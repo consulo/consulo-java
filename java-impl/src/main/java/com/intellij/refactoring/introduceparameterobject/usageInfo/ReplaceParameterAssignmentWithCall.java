@@ -15,9 +15,9 @@
  */
 package com.intellij.refactoring.introduceparameterobject.usageInfo;
 
-import com.intellij.psi.PsiAssignmentExpression;
-import com.intellij.psi.PsiExpression;
-import com.intellij.psi.PsiReferenceExpression;
+import com.intellij.java.language.psi.PsiAssignmentExpression;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiReferenceExpression;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.refactoring.psi.MutationUtils;
 import com.intellij.refactoring.util.FixableUsageInfo;

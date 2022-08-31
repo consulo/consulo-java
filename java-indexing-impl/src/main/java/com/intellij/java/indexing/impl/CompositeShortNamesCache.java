@@ -16,12 +16,12 @@
 package com.intellij.java.indexing.impl;
 
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiField;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiField;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.search.PsiShortNamesCache;
+import com.intellij.java.language.psi.search.PsiShortNamesCache;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.CommonProcessors;
 import com.intellij.util.Processor;

@@ -25,7 +25,7 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiSubstitutor;
+import com.intellij.java.language.psi.PsiSubstitutor;
 import com.intellij.refactoring.safeDelete.SafeDeleteHandler;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 

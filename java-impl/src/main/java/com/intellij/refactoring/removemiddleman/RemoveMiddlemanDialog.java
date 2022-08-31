@@ -16,11 +16,11 @@
 package com.intellij.refactoring.removemiddleman;
 
 import com.intellij.openapi.help.HelpManager;
-import com.intellij.psi.PsiField;
-import com.intellij.psi.PsiMember;
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiSubstitutor;
-import com.intellij.psi.util.PsiFormatUtil;
+import com.intellij.java.language.psi.PsiField;
+import com.intellij.java.language.psi.PsiMember;
+import com.intellij.java.language.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiSubstitutor;
+import com.intellij.java.language.psi.util.PsiFormatUtil;
 import com.intellij.refactoring.HelpID;
 import com.intellij.refactoring.RefactorJBundle;
 import com.intellij.refactoring.classMembers.DelegatingMemberInfoModel;

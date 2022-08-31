@@ -17,9 +17,9 @@ package com.siyeh.ig.threading;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.psi.PsiCodeBlock;
-import com.intellij.psi.PsiStatement;
-import com.intellij.psi.PsiSynchronizedStatement;
+import com.intellij.java.language.psi.PsiCodeBlock;
+import com.intellij.java.language.psi.PsiStatement;
+import com.intellij.java.language.psi.PsiSynchronizedStatement;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;

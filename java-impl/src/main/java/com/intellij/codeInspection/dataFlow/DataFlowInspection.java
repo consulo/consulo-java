@@ -27,12 +27,13 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.DfaOptionalSuppor
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.DfaPsiUtil;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.TrackingRunner;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.fix.SurroundWithRequireNonNullFix;
-import com.intellij.pom.java.LanguageLevel;
+import com.intellij.java.language.LanguageLevel;
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.util.PsiPrecedenceUtil;
+import com.intellij.java.language.psi.util.PsiPrecedenceUtil;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.refactoring.util.RefactoringUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.SmartList;

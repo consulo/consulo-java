@@ -17,8 +17,9 @@ package com.intellij.psi;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import com.intellij.pom.java.LanguageLevel;
-import com.intellij.psi.impl.source.resolve.ParameterTypeInferencePolicy;
+import com.intellij.java.language.LanguageLevel;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.impl.source.resolve.ParameterTypeInferencePolicy;
 
 /**
  * User: anna

@@ -17,7 +17,7 @@ package com.intellij.refactoring.ui;
 
 import com.intellij.ide.util.PackageChooserDialog;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiJavaPackage;
+import com.intellij.java.language.psi.PsiJavaPackage;
 import com.intellij.ui.ReferenceEditorComboWithBrowseButton;
 import javax.annotation.Nonnull;
 

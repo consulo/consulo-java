@@ -18,8 +18,8 @@ package com.intellij.psi.filters.getters;
 import com.intellij.codeInsight.ExpectedTypeInfo;
 import com.intellij.codeInsight.ExpectedTypesProvider;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiExpression;
-import com.intellij.psi.PsiType;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiType;
 import com.intellij.psi.util.PsiTreeUtil;
 
 import java.util.HashSet;

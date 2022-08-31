@@ -15,7 +15,7 @@
  */
 package com.intellij.java.analysis.codeInspection.reference;
 
-import com.intellij.psi.PsiField;
+import com.intellij.java.language.psi.PsiField;
 
 /**
  * A node in the reference graph corresponding to a Java field.

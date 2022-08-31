@@ -18,7 +18,7 @@ package consulo.java.codeInsight;
 import javax.annotation.Nonnull;
 
 import com.intellij.openapi.extensions.ExtensionPointName;
-import com.intellij.psi.PsiClassType;
+import com.intellij.java.language.psi.PsiClassType;
 import com.intellij.psi.PsiElement;
 
 /**

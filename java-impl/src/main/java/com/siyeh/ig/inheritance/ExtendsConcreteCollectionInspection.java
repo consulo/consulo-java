@@ -15,8 +15,8 @@
  */
 package com.siyeh.ig.inheritance;
 
-import com.intellij.psi.PsiAnonymousClass;
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.psi.PsiAnonymousClass;
+import com.intellij.java.language.psi.PsiClass;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.fixes.ReplaceInheritanceWithDelegationFix;
 

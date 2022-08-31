@@ -15,9 +15,10 @@
  */
 package com.intellij.codeInsight.daemon.impl;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.JavaConstantExpressionEvaluator;
-import com.intellij.psi.util.PsiTypesUtil;
+import com.intellij.java.language.psi.util.PsiTypesUtil;
 import com.intellij.ui.ColorUtil;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.access.RequiredWriteAction;

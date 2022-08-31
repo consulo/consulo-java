@@ -15,6 +15,7 @@
  */
 package com.intellij.psi.impl;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.application.ReadActionProcessor;
 import com.intellij.openapi.progress.ProgressIndicatorProvider;
 import com.intellij.openapi.project.DumbAware;
@@ -40,7 +41,7 @@ import com.intellij.util.SmartList;
 import com.intellij.util.containers.ContainerUtil;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.disposer.Disposable;
-import consulo.java.module.extension.JavaModuleExtension;
+import consulo.java.language.module.extension.JavaModuleExtension;
 import consulo.psi.PsiPackageManager;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;

@@ -18,8 +18,8 @@ package com.intellij.refactoring.introduceParameter;
 import javax.annotation.Nonnull;
 
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiExpression;
-import com.intellij.psi.PsiType;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiType;
 
 /**
  * @author Maxim.Medvedev

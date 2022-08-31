@@ -15,6 +15,10 @@
  */
 package com.siyeh.ipp.exceptions;
 
+import com.intellij.java.language.psi.PsiCatchSection;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiCodeBlock;
+import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.siyeh.ipp.base.PsiElementPredicate;

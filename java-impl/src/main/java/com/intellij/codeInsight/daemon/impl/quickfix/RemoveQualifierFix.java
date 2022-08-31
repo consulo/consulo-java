@@ -22,10 +22,10 @@ import consulo.java.analysis.impl.JavaQuickFixBundle;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiReferenceExpression;
+import com.intellij.java.language.psi.PsiReferenceExpression;
 import com.intellij.util.IncorrectOperationException;
 
 /**

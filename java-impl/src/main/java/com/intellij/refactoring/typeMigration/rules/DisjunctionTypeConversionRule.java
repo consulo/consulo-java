@@ -15,11 +15,11 @@
  */
 package com.intellij.refactoring.typeMigration.rules;
 
-import com.intellij.psi.PsiDisjunctionType;
-import com.intellij.psi.PsiExpression;
-import com.intellij.psi.PsiIntersectionType;
-import com.intellij.psi.PsiMember;
-import com.intellij.psi.PsiType;
+import com.intellij.java.language.psi.PsiDisjunctionType;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiIntersectionType;
+import com.intellij.java.language.psi.PsiMember;
+import com.intellij.java.language.psi.PsiType;
 import com.intellij.refactoring.typeMigration.TypeConversionDescriptorBase;
 import com.intellij.refactoring.typeMigration.TypeMigrationLabeler;
 

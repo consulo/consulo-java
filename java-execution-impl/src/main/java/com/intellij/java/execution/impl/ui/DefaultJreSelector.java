@@ -31,7 +31,7 @@ import com.intellij.ui.EditorTextFieldWithBrowseButton;
 import com.intellij.util.ObjectUtil;
 import consulo.annotation.DeprecationInfo;
 import consulo.java.execution.configurations.OwnJavaParameters;
-import consulo.java.module.extension.JavaModuleExtension;
+import consulo.java.language.module.extension.JavaModuleExtension;
 
 import javax.annotation.Nonnull;
 import java.util.Objects;

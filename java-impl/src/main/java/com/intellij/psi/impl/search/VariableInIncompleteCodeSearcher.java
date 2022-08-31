@@ -15,7 +15,11 @@
  */
 package com.intellij.psi.impl.search;
 
-import com.intellij.lang.java.JavaLanguage;
+import com.intellij.java.language.JavaLanguage;
+import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
+import com.intellij.java.language.psi.PsiLocalVariable;
+import com.intellij.java.language.psi.PsiParameter;
+import com.intellij.java.language.psi.PsiVariable;
 import com.intellij.openapi.application.QueryExecutorBase;
 import com.intellij.psi.*;
 import com.intellij.psi.search.LocalSearchScope;

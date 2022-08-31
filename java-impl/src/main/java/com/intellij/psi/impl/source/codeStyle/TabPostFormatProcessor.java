@@ -19,7 +19,7 @@ import javax.annotation.Nonnull;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.Language;
-import com.intellij.lang.java.JavaLanguage;
+import com.intellij.java.language.JavaLanguage;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.fileTypes.LanguageFileType;
 import com.intellij.openapi.util.TextRange;

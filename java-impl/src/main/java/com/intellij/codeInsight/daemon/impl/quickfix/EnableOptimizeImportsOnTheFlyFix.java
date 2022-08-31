@@ -25,7 +25,7 @@ import com.intellij.codeInsight.intention.LowPriorityAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiJavaFile;
+import com.intellij.java.language.psi.PsiJavaFile;
 
 public class EnableOptimizeImportsOnTheFlyFix implements IntentionAction, LowPriorityAction{
   @Override

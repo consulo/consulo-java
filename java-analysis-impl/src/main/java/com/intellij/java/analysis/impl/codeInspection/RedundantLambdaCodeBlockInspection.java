@@ -22,10 +22,11 @@ import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.java.analysis.codeInspection.BaseJavaBatchLocalInspectionTool;
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.logging.Logger;
 import org.jetbrains.annotations.Nls;
 

@@ -20,6 +20,7 @@
  */
 package com.intellij.refactoring.extractclass;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
 
 import java.util.List;

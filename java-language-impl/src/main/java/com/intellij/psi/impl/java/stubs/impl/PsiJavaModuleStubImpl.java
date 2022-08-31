@@ -15,7 +15,7 @@
  */
 package com.intellij.psi.impl.java.stubs.impl;
 
-import com.intellij.psi.PsiJavaModule;
+import com.intellij.java.language.psi.PsiJavaModule;
 import com.intellij.psi.impl.java.stubs.JavaStubElementTypes;
 import com.intellij.psi.impl.java.stubs.PsiJavaModuleStub;
 import com.intellij.psi.stubs.StubBase;

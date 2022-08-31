@@ -37,6 +37,7 @@ import com.intellij.java.debugger.impl.jdi.VirtualMachineProxyImpl;
 import com.intellij.java.debugger.engine.DebugProcess;
 import com.intellij.java.debugger.engine.DebuggerUtils;
 import com.intellij.java.debugger.requests.ClassPrepareRequestor;
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.application.ReadAction;
 import consulo.logging.Logger;

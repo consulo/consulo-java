@@ -15,7 +15,7 @@
  */
 package com.intellij.psi.impl.compiled;
 
-import com.intellij.psi.PsiModifierListOwner;
+import com.intellij.java.language.psi.PsiModifierListOwner;
 
 /**
  * @author ven

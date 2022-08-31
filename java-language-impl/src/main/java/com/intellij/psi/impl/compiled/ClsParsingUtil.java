@@ -15,19 +15,20 @@
  */
 package com.intellij.psi.impl.compiled;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.java.parser.JavaParser;
 import com.intellij.lang.java.parser.JavaParserUtil;
 import com.intellij.lang.java.lexer.JavaLexer;
-import com.intellij.openapi.projectRoots.JavaSdkVersion;
+import com.intellij.java.language.projectRoots.JavaSdkVersion;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.pom.java.LanguageLevel;
+import com.intellij.java.language.LanguageLevel;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.DummyHolder;
 import com.intellij.psi.impl.source.DummyHolderFactory;
 import com.intellij.psi.impl.source.JavaDummyElement;
 import com.intellij.psi.impl.source.SourceTreeToPsiMap;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.lang.JavaVersion;
 import consulo.internal.org.objectweb.asm.Opcodes;

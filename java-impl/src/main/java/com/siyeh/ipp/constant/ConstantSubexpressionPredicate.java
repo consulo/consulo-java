@@ -16,14 +16,14 @@
 package com.siyeh.ipp.constant;
 
 import javax.annotation.Nullable;
-import com.intellij.psi.JavaPsiFacade;
+import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiElementFactory;
-import com.intellij.psi.PsiExpression;
-import com.intellij.psi.PsiJavaToken;
-import com.intellij.psi.PsiPolyadicExpression;
-import com.intellij.psi.PsiType;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.PsiElementFactory;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiJavaToken;
+import com.intellij.java.language.psi.PsiPolyadicExpression;
+import com.intellij.java.language.psi.PsiType;
+import com.intellij.java.language.psi.util.PsiUtil;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ipp.base.PsiElementPredicate;
 

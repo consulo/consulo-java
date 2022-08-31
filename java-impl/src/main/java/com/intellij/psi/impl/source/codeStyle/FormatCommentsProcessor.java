@@ -6,18 +6,18 @@ import javax.annotation.Nonnull;
 import com.intellij.application.options.CodeStyle;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.injection.InjectedLanguageManager;
-import com.intellij.lang.java.JavaLanguage;
+import com.intellij.java.language.JavaLanguage;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiField;
+import com.intellij.java.language.psi.PsiField;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.psi.codeStyle.JavaCodeStyleSettings;
 import com.intellij.psi.impl.source.SourceTreeToPsiMap;
 import com.intellij.psi.impl.source.codeStyle.javadoc.CommentFormatter;
-import com.intellij.psi.javadoc.PsiDocComment;
+import com.intellij.java.language.psi.javadoc.PsiDocComment;
 
 public class FormatCommentsProcessor implements PreFormatProcessor
 {

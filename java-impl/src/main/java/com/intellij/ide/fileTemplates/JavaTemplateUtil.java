@@ -15,10 +15,10 @@
  */
 package com.intellij.ide.fileTemplates;
 
-import com.intellij.psi.JavaDirectoryService;
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.psi.JavaDirectoryService;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.PsiDirectory;
-import com.intellij.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiMethod;
 import consulo.psi.PsiPackage;
 
 import javax.annotation.Nonnull;

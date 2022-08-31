@@ -15,12 +15,12 @@
  */
 package com.intellij.psi;
 
-import static com.intellij.psi.compiled.ClassFileDecompilers.Full;
+import static com.intellij.java.language.psi.compiled.ClassFileDecompilers.Full;
 
 import javax.annotation.Nonnull;
 import com.intellij.lang.Language;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.compiled.ClassFileDecompilers;
+import com.intellij.java.language.psi.compiled.ClassFileDecompilers;
 
 /**
  * @author max

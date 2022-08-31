@@ -17,13 +17,14 @@ package com.intellij.codeInsight.completion;
 
 import com.intellij.codeInsight.lookup.AutoCompletionPolicy;
 import com.intellij.codeInsight.lookup.LookupElement;
+import com.intellij.java.language.psi.*;
 import consulo.util.dataholder.Key;
 import com.intellij.psi.*;
 import com.intellij.util.Consumer;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
 
-import static consulo.java.module.util.JavaClassNames.*;
+import static consulo.java.language.module.util.JavaClassNames.*;
 
 /**
 * @author peter

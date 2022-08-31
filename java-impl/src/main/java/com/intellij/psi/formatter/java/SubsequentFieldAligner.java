@@ -23,7 +23,7 @@ import com.intellij.formatting.alignment.AlignmentInColumnsConfig;
 import com.intellij.formatting.alignment.AlignmentInColumnsHelper;
 import com.intellij.formatting.alignment.AlignmentStrategy;
 import com.intellij.lang.ASTNode;
-import com.intellij.psi.JavaTokenType;
+import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
 import com.intellij.psi.impl.source.tree.ElementType;
 import com.intellij.psi.impl.source.tree.JavaElementType;

@@ -15,8 +15,9 @@
  */
 package com.intellij.refactoring.util.classMembers;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
 
 /**
  * @author dsl

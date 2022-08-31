@@ -16,7 +16,7 @@
 package com.intellij.psi.impl.java.stubs;
 
 import com.intellij.lang.ASTNode;
-import com.intellij.lang.java.JavaLanguage;
+import com.intellij.java.language.JavaLanguage;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.stubs.ILightStubElementType;
 import com.intellij.psi.stubs.PsiFileStub;

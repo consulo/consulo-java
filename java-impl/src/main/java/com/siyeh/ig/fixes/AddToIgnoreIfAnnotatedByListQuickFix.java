@@ -20,7 +20,7 @@ import java.util.List;
 
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import com.intellij.java.analysis.impl.codeInspection.util.SpecialAnnotationsUtilBase;
-import com.intellij.psi.PsiModifierListOwner;
+import com.intellij.java.language.psi.PsiModifierListOwner;
 import com.intellij.util.Processor;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.DelegatingFix;

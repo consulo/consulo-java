@@ -19,9 +19,9 @@ import com.intellij.codeInsight.editorActions.SelectWordUtil;
 import com.intellij.lexer.StringLiteralLexer;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.JavaTokenType;
+import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiLiteralExpression;
+import com.intellij.java.language.psi.PsiLiteralExpression;
 
 import java.util.List;
 

@@ -15,11 +15,12 @@
  */
 package com.intellij.refactoring.introduceParameter;
 
+import com.intellij.java.language.psi.*;
 import consulo.logging.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.codeStyle.CodeStyleManager;
-import com.intellij.psi.util.PropertyUtil;
+import com.intellij.java.language.psi.util.PropertyUtil;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.refactoring.IntroduceParameterRefactoring;
 import com.intellij.refactoring.util.RefactoringUtil;

@@ -18,18 +18,20 @@ package com.intellij.psi.impl.source.resolve;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.intellij.openapi.projectRoots.JavaSdkVersion;
-import com.intellij.openapi.projectRoots.JavaVersionService;
+import com.intellij.java.language.projectRoots.JavaSdkVersion;
+import com.intellij.java.language.projectRoots.JavaVersionService;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.impl.source.resolve.ParameterTypeInferencePolicy;
 import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.RecursionGuard;
-import com.intellij.pom.java.LanguageLevel;
+import com.intellij.java.language.LanguageLevel;
 import com.intellij.psi.*;
 import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.util.PsiTypesUtil;
-import com.intellij.psi.util.PsiUtil;
-import com.intellij.psi.util.TypeConversionUtil;
+import com.intellij.java.language.psi.util.PsiTypesUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.TypeConversionUtil;
 import com.intellij.util.ArrayUtil;
-import consulo.java.module.util.JavaClassNames;
+import consulo.java.language.module.util.JavaClassNames;
 import consulo.logging.Logger;
 
 /**

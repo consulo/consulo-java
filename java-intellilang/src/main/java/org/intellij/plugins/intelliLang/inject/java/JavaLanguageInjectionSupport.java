@@ -16,8 +16,9 @@
 
 package org.intellij.plugins.intelliLang.inject.java;
 
-import com.intellij.codeInsight.AnnotationUtil;
+import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.icons.AllIcons;
+import com.intellij.java.language.psi.*;
 import com.intellij.lang.Language;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
@@ -30,13 +31,13 @@ import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.util.Factory;
 import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.patterns.PsiJavaPatterns;
+import com.intellij.java.language.patterns.PsiJavaPatterns;
 import com.intellij.patterns.compiler.PatternCompiler;
 import com.intellij.psi.*;
-import com.intellij.psi.codeStyle.JavaCodeStyleManager;
+import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.ui.SimpleColoredText;
 import com.intellij.ui.SimpleTextAttributes;
 import com.intellij.util.ArrayUtilRt;

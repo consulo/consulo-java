@@ -20,7 +20,7 @@ import javax.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 import com.intellij.codeInspection.LocalInspectionTool;
 import com.intellij.codeInspection.defUse.DefUseInspection;
-import com.intellij.openapi.projectRoots.JavaSdkVersion;
+import com.intellij.java.language.projectRoots.JavaSdkVersion;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.testFramework.IdeaTestUtil;
 

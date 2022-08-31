@@ -11,9 +11,9 @@ import com.intellij.codeInsight.lookup.LookupElement
 import com.intellij.codeInsight.lookup.LookupElementPresentation
 import com.intellij.codeInsight.lookup.impl.LookupImpl
 import com.intellij.ide.ui.UISettings
-import com.intellij.psi.PsiClass
-import com.intellij.psi.PsiField
-import com.intellij.psi.PsiMethod
+import com.intellij.java.language.psi.PsiClass
+import com.intellij.java.language.psi.PsiField
+import com.intellij.java.language.psi.PsiMethod
 import com.intellij.openapi.fileEditor.FileDocumentManager
 import com.intellij.psi.statistics.StatisticsManager
 

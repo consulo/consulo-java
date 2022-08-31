@@ -15,10 +15,10 @@
  */
 package com.siyeh.ig.psiutils;
 
-import com.intellij.psi.*;
-import com.intellij.psi.util.InheritanceUtil;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.siyeh.ig.callMatcher.CallMatcher;
-import consulo.java.module.util.JavaClassNames;
+import consulo.java.language.module.util.JavaClassNames;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
 

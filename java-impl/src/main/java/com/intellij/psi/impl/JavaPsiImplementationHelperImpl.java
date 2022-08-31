@@ -21,6 +21,8 @@ import java.util.Set;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import com.intellij.java.language.psi.*;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
@@ -29,7 +31,7 @@ import com.intellij.ide.fileTemplates.FileTemplateManager;
 import com.intellij.ide.fileTemplates.JavaTemplateUtil;
 import com.intellij.ide.highlighter.JavaClassFileType;
 import com.intellij.lang.ASTNode;
-import com.intellij.lang.java.JavaLanguage;
+import com.intellij.java.language.JavaLanguage;
 import com.intellij.openapi.components.ServiceManager;
 import consulo.logging.Logger;
 import com.intellij.openapi.module.Module;
@@ -45,7 +47,7 @@ import com.intellij.openapi.roots.impl.DirectoryIndex;
 import com.intellij.openapi.roots.impl.LibraryScopeCache;
 import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.pom.java.LanguageLevel;
+import com.intellij.java.language.LanguageLevel;
 import com.intellij.psi.*;
 import com.intellij.psi.codeStyle.CodeStyleSettings;
 import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
@@ -57,7 +59,7 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.ContainerUtil;
-import consulo.java.module.extension.JavaModuleExtension;
+import consulo.java.language.module.extension.JavaModuleExtension;
 import consulo.roots.OrderEntryWithTracking;
 import consulo.roots.types.SourcesOrderRootType;
 

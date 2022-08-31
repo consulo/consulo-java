@@ -16,7 +16,7 @@
 package com.intellij.lang.refactoring;
 
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiNameHelper;
+import com.intellij.java.language.psi.PsiNameHelper;
 
 /**
  * Default NamesValidator interface implementation. Uses java language keyword set and java language rules for identifier.

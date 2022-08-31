@@ -20,7 +20,7 @@
  */
 package com.intellij.refactoring.inlineSuperClass.usageInfo;
 
-import com.intellij.psi.PsiImportStatement;
+import com.intellij.java.language.psi.PsiImportStatement;
 import com.intellij.refactoring.util.FixableUsageInfo;
 import com.intellij.util.IncorrectOperationException;
 

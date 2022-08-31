@@ -16,12 +16,13 @@
 package com.intellij.refactoring.encapsulateFields;
 
 import com.intellij.icons.AllIcons;
+import com.intellij.java.language.psi.*;
 import consulo.logging.Logger;
 import com.intellij.openapi.help.HelpManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Iconable;
 import com.intellij.psi.*;
-import com.intellij.psi.util.PsiFormatUtil;
+import com.intellij.java.language.psi.util.PsiFormatUtil;
 import com.intellij.psi.util.PsiFormatUtilBase;
 import com.intellij.refactoring.HelpID;
 import com.intellij.refactoring.JavaRefactoringSettings;

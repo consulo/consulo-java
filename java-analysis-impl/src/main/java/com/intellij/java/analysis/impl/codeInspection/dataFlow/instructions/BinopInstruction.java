@@ -21,14 +21,15 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.DfaInstructionSta
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.DfaMemoryState;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.InstructionVisitor;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.RelationType;
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
 import javax.annotation.Nullable;
 
-import static com.intellij.psi.JavaTokenType.*;
+import static com.intellij.java.language.psi.JavaTokenType.*;
 
 public class BinopInstruction extends ExpressionPushingInstruction<PsiExpression> implements BranchingInstruction
 {
@@ -44,7 +45,7 @@ public class BinopInstruction extends ExpressionPushingInstruction<PsiExpression
 	private final IElementType myOperationSign;
 	private final
 	@Nullable
-	PsiType myResultType;
+  PsiType myResultType;
 	private final int myLastOperand;
 	private final boolean myUnrolledLoop;
 	private boolean myWidened;

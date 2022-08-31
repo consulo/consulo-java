@@ -18,9 +18,9 @@ package com.siyeh.ipp.trivialif;
 import javax.annotation.Nonnull;
 
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiIfStatement;
-import com.intellij.psi.PsiJavaToken;
-import com.intellij.psi.PsiStatement;
+import com.intellij.java.language.psi.PsiIfStatement;
+import com.intellij.java.language.psi.PsiJavaToken;
+import com.intellij.java.language.psi.PsiStatement;
 import com.intellij.util.IncorrectOperationException;
 import com.siyeh.ipp.base.Intention;
 import com.siyeh.ipp.base.PsiElementPredicate;

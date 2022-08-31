@@ -16,9 +16,9 @@
 package com.intellij.java.analysis.impl.psi.util;
 
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiModifier;
-import com.intellij.psi.PsiModifierListOwner;
+import com.intellij.java.language.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiModifier;
+import com.intellij.java.language.psi.PsiModifierListOwner;
 import com.intellij.psi.util.PsiMatcherExpression;
 
 public class JavaMatchers {

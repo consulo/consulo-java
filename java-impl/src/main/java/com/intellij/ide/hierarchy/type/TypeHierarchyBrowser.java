@@ -34,9 +34,9 @@ import com.intellij.openapi.actionSystem.IdeActions;
 import consulo.logging.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Comparing;
-import consulo.java.module.util.JavaClassNames;
-import com.intellij.psi.PsiAnonymousClass;
-import com.intellij.psi.PsiClass;
+import consulo.java.language.module.util.JavaClassNames;
+import com.intellij.java.language.psi.PsiAnonymousClass;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.presentation.java.ClassPresentationUtil;
 

@@ -49,7 +49,7 @@ import com.intellij.openapi.vcs.FileStatus;
 import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiModifierListOwner;
+import com.intellij.java.language.psi.PsiModifierListOwner;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtilCore;
 import com.intellij.refactoring.safeDelete.SafeDeleteHandler;

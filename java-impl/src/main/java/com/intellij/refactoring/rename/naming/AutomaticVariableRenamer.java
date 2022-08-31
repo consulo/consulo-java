@@ -15,10 +15,11 @@
  */
 package com.intellij.refactoring.rename.naming;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
-import com.intellij.psi.codeStyle.JavaCodeStyleManager;
+import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.psi.impl.source.tree.JavaElementType;
 import com.intellij.psi.impl.source.tree.StdTokenSets;
 import com.intellij.psi.impl.source.tree.TreeUtil;

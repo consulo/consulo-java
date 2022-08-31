@@ -17,8 +17,8 @@ package com.intellij.refactoring.util.duplicates;
 
 import com.intellij.codeInsight.PsiEquivalenceUtil;
 import com.intellij.java.analysis.impl.refactoring.util.duplicates.Match;
-import com.intellij.psi.*;
-import com.intellij.psi.util.PsiFormatUtil;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.PsiFormatUtil;
 import com.intellij.refactoring.changeSignature.ChangeSignatureProcessor;
 import com.intellij.refactoring.changeSignature.ParameterInfoImpl;
 import org.jetbrains.annotations.NonNls;

@@ -15,8 +15,8 @@
  */
 package com.intellij.java.analysis.impl.codeInsight.daemon.impl;
 
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiMember;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiMember;
 import com.intellij.psi.PsiNamedElement;
 
 import javax.annotation.Nonnull;

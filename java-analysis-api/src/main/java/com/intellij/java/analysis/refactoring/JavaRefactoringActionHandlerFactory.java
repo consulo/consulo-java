@@ -18,10 +18,10 @@ package com.intellij.java.analysis.refactoring;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiField;
-import com.intellij.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiField;
+import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.refactoring.RefactoringActionHandler;
 
 public abstract class JavaRefactoringActionHandlerFactory {

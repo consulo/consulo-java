@@ -17,7 +17,7 @@ package com.intellij.util.xml.converters;
 
 import java.util.List;
 
-import com.intellij.psi.PsiType;
+import com.intellij.java.language.psi.PsiType;
 import com.intellij.util.xml.DomElement;
 import com.intellij.util.xml.GenericDomValue;
 

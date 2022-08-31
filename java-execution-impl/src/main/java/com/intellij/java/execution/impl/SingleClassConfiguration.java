@@ -15,7 +15,7 @@
  */
 package com.intellij.java.execution.impl;
 
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.psi.PsiClass;
 
 /**
  * @author dyoma

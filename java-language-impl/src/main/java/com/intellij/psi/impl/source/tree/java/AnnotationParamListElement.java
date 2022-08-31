@@ -17,12 +17,12 @@ package com.intellij.psi.impl.source.tree.java;
 
 import javax.annotation.Nonnull;
 import com.intellij.lang.ASTNode;
-import com.intellij.psi.JavaPsiFacade;
-import com.intellij.psi.JavaTokenType;
-import com.intellij.psi.PsiAnnotation;
-import com.intellij.psi.PsiAnnotationMemberValue;
-import com.intellij.psi.PsiElementFactory;
-import com.intellij.psi.PsiNameValuePair;
+import com.intellij.java.language.psi.JavaPsiFacade;
+import com.intellij.java.language.psi.JavaTokenType;
+import com.intellij.java.language.psi.PsiAnnotation;
+import com.intellij.java.language.psi.PsiAnnotationMemberValue;
+import com.intellij.java.language.psi.PsiElementFactory;
+import com.intellij.java.language.psi.PsiNameValuePair;
 import com.intellij.psi.impl.source.tree.ChildRole;
 import com.intellij.psi.impl.source.tree.CompositeElement;
 import com.intellij.psi.impl.source.tree.ElementType;

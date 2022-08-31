@@ -21,6 +21,7 @@ import com.intellij.java.debugger.SourcePosition;
 import com.intellij.java.debugger.impl.engine.PositionManagerImpl;
 import com.intellij.java.debugger.impl.DebuggerUtilsEx;
 import com.intellij.icons.AllIcons;
+import com.intellij.java.language.psi.PsiLambdaExpression;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;

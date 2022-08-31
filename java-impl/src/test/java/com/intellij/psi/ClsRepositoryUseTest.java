@@ -27,6 +27,7 @@ import static org.junit.Assert.fail;
 import java.io.File;
 
 import com.intellij.ide.highlighter.JavaFileType;
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.application.ApplicationManager;
 import consulo.logging.Logger;
 import com.intellij.openapi.roots.ModifiableRootModel;
@@ -38,14 +39,14 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileFilter;
 import com.intellij.psi.impl.java.stubs.PsiMethodStub;
 import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.testFramework.IdeaTestUtil;
 import com.intellij.testFramework.PlatformTestCase;
 import com.intellij.testFramework.PsiTestCase;
 import com.intellij.testFramework.PsiTestUtil;
 import consulo.java.module.extension.JavaModuleExtensionImpl;
 import consulo.java.module.extension.JavaMutableModuleExtensionImpl;
-import consulo.java.module.util.JavaClassNames;
+import consulo.java.language.module.util.JavaClassNames;
 
 @PlatformTestCase.WrapInCommand
 public abstract class ClsRepositoryUseTest extends PsiTestCase {

@@ -9,10 +9,11 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.types.DfType;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.types.DfTypes;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.*;
 import com.intellij.java.analysis.impl.codeInspection.util.OptionalUtil;
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
-import com.intellij.psi.util.InheritanceUtil;
-import com.intellij.psi.util.PsiUtil;
-import com.intellij.psi.util.TypeConversionUtil;
+import com.intellij.java.language.psi.util.InheritanceUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.TypeConversionUtil;
 import com.intellij.util.ObjectUtils;
 import com.siyeh.ig.callMatcher.CallMatcher;
 import com.siyeh.ig.psiutils.ExpressionUtils;
@@ -27,7 +28,7 @@ import java.util.Objects;
 import static com.intellij.java.analysis.impl.codeInspection.dataFlow.ContractReturnValue.returnFalse;
 import static com.intellij.java.analysis.impl.codeInspection.dataFlow.ContractReturnValue.returnTrue;
 import static com.intellij.java.analysis.impl.codeInspection.dataFlow.StandardMethodContract.ValueConstraint.NULL_VALUE;
-import static com.intellij.psi.CommonClassNames.*;
+import static com.intellij.java.language.psi.CommonClassNames.*;
 
 /**
  * Represents a method which is handled as a field in DFA.

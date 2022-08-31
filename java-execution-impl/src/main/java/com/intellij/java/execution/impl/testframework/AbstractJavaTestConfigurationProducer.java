@@ -15,7 +15,7 @@
  */
 package com.intellij.java.execution.impl.testframework;
 
-import com.intellij.codeInsight.TestFrameworks;
+import com.intellij.java.language.codeInsight.TestFrameworks;
 import com.intellij.execution.Location;
 import com.intellij.execution.RunManager;
 import com.intellij.execution.RunnerAndConfigurationSettings;
@@ -31,6 +31,7 @@ import com.intellij.java.execution.impl.JavaTestConfigurationBase;
 import com.intellij.java.execution.impl.junit.JavaRunConfigurationProducerBase;
 import com.intellij.java.execution.impl.junit2.PsiMemberParameterizedLocation;
 import com.intellij.java.execution.impl.junit2.info.MethodLocation;
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.actionSystem.LangDataKeys;
@@ -44,10 +45,10 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.psi.search.PsiElementProcessor;
-import com.intellij.psi.util.ClassUtil;
+import com.intellij.java.language.psi.util.ClassUtil;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.testIntegration.JavaTestFramework;
-import com.intellij.testIntegration.TestFramework;
+import com.intellij.java.language.testIntegration.JavaTestFramework;
+import com.intellij.java.language.testIntegration.TestFramework;
 import com.intellij.util.containers.ContainerUtil;
 import consulo.psi.PsiPackage;
 

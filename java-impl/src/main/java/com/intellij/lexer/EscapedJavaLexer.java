@@ -16,8 +16,8 @@
 package com.intellij.lexer;
 
 import com.intellij.lang.java.lexer.JavaLexer;
-import com.intellij.pom.java.LanguageLevel;
-import com.intellij.psi.JavaTokenType;
+import com.intellij.java.language.LanguageLevel;
+import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.psi.tree.IElementType;
 
 /**

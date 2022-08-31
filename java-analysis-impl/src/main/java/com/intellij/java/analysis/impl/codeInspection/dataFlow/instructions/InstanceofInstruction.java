@@ -19,10 +19,10 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.DataFlowRunner;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.DfaInstructionState;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.DfaMemoryState;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.InstructionVisitor;
-import com.intellij.psi.JavaTokenType;
-import com.intellij.psi.PsiExpression;
-import com.intellij.psi.PsiMethodCallExpression;
-import com.intellij.psi.PsiType;
+import com.intellij.java.language.psi.JavaTokenType;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiMethodCallExpression;
+import com.intellij.java.language.psi.PsiType;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 

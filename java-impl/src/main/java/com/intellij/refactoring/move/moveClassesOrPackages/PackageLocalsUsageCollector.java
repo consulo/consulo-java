@@ -15,6 +15,7 @@
  */
 package com.intellij.refactoring.move.moveClassesOrPackages;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.refactoring.PackageWrapper;
@@ -22,7 +23,7 @@ import com.intellij.refactoring.RefactoringBundle;
 import com.intellij.refactoring.util.CommonRefactoringUtil;
 import com.intellij.refactoring.util.ConflictsUtil;
 import com.intellij.refactoring.util.RefactoringUIUtil;
-import com.intellij.util.VisibilityUtil;
+import com.intellij.java.language.util.VisibilityUtil;
 import java.util.HashMap;
 import com.intellij.util.containers.MultiMap;
 

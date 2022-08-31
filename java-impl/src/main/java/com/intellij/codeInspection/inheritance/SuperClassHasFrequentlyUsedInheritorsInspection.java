@@ -5,8 +5,8 @@ import com.intellij.codeInspection.*;
 import com.intellij.codeInspection.inheritance.search.InheritorsStatisticalDataSearch;
 import com.intellij.codeInspection.inheritance.search.InheritorsStatisticsSearchResult;
 import com.intellij.java.analysis.impl.codeInspection.BaseJavaLocalInspectionTool;
-import com.intellij.psi.*;
-import consulo.java.module.util.JavaClassNames;
+import com.intellij.java.language.psi.*;
+import consulo.java.language.module.util.JavaClassNames;
 import org.jetbrains.annotations.Nls;
 import javax.annotation.Nonnull;
 

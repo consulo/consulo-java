@@ -21,6 +21,7 @@ import com.intellij.java.analysis.codeInspection.BaseJavaBatchLocalInspectionToo
 import com.intellij.codeInspection.InspectionsBundle;
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemsHolder;
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ProjectRootManager;
@@ -30,8 +31,8 @@ import com.intellij.psi.*;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
-import com.intellij.psi.util.MethodSignatureUtil;
-import consulo.java.module.util.JavaClassNames;
+import com.intellij.java.language.psi.util.MethodSignatureUtil;
+import consulo.java.language.module.util.JavaClassNames;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nullable;

@@ -17,9 +17,9 @@ package com.siyeh.ipp.braces;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.psi.PsiArrayInitializerExpression;
+import com.intellij.java.language.psi.PsiArrayInitializerExpression;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiNewExpression;
+import com.intellij.java.language.psi.PsiNewExpression;
 import com.siyeh.ipp.base.PsiElementPredicate;
 
 class ArrayCreationExpressionPredicate implements PsiElementPredicate {

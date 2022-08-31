@@ -34,7 +34,7 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.util.Function;
 import com.intellij.util.containers.ComparatorUtil;
 import com.intellij.util.containers.Convertor;
-import consulo.java.module.extension.JavaModuleExtension;
+import consulo.java.language.module.extension.JavaModuleExtension;
 
 /**
  * @author Eugene Zhuravlev

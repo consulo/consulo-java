@@ -15,6 +15,7 @@
  */
 package com.intellij.psi.filters.getters;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
 import com.intellij.psi.filters.FilterUtil;
 import com.intellij.psi.util.PsiTreeUtil;

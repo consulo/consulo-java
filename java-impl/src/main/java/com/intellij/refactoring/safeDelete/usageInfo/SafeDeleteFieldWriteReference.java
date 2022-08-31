@@ -15,6 +15,10 @@
  */
 package com.intellij.refactoring.safeDelete.usageInfo;
 
+import com.intellij.java.language.psi.PsiAssignmentExpression;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiExpressionStatement;
+import com.intellij.java.language.psi.PsiField;
 import com.intellij.psi.*;
 import com.intellij.refactoring.util.RefactoringUtil;
 import com.intellij.util.IncorrectOperationException;

@@ -17,7 +17,8 @@ package com.intellij.psi.impl.smartPointers;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import com.intellij.lang.java.JavaLanguage;
+import com.intellij.java.language.JavaLanguage;
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
 
 /**

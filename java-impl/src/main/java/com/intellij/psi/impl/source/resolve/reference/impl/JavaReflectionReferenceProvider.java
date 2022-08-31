@@ -18,11 +18,11 @@ package com.intellij.psi.impl.source.resolve.reference.impl;
 import javax.annotation.Nonnull;
 
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiExpressionList;
-import com.intellij.psi.PsiLiteralExpression;
-import com.intellij.psi.PsiMethodCallExpression;
+import com.intellij.java.language.psi.PsiExpressionList;
+import com.intellij.java.language.psi.PsiLiteralExpression;
+import com.intellij.java.language.psi.PsiMethodCallExpression;
 import com.intellij.psi.PsiReference;
-import com.intellij.psi.PsiReferenceExpression;
+import com.intellij.java.language.psi.PsiReferenceExpression;
 import com.intellij.psi.PsiReferenceProvider;
 import com.intellij.util.ProcessingContext;
 

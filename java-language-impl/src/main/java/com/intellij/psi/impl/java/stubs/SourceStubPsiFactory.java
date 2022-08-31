@@ -15,7 +15,7 @@
  */
 package com.intellij.psi.impl.java.stubs;
 
-import com.intellij.psi.*;
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.impl.source.*;
 import com.intellij.psi.impl.source.tree.java.PsiAnnotationImpl;
 import com.intellij.psi.impl.source.tree.java.PsiAnnotationParamListImpl;

@@ -15,6 +15,9 @@
  */
 package com.intellij.ide.actions;
 
+import com.intellij.java.language.psi.JavaDirectoryService;
+import com.intellij.java.language.psi.PsiJavaPackage;
+import com.intellij.java.language.psi.PsiNameHelper;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
 import consulo.ui.image.Image;

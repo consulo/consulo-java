@@ -16,7 +16,7 @@
 package com.siyeh.ipp.chartostring;
 
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiLiteralExpression;
+import com.intellij.java.language.psi.PsiLiteralExpression;
 import com.intellij.util.IncorrectOperationException;
 import com.siyeh.ipp.base.Intention;
 import com.siyeh.ipp.base.PsiElementPredicate;

@@ -17,10 +17,10 @@ package com.intellij.refactoring.inline;
 
 import com.intellij.openapi.help.HelpManager;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiField;
-import com.intellij.psi.PsiReferenceExpression;
-import com.intellij.psi.PsiSubstitutor;
-import com.intellij.psi.util.PsiFormatUtil;
+import com.intellij.java.language.psi.PsiField;
+import com.intellij.java.language.psi.PsiReferenceExpression;
+import com.intellij.java.language.psi.PsiSubstitutor;
+import com.intellij.java.language.psi.util.PsiFormatUtil;
 import com.intellij.refactoring.HelpID;
 import com.intellij.refactoring.JavaRefactoringSettings;
 import com.intellij.refactoring.RefactoringBundle;

@@ -27,14 +27,15 @@ package com.intellij.codeInspection.util;
 import com.intellij.codeInspection.InspectionsBundle;
 import com.intellij.codeInspection.reference.*;
 import com.intellij.java.analysis.codeInspection.reference.*;
+import com.intellij.java.language.psi.*;
 import consulo.logging.Logger;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
-import com.intellij.psi.javadoc.PsiDocComment;
-import com.intellij.psi.javadoc.PsiDocTag;
-import com.intellij.psi.util.PsiFormatUtil;
+import com.intellij.java.language.psi.javadoc.PsiDocComment;
+import com.intellij.java.language.psi.javadoc.PsiDocTag;
+import com.intellij.java.language.psi.util.PsiFormatUtil;
 import org.jdom.Element;
 
 @SuppressWarnings({"HardCodedStringLiteral"})

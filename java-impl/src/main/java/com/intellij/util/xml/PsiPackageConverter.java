@@ -19,9 +19,9 @@ import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import com.intellij.psi.ElementManipulators;
-import com.intellij.psi.JavaPsiFacade;
+import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiJavaPackage;
+import com.intellij.java.language.psi.PsiJavaPackage;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.PackageReferenceSet;
 

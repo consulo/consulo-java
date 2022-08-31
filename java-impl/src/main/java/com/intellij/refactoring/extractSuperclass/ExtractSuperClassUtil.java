@@ -16,6 +16,7 @@
 package com.intellij.refactoring.extractSuperclass;
 
 import com.intellij.codeInsight.generation.OverrideImplementUtil;
+import com.intellij.java.language.psi.*;
 import consulo.logging.Logger;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtil;
@@ -27,10 +28,10 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.util.MethodSignature;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.MethodSignature;
+import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.psi.util.PsiUtilBase;
-import com.intellij.psi.util.TypeConversionUtil;
+import com.intellij.java.language.psi.util.TypeConversionUtil;
 import com.intellij.refactoring.memberPullUp.PullUpProcessor;
 import com.intellij.refactoring.ui.ConflictsDialog;
 import com.intellij.refactoring.util.DocCommentPolicy;

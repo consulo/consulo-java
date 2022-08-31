@@ -16,14 +16,14 @@
 package com.intellij.codeInsight.completion;
 
 import static com.intellij.openapi.util.Conditions.notInstanceOf;
-import static com.intellij.patterns.PsiJavaPatterns.and;
-import static com.intellij.patterns.PsiJavaPatterns.or;
-import static com.intellij.patterns.PsiJavaPatterns.psiAnnotation;
-import static com.intellij.patterns.PsiJavaPatterns.psiClass;
-import static com.intellij.patterns.PsiJavaPatterns.psiElement;
-import static com.intellij.patterns.PsiJavaPatterns.psiMethod;
-import static com.intellij.patterns.PsiJavaPatterns.psiNameValuePair;
-import static com.intellij.patterns.PsiJavaPatterns.psiReferenceExpression;
+import static com.intellij.java.language.patterns.PsiJavaPatterns.and;
+import static com.intellij.java.language.patterns.PsiJavaPatterns.or;
+import static com.intellij.java.language.patterns.PsiJavaPatterns.psiAnnotation;
+import static com.intellij.java.language.patterns.PsiJavaPatterns.psiClass;
+import static com.intellij.java.language.patterns.PsiJavaPatterns.psiElement;
+import static com.intellij.java.language.patterns.PsiJavaPatterns.psiMethod;
+import static com.intellij.java.language.patterns.PsiJavaPatterns.psiNameValuePair;
+import static com.intellij.java.language.patterns.PsiJavaPatterns.psiReferenceExpression;
 import static com.intellij.patterns.StandardPatterns.not;
 import static com.intellij.psi.SyntaxTraverser.psiApi;
 
@@ -45,10 +45,11 @@ import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.codeInsight.lookup.LookupElementDecorator;
 import com.intellij.codeInsight.lookup.PsiTypeLookupItem;
 import com.intellij.codeInsight.lookup.TailTypeDecorator;
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.util.AtomicNotNullLazyValue;
 import com.intellij.openapi.util.NotNullLazyValue;
 import com.intellij.patterns.ElementPattern;
-import com.intellij.pom.java.LanguageLevel;
+import com.intellij.java.language.LanguageLevel;
 import com.intellij.psi.*;
 import com.intellij.psi.filters.AndFilter;
 import com.intellij.psi.filters.ClassFilter;
@@ -64,14 +65,14 @@ import com.intellij.psi.filters.position.ParentElementFilter;
 import com.intellij.psi.filters.position.StartElementFilter;
 import com.intellij.psi.filters.position.SuperParentFilter;
 import com.intellij.psi.templateLanguages.OuterLanguageElement;
-import com.intellij.psi.util.InheritanceUtil;
+import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.util.Consumer;
 import com.intellij.util.ObjectUtil;
 import com.intellij.util.ProcessingContext;
 import com.intellij.util.containers.ContainerUtil;
-import consulo.java.module.util.JavaClassNames;
+import consulo.java.language.module.util.JavaClassNames;
 
 public class JavaKeywordCompletion
 {

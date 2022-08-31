@@ -15,8 +15,9 @@
  */
 package com.siyeh.ig.logging;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
-import com.intellij.psi.util.InheritanceUtil;
+import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;

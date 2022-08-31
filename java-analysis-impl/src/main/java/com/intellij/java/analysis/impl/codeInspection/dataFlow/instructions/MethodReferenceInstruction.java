@@ -19,7 +19,7 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.DataFlowRunner;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.DfaInstructionState;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.DfaMemoryState;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.InstructionVisitor;
-import com.intellij.psi.PsiMethodReferenceExpression;
+import com.intellij.java.language.psi.PsiMethodReferenceExpression;
 import javax.annotation.Nonnull;
 
 import java.util.Objects;

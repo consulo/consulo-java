@@ -15,14 +15,14 @@
  */
 package com.siyeh.ipp.constant;
 
-import com.intellij.psi.PsiClassObjectAccessExpression;
+import com.intellij.java.language.psi.PsiClassObjectAccessExpression;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiExpression;
-import com.intellij.psi.PsiLiteralExpression;
-import com.intellij.psi.PsiPolyadicExpression;
-import com.intellij.psi.PsiType;
-import com.intellij.psi.util.ConstantEvaluationOverflowException;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiLiteralExpression;
+import com.intellij.java.language.psi.PsiPolyadicExpression;
+import com.intellij.java.language.psi.PsiType;
+import com.intellij.java.language.psi.util.ConstantEvaluationOverflowException;
+import com.intellij.java.language.psi.util.PsiUtil;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ipp.base.PsiElementPredicate;
 

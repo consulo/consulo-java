@@ -17,6 +17,7 @@ package com.siyeh.ig.j2me;
 
 import javax.annotation.Nonnull;
 
+import com.intellij.java.language.psi.*;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nullable;

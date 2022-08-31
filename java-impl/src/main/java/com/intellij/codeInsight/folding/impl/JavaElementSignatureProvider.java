@@ -22,16 +22,16 @@ import javax.annotation.Nonnull;
 
 import consulo.logging.Logger;
 import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiClassInitializer;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiClassInitializer;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiField;
+import com.intellij.java.language.psi.PsiField;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiImportList;
-import com.intellij.psi.PsiJavaFile;
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiNameHelper;
-import com.intellij.psi.javadoc.PsiDocComment;
+import com.intellij.java.language.psi.PsiImportList;
+import com.intellij.java.language.psi.PsiJavaFile;
+import com.intellij.java.language.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiNameHelper;
+import com.intellij.java.language.psi.javadoc.PsiDocComment;
 
 @SuppressWarnings({"HardCodedStringLiteral"})
 public class JavaElementSignatureProvider extends AbstractElementSignatureProvider {

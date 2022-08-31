@@ -18,9 +18,9 @@ package com.siyeh.ig.memory;
 import javax.annotation.Nonnull;
 
 import org.intellij.lang.annotations.Pattern;
-import com.intellij.psi.PsiArrayInitializerExpression;
-import com.intellij.psi.PsiExpression;
-import com.intellij.psi.PsiNewExpression;
+import com.intellij.java.language.psi.PsiArrayInitializerExpression;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiNewExpression;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;

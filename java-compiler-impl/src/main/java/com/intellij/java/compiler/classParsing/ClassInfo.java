@@ -18,7 +18,7 @@ package com.intellij.java.compiler.classParsing;
 import com.intellij.compiler.make.CacheCorruptedException;
 import com.intellij.java.compiler.cache.SymbolTable;
 import com.intellij.util.ArrayUtil;
-import com.intellij.util.cls.ClsFormatException;
+import com.intellij.java.language.util.cls.ClsFormatException;
 import consulo.logging.Logger;
 
 import java.io.DataInput;

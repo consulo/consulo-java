@@ -18,15 +18,15 @@ package com.intellij.psi.filters.getters;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.intellij.psi.JavaPsiFacade;
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.psi.JavaPsiFacade;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiElementFactory;
-import com.intellij.psi.PsiExpression;
-import com.intellij.psi.PsiExpressionList;
-import com.intellij.psi.PsiKeyword;
-import com.intellij.psi.PsiModifier;
-import com.intellij.psi.PsiModifierListOwner;
+import com.intellij.java.language.psi.PsiElementFactory;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiExpressionList;
+import com.intellij.java.language.psi.PsiKeyword;
+import com.intellij.java.language.psi.PsiModifier;
+import com.intellij.java.language.psi.PsiModifierListOwner;
 import com.intellij.util.IncorrectOperationException;
 
 /**

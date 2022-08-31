@@ -3,14 +3,14 @@
  */
 package com.intellij.java.analysis.impl.codeInspection.dataFlow.inliner;
 
-import com.intellij.codeInsight.Nullability;
+import com.intellij.java.language.codeInsight.Nullability;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.CFGBuilder;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.SpecialField;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.types.DfTypes;
-import com.intellij.psi.CommonClassNames;
-import com.intellij.psi.PsiExpression;
-import com.intellij.psi.PsiMethodCallExpression;
-import com.intellij.psi.PsiType;
+import com.intellij.java.language.psi.CommonClassNames;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiMethodCallExpression;
+import com.intellij.java.language.psi.PsiType;
 import com.siyeh.ig.callMatcher.CallMatcher;
 import com.siyeh.ig.psiutils.ExpectedTypeUtils;
 import javax.annotation.Nonnull;

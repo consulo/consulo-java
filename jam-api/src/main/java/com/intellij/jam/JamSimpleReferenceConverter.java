@@ -25,7 +25,7 @@ import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.jam.model.common.CommonModelElement;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiLiteral;
+import com.intellij.java.language.psi.PsiLiteral;
 import com.intellij.psi.PsiNamedElement;
 import com.intellij.psi.PsiReference;
 import com.intellij.util.NotNullFunction;

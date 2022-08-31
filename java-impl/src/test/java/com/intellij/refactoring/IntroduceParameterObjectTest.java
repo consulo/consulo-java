@@ -21,16 +21,19 @@
 package com.intellij.refactoring;
 
 import com.intellij.JavaTestUtil;
+import com.intellij.java.language.psi.JavaPsiFacade;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiParameter;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.*;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.refactoring.introduceparameterobject.IntroduceParameterObjectProcessor;
 import com.intellij.java.analysis.impl.refactoring.util.VariableData;
 import com.intellij.util.Function;
-import com.intellij.util.VisibilityUtil;
-import consulo.java.module.util.JavaClassNames;
+import com.intellij.java.language.util.VisibilityUtil;
+import consulo.java.language.module.util.JavaClassNames;
 
 public abstract class IntroduceParameterObjectTest extends MultiFileTestCase{
   @Override

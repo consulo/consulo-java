@@ -16,9 +16,9 @@
 package com.intellij.psi.impl.source.resolve;
 
 import javax.annotation.Nonnull;
-import com.intellij.psi.JavaResolveResult;
-import com.intellij.psi.PsiJavaCodeReferenceElement;
-import com.intellij.psi.PsiVariable;
+import com.intellij.java.language.psi.JavaResolveResult;
+import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
+import com.intellij.java.language.psi.PsiVariable;
 import com.intellij.psi.scope.util.PsiScopesUtil;
 
 public class ResolveVariableUtil

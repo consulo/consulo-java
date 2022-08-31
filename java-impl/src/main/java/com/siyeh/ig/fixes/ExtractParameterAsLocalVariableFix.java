@@ -18,10 +18,11 @@ package com.siyeh.ig.fixes;
 import javax.annotation.Nonnull;
 
 import com.intellij.codeInspection.ProblemDescriptor;
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.codeStyle.CodeStyleManager;
-import com.intellij.psi.codeStyle.JavaCodeStyleManager;
+import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.psi.search.SearchScope;
 import com.intellij.psi.search.searches.ReferencesSearch;
 import com.intellij.psi.tree.IElementType;

@@ -18,15 +18,16 @@ package com.intellij.refactoring.encapsulateFields;
 import javax.annotation.Nonnull;
 
 import com.intellij.codeInsight.generation.GenerateMembersUtil;
+import com.intellij.java.language.psi.*;
 import consulo.logging.Logger;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.util.PropertyUtil;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.PropertyUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.refactoring.util.RefactoringUtil;
 import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.VisibilityUtil;
+import com.intellij.java.language.util.VisibilityUtil;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nullable;

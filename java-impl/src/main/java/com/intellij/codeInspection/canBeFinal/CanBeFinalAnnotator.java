@@ -22,6 +22,7 @@ import com.intellij.java.analysis.codeInspection.reference.RefField;
 import com.intellij.java.analysis.codeInspection.reference.RefMethod;
 import com.intellij.java.analysis.impl.codeInspection.reference.RefClassImpl;
 import com.intellij.java.analysis.impl.codeInspection.reference.RefMethodImpl;
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
 import com.intellij.psi.controlFlow.*;
 import com.intellij.util.containers.ContainerUtil;

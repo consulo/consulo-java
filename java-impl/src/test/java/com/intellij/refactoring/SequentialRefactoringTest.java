@@ -17,10 +17,10 @@ package com.intellij.refactoring;
 
 import java.io.IOException;
 
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiClassOwner;
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiReferenceExpression;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiClassOwner;
+import com.intellij.java.language.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiReferenceExpression;
 import com.intellij.refactoring.extractMethod.PrepareFailedException;
 import com.intellij.refactoring.inline.InlineMethodProcessor;
 import com.intellij.testFramework.LightCodeInsightTestCase;

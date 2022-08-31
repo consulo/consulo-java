@@ -16,8 +16,8 @@
 package com.intellij.psi.impl.source.tree.java;
 
 import com.intellij.lang.ASTNode;
-import com.intellij.psi.PsiImportList;
-import com.intellij.psi.PsiImportStatementBase;
+import com.intellij.java.language.psi.PsiImportList;
+import com.intellij.java.language.psi.PsiImportStatementBase;
 import com.intellij.psi.impl.JavaPsiImplementationHelper;
 import com.intellij.psi.impl.source.SourceTreeToPsiMap;
 import com.intellij.psi.impl.source.tree.CompositeElement;

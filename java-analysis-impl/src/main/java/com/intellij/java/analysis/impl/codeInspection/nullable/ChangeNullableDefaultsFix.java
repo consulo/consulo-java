@@ -17,11 +17,11 @@ package com.intellij.java.analysis.impl.codeInspection.nullable;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.codeInsight.NullableNotNullManager;
+import com.intellij.java.language.codeInsight.NullableNotNullManager;
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiAnnotation;
+import com.intellij.java.language.psi.PsiAnnotation;
 
 /**
 * User: anna

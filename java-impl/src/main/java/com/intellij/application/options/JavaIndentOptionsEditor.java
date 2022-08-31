@@ -22,7 +22,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 
 import javax.annotation.Nonnull;
-import com.intellij.lang.java.JavaLanguage;
+import com.intellij.java.language.JavaLanguage;
 import com.intellij.openapi.application.ApplicationBundle;
 import com.intellij.psi.codeStyle.CodeStyleSettings;
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings;

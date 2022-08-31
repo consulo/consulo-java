@@ -15,6 +15,10 @@
  */
 package com.siyeh.ipp.types;
 
+import com.intellij.java.language.psi.PsiDiamondType;
+import com.intellij.java.language.psi.PsiReferenceParameterList;
+import com.intellij.java.language.psi.PsiType;
+import com.intellij.java.language.psi.PsiTypeElement;
 import com.intellij.psi.*;
 import com.siyeh.ipp.base.PsiElementPredicate;
 

@@ -8,6 +8,7 @@ import java.io.IOException;
 
 import com.intellij.JavaTestUtil;
 import com.intellij.ide.highlighter.JavaFileType;
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.application.ApplicationManager;
 import consulo.logging.Logger;
 import com.intellij.openapi.roots.ModuleRootModificationUtil;

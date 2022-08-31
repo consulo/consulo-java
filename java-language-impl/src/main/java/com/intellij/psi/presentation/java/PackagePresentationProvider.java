@@ -20,7 +20,7 @@ import com.intellij.navigation.ColoredItemPresentation;
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.navigation.ItemPresentationProvider;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
-import com.intellij.psi.PsiJavaPackage;
+import com.intellij.java.language.psi.PsiJavaPackage;
 import consulo.ui.image.Image;
 
 public class PackagePresentationProvider implements ItemPresentationProvider<PsiJavaPackage> {

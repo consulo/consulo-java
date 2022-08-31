@@ -18,6 +18,7 @@ package com.intellij.ide.util;
 import javax.annotation.Nonnull;
 
 import com.intellij.ide.IdeBundle;
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
 
 /**

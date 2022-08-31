@@ -24,6 +24,8 @@ import java.util.Map;
 
 import javax.annotation.Nonnull;
 
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.impl.source.resolve.graphInference.PsiPolyExpressionUtil;
 import org.jetbrains.annotations.Contract;
 
 import javax.annotation.Nullable;
@@ -31,15 +33,15 @@ import consulo.logging.Logger;
 import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
-import com.intellij.psi.impl.source.resolve.ParameterTypeInferencePolicy;
+import com.intellij.java.language.psi.impl.source.resolve.ParameterTypeInferencePolicy;
 import com.intellij.psi.impl.source.resolve.graphInference.constraints.ExpressionCompatibilityConstraint;
-import com.intellij.psi.infos.MethodCandidateInfo;
+import com.intellij.java.language.psi.infos.MethodCandidateInfo;
 import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
 import com.intellij.psi.util.PsiModificationTracker;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.PsiTypesUtil;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.PsiTypesUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.util.Producer;
 
 public class InferenceSessionContainer

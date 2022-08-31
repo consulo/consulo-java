@@ -15,9 +15,10 @@
  */
 package com.siyeh.ig.assignment;
 
-import com.intellij.codeInsight.NullableNotNullManager;
+import com.intellij.java.language.codeInsight.NullableNotNullManager;
 import com.intellij.java.analysis.impl.codeInsight.intention.AddAnnotationFix;
 import com.intellij.codeInspection.ui.SingleCheckboxOptionsPanel;
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;

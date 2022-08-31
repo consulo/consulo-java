@@ -22,6 +22,7 @@ import java.util.Set;
 
 import javax.annotation.Nonnull;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
@@ -30,11 +31,11 @@ import com.intellij.psi.impl.source.tree.Factory;
 import com.intellij.psi.impl.source.tree.JavaDocElementType;
 import com.intellij.psi.impl.source.tree.LeafElement;
 import com.intellij.psi.impl.source.tree.SharedImplUtil;
-import com.intellij.psi.infos.CandidateInfo;
-import com.intellij.psi.javadoc.PsiDocComment;
-import com.intellij.psi.javadoc.PsiDocTag;
-import com.intellij.psi.javadoc.PsiDocTagValue;
-import com.intellij.psi.javadoc.PsiDocToken;
+import com.intellij.java.language.psi.infos.CandidateInfo;
+import com.intellij.java.language.psi.javadoc.PsiDocComment;
+import com.intellij.java.language.psi.javadoc.PsiDocTag;
+import com.intellij.java.language.psi.javadoc.PsiDocTagValue;
+import com.intellij.java.language.psi.javadoc.PsiDocToken;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.CharTable;

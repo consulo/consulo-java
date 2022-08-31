@@ -17,16 +17,16 @@ package com.siyeh.ig.internationalization;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.codeInsight.AnnotationUtil;
+import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.analysis.impl.codeInsight.intention.AddAnnotationFix;
-import com.intellij.psi.*;
+import com.intellij.java.language.psi.*;
 import com.siyeh.HardcodedMethodConstants;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.DelegatingFix;
 import com.siyeh.ig.InspectionGadgetsFix;
-import consulo.java.module.util.JavaClassNames;
+import consulo.java.language.module.util.JavaClassNames;
 
 public class StringToUpperWithoutLocaleInspection extends BaseInspection {
 

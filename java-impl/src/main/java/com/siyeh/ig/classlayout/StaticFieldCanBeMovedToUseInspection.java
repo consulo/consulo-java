@@ -23,8 +23,8 @@ import com.intellij.codeInspection.reference.*;
 import com.intellij.java.analysis.codeInspection.reference.RefClass;
 import com.intellij.java.analysis.codeInspection.reference.RefField;
 import com.intellij.java.analysis.codeInspection.reference.RefJavaUtil;
-import com.intellij.psi.PsiField;
-import com.intellij.psi.PsiType;
+import com.intellij.java.language.psi.PsiField;
+import com.intellij.java.language.psi.PsiType;
 import com.siyeh.ig.BaseGlobalInspection;
 import javax.annotation.Nonnull;
 

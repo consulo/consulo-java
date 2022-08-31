@@ -4,7 +4,7 @@ package com.intellij.psi.impl.java.stubs;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.LighterAST;
 import com.intellij.lang.LighterASTNode;
-import com.intellij.psi.PsiRecordHeader;
+import com.intellij.java.language.psi.PsiRecordHeader;
 import com.intellij.psi.impl.java.stubs.impl.PsiRecordHeaderStubImpl;
 import com.intellij.psi.impl.source.PsiRecordHeaderImpl;
 import com.intellij.psi.impl.source.tree.java.RecordHeaderElement;

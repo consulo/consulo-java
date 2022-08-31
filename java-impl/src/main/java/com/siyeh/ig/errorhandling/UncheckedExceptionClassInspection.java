@@ -15,9 +15,9 @@
  */
 package com.siyeh.ig.errorhandling;
 
-import consulo.java.module.util.JavaClassNames;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.util.InheritanceUtil;
+import consulo.java.language.module.util.JavaClassNames;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;

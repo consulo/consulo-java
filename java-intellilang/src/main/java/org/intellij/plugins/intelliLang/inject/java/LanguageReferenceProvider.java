@@ -15,6 +15,9 @@
  */
 package org.intellij.plugins.intelliLang.inject.java;
 
+import com.intellij.java.language.psi.PsiAnnotation;
+import com.intellij.java.language.psi.PsiLiteralExpression;
+import com.intellij.java.language.psi.PsiModifierListOwner;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.patterns.PatternCondition;
 import com.intellij.patterns.StandardPatterns;
@@ -25,7 +28,7 @@ import org.intellij.plugins.intelliLang.util.AnnotationUtilEx;
 import org.intellij.plugins.intelliLang.util.PsiUtilEx;
 import javax.annotation.Nonnull;
 
-import static com.intellij.patterns.PsiJavaPatterns.literalExpression;
+import static com.intellij.java.language.patterns.PsiJavaPatterns.literalExpression;
 
 /**
  * Provides references to Language-IDs and RegExp enums for completion.

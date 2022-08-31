@@ -20,21 +20,22 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.util.Comparing;
 import consulo.logging.Logger;
 import consulo.util.dataholder.Key;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
-import com.intellij.psi.infos.CandidateInfo;
-import com.intellij.psi.infos.ClassCandidateInfo;
+import com.intellij.java.language.psi.infos.CandidateInfo;
+import com.intellij.java.language.psi.infos.ClassCandidateInfo;
 import com.intellij.psi.scope.BaseScopeProcessor;
 import com.intellij.psi.scope.ElementClassHint;
-import com.intellij.psi.scope.JavaScopeProcessorEvent;
+import com.intellij.java.language.psi.scope.JavaScopeProcessorEvent;
 import com.intellij.psi.scope.NameHint;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.SmartList;
-import consulo.java.module.util.JavaClassNames;
+import consulo.java.language.module.util.JavaClassNames;
 
 public class ClassResolverProcessor extends BaseScopeProcessor implements NameHint, ElementClassHint
 {

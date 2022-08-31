@@ -18,7 +18,7 @@ package com.intellij.psi.impl.source;
 import com.intellij.lang.LighterAST;
 import com.intellij.lang.LighterASTNode;
 import com.intellij.openapi.progress.ProgressManager;
-import com.intellij.psi.JavaTokenType;
+import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.psi.impl.source.tree.ElementType;
 import com.intellij.psi.impl.source.tree.LightTreeUtil;
 import com.intellij.psi.tree.IElementType;

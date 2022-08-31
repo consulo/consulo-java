@@ -23,6 +23,7 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import com.intellij.codeInsight.daemon.impl.quickfix.DefineParamsDefaultValueAction;
+import com.intellij.java.language.psi.*;
 import com.intellij.lang.findUsages.DescriptiveNameUtil;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.command.CommandProcessor;
@@ -40,7 +41,7 @@ import com.intellij.refactoring.util.CanonicalTypes;
 import com.intellij.usageView.UsageInfo;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.VisibilityUtil;
+import com.intellij.java.language.util.VisibilityUtil;
 
 class DetectedJavaChangeInfo extends JavaChangeInfoImpl
 {

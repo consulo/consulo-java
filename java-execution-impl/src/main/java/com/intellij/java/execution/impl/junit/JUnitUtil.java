@@ -1,7 +1,7 @@
 // Copyright 2000-2017 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.execution.impl.junit;
 
-import static com.intellij.codeInsight.AnnotationUtil.CHECK_HIERARCHY;
+import static com.intellij.java.language.codeInsight.AnnotationUtil.CHECK_HIERARCHY;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -11,9 +11,9 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import com.intellij.codeInsight.AnnotationUtil;
+import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.codeInsight.MetaAnnotationUtil;
-import com.intellij.codeInsight.TestFrameworks;
+import com.intellij.java.language.codeInsight.TestFrameworks;
 import com.intellij.execution.CantRunException;
 import com.intellij.execution.ExecutionBundle;
 import com.intellij.java.execution.JUnitRecognizer;
@@ -22,6 +22,7 @@ import com.intellij.execution.Location;
 import com.intellij.execution.PsiLocation;
 import com.intellij.java.execution.impl.junit2.info.MethodLocation;
 import com.intellij.execution.testframework.SourceScope;
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.application.ReadAction;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
@@ -33,13 +34,13 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
 import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
-import com.intellij.psi.util.InheritanceUtil;
-import com.intellij.psi.util.PsiClassUtil;
+import com.intellij.java.language.psi.util.InheritanceUtil;
+import com.intellij.java.language.psi.util.PsiClassUtil;
 import com.intellij.psi.util.PsiModificationTracker;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.PsiUtil;
-import com.intellij.testIntegration.JavaTestFramework;
-import com.intellij.testIntegration.TestFramework;
+import com.intellij.java.language.psi.util.PsiUtil;
+import com.intellij.java.language.testIntegration.JavaTestFramework;
+import com.intellij.java.language.testIntegration.TestFramework;
 import com.siyeh.ig.psiutils.TestUtils;
 import consulo.psi.PsiPackage;
 

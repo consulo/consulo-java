@@ -16,6 +16,7 @@
 package com.intellij.psi.impl.source;
 
 import com.intellij.ide.highlighter.JavaFileType;
+import com.intellij.java.language.psi.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;

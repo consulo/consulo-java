@@ -17,15 +17,15 @@ package com.intellij.psi.impl.source.javadoc;
 
 import org.jetbrains.annotations.NonNls;
 import com.intellij.codeInsight.daemon.JavaErrorBundle;
-import com.intellij.psi.JavaPsiFacade;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiClassType;
+import com.intellij.java.language.psi.JavaPsiFacade;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiClassType;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiJavaCodeReferenceElement;
-import com.intellij.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
+import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.psi.PsiReference;
-import com.intellij.psi.javadoc.JavadocTagInfo;
-import com.intellij.psi.javadoc.PsiDocTagValue;
+import com.intellij.java.language.psi.javadoc.JavadocTagInfo;
+import com.intellij.java.language.psi.javadoc.PsiDocTagValue;
 import com.intellij.psi.util.PsiTreeUtil;
 
 /**

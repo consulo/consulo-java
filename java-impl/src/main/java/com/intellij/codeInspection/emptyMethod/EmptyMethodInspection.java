@@ -16,13 +16,14 @@
 package com.intellij.codeInspection.emptyMethod;
 
 import com.intellij.analysis.AnalysisScope;
-import com.intellij.codeInsight.AnnotationUtil;
+import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.codeInsight.daemon.GroupNames;
 import com.intellij.java.analysis.codeInspection.GlobalJavaInspectionContext;
 import com.intellij.java.analysis.codeInspection.GlobalJavaInspectionTool;
 import com.intellij.java.analysis.codeInspection.reference.RefJavaUtil;
 import com.intellij.java.analysis.codeInspection.reference.RefJavaVisitor;
 import com.intellij.java.analysis.codeInspection.reference.RefMethod;
+import com.intellij.java.language.psi.*;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import com.intellij.codeInspection.*;
 import com.intellij.codeInspection.reference.*;

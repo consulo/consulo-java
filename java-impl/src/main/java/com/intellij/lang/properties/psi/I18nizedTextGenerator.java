@@ -16,7 +16,7 @@
 
 package com.intellij.lang.properties.psi;
 
-import com.intellij.psi.PsiLiteralExpression;
+import com.intellij.java.language.psi.PsiLiteralExpression;
 import javax.annotation.Nullable;
 
 /**

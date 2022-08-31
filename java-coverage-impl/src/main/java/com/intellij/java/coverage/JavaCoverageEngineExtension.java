@@ -10,7 +10,7 @@ import com.intellij.coverage.CoverageSuitesBundle;
 import com.intellij.execution.configurations.RunConfigurationBase;
 import com.intellij.openapi.extensions.ExtensionPointName;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.PsiFile;
 
 /**

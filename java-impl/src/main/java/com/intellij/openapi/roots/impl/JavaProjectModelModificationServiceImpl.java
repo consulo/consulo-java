@@ -24,12 +24,12 @@ import jakarta.inject.Singleton;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.DependencyScope;
-import com.intellij.openapi.roots.ExternalLibraryDescriptor;
+import com.intellij.java.language.projectRoots.roots.ExternalLibraryDescriptor;
 import com.intellij.openapi.roots.JavaProjectModelModificationService;
 import com.intellij.openapi.roots.JavaProjectModelModifier;
 import com.intellij.openapi.roots.libraries.Library;
 import com.intellij.openapi.util.AsyncResult;
-import com.intellij.pom.java.LanguageLevel;
+import com.intellij.java.language.LanguageLevel;
 
 /**
  * @author nik

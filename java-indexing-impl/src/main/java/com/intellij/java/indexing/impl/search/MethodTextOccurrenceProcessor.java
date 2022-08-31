@@ -15,11 +15,15 @@
  */
 package com.intellij.java.indexing.impl.search;
 
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiModifier;
+import com.intellij.java.language.psi.PsiSubstitutor;
 import com.intellij.psi.*;
 import com.intellij.psi.search.RequestResultProcessor;
-import com.intellij.psi.util.MethodSignature;
-import com.intellij.psi.util.MethodSignatureUtil;
-import com.intellij.psi.util.TypeConversionUtil;
+import com.intellij.java.language.psi.util.MethodSignature;
+import com.intellij.java.language.psi.util.MethodSignatureUtil;
+import com.intellij.java.language.psi.util.TypeConversionUtil;
 import com.intellij.util.Processor;
 
 import javax.annotation.Nonnull;

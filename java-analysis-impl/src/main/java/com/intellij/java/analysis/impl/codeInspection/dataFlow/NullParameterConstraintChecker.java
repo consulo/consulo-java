@@ -1,8 +1,8 @@
 // Copyright 2000-2020 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.analysis.impl.codeInspection.dataFlow;
 
-import com.intellij.codeInsight.Nullability;
-import com.intellij.codeInsight.NullableNotNullManager;
+import com.intellij.java.language.codeInsight.Nullability;
+import com.intellij.java.language.codeInsight.NullableNotNullManager;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.instructions.AssignInstruction;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.instructions.Instruction;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.instructions.PushInstruction;
@@ -11,10 +11,10 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaValue;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaValueFactory;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaVariableValue;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiModifierListOwner;
-import com.intellij.psi.PsiParameter;
-import com.intellij.psi.PsiPrimitiveType;
+import com.intellij.java.language.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiModifierListOwner;
+import com.intellij.java.language.psi.PsiParameter;
+import com.intellij.java.language.psi.PsiPrimitiveType;
 import com.intellij.java.analysis.impl.psi.impl.search.JavaNullMethodArgumentUtil;
 import com.intellij.util.SmartList;
 import javax.annotation.Nonnull;

@@ -18,6 +18,7 @@ package com.siyeh.ig.performance;
 import javax.annotation.Nonnull;
 import javax.swing.JComponent;
 
+import com.intellij.java.language.psi.*;
 import org.jetbrains.annotations.NonNls;
 import consulo.java.analysis.codeInspection.JavaExtensionPoints;
 import com.intellij.codeInspection.ui.MultipleCheckboxOptionsPanel;
@@ -33,7 +34,7 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.fixes.ChangeModifierFix;
 import com.siyeh.ig.psiutils.ClassUtils;
 import com.siyeh.ig.psiutils.MethodUtils;
-import consulo.java.module.util.JavaClassNames;
+import consulo.java.language.module.util.JavaClassNames;
 
 public class MethodMayBeStaticInspection extends BaseInspection
 {

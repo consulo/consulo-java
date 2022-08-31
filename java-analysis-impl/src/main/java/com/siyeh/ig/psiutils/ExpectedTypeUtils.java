@@ -16,15 +16,16 @@
 package com.siyeh.ig.psiutils;
 
 import com.intellij.codeInsight.ExceptionUtil;
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.util.PsiTypesUtil;
-import com.intellij.psi.util.TypeConversionUtil;
+import com.intellij.java.language.psi.util.PsiTypesUtil;
+import com.intellij.java.language.psi.util.TypeConversionUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.ContainerUtil;
-import consulo.java.module.util.JavaClassNames;
+import consulo.java.language.module.util.JavaClassNames;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

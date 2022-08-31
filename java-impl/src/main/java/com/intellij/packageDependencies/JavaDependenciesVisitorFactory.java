@@ -20,9 +20,10 @@
  */
 package com.intellij.packageDependencies;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
-import com.intellij.psi.javadoc.PsiDocComment;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.javadoc.PsiDocComment;
+import com.intellij.java.language.psi.util.PsiUtil;
 
 public class JavaDependenciesVisitorFactory extends DependenciesVisitorFactory {
   @Override

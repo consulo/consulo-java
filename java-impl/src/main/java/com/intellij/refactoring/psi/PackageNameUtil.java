@@ -15,7 +15,7 @@
  */
 package com.intellij.refactoring.psi;
 
-import com.intellij.psi.PsiNameHelper;
+import com.intellij.java.language.psi.PsiNameHelper;
 
 import java.util.StringTokenizer;
 

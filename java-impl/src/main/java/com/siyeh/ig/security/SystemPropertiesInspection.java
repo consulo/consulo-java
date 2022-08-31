@@ -17,11 +17,14 @@ package com.siyeh.ig.security;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.psi.*;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiMethodCallExpression;
+import com.intellij.java.language.psi.PsiReferenceExpression;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import consulo.java.module.util.JavaClassNames;
+import consulo.java.language.module.util.JavaClassNames;
 import org.jetbrains.annotations.NonNls;
 
 public class SystemPropertiesInspection extends BaseInspection {

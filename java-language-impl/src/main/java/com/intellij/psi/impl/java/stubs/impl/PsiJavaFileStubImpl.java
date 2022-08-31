@@ -16,10 +16,10 @@
 package com.intellij.psi.impl.java.stubs.impl;
 
 import javax.annotation.Nonnull;
-import com.intellij.pom.java.LanguageLevel;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiJavaFile;
-import com.intellij.psi.PsiJavaModule;
+import com.intellij.java.language.LanguageLevel;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiJavaFile;
+import com.intellij.java.language.psi.PsiJavaModule;
 import com.intellij.psi.impl.java.stubs.ClsStubPsiFactory;
 import com.intellij.psi.impl.java.stubs.JavaStubElementTypes;
 import com.intellij.psi.impl.java.stubs.PsiJavaFileStub;

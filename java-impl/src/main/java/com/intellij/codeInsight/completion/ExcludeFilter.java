@@ -18,7 +18,7 @@ package com.intellij.codeInsight.completion;
 import javax.annotation.Nonnull;
 
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiVariable;
+import com.intellij.java.language.psi.PsiVariable;
 import com.intellij.psi.filters.ElementFilter;
 
 /**

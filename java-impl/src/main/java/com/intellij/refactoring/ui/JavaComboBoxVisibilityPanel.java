@@ -15,9 +15,9 @@
  */
 package com.intellij.refactoring.ui;
 
-import com.intellij.psi.PsiModifier;
+import com.intellij.java.language.psi.PsiModifier;
 
-import static com.intellij.util.VisibilityUtil.toPresentableText;
+import static com.intellij.java.language.util.VisibilityUtil.toPresentableText;
 
 /**
  * @author Konstantin Bulenkov

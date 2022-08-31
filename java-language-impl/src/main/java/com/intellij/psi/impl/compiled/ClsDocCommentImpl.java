@@ -17,18 +17,18 @@ package com.intellij.psi.impl.compiled;
 
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
-import com.intellij.psi.JavaElementVisitor;
-import com.intellij.psi.JavaTokenType;
-import com.intellij.psi.PsiDocCommentOwner;
+import com.intellij.java.language.psi.JavaElementVisitor;
+import com.intellij.java.language.psi.JavaTokenType;
+import com.intellij.java.language.psi.PsiDocCommentOwner;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.PsiJavaDocumentedElement;
-import com.intellij.psi.PsiJavaToken;
+import com.intellij.java.language.psi.PsiJavaDocumentedElement;
+import com.intellij.java.language.psi.PsiJavaToken;
 import com.intellij.psi.impl.PsiImplUtil;
 import com.intellij.psi.impl.source.tree.JavaDocElementType;
 import com.intellij.psi.impl.source.tree.TreeElement;
-import com.intellij.psi.javadoc.PsiDocComment;
-import com.intellij.psi.javadoc.PsiDocTag;
+import com.intellij.java.language.psi.javadoc.PsiDocComment;
+import com.intellij.java.language.psi.javadoc.PsiDocTag;
 import com.intellij.psi.tree.IElementType;
 
 class ClsDocCommentImpl extends ClsElementImpl implements PsiDocComment, JavaTokenType, PsiJavaToken

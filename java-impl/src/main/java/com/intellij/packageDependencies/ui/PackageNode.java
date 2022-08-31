@@ -20,8 +20,8 @@ import com.intellij.icons.AllIcons;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiJavaFile;
-import com.intellij.psi.PsiJavaPackage;
+import com.intellij.java.language.psi.PsiJavaFile;
+import com.intellij.java.language.psi.PsiJavaPackage;
 import consulo.ui.image.Image;
 
 import java.util.Map;

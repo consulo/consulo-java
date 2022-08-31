@@ -15,8 +15,8 @@
  */
 package com.siyeh.ig.inheritance;
 
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiModifier;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiModifier;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;

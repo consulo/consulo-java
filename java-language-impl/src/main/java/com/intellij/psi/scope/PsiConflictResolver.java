@@ -19,7 +19,7 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import com.intellij.psi.infos.CandidateInfo;
+import com.intellij.java.language.psi.infos.CandidateInfo;
 
 /**
  * Created by IntelliJ IDEA.

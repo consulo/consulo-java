@@ -24,7 +24,7 @@ import com.intellij.lang.ASTNode;
 import com.intellij.lang.LighterAST;
 import com.intellij.lang.LighterASTNode;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.PsiPackageAccessibilityStatement;
+import com.intellij.java.language.psi.PsiPackageAccessibilityStatement;
 import com.intellij.psi.impl.java.stubs.impl.PsiPackageAccessibilityStatementStubImpl;
 import com.intellij.psi.impl.source.PackageAccessibilityStatementElement;
 import com.intellij.psi.impl.source.PsiPackageAccessibilityStatementImpl;

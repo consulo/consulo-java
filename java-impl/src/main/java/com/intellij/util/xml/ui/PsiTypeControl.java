@@ -19,9 +19,9 @@ import javax.annotation.Nonnull;
 
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.JavaPsiFacade;
+import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.psi.PsiManager;
-import com.intellij.psi.PsiType;
+import com.intellij.java.language.psi.PsiType;
 import com.intellij.ui.EditorTextField;
 import com.intellij.ui.ReferenceEditorWithBrowseButton;
 import com.intellij.ui.JavaReferenceEditorUtil;

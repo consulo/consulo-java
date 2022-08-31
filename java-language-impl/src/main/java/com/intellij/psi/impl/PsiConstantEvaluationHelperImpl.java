@@ -15,8 +15,12 @@
  */
 package com.intellij.psi.impl;
 
+import com.intellij.java.language.psi.PsiConstantEvaluationHelper;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiType;
+import com.intellij.java.language.psi.PsiVariable;
 import com.intellij.psi.*;
-import com.intellij.psi.util.ConstantExpressionUtil;
+import com.intellij.java.language.psi.util.ConstantExpressionUtil;
 
 import java.util.Set;
 

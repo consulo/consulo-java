@@ -23,13 +23,14 @@ import com.intellij.java.analysis.codeInspection.reference.RefJavaUtil;
 import com.intellij.java.analysis.codeInspection.reference.RefJavaVisitor;
 import com.intellij.java.analysis.impl.codeInspection.reference.RefClassImpl;
 import com.intellij.java.analysis.impl.codeInspection.reference.RefJavaElementImpl;
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.util.Computable;
 import com.intellij.psi.*;
-import com.intellij.psi.util.ClassUtil;
-import com.intellij.psi.util.PsiFormatUtil;
+import com.intellij.java.language.psi.util.ClassUtil;
+import com.intellij.java.language.psi.util.PsiFormatUtil;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
 
 /**
  * @author max

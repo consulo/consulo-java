@@ -15,7 +15,7 @@
  */
 package com.intellij.codeInsight.completion;
 
-import static com.intellij.patterns.PsiJavaPatterns.*;
+import static com.intellij.java.language.patterns.PsiJavaPatterns.*;
 import static com.intellij.util.ObjectUtil.assertNotNull;
 
 import java.util.ArrayList;
@@ -40,8 +40,9 @@ import com.intellij.codeInsight.lookup.LookupItemUtil;
 import com.intellij.codeInsight.lookup.PsiTypeLookupItem;
 import com.intellij.codeInsight.lookup.TailTypeDecorator;
 import com.intellij.featureStatistics.FeatureUsageTracker;
+import com.intellij.java.language.psi.*;
 import com.intellij.lang.LangBundle;
-import com.intellij.lang.java.JavaLanguage;
+import com.intellij.java.language.JavaLanguage;
 import com.intellij.openapi.actionSystem.IdeActions;
 import consulo.logging.Logger;
 import com.intellij.openapi.editor.Document;
@@ -54,8 +55,8 @@ import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.patterns.ElementPattern;
 import com.intellij.patterns.PatternCondition;
-import com.intellij.patterns.PsiJavaElementPattern;
-import com.intellij.patterns.PsiNameValuePairPattern;
+import com.intellij.java.language.patterns.PsiJavaElementPattern;
+import com.intellij.java.language.patterns.PsiNameValuePairPattern;
 import com.intellij.psi.*;
 import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.psi.filters.AndFilter;
@@ -75,9 +76,9 @@ import com.intellij.psi.impl.source.PsiLabelReference;
 import com.intellij.psi.impl.source.tree.ElementType;
 import com.intellij.psi.scope.ElementClassFilter;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.psi.util.PsiUtilCore;
-import com.intellij.psi.util.TypeConversionUtil;
+import com.intellij.java.language.psi.util.TypeConversionUtil;
 import com.intellij.util.Consumer;
 import com.intellij.util.DocumentUtil;
 import com.intellij.util.ProcessingContext;

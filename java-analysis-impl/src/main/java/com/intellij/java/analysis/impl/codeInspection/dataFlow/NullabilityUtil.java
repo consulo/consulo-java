@@ -2,12 +2,13 @@
 package com.intellij.java.analysis.impl.codeInspection.dataFlow;
 
 import com.intellij.java.analysis.impl.codeInsight.JavaPsiEquivalenceUtil;
-import com.intellij.codeInsight.Nullability;
+import com.intellij.java.language.codeInsight.Nullability;
 import com.intellij.codeInsight.daemon.ImplicitUsageProvider;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.HighlightControlFlowUtil;
-import com.intellij.codeInsight.daemon.impl.analysis.JavaGenericsUtil;
+import com.intellij.java.language.codeInsight.daemon.impl.analysis.JavaGenericsUtil;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaExpressionFactory;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaVariableValue;
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.util.Pair;
 import com.intellij.psi.*;
 import com.intellij.psi.search.GlobalSearchScope;
@@ -17,7 +18,7 @@ import com.intellij.psi.search.searches.ReferencesSearch;
 import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
 import com.intellij.psi.util.PsiModificationTracker;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.util.containers.ContainerUtil;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import javax.annotation.Nonnull;

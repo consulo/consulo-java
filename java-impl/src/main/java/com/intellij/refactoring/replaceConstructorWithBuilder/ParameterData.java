@@ -20,12 +20,12 @@
  */
 package com.intellij.refactoring.replaceConstructorWithBuilder;
 
+import com.intellij.java.language.psi.*;
 import consulo.logging.Logger;
 import com.intellij.openapi.util.Comparing;
-import com.intellij.psi.*;
-import com.intellij.psi.codeStyle.JavaCodeStyleManager;
-import com.intellij.psi.codeStyle.VariableKind;
-import com.intellij.psi.util.PropertyUtil;
+import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
+import com.intellij.java.language.psi.codeStyle.VariableKind;
+import com.intellij.java.language.psi.util.PropertyUtil;
 import com.intellij.refactoring.util.RefactoringUtil;
 
 import java.util.Map;

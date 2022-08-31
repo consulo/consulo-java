@@ -17,6 +17,7 @@ package com.siyeh.ig.style;
 
 import javax.annotation.Nonnull;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.openapi.project.Project;
@@ -28,7 +29,7 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.MethodCallUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
 import com.siyeh.InspectionGadgetsBundle;
-import consulo.java.module.util.JavaClassNames;
+import consulo.java.language.module.util.JavaClassNames;
 import org.jetbrains.annotations.Nls;
 
 public class EqualsCalledOnEnumConstantInspection extends BaseInspection {

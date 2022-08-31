@@ -17,10 +17,10 @@ package com.intellij.codeInsight.editorActions.wordSelection;
 
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.JavaDocTokenType;
+import com.intellij.java.language.psi.JavaDocTokenType;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.javadoc.PsiDocComment;
-import com.intellij.psi.javadoc.PsiDocToken;
+import com.intellij.java.language.psi.javadoc.PsiDocComment;
+import com.intellij.java.language.psi.javadoc.PsiDocToken;
 import com.intellij.util.text.CharArrayUtil;
 
 import java.util.List;

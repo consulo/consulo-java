@@ -15,6 +15,10 @@
  */
 package com.intellij.refactoring.extractclass.usageInfo;
 
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiImportStaticStatement;
+import com.intellij.java.language.psi.PsiMethodCallExpression;
+import com.intellij.java.language.psi.PsiReferenceExpression;
 import com.intellij.psi.*;
 import com.intellij.refactoring.psi.MutationUtils;
 import com.intellij.refactoring.util.FixableUsageInfo;

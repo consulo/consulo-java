@@ -10,8 +10,8 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.rangeSet.LongRang
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.types.*;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.*;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiExpression;
-import com.intellij.psi.PsiType;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiType;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ObjectUtils;
 import com.intellij.util.containers.ContainerUtil;

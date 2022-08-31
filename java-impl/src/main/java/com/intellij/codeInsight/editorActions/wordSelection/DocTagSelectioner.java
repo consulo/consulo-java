@@ -20,11 +20,11 @@ import java.util.List;
 import consulo.annotation.access.RequiredReadAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.JavaDocTokenType;
+import com.intellij.java.language.psi.JavaDocTokenType;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiWhiteSpace;
-import com.intellij.psi.javadoc.PsiDocTag;
-import com.intellij.psi.javadoc.PsiDocToken;
+import com.intellij.java.language.psi.javadoc.PsiDocTag;
+import com.intellij.java.language.psi.javadoc.PsiDocToken;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.util.text.CharArrayUtil;
 

@@ -15,6 +15,7 @@
  */
 package com.intellij.psi.impl.source.javadoc;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
@@ -22,14 +23,14 @@ import com.intellij.psi.impl.source.Constants;
 import com.intellij.psi.impl.source.SourceTreeToPsiMap;
 import com.intellij.psi.impl.source.resolve.JavaResolveUtil;
 import com.intellij.psi.impl.source.tree.*;
-import com.intellij.psi.infos.CandidateInfo;
-import com.intellij.psi.javadoc.PsiDocTag;
-import com.intellij.psi.javadoc.PsiDocTagValue;
+import com.intellij.java.language.psi.infos.CandidateInfo;
+import com.intellij.java.language.psi.javadoc.PsiDocTag;
+import com.intellij.java.language.psi.javadoc.PsiDocTagValue;
 import com.intellij.psi.scope.ElementClassFilter;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.scope.processor.FilterScopeProcessor;
-import com.intellij.psi.util.MethodSignature;
-import com.intellij.psi.util.MethodSignatureUtil;
+import com.intellij.java.language.psi.util.MethodSignature;
+import com.intellij.java.language.psi.util.MethodSignatureUtil;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.CharTable;

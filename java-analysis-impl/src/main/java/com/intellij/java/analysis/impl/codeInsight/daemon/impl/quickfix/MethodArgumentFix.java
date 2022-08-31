@@ -23,11 +23,11 @@ import com.intellij.codeInsight.intention.IntentionAction;
 import consulo.logging.Logger;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiEllipsisType;
-import com.intellij.psi.PsiExpression;
-import com.intellij.psi.PsiExpressionList;
+import com.intellij.java.language.psi.PsiEllipsisType;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiExpressionList;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiType;
+import com.intellij.java.language.psi.PsiType;
 import com.intellij.util.IncorrectOperationException;
 
 /**

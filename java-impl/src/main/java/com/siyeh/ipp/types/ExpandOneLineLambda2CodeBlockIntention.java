@@ -17,6 +17,10 @@ package com.siyeh.ipp.types;
 
 import javax.annotation.Nonnull;
 
+import com.intellij.java.language.psi.JavaPsiFacade;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiLambdaExpression;
+import com.intellij.java.language.psi.PsiType;
 import consulo.logging.Logger;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;

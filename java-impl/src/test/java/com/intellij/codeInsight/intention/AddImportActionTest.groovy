@@ -15,7 +15,7 @@
  */
 package com.intellij.codeInsight.intention;
 
-import com.intellij.pom.java.LanguageLevel
+import com.intellij.java.language.LanguageLevel
 import com.intellij.testFramework.IdeaTestUtil
 import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase
 

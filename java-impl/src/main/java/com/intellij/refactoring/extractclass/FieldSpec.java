@@ -15,7 +15,7 @@
  */
 package com.intellij.refactoring.extractclass;
 
-import com.intellij.psi.PsiField;
+import com.intellij.java.language.psi.PsiField;
 
 class FieldSpec{
     private final boolean setterRequired;

@@ -15,7 +15,7 @@
  */
 package com.siyeh.ig.security;
 
-import com.intellij.psi.PsiNewExpression;
+import com.intellij.java.language.psi.PsiNewExpression;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;

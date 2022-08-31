@@ -17,6 +17,7 @@ package com.siyeh.ig.bugs;
 
 import javax.annotation.Nonnull;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;

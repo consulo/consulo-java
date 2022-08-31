@@ -2,7 +2,7 @@
 
 package com.intellij.psi.impl.java.stubs;
 
-import com.intellij.psi.PsiRecordHeader;
+import com.intellij.java.language.psi.PsiRecordHeader;
 import com.intellij.psi.stubs.StubElement;
 
 public interface PsiRecordHeaderStub extends StubElement<PsiRecordHeader>

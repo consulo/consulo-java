@@ -15,6 +15,10 @@
  */
 package com.siyeh.ig.threading;
 
+import com.intellij.java.language.psi.JavaRecursiveElementWalkingVisitor;
+import com.intellij.java.language.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiModifier;
+import com.intellij.java.language.psi.PsiSynchronizedStatement;
 import com.intellij.psi.*;
 
 class ContainsSynchronizationVisitor extends JavaRecursiveElementWalkingVisitor {

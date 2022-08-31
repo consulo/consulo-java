@@ -26,15 +26,15 @@ import com.intellij.codeInsight.daemon.impl.quickfix.RemoveUnusedVariableUtil;
 import consulo.logging.Logger;
 import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.JavaPsiFacade;
+import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiElementFactory;
-import com.intellij.psi.PsiExpression;
-import com.intellij.psi.PsiExpressionStatement;
-import com.intellij.psi.PsiStatement;
-import com.intellij.psi.PsiVariable;
-import com.intellij.psi.util.PsiExpressionTrimRenderer;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.PsiElementFactory;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiExpressionStatement;
+import com.intellij.java.language.psi.PsiStatement;
+import com.intellij.java.language.psi.PsiVariable;
+import com.intellij.java.language.psi.util.PsiExpressionTrimRenderer;
+import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.application.AccessRule;
 
 public class RemoveInitializerFix implements LocalQuickFix

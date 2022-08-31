@@ -26,6 +26,7 @@ import java.util.Set;
 
 import javax.annotation.Nonnull;
 
+import com.intellij.java.language.psi.*;
 import consulo.logging.Logger;
 import org.jetbrains.annotations.NonNls;
 
@@ -70,24 +71,24 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
 import com.intellij.psi.codeStyle.CodeStyleManager;
-import com.intellij.psi.codeStyle.JavaCodeStyleManager;
+import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.psi.codeStyle.SuggestedNameInfo;
-import com.intellij.psi.codeStyle.VariableKind;
+import com.intellij.java.language.psi.codeStyle.VariableKind;
 import com.intellij.psi.scope.util.PsiScopesUtil;
 import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.search.PsiShortNamesCache;
+import com.intellij.java.language.psi.search.PsiShortNamesCache;
 import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
 import com.intellij.psi.statistics.JavaStatisticsManager;
 import com.intellij.psi.util.ProximityLocation;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.PsiTypesUtil;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.PsiTypesUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.psi.util.proximity.PsiProximityComparator;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.Processor;
 import com.intellij.util.containers.ContainerUtil;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
-import consulo.java.module.util.JavaClassNames;
+import consulo.java.language.module.util.JavaClassNames;
 
 /**
  * @author mike

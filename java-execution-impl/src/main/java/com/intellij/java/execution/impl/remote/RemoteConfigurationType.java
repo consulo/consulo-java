@@ -30,7 +30,7 @@ import com.intellij.openapi.extensions.Extensions;
 import com.intellij.openapi.project.Project;
 import com.intellij.util.containers.ContainerUtil;
 import consulo.java.execution.JavaExecutionBundle;
-import consulo.java.module.extension.JavaModuleExtension;
+import consulo.java.language.module.extension.JavaModuleExtension;
 import consulo.module.extension.ModuleExtensionHelper;
 
 public class RemoteConfigurationType extends ConfigurationTypeBase

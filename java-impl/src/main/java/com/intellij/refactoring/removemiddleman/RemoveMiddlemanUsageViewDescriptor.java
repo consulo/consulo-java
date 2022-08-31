@@ -16,7 +16,7 @@
 package com.intellij.refactoring.removemiddleman;
 
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiField;
+import com.intellij.java.language.psi.PsiField;
 import com.intellij.refactoring.RefactorJBundle;
 import com.intellij.refactoring.psi.MyUsageViewUtil;
 import com.intellij.usageView.UsageViewDescriptor;

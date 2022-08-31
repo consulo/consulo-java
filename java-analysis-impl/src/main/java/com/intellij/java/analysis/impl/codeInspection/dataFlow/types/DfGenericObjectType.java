@@ -3,9 +3,9 @@ package com.intellij.java.analysis.impl.codeInspection.dataFlow.types;
 
 import com.intellij.java.analysis.JavaAnalysisBundle;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.*;
-import com.intellij.psi.JavaPsiFacade;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiEnumConstant;
+import com.intellij.java.language.psi.JavaPsiFacade;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiEnumConstant;
 import one.util.streamex.StreamEx;
 
 import javax.annotation.Nonnull;

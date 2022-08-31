@@ -23,9 +23,10 @@ import java.util.Map;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import com.intellij.codeInsight.AnnotationUtil;
-import com.intellij.codeInsight.folding.JavaCodeFoldingSettings;
+import com.intellij.java.language.codeInsight.AnnotationUtil;
+import com.intellij.java.language.codeInsight.folding.JavaCodeFoldingSettings;
 import com.intellij.codeInspection.i18n.JavaI18nUtil;
+import com.intellij.java.language.psi.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.folding.FoldingBuilderEx;
 import com.intellij.lang.folding.FoldingDescriptor;

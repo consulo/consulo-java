@@ -16,10 +16,10 @@
 package com.intellij.psi.impl.java.stubs.impl;
 
 import javax.annotation.Nullable;
-import com.intellij.psi.JavaPsiFacade;
-import com.intellij.psi.PsiImportStatementBase;
-import com.intellij.psi.PsiJavaCodeReferenceElement;
-import com.intellij.psi.PsiJavaParserFacade;
+import com.intellij.java.language.psi.JavaPsiFacade;
+import com.intellij.java.language.psi.PsiImportStatementBase;
+import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
+import com.intellij.java.language.psi.PsiJavaParserFacade;
 import com.intellij.psi.impl.java.stubs.JavaStubElementTypes;
 import com.intellij.psi.impl.java.stubs.PsiImportStatementStub;
 import com.intellij.psi.impl.source.PsiJavaCodeReferenceElementImpl;

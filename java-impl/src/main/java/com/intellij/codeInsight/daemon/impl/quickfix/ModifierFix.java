@@ -22,6 +22,7 @@ import javax.annotation.Nonnull;
 
 import com.intellij.codeInsight.FileModificationService;
 import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement;
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.command.undo.UndoUtil;
 import consulo.logging.Logger;
@@ -33,11 +34,11 @@ import com.intellij.psi.*;
 import com.intellij.psi.search.PsiElementProcessor;
 import com.intellij.psi.search.PsiElementProcessorAdapter;
 import com.intellij.java.indexing.search.searches.OverridingMethodsSearch;
-import com.intellij.psi.util.PsiFormatUtil;
+import com.intellij.java.language.psi.util.PsiFormatUtil;
 import com.intellij.psi.util.PsiFormatUtilBase;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.VisibilityUtil;
+import com.intellij.java.language.util.VisibilityUtil;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 
 public class ModifierFix extends LocalQuickFixAndIntentionActionOnPsiElement {

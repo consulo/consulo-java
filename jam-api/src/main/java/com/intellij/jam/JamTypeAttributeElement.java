@@ -17,8 +17,12 @@ package com.intellij.jam;
 
 import javax.annotation.Nonnull;
 
+import com.intellij.java.language.psi.PsiAnnotation;
+import com.intellij.java.language.psi.PsiAnnotationMemberValue;
+import com.intellij.java.language.psi.PsiClassObjectAccessExpression;
+import com.intellij.java.language.psi.PsiType;
 import com.intellij.psi.*;
-import consulo.java.module.util.JavaClassNames;
+import consulo.java.language.module.util.JavaClassNames;
 
 /**
  * @author peter

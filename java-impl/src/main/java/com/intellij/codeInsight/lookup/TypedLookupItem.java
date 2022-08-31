@@ -16,7 +16,7 @@
 package com.intellij.codeInsight.lookup;
 
 import com.intellij.openapi.util.ClassConditionKey;
-import com.intellij.psi.PsiType;
+import com.intellij.java.language.psi.PsiType;
 
 /**
  * @author peter

@@ -17,7 +17,7 @@ package com.siyeh.ig.naming;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.psi.PsiEnumConstant;
+import com.intellij.java.language.psi.PsiEnumConstant;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;

@@ -20,8 +20,8 @@
 package com.intellij.lang.java;
 
 import com.intellij.lang.WordCompletionElementFilter;
-import com.intellij.psi.JavaDocTokenType;
-import com.intellij.psi.JavaTokenType;
+import com.intellij.java.language.psi.JavaDocTokenType;
+import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
 import consulo.lang.LanguageVersion;

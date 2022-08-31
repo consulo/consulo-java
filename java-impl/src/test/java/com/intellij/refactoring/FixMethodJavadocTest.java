@@ -1,6 +1,10 @@
 package com.intellij.refactoring;
 
 import com.intellij.FileSetTestCase;
+import com.intellij.java.language.psi.JavaPsiFacade;
+import com.intellij.java.language.psi.PsiElementFactory;
+import com.intellij.java.language.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiParameter;
 import com.intellij.psi.*;
 import com.intellij.refactoring.util.RefactoringUtil;
 import java.util.HashSet;

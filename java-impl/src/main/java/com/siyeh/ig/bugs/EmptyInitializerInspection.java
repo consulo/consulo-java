@@ -19,10 +19,10 @@ import javax.annotation.Nonnull;
 
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiClassInitializer;
-import com.intellij.psi.PsiCodeBlock;
+import com.intellij.java.language.psi.PsiClassInitializer;
+import com.intellij.java.language.psi.PsiCodeBlock;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiStatement;
+import com.intellij.java.language.psi.PsiStatement;
 import com.intellij.util.IncorrectOperationException;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;

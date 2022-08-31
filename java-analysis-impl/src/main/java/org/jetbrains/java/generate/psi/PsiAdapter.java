@@ -15,28 +15,30 @@
  */
 package org.jetbrains.java.generate.psi;
 
-import static consulo.java.module.util.JavaClassNames.JAVA_LANG_BOOLEAN;
-import static consulo.java.module.util.JavaClassNames.JAVA_LANG_OBJECT;
-import static consulo.java.module.util.JavaClassNames.JAVA_LANG_STRING;
-import static consulo.java.module.util.JavaClassNames.JAVA_LANG_THROWABLE;
-import static consulo.java.module.util.JavaClassNames.JAVA_UTIL_LIST;
-import static consulo.java.module.util.JavaClassNames.JAVA_UTIL_MAP;
-import static consulo.java.module.util.JavaClassNames.JAVA_UTIL_SET;
+import static consulo.java.language.module.util.JavaClassNames.JAVA_LANG_BOOLEAN;
+import static consulo.java.language.module.util.JavaClassNames.JAVA_LANG_OBJECT;
+import static consulo.java.language.module.util.JavaClassNames.JAVA_LANG_STRING;
+import static consulo.java.language.module.util.JavaClassNames.JAVA_LANG_THROWABLE;
+import static consulo.java.language.module.util.JavaClassNames.JAVA_UTIL_LIST;
+import static consulo.java.language.module.util.JavaClassNames.JAVA_UTIL_MAP;
+import static consulo.java.language.module.util.JavaClassNames.JAVA_UTIL_SET;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.projectRoots.JavaSdkVersion;
-import com.intellij.openapi.projectRoots.JavaVersionService;
+import com.intellij.java.language.projectRoots.JavaSdkVersion;
+import com.intellij.java.language.projectRoots.JavaVersionService;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
 import com.intellij.psi.codeStyle.CodeStyleManager;
-import com.intellij.psi.codeStyle.JavaCodeStyleManager;
-import com.intellij.psi.javadoc.PsiDocComment;
+import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
+import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.util.InheritanceUtil;
-import com.intellij.psi.util.PropertyUtil;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.InheritanceUtil;
+import com.intellij.java.language.psi.util.PropertyUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.IncorrectOperationException;
 
@@ -366,7 +368,7 @@ public class PsiAdapter
 	 *
 	 * @param type the type.
 	 * @return the fully qualified classname, null if the field is a primitive.
-	 * @see #getTypeClassName(com.intellij.psi.PsiType) for the non qualified version.
+	 * @see #getTypeClassName(PsiType) for the non qualified version.
 	 */
 	@Nullable
 	public static String getTypeQualifiedClassName(PsiType type)
@@ -391,7 +393,7 @@ public class PsiAdapter
 	 *
 	 * @param type the type.
 	 * @return the classname, null if the field is a primitive.
-	 * @see #getTypeQualifiedClassName(com.intellij.psi.PsiType) for the qualified version.
+	 * @see #getTypeQualifiedClassName(PsiType) for the qualified version.
 	 */
 	@javax.annotation.Nullable
 	public static String getTypeClassName(PsiType type)
@@ -554,7 +556,7 @@ public class PsiAdapter
 	 *
 	 * @param method the method
 	 * @return the fieldname if this is a getter method.
-	 * @see #isGetterMethod(com.intellij.psi.PsiMethod) for the getter check
+	 * @see #isGetterMethod(PsiMethod) for the getter check
 	 */
 	@javax.annotation.Nullable
 	public static String getGetterFieldName(PsiMethod method)

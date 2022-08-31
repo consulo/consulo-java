@@ -18,7 +18,7 @@ package com.intellij.psi.impl.java.stubs;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.LighterAST;
 import com.intellij.lang.LighterASTNode;
-import com.intellij.psi.PsiClassInitializer;
+import com.intellij.java.language.psi.PsiClassInitializer;
 import com.intellij.psi.impl.java.stubs.impl.PsiClassInitializerStubImpl;
 import com.intellij.psi.impl.source.PsiClassInitializerImpl;
 import com.intellij.psi.impl.source.tree.java.ClassInitializerElement;

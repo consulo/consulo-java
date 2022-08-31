@@ -16,9 +16,9 @@
 package com.intellij.psi.impl;
 
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.JVMElementFactory;
-import com.intellij.psi.JVMElementFactoryProvider;
-import com.intellij.psi.JavaPsiFacade;
+import com.intellij.java.language.psi.JVMElementFactory;
+import com.intellij.java.language.psi.JVMElementFactoryProvider;
+import com.intellij.java.language.psi.JavaPsiFacade;
 
 /**
 * @author Medvedev Max

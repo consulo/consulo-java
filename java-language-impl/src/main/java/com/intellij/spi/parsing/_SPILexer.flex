@@ -15,10 +15,9 @@
  */
 package com.intellij.spi.parsing;
 
-import com.intellij.psi.JavaTokenType;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.spi.parsing.SPITokenType;
+import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.lexer.FlexLexer;
+import com.intellij.psi.tree.IElementType;
 
 @SuppressWarnings({"ALL"})
 %%

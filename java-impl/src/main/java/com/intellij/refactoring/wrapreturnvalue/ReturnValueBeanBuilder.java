@@ -17,11 +17,11 @@ package com.intellij.refactoring.wrapreturnvalue;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.PsiType;
-import com.intellij.psi.PsiTypeParameter;
+import com.intellij.java.language.psi.PsiType;
+import com.intellij.java.language.psi.PsiTypeParameter;
 import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
-import com.intellij.psi.codeStyle.JavaCodeStyleManager;
-import com.intellij.psi.codeStyle.VariableKind;
+import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
+import com.intellij.java.language.psi.codeStyle.VariableKind;
 import org.jetbrains.annotations.NonNls;
 
 import java.io.IOException;

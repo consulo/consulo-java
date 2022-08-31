@@ -29,6 +29,7 @@ import javax.annotation.Nonnull;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
+import com.intellij.java.language.psi.*;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
 import com.intellij.codeInspection.ui.ListTable;
@@ -36,7 +37,7 @@ import com.intellij.codeInspection.ui.ListWrappingTableModel;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.WriteExternalException;
 import com.intellij.psi.*;
-import com.intellij.psi.util.InheritanceUtil;
+import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.util.ui.CheckBox;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;

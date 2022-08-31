@@ -15,6 +15,9 @@
  */
 package com.intellij.psi.impl.file;
 
+import com.intellij.java.language.psi.JavaDirectoryService;
+import com.intellij.java.language.psi.PsiClassOwner;
+import com.intellij.java.language.psi.PsiJavaPackage;
 import com.intellij.psi.*;
 import com.intellij.psi.templateLanguages.TemplateLanguageFileViewProvider;
 import com.intellij.util.IncorrectOperationException;

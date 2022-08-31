@@ -16,6 +16,7 @@
 package com.intellij.jam.model.common;
 
 import com.intellij.jam.JamElement;
+import com.intellij.java.language.psi.PsiMember;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.openapi.progress.ProgressManager;

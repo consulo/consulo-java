@@ -31,7 +31,7 @@ import com.intellij.java.analysis.codeInspection.reference.RefJavaUtil;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.util.Computable;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiModifierListOwner;
+import com.intellij.java.language.psi.PsiModifierListOwner;
 
 import javax.annotation.Nullable;
 

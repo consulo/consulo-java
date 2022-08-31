@@ -19,6 +19,7 @@
  */
 package com.intellij.java.analysis.impl.psi.util;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiMatcherExpression;
 

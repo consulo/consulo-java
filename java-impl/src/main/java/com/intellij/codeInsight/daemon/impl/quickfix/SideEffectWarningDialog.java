@@ -20,7 +20,7 @@ import consulo.java.analysis.impl.JavaQuickFixBundle;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.ui.Messages;
-import com.intellij.psi.PsiVariable;
+import com.intellij.java.language.psi.PsiVariable;
 import com.intellij.util.ui.UIUtil;
 import javax.annotation.Nonnull;
 

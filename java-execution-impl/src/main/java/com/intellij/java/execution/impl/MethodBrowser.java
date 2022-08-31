@@ -25,8 +25,8 @@ import com.intellij.java.execution.impl.ui.ConfigurationModuleSelector;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.util.Condition;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.ui.EditorTextField;
 import com.intellij.util.TextFieldCompletionProvider;
 

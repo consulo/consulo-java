@@ -21,7 +21,7 @@ import com.intellij.lang.surroundWith.SurroundDescriptor;
 import com.intellij.lang.surroundWith.Surrounder;
 import com.intellij.openapi.extensions.Extensions;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.psi.PsiFile;
 import com.intellij.refactoring.introduceVariable.IntroduceVariableBase;
 import javax.annotation.Nonnull;

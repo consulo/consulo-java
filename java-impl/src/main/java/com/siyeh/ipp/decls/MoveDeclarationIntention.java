@@ -18,6 +18,7 @@ package com.siyeh.ipp.decls;
 import javax.annotation.Nonnull;
 
 import com.intellij.codeInsight.highlighting.HighlightManager;
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.colors.EditorColors;
 import com.intellij.openapi.editor.colors.EditorColorsManager;

@@ -16,7 +16,7 @@
 package com.intellij.core;
 
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiJavaPackage;
+import com.intellij.java.language.psi.PsiJavaPackage;
 import com.intellij.psi.impl.file.PsiPackageImplementationHelper;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.util.ArrayUtil;

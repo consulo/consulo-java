@@ -27,7 +27,7 @@ package com.intellij.refactoring.makeStatic;
 import javax.annotation.Nonnull;
 
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiMember;
+import com.intellij.java.language.psi.PsiMember;
 import com.intellij.refactoring.RefactoringBundle;
 import com.intellij.usageView.UsageViewBundle;
 import com.intellij.usageView.UsageViewDescriptor;

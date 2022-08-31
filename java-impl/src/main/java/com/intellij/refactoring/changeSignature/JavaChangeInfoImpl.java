@@ -28,8 +28,9 @@ import java.util.Set;
 
 import javax.annotation.Nonnull;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.lang.Language;
-import com.intellij.lang.java.JavaLanguage;
+import com.intellij.java.language.JavaLanguage;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;

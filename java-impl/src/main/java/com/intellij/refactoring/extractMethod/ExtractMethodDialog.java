@@ -15,20 +15,21 @@
  */
 package com.intellij.refactoring.extractMethod;
 
-import com.intellij.codeInsight.Nullability;
-import com.intellij.codeInsight.NullableNotNullManager;
+import com.intellij.java.language.codeInsight.Nullability;
+import com.intellij.java.language.codeInsight.NullableNotNullManager;
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.java.analysis.impl.refactoring.extractMethod.InputVariables;
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.ui.Splitter;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
-import com.intellij.psi.util.PsiFormatUtil;
+import com.intellij.java.language.psi.util.PsiFormatUtil;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.PsiUtil;
-import com.intellij.psi.util.TypeConversionUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.TypeConversionUtil;
 import com.intellij.refactoring.RefactoringBundle;
 import com.intellij.refactoring.ui.*;
 import com.intellij.refactoring.util.ConflictsUtil;
@@ -39,7 +40,7 @@ import com.intellij.ui.NonFocusableCheckBox;
 import com.intellij.ui.SeparatorFactory;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.VisibilityUtil;
+import com.intellij.java.language.util.VisibilityUtil;
 import com.intellij.util.containers.MultiMap;
 import com.intellij.util.ui.DialogUtil;
 import com.intellij.util.ui.JBUI;

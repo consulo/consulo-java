@@ -39,6 +39,7 @@ import com.intellij.java.analysis.codeInspection.GlobalJavaInspectionContext;
 import com.intellij.java.analysis.codeInspection.GlobalJavaInspectionTool;
 import com.intellij.java.analysis.codeInspection.reference.*;
 import com.intellij.java.analysis.impl.codeInspection.reference.RefClassImpl;
+import com.intellij.java.language.psi.*;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nullable;
@@ -56,7 +57,7 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.PsiNonJavaFileReferenceProcessor;
 import com.intellij.psi.search.PsiSearchHelper;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.util.IncorrectOperationException;
 
 public class VisibilityInspection extends GlobalJavaInspectionTool

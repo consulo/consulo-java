@@ -16,8 +16,8 @@
 package com.intellij.ide.actions;
 
 import static com.intellij.ide.fileTemplates.JavaTemplateUtil.INTERNAL_MODULE_INFO_TEMPLATE_NAME;
-import static com.intellij.psi.PsiJavaModule.MODULE_INFO_CLASS;
-import static com.intellij.psi.PsiJavaModule.MODULE_INFO_FILE;
+import static com.intellij.java.language.psi.PsiJavaModule.MODULE_INFO_CLASS;
+import static com.intellij.java.language.psi.PsiJavaModule.MODULE_INFO_FILE;
 
 import java.util.Collections;
 import java.util.Map;
@@ -45,7 +45,7 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.impl.light.LightJavaModule;
 import com.intellij.psi.search.FilenameIndex;
 import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.java.JavaBundle;
 import consulo.roots.ContentFolderScopes;
 

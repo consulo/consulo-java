@@ -5,10 +5,10 @@ import com.intellij.java.analysis.impl.codeInsight.JavaPsiEquivalenceUtil;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaVariableValue;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.VariableDescriptor;
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.psi.PsiExpression;
-import com.intellij.psi.PsiMethodCallExpression;
-import com.intellij.psi.PsiReferenceExpression;
-import com.intellij.psi.PsiType;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiMethodCallExpression;
+import com.intellij.java.language.psi.PsiReferenceExpression;
+import com.intellij.java.language.psi.PsiType;
 import consulo.util.collection.HashingStrategy;
 import javax.annotation.Nonnull;
 

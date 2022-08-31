@@ -32,7 +32,7 @@ import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.Chunk;
 import com.intellij.util.ExceptionUtil;
-import consulo.java.module.extension.JavaModuleExtension;
+import consulo.java.language.module.extension.JavaModuleExtension;
 import consulo.logging.Logger;
 import consulo.roots.ContentFolderTypeProvider;
 import consulo.roots.impl.ProductionResourceContentFolderTypeProvider;

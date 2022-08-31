@@ -15,6 +15,10 @@
  */
 package com.siyeh.ipp.equality;
 
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiExpressionList;
+import com.intellij.java.language.psi.PsiMethodCallExpression;
+import com.intellij.java.language.psi.PsiReferenceExpression;
 import com.intellij.psi.*;
 import com.siyeh.ipp.base.PsiElementPredicate;
 import com.siyeh.ipp.psiutils.ErrorUtil;

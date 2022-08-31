@@ -20,10 +20,10 @@
 package com.intellij.psi.impl.java.stubs;
 
 import javax.annotation.Nonnull;
-import com.intellij.pom.java.LanguageLevel;
-import com.intellij.psi.PsiJavaFile;
-import com.intellij.psi.PsiJavaModule;
-import com.intellij.psi.stubs.PsiClassHolderFileStub;
+import com.intellij.java.language.LanguageLevel;
+import com.intellij.java.language.psi.PsiJavaFile;
+import com.intellij.java.language.psi.PsiJavaModule;
+import com.intellij.java.language.psi.stubs.PsiClassHolderFileStub;
 
 public interface PsiJavaFileStub extends PsiClassHolderFileStub<PsiJavaFile>
 {

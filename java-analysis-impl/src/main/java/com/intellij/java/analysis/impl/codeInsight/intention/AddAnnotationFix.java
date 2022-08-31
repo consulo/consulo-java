@@ -20,8 +20,8 @@ import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiModifierListOwner;
-import com.intellij.psi.PsiNameValuePair;
+import com.intellij.java.language.psi.PsiModifierListOwner;
+import com.intellij.java.language.psi.PsiNameValuePair;
 import com.intellij.util.IncorrectOperationException;
 
 import javax.annotation.Nonnull;

@@ -40,7 +40,7 @@ import com.intellij.openapi.util.InvalidDataException;
 import consulo.util.dataholder.Key;
 import com.intellij.openapi.util.WriteExternalException;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiExpression;
 import consulo.internal.com.sun.jdi.BooleanValue;
 import consulo.internal.com.sun.jdi.Value;
 

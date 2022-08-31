@@ -25,15 +25,16 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import com.intellij.codeInsight.ChangeContextUtil;
 import com.intellij.codeInsight.highlighting.ReadWriteAccessDetector;
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.resolve.JavaResolveUtil;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.LocalSearchScope;
 import com.intellij.psi.search.searches.ReferencesSearch;
-import com.intellij.psi.util.MethodSignatureUtil;
+import com.intellij.java.language.psi.util.MethodSignatureUtil;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.psi.util.PsiUtilCore;
 import com.intellij.refactoring.RefactoringBundle;
 import com.intellij.refactoring.util.CommonRefactoringUtil;
@@ -44,7 +45,7 @@ import com.intellij.refactoring.util.RefactoringHierarchyUtil;
 import com.intellij.refactoring.util.RefactoringUIUtil;
 import com.intellij.refactoring.util.RefactoringUtil;
 import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.VisibilityUtil;
+import com.intellij.java.language.util.VisibilityUtil;
 import com.intellij.util.containers.MultiMap;
 
 /**
@@ -99,8 +100,8 @@ public class MoveJavaMemberHandler implements MoveMemberHandler
 
 	@Override
 	public void checkConflictsOnUsage(@Nonnull MoveMembersProcessor.MoveMembersUsageInfo usageInfo, @Nullable String newVisibility,
-			@Nullable PsiModifierList modifierListCopy, @Nonnull PsiClass targetClass, @Nonnull Set<PsiMember> membersToMove,
-			@Nonnull MultiMap<PsiElement, String> conflicts)
+                                    @Nullable PsiModifierList modifierListCopy, @Nonnull PsiClass targetClass, @Nonnull Set<PsiMember> membersToMove,
+                                    @Nonnull MultiMap<PsiElement, String> conflicts)
 	{
 		final PsiElement element = usageInfo.getElement();
 		if(element == null)

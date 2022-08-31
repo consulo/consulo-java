@@ -15,7 +15,7 @@
  */
 package com.intellij.jam.reflect;
 
-import static com.intellij.patterns.PsiJavaPatterns.psiAnnotation;
+import static com.intellij.java.language.patterns.PsiJavaPatterns.psiAnnotation;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -24,14 +24,14 @@ import org.jetbrains.annotations.NonNls;
 import com.intellij.jam.JamService;
 import com.intellij.patterns.ElementPattern;
 import com.intellij.patterns.PatternCondition;
-import com.intellij.patterns.PsiAnnotationPattern;
-import com.intellij.patterns.PsiJavaPatterns;
-import com.intellij.psi.PsiAnnotation;
+import com.intellij.java.language.patterns.PsiAnnotationPattern;
+import com.intellij.java.language.patterns.PsiJavaPatterns;
+import com.intellij.java.language.psi.PsiAnnotation;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementRef;
-import com.intellij.psi.PsiModifierListOwner;
-import com.intellij.psi.PsiPackageStatement;
-import com.intellij.psi.ref.AnnotationChildLink;
+import com.intellij.java.language.psi.PsiModifierListOwner;
+import com.intellij.java.language.psi.PsiPackageStatement;
+import com.intellij.java.language.psi.ref.AnnotationChildLink;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.semantic.SemElement;
 import com.intellij.semantic.SemKey;

@@ -19,6 +19,10 @@ import javax.annotation.Nonnull;
 
 import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.codeInsight.template.*;
+import com.intellij.java.language.psi.PsiDeclarationStatement;
+import com.intellij.java.language.psi.PsiIdentifier;
+import com.intellij.java.language.psi.PsiLocalVariable;
+import com.intellij.java.language.psi.PsiVariable;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;

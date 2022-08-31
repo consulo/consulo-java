@@ -15,6 +15,7 @@
  */
 package com.siyeh.ipp.initialization;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.codeStyle.CodeStyleManager;

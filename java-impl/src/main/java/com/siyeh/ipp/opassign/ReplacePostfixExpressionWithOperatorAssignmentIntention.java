@@ -15,6 +15,10 @@
  */
 package com.siyeh.ipp.opassign;
 
+import com.intellij.java.language.psi.JavaTokenType;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiJavaToken;
+import com.intellij.java.language.psi.PsiPostfixExpression;
 import com.siyeh.ipp.base.MutablyNamedIntention;
 import com.siyeh.ipp.base.PsiElementPredicate;
 import com.siyeh.IntentionPowerPackBundle;

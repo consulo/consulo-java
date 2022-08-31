@@ -25,13 +25,14 @@ import javax.annotation.Nullable;
 import com.intellij.ide.hierarchy.HierarchyBrowserManager;
 import com.intellij.ide.hierarchy.HierarchyNodeDescriptor;
 import com.intellij.ide.hierarchy.HierarchyTreeStructure;
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
 import com.intellij.java.indexing.search.searches.FunctionalExpressionSearch;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.Processor;
-import consulo.java.module.util.JavaClassNames;
+import consulo.java.language.module.util.JavaClassNames;
 
 public final class MethodHierarchyTreeStructure extends HierarchyTreeStructure
 {

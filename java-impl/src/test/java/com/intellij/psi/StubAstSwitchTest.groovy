@@ -15,6 +15,8 @@
  */
 package com.intellij.psi
 
+import com.intellij.java.language.psi.PsiClass
+import com.intellij.java.language.psi.PsiJavaFile
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.psi.impl.source.PsiFileImpl
 import com.intellij.psi.util.PsiTreeUtil

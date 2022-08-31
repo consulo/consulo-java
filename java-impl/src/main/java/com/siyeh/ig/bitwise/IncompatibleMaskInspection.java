@@ -17,10 +17,13 @@ package com.siyeh.ig.bitwise;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.psi.*;
+import com.intellij.java.language.psi.JavaTokenType;
+import com.intellij.java.language.psi.PsiBinaryExpression;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiType;
 import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.util.ConstantExpressionUtil;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.ConstantExpressionUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;

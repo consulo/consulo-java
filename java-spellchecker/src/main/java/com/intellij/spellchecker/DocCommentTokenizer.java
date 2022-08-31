@@ -19,8 +19,8 @@ import java.util.Set;
 
 import javax.annotation.Nonnull;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.javadoc.PsiDocComment;
-import com.intellij.psi.javadoc.PsiDocTag;
+import com.intellij.java.language.psi.javadoc.PsiDocComment;
+import com.intellij.java.language.psi.javadoc.PsiDocTag;
 import com.intellij.spellchecker.inspections.CommentSplitter;
 import com.intellij.spellchecker.tokenizer.TokenConsumer;
 import com.intellij.spellchecker.tokenizer.Tokenizer;

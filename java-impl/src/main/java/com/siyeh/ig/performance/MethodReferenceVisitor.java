@@ -17,8 +17,9 @@ package com.siyeh.ig.performance;
 
 import javax.annotation.Nonnull;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
-import com.intellij.psi.util.InheritanceUtil;
+import com.intellij.java.language.psi.util.InheritanceUtil;
 
 class MethodReferenceVisitor extends JavaRecursiveElementVisitor {
 

@@ -18,6 +18,10 @@ package com.siyeh.ig.controlflow;
 import javax.annotation.Nonnull;
 
 import com.intellij.codeInspection.ProblemDescriptor;
+import com.intellij.java.language.psi.JavaTokenType;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiPolyadicExpression;
+import com.intellij.java.language.psi.PsiPrefixExpression;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.util.IncorrectOperationException;

@@ -17,7 +17,7 @@ package com.siyeh.ig.bugs;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.psi.*;
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.tree.IElementType;
 import com.siyeh.HardcodedMethodConstants;
 import com.siyeh.InspectionGadgetsBundle;
@@ -25,7 +25,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
-import consulo.java.module.util.JavaClassNames;
+import consulo.java.language.module.util.JavaClassNames;
 import org.jetbrains.annotations.NonNls;
 
 public class ObjectToStringInspection extends BaseInspection {

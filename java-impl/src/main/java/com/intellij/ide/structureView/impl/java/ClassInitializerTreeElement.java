@@ -17,9 +17,12 @@ package com.intellij.ide.structureView.impl.java;
 
 import com.intellij.ide.structureView.StructureViewTreeElement;
 import com.intellij.ide.structureView.impl.common.PsiTreeElementBase;
+import com.intellij.java.language.psi.PsiClassInitializer;
+import com.intellij.java.language.psi.PsiCodeBlock;
+import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.java.analysis.codeInsight.JavaCodeInsightBundle;
 import javax.annotation.Nonnull;
 

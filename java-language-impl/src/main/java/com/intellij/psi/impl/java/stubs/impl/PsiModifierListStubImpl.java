@@ -19,7 +19,7 @@
  */
 package com.intellij.psi.impl.java.stubs.impl;
 
-import com.intellij.psi.PsiModifierList;
+import com.intellij.java.language.psi.PsiModifierList;
 import com.intellij.psi.impl.java.stubs.JavaStubElementTypes;
 import com.intellij.psi.impl.java.stubs.PsiModifierListStub;
 import com.intellij.psi.stubs.StubBase;

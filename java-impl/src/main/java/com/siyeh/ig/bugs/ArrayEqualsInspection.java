@@ -18,8 +18,8 @@ package com.siyeh.ig.bugs;
 import javax.annotation.Nonnull;
 
 import com.intellij.codeInspection.ProblemDescriptor;
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.*;
 import com.intellij.util.IncorrectOperationException;
 import com.siyeh.HardcodedMethodConstants;
 import com.siyeh.InspectionGadgetsBundle;

@@ -23,12 +23,13 @@ import javax.annotation.Nullable;
 import javax.swing.JComponent;
 
 import com.intellij.codeHighlighting.Pass;
-import com.intellij.codeInsight.AnnotationUtil;
+import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.codeInsight.daemon.GutterIconNavigationHandler;
 import com.intellij.codeInsight.daemon.LineMarkerInfo;
 import com.intellij.codeInsight.daemon.LineMarkerProvider;
 import com.intellij.codeInsight.daemon.impl.PsiElementListNavigator;
 import com.intellij.ide.util.DefaultPsiElementCellRenderer;
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.application.ReadAction;
 import com.intellij.openapi.editor.markup.GutterIconRenderer;
 import com.intellij.openapi.progress.ProgressManager;

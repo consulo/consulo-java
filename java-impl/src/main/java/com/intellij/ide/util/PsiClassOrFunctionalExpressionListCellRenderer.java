@@ -16,10 +16,10 @@
 package com.intellij.ide.util;
 
 import com.intellij.psi.NavigatablePsiElement;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.psi.presentation.java.ClassPresentationUtil;
-import com.intellij.psi.util.PsiExpressionTrimRenderer;
+import com.intellij.java.language.psi.util.PsiExpressionTrimRenderer;
 
 public class PsiClassOrFunctionalExpressionListCellRenderer extends PsiElementListCellRenderer<NavigatablePsiElement>
 {

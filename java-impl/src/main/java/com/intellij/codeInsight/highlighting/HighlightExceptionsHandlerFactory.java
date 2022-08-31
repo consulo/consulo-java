@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import com.intellij.codeInsight.ExceptionUtil;
+import com.intellij.java.language.psi.*;
 import consulo.codeInsight.TargetElementUtil;
 import com.intellij.featureStatistics.FeatureUsageTracker;
 import com.intellij.openapi.editor.Editor;

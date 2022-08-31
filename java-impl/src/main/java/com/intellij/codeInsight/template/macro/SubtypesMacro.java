@@ -23,7 +23,7 @@ import com.intellij.codeInsight.template.impl.JavaTemplateUtil;
 import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiType;
+import com.intellij.java.language.psi.PsiType;
 import com.intellij.util.Consumer;
 import javax.annotation.Nonnull;
 

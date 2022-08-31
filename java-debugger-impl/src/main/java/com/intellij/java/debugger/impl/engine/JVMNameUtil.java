@@ -25,7 +25,8 @@ import com.intellij.java.debugger.DebuggerManager;
 import com.intellij.java.debugger.SourcePosition;
 import com.intellij.java.debugger.engine.evaluation.EvaluateException;
 import com.intellij.java.debugger.engine.evaluation.EvaluateExceptionUtil;
-import com.intellij.ide.util.JavaAnonymousClassesHelper;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.util.JavaAnonymousClassesHelper;
 import com.intellij.openapi.application.ApplicationManager;
 import consulo.logging.Logger;
 import com.intellij.openapi.progress.ProcessCanceledException;
@@ -34,10 +35,10 @@ import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.util.Ref;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
-import com.intellij.psi.util.ClassUtil;
+import com.intellij.java.language.psi.util.ClassUtil;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.PsiUtil;
-import com.intellij.psi.util.TypeConversionUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.internal.com.sun.jdi.ReferenceType;
 
 /**

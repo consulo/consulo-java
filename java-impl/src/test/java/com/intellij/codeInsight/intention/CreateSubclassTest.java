@@ -2,7 +2,7 @@ package com.intellij.codeInsight.intention;
 
 import com.intellij.codeInsight.intention.impl.CreateSubclassAction;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.search.ProjectScope;
 import com.intellij.refactoring.MultiFileTestCase;

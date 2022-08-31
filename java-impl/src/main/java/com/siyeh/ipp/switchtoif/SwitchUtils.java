@@ -15,17 +15,18 @@
  */
 package com.siyeh.ipp.switchtoif;
 
+import com.intellij.java.language.psi.*;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nullable;
-import com.intellij.pom.java.LanguageLevel;
+import com.intellij.java.language.LanguageLevel;
 import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
 import com.siyeh.ig.psiutils.SideEffectChecker;
 import com.siyeh.ipp.psiutils.EquivalenceChecker;
-import consulo.java.module.util.JavaClassNames;
+import consulo.java.language.module.util.JavaClassNames;
 
 class SwitchUtils {
 

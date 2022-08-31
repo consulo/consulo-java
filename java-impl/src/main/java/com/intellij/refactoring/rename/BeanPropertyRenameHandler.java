@@ -24,9 +24,9 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.psi.impl.beanProperties.BeanProperty;
-import com.intellij.psi.util.PropertyUtil;
+import com.intellij.java.language.psi.util.PropertyUtil;
 import com.intellij.refactoring.RenameRefactoring;
 import com.intellij.refactoring.openapi.impl.JavaRenameRefactoringImpl;
 

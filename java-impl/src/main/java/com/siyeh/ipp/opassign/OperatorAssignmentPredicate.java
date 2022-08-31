@@ -15,8 +15,8 @@
  */
 package com.siyeh.ipp.opassign;
 
-import com.intellij.psi.JavaTokenType;
-import com.intellij.psi.PsiAssignmentExpression;
+import com.intellij.java.language.psi.JavaTokenType;
+import com.intellij.java.language.psi.PsiAssignmentExpression;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.tree.IElementType;
 import com.siyeh.ipp.base.PsiElementPredicate;

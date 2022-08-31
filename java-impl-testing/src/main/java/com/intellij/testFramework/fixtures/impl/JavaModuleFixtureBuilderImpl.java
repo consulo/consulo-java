@@ -26,7 +26,7 @@ import javax.annotation.Nonnull;
 
 import org.jetbrains.annotations.NonNls;
 import com.intellij.openapi.module.Module;
-import com.intellij.openapi.projectRoots.JavaSdk;
+import com.intellij.java.language.projectRoots.JavaSdk;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.projectRoots.impl.SdkImpl;
 import com.intellij.openapi.roots.LibraryOrderEntry;
@@ -40,7 +40,7 @@ import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.StandardFileSystems;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.pom.java.LanguageLevel;
+import com.intellij.java.language.LanguageLevel;
 import com.intellij.testFramework.IdeaTestUtil;
 import com.intellij.testFramework.builders.JavaModuleFixtureBuilder;
 import com.intellij.testFramework.fixtures.IdeaProjectTestFixture;
@@ -48,7 +48,7 @@ import com.intellij.testFramework.fixtures.ModuleFixture;
 import com.intellij.testFramework.fixtures.TestFixtureBuilder;
 import com.intellij.util.ArrayUtil;
 import consulo.bundle.SdkPointerManager;
-import consulo.java.module.extension.JavaMutableModuleExtension;
+import consulo.java.language.module.extension.JavaMutableModuleExtension;
 import consulo.util.pointers.NamedPointer;
 import consulo.util.pointers.NamedPointerImpl;
 

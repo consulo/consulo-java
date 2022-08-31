@@ -21,9 +21,9 @@
 package com.intellij.refactoring.inlineSuperClass.usageInfo;
 
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.JavaPsiFacade;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiImportStaticStatement;
+import com.intellij.java.language.psi.JavaPsiFacade;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiImportStaticStatement;
 import com.intellij.refactoring.util.FixableUsageInfo;
 import com.intellij.util.Function;
 import com.intellij.util.IncorrectOperationException;

@@ -18,10 +18,10 @@ package com.siyeh.ipp.equality;
 import javax.annotation.Nonnull;
 
 import org.jetbrains.annotations.NonNls;
-import com.intellij.psi.JavaTokenType;
-import com.intellij.psi.PsiBinaryExpression;
+import com.intellij.java.language.psi.JavaTokenType;
+import com.intellij.java.language.psi.PsiBinaryExpression;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.util.IncorrectOperationException;
 import com.siyeh.ig.psiutils.ParenthesesUtils;

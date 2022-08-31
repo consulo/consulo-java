@@ -15,16 +15,16 @@
  */
 package com.intellij.testIntegration;
 
-import com.intellij.codeInsight.TestFrameworks;
+import com.intellij.java.language.codeInsight.TestFrameworks;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.roots.ProjectFileIndex;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.util.Pair;
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiNamedElement;
 import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.search.PsiShortNamesCache;
+import com.intellij.java.language.psi.search.PsiShortNamesCache;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

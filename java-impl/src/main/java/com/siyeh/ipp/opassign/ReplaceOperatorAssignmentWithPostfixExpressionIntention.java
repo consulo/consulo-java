@@ -17,6 +17,10 @@ package com.siyeh.ipp.opassign;
 
 import javax.annotation.Nonnull;
 
+import com.intellij.java.language.psi.JavaTokenType;
+import com.intellij.java.language.psi.PsiAssignmentExpression;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiJavaToken;
 import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.util.IncorrectOperationException;

@@ -17,7 +17,7 @@
 package com.intellij.refactoring.encapsulateFields;
 
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiField;
+import com.intellij.java.language.psi.PsiField;
 import com.intellij.refactoring.RefactoringBundle;
 import com.intellij.usageView.UsageViewBundle;
 import com.intellij.usageView.UsageViewDescriptor;

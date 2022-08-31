@@ -17,7 +17,7 @@ package com.siyeh.ig.psiutils;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.psi.*;
+import com.intellij.java.language.psi.*;
 
 public class UtilityClassUtil {
 

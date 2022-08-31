@@ -15,7 +15,7 @@
  */
 package com.intellij.javadoc;
 
-import com.intellij.psi.PsiKeyword;
+import com.intellij.java.language.psi.PsiKeyword;
 import com.intellij.util.xmlb.SerializationFilter;
 
 /**

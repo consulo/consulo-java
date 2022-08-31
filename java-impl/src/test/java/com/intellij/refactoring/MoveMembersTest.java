@@ -11,14 +11,14 @@ import java.util.LinkedHashSet;
 import com.intellij.JavaTestUtil;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiMember;
-import com.intellij.psi.PsiModifier;
+import com.intellij.java.language.psi.PsiMember;
+import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.psi.search.ProjectScope;
 import com.intellij.refactoring.move.moveMembers.MockMoveMembersOptions;
 import com.intellij.refactoring.move.moveMembers.MoveMembersProcessor;
-import com.intellij.util.VisibilityUtil;
+import com.intellij.java.language.util.VisibilityUtil;
 
 public abstract class MoveMembersTest extends MultiFileTestCase {
   @Override

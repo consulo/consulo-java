@@ -21,7 +21,7 @@ import com.intellij.jam.JamService;
 import com.intellij.patterns.ElementPattern;
 import com.intellij.pom.PomTarget;
 import com.intellij.psi.PsiElementRef;
-import com.intellij.psi.PsiModifierListOwner;
+import com.intellij.java.language.psi.PsiModifierListOwner;
 import com.intellij.semantic.SemElement;
 import com.intellij.semantic.SemKey;
 import com.intellij.semantic.SemRegistrar;

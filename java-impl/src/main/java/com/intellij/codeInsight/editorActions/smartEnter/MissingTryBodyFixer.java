@@ -18,7 +18,7 @@ package com.intellij.codeInsight.editorActions.smartEnter;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiTryStatement;
+import com.intellij.java.language.psi.PsiTryStatement;
 import com.intellij.util.IncorrectOperationException;
 
 public class MissingTryBodyFixer implements Fixer

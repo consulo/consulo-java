@@ -15,10 +15,10 @@
  */
 package com.siyeh.ig.j2me;
 
-import com.intellij.psi.PsiArrayInitializerExpression;
-import com.intellij.psi.PsiExpression;
-import com.intellij.psi.PsiPrimitiveType;
-import com.intellij.psi.PsiType;
+import com.intellij.java.language.psi.PsiArrayInitializerExpression;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiPrimitiveType;
+import com.intellij.java.language.psi.PsiType;
 import com.intellij.codeInspection.ui.SingleIntegerFieldOptionsPanel;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;

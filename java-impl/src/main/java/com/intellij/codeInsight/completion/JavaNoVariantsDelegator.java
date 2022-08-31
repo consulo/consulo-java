@@ -15,7 +15,7 @@
  */
 package com.intellij.codeInsight.completion;
 
-import static com.intellij.patterns.PsiJavaPatterns.psiElement;
+import static com.intellij.java.language.patterns.PsiJavaPatterns.psiElement;
 
 import java.util.Collections;
 import java.util.LinkedHashSet;
@@ -29,17 +29,17 @@ import com.intellij.codeInsight.completion.impl.CamelHumpMatcher;
 import com.intellij.codeInsight.lookup.AutoCompletionPolicy;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.PsiAnnotation;
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.psi.PsiAnnotation;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiImportStatementBase;
-import com.intellij.psi.PsiJavaCodeReferenceCodeFragment;
-import com.intellij.psi.PsiJavaCodeReferenceElement;
-import com.intellij.psi.PsiReferenceExpression;
-import com.intellij.psi.PsiType;
+import com.intellij.java.language.psi.PsiImportStatementBase;
+import com.intellij.java.language.psi.PsiJavaCodeReferenceCodeFragment;
+import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
+import com.intellij.java.language.psi.PsiReferenceExpression;
+import com.intellij.java.language.psi.PsiType;
 import com.intellij.psi.filters.ElementFilter;
-import com.intellij.psi.search.PsiShortNamesCache;
+import com.intellij.java.language.psi.search.PsiShortNamesCache;
 import com.intellij.util.CollectConsumer;
 import com.intellij.util.Consumer;
 import consulo.psi.PsiPackage;

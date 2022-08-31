@@ -15,8 +15,8 @@
  */
 package com.intellij.psi.impl.source;
 
-import com.intellij.psi.HierarchicalMethodSignature;
-import com.intellij.psi.util.MethodSignatureBackedByPsiMethod;
+import com.intellij.java.language.psi.HierarchicalMethodSignature;
+import com.intellij.java.language.psi.util.MethodSignatureBackedByPsiMethod;
 import com.intellij.util.SmartList;
 import javax.annotation.Nonnull;
 

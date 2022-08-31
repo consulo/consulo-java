@@ -17,7 +17,7 @@ package com.siyeh.ig.controlflow;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.psi.PsiContinueStatement;
+import com.intellij.java.language.psi.PsiContinueStatement;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;

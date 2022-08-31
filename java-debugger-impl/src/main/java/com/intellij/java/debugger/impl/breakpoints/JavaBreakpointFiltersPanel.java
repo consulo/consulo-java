@@ -23,7 +23,7 @@ import com.intellij.java.debugger.ui.classFilter.ClassFilter;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.ui.FieldPanel;
 import com.intellij.ui.MultiLineTooltipUI;
 import com.intellij.xdebugger.XSourcePosition;
@@ -95,7 +95,7 @@ public class JavaBreakpointFiltersPanel<T extends JavaBreakpointProperties, B ex
 			{
 				reloadClassFilters();
 
-				com.intellij.ide.util.ClassFilter classFilter = createClassConditionFilter();
+				com.intellij.java.language.util.ClassFilter classFilter = createClassConditionFilter();
 
 				EditClassFiltersDialog _dialog = new EditClassFiltersDialog(myProject, classFilter);
 				_dialog.setFilters(myClassFilters, myClassExclusionFilters);
@@ -430,12 +430,12 @@ public class JavaBreakpointFiltersPanel<T extends JavaBreakpointProperties, B ex
 		return result;
 	}
 
-	protected com.intellij.ide.util.ClassFilter createClassConditionFilter()
+	protected com.intellij.java.language.util.ClassFilter createClassConditionFilter()
 	{
-		com.intellij.ide.util.ClassFilter classFilter;
+		com.intellij.java.language.util.ClassFilter classFilter;
 		if(myBreakpointPsiClass != null)
 		{
-			classFilter = new com.intellij.ide.util.ClassFilter()
+			classFilter = new com.intellij.java.language.util.ClassFilter()
 			{
 				@Override
 				public boolean isAccepted(PsiClass aClass)

@@ -17,12 +17,13 @@ package com.siyeh.ig.psiutils;
 
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.ContractValue;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.JavaMethodContractUtil;
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.util.InheritanceUtil;
-import com.intellij.psi.util.PropertyUtil;
+import com.intellij.java.language.psi.util.InheritanceUtil;
+import com.intellij.java.language.psi.util.PropertyUtil;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.util.SmartList;
 import consulo.psi.PsiPackage;
 import one.util.streamex.StreamEx;
@@ -391,7 +392,7 @@ public class SideEffectChecker
 		if(CommonClassNames.DEFAULT_PACKAGE.equals(packageName) || "java.io".equals(packageName))
 		{
 			PsiClass throwableClass = JavaPsiFacade.getInstance(aClass.getProject()).findClass("java.lang.Throwable", aClass.getResolveScope());
-			if(throwableClass != null && com.intellij.psi.util.InheritanceUtil.isInheritorOrSelf(aClass, throwableClass, true))
+			if(throwableClass != null && InheritanceUtil.isInheritorOrSelf(aClass, throwableClass, true))
 			{
 				return true;
 			}

@@ -25,7 +25,7 @@ import com.intellij.openapi.extensions.ExtensionPointName;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.util.IncorrectOperationException;
 import consulo.logging.Logger;
 

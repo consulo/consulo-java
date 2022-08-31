@@ -27,8 +27,8 @@ import com.intellij.java.util.cls.ClsUtil;
 import com.intellij.openapi.compiler.CompilerBundle;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.util.ArrayUtil;
-import com.intellij.util.cls.ClsFormatException;
-import consulo.java.module.util.JavaClassNames;
+import com.intellij.java.language.util.cls.ClsFormatException;
+import consulo.java.language.module.util.JavaClassNames;
 
 import javax.annotation.Nonnull;
 import java.io.File;

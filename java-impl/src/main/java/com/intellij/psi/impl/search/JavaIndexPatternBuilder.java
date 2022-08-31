@@ -17,10 +17,10 @@ package com.intellij.psi.impl.search;
 
 import com.intellij.lang.java.lexer.JavaLexer;
 import com.intellij.lexer.Lexer;
-import com.intellij.psi.JavaDocTokenType;
-import com.intellij.psi.JavaTokenType;
+import com.intellij.java.language.psi.JavaDocTokenType;
+import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiJavaFile;
+import com.intellij.java.language.psi.PsiJavaFile;
 import com.intellij.psi.impl.source.tree.StdTokenSets;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;

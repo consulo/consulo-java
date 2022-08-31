@@ -15,9 +15,9 @@
  */
 package com.intellij.psi.impl.source.tree.java;
 
-import com.intellij.psi.JavaElementVisitor;
+import com.intellij.java.language.psi.JavaElementVisitor;
 import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.PsiJavaToken;
+import com.intellij.java.language.psi.PsiJavaToken;
 import com.intellij.psi.impl.source.tree.LeafPsiElement;
 import com.intellij.psi.tree.IElementType;
 import javax.annotation.Nonnull;

@@ -15,7 +15,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
 import consulo.java.execution.JavaExecutionBundle;
-import consulo.java.module.extension.JavaModuleExtension;
+import consulo.java.language.module.extension.JavaModuleExtension;
 import consulo.module.extension.ModuleExtensionHelper;
 
 public class JarApplicationConfigurationType extends ConfigurationTypeBase implements ConfigurationType

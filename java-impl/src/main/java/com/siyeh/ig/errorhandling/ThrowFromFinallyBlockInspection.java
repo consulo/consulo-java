@@ -15,7 +15,7 @@
  */
 package com.siyeh.ig.errorhandling;
 
-import com.intellij.psi.PsiThrowStatement;
+import com.intellij.java.language.psi.PsiThrowStatement;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;

@@ -15,7 +15,7 @@
  */
 package com.intellij.ide.highlighter;
 
-import com.intellij.lang.java.JavaLanguage;
+import com.intellij.java.language.JavaLanguage;
 import com.intellij.openapi.fileTypes.LanguageFileType;
 import consulo.java.JavaIcons;
 import consulo.localize.LocalizeValue;

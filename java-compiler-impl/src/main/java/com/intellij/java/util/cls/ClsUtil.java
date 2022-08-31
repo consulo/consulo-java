@@ -16,7 +16,7 @@
 package com.intellij.java.util.cls;
 
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.util.cls.ClsFormatException;
+import com.intellij.java.language.util.cls.ClsFormatException;
 import org.jetbrains.annotations.NonNls;
 
 

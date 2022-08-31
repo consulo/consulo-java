@@ -19,6 +19,7 @@
  */
 package com.intellij.psi.impl.search;
 
+import com.intellij.java.language.psi.*;
 import consulo.logging.Logger;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.vfs.VirtualFile;

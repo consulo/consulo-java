@@ -21,12 +21,12 @@ import java.util.Set;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.psi.JavaTokenType;
-import com.intellij.psi.PsiBinaryExpression;
+import com.intellij.java.language.psi.JavaTokenType;
+import com.intellij.java.language.psi.PsiBinaryExpression;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiExpression;
-import com.intellij.psi.PsiParenthesizedExpression;
-import com.intellij.psi.PsiPolyadicExpression;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiParenthesizedExpression;
+import com.intellij.java.language.psi.PsiPolyadicExpression;
 import com.intellij.psi.tree.IElementType;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;

@@ -18,7 +18,7 @@ package com.intellij.psi.formatter;
 import javax.annotation.Nonnull;
 
 import com.intellij.lang.ASTNode;
-import com.intellij.psi.JavaDocTokenType;
+import com.intellij.java.language.psi.JavaDocTokenType;
 
 /**
  * @author max

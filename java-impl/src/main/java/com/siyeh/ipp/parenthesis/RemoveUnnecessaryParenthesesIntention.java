@@ -17,12 +17,12 @@ package com.siyeh.ipp.parenthesis;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.psi.JavaPsiFacade;
+import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiElementFactory;
-import com.intellij.psi.PsiExpression;
-import com.intellij.psi.PsiLambdaExpression;
-import com.intellij.psi.PsiParameterList;
+import com.intellij.java.language.psi.PsiElementFactory;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiLambdaExpression;
+import com.intellij.java.language.psi.PsiParameterList;
 import com.intellij.util.IncorrectOperationException;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
 import com.siyeh.ipp.base.Intention;

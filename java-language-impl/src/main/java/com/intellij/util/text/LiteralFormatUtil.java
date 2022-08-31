@@ -19,7 +19,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import com.intellij.openapi.util.text.CharFilter;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.PsiType;
+import com.intellij.java.language.psi.PsiType;
 
 public class LiteralFormatUtil
 {

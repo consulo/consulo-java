@@ -19,13 +19,13 @@ import javax.annotation.Nonnull;
 
 import com.intellij.openapi.util.AtomicNotNullLazyValue;
 import com.intellij.openapi.util.NotNullLazyValue;
-import com.intellij.psi.PsiDocCommentOwner;
+import com.intellij.java.language.psi.PsiDocCommentOwner;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiIdentifier;
+import com.intellij.java.language.psi.PsiIdentifier;
 import com.intellij.psi.PsiNameIdentifierOwner;
 import com.intellij.psi.impl.PsiImplUtil;
 import com.intellij.psi.impl.java.stubs.PsiMemberStub;
-import com.intellij.psi.javadoc.PsiDocComment;
+import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.util.IncorrectOperationException;
 
 public abstract class ClsMemberImpl<T extends PsiMemberStub> extends ClsRepositoryPsiElement<T> implements PsiDocCommentOwner, PsiNameIdentifierOwner

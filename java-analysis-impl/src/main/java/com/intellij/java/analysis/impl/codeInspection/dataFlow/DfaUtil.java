@@ -2,18 +2,19 @@
 package com.intellij.java.analysis.impl.codeInspection.dataFlow;
 
 import com.intellij.codeInsight.ExpressionUtil;
-import com.intellij.codeInsight.Nullability;
+import com.intellij.java.language.codeInsight.Nullability;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.rangeSet.LongRangeSet;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.types.DfReferenceType;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.*;
 import com.intellij.java.analysis.impl.psi.controlFlow.DefUseUtil;
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.resolve.JavaResolveUtil;
 import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.util.PsiPrecedenceUtil;
+import com.intellij.java.language.psi.util.PsiPrecedenceUtil;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.PsiUtil;
-import com.intellij.psi.util.TypeConversionUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.TypeConversionUtil;
 import com.intellij.util.containers.ContainerUtil;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
@@ -24,7 +25,7 @@ import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.Predicate;
 
-import static com.intellij.psi.CommonClassNames.JAVA_UTIL_COLLECTIONS;
+import static com.intellij.java.language.psi.CommonClassNames.JAVA_UTIL_COLLECTIONS;
 import static com.intellij.util.ObjectUtils.tryCast;
 
 /**

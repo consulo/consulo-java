@@ -17,7 +17,7 @@ package com.siyeh.ig.migration;
 
 import com.intellij.codeInspection.ex.LocalInspectionToolWrapper;
 import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.pom.java.LanguageLevel;
+import com.intellij.java.language.LanguageLevel;
 import com.intellij.testFramework.IdeaTestUtil;
 import com.siyeh.ig.IGInspectionTestCase;
 

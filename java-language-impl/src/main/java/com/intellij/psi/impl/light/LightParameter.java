@@ -18,12 +18,12 @@ package com.intellij.psi.impl.light;
 import javax.annotation.Nonnull;
 
 import com.intellij.lang.Language;
-import com.intellij.psi.JavaElementVisitor;
+import com.intellij.java.language.psi.JavaElementVisitor;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.PsiEllipsisType;
-import com.intellij.psi.PsiParameter;
-import com.intellij.psi.PsiType;
+import com.intellij.java.language.psi.PsiEllipsisType;
+import com.intellij.java.language.psi.PsiParameter;
+import com.intellij.java.language.psi.PsiType;
 
 /**
  * @author peter

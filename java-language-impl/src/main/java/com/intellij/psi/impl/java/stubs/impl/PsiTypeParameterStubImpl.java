@@ -18,7 +18,7 @@ package com.intellij.psi.impl.java.stubs.impl;
 import java.util.List;
 
 import javax.annotation.Nonnull;
-import com.intellij.psi.PsiTypeParameter;
+import com.intellij.java.language.psi.PsiTypeParameter;
 import com.intellij.psi.impl.java.stubs.JavaStubElementTypes;
 import com.intellij.psi.impl.java.stubs.PsiAnnotationStub;
 import com.intellij.psi.impl.java.stubs.PsiTypeParameterStub;

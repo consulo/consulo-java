@@ -17,10 +17,10 @@
 package com.intellij.java.analysis.impl.codeInspection.dataFlow.instructions;
 
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.*;
-import com.intellij.psi.PsiExpression;
-import com.intellij.psi.PsiPrimitiveType;
-import com.intellij.psi.PsiType;
-import com.intellij.psi.PsiTypeCastExpression;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiPrimitiveType;
+import com.intellij.java.language.psi.PsiType;
+import com.intellij.java.language.psi.PsiTypeCastExpression;
 
 import javax.annotation.Nullable;
 

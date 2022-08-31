@@ -1,6 +1,6 @@
 package com.siyeh.ig.abstraction;
 
-import com.intellij.pom.java.LanguageLevel;
+import com.intellij.java.language.LanguageLevel;
 import com.siyeh.ig.IGInspectionTestCase;
 
 public class TypeMayBeWeakenedInspectionTest extends IGInspectionTestCase {

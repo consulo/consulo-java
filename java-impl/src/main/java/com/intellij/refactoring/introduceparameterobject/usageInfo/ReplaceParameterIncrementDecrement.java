@@ -15,7 +15,7 @@
  */
 package com.intellij.refactoring.introduceparameterobject.usageInfo;
 
-import com.intellij.psi.*;
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.refactoring.psi.MutationUtils;
 import com.intellij.refactoring.util.FixableUsageInfo;

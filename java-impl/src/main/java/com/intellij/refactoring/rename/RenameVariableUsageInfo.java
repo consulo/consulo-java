@@ -16,8 +16,7 @@
 package com.intellij.refactoring.rename;
 
 import com.intellij.usageView.UsageInfo;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiVariable;
+import com.intellij.java.language.psi.PsiVariable;
 
 /**
  * @author dsl

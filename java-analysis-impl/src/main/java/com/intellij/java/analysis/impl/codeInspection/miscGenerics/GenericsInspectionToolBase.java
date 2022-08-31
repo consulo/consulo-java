@@ -18,6 +18,7 @@ package com.intellij.java.analysis.impl.codeInspection.miscGenerics;
 import com.intellij.java.analysis.codeInspection.BaseJavaBatchLocalInspectionTool;
 import com.intellij.codeInspection.InspectionManager;
 import com.intellij.codeInspection.ProblemDescriptor;
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
 import com.intellij.util.containers.ContainerUtil;
 import javax.annotation.Nonnull;

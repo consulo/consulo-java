@@ -11,7 +11,7 @@ import com.intellij.psi.impl.java.stubs.impl.PsiTypeParameterStubImpl;
 import com.intellij.psi.stubs.StubElement;
 import com.intellij.util.Function;
 import com.intellij.util.SmartList;
-import com.intellij.util.cls.ClsFormatException;
+import com.intellij.java.language.util.cls.ClsFormatException;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import consulo.internal.org.objectweb.asm.TypeReference;

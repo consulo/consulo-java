@@ -16,7 +16,7 @@
 package com.intellij.javadoc;
 
 import com.intellij.openapi.options.Configurable;
-import com.intellij.psi.PsiKeyword;
+import com.intellij.java.language.psi.PsiKeyword;
 
 import javax.swing.*;
 import java.io.File;

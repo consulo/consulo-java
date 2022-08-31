@@ -17,14 +17,14 @@ package com.intellij.psi.impl.source.javadoc;
 
 import com.intellij.codeInsight.daemon.JavaErrorBundle;
 import com.intellij.lang.ASTNode;
-import com.intellij.psi.JavaDocTokenType;
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.psi.JavaDocTokenType;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.psi.PsiReference;
-import com.intellij.psi.javadoc.JavadocTagInfo;
-import com.intellij.psi.javadoc.PsiDocTagValue;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.javadoc.JavadocTagInfo;
+import com.intellij.java.language.psi.javadoc.PsiDocTagValue;
+import com.intellij.java.language.psi.util.PsiUtil;
 
 /**
  * @author mike

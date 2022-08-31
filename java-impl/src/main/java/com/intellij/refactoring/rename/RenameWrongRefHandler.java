@@ -30,7 +30,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;
-import com.intellij.psi.PsiReferenceExpression;
+import com.intellij.java.language.psi.PsiReferenceExpression;
 
 public class RenameWrongRefHandler implements RenameHandler
 {

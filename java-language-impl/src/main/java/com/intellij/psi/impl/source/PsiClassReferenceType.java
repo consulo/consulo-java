@@ -1,14 +1,15 @@
 // Copyright 2000-2020 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.psi.impl.source;
 
-import com.intellij.pom.java.LanguageLevel;
+import com.intellij.java.language.LanguageLevel;
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
-import com.intellij.psi.augment.PsiAugmentProvider;
+import com.intellij.java.language.psi.augment.PsiAugmentProvider;
 import com.intellij.psi.impl.light.LightClassReference;
 import com.intellij.psi.impl.light.LightClassTypeReference;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.SmartList;
 import com.intellij.util.containers.ContainerUtil;

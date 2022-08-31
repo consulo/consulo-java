@@ -17,6 +17,7 @@ package org.intellij.plugins.intelliLang.util;
 
 import javax.annotation.Nonnull;
 
+import com.intellij.java.language.psi.*;
 import consulo.annotation.access.RequiredReadAction;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Document;
@@ -29,7 +30,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.ui.JavaReferenceEditorUtil;
-import consulo.java.module.util.JavaClassNames;
+import consulo.java.language.module.util.JavaClassNames;
 
 public class PsiUtilEx {
 

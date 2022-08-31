@@ -21,7 +21,7 @@ import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.util.Computable;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiSubstitutor;
+import com.intellij.java.language.psi.PsiSubstitutor;
 import com.intellij.usageView.UsageInfo;
 import com.intellij.usages.UsageInfo2UsageAdapter;
 import com.intellij.util.CommonProcessors;

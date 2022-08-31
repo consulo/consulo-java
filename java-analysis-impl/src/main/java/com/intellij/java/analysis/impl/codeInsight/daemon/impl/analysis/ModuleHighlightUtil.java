@@ -25,6 +25,7 @@ import com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix.AddRequi
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix.GoToSymbolFix;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix.MergeModuleStatementsFix;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix.MoveFileFix;
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
@@ -35,15 +36,15 @@ import com.intellij.openapi.util.Trinity;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
-import com.intellij.psi.PsiPackageAccessibilityStatement.Role;
+import com.intellij.java.language.psi.PsiPackageAccessibilityStatement.Role;
 import com.intellij.psi.impl.light.LightJavaModule;
-import com.intellij.psi.javadoc.PsiDocComment;
+import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.psi.search.FilenameIndex;
 import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.util.ClassUtil;
-import com.intellij.psi.util.InheritanceUtil;
+import com.intellij.java.language.psi.util.ClassUtil;
+import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.util.ObjectUtil;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.JBIterable;
@@ -59,7 +60,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.intellij.psi.PsiJavaModule.MODULE_INFO_FILE;
+import static com.intellij.java.language.psi.PsiJavaModule.MODULE_INFO_FILE;
 
 public class ModuleHighlightUtil {
   @Nullable

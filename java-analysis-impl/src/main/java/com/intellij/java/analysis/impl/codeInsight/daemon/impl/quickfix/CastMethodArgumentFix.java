@@ -27,12 +27,12 @@ import javax.annotation.Nonnull;
 
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.JavaHighlightUtil;
-import com.intellij.psi.PsiClassType;
+import com.intellij.java.language.psi.PsiClassType;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiExpression;
-import com.intellij.psi.PsiExpressionList;
-import com.intellij.psi.PsiPrimitiveType;
-import com.intellij.psi.PsiType;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiExpressionList;
+import com.intellij.java.language.psi.PsiPrimitiveType;
+import com.intellij.java.language.psi.PsiType;
 import com.intellij.util.IncorrectOperationException;
 
 public class CastMethodArgumentFix extends MethodArgumentFix {

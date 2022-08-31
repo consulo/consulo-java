@@ -21,11 +21,11 @@ import com.intellij.openapi.module.Module;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.roots.ContentEntry;
 import com.intellij.openapi.roots.ModifiableRootModel;
-import com.intellij.pom.java.LanguageLevel;
+import com.intellij.java.language.LanguageLevel;
 import com.intellij.testFramework.IdeaTestUtil;
 import com.intellij.testFramework.TestModuleDescriptor;
 import com.intellij.util.Consumer;
-import consulo.java.module.extension.JavaMutableModuleExtension;
+import consulo.java.language.module.extension.JavaMutableModuleExtension;
 
 /**
  * @author peter

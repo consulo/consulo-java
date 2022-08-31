@@ -17,9 +17,9 @@
 package com.intellij.java.compiler.artifact.impl;
 
 import com.intellij.CommonBundle;
-import com.intellij.ide.util.ClassFilter;
-import com.intellij.ide.util.TreeClassChooser;
-import com.intellij.ide.util.TreeClassChooserFactory;
+import com.intellij.java.language.util.ClassFilter;
+import com.intellij.java.language.util.TreeClassChooser;
+import com.intellij.java.language.util.TreeClassChooserFactory;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.application.WriteAction;
 import com.intellij.openapi.deployment.DeploymentUtil;
@@ -52,10 +52,10 @@ import com.intellij.packaging.impl.elements.DirectoryCopyPackagingElement;
 import com.intellij.packaging.impl.elements.FileCopyPackagingElement;
 import com.intellij.packaging.ui.ArtifactEditorContext;
 import com.intellij.java.compiler.artifact.impl.ui.ManifestFileConfiguration;
-import com.intellij.psi.JavaPsiFacade;
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.psi.JavaPsiFacade;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.util.PsiMethodUtil;
+import com.intellij.java.language.psi.util.PsiMethodUtil;
 import com.intellij.util.PathUtil;
 
 import javax.annotation.Nonnull;

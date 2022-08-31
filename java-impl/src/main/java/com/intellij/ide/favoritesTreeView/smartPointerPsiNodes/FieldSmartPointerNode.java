@@ -19,11 +19,11 @@ import com.intellij.ide.projectView.PresentationData;
 import com.intellij.ide.projectView.ViewSettings;
 import com.intellij.ide.util.treeView.AbstractTreeNode;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiField;
-import com.intellij.psi.PsiSubstitutor;
+import com.intellij.java.language.psi.PsiField;
+import com.intellij.java.language.psi.PsiSubstitutor;
 import com.intellij.psi.SmartPointerManager;
 import com.intellij.psi.SmartPsiElementPointer;
-import com.intellij.psi.util.PsiFormatUtil;
+import com.intellij.java.language.psi.util.PsiFormatUtil;
 import com.intellij.psi.util.PsiFormatUtilBase;
 import javax.annotation.Nonnull;
 

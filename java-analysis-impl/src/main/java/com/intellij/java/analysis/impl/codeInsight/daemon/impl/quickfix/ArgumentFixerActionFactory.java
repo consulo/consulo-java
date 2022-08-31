@@ -17,10 +17,11 @@ package com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix;
 
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
 import com.intellij.codeInsight.daemon.impl.quickfix.QuickFixAction;
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
-import com.intellij.psi.infos.CandidateInfo;
+import com.intellij.java.language.psi.infos.CandidateInfo;
 import com.intellij.util.IncorrectOperationException;
 import consulo.logging.Logger;
 

@@ -19,14 +19,15 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.resolve.JavaResolveUtil;
-import com.intellij.psi.infos.CandidateInfo;
-import com.intellij.psi.infos.MethodCandidateInfo;
+import com.intellij.java.language.psi.infos.CandidateInfo;
+import com.intellij.java.language.psi.infos.MethodCandidateInfo;
 import com.intellij.psi.scope.PsiConflictResolver;
 import com.intellij.psi.scope.conflictResolvers.DuplicateConflictResolver;
 import com.intellij.psi.util.ImportsUtil;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.util.SmartList;
 
 /**

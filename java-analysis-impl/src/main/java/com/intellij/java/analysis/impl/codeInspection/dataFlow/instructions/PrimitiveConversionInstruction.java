@@ -10,10 +10,10 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaBinOpVal
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaValue;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaValueFactory;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaVariableValue;
-import com.intellij.psi.PsiExpression;
-import com.intellij.psi.PsiPrimitiveType;
-import com.intellij.psi.PsiType;
-import com.intellij.psi.util.TypeConversionUtil;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiPrimitiveType;
+import com.intellij.java.language.psi.PsiType;
+import com.intellij.java.language.psi.util.TypeConversionUtil;
 import javax.annotation.Nonnull;
 
 import javax.annotation.Nullable;

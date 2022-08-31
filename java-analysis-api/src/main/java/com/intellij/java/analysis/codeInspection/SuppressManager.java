@@ -25,10 +25,10 @@ import com.intellij.codeInspection.InspectionSuppressor;
 import com.intellij.codeInspection.SuppressIntentionAction;
 import com.intellij.codeInspection.SuppressQuickFix;
 import com.intellij.openapi.components.ServiceManager;
-import com.intellij.psi.PsiAnnotation;
-import com.intellij.psi.PsiCodeBlock;
-import com.intellij.psi.PsiField;
-import com.intellij.psi.PsiLiteralExpression;
+import com.intellij.java.language.psi.PsiAnnotation;
+import com.intellij.java.language.psi.PsiCodeBlock;
+import com.intellij.java.language.psi.PsiField;
+import com.intellij.java.language.psi.PsiLiteralExpression;
 import com.intellij.psi.util.PsiTreeUtil;
 
 import javax.annotation.Nonnull;

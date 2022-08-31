@@ -20,12 +20,13 @@ import java.util.Collections;
 
 import javax.annotation.Nonnull;
 
+import com.intellij.java.language.projectRoots.roots.ExternalLibraryDescriptor;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.libraries.Library;
 import com.intellij.openapi.util.AsyncResult;
-import com.intellij.pom.java.LanguageLevel;
+import com.intellij.java.language.LanguageLevel;
 
 /**
  * Provides methods to perform high-level modifications of project configuration accordingly with dependency management system used in the

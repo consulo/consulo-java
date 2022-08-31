@@ -3,9 +3,9 @@
  */
 package com.intellij.codeInsight;
 
-import com.intellij.psi.*;
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
 
 public class ExpressionUtil
 {

@@ -20,7 +20,7 @@
  */
 package com.intellij.refactoring;
 
-import com.intellij.psi.*;
+import com.intellij.java.language.psi.*;
 import com.intellij.refactoring.util.classMembers.MemberInfo;
 import junit.framework.Assert;
 

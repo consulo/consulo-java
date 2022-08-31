@@ -23,14 +23,14 @@ import javax.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nullable;
-import com.intellij.psi.JavaPsiFacade;
-import com.intellij.psi.PsiArrayType;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiClassType;
+import com.intellij.java.language.psi.JavaPsiFacade;
+import com.intellij.java.language.psi.PsiArrayType;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiClassType;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiPrimitiveType;
+import com.intellij.java.language.psi.PsiPrimitiveType;
 import com.intellij.psi.PsiReference;
-import com.intellij.psi.PsiType;
+import com.intellij.java.language.psi.PsiType;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.JavaClassReferenceProvider;
 import com.intellij.util.containers.BidirectionalMap;
 

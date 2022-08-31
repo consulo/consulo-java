@@ -20,11 +20,11 @@ import javax.annotation.Nonnull;
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.JavaPsiFacade;
+import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiExpressionList;
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiMethodCallExpression;
+import com.intellij.java.language.psi.PsiExpressionList;
+import com.intellij.java.language.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiMethodCallExpression;
 import com.intellij.java.analysis.impl.refactoring.extractMethod.ExtractMethodUtil;
 
 /**

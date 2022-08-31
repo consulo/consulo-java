@@ -20,22 +20,22 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import consulo.util.dataholder.Key;
-import com.intellij.pom.java.LanguageLevel;
-import com.intellij.psi.PsiCallExpression;
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.LanguageLevel;
+import com.intellij.java.language.psi.PsiCallExpression;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiExpressionList;
+import com.intellij.java.language.psi.PsiExpressionList;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiSubstitutor;
-import com.intellij.psi.PsiType;
+import com.intellij.java.language.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiSubstitutor;
+import com.intellij.java.language.psi.PsiType;
 import com.intellij.psi.filters.ElementFilter;
-import com.intellij.psi.infos.CandidateInfo;
+import com.intellij.java.language.psi.infos.CandidateInfo;
 import com.intellij.psi.scope.ElementClassFilter;
 import com.intellij.psi.scope.ElementClassHint;
-import com.intellij.psi.scope.JavaScopeProcessorEvent;
+import com.intellij.java.language.psi.scope.JavaScopeProcessorEvent;
 import com.intellij.psi.scope.PsiConflictResolver;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
 
 /**
  * Created by IntelliJ IDEA.

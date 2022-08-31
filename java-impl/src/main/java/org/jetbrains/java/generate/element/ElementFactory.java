@@ -17,16 +17,16 @@ package org.jetbrains.java.generate.element;
 
 import org.jetbrains.java.generate.psi.PsiAdapter;
 import consulo.logging.Logger;
-import consulo.java.module.util.JavaClassNames;
-import com.intellij.psi.JavaPsiFacade;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiElementFactory;
-import com.intellij.psi.PsiField;
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiModifier;
-import com.intellij.psi.PsiModifierList;
-import com.intellij.psi.PsiType;
-import com.intellij.psi.util.PropertyUtil;
+import consulo.java.language.module.util.JavaClassNames;
+import com.intellij.java.language.psi.JavaPsiFacade;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiElementFactory;
+import com.intellij.java.language.psi.PsiField;
+import com.intellij.java.language.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiModifier;
+import com.intellij.java.language.psi.PsiModifierList;
+import com.intellij.java.language.psi.PsiType;
+import com.intellij.java.language.psi.util.PropertyUtil;
 
 /**
  * Factory for creating {@link FieldElement} or {@link ClassElement} objects.
@@ -77,7 +77,7 @@ public class ElementFactory
 	/**
 	 * Create a new {@link FieldElement} object.
 	 *
-	 * @param field the {@link com.intellij.psi.PsiField} to get the information from.
+	 * @param field the {@link PsiField} to get the information from.
 	 * @return a new {@link FieldElement} object.
 	 */
 	public static FieldElement newFieldElement(PsiField field, boolean useAccessor)

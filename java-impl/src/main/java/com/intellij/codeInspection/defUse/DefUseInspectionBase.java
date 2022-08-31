@@ -18,6 +18,7 @@ package com.intellij.codeInspection.defUse;
 import com.intellij.codeInsight.daemon.GroupNames;
 import com.intellij.codeInspection.*;
 import com.intellij.java.analysis.codeInspection.BaseJavaBatchLocalInspectionTool;
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
 import com.intellij.java.analysis.impl.psi.controlFlow.DefUseUtil;
 import org.jetbrains.annotations.NonNls;

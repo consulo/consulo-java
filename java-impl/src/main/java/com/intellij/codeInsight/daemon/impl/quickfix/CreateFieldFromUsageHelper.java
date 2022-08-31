@@ -19,10 +19,10 @@ import javax.annotation.Nonnull;
 import com.intellij.codeInsight.template.Template;
 import com.intellij.lang.LanguageExtension;
 import com.intellij.openapi.editor.Editor;
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiField;
-import com.intellij.psi.PsiSubstitutor;
+import com.intellij.java.language.psi.PsiField;
+import com.intellij.java.language.psi.PsiSubstitutor;
 
 /**
  * @author Max Medvedev

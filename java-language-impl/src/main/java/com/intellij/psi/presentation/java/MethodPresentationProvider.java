@@ -17,7 +17,7 @@ package com.intellij.psi.presentation.java;
 
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.navigation.ItemPresentationProvider;
-import com.intellij.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiMethod;
 
 /**
  * @author yole

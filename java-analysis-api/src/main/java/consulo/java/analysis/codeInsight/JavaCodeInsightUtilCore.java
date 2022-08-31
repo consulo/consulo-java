@@ -17,8 +17,9 @@
 package consulo.java.analysis.codeInsight;
 
 import com.intellij.codeInsight.CodeInsightUtilCore;
+import com.intellij.java.language.psi.*;
 import com.intellij.lang.Language;
-import com.intellij.lang.java.JavaLanguage;
+import com.intellij.java.language.JavaLanguage;
 import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.PsiTreeUtil;

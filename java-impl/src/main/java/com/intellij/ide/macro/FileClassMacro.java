@@ -18,9 +18,9 @@ package com.intellij.ide.macro;
 import com.intellij.ide.IdeBundle;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.actionSystem.LangDataKeys;
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiJavaFile;
+import com.intellij.java.language.psi.PsiJavaFile;
 
 public final class FileClassMacro extends Macro {
   public String getName() {

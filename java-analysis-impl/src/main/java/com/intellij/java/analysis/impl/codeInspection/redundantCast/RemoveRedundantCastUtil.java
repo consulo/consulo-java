@@ -2,10 +2,10 @@
 package com.intellij.java.analysis.impl.codeInspection.redundantCast;
 
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiExpression;
-import com.intellij.psi.PsiParenthesizedExpression;
-import com.intellij.psi.PsiTypeCastExpression;
-import com.intellij.psi.util.PsiPrecedenceUtil;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiParenthesizedExpression;
+import com.intellij.java.language.psi.PsiTypeCastExpression;
+import com.intellij.java.language.psi.util.PsiPrecedenceUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.siyeh.ig.psiutils.CommentTracker;
 import consulo.logging.Logger;

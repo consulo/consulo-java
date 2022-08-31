@@ -1,7 +1,7 @@
 // Copyright 2000-2020 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.analysis.impl.codeInspection.dataFlow;
 
-import com.intellij.codeInsight.Nullability;
+import com.intellij.java.language.codeInsight.Nullability;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.rangeSet.LongRangeSet;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.types.DfConstantType;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.types.DfIntType;
@@ -11,11 +11,11 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaValue;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaValueFactory;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.RelationType;
 import com.intellij.java.analysis.impl.codeInspection.util.OptionalUtil;
-import com.intellij.psi.*;
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
-import com.intellij.psi.util.ClassUtil;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.ClassUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.ReflectionUtil;
 import com.siyeh.ig.callMatcher.CallMapper;
@@ -34,7 +34,7 @@ import java.util.Locale;
 
 import static com.intellij.java.analysis.impl.codeInspection.dataFlow.SpecialField.*;
 import static com.intellij.java.analysis.impl.codeInspection.dataFlow.types.DfTypes.*;
-import static com.intellij.psi.CommonClassNames.*;
+import static com.intellij.java.language.psi.CommonClassNames.*;
 import static com.siyeh.ig.callMatcher.CallMatcher.*;
 
 final class CustomMethodHandlers

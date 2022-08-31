@@ -2,9 +2,9 @@
 package com.intellij.java.analysis.impl.codeInspection.dataFlow.types;
 
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiField;
-import com.intellij.psi.PsiType;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiField;
+import com.intellij.java.language.psi.PsiType;
 import com.intellij.util.ObjectUtils;
 
 import javax.annotation.Nonnull;

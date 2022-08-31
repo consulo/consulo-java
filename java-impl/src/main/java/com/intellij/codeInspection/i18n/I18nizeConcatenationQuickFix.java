@@ -17,6 +17,7 @@ package com.intellij.codeInspection.i18n;
 
 import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.codeInsight.intention.impl.ConcatenationToMessageFormatAction;
+import com.intellij.java.language.psi.*;
 import com.intellij.lang.properties.psi.I18nizedTextGenerator;
 import com.intellij.lang.properties.psi.PropertiesFile;
 import consulo.logging.Logger;

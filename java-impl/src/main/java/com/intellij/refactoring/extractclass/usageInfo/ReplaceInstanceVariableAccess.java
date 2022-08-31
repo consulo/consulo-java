@@ -16,7 +16,7 @@
 package com.intellij.refactoring.extractclass.usageInfo;
 
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiReferenceExpression;
+import com.intellij.java.language.psi.PsiReferenceExpression;
 import com.intellij.refactoring.psi.MutationUtils;
 import com.intellij.refactoring.util.FixableUsageInfo;
 import com.intellij.util.IncorrectOperationException;

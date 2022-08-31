@@ -20,9 +20,9 @@ import javax.annotation.Nonnull;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import com.intellij.codeInsight.daemon.impl.quickfix.MethodThrowsFix;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiClassType;
+import com.intellij.java.language.psi.PsiClassType;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.psi.PsiElement;
 
 /**

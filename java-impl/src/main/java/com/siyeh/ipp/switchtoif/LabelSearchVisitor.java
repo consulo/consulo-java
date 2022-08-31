@@ -15,6 +15,9 @@
  */
 package com.siyeh.ipp.switchtoif;
 
+import com.intellij.java.language.psi.JavaRecursiveElementWalkingVisitor;
+import com.intellij.java.language.psi.PsiIdentifier;
+import com.intellij.java.language.psi.PsiLabeledStatement;
 import com.intellij.psi.*;
 
 class LabelSearchVisitor extends JavaRecursiveElementWalkingVisitor {

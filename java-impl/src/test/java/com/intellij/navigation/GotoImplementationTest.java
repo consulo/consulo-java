@@ -5,8 +5,8 @@ import com.intellij.java.indexing.impl.ClassImplementationsSearch;
 import com.intellij.java.indexing.impl.MethodImplementationsSearch;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.psi.search.GlobalSearchScope;
 
 import java.util.*;

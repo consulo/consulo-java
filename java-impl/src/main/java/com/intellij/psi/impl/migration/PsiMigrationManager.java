@@ -22,9 +22,9 @@ import jakarta.inject.Singleton;
 import com.intellij.openapi.components.ServiceManager;
 import consulo.logging.Logger;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.JavaPsiFacade;
+import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.psi.PsiManager;
-import com.intellij.psi.PsiMigration;
+import com.intellij.java.language.psi.PsiMigration;
 import com.intellij.psi.impl.PsiManagerEx;
 import com.intellij.psi.impl.PsiManagerImpl;
 
@@ -50,7 +50,7 @@ public class PsiMigrationManager {
 
   /**
    * Initiates a migrate refactoring. The refactoring is finished when
-   * {@link com.intellij.psi.PsiMigration#finish()} is called.
+   * {@link PsiMigration#finish()} is called.
    *
    * @return the migrate operation object.
    */

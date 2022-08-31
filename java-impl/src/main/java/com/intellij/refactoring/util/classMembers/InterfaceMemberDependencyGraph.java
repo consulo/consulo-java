@@ -15,7 +15,7 @@
  */
 package com.intellij.refactoring.util.classMembers;
 
-import com.intellij.psi.*;
+import com.intellij.java.language.psi.*;
 import com.intellij.refactoring.RefactoringBundle;
 import com.intellij.refactoring.classMembers.MemberDependencyGraph;
 import com.intellij.refactoring.classMembers.MemberInfoBase;

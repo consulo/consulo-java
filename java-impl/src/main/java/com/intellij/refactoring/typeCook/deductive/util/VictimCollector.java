@@ -15,10 +15,11 @@
  */
 package com.intellij.refactoring.typeCook.deductive.util;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
 import com.intellij.refactoring.typeCook.Settings;
 import com.intellij.refactoring.typeCook.Util;
-import consulo.java.module.util.JavaClassNames;
+import consulo.java.language.module.util.JavaClassNames;
 
 import java.util.HashSet;
 

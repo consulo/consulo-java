@@ -15,6 +15,9 @@
  */
 package com.siyeh.ipp.concatenation;
 
+import com.intellij.java.language.psi.PsiJavaToken;
+import com.intellij.java.language.psi.PsiLiteralExpression;
+import com.intellij.java.language.psi.PsiPolyadicExpression;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
 import com.intellij.util.IncorrectOperationException;

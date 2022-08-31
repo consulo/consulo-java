@@ -16,7 +16,7 @@
 package com.intellij.refactoring.openapi.impl;
 
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.refactoring.RefactoringImpl;
 import com.intellij.refactoring.TurnRefsToSuperRefactoring;
 import com.intellij.refactoring.turnRefsToSuper.TurnRefsToSuperProcessor;

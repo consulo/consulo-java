@@ -38,7 +38,7 @@ import com.intellij.openapi.util.Trinity;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.Function;
-import com.intellij.util.cls.ClsFormatException;
+import com.intellij.java.language.util.cls.ClsFormatException;
 import consulo.compiler.make.DependencyCache;
 import consulo.logging.Logger;
 import consulo.util.collection.primitive.ints.IntSet;

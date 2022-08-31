@@ -15,6 +15,7 @@
  */
 package com.siyeh.ig.psiutils;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import javax.annotation.Nonnull;
@@ -41,7 +42,7 @@ public class VariableSearchUtils {
   }
 
   public static boolean containsConflictingDeclarations(
-    PsiCodeBlock block, PsiCodeBlock parentBlock) {
+      PsiCodeBlock block, PsiCodeBlock parentBlock) {
     final List<PsiCodeBlock> followingBlocks = new ArrayList();
     collectFollowingBlocks(block.getParent().getNextSibling(),
                            followingBlocks);

@@ -17,6 +17,7 @@ package com.intellij.lang.java;
 
 import javax.annotation.Nonnull;
 
+import com.intellij.java.language.psi.*;
 import consulo.psi.PsiPackage;
 import com.intellij.find.impl.HelpID;
 import com.intellij.ide.TypePresentationService;
@@ -29,7 +30,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.java.analysis.impl.psi.impl.search.ThrowSearchUtil;
 import com.intellij.psi.meta.PsiMetaOwner;
-import com.intellij.psi.util.PsiFormatUtil;
+import com.intellij.java.language.psi.util.PsiFormatUtil;
 import com.intellij.psi.util.PsiFormatUtilBase;
 import com.intellij.usageView.UsageViewBundle;
 

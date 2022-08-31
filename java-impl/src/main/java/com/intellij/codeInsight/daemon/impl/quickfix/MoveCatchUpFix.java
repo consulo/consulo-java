@@ -24,10 +24,10 @@ import com.intellij.codeInsight.intention.IntentionAction;
 import consulo.logging.Logger;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiCatchSection;
+import com.intellij.java.language.psi.PsiCatchSection;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiTryStatement;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.PsiTryStatement;
+import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.util.IncorrectOperationException;
 
 public class MoveCatchUpFix implements IntentionAction {

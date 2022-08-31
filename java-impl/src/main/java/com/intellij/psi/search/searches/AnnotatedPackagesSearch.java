@@ -17,8 +17,8 @@ package com.intellij.psi.search.searches;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiJavaPackage;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiJavaPackage;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.SearchScope;
 import com.intellij.util.Query;

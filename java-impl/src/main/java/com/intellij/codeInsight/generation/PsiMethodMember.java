@@ -15,10 +15,10 @@
  */
 package com.intellij.codeInsight.generation;
 
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiSubstitutor;
-import com.intellij.psi.infos.CandidateInfo;
-import com.intellij.psi.util.PsiFormatUtil;
+import com.intellij.java.language.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiSubstitutor;
+import com.intellij.java.language.psi.infos.CandidateInfo;
+import com.intellij.java.language.psi.util.PsiFormatUtil;
 import com.intellij.psi.util.PsiFormatUtilBase;
 
 /**

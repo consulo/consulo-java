@@ -17,10 +17,10 @@ package com.siyeh.ig.errorhandling;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.psi.PsiCodeBlock;
+import com.intellij.java.language.psi.PsiCodeBlock;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiKeyword;
-import com.intellij.psi.PsiTryStatement;
+import com.intellij.java.language.psi.PsiKeyword;
+import com.intellij.java.language.psi.PsiTryStatement;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;

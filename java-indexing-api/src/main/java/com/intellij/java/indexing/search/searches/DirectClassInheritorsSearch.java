@@ -16,8 +16,8 @@
 package com.intellij.java.indexing.search.searches;
 
 import com.intellij.openapi.util.Condition;
-import com.intellij.psi.PsiAnonymousClass;
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.psi.PsiAnonymousClass;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.SearchScope;
 import com.intellij.psi.search.searches.ExtensibleQueryFactory;

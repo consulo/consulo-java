@@ -17,9 +17,9 @@
 package com.intellij.java.analysis.impl.codeInspection.dataFlow.inference;
 
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.StandardMethodContract;
-import com.intellij.psi.PsiCodeBlock;
-import com.intellij.psi.PsiExpression;
-import com.intellij.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiCodeBlock;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiMethod;
 import com.siyeh.ig.psiutils.SideEffectChecker;
 import consulo.annotation.access.RequiredReadAction;
 

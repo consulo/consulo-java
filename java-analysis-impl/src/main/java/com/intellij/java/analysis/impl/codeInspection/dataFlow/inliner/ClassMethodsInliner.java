@@ -2,14 +2,14 @@
 package com.intellij.java.analysis.impl.codeInspection.dataFlow.inliner;
 
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.CFGBuilder;
-import com.intellij.psi.PsiExpression;
-import com.intellij.psi.PsiMethodCallExpression;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiMethodCallExpression;
+import com.intellij.java.language.psi.util.PsiUtil;
 import com.siyeh.ig.callMatcher.CallMatcher;
 import javax.annotation.Nonnull;
 
-import static com.intellij.psi.CommonClassNames.JAVA_LANG_CLASS;
-import static com.intellij.psi.CommonClassNames.JAVA_LANG_OBJECT;
+import static com.intellij.java.language.psi.CommonClassNames.JAVA_LANG_CLASS;
+import static com.intellij.java.language.psi.CommonClassNames.JAVA_LANG_OBJECT;
 import static com.intellij.util.ObjectUtils.tryCast;
 
 /**

@@ -15,10 +15,10 @@
  */
 package com.siyeh.ig.errorhandling;
 
-import com.intellij.psi.JavaRecursiveElementVisitor;
+import com.intellij.java.language.psi.JavaRecursiveElementVisitor;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiParameter;
-import com.intellij.psi.PsiReferenceExpression;
+import com.intellij.java.language.psi.PsiParameter;
+import com.intellij.java.language.psi.PsiReferenceExpression;
 import javax.annotation.Nonnull;
 
 class CatchParameterUsedVisitor extends JavaRecursiveElementVisitor {

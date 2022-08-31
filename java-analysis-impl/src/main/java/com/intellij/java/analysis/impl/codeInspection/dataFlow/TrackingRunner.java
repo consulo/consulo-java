@@ -1,9 +1,9 @@
 // Copyright 2000-2020 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.analysis.impl.codeInspection.dataFlow;
 
-import com.intellij.codeInsight.Nullability;
-import com.intellij.codeInsight.NullabilityAnnotationInfo;
-import com.intellij.codeInsight.NullableNotNullManager;
+import com.intellij.java.language.codeInsight.Nullability;
+import com.intellij.java.language.codeInsight.NullabilityAnnotationInfo;
+import com.intellij.java.language.codeInsight.NullableNotNullManager;
 import com.intellij.java.analysis.JavaAnalysisBundle;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.TrackingDfaMemoryState.FactDefinition;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.TrackingDfaMemoryState.FactExtractor;
@@ -14,6 +14,7 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.rangeSet.LongRang
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.rangeSet.LongRangeSet;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.types.DfConstantType;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.*;
+import com.intellij.java.language.psi.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.progress.ProgressManager;
@@ -26,12 +27,12 @@ import com.intellij.psi.*;
 import com.intellij.psi.impl.source.tree.ChildRole;
 import com.intellij.psi.impl.source.tree.CompositeElement;
 import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.util.JavaElementKind;
+import com.intellij.java.language.psi.util.JavaElementKind;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.PsiUtil;
-import com.intellij.psi.util.TypeConversionUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.TypeConversionUtil;
 import com.intellij.util.ArrayUtil;
-import com.intellij.util.JavaPsiConstructorUtil;
+import com.intellij.java.language.util.JavaPsiConstructorUtil;
 import com.intellij.util.ObjectUtils;
 import com.intellij.util.ThreeState;
 import com.intellij.util.containers.ContainerUtil;

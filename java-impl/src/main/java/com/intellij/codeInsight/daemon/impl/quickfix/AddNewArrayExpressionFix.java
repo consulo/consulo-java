@@ -17,6 +17,7 @@ package com.intellij.codeInsight.daemon.impl.quickfix;
 
 import javax.annotation.Nonnull;
 
+import com.intellij.java.language.psi.*;
 import org.jetbrains.annotations.NonNls;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import com.intellij.codeInsight.FileModificationService;

@@ -19,9 +19,9 @@
  */
 package com.intellij.psi.impl.source.tree.java;
 
-import com.intellij.psi.PsiAnnotation;
+import com.intellij.java.language.psi.PsiAnnotation;
 import com.intellij.psi.PsiManager;
-import com.intellij.psi.PsiModifierList;
+import com.intellij.java.language.psi.PsiModifierList;
 import com.intellij.psi.impl.light.LightModifierList;
 import com.intellij.util.containers.ContainerUtil;
 import javax.annotation.Nonnull;

@@ -27,12 +27,12 @@ import com.intellij.java.debugger.impl.ui.tree.DebuggerTreeNode;
 import com.intellij.java.debugger.impl.ui.tree.ValueDescriptor;
 import consulo.logging.Logger;
 import com.intellij.openapi.project.Project;
-import consulo.java.module.util.JavaClassNames;
-import com.intellij.psi.JavaPsiFacade;
+import consulo.java.language.module.util.JavaClassNames;
+import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiElementFactory;
+import com.intellij.java.language.psi.PsiElementFactory;
 import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.util.TypeConversionUtil;
+import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.internal.com.sun.jdi.ReferenceType;
 import consulo.internal.com.sun.jdi.Type;
 

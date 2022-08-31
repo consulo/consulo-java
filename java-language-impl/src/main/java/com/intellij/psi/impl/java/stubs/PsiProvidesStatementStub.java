@@ -15,7 +15,7 @@
  */
 package com.intellij.psi.impl.java.stubs;
 
-import com.intellij.psi.PsiProvidesStatement;
+import com.intellij.java.language.psi.PsiProvidesStatement;
 import com.intellij.psi.stubs.StubElement;
 
 public interface PsiProvidesStatementStub extends StubElement<PsiProvidesStatement> {

@@ -23,8 +23,8 @@ import javax.annotation.Nonnull;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiImportStaticStatement;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiImportStaticStatement;
 import com.intellij.util.SmartList;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.ui.CheckBox;

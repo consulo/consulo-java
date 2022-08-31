@@ -22,7 +22,12 @@ import com.intellij.codeInsight.daemon.quickFix.ExternalLibraryResolver.External
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemDescriptor;
-import com.intellij.lang.java.JavaLanguage;
+import com.intellij.java.language.JavaLanguage;
+import com.intellij.java.language.projectRoots.roots.ExternalLibraryDescriptor;
+import com.intellij.java.language.psi.JavaPsiFacade;
+import com.intellij.java.language.psi.PsiAnnotation;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiImportStatement;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.DumbService;
@@ -36,9 +41,9 @@ import com.intellij.packageDependencies.DependencyValidationManager;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.PsiJavaModuleReferenceImpl;
 import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.search.PsiShortNamesCache;
+import com.intellij.java.language.psi.search.PsiShortNamesCache;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.util.ThreeState;
 import com.intellij.util.containers.ContainerUtil;
 

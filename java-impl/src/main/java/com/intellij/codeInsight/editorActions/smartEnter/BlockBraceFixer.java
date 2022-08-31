@@ -18,9 +18,9 @@ package com.intellij.codeInsight.editorActions.smartEnter;
 import com.intellij.codeInsight.editorActions.enter.EnterAfterUnmatchedBraceHandler;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.fileTypes.FileType;
-import com.intellij.psi.PsiCodeBlock;
+import com.intellij.java.language.psi.PsiCodeBlock;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiStatement;
+import com.intellij.java.language.psi.PsiStatement;
 import com.intellij.util.IncorrectOperationException;
 
 public class BlockBraceFixer implements Fixer

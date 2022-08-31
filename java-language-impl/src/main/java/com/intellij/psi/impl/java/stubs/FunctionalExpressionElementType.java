@@ -21,7 +21,7 @@ import javax.annotation.Nonnull;
 
 import com.intellij.lang.LighterAST;
 import com.intellij.lang.LighterASTNode;
-import com.intellij.psi.PsiFunctionalExpression;
+import com.intellij.java.language.psi.PsiFunctionalExpression;
 import com.intellij.psi.stubs.IndexSink;
 import com.intellij.psi.stubs.StubElement;
 import com.intellij.psi.stubs.StubInputStream;

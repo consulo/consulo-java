@@ -15,6 +15,7 @@
  */
 package com.intellij.refactoring.move.moveClassesOrPackages;
 
+import com.intellij.java.language.psi.PsiJavaPackage;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;

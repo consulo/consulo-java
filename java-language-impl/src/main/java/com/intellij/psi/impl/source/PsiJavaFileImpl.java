@@ -21,7 +21,7 @@ import javax.annotation.Nullable;
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.psi.FileViewProvider;
-import com.intellij.psi.PsiJavaModule;
+import com.intellij.java.language.psi.PsiJavaModule;
 import com.intellij.psi.impl.java.stubs.JavaStubElementTypes;
 import com.intellij.psi.impl.java.stubs.PsiJavaFileStub;
 import com.intellij.psi.util.PsiTreeUtil;

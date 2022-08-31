@@ -25,6 +25,7 @@
 package com.intellij.refactoring.introduceParameter;
 
 import com.intellij.codeInsight.ChangeContextUtil;
+import com.intellij.java.language.psi.*;
 import com.intellij.lang.findUsages.DescriptiveNameUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Pair;
@@ -33,7 +34,7 @@ import com.intellij.psi.*;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.java.indexing.search.searches.MethodReferencesSearch;
 import com.intellij.java.indexing.search.searches.OverridingMethodsSearch;
-import com.intellij.psi.util.PropertyUtil;
+import com.intellij.java.language.psi.util.PropertyUtil;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.refactoring.BaseRefactoringProcessor;
 import com.intellij.refactoring.IntroduceParameterRefactoring;

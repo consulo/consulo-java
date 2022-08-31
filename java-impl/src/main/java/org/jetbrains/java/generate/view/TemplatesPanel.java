@@ -27,7 +27,7 @@ import com.intellij.openapi.ui.Namer;
 import com.intellij.openapi.util.Cloner;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Factory;
-import com.intellij.psi.PsiType;
+import com.intellij.java.language.psi.PsiType;
 import consulo.util.collection.HashingStrategy;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;

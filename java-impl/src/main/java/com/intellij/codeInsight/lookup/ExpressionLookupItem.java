@@ -16,6 +16,10 @@
 package com.intellij.codeInsight.lookup;
 
 import com.intellij.icons.AllIcons;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiMethodCallExpression;
+import com.intellij.java.language.psi.PsiReferenceExpression;
+import com.intellij.java.language.psi.PsiType;
 import com.intellij.psi.*;
 import com.intellij.util.containers.ContainerUtil;
 import consulo.ide.IconDescriptorUpdaters;

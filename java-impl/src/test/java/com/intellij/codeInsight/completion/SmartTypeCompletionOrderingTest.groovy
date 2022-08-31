@@ -9,7 +9,7 @@ import com.intellij.JavaTestUtil
 import com.intellij.codeInsight.lookup.LookupElement
 import com.intellij.codeInsight.lookup.LookupElementPresentation
 import com.intellij.codeInsight.lookup.impl.LookupImpl
-import com.intellij.psi.PsiClass
+import com.intellij.java.language.psi.PsiClass
 import com.intellij.psi.statistics.StatisticsManager
 import com.intellij.openapi.fileEditor.FileDocumentManager
 

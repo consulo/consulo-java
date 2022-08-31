@@ -16,9 +16,9 @@
 package com.intellij.refactoring.openapi.impl;
 
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiMember;
+import com.intellij.java.language.psi.PsiMember;
 import com.intellij.refactoring.MoveMembersRefactoring;
 import com.intellij.refactoring.RefactoringImpl;
 import com.intellij.refactoring.move.moveMembers.MoveMembersOptions;

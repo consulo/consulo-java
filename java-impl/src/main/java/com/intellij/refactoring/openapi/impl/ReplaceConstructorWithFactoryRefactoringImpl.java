@@ -16,9 +16,8 @@
 package com.intellij.refactoring.openapi.impl;
 
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiMethod;
-import com.intellij.refactoring.BaseRefactoringProcessor;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.refactoring.RefactoringImpl;
 import com.intellij.refactoring.ReplaceConstructorWithFactoryRefactoring;
 import com.intellij.refactoring.replaceConstructorWithFactory.ReplaceConstructorWithFactoryProcessor;

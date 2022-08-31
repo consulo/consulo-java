@@ -1,10 +1,11 @@
 // Copyright 2000-2019 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.psi.impl.source;
 
-import com.intellij.codeInsight.AnnotationTargetUtil;
+import com.intellij.java.language.codeInsight.AnnotationTargetUtil;
+import com.intellij.java.language.psi.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.*;
-import com.intellij.psi.augment.PsiAugmentProvider;
+import com.intellij.java.language.psi.augment.PsiAugmentProvider;
 import com.intellij.psi.impl.CheckUtil;
 import com.intellij.psi.impl.PsiImplUtil;
 import com.intellij.psi.impl.cache.ModifierFlags;
@@ -15,7 +16,7 @@ import com.intellij.psi.impl.source.tree.CompositeElement;
 import com.intellij.psi.impl.source.tree.Factory;
 import com.intellij.psi.impl.source.tree.TreeElement;
 import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.BitUtil;
 import com.intellij.util.IncorrectOperationException;
@@ -26,7 +27,7 @@ import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
 import java.util.*;
 
-import static com.intellij.psi.PsiModifier.*;
+import static com.intellij.java.language.psi.PsiModifier.*;
 
 public class PsiModifierListImpl extends JavaStubPsiElement<PsiModifierListStub> implements PsiModifierList
 {

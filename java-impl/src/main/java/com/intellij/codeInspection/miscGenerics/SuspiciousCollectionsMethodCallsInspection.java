@@ -9,9 +9,10 @@ import com.intellij.java.analysis.codeInspection.AbstractBaseJavaLocalInspection
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.CommonDataflow;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.TypeConstraint;
 import com.intellij.java.analysis.impl.codeInspection.miscGenerics.SuspiciousMethodCallUtil;
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
-import com.intellij.psi.util.MethodSignature;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.MethodSignature;
+import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.util.ObjectUtils;
 
 import javax.annotation.Nonnull;

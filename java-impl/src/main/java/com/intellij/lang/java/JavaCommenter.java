@@ -17,12 +17,12 @@ package com.intellij.lang.java;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.CodeDocumentationAwareCommenterEx;
-import com.intellij.psi.JavaDocTokenType;
-import com.intellij.psi.JavaTokenType;
+import com.intellij.java.language.psi.JavaDocTokenType;
+import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.psi.PsiComment;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.impl.source.tree.JavaDocElementType;
-import com.intellij.psi.javadoc.PsiDocComment;
+import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.psi.tree.IElementType;
 import javax.annotation.Nullable;
 

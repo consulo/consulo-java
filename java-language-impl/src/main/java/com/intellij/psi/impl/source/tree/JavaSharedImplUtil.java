@@ -19,7 +19,8 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import com.intellij.codeInsight.AnnotationTargetUtil;
+import com.intellij.java.language.codeInsight.AnnotationTargetUtil;
+import com.intellij.java.language.psi.*;
 import com.intellij.lang.ASTFactory;
 import com.intellij.lang.ASTNode;
 import consulo.logging.Logger;
@@ -28,7 +29,7 @@ import com.intellij.psi.impl.GeneratedMarkerVisitor;
 import com.intellij.psi.impl.PsiImplUtil;
 import com.intellij.psi.impl.cache.TypeInfo;
 import com.intellij.psi.tree.TokenSet;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.util.CharTable;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.ContainerUtil;

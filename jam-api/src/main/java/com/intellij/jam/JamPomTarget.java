@@ -22,7 +22,7 @@ import com.intellij.pom.PomRenameableTarget;
 import com.intellij.pom.PsiDeclaredTarget;
 import com.intellij.psi.DelegatePsiTarget;
 import com.intellij.psi.ElementManipulators;
-import com.intellij.psi.PsiLiteral;
+import com.intellij.java.language.psi.PsiLiteral;
 import com.intellij.util.ObjectUtil;
 
 import javax.annotation.Nullable;

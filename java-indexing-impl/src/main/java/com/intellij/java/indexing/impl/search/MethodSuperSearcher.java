@@ -15,14 +15,14 @@
  */
 package com.intellij.java.indexing.impl.search;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.application.ApplicationManager;
 import consulo.logging.Logger;
 import com.intellij.openapi.util.Computable;
-import com.intellij.psi.*;
-import com.intellij.psi.search.searches.SuperMethodsSearch;
-import com.intellij.psi.util.InheritanceUtil;
-import com.intellij.psi.util.MethodSignatureBackedByPsiMethod;
-import com.intellij.psi.util.MethodSignatureUtil;
+import com.intellij.java.language.psi.search.searches.SuperMethodsSearch;
+import com.intellij.java.language.psi.util.InheritanceUtil;
+import com.intellij.java.language.psi.util.MethodSignatureBackedByPsiMethod;
+import com.intellij.java.language.psi.util.MethodSignatureUtil;
 import com.intellij.util.Processor;
 import com.intellij.util.QueryExecutor;
 

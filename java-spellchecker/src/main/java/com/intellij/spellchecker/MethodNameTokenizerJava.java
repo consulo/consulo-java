@@ -19,7 +19,7 @@ import javax.annotation.Nonnull;
 
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.spellchecker.tokenizer.TokenConsumer;
 
 /**

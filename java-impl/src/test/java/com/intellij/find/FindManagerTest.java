@@ -19,6 +19,8 @@ import com.intellij.JavaTestUtil;
 import com.intellij.codeInsight.daemon.DaemonAnalyzerTestCase;
 import com.intellij.find.impl.FindInProjectUtil;
 import com.intellij.find.replaceInProject.ReplaceInProjectManager;
+import com.intellij.java.language.psi.JavaPsiFacade;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.fileTypes.PlainTextFileType;
 import com.intellij.openapi.projectRoots.Sdk;

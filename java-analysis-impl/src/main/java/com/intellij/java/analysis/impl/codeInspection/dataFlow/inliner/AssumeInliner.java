@@ -3,8 +3,8 @@ package com.intellij.java.analysis.impl.codeInspection.dataFlow.inliner;
 
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.CFGBuilder;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.NullabilityProblemKind;
-import com.intellij.psi.PsiExpression;
-import com.intellij.psi.PsiMethodCallExpression;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiMethodCallExpression;
 import com.siyeh.ig.callMatcher.CallMatcher;
 import com.siyeh.ig.psiutils.MethodCallUtils;
 import javax.annotation.Nonnull;

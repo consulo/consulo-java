@@ -27,7 +27,7 @@ package com.intellij.refactoring.makeStatic;
 import com.intellij.openapi.help.HelpManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.PsiTypeParameterListOwner;
+import com.intellij.java.language.psi.PsiTypeParameterListOwner;
 import com.intellij.refactoring.HelpID;
 import com.intellij.refactoring.RefactoringBundle;
 import com.intellij.java.analysis.impl.refactoring.util.VariableData;

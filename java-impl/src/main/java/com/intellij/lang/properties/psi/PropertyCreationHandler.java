@@ -18,7 +18,7 @@ package com.intellij.lang.properties.psi;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.util.IncorrectOperationException;
-import com.intellij.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiExpression;
 
 import java.util.Collection;
 

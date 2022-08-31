@@ -20,11 +20,11 @@
  */
 package com.intellij.refactoring.replaceConstructorWithBuilder.usageInfo;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.*;
-import com.intellij.psi.codeStyle.JavaCodeStyleManager;
-import com.intellij.psi.codeStyle.VariableKind;
+import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
+import com.intellij.java.language.psi.codeStyle.VariableKind;
 import com.intellij.refactoring.replaceConstructorWithBuilder.ParameterData;
 import com.intellij.refactoring.util.FixableUsageInfo;
 import com.intellij.util.IncorrectOperationException;

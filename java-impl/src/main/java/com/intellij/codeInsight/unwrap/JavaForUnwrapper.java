@@ -16,6 +16,10 @@
 package com.intellij.codeInsight.unwrap;
 
 import com.intellij.codeInsight.CodeInsightBundle;
+import com.intellij.java.language.psi.PsiForStatement;
+import com.intellij.java.language.psi.PsiForeachStatement;
+import com.intellij.java.language.psi.PsiLoopStatement;
+import com.intellij.java.language.psi.PsiStatement;
 import com.intellij.psi.*;
 import com.intellij.util.IncorrectOperationException;
 

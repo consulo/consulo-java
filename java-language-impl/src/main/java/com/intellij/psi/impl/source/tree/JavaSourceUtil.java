@@ -15,6 +15,7 @@
  */
 package com.intellij.psi.impl.source.tree;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.lang.ASTFactory;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.LighterAST;

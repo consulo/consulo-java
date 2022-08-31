@@ -18,8 +18,8 @@ package com.intellij.refactoring.memberPullUp;
 import java.util.Set;
 
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiMember;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiMember;
 import com.intellij.refactoring.util.DocCommentPolicy;
 
 /**

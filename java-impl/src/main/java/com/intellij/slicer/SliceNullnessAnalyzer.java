@@ -15,7 +15,7 @@
  */
 package com.intellij.slicer;
 
-import com.intellij.codeInsight.Nullability;
+import com.intellij.java.language.codeInsight.Nullability;
 import com.intellij.codeInsight.PsiEquivalenceUtil;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.NullabilityUtil;
 import com.intellij.ide.util.treeView.AbstractTreeNode;
@@ -26,7 +26,7 @@ import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.progress.Task;
 import com.intellij.openapi.util.Ref;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.util.NullableFunction;
 import com.intellij.util.PairProcessor;
 import com.intellij.util.WalkingState;

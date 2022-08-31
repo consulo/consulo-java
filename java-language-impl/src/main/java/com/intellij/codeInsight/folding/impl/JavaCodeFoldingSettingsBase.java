@@ -16,7 +16,7 @@
 package com.intellij.codeInsight.folding.impl;
 
 import com.intellij.codeInsight.folding.CodeFoldingSettings;
-import com.intellij.codeInsight.folding.JavaCodeFoldingSettings;
+import com.intellij.java.language.codeInsight.folding.JavaCodeFoldingSettings;
 
 public class JavaCodeFoldingSettingsBase extends JavaCodeFoldingSettings
 {

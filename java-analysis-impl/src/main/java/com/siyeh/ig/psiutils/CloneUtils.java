@@ -17,11 +17,11 @@ package com.siyeh.ig.psiutils;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.psi.*;
-import com.intellij.psi.util.InheritanceUtil;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.InheritanceUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
 import com.siyeh.HardcodedMethodConstants;
-import consulo.java.module.util.JavaClassNames;
+import consulo.java.language.module.util.JavaClassNames;
 
 public class CloneUtils {
 

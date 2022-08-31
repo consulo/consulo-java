@@ -15,7 +15,7 @@
  */
 package com.siyeh.ig.abstraction;
 
-import com.intellij.psi.*;
+import com.intellij.java.language.psi.*;
 import com.siyeh.ig.psiutils.LibraryUtil;
 import javax.annotation.Nullable;
 

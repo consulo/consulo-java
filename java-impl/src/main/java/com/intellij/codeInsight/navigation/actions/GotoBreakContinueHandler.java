@@ -15,6 +15,7 @@
  */
 package com.intellij.codeInsight.navigation.actions;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;

@@ -15,9 +15,9 @@
  */
 package com.siyeh.ipp.shift;
 
-import com.intellij.psi.PsiExpression;
-import com.intellij.psi.PsiLiteralExpression;
-import com.intellij.psi.PsiType;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiLiteralExpression;
+import com.intellij.java.language.psi.PsiType;
 
 class ShiftUtils {
 

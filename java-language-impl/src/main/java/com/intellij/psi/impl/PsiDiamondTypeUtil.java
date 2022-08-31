@@ -15,17 +15,18 @@
  */
 package com.intellij.psi.impl;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.lang.injection.InjectedLanguageManager;
 import consulo.logging.Logger;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.pom.java.LanguageLevel;
+import com.intellij.java.language.LanguageLevel;
 import com.intellij.psi.*;
-import com.intellij.psi.augment.PsiAugmentProvider;
+import com.intellij.java.language.psi.augment.PsiAugmentProvider;
 import com.intellij.psi.codeStyle.CodeStyleManager;
-import com.intellij.psi.infos.MethodCandidateInfo;
+import com.intellij.java.language.psi.infos.MethodCandidateInfo;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.PsiTypesUtil;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.PsiTypesUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.util.IncorrectOperationException;
 import javax.annotation.Nullable;
 

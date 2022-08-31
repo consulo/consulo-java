@@ -6,11 +6,11 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.rangeSet.LongRang
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.rangeSet.LongRangeSet;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.types.*;
 import com.intellij.openapi.util.Pair;
-import com.intellij.psi.JavaTokenType;
-import com.intellij.psi.PsiPrimitiveType;
-import com.intellij.psi.PsiType;
+import com.intellij.java.language.psi.JavaTokenType;
+import com.intellij.java.language.psi.PsiPrimitiveType;
+import com.intellij.java.language.psi.PsiType;
 import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.util.TypeConversionUtil;
+import com.intellij.java.language.psi.util.TypeConversionUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

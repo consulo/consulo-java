@@ -18,7 +18,7 @@ package com.intellij.spi.parsing;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.IFileElementType;
 import com.intellij.psi.tree.TokenSet;
-import com.intellij.lang.spi.SPILanguage;
+import com.intellij.java.language.spi.SPILanguage;
 
 public interface SPIElementTypes {
 

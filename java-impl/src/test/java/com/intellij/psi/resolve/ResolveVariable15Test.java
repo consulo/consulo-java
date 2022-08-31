@@ -4,8 +4,8 @@
 package com.intellij.psi.resolve;
 
 import com.intellij.psi.PsiReference;
-import com.intellij.psi.JavaResolveResult;
-import com.intellij.psi.PsiJavaReference;
+import com.intellij.java.language.psi.JavaResolveResult;
+import com.intellij.java.language.psi.PsiJavaReference;
 import com.intellij.psi.PsiElement;
 
 /**

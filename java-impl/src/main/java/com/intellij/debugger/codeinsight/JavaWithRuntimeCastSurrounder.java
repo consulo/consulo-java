@@ -34,15 +34,15 @@ import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.util.ProgressWindowWithNotification;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.JavaPsiFacade;
+import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.psi.PsiCodeFragment;
-import com.intellij.psi.PsiElementFactory;
-import com.intellij.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiElementFactory;
+import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiParenthesizedExpression;
-import com.intellij.psi.PsiType;
-import com.intellij.psi.PsiTypeCastExpression;
-import com.intellij.psi.codeStyle.JavaCodeStyleManager;
+import com.intellij.java.language.psi.PsiParenthesizedExpression;
+import com.intellij.java.language.psi.PsiType;
+import com.intellij.java.language.psi.PsiTypeCastExpression;
+import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.util.IncorrectOperationException;
 
 /**

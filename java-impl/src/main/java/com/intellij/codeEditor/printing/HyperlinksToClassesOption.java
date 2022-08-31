@@ -32,10 +32,10 @@ import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.UnnamedConfigurable;
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiJavaCodeReferenceElement;
+import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
 import com.intellij.psi.PsiReference;
 
 public class HyperlinksToClassesOption extends PrintOption {

@@ -15,11 +15,11 @@
  */
 package com.intellij.codeInsight.completion.scope;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Pair;
-import com.intellij.psi.*;
-import com.intellij.psi.util.MethodSignature;
-import com.intellij.psi.util.MethodSignatureUtil;
+import com.intellij.java.language.psi.util.MethodSignature;
+import com.intellij.java.language.psi.util.MethodSignatureUtil;
 import consulo.psi.PsiPackage;
 
 import javax.annotation.Nonnull;

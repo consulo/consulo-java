@@ -15,11 +15,12 @@
  */
 package com.intellij.psi.impl.smartPointers;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.project.Project;
-import com.intellij.pom.java.LanguageLevel;
+import com.intellij.java.language.LanguageLevel;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.PsiImmediateClassType;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.util.containers.ContainerUtil;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;

@@ -16,8 +16,8 @@
 package com.intellij.codeInsight.generation.actions;
 
 import com.intellij.codeInsight.generation.GenerateConstructorHandler;
-import com.intellij.psi.PsiAnonymousClass;
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.psi.PsiAnonymousClass;
+import com.intellij.java.language.psi.PsiClass;
 
 /**
  * Action group which contains Generate... actions

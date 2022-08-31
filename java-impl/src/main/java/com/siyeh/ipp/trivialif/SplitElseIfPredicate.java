@@ -15,6 +15,10 @@
  */
 package com.siyeh.ipp.trivialif;
 
+import com.intellij.java.language.psi.PsiIfStatement;
+import com.intellij.java.language.psi.PsiJavaToken;
+import com.intellij.java.language.psi.PsiKeyword;
+import com.intellij.java.language.psi.PsiStatement;
 import com.intellij.psi.*;
 import com.siyeh.ipp.base.PsiElementPredicate;
 import com.siyeh.ipp.psiutils.ErrorUtil;

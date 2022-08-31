@@ -15,6 +15,7 @@
  */
 package com.siyeh.ig.threading;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;

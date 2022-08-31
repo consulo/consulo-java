@@ -24,6 +24,7 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 import javax.swing.JList;
 
+import com.intellij.java.language.psi.*;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nullable;
@@ -53,12 +54,12 @@ import com.intellij.openapi.util.AsyncResult;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
-import com.intellij.psi.javadoc.JavadocManager;
-import com.intellij.psi.javadoc.JavadocTagInfo;
-import com.intellij.psi.javadoc.PsiDocComment;
-import com.intellij.psi.javadoc.PsiDocTag;
-import com.intellij.psi.javadoc.PsiDocTagValue;
-import com.intellij.psi.javadoc.PsiInlineDocTag;
+import com.intellij.java.language.psi.javadoc.JavadocManager;
+import com.intellij.java.language.psi.javadoc.JavadocTagInfo;
+import com.intellij.java.language.psi.javadoc.PsiDocComment;
+import com.intellij.java.language.psi.javadoc.PsiDocTag;
+import com.intellij.java.language.psi.javadoc.PsiDocTagValue;
+import com.intellij.java.language.psi.javadoc.PsiInlineDocTag;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.proximity.PsiProximityComparator;
 import com.intellij.ui.components.JBList;

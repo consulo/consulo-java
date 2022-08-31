@@ -36,7 +36,7 @@ import com.intellij.openapi.actionSystem.IdeActions;
 import consulo.logging.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.ui.PopupHandler;
 
 public class MethodHierarchyBrowser extends MethodHierarchyBrowserBase {

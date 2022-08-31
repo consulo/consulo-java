@@ -16,6 +16,7 @@
 package com.intellij.jam.view.ui;
 
 import com.intellij.jam.JamMessages;
+import com.intellij.java.language.psi.*;
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.navigation.NavigationItem;
 import com.intellij.openapi.project.Project;
@@ -23,7 +24,7 @@ import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
-import com.intellij.psi.util.PsiFormatUtil;
+import com.intellij.java.language.psi.util.PsiFormatUtil;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.xml.XmlTag;
 import com.intellij.refactoring.ui.EnableDisableAction;
@@ -32,7 +33,6 @@ import com.intellij.ui.table.TableView;
 import java.util.HashSet;
 import com.intellij.util.ui.ColumnInfo;
 import com.intellij.util.ui.ListTableModel;
-import consulo.awt.TargetAWT;
 import consulo.ide.IconDescriptorUpdaters;
 
 import javax.annotation.Nullable;

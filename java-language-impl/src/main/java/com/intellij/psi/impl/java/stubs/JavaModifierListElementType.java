@@ -26,7 +26,7 @@ import javax.annotation.Nonnull;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.LighterAST;
 import com.intellij.lang.LighterASTNode;
-import com.intellij.psi.PsiModifierList;
+import com.intellij.java.language.psi.PsiModifierList;
 import com.intellij.psi.impl.cache.RecordUtil;
 import com.intellij.psi.impl.java.stubs.impl.PsiModifierListStubImpl;
 import com.intellij.psi.impl.source.PsiModifierListImpl;

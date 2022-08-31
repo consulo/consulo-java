@@ -18,8 +18,8 @@ package com.intellij.codeInsight.javadoc;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import com.intellij.openapi.extensions.ExtensionPointName;
-import com.intellij.psi.PsiDocCommentOwner;
-import com.intellij.psi.PsiMember;
+import com.intellij.java.language.psi.PsiDocCommentOwner;
+import com.intellij.java.language.psi.PsiMember;
 
 public abstract class DocumentationDelegateProvider
 {

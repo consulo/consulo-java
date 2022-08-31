@@ -21,8 +21,8 @@ import com.intellij.openapi.externalSystem.model.ProjectKeys;
 import com.intellij.openapi.externalSystem.model.ProjectSystemId;
 import com.intellij.openapi.externalSystem.model.project.AbstractExternalEntityData;
 import com.intellij.openapi.externalSystem.util.ExternalSystemApiUtil;
-import com.intellij.openapi.projectRoots.JavaSdkVersion;
-import com.intellij.pom.java.LanguageLevel;
+import com.intellij.java.language.projectRoots.JavaSdkVersion;
+import com.intellij.java.language.LanguageLevel;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 

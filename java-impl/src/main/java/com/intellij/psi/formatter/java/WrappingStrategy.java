@@ -16,7 +16,7 @@
 package com.intellij.psi.formatter.java;
 
 import com.intellij.formatting.Wrap;
-import com.intellij.psi.JavaTokenType;
+import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.psi.tree.IElementType;
 
 public abstract class WrappingStrategy

@@ -24,11 +24,11 @@ import com.intellij.openapi.command.undo.UndoUtil;
 import consulo.logging.Logger;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiClassType;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiClassType;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiReferenceList;
+import com.intellij.java.language.psi.PsiReferenceList;
 import com.intellij.util.IncorrectOperationException;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 

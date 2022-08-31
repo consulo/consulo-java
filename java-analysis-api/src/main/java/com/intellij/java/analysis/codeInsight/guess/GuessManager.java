@@ -19,8 +19,8 @@ package com.intellij.java.analysis.codeInsight.guess;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.PsiExpression;
-import com.intellij.psi.PsiType;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiType;
 import com.intellij.util.containers.MultiMap;
 import javax.annotation.Nonnull;
 

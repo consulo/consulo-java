@@ -17,7 +17,7 @@ package com.intellij.application.options;
 
 import org.jetbrains.annotations.Nls;
 import javax.annotation.Nullable;
-import com.intellij.javadoc.JavadocBundle;
+import com.intellij.java.language.JavadocBundle;
 import com.intellij.openapi.options.BeanConfigurable;
 import com.intellij.openapi.options.Configurable;
 import consulo.java.application.options.JavaSmartKeysSettings;

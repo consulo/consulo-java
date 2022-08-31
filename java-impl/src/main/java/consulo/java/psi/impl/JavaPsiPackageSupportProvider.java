@@ -17,10 +17,10 @@ package consulo.java.psi.impl;
 
 import javax.annotation.Nonnull;
 
-import consulo.java.module.extension.JavaModuleExtension;
+import consulo.java.language.module.extension.JavaModuleExtension;
 import com.intellij.openapi.module.Module;
 import com.intellij.psi.PsiManager;
-import com.intellij.psi.PsiNameHelper;
+import com.intellij.java.language.psi.PsiNameHelper;
 import com.intellij.psi.impl.file.PsiPackageImpl;
 import consulo.module.extension.ModuleExtension;
 import consulo.psi.PsiPackage;

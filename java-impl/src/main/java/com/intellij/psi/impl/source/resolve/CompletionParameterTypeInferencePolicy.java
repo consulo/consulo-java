@@ -18,11 +18,11 @@ package com.intellij.psi.impl.source.resolve;
 import com.intellij.codeInsight.ExpectedTypeInfo;
 import com.intellij.codeInsight.ExpectedTypesProvider;
 import com.intellij.openapi.util.Pair;
-import com.intellij.psi.ConstraintType;
-import com.intellij.psi.PsiCallExpression;
+import com.intellij.java.language.psi.ConstraintType;
+import com.intellij.java.language.psi.PsiCallExpression;
 import com.intellij.psi.PsiManager;
-import com.intellij.psi.PsiType;
-import com.intellij.psi.PsiWildcardType;
+import com.intellij.java.language.psi.PsiType;
+import com.intellij.java.language.psi.PsiWildcardType;
 
 /**
  * @author yole

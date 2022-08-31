@@ -7,6 +7,9 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.instructions.Inst
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.instructions.TypeCastInstruction;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaValue;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaVariableValue;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.TypeConversionUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;

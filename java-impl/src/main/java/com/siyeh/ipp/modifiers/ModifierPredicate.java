@@ -15,8 +15,9 @@
  */
 package com.siyeh.ipp.modifiers;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
-import com.intellij.psi.javadoc.PsiDocComment;
+import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.siyeh.ipp.base.PsiElementPredicate;
 import javax.annotation.Nonnull;
 

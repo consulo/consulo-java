@@ -2,7 +2,7 @@
 package com.intellij.java.analysis.impl.codeInspection.dataFlow;
 
 import com.intellij.java.analysis.JavaAnalysisBundle;
-import com.intellij.psi.*;
+import com.intellij.java.language.psi.*;
 import com.intellij.util.ObjectUtils;
 import com.siyeh.ig.psiutils.ClassUtils;
 import com.siyeh.ig.psiutils.ExpressionUtils;

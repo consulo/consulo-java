@@ -18,7 +18,7 @@ package com.intellij.slicer;
 import com.intellij.openapi.editor.markup.EffectType;
 import com.intellij.openapi.editor.markup.TextAttributes;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiSubstitutor;
+import com.intellij.java.language.psi.PsiSubstitutor;
 import com.intellij.usages.TextChunk;
 import com.intellij.usages.UsagePresentation;
 import com.intellij.util.Processor;

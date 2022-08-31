@@ -2,6 +2,10 @@
 package com.intellij.psi.impl.source.tree.java;
 
 import com.intellij.codeInsight.CodeInsightUtilCore;
+import com.intellij.java.language.psi.JavaElementVisitor;
+import com.intellij.java.language.psi.JavaTokenType;
+import com.intellij.java.language.psi.PsiLiteralExpression;
+import com.intellij.java.language.psi.PsiType;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
@@ -15,7 +19,7 @@ import com.intellij.psi.impl.source.tree.LeafElement;
 import com.intellij.psi.impl.source.tree.injected.StringLiteralEscaper;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
-import com.intellij.psi.util.PsiLiteralUtil;
+import com.intellij.java.language.psi.util.PsiLiteralUtil;
 import com.intellij.util.text.LiteralFormatUtil;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

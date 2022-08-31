@@ -18,14 +18,14 @@ package com.intellij.psi.impl.source.resolve.graphInference.constraints;
 import java.util.HashSet;
 import java.util.List;
 
-import com.intellij.psi.*;
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.impl.source.resolve.graphInference.InferenceBound;
 import com.intellij.psi.impl.source.resolve.graphInference.InferenceSession;
 import com.intellij.psi.impl.source.resolve.graphInference.InferenceVariable;
-import com.intellij.psi.util.InheritanceUtil;
-import com.intellij.psi.util.PsiUtil;
-import com.intellij.psi.util.TypeConversionUtil;
-import consulo.java.module.util.JavaClassNames;
+import com.intellij.java.language.psi.util.InheritanceUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.TypeConversionUtil;
+import consulo.java.language.module.util.JavaClassNames;
 
 /**
  * User: anna

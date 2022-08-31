@@ -11,6 +11,7 @@ import com.intellij.execution.testframework.AbstractTestProxy;
 import com.intellij.ide.highlighter.JavaClassFileType;
 import com.intellij.java.analysis.impl.psi.controlFlow.AllVariablesControlFlowPolicy;
 import com.intellij.java.coverage.view.JavaCoverageViewExtension;
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.compiler.CompileContext;
 import com.intellij.openapi.compiler.CompileStatusNotification;

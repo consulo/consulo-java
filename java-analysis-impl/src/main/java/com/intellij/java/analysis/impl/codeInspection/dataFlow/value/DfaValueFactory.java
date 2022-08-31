@@ -2,12 +2,15 @@
 
 package com.intellij.java.analysis.impl.codeInspection.dataFlow.value;
 
-import com.intellij.codeInsight.AnnotationUtil;
-import com.intellij.codeInsight.Nullability;
+import com.intellij.java.language.codeInsight.AnnotationUtil;
+import com.intellij.java.language.codeInsight.Nullability;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.*;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.types.DfType;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.types.DfTypes;
-import com.intellij.lang.java.JavaLanguage;
+import com.intellij.java.language.JavaLanguage;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.InheritanceUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Pair;
 import com.intellij.patterns.ElementPattern;
@@ -25,8 +28,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 
-import static com.intellij.patterns.PsiJavaPatterns.psiMember;
-import static com.intellij.patterns.PsiJavaPatterns.psiParameter;
+import static com.intellij.java.language.patterns.PsiJavaPatterns.psiMember;
+import static com.intellij.java.language.patterns.PsiJavaPatterns.psiParameter;
 import static com.intellij.patterns.StandardPatterns.or;
 
 public class DfaValueFactory {

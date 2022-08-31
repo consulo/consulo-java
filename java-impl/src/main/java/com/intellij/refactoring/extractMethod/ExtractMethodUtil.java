@@ -15,6 +15,7 @@
  */
 package com.intellij.refactoring.extractMethod;
 
+import com.intellij.java.language.psi.*;
 import consulo.logging.Logger;
 import consulo.util.dataholder.Key;
 import com.intellij.psi.*;
@@ -22,7 +23,7 @@ import com.intellij.psi.search.SearchScope;
 import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
 import com.intellij.psi.search.searches.ReferencesSearch;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.RedundantCastUtil;
+import com.intellij.java.language.psi.util.RedundantCastUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.Processor;
 import java.util.HashMap;
@@ -39,9 +40,9 @@ public class ExtractMethodUtil {
   private ExtractMethodUtil() { }
 
   static Map<PsiMethodCallExpression, PsiMethod> encodeOverloadTargets(final PsiClass targetClass,
-                                                        final SearchScope processConflictsScope,
-                                                        final String overloadName,
-                                                        final PsiElement extractedFragment) {
+                                                                       final SearchScope processConflictsScope,
+                                                                       final String overloadName,
+                                                                       final PsiElement extractedFragment) {
     final Map<PsiMethodCallExpression, PsiMethod> ret = new HashMap<PsiMethodCallExpression, PsiMethod>();
     encodeInClass(targetClass, overloadName, extractedFragment, ret);
 

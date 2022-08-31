@@ -49,18 +49,19 @@ import com.intellij.java.debugger.impl.DebuggerUtilsEx;
 import com.intellij.java.debugger.engine.evaluation.expression.EvaluatorBuilder;
 import com.intellij.java.debugger.engine.evaluation.expression.ExpressionEvaluator;
 import com.intellij.java.debugger.engine.evaluation.expression.Modifier;
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.JavaConstantExpressionEvaluator;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.PsiTypesUtil;
-import com.intellij.psi.util.PsiUtil;
-import com.intellij.psi.util.TypeConversionUtil;
+import com.intellij.java.language.psi.util.PsiTypesUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.TypeConversionUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.IncorrectOperationException;
 import consulo.internal.com.sun.jdi.Value;
-import consulo.java.module.util.JavaClassNames;
+import consulo.java.language.module.util.JavaClassNames;
 import consulo.logging.Logger;
 
 public class EvaluatorBuilderImpl implements EvaluatorBuilder

@@ -19,6 +19,10 @@
  */
 package com.intellij.java.indexing.impl.search;
 
+import com.intellij.java.language.psi.JavaElementVisitor;
+import com.intellij.java.language.psi.JavaRecursiveElementVisitor;
+import com.intellij.java.language.psi.JavaRecursiveElementWalkingVisitor;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.ProgressIndicatorProvider;
@@ -27,7 +31,7 @@ import com.intellij.openapi.util.Computable;
 import com.intellij.psi.*;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.LocalSearchScope;
-import com.intellij.psi.search.PsiShortNamesCache;
+import com.intellij.java.language.psi.search.PsiShortNamesCache;
 import com.intellij.psi.search.SearchScope;
 import com.intellij.java.indexing.search.searches.AllClassesSearch;
 import com.intellij.util.Processor;

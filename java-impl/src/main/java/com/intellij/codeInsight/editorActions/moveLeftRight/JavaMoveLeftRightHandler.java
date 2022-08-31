@@ -17,13 +17,13 @@ package com.intellij.codeInsight.editorActions.moveLeftRight;
 
 import javax.annotation.Nonnull;
 import consulo.annotation.access.RequiredReadAction;
-import com.intellij.psi.PsiAnnotationParameterList;
-import com.intellij.psi.PsiArrayInitializerExpression;
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.psi.PsiAnnotationParameterList;
+import com.intellij.java.language.psi.PsiArrayInitializerExpression;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiEnumConstant;
-import com.intellij.psi.PsiExpressionList;
-import com.intellij.psi.PsiParameterList;
+import com.intellij.java.language.psi.PsiEnumConstant;
+import com.intellij.java.language.psi.PsiExpressionList;
+import com.intellij.java.language.psi.PsiParameterList;
 import com.intellij.psi.util.PsiTreeUtil;
 
 public class JavaMoveLeftRightHandler implements MoveElementLeftRightHandler

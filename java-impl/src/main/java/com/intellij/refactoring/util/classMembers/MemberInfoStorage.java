@@ -15,8 +15,8 @@
  */
 package com.intellij.refactoring.util.classMembers;
 
-import com.intellij.psi.*;
-import com.intellij.psi.util.MethodSignatureUtil;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.MethodSignatureUtil;
 import com.intellij.refactoring.classMembers.AbstractMemberInfoStorage;
 
 import java.util.ArrayList;

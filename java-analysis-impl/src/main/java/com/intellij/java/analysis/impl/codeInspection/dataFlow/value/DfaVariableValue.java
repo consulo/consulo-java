@@ -16,7 +16,7 @@
 
 package com.intellij.java.analysis.impl.codeInspection.dataFlow.value;
 
-import com.intellij.codeInsight.Nullability;
+import com.intellij.java.language.codeInsight.Nullability;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.DfaNullability;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.Mutability;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.NullabilityUtil;
@@ -25,9 +25,9 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.rangeSet.LongRang
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.types.DfReferenceType;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.types.DfType;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.types.DfTypes;
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.util.Pair;
-import com.intellij.psi.*;
-import com.intellij.psi.util.TypeConversionUtil;
+import com.intellij.java.language.psi.util.TypeConversionUtil;
 import com.intellij.util.SmartList;
 import org.jetbrains.annotations.Contract;
 import javax.annotation.Nonnull;

@@ -15,8 +15,8 @@
  */
 package com.intellij.jam;
 
-import static com.intellij.patterns.PsiJavaPatterns.psiLiteral;
-import static com.intellij.patterns.PsiJavaPatterns.psiNameValuePair;
+import static com.intellij.java.language.patterns.PsiJavaPatterns.psiLiteral;
+import static com.intellij.java.language.patterns.PsiJavaPatterns.psiNameValuePair;
 
 import java.util.List;
 
@@ -26,9 +26,10 @@ import com.intellij.codeInsight.completion.CompletionUtil;
 import com.intellij.jam.reflect.JamAnnotationMeta;
 import com.intellij.jam.reflect.JamAttributeMeta;
 import com.intellij.jam.reflect.JamStringAttributeMeta;
-import com.intellij.patterns.PsiJavaElementPattern;
-import com.intellij.patterns.PsiJavaPatterns;
-import com.intellij.patterns.PsiNameValuePairPattern;
+import com.intellij.java.language.patterns.PsiJavaElementPattern;
+import com.intellij.java.language.patterns.PsiJavaPatterns;
+import com.intellij.java.language.patterns.PsiNameValuePairPattern;
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ProcessingContext;

@@ -17,13 +17,13 @@ package com.intellij.psi.impl.compiled;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.psi.JavaElementVisitor;
-import com.intellij.psi.JavaTokenType;
+import com.intellij.java.language.psi.JavaElementVisitor;
+import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.PsiIdentifier;
-import com.intellij.psi.PsiJavaFile;
-import com.intellij.psi.PsiJavaToken;
+import com.intellij.java.language.psi.PsiIdentifier;
+import com.intellij.java.language.psi.PsiJavaFile;
+import com.intellij.java.language.psi.PsiJavaToken;
 import com.intellij.psi.impl.source.tree.TreeElement;
 import com.intellij.psi.tree.IElementType;
 

@@ -26,7 +26,7 @@ import com.intellij.navigation.ItemPresentationProvider;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.roots.FileIndexFacade;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiJavaModule;
+import com.intellij.java.language.psi.PsiJavaModule;
 import com.intellij.psi.impl.PsiImplUtil;
 import consulo.java.JavaIcons;
 import consulo.ui.image.Image;

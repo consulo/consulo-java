@@ -16,7 +16,7 @@
 
 package consulo.java.psi.impl.java.stub;
 
-import com.intellij.psi.PsiClassLevelDeclarationStatement;
+import com.intellij.java.language.psi.PsiClassLevelDeclarationStatement;
 import com.intellij.psi.stubs.StubElement;
 
 /**

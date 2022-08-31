@@ -15,10 +15,14 @@
  */
 package com.intellij.refactoring.rename.naming;
 
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiField;
+import com.intellij.java.language.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiParameter;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.psi.*;
-import com.intellij.psi.codeStyle.JavaCodeStyleManager;
-import com.intellij.psi.codeStyle.VariableKind;
+import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
+import com.intellij.java.language.psi.codeStyle.VariableKind;
 import com.intellij.psi.impl.light.LightElement;
 import com.intellij.refactoring.RefactoringBundle;
 import org.jetbrains.annotations.NonNls;

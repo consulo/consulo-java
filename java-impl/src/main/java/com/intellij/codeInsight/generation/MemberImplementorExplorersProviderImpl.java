@@ -17,7 +17,7 @@ package com.intellij.codeInsight.generation;
 
 import jakarta.inject.Singleton;
 
-import com.intellij.codeInsight.MemberImplementorExplorer;
+import com.intellij.java.language.codeInsight.MemberImplementorExplorer;
 
 @Singleton
 public class MemberImplementorExplorersProviderImpl implements OverrideImplementExploreUtil.MemberImplementorExplorersProvider

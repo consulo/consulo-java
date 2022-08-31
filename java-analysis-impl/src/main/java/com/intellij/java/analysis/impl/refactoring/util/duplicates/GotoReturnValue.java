@@ -22,15 +22,15 @@ package com.intellij.java.analysis.impl.refactoring.util.duplicates;
 
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nullable;
-import com.intellij.psi.JavaPsiFacade;
-import com.intellij.psi.PsiElementFactory;
-import com.intellij.psi.PsiExpression;
-import com.intellij.psi.PsiIfStatement;
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiMethodCallExpression;
-import com.intellij.psi.PsiStatement;
+import com.intellij.java.language.psi.JavaPsiFacade;
+import com.intellij.java.language.psi.PsiElementFactory;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiIfStatement;
+import com.intellij.java.language.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiMethodCallExpression;
+import com.intellij.java.language.psi.PsiStatement;
 import com.intellij.psi.codeStyle.CodeStyleManager;
-import com.intellij.psi.util.TypeConversionUtil;
+import com.intellij.java.language.psi.util.TypeConversionUtil;
 import com.intellij.util.IncorrectOperationException;
 
 public abstract class GotoReturnValue implements ReturnValue {

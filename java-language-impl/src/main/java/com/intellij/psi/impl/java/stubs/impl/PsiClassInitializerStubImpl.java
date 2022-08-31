@@ -19,7 +19,7 @@
  */
 package com.intellij.psi.impl.java.stubs.impl;
 
-import com.intellij.psi.PsiClassInitializer;
+import com.intellij.java.language.psi.PsiClassInitializer;
 import com.intellij.psi.impl.java.stubs.JavaStubElementTypes;
 import com.intellij.psi.impl.java.stubs.PsiClassInitializerStub;
 import com.intellij.psi.stubs.StubBase;

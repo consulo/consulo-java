@@ -20,7 +20,7 @@ import jakarta.inject.Singleton;
 
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.jam.model.util.JamCommonUtil;
-import com.intellij.lang.java.JavaLanguage;
+import com.intellij.java.language.JavaLanguage;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.xml.XmlFile;

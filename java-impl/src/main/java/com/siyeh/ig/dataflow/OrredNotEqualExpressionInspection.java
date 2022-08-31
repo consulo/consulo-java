@@ -17,6 +17,7 @@ package com.siyeh.ig.dataflow;
 
 import javax.annotation.Nonnull;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.util.Pair;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;

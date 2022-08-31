@@ -24,8 +24,8 @@ import consulo.codeInsight.TargetElementUtil;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiKeyword;
-import com.intellij.psi.PsiThrowStatement;
+import com.intellij.java.language.psi.PsiKeyword;
+import com.intellij.java.language.psi.PsiThrowStatement;
 import com.intellij.usages.UsageTarget;
 import com.intellij.usages.UsageTargetProvider;
 

@@ -15,7 +15,7 @@
  */
 package com.intellij.ide.projectView;
 
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 
 import java.util.List;

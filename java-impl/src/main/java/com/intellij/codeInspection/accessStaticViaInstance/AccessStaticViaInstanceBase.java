@@ -23,6 +23,7 @@ import com.intellij.java.analysis.codeInspection.BaseJavaBatchLocalInspectionToo
 import com.intellij.codeInspection.InspectionsBundle;
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemsHolder;
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
 import consulo.psi.PsiPackage;
 import org.jetbrains.annotations.NonNls;

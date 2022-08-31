@@ -17,7 +17,7 @@ package com.intellij.codeInsight.unwrap;
 
 import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiTryStatement;
+import com.intellij.java.language.psi.PsiTryStatement;
 import com.intellij.util.IncorrectOperationException;
 
 public class JavaTryUnwrapper extends JavaUnwrapper {

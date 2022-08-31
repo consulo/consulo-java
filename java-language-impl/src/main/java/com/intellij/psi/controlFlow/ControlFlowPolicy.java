@@ -15,10 +15,10 @@
  */
 package com.intellij.psi.controlFlow;
 
-import com.intellij.psi.PsiLocalVariable;
-import com.intellij.psi.PsiParameter;
-import com.intellij.psi.PsiReferenceExpression;
-import com.intellij.psi.PsiVariable;
+import com.intellij.java.language.psi.PsiLocalVariable;
+import com.intellij.java.language.psi.PsiParameter;
+import com.intellij.java.language.psi.PsiReferenceExpression;
+import com.intellij.java.language.psi.PsiVariable;
 
 import javax.annotation.Nullable;
 

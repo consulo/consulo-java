@@ -18,10 +18,10 @@ package com.intellij.psi.impl.beanProperties;
 
 import com.intellij.icons.AllIcons;
 import com.intellij.ide.presentation.Presentation;
-import com.intellij.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.psi.PsiNamedElement;
-import com.intellij.psi.PsiType;
-import com.intellij.psi.util.PropertyUtil;
+import com.intellij.java.language.psi.PsiType;
+import com.intellij.java.language.psi.util.PropertyUtil;
 import com.intellij.util.IncorrectOperationException;
 import consulo.ui.image.Image;
 

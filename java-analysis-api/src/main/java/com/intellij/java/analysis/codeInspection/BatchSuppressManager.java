@@ -18,9 +18,9 @@ package com.intellij.java.analysis.codeInspection;
 import com.intellij.codeInsight.daemon.HighlightDisplayKey;
 import com.intellij.codeInspection.SuppressQuickFix;
 import com.intellij.openapi.components.ServiceManager;
-import com.intellij.psi.PsiDocCommentOwner;
+import com.intellij.java.language.psi.PsiDocCommentOwner;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiModifierListOwner;
+import com.intellij.java.language.psi.PsiModifierListOwner;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

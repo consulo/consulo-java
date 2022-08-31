@@ -17,6 +17,7 @@ package com.siyeh.ig.controlflow;
 
 import javax.swing.JComponent;
 
+import com.intellij.java.language.psi.*;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;

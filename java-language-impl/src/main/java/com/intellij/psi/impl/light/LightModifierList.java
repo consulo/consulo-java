@@ -15,8 +15,9 @@
  */
 package com.intellij.psi.impl.light;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.lang.Language;
-import com.intellij.lang.java.JavaLanguage;
+import com.intellij.java.language.JavaLanguage;
 import com.intellij.psi.*;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.IncorrectOperationException;

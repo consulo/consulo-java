@@ -23,7 +23,7 @@ import com.intellij.java.debugger.impl.jdi.StackFrameProxyImpl;
 import com.intellij.java.debugger.impl.settings.DebuggerSettings;
 import com.intellij.java.debugger.impl.ui.breakpoints.BreakpointManager;
 import com.intellij.java.debugger.impl.ui.breakpoints.StepIntoBreakpoint;
-import com.intellij.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.util.Range;
 import consulo.internal.com.sun.jdi.ObjectReference;
 import consulo.internal.com.sun.jdi.request.EventRequest;

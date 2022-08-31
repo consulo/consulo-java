@@ -16,7 +16,7 @@
 package com.intellij.java.indexing.search.searches;
 
 import com.intellij.openapi.extensions.ExtensionPointName;
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.search.SearchScope;
 import com.intellij.psi.search.searches.ExtensibleQueryFactory;
 import com.intellij.util.Query;

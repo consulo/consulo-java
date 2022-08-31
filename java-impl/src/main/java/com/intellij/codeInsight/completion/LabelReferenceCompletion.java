@@ -27,7 +27,7 @@ import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.codeInsight.lookup.TailTypeDecorator;
 import com.intellij.patterns.ElementPattern;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiKeyword;
+import com.intellij.java.language.psi.PsiKeyword;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.impl.source.PsiLabelReference;
 import com.intellij.util.ProcessingContext;

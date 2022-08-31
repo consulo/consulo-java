@@ -17,11 +17,11 @@ package com.intellij.codeInsight.editorActions.smartEnter;
 
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
-import com.intellij.psi.PsiBlockStatement;
+import com.intellij.java.language.psi.PsiBlockStatement;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiExpression;
-import com.intellij.psi.PsiForStatement;
-import com.intellij.psi.PsiStatement;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiForStatement;
+import com.intellij.java.language.psi.PsiStatement;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
 

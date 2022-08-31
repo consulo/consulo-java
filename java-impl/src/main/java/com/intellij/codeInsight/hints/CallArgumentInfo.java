@@ -1,7 +1,7 @@
 package com.intellij.codeInsight.hints;
 
-import com.intellij.psi.PsiExpression;
-import com.intellij.psi.PsiParameter;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiParameter;
 
 /**
  * from kotlin

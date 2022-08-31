@@ -26,14 +26,14 @@ import jakarta.inject.Singleton;
 import com.intellij.codeInspection.SuppressionUtil;
 import com.intellij.openapi.extensions.Extensions;
 import com.intellij.openapi.project.Project;
-import com.intellij.pom.java.LanguageLevel;
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.LanguageLevel;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiField;
-import com.intellij.psi.PsiJavaModule;
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.javadoc.JavadocManager;
-import com.intellij.psi.javadoc.JavadocTagInfo;
+import com.intellij.java.language.psi.PsiField;
+import com.intellij.java.language.psi.PsiJavaModule;
+import com.intellij.java.language.psi.PsiMethod;
+import com.intellij.java.language.psi.javadoc.JavadocManager;
+import com.intellij.java.language.psi.javadoc.JavadocTagInfo;
 import consulo.psi.PsiPackage;
 
 /**

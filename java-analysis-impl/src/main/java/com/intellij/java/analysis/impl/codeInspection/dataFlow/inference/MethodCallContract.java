@@ -16,13 +16,13 @@
 
 package com.intellij.java.analysis.impl.codeInspection.dataFlow.inference;
 
-import com.intellij.codeInsight.NullableNotNullManager;
+import com.intellij.java.language.codeInsight.NullableNotNullManager;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.ContractReturnValue;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.StandardMethodContract;
-import com.intellij.psi.PsiCodeBlock;
-import com.intellij.psi.PsiExpression;
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiMethodCallExpression;
+import com.intellij.java.language.psi.PsiCodeBlock;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiMethodCallExpression;
 import com.intellij.util.containers.ContainerUtil;
 
 import javax.annotation.Nonnull;

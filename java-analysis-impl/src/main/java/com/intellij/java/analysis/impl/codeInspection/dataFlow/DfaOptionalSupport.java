@@ -7,10 +7,11 @@ import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.types.DfType;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.types.DfTypes;
 import com.intellij.java.analysis.impl.codeInspection.util.OptionalUtil;
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 
 import javax.annotation.Nonnull;

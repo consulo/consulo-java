@@ -24,6 +24,7 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
+import com.intellij.java.language.psi.*;
 import consulo.logging.Logger;
 import org.jetbrains.annotations.NonNls;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
@@ -37,7 +38,7 @@ import com.intellij.psi.*;
 import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.util.Function;
 import com.intellij.util.IncorrectOperationException;
 

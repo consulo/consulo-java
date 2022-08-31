@@ -17,6 +17,7 @@ package com.intellij.psi.presentation.java;
 
 import javax.annotation.Nonnull;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 

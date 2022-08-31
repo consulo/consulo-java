@@ -19,18 +19,18 @@ import java.util.Collections;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import com.intellij.codeInsight.AnnotationUtil;
+import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.execution.Location;
 import com.intellij.execution.PsiLocation;
 import com.intellij.java.execution.impl.junit.JUnitUtil;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiAnnotation;
-import com.intellij.psi.PsiAnnotationMemberValue;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiClassObjectAccessExpression;
+import com.intellij.java.language.psi.PsiAnnotation;
+import com.intellij.java.language.psi.PsiAnnotationMemberValue;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiClassObjectAccessExpression;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiTypeElement;
-import com.intellij.psi.util.InheritanceUtil;
+import com.intellij.java.language.psi.PsiTypeElement;
+import com.intellij.java.language.psi.util.InheritanceUtil;
 
 public class PsiMemberParameterizedLocation extends PsiLocation<PsiElement>
 {

@@ -16,6 +16,7 @@
 package com.intellij.psi.impl.source;
 
 import com.intellij.codeInsight.daemon.JavaErrorBundle;
+import com.intellij.java.language.psi.*;
 import com.intellij.lang.ASTNode;
 import consulo.logging.Logger;
 import com.intellij.openapi.util.TextRange;

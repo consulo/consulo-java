@@ -16,8 +16,8 @@
 package com.intellij.psi.impl.java.stubs.impl;
 
 import com.intellij.extapi.psi.StubBasedPsiElementBase;
-import com.intellij.pom.java.LanguageLevel;
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.LanguageLevel;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.impl.DebugUtil;
 import com.intellij.psi.impl.java.stubs.JavaClassElementType;
 import com.intellij.psi.impl.java.stubs.PsiClassStub;

@@ -18,8 +18,8 @@ package com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis;
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
 import com.intellij.codeInsight.daemon.impl.HighlightInfoType;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiImportStaticStatement;
-import com.intellij.psi.PsiJavaCodeReferenceElement;
+import com.intellij.java.language.psi.PsiImportStaticStatement;
+import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
 import com.intellij.util.ObjectUtil;
 
 public class ImportsHighlightUtil {

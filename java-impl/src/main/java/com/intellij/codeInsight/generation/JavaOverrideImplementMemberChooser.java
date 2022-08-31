@@ -42,10 +42,10 @@ import com.intellij.openapi.keymap.KeymapManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.util.NotNullLazyValue;
-import com.intellij.pom.java.LanguageLevel;
+import com.intellij.java.language.LanguageLevel;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.infos.CandidateInfo;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.infos.CandidateInfo;
+import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
 

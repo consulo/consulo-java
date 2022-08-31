@@ -16,6 +16,8 @@
 package com.intellij.refactoring.openapi.impl;
 
 import javax.annotation.Nonnull;
+
+import com.intellij.java.language.psi.*;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 

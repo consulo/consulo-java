@@ -16,13 +16,14 @@
 package com.intellij.codeInsight.highlighting;
 
 import com.intellij.codeInsight.hint.DeclarationRangeUtil;
+import com.intellij.java.language.psi.*;
 import com.intellij.lang.BracePair;
 import com.intellij.lang.PairedBraceMatcher;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.tree.ElementType;
 import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.tree.java.IJavaElementType;
+import com.intellij.java.language.psi.tree.java.IJavaElementType;
 import javax.annotation.Nonnull;
 
 public class JavaBraceMatcher implements PairedBraceMatcher {

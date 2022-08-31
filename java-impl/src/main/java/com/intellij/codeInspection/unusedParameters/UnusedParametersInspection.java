@@ -34,6 +34,7 @@ import com.intellij.codeInspection.reference.*;
 import com.intellij.java.analysis.codeInspection.reference.RefJavaVisitor;
 import com.intellij.java.analysis.codeInspection.reference.RefMethod;
 import com.intellij.java.analysis.codeInspection.reference.RefParameter;
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectUtil;
 import com.intellij.openapi.util.Comparing;

@@ -17,9 +17,10 @@ package com.intellij.codeInsight.completion;
 
 import com.intellij.codeInsight.ExpressionUtil;
 import com.intellij.codeInsight.daemon.ImplicitUsageProvider;
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
 import com.intellij.psi.filters.ElementFilter;
-import com.intellij.psi.infos.CandidateInfo;
+import com.intellij.java.language.psi.infos.CandidateInfo;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 

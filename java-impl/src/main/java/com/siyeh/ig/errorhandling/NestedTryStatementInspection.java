@@ -17,9 +17,9 @@ package com.siyeh.ig.errorhandling;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.psi.PsiCodeBlock;
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiTryStatement;
+import com.intellij.java.language.psi.PsiCodeBlock;
+import com.intellij.java.language.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiTryStatement;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;

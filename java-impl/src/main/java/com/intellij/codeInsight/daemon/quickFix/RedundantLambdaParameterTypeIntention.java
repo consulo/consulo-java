@@ -18,15 +18,16 @@ package com.intellij.codeInsight.daemon.quickFix;
 import javax.annotation.Nonnull;
 
 import com.intellij.codeInsight.intention.PsiElementBaseIntentionAction;
+import com.intellij.java.language.psi.*;
 import consulo.logging.Logger;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
-import com.intellij.psi.impl.source.resolve.DefaultParameterTypeInferencePolicy;
-import com.intellij.psi.infos.MethodCandidateInfo;
+import com.intellij.java.language.psi.impl.source.resolve.DefaultParameterTypeInferencePolicy;
+import com.intellij.java.language.psi.infos.MethodCandidateInfo;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.util.Function;
 import com.intellij.util.IncorrectOperationException;
 

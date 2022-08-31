@@ -17,9 +17,9 @@ package com.siyeh.ig.bugs;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.psi.PsiAssertStatement;
-import com.intellij.psi.PsiExpression;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.PsiAssertStatement;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.util.PsiUtil;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;

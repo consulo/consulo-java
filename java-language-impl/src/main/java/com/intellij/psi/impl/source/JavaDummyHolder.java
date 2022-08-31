@@ -21,14 +21,14 @@ import java.util.Map;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.lang.java.JavaLanguage;
-import com.intellij.psi.JavaPsiFacade;
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.JavaLanguage;
+import com.intellij.java.language.psi.JavaPsiFacade;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiImportHolder;
-import com.intellij.psi.PsiJavaFile;
-import com.intellij.psi.PsiJavaPackage;
+import com.intellij.java.language.psi.PsiImportHolder;
+import com.intellij.java.language.psi.PsiJavaFile;
+import com.intellij.java.language.psi.PsiJavaPackage;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.impl.source.resolve.JavaResolveUtil;
@@ -36,7 +36,7 @@ import com.intellij.psi.impl.source.tree.TreeElement;
 import com.intellij.psi.scope.ElementClassHint;
 import com.intellij.psi.scope.NameHint;
 import com.intellij.psi.scope.PsiScopeProcessor;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.util.CharTable;
 
 public class JavaDummyHolder extends DummyHolder implements PsiImportHolder

@@ -3,7 +3,7 @@ package com.intellij.codeInsight.javadoc;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
-import com.intellij.lang.java.JavaLanguage;
+import com.intellij.java.language.JavaLanguage;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings;

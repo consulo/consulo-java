@@ -16,7 +16,7 @@
 package com.intellij.refactoring.util.occurrences;
 
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiExpression;
 
 /**
  * @author dsl

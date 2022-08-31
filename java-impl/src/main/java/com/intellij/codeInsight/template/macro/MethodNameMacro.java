@@ -20,10 +20,10 @@ import javax.annotation.Nonnull;
 import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.codeInsight.template.*;
 import com.intellij.lang.LangBundle;
-import com.intellij.psi.PsiClassInitializer;
+import com.intellij.java.language.psi.PsiClassInitializer;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiModifier;
+import com.intellij.java.language.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiModifier;
 
 public class MethodNameMacro extends Macro {
 

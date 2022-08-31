@@ -20,7 +20,7 @@ import com.intellij.java.debugger.engine.DebugProcessListener;
 import com.intellij.execution.process.ProcessHandler;
 import com.intellij.openapi.components.ProjectComponent;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.util.Function;
 
 /**

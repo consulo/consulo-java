@@ -15,7 +15,7 @@
  */
 package com.intellij.refactoring.ui;
 
-import com.intellij.psi.PsiType;
+import com.intellij.java.language.psi.PsiType;
 import com.intellij.psi.codeStyle.SuggestedNameInfo;
 import java.util.HashMap;
 

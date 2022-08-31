@@ -15,11 +15,12 @@
  */
 package com.siyeh.ipp.chartostring;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.util.ArrayUtil;
 import com.siyeh.ipp.base.PsiElementPredicate;
-import consulo.java.module.util.JavaClassNames;
+import consulo.java.language.module.util.JavaClassNames;
 import org.jetbrains.annotations.NonNls;
 
 class StringToCharPredicate implements PsiElementPredicate {

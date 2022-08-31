@@ -15,6 +15,7 @@
  */
 package com.intellij.refactoring.inheritanceToDelegation.usageInfo;
 
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.*;
 
 /**

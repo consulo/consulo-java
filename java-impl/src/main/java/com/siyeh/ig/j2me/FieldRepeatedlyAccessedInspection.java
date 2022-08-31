@@ -16,6 +16,10 @@
 package com.siyeh.ig.j2me;
 
 import com.intellij.codeInspection.ui.SingleCheckboxOptionsPanel;
+import com.intellij.java.language.psi.PsiField;
+import com.intellij.java.language.psi.PsiIdentifier;
+import com.intellij.java.language.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.psi.*;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;

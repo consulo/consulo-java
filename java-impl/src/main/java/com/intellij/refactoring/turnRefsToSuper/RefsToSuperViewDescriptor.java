@@ -16,7 +16,7 @@
  */
 package com.intellij.refactoring.turnRefsToSuper;
 
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.usageView.*;
 import com.intellij.usageView.UsageViewBundle;

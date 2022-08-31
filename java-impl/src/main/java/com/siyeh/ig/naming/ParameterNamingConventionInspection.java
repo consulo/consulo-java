@@ -15,10 +15,10 @@
  */
 package com.siyeh.ig.naming;
 
-import com.intellij.psi.PsiCatchSection;
+import com.intellij.java.language.psi.PsiCatchSection;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiForeachStatement;
-import com.intellij.psi.PsiParameter;
+import com.intellij.java.language.psi.PsiForeachStatement;
+import com.intellij.java.language.psi.PsiParameter;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;

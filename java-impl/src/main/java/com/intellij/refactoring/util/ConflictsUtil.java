@@ -20,12 +20,13 @@
  */
 package com.intellij.refactoring.util;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.lang.findUsages.DescriptiveNameUtil;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.resolve.FileContextUtil;
 import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
-import com.intellij.psi.util.PsiFormatUtil;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.PsiFormatUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.refactoring.RefactoringBundle;
 import com.intellij.util.Processor;
 import com.intellij.util.containers.MultiMap;

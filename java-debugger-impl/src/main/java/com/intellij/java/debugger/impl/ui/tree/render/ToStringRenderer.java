@@ -15,7 +15,7 @@
  */
 package com.intellij.java.debugger.impl.ui.tree.render;
 
-import static consulo.java.module.util.JavaClassNames.JAVA_LANG_STRING;
+import static consulo.java.language.module.util.JavaClassNames.JAVA_LANG_STRING;
 
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
@@ -32,7 +32,7 @@ import com.intellij.java.debugger.ui.tree.NodeDescriptor;
 import com.intellij.java.debugger.impl.ui.tree.ValueDescriptor;
 import com.intellij.openapi.util.JDOMExternalizerUtil;
 import com.intellij.openapi.util.text.StringUtil;
-import consulo.java.module.util.JavaClassNames;
+import consulo.java.language.module.util.JavaClassNames;
 import com.intellij.psi.PsiElement;
 import com.intellij.java.debugger.ui.classFilter.ClassFilter;
 import com.intellij.xdebugger.impl.ui.XDebuggerUIConstants;

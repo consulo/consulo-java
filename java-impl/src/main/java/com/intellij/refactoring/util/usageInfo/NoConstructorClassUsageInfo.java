@@ -15,7 +15,7 @@
  */
 package com.intellij.refactoring.util.usageInfo;
 
-import com.intellij.psi.*;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.usageView.UsageInfo;
 
 /**

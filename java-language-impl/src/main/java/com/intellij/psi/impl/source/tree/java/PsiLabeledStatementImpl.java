@@ -15,6 +15,10 @@
  */
 package com.intellij.psi.impl.source.tree.java;
 
+import com.intellij.java.language.psi.JavaElementVisitor;
+import com.intellij.java.language.psi.PsiIdentifier;
+import com.intellij.java.language.psi.PsiLabeledStatement;
+import com.intellij.java.language.psi.PsiStatement;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.*;
 import com.intellij.psi.search.SearchScope;

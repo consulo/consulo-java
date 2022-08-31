@@ -14,6 +14,8 @@ import java.util.jar.Manifest;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import com.intellij.java.language.projectRoots.OwnJdkVersionDetector;
 import jakarta.inject.Singleton;
 
 import com.intellij.openapi.application.Application;
@@ -21,7 +23,7 @@ import consulo.logging.Logger;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.CharsetToolkit;
-import com.intellij.util.Bitness;
+import com.intellij.java.language.util.Bitness;
 import com.intellij.util.io.BaseOutputReader;
 import com.intellij.util.lang.JavaVersion;
 

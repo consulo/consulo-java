@@ -15,6 +15,8 @@
  */
 package org.intellij.plugins.intelliLang.inject.java;
 
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.lang.Language;
 import com.intellij.lang.LanguageParserDefinitions;
 import com.intellij.lang.injection.ConcatenationAwareInjector;

@@ -15,15 +15,15 @@
  */
 package com.intellij.java.analysis.impl.codeInspection.dataFlow.inliner;
 
-import com.intellij.codeInsight.Nullability;
+import com.intellij.java.language.codeInsight.Nullability;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.CFGBuilder;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.DfaOptionalSupport;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.NullabilityProblemKind;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.SpecialField;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.types.DfTypes;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaVariableValue;
-import com.intellij.psi.*;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.ObjectUtils;
 import com.siyeh.ig.callMatcher.CallMapper;
@@ -37,7 +37,7 @@ import javax.annotation.Nonnull;
 import java.util.function.BiConsumer;
 
 import static com.intellij.java.analysis.impl.codeInspection.util.OptionalUtil.*;
-import static com.intellij.psi.CommonClassNames.JAVA_UTIL_OPTIONAL;
+import static com.intellij.java.language.psi.CommonClassNames.JAVA_UTIL_OPTIONAL;
 import static com.siyeh.ig.callMatcher.CallMatcher.*;
 
 /**

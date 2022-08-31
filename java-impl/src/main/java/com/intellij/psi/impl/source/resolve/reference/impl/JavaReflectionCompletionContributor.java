@@ -15,21 +15,22 @@
  */
 package com.intellij.psi.impl.source.resolve.reference.impl;
 
-import com.intellij.codeInsight.AnnotationUtil;
+import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.codeInsight.completion.*;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.java.analysis.impl.psi.impl.source.resolve.reference.impl.JavaReflectionReferenceUtil;
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.patterns.ElementPattern;
 import com.intellij.patterns.PatternCondition;
 import com.intellij.psi.*;
-import com.intellij.psi.util.InheritanceUtil;
+import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.util.PsiUtilCore;
 import com.intellij.util.ProcessingContext;
 import com.intellij.util.containers.ContainerUtil;
-import consulo.java.module.util.JavaClassNames;
+import consulo.java.language.module.util.JavaClassNames;
 
 import javax.annotation.Nonnull;
 import java.util.Set;
@@ -37,7 +38,7 @@ import java.util.function.BiConsumer;
 
 import static com.intellij.codeInsight.completion.JavaCompletionContributor.isInJavaContext;
 import static com.intellij.java.analysis.impl.psi.impl.source.resolve.reference.impl.JavaReflectionReferenceUtil.*;
-import static com.intellij.patterns.PsiJavaPatterns.*;
+import static com.intellij.java.language.patterns.PsiJavaPatterns.*;
 import static com.intellij.patterns.StandardPatterns.or;
 
 /**

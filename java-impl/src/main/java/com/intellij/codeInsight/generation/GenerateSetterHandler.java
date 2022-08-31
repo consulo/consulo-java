@@ -21,7 +21,7 @@ import javax.annotation.Nullable;
 import consulo.java.analysis.codeInsight.JavaCodeInsightBundle;
 import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.util.IncorrectOperationException;
 
 public class GenerateSetterHandler extends GenerateGetterSetterHandlerBase

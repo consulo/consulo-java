@@ -15,6 +15,8 @@
  */
 package com.intellij.psi;
 
+import com.intellij.java.language.psi.PsiTypeVisitor;
+
 import javax.annotation.Nullable;
 
 /**

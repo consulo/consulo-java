@@ -15,10 +15,10 @@
  */
 package com.siyeh.ipp.whileloop;
 
-import com.intellij.psi.JavaTokenType;
-import com.intellij.psi.PsiDoWhileStatement;
+import com.intellij.java.language.psi.JavaTokenType;
+import com.intellij.java.language.psi.PsiDoWhileStatement;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiJavaToken;
+import com.intellij.java.language.psi.PsiJavaToken;
 import com.intellij.psi.tree.IElementType;
 import com.siyeh.ipp.base.PsiElementPredicate;
 

@@ -15,6 +15,7 @@
  */
 package com.siyeh.ig.cloneable;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
 import com.siyeh.HardcodedMethodConstants;
 import javax.annotation.Nonnull;

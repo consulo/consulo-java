@@ -4,7 +4,7 @@ package com.intellij.java.analysis.impl.codeInspection.dataFlow.types;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.DfaNullability;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.TypeConstraint;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.TypeConstraints;
-import com.intellij.psi.PsiType;
+import com.intellij.java.language.psi.PsiType;
 import javax.annotation.Nonnull;
 
 import java.util.Set;

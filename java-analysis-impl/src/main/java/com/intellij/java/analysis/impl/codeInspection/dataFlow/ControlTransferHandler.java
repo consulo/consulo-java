@@ -17,10 +17,10 @@
 package com.intellij.java.analysis.impl.codeInspection.dataFlow;
 
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaVariableValue;
-import com.intellij.psi.PsiCatchSection;
-import com.intellij.psi.PsiDisjunctionType;
-import com.intellij.psi.PsiParameter;
-import com.intellij.psi.PsiType;
+import com.intellij.java.language.psi.PsiCatchSection;
+import com.intellij.java.language.psi.PsiDisjunctionType;
+import com.intellij.java.language.psi.PsiParameter;
+import com.intellij.java.language.psi.PsiType;
 import com.intellij.util.ObjectUtil;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.FList;

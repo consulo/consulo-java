@@ -16,6 +16,8 @@
 package com.siyeh.ipp.switchtoif;
 
 import com.intellij.codeInsight.daemon.impl.quickfix.ConvertSwitchToIfIntention;
+import com.intellij.java.language.psi.PsiJavaToken;
+import com.intellij.java.language.psi.PsiSwitchStatement;
 import com.intellij.psi.*;
 import com.intellij.util.IncorrectOperationException;
 import com.siyeh.ipp.base.Intention;

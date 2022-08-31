@@ -18,12 +18,12 @@ package com.intellij.jam.reflect;
 import com.intellij.jam.JamElement;
 import com.intellij.jam.JamService;
 import com.intellij.patterns.ElementPattern;
-import com.intellij.patterns.PsiAnnotationPattern;
-import com.intellij.patterns.PsiNameValuePairPattern;
+import com.intellij.java.language.patterns.PsiAnnotationPattern;
+import com.intellij.java.language.patterns.PsiNameValuePairPattern;
 import com.intellij.pom.PomTarget;
-import com.intellij.psi.PsiAnnotation;
-import com.intellij.psi.PsiAnnotationMemberValue;
-import com.intellij.psi.PsiArrayInitializerMemberValue;
+import com.intellij.java.language.psi.PsiAnnotation;
+import com.intellij.java.language.psi.PsiAnnotationMemberValue;
+import com.intellij.java.language.psi.PsiArrayInitializerMemberValue;
 import com.intellij.psi.PsiElementRef;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.semantic.SemKey;
@@ -40,7 +40,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.intellij.patterns.PsiJavaPatterns.*;
+import static com.intellij.java.language.patterns.PsiJavaPatterns.*;
 
 /**
  * @author peter

@@ -22,13 +22,13 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 import com.intellij.openapi.util.Condition;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiClassType;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiClassType;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.codeStyle.JavaCodeStyleManager;
+import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.psi.codeStyle.SuggestedNameInfo;
-import com.intellij.psi.codeStyle.VariableKind;
-import com.intellij.psi.util.PsiTypesUtil;
+import com.intellij.java.language.psi.codeStyle.VariableKind;
+import com.intellij.java.language.psi.util.PsiTypesUtil;
 import com.intellij.util.containers.ContainerUtil;
 
 /**

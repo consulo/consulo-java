@@ -19,7 +19,7 @@ import javax.annotation.Nonnull;
 
 import com.intellij.codeInsight.template.*;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiMethod;
 
 /**
  * @author yole

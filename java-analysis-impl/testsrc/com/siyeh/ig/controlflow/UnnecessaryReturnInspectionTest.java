@@ -1,7 +1,7 @@
 package com.siyeh.ig.controlflow;
 
 import com.intellij.codeInspection.ex.LocalInspectionToolWrapper;
-import com.intellij.pom.java.LanguageLevel;
+import com.intellij.java.language.LanguageLevel;
 import com.siyeh.ig.IGInspectionTestCase;
 
 public class UnnecessaryReturnInspectionTest extends IGInspectionTestCase {

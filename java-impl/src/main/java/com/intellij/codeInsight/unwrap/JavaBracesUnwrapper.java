@@ -16,6 +16,7 @@
 package com.intellij.codeInsight.unwrap;
 
 import com.intellij.codeInsight.CodeInsightBundle;
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
 import com.intellij.util.IncorrectOperationException;
 

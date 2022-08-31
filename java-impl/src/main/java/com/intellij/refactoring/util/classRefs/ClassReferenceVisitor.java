@@ -15,6 +15,7 @@
  */
 package com.intellij.refactoring.util.classRefs;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
 
 public interface ClassReferenceVisitor {

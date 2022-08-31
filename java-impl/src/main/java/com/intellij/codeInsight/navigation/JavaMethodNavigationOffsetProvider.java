@@ -15,6 +15,7 @@
  */
 package com.intellij.codeInsight.navigation;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
 import javax.annotation.Nullable;
 

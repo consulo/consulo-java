@@ -1,9 +1,9 @@
 // Copyright 2000-2019 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.analysis.impl.codeInspection.nullable;
 
-import com.intellij.codeInsight.*;
 import com.intellij.codeInsight.daemon.GroupNames;
-import com.intellij.codeInsight.daemon.impl.analysis.JavaGenericsUtil;
+import com.intellij.java.language.codeInsight.*;
+import com.intellij.java.language.codeInsight.daemon.impl.analysis.JavaGenericsUtil;
 import com.intellij.java.analysis.impl.codeInsight.intention.AddAnnotationPsiFix;
 import com.intellij.codeInspection.*;
 import com.intellij.java.analysis.impl.codeInspection.AnnotateMethodFix;
@@ -11,6 +11,8 @@ import com.intellij.java.analysis.impl.codeInspection.RemoveAnnotationQuickFix;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.DfaPsiUtil;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.instructions.MethodCallInstruction;
 import com.intellij.java.analysis.codeInspection.AbstractBaseJavaLocalInspectionTool;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.*;
 import consulo.logging.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.GeneratedSourcesFilter;
@@ -20,8 +22,8 @@ import com.intellij.openapi.util.registry.Registry;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
-import com.intellij.psi.codeStyle.JavaCodeStyleManager;
-import com.intellij.psi.codeStyle.VariableKind;
+import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
+import com.intellij.java.language.psi.codeStyle.VariableKind;
 import com.intellij.java.analysis.impl.psi.impl.search.JavaNullMethodArgumentUtil;
 import com.intellij.java.indexing.impl.search.JavaOverridingMethodsSearcher;
 import com.intellij.psi.search.GlobalSearchScope;
@@ -39,10 +41,10 @@ import javax.annotation.Nullable;
 import javax.swing.*;
 import java.util.*;
 
-import static com.intellij.codeInsight.AnnotationUtil.CHECK_HIERARCHY;
-import static com.intellij.codeInsight.AnnotationUtil.CHECK_TYPE;
-import static com.intellij.patterns.PsiJavaPatterns.psiElement;
-import static com.intellij.patterns.PsiJavaPatterns.psiMethod;
+import static com.intellij.java.language.codeInsight.AnnotationUtil.CHECK_HIERARCHY;
+import static com.intellij.java.language.codeInsight.AnnotationUtil.CHECK_TYPE;
+import static com.intellij.java.language.patterns.PsiJavaPatterns.psiElement;
+import static com.intellij.java.language.patterns.PsiJavaPatterns.psiMethod;
 
 public class NullableStuffInspectionBase extends AbstractBaseJavaLocalInspectionTool
 {

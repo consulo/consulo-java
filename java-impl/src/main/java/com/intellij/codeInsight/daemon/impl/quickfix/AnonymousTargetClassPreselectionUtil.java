@@ -18,8 +18,8 @@ package com.intellij.codeInsight.daemon.impl.quickfix;
 import java.util.Collection;
 
 import com.intellij.ide.util.PropertiesComponent;
-import com.intellij.psi.PsiAnonymousClass;
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.psi.PsiAnonymousClass;
+import com.intellij.java.language.psi.PsiClass;
 
 public class AnonymousTargetClassPreselectionUtil
 {

@@ -27,18 +27,18 @@ import java.util.Set;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiClassType;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiClassType;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiType;
-import com.intellij.psi.PsiTypeParameter;
-import com.intellij.psi.PsiTypeParameterListOwner;
-import com.intellij.psi.TypeAnnotationProvider;
-import com.intellij.psi.augment.TypeAnnotationModifier;
+import com.intellij.java.language.psi.PsiType;
+import com.intellij.java.language.psi.PsiTypeParameter;
+import com.intellij.java.language.psi.PsiTypeParameterListOwner;
+import com.intellij.java.language.psi.TypeAnnotationProvider;
+import com.intellij.java.language.psi.augment.TypeAnnotationModifier;
 import com.intellij.psi.impl.light.LightTypeParameter;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.PsiUtil;
-import com.intellij.psi.util.TypeConversionUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.TypeConversionUtil;
 
 /**
  * User: anna

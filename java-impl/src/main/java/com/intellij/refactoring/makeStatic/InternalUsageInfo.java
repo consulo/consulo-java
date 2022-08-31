@@ -25,9 +25,9 @@
 package com.intellij.refactoring.makeStatic;
 
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiField;
-import com.intellij.psi.PsiReferenceExpression;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.PsiField;
+import com.intellij.java.language.psi.PsiReferenceExpression;
+import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.refactoring.util.RefactoringUtil;
 import com.intellij.usageView.UsageInfo;
 

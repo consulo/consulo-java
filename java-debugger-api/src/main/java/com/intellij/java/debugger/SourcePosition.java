@@ -30,13 +30,13 @@ import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.pom.Navigatable;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiClassOwner;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiClassOwner;
 import com.intellij.psi.PsiComment;
 import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiForStatement;
+import com.intellij.java.language.psi.PsiForStatement;
 import com.intellij.psi.SyntheticElement;
 import com.intellij.util.containers.ContainerUtil;
 

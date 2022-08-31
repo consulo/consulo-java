@@ -42,7 +42,7 @@ import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.psi.ElementDescriptionUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiManager;
-import com.intellij.psi.PsiReferenceExpression;
+import com.intellij.java.language.psi.PsiReferenceExpression;
 import com.intellij.psi.PsiTreeChangeAdapter;
 import com.intellij.psi.PsiTreeChangeEvent;
 import com.intellij.refactoring.util.RefactoringDescriptionLocation;

@@ -16,7 +16,7 @@
 package com.intellij.psi;
 
 import com.intellij.lang.Language;
-import com.intellij.lang.java.JavaLanguage;
+import com.intellij.java.language.JavaLanguage;
 import com.intellij.openapi.components.ServiceManager;
 import consulo.logging.Logger;
 import com.intellij.openapi.fileTypes.FileType;

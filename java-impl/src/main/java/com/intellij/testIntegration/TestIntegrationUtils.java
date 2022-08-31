@@ -23,7 +23,7 @@ import java.util.Properties;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.codeInsight.TestFrameworks;
+import com.intellij.java.language.codeInsight.TestFrameworks;
 import com.intellij.codeInsight.daemon.impl.quickfix.CreateFromUsageUtils;
 import com.intellij.codeInsight.generation.GenerateMembersUtil;
 import com.intellij.codeInsight.template.Expression;
@@ -34,6 +34,9 @@ import com.intellij.codeInsight.template.impl.ConstantNode;
 import com.intellij.ide.fileTemplates.FileTemplate;
 import com.intellij.ide.fileTemplates.FileTemplateDescriptor;
 import com.intellij.ide.fileTemplates.FileTemplateManager;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.testIntegration.JavaTestFramework;
+import com.intellij.java.language.testIntegration.TestFramework;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.extensions.Extensions;

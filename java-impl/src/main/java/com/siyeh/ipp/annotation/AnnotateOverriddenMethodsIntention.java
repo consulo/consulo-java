@@ -15,15 +15,16 @@
  */
 package com.siyeh.ipp.annotation;
 
-import com.intellij.codeInsight.ExternalAnnotationsManager;
+import com.intellij.java.language.codeInsight.ExternalAnnotationsManager;
 import com.intellij.codeInsight.FileModificationService;
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.command.undo.UndoUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
-import com.intellij.psi.codeStyle.JavaCodeStyleManager;
+import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.java.indexing.search.searches.OverridingMethodsSearch;
-import com.intellij.psi.util.ClassUtil;
+import com.intellij.java.language.psi.util.ClassUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.siyeh.IntentionPowerPackBundle;
 import com.siyeh.ipp.base.MutablyNamedIntention;

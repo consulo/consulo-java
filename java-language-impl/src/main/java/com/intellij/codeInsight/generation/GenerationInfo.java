@@ -18,9 +18,9 @@ package com.intellij.codeInsight.generation;
 import javax.annotation.Nonnull;
 
 import com.intellij.openapi.editor.Editor;
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiMember;
+import com.intellij.java.language.psi.PsiMember;
 import com.intellij.util.IncorrectOperationException;
 
 /**
@@ -36,7 +36,7 @@ public interface GenerationInfo {
   /**
    * @param aClass
    * @param leaf leaf element. Is guaranteed to be a tree descendant of aClass.
-   * @return the value that will be passed to the {@link #insert(com.intellij.psi.PsiClass, com.intellij.psi.PsiElement, boolean)} method later.
+   * @return the value that will be passed to the {@link #insert(PsiClass, com.intellij.psi.PsiElement, boolean)} method later.
    */
   @javax.annotation.Nullable
   PsiElement findInsertionAnchor(@Nonnull PsiClass aClass, @Nonnull PsiElement leaf);

@@ -18,6 +18,7 @@ package com.intellij.ide.structureView.impl.java;
 import com.intellij.ide.structureView.impl.AddAllMembersProcessor;
 import com.intellij.ide.util.InheritedMembersNodeProvider;
 import com.intellij.ide.util.treeView.smartTree.TreeElement;
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
 import com.intellij.util.containers.ContainerUtil;
 import javax.annotation.Nonnull;

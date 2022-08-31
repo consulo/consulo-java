@@ -26,10 +26,10 @@ import javax.annotation.Nonnull;
 import consulo.logging.Logger;
 import org.jetbrains.annotations.Nls;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiJavaModule;
-import com.intellij.psi.PsiKeyword;
-import com.intellij.psi.PsiPackageAccessibilityStatement;
-import com.intellij.psi.PsiPackageAccessibilityStatement.Role;
+import com.intellij.java.language.psi.PsiJavaModule;
+import com.intellij.java.language.psi.PsiKeyword;
+import com.intellij.java.language.psi.PsiPackageAccessibilityStatement;
+import com.intellij.java.language.psi.PsiPackageAccessibilityStatement.Role;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 
 /**

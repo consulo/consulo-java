@@ -26,6 +26,7 @@ import javax.annotation.Nullable;
 import javax.swing.JList;
 import javax.swing.ListSelectionModel;
 
+import com.intellij.java.language.psi.*;
 import consulo.logging.Logger;
 import org.jetbrains.annotations.NonNls;
 import com.intellij.codeInsight.FileModificationService;
@@ -47,11 +48,11 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.psi.util.PsiUtilCore;
 import com.intellij.ui.components.JBList;
 import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.VisibilityUtil;
+import com.intellij.java.language.util.VisibilityUtil;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 
 /**

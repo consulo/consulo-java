@@ -19,7 +19,8 @@ import java.util.HashSet;
 
 import javax.annotation.Nullable;
 
-import com.intellij.psi.*;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.impl.source.resolve.graphInference.PsiPolyExpressionUtil;
 import com.intellij.psi.impl.source.resolve.graphInference.constraints.TypeEqualityConstraint;
 import com.intellij.util.containers.ContainerUtil;
 import consulo.logging.Logger;

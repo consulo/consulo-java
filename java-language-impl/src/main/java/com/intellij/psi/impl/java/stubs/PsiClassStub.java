@@ -19,8 +19,8 @@
  */
 package com.intellij.psi.impl.java.stubs;
 
-import com.intellij.pom.java.LanguageLevel;
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.LanguageLevel;
+import com.intellij.java.language.psi.PsiClass;
 
 import javax.annotation.Nullable;
 

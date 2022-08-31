@@ -21,7 +21,7 @@ import java.util.List;
 
 import com.intellij.codeInsight.editorActions.ExtendWordSelectionHandler;
 import com.intellij.lang.Language;
-import com.intellij.lang.java.JavaLanguage;
+import com.intellij.java.language.JavaLanguage;
 import com.intellij.lang.xml.XMLLanguage;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.util.TextRange;

@@ -17,7 +17,7 @@ package com.intellij.psi.impl.migration;
 
 import javax.annotation.Nonnull;
 
-import consulo.java.module.extension.JavaModuleExtension;
+import consulo.java.language.module.extension.JavaModuleExtension;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.impl.file.PsiPackageImpl;
 import consulo.psi.PsiPackageManager;

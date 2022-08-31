@@ -7,8 +7,8 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.types.DfReference
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.types.DfType;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaValueFactory;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaVariableValue;
-import com.intellij.psi.PsiLambdaExpression;
-import com.intellij.psi.PsiParameter;
+import com.intellij.java.language.psi.PsiLambdaExpression;
+import com.intellij.java.language.psi.PsiParameter;
 import javax.annotation.Nonnull;
 
 /**

@@ -20,12 +20,12 @@ import static com.intellij.codeInsight.template.postfix.util.JavaPostfixTemplate
 
 import javax.annotation.Nonnull;
 import com.intellij.openapi.editor.Editor;
-import com.intellij.psi.JavaPsiFacade;
+import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiElementFactory;
-import com.intellij.psi.PsiExpression;
-import com.intellij.psi.PsiJavaToken;
-import com.intellij.psi.PsiWhileStatement;
+import com.intellij.java.language.psi.PsiElementFactory;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiJavaToken;
+import com.intellij.java.language.psi.PsiWhileStatement;
 
 public class WhileStatementPostfixTemplate extends TypedPostfixTemplate {
   public WhileStatementPostfixTemplate() {

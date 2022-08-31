@@ -17,11 +17,11 @@ package com.siyeh.ig.fixes;
 
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiMember;
-import com.intellij.psi.PsiReferenceExpression;
-import com.intellij.psi.util.InheritanceUtil;
+import com.intellij.java.language.psi.PsiMember;
+import com.intellij.java.language.psi.PsiReferenceExpression;
+import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.InspectionGadgetsFix;

@@ -17,8 +17,8 @@ package com.intellij.refactoring.wrapreturnvalue.usageInfo;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiTypeElement;
+import com.intellij.java.language.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiTypeElement;
 import com.intellij.refactoring.psi.MutationUtils;
 import com.intellij.refactoring.util.FixableUsageInfo;
 import com.intellij.util.IncorrectOperationException;

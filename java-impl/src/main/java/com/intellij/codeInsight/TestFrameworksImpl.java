@@ -21,13 +21,15 @@
 package com.intellij.codeInsight;
 
 import javax.annotation.Nullable;
+
+import com.intellij.java.language.codeInsight.TestFrameworks;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
 import com.intellij.openapi.extensions.Extensions;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiMethod;
-import com.intellij.testIntegration.TestFramework;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiMethod;
+import com.intellij.java.language.testIntegration.TestFramework;
 import com.intellij.util.IncorrectOperationException;
 
 @Singleton

@@ -16,8 +16,8 @@
 package com.intellij.psi.impl.source.tree.java;
 
 import com.intellij.lang.ASTNode;
-import com.intellij.psi.JavaTokenType;
-import com.intellij.psi.PsiKeyword;
+import com.intellij.java.language.psi.JavaTokenType;
+import com.intellij.java.language.psi.PsiKeyword;
 import com.intellij.psi.impl.source.tree.ChildRole;
 import com.intellij.psi.impl.source.tree.JavaElementType;
 import com.intellij.psi.tree.ChildRoleBase;

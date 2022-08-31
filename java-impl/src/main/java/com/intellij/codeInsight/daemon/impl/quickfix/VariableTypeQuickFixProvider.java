@@ -22,8 +22,8 @@ package com.intellij.codeInsight.daemon.impl.quickfix;
 
 import com.intellij.java.analysis.impl.codeInsight.quickfix.ChangeVariableTypeQuickFixProvider;
 import com.intellij.codeInsight.intention.IntentionAction;
-import com.intellij.psi.PsiVariable;
-import com.intellij.psi.PsiType;
+import com.intellij.java.language.psi.PsiVariable;
+import com.intellij.java.language.psi.PsiType;
 
 public class VariableTypeQuickFixProvider implements ChangeVariableTypeQuickFixProvider{
   @Override

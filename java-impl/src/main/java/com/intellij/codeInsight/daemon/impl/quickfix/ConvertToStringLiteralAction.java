@@ -17,13 +17,16 @@ package com.intellij.codeInsight.daemon.impl.quickfix;
 
 import javax.annotation.Nonnull;
 
+import com.intellij.java.language.psi.JavaPsiFacade;
+import com.intellij.java.language.psi.JavaTokenType;
+import com.intellij.java.language.psi.PsiExpression;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.util.IncorrectOperationException;
 
 public class ConvertToStringLiteralAction implements IntentionAction {

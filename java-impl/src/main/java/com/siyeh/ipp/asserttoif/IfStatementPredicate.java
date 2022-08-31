@@ -15,9 +15,10 @@
  */
 package com.siyeh.ipp.asserttoif;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
 import com.siyeh.ipp.base.PsiElementPredicate;
-import consulo.java.module.util.JavaClassNames;
+import consulo.java.language.module.util.JavaClassNames;
 
 class IfStatementPredicate implements PsiElementPredicate {
 

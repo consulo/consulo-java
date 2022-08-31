@@ -16,10 +16,10 @@
 package org.jetbrains.java.generate.config;
 
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.PsiField;
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiModifier;
-import com.intellij.psi.PsiType;
+import com.intellij.java.language.psi.PsiField;
+import com.intellij.java.language.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiModifier;
+import com.intellij.java.language.psi.PsiType;
 import consulo.logging.Logger;
 import org.jetbrains.java.generate.psi.PsiAdapter;
 

@@ -15,23 +15,23 @@
  */
 package com.intellij.util.xml.actions;
 
-import com.intellij.ide.util.ClassFilter;
-import com.intellij.ide.util.TreeClassChooser;
-import com.intellij.ide.util.TreeClassChooserFactory;
+import com.intellij.java.language.util.ClassFilter;
+import com.intellij.java.language.util.TreeClassChooser;
+import com.intellij.java.language.util.TreeClassChooserFactory;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.JavaPsiFacade;
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.psi.JavaPsiFacade;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiModifier;
+import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.util.xml.DomElement;
 import com.intellij.util.xml.actions.generate.DomTemplateRunner;
 import com.intellij.util.xml.ui.actions.generate.CreateDomElementAction;
-import consulo.java.module.util.JavaClassNames;
+import consulo.java.language.module.util.JavaClassNames;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;

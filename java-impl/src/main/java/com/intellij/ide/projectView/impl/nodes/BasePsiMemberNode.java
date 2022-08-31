@@ -22,8 +22,8 @@ package com.intellij.ide.projectView.impl.nodes;
 
 import com.intellij.ide.projectView.ViewSettings;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiDocCommentOwner;
-import com.intellij.psi.PsiModifierListOwner;
+import com.intellij.java.language.psi.PsiDocCommentOwner;
+import com.intellij.java.language.psi.PsiModifierListOwner;
 
 public abstract class BasePsiMemberNode<T extends PsiModifierListOwner> extends BasePsiNode<T>{
   protected BasePsiMemberNode(Project project, T value, ViewSettings viewSettings) {

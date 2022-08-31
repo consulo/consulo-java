@@ -30,6 +30,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextArea;
 
+import com.intellij.java.language.psi.*;
 import org.jetbrains.annotations.NonNls;
 import com.intellij.openapi.editor.event.DocumentAdapter;
 import com.intellij.openapi.editor.event.DocumentEvent;
@@ -39,7 +40,7 @@ import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.wm.IdeFocusManager;
 import com.intellij.psi.*;
-import com.intellij.psi.util.PsiFormatUtil;
+import com.intellij.java.language.psi.util.PsiFormatUtil;
 import com.intellij.refactoring.HelpID;
 import com.intellij.refactoring.extractMethod.AbstractExtractDialog;
 import com.intellij.java.analysis.impl.refactoring.extractMethod.InputVariables;
@@ -48,7 +49,7 @@ import com.intellij.refactoring.util.ParameterTablePanel;
 import com.intellij.java.analysis.impl.refactoring.util.VariableData;
 import com.intellij.ui.EditorTextField;
 import com.intellij.util.Function;
-import com.intellij.util.VisibilityUtil;
+import com.intellij.java.language.util.VisibilityUtil;
 import com.intellij.util.containers.MultiMap;
 import com.intellij.util.ui.UIUtil;
 

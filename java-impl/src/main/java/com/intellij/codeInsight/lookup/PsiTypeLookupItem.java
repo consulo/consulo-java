@@ -18,6 +18,7 @@ package com.intellij.codeInsight.lookup;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.intellij.java.language.psi.*;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
 
@@ -37,8 +38,8 @@ import com.intellij.psi.*;
 import com.intellij.psi.impl.DebugUtil;
 import com.intellij.psi.impl.source.PostprocessReformattingAspect;
 import com.intellij.psi.impl.source.PsiClassReferenceType;
-import com.intellij.psi.util.PsiFormatUtil;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.PsiFormatUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.util.ArrayUtil;
 
 /**

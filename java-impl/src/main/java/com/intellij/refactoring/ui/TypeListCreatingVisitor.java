@@ -15,7 +15,9 @@
  */
 package com.intellij.refactoring.ui;
 
-import com.intellij.psi.*;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiElementFactory;
+import com.intellij.java.language.psi.PsiType;
 import com.intellij.refactoring.util.RefactoringHierarchyUtil;
 
 import java.util.ArrayList;

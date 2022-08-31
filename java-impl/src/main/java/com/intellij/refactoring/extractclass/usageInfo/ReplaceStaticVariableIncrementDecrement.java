@@ -15,9 +15,9 @@
  */
 package com.intellij.refactoring.extractclass.usageInfo;
 
-import com.intellij.psi.PsiExpression;
-import com.intellij.psi.PsiPostfixExpression;
-import com.intellij.psi.PsiPrefixExpression;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiPostfixExpression;
+import com.intellij.java.language.psi.PsiPrefixExpression;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.refactoring.psi.MutationUtils;
 import com.intellij.refactoring.util.FixableUsageInfo;

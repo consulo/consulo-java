@@ -15,6 +15,10 @@
  */
 package com.intellij.codeInsight.completion;
 
+import com.intellij.java.language.psi.JavaTokenType;
+import com.intellij.java.language.psi.PsiAnnotationParameterList;
+import com.intellij.java.language.psi.PsiIdentifier;
+import com.intellij.java.language.psi.PsiJavaFile;
 import consulo.logging.Logger;
 import com.intellij.openapi.editor.ex.EditorEx;
 import com.intellij.openapi.editor.highlighter.HighlighterIterator;

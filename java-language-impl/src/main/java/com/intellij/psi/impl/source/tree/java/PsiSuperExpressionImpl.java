@@ -17,6 +17,7 @@ package com.intellij.psi.impl.source.tree.java;
 
 import javax.annotation.Nonnull;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.lang.ASTNode;
 import consulo.logging.Logger;
 import com.intellij.psi.*;
@@ -25,8 +26,8 @@ import com.intellij.psi.impl.source.tree.ChildRole;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.ChildRoleBase;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.PsiUtil;
-import consulo.java.module.util.JavaClassNames;
+import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.java.language.module.util.JavaClassNames;
 
 import javax.annotation.Nullable;
 

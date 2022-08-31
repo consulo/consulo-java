@@ -15,10 +15,10 @@
  */
 package com.siyeh.ig.maturity;
 
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiField;
-import com.intellij.psi.PsiReferenceExpression;
+import com.intellij.java.language.psi.PsiField;
+import com.intellij.java.language.psi.PsiReferenceExpression;
 import com.siyeh.HardcodedMethodConstants;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;

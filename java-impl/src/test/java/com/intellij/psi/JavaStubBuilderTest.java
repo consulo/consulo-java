@@ -24,6 +24,7 @@ import java.security.SecureRandom;
 
 import javax.annotation.Nullable;
 
+import com.intellij.java.language.psi.PsiJavaFile;
 import org.jetbrains.annotations.NonNls;
 import com.intellij.lang.FileASTNode;
 import com.intellij.openapi.util.io.FileUtil;

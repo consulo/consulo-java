@@ -15,8 +15,9 @@
  */
 package com.siyeh.ig.psiutils;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
-import com.intellij.psi.util.MethodSignature;
+import com.intellij.java.language.psi.util.MethodSignature;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 

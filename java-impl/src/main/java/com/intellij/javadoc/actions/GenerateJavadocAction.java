@@ -22,7 +22,7 @@ import javax.annotation.Nonnull;
 import com.intellij.analysis.AnalysisScope;
 import com.intellij.analysis.BaseAnalysisAction;
 import com.intellij.analysis.BaseAnalysisActionDialog;
-import com.intellij.javadoc.JavadocBundle;
+import com.intellij.java.language.JavadocBundle;
 import com.intellij.javadoc.JavadocConfigurable;
 import com.intellij.javadoc.JavadocGenerationManager;
 import com.intellij.openapi.project.Project;

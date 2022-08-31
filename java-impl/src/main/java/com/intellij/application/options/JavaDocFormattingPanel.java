@@ -29,7 +29,7 @@ import javax.swing.JPanel;
 import com.intellij.application.options.codeStyle.OptionTreeWithPreviewPanel;
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.lang.Language;
-import com.intellij.lang.java.JavaLanguage;
+import com.intellij.java.language.JavaLanguage;
 import com.intellij.openapi.application.ApplicationBundle;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.ui.OnePixelDivider;

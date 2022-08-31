@@ -2,7 +2,7 @@
 
 package com.intellij.psi.impl.java.stubs;
 
-import com.intellij.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.psi.impl.cache.TypeInfo;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

@@ -16,6 +16,8 @@
 package com.siyeh.ipp.trivialif;
 
 import javax.annotation.Nonnull;
+
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.PsiDiamondTypeUtil;
 import com.intellij.psi.util.PsiTreeUtil;

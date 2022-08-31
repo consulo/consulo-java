@@ -17,6 +17,7 @@ package com.intellij.psi.impl.compiled;
 
 import javax.annotation.Nonnull;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.tree.JavaElementType;

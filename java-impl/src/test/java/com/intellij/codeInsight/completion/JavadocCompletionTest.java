@@ -11,7 +11,7 @@ import com.intellij.JavaTestUtil;
 import com.intellij.codeInsight.CodeInsightSettings;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInspection.javaDoc.JavaDocLocalInspection;
-import com.intellij.lang.java.JavaLanguage;
+import com.intellij.java.language.JavaLanguage;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.PsiReferenceBase;
@@ -19,7 +19,7 @@ import com.intellij.psi.PsiReferenceProvider;
 import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
 import com.intellij.psi.impl.source.resolve.reference.PsiReferenceRegistrarImpl;
 import com.intellij.psi.impl.source.resolve.reference.ReferenceProvidersRegistry;
-import com.intellij.psi.javadoc.PsiDocTag;
+import com.intellij.java.language.psi.javadoc.PsiDocTag;
 import com.intellij.util.ObjectUtil;
 import com.intellij.util.ProcessingContext;
 

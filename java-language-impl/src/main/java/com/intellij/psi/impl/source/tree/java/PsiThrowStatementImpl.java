@@ -17,10 +17,10 @@ package com.intellij.psi.impl.source.tree.java;
 
 import com.intellij.lang.ASTNode;
 import consulo.logging.Logger;
-import com.intellij.psi.JavaElementVisitor;
+import com.intellij.java.language.psi.JavaElementVisitor;
 import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.PsiExpression;
-import com.intellij.psi.PsiThrowStatement;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiThrowStatement;
 import com.intellij.psi.impl.source.Constants;
 import com.intellij.psi.impl.source.tree.ChildRole;
 import com.intellij.psi.impl.source.tree.CompositePsiElement;

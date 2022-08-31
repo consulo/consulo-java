@@ -15,6 +15,10 @@
  */
 package com.intellij.codeInsight.template;
 
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiIdentifier;
+import com.intellij.java.language.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiVariable;
 import com.intellij.psi.*;
 import com.intellij.openapi.editor.Document;
 import com.intellij.codeInsight.template.impl.JavaTemplateUtil;

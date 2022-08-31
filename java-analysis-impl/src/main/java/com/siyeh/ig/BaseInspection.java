@@ -25,6 +25,7 @@ import javax.swing.JFormattedTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.text.Document;
 
+import com.intellij.java.language.psi.util.PsiUtil;
 import org.jdom.Element;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
@@ -154,7 +155,7 @@ public abstract class BaseInspection extends BaseJavaBatchLocalInspectionTool
 
 	/**
 	 * To check precondition(s) on the entire file, to prevent doing the check on every PsiElement visited.
-	 * Useful for e.g. a {@link com.intellij.psi.util.PsiUtil#isLanguageLevel5OrHigher(com.intellij.psi.PsiElement)} check
+	 * Useful for e.g. a {@link PsiUtil#isLanguageLevel5OrHigher(com.intellij.psi.PsiElement)} check
 	 * which will be the same for all elements in the specified file.
 	 * When this method returns false, {@link #buildVisitor()} will not be called.
 	 */

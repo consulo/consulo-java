@@ -15,10 +15,10 @@
  */
 package com.intellij.refactoring.util.classMembers;
 
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiField;
-import com.intellij.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiField;
+import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.refactoring.classMembers.MemberInfoBase;
 
 public class ClassMembersUtil {

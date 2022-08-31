@@ -18,9 +18,9 @@ package com.intellij.psi.impl.source.resolve.graphInference.constraints;
 import java.util.List;
 
 import consulo.logging.Logger;
-import com.intellij.psi.PsiSubstitutor;
-import com.intellij.psi.PsiType;
-import com.intellij.psi.PsiWildcardType;
+import com.intellij.java.language.psi.PsiSubstitutor;
+import com.intellij.java.language.psi.PsiType;
+import com.intellij.java.language.psi.PsiWildcardType;
 import com.intellij.psi.impl.source.resolve.graphInference.InferenceSession;
 
 public class SubtypingConstraint implements ConstraintFormula

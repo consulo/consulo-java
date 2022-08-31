@@ -42,7 +42,7 @@ import com.intellij.openapi.application.ReadAction;
 import consulo.logging.Logger;
 import consulo.util.dataholder.Key;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.debugger.ui.classFilter.ClassFilter;
 import java.util.HashMap;
 import consulo.internal.com.sun.jdi.ClassType;

@@ -17,10 +17,10 @@ package com.intellij.psi.impl.migration;
 
 import com.intellij.openapi.application.ApplicationManager;
 import consulo.logging.Logger;
-import com.intellij.psi.JavaPsiFacade;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiMigration;
-import com.intellij.psi.PsiJavaPackage;
+import com.intellij.java.language.psi.JavaPsiFacade;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiMigration;
+import com.intellij.java.language.psi.PsiJavaPackage;
 import com.intellij.psi.impl.PsiManagerImpl;
 import java.util.HashMap;
 

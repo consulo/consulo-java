@@ -19,7 +19,7 @@ import javax.annotation.Nonnull;
 
 import com.intellij.codeInsight.generation.surroundWith.JavaWithCastSurrounder;
 import com.intellij.openapi.editor.Editor;
-import com.intellij.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiExpression;
 
 public class CastExpressionPostfixTemplate extends ExpressionPostfixTemplateWithChooser {
   public CastExpressionPostfixTemplate() {

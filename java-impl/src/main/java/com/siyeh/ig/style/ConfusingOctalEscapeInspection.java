@@ -17,7 +17,7 @@ package com.siyeh.ig.style;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.psi.PsiLiteralExpression;
+import com.intellij.java.language.psi.PsiLiteralExpression;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;

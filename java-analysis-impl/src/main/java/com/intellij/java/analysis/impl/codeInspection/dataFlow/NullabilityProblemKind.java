@@ -1,13 +1,14 @@
 // Copyright 2000-2020 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.analysis.impl.codeInspection.dataFlow;
 
-import com.intellij.codeInsight.Nullability;
+import com.intellij.java.language.codeInsight.Nullability;
 import com.intellij.java.analysis.JavaAnalysisBundle;
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.util.PsiTypesUtil;
-import com.intellij.psi.util.PsiUtil;
-import com.intellij.psi.util.TypeConversionUtil;
+import com.intellij.java.language.psi.util.PsiTypesUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.TypeConversionUtil;
 import com.siyeh.ig.psiutils.ExpectedTypeUtils;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.MethodCallUtils;
@@ -24,8 +25,8 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 import static com.intellij.java.analysis.JavaAnalysisBundle.BUNDLE;
-import static com.intellij.psi.CommonClassNames.JAVA_LANG_NULL_POINTER_EXCEPTION;
-import static com.intellij.psi.CommonClassNames.JAVA_LANG_RUNTIME_EXCEPTION;
+import static com.intellij.java.language.psi.CommonClassNames.JAVA_LANG_NULL_POINTER_EXCEPTION;
+import static com.intellij.java.language.psi.CommonClassNames.JAVA_LANG_RUNTIME_EXCEPTION;
 import static com.intellij.util.ObjectUtils.tryCast;
 
 /**

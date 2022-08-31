@@ -21,8 +21,8 @@ import com.intellij.java.analysis.impl.find.findUsages.JavaFindUsagesOptions;
 import com.intellij.java.analysis.impl.find.findUsages.JavaMethodFindUsagesOptions;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.util.MethodSignatureUtil;
+import com.intellij.java.language.psi.PsiMethod;
+import com.intellij.java.language.psi.util.MethodSignatureUtil;
 import com.intellij.ui.StateRestoringCheckBox;
 import javax.annotation.Nonnull;
 

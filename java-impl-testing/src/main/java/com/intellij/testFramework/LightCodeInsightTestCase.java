@@ -16,7 +16,7 @@
 package com.intellij.testFramework;
 
 import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.pom.java.LanguageLevel;
+import com.intellij.java.language.LanguageLevel;
 import com.intellij.psi.impl.JavaPsiFacadeEx;
 
 /**

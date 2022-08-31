@@ -34,15 +34,17 @@ import java.util.Set;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
 import com.intellij.psi.codeStyle.arrangement.group.ArrangementGroupingRule;
 import com.intellij.psi.codeStyle.arrangement.std.ArrangementSettingsToken;
 import com.intellij.psi.codeStyle.arrangement.std.StdArrangementTokens;
-import com.intellij.psi.search.searches.SuperMethodsSearch;
-import com.intellij.psi.util.MethodSignatureBackedByPsiMethod;
-import com.intellij.psi.util.PropertyUtil;
+import com.intellij.java.language.psi.search.searches.SuperMethodsSearch;
+import com.intellij.java.language.psi.util.MethodSignatureBackedByPsiMethod;
+import com.intellij.java.language.psi.util.PropertyUtil;
 import com.intellij.util.Consumer;
 import com.intellij.util.Functions;
 import com.intellij.util.containers.ContainerUtil;
@@ -599,7 +601,7 @@ public class JavaArrangementVisitor extends JavaRecursiveElementVisitor
 	}
 
 	private void processEntry(
-			@javax.annotation.Nullable JavaElementArrangementEntry entry, @javax.annotation.Nullable PsiModifierListOwner modifier, @Nullable final PsiElement nextPsiRoot)
+      @javax.annotation.Nullable JavaElementArrangementEntry entry, @javax.annotation.Nullable PsiModifierListOwner modifier, @Nullable final PsiElement nextPsiRoot)
 	{
 		if(entry == null)
 		{

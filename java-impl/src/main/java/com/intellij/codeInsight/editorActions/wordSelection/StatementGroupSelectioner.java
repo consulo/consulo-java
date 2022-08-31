@@ -15,11 +15,12 @@
  */
 package com.intellij.codeInsight.editorActions.wordSelection;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.util.text.LineTokenizer;
 import com.intellij.psi.*;
-import com.intellij.psi.javadoc.PsiDocComment;
+import com.intellij.java.language.psi.javadoc.PsiDocComment;
 
 import java.util.ArrayList;
 import java.util.List;

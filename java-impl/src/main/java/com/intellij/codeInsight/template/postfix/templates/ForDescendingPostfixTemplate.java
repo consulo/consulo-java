@@ -19,7 +19,7 @@ import javax.annotation.Nonnull;
 
 import com.intellij.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils;
 import com.intellij.openapi.util.Pair;
-import com.intellij.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiExpression;
 
 import javax.annotation.Nullable;
 

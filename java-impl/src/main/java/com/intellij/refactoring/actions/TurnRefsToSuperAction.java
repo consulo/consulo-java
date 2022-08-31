@@ -17,9 +17,9 @@ package com.intellij.refactoring.actions;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.lang.java.JavaLanguage;
+import com.intellij.java.language.JavaLanguage;
 import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.refactoring.RefactoringActionHandler;
 import com.intellij.refactoring.turnRefsToSuper.TurnRefsToSuperHandler;

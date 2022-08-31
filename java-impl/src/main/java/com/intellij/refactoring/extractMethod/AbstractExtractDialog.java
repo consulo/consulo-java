@@ -20,8 +20,8 @@
  */
 package com.intellij.refactoring.extractMethod;
 
-import com.intellij.psi.PsiModifier;
-import com.intellij.psi.PsiType;
+import com.intellij.java.language.psi.PsiModifier;
+import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.analysis.impl.refactoring.util.VariableData;
 
 public interface AbstractExtractDialog

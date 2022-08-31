@@ -22,13 +22,14 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import com.intellij.codeInsight.daemon.impl.analysis.HighlightUtilBase;
 import com.intellij.codeInsight.generation.OverrideImplementExploreUtil;
+import com.intellij.java.language.psi.*;
 import com.intellij.lang.folding.NamedFoldingDescriptor;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.FoldingGroup;
 import com.intellij.openapi.project.IndexNotReadyException;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.util.ObjectUtil;
 import com.intellij.util.text.CharArrayUtil;
 

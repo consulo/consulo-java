@@ -25,9 +25,9 @@ import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ContentEntry;
 import com.intellij.openapi.roots.ModifiableRootModel;
-import com.intellij.pom.java.LanguageLevel;
-import com.intellij.psi.JavaPsiFacade;
-import com.intellij.psi.PsiElementFactory;
+import com.intellij.java.language.LanguageLevel;
+import com.intellij.java.language.psi.JavaPsiFacade;
+import com.intellij.java.language.psi.PsiElementFactory;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiFileFactory;
 import com.intellij.psi.PsiManager;
@@ -35,7 +35,7 @@ import com.intellij.testFramework.PlatformTestUtil;
 import com.intellij.testFramework.TestModuleDescriptor;
 import com.intellij.testFramework.UsefulTestCase;
 import com.intellij.testFramework.fixtures.impl.LightTempDirTestFixtureImpl;
-import consulo.java.module.extension.JavaMutableModuleExtension;
+import consulo.java.language.module.extension.JavaMutableModuleExtension;
 
 /**
  * @author peter

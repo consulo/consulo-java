@@ -15,6 +15,7 @@
  */
 package com.intellij.lang.java;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.navigation.AnonymousElementProvider;
 import com.intellij.psi.*;
 

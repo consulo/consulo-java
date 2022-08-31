@@ -18,6 +18,9 @@ package com.intellij.find.findUsages;
 import javax.annotation.Nonnull;
 
 import com.intellij.java.analysis.impl.find.findUsages.*;
+import com.intellij.java.language.psi.JavaDirectoryService;
+import com.intellij.java.language.psi.PsiJavaPackage;
+import com.intellij.java.language.psi.PsiMethod;
 import jakarta.inject.Inject;
 
 import com.intellij.ide.util.SuperMethodWarningUtil;

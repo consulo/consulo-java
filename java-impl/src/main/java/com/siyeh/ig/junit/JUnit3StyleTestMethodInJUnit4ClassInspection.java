@@ -17,6 +17,7 @@ package com.siyeh.ig.junit;
 
 import javax.annotation.Nonnull;
 
+import com.intellij.java.language.psi.*;
 import org.jetbrains.annotations.Nls;
 import com.intellij.java.analysis.impl.codeInspection.AnnotateMethodFix;
 import com.intellij.psi.*;

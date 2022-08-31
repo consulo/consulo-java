@@ -2,15 +2,16 @@
 package com.intellij.java.analysis.impl.codeInspection.dataFlow.inliner;
 
 import com.intellij.codeInsight.ExpressionUtil;
-import com.intellij.codeInsight.Nullability;
-import com.intellij.codeInsight.NullabilityAnnotationInfo;
-import com.intellij.codeInsight.NullableNotNullManager;
+import com.intellij.java.language.codeInsight.Nullability;
+import com.intellij.java.language.codeInsight.NullabilityAnnotationInfo;
+import com.intellij.java.language.codeInsight.NullableNotNullManager;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.CFGBuilder;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.NullabilityProblemKind;
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.util.Ref;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
 import com.siyeh.ig.psiutils.ControlFlowUtils;
 
 import javax.annotation.Nonnull;

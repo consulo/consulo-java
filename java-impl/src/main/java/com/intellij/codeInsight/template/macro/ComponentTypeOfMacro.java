@@ -30,9 +30,9 @@ import com.intellij.codeInsight.template.PsiElementResult;
 import com.intellij.codeInsight.template.PsiTypeResult;
 import com.intellij.codeInsight.template.Result;
 import com.intellij.codeInsight.template.TemplateContextType;
-import com.intellij.psi.PsiArrayType;
-import com.intellij.psi.PsiExpression;
-import com.intellij.psi.PsiType;
+import com.intellij.java.language.psi.PsiArrayType;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiType;
 import com.intellij.util.containers.ContainerUtil;
 
 public class ComponentTypeOfMacro extends Macro

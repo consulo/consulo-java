@@ -17,9 +17,9 @@ package com.intellij.psi.impl.compiled;
 
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiReferenceParameterList;
-import com.intellij.psi.PsiType;
-import com.intellij.psi.PsiTypeElement;
+import com.intellij.java.language.psi.PsiReferenceParameterList;
+import com.intellij.java.language.psi.PsiType;
+import com.intellij.java.language.psi.PsiTypeElement;
 import com.intellij.psi.impl.cache.TypeAnnotationContainer;
 import com.intellij.psi.impl.source.tree.TreeElement;
 import org.jetbrains.annotations.NonNls;

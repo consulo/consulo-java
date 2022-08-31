@@ -19,6 +19,7 @@
  */
 package com.intellij.psi.scope;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
 import com.intellij.psi.filters.ElementFilter;
 

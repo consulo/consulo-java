@@ -22,7 +22,7 @@ import javax.annotation.Nonnull;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.LighterAST;
 import com.intellij.lang.LighterASTNode;
-import com.intellij.psi.PsiProvidesStatement;
+import com.intellij.java.language.psi.PsiProvidesStatement;
 import com.intellij.psi.impl.java.stubs.impl.PsiProvidesStatementStubImpl;
 import com.intellij.psi.impl.source.PsiProvidesStatementImpl;
 import com.intellij.psi.impl.source.tree.CompositeElement;

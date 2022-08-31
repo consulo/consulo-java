@@ -30,16 +30,18 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.Nullable;
+
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Pair;
 import com.intellij.psi.*;
-import com.intellij.psi.codeStyle.JavaCodeStyleManager;
-import com.intellij.psi.codeStyle.VariableKind;
+import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
+import com.intellij.java.language.psi.codeStyle.VariableKind;
 import com.intellij.psi.controlFlow.ControlFlow;
 import com.intellij.psi.search.LocalSearchScope;
 import com.intellij.psi.search.searches.ReferencesSearch;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.TypeConversionUtil;
+import com.intellij.java.language.psi.util.TypeConversionUtil;
 import com.intellij.java.analysis.impl.refactoring.util.VariableData;
 import com.intellij.java.analysis.impl.refactoring.util.duplicates.DuplicatesFinder;
 import com.intellij.util.ArrayUtil;

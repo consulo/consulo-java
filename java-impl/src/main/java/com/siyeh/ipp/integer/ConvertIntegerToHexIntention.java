@@ -15,7 +15,7 @@
  */
 package com.siyeh.ipp.integer;
 
-import com.intellij.psi.PsiType;
+import com.intellij.java.language.psi.PsiType;
 import com.siyeh.ipp.base.PsiElementPredicate;
 import javax.annotation.Nonnull;
 

@@ -19,9 +19,9 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import com.intellij.lang.Language;
 import com.intellij.lang.LanguageExtension;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiField;
-import com.intellij.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiField;
+import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.psi.PsiReference;
 
 /**

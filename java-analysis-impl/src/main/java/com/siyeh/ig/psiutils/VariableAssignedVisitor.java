@@ -20,9 +20,10 @@ import java.util.Collections;
 
 import javax.annotation.Nonnull;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.util.TypeConversionUtil;
+import com.intellij.java.language.psi.util.TypeConversionUtil;
 
 public class VariableAssignedVisitor extends JavaRecursiveElementWalkingVisitor
 {

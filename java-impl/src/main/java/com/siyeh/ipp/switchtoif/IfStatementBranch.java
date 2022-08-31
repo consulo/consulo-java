@@ -15,6 +15,7 @@
  */
 package com.siyeh.ipp.switchtoif;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
 
 import java.util.*;

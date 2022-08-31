@@ -18,9 +18,9 @@ package com.intellij.codeInsight.daemon.impl;
 import javax.annotation.Nonnull;
 
 import com.intellij.ProjectTopics;
-import com.intellij.core.JavaCoreBundle;
+import com.intellij.java.language.JavaCoreBundle;
 import com.intellij.ide.highlighter.JavaClassFileType;
-import com.intellij.lang.java.JavaLanguage;
+import com.intellij.java.language.JavaLanguage;
 import com.intellij.openapi.fileEditor.FileEditor;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
@@ -36,7 +36,7 @@ import com.intellij.ui.EditorNotificationPanel;
 import com.intellij.ui.EditorNotifications;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.editor.notifications.EditorNotificationProvider;
-import consulo.java.module.extension.JavaModuleExtension;
+import consulo.java.language.module.extension.JavaModuleExtension;
 import consulo.module.extension.ModuleExtension;
 
 /**

@@ -15,12 +15,13 @@
  */
 package com.intellij.java.indexing.impl.search;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.util.UnfairTextRange;
-import com.intellij.pom.java.LanguageLevel;
+import com.intellij.java.language.LanguageLevel;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.light.LightMemberReference;
 import com.intellij.psi.impl.source.resolve.JavaResolveUtil;
@@ -29,7 +30,7 @@ import com.intellij.psi.search.SearchRequestCollector;
 import com.intellij.psi.search.SearchScope;
 import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
 import com.intellij.psi.search.searches.ReferencesSearch;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.util.PairProcessor;
 import com.intellij.util.Processor;
 import consulo.annotation.access.RequiredReadAction;

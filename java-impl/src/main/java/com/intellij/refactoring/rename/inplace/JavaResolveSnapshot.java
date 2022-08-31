@@ -15,6 +15,10 @@
  */
 package com.intellij.refactoring.rename.inplace;
 
+import com.intellij.java.language.psi.JavaRecursiveElementWalkingVisitor;
+import com.intellij.java.language.psi.JavaResolveResult;
+import com.intellij.java.language.psi.PsiField;
+import com.intellij.java.language.psi.PsiReferenceExpression;
 import consulo.logging.Logger;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.project.Project;

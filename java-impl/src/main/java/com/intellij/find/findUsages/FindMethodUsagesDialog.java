@@ -17,6 +17,10 @@ package com.intellij.find.findUsages;
 
 import com.intellij.find.FindBundle;
 import com.intellij.java.analysis.impl.find.findUsages.JavaMethodFindUsagesOptions;
+import com.intellij.java.language.psi.PsiAnonymousClass;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.ui.IdeBorderFactory;

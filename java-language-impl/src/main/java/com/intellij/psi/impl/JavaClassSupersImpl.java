@@ -15,10 +15,10 @@
  */
 package com.intellij.psi.impl;
 
-import com.intellij.psi.*;
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.util.JavaClassSupers;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.JavaClassSupers;
+import com.intellij.java.language.psi.util.PsiUtil;
 import jakarta.inject.Singleton;
 
 import javax.annotation.Nonnull;

@@ -15,21 +15,21 @@
  */
 package com.intellij.codeInsight.editorActions.smartEnter;
 
-import static com.intellij.psi.PsiModifier.ABSTRACT;
-import static com.intellij.psi.PsiModifier.DEFAULT;
-import static com.intellij.psi.PsiModifier.NATIVE;
-import static com.intellij.psi.PsiModifier.PRIVATE;
-import static com.intellij.psi.PsiModifier.STATIC;
+import static com.intellij.java.language.psi.PsiModifier.ABSTRACT;
+import static com.intellij.java.language.psi.PsiModifier.DEFAULT;
+import static com.intellij.java.language.psi.PsiModifier.NATIVE;
+import static com.intellij.java.language.psi.PsiModifier.PRIVATE;
+import static com.intellij.java.language.psi.PsiModifier.STATIC;
 
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiCodeBlock;
-import com.intellij.psi.PsiDeclarationStatement;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiCodeBlock;
+import com.intellij.java.language.psi.PsiDeclarationStatement;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiErrorElement;
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiStatement;
+import com.intellij.java.language.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiStatement;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
 

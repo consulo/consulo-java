@@ -20,12 +20,12 @@ import javax.annotation.Nonnull;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.JavaClassReferenceProvider;
 import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.util.ClassKind;
+import com.intellij.java.language.psi.util.ClassKind;
 
 /**
  * @author Dmitry Avdeev

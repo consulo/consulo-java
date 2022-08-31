@@ -30,7 +30,7 @@ import com.intellij.java.debugger.impl.engine.events.SuspendContextCommandImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.FieldDescriptorImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.NodeManagerImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.ValueDescriptorImpl;
-import com.intellij.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.xdebugger.frame.XCompositeNode;
 import com.intellij.xdebugger.frame.XFullValueEvaluator;
 import com.intellij.xdebugger.frame.XValueChildrenList;

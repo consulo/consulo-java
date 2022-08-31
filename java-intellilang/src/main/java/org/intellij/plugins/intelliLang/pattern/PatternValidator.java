@@ -28,6 +28,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
+import com.intellij.java.language.psi.*;
 import org.intellij.plugins.intelliLang.Configuration;
 import org.intellij.plugins.intelliLang.util.AnnotateFix;
 import org.intellij.plugins.intelliLang.util.AnnotationUtilEx;

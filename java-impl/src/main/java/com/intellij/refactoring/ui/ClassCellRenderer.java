@@ -20,7 +20,7 @@ import javax.swing.JList;
 import javax.swing.ListCellRenderer;
 
 import com.intellij.openapi.util.Iconable;
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.refactoring.RefactoringBundle;
 import com.intellij.ui.ListCellRendererWrapper;
 import consulo.awt.TargetAWT;

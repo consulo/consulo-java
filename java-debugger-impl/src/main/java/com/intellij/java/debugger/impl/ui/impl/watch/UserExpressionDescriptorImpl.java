@@ -31,10 +31,10 @@ import com.intellij.java.debugger.impl.ui.tree.UserExpressionDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.JavaCodeFragment;
+import com.intellij.java.language.psi.JavaCodeFragment;
 import com.intellij.psi.PsiCodeFragment;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiType;
+import com.intellij.java.language.psi.PsiType;
 import consulo.internal.com.sun.jdi.Type;
 
 public class UserExpressionDescriptorImpl extends EvaluationDescriptor implements UserExpressionDescriptor

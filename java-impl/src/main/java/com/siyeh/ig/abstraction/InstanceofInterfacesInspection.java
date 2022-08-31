@@ -16,8 +16,8 @@
 package com.siyeh.ig.abstraction;
 
 import com.intellij.codeInspection.ui.SingleCheckboxOptionsPanel;
-import com.intellij.psi.PsiInstanceOfExpression;
-import com.intellij.psi.PsiTypeElement;
+import com.intellij.java.language.psi.PsiInstanceOfExpression;
+import com.intellij.java.language.psi.PsiTypeElement;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;

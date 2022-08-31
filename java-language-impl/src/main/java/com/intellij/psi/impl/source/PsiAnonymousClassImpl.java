@@ -17,6 +17,7 @@ package com.intellij.psi.impl.source;
 
 import javax.annotation.Nonnull;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
@@ -24,7 +25,7 @@ import com.intellij.psi.impl.java.stubs.JavaStubElementTypes;
 import com.intellij.psi.impl.java.stubs.PsiClassStub;
 import com.intellij.psi.impl.source.tree.ChildRole;
 import com.intellij.psi.scope.PsiScopeProcessor;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.reference.SoftReference;
 import com.intellij.util.IncorrectOperationException;
 

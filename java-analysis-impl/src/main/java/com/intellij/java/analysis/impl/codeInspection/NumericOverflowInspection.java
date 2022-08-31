@@ -20,10 +20,14 @@ import com.intellij.codeInsight.daemon.JavaErrorBundle;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.java.analysis.codeInspection.BaseJavaBatchLocalInspectionTool;
+import com.intellij.java.language.psi.JavaElementVisitor;
+import com.intellij.java.language.psi.JavaPsiFacade;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiReferenceExpression;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
-import com.intellij.psi.util.ConstantEvaluationOverflowException;
-import com.intellij.psi.util.TypeConversionUtil;
+import com.intellij.java.language.psi.util.ConstantEvaluationOverflowException;
+import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.util.dataholder.Key;
 import org.jetbrains.annotations.Nls;
 

@@ -21,7 +21,7 @@ import com.intellij.openapi.fileTypes.BinaryFileDecompiler;
 import com.intellij.openapi.project.DefaultProjectFactory;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiManager;
-import com.intellij.psi.compiled.ClassFileDecompilers;
+import com.intellij.java.language.psi.compiled.ClassFileDecompilers;
 
 /**
  * @author max

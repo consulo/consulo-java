@@ -15,6 +15,7 @@
  */
 package com.siyeh.ig.imports;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;

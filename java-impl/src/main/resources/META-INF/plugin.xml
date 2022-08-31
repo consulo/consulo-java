@@ -429,8 +429,8 @@
 			<with attribute="implementationClass" implements="org.osmorc.manifest.lang.headerparser.HeaderParser"/>
 		</extensionPoint>
 
-		<extensionPoint name="typeAnnotationModifier" interface="com.intellij.psi.augment.TypeAnnotationModifier"/>
-		<extensionPoint name="augmentProvider" interface="com.intellij.psi.augment.PsiAugmentProvider"/>
+		<extensionPoint name="typeAnnotationModifier" interface="com.intellij.java.language.psi.augment.TypeAnnotationModifier"/>
+		<extensionPoint name="augmentProvider" interface="com.intellij.java.language.psi.augment.PsiAugmentProvider"/>
 		<extensionPoint name="cantBeStatic" interface="com.intellij.openapi.util.Condition"/>
 
 		<extensionPoint name="allOverridingMethodsSearch" interface="com.intellij.util.QueryExecutor"/>
@@ -445,7 +445,7 @@
 		<extensionPoint name="overridingMethodsSearch" interface="com.intellij.util.QueryExecutor"/>
 		<extensionPoint name="superMethodsSearch" interface="com.intellij.util.QueryExecutor"/>
 		<extensionPoint name="allClassesSearch" interface="com.intellij.util.QueryExecutor"/>
-		<extensionPoint name="importFilter" interface="com.intellij.codeInsight.ImportFilter"/>
+		<extensionPoint name="importFilter" interface="com.intellij.java.language.codeInsight.ImportFilter"/>
 
 		<extensionPoint name="encapsulateFields.helper" beanClass="com.intellij.lang.LanguageExtensionPoint">
 			<with attribute="implementationClass" implements="com.intellij.refactoring.encapsulateFields.EncapsulateFieldHelper"/>
@@ -530,15 +530,15 @@
 						interface="com.intellij.java.debugger.impl.actions.JvmSmartStepIntoHandler"/>
 
 		<extensionPoint name="testFramework"
-						interface="com.intellij.testIntegration.TestFramework"/>
+						interface="com.intellij.java.language.testIntegration.TestFramework"/>
 
 		<extensionPoint name="expressionSurrounder"
 						interface="com.intellij.codeInsight.generation.surroundWith.JavaExpressionSurrounder"/>
 
 		<extensionPoint name="unscrambleSupport" interface="com.intellij.unscramble.UnscrambleSupport"/>
 
-		<extensionPoint name="mainMethodProvider" interface="com.intellij.codeInsight.runner.JavaMainMethodProvider"/>
-		<extensionPoint name="psi.classFileDecompiler" interface="com.intellij.psi.compiled.ClassFileDecompilers$Decompiler"/>
+		<extensionPoint name="mainMethodProvider" interface="com.intellij.java.language.codeInsight.runner.JavaMainMethodProvider"/>
+		<extensionPoint name="psi.classFileDecompiler" interface="com.intellij.java.language.psi.compiled.ClassFileDecompilers$Decompiler"/>
 
 		<extensionPoint name="debuggerClassFilterProvider" interface="com.intellij.java.debugger.ui.classFilter.DebuggerClassFilterProvider"/>
 		<extensionPoint name="topLevelClassProvider" interface="com.intellij.java.debugger.engine.TopLevelParentClassProvider"/>
@@ -547,13 +547,13 @@
 			<with attribute="implementationClass" implements="com.intellij.java.debugger.impl.EditorTextProvider"/>
 		</extensionPoint>
 
-		<extensionPoint name="javadocTagInfo" area="PROJECT" interface="com.intellij.psi.javadoc.JavadocTagInfo"/>
+		<extensionPoint name="javadocTagInfo" area="PROJECT" interface="com.intellij.java.language.psi.javadoc.JavadocTagInfo"/>
 
 		<extensionPoint name="refactoring.introduceParameterMethodUsagesProcessor"
 						interface="com.intellij.refactoring.introduceParameter.IntroduceParameterMethodUsagesProcessor"/>
 
 		<extensionPoint name="annotationSupport" beanClass="com.intellij.lang.LanguageExtensionPoint">
-			<with attribute="implementationClass" implements="com.intellij.psi.PsiAnnotationSupport"/>
+			<with attribute="implementationClass" implements="com.intellij.java.language.psi.PsiAnnotationSupport"/>
 		</extensionPoint>
 
 		<extensionPoint name="projectModelModifier" interface="com.intellij.openapi.roots.JavaProjectModelModifier" area="PROJECT"/>
@@ -569,11 +569,11 @@
 
 		<!--<extensionPoint name="expectedTypesProvider" interface="com.intellij.codeInsight.ExpectedTypesProviderExtension"/>-->
 
-		<extensionPoint name="elementFinder" area="PROJECT" interface="com.intellij.psi.PsiElementFinder"/>
-		<extensionPoint name="java.shortNamesCache" area="PROJECT" interface="com.intellij.psi.search.PsiShortNamesCache"/>
+		<extensionPoint name="elementFinder" area="PROJECT" interface="com.intellij.java.language.psi.PsiElementFinder"/>
+		<extensionPoint name="java.shortNamesCache" area="PROJECT" interface="com.intellij.java.language.psi.search.PsiShortNamesCache"/>
 
 		<extensionPoint name="generation.topLevelFactory" beanClass="com.intellij.lang.LanguageExtensionPoint">
-			<with attribute="implementationClass" implements="com.intellij.psi.JVMElementFactoryProvider"/>
+			<with attribute="implementationClass" implements="com.intellij.java.language.psi.JVMElementFactoryProvider"/>
 		</extensionPoint>
 
 		<extensionPoint name="codeInsight.createFieldFromUsageHelper" beanClass="com.intellij.lang.LanguageExtensionPoint">
@@ -643,7 +643,7 @@
 
 		<extensionPoint name="documentationDelegateProvider" interface="com.intellij.codeInsight.javadoc.DocumentationDelegateProvider"/>
 
-		<extensionPoint name="inferredAnnotationProvider" interface="com.intellij.codeInsight.InferredAnnotationProvider" area="PROJECT"/>
+		<extensionPoint name="inferredAnnotationProvider" interface="com.intellij.java.language.codeInsight.InferredAnnotationProvider" area="PROJECT"/>
 	</extensionPoints>
 
 	<extensions defaultExtensionNs="consulo.java">
@@ -756,7 +756,7 @@
 		<projectService serviceInterface="com.intellij.java.compiler.impl.javaCompiler.JavaCompilerConfiguration"
 						serviceImplementation="com.intellij.java.compiler.impl.javaCompiler.JavaCompilerConfiguration"/>
 
-		<projectService serviceInterface="com.intellij.psi.JavaPsiFacade"
+		<projectService serviceInterface="com.intellij.java.language.psi.JavaPsiFacade"
 						serviceImplementation="com.intellij.psi.impl.JavaPsiFacadeImpl"/>
 
 		<projectService serviceInterface="com.intellij.java.compiler.impl.javaCompiler.javac.JavacCompilerConfiguration"
@@ -869,9 +869,9 @@
 
 		<lookup.charFilter implementation="com.intellij.codeInsight.completion.JavaCharFilter" id="java"/>
 
-		<lang.elementManipulator forClass="com.intellij.psi.PsiLiteralExpression"
+		<lang.elementManipulator forClass="com.intellij.java.language.psi.PsiLiteralExpression"
 								 implementationClass="com.intellij.psi.impl.source.resolve.reference.impl.manipulators.StringLiteralManipulator"/>
-		<lang.elementManipulator forClass="com.intellij.psi.javadoc.PsiDocTag"
+		<lang.elementManipulator forClass="com.intellij.java.language.psi.javadoc.PsiDocTag"
 								 implementationClass="com.intellij.psi.impl.source.resolve.reference.impl.manipulators.PsiDocTagValueManipulator"/>
 
 		<applicationService serviceInterface="com.intellij.util.xml.converters.values.ClassValueConverter"
@@ -883,7 +883,7 @@
 		<applicationService serviceInterface="com.intellij.util.xml.converters.values.ClassArrayConverter"
 							serviceImplementation="com.intellij.util.xml.converters.ClassArrayConverterImpl"/>
 
-		<applicationService serviceInterface="com.intellij.psi.util.JavaClassSupers"
+		<applicationService serviceInterface="com.intellij.java.language.psi.util.JavaClassSupers"
 							serviceImplementation="com.intellij.psi.impl.JavaClassSupersImpl"/>
 
 		<applicationService serviceInterface="com.intellij.java.debugger.engine.DebuggerUtils"
@@ -892,13 +892,13 @@
 		<applicationService serviceInterface="com.intellij.java.analysis.codeInspection.reference.RefJavaUtil"
 							serviceImplementation="com.intellij.codeInspection.reference.RefJavaUtilImpl"/>
 
-		<applicationService serviceInterface="com.intellij.psi.PsiSubstitutorFactory"
+		<applicationService serviceInterface="com.intellij.java.language.psi.PsiSubstitutorFactory"
 							serviceImplementation="com.intellij.psi.impl.PsiSubstitutorFactoryImpl"/>
 
 		<applicationService serviceInterface="com.intellij.java.analysis.codeInsight.intention.QuickFixFactory"
 							serviceImplementation="com.intellij.codeInsight.intention.impl.config.QuickFixFactoryImpl"/>
 
-		<applicationService serviceInterface="com.intellij.codeInsight.TestFrameworks"
+		<applicationService serviceInterface="com.intellij.java.language.codeInsight.TestFrameworks"
 							serviceImplementation="com.intellij.codeInsight.TestFrameworksImpl"/>
 
 		<applicationService serviceInterface="com.intellij.util.descriptors.ConfigFileFactory"
@@ -927,27 +927,27 @@
 							serviceImplementation="com.intellij.java.debugger.impl.settings.ThreadsViewSettings"/>
 		<applicationService serviceImplementation="consulo.java.codeInsight.JavaCodeInsightSettings"/>
 
-		<projectService serviceInterface="com.intellij.ide.util.TreeClassChooserFactory"
+		<projectService serviceInterface="com.intellij.java.language.util.TreeClassChooserFactory"
 						serviceImplementation="com.intellij.ide.util.TreeClassChooserFactoryImpl"/>
 		<projectService serviceInterface="com.intellij.java.analysis.codeInsight.guess.GuessManager"
 						serviceImplementation="com.intellij.java.analysis.impl.codeInsight.guess.impl.GuessManagerImpl"/>
 		<projectService serviceInterface="com.intellij.psi.impl.source.resolve.JavaResolveCache"
 						serviceImplementation="com.intellij.psi.impl.source.resolve.JavaResolveCache"/>
-		<projectService serviceInterface="com.intellij.psi.PsiElementFactory"
+		<projectService serviceInterface="com.intellij.java.language.psi.PsiElementFactory"
 						serviceImplementation="com.intellij.psi.impl.PsiElementFactoryImpl"/>
-		<projectService serviceInterface="com.intellij.psi.javadoc.JavadocManager"
+		<projectService serviceInterface="com.intellij.java.language.psi.javadoc.JavadocManager"
 						serviceImplementation="com.intellij.psi.impl.source.javadoc.JavadocManagerImpl"/>
 		<projectService serviceInterface="com.intellij.psi.impl.JavaPsiImplementationHelper"
 						serviceImplementation="com.intellij.psi.impl.JavaPsiImplementationHelperImpl"/>
-		<projectService serviceInterface="com.intellij.psi.codeStyle.JavaCodeStyleSettingsFacade"
+		<projectService serviceInterface="com.intellij.java.language.psi.codeStyle.JavaCodeStyleSettingsFacade"
 						serviceImplementation="com.intellij.psi.codeStyle.JavaCodeStyleSettingsFacadeImpl"/>
 		<projectService serviceInterface="com.intellij.psi.impl.migration.PsiMigrationManager"
 						serviceImplementation="com.intellij.psi.impl.migration.PsiMigrationManager"/>
-		<projectService serviceInterface="com.intellij.psi.PsiResolveHelper"
+		<projectService serviceInterface="com.intellij.java.language.psi.PsiResolveHelper"
 						serviceImplementation="com.intellij.psi.impl.source.resolve.PsiResolveHelperImpl"/>
 		<projectService serviceImplementation="com.intellij.psi.util.ProjectIconsAccessor"/>
 
-		<projectService serviceInterface="com.intellij.psi.JavaCodeFragmentFactory"
+		<projectService serviceInterface="com.intellij.java.language.psi.JavaCodeFragmentFactory"
 						serviceImplementation="com.intellij.psi.impl.JavaCodeFragmentFactoryImpl"/>
 
 		<projectService serviceInterface="com.intellij.codeInsight.javadoc.JavaDocCodeStyle"
@@ -955,10 +955,10 @@
 
 		<projectService serviceImplementation="com.intellij.codeInsight.JavaProjectCodeInsightSettings"/>
 
-		<applicationService serviceInterface="com.intellij.psi.JavaDirectoryService"
+		<applicationService serviceInterface="com.intellij.java.language.psi.JavaDirectoryService"
 							serviceImplementation="com.intellij.psi.impl.file.JavaDirectoryServiceImpl"/>
 
-		<applicationService serviceInterface="com.intellij.openapi.projectRoots.JavaVersionService"
+		<applicationService serviceInterface="com.intellij.java.language.projectRoots.JavaVersionService"
 							serviceImplementation="com.intellij.openapi.projectRoots.JavaVersionServiceImpl"/>
 
 		<applicationService serviceInterface="com.intellij.java.analysis.refactoring.JavaRefactoringActionHandlerFactory"
@@ -975,17 +975,17 @@
 		<projectService serviceInterface="com.intellij.refactoring.JavaRefactoringFactory"
 						serviceImplementation="com.intellij.refactoring.openapi.impl.JavaRefactoringFactoryImpl"/>
 
-		<applicationService serviceInterface="com.intellij.codeInsight.folding.JavaCodeFoldingSettings"
+		<applicationService serviceInterface="com.intellij.java.language.codeInsight.folding.JavaCodeFoldingSettings"
 							serviceImplementation="com.intellij.codeInsight.folding.impl.JavaCodeFoldingSettingsImpl"/>
 
 		<multiHostInjector
-				forClass="com.intellij.psi.PsiLiteralExpression"
+				forClass="com.intellij.java.language.psi.PsiLiteralExpression"
 				implementationClass="com.intellij.psi.impl.source.tree.injected.JavaConcatenationToInjectorAdapter"
 				order="last"/>
 
-		<projectService serviceInterface="com.intellij.psi.SmartTypePointerManager"
+		<projectService serviceInterface="com.intellij.java.language.psi.SmartTypePointerManager"
 						serviceImplementation="com.intellij.psi.impl.smartPointers.SmartTypePointerManagerImpl"/>
-		<projectService serviceInterface="com.intellij.psi.codeStyle.JavaCodeStyleManager"
+		<projectService serviceInterface="com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager"
 						serviceImplementation="com.intellij.psi.impl.source.codeStyle.JavaCodeStyleManagerImpl"/>
 		<projectService serviceInterface="com.intellij.codeInsight.ExpectedTypesProvider"
 						serviceImplementation="com.intellij.codeInsight.ExpectedTypesProvider"/>
@@ -1004,10 +1004,10 @@
 		<projectService serviceInterface="com.intellij.java.analysis.codeInspection.ex.EntryPointsManager"
 						serviceImplementation="com.intellij.codeInspection.ex.EntryPointsManagerImpl"/>
 
-		<projectService serviceInterface="com.intellij.codeInsight.NullableNotNullManager"
+		<projectService serviceInterface="com.intellij.java.language.codeInsight.NullableNotNullManager"
 						serviceImplementation="com.intellij.codeInsight.NullableNotNullManagerImpl"/>
 
-		<projectService serviceInterface="com.intellij.psi.search.PsiShortNamesCache"
+		<projectService serviceInterface="com.intellij.java.language.psi.search.PsiShortNamesCache"
 						serviceImplementation="com.intellij.java.indexing.impl.CompositeShortNamesCache"/>
 
 		<projectService serviceImplementation="com.intellij.javadoc.JavadocGenerationManager"/>
@@ -1668,11 +1668,11 @@
 		<applicationService serviceInterface="com.intellij.java.analysis.codeInspection.BatchSuppressManager"
 							serviceImplementation="com.intellij.java.analysis.impl.codeInspection.BatchSuppressManagerImpl"/>
 
-		<declarationRangeHandler key="com.intellij.psi.PsiMethod"
+		<declarationRangeHandler key="com.intellij.java.language.psi.PsiMethod"
 								 implementationClass="com.intellij.codeInsight.hint.MethodDeclarationRangeHandler"/>
-		<declarationRangeHandler key="com.intellij.psi.PsiClass"
+		<declarationRangeHandler key="com.intellij.java.language.psi.PsiClass"
 								 implementationClass="com.intellij.codeInsight.hint.ClassDeclarationRangeHandler"/>
-		<declarationRangeHandler key="com.intellij.psi.PsiClassInitializer"
+		<declarationRangeHandler key="com.intellij.java.language.psi.PsiClassInitializer"
 								 implementationClass="com.intellij.codeInsight.hint.ClassInitializerDeclarationRangeHandler"/>
 
 		<backspaceHandlerDelegate implementation="com.intellij.codeInsight.editorActions.JavaBackspaceHandler"/>
@@ -1697,7 +1697,7 @@
 		<patternDialectProvider implementation="com.intellij.packageDependencies.ui.PackagePatternProvider" id="package" order="before file"/>
 		<scopeDescriptorProvider implementation="com.intellij.ide.util.scopeChooser.HierarchyScopeDescriptorProvider"/>
 
-		<patterns.patternClass className="com.intellij.patterns.PsiJavaPatterns" alias="java"/>
+		<patterns.patternClass className="com.intellij.java.language.patterns.PsiJavaPatterns" alias="java"/>
 
 
 		<highlightErrorFilter implementation="com.intellij.codeInsight.daemon.impl.analysis.JavadocErrorFilter"/>
@@ -1924,19 +1924,19 @@
 
 		<programRunner id="defaultDebugRunner" implementation="com.intellij.java.debugger.impl.GenericDebuggerRunner" order="last"/>
 
-		<itemPresentationProvider forClass="com.intellij.psi.PsiJavaPackage"
+		<itemPresentationProvider forClass="com.intellij.java.language.psi.PsiJavaPackage"
 								  implementationClass="com.intellij.psi.presentation.java.PackagePresentationProvider"/>
-		<itemPresentationProvider forClass="com.intellij.psi.PsiClass"
+		<itemPresentationProvider forClass="com.intellij.java.language.psi.PsiClass"
 								  implementationClass="com.intellij.psi.presentation.java.ClassPresentationProvider"/>
-		<itemPresentationProvider forClass="com.intellij.psi.PsiMethod"
+		<itemPresentationProvider forClass="com.intellij.java.language.psi.PsiMethod"
 								  implementationClass="com.intellij.psi.presentation.java.MethodPresentationProvider"/>
-		<itemPresentationProvider forClass="com.intellij.psi.PsiField"
+		<itemPresentationProvider forClass="com.intellij.java.language.psi.PsiField"
 								  implementationClass="com.intellij.psi.presentation.java.FieldPresentationProvider"/>
-		<itemPresentationProvider forClass="com.intellij.psi.PsiLocalVariable"
+		<itemPresentationProvider forClass="com.intellij.java.language.psi.PsiLocalVariable"
 								  implementationClass="com.intellij.psi.presentation.java.VariablePresentationProvider"/>
-		<itemPresentationProvider forClass="com.intellij.psi.PsiParameter"
+		<itemPresentationProvider forClass="com.intellij.java.language.psi.PsiParameter"
 								  implementationClass="com.intellij.psi.presentation.java.VariablePresentationProvider"/>
-		<itemPresentationProvider forClass="com.intellij.psi.PsiJavaModule"
+		<itemPresentationProvider forClass="com.intellij.java.language.psi.PsiJavaModule"
 								  implementationClass="com.intellij.psi.presentation.java.JavaModulePresentationProvider"/>
 
 		<treeCopyHandler implementation="com.intellij.psi.impl.source.tree.JavaTreeCopyHandler"/>
@@ -1950,16 +1950,16 @@
 
 		<writingAccessProvider implementation="com.intellij.refactoring.util.ClsElementWritingAccessProvider"/>
 
-		<projectService serviceInterface="com.intellij.codeInsight.ExternalAnnotationsManager"
+		<projectService serviceInterface="com.intellij.java.language.codeInsight.ExternalAnnotationsManager"
 						serviceImplementation="com.intellij.codeInsight.ExternalAnnotationsManagerImpl"/>
 
-		<projectService serviceInterface="com.intellij.codeInsight.InferredAnnotationsManager"
+		<projectService serviceInterface="com.intellij.java.language.codeInsight.InferredAnnotationsManager"
 						serviceImplementation="com.intellij.codeInsight.InferredAnnotationsManagerImpl"/>
 
 		<projectService serviceInterface="com.intellij.java.analysis.impl.codeInspection.bytecodeAnalysis.ProjectBytecodeAnalysis"
 						serviceImplementation="com.intellij.java.analysis.impl.codeInspection.bytecodeAnalysis.ProjectBytecodeAnalysis"/>
 
-		<projectService serviceInterface="com.intellij.psi.PsiNameHelper"
+		<projectService serviceInterface="com.intellij.java.language.psi.PsiNameHelper"
 						serviceImplementation="com.intellij.psi.impl.PsiNameHelperImpl"/>
 
 		<projectService serviceInterface="com.intellij.psi.impl.file.impl.JavaFileManager"
@@ -1972,7 +1972,7 @@
 							serviceImplementation="com.intellij.psi.impl.file.PsiPackageImplementationHelperImpl"/>
 		<sdkType implementation="com.intellij.openapi.projectRoots.impl.JavaSdkImpl"/>
 		<predefinedBundlesProvider implementation="consulo.java.bundle.JavaHomePredefinedBundleProvider"/>
-		<applicationService serviceInterface="com.intellij.openapi.projectRoots.OwnJdkVersionDetector"
+		<applicationService serviceInterface="com.intellij.java.language.projectRoots.OwnJdkVersionDetector"
 							serviceImplementation="com.intellij.openapi.projectRoots.OwnJdkVersionDetectorImpl"/>
 
 		<consoleFilterProvider implementation="com.intellij.java.execution.impl.filters.DefaultConsoleFiltersProvider"/>
@@ -2006,7 +2006,7 @@
 								 name="Java"
 								 immutableClass="consulo.java.module.extension.JavaModuleExtensionImpl"
 								 mutableClass="consulo.java.module.extension.JavaMutableModuleExtensionImpl"/>
-		<orderRootType implementation="com.intellij.openapi.roots.AnnotationOrderRootType"/>
+		<orderRootType implementation="com.intellij.java.language.projectRoots.roots.AnnotationOrderRootType"/>
 		<orderRootTypeEditor key="javaExternalAnnotations"
 							 implementationClass="com.intellij.openapi.roots.ui.configuration.libraryEditor.AnnotationsOrderRootTypeUIFactory"/>
 		<contentFolderSupportPatcher implementation="consulo.java.module.extension.JavaContentFolderSupportPatcher"/>
@@ -2041,7 +2041,7 @@
 		<projectService serviceInterface="com.intellij.openapi.roots.JavaProjectModelModificationService"
 						serviceImplementation="com.intellij.openapi.roots.impl.JavaProjectModelModificationServiceImpl"/>
 
-		<orderRootType implementation="com.intellij.openapi.roots.NativeLibraryOrderRootType"/>
+		<orderRootType implementation="com.intellij.java.language.projectRoots.roots.NativeLibraryOrderRootType"/>
 		<orderRootTypeEditor key="javaNative"
 							 implementationClass="com.intellij.openapi.roots.ui.configuration.libraryEditor.NativeLibraryOrderRootTypeUIFactory"/>
 
@@ -2064,7 +2064,7 @@
 
 		<codeStyleIndentHelperExtension implementation="com.intellij.psi.impl.source.codeStyle.JavaIndentHelper"/>
 
-		<projectService serviceImplementation="com.intellij.codeInsight.ConcurrencyAnnotationsManager"/>
+		<projectService serviceImplementation="com.intellij.java.language.codeInsight.ConcurrencyAnnotationsManager"/>
 	</extensions>
 
 	<extensions defaultExtensionNs="com.intellij.copyright">

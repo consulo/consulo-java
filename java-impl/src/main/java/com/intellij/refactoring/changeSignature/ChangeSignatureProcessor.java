@@ -28,6 +28,7 @@ import java.util.Set;
 
 import javax.annotation.Nonnull;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
@@ -35,11 +36,11 @@ import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.util.Ref;
 import com.intellij.psi.*;
 import com.intellij.psi.codeStyle.CodeStyleManager;
-import com.intellij.psi.util.InheritanceUtil;
-import com.intellij.psi.util.MethodSignature;
-import com.intellij.psi.util.MethodSignatureUtil;
-import com.intellij.psi.util.PsiUtil;
-import com.intellij.psi.util.TypeConversionUtil;
+import com.intellij.java.language.psi.util.InheritanceUtil;
+import com.intellij.java.language.psi.util.MethodSignature;
+import com.intellij.java.language.psi.util.MethodSignatureUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.TypeConversionUtil;
 import com.intellij.refactoring.RefactoringBundle;
 import com.intellij.refactoring.rename.RenameUtil;
 import com.intellij.refactoring.ui.ConflictsDialog;
@@ -47,7 +48,7 @@ import com.intellij.refactoring.util.CanonicalTypes;
 import com.intellij.usageView.UsageInfo;
 import com.intellij.usageView.UsageViewDescriptor;
 import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.VisibilityUtil;
+import com.intellij.java.language.util.VisibilityUtil;
 import java.util.HashSet;
 import com.intellij.util.containers.MultiMap;
 import consulo.java.refactoring.changeSignature.ChangeSignatureUsageProcessorEx;
@@ -58,7 +59,7 @@ public class ChangeSignatureProcessor extends ChangeSignatureProcessorBase
 	private static final Logger LOG = Logger.getInstance(ChangeSignatureProcessor.class);
 
 	public ChangeSignatureProcessor(Project project, PsiMethod method, final boolean generateDelegate,
-			@PsiModifier.ModifierConstant String newVisibility, String newName, PsiType newType, @Nonnull ParameterInfoImpl[] parameterInfo)
+                                  @PsiModifier.ModifierConstant String newVisibility, String newName, PsiType newType, @Nonnull ParameterInfoImpl[] parameterInfo)
 	{
 		this(project, method, generateDelegate, newVisibility, newName, newType != null ? CanonicalTypes.createTypeWrapper(newType) : null,
 				parameterInfo, null, null, null);

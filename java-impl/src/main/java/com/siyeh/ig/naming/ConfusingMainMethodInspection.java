@@ -17,7 +17,7 @@ package com.siyeh.ig.naming;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.psi.*;
+import com.intellij.java.language.psi.*;
 import com.siyeh.HardcodedMethodConstants;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
@@ -25,7 +25,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.fixes.RenameFix;
 import com.siyeh.ig.psiutils.TypeUtils;
-import consulo.java.module.util.JavaClassNames;
+import consulo.java.language.module.util.JavaClassNames;
 
 public class ConfusingMainMethodInspection extends BaseInspection {
 

@@ -15,7 +15,7 @@
  */
 package com.intellij.java.indexing.search.searches;
 
-import com.intellij.psi.*;
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.search.SearchScope;
 import com.intellij.psi.search.searches.ExtensibleQueryFactory;
 import com.intellij.util.InstanceofQuery;

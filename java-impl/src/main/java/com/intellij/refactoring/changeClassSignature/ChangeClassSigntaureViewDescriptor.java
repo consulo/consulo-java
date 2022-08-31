@@ -17,7 +17,7 @@ package com.intellij.refactoring.changeClassSignature;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.refactoring.ui.UsageViewDescriptorAdapter;
 import com.intellij.usageView.UsageViewUtil;

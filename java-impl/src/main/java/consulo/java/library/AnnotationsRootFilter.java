@@ -15,9 +15,9 @@
  */
 package consulo.java.library;
 
-import com.intellij.codeInsight.ExternalAnnotationsManager;
+import com.intellij.java.language.codeInsight.ExternalAnnotationsManager;
 import com.intellij.ide.highlighter.XmlFileType;
-import com.intellij.openapi.roots.AnnotationOrderRootType;
+import com.intellij.java.language.projectRoots.roots.AnnotationOrderRootType;
 import com.intellij.openapi.roots.libraries.ui.FileTypeBasedRootFilter;
 import com.intellij.openapi.vfs.VirtualFile;
 

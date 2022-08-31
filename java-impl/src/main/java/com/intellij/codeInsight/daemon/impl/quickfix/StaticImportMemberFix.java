@@ -33,9 +33,9 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiJavaFile;
-import com.intellij.psi.PsiMember;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.PsiJavaFile;
+import com.intellij.java.language.psi.PsiMember;
+import com.intellij.java.language.psi.util.PsiUtil;
 
 public abstract class StaticImportMemberFix<T extends PsiMember> implements IntentionAction, HintAction
 {

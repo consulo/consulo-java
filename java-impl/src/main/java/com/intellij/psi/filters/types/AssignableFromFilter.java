@@ -15,11 +15,12 @@
  */
 package com.intellij.psi.filters.types;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
 import com.intellij.psi.filters.ElementFilter;
 import com.intellij.psi.filters.FilterUtil;
-import com.intellij.psi.infos.CandidateInfo;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.infos.CandidateInfo;
+import com.intellij.java.language.psi.util.PsiUtil;
 import javax.annotation.Nullable;
 
 

@@ -15,7 +15,9 @@
  */
 package com.intellij.testIntegration;
 
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.testIntegration.JavaTestFramework;
+import com.intellij.java.language.testIntegration.TestFramework;
+import com.intellij.java.language.psi.PsiClass;
 
 public class GenerateDataMethodAction extends BaseGenerateTestSupportMethodAction {
   public GenerateDataMethodAction() {

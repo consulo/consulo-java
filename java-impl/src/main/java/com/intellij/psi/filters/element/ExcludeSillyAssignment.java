@@ -15,6 +15,7 @@
  */
 package com.intellij.psi.filters.element;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
 import com.intellij.psi.filters.ElementFilter;
 import javax.annotation.Nullable;

@@ -15,8 +15,9 @@
  */
 package com.intellij.psi.impl.source.tree.java;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.lang.ASTNode;
-import com.intellij.lang.java.JavaLanguage;
+import com.intellij.java.language.JavaLanguage;
 import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.Ref;
 import com.intellij.psi.*;

@@ -18,7 +18,7 @@ package com.siyeh.ipp.decls;
 import javax.annotation.Nonnull;
 
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiVariable;
+import com.intellij.java.language.psi.PsiVariable;
 import com.intellij.util.IncorrectOperationException;
 import com.siyeh.ipp.base.Intention;
 import com.siyeh.ipp.base.PsiElementPredicate;

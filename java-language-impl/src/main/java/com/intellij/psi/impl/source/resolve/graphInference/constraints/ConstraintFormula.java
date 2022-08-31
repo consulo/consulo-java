@@ -15,7 +15,7 @@
  */
 package com.intellij.psi.impl.source.resolve.graphInference.constraints;
 
-import com.intellij.psi.PsiSubstitutor;
+import com.intellij.java.language.psi.PsiSubstitutor;
 import com.intellij.psi.impl.source.resolve.graphInference.InferenceSession;
 
 import java.util.List;

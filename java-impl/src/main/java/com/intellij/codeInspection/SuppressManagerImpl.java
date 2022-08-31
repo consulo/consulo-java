@@ -23,9 +23,9 @@ package com.intellij.codeInspection;
 import com.intellij.codeInsight.daemon.HighlightDisplayKey;
 import com.intellij.java.analysis.codeInspection.SuppressManager;
 import com.intellij.java.analysis.impl.codeInspection.JavaSuppressionUtil;
-import com.intellij.psi.PsiDocCommentOwner;
+import com.intellij.java.language.psi.PsiDocCommentOwner;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiModifierListOwner;
+import com.intellij.java.language.psi.PsiModifierListOwner;
 import jakarta.inject.Singleton;
 
 import javax.annotation.Nonnull;

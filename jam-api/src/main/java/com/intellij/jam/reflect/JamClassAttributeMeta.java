@@ -17,9 +17,9 @@ package com.intellij.jam.reflect;
 
 import com.intellij.jam.JamClassAttributeElement;
 import com.intellij.openapi.util.Factory;
-import com.intellij.psi.PsiAnnotation;
-import com.intellij.psi.PsiAnnotationMemberValue;
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.psi.PsiAnnotation;
+import com.intellij.java.language.psi.PsiAnnotationMemberValue;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.PsiElementRef;
 import com.intellij.util.NullableFunction;
 import javax.annotation.Nonnull;

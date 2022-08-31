@@ -15,6 +15,8 @@
  */
 package com.intellij.psi.infos;
 
+import com.intellij.java.language.psi.infos.CandidateInfo;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;

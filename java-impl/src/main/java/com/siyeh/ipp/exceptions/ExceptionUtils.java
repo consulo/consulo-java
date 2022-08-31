@@ -15,8 +15,9 @@
  */
 package com.siyeh.ipp.exceptions;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
-import consulo.java.module.util.JavaClassNames;
+import consulo.java.language.module.util.JavaClassNames;
 
 import java.util.Collections;
 import java.util.HashSet;

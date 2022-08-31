@@ -20,12 +20,12 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiMethodCallExpression;
-import com.intellij.psi.PsiModifier;
-import com.intellij.psi.PsiReferenceExpression;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.PsiMethodCallExpression;
+import com.intellij.java.language.psi.PsiModifier;
+import com.intellij.java.language.psi.PsiReferenceExpression;
+import com.intellij.java.language.psi.util.PsiUtil;
 
 public class CreateAbstractMethodFromUsageFix extends CreateMethodFromUsageFix
 {

@@ -16,7 +16,7 @@
 package com.siyeh.ipp.switchtoif;
 
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiLocalVariable;
+import com.intellij.java.language.psi.PsiLocalVariable;
 
 import java.util.*;
 

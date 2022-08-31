@@ -19,9 +19,10 @@
  */
 package com.intellij.psi.impl.source.resolve;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.projectRoots.JavaSdkVersion;
-import com.intellij.openapi.projectRoots.JavaVersionService;
+import com.intellij.java.language.projectRoots.JavaSdkVersion;
+import com.intellij.java.language.projectRoots.JavaVersionService;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.PsiImplUtil;
 import com.intellij.psi.impl.source.DummyHolder;
@@ -29,13 +30,13 @@ import com.intellij.psi.impl.source.DummyHolderFactory;
 import com.intellij.psi.impl.source.tree.FileElement;
 import com.intellij.psi.impl.source.tree.TreeElement;
 import com.intellij.psi.impl.source.tree.java.PsiExpressionListImpl;
-import com.intellij.psi.infos.CandidateInfo;
-import com.intellij.psi.javadoc.PsiDocComment;
+import com.intellij.java.language.psi.infos.CandidateInfo;
+import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.psi.scope.PsiScopeProcessor;
-import com.intellij.psi.util.InheritanceUtil;
-import com.intellij.psi.util.PsiTypesUtil;
-import com.intellij.psi.util.PsiUtil;
-import consulo.java.module.util.JavaClassNames;
+import com.intellij.java.language.psi.util.InheritanceUtil;
+import com.intellij.java.language.psi.util.PsiTypesUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.java.language.module.util.JavaClassNames;
 import consulo.psi.PsiPackage;
 import javax.annotation.Nonnull;
 

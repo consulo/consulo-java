@@ -19,7 +19,7 @@ import javax.annotation.Nonnull;
 
 import com.intellij.lang.ASTNode;
 import consulo.logging.Logger;
-import com.intellij.psi.JavaTokenType;
+import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.psi.impl.source.tree.ChildRole;
 import com.intellij.psi.impl.source.tree.CompositeElement;
 import com.intellij.psi.impl.source.tree.JavaElementType;

@@ -52,7 +52,7 @@ import com.intellij.util.Chunk;
 import com.intellij.util.containers.ContainerUtil;
 import consulo.compiler.ModuleCompilerPathsManager;
 import consulo.java.compiler.JavaCompilerUtil;
-import consulo.java.module.extension.JavaModuleExtension;
+import consulo.java.language.module.extension.JavaModuleExtension;
 import consulo.logging.Logger;
 import consulo.roots.ContentFolderTypeProvider;
 import consulo.roots.impl.ProductionContentFolderTypeProvider;

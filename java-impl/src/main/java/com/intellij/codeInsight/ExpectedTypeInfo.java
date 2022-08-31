@@ -18,8 +18,8 @@ package com.intellij.codeInsight;
 import javax.annotation.Nonnull;
 
 import org.intellij.lang.annotations.MagicConstant;
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiType;
+import com.intellij.java.language.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiType;
 
 /**
  * @author ven

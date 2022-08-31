@@ -20,10 +20,10 @@
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
 import consulo.java.analysis.impl.JavaQuickFixBundle;
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiMethodCallExpression;
-import com.intellij.psi.PsiTypeParameter;
+import com.intellij.java.language.psi.PsiMethodCallExpression;
+import com.intellij.java.language.psi.PsiTypeParameter;
 import com.intellij.psi.util.PsiTreeUtil;
 import javax.annotation.Nonnull;
 

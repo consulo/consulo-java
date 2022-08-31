@@ -22,9 +22,9 @@ import java.util.Set;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.psi.JavaTokenType;
-import com.intellij.psi.PsiExpression;
-import com.intellij.psi.PsiPolyadicExpression;
+import com.intellij.java.language.psi.JavaTokenType;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiPolyadicExpression;
 import com.intellij.psi.tree.IElementType;
 
 public class ComparisonUtils {

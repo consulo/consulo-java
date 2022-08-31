@@ -17,8 +17,8 @@ package com.intellij.java.analysis.impl.codeInspection.dataFlow.inliner;
 
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.CFGBuilder;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.DfaPsiUtil;
-import com.intellij.psi.*;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.PsiUtil;
 import one.util.streamex.EntryStream;
 import javax.annotation.Nonnull;
 

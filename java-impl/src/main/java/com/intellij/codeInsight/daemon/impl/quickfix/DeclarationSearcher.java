@@ -15,6 +15,7 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

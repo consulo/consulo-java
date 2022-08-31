@@ -15,8 +15,9 @@
  */
 package com.intellij.jam.reflect;
 
-import com.intellij.codeInsight.AnnotationUtil;
+import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.jam.JamElement;
+import com.intellij.java.language.psi.*;
 import consulo.util.dataholder.Key;
 import com.intellij.psi.*;
 import com.intellij.psi.util.CachedValue;
@@ -27,7 +28,7 @@ import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.semantic.SemRegistrar;
 import com.intellij.patterns.ElementPattern;
-import com.intellij.patterns.PsiJavaPatterns;
+import com.intellij.java.language.patterns.PsiJavaPatterns;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

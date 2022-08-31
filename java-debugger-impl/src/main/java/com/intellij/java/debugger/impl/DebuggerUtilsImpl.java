@@ -16,8 +16,9 @@
 package com.intellij.java.debugger.impl;
 
 import com.intellij.execution.ExecutionException;
-import com.intellij.ide.util.TreeClassChooser;
-import com.intellij.ide.util.TreeClassChooserFactory;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.util.TreeClassChooser;
+import com.intellij.java.language.util.TreeClassChooserFactory;
 import com.intellij.java.debugger.engine.DebugProcess;
 import com.intellij.java.debugger.engine.StackFrameContext;
 import com.intellij.java.debugger.engine.evaluation.CodeFragmentKind;

@@ -17,6 +17,7 @@ package com.siyeh.ig.psiutils;
 
 import javax.annotation.Nonnull;
 
+import com.intellij.java.language.psi.*;
 import org.jetbrains.annotations.NonNls;
 import com.intellij.psi.*;
 import com.siyeh.HardcodedMethodConstants;

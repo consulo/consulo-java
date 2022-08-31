@@ -21,7 +21,7 @@ import org.jetbrains.annotations.NonNls;
 import com.intellij.codeInsight.daemon.LightDaemonAnalyzerTestCase;
 import com.intellij.codeInspection.LocalInspectionTool;
 import com.intellij.codeInspection.unusedSymbol.UnusedSymbolLocalInspection;
-import com.intellij.openapi.projectRoots.JavaSdkVersion;
+import com.intellij.java.language.projectRoots.JavaSdkVersion;
 import com.intellij.testFramework.IdeaTestUtil;
 
 public abstract class MethodRefHighlightingTest extends LightDaemonAnalyzerTestCase {

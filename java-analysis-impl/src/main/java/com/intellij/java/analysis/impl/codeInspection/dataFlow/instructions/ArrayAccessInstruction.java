@@ -17,7 +17,7 @@ package com.intellij.java.analysis.impl.codeInspection.dataFlow.instructions;
 
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.*;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaValue;
-import com.intellij.psi.PsiArrayAccessExpression;
+import com.intellij.java.language.psi.PsiArrayAccessExpression;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

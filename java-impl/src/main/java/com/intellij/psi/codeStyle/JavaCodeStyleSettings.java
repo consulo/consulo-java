@@ -16,7 +16,7 @@
 package com.intellij.psi.codeStyle;
 
 import com.intellij.application.options.CodeStyle;
-import com.intellij.lang.java.JavaLanguage;
+import com.intellij.java.language.JavaLanguage;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.WriteExternalException;

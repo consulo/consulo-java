@@ -21,7 +21,7 @@ import com.intellij.java.compiler.classParsing.*;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.util.ArrayUtil;
-import com.intellij.util.cls.ClsFormatException;
+import com.intellij.java.language.util.cls.ClsFormatException;
 import com.intellij.util.indexing.ValueContainer;
 import com.intellij.util.indexing.impl.ChangeTrackingValueContainer;
 import com.intellij.util.indexing.impl.MapIndexStorage;

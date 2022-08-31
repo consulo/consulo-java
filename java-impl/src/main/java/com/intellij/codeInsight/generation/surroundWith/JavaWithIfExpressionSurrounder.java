@@ -16,6 +16,7 @@
  */
 package com.intellij.codeInsight.generation.surroundWith;
 
+import com.intellij.java.language.psi.*;
 import org.jetbrains.annotations.NonNls;
 import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.codeInsight.CodeInsightUtilBase;

@@ -15,10 +15,10 @@
  */
 package com.intellij.spi.parsing;
 
-import com.intellij.lang.spi.SPILanguage;
-import com.intellij.psi.JavaTokenType;
+import com.intellij.java.language.spi.SPILanguage;
+import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.tree.java.IKeywordElementType;
+import com.intellij.java.language.psi.tree.java.IKeywordElementType;
 
 /**
  * User: anna

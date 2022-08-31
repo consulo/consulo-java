@@ -19,6 +19,7 @@ import javax.annotation.Nonnull;
 import javax.swing.JComponent;
 
 import com.intellij.codeInspection.ui.SingleCheckboxOptionsPanel;
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
 import com.intellij.xml.util.XmlStringUtil;
 import com.siyeh.InspectionGadgetsBundle;

@@ -24,12 +24,13 @@
  */
 package com.intellij.refactoring.introduceParameter;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
 import com.intellij.java.indexing.search.searches.OverridingMethodsSearch;
 import com.intellij.psi.search.searches.ReferencesSearch;
-import com.intellij.psi.util.PropertyUtil;
+import com.intellij.java.language.psi.util.PropertyUtil;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.refactoring.introduceField.ElementToWorkOn;
 import com.intellij.usageView.UsageInfo;
 import com.intellij.util.ArrayUtil;

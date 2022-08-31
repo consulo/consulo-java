@@ -19,14 +19,14 @@ import javax.annotation.Nonnull;
 
 import com.intellij.java.debugger.engine.SimplePropertyGetterProvider;
 import com.intellij.openapi.util.Comparing;
-import com.intellij.psi.PsiCodeBlock;
+import com.intellij.java.language.psi.PsiCodeBlock;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiExpression;
-import com.intellij.psi.PsiField;
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiReferenceExpression;
-import com.intellij.psi.PsiReturnStatement;
-import com.intellij.psi.PsiStatement;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiField;
+import com.intellij.java.language.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiReferenceExpression;
+import com.intellij.java.language.psi.PsiReturnStatement;
+import com.intellij.java.language.psi.PsiStatement;
 import com.intellij.psi.util.PsiTreeUtil;
 
 /**

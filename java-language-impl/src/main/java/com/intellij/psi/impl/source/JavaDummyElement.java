@@ -18,7 +18,7 @@ package com.intellij.psi.impl.source;
 import javax.annotation.Nonnull;
 
 import com.intellij.lang.java.parser.JavaParserUtil;
-import com.intellij.pom.java.LanguageLevel;
+import com.intellij.java.language.LanguageLevel;
 import com.intellij.psi.impl.source.tree.FileElement;
 import com.intellij.psi.impl.source.tree.JavaElementType;
 import com.intellij.psi.impl.source.tree.TreeElement;

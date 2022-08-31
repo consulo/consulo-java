@@ -16,7 +16,7 @@
 package com.intellij.spi;
 
 import com.intellij.icons.AllIcons;
-import com.intellij.lang.spi.SPILanguage;
+import com.intellij.java.language.spi.SPILanguage;
 import com.intellij.openapi.fileTypes.FileTypeRegistry;
 import com.intellij.openapi.fileTypes.LanguageFileType;
 import com.intellij.openapi.fileTypes.UnknownFileType;

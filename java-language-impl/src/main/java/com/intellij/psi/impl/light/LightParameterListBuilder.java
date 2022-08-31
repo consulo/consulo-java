@@ -6,11 +6,11 @@ import java.util.List;
 import javax.annotation.Nonnull;
 
 import com.intellij.lang.Language;
-import com.intellij.psi.JavaElementVisitor;
+import com.intellij.java.language.psi.JavaElementVisitor;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.PsiManager;
-import com.intellij.psi.PsiParameter;
-import com.intellij.psi.PsiParameterList;
+import com.intellij.java.language.psi.PsiParameter;
+import com.intellij.java.language.psi.PsiParameterList;
 
 /**
  * @author peter

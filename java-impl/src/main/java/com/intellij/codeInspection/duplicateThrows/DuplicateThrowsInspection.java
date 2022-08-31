@@ -22,6 +22,7 @@ import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.java.analysis.impl.codeInspection.ex.BaseLocalInspectionTool;
 import com.intellij.codeInspection.ui.SingleCheckboxOptionsPanel;
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

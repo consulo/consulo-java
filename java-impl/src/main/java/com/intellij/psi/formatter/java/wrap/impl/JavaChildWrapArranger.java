@@ -22,6 +22,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import com.intellij.formatting.Wrap;
 import com.intellij.formatting.WrapType;
+import com.intellij.java.language.psi.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.project.DumbService;
 import com.intellij.psi.*;

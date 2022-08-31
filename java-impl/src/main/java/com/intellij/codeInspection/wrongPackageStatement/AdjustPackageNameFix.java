@@ -23,15 +23,15 @@ import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.ProblemDescriptor;
 import consulo.logging.Logger;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.JavaDirectoryService;
-import com.intellij.psi.JavaPsiFacade;
+import com.intellij.java.language.psi.JavaDirectoryService;
+import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiElementFactory;
+import com.intellij.java.language.psi.PsiElementFactory;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiJavaFile;
-import com.intellij.psi.PsiJavaPackage;
-import com.intellij.psi.PsiPackageStatement;
+import com.intellij.java.language.psi.PsiJavaFile;
+import com.intellij.java.language.psi.PsiJavaPackage;
+import com.intellij.java.language.psi.PsiPackageStatement;
 import com.intellij.util.IncorrectOperationException;
 
 public class AdjustPackageNameFix implements LocalQuickFix {

@@ -16,7 +16,7 @@
 package consulo.java.spi;
 
 import com.intellij.lang.Language;
-import com.intellij.lang.spi.SPILanguage;
+import com.intellij.java.language.spi.SPILanguage;
 import com.intellij.openapi.extensions.ExtensionPointName;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;

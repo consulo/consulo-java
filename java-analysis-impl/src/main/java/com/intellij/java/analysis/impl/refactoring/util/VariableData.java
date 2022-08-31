@@ -17,9 +17,9 @@ package com.intellij.java.analysis.impl.refactoring.util;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.psi.PsiType;
-import com.intellij.psi.PsiVariable;
-import com.intellij.psi.SmartTypePointerManager;
+import com.intellij.java.language.psi.PsiType;
+import com.intellij.java.language.psi.PsiVariable;
+import com.intellij.java.language.psi.SmartTypePointerManager;
 
 public class VariableData {
   public final PsiVariable variable;

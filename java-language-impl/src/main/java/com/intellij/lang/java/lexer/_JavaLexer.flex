@@ -1,11 +1,10 @@
 // Copyright 2000-2019 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.lang.java.lexer;
 
-import com.intellij.pom.java.LanguageLevel;
-import com.intellij.psi.JavaTokenType;
-import com.intellij.psi.impl.source.tree.JavaDocElementType;
-import com.intellij.psi.tree.IElementType;
+import com.intellij.java.language.LanguageLevel;
+import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.lexer.FlexLexer;
+import com.intellij.psi.tree.IElementType;
 
 @SuppressWarnings("ALL")
 %%

@@ -2,7 +2,7 @@ package com.intellij.codeInspection.inheritance.search;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.psi.PsiClass;
 
 /**
  * @author Dmitry Batkovich

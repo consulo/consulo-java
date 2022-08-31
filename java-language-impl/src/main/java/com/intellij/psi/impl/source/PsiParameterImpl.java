@@ -19,6 +19,8 @@ import java.lang.ref.Reference;
 import java.util.Arrays;
 
 import javax.annotation.Nonnull;
+
+import com.intellij.java.language.psi.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.navigation.ItemPresentationProviders;
@@ -35,7 +37,7 @@ import com.intellij.psi.search.LocalSearchScope;
 import com.intellij.psi.search.SearchScope;
 import com.intellij.psi.stubs.IStubElementType;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.reference.SoftReference;
 import com.intellij.util.IncorrectOperationException;
 

@@ -15,9 +15,9 @@
  */
 package com.siyeh.ig.classmetrics;
 
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.util.PropertyUtil;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiMethod;
+import com.intellij.java.language.psi.util.PropertyUtil;
 import com.intellij.util.ui.CheckBox;
 import com.intellij.util.ui.UIUtil;
 import com.siyeh.InspectionGadgetsBundle;

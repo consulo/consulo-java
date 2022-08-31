@@ -17,7 +17,7 @@ package com.siyeh.ig.jdk;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.psi.PsiAnnotation;
+import com.intellij.java.language.psi.PsiAnnotation;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;

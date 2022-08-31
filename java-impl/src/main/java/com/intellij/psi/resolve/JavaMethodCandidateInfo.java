@@ -15,8 +15,8 @@
  */
 package com.intellij.psi.resolve;
 
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiSubstitutor;
+import com.intellij.java.language.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiSubstitutor;
 
 /**
  * @author peter

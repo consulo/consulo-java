@@ -30,7 +30,7 @@ import com.intellij.packaging.impl.elements.FilePathValidator;
 import com.intellij.packaging.impl.elements.PackagingElementFactoryImpl;
 import com.intellij.packaging.ui.ArtifactEditorContext;
 import com.intellij.util.PathUtil;
-import consulo.java.module.extension.JavaModuleExtension;
+import consulo.java.language.module.extension.JavaModuleExtension;
 import consulo.ui.image.Image;
 
 import javax.annotation.Nonnull;

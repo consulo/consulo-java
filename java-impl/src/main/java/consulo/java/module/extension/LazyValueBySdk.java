@@ -16,54 +16,49 @@
 
 package consulo.java.module.extension;
 
-import javax.annotation.Nonnull;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.util.NotNullFunction;
 import consulo.module.extension.ModuleExtensionWithSdk;
 
+import javax.annotation.Nonnull;
+
 /**
  * @author VISTALL
  * @since 15-Nov-16.
  */
-public class LazyValueBySdk<T>
-{
-	private ModuleExtensionWithSdk<?> myExtension;
+public class LazyValueBySdk<T> {
+  private ModuleExtensionWithSdk<?> myExtension;
 
-	private NotNullFunction<Sdk, T> myFunc;
+  private NotNullFunction<Sdk, T> myFunc;
 
-	private final T myDefaultValue;
+  private final T myDefaultValue;
 
-	private volatile T myValue;
+  private volatile T myValue;
 
-	private Sdk myLastSdk;
+  private Sdk myLastSdk;
 
-	public LazyValueBySdk(@Nonnull ModuleExtensionWithSdk<?> extension, @Nonnull T defaultValue, @Nonnull NotNullFunction<Sdk, T> func)
-	{
-		myExtension = extension;
-		myFunc = func;
-		myDefaultValue = defaultValue;
-		myValue = defaultValue;
-	}
+  public LazyValueBySdk(@Nonnull ModuleExtensionWithSdk<?> extension, @Nonnull T defaultValue, @Nonnull NotNullFunction<Sdk, T> func) {
+    myExtension = extension;
+    myFunc = func;
+    myDefaultValue = defaultValue;
+    myValue = defaultValue;
+  }
 
-	public T getValue()
-	{
-		Sdk lastSdk = myLastSdk;
-		Sdk currentSdk = myExtension.getSdk();
+  public T getValue() {
+    Sdk lastSdk = myLastSdk;
+    Sdk currentSdk = myExtension.getSdk();
 
-		T value = myValue;
+    T value = myValue;
 
-		if(currentSdk == null)
-		{
-			value = myDefaultValue;
-		}
-		else if(!Comparing.equal(lastSdk, currentSdk))
-		{
-			myLastSdk = currentSdk;
-			value = myFunc.fun(currentSdk);
-		}
+    if (currentSdk == null) {
+      value = myDefaultValue;
+    } else if (!Comparing.equal(lastSdk, currentSdk)) {
+      myLastSdk = currentSdk;
+      value = myFunc.fun(currentSdk);
+    }
 
-		myValue = value;
-		return value;
-	}
+    myValue = value;
+    return value;
+  }
 }

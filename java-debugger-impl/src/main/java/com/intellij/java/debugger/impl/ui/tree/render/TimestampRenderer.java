@@ -23,7 +23,7 @@ import com.intellij.java.debugger.engine.evaluation.EvaluationContext;
 import com.intellij.java.debugger.impl.ui.tree.DebuggerTreeNode;
 import com.intellij.java.debugger.ui.tree.NodeDescriptor;
 import com.intellij.java.debugger.impl.ui.tree.ValueDescriptor;
-import com.intellij.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiExpression;
 import consulo.internal.com.sun.jdi.*;
 
 /**

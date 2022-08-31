@@ -17,8 +17,10 @@ package consulo.java.module.extension;
 
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.util.Comparing;
-import com.intellij.pom.java.LanguageLevel;
+import com.intellij.java.language.LanguageLevel;
 import consulo.disposer.Disposable;
+import consulo.java.language.module.extension.JavaMutableModuleExtension;
+import consulo.java.language.module.extension.SpecialDirLocation;
 import consulo.java.module.extension.ui.JavaModuleExtensionPanel;
 import consulo.module.extension.MutableModuleInheritableNamedPointer;
 import consulo.module.extension.swing.SwingMutableModuleExtension;

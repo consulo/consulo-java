@@ -16,11 +16,12 @@
 package com.siyeh.ig.psiutils;
 
 import com.intellij.java.analysis.impl.codeInspection.concurrencyAnnotations.JCiPUtil;
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.PsiUtil;
-import com.intellij.psi.util.TypeConversionUtil;
-import consulo.java.module.util.JavaClassNames;
+import com.intellij.java.language.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.TypeConversionUtil;
+import consulo.java.language.module.util.JavaClassNames;
 import org.jetbrains.annotations.Contract;
 import javax.annotation.Nonnull;
 

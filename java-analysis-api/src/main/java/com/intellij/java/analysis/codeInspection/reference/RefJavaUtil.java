@@ -23,6 +23,7 @@ package com.intellij.java.analysis.codeInspection.reference;
 import com.intellij.codeInspection.reference.RefElement;
 import com.intellij.codeInspection.reference.RefEntity;
 import com.intellij.codeInspection.reference.RefManager;
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.psi.*;
 

@@ -15,7 +15,7 @@
  */
 package com.siyeh.ipp.exceptions;
 
-import com.intellij.psi.PsiType;
+import com.intellij.java.language.psi.PsiType;
 
 import java.util.Comparator;
 

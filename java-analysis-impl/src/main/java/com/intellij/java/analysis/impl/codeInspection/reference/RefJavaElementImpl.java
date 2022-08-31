@@ -25,6 +25,7 @@ import com.intellij.codeInspection.reference.RefElement;
 import com.intellij.codeInspection.reference.RefElementImpl;
 import com.intellij.codeInspection.reference.RefManager;
 import com.intellij.java.analysis.codeInspection.reference.*;
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.util.Iconable;
 import com.intellij.psi.*;
 import com.intellij.util.containers.Stack;

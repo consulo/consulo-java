@@ -15,7 +15,7 @@
  */
 package org.jetbrains.java.generate.element;
 
-import com.intellij.psi.PsiField;
+import com.intellij.java.language.psi.PsiField;
 
 /**
  * This is an Element.

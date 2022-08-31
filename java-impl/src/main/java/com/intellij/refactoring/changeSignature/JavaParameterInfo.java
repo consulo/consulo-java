@@ -15,6 +15,9 @@
  */
 package com.intellij.refactoring.changeSignature;
 
+import com.intellij.java.language.psi.PsiCallExpression;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiType;
 import com.intellij.psi.*;
 import com.intellij.refactoring.util.CanonicalTypes;
 import com.intellij.util.IncorrectOperationException;
@@ -27,7 +30,7 @@ import javax.annotation.Nullable;
 public interface JavaParameterInfo extends ParameterInfo
 {
 	@Nullable
-	PsiType createType(@Nullable PsiElement context, final PsiManager manager) throws IncorrectOperationException;
+  PsiType createType(@Nullable PsiElement context, final PsiManager manager) throws IncorrectOperationException;
 
 	@Nullable
 	default PsiType createType(@Nonnull PsiElement context)

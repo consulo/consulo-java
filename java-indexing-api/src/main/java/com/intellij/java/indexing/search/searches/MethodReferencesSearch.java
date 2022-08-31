@@ -18,7 +18,7 @@ package com.intellij.java.indexing.search.searches;
 import com.intellij.openapi.application.DumbAwareSearchParameters;
 import com.intellij.openapi.extensions.ExtensionPointName;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.search.*;
 import com.intellij.psi.search.searches.ExtensibleQueryFactory;

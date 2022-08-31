@@ -17,7 +17,7 @@ package com.intellij.java.debugger;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.psi.PsiClass;
 
 /**
  * Compilers of some java-based languages (like Scala) produce classes with names different from those declared in sources.

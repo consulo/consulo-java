@@ -5,16 +5,16 @@ import com.intellij.ide.structureView.StructureViewTreeElement;
 import com.intellij.ide.util.treeView.smartTree.SortableTreeElement;
 import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.PsiEnumConstant;
-import com.intellij.psi.PsiEnumConstantInitializer;
-import com.intellij.psi.PsiField;
-import com.intellij.psi.PsiSubstitutor;
+import com.intellij.java.language.psi.PsiEnumConstant;
+import com.intellij.java.language.psi.PsiEnumConstantInitializer;
+import com.intellij.java.language.psi.PsiField;
+import com.intellij.java.language.psi.PsiSubstitutor;
 import javax.annotation.Nonnull;
 
 import java.util.Collection;
 import java.util.Collections;
 
-import static com.intellij.psi.util.PsiFormatUtil.*;
+import static com.intellij.java.language.psi.util.PsiFormatUtil.*;
 
 public class PsiFieldTreeElement extends JavaClassTreeElementBase<PsiField> implements SortableTreeElement
 {

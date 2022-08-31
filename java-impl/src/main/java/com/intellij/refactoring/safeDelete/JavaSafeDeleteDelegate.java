@@ -18,8 +18,8 @@ package com.intellij.refactoring.safeDelete;
 import java.util.List;
 
 import com.intellij.lang.LanguageExtension;
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiParameter;
+import com.intellij.java.language.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiParameter;
 import com.intellij.psi.PsiReference;
 import com.intellij.usageView.UsageInfo;
 

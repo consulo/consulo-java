@@ -1,9 +1,9 @@
 package com.intellij.codeInsight.unwrap;
 
 import com.intellij.codeInsight.CodeInsightBundle;
-import com.intellij.psi.PsiConditionalExpression;
+import com.intellij.java.language.psi.PsiConditionalExpression;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiExpressionList;
+import com.intellij.java.language.psi.PsiExpressionList;
 import com.intellij.util.IncorrectOperationException;
 
 import java.util.List;

@@ -17,8 +17,8 @@ package com.intellij.refactoring.introduceParameter;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiType;
+import com.intellij.java.language.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiType;
 import consulo.util.collection.primitive.ints.IntList;
 import org.intellij.lang.annotations.MagicConstant;
 

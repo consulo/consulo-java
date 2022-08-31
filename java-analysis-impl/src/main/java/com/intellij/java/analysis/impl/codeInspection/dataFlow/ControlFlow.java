@@ -6,7 +6,7 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.instructions.*;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaValueFactory;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaVariableValue;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiVariable;
+import com.intellij.java.language.psi.PsiVariable;
 import com.intellij.util.containers.FList;
 import consulo.util.collection.primitive.objects.ObjectIntMap;
 import consulo.util.collection.primitive.objects.ObjectMaps;

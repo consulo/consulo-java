@@ -37,11 +37,11 @@ import com.intellij.openapi.roots.ProjectFileIndex;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.JavaDirectoryService;
+import com.intellij.java.language.psi.JavaDirectoryService;
 import com.intellij.psi.PsiDirectory;
-import com.intellij.psi.PsiJavaPackage;
-import com.intellij.psi.PsiNameHelper;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.PsiJavaPackage;
+import com.intellij.java.language.psi.PsiNameHelper;
+import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.java.JavaBundle;
 import consulo.roots.ContentFolderScopes;
 

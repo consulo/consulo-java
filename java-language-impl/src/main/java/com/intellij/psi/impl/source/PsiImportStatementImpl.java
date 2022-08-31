@@ -15,6 +15,9 @@
  */
 package com.intellij.psi.impl.source;
 
+import com.intellij.java.language.psi.JavaElementVisitor;
+import com.intellij.java.language.psi.PsiImportStatement;
+import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.java.stubs.JavaStubElementTypes;

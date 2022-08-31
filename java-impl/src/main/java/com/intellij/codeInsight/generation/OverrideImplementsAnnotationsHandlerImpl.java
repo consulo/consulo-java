@@ -20,8 +20,8 @@
  */
 package com.intellij.codeInsight.generation;
 
-import com.intellij.codeInsight.AnnotationUtil;
-import com.intellij.codeInsight.NullableNotNullManager;
+import com.intellij.java.language.codeInsight.AnnotationUtil;
+import com.intellij.java.language.codeInsight.NullableNotNullManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.util.ArrayUtil;

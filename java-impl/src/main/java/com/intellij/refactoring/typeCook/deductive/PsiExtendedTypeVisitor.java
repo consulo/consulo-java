@@ -15,8 +15,8 @@
  */
 package com.intellij.refactoring.typeCook.deductive;
 
-import com.intellij.psi.PsiClassType;
-import com.intellij.psi.PsiType;
+import com.intellij.java.language.psi.PsiClassType;
+import com.intellij.java.language.psi.PsiType;
 import com.intellij.psi.PsiTypeVisitorEx;
 
 /**

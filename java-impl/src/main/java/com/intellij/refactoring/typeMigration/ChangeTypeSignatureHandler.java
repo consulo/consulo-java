@@ -9,6 +9,7 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.actionSystem.DataContext;
 import consulo.logging.Logger;
 import com.intellij.openapi.editor.Editor;

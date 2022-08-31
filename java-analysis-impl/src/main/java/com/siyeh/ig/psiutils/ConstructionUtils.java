@@ -15,11 +15,13 @@
  */
 package com.siyeh.ig.psiutils;
 
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.psi.*;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.util.containers.ContainerUtil;
 import com.siyeh.ig.callMatcher.CallMatcher;
-import consulo.java.module.util.JavaClassNames;
+import consulo.java.language.module.util.JavaClassNames;
 import org.jetbrains.annotations.Contract;
 
 import java.util.Set;
@@ -117,7 +119,7 @@ public class ConstructionUtils
 			if(argumentList != null && argumentList.getExpressions().length == 0)
 			{
 				PsiType type = expression.getType();
-				return com.intellij.psi.util.InheritanceUtil.isInheritor(type, JavaClassNames.JAVA_UTIL_COLLECTION) || com.intellij.psi.util.InheritanceUtil.isInheritor(type, JavaClassNames
+				return InheritanceUtil.isInheritor(type, JavaClassNames.JAVA_UTIL_COLLECTION) || InheritanceUtil.isInheritor(type, JavaClassNames
 						.JAVA_UTIL_MAP);
 			}
 		}
@@ -173,12 +175,12 @@ public class ConstructionUtils
 			{
 				return false;
 			}
-			if(!com.intellij.psi.util.InheritanceUtil.isInheritor(aClass, JavaClassNames.JAVA_UTIL_COLLECTION) && !com.intellij.psi.util.InheritanceUtil.isInheritor(aClass, JavaClassNames
+			if(!InheritanceUtil.isInheritor(aClass, JavaClassNames.JAVA_UTIL_COLLECTION) && !InheritanceUtil.isInheritor(aClass, JavaClassNames
 					.JAVA_UTIL_MAP))
 			{
 				return false;
 			}
-			Predicate<PsiType> allowedParameterType = t -> t instanceof PsiPrimitiveType || com.intellij.psi.util.InheritanceUtil.isInheritor(t, JavaClassNames.JAVA_LANG_CLASS);
+			Predicate<PsiType> allowedParameterType = t -> t instanceof PsiPrimitiveType || InheritanceUtil.isInheritor(t, JavaClassNames.JAVA_LANG_CLASS);
 			return Stream.of(constructor.getParameterList().getParameters()).map(PsiParameter::getType).allMatch(allowedParameterType);
 		}
 		if(expression instanceof PsiMethodCallExpression)

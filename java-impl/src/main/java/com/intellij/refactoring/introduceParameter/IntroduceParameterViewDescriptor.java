@@ -25,7 +25,7 @@
 package com.intellij.refactoring.introduceParameter;
 
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.refactoring.RefactoringBundle;
 import com.intellij.refactoring.ui.UsageViewDescriptorAdapter;
 import javax.annotation.Nonnull;

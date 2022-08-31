@@ -15,9 +15,9 @@
  */
 package com.intellij.psi.impl;
 
-import com.intellij.psi.PsiConstantEvaluationHelper;
+import com.intellij.java.language.psi.PsiConstantEvaluationHelper;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiExpression;
 
 public class PsiExpressionEvaluator implements ConstantExpressionEvaluator {
 

@@ -2,8 +2,8 @@
 package com.intellij.java.analysis.impl.codeInspection.dataFlow.types;
 
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.rangeSet.LongRangeSet;
-import com.intellij.psi.PsiKeyword;
-import com.intellij.psi.PsiType;
+import com.intellij.java.language.psi.PsiKeyword;
+import com.intellij.java.language.psi.PsiType;
 import javax.annotation.Nonnull;
 
 import java.util.Objects;

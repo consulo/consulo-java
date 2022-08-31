@@ -15,6 +15,10 @@
  */
 package com.siyeh.ipp.exceptions;
 
+import com.intellij.java.language.psi.JavaTokenType;
+import com.intellij.java.language.psi.PsiJavaToken;
+import com.intellij.java.language.psi.PsiResourceList;
+import com.intellij.java.language.psi.PsiTryStatement;
 import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;
 import com.siyeh.ipp.base.PsiElementPredicate;

@@ -23,14 +23,14 @@ package com.intellij.refactoring.inlineSuperClass;
 import java.util.Collection;
 
 import consulo.codeInsight.TargetElementUtil;
-import com.intellij.lang.java.JavaLanguage;
+import com.intellij.java.language.JavaLanguage;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiAnonymousClass;
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.psi.PsiAnonymousClass;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
-import com.intellij.psi.PsiReferenceList;
+import com.intellij.java.language.psi.PsiReferenceList;
 import com.intellij.java.indexing.search.searches.DirectClassInheritorsSearch;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.refactoring.inline.JavaInlineActionHandler;

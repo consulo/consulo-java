@@ -19,6 +19,9 @@
  */
 package com.intellij.java.analysis.impl.psi.util;
 
+import com.intellij.java.language.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiModifier;
+import com.intellij.java.language.psi.PsiModifierListOwner;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiMatcherExpression;
 import com.intellij.psi.xml.XmlTag;

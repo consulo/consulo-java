@@ -13,7 +13,7 @@ import com.intellij.openapi.actionSystem.Shortcut;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.util.PropertyOwner;
 import com.intellij.openapi.util.SystemInfo;
-import com.intellij.psi.PsiAnonymousClass;
+import com.intellij.java.language.psi.PsiAnonymousClass;
 import com.intellij.psi.PsiElement;
 import consulo.java.analysis.codeInsight.JavaCodeInsightBundle;
 

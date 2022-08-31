@@ -17,6 +17,7 @@ package com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix;
 
 import javax.annotation.Nonnull;
 
+import com.intellij.java.language.psi.*;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nullable;
@@ -30,7 +31,7 @@ import com.intellij.openapi.command.undo.UndoUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
-import com.intellij.psi.codeStyle.JavaCodeStyleManager;
+import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 
 public class VariableArrayTypeFix extends LocalQuickFixOnPsiElement

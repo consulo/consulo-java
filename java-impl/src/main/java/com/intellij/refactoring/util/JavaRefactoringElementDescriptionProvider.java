@@ -15,9 +15,10 @@
  */
 package com.intellij.refactoring.util;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.lang.findUsages.DescriptiveNameUtil;
 import com.intellij.psi.*;
-import com.intellij.psi.util.PsiFormatUtil;
+import com.intellij.java.language.psi.util.PsiFormatUtil;
 import com.intellij.refactoring.RefactoringBundle;
 import javax.annotation.Nonnull;
 

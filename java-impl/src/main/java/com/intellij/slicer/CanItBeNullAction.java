@@ -16,6 +16,7 @@
 package com.intellij.slicer;
 
 import com.intellij.icons.AllIcons;
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.psi.*;

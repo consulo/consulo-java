@@ -21,6 +21,8 @@ import com.intellij.codeInspection.reference.RefElementImpl;
 import com.intellij.codeInspection.reference.RefManager;
 import com.intellij.codeInspection.reference.RefVisitor;
 import com.intellij.java.analysis.codeInspection.reference.*;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.*;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.psi.*;

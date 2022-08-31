@@ -15,11 +15,12 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.util.Computable;
 import com.intellij.psi.*;
 import com.intellij.psi.controlFlow.ReturnStatementsVisitor;
-import com.intellij.psi.util.PsiTypesUtil;
+import com.intellij.java.language.psi.util.PsiTypesUtil;
 import com.intellij.util.IncorrectOperationException;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

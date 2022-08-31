@@ -17,8 +17,8 @@ package com.siyeh.ipp.opassign;
 
 import com.siyeh.ipp.base.PsiElementPredicate;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiPostfixExpression;
-import com.intellij.psi.JavaTokenType;
+import com.intellij.java.language.psi.PsiPostfixExpression;
+import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.psi.tree.IElementType;
 
 class ReplacePostfixExpressionWithOperatorAssignmentPredicate implements PsiElementPredicate {

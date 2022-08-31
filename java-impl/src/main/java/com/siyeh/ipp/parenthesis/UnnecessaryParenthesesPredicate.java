@@ -15,6 +15,10 @@
  */
 package com.siyeh.ipp.parenthesis;
 
+import com.intellij.java.language.psi.PsiLambdaExpression;
+import com.intellij.java.language.psi.PsiParameter;
+import com.intellij.java.language.psi.PsiParameterList;
+import com.intellij.java.language.psi.PsiParenthesizedExpression;
 import com.intellij.psi.*;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
 import com.siyeh.ipp.base.PsiElementPredicate;

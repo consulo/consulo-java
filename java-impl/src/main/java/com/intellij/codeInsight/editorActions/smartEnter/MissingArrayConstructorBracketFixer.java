@@ -16,9 +16,9 @@
 package com.intellij.codeInsight.editorActions.smartEnter;
 
 import com.intellij.openapi.editor.Editor;
-import com.intellij.psi.JavaTokenType;
+import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiNewExpression;
+import com.intellij.java.language.psi.PsiNewExpression;
 import com.intellij.util.IncorrectOperationException;
 
 public class MissingArrayConstructorBracketFixer implements Fixer

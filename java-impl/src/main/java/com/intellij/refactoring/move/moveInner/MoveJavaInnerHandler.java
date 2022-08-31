@@ -15,9 +15,10 @@
  */
 package com.intellij.refactoring.move.moveInner;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
-import com.intellij.psi.javadoc.PsiDocComment;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.javadoc.PsiDocComment;
+import com.intellij.java.language.psi.util.PsiUtil;
 import javax.annotation.Nonnull;
 
 public class MoveJavaInnerHandler implements MoveInnerHandler {

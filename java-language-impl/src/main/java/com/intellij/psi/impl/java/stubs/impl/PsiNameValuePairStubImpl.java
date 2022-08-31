@@ -15,7 +15,7 @@
  */
 package com.intellij.psi.impl.java.stubs.impl;
 
-import com.intellij.psi.PsiNameValuePair;
+import com.intellij.java.language.psi.PsiNameValuePair;
 import com.intellij.psi.impl.java.stubs.JavaStubElementTypes;
 import com.intellij.psi.impl.java.stubs.PsiNameValuePairStub;
 import com.intellij.psi.stubs.StubBase;

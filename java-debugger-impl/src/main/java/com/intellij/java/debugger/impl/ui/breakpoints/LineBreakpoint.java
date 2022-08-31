@@ -32,6 +32,7 @@ import com.intellij.java.debugger.impl.DebuggerUtilsEx;
 import com.intellij.java.debugger.impl.jdi.MethodBytecodeUtil;
 import com.intellij.java.debugger.impl.jdi.StackFrameProxyImpl;
 import com.intellij.icons.AllIcons;
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.application.ReadAction;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.module.Module;

@@ -16,8 +16,9 @@
  */
 package com.intellij.refactoring.inline;
 
+import com.intellij.java.language.psi.*;
 import consulo.codeInsight.TargetElementUtil;
-import com.intellij.lang.java.JavaLanguage;
+import com.intellij.java.language.JavaLanguage;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.ReadonlyStatusHandler;

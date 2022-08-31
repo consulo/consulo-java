@@ -15,12 +15,13 @@
  */
 package org.intellij.plugins.intelliLang.util;
 
-import com.intellij.codeInsight.AnnotationUtil;
+import com.intellij.java.language.codeInsight.AnnotationUtil;
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.util.Pair;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.PsiConstantEvaluationHelperImpl;
-import com.intellij.psi.search.searches.SuperMethodsSearch;
-import com.intellij.psi.util.MethodSignatureBackedByPsiMethod;
+import com.intellij.java.language.psi.search.searches.SuperMethodsSearch;
+import com.intellij.java.language.psi.util.MethodSignatureBackedByPsiMethod;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.Processor;
 import com.intellij.util.containers.ContainerUtil;
@@ -193,7 +194,7 @@ public class AnnotationUtilEx {
    * <p/>
    * The <code>annotationName</code> parameter is a pair of the target annotation class' fully qualified name as a
    * String and as a Set. This is done for performance reasons because the Set is required by the
-   * {@link com.intellij.codeInsight.AnnotationUtil} utility class and allows to avoid unnecessary object constructions.
+   * {@link AnnotationUtil} utility class and allows to avoid unnecessary object constructions.
    */
   @Nonnull
   public static PsiAnnotation[] getAnnotationFrom(PsiModifierListOwner owner,
@@ -213,7 +214,7 @@ public class AnnotationUtilEx {
    * <p/>
    * The <code>annotationName</code> parameter is a pair of the target annotation class' fully qualified name as a
    * String and as a Set. This is done for performance reasons because the Set is required by the
-   * {@link com.intellij.codeInsight.AnnotationUtil} utility class and allows to avoid unnecessary object constructions.
+   * {@link AnnotationUtil} utility class and allows to avoid unnecessary object constructions.
    */
 
   public static PsiAnnotation[] getAnnotationsFromImpl(PsiModifierListOwner owner,
@@ -275,7 +276,7 @@ public class AnnotationUtilEx {
   /**
    * Returns all annotations for <code>listOwner</code>, possibly walking up the method hierarchy.
    *
-   * @see com.intellij.codeInsight.AnnotationUtil#isAnnotated(com.intellij.psi.PsiModifierListOwner, java.lang.String, boolean)
+   * @see AnnotationUtil#isAnnotated(PsiModifierListOwner, java.lang.String, boolean)
    */
   private static PsiAnnotation[] getAnnotations(@Nonnull PsiModifierListOwner listOwner, boolean inHierarchy) {
     final PsiModifierList modifierList = listOwner.getModifierList();

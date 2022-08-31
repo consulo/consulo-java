@@ -18,7 +18,7 @@ package com.intellij.refactoring.wrapreturnvalue;
 import javax.annotation.Nonnull;
 
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.refactoring.RefactorJBundle;
 import com.intellij.refactoring.psi.MyUsageViewUtil;
 import com.intellij.usageView.UsageInfo;

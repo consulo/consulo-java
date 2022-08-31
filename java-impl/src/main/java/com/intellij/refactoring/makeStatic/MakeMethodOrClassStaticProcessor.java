@@ -24,6 +24,7 @@
  */
 package com.intellij.refactoring.makeStatic;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.lang.findUsages.DescriptiveNameUtil;
 import consulo.logging.Logger;
 import com.intellij.openapi.project.Project;
@@ -33,7 +34,7 @@ import com.intellij.psi.*;
 import com.intellij.java.indexing.search.searches.OverridingMethodsSearch;
 import com.intellij.psi.search.searches.ReferencesSearch;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.refactoring.BaseRefactoringProcessor;
 import com.intellij.refactoring.RefactoringBundle;
 import com.intellij.refactoring.ui.ConflictsDialog;

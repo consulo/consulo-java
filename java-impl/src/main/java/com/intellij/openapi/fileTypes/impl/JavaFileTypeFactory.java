@@ -21,7 +21,7 @@ import com.intellij.ide.highlighter.JavaClassFileType;
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.fileTypes.FileTypeConsumer;
 import com.intellij.openapi.fileTypes.FileTypeFactory;
-import consulo.java.fileTypes.JModFileType;
+import consulo.java.language.fileTypes.JModFileType;
 
 public class JavaFileTypeFactory extends FileTypeFactory
 {

@@ -15,7 +15,7 @@
  */
 package com.intellij.refactoring.inheritanceToDelegation.usageInfo;
 
-import com.intellij.psi.*;
+import com.intellij.java.language.psi.PsiClass;
 
 /**
  * @author dsl

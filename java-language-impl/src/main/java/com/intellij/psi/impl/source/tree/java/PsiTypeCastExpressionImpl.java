@@ -19,17 +19,17 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import com.intellij.lang.ASTNode;
 import consulo.logging.Logger;
-import com.intellij.psi.JavaElementVisitor;
+import com.intellij.java.language.psi.JavaElementVisitor;
 import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.PsiExpression;
-import com.intellij.psi.PsiType;
-import com.intellij.psi.PsiTypeCastExpression;
-import com.intellij.psi.PsiTypeElement;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiType;
+import com.intellij.java.language.psi.PsiTypeCastExpression;
+import com.intellij.java.language.psi.PsiTypeElement;
 import com.intellij.psi.impl.source.Constants;
 import com.intellij.psi.impl.source.tree.ChildRole;
 import com.intellij.psi.tree.ChildRoleBase;
 import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
 
 public class PsiTypeCastExpressionImpl extends ExpressionPsiElement implements PsiTypeCastExpression, Constants
 {

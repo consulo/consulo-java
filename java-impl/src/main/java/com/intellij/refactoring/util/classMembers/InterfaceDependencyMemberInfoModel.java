@@ -24,8 +24,8 @@
  */
 package com.intellij.refactoring.util.classMembers;
 
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiMember;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiMember;
 import com.intellij.refactoring.classMembers.DependencyMemberInfoModel;
 import com.intellij.refactoring.classMembers.MemberInfoBase;
 import com.intellij.refactoring.classMembers.MemberInfoTooltipManager;

@@ -15,6 +15,7 @@
  */
 package com.siyeh.ig.migration;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
 
 import java.util.*;

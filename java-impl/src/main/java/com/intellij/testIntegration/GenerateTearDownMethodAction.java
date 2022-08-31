@@ -15,7 +15,8 @@
  */
 package com.intellij.testIntegration;
 
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.testIntegration.TestFramework;
+import com.intellij.java.language.psi.PsiClass;
 
 public class GenerateTearDownMethodAction extends BaseGenerateTestSupportMethodAction {
   public GenerateTearDownMethodAction() {

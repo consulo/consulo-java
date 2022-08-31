@@ -27,8 +27,8 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Pair;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiExpression;
-import com.intellij.psi.PsiType;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiType;
 
 public abstract class ForIndexedPostfixTemplate extends PostfixTemplate {
   protected ForIndexedPostfixTemplate(@Nonnull String key, @Nonnull String example) {

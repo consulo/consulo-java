@@ -24,15 +24,16 @@ import com.intellij.java.analysis.codeInspection.reference.*;
 import com.intellij.java.analysis.impl.codeInspection.reference.RefClassImpl;
 import com.intellij.java.analysis.impl.codeInspection.reference.RefJavaElementImpl;
 import com.intellij.java.analysis.impl.codeInspection.reference.RefMethodImpl;
+import com.intellij.java.language.psi.*;
 import jakarta.inject.Singleton;
 
 import com.intellij.codeInspection.InspectionsBundle;
 import com.intellij.psi.*;
 import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.util.MethodSignatureUtil;
+import com.intellij.java.language.psi.util.MethodSignatureUtil;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.PsiUtil;
-import com.intellij.util.VisibilityUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
+import com.intellij.java.language.util.VisibilityUtil;
 
 @Singleton
 public class RefJavaUtilImpl extends RefJavaUtil{

@@ -19,9 +19,9 @@ import com.intellij.codeInsight.daemon.HighlightDisplayKey;
 import com.intellij.codeInspection.SuppressQuickFix;
 import com.intellij.java.analysis.codeInspection.BatchSuppressManager;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.actions.*;
-import com.intellij.psi.PsiDocCommentOwner;
+import com.intellij.java.language.psi.PsiDocCommentOwner;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiModifierListOwner;
+import com.intellij.java.language.psi.PsiModifierListOwner;
 import jakarta.inject.Singleton;
 
 import javax.annotation.Nonnull;

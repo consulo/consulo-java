@@ -15,13 +15,15 @@
  */
 package com.intellij.java.analysis.impl.codeInspection.ex;
 
-import com.intellij.codeInsight.AnnotationUtil;
+import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.codeInspection.reference.*;
 import com.intellij.java.analysis.codeInspection.ex.EntryPointsManager;
 import com.intellij.java.analysis.codeInspection.reference.RefClass;
 import com.intellij.java.analysis.codeInspection.reference.RefJavaManager;
 import com.intellij.java.analysis.codeInspection.reference.RefMethod;
+import com.intellij.java.language.psi.PsiDocCommentOwner;
+import com.intellij.java.language.psi.PsiModifierListOwner;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.ServiceManager;

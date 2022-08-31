@@ -18,7 +18,7 @@ package com.intellij.refactoring.typeCook;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.WindowManager;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiTypeCastExpression;
+import com.intellij.java.language.psi.PsiTypeCastExpression;
 import com.intellij.refactoring.BaseRefactoringProcessor;
 import com.intellij.refactoring.RefactoringBundle;
 import com.intellij.refactoring.typeCook.deductive.builder.ReductionSystem;

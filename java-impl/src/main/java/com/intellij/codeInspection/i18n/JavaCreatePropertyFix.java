@@ -15,6 +15,9 @@
  */
 package com.intellij.codeInspection.i18n;
 
+import com.intellij.java.language.psi.JavaPsiFacade;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiLiteralExpression;
 import com.intellij.lang.properties.psi.PropertiesFile;
 import com.intellij.lang.properties.references.CreatePropertyFix;
 import com.intellij.lang.properties.references.I18nizeQuickFixDialog;

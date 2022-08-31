@@ -15,7 +15,7 @@
  */
 package com.intellij.psi.impl.java.stubs;
 
-import com.intellij.psi.PsiRequiresStatement;
+import com.intellij.java.language.psi.PsiRequiresStatement;
 import com.intellij.psi.stubs.StubElement;
 
 public interface PsiRequiresStatementStub extends StubElement<PsiRequiresStatement>

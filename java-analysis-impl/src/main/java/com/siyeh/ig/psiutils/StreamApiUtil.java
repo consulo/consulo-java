@@ -15,10 +15,11 @@
  */
 package com.siyeh.ig.psiutils;
 
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.InheritanceUtil;
 import org.jetbrains.annotations.Contract;
-import com.intellij.psi.*;
-import com.intellij.psi.util.PsiUtil;
-import consulo.java.module.util.JavaClassNames;
+import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.java.language.module.util.JavaClassNames;
 
 /**
  * @author Tagir Valeev
@@ -39,19 +40,19 @@ public class StreamApiUtil
 			return null;
 		}
 		PsiClass aClass = ((PsiClassType) type).resolve();
-		if(com.intellij.psi.util.InheritanceUtil.isInheritor(aClass, false, JavaClassNames.JAVA_UTIL_STREAM_INT_STREAM))
+		if(InheritanceUtil.isInheritor(aClass, false, JavaClassNames.JAVA_UTIL_STREAM_INT_STREAM))
 		{
 			return PsiType.INT;
 		}
-		if(com.intellij.psi.util.InheritanceUtil.isInheritor(aClass, false, JavaClassNames.JAVA_UTIL_STREAM_LONG_STREAM))
+		if(InheritanceUtil.isInheritor(aClass, false, JavaClassNames.JAVA_UTIL_STREAM_LONG_STREAM))
 		{
 			return PsiType.LONG;
 		}
-		if(com.intellij.psi.util.InheritanceUtil.isInheritor(aClass, false, JavaClassNames.JAVA_UTIL_STREAM_DOUBLE_STREAM))
+		if(InheritanceUtil.isInheritor(aClass, false, JavaClassNames.JAVA_UTIL_STREAM_DOUBLE_STREAM))
 		{
 			return PsiType.DOUBLE;
 		}
-		if(!com.intellij.psi.util.InheritanceUtil.isInheritor(aClass, false, JavaClassNames.JAVA_UTIL_STREAM_STREAM))
+		if(!InheritanceUtil.isInheritor(aClass, false, JavaClassNames.JAVA_UTIL_STREAM_STREAM))
 		{
 			return null;
 		}

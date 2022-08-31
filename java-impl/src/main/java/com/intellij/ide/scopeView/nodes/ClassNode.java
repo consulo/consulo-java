@@ -16,7 +16,7 @@
 package com.intellij.ide.scopeView.nodes;
 
 import com.intellij.ide.projectView.impl.nodes.ClassTreeNode;
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.presentation.java.ClassPresentationUtil;
 
 /**

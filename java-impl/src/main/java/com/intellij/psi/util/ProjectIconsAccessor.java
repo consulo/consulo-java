@@ -15,6 +15,8 @@
  */
 package com.intellij.psi.util;
 
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.openapi.application.Application;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;

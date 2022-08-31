@@ -19,6 +19,7 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
+import com.intellij.java.language.psi.*;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;

@@ -22,8 +22,8 @@ package com.intellij.java.analysis.impl.codeInsight.quickfix;
 
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.openapi.extensions.ExtensionPointName;
-import com.intellij.psi.PsiType;
-import com.intellij.psi.PsiVariable;
+import com.intellij.java.language.psi.PsiType;
+import com.intellij.java.language.psi.PsiVariable;
 
 public interface ChangeVariableTypeQuickFixProvider {
   ExtensionPointName<ChangeVariableTypeQuickFixProvider> EP_NAME = ExtensionPointName.create("consulo.java.codeInsight.changeVariableTypeQuickFixProvider");

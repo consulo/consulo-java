@@ -3,7 +3,7 @@ package com.intellij.java.analysis.impl.codeInspection.dataFlow.types;
 
 import com.intellij.java.analysis.JavaAnalysisBundle;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.PsiKeyword;
+import com.intellij.java.language.psi.PsiKeyword;
 import javax.annotation.Nonnull;
 
 import java.util.HashSet;

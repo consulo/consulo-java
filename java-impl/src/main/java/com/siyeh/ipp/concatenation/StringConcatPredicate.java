@@ -15,10 +15,11 @@
  */
 package com.siyeh.ipp.concatenation;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;
 import com.siyeh.ipp.base.PsiElementPredicate;
-import consulo.java.module.util.JavaClassNames;
+import consulo.java.language.module.util.JavaClassNames;
 
 class StringConcatPredicate implements PsiElementPredicate {
 

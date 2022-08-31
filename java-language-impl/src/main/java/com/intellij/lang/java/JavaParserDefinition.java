@@ -23,13 +23,13 @@ import com.intellij.lang.ParserDefinition;
 import com.intellij.lang.PsiParser;
 import com.intellij.lang.java.lexer.JavaLexer;
 import com.intellij.lexer.Lexer;
-import com.intellij.pom.java.LanguageLevel;
+import com.intellij.java.language.LanguageLevel;
 import com.intellij.psi.FileViewProvider;
-import com.intellij.psi.JavaDocTokenType;
-import com.intellij.psi.JavaTokenType;
+import com.intellij.java.language.psi.JavaDocTokenType;
+import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiJavaFile;
+import com.intellij.java.language.psi.PsiJavaFile;
 import com.intellij.psi.impl.java.stubs.JavaStubElementType;
 import com.intellij.psi.impl.java.stubs.JavaStubElementTypes;
 import com.intellij.psi.impl.source.PsiJavaFileImpl;
@@ -39,7 +39,7 @@ import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.IFileElementType;
 import com.intellij.psi.tree.TokenSet;
 import consulo.annotation.access.RequiredReadAction;
-import consulo.java.psi.JavaLanguageVersion;
+import consulo.java.language.psi.JavaLanguageVersion;
 import consulo.lang.LanguageVersion;
 
 /**

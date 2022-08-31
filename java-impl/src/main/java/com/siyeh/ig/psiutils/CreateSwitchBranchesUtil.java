@@ -4,6 +4,7 @@ package com.siyeh.ig.psiutils;
 import com.intellij.codeInsight.template.TemplateBuilder;
 import com.intellij.codeInsight.template.TemplateBuilderFactory;
 import com.intellij.codeInsight.template.impl.ConstantNode;
+import com.intellij.java.language.psi.*;
 import com.intellij.lang.injection.InjectedLanguageManager;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
@@ -61,9 +62,9 @@ public class CreateSwitchBranchesUtil
 	 * @return a list of created branches
 	 */
 	public static List<PsiSwitchLabelStatementBase> createMissingBranches(@Nonnull PsiSwitchBlock switchBlock,
-																		  @Nonnull List<String> allNames,
-																		  @Nonnull Collection<String> missingNames,
-																		  @Nonnull Function<PsiSwitchLabelStatementBase, List<String>> caseExtractor)
+                                                                        @Nonnull List<String> allNames,
+                                                                        @Nonnull Collection<String> missingNames,
+                                                                        @Nonnull Function<PsiSwitchLabelStatementBase, List<String>> caseExtractor)
 	{
 		boolean isRuleBasedFormat = SwitchUtils.isRuleFormatSwitch(switchBlock);
 		final PsiCodeBlock body = switchBlock.getBody();

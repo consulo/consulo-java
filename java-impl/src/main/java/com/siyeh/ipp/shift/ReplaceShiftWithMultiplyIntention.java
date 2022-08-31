@@ -17,13 +17,13 @@ package com.siyeh.ipp.shift;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.psi.JavaTokenType;
-import com.intellij.psi.PsiAssignmentExpression;
-import com.intellij.psi.PsiBinaryExpression;
+import com.intellij.java.language.psi.JavaTokenType;
+import com.intellij.java.language.psi.PsiAssignmentExpression;
+import com.intellij.java.language.psi.PsiBinaryExpression;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiExpression;
-import com.intellij.psi.PsiJavaToken;
-import com.intellij.psi.PsiParenthesizedExpression;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiJavaToken;
+import com.intellij.java.language.psi.PsiParenthesizedExpression;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.util.IncorrectOperationException;
 import com.siyeh.IntentionPowerPackBundle;

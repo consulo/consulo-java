@@ -22,7 +22,7 @@
  */
 package com.intellij.refactoring.move;
 
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.refactoring.MoveDestination;
 import javax.annotation.Nullable;
 

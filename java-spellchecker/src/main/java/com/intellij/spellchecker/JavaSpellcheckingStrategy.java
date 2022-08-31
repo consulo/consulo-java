@@ -22,10 +22,10 @@ import com.intellij.java.analysis.codeInspection.BatchSuppressManager;
 import com.intellij.java.analysis.codeInspection.SuppressManager;
 import com.intellij.codeInspection.SuppressQuickFix;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiLiteralExpression;
-import com.intellij.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiLiteralExpression;
+import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.psi.PsiNamedElement;
-import com.intellij.psi.javadoc.PsiDocComment;
+import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.spellchecker.tokenizer.SuppressibleSpellcheckingStrategy;
 import com.intellij.spellchecker.tokenizer.Tokenizer;
 

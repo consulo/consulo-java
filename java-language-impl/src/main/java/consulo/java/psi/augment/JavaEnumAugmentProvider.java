@@ -22,16 +22,16 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.psi.augment.PsiAugmentProvider;
-import consulo.java.module.util.JavaClassNames;
-import com.intellij.lang.java.JavaLanguage;
+import com.intellij.java.language.psi.augment.PsiAugmentProvider;
+import consulo.java.language.module.util.JavaClassNames;
+import com.intellij.java.language.JavaLanguage;
 import consulo.util.dataholder.Key;
-import com.intellij.psi.PsiArrayType;
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.psi.PsiArrayType;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiModifier;
-import com.intellij.psi.PsiSubstitutor;
+import com.intellij.java.language.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiModifier;
+import com.intellij.java.language.psi.PsiSubstitutor;
 import com.intellij.psi.impl.light.LightMethodBuilder;
 import com.intellij.psi.impl.source.PsiImmediateClassType;
 

@@ -16,6 +16,9 @@
 
 package com.intellij.java.analysis.impl.codeInspection.dataFlow.inference;
 
+import com.intellij.java.language.psi.JavaPsiFacade;
+import com.intellij.java.language.psi.PsiCodeBlock;
+import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.openapi.editor.Document;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.java.stubs.PsiMethodStub;

@@ -21,7 +21,7 @@ import com.intellij.codeInspection.GlobalInspectionContext;
 import com.intellij.codeInspection.InspectionManager;
 import com.intellij.java.analysis.codeInspection.reference.RefClass;
 import com.intellij.codeInspection.reference.RefEntity;
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.psi.PsiClass;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseGlobalInspection;
 import javax.annotation.Nonnull;

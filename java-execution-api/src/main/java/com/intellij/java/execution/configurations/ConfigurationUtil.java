@@ -16,9 +16,9 @@
 package com.intellij.java.execution.configurations;
 
 import com.intellij.openapi.util.Condition;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiModifier;
-import com.intellij.psi.util.PsiMethodUtil;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiModifier;
+import com.intellij.java.language.psi.util.PsiMethodUtil;
 
 /**
  * User: anna

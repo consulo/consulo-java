@@ -22,10 +22,10 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiModifierListOwner;
+import com.intellij.java.language.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiModifierListOwner;
 import com.intellij.psi.PsiNamedElement;
-import com.intellij.psi.PsiParameter;
+import com.intellij.java.language.psi.PsiParameter;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.MultiMap;
 

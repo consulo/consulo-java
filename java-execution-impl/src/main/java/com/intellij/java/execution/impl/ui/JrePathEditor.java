@@ -16,7 +16,7 @@
 package com.intellij.java.execution.impl.ui;
 
 import com.intellij.icons.AllIcons;
-import com.intellij.openapi.projectRoots.JavaSdk;
+import com.intellij.java.language.projectRoots.JavaSdk;
 import com.intellij.openapi.roots.ui.configuration.projectRoot.ProjectSdksModel;
 import com.intellij.openapi.ui.LabeledComponent;
 import com.intellij.ui.PanelWithAnchor;

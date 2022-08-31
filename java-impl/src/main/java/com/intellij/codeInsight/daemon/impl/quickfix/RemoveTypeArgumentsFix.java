@@ -25,10 +25,10 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiJavaCodeReferenceElement;
-import com.intellij.psi.PsiReferenceParameterList;
-import com.intellij.psi.PsiTypeElement;
-import com.intellij.psi.PsiVariable;
+import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
+import com.intellij.java.language.psi.PsiReferenceParameterList;
+import com.intellij.java.language.psi.PsiTypeElement;
+import com.intellij.java.language.psi.PsiVariable;
 
 /**
  * User: anna

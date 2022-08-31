@@ -1,9 +1,9 @@
 // Copyright 2000-2019 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.codeInspection.dataFlow;
 
-import com.intellij.codeInsight.AnnotationUtil;
+import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.analysis.impl.codeInsight.DefaultInferredAnnotationProvider;
-import com.intellij.codeInsight.ExternalAnnotationsManager;
+import com.intellij.java.language.codeInsight.ExternalAnnotationsManager;
 import com.intellij.codeInsight.ExternalAnnotationsManagerImpl;
 import com.intellij.codeInsight.daemon.DaemonCodeAnalyzer;
 import com.intellij.java.analysis.impl.codeInsight.intention.AddAnnotationPsiFix;
@@ -12,6 +12,9 @@ import com.intellij.codeInsight.intention.impl.BaseIntentionAction;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.JavaMethodContractUtil;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.MutationSignature;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.StandardMethodContract;
+import com.intellij.java.language.psi.PsiAnnotation;
+import com.intellij.java.language.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiModifierListOwner;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;

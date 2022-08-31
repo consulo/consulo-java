@@ -16,13 +16,15 @@
 package com.siyeh.ig.psiutils;
 
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.instructions.MethodCallInstruction;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.psi.*;
 import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.util.MethodSignatureUtil;
+import com.intellij.java.language.psi.util.MethodSignatureUtil;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.util.ArrayUtil;import com.siyeh.HardcodedMethodConstants;
-import consulo.java.module.util.JavaClassNames;
+import consulo.java.language.module.util.JavaClassNames;
 import org.jetbrains.annotations.NonNls;import javax.annotation.Nonnull;
 
 import javax.annotation.Nullable;
@@ -451,7 +453,7 @@ public class MethodCallUtils
 		{
 			return false;
 		}
-		if(!com.intellij.psi.util.InheritanceUtil.isInheritor(aClass, className))
+		if(!InheritanceUtil.isInheritor(aClass, className))
 		{
 			return false;
 		}

@@ -19,7 +19,7 @@ package com.intellij.openapi.ui;
 import java.util.List;
 
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiJavaPackage;
+import com.intellij.java.language.psi.PsiJavaPackage;
 
 /**
  * @author ven

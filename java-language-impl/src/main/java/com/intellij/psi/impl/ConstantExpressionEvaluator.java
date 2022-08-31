@@ -15,7 +15,7 @@
  */
 package com.intellij.psi.impl;
 
-import com.intellij.psi.PsiConstantEvaluationHelper;
+import com.intellij.java.language.psi.PsiConstantEvaluationHelper;
 import com.intellij.psi.PsiElement;
 import javax.annotation.Nullable;
 

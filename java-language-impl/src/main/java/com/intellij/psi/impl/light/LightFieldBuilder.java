@@ -17,15 +17,15 @@ package com.intellij.psi.impl.light;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.lang.java.JavaLanguage;
-import com.intellij.psi.JavaPsiFacade;
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.JavaLanguage;
+import com.intellij.java.language.psi.JavaPsiFacade;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiExpression;
-import com.intellij.psi.PsiField;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiField;
 import com.intellij.psi.PsiManager;
-import com.intellij.psi.PsiType;
-import com.intellij.psi.javadoc.PsiDocComment;
+import com.intellij.java.language.psi.PsiType;
+import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.util.IncorrectOperationException;
 
 /**

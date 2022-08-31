@@ -20,13 +20,14 @@ import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement;
 import com.intellij.codeInspection.LocalQuickFixOnPsiElement;
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
-import com.intellij.pom.java.LanguageLevel;
+import com.intellij.java.language.LanguageLevel;
 import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.util.PropertyMemberType;
+import com.intellij.java.language.psi.util.PropertyMemberType;
 import org.jetbrains.annotations.Nls;
 
 import javax.annotation.Nonnull;

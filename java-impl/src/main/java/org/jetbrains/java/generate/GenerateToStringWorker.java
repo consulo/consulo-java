@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
 
+import com.intellij.java.language.psi.*;
 import org.jetbrains.java.generate.config.*;
 import org.jetbrains.java.generate.exception.GenerateCodeException;
 import org.jetbrains.java.generate.psi.PsiAdapter;
@@ -37,16 +38,12 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.ScrollType;
 import com.intellij.openapi.editor.VisualPosition;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.JVMElementFactories;
-import com.intellij.psi.JVMElementFactory;
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.psi.JVMElementFactory;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiJavaFile;
-import com.intellij.psi.PsiMember;
-import com.intellij.psi.PsiMethod;
 import com.intellij.psi.codeStyle.CodeStyleManager;
-import com.intellij.psi.codeStyle.JavaCodeStyleManager;
-import com.intellij.psi.javadoc.PsiDocComment;
+import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
+import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.util.IncorrectOperationException;
 
 public class GenerateToStringWorker
@@ -69,7 +66,7 @@ public class GenerateToStringWorker
 	/**
 	 * Creates the <code>toString</code> method.
 	 *
-	 * @param selectedMembers the selected members as both {@link com.intellij.psi.PsiField} and {@link com.intellij.psi.PsiMethod}.
+	 * @param selectedMembers the selected members as both {@link PsiField} and {@link PsiMethod}.
 	 * @param policy          conflict resolution policy
 	 * @param params          additional parameters stored with key/value in the map.
 	 * @param template        the template to use

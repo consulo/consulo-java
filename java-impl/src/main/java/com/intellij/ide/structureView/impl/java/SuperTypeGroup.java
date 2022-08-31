@@ -25,11 +25,11 @@ import com.intellij.ide.IdeBundle;
 import com.intellij.ide.util.treeView.smartTree.Group;
 import com.intellij.ide.util.treeView.smartTree.TreeElement;
 import com.intellij.navigation.ItemPresentation;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiModifierList;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiModifierList;
 import com.intellij.psi.SmartPointerManager;
 import com.intellij.psi.SmartPsiElementPointer;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.ui.image.Image;
 
 public class SuperTypeGroup implements Group, ItemPresentation, AccessLevelProvider{

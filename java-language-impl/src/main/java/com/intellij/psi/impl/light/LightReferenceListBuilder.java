@@ -21,14 +21,14 @@ import java.util.List;
 import javax.annotation.Nonnull;
 
 import com.intellij.lang.Language;
-import com.intellij.lang.java.JavaLanguage;
-import com.intellij.psi.JavaPsiFacade;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiClassType;
-import com.intellij.psi.PsiElementFactory;
-import com.intellij.psi.PsiJavaCodeReferenceElement;
+import com.intellij.java.language.JavaLanguage;
+import com.intellij.java.language.psi.JavaPsiFacade;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiClassType;
+import com.intellij.java.language.psi.PsiElementFactory;
+import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
 import com.intellij.psi.PsiManager;
-import com.intellij.psi.PsiReferenceList;
+import com.intellij.java.language.psi.PsiReferenceList;
 import com.intellij.util.containers.ContainerUtil;
 
 /**

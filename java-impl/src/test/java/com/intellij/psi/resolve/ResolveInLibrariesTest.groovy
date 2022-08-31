@@ -17,10 +17,10 @@ package com.intellij.psi.resolve
 import com.intellij.openapi.application.ex.PathManagerEx
 import com.intellij.openapi.vfs.LocalFileSystem
 import com.intellij.openapi.vfs.VirtualFile
-import com.intellij.psi.JavaPsiFacade
-import com.intellij.psi.PsiClass
+import com.intellij.java.language.psi.JavaPsiFacade
+import com.intellij.java.language.psi.PsiClass
 import com.intellij.psi.PsiFile
-import com.intellij.psi.PsiMethod
+import com.intellij.java.language.psi.PsiMethod
 import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.java.indexing.search.searches.ClassInheritorsSearch
 import com.intellij.java.indexing.search.searches.OverridingMethodsSearch

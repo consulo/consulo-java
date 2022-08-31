@@ -17,7 +17,7 @@ package com.intellij.ide.macro;
 
 import com.intellij.ide.IdeBundle;
 import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.psi.PsiJavaPackage;
+import com.intellij.java.language.psi.PsiJavaPackage;
 
 public class FileFQPackage extends Macro {
   public String expand(DataContext dataContext) {

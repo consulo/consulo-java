@@ -21,7 +21,7 @@ import javax.annotation.Nonnull;
 
 import com.intellij.codeInsight.ExpectedTypeInfo;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiLiteralExpression;
+import com.intellij.java.language.psi.PsiLiteralExpression;
 import com.intellij.util.ProcessingContext;
 import com.intellij.util.containers.ContainerUtil;
 import consulo.codeInsight.completion.CompletionProvider;

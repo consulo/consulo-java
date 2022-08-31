@@ -17,8 +17,8 @@ package com.intellij.refactoring.typeMigration;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.psi.PsiExpression;
-import com.intellij.psi.PsiType;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiType;
 import com.intellij.refactoring.typeMigration.usageInfo.TypeMigrationUsageInfo;
 import com.intellij.util.IncorrectOperationException;
 

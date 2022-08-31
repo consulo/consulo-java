@@ -16,9 +16,9 @@
 package com.intellij.codeInsight.unwrap;
 
 import com.intellij.codeInsight.CodeInsightBundle;
-import com.intellij.psi.PsiCatchSection;
+import com.intellij.java.language.psi.PsiCatchSection;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiTryStatement;
+import com.intellij.java.language.psi.PsiTryStatement;
 import com.intellij.util.IncorrectOperationException;
 
 public class JavaCatchRemover extends JavaUnwrapper {

@@ -17,6 +17,10 @@ package com.intellij.psi.impl.source.tree.java;
 
 import javax.annotation.Nonnull;
 
+import com.intellij.java.language.psi.JavaElementVisitor;
+import com.intellij.java.language.psi.PsiCodeBlock;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiSynchronizedStatement;
 import com.intellij.lang.ASTNode;
 import consulo.logging.Logger;
 import com.intellij.psi.*;

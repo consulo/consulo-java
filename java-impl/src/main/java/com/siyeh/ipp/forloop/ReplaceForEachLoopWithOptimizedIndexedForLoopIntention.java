@@ -15,10 +15,10 @@
  */
 package com.siyeh.ipp.forloop;
 
-import com.intellij.psi.PsiExpression;
-import com.intellij.psi.PsiForeachStatement;
-import com.intellij.psi.PsiType;
-import com.intellij.psi.PsiTypeCastExpression;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiForeachStatement;
+import com.intellij.java.language.psi.PsiType;
+import com.intellij.java.language.psi.PsiTypeCastExpression;
 
 /**
  * User: anna

@@ -2,7 +2,7 @@
 package com.intellij.psi.impl.light;
 
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiRecordComponent;
+import com.intellij.java.language.psi.PsiRecordComponent;
 import com.intellij.psi.SyntheticElement;
 import javax.annotation.Nonnull;
 

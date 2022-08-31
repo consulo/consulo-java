@@ -2,7 +2,8 @@
 package com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis;
 
 import com.google.common.base.Predicate;
-import com.intellij.lang.java.JavaLanguage;
+import com.intellij.java.language.JavaLanguage;
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.fileTypes.FileTypeRegistry;
 import com.intellij.openapi.fileTypes.LanguageFileType;
 import com.intellij.openapi.module.Module;

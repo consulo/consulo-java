@@ -1,6 +1,6 @@
 package com.intellij.codeInsight.daemon.quickFix;
 
-import com.intellij.pom.java.LanguageLevel;
+import com.intellij.java.language.LanguageLevel;
 
 public abstract class ModifierTest extends LightQuickFixTestCase {
   public void test() throws Exception { doAllTests(); }

@@ -15,6 +15,9 @@
  */
 package com.intellij.refactoring.changeSignature;
 
+import com.intellij.java.language.psi.PsiClassType;
+import com.intellij.java.language.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiType;
 import com.intellij.psi.*;
 import com.intellij.util.IncorrectOperationException;
 import javax.annotation.Nullable;

@@ -16,7 +16,7 @@
 package com.intellij.jam;
 
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiLiteral;
+import com.intellij.java.language.psi.PsiLiteral;
 import com.intellij.psi.PsiReferenceBase;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.ObjectUtil;

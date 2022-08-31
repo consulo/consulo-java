@@ -25,7 +25,7 @@ import com.intellij.execution.filters.Filter;
 import com.intellij.java.execution.filters.ExceptionFilters;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.search.GlobalSearchScope;
-import consulo.java.module.extension.JavaModuleExtension;
+import consulo.java.language.module.extension.JavaModuleExtension;
 import consulo.module.extension.ModuleExtensionHelper;
 
 import javax.annotation.Nonnull;

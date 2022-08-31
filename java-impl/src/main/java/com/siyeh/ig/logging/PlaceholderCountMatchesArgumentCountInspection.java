@@ -15,8 +15,11 @@
  */
 package com.siyeh.ig.logging;
 
-import com.intellij.psi.*;
-import com.intellij.psi.util.InheritanceUtil;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiExpressionList;
+import com.intellij.java.language.psi.PsiMethodCallExpression;
+import com.intellij.java.language.psi.PsiReferenceExpression;
+import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.util.containers.ContainerUtilRt;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;

@@ -19,7 +19,7 @@ import javax.annotation.Nonnull;
 
 import com.intellij.jam.JamElement;
 import com.intellij.pom.PomTarget;
-import com.intellij.psi.PsiJavaPackage;
+import com.intellij.java.language.psi.PsiJavaPackage;
 import com.intellij.semantic.SemKey;
 import com.intellij.util.Consumer;
 import com.intellij.util.PairConsumer;

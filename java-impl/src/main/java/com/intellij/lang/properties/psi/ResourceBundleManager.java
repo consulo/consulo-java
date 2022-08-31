@@ -24,7 +24,7 @@ import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.lang.properties.references.I18nUtil;
 import com.intellij.openapi.extensions.ExtensionPointName;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.PsiFile;
 
 public abstract class ResourceBundleManager {

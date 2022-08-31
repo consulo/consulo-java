@@ -22,9 +22,9 @@ package com.intellij.codeInsight.daemon.impl.quickfix;
 import javax.annotation.Nonnull;
 
 import consulo.java.analysis.impl.JavaQuickFixBundle;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiClassType;
-import com.intellij.psi.PsiKeyword;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiClassType;
+import com.intellij.java.language.psi.PsiKeyword;
 
 /**
  * changes 'class a extends b' to 'class a implements b' or vice versa

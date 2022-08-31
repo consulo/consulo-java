@@ -15,6 +15,7 @@
  */
 package com.intellij.refactoring.extractclass;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.help.HelpManager;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.project.Project;

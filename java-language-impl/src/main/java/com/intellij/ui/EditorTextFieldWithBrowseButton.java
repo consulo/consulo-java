@@ -20,9 +20,9 @@ import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.ComponentWithBrowseButton;
-import com.intellij.psi.JavaCodeFragment;
-import com.intellij.psi.JavaCodeFragmentFactory;
-import com.intellij.psi.JavaPsiFacade;
+import com.intellij.java.language.psi.JavaCodeFragment;
+import com.intellij.java.language.psi.JavaCodeFragmentFactory;
+import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiElement;
 

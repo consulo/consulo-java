@@ -22,7 +22,7 @@ import com.intellij.codeInsight.template.*;
 import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiVariable;
+import com.intellij.java.language.psi.PsiVariable;
 import com.intellij.util.ArrayUtil;
 import javax.annotation.Nonnull;
 

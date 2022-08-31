@@ -16,7 +16,7 @@
 
 package consulo.java.compiler.bytecodeProcessing.impl;
 
-import com.intellij.codeInsight.NullableNotNullManager;
+import com.intellij.java.language.codeInsight.NullableNotNullManager;
 import com.intellij.java.compiler.cache.Cache;
 import com.intellij.java.compiler.cache.JavaDependencyCache;
 import com.intellij.java.compiler.impl.javaCompiler.JavaCompilerConfiguration;
@@ -27,8 +27,8 @@ import com.intellij.compiler.make.CacheCorruptedException;
 import com.intellij.compiler.notNullVerification.NotNullVerifyingInstrumenter;
 import com.intellij.openapi.compiler.CompileContext;
 import com.intellij.openapi.module.Module;
-import com.intellij.openapi.projectRoots.JavaSdk;
-import com.intellij.openapi.projectRoots.JavaSdkVersion;
+import com.intellij.java.language.projectRoots.JavaSdk;
+import com.intellij.java.language.projectRoots.JavaSdkVersion;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.util.ThrowableComputable;
 import com.intellij.util.ArrayUtil;

@@ -15,8 +15,9 @@
  */
 package com.siyeh.ig.performance;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
-import com.intellij.psi.util.InheritanceUtil;
+import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.siyeh.ig.psiutils.ClassUtils;
 import javax.annotation.Nonnull;

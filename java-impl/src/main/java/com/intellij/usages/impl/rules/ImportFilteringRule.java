@@ -19,8 +19,8 @@ import javax.annotation.Nonnull;
 
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiImportList;
-import com.intellij.psi.PsiJavaFile;
+import com.intellij.java.language.psi.PsiImportList;
+import com.intellij.java.language.psi.PsiJavaFile;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.usages.Usage;
 import com.intellij.usages.rules.PsiElementUsage;

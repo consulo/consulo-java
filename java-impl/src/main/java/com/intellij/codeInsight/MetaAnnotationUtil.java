@@ -15,6 +15,9 @@
  */
 package com.intellij.codeInsight;
 
+import com.intellij.java.language.codeInsight.AnnotationTargetUtil;
+import com.intellij.java.language.codeInsight.AnnotationUtil;
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Comparing;
@@ -27,7 +30,7 @@ import com.intellij.java.indexing.search.searches.DirectClassInheritorsSearch;
 import com.intellij.psi.util.*;
 import com.intellij.util.containers.ConcurrentFactoryMap;
 import com.intellij.util.containers.ContainerUtil;
-import consulo.java.module.util.JavaClassNames;
+import consulo.java.language.module.util.JavaClassNames;
 import consulo.util.collection.HashingStrategy;
 import consulo.util.collection.Sets;
 import consulo.util.dataholder.Key;

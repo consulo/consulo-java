@@ -17,10 +17,10 @@ package com.siyeh.ig.controlflow;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.psi.PsiDoWhileStatement;
-import com.intellij.psi.PsiForStatement;
-import com.intellij.psi.PsiStatement;
-import com.intellij.psi.PsiWhileStatement;
+import com.intellij.java.language.psi.PsiDoWhileStatement;
+import com.intellij.java.language.psi.PsiForStatement;
+import com.intellij.java.language.psi.PsiStatement;
+import com.intellij.java.language.psi.PsiWhileStatement;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;

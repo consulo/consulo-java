@@ -18,9 +18,9 @@ package com.intellij.jam;
 import javax.annotation.Nonnull;
 
 import com.intellij.jam.model.util.JamCommonUtil;
-import com.intellij.psi.PsiAnnotation;
-import com.intellij.psi.PsiAnnotationMemberValue;
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.psi.PsiAnnotation;
+import com.intellij.java.language.psi.PsiAnnotationMemberValue;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.PsiElementRef;
 
 /**

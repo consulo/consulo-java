@@ -30,7 +30,7 @@ import javax.annotation.Nonnull;
 
 import org.jetbrains.annotations.NonNls;
 import com.intellij.JavaTestUtil;
-import com.intellij.lang.java.JavaLanguage;
+import com.intellij.java.language.JavaLanguage;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
 import com.intellij.refactoring.rename.RenameProcessor;

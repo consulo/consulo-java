@@ -18,7 +18,7 @@ package com.intellij.psi.filters.position;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.filters.ElementFilter;
-import com.intellij.psi.javadoc.PsiDocToken;
+import com.intellij.java.language.psi.javadoc.PsiDocToken;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.xml.XmlToken;
 import com.intellij.util.ReflectionUtil;

@@ -17,18 +17,18 @@ package com.intellij.psi.scope.processor;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.psi.PsiCallExpression;
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.psi.PsiCallExpression;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiExpressionList;
+import com.intellij.java.language.psi.PsiExpressionList;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiMethodCallExpression;
+import com.intellij.java.language.psi.PsiMethodCallExpression;
 import com.intellij.psi.ResolveState;
-import com.intellij.psi.infos.CandidateInfo;
-import com.intellij.psi.scope.JavaScopeProcessorEvent;
+import com.intellij.java.language.psi.infos.CandidateInfo;
+import com.intellij.java.language.psi.scope.JavaScopeProcessorEvent;
 import com.intellij.psi.scope.PsiConflictResolver;
 import com.intellij.psi.scope.conflictResolvers.JavaMethodsConflictResolver;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.util.SmartList;
 
 public class MethodResolverProcessor extends MethodCandidatesProcessor

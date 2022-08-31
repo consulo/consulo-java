@@ -17,7 +17,7 @@ package com.intellij.codeInsight.intention;
 
 import com.intellij.JavaTestUtil;
 import com.intellij.codeInsight.CodeInsightBundle;
-import com.intellij.pom.java.LanguageLevel;
+import com.intellij.java.language.LanguageLevel;
 import com.intellij.testFramework.builders.JavaModuleFixtureBuilder;
 import com.intellij.testFramework.fixtures.CodeInsightTestUtil;
 import com.intellij.testFramework.fixtures.JavaCodeInsightFixtureTestCase;

@@ -22,7 +22,7 @@ import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
 import com.intellij.java.debugger.impl.DebuggerUtilsEx;
 import com.intellij.java.debugger.impl.settings.NodeRendererSettings;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiExpression;
 import consulo.internal.com.sun.jdi.ClassNotLoadedException;
 import consulo.internal.com.sun.jdi.Method;
 import consulo.internal.com.sun.jdi.Type;

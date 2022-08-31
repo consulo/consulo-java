@@ -15,18 +15,18 @@
  */
 package com.intellij.codeInsight.completion;
 
-import static com.intellij.patterns.PsiJavaPatterns.psiElement;
+import static com.intellij.java.language.patterns.PsiJavaPatterns.psiElement;
 
 import javax.annotation.Nonnull;
 
 import com.intellij.patterns.PlatformPatterns;
-import com.intellij.psi.JavaDocTokenType;
+import com.intellij.java.language.psi.JavaDocTokenType;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiJavaReference;
+import com.intellij.java.language.psi.PsiJavaReference;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.impl.source.resolve.reference.impl.PsiMultiReference;
-import com.intellij.psi.javadoc.PsiDocTag;
+import com.intellij.java.language.psi.javadoc.PsiDocTag;
 import com.intellij.util.ThreeState;
 
 /**

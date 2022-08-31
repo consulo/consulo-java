@@ -17,9 +17,9 @@ package com.intellij.java.debugger.impl.engine;
 
 import javax.annotation.Nullable;
 import com.intellij.java.debugger.SourcePosition;
-import com.intellij.psi.PsiCodeBlock;
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiStatement;
+import com.intellij.java.language.psi.PsiCodeBlock;
+import com.intellij.java.language.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiStatement;
 import com.intellij.util.Range;
 
 /**

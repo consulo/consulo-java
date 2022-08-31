@@ -16,8 +16,8 @@
 package com.intellij.ide.util;
 
 import javax.annotation.Nullable;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiClassOwner;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiClassOwner;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.presentation.java.ClassPresentationUtil;

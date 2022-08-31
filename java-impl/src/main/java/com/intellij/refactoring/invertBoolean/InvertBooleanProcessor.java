@@ -16,6 +16,7 @@
 package com.intellij.refactoring.invertBoolean;
 
 import com.intellij.codeInsight.CodeInsightServicesUtil;
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Ref;
 import com.intellij.psi.*;

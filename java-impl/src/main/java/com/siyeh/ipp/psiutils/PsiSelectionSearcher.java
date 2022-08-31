@@ -16,6 +16,7 @@
 
 package com.siyeh.ipp.psiutils;
 
+import com.intellij.java.language.psi.JavaRecursiveElementWalkingVisitor;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.SelectionModel;
 import com.intellij.openapi.project.Project;

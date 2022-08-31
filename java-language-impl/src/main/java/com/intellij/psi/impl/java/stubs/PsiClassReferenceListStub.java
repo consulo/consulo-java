@@ -19,8 +19,8 @@
  */
 package com.intellij.psi.impl.java.stubs;
 
-import com.intellij.psi.PsiClassType;
-import com.intellij.psi.PsiReferenceList;
+import com.intellij.java.language.psi.PsiClassType;
+import com.intellij.java.language.psi.PsiReferenceList;
 import com.intellij.psi.impl.cache.TypeInfo;
 import com.intellij.psi.stubs.StubElement;
 import javax.annotation.Nonnull;

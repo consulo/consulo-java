@@ -16,9 +16,9 @@
 package com.intellij.codeInsight.unwrap;
 
 import com.intellij.codeInsight.CodeInsightBundle;
-import com.intellij.psi.PsiCodeBlock;
+import com.intellij.java.language.psi.PsiCodeBlock;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiSynchronizedStatement;
+import com.intellij.java.language.psi.PsiSynchronizedStatement;
 import com.intellij.util.IncorrectOperationException;
 
 public class JavaSynchronizedUnwrapper extends JavaUnwrapper {

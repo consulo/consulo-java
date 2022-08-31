@@ -23,7 +23,7 @@ import consulo.util.dataholder.Key;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.util.ThrowableRunnable;
 import consulo.execution.process.OSProcessUtil;
-import consulo.java.module.util.JavaClassNames;
+import consulo.java.language.module.util.JavaClassNames;
 
 /**
  * @author ven

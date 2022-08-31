@@ -16,8 +16,8 @@
 package com.intellij.java.analysis.impl.codeInspection.dataFlow.inliner;
 
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.CFGBuilder;
-import com.intellij.psi.PsiExpression;
-import com.intellij.psi.PsiMethodCallExpression;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiMethodCallExpression;
 import javax.annotation.Nonnull;
 
 /**

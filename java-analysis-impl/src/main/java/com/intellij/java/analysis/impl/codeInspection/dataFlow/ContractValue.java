@@ -19,10 +19,10 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.types.DfPrimitive
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.types.DfReferenceType;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.types.DfType;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.*;
-import com.intellij.psi.*;
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.impl.compiled.ClsParameterImpl;
-import com.intellij.psi.util.JavaElementKind;
-import com.intellij.psi.util.TypeConversionUtil;
+import com.intellij.java.language.psi.util.JavaElementKind;
+import com.intellij.java.language.psi.util.TypeConversionUtil;
 import com.siyeh.ig.psiutils.MethodCallUtils;
 
 import javax.annotation.Nonnull;

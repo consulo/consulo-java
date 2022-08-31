@@ -32,7 +32,7 @@ import com.intellij.codeInspection.ui.ListTable;
 import com.intellij.codeInspection.ui.ListWrappingTableModel;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.WriteExternalException;
-import consulo.java.module.util.JavaClassNames;
+import consulo.java.language.module.util.JavaClassNames;
 import com.intellij.util.SmartList;
 import com.siyeh.ig.ui.UiUtils;
 import consulo.java.analysis.impl.JavaQuickFixBundle;

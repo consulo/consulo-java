@@ -21,6 +21,10 @@
 package com.intellij.refactoring.move.moveInner;
 
 import com.intellij.ide.util.PackageChooserDialog;
+import com.intellij.java.language.psi.JavaDirectoryService;
+import com.intellij.java.language.psi.PsiAnonymousClass;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiJavaPackage;
 import consulo.logging.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;

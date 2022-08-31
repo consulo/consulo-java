@@ -1,6 +1,6 @@
 package consulo.java.bundle;
 
-import com.intellij.openapi.projectRoots.JavaSdk;
+import com.intellij.java.language.projectRoots.JavaSdk;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.projectRoots.SdkModificator;
 import com.intellij.openapi.projectRoots.impl.JavaSdkImpl;

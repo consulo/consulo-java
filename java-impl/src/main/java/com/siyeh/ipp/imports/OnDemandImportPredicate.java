@@ -15,6 +15,9 @@
  */
 package com.siyeh.ipp.imports;
 
+import com.intellij.java.language.psi.PsiImportStatement;
+import com.intellij.java.language.psi.PsiImportStatementBase;
+import com.intellij.java.language.psi.PsiJavaFile;
 import com.intellij.psi.*;
 import com.siyeh.ipp.base.PsiElementPredicate;
 import javax.annotation.Nonnull;

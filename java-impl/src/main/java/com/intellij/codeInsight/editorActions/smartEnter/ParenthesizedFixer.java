@@ -17,7 +17,7 @@ package com.intellij.codeInsight.editorActions.smartEnter;
 
 import com.intellij.openapi.editor.Editor;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiParenthesizedExpression;
+import com.intellij.java.language.psi.PsiParenthesizedExpression;
 import com.intellij.util.IncorrectOperationException;
 
 public class ParenthesizedFixer implements Fixer

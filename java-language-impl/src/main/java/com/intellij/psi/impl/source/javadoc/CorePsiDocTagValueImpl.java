@@ -18,13 +18,13 @@ package com.intellij.psi.impl.source.javadoc;
 import javax.annotation.Nonnull;
 
 import com.intellij.lang.ASTNode;
-import com.intellij.psi.JavaDocTokenType;
-import com.intellij.psi.JavaElementVisitor;
+import com.intellij.java.language.psi.JavaDocTokenType;
+import com.intellij.java.language.psi.JavaElementVisitor;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.impl.source.tree.ChildRole;
 import com.intellij.psi.impl.source.tree.CompositePsiElement;
 import com.intellij.psi.impl.source.tree.JavaDocElementType;
-import com.intellij.psi.javadoc.PsiDocTagValue;
+import com.intellij.java.language.psi.javadoc.PsiDocTagValue;
 
 /**
  * @author yole

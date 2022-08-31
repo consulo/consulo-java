@@ -18,10 +18,10 @@ package com.intellij.psi.util.proximity;
 import javax.annotation.Nonnull;
 
 import com.intellij.openapi.util.NotNullLazyKey;
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiMember;
+import com.intellij.java.language.psi.PsiMember;
 import com.intellij.psi.util.ProximityLocation;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.NotNullFunction;

@@ -15,7 +15,7 @@
  */
 package com.intellij.lang.java;
 
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.refactoring.classMembers.ClassMembersRefactoringSupport;
 import com.intellij.refactoring.classMembers.DependentMembersCollectorBase;
 import com.intellij.refactoring.classMembers.MemberInfoBase;

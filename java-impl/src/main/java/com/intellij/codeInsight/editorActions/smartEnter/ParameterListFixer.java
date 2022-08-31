@@ -18,8 +18,8 @@ package com.intellij.codeInsight.editorActions.smartEnter;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiParameter;
-import com.intellij.psi.PsiParameterList;
+import com.intellij.java.language.psi.PsiParameter;
+import com.intellij.java.language.psi.PsiParameterList;
 import com.intellij.util.IncorrectOperationException;
 
 /**

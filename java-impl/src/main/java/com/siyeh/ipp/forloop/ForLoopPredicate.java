@@ -15,10 +15,10 @@
  */
 package com.siyeh.ipp.forloop;
 
-import com.intellij.psi.JavaTokenType;
+import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiForStatement;
-import com.intellij.psi.PsiJavaToken;
+import com.intellij.java.language.psi.PsiForStatement;
+import com.intellij.java.language.psi.PsiJavaToken;
 import com.intellij.psi.tree.IElementType;
 import com.siyeh.ipp.base.PsiElementPredicate;
 import com.siyeh.ipp.psiutils.ErrorUtil;

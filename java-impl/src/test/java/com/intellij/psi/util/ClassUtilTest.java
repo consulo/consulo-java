@@ -16,7 +16,8 @@
 package com.intellij.psi.util;
 
 import com.intellij.JavaTestUtil;
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.psi.util.ClassUtil;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
 
 /**

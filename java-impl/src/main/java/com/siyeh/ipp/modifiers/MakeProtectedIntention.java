@@ -15,7 +15,7 @@
  */
 package com.siyeh.ipp.modifiers;
 
-import com.intellij.psi.PsiModifier;
+import com.intellij.java.language.psi.PsiModifier;
 
 /**
  * @author Bas Leijdekkers

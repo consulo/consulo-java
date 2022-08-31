@@ -16,7 +16,7 @@
 package com.intellij.psi.filters;
 
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiMethod;
 
 /**
  * Created by IntelliJ IDEA.

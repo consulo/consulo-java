@@ -15,6 +15,9 @@
  */
 package com.intellij.refactoring.safeDelete;
 
+import com.intellij.java.language.psi.PsiImportStatement;
+import com.intellij.java.language.psi.PsiImportStatementBase;
+import com.intellij.java.language.psi.PsiJavaFile;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 

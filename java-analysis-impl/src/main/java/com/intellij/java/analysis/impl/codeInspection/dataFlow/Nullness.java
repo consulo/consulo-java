@@ -15,7 +15,7 @@
  */
 package com.intellij.java.analysis.impl.codeInspection.dataFlow;
 
-import com.intellij.codeInsight.Nullability;
+import com.intellij.java.language.codeInsight.Nullability;
 import org.jetbrains.annotations.Contract;
 
 /**

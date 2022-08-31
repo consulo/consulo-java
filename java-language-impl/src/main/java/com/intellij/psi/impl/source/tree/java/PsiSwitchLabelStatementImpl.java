@@ -2,10 +2,10 @@
 package com.intellij.psi.impl.source.tree.java;
 
 import com.intellij.lang.ASTNode;
-import com.intellij.psi.JavaElementVisitor;
-import com.intellij.psi.JavaTokenType;
+import com.intellij.java.language.psi.JavaElementVisitor;
+import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.PsiSwitchLabelStatement;
+import com.intellij.java.language.psi.PsiSwitchLabelStatement;
 import com.intellij.psi.impl.source.tree.ChildRole;
 import com.intellij.psi.impl.source.tree.ElementType;
 import com.intellij.psi.impl.source.tree.JavaElementType;

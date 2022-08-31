@@ -27,7 +27,7 @@ import com.intellij.java.debugger.engine.evaluation.EvaluateExceptionUtil;
 import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.engine.evaluation.expression.Modifier;
 import consulo.logging.Logger;
-import com.intellij.psi.PsiType;
+import com.intellij.java.language.psi.PsiType;
 import consulo.internal.com.sun.jdi.*;
 
 import java.util.LinkedList;

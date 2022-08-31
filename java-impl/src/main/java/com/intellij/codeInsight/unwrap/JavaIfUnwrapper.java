@@ -17,9 +17,9 @@ package com.intellij.codeInsight.unwrap;
 
 import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiIfStatement;
-import com.intellij.psi.PsiStatement;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.PsiIfStatement;
+import com.intellij.java.language.psi.PsiStatement;
+import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.util.IncorrectOperationException;
 
 public class JavaIfUnwrapper extends JavaUnwrapper {

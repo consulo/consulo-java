@@ -15,11 +15,11 @@
  */
 package com.intellij.psi.impl.source.javadoc;
 
-import com.intellij.pom.java.LanguageLevel;
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.LanguageLevel;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiJavaPackage;
-import com.intellij.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiJavaPackage;
+import com.intellij.java.language.psi.PsiMethod;
 
 class AuthorDocTagInfo extends SimpleDocTagInfo
 {

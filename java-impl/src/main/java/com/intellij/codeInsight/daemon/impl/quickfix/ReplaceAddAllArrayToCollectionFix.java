@@ -22,7 +22,8 @@ package com.intellij.codeInsight.daemon.impl.quickfix;
 
 import javax.annotation.Nonnull;
 
-import consulo.java.module.extension.JavaModuleExtension;
+import com.intellij.java.language.psi.*;
+import consulo.java.language.module.extension.JavaModuleExtension;
 import org.jetbrains.annotations.NonNls;
 import com.intellij.codeInsight.FileModificationService;
 import com.intellij.codeInsight.intention.IntentionAction;
@@ -31,14 +32,14 @@ import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.projectRoots.JavaSdk;
-import com.intellij.openapi.projectRoots.JavaSdkVersion;
+import com.intellij.java.language.projectRoots.JavaSdk;
+import com.intellij.java.language.projectRoots.JavaSdkVersion;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.psi.*;
-import com.intellij.psi.codeStyle.JavaCodeStyleManager;
+import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.util.InheritanceUtil;
+import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.util.IncorrectOperationException;
 
 public class ReplaceAddAllArrayToCollectionFix implements IntentionAction {

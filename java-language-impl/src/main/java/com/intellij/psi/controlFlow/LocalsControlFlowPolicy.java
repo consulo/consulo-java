@@ -15,6 +15,7 @@
  */
 package com.intellij.psi.controlFlow;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import javax.annotation.Nonnull;

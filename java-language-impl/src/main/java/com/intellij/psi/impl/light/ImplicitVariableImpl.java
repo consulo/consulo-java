@@ -17,6 +17,7 @@ package com.intellij.psi.impl.light;
 
 import javax.annotation.Nonnull;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
 import com.intellij.psi.search.SearchScope;
 import com.intellij.psi.search.LocalSearchScope;

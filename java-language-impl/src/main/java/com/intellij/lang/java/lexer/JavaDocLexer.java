@@ -15,195 +15,164 @@
  */
 package com.intellij.lang.java.lexer;
 
-import java.io.IOException;
-
-import javax.annotation.Nonnull;
-
-import com.intellij.lexer.DocCommentTokenTypes;
-import com.intellij.lexer.JavaDocTokenTypes;
+import com.intellij.java.language.LanguageLevel;
+import com.intellij.java.language.lexer.DocCommentTokenTypes;
+import com.intellij.java.language.lexer.JavaDocTokenTypes;
+import com.intellij.java.language.lexer._JavaDocLexer;
 import com.intellij.lexer.LexerBase;
 import com.intellij.lexer.MergingLexerAdapter;
-import com.intellij.lexer._JavaDocLexer;
-import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.util.text.CharArrayUtil;
 
-public class JavaDocLexer extends MergingLexerAdapter
-{
-	public JavaDocLexer(@Nonnull LanguageLevel level)
-	{
-		this(JavaDocTokenTypes.INSTANCE, level.isAtLeast(LanguageLevel.JDK_1_5));
-	}
+import javax.annotation.Nonnull;
+import java.io.IOException;
 
-	private JavaDocLexer(DocCommentTokenTypes tokenTypes, boolean isJdk15Enabled)
-	{
-		super(new AsteriskStripperLexer(new _JavaDocLexer(isJdk15Enabled, tokenTypes), tokenTypes), tokenTypes.spaceCommentsTokenSet());
-	}
+public class JavaDocLexer extends MergingLexerAdapter {
+  public JavaDocLexer(@Nonnull LanguageLevel level) {
+    this(JavaDocTokenTypes.INSTANCE, level.isAtLeast(LanguageLevel.JDK_1_5));
+  }
 
-	private static class AsteriskStripperLexer extends LexerBase
-	{
-		private final _JavaDocLexer myFlex;
-		private final DocCommentTokenTypes myTokenTypes;
-		private CharSequence myBuffer;
-		private int myBufferIndex;
-		private int myBufferEndOffset;
-		private int myTokenEndOffset;
-		private int myState;
-		private IElementType myTokenType;
-		private boolean myAfterLineBreak;
-		private boolean myInLeadingSpace;
+  private JavaDocLexer(DocCommentTokenTypes tokenTypes, boolean isJdk15Enabled) {
+    super(new AsteriskStripperLexer(new _JavaDocLexer(isJdk15Enabled, tokenTypes), tokenTypes), tokenTypes.spaceCommentsTokenSet());
+  }
 
-		public AsteriskStripperLexer(final _JavaDocLexer flex, final DocCommentTokenTypes tokenTypes)
-		{
-			myFlex = flex;
-			myTokenTypes = tokenTypes;
-		}
+  private static class AsteriskStripperLexer extends LexerBase {
+    private final _JavaDocLexer myFlex;
+    private final DocCommentTokenTypes myTokenTypes;
+    private CharSequence myBuffer;
+    private int myBufferIndex;
+    private int myBufferEndOffset;
+    private int myTokenEndOffset;
+    private int myState;
+    private IElementType myTokenType;
+    private boolean myAfterLineBreak;
+    private boolean myInLeadingSpace;
 
-		@Override
-		public final void start(@Nonnull CharSequence buffer, int startOffset, int endOffset, int initialState)
-		{
-			myBuffer = buffer;
-			myBufferIndex = startOffset;
-			myBufferEndOffset = endOffset;
-			myTokenType = null;
-			myTokenEndOffset = startOffset;
-			myFlex.reset(myBuffer, startOffset, endOffset, initialState);
-		}
+    public AsteriskStripperLexer(final _JavaDocLexer flex, final DocCommentTokenTypes tokenTypes) {
+      myFlex = flex;
+      myTokenTypes = tokenTypes;
+    }
 
-		@Override
-		public int getState()
-		{
-			return myState;
-		}
+    @Override
+    public final void start(@Nonnull CharSequence buffer, int startOffset, int endOffset, int initialState) {
+      myBuffer = buffer;
+      myBufferIndex = startOffset;
+      myBufferEndOffset = endOffset;
+      myTokenType = null;
+      myTokenEndOffset = startOffset;
+      myFlex.reset(myBuffer, startOffset, endOffset, initialState);
+    }
 
-		@Nonnull
-		@Override
-		public CharSequence getBufferSequence()
-		{
-			return myBuffer;
-		}
+    @Override
+    public int getState() {
+      return myState;
+    }
 
-		@Override
-		public int getBufferEnd()
-		{
-			return myBufferEndOffset;
-		}
+    @Nonnull
+    @Override
+    public CharSequence getBufferSequence() {
+      return myBuffer;
+    }
 
-		@Override
-		public final IElementType getTokenType()
-		{
-			locateToken();
-			return myTokenType;
-		}
+    @Override
+    public int getBufferEnd() {
+      return myBufferEndOffset;
+    }
 
-		@Override
-		public final int getTokenStart()
-		{
-			locateToken();
-			return myBufferIndex;
-		}
+    @Override
+    public final IElementType getTokenType() {
+      locateToken();
+      return myTokenType;
+    }
 
-		@Override
-		public final int getTokenEnd()
-		{
-			locateToken();
-			return myTokenEndOffset;
-		}
+    @Override
+    public final int getTokenStart() {
+      locateToken();
+      return myBufferIndex;
+    }
+
+    @Override
+    public final int getTokenEnd() {
+      locateToken();
+      return myTokenEndOffset;
+    }
 
 
-		@Override
-		public final void advance()
-		{
-			locateToken();
-			myTokenType = null;
-		}
+    @Override
+    public final void advance() {
+      locateToken();
+      myTokenType = null;
+    }
 
-		protected final void locateToken()
-		{
-			if(myTokenType != null)
-			{
-				return;
-			}
-			_locateToken();
+    protected final void locateToken() {
+      if (myTokenType != null) {
+        return;
+      }
+      _locateToken();
 
-			if(myTokenType == myTokenTypes.space())
-			{
-				myAfterLineBreak = CharArrayUtil.containLineBreaks(myBuffer, getTokenStart(), getTokenEnd());
-			}
-		}
+      if (myTokenType == myTokenTypes.space()) {
+        myAfterLineBreak = CharArrayUtil.containLineBreaks(myBuffer, getTokenStart(), getTokenEnd());
+      }
+    }
 
-		private void _locateToken()
-		{
-			if(myTokenEndOffset == myBufferEndOffset)
-			{
-				myTokenType = null;
-				myBufferIndex = myBufferEndOffset;
-				return;
-			}
+    private void _locateToken() {
+      if (myTokenEndOffset == myBufferEndOffset) {
+        myTokenType = null;
+        myBufferIndex = myBufferEndOffset;
+        return;
+      }
 
-			myBufferIndex = myTokenEndOffset;
+      myBufferIndex = myTokenEndOffset;
 
-			if(myAfterLineBreak)
-			{
-				myAfterLineBreak = false;
-				while(myTokenEndOffset < myBufferEndOffset && myBuffer.charAt(myTokenEndOffset) == '*' && (myTokenEndOffset + 1 >= myBufferEndOffset || myBuffer.charAt(myTokenEndOffset + 1) != '/'))
-				{
-					myTokenEndOffset++;
-				}
+      if (myAfterLineBreak) {
+        myAfterLineBreak = false;
+        while (myTokenEndOffset < myBufferEndOffset && myBuffer.charAt(myTokenEndOffset) == '*' && (myTokenEndOffset + 1 >= myBufferEndOffset || myBuffer.charAt(myTokenEndOffset + 1) != '/')) {
+          myTokenEndOffset++;
+        }
 
-				myInLeadingSpace = true;
-				if(myBufferIndex < myTokenEndOffset)
-				{
-					myTokenType = myTokenTypes.commentLeadingAsterisks();
-					return;
-				}
-			}
+        myInLeadingSpace = true;
+        if (myBufferIndex < myTokenEndOffset) {
+          myTokenType = myTokenTypes.commentLeadingAsterisks();
+          return;
+        }
+      }
 
-			if(myInLeadingSpace)
-			{
-				myInLeadingSpace = false;
-				boolean lf = false;
-				while(myTokenEndOffset < myBufferEndOffset && Character.isWhitespace(myBuffer.charAt(myTokenEndOffset)))
-				{
-					if(myBuffer.charAt(myTokenEndOffset) == '\n')
-					{
-						lf = true;
-					}
-					myTokenEndOffset++;
-				}
+      if (myInLeadingSpace) {
+        myInLeadingSpace = false;
+        boolean lf = false;
+        while (myTokenEndOffset < myBufferEndOffset && Character.isWhitespace(myBuffer.charAt(myTokenEndOffset))) {
+          if (myBuffer.charAt(myTokenEndOffset) == '\n') {
+            lf = true;
+          }
+          myTokenEndOffset++;
+        }
 
-				final int state = myFlex.yystate();
-				if(state == _JavaDocLexer.COMMENT_DATA || myTokenEndOffset < myBufferEndOffset && (myBuffer.charAt(myTokenEndOffset) == '@' || myBuffer.charAt(myTokenEndOffset) == '{' || myBuffer
-						.charAt(myTokenEndOffset) == '\"' || myBuffer.charAt(myTokenEndOffset) == '<'))
-				{
-					myFlex.yybegin(_JavaDocLexer.COMMENT_DATA_START);
-				}
+        final int state = myFlex.yystate();
+        if (state == _JavaDocLexer.COMMENT_DATA || myTokenEndOffset < myBufferEndOffset && (myBuffer.charAt(myTokenEndOffset) == '@' || myBuffer.charAt(myTokenEndOffset) == '{' || myBuffer
+            .charAt(myTokenEndOffset) == '\"' || myBuffer.charAt(myTokenEndOffset) == '<')) {
+          myFlex.yybegin(_JavaDocLexer.COMMENT_DATA_START);
+        }
 
-				if(myBufferIndex < myTokenEndOffset)
-				{
-					myTokenType = lf || state == _JavaDocLexer.PARAM_TAG_SPACE || state == _JavaDocLexer.TAG_DOC_SPACE || state == _JavaDocLexer.INLINE_TAG_NAME || state == _JavaDocLexer
-							.DOC_TAG_VALUE_IN_PAREN ? myTokenTypes.space() : myTokenTypes.commentData();
+        if (myBufferIndex < myTokenEndOffset) {
+          myTokenType = lf || state == _JavaDocLexer.PARAM_TAG_SPACE || state == _JavaDocLexer.TAG_DOC_SPACE || state == _JavaDocLexer.INLINE_TAG_NAME || state == _JavaDocLexer
+              .DOC_TAG_VALUE_IN_PAREN ? myTokenTypes.space() : myTokenTypes.commentData();
 
-					return;
-				}
-			}
+          return;
+        }
+      }
 
-			flexLocateToken();
-		}
+      flexLocateToken();
+    }
 
-		private void flexLocateToken()
-		{
-			try
-			{
-				myState = myFlex.yystate();
-				myFlex.goTo(myBufferIndex);
-				myTokenType = myFlex.advance();
-				myTokenEndOffset = myFlex.getTokenEnd();
-			}
-			catch(IOException e)
-			{
-				// Can't be
-			}
-		}
-	}
+    private void flexLocateToken() {
+      try {
+        myState = myFlex.yystate();
+        myFlex.goTo(myBufferIndex);
+        myTokenType = myFlex.advance();
+        myTokenEndOffset = myFlex.getTokenEnd();
+      } catch (IOException e) {
+        // Can't be
+      }
+    }
+  }
 }

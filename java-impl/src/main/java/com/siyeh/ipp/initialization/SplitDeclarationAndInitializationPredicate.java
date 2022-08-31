@@ -15,6 +15,9 @@
  */
 package com.siyeh.ipp.initialization;
 
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiField;
 import com.intellij.psi.*;
 import com.siyeh.ipp.base.PsiElementPredicate;
 import com.siyeh.ipp.psiutils.ErrorUtil;

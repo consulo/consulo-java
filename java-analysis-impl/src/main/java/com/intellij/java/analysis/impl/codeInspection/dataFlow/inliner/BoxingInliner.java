@@ -2,15 +2,15 @@
 package com.intellij.java.analysis.impl.codeInspection.dataFlow.inliner;
 
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.CFGBuilder;
-import com.intellij.psi.PsiExpression;
-import com.intellij.psi.PsiMethodCallExpression;
-import com.intellij.psi.PsiPrimitiveType;
-import com.intellij.psi.PsiType;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiMethodCallExpression;
+import com.intellij.java.language.psi.PsiPrimitiveType;
+import com.intellij.java.language.psi.PsiType;
 import com.siyeh.ig.callMatcher.CallMatcher;
 
 import javax.annotation.Nonnull;
 
-import static com.intellij.psi.CommonClassNames.*;
+import static com.intellij.java.language.psi.CommonClassNames.*;
 
 public class BoxingInliner implements CallInliner {
   private static final CallMatcher BOXING_CALL = CallMatcher.anyOf(

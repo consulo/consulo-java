@@ -16,9 +16,9 @@
 package com.siyeh.ig.abstraction;
 
 import com.intellij.codeInspection.ui.SingleCheckboxOptionsPanel;
-import com.intellij.psi.PsiCatchSection;
-import com.intellij.psi.PsiParameter;
-import com.intellij.psi.PsiTypeElement;
+import com.intellij.java.language.psi.PsiCatchSection;
+import com.intellij.java.language.psi.PsiParameter;
+import com.intellij.java.language.psi.PsiTypeElement;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;

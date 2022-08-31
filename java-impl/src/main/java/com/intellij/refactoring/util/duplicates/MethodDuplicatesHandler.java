@@ -36,6 +36,7 @@ import com.intellij.java.analysis.impl.refactoring.util.duplicates.DuplicatesFin
 import com.intellij.java.analysis.impl.refactoring.util.duplicates.Match;
 import com.intellij.java.analysis.impl.refactoring.util.duplicates.ReturnValue;
 import com.intellij.java.analysis.impl.refactoring.util.duplicates.VariableReturnValue;
+import com.intellij.java.language.psi.*;
 import com.intellij.lang.ContextAwareActionHandler;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.application.ApplicationManager;

@@ -32,15 +32,16 @@ import java.util.regex.Pattern;
 
 import javax.annotation.Nonnull;
 
+import com.intellij.java.language.psi.*;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
 
 import javax.annotation.Nullable;
-import com.intellij.codeInsight.AnnotationUtil;
+import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.codeInsight.CodeInsightBundle;
-import com.intellij.codeInsight.ExternalAnnotationsManager;
-import com.intellij.codeInsight.InferredAnnotationsManager;
+import com.intellij.java.language.codeInsight.ExternalAnnotationsManager;
+import com.intellij.java.language.codeInsight.InferredAnnotationsManager;
 import com.intellij.codeInsight.documentation.DocumentationManagerProtocol;
 import com.intellij.codeInsight.documentation.DocumentationManagerUtil;
 import com.intellij.javadoc.JavadocGeneratorRunProfile;
@@ -49,8 +50,8 @@ import com.intellij.lang.LangBundle;
 import com.intellij.lang.java.JavaDocumentationProvider;
 import consulo.logging.Logger;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.projectRoots.JavaSdk;
-import com.intellij.openapi.projectRoots.JavaSdkVersion;
+import com.intellij.java.language.projectRoots.JavaSdk;
+import com.intellij.java.language.projectRoots.JavaSdkVersion;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.roots.ProjectFileIndex;
 import com.intellij.openapi.util.Comparing;
@@ -66,13 +67,13 @@ import com.intellij.psi.*;
 import com.intellij.psi.impl.JavaConstantExpressionEvaluator;
 import com.intellij.psi.impl.source.tree.JavaDocElementType;
 import com.intellij.psi.impl.source.tree.JavaElementType;
-import com.intellij.psi.javadoc.PsiDocComment;
-import com.intellij.psi.javadoc.PsiDocTag;
-import com.intellij.psi.javadoc.PsiDocTagValue;
-import com.intellij.psi.javadoc.PsiDocToken;
-import com.intellij.psi.javadoc.PsiInlineDocTag;
+import com.intellij.java.language.psi.javadoc.PsiDocComment;
+import com.intellij.java.language.psi.javadoc.PsiDocTag;
+import com.intellij.java.language.psi.javadoc.PsiDocTagValue;
+import com.intellij.java.language.psi.javadoc.PsiDocToken;
+import com.intellij.java.language.psi.javadoc.PsiInlineDocTag;
 import com.intellij.psi.search.EverythingGlobalScope;
-import com.intellij.psi.util.PsiFormatUtil;
+import com.intellij.java.language.psi.util.PsiFormatUtil;
 import com.intellij.psi.util.PsiFormatUtilBase;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ArrayUtil;
@@ -81,7 +82,7 @@ import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.ObjectUtil;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.xml.util.XmlStringUtil;
-import consulo.java.module.util.JavaClassNames;
+import consulo.java.language.module.util.JavaClassNames;
 
 public class JavaDocInfoGenerator
 {

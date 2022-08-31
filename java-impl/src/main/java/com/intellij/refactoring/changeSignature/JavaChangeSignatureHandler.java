@@ -18,6 +18,7 @@ package com.intellij.refactoring.changeSignature;
 import javax.annotation.Nonnull;
 
 import com.intellij.ide.util.SuperMethodWarningUtil;
+import com.intellij.java.language.psi.*;
 import com.intellij.lang.java.JavaRefactoringSupportProvider;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.actionSystem.LangDataKeys;

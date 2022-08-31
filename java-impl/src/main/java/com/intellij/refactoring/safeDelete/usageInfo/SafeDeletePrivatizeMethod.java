@@ -15,12 +15,12 @@
  */
 package com.intellij.refactoring.safeDelete.usageInfo;
 
-import consulo.java.module.util.JavaClassNames;
-import com.intellij.codeInsight.AnnotationUtil;
-import com.intellij.psi.PsiAnnotation;
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiModifier;
-import com.intellij.psi.util.PsiUtil;
+import consulo.java.language.module.util.JavaClassNames;
+import com.intellij.java.language.codeInsight.AnnotationUtil;
+import com.intellij.java.language.psi.PsiAnnotation;
+import com.intellij.java.language.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiModifier;
+import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.util.IncorrectOperationException;
 
 /**

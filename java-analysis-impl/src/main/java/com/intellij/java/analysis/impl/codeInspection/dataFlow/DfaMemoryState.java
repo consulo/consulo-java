@@ -21,7 +21,7 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaConditio
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaValue;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaVariableValue;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.RelationType;
-import com.intellij.psi.PsiType;
+import com.intellij.java.language.psi.PsiType;
 import javax.annotation.Nonnull;
 
 import javax.annotation.Nullable;

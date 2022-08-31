@@ -20,7 +20,7 @@ import com.intellij.psi.util.ProximityLocation;
 import com.intellij.psi.statistics.StatisticsInfo;
 import com.intellij.psi.statistics.JavaStatisticsManager;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiMember;
+import com.intellij.java.language.psi.PsiMember;
 
 /**
  * @author peter

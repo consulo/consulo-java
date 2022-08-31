@@ -15,9 +15,9 @@
  */
 package com.siyeh.ig.memory;
 
-import consulo.java.module.util.JavaClassNames;
-import com.intellij.psi.PsiField;
-import com.intellij.psi.PsiType;
+import consulo.java.language.module.util.JavaClassNames;
+import com.intellij.java.language.psi.PsiField;
+import com.intellij.java.language.psi.PsiType;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;

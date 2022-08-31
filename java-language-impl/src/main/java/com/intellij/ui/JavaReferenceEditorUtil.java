@@ -21,11 +21,11 @@ import javax.annotation.Nullable;
 import consulo.annotation.access.RequiredReadAction;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.JavaCodeFragment;
-import com.intellij.psi.JavaCodeFragmentFactory;
-import com.intellij.psi.JavaPsiFacade;
+import com.intellij.java.language.psi.JavaCodeFragment;
+import com.intellij.java.language.psi.JavaCodeFragmentFactory;
+import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.psi.PsiDocumentManager;
-import com.intellij.psi.PsiJavaPackage;
+import com.intellij.java.language.psi.PsiJavaPackage;
 import com.intellij.util.NullableFunction;
 
 /**

@@ -15,6 +15,7 @@
  */
 package com.siyeh.ipp.exceptions;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;

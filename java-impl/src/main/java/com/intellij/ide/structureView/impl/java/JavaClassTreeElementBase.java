@@ -16,6 +16,7 @@
 package com.intellij.ide.structureView.impl.java;
 
 import com.intellij.ide.structureView.impl.common.PsiTreeElementBase;
+import com.intellij.java.language.psi.*;
 import com.intellij.navigation.ColoredItemPresentation;
 import com.intellij.navigation.LocationPresentation;
 import com.intellij.openapi.editor.colors.CodeInsightColors;
@@ -24,7 +25,7 @@ import com.intellij.openapi.project.IndexNotReadyException;
 import com.intellij.openapi.util.registry.Registry;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.util.ui.UIUtil;
 
 public abstract class JavaClassTreeElementBase<Value extends PsiElement> extends PsiTreeElementBase<Value> implements AccessLevelProvider,

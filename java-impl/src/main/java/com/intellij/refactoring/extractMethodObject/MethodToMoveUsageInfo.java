@@ -20,7 +20,7 @@
  */
 package com.intellij.refactoring.extractMethodObject;
 
-import com.intellij.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.usageView.UsageInfo;
 import javax.annotation.Nonnull;
 

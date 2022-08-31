@@ -66,7 +66,7 @@ import com.intellij.openapi.util.Comparing;
 import consulo.disposer.Disposer;
 import com.intellij.openapi.util.Pair;
 import com.intellij.psi.PsiCompiledElement;
-import com.intellij.psi.PsiElementFinder;
+import com.intellij.java.language.psi.PsiElementFinder;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.java.execution.unscramble.ThreadState;

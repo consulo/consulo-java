@@ -15,7 +15,7 @@
  */
 package com.intellij.psi.impl.java.stubs;
 
-import com.intellij.psi.PsiJavaModule;
+import com.intellij.java.language.psi.PsiJavaModule;
 import com.intellij.psi.stubs.StubElement;
 
 public interface PsiJavaModuleStub extends StubElement<PsiJavaModule>

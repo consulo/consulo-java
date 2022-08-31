@@ -30,20 +30,20 @@ import javax.swing.text.Document;
 
 import org.jetbrains.java.generate.GenerateToStringContext;
 import org.jetbrains.java.generate.GenerateToStringUtils;
-import consulo.java.module.util.JavaClassNames;
-import com.intellij.codeInsight.TestFrameworks;
+import consulo.java.language.module.util.JavaClassNames;
+import com.intellij.java.language.codeInsight.TestFrameworks;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.JavaElementVisitor;
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.psi.JavaElementVisitor;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.PsiField;
-import com.intellij.psi.PsiIdentifier;
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiModifier;
-import com.intellij.psi.PsiParameterList;
-import com.intellij.psi.util.InheritanceUtil;
+import com.intellij.java.language.psi.PsiField;
+import com.intellij.java.language.psi.PsiIdentifier;
+import com.intellij.java.language.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiModifier;
+import com.intellij.java.language.psi.PsiParameterList;
+import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.util.ui.CheckBox;
 
 /**

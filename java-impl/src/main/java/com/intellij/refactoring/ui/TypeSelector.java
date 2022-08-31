@@ -18,9 +18,9 @@ package com.intellij.refactoring.ui;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.ComboBox;
 import com.intellij.openapi.util.Comparing;
-import com.intellij.psi.PsiType;
-import com.intellij.psi.SmartTypePointer;
-import com.intellij.psi.SmartTypePointerManager;
+import com.intellij.java.language.psi.PsiType;
+import com.intellij.java.language.psi.SmartTypePointer;
+import com.intellij.java.language.psi.SmartTypePointerManager;
 import javax.annotation.Nonnull;
 
 import javax.swing.*;

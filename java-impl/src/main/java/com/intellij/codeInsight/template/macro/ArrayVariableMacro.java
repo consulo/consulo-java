@@ -18,6 +18,9 @@ package com.intellij.codeInsight.template.macro;
 import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.codeInsight.template.Expression;
 import com.intellij.codeInsight.template.ExpressionContext;
+import com.intellij.java.language.psi.PsiArrayType;
+import com.intellij.java.language.psi.PsiType;
+import com.intellij.java.language.psi.PsiVariable;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 

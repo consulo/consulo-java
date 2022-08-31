@@ -17,10 +17,10 @@ package com.intellij.jam.reflect;
 
 import com.intellij.jam.JamTypeAttributeElement;
 import com.intellij.openapi.util.Factory;
-import com.intellij.psi.PsiAnnotation;
-import com.intellij.psi.PsiAnnotationMemberValue;
+import com.intellij.java.language.psi.PsiAnnotation;
+import com.intellij.java.language.psi.PsiAnnotationMemberValue;
 import com.intellij.psi.PsiElementRef;
-import com.intellij.psi.PsiType;
+import com.intellij.java.language.psi.PsiType;
 import com.intellij.util.NullableFunction;
 import javax.annotation.Nonnull;
 

@@ -21,7 +21,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import consulo.util.dataholder.Key;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiSubstitutor;
+import com.intellij.java.language.psi.PsiSubstitutor;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.filters.ElementFilter;
 import com.intellij.psi.scope.BaseScopeProcessor;

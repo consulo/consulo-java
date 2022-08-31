@@ -28,7 +28,7 @@ import com.intellij.java.debugger.engine.evaluation.EvaluationContext;
 import com.intellij.java.debugger.engine.evaluation.expression.ExpressionEvaluator;
 import com.intellij.java.debugger.engine.evaluation.expression.Modifier;
 import com.intellij.java.compiler.ClassObject;
-import com.intellij.openapi.projectRoots.JavaSdkVersion;
+import com.intellij.java.language.projectRoots.JavaSdkVersion;
 import consulo.internal.com.sun.jdi.Value;
 
 /**

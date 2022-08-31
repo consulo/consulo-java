@@ -16,10 +16,11 @@
 
 package com.intellij.java.analysis.impl.codeInspection.dataFlow.instructions;
 
-import com.intellij.codeInsight.Nullability;
+import com.intellij.java.language.codeInsight.Nullability;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.*;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaTypeValue;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaValue;
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
 import com.intellij.util.ObjectUtils;
 

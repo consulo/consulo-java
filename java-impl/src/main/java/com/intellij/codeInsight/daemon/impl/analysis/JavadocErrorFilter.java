@@ -17,7 +17,7 @@ package com.intellij.codeInsight.daemon.impl.analysis;
 
 import com.intellij.codeInsight.highlighting.HighlightErrorFilter;
 import com.intellij.psi.PsiErrorElement;
-import com.intellij.psi.javadoc.PsiDocComment;
+import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.psi.util.PsiTreeUtil;
 import javax.annotation.Nonnull;
 

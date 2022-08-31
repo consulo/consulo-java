@@ -1,7 +1,7 @@
 package com.intellij.psi.impl.source.resolve.reference.impl.providers;
 
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiJavaPackage;
+import com.intellij.java.language.psi.PsiJavaPackage;
 import com.intellij.util.PatternUtil;
 import com.intellij.util.Processor;
 import javax.annotation.Nullable;

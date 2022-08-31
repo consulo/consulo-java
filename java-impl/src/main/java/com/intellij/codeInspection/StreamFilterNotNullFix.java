@@ -21,18 +21,19 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import com.intellij.codeInsight.intention.HighPriorityAction;
 import com.intellij.java.analysis.impl.codeInspection.LambdaCanBeMethodReferenceInspection;
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
-import com.intellij.psi.codeStyle.JavaCodeStyleManager;
+import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.psi.codeStyle.SuggestedNameInfo;
-import com.intellij.psi.codeStyle.VariableKind;
-import com.intellij.psi.util.InheritanceUtil;
+import com.intellij.java.language.psi.codeStyle.VariableKind;
+import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.util.ArrayUtil;
 import com.siyeh.ig.psiutils.StreamApiUtil;
 import consulo.java.analysis.impl.codeInsight.JavaInspectionsBundle;
-import consulo.java.module.util.JavaClassNames;
+import consulo.java.language.module.util.JavaClassNames;
 
 public class StreamFilterNotNullFix implements LocalQuickFix, HighPriorityAction
 {

@@ -15,7 +15,10 @@
  */
 package com.siyeh.ig.bugs;
 
-import com.intellij.psi.*;
+import com.intellij.java.language.psi.PsiBinaryExpression;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiJavaToken;
+import com.intellij.java.language.psi.PsiKeyword;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;

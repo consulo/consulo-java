@@ -17,7 +17,7 @@ import com.intellij.openapi.projectRoots.SdkTable;
 import com.intellij.openapi.ui.ComboBox;
 import com.intellij.ui.ColoredListCellRenderer;
 import com.intellij.ui.SimpleTextAttributes;
-import consulo.java.module.extension.JavaModuleExtension;
+import consulo.java.language.module.extension.JavaModuleExtension;
 
 public class ShortenCommandLineModeCombo extends ComboBox<ShortenCommandLine>
 {

@@ -15,10 +15,10 @@
  */
 package com.siyeh.ig.assignment;
 
-import com.intellij.psi.PsiAssignmentExpression;
+import com.intellij.java.language.psi.PsiAssignmentExpression;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiExpressionListStatement;
-import com.intellij.psi.PsiExpressionStatement;
+import com.intellij.java.language.psi.PsiExpressionListStatement;
+import com.intellij.java.language.psi.PsiExpressionStatement;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;

@@ -15,10 +15,11 @@
  */
 package com.intellij.refactoring.typeCook.deductive;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
 import javax.annotation.Nonnull;
 
 import java.util.HashMap;

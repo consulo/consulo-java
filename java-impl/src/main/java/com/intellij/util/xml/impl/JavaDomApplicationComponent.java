@@ -18,8 +18,8 @@ package com.intellij.util.xml.impl;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiType;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiType;
 import com.intellij.util.Consumer;
 import com.intellij.util.xml.CanonicalPsiTypeConverter;
 import com.intellij.util.xml.CanonicalPsiTypeConverterImpl;

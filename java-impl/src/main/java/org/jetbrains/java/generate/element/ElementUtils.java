@@ -19,9 +19,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import com.intellij.psi.PsiField;
-import com.intellij.psi.PsiMember;
-import com.intellij.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiField;
+import com.intellij.java.language.psi.PsiMember;
+import com.intellij.java.language.psi.PsiMethod;
 
 /**
  * Element utilities.
@@ -65,7 +65,7 @@ public class ElementUtils
 	/**
 	 * Gets the list of members to be put in the VelocityContext.
 	 *
-	 * @param members a list of {@link com.intellij.psi.PsiMember} objects.
+	 * @param members a list of {@link PsiMember} objects.
 	 * @return a filtered list of only the methods as a {@link MethodElement} objects.
 	 */
 	public static List<MethodElement> getOnlyAsMethodElements(Collection<? extends PsiMember> members)

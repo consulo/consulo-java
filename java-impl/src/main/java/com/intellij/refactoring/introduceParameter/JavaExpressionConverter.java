@@ -16,7 +16,7 @@
 package com.intellij.refactoring.introduceParameter;
 
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.JavaPsiFacade;
+import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.psi.PsiElement;
 
 /**

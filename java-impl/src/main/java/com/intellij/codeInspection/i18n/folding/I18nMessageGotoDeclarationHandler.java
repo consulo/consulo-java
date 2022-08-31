@@ -17,6 +17,10 @@ package com.intellij.codeInspection.i18n.folding;
 
 import com.intellij.codeInsight.folding.impl.EditorFoldingInfo;
 import com.intellij.codeInsight.navigation.actions.GotoDeclarationHandlerBase;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiJavaToken;
+import com.intellij.java.language.psi.PsiLiteralExpression;
+import com.intellij.java.language.psi.PsiMethodCallExpression;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.folding.CompositeFoldingBuilder;
 import com.intellij.lang.folding.FoldingBuilder;

@@ -16,10 +16,11 @@
 package com.intellij.codeInsight.template;
 
 import com.intellij.codeInsight.template.impl.JavaTemplateUtil;
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.util.IncorrectOperationException;
 import javax.annotation.Nonnull;
 

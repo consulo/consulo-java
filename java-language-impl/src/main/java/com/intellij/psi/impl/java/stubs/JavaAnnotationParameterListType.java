@@ -18,7 +18,7 @@ package com.intellij.psi.impl.java.stubs;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.LighterAST;
 import com.intellij.lang.LighterASTNode;
-import com.intellij.psi.PsiAnnotationParameterList;
+import com.intellij.java.language.psi.PsiAnnotationParameterList;
 import com.intellij.psi.impl.java.stubs.impl.PsiAnnotationParameterListStubImpl;
 import com.intellij.psi.impl.source.tree.java.AnnotationParamListElement;
 import com.intellij.psi.impl.source.tree.java.PsiAnnotationParamListImpl;

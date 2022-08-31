@@ -18,7 +18,7 @@ package com.intellij.psi.presentation.java;
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.navigation.ItemPresentationProvider;
 import com.intellij.navigation.NavigationItem;
-import com.intellij.psi.PsiVariable;
+import com.intellij.java.language.psi.PsiVariable;
 import consulo.ide.IconDescriptorUpdaters;
 import consulo.ui.image.Image;
 

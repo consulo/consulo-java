@@ -17,8 +17,8 @@ package com.siyeh.ig.serialization;
 
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.WriteExternalException;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.util.InheritanceUtil;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.util.ui.CheckBox;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;

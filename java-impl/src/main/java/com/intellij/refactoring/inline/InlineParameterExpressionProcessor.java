@@ -17,6 +17,7 @@ package com.intellij.refactoring.inline;
 
 import com.intellij.codeInsight.ExceptionUtil;
 import com.intellij.codeInspection.sameParameterValue.SameParameterValueInspection;
+import com.intellij.java.language.psi.*;
 import consulo.logging.Logger;
 import consulo.util.dataholder.Key;
 import com.intellij.openapi.util.Ref;
@@ -24,7 +25,7 @@ import com.intellij.psi.*;
 import com.intellij.java.analysis.impl.psi.controlFlow.DefUseUtil;
 import com.intellij.psi.search.searches.ReferencesSearch;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.refactoring.BaseRefactoringProcessor;
 import com.intellij.refactoring.util.InlineUtil;
 import com.intellij.refactoring.util.RefactoringUIUtil;

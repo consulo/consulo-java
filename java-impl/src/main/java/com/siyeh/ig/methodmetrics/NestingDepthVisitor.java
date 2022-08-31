@@ -17,6 +17,7 @@ package com.siyeh.ig.methodmetrics;
 
 import javax.annotation.Nonnull;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
 
 class NestingDepthVisitor extends JavaRecursiveElementVisitor {

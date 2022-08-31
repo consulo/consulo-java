@@ -17,10 +17,10 @@ package com.intellij.codeInsight.editorActions.smartEnter;
 
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
-import com.intellij.psi.PsiCatchSection;
-import com.intellij.psi.PsiCodeBlock;
+import com.intellij.java.language.psi.PsiCatchSection;
+import com.intellij.java.language.psi.PsiCodeBlock;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiJavaToken;
+import com.intellij.java.language.psi.PsiJavaToken;
 import com.intellij.util.IncorrectOperationException;
 
 /**

@@ -4,6 +4,7 @@ import com.intellij.java.debugger.impl.ui.breakpoints.JavaFieldBreakpointType;
 import com.intellij.java.debugger.impl.ui.breakpoints.JavaLineBreakpointType;
 import com.intellij.java.debugger.impl.ui.breakpoints.JavaLineBreakpointTypeBase;
 import com.intellij.java.debugger.impl.ui.breakpoints.JavaMethodBreakpointType;
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.project.Project;

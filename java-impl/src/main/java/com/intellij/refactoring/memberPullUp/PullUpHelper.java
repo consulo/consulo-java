@@ -19,9 +19,9 @@ import java.util.LinkedHashSet;
 
 import com.intellij.lang.LanguageExtension;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiField;
-import com.intellij.psi.PsiMember;
-import com.intellij.psi.PsiSubstitutor;
+import com.intellij.java.language.psi.PsiField;
+import com.intellij.java.language.psi.PsiMember;
+import com.intellij.java.language.psi.PsiSubstitutor;
 import com.intellij.refactoring.classMembers.MemberInfoBase;
 
 /**

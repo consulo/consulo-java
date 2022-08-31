@@ -15,10 +15,10 @@
  */
 package com.siyeh.ig.methodmetrics;
 
-import com.intellij.psi.PsiCodeBlock;
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiStatement;
-import com.intellij.psi.PsiType;
+import com.intellij.java.language.psi.PsiCodeBlock;
+import com.intellij.java.language.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiStatement;
+import com.intellij.java.language.psi.PsiType;
 import com.intellij.util.ui.CheckBox;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;

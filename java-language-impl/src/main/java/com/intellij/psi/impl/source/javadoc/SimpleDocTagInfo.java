@@ -17,12 +17,12 @@ package com.intellij.psi.impl.source.javadoc;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.pom.java.LanguageLevel;
+import com.intellij.java.language.LanguageLevel;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
-import com.intellij.psi.javadoc.JavadocTagInfo;
-import com.intellij.psi.javadoc.PsiDocTagValue;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.javadoc.JavadocTagInfo;
+import com.intellij.java.language.psi.javadoc.PsiDocTagValue;
+import com.intellij.java.language.psi.util.PsiUtil;
 
 /**
  * @author mike

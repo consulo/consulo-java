@@ -19,14 +19,14 @@ import javax.annotation.Nonnull;
 
 import consulo.logging.Logger;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.ClassTypePointerFactory;
-import com.intellij.psi.JavaPsiFacade;
-import com.intellij.psi.PsiClassType;
-import com.intellij.psi.PsiElementFactory;
-import com.intellij.psi.PsiJavaCodeReferenceElement;
+import com.intellij.java.language.psi.ClassTypePointerFactory;
+import com.intellij.java.language.psi.JavaPsiFacade;
+import com.intellij.java.language.psi.PsiClassType;
+import com.intellij.java.language.psi.PsiElementFactory;
+import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
 import com.intellij.psi.SmartPointerManager;
 import com.intellij.psi.SmartPsiElementPointer;
-import com.intellij.psi.SmartTypePointer;
+import com.intellij.java.language.psi.SmartTypePointer;
 import com.intellij.psi.impl.source.PsiClassReferenceType;
 import com.intellij.util.IncorrectOperationException;
 

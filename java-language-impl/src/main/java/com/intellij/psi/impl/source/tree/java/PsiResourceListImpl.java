@@ -21,12 +21,12 @@ import java.util.List;
 import javax.annotation.Nonnull;
 
 import com.intellij.lang.ASTNode;
-import com.intellij.psi.JavaElementVisitor;
+import com.intellij.java.language.psi.JavaElementVisitor;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.PsiResourceList;
-import com.intellij.psi.PsiResourceListElement;
-import com.intellij.psi.PsiResourceVariable;
+import com.intellij.java.language.psi.PsiResourceList;
+import com.intellij.java.language.psi.PsiResourceListElement;
+import com.intellij.java.language.psi.PsiResourceVariable;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.impl.PsiImplUtil;
 import com.intellij.psi.impl.source.tree.CompositePsiElement;

@@ -15,9 +15,9 @@
  */
 package com.siyeh.ig.numeric;
 
-import com.intellij.psi.JavaTokenType;
-import com.intellij.psi.PsiJavaToken;
-import com.intellij.psi.PsiPrefixExpression;
+import com.intellij.java.language.psi.JavaTokenType;
+import com.intellij.java.language.psi.PsiJavaToken;
+import com.intellij.java.language.psi.PsiPrefixExpression;
 import com.intellij.psi.tree.IElementType;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;

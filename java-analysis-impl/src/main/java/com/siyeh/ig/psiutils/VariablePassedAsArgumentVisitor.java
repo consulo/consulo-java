@@ -17,13 +17,13 @@ package com.siyeh.ig.psiutils;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.psi.JavaRecursiveElementVisitor;
+import com.intellij.java.language.psi.JavaRecursiveElementVisitor;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiExpression;
-import com.intellij.psi.PsiExpressionList;
-import com.intellij.psi.PsiMethodCallExpression;
-import com.intellij.psi.PsiNewExpression;
-import com.intellij.psi.PsiVariable;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiExpressionList;
+import com.intellij.java.language.psi.PsiMethodCallExpression;
+import com.intellij.java.language.psi.PsiNewExpression;
+import com.intellij.java.language.psi.PsiVariable;
 
 class VariablePassedAsArgumentVisitor extends JavaRecursiveElementVisitor {
 

@@ -15,12 +15,12 @@
  */
 package com.intellij.util.text;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
-import com.intellij.psi.util.PsiFormatUtil;
+import com.intellij.java.language.psi.util.PsiFormatUtil;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.psi.xml.XmlTag;
-import com.intellij.psi.PsiJavaPackage;
 
 public abstract class ElementPresentation {
   private final Noun myKind;

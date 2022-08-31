@@ -21,7 +21,7 @@ import static org.junit.Assert.assertNotNull;
 import org.jetbrains.annotations.NonNls;
 import com.intellij.codeInsight.daemon.LightDaemonAnalyzerTestCase;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.LambdaHighlightingUtil;
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.search.GlobalSearchScope;
 
 public abstract class FunctionalInterfaceTest extends LightDaemonAnalyzerTestCase {

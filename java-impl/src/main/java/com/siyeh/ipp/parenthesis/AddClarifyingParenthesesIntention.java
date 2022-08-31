@@ -15,6 +15,7 @@
  */
 package com.siyeh.ipp.parenthesis;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.progress.ProcessCanceledException;
 import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;

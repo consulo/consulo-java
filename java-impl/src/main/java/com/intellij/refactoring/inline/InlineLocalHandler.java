@@ -23,6 +23,7 @@ import java.util.List;
 import javax.annotation.Nonnull;
 
 import com.intellij.codeInsight.ExceptionUtil;
+import com.intellij.java.language.psi.*;
 import consulo.codeInsight.TargetElementUtil;
 import com.intellij.codeInsight.highlighting.HighlightManager;
 import com.intellij.java.analysis.codeInsight.intention.QuickFixFactory;
@@ -41,7 +42,7 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.searches.ReferencesSearch;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.psi.util.PsiUtilBase;
 import com.intellij.refactoring.HelpID;
 import com.intellij.refactoring.RefactoringBundle;

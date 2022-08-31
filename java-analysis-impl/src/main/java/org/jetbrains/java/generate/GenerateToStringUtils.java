@@ -23,11 +23,11 @@ import javax.annotation.Nonnull;
 import org.jetbrains.java.generate.config.FilterPattern;
 import org.jetbrains.java.generate.psi.PsiAdapter;
 import consulo.logging.Logger;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiField;
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiModifier;
-import com.intellij.psi.PsiType;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiField;
+import com.intellij.java.language.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiModifier;
+import com.intellij.java.language.psi.PsiType;
 
 /**
  * Utility methods for GenerationToStringAction and the inspections.

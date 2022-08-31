@@ -16,8 +16,8 @@
 package com.intellij.codeInspection.accessStaticViaInstance;
 
 import com.intellij.codeInsight.daemon.impl.quickfix.AccessStaticViaInstanceFix;
-import com.intellij.psi.JavaResolveResult;
-import com.intellij.psi.PsiReferenceExpression;
+import com.intellij.java.language.psi.JavaResolveResult;
+import com.intellij.java.language.psi.PsiReferenceExpression;
 
 /**
  * User: anna

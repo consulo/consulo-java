@@ -17,9 +17,9 @@ package com.intellij.java.analysis.impl.codeInsight.daemon.impl.actions;
 
 import com.intellij.codeInsight.daemon.HighlightDisplayKey;
 import com.intellij.codeInspection.InspectionsBundle;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiDeclarationStatement;
-import com.intellij.psi.PsiDocCommentOwner;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiDeclarationStatement;
+import com.intellij.java.language.psi.PsiDocCommentOwner;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
 

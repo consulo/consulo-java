@@ -23,6 +23,8 @@ import com.intellij.idea.ActionsBundle;
 import com.intellij.java.compiler.impl.javaCompiler.AnnotationProcessingCompiler;
 import com.intellij.java.compiler.impl.javaCompiler.JavaCompilerConfiguration;
 import com.intellij.java.compiler.impl.javaCompiler.annotationProcessing.AnnotationProcessingConfiguration;
+import com.intellij.java.language.psi.JavaDirectoryService;
+import com.intellij.java.language.psi.PsiJavaPackage;
 import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.compiler.CompilerBundle;
 import com.intellij.openapi.compiler.CompilerManager;

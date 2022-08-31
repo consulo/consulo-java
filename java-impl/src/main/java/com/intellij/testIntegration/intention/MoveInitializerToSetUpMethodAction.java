@@ -16,15 +16,16 @@
 package com.intellij.testIntegration.intention;
 
 import com.intellij.codeInsight.CodeInsightBundle;
-import com.intellij.codeInsight.TestFrameworks;
+import com.intellij.java.language.codeInsight.TestFrameworks;
 import com.intellij.codeInsight.intention.impl.BaseMoveInitializerToMethodAction;
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.extensions.Extensions;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.testIntegration.JavaTestFramework;
-import com.intellij.testIntegration.TestFramework;
+import com.intellij.java.language.testIntegration.JavaTestFramework;
+import com.intellij.java.language.testIntegration.TestFramework;
 import com.intellij.testIntegration.TestIntegrationUtils;
 import consulo.logging.Logger;
 

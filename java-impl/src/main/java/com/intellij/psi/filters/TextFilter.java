@@ -16,7 +16,7 @@
 package com.intellij.psi.filters;
 
 import org.jetbrains.annotations.NonNls;
-import com.intellij.psi.PsiType;
+import com.intellij.java.language.psi.PsiType;
 import com.intellij.psi.xml.XmlTag;
 
 /**

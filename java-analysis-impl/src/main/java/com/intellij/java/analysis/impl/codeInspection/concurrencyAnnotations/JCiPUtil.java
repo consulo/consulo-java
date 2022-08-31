@@ -15,12 +15,13 @@
  */
 package com.intellij.java.analysis.impl.codeInspection.concurrencyAnnotations;
 
-import com.intellij.codeInsight.AnnotationUtil;
-import com.intellij.codeInsight.ConcurrencyAnnotationsManager;
+import com.intellij.java.language.codeInsight.AnnotationUtil;
+import com.intellij.java.language.codeInsight.ConcurrencyAnnotationsManager;
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.cache.impl.id.IdIndex;
-import com.intellij.psi.javadoc.PsiDocComment;
-import com.intellij.psi.javadoc.PsiDocTag;
+import com.intellij.java.language.psi.javadoc.PsiDocComment;
+import com.intellij.java.language.psi.javadoc.PsiDocTag;
 import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
 import com.intellij.psi.util.PsiTreeUtil;

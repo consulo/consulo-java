@@ -24,8 +24,8 @@
  */
 package com.intellij.refactoring.makeStatic;
 
-import com.intellij.psi.PsiField;
-import com.intellij.psi.PsiType;
+import com.intellij.java.language.psi.PsiField;
+import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.analysis.impl.refactoring.util.VariableData;
 import java.util.HashMap;
 import javax.annotation.Nullable;

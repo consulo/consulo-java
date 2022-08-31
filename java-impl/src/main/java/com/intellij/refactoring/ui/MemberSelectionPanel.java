@@ -29,7 +29,7 @@ import java.util.List;
 
 import javax.swing.JScrollPane;
 
-import com.intellij.psi.PsiMember;
+import com.intellij.java.language.psi.PsiMember;
 import com.intellij.refactoring.util.classMembers.MemberInfo;
 import com.intellij.ui.ScrollPaneFactory;
 import com.intellij.ui.SeparatorFactory;

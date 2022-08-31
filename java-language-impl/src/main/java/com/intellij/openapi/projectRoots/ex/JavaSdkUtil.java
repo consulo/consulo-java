@@ -15,15 +15,17 @@
  */
 package com.intellij.openapi.projectRoots.ex;
 
+import com.intellij.java.language.projectRoots.JavaSdk;
+import com.intellij.java.language.projectRoots.JavaSdkVersion;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.*;
-import com.intellij.pom.java.LanguageLevel;
+import com.intellij.java.language.LanguageLevel;
 import com.intellij.util.PathsList;
 import consulo.annotation.DeprecationInfo;
 import consulo.container.plugin.PluginManager;
-import consulo.java.module.extension.JavaModuleExtension;
+import consulo.java.language.module.extension.JavaModuleExtension;
 import org.jetbrains.annotations.Contract;
 
 import javax.annotation.Nonnull;

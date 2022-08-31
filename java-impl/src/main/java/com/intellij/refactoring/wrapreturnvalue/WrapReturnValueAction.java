@@ -17,6 +17,8 @@ package com.intellij.refactoring.wrapreturnvalue;
 
 import javax.annotation.Nonnull;
 
+import com.intellij.java.language.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiType;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.psi.*;

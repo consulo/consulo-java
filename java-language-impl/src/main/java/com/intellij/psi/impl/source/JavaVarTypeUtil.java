@@ -15,13 +15,14 @@
  */
 package com.intellij.psi.impl.source;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.util.RecursionManager;
 import com.intellij.psi.*;
-import com.intellij.psi.impl.source.resolve.graphInference.PsiPolyExpressionUtil;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.impl.source.resolve.graphInference.PsiPolyExpressionUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.containers.ContainerUtil;
-import consulo.java.module.util.JavaClassNames;
+import consulo.java.language.module.util.JavaClassNames;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

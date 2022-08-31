@@ -15,6 +15,7 @@
  */
 package com.intellij.codeInsight.editorActions.smartEnter;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.psi.*;
 import com.intellij.util.text.CharArrayUtil;

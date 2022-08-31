@@ -16,8 +16,8 @@
 package com.intellij.refactoring.move.moveInstanceMethod;
 
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiMethodReferenceExpression;
-import com.intellij.psi.PsiReferenceExpression;
+import com.intellij.java.language.psi.PsiMethodReferenceExpression;
+import com.intellij.java.language.psi.PsiReferenceExpression;
 import com.intellij.usageView.UsageInfo;
 
 /**

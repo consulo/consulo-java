@@ -17,7 +17,7 @@ package com.siyeh.ig.classmetrics;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.psi.*;
+import com.intellij.java.language.psi.*;
 
 class ComplexityVisitor extends JavaRecursiveElementVisitor {
   private int m_complexity = 1;

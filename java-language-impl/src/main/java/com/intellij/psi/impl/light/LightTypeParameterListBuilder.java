@@ -15,6 +15,9 @@
  */
 package com.intellij.psi.impl.light;
 
+import com.intellij.java.language.psi.JavaElementVisitor;
+import com.intellij.java.language.psi.PsiTypeParameter;
+import com.intellij.java.language.psi.PsiTypeParameterList;
 import com.intellij.lang.Language;
 import com.intellij.psi.*;
 import javax.annotation.Nonnull;

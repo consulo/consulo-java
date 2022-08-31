@@ -18,9 +18,9 @@ package com.intellij.find.findUsages;
 import com.intellij.find.FindBundle;
 import com.intellij.java.analysis.impl.find.findUsages.JavaClassFindUsagesOptions;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiModifier;
+import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.ui.IdeBorderFactory;
 import com.intellij.ui.StateRestoringCheckBox;
 

@@ -32,10 +32,11 @@ import com.intellij.java.analysis.codeInspection.reference.RefJavaManager;
 import com.intellij.java.analysis.codeInspection.reference.RefJavaVisitor;
 import com.intellij.java.analysis.codeInspection.reference.RefMethod;
 import com.intellij.java.analysis.codeInspection.reference.RefParameter;
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.psi.*;
-import com.intellij.psi.util.PsiFormatUtil;
+import com.intellij.java.language.psi.util.PsiFormatUtil;
 
 import javax.annotation.Nullable;
 

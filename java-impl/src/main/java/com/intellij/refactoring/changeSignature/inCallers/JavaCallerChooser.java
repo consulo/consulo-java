@@ -19,7 +19,7 @@ import java.util.Set;
 
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.refactoring.changeSignature.CallerChooserBase;
 import com.intellij.ui.treeStructure.Tree;
 import com.intellij.util.Consumer;

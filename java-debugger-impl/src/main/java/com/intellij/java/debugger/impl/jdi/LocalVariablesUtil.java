@@ -22,6 +22,8 @@ import java.lang.reflect.Method;
 import java.util.*;
 
 import javax.annotation.Nonnull;
+
+import com.intellij.java.language.psi.*;
 import consulo.internal.org.objectweb.asm.MethodVisitor;
 import consulo.internal.org.objectweb.asm.Opcodes;
 import com.intellij.java.debugger.SourcePosition;

@@ -17,8 +17,8 @@ package com.siyeh.ig.psiutils;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.psi.PsiAssignmentExpression;
-import com.intellij.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiAssignmentExpression;
+import com.intellij.java.language.psi.PsiExpression;
 
 public class WellFormednessUtils {
   private WellFormednessUtils() {

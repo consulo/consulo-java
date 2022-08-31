@@ -19,6 +19,7 @@ package com.intellij.codeInsight.folding;
 import com.intellij.codeInsight.folding.impl.CodeFoldingManagerImpl
 import com.intellij.codeInsight.folding.impl.JavaCodeFoldingSettingsImpl
 import com.intellij.find.FindManager
+import com.intellij.java.language.codeInsight.folding.JavaCodeFoldingSettings
 import com.intellij.openapi.application.ex.PathManagerEx
 import com.intellij.openapi.editor.FoldRegion
 import com.intellij.openapi.editor.ex.FoldingModelEx

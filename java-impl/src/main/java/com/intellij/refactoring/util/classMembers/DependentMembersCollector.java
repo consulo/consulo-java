@@ -15,6 +15,10 @@
  */
 package com.intellij.refactoring.util.classMembers;
 
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
+import com.intellij.java.language.psi.PsiMember;
+import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.psi.*;
 import com.intellij.refactoring.classMembers.DependentMembersCollectorBase;
 

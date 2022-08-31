@@ -18,7 +18,7 @@ package com.intellij.refactoring.anonymousToInner;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiAnonymousClass;
+import com.intellij.java.language.psi.PsiAnonymousClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import com.intellij.refactoring.move.MoveHandlerDelegate;

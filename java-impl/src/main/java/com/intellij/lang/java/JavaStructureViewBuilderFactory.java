@@ -26,7 +26,7 @@ import com.intellij.ide.structureView.impl.java.JavaFileTreeModel;
 import com.intellij.lang.PsiStructureViewFactory;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiJavaFile;
+import com.intellij.java.language.psi.PsiJavaFile;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

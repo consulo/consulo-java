@@ -15,7 +15,7 @@
  */
 package com.intellij.java.analysis.codeInspection.reference;
 
-import com.intellij.psi.PsiParameter;
+import com.intellij.java.language.psi.PsiParameter;
 
 import javax.annotation.Nullable;
 

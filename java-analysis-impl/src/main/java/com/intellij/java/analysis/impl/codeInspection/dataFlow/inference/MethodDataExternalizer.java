@@ -16,7 +16,7 @@
 
 package com.intellij.java.analysis.impl.codeInspection.dataFlow.inference;
 
-import com.intellij.codeInsight.Nullability;
+import com.intellij.java.language.codeInsight.Nullability;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.ContractReturnValue;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.StandardMethodContract;
 import com.intellij.openapi.util.Pair;

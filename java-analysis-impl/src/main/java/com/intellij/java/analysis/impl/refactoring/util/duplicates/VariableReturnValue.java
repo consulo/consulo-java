@@ -15,7 +15,7 @@
  */
 package com.intellij.java.analysis.impl.refactoring.util.duplicates;
 
-import com.intellij.psi.*;
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.util.IncorrectOperationException;
 

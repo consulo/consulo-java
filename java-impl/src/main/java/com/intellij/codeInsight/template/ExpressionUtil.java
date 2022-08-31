@@ -15,13 +15,14 @@
  */
 package com.intellij.codeInsight.template;
 
+ import com.intellij.java.language.psi.*;
  import com.intellij.openapi.application.ApplicationManager;
 import consulo.logging.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
-import com.intellij.psi.codeStyle.JavaCodeStyleManager;
+import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.psi.codeStyle.SuggestedNameInfo;
-import com.intellij.psi.codeStyle.VariableKind;
+import com.intellij.java.language.psi.codeStyle.VariableKind;
 import com.intellij.psi.text.BlockSupport;
 import com.intellij.util.IncorrectOperationException;
 import javax.annotation.Nullable;

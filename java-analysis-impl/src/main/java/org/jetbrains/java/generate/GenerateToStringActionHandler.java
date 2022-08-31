@@ -16,7 +16,7 @@
 package org.jetbrains.java.generate;
 
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.psi.PsiClass;
 
 /**
  * Main interface for the plugin.

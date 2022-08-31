@@ -18,8 +18,8 @@ package org.jetbrains.java.generate.config;
 import javax.annotation.Nonnull;
 
 import com.intellij.openapi.editor.Editor;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiMethod;
 
 /**
  * Interface that defines a policy for dealing with where to insert a new <code>toString()</code>

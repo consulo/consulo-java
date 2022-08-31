@@ -15,6 +15,10 @@
  */
 package com.siyeh.ipp.bool;
 
+import com.intellij.java.language.psi.JavaTokenType;
+import com.intellij.java.language.psi.PsiBinaryExpression;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiType;
 import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;
 import com.siyeh.ipp.base.PsiElementPredicate;

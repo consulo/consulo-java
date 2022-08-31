@@ -15,8 +15,8 @@
  */
 package com.siyeh.ig.visibility;
 
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiField;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiField;
 import com.intellij.codeInspection.ui.SingleCheckboxOptionsPanel;
 import com.siyeh.HardcodedMethodConstants;
 import com.siyeh.InspectionGadgetsBundle;

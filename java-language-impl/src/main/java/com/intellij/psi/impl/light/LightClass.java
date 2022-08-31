@@ -18,8 +18,8 @@ package com.intellij.psi.impl.light;
 import javax.annotation.Nonnull;
 
 import com.intellij.lang.Language;
-import com.intellij.lang.java.JavaLanguage;
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.JavaLanguage;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 
 /**

@@ -25,7 +25,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
-import com.intellij.psi.PsiType;
+import com.intellij.java.language.psi.PsiType;
 import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
 

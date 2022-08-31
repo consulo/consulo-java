@@ -21,7 +21,7 @@
 package com.intellij.java.debugger.impl.ui.breakpoints;
 
 import com.intellij.java.debugger.DebuggerBundle;
-import com.intellij.ide.util.ClassFilter;
+import com.intellij.java.language.util.ClassFilter;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.ui.IdeBorderFactory;

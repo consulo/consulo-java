@@ -15,10 +15,10 @@
  */
 package com.intellij.psi.impl.source.tree.java;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.psi.*;
 import com.intellij.testFramework.LightCodeInsightTestCase;
-import consulo.java.module.util.JavaClassNames;
+import consulo.java.language.module.util.JavaClassNames;
 
 /**
  *  @author dsl

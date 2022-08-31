@@ -15,6 +15,7 @@
  */
 package com.siyeh.ipp.exceptions;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.PsiImplUtil;
 import com.intellij.util.IncorrectOperationException;
@@ -22,7 +23,7 @@ import com.siyeh.ipp.base.Intention;
 import com.siyeh.ipp.base.PsiElementPredicate;
 import javax.annotation.Nonnull;
 
-import static com.intellij.psi.PsiAnnotation.TargetType;
+import static com.intellij.java.language.psi.PsiAnnotation.TargetType;
 
 public class SplitMultiCatchIntention extends Intention {
 

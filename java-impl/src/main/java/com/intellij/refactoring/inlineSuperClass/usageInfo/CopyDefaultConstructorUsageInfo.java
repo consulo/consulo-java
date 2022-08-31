@@ -20,8 +20,9 @@
  */
 package com.intellij.refactoring.inlineSuperClass.usageInfo;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
-import com.intellij.psi.util.TypeConversionUtil;
+import com.intellij.java.language.psi.util.TypeConversionUtil;
 import com.intellij.refactoring.util.FixableUsageInfo;
 import com.intellij.refactoring.util.InlineUtil;
 import com.intellij.util.IncorrectOperationException;

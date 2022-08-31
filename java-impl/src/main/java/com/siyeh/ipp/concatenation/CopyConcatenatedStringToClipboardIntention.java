@@ -20,11 +20,11 @@ import java.awt.datatransfer.StringSelection;
 import javax.annotation.Nonnull;
 
 import com.intellij.openapi.ide.CopyPasteManager;
-import com.intellij.psi.JavaTokenType;
+import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiExpression;
-import com.intellij.psi.PsiPolyadicExpression;
-import com.intellij.psi.PsiType;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiPolyadicExpression;
+import com.intellij.java.language.psi.PsiType;
 import com.intellij.psi.PsiWhiteSpace;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.util.IncorrectOperationException;

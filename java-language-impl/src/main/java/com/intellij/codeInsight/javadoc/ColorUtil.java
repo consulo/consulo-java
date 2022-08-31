@@ -15,6 +15,7 @@
  */
 package com.intellij.codeInsight.javadoc;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
 import com.intellij.util.ArrayUtil;
 import javax.annotation.Nonnull;

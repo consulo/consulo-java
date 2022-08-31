@@ -17,11 +17,11 @@ package com.intellij.core;
 
 import com.intellij.mock.MockFileIndexFacade;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiElementFactory;
-import com.intellij.psi.PsiElementFinder;
-import com.intellij.psi.PsiResolveHelper;
-import com.intellij.psi.codeStyle.JavaCodeStyleManager;
-import com.intellij.psi.codeStyle.JavaCodeStyleSettingsFacade;
+import com.intellij.java.language.psi.PsiElementFactory;
+import com.intellij.java.language.psi.PsiElementFinder;
+import com.intellij.java.language.psi.PsiResolveHelper;
+import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
+import com.intellij.java.language.psi.codeStyle.JavaCodeStyleSettingsFacade;
 import com.intellij.psi.impl.JavaPsiImplementationHelper;
 import com.intellij.psi.impl.PsiElementFactoryImpl;
 import com.intellij.psi.impl.file.impl.JavaFileManager;

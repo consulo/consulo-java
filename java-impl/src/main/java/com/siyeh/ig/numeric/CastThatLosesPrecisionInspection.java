@@ -16,7 +16,7 @@
 package com.siyeh.ig.numeric;
 
 import com.intellij.codeInspection.ui.SingleCheckboxOptionsPanel;
-import com.intellij.psi.*;
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;

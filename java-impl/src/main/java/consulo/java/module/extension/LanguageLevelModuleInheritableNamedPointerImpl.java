@@ -19,7 +19,8 @@ import javax.annotation.Nonnull;
 
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
-import com.intellij.pom.java.LanguageLevel;
+import com.intellij.java.language.LanguageLevel;
+import consulo.java.language.module.extension.JavaModuleExtension;
 import consulo.module.extension.impl.ModuleInheritableNamedPointerImpl;
 import consulo.roots.ModuleRootLayer;
 import consulo.util.pointers.NamedPointer;

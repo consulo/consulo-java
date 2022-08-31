@@ -22,7 +22,7 @@ package com.intellij.codeInsight.daemon.impl.quickfix;
 import javax.annotation.Nonnull;
 
 import consulo.java.analysis.impl.JavaQuickFixBundle;
-import com.intellij.psi.PsiReferenceExpression;
+import com.intellij.java.language.psi.PsiReferenceExpression;
 
 public class CreateConstantFieldFromUsageFix extends CreateFieldFromUsageFix {
   @Override

@@ -17,10 +17,10 @@ package com.intellij.psi.impl.source.javadoc;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.psi.JavaElementVisitor;
+import com.intellij.java.language.psi.JavaElementVisitor;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.impl.source.tree.LeafPsiElement;
-import com.intellij.psi.javadoc.PsiDocToken;
+import com.intellij.java.language.psi.javadoc.PsiDocToken;
 import com.intellij.psi.tree.IElementType;
 
 public class PsiDocTokenImpl extends LeafPsiElement implements PsiDocToken{

@@ -18,7 +18,7 @@ package com.intellij.java.analysis.impl.codeInspection.dataFlow.inference;
 
 import com.intellij.lang.LighterAST;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.psi.impl.source.PsiFileImpl;
 import com.intellij.psi.impl.source.PsiMethodImpl;
 import com.intellij.psi.impl.source.StubbedSpine;

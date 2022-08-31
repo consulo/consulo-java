@@ -20,7 +20,7 @@ import com.intellij.lang.java.JavaRefactoringSupportProvider;
 import com.intellij.openapi.util.Condition;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiJavaFile;
+import com.intellij.java.language.psi.PsiJavaFile;
 
 public class JavaVetoRenameCondition implements Condition<PsiElement>
 {

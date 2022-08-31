@@ -30,11 +30,11 @@ import com.intellij.application.options.JavaCodeStyleMainPanel;
 import com.intellij.application.options.JavaIndentOptionsEditor;
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.lang.Language;
-import com.intellij.lang.java.JavaLanguage;
+import com.intellij.java.language.JavaLanguage;
 import com.intellij.openapi.application.ApplicationBundle;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.project.Project;
-import com.intellij.pom.java.LanguageLevel;
+import com.intellij.java.language.LanguageLevel;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiFileFactory;
 import com.intellij.psi.codeStyle.CodeStyleSettings;
@@ -45,7 +45,7 @@ import com.intellij.psi.codeStyle.DocCommentSettings;
 import com.intellij.psi.codeStyle.JavaCodeStyleBean;
 import com.intellij.psi.codeStyle.JavaCodeStyleSettings;
 import com.intellij.psi.codeStyle.LanguageCodeStyleSettingsProvider;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.util.LocalTimeCounter;
 
 /**

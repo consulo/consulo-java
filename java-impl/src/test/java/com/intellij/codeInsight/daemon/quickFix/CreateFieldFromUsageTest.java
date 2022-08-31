@@ -1,6 +1,6 @@
 package com.intellij.codeInsight.daemon.quickFix;
 
-import com.intellij.lang.java.JavaLanguage;
+import com.intellij.java.language.JavaLanguage;
 import com.intellij.openapi.application.Result;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.vfs.VfsUtil;

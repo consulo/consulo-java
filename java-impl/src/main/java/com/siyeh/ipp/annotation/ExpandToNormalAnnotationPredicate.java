@@ -15,6 +15,8 @@
  */
 package com.siyeh.ipp.annotation;
 
+import com.intellij.java.language.psi.PsiAnnotationMemberValue;
+import com.intellij.java.language.psi.PsiNameValuePair;
 import com.intellij.psi.*;
 import com.siyeh.ipp.base.PsiElementPredicate;
 

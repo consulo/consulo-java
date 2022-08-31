@@ -12,7 +12,7 @@ import javax.annotation.Nonnull;
 import com.intellij.JavaTestUtil;
 import com.intellij.analysis.AnalysisScope;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiMember;
+import com.intellij.java.language.psi.PsiMember;
 import com.intellij.refactoring.util.duplicates.MethodDuplicatesHandler;
 import com.intellij.testFramework.LightCodeInsightTestCase;
 import com.intellij.util.containers.ContainerUtil;

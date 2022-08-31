@@ -22,12 +22,12 @@ package com.intellij.openapi.roots.ui.configuration.libraryEditor;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.core.JavaCoreBundle;
+import com.intellij.java.language.JavaCoreBundle;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.fileChooser.FileChooserDescriptor;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.projectRoots.ui.SdkPathEditor;
-import com.intellij.openapi.roots.AnnotationOrderRootType;
+import com.intellij.java.language.projectRoots.roots.AnnotationOrderRootType;
 import com.intellij.openapi.roots.ui.OrderRootTypeUIFactory;
 import consulo.ui.image.Image;
 

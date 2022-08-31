@@ -16,7 +16,8 @@
 package com.intellij.java.debugger.impl.actions;
 
 import com.intellij.java.debugger.SourcePosition;
-import com.intellij.lang.java.JavaLanguage;
+import com.intellij.java.language.JavaLanguage;
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.util.TextRange;

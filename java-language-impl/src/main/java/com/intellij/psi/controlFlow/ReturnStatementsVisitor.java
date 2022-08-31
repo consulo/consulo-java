@@ -15,7 +15,7 @@
  */
 package com.intellij.psi.controlFlow;
 
-import com.intellij.psi.PsiReturnStatement;
+import com.intellij.java.language.psi.PsiReturnStatement;
 import com.intellij.util.IncorrectOperationException;
 
 import java.util.List;

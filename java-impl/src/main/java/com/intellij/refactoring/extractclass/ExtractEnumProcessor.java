@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.intellij.codeInsight.generation.GenerateMembersUtil;
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Ref;
 import com.intellij.openapi.util.text.StringUtil;

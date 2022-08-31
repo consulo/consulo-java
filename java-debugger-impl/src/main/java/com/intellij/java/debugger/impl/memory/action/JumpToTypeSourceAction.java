@@ -23,7 +23,7 @@ import com.intellij.codeInsight.navigation.NavigationUtil;
 import com.intellij.java.debugger.engine.DebuggerUtils;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.search.GlobalSearchScope;
 import consulo.internal.com.sun.jdi.ArrayType;
 import consulo.internal.com.sun.jdi.ReferenceType;

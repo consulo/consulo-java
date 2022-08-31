@@ -1,7 +1,7 @@
 package consulo.java.util;
 
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.PsiAnnotation;
+import com.intellij.java.language.psi.PsiAnnotation;
 
 public class AnnotationTextUtil
 {

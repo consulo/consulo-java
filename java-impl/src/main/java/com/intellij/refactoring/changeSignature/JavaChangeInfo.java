@@ -15,7 +15,7 @@
  */
 package com.intellij.refactoring.changeSignature;
 
-import com.intellij.psi.*;
+import com.intellij.java.language.psi.*;
 import com.intellij.refactoring.util.CanonicalTypes;
 import javax.annotation.Nonnull;
 

@@ -20,8 +20,8 @@ import com.intellij.openapi.project.Project;
 import com.intellij.patterns.ElementPattern;
 import com.intellij.patterns.PlatformPatterns;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiJavaPackage;
-import com.intellij.psi.PsiNameHelper;
+import com.intellij.java.language.psi.PsiJavaPackage;
+import com.intellij.java.language.psi.PsiNameHelper;
 import com.intellij.util.ProcessingContext;
 
 /**

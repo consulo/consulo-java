@@ -17,8 +17,8 @@ package com.siyeh.ig.classlayout;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.psi.PsiClassInitializer;
-import com.intellij.psi.PsiModifier;
+import com.intellij.java.language.psi.PsiClassInitializer;
+import com.intellij.java.language.psi.PsiModifier;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;

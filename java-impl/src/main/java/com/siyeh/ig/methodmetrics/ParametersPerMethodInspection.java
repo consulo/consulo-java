@@ -17,8 +17,8 @@ package com.siyeh.ig.methodmetrics;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiParameterList;
+import com.intellij.java.language.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiParameterList;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.LibraryUtil;

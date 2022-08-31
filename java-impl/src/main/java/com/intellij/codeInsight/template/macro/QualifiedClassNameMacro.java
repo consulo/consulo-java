@@ -19,10 +19,10 @@ import javax.annotation.Nonnull;
 
 import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.codeInsight.template.*;
-import com.intellij.psi.PsiAnonymousClass;
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.psi.PsiAnonymousClass;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiTypeParameter;
+import com.intellij.java.language.psi.PsiTypeParameter;
 
 public class QualifiedClassNameMacro extends Macro {
 

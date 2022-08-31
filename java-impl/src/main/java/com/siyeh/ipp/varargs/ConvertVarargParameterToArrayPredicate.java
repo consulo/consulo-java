@@ -18,8 +18,8 @@ package com.siyeh.ipp.varargs;
 import javax.annotation.Nonnull;
 
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiParameterList;
+import com.intellij.java.language.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiParameterList;
 import com.siyeh.ipp.base.PsiElementPredicate;
 
 class ConvertVarargParameterToArrayPredicate

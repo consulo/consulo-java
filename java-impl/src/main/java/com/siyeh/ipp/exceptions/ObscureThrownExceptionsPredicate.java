@@ -16,8 +16,8 @@
 package com.siyeh.ipp.exceptions;
 
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiReferenceList;
+import com.intellij.java.language.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiReferenceList;
 import com.siyeh.ipp.base.PsiElementPredicate;
 
 class ObscureThrownExceptionsPredicate implements PsiElementPredicate {

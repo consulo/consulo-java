@@ -16,6 +16,8 @@
 package com.intellij.codeInsight.hint;
 
 import javax.annotation.Nonnull;
+
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
 

@@ -19,6 +19,10 @@ import java.util.*;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.impl.source.resolve.graphInference.PsiPolyExpressionUtil;
+import com.intellij.java.language.psi.util.*;
 import consulo.logging.Logger;
 import com.intellij.openapi.util.Comparing;
 import consulo.util.dataholder.Key;
@@ -26,8 +30,8 @@ import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.Ref;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
-import com.intellij.psi.impl.source.resolve.DefaultParameterTypeInferencePolicy;
-import com.intellij.psi.impl.source.resolve.ParameterTypeInferencePolicy;
+import com.intellij.java.language.psi.impl.source.resolve.DefaultParameterTypeInferencePolicy;
+import com.intellij.java.language.psi.impl.source.resolve.ParameterTypeInferencePolicy;
 import com.intellij.psi.impl.source.resolve.graphInference.constraints.CheckedExceptionCompatibilityConstraint;
 import com.intellij.psi.impl.source.resolve.graphInference.constraints.ConstraintFormula;
 import com.intellij.psi.impl.source.resolve.graphInference.constraints.ExpressionCompatibilityConstraint;
@@ -36,7 +40,7 @@ import com.intellij.psi.impl.source.resolve.graphInference.constraints.PsiMethod
 import com.intellij.psi.impl.source.resolve.graphInference.constraints.StrictSubtypingConstraint;
 import com.intellij.psi.impl.source.resolve.graphInference.constraints.TypeCompatibilityConstraint;
 import com.intellij.psi.impl.source.resolve.graphInference.constraints.TypeEqualityConstraint;
-import com.intellij.psi.infos.MethodCandidateInfo;
+import com.intellij.java.language.psi.infos.MethodCandidateInfo;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.*;
 import com.intellij.util.ArrayUtilRt;
@@ -45,7 +49,7 @@ import com.intellij.util.Processor;
 import com.intellij.util.Producer;
 import com.intellij.util.SystemProperties;
 import com.intellij.util.containers.ContainerUtil;
-import consulo.java.module.util.JavaClassNames;
+import consulo.java.language.module.util.JavaClassNames;
 
 /**
  * User: anna

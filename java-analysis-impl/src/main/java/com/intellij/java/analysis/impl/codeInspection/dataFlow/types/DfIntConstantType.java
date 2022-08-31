@@ -2,7 +2,7 @@
 package com.intellij.java.analysis.impl.codeInspection.dataFlow.types;
 
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.rangeSet.LongRangeSet;
-import com.intellij.psi.PsiPrimitiveType;
+import com.intellij.java.language.psi.PsiPrimitiveType;
 import javax.annotation.Nonnull;
 
 class DfIntConstantType extends DfConstantType<Integer> implements DfIntType {

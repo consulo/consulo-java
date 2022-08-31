@@ -16,7 +16,7 @@
 package com.intellij.codeInsight.template;
 
 import javax.annotation.Nonnull;
-import com.intellij.lang.java.JavaLanguage;
+import com.intellij.java.language.JavaLanguage;
 import com.intellij.psi.PsiComment;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;

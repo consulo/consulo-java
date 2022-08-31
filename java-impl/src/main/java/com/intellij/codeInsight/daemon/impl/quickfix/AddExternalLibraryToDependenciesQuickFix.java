@@ -22,7 +22,7 @@ import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.IndexNotReadyException;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.DependencyScope;
-import com.intellij.openapi.roots.ExternalLibraryDescriptor;
+import com.intellij.java.language.projectRoots.roots.ExternalLibraryDescriptor;
 import com.intellij.openapi.roots.JavaProjectModelModificationService;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;

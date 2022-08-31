@@ -32,11 +32,11 @@ import com.intellij.openapi.application.Result;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiEnumConstant;
+import com.intellij.java.language.psi.PsiEnumConstant;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.infos.CandidateInfo;
+import com.intellij.java.language.psi.infos.CandidateInfo;
 import com.intellij.util.containers.ContainerUtil;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 

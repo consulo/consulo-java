@@ -15,8 +15,8 @@
  */
 package com.intellij.refactoring.introduceparameterobject;
 
-import com.intellij.psi.PsiParameter;
-import com.intellij.psi.PsiType;
+import com.intellij.java.language.psi.PsiParameter;
+import com.intellij.java.language.psi.PsiType;
 
 class ParameterSpec {
   private final PsiParameter myParameter;

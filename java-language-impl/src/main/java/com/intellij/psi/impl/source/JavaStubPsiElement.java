@@ -25,7 +25,7 @@ import com.intellij.extapi.psi.StubBasedPsiElementBase;
 import com.intellij.ide.util.PsiNavigationSupport;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.Language;
-import com.intellij.lang.java.JavaLanguage;
+import com.intellij.java.language.JavaLanguage;
 import consulo.logging.Logger;
 import com.intellij.pom.Navigatable;
 import com.intellij.psi.PsiElement;

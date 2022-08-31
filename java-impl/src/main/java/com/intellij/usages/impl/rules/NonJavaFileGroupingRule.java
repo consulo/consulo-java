@@ -17,8 +17,8 @@ package com.intellij.usages.impl.rules;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiJavaFile;
-import com.intellij.psi.ServerPageFile;
+import com.intellij.java.language.psi.PsiJavaFile;
+import com.intellij.java.language.psi.ServerPageFile;
 import com.intellij.usages.Usage;
 import com.intellij.usages.UsageGroup;
 import com.intellij.usages.UsageTarget;

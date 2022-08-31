@@ -15,8 +15,8 @@
  */
 package com.intellij.codeInsight.generation.actions;
 
-import com.intellij.psi.*;
-import com.intellij.psi.util.PsiTypesUtil;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.PsiTypesUtil;
 
 /**
  * @author Konstantin Bulenkov

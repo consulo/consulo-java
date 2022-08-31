@@ -18,6 +18,10 @@ package com.intellij.codeInsight.daemon.impl.quickfix;
 import javax.annotation.Nonnull;
 
 import com.intellij.codeInsight.FileModificationService;
+import com.intellij.java.language.psi.PsiCatchSection;
+import com.intellij.java.language.psi.PsiCodeBlock;
+import com.intellij.java.language.psi.PsiParameter;
+import com.intellij.java.language.psi.PsiTryStatement;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.JavaHighlightUtil;
 import com.intellij.codeInsight.intention.IntentionAction;

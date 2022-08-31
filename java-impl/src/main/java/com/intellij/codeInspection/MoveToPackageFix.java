@@ -19,6 +19,8 @@ import javax.annotation.Nonnull;
 
 import com.intellij.CommonBundle;
 import com.intellij.codeInsight.FileModificationService;
+import com.intellij.java.language.psi.JavaDirectoryService;
+import com.intellij.java.language.psi.PsiJavaFile;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import com.intellij.openapi.application.ApplicationManager;
 import consulo.logging.Logger;

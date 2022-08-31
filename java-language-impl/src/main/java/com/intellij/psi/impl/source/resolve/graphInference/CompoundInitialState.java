@@ -17,9 +17,9 @@ package com.intellij.psi.impl.source.resolve.graphInference;
 
 import java.util.Map;
 
-import com.intellij.psi.PsiCall;
+import com.intellij.java.language.psi.PsiCall;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiSubstitutor;
+import com.intellij.java.language.psi.PsiSubstitutor;
 
 class CompoundInitialState
 {

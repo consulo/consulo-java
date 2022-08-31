@@ -20,11 +20,11 @@ import com.intellij.codeInsight.lookup.Lookup
 import com.intellij.codeInsight.lookup.LookupElement
 import com.intellij.codeInsight.lookup.LookupElementPresentation
 import com.intellij.codeInsight.lookup.LookupManager
-import com.intellij.lang.java.JavaLanguage
+import com.intellij.java.language.JavaLanguage
 import com.intellij.openapi.actionSystem.IdeActions
 import com.intellij.openapi.editor.LogicalPosition
 import com.intellij.psi.PsiDocumentManager
-import com.intellij.psi.PsiMethod
+import com.intellij.java.language.psi.PsiMethod
 import com.intellij.psi.codeStyle.CodeStyleSettingsManager
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings
 

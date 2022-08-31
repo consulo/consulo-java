@@ -19,7 +19,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 import org.jetbrains.annotations.NonNls;
-import com.intellij.psi.util.ClassKind;
+import com.intellij.java.language.psi.util.ClassKind;
 
 /**
  * To be used together with {@link com.intellij.util.xml.ExtendClass}.

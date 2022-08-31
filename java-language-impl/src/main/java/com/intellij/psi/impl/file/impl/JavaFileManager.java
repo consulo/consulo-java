@@ -21,8 +21,8 @@ package com.intellij.psi.impl.file.impl;
 
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiJavaModule;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiJavaModule;
 import com.intellij.psi.search.GlobalSearchScope;
 
 import javax.annotation.Nonnull;

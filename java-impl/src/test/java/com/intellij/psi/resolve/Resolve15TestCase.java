@@ -3,8 +3,8 @@
  */
 package com.intellij.psi.resolve;
 
-import com.intellij.openapi.projectRoots.JavaSdkVersion;
-import com.intellij.pom.java.LanguageLevel;
+import com.intellij.java.language.projectRoots.JavaSdkVersion;
+import com.intellij.java.language.LanguageLevel;
 import com.intellij.testFramework.IdeaTestUtil;
 import com.intellij.testFramework.ResolveTestCase;
 

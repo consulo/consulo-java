@@ -17,6 +17,9 @@ package com.intellij.refactoring.util;
 
 import javax.annotation.Nonnull;
 
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiJavaPackage;
+import com.intellij.java.language.psi.PsiMember;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
 

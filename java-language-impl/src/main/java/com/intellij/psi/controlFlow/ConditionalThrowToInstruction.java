@@ -15,7 +15,7 @@
  */
 package com.intellij.psi.controlFlow;
 
-import com.intellij.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiExpression;
 
 public class ConditionalThrowToInstruction extends ConditionalBranchingInstruction {
 

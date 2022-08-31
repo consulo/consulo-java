@@ -15,9 +15,9 @@
  */
 package com.intellij.java.analysis.impl.refactoring.util.duplicates;
 
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiMethodCallExpression;
-import com.intellij.psi.PsiStatement;
+import com.intellij.java.language.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiMethodCallExpression;
+import com.intellij.java.language.psi.PsiStatement;
 import com.intellij.util.IncorrectOperationException;
 
 /**

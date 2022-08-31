@@ -15,6 +15,8 @@
  */
 package com.intellij.psi.impl;
 
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.*;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Pair;
@@ -22,14 +24,14 @@ import com.intellij.psi.*;
 import com.intellij.psi.impl.light.LightElement;
 import com.intellij.psi.impl.source.HierarchicalMethodSignatureImpl;
 import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.search.searches.DeepestSuperMethodsSearch;
-import com.intellij.psi.search.searches.SuperMethodsSearch;
+import com.intellij.java.language.psi.search.searches.DeepestSuperMethodsSearch;
+import com.intellij.java.language.psi.search.searches.SuperMethodsSearch;
 import com.intellij.psi.util.*;
 import com.intellij.util.NotNullFunction;
 import com.intellij.util.Processor;
 import com.intellij.util.SmartList;
 import com.intellij.util.containers.ConcurrentFactoryMap;
-import consulo.java.module.util.JavaClassNames;
+import consulo.java.language.module.util.JavaClassNames;
 import consulo.logging.Logger;
 import consulo.util.collection.HashingStrategy;
 import consulo.util.collection.Maps;

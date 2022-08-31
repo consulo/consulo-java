@@ -15,7 +15,7 @@
  */
 package com.siyeh.ig.jdk;
 
-import com.intellij.psi.PsiAssertStatement;
+import com.intellij.java.language.psi.PsiAssertStatement;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;

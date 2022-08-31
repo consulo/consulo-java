@@ -17,8 +17,8 @@ package com.intellij.psi.impl.source;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiImportStatementBase;
-import com.intellij.psi.PsiJavaCodeReferenceElement;
+import com.intellij.java.language.psi.PsiImportStatementBase;
+import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
 import com.intellij.psi.impl.java.stubs.PsiImportStatementStub;
 import com.intellij.psi.impl.source.tree.ChildRole;
 import com.intellij.psi.stubs.IStubElementType;

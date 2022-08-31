@@ -17,7 +17,7 @@ package com.intellij.codeInsight.daemon.lambda;
 
 import org.jetbrains.annotations.NonNls;
 import com.intellij.codeInsight.daemon.LightDaemonAnalyzerTestCase;
-import com.intellij.openapi.projectRoots.JavaSdkVersion;
+import com.intellij.java.language.projectRoots.JavaSdkVersion;
 import com.intellij.testFramework.IdeaTestUtil;
 
 public abstract class GraphInferenceHighlightingTest extends LightDaemonAnalyzerTestCase {

@@ -22,12 +22,12 @@ import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nullable;
 import com.intellij.codeInspection.ui.MultipleCheckboxOptionsPanel;
-import com.intellij.psi.PsiCatchSection;
-import com.intellij.psi.PsiCodeBlock;
+import com.intellij.java.language.psi.PsiCatchSection;
+import com.intellij.java.language.psi.PsiCodeBlock;
 import com.intellij.psi.PsiComment;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiParameter;
-import com.intellij.psi.PsiTryStatement;
+import com.intellij.java.language.psi.PsiParameter;
+import com.intellij.java.language.psi.PsiTryStatement;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;

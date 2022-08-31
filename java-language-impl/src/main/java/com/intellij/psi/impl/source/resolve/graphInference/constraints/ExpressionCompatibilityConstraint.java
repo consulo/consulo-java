@@ -19,12 +19,13 @@ import java.util.List;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
-import com.intellij.psi.*;
+
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.impl.source.resolve.graphInference.InferenceSession;
 import com.intellij.psi.impl.source.resolve.graphInference.InferenceVariable;
-import com.intellij.psi.impl.source.resolve.graphInference.PsiPolyExpressionUtil;
-import com.intellij.psi.infos.MethodCandidateInfo;
-import com.intellij.psi.util.TypeConversionUtil;
+import com.intellij.java.language.psi.impl.source.resolve.graphInference.PsiPolyExpressionUtil;
+import com.intellij.java.language.psi.infos.MethodCandidateInfo;
+import com.intellij.java.language.psi.util.TypeConversionUtil;
 
 /**
  * User: anna

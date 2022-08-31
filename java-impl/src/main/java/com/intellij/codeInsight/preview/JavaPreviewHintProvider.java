@@ -20,11 +20,13 @@ import java.awt.Color;
 import javax.swing.JComponent;
 
 import javax.annotation.Nonnull;
+
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.patterns.PlatformPatterns;
-import com.intellij.patterns.PsiExpressionPattern;
-import com.intellij.patterns.PsiJavaPatterns;
-import com.intellij.patterns.PsiMethodPattern;
+import com.intellij.java.language.patterns.PsiExpressionPattern;
+import com.intellij.java.language.patterns.PsiJavaPatterns;
+import com.intellij.java.language.patterns.PsiMethodPattern;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ArrayUtil;

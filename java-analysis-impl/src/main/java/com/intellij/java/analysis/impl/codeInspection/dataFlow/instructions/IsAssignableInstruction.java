@@ -7,8 +7,8 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.TypeConstraints;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.types.DfConstantType;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaValue;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaValueFactory;
-import com.intellij.psi.PsiMethodCallExpression;
-import com.intellij.psi.PsiType;
+import com.intellij.java.language.psi.PsiMethodCallExpression;
+import com.intellij.java.language.psi.PsiType;
 import javax.annotation.Nonnull;
 
 /**

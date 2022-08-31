@@ -15,10 +15,11 @@
  */
 package com.intellij.codeInsight;
 
+import com.intellij.java.language.psi.*;
 import consulo.logging.Logger;
 import consulo.util.dataholder.Key;
 import com.intellij.psi.*;
-import com.intellij.psi.util.InheritanceUtil;
+import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.refactoring.util.RefactoringChangeUtil;
 import com.intellij.util.ArrayUtil;

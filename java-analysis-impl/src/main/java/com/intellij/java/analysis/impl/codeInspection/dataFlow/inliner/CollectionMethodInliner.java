@@ -4,14 +4,14 @@ package com.intellij.java.analysis.impl.codeInspection.dataFlow.inliner;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.CFGBuilder;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.SpecialField;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaValueFactory;
-import com.intellij.psi.PsiExpression;
-import com.intellij.psi.PsiMethodCallExpression;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiMethodCallExpression;
 import com.siyeh.ig.callMatcher.CallMatcher;
 
 import javax.annotation.Nonnull;
 
-import static com.intellij.psi.CommonClassNames.JAVA_UTIL_COLLECTION;
-import static com.intellij.psi.CommonClassNames.JAVA_UTIL_MAP;
+import static com.intellij.java.language.psi.CommonClassNames.JAVA_UTIL_COLLECTION;
+import static com.intellij.java.language.psi.CommonClassNames.JAVA_UTIL_MAP;
 import static com.siyeh.ig.callMatcher.CallMatcher.anyOf;
 import static com.siyeh.ig.callMatcher.CallMatcher.instanceCall;
 

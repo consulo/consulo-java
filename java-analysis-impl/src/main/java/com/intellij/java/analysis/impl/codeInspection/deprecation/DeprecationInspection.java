@@ -15,7 +15,7 @@
  */
 package com.intellij.java.analysis.impl.codeInspection.deprecation;
 
-import com.intellij.codeInsight.AnnotationUtil;
+import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.codeInsight.daemon.JavaErrorBundle;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.HighlightMessageUtil;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.JavaHighlightUtil;
@@ -24,10 +24,11 @@ import com.intellij.codeInspection.DeprecationUtil;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.codeInspection.ui.MultipleCheckboxOptionsPanel;
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
-import com.intellij.psi.infos.MethodCandidateInfo;
-import com.intellij.psi.util.MethodSignatureBackedByPsiMethod;
+import com.intellij.java.language.psi.infos.MethodCandidateInfo;
+import com.intellij.java.language.psi.util.MethodSignatureBackedByPsiMethod;
 import com.intellij.psi.util.PsiTreeUtil;
 import consulo.annotation.DeprecationInfo;
 import org.jetbrains.annotations.NonNls;

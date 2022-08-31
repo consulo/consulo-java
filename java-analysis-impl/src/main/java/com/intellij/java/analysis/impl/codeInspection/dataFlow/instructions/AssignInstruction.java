@@ -21,9 +21,9 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.DfaInstructionSta
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.DfaMemoryState;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.InstructionVisitor;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaValue;
-import com.intellij.psi.PsiAssignmentExpression;
-import com.intellij.psi.PsiExpression;
-import com.intellij.psi.PsiVariable;
+import com.intellij.java.language.psi.PsiAssignmentExpression;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiVariable;
 import com.intellij.util.ObjectUtils;
 import org.jetbrains.annotations.Contract;
 import javax.annotation.Nullable;

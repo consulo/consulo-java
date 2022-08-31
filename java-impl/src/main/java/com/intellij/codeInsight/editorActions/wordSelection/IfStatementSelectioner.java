@@ -16,9 +16,9 @@
 package com.intellij.codeInsight.editorActions.wordSelection;
 
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiIfStatement;
-import com.intellij.psi.PsiKeyword;
-import com.intellij.psi.PsiStatement;
+import com.intellij.java.language.psi.PsiIfStatement;
+import com.intellij.java.language.psi.PsiKeyword;
+import com.intellij.java.language.psi.PsiStatement;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.editor.Editor;
 

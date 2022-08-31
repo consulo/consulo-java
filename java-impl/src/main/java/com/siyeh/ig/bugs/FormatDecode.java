@@ -15,8 +15,8 @@
  */
 package com.siyeh.ig.bugs;
 
-import consulo.java.module.util.JavaClassNames;
-import com.intellij.psi.PsiType;
+import consulo.java.language.module.util.JavaClassNames;
+import com.intellij.java.language.psi.PsiType;
 import com.intellij.util.containers.ContainerUtil;
 
 import java.util.ArrayList;

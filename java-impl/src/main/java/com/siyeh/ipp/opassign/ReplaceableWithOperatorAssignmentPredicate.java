@@ -15,13 +15,13 @@
  */
 package com.siyeh.ipp.opassign;
 
-import com.intellij.psi.JavaTokenType;
-import com.intellij.psi.PsiAssignmentExpression;
+import com.intellij.java.language.psi.JavaTokenType;
+import com.intellij.java.language.psi.PsiAssignmentExpression;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiExpression;
-import com.intellij.psi.PsiPolyadicExpression;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiPolyadicExpression;
 import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
 import com.siyeh.ig.psiutils.SideEffectChecker;
 import com.siyeh.ipp.base.PsiElementPredicate;
 import com.siyeh.ipp.psiutils.EquivalenceChecker;

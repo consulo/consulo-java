@@ -9,9 +9,9 @@ import javax.annotation.Nonnull;
 
 import org.jetbrains.annotations.NonNls;
 import com.intellij.JavaTestUtil;
-import com.intellij.psi.PsiCall;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiClassType;
+import com.intellij.java.language.psi.PsiCall;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiClassType;
 import com.intellij.psi.PsiElement;
 import com.intellij.refactoring.LightRefactoringTestCase;
 import com.intellij.usageView.UsageInfo;

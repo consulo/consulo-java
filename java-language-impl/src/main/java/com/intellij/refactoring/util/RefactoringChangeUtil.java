@@ -17,11 +17,12 @@ package com.intellij.refactoring.util;
 
 import javax.annotation.Nonnull;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
 import com.intellij.psi.codeStyle.CodeStyleManager;
-import com.intellij.psi.util.InheritanceUtil;
+import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.util.IncorrectOperationException;
 import consulo.logging.Logger;
 
@@ -164,8 +165,8 @@ public class RefactoringChangeUtil
 	}
 
 	static <T extends PsiQualifiedExpression> T createQualifiedExpression(@Nonnull PsiManager manager,
-			PsiClass qualifierClass,
-			@Nonnull String qName) throws IncorrectOperationException
+                                                                        PsiClass qualifierClass,
+                                                                        @Nonnull String qName) throws IncorrectOperationException
 	{
 		PsiElementFactory factory = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory();
 		if(qualifierClass != null)

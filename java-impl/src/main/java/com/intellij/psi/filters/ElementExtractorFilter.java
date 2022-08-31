@@ -16,7 +16,7 @@
 package com.intellij.psi.filters;
 
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.infos.CandidateInfo;
+import com.intellij.java.language.psi.infos.CandidateInfo;
 
 /**
  * Created by IntelliJ IDEA.

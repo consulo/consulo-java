@@ -28,12 +28,12 @@ import com.intellij.java.debugger.impl.DebuggerUtilsImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.CompilingEvaluatorImpl;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Pair;
-import com.intellij.psi.JavaCodeFragment;
+import com.intellij.java.language.psi.JavaCodeFragment;
 import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiExpression;
-import com.intellij.psi.PsiExpressionCodeFragment;
-import com.intellij.psi.PsiType;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiExpressionCodeFragment;
+import com.intellij.java.language.psi.PsiType;
 import com.intellij.reference.SoftReference;
 
 public abstract class CachedEvaluator

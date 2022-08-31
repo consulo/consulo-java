@@ -24,7 +24,7 @@ import com.intellij.java.debugger.engine.evaluation.EvaluateException;
 import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
 import consulo.logging.Logger;
 import com.intellij.openapi.util.Couple;
-import consulo.java.module.util.JavaClassNames;
+import consulo.java.language.module.util.JavaClassNames;
 import com.intellij.psi.impl.PsiJavaParserFacadeImpl;
 import java.util.HashMap;
 import consulo.internal.com.sun.jdi.ClassType;

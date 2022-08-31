@@ -18,7 +18,7 @@ package consulo.java.execution.impl.testframework;
 import javax.annotation.Nonnull;
 import com.intellij.icons.AllIcons;
 import com.intellij.psi.PsiElement;
-import com.intellij.testIntegration.TestFramework;
+import com.intellij.java.language.testIntegration.TestFramework;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.ide.IconDescriptor;
 import consulo.ide.IconDescriptorUpdater;

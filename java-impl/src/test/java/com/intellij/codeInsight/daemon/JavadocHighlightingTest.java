@@ -6,7 +6,7 @@ import com.intellij.JavaTestUtil;
 import com.intellij.codeInspection.LocalInspectionTool;
 import com.intellij.codeInspection.javaDoc.JavaDocLocalInspection;
 import com.intellij.codeInspection.javaDoc.JavaDocReferenceInspection;
-import com.intellij.pom.java.LanguageLevel;
+import com.intellij.java.language.LanguageLevel;
 
 
 public abstract class JavadocHighlightingTest extends LightDaemonAnalyzerTestCase {

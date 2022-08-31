@@ -34,11 +34,11 @@ import com.intellij.openapi.editor.RangeMarker;
 import com.intellij.openapi.editor.ScrollType;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.PsiAssignmentExpression;
-import com.intellij.psi.PsiConditionalExpression;
-import com.intellij.psi.PsiExpression;
-import com.intellij.psi.PsiPolyadicExpression;
-import com.intellij.psi.PsiType;
+import com.intellij.java.language.psi.PsiAssignmentExpression;
+import com.intellij.java.language.psi.PsiConditionalExpression;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiPolyadicExpression;
+import com.intellij.java.language.psi.PsiType;
 import com.intellij.refactoring.introduceField.ElementToWorkOn;
 import com.intellij.util.IncorrectOperationException;
 

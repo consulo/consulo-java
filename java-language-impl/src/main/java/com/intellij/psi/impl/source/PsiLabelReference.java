@@ -15,6 +15,9 @@
  */
 package com.intellij.psi.impl.source;
 
+import com.intellij.java.language.psi.PsiIdentifier;
+import com.intellij.java.language.psi.PsiLabeledStatement;
+import com.intellij.java.language.psi.PsiStatement;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.PsiImplUtil;

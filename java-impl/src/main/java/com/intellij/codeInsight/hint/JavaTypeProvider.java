@@ -22,8 +22,8 @@ import javax.annotation.Nonnull;
 import com.intellij.lang.ExpressionTypeProvider;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiExpression;
-import com.intellij.psi.PsiType;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiType;
 import com.intellij.psi.SyntaxTraverser;
 
 /**

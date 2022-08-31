@@ -27,6 +27,7 @@ import com.intellij.java.debugger.impl.engine.evaluation.expression.EvaluatorBui
 import com.intellij.java.debugger.engine.evaluation.expression.ExpressionEvaluator;
 import com.intellij.java.debugger.impl.DebuggerContextImpl;
 import com.intellij.java.debugger.impl.ui.EditorEvaluationCommand;
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.application.ReadAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.progress.ProcessCanceledException;
@@ -37,7 +38,7 @@ import consulo.internal.com.sun.jdi.ClassType;
 import consulo.internal.com.sun.jdi.InterfaceType;
 import consulo.internal.com.sun.jdi.Type;
 import consulo.internal.com.sun.jdi.Value;
-import consulo.java.module.util.JavaClassNames;
+import consulo.java.language.module.util.JavaClassNames;
 
 /**
  * @author peter

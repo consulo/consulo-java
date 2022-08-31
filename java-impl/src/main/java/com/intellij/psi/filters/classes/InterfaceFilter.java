@@ -15,7 +15,7 @@
  */
 package com.intellij.psi.filters.classes;
 
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.filters.ElementFilter;
 import com.intellij.util.ReflectionUtil;

@@ -15,20 +15,20 @@
  */
 package com.intellij.codeInsight.completion;
 
-import static com.intellij.patterns.PsiJavaPatterns.psiMethod;
+import static com.intellij.java.language.patterns.PsiJavaPatterns.psiMethod;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementWeigher;
-import com.intellij.patterns.PsiMethodPattern;
+import com.intellij.java.language.patterns.PsiMethodPattern;
 import com.intellij.patterns.StandardPatterns;
-import consulo.java.module.util.JavaClassNames;
+import consulo.java.language.module.util.JavaClassNames;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiParameter;
-import com.intellij.psi.PsiType;
-import com.intellij.psi.util.TypeConversionUtil;
+import com.intellij.java.language.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiParameter;
+import com.intellij.java.language.psi.PsiType;
+import com.intellij.java.language.psi.util.TypeConversionUtil;
 
 class PreferMostUsedWeigher extends LookupElementWeigher
 {

@@ -17,6 +17,7 @@ package com.intellij.java.indexing.impl.search;
 
 import com.intellij.java.indexing.impl.stubs.index.JavaAnnotationIndex;
 import com.intellij.java.indexing.search.searches.AnnotatedElementsSearch;
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.util.Computable;
 import com.intellij.psi.*;

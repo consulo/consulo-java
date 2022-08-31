@@ -19,8 +19,8 @@ import javax.annotation.Nonnull;
 
 import org.jetbrains.java.generate.psi.PsiAdapter;
 import com.intellij.openapi.editor.Editor;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiMethod;
 
 /**
  * Inserts the method after the hashCode/equals methods in the javafile.

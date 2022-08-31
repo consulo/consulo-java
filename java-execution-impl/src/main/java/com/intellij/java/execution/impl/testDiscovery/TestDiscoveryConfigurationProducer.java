@@ -22,7 +22,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-import com.intellij.codeInsight.TestFrameworks;
+import com.intellij.java.language.codeInsight.TestFrameworks;
 import com.intellij.java.execution.JavaExecutionUtil;
 import com.intellij.java.execution.impl.JavaTestConfigurationBase;
 import com.intellij.execution.Location;
@@ -39,11 +39,11 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.Ref;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.testIntegration.TestFramework;
+import com.intellij.java.language.testIntegration.TestFramework;
 import com.intellij.util.containers.ContainerUtil;
 import java.util.HashSet;
 

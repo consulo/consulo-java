@@ -23,10 +23,10 @@ package com.intellij.java.analysis.codeInspection.reference;
 import com.intellij.codeInspection.lang.RefManagerExtension;
 import com.intellij.java.analysis.codeInspection.ex.EntryPointsManager;
 import com.intellij.lang.Language;
-import com.intellij.lang.java.JavaLanguage;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiParameter;
+import com.intellij.java.language.JavaLanguage;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiParameter;
 import consulo.util.dataholder.Key;
 import org.jetbrains.annotations.NonNls;
 

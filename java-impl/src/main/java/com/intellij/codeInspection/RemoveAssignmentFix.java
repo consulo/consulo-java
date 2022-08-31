@@ -20,14 +20,14 @@ import javax.annotation.Nonnull;
 import com.intellij.codeInsight.FileModificationService;
 import consulo.java.analysis.impl.codeInsight.JavaInspectionsBundle;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiAssignmentExpression;
+import com.intellij.java.language.psi.PsiAssignmentExpression;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiExpression;
-import com.intellij.psi.PsiExpressionList;
-import com.intellij.psi.PsiParenthesizedExpression;
-import com.intellij.psi.PsiReferenceExpression;
-import com.intellij.psi.PsiVariable;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiExpressionList;
+import com.intellij.java.language.psi.PsiParenthesizedExpression;
+import com.intellij.java.language.psi.PsiReferenceExpression;
+import com.intellij.java.language.psi.PsiVariable;
+import com.intellij.java.language.psi.util.PsiUtil;
 
 public class RemoveAssignmentFix extends RemoveInitializerFix
 {

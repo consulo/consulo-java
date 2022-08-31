@@ -15,7 +15,7 @@
  */
 package com.intellij.refactoring.util.occurrences;
 
-import com.intellij.psi.*;
+import com.intellij.java.language.psi.PsiExpression;
 
 public interface OccurrenceFilter {
   boolean isOK(PsiExpression occurrence);

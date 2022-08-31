@@ -18,6 +18,7 @@ package com.intellij.codeInsight.editorActions.smartEnter;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import com.intellij.ide.DataManager;
+import com.intellij.java.language.psi.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.actionSystem.IdeActions;

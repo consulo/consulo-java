@@ -16,7 +16,7 @@
 package com.intellij.java.analysis.codeInspection.reference;
 
 import com.intellij.codeInspection.reference.RefElement;
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.psi.PsiClass;
 
 import javax.annotation.Nonnull;
 import java.util.List;

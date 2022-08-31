@@ -15,11 +15,12 @@
  */
 package com.intellij.ide.structureView.impl;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.PsiImplUtil;
 import com.intellij.psi.scope.BaseScopeProcessor;
-import com.intellij.psi.util.MethodSignature;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.MethodSignature;
+import com.intellij.java.language.psi.util.PsiUtil;
 
 import javax.annotation.Nonnull;
 import java.util.Collection;

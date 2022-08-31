@@ -24,16 +24,17 @@
  */
 package com.intellij.java.analysis.impl.codeInspection.reference;
 
-import com.intellij.codeInsight.TestFrameworks;
+import com.intellij.java.language.codeInsight.TestFrameworks;
 import com.intellij.codeInspection.reference.*;
 import com.intellij.java.analysis.codeInspection.reference.*;
+import com.intellij.java.language.psi.*;
 import com.intellij.lang.injection.InjectedLanguageManager;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.psi.*;
-import com.intellij.psi.util.ClassUtil;
-import com.intellij.psi.util.PsiFormatUtil;
+import com.intellij.java.language.psi.util.ClassUtil;
+import com.intellij.java.language.psi.util.PsiFormatUtil;
 import com.intellij.psi.util.PsiUtilCore;
 import consulo.annotation.access.RequiredReadAction;
 

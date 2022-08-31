@@ -17,8 +17,8 @@ package com.intellij.refactoring.introduceVariable;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiExpression;
-import com.intellij.psi.PsiVariable;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiVariable;
 import com.intellij.refactoring.RefactoringBundle;
 import com.intellij.refactoring.rename.JavaUnresolvableLocalCollisionDetector;
 import com.intellij.refactoring.util.RefactoringUIUtil;

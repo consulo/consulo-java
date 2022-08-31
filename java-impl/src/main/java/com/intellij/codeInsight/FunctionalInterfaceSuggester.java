@@ -16,13 +16,14 @@
 package com.intellij.codeInsight;
 
 import com.intellij.java.analysis.impl.codeInspection.java15api.Java15APIUsageInspection;
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.java.indexing.search.searches.AnnotatedMembersSearch;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.PsiUtil;
-import com.intellij.psi.util.TypeConversionUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.TypeConversionUtil;
 import com.intellij.util.Processor;
 import javax.annotation.Nonnull;
 

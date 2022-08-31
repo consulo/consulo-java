@@ -23,8 +23,8 @@ import com.intellij.codeInspection.compiler.JavacQuirksInspection;
 import com.intellij.java.analysis.impl.codeInspection.redundantCast.RedundantCastInspection;
 import com.intellij.codeInspection.uncheckedWarnings.UncheckedWarningLocalInspection;
 import com.intellij.codeInspection.unusedSymbol.UnusedSymbolLocalInspection;
-import com.intellij.openapi.projectRoots.JavaSdkVersion;
-import com.intellij.pom.java.LanguageLevel;
+import com.intellij.java.language.projectRoots.JavaSdkVersion;
+import com.intellij.java.language.LanguageLevel;
 import com.intellij.testFramework.IdeaTestUtil;
 
 /**

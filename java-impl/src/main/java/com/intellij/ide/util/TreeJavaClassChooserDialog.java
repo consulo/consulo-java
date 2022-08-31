@@ -16,15 +16,17 @@
 package com.intellij.ide.util;
 
 import com.intellij.ide.projectView.impl.nodes.ClassTreeNode;
+import com.intellij.java.language.util.ClassFilter;
+import com.intellij.java.language.util.TreeClassChooser;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.Conditions;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiJavaFile;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiJavaFile;
 import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.search.PsiShortNamesCache;
+import com.intellij.java.language.psi.search.PsiShortNamesCache;
 import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
 import com.intellij.util.Query;
 import com.intellij.util.containers.ContainerUtil;

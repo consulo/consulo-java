@@ -19,6 +19,7 @@ import com.intellij.java.debugger.engine.DebuggerUtils;
 import com.intellij.java.debugger.engine.evaluation.CodeFragmentKind;
 import com.intellij.java.debugger.engine.evaluation.TextWithImports;
 import com.intellij.java.debugger.impl.engine.evaluation.TextWithImportsImpl;
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;

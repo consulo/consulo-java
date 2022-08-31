@@ -15,6 +15,10 @@
  */
 package com.intellij.refactoring.introduceField;
 
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiField;
+import com.intellij.java.language.psi.PsiVariable;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.RangeMarker;
 import com.intellij.openapi.project.Project;

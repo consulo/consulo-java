@@ -15,6 +15,7 @@
  */
 package org.intellij.plugins.intelliLang.inject.config;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.JDOMExternalizableStringList;
@@ -23,7 +24,7 @@ import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.patterns.compiler.PatternCompiler;
 import com.intellij.psi.*;
-import com.intellij.psi.util.PsiFormatUtil;
+import com.intellij.java.language.psi.util.PsiFormatUtil;
 import com.intellij.util.IncorrectOperationException;
 import org.intellij.plugins.intelliLang.inject.java.JavaLanguageInjectionSupport;
 import org.jdom.Element;

@@ -19,10 +19,10 @@ import javax.annotation.Nonnull;
 
 import com.intellij.java.analysis.codeInspection.SuppressManager;
 import com.intellij.codeInspection.SuppressionUtil;
-import com.intellij.psi.JavaTokenType;
-import com.intellij.psi.PsiAnnotation;
+import com.intellij.java.language.psi.JavaTokenType;
+import com.intellij.java.language.psi.PsiAnnotation;
 import com.intellij.psi.PsiComment;
-import com.intellij.psi.PsiJavaCodeReferenceElement;
+import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
 import com.intellij.psi.tree.IElementType;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;

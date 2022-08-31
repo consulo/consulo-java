@@ -20,9 +20,9 @@ import javax.annotation.Nonnull;
 import com.intellij.openapi.util.NullableComputable;
 import com.intellij.openapi.util.NullableLazyValue;
 import com.intellij.openapi.util.VolatileNullableLazyValue;
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiType;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiType;
+import com.intellij.java.language.psi.util.PsiUtil;
 
 public class ExpectedTypeInfoImpl implements ExpectedTypeInfo
 {

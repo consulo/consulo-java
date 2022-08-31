@@ -21,7 +21,7 @@ import com.intellij.java.debugger.engine.SourcePositionHighlighter;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiLambdaExpression;
+import com.intellij.java.language.psi.PsiLambdaExpression;
 
 /**
  * @author Nikolay.Tropin

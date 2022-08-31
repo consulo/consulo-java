@@ -16,8 +16,8 @@
 package com.intellij.jam.reflect;
 
 import com.intellij.jam.JamElement;
-import com.intellij.psi.PsiMember;
-import com.intellij.psi.PsiModifierListOwner;
+import com.intellij.java.language.psi.PsiMember;
+import com.intellij.java.language.psi.PsiModifierListOwner;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;

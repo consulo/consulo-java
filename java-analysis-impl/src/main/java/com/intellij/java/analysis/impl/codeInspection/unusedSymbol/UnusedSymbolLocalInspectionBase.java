@@ -28,7 +28,7 @@ import com.intellij.java.analysis.impl.codeInspection.BaseJavaLocalInspectionToo
 import com.intellij.java.analysis.impl.codeInspection.deadCode.UnusedDeclarationInspectionBase;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.WriteExternalException;
-import com.intellij.psi.PsiModifier;
+import com.intellij.java.language.psi.PsiModifier;
 
 public class UnusedSymbolLocalInspectionBase extends BaseJavaLocalInspectionTool
 {

@@ -17,6 +17,9 @@ package com.siyeh.ipp.decls;
 
 import javax.annotation.Nonnull;
 
+import com.intellij.java.language.psi.PsiCodeBlock;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiLocalVariable;
 import com.intellij.psi.*;
 import com.intellij.psi.search.searches.ReferencesSearch;
 import com.intellij.psi.util.PsiTreeUtil;

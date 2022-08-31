@@ -7,7 +7,7 @@ import com.intellij.formatting.BraceStyle;
 import com.intellij.formatting.ForceBraces;
 import com.intellij.formatting.WrapType;
 import com.intellij.lang.Language;
-import com.intellij.lang.java.JavaLanguage;
+import com.intellij.java.language.JavaLanguage;
 
 public class JavaCodeStyleBean extends CodeStyleBean
 {

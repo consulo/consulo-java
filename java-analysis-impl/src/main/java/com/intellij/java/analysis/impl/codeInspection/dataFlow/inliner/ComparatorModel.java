@@ -15,18 +15,18 @@
  */
 package com.intellij.java.analysis.impl.codeInspection.dataFlow.inliner;
 
-import com.intellij.codeInsight.Nullability;
+import com.intellij.java.language.codeInsight.Nullability;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.CFGBuilder;
-import com.intellij.psi.*;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.util.ObjectUtils;
 import com.siyeh.ig.callMatcher.CallMatcher;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import static com.intellij.psi.CommonClassNames.JAVA_UTIL_COLLECTIONS;
-import static com.intellij.psi.CommonClassNames.JAVA_UTIL_COMPARATOR;
+import static com.intellij.java.language.psi.CommonClassNames.JAVA_UTIL_COLLECTIONS;
+import static com.intellij.java.language.psi.CommonClassNames.JAVA_UTIL_COMPARATOR;
 import static com.siyeh.ig.callMatcher.CallMatcher.*;
 
 /**

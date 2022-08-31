@@ -17,6 +17,9 @@ package com.intellij.psi;
 
 import javax.annotation.Nonnull;
 
+import com.intellij.java.language.psi.PsiAnnotation;
+import com.intellij.java.language.psi.PsiType;
+import com.intellij.java.language.psi.PsiTypeVisitor;
 import com.intellij.psi.search.GlobalSearchScope;
 
 /**

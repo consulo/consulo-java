@@ -23,14 +23,14 @@ import com.intellij.openapi.externalSystem.util.ExternalSystemApiUtil;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.projectRoots.JavaSdk;
-import com.intellij.openapi.projectRoots.JavaSdkVersion;
+import com.intellij.java.language.projectRoots.JavaSdk;
+import com.intellij.java.language.projectRoots.JavaSdkVersion;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.projectRoots.SdkTable;
 import com.intellij.openapi.roots.ModifiableRootModel;
 import com.intellij.openapi.roots.ModuleRootManager;
-import com.intellij.pom.java.LanguageLevel;
-import consulo.java.module.extension.JavaMutableModuleExtension;
+import com.intellij.java.language.LanguageLevel;
+import consulo.java.language.module.extension.JavaMutableModuleExtension;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

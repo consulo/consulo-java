@@ -19,10 +19,10 @@ import javax.annotation.Nullable;
 import com.intellij.ide.IdeBundle;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.actionSystem.LangDataKeys;
-import com.intellij.psi.JavaDirectoryService;
+import com.intellij.java.language.psi.JavaDirectoryService;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiJavaPackage;
+import com.intellij.java.language.psi.PsiJavaPackage;
 
 public final class FilePackageMacro extends Macro {
   public String getName() {

@@ -21,7 +21,7 @@ import com.intellij.java.debugger.engine.DebuggerUtils;
 import consulo.logging.Logger;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.WriteExternalException;
-import consulo.java.module.util.JavaClassNames;
+import consulo.java.language.module.util.JavaClassNames;
 import consulo.internal.com.sun.jdi.Type;
 
 public abstract class TypeRenderer implements Renderer

@@ -17,7 +17,7 @@ package com.intellij.codeInsight.editorActions.smartEnter;
 
 import com.intellij.openapi.editor.Editor;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiThrowStatement;
+import com.intellij.java.language.psi.PsiThrowStatement;
 import com.intellij.util.IncorrectOperationException;
 
 @SuppressWarnings({"HardCodedStringLiteral"})

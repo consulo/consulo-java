@@ -16,10 +16,10 @@
 package com.intellij.codeInsight.editorActions;
 
 import com.intellij.openapi.editor.Document;
-import com.intellij.psi.JavaTokenType;
+import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiJavaToken;
+import com.intellij.java.language.psi.PsiJavaToken;
 
 public class LiteralJoinLinesHandler implements JoinLinesHandlerDelegate {
   @Override

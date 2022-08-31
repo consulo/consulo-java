@@ -1,5 +1,6 @@
 package com.intellij.psi.resolve;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.testFramework.PlatformTestCase;

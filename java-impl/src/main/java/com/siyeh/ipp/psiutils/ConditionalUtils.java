@@ -15,7 +15,7 @@
  */
 package com.siyeh.ipp.psiutils;
 
-import com.intellij.psi.*;
+import com.intellij.java.language.psi.*;
 import org.jetbrains.annotations.NonNls;
 
 public class ConditionalUtils {

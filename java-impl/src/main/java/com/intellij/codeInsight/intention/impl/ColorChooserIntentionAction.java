@@ -29,12 +29,13 @@ import javax.swing.JComponent;
 
 import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.codeInsight.FileModificationService;
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.patterns.PsiJavaPatterns;
-import com.intellij.patterns.PsiMethodPattern;
+import com.intellij.java.language.patterns.PsiJavaPatterns;
+import com.intellij.java.language.patterns.PsiMethodPattern;
 import com.intellij.psi.*;
 import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.psi.util.PsiTreeUtil;

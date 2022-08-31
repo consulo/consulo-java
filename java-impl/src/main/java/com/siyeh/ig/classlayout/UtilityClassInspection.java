@@ -18,10 +18,10 @@ package com.siyeh.ig.classlayout;
 import javax.annotation.Nonnull;
 import javax.swing.JComponent;
 
-import com.intellij.codeInsight.AnnotationUtil;
+import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.codeInspection.util.SpecialAnnotationsUtil;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiModifierListOwner;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiModifierListOwner;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;

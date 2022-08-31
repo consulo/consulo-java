@@ -20,8 +20,8 @@
  */
 package com.intellij.refactoring.util;
 
-import com.intellij.psi.*;
-import com.intellij.psi.util.TypeConversionUtil;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.TypeConversionUtil;
 import com.intellij.util.IncorrectOperationException;
 import javax.annotation.Nullable;
 

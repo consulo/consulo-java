@@ -20,13 +20,13 @@ import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementPresentation;
 import com.intellij.codeInsight.lookup.TypedLookupItem;
 import com.intellij.icons.AllIcons;
-import com.intellij.psi.*;
-import com.intellij.psi.codeStyle.JavaCodeStyleManager;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.util.InheritanceUtil;
+import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.PsiUtil;
-import com.intellij.psi.util.TypeConversionUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.TypeConversionUtil;
 import com.intellij.util.Consumer;
 import com.intellij.util.containers.ContainerUtil;
 
@@ -34,7 +34,7 @@ import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.Set;
 
-import static consulo.java.module.util.JavaClassNames.*;
+import static consulo.java.language.module.util.JavaClassNames.*;
 
 /**
  * @author peter

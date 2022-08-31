@@ -17,7 +17,7 @@ package com.intellij.psi.impl.java.stubs.impl;
 
 import static com.intellij.util.ObjectUtil.notNull;
 
-import com.intellij.psi.PsiRequiresStatement;
+import com.intellij.java.language.psi.PsiRequiresStatement;
 import com.intellij.psi.impl.java.stubs.JavaStubElementTypes;
 import com.intellij.psi.impl.java.stubs.PsiRequiresStatementStub;
 import com.intellij.psi.stubs.StubBase;

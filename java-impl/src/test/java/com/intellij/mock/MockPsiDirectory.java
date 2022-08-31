@@ -5,6 +5,7 @@ package com.intellij.mock;
 
 import javax.annotation.Nonnull;
 
+import com.intellij.java.language.psi.PsiJavaPackage;
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;

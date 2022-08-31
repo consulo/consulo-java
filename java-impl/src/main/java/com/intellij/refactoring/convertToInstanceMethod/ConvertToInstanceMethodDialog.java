@@ -17,9 +17,9 @@ package com.intellij.refactoring.convertToInstanceMethod;
 
 import consulo.logging.Logger;
 import com.intellij.openapi.help.HelpManager;
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiParameter;
-import com.intellij.psi.PsiVariable;
+import com.intellij.java.language.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiParameter;
+import com.intellij.java.language.psi.PsiVariable;
 import com.intellij.refactoring.HelpID;
 import com.intellij.refactoring.RefactoringBundle;
 import com.intellij.refactoring.move.moveInstanceMethod.MoveInstanceMethodDialogBase;

@@ -17,10 +17,11 @@ package com.intellij.psi.impl.source.resolve.graphInference;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.pom.java.LanguageLevel;
+import com.intellij.java.language.LanguageLevel;
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
-import com.intellij.psi.impl.source.resolve.ParameterTypeInferencePolicy;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.impl.source.resolve.ParameterTypeInferencePolicy;
+import com.intellij.java.language.psi.util.PsiUtil;
 
 /**
  * User: anna
@@ -36,11 +37,11 @@ public class PsiGraphInferenceHelper implements PsiInferenceHelper
 
 	@Override
 	public PsiType inferTypeForMethodTypeParameter(@Nonnull PsiTypeParameter typeParameter,
-			@Nonnull PsiParameter[] parameters,
-			@Nonnull PsiExpression[] arguments,
-			@Nonnull PsiSubstitutor partialSubstitutor,
-			@javax.annotation.Nullable PsiElement parent,
-			@Nonnull ParameterTypeInferencePolicy policy)
+																								 @Nonnull PsiParameter[] parameters,
+																								 @Nonnull PsiExpression[] arguments,
+																								 @Nonnull PsiSubstitutor partialSubstitutor,
+																								 @javax.annotation.Nullable PsiElement parent,
+																								 @Nonnull ParameterTypeInferencePolicy policy)
 	{
 		final PsiSubstitutor substitutor;
 		if(parent != null)

@@ -15,13 +15,13 @@
  */
 package com.intellij.codeInsight.editorActions.wordSelection;
 
-import com.intellij.lang.java.JavaLanguage;
+import com.intellij.java.language.JavaLanguage;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiField;
-import com.intellij.psi.PsiIdentifier;
-import com.intellij.psi.javadoc.PsiDocComment;
+import com.intellij.java.language.psi.PsiField;
+import com.intellij.java.language.psi.PsiIdentifier;
+import com.intellij.java.language.psi.javadoc.PsiDocComment;
 
 import java.util.List;
 

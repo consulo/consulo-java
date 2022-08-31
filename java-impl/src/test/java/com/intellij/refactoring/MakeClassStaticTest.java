@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 import javax.annotation.Nonnull;
 import com.intellij.JavaTestUtil;
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.codeStyle.CodeStyleSettings;
 import com.intellij.psi.codeStyle.CodeStyleSettingsManager;

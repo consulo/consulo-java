@@ -16,7 +16,7 @@
 package com.intellij.psi.impl.cache.impl.idCache;
 
 import com.intellij.lexer.Lexer;
-import com.intellij.psi.JavaTokenType;
+import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.psi.TokenType;
 import com.intellij.psi.impl.cache.impl.BaseFilterLexer;
 import com.intellij.psi.impl.cache.impl.OccurrenceConsumer;

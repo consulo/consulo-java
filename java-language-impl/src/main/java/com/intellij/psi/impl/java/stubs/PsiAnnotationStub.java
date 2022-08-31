@@ -16,7 +16,7 @@
 package com.intellij.psi.impl.java.stubs;
 
 import javax.annotation.Nonnull;
-import com.intellij.psi.PsiAnnotation;
+import com.intellij.java.language.psi.PsiAnnotation;
 import com.intellij.psi.stubs.StubElement;
 import com.intellij.util.ArrayFactory;
 

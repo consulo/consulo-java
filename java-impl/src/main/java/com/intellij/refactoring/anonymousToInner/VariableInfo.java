@@ -20,7 +20,7 @@
  */
 package com.intellij.refactoring.anonymousToInner;
 
-import com.intellij.psi.*;
+import com.intellij.java.language.psi.PsiVariable;
 
 public class VariableInfo {
   public PsiVariable variable;

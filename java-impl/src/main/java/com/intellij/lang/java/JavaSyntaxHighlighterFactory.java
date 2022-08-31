@@ -17,6 +17,7 @@ package com.intellij.lang.java;
 
 import javax.annotation.Nonnull;
 import com.intellij.ide.highlighter.JavaFileHighlighter;
+import com.intellij.java.language.JavaLanguage;
 import com.intellij.openapi.fileTypes.SyntaxHighlighter;
 import consulo.fileTypes.LanguageVersionableSyntaxHighlighterFactory;
 import consulo.lang.LanguageVersion;

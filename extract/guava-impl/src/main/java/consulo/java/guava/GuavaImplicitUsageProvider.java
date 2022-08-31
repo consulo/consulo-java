@@ -16,10 +16,11 @@
 
 package consulo.java.guava;
 
-import com.intellij.codeInsight.AnnotationUtil;
+import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.codeInsight.daemon.ImplicitUsageProvider;
+import com.intellij.java.language.psi.PsiModifierListOwner;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiMethod;
 
 /**
  * @author VISTALL
@@ -30,7 +31,7 @@ public class GuavaImplicitUsageProvider implements ImplicitUsageProvider
 	@Override
 	public boolean isImplicitUsage(PsiElement psiElement)
 	{
-		return psiElement instanceof PsiMethod && AnnotationUtil.isAnnotated((com.intellij.psi.PsiModifierListOwner) psiElement, GuavaLibrary.Subscribe, false);
+		return psiElement instanceof PsiMethod && AnnotationUtil.isAnnotated((PsiModifierListOwner) psiElement, GuavaLibrary.Subscribe, false);
 	}
 
 	@Override

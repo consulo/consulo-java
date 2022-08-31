@@ -15,8 +15,9 @@
  */
 package com.intellij.java.analysis.codeInspection.reference;
 
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiModifierListOwner;
+import com.intellij.java.language.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiModifierListOwner;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -34,7 +35,7 @@ public interface RefMethod extends RefJavaElement {
    * analysis scope.
    *
    * @return the collection of super methods.
-   * @see com.intellij.psi.PsiMethod#findSuperMethods()
+   * @see PsiMethod#findSuperMethods()
    * @see #hasSuperMethods
    */
   @Nonnull

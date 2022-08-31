@@ -17,7 +17,7 @@ package com.intellij.psi.impl.java.stubs;
 
 import java.util.List;
 
-import com.intellij.psi.PsiPackageAccessibilityStatement;
+import com.intellij.java.language.psi.PsiPackageAccessibilityStatement;
 import com.intellij.psi.stubs.StubElement;
 
 public interface PsiPackageAccessibilityStatementStub extends StubElement<PsiPackageAccessibilityStatement>

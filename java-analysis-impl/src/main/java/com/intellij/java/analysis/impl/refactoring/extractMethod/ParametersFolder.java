@@ -21,16 +21,17 @@
 package com.intellij.java.analysis.impl.refactoring.extractMethod;
 
 import com.intellij.codeInsight.PsiEquivalenceUtil;
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.util.Pair;
 import com.intellij.psi.*;
-import com.intellij.psi.codeStyle.JavaCodeStyleManager;
+import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.psi.codeStyle.SuggestedNameInfo;
-import com.intellij.psi.codeStyle.VariableKind;
+import com.intellij.java.language.psi.codeStyle.VariableKind;
 import com.intellij.psi.search.LocalSearchScope;
 import com.intellij.psi.search.SearchScope;
 import com.intellij.psi.search.searches.ReferencesSearch;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.analysis.impl.refactoring.util.VariableData;
 import com.intellij.java.analysis.impl.refactoring.util.duplicates.DuplicatesFinder;
 import javax.annotation.Nonnull;

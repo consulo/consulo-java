@@ -16,12 +16,13 @@
 package com.siyeh.ig.psiutils;
 
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.HighlightUtil;
-import com.intellij.pom.java.LanguageLevel;
+import com.intellij.java.language.LanguageLevel;
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.PsiUtil;
-import consulo.java.module.util.JavaClassNames;
+import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.java.language.module.util.JavaClassNames;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
 

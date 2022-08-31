@@ -15,8 +15,8 @@
  */
 package com.siyeh.ig.controlflow;
 
-import com.intellij.psi.PsiCodeBlock;
-import com.intellij.psi.PsiSwitchStatement;
+import com.intellij.java.language.psi.PsiCodeBlock;
+import com.intellij.java.language.psi.PsiSwitchStatement;
 import com.intellij.codeInspection.ui.SingleIntegerFieldOptionsPanel;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;

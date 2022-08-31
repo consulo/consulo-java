@@ -18,7 +18,7 @@ package com.intellij.codeInsight.template.postfix.templates;
 import javax.annotation.Nonnull;
 
 import com.intellij.openapi.util.Pair;
-import com.intellij.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiExpression;
 
 public class ForAscendingPostfixTemplate extends ForIndexedPostfixTemplate {
   public ForAscendingPostfixTemplate() {

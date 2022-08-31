@@ -2,9 +2,9 @@ package com.intellij.codeInsight;
 
 import com.intellij.codeInsight.generation.GenerateEqualsHelper;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiField;
+import com.intellij.java.language.psi.PsiField;
 import com.intellij.psi.codeStyle.CodeStyleSettings;
 import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
 import com.intellij.psi.util.PsiTreeUtil;

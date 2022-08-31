@@ -15,8 +15,8 @@
  */
 package com.siyeh.ig.controlflow;
 
-import com.intellij.psi.PsiBreakStatement;
-import com.intellij.psi.PsiIdentifier;
+import com.intellij.java.language.psi.PsiBreakStatement;
+import com.intellij.java.language.psi.PsiIdentifier;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;

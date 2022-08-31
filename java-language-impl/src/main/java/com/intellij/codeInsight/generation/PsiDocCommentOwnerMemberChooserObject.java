@@ -15,7 +15,7 @@
  */
 package com.intellij.codeInsight.generation;
 
-import com.intellij.psi.PsiDocCommentOwner;
+import com.intellij.java.language.psi.PsiDocCommentOwner;
 import com.intellij.ui.SimpleTextAttributes;
 import consulo.ui.image.Image;
 

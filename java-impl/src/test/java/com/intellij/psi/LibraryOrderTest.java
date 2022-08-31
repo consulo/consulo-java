@@ -16,6 +16,8 @@
 package com.intellij.psi;
 
 import com.intellij.JavaTestUtil;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.roots.*;
 import com.intellij.openapi.vfs.LocalFileSystem;

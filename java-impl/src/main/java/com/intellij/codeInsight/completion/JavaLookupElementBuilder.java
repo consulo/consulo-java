@@ -18,11 +18,11 @@ package com.intellij.codeInsight.completion;
 import javax.annotation.Nonnull;
 
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
+import com.intellij.java.language.psi.*;
 import consulo.ide.IconDescriptorUpdaters;
 import com.intellij.openapi.util.Iconable;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.*;
-import com.intellij.psi.util.PsiFormatUtil;
+import com.intellij.java.language.psi.util.PsiFormatUtil;
 import com.intellij.psi.util.PsiFormatUtilBase;
 
 import javax.annotation.Nullable;

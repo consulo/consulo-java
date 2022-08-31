@@ -18,6 +18,9 @@ package com.intellij.codeInsight.folding.impl;
 import javax.annotation.Nonnull;
 
 import com.intellij.codeInsight.CodeInsightActionHandler;
+import com.intellij.java.language.psi.JavaTokenType;
+import com.intellij.java.language.psi.PsiCodeBlock;
+import com.intellij.java.language.psi.PsiJavaToken;
 import consulo.logging.Logger;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.FoldRegion;

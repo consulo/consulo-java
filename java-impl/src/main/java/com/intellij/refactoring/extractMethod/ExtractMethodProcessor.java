@@ -33,6 +33,14 @@ import com.intellij.java.analysis.impl.refactoring.util.VariableData;
 import com.intellij.java.analysis.impl.refactoring.util.duplicates.DuplicatesFinder;
 import com.intellij.java.analysis.impl.refactoring.util.duplicates.Match;
 import com.intellij.java.analysis.impl.refactoring.util.duplicates.VariableReturnValue;
+import com.intellij.java.language.codeInsight.AnnotationUtil;
+import com.intellij.java.language.codeInsight.Nullability;
+import com.intellij.java.language.codeInsight.NullableNotNullManager;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
+import com.intellij.java.language.psi.codeStyle.VariableKind;
+import com.intellij.java.language.psi.util.*;
+import com.intellij.java.language.util.VisibilityUtil;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.LogicalPosition;
@@ -82,7 +90,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 
-import static com.intellij.codeInsight.AnnotationUtil.CHECK_TYPE;
+import static com.intellij.java.language.codeInsight.AnnotationUtil.CHECK_TYPE;
 
 public class ExtractMethodProcessor implements MatchProvider {
   private static final Logger LOG = Logger.getInstance(ExtractMethodProcessor.class);

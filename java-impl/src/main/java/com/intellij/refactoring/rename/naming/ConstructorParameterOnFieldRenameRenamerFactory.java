@@ -16,7 +16,7 @@
 package com.intellij.refactoring.rename.naming;
 
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiField;
+import com.intellij.java.language.psi.PsiField;
 import com.intellij.usageView.UsageInfo;
 
 import java.util.Collection;

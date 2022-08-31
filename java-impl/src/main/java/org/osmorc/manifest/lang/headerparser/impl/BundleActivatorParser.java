@@ -32,11 +32,11 @@ import org.osmorc.manifest.lang.psi.HeaderValuePart;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.JavaClassReferenceProvider;
 import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.util.ClassKind;
+import com.intellij.java.language.psi.util.ClassKind;
 
 /**
  * @author Robert F. Beeger (robert@beeger.net)

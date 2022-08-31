@@ -20,7 +20,7 @@ import java.util.Collection;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import com.intellij.openapi.extensions.ExtensionPointName;
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.usageView.UsageInfo;
 import com.intellij.util.IncorrectOperationException;

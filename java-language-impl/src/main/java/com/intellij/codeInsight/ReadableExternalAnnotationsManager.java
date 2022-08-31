@@ -26,7 +26,7 @@ import javax.annotation.Nonnull;
 
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
-import com.intellij.openapi.roots.AnnotationOrderRootType;
+import com.intellij.java.language.projectRoots.roots.AnnotationOrderRootType;
 import com.intellij.openapi.roots.ModuleOrderEntry;
 import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.roots.OrderEntry;

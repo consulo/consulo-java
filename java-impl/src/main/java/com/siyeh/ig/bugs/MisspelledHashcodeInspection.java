@@ -17,8 +17,8 @@ package com.siyeh.ig.bugs;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiParameterList;
+import com.intellij.java.language.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiParameterList;
 import com.siyeh.HardcodedMethodConstants;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;

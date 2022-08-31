@@ -16,14 +16,15 @@
 package com.intellij.ide.util.gotoByName;
 
 import com.intellij.ide.util.DefaultPsiElementCellRenderer;
+import com.intellij.java.language.psi.*;
 import com.intellij.navigation.ChooseByNameContributorEx;
 import com.intellij.navigation.NavigationItem;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.PsiSuperMethodImplUtil;
 import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.search.PsiShortNamesCache;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.search.PsiShortNamesCache;
+import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.util.Processor;
 import com.intellij.util.indexing.FindSymbolParameters;
 import com.intellij.util.indexing.IdFilter;

@@ -24,11 +24,11 @@ import javax.annotation.Nonnull;
 
 import org.jetbrains.annotations.Nls;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiJavaCodeReferenceElement;
-import com.intellij.psi.PsiJavaModule;
-import com.intellij.psi.PsiKeyword;
-import com.intellij.psi.PsiProvidesStatement;
-import com.intellij.psi.PsiReferenceList;
+import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
+import com.intellij.java.language.psi.PsiJavaModule;
+import com.intellij.java.language.psi.PsiKeyword;
+import com.intellij.java.language.psi.PsiProvidesStatement;
+import com.intellij.java.language.psi.PsiReferenceList;
 import com.intellij.util.containers.ContainerUtil;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 

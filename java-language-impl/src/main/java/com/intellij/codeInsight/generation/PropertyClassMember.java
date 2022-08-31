@@ -16,7 +16,7 @@
 package com.intellij.codeInsight.generation;
 
 import javax.annotation.Nullable;
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.util.IncorrectOperationException;
 
 /**

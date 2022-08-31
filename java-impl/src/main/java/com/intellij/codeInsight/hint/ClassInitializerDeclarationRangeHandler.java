@@ -19,7 +19,7 @@ import javax.annotation.Nonnull;
 
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiClassInitializer;
+import com.intellij.java.language.psi.PsiClassInitializer;
 
 public class ClassInitializerDeclarationRangeHandler implements DeclarationRangeHandler {
   @Override

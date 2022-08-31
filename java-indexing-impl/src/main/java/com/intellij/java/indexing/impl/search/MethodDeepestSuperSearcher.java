@@ -17,7 +17,7 @@ package com.intellij.java.indexing.impl.search;
 
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.util.Computable;
-import com.intellij.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.util.Processor;
 import com.intellij.util.QueryExecutor;
 

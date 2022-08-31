@@ -15,13 +15,14 @@
  */
 package com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
-import com.intellij.psi.util.PsiFormatUtil;
+import com.intellij.java.language.psi.util.PsiFormatUtil;
 import com.intellij.psi.util.PsiFormatUtilBase;
-import com.intellij.psi.util.TypeConversionUtil;
-import com.intellij.util.JavaPsiConstructorUtil;
+import com.intellij.java.language.psi.util.TypeConversionUtil;
+import com.intellij.java.language.util.JavaPsiConstructorUtil;
 import com.intellij.util.ObjectUtils;
-import consulo.java.module.util.JavaClassNames;
+import consulo.java.language.module.util.JavaClassNames;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
 

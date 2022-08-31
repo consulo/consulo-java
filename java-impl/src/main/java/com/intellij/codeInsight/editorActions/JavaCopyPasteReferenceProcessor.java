@@ -17,6 +17,7 @@ package com.intellij.codeInsight.editorActions;
 
 import java.util.ArrayList;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.editor.RangeMarker;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;

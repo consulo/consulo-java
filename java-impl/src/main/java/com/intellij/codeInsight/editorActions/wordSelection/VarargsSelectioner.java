@@ -15,6 +15,7 @@
  */
 package com.intellij.codeInsight.editorActions.wordSelection;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;

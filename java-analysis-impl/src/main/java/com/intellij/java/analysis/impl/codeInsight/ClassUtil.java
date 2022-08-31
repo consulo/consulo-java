@@ -19,8 +19,8 @@
  */
 package com.intellij.java.analysis.impl.codeInsight;
 
-import com.intellij.psi.*;
-import consulo.java.module.util.JavaClassNames;
+import com.intellij.java.language.psi.*;
+import consulo.java.language.module.util.JavaClassNames;
 
 import javax.annotation.Nonnull;
 import java.util.HashSet;

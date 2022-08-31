@@ -27,6 +27,7 @@ import javax.swing.JRadioButton;
 
 import javax.annotation.Nullable;
 import com.intellij.CommonBundle;
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.actionSystem.LangDataKeys;
 import com.intellij.openapi.editor.Editor;

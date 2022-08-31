@@ -21,6 +21,7 @@ import com.intellij.codeInsight.daemon.JavaErrorBundle;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.JavaHighlightUtil;
 import com.intellij.codeInspection.*;
 import com.intellij.java.analysis.codeInspection.BaseJavaBatchLocalInspectionTool;
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;

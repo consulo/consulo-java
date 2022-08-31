@@ -15,8 +15,8 @@
  */
 package com.intellij.psi.impl.cache;
 
-import com.intellij.psi.JavaTokenType;
-import com.intellij.psi.PsiModifier;
+import com.intellij.java.language.psi.JavaTokenType;
+import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.util.BitUtil;
 import consulo.util.collection.primitive.ints.IntMaps;

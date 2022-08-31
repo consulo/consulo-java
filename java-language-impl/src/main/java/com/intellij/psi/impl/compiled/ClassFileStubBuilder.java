@@ -15,7 +15,7 @@
  */
 package com.intellij.psi.impl.compiled;
 
-import static com.intellij.psi.compiled.ClassFileDecompilers.Full;
+import static com.intellij.java.language.psi.compiled.ClassFileDecompilers.Full;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -25,11 +25,11 @@ import javax.annotation.Nonnull;
 
 import consulo.logging.Logger;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.compiled.ClassFileDecompilers;
+import com.intellij.java.language.psi.compiled.ClassFileDecompilers;
 import com.intellij.psi.stubs.BinaryFileStubBuilder;
 import com.intellij.psi.stubs.PsiFileStub;
 import com.intellij.psi.stubs.StubElement;
-import com.intellij.util.cls.ClsFormatException;
+import com.intellij.java.language.util.cls.ClsFormatException;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.indexing.FileContent;
 

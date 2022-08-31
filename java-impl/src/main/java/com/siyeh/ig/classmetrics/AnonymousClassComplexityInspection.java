@@ -15,7 +15,7 @@
  */
 package com.siyeh.ig.classmetrics;
 
-import com.intellij.psi.*;
+import com.intellij.java.language.psi.*;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;

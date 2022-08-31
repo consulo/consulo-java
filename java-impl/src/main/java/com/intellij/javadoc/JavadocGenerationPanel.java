@@ -15,9 +15,10 @@
  */
 package com.intellij.javadoc;
 
+import com.intellij.java.language.JavadocBundle;
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
 import com.intellij.openapi.ui.TextFieldWithBrowseButton;
-import com.intellij.psi.PsiKeyword;
+import com.intellij.java.language.psi.PsiKeyword;
 import com.intellij.ui.Gray;
 import com.intellij.util.ui.UIUtil;
 

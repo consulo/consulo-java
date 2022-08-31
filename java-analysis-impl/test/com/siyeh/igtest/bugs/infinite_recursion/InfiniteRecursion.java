@@ -1,6 +1,6 @@
 package com.siyeh.igtest.bugs.infinite_recursion;
 
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.psi.PsiClass;
 
 import java.util.List;
 import java.io.IOException;

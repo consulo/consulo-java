@@ -19,7 +19,7 @@ import com.intellij.java.debugger.engine.evaluation.expression.EvaluatorBuilder;
 import com.intellij.openapi.extensions.ExtensionPointName;
 import com.intellij.openapi.fileTypes.LanguageFileType;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.JavaCodeFragment;
+import com.intellij.java.language.psi.JavaCodeFragment;
 import com.intellij.psi.PsiElement;
 
 public abstract class CodeFragmentFactory {

@@ -17,9 +17,9 @@ package com.siyeh.ipp.conditional;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.psi.PsiConditionalExpression;
+import com.intellij.java.language.psi.PsiConditionalExpression;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.util.IncorrectOperationException;
 import com.siyeh.ipp.base.Intention;
 import com.siyeh.ipp.base.PsiElementPredicate;

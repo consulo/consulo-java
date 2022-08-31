@@ -15,11 +15,11 @@
  */
 package com.intellij.refactoring.changeSignature;
 
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiParameter;
-import com.intellij.psi.PsiTypeElement;
-import com.intellij.util.VisibilityUtil;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiParameter;
+import com.intellij.java.language.psi.PsiTypeElement;
+import com.intellij.java.language.util.VisibilityUtil;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -15,6 +15,7 @@
  */
 package com.intellij.psi.resolve;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
 import org.jetbrains.annotations.NonNls;
 

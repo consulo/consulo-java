@@ -1,5 +1,7 @@
 package com.intellij.psi;
 
+import com.intellij.java.language.psi.JavaCodeFragmentFactory;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.testFramework.PlatformTestCase;
 import com.intellij.testFramework.PsiTestCase;
 import com.intellij.psi.search.GlobalSearchScope;

@@ -15,9 +15,10 @@
  */
 package com.intellij.codeInsight.editorActions.wordSelection;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.util.Condition;
 import com.intellij.psi.*;
-import com.intellij.psi.javadoc.PsiDocTag;
+import com.intellij.java.language.psi.javadoc.PsiDocTag;
 
 /**
  * @author yole

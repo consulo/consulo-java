@@ -15,6 +15,10 @@
  */
 package com.siyeh.ipp.adapter;
 
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
+import com.intellij.java.language.psi.PsiModifier;
+import com.intellij.java.language.psi.PsiReferenceList;
 import com.intellij.psi.*;
 import com.siyeh.ipp.base.PsiElementPredicate;
 

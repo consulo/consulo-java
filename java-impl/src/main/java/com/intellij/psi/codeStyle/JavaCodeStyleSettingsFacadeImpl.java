@@ -15,6 +15,7 @@
  */
 package com.intellij.psi.codeStyle;
 
+import com.intellij.java.language.psi.codeStyle.JavaCodeStyleSettingsFacade;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 

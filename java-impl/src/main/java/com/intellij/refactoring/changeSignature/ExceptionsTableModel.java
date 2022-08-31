@@ -15,6 +15,10 @@
  */
 package com.intellij.refactoring.changeSignature;
 
+import com.intellij.java.language.psi.JavaCodeFragmentFactory;
+import com.intellij.java.language.psi.PsiClassType;
+import com.intellij.java.language.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiTypeCodeFragment;
 import com.intellij.psi.*;
 import com.intellij.refactoring.RefactoringBundle;
 import com.intellij.refactoring.util.CanonicalTypes;

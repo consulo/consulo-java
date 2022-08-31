@@ -26,12 +26,12 @@ import java.util.HashSet;
 import javax.annotation.Nonnull;
 
 import com.intellij.JavaTestUtil;
-import com.intellij.psi.JavaDirectoryService;
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.psi.JavaDirectoryService;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiJavaPackage;
-import com.intellij.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiJavaPackage;
+import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.refactoring.MultiFileTestCase;
 import com.intellij.refactoring.memberPullUp.PullUpConflictsUtil;

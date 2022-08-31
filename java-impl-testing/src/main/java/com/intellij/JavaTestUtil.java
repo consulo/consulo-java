@@ -17,12 +17,12 @@ package com.intellij;
 
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
-import com.intellij.openapi.projectRoots.JavaSdk;
+import com.intellij.java.language.projectRoots.JavaSdk;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.projectRoots.SdkTable;
 import com.intellij.openapi.util.text.StringUtil;
 import consulo.container.boot.ContainerPathManager;
-import consulo.java.module.extension.JavaModuleExtension;
+import consulo.java.language.module.extension.JavaModuleExtension;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

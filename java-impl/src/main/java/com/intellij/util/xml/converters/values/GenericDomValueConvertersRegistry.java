@@ -20,7 +20,7 @@ import com.intellij.openapi.extensions.Extensions;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.Pair;
-import com.intellij.psi.PsiType;
+import com.intellij.java.language.psi.PsiType;
 import com.intellij.util.xml.Converter;
 import com.intellij.util.xml.GenericDomValue;
 import javax.annotation.Nonnull;

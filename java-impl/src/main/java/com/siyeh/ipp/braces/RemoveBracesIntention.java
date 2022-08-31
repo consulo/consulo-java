@@ -17,6 +17,10 @@ package com.siyeh.ipp.braces;
 
 import javax.annotation.Nonnull;
 
+import com.intellij.java.language.psi.PsiBlockStatement;
+import com.intellij.java.language.psi.PsiCodeBlock;
+import com.intellij.java.language.psi.PsiDeclarationStatement;
+import com.intellij.java.language.psi.PsiStatement;
 import com.intellij.psi.*;
 import com.intellij.util.IncorrectOperationException;
 import com.siyeh.ipp.base.PsiElementPredicate;

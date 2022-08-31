@@ -15,9 +15,10 @@
  */
 package com.intellij.psi.impl.source.resolve;
 
+import com.intellij.java.language.psi.*;
 import consulo.util.dataholder.Key;
 import com.intellij.psi.*;
-import com.intellij.psi.infos.CandidateInfo;
+import com.intellij.java.language.psi.infos.CandidateInfo;
 import com.intellij.psi.scope.BaseScopeProcessor;
 import com.intellij.psi.scope.NameHint;
 import com.intellij.util.SmartList;

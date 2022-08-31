@@ -26,12 +26,12 @@ import com.intellij.openapi.roots.ProjectFileIndex;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.patterns.ElementPattern;
 import com.intellij.patterns.PlatformPatterns;
-import consulo.java.module.util.JavaClassNames;
-import com.intellij.psi.PsiClass;
+import consulo.java.language.module.util.JavaClassNames;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiJavaCodeReferenceElement;
-import com.intellij.psi.PsiReferenceList;
-import com.intellij.psi.util.InheritanceUtil;
+import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
+import com.intellij.java.language.psi.PsiReferenceList;
+import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.psi.util.ProximityLocation;
 
 /**

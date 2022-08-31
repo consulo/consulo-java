@@ -17,7 +17,7 @@ package com.siyeh.ig.controlflow;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.psi.PsiConditionalExpression;
+import com.intellij.java.language.psi.PsiConditionalExpression;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;

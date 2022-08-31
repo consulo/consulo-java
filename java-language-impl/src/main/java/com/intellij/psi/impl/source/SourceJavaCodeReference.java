@@ -15,7 +15,7 @@
  */
 package com.intellij.psi.impl.source;
 
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 
 /**

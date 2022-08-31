@@ -21,7 +21,7 @@
 package com.intellij.java.analysis.codeInspection.reference;
 
 import com.intellij.codeInspection.reference.RefElement;
-import com.intellij.psi.PsiModifier;
+import com.intellij.java.language.psi.PsiModifier;
 
 import javax.annotation.Nonnull;
 import java.util.Collection;
@@ -67,7 +67,7 @@ public interface RefJavaElement extends RefElement
 
 	/**
 	 * Returns the access modifier for the element, as one of the keywords from the
-	 * {@link com.intellij.psi.PsiModifier} class.
+	 * {@link PsiModifier} class.
 	 *
 	 * @return the modifier, or null if the element does not have any access modifier.
 	 */

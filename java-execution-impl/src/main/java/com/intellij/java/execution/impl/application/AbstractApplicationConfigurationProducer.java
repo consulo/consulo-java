@@ -16,7 +16,7 @@
 package com.intellij.java.execution.impl.application;
 
 import javax.annotation.Nullable;
-import com.intellij.codeInsight.TestFrameworks;
+import com.intellij.java.language.codeInsight.TestFrameworks;
 import com.intellij.java.execution.JavaExecutionUtil;
 import com.intellij.execution.Location;
 import com.intellij.execution.actions.ConfigurationContext;
@@ -25,10 +25,10 @@ import com.intellij.java.execution.impl.junit.JavaRunConfigurationProducerBase;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Ref;
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.util.PsiMethodUtil;
+import com.intellij.java.language.psi.PsiMethod;
+import com.intellij.java.language.psi.util.PsiMethodUtil;
 import com.intellij.psi.util.PsiTreeUtil;
 
 public abstract class AbstractApplicationConfigurationProducer<T extends ApplicationConfiguration> extends JavaRunConfigurationProducerBase<T>

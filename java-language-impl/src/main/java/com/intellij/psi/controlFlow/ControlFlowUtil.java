@@ -3,11 +3,12 @@ package com.intellij.psi.controlFlow;
 
 import com.intellij.codeInsight.ExceptionUtil;
 import com.intellij.codeInsight.ExpressionUtil;
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.DummyHolder;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.util.*;
 import consulo.util.collection.primitive.ints.*;
 import consulo.util.collection.primitive.ints.impl.list.IntArrayList;

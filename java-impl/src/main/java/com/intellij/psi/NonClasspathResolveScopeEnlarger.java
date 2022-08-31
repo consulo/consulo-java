@@ -5,6 +5,7 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import com.intellij.ide.highlighter.JavaClassFileType;
 import com.intellij.ide.highlighter.JavaFileType;
+import com.intellij.java.language.psi.PsiElementFinder;
 import com.intellij.openapi.extensions.Extensions;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.project.Project;

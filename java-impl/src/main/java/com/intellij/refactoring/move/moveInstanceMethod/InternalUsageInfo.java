@@ -16,10 +16,10 @@
 package com.intellij.refactoring.move.moveInstanceMethod;
 
 import com.intellij.usageView.UsageInfo;
-import com.intellij.psi.PsiReferenceExpression;
+import com.intellij.java.language.psi.PsiReferenceExpression;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiExpression;
-import com.intellij.psi.PsiNewExpression;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiNewExpression;
 import consulo.logging.Logger;
 
 /**

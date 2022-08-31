@@ -15,12 +15,12 @@
  */
 package com.intellij.java.analysis.impl.codeInsight;
 
-import com.intellij.codeInsight.NullableNotNullManager;
-import com.intellij.psi.PsiAnnotation;
-import com.intellij.psi.PsiClassType;
-import com.intellij.psi.PsiType;
-import com.intellij.psi.TypeAnnotationProvider;
-import com.intellij.psi.augment.TypeAnnotationModifier;
+import com.intellij.java.language.codeInsight.NullableNotNullManager;
+import com.intellij.java.language.psi.PsiAnnotation;
+import com.intellij.java.language.psi.PsiClassType;
+import com.intellij.java.language.psi.PsiType;
+import com.intellij.java.language.psi.TypeAnnotationProvider;
+import com.intellij.java.language.psi.augment.TypeAnnotationModifier;
 import com.intellij.util.containers.ContainerUtil;
 
 import javax.annotation.Nonnull;

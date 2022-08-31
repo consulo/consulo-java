@@ -15,16 +15,16 @@
  */
 package com.intellij.lang.properties;
 
-import com.intellij.codeInsight.AnnotationUtil;
+import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.lang.properties.psi.impl.PropertyValueImpl;
-import com.intellij.patterns.PsiJavaPatterns;
+import com.intellij.java.language.patterns.PsiJavaPatterns;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.JavaClassReferenceProvider;
 import com.intellij.util.ProcessingContext;
 import javax.annotation.Nonnull;
 
-import static com.intellij.patterns.PsiJavaPatterns.literalExpression;
-import static com.intellij.patterns.PsiJavaPatterns.psiNameValuePair;
+import static com.intellij.java.language.patterns.PsiJavaPatterns.literalExpression;
+import static com.intellij.java.language.patterns.PsiJavaPatterns.psiNameValuePair;
 
 /**
  * @author peter

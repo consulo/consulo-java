@@ -15,8 +15,8 @@
  */
 package com.siyeh.ig.bugs;
 
-import consulo.java.module.util.JavaClassNames;
-import com.intellij.psi.PsiMethod;
+import consulo.java.language.module.util.JavaClassNames;
+import com.intellij.java.language.psi.PsiMethod;
 import com.siyeh.HardcodedMethodConstants;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;

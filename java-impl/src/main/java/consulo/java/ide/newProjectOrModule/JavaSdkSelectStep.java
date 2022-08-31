@@ -16,7 +16,7 @@
 
 package consulo.java.ide.newProjectOrModule;
 
-import com.intellij.openapi.projectRoots.JavaSdk;
+import com.intellij.java.language.projectRoots.JavaSdk;
 import com.intellij.openapi.projectRoots.SdkTable;
 import consulo.bundle.ui.BundleBox;
 import consulo.bundle.ui.BundleBoxBuilder;

@@ -15,7 +15,7 @@
  */
 package com.intellij.refactoring.psi;
 
-import com.intellij.psi.*;
+import com.intellij.java.language.psi.*;
 
 import java.util.Set;
 

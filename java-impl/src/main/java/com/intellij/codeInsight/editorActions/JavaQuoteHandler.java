@@ -15,6 +15,9 @@
  */
 package com.intellij.codeInsight.editorActions;
 
+import com.intellij.java.language.psi.JavaTokenType;
+import com.intellij.java.language.psi.PsiLiteralExpression;
+import com.intellij.java.language.psi.PsiReferenceExpression;
 import com.intellij.openapi.editor.highlighter.HighlighterIterator;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.tree.ElementType;

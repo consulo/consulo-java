@@ -20,15 +20,17 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.impl.source.resolve.DefaultParameterTypeInferencePolicy;
 import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.util.Pair;
-import com.intellij.pom.java.LanguageLevel;
+import com.intellij.java.language.LanguageLevel;
 import com.intellij.psi.*;
-import com.intellij.psi.infos.MethodCandidateInfo;
+import com.intellij.java.language.psi.infos.MethodCandidateInfo;
 import com.intellij.psi.scope.MethodProcessorSetupFailedException;
 import com.intellij.psi.scope.processor.MethodCandidatesProcessor;
 import com.intellij.psi.scope.util.PsiScopesUtil;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.util.ArrayUtilRt;
 
 /**
@@ -42,9 +44,9 @@ public class ProcessCandidateParameterTypeInferencePolicy extends DefaultParamet
 
 	@Override
 	public Pair<PsiType, ConstraintType> inferTypeConstraintFromCallContext(PsiExpression innerMethodCall,
-			PsiExpressionList expressionList,
-			@Nonnull PsiCallExpression contextCall,
-			PsiTypeParameter typeParameter)
+																																					PsiExpressionList expressionList,
+																																					@Nonnull PsiCallExpression contextCall,
+																																					PsiTypeParameter typeParameter)
 	{
 		PsiExpression[] expressions = expressionList.getExpressions();
 		PsiElement parent = innerMethodCall;

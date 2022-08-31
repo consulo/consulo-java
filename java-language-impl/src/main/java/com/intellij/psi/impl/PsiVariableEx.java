@@ -15,7 +15,7 @@
  */
 package com.intellij.psi.impl;
 
-import com.intellij.psi.PsiVariable;
+import com.intellij.java.language.psi.PsiVariable;
 
 import java.util.Set;
 

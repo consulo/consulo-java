@@ -23,7 +23,7 @@
  */
 package com.intellij.refactoring.introduceVariable;
 
-import com.intellij.psi.PsiType;
+import com.intellij.java.language.psi.PsiType;
 
 public interface IntroduceVariableSettings {
   String getEnteredName();

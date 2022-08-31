@@ -16,8 +16,8 @@
 package com.intellij.ide.fileTemplates;
 
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiJavaFile;
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.psi.PsiJavaFile;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.ide.actions.SaveFileAsTemplateHandler;
 

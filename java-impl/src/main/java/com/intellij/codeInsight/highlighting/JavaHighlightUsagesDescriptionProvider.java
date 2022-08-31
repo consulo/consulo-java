@@ -15,8 +15,9 @@
  */
 package com.intellij.codeInsight.highlighting;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
-import com.intellij.psi.util.PsiFormatUtil;
+import com.intellij.java.language.psi.util.PsiFormatUtil;
 import com.intellij.lang.LangBundle;
 import com.intellij.psi.util.PsiFormatUtilBase;
 import javax.annotation.Nonnull;

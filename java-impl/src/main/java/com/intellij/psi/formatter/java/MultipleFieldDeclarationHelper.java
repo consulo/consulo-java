@@ -19,10 +19,10 @@ import javax.annotation.Nonnull;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.JavaTokenType;
+import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiTypeElement;
-import com.intellij.psi.PsiVariable;
+import com.intellij.java.language.psi.PsiTypeElement;
+import com.intellij.java.language.psi.PsiVariable;
 import com.intellij.psi.TokenType;
 import com.intellij.psi.impl.source.tree.JavaElementType;
 import com.intellij.psi.impl.source.tree.JavaJspElementType;

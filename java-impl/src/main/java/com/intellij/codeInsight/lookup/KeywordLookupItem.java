@@ -16,8 +16,8 @@
 package com.intellij.codeInsight.lookup;
 
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiKeyword;
-import com.intellij.psi.PsiType;
+import com.intellij.java.language.psi.PsiKeyword;
+import com.intellij.java.language.psi.PsiType;
 import com.intellij.psi.filters.FilterUtil;
 import javax.annotation.Nonnull;
 

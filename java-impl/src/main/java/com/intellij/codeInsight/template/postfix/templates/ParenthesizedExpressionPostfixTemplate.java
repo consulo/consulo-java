@@ -18,10 +18,10 @@ package com.intellij.codeInsight.template.postfix.templates;
 import javax.annotation.Nonnull;
 
 import com.intellij.openapi.editor.Editor;
-import com.intellij.psi.JavaPsiFacade;
-import com.intellij.psi.PsiElementFactory;
-import com.intellij.psi.PsiExpression;
-import com.intellij.psi.PsiParenthesizedExpression;
+import com.intellij.java.language.psi.JavaPsiFacade;
+import com.intellij.java.language.psi.PsiElementFactory;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiParenthesizedExpression;
 
 public class ParenthesizedExpressionPostfixTemplate extends ExpressionPostfixTemplateWithChooser {
   public ParenthesizedExpressionPostfixTemplate() {

@@ -15,11 +15,11 @@
  */
 package com.intellij.psi.scope.conflictResolvers;
 
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiField;
-import com.intellij.psi.PsiLocalVariable;
-import com.intellij.psi.infos.CandidateInfo;
+import com.intellij.java.language.psi.PsiField;
+import com.intellij.java.language.psi.PsiLocalVariable;
+import com.intellij.java.language.psi.infos.CandidateInfo;
 import com.intellij.psi.scope.PsiConflictResolver;
 import javax.annotation.Nonnull;
 

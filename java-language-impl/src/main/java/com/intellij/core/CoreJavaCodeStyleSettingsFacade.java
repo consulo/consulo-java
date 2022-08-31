@@ -15,7 +15,7 @@
  */
 package com.intellij.core;
 
-import com.intellij.psi.codeStyle.JavaCodeStyleSettingsFacade;
+import com.intellij.java.language.psi.codeStyle.JavaCodeStyleSettingsFacade;
 
 /**
  * @author yole

@@ -17,7 +17,7 @@ package com.intellij.psi.scope.processor;
 
 import java.util.List;
 
-import com.intellij.psi.PsiVariable;
+import com.intellij.java.language.psi.PsiVariable;
 import com.intellij.psi.ResolveState;
 import com.intellij.util.SmartList;
 

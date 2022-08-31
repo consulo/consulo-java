@@ -20,8 +20,8 @@
  */
 package com.intellij.refactoring.inlineSuperClass.usageInfo;
 
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiJavaCodeReferenceElement;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
 import com.intellij.refactoring.safeDelete.usageInfo.SafeDeleteExtendsClassUsageInfo;
 import com.intellij.refactoring.util.FixableUsageInfo;
 import com.intellij.util.IncorrectOperationException;

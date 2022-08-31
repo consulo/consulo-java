@@ -15,11 +15,11 @@
  */
 package com.intellij.lang.java;
 
-import com.intellij.lang.Language;
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.JavaLanguage;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiField;
-import com.intellij.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiField;
+import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.psi.impl.source.tree.java.ImportStatementElement;
 import com.intellij.usages.UsageToPsiElementProvider;
 

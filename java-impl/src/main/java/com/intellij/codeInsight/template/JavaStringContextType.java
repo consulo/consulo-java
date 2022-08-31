@@ -16,11 +16,11 @@
 package com.intellij.codeInsight.template;
 
 import javax.annotation.Nonnull;
-import com.intellij.lang.java.JavaLanguage;
-import com.intellij.psi.JavaTokenType;
+import com.intellij.java.language.JavaLanguage;
+import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiJavaToken;
+import com.intellij.java.language.psi.PsiJavaToken;
 import com.intellij.psi.util.PsiUtilCore;
 
 /**

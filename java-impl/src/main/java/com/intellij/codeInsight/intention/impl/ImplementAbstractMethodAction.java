@@ -27,6 +27,7 @@ package com.intellij.codeInsight.intention.impl;
 import javax.annotation.Nonnull;
 
 import com.intellij.codeInsight.CodeInsightBundle;
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;

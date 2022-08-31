@@ -15,10 +15,10 @@
  */
 package com.intellij.java.indexing.impl.search;
 
-import com.intellij.lang.spi.SPILanguage;
+import com.intellij.java.language.spi.SPILanguage;
 import com.intellij.openapi.application.QueryExecutorBase;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;
@@ -26,7 +26,7 @@ import com.intellij.psi.search.FilenameIndex;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.SearchScope;
 import com.intellij.psi.search.searches.ReferencesSearch;
-import com.intellij.psi.util.ClassUtil;
+import com.intellij.java.language.psi.util.ClassUtil;
 import com.intellij.util.Processor;
 import consulo.psi.PsiPackage;
 

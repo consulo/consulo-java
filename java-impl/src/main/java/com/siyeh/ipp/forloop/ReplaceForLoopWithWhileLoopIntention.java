@@ -15,6 +15,7 @@
  */
 package com.siyeh.ipp.forloop;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
 import com.intellij.util.IncorrectOperationException;
 import com.siyeh.ipp.base.Intention;

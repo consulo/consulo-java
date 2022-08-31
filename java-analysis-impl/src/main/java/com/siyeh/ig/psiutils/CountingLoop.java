@@ -16,10 +16,10 @@
 package com.siyeh.ig.psiutils;
 
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.RelationType;
-import com.intellij.psi.*;
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.util.PsiUtil;
-import com.intellij.psi.util.TypeConversionUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.TypeConversionUtil;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -34,10 +34,10 @@ public class CountingLoop
 {
 	final
 	@Nonnull
-	PsiLocalVariable myCounter;
+  PsiLocalVariable myCounter;
 	final
 	@Nonnull
-	PsiLoopStatement myLoop;
+  PsiLoopStatement myLoop;
 	final
 	@Nonnull
 	PsiExpression myInitializer;

@@ -19,7 +19,7 @@ import javax.annotation.Nonnull;
 
 import com.intellij.application.options.codeStyle.arrangement.ArrangementSettingsPanel;
 import com.intellij.ide.highlighter.JavaFileType;
-import com.intellij.lang.java.JavaLanguage;
+import com.intellij.java.language.JavaLanguage;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.psi.codeStyle.CodeStyleSettings;
 

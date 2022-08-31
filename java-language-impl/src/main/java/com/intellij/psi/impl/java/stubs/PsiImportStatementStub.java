@@ -19,8 +19,8 @@
  */
 package com.intellij.psi.impl.java.stubs;
 
-import com.intellij.psi.PsiImportStatementBase;
-import com.intellij.psi.PsiJavaCodeReferenceElement;
+import com.intellij.java.language.psi.PsiImportStatementBase;
+import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
 import com.intellij.psi.stubs.StubElement;
 
 public interface PsiImportStatementStub extends StubElement<PsiImportStatementBase> {

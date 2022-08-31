@@ -17,6 +17,7 @@ package com.siyeh.ipp.commutative;
 
 import javax.annotation.Nonnull;
 
+import com.intellij.java.language.psi.*;
 import com.siyeh.ipp.base.MutablyNamedIntention;
 import com.siyeh.ipp.base.PsiElementPredicate;
 import com.siyeh.IntentionPowerPackBundle;

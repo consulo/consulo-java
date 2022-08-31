@@ -17,6 +17,10 @@ package com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis;
 
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
 import com.intellij.codeInsight.daemon.impl.HighlightInfoType;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiMethodReferenceExpression;
+import com.intellij.java.language.psi.PsiReferenceExpression;
+import com.intellij.java.language.psi.PsiType;
 import com.intellij.psi.*;
 
 import javax.annotation.Nonnull;

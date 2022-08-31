@@ -17,13 +17,13 @@ package com.intellij.psi.impl.source.javadoc;
 
 import com.intellij.codeInsight.daemon.JavaErrorBundle;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiField;
-import com.intellij.psi.PsiModifier;
+import com.intellij.java.language.psi.PsiField;
+import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.impl.JavaConstantExpressionEvaluator;
-import com.intellij.psi.javadoc.JavadocTagInfo;
-import com.intellij.psi.javadoc.PsiDocTagValue;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.javadoc.JavadocTagInfo;
+import com.intellij.java.language.psi.javadoc.PsiDocTagValue;
+import com.intellij.java.language.psi.util.PsiUtil;
 
 /**
  * @author yole

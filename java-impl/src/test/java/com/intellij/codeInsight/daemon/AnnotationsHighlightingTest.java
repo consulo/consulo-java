@@ -16,7 +16,7 @@
 package com.intellij.codeInsight.daemon;
 
 import org.jetbrains.annotations.NonNls;
-import com.intellij.pom.java.LanguageLevel;
+import com.intellij.java.language.LanguageLevel;
 
 /**
  * @author ven

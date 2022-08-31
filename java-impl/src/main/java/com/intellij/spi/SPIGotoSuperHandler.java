@@ -16,7 +16,7 @@
 package com.intellij.spi;
 
 import com.intellij.codeInsight.navigation.JavaGotoSuperHandler;
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiNameIdentifierOwner;
 import com.intellij.psi.util.PsiTreeUtil;

@@ -22,15 +22,15 @@ import com.intellij.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.util.Condition;
-import com.intellij.pom.java.LanguageLevel;
-import consulo.java.module.util.JavaClassNames;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiClassType;
+import com.intellij.java.language.LanguageLevel;
+import consulo.java.language.module.util.JavaClassNames;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiClassType;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiJavaFile;
-import com.intellij.psi.PsiType;
+import com.intellij.java.language.psi.PsiJavaFile;
+import com.intellij.java.language.psi.PsiType;
 
 public class SwitchStatementPostfixTemplate extends JavaStatementWrapPostfixTemplate {
   private static final Condition<PsiElement> SWITCH_TYPE = new Condition<PsiElement>() {

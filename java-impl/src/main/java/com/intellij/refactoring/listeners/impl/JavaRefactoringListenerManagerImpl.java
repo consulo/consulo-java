@@ -19,8 +19,8 @@ import java.util.List;
 
 import jakarta.inject.Singleton;
 
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiMember;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiMember;
 import com.intellij.refactoring.listeners.JavaRefactoringListenerManager;
 import com.intellij.refactoring.listeners.MoveMemberListener;
 import com.intellij.util.containers.ContainerUtil;

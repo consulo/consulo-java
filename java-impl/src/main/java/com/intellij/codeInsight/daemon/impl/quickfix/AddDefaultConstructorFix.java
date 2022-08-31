@@ -18,10 +18,10 @@ package com.intellij.codeInsight.daemon.impl.quickfix;
 import javax.annotation.Nonnull;
 
 import consulo.java.analysis.impl.JavaQuickFixBundle;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiModifier;
-import com.intellij.psi.util.PsiUtil;
-import com.intellij.util.VisibilityUtil;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiModifier;
+import com.intellij.java.language.psi.util.PsiUtil;
+import com.intellij.java.language.util.VisibilityUtil;
 
 public class AddDefaultConstructorFix extends AddMethodFix {
   public AddDefaultConstructorFix(PsiClass aClass) {

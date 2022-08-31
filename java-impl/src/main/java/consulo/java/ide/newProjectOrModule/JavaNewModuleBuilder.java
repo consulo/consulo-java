@@ -26,7 +26,7 @@ import consulo.ide.newProject.NewModuleBuilder;
 import consulo.ide.newProject.NewModuleBuilderProcessor;
 import consulo.ide.newProject.NewModuleContext;
 import consulo.ide.newProject.node.NewModuleContextGroup;
-import consulo.java.module.extension.JavaMutableModuleExtension;
+import consulo.java.language.module.extension.JavaMutableModuleExtension;
 import consulo.localize.LocalizeValue;
 import consulo.roots.impl.ProductionContentFolderTypeProvider;
 import consulo.ui.wizard.WizardStep;

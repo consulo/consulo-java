@@ -16,6 +16,9 @@
 package com.intellij.codeInsight.unwrap;
 
 import com.intellij.codeInsight.CodeInsightBundle;
+import com.intellij.java.language.psi.PsiDoWhileStatement;
+import com.intellij.java.language.psi.PsiLoopStatement;
+import com.intellij.java.language.psi.PsiStatement;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.tree.java.PsiWhileStatementImpl;
 import com.intellij.util.IncorrectOperationException;

@@ -17,8 +17,8 @@ package com.siyeh.ig.naming;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiTypeParameter;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiTypeParameter;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;

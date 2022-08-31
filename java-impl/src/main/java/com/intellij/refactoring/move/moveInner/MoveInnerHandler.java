@@ -18,7 +18,7 @@ package com.intellij.refactoring.move.moveInner;
 import javax.annotation.Nonnull;
 
 import com.intellij.lang.LanguageExtension;
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.psi.PsiClass;
 
 public interface MoveInnerHandler {
   LanguageExtension<MoveInnerHandler> EP_NAME = new LanguageExtension<MoveInnerHandler>("consulo.java.refactoring.moveInnerHandler");

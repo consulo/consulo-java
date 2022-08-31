@@ -25,9 +25,9 @@
 package com.intellij.refactoring.ui;
 
 import com.intellij.icons.AllIcons;
-import com.intellij.psi.PsiMember;
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiModifier;
+import com.intellij.java.language.psi.PsiMember;
+import com.intellij.java.language.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.refactoring.classMembers.MemberInfoModel;
 import com.intellij.refactoring.util.classMembers.MemberInfo;
 import consulo.ui.image.Image;

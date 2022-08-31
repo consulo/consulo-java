@@ -26,7 +26,7 @@ package com.intellij.refactoring.introduceParameter;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
-import com.intellij.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.refactoring.RefactoringBundle;
 import com.intellij.refactoring.ui.MethodCellRenderer;
 import com.intellij.ui.ScrollPaneFactory;

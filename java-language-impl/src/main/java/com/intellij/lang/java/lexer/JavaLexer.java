@@ -2,8 +2,8 @@
 package com.intellij.lang.java.lexer;
 
 import com.intellij.lexer.LexerBase;
-import com.intellij.pom.java.LanguageLevel;
-import com.intellij.psi.JavaTokenType;
+import com.intellij.java.language.LanguageLevel;
+import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.psi.TokenType;
 import com.intellij.psi.impl.source.tree.JavaDocElementType;
 import com.intellij.psi.tree.IElementType;
@@ -18,7 +18,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import static com.intellij.psi.PsiKeyword.*;
+import static com.intellij.java.language.psi.PsiKeyword.*;
 
 public final class JavaLexer extends LexerBase
 {

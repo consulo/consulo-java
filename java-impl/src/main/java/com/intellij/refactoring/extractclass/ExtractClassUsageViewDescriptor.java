@@ -15,7 +15,7 @@
  */
 package com.intellij.refactoring.extractclass;
 
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.refactoring.RefactorJBundle;
 import com.intellij.refactoring.psi.MyUsageViewUtil;

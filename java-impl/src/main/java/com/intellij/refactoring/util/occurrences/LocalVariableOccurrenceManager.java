@@ -16,8 +16,8 @@
 package com.intellij.refactoring.util.occurrences;
 
 import com.intellij.codeInsight.CodeInsightUtil;
-import com.intellij.psi.PsiExpression;
-import com.intellij.psi.PsiLocalVariable;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiLocalVariable;
 import com.intellij.refactoring.util.RefactoringUtil;
 
 /**

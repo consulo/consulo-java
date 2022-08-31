@@ -15,7 +15,7 @@
  */
 package com.intellij.refactoring.extractclass.usageInfo;
 
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.refactoring.util.FixableUsageInfo;
 import com.intellij.util.IncorrectOperationException;
 

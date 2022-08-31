@@ -19,9 +19,9 @@ import javax.annotation.Nonnull;
 
 import com.intellij.lang.ASTNode;
 import consulo.logging.Logger;
-import com.intellij.psi.JavaElementVisitor;
-import com.intellij.psi.PsiBlockStatement;
-import com.intellij.psi.PsiCodeBlock;
+import com.intellij.java.language.psi.JavaElementVisitor;
+import com.intellij.java.language.psi.PsiBlockStatement;
+import com.intellij.java.language.psi.PsiCodeBlock;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.tree.ChildRoleBase;
 import com.intellij.psi.impl.source.Constants;

@@ -20,13 +20,13 @@ import static com.intellij.patterns.StandardPatterns.or;
 import javax.annotation.Nonnull;
 
 import com.intellij.patterns.ElementPattern;
-import com.intellij.patterns.PsiJavaPatterns;
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.patterns.PsiJavaPatterns;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiNameValuePair;
-import com.intellij.psi.PsiType;
+import com.intellij.java.language.psi.PsiNameValuePair;
+import com.intellij.java.language.psi.PsiType;
 import com.intellij.psi.filters.getters.ExpectedTypesGetter;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.util.ProcessingContext;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.codeInsight.completion.CompletionProvider;

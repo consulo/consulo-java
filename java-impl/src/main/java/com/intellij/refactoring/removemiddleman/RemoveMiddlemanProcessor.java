@@ -16,12 +16,13 @@
 package com.intellij.refactoring.removemiddleman;
 
 import com.intellij.codeInsight.generation.GenerateMembersUtil;
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Ref;
 import com.intellij.psi.*;
 import com.intellij.psi.presentation.java.SymbolPresentationUtil;
 import com.intellij.psi.search.searches.ReferencesSearch;
-import com.intellij.psi.util.PropertyUtil;
+import com.intellij.java.language.psi.util.PropertyUtil;
 import com.intellij.refactoring.RefactorJBundle;
 import com.intellij.refactoring.removemiddleman.usageInfo.DeleteMethod;
 import com.intellij.refactoring.removemiddleman.usageInfo.InlineDelegatingCall;

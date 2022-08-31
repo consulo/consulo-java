@@ -45,7 +45,7 @@ import com.intellij.util.EventDispatcher;
 import com.intellij.util.IncorrectOperationException;
 import consulo.disposer.Disposable;
 import consulo.internal.com.sun.jdi.Value;
-import consulo.java.module.util.JavaClassNames;
+import consulo.java.language.module.util.JavaClassNames;
 import consulo.ui.image.Image;
 import jakarta.inject.Singleton;
 import org.jdom.Element;

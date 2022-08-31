@@ -15,9 +15,9 @@
  */
 package com.siyeh.ig.callMatcher;
 
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiMethodCallExpression;
-import com.intellij.psi.PsiMethodReferenceExpression;
+import com.intellij.java.language.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiMethodCallExpression;
+import com.intellij.java.language.psi.PsiMethodReferenceExpression;
 import one.util.streamex.StreamEx;
 import org.jetbrains.annotations.Contract;
 

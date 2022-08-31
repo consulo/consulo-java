@@ -27,8 +27,8 @@ import com.intellij.java.analysis.codeInspection.reference.RefField;
 import com.intellij.codeInspection.reference.RefManager;
 import com.intellij.java.analysis.codeInspection.reference.RefMethod;
 import consulo.util.dataholder.Key;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.psi.PsiReference;
 import com.intellij.util.Processor;
 

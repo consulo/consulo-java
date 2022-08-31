@@ -19,7 +19,7 @@ import java.io.IOException;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.lang.java.JavaLanguage;
+import com.intellij.java.language.JavaLanguage;
 import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.testFramework.LightPlatformCodeInsightTestCase;
 

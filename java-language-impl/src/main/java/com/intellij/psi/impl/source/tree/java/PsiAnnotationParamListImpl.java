@@ -18,10 +18,10 @@ package com.intellij.psi.impl.source.tree.java;
 import javax.annotation.Nonnull;
 
 import com.intellij.lang.ASTNode;
-import com.intellij.psi.JavaElementVisitor;
-import com.intellij.psi.PsiAnnotationParameterList;
+import com.intellij.java.language.psi.JavaElementVisitor;
+import com.intellij.java.language.psi.PsiAnnotationParameterList;
 import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.PsiNameValuePair;
+import com.intellij.java.language.psi.PsiNameValuePair;
 import com.intellij.psi.impl.java.stubs.JavaStubElementTypes;
 import com.intellij.psi.impl.java.stubs.PsiAnnotationParameterListStub;
 import com.intellij.psi.impl.source.JavaStubPsiElement;

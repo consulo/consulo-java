@@ -16,7 +16,7 @@
 package com.intellij.refactoring.typeCook.deductive.builder;
 
 import consulo.logging.Logger;
-import com.intellij.psi.PsiType;
+import com.intellij.java.language.psi.PsiType;
 import com.intellij.refactoring.typeCook.deductive.resolver.Binding;
 
 /**

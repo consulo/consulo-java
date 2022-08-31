@@ -25,6 +25,7 @@ import com.intellij.codeInspection.HTMLJavaHTMLComposer;
 import com.intellij.codeInspection.InspectionsBundle;
 import com.intellij.codeInspection.reference.*;
 import com.intellij.java.analysis.codeInspection.reference.*;
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
 import com.intellij.xml.util.XmlStringUtil;
 

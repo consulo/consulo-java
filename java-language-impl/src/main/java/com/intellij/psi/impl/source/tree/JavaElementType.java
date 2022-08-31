@@ -16,20 +16,20 @@
 package com.intellij.psi.impl.source.tree;
 
 import com.intellij.lang.*;
-import com.intellij.lang.java.JavaLanguage;
+import com.intellij.java.language.JavaLanguage;
 import com.intellij.lang.java.lexer.JavaLexer;
 import com.intellij.lang.java.parser.JavaParser;
 import com.intellij.lang.java.parser.JavaParserUtil;
 import com.intellij.lang.java.parser.ReferenceParser;
 import com.intellij.lexer.Lexer;
 import com.intellij.openapi.project.Project;
-import com.intellij.pom.java.LanguageLevel;
-import com.intellij.psi.JavaTokenType;
+import com.intellij.java.language.LanguageLevel;
+import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.psi.impl.java.stubs.JavaStubElementTypes;
 import com.intellij.psi.impl.source.*;
 import com.intellij.psi.impl.source.tree.java.*;
 import com.intellij.psi.tree.*;
-import com.intellij.psi.tree.java.IJavaElementType;
+import com.intellij.java.language.psi.tree.java.IJavaElementType;
 import com.intellij.util.diff.FlyweightCapableTreeStructure;
 
 import javax.annotation.Nonnull;

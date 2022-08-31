@@ -15,6 +15,7 @@
  */
 package com.intellij.refactoring.memberPushDown;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.ScrollType;

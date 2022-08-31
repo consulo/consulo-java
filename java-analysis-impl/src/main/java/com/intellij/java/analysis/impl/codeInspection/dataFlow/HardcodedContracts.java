@@ -4,9 +4,10 @@ package com.intellij.java.analysis.impl.codeInspection.dataFlow;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.StandardMethodContract.ValueConstraint;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.RelationType;
 import com.intellij.java.analysis.impl.codeInspection.util.OptionalUtil;
+import com.intellij.java.language.psi.*;
 import com.intellij.lang.injection.InjectedLanguageManager;
 import com.intellij.psi.*;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.util.containers.ContainerUtil;
 import com.siyeh.ig.callMatcher.CallMapper;
 import com.siyeh.ig.callMatcher.CallMatcher;
@@ -22,7 +23,7 @@ import static com.intellij.java.analysis.impl.codeInspection.dataFlow.MethodCont
 import static com.intellij.java.analysis.impl.codeInspection.dataFlow.MethodContract.trivialContract;
 import static com.intellij.java.analysis.impl.codeInspection.dataFlow.StandardMethodContract.ValueConstraint.*;
 import static com.intellij.java.analysis.impl.codeInspection.dataFlow.StandardMethodContract.createConstraintArray;
-import static com.intellij.psi.CommonClassNames.*;
+import static com.intellij.java.language.psi.CommonClassNames.*;
 import static com.siyeh.ig.callMatcher.CallMatcher.*;
 
 /**

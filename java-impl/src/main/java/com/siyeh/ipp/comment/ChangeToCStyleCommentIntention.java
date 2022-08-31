@@ -15,6 +15,9 @@
  */
 package com.siyeh.ipp.comment;
 
+import com.intellij.java.language.psi.JavaPsiFacade;
+import com.intellij.java.language.psi.JavaTokenType;
+import com.intellij.java.language.psi.PsiElementFactory;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;

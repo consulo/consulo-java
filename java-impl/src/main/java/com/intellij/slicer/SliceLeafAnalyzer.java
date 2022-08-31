@@ -28,7 +28,7 @@ import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.util.Ref;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiJavaReference;
+import com.intellij.java.language.psi.PsiJavaReference;
 import com.intellij.psi.PsiNamedElement;
 import com.intellij.psi.impl.source.tree.AstBufferUtil;
 import com.intellij.util.NullableFunction;

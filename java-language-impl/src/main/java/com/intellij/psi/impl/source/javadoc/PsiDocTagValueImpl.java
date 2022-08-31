@@ -16,9 +16,9 @@
 package com.intellij.psi.impl.source.javadoc;
 
 import com.intellij.psi.PsiReference;
-import com.intellij.psi.javadoc.JavadocManager;
-import com.intellij.psi.javadoc.JavadocTagInfo;
-import com.intellij.psi.javadoc.PsiDocTag;
+import com.intellij.java.language.psi.javadoc.JavadocManager;
+import com.intellij.java.language.psi.javadoc.JavadocTagInfo;
+import com.intellij.java.language.psi.javadoc.PsiDocTag;
 import com.intellij.psi.util.PsiTreeUtil;
 
 /**

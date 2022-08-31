@@ -20,7 +20,7 @@ import com.intellij.java.indexing.search.searches.ClassesWithAnnotatedMembersSea
 import com.intellij.java.indexing.search.searches.ScopedQueryExecutor;
 import com.intellij.openapi.application.QueryExecutorBase;
 import com.intellij.openapi.application.ReadAction;
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.SearchScope;
 import com.intellij.util.Processor;

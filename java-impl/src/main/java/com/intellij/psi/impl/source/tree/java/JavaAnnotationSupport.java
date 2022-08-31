@@ -15,13 +15,13 @@
  */
 package com.intellij.psi.impl.source.tree.java;
 
-import javax.annotation.Nonnull;
-
+import com.intellij.java.language.psi.JavaPsiFacade;
+import com.intellij.java.language.psi.PsiAnnotationSupport;
+import com.intellij.java.language.psi.PsiLiteral;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiLiteral;
-import com.intellij.psi.PsiAnnotationSupport;
+
+import javax.annotation.Nonnull;
 
 public class JavaAnnotationSupport implements PsiAnnotationSupport {
   @Override

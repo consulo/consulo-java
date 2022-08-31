@@ -17,10 +17,10 @@ package com.siyeh.ig.controlflow;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.psi.PsiCodeBlock;
-import com.intellij.psi.PsiStatement;
-import com.intellij.psi.PsiSwitchLabelStatement;
-import com.intellij.psi.PsiSwitchStatement;
+import com.intellij.java.language.psi.PsiCodeBlock;
+import com.intellij.java.language.psi.PsiStatement;
+import com.intellij.java.language.psi.PsiSwitchLabelStatement;
+import com.intellij.java.language.psi.PsiSwitchStatement;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;

@@ -15,6 +15,9 @@
  */
 package com.intellij.psi.impl.light;
 
+import com.intellij.java.language.psi.JavaResolveResult;
+import com.intellij.java.language.psi.PsiClassType;
+import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
 import com.intellij.psi.*;
 import com.intellij.psi.search.GlobalSearchScope;
 import javax.annotation.Nonnull;
@@ -25,7 +28,7 @@ public class LightClassTypeReference extends LightClassReferenceBase implements 
 
 	@Nonnull
 	private final
-	PsiClassType myType;
+  PsiClassType myType;
 
 	private LightClassTypeReference(@Nonnull PsiManager manager, @Nonnull String text, @Nonnull PsiClassType type)
 	{

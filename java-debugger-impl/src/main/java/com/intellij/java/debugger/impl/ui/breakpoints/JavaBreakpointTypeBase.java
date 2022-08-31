@@ -25,7 +25,7 @@ import com.intellij.java.debugger.impl.JavaDebuggerEditorsProvider;
 import com.intellij.java.debugger.impl.breakpoints.JavaBreakpointFiltersPanel;
 import com.intellij.java.debugger.impl.breakpoints.properties.JavaBreakpointProperties;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.xdebugger.XDebuggerUtil;
 import com.intellij.xdebugger.XSourcePosition;
 import com.intellij.xdebugger.breakpoints.XBreakpoint;

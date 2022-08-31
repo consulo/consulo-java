@@ -17,10 +17,10 @@ package com.siyeh.ig.internationalization;
 
 import javax.annotation.Nonnull;
 
-import consulo.java.module.util.JavaClassNames;
-import com.intellij.psi.PsiExpressionList;
-import com.intellij.psi.PsiMethodCallExpression;
-import com.intellij.psi.PsiType;
+import consulo.java.language.module.util.JavaClassNames;
+import com.intellij.java.language.psi.PsiExpressionList;
+import com.intellij.java.language.psi.PsiMethodCallExpression;
+import com.intellij.java.language.psi.PsiType;
 import com.siyeh.HardcodedMethodConstants;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;

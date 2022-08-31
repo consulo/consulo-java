@@ -16,6 +16,9 @@
 package com.intellij.codeInsight.completion.simple;
 
 import com.intellij.codeInsight.TailType;
+import com.intellij.java.language.psi.JavaTokenType;
+import com.intellij.java.language.psi.PsiLoopStatement;
+import com.intellij.java.language.psi.PsiStatement;
 import consulo.logging.Logger;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
@@ -27,7 +30,7 @@ import com.intellij.psi.*;
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
 import com.intellij.psi.impl.source.tree.ElementType;
 import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.tree.java.IJavaElementType;
+import com.intellij.java.language.psi.tree.java.IJavaElementType;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NonNls;
 

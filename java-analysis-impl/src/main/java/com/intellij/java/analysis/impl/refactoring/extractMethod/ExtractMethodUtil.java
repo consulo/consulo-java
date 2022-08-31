@@ -15,12 +15,13 @@
  */
 package com.intellij.java.analysis.impl.refactoring.extractMethod;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
 import com.intellij.psi.search.SearchScope;
 import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
 import com.intellij.psi.search.searches.ReferencesSearch;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.RedundantCastUtil;
+import com.intellij.java.language.psi.util.RedundantCastUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.Processor;
 import consulo.logging.Logger;

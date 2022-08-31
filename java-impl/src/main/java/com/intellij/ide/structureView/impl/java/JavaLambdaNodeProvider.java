@@ -13,8 +13,8 @@ import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.util.PropertyOwner;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiLambdaExpression;
-import com.intellij.psi.PsiMember;
+import com.intellij.java.language.psi.PsiLambdaExpression;
+import com.intellij.java.language.psi.PsiMember;
 import com.intellij.psi.SyntaxTraverser;
 import consulo.java.analysis.codeInsight.JavaCodeInsightBundle;
 

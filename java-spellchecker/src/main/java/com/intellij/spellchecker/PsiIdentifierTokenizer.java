@@ -17,7 +17,7 @@ package com.intellij.spellchecker;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.psi.PsiIdentifier;
+import com.intellij.java.language.psi.PsiIdentifier;
 import com.intellij.spellchecker.inspections.IdentifierSplitter;
 import com.intellij.spellchecker.tokenizer.TokenConsumer;
 import com.intellij.spellchecker.tokenizer.Tokenizer;

@@ -15,6 +15,7 @@
  */
 package com.intellij.refactoring.extractclass.usageInfo;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
 import com.intellij.refactoring.util.FixableUsageInfo;
 import com.intellij.util.IncorrectOperationException;

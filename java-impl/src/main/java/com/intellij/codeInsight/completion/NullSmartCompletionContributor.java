@@ -15,7 +15,7 @@
  */
 package com.intellij.codeInsight.completion;
 
-import static com.intellij.patterns.PsiJavaPatterns.psiElement;
+import static com.intellij.java.language.patterns.PsiJavaPatterns.psiElement;
 import static com.intellij.patterns.StandardPatterns.and;
 import static com.intellij.patterns.StandardPatterns.not;
 
@@ -25,8 +25,8 @@ import java.util.LinkedHashSet;
 import com.intellij.codeInsight.ExpectedTypeInfo;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.PsiKeyword;
-import com.intellij.psi.PsiPrimitiveType;
+import com.intellij.java.language.psi.PsiKeyword;
+import com.intellij.java.language.psi.PsiPrimitiveType;
 
 /**
  * @author peter

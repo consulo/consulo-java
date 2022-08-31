@@ -15,15 +15,15 @@
 */
 package com.intellij.psi.impl;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import com.intellij.java.language.LanguageLevel;
+import com.intellij.java.language.psi.PsiNameHelper;
+import com.intellij.lang.java.lexer.JavaLexer;
+import com.intellij.openapi.util.text.StringUtil;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
-import com.intellij.lang.java.lexer.JavaLexer;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.pom.java.LanguageLevel;
-import com.intellij.psi.PsiNameHelper;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 @Singleton
 public class PsiNameHelperImpl extends PsiNameHelper {

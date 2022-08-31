@@ -21,7 +21,7 @@ import static com.intellij.util.ObjectUtil.notNull;
 import java.util.Collections;
 import java.util.List;
 
-import com.intellij.psi.PsiPackageAccessibilityStatement;
+import com.intellij.java.language.psi.PsiPackageAccessibilityStatement;
 import com.intellij.psi.impl.java.stubs.PsiPackageAccessibilityStatementStub;
 import com.intellij.psi.stubs.IStubElementType;
 import com.intellij.psi.stubs.StubBase;

@@ -2,8 +2,8 @@
 
 package com.intellij.psi.controlFlow;
 
-import com.intellij.psi.*;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.util.ObjectUtils;
 import javax.annotation.Nonnull;
 

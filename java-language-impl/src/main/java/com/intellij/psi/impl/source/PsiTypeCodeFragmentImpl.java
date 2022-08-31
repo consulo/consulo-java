@@ -22,18 +22,18 @@ import javax.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 import consulo.logging.Logger;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.JavaCodeFragmentFactory;
-import com.intellij.psi.PsiDisjunctionType;
+import com.intellij.java.language.psi.JavaCodeFragmentFactory;
+import com.intellij.java.language.psi.PsiDisjunctionType;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiEllipsisType;
+import com.intellij.java.language.psi.PsiEllipsisType;
 import com.intellij.psi.PsiErrorElement;
 import com.intellij.psi.PsiRecursiveElementWalkingVisitor;
-import com.intellij.psi.PsiType;
-import com.intellij.psi.PsiTypeCodeFragment;
-import com.intellij.psi.PsiTypeElement;
+import com.intellij.java.language.psi.PsiType;
+import com.intellij.java.language.psi.PsiTypeCodeFragment;
+import com.intellij.java.language.psi.PsiTypeElement;
 import com.intellij.psi.impl.source.tree.JavaElementType;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
 
 /**
  * @author dsl

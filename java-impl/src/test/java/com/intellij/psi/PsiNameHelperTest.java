@@ -15,6 +15,7 @@
  */
 package com.intellij.psi;
 
+import com.intellij.java.language.psi.PsiNameHelper;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

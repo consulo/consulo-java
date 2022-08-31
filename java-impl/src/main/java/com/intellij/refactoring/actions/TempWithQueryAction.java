@@ -22,7 +22,7 @@ import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiLocalVariable;
+import com.intellij.java.language.psi.PsiLocalVariable;
 import com.intellij.refactoring.RefactoringActionHandler;
 import com.intellij.refactoring.tempWithQuery.TempWithQueryHandler;
 

@@ -17,8 +17,8 @@
 package com.intellij.java.analysis.impl.codeInspection.dataFlow.inference;
 
 import com.intellij.lang.LighterASTNode;
-import com.intellij.psi.PsiCodeBlock;
-import com.intellij.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiCodeBlock;
+import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.psi.util.PsiTreeUtil;
 import consulo.annotation.access.RequiredReadAction;
 

@@ -15,7 +15,7 @@
  */
 package com.siyeh.ig.controlflow;
 
-import com.intellij.psi.*;
+import com.intellij.java.language.psi.*;
 
 public class ConditionalUtils {
 

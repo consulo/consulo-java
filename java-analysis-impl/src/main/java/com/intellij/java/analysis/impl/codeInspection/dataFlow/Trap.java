@@ -16,6 +16,10 @@
 
 package com.intellij.java.analysis.impl.codeInspection.dataFlow;
 
+import com.intellij.java.language.psi.PsiCatchSection;
+import com.intellij.java.language.psi.PsiCodeBlock;
+import com.intellij.java.language.psi.PsiResourceList;
+import com.intellij.java.language.psi.PsiTryStatement;
 import com.intellij.psi.*;
 
 import javax.annotation.Nonnull;

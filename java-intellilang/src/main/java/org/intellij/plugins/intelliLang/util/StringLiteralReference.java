@@ -20,7 +20,7 @@ import javax.annotation.Nonnull;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.ElementManipulators;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiLiteralExpression;
+import com.intellij.java.language.psi.PsiLiteralExpression;
 import com.intellij.psi.PsiReference;
 import com.intellij.util.IncorrectOperationException;
 

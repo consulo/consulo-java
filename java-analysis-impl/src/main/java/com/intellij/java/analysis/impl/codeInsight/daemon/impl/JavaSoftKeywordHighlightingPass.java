@@ -22,10 +22,10 @@ import com.intellij.codeInsight.daemon.impl.UpdateHighlightersUtil;
 import com.intellij.lang.java.lexer.JavaLexer;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.progress.ProgressIndicator;
-import com.intellij.pom.java.LanguageLevel;
-import com.intellij.psi.JavaRecursiveElementVisitor;
-import com.intellij.psi.PsiJavaFile;
-import com.intellij.psi.PsiKeyword;
+import com.intellij.java.language.LanguageLevel;
+import com.intellij.java.language.psi.JavaRecursiveElementVisitor;
+import com.intellij.java.language.psi.PsiJavaFile;
+import com.intellij.java.language.psi.PsiKeyword;
 import com.intellij.util.containers.ContainerUtil;
 import consulo.annotation.access.RequiredReadAction;
 

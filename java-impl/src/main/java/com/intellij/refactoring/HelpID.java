@@ -16,9 +16,9 @@
  */
 package com.intellij.refactoring;
 
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiJavaPackage;
+import com.intellij.java.language.psi.PsiJavaPackage;
 import org.jetbrains.annotations.NonNls;
 
 @SuppressWarnings({"HardCodedStringLiteral"})

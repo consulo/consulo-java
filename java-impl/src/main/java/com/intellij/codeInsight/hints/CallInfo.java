@@ -4,8 +4,8 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import com.intellij.psi.PsiExpression;
-import com.intellij.psi.PsiParameter;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiParameter;
 
 /**
  * from kotlin

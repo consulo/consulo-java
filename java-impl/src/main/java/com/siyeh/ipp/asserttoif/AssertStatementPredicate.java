@@ -15,7 +15,7 @@
  */
 package com.siyeh.ipp.asserttoif;
 
-import com.intellij.psi.PsiAssertStatement;
+import com.intellij.java.language.psi.PsiAssertStatement;
 import com.intellij.psi.PsiElement;
 import com.siyeh.ipp.base.PsiElementPredicate;
 import com.siyeh.ipp.psiutils.ErrorUtil;

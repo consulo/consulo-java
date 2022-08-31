@@ -17,10 +17,10 @@ package com.siyeh.ig.portability;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.psi.PsiNewExpression;
-import com.intellij.psi.PsiType;
-import com.intellij.psi.PsiTypeElement;
-import com.intellij.psi.PsiVariable;
+import com.intellij.java.language.psi.PsiNewExpression;
+import com.intellij.java.language.psi.PsiType;
+import com.intellij.java.language.psi.PsiTypeElement;
+import com.intellij.java.language.psi.PsiVariable;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;

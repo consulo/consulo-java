@@ -17,7 +17,11 @@ package com.intellij.psi.impl.light;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.lang.java.JavaLanguage;
+import com.intellij.java.language.JavaLanguage;
+import com.intellij.java.language.psi.JavaElementVisitor;
+import com.intellij.java.language.psi.JavaTokenType;
+import com.intellij.java.language.psi.PsiIdentifier;
+import com.intellij.java.language.psi.PsiJavaToken;
 import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;
 

@@ -7,6 +7,7 @@ import com.intellij.ide.util.treeView.AbstractTreeNode;
 import com.intellij.java.coverage.JavaCoverageAnnotator;
 import com.intellij.java.coverage.JavaCoverageSuite;
 import com.intellij.java.coverage.PackageAnnotator;
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Computable;

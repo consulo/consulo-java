@@ -21,13 +21,14 @@ import com.intellij.codeInsight.daemon.impl.actions.AbstractBatchSuppressByNoIns
 import com.intellij.codeInspection.InspectionsBundle;
 import com.intellij.codeInspection.SuppressionUtil;
 import com.intellij.java.analysis.impl.codeInspection.JavaSuppressionUtil;
-import com.intellij.lang.java.JavaLanguage;
+import com.intellij.java.language.JavaLanguage;
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.command.undo.UndoUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
-import com.intellij.psi.javadoc.PsiDocComment;
-import com.intellij.psi.javadoc.PsiDocTag;
+import com.intellij.java.language.psi.javadoc.PsiDocComment;
+import com.intellij.java.language.psi.javadoc.PsiDocTag;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
 

@@ -18,7 +18,7 @@ package com.intellij.psi.impl.java.stubs;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.LighterAST;
 import com.intellij.lang.LighterASTNode;
-import com.intellij.psi.PsiTypeParameterList;
+import com.intellij.java.language.psi.PsiTypeParameterList;
 import com.intellij.psi.impl.java.stubs.impl.PsiTypeParameterListStubImpl;
 import com.intellij.psi.impl.source.tree.java.PsiTypeParameterListImpl;
 import com.intellij.psi.impl.source.tree.java.TypeParameterListElement;

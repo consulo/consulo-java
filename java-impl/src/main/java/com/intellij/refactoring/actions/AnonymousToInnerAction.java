@@ -17,10 +17,10 @@ package com.intellij.refactoring.actions;
 
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.editor.Editor;
-import com.intellij.psi.PsiAnonymousClass;
+import com.intellij.java.language.psi.PsiAnonymousClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiNewExpression;
+import com.intellij.java.language.psi.PsiNewExpression;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.refactoring.RefactoringActionHandler;
 import com.intellij.refactoring.anonymousToInner.AnonymousToInnerHandler;

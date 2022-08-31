@@ -22,9 +22,9 @@ import jakarta.inject.Inject;
 
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiElementFinder;
-import com.intellij.psi.PsiJavaPackage;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiElementFinder;
+import com.intellij.java.language.psi.PsiJavaPackage;
 import com.intellij.psi.search.GlobalSearchScope;
 
 /**

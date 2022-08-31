@@ -16,9 +16,9 @@
 package com.intellij.ide.structureView.impl.java;
 
 import com.intellij.icons.AllIcons;
-import com.intellij.ide.util.JavaAnonymousClassesHelper;
-import com.intellij.psi.PsiAnonymousClass;
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.util.JavaAnonymousClassesHelper;
+import com.intellij.java.language.psi.PsiAnonymousClass;
+import com.intellij.java.language.psi.PsiClass;
 import consulo.ui.image.Image;
 
 /**

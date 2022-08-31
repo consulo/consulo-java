@@ -15,16 +15,17 @@
  */
 package com.siyeh.ig.psiutils;
 
-import com.intellij.codeInsight.AnnotationUtil;
+import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.codeInsight.MetaAnnotationUtil;
-import com.intellij.codeInsight.TestFrameworks;
+import com.intellij.java.language.codeInsight.TestFrameworks;
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
-import com.intellij.psi.util.InheritanceUtil;
+import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.PsiUtil;
-import com.intellij.testIntegration.TestFramework;
+import com.intellij.java.language.psi.util.PsiUtil;
+import com.intellij.java.language.testIntegration.TestFramework;
 import com.intellij.util.ObjectUtil;
 import com.siyeh.ig.callMatcher.CallMatcher;
 import com.siyeh.ig.junit.JUnitCommonClassNames;
@@ -36,7 +37,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import static com.intellij.codeInsight.AnnotationUtil.CHECK_HIERARCHY;
+import static com.intellij.java.language.codeInsight.AnnotationUtil.CHECK_HIERARCHY;
 
 public class TestUtils
 {

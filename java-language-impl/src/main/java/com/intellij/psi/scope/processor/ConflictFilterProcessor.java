@@ -15,15 +15,17 @@
  */
 package com.intellij.psi.scope.processor;
 
+import com.intellij.java.language.psi.JavaResolveResult;
+import com.intellij.java.language.psi.PsiSubstitutor;
 import consulo.util.dataholder.Key;
 import com.intellij.psi.*;
 import com.intellij.psi.filters.ElementFilter;
-import com.intellij.psi.infos.CandidateInfo;
-import com.intellij.psi.scope.JavaScopeProcessorEvent;
+import com.intellij.java.language.psi.infos.CandidateInfo;
+import com.intellij.java.language.psi.scope.JavaScopeProcessorEvent;
 import com.intellij.psi.scope.NameHint;
 import com.intellij.psi.scope.PsiConflictResolver;
 import com.intellij.psi.scope.PsiScopeProcessor;
-import com.intellij.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
 import javax.annotation.Nonnull;
 
 import java.util.List;

@@ -1,5 +1,6 @@
 package com.intellij.psi;
 
+import com.intellij.java.language.psi.JavaDirectoryService;
 import com.intellij.openapi.application.ApplicationManager;
 import consulo.logging.Logger;
 import com.intellij.openapi.roots.ProjectRootManager;

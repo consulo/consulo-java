@@ -15,6 +15,9 @@
  */
 package com.intellij.psi.filters.element;
 
+import com.intellij.java.language.psi.PsiModifier;
+import com.intellij.java.language.psi.PsiModifierList;
+import com.intellij.java.language.psi.PsiModifierListOwner;
 import com.intellij.psi.*;
 import com.intellij.psi.filters.ClassFilter;
 import org.jetbrains.annotations.NonNls;

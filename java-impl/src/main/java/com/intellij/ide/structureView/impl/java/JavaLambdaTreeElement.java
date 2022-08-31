@@ -17,10 +17,10 @@ package com.intellij.ide.structureView.impl.java;
 
 import com.intellij.icons.AllIcons;
 import com.intellij.ide.structureView.StructureViewTreeElement;
-import com.intellij.ide.util.PsiLambdaNameHelper;
+import com.intellij.java.language.util.PsiLambdaNameHelper;
 import com.intellij.openapi.project.DumbService;
-import com.intellij.psi.PsiLambdaExpression;
-import com.intellij.psi.PsiType;
+import com.intellij.java.language.psi.PsiLambdaExpression;
+import com.intellij.java.language.psi.PsiType;
 import consulo.ui.image.Image;
 import javax.annotation.Nonnull;
 

@@ -15,6 +15,9 @@
  */
 package com.intellij.refactoring.extractInterface;
 
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiField;
+import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.refactoring.extractSuperclass.ExtractSuperBaseProcessor;

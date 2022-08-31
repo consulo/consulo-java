@@ -17,6 +17,9 @@ package com.intellij.psi.impl.source.tree.java;
 
 import javax.annotation.Nonnull;
 
+import com.intellij.java.language.psi.JavaElementVisitor;
+import com.intellij.java.language.psi.PsiTypeParameter;
+import com.intellij.java.language.psi.PsiTypeParameterList;
 import com.intellij.lang.ASTNode;
 import consulo.logging.Logger;
 import com.intellij.psi.*;

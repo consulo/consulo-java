@@ -16,8 +16,8 @@
 package com.intellij.refactoring.openapi.impl;
 
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiField;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiField;
 import com.intellij.refactoring.MakeStaticRefactoring;
 import com.intellij.refactoring.RefactoringImpl;
 import com.intellij.refactoring.makeStatic.MakeClassStaticProcessor;

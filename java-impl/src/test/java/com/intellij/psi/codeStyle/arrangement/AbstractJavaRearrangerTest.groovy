@@ -16,7 +16,7 @@
 package com.intellij.psi.codeStyle.arrangement
 
 import com.intellij.ide.highlighter.JavaFileType
-import com.intellij.lang.java.JavaLanguage
+import com.intellij.java.language.JavaLanguage
 
 /**
  * @author Denis Zhdanov

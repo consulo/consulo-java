@@ -15,6 +15,8 @@
  */
 package com.intellij.psi.impl.source.codeStyle;
 
+import com.intellij.java.language.psi.JavaDocTokenType;
+import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.lang.ASTFactory;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.LanguageParserDefinitions;

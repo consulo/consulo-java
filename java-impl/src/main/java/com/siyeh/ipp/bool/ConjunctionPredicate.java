@@ -15,9 +15,9 @@
  */
 package com.siyeh.ipp.bool;
 
-import com.intellij.psi.JavaTokenType;
+import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiPolyadicExpression;
+import com.intellij.java.language.psi.PsiPolyadicExpression;
 import com.intellij.psi.tree.IElementType;
 import com.siyeh.ipp.base.PsiElementPredicate;
 import com.siyeh.ipp.psiutils.ErrorUtil;

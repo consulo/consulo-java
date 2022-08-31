@@ -17,8 +17,8 @@ package com.intellij.codeInsight.generation.actions;
 
 import com.intellij.codeInsight.generation.GenerateEqualsHandler;
 import com.intellij.openapi.editor.Editor;
-import com.intellij.psi.PsiAnonymousClass;
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.psi.PsiAnonymousClass;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.PsiFile;
 
 /**

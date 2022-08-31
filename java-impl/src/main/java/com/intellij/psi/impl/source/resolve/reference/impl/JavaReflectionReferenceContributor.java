@@ -15,10 +15,10 @@
  */
 package com.intellij.psi.impl.source.resolve.reference.impl;
 
-import static com.intellij.patterns.PsiJavaPatterns.psiLiteral;
-import static com.intellij.patterns.PsiJavaPatterns.psiMethod;
+import static com.intellij.java.language.patterns.PsiJavaPatterns.psiLiteral;
+import static com.intellij.java.language.patterns.PsiJavaPatterns.psiMethod;
 import static com.intellij.patterns.StandardPatterns.or;
-import static consulo.java.module.util.JavaClassNames.JAVA_LANG_CLASS;
+import static consulo.java.language.module.util.JavaClassNames.JAVA_LANG_CLASS;
 import static com.intellij.java.analysis.impl.psi.impl.source.resolve.reference.impl.JavaReflectionReferenceUtil.FOR_NAME;
 import static com.intellij.java.analysis.impl.psi.impl.source.resolve.reference.impl.JavaReflectionReferenceUtil.GET_DECLARED_FIELD;
 import static com.intellij.java.analysis.impl.psi.impl.source.resolve.reference.impl.JavaReflectionReferenceUtil.GET_DECLARED_METHOD;
@@ -32,14 +32,14 @@ import static com.intellij.java.analysis.impl.psi.impl.source.resolve.reference.
 import javax.annotation.Nonnull;
 
 import com.intellij.patterns.ElementPattern;
-import com.intellij.patterns.PsiJavaElementPattern;
+import com.intellij.java.language.patterns.PsiJavaElementPattern;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiExpression;
-import com.intellij.psi.PsiLiteral;
-import com.intellij.psi.PsiLiteralExpression;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiLiteral;
+import com.intellij.java.language.psi.PsiLiteralExpression;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.PsiReferenceContributor;
-import com.intellij.psi.PsiReferenceExpression;
+import com.intellij.java.language.psi.PsiReferenceExpression;
 import com.intellij.psi.PsiReferenceRegistrar;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.JavaClassReferenceProvider;
 import com.intellij.util.ProcessingContext;

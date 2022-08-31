@@ -17,6 +17,7 @@ package com.siyeh.ig.junit;
 
 import javax.annotation.Nonnull;
 
+import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
 import org.jetbrains.annotations.NonNls;
 

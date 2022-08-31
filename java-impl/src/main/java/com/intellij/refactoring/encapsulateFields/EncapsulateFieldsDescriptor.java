@@ -20,8 +20,8 @@
  */
 package com.intellij.refactoring.encapsulateFields;
 
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiModifier;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiModifier;
 
 public interface EncapsulateFieldsDescriptor {
   FieldDescriptor[] getSelectedFields();

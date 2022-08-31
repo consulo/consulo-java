@@ -15,7 +15,7 @@
  */
 package org.jetbrains.generate.tostring;
 
-import com.intellij.psi.PsiClass;
+import com.intellij.java.language.psi.PsiClass;
 
 /**
  * Nikolay.Tropin

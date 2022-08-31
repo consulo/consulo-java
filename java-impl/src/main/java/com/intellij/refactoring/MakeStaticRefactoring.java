@@ -15,8 +15,8 @@
  */
 package com.intellij.refactoring;
 
-import com.intellij.psi.PsiField;
-import com.intellij.psi.PsiTypeParameterListOwner;
+import com.intellij.java.language.psi.PsiField;
+import com.intellij.java.language.psi.PsiTypeParameterListOwner;
 
 import java.util.List;
 

@@ -1,7 +1,7 @@
 package com.intellij.java.execution;
 
 import com.intellij.openapi.extensions.ExtensionPointName;
-import com.intellij.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiMethod;
 
 import javax.annotation.Nonnull;
 
