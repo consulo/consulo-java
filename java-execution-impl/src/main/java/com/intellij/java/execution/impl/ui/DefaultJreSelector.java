@@ -27,7 +27,7 @@ import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.ui.ComboBox;
 import com.intellij.openapi.util.Pair;
-import com.intellij.ui.EditorTextFieldWithBrowseButton;
+import com.intellij.java.language.impl.ui.EditorTextFieldWithBrowseButton;
 import com.intellij.util.ObjectUtil;
 import consulo.annotation.DeprecationInfo;
 import consulo.java.execution.configurations.OwnJavaParameters;

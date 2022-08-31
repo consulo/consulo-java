@@ -15,7 +15,7 @@
  */
 package com.intellij.codeInsight.highlighting;
 
-import com.intellij.ide.util.PsiClassListCellRenderer;
+import com.intellij.java.language.impl.codeInsight.PsiClassListCellRenderer;
 import com.intellij.ide.util.PsiElementListCellRenderer;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.java.language.psi.PsiClass;

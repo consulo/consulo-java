@@ -16,7 +16,7 @@
 package com.intellij.application.options;
 
 import org.jetbrains.annotations.NonNls;
-import com.intellij.ide.highlighter.JavaFileType;
+import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.psi.PsiFile;

@@ -17,7 +17,7 @@ package com.intellij.java.debugger.impl.engine.evaluation;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.ide.highlighter.JavaFileType;
+import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.java.debugger.engine.evaluation.CodeFragmentKind;
 import com.intellij.java.debugger.engine.evaluation.TextWithImports;
 import com.intellij.lang.LanguageUtil;

@@ -29,7 +29,7 @@ import com.intellij.patterns.ElementPattern;
 import com.intellij.psi.PsiElement;
 import com.intellij.java.language.psi.PsiKeyword;
 import com.intellij.psi.PsiReference;
-import com.intellij.psi.impl.source.PsiLabelReference;
+import com.intellij.java.language.impl.psi.impl.source.PsiLabelReference;
 import com.intellij.util.ProcessingContext;
 import com.intellij.util.containers.ContainerUtil;
 import consulo.annotation.access.RequiredReadAction;

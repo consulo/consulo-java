@@ -19,7 +19,8 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Map;
 
-import com.intellij.ide.highlighter.JavaFileType;
+import com.intellij.java.language.impl.JavaFileType;
+import com.intellij.java.language.impl.psi.PsiTypeVariable;
 import com.intellij.java.language.psi.*;
 import consulo.logging.Logger;
 import com.intellij.openapi.project.Project;

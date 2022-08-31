@@ -28,7 +28,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Pair;
 import com.intellij.psi.*;
 import com.intellij.java.analysis.impl.psi.controlFlow.DefUseUtil;
-import com.intellij.psi.impl.PsiSubstitutorImpl;
+import com.intellij.java.language.impl.psi.impl.PsiSubstitutorImpl;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.searches.ReferencesSearch;
 import com.intellij.psi.tree.IElementType;

@@ -16,7 +16,7 @@
 package com.intellij.java.analysis.impl.codeInspection;
 
 import com.intellij.codeInsight.daemon.GroupNames;
-import com.intellij.codeInsight.daemon.JavaErrorBundle;
+import com.intellij.java.language.impl.codeInsight.daemon.JavaErrorBundle;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.java.analysis.codeInspection.BaseJavaBatchLocalInspectionTool;

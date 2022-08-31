@@ -35,7 +35,7 @@ import javax.annotation.Nullable;
 import com.intellij.codeInsight.completion.JavaCompletionUtil;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupManager;
-import com.intellij.ide.highlighter.JavaFileType;
+import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.java.language.psi.JavaCodeFragment;

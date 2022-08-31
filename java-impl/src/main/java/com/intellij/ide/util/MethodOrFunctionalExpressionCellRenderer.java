@@ -15,47 +15,41 @@
  */
 package com.intellij.ide.util;
 
-import com.intellij.psi.NavigatablePsiElement;
-import com.intellij.psi.PsiElement;
+import com.intellij.java.language.impl.codeInsight.PsiClassListCellRenderer;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.util.PsiExpressionTrimRenderer;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
+import com.intellij.psi.NavigatablePsiElement;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiFormatUtilBase;
 import consulo.ui.image.Image;
 
-public class MethodOrFunctionalExpressionCellRenderer extends PsiElementListCellRenderer<NavigatablePsiElement>
-{
-	private final PsiClassListCellRenderer myClassListCellRenderer = new PsiClassListCellRenderer();
-	private final MethodCellRenderer myMethodCellRenderer;
+public class MethodOrFunctionalExpressionCellRenderer extends PsiElementListCellRenderer<NavigatablePsiElement> {
+  private final PsiClassListCellRenderer myClassListCellRenderer = new PsiClassListCellRenderer();
+  private final MethodCellRenderer myMethodCellRenderer;
 
-	public MethodOrFunctionalExpressionCellRenderer(boolean showMethodNames)
-	{
-		this(showMethodNames, PsiFormatUtilBase.SHOW_NAME | PsiFormatUtilBase.SHOW_PARAMETERS);
-	}
+  public MethodOrFunctionalExpressionCellRenderer(boolean showMethodNames) {
+    this(showMethodNames, PsiFormatUtilBase.SHOW_NAME | PsiFormatUtilBase.SHOW_PARAMETERS);
+  }
 
-	public MethodOrFunctionalExpressionCellRenderer(boolean showMethodNames, @PsiFormatUtil.FormatMethodOptions int options)
-	{
-		myMethodCellRenderer = new MethodCellRenderer(showMethodNames, options);
-	}
+  public MethodOrFunctionalExpressionCellRenderer(boolean showMethodNames, @PsiFormatUtil.FormatMethodOptions int options) {
+    myMethodCellRenderer = new MethodCellRenderer(showMethodNames, options);
+  }
 
-	public String getElementText(NavigatablePsiElement element)
-	{
-		return element instanceof PsiMethod ? myMethodCellRenderer.getElementText((PsiMethod) element) : PsiExpressionTrimRenderer.render((PsiExpression) element);
-	}
+  public String getElementText(NavigatablePsiElement element) {
+    return element instanceof PsiMethod ? myMethodCellRenderer.getElementText((PsiMethod) element) : PsiExpressionTrimRenderer.render((PsiExpression) element);
+  }
 
-	protected Image getIcon(PsiElement element)
-	{
-		return element instanceof PsiMethod ? myMethodCellRenderer.getIcon(element) : super.getIcon(element);
-	}
+  protected Image getIcon(PsiElement element) {
+    return element instanceof PsiMethod ? myMethodCellRenderer.getIcon(element) : super.getIcon(element);
+  }
 
-	public String getContainerText(final NavigatablePsiElement element, final String name)
-	{
-		return element instanceof PsiMethod ? myMethodCellRenderer.getContainerText((PsiMethod) element, name) : PsiClassListCellRenderer.getContainerTextStatic(element);
-	}
+  public String getContainerText(final NavigatablePsiElement element, final String name) {
+    return element instanceof PsiMethod ? myMethodCellRenderer.getContainerText((PsiMethod) element, name) : PsiClassListCellRenderer.getContainerTextStatic(element);
+  }
 
-	public int getIconFlags()
-	{
-		return myClassListCellRenderer.getIconFlags();
-	}
+  public int getIconFlags() {
+    return myClassListCellRenderer.getIconFlags();
+  }
 }

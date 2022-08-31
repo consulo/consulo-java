@@ -2,7 +2,7 @@ package consulo.java.util;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import com.intellij.ide.highlighter.JavaFileType;
+import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.ide.projectView.impl.ProjectRootsUtil;
 import com.intellij.openapi.fileTypes.FileTypeManager;
 import com.intellij.openapi.module.Module;

@@ -28,11 +28,11 @@ import com.intellij.java.language.psi.PsiExpressionCodeFragment;
 import com.intellij.java.language.psi.PsiJavaCodeReferenceCodeFragment;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.PsiTypeCodeFragment;
-import com.intellij.psi.impl.source.PsiCodeFragmentImpl;
+import com.intellij.java.language.impl.psi.impl.source.PsiCodeFragmentImpl;
 import com.intellij.psi.impl.source.PsiExpressionCodeFragmentImpl;
 import com.intellij.psi.impl.source.PsiJavaCodeReferenceCodeFragmentImpl;
-import com.intellij.psi.impl.source.PsiTypeCodeFragmentImpl;
-import com.intellij.psi.impl.source.tree.JavaElementType;
+import com.intellij.java.language.impl.psi.impl.source.PsiTypeCodeFragmentImpl;
+import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
 
 @Singleton
 public class JavaCodeFragmentFactoryImpl extends JavaCodeFragmentFactory

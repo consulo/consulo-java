@@ -27,7 +27,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.refactoring.util.RefactoringChangeUtil;
+import com.intellij.java.language.impl.refactoring.util.RefactoringChangeUtil;
 import com.intellij.util.IncorrectOperationException;
 import consulo.logging.Logger;
 

@@ -42,7 +42,7 @@ import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.presentation.java.ClassPresentationUtil;
+import com.intellij.java.language.impl.psi.presentation.java.ClassPresentationUtil;
 import com.intellij.psi.search.GlobalSearchScope;
 
 public class PsiClassFavoriteNodeProvider extends FavoriteNodeProvider {

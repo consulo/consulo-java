@@ -17,7 +17,7 @@ import javax.swing.JPanel;
 
 import javax.annotation.Nullable;
 import com.intellij.find.FindSettings;
-import com.intellij.ide.highlighter.JavaFileType;
+import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.ide.util.scopeChooser.ScopeChooserCombo;
 import com.intellij.java.language.psi.*;
 import com.intellij.openapi.editor.Document;

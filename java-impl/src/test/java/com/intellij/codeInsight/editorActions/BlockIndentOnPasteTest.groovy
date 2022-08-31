@@ -16,7 +16,7 @@
 package com.intellij.codeInsight.editorActions
 
 import com.intellij.codeInsight.CodeInsightSettings
-import com.intellij.ide.highlighter.JavaFileType
+import com.intellij.java.language.impl.JavaFileType
 import com.intellij.openapi.fileTypes.FileType
 import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase
 import com.intellij.openapi.application.ApplicationManager

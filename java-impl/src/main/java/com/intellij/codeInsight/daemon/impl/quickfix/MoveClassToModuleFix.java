@@ -26,7 +26,7 @@ import com.intellij.codeInsight.daemon.impl.actions.AddImportAction;
 import com.intellij.codeInsight.hint.QuestionAction;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.ide.DataManager;
-import com.intellij.ide.util.PackageUtil;
+import com.intellij.java.language.impl.codeInsight.PackageUtil;
 import com.intellij.ide.util.PsiElementListCellRenderer;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.actionSystem.LangDataKeys;

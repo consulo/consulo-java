@@ -1,5 +1,6 @@
 package com.intellij.codeInsight.javadoc;
 
+import com.intellij.java.language.impl.codeInsight.javadoc.JavaDocCodeStyle;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 

@@ -67,7 +67,7 @@ import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiElement;
 import com.intellij.java.language.psi.PsiType;
-import com.intellij.psi.impl.source.PsiTypeCodeFragmentImpl;
+import com.intellij.java.language.impl.psi.impl.source.PsiTypeCodeFragmentImpl;
 import com.intellij.ui.AnActionButton;
 import com.intellij.ui.AnActionButtonRunnable;
 import com.intellij.ui.ReferenceEditorWithBrowseButton;

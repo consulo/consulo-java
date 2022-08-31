@@ -19,7 +19,7 @@ import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.Highligh
 import com.intellij.java.language.psi.*;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.psi.*;
-import com.intellij.psi.impl.PsiSuperMethodImplUtil;
+import com.intellij.java.language.impl.psi.impl.PsiSuperMethodImplUtil;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.usages.PsiElementUsageTarget;
 import com.intellij.usages.UsageTarget;

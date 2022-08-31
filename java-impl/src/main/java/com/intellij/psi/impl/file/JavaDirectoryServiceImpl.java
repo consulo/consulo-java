@@ -23,13 +23,13 @@ import java.util.Properties;
 import javax.annotation.Nonnull;
 import jakarta.inject.Singleton;
 
-import com.intellij.core.CoreJavaDirectoryService;
+import com.intellij.java.language.impl.core.CoreJavaDirectoryService;
 import com.intellij.ide.fileTemplates.FileTemplate;
 import com.intellij.ide.fileTemplates.FileTemplateManager;
 import com.intellij.ide.fileTemplates.FileTemplateUtil;
 import com.intellij.ide.fileTemplates.JavaTemplateUtil;
 import com.intellij.ide.fileTemplates.ui.CreateFromTemplateDialog;
-import com.intellij.ide.highlighter.JavaFileType;
+import com.intellij.java.language.impl.JavaFileType;
 import consulo.logging.Logger;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;

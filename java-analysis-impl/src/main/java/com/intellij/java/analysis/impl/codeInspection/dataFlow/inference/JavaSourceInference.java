@@ -15,7 +15,7 @@ import com.intellij.openapi.roots.FileIndexFacade;
 import com.intellij.openapi.util.RecursionManager;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
-import com.intellij.psi.impl.source.PsiMethodImpl;
+import com.intellij.java.language.impl.psi.impl.source.PsiMethodImpl;
 import com.intellij.psi.search.LocalSearchScope;
 import com.intellij.java.indexing.search.searches.MethodReferencesSearch;
 import com.intellij.psi.util.*;

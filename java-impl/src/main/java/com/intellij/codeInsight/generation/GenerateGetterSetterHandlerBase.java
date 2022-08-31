@@ -30,6 +30,7 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 
+import com.intellij.java.language.impl.codeInsight.generation.EncapsulatableClassMember;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.java.generate.exception.GenerateCodeException;
 import org.jetbrains.java.generate.template.TemplateResource;

@@ -22,7 +22,7 @@ import javax.annotation.Nonnull;
 
 import com.intellij.java.language.psi.*;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
-import com.intellij.codeInsight.ExceptionUtil;
+import com.intellij.java.language.impl.codeInsight.ExceptionUtil;
 import com.intellij.codeInsight.FileModificationService;
 import com.intellij.codeInsight.generation.surroundWith.SurroundWithUtil;
 import com.intellij.codeInsight.intention.impl.BaseIntentionAction;

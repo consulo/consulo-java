@@ -19,7 +19,7 @@ import com.intellij.CommonBundle;
 import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.codeInsight.daemon.impl.quickfix.OrderEntryFix;
 import com.intellij.icons.AllIcons;
-import com.intellij.ide.util.PackageUtil;
+import com.intellij.java.language.impl.codeInsight.PackageUtil;
 import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.util.TreeClassChooser;

@@ -21,12 +21,12 @@
  */
 package com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis;
 
-import com.intellij.codeInsight.ExceptionUtil;
-import com.intellij.codeInsight.daemon.JavaErrorBundle;
+import com.intellij.java.language.impl.codeInsight.ExceptionUtil;
+import com.intellij.java.language.impl.codeInsight.daemon.JavaErrorBundle;
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
 import com.intellij.codeInsight.daemon.impl.HighlightInfoType;
 import com.intellij.codeInsight.daemon.impl.quickfix.QuickFixAction;
-import com.intellij.ide.highlighter.JavaFileType;
+import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.java.analysis.codeInsight.intention.QuickFixFactory;
 import com.intellij.java.analysis.impl.codeInsight.ClassUtil;
 import com.intellij.java.analysis.impl.psi.util.JavaMatchers;
@@ -44,7 +44,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.*;
-import com.intellij.refactoring.util.RefactoringChangeUtil;
+import com.intellij.java.language.impl.refactoring.util.RefactoringChangeUtil;
 import consulo.java.language.module.util.JavaClassNames;
 
 import javax.annotation.Nonnull;

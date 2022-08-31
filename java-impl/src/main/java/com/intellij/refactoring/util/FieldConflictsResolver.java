@@ -15,6 +15,7 @@
  */
 package com.intellij.refactoring.util;
 
+import com.intellij.java.language.impl.refactoring.util.RefactoringChangeUtil;
 import com.intellij.java.language.psi.*;
 import consulo.logging.Logger;
 import com.intellij.psi.*;

@@ -30,7 +30,7 @@ import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
-import com.intellij.psi.impl.PsiVariableEx;
+import com.intellij.java.language.impl.psi.impl.PsiVariableEx;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.java.language.psi.javadoc.PsiDocTag;
 import com.intellij.psi.util.PsiTreeUtil;

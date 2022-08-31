@@ -15,7 +15,7 @@
  */
 package com.intellij.codeInsight.intention.impl;
 
-import com.intellij.codeInsight.ChangeContextUtil;
+import com.intellij.java.language.impl.codeInsight.ChangeContextUtil;
 import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.codeInsight.generation.GenerateMembersUtil;
 import com.intellij.codeInsight.generation.OverrideImplementUtil;

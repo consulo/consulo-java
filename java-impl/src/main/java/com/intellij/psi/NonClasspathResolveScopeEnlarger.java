@@ -3,8 +3,9 @@ package com.intellij.psi;
 import java.util.List;
 
 import javax.annotation.Nonnull;
-import com.intellij.ide.highlighter.JavaClassFileType;
-import com.intellij.ide.highlighter.JavaFileType;
+import com.intellij.java.language.impl.JavaClassFileType;
+import com.intellij.java.language.impl.JavaFileType;
+import com.intellij.java.language.impl.psi.NonClasspathClassFinder;
 import com.intellij.java.language.psi.PsiElementFinder;
 import com.intellij.openapi.extensions.Extensions;
 import com.intellij.openapi.fileTypes.FileType;

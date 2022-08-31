@@ -26,7 +26,7 @@ import static org.junit.Assert.fail;
 
 import java.io.File;
 
-import com.intellij.ide.highlighter.JavaFileType;
+import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.java.language.psi.*;
 import com.intellij.openapi.application.ApplicationManager;
 import consulo.logging.Logger;
@@ -37,7 +37,7 @@ import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileFilter;
-import com.intellij.psi.impl.java.stubs.PsiMethodStub;
+import com.intellij.java.language.impl.psi.impl.java.stubs.PsiMethodStub;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.testFramework.IdeaTestUtil;

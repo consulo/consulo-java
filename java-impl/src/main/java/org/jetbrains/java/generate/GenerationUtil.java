@@ -36,7 +36,7 @@ import org.jetbrains.java.generate.exception.GenerateCodeException;
 import org.jetbrains.java.generate.exception.PluginException;
 import org.jetbrains.java.generate.psi.PsiAdapter;
 import org.jetbrains.java.generate.velocity.VelocityFactory;
-import com.intellij.codeInsight.generation.PsiElementClassMember;
+import com.intellij.java.language.impl.codeInsight.generation.PsiElementClassMember;
 import com.intellij.codeInsight.generation.PsiFieldMember;
 import com.intellij.codeInsight.generation.PsiMethodMember;
 import com.intellij.openapi.progress.ProcessCanceledException;
@@ -120,9 +120,9 @@ public class GenerationUtil
 	}
 
 	/**
-	 * Converts the list of {@link com.intellij.codeInsight.generation.PsiElementClassMember} to {PsiMember} objects.
+	 * Converts the list of {@link PsiElementClassMember} to {PsiMember} objects.
 	 *
-	 * @param classMemberList list of {@link com.intellij.codeInsight.generation.PsiElementClassMember}
+	 * @param classMemberList list of {@link PsiElementClassMember}
 	 * @return a list of {PsiMember} objects.
 	 */
 	public static List<PsiMember> convertClassMembersToPsiMembers(@javax.annotation.Nullable List<PsiElementClassMember> classMemberList)

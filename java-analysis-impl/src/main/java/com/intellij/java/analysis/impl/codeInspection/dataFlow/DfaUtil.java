@@ -1,7 +1,7 @@
 // Copyright 2000-2020 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.analysis.impl.codeInspection.dataFlow;
 
-import com.intellij.codeInsight.ExpressionUtil;
+import com.intellij.java.language.impl.codeInsight.ExpressionUtil;
 import com.intellij.java.language.codeInsight.Nullability;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.rangeSet.LongRangeSet;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.types.DfReferenceType;
@@ -9,7 +9,7 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.*;
 import com.intellij.java.analysis.impl.psi.controlFlow.DefUseUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
-import com.intellij.psi.impl.source.resolve.JavaResolveUtil;
+import com.intellij.java.language.impl.psi.impl.source.resolve.JavaResolveUtil;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.java.language.psi.util.PsiPrecedenceUtil;
 import com.intellij.psi.util.PsiTreeUtil;

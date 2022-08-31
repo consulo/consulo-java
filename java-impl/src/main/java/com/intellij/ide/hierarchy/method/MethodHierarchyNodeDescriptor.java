@@ -31,7 +31,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.java.language.psi.PsiFunctionalExpression;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifier;
-import com.intellij.psi.presentation.java.ClassPresentationUtil;
+import com.intellij.java.language.impl.psi.presentation.java.ClassPresentationUtil;
 import consulo.ide.IconDescriptorUpdaters;
 import consulo.ui.image.Image;
 import consulo.ui.image.ImageEffects;

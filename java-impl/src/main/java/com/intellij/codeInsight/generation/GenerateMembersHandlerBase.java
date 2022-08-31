@@ -22,6 +22,9 @@ import javax.annotation.Nonnull;
 import javax.swing.JComponent;
 
 import javax.annotation.Nullable;
+
+import com.intellij.java.language.impl.codeInsight.generation.GenerationInfo;
+import com.intellij.java.language.impl.codeInsight.generation.PsiElementClassMember;
 import org.jetbrains.java.generate.exception.GenerateCodeException;
 import com.intellij.codeInsight.CodeInsightActionHandler;
 import com.intellij.codeInsight.CodeInsightUtilBase;

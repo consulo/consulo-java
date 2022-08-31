@@ -36,7 +36,7 @@ import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.java.language.psi.PsiNewExpression;
 import com.intellij.java.language.psi.PsiSubstitutor;
 import com.intellij.java.language.psi.PsiType;
-import com.intellij.psi.impl.source.resolve.JavaResolveUtil;
+import com.intellij.java.language.impl.psi.impl.source.resolve.JavaResolveUtil;
 import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
 import com.intellij.psi.util.PsiTreeUtil;

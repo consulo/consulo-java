@@ -28,7 +28,7 @@ import com.intellij.openapi.editor.highlighter.HighlighterIterator;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
-import com.intellij.psi.impl.source.tree.ElementType;
+import com.intellij.java.language.impl.psi.impl.source.tree.ElementType;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.java.language.psi.tree.java.IJavaElementType;
 import com.intellij.psi.util.PsiTreeUtil;

@@ -1,5 +1,6 @@
 package com.intellij.codeInsight.psi;
 
+import com.intellij.java.language.impl.psi.controlFlow.*;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.LocalFileSystem;
@@ -7,7 +8,6 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.java.language.psi.PsiCodeBlock;
 import com.intellij.psi.PsiElement;
 import com.intellij.java.language.psi.PsiJavaFile;
-import com.intellij.psi.controlFlow.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.testFramework.LightCodeInsightTestCase;
 import consulo.util.collection.primitive.ints.IntList;

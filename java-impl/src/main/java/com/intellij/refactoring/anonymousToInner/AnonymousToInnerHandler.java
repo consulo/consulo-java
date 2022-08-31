@@ -32,7 +32,7 @@ import consulo.logging.Logger;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nullable;
-import com.intellij.codeInsight.ChangeContextUtil;
+import com.intellij.java.language.impl.codeInsight.ChangeContextUtil;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.application.ApplicationManager;
@@ -42,7 +42,7 @@ import com.intellij.openapi.editor.ScrollType;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.codeStyle.CodeStyleManager;
-import com.intellij.psi.impl.PsiDiamondTypeUtil;
+import com.intellij.java.language.impl.psi.impl.PsiDiamondTypeUtil;
 import com.intellij.psi.search.LocalSearchScope;
 import com.intellij.psi.search.searches.ReferencesSearch;
 import com.intellij.psi.util.PsiTreeUtil;

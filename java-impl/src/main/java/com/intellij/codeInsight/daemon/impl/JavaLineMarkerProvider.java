@@ -33,7 +33,7 @@ import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
-import com.intellij.psi.impl.FindSuperElementsHelper;
+import com.intellij.java.language.impl.psi.impl.FindSuperElementsHelper;
 import com.intellij.java.indexing.search.searches.AllOverridingMethodsSearch;
 import com.intellij.java.indexing.search.searches.DirectClassInheritorsSearch;
 import com.intellij.java.indexing.search.searches.FunctionalExpressionSearch;

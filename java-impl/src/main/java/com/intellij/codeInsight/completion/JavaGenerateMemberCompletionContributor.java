@@ -23,9 +23,9 @@ import java.util.List;
 import java.util.Set;
 
 import com.intellij.codeInsight.generation.GenerateMembersUtil;
-import com.intellij.codeInsight.generation.GenerationInfo;
+import com.intellij.java.language.impl.codeInsight.generation.GenerationInfo;
 import com.intellij.codeInsight.generation.GetterSetterPrototypeProvider;
-import com.intellij.codeInsight.generation.OverrideImplementExploreUtil;
+import com.intellij.java.language.impl.codeInsight.generation.OverrideImplementExploreUtil;
 import com.intellij.codeInsight.generation.OverrideImplementUtil;
 import com.intellij.codeInsight.generation.PsiGenerationInfo;
 import com.intellij.codeInsight.generation.TemplateGenerationInfo;

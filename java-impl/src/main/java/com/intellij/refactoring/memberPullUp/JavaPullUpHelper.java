@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.intellij.java.language.codeInsight.AnnotationUtil;
-import com.intellij.codeInsight.ChangeContextUtil;
+import com.intellij.java.language.impl.codeInsight.ChangeContextUtil;
 import com.intellij.codeInsight.PsiEquivalenceUtil;
 import com.intellij.java.analysis.impl.codeInsight.intention.AddAnnotationFix;
 import com.intellij.java.language.psi.*;
@@ -45,7 +45,7 @@ import com.intellij.java.language.psi.util.MethodSignatureUtil;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.refactoring.util.DocCommentPolicy;
-import com.intellij.refactoring.util.RefactoringChangeUtil;
+import com.intellij.java.language.impl.refactoring.util.RefactoringChangeUtil;
 import com.intellij.refactoring.util.RefactoringHierarchyUtil;
 import com.intellij.refactoring.util.RefactoringUtil;
 import com.intellij.refactoring.util.classMembers.ClassMemberReferencesVisitor;

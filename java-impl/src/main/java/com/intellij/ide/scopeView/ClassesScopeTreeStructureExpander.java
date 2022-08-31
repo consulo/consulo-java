@@ -28,8 +28,8 @@ import javax.swing.tree.ExpandVetoException;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
-import com.intellij.ide.highlighter.JavaClassFileType;
-import com.intellij.ide.highlighter.JavaFileType;
+import com.intellij.java.language.impl.JavaClassFileType;
+import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.ide.projectView.ProjectView;
 import com.intellij.ide.projectView.PsiClassChildrenSource;
 import com.intellij.ide.scopeView.nodes.ClassNode;

@@ -20,7 +20,7 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import com.intellij.formatting.alignment.AlignmentStrategy;
 import com.intellij.lang.ASTNode;
-import com.intellij.psi.impl.source.tree.JavaElementType;
+import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.util.containers.ContainerUtil;
 

@@ -4,8 +4,8 @@ import com.intellij.lang.LighterAST;
 import com.intellij.lang.LighterASTNode;
 import com.intellij.java.language.psi.CommonClassNames;
 import com.intellij.java.language.psi.JavaTokenType;
-import com.intellij.psi.impl.source.JavaLightTreeUtil;
-import com.intellij.psi.impl.source.tree.ElementType;
+import com.intellij.java.language.impl.psi.impl.source.JavaLightTreeUtil;
+import com.intellij.java.language.impl.psi.impl.source.tree.ElementType;
 import com.intellij.psi.impl.source.tree.LightTreeUtil;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
@@ -15,7 +15,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 
-import static com.intellij.psi.impl.source.tree.JavaElementType.*;
+import static com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType.*;
 
 /**
  * from kotlin

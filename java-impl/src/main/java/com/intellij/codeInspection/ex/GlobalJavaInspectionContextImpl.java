@@ -29,7 +29,7 @@ import com.intellij.codeInspection.InspectionsBundle;
 import com.intellij.codeInspection.deadCode.UnusedDeclarationInspection;
 import com.intellij.codeInspection.reference.*;
 import com.intellij.codeInspection.ui.InspectionToolPresentation;
-import com.intellij.ide.highlighter.JavaFileType;
+import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.java.analysis.codeInspection.ex.EntryPointsManager;
 import com.intellij.java.analysis.codeInspection.reference.RefClass;
 import com.intellij.java.analysis.codeInspection.reference.RefField;

@@ -15,7 +15,7 @@
  */
 package com.intellij.psi.impl.search;
 
-import com.intellij.lang.java.lexer.JavaLexer;
+import com.intellij.java.language.impl.lexer.JavaLexer;
 import com.intellij.lexer.Lexer;
 import com.intellij.java.language.psi.JavaDocTokenType;
 import com.intellij.java.language.psi.JavaTokenType;

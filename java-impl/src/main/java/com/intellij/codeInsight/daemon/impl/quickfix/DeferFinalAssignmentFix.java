@@ -24,20 +24,21 @@
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
 import com.intellij.codeInsight.FileModificationService;
-import com.intellij.java.language.psi.*;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
 import com.intellij.codeInsight.intention.IntentionAction;
-import consulo.logging.Logger;
+import com.intellij.java.language.impl.psi.controlFlow.*;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
+import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.*;
-import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
-import com.intellij.psi.controlFlow.*;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.util.IncorrectOperationException;
-import javax.annotation.Nonnull;
+import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.logging.Logger;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,10 +70,9 @@ public class DeferFinalAssignmentFix implements IntentionAction {
     if (!FileModificationService.getInstance().prepareFileForWrite(variable.getContainingFile())) return;
 
     if (variable instanceof PsiField) {
-      deferField((PsiField)variable);
-    }
-    else {
-      deferLocalVariable((PsiLocalVariable)variable);
+      deferField((PsiField) variable);
+    } else {
+      deferLocalVariable((PsiLocalVariable) variable);
     }
   }
 
@@ -119,14 +119,13 @@ public class DeferFinalAssignmentFix implements IntentionAction {
     ControlFlow controlFlow;
     try {
       controlFlow = ControlFlowFactory.getInstance(project).getControlFlow(outerCodeBlock, LocalsOrMyInstanceFieldsControlFlowPolicy.getInstance(), false);
-    }
-    catch (AnalysisCanceledException e) {
+    } catch (AnalysisCanceledException e) {
       return;
     }
     int minOffset = 0;
     boolean writeReferenceOccurred = false;
     PsiReferenceExpression writeReference = null;
-    for (int i = outerReferences.size()-1; i>=0; i--) {
+    for (int i = outerReferences.size() - 1; i >= 0; i--) {
       PsiReferenceExpression reference = outerReferences.get(i);
       if (!writeReferenceOccurred && !PsiUtil.isAccessedForWriting(reference)) {
         // trailing read references need not be converted to temp var references
@@ -140,8 +139,9 @@ public class DeferFinalAssignmentFix implements IntentionAction {
       minOffset = Math.max(minOffset, endOffset);
     }
     LOG.assertTrue(writeReference != null);
-    PsiStatement finalAssignment = factory.createStatementFromText(writeReference.getText()+" = "+tempName+";", outerCodeBlock);
-    if (!insertToDefinitelyReachedPlace(outerCodeBlock, finalAssignment, controlFlow, minOffset, outerReferences)) return;
+    PsiStatement finalAssignment = factory.createStatementFromText(writeReference.getText() + " = " + tempName + ";", outerCodeBlock);
+    if (!insertToDefinitelyReachedPlace(outerCodeBlock, finalAssignment, controlFlow, minOffset, outerReferences))
+      return;
 
     outerCodeBlock.addAfter(tempVariableDeclaration, tempDeclarationAnchor);
 
@@ -172,7 +172,7 @@ public class DeferFinalAssignmentFix implements IntentionAction {
 
   private static void replaceReferences(List references, PsiElement newExpression) throws IncorrectOperationException {
     for (Object reference1 : references) {
-      PsiElement reference = (PsiElement)reference1;
+      PsiElement reference = (PsiElement) reference1;
       reference.replace(newExpression);
     }
 
@@ -181,7 +181,8 @@ public class DeferFinalAssignmentFix implements IntentionAction {
 
   private static void collectReferences(PsiElement context, final PsiVariable variable, final List<PsiReferenceExpression> references) {
     context.accept(new JavaRecursiveElementWalkingVisitor() {
-      @Override public void visitReferenceExpression(PsiReferenceExpression expression) {
+      @Override
+      public void visitReferenceExpression(PsiReferenceExpression expression) {
         if (expression.resolve() == variable) references.add(expression);
         super.visitReferenceExpression(expression);
       }
@@ -192,8 +193,8 @@ public class DeferFinalAssignmentFix implements IntentionAction {
     // new name should not conflict with another variable at the variable declaration level and usage level
     String name = variable.getName();
     // trim last digit to suggest variable names like i1,i2, i3...
-    if (name.length() > 1 && Character.isDigit(name.charAt(name.length()-1))) {
-      name = name.substring(0,name.length()-1);
+    if (name.length() > 1 && Character.isDigit(name.charAt(name.length() - 1))) {
+      name = name.substring(0, name.length() - 1);
     }
     return JavaCodeStyleManager.getInstance(project).suggestUniqueVariableName(name, variable, true);
   }
@@ -202,12 +203,12 @@ public class DeferFinalAssignmentFix implements IntentionAction {
   public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     return
         variable != null
-        && variable.isValid()
-        && !(variable instanceof PsiParameter)
-        && !(variable instanceof ImplicitVariable)
-        && expression != null
-        && expression.isValid()
-        && variable.getManager().isInProject(variable)
+            && variable.isValid()
+            && !(variable instanceof PsiParameter)
+            && !(variable instanceof ImplicitVariable)
+            && expression != null
+            && expression.isValid()
+            && variable.getManager().isInProject(variable)
         ;
   }
 

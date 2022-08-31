@@ -21,7 +21,7 @@ import javax.annotation.Nullable;
 import com.intellij.java.language.psi.*;
 import com.intellij.lang.refactoring.RefactoringSupportProvider;
 import com.intellij.psi.*;
-import com.intellij.psi.impl.light.LightMethodBuilder;
+import com.intellij.java.language.impl.psi.impl.light.LightMethodBuilder;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.psi.search.LocalSearchScope;
 import com.intellij.psi.search.PsiSearchHelper;

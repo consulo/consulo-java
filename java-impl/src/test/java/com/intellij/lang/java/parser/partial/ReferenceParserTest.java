@@ -16,9 +16,9 @@
 package com.intellij.lang.java.parser.partial;
 
 import com.intellij.lang.PsiBuilder;
-import com.intellij.lang.java.parser.JavaParser;
+import com.intellij.java.language.impl.parser.JavaParser;
 import com.intellij.lang.java.parser.JavaParsingTestCase;
-import com.intellij.lang.java.parser.ReferenceParser;
+import com.intellij.java.language.impl.parser.ReferenceParser;
 
 
 public abstract class ReferenceParserTest extends JavaParsingTestCase {

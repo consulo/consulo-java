@@ -27,7 +27,7 @@ import com.intellij.java.language.util.TreeClassChooser;
 import com.intellij.java.language.util.TreeClassChooserFactory;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.RecursionManager;
-import com.intellij.psi.impl.source.PsiImmediateClassType;
+import com.intellij.java.language.impl.psi.impl.source.PsiImmediateClassType;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;

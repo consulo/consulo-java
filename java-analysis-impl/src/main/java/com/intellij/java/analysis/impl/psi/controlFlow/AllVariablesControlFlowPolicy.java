@@ -29,7 +29,7 @@ import com.intellij.java.language.psi.PsiParameter;
 import com.intellij.java.language.psi.PsiReferenceExpression;
 import com.intellij.java.language.psi.PsiVariable;
 import com.intellij.psi.*;
-import com.intellij.psi.controlFlow.ControlFlowPolicy;
+import com.intellij.java.language.impl.psi.controlFlow.ControlFlowPolicy;
 
 import javax.annotation.Nonnull;
 

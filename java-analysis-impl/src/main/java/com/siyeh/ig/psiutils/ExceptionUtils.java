@@ -21,12 +21,12 @@ import java.util.Set;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.codeInsight.ExceptionUtil;
+import com.intellij.java.language.impl.codeInsight.ExceptionUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.refactoring.util.RefactoringChangeUtil;
+import com.intellij.java.language.impl.refactoring.util.RefactoringChangeUtil;
 import consulo.java.language.module.util.JavaClassNames;
 
 public class ExceptionUtils

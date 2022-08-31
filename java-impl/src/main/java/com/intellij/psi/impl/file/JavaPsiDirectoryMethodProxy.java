@@ -17,7 +17,7 @@ package com.intellij.psi.impl.file;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.ide.highlighter.JavaClassFileType;
+import com.intellij.java.language.impl.JavaClassFileType;
 import consulo.logging.Logger;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.fileTypes.FileTypeManager;

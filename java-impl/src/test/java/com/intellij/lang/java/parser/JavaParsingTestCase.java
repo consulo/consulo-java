@@ -19,8 +19,9 @@ import java.io.IOException;
 
 import javax.annotation.Nonnull;
 
+import com.intellij.java.language.impl.parser.JavaParserUtil;
 import org.jetbrains.annotations.NonNls;
-import com.intellij.ide.highlighter.JavaFileType;
+import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.java.language.JavaLanguage;
@@ -30,7 +31,7 @@ import com.intellij.psi.FileViewProvider;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.SingleRootFileViewProvider;
-import com.intellij.psi.impl.source.PsiJavaFileImpl;
+import com.intellij.java.language.impl.psi.impl.source.PsiJavaFileImpl;
 import com.intellij.psi.impl.source.tree.FileElement;
 import com.intellij.psi.tree.IFileElementType;
 import com.intellij.java.language.psi.util.PsiUtil;

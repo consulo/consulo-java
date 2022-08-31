@@ -23,7 +23,7 @@ import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.projectRoots.SdkTable;
 import com.intellij.openapi.roots.OrderRootType;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.NonClasspathClassFinder;
+import com.intellij.java.language.impl.psi.NonClasspathClassFinder;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.NonClasspathDirectoriesScope;
 import com.intellij.util.containers.ContainerUtil;

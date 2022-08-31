@@ -17,7 +17,7 @@ package com.intellij.psi;
 
 import com.intellij.JavaTestUtil;
 import com.intellij.codeInsight.CodeInsightTestCase;
-import com.intellij.ide.highlighter.JavaFileType;
+import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.java.language.psi.*;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.EditorFactory;

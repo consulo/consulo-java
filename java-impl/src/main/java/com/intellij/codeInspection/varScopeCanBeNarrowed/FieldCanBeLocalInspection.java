@@ -15,16 +15,24 @@
  */
 package com.intellij.codeInspection.varScopeCanBeNarrowed;
 
-import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.codeInsight.daemon.GroupNames;
 import com.intellij.codeInsight.daemon.ImplicitUsageProvider;
 import com.intellij.codeInspection.InspectionsBundle;
 import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.ProblemsHolder;
-import com.intellij.java.analysis.impl.codeInspection.ex.BaseLocalInspectionTool;
 import com.intellij.codeInspection.util.SpecialAnnotationsUtil;
+import com.intellij.java.analysis.impl.codeInspection.ex.BaseLocalInspectionTool;
 import com.intellij.java.analysis.impl.psi.controlFlow.AllVariablesControlFlowPolicy;
+import com.intellij.java.language.codeInsight.AnnotationUtil;
+import com.intellij.java.language.impl.psi.controlFlow.AnalysisCanceledException;
+import com.intellij.java.language.impl.psi.controlFlow.ControlFlow;
+import com.intellij.java.language.impl.psi.controlFlow.ControlFlowFactory;
+import com.intellij.java.language.impl.psi.controlFlow.ControlFlowUtil;
 import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
+import com.intellij.java.language.psi.codeStyle.VariableKind;
+import com.intellij.java.language.psi.javadoc.PsiDocComment;
+import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.lang.java.JavaCommenter;
 import com.intellij.openapi.extensions.Extensions;
 import com.intellij.openapi.project.Project;
@@ -32,13 +40,10 @@ import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.JDOMExternalizableStringList;
 import com.intellij.openapi.util.Ref;
 import com.intellij.openapi.util.WriteExternalException;
-import com.intellij.psi.*;
-import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
-import com.intellij.java.language.psi.codeStyle.VariableKind;
-import com.intellij.psi.controlFlow.*;
-import com.intellij.java.language.psi.javadoc.PsiDocComment;
+import com.intellij.psi.PsiComment;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.refactoring.util.RefactoringUtil;
 import consulo.java.language.module.util.JavaClassNames;
 import org.jdom.Element;
@@ -55,7 +60,8 @@ import java.util.*;
  * @author ven
  */
 public class FieldCanBeLocalInspection extends BaseLocalInspectionTool {
-  @NonNls public static final String SHORT_NAME = "FieldCanBeLocal";
+  @NonNls
+  public static final String SHORT_NAME = "FieldCanBeLocal";
   public final JDOMExternalizableStringList EXCLUDE_ANNOS = new JDOMExternalizableStringList();
 
   @Override
@@ -87,7 +93,7 @@ public class FieldCanBeLocalInspection extends BaseLocalInspectionTool {
   @Override
   public JComponent createOptionsPanel() {
     final JPanel listPanel = SpecialAnnotationsUtil
-      .createSpecialAnnotationsListControl(EXCLUDE_ANNOS, InspectionsBundle.message("special.annotations.annotations.list"));
+        .createSpecialAnnotationsListControl(EXCLUDE_ANNOS, InspectionsBundle.message("special.annotations.annotations.list"));
 
     final JPanel panel = new JPanel(new BorderLayout(2, 2));
     panel.add(listPanel, BorderLayout.CENTER);
@@ -178,7 +184,7 @@ public class FieldCanBeLocalInspection extends BaseLocalInspectionTool {
       final List<PsiVariable> usedVars = ControlFlowUtil.getUsedVariables(controlFlow, 0, controlFlow.getSize());
       for (PsiVariable usedVariable : usedVars) {
         if (usedVariable instanceof PsiField) {
-          final PsiField usedField = (PsiField)usedVariable;
+          final PsiField usedField = (PsiField) usedVariable;
           if (!usedFields.add(usedField)) {
             candidates.remove(usedField); //used in more than one code block
           }
@@ -189,29 +195,28 @@ public class FieldCanBeLocalInspection extends BaseLocalInspectionTool {
       for (final PsiReferenceExpression readBeforeWrite : readBeforeWrites) {
         final PsiElement resolved = readBeforeWrite.resolve();
         if (resolved instanceof PsiField) {
-          final PsiField field = (PsiField)resolved;
+          final PsiField field = (PsiField) resolved;
           if (!isImmutableState(field.getType()) || !PsiUtil.isConstantExpression(field.getInitializer()) || getWrittenVariables(controlFlow, writtenVariables).contains(field)) {
             PsiElement parent = body.getParent();
             if (!(parent instanceof PsiMethod) ||
-                !((PsiMethod)parent).isConstructor() ||
+                !((PsiMethod) parent).isConstructor() ||
                 field.getInitializer() == null ||
                 field.hasModifierProperty(PsiModifier.STATIC) ||
-                !PsiTreeUtil.isAncestor(((PsiMethod)parent).getContainingClass(), field, true)) {
+                !PsiTreeUtil.isAncestor(((PsiMethod) parent).getContainingClass(), field, true)) {
               candidates.remove(field);
             }
           }
         }
       }
-    }
-    catch (AnalysisCanceledException e) {
+    } catch (AnalysisCanceledException e) {
       candidates.clear();
     }
   }
 
   private static boolean isImmutableState(PsiType type) {
     return type instanceof PsiPrimitiveType ||
-           PsiPrimitiveType.getUnboxedType(type) != null ||
-           Comparing.strEqual(JavaClassNames.JAVA_LANG_STRING, type.getCanonicalText());
+        PsiPrimitiveType.getUnboxedType(type) != null ||
+        Comparing.strEqual(JavaClassNames.JAVA_LANG_STRING, type.getCanonicalText());
   }
 
   private static Collection<PsiVariable> getWrittenVariables(ControlFlow controlFlow, Ref<Collection<PsiVariable>> writtenVariables) {
@@ -237,7 +242,7 @@ public class FieldCanBeLocalInspection extends BaseLocalInspectionTool {
       public void visitReferenceExpression(PsiReferenceExpression expression) {
         final PsiElement resolved = expression.resolve();
         if (resolved instanceof PsiField) {
-          final PsiField field = (PsiField)resolved;
+          final PsiField field = (PsiField) resolved;
           if (aClass.equals(field.getContainingClass())) {
             candidates.remove(field);
           }

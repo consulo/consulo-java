@@ -16,7 +16,7 @@
 package com.intellij.lang.java.parser.partial;
 
 import com.intellij.lang.PsiBuilder;
-import com.intellij.lang.java.parser.JavaParser;
+import com.intellij.java.language.impl.parser.JavaParser;
 import com.intellij.lang.java.parser.JavaParsingTestCase;
 
 public abstract class AnnotationParserTest extends JavaParsingTestCase {

@@ -37,8 +37,8 @@ import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
 import com.intellij.psi.codeStyle.JavaCodeStyleSettings;
 import com.intellij.psi.formatter.FormatterUtil;
 import com.intellij.psi.formatter.common.AbstractBlock;
-import com.intellij.psi.impl.source.tree.JavaDocElementType;
-import com.intellij.psi.impl.source.tree.JavaElementType;
+import com.intellij.java.language.impl.psi.impl.source.tree.JavaDocElementType;
+import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
 import com.intellij.psi.impl.source.tree.StdTokenSets;
 import com.intellij.psi.tree.IElementType;
 

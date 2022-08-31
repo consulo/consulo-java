@@ -29,7 +29,7 @@ import org.jetbrains.annotations.NonNls;
 import com.intellij.lang.FileASTNode;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.psi.impl.DebugUtil;
-import com.intellij.psi.impl.source.JavaLightStubBuilder;
+import com.intellij.java.language.impl.psi.impl.source.JavaLightStubBuilder;
 import com.intellij.psi.stubs.StubElement;
 import com.intellij.testFramework.LightIdeaTestCase;
 import com.intellij.testFramework.PlatformTestUtil;

@@ -16,6 +16,7 @@
 package com.intellij.codeInsight;
 
 import com.intellij.java.analysis.impl.codeInspection.java15api.Java15APIUsageInspection;
+import com.intellij.java.language.impl.codeInsight.ExceptionUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;

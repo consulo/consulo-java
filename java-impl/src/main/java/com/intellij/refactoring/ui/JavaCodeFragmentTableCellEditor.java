@@ -16,7 +16,7 @@
 package com.intellij.refactoring.ui;
 
 import com.intellij.codeInsight.daemon.impl.JavaReferenceImporter;
-import com.intellij.ide.highlighter.JavaFileType;
+import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 

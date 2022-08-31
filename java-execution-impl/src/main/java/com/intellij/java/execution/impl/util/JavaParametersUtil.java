@@ -27,7 +27,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.java.language.projectRoots.JavaSdk;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.projectRoots.SdkTable;
-import com.intellij.openapi.projectRoots.ex.PathUtilEx;
+import com.intellij.java.language.impl.projectRoots.ex.PathUtilEx;
 import com.intellij.openapi.roots.*;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;

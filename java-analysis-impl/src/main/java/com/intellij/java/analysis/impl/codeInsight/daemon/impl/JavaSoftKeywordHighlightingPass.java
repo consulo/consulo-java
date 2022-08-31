@@ -19,7 +19,7 @@ package com.intellij.java.analysis.impl.codeInsight.daemon.impl;
 import com.intellij.codeHighlighting.TextEditorHighlightingPass;
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
 import com.intellij.codeInsight.daemon.impl.UpdateHighlightersUtil;
-import com.intellij.lang.java.lexer.JavaLexer;
+import com.intellij.java.language.impl.lexer.JavaLexer;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.java.language.LanguageLevel;

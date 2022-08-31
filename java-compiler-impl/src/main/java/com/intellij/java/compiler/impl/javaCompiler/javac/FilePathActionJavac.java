@@ -21,8 +21,8 @@ import java.util.regex.Pattern;
 
 import com.intellij.java.compiler.OutputParser;
 import com.intellij.java.compiler.impl.javaCompiler.FileObject;
-import com.intellij.ide.highlighter.JavaClassFileType;
-import com.intellij.ide.highlighter.JavaFileType;
+import com.intellij.java.language.impl.JavaClassFileType;
+import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.openapi.compiler.CompilerBundle;
 import consulo.logging.Logger;
 import com.intellij.openapi.util.Comparing;

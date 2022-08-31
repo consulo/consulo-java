@@ -22,6 +22,7 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
+import com.intellij.java.language.impl.codeInsight.generation.GenerationInfo;
 import com.intellij.openapi.project.Project;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiAnnotation;

@@ -1,0 +1,28 @@
+package consulo.java.language.impl;
+
+import consulo.annotation.DeprecationInfo;
+import consulo.java.psi.impl.icon.JavaPsiImplIconGroup;
+import consulo.platform.base.icon.PlatformIconGroup;
+import consulo.ui.image.Image;
+
+@Deprecated
+@DeprecationInfo("Use JavaPsiImplIconGroup")
+public interface JavaIcons {
+  interface FileTypes {
+    Image Java = JavaPsiImplIconGroup.fileTypesJava();
+    Image JavaClass = PlatformIconGroup.fileTypesBinary();
+    Image JavaOutsideSource = JavaPsiImplIconGroup.fileTypesJavaOutsideSource();
+  }
+
+  interface Gutter {
+    Image EventMethod = JavaPsiImplIconGroup.gutterEventMethod();
+    Image ExtAnnotation = JavaPsiImplIconGroup.gutterExtAnnotation();
+  }
+
+  interface Nodes {
+    Image JavaModule = JavaPsiImplIconGroup.nodesJavaModule();
+    Image NativeLibrariesFolder = JavaPsiImplIconGroup.nodesNativeLibrariesFolder();
+  }
+
+  Image Java = JavaPsiImplIconGroup.java();
+}

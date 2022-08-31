@@ -16,9 +16,9 @@
 package com.intellij.openapi.fileTypes.impl;
 
 import javax.annotation.Nonnull;
-import com.intellij.ide.highlighter.JarArchiveFileType;
-import com.intellij.ide.highlighter.JavaClassFileType;
-import com.intellij.ide.highlighter.JavaFileType;
+import com.intellij.java.language.impl.JarArchiveFileType;
+import com.intellij.java.language.impl.JavaClassFileType;
+import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.openapi.fileTypes.FileTypeConsumer;
 import com.intellij.openapi.fileTypes.FileTypeFactory;
 import consulo.java.language.fileTypes.JModFileType;

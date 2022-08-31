@@ -32,6 +32,8 @@ import java.util.regex.Pattern;
 
 import javax.annotation.Nonnull;
 
+import com.intellij.java.language.impl.codeInsight.javadoc.ColorUtil;
+import com.intellij.java.language.impl.codeInsight.javadoc.JavaDocUtil;
 import com.intellij.java.language.psi.*;
 import org.jdom.Document;
 import org.jdom.Element;
@@ -64,9 +66,9 @@ import com.intellij.openapi.vfs.CharsetToolkit;
 import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
-import com.intellij.psi.impl.JavaConstantExpressionEvaluator;
-import com.intellij.psi.impl.source.tree.JavaDocElementType;
-import com.intellij.psi.impl.source.tree.JavaElementType;
+import com.intellij.java.language.impl.psi.impl.JavaConstantExpressionEvaluator;
+import com.intellij.java.language.impl.psi.impl.source.tree.JavaDocElementType;
+import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.java.language.psi.javadoc.PsiDocTag;
 import com.intellij.java.language.psi.javadoc.PsiDocTagValue;

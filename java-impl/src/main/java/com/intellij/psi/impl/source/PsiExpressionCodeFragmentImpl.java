@@ -15,6 +15,7 @@
  */
 package com.intellij.psi.impl.source;
 
+import com.intellij.java.language.impl.psi.impl.source.PsiCodeFragmentImpl;
 import com.intellij.lang.ASTNode;
 import consulo.logging.Logger;
 import com.intellij.openapi.project.Project;
@@ -22,8 +23,8 @@ import com.intellij.psi.PsiElement;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiExpressionCodeFragment;
 import com.intellij.java.language.psi.PsiType;
-import com.intellij.psi.impl.source.tree.ElementType;
-import com.intellij.psi.impl.source.tree.JavaElementType;
+import com.intellij.java.language.impl.psi.impl.source.tree.ElementType;
+import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nullable;
 

@@ -21,7 +21,7 @@ import java.util.List;
 import jakarta.inject.Singleton;
 
 import org.jetbrains.annotations.NonNls;
-import com.intellij.ide.highlighter.JavaClassFileType;
+import com.intellij.java.language.impl.JavaClassFileType;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
 import consulo.roots.types.BinariesOrderRootType;

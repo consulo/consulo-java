@@ -37,7 +37,7 @@ import org.jetbrains.java.generate.template.TemplateResource;
 import org.jetbrains.java.generate.template.toString.ToStringTemplatesManager;
 import org.jetbrains.java.generate.view.TemplatesPanel;
 import com.intellij.codeInsight.CodeInsightActionHandler;
-import com.intellij.codeInsight.generation.PsiElementClassMember;
+import com.intellij.java.language.impl.codeInsight.generation.PsiElementClassMember;
 import com.intellij.codeInsight.hint.HintManager;
 import com.intellij.ide.util.MemberChooser;
 import consulo.disposer.Disposable;

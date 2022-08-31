@@ -28,7 +28,7 @@ import com.intellij.psi.PsiFileFactory;
 import com.intellij.psi.PsiReference;
 import com.intellij.java.language.psi.util.ClassUtil;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.spi.SPIFileType;
+import com.intellij.java.language.impl.spi.SPIFileType;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.IncorrectOperationException;
 

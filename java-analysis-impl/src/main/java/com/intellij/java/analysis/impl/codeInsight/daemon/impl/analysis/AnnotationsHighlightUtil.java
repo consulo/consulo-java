@@ -16,7 +16,7 @@
 package com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis;
 
 import com.intellij.java.language.codeInsight.AnnotationTargetUtil;
-import com.intellij.codeInsight.daemon.JavaErrorBundle;
+import com.intellij.java.language.impl.codeInsight.daemon.JavaErrorBundle;
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
 import com.intellij.codeInsight.daemon.impl.HighlightInfoType;
 import com.intellij.codeInsight.daemon.impl.quickfix.QuickFixAction;
@@ -29,9 +29,9 @@ import com.intellij.openapi.util.Comparing;
 import com.intellij.patterns.ElementPattern;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.psi.*;
-import com.intellij.psi.impl.PsiImplUtil;
-import com.intellij.psi.impl.source.PsiClassReferenceType;
-import com.intellij.psi.impl.source.PsiImmediateClassType;
+import com.intellij.java.language.impl.psi.impl.PsiImplUtil;
+import com.intellij.java.language.impl.psi.impl.source.PsiClassReferenceType;
+import com.intellij.java.language.impl.psi.impl.source.PsiImmediateClassType;
 import com.intellij.java.language.psi.util.ClassUtil;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;

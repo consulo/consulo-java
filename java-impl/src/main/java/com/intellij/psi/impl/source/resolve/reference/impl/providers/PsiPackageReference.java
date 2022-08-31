@@ -24,7 +24,7 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 
 import com.intellij.codeInsight.daemon.EmptyResolveMessageProvider;
-import com.intellij.codeInsight.daemon.JavaErrorBundle;
+import com.intellij.java.language.impl.codeInsight.daemon.JavaErrorBundle;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.ElementManipulator;
 import com.intellij.psi.ElementManipulators;

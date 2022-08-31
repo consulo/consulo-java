@@ -18,7 +18,7 @@ package com.intellij.refactoring.changeSignature;
 import java.util.List;
 
 import javax.annotation.Nonnull;
-import com.intellij.ide.highlighter.JavaFileType;
+import com.intellij.java.language.impl.JavaFileType;
 import consulo.logging.Logger;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.fileTypes.FileType;

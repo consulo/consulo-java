@@ -16,30 +16,34 @@
 package com.intellij.codeInspection.varScopeCanBeNarrowed;
 
 import com.intellij.codeInsight.daemon.GroupNames;
-import com.intellij.codeInspection.*;
+import com.intellij.codeInspection.InspectionManager;
+import com.intellij.codeInspection.InspectionsBundle;
+import com.intellij.codeInspection.ProblemDescriptor;
+import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.java.analysis.impl.codeInspection.BaseJavaLocalInspectionTool;
+import com.intellij.java.language.impl.psi.controlFlow.*;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.*;
-import com.intellij.psi.controlFlow.*;
 import com.intellij.java.language.psi.search.searches.SuperMethodsSearch;
+import com.intellij.java.language.util.VisibilityUtil;
+import com.intellij.openapi.project.Project;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiReference;
 import com.intellij.refactoring.changeSignature.ChangeSignatureProcessor;
 import com.intellij.refactoring.changeSignature.ParameterInfoImpl;
 import com.intellij.usageView.UsageInfo;
 import com.intellij.util.NotNullFunction;
-import com.intellij.java.language.util.VisibilityUtil;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
 
+import javax.annotation.Nonnull;
 import java.util.*;
 
 /**
  * @author Danila Ponomarenko
  */
-public class ParameterCanBeLocalInspection extends BaseJavaLocalInspectionTool
-{
+public class ParameterCanBeLocalInspection extends BaseJavaLocalInspectionTool {
 
-  @NonNls public static final String SHORT_NAME = "ParameterCanBeLocal";
+  @NonNls
+  public static final String SHORT_NAME = "ParameterCanBeLocal";
 
   @Override
   @Nonnull
@@ -94,12 +98,12 @@ public class ParameterCanBeLocalInspection extends BaseJavaLocalInspectionTool
                                                  @Nonnull PsiIdentifier identifier,
                                                  boolean isOnTheFly) {
     return manager.createProblemDescriptor(
-      identifier,
-      InspectionsBundle.message("inspection.parameter.can.be.local.problem.descriptor"),
-      true,
-      ProblemHighlightType.LIKE_UNUSED_SYMBOL,
-      isOnTheFly,
-      new ConvertParameterToLocalQuickFix()
+        identifier,
+        InspectionsBundle.message("inspection.parameter.can.be.local.problem.descriptor"),
+        true,
+        ProblemHighlightType.LIKE_UNUSED_SYMBOL,
+        isOnTheFly,
+        new ConvertParameterToLocalQuickFix()
     );
   }
 
@@ -113,7 +117,7 @@ public class ParameterCanBeLocalInspection extends BaseJavaLocalInspectionTool
     for (final PsiReferenceExpression readBeforeWrite : ControlFlowUtil.getReadBeforeWrite(controlFlow)) {
       final PsiElement resolved = readBeforeWrite.resolve();
       if (resolved instanceof PsiParameter) {
-        result.remove((PsiParameter)resolved);
+        result.remove((PsiParameter) resolved);
       }
     }
 
@@ -140,9 +144,8 @@ public class ParameterCanBeLocalInspection extends BaseJavaLocalInspectionTool
   private static ControlFlow getControlFlow(final PsiElement context) {
     try {
       return ControlFlowFactory.getInstance(context.getProject())
-        .getControlFlow(context, LocalsOrMyInstanceFieldsControlFlowPolicy.getInstance());
-    }
-    catch (AnalysisCanceledException e) {
+          .getControlFlow(context, LocalsOrMyInstanceFieldsControlFlowPolicy.getInstance());
+    } catch (AnalysisCanceledException e) {
       return null;
     }
   }
@@ -150,19 +153,19 @@ public class ParameterCanBeLocalInspection extends BaseJavaLocalInspectionTool
   public static class ConvertParameterToLocalQuickFix extends BaseConvertToLocalQuickFix<PsiParameter> {
     @Override
     protected PsiParameter getVariable(@Nonnull ProblemDescriptor descriptor) {
-      return (PsiParameter)descriptor.getPsiElement().getParent();
+      return (PsiParameter) descriptor.getPsiElement().getParent();
     }
 
     @Override
     protected PsiElement applyChanges(@Nonnull final Project project,
-                                       @Nonnull final String localName,
-                                       @javax.annotation.Nullable final PsiExpression initializer,
-                                       @Nonnull final PsiParameter parameter,
-                                       @Nonnull final Collection<PsiReference> references,
-                                       @Nonnull final NotNullFunction<PsiDeclarationStatement, PsiElement> action) {
+                                      @Nonnull final String localName,
+                                      @javax.annotation.Nullable final PsiExpression initializer,
+                                      @Nonnull final PsiParameter parameter,
+                                      @Nonnull final Collection<PsiReference> references,
+                                      @Nonnull final NotNullFunction<PsiDeclarationStatement, PsiElement> action) {
       final PsiElement scope = parameter.getDeclarationScope();
       if (scope instanceof PsiMethod) {
-        final PsiMethod method = (PsiMethod)scope;
+        final PsiMethod method = (PsiMethod) scope;
         final PsiParameter[] parameters = method.getParameterList().getParameters();
 
         final List<ParameterInfoImpl> info = new ArrayList<ParameterInfoImpl>();
@@ -174,7 +177,7 @@ public class ParameterCanBeLocalInspection extends BaseJavaLocalInspectionTool
         final ParameterInfoImpl[] newParams = info.toArray(new ParameterInfoImpl[info.size()]);
         final String visibilityModifier = VisibilityUtil.getVisibilityModifier(method.getModifierList());
         final ChangeSignatureProcessor cp = new ChangeSignatureProcessor(project, method, false, visibilityModifier,
-                                                                         method.getName(), method.getReturnType(), newParams) {
+            method.getName(), method.getReturnType(), newParams) {
           @Override
           protected void performRefactoring(UsageInfo[] usages) {
             final PsiElementFactory elementFactory = JavaPsiFacade.getElementFactory(project);

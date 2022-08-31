@@ -21,7 +21,7 @@ import com.intellij.java.language.projectRoots.roots.ExternalLibraryDescriptor;
 import com.intellij.openapi.application.WriteAction;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.projectRoots.ex.JavaSdkUtil;
+import com.intellij.java.language.impl.projectRoots.ex.JavaSdkUtil;
 import com.intellij.openapi.roots.*;
 import com.intellij.openapi.roots.libraries.Library;
 import com.intellij.openapi.roots.libraries.LibraryTablesRegistrar;

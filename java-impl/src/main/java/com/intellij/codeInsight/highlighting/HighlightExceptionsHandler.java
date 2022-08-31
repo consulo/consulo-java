@@ -16,7 +16,7 @@
 package com.intellij.codeInsight.highlighting;
 
 import com.intellij.codeInsight.CodeInsightBundle;
-import com.intellij.codeInsight.ExceptionUtil;
+import com.intellij.java.language.impl.codeInsight.ExceptionUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.lang.LangBundle;
 import com.intellij.openapi.editor.Editor;

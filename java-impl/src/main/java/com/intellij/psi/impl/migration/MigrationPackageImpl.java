@@ -19,7 +19,7 @@ import javax.annotation.Nonnull;
 
 import consulo.java.language.module.extension.JavaModuleExtension;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.impl.file.PsiPackageImpl;
+import com.intellij.java.language.impl.psi.impl.file.PsiPackageImpl;
 import consulo.psi.PsiPackageManager;
 
 /**

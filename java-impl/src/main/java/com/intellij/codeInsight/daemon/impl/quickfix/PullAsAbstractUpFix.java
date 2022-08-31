@@ -24,7 +24,7 @@ import com.intellij.codeInsight.daemon.QuickFixActionRegistrar;
 import com.intellij.codeInsight.intention.impl.RunRefactoringAction;
 import com.intellij.codeInsight.navigation.NavigationUtil;
 import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement;
-import com.intellij.ide.util.PsiClassListCellRenderer;
+import com.intellij.java.language.impl.codeInsight.PsiClassListCellRenderer;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.java.language.psi.PsiAnonymousClass;

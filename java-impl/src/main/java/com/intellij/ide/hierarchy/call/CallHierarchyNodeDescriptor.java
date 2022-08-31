@@ -47,7 +47,7 @@ import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.psi.PsiReference;
 import com.intellij.java.language.psi.PsiSubstitutor;
 import com.intellij.psi.SyntheticElement;
-import com.intellij.psi.presentation.java.ClassPresentationUtil;
+import com.intellij.java.language.impl.psi.presentation.java.ClassPresentationUtil;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
 import com.intellij.psi.util.PsiFormatUtilBase;
 import com.intellij.psi.util.PsiTreeUtil;

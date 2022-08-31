@@ -17,7 +17,7 @@ package com.intellij.refactoring.changeSignature.inCallers;
 
 import java.util.Set;
 
-import com.intellij.ide.highlighter.JavaFileType;
+import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.openapi.project.Project;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.refactoring.changeSignature.CallerChooserBase;

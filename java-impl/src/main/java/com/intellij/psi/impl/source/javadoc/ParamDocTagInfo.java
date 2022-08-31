@@ -15,7 +15,8 @@
  */
 package com.intellij.psi.impl.source.javadoc;
 
-import com.intellij.codeInsight.daemon.JavaErrorBundle;
+import com.intellij.java.language.impl.codeInsight.daemon.JavaErrorBundle;
+import com.intellij.java.language.impl.psi.impl.source.javadoc.PsiDocParamRef;
 import com.intellij.lang.ASTNode;
 import com.intellij.java.language.psi.JavaDocTokenType;
 import com.intellij.java.language.psi.PsiClass;

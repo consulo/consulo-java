@@ -6,7 +6,7 @@ import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
-import com.intellij.psi.impl.PsiImplUtil;
+import com.intellij.java.language.impl.psi.impl.PsiImplUtil;
 import com.intellij.psi.search.LocalSearchScope;
 import com.intellij.psi.search.searches.ReferencesSearch;
 import com.intellij.psi.util.PsiTreeUtil;

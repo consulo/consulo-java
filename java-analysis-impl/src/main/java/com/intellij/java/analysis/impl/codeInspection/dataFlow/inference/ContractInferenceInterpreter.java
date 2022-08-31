@@ -7,7 +7,7 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.StandardMethodCon
 import com.intellij.lang.LighterAST;
 import com.intellij.lang.LighterASTNode;
 import com.intellij.java.language.psi.JavaTokenType;
-import com.intellij.psi.impl.source.tree.ElementType;
+import com.intellij.java.language.impl.psi.impl.source.tree.ElementType;
 import com.intellij.psi.impl.source.tree.RecursiveLighterASTNodeWalkingVisitor;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
@@ -22,8 +22,8 @@ import java.util.List;
 
 import static com.intellij.java.analysis.impl.codeInspection.dataFlow.ContractReturnValue.*;
 import static com.intellij.java.analysis.impl.codeInspection.dataFlow.StandardMethodContract.ValueConstraint.*;
-import static com.intellij.psi.impl.source.JavaLightTreeUtil.*;
-import static com.intellij.psi.impl.source.tree.JavaElementType.*;
+import static com.intellij.java.language.impl.psi.impl.source.JavaLightTreeUtil.*;
+import static com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType.*;
 import static com.intellij.psi.impl.source.tree.LightTreeUtil.firstChildOfType;
 import static com.intellij.psi.impl.source.tree.LightTreeUtil.getChildrenOfType;
 import static java.util.Collections.emptyList;

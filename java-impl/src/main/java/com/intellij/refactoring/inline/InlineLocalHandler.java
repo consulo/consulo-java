@@ -22,7 +22,7 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.codeInsight.ExceptionUtil;
+import com.intellij.java.language.impl.codeInsight.ExceptionUtil;
 import com.intellij.java.language.psi.*;
 import consulo.codeInsight.TargetElementUtil;
 import com.intellij.codeInsight.highlighting.HighlightManager;

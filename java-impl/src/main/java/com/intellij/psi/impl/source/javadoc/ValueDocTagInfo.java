@@ -15,12 +15,12 @@
  */
 package com.intellij.psi.impl.source.javadoc;
 
-import com.intellij.codeInsight.daemon.JavaErrorBundle;
+import com.intellij.java.language.impl.codeInsight.daemon.JavaErrorBundle;
 import com.intellij.psi.PsiElement;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.psi.PsiReference;
-import com.intellij.psi.impl.JavaConstantExpressionEvaluator;
+import com.intellij.java.language.impl.psi.impl.JavaConstantExpressionEvaluator;
 import com.intellij.java.language.psi.javadoc.JavadocTagInfo;
 import com.intellij.java.language.psi.javadoc.PsiDocTagValue;
 import com.intellij.java.language.psi.util.PsiUtil;

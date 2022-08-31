@@ -15,7 +15,7 @@
  */
 package com.intellij.refactoring.introduceField;
 
-import com.intellij.codeInsight.ExceptionUtil;
+import com.intellij.java.language.impl.codeInsight.ExceptionUtil;
 import com.intellij.codeInsight.highlighting.HighlightManager;
 import com.intellij.java.language.psi.*;
 import com.intellij.openapi.actionSystem.DataContext;

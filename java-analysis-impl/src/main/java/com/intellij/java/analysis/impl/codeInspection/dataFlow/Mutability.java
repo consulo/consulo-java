@@ -13,7 +13,7 @@ import com.intellij.java.language.psi.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.ModificationTracker;
 import com.intellij.psi.impl.light.LightElement;
-import com.intellij.psi.impl.source.PsiMethodImpl;
+import com.intellij.java.language.impl.psi.impl.source.PsiMethodImpl;
 import com.intellij.psi.util.*;
 import com.intellij.testFramework.LightVirtualFile;
 import com.intellij.util.ObjectUtils;

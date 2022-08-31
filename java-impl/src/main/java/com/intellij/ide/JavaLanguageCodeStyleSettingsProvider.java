@@ -28,7 +28,7 @@ import com.intellij.application.options.CodeStyleBean;
 import com.intellij.application.options.IndentOptionsEditor;
 import com.intellij.application.options.JavaCodeStyleMainPanel;
 import com.intellij.application.options.JavaIndentOptionsEditor;
-import com.intellij.ide.highlighter.JavaFileType;
+import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.lang.Language;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.openapi.application.ApplicationBundle;

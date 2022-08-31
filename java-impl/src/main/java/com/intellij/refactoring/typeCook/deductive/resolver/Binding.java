@@ -16,7 +16,7 @@
 package com.intellij.refactoring.typeCook.deductive.resolver;
 
 import com.intellij.java.language.psi.PsiType;
-import com.intellij.psi.PsiTypeVariable;
+import com.intellij.java.language.impl.psi.PsiTypeVariable;
 
 import java.util.HashSet;
 

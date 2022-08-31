@@ -24,7 +24,7 @@
  */
 package com.intellij.refactoring.introduceParameter;
 
-import com.intellij.codeInsight.ChangeContextUtil;
+import com.intellij.java.language.impl.codeInsight.ChangeContextUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.lang.findUsages.DescriptiveNameUtil;
 import com.intellij.openapi.project.Project;

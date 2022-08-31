@@ -15,8 +15,8 @@
  */
 package com.intellij.psi;
 
-import com.intellij.core.CoreJavaFileManager;
-import com.intellij.ide.highlighter.JavaFileType;
+import com.intellij.java.language.impl.core.CoreJavaFileManager;
+import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.search.GlobalSearchScope;

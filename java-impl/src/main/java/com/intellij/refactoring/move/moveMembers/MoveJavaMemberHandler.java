@@ -23,12 +23,12 @@ import java.util.Set;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import com.intellij.codeInsight.ChangeContextUtil;
+import com.intellij.java.language.impl.codeInsight.ChangeContextUtil;
 import com.intellij.codeInsight.highlighting.ReadWriteAccessDetector;
 import com.intellij.java.language.psi.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
-import com.intellij.psi.impl.source.resolve.JavaResolveUtil;
+import com.intellij.java.language.impl.psi.impl.source.resolve.JavaResolveUtil;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.LocalSearchScope;
 import com.intellij.psi.search.searches.ReferencesSearch;

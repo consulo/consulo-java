@@ -32,7 +32,7 @@ import com.intellij.openapi.options.SettingsEditorGroup;
 import com.intellij.openapi.project.DumbService;
 import com.intellij.openapi.project.Project;
 import com.intellij.java.language.projectRoots.JavaSdkVersion;
-import com.intellij.openapi.projectRoots.ex.JavaSdkUtil;
+import com.intellij.java.language.impl.projectRoots.ex.JavaSdkUtil;
 import com.intellij.openapi.util.DefaultJDOMExternalizer;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.PsiElement;

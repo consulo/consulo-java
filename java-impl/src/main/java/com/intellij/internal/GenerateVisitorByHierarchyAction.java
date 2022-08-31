@@ -22,12 +22,12 @@ package com.intellij.internal;
 
 import com.intellij.codeInsight.editorActions.SelectWordUtil;
 import com.intellij.codeInsight.generation.GenerateMembersUtil;
-import com.intellij.codeInsight.generation.GenerationInfo;
+import com.intellij.java.language.impl.codeInsight.generation.GenerationInfo;
 import com.intellij.codeInsight.generation.PsiGenerationInfo;
 import com.intellij.ide.IdeView;
-import com.intellij.ide.highlighter.JavaFileType;
-import com.intellij.ide.util.PackageChooserDialog;
-import com.intellij.ide.util.PackageUtil;
+import com.intellij.java.language.impl.JavaFileType;
+import com.intellij.java.language.impl.codeInsight.PackageChooserDialog;
+import com.intellij.java.language.impl.codeInsight.PackageUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;

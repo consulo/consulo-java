@@ -15,6 +15,7 @@
  */
 package com.intellij.codeInsight.generation;
 
+import com.intellij.java.language.impl.codeInsight.generation.OverrideImplementExploreUtil;
 import jakarta.inject.Singleton;
 
 import com.intellij.java.language.codeInsight.MemberImplementorExplorer;

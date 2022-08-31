@@ -31,7 +31,7 @@ import com.intellij.openapi.fileEditor.OpenFileDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
-import com.intellij.psi.impl.FindSuperElementsHelper;
+import com.intellij.java.language.impl.psi.impl.FindSuperElementsHelper;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 

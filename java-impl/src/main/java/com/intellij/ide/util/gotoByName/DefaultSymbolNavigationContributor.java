@@ -21,7 +21,7 @@ import com.intellij.navigation.ChooseByNameContributorEx;
 import com.intellij.navigation.NavigationItem;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.psi.*;
-import com.intellij.psi.impl.PsiSuperMethodImplUtil;
+import com.intellij.java.language.impl.psi.impl.PsiSuperMethodImplUtil;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.java.language.psi.search.PsiShortNamesCache;
 import com.intellij.java.language.psi.util.PsiUtil;

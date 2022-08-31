@@ -20,7 +20,7 @@ import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.psi.TokenType;
 import com.intellij.psi.impl.cache.impl.BaseFilterLexer;
 import com.intellij.psi.impl.cache.impl.OccurrenceConsumer;
-import com.intellij.psi.impl.source.tree.ElementType;
+import com.intellij.java.language.impl.psi.impl.source.tree.ElementType;
 import com.intellij.psi.search.UsageSearchContext;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;

@@ -17,6 +17,7 @@ package com.intellij.psi.impl.source.resolve;
 
 import com.intellij.codeInsight.ExpectedTypeInfo;
 import com.intellij.codeInsight.ExpectedTypesProvider;
+import com.intellij.java.language.impl.psi.impl.source.resolve.ProcessCandidateParameterTypeInferencePolicy;
 import com.intellij.openapi.util.Pair;
 import com.intellij.java.language.psi.ConstraintType;
 import com.intellij.java.language.psi.PsiCallExpression;

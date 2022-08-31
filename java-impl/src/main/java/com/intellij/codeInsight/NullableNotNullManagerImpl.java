@@ -4,6 +4,7 @@ package com.intellij.codeInsight;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.HardcodedContracts;
 import com.intellij.java.indexing.impl.stubs.index.JavaAnnotationIndex;
 import com.intellij.java.language.codeInsight.*;
+import com.intellij.java.language.impl.codeInsight.MetaAnnotationUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.State;

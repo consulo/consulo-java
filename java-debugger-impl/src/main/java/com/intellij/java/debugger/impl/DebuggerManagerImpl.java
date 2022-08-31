@@ -50,7 +50,7 @@ import com.intellij.java.language.projectRoots.JavaSdk;
 import com.intellij.java.language.projectRoots.JavaSdkVersion;
 import com.intellij.openapi.projectRoots.JdkUtil;
 import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.projectRoots.ex.JavaSdkUtil;
+import com.intellij.java.language.impl.projectRoots.ex.JavaSdkUtil;
 import com.intellij.openapi.startup.StartupManager;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.util.WriteExternalException;

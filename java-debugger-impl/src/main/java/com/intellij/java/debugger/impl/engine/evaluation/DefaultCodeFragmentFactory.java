@@ -30,7 +30,7 @@ import com.intellij.java.debugger.impl.engine.evaluation.expression.EvaluatorBui
 import com.intellij.java.debugger.impl.DebuggerContextImpl;
 import com.intellij.java.debugger.impl.DebuggerSession;
 import com.intellij.java.debugger.impl.ui.DebuggerExpressionComboBox;
-import com.intellij.ide.highlighter.JavaFileType;
+import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.java.debugger.engine.evaluation.TextWithImports;
 import com.intellij.openapi.fileTypes.LanguageFileType;
 import com.intellij.openapi.progress.ProgressManager;

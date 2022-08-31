@@ -21,8 +21,8 @@ import java.util.Set;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.codeInsight.ChangeContextUtil;
-import com.intellij.ide.highlighter.JavaFileType;
+import com.intellij.java.language.impl.codeInsight.ChangeContextUtil;
+import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.java.language.psi.*;
 import consulo.logging.Logger;
 import com.intellij.psi.*;

@@ -15,7 +15,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Pair;
 import com.intellij.patterns.ElementPattern;
 import com.intellij.psi.*;
-import com.intellij.psi.impl.source.PsiFieldImpl;
+import com.intellij.java.language.impl.psi.impl.source.PsiFieldImpl;
 import com.intellij.psi.util.*;
 import com.intellij.util.containers.FList;
 import com.intellij.util.containers.FactoryMap;

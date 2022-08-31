@@ -10,7 +10,7 @@ import com.intellij.openapi.compiler.CompileContext;
 import com.intellij.java.language.projectRoots.JavaSdk;
 import com.intellij.java.language.projectRoots.JavaSdkVersion;
 import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.projectRoots.ex.JavaSdkUtil;
+import com.intellij.java.language.impl.projectRoots.ex.JavaSdkUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.java.compiler.JavaCompilerBundle;

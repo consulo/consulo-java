@@ -19,7 +19,7 @@ import com.intellij.java.language.psi.codeStyle.JavaCodeStyleSettingsFacade;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
-import com.intellij.ide.highlighter.JavaFileType;
+import com.intellij.java.language.impl.JavaFileType;
 
 /**
  * @author yole

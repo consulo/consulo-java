@@ -15,6 +15,7 @@
  */
 package com.intellij.psi.impl.file;
 
+import com.intellij.java.language.impl.psi.impl.file.PsiPackageImplementationHelper;
 import jakarta.inject.Singleton;
 
 import com.intellij.ide.projectView.ProjectView;
@@ -29,7 +30,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowId;
 import com.intellij.openapi.wm.ToolWindowManager;
-import com.intellij.psi.NonClasspathClassFinder;
+import com.intellij.java.language.impl.psi.NonClasspathClassFinder;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiFile;

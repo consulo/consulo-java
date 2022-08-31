@@ -1,6 +1,6 @@
 package com.intellij.codeInsight.completion
 import com.intellij.JavaTestUtil
-import com.intellij.ide.highlighter.JavaFileType
+import com.intellij.java.language.impl.JavaFileType
 import com.intellij.psi.codeStyle.CodeStyleSettings
 import com.intellij.psi.codeStyle.CodeStyleSettingsManager
 

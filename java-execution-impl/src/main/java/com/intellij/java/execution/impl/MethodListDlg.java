@@ -17,13 +17,13 @@
 package com.intellij.java.execution.impl;
 
 import com.intellij.execution.ExecutionBundle;
-import com.intellij.ide.structureView.impl.StructureNodeRenderer;
-import com.intellij.openapi.ui.DialogWrapper;
-import com.intellij.openapi.util.Condition;
+import com.intellij.java.language.impl.codeInsight.StructureNodeRenderer;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiSubstitutor;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
+import com.intellij.openapi.ui.DialogWrapper;
+import com.intellij.openapi.util.Condition;
 import com.intellij.ui.*;
 import com.intellij.ui.components.JBList;
 

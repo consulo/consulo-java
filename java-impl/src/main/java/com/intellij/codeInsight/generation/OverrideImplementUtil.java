@@ -27,6 +27,8 @@ import javax.annotation.Nonnull;
 import javax.swing.AbstractAction;
 import javax.swing.JComponent;
 
+import com.intellij.java.language.impl.codeInsight.generation.GenerationInfo;
+import com.intellij.java.language.impl.codeInsight.generation.OverrideImplementExploreUtil;
 import com.intellij.java.language.psi.*;
 import consulo.logging.Logger;
 import org.jetbrains.annotations.NonNls;

@@ -15,12 +15,12 @@
  */
 package com.intellij.spi.psi;
 
-import java.util.List;
+import com.intellij.extapi.psi.ASTWrapperPsiElement;
+import com.intellij.java.language.impl.spi.parsing.SPIElementTypes;
+import com.intellij.lang.ASTNode;
 
 import javax.annotation.Nonnull;
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
-import com.intellij.lang.ASTNode;
-import com.intellij.spi.parsing.SPIElementTypes;
+import java.util.List;
 
 /**
  * User: anna

@@ -16,12 +16,12 @@
 package com.intellij.ide.util.projectWizard.importSources;
 
 import javax.annotation.Nullable;
-import com.intellij.lang.java.lexer.JavaLexer;
+import com.intellij.java.language.impl.lexer.JavaLexer;
 import com.intellij.lexer.Lexer;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.psi.JavaTokenType;
-import com.intellij.psi.impl.source.tree.ElementType;
+import com.intellij.java.language.impl.psi.impl.source.tree.ElementType;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
 

@@ -21,7 +21,7 @@ import com.intellij.patterns.ElementPattern;
 import com.intellij.psi.*;
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
 import com.intellij.psi.impl.source.PostprocessReformattingAspect;
-import com.intellij.psi.impl.source.tree.java.PsiEmptyExpressionImpl;
+import com.intellij.java.language.impl.psi.impl.source.tree.java.PsiEmptyExpressionImpl;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;

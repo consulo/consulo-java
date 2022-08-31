@@ -38,7 +38,7 @@ import javax.annotation.Nonnull;
 
 import java.util.List;
 
-import static com.intellij.psi.util.ImportsUtil.*;
+import static com.intellij.java.language.impl.psi.util.ImportsUtil.*;
 
 public class ExpandStaticImportAction extends PsiElementBaseIntentionAction {
   private static final Logger LOG = Logger.getInstance(ExpandStaticImportAction.class);

@@ -9,7 +9,7 @@ import javax.annotation.Nullable;
 import com.intellij.java.debugger.engine.evaluation.CodeFragmentFactory;
 import com.intellij.java.debugger.engine.evaluation.TextWithImports;
 import com.intellij.java.debugger.impl.engine.evaluation.TextWithImportsImpl;
-import com.intellij.ide.highlighter.JavaFileType;
+import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.lang.Language;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.fileTypes.FileType;

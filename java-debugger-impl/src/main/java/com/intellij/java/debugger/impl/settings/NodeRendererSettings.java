@@ -15,7 +15,7 @@
  */
 package com.intellij.java.debugger.impl.settings;
 
-import com.intellij.ide.highlighter.JavaFileType;
+import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.DebuggerContext;
 import com.intellij.java.debugger.engine.DebugProcess;

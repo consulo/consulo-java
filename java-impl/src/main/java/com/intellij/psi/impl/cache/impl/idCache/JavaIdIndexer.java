@@ -15,7 +15,7 @@
  */
 package com.intellij.psi.impl.cache.impl.idCache;
 
-import com.intellij.lang.java.lexer.JavaLexer;
+import com.intellij.java.language.impl.lexer.JavaLexer;
 import com.intellij.lexer.Lexer;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.psi.impl.cache.impl.OccurrenceConsumer;

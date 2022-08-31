@@ -25,14 +25,14 @@
 package com.intellij.refactoring.introduceField;
 
 import com.intellij.java.language.codeInsight.AnnotationUtil;
-import com.intellij.codeInsight.ChangeContextUtil;
+import com.intellij.java.language.impl.codeInsight.ChangeContextUtil;
 import com.intellij.java.language.codeInsight.TestFrameworks;
 import com.intellij.codeInsight.highlighting.HighlightManager;
 import com.intellij.codeInsight.lookup.LookupManager;
 import com.intellij.codeInsight.navigation.NavigationUtil;
 import com.intellij.ide.util.DirectoryChooserUtil;
-import com.intellij.ide.util.PackageUtil;
-import com.intellij.ide.util.PsiClassListCellRenderer;
+import com.intellij.java.language.impl.codeInsight.PackageUtil;
+import com.intellij.java.language.impl.codeInsight.PsiClassListCellRenderer;
 import com.intellij.java.language.psi.*;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.application.Result;
@@ -62,7 +62,7 @@ import com.intellij.refactoring.introduceVariable.IntroduceVariableBase;
 import com.intellij.refactoring.rename.RenameJavaVariableProcessor;
 import com.intellij.refactoring.util.CommonRefactoringUtil;
 import com.intellij.refactoring.util.EnumConstantsUtil;
-import com.intellij.refactoring.util.RefactoringChangeUtil;
+import com.intellij.java.language.impl.refactoring.util.RefactoringChangeUtil;
 import com.intellij.refactoring.util.RefactoringUtil;
 import com.intellij.refactoring.util.occurrences.OccurrenceManager;
 import com.intellij.util.IncorrectOperationException;

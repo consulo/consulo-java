@@ -6,8 +6,8 @@ import com.intellij.lang.LighterAST;
 import com.intellij.lang.LighterASTNode;
 import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.psi.TokenType;
-import com.intellij.psi.impl.source.FileLocalResolver;
-import com.intellij.psi.impl.source.tree.ElementType;
+import com.intellij.java.language.impl.psi.impl.source.FileLocalResolver;
+import com.intellij.java.language.impl.psi.impl.source.tree.ElementType;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
 import com.intellij.util.containers.ContainerUtil;
@@ -16,8 +16,8 @@ import javax.annotation.Nullable;
 
 import java.util.*;
 
-import static com.intellij.psi.impl.source.JavaLightTreeUtil.*;
-import static com.intellij.psi.impl.source.tree.JavaElementType.*;
+import static com.intellij.java.language.impl.psi.impl.source.JavaLightTreeUtil.*;
+import static com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType.*;
 import static com.intellij.psi.impl.source.tree.LightTreeUtil.firstChildOfType;
 import static com.intellij.psi.impl.source.tree.LightTreeUtil.getChildrenOfType;
 

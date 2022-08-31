@@ -2,7 +2,6 @@
 
 package com.intellij.java.analysis.impl.codeInspection.dataFlow;
 
-import com.intellij.codeInsight.*;
 import com.intellij.codeInsight.intention.impl.BaseIntentionAction;
 import com.intellij.codeInspection.*;
 import com.intellij.java.analysis.JavaAnalysisBundle;
@@ -19,6 +18,8 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.types.DfTypes;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaValue;
 import com.intellij.java.analysis.impl.codeInspection.nullable.NullableStuffInspectionBase;
 import com.intellij.java.language.codeInsight.*;
+import com.intellij.java.language.impl.codeInsight.ExpressionUtil;
+import com.intellij.java.language.impl.psi.util.JavaPsiPatternUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiExpressionTrimRenderer;
 import com.intellij.java.language.psi.util.PsiTypesUtil;
@@ -33,7 +34,7 @@ import com.intellij.openapi.util.WriteExternalException;
 import com.intellij.openapi.util.registry.Registry;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
-import com.intellij.psi.impl.PsiImplUtil;
+import com.intellij.java.language.impl.psi.impl.PsiImplUtil;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.*;
 import com.intellij.util.*;

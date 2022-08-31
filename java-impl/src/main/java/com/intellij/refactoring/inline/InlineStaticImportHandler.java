@@ -26,8 +26,8 @@ import com.intellij.psi.util.PsiTreeUtil;
 
 import java.util.List;
 
-import static com.intellij.psi.util.ImportsUtil.collectReferencesThrough;
-import static com.intellij.psi.util.ImportsUtil.replaceAllAndDeleteImport;
+import static com.intellij.java.language.impl.psi.util.ImportsUtil.collectReferencesThrough;
+import static com.intellij.java.language.impl.psi.util.ImportsUtil.replaceAllAndDeleteImport;
 
 /**
  * User: anna

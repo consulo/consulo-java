@@ -17,7 +17,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
 import com.intellij.java.language.psi.PsiMember;
-import com.intellij.psi.impl.compiled.ClsClassImpl;
+import com.intellij.java.language.impl.psi.impl.compiled.ClsClassImpl;
 import com.intellij.psi.util.PsiTreeUtil;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.fileEditor.impl.EditorWithProviderComposite;

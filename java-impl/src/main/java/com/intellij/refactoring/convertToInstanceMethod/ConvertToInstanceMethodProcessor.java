@@ -15,7 +15,7 @@
  */
 package com.intellij.refactoring.convertToInstanceMethod;
 
-import com.intellij.codeInsight.ChangeContextUtil;
+import com.intellij.java.language.impl.codeInsight.ChangeContextUtil;
 import com.intellij.history.LocalHistory;
 import com.intellij.history.LocalHistoryAction;
 import com.intellij.java.language.psi.*;
@@ -24,7 +24,7 @@ import com.intellij.openapi.project.Project;
 import consulo.util.dataholder.Key;
 import com.intellij.openapi.util.Ref;
 import com.intellij.psi.*;
-import com.intellij.psi.impl.source.javadoc.PsiDocParamRef;
+import com.intellij.java.language.impl.psi.impl.source.javadoc.PsiDocParamRef;
 import com.intellij.java.language.psi.javadoc.PsiDocTagValue;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.LocalSearchScope;

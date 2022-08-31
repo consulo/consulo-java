@@ -16,7 +16,7 @@
 package com.intellij.java.analysis.impl.codeInspection.deprecation;
 
 import com.intellij.java.language.codeInsight.AnnotationUtil;
-import com.intellij.codeInsight.daemon.JavaErrorBundle;
+import com.intellij.java.language.impl.codeInsight.daemon.JavaErrorBundle;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.HighlightMessageUtil;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.JavaHighlightUtil;
 import com.intellij.java.analysis.codeInspection.BaseJavaBatchLocalInspectionTool;

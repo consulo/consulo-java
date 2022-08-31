@@ -26,7 +26,7 @@ import com.intellij.java.language.util.TreeClassChooserFactory;
 import com.intellij.openapi.project.Project;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.presentation.java.ClassPresentationUtil;
+import com.intellij.java.language.impl.psi.presentation.java.ClassPresentationUtil;
 import com.intellij.psi.search.LocalSearchScope;
 import com.intellij.psi.search.SearchScope;
 import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;

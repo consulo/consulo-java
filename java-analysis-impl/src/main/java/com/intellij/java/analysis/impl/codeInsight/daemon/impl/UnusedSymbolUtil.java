@@ -30,15 +30,15 @@ import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
-import com.intellij.psi.impl.FindSuperElementsHelper;
-import com.intellij.psi.impl.source.PsiClassImpl;
+import com.intellij.java.language.impl.psi.impl.FindSuperElementsHelper;
+import com.intellij.java.language.impl.psi.impl.source.PsiClassImpl;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.PsiSearchHelper;
 import com.intellij.psi.search.SearchScope;
 import com.intellij.java.language.psi.util.PropertyUtil;
 import com.intellij.usageView.UsageInfo;
 import com.intellij.util.Processor;
-import consulo.java.psi.augment.JavaEnumAugmentProvider;
+import consulo.java.language.impl.psi.augment.JavaEnumAugmentProvider;
 import consulo.psi.PsiPackage;
 
 import javax.annotation.Nonnull;

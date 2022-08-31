@@ -20,7 +20,7 @@ import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.psi.impl.source.tree.java.ImportStatementElement;
+import com.intellij.java.language.impl.psi.impl.source.tree.java.ImportStatementElement;
 import com.intellij.usages.UsageToPsiElementProvider;
 
 /**

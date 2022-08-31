@@ -37,7 +37,7 @@ import com.intellij.java.language.psi.PsiParameter;
 import com.intellij.java.language.psi.PsiParameterList;
 import com.intellij.java.language.psi.PsiPrimitiveType;
 import com.intellij.java.language.psi.PsiType;
-import com.intellij.psi.impl.source.PsiExtensibleClass;
+import com.intellij.java.language.impl.psi.impl.source.PsiExtensibleClass;
 import com.intellij.java.language.psi.infos.CandidateInfo;
 import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
 import com.intellij.ui.SimpleColoredComponent;

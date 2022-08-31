@@ -19,7 +19,7 @@ import java.awt.event.ActionListener;
 import java.util.List;
 
 import javax.annotation.Nonnull;
-import com.intellij.ide.highlighter.JavaFileType;
+import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.ComponentWithBrowseButton;

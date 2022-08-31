@@ -16,20 +16,21 @@
 package com.intellij.java.analysis.impl.refactoring.util.duplicates;
 
 import com.intellij.codeInsight.PsiEquivalenceUtil;
+import com.intellij.java.language.impl.psi.controlFlow.*;
 import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
+import com.intellij.java.language.psi.util.InheritanceUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.TypeConversionUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.Ref;
 import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.*;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
 import com.intellij.psi.codeStyle.CodeStyleManager;
-import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
-import com.intellij.psi.controlFlow.*;
-import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.java.language.psi.util.TypeConversionUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.IncorrectOperationException;
 import consulo.logging.Logger;

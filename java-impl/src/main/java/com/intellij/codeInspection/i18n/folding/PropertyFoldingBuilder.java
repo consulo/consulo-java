@@ -40,7 +40,7 @@ import com.intellij.openapi.project.Project;
 import consulo.util.dataholder.Key;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
-import com.intellij.psi.impl.JavaConstantExpressionEvaluator;
+import com.intellij.java.language.impl.psi.impl.JavaConstantExpressionEvaluator;
 import com.intellij.psi.impl.source.SourceTreeToPsiMap;
 import com.intellij.psi.util.PsiModificationTracker;
 import com.intellij.util.ObjectUtil;

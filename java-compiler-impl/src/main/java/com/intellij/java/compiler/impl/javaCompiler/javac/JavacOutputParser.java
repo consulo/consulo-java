@@ -16,7 +16,7 @@
 package com.intellij.java.compiler.impl.javaCompiler.javac;
 
 import com.intellij.java.compiler.OutputParser;
-import com.intellij.ide.highlighter.JavaFileType;
+import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.compiler.CompilerBundle;
 import com.intellij.openapi.compiler.CompilerMessageCategory;

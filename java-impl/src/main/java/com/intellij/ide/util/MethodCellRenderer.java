@@ -15,6 +15,7 @@
  */
 package com.intellij.ide.util;
 
+import com.intellij.java.language.impl.codeInsight.PsiClassListCellRenderer;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.java.language.psi.PsiMethod;

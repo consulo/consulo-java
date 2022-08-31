@@ -27,7 +27,7 @@ import com.intellij.formatting.Indent;
 import com.intellij.formatting.Wrap;
 import com.intellij.formatting.WrapType;
 import com.intellij.formatting.alignment.AlignmentStrategy;
-import com.intellij.ide.highlighter.JavaFileType;
+import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.lang.ASTNode;
 import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings;

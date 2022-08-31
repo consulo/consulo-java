@@ -28,7 +28,7 @@ import java.util.Set;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import com.intellij.codeInsight.daemon.JavaErrorBundle;
+import com.intellij.java.language.impl.codeInsight.daemon.JavaErrorBundle;
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.HighlightUtil;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.JavaHighlightUtil;
@@ -52,7 +52,7 @@ import com.intellij.java.debugger.engine.evaluation.expression.Modifier;
 import com.intellij.java.language.psi.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
-import com.intellij.psi.impl.JavaConstantExpressionEvaluator;
+import com.intellij.java.language.impl.psi.impl.JavaConstantExpressionEvaluator;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiTypesUtil;

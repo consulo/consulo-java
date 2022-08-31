@@ -35,7 +35,7 @@ import com.intellij.openapi.editor.markup.GutterIconRenderer;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.psi.*;
-import com.intellij.psi.impl.source.PsiImmediateClassType;
+import com.intellij.java.language.impl.psi.impl.source.PsiImmediateClassType;
 import com.intellij.psi.search.PsiElementProcessor;
 import com.intellij.psi.search.PsiElementProcessorAdapter;
 import com.intellij.java.indexing.search.searches.AnnotatedMembersSearch;
@@ -46,7 +46,7 @@ import com.intellij.util.FilteredQuery;
 import com.intellij.util.Functions;
 import com.intellij.util.Query;
 import consulo.annotation.access.RequiredReadAction;
-import consulo.java.JavaIcons;
+import consulo.java.language.impl.JavaIcons;
 
 /**
  * @author VISTALL

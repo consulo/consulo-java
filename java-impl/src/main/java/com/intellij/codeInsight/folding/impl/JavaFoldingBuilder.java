@@ -22,6 +22,7 @@ import javax.annotation.Nonnull;
 import com.intellij.codeInsight.ExpectedTypeInfo;
 import com.intellij.codeInsight.ExpectedTypesProvider;
 import com.intellij.java.language.JavaLanguage;
+import com.intellij.java.language.impl.codeInsight.folding.impl.JavaFoldingBuilderBase;
 import com.intellij.openapi.editor.colors.EditorColorsManager;
 import com.intellij.openapi.editor.colors.EditorFontType;
 import com.intellij.openapi.project.Project;

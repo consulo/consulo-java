@@ -31,7 +31,7 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.packageDependencies.DependencyValidationManager;
 import com.intellij.packageDependencies.DependencyValidationManagerImpl;
 import com.intellij.psi.*;
-import com.intellij.psi.impl.source.tree.ElementType;
+import com.intellij.java.language.impl.psi.impl.source.tree.ElementType;
 import com.intellij.psi.impl.source.tree.TreeUtil;
 import com.intellij.psi.search.scope.packageSet.NamedScope;
 import com.intellij.psi.search.scope.packageSet.NamedScopesHolder;

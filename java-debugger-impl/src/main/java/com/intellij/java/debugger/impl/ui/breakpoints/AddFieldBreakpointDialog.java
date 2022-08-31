@@ -29,7 +29,7 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.event.DocumentEvent;
 
-import com.intellij.codeInsight.generation.PsiElementClassMember;
+import com.intellij.java.language.impl.codeInsight.generation.PsiElementClassMember;
 import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.ide.util.MemberChooser;
 import com.intellij.java.language.util.TreeClassChooser;

@@ -17,7 +17,7 @@ package com.siyeh.ipp.exceptions;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
-import com.intellij.psi.impl.PsiImplUtil;
+import com.intellij.java.language.impl.psi.impl.PsiImplUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.siyeh.ipp.base.Intention;
 import com.siyeh.ipp.base.PsiElementPredicate;

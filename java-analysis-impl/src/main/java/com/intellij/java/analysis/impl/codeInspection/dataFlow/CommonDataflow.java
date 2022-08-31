@@ -7,6 +7,7 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.types.*;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaTypeValue;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaValue;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaVariableValue;
+import com.intellij.java.language.impl.psi.impl.ConstantExpressionEvaluator;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.openapi.util.TextRange;
@@ -317,7 +318,7 @@ public final class CommonDataflow {
 
   /**
    * Returns long range set for expression or null if range is unknown.
-   * This method first tries to compute expression using {@link com.intellij.psi.impl.ConstantExpressionEvaluator}
+   * This method first tries to compute expression using {@link ConstantExpressionEvaluator}
    * and only then calls {@link #getDfType(PsiExpression)}.
    *
    * @param expression expression to get its range

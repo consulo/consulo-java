@@ -16,7 +16,7 @@
 package com.intellij.psi.formatter.java.wrap.impl;
 
 import static com.intellij.psi.formatter.java.JavaFormatterUtil.getWrapType;
-import static com.intellij.psi.impl.PsiImplUtil.isTypeAnnotation;
+import static com.intellij.java.language.impl.psi.impl.PsiImplUtil.isTypeAnnotation;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -33,9 +33,9 @@ import com.intellij.psi.formatter.java.AbstractJavaBlock;
 import com.intellij.psi.formatter.java.JavaFormatterUtil;
 import com.intellij.psi.formatter.java.wrap.JavaWrapManager;
 import com.intellij.psi.formatter.java.wrap.ReservedWrapsProvider;
-import com.intellij.psi.impl.source.tree.ChildRole;
+import com.intellij.java.language.impl.psi.impl.source.tree.ChildRole;
 import com.intellij.psi.impl.source.tree.CompositeElement;
-import com.intellij.psi.impl.source.tree.JavaElementType;
+import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ArrayUtil;

@@ -21,8 +21,8 @@ import com.intellij.java.language.psi.PsiCodeBlock;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.openapi.editor.Document;
 import com.intellij.psi.*;
-import com.intellij.psi.impl.java.stubs.PsiMethodStub;
-import com.intellij.psi.impl.source.PsiMethodImpl;
+import com.intellij.java.language.impl.psi.impl.java.stubs.PsiMethodStub;
+import com.intellij.java.language.impl.psi.impl.source.PsiMethodImpl;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.gist.GistManager;
 

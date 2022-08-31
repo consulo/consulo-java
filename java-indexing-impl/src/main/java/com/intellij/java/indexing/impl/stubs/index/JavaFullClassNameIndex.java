@@ -22,7 +22,7 @@ package com.intellij.java.indexing.impl.stubs.index;
 import com.intellij.java.indexing.impl.search.JavaSourceFilterScope;
 import com.intellij.openapi.project.Project;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.impl.java.stubs.index.JavaStubIndexKeys;
+import com.intellij.java.language.impl.psi.impl.java.stubs.index.JavaStubIndexKeys;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.stubs.IntStubIndexExtension;
 import com.intellij.psi.stubs.StubIndex;

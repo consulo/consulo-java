@@ -21,7 +21,7 @@ import java.util.Set;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import com.intellij.codeInsight.completion.proc.VariablesProcessor;
+import com.intellij.java.language.impl.codeInsight.completion.proc.VariablesProcessor;
 import com.intellij.codeInsight.template.ExpressionContext;
 import com.intellij.codeInsight.template.PsiElementResult;
 import com.intellij.codeInsight.template.PsiTypeResult;
@@ -30,7 +30,7 @@ import com.intellij.java.language.psi.*;
 import consulo.logging.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
-import com.intellij.psi.scope.util.PsiScopesUtil;
+import com.intellij.java.language.impl.psi.scope.util.PsiScopesUtil;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.util.IncorrectOperationException;

@@ -17,7 +17,7 @@ package com.intellij.testFramework;
 
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.java.language.LanguageLevel;
-import com.intellij.psi.impl.JavaPsiFacadeEx;
+import com.intellij.java.language.impl.psi.impl.JavaPsiFacadeEx;
 
 /**
  * A TestCase for single PsiFile being opened in Editor conversion. See configureXXX and checkResultXXX method docs.

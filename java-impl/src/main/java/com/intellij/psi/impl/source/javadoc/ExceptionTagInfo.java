@@ -16,7 +16,7 @@
 package com.intellij.psi.impl.source.javadoc;
 
 import org.jetbrains.annotations.NonNls;
-import com.intellij.codeInsight.daemon.JavaErrorBundle;
+import com.intellij.java.language.impl.codeInsight.daemon.JavaErrorBundle;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiClassType;

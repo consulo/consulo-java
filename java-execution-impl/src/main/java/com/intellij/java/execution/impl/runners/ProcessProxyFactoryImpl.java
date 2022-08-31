@@ -28,7 +28,7 @@ import com.intellij.java.execution.configurations.JavaCommandLine;
 import com.intellij.execution.configurations.ParametersList;
 import com.intellij.execution.process.ProcessHandler;
 import com.intellij.java.language.projectRoots.JavaSdkVersion;
-import com.intellij.openapi.projectRoots.ex.JavaSdkUtil;
+import com.intellij.java.language.impl.projectRoots.ex.JavaSdkUtil;
 import com.intellij.openapi.util.text.StringUtil;
 import consulo.java.execution.configurations.OwnJavaParameters;
 import consulo.java.language.module.util.JavaClassNames;

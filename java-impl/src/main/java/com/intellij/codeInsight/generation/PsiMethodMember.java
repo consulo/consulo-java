@@ -15,6 +15,7 @@
  */
 package com.intellij.codeInsight.generation;
 
+import com.intellij.java.language.impl.codeInsight.generation.PsiElementClassMember;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiSubstitutor;
 import com.intellij.java.language.psi.infos.CandidateInfo;
@@ -24,7 +25,7 @@ import com.intellij.psi.util.PsiFormatUtilBase;
 /**
  * @author peter
 */
-public class PsiMethodMember extends PsiElementClassMember<PsiMethod>{
+public class PsiMethodMember extends PsiElementClassMember<PsiMethod> {
   private static final int PARAM_OPTIONS = PsiFormatUtilBase.SHOW_NAME | PsiFormatUtilBase.SHOW_TYPE | PsiFormatUtilBase.TYPE_AFTER;
   private static final int METHOD_OPTIONS = PARAM_OPTIONS | PsiFormatUtilBase.SHOW_PARAMETERS;
 

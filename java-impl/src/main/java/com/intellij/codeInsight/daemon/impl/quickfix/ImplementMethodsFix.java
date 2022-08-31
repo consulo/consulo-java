@@ -21,7 +21,7 @@ import java.util.List;
 import javax.annotation.Nonnull;
 
 import com.intellij.codeInsight.FileModificationService;
-import com.intellij.codeInsight.generation.OverrideImplementExploreUtil;
+import com.intellij.java.language.impl.codeInsight.generation.OverrideImplementExploreUtil;
 import com.intellij.codeInsight.generation.OverrideImplementUtil;
 import com.intellij.codeInsight.generation.PsiMethodMember;
 import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement;

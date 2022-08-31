@@ -16,8 +16,8 @@
 package consulo.java.ide;
 
 import com.intellij.icons.AllIcons;
-import com.intellij.ide.highlighter.JavaClassFileType;
-import com.intellij.ide.highlighter.JavaFileType;
+import com.intellij.java.language.impl.JavaClassFileType;
+import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.java.language.psi.*;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.project.DumbService;
@@ -31,7 +31,7 @@ import consulo.annotation.access.RequiredReadAction;
 import consulo.ide.IconDescriptor;
 import consulo.ide.IconDescriptorUpdater;
 import consulo.ide.IconDescriptorUpdaters;
-import consulo.java.JavaIcons;
+import consulo.java.language.impl.JavaIcons;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.java.psi.impl.icon.JavaPsiImplIconGroup;
 import consulo.java.util.JavaProjectRootsUtil;

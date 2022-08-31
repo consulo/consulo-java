@@ -38,7 +38,7 @@ import consulo.java.language.module.util.JavaClassNames;
 import com.intellij.java.language.psi.PsiAnonymousClass;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.presentation.java.ClassPresentationUtil;
+import com.intellij.java.language.impl.psi.presentation.java.ClassPresentationUtil;
 
 public class TypeHierarchyBrowser extends TypeHierarchyBrowserBase
 {

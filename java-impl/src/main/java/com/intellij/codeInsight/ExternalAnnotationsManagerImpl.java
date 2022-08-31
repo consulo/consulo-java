@@ -22,6 +22,7 @@ import com.intellij.diagnostic.LogMessageEx;
 import com.intellij.icons.AllIcons;
 import com.intellij.ide.DataManager;
 import com.intellij.ide.highlighter.XmlFileType;
+import com.intellij.java.language.impl.codeInsight.ReadableExternalAnnotationsManager;
 import com.intellij.java.language.projectRoots.roots.AnnotationOrderRootType;
 import com.intellij.java.language.psi.PsiJavaFile;
 import com.intellij.java.language.psi.PsiModifierListOwner;

@@ -24,7 +24,7 @@ import com.intellij.psi.PsiManager;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.ui.EditorTextField;
 import com.intellij.ui.ReferenceEditorWithBrowseButton;
-import com.intellij.ui.JavaReferenceEditorUtil;
+import com.intellij.java.language.impl.ui.JavaReferenceEditorUtil;
 import com.intellij.util.Function;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.xml.AbstractConvertContext;

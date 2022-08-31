@@ -15,7 +15,7 @@
  */
 package com.intellij.java.analysis.impl.psi.impl.search;
 
-import com.intellij.ide.highlighter.JavaFileType;
+import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.lang.LighterAST;
 import com.intellij.lang.LighterASTNode;
 import com.intellij.openapi.application.ApplicationManager;
@@ -23,9 +23,9 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.java.language.psi.PsiKeyword;
-import com.intellij.psi.impl.java.stubs.JavaStubElementTypes;
-import com.intellij.psi.impl.source.JavaLightTreeUtil;
-import com.intellij.psi.impl.source.tree.ElementType;
+import com.intellij.java.language.impl.psi.impl.java.stubs.JavaStubElementTypes;
+import com.intellij.java.language.impl.psi.impl.source.JavaLightTreeUtil;
+import com.intellij.java.language.impl.psi.impl.source.tree.ElementType;
 import com.intellij.psi.impl.source.tree.LightTreeUtil;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
@@ -46,7 +46,7 @@ import java.io.DataOutput;
 import java.io.IOException;
 import java.util.*;
 
-import static com.intellij.psi.impl.source.tree.JavaElementType.*;
+import static com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType.*;
 
 public class JavaNullMethodArgumentIndex extends ScalarIndexExtension<JavaNullMethodArgumentIndex.MethodCallData> implements PsiDependentIndex
 {

@@ -25,7 +25,7 @@ import com.intellij.codeInsight.daemon.impl.quickfix.EmptyExpression;
 import com.intellij.codeInsight.generation.ClassMember;
 import com.intellij.codeInsight.generation.GenerateFieldOrPropertyHandler;
 import com.intellij.codeInsight.generation.GenerateMembersUtil;
-import com.intellij.codeInsight.generation.GenerationInfo;
+import com.intellij.java.language.impl.codeInsight.generation.GenerationInfo;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.codeInsight.template.*;
 import com.intellij.codeInspection.LocalQuickFix;

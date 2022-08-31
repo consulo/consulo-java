@@ -30,8 +30,8 @@ import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
 import com.intellij.psi.codeStyle.JavaCodeStyleSettings;
 import com.intellij.psi.formatter.FormatterUtil;
-import com.intellij.psi.impl.source.tree.ElementType;
-import com.intellij.psi.impl.source.tree.JavaElementType;
+import com.intellij.java.language.impl.psi.impl.source.tree.ElementType;
+import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
 import com.intellij.psi.tree.IElementType;
 
 public class ExtendsListBlock extends AbstractJavaBlock

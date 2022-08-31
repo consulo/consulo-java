@@ -15,9 +15,10 @@
  */
 package com.intellij.ide.structureView.impl;
 
+import com.intellij.java.language.impl.psi.scope.processor.ConflictFilterProcessor;
 import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
-import com.intellij.psi.impl.PsiImplUtil;
+import com.intellij.java.language.impl.psi.impl.PsiImplUtil;
 import com.intellij.psi.scope.BaseScopeProcessor;
 import com.intellij.java.language.psi.util.MethodSignature;
 import com.intellij.java.language.psi.util.PsiUtil;
@@ -28,7 +29,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @deprecated use conflict-filter processor with duplicates resolver {@link com.intellij.psi.scope.processor.ConflictFilterProcessor}
+ * @deprecated use conflict-filter processor with duplicates resolver {@link ConflictFilterProcessor}
  */
 public class AddAllMembersProcessor extends BaseScopeProcessor {
   private final Collection<PsiElement> myAllMembers;

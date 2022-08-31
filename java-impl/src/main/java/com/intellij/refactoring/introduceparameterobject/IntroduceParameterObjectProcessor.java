@@ -15,8 +15,8 @@
  */
 package com.intellij.refactoring.introduceparameterobject;
 
-import com.intellij.ide.highlighter.JavaFileType;
-import com.intellij.ide.util.PackageUtil;
+import com.intellij.java.language.impl.JavaFileType;
+import com.intellij.java.language.impl.codeInsight.PackageUtil;
 import com.intellij.java.analysis.impl.refactoring.util.VariableData;
 import com.intellij.java.language.psi.*;
 import com.intellij.openapi.module.Module;
@@ -27,7 +27,7 @@ import com.intellij.psi.*;
 import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
-import com.intellij.psi.impl.source.javadoc.PsiDocParamRef;
+import com.intellij.java.language.impl.psi.impl.source.javadoc.PsiDocParamRef;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.java.language.psi.javadoc.PsiDocTag;
 import com.intellij.psi.search.GlobalSearchScope;

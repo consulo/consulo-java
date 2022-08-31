@@ -12,7 +12,7 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import com.intellij.java.language.codeInsight.AnnotationUtil;
-import com.intellij.codeInsight.MetaAnnotationUtil;
+import com.intellij.java.language.impl.codeInsight.MetaAnnotationUtil;
 import com.intellij.java.language.codeInsight.TestFrameworks;
 import com.intellij.execution.CantRunException;
 import com.intellij.execution.ExecutionBundle;

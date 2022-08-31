@@ -28,7 +28,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.text.LiteralFormatUtil;
+import com.intellij.java.language.impl.util.text.LiteralFormatUtil;
 
 public class RemoveLiteralUnderscoresAction extends PsiElementBaseIntentionAction {
   @Override

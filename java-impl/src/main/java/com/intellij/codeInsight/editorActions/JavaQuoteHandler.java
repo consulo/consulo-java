@@ -20,7 +20,7 @@ import com.intellij.java.language.psi.PsiLiteralExpression;
 import com.intellij.java.language.psi.PsiReferenceExpression;
 import com.intellij.openapi.editor.highlighter.HighlighterIterator;
 import com.intellij.psi.*;
-import com.intellij.psi.impl.source.tree.ElementType;
+import com.intellij.java.language.impl.psi.impl.source.tree.ElementType;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
 import javax.annotation.Nonnull;

@@ -15,6 +15,8 @@
  */
 package com.intellij.refactoring.typeCook.deductive.resolver;
 
+import com.intellij.java.language.impl.psi.Bottom;
+import com.intellij.java.language.impl.psi.PsiTypeVariable;
 import com.intellij.java.language.psi.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Pair;

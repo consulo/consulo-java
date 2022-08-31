@@ -33,7 +33,7 @@ import com.intellij.openapi.util.Comparing;
 import com.intellij.psi.*;
 import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
-import com.intellij.psi.scope.processor.VariablesProcessor;
+import com.intellij.java.language.impl.psi.scope.processor.VariablesProcessor;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import com.intellij.refactoring.JavaRefactoringSettings;

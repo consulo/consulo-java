@@ -33,7 +33,7 @@ import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.psi.codeStyle.SuggestedNameInfo;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
 import com.intellij.java.language.psi.impl.source.resolve.DefaultParameterTypeInferencePolicy;
-import com.intellij.psi.impl.source.resolve.graphInference.FunctionalInterfaceParameterizationUtil;
+import com.intellij.java.language.impl.psi.impl.source.resolve.graphInference.FunctionalInterfaceParameterizationUtil;
 import com.intellij.java.language.psi.infos.MethodCandidateInfo;
 import com.intellij.java.language.psi.util.MethodSignature;
 import com.intellij.psi.util.PsiTreeUtil;

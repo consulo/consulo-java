@@ -30,7 +30,7 @@ import javax.annotation.Nullable;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import com.intellij.codeInsight.CodeInsightUtil;
 import com.intellij.codeInsight.FileModificationService;
-import com.intellij.codeInsight.generation.OverrideImplementExploreUtil;
+import com.intellij.java.language.impl.codeInsight.generation.OverrideImplementExploreUtil;
 import com.intellij.codeInsight.generation.OverrideImplementUtil;
 import com.intellij.codeInsight.generation.PsiMethodMember;
 import com.intellij.openapi.application.ApplicationManager;

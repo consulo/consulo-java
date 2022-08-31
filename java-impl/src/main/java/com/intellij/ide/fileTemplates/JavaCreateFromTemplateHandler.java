@@ -17,7 +17,7 @@ package com.intellij.ide.fileTemplates;
 
 import com.intellij.java.language.JavaCoreBundle;
 import com.intellij.ide.IdeBundle;
-import com.intellij.ide.highlighter.JavaFileType;
+import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.java.language.psi.JavaDirectoryService;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiJavaFile;

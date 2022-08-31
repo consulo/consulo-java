@@ -18,7 +18,7 @@ package com.intellij.java.debugger.impl.ui.impl.watch;
 import java.util.Set;
 
 import javax.annotation.Nullable;
-import com.intellij.codeInsight.ChangeContextUtil;
+import com.intellij.java.language.impl.codeInsight.ChangeContextUtil;
 import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.impl.codeinsight.RuntimeTypeEvaluator;
 import com.intellij.java.debugger.engine.evaluation.EvaluateException;

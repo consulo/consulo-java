@@ -31,7 +31,7 @@ import com.intellij.openapi.util.Ref;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
 import com.intellij.psi.scope.PsiScopeProcessor;
-import com.intellij.psi.scope.util.PsiScopesUtil;
+import com.intellij.java.language.impl.psi.scope.util.PsiScopesUtil;
 import com.intellij.psi.util.*;
 import com.intellij.util.IncorrectOperationException;
 import consulo.util.dataholder.Key;

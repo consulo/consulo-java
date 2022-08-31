@@ -18,7 +18,7 @@ package com.siyeh.ipp.types;
 import javax.annotation.Nonnull;
 
 import com.intellij.psi.*;
-import com.intellij.psi.impl.PsiDiamondTypeUtil;
+import com.intellij.java.language.impl.psi.impl.PsiDiamondTypeUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.siyeh.ipp.base.Intention;
 import com.siyeh.ipp.base.PsiElementPredicate;

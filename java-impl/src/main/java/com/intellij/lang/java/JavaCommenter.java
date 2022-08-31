@@ -21,7 +21,7 @@ import com.intellij.java.language.psi.JavaDocTokenType;
 import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.psi.PsiComment;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.impl.source.tree.JavaDocElementType;
+import com.intellij.java.language.impl.psi.impl.source.tree.JavaDocElementType;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.psi.tree.IElementType;
 import javax.annotation.Nullable;

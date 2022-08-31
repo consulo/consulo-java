@@ -33,7 +33,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Comparing;
 import consulo.util.dataholder.Key;
 import com.intellij.psi.*;
-import com.intellij.psi.impl.source.tree.java.PsiReferenceExpressionImpl;
+import com.intellij.java.language.impl.psi.impl.source.tree.java.PsiReferenceExpressionImpl;
 import com.intellij.psi.util.*;
 import com.intellij.util.IncorrectOperationException;
 

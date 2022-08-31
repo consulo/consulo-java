@@ -17,7 +17,7 @@
 package com.intellij.codeInspection.suspiciousNameCombination;
 
 import com.intellij.codeInsight.daemon.GroupNames;
-import com.intellij.codeInsight.daemon.JavaErrorBundle;
+import com.intellij.java.language.impl.codeInsight.daemon.JavaErrorBundle;
 import com.intellij.codeInspection.InspectionsBundle;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.java.analysis.impl.codeInspection.ex.BaseLocalInspectionTool;

@@ -17,7 +17,7 @@ package com.intellij.refactoring.extractMethod;
 
 import com.intellij.java.language.codeInsight.Nullability;
 import com.intellij.java.language.codeInsight.NullableNotNullManager;
-import com.intellij.ide.highlighter.JavaFileType;
+import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.java.analysis.impl.refactoring.extractMethod.InputVariables;
 import com.intellij.java.language.psi.*;

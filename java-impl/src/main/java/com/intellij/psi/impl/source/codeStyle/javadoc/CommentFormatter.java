@@ -5,7 +5,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.intellij.application.options.CodeStyle;
-import com.intellij.ide.highlighter.JavaFileType;
+import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.lang.ASTNode;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.openapi.project.Project;

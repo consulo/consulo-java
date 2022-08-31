@@ -28,7 +28,7 @@ import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nullable;
-import com.intellij.codeInsight.daemon.JavaErrorBundle;
+import com.intellij.java.language.impl.codeInsight.daemon.JavaErrorBundle;
 import com.intellij.java.language.codeInsight.daemon.impl.analysis.JavaGenericsUtil;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.JavaHighlightUtil;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix.VariableArrayTypeFix;

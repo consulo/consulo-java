@@ -32,7 +32,7 @@ import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.psi.PsiComment;
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
 import com.intellij.psi.codeStyle.JavaCodeStyleSettings;
-import com.intellij.psi.impl.source.tree.JavaElementType;
+import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
 
 class ChainMethodCallsBlockBuilder
 {

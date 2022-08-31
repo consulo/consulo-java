@@ -15,7 +15,7 @@
  */
 package com.intellij.refactoring.introduceParameter;
 
-import com.intellij.codeInsight.ChangeContextUtil;
+import com.intellij.java.language.impl.codeInsight.ChangeContextUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.lang.Language;
 import com.intellij.java.language.JavaLanguage;
@@ -23,7 +23,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
-import com.intellij.psi.impl.PsiDiamondTypeUtil;
+import com.intellij.java.language.impl.psi.impl.PsiDiamondTypeUtil;
 import com.intellij.java.language.psi.impl.source.resolve.DefaultParameterTypeInferencePolicy;
 import com.intellij.java.language.psi.javadoc.PsiDocTag;
 import com.intellij.psi.util.PsiTreeUtil;

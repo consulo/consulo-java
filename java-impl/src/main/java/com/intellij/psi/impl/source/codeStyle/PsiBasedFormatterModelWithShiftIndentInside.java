@@ -23,7 +23,7 @@ import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
 import consulo.annotation.access.RequiredReadAction;
 import com.intellij.formatting.Block;
-import com.intellij.ide.highlighter.JavaFileType;
+import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.lang.ASTNode;
 import consulo.logging.Logger;
 import com.intellij.openapi.project.Project;

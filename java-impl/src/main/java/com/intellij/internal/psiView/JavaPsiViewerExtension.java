@@ -17,7 +17,7 @@ package com.intellij.internal.psiView;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.ide.highlighter.JavaFileType;
+import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.project.Project;
 import com.intellij.java.language.psi.JavaPsiFacade;

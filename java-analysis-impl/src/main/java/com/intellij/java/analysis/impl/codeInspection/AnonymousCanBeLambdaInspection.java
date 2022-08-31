@@ -16,7 +16,7 @@
 package com.intellij.java.analysis.impl.codeInspection;
 
 import com.intellij.java.language.codeInsight.AnnotationUtil;
-import com.intellij.codeInsight.ChangeContextUtil;
+import com.intellij.java.language.impl.codeInsight.ChangeContextUtil;
 import com.intellij.codeInsight.daemon.GroupNames;
 import com.intellij.codeInsight.intention.HighPriorityAction;
 import com.intellij.codeInspection.LocalQuickFix;
@@ -38,9 +38,9 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
-import com.intellij.psi.controlFlow.AnalysisCanceledException;
-import com.intellij.psi.controlFlow.ControlFlow;
-import com.intellij.psi.controlFlow.ControlFlowUtil;
+import com.intellij.java.language.impl.psi.controlFlow.AnalysisCanceledException;
+import com.intellij.java.language.impl.psi.controlFlow.ControlFlow;
+import com.intellij.java.language.impl.psi.controlFlow.ControlFlowUtil;
 import com.intellij.psi.util.*;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.text.UniqueNameGenerator;

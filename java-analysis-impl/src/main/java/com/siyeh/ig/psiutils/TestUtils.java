@@ -16,7 +16,7 @@
 package com.siyeh.ig.psiutils;
 
 import com.intellij.java.language.codeInsight.AnnotationUtil;
-import com.intellij.codeInsight.MetaAnnotationUtil;
+import com.intellij.java.language.impl.codeInsight.MetaAnnotationUtil;
 import com.intellij.java.language.codeInsight.TestFrameworks;
 import com.intellij.java.language.psi.*;
 import com.intellij.openapi.roots.ProjectRootManager;

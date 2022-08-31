@@ -23,7 +23,7 @@ import consulo.logging.Logger;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.refactoring.util.RefactoringChangeUtil;
+import com.intellij.java.language.impl.refactoring.util.RefactoringChangeUtil;
 import com.intellij.util.IncorrectOperationException;
 
 public class AddTypeArgumentsFix extends MethodArgumentFix {

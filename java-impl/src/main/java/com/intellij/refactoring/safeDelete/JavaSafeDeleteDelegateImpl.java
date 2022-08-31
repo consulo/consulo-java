@@ -18,7 +18,7 @@ package com.intellij.refactoring.safeDelete;
 import com.intellij.java.language.psi.*;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
-import com.intellij.psi.impl.source.javadoc.PsiDocMethodOrFieldRef;
+import com.intellij.java.language.impl.psi.impl.source.javadoc.PsiDocMethodOrFieldRef;
 import com.intellij.refactoring.safeDelete.usageInfo.SafeDeleteReferenceJavaDeleteUsageInfo;
 import com.intellij.usageView.UsageInfo;
 import com.intellij.util.Function;

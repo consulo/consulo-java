@@ -24,7 +24,7 @@ import com.intellij.java.language.psi.PsiPolyadicExpression;
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
 import com.intellij.psi.formatter.java.JavaFormatterUtil;
 import com.intellij.psi.formatter.java.wrap.ReservedWrapsProvider;
-import com.intellij.psi.impl.source.tree.JavaElementType;
+import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
 import com.intellij.psi.tree.IElementType;
 
 /**

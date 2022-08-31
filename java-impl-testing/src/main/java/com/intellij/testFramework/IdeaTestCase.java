@@ -20,7 +20,7 @@ import java.util.Comparator;
 
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.impl.JavaPsiFacadeEx;
+import com.intellij.java.language.impl.psi.impl.JavaPsiFacadeEx;
 
 /**
  * @author mike

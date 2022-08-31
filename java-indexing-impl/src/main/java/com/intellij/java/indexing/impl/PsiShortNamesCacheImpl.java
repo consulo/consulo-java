@@ -26,7 +26,7 @@ import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.openapi.progress.ProgressIndicatorProvider;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
-import com.intellij.psi.impl.java.stubs.index.JavaStubIndexKeys;
+import com.intellij.java.language.impl.psi.impl.java.stubs.index.JavaStubIndexKeys;
 import com.intellij.psi.search.FilenameIndex;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.java.language.psi.search.PsiShortNamesCache;

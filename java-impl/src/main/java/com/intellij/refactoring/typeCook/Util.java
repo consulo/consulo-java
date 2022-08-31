@@ -15,6 +15,8 @@
  */
 package com.intellij.refactoring.typeCook;
 
+import com.intellij.java.language.impl.psi.Bottom;
+import com.intellij.java.language.impl.psi.PsiTypeVariable;
 import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
 import com.intellij.psi.search.GlobalSearchScope;

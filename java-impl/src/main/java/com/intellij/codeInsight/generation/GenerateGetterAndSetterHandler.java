@@ -16,6 +16,7 @@
 package com.intellij.codeInsight.generation;
 
 import com.intellij.codeInsight.CodeInsightBundle;
+import com.intellij.java.language.impl.codeInsight.generation.GenerationInfo;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.util.IncorrectOperationException;
 

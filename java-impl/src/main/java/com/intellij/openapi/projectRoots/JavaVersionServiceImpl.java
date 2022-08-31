@@ -17,6 +17,7 @@ package com.intellij.openapi.projectRoots;
 
 import javax.annotation.Nonnull;
 
+import com.intellij.java.language.impl.projectRoots.JavaSdkVersionUtil;
 import com.intellij.java.language.projectRoots.JavaSdkVersion;
 import com.intellij.java.language.projectRoots.JavaVersionService;
 import jakarta.inject.Singleton;

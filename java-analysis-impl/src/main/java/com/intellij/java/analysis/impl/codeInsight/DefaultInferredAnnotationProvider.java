@@ -11,7 +11,7 @@ import com.intellij.java.language.psi.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
-import com.intellij.psi.impl.source.PsiMethodImpl;
+import com.intellij.java.language.impl.psi.impl.source.PsiMethodImpl;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.util.containers.ContainerUtil;
 import com.siyeh.ig.callMatcher.CallMatcher;

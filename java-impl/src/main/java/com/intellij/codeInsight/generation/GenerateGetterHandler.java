@@ -17,6 +17,9 @@ package com.intellij.codeInsight.generation;
 
 import javax.swing.JComponent;
 
+import com.intellij.java.language.impl.codeInsight.generation.EncapsulatableClassMember;
+import com.intellij.java.language.impl.codeInsight.generation.GenerationInfo;
+import com.intellij.java.language.impl.codeInsight.generation.PropertyClassMember;
 import consulo.java.analysis.codeInsight.JavaCodeInsightBundle;
 import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.openapi.project.Project;

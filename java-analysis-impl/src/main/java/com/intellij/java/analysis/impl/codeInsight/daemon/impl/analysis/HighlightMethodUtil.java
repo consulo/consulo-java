@@ -15,9 +15,9 @@
  */
 package com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis;
 
-import com.intellij.codeInsight.ExceptionUtil;
+import com.intellij.java.language.impl.codeInsight.ExceptionUtil;
 import com.intellij.codeInsight.daemon.DaemonBundle;
-import com.intellij.codeInsight.daemon.JavaErrorBundle;
+import com.intellij.java.language.impl.codeInsight.daemon.JavaErrorBundle;
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
 import com.intellij.codeInsight.daemon.impl.HighlightInfoType;
 import com.intellij.codeInsight.daemon.impl.analysis.HighlightInfoHolder;
@@ -41,11 +41,11 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.psi.*;
-import com.intellij.psi.impl.PsiSuperMethodImplUtil;
+import com.intellij.java.language.impl.psi.impl.PsiSuperMethodImplUtil;
 import com.intellij.java.language.psi.infos.CandidateInfo;
 import com.intellij.java.language.psi.infos.MethodCandidateInfo;
 import com.intellij.psi.util.*;
-import com.intellij.refactoring.util.RefactoringChangeUtil;
+import com.intellij.java.language.impl.refactoring.util.RefactoringChangeUtil;
 import com.intellij.ui.ColorUtil;
 import com.intellij.util.ObjectUtil;
 import com.intellij.java.language.util.VisibilityUtil;

@@ -20,7 +20,7 @@
  */
 package com.intellij.refactoring.move.moveInner;
 
-import com.intellij.ide.util.PackageChooserDialog;
+import com.intellij.java.language.impl.codeInsight.PackageChooserDialog;
 import com.intellij.java.language.psi.JavaDirectoryService;
 import com.intellij.java.language.psi.PsiAnonymousClass;
 import com.intellij.java.language.psi.PsiClass;

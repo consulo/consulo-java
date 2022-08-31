@@ -31,7 +31,7 @@ import com.intellij.java.language.psi.JavaCodeFragment;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.java.language.psi.util.PsiMethodUtil;
-import com.intellij.ui.EditorTextFieldWithBrowseButton;
+import com.intellij.java.language.impl.ui.EditorTextFieldWithBrowseButton;
 import com.intellij.ui.components.JBCheckBox;
 import com.intellij.util.ui.UIUtil;
 import consulo.java.execution.JavaExecutionBundle;

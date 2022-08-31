@@ -17,7 +17,7 @@ import com.intellij.java.language.psi.*;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
 import com.intellij.java.language.psi.impl.source.resolve.graphInference.PsiPolyExpressionUtil;
-import com.intellij.psi.impl.source.tree.java.PsiNewExpressionImpl;
+import com.intellij.java.language.impl.psi.impl.source.tree.java.PsiNewExpressionImpl;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import com.intellij.util.ArrayUtil;

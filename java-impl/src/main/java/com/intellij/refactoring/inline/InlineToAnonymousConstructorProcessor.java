@@ -15,7 +15,7 @@
  */
 package com.intellij.refactoring.inline;
 
-import com.intellij.codeInsight.ChangeContextUtil;
+import com.intellij.java.language.impl.codeInsight.ChangeContextUtil;
 import com.intellij.java.language.psi.*;
 import consulo.logging.Logger;
 import consulo.util.dataholder.Key;

@@ -29,7 +29,7 @@ import com.intellij.psi.*;
 import com.intellij.psi.filters.getters.ClassLiteralGetter;
 import com.intellij.psi.filters.getters.ThisGetter;
 import com.intellij.psi.scope.BaseScopeProcessor;
-import com.intellij.psi.scope.util.PsiScopesUtil;
+import com.intellij.java.language.impl.psi.scope.util.PsiScopesUtil;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.Consumer;
 import com.intellij.util.containers.MultiMap;

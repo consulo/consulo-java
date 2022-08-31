@@ -15,7 +15,7 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
-import com.intellij.codeInsight.BlockUtils;
+import com.intellij.java.language.impl.codeInsight.BlockUtils;
 import com.intellij.codeInsight.intention.LowPriorityAction;
 import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement;
 import com.intellij.java.language.psi.*;

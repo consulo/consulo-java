@@ -15,6 +15,7 @@
  */
 package com.intellij.psi.impl.source.resolve.reference.impl.providers;
 
+import com.intellij.java.language.impl.psi.impl.source.resolve.reference.impl.providers.GenericReferenceProvider;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiJavaPackage;
@@ -24,7 +25,7 @@ import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
-import com.intellij.psi.scope.ElementClassHint;
+import com.intellij.java.language.impl.psi.scope.ElementClassHint;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.*;

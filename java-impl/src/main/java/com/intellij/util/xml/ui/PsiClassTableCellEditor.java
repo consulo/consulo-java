@@ -16,7 +16,7 @@ import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.KeyStroke;
 
-import com.intellij.ide.highlighter.JavaFileType;
+import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.java.language.util.TreeClassChooser;
 import com.intellij.java.language.util.TreeClassChooserFactory;
 import com.intellij.openapi.editor.Document;
@@ -26,7 +26,7 @@ import com.intellij.openapi.util.Conditions;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.ui.EditorTextField;
-import com.intellij.ui.JavaReferenceEditorUtil;
+import com.intellij.java.language.impl.ui.JavaReferenceEditorUtil;
 import com.intellij.ui.UIBundle;
 import com.intellij.util.ui.AbstractTableCellEditor;
 

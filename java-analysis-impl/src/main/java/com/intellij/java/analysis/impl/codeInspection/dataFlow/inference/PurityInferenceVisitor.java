@@ -4,8 +4,8 @@ package com.intellij.java.analysis.impl.codeInspection.dataFlow.inference;
 import com.intellij.lang.LighterAST;
 import com.intellij.lang.LighterASTNode;
 import com.intellij.java.language.psi.JavaTokenType;
-import com.intellij.psi.impl.source.FileLocalResolver;
-import com.intellij.psi.impl.source.JavaLightTreeUtil;
+import com.intellij.java.language.impl.psi.impl.source.FileLocalResolver;
+import com.intellij.java.language.impl.psi.impl.source.JavaLightTreeUtil;
 import com.intellij.psi.impl.source.tree.LightTreeUtil;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.util.containers.ContainerUtil;
@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static com.intellij.psi.impl.source.tree.JavaElementType.*;
+import static com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType.*;
 
 class PurityInferenceVisitor
 {

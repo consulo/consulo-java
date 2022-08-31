@@ -20,7 +20,7 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Ignore;
 import org.junit.Test;
 import com.intellij.java.language.psi.PsiType;
-import com.intellij.util.text.LiteralFormatUtil;
+import com.intellij.java.language.impl.util.text.LiteralFormatUtil;
 
 @Ignore
 public class UnderscoresInLiteralsFormatterTest {

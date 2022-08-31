@@ -19,7 +19,7 @@ import javax.annotation.Nonnull;
 
 import com.intellij.ProjectTopics;
 import com.intellij.java.language.JavaCoreBundle;
-import com.intellij.ide.highlighter.JavaClassFileType;
+import com.intellij.java.language.impl.JavaClassFileType;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.openapi.fileEditor.FileEditor;
 import com.intellij.openapi.module.Module;

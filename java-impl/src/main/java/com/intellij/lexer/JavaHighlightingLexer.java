@@ -15,12 +15,12 @@
  */
 package com.intellij.lexer;
 
-import com.intellij.lang.java.lexer.JavaDocLexer;
-import com.intellij.lang.java.lexer.JavaLexer;
+import com.intellij.java.language.impl.lexer.JavaDocLexer;
+import com.intellij.java.language.impl.lexer.JavaLexer;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.psi.JavaDocTokenType;
 import com.intellij.java.language.psi.JavaTokenType;
-import com.intellij.psi.impl.source.tree.JavaDocElementType;
+import com.intellij.java.language.impl.psi.impl.source.tree.JavaDocElementType;
 import com.intellij.psi.tree.IElementType;
 
 

@@ -18,7 +18,7 @@ package com.intellij.codeInsight.highlighting;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import com.intellij.codeInsight.ExceptionUtil;
+import com.intellij.java.language.impl.codeInsight.ExceptionUtil;
 import com.intellij.java.language.psi.*;
 import consulo.codeInsight.TargetElementUtil;
 import com.intellij.featureStatistics.FeatureUsageTracker;

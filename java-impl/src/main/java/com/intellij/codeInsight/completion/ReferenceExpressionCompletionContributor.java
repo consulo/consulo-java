@@ -31,7 +31,7 @@ import com.intellij.psi.*;
 import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.psi.filters.*;
-import com.intellij.psi.filters.element.ModifierFilter;
+import com.intellij.java.language.impl.psi.filters.element.ModifierFilter;
 import com.intellij.psi.filters.types.AssignableFromFilter;
 import com.intellij.java.language.psi.infos.CandidateInfo;
 import com.intellij.java.language.psi.util.InheritanceUtil;

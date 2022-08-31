@@ -15,7 +15,7 @@
  */
 package com.intellij.refactoring.move.moveInner;
 
-import com.intellij.codeInsight.ChangeContextUtil;
+import com.intellij.java.language.impl.codeInsight.ChangeContextUtil;
 import com.intellij.codeInsight.CodeInsightUtilCore;
 import com.intellij.java.language.psi.*;
 import com.intellij.lang.findUsages.DescriptiveNameUtil;
@@ -39,7 +39,7 @@ import com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackages
 import com.intellij.refactoring.rename.RenameUtil;
 import com.intellij.refactoring.util.ConflictsUtil;
 import com.intellij.refactoring.util.NonCodeUsageInfo;
-import com.intellij.refactoring.util.RefactoringChangeUtil;
+import com.intellij.java.language.impl.refactoring.util.RefactoringChangeUtil;
 import com.intellij.refactoring.util.RefactoringUIUtil;
 import com.intellij.usageView.UsageInfo;
 import com.intellij.usageView.UsageViewDescriptor;

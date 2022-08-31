@@ -19,6 +19,8 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
+import com.intellij.java.language.impl.codeInsight.generation.GenerationInfo;
+import com.intellij.java.language.impl.codeInsight.generation.PsiElementClassMember;
 import consulo.java.codeInsight.JavaCodeInsightSettings;
 import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.codeInsight.generation.ui.GenerateEqualsWizard;

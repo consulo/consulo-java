@@ -15,33 +15,33 @@
  */
 package com.intellij.java.language.psi.javadoc;
 
-import javax.annotation.Nullable;
 import com.intellij.openapi.extensions.ExtensionPointName;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 
+import javax.annotation.Nullable;
+
 /**
  * @author mike
  */
-public interface JavadocTagInfo
-{
-	ExtensionPointName<JavadocTagInfo> EP_NAME = ExtensionPointName.create("consulo.java.javadocTagInfo");
+public interface JavadocTagInfo {
+  ExtensionPointName<JavadocTagInfo> EP_NAME = ExtensionPointName.create("consulo.java.javadocTagInfo");
 
-	String getName();
+  String getName();
 
-	boolean isInline();
+  boolean isInline();
 
-	boolean isValidInContext(PsiElement element);
+  boolean isValidInContext(PsiElement element);
 
-	/**
-	 * Checks the tag value for correctness.
-	 *
-	 * @param value Doc tag to check.
-	 * @return Returns null if correct, error message otherwise.
-	 */
-	@Nullable
-	String checkTagValue(PsiDocTagValue value);
+  /**
+   * Checks the tag value for correctness.
+   *
+   * @param value Doc tag to check.
+   * @return Returns null if correct, error message otherwise.
+   */
+  @Nullable
+  String checkTagValue(PsiDocTagValue value);
 
-	@javax.annotation.Nullable
-	PsiReference getReference(PsiDocTagValue value);
+  @javax.annotation.Nullable
+  PsiReference getReference(PsiDocTagValue value);
 }

@@ -15,7 +15,7 @@
  */
 package com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis;
 
-import com.intellij.codeInsight.daemon.JavaErrorBundle;
+import com.intellij.java.language.impl.codeInsight.daemon.JavaErrorBundle;
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
 import com.intellij.codeInsight.daemon.impl.HighlightInfoType;
 import com.intellij.codeInsight.daemon.impl.quickfix.QuickFixAction;
@@ -37,7 +37,7 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.java.language.psi.PsiPackageAccessibilityStatement.Role;
-import com.intellij.psi.impl.light.LightJavaModule;
+import com.intellij.java.language.impl.psi.impl.light.LightJavaModule;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.psi.search.FilenameIndex;
 import com.intellij.psi.search.GlobalSearchScope;

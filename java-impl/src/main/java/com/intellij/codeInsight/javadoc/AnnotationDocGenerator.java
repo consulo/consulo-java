@@ -21,6 +21,7 @@ import java.util.Set;
 
 import javax.annotation.Nonnull;
 
+import com.intellij.java.language.impl.codeInsight.javadoc.JavaDocUtil;
 import com.intellij.java.language.psi.*;
 import org.intellij.lang.annotations.Flow;
 import com.intellij.java.language.codeInsight.AnnotationUtil;

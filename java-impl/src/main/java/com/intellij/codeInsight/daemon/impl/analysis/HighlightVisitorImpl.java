@@ -16,7 +16,7 @@
 package com.intellij.codeInsight.daemon.impl.analysis;
 
 import com.intellij.codeHighlighting.Pass;
-import com.intellij.codeInsight.daemon.JavaErrorBundle;
+import com.intellij.java.language.impl.codeInsight.daemon.JavaErrorBundle;
 import com.intellij.codeInsight.daemon.impl.*;
 import com.intellij.codeInsight.daemon.impl.quickfix.QuickFixAction;
 import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement;
@@ -41,11 +41,11 @@ import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.psi.*;
-import com.intellij.psi.controlFlow.ControlFlowUtil;
-import com.intellij.psi.impl.source.javadoc.PsiDocMethodOrFieldRef;
-import com.intellij.psi.impl.source.resolve.JavaResolveUtil;
+import com.intellij.java.language.impl.psi.controlFlow.ControlFlowUtil;
+import com.intellij.java.language.impl.psi.impl.source.javadoc.PsiDocMethodOrFieldRef;
+import com.intellij.java.language.impl.psi.impl.source.resolve.JavaResolveUtil;
 import com.intellij.java.language.psi.impl.source.resolve.graphInference.PsiPolyExpressionUtil;
-import com.intellij.psi.impl.source.tree.java.PsiReferenceExpressionImpl;
+import com.intellij.java.language.impl.psi.impl.source.tree.java.PsiReferenceExpressionImpl;
 import com.intellij.java.language.psi.infos.CandidateInfo;
 import com.intellij.java.language.psi.infos.MethodCandidateInfo;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;

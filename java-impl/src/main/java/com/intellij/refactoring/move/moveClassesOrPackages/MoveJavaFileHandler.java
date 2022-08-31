@@ -20,7 +20,7 @@
  */
 package com.intellij.refactoring.move.moveClassesOrPackages;
 
-import com.intellij.codeInsight.ChangeContextUtil;
+import com.intellij.java.language.impl.codeInsight.ChangeContextUtil;
 import com.intellij.java.language.psi.*;
 import consulo.logging.Logger;
 import com.intellij.openapi.util.text.StringUtil;

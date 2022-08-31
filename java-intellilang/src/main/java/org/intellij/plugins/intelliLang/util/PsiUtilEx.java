@@ -29,7 +29,7 @@ import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.psi.tree.IElementType;
-import com.intellij.ui.JavaReferenceEditorUtil;
+import com.intellij.java.language.impl.ui.JavaReferenceEditorUtil;
 import consulo.java.language.module.util.JavaClassNames;
 
 public class PsiUtilEx {

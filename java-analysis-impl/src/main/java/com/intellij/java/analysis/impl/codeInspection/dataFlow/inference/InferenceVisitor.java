@@ -3,8 +3,8 @@ package com.intellij.java.analysis.impl.codeInspection.dataFlow.inference;
 import com.intellij.lang.LighterAST;
 import com.intellij.lang.LighterASTNode;
 import com.intellij.java.language.psi.JavaTokenType;
-import com.intellij.psi.impl.source.JavaLightStubBuilder;
-import com.intellij.psi.impl.source.JavaLightTreeUtil;
+import com.intellij.java.language.impl.psi.impl.source.JavaLightStubBuilder;
+import com.intellij.java.language.impl.psi.impl.source.JavaLightTreeUtil;
 import com.intellij.psi.impl.source.tree.LightTreeUtil;
 import com.intellij.psi.impl.source.tree.RecursiveLighterASTNodeWalkingVisitor;
 import com.intellij.psi.tree.IElementType;
@@ -14,7 +14,7 @@ import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.Consumer;
 
-import static com.intellij.psi.impl.source.tree.JavaElementType.*;
+import static com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType.*;
 
 /**
  * from kotlin

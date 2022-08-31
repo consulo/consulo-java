@@ -16,7 +16,7 @@
 package com.intellij.java.indexing.impl;
 
 import com.intellij.ProjectTopics;
-import com.intellij.ide.highlighter.JavaClassFileType;
+import com.intellij.java.language.impl.JavaClassFileType;
 import com.intellij.java.indexing.impl.stubs.index.JavaAutoModuleNameIndex;
 import com.intellij.java.indexing.impl.stubs.index.JavaFullClassNameIndex;
 import com.intellij.java.indexing.impl.stubs.index.JavaModuleNameIndex;
@@ -33,10 +33,10 @@ import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileWithId;
 import com.intellij.psi.*;
-import com.intellij.psi.impl.PsiImplUtil;
+import com.intellij.java.language.impl.psi.impl.PsiImplUtil;
 import com.intellij.psi.impl.PsiManagerEx;
-import com.intellij.psi.impl.file.impl.JavaFileManager;
-import com.intellij.psi.impl.light.LightJavaModule;
+import com.intellij.java.language.impl.psi.impl.file.impl.JavaFileManager;
+import com.intellij.java.language.impl.psi.impl.light.LightJavaModule;
 import com.intellij.psi.search.DelegatingGlobalSearchScope;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.util.containers.ContainerUtil;

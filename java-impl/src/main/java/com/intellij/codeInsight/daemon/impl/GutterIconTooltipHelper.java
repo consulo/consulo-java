@@ -30,7 +30,7 @@ import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.psi.presentation.java.ClassPresentationUtil;
+import com.intellij.java.language.impl.psi.presentation.java.ClassPresentationUtil;
 
 public class GutterIconTooltipHelper
 {

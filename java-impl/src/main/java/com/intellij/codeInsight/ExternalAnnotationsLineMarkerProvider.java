@@ -57,7 +57,7 @@ import com.intellij.util.containers.ContainerUtil;
 import com.intellij.xml.util.XmlStringUtil;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.annotation.access.RequiredReadAction;
-import consulo.java.JavaIcons;
+import consulo.java.language.impl.JavaIcons;
 import consulo.java.codeInsight.JavaCodeInsightSettings;
 import consulo.ui.image.Image;
 

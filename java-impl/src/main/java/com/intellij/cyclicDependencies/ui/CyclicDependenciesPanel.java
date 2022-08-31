@@ -68,7 +68,7 @@ import com.intellij.ui.treeStructure.Tree;
 import com.intellij.util.EditSourceOnDoubleClickHandler;
 import com.intellij.util.ui.UIUtil;
 import com.intellij.util.ui.tree.TreeUtil;
-import consulo.java.JavaIcons;
+import consulo.java.language.impl.JavaIcons;
 
 /**
  * User: anna

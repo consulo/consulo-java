@@ -18,6 +18,7 @@ package com.intellij.codeInsight.generation;
 import com.intellij.codeInsight.template.Expression;
 import com.intellij.codeInsight.template.Template;
 import com.intellij.codeInsight.template.TemplateBuilderImpl;
+import com.intellij.java.language.impl.codeInsight.generation.GenerationInfo;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiTypeElement;

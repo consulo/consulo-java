@@ -47,7 +47,7 @@ import com.intellij.refactoring.RefactoringBundle;
 import com.intellij.refactoring.ui.NameSuggestionsField;
 import com.intellij.refactoring.ui.RefactoringDialog;
 import com.intellij.refactoring.util.CommonRefactoringUtil;
-import com.intellij.ui.JavaReferenceEditorUtil;
+import com.intellij.java.language.impl.ui.JavaReferenceEditorUtil;
 import com.intellij.ui.ReferenceEditorWithBrowseButton;
 import com.intellij.util.ArrayUtil;
 

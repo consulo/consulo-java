@@ -15,7 +15,7 @@
  */
 package com.intellij.codeInsight.completion;
 
-import com.intellij.codeInsight.ExpressionUtil;
+import com.intellij.java.language.impl.codeInsight.ExpressionUtil;
 import com.intellij.codeInsight.daemon.ImplicitUsageProvider;
 import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;

@@ -15,8 +15,10 @@
  */
 package com.intellij.refactoring.util;
 
-import com.intellij.codeInsight.ChangeContextUtil;
+import com.intellij.java.language.impl.codeInsight.ChangeContextUtil;
 import com.intellij.java.language.codeInsight.daemon.impl.analysis.JavaGenericsUtil;
+import com.intellij.java.language.impl.psi.PsiDiamondTypeImpl;
+import com.intellij.java.language.impl.refactoring.util.RefactoringChangeUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.util.Comparing;

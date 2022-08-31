@@ -26,7 +26,7 @@ import com.intellij.java.language.psi.PsiCodeBlock;
 import com.intellij.psi.PsiElement;
 import com.intellij.java.language.psi.PsiReturnStatement;
 import com.intellij.java.language.psi.PsiThrowStatement;
-import com.intellij.psi.impl.source.tree.JavaElementType;
+import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
 import com.intellij.psi.tree.TokenSet;
 import com.intellij.util.text.CharArrayUtil;
 

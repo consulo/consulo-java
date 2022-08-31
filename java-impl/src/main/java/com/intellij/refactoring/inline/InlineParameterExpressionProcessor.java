@@ -15,7 +15,7 @@
  */
 package com.intellij.refactoring.inline;
 
-import com.intellij.codeInsight.ExceptionUtil;
+import com.intellij.java.language.impl.codeInsight.ExceptionUtil;
 import com.intellij.codeInspection.sameParameterValue.SameParameterValueInspection;
 import com.intellij.java.language.psi.*;
 import consulo.logging.Logger;

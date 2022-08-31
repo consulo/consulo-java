@@ -18,7 +18,7 @@ package com.intellij.codeInsight.daemon;
 import javax.annotation.Nonnull;
 
 import consulo.java.util.JavaProjectRootsUtil;
-import com.intellij.ide.highlighter.JavaFileType;
+import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;

@@ -15,14 +15,15 @@
  */
 package com.intellij.refactoring.extractMethod;
 
-import com.intellij.codeInsight.ExceptionUtil;
+import com.intellij.java.language.impl.codeInsight.ChangeContextUtil;
+import com.intellij.java.language.impl.codeInsight.ExceptionUtil;
 import com.intellij.codeInsight.*;
 import com.intellij.codeInsight.daemon.impl.quickfix.AnonymousTargetClassPreselectionUtil;
 import com.intellij.codeInsight.highlighting.HighlightManager;
 import com.intellij.codeInsight.navigation.NavigationUtil;
 import com.intellij.ide.DataManager;
 import com.intellij.ide.util.PropertiesComponent;
-import com.intellij.ide.util.PsiClassListCellRenderer;
+import com.intellij.java.language.impl.codeInsight.PsiClassListCellRenderer;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.JavaHighlightUtil;
 import com.intellij.java.analysis.impl.codeInsight.intention.AddAnnotationPsiFix;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.*;
@@ -36,6 +37,7 @@ import com.intellij.java.analysis.impl.refactoring.util.duplicates.VariableRetur
 import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.language.codeInsight.Nullability;
 import com.intellij.java.language.codeInsight.NullableNotNullManager;
+import com.intellij.java.language.impl.refactoring.util.RefactoringChangeUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
@@ -59,10 +61,10 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.wm.WindowManager;
 import com.intellij.psi.*;
 import com.intellij.psi.codeStyle.*;
-import com.intellij.psi.controlFlow.ControlFlowUtil;
+import com.intellij.java.language.impl.psi.controlFlow.ControlFlowUtil;
 import com.intellij.psi.impl.source.codeStyle.JavaCodeStyleManagerImpl;
-import com.intellij.psi.scope.processor.VariablesProcessor;
-import com.intellij.psi.scope.util.PsiScopesUtil;
+import com.intellij.java.language.impl.psi.scope.processor.VariablesProcessor;
+import com.intellij.java.language.impl.psi.scope.util.PsiScopesUtil;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.LocalSearchScope;
 import com.intellij.psi.search.PsiElementProcessor;

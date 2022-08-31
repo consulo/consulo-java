@@ -22,7 +22,7 @@ import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.projectRoots.ui.SdkPathEditor;
 import com.intellij.openapi.roots.ui.OrderRootTypeUIFactory;
 import consulo.java.JavaBundle;
-import consulo.java.JavaIcons;
+import consulo.java.language.impl.JavaIcons;
 import consulo.ui.image.Image;
 
 public class NativeLibraryOrderRootTypeUIFactory implements OrderRootTypeUIFactory

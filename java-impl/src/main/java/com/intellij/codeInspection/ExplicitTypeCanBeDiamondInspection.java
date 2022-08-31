@@ -26,7 +26,7 @@ import com.intellij.java.language.psi.PsiNewExpression;
 import com.intellij.java.language.psi.PsiReferenceParameterList;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
-import com.intellij.psi.impl.PsiDiamondTypeUtil;
+import com.intellij.java.language.impl.psi.impl.PsiDiamondTypeUtil;
 import consulo.logging.Logger;
 import org.jetbrains.annotations.Nls;
 

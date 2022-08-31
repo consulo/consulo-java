@@ -15,16 +15,18 @@
  */
 package com.intellij.spi.parsing;
 
-import javax.annotation.Nonnull;
-
+import com.intellij.java.language.impl.spi.parsing.SPIElementTypes;
+import com.intellij.java.language.impl.spi.parsing.SPILexer;
+import com.intellij.java.language.impl.spi.parsing.SPITokenType;
+import com.intellij.java.language.impl.spi.psi.SPIFile;
+import com.intellij.java.language.psi.JavaTokenType;
+import com.intellij.java.language.spi.SPILanguage;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.ParserDefinition;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.PsiParser;
-import com.intellij.java.language.spi.SPILanguage;
 import com.intellij.lexer.Lexer;
 import com.intellij.psi.FileViewProvider;
-import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.TokenType;
@@ -34,10 +36,11 @@ import com.intellij.psi.tree.TokenSet;
 import com.intellij.psi.util.PsiUtilCore;
 import com.intellij.spi.psi.SPIClassProviderReferenceElement;
 import com.intellij.spi.psi.SPIClassProvidersElementList;
-import com.intellij.spi.psi.SPIFile;
 import com.intellij.spi.psi.SPIPackageOrClassReferenceElement;
 import consulo.lang.LanguageVersion;
 import consulo.logging.Logger;
+
+import javax.annotation.Nonnull;
 
 /**
  * User: anna

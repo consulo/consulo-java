@@ -48,7 +48,7 @@ import com.intellij.java.language.psi.PsiJavaFile;
 import com.intellij.java.language.psi.PsiJavaModule;
 import com.intellij.psi.PsiManager;
 import com.intellij.java.indexing.impl.stubs.index.JavaModuleNameIndex;
-import com.intellij.psi.impl.light.LightJavaModule;
+import com.intellij.java.language.impl.psi.impl.light.LightJavaModule;
 import com.intellij.util.PathsList;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.application.AccessRule;

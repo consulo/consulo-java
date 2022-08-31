@@ -17,6 +17,8 @@ package com.intellij.codeInsight.generation;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import com.intellij.java.language.impl.codeInsight.generation.GenerationInfo;
 import consulo.logging.Logger;
 import com.intellij.java.language.psi.PsiAnnotation;
 import com.intellij.java.language.psi.PsiClass;

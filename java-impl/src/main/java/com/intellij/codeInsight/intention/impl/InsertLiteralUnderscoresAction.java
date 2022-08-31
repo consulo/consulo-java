@@ -29,7 +29,7 @@ import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.text.LiteralFormatUtil;
+import com.intellij.java.language.impl.util.text.LiteralFormatUtil;
 
 public class InsertLiteralUnderscoresAction extends PsiElementBaseIntentionAction {
   @Override

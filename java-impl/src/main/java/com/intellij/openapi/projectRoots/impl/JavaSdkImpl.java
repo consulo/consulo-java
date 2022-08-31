@@ -38,7 +38,7 @@ import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.util.SystemProperties;
 import com.intellij.util.containers.ContainerUtil;
 import consulo.fileTypes.ZipArchiveFileType;
-import consulo.java.JavaIcons;
+import consulo.java.language.impl.JavaIcons;
 import consulo.java.execution.projectRoots.OwnJdkUtil;
 import consulo.java.language.fileTypes.JModFileType;
 import consulo.logging.Logger;

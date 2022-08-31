@@ -19,7 +19,7 @@ import javax.annotation.Nonnull;
 
 import org.jetbrains.annotations.NonNls;
 import org.junit.Assert;
-import com.intellij.ide.highlighter.JavaFileType;
+import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -28,7 +28,7 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiFileFactory;
 import com.intellij.java.language.psi.PsiJavaFile;
 import com.intellij.java.language.psi.PsiJavaPackage;
-import com.intellij.psi.impl.JavaPsiFacadeEx;
+import com.intellij.java.language.impl.psi.impl.JavaPsiFacadeEx;
 import com.intellij.psi.impl.PsiModificationTrackerImpl;
 import com.intellij.psi.search.ProjectScope;
 import com.intellij.testFramework.fixtures.IdeaProjectTestFixture;

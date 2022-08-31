@@ -16,7 +16,7 @@
 package com.intellij.testFramework;
 
 import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.psi.impl.JavaPsiFacadeEx;
+import com.intellij.java.language.impl.psi.impl.JavaPsiFacadeEx;
 
 /**
  * A test case that provides IDEA application and project. Note both are reused for each test run in the session so

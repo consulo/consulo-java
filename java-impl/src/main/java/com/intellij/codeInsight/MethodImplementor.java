@@ -17,7 +17,7 @@ package com.intellij.codeInsight;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import com.intellij.codeInsight.generation.GenerationInfo;
+import com.intellij.java.language.impl.codeInsight.generation.GenerationInfo;
 import com.intellij.java.language.codeInsight.MemberImplementorExplorer;
 import com.intellij.openapi.extensions.ExtensionPointName;
 import com.intellij.java.language.psi.PsiClass;

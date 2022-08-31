@@ -3,7 +3,7 @@ package com.intellij.java.indexing.impl.stubs.index;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.impl.light.LightJavaModule;
+import com.intellij.java.language.impl.psi.impl.light.LightJavaModule;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.util.indexing.*;
 import com.intellij.util.io.EnumeratorStringDescriptor;

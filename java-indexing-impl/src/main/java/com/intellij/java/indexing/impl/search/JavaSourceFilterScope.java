@@ -18,7 +18,7 @@ package com.intellij.java.indexing.impl.search;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.intellij.ide.highlighter.JavaClassFileType;
+import com.intellij.java.language.impl.JavaClassFileType;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ProjectFileIndex;
 import com.intellij.openapi.roots.ProjectRootManager;

@@ -15,8 +15,8 @@
  */
 package com.intellij.refactoring.replaceConstructorWithBuilder;
 
-import com.intellij.ide.highlighter.JavaFileType;
-import com.intellij.ide.util.PackageUtil;
+import com.intellij.java.language.impl.JavaFileType;
+import com.intellij.java.language.impl.codeInsight.PackageUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtil;

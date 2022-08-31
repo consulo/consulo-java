@@ -19,6 +19,7 @@ import javax.annotation.Nonnull;
 
 import com.intellij.ide.structureView.StructureViewBuilder;
 import com.intellij.ide.structureView.StructureViewBuilderProvider;
+import com.intellij.java.language.impl.JavaClassFileType;
 import com.intellij.lang.LanguageStructureViewBuilder;
 import com.intellij.lang.PsiStructureViewFactory;
 import com.intellij.openapi.fileTypes.FileType;

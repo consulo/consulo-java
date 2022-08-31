@@ -16,7 +16,7 @@
 package com.intellij.codeInsight.navigation;
 
 import com.intellij.ide.util.MethodCellRenderer;
-import com.intellij.ide.util.PsiClassListCellRenderer;
+import com.intellij.java.language.impl.codeInsight.PsiClassListCellRenderer;
 import com.intellij.ide.util.PsiElementListCellRenderer;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.PsiElement;

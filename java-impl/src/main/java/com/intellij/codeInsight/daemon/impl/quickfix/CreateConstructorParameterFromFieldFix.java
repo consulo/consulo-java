@@ -18,7 +18,7 @@ package com.intellij.codeInsight.daemon.impl.quickfix;
 import com.intellij.codeInsight.FileModificationService;
 import com.intellij.java.language.codeInsight.NullableNotNullManager;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.JavaHighlightUtil;
-import com.intellij.codeInsight.generation.PsiElementClassMember;
+import com.intellij.java.language.impl.codeInsight.generation.PsiElementClassMember;
 import com.intellij.codeInsight.generation.PsiFieldMember;
 import com.intellij.codeInsight.generation.PsiMethodMember;
 import com.intellij.codeInsight.intention.IntentionAction;

@@ -28,7 +28,7 @@ import com.intellij.openapi.util.Comparing;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.java.language.psi.PsiFunctionalExpression;
-import com.intellij.psi.presentation.java.ClassPresentationUtil;
+import com.intellij.java.language.impl.psi.presentation.java.ClassPresentationUtil;
 import consulo.ui.image.ImageEffects;
 
 public final class TypeHierarchyNodeDescriptor extends HierarchyNodeDescriptor

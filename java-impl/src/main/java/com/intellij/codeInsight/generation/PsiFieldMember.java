@@ -15,6 +15,9 @@
  */
 package com.intellij.codeInsight.generation;
 
+import com.intellij.java.language.impl.codeInsight.generation.GenerationInfo;
+import com.intellij.java.language.impl.codeInsight.generation.PropertyClassMember;
+import com.intellij.java.language.impl.codeInsight.generation.PsiElementClassMember;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiMethod;

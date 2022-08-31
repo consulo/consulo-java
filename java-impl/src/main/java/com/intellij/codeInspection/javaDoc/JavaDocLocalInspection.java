@@ -67,7 +67,7 @@ import com.intellij.openapi.util.WriteExternalException;
 import com.intellij.profile.codeInspection.InspectionProfileManager;
 import com.intellij.profile.codeInspection.InspectionProjectProfileManager;
 import com.intellij.psi.*;
-import com.intellij.psi.impl.source.javadoc.PsiDocParamRef;
+import com.intellij.java.language.impl.psi.impl.source.javadoc.PsiDocParamRef;
 import com.intellij.java.language.psi.javadoc.JavadocManager;
 import com.intellij.java.language.psi.javadoc.JavadocTagInfo;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;

@@ -24,7 +24,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.java.language.psi.PsiTypeElement;
 import com.intellij.java.language.psi.PsiVariable;
 import com.intellij.psi.TokenType;
-import com.intellij.psi.impl.source.tree.JavaElementType;
+import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
 import com.intellij.psi.impl.source.tree.JavaJspElementType;
 import com.intellij.psi.impl.source.tree.StdTokenSets;
 

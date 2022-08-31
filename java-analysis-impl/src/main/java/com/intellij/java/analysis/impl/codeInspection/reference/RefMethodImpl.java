@@ -15,7 +15,7 @@
  */
 package com.intellij.java.analysis.impl.codeInspection.reference;
 
-import com.intellij.codeInsight.ExceptionUtil;
+import com.intellij.java.language.impl.codeInsight.ExceptionUtil;
 import com.intellij.codeInspection.reference.RefElement;
 import com.intellij.codeInspection.reference.RefElementImpl;
 import com.intellij.codeInspection.reference.RefManager;

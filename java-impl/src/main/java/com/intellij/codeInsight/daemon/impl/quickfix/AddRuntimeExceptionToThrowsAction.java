@@ -20,7 +20,7 @@ import java.util.Collections;
 import javax.annotation.Nonnull;
 
 import consulo.java.analysis.impl.JavaQuickFixBundle;
-import com.intellij.codeInsight.ExceptionUtil;
+import com.intellij.java.language.impl.codeInsight.ExceptionUtil;
 import com.intellij.codeInsight.FileModificationService;
 import com.intellij.codeInsight.intention.IntentionAction;
 import com.intellij.openapi.editor.Editor;

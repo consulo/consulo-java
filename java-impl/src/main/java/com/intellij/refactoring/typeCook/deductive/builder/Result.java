@@ -15,6 +15,8 @@
  */
 package com.intellij.refactoring.typeCook.deductive.builder;
 
+import com.intellij.java.language.impl.psi.Bottom;
+import com.intellij.java.language.impl.psi.PsiTypeVariable;
 import com.intellij.java.language.psi.*;
 import consulo.logging.Logger;
 import com.intellij.psi.*;

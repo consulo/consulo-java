@@ -37,7 +37,7 @@ import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.util.Consumer;
-import consulo.java.JavaIcons;
+import consulo.java.language.impl.JavaIcons;
 import consulo.psi.PsiPackage;
 
 import javax.annotation.Nonnull;

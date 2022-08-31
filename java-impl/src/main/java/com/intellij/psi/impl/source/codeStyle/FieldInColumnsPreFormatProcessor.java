@@ -26,7 +26,7 @@ import com.intellij.java.language.psi.PsiField;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
-import com.intellij.psi.impl.source.tree.ElementType;
+import com.intellij.java.language.impl.psi.impl.source.tree.ElementType;
 import com.intellij.psi.impl.source.tree.JavaJspElementType;
 import com.intellij.psi.util.PsiTreeUtil;
 

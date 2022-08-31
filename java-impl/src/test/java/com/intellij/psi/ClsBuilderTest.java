@@ -14,7 +14,7 @@ import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.impl.compiled.ClsFileImpl;
+import com.intellij.java.language.impl.psi.impl.compiled.ClsFileImpl;
 import com.intellij.psi.stubs.PsiFileStub;
 import com.intellij.psi.stubs.StubBase;
 import com.intellij.testFramework.LightIdeaTestCase;

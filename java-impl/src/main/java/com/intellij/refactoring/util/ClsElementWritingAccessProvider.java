@@ -15,7 +15,7 @@
  */
 package com.intellij.refactoring.util;
 
-import com.intellij.ide.highlighter.JavaClassFileType;
+import com.intellij.java.language.impl.JavaClassFileType;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.WritingAccessProvider;
 import javax.annotation.Nonnull;

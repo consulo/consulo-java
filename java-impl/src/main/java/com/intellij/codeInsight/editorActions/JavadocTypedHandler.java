@@ -28,8 +28,8 @@ import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiWhiteSpace;
-import com.intellij.psi.impl.source.javadoc.PsiDocParamRef;
-import com.intellij.psi.impl.source.tree.JavaDocElementType;
+import com.intellij.java.language.impl.psi.impl.source.javadoc.PsiDocParamRef;
+import com.intellij.java.language.impl.psi.impl.source.tree.JavaDocElementType;
 import com.intellij.java.language.psi.javadoc.PsiDocTag;
 import com.intellij.java.language.psi.javadoc.PsiDocTagValue;
 

@@ -20,6 +20,8 @@ import com.intellij.codeInsight.CodeInsightBundle;
 import com.intellij.java.language.codeInsight.NullableNotNullManager;
 import com.intellij.codeInsight.daemon.ImplicitUsageProvider;
 import com.intellij.ide.util.MemberChooser;
+import com.intellij.java.language.impl.codeInsight.generation.GenerationInfo;
+import com.intellij.java.language.impl.codeInsight.generation.PsiElementClassMember;
 import com.intellij.java.language.psi.*;
 import consulo.logging.Logger;
 import com.intellij.openapi.extensions.Extensions;

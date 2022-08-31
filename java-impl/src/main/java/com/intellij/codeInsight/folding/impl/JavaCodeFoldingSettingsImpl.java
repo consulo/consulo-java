@@ -15,6 +15,7 @@
  */
 package com.intellij.codeInsight.folding.impl;
 
+import com.intellij.java.language.impl.codeInsight.folding.impl.JavaCodeFoldingSettingsBase;
 import jakarta.inject.Singleton;
 
 import com.intellij.openapi.components.PersistentStateComponent;

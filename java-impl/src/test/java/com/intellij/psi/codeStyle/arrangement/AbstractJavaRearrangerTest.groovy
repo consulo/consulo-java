@@ -15,7 +15,7 @@
  */
 package com.intellij.psi.codeStyle.arrangement
 
-import com.intellij.ide.highlighter.JavaFileType
+import com.intellij.java.language.impl.JavaFileType
 import com.intellij.java.language.JavaLanguage
 
 /**

@@ -1,6 +1,6 @@
 package consulo.java.library;
 
-import com.intellij.ide.highlighter.JavaFileType;
+import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.openapi.roots.OrderRootType;
 import com.intellij.openapi.roots.libraries.ui.FileTypeBasedRootFilter;
 

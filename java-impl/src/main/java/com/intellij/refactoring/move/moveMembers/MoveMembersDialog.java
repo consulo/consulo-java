@@ -34,7 +34,7 @@ import com.intellij.java.language.psi.*;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nullable;
 import com.intellij.java.language.util.ClassFilter;
-import com.intellij.ide.util.PackageUtil;
+import com.intellij.java.language.impl.codeInsight.PackageUtil;
 import com.intellij.java.language.util.TreeClassChooser;
 import com.intellij.java.language.util.TreeClassChooserFactory;
 import com.intellij.openapi.application.ApplicationManager;

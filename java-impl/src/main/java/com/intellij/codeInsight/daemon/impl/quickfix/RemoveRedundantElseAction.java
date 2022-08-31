@@ -15,19 +15,19 @@
  */
 package com.intellij.codeInsight.daemon.impl.quickfix;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.codeInsight.FileModificationService;
-import com.intellij.java.language.psi.*;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
 import com.intellij.codeInsight.intention.PsiElementBaseIntentionAction;
+import com.intellij.java.language.impl.psi.controlFlow.*;
+import com.intellij.java.language.psi.*;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.*;
-import com.intellij.psi.controlFlow.*;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
+import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.logging.Logger;
+
+import javax.annotation.Nonnull;
 
 /**
  * @author ven
@@ -52,7 +52,7 @@ public class RemoveRedundantElseAction extends PsiElementBaseIntentionAction {
     if (element instanceof PsiKeyword &&
         element.getParent() instanceof PsiIfStatement &&
         PsiKeyword.ELSE.equals(element.getText())) {
-      PsiIfStatement ifStatement = (PsiIfStatement)element.getParent();
+      PsiIfStatement ifStatement = (PsiIfStatement) element.getParent();
       if (ifStatement.getElseBranch() == null) return false;
       PsiStatement thenBranch = ifStatement.getThenBranch();
       if (thenBranch == null) return false;
@@ -72,8 +72,8 @@ public class RemoveRedundantElseAction extends PsiElementBaseIntentionAction {
   private static PsiStatement getPrevThenBranch(@Nonnull PsiElement thenBranch) {
     final PsiElement ifStatement = thenBranch.getParent();
     final PsiElement parent = ifStatement.getParent();
-    if (parent instanceof PsiIfStatement && ((PsiIfStatement)parent).getElseBranch() == ifStatement) {
-      return ((PsiIfStatement)parent).getThenBranch();
+    if (parent instanceof PsiIfStatement && ((PsiIfStatement) parent).getElseBranch() == ifStatement) {
+      return ((PsiIfStatement) parent).getThenBranch();
     }
     return null;
   }
@@ -84,8 +84,7 @@ public class RemoveRedundantElseAction extends PsiElementBaseIntentionAction {
       int startOffset = controlFlow.getStartOffset(thenBranch);
       int endOffset = controlFlow.getEndOffset(thenBranch);
       return startOffset != -1 && endOffset != -1 && !ControlFlowUtil.canCompleteNormally(controlFlow, startOffset, endOffset);
-    }
-    catch (AnalysisCanceledException e) {
+    } catch (AnalysisCanceledException e) {
       return false;
     }
   }
@@ -93,13 +92,13 @@ public class RemoveRedundantElseAction extends PsiElementBaseIntentionAction {
   @Override
   public void invoke(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) throws IncorrectOperationException {
     if (!FileModificationService.getInstance().preparePsiElementForWrite(element)) return;
-    PsiIfStatement ifStatement = (PsiIfStatement)element.getParent();
+    PsiIfStatement ifStatement = (PsiIfStatement) element.getParent();
     LOG.assertTrue(ifStatement != null && ifStatement.getElseBranch() != null);
     PsiStatement elseBranch = ifStatement.getElseBranch();
     if (elseBranch instanceof PsiBlockStatement) {
-      PsiElement[] statements = ((PsiBlockStatement)elseBranch).getCodeBlock().getStatements();
+      PsiElement[] statements = ((PsiBlockStatement) elseBranch).getCodeBlock().getStatements();
       if (statements.length > 0) {
-        ifStatement.getParent().addRangeAfter(statements[0], statements[statements.length-1], ifStatement);
+        ifStatement.getParent().addRangeAfter(statements[0], statements[statements.length - 1], ifStatement);
       }
     } else {
       ifStatement.getParent().addAfter(elseBranch, ifStatement);

@@ -24,7 +24,7 @@ import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.psi.PsiFile;
 import com.intellij.java.language.psi.PsiJavaFile;
 import com.intellij.psi.impl.source.tree.CompositeElement;
-import com.intellij.psi.impl.source.tree.JavaElementType;
+import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
 import com.intellij.psi.impl.source.tree.TreeUtil;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.psi.impl.source.codeStyle.IndentHelperExtension;

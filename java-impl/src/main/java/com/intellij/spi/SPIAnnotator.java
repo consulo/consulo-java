@@ -25,7 +25,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.java.language.psi.util.ClassUtil;
 import com.intellij.psi.util.PsiUtilCore;
 import com.intellij.spi.psi.SPIClassProviderReferenceElement;
-import com.intellij.spi.psi.SPIFile;
+import com.intellij.java.language.impl.spi.psi.SPIFile;
 
 /**
  * User: anna

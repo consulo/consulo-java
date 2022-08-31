@@ -15,25 +15,27 @@
  */
 package com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis;
 
-import com.intellij.codeInsight.daemon.JavaErrorBundle;
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
 import com.intellij.codeInsight.daemon.impl.HighlightInfoType;
 import com.intellij.codeInsight.daemon.impl.quickfix.QuickFixAction;
 import com.intellij.java.analysis.codeInsight.intention.QuickFixFactory;
 import com.intellij.java.analysis.impl.psi.controlFlow.AllVariablesControlFlowPolicy;
+import com.intellij.java.language.LanguageLevel;
+import com.intellij.java.language.impl.codeInsight.daemon.JavaErrorBundle;
+import com.intellij.java.language.impl.psi.controlFlow.*;
+import com.intellij.java.language.impl.psi.util.JavaPsiRecordUtil;
 import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.FileTypeUtils;
+import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.openapi.project.IndexNotReadyException;
 import com.intellij.openapi.util.TextRange;
-import com.intellij.java.language.LanguageLevel;
-import com.intellij.psi.*;
-import com.intellij.psi.controlFlow.*;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiReference;
 import com.intellij.psi.search.LocalSearchScope;
 import com.intellij.psi.search.searches.ReferencesSearch;
 import com.intellij.psi.tree.IElementType;
-import com.intellij.java.language.psi.util.FileTypeUtils;
-import com.intellij.psi.util.JavaPsiRecordUtil;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.util.Processor;
 import com.intellij.util.containers.ContainerUtil;
 import consulo.java.analysis.impl.JavaQuickFixBundle;

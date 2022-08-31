@@ -27,7 +27,7 @@ import com.intellij.execution.filters.TextConsoleBuilderFactory;
 import com.intellij.execution.ui.ConsoleView;
 import com.intellij.execution.ui.RunnerLayoutUi;
 import com.intellij.execution.ui.layout.impl.RunnerContentUi;
-import com.intellij.ide.highlighter.JavaFileType;
+import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.SourcePosition;
 import com.intellij.java.debugger.engine.DebuggerUtils;
