@@ -15,10 +15,10 @@
  */
 package com.intellij.java.impl.ipp.psiutils;
 
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiErrorElement;
-import com.intellij.psi.PsiRecursiveElementWalkingVisitor;
-import com.intellij.psi.util.PsiUtilCore;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiErrorElement;
+import consulo.language.psi.PsiRecursiveElementWalkingVisitor;
+import consulo.language.psi.PsiUtilCore;
 
 public class ErrorUtil {
 

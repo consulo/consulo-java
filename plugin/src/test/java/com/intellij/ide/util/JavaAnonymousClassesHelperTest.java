@@ -18,8 +18,8 @@ package com.intellij.ide.util;
 import com.intellij.JavaTestUtil;
 import com.intellij.java.language.util.JavaAnonymousClassesHelper;
 import com.intellij.java.language.psi.PsiAnonymousClass;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.util.PsiUtilBase;
+import consulo.language.psi.PsiElement;
+import consulo.language.editor.util.PsiUtilBase;
 import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
 
 /**

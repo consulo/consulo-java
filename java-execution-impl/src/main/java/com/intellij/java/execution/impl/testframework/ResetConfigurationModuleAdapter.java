@@ -21,27 +21,27 @@ import java.util.Set;
 import javax.swing.event.HyperlinkEvent;
 
 import com.intellij.java.execution.CommonJavaRunConfigurationParameters;
-import com.intellij.execution.ExecutionException;
-import com.intellij.execution.Executor;
+import consulo.execution.executor.DefaultRunExecutor;
+import consulo.execution.executor.Executor;
+import consulo.process.ExecutionException;
 import com.intellij.java.execution.configurations.JavaRunConfigurationModule;
-import com.intellij.execution.configurations.ModuleBasedConfiguration;
-import com.intellij.execution.executors.DefaultDebugExecutor;
-import com.intellij.execution.executors.DefaultRunExecutor;
-import com.intellij.execution.runners.ExecutionEnvironmentBuilder;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleManager;
-import com.intellij.openapi.module.ModuleUtilCore;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.MessageType;
-import com.intellij.openapi.ui.popup.Balloon;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.wm.ToolWindowId;
-import com.intellij.openapi.wm.ToolWindowManager;
+import consulo.execution.configuration.ModuleBasedConfiguration;
+import consulo.execution.debug.DefaultDebugExecutor;
+import consulo.execution.runner.ExecutionEnvironmentBuilder;
+import consulo.module.Module;
+import consulo.module.ModuleManager;
+import consulo.language.util.ModuleUtilCore;
+import consulo.project.Project;
+import consulo.ide.impl.idea.openapi.ui.MessageType;
+import consulo.project.ui.wm.ToolWindowId;
+import consulo.ui.ex.popup.Balloon;
+import consulo.util.lang.StringUtil;
+import consulo.project.ui.wm.ToolWindowManager;
 import com.intellij.java.language.psi.JavaPsiFacade;
-import com.intellij.psi.PsiDirectory;
+import consulo.language.psi.PsiDirectory;
 import com.intellij.java.language.psi.PsiJavaPackage;
-import com.intellij.ui.HyperlinkAdapter;
-import com.intellij.util.Function;
+import consulo.ui.ex.awt.HyperlinkAdapter;
+import consulo.ide.impl.idea.util.Function;
 import consulo.logging.Logger;
 
 public class ResetConfigurationModuleAdapter extends HyperlinkAdapter
@@ -110,7 +110,7 @@ public class ResetConfigurationModuleAdapter extends HyperlinkAdapter
 				message += "one of\n" + StringUtil.join(modulesWithPackage, moduleNameRef, "\n") + "\n";
 			}
 			message += "instead";
-			toolWindowManager.notifyByBalloon(testRunDebugId, MessageType.WARNING, message, null, new ResetConfigurationModuleAdapter(configuration, project, isDebug, toolWindowManager,
+			toolWindowManager.notifyByBalloon(testRunDebugId, consulo.ide.impl.idea.openapi.ui.MessageType.WARNING, message, null, new ResetConfigurationModuleAdapter(configuration, project, isDebug, toolWindowManager,
 					testRunDebugId));
 			return true;
 		}

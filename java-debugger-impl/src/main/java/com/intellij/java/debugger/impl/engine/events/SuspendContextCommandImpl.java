@@ -21,7 +21,7 @@ import com.intellij.java.debugger.impl.engine.DebuggerManagerThreadImpl;
 import com.intellij.java.debugger.impl.engine.SuspendContextImpl;
 import com.intellij.java.debugger.engine.managerThread.SuspendContextCommand;
 import consulo.logging.Logger;
-import com.intellij.util.containers.Stack;
+import consulo.util.collection.Stack;
 
 /**
  * Performs contextAction when evaluation is available in suspend context
@@ -32,7 +32,7 @@ public abstract class SuspendContextCommandImpl extends DebuggerCommandImpl
 
 	private final SuspendContextImpl mySuspendContext;
 
-	protected SuspendContextCommandImpl(@javax.annotation.Nullable SuspendContextImpl suspendContext)
+	protected SuspendContextCommandImpl(@Nullable SuspendContextImpl suspendContext)
 	{
 		mySuspendContext = suspendContext;
 	}

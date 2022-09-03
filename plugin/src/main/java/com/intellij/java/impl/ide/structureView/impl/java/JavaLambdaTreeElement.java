@@ -15,10 +15,10 @@
  */
 package com.intellij.java.impl.ide.structureView.impl.java;
 
-import com.intellij.icons.AllIcons;
-import com.intellij.ide.structureView.StructureViewTreeElement;
+import consulo.application.AllIcons;
+import consulo.fileEditor.structureView.StructureViewTreeElement;
 import com.intellij.java.language.util.PsiLambdaNameHelper;
-import com.intellij.openapi.project.DumbService;
+import consulo.project.DumbService;
 import com.intellij.java.language.psi.PsiLambdaExpression;
 import com.intellij.java.language.psi.PsiType;
 import consulo.ui.image.Image;

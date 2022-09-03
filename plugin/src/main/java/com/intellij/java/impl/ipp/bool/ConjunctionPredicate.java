@@ -16,9 +16,9 @@
 package com.intellij.java.impl.ipp.bool;
 
 import com.intellij.java.language.psi.JavaTokenType;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiPolyadicExpression;
-import com.intellij.psi.tree.IElementType;
+import consulo.language.ast.IElementType;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.intellij.java.impl.ipp.psiutils.ErrorUtil;
 

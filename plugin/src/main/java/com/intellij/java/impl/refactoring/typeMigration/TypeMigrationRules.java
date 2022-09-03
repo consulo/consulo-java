@@ -12,21 +12,21 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.jetbrains.annotations.NonNls;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.impl.LibraryScopeCache;
-import com.intellij.openapi.util.Pair;
+import consulo.project.Project;
+import consulo.ide.impl.idea.openapi.roots.impl.LibraryScopeCache;
+import consulo.util.lang.Pair;
 import com.intellij.java.language.psi.PsiEllipsisType;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiMember;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiType;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.search.SearchScope;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.content.scope.SearchScope;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import com.intellij.java.impl.refactoring.typeMigration.rules.DisjunctionTypeConversionRule;
 import com.intellij.java.impl.refactoring.typeMigration.rules.RootTypeConversionRule;
 import com.intellij.java.impl.refactoring.typeMigration.rules.TypeConversionRule;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.util.collection.ContainerUtil;
 
 /**
  * @author db

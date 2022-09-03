@@ -15,13 +15,13 @@
  */
 package com.intellij.java.impl.ide.macro;
 
-import com.intellij.ide.IdeBundle;
-import com.intellij.ide.macro.Macro;
+import consulo.ide.IdeBundle;
+import consulo.pathMacro.Macro;
 import com.intellij.java.impl.javadoc.JavadocConfiguration;
 import com.intellij.java.impl.javadoc.JavadocGenerationManager;
-import com.intellij.openapi.actionSystem.CommonDataKeys;
-import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.project.Project;
+import consulo.language.editor.CommonDataKeys;
+import consulo.dataContext.DataContext;
+import consulo.project.Project;
 
 import java.io.File;
 

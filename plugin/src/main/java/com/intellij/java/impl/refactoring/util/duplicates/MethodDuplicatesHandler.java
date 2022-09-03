@@ -26,45 +26,46 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-import com.intellij.analysis.AnalysisScope;
-import com.intellij.analysis.AnalysisUIOptions;
-import com.intellij.analysis.BaseAnalysisActionDialog;
-import com.intellij.history.LocalHistory;
+import consulo.language.editor.scope.AnalysisScope;
+import consulo.ide.impl.idea.analysis.AnalysisUIOptions;
+import consulo.ide.impl.idea.analysis.BaseAnalysisActionDialog;
+import consulo.localHistory.LocalHistory;
 import com.intellij.history.LocalHistoryAction;
 import com.intellij.java.analysis.impl.refactoring.util.duplicates.DuplicatesFinder;
 import com.intellij.java.analysis.impl.refactoring.util.duplicates.Match;
 import com.intellij.java.analysis.impl.refactoring.util.duplicates.ReturnValue;
 import com.intellij.java.analysis.impl.refactoring.util.duplicates.VariableReturnValue;
 import com.intellij.java.language.psi.*;
-import com.intellij.lang.ContextAwareActionHandler;
-import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.application.ApplicationNamesInfo;
-import com.intellij.openapi.application.ModalityState;
-import com.intellij.openapi.command.CommandProcessor;
+import consulo.language.editor.refactoring.ContextAwareActionHandler;
+import consulo.dataContext.DataContext;
+import consulo.application.ApplicationManager;
+import consulo.application.impl.internal.ApplicationNamesInfo;
+import consulo.ui.ModalityState;
+import consulo.undoRedo.CommandProcessor;
 import consulo.logging.Logger;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleUtilCore;
-import com.intellij.openapi.progress.ProgressIndicator;
-import com.intellij.openapi.progress.ProgressManager;
-import com.intellij.openapi.progress.Task;
-import com.intellij.openapi.project.Project;
+import consulo.codeEditor.Editor;
+import consulo.module.Module;
+import consulo.language.util.ModuleUtilCore;
+import consulo.application.progress.ProgressIndicator;
+import consulo.application.progress.ProgressManager;
+import consulo.application.progress.Task;
+import consulo.project.Project;
 import com.intellij.openapi.project.ProjectUtil;
-import com.intellij.openapi.ui.Messages;
-import com.intellij.openapi.util.Computable;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.openapi.wm.WindowManager;
+import consulo.ui.ex.awt.Messages;
+import consulo.application.util.function.Computable;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.project.ui.wm.WindowManager;
 import com.intellij.psi.*;
-import com.intellij.psi.impl.source.PostprocessReformattingAspect;
-import com.intellij.psi.search.LocalSearchScope;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.codeStyle.PostprocessReformattingAspect;
+import consulo.language.psi.scope.LocalSearchScope;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.impl.refactoring.HelpID;
-import com.intellij.refactoring.RefactoringActionHandler;
-import com.intellij.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.action.RefactoringActionHandler;
+import consulo.language.editor.refactoring.RefactoringBundle;
 import com.intellij.java.analysis.impl.refactoring.extractMethod.InputVariables;
-import com.intellij.refactoring.util.CommonRefactoringUtil;
+import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 
 /**
  * @author dsl
@@ -114,7 +115,7 @@ public class MethodDuplicatesHandler implements RefactoringActionHandler, Contex
 		}
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	private static String getCannotRefactorMessage(PsiMember member)
 	{
 		if(member == null)
@@ -356,7 +357,7 @@ public class MethodDuplicatesHandler implements RefactoringActionHandler, Contex
 		return duplicatesFinder.findDuplicates(file);
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public static DuplicatesFinder createDuplicatesFinder(PsiMember member)
 	{
 		PsiElement[] pattern;

@@ -18,9 +18,9 @@ package com.intellij.java.impl.lang.java;
 import javax.annotation.Nonnull;
 import com.intellij.java.impl.ide.highlighter.JavaFileHighlighter;
 import com.intellij.java.language.JavaLanguage;
-import com.intellij.openapi.fileTypes.SyntaxHighlighter;
-import consulo.fileTypes.LanguageVersionableSyntaxHighlighterFactory;
-import consulo.lang.LanguageVersion;
+import consulo.language.editor.highlight.SyntaxHighlighter;
+import consulo.language.editor.highlight.LanguageVersionableSyntaxHighlighterFactory;
+import consulo.language.version.LanguageVersion;
 
 public class JavaSyntaxHighlighterFactory extends LanguageVersionableSyntaxHighlighterFactory
 {

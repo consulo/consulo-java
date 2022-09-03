@@ -16,13 +16,13 @@
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
 import com.intellij.java.language.impl.codeInsight.BlockUtils;
-import com.intellij.codeInsight.intention.LowPriorityAction;
-import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement;
+import consulo.language.editor.intention.LowPriorityAction;
+import consulo.language.editor.inspection.LocalQuickFixAndIntentionActionOnPsiElement;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
+import consulo.codeEditor.Editor;
+import consulo.project.Project;
 import com.intellij.psi.*;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.siyeh.ig.psiutils.CommentTracker;
 import com.siyeh.ig.psiutils.SideEffectChecker;

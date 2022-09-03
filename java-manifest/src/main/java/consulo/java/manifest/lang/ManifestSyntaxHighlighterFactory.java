@@ -1,11 +1,12 @@
 package consulo.java.manifest.lang;
 
 import javax.annotation.Nonnull;
+
+import consulo.language.editor.highlight.LanguageVersionableSyntaxHighlighterFactory;
 import org.osmorc.manifest.lang.ManifestLanguage;
 import org.osmorc.manifest.lang.ManifestSyntaxHighlighter;
-import com.intellij.openapi.fileTypes.SyntaxHighlighter;
-import consulo.fileTypes.LanguageVersionableSyntaxHighlighterFactory;
-import consulo.lang.LanguageVersion;
+import consulo.language.editor.highlight.SyntaxHighlighter;
+import consulo.language.version.LanguageVersion;
 
 /**
  * @author VISTALL

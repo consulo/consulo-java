@@ -19,12 +19,12 @@ package com.intellij.java.analysis.impl.codeInspection.dataFlow.inference;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiCodeBlock;
 import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.openapi.editor.Document;
+import consulo.document.Document;
 import com.intellij.psi.*;
 import com.intellij.java.language.impl.psi.impl.java.stubs.PsiMethodStub;
 import com.intellij.java.language.impl.psi.impl.source.PsiMethodImpl;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.gist.GistManager;
+import consulo.language.util.IncorrectOperationException;
+import consulo.ide.impl.idea.util.gist.GistManager;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

@@ -15,15 +15,15 @@
  */
 package com.intellij.java.language.impl.psi.impl.source.tree.java;
 
-import com.intellij.lang.ASTNode;
+import consulo.language.ast.ASTNode;
 import consulo.logging.Logger;
 import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.java.language.impl.psi.impl.source.tree.ChildRole;
-import com.intellij.psi.impl.source.tree.CompositeElement;
+import consulo.language.impl.ast.CompositeElement;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
-import com.intellij.psi.impl.source.tree.TreeUtil;
-import com.intellij.psi.tree.ChildRoleBase;
-import com.intellij.psi.tree.IElementType;
+import consulo.language.impl.ast.TreeUtil;
+import consulo.language.ast.ChildRoleBase;
+import consulo.language.ast.IElementType;
 
 /**
  * @author dsl

@@ -15,16 +15,16 @@
  */
 package com.intellij.java.impl.psi.search.scope.packageSet;
 
-import com.intellij.openapi.project.Project;
+import consulo.project.Project;
 import com.intellij.openapi.roots.*;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.problems.WolfTheProblemSolver;
-import com.intellij.psi.search.scope.packageSet.FilePatternPackageSet;
-import com.intellij.psi.search.scope.packageSet.NamedScopesHolder;
-import com.intellij.psi.search.scope.packageSet.PackageSet;
-import com.intellij.psi.search.scope.packageSet.PatternBasedPackageSet;
+import consulo.util.lang.Comparing;
+import consulo.util.lang.StringUtil;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.language.editor.wolfAnalyzer.WolfTheProblemSolver;
+import consulo.ide.impl.psi.search.scope.packageSet.FilePatternPackageSet;
+import consulo.content.scope.NamedScopesHolder;
+import consulo.content.scope.PackageSet;
+import consulo.ide.impl.psi.search.scope.packageSet.PatternBasedPackageSet;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;

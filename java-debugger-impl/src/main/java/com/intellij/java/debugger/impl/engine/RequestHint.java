@@ -36,9 +36,9 @@ import com.intellij.java.debugger.impl.DebuggerUtilsEx;
 import com.intellij.java.debugger.impl.jdi.StackFrameProxyImpl;
 import com.intellij.java.debugger.impl.jdi.ThreadReferenceProxyImpl;
 import com.intellij.java.debugger.impl.settings.DebuggerSettings;
-import com.intellij.openapi.application.ReadAction;
+import consulo.application.ReadAction;
 import consulo.logging.Logger;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.util.Range;
 import consulo.internal.com.sun.jdi.Location;
 import consulo.internal.com.sun.jdi.Method;
@@ -66,7 +66,7 @@ public class RequestHint
 	private final int myFrameCount;
 	private boolean mySteppedOut = false;
 
-	@javax.annotation.Nullable
+	@Nullable
 	private final MethodFilter myMethodFilter;
 	private boolean myTargetMethodMatched = false;
 
@@ -101,7 +101,7 @@ public class RequestHint
 					StepRequest.STEP_OVER,
 					StepRequest.STEP_OUT
 			}) int depth,
-			@javax.annotation.Nullable MethodFilter methodFilter)
+			@Nullable MethodFilter methodFilter)
 	{
 		mySize = stepSize;
 		myDepth = depth;

@@ -16,16 +16,18 @@
 package com.intellij.java.impl.application.options;
 
 import com.intellij.java.analysis.impl.ide.highlighter.JavaHighlightingColors;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.application.ApplicationBundle;
-import com.intellij.openapi.editor.markup.TextAttributes;
-import com.intellij.psi.codeStyle.PackageEntry;
-import com.intellij.psi.codeStyle.PackageEntryTable;
+import consulo.ui.ex.action.AnActionEvent;
+import consulo.application.ApplicationBundle;
+import consulo.colorScheme.TextAttributes;
+import consulo.language.codeStyle.PackageEntry;
+import consulo.language.codeStyle.PackageEntryTable;
 import com.intellij.ui.*;
-import com.intellij.ui.components.JBCheckBox;
-import com.intellij.ui.table.JBTable;
-import com.intellij.util.IconUtil;
+import consulo.ui.ex.awt.JBCheckBox;
+import consulo.ui.ex.awt.table.JBTable;
+import consulo.ide.impl.idea.util.IconUtil;
+import consulo.ui.ex.awt.*;
 
+import javax.annotation.Nullable;
 import javax.swing.*;
 import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
@@ -229,7 +231,7 @@ public abstract class ImportLayoutPanel extends JPanel {
         return packageTable.getEntryCount();
       }
 
-      @javax.annotation.Nullable
+      @Nullable
       public Object getValueAt(int row, int col) {
         PackageEntry entry = packageTable.getEntryAt(row);
         if (entry == null || !isCellEditable(row, col)) return null;

@@ -15,19 +15,19 @@
  */
 package com.intellij.java.impl.find.findUsages;
 
-import com.intellij.find.findUsages.FindUsagesHandler;
-import com.intellij.find.findUsages.FindUsagesHandlerFactory;
+import consulo.find.FindUsagesHandler;
+import consulo.find.FindUsagesHandlerFactory;
 import com.intellij.java.analysis.impl.find.findUsages.*;
 import com.intellij.java.impl.ide.util.SuperMethodWarningUtil;
 import com.intellij.java.impl.lang.java.JavaFindUsagesProvider;
 import com.intellij.java.language.psi.JavaDirectoryService;
 import com.intellij.java.language.psi.PsiJavaPackage;
 import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.openapi.extensions.Extensions;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiDirectory;
-import com.intellij.psi.PsiElement;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.component.extension.Extensions;
+import consulo.project.Project;
+import consulo.language.psi.PsiDirectory;
+import consulo.language.psi.PsiElement;
+import consulo.util.collection.ContainerUtil;
 import jakarta.inject.Inject;
 
 import javax.annotation.Nonnull;

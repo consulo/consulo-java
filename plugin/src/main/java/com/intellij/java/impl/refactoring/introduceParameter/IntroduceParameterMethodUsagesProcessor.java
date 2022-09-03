@@ -15,11 +15,11 @@
  */
 package com.intellij.java.impl.refactoring.introduceParameter;
 
-import com.intellij.openapi.extensions.ExtensionPointName;
-import com.intellij.psi.PsiElement;
-import com.intellij.usageView.UsageInfo;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.containers.MultiMap;
+import consulo.component.extension.ExtensionPointName;
+import consulo.language.psi.PsiElement;
+import consulo.usage.UsageInfo;
+import consulo.language.util.IncorrectOperationException;
+import consulo.util.collection.MultiMap;
 
 /**
  * @author Maxim.Medvedev

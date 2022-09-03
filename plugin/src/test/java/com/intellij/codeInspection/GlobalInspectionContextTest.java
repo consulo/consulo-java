@@ -16,13 +16,13 @@
 package com.intellij.codeInspection;
 
 import com.intellij.JavaTestUtil;
-import com.intellij.analysis.AnalysisScope;
+import consulo.language.editor.scope.AnalysisScope;
 import com.intellij.codeInsight.CodeInsightTestCase;
-import com.intellij.codeInspection.actions.RunInspectionIntention;
+import consulo.ide.impl.idea.codeInspection.actions.RunInspectionIntention;
 import com.intellij.codeInspection.ex.*;
-import com.intellij.codeInspection.ui.InspectionToolPresentation;
+import consulo.ide.impl.idea.codeInspection.ui.InspectionToolPresentation;
 import com.intellij.java.impl.codeInspection.visibility.VisibilityInspection;
-import com.intellij.psi.PsiFile;
+import consulo.language.psi.PsiFile;
 
 import java.util.ArrayList;
 import java.util.Arrays;

@@ -15,19 +15,20 @@
  */
 package com.intellij.java.impl.codeInsight.lookup.impl;
 
-import com.intellij.codeInsight.lookup.DefaultLookupItemRenderer;
-import com.intellij.codeInsight.lookup.LookupElement;
-import com.intellij.codeInsight.lookup.LookupElementPresentation;
-import com.intellij.codeInsight.lookup.LookupItem;
-import com.intellij.codeInsight.lookup.impl.ElementLookupRenderer;
+import consulo.language.editor.completion.lookup.DefaultLookupItemRenderer;
+import consulo.language.editor.completion.lookup.LookupElement;
+import consulo.language.editor.completion.lookup.LookupElementPresentation;
+import consulo.language.editor.completion.lookup.LookupItem;
+import consulo.language.editor.completion.lookup.ElementLookupRenderer;
 import com.intellij.java.impl.codeInsight.completion.JavaCompletionUtil;
 import com.intellij.java.impl.psi.impl.beanProperties.BeanPropertyElement;
 import com.intellij.java.language.psi.PsiDocCommentOwner;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiType;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.util.PsiUtilCore;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiUtilCore;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 /**
@@ -68,7 +69,7 @@ public class JavaElementLookupRenderer implements ElementLookupRenderer {
     return isDeprecated(item.getPsiElement());
   }
 
-  private static boolean isDeprecated(@javax.annotation.Nullable PsiElement element) {
+  private static boolean isDeprecated(@Nullable PsiElement element) {
     return element instanceof PsiDocCommentOwner && ((PsiDocCommentOwner) element).isDeprecated();
   }
 }

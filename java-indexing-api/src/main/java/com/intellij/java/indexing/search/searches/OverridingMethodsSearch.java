@@ -15,16 +15,18 @@
  */
 package com.intellij.java.indexing.search.searches;
 
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.util.Computable;
+import consulo.application.ApplicationManager;
+import consulo.application.util.function.Computable;
 import com.intellij.java.language.psi.PsiAnonymousClass;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifier;
-import com.intellij.psi.search.SearchScope;
-import com.intellij.psi.search.searches.ExtensibleQueryFactory;
-import com.intellij.util.EmptyQuery;
-import com.intellij.util.Query;
+import consulo.content.scope.SearchScope;
+import consulo.application.util.query.ExtensibleQueryFactory;
+import consulo.application.util.query.EmptyQuery;
+import consulo.application.util.query.Query;
+
+import java.util.function.Supplier;
 
 /**
  * @author max
@@ -57,16 +59,11 @@ public class OverridingMethodsSearch extends ExtensibleQueryFactory<PsiMethod, O
   }
 
   private OverridingMethodsSearch() {
-    super("consulo.java");
+    super(OverridingMethodsSearchExecutor.class);
   }
 
   public static Query<PsiMethod> search(final PsiMethod method, SearchScope scope, final boolean checkDeep) {
-    if (ApplicationManager.getApplication().runReadAction(new Computable<Boolean>() {
-      @Override
-      public Boolean compute() {
-        return cannotBeOverriden(method);
-      }
-    })) return EmptyQuery.getEmptyQuery(); // Optimization
+    if (ApplicationManager.getApplication().runReadAction((Computable<Boolean>) () -> cannotBeOverriden(method))) return EmptyQuery.getEmptyQuery(); // Optimization
     return INSTANCE.createUniqueResultsQuery(new SearchParameters(method, scope, checkDeep));
   }
 
@@ -82,9 +79,9 @@ public class OverridingMethodsSearch extends ExtensibleQueryFactory<PsiMethod, O
   }
 
   public static Query<PsiMethod> search(final PsiMethod method, final boolean checkDeep) {
-    return search(method, ApplicationManager.getApplication().runReadAction(new Computable<SearchScope>() {
+    return search(method, ApplicationManager.getApplication().runReadAction(new Supplier<>() {
       @Override
-      public SearchScope compute() {
+      public SearchScope get() {
         return method.getUseScope();
       }
     }), checkDeep);

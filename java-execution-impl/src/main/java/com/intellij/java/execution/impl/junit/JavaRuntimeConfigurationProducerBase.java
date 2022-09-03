@@ -15,23 +15,23 @@
  */
 package com.intellij.java.execution.impl.junit;
 
-import com.intellij.execution.RunnerAndConfigurationSettings;
-import com.intellij.execution.actions.ConfigurationContext;
-import com.intellij.execution.configurations.ConfigurationType;
-import com.intellij.execution.configurations.ModuleBasedConfiguration;
-import com.intellij.execution.impl.RunManagerImpl;
-import com.intellij.execution.junit.RuntimeConfigurationProducer;
-import com.intellij.execution.testframework.TestSearchScope;
+import consulo.execution.RunnerAndConfigurationSettings;
+import consulo.execution.action.ConfigurationContext;
+import consulo.execution.action.RuntimeConfigurationProducer;
+import consulo.execution.configuration.ConfigurationType;
+import consulo.execution.configuration.ModuleBasedConfiguration;
+import consulo.execution.test.TestSearchScope;
+import consulo.ide.impl.idea.execution.impl.RunManagerImpl;
 import com.intellij.java.language.psi.JavaDirectoryService;
 import com.intellij.java.language.psi.PsiJavaPackage;
 import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.ProjectFileIndex;
-import com.intellij.openapi.roots.ProjectRootManager;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.module.Module;
+import consulo.project.Project;
+import consulo.module.content.ProjectFileIndex;
+import consulo.module.content.ProjectRootManager;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.psi.*;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.language.psi.scope.GlobalSearchScope;
 
 import javax.annotation.Nullable;
 

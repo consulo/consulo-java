@@ -1,6 +1,6 @@
 package consulo.java.manifest.lang;
 
-import com.intellij.openapi.fileTypes.LanguageFileType;
+import consulo.language.file.LanguageFileType;
 import consulo.java.manifest.ManifestIcons;
 import consulo.localize.LocalizeValue;
 import consulo.ui.image.Image;

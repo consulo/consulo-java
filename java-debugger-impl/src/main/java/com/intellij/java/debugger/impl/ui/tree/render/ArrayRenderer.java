@@ -21,6 +21,8 @@ import java.util.Collections;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
+import consulo.execution.debug.breakpoint.XExpression;
+import consulo.execution.debug.frame.XDebuggerTreeNodeHyperlink;
 import consulo.logging.Logger;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
@@ -46,23 +48,21 @@ import com.intellij.java.debugger.impl.ui.tree.DebuggerTreeNode;
 import com.intellij.java.debugger.ui.tree.NodeDescriptor;
 import com.intellij.java.debugger.impl.ui.tree.NodeDescriptorFactory;
 import com.intellij.java.debugger.impl.ui.tree.ValueDescriptor;
-import com.intellij.icons.AllIcons;
-import com.intellij.openapi.util.DefaultJDOMExternalizer;
-import com.intellij.openapi.util.InvalidDataException;
-import com.intellij.openapi.util.WriteExternalException;
+import consulo.application.AllIcons;
+import consulo.util.xml.serializer.DefaultJDOMExternalizer;
+import consulo.util.xml.serializer.InvalidDataException;
+import consulo.util.xml.serializer.WriteExternalException;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.psi.JavaPsiFacade;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiElementFactory;
 import com.intellij.java.language.psi.PsiExpression;
-import com.intellij.ui.SimpleTextAttributes;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.xdebugger.XExpression;
-import com.intellij.xdebugger.frame.XCompositeNode;
-import com.intellij.xdebugger.frame.XDebuggerTreeNodeHyperlink;
-import com.intellij.xdebugger.frame.XValueChildrenList;
-import com.intellij.xdebugger.impl.ui.tree.XDebuggerTree;
-import com.intellij.xdebugger.impl.ui.tree.nodes.XValueNodeImpl;
+import consulo.ui.ex.SimpleTextAttributes;
+import consulo.language.util.IncorrectOperationException;
+import consulo.execution.debug.frame.XCompositeNode;
+import consulo.execution.debug.frame.XValueChildrenList;
+import consulo.ide.impl.idea.xdebugger.impl.ui.tree.XDebuggerTree;
+import consulo.ide.impl.idea.xdebugger.impl.ui.tree.nodes.XValueNodeImpl;
 import consulo.internal.com.sun.jdi.ArrayReference;
 import consulo.internal.com.sun.jdi.ArrayType;
 import consulo.internal.com.sun.jdi.Type;
@@ -358,7 +358,7 @@ public class ArrayRenderer extends NodeRendererImpl
 					TreeNode parent = ((TreeNode) path.getLastPathComponent()).getParent();
 					if(parent instanceof XValueNodeImpl)
 					{
-						XValueNodeImpl valueNode = (XValueNodeImpl) parent;
+						consulo.ide.impl.idea.xdebugger.impl.ui.tree.nodes.XValueNodeImpl valueNode = (consulo.ide.impl.idea.xdebugger.impl.ui.tree.nodes.XValueNodeImpl) parent;
 						ArrayAction.setArrayRenderer(NodeRendererSettings.getInstance().getArrayRenderer(), valueNode, DebuggerManagerEx.getInstanceEx(tree.getProject()).getContext());
 					}
 				}

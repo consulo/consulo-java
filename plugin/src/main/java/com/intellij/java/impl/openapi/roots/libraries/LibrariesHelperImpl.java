@@ -16,14 +16,15 @@
 package com.intellij.java.impl.openapi.roots.libraries;
 
 import com.intellij.java.language.impl.JavaClassFileType;
-import com.intellij.openapi.roots.libraries.Library;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.openapi.vfs.VirtualFileManager;
+import consulo.content.library.Library;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.virtualFileSystem.VirtualFileManager;
 import consulo.roots.types.BinariesOrderRootType;
-import consulo.vfs.util.ArchiveVfsUtil;
+import consulo.virtualFileSystem.archive.ArchiveVfsUtil;
 import jakarta.inject.Singleton;
 import org.jetbrains.annotations.NonNls;
 
+import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.List;
 
@@ -37,7 +38,7 @@ public class LibrariesHelperImpl extends LibrariesHelper {
     return library == null ? null : findRootByClass(Arrays.asList(library.getFiles(BinariesOrderRootType.getInstance())), fqn);
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   @Override
   public VirtualFile findRootByClass(List<VirtualFile> roots, String fqn) {
     for (VirtualFile file : roots) {

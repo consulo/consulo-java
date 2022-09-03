@@ -15,20 +15,20 @@
  */
 package com.intellij.java.impl.codeInsight.completion;
 
-import com.intellij.codeInsight.PsiEquivalenceUtil;
-import com.intellij.codeInsight.TailType;
-import com.intellij.codeInsight.completion.CompletionParameters;
-import com.intellij.codeInsight.completion.CompletionResultSet;
-import com.intellij.codeInsight.lookup.LookupElement;
+import consulo.language.editor.PsiEquivalenceUtil;
+import consulo.language.editor.completion.lookup.TailType;
+import consulo.language.editor.completion.CompletionParameters;
+import consulo.language.editor.completion.CompletionResultSet;
+import consulo.language.editor.completion.lookup.LookupElement;
 import com.intellij.java.impl.codeInsight.ExpectedTypeInfo;
 import com.intellij.java.impl.codeInsight.ExpectedTypeInfoImpl;
 import com.intellij.java.language.impl.psi.impl.source.resolve.graphInference.FunctionalInterfaceParameterizationUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.psi.PsiElement;
-import com.intellij.util.Consumer;
-import com.intellij.util.ProcessingContext;
-import consulo.codeInsight.completion.CompletionProvider;
+import consulo.language.psi.PsiElement;
+import consulo.ide.impl.idea.util.Consumer;
+import consulo.language.util.ProcessingContext;
+import consulo.language.editor.completion.CompletionProvider;
 import consulo.logging.Logger;
 
 import javax.annotation.Nonnull;

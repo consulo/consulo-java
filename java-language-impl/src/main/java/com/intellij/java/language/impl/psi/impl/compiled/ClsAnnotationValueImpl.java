@@ -15,142 +15,119 @@
  */
 package com.intellij.java.language.impl.psi.impl.compiled;
 
-import javax.annotation.Nonnull;
-
+import com.intellij.java.language.impl.psi.impl.PsiImplUtil;
+import com.intellij.java.language.psi.*;
+import consulo.language.impl.ast.TreeElement;
+import consulo.language.impl.psi.SourceTreeToPsiMap;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiElementVisitor;
+import consulo.language.psi.meta.MetaDataService;
+import consulo.language.psi.meta.PsiMetaData;
+import consulo.navigation.Navigatable;
 import org.jetbrains.annotations.NonNls;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import com.intellij.pom.Navigatable;
-import com.intellij.java.language.psi.JavaElementVisitor;
-import com.intellij.java.language.psi.PsiAnnotation;
-import com.intellij.java.language.psi.PsiAnnotationMemberValue;
-import com.intellij.java.language.psi.PsiAnnotationParameterList;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiElementVisitor;
-import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
-import com.intellij.java.language.impl.psi.impl.PsiImplUtil;
-import com.intellij.psi.impl.meta.MetaRegistry;
-import com.intellij.psi.impl.source.SourceTreeToPsiMap;
-import com.intellij.psi.impl.source.tree.TreeElement;
-import com.intellij.psi.meta.PsiMetaData;
 
 /**
  * @author ven
  */
-abstract class ClsAnnotationValueImpl extends ClsElementImpl implements PsiAnnotation, Navigatable
-{
-	private final ClsElementImpl myParent;
-	private final ClsJavaCodeReferenceElementImpl myReferenceElement;
-	private final ClsAnnotationParameterListImpl myParameterList;
+abstract class ClsAnnotationValueImpl extends ClsElementImpl implements PsiAnnotation, Navigatable {
+  private final ClsElementImpl myParent;
+  private final ClsJavaCodeReferenceElementImpl myReferenceElement;
+  private final ClsAnnotationParameterListImpl myParameterList;
 
-	@SuppressWarnings("AbstractMethodCallInConstructor")
-	ClsAnnotationValueImpl(@Nonnull ClsElementImpl parent)
-	{
-		myParent = parent;
-		myReferenceElement = createReference();
-		myParameterList = createParameterList();
-	}
+  @SuppressWarnings("AbstractMethodCallInConstructor")
+  ClsAnnotationValueImpl(@Nonnull ClsElementImpl parent) {
+    myParent = parent;
+    myReferenceElement = createReference();
+    myParameterList = createParameterList();
+  }
 
-	protected abstract ClsAnnotationParameterListImpl createParameterList();
+  protected abstract ClsAnnotationParameterListImpl createParameterList();
 
-	protected abstract ClsJavaCodeReferenceElementImpl createReference();
+  protected abstract ClsJavaCodeReferenceElementImpl createReference();
 
-	@Override
-	public void appendMirrorText(int indentLevel, @Nonnull StringBuilder buffer)
-	{
-		buffer.append("@").append(myReferenceElement.getCanonicalText());
-		myParameterList.appendMirrorText(indentLevel, buffer);
-	}
+  @Override
+  public void appendMirrorText(int indentLevel, @Nonnull StringBuilder buffer) {
+    buffer.append("@").append(myReferenceElement.getCanonicalText());
+    myParameterList.appendMirrorText(indentLevel, buffer);
+  }
 
-	@Override
-	public void setMirror(@Nonnull TreeElement element) throws InvalidMirrorException
-	{
-		setMirrorCheckingType(element, null);
+  @Override
+  public void setMirror(@Nonnull TreeElement element) throws InvalidMirrorException {
+    setMirrorCheckingType(element, null);
 
-		PsiAnnotation mirror = SourceTreeToPsiMap.treeToPsiNotNull(element);
-		setMirror(getNameReferenceElement(), mirror.getNameReferenceElement());
-		setMirror(getParameterList(), mirror.getParameterList());
-	}
+    PsiAnnotation mirror = SourceTreeToPsiMap.treeToPsiNotNull(element);
+    setMirror(getNameReferenceElement(), mirror.getNameReferenceElement());
+    setMirror(getParameterList(), mirror.getParameterList());
+  }
 
-	@Override
-	@Nonnull
-	public PsiElement[] getChildren()
-	{
-		return new PsiElement[]{
-				myReferenceElement,
-				myParameterList
-		};
-	}
+  @Override
+  @Nonnull
+  public PsiElement[] getChildren() {
+    return new PsiElement[]{
+        myReferenceElement,
+        myParameterList
+    };
+  }
 
-	@Override
-	public PsiElement getParent()
-	{
-		return myParent;
-	}
+  @Override
+  public PsiElement getParent() {
+    return myParent;
+  }
 
-	@Override
-	public void accept(@Nonnull PsiElementVisitor visitor)
-	{
-		if(visitor instanceof JavaElementVisitor)
-		{
-			((JavaElementVisitor) visitor).visitAnnotation(this);
-		}
-		else
-		{
-			visitor.visitElement(this);
-		}
-	}
+  @Override
+  public void accept(@Nonnull PsiElementVisitor visitor) {
+    if (visitor instanceof JavaElementVisitor) {
+      ((JavaElementVisitor) visitor).visitAnnotation(this);
+    } else {
+      visitor.visitElement(this);
+    }
+  }
 
-	@Override
-	@Nonnull
-	public PsiAnnotationParameterList getParameterList()
-	{
-		return myParameterList;
-	}
+  @Override
+  @Nonnull
+  public PsiAnnotationParameterList getParameterList() {
+    return myParameterList;
+  }
 
-	@Override
-	@javax.annotation.Nullable
-	public String getQualifiedName()
-	{
-		return myReferenceElement != null ? myReferenceElement.getCanonicalText() : null;
-	}
+  @Override
+  @Nullable
+  public String getQualifiedName() {
+    return myReferenceElement != null ? myReferenceElement.getCanonicalText() : null;
+  }
 
-	@Override
-	public PsiJavaCodeReferenceElement getNameReferenceElement()
-	{
-		return myReferenceElement;
-	}
+  @Override
+  public PsiJavaCodeReferenceElement getNameReferenceElement() {
+    return myReferenceElement;
+  }
 
-	@Override
-	public PsiAnnotationMemberValue findAttributeValue(String attributeName)
-	{
-		return PsiImplUtil.findAttributeValue(this, attributeName);
-	}
+  @Override
+  public PsiAnnotationMemberValue findAttributeValue(String attributeName) {
+    return PsiImplUtil.findAttributeValue(this, attributeName);
+  }
 
-	@Override
-	@Nullable
-	public PsiAnnotationMemberValue findDeclaredAttributeValue(@NonNls final String attributeName)
-	{
-		return PsiImplUtil.findDeclaredAttributeValue(this, attributeName);
-	}
+  @Override
+  @Nullable
+  public PsiAnnotationMemberValue findDeclaredAttributeValue(@NonNls final String attributeName) {
+    return PsiImplUtil.findDeclaredAttributeValue(this, attributeName);
+  }
 
-	@Override
-	public <T extends PsiAnnotationMemberValue> T setDeclaredAttributeValue(@NonNls String attributeName, T value)
-	{
-		throw cannotModifyException(this);
-	}
+  @Override
+  public <T extends PsiAnnotationMemberValue> T setDeclaredAttributeValue(@NonNls String attributeName, T value) {
+    throw cannotModifyException(this);
+  }
 
-	@Override
-	public String getText()
-	{
-		final StringBuilder buffer = new StringBuilder();
-		appendMirrorText(0, buffer);
-		return buffer.toString();
-	}
+  @Override
+  public String getText() {
+    final StringBuilder buffer = new StringBuilder();
+    appendMirrorText(0, buffer);
+    return buffer.toString();
+  }
 
-	@Override
-	public PsiMetaData getMetaData()
-	{
-		return MetaRegistry.getMetaBase(this);
-	}
+  @Override
+  public PsiMetaData getMetaData() {
+    return MetaDataService.getInstance().getMeta(this);
+  }
 }

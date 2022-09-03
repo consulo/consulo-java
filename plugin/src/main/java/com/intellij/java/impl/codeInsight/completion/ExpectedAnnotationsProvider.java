@@ -15,23 +15,23 @@
  */
 package com.intellij.java.impl.codeInsight.completion;
 
-import com.intellij.codeInsight.completion.CompletionParameters;
-import com.intellij.codeInsight.completion.CompletionResultSet;
+import consulo.language.editor.completion.CompletionParameters;
+import consulo.language.editor.completion.CompletionResultSet;
 import com.intellij.java.impl.psi.filters.getters.ExpectedTypesGetter;
 import com.intellij.java.language.patterns.PsiJavaPatterns;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiNameValuePair;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.patterns.ElementPattern;
-import com.intellij.psi.PsiElement;
-import com.intellij.util.ProcessingContext;
+import consulo.language.pattern.ElementPattern;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.ProcessingContext;
 import consulo.annotation.access.RequiredReadAction;
-import consulo.codeInsight.completion.CompletionProvider;
+import consulo.language.editor.completion.CompletionProvider;
 
 import javax.annotation.Nonnull;
 
-import static com.intellij.patterns.StandardPatterns.or;
+import static consulo.language.pattern.StandardPatterns.or;
 
 /**
  * @author peter

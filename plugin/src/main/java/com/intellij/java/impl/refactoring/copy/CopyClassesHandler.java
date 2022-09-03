@@ -15,36 +15,37 @@
  */
 package com.intellij.java.impl.refactoring.copy;
 
-import com.intellij.codeInsight.actions.OptimizeImportsProcessor;
-import com.intellij.featureStatistics.FeatureUsageTracker;
-import com.intellij.ide.util.EditorHelper;
+import consulo.ide.impl.idea.codeInsight.actions.OptimizeImportsProcessor;
+import consulo.externalService.statistic.FeatureUsageTracker;
+import consulo.language.editor.util.EditorHelper;
 import com.intellij.java.impl.refactoring.MoveDestination;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.command.CommandProcessor;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.ProjectRootManager;
-import com.intellij.openapi.ui.Messages;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.openapi.wm.ToolWindowManager;
+import consulo.application.ApplicationManager;
+import consulo.project.ui.wm.ToolWindowManager;
+import consulo.ui.ex.awt.Messages;
+import consulo.undoRedo.CommandProcessor;
+import consulo.project.Project;
+import consulo.module.content.ProjectRootManager;
+import consulo.util.lang.StringUtil;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.psi.*;
-import com.intellij.psi.search.LocalSearchScope;
-import com.intellij.psi.search.searches.ReferencesSearch;
-import com.intellij.psi.util.PsiUtilCore;
-import com.intellij.refactoring.RefactoringBundle;
-import com.intellij.refactoring.copy.CopyFilesOrDirectoriesDialog;
-import com.intellij.refactoring.copy.CopyFilesOrDirectoriesHandler;
+import consulo.language.psi.scope.LocalSearchScope;
+import consulo.language.psi.search.ReferencesSearch;
+import consulo.language.psi.PsiUtilCore;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.copy.CopyFilesOrDirectoriesDialog;
+import consulo.language.editor.refactoring.copy.CopyFilesOrDirectoriesHandler;
 import com.intellij.refactoring.copy.CopyHandler;
-import com.intellij.refactoring.copy.CopyHandlerDelegateBase;
+import consulo.language.editor.refactoring.copy.CopyHandlerDelegateBase;
 import com.intellij.refactoring.move.moveClassesOrPackages.MoveDirectoryWithClassesProcessor;
-import com.intellij.util.ArrayUtil;
-import com.intellij.util.IncorrectOperationException;
+import consulo.util.collection.ArrayUtil;
+import consulo.language.util.IncorrectOperationException;
 import consulo.java.impl.util.JavaProjectRootsUtil;
 import consulo.logging.Logger;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.*;
 
@@ -75,7 +76,7 @@ public class CopyClassesHandler extends CopyHandlerDelegateBase {
     return convertToTopLevelClasses(elements, fromUpdate, null, null) != null;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private static Map<PsiFile, PsiClass[]> convertToTopLevelClasses(final PsiElement[] elements,
                                                                    final boolean fromUpdate,
                                                                    String relativePath,
@@ -123,7 +124,7 @@ public class CopyClassesHandler extends CopyHandlerDelegateBase {
     }
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private static String normalizeRelativeMap(Map<PsiFile, String> relativeMap) {
     String vector = null;
     for (String relativePath : relativeMap.values()) {
@@ -311,7 +312,7 @@ public class CopyClassesHandler extends CopyHandlerDelegateBase {
     }
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public static PsiElement doCopyClasses(final Map<PsiFile, PsiClass[]> fileToClasses,
                                          final String copyClassName,
                                          final PsiDirectory targetDirectory,
@@ -319,9 +320,9 @@ public class CopyClassesHandler extends CopyHandlerDelegateBase {
     return doCopyClasses(fileToClasses, null, copyClassName, targetDirectory, project);
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public static PsiElement doCopyClasses(final Map<PsiFile, PsiClass[]> fileToClasses,
-                                         @javax.annotation.Nullable HashMap<PsiFile, String> map, final String copyClassName,
+                                         @Nullable HashMap<PsiFile, String> map, final String copyClassName,
                                          final PsiDirectory targetDirectory,
                                          final Project project) throws IncorrectOperationException {
     PsiElement newElement = null;
@@ -449,7 +450,7 @@ public class CopyClassesHandler extends CopyHandlerDelegateBase {
     return classCopy;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private static PsiClass findByName(PsiClass[] classes, String name) {
     if (name != null) {
       for (PsiClass aClass : classes) {
@@ -515,7 +516,7 @@ public class CopyClassesHandler extends CopyHandlerDelegateBase {
     }
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private static PsiClass[] getTopLevelClasses(PsiElement element) {
     while (true) {
       if (element == null || element instanceof PsiFile) break;

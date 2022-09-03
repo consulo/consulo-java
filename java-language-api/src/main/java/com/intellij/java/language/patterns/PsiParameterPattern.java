@@ -17,13 +17,13 @@ package com.intellij.java.language.patterns;
 
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiParameter;
-import com.intellij.patterns.ElementPattern;
-import com.intellij.patterns.PatternConditionPlus;
-import com.intellij.psi.PsiElement;
-import com.intellij.util.PairProcessor;
-import com.intellij.util.ProcessingContext;
+import consulo.language.pattern.ElementPattern;
+import consulo.language.pattern.PatternConditionPlus;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.ProcessingContext;
 
 import javax.annotation.Nonnull;
+import java.util.function.BiPredicate;
 
 /**
  * @author Gregory Shrago
@@ -39,10 +39,10 @@ public class PsiParameterPattern extends PsiModifierListOwnerPattern<PsiParamete
       @Override
       public boolean processValues(PsiParameter t,
                                    ProcessingContext context,
-                                   PairProcessor<PsiMethod, ProcessingContext> processor) {
+                                   BiPredicate<PsiMethod, ProcessingContext> processor) {
         PsiElement scope = t.getDeclarationScope();
         if (!(scope instanceof PsiMethod)) return true;
-        return processor.process((PsiMethod)scope, context);
+        return processor.test((PsiMethod)scope, context);
       }
 
       public boolean accepts(@Nonnull final PsiParameter t, final ProcessingContext context) {

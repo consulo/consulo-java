@@ -46,7 +46,7 @@ public abstract class MethodSignatureBase implements MethodSignature {
 
   protected MethodSignatureBase(@Nonnull PsiSubstitutor substitutor,
                                 @Nullable PsiParameterList parameterList,
-                                @javax.annotation.Nullable PsiTypeParameterList typeParameterList) {
+                                @Nullable PsiTypeParameterList typeParameterList) {
     mySubstitutor = substitutor;
     if (parameterList == null) {
       myParameterTypes = PsiType.EMPTY_ARRAY;

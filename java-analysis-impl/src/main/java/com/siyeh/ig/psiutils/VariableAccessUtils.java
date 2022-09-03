@@ -17,11 +17,11 @@ package com.siyeh.ig.psiutils;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
-import com.intellij.psi.search.searches.ReferencesSearch;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.search.ReferencesSearch;
+import consulo.language.ast.IElementType;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.util.ObjectUtils;
+import consulo.ide.impl.idea.util.ObjectUtils;
 import javax.annotation.Nonnull;
 
 import javax.annotation.Nullable;

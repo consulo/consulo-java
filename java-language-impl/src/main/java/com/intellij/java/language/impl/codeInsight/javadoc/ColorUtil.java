@@ -16,10 +16,11 @@
 package com.intellij.java.language.impl.codeInsight.javadoc;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.*;
-import com.intellij.util.ArrayUtil;
-import javax.annotation.Nonnull;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiReference;
+import consulo.util.collection.ArrayUtil;
 
+import javax.annotation.Nonnull;
 import java.awt.*;
 import java.lang.reflect.Field;
 
@@ -31,7 +32,7 @@ public class ColorUtil {
   }
 
   public static String generatePreviewHtml(@Nonnull final Color color) {
-    return String.format("<div style=\"padding: 1px; width: 52px; height: 32px; background-color: #555555;\"><div style=\"width: 50px; height: 30px; background-color: #%s;\">&nbsp;</div></div>", com.intellij.ui.ColorUtil.toHex(color));
+    return String.format("<div style=\"padding: 1px; width: 52px; height: 32px; background-color: #555555;\"><div style=\"width: 50px; height: 30px; background-color: #%s;\">&nbsp;</div></div>", consulo.ui.ex.awt.util.ColorUtil.toHex(color));
   }
 
   public static void appendColorPreview(final PsiVariable variable, final StringBuilder buffer) {

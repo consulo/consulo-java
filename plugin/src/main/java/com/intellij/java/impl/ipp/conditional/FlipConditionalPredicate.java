@@ -16,7 +16,7 @@
 package com.intellij.java.impl.ipp.conditional;
 
 import com.intellij.java.language.psi.PsiConditionalExpression;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.intellij.java.impl.ipp.psiutils.ErrorUtil;
 

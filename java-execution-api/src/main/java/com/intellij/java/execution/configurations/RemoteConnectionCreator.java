@@ -15,14 +15,13 @@
  */
 package com.intellij.java.execution.configurations;
 
-import com.intellij.execution.runners.ExecutionEnvironment;
+import consulo.execution.runner.ExecutionEnvironment;
 
 import javax.annotation.Nullable;
 
-public interface RemoteConnectionCreator
-{
-	@Nullable
-	RemoteConnection createRemoteConnection(ExecutionEnvironment environment);
+public interface RemoteConnectionCreator {
+  @Nullable
+  RemoteConnection createRemoteConnection(ExecutionEnvironment environment);
 
-	boolean isPollConnection();
+  boolean isPollConnection();
 }

@@ -18,10 +18,10 @@ package com.intellij.java.debugger.impl.engine;
 import java.io.OutputStream;
 
 import com.intellij.java.debugger.DebuggerManager;
-import com.intellij.execution.process.ProcessHandler;
+import consulo.process.ProcessHandler;
 import com.intellij.java.debugger.engine.DebugProcess;
 import com.intellij.java.debugger.engine.DebugProcessAdapter;
-import com.intellij.openapi.project.Project;
+import consulo.project.Project;
 
 public class RemoteDebugProcessHandler extends ProcessHandler
 {

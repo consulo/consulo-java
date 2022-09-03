@@ -16,16 +16,17 @@
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.intellij.java.impl.codeInsight.ExpectedTypeInfo;
 import com.intellij.java.impl.codeInsight.ExpectedTypesProvider;
 import com.intellij.java.language.psi.*;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
-import com.intellij.codeInsight.intention.impl.BaseIntentionAction;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
+import consulo.language.editor.intention.BaseIntentionAction;
+import consulo.codeEditor.Editor;
+import consulo.project.Project;
 import com.intellij.psi.*;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.logging.Logger;
@@ -137,12 +138,12 @@ public abstract class CreateClassFromUsageBaseFix extends BaseIntentionAction {
     return JavaQuickFixBundle.message("create.class.from.usage.family");
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   protected PsiJavaCodeReferenceElement getRefElement() {
     return myRefElement.getElement();
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   protected String getSuperClassName(final PsiJavaCodeReferenceElement element) {
     String superClassName = null;
     PsiElement parent = element.getParent();

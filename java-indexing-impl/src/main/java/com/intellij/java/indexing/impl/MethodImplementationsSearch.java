@@ -17,14 +17,14 @@ package com.intellij.java.indexing.impl;
 
 import com.intellij.java.indexing.search.searches.FunctionalExpressionSearch;
 import com.intellij.java.indexing.search.searches.OverridingMethodsSearch;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiFunctionalExpression;
 import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.psi.search.SearchScope;
-import com.intellij.psi.search.searches.DefinitionsScopedSearch;
-import com.intellij.util.Processor;
-import com.intellij.util.QueryExecutor;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.content.scope.SearchScope;
+import consulo.language.psi.search.DefinitionsScopedSearch;
+import consulo.application.util.function.Processor;
+import consulo.application.util.query.QueryExecutor;
+import consulo.util.collection.ContainerUtil;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;

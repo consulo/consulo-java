@@ -1,15 +1,15 @@
 package consulo.java.manifest.editor.completionProviders;
 
-import com.intellij.codeInsight.completion.CompletionParameters;
-import com.intellij.ide.actions.QualifiedNameProvider;
-import com.intellij.navigation.ItemPresentation;
+import consulo.language.editor.completion.CompletionParameters;
+import consulo.language.editor.QualifiedNameProvider;
+import consulo.navigation.ItemPresentation;
 import com.intellij.navigation.ItemPresentationProviders;
-import com.intellij.navigation.NavigationItem;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.util.Computable;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiReference;
-import com.intellij.ui.TextFieldWithAutoCompletionListProvider;
+import consulo.navigation.NavigationItem;
+import consulo.application.ApplicationManager;
+import consulo.application.util.function.Computable;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiReference;
+import consulo.language.editor.ui.awt.TextFieldWithAutoCompletionListProvider;
 import consulo.ui.image.Image;
 import org.osmorc.manifest.lang.headerparser.HeaderParser;
 import org.osmorc.manifest.lang.psi.Clause;

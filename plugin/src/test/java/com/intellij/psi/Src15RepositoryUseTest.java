@@ -29,9 +29,9 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.openapi.vfs.VirtualFileFilter;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.virtualFileSystem.VirtualFileFilter;
+import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.java.indexing.search.searches.AnnotatedMembersSearch;
 import com.intellij.java.impl.psi.search.searches.AnnotatedPackagesSearch;
 import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;

@@ -21,16 +21,16 @@ import com.intellij.java.debugger.impl.memory.component.MemoryViewDebugProcessDa
 import com.intellij.java.debugger.impl.memory.event.InstancesTrackerListener;
 import com.intellij.java.debugger.impl.memory.tracking.TrackingType;
 import com.intellij.java.debugger.impl.memory.utils.StackFrameItem;
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.project.Project;
-import com.intellij.ui.JBSplitter;
-import com.intellij.ui.components.JBLabel;
-import com.intellij.ui.components.JBScrollPane;
-import com.intellij.ui.components.labels.ActionLink;
-import com.intellij.xdebugger.XDebugSession;
+import consulo.ui.ex.action.AnAction;
+import consulo.ui.ex.action.AnActionEvent;
+import consulo.project.Project;
+import consulo.ui.ex.awt.JBLabel;
+import consulo.ui.ex.awt.JBScrollPane;
+import consulo.ide.impl.idea.ui.components.labels.ActionLink;
+import consulo.execution.debug.XDebugSession;
 import consulo.internal.com.sun.jdi.ObjectReference;
 import consulo.platform.base.icon.PlatformIconGroup;
+import consulo.ui.ex.awt.JBSplitter;
 
 import javax.annotation.Nonnull;
 import javax.swing.*;
@@ -63,7 +63,7 @@ class InstancesWithStackFrameView
 		}
 		else
 		{
-			ActionLink actionLink = new ActionLink("Enable tracking for new instances", PlatformIconGroup.debuggerWatch(), new AnAction()
+			consulo.ide.impl.idea.ui.components.labels.ActionLink actionLink = new ActionLink("Enable tracking for new instances", PlatformIconGroup.debuggerWatch(), new AnAction()
 			{
 				@Override
 				public void actionPerformed(AnActionEvent e)

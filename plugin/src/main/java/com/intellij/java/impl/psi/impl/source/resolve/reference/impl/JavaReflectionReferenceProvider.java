@@ -16,15 +16,16 @@
 package com.intellij.java.impl.psi.impl.source.resolve.reference.impl;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiExpressionList;
 import com.intellij.java.language.psi.PsiLiteralExpression;
 import com.intellij.java.language.psi.PsiMethodCallExpression;
-import com.intellij.psi.PsiReference;
+import consulo.language.psi.PsiReference;
 import com.intellij.java.language.psi.PsiReferenceExpression;
-import com.intellij.psi.PsiReferenceProvider;
-import com.intellij.util.ProcessingContext;
+import consulo.language.psi.PsiReferenceProvider;
+import consulo.language.util.ProcessingContext;
 
 /**
  * @author Konstantin Bulenkov
@@ -59,6 +60,6 @@ abstract class JavaReflectionReferenceProvider extends PsiReferenceProvider
 		return PsiReference.EMPTY_ARRAY;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	protected abstract PsiReference[] getReferencesByMethod(@Nonnull PsiLiteralExpression literalArgument, @Nonnull PsiReferenceExpression methodReference, @Nonnull ProcessingContext context);
 }

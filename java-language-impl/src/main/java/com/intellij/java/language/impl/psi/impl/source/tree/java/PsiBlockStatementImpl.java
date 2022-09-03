@@ -17,16 +17,16 @@ package com.intellij.java.language.impl.psi.impl.source.tree.java;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.lang.ASTNode;
+import consulo.language.ast.ASTNode;
 import consulo.logging.Logger;
 import com.intellij.java.language.psi.JavaElementVisitor;
 import com.intellij.java.language.psi.PsiBlockStatement;
 import com.intellij.java.language.psi.PsiCodeBlock;
-import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.tree.ChildRoleBase;
+import consulo.language.psi.PsiElementVisitor;
+import consulo.language.ast.ChildRoleBase;
 import com.intellij.java.language.impl.psi.impl.source.Constants;
 import com.intellij.java.language.impl.psi.impl.source.tree.ChildRole;
-import com.intellij.psi.impl.source.tree.CompositePsiElement;
+import consulo.language.impl.psi.CompositePsiElement;
 
 public class PsiBlockStatementImpl extends CompositePsiElement implements PsiBlockStatement {
   private static final Logger LOG = Logger.getInstance(PsiBlockStatementImpl.class);

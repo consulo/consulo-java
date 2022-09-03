@@ -18,12 +18,12 @@ package org.jetbrains.java.generate.inspection;
 import javax.annotation.Nonnull;
 
 import org.jetbrains.java.generate.GenerateToStringActionHandler;
-import com.intellij.codeInspection.LocalQuickFix;
-import com.intellij.codeInspection.ProblemDescriptor;
-import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.project.Project;
+import consulo.language.editor.inspection.LocalQuickFix;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.ide.ServiceManager;
+import consulo.project.Project;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 
 /**
  * Quick fix to run Generate toString() to fix any code inspection problems.

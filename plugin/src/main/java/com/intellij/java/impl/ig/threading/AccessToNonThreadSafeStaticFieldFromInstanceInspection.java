@@ -16,9 +16,9 @@
 package com.intellij.java.impl.ig.threading;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.util.lang.StringUtil;
 import com.intellij.psi.*;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
@@ -28,6 +28,7 @@ import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
 
+import javax.annotation.Nullable;
 import javax.swing.JComponent;
 import java.util.List;
 
@@ -78,7 +79,7 @@ public class AccessToNonThreadSafeStaticFieldFromInstanceInspection
   }
 
   @Override
-  @javax.annotation.Nullable
+  @Nullable
   public JComponent createOptionsPanel() {
     return UiUtils.createTreeClassChooserList(nonThreadSafeClasses,
                                               InspectionGadgetsBundle.message(

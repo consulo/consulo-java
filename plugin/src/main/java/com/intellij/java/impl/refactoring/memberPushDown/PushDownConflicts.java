@@ -16,17 +16,17 @@
 package com.intellij.java.impl.refactoring.memberPushDown;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.progress.ProgressManager;
+import consulo.application.progress.ProgressManager;
 import com.intellij.psi.*;
-import com.intellij.psi.search.searches.ReferencesSearch;
+import consulo.language.psi.search.ReferencesSearch;
 import com.intellij.java.language.psi.util.InheritanceUtil;
-import com.intellij.refactoring.RefactoringBundle;
-import com.intellij.refactoring.util.CommonRefactoringUtil;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import com.intellij.java.impl.refactoring.util.RefactoringConflictsUtil;
-import com.intellij.refactoring.util.RefactoringUIUtil;
+import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
 import com.intellij.java.impl.refactoring.util.classMembers.ClassMemberReferencesVisitor;
 import com.intellij.java.impl.refactoring.util.classMembers.MemberInfo;
-import com.intellij.util.containers.MultiMap;
+import consulo.util.collection.MultiMap;
 
 import java.util.HashSet;
 import java.util.Set;

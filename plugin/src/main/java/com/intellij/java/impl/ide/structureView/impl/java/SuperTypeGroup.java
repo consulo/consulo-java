@@ -20,15 +20,15 @@ import java.util.Collection;
 
 import javax.annotation.Nullable;
 
-import com.intellij.icons.AllIcons;
-import com.intellij.ide.IdeBundle;
-import com.intellij.ide.util.treeView.smartTree.Group;
-import com.intellij.ide.util.treeView.smartTree.TreeElement;
-import com.intellij.navigation.ItemPresentation;
+import consulo.application.AllIcons;
+import consulo.ide.IdeBundle;
+import consulo.fileEditor.structureView.tree.Group;
+import consulo.fileEditor.structureView.tree.TreeElement;
+import consulo.navigation.ItemPresentation;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiModifierList;
-import com.intellij.psi.SmartPointerManager;
-import com.intellij.psi.SmartPsiElementPointer;
+import consulo.language.psi.SmartPointerManager;
+import consulo.language.psi.SmartPsiElementPointer;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.ui.image.Image;
 

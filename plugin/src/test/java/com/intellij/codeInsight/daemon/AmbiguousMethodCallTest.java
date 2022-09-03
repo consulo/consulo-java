@@ -18,8 +18,8 @@ package com.intellij.codeInsight.daemon;
 import javax.annotation.Nonnull;
 
 import org.jetbrains.annotations.NonNls;
-import com.intellij.codeInspection.InspectionProfileEntry;
-import com.intellij.codeInspection.LocalInspectionTool;
+import consulo.language.editor.inspection.scheme.InspectionProfileEntry;
+import consulo.language.editor.inspection.LocalInspectionTool;
 import com.intellij.java.impl.codeInspection.compiler.JavacQuirksInspection;
 import com.intellij.java.analysis.impl.codeInspection.redundantCast.RedundantCastInspection;
 import com.intellij.java.impl.codeInspection.uncheckedWarnings.UncheckedWarningLocalInspection;

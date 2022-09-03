@@ -18,6 +18,7 @@ package com.intellij.java.debugger.impl.actions;
 import java.util.Collections;
 import java.util.List;
 
+import javax.annotation.Nullable;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -30,16 +31,16 @@ import com.intellij.java.debugger.impl.engine.ClassInstanceMethodFilter;
 import com.intellij.java.debugger.impl.engine.LambdaMethodFilter;
 import com.intellij.java.debugger.impl.engine.MethodFilter;
 import com.intellij.java.debugger.impl.DebuggerSession;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.extensions.ExtensionPointName;
-import com.intellij.openapi.fileEditor.TextEditor;
+import consulo.codeEditor.Editor;
+import consulo.component.extension.ExtensionPointName;
+import consulo.fileEditor.TextEditor;
 import com.intellij.java.language.psi.PsiAnonymousClass;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.ui.components.JBList;
-import com.intellij.ui.popup.list.ListPopupImpl;
-import com.intellij.xdebugger.impl.actions.XDebuggerActions;
-import com.intellij.xdebugger.impl.ui.DebuggerUIUtil;
+import consulo.ui.ex.awt.JBList;
+import consulo.ide.impl.idea.ui.popup.list.ListPopupImpl;
+import consulo.ide.impl.idea.xdebugger.impl.actions.XDebuggerActions;
+import consulo.ide.impl.idea.xdebugger.impl.ui.DebuggerUIUtil;
 
 /**
  * User: Alexander Podkhalyuzin
@@ -85,8 +86,8 @@ public abstract class JvmSmartStepIntoHandler
 					}
 				});
 				ListPopupImpl popup = new ListPopupImpl(popupStep);
-				DebuggerUIUtil.registerExtraHandleShortcuts(popup, XDebuggerActions.STEP_INTO);
-				DebuggerUIUtil.registerExtraHandleShortcuts(popup, XDebuggerActions.SMART_STEP_INTO);
+				consulo.ide.impl.idea.xdebugger.impl.ui.DebuggerUIUtil.registerExtraHandleShortcuts(popup, XDebuggerActions.STEP_INTO);
+				consulo.ide.impl.idea.xdebugger.impl.ui.DebuggerUIUtil.registerExtraHandleShortcuts(popup, XDebuggerActions.SMART_STEP_INTO);
 				popup.addListSelectionListener(new ListSelectionListener()
 				{
 					public void valueChanged(ListSelectionEvent e)
@@ -125,7 +126,7 @@ public abstract class JvmSmartStepIntoHandler
 	 * @param stepTarget
 	 * @return SmartStepFilter
 	 */
-	@javax.annotation.Nullable
+	@Nullable
 	protected MethodFilter createMethodFilter(SmartStepTarget stepTarget)
 	{
 		if(stepTarget instanceof MethodSmartStepTarget)

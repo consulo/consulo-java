@@ -20,15 +20,15 @@ import static org.junit.Assert.assertNotNull;
 import javax.annotation.Nonnull;
 
 import org.jetbrains.annotations.NonNls;
-import com.intellij.codeInspection.LocalInspectionTool;
+import consulo.language.editor.inspection.LocalInspectionTool;
 import com.intellij.java.impl.codeInspection.uncheckedWarnings.UncheckedWarningLocalInspection;
 import com.intellij.java.analysis.impl.codeInspection.unusedImport.UnusedImportLocalInspection;
 import com.intellij.java.impl.codeInspection.unusedSymbol.UnusedSymbolLocalInspection;
 import com.intellij.java.language.projectRoots.JavaSdkVersion;
-import com.intellij.openapi.projectRoots.Sdk;
+import consulo.content.bundle.Sdk;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.testFramework.IdeaTestUtil;
 
 public abstract class GenericsHighlightingTest extends LightDaemonAnalyzerTestCase {

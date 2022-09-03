@@ -15,7 +15,7 @@
  */
 package com.intellij.lang.java.parser.partial;
 
-import com.intellij.lang.PsiBuilder;
+import consulo.language.parser.PsiBuilder;
 import com.intellij.java.language.impl.parser.JavaParser;
 import com.intellij.lang.java.parser.JavaParsingTestCase;
 

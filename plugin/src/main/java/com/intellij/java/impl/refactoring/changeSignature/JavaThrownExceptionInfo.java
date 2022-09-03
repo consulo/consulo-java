@@ -20,7 +20,9 @@ import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.psi.*;
 import com.intellij.java.impl.refactoring.util.CanonicalTypes;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
+
+import javax.annotation.Nullable;
 
 /**
  * @author Maxim.Medvedev
@@ -56,7 +58,7 @@ public class JavaThrownExceptionInfo implements ThrownExceptionInfo {
     myType = CanonicalTypes.createTypeWrapper(type);
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public PsiType createType(PsiElement context, final PsiManager manager) throws IncorrectOperationException {
     if (myType != null) {
       return myType.getType(context, manager);

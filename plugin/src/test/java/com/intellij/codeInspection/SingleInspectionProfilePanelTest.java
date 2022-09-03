@@ -15,13 +15,13 @@
  */
 package com.intellij.codeInspection;
 
-import com.intellij.codeInspection.ex.InspectionProfileImpl;
-import com.intellij.codeInspection.ex.LocalInspectionToolWrapper;
+import consulo.ide.impl.idea.codeInspection.ex.InspectionProfileImpl;
+import consulo.language.editor.inspection.scheme.LocalInspectionToolWrapper;
 import com.intellij.java.impl.codeInspection.javaDoc.JavaDocLocalInspection;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.project.ProjectManager;
-import com.intellij.profile.codeInspection.InspectionProjectProfileManager;
-import com.intellij.profile.codeInspection.ui.SingleInspectionProfilePanel;
+import consulo.project.Project;
+import consulo.project.ProjectManager;
+import consulo.language.editor.inspection.scheme.InspectionProjectProfileManager;
+import consulo.ide.impl.idea.profile.codeInspection.ui.SingleInspectionProfilePanel;
 import com.intellij.testFramework.LightIdeaTestCase;
 import javax.annotation.Nonnull;
 

@@ -15,9 +15,9 @@
  */
 package com.intellij.java.impl.cyclicDependencies.ui;
 
-import com.intellij.analysis.AnalysisScopeBundle;
-import com.intellij.openapi.project.Project;
-import com.intellij.packageDependencies.ui.PackageDependenciesNode;
+import consulo.language.editor.scope.AnalysisScopeBundle;
+import consulo.project.Project;
+import consulo.ide.impl.idea.packageDependencies.ui.PackageDependenciesNode;
 
 /**
  * User: anna

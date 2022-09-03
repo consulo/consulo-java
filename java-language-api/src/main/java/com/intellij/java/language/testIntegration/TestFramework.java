@@ -16,13 +16,13 @@
 
 package com.intellij.java.language.testIntegration;
 
-import com.intellij.ide.fileTemplates.FileTemplateDescriptor;
-import com.intellij.lang.Language;
-import com.intellij.openapi.extensions.ExtensionPointName;
-import com.intellij.openapi.module.Module;
-import com.intellij.psi.PsiElement;
-import com.intellij.util.IncorrectOperationException;
+import consulo.component.extension.ExtensionPointName;
+import consulo.language.Language;
+import consulo.language.psi.PsiElement;
+import consulo.fileTemplate.FileTemplateDescriptor;
+import consulo.module.Module;
 import consulo.ui.image.Image;
+import consulo.language.util.IncorrectOperationException;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -63,7 +63,7 @@ public interface TestFramework
 	FileTemplateDescriptor getTearDownMethodFileTemplateDescriptor();
 
 	@Nonnull
-	FileTemplateDescriptor getTestMethodFileTemplateDescriptor();
+  FileTemplateDescriptor getTestMethodFileTemplateDescriptor();
 
 	/**
 	 * should be checked for abstract method error

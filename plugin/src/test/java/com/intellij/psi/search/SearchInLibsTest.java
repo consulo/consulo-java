@@ -1,12 +1,12 @@
 package com.intellij.psi.search;
 
 import com.intellij.JavaTestUtil;
-import com.intellij.openapi.roots.ModuleRootModificationUtil;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.ide.impl.idea.openapi.roots.ModuleRootModificationUtil;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiReference;
-import com.intellij.psi.search.searches.ReferencesSearch;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiReference;
+import consulo.language.psi.search.ReferencesSearch;
 import com.intellij.testFramework.PsiTestCase;
 import com.intellij.testFramework.PsiTestUtil;
 

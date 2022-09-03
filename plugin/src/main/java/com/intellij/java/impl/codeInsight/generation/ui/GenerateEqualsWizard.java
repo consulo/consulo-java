@@ -15,29 +15,29 @@
  */
 package com.intellij.java.impl.codeInsight.generation.ui;
 
-import com.intellij.codeInsight.CodeInsightBundle;
+import consulo.language.editor.CodeInsightBundle;
 import com.intellij.java.language.codeInsight.NullableNotNullManager;
 import com.intellij.java.impl.codeInsight.generation.EqualsHashCodeTemplatesManager;
 import com.intellij.java.impl.codeInsight.generation.GenerateEqualsHelper;
-import com.intellij.ide.wizard.StepAdapter;
+import consulo.ide.impl.idea.ide.wizard.StepAdapter;
 import com.intellij.java.language.psi.*;
 import consulo.logging.Logger;
-import com.intellij.openapi.options.ShowSettingsUtil;
-import com.intellij.openapi.project.Project;
+import consulo.ide.setting.ShowSettingsUtil;
+import consulo.project.Project;
 import com.intellij.java.language.projectRoots.JavaSdkVersion;
 import com.intellij.java.language.projectRoots.JavaVersionService;
-import com.intellij.openapi.ui.ComboBox;
-import com.intellij.openapi.ui.ComponentWithBrowseButton;
-import com.intellij.openapi.ui.VerticalFlowLayout;
-import com.intellij.refactoring.classMembers.AbstractMemberInfoModel;
-import com.intellij.refactoring.classMembers.MemberInfoBase;
-import com.intellij.refactoring.classMembers.MemberInfoTooltipManager;
-import com.intellij.refactoring.ui.AbstractMemberSelectionPanel;
+import consulo.ui.ex.awt.*;
+import consulo.language.editor.refactoring.classMember.AbstractMemberInfoModel;
+import consulo.language.editor.refactoring.classMember.MemberInfoBase;
+import consulo.language.editor.refactoring.classMember.MemberInfoTooltipManager;
+import consulo.ide.impl.idea.refactoring.ui.AbstractMemberSelectionPanel;
 import com.intellij.java.impl.refactoring.ui.MemberSelectionPanel;
 import com.intellij.java.impl.refactoring.util.classMembers.MemberInfo;
-import com.intellij.ui.NonFocusableCheckBox;
+import consulo.ui.ex.awt.NonFocusableCheckBox;
 import consulo.java.analysis.codeInsight.JavaCodeInsightBundle;
 import consulo.java.impl.codeInsight.JavaCodeInsightSettings;
+import consulo.ui.ex.awt.ComboBox;
+import consulo.ui.ex.awt.ComponentWithBrowseButton;
 import org.jetbrains.java.generate.psi.PsiAdapter;
 
 import javax.annotation.Nonnull;
@@ -442,7 +442,7 @@ public class GenerateEqualsWizard extends AbstractGenerateEqualsWizard<PsiClass,
 		}
 	}
 
-	private static class TemplateChooserStep extends StepAdapter
+	private static class TemplateChooserStep extends consulo.ide.impl.idea.ide.wizard.StepAdapter
 	{
 		private final JComponent myPanel;
 

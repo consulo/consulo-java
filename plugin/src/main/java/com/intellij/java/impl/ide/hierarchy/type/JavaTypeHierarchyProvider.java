@@ -16,25 +16,26 @@
 package com.intellij.java.impl.ide.hierarchy.type;
 
 import javax.annotation.Nonnull;
-import com.intellij.ide.hierarchy.HierarchyBrowser;
-import com.intellij.ide.hierarchy.HierarchyProvider;
-import com.intellij.ide.hierarchy.TypeHierarchyBrowserBase;
-import com.intellij.openapi.actionSystem.CommonDataKeys;
-import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.actionSystem.LangDataKeys;
-import com.intellij.openapi.actionSystem.PlatformDataKeys;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
+
+import consulo.language.editor.PlatformDataKeys;
+import consulo.language.editor.hierarchy.HierarchyBrowser;
+import consulo.language.editor.hierarchy.HierarchyProvider;
+import consulo.ide.impl.idea.ide.hierarchy.TypeHierarchyBrowserBase;
+import consulo.language.editor.CommonDataKeys;
+import consulo.dataContext.DataContext;
+import consulo.language.editor.LangDataKeys;
+import consulo.codeEditor.Editor;
+import consulo.project.Project;
 import com.intellij.java.language.psi.PsiAnonymousClass;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiClassOwner;
-import com.intellij.psi.PsiDocumentManager;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
+import consulo.language.psi.PsiDocumentManager;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
 import com.intellij.java.language.psi.PsiSyntheticClass;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.util.collection.ContainerUtil;
 import consulo.ui.annotation.RequiredUIAccess;
-import consulo.codeInsight.TargetElementUtil;
+import consulo.language.editor.TargetElementUtil;
 import consulo.codeInsight.TargetElementUtilEx;
 
 /**

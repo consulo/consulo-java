@@ -17,8 +17,8 @@ package com.intellij.java.impl.ig.psiutils;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.MethodSignature;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiReference;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiReference;
 import com.siyeh.ig.psiutils.BoolUtils;
 import com.siyeh.ig.psiutils.ClassUtils;
 
@@ -56,7 +56,7 @@ public class InitializationUtils {
   }
 
   public static boolean blockAssignsVariableOrFails(
-      @javax.annotation.Nullable PsiCodeBlock block, @Nonnull PsiVariable variable) {
+      @Nullable PsiCodeBlock block, @Nonnull PsiVariable variable) {
     return blockAssignsVariableOrFails(block, variable, false);
   }
 
@@ -68,7 +68,7 @@ public class InitializationUtils {
   }
 
   private static boolean blockAssignsVariableOrFails(
-      @javax.annotation.Nullable PsiCodeBlock block, @Nonnull PsiVariable variable,
+      @Nullable PsiCodeBlock block, @Nonnull PsiVariable variable,
       @Nonnull Set<MethodSignature> checkedMethods, boolean strict) {
     if (block == null) {
       return false;

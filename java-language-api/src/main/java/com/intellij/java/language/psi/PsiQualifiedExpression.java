@@ -15,7 +15,9 @@
  */
 package com.intellij.java.language.psi;
 
+import javax.annotation.Nullable;
+
 public interface PsiQualifiedExpression extends PsiExpression {
-  @javax.annotation.Nullable
+  @Nullable
   PsiJavaCodeReferenceElement getQualifier();
 }

@@ -4,6 +4,7 @@ package com.intellij.java.analysis.impl.codeInspection.bytecodeAnalysis.asm;
 import consulo.internal.org.objectweb.asm.Opcodes;
 import consulo.internal.org.objectweb.asm.Type;
 import consulo.internal.org.objectweb.asm.tree.*;
+import consulo.internal.org.objectweb.asm.tree.analysis.Analyzer;
 import consulo.internal.org.objectweb.asm.tree.analysis.AnalyzerException;
 import consulo.internal.org.objectweb.asm.tree.analysis.Frame;
 import consulo.internal.org.objectweb.asm.tree.analysis.Interpreter;
@@ -13,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Specialized lite version of {@link consulo.internal.org.objectweb.asm.tree.analysis.Analyzer}.
+ * Specialized lite version of {@link Analyzer}.
  * No processing of Subroutines. May be used for methods without JSR/RET instructions.
  *
  * @author lambdamix

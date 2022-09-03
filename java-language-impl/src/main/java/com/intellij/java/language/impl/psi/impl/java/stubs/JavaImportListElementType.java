@@ -19,17 +19,17 @@ import java.io.IOException;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.lang.ASTNode;
-import com.intellij.lang.LighterAST;
-import com.intellij.lang.LighterASTNode;
+import consulo.language.ast.ASTNode;
+import consulo.language.ast.LighterAST;
+import consulo.language.ast.LighterASTNode;
 import com.intellij.java.language.psi.PsiImportList;
 import com.intellij.java.language.impl.psi.impl.java.stubs.impl.PsiImportListStubImpl;
 import com.intellij.java.language.impl.psi.impl.source.PsiImportListImpl;
 import com.intellij.java.language.impl.psi.impl.source.tree.java.ImportListElement;
-import com.intellij.psi.stubs.IndexSink;
-import com.intellij.psi.stubs.StubElement;
-import com.intellij.psi.stubs.StubInputStream;
-import com.intellij.psi.stubs.StubOutputStream;
+import consulo.language.psi.stub.IndexSink;
+import consulo.language.psi.stub.StubElement;
+import consulo.language.psi.stub.StubInputStream;
+import consulo.language.psi.stub.StubOutputStream;
 
 /**
  * @author max

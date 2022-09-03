@@ -18,11 +18,13 @@ package com.intellij.java.language.codeInsight;
 import com.intellij.java.language.psi.PsiAnnotation;
 import com.intellij.java.language.psi.PsiModifierListOwner;
 import com.intellij.java.language.psi.PsiNameValuePair;
-import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.NotNullLazyKey;
-import com.intellij.psi.*;
-import com.intellij.util.messages.Topic;
+import consulo.component.messagebus.Topic;
+import consulo.ide.ServiceManager;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.project.Project;
+import consulo.util.dataholder.NotNullLazyKey;
+
 import javax.annotation.Nonnull;
 
 import javax.annotation.Nullable;

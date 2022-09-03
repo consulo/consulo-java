@@ -17,11 +17,11 @@ package com.intellij.java.impl.lang.java;
 
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.impl.psi.impl.source.tree.java.ImportStatementElement;
-import com.intellij.usages.UsageToPsiElementProvider;
+import consulo.usage.UsageToPsiElementProvider;
 
 /**
  * @author Konstantin Bulenkov

@@ -19,14 +19,15 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-import com.intellij.openapi.extensions.ExtensionPointName;
-import com.intellij.openapi.project.Project;
+import consulo.component.extension.ExtensionPointName;
+import consulo.project.Project;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.refactoring.util.NonCodeUsageInfo;
-import com.intellij.usageView.UsageInfo;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.usage.NonCodeUsageInfo;
+import consulo.usage.UsageInfo;
 
 /**
  * @author Max Medvedev
@@ -35,7 +36,7 @@ public interface MoveClassToInnerHandler {
   ExtensionPointName<MoveClassToInnerHandler> EP_NAME =
 		  new ExtensionPointName<MoveClassToInnerHandler>("consulo.java.refactoring.moveClassToInnerHandler");
 
-  @javax.annotation.Nullable
+  @Nullable
   PsiClass moveClass(@Nonnull PsiClass aClass, @Nonnull PsiClass targetClass);
 
   /**

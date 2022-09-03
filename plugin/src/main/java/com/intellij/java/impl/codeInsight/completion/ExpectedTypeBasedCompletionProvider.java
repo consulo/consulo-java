@@ -15,14 +15,14 @@
  */
 package com.intellij.java.impl.codeInsight.completion;
 
-import com.intellij.codeInsight.completion.CompletionParameters;
-import com.intellij.codeInsight.completion.CompletionResultSet;
+import consulo.language.editor.completion.CompletionParameters;
+import consulo.language.editor.completion.CompletionResultSet;
 import com.intellij.java.impl.codeInsight.ExpectedTypeInfo;
 import com.intellij.java.language.psi.PsiLiteralExpression;
-import com.intellij.psi.PsiElement;
-import com.intellij.util.ProcessingContext;
-import com.intellij.util.containers.ContainerUtil;
-import consulo.codeInsight.completion.CompletionProvider;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.ProcessingContext;
+import consulo.util.collection.ContainerUtil;
+import consulo.language.editor.completion.CompletionProvider;
 
 import javax.annotation.Nonnull;
 import java.util.Collection;

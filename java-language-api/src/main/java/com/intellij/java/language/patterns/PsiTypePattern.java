@@ -19,10 +19,10 @@ import com.intellij.java.language.psi.PsiArrayType;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiClassType;
 import com.intellij.java.language.psi.PsiType;
-import com.intellij.patterns.ElementPattern;
-import com.intellij.patterns.ObjectPattern;
-import com.intellij.patterns.PatternCondition;
-import com.intellij.util.ProcessingContext;
+import consulo.language.pattern.ElementPattern;
+import consulo.language.pattern.PatternCondition;
+import consulo.language.util.ProcessingContext;
+import consulo.language.pattern.ObjectPattern;
 
 import javax.annotation.Nonnull;
 

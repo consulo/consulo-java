@@ -16,19 +16,19 @@
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
 import com.intellij.java.language.impl.codeInsight.ExceptionUtil;
-import com.intellij.codeInsight.FileModificationService;
-import com.intellij.codeInsight.intention.impl.BaseIntentionAction;
+import consulo.language.editor.FileModificationService;
+import consulo.language.editor.intention.BaseIntentionAction;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.application.WriteAction;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.Messages;
+import consulo.application.ApplicationManager;
+import consulo.application.WriteAction;
+import consulo.codeEditor.Editor;
+import consulo.project.Project;
+import consulo.ui.ex.awt.Messages;
 import com.intellij.psi.*;
-import com.intellij.psi.codeStyle.CodeStyleManager;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 
 import javax.annotation.Nonnull;
@@ -210,7 +210,7 @@ public class AddExceptionToThrowsFix extends BaseIntentionAction
 		return true;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	private PsiMethod collectExceptions(List<PsiClassType> unhandled)
 	{
 		PsiElement targetElement = null;

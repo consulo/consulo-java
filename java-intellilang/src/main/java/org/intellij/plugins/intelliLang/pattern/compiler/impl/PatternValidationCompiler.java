@@ -27,17 +27,17 @@ import org.intellij.plugins.intelliLang.pattern.compiler.Instrumenter;
 import org.intellij.plugins.intelliLang.util.AnnotationUtilEx;
 import consulo.internal.org.objectweb.asm.ClassWriter;
 import com.intellij.java.language.codeInsight.AnnotationUtil;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Pair;
+import consulo.project.Project;
+import consulo.util.lang.Pair;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiAnnotation;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMember;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.java.indexing.search.searches.AnnotatedMembersSearch;
-import com.intellij.util.ArrayUtil;
-import com.intellij.util.Processor;
-import com.intellij.util.Query;
+import consulo.util.collection.ArrayUtil;
+import consulo.application.util.function.Processor;
+import consulo.application.util.query.Query;
 
 public class PatternValidationCompiler extends AnnotationBasedInstrumentingCompiler {
 

@@ -18,17 +18,17 @@ package com.intellij.java.impl.codeInspection.deadCode;
 import javax.annotation.Nonnull;
 
 import com.intellij.java.analysis.codeInspection.GlobalJavaInspectionContext;
-import com.intellij.codeInspection.InspectionsBundle;
+import consulo.language.editor.inspection.InspectionsBundle;
 import com.intellij.java.analysis.codeInspection.ex.EntryPointsManager;
-import com.intellij.codeInspection.ex.GlobalInspectionContextImpl;
-import com.intellij.codeInspection.ex.HTMLComposerImpl;
-import com.intellij.codeInspection.ex.InspectionRVContentProvider;
-import com.intellij.codeInspection.ex.InspectionToolWrapper;
-import com.intellij.codeInspection.ex.QuickFixAction;
-import com.intellij.codeInspection.reference.RefElement;
-import com.intellij.codeInspection.reference.RefEntity;
-import com.intellij.codeInspection.ui.InspectionNode;
-import com.intellij.codeInspection.ui.InspectionTreeNode;
+import consulo.ide.impl.idea.codeInspection.ex.GlobalInspectionContextImpl;
+import consulo.ide.impl.idea.codeInspection.ex.HTMLComposerImpl;
+import consulo.ide.impl.idea.codeInspection.ex.InspectionRVContentProvider;
+import consulo.language.editor.inspection.scheme.InspectionToolWrapper;
+import consulo.ide.impl.idea.codeInspection.ex.QuickFixAction;
+import consulo.language.editor.inspection.reference.RefElement;
+import consulo.language.editor.inspection.reference.RefEntity;
+import consulo.ide.impl.idea.codeInspection.ui.InspectionNode;
+import consulo.ide.impl.idea.codeInspection.ui.InspectionTreeNode;
 import com.intellij.java.analysis.impl.codeInspection.util.RefFilter;
 
 public class DummyEntryPointsPresentation extends UnusedDeclarationPresentation

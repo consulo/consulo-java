@@ -2,16 +2,16 @@
 package com.intellij.java.impl.codeInspection.dataFlow;
 
 import com.intellij.java.language.codeInsight.AnnotationUtil;
-import com.intellij.codeInspection.ProblemsHolder;
+import consulo.language.editor.inspection.ProblemsHolder;
 import com.intellij.java.analysis.codeInspection.AbstractBaseJavaLocalInspectionTool;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.*;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.StandardMethodContract.ValueConstraint;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.application.ApplicationManager;
+import consulo.document.util.TextRange;
+import consulo.util.lang.StringUtil;
 import com.intellij.psi.*;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import one.util.streamex.StreamEx;
 

@@ -1,18 +1,20 @@
 // Copyright 2000-2018 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.impl.codeInsight;
 
-import com.intellij.icons.AllIcons;
+import consulo.application.AllIcons;
 import com.intellij.java.language.util.ClassFilter;
 import com.intellij.java.language.util.TreeClassChooser;
 import com.intellij.java.language.util.TreeClassChooserFactory;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.project.Project;
+import consulo.ui.ex.action.AnActionEvent;
+import consulo.project.Project;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.ui.*;
-import com.intellij.ui.table.JBTable;
-import com.intellij.util.ui.JBDimension;
-import com.intellij.util.ui.JBUI;
+import consulo.ui.ex.awt.table.JBTable;
+import consulo.ui.ex.awt.JBDimension;
+import consulo.ui.ex.awt.JBUI;
+import consulo.ui.ex.awt.*;
+import consulo.ui.ex.awt.table.BooleanTableCellEditor;
 import consulo.ui.image.Image;
 
 import javax.annotation.Nonnull;

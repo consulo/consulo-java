@@ -15,16 +15,16 @@
  */
 package com.intellij.java.impl.refactoring.convertToInstanceMethod;
 
+import consulo.application.HelpManager;
 import consulo.logging.Logger;
-import com.intellij.openapi.help.HelpManager;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiParameter;
 import com.intellij.java.language.psi.PsiVariable;
 import com.intellij.java.impl.refactoring.HelpID;
-import com.intellij.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.RefactoringBundle;
 import com.intellij.java.impl.refactoring.move.moveInstanceMethod.MoveInstanceMethodDialogBase;
-import com.intellij.ui.DoubleClickListener;
-import com.intellij.util.ui.UIUtil;
+import consulo.ui.ex.awt.event.DoubleClickListener;
+import consulo.ui.ex.awt.UIUtil;
 
 import javax.swing.*;
 import java.awt.*;

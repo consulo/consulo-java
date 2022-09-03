@@ -21,7 +21,7 @@ import com.intellij.java.debugger.impl.ui.tree.DebuggerTreeNode;
 import com.intellij.java.debugger.impl.ui.tree.NodeDescriptorFactory;
 import com.intellij.java.debugger.impl.ui.tree.NodeManager;
 import com.intellij.java.debugger.impl.ui.tree.ValueDescriptor;
-import com.intellij.xdebugger.frame.XCompositeNode;
+import consulo.execution.debug.frame.XCompositeNode;
 
 public interface ChildrenBuilder extends XCompositeNode
 {

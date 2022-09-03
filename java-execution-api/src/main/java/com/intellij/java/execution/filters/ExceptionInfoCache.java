@@ -15,15 +15,15 @@
  */
 package com.intellij.java.execution.filters;
 
-import com.intellij.openapi.project.DumbService;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Pair;
+import consulo.project.DumbService;
+import consulo.project.Project;
+import consulo.util.lang.Pair;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.util.ObjectUtil;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.util.lang.ObjectUtil;
+import consulo.util.collection.ContainerUtil;
 
 import javax.annotation.Nonnull;
 import java.util.concurrent.ConcurrentMap;

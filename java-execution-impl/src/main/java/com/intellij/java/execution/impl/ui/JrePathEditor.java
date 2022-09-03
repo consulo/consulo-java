@@ -15,12 +15,12 @@
  */
 package com.intellij.java.execution.impl.ui;
 
-import com.intellij.icons.AllIcons;
+import consulo.application.AllIcons;
 import com.intellij.java.language.projectRoots.JavaSdk;
-import com.intellij.openapi.roots.ui.configuration.projectRoot.ProjectSdksModel;
-import com.intellij.openapi.ui.LabeledComponent;
-import com.intellij.ui.PanelWithAnchor;
-import com.intellij.ui.components.panels.Wrapper;
+import consulo.ide.impl.idea.openapi.roots.ui.configuration.projectRoot.ProjectSdksModel;
+import consulo.ui.ex.awt.LabeledComponent;
+import consulo.ui.ex.awt.PanelWithAnchor;
+import consulo.ui.ex.awt.Wrapper;
 import consulo.annotation.DeprecationInfo;
 import consulo.java.execution.JavaExecutionBundle;
 import consulo.roots.ui.configuration.SdkComboBox;

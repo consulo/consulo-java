@@ -17,9 +17,10 @@ package com.intellij.java.language.psi;
 
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.project.Project;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
@@ -35,7 +36,7 @@ public interface JVMElementFactory {
    *
    * @param name the name of the class to create.
    * @return the created class instance.
-   * @throws com.intellij.util.IncorrectOperationException if <code>name</code> is not a valid Java identifier.
+   * @throws IncorrectOperationException if <code>name</code> is not a valid Java identifier.
    */
   @Nonnull
   PsiClass createClass(@NonNls @Nonnull String name) throws IncorrectOperationException;
@@ -143,7 +144,7 @@ public interface JVMElementFactory {
 
   @Nonnull
   PsiElement createExpressionFromText(@Nonnull @NonNls String text,
-                                      @Nullable PsiElement context) throws IncorrectOperationException;
+                                                           @Nullable PsiElement context) throws IncorrectOperationException;
 
   /**
    * Creates new reference element by type
@@ -186,7 +187,7 @@ public interface JVMElementFactory {
    *
    * @param name the name of the annotation type to create.
    * @return the created annotation type instance.
-   * @throws com.intellij.util.IncorrectOperationException if <code>name</code> is not a valid Java identifier.
+   * @throws IncorrectOperationException if <code>name</code> is not a valid Java identifier.
    */
   @Nonnull
   PsiClass createAnnotationType(@Nonnull @NonNls String name) throws IncorrectOperationException;
@@ -263,8 +264,8 @@ public interface JVMElementFactory {
   PsiPrimitiveType createPrimitiveType(@Nonnull String text);
 
   /**
-   * The same as {@link #createTypeByFQClassName(String, com.intellij.psi.search.GlobalSearchScope)}
-   * with {@link com.intellij.psi.search.GlobalSearchScope#allScope(com.intellij.openapi.project.Project)}.
+   * The same as {@link #createTypeByFQClassName(String, GlobalSearchScope)}
+   * with {@link GlobalSearchScope#allScope(Project)}.
    *
    * @param qName the full-qualified name of the class to create the reference to.
    * @return the class type instance.

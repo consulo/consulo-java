@@ -20,13 +20,13 @@ import javax.annotation.Nonnull;
 import com.intellij.java.impl.codeInsight.generation.GenerateMembersUtil;
 import com.intellij.java.language.psi.*;
 import consulo.logging.Logger;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.util.lang.StringUtil;
 import com.intellij.psi.*;
-import com.intellij.psi.tree.IElementType;
+import consulo.language.ast.IElementType;
 import com.intellij.java.language.psi.util.PropertyUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.impl.refactoring.util.RefactoringUtil;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
 import com.intellij.java.language.util.VisibilityUtil;
 import org.jetbrains.annotations.NonNls;
 
@@ -259,7 +259,7 @@ public class JavaEncapsulateFieldHelper extends EncapsulateFieldHelper {
     return methodCall;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private static PsiMethodCallExpression createGetterCall(FieldDescriptor fieldDescriptor,
                                                           PsiReferenceExpression expr,
                                                           PsiClass aClass,
@@ -333,7 +333,7 @@ public class JavaEncapsulateFieldHelper extends EncapsulateFieldHelper {
   }
 
   @Override
-  @javax.annotation.Nullable
+  @Nullable
   public PsiMethod generateMethodPrototype(@Nonnull PsiField field, @Nonnull String methodName, boolean isGetter) {
     PsiMethod prototype = isGetter
                           ? GenerateMembersUtil.generateGetterPrototype(field)

@@ -25,12 +25,12 @@ import com.intellij.java.debugger.impl.ui.impl.watch.DebuggerTreeNodeImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.NodeDescriptorImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.ValueDescriptorImpl;
 import com.intellij.java.debugger.impl.ui.tree.render.*;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.options.Configurable;
-import com.intellij.openapi.options.ShowSettingsUtil;
-import com.intellij.xdebugger.frame.XValue;
-import com.intellij.xdebugger.impl.ui.tree.actions.XDebuggerTreeActionBase;
-import com.intellij.xdebugger.impl.ui.tree.nodes.XValueNodeImpl;
+import consulo.execution.debug.frame.XValue;
+import consulo.ui.ex.action.AnActionEvent;
+import consulo.configurable.Configurable;
+import consulo.ide.setting.ShowSettingsUtil;
+import consulo.ide.impl.idea.xdebugger.impl.ui.tree.actions.XDebuggerTreeActionBase;
+import consulo.ide.impl.idea.xdebugger.impl.ui.tree.nodes.XValueNodeImpl;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.util.concurrent.AsyncResult;
 
@@ -49,7 +49,7 @@ public abstract class ArrayAction extends DebuggerAction {
       return;
     }
 
-    final XValueNodeImpl node = XDebuggerTreeActionBase.getSelectedNode(e.getDataContext());
+    final consulo.ide.impl.idea.xdebugger.impl.ui.tree.nodes.XValueNodeImpl node = consulo.ide.impl.idea.xdebugger.impl.ui.tree.actions.XDebuggerTreeActionBase.getSelectedNode(e.getDataContext());
     if (node == null) {
       return;
     }
@@ -69,7 +69,7 @@ public abstract class ArrayAction extends DebuggerAction {
   }
 
   @Nonnull
-  protected abstract AsyncResult<ArrayRenderer> createNewRenderer(XValueNodeImpl node, ArrayRenderer original, @Nonnull DebuggerContextImpl debuggerContext, String title);
+  protected abstract AsyncResult<ArrayRenderer> createNewRenderer(consulo.ide.impl.idea.xdebugger.impl.ui.tree.nodes.XValueNodeImpl node, ArrayRenderer original, @Nonnull DebuggerContextImpl debuggerContext, String title);
 
   @RequiredUIAccess
   @Override
@@ -103,7 +103,7 @@ public abstract class ArrayAction extends DebuggerAction {
     return null;
   }
 
-  public static void setArrayRenderer(ArrayRenderer newRenderer, @Nonnull XValueNodeImpl node, @Nonnull DebuggerContextImpl debuggerContext) {
+  public static void setArrayRenderer(ArrayRenderer newRenderer, @Nonnull consulo.ide.impl.idea.xdebugger.impl.ui.tree.nodes.XValueNodeImpl node, @Nonnull DebuggerContextImpl debuggerContext) {
     XValue container = node.getValueContainer();
 
     ArrayRenderer renderer = getArrayRenderer(container);

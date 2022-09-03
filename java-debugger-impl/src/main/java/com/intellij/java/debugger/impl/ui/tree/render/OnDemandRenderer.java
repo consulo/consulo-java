@@ -25,12 +25,12 @@ import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.ValueDescriptorImpl;
 import com.intellij.java.debugger.impl.ui.tree.ValueDescriptor;
 import com.intellij.java.debugger.impl.ui.tree.actions.ForceOnDemandRenderersAction;
+import consulo.execution.debug.frame.XFullValueEvaluator;
 import consulo.util.dataholder.Key;
-import com.intellij.xdebugger.frame.XFullValueEvaluator;
-import com.intellij.xdebugger.frame.XValuePlace;
-import com.intellij.xdebugger.impl.XDebugSessionImpl;
-import com.intellij.xdebugger.impl.ui.tree.nodes.HeadlessValueEvaluationCallback;
-import com.intellij.xdebugger.impl.ui.tree.nodes.XValueNodeImpl;
+import consulo.execution.debug.frame.XValuePlace;
+import consulo.ide.impl.idea.xdebugger.impl.XDebugSessionImpl;
+import consulo.ide.impl.idea.xdebugger.impl.ui.tree.nodes.HeadlessValueEvaluationCallback;
+import consulo.ide.impl.idea.xdebugger.impl.ui.tree.nodes.XValueNodeImpl;
 
 /**
  * @author egor
@@ -93,6 +93,6 @@ public interface OnDemandRenderer extends FullValueEvaluatorProvider
 
 	static boolean isOnDemandForced(EvaluationContext evaluationContext)
 	{
-		return ForceOnDemandRenderersAction.isForcedOnDemand((XDebugSessionImpl) ((DebugProcessImpl) evaluationContext.getDebugProcess()).getXdebugProcess().getSession());
+		return ForceOnDemandRenderersAction.isForcedOnDemand((consulo.ide.impl.idea.xdebugger.impl.XDebugSessionImpl) ((DebugProcessImpl) evaluationContext.getDebugProcess()).getXdebugProcess().getSession());
 	}
 }

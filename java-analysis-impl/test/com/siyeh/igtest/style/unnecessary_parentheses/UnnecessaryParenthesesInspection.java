@@ -1,5 +1,6 @@
 package com.siyeh.igtest.style.unnecessary_parentheses;
 
+import javax.swing.JPanel;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -55,7 +56,7 @@ public class UnnecessaryParenthesesInspection
     }
 
     // http://www.jetbrains.net/jira/browse/IDEADEV-34926
-    class ParenBug extends javax.swing.JPanel {
+    class ParenBug extends JPanel {
         private int resolution;
         private float pageWidth;  // in cm.
         private float pageHeight; // in cm.

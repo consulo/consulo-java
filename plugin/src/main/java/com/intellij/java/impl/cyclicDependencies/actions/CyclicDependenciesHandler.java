@@ -15,16 +15,16 @@
  */
 package com.intellij.java.impl.cyclicDependencies.actions;
 
-import com.intellij.analysis.AnalysisScope;
-import com.intellij.analysis.AnalysisScopeBundle;
-import com.intellij.analysis.PerformAnalysisInBackgroundOption;
+import consulo.language.editor.scope.AnalysisScope;
+import consulo.language.editor.scope.AnalysisScopeBundle;
+import consulo.ide.impl.idea.analysis.PerformAnalysisInBackgroundOption;
 import com.intellij.java.impl.cyclicDependencies.CyclicDependenciesBuilder;
 import com.intellij.java.impl.cyclicDependencies.ui.CyclicDependenciesPanel;
-import com.intellij.openapi.progress.ProgressManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.packageDependencies.DependenciesToolWindow;
-import com.intellij.ui.content.Content;
-import com.intellij.ui.content.ContentFactory;
+import consulo.application.progress.ProgressManager;
+import consulo.project.Project;
+import consulo.ide.impl.idea.packageDependencies.DependenciesToolWindow;
+import consulo.ui.ex.content.Content;
+import consulo.ui.ex.content.ContentFactory;
 
 import javax.swing.*;
 

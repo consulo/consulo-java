@@ -2,15 +2,15 @@
 package com.intellij.java.analysis.impl.codeInspection.dataFlow.inference;
 
 import com.intellij.java.language.codeInsight.Nullability;
-import com.intellij.lang.LighterAST;
-import com.intellij.lang.LighterASTNode;
+import consulo.language.ast.LighterAST;
+import consulo.language.ast.LighterASTNode;
 import com.intellij.java.language.psi.JavaTokenType;
-import com.intellij.psi.TokenType;
+import consulo.language.ast.TokenType;
 import com.intellij.java.language.impl.psi.impl.source.FileLocalResolver;
 import com.intellij.java.language.impl.psi.impl.source.tree.ElementType;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.tree.TokenSet;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.language.ast.IElementType;
+import consulo.language.ast.TokenSet;
+import consulo.util.collection.ContainerUtil;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -18,8 +18,8 @@ import java.util.*;
 
 import static com.intellij.java.language.impl.psi.impl.source.JavaLightTreeUtil.*;
 import static com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType.*;
-import static com.intellij.psi.impl.source.tree.LightTreeUtil.firstChildOfType;
-import static com.intellij.psi.impl.source.tree.LightTreeUtil.getChildrenOfType;
+import static consulo.language.ast.LightTreeUtil.firstChildOfType;
+import static consulo.language.ast.LightTreeUtil.getChildrenOfType;
 
 class MethodReturnInferenceVisitor
 {

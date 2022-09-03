@@ -17,7 +17,7 @@ package com.intellij.java.language.impl.psi.impl;
 
 import com.intellij.java.language.impl.psi.impl.source.resolve.graphInference.InferenceVariable;
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.java.language.psi.util.JavaClassSupers;
 import com.intellij.java.language.psi.util.PsiUtil;
 import jakarta.inject.Singleton;

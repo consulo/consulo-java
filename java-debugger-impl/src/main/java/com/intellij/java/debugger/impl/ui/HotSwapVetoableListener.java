@@ -16,7 +16,7 @@
 
 package com.intellij.java.debugger.impl.ui;
 
-import com.intellij.openapi.compiler.CompileContext;
+import consulo.compiler.CompileContext;
 
 /**
  * @author nik

@@ -19,17 +19,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nullable;
-import com.intellij.codeInsight.CodeInsightBundle;
-import com.intellij.codeInsight.template.Expression;
-import com.intellij.codeInsight.template.ExpressionContext;
+import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.template.Expression;
+import consulo.language.editor.template.ExpressionContext;
 import com.intellij.java.language.psi.*;
 import consulo.logging.Logger;
-import com.intellij.openapi.project.Project;
+import consulo.project.Project;
 import com.intellij.psi.*;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.PsiUtilCore;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.psi.PsiUtilCore;
+import consulo.language.util.IncorrectOperationException;
 import consulo.java.language.module.util.JavaClassNames;
 
 /**

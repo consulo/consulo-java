@@ -15,22 +15,22 @@
  */
 package com.intellij.java.impl.ig.redundancy;
 
-import com.intellij.analysis.AnalysisScope;
+import consulo.language.editor.scope.AnalysisScope;
 import com.intellij.java.language.codeInsight.TestFrameworks;
-import com.intellij.codeInspection.*;
 import com.intellij.codeInspection.reference.*;
 import com.intellij.java.analysis.codeInspection.reference.*;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiIdentifier;
 import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.openapi.roots.ProjectRootManager;
+import consulo.module.content.ProjectRootManager;
 import consulo.util.dataholder.Key;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.psi.*;
 import com.siyeh.InspectionGadgetsBundle;
 import com.intellij.java.impl.ig.BaseGlobalInspection;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class ElementOnlyUsedFromTestCodeInspection
   extends BaseGlobalInspection {
@@ -46,12 +46,12 @@ public class ElementOnlyUsedFromTestCodeInspection
   }
 
   @Override
-  @javax.annotation.Nullable
+  @Nullable
   public RefGraphAnnotator getAnnotator(RefManager refManager) {
     return new ElementOnlyUsedFromTestCodeAnnotator();
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   @Override
   public CommonProblemDescriptor[] checkElement(
     RefEntity refEntity, AnalysisScope scope, InspectionManager manager,
@@ -120,7 +120,7 @@ public class ElementOnlyUsedFromTestCodeInspection
            rootManager.getFileIndex().isInTestSourceContent(file);
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public static PsiClass getTopLevelParentClass(PsiElement e) {
     PsiClass result = null;
     PsiElement parent = e.getParent();

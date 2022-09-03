@@ -2,8 +2,8 @@ package consulo.java.manifest.lang;
 
 import org.osmorc.manifest.lang.ManifestLexer;
 import org.osmorc.manifest.lang.ManifestTokenType;
-import com.intellij.psi.TokenType;
-import com.intellij.psi.tree.IElementType;
+import consulo.language.ast.TokenType;
+import consulo.language.ast.IElementType;
 
 /**
  * @author VISTALL

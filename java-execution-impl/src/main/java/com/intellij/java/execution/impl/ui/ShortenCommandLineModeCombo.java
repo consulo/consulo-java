@@ -7,16 +7,16 @@ import javax.swing.JList;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import com.intellij.application.options.ModuleDescriptionsComboBox;
+import consulo.module.ui.awt.ModuleDescriptionsComboBox;
 import com.intellij.java.execution.ShortenCommandLine;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleUtilCore;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.projectRoots.SdkTable;
-import com.intellij.openapi.ui.ComboBox;
-import com.intellij.ui.ColoredListCellRenderer;
-import com.intellij.ui.SimpleTextAttributes;
+import consulo.module.Module;
+import consulo.language.util.ModuleUtilCore;
+import consulo.project.Project;
+import consulo.content.bundle.Sdk;
+import consulo.content.bundle.SdkTable;
+import consulo.ui.ex.awt.ComboBox;
+import consulo.ui.ex.awt.ColoredListCellRenderer;
+import consulo.ui.ex.SimpleTextAttributes;
 import consulo.java.language.module.extension.JavaModuleExtension;
 
 public class ShortenCommandLineModeCombo extends ComboBox<ShortenCommandLine>

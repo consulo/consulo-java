@@ -32,9 +32,9 @@ import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
 import com.intellij.java.debugger.impl.jdi.StackFrameProxyImpl;
 import com.intellij.java.debugger.impl.jdi.ThreadReferenceProxyImpl;
 import consulo.logging.Logger;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiDocumentManager;
-import com.intellij.psi.PsiElement;
+import consulo.project.Project;
+import consulo.language.psi.PsiDocumentManager;
+import consulo.language.psi.PsiElement;
 import consulo.internal.com.sun.jdi.ObjectReference;
 import consulo.internal.com.sun.jdi.Value;
 
@@ -47,7 +47,7 @@ public final class DebuggerContextImpl implements DebuggerContext
 
 	private boolean myInitialized;
 
-	@javax.annotation.Nullable
+	@Nullable
 	private final DebuggerSession myDebuggerSession;
 	private final DebugProcessImpl myDebugProcess;
 	private final SuspendContextImpl mySuspendContext;
@@ -58,9 +58,9 @@ public final class DebuggerContextImpl implements DebuggerContext
 	private PsiElement myContextElement;
 
 	private DebuggerContextImpl(
-			@javax.annotation.Nullable DebuggerSession session,
-			@javax.annotation.Nullable DebugProcessImpl debugProcess,
-			@javax.annotation.Nullable SuspendContextImpl context,
+			@Nullable DebuggerSession session,
+			@Nullable DebugProcessImpl debugProcess,
+			@Nullable SuspendContextImpl context,
 			ThreadReferenceProxyImpl threadProxy,
 			StackFrameProxyImpl frameProxy,
 			SourcePosition position,
@@ -85,7 +85,7 @@ public final class DebuggerContextImpl implements DebuggerContext
 		return myDebuggerSession;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	@Override
 	public DebugProcessImpl getDebugProcess()
 	{
@@ -140,7 +140,7 @@ public final class DebuggerContextImpl implements DebuggerContext
 		return new EvaluationContextImpl(getSuspendContext(), getFrameProxy(), thisObject);
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public EvaluationContextImpl createEvaluationContext()
 	{
 		DebuggerManagerThreadImpl.assertIsManagerThread();
@@ -161,7 +161,7 @@ public final class DebuggerContextImpl implements DebuggerContext
 
 	public static DebuggerContextImpl createDebuggerContext(
 			@Nullable DebuggerSession session,
-			@javax.annotation.Nullable SuspendContextImpl context,
+			@Nullable SuspendContextImpl context,
 			ThreadReferenceProxyImpl threadProxy,
 			StackFrameProxyImpl frameProxy)
 	{

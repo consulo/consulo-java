@@ -15,18 +15,18 @@
  */
 package com.intellij.java.impl.slicer;
 
-import com.intellij.ide.projectView.PresentationData;
-import com.intellij.ide.util.treeView.AbstractTreeNode;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.progress.ProgressIndicator;
-import com.intellij.openapi.progress.ProgressManager;
-import com.intellij.openapi.progress.util.ProgressIndicatorBase;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Computable;
-import com.intellij.ui.DuplicateNodeRenderer;
-import com.intellij.usageView.UsageViewBundle;
-import com.intellij.util.ArrayUtil;
-import com.intellij.util.Processor;
+import consulo.ui.ex.tree.PresentationData;
+import consulo.project.ui.view.tree.AbstractTreeNode;
+import consulo.application.ApplicationManager;
+import consulo.application.progress.ProgressIndicator;
+import consulo.application.progress.ProgressManager;
+import consulo.application.impl.internal.progress.ProgressIndicatorBase;
+import consulo.project.Project;
+import consulo.application.util.function.Computable;
+import consulo.ide.impl.idea.ui.DuplicateNodeRenderer;
+import consulo.usage.UsageViewBundle;
+import consulo.util.collection.ArrayUtil;
+import consulo.application.util.function.Processor;
 
 import javax.annotation.Nonnull;
 import javax.swing.*;

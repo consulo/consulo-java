@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.psi.impl.source.javadoc;
 
-import com.intellij.codeInspection.SuppressionUtil;
+import consulo.language.editor.inspection.SuppressionUtil;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.impl.psi.impl.source.javadoc.AuthorDocTagInfo;
 import com.intellij.java.language.impl.psi.impl.source.javadoc.SimpleDocTagInfo;
@@ -25,14 +25,15 @@ import com.intellij.java.language.psi.PsiJavaModule;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.javadoc.JavadocManager;
 import com.intellij.java.language.psi.javadoc.JavadocTagInfo;
-import com.intellij.openapi.extensions.Extensions;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiElement;
+import consulo.component.extension.Extensions;
+import consulo.project.Project;
+import consulo.language.psi.PsiElement;
 import consulo.psi.PsiPackage;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -95,7 +96,7 @@ public class JavadocManagerImpl implements JavadocManager {
   }
 
   @Override
-  @javax.annotation.Nullable
+  @Nullable
   public JavadocTagInfo getTagInfo(String name) {
     for (JavadocTagInfo info : myInfos) {
       if (info.getName().equals(name)) {

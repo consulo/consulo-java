@@ -20,8 +20,8 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.util.containers.ContainerUtilRt;
+import consulo.util.lang.StringUtil;
+import consulo.ide.impl.idea.util.containers.ContainerUtilRt;
 
 public class JDParamListOwnerComment extends JDComment
 {

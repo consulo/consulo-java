@@ -17,12 +17,12 @@ package com.intellij.java.impl.refactoring.move;
 
 import com.intellij.java.language.psi.*;
 import consulo.logging.Logger;
-import com.intellij.openapi.util.Pair;
+import consulo.util.lang.Pair;
 import com.intellij.psi.*;
-import com.intellij.psi.codeStyle.CodeStyleManager;
+import consulo.language.codeStyle.CodeStyleManager;
 import com.intellij.java.language.psi.util.InheritanceUtil;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
 import java.util.HashSet;
 import javax.annotation.Nullable;
 

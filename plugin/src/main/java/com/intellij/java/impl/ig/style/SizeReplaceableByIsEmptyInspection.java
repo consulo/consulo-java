@@ -15,17 +15,17 @@
  */
 package com.intellij.java.impl.ig.style;
 
-import com.intellij.codeInspection.ProblemDescriptor;
-import com.intellij.codeInspection.ui.ListTable;
-import com.intellij.codeInspection.ui.ListWrappingTableModel;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.ide.impl.idea.codeInspection.ui.ListTable;
+import consulo.ide.impl.idea.codeInspection.ui.ListWrappingTableModel;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.tree.IElementType;
+import consulo.project.Project;
+import consulo.language.ast.IElementType;
 import com.intellij.java.language.psi.util.InheritanceUtil;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.containers.OrderedSet;
-import com.intellij.util.ui.CheckBox;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.util.collection.OrderedSet;
+import consulo.ui.CheckBox;
 import com.siyeh.HardcodedMethodConstants;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
@@ -184,7 +184,7 @@ public class SizeReplaceableByIsEmptyInspection extends BaseInspection {
       return null;
     }
 
-    @javax.annotation.Nullable
+    @Nullable
     private String getIsEmptyCall(PsiMethodCallExpression callExpression) {
       final PsiReferenceExpression methodExpression = callExpression.getMethodExpression();
       final String referenceName = methodExpression.getReferenceName();

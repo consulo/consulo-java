@@ -22,9 +22,9 @@ import com.intellij.java.language.psi.PsiTypeParameter;
 import com.intellij.java.language.impl.psi.impl.java.stubs.JavaStubElementTypes;
 import com.intellij.java.language.impl.psi.impl.java.stubs.PsiAnnotationStub;
 import com.intellij.java.language.impl.psi.impl.java.stubs.PsiTypeParameterStub;
-import com.intellij.psi.stubs.StubBase;
-import com.intellij.psi.stubs.StubElement;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.language.psi.stub.StubBase;
+import consulo.language.psi.stub.StubElement;
+import consulo.util.collection.ContainerUtil;
 
 /**
  * @author max

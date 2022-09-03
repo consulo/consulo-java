@@ -24,6 +24,7 @@ import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
@@ -35,25 +36,25 @@ import org.intellij.plugins.intelliLang.util.AnnotationUtilEx;
 import org.intellij.plugins.intelliLang.util.PsiUtilEx;
 import org.intellij.plugins.intelliLang.util.SubstitutedExpressionEvaluationHelper;
 import org.jetbrains.annotations.NonNls;
-import com.intellij.codeInspection.LocalInspectionTool;
-import com.intellij.codeInspection.LocalQuickFix;
-import com.intellij.codeInspection.ProblemDescriptor;
-import com.intellij.codeInspection.ProblemsHolder;
-import com.intellij.ide.DataManager;
-import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.AsyncResult;
-import com.intellij.openapi.util.Comparing;
+import consulo.language.editor.inspection.LocalInspectionTool;
+import consulo.language.editor.inspection.LocalQuickFix;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.editor.inspection.ProblemsHolder;
+import consulo.dataContext.DataManager;
+import consulo.dataContext.DataContext;
+import consulo.project.Project;
+import consulo.util.concurrent.AsyncResult;
+import consulo.util.lang.Comparing;
 import consulo.util.dataholder.Key;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.util.lang.StringUtil;
 import com.intellij.psi.*;
-import com.intellij.psi.util.CachedValue;
-import com.intellij.psi.util.CachedValueProvider;
-import com.intellij.psi.util.CachedValuesManager;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.application.util.CachedValue;
+import consulo.application.util.CachedValueProvider;
+import consulo.application.util.CachedValuesManager;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.analysis.refactoring.JavaRefactoringActionHandlerFactory;
-import com.intellij.refactoring.RefactoringActionHandler;
-import com.intellij.util.SmartList;
+import consulo.language.editor.refactoring.action.RefactoringActionHandler;
+import consulo.util.collection.SmartList;
 
 /**
  * Inspection that validates if string literals, compile-time constants or
@@ -95,7 +96,7 @@ public class PatternValidator extends LocalInspectionTool
 	}
 
 	@Override
-	@javax.annotation.Nullable
+	@Nullable
 	public JComponent createOptionsPanel()
 	{
 		final JPanel jPanel = new JPanel(new BorderLayout());

@@ -15,14 +15,15 @@
  */
 package com.intellij.java.language.psi;
 
-import com.intellij.pom.PomRenameableTarget;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiNameIdentifierOwner;
-import com.intellij.psi.PsiTarget;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiTarget;
+import consulo.language.util.IncorrectOperationException;
+import consulo.language.pom.PomRenameableTarget;
+import consulo.language.psi.PsiNameIdentifierOwner;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Represents a Java local variable, method parameter or field.
@@ -41,7 +42,7 @@ public interface PsiVariable extends PsiModifierListOwner, PsiNameIdentifierOwne
    *
    * @return the type element for the variable type.
    */
-  @javax.annotation.Nullable
+  @Nullable
   PsiTypeElement getTypeElement();
 
   /**
@@ -50,7 +51,7 @@ public interface PsiVariable extends PsiModifierListOwner, PsiNameIdentifierOwne
    * @return the initializer expression, or null if it has no initializer.
    * @see {@link #hasInitializer()}
    */
-  @javax.annotation.Nullable
+  @Nullable
   PsiExpression getInitializer();
 
   /**
@@ -78,7 +79,7 @@ public interface PsiVariable extends PsiModifierListOwner, PsiNameIdentifierOwne
    * @return the calculated value, or null if the variable has no initializer or
    * the initializer does not evaluate to a constant.
    */
-  @javax.annotation.Nullable
+  @Nullable
   Object computeConstantValue();
 
   /**
@@ -87,7 +88,7 @@ public interface PsiVariable extends PsiModifierListOwner, PsiNameIdentifierOwne
    * @return the variable name identifier.
    */
   @Override
-  @javax.annotation.Nullable
+  @Nullable
   PsiIdentifier getNameIdentifier();
 
   @Override

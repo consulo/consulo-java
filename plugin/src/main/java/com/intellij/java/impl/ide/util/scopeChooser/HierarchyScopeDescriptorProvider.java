@@ -20,9 +20,9 @@
  */
 package com.intellij.java.impl.ide.util.scopeChooser;
 
-import com.intellij.ide.util.scopeChooser.ScopeDescriptor;
-import com.intellij.ide.util.scopeChooser.ScopeDescriptorProvider;
-import com.intellij.openapi.project.Project;
+import consulo.content.scope.ScopeDescriptor;
+import consulo.content.scope.ScopeDescriptorProvider;
+import consulo.project.Project;
 
 import javax.annotation.Nonnull;
 

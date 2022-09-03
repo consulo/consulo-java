@@ -15,20 +15,20 @@
  */
 package com.intellij.java.impl.ide.hierarchy.call;
 
-import com.intellij.ide.hierarchy.CallHierarchyBrowserBase;
-import com.intellij.ide.hierarchy.HierarchyNodeDescriptor;
-import com.intellij.ide.hierarchy.HierarchyTreeStructure;
+import consulo.ide.impl.idea.ide.hierarchy.CallHierarchyBrowserBase;
+import consulo.ide.impl.idea.ide.hierarchy.HierarchyNodeDescriptor;
+import consulo.ide.impl.idea.ide.hierarchy.HierarchyTreeStructure;
 import com.intellij.java.impl.ide.hierarchy.JavaHierarchyUtil;
-import com.intellij.ide.util.treeView.NodeDescriptor;
-import com.intellij.openapi.actionSystem.ActionGroup;
-import com.intellij.openapi.actionSystem.ActionManager;
-import com.intellij.openapi.actionSystem.ActionPlaces;
-import com.intellij.openapi.actionSystem.IdeActions;
+import consulo.ui.ex.action.*;
+import consulo.ui.ex.awt.PopupHandler;
+import consulo.ui.ex.tree.NodeDescriptor;
+import consulo.ui.ex.action.ActionPlaces;
+import consulo.ui.ex.action.IdeActions;
 import consulo.logging.Logger;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiElement;
+import consulo.project.Project;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.ui.PopupHandler;
+
 import javax.annotation.Nonnull;
 
 import javax.swing.*;

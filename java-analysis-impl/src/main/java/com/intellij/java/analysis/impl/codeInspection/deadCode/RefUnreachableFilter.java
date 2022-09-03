@@ -24,9 +24,9 @@
  */
 package com.intellij.java.analysis.impl.codeInspection.deadCode;
 
-import com.intellij.codeInspection.GlobalInspectionContext;
-import com.intellij.codeInspection.GlobalInspectionTool;
-import com.intellij.codeInspection.ex.GlobalInspectionContextBase;
+import consulo.language.editor.inspection.GlobalInspectionContext;
+import consulo.language.editor.inspection.GlobalInspectionTool;
+import consulo.ide.impl.idea.codeInspection.ex.GlobalInspectionContextBase;
 import com.intellij.codeInspection.reference.*;
 import com.intellij.java.analysis.impl.codeInspection.util.RefFilter;
 import com.intellij.java.analysis.codeInspection.reference.*;

@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.codeInsight.template.impl;
 
-import com.intellij.codeInsight.template.impl.DefaultLiveTemplatesProvider;
+import consulo.language.editor.template.DefaultLiveTemplatesProvider;
 import org.jetbrains.annotations.NonNls;
 
 /**

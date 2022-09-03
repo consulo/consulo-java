@@ -18,11 +18,11 @@ package com.intellij.java.language.impl.psi.impl.source.tree.java;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import com.intellij.java.language.psi.JavaElementVisitor;
-import com.intellij.psi.PsiElementVisitor;
+import consulo.language.psi.PsiElementVisitor;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiResourceExpression;
 import com.intellij.java.language.psi.PsiType;
-import com.intellij.psi.impl.source.tree.CompositePsiElement;
+import consulo.language.impl.psi.CompositePsiElement;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
 
 public class PsiResourceExpressionImpl extends CompositePsiElement implements PsiResourceExpression

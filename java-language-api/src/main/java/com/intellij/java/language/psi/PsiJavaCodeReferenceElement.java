@@ -15,11 +15,12 @@
  */
 package com.intellij.java.language.psi;
 
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiQualifiedReferenceElement;
-import com.intellij.util.ArrayFactory;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiQualifiedReferenceElement;
+import consulo.util.collection.ArrayFactory;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Represents a reference found in Java code (either an identifier or a sequence of identifiers
@@ -45,7 +46,7 @@ public interface PsiJavaCodeReferenceElement extends PsiJavaReference, PsiQualif
    * @return the element, or null if the reference element is not physical (for example,
    *         exists in compiled code).
    */
-  @javax.annotation.Nullable
+  @Nullable
   PsiElement getReferenceNameElement();
 
   /**
@@ -53,7 +54,7 @@ public interface PsiJavaCodeReferenceElement extends PsiJavaReference, PsiQualif
    *
    * @return the type argument list, or null if the reference does not have any type arguments.
    */
-  @javax.annotation.Nullable
+  @Nullable
   PsiReferenceParameterList getParameterList();
 
   /**

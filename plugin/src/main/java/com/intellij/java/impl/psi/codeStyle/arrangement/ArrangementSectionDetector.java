@@ -15,24 +15,24 @@
  */
 package com.intellij.java.impl.psi.codeStyle.arrangement;
 
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.PsiComment;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.codeStyle.arrangement.ArrangementSettings;
-import com.intellij.psi.codeStyle.arrangement.ArrangementUtil;
-import com.intellij.psi.codeStyle.arrangement.match.ArrangementSectionRule;
-import com.intellij.psi.codeStyle.arrangement.std.ArrangementSettingsToken;
-import com.intellij.util.Consumer;
-import com.intellij.util.containers.ContainerUtil;
-import com.intellij.util.containers.Stack;
+import consulo.document.Document;
+import consulo.document.util.TextRange;
+import consulo.util.lang.StringUtil;
+import consulo.language.psi.PsiComment;
+import consulo.language.psi.PsiElement;
+import consulo.language.codeStyle.arrangement.ArrangementSettings;
+import consulo.language.codeStyle.arrangement.ArrangementUtil;
+import consulo.language.codeStyle.arrangement.match.ArrangementSectionRule;
+import consulo.language.codeStyle.arrangement.std.ArrangementSettingsToken;
+import consulo.ide.impl.idea.util.Consumer;
+import consulo.util.collection.ContainerUtil;
+import consulo.util.collection.Stack;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import static com.intellij.psi.codeStyle.arrangement.std.StdArrangementTokens.Section.END_SECTION;
-import static com.intellij.psi.codeStyle.arrangement.std.StdArrangementTokens.Section.START_SECTION;
+import static consulo.language.codeStyle.arrangement.std.StdArrangementTokens.Section.END_SECTION;
+import static consulo.language.codeStyle.arrangement.std.StdArrangementTokens.Section.START_SECTION;
 
 /**
  * Class that is able to detect arrangement section start/end from comment element.
@@ -83,7 +83,7 @@ public class ArrangementSectionDetector {
     return false;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public static ArrangementSectionRule isSectionStartComment(@Nonnull ArrangementSettings settings, @Nonnull String comment) {
     for (ArrangementSectionRule rule : settings.getSections()) {
       if (rule.getStartComment() != null && StringUtil.equals(comment, rule.getStartComment())) {

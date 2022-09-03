@@ -15,13 +15,14 @@
  */
 package com.intellij.java.execution.impl;
 
+import consulo.execution.RuntimeConfigurationException;
+import consulo.execution.configuration.RunConfigurationBase;
+import consulo.execution.configuration.RunConfigurationExtensionsManager;
+import consulo.ide.ServiceManager;
 import consulo.logging.Logger;
 import jakarta.inject.Singleton;
 
-import com.intellij.execution.configuration.RunConfigurationExtensionsManager;
-import com.intellij.execution.configurations.RunConfigurationBase;
-import com.intellij.execution.configurations.RuntimeConfigurationException;
-import com.intellij.openapi.components.ServiceManager;
+import javax.annotation.Nonnull;
 
 /**
  * User: anna
@@ -32,7 +33,7 @@ public class JavaRunConfigurationExtensionManager extends RunConfigurationExtens
   private static final Logger LOG = Logger.getInstance(RunConfigurationExtension.class.getName());
 
   public JavaRunConfigurationExtensionManager() {
-    super(RunConfigurationExtension.EP_NAME);
+    super(RunConfigurationExtension.class);
   }
 
   public static JavaRunConfigurationExtensionManager getInstance() {
@@ -48,11 +49,13 @@ public class JavaRunConfigurationExtensionManager extends RunConfigurationExtens
     }
   }
 
+  @Nonnull
   @Override
   protected String getIdAttrName() {
     return "name";
   }
 
+  @Nonnull
   @Override
   protected String getExtensionRootAttr() {
     return "extension";

@@ -18,21 +18,21 @@ package com.intellij.java.impl.codeInspection.wrongPackageStatement;
 import javax.annotation.Nonnull;
 
 import consulo.java.analysis.impl.JavaQuickFixBundle;
-import com.intellij.codeInsight.FileModificationService;
-import com.intellij.codeInspection.LocalQuickFix;
-import com.intellij.codeInspection.ProblemDescriptor;
+import consulo.language.editor.FileModificationService;
+import consulo.language.editor.inspection.LocalQuickFix;
+import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.logging.Logger;
-import com.intellij.openapi.project.Project;
+import consulo.project.Project;
 import com.intellij.java.language.psi.JavaDirectoryService;
 import com.intellij.java.language.psi.JavaPsiFacade;
-import com.intellij.psi.PsiDirectory;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiDirectory;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiElementFactory;
-import com.intellij.psi.PsiFile;
+import consulo.language.psi.PsiFile;
 import com.intellij.java.language.psi.PsiJavaFile;
 import com.intellij.java.language.psi.PsiJavaPackage;
 import com.intellij.java.language.psi.PsiPackageStatement;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
 
 public class AdjustPackageNameFix implements LocalQuickFix {
   private static final Logger LOG = Logger.getInstance(AdjustPackageNameFix.class);

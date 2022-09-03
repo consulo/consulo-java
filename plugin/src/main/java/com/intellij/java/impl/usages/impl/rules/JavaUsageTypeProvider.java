@@ -18,14 +18,14 @@ package com.intellij.java.impl.usages.impl.rules;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.HighlightControlFlowUtil;
 import com.intellij.java.language.impl.psi.impl.PsiSuperMethodImplUtil;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.usages.PsiElementUsageTarget;
-import com.intellij.usages.UsageTarget;
-import com.intellij.usages.impl.rules.UsageType;
-import com.intellij.usages.impl.rules.UsageTypeProviderEx;
-import com.intellij.util.Processor;
+import consulo.util.lang.Comparing;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.usage.PsiElementUsageTarget;
+import consulo.usage.UsageTarget;
+import consulo.usage.UsageType;
+import consulo.usage.UsageTypeProviderEx;
+import consulo.application.util.function.Processor;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -157,7 +157,7 @@ public class JavaUsageTypeProvider implements UsageTypeProviderEx {
     */
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private static UsageType getClassUsageType(@Nonnull PsiElement element, @Nonnull UsageTarget[] targets) {
     final PsiJavaCodeReferenceElement codeReference = PsiTreeUtil.getParentOfType(element, PsiJavaCodeReferenceElement.class);
     if (codeReference != null && isNestedClassOf(codeReference, targets)) {
@@ -248,7 +248,7 @@ public class JavaUsageTypeProvider implements UsageTypeProviderEx {
     return expression.getArrayDimensions().length > 0 || expression.getArrayInitializer() != null;
   }
 
-  private static boolean isAnonymousClassOf(@javax.annotation.Nullable PsiAnonymousClass anonymousClass, @Nonnull UsageTarget[] targets) {
+  private static boolean isAnonymousClassOf(@Nullable PsiAnonymousClass anonymousClass, @Nonnull UsageTarget[] targets) {
     if (anonymousClass == null) {
       return false;
     }

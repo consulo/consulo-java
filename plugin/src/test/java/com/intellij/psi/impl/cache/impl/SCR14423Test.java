@@ -9,17 +9,17 @@ import static org.junit.Assert.assertTrue;
 import java.io.File;
 import java.io.IOException;
 
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.fileEditor.FileDocumentManager;
-import com.intellij.openapi.roots.ContentEntry;
-import com.intellij.openapi.roots.ModifiableRootModel;
-import com.intellij.openapi.roots.ModuleRootManager;
-import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.openapi.vfs.LocalFileSystem;
-import com.intellij.openapi.vfs.VfsUtil;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.application.ApplicationManager;
+import consulo.document.FileDocumentManager;
+import consulo.module.content.layer.ContentEntry;
+import consulo.module.content.layer.ModifiableRootModel;
+import consulo.module.content.ModuleRootManager;
+import consulo.ide.impl.idea.openapi.util.io.FileUtil;
+import consulo.virtualFileSystem.LocalFileSystem;
+import consulo.ide.impl.idea.openapi.vfs.VfsUtil;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.testFramework.PsiTestCase;
 import com.intellij.testFramework.PsiTestUtil;
 import consulo.java.impl.module.extension.JavaModuleExtensionImpl;
@@ -122,7 +122,7 @@ public abstract class SCR14423Test extends PsiTestCase {
         FileDocumentManager.getInstance().saveAllDocuments();
         PsiClass psiClass = myJavaFacade.findClass("p.A");
         final VirtualFile vFile = psiClass.getContainingFile().getVirtualFile();
-        File ioFile = VfsUtil.virtualToIoFile(vFile);
+        File ioFile = consulo.ide.impl.idea.openapi.vfs.VfsUtil.virtualToIoFile(vFile);
         ioFile.setLastModified(5);
 
         LocalFileSystem.getInstance().refresh(false);

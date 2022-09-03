@@ -1,15 +1,16 @@
 // Copyright 2000-2018 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.impl.codeInsight;
 
-import com.intellij.codeInspection.InspectionsBundle;
-import com.intellij.ide.DataManager;
+import consulo.language.editor.inspection.InspectionsBundle;
+import consulo.dataContext.DataManager;
 import com.intellij.java.language.codeInsight.NullableNotNullManager;
-import com.intellij.openapi.actionSystem.CommonDataKeys;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.project.ProjectManager;
-import com.intellij.openapi.ui.DialogWrapper;
-import com.intellij.openapi.ui.Splitter;
-import com.intellij.util.ui.JBUI;
+import consulo.language.editor.CommonDataKeys;
+import consulo.project.Project;
+import consulo.project.ProjectManager;
+import consulo.ui.ex.awt.DialogWrapper;
+import consulo.ui.ex.awt.Splitter;
+import consulo.ui.ex.awt.JBUI;
+
 import javax.annotation.Nonnull;
 
 import javax.swing.*;

@@ -20,12 +20,12 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import jakarta.inject.Inject;
 
-import com.intellij.openapi.project.DumbAware;
-import com.intellij.openapi.project.Project;
+import consulo.application.dumb.DumbAware;
+import consulo.project.Project;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiElementFinder;
 import com.intellij.java.language.psi.PsiJavaPackage;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.language.psi.scope.GlobalSearchScope;
 
 /**
  * @author yole

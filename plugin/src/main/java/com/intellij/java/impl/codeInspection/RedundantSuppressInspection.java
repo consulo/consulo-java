@@ -15,30 +15,29 @@
  */
 package com.intellij.java.impl.codeInspection;
 
-import com.intellij.analysis.AnalysisScope;
-import com.intellij.codeInsight.daemon.GroupNames;
-import com.intellij.codeInspection.*;
+import consulo.language.editor.scope.AnalysisScope;
+import consulo.ide.impl.idea.codeInsight.daemon.GroupNames;
 import com.intellij.codeInspection.ex.*;
-import com.intellij.codeInspection.reference.RefElement;
-import com.intellij.codeInspection.reference.RefEntity;
-import com.intellij.codeInspection.reference.RefManagerImpl;
-import com.intellij.codeInspection.reference.RefVisitor;
-import com.intellij.codeInspection.ui.SingleCheckboxOptionsPanel;
+import consulo.language.editor.inspection.reference.RefElement;
+import consulo.language.editor.inspection.reference.RefEntity;
+import consulo.ide.impl.idea.codeInspection.reference.RefManagerImpl;
+import consulo.language.editor.inspection.reference.RefVisitor;
+import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
 import com.intellij.java.analysis.codeInspection.reference.RefClass;
 import com.intellij.java.analysis.codeInspection.reference.RefJavaVisitor;
 import com.intellij.java.analysis.impl.codeInspection.JavaSuppressionUtil;
 import com.intellij.java.impl.codeInsight.daemon.impl.RemoveSuppressWarningAction;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.WriteExternalException;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.profile.codeInspection.InspectionProjectProfileManager;
-import com.intellij.psi.PsiComment;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.containers.BidirectionalMap;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.project.Project;
+import consulo.util.xml.serializer.WriteExternalException;
+import consulo.util.lang.StringUtil;
+import consulo.language.editor.inspection.scheme.InspectionProjectProfileManager;
+import consulo.language.psi.PsiComment;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.util.collection.BidirectionalMap;
+import consulo.util.collection.ContainerUtil;
 import consulo.logging.Logger;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
@@ -241,7 +240,7 @@ public class RedundantSuppressInspection extends GlobalInspectionTool {
                 }
 
                 @Override
-                public void addProblemElement(@javax.annotation.Nullable RefEntity refEntity, @Nonnull CommonProblemDescriptor... commonProblemDescriptors) {
+                public void addProblemElement(@Nullable RefEntity refEntity, @Nonnull CommonProblemDescriptor... commonProblemDescriptors) {
                   int i = 0;
                 }
 
@@ -335,7 +334,7 @@ public class RedundantSuppressInspection extends GlobalInspectionTool {
 
 
   @Override
-  @javax.annotation.Nullable
+  @Nullable
   public String getHint(@Nonnull final QuickFix fix) {
     if (myQuickFixes != null) {
       final List<String> list = myQuickFixes.getKeysByValue(fix);

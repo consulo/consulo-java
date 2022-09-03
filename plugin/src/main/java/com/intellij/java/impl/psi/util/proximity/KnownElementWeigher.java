@@ -18,16 +18,16 @@ package com.intellij.java.impl.psi.util.proximity;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.ProjectFileIndex;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.util.ProximityLocation;
-import com.intellij.psi.util.PsiUtilCore;
-import com.intellij.psi.util.proximity.ProximityWeigher;
-import com.intellij.psi.util.proximity.SdkOrLibraryWeigher;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.project.Project;
+import consulo.module.content.ProjectFileIndex;
+import consulo.util.lang.StringUtil;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.language.psi.PsiElement;
+import consulo.ide.impl.psi.util.ProximityLocation;
+import consulo.language.psi.PsiUtilCore;
+import consulo.ide.impl.psi.util.proximity.ProximityWeigher;
+import consulo.ide.impl.psi.util.proximity.SdkOrLibraryWeigher;
+import consulo.util.collection.ContainerUtil;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
@@ -92,7 +92,7 @@ public class KnownElementWeigher extends ProximityWeigher {
     return 0;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private static Integer getTestFrameworkWeight(@Nonnull PsiElement element, @Nonnull ProximityLocation location, @Nonnull Project project) {
     if (element instanceof PsiClass) {
       final String qualifiedName = ((PsiClass) element).getQualifiedName();

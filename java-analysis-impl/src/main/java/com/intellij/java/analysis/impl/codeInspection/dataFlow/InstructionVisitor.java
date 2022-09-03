@@ -19,12 +19,12 @@ import com.intellij.java.language.codeInsight.Nullability;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.instructions.*;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.*;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.util.TextRange;
+import consulo.document.util.TextRange;
 import com.intellij.psi.*;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.util.ArrayUtil;
-import com.intellij.util.ObjectUtils;
+import consulo.util.collection.ArrayUtil;
+import consulo.ide.impl.idea.util.ObjectUtils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

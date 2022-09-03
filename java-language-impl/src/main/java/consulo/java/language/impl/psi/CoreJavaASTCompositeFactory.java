@@ -17,11 +17,12 @@ package consulo.java.language.impl.psi;
 
 import com.intellij.java.language.impl.psi.impl.source.Constants;
 import com.intellij.java.language.impl.psi.impl.source.javadoc.CorePsiDocTagValueImpl;
-import com.intellij.psi.impl.source.tree.CompositeElement;
-import com.intellij.psi.tree.IElementType;
-import consulo.psi.tree.ASTCompositeFactory;
+import consulo.language.ast.IElementType;
+import consulo.language.impl.ast.ASTCompositeFactory;
+import consulo.language.impl.ast.CompositeElement;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * @author VISTALL
@@ -35,7 +36,7 @@ public class CoreJavaASTCompositeFactory implements ASTCompositeFactory, Constan
   }
 
   @Override
-  public boolean apply(@javax.annotation.Nullable IElementType input) {
+  public boolean test(@Nullable IElementType input) {
     return input == DOC_TAG_VALUE_ELEMENT;
   }
 }

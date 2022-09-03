@@ -15,9 +15,8 @@
  */
 package com.intellij.java.impl.codeInspection.sameReturnValue;
 
-import com.intellij.analysis.AnalysisScope;
-import com.intellij.codeInsight.daemon.GroupNames;
-import com.intellij.codeInspection.*;
+import consulo.language.editor.scope.AnalysisScope;
+import consulo.ide.impl.idea.codeInsight.daemon.GroupNames;
 import com.intellij.codeInspection.reference.*;
 import com.intellij.java.analysis.codeInspection.GlobalJavaInspectionContext;
 import com.intellij.java.analysis.codeInspection.GlobalJavaInspectionTool;
@@ -25,6 +24,7 @@ import com.intellij.java.analysis.codeInspection.reference.RefJavaVisitor;
 import com.intellij.java.analysis.codeInspection.reference.RefMethod;
 import com.intellij.java.language.psi.PsiMethod;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * @author max
@@ -32,7 +32,7 @@ import javax.annotation.Nonnull;
 public class SameReturnValueInspection extends GlobalJavaInspectionTool
 {
   @Override
-  @javax.annotation.Nullable
+  @Nullable
   public CommonProblemDescriptor[] checkElement(RefEntity refEntity, AnalysisScope scope, InspectionManager manager, GlobalInspectionContext globalContext,
                                                 ProblemDescriptionsProcessor processor) {
     if (refEntity instanceof RefMethod) {

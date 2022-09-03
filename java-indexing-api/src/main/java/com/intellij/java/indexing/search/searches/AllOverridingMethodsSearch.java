@@ -16,16 +16,16 @@
 
 package com.intellij.java.indexing.search.searches;
 
-import com.intellij.openapi.util.Pair;
+import consulo.util.lang.Pair;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifier;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.search.SearchScope;
-import com.intellij.psi.search.searches.ExtensibleQueryFactory;
-import com.intellij.psi.util.PsiUtilCore;
-import com.intellij.util.EmptyQuery;
-import com.intellij.util.Query;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.content.scope.SearchScope;
+import consulo.application.util.query.ExtensibleQueryFactory;
+import consulo.language.psi.PsiUtilCore;
+import consulo.application.util.query.EmptyQuery;
+import consulo.application.util.query.Query;
 
 /**
  * @author ven
@@ -54,7 +54,7 @@ public class AllOverridingMethodsSearch extends ExtensibleQueryFactory<Pair<PsiM
   }
 
   private AllOverridingMethodsSearch() {
-    super("consulo.java");
+    super(AllOverridingMethodsSearchExecutor.class);
   }
 
   public static Query<Pair<PsiMethod, PsiMethod>> search(final PsiClass aClass, SearchScope scope) {

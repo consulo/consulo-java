@@ -19,21 +19,21 @@ import java.io.IOException;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.lang.ASTNode;
-import com.intellij.lang.LighterAST;
-import com.intellij.lang.LighterASTNode;
+import consulo.language.ast.ASTNode;
+import consulo.language.ast.LighterAST;
+import consulo.language.ast.LighterASTNode;
 import com.intellij.java.language.psi.PsiRequiresStatement;
 import com.intellij.java.language.impl.psi.impl.java.stubs.impl.PsiRequiresStatementStubImpl;
 import com.intellij.java.language.impl.psi.impl.source.PsiRequiresStatementImpl;
-import com.intellij.psi.impl.source.tree.CompositeElement;
+import consulo.language.impl.ast.CompositeElement;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaSourceUtil;
-import com.intellij.psi.impl.source.tree.LightTreeUtil;
-import com.intellij.psi.stubs.IndexSink;
-import com.intellij.psi.stubs.StubElement;
-import com.intellij.psi.stubs.StubInputStream;
-import com.intellij.psi.stubs.StubOutputStream;
-import com.intellij.util.io.StringRef;
+import consulo.language.ast.LightTreeUtil;
+import consulo.language.psi.stub.IndexSink;
+import consulo.language.psi.stub.StubElement;
+import consulo.language.psi.stub.StubInputStream;
+import consulo.language.psi.stub.StubOutputStream;
+import consulo.index.io.StringRef;
 
 public class JavaRequiresStatementElementType extends JavaStubElementType<PsiRequiresStatementStub, PsiRequiresStatement>
 {

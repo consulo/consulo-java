@@ -15,33 +15,34 @@
  */
 package com.intellij.java.impl.codeInsight.lookup;
 
-import com.intellij.codeInsight.completion.CompletionUtil;
-import com.intellij.codeInsight.completion.InsertHandler;
-import com.intellij.codeInsight.completion.InsertionContext;
-import com.intellij.codeInsight.lookup.DefaultLookupItemRenderer;
-import com.intellij.codeInsight.lookup.LookupElementPresentation;
-import com.intellij.codeInsight.lookup.LookupItem;
-import com.intellij.diagnostic.AttachmentFactory;
-import com.intellij.diagnostic.LogMessageEx;
+import consulo.language.editor.completion.ClassConditionKey;
+import consulo.language.editor.impl.internal.completion.CompletionUtil;
+import consulo.language.editor.completion.lookup.InsertHandler;
+import consulo.language.editor.completion.lookup.InsertionContext;
+import consulo.language.editor.completion.lookup.DefaultLookupItemRenderer;
+import consulo.language.editor.completion.lookup.LookupElementPresentation;
+import consulo.language.editor.completion.lookup.LookupItem;
+import consulo.logging.attachment.AttachmentFactory;
+import consulo.ide.impl.idea.diagnostic.LogMessageEx;
 import com.intellij.java.impl.codeInsight.completion.JavaCompletionUtil;
 import com.intellij.java.impl.codeInsight.completion.JavaPsiClassReferenceElement;
 import com.intellij.java.language.impl.psi.impl.source.PsiClassReferenceType;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.ScrollType;
-import com.intellij.openapi.util.ClassConditionKey;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.impl.DebugUtil;
-import com.intellij.psi.impl.source.PostprocessReformattingAspect;
-import com.intellij.util.ArrayUtil;
+import consulo.codeEditor.Editor;
+import consulo.codeEditor.ScrollType;
+import consulo.util.lang.StringUtil;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.impl.DebugUtil;
+import consulo.language.codeStyle.PostprocessReformattingAspect;
+import consulo.util.collection.ArrayUtil;
 import consulo.logging.Logger;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -91,7 +92,7 @@ public class PsiTypeLookupItem extends LookupItem implements TypedLookupItem {
     return type;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public String getForcedPresentableName() {
     return myForcedPresentableName;
   }
@@ -199,17 +200,17 @@ public class PsiTypeLookupItem extends LookupItem implements TypedLookupItem {
     return myBracketsCount;
   }
 
-  public static PsiTypeLookupItem createLookupItem(@Nonnull PsiType type, @javax.annotation.Nullable PsiElement context) {
+  public static PsiTypeLookupItem createLookupItem(@Nonnull PsiType type, @Nullable PsiElement context) {
     final boolean diamond = isDiamond(type);
     return createLookupItem(type, context, diamond);
   }
 
-  public static PsiTypeLookupItem createLookupItem(@Nonnull PsiType type, @javax.annotation.Nullable PsiElement context, boolean isDiamond) {
+  public static PsiTypeLookupItem createLookupItem(@Nonnull PsiType type, @Nullable PsiElement context, boolean isDiamond) {
     return createLookupItem(type, context, isDiamond, DEFAULT_IMPORT_FIXER);
   }
 
 
-  public static PsiTypeLookupItem createLookupItem(@Nonnull PsiType type, @javax.annotation.Nullable PsiElement context, boolean isDiamond, InsertHandler<PsiTypeLookupItem> importFixer) {
+  public static PsiTypeLookupItem createLookupItem(@Nonnull PsiType type, @Nullable PsiElement context, boolean isDiamond, InsertHandler<PsiTypeLookupItem> importFixer) {
     int dim = 0;
     while (type instanceof PsiArrayType) {
       type = ((PsiArrayType) type).getComponentType();

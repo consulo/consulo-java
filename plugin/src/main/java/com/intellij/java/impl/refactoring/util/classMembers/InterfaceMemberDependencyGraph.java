@@ -16,9 +16,9 @@
 package com.intellij.java.impl.refactoring.util.classMembers;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.refactoring.RefactoringBundle;
-import com.intellij.refactoring.classMembers.MemberDependencyGraph;
-import com.intellij.refactoring.classMembers.MemberInfoBase;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.classMember.MemberDependencyGraph;
+import consulo.language.editor.refactoring.classMember.MemberInfoBase;
 
 import java.util.HashMap;
 import java.util.HashSet;

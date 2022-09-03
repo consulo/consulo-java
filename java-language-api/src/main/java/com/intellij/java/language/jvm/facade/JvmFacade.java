@@ -15,20 +15,20 @@
  */
 package com.intellij.java.language.jvm.facade;
 
-import static com.intellij.util.containers.ContainerUtil.getFirstItem;
+import static consulo.util.collection.ContainerUtil.getFirstItem;
 
 import java.util.List;
 
 import javax.annotation.Nonnull;
 
+import consulo.ide.ServiceManager;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.project.Project;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nullable;
 import com.intellij.java.language.jvm.JvmClass;
-import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.progress.ProgressManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.application.progress.ProgressManager;
 
 public interface JvmFacade
 {

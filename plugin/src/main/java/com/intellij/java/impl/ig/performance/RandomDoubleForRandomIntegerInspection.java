@@ -15,12 +15,12 @@
  */
 package com.intellij.java.impl.ig.performance;
 
-import com.intellij.codeInspection.ProblemDescriptor;
+import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.project.Project;
+import consulo.project.Project;
 import com.intellij.psi.*;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.ast.IElementType;
+import consulo.language.util.IncorrectOperationException;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
@@ -28,6 +28,7 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class RandomDoubleForRandomIntegerInspection
   extends BaseInspection {
@@ -180,7 +181,7 @@ public class RandomDoubleForRandomIntegerInspection
     }
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   static PsiExpression getContainingExpression(PsiExpression expression) {
     PsiElement ancestor = expression.getParent();
     while (true) {

@@ -16,9 +16,10 @@
 package com.intellij.java.impl.codeInsight.template.postfix.templates;
 
 import com.intellij.java.language.psi.PsiExpression;
-import com.intellij.openapi.util.Pair;
+import consulo.util.lang.Pair;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class ForAscendingPostfixTemplate extends ForIndexedPostfixTemplate {
   public ForAscendingPostfixTemplate() {
@@ -37,7 +38,7 @@ public class ForAscendingPostfixTemplate extends ForIndexedPostfixTemplate {
     return "<";
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   @Override
   protected Pair<String, String> calculateBounds(@Nonnull PsiExpression expression) {
     String bound = getExpressionBound(expression);

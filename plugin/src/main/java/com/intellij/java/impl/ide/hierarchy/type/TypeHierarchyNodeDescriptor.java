@@ -17,16 +17,16 @@ package com.intellij.java.impl.ide.hierarchy.type;
 
 import java.awt.Font;
 
-import com.intellij.icons.AllIcons;
-import com.intellij.ide.IdeBundle;
-import com.intellij.ide.hierarchy.HierarchyNodeDescriptor;
+import consulo.application.AllIcons;
+import consulo.ide.IdeBundle;
+import consulo.ide.impl.idea.ide.hierarchy.HierarchyNodeDescriptor;
 import com.intellij.java.impl.ide.hierarchy.JavaHierarchyUtil;
-import com.intellij.openapi.editor.markup.TextAttributes;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.ui.util.CompositeAppearance;
-import com.intellij.openapi.util.Comparing;
+import consulo.colorScheme.TextAttributes;
+import consulo.project.Project;
+import consulo.ide.impl.idea.openapi.roots.ui.util.CompositeAppearance;
+import consulo.util.lang.Comparing;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiFunctionalExpression;
 import com.intellij.java.language.impl.psi.presentation.java.ClassPresentationUtil;
 import consulo.ui.image.ImageEffects;
@@ -64,9 +64,9 @@ public final class TypeHierarchyNodeDescriptor extends HierarchyNodeDescriptor
 
 		final PsiElement psiElement = getPsiClass();
 
-		final CompositeAppearance oldText = myHighlightedText;
+		final consulo.ide.impl.idea.openapi.roots.ui.util.CompositeAppearance oldText = myHighlightedText;
 
-		myHighlightedText = new CompositeAppearance();
+		myHighlightedText = new consulo.ide.impl.idea.openapi.roots.ui.util.CompositeAppearance();
 
 		TextAttributes classNameAttributes = null;
 		if(myColor != null)

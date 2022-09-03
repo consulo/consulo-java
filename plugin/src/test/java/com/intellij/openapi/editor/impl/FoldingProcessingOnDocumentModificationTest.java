@@ -20,9 +20,9 @@ import static org.junit.Assert.assertFalse;
 
 import java.io.IOException;
 
-import com.intellij.codeInsight.folding.CodeFoldingManager;
-import com.intellij.openapi.editor.CaretModel;
-import com.intellij.openapi.editor.FoldRegion;
+import consulo.language.editor.folding.CodeFoldingManager;
+import consulo.codeEditor.CaretModel;
+import consulo.codeEditor.FoldRegion;
 import com.intellij.testFramework.TestFileType;
 
 /**

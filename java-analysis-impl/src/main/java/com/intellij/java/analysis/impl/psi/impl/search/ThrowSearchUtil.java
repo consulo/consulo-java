@@ -19,16 +19,16 @@ import java.util.Set;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import com.intellij.find.findUsages.FindUsagesOptions;
+import consulo.find.FindUsagesOptions;
 import com.intellij.java.language.psi.*;
 import consulo.logging.Logger;
 import consulo.util.dataholder.Key;
 import com.intellij.psi.*;
 import com.intellij.java.indexing.search.searches.MethodReferencesSearch;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
-import com.intellij.psi.util.PsiFormatUtilBase;
-import com.intellij.usageView.UsageInfo;
-import com.intellij.util.Processor;
+import consulo.ide.impl.psi.util.PsiFormatUtilBase;
+import consulo.usage.UsageInfo;
+import consulo.application.util.function.Processor;
 import java.util.HashSet;
 
 /**

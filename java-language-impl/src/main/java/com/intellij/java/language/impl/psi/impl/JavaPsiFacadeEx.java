@@ -20,13 +20,14 @@
 package com.intellij.java.language.impl.psi.impl;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.jetbrains.annotations.TestOnly;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.VirtualFileFilter;
+import consulo.project.Project;
+import consulo.virtualFileSystem.VirtualFileFilter;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.disposer.Disposable;
 
 public abstract class JavaPsiFacadeEx extends JavaPsiFacade
@@ -38,7 +39,7 @@ public abstract class JavaPsiFacadeEx extends JavaPsiFacade
 	}
 
 	@TestOnly
-	@javax.annotation.Nullable
+	@Nullable
 	public PsiClass findClass(@Nonnull String qualifiedName)
 	{
 		return findClass(qualifiedName, GlobalSearchScope.allScope(getProject()));

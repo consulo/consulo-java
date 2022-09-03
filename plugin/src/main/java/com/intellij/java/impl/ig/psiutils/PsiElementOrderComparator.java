@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.psiutils;
 
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 
 import java.util.Comparator;
 

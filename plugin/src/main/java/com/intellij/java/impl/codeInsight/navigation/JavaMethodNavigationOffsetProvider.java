@@ -15,11 +15,11 @@
  */
 package com.intellij.java.impl.codeInsight.navigation;
 
-import com.intellij.codeInsight.navigation.MethodNavigationOffsetProvider;
-import com.intellij.codeInsight.navigation.MethodUpDownUtil;
+import consulo.language.editor.moveUpDown.MethodNavigationOffsetProvider;
+import consulo.language.editor.moveUpDown.MethodUpDownUtil;
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;

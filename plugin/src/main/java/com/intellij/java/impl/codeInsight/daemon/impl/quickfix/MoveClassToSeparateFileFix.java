@@ -15,21 +15,23 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
-import com.intellij.codeInsight.FileModificationService;
+import consulo.fileEditor.FileEditorManager;
+import consulo.language.editor.FileModificationService;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
-import com.intellij.codeInsight.intention.IntentionAction;
+import consulo.language.editor.intention.IntentionAction;
 import consulo.logging.Logger;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.fileEditor.FileEditorManager;
-import com.intellij.openapi.fileEditor.OpenFileDescriptor;
-import com.intellij.openapi.project.Project;
+import consulo.codeEditor.Editor;
+import consulo.navigation.OpenFileDescriptor;
+import consulo.project.Project;
 import com.intellij.java.language.psi.JavaDirectoryService;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiDirectory;
-import com.intellij.psi.PsiFile;
+import consulo.language.psi.PsiDirectory;
+import consulo.language.psi.PsiFile;
 import com.intellij.java.impl.psi.impl.file.JavaDirectoryServiceImpl;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
+
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class MoveClassToSeparateFileFix implements IntentionAction {
   private static final Logger LOG = Logger.getInstance(MoveClassToSeparateFileFix.class);
@@ -53,7 +55,7 @@ public class MoveClassToSeparateFileFix implements IntentionAction {
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, @javax.annotation.Nullable Editor editor, @Nonnull PsiFile file) {
+  public boolean isAvailable(@Nonnull Project project, @Nullable Editor editor, @Nonnull PsiFile file) {
     if  (!myClass.isValid() || !myClass.getManager().isInProject(myClass)) return false;
     PsiDirectory dir = file.getContainingDirectory();
     if (dir == null) return false;
@@ -68,7 +70,7 @@ public class MoveClassToSeparateFileFix implements IntentionAction {
   }
 
   @Override
-  public void invoke(@Nonnull Project project, @javax.annotation.Nullable Editor editor, @Nonnull PsiFile file) {
+  public void invoke(@Nonnull Project project, @Nullable Editor editor, @Nonnull PsiFile file) {
     if (!FileModificationService.getInstance().prepareFileForWrite(myClass.getContainingFile())) return;
 
     PsiDirectory dir = file.getContainingDirectory();

@@ -16,8 +16,8 @@
 package com.intellij.java.impl.codeInsight.completion.scope;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.openapi.util.Pair;
+import consulo.util.lang.Comparing;
+import consulo.util.lang.Pair;
 import com.intellij.java.language.psi.util.MethodSignature;
 import com.intellij.java.language.psi.util.MethodSignatureUtil;
 import consulo.psi.PsiPackage;

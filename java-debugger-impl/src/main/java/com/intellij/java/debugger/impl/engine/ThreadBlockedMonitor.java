@@ -21,19 +21,20 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.swing.event.HyperlinkEvent;
 
-import com.intellij.concurrency.JobScheduler;
+import consulo.application.impl.internal.JobScheduler;
 import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.impl.engine.events.DebuggerCommandImpl;
 import com.intellij.java.debugger.engine.jdi.ThreadReferenceProxy;
 import com.intellij.java.debugger.impl.jdi.ThreadReferenceProxyImpl;
 import com.intellij.java.debugger.impl.jdi.VirtualMachineProxyImpl;
-import com.intellij.notification.Notification;
-import com.intellij.notification.NotificationListener;
-import com.intellij.notification.NotificationType;
+import consulo.project.ui.notification.Notification;
+import consulo.project.ui.notification.event.NotificationListener;
+import consulo.ui.NotificationType;
 import consulo.disposer.Disposable;
-import com.intellij.xdebugger.impl.XDebugSessionImpl;
+import consulo.ide.impl.idea.xdebugger.impl.XDebugSessionImpl;
 import consulo.disposer.Disposer;
 import consulo.internal.com.sun.jdi.IncompatibleThreadStateException;
 import consulo.internal.com.sun.jdi.ObjectReference;
@@ -58,7 +59,7 @@ public class ThreadBlockedMonitor
 		Disposer.register(disposable, this::cancelTask);
 	}
 
-	public void startWatching(@javax.annotation.Nullable ThreadReferenceProxy thread)
+	public void startWatching(@Nullable ThreadReferenceProxy thread)
 	{
 		DebuggerManagerThreadImpl.assertIsManagerThread();
 		if(thread != null)
@@ -71,7 +72,7 @@ public class ThreadBlockedMonitor
 		}
 	}
 
-	public void stopWatching(@javax.annotation.Nullable ThreadReferenceProxy thread)
+	public void stopWatching(@Nullable ThreadReferenceProxy thread)
 	{
 		DebuggerManagerThreadImpl.assertIsManagerThread();
 		if(thread != null)

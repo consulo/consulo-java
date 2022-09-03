@@ -17,14 +17,15 @@ package com.intellij.java.language.patterns;
 
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMember;
-import com.intellij.patterns.ElementPattern;
-import com.intellij.patterns.InitialPatternCondition;
-import com.intellij.patterns.PatternConditionPlus;
-import com.intellij.util.PairProcessor;
-import com.intellij.util.ProcessingContext;
+import consulo.language.pattern.ElementPattern;
+import consulo.language.pattern.InitialPatternCondition;
+import consulo.language.pattern.PatternConditionPlus;
+import consulo.language.util.ProcessingContext;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.function.BiPredicate;
 
 /**
  * @author peter
@@ -45,8 +46,8 @@ public class PsiMemberPattern<T extends PsiMember, Self extends PsiMemberPattern
   public Self inClass(final ElementPattern pattern) {
     return with(new PatternConditionPlus<T, PsiClass>("inClass", pattern) {
       @Override
-      public boolean processValues(T t, ProcessingContext context, PairProcessor<PsiClass, ProcessingContext> processor) {
-        return processor.process(t.getContainingClass(), context);
+      public boolean processValues(T t, ProcessingContext context, BiPredicate<PsiClass, ProcessingContext> processor) {
+        return processor.test(t.getContainingClass(), context);
       }
     });
   }
@@ -55,7 +56,7 @@ public class PsiMemberPattern<T extends PsiMember, Self extends PsiMemberPattern
 
     protected Capture() {
       super(new InitialPatternCondition<PsiMember>(PsiMember.class) {
-        public boolean accepts(@javax.annotation.Nullable final Object o, final ProcessingContext context) {
+        public boolean accepts(@Nullable final Object o, final ProcessingContext context) {
           return o instanceof PsiMember;
         }
       });

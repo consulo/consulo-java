@@ -15,11 +15,11 @@
  */
 package com.intellij.java.impl.codeInsight.template.macro;
 
-import com.intellij.codeInsight.CodeInsightBundle;
-import com.intellij.codeInsight.template.Expression;
-import com.intellij.codeInsight.template.ExpressionContext;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.util.PsiUtilCore;
+import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.template.Expression;
+import consulo.language.editor.template.ExpressionContext;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiUtilCore;
 
 import java.util.ArrayList;
 import java.util.Arrays;

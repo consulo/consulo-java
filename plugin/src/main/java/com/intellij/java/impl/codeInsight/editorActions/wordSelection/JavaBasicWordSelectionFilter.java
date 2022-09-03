@@ -16,7 +16,7 @@
 package com.intellij.java.impl.codeInsight.editorActions.wordSelection;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.util.Condition;
+import consulo.util.lang.function.Condition;
 import com.intellij.psi.*;
 import com.intellij.java.language.psi.javadoc.PsiDocTag;
 

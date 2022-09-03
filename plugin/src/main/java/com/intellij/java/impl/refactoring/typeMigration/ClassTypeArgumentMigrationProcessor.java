@@ -23,17 +23,17 @@ import java.util.Set;
 
 import com.intellij.java.language.psi.*;
 import consulo.logging.Logger;
-import com.intellij.openapi.util.Pair;
+import consulo.util.lang.Pair;
 import com.intellij.psi.*;
 import com.intellij.java.language.psi.impl.source.resolve.graphInference.PsiPolyExpressionUtil;
-import com.intellij.psi.search.searches.ReferencesSearch;
+import consulo.language.psi.search.ReferencesSearch;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.MethodSignatureUtil;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.impl.refactoring.typeMigration.usageInfo.TypeMigrationUsageInfo;
 import com.intellij.java.impl.refactoring.util.RefactoringHierarchyUtil;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.util.collection.ContainerUtil;
 
 /**
  * @author anna

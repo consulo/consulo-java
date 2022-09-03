@@ -15,419 +15,327 @@
  */
 package com.intellij.java.language.impl.parser;
 
-import static com.intellij.lang.PsiBuilderUtil.expect;
-import static com.intellij.java.language.impl.parser.JavaParserUtil.error;
-import static com.intellij.java.language.impl.parser.JavaParserUtil.semicolon;
-
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-
-import javax.annotation.Nullable;
 import com.intellij.java.language.impl.codeInsight.daemon.JavaErrorBundle;
-import com.intellij.lang.PsiBuilder;
-import com.intellij.java.language.psi.JavaTokenType;
-import com.intellij.java.language.psi.PsiKeyword;
 import com.intellij.java.language.impl.psi.impl.source.tree.ElementType;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.util.containers.ContainerUtil;
+import com.intellij.java.language.psi.JavaTokenType;
+import com.intellij.java.language.psi.PsiKeyword;
+import consulo.language.ast.IElementType;
+import consulo.language.parser.PsiBuilder;
 
-public class ModuleParser
-{
-	private static final Set<String> STATEMENT_KEYWORDS = ContainerUtil.newHashSet(PsiKeyword.REQUIRES, PsiKeyword.EXPORTS, PsiKeyword.USES, PsiKeyword.PROVIDES);
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Set;
 
-	private final JavaParser myParser;
+import static com.intellij.java.language.impl.parser.JavaParserUtil.error;
+import static com.intellij.java.language.impl.parser.JavaParserUtil.semicolon;
+import static consulo.language.parser.PsiBuilderUtil.expect;
 
-	public ModuleParser(@Nonnull JavaParser parser)
-	{
-		myParser = parser;
-	}
+public class ModuleParser {
+  private static final Set<String> STATEMENT_KEYWORDS = Set.of(PsiKeyword.REQUIRES, PsiKeyword.EXPORTS, PsiKeyword.USES, PsiKeyword.PROVIDES);
 
-	@Nullable
-	public PsiBuilder.Marker parse(@Nonnull PsiBuilder builder)
-	{
-		PsiBuilder.Marker module = builder.mark();
+  private final JavaParser myParser;
 
-		PsiBuilder.Marker firstAnnotation = myParser.getDeclarationParser().parseAnnotations(builder);
+  public ModuleParser(@Nonnull JavaParser parser) {
+    myParser = parser;
+  }
 
-		IElementType type = builder.getTokenType();
-		String text = type == JavaTokenType.IDENTIFIER ? builder.getTokenText() : null;
-		if(!(PsiKeyword.OPEN.equals(text) || PsiKeyword.MODULE.equals(text)))
-		{
-			module.rollbackTo();
-			return null;
-		}
+  @Nullable
+  public PsiBuilder.Marker parse(@Nonnull PsiBuilder builder) {
+    PsiBuilder.Marker module = builder.mark();
 
-		PsiBuilder.Marker modifierList = firstAnnotation != null ? firstAnnotation.precede() : builder.mark();
-		if(PsiKeyword.OPEN.equals(text))
-		{
-			mapAndAdvance(builder, JavaTokenType.OPEN_KEYWORD);
-			text = builder.getTokenText();
-		}
-		JavaParserUtil.done(modifierList, JavaElementType.MODIFIER_LIST);
+    PsiBuilder.Marker firstAnnotation = myParser.getDeclarationParser().parseAnnotations(builder);
 
-		if(PsiKeyword.MODULE.equals(text))
-		{
-			mapAndAdvance(builder, JavaTokenType.MODULE_KEYWORD);
-		}
-		else
-		{
-			module.drop();
-			parseExtras(builder, JavaErrorBundle.message("expected.module.declaration"));
-			return module;
-		}
+    IElementType type = builder.getTokenType();
+    String text = type == JavaTokenType.IDENTIFIER ? builder.getTokenText() : null;
+    if (!(PsiKeyword.OPEN.equals(text) || PsiKeyword.MODULE.equals(text))) {
+      module.rollbackTo();
+      return null;
+    }
 
-		if(parseName(builder) == null)
-		{
-			module.drop();
-			if(builder.getTokenType() != null)
-			{
-				parseExtras(builder, JavaErrorBundle.message("expected.module.declaration"));
-			}
-			else
-			{
-				error(builder, JavaErrorBundle.message("expected.identifier"));
-			}
-			return module;
-		}
+    PsiBuilder.Marker modifierList = firstAnnotation != null ? firstAnnotation.precede() : builder.mark();
+    if (PsiKeyword.OPEN.equals(text)) {
+      mapAndAdvance(builder, JavaTokenType.OPEN_KEYWORD);
+      text = builder.getTokenText();
+    }
+    JavaParserUtil.done(modifierList, JavaElementType.MODIFIER_LIST);
 
-		if(!expect(builder, JavaTokenType.LBRACE))
-		{
-			if(builder.getTokenType() != null)
-			{
-				parseExtras(builder, JavaErrorBundle.message("expected.module.declaration"));
-			}
-			else
-			{
-				error(builder, JavaErrorBundle.message("expected.lbrace"));
-			}
-		}
-		else
-		{
-			parseModuleContent(builder);
-		}
+    if (PsiKeyword.MODULE.equals(text)) {
+      mapAndAdvance(builder, JavaTokenType.MODULE_KEYWORD);
+    } else {
+      module.drop();
+      parseExtras(builder, JavaErrorBundle.message("expected.module.declaration"));
+      return module;
+    }
 
-		JavaParserUtil.done(module, JavaElementType.MODULE);
+    if (parseName(builder) == null) {
+      module.drop();
+      if (builder.getTokenType() != null) {
+        parseExtras(builder, JavaErrorBundle.message("expected.module.declaration"));
+      } else {
+        error(builder, JavaErrorBundle.message("expected.identifier"));
+      }
+      return module;
+    }
 
-		if(builder.getTokenType() != null)
-		{
-			parseExtras(builder, JavaErrorBundle.message("unexpected.tokens"));
-		}
+    if (!expect(builder, JavaTokenType.LBRACE)) {
+      if (builder.getTokenType() != null) {
+        parseExtras(builder, JavaErrorBundle.message("expected.module.declaration"));
+      } else {
+        error(builder, JavaErrorBundle.message("expected.lbrace"));
+      }
+    } else {
+      parseModuleContent(builder);
+    }
 
-		return module;
-	}
+    JavaParserUtil.done(module, JavaElementType.MODULE);
 
-	private static PsiBuilder.Marker parseName(PsiBuilder builder)
-	{
-		PsiBuilder.Marker nameElement = builder.mark();
-		boolean empty = true;
+    if (builder.getTokenType() != null) {
+      parseExtras(builder, JavaErrorBundle.message("unexpected.tokens"));
+    }
 
-		boolean idExpected = true;
-		while(true)
-		{
-			IElementType t = builder.getTokenType();
-			if(t == JavaTokenType.IDENTIFIER)
-			{
-				if(!idExpected)
-				{
-					error(builder, JavaErrorBundle.message("expected.dot"));
-				}
-				idExpected = false;
-			}
-			else if(t == JavaTokenType.DOT)
-			{
-				if(idExpected)
-				{
-					error(builder, JavaErrorBundle.message("expected.identifier"));
-				}
-				idExpected = true;
-			}
-			else
-			{
-				break;
-			}
-			builder.advanceLexer();
-			empty = false;
-		}
+    return module;
+  }
 
-		if(!empty)
-		{
-			if(idExpected)
-			{
-				error(builder, JavaErrorBundle.message("expected.identifier"));
-			}
-			nameElement.done(JavaElementType.MODULE_REFERENCE);
-			return nameElement;
-		}
-		else
-		{
-			nameElement.drop();
-			return null;
-		}
-	}
+  private static PsiBuilder.Marker parseName(PsiBuilder builder) {
+    PsiBuilder.Marker nameElement = builder.mark();
+    boolean empty = true;
 
-	private void parseModuleContent(PsiBuilder builder)
-	{
-		IElementType token;
-		PsiBuilder.Marker invalid = null;
+    boolean idExpected = true;
+    while (true) {
+      IElementType t = builder.getTokenType();
+      if (t == JavaTokenType.IDENTIFIER) {
+        if (!idExpected) {
+          error(builder, JavaErrorBundle.message("expected.dot"));
+        }
+        idExpected = false;
+      } else if (t == JavaTokenType.DOT) {
+        if (idExpected) {
+          error(builder, JavaErrorBundle.message("expected.identifier"));
+        }
+        idExpected = true;
+      } else {
+        break;
+      }
+      builder.advanceLexer();
+      empty = false;
+    }
 
-		while((token = builder.getTokenType()) != null)
-		{
-			if(token == JavaTokenType.RBRACE)
-			{
-				break;
-			}
+    if (!empty) {
+      if (idExpected) {
+        error(builder, JavaErrorBundle.message("expected.identifier"));
+      }
+      nameElement.done(JavaElementType.MODULE_REFERENCE);
+      return nameElement;
+    } else {
+      nameElement.drop();
+      return null;
+    }
+  }
 
-			if(token == JavaTokenType.SEMICOLON)
-			{
-				if(invalid != null)
-				{
-					invalid.error(JavaErrorBundle.message("expected.module.statement"));
-					invalid = null;
-				}
-				builder.advanceLexer();
-				continue;
-			}
+  private void parseModuleContent(PsiBuilder builder) {
+    IElementType token;
+    PsiBuilder.Marker invalid = null;
 
-			PsiBuilder.Marker statement = parseStatement(builder);
-			if(statement == null)
-			{
-				if(invalid == null)
-				{
-					invalid = builder.mark();
-				}
-				builder.advanceLexer();
-			}
-			else if(invalid != null)
-			{
-				invalid.errorBefore(JavaErrorBundle.message("expected.module.statement"), statement);
-				invalid = null;
-			}
-		}
+    while ((token = builder.getTokenType()) != null) {
+      if (token == JavaTokenType.RBRACE) {
+        break;
+      }
 
-		if(invalid != null)
-		{
-			invalid.error(JavaErrorBundle.message("expected.module.statement"));
-		}
+      if (token == JavaTokenType.SEMICOLON) {
+        if (invalid != null) {
+          invalid.error(JavaErrorBundle.message("expected.module.statement"));
+          invalid = null;
+        }
+        builder.advanceLexer();
+        continue;
+      }
 
-		if(!expect(builder, JavaTokenType.RBRACE) && invalid == null)
-		{
-			error(builder, JavaErrorBundle.message("expected.rbrace"));
-		}
-	}
+      PsiBuilder.Marker statement = parseStatement(builder);
+      if (statement == null) {
+        if (invalid == null) {
+          invalid = builder.mark();
+        }
+        builder.advanceLexer();
+      } else if (invalid != null) {
+        invalid.errorBefore(JavaErrorBundle.message("expected.module.statement"), statement);
+        invalid = null;
+      }
+    }
 
-	private PsiBuilder.Marker parseStatement(PsiBuilder builder)
-	{
-		String kw = builder.getTokenText();
-		if(PsiKeyword.REQUIRES.equals(kw))
-		{
-			return parseRequiresStatement(builder);
-		}
-		if(PsiKeyword.EXPORTS.equals(kw))
-		{
-			return parseExportsStatement(builder);
-		}
-		if(PsiKeyword.OPENS.equals(kw))
-		{
-			return parseOpensStatement(builder);
-		}
-		if(PsiKeyword.USES.equals(kw))
-		{
-			return parseUsesStatement(builder);
-		}
-		if(PsiKeyword.PROVIDES.equals(kw))
-		{
-			return parseProvidesStatement(builder);
-		}
-		return null;
-	}
+    if (invalid != null) {
+      invalid.error(JavaErrorBundle.message("expected.module.statement"));
+    }
 
-	private static PsiBuilder.Marker parseRequiresStatement(PsiBuilder builder)
-	{
-		PsiBuilder.Marker statement = builder.mark();
-		mapAndAdvance(builder, JavaTokenType.REQUIRES_KEYWORD);
+    if (!expect(builder, JavaTokenType.RBRACE) && invalid == null) {
+      error(builder, JavaErrorBundle.message("expected.rbrace"));
+    }
+  }
 
-		PsiBuilder.Marker modifierList = builder.mark();
-		while(true)
-		{
-			if(expect(builder, ElementType.MODIFIER_BIT_SET))
-			{
-				continue;
-			}
-			if(builder.getTokenType() == JavaTokenType.IDENTIFIER && PsiKeyword.TRANSITIVE.equals(builder.getTokenText()))
-			{
-				mapAndAdvance(builder, JavaTokenType.TRANSITIVE_KEYWORD);
-				continue;
-			}
-			break;
-		}
-		JavaParserUtil.done(modifierList, JavaElementType.MODIFIER_LIST);
+  private PsiBuilder.Marker parseStatement(PsiBuilder builder) {
+    String kw = builder.getTokenText();
+    if (PsiKeyword.REQUIRES.equals(kw)) {
+      return parseRequiresStatement(builder);
+    }
+    if (PsiKeyword.EXPORTS.equals(kw)) {
+      return parseExportsStatement(builder);
+    }
+    if (PsiKeyword.OPENS.equals(kw)) {
+      return parseOpensStatement(builder);
+    }
+    if (PsiKeyword.USES.equals(kw)) {
+      return parseUsesStatement(builder);
+    }
+    if (PsiKeyword.PROVIDES.equals(kw)) {
+      return parseProvidesStatement(builder);
+    }
+    return null;
+  }
 
-		if(parseNameRef(builder) != null)
-		{
-			semicolon(builder);
-		}
-		else
-		{
-			expect(builder, JavaTokenType.SEMICOLON);
-		}
+  private static PsiBuilder.Marker parseRequiresStatement(PsiBuilder builder) {
+    PsiBuilder.Marker statement = builder.mark();
+    mapAndAdvance(builder, JavaTokenType.REQUIRES_KEYWORD);
 
-		statement.done(JavaElementType.REQUIRES_STATEMENT);
-		return statement;
-	}
+    PsiBuilder.Marker modifierList = builder.mark();
+    while (true) {
+      if (expect(builder, ElementType.MODIFIER_BIT_SET)) {
+        continue;
+      }
+      if (builder.getTokenType() == JavaTokenType.IDENTIFIER && PsiKeyword.TRANSITIVE.equals(builder.getTokenText())) {
+        mapAndAdvance(builder, JavaTokenType.TRANSITIVE_KEYWORD);
+        continue;
+      }
+      break;
+    }
+    JavaParserUtil.done(modifierList, JavaElementType.MODIFIER_LIST);
 
-	private PsiBuilder.Marker parseExportsStatement(PsiBuilder builder)
-	{
-		PsiBuilder.Marker statement = builder.mark();
-		mapAndAdvance(builder, JavaTokenType.EXPORTS_KEYWORD);
-		return parsePackageStatement(builder, statement, JavaElementType.EXPORTS_STATEMENT);
-	}
+    if (parseNameRef(builder) != null) {
+      semicolon(builder);
+    } else {
+      expect(builder, JavaTokenType.SEMICOLON);
+    }
 
-	private PsiBuilder.Marker parseOpensStatement(PsiBuilder builder)
-	{
-		PsiBuilder.Marker statement = builder.mark();
-		mapAndAdvance(builder, JavaTokenType.OPENS_KEYWORD);
-		return parsePackageStatement(builder, statement, JavaElementType.OPENS_STATEMENT);
-	}
+    statement.done(JavaElementType.REQUIRES_STATEMENT);
+    return statement;
+  }
 
-	@Nonnull
-	private PsiBuilder.Marker parsePackageStatement(PsiBuilder builder, PsiBuilder.Marker statement, IElementType type)
-	{
-		boolean hasError = false;
+  private PsiBuilder.Marker parseExportsStatement(PsiBuilder builder) {
+    PsiBuilder.Marker statement = builder.mark();
+    mapAndAdvance(builder, JavaTokenType.EXPORTS_KEYWORD);
+    return parsePackageStatement(builder, statement, JavaElementType.EXPORTS_STATEMENT);
+  }
 
-		if(parseClassOrPackageRef(builder) != null)
-		{
-			if(PsiKeyword.TO.equals(builder.getTokenText()))
-			{
-				mapAndAdvance(builder, JavaTokenType.TO_KEYWORD);
+  private PsiBuilder.Marker parseOpensStatement(PsiBuilder builder) {
+    PsiBuilder.Marker statement = builder.mark();
+    mapAndAdvance(builder, JavaTokenType.OPENS_KEYWORD);
+    return parsePackageStatement(builder, statement, JavaElementType.OPENS_STATEMENT);
+  }
 
-				while(true)
-				{
-					PsiBuilder.Marker ref = parseNameRef(builder);
-					if(!expect(builder, JavaTokenType.COMMA))
-					{
-						if(ref == null)
-						{
-							hasError = true;
-						}
-						break;
-					}
-				}
-			}
-		}
-		else
-		{
-			error(builder, JavaErrorBundle.message("expected.package.reference"));
-			hasError = true;
-		}
+  @Nonnull
+  private PsiBuilder.Marker parsePackageStatement(PsiBuilder builder, PsiBuilder.Marker statement, IElementType type) {
+    boolean hasError = false;
 
-		if(!hasError)
-		{
-			semicolon(builder);
-		}
-		else
-		{
-			expect(builder, JavaTokenType.SEMICOLON);
-		}
+    if (parseClassOrPackageRef(builder) != null) {
+      if (PsiKeyword.TO.equals(builder.getTokenText())) {
+        mapAndAdvance(builder, JavaTokenType.TO_KEYWORD);
 
-		statement.done(type);
-		return statement;
-	}
+        while (true) {
+          PsiBuilder.Marker ref = parseNameRef(builder);
+          if (!expect(builder, JavaTokenType.COMMA)) {
+            if (ref == null) {
+              hasError = true;
+            }
+            break;
+          }
+        }
+      }
+    } else {
+      error(builder, JavaErrorBundle.message("expected.package.reference"));
+      hasError = true;
+    }
 
-	private PsiBuilder.Marker parseUsesStatement(PsiBuilder builder)
-	{
-		PsiBuilder.Marker statement = builder.mark();
-		mapAndAdvance(builder, JavaTokenType.USES_KEYWORD);
+    if (!hasError) {
+      semicolon(builder);
+    } else {
+      expect(builder, JavaTokenType.SEMICOLON);
+    }
 
-		if(parseClassOrPackageRef(builder) != null)
-		{
-			semicolon(builder);
-		}
-		else
-		{
-			error(builder, JavaErrorBundle.message("expected.class.reference"));
-			expect(builder, JavaTokenType.SEMICOLON);
-		}
+    statement.done(type);
+    return statement;
+  }
 
-		statement.done(JavaElementType.USES_STATEMENT);
-		return statement;
-	}
+  private PsiBuilder.Marker parseUsesStatement(PsiBuilder builder) {
+    PsiBuilder.Marker statement = builder.mark();
+    mapAndAdvance(builder, JavaTokenType.USES_KEYWORD);
 
-	private PsiBuilder.Marker parseProvidesStatement(PsiBuilder builder)
-	{
-		PsiBuilder.Marker statement = builder.mark();
-		boolean hasError = false;
-		mapAndAdvance(builder, JavaTokenType.PROVIDES_KEYWORD);
+    if (parseClassOrPackageRef(builder) != null) {
+      semicolon(builder);
+    } else {
+      error(builder, JavaErrorBundle.message("expected.class.reference"));
+      expect(builder, JavaTokenType.SEMICOLON);
+    }
 
-		if(parseClassOrPackageRef(builder) == null)
-		{
-			error(builder, JavaErrorBundle.message("expected.class.reference"));
-			hasError = true;
-		}
+    statement.done(JavaElementType.USES_STATEMENT);
+    return statement;
+  }
 
-		if(PsiKeyword.WITH.equals(builder.getTokenText()))
-		{
-			builder.remapCurrentToken(JavaTokenType.WITH_KEYWORD);
-			hasError = myParser.getReferenceParser().parseReferenceList(builder, JavaTokenType.WITH_KEYWORD, JavaElementType.PROVIDES_WITH_LIST, JavaTokenType.COMMA);
-		}
-		else if(!hasError)
-		{
-			IElementType next = builder.getTokenType();
-			if(next == JavaTokenType.IDENTIFIER && !STATEMENT_KEYWORDS.contains(builder.getTokenText()))
-			{
-				PsiBuilder.Marker marker = builder.mark();
-				builder.advanceLexer();
-				marker.error(JavaErrorBundle.message("expected.with"));
-			}
-			else
-			{
-				error(builder, JavaErrorBundle.message("expected.with"));
-			}
-			hasError = true;
-		}
+  private PsiBuilder.Marker parseProvidesStatement(PsiBuilder builder) {
+    PsiBuilder.Marker statement = builder.mark();
+    boolean hasError = false;
+    mapAndAdvance(builder, JavaTokenType.PROVIDES_KEYWORD);
 
-		if(!hasError)
-		{
-			semicolon(builder);
-		}
-		else
-		{
-			expect(builder, JavaTokenType.SEMICOLON);
-		}
+    if (parseClassOrPackageRef(builder) == null) {
+      error(builder, JavaErrorBundle.message("expected.class.reference"));
+      hasError = true;
+    }
 
-		statement.done(JavaElementType.PROVIDES_STATEMENT);
-		return statement;
-	}
+    if (PsiKeyword.WITH.equals(builder.getTokenText())) {
+      builder.remapCurrentToken(JavaTokenType.WITH_KEYWORD);
+      hasError = myParser.getReferenceParser().parseReferenceList(builder, JavaTokenType.WITH_KEYWORD, JavaElementType.PROVIDES_WITH_LIST, JavaTokenType.COMMA);
+    } else if (!hasError) {
+      IElementType next = builder.getTokenType();
+      if (next == JavaTokenType.IDENTIFIER && !STATEMENT_KEYWORDS.contains(builder.getTokenText())) {
+        PsiBuilder.Marker marker = builder.mark();
+        builder.advanceLexer();
+        marker.error(JavaErrorBundle.message("expected.with"));
+      } else {
+        error(builder, JavaErrorBundle.message("expected.with"));
+      }
+      hasError = true;
+    }
 
-	private static PsiBuilder.Marker parseNameRef(PsiBuilder builder)
-	{
-		PsiBuilder.Marker name = parseName(builder);
-		if(name == null)
-		{
-			error(builder, JavaErrorBundle.message("expected.identifier"));
-		}
-		return name;
-	}
+    if (!hasError) {
+      semicolon(builder);
+    } else {
+      expect(builder, JavaTokenType.SEMICOLON);
+    }
 
-	private static void mapAndAdvance(PsiBuilder builder, IElementType keyword)
-	{
-		builder.remapCurrentToken(keyword);
-		builder.advanceLexer();
-	}
+    statement.done(JavaElementType.PROVIDES_STATEMENT);
+    return statement;
+  }
 
-	private static void parseExtras(PsiBuilder builder, String message)
-	{
-		PsiBuilder.Marker extras = builder.mark();
-		while(builder.getTokenType() != null)
-		{
-			builder.advanceLexer();
-		}
-		extras.error(message);
-	}
+  private static PsiBuilder.Marker parseNameRef(PsiBuilder builder) {
+    PsiBuilder.Marker name = parseName(builder);
+    if (name == null) {
+      error(builder, JavaErrorBundle.message("expected.identifier"));
+    }
+    return name;
+  }
 
-	private PsiBuilder.Marker parseClassOrPackageRef(PsiBuilder builder)
-	{
-		return myParser.getReferenceParser().parseJavaCodeReference(builder, true, false, false, false);
-	}
+  private static void mapAndAdvance(PsiBuilder builder, IElementType keyword) {
+    builder.remapCurrentToken(keyword);
+    builder.advanceLexer();
+  }
+
+  private static void parseExtras(PsiBuilder builder, String message) {
+    PsiBuilder.Marker extras = builder.mark();
+    while (builder.getTokenType() != null) {
+      builder.advanceLexer();
+    }
+    extras.error(message);
+  }
+
+  private PsiBuilder.Marker parseClassOrPackageRef(PsiBuilder builder) {
+    return myParser.getReferenceParser().parseJavaCodeReference(builder, true, false, false, false);
+  }
 }

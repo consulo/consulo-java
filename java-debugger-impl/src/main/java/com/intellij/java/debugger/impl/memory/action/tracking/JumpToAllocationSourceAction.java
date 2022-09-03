@@ -18,6 +18,7 @@ package com.intellij.java.debugger.impl.memory.action.tracking;
 import java.util.List;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.intellij.java.debugger.DebuggerManager;
 import com.intellij.java.debugger.impl.engine.DebugProcessImpl;
@@ -25,11 +26,11 @@ import com.intellij.java.debugger.impl.memory.action.DebuggerTreeAction;
 import com.intellij.java.debugger.impl.memory.component.MemoryViewDebugProcessData;
 import com.intellij.java.debugger.impl.memory.ui.StackFramePopup;
 import com.intellij.java.debugger.impl.memory.utils.StackFrameItem;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.project.Project;
-import com.intellij.xdebugger.XDebugSession;
-import com.intellij.xdebugger.XDebuggerManager;
-import com.intellij.xdebugger.impl.ui.tree.nodes.XValueNodeImpl;
+import consulo.execution.debug.XDebugSession;
+import consulo.ui.ex.action.AnActionEvent;
+import consulo.project.Project;
+import consulo.execution.debug.XDebuggerManager;
+import consulo.ide.impl.idea.xdebugger.impl.ui.tree.nodes.XValueNodeImpl;
 import consulo.internal.com.sun.jdi.ObjectReference;
 
 public class JumpToAllocationSourceAction extends DebuggerTreeAction
@@ -56,7 +57,7 @@ public class JumpToAllocationSourceAction extends DebuggerTreeAction
 		}
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	private List<StackFrameItem> getStack(AnActionEvent e)
 	{
 		final Project project = e.getProject();

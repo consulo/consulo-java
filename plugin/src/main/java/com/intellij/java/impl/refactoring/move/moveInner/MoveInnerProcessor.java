@@ -16,42 +16,43 @@
 package com.intellij.java.impl.refactoring.move.moveInner;
 
 import com.intellij.java.language.impl.codeInsight.ChangeContextUtil;
-import com.intellij.codeInsight.CodeInsightUtilCore;
+import consulo.language.editor.CodeInsightUtilCore;
 import com.intellij.java.language.psi.*;
-import com.intellij.lang.findUsages.DescriptiveNameUtil;
-import com.intellij.openapi.fileEditor.FileEditorManager;
-import com.intellij.openapi.fileEditor.OpenFileDescriptor;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Ref;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.language.findUsage.DescriptiveNameUtil;
+import consulo.fileEditor.FileEditorManager;
+import consulo.navigation.OpenFileDescriptor;
+import consulo.project.Project;
+import consulo.util.lang.ref.Ref;
+import consulo.util.lang.StringUtil;
 import com.intellij.psi.*;
-import com.intellij.psi.codeStyle.CodeStyleManager;
+import consulo.language.codeStyle.CodeStyleManager;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
-import com.intellij.psi.search.LocalSearchScope;
-import com.intellij.psi.search.searches.ReferencesSearch;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.refactoring.BaseRefactoringProcessor;
-import com.intellij.refactoring.RefactoringBundle;
-import com.intellij.refactoring.listeners.RefactoringElementListener;
-import com.intellij.refactoring.move.MoveCallback;
+import consulo.language.psi.scope.LocalSearchScope;
+import consulo.language.psi.search.ReferencesSearch;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.editor.refactoring.BaseRefactoringProcessor;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.event.RefactoringElementListener;
+import consulo.language.editor.refactoring.move.MoveCallback;
 import com.intellij.java.impl.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesUtil;
-import com.intellij.refactoring.rename.RenameUtil;
+import consulo.language.editor.refactoring.rename.RenameUtil;
 import com.intellij.java.impl.refactoring.util.ConflictsUtil;
-import com.intellij.refactoring.util.NonCodeUsageInfo;
+import consulo.usage.NonCodeUsageInfo;
 import com.intellij.java.language.impl.refactoring.util.RefactoringChangeUtil;
-import com.intellij.refactoring.util.RefactoringUIUtil;
-import com.intellij.usageView.UsageInfo;
-import com.intellij.usageView.UsageViewDescriptor;
-import com.intellij.util.Function;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
+import consulo.usage.UsageInfo;
+import consulo.usage.UsageViewDescriptor;
+import consulo.ide.impl.idea.util.Function;
+import consulo.language.util.IncorrectOperationException;
 import com.intellij.java.language.util.VisibilityUtil;
 import java.util.HashMap;
-import com.intellij.util.containers.MultiMap;
+import consulo.util.collection.MultiMap;
 import consulo.logging.Logger;
 import consulo.psi.PsiPackage;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.*;
 
@@ -505,7 +506,7 @@ public class MoveInnerProcessor extends BaseRefactoringProcessor {
     return statement;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private static PsiElement getAnchorElement(PsiCodeBlock body) {
     PsiStatement[] statements = body.getStatements();
     if (statements.length > 0) {

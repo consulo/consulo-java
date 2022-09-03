@@ -15,7 +15,7 @@
  */
 package com.intellij.java.debugger.impl.actions;
 
-import com.intellij.openapi.editor.Document;
+import consulo.document.Document;
 
 class PlaceInDocument
 {

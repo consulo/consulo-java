@@ -19,8 +19,8 @@ import java.util.List;
 
 import com.intellij.java.debugger.impl.breakpoints.properties.JavaMethodBreakpointProperties;
 import com.intellij.java.debugger.impl.engine.DebugProcessImpl;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.xdebugger.breakpoints.XBreakpoint;
+import consulo.application.ApplicationManager;
+import consulo.execution.debug.breakpoint.XBreakpoint;
 import consulo.internal.com.sun.jdi.Method;
 
 /**

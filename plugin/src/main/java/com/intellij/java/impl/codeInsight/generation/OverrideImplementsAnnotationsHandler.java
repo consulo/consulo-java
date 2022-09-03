@@ -22,8 +22,8 @@ package com.intellij.java.impl.codeInsight.generation;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.openapi.extensions.ExtensionPointName;
-import com.intellij.openapi.project.Project;
+import consulo.component.extension.ExtensionPointName;
+import consulo.project.Project;
 
 public interface OverrideImplementsAnnotationsHandler {
   ExtensionPointName<OverrideImplementsAnnotationsHandler> EP_NAME = ExtensionPointName.create("consulo.java.overrideImplementsAnnotationsHandler");

@@ -29,13 +29,13 @@ import java.util.Map;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.lexer.Lexer;
-import com.intellij.openapi.editor.colors.TextAttributesKey;
-import com.intellij.psi.tree.IElementType;
-import consulo.fileTypes.LanguageVersionableSyntaxHighlighter;
+import consulo.language.editor.highlight.LanguageVersionableSyntaxHighlighter;
+import consulo.language.lexer.Lexer;
+import consulo.colorScheme.TextAttributesKey;
+import consulo.language.ast.IElementType;
 import consulo.java.manifest.lang.ManifestLanguageVersion;
-import consulo.lang.LanguageVersion;
-import consulo.lang.LanguageVersionWithParsing;
+import consulo.language.version.LanguageVersion;
+import consulo.language.version.LanguageVersionWithParsing;
 
 /**
  * @author Robert F. Beeger (robert@beeger.net)

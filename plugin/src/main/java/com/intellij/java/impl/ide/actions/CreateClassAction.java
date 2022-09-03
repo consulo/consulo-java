@@ -16,10 +16,10 @@
 
 package com.intellij.java.impl.ide.actions;
 
-import com.intellij.icons.AllIcons;
-import com.intellij.ide.actions.CreateFileFromTemplateDialog;
-import com.intellij.ide.fileTemplates.FileTemplate;
-import com.intellij.ide.fileTemplates.FileTemplateManager;
+import consulo.application.AllIcons;
+import consulo.ide.action.CreateFileFromTemplateDialog;
+import consulo.fileTemplate.FileTemplate;
+import consulo.fileTemplate.FileTemplateManager;
 import com.intellij.java.impl.ide.fileTemplates.JavaCreateFromTemplateHandler;
 import com.intellij.java.impl.ide.fileTemplates.JavaTemplateUtil;
 import com.intellij.java.language.JavaCoreBundle;
@@ -29,13 +29,13 @@ import com.intellij.java.language.psi.JavaDirectoryService;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiNameHelper;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.openapi.project.DumbAware;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.InputValidatorEx;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.PsiDirectory;
-import com.intellij.psi.PsiElement;
-import com.intellij.util.IncorrectOperationException;
+import consulo.application.dumb.DumbAware;
+import consulo.project.Project;
+import consulo.ui.ex.InputValidatorEx;
+import consulo.util.lang.StringUtil;
+import consulo.language.psi.PsiDirectory;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
 import consulo.java.language.module.extension.JavaModuleExtension;
 import consulo.java.psi.impl.icon.JavaPsiImplIconGroup;
 import consulo.module.extension.ModuleExtension;

@@ -18,11 +18,11 @@ package com.intellij.java.impl.refactoring.util;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiJavaPackage;
 import com.intellij.java.language.psi.PsiMember;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.ElementDescriptionLocation;
-import com.intellij.psi.ElementDescriptionProvider;
-import com.intellij.psi.PsiElement;
-import com.intellij.refactoring.util.NonCodeSearchDescriptionLocation;
+import consulo.util.lang.StringUtil;
+import consulo.language.psi.ElementDescriptionLocation;
+import consulo.language.psi.ElementDescriptionProvider;
+import consulo.language.psi.PsiElement;
+import consulo.language.editor.refactoring.util.NonCodeSearchDescriptionLocation;
 
 import javax.annotation.Nonnull;
 

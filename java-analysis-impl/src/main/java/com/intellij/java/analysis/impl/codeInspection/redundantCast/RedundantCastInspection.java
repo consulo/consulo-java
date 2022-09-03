@@ -15,14 +15,13 @@
  */
 package com.intellij.java.analysis.impl.codeInspection.redundantCast;
 
-import com.intellij.codeInsight.daemon.GroupNames;
-import com.intellij.codeInspection.*;
+import consulo.ide.impl.idea.codeInsight.daemon.GroupNames;
 import com.intellij.java.analysis.impl.codeInspection.miscGenerics.GenericsInspectionToolBase;
 import com.intellij.java.analysis.impl.codeInspection.miscGenerics.SuspiciousMethodCallUtil;
-import com.intellij.codeInspection.ui.MultipleCheckboxOptionsPanel;
+import consulo.ide.impl.idea.codeInspection.ui.MultipleCheckboxOptionsPanel;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.WriteExternalException;
+import consulo.project.Project;
+import consulo.util.xml.serializer.WriteExternalException;
 import com.intellij.psi.*;
 import com.intellij.java.language.psi.util.PsiExpressionTrimRenderer;
 import com.intellij.java.language.psi.util.PsiUtil;

@@ -18,9 +18,9 @@ package com.intellij.find;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
-import com.intellij.find.impl.livePreview.LivePreview;
-import com.intellij.find.impl.livePreview.LivePreviewController;
-import com.intellij.find.impl.livePreview.SearchResults;
+import consulo.ide.impl.idea.find.impl.livePreview.LivePreview;
+import consulo.ide.impl.idea.find.impl.livePreview.LivePreviewController;
+import consulo.ide.impl.idea.find.impl.livePreview.SearchResults;
 import com.intellij.testFramework.LightCodeInsightTestCase;
 
 public abstract class FindInEditorTest extends LightCodeInsightTestCase {

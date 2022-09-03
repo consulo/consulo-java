@@ -8,15 +8,15 @@ import com.intellij.java.language.codeInsight.NullableNotNullManager;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.CFGBuilder;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.NullabilityProblemKind;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.util.Ref;
+import consulo.util.lang.ref.Ref;
 import com.intellij.psi.*;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.siyeh.ig.psiutils.ControlFlowUtils;
 
 import javax.annotation.Nonnull;
 
-import static com.intellij.util.ObjectUtils.tryCast;
+import static consulo.ide.impl.idea.util.ObjectUtils.tryCast;
 
 /**
  * Inlines simple stable methods defined in the same class

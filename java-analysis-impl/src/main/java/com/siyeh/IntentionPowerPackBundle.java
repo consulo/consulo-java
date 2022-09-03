@@ -21,7 +21,7 @@ import java.util.ResourceBundle;
 
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.PropertyKey;
-import com.intellij.CommonBundle;
+import consulo.application.CommonBundle;
 
 /**
  * @author max

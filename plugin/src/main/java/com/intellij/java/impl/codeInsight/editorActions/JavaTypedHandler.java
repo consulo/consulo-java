@@ -15,35 +15,35 @@
  */
 package com.intellij.java.impl.codeInsight.editorActions;
 
-import com.intellij.codeInsight.AutoPopupController;
-import com.intellij.codeInsight.CodeInsightSettings;
-import com.intellij.codeInsight.editorActions.TypedHandler;
-import com.intellij.codeInsight.editorActions.TypedHandlerDelegate;
+import consulo.language.editor.AutoPopupController;
+import consulo.language.editor.CodeInsightSettings;
+import consulo.ide.impl.idea.codeInsight.editorActions.TypedHandler;
+import consulo.language.editor.action.TypedHandlerDelegate;
 import com.intellij.java.impl.codeInsight.completion.JavaClassReferenceCompletionContributor;
 import com.intellij.java.impl.codeInsight.editorActions.smartEnter.JavaSmartEnterProcessor;
 import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.openapi.command.CommandProcessor;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.EditorModificationUtil;
-import com.intellij.openapi.editor.ex.EditorEx;
-import com.intellij.openapi.editor.highlighter.HighlighterIterator;
-import com.intellij.openapi.fileTypes.FileType;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Condition;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiDocumentManager;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.TokenType;
-import com.intellij.psi.codeStyle.CodeStyleManager;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.tree.TokenSet;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.undoRedo.CommandProcessor;
+import consulo.document.Document;
+import consulo.codeEditor.Editor;
+import consulo.ide.impl.idea.openapi.editor.EditorModificationUtil;
+import consulo.codeEditor.EditorEx;
+import consulo.codeEditor.HighlighterIterator;
+import consulo.virtualFileSystem.fileType.FileType;
+import consulo.project.Project;
+import consulo.util.lang.function.Condition;
+import consulo.util.lang.StringUtil;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.language.psi.PsiDocumentManager;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.ast.TokenType;
+import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.ast.IElementType;
+import consulo.language.ast.TokenSet;
+import consulo.language.psi.util.PsiTreeUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -168,7 +168,7 @@ public class JavaTypedHandler extends TypedHandlerDelegate {
         return Result.STOP;
       }
       if (PsiTreeUtil.getParentOfType(leaf, PsiCodeBlock.class, false, PsiMember.class) != null) {
-        EditorModificationUtil.insertStringAtCaret(editor, "{");
+        consulo.ide.impl.idea.openapi.editor.EditorModificationUtil.insertStringAtCaret(editor, "{");
         TypedHandler.indentOpenedBrace(project, editor);
         return Result.STOP;
       }
@@ -179,7 +179,7 @@ public class JavaTypedHandler extends TypedHandlerDelegate {
 
   private static boolean shouldInsertStatementBody(@Nonnull PsiElement statement,
                                                    @Nonnull Document doc,
-                                                   @javax.annotation.Nullable PsiElement prev) {
+                                                   @Nullable PsiElement prev) {
     PsiStatement block = statement instanceof PsiWhileStatement ? ((PsiWhileStatement) statement).getBody() : (
         (PsiIfStatement) statement).getThenBranch();
     PsiExpression condition = PsiTreeUtil.getChildOfType(statement, PsiExpression.class);
@@ -191,7 +191,7 @@ public class JavaTypedHandler extends TypedHandlerDelegate {
         statement) || condition == null);
   }
 
-  private static boolean isRparenth(@javax.annotation.Nullable PsiElement leaf) {
+  private static boolean isRparenth(@Nullable PsiElement leaf) {
     if (leaf == null) {
       return false;
     }

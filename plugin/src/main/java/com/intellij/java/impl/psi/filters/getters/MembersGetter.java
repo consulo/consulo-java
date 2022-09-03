@@ -22,26 +22,27 @@ import java.util.List;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.intellij.java.impl.codeInsight.CodeInsightUtil;
-import com.intellij.codeInsight.completion.CompletionUtil;
+import consulo.language.editor.impl.internal.completion.CompletionUtil;
 import com.intellij.java.impl.codeInsight.completion.JavaCompletionUtil;
-import com.intellij.codeInsight.completion.PrefixMatcher;
+import consulo.application.util.matcher.PrefixMatcher;
 import com.intellij.java.impl.codeInsight.completion.StaticMemberProcessor;
-import com.intellij.codeInsight.lookup.AutoCompletionPolicy;
-import com.intellij.codeInsight.lookup.LookupElement;
+import consulo.language.editor.completion.AutoCompletionPolicy;
+import consulo.language.editor.completion.lookup.LookupElement;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.project.Project;
+import consulo.project.Project;
 import consulo.util.dataholder.Key;
 import com.intellij.psi.*;
-import com.intellij.psi.filters.TrueFilter;
+import consulo.language.psi.filter.TrueFilter;
 import com.intellij.java.indexing.impl.stubs.index.JavaStaticMemberTypeIndex;
 import com.intellij.java.language.impl.psi.scope.processor.FilterScopeProcessor;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.java.language.psi.util.InheritanceUtil;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.util.Consumer;
+import consulo.ide.impl.idea.util.Consumer;
 import consulo.java.language.module.util.JavaClassNames;
 
 /**
@@ -79,7 +80,7 @@ public abstract class MembersGetter
 
 	}
 
-	private boolean mayProcessMembers(@javax.annotation.Nullable PsiClass psiClass)
+	private boolean mayProcessMembers(@Nullable PsiClass psiClass)
 	{
 		if(psiClass == null)
 		{
@@ -96,7 +97,7 @@ public abstract class MembersGetter
 		return true;
 	}
 
-	public void processMembers(final Consumer<LookupElement> results, @javax.annotation.Nullable final PsiClass where, final boolean acceptMethods, final boolean searchInheritors)
+	public void processMembers(final Consumer<LookupElement> results, @Nullable final PsiClass where, final boolean acceptMethods, final boolean searchInheritors)
 	{
 		if(where == null || isPrimitiveClass(where))
 		{
@@ -187,9 +188,9 @@ public abstract class MembersGetter
 		}
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	protected abstract LookupElement createFieldElement(PsiField field);
 
-	@javax.annotation.Nullable
+	@Nullable
 	protected abstract LookupElement createMethodElement(PsiMethod method);
 }

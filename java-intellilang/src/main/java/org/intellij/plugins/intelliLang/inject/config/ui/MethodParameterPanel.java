@@ -15,30 +15,34 @@
  */
 package org.intellij.plugins.intelliLang.inject.config.ui;
 
-import com.intellij.icons.AllIcons;
+import consulo.application.AllIcons;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.util.TreeClassChooser;
 import com.intellij.java.language.util.TreeClassChooserFactory;
 import com.intellij.openapi.actionSystem.*;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.event.DocumentAdapter;
-import com.intellij.openapi.editor.event.DocumentEvent;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Computable;
-import com.intellij.openapi.util.Condition;
+import consulo.application.ApplicationManager;
+import consulo.document.Document;
+import consulo.document.event.DocumentAdapter;
+import consulo.document.event.DocumentEvent;
+import consulo.project.Project;
+import consulo.application.util.function.Computable;
+import consulo.ui.ex.awt.BooleanTableCellRenderer;
+import consulo.ui.ex.awt.tree.ColoredTreeCellRenderer;
+import consulo.util.lang.function.Condition;
 import com.intellij.psi.*;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
 import com.intellij.ui.*;
-import com.intellij.ui.dualView.TreeTableView;
-import com.intellij.ui.treeStructure.treetable.ListTreeTableModelOnColumns;
-import com.intellij.ui.treeStructure.treetable.TreeColumnInfo;
-import com.intellij.util.Function;
-import com.intellij.util.containers.ContainerUtil;
-import com.intellij.util.containers.Convertor;
-import com.intellij.util.ui.ColumnInfo;
-import com.intellij.util.ui.tree.TreeUtil;
+import consulo.ide.impl.idea.ui.dualView.TreeTableView;
+import consulo.ide.impl.idea.ui.treeStructure.treetable.ListTreeTableModelOnColumns;
+import consulo.ide.impl.idea.ui.treeStructure.treetable.TreeColumnInfo;
+import consulo.ide.impl.idea.util.Function;
+import consulo.util.collection.ContainerUtil;
+import consulo.ide.impl.idea.util.containers.Convertor;
+import consulo.ui.ex.awt.ColumnInfo;
+import consulo.ui.ex.awt.tree.TreeUtil;
+import consulo.dataContext.DataSink;
+import consulo.dataContext.TypeSafeDataProvider;
 import consulo.util.dataholder.Key;
 import org.intellij.plugins.intelliLang.inject.config.MethodParameterInjection;
 import org.intellij.plugins.intelliLang.util.PsiUtilEx;
@@ -63,7 +67,7 @@ public class MethodParameterPanel extends AbstractInjectionPanel<MethodParameter
   private JPanel myRoot;
   private JPanel myClassPanel;
 
-  private TreeTableView myParamsTable;
+  private consulo.ide.impl.idea.ui.dualView.TreeTableView myParamsTable;
 
   private final ReferenceEditorWithBrowseButton myClassField;
   private DefaultMutableTreeNode myRootNode;
@@ -150,7 +154,7 @@ public class MethodParameterPanel extends AbstractInjectionPanel<MethodParameter
     myParamsTable.updateUI();
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private PsiType getClassType() {
     final Document document = myClassField.getEditorTextField().getDocument();
     final PsiDocumentManager dm = PsiDocumentManager.getInstance(getProject());
@@ -294,7 +298,7 @@ public class MethodParameterPanel extends AbstractInjectionPanel<MethodParameter
     myAdvancedPanel = new AdvancedPanel(getProject(), getOrigInjection());    
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private Boolean isNodeSelected(final DefaultMutableTreeNode o) {
     final Object userObject = o.getUserObject();
     if (userObject instanceof PsiMethod) {
@@ -362,7 +366,7 @@ public class MethodParameterPanel extends AbstractInjectionPanel<MethodParameter
             return valueOf(o) != null;
           }
 
-        }, new TreeColumnInfo("Method/Parameters")
+        }, new consulo.ide.impl.idea.ui.treeStructure.treetable.TreeColumnInfo("Method/Parameters")
     };
   }
 
@@ -386,7 +390,7 @@ public class MethodParameterPanel extends AbstractInjectionPanel<MethodParameter
     }
   }
 
-  private class MyView extends TreeTableView implements TypeSafeDataProvider {
+  private class MyView extends consulo.ide.impl.idea.ui.dualView.TreeTableView implements TypeSafeDataProvider {
     public MyView(ListTreeTableModelOnColumns treeTableModel) {
       super(treeTableModel);
     }

@@ -34,35 +34,35 @@ import java.util.Set;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.analysis.AnalysisScope;
+import consulo.language.editor.scope.AnalysisScope;
 import com.intellij.java.language.psi.*;
-import com.intellij.lang.Language;
-import com.intellij.lang.findUsages.DescriptiveNameUtil;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.application.ModalityState;
+import consulo.language.Language;
+import consulo.language.findUsage.DescriptiveNameUtil;
+import consulo.application.ApplicationManager;
+import consulo.ui.ModalityState;
 import consulo.logging.Logger;
-import com.intellij.openapi.progress.ProgressManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.application.progress.ProgressManager;
+import consulo.project.Project;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
-import com.intellij.psi.search.searches.ReferencesSearch;
+import consulo.language.psi.search.ReferencesSearch;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
-import com.intellij.refactoring.BaseRefactoringProcessor;
-import com.intellij.refactoring.RefactoringBundle;
-import com.intellij.refactoring.classMembers.MemberInfoBase;
+import consulo.language.editor.refactoring.BaseRefactoringProcessor;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.classMember.MemberInfoBase;
 import com.intellij.java.impl.refactoring.listeners.JavaRefactoringListenerManager;
 import com.intellij.java.impl.refactoring.listeners.impl.JavaRefactoringListenerManagerImpl;
-import com.intellij.refactoring.util.DocCommentPolicy;
-import com.intellij.refactoring.util.RefactoringUIUtil;
+import consulo.ide.impl.idea.refactoring.util.DocCommentPolicy;
+import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
 import com.intellij.java.impl.refactoring.util.classMembers.MemberInfo;
 import com.intellij.java.impl.refactoring.util.duplicates.MethodDuplicatesHandler;
-import com.intellij.usageView.UsageInfo;
-import com.intellij.usageView.UsageViewDescriptor;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.Query;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.usage.UsageInfo;
+import consulo.usage.UsageViewDescriptor;
+import consulo.language.util.IncorrectOperationException;
+import consulo.application.util.query.Query;
+import consulo.util.collection.ContainerUtil;
 
 public class PullUpProcessor extends BaseRefactoringProcessor implements PullUpData
 {

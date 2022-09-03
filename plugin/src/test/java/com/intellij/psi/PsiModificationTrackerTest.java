@@ -1,13 +1,13 @@
 package com.intellij.psi;
 
 import com.intellij.java.language.impl.JavaFileType;
-import com.intellij.openapi.command.WriteCommandAction;
-import com.intellij.openapi.editor.SelectionModel;
-import com.intellij.openapi.fileEditor.FileEditorManager;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.util.PsiModificationTracker;
+import consulo.fileEditor.FileEditorManager;
+import consulo.language.editor.WriteCommandAction;
+import consulo.codeEditor.SelectionModel;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.language.psi.PsiModificationTracker;
 import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCase;
-import com.intellij.util.Processor;
+import consulo.application.util.function.Processor;
 import org.jetbrains.annotations.NonNls;
 
 import java.io.IOException;

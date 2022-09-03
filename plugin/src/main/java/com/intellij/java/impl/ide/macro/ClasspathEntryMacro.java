@@ -15,14 +15,14 @@
  */
 package com.intellij.java.impl.ide.macro;
 
-import com.intellij.ide.IdeBundle;
-import com.intellij.ide.macro.Macro;
-import com.intellij.openapi.actionSystem.CommonDataKeys;
-import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.actionSystem.PlatformDataKeys;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.ProjectRootManager;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.ide.IdeBundle;
+import consulo.language.editor.PlatformDataKeys;
+import consulo.pathMacro.Macro;
+import consulo.language.editor.CommonDataKeys;
+import consulo.dataContext.DataContext;
+import consulo.project.Project;
+import consulo.module.content.ProjectRootManager;
+import consulo.virtualFileSystem.VirtualFile;
 
 /**
  * @author Eugene Belyaev

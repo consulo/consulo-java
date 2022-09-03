@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
-import com.intellij.psi.PsiReference;
+import consulo.language.psi.PsiReference;
 
 abstract class AddOrderEntryFix extends OrderEntryFix
 {

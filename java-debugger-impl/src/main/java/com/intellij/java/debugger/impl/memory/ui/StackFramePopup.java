@@ -20,9 +20,9 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import com.intellij.java.debugger.impl.engine.DebugProcessImpl;
 import com.intellij.java.debugger.impl.memory.utils.StackFrameItem;
-import com.intellij.openapi.ui.popup.JBPopup;
-import com.intellij.openapi.ui.popup.JBPopupFactory;
-import com.intellij.xdebugger.impl.ui.DebuggerUIUtil;
+import consulo.ui.ex.popup.JBPopup;
+import consulo.ui.ex.popup.JBPopupFactory;
+import consulo.ide.impl.idea.xdebugger.impl.ui.DebuggerUIUtil;
 
 public class StackFramePopup
 {

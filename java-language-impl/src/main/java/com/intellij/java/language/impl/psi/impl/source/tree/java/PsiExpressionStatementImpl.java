@@ -15,8 +15,6 @@
  */
 package com.intellij.java.language.impl.psi.impl.source.tree.java;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.java.language.impl.psi.impl.source.tree.ChildRole;
 import com.intellij.java.language.impl.psi.impl.source.tree.ElementType;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
@@ -24,14 +22,17 @@ import com.intellij.java.language.psi.JavaElementVisitor;
 import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiExpressionStatement;
-import com.intellij.lang.ASTNode;
+import consulo.language.ast.ASTNode;
+import consulo.language.ast.ChildRoleBase;
+import consulo.language.ast.IElementType;
+import consulo.language.impl.DebugUtil;
+import consulo.language.impl.ast.TreeUtil;
+import consulo.language.impl.psi.CompositePsiElement;
+import consulo.language.impl.psi.SourceTreeToPsiMap;
+import consulo.language.psi.PsiElementVisitor;
 import consulo.logging.Logger;
-import com.intellij.psi.*;
-import com.intellij.psi.impl.DebugUtil;
-import com.intellij.psi.impl.source.SourceTreeToPsiMap;
-import com.intellij.psi.impl.source.tree.*;
-import com.intellij.psi.tree.ChildRoleBase;
-import com.intellij.psi.tree.IElementType;
+
+import javax.annotation.Nonnull;
 
 public class PsiExpressionStatementImpl extends CompositePsiElement implements PsiExpressionStatement {
   private static final Logger LOG = Logger.getInstance(PsiExpressionStatementImpl.class);

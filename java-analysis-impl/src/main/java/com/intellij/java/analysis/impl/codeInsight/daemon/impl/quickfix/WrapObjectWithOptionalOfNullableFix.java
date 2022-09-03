@@ -16,19 +16,19 @@
 package com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix;
 
 import com.intellij.java.language.codeInsight.Nullability;
-import com.intellij.codeInsight.intention.HighPriorityAction;
-import com.intellij.codeInsight.intention.IntentionAction;
-import com.intellij.codeInsight.intention.impl.BaseIntentionAction;
-import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement;
+import consulo.language.editor.intention.HighPriorityAction;
+import consulo.language.editor.intention.IntentionAction;
+import consulo.language.editor.intention.BaseIntentionAction;
+import consulo.language.editor.inspection.LocalQuickFixAndIntentionActionOnPsiElement;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.NullabilityUtil;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
+import consulo.codeEditor.Editor;
+import consulo.project.Project;
 import com.intellij.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.util.collection.ContainerUtil;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import org.jetbrains.annotations.Nls;
 import javax.annotation.Nonnull;

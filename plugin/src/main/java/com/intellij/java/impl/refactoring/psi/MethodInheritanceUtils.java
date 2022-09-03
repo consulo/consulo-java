@@ -16,10 +16,10 @@
 package com.intellij.java.impl.refactoring.psi;
 
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiCompiledElement;
+import consulo.language.psi.PsiCompiledElement;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.indexing.search.searches.OverridingMethodsSearch;
-import com.intellij.util.containers.Stack;
+import consulo.util.collection.Stack;
 
 import java.util.ArrayList;
 import java.util.HashSet;

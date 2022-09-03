@@ -29,18 +29,18 @@ import java.util.regex.Pattern;
 import javax.annotation.Nonnull;
 
 import org.jetbrains.annotations.NonNls;
-import com.intellij.openapi.command.WriteCommandAction;
-import com.intellij.openapi.editor.Caret;
-import com.intellij.openapi.editor.FoldRegion;
-import com.intellij.openapi.editor.Inlay;
-import com.intellij.openapi.editor.SoftWrap;
-import com.intellij.openapi.editor.VisualPosition;
-import com.intellij.openapi.editor.impl.view.FontLayoutService;
+import consulo.language.editor.WriteCommandAction;
+import consulo.codeEditor.Caret;
+import consulo.codeEditor.FoldRegion;
+import consulo.codeEditor.Inlay;
+import consulo.codeEditor.SoftWrap;
+import consulo.codeEditor.VisualPosition;
+import consulo.codeEditor.impl.FontLayoutService;
 import com.intellij.testFramework.EditorTestUtil;
 import com.intellij.testFramework.LightPlatformCodeInsightTestCase;
 import com.intellij.testFramework.MockFontLayoutService;
 import com.intellij.testFramework.TestFileType;
-import com.intellij.util.ThrowableRunnable;
+import consulo.util.lang.function.ThrowableRunnable;
 
 /**
  * Base super class for tests that check various IJ editor functionality on managed document modification.

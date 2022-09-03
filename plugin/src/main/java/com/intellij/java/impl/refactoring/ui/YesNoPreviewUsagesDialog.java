@@ -20,13 +20,13 @@
  */
 package com.intellij.java.impl.refactoring.ui;
 
-import com.intellij.openapi.help.HelpManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.DialogWrapper;
-import com.intellij.openapi.ui.MultiLineLabelUI;
-import com.intellij.openapi.ui.Messages;
-import com.intellij.refactoring.RefactoringBundle;
-import consulo.awt.TargetAWT;
+import consulo.application.HelpManager;
+import consulo.project.Project;
+import consulo.ui.ex.awt.DialogWrapper;
+import consulo.ui.ex.awt.internal.laf.MultiLineLabelUI;
+import consulo.ui.ex.awt.Messages;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.ui.ex.awtUnsafe.TargetAWT;
 import consulo.ui.image.Image;
 
 import javax.annotation.Nonnull;

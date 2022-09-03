@@ -15,22 +15,22 @@
  */
 package com.intellij.java.impl.testIntegration.createTest;
 
-import com.intellij.codeInsight.CodeInsightBundle;
+import consulo.language.editor.CodeInsightBundle;
 import com.intellij.java.impl.codeInsight.CodeInsightUtil;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.fileEditor.ex.IdeDocumentHistory;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.Messages;
-import com.intellij.openapi.util.Computable;
+import consulo.application.ApplicationManager;
+import consulo.codeEditor.Editor;
+import consulo.ide.impl.idea.openapi.fileEditor.ex.IdeDocumentHistory;
+import consulo.project.Project;
+import consulo.ui.ex.awt.Messages;
+import consulo.application.util.function.Computable;
 import com.intellij.psi.*;
-import com.intellij.psi.impl.source.PostprocessReformattingAspect;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.language.codeStyle.PostprocessReformattingAspect;
+import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.java.impl.refactoring.util.classMembers.MemberInfo;
 import com.intellij.java.language.testIntegration.TestFramework;
 import com.intellij.java.impl.testIntegration.TestIntegrationUtils;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
 import javax.annotation.Nullable;
 
 import java.util.Collection;

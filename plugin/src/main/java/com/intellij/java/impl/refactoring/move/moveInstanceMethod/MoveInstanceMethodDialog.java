@@ -23,6 +23,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
+import javax.annotation.Nullable;
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JList;
@@ -31,11 +32,11 @@ import javax.swing.JScrollPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import consulo.application.HelpManager;
+import consulo.ui.ex.awt.*;
 import org.jetbrains.annotations.NonNls;
 import com.intellij.java.language.impl.JavaFileType;
-import com.intellij.openapi.help.HelpManager;
-import com.intellij.openapi.ui.Messages;
-import com.intellij.openapi.ui.VerticalFlowLayout;
+import consulo.ui.ex.awt.Messages;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiClassType;
 import com.intellij.java.language.psi.PsiField;
@@ -44,13 +45,12 @@ import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiNameHelper;
 import com.intellij.java.language.psi.PsiVariable;
 import com.intellij.java.impl.refactoring.HelpID;
-import com.intellij.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.RefactoringBundle;
 import com.intellij.java.impl.refactoring.move.MoveInstanceMembersUtil;
-import com.intellij.ui.EditorTextField;
-import com.intellij.ui.ScrollPaneFactory;
-import com.intellij.ui.TitledSeparator;
+import consulo.language.editor.ui.awt.EditorTextField;
+import consulo.ui.ex.awt.TitledSeparator;
 import java.util.HashMap;
-import com.intellij.util.ui.UIUtil;
+import consulo.ui.ex.awt.UIUtil;
 
 /**
  * @author ven
@@ -121,7 +121,7 @@ public class MoveInstanceMethodDialog extends MoveInstanceMethodDialogBase {
     }
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private JPanel createParametersPanel () {
     myThisClassesMap = MoveInstanceMembersUtil.getThisClassesToMembers(myMethod);
     myOldClassParameterNameFields = new HashMap<PsiClass, EditorTextField>();

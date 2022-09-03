@@ -1,9 +1,9 @@
 // Copyright 2000-2020 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.language.impl.psi.impl.java.stubs;
 
-import com.intellij.lang.ASTNode;
-import com.intellij.lang.LighterAST;
-import com.intellij.lang.LighterASTNode;
+import consulo.language.ast.ASTNode;
+import consulo.language.ast.LighterAST;
+import consulo.language.ast.LighterASTNode;
 import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiNameHelper;
@@ -15,14 +15,14 @@ import com.intellij.java.language.impl.psi.impl.source.PsiClassImpl;
 import com.intellij.java.language.impl.psi.impl.source.PsiEnumConstantInitializerImpl;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaDocElementType;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
-import com.intellij.psi.impl.source.tree.LightTreeUtil;
+import consulo.language.ast.LightTreeUtil;
 import com.intellij.java.language.impl.psi.impl.source.tree.java.AnonymousClassElement;
 import com.intellij.java.language.impl.psi.impl.source.tree.java.EnumConstantInitializerElement;
-import com.intellij.psi.stubs.IndexSink;
-import com.intellij.psi.stubs.StubElement;
-import com.intellij.psi.stubs.StubInputStream;
-import com.intellij.psi.stubs.StubOutputStream;
-import com.intellij.psi.tree.IElementType;
+import consulo.language.psi.stub.IndexSink;
+import consulo.language.psi.stub.StubElement;
+import consulo.language.psi.stub.StubInputStream;
+import consulo.language.psi.stub.StubOutputStream;
+import consulo.language.ast.IElementType;
 import javax.annotation.Nonnull;
 
 import java.io.IOException;

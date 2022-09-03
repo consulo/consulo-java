@@ -18,6 +18,7 @@ package com.intellij.java.debugger.impl.engine.evaluation.expression;
 import java.util.List;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.intellij.java.debugger.engine.DebuggerUtils;
 import com.intellij.java.debugger.engine.evaluation.EvaluateException;
@@ -32,10 +33,10 @@ public class TryEvaluator implements Evaluator
 	@Nonnull
 	private final Evaluator myBodyEvaluator;
 	private final List<CatchEvaluator> myCatchBlockEvaluators;
-	@javax.annotation.Nullable
+	@Nullable
 	private final Evaluator myFinallyEvaluator;
 
-	public TryEvaluator(@Nonnull Evaluator bodyEvaluator, List<CatchEvaluator> catchBlockEvaluators, @javax.annotation.Nullable Evaluator finallyEvaluator)
+	public TryEvaluator(@Nonnull Evaluator bodyEvaluator, List<CatchEvaluator> catchBlockEvaluators, @Nullable Evaluator finallyEvaluator)
 	{
 		myBodyEvaluator = bodyEvaluator;
 		myCatchBlockEvaluators = catchBlockEvaluators;

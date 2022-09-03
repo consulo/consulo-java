@@ -30,25 +30,25 @@ import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.TableCellEditor;
 
+import consulo.ui.ex.awt.*;
+import consulo.ui.ex.awt.util.ListUtil;
 import org.jetbrains.annotations.NonNls;
-import com.intellij.codeInspection.ui.ListTable;
-import com.intellij.codeInspection.ui.ListWrappingTableModel;
-import com.intellij.ide.DataManager;
+import consulo.ide.impl.idea.codeInspection.ui.ListTable;
+import consulo.ide.impl.idea.codeInspection.ui.ListWrappingTableModel;
+import consulo.dataContext.DataManager;
 import com.intellij.java.language.util.ClassFilter;
 import com.intellij.java.language.util.TreeClassChooser;
 import com.intellij.java.language.util.TreeClassChooserFactory;
-import com.intellij.openapi.actionSystem.CommonDataKeys;
-import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.project.Project;
+import consulo.language.editor.CommonDataKeys;
+import consulo.dataContext.DataContext;
+import consulo.project.Project;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.java.language.psi.util.InheritanceUtil;
-import com.intellij.ui.AnActionButton;
-import com.intellij.ui.AnActionButtonRunnable;
-import com.intellij.ui.IdeBorderFactory;
-import com.intellij.ui.ListUtil;
-import com.intellij.ui.ToolbarDecorator;
-import com.intellij.ui.components.JBList;
+import consulo.ui.ex.awt.AnActionButtonRunnable;
+import consulo.ui.ex.awt.IdeBorderFactory;
+import consulo.ui.ex.awt.ToolbarDecorator;
+import consulo.ui.ex.awt.JBList;
 
 public class UiUtils {
 

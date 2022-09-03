@@ -7,14 +7,14 @@ import javax.annotation.Nonnull;
 import com.intellij.java.impl.refactoring.inline.InlineConstantFieldProcessor;
 import org.jetbrains.annotations.NonNls;
 import com.intellij.JavaTestUtil;
-import com.intellij.psi.PsiCompiledElement;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiCompiledElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiField;
-import com.intellij.psi.PsiReference;
+import consulo.language.psi.PsiReference;
 import com.intellij.java.language.psi.PsiReferenceExpression;
 import com.intellij.refactoring.LightRefactoringTestCase;
-import com.intellij.util.containers.ContainerUtil;
-import consulo.codeInsight.TargetElementUtil;
+import consulo.util.collection.ContainerUtil;
+import consulo.language.editor.TargetElementUtil;
 import consulo.codeInsight.TargetElementUtilEx;
 
 public abstract class InlineConstantFieldTest extends LightRefactoringTestCase

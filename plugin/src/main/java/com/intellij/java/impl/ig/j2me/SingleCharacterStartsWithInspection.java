@@ -16,12 +16,13 @@
 package com.intellij.java.impl.ig.j2me;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-import com.intellij.codeInspection.ProblemDescriptor;
+import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.project.Project;
+import consulo.project.Project;
 import com.intellij.psi.*;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
 import com.siyeh.HardcodedMethodConstants;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
@@ -44,7 +45,7 @@ public class SingleCharacterStartsWithInspection extends BaseInspection {
       "single.character.startswith.problem.descriptor");
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   protected InspectionGadgetsFix buildFix(Object... infos) {
     return new SingleCharacterStartsWithFix();
   }

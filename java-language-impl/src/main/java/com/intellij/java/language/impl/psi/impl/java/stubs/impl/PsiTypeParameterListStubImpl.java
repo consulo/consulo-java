@@ -22,8 +22,8 @@ package com.intellij.java.language.impl.psi.impl.java.stubs.impl;
 import com.intellij.java.language.psi.PsiTypeParameterList;
 import com.intellij.java.language.impl.psi.impl.java.stubs.JavaStubElementTypes;
 import com.intellij.java.language.impl.psi.impl.java.stubs.PsiTypeParameterListStub;
-import com.intellij.psi.stubs.StubBase;
-import com.intellij.psi.stubs.StubElement;
+import consulo.language.psi.stub.StubBase;
+import consulo.language.psi.stub.StubElement;
 
 public class PsiTypeParameterListStubImpl extends StubBase<PsiTypeParameterList> implements PsiTypeParameterListStub{
   public PsiTypeParameterListStubImpl(final StubElement parent) {

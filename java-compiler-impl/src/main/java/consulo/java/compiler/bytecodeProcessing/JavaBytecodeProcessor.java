@@ -22,11 +22,13 @@ import java.io.IOException;
 import com.intellij.java.compiler.cache.Cache;
 import com.intellij.java.compiler.cache.JavaDependencyCache;
 import com.intellij.compiler.instrumentation.InstrumentationClassFinder;
-import com.intellij.compiler.make.CacheCorruptedException;
-import com.intellij.openapi.compiler.CompileContext;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.util.ThrowableComputable;
+import consulo.compiler.CacheCorruptedException;
+import consulo.compiler.CompileContext;
+import consulo.module.Module;
+import consulo.application.util.function.ThrowableComputable;
 import consulo.extensions.CompositeExtensionPointName;
+
+import javax.annotation.Nullable;
 
 /**
  * @author VISTALL
@@ -36,7 +38,7 @@ public interface JavaBytecodeProcessor
 {
 	CompositeExtensionPointName<JavaBytecodeProcessor> EP_NAME = CompositeExtensionPointName.applicationPoint("consulo.java.bytecodeCompilerProcessor", JavaBytecodeProcessor.class);
 
-	@javax.annotation.Nullable
+	@Nullable
 	byte[] processClassFile(CompileContext compileContext,
 			Module affectedModule,
 			JavaDependencyCache dependencyCache,

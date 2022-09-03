@@ -15,13 +15,15 @@
  */
 package com.intellij.java.impl.codeInsight;
 
-import com.intellij.CommonBundle;
+import consulo.application.CommonBundle;
 import com.intellij.ProjectTopics;
-import com.intellij.codeInsight.FileModificationService;
-import com.intellij.codeInsight.highlighting.HighlightManager;
-import com.intellij.diagnostic.LogMessageEx;
-import com.intellij.icons.AllIcons;
-import com.intellij.ide.DataManager;
+import consulo.fileChooser.FileChooserDescriptor;
+import consulo.fileEditor.FileEditorManager;
+import consulo.language.editor.FileModificationService;
+import consulo.language.editor.highlight.HighlightManager;
+import consulo.ide.impl.idea.diagnostic.LogMessageEx;
+import consulo.application.AllIcons;
+import consulo.dataContext.DataManager;
 import com.intellij.ide.highlighter.XmlFileType;
 import com.intellij.java.impl.psi.codeStyle.JavaCodeStyleSettings;
 import com.intellij.java.language.impl.codeInsight.ReadableExternalAnnotationsManager;
@@ -29,64 +31,64 @@ import com.intellij.java.language.projectRoots.roots.AnnotationOrderRootType;
 import com.intellij.java.language.psi.PsiJavaFile;
 import com.intellij.java.language.psi.PsiModifierListOwner;
 import com.intellij.java.language.psi.PsiNameValuePair;
-import com.intellij.openapi.application.Application;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.application.Result;
-import com.intellij.openapi.command.CommandProcessor;
-import com.intellij.openapi.command.WriteCommandAction;
-import com.intellij.openapi.command.undo.BasicUndoableAction;
-import com.intellij.openapi.command.undo.UndoManager;
-import com.intellij.openapi.command.undo.UndoUtil;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.LogicalPosition;
-import com.intellij.openapi.editor.ScrollType;
-import com.intellij.openapi.editor.colors.EditorColors;
-import com.intellij.openapi.editor.colors.EditorColorsManager;
-import com.intellij.openapi.editor.markup.RangeHighlighter;
-import com.intellij.openapi.editor.markup.TextAttributes;
-import com.intellij.openapi.fileChooser.FileChooser;
-import com.intellij.openapi.fileChooser.FileChooserDescriptor;
-import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
-import com.intellij.openapi.fileEditor.FileDocumentManager;
-import com.intellij.openapi.fileEditor.FileEditorManager;
-import com.intellij.openapi.project.DumbService;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.project.ProjectBundle;
-import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.projectRoots.SdkModificator;
+import consulo.application.Application;
+import consulo.application.ApplicationManager;
+import consulo.application.Result;
+import consulo.ui.ex.awt.DialogWrapper;
+import consulo.ui.ex.awt.Messages;
+import consulo.undoRedo.CommandProcessor;
+import consulo.language.editor.WriteCommandAction;
+import consulo.undoRedo.BasicUndoableAction;
+import consulo.undoRedo.UndoManager;
+import consulo.undoRedo.util.UndoUtil;
+import consulo.document.Document;
+import consulo.codeEditor.Editor;
+import consulo.codeEditor.LogicalPosition;
+import consulo.codeEditor.ScrollType;
+import consulo.codeEditor.EditorColors;
+import consulo.colorScheme.EditorColorsManager;
+import consulo.codeEditor.markup.RangeHighlighter;
+import consulo.colorScheme.TextAttributes;
+import consulo.ui.fileChooser.FileChooser;
+import consulo.fileChooser.FileChooserDescriptorFactory;
+import consulo.document.FileDocumentManager;
+import consulo.project.DumbService;
+import consulo.project.Project;
+import consulo.project.ProjectBundle;
+import consulo.content.bundle.Sdk;
+import consulo.content.bundle.SdkModificator;
 import com.intellij.openapi.roots.*;
-import com.intellij.openapi.roots.libraries.Library;
-import com.intellij.openapi.ui.DialogWrapper;
-import com.intellij.openapi.ui.Messages;
-import com.intellij.openapi.ui.popup.JBPopupFactory;
-import com.intellij.openapi.ui.popup.PopupStep;
-import com.intellij.openapi.ui.popup.util.BaseListPopupStep;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.content.library.Library;
+import consulo.ui.ex.popup.JBPopupFactory;
+import consulo.ui.ex.popup.PopupStep;
+import consulo.ui.ex.popup.BaseListPopupStep;
+import consulo.util.lang.Comparing;
+import consulo.document.util.TextRange;
+import consulo.util.lang.StringUtil;
 import com.intellij.openapi.vfs.*;
 import com.intellij.psi.*;
-import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
-import com.intellij.psi.impl.PsiModificationTrackerImpl;
+import consulo.language.codeStyle.CodeStyleSettingsManager;
+import consulo.language.impl.internal.psi.PsiModificationTrackerImpl;
 import com.intellij.psi.xml.XmlDocument;
 import com.intellij.psi.xml.XmlFile;
 import com.intellij.psi.xml.XmlTag;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.Processor;
-import com.intellij.util.SmartList;
-import com.intellij.util.containers.ContainerUtil;
-import com.intellij.util.messages.MessageBus;
-import com.intellij.util.messages.MessageBusConnection;
-import com.intellij.util.ui.OptionsMessageDialog;
+import consulo.language.util.IncorrectOperationException;
+import consulo.application.util.function.Processor;
+import consulo.util.collection.SmartList;
+import consulo.util.collection.ContainerUtil;
+import consulo.component.messagebus.MessageBus;
+import consulo.component.messagebus.MessageBusConnection;
+import consulo.ide.impl.idea.util.ui.OptionsMessageDialog;
 import consulo.disposer.Disposer;
 import consulo.logging.Logger;
 import consulo.ui.image.Image;
+import consulo.virtualFileSystem.ReadonlyStatusHandler;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -146,7 +148,7 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
   public void annotateExternally(@Nonnull final PsiModifierListOwner listOwner,
                                  @Nonnull final String annotationFQName,
                                  @Nonnull final PsiFile fromFile,
-                                 @javax.annotation.Nullable final PsiNameValuePair[] value) {
+                                 @Nullable final PsiNameValuePair[] value) {
     Application application = ApplicationManager.getApplication();
     application.assertIsDispatchThread();
     LOG.assertTrue(!application.isWriteAccessAllowed());
@@ -191,7 +193,7 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
     }
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   protected List<XmlFile> findExternalAnnotationsXmlFiles(@Nonnull PsiModifierListOwner listOwner) {
     List<PsiFile> psiFiles = findExternalAnnotationsFiles(listOwner);
     if (psiFiles == null) {
@@ -212,11 +214,11 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
                                                  @Nonnull final String annotationFQName,
                                                  @Nonnull final PsiFile fromFile,
                                                  @Nonnull final String packageName,
-                                                 @javax.annotation.Nullable final PsiNameValuePair[] value) {
+                                                 @Nullable final PsiNameValuePair[] value) {
     final FileChooserDescriptor descriptor = FileChooserDescriptorFactory.createSingleFolderDescriptor();
     descriptor.setTitle(ProjectBundle.message("external.annotations.root.chooser.title", entry.getPresentableName()));
     descriptor.setDescription(ProjectBundle.message("external.annotations.root.chooser.description"));
-    final VirtualFile newRoot = FileChooser.chooseFile(descriptor, project, null);
+    final VirtualFile newRoot = consulo.ui.fileChooser.FileChooser.chooseFile(descriptor, project, null);
     if (newRoot == null) {
       notifyAfterAnnotationChanging(listOwner, annotationFQName, false);
       return false;
@@ -245,8 +247,8 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
     return true;
   }
 
-  @javax.annotation.Nullable
-  private static XmlFile findXmlFileInRoot(@javax.annotation.Nullable List<XmlFile> xmlFiles, @Nonnull VirtualFile root) {
+  @Nullable
+  private static XmlFile findXmlFileInRoot(@Nullable List<XmlFile> xmlFiles, @Nonnull VirtualFile root) {
     if (xmlFiles != null) {
       for (XmlFile xmlFile : xmlFiles) {
         VirtualFile vf = xmlFile.getVirtualFile();
@@ -266,7 +268,7 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
                                                @Nonnull final Project project,
                                                @Nonnull final String packageName,
                                                @Nonnull VirtualFile[] roots,
-                                               @javax.annotation.Nullable final PsiNameValuePair[] value) {
+                                               @Nullable final PsiNameValuePair[] value) {
     if (roots.length > 1) {
       JBPopupFactory.getInstance().createListPopup(new BaseListPopupStep<VirtualFile>("Annotation Roots", roots) {
         @Override
@@ -308,7 +310,7 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
                                   @Nonnull final String packageName,
                                   @Nonnull final String annotationFQName,
                                   @Nonnull final PsiFile fromFile,
-                                  @javax.annotation.Nullable final PsiNameValuePair[] value) {
+                                  @Nullable final PsiNameValuePair[] value) {
     List<XmlFile> xmlFiles = findExternalAnnotationsXmlFiles(listOwner);
 
     final XmlFile existingXml = findXmlFileInRoot(xmlFiles, root);
@@ -369,7 +371,7 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
   }
 
   @Override
-  public boolean editExternalAnnotation(@Nonnull PsiModifierListOwner listOwner, @Nonnull final String annotationFQN, @javax.annotation.Nullable final PsiNameValuePair[] value) {
+  public boolean editExternalAnnotation(@Nonnull PsiModifierListOwner listOwner, @Nonnull final String annotationFQN, @Nullable final PsiNameValuePair[] value) {
     ApplicationManager.getApplication().assertIsDispatchThread();
     return processExistingExternalAnnotations(listOwner, annotationFQN, annotationTag ->
     {
@@ -555,9 +557,9 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
 
   private void annotateExternally(@Nonnull final PsiModifierListOwner listOwner,
                                   @Nonnull final String annotationFQName,
-                                  @javax.annotation.Nullable final XmlFile xmlFile,
+                                  @Nullable final XmlFile xmlFile,
                                   @Nonnull final PsiFile codeUsageFile,
-                                  @javax.annotation.Nullable final PsiNameValuePair[] values) {
+                                  @Nullable final PsiNameValuePair[] values) {
     if (xmlFile == null) {
       notifyAfterAnnotationChanging(listOwner, annotationFQName, false);
       return;
@@ -662,7 +664,7 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
 
   @NonNls
   @Nonnull
-  private static String createAnnotationTag(@Nonnull String annotationFQName, @javax.annotation.Nullable PsiNameValuePair[] values) {
+  private static String createAnnotationTag(@Nonnull String annotationFQName, @Nullable PsiNameValuePair[] values) {
     @NonNls String text;
     if (values != null && values.length != 0) {
       text = "  <annotation name=\'" + annotationFQName + "\'>\n";
@@ -675,7 +677,7 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
     return text;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private XmlFile createAnnotationsXml(@Nonnull VirtualFile root, @NonNls @Nonnull String packageName) {
     final String[] dirs = packageName.split("[\\.]");
     for (String dir : dirs) {

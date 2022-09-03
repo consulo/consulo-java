@@ -16,10 +16,10 @@
 package com.intellij.java.impl.refactoring.extractclass;
 
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.impl.refactoring.RefactorJBundle;
 import com.intellij.java.impl.refactoring.psi.MyUsageViewUtil;
-import com.intellij.usageView.UsageViewDescriptor;
+import consulo.usage.UsageViewDescriptor;
 import javax.annotation.Nonnull;
 
 class ExtractClassUsageViewDescriptor implements UsageViewDescriptor {

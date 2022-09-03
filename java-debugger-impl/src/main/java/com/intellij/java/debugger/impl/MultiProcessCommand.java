@@ -17,7 +17,7 @@ package com.intellij.java.debugger.impl;
 
 import com.intellij.java.debugger.impl.engine.DebugProcessImpl;
 import com.intellij.java.debugger.impl.engine.events.DebuggerCommandImpl;
-import com.intellij.openapi.util.Pair;
+import consulo.util.lang.Pair;
 
 import java.util.ArrayList;
 import java.util.List;

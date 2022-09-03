@@ -9,10 +9,10 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 
 import com.intellij.JavaTestUtil;
-import com.intellij.openapi.fileEditor.FileDocumentManager;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.document.FileDocumentManager;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiMember;
 import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.psi.search.ProjectScope;

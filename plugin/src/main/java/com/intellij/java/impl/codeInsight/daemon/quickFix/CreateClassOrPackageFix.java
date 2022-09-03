@@ -26,29 +26,29 @@ import javax.annotation.Nullable;
 
 import com.intellij.java.impl.codeInsight.daemon.impl.quickfix.CreateClassKind;
 import com.intellij.java.impl.codeInsight.daemon.impl.quickfix.CreateFromUsageUtils;
-import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement;
-import com.intellij.ide.util.DirectoryChooserUtil;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.application.Result;
-import com.intellij.openapi.command.WriteCommandAction;
+import consulo.language.editor.inspection.LocalQuickFixAndIntentionActionOnPsiElement;
+import consulo.ide.util.DirectoryChooserUtil;
+import consulo.application.ApplicationManager;
+import consulo.application.Result;
+import consulo.language.editor.WriteCommandAction;
 import consulo.logging.Logger;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.ProjectFileIndex;
-import com.intellij.openapi.roots.ProjectRootManager;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.codeEditor.Editor;
+import consulo.module.Module;
+import consulo.project.Project;
+import consulo.module.content.ProjectFileIndex;
+import consulo.module.content.ProjectRootManager;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.java.language.psi.JavaDirectoryService;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiDirectory;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
+import consulo.language.psi.PsiDirectory;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
 import com.intellij.java.language.psi.PsiJavaPackage;
-import com.intellij.psi.PsiManager;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.language.psi.PsiManager;
+import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.java.language.psi.util.ClassKind;
 import com.intellij.java.impl.psi.util.CreateClassUtil;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 
 /**
@@ -60,10 +60,10 @@ public class CreateClassOrPackageFix extends LocalQuickFixAndIntentionActionOnPs
   private final String myPresentation;
 
   @Nullable private final ClassKind myClassKind;
-  @javax.annotation.Nullable
+  @Nullable
   private final String mySuperClass;
   private final String myRedPart;
-  @javax.annotation.Nullable
+  @Nullable
   private final String myTemplateName;
 
   @Nullable
@@ -71,7 +71,7 @@ public class CreateClassOrPackageFix extends LocalQuickFixAndIntentionActionOnPs
                                                   @Nonnull final GlobalSearchScope scope,
                                                   @Nonnull final PsiElement context,
                                                   @Nullable final PsiJavaPackage basePackage,
-                                                  @javax.annotation.Nullable ClassKind kind,
+                                                  @Nullable ClassKind kind,
                                                   @Nullable String superClass,
                                                   @Nullable String templateName) {
     final List<PsiDirectory> directories = getWritableDirectoryListDefault(basePackage, scope, context.getManager());
@@ -96,7 +96,7 @@ public class CreateClassOrPackageFix extends LocalQuickFixAndIntentionActionOnPs
                                                                       templateName);
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public static CreateClassOrPackageFix createFix(@Nonnull final String qualifiedName,
                                                   @Nonnull final PsiElement context,
                                                   @Nullable ClassKind kind, final String superClass) {

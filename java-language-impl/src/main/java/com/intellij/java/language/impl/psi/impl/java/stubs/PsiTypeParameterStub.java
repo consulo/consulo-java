@@ -20,7 +20,7 @@
 package com.intellij.java.language.impl.psi.impl.java.stubs;
 
 import com.intellij.java.language.psi.PsiTypeParameter;
-import com.intellij.psi.stubs.NamedStub;
+import consulo.language.psi.stub.NamedStub;
 import javax.annotation.Nonnull;
 
 import java.util.List;

@@ -16,11 +16,11 @@
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
 import javax.annotation.Nonnull;
-import com.intellij.codeInsight.template.Template;
-import com.intellij.lang.LanguageExtension;
-import com.intellij.openapi.editor.Editor;
+import consulo.language.editor.template.Template;
+import consulo.language.extension.LanguageExtension;
+import consulo.codeEditor.Editor;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiSubstitutor;
 

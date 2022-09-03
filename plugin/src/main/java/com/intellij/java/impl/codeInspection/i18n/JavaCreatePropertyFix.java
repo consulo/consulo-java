@@ -22,14 +22,14 @@ import com.intellij.lang.properties.psi.PropertiesFile;
 import com.intellij.lang.properties.references.CreatePropertyFix;
 import com.intellij.lang.properties.references.I18nizeQuickFixDialog;
 import com.intellij.lang.properties.references.I18nizeQuickFixModel;
-import com.intellij.openapi.application.AccessToken;
-import com.intellij.openapi.application.ApplicationManager;
+import consulo.application.AccessToken;
+import consulo.application.ApplicationManager;
 import consulo.logging.Logger;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Pair;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.project.Project;
+import consulo.util.lang.Pair;
+import consulo.util.lang.StringUtil;
 import com.intellij.psi.*;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -73,13 +73,13 @@ public class JavaCreatePropertyFix extends CreatePropertyFix {
     return result;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   protected Pair<String, String> invokeAction(@Nonnull final Project project,
                                               @Nonnull PsiFile file,
                                               @Nonnull PsiElement psiElement,
                                               @Nullable final String suggestedKey,
-                                              @javax.annotation.Nullable String suggestedValue,
-                                              @javax.annotation.Nullable final List<PropertiesFile> propertiesFiles) {
+                                              @Nullable String suggestedValue,
+                                              @Nullable final List<PropertiesFile> propertiesFiles) {
     final PsiLiteralExpression literalExpression = psiElement instanceof PsiLiteralExpression ? (PsiLiteralExpression)psiElement : null;
     final String propertyValue = suggestedValue == null ? "" : suggestedValue;
 

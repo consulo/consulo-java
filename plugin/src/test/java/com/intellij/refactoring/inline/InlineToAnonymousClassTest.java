@@ -14,12 +14,12 @@ import com.intellij.JavaTestUtil;
 import com.intellij.java.language.psi.PsiCall;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiClassType;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.refactoring.LightRefactoringTestCase;
-import com.intellij.usageView.UsageInfo;
-import com.intellij.util.containers.ContainerUtil;
-import com.intellij.util.containers.MultiMap;
-import consulo.codeInsight.TargetElementUtil;
+import consulo.usage.UsageInfo;
+import consulo.util.collection.ContainerUtil;
+import consulo.util.collection.MultiMap;
+import consulo.language.editor.TargetElementUtil;
 import consulo.codeInsight.TargetElementUtilEx;
 
 /**

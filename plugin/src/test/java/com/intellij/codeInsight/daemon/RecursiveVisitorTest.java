@@ -4,10 +4,9 @@ import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.JavaRecursiveElementWalkingVisitor;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiMethodCallExpression;
-import com.intellij.psi.*;
 import com.intellij.testFramework.PlatformTestUtil;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.ThrowableRunnable;
+import consulo.language.util.IncorrectOperationException;
+import consulo.util.lang.function.ThrowableRunnable;
 
 /**
  * @author cdr

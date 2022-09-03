@@ -20,7 +20,7 @@ import com.intellij.psi.*;
 import com.intellij.java.language.psi.javadoc.PsiDocTag;
 import com.intellij.psi.xml.XmlToken;
 import com.intellij.psi.xml.XmlElement;
-import com.intellij.codeInsight.editorActions.ExtendWordSelectionHandlerBase;
+import consulo.language.editor.action.ExtendWordSelectionHandlerBase;
 
 public class BasicSelectioner extends ExtendWordSelectionHandlerBase {
 

@@ -1,12 +1,12 @@
 package com.intellij.codeInsight.daemon;
 
-import com.intellij.codeInsight.daemon.impl.HighlightInfo;
-import com.intellij.codeInspection.LocalInspectionTool;
+import consulo.language.editor.rawHighlight.HighlightInfo;
+import consulo.language.editor.inspection.LocalInspectionTool;
 import com.intellij.java.impl.codeInspection.unusedSymbol.UnusedSymbolLocalInspection;
-import com.intellij.lang.annotation.HighlightSeverity;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.editor.Document;
-import com.intellij.psi.PsiDocumentManager;
+import consulo.language.editor.annotation.HighlightSeverity;
+import consulo.application.ApplicationManager;
+import consulo.document.Document;
+import consulo.language.psi.PsiDocumentManager;
 
 import java.util.Collection;
 

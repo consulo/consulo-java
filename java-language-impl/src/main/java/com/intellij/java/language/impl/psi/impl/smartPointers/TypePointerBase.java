@@ -21,7 +21,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.SmartTypePointer;
-import com.intellij.reference.SoftReference;
+import consulo.util.lang.ref.SoftReference;
 
 /**
  * Created by Max Medvedev on 10/25/13

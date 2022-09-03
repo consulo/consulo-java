@@ -3,13 +3,13 @@ package com.intellij.refactoring;
 import static org.junit.Assert.assertTrue;
 
 import com.intellij.JavaTestUtil;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.fileEditor.FileDocumentManager;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.codeEditor.Editor;
+import consulo.document.FileDocumentManager;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.java.impl.refactoring.introduceVariable.IntroduceVariableBase;
 
 /**

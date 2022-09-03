@@ -16,9 +16,9 @@
 package com.intellij.java.language.impl.psi;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.PsiManager;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.language.psi.PsiManager;
 import consulo.logging.Logger;
+import consulo.util.collection.SmartList;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -120,7 +120,7 @@ public abstract class PsiTypeMapper extends PsiTypeVisitorEx<PsiType> {
   @Nullable
   @Override
   public PsiType visitIntersectionType(PsiIntersectionType intersectionType) {
-    final List<PsiType> substituted = ContainerUtil.newSmartList();
+    final List<PsiType> substituted = new SmartList<>();
     for (PsiType component : intersectionType.getConjuncts()) {
       PsiType mapped = mapType(component);
       if (mapped == null) {
@@ -134,7 +134,7 @@ public abstract class PsiTypeMapper extends PsiTypeVisitorEx<PsiType> {
 
   @Override
   public PsiType visitDisjunctionType(PsiDisjunctionType disjunctionType) {
-    final List<PsiType> substituted = ContainerUtil.newSmartList();
+    final List<PsiType> substituted = new SmartList<>();
     for (PsiType component : disjunctionType.getDisjunctions()) {
       PsiType mapped = mapType(component);
       if (mapped == null) {

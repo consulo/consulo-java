@@ -16,7 +16,7 @@ class CallInfo
 	private final PsiParameter varArg;
 	private final List<PsiExpression> varArgExpressions;
 
-	CallInfo(@Nonnull List<CallArgumentInfo> regularArgs, @javax.annotation.Nullable PsiParameter varArg, @Nonnull List<PsiExpression> varArgExpressions)
+	CallInfo(@Nonnull List<CallArgumentInfo> regularArgs, @Nullable PsiParameter varArg, @Nonnull List<PsiExpression> varArgExpressions)
 	{
 		this.regularArgs = regularArgs;
 		this.varArg = varArg;

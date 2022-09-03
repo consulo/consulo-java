@@ -24,10 +24,9 @@
  */
 package com.intellij.java.impl.codeInspection.canBeFinal;
 
-import com.intellij.analysis.AnalysisScope;
-import com.intellij.codeInsight.FileModificationService;
-import com.intellij.codeInsight.daemon.GroupNames;
-import com.intellij.codeInspection.*;
+import consulo.language.editor.scope.AnalysisScope;
+import consulo.language.editor.FileModificationService;
+import consulo.ide.impl.idea.codeInsight.daemon.GroupNames;
 import com.intellij.codeInspection.reference.*;
 import com.intellij.java.analysis.codeInspection.GlobalJavaInspectionContext;
 import com.intellij.java.analysis.codeInspection.GlobalJavaInspectionTool;
@@ -36,11 +35,11 @@ import com.intellij.java.analysis.impl.codeInspection.canBeFinal.CanBeFinalHandl
 import com.intellij.java.analysis.impl.codeInspection.reference.RefClassImpl;
 import com.intellij.java.impl.codeInspection.reference.RefFieldImpl;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.project.Project;
+import consulo.project.Project;
 import com.intellij.psi.*;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;

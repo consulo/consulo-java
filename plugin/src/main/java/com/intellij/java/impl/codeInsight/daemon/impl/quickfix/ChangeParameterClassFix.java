@@ -29,21 +29,21 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import com.intellij.java.impl.codeInsight.CodeInsightUtil;
-import com.intellij.codeInsight.FileModificationService;
+import consulo.language.editor.FileModificationService;
 import com.intellij.java.language.impl.codeInsight.generation.OverrideImplementExploreUtil;
 import com.intellij.java.impl.codeInsight.generation.OverrideImplementUtil;
 import com.intellij.java.impl.codeInsight.generation.PsiMethodMember;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.command.undo.UndoUtil;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
+import consulo.application.ApplicationManager;
+import consulo.undoRedo.util.UndoUtil;
+import consulo.codeEditor.Editor;
+import consulo.project.Project;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiClassType;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
 import com.intellij.java.language.psi.infos.CandidateInfo;
-import com.intellij.util.Function;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.ide.impl.idea.util.Function;
+import consulo.util.collection.ContainerUtil;
 
 public class ChangeParameterClassFix extends ExtendsListFix {
   public ChangeParameterClassFix(@Nonnull PsiClass aClassToExtend, @Nonnull PsiClassType parameterClass) {

@@ -11,20 +11,20 @@ import java.util.regex.Pattern;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import com.intellij.java.language.JavaLanguage;
-import com.intellij.openapi.util.Pair;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.util.lang.Pair;
+import consulo.util.lang.StringUtil;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiComment;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiComment;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiJavaDocumentedElement;
 import com.intellij.java.language.psi.PsiJavaFile;
 import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.psi.PsiWhiteSpace;
-import com.intellij.psi.codeStyle.CodeStyleSettings;
-import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
+import consulo.language.psi.PsiWhiteSpace;
+import consulo.language.codeStyle.CodeStyleSettings;
+import consulo.language.codeStyle.CommonCodeStyleSettings;
 import com.intellij.java.impl.psi.codeStyle.JavaCodeStyleSettings;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
-import com.intellij.util.text.CharArrayUtil;
+import consulo.util.lang.CharArrayUtil;
 
 /**
  * Javadoc parser

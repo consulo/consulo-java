@@ -17,6 +17,8 @@ package com.intellij.java.debugger.impl.ui.breakpoints;
 
 import javax.annotation.Nonnull;
 
+import consulo.execution.debug.XSourcePosition;
+import consulo.execution.debug.breakpoint.ui.XBreakpointCustomPropertiesPanel;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
 
@@ -24,14 +26,12 @@ import javax.annotation.Nullable;
 import com.intellij.java.debugger.impl.JavaDebuggerEditorsProvider;
 import com.intellij.java.debugger.impl.breakpoints.JavaBreakpointFiltersPanel;
 import com.intellij.java.debugger.impl.breakpoints.properties.JavaBreakpointProperties;
-import com.intellij.openapi.project.Project;
+import consulo.project.Project;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.xdebugger.XDebuggerUtil;
-import com.intellij.xdebugger.XSourcePosition;
-import com.intellij.xdebugger.breakpoints.XBreakpoint;
-import com.intellij.xdebugger.breakpoints.XBreakpointType;
-import com.intellij.xdebugger.breakpoints.ui.XBreakpointCustomPropertiesPanel;
-import com.intellij.xdebugger.evaluation.XDebuggerEditorsProvider;
+import consulo.execution.debug.XDebuggerUtil;
+import consulo.execution.debug.breakpoint.XBreakpoint;
+import consulo.execution.debug.breakpoint.XBreakpointType;
+import consulo.execution.debug.evaluation.XDebuggerEditorsProvider;
 
 /**
  * Base class for non-line java breakpoint
@@ -51,14 +51,14 @@ public abstract class JavaBreakpointTypeBase<T extends JavaBreakpointProperties>
 		return true;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	@Override
 	public final XBreakpointCustomPropertiesPanel<XBreakpoint<T>> createCustomRightPropertiesPanel(@Nonnull Project project)
 	{
 		return new JavaBreakpointFiltersPanel<T, XBreakpoint<T>>(project);
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	@Override
 	public final XDebuggerEditorsProvider getEditorsProvider(@Nonnull XBreakpoint<T> breakpoint, @Nonnull Project project)
 	{

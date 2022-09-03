@@ -26,14 +26,14 @@ import javax.annotation.Nullable;
 
 import com.intellij.java.language.psi.PsiJavaFile;
 import org.jetbrains.annotations.NonNls;
-import com.intellij.lang.FileASTNode;
-import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.psi.impl.DebugUtil;
+import consulo.language.ast.FileASTNode;
+import consulo.ide.impl.idea.openapi.util.io.FileUtil;
+import consulo.language.impl.DebugUtil;
 import com.intellij.java.language.impl.psi.impl.source.JavaLightStubBuilder;
-import com.intellij.psi.stubs.StubElement;
+import consulo.language.psi.stub.StubElement;
 import com.intellij.testFramework.LightIdeaTestCase;
 import com.intellij.testFramework.PlatformTestUtil;
-import com.intellij.util.ThrowableRunnable;
+import consulo.util.lang.function.ThrowableRunnable;
 
 @SuppressWarnings("SpellCheckingInspection")
 public abstract class JavaStubBuilderTest extends LightIdeaTestCase {

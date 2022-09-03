@@ -15,9 +15,9 @@
  */
 package com.intellij.java.debugger.impl.actions;
 
-import com.intellij.openapi.actionSystem.ActionManager;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.IdeActions;
+import consulo.ui.ex.action.ActionManager;
+import consulo.ui.ex.action.AnActionEvent;
+import consulo.ui.ex.action.IdeActions;
 
 /**
  * @author lex

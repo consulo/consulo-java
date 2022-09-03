@@ -22,11 +22,11 @@ package com.intellij.refactoring;
 
 import com.intellij.JavaTestUtil;
 import com.intellij.java.impl.codeInsight.CodeInsightUtil;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiElement;
+import consulo.codeEditor.Editor;
+import consulo.project.Project;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiExpression;
-import com.intellij.psi.PsiFile;
+import consulo.language.psi.PsiFile;
 import com.intellij.java.impl.refactoring.extractMethod.ExtractMethodProcessor;
 import com.intellij.java.impl.refactoring.ui.TypeSelectorManager;
 import com.intellij.java.impl.refactoring.ui.TypeSelectorManagerImpl;

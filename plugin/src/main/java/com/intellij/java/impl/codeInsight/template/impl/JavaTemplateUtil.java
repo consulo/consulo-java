@@ -19,19 +19,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import com.intellij.codeInsight.lookup.LookupElement;
+import consulo.language.editor.completion.lookup.LookupElement;
 import com.intellij.java.impl.codeInsight.lookup.LookupItemUtil;
 import com.intellij.java.impl.codeInsight.lookup.PsiTypeLookupItem;
-import com.intellij.codeInsight.template.TemplateLookupSelectionHandler;
+import consulo.ide.impl.idea.codeInsight.template.TemplateLookupSelectionHandler;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.application.ApplicationManager;
+import consulo.application.ApplicationManager;
 import consulo.logging.Logger;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.project.Project;
+import consulo.document.Document;
+import consulo.project.Project;
 import com.intellij.psi.*;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
 
 public class JavaTemplateUtil
 {

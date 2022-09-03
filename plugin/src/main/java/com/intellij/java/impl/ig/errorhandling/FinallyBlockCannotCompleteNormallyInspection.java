@@ -18,7 +18,7 @@ package com.intellij.java.impl.ig.errorhandling;
 import javax.annotation.Nonnull;
 
 import com.intellij.java.language.psi.PsiCodeBlock;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiKeyword;
 import com.intellij.java.language.psi.PsiTryStatement;
 import com.siyeh.InspectionGadgetsBundle;

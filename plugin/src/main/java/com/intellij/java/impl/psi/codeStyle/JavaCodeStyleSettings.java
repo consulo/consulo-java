@@ -15,12 +15,12 @@
  */
 package com.intellij.java.impl.psi.codeStyle;
 
-import com.intellij.application.options.CodeStyle;
+import consulo.language.codeStyle.CodeStyle;
 import com.intellij.java.language.JavaLanguage;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.InvalidDataException;
-import com.intellij.openapi.util.WriteExternalException;
-import com.intellij.psi.PsiFile;
+import consulo.project.Project;
+import consulo.util.xml.serializer.InvalidDataException;
+import consulo.util.xml.serializer.WriteExternalException;
+import consulo.language.psi.PsiFile;
 import com.intellij.psi.codeStyle.*;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;

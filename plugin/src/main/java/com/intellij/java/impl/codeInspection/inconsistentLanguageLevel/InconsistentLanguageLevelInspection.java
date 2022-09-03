@@ -20,23 +20,22 @@
  */
 package com.intellij.java.impl.codeInspection.inconsistentLanguageLevel;
 
-import com.intellij.analysis.AnalysisScope;
-import com.intellij.codeInsight.daemon.GroupNames;
-import com.intellij.codeInspection.*;
-import com.intellij.codeInspection.reference.RefModule;
+import consulo.language.editor.scope.AnalysisScope;
+import consulo.ide.impl.idea.codeInsight.daemon.GroupNames;
+import consulo.language.editor.inspection.reference.RefModule;
 import com.intellij.java.impl.codeInspection.unnecessaryModuleDependency.UnnecessaryModuleDependencyInspection;
 import com.intellij.java.language.module.EffectiveLanguageLevelUtil;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleUtilCore;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.project.ProjectBundle;
-import com.intellij.openapi.roots.ModuleOrderEntry;
-import com.intellij.openapi.roots.ModuleRootManager;
-import com.intellij.openapi.roots.OrderEntry;
-import com.intellij.openapi.roots.ui.configuration.ProjectSettingsService;
+import consulo.module.Module;
+import consulo.language.util.ModuleUtilCore;
+import consulo.project.Project;
+import consulo.project.ProjectBundle;
+import consulo.module.content.layer.orderEntry.ModuleOrderEntry;
+import consulo.module.content.ModuleRootManager;
+import consulo.module.content.layer.orderEntry.OrderEntry;
+import consulo.project.ui.view.internal.ProjectSettingsService;
 import com.intellij.java.language.LanguageLevel;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiElementVisitor;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiElementVisitor;
 import consulo.logging.Logger;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;

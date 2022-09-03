@@ -17,13 +17,13 @@ package org.intellij.plugins.intelliLang.util;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.codeInsight.FileModificationService;
-import com.intellij.codeInspection.LocalInspectionTool;
-import com.intellij.codeInspection.LocalQuickFix;
-import com.intellij.codeInspection.ProblemDescriptor;
+import consulo.language.editor.FileModificationService;
+import consulo.language.editor.inspection.LocalInspectionTool;
+import consulo.language.editor.inspection.LocalQuickFix;
+import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.logging.Logger;
-import com.intellij.openapi.project.Project;
-import com.intellij.util.IncorrectOperationException;
+import consulo.project.Project;
+import consulo.language.util.IncorrectOperationException;
 import org.intellij.plugins.intelliLang.inject.java.validation.InjectionNotApplicable;
 
 public class RemoveAnnotationFix implements LocalQuickFix {

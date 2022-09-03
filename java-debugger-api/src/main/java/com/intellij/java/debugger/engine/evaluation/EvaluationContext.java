@@ -18,7 +18,7 @@ package com.intellij.java.debugger.engine.evaluation;
 import com.intellij.java.debugger.engine.DebugProcess;
 import com.intellij.java.debugger.engine.StackFrameContext;
 import com.intellij.java.debugger.engine.SuspendContext;
-import com.intellij.openapi.project.Project;
+import consulo.project.Project;
 import consulo.internal.com.sun.jdi.ClassLoaderReference;
 import consulo.internal.com.sun.jdi.Value;
 

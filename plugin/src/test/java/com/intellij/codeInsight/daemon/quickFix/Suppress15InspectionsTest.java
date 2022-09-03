@@ -18,10 +18,10 @@ package com.intellij.codeInsight.daemon.quickFix;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.codeInspection.LocalInspectionTool;
+import consulo.language.editor.inspection.LocalInspectionTool;
 import com.intellij.java.impl.codeInspection.accessStaticViaInstance.AccessStaticViaInstance;
 import com.intellij.java.analysis.impl.codeInspection.deprecation.DeprecationInspection;
-import com.intellij.codeInspection.ex.GlobalInspectionToolWrapper;
+import consulo.ide.impl.idea.codeInspection.ex.GlobalInspectionToolWrapper;
 import com.intellij.java.impl.codeInspection.javaDoc.JavaDocReferenceInspection;
 import com.intellij.java.impl.codeInspection.sillyAssignment.SillyAssignmentInspection;
 import com.intellij.java.impl.codeInspection.uncheckedWarnings.UncheckedWarningLocalInspection;

@@ -7,9 +7,9 @@ import com.intellij.java.language.impl.psi.impl.java.stubs.JavaStubElementTypes;
 import com.intellij.java.language.impl.psi.impl.java.stubs.PsiMethodStub;
 import com.intellij.java.language.impl.psi.impl.java.stubs.PsiParameterListStub;
 import com.intellij.java.language.impl.psi.impl.java.stubs.PsiParameterStub;
-import com.intellij.psi.stubs.StubBase;
-import com.intellij.psi.stubs.StubElement;
-import com.intellij.util.BitUtil;
+import consulo.language.psi.stub.StubBase;
+import consulo.language.psi.stub.StubElement;
+import consulo.util.lang.BitUtil;
 import javax.annotation.Nonnull;
 
 import javax.annotation.Nullable;

@@ -15,7 +15,7 @@
  */
 package com.intellij.java.debugger.impl;
 
-import com.intellij.util.EventDispatcher;
+import consulo.proxy.EventDispatcher;
 
 import javax.annotation.Nonnull;
 

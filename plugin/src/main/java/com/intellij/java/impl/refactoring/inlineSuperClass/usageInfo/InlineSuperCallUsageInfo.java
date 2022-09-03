@@ -24,16 +24,16 @@ import javax.annotation.Nonnull;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.refactoring.RefactoringBundle;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.editor.refactoring.RefactoringBundle;
 import com.intellij.java.impl.refactoring.inline.InlineMethodProcessor;
 import com.intellij.java.impl.refactoring.inline.ReferencedElementsCollector;
-import com.intellij.refactoring.util.CommonRefactoringUtil;
+import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import com.intellij.java.impl.refactoring.util.FixableUsageInfo;
 import com.intellij.java.impl.refactoring.util.InlineUtil;
-import com.intellij.usageView.UsageInfo;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.containers.MultiMap;
+import consulo.usage.UsageInfo;
+import consulo.language.util.IncorrectOperationException;
+import consulo.util.collection.MultiMap;
 
 public class InlineSuperCallUsageInfo extends FixableUsageInfo {
   private PsiCodeBlock myConstrBody;

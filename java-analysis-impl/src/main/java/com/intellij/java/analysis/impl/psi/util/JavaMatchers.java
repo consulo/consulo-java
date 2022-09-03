@@ -15,11 +15,11 @@
  */
 package com.intellij.java.analysis.impl.psi.util;
 
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.java.language.psi.PsiModifierListOwner;
-import com.intellij.psi.util.PsiMatcherExpression;
+import consulo.ide.impl.psi.util.PsiMatcherExpression;
 
 public class JavaMatchers {
   public static PsiMatcherExpression isConstructor(final boolean shouldBe) {

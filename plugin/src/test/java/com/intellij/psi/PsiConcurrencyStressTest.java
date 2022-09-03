@@ -28,19 +28,19 @@ import java.util.Random;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-import com.intellij.codeInsight.daemon.impl.analysis.HighlightInfoHolder;
+import consulo.language.editor.rawHighlight.HighlightInfoHolder;
 import com.intellij.java.impl.codeInsight.daemon.impl.analysis.HighlightVisitorImpl;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.application.Result;
-import com.intellij.openapi.command.WriteCommandAction;
-import com.intellij.openapi.editor.Document;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.application.ApplicationManager;
+import consulo.application.Result;
+import consulo.language.editor.WriteCommandAction;
+import consulo.document.Document;
+import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.testFramework.IdeaTestUtil;
 import com.intellij.testFramework.PsiTestCase;
 import com.intellij.testFramework.PsiTestUtil;
 import com.intellij.testFramework.Timings;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
 
 public abstract class PsiConcurrencyStressTest extends PsiTestCase {
   private static final boolean SKIP = "true".equalsIgnoreCase(System.getProperty("skip.psi.concurrency.test"));

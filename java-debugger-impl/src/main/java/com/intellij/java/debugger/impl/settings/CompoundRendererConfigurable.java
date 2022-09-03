@@ -41,6 +41,8 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumn;
 
+import consulo.ui.ex.awt.*;
+import consulo.ui.ex.awt.table.JBTable;
 import org.jetbrains.annotations.NonNls;
 import com.intellij.java.debugger.impl.JavaDebuggerEditorsProvider;
 import com.intellij.java.debugger.DebuggerBundle;
@@ -59,26 +61,23 @@ import com.intellij.java.debugger.impl.ui.tree.render.ExpressionChildrenRenderer
 import com.intellij.java.debugger.impl.ui.tree.render.LabelRenderer;
 import com.intellij.java.debugger.impl.ui.tree.render.NodeRenderer;
 import com.intellij.java.debugger.impl.ui.tree.render.ValueLabelRenderer;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Pair;
+import consulo.application.ApplicationManager;
+import consulo.project.Project;
+import consulo.util.lang.Pair;
 import com.intellij.java.language.psi.JavaCodeFragment;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiDocumentManager;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiDocumentManager;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.impl.psi.impl.source.PsiTypeCodeFragmentImpl;
-import com.intellij.ui.AnActionButton;
-import com.intellij.ui.AnActionButtonRunnable;
-import com.intellij.ui.ReferenceEditorWithBrowseButton;
-import com.intellij.ui.TableUtil;
-import com.intellij.ui.ToolbarDecorator;
-import com.intellij.ui.components.JBCheckBox;
-import com.intellij.ui.table.JBTable;
-import com.intellij.util.ui.AbstractTableCellEditor;
-import com.intellij.util.ui.JBUI;
-import com.intellij.xdebugger.impl.breakpoints.XExpressionImpl;
-import com.intellij.xdebugger.impl.ui.XDebuggerExpressionEditor;
+import consulo.ui.ex.awt.AnActionButtonRunnable;
+import consulo.language.editor.ui.awt.ReferenceEditorWithBrowseButton;
+import consulo.ui.ex.awt.util.TableUtil;
+import consulo.ui.ex.awt.JBCheckBox;
+import consulo.ui.ex.awt.AbstractTableCellEditor;
+import consulo.ui.ex.awt.JBUI;
+import consulo.ide.impl.idea.xdebugger.impl.breakpoints.XExpressionImpl;
+import consulo.ide.impl.idea.xdebugger.impl.ui.XDebuggerExpressionEditor;
 import consulo.disposer.Disposable;
 
 class CompoundRendererConfigurable extends JPanel
@@ -94,10 +93,10 @@ class CompoundRendererConfigurable extends JPanel
 	private final JRadioButton myRbDefaultChildrenRenderer;
 	private final JRadioButton myRbExpressionChildrenRenderer;
 	private final JRadioButton myRbListChildrenRenderer;
-	private final XDebuggerExpressionEditor myLabelEditor;
-	private final XDebuggerExpressionEditor myChildrenEditor;
-	private final XDebuggerExpressionEditor myChildrenExpandedEditor;
-	private XDebuggerExpressionEditor myListChildrenEditor;
+	private final consulo.ide.impl.idea.xdebugger.impl.ui.XDebuggerExpressionEditor myLabelEditor;
+	private final consulo.ide.impl.idea.xdebugger.impl.ui.XDebuggerExpressionEditor myChildrenEditor;
+	private final consulo.ide.impl.idea.xdebugger.impl.ui.XDebuggerExpressionEditor myChildrenExpandedEditor;
+	private consulo.ide.impl.idea.xdebugger.impl.ui.XDebuggerExpressionEditor myListChildrenEditor;
 	private final JLabel myExpandedLabel;
 	private JBTable myTable;
 	private final JBCheckBox myAppendDefaultChildren;
@@ -137,9 +136,9 @@ class CompoundRendererConfigurable extends JPanel
 
 		JavaDebuggerEditorsProvider editorsProvider = new JavaDebuggerEditorsProvider();
 
-		myLabelEditor = new XDebuggerExpressionEditor(myProject, editorsProvider, "ClassLabelExpression", null, XExpressionImpl.EMPTY_EXPRESSION, false, false, true);
-		myChildrenEditor = new XDebuggerExpressionEditor(myProject, editorsProvider, "ClassChildrenExpression", null, XExpressionImpl.EMPTY_EXPRESSION, false, false, true);
-		myChildrenExpandedEditor = new XDebuggerExpressionEditor(myProject, editorsProvider, "ClassChildrenExpression", null, XExpressionImpl.EMPTY_EXPRESSION, false, false, true);
+		myLabelEditor = new XDebuggerExpressionEditor(myProject, editorsProvider, "ClassLabelExpression", null, consulo.ide.impl.idea.xdebugger.impl.breakpoints.XExpressionImpl.EMPTY_EXPRESSION, false, false, true);
+		myChildrenEditor = new consulo.ide.impl.idea.xdebugger.impl.ui.XDebuggerExpressionEditor(myProject, editorsProvider, "ClassChildrenExpression", null, consulo.ide.impl.idea.xdebugger.impl.breakpoints.XExpressionImpl.EMPTY_EXPRESSION, false, false, true);
+		myChildrenExpandedEditor = new consulo.ide.impl.idea.xdebugger.impl.ui.XDebuggerExpressionEditor(myProject, editorsProvider, "ClassChildrenExpression", null, XExpressionImpl.EMPTY_EXPRESSION, false, false, true);
 		JComponent myChildrenListEditor = createChildrenListEditor(editorsProvider);
 
 		final ItemListener updateListener = new ItemListener()

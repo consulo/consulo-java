@@ -26,53 +26,53 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
+import consulo.application.HelpManager;
+import consulo.configurable.ConfigurationException;
 import consulo.logging.Logger;
+import consulo.ui.ex.awt.Messages;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import com.intellij.lang.Language;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.application.ModalityState;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.event.DocumentAdapter;
-import com.intellij.openapi.editor.event.DocumentEvent;
-import com.intellij.openapi.help.HelpManager;
-import com.intellij.openapi.options.ConfigurationException;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.ProjectRootManager;
-import com.intellij.openapi.ui.Messages;
+import consulo.language.Language;
+import consulo.application.ApplicationManager;
+import consulo.ui.ModalityState;
+import consulo.document.Document;
+import consulo.document.event.DocumentAdapter;
+import consulo.document.event.DocumentEvent;
+import consulo.project.Project;
+import consulo.module.content.ProjectRootManager;
 import com.intellij.openapi.util.Pass;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiDirectory;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiDirectory;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiJavaPackage;
-import com.intellij.psi.PsiManager;
+import consulo.language.psi.PsiManager;
 import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.java.language.psi.PsiNameHelper;
 import com.intellij.psi.search.ProjectScope;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.impl.refactoring.HelpID;
 import com.intellij.java.impl.refactoring.JavaRefactoringSettings;
 import com.intellij.java.impl.refactoring.MoveDestination;
 import com.intellij.java.impl.refactoring.PackageWrapper;
-import com.intellij.refactoring.RefactoringBundle;
-import com.intellij.refactoring.move.MoveCallback;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.move.MoveCallback;
 import com.intellij.java.impl.refactoring.move.MoveClassesOrPackagesCallback;
-import com.intellij.refactoring.move.MoveHandler;
-import com.intellij.refactoring.move.moveFilesOrDirectories.MoveFilesOrDirectoriesUtil;
+import consulo.language.editor.refactoring.move.MoveHandler;
+import consulo.language.editor.refactoring.move.fileOrDirectory.MoveFilesOrDirectoriesUtil;
 import com.intellij.java.impl.refactoring.ui.ClassNameReferenceEditor;
 import com.intellij.java.impl.refactoring.ui.PackageNameReferenceEditorCombo;
-import com.intellij.refactoring.ui.RefactoringDialog;
-import com.intellij.refactoring.util.CommonRefactoringUtil;
-import com.intellij.ui.ComboboxWithBrowseButton;
-import com.intellij.ui.RecentsManager;
+import consulo.language.editor.refactoring.ui.RefactoringDialog;
+import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
+import consulo.ui.ex.awt.ComboboxWithBrowseButton;
+import consulo.ui.ex.RecentsManager;
 import com.intellij.java.impl.ui.ReferenceEditorComboWithBrowseButton;
-import com.intellij.ui.ReferenceEditorWithBrowseButton;
-import com.intellij.usageView.UsageViewUtil;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.ui.UIUtil;
+import consulo.language.editor.ui.awt.ReferenceEditorWithBrowseButton;
+import consulo.usage.UsageViewUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.ui.ex.awt.UIUtil;
 
 public class MoveClassesOrPackagesDialog extends RefactoringDialog {
   @NonNls private static final String RECENTS_KEY = "MoveClassesOrPackagesDialog.RECENTS_KEY";
@@ -337,7 +337,7 @@ public class MoveClassesOrPackagesDialog extends RefactoringDialog {
     return null;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private PsiClass findTargetClass() {
     String name = myInnerClassChooser.getText().trim();
     return JavaPsiFacade.getInstance(myManager.getProject()).findClass(name, ProjectScope.getProjectScope(myProject));
@@ -471,7 +471,7 @@ public class MoveClassesOrPackagesDialog extends RefactoringDialog {
   }
 
   //for scala plugin
-  protected MoveClassToInnerProcessor createMoveToInnerProcessor(PsiClass destination, @Nonnull PsiClass[] classesToMove, @javax.annotation.Nullable final MoveCallback callback) {
+  protected MoveClassToInnerProcessor createMoveToInnerProcessor(PsiClass destination, @Nonnull PsiClass[] classesToMove, @Nullable final MoveCallback callback) {
     return new MoveClassToInnerProcessor(getProject(), classesToMove, destination, isSearchInComments(), isSearchInNonJavaFiles(), callback);
   }
 
@@ -479,7 +479,7 @@ public class MoveClassesOrPackagesDialog extends RefactoringDialog {
     return myCbSearchTextOccurences.isSelected();
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private MoveDestination selectDestination() {
     final String packageName = getTargetPackage().trim();
     if (packageName.length() > 0 && !PsiNameHelper.getInstance(myManager.getProject()).isQualifiedName(packageName)) {

@@ -15,15 +15,16 @@
  */
 package com.intellij.java.impl.ig.dependency;
 
-import com.intellij.analysis.AnalysisScope;
-import com.intellij.codeInspection.CommonProblemDescriptor;
-import com.intellij.codeInspection.GlobalInspectionContext;
-import com.intellij.codeInspection.InspectionManager;
-import com.intellij.codeInspection.reference.RefEntity;
+import consulo.language.editor.scope.AnalysisScope;
+import consulo.language.editor.inspection.CommonProblemDescriptor;
+import consulo.language.editor.inspection.GlobalInspectionContext;
+import consulo.language.editor.inspection.scheme.InspectionManager;
+import consulo.language.editor.inspection.reference.RefEntity;
 import com.intellij.java.analysis.codeInspection.reference.RefPackage;
 import com.siyeh.InspectionGadgetsBundle;
 import com.intellij.java.impl.ig.BaseGlobalInspection;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -37,7 +38,7 @@ public class CyclicPackageDependencyInspection extends BaseGlobalInspection {
       "cyclic.package.dependency.display.name");
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public CommonProblemDescriptor[] checkElement(
     RefEntity refEntity,
     AnalysisScope analysisScope,

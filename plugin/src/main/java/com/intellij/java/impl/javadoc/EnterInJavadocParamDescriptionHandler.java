@@ -1,19 +1,19 @@
 package com.intellij.java.impl.javadoc;
 
-import com.intellij.codeInsight.CodeInsightSettings;
-import com.intellij.codeInsight.editorActions.enter.EnterHandlerDelegateAdapter;
-import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.editor.CaretModel;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.LogicalPosition;
-import com.intellij.openapi.util.Pair;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.PsiDocumentManager;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
-import com.intellij.util.text.CharArrayUtil;
+import consulo.language.editor.CodeInsightSettings;
+import consulo.language.editor.action.EnterHandlerDelegateAdapter;
+import consulo.dataContext.DataContext;
+import consulo.application.ApplicationManager;
+import consulo.codeEditor.CaretModel;
+import consulo.document.Document;
+import consulo.codeEditor.Editor;
+import consulo.codeEditor.LogicalPosition;
+import consulo.util.lang.Pair;
+import consulo.util.lang.StringUtil;
+import consulo.language.psi.PsiDocumentManager;
+import consulo.language.psi.PsiFile;
+import consulo.language.codeStyle.CodeStyleSettingsManager;
+import consulo.util.lang.CharArrayUtil;
 import javax.annotation.Nonnull;
 
 import java.util.List;

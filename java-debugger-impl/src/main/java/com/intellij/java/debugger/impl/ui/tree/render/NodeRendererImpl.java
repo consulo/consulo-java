@@ -16,6 +16,7 @@
 package com.intellij.java.debugger.impl.ui.tree.render;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.jdom.Element;
 import com.intellij.java.debugger.DebuggerContext;
@@ -27,7 +28,7 @@ import com.intellij.java.debugger.impl.ui.tree.DebuggerTreeNode;
 import com.intellij.java.debugger.ui.tree.NodeDescriptor;
 import com.intellij.java.debugger.impl.ui.tree.ValueDescriptor;
 import consulo.logging.Logger;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import consulo.internal.com.sun.jdi.ObjectReference;
 import consulo.internal.com.sun.jdi.Value;
 import consulo.ui.image.Image;
@@ -148,7 +149,7 @@ public abstract class NodeRendererImpl implements NodeRenderer
 		return getName();
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public String getIdLabel(Value value, DebugProcess process)
 	{
 		return value instanceof ObjectReference && isShowType() ? ValueDescriptorImpl.getIdLabel((ObjectReference) value) : null;

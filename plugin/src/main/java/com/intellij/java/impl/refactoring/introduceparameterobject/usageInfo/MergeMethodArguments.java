@@ -16,20 +16,21 @@
 package com.intellij.java.impl.refactoring.introduceparameterobject.usageInfo;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.application.ApplicationManager;
+import consulo.util.lang.Comparing;
+import consulo.util.lang.StringUtil;
 import com.intellij.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.impl.psi.impl.source.PsiImmediateClassType;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import com.intellij.java.impl.refactoring.changeSignature.ChangeSignatureProcessor;
 import com.intellij.java.impl.refactoring.changeSignature.ParameterInfoImpl;
 import com.intellij.java.impl.refactoring.util.FixableUsageInfo;
-import com.intellij.util.Function;
-import com.intellij.util.IncorrectOperationException;
+import consulo.ide.impl.idea.util.Function;
+import consulo.language.util.IncorrectOperationException;
 
+import javax.annotation.Nullable;
 import java.util.*;
 
 @SuppressWarnings({"MethodWithTooManyParameters"})
@@ -193,7 +194,7 @@ public class MergeMethodArguments extends FixableUsageInfo {
     return newExpression.toString();
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private String getArgument(PsiExpression[] args, int i) {
     if (i < args.length) {
       return args[i].getText();

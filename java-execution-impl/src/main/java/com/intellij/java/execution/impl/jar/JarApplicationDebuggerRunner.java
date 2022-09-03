@@ -18,8 +18,8 @@ package com.intellij.java.execution.impl.jar;
 import javax.annotation.Nonnull;
 
 import com.intellij.java.debugger.impl.GenericDebuggerRunner;
-import com.intellij.execution.configurations.RunProfile;
-import com.intellij.execution.executors.DefaultDebugExecutor;
+import consulo.execution.configuration.RunProfile;
+import consulo.execution.debug.DefaultDebugExecutor;
 
 /**
  * @author nik

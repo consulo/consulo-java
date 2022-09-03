@@ -15,23 +15,23 @@
  */
 package com.intellij.java.impl.codeInsight.editorActions;
 
-import com.intellij.CommonBundle;
-import com.intellij.codeInsight.CodeInsightBundle;
+import consulo.application.CommonBundle;
+import consulo.language.editor.CodeInsightBundle;
 import com.intellij.java.impl.ide.util.FQNameCellRenderer;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.DialogWrapper;
-import com.intellij.openapi.ui.VerticalFlowLayout;
+import consulo.project.Project;
+import consulo.ui.ex.awt.*;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.ui.ScrollPaneFactory;
-import com.intellij.ui.components.JBLabel;
-import com.intellij.ui.components.JBList;
-import com.intellij.util.ui.UIUtil;
+import consulo.ui.ex.awt.ScrollPaneFactory;
+import consulo.ui.ex.awt.JBLabel;
+import consulo.ui.ex.awt.JBList;
+import consulo.ui.ex.awt.UIUtil;
+import consulo.ui.ex.awt.DialogWrapper;
 
 import javax.swing.*;
 import java.awt.*;
 
-import static com.intellij.util.ui.UIUtil.ComponentStyle.SMALL;
-import static com.intellij.util.ui.UIUtil.FontColor.BRIGHTER;
+import static consulo.ui.ex.awt.UIUtil.ComponentStyle.SMALL;
+import static consulo.ui.ex.awt.UIUtil.FontColor.BRIGHTER;
 
 class RestoreReferencesDialog extends DialogWrapper {
   private final Object[] myNamedElements;

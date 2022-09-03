@@ -17,17 +17,17 @@
 package com.intellij.java.impl.codeInsight.generation.surroundWith;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.lang.ASTNode;
-import com.intellij.openapi.util.TextRange;
+import consulo.language.ast.ASTNode;
+import consulo.document.util.TextRange;
 import com.intellij.psi.*;
-import com.intellij.psi.codeStyle.CodeStyleManager;
+import consulo.language.codeStyle.CodeStyleManager;
 import com.intellij.java.language.impl.psi.impl.source.tree.ElementType;
 import com.intellij.java.impl.psi.impl.source.tree.JavaJspElementType;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.search.searches.ReferencesSearch;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.search.ReferencesSearch;
 import com.intellij.java.language.psi.util.PsiTypesUtil;
-import com.intellij.psi.util.PsiUtilCore;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.psi.PsiUtilCore;
+import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 
 import javax.annotation.Nonnull;

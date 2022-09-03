@@ -17,13 +17,13 @@ package com.intellij.java.impl.ipp.expression;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.openapi.editor.CaretModel;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.psi.PsiElement;
+import consulo.codeEditor.CaretModel;
+import consulo.codeEditor.Editor;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiJavaToken;
 import com.intellij.java.language.psi.PsiPolyadicExpression;
-import com.intellij.psi.tree.IElementType;
+import consulo.language.ast.IElementType;
 import com.siyeh.IntentionPowerPackBundle;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
 import com.intellij.java.impl.ipp.base.MutablyNamedIntention;

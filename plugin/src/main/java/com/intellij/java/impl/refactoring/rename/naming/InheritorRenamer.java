@@ -17,8 +17,8 @@ package com.intellij.java.impl.refactoring.rename.naming;
 
 import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.refactoring.RefactoringBundle;
-import com.intellij.refactoring.rename.naming.AutomaticRenamer;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.rename.AutomaticRenamer;
 
 /**
  * @author dsl

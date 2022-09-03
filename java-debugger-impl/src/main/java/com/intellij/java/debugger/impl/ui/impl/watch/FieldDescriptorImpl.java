@@ -16,6 +16,7 @@
 package com.intellij.java.debugger.impl.ui.impl.watch;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.DebuggerContext;
@@ -32,13 +33,13 @@ import com.intellij.java.debugger.impl.PositionUtil;
 import com.intellij.java.debugger.impl.settings.NodeRendererSettings;
 import com.intellij.java.debugger.impl.ui.tree.FieldDescriptor;
 import com.intellij.java.debugger.ui.tree.NodeDescriptor;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.project.Project;
+import consulo.util.lang.StringUtil;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiElementFactory;
 import com.intellij.java.language.psi.PsiExpression;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.xdebugger.frame.XValueModifier;
+import consulo.language.util.IncorrectOperationException;
+import consulo.execution.debug.frame.XValueModifier;
 import consulo.internal.com.sun.jdi.*;
 
 public class FieldDescriptorImpl extends ValueDescriptorImpl implements FieldDescriptor
@@ -149,7 +150,7 @@ public class FieldDescriptorImpl extends ValueDescriptorImpl implements FieldDes
 		}
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	@Override
 	public String getDeclaredType()
 	{

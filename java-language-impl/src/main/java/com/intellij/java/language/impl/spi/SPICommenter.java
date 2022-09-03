@@ -15,14 +15,20 @@
  */
 package com.intellij.java.language.impl.spi;
 
-import com.intellij.lang.Commenter;
+import com.intellij.java.language.spi.SPILanguage;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.Commenter;
+import consulo.language.Language;
+
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
  * User: anna
  */
+@ExtensionImpl
 public class SPICommenter implements Commenter {
-  @javax.annotation.Nullable
+  @Nullable
   @Override
   public String getLineCommentPrefix() {
     return "#";
@@ -40,15 +46,21 @@ public class SPICommenter implements Commenter {
     return null;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   @Override
   public String getCommentedBlockCommentPrefix() {
     return null;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   @Override
   public String getCommentedBlockCommentSuffix() {
     return null;
+  }
+
+  @Nonnull
+  @Override
+  public Language getLanguage() {
+    return SPILanguage.INSTANCE;
   }
 }

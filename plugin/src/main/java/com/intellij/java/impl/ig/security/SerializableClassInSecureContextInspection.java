@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.security;
 
-import com.intellij.codeInspection.ui.SingleCheckboxOptionsPanel;
+import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiTypeParameter;
@@ -27,6 +27,7 @@ import com.siyeh.ig.psiutils.ControlFlowUtils;
 import com.intellij.java.impl.ig.psiutils.SerializationUtils;
 import javax.annotation.Nonnull;
 
+import javax.annotation.Nullable;
 import javax.swing.*;
 
 public class SerializableClassInSecureContextInspection extends BaseInspection {
@@ -46,7 +47,7 @@ public class SerializableClassInSecureContextInspection extends BaseInspection {
     return InspectionGadgetsBundle.message("serializable.class.in.secure.context.problem.descriptor");
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   @Override
   public JComponent createOptionsPanel() {
     return new SingleCheckboxOptionsPanel(

@@ -16,17 +16,18 @@
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.DependencyScope;
+import consulo.codeEditor.Editor;
+import consulo.module.Module;
+import consulo.project.Project;
+import consulo.module.content.layer.orderEntry.DependencyScope;
 import com.intellij.java.impl.openapi.roots.JavaProjectModelModificationService;
-import com.intellij.openapi.roots.impl.libraries.LibraryEx;
-import com.intellij.openapi.roots.libraries.Library;
-import com.intellij.openapi.roots.libraries.LibraryUtil;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiReference;
+import consulo.content.impl.internal.library.LibraryEx;
+import consulo.content.library.Library;
+import consulo.ide.impl.idea.openapi.roots.libraries.LibraryUtil;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiReference;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 
 /**
@@ -38,7 +39,7 @@ class AddLibraryToDependenciesFix extends AddOrderEntryFix
 	private final Module myCurrentModule;
 	private final String myQualifiedClassName;
 
-	public AddLibraryToDependenciesFix(@Nonnull Module currentModule, @Nonnull Library library, @Nonnull PsiReference reference, @javax.annotation.Nullable String qualifiedClassName)
+	public AddLibraryToDependenciesFix(@Nonnull Module currentModule, @Nonnull Library library, @Nonnull PsiReference reference, @Nullable String qualifiedClassName)
 	{
 		super(reference);
 		myLibrary = library;
@@ -67,7 +68,7 @@ class AddLibraryToDependenciesFix extends AddOrderEntryFix
 	}
 
 	@Override
-	public void invoke(@Nonnull Project project, @javax.annotation.Nullable Editor editor, PsiFile file)
+	public void invoke(@Nonnull Project project, @Nullable Editor editor, PsiFile file)
 	{
 		DependencyScope scope = suggestScopeByLocation(myCurrentModule, myReference.getElement());
 		JavaProjectModelModificationService.getInstance(project).addDependency(myCurrentModule, myLibrary, scope);

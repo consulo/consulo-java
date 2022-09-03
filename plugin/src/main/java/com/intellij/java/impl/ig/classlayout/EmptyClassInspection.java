@@ -28,7 +28,7 @@ import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.impl.codeInspection.util.SpecialAnnotationsUtil;
 import com.intellij.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
-import com.intellij.util.ui.CheckBox;
+import consulo.ui.CheckBox;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;

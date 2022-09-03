@@ -1,12 +1,12 @@
 package com.intellij.psi.resolve;
 
 import com.intellij.codeInsight.CodeInsightTestCase;
-import com.intellij.codeInsight.navigation.actions.GotoDeclarationAction;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiFileSystemItem;
-import com.intellij.psi.impl.include.FileIncludeInfo;
-import com.intellij.psi.impl.include.FileIncludeManager;
+import consulo.ide.impl.idea.codeInsight.navigation.actions.GotoDeclarationAction;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiFileSystemItem;
+import consulo.language.psi.include.FileIncludeInfo;
+import consulo.language.psi.include.FileIncludeManager;
 
 /**
  * @author cdr

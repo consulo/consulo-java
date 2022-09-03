@@ -18,8 +18,8 @@ package consulo.java.impl.psi.impl;
 import javax.annotation.Nonnull;
 
 import consulo.java.language.module.extension.JavaModuleExtension;
-import com.intellij.openapi.module.Module;
-import com.intellij.psi.PsiManager;
+import consulo.module.Module;
+import consulo.language.psi.PsiManager;
 import com.intellij.java.language.psi.PsiNameHelper;
 import com.intellij.java.language.impl.psi.impl.file.PsiPackageImpl;
 import consulo.module.extension.ModuleExtension;

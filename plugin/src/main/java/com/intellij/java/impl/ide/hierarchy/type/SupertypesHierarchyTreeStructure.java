@@ -20,15 +20,15 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.ide.hierarchy.HierarchyNodeDescriptor;
-import com.intellij.ide.hierarchy.HierarchyTreeStructure;
-import com.intellij.openapi.project.Project;
+import consulo.ide.impl.idea.ide.hierarchy.HierarchyNodeDescriptor;
+import consulo.ide.impl.idea.ide.hierarchy.HierarchyTreeStructure;
+import consulo.project.Project;
 import consulo.java.language.module.util.JavaClassNames;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiFunctionalExpression;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.util.ArrayUtil;
+import consulo.util.collection.ArrayUtil;
 
 public final class SupertypesHierarchyTreeStructure extends HierarchyTreeStructure
 {

@@ -20,19 +20,19 @@ import static org.junit.Assert.fail;
 
 import org.jetbrains.annotations.NonNls;
 import com.intellij.java.language.impl.JavaFileType;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.command.CommandProcessor;
-import com.intellij.openapi.util.TextRange;
+import consulo.application.ApplicationManager;
+import consulo.undoRedo.CommandProcessor;
+import consulo.document.util.TextRange;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.psi.JavaCodeFragmentFactory;
 import com.intellij.java.language.psi.JavaPsiFacade;
-import com.intellij.psi.PsiCodeFragment;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.codeStyle.CodeStyleManager;
-import com.intellij.psi.codeStyle.CodeStyleSettings;
-import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
-import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.psi.PsiCodeFragment;
+import consulo.language.psi.PsiElement;
+import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.codeStyle.CodeStyleSettings;
+import consulo.language.codeStyle.CodeStyleSettingsManager;
+import consulo.language.codeStyle.CommonCodeStyleSettings;
+import consulo.language.util.IncorrectOperationException;
 
 
 /**

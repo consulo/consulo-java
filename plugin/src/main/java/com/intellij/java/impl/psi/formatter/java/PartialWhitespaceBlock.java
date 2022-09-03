@@ -17,14 +17,14 @@ package com.intellij.java.impl.psi.formatter.java;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.formatting.Alignment;
-import com.intellij.formatting.FormattingMode;
-import com.intellij.formatting.Indent;
-import com.intellij.formatting.Wrap;
-import com.intellij.formatting.alignment.AlignmentStrategy;
-import com.intellij.lang.ASTNode;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
+import consulo.language.codeStyle.Alignment;
+import consulo.language.codeStyle.FormattingMode;
+import consulo.language.codeStyle.Indent;
+import consulo.language.codeStyle.Wrap;
+import consulo.language.codeStyle.AlignmentStrategy;
+import consulo.language.ast.ASTNode;
+import consulo.document.util.TextRange;
+import consulo.language.codeStyle.CommonCodeStyleSettings;
 import com.intellij.java.impl.psi.codeStyle.JavaCodeStyleSettings;
 
 /**

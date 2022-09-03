@@ -33,33 +33,33 @@ import javax.swing.event.DocumentListener;
 
 import com.intellij.java.impl.ide.util.TreeJavaClassChooserDialog;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.help.HelpManager;
-import com.intellij.openapi.options.ConfigurationException;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.ProjectRootManager;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.openapi.wm.IdeFocusManager;
+import consulo.application.ui.wm.IdeFocusManager;
+import consulo.configurable.ConfigurationException;
+import consulo.document.Document;
+import consulo.application.HelpManager;
+import consulo.project.Project;
+import consulo.module.content.ProjectRootManager;
+import consulo.ui.ex.awt.ComboboxWithBrowseButton;
+import consulo.util.lang.StringUtil;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.psi.*;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
 import com.intellij.java.impl.refactoring.HelpID;
 import com.intellij.java.impl.refactoring.MoveDestination;
 import com.intellij.java.impl.refactoring.PackageWrapper;
 import com.intellij.java.impl.refactoring.RefactorJBundle;
-import com.intellij.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.RefactoringBundle;
 import com.intellij.java.impl.refactoring.move.moveClassesOrPackages.DestinationFolderComboBox;
 import com.intellij.java.impl.refactoring.ui.PackageNameReferenceEditorCombo;
-import com.intellij.refactoring.ui.RefactoringDialog;
+import consulo.language.editor.refactoring.ui.RefactoringDialog;
 import com.intellij.java.impl.refactoring.util.ParameterTablePanel;
 import com.intellij.java.analysis.impl.refactoring.util.VariableData;
-import com.intellij.ui.ComboboxWithBrowseButton;
-import com.intellij.ui.DocumentAdapter;
-import com.intellij.ui.RecentsManager;
+import consulo.ui.ex.awt.event.DocumentAdapter;
+import consulo.ui.ex.RecentsManager;
 import com.intellij.java.impl.ui.ReferenceEditorComboWithBrowseButton;
 import com.intellij.java.language.util.VisibilityUtil;
-import com.intellij.util.ui.UIUtil;
+import consulo.ui.ex.awt.UIUtil;
 
 @SuppressWarnings({"OverridableMethodCallInConstructor"})
 public class IntroduceParameterObjectDialog extends RefactoringDialog {

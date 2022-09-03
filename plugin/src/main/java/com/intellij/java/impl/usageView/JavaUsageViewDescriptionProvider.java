@@ -17,13 +17,13 @@ package com.intellij.java.impl.usageView;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
-import com.intellij.lang.LangBundle;
-import com.intellij.psi.ElementDescriptionLocation;
-import com.intellij.psi.ElementDescriptionProvider;
-import com.intellij.psi.PsiElement;
-import com.intellij.usageView.UsageViewBundle;
-import com.intellij.usageView.UsageViewLongNameLocation;
-import com.intellij.usageView.UsageViewShortNameLocation;
+import consulo.language.LangBundle;
+import consulo.language.psi.ElementDescriptionLocation;
+import consulo.language.psi.ElementDescriptionProvider;
+import consulo.language.psi.PsiElement;
+import consulo.usage.UsageViewBundle;
+import consulo.usage.UsageViewLongNameLocation;
+import consulo.usage.UsageViewShortNameLocation;
 
 import javax.annotation.Nonnull;
 

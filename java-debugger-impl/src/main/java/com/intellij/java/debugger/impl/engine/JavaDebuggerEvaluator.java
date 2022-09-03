@@ -26,21 +26,21 @@ import com.intellij.java.debugger.impl.DebuggerUtilsEx;
 import com.intellij.java.debugger.impl.EditorTextProvider;
 import com.intellij.java.debugger.impl.ui.impl.watch.NodeManagerImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.WatchItemDescriptor;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.project.IndexNotReadyException;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Pair;
-import com.intellij.openapi.util.Ref;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.PsiDocumentManager;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.xdebugger.XExpression;
-import com.intellij.xdebugger.XSourcePosition;
-import com.intellij.xdebugger.evaluation.EvaluationMode;
-import com.intellij.xdebugger.evaluation.XDebuggerEvaluator;
-import com.intellij.xdebugger.impl.breakpoints.XExpressionImpl;
-import com.intellij.xdebugger.impl.ui.DebuggerUIUtil;
+import consulo.document.Document;
+import consulo.application.dumb.IndexNotReadyException;
+import consulo.execution.debug.XSourcePosition;
+import consulo.project.Project;
+import consulo.util.lang.Pair;
+import consulo.util.lang.ref.Ref;
+import consulo.document.util.TextRange;
+import consulo.language.psi.PsiDocumentManager;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.execution.debug.breakpoint.XExpression;
+import consulo.execution.debug.evaluation.EvaluationMode;
+import consulo.execution.debug.evaluation.XDebuggerEvaluator;
+import consulo.ide.impl.idea.xdebugger.impl.breakpoints.XExpressionImpl;
+import consulo.ide.impl.idea.xdebugger.impl.ui.DebuggerUIUtil;
 import consulo.java.analysis.codeInsight.JavaCodeInsightUtilCore;
 
 /**
@@ -58,7 +58,7 @@ public class JavaDebuggerEvaluator extends XDebuggerEvaluator
 	}
 
 	@Override
-	public void evaluate(@Nonnull final String expression, @Nonnull final XEvaluationCallback callback, @javax.annotation.Nullable XSourcePosition expressionPosition)
+	public void evaluate(@Nonnull final String expression, @Nonnull final XEvaluationCallback callback, @Nullable XSourcePosition expressionPosition)
 	{
 		evaluate(XExpressionImpl.fromText(expression), callback, expressionPosition);
 	}

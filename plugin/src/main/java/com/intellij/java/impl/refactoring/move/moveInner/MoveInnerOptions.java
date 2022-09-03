@@ -16,7 +16,7 @@
 package com.intellij.java.impl.refactoring.move.moveInner;
 
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 
 public class MoveInnerOptions {
   private final PsiClass myInnerClass;

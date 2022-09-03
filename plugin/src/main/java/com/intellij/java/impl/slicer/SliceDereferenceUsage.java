@@ -17,11 +17,11 @@ package com.intellij.java.impl.slicer;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiSubstitutor;
 import com.intellij.usages.TextChunk;
-import com.intellij.usages.UsagePresentation;
-import com.intellij.util.Processor;
+import consulo.usage.UsagePresentation;
+import consulo.application.util.function.Processor;
 import consulo.ui.image.Image;
 
 /**

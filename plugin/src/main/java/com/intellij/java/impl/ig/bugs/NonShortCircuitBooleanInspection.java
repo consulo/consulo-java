@@ -17,14 +17,14 @@ package com.intellij.java.impl.ig.bugs;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.codeInspection.ProblemDescriptor;
+import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiPolyadicExpression;
 import com.intellij.java.language.psi.PsiType;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.util.IncorrectOperationException;
+import consulo.project.Project;
+import consulo.language.ast.IElementType;
+import consulo.language.util.IncorrectOperationException;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;

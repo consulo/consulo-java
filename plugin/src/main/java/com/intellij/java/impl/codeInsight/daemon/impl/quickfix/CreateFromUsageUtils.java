@@ -15,80 +15,68 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Properties;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-
-import com.intellij.java.language.psi.*;
-import consulo.logging.Logger;
-import org.jetbrains.annotations.NonNls;
-
-import javax.annotation.Nullable;
 import com.intellij.java.impl.codeInsight.ExpectedTypeInfo;
 import com.intellij.java.impl.codeInsight.ExpectedTypeUtil;
 import com.intellij.java.impl.codeInsight.ExpectedTypesProvider;
-import com.intellij.codeInsight.FileModificationService;
-import com.intellij.codeInsight.TailType;
-import com.intellij.java.language.impl.codeInsight.completion.proc.VariablesProcessor;
 import com.intellij.java.impl.codeInsight.generation.OverrideImplementUtil;
 import com.intellij.java.impl.codeInsight.generation.PsiGenerationInfo;
 import com.intellij.java.impl.codeInsight.intention.impl.CreateClassDialog;
-import com.intellij.codeInsight.lookup.LookupElement;
-import com.intellij.codeInsight.lookup.LookupElementBuilder;
-import com.intellij.codeInsight.template.Expression;
-import com.intellij.codeInsight.template.ExpressionContext;
 import com.intellij.java.impl.codeInsight.template.ExpressionUtil;
-import com.intellij.codeInsight.template.Result;
-import com.intellij.codeInsight.template.TemplateBuilder;
-import com.intellij.codeInsight.template.TextResult;
-import com.intellij.ide.fileTemplates.FileTemplate;
-import com.intellij.ide.fileTemplates.FileTemplateManager;
-import com.intellij.ide.fileTemplates.FileTemplateUtil;
 import com.intellij.java.impl.ide.fileTemplates.JavaTemplateUtil;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.EditorModificationUtil;
-import com.intellij.openapi.editor.ScrollType;
-import com.intellij.openapi.fileTypes.FileType;
-import com.intellij.openapi.fileTypes.FileTypeManager;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleUtilCore;
-import com.intellij.openapi.progress.ProcessCanceledException;
-import com.intellij.openapi.progress.ProgressManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.DialogWrapper;
-import com.intellij.openapi.ui.Messages;
-import com.intellij.openapi.util.Computable;
-import com.intellij.openapi.util.Pair;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.*;
-import com.intellij.psi.codeStyle.CodeStyleManager;
-import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
-import com.intellij.psi.codeStyle.SuggestedNameInfo;
-import com.intellij.java.language.psi.codeStyle.VariableKind;
-import com.intellij.java.language.impl.psi.scope.util.PsiScopesUtil;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.java.language.psi.search.PsiShortNamesCache;
-import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
 import com.intellij.java.impl.psi.statistics.JavaStatisticsManager;
-import com.intellij.psi.util.ProximityLocation;
-import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
+import com.intellij.java.language.impl.codeInsight.completion.proc.VariablesProcessor;
+import com.intellij.java.language.impl.psi.scope.util.PsiScopesUtil;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
+import com.intellij.java.language.psi.codeStyle.VariableKind;
+import com.intellij.java.language.psi.search.PsiShortNamesCache;
 import com.intellij.java.language.psi.util.PsiTypesUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.psi.util.proximity.PsiProximityComparator;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.Processor;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.application.ApplicationManager;
+import consulo.application.progress.ProgressManager;
+import consulo.application.util.function.Computable;
+import consulo.application.util.function.Processor;
+import consulo.codeEditor.Editor;
+import consulo.codeEditor.ScrollType;
+import consulo.component.ProcessCanceledException;
+import consulo.document.util.TextRange;
+import consulo.fileTemplate.FileTemplate;
+import consulo.fileTemplate.FileTemplateManager;
+import consulo.fileTemplate.FileTemplateUtil;
+import consulo.ide.impl.idea.openapi.editor.EditorModificationUtil;
+import consulo.ide.impl.psi.util.ProximityLocation;
+import consulo.ide.impl.psi.util.proximity.PsiProximityComparator;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.editor.FileModificationService;
+import consulo.language.editor.completion.lookup.LookupElement;
+import consulo.language.editor.completion.lookup.LookupElementBuilder;
+import consulo.language.editor.completion.lookup.TailType;
+import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
+import consulo.language.editor.template.*;
+import consulo.language.file.FileTypeManager;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiManager;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.ModuleUtilCore;
+import consulo.logging.Logger;
+import consulo.module.Module;
+import consulo.project.Project;
+import consulo.ui.ex.awt.DialogWrapper;
+import consulo.ui.ex.awt.Messages;
+import consulo.util.collection.ContainerUtil;
+import consulo.util.lang.Pair;
+import consulo.util.lang.StringUtil;
+import consulo.virtualFileSystem.fileType.FileType;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.*;
 
 /**
  * @author mike
@@ -222,7 +210,7 @@ public class CreateFromUsageUtils {
           final String lineIndent = styleManager.getLineIndent(containingFile, Math.min(start, end));
           PsiDocumentManager manager = PsiDocumentManager.getInstance(method.getProject());
           manager.doPostponedOperationsAndUnblockDocument(manager.getDocument(containingFile));
-          EditorModificationUtil.insertStringAtCaret(newEditor, lineIndent);
+          consulo.ide.impl.idea.openapi.editor.EditorModificationUtil.insertStringAtCaret(newEditor, lineIndent);
           EditorModificationUtil.insertStringAtCaret(newEditor, "\n", false, false);
         }
         else {
@@ -307,7 +295,7 @@ public class CreateFromUsageUtils {
     }
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public static PsiClass createClass(final PsiJavaCodeReferenceElement referenceElement,
                                      final CreateClassKind classKind,
                                      final String superClassName) {
@@ -360,7 +348,7 @@ public class CreateFromUsageUtils {
     return createClass(classKind, targetDirectory, name, manager, referenceElement, sourceFile, superClassName);
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public static PsiJavaPackage findTargetPackage(PsiElement qualifierElement, PsiManager manager, PsiFile sourceFile) {
     PsiJavaPackage aPackage = null;
     if (qualifierElement instanceof PsiJavaPackage) {
@@ -694,7 +682,7 @@ public class CreateFromUsageUtils {
   }
 
 
-  @javax.annotation.Nullable
+  @Nullable
   public static PsiType[] guessType(PsiExpression expression, final boolean allowVoidType) {
     final PsiManager manager = expression.getManager();
     final GlobalSearchScope resolveScope = expression.getResolveScope();
@@ -976,10 +964,10 @@ public class CreateFromUsageUtils {
     return false;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private static String getQualifiedName(final PsiClass aClass) {
     return ApplicationManager.getApplication().runReadAction(new Computable<String>() {
-      @javax.annotation.Nullable
+      @Nullable
       @Override
       public String compute() {
         return aClass.getQualifiedName();
@@ -987,7 +975,7 @@ public class CreateFromUsageUtils {
     });
   }
 
-  private static boolean hasCorrectModifiers(@javax.annotation.Nullable final PsiMember member, final boolean staticAccess) {
+  private static boolean hasCorrectModifiers(@Nullable final PsiMember member, final boolean staticAccess) {
     if (member == null) {
       return false;
     }

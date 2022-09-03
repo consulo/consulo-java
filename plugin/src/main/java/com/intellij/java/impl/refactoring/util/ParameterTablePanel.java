@@ -22,6 +22,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
+import javax.annotation.Nullable;
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -30,9 +31,9 @@ import javax.swing.table.TableColumn;
 
 import com.intellij.java.analysis.impl.refactoring.util.VariableData;
 import org.jetbrains.annotations.NonNls;
-import com.intellij.openapi.project.Project;
+import consulo.project.Project;
 import com.intellij.java.language.psi.JavaRecursiveElementWalkingVisitor;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiNameHelper;
 import com.intellij.java.language.psi.PsiReferenceExpression;
@@ -41,16 +42,16 @@ import com.intellij.java.language.psi.PsiVariable;
 import com.intellij.java.impl.refactoring.ui.TypeSelector;
 import com.intellij.java.impl.refactoring.ui.TypeSelectorManager;
 import com.intellij.java.impl.refactoring.ui.TypeSelectorManagerImpl;
-import com.intellij.ui.BooleanTableCellRenderer;
-import com.intellij.ui.ListCellRendererWrapper;
-import com.intellij.ui.TableUtil;
-import com.intellij.ui.ToolbarDecorator;
-import com.intellij.ui.components.JBComboBoxLabel;
-import com.intellij.ui.components.editors.JBComboBoxTableCellEditorComponent;
-import com.intellij.ui.table.JBTable;
-import com.intellij.util.Function;
-import com.intellij.util.ui.AbstractTableCellEditor;
-import com.intellij.util.ui.EditableModel;
+import consulo.ui.ex.awt.BooleanTableCellRenderer;
+import consulo.ui.ex.awt.ListCellRendererWrapper;
+import consulo.ui.ex.awt.util.TableUtil;
+import consulo.ui.ex.awt.ToolbarDecorator;
+import consulo.ide.impl.idea.ui.components.JBComboBoxLabel;
+import consulo.ui.ex.awt.JBComboBoxTableCellEditorComponent;
+import consulo.ui.ex.awt.table.JBTable;
+import consulo.ide.impl.idea.util.Function;
+import consulo.ui.ex.awt.AbstractTableCellEditor;
+import consulo.ui.ex.awt.EditableModel;
 
 /**
  * @author Konstantin Bulenkov
@@ -134,7 +135,7 @@ public abstract class ParameterTablePanel extends JPanel {
       TypeSelector myCurrentSelector;
       final JBComboBoxTableCellEditorComponent myEditorComponent = new JBComboBoxTableCellEditorComponent();
 
-      @javax.annotation.Nullable
+      @Nullable
       public Object getCellEditorValue() {
         return myEditorComponent.getEditorValue();
       }
@@ -162,7 +163,7 @@ public abstract class ParameterTablePanel extends JPanel {
 
 
     myTable.getColumnModel().getColumn(MyTableModel.PARAMETER_TYPE_COLUMN).setCellRenderer(new DefaultTableCellRenderer() {
-      private JBComboBoxLabel myLabel = new JBComboBoxLabel();
+      private consulo.ide.impl.idea.ui.components.JBComboBoxLabel myLabel = new consulo.ide.impl.idea.ui.components.JBComboBoxLabel();
 
       public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
         myLabel.setText(String.valueOf(value));

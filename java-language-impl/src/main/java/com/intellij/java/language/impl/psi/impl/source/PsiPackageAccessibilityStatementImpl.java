@@ -15,110 +15,86 @@
  */
 package com.intellij.java.language.impl.psi.impl.source;
 
-import static com.intellij.psi.SyntaxTraverser.psiTraverser;
-
-import java.util.List;
-
-import javax.annotation.Nonnull;
-
-import com.intellij.lang.ASTNode;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.java.language.psi.JavaElementVisitor;
-import com.intellij.psi.PsiElementVisitor;
-import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
-import com.intellij.java.language.psi.PsiJavaModuleReferenceElement;
-import com.intellij.java.language.psi.PsiNameHelper;
-import com.intellij.java.language.psi.PsiPackageAccessibilityStatement;
 import com.intellij.java.language.impl.psi.impl.java.stubs.JavaPackageAccessibilityStatementElementType;
 import com.intellij.java.language.impl.psi.impl.java.stubs.PsiPackageAccessibilityStatementStub;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.containers.ContainerUtil;
+import com.intellij.java.language.psi.*;
+import consulo.language.ast.ASTNode;
+import consulo.language.psi.PsiElementVisitor;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.util.lang.StringUtil;
 
-public class PsiPackageAccessibilityStatementImpl extends JavaStubPsiElement<PsiPackageAccessibilityStatementStub> implements PsiPackageAccessibilityStatement
-{
-	public PsiPackageAccessibilityStatementImpl(@Nonnull PsiPackageAccessibilityStatementStub stub)
-	{
-		super(stub, stub.getStubType());
-	}
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 
-	public PsiPackageAccessibilityStatementImpl(@Nonnull ASTNode node)
-	{
-		super(node);
-	}
+import static consulo.language.psi.SyntaxTraverser.psiTraverser;
 
-	@Nonnull
-	@Override
-	public Role getRole()
-	{
-		return JavaPackageAccessibilityStatementElementType.typeToRole(getElementType());
-	}
+public class PsiPackageAccessibilityStatementImpl extends JavaStubPsiElement<PsiPackageAccessibilityStatementStub> implements PsiPackageAccessibilityStatement {
+  public PsiPackageAccessibilityStatementImpl(@Nonnull PsiPackageAccessibilityStatementStub stub) {
+    super(stub, stub.getStubType());
+  }
 
-	@javax.annotation.Nullable
-	@Override
-	public PsiJavaCodeReferenceElement getPackageReference()
-	{
-		return PsiTreeUtil.getChildOfType(this, PsiJavaCodeReferenceElement.class);
-	}
+  public PsiPackageAccessibilityStatementImpl(@Nonnull ASTNode node) {
+    super(node);
+  }
 
-	@javax.annotation.Nullable
-	@Override
-	public String getPackageName()
-	{
-		PsiPackageAccessibilityStatementStub stub = getGreenStub();
-		if(stub != null)
-		{
-			return StringUtil.nullize(stub.getPackageName());
-		}
-		else
-		{
-			PsiJavaCodeReferenceElement ref = getPackageReference();
-			return ref != null ? PsiNameHelper.getQualifiedClassName(ref.getText(), true) : null;
-		}
-	}
+  @Nonnull
+  @Override
+  public Role getRole() {
+    return JavaPackageAccessibilityStatementElementType.typeToRole(getElementType());
+  }
 
-	@Nonnull
-	@Override
-	public Iterable<PsiJavaModuleReferenceElement> getModuleReferences()
-	{
-		return psiTraverser().children(this).filter(PsiJavaModuleReferenceElement.class);
-	}
+  @Nullable
+  @Override
+  public PsiJavaCodeReferenceElement getPackageReference() {
+    return PsiTreeUtil.getChildOfType(this, PsiJavaCodeReferenceElement.class);
+  }
 
-	@Nonnull
-	@Override
-	public List<String> getModuleNames()
-	{
-		PsiPackageAccessibilityStatementStub stub = getGreenStub();
-		if(stub != null)
-		{
-			return stub.getTargets();
-		}
-		else
-		{
-			List<String> targets = ContainerUtil.newSmartList();
-			for(PsiJavaModuleReferenceElement refElement : getModuleReferences())
-			{
-				targets.add(refElement.getReferenceText());
-			}
-			return targets;
-		}
-	}
+  @Nullable
+  @Override
+  public String getPackageName() {
+    PsiPackageAccessibilityStatementStub stub = getGreenStub();
+    if (stub != null) {
+      return StringUtil.nullize(stub.getPackageName());
+    } else {
+      PsiJavaCodeReferenceElement ref = getPackageReference();
+      return ref != null ? PsiNameHelper.getQualifiedClassName(ref.getText(), true) : null;
+    }
+  }
 
-	@Override
-	public void accept(@Nonnull PsiElementVisitor visitor)
-	{
-		if(visitor instanceof JavaElementVisitor)
-		{
-			((JavaElementVisitor) visitor).visitPackageAccessibilityStatement(this);
-		}
-		else
-		{
-			visitor.visitElement(this);
-		}
-	}
+  @Nonnull
+  @Override
+  public Iterable<PsiJavaModuleReferenceElement> getModuleReferences() {
+    return psiTraverser().children(this).filter(PsiJavaModuleReferenceElement.class);
+  }
 
-	@Override
-	public String toString()
-	{
-		return "PsiPackageAccessibilityStatement";
-	}
+  @Nonnull
+  @Override
+  public List<String> getModuleNames() {
+    PsiPackageAccessibilityStatementStub stub = getGreenStub();
+    if (stub != null) {
+      return stub.getTargets();
+    } else {
+      List<String> targets = new ArrayList<>();
+      for (PsiJavaModuleReferenceElement refElement : getModuleReferences()) {
+        targets.add(refElement.getReferenceText());
+      }
+      return targets;
+    }
+  }
+
+  @Override
+  public void accept(@Nonnull PsiElementVisitor visitor) {
+    if (visitor instanceof JavaElementVisitor) {
+      ((JavaElementVisitor) visitor).visitPackageAccessibilityStatement(this);
+    } else {
+      visitor.visitElement(this);
+    }
+  }
+
+  @Override
+  public String toString() {
+    return "PsiPackageAccessibilityStatement";
+  }
 }

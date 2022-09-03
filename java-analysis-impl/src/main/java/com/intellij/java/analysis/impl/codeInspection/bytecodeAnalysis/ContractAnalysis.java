@@ -3,7 +3,7 @@ package com.intellij.java.analysis.impl.codeInspection.bytecodeAnalysis;
 import com.intellij.java.analysis.impl.codeInspection.bytecodeAnalysis.Direction.ParamValueBasedDirection;
 import com.intellij.java.analysis.impl.codeInspection.bytecodeAnalysis.asm.ControlFlowGraph.Edge;
 import com.intellij.java.analysis.impl.codeInspection.bytecodeAnalysis.asm.RichControlFlow;
-import com.intellij.openapi.progress.ProgressManager;
+import consulo.application.progress.ProgressManager;
 import consulo.internal.org.objectweb.asm.Opcodes;
 import consulo.internal.org.objectweb.asm.tree.AbstractInsnNode;
 import consulo.internal.org.objectweb.asm.tree.JumpInsnNode;

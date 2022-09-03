@@ -31,37 +31,38 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
 import javax.annotation.Nullable;
-import com.intellij.codeInsight.CodeInsightSettings;
+
+import consulo.application.ui.wm.IdeFocusManager;
+import consulo.language.editor.CodeInsightSettings;
 import com.intellij.java.impl.codeInsight.JavaProjectCodeInsightSettings;
-import com.intellij.execution.util.ListTableWithButtons;
-import com.intellij.openapi.application.ApplicationBundle;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.ComboBox;
-import com.intellij.openapi.ui.ComboBoxTableRenderer;
-import com.intellij.openapi.wm.IdeFocusManager;
-import com.intellij.ui.DocumentAdapter;
-import com.intellij.ui.GuiUtils;
-import com.intellij.ui.JBColor;
-import com.intellij.ui.ScrollingUtil;
-import com.intellij.util.ArrayUtil;
-import com.intellij.util.containers.ContainerUtil;
-import com.intellij.util.ui.ColumnInfo;
-import com.intellij.util.ui.ListTableModel;
-import com.intellij.util.ui.UIUtil;
+import consulo.execution.ui.awt.ListTableWithButtons;
+import consulo.application.ApplicationBundle;
+import consulo.project.Project;
+import consulo.ui.ex.awt.ComboBox;
+import consulo.ide.impl.idea.openapi.ui.ComboBoxTableRenderer;
+import consulo.ui.ex.awt.event.DocumentAdapter;
+import consulo.ui.ex.awt.internal.GuiUtils;
+import consulo.ui.ex.JBColor;
+import consulo.ui.ex.awt.ScrollingUtil;
+import consulo.util.collection.ArrayUtil;
+import consulo.util.collection.ContainerUtil;
+import consulo.ui.ex.awt.ColumnInfo;
+import consulo.ui.ex.awt.table.ListTableModel;
+import consulo.ui.ex.awt.UIUtil;
 
 class ExcludeTable extends ListTableWithButtons<ExcludeTable.Item>
 {
 	private static final Pattern ourPackagePattern = Pattern.compile("([\\w*]+\\.)*[\\w*]+");
 	private static final ColumnInfo<Item, String> NAME_COLUMN = new ColumnInfo<Item, String>("Class/package/member qualified name mask")
 	{
-		@javax.annotation.Nullable
+		@Nullable
 		@Override
 		public String valueOf(Item pair)
 		{
 			return pair.exclude;
 		}
 
-		@javax.annotation.Nullable
+		@Nullable
 		@Override
 		public TableCellEditor getEditor(Item pair)
 		{
@@ -77,7 +78,7 @@ class ExcludeTable extends ListTableWithButtons<ExcludeTable.Item>
 			return new DefaultCellEditor(field);
 		}
 
-		@javax.annotation.Nullable
+		@Nullable
 		@Override
 		public TableCellRenderer getRenderer(Item pair)
 		{
@@ -118,14 +119,14 @@ class ExcludeTable extends ListTableWithButtons<ExcludeTable.Item>
 			return pair.scope;
 		}
 
-		@javax.annotation.Nullable
+		@Nullable
 		@Override
 		public TableCellRenderer getRenderer(Item pair)
 		{
 			return new ComboBoxTableRenderer<>(ExclusionScope.values());
 		}
 
-		@javax.annotation.Nullable
+		@Nullable
 		@Override
 		public TableCellEditor getEditor(Item pair)
 		{
@@ -144,7 +145,7 @@ class ExcludeTable extends ListTableWithButtons<ExcludeTable.Item>
 			pair.scope = value;
 		}
 
-		@javax.annotation.Nullable
+		@Nullable
 		@Override
 		public String getMaxStringValue()
 		{
@@ -215,7 +216,7 @@ class ExcludeTable extends ListTableWithButtons<ExcludeTable.Item>
 
 	void reset()
 	{
-		java.util.List<Item> rows = ContainerUtil.newArrayList();
+		List<Item> rows = ContainerUtil.newArrayList();
 		for(String s : CodeInsightSettings.getInstance().EXCLUDED_PACKAGES)
 		{
 			rows.add(new Item(s, ExclusionScope.IDE));

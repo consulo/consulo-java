@@ -15,17 +15,16 @@
  */
 package com.intellij.java.language.projectRoots;
 
-import com.intellij.execution.configurations.GeneralCommandLine;
-import com.intellij.openapi.projectRoots.JavaSdkType;
-import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.projectRoots.SdkType;
+import consulo.content.bundle.Sdk;
+import consulo.content.bundle.SdkType;
+import consulo.process.cmd.GeneralCommandLine;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public abstract class JavaSdk extends SdkType implements JavaSdkType {
-  public JavaSdk(@NonNls String name) {
+  public JavaSdk(String name) {
     super(name);
   }
 

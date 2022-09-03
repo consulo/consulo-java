@@ -15,17 +15,18 @@
  */
 package com.intellij.java.impl.codeInsight.completion;
 
-import com.intellij.codeInsight.completion.CompletionUtil;
-import com.intellij.codeInsight.daemon.ImplicitUsageProvider;
+import consulo.language.editor.impl.internal.completion.CompletionUtil;
+import consulo.language.editor.ImplicitUsageProvider;
 import com.intellij.java.language.impl.codeInsight.ExpressionUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.infos.CandidateInfo;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.filters.ElementFilter;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.filter.ElementFilter;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -142,7 +143,7 @@ class CheckInitialized implements ElementFilter
 	}
 
 	@Override
-	public boolean isAcceptable(Object element, @javax.annotation.Nullable PsiElement context)
+	public boolean isAcceptable(Object element, @Nullable PsiElement context)
 	{
 		if(element instanceof CandidateInfo)
 		{

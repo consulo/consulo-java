@@ -25,13 +25,12 @@
 
 package com.intellij.java.analysis.impl.codeInspection.deadCode;
 
-import com.intellij.analysis.AnalysisScope;
-import com.intellij.codeInsight.daemon.GroupNames;
-import com.intellij.codeInsight.daemon.ImplicitUsageProvider;
+import consulo.language.editor.scope.AnalysisScope;
+import consulo.ide.impl.idea.codeInsight.daemon.GroupNames;
+import consulo.language.editor.ImplicitUsageProvider;
 import com.intellij.java.language.impl.codeInsight.daemon.impl.analysis.HighlightUtilBase;
-import com.intellij.codeInspection.*;
-import com.intellij.codeInspection.ex.GlobalInspectionContextBase;
-import com.intellij.codeInspection.ex.JobDescriptor;
+import consulo.ide.impl.idea.codeInspection.ex.GlobalInspectionContextBase;
+import consulo.language.editor.inspection.scheme.JobDescriptor;
 import com.intellij.codeInspection.reference.*;
 import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.java.analysis.codeInspection.GlobalJavaInspectionContext;
@@ -42,22 +41,22 @@ import com.intellij.java.analysis.impl.codeInspection.reference.RefJavaElementIm
 import com.intellij.java.analysis.impl.codeInspection.unusedSymbol.UnusedSymbolLocalInspectionBase;
 import com.intellij.java.analysis.impl.codeInspection.util.RefFilter;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.extensions.Extensions;
-import com.intellij.openapi.progress.ProgressManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.InvalidDataException;
-import com.intellij.openapi.util.WriteExternalException;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.application.ApplicationManager;
+import consulo.component.extension.Extensions;
+import consulo.application.progress.ProgressManager;
+import consulo.project.Project;
+import consulo.util.xml.serializer.InvalidDataException;
+import consulo.util.xml.serializer.WriteExternalException;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.java.language.impl.psi.impl.PsiClassImplUtil;
-import com.intellij.psi.search.DelegatingGlobalSearchScope;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.search.PsiNonJavaFileReferenceProcessor;
-import com.intellij.psi.search.PsiSearchHelper;
-import com.intellij.psi.search.searches.ReferencesSearch;
+import consulo.language.psi.scope.DelegatingGlobalSearchScope;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.search.PsiNonJavaFileReferenceProcessor;
+import consulo.language.psi.search.PsiSearchHelper;
+import consulo.language.psi.search.ReferencesSearch;
 import com.intellij.java.language.psi.util.PsiMethodUtil;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.util.collection.ContainerUtil;
 import consulo.java.analysis.codeInspection.JavaExtensionPoints;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.logging.Logger;
@@ -641,7 +640,7 @@ public class UnusedDeclarationInspectionBase extends GlobalInspectionTool {
     return getContext().getExtension(GlobalJavaInspectionContext.CONTEXT);
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   @Override
   public JobDescriptor[] getAdditionalJobs() {
     return new JobDescriptor[]{

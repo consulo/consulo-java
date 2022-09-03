@@ -17,10 +17,10 @@
 package com.intellij.navigation;
 
 
-import com.intellij.codeInsight.navigation.GotoImplementationHandler;
+import consulo.ide.impl.idea.codeInsight.navigation.GotoImplementationHandler;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.testFramework.fixtures.JavaCodeInsightFixtureTestCase;
 

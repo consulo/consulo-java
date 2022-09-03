@@ -15,17 +15,14 @@
  */
 package com.intellij.java.impl.codeInsight.generation;
 
+import com.intellij.java.language.codeInsight.MemberImplementorExplorer;
 import com.intellij.java.language.impl.codeInsight.generation.OverrideImplementExploreUtil;
 import jakarta.inject.Singleton;
 
-import com.intellij.java.language.codeInsight.MemberImplementorExplorer;
-
 @Singleton
-public class MemberImplementorExplorersProviderImpl implements OverrideImplementExploreUtil.MemberImplementorExplorersProvider
-{
-	@Override
-	public MemberImplementorExplorer[] getExplorers()
-	{
-		return OverrideImplementUtil.getImplementors();
-	}
+public class MemberImplementorExplorersProviderImpl implements OverrideImplementExploreUtil.MemberImplementorExplorersProvider {
+  @Override
+  public MemberImplementorExplorer[] getExplorers() {
+    return OverrideImplementUtil.getImplementors();
+  }
 }

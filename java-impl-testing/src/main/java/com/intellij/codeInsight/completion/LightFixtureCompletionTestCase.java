@@ -5,11 +5,11 @@ import java.util.List;
 import javax.annotation.Nonnull;
 
 import org.junit.Assert;
-import com.intellij.codeInsight.lookup.LookupElement;
-import com.intellij.codeInsight.lookup.LookupEvent;
-import com.intellij.codeInsight.lookup.LookupManager;
-import com.intellij.codeInsight.lookup.impl.LookupImpl;
-import com.intellij.openapi.command.WriteCommandAction;
+import consulo.language.editor.completion.lookup.LookupElement;
+import consulo.language.editor.completion.lookup.event.LookupEvent;
+import consulo.language.editor.completion.lookup.LookupManager;
+import consulo.ide.impl.idea.codeInsight.lookup.impl.LookupImpl;
+import consulo.language.editor.WriteCommandAction;
 import com.intellij.testFramework.TestModuleDescriptor;
 import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
 

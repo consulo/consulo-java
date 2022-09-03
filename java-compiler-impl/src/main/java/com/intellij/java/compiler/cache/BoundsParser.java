@@ -17,7 +17,7 @@ package com.intellij.java.compiler.cache;
 
 import com.intellij.java.compiler.classParsing.SignatureParser;
 import com.intellij.java.compiler.classParsing.SignatureParsingException;
-import com.intellij.util.ArrayUtil;
+import consulo.util.collection.ArrayUtil;
 
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;

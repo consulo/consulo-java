@@ -18,8 +18,8 @@ package com.intellij.java.impl.codeInspection.deadCode;
 import javax.annotation.Nonnull;
 
 import com.intellij.codeInspection.InspectionEP;
-import com.intellij.codeInspection.InspectionProfileEntry;
-import com.intellij.codeInspection.InspectionsBundle;
+import consulo.language.editor.inspection.scheme.InspectionProfileEntry;
+import consulo.language.editor.inspection.InspectionsBundle;
 
 public class DummyEntryPointsEP extends InspectionEP {
   public DummyEntryPointsEP() {

@@ -15,9 +15,9 @@
  */
 package com.intellij.java.impl.packageDependencies.ui;
 
-import com.intellij.openapi.project.Project;
-import com.intellij.packageDependencies.ui.PackageDependenciesNode;
-import com.intellij.psi.PsiFile;
+import consulo.project.Project;
+import consulo.ide.impl.idea.packageDependencies.ui.PackageDependenciesNode;
+import consulo.language.psi.PsiFile;
 import consulo.ui.image.Image;
 
 import java.util.Set;

@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NonNls;
 import com.intellij.JavaTestUtil;
 import com.intellij.codeInsight.daemon.quickFix.LightQuickFixTestCase;
 import com.intellij.java.impl.codeInspection.sameParameterValue.SameParameterValueInspection;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 
 public abstract class InlineSameParameterValueTest extends LightQuickFixTestCase {
   @Nonnull

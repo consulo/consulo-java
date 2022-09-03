@@ -15,7 +15,7 @@
  */
 package com.intellij.java.language.impl.psi.controlFlow;
 
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import javax.annotation.Nonnull;
 
 import java.util.List;

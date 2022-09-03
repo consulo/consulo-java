@@ -16,24 +16,25 @@
 package com.intellij.java.impl.ipp.interfacetoclass;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.application.AccessToken;
-import com.intellij.openapi.application.WriteAction;
-import com.intellij.openapi.project.Project;
+import consulo.application.AccessToken;
+import consulo.application.WriteAction;
+import consulo.project.Project;
 import com.intellij.psi.*;
-import com.intellij.psi.search.SearchScope;
+import consulo.content.scope.SearchScope;
 import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.refactoring.ui.ConflictsDialog;
-import com.intellij.refactoring.util.CommonRefactoringUtil;
-import com.intellij.refactoring.util.RefactoringUIUtil;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.Processor;
-import com.intellij.util.Query;
-import com.intellij.util.containers.MultiMap;
+import consulo.language.editor.refactoring.ui.ConflictsDialog;
+import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
+import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.application.util.function.Processor;
+import consulo.application.util.query.Query;
+import consulo.util.collection.MultiMap;
 import com.siyeh.IntentionPowerPackBundle;
 import com.intellij.java.impl.ipp.base.Intention;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.Collection;
 
@@ -196,7 +197,7 @@ public class ConvertInterfaceToClassIntention extends Intention {
     return true;
   }
 
-  private static void moveReference(@Nonnull PsiReferenceList source, @javax.annotation.Nullable PsiReferenceList target,
+  private static void moveReference(@Nonnull PsiReferenceList source, @Nullable PsiReferenceList target,
                                     @Nonnull PsiJavaCodeReferenceElement reference) throws IncorrectOperationException {
     final PsiJavaCodeReferenceElement[] implementsReferences = source.getReferenceElements();
     final String qualifiedName = reference.getQualifiedName();

@@ -17,14 +17,14 @@ package com.intellij.spellchecker;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.codeInsight.daemon.HighlightDisplayKey;
+import consulo.language.editor.rawHighlight.HighlightDisplayKey;
 import com.intellij.java.analysis.codeInspection.BatchSuppressManager;
 import com.intellij.java.analysis.codeInspection.SuppressManager;
-import com.intellij.codeInspection.SuppressQuickFix;
-import com.intellij.psi.PsiElement;
+import consulo.language.editor.inspection.SuppressQuickFix;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiLiteralExpression;
 import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.psi.PsiNamedElement;
+import consulo.language.psi.PsiNamedElement;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.spellchecker.tokenizer.SuppressibleSpellcheckingStrategy;
 import com.intellij.spellchecker.tokenizer.Tokenizer;

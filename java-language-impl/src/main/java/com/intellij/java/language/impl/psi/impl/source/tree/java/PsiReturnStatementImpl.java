@@ -17,17 +17,17 @@ package com.intellij.java.language.impl.psi.impl.source.tree.java;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.lang.ASTNode;
+import consulo.language.ast.ASTNode;
 import com.intellij.java.language.psi.JavaElementVisitor;
-import com.intellij.psi.PsiElementVisitor;
+import consulo.language.psi.PsiElementVisitor;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiReturnStatement;
 import com.intellij.java.language.impl.psi.impl.source.tree.ChildRole;
-import com.intellij.psi.impl.source.tree.CompositePsiElement;
-import com.intellij.psi.impl.source.tree.TreeUtil;
+import consulo.language.impl.psi.CompositePsiElement;
+import consulo.language.impl.ast.TreeUtil;
 import com.intellij.java.language.impl.psi.impl.source.Constants;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.tree.ChildRoleBase;
+import consulo.language.ast.IElementType;
+import consulo.language.ast.ChildRoleBase;
 import consulo.logging.Logger;
 
 public class PsiReturnStatementImpl extends CompositePsiElement implements PsiReturnStatement, Constants {

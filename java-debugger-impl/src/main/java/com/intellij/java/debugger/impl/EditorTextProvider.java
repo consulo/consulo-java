@@ -16,10 +16,12 @@
 package com.intellij.java.debugger.impl;
 
 import com.intellij.java.debugger.engine.evaluation.TextWithImports;
-import com.intellij.lang.LanguageExtension;
-import com.intellij.openapi.util.Pair;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.PsiElement;
+import consulo.language.extension.LanguageExtension;
+import consulo.util.lang.Pair;
+import consulo.document.util.TextRange;
+import consulo.language.psi.PsiElement;
+
+import javax.annotation.Nullable;
 
 /**
  * Provides text in the editor for Evaluate expression action
@@ -28,9 +30,9 @@ import com.intellij.psi.PsiElement;
 public interface EditorTextProvider {
   LanguageExtension<EditorTextProvider> EP = new LanguageExtension<EditorTextProvider>("consulo.java.debuggerEditorTextProvider");
 
-  @javax.annotation.Nullable
+  @Nullable
   TextWithImports getEditorText(PsiElement elementAtCaret);
 
-  @javax.annotation.Nullable
+  @Nullable
   Pair<PsiElement, TextRange> findExpression(PsiElement elementAtCaret, boolean allowMethodCalls);
 }

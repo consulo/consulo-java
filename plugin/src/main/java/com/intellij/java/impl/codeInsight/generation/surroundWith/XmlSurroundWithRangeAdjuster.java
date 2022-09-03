@@ -15,15 +15,15 @@
  */
 package com.intellij.java.impl.codeInsight.generation.surroundWith;
 
-import com.intellij.codeInsight.generation.surroundWith.SurroundWithRangeAdjuster;
-import com.intellij.lang.Language;
+import consulo.language.editor.surroundWith.SurroundWithRangeAdjuster;
+import consulo.language.Language;
 import com.intellij.lang.html.HTMLLanguage;
 import com.intellij.lang.xhtml.XHTMLLanguage;
 import com.intellij.lang.xml.XMLLanguage;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiWhiteSpace;
+import consulo.document.util.TextRange;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiWhiteSpace;
 
 /**
  * @author yole

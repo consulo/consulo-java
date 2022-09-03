@@ -17,10 +17,10 @@ package com.intellij.java.impl.refactoring.typeMigration.ui;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.openapi.project.Project;
-import com.intellij.packageDependencies.ui.UsagesPanel;
-import com.intellij.psi.PsiElement;
-import com.intellij.usageView.UsageInfo;
+import consulo.project.Project;
+import consulo.ide.impl.idea.packageDependencies.ui.UsagesPanel;
+import consulo.language.psi.PsiElement;
+import consulo.usage.UsageInfo;
 
 /**
  * @author anna

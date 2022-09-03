@@ -18,11 +18,11 @@ package com.intellij.java.language.patterns;
 import com.intellij.java.language.psi.PsiMember;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiStatement;
-import com.intellij.patterns.PatternCondition;
-import com.intellij.patterns.StandardPatterns;
-import com.intellij.patterns.StringPattern;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.ProcessingContext;
+import consulo.language.pattern.PatternCondition;
+import consulo.language.pattern.StandardPatterns;
+import consulo.language.pattern.StringPattern;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.ProcessingContext;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;

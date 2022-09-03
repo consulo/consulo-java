@@ -1,14 +1,13 @@
 package com.intellij.psi.impl.source.tree.java;
 
-import com.intellij.codeInsight.CodeInsightUtilBase;
+import consulo.ide.impl.idea.codeInsight.CodeInsightUtilBase;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.command.CommandProcessor;
-import com.intellij.psi.*;
+import consulo.application.ApplicationManager;
+import consulo.undoRedo.CommandProcessor;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.java.language.psi.javadoc.PsiDocTag;
 import com.intellij.testFramework.LightIdeaTestCase;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
 
 /**
  *  @author dsl

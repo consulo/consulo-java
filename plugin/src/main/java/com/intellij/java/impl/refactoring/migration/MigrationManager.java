@@ -16,8 +16,9 @@
 package com.intellij.java.impl.refactoring.migration;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-import com.intellij.openapi.project.Project;
+import consulo.project.Project;
 
 public class MigrationManager
 {
@@ -45,7 +46,7 @@ public class MigrationManager
 		new MigrationProcessor(myProject, migrationMap, migrationDialog.getScope()).run();
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public MigrationMap findMigrationMap(@Nonnull String name)
 	{
 		return myMigrationMapSet.findMigrationMap(name);

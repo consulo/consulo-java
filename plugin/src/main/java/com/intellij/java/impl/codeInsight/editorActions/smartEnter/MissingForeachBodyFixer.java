@@ -15,15 +15,15 @@
  */
 package com.intellij.java.impl.codeInsight.editorActions.smartEnter;
 
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.Editor;
+import consulo.document.Document;
+import consulo.codeEditor.Editor;
 import com.intellij.java.language.psi.PsiBlockStatement;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiForeachStatement;
 import com.intellij.java.language.psi.PsiParameter;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
 
 /**
  * @author Maxim.Mossienko

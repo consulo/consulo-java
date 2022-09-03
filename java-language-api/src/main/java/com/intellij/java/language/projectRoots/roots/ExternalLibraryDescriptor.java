@@ -61,7 +61,7 @@ public abstract class ExternalLibraryDescriptor
 		return myMinVersion;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public String getMaxVersion()
 	{
 		return myMaxVersion;

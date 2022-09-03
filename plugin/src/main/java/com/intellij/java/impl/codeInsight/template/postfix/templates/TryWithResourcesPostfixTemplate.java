@@ -15,10 +15,10 @@
  */
 package com.intellij.java.impl.codeInsight.template.postfix.templates;
 
-import com.intellij.codeInsight.template.Template;
-import com.intellij.codeInsight.template.TemplateManager;
-import com.intellij.codeInsight.template.impl.MacroCallNode;
-import com.intellij.codeInsight.template.postfix.templates.PostfixTemplate;
+import consulo.language.editor.template.Template;
+import consulo.language.editor.template.TemplateManager;
+import consulo.language.editor.template.macro.MacroCallNode;
+import consulo.language.editor.postfixTemplate.PostfixTemplate;
 import com.intellij.java.impl.codeInsight.intention.impl.TypeExpression;
 import com.intellij.java.impl.codeInsight.template.impl.TextExpression;
 import com.intellij.java.impl.codeInsight.template.macro.SuggestVariableNameMacro;
@@ -27,10 +27,10 @@ import com.intellij.java.language.impl.codeInsight.ExceptionUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiElement;
+import consulo.document.Document;
+import consulo.codeEditor.Editor;
+import consulo.project.Project;
+import consulo.language.psi.PsiElement;
 import com.intellij.psi.search.ProjectScope;
 import consulo.java.language.module.util.JavaClassNames;
 

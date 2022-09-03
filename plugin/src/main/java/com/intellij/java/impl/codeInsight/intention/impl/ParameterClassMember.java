@@ -17,15 +17,15 @@ package com.intellij.java.impl.codeInsight.intention.impl;
 
 import javax.swing.JTree;
 
-import com.intellij.codeInsight.generation.ClassMember;
-import com.intellij.codeInsight.generation.MemberChooserObject;
+import consulo.ide.impl.idea.codeInsight.generation.ClassMember;
+import consulo.ide.impl.idea.codeInsight.generation.MemberChooserObject;
 import com.intellij.java.impl.codeInsight.generation.PsiMethodMember;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiParameter;
-import com.intellij.ui.SimpleColoredComponent;
-import com.intellij.ui.SimpleTextAttributes;
-import com.intellij.ui.speedSearch.SpeedSearchUtil;
-import consulo.ide.IconDescriptorUpdaters;
+import consulo.ui.ex.awt.SimpleColoredComponent;
+import consulo.ui.ex.SimpleTextAttributes;
+import consulo.ui.ex.awt.speedSearch.SpeedSearchUtil;
+import consulo.language.icon.IconDescriptorUpdaters;
 
 /**
 * User: anna

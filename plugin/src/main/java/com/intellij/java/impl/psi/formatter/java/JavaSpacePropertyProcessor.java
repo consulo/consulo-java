@@ -1,44 +1,44 @@
 // Copyright 2000-2018 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.impl.psi.formatter.java;
 
-import com.intellij.formatting.Block;
-import com.intellij.formatting.Spacing;
-import com.intellij.formatting.blocks.CStyleCommentBlock;
-import com.intellij.formatting.blocks.TextLineBlock;
+import consulo.language.codeStyle.Block;
+import consulo.language.codeStyle.Spacing;
+import consulo.ide.impl.idea.formatting.blocks.CStyleCommentBlock;
+import consulo.ide.impl.idea.formatting.blocks.TextLineBlock;
 import com.intellij.java.impl.psi.impl.source.tree.StdTokenSets;
 import com.intellij.java.language.impl.psi.impl.source.tree.ChildRole;
 import com.intellij.java.language.impl.psi.impl.source.tree.ElementType;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaDocElementType;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
 import com.intellij.java.language.psi.*;
-import com.intellij.lang.ASTNode;
+import consulo.language.ast.ASTNode;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.impl.lexer.JavaLexer;
-import com.intellij.lexer.Lexer;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.openapi.util.Pair;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.language.lexer.Lexer;
+import consulo.application.ApplicationManager;
+import consulo.util.lang.Comparing;
+import consulo.util.lang.Pair;
+import consulo.document.util.TextRange;
+import consulo.util.lang.StringUtil;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.psi.*;
-import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
+import consulo.language.codeStyle.CommonCodeStyleSettings;
 import com.intellij.java.impl.psi.codeStyle.JavaCodeStyleSettings;
-import com.intellij.psi.formatter.FormatterUtil;
-import com.intellij.psi.impl.source.SourceTreeToPsiMap;
+import consulo.language.codeStyle.FormatterUtil;
+import consulo.language.impl.psi.SourceTreeToPsiMap;
 import com.intellij.java.impl.psi.impl.source.codeStyle.ImportHelper;
 import com.intellij.java.language.impl.psi.impl.source.javadoc.PsiDocMethodOrFieldRef;
 import com.intellij.psi.impl.source.tree.*;
 import com.intellij.java.language.impl.psi.impl.source.tree.java.EnumConstantElement;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.java.language.psi.javadoc.PsiDocTag;
-import com.intellij.psi.tree.ChildRoleBase;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.tree.TokenSet;
+import consulo.language.ast.ChildRoleBase;
+import consulo.language.ast.IElementType;
+import consulo.language.ast.TokenSet;
 import com.intellij.java.language.psi.tree.java.IJavaElementType;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.util.collection.ContainerUtil;
 import consulo.logging.Logger;
 
 import javax.annotation.Nonnull;
@@ -46,8 +46,8 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
 
-import static com.intellij.openapi.util.Pair.pair;
-import static com.intellij.psi.codeStyle.CommonCodeStyleSettings.*;
+import static consulo.util.lang.Pair.pair;
+import static consulo.language.codeStyle.CommonCodeStyleSettings.*;
 
 public class JavaSpacePropertyProcessor extends JavaElementVisitor
 {

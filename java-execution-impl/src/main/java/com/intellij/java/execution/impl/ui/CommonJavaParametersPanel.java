@@ -15,11 +15,11 @@
  */
 package com.intellij.java.execution.impl.ui;
 
-import com.intellij.execution.ExecutionBundle;
-import com.intellij.execution.ui.CommonProgramParametersPanel;
+import consulo.execution.ExecutionBundle;
+import consulo.execution.ui.awt.CommonProgramParametersPanel;
 import com.intellij.java.execution.CommonJavaRunConfigurationParameters;
-import com.intellij.openapi.ui.LabeledComponent;
-import com.intellij.ui.RawCommandLineEditor;
+import consulo.execution.ui.awt.RawCommandLineEditor;
+import consulo.ui.ex.awt.LabeledComponent;
 
 import javax.swing.*;
 import java.awt.*;

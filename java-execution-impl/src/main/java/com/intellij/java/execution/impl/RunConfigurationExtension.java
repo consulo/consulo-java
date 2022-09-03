@@ -22,22 +22,25 @@
  */
 package com.intellij.java.execution.impl;
 
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ExtensionAPI;
+import consulo.component.extension.ExtensionPointName;
+import consulo.component.extension.Extensions;
+import consulo.execution.configuration.RunConfigurationBase;
+import consulo.execution.configuration.RunConfigurationExtensionBase;
+import consulo.execution.configuration.RunnerSettings;
+import consulo.java.execution.configurations.OwnJavaParameters;
+import consulo.language.editor.refactoring.event.RefactoringElementListener;
+import consulo.language.psi.PsiElement;
+import consulo.process.ExecutionException;
+import consulo.process.cmd.GeneralCommandLine;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.intellij.execution.ExecutionException;
-import com.intellij.execution.configuration.RunConfigurationExtensionBase;
-import com.intellij.execution.configurations.GeneralCommandLine;
-import com.intellij.execution.configurations.RunConfigurationBase;
-import com.intellij.execution.configurations.RunnerSettings;
-import com.intellij.openapi.extensions.ExtensionPointName;
-import com.intellij.openapi.extensions.Extensions;
-import com.intellij.psi.PsiElement;
-import com.intellij.refactoring.listeners.RefactoringElementListener;
-import consulo.java.execution.configurations.OwnJavaParameters;
-
-public abstract class RunConfigurationExtension extends RunConfigurationExtensionBase<RunConfigurationBase>{
-  public static final ExtensionPointName<RunConfigurationExtension> EP_NAME = new ExtensionPointName<>("consulo.java.runConfigurationExtension");
+@ExtensionAPI(ComponentScope.APPLICATION)
+public abstract class RunConfigurationExtension extends RunConfigurationExtensionBase<RunConfigurationBase> {
+  public static final ExtensionPointName<RunConfigurationExtension> EP_NAME = new ExtensionPointName<>(RunConfigurationExtension.class);
 
   public abstract <T extends RunConfigurationBase > void updateJavaParameters(final T configuration, final OwnJavaParameters params, RunnerSettings runnerSettings) throws ExecutionException;
 

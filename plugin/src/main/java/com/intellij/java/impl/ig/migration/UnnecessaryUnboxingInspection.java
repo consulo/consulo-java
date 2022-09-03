@@ -19,15 +19,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.swing.JComponent;
 
 import com.intellij.java.language.psi.*;
 import org.jetbrains.annotations.NonNls;
-import com.intellij.codeInspection.ProblemDescriptor;
-import com.intellij.codeInspection.ui.SingleCheckboxOptionsPanel;
-import com.intellij.openapi.project.Project;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
+import consulo.project.Project;
 import com.intellij.psi.*;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
@@ -81,7 +82,7 @@ public class UnnecessaryUnboxingInspection extends BaseInspection
 		return true;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	@Override
 	public JComponent createOptionsPanel()
 	{

@@ -16,14 +16,14 @@
 
 package com.intellij.java.impl.psi.impl.beanProperties;
 
-import com.intellij.icons.AllIcons;
+import consulo.application.AllIcons;
 import com.intellij.ide.presentation.Presentation;
 import com.intellij.java.impl.refactoring.rename.BeanPropertyRenameHandler;
 import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.psi.PsiNamedElement;
+import consulo.language.psi.PsiNamedElement;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.util.PropertyUtil;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
 import consulo.ui.image.Image;
 
 import javax.annotation.Nonnull;

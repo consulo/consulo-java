@@ -14,22 +14,22 @@ import java.util.Map;
 
 import com.intellij.java.impl.slicer.*;
 import org.jetbrains.annotations.NonNls;
-import com.intellij.analysis.AnalysisScope;
+import consulo.language.editor.scope.AnalysisScope;
 import com.intellij.codeInsight.daemon.LightDaemonAnalyzerTestCase;
-import com.intellij.codeInsight.daemon.impl.HighlightInfo;
-import com.intellij.ide.util.treeView.AbstractTreeNode;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.language.editor.rawHighlight.HighlightInfo;
+import consulo.project.ui.view.tree.AbstractTreeNode;
+import consulo.util.lang.StringUtil;
 import com.intellij.openapi.wm.impl.ToolWindowHeadlessManagerImpl;
-import com.intellij.psi.PsiDocumentManager;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiDocumentManager;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiLiteral;
 import com.intellij.java.language.psi.PsiLiteralExpression;
 import com.intellij.java.language.psi.PsiReferenceExpression;
 import com.intellij.slicer.*;
-import com.intellij.util.ArrayUtil;
-import com.intellij.util.Function;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.util.collection.ArrayUtil;
+import consulo.ide.impl.idea.util.Function;
+import consulo.util.collection.ContainerUtil;
 import consulo.disposer.Disposer;
 
 /**

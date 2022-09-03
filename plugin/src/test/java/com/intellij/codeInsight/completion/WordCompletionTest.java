@@ -4,14 +4,14 @@ import javax.annotation.Nonnull;
 
 import com.intellij.JavaTestUtil;
 import com.intellij.java.language.JavaLanguage;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiLiteralExpression;
-import com.intellij.psi.PsiReference;
-import com.intellij.psi.PsiReferenceBase;
-import com.intellij.psi.PsiReferenceProvider;
-import com.intellij.psi.impl.source.resolve.reference.PsiReferenceRegistrarImpl;
-import com.intellij.psi.impl.source.resolve.reference.ReferenceProvidersRegistry;
-import com.intellij.util.ProcessingContext;
+import consulo.language.psi.PsiReference;
+import consulo.language.psi.PsiReferenceBase;
+import consulo.language.psi.PsiReferenceProvider;
+import consulo.ide.impl.psi.impl.source.resolve.reference.PsiReferenceRegistrarImpl;
+import consulo.language.psi.ReferenceProvidersRegistry;
+import consulo.language.util.ProcessingContext;
 
 /**
  * @author Maxim.Mossienko

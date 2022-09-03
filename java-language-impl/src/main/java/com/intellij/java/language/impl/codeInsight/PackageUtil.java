@@ -15,35 +15,35 @@
  */
 package com.intellij.java.language.impl.codeInsight;
 
-import com.intellij.ide.IdeBundle;
-import com.intellij.ide.util.DirectoryChooserUtil;
 import com.intellij.java.language.psi.JavaDirectoryService;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiJavaPackage;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.application.WriteAction;
-import com.intellij.openapi.command.CommandProcessor;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleUtil;
-import com.intellij.openapi.options.ShowSettingsUtil;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.project.ProjectBundle;
-import com.intellij.openapi.roots.ModuleRootManager;
-import com.intellij.openapi.roots.OrderEnumerator;
-import com.intellij.openapi.roots.ProjectFileIndex;
-import com.intellij.openapi.roots.ProjectRootManager;
-import com.intellij.openapi.roots.impl.DirectoryIndex;
-import com.intellij.openapi.ui.Messages;
-import com.intellij.openapi.util.Computable;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiDirectory;
-import com.intellij.psi.PsiManager;
-import com.intellij.psi.impl.PsiManagerImpl;
-import com.intellij.psi.impl.file.impl.FileManager;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.Query;
+import consulo.application.ApplicationManager;
+import consulo.application.WriteAction;
+import consulo.application.util.function.Computable;
+import consulo.application.util.query.Query;
+import consulo.ide.IdeBundle;
+import consulo.ide.setting.ShowSettingsUtil;
+import consulo.ide.util.DirectoryChooserUtil;
+import consulo.language.impl.internal.file.FileManager;
+import consulo.language.impl.internal.psi.PsiManagerImpl;
+import consulo.language.psi.PsiDirectory;
+import consulo.language.psi.PsiManager;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.util.IncorrectOperationException;
+import consulo.language.util.ModuleUtilCore;
 import consulo.logging.Logger;
+import consulo.module.Module;
+import consulo.module.content.DirectoryIndex;
+import consulo.module.content.ModuleRootManager;
+import consulo.module.content.ProjectFileIndex;
+import consulo.module.content.ProjectRootManager;
+import consulo.module.content.layer.OrderEnumerator;
+import consulo.project.Project;
+import consulo.project.ProjectBundle;
+import consulo.ui.ex.awt.Messages;
+import consulo.undoRedo.CommandProcessor;
+import consulo.virtualFileSystem.VirtualFile;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -174,7 +174,7 @@ public class PackageUtil {
   }
 
   @Nullable
-  public static PsiDirectory findOrCreateDirectoryForPackage(@Nonnull Module module, String packageName, @javax.annotation.Nullable PsiDirectory baseDir, boolean askUserToCreate) throws IncorrectOperationException {
+  public static PsiDirectory findOrCreateDirectoryForPackage(@Nonnull Module module, String packageName, @Nullable PsiDirectory baseDir, boolean askUserToCreate) throws IncorrectOperationException {
     return findOrCreateDirectoryForPackage(module, packageName, baseDir, askUserToCreate, false);
   }
 
@@ -300,7 +300,7 @@ public class PackageUtil {
 
   private static PsiDirectory getWritableModuleDirectory(@Nonnull Query<VirtualFile> vFiles, @Nonnull Module module, PsiManager manager) {
     for (VirtualFile vFile : vFiles) {
-      if (ModuleUtil.findModuleForFile(vFile, module.getProject()) != module) {
+      if (ModuleUtilCore.findModuleForFile(vFile, module.getProject()) != module) {
         continue;
       }
       PsiDirectory directory = manager.findDirectory(vFile);

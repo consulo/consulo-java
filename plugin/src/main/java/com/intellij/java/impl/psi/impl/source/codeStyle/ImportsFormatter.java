@@ -15,19 +15,19 @@
  */
 package com.intellij.java.impl.psi.impl.source.codeStyle;
 
-import com.intellij.lang.ASTNode;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
+import consulo.language.ast.ASTNode;
+import consulo.document.util.TextRange;
+import consulo.util.lang.StringUtil;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
 import com.intellij.psi.XmlRecursiveElementVisitor;
-import com.intellij.psi.codeStyle.CodeStyleSettings;
-import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
-import com.intellij.psi.formatter.FormattingDocumentModelImpl;
-import com.intellij.psi.impl.source.codeStyle.PostFormatProcessorHelper;
+import consulo.language.codeStyle.CodeStyleSettings;
+import consulo.language.codeStyle.CommonCodeStyleSettings;
+import consulo.ide.impl.psi.formatter.FormattingDocumentModelImpl;
+import consulo.ide.impl.psi.impl.source.codeStyle.PostFormatProcessorHelper;
 import com.intellij.psi.xml.*;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.text.CharArrayUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.util.lang.CharArrayUtil;
 import consulo.logging.Logger;
 import org.jetbrains.annotations.NonNls;
 

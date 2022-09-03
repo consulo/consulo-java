@@ -35,8 +35,8 @@ import com.intellij.java.debugger.engine.evaluation.EvaluateExceptionUtil;
 import com.intellij.java.debugger.engine.jdi.ThreadReferenceProxy;
 import com.intellij.java.debugger.impl.DebuggerUtilsEx;
 import consulo.logging.Logger;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.util.lang.Comparing;
+import consulo.util.collection.ContainerUtil;
 import consulo.internal.com.sun.jdi.*;
 
 public final class ThreadReferenceProxyImpl extends ObjectReferenceProxyImpl implements ThreadReferenceProxy

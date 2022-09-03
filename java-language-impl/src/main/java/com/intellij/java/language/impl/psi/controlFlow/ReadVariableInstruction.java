@@ -16,46 +16,39 @@
 package com.intellij.java.language.impl.psi.controlFlow;
 
 import com.intellij.java.language.psi.PsiVariable;
+
 import javax.annotation.Nonnull;
 
-public final class ReadVariableInstruction extends SimpleInstruction
-{
-	@Nonnull
-	public final PsiVariable variable;
+public final class ReadVariableInstruction extends SimpleInstruction {
+  @Nonnull
+  public final PsiVariable variable;
 
-	ReadVariableInstruction(@Nonnull PsiVariable variable)
-	{
-		this.variable = variable;
-	}
+  ReadVariableInstruction(@Nonnull PsiVariable variable) {
+    this.variable = variable;
+  }
 
-	public String toString()
-	{
-		return "READ " + variable.getName();
-	}
+  public String toString() {
+    return "READ " + variable.getName();
+  }
 
-	@Override
-	public void accept(@Nonnull ControlFlowInstructionVisitor visitor, int offset, int nextOffset)
-	{
-		visitor.visitReadVariableInstruction(this, offset, nextOffset);
-	}
+  @Override
+  public void accept(@Nonnull ControlFlowInstructionVisitor visitor, int offset, int nextOffset) {
+    visitor.visitReadVariableInstruction(this, offset, nextOffset);
+  }
 
-	@Override
-	public boolean equals(Object o)
-	{
-		if(this == o)
-		{
-			return true;
-		}
-		if(o == null || getClass() != o.getClass())
-		{
-			return false;
-		}
-		return variable.equals(((ReadVariableInstruction) o).variable);
-	}
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    return variable.equals(((ReadVariableInstruction) o).variable);
+  }
 
-	@Override
-	public int hashCode()
-	{
-		return 351 + variable.hashCode();
-	}
+  @Override
+  public int hashCode() {
+    return 351 + variable.hashCode();
+  }
 }

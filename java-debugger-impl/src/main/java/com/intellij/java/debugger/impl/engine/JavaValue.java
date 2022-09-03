@@ -55,29 +55,29 @@ import com.intellij.java.debugger.impl.ui.tree.render.NodeRenderer;
 import com.intellij.java.debugger.impl.ui.tree.render.OnDemandRenderer;
 import com.intellij.java.debugger.impl.ui.tree.render.Renderer;
 import com.intellij.java.debugger.impl.ui.tree.render.ToStringRenderer;
-import com.intellij.icons.AllIcons;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.application.ReadAction;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.AsyncResult;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.PsiElement;
+import consulo.application.AllIcons;
+import consulo.application.ApplicationManager;
+import consulo.application.ReadAction;
+import consulo.execution.debug.breakpoint.XExpression;
+import consulo.execution.debug.evaluation.XDebuggerEvaluator;
+import consulo.execution.debug.evaluation.XInstanceEvaluator;
+import consulo.execution.debug.frame.presentation.XRegularValuePresentation;
+import consulo.execution.debug.frame.presentation.XValuePresentation;
+import consulo.project.Project;
+import consulo.util.concurrent.AsyncResult;
+import consulo.util.lang.StringUtil;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
-import com.intellij.ui.SimpleTextAttributes;
-import com.intellij.util.ThreeState;
-import com.intellij.xdebugger.XExpression;
-import com.intellij.xdebugger.evaluation.XDebuggerEvaluator;
-import com.intellij.xdebugger.evaluation.XInstanceEvaluator;
+import consulo.ui.ex.SimpleTextAttributes;
+import consulo.util.lang.ThreeState;
 import com.intellij.xdebugger.frame.*;
-import com.intellij.xdebugger.frame.presentation.XErrorValuePresentation;
-import com.intellij.xdebugger.frame.presentation.XRegularValuePresentation;
-import com.intellij.xdebugger.frame.presentation.XValuePresentation;
-import com.intellij.xdebugger.impl.breakpoints.XExpressionImpl;
-import com.intellij.xdebugger.impl.evaluate.XValueCompactPresentation;
-import com.intellij.xdebugger.impl.frame.XValueWithInlinePresentation;
-import com.intellij.xdebugger.impl.ui.XValueTextProvider;
-import com.intellij.xdebugger.impl.ui.tree.XValueExtendedPresentation;
-import com.intellij.xdebugger.impl.ui.tree.nodes.XValueNodeImpl;
+import consulo.execution.debug.frame.presentation.XErrorValuePresentation;
+import consulo.ide.impl.idea.xdebugger.impl.breakpoints.XExpressionImpl;
+import consulo.ide.impl.idea.xdebugger.impl.evaluate.XValueCompactPresentation;
+import consulo.ide.impl.idea.xdebugger.impl.frame.XValueWithInlinePresentation;
+import consulo.ide.impl.idea.xdebugger.impl.ui.XValueTextProvider;
+import consulo.ide.impl.idea.xdebugger.impl.ui.tree.XValueExtendedPresentation;
+import consulo.ide.impl.idea.xdebugger.impl.ui.tree.nodes.XValueNodeImpl;
 import consulo.internal.com.sun.jdi.ArrayReference;
 import consulo.internal.com.sun.jdi.ArrayType;
 import consulo.internal.com.sun.jdi.Value;
@@ -88,7 +88,7 @@ import consulo.ui.image.Image;
 /**
  * @author egor
  */
-public class JavaValue extends XNamedValue implements NodeDescriptorProvider, XValueTextProvider, XValueWithInlinePresentation
+public class JavaValue extends XNamedValue implements NodeDescriptorProvider, consulo.ide.impl.idea.xdebugger.impl.ui.XValueTextProvider, consulo.ide.impl.idea.xdebugger.impl.frame.XValueWithInlinePresentation
 {
 	private static final Logger LOG = Logger.getInstance(JavaValue.class);
 
@@ -303,7 +303,7 @@ public class JavaValue extends XNamedValue implements NodeDescriptorProvider, XV
 		return value.substring(0, Math.min(value.length(), XValueNode.MAX_VALUE_LENGTH));
 	}
 
-	private static class JavaValuePresentation extends XValueExtendedPresentation implements XValueCompactPresentation
+	private static class JavaValuePresentation extends XValueExtendedPresentation implements consulo.ide.impl.idea.xdebugger.impl.evaluate.XValueCompactPresentation
 	{
 		private final String myValue;
 		private final String myType;
@@ -332,7 +332,7 @@ public class JavaValue extends XNamedValue implements NodeDescriptorProvider, XV
 		}
 
 		@Override
-		public void renderValue(@Nonnull XValueTextRenderer renderer, @Nullable XValueNodeImpl node)
+		public void renderValue(@Nonnull XValueTextRenderer renderer, @Nullable consulo.ide.impl.idea.xdebugger.impl.ui.tree.nodes.XValueNodeImpl node)
 		{
 			boolean compact = node != null;
 			if(myError != null)

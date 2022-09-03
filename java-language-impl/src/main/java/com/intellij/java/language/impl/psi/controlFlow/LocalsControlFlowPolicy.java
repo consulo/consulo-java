@@ -16,102 +16,82 @@
 package com.intellij.java.language.impl.psi.controlFlow;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.*;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.util.PsiTreeUtil;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class LocalsControlFlowPolicy implements ControlFlowPolicy
-{
-	private final PsiElement myCodeFragment;
+public class LocalsControlFlowPolicy implements ControlFlowPolicy {
+  private final PsiElement myCodeFragment;
 
-	public LocalsControlFlowPolicy(@Nonnull PsiElement codeFragment)
-	{
-		myCodeFragment = codeFragment;
-	}
+  public LocalsControlFlowPolicy(@Nonnull PsiElement codeFragment) {
+    myCodeFragment = codeFragment;
+  }
 
-	@Override
-	public PsiVariable getUsedVariable(@Nonnull PsiReferenceExpression refExpr)
-	{
-		if(refExpr.isQualified())
-		{
-			return null;
-		}
+  @Override
+  public PsiVariable getUsedVariable(@Nonnull PsiReferenceExpression refExpr) {
+    if (refExpr.isQualified()) {
+      return null;
+    }
 
-		PsiElement refElement = refExpr.resolve();
-		return refElement instanceof PsiLocalVariable || refElement instanceof PsiParameter ? checkCodeFragment(refElement) : null;
-	}
+    PsiElement refElement = refExpr.resolve();
+    return refElement instanceof PsiLocalVariable || refElement instanceof PsiParameter ? checkCodeFragment(refElement) : null;
+  }
 
-	@Nullable
-	private PsiVariable checkCodeFragment(@Nonnull PsiElement refElement)
-	{
-		PsiElement codeFragment;
-		if(refElement instanceof PsiParameter)
-		{
-			final PsiElement declarationScope = ((PsiParameter) refElement).getDeclarationScope();
-			if(declarationScope instanceof PsiMethod)
-			{
-				codeFragment = ((PsiMethod) declarationScope).getBody();
-			}
-			else if(declarationScope instanceof PsiLambdaExpression)
-			{
-				codeFragment = ((PsiLambdaExpression) declarationScope).getBody();
-			}
-			else
-			{
-				codeFragment = ControlFlowUtil.findCodeFragment(refElement);
-			}
-		}
-		else
-		{
-			codeFragment = ControlFlowUtil.findCodeFragment(refElement);
-		}
-		if(codeFragment == null)
-		{
-			return null;
-		}
-		if(myCodeFragment.getContainingFile() == codeFragment.getContainingFile() &&  // in order for jsp includes to work
-				!myCodeFragment.equals(codeFragment) &&
-				!(myCodeFragment.getParent() instanceof PsiLambdaExpression &&
-						PsiTreeUtil.isAncestor(PsiTreeUtil.getParentOfType(myCodeFragment, PsiClass.class), codeFragment, false)))
-		{
-			return null;
-		}
-		return (PsiVariable) refElement;
-	}
+  @Nullable
+  private PsiVariable checkCodeFragment(@Nonnull PsiElement refElement) {
+    PsiElement codeFragment;
+    if (refElement instanceof PsiParameter) {
+      final PsiElement declarationScope = ((PsiParameter) refElement).getDeclarationScope();
+      if (declarationScope instanceof PsiMethod) {
+        codeFragment = ((PsiMethod) declarationScope).getBody();
+      } else if (declarationScope instanceof PsiLambdaExpression) {
+        codeFragment = ((PsiLambdaExpression) declarationScope).getBody();
+      } else {
+        codeFragment = ControlFlowUtil.findCodeFragment(refElement);
+      }
+    } else {
+      codeFragment = ControlFlowUtil.findCodeFragment(refElement);
+    }
+    if (codeFragment == null) {
+      return null;
+    }
+    if (myCodeFragment.getContainingFile() == codeFragment.getContainingFile() &&  // in order for jsp includes to work
+        !myCodeFragment.equals(codeFragment) &&
+        !(myCodeFragment.getParent() instanceof PsiLambdaExpression &&
+            PsiTreeUtil.isAncestor(PsiTreeUtil.getParentOfType(myCodeFragment, PsiClass.class), codeFragment, false))) {
+      return null;
+    }
+    return (PsiVariable) refElement;
+  }
 
-	@Override
-	public boolean isParameterAccepted(@Nonnull PsiParameter psiParameter)
-	{
-		return checkCodeFragment(psiParameter) != null;
-	}
+  @Override
+  public boolean isParameterAccepted(@Nonnull PsiParameter psiParameter) {
+    return checkCodeFragment(psiParameter) != null;
+  }
 
-	@Override
-	public boolean isLocalVariableAccepted(@Nonnull PsiLocalVariable psiVariable)
-	{
-		return checkCodeFragment(psiVariable) != null;
-	}
+  @Override
+  public boolean isLocalVariableAccepted(@Nonnull PsiLocalVariable psiVariable) {
+    return checkCodeFragment(psiVariable) != null;
+  }
 
-	@Override
-	public boolean equals(Object o)
-	{
-		if(this == o)
-		{
-			return true;
-		}
-		if(o == null || getClass() != o.getClass())
-		{
-			return false;
-		}
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
 
-		LocalsControlFlowPolicy policy = (LocalsControlFlowPolicy) o;
+    LocalsControlFlowPolicy policy = (LocalsControlFlowPolicy) o;
 
-		return myCodeFragment.equals(policy.myCodeFragment);
-	}
+    return myCodeFragment.equals(policy.myCodeFragment);
+  }
 
-	@Override
-	public int hashCode()
-	{
-		return myCodeFragment.hashCode();
-	}
+  @Override
+  public int hashCode() {
+    return myCodeFragment.hashCode();
+  }
 }

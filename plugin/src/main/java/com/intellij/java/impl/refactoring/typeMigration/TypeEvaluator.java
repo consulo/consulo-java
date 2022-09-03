@@ -13,18 +13,18 @@ import javax.annotation.Nullable;
 
 import com.intellij.java.language.psi.*;
 import consulo.logging.Logger;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.ProjectFileIndex;
-import com.intellij.openapi.roots.ProjectRootManager;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.openapi.util.Pair;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.project.Project;
+import consulo.module.content.ProjectFileIndex;
+import consulo.module.content.ProjectRootManager;
+import consulo.util.lang.Comparing;
+import consulo.util.lang.Pair;
+import consulo.util.lang.StringUtil;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.java.language.impl.psi.impl.PsiImplUtil;
-import com.intellij.psi.tree.IElementType;
+import consulo.language.ast.IElementType;
 import com.intellij.java.language.psi.util.InheritanceUtil;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import com.intellij.java.impl.refactoring.typeMigration.usageInfo.TypeMigrationUsageInfo;
@@ -102,7 +102,7 @@ public class TypeEvaluator
 		return false;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public PsiType getType(PsiElement element)
 	{
 		VirtualFile file = element.getContainingFile().getVirtualFile();
@@ -125,7 +125,7 @@ public class TypeEvaluator
 		return getType(new TypeMigrationUsageInfo(element));
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public PsiType getType(final TypeMigrationUsageInfo usageInfo)
 	{
 		final LinkedList<PsiType> e = myTypeMap.get(usageInfo);
@@ -307,7 +307,7 @@ public class TypeEvaluator
 		return getType(expr);
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	private PsiType evaluateReferenceExpressionType(PsiExpression expr)
 	{
 		final PsiReferenceExpression ref = (PsiReferenceExpression) expr;
@@ -534,7 +534,7 @@ public class TypeEvaluator
 		return migrationTtype;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public <T> T getSettings(Class<T> aClass)
 	{
 		return myRules.getConversionSettings(aClass);

@@ -19,22 +19,22 @@ import java.util.Set;
 
 import javax.annotation.Nonnull;
 
+import consulo.language.editor.PlatformDataKeys;
 import org.jetbrains.annotations.NonNls;
-import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.actionSystem.LangDataKeys;
-import com.intellij.openapi.actionSystem.PlatformDataKeys;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.ScrollType;
-import com.intellij.openapi.editor.ScrollingModel;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiElement;
+import consulo.dataContext.DataContext;
+import consulo.language.editor.LangDataKeys;
+import consulo.codeEditor.Editor;
+import consulo.codeEditor.ScrollType;
+import consulo.codeEditor.ScrollingModel;
+import consulo.project.Project;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiField;
-import com.intellij.psi.PsiFile;
+import consulo.language.psi.PsiFile;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.impl.refactoring.HelpID;
 import com.intellij.java.impl.refactoring.RefactorJBundle;
-import com.intellij.refactoring.RefactoringActionHandler;
-import com.intellij.refactoring.util.CommonRefactoringUtil;
+import consulo.language.editor.refactoring.action.RefactoringActionHandler;
+import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import com.intellij.java.impl.refactoring.util.classMembers.MemberInfo;
 
 public class RemoveMiddlemanHandler implements RefactoringActionHandler {

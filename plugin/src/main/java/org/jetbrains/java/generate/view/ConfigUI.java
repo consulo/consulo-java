@@ -22,6 +22,7 @@ import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.annotation.Nullable;
 import javax.swing.AbstractAction;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -37,10 +38,10 @@ import org.jetbrains.java.generate.config.Config;
 import org.jetbrains.java.generate.config.DuplicationPolicy;
 import org.jetbrains.java.generate.config.InsertWhere;
 import org.jetbrains.java.generate.config.PolicyOptions;
-import com.intellij.openapi.project.Project;
-import com.intellij.ui.IdeBorderFactory;
-import com.intellij.ui.LanguageTextField;
-import com.intellij.util.ui.JBUI;
+import consulo.project.Project;
+import consulo.ui.ex.awt.IdeBorderFactory;
+import consulo.language.editor.ui.awt.LanguageTextField;
+import consulo.ui.ex.awt.JBUI;
 
 /**
  * Configuration User Interface.
@@ -282,7 +283,7 @@ public class ConfigUI extends JPanel
 		}
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	private static String emptyToNull(final String s)
 	{
 		if(s != null && s.length() == 0)

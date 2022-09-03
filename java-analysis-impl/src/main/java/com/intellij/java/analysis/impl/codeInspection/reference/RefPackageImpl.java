@@ -24,15 +24,15 @@
  */
 package com.intellij.java.analysis.impl.codeInspection.reference;
 
-import com.intellij.codeInspection.reference.RefEntity;
-import com.intellij.codeInspection.reference.RefEntityImpl;
-import com.intellij.codeInspection.reference.RefManager;
-import com.intellij.codeInspection.reference.RefVisitor;
-import com.intellij.icons.AllIcons;
+import consulo.language.editor.inspection.reference.RefEntity;
+import consulo.ide.impl.idea.codeInspection.reference.RefEntityImpl;
+import consulo.language.editor.inspection.reference.RefManager;
+import consulo.language.editor.inspection.reference.RefVisitor;
+import consulo.application.AllIcons;
 import com.intellij.java.analysis.codeInspection.reference.RefJavaManager;
 import com.intellij.java.analysis.codeInspection.reference.RefJavaVisitor;
 import com.intellij.java.analysis.codeInspection.reference.RefPackage;
-import com.intellij.openapi.application.ApplicationManager;
+import consulo.application.ApplicationManager;
 import consulo.ui.image.Image;
 
 

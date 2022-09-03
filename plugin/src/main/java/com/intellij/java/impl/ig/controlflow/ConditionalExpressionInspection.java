@@ -17,7 +17,7 @@ package com.intellij.java.impl.ig.controlflow;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
-import com.intellij.codeInspection.ui.SingleCheckboxOptionsPanel;
+import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;

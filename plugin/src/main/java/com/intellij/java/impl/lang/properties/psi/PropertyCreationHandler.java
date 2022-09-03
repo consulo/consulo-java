@@ -18,8 +18,8 @@ package com.intellij.java.impl.lang.properties.psi;
 
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.lang.properties.psi.PropertiesFile;
-import com.intellij.openapi.project.Project;
-import com.intellij.util.IncorrectOperationException;
+import consulo.project.Project;
+import consulo.language.util.IncorrectOperationException;
 
 import java.util.Collection;
 

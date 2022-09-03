@@ -15,19 +15,19 @@
  */
 package com.intellij.java.impl.lang.properties;
 
-import com.intellij.codeInsight.daemon.impl.quickfix.RenameElementFix;
-import com.intellij.codeInspection.InspectionManager;
-import com.intellij.codeInspection.LocalQuickFix;
-import com.intellij.codeInspection.ProblemDescriptor;
-import com.intellij.codeInspection.ProblemHighlightType;
+import consulo.ide.impl.idea.codeInsight.daemon.impl.quickfix.RenameElementFix;
+import consulo.language.editor.inspection.scheme.InspectionManager;
+import consulo.language.editor.inspection.LocalQuickFix;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.editor.inspection.ProblemHighlightType;
 import com.intellij.java.analysis.impl.codeInspection.ex.BaseLocalInspectionTool;
-import com.intellij.lang.ASTNode;
+import consulo.language.ast.ASTNode;
 import com.intellij.lang.properties.IProperty;
 import com.intellij.lang.properties.PropertiesBundle;
 import com.intellij.lang.properties.psi.PropertiesFile;
 import com.intellij.lang.properties.psi.Property;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;

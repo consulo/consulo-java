@@ -19,10 +19,10 @@ import com.intellij.java.language.impl.psi.impl.source.PsiCodeFragmentImpl;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
 import com.intellij.java.language.psi.PsiJavaCodeReferenceCodeFragment;
 import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.impl.source.SourceTreeToPsiMap;
-import com.intellij.psi.impl.source.tree.CompositeElement;
+import consulo.project.Project;
+import consulo.language.psi.PsiElement;
+import consulo.language.impl.psi.SourceTreeToPsiMap;
+import consulo.language.impl.ast.CompositeElement;
 import consulo.logging.Logger;
 import org.jetbrains.annotations.NonNls;
 

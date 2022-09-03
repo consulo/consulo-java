@@ -16,7 +16,7 @@
 package com.intellij.java.language.psi.tree.java;
 
 import com.intellij.java.language.JavaLanguage;
-import com.intellij.psi.tree.IElementType;
+import consulo.language.ast.IElementType;
 import org.jetbrains.annotations.NonNls;
 
 public class IJavaElementType extends IElementType {

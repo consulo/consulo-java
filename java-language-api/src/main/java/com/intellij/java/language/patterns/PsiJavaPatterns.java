@@ -16,10 +16,16 @@
 package com.intellij.java.language.patterns;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.patterns.*;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.util.ProcessingContext;
+import consulo.language.pattern.ElementPattern;
+import consulo.language.pattern.IElementTypePattern;
+import consulo.language.pattern.InitialPatternCondition;
+import consulo.language.pattern.InitialPatternConditionPlus;
+import consulo.language.pattern.PlatformPatterns;
+import consulo.language.pattern.StandardPatterns;
+import consulo.language.psi.PsiElement;
+import consulo.language.ast.IElementType;
+import consulo.language.util.ProcessingContext;
+import consulo.language.pattern.VirtualFilePattern;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -88,7 +94,7 @@ public class PsiJavaPatterns extends StandardPatterns {
 
   public static PsiJavaElementPattern.Capture<PsiNewExpression> psiNewExpression(@Nonnull final String... fqns) {
     return new PsiJavaElementPattern.Capture<PsiNewExpression>(new InitialPatternCondition<PsiNewExpression>(PsiNewExpression.class) {
-      public boolean accepts(@javax.annotation.Nullable final Object o, final ProcessingContext context) {
+      public boolean accepts(@Nullable final Object o, final ProcessingContext context) {
         if(o instanceof PsiNewExpression) {
           PsiJavaCodeReferenceElement reference = ((PsiNewExpression)o).getClassOrAnonymousClassReference();
           if (reference != null) {
@@ -102,9 +108,9 @@ public class PsiJavaPatterns extends StandardPatterns {
     });
   }
 
-  public static PsiJavaElementPattern.Capture<PsiLiteralExpression> literalExpression(@javax.annotation.Nullable final ElementPattern value) {
+  public static PsiJavaElementPattern.Capture<PsiLiteralExpression> literalExpression(@Nullable final ElementPattern value) {
     return new PsiJavaElementPattern.Capture<PsiLiteralExpression>(new InitialPatternConditionPlus<PsiLiteralExpression>(PsiLiteralExpression.class) {
-      public boolean accepts(@javax.annotation.Nullable final Object o, final ProcessingContext context) {
+      public boolean accepts(@Nullable final Object o, final ProcessingContext context) {
         return o instanceof PsiLiteralExpression && (value == null || value.accepts(((PsiLiteralExpression)o).getValue(), context));
       }
 
@@ -130,7 +136,7 @@ public class PsiJavaPatterns extends StandardPatterns {
   public static PsiModifierListOwnerPattern.Capture<PsiModifierListOwner> psiModifierListOwner() {
     return new PsiModifierListOwnerPattern.Capture<PsiModifierListOwner>(new InitialPatternCondition<PsiModifierListOwner>(PsiModifierListOwner.class) {
       @Override
-      public boolean accepts(@javax.annotation.Nullable Object o, ProcessingContext context) {
+      public boolean accepts(@Nullable Object o, ProcessingContext context) {
         return o instanceof PsiModifierListOwner;
       }
     });

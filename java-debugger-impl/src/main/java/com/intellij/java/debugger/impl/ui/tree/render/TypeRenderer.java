@@ -19,8 +19,8 @@ import org.jdom.Element;
 import javax.annotation.Nonnull;
 import com.intellij.java.debugger.engine.DebuggerUtils;
 import consulo.logging.Logger;
-import com.intellij.openapi.util.InvalidDataException;
-import com.intellij.openapi.util.WriteExternalException;
+import consulo.util.xml.serializer.InvalidDataException;
+import consulo.util.xml.serializer.WriteExternalException;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.internal.com.sun.jdi.Type;
 

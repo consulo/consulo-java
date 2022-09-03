@@ -15,15 +15,17 @@
  */
 package com.intellij.java.impl.codeInsight.editorActions.smartEnter;
 
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.Editor;
+import consulo.document.Document;
+import consulo.codeEditor.Editor;
 import com.intellij.java.language.psi.PsiBlockStatement;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiForStatement;
 import com.intellij.java.language.psi.PsiStatement;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
+
+import javax.annotation.Nullable;
 
 /**
  * Created by IntelliJ IDEA.
@@ -65,7 +67,7 @@ public class MissingForBodyFixer implements Fixer
 		doc.insertString(eltToInsertAfter.getTextRange().getEndOffset(), text);
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	private static PsiForStatement getForStatementParent(PsiElement psiElement)
 	{
 		PsiForStatement statement = PsiTreeUtil.getParentOfType(psiElement, PsiForStatement.class);

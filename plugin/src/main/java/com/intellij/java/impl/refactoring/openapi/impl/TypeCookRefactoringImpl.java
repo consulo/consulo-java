@@ -15,9 +15,9 @@
  */
 package com.intellij.java.impl.refactoring.openapi.impl;
 
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiElement;
-import com.intellij.refactoring.RefactoringImpl;
+import consulo.project.Project;
+import consulo.language.psi.PsiElement;
+import consulo.language.editor.refactoring.RefactoringImpl;
 import com.intellij.java.impl.refactoring.TypeCookRefactoring;
 import com.intellij.java.impl.refactoring.typeCook.Settings;
 import com.intellij.java.impl.refactoring.typeCook.TypeCookProcessor;

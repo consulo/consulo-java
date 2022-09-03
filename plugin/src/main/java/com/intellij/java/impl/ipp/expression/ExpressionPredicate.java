@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ipp.expression;
 
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiJavaToken;
 import com.intellij.java.language.psi.PsiPolyadicExpression;

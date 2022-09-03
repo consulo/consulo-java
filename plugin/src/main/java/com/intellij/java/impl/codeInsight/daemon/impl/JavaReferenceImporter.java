@@ -15,16 +15,16 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl;
 
-import com.intellij.codeInsight.daemon.ReferenceImporter;
-import com.intellij.codeInsight.daemon.impl.CollectHighlightsUtil;
+import consulo.language.editor.ReferenceImporter;
+import consulo.language.editor.util.CollectHighlightsUtil;
 import com.intellij.java.impl.codeInsight.daemon.impl.quickfix.ImportClassFix;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiReference;
+import consulo.document.Document;
+import consulo.codeEditor.Editor;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiReference;
 
 import javax.annotation.Nonnull;
 import java.util.List;

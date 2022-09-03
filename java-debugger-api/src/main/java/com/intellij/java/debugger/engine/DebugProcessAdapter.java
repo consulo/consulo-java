@@ -15,9 +15,9 @@
  */
 package com.intellij.java.debugger.engine;
 
-import com.intellij.execution.ExecutionException;
+import consulo.process.ExecutionException;
 import com.intellij.java.execution.configurations.RemoteConnection;
-import com.intellij.execution.configurations.RunProfileState;
+import consulo.execution.configuration.RunProfileState;
 import consulo.internal.com.sun.jdi.ThreadReference;
 
 public class DebugProcessAdapter implements DebugProcessListener{

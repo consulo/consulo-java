@@ -17,8 +17,8 @@ package com.intellij.java.language.psi;
 
 import com.intellij.java.language.psi.tree.java.IJavaElementType;
 import com.intellij.java.language.psi.tree.java.IKeywordElementType;
-import com.intellij.psi.TokenType;
-import com.intellij.psi.tree.IElementType;
+import consulo.language.ast.IElementType;
+import consulo.language.ast.TokenType;
 
 @SuppressWarnings("SpellCheckingInspection")
 public interface JavaTokenType extends TokenType {

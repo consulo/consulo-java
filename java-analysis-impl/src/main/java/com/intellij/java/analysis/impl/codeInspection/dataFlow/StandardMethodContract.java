@@ -5,11 +5,12 @@ import com.intellij.java.analysis.JavaAnalysisBundle;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaValue;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaValueFactory;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.RelationType;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.document.util.TextRange;
+import consulo.util.lang.StringUtil;
+import consulo.util.collection.ContainerUtil;
 import one.util.streamex.IntStreamEx;
 import one.util.streamex.StreamEx;
+import org.jetbrains.annotations.Contract;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -21,7 +22,7 @@ import java.util.stream.Stream;
 
 /**
  * A method contract which is described by {@link ValueConstraint} constraints on arguments.
- * Such contract can be created from {@link org.jetbrains.annotations.Contract} annotation.
+ * Such contract can be created from {@link Contract} annotation.
  *
  * @author peter
  */

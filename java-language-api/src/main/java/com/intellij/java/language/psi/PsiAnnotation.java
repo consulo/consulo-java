@@ -16,14 +16,14 @@
 package com.intellij.java.language.psi;
 
 import com.intellij.java.language.jvm.JvmAnnotation;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.meta.PsiMetaData;
-import com.intellij.psi.meta.PsiMetaOwner;
-import com.intellij.util.ArrayFactory;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.meta.PsiMetaOwner;
+import consulo.util.collection.ArrayFactory;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.lang.annotation.ElementType;
 
 /**
  * Represents a Java annotation.
@@ -42,7 +42,7 @@ public interface PsiAnnotation extends PsiAnnotationMemberValue, PsiMetaOwner, J
   String DEFAULT_REFERENCED_METHOD_NAME = "value";
 
   /**
-   * Kinds of element to which an annotation type is applicable (see {@link java.lang.annotation.ElementType}).
+   * Kinds of element to which an annotation type is applicable (see {@link ElementType}).
    */
   enum TargetType {
     // see java.lang.annotation.ElementType
@@ -153,14 +153,5 @@ public interface PsiAnnotation extends PsiAnnotationMemberValue, PsiMetaOwner, J
   @Override
   default boolean canNavigateToSource() {
     return false;
-  }
-
-  /**
-   * @deprecated don't use or override; it's temporarily left for compatibility with older plugins
-   */
-  @Nullable
-  @Deprecated
-  default PsiMetaData getMetaData() {
-    return null;
   }
 }

@@ -15,9 +15,9 @@
  */
 package com.intellij.java.impl.codeInsight.template.postfix.templates;
 
-import com.intellij.codeInsight.template.postfix.templates.IfPostfixTemplateBase;
+import consulo.language.editor.postfixTemplate.IfPostfixTemplateBase;
 import com.intellij.java.impl.codeInsight.generation.surroundWith.JavaWithIfExpressionSurrounder;
-import com.intellij.lang.surroundWith.Surrounder;
+import consulo.language.editor.surroundWith.Surrounder;
 
 import javax.annotation.Nonnull;
 

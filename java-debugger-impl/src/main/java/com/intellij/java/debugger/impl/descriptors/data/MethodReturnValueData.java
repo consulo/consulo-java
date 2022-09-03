@@ -16,8 +16,8 @@
 package com.intellij.java.debugger.impl.descriptors.data;
 
 import com.intellij.java.debugger.impl.ui.impl.watch.MethodReturnValueDescriptorImpl;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Pair;
+import consulo.project.Project;
+import consulo.util.lang.Pair;
 import consulo.internal.com.sun.jdi.Method;
 import consulo.internal.com.sun.jdi.Value;
 import javax.annotation.Nonnull;
@@ -28,13 +28,13 @@ public final class MethodReturnValueData extends DescriptorData<MethodReturnValu
   private final @Nonnull
   Method myMethod;
 
-  public MethodReturnValueData(@Nonnull Method method, @javax.annotation.Nullable Value returnValue) {
+  public MethodReturnValueData(@Nonnull Method method, @Nullable Value returnValue) {
     super();
     myMethod = method;
     myReturnValue = returnValue;
   }
 
-  public @javax.annotation.Nullable
+  public @Nullable
   Value getReturnValue() {
     return myReturnValue;
   }
@@ -73,7 +73,7 @@ public final class MethodReturnValueData extends DescriptorData<MethodReturnValu
   }
 
   private static final class MethodReturnValueDisplayKey extends Pair<Method, Value> implements DisplayKey<MethodReturnValueDescriptorImpl> {
-    public MethodReturnValueDisplayKey(@Nonnull Method method, @javax.annotation.Nullable Value value) {
+    public MethodReturnValueDisplayKey(@Nonnull Method method, @Nullable Value value) {
       super(method, value);
     }
   }

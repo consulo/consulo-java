@@ -23,7 +23,7 @@ import com.intellij.java.debugger.impl.engine.FullValueEvaluatorProvider;
 import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
 import com.intellij.java.debugger.impl.settings.NodeRendererSettings;
 import com.intellij.java.debugger.impl.ui.impl.watch.ValueDescriptorImpl;
-import com.intellij.xdebugger.frame.XFullValueEvaluator;
+import consulo.execution.debug.frame.XFullValueEvaluator;
 import consulo.internal.com.sun.jdi.ClassType;
 import consulo.internal.com.sun.jdi.Field;
 import consulo.internal.com.sun.jdi.ObjectReference;

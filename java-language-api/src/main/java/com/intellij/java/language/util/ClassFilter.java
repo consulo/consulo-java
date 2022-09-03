@@ -16,8 +16,8 @@
 package com.intellij.java.language.util;
 
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.language.psi.scope.GlobalSearchScope;
 
 /**
 * @author traff

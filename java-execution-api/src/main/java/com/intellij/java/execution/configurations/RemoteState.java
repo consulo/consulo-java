@@ -15,7 +15,7 @@
  */
 package com.intellij.java.execution.configurations;
 
-import com.intellij.execution.configurations.RunProfileState;
+import consulo.execution.configuration.RunProfileState;
 
 public interface RemoteState extends RunProfileState {
   RemoteConnection getRemoteConnection();

@@ -19,10 +19,10 @@ import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.lexer.DocCommentTokenTypes;
 import com.intellij.java.language.lexer.JavaDocTokenTypes;
 import com.intellij.java.language.lexer._JavaDocLexer;
-import com.intellij.lexer.LexerBase;
-import com.intellij.lexer.MergingLexerAdapter;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.util.text.CharArrayUtil;
+import consulo.language.lexer.LexerBase;
+import consulo.language.lexer.MergingLexerAdapter;
+import consulo.language.ast.IElementType;
+import consulo.util.lang.CharArrayUtil;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;

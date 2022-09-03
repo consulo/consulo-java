@@ -19,29 +19,30 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 
+import javax.annotation.Nullable;
 import javax.swing.ButtonGroup;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
-import com.intellij.lang.Language;
+import consulo.language.Language;
 import com.intellij.java.language.JavaLanguage;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.event.DocumentEvent;
-import com.intellij.openapi.editor.event.DocumentListener;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.DialogWrapper;
+import consulo.document.Document;
+import consulo.document.event.DocumentEvent;
+import consulo.document.event.DocumentListener;
+import consulo.project.Project;
+import consulo.ui.ex.awt.DialogWrapper;
 import com.intellij.java.language.psi.JavaCodeFragment;
 import com.intellij.java.language.psi.JavaCodeFragmentFactory;
 import com.intellij.java.language.psi.JavaPsiFacade;
-import com.intellij.psi.PsiDocumentManager;
-import com.intellij.psi.PsiManager;
+import consulo.language.psi.PsiDocumentManager;
+import consulo.language.psi.PsiManager;
 import com.intellij.java.language.psi.PsiNameHelper;
-import com.intellij.refactoring.RefactoringBundle;
-import com.intellij.ui.EditorTextField;
-import com.intellij.ui.LanguageTextField;
-import com.intellij.util.ui.JBUI;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.ui.awt.EditorTextField;
+import consulo.language.editor.ui.awt.LanguageTextField;
+import consulo.ui.ex.awt.JBUI;
 import consulo.psi.PsiPackage;
 
 public class EditMigrationEntryDialog extends DialogWrapper
@@ -114,7 +115,7 @@ public class EditMigrationEntryDialog extends DialogWrapper
 		final LanguageTextField.DocumentCreator documentCreator = new LanguageTextField.DocumentCreator()
 		{
 			@Override
-			public Document createDocument(String value, @javax.annotation.Nullable Language language, Project project)
+			public Document createDocument(String value, @Nullable Language language, Project project)
 			{
 				PsiPackage defaultPackage = JavaPsiFacade.getInstance(project).findPackage("");
 				final JavaCodeFragment fragment = JavaCodeFragmentFactory.getInstance(project).createReferenceCodeFragment("", defaultPackage, true, true);

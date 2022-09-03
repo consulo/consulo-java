@@ -19,7 +19,7 @@
  */
 package com.intellij.java.impl.internal;
 
-import com.intellij.util.containers.MultiMap;
+import consulo.util.collection.MultiMap;
 
 import java.io.BufferedInputStream;
 import java.io.File;

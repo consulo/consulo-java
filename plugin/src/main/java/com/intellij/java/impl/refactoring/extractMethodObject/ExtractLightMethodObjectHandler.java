@@ -23,18 +23,18 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.util.VisibilityUtil;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.project.Project;
+import consulo.document.util.TextRange;
+import consulo.util.lang.StringUtil;
 import com.intellij.psi.*;
-import com.intellij.psi.codeStyle.CodeStyleManager;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.impl.refactoring.extractMethod.AbstractExtractDialog;
 import com.intellij.java.impl.refactoring.extractMethod.PrepareFailedException;
 import com.intellij.java.impl.refactoring.util.RefactoringUtil;
-import com.intellij.usageView.UsageInfo;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.usage.UsageInfo;
+import consulo.language.util.IncorrectOperationException;
+import consulo.util.collection.ContainerUtil;
 import consulo.logging.Logger;
 
 import javax.annotation.Nonnull;
@@ -70,7 +70,7 @@ public class ExtractLightMethodObjectHandler {
 
   @Nullable
   public static ExtractedData extractLightMethodObject(final Project project,
-                                                       @javax.annotation.Nullable PsiElement originalContext,
+                                                       @Nullable PsiElement originalContext,
                                                        @Nonnull final PsiCodeFragment fragment,
                                                        final String methodName) throws PrepareFailedException {
     final PsiElementFactory elementFactory = JavaPsiFacade.getElementFactory(project);
@@ -232,7 +232,7 @@ public class ExtractLightMethodObjectHandler {
     return new ExtractedData(generatedCall, (PsiClass) CodeStyleManager.getInstance(project).reformat(extractMethodObjectProcessor.getInnerClass()), originalAnchor);
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private static PsiElement[] completeToStatementArray(PsiCodeFragment fragment, PsiElementFactory elementFactory) {
     PsiExpression expression = CodeInsightUtil.findExpressionInRange(fragment, 0, fragment.getTextLength());
     if (expression != null) {

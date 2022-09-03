@@ -20,19 +20,20 @@
  */
 package com.intellij.java.impl.codeEditor.printing;
 
-import com.intellij.codeEditor.printing.CodeEditorBundle;
-import com.intellij.codeEditor.printing.PrintOption;
+import consulo.configurable.ConfigurationException;
+import consulo.configurable.UnnamedConfigurable;
+import consulo.ide.impl.idea.codeEditor.printing.CodeEditorBundle;
+import consulo.ide.impl.idea.codeEditor.printing.PrintOption;
 import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
-import com.intellij.openapi.fileTypes.FileType;
-import com.intellij.openapi.options.ConfigurationException;
-import com.intellij.openapi.options.UnnamedConfigurable;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiReference;
+import consulo.virtualFileSystem.fileType.FileType;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiReference;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.swing.*;
 import java.util.Map;
 import java.util.TreeMap;
@@ -41,7 +42,7 @@ public class HyperlinksToClassesOption extends PrintOption {
   private JCheckBox myCbGenerateHyperlinksToClasses;
   private boolean isGenerateHyperlinksToClasses = false;
 
-  @javax.annotation.Nullable
+  @Nullable
   public TreeMap<Integer, PsiReference> collectReferences(PsiFile psiFile, Map<PsiFile, PsiFile> filesMap) {
     if (isGenerateHyperlinksToClasses) {
       FileType fileType = psiFile.getFileType();

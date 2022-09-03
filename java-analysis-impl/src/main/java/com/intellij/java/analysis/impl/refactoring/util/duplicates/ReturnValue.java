@@ -18,7 +18,9 @@ package com.intellij.java.analysis.impl.refactoring.util.duplicates;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiMethodCallExpression;
 import com.intellij.java.language.psi.PsiStatement;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
+
+import javax.annotation.Nullable;
 
 /**
  * @author dsl
@@ -26,6 +28,6 @@ import com.intellij.util.IncorrectOperationException;
 public interface ReturnValue {
   boolean isEquivalent(ReturnValue other);
 
-  @javax.annotation.Nullable
+  @Nullable
   PsiStatement createReplacement(final PsiMethod extractedMethod, PsiMethodCallExpression methodCallExpression) throws IncorrectOperationException;
 }

@@ -16,8 +16,8 @@
 package com.intellij.java.impl.ide.projectView;
 
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiElement;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.language.psi.PsiElement;
+import consulo.util.collection.ContainerUtil;
 
 import java.util.List;
 

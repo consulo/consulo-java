@@ -15,15 +15,16 @@
  */
 package com.intellij.java.language.impl.psi.impl.source;
 
-import javax.annotation.Nonnull;
-
-import com.intellij.java.language.psi.*;
-import com.intellij.lang.ASTNode;
-import consulo.logging.Logger;
-import com.intellij.psi.*;
 import com.intellij.java.language.impl.psi.impl.java.stubs.JavaStubElementTypes;
 import com.intellij.java.language.impl.psi.impl.java.stubs.PsiClassStub;
 import com.intellij.java.language.impl.psi.impl.light.LightClassReference;
+import com.intellij.java.language.psi.*;
+import consulo.language.ast.ASTNode;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiElementVisitor;
+import consulo.logging.Logger;
+
+import javax.annotation.Nonnull;
 
 public class PsiEnumConstantInitializerImpl extends PsiClassImpl implements PsiEnumConstantInitializer {
   private static final Logger LOG = Logger.getInstance(PsiEnumConstantInitializerImpl.class);
@@ -39,7 +40,7 @@ public class PsiEnumConstantInitializerImpl extends PsiClassImpl implements PsiE
 
   @Override
   protected Object clone() {
-    PsiEnumConstantInitializerImpl clone = (PsiEnumConstantInitializerImpl)super.clone();
+    PsiEnumConstantInitializerImpl clone = (PsiEnumConstantInitializerImpl) super.clone();
     clone.myCachedBaseType = null;
     return clone;
   }
@@ -54,7 +55,7 @@ public class PsiEnumConstantInitializerImpl extends PsiClassImpl implements PsiE
   public PsiExpressionList getArgumentList() {
     PsiElement parent = getParent();
     LOG.assertTrue(parent instanceof PsiEnumConstant);
-    return ((PsiCall)parent).getArgumentList();
+    return ((PsiCall) parent).getArgumentList();
   }
 
   @Override
@@ -72,7 +73,7 @@ public class PsiEnumConstantInitializerImpl extends PsiClassImpl implements PsiE
   private PsiClass getBaseClass() {
     PsiElement parent = getParent();
     LOG.assertTrue(parent instanceof PsiEnumConstant);
-    PsiClass containingClass = ((PsiEnumConstant)parent).getContainingClass();
+    PsiClass containingClass = ((PsiEnumConstant) parent).getContainingClass();
     LOG.assertTrue(containingClass != null);
     return containingClass;
   }
@@ -156,9 +157,8 @@ public class PsiEnumConstantInitializerImpl extends PsiClassImpl implements PsiE
   @Override
   public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
-      ((JavaElementVisitor)visitor).visitEnumConstantInitializer(this);
-    }
-    else {
+      ((JavaElementVisitor) visitor).visitEnumConstantInitializer(this);
+    } else {
       visitor.visitElement(this);
     }
   }

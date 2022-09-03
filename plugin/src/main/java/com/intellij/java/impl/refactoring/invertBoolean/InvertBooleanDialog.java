@@ -15,15 +15,15 @@
  */
 package com.intellij.java.impl.refactoring.invertBoolean;
 
-import com.intellij.lang.findUsages.DescriptiveNameUtil;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.help.HelpManager;
-import com.intellij.psi.PsiNamedElement;
+import consulo.language.findUsage.DescriptiveNameUtil;
+import consulo.project.Project;
+import consulo.application.HelpManager;
+import consulo.language.psi.PsiNamedElement;
 import com.intellij.java.impl.refactoring.HelpID;
-import com.intellij.refactoring.RefactoringBundle;
-import com.intellij.refactoring.ui.RefactoringDialog;
-import com.intellij.refactoring.util.CommonRefactoringUtil;
-import com.intellij.usageView.UsageViewUtil;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.ui.RefactoringDialog;
+import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
+import consulo.usage.UsageViewUtil;
 
 import javax.swing.*;
 

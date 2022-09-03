@@ -15,17 +15,17 @@
  */
 package com.intellij.java.impl.application.options;
 
-import com.intellij.openapi.application.ApplicationBundle;
-import com.intellij.openapi.ui.ex.MultiLineLabel;
-import com.intellij.psi.codeStyle.CodeStyleSettings;
+import consulo.application.ApplicationBundle;
+import consulo.ide.impl.idea.openapi.ui.ex.MultiLineLabel;
+import consulo.language.codeStyle.CodeStyleSettings;
 import com.intellij.java.impl.psi.codeStyle.JavaCodeStyleSettings;
-import com.intellij.psi.codeStyle.PackageEntry;
-import com.intellij.psi.codeStyle.PackageEntryTable;
-import com.intellij.ui.IdeBorderFactory;
-import com.intellij.ui.OptionGroup;
-import com.intellij.ui.TableUtil;
-import com.intellij.ui.table.JBTable;
-import com.intellij.util.ui.JBUI;
+import consulo.language.codeStyle.PackageEntry;
+import consulo.language.codeStyle.PackageEntryTable;
+import consulo.ui.ex.awt.IdeBorderFactory;
+import consulo.ui.ex.awt.OptionGroup;
+import consulo.ui.ex.awt.table.JBTable;
+import consulo.ui.ex.awt.util.TableUtil;
+import consulo.ui.ex.awt.JBUI;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;

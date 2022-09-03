@@ -27,21 +27,21 @@ import java.awt.Color;
 import javax.annotation.Nonnull;
 import javax.swing.JComponent;
 
-import com.intellij.codeInsight.CodeInsightBundle;
-import com.intellij.codeInsight.FileModificationService;
+import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.FileModificationService;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.command.WriteCommandAction;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.language.editor.WriteCommandAction;
+import consulo.codeEditor.Editor;
+import consulo.project.Project;
+import consulo.util.lang.StringUtil;
 import com.intellij.java.language.patterns.PsiJavaPatterns;
 import com.intellij.java.language.patterns.PsiMethodPattern;
 import com.intellij.psi.*;
-import com.intellij.psi.codeStyle.CodeStyleManager;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.ui.ColorChooser;
-import com.intellij.ui.JBColor;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.ide.impl.idea.ui.ColorChooser;
+import consulo.ui.ex.JBColor;
+import consulo.language.util.IncorrectOperationException;
 
 /**
  * @author spleaner

@@ -24,7 +24,7 @@
  */
 package org.osmorc.manifest.lang.valueparser;
 
-import com.intellij.lang.annotation.AnnotationHolder;
+import consulo.language.editor.annotation.AnnotationHolder;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.osmorc.manifest.lang.psi.HeaderValuePart;
@@ -35,7 +35,7 @@ import org.osmorc.manifest.lang.psi.HeaderValuePart;
 public interface ValueParser<T> {
   T parseValue(@Nonnull HeaderValuePart headerValuePart, @Nullable AnnotationHolder annotationHolder);
 
-  T parseValue(@Nonnull HeaderValuePart headerValuePart, int start, int end, @javax.annotation.Nullable AnnotationHolder annotationHolder);
+  T parseValue(@Nonnull HeaderValuePart headerValuePart, int start, int end, @Nullable AnnotationHolder annotationHolder);
 
   T parseValue(@Nonnull String text, int start, int end);
 }

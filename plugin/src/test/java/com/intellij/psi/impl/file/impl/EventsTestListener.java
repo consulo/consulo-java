@@ -2,8 +2,8 @@ package com.intellij.psi.impl.file.impl;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.psi.PsiTreeChangeEvent;
-import com.intellij.psi.PsiTreeChangeListener;
+import consulo.language.psi.event.PsiTreeChangeEvent;
+import consulo.language.psi.event.PsiTreeChangeListener;
 
 /**
  *  @author dsl

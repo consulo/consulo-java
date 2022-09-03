@@ -1,17 +1,17 @@
 package consulo.java.compiler.impl.javaCompiler.old;
 
-import com.intellij.compiler.impl.CompilerUtil;
-import com.intellij.compiler.impl.ModuleChunk;
+import consulo.ide.impl.idea.compiler.impl.CompilerUtil;
+import consulo.ide.impl.idea.compiler.impl.ModuleChunk;
 import com.intellij.java.compiler.impl.javaCompiler.javac.JavacCompiler;
 import com.intellij.java.compiler.impl.javaCompiler.javac.JpsJavaCompilerOptions;
-import com.intellij.execution.configurations.GeneralCommandLine;
-import com.intellij.execution.configurations.ParametersList;
-import com.intellij.openapi.compiler.CompileContext;
+import consulo.process.cmd.GeneralCommandLine;
+import consulo.process.cmd.ParametersList;
+import consulo.compiler.CompileContext;
 import com.intellij.java.language.projectRoots.JavaSdk;
 import com.intellij.java.language.projectRoots.JavaSdkVersion;
-import com.intellij.openapi.projectRoots.Sdk;
+import consulo.content.bundle.Sdk;
 import com.intellij.java.language.impl.projectRoots.ex.JavaSdkUtil;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.virtualFileSystem.VirtualFile;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.java.compiler.JavaCompilerBundle;
 import consulo.java.compiler.JavaCompilerUtil;
@@ -53,10 +53,10 @@ public class OldBackendCompilerProcessBuilder extends BackendCompilerProcessBuil
 	@Nonnull
 	@RequiredReadAction
 	private GeneralCommandLine createStartupCommand(ModuleChunk chunk,
-													String outputPath,
-													CompileContext compileContext,
-													JpsJavaCompilerOptions javacOptions,
-													boolean annotationProcessorsEnabled) throws IOException
+                                                  String outputPath,
+                                                  CompileContext compileContext,
+                                                  JpsJavaCompilerOptions javacOptions,
+                                                  boolean annotationProcessorsEnabled) throws IOException
 	{
 		final Sdk jdk = JavacCompiler.getJdkForStartupCommand(chunk);
 		final String versionString = jdk.getVersionString();
@@ -123,7 +123,7 @@ public class OldBackendCompilerProcessBuilder extends BackendCompilerProcessBuil
 				{
 					LOG.debug("Adding path for compilation " + path);
 				}
-				parametersList.add(CompilerUtil.quotePath(path));
+				parametersList.add(consulo.ide.impl.idea.compiler.impl.CompilerUtil.quotePath(path));
 			}
 		}
 		else

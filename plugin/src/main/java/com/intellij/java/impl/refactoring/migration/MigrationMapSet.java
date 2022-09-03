@@ -16,14 +16,14 @@
 package com.intellij.java.impl.refactoring.migration;
 
 import consulo.logging.Logger;
-import com.intellij.openapi.extensions.Extensions;
-import com.intellij.openapi.util.InvalidDataException;
-import com.intellij.openapi.util.JDOMUtil;
-import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.openapi.util.io.FileUtilRt;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
-import com.intellij.util.text.UniqueNameGenerator;
+import consulo.component.extension.Extensions;
+import consulo.util.xml.serializer.InvalidDataException;
+import consulo.util.jdom.JDOMUtil;
+import consulo.ide.impl.idea.openapi.util.io.FileUtil;
+import consulo.ide.impl.idea.openapi.util.io.FileUtilRt;
+import consulo.util.lang.StringUtil;
+import consulo.language.codeStyle.CodeStyleSettingsManager;
+import consulo.component.util.text.UniqueNameGenerator;
 import consulo.container.boot.ContainerPathManager;
 import org.jdom.Document;
 import org.jdom.Element;

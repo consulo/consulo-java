@@ -20,7 +20,7 @@
  */
 package com.intellij.java.impl.codeInspection.reference;
 
-import com.intellij.codeInspection.InspectionsBundle;
+import consulo.language.editor.inspection.InspectionsBundle;
 import com.intellij.codeInspection.reference.*;
 import com.intellij.java.analysis.codeInspection.reference.*;
 import com.intellij.java.analysis.impl.codeInspection.reference.RefClassImpl;
@@ -30,16 +30,18 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.MethodSignatureUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.util.VisibilityUtil;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.util.PsiTreeUtil;
 import jakarta.inject.Singleton;
+
+import javax.annotation.Nullable;
 
 @Singleton
 public class RefJavaUtilImpl extends RefJavaUtil {
 
   @Override
-  public void addReferences(final PsiModifierListOwner psiFrom, final RefJavaElement ref, @javax.annotation.Nullable PsiElement findIn) {
+  public void addReferences(final PsiModifierListOwner psiFrom, final RefJavaElement ref, @Nullable PsiElement findIn) {
     final RefJavaElementImpl refFrom = (RefJavaElementImpl) ref;
     if (findIn != null) {
       findIn.accept(
@@ -92,7 +94,7 @@ public class RefJavaUtilImpl extends RefJavaUtil {
               }
             }
 
-            @javax.annotation.Nullable
+            @Nullable
             private RefMethod processNewLikeConstruct(final PsiMethod psiConstructor, final PsiExpressionList argumentList) {
               if (psiConstructor != null) {
                 if (isDeprecated(psiConstructor)) refFrom.setUsesDeprecatedApi(true);
@@ -249,7 +251,7 @@ public class RefJavaUtilImpl extends RefJavaUtil {
   }
 
   @Override
-  @javax.annotation.Nullable
+  @Nullable
   public String getPackageName(RefEntity refEntity) {
     if (refEntity instanceof RefProject) {
       return null;
@@ -285,7 +287,7 @@ public class RefJavaUtilImpl extends RefJavaUtil {
   }
 
   @Override
-  @javax.annotation.Nullable
+  @Nullable
   public RefClass getOwnerClass(RefManager refManager, PsiElement psiElement) {
     while (psiElement != null && !(psiElement instanceof PsiClass)) {
       psiElement = psiElement.getParent();
@@ -295,7 +297,7 @@ public class RefJavaUtilImpl extends RefJavaUtil {
   }
 
   @Override
-  @javax.annotation.Nullable
+  @Nullable
   public RefClass getOwnerClass(RefElement refElement) {
     RefEntity parent = refElement.getOwner();
 

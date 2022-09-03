@@ -16,54 +16,52 @@
 
 package consulo.java.language.fileTypes;
 
-import javax.annotation.Nonnull;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.virtualFileSystem.VirtualFileManager;
+import consulo.virtualFileSystem.archive.ArchiveFileType;
+import consulo.virtualFileSystem.archive.ArchiveVfsUtil;
 
-import com.intellij.openapi.vfs.VirtualFile;
-import consulo.fileTypes.ArchiveFileType;
-import consulo.vfs.util.ArchiveVfsUtil;
+import javax.annotation.Nonnull;
 
 /**
  * @author VISTALL
  * @since 05-Dec-16.
  */
-public class JModFileType extends ArchiveFileType
-{
-	public static final JModFileType INSTANCE = new JModFileType();
+public class JModFileType extends ArchiveFileType {
+  public static final JModFileType INSTANCE = new JModFileType();
 
-	@Nonnull
-	@Override
-	public String getId()
-	{
-		return "JMOD_ARCHIVE";
-	}
+  private JModFileType() {
+    super(VirtualFileManager.getInstance());
+  }
 
-	@Nonnull
-	@Override
-	public String getDefaultExtension()
-	{
-		return "jmod";
-	}
+  @Nonnull
+  @Override
+  public String getId() {
+    return "JMOD_ARCHIVE";
+  }
 
-	@Nonnull
-	@Override
-	public String getProtocol()
-	{
-		return "jar";
-	}
+  @Nonnull
+  @Override
+  public String getDefaultExtension() {
+    return "jmod";
+  }
 
-	public static boolean isRoot(@Nonnull VirtualFile file)
-	{
-		if(file.getParent() == null)
-		{
-			VirtualFile archiveFile = ArchiveVfsUtil.getVirtualFileForArchive(file);
-			return archiveFile != null && archiveFile.getFileType() == JModFileType.INSTANCE;
-		}
-		return false;
-	}
+  @Nonnull
+  @Override
+  public String getProtocol() {
+    return "jar";
+  }
 
-	public static boolean isModuleRoot(@Nonnull VirtualFile file)
-	{
-		VirtualFile parent = file.getParent();
-		return parent != null && isRoot(parent);
-	}
+  public static boolean isRoot(@Nonnull VirtualFile file) {
+    if (file.getParent() == null) {
+      VirtualFile archiveFile = ArchiveVfsUtil.getVirtualFileForArchive(file);
+      return archiveFile != null && archiveFile.getFileType() == JModFileType.INSTANCE;
+    }
+    return false;
+  }
+
+  public static boolean isModuleRoot(@Nonnull VirtualFile file) {
+    VirtualFile parent = file.getParent();
+    return parent != null && isRoot(parent);
+  }
 }

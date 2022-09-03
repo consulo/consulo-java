@@ -7,14 +7,14 @@ import static org.junit.Assert.fail;
 import javax.annotation.Nonnull;
 import com.intellij.JavaTestUtil;
 import com.intellij.java.impl.refactoring.convertToInstanceMethod.ConvertToInstanceMethodProcessor;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifier;
-import com.intellij.refactoring.BaseRefactoringProcessor;
+import consulo.language.editor.refactoring.BaseRefactoringProcessor;
 import com.intellij.refactoring.LightRefactoringTestCase;
 import com.intellij.java.language.util.VisibilityUtil;
-import com.intellij.util.containers.ContainerUtil;
-import consulo.codeInsight.TargetElementUtil;
+import consulo.util.collection.ContainerUtil;
+import consulo.language.editor.TargetElementUtil;
 import consulo.codeInsight.TargetElementUtilEx;
 
 /**

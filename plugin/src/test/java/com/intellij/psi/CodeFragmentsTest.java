@@ -4,7 +4,7 @@ import com.intellij.java.language.psi.JavaCodeFragmentFactory;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.testFramework.PlatformTestCase;
 import com.intellij.testFramework.PsiTestCase;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.language.psi.scope.GlobalSearchScope;
 
 @PlatformTestCase.WrapInCommand
 public abstract class CodeFragmentsTest extends PsiTestCase{

@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.intellij.java.language.impl.vfs.impl.jar;
+package com.intellij.java.impl.vfs.impl.jar;
 
 import com.intellij.java.language.impl.JarArchiveFileType;
-import consulo.vfs.impl.archive.ArchiveFile;
+import consulo.virtualFileSystem.archive.ArchiveFile;
 import consulo.vfs.impl.archive.ArchiveFileSystemBase;
 import consulo.vfs.impl.zip.ZipArchiveFile;
 

@@ -24,26 +24,26 @@
  */
 package com.intellij.java.impl.codeInsight.intention.impl;
 
-import com.intellij.codeInsight.CodeInsightBundle;
-import com.intellij.codeInsight.FileModificationService;
+import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.FileModificationService;
 import com.intellij.java.impl.codeInsight.generation.OverrideImplementUtil;
 import com.intellij.java.language.impl.codeInsight.PsiClassListCellRenderer;
-import com.intellij.ide.util.PsiElementListCellRenderer;
+import consulo.language.editor.ui.PsiElementListCellRenderer;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.command.CommandProcessor;
+import consulo.application.ApplicationManager;
+import consulo.ui.ex.awt.Messages;
+import consulo.undoRedo.CommandProcessor;
 import consulo.logging.Logger;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.progress.ProgressManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.Messages;
-import com.intellij.openapi.ui.popup.PopupChooserBuilder;
-import com.intellij.openapi.util.Computable;
+import consulo.codeEditor.Editor;
+import consulo.application.progress.ProgressManager;
+import consulo.project.Project;
+import consulo.ide.impl.ui.impl.PopupChooserBuilder;
+import consulo.application.util.function.Computable;
 import com.intellij.psi.*;
 import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
-import com.intellij.psi.util.PsiUtilCore;
-import com.intellij.ui.components.JBList;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.psi.PsiUtilCore;
+import consulo.ui.ex.awt.JBList;
+import consulo.language.util.IncorrectOperationException;
 
 import javax.swing.*;
 import java.util.*;
@@ -128,7 +128,7 @@ public class ImplementAbstractMethodHandler {
       }
     };
     myList.setCellRenderer(elementListCellRenderer);
-    final PopupChooserBuilder builder = new PopupChooserBuilder(myList);
+    final PopupChooserBuilder builder = new consulo.ide.impl.ui.impl.PopupChooserBuilder(myList);
     elementListCellRenderer.installSpeedSearch(builder);
 
     builder.

@@ -29,34 +29,34 @@ import com.intellij.java.debugger.impl.DebuggerContextImpl;
 import com.intellij.java.debugger.impl.DebuggerContextListener;
 import com.intellij.java.debugger.impl.DebuggerManagerImpl;
 import com.intellij.java.debugger.impl.DebuggerSession;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.markup.GutterIconRenderer;
-import com.intellij.openapi.editor.markup.RangeHighlighter;
-import com.intellij.openapi.fileEditor.FileDocumentManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.startup.StartupManager;
-import com.intellij.openapi.ui.MessageType;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.openapi.util.Computable;
-import com.intellij.openapi.util.InvalidDataException;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.openapi.vfs.VirtualFileManager;
+import consulo.application.ApplicationManager;
+import consulo.document.Document;
+import consulo.codeEditor.Editor;
+import consulo.codeEditor.markup.GutterIconRenderer;
+import consulo.codeEditor.markup.RangeHighlighter;
+import consulo.document.FileDocumentManager;
+import consulo.execution.debug.XDebuggerManager;
+import consulo.execution.debug.XDebuggerUtil;
+import consulo.project.Project;
+import consulo.project.startup.StartupManager;
+import consulo.ide.impl.idea.openapi.ui.MessageType;
+import consulo.util.lang.Comparing;
+import consulo.application.util.function.Computable;
+import consulo.util.xml.serializer.InvalidDataException;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.virtualFileSystem.VirtualFileManager;
 import com.intellij.java.language.psi.PsiField;
-import com.intellij.util.Function;
-import com.intellij.util.containers.ContainerUtil;
-import com.intellij.xdebugger.XDebuggerManager;
-import com.intellij.xdebugger.XDebuggerUtil;
-import com.intellij.xdebugger.XSourcePosition;
+import consulo.ide.impl.idea.util.Function;
+import consulo.util.collection.ContainerUtil;
+import consulo.execution.debug.XSourcePosition;
 import com.intellij.xdebugger.breakpoints.*;
-import com.intellij.xdebugger.impl.DebuggerSupport;
-import com.intellij.xdebugger.impl.XDebugSessionImpl;
-import com.intellij.xdebugger.impl.XDebuggerSupport;
-import com.intellij.xdebugger.impl.breakpoints.XBreakpointBase;
-import com.intellij.xdebugger.impl.breakpoints.XBreakpointManagerImpl;
-import com.intellij.xdebugger.impl.breakpoints.XDependentBreakpointManager;
-import com.intellij.xdebugger.impl.breakpoints.XLineBreakpointImpl;
+import consulo.ide.impl.idea.xdebugger.impl.DebuggerSupport;
+import consulo.ide.impl.idea.xdebugger.impl.XDebugSessionImpl;
+import consulo.ide.impl.idea.xdebugger.impl.XDebuggerSupport;
+import consulo.ide.impl.idea.xdebugger.impl.breakpoints.XBreakpointBase;
+import consulo.ide.impl.idea.xdebugger.impl.breakpoints.XBreakpointManagerImpl;
+import consulo.ide.impl.idea.xdebugger.impl.breakpoints.XDependentBreakpointManager;
+import consulo.ide.impl.idea.xdebugger.impl.breakpoints.XLineBreakpointImpl;
 import consulo.internal.com.sun.jdi.InternalException;
 import consulo.internal.com.sun.jdi.ThreadReference;
 import consulo.internal.com.sun.jdi.request.*;
@@ -130,7 +130,7 @@ public class BreakpointManager
 	{
 		if(breakpoint.isEnabled() && (breakpoint.getType() instanceof JavaMethodBreakpointType || breakpoint.getType() instanceof JavaWildcardMethodBreakpointType))
 		{
-			XDebugSessionImpl.NOTIFICATION_GROUP.createNotification("Method breakpoints may dramatically slow down debugging", MessageType.WARNING).notify(((XBreakpointBase) breakpoint).getProject
+			consulo.ide.impl.idea.xdebugger.impl.XDebugSessionImpl.NOTIFICATION_GROUP.createNotification("Method breakpoints may dramatically slow down debugging", consulo.ide.impl.idea.openapi.ui.MessageType.WARNING).notify(((consulo.ide.impl.idea.xdebugger.impl.breakpoints.XBreakpointBase) breakpoint).getProject
 					());
 			return true;
 		}
@@ -177,7 +177,7 @@ public class BreakpointManager
 			public void run()
 			{
 				XBreakpoint xBreakpoint = breakpoint.myXBreakpoint;
-				if(xBreakpoint instanceof XLineBreakpointImpl)
+				if(xBreakpoint instanceof consulo.ide.impl.idea.xdebugger.impl.breakpoints.XLineBreakpointImpl)
 				{
 					RangeHighlighter highlighter = ((XLineBreakpointImpl) xBreakpoint).getHighlighter();
 					if(highlighter != null)
@@ -185,7 +185,7 @@ public class BreakpointManager
 						GutterIconRenderer renderer = highlighter.getGutterIconRenderer();
 						if(renderer != null)
 						{
-							DebuggerSupport.getDebuggerSupport(XDebuggerSupport.class).getEditBreakpointAction().editBreakpoint(myProject, editor, breakpoint.myXBreakpoint, renderer);
+							DebuggerSupport.getDebuggerSupport(consulo.ide.impl.idea.xdebugger.impl.XDebuggerSupport.class).getEditBreakpointAction().editBreakpoint(myProject, editor, breakpoint.myXBreakpoint, renderer);
 						}
 					}
 				}
@@ -215,7 +215,7 @@ public class BreakpointManager
 		if(typeCls != null)
 		{
 			XBreakpointType<XBreakpoint<?>, ?> type = XDebuggerUtil.getInstance().findBreakpointType(typeCls);
-			((XBreakpointManagerImpl) getXBreakpointManager()).getBreakpointDefaults(type).setSuspendPolicy(Breakpoint.transformSuspendPolicy(defaults.getSuspendPolicy()));
+			((consulo.ide.impl.idea.xdebugger.impl.breakpoints.XBreakpointManagerImpl) getXBreakpointManager()).getBreakpointDefaults(type).setSuspendPolicy(Breakpoint.transformSuspendPolicy(defaults.getSuspendPolicy()));
 		}
 	}
 
@@ -496,7 +496,7 @@ public class BreakpointManager
 						}
 
 						boolean leaveEnabled = "true".equalsIgnoreCase(rule.getAttributeValue("leaveEnabled"));
-						XDependentBreakpointManager dependentBreakpointManager = ((XBreakpointManagerImpl) getXBreakpointManager()).getDependentBreakpointManager();
+						XDependentBreakpointManager dependentBreakpointManager = ((consulo.ide.impl.idea.xdebugger.impl.breakpoints.XBreakpointManagerImpl) getXBreakpointManager()).getDependentBreakpointManager();
 						dependentBreakpointManager.setMasterBreakpoint(slaveBreakpoint.myXBreakpoint, masterBreakpoint.myXBreakpoint, leaveEnabled);
 						//addBreakpointRule(new EnableBreakpointRule(BreakpointManager.this, masterBreakpoint, slaveBreakpoint, leaveEnabled));
 					}
@@ -849,7 +849,7 @@ public class BreakpointManager
 	@Nullable
 	public Breakpoint findMasterBreakpoint(@Nonnull Breakpoint dependentBreakpoint)
 	{
-		XDependentBreakpointManager dependentBreakpointManager = ((XBreakpointManagerImpl) getXBreakpointManager()).getDependentBreakpointManager();
+		XDependentBreakpointManager dependentBreakpointManager = ((consulo.ide.impl.idea.xdebugger.impl.breakpoints.XBreakpointManagerImpl) getXBreakpointManager()).getDependentBreakpointManager();
 		return getJavaBreakpoint(dependentBreakpointManager.getMasterBreakpoint(dependentBreakpoint.myXBreakpoint));
 	}
 

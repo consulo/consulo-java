@@ -17,7 +17,7 @@ package com.intellij.java.impl.psi.impl.source.resolve.reference.impl;
 
 import static com.intellij.java.language.patterns.PsiJavaPatterns.psiLiteral;
 import static com.intellij.java.language.patterns.PsiJavaPatterns.psiMethod;
-import static com.intellij.patterns.StandardPatterns.or;
+import static consulo.language.pattern.StandardPatterns.or;
 import static consulo.java.language.module.util.JavaClassNames.JAVA_LANG_CLASS;
 import static com.intellij.java.analysis.impl.psi.impl.source.resolve.reference.impl.JavaReflectionReferenceUtil.FOR_NAME;
 import static com.intellij.java.analysis.impl.psi.impl.source.resolve.reference.impl.JavaReflectionReferenceUtil.GET_DECLARED_FIELD;
@@ -30,19 +30,20 @@ import static com.intellij.java.analysis.impl.psi.impl.source.resolve.reference.
 import static com.intellij.java.analysis.impl.psi.impl.source.resolve.reference.impl.JavaReflectionReferenceUtil.LOAD_CLASS;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-import com.intellij.patterns.ElementPattern;
+import consulo.language.pattern.ElementPattern;
 import com.intellij.java.language.patterns.PsiJavaElementPattern;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiLiteral;
 import com.intellij.java.language.psi.PsiLiteralExpression;
-import com.intellij.psi.PsiReference;
-import com.intellij.psi.PsiReferenceContributor;
+import consulo.language.psi.PsiReference;
+import consulo.language.psi.PsiReferenceContributor;
 import com.intellij.java.language.psi.PsiReferenceExpression;
-import com.intellij.psi.PsiReferenceRegistrar;
+import consulo.language.psi.PsiReferenceRegistrar;
 import com.intellij.java.impl.psi.impl.source.resolve.reference.impl.providers.JavaClassReferenceProvider;
-import com.intellij.util.ProcessingContext;
+import consulo.language.util.ProcessingContext;
 
 /**
  * @author Konstantin Bulenkov
@@ -63,7 +64,7 @@ public class JavaReflectionReferenceContributor extends PsiReferenceContributor
 	{
 		registrar.registerReferenceProvider(PATTERN, new JavaReflectionReferenceProvider()
 		{
-			@javax.annotation.Nullable
+			@Nullable
 			@Override
 			protected PsiReference[] getReferencesByMethod(@Nonnull PsiLiteralExpression literalArgument, @Nonnull PsiReferenceExpression methodReference, @Nonnull ProcessingContext context)
 			{
@@ -75,7 +76,7 @@ public class JavaReflectionReferenceContributor extends PsiReferenceContributor
 
 		registrar.registerReferenceProvider(CLASS_PATTERN, new JavaReflectionReferenceProvider()
 		{
-			@javax.annotation.Nullable
+			@Nullable
 			@Override
 			protected PsiReference[] getReferencesByMethod(@Nonnull PsiLiteralExpression literalArgument, @Nonnull PsiReferenceExpression methodReference, @Nonnull ProcessingContext context)
 			{

@@ -17,11 +17,11 @@ package com.intellij.codeInsight.daemon.quickFix;
 
 import java.util.List;
 
-import com.intellij.codeInsight.daemon.impl.HighlightInfo;
-import com.intellij.codeInsight.intention.IntentionAction;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Pair;
-import com.intellij.psi.PsiFile;
+import consulo.language.editor.rawHighlight.HighlightInfo;
+import consulo.language.editor.intention.IntentionAction;
+import consulo.project.Project;
+import consulo.util.lang.Pair;
+import consulo.language.psi.PsiFile;
 
 /**
  * @author Maxim.Mossienko

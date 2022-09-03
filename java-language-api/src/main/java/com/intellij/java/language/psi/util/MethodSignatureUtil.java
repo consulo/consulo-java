@@ -16,8 +16,8 @@
 package com.intellij.java.language.psi.util;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.openapi.util.Pair;
+import consulo.util.lang.Comparing;
+import consulo.util.lang.Pair;
 import consulo.util.collection.HashingStrategy;
 import org.jetbrains.annotations.NonNls;
 
@@ -107,8 +107,8 @@ public class MethodSignatureUtil
 
 	@Nonnull
 	public static MethodSignature createMethodSignature(@NonNls @Nonnull String name,
-			@javax.annotation.Nullable PsiParameterList parameterTypes,
-			@javax.annotation.Nullable PsiTypeParameterList typeParameterList,
+			@Nullable PsiParameterList parameterTypes,
+			@Nullable PsiTypeParameterList typeParameterList,
 			@Nonnull PsiSubstitutor substitutor)
 	{
 		return createMethodSignature(name, parameterTypes, typeParameterList, substitutor, false);
@@ -116,8 +116,8 @@ public class MethodSignatureUtil
 
 	@Nonnull
 	public static MethodSignature createMethodSignature(@NonNls @Nonnull String name,
-			@javax.annotation.Nullable PsiParameterList parameterTypes,
-			@javax.annotation.Nullable PsiTypeParameterList typeParameterList,
+			@Nullable PsiParameterList parameterTypes,
+			@Nullable PsiTypeParameterList typeParameterList,
 			@Nonnull PsiSubstitutor substitutor,
 			boolean isConstructor)
 	{
@@ -257,7 +257,7 @@ public class MethodSignatureUtil
 		return doFindMethodInSuperClassBySignatureInDerived(superClass, superSubstitutor, signature, checkDeep);
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	private static PsiMethod doFindMethodInSuperClassBySignatureInDerived(@Nonnull PsiClass superClass,
 			@Nonnull PsiSubstitutor superSubstitutor,
 			@Nonnull MethodSignature signature,

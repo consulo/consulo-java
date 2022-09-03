@@ -15,8 +15,8 @@
  */
 package com.intellij.java.impl.ide.hierarchy.method;
 
-import com.intellij.openapi.actionSystem.Presentation;
-import com.intellij.ide.IdeBundle;
+import consulo.ui.ex.action.Presentation;
+import consulo.ide.IdeBundle;
 
 public final class ImplementMethodAction extends OverrideImplementMethodAction {
   protected final void update(final Presentation presentation, final int toImplement, final int toOverride) {

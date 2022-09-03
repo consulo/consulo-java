@@ -15,16 +15,16 @@
  */
 package com.intellij.java.language.impl.psi.impl.source.tree.java;
 
-import javax.annotation.Nonnull;
-
-import com.intellij.lang.ASTNode;
-import consulo.logging.Logger;
-import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.java.language.impl.psi.impl.source.tree.ChildRole;
-import com.intellij.psi.impl.source.tree.CompositeElement;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
-import com.intellij.psi.tree.ChildRoleBase;
-import com.intellij.psi.tree.IElementType;
+import com.intellij.java.language.psi.JavaTokenType;
+import consulo.language.ast.ASTNode;
+import consulo.language.ast.ChildRoleBase;
+import consulo.language.ast.IElementType;
+import consulo.language.impl.ast.CompositeElement;
+import consulo.logging.Logger;
+
+import javax.annotation.Nonnull;
 
 public class ParameterElement extends CompositeElement {
   private static final Logger LOG = Logger.getInstance(ParameterElement.class);

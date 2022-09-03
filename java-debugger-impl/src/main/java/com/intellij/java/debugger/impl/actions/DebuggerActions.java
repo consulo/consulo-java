@@ -21,9 +21,9 @@
 package com.intellij.java.debugger.impl.actions;
 
 import org.jetbrains.annotations.NonNls;
-import com.intellij.xdebugger.impl.actions.XDebuggerActions;
+import consulo.ide.impl.idea.xdebugger.impl.actions.XDebuggerActions;
 
-public interface DebuggerActions extends XDebuggerActions {
+public interface DebuggerActions extends consulo.ide.impl.idea.xdebugger.impl.actions.XDebuggerActions {
   @NonNls String POP_FRAME = "Debugger.PopFrame";
   @NonNls String EVALUATION_DIALOG_POPUP = "Debugger.EvaluationDialogPopup";
   @NonNls String FRAME_PANEL_POPUP = "Debugger.FramePanelPopup";

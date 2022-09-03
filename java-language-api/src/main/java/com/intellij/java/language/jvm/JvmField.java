@@ -18,24 +18,25 @@ package com.intellij.java.language.jvm;
 import com.intellij.java.language.jvm.types.JvmType;
 
 import javax.annotation.Nonnull;
+import java.lang.reflect.Field;
 
 /**
  * Represents a field.
  *
- * @see java.lang.reflect.Field
+ * @see Field
  */
 public interface JvmField extends JvmMember {
 
   /**
-   * @see java.lang.reflect.Field#getName
+   * @see Field#getName
    */
   @Nonnull
   @Override
   String getName();
 
   /**
-   * @see java.lang.reflect.Field#getGenericType
-   * @see java.lang.reflect.Field#getAnnotatedType
+   * @see Field#getGenericType
+   * @see Field#getAnnotatedType
    */
   @Nonnull
   JvmType getType();

@@ -16,10 +16,10 @@
 package com.intellij.java.impl.refactoring.extractSuperclass;
 
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiDirectory;
-import com.intellij.psi.PsiElement;
-import com.intellij.refactoring.RefactoringBundle;
-import com.intellij.refactoring.ui.UsageViewDescriptorAdapter;
+import consulo.language.psi.PsiDirectory;
+import consulo.language.psi.PsiElement;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.ui.UsageViewDescriptorAdapter;
 import com.intellij.java.impl.refactoring.util.classMembers.MemberInfo;
 import com.intellij.java.impl.refactoring.util.classMembers.ClassMembersUtil;
 import javax.annotation.Nonnull;

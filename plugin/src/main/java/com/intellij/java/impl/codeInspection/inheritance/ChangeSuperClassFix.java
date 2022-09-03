@@ -17,14 +17,14 @@ package com.intellij.java.impl.codeInspection.inheritance;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.codeInsight.FileModificationService;
-import com.intellij.codeInsight.daemon.GroupNames;
-import com.intellij.codeInsight.intention.LowPriorityAction;
-import com.intellij.codeInspection.LocalQuickFix;
-import com.intellij.codeInspection.ProblemDescriptor;
+import consulo.language.editor.FileModificationService;
+import consulo.ide.impl.idea.codeInsight.daemon.GroupNames;
+import consulo.language.editor.intention.LowPriorityAction;
+import consulo.language.editor.inspection.LocalQuickFix;
+import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.command.WriteCommandAction;
-import com.intellij.openapi.project.Project;
+import consulo.language.editor.WriteCommandAction;
+import consulo.project.Project;
 import com.intellij.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import org.jetbrains.annotations.TestOnly;

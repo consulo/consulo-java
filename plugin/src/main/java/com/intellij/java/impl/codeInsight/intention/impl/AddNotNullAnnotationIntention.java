@@ -23,9 +23,9 @@
 package com.intellij.java.impl.codeInsight.intention.impl;
 
 import com.intellij.java.language.codeInsight.NullableNotNullManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Pair;
-import com.intellij.util.ArrayUtil;
+import consulo.project.Project;
+import consulo.util.lang.Pair;
+import consulo.util.collection.ArrayUtil;
 import javax.annotation.Nonnull;
 
 import java.util.List;

@@ -16,19 +16,20 @@
 package com.intellij.java.language.impl.psi.impl.smartPointers;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import consulo.logging.Logger;
-import com.intellij.openapi.project.Project;
+import consulo.project.Project;
 import com.intellij.java.language.psi.ClassTypePointerFactory;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClassType;
 import com.intellij.java.language.psi.PsiElementFactory;
 import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
-import com.intellij.psi.SmartPointerManager;
-import com.intellij.psi.SmartPsiElementPointer;
+import consulo.language.psi.SmartPointerManager;
+import consulo.language.psi.SmartPsiElementPointer;
 import com.intellij.java.language.psi.SmartTypePointer;
 import com.intellij.java.language.impl.psi.impl.source.PsiClassReferenceType;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
 
 /**
  * Created by Max Medvedev on 10/25/13
@@ -37,7 +38,7 @@ public class PsiClassReferenceTypePointerFactory implements ClassTypePointerFact
 {
 	private static final Logger LOG = Logger.getInstance(PsiClassReferenceTypePointerFactory.class);
 
-	@javax.annotation.Nullable
+	@Nullable
 	@Override
 	public SmartTypePointer createClassTypePointer(@Nonnull PsiClassType classType, @Nonnull Project project)
 	{

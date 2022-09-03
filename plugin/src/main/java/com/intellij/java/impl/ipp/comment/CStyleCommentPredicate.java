@@ -16,12 +16,12 @@
 package com.intellij.java.impl.ipp.comment;
 
 import com.intellij.java.language.psi.JavaTokenType;
-import com.intellij.psi.PsiComment;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiWhiteSpace;
+import consulo.language.psi.PsiComment;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiWhiteSpace;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.ast.IElementType;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 
 class CStyleCommentPredicate implements PsiElementPredicate {

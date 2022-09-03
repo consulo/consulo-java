@@ -16,11 +16,11 @@
 package com.intellij.java.impl.util.xml.converters.values;
 
 import com.intellij.java.language.psi.PsiType;
-import com.intellij.openapi.extensions.ExtensionPointName;
-import com.intellij.openapi.extensions.Extensions;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.openapi.util.Condition;
-import com.intellij.openapi.util.Pair;
+import consulo.component.extension.ExtensionPointName;
+import consulo.component.extension.Extensions;
+import consulo.util.lang.Comparing;
+import consulo.util.lang.function.Condition;
+import consulo.util.lang.Pair;
 import com.intellij.util.xml.Converter;
 import com.intellij.util.xml.GenericDomValue;
 import com.intellij.util.xml.converters.values.BooleanValueConverter;
@@ -115,7 +115,7 @@ public class GenericDomValueConvertersRegistry {
     myConditionConverters.put(condition, provider);
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public Converter<?> getConverter(@Nonnull GenericDomValue domValue, @Nullable PsiType type) {
     final Pair<PsiType, GenericDomValue> pair = new Pair<PsiType, GenericDomValue>(type, domValue);
     for (@Nonnull Condition<Pair<PsiType, GenericDomValue>> condition : myConditionConverters.keySet()) {

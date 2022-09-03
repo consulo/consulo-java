@@ -24,7 +24,7 @@
  */
 package com.intellij.java.analysis.impl.codeInspection.util;
 
-import com.intellij.codeInspection.reference.RefEntity;
+import consulo.language.editor.inspection.reference.RefEntity;
 import com.intellij.java.analysis.codeInspection.reference.RefJavaElement;
 import com.intellij.java.analysis.codeInspection.reference.RefParameter;
 

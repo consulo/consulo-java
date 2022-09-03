@@ -20,13 +20,13 @@
 package com.intellij.java.language.impl.psi.impl.source;
 
 import com.intellij.java.language.JavaLanguage;
-import com.intellij.lang.Language;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiManager;
-import com.intellij.psi.impl.source.DummyHolder;
-import com.intellij.psi.impl.source.HolderFactory;
-import com.intellij.psi.impl.source.tree.TreeElement;
-import com.intellij.util.CharTable;
+import consulo.language.Language;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiManager;
+import consulo.language.impl.psi.DummyHolder;
+import consulo.language.impl.psi.HolderFactory;
+import consulo.language.impl.ast.TreeElement;
+import consulo.language.util.CharTable;
 
 import javax.annotation.Nonnull;
 

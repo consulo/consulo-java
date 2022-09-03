@@ -15,39 +15,39 @@
  */
 package com.intellij.java.impl.codeInsight.generation;
 
-import com.intellij.codeInsight.CodeInsightActionHandler;
-import com.intellij.codeInsight.CodeInsightUtilBase;
-import com.intellij.codeInsight.generation.ClassMember;
-import com.intellij.codeInsight.hint.HintManager;
-import com.intellij.codeInsight.template.Template;
-import com.intellij.codeInsight.template.TemplateEditingAdapter;
-import com.intellij.codeInsight.template.TemplateManager;
-import com.intellij.codeInspection.ex.GlobalInspectionContextBase;
-import com.intellij.ide.util.MemberChooser;
+import consulo.language.editor.action.CodeInsightActionHandler;
+import consulo.ide.impl.idea.codeInsight.CodeInsightUtilBase;
+import consulo.ide.impl.idea.codeInsight.generation.ClassMember;
+import consulo.language.editor.hint.HintManager;
+import consulo.language.editor.template.Template;
+import consulo.language.editor.template.event.TemplateEditingAdapter;
+import consulo.language.editor.template.TemplateManager;
+import consulo.ide.impl.idea.codeInspection.ex.GlobalInspectionContextBase;
+import consulo.ide.impl.idea.ide.util.MemberChooser;
 import com.intellij.java.language.impl.codeInsight.generation.GenerationInfo;
 import com.intellij.java.language.impl.codeInsight.generation.PsiElementClassMember;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiDocCommentOwner;
 import com.intellij.java.language.psi.PsiMember;
-import com.intellij.lang.ContextAwareActionHandler;
-import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.application.Result;
-import com.intellij.openapi.command.WriteCommandAction;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.LogicalPosition;
-import com.intellij.openapi.editor.ScrollType;
-import com.intellij.openapi.editor.actions.EnterAction;
-import com.intellij.openapi.fileEditor.FileDocumentManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.PsiDocumentManager;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.language.editor.refactoring.ContextAwareActionHandler;
+import consulo.dataContext.DataContext;
+import consulo.application.ApplicationManager;
+import consulo.application.Result;
+import consulo.language.editor.WriteCommandAction;
+import consulo.document.Document;
+import consulo.codeEditor.Editor;
+import consulo.codeEditor.LogicalPosition;
+import consulo.codeEditor.ScrollType;
+import consulo.ide.impl.idea.openapi.editor.actions.EnterAction;
+import consulo.document.FileDocumentManager;
+import consulo.project.Project;
+import consulo.document.util.TextRange;
+import consulo.util.lang.StringUtil;
+import consulo.language.psi.PsiDocumentManager;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.util.IncorrectOperationException;
+import consulo.util.collection.ContainerUtil;
 import consulo.logging.Logger;
 import org.jetbrains.java.generate.exception.GenerateCodeException;
 
@@ -232,13 +232,13 @@ public abstract class GenerateMembersHandlerBase implements CodeInsightActionHan
     return chooseMembers(allMembers, false, false, project, null);
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   protected ClassMember[] chooseOriginalMembers(PsiClass aClass, Project project, Editor editor) {
     return chooseOriginalMembers(aClass, project);
   }
 
   @Nullable
-  protected ClassMember[] chooseMembers(ClassMember[] members, boolean allowEmptySelection, boolean copyJavadocCheckbox, Project project, @javax.annotation.Nullable Editor editor) {
+  protected ClassMember[] chooseMembers(ClassMember[] members, boolean allowEmptySelection, boolean copyJavadocCheckbox, Project project, @Nullable Editor editor) {
     MemberChooser<ClassMember> chooser = createMembersChooser(members, allowEmptySelection, copyJavadocCheckbox, project);
     if (editor != null) {
       final int offset = editor.getCaretModel().getOffset();
@@ -269,7 +269,7 @@ public abstract class GenerateMembersHandlerBase implements CodeInsightActionHan
 
   protected MemberChooser<ClassMember> createMembersChooser(ClassMember[] members, boolean allowEmptySelection, boolean copyJavadocCheckbox, Project project) {
     MemberChooser<ClassMember> chooser = new MemberChooser<ClassMember>(members, allowEmptySelection, true, project, false, getHeaderPanel(project)) {
-      @javax.annotation.Nullable
+      @Nullable
       @Override
       protected String getHelpId() {
         return GenerateMembersHandlerBase.this.getHelpId();

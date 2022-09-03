@@ -28,12 +28,12 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import org.jetbrains.annotations.NonNls;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.DialogWrapper;
-import com.intellij.refactoring.RefactoringBundle;
-import com.intellij.ui.ScrollPaneFactory;
-import com.intellij.util.ui.JBUI;
-import com.intellij.util.ui.UIUtil;
+import consulo.project.Project;
+import consulo.ui.ex.awt.DialogWrapper;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.ui.ex.awt.ScrollPaneFactory;
+import consulo.ui.ex.awt.JBUI;
+import consulo.ui.ex.awt.UIUtil;
 
 /**
  * created at Sep 12, 2001

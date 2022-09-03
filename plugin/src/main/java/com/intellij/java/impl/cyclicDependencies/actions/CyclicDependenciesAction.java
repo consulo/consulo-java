@@ -22,27 +22,28 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
 import javax.annotation.Nullable;
-import com.intellij.analysis.AnalysisScope;
-import com.intellij.analysis.AnalysisScopeBundle;
+
+import consulo.language.editor.PlatformDataKeys;
+import consulo.language.editor.scope.AnalysisScope;
+import consulo.language.editor.scope.AnalysisScopeBundle;
 import com.intellij.java.impl.analysis.JavaAnalysisScope;
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.CommonDataKeys;
-import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.actionSystem.LangDataKeys;
-import com.intellij.openapi.actionSystem.PlatformDataKeys;
-import com.intellij.openapi.actionSystem.Presentation;
-import com.intellij.openapi.fileEditor.FileDocumentManager;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleManager;
-import com.intellij.openapi.module.ModuleUtilCore;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.DialogWrapper;
-import com.intellij.psi.PsiDirectory;
-import com.intellij.psi.PsiElement;
+import consulo.ui.ex.action.AnAction;
+import consulo.ui.ex.action.AnActionEvent;
+import consulo.language.editor.CommonDataKeys;
+import consulo.dataContext.DataContext;
+import consulo.language.editor.LangDataKeys;
+import consulo.ui.ex.action.Presentation;
+import consulo.document.FileDocumentManager;
+import consulo.module.Module;
+import consulo.module.ModuleManager;
+import consulo.language.util.ModuleUtilCore;
+import consulo.project.Project;
+import consulo.ui.ex.awt.DialogWrapper;
+import consulo.language.psi.PsiDirectory;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiJavaPackage;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.ui.IdeBorderFactory;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.ui.ex.awt.IdeBorderFactory;
 
 /**
  * User: anna
@@ -100,7 +101,7 @@ public class CyclicDependenciesAction extends AnAction{
   }
 
 
-  @javax.annotation.Nullable
+  @Nullable
   private static AnalysisScope getInspectionScope(final DataContext dataContext) {
     final Project project = dataContext.getData(CommonDataKeys.PROJECT);
     if (project == null) return null;
@@ -144,7 +145,7 @@ public class CyclicDependenciesAction extends AnAction{
     return null;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private static AnalysisScope getProjectScope(DataContext dataContext) {
     final Project data = dataContext.getData(CommonDataKeys.PROJECT);
     if (data == null) {
@@ -153,7 +154,7 @@ public class CyclicDependenciesAction extends AnAction{
     return new AnalysisScope(data);
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private static AnalysisScope getModuleScope(DataContext dataContext) {
     final Module data = dataContext.getData(LangDataKeys.MODULE);
     if (data == null) {

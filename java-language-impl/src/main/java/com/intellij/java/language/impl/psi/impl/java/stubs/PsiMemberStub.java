@@ -16,8 +16,8 @@
 package com.intellij.java.language.impl.psi.impl.java.stubs;
 
 import com.intellij.java.language.psi.PsiMember;
-import com.intellij.psi.PsiNamedElement;
-import com.intellij.psi.stubs.NamedStub;
+import consulo.language.psi.PsiNamedElement;
+import consulo.language.psi.stub.NamedStub;
 
 /**
  * @author peter

@@ -15,10 +15,10 @@
  */
 package com.intellij.java.impl.codeInsight.completion;
 
-import com.intellij.codeInsight.completion.PrefixMatcher;
-import com.intellij.codeInsight.lookup.LookupElement;
-import com.intellij.codeInsight.template.impl.TemplateImpl;
-import com.intellij.codeInsight.template.impl.TemplateSettings;
+import consulo.application.util.matcher.PrefixMatcher;
+import consulo.language.editor.completion.lookup.LookupElement;
+import consulo.language.editor.impl.internal.template.TemplateImpl;
+import consulo.language.editor.template.TemplateSettings;
 import com.intellij.java.analysis.codeInsight.guess.GuessManager;
 import com.intellij.java.impl.codeInsight.lookup.ExpressionLookupItem;
 import com.intellij.java.impl.codeInsight.lookup.KeywordLookupItem;
@@ -28,13 +28,13 @@ import com.intellij.java.impl.psi.filters.getters.ClassLiteralGetter;
 import com.intellij.java.impl.psi.filters.getters.ThisGetter;
 import com.intellij.java.language.impl.psi.scope.util.PsiScopesUtil;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.ResolveState;
-import com.intellij.psi.scope.BaseScopeProcessor;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.Consumer;
-import com.intellij.util.containers.MultiMap;
+import consulo.util.lang.StringUtil;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.resolve.ResolveState;
+import consulo.language.psi.resolve.BaseScopeProcessor;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.ide.impl.idea.util.Consumer;
+import consulo.util.collection.MultiMap;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

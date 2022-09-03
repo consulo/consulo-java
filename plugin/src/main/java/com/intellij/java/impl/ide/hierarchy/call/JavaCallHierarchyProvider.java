@@ -17,16 +17,16 @@ package com.intellij.java.impl.ide.hierarchy.call;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.ide.hierarchy.CallHierarchyBrowserBase;
-import com.intellij.ide.hierarchy.HierarchyBrowser;
-import com.intellij.ide.hierarchy.HierarchyProvider;
-import com.intellij.openapi.actionSystem.CommonDataKeys;
-import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.actionSystem.LangDataKeys;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiElement;
+import consulo.ide.impl.idea.ide.hierarchy.CallHierarchyBrowserBase;
+import consulo.language.editor.hierarchy.HierarchyBrowser;
+import consulo.language.editor.hierarchy.HierarchyProvider;
+import consulo.language.editor.CommonDataKeys;
+import consulo.dataContext.DataContext;
+import consulo.language.editor.LangDataKeys;
+import consulo.project.Project;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 
 /**
  * @author yole

@@ -15,13 +15,13 @@
  */
 package com.intellij.java.impl.psi.codeStyle.arrangement;
 
-import com.intellij.openapi.util.Pair;
+import consulo.util.lang.Pair;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.util.containers.ContainerUtil;
-import com.intellij.util.containers.ContainerUtilRt;
-import com.intellij.util.containers.Stack;
+import consulo.util.collection.ContainerUtil;
+import consulo.ide.impl.idea.util.containers.ContainerUtilRt;
+import consulo.util.collection.Stack;
 import consulo.util.collection.primitive.objects.ObjectIntMap;
 import consulo.util.collection.primitive.objects.ObjectMaps;
 

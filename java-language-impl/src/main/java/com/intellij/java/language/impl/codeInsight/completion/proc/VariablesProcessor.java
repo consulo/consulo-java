@@ -23,20 +23,19 @@
  */
 package com.intellij.java.language.impl.codeInsight.completion.proc;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-
+import com.intellij.java.language.impl.psi.scope.ElementClassHint;
 import com.intellij.java.language.impl.psi.scope.util.PsiScopesUtil;
-import consulo.util.dataholder.Key;
-import com.intellij.psi.PsiElement;
 import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.java.language.psi.PsiVariable;
-import com.intellij.psi.ResolveState;
-import com.intellij.psi.scope.BaseScopeProcessor;
-import com.intellij.java.language.impl.psi.scope.ElementClassHint;
 import com.intellij.java.language.psi.scope.JavaScopeProcessorEvent;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.resolve.BaseScopeProcessor;
+import consulo.language.psi.resolve.ResolveState;
+import consulo.util.dataholder.Key;
+
+import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /** Simple processor to get all visible variables

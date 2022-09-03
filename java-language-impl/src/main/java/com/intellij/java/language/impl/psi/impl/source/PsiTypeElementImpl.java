@@ -24,23 +24,28 @@ import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaSharedImplUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.lang.ASTNode;
-import com.intellij.openapi.diagnostic.Attachment;
-import com.intellij.openapi.diagnostic.RuntimeExceptionWithAttachments;
-import com.intellij.openapi.util.RecursionGuard;
-import com.intellij.openapi.util.RecursionManager;
-import com.intellij.psi.*;
-import com.intellij.psi.impl.source.SourceTreeToPsiMap;
-import com.intellij.psi.impl.source.tree.CompositePsiElement;
-import com.intellij.psi.impl.source.tree.TreeElement;
-import com.intellij.psi.scope.PsiScopeProcessor;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.util.*;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.ObjectUtil;
-import com.intellij.util.SmartList;
-import com.intellij.util.containers.ContainerUtil;
-import com.intellij.util.containers.JBIterable;
+import consulo.application.util.CachedValueProvider;
+import consulo.application.util.CachedValuesManager;
+import consulo.application.util.RecursionGuard;
+import consulo.application.util.RecursionManager;
+import consulo.language.ast.ASTNode;
+import consulo.language.ast.IElementType;
+import consulo.language.impl.ast.TreeElement;
+import consulo.language.impl.psi.CompositePsiElement;
+import consulo.language.impl.psi.SourceTreeToPsiMap;
+import consulo.language.psi.*;
+import consulo.language.psi.resolve.PsiScopeProcessor;
+import consulo.language.psi.resolve.ResolveState;
+import consulo.language.psi.util.LanguageCachedValueUtil;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.logging.attachment.Attachment;
+import consulo.logging.attachment.AttachmentFactory;
+import consulo.logging.attachment.RuntimeExceptionWithAttachments;
+import consulo.util.collection.ContainerUtil;
+import consulo.util.collection.JBIterable;
+import consulo.util.collection.SmartList;
+import consulo.util.lang.ObjectUtil;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
@@ -70,13 +75,13 @@ public class PsiTypeElementImpl extends CompositePsiElement implements PsiTypeEl
   @Override
   @Nonnull
   public PsiType getType() {
-    return CachedValuesManager.getCachedValue(this, () -> CachedValueProvider.Result.create(calculateType(), PsiModificationTracker.MODIFICATION_COUNT));
+    return LanguageCachedValueUtil.getCachedValue(this, () -> CachedValueProvider.Result.create(calculateType(), PsiModificationTracker.MODIFICATION_COUNT));
   }
 
   @Nonnull
   private PsiType calculateType() {
     /*PsiType inferredType = PsiAugmentProvider.getInferredType(this);
-		if(inferredType != null)
+    if(inferredType != null)
 		{
 			return inferredType;
 		} */
@@ -307,7 +312,7 @@ public class PsiTypeElementImpl extends CompositePsiElement implements PsiTypeEl
           if (result == null) {
             PsiUtilCore.ensureValid(parent);
             throw new RuntimeExceptionWithAttachments("Can't retrieve reference by index " + index + " for " + parent.getClass() + "; type: " + type.getClass(),
-                new Attachment("memberType.txt", type.getCanonicalText()));
+                AttachmentFactory.get().create("memberType.txt", type.getCanonicalText()));
           }
         }
         return result;

@@ -25,16 +25,16 @@ import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.JList;
 
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.DialogWrapper;
+import consulo.project.Project;
+import consulo.ui.ex.awt.DialogWrapper;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiSubstitutor;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
-import com.intellij.psi.util.PsiFormatUtilBase;
-import com.intellij.ui.DoubleClickListener;
-import com.intellij.ui.components.JBList;
-import consulo.awt.TargetAWT;
-import consulo.ide.IconDescriptorUpdaters;
+import consulo.ide.impl.psi.util.PsiFormatUtilBase;
+import consulo.ui.ex.awt.event.DoubleClickListener;
+import consulo.ui.ex.awt.JBList;
+import consulo.ui.ex.awtUnsafe.TargetAWT;
+import consulo.language.icon.IconDescriptorUpdaters;
 
 /**
  * @author ven

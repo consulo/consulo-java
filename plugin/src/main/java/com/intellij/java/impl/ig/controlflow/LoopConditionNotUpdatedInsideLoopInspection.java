@@ -17,10 +17,10 @@ package com.intellij.java.impl.ig.controlflow;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
-import com.intellij.psi.tree.IElementType;
+import consulo.language.ast.IElementType;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.util.SmartList;
-import com.intellij.codeInspection.ui.SingleCheckboxOptionsPanel;
+import consulo.util.collection.SmartList;
+import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
@@ -29,6 +29,7 @@ import com.intellij.java.impl.ig.psiutils.IteratorUtils;
 import com.siyeh.ig.psiutils.VariableAccessUtils;
 import javax.annotation.Nonnull;
 
+import javax.annotation.Nullable;
 import javax.swing.*;
 import java.util.List;
 
@@ -50,7 +51,7 @@ public class LoopConditionNotUpdatedInsideLoopInspection
       "loop.condition.not.updated.inside.loop.problem.descriptor");
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public JComponent createOptionsPanel() {
     return new SingleCheckboxOptionsPanel(
       InspectionGadgetsBundle.message("ignore.iterator.loop.variables"),
@@ -107,7 +108,7 @@ public class LoopConditionNotUpdatedInsideLoopInspection
       }
     }
 
-    private boolean checkCondition(@javax.annotation.Nullable PsiExpression condition,
+    private boolean checkCondition(@Nullable PsiExpression condition,
                                    @Nonnull PsiStatement context,
                                    List<PsiExpression> notUpdated) {
       if (condition == null) {

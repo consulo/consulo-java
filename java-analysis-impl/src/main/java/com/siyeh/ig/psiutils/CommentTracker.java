@@ -2,15 +2,15 @@
 package com.siyeh.ig.psiutils;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.lang.ASTFactory;
-import com.intellij.lang.ASTNode;
-import com.intellij.openapi.util.TextRange;
+import consulo.language.impl.ast.ASTFactory;
+import consulo.language.ast.ASTNode;
+import consulo.document.util.TextRange;
 import com.intellij.psi.*;
 import com.intellij.java.language.impl.psi.impl.source.tree.ChildRole;
-import com.intellij.psi.impl.source.tree.CompositeElement;
-import com.intellij.psi.impl.source.tree.LeafPsiElement;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.SmartList;
+import consulo.language.impl.ast.CompositeElement;
+import consulo.language.impl.psi.LeafPsiElement;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.util.collection.SmartList;
 import one.util.streamex.StreamEx;
 import org.jetbrains.annotations.Contract;
 import javax.annotation.Nonnull;

@@ -21,21 +21,22 @@ import com.intellij.java.language.psi.JavaDirectoryService;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiJavaPackage;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiDirectory;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.util.PsiUtilCore;
-import com.intellij.refactoring.listeners.RefactoringElementListener;
-import com.intellij.refactoring.rename.RenamePsiElementProcessor;
-import com.intellij.refactoring.rename.RenameUtil;
-import com.intellij.usageView.UsageInfo;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.containers.MultiMap;
+import consulo.project.Project;
+import consulo.language.psi.PsiDirectory;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.PsiUtilCore;
+import consulo.language.editor.refactoring.event.RefactoringElementListener;
+import consulo.language.editor.refactoring.rename.RenamePsiElementProcessor;
+import consulo.language.editor.refactoring.rename.RenameUtil;
+import consulo.usage.UsageInfo;
+import consulo.language.util.IncorrectOperationException;
+import consulo.util.collection.MultiMap;
 import consulo.logging.Logger;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Map;
 
 /**
@@ -51,7 +52,7 @@ public class RenamePsiPackageProcessor extends RenamePsiElementProcessor {
   public void renameElement(final PsiElement element,
                             final String newName,
                             final UsageInfo[] usages,
-                            @javax.annotation.Nullable RefactoringElementListener listener) throws IncorrectOperationException {
+                            @Nullable RefactoringElementListener listener) throws IncorrectOperationException {
     final PsiJavaPackage psiPackage = (PsiJavaPackage) element;
     psiPackage.handleQualifiedNameChange(PsiUtilCore.getQualifiedNameAfterRename(psiPackage.getQualifiedName(), newName));
     RenameUtil.doRenameGenericNamedElement(element, newName, usages, listener);
@@ -95,7 +96,7 @@ public class RenamePsiPackageProcessor extends RenamePsiElementProcessor {
     }
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public Runnable getPostRenameCallback(final PsiElement element, final String newName, final RefactoringElementListener listener) {
     final Project project = element.getProject();
     final PsiJavaPackage psiPackage = (PsiJavaPackage) element;
@@ -111,7 +112,7 @@ public class RenamePsiPackageProcessor extends RenamePsiElementProcessor {
     };
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   @NonNls
   public String getHelpID(final PsiElement element) {
     return HelpID.RENAME_PACKAGE;

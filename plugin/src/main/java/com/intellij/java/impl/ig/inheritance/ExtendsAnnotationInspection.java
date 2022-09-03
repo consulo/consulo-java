@@ -18,7 +18,7 @@ package com.intellij.java.impl.ig.inheritance;
 import javax.annotation.Nonnull;
 
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
 import com.intellij.java.language.psi.PsiReferenceList;
 import com.intellij.java.language.psi.util.PsiUtil;

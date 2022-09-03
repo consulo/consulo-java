@@ -16,27 +16,28 @@
 package com.intellij.java.impl.refactoring.inheritanceToDelegation;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.help.HelpManager;
-import com.intellij.openapi.options.ConfigurationException;
-import com.intellij.openapi.project.Project;
+import consulo.application.HelpManager;
+import consulo.configurable.ConfigurationException;
+import consulo.project.Project;
 import com.intellij.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
-import com.intellij.psi.codeStyle.SuggestedNameInfo;
+import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
 import com.intellij.java.impl.refactoring.HelpID;
 import com.intellij.java.impl.refactoring.JavaRefactoringSettings;
-import com.intellij.refactoring.RefactoringBundle;
-import com.intellij.refactoring.classMembers.MemberInfoChange;
-import com.intellij.refactoring.classMembers.MemberInfoModel;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.classMember.MemberInfoChange;
+import consulo.language.editor.refactoring.classMember.MemberInfoModel;
 import com.intellij.java.impl.refactoring.ui.ClassCellRenderer;
 import com.intellij.java.impl.refactoring.ui.MemberSelectionPanel;
-import com.intellij.refactoring.ui.NameSuggestionsField;
-import com.intellij.refactoring.ui.RefactoringDialog;
+import consulo.language.editor.refactoring.ui.NameSuggestionsField;
+import consulo.language.editor.refactoring.ui.RefactoringDialog;
 import com.intellij.java.impl.refactoring.util.classMembers.InterfaceMemberDependencyGraph;
 import com.intellij.java.impl.refactoring.util.classMembers.MemberInfo;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ItemEvent;
@@ -91,7 +92,7 @@ public class InheritanceToDelegationDialog extends RefactoringDialog {
     return myFieldNameField.getEnteredName();
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public String getInnerClassName() {
     if (myInnerClassNameField != null) {
       return myInnerClassNameField.getEnteredName();

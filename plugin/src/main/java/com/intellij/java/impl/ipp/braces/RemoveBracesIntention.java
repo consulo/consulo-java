@@ -22,7 +22,7 @@ import com.intellij.java.language.psi.PsiCodeBlock;
 import com.intellij.java.language.psi.PsiDeclarationStatement;
 import com.intellij.java.language.psi.PsiStatement;
 import com.intellij.psi.*;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 
 public class RemoveBracesIntention extends BaseBracesIntention {

@@ -15,7 +15,7 @@
  */
 package com.intellij.java.language.psi;
 
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
 
 /**
  * Represents a reference to the member imported by a Java <code>import static</code>

@@ -15,20 +15,22 @@
  */
 package com.intellij.java.impl.refactoring.move.moveInner;
 
-import com.intellij.featureStatistics.FeatureUsageTracker;
-import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
+import consulo.externalService.statistic.FeatureUsageTracker;
+import consulo.dataContext.DataContext;
+import consulo.codeEditor.Editor;
+import consulo.project.Project;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiModifier;
-import com.intellij.psi.PsiReference;
-import com.intellij.refactoring.move.MoveCallback;
-import com.intellij.refactoring.move.MoveHandlerDelegate;
+import consulo.language.psi.PsiReference;
+import consulo.language.editor.refactoring.move.MoveCallback;
+import consulo.language.editor.refactoring.move.MoveHandlerDelegate;
 import com.intellij.java.impl.refactoring.move.moveClassesOrPackages.JavaMoveClassesOrPackagesHandler;
 
+import javax.annotation.Nullable;
+
 public class MoveInnerToUpperHandler extends MoveHandlerDelegate {
-  public boolean canMove(final PsiElement[] elements, @javax.annotation.Nullable final PsiElement targetContainer) {
+  public boolean canMove(final PsiElement[] elements, @Nullable final PsiElement targetContainer) {
     if (elements.length != 1) return false;
     PsiElement element = elements [0];
     return isNonStaticInnerClass(element) &&

@@ -16,25 +16,24 @@
 
 package com.intellij.java.language.impl.projectRoots.ex;
 
-import static com.intellij.util.containers.ContainerUtil.map;
-import static com.intellij.util.containers.ContainerUtil.skipNulls;
+import consulo.content.bundle.Sdk;
+import consulo.java.language.module.extension.JavaModuleExtension;
+import consulo.language.util.ModuleUtilCore;
+import consulo.module.Module;
+import consulo.module.ModuleManager;
+import consulo.project.Project;
+import consulo.util.lang.ComparatorUtil;
+import consulo.util.lang.StringUtil;
 
+import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Function;
 
-import javax.annotation.Nullable;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleManager;
-import com.intellij.openapi.module.ModuleUtilCore;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.util.Function;
-import com.intellij.util.containers.ComparatorUtil;
-import com.intellij.util.containers.Convertor;
-import consulo.java.language.module.extension.JavaModuleExtension;
+import static consulo.util.collection.ContainerUtil.map;
+import static consulo.util.collection.ContainerUtil.skipNulls;
 
 /**
  * @author Eugene Zhuravlev
@@ -43,14 +42,14 @@ import consulo.java.language.module.extension.JavaModuleExtension;
 public class PathUtilEx {
 
   private static final Function<Module, Sdk> MODULE_JDK = module -> ModuleUtilCore.getSdk(module, JavaModuleExtension.class);
-  private static final Convertor<Sdk, String> JDK_VERSION = jdk -> StringUtil.notNullize(jdk.getVersionString());
+  private static final Function<Sdk, String> JDK_VERSION = jdk -> StringUtil.notNullize(jdk.getVersionString());
 
   @Nullable
   public static Sdk getAnyJdk(Project project) {
     return chooseJdk(project, Arrays.asList(ModuleManager.getInstance(project).getModules()));
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public static Sdk chooseJdk(Project project, Collection<Module> modules) {
    /* Sdk projectJdk = ProjectRootManager.getInstance(project).getProjectSdk();
     if (projectJdk != null) {
@@ -59,7 +58,7 @@ public class PathUtilEx {
     return chooseJdk(modules);
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public static Sdk chooseJdk(Collection<Module> modules) {
     List<Sdk> jdks = skipNulls(map(skipNulls(modules), MODULE_JDK));
     if (jdks.isEmpty()) {

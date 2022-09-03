@@ -22,20 +22,20 @@ import java.util.ArrayList;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
+import consulo.execution.ExecutionBundle;
+import consulo.ui.ex.awt.TextFieldWithHistory;
+import consulo.ui.ex.awt.util.BrowseFilesListener;
 import net.miginfocom.swing.MigLayout;
 
-import com.intellij.execution.ExecutionBundle;
-import com.intellij.ide.util.BrowseFilesListener;
-import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.projectRoots.SdkTable;
-import com.intellij.openapi.ui.ComponentWithBrowseButton;
+import consulo.content.bundle.Sdk;
+import consulo.content.bundle.SdkTable;
+import consulo.ui.ex.awt.ComponentWithBrowseButton;
 import com.intellij.openapi.ui.TextComponentAccessor;
-import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.ui.GuiUtils;
-import com.intellij.ui.InsertPathAction;
-import com.intellij.ui.PanelWithAnchor;
-import com.intellij.ui.TextFieldWithHistory;
-import com.intellij.ui.components.JBCheckBox;
+import consulo.ide.impl.idea.openapi.util.io.FileUtil;
+import consulo.ui.ex.awt.internal.GuiUtils;
+import consulo.ui.ex.awt.InsertPathAction;
+import consulo.ui.ex.awt.PanelWithAnchor;
+import consulo.ui.ex.awt.JBCheckBox;
 
 /**
  * User: anna

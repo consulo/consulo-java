@@ -62,7 +62,7 @@ public interface PsiTryStatement extends PsiStatement {
    * @return the code block for the <code>finally</code> section, or null if the statement
    * does not have one.
    */
-  @javax.annotation.Nullable
+  @Nullable
   PsiCodeBlock getFinallyBlock();
 
   /**
@@ -70,6 +70,6 @@ public interface PsiTryStatement extends PsiStatement {
    *
    * @return resource list, or null if the statement doesn't have it.
    */
-  @javax.annotation.Nullable
+  @Nullable
   PsiResourceList getResourceList();
 }

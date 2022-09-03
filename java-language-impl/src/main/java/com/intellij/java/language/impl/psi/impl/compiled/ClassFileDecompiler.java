@@ -15,42 +15,47 @@
  */
 package com.intellij.java.language.impl.psi.impl.compiled;
 
-import javax.annotation.Nonnull;
-
-import com.intellij.openapi.fileTypes.BinaryFileDecompiler;
-import com.intellij.openapi.project.DefaultProjectFactory;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiManager;
+import com.intellij.java.language.impl.JavaClassFileType;
 import com.intellij.java.language.psi.compiled.ClassFileDecompilers;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.psi.PsiManager;
+import consulo.project.internal.DefaultProjectFactory;
+import consulo.virtualFileSystem.BinaryFileDecompiler;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.virtualFileSystem.fileType.FileType;
+
+import javax.annotation.Nonnull;
 
 /**
  * @author max
  */
-public class ClassFileDecompiler implements BinaryFileDecompiler
-{
-	@Override
-	@Nonnull
-	public CharSequence decompile(@Nonnull VirtualFile file)
-	{
-		ClassFileDecompilers.Decompiler decompiler = ClassFileDecompilers.find(file);
-		if(decompiler instanceof ClassFileDecompilers.Full)
-		{
-			PsiManager manager = PsiManager.getInstance(DefaultProjectFactory.getInstance().getDefaultProject());
-			return ((ClassFileDecompilers.Full) decompiler).createFileViewProvider(file, manager, true).getContents();
-		}
+@ExtensionImpl
+public class ClassFileDecompiler implements BinaryFileDecompiler {
+  @Nonnull
+  @Override
+  public FileType getFileType() {
+    return JavaClassFileType.INSTANCE;
+  }
 
-		return decompileText(file);
-	}
+  @Override
+  @Nonnull
+  public CharSequence decompile(@Nonnull VirtualFile file) {
+    ClassFileDecompilers.Decompiler decompiler = ClassFileDecompilers.find(file);
+    if (decompiler instanceof ClassFileDecompilers.Full) {
+      PsiManager manager = PsiManager.getInstance(DefaultProjectFactory.getInstance().getDefaultProject());
+      return ((ClassFileDecompilers.Full) decompiler).createFileViewProvider(file, manager, true).getContents();
+    }
 
-	@Nonnull
-	public static CharSequence decompileText(@Nonnull VirtualFile file)
-	{
-		ClassFileDecompilers.Decompiler decompiler = ClassFileDecompilers.find(file);
-		if(decompiler instanceof ClassFileDecompilers.Light)
-		{
-			return ((ClassFileDecompilers.Light) decompiler).getText(file);
-		}
+    return decompileText(file);
+  }
 
-		return ClsFileImpl.decompile(file);
-	}
+  @Nonnull
+  public static CharSequence decompileText(@Nonnull VirtualFile file) {
+    ClassFileDecompilers.Decompiler decompiler = ClassFileDecompilers.find(file);
+    if (decompiler instanceof ClassFileDecompilers.Light) {
+      return ((ClassFileDecompilers.Light) decompiler).getText(file);
+    }
+
+    return ClsFileImpl.decompile(file);
+  }
 }

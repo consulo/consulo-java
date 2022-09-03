@@ -17,14 +17,14 @@ package com.intellij.java.debugger.impl.ui.impl;
 
 import com.intellij.java.debugger.impl.ui.impl.watch.DebuggerTreeNodeImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.ValueDescriptorImpl;
-import com.intellij.ide.dnd.DnDAction;
-import com.intellij.ide.dnd.DnDDragStartBean;
-import com.intellij.ide.dnd.DnDManager;
-import com.intellij.ide.dnd.DnDSource;
-import com.intellij.ide.dnd.aware.DnDAwareTree;
-import com.intellij.openapi.util.Pair;
+import consulo.ui.ex.awt.dnd.*;
+import consulo.ui.ex.awt.dnd.DnDSource;
+import consulo.ide.impl.idea.ide.dnd.aware.DnDAwareTree;
+import consulo.util.lang.Pair;
 import com.intellij.ui.treeStructure.Tree;
 import consulo.disposer.Disposable;
+import consulo.ui.ex.awt.dnd.DnDAction;
+import consulo.ui.ex.awt.dnd.DnDManager;
 
 import javax.annotation.Nullable;
 

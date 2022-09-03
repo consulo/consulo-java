@@ -18,19 +18,20 @@ package com.intellij.java.impl.refactoring.typeMigration;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.intellij.java.language.psi.*;
 import consulo.logging.Logger;
-import com.intellij.openapi.project.Project;
+import consulo.project.Project;
 import com.intellij.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.impl.psi.impl.PsiDiamondTypeUtil;
 import com.intellij.java.language.impl.psi.impl.source.tree.ChildRole;
-import com.intellij.psi.impl.source.tree.CompositeElement;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.impl.ast.CompositeElement;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.impl.refactoring.typeMigration.usageInfo.TypeMigrationUsageInfo;
 import com.intellij.java.language.impl.refactoring.util.RefactoringChangeUtil;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
 
 /**
  * @author anna
@@ -215,7 +216,7 @@ public class TypeMigrationReplacementUtil
 		return null;
 	}
 
-	static boolean tryToReplaceWithDiamond(PsiNewExpression newExpression, @javax.annotation.Nullable PsiType changeType)
+	static boolean tryToReplaceWithDiamond(PsiNewExpression newExpression, @Nullable PsiType changeType)
 	{
 		if(newExpression != null && PsiDiamondTypeUtil.canCollapseToDiamond(newExpression, newExpression, changeType))
 		{

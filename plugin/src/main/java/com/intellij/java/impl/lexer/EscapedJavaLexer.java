@@ -18,8 +18,8 @@ package com.intellij.java.impl.lexer;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.impl.lexer.JavaLexer;
 import com.intellij.java.language.psi.JavaTokenType;
-import com.intellij.lexer.LexerBase;
-import com.intellij.psi.tree.IElementType;
+import consulo.language.lexer.LexerBase;
+import consulo.language.ast.IElementType;
 
 /**
  * Used to process scriptlet code in JSP attribute values like this:

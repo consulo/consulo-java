@@ -15,25 +15,26 @@
  */
 package com.intellij.java.impl.codeInsight.editorActions.moveUpDown;
 
-import com.intellij.codeInsight.CodeInsightUtilBase;
-import com.intellij.codeInsight.editorActions.moveUpDown.LineMover;
-import com.intellij.codeInsight.editorActions.moveUpDown.LineRange;
+import consulo.ide.impl.idea.codeInsight.CodeInsightUtilBase;
+import consulo.language.editor.moveUpDown.LineMover;
+import consulo.language.editor.moveUpDown.LineRange;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.LogicalPosition;
-import com.intellij.openapi.util.Pair;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiErrorElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.impl.source.tree.Factory;
-import com.intellij.psi.impl.source.tree.TreeElement;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.IncorrectOperationException;
+import consulo.document.Document;
+import consulo.codeEditor.Editor;
+import consulo.codeEditor.LogicalPosition;
+import consulo.util.lang.Pair;
+import consulo.document.util.TextRange;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiErrorElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.impl.internal.ast.Factory;
+import consulo.language.impl.ast.TreeElement;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -175,7 +176,7 @@ class DeclarationMover extends LineMover {
 
   // null means we are not crossing class border
   // throws IllegalMoveException when corresponding movement has no sense
-  @javax.annotation.Nullable
+  @Nullable
   private LineRange moveInsideOutsideClassPosition(Editor editor, PsiElement sibling, final boolean isDown, boolean areWeMovingClass) throws IllegalMoveException {
     if (sibling == null) throw new IllegalMoveException();
     if (sibling instanceof PsiJavaToken &&

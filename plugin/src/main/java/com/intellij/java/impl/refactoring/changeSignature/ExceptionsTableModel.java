@@ -20,9 +20,9 @@ import com.intellij.java.language.psi.PsiClassType;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiTypeCodeFragment;
 import com.intellij.psi.*;
-import com.intellij.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.RefactoringBundle;
 import com.intellij.java.impl.refactoring.util.CanonicalTypes;
-import com.intellij.util.ui.EditableModel;
+import consulo.ui.ex.awt.EditableModel;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;

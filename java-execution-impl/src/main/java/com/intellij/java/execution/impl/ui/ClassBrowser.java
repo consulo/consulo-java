@@ -15,22 +15,22 @@
  */
 package com.intellij.java.execution.impl.ui;
 
-import com.intellij.execution.ExecutionBundle;
+import consulo.execution.ExecutionBundle;
 import com.intellij.java.execution.JavaExecutionUtil;
-import com.intellij.execution.configuration.BrowseModuleValueActionListener;
+import consulo.ide.impl.idea.execution.configuration.BrowseModuleValueActionListener;
 import com.intellij.java.execution.configurations.ConfigurationUtil;
 import com.intellij.java.language.util.ClassFilter;
 import com.intellij.java.language.util.TreeClassChooser;
 import com.intellij.java.language.util.TreeClassChooserFactory;
-import com.intellij.openapi.application.ReadAction;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.ex.MessagesEx;
+import consulo.application.ReadAction;
+import consulo.module.Module;
+import consulo.project.Project;
+import consulo.ide.impl.idea.openapi.ui.ex.MessagesEx;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiDirectory;
+import consulo.language.psi.PsiDirectory;
 import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.java.language.psi.util.PsiMethodUtil;
 
 import javax.annotation.Nullable;

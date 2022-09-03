@@ -16,7 +16,8 @@
 package com.intellij.java.debugger.impl.engine;
 
 import com.intellij.java.debugger.engine.SuspendContext;
-import com.intellij.openapi.extensions.ExtensionPointName;
+import consulo.component.extension.ExtensionPointName;
+import consulo.internal.com.sun.jdi.request.StepRequest;
 
 /**
  * @author Nikolay.Tropin
@@ -28,7 +29,7 @@ public interface ExtraSteppingFilter
 	boolean isApplicable(SuspendContext context);
 
 	/**
-	 * @return Step request depth as defined in {@link consulo.internal.com.sun.jdi.request.StepRequest}
+	 * @return Step request depth as defined in {@link StepRequest}
 	 */
 	int getStepRequestDepth(SuspendContext context);
 }

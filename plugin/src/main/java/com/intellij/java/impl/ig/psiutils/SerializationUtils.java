@@ -22,17 +22,18 @@ import com.siyeh.ig.psiutils.TypeUtils;
 import consulo.java.language.module.util.JavaClassNames;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class SerializationUtils {
 
   private SerializationUtils() {
   }
 
-  public static boolean isSerializable(@javax.annotation.Nullable PsiClass aClass) {
+  public static boolean isSerializable(@Nullable PsiClass aClass) {
     return InheritanceUtil.isInheritor(aClass, JavaClassNames.JAVA_IO_SERIALIZABLE);
   }
 
-  public static boolean isExternalizable(@javax.annotation.Nullable PsiClass aClass) {
+  public static boolean isExternalizable(@Nullable PsiClass aClass) {
     return InheritanceUtil.isInheritor(aClass, JavaClassNames.JAVA_IO_EXTERNALIZABLE);
   }
 

@@ -21,7 +21,7 @@
 package com.intellij.java.impl.refactoring.extractMethodObject;
 
 import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.usageView.UsageInfo;
+import consulo.usage.UsageInfo;
 import javax.annotation.Nonnull;
 
 public class MethodToMoveUsageInfo extends UsageInfo {

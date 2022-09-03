@@ -17,7 +17,7 @@ package com.intellij.java.impl.ipp.conditional;
 
 import org.jetbrains.annotations.NonNls;
 import com.intellij.java.language.psi.PsiConditionalExpression;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiExpression;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;

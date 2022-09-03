@@ -20,8 +20,8 @@ import javax.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nullable;
-import com.intellij.psi.PsiDocCommentBase;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiDocCommentBase;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiJavaDocumentedElement;
 
 /**

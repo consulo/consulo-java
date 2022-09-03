@@ -15,14 +15,15 @@
  */
 package com.intellij.java.language.psi;
 
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.psi.NavigatablePsiElement;
+import consulo.language.util.IncorrectOperationException;
 import javax.annotation.Nullable;
 import javax.annotation.Nonnull;
 
 /**
  * Represents a Java local variable.
  */
-public interface PsiLocalVariable extends PsiVariable {
+public interface PsiLocalVariable extends PsiVariable, NavigatablePsiElement {
   /**
    * Adds initializer to the variable declaration statement or, if <code>initializer</code>
    * parameter is null, removes initializer from variable.

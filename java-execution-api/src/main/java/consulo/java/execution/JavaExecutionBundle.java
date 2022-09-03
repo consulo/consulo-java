@@ -17,7 +17,7 @@
 package consulo.java.execution;
 
 import org.jetbrains.annotations.PropertyKey;
-import com.intellij.AbstractBundle;
+import consulo.component.util.localize.AbstractBundle;
 
 /**
  * @author VISTALL

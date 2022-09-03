@@ -15,20 +15,20 @@
  */
 package com.intellij.java.impl.codeInsight.template.postfix.templates;
 
-import com.intellij.codeInsight.completion.CompletionInitializationContext;
-import com.intellij.codeInsight.template.postfix.templates.PostfixLiveTemplate;
-import com.intellij.codeInsight.template.postfix.templates.PostfixTemplate;
-import com.intellij.codeInsight.template.postfix.templates.PostfixTemplateProvider;
+import consulo.language.editor.completion.CompletionInitializationContext;
+import consulo.ide.impl.idea.codeInsight.template.postfix.templates.PostfixLiveTemplate;
+import consulo.language.editor.postfixTemplate.PostfixTemplate;
+import consulo.language.editor.postfixTemplate.PostfixTemplateProvider;
 import com.intellij.java.impl.codeInsight.completion.JavaCompletionContributor;
 import com.intellij.java.language.psi.JavaTokenType;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.command.CommandProcessor;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.EditorModificationUtil;
-import com.intellij.openapi.util.Computable;
+import consulo.application.ApplicationManager;
+import consulo.undoRedo.CommandProcessor;
+import consulo.document.Document;
+import consulo.codeEditor.Editor;
+import consulo.ide.impl.idea.openapi.editor.EditorModificationUtil;
+import consulo.application.util.function.Computable;
 import com.intellij.psi.*;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.util.collection.ContainerUtil;
 import consulo.util.dataholder.Key;
 
 import javax.annotation.Nonnull;

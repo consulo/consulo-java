@@ -16,16 +16,17 @@
 package com.intellij.psi.impl.file.impl;
 
 import com.intellij.JavaTestUtil;
-import com.intellij.openapi.roots.ModuleRootModificationUtil;
-import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.openapi.vfs.LocalFileSystem;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.openapi.vfs.VirtualFileManager;
+import consulo.ide.impl.idea.openapi.roots.ModuleRootModificationUtil;
+import consulo.ide.impl.idea.openapi.util.io.FileUtil;
+import consulo.virtualFileSystem.LocalFileSystem;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.virtualFileSystem.VirtualFileManager;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiTreeChangeAdapter;
-import com.intellij.psi.PsiTreeChangeEvent;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.language.psi.event.PsiTreeChangeAdapter;
+import consulo.language.psi.event.PsiTreeChangeEvent;
+import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.testFramework.PsiTestCase;
+
 import javax.annotation.Nonnull;
 
 import java.io.File;

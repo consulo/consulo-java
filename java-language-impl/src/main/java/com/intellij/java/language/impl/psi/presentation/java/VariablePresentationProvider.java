@@ -15,17 +15,17 @@
  */
 package com.intellij.java.language.impl.psi.presentation.java;
 
-import com.intellij.navigation.ItemPresentation;
-import com.intellij.navigation.ItemPresentationProvider;
-import com.intellij.navigation.NavigationItem;
 import com.intellij.java.language.psi.PsiVariable;
-import consulo.ide.IconDescriptorUpdaters;
+import consulo.language.icon.IconDescriptorUpdaters;
+import consulo.navigation.ItemPresentation;
+import consulo.navigation.ItemPresentationProvider;
+import consulo.navigation.NavigationItem;
 import consulo.ui.image.Image;
 
 /**
  * @author yole
  */
-public class VariablePresentationProvider<T extends PsiVariable & NavigationItem> implements ItemPresentationProvider<T> {
+public abstract class VariablePresentationProvider<T extends PsiVariable & NavigationItem> implements ItemPresentationProvider<T> {
   @Override
   public ItemPresentation getPresentation(final T variable) {
     return new ItemPresentation() {
@@ -43,7 +43,7 @@ public class VariablePresentationProvider<T extends PsiVariable & NavigationItem
       @Override
       public Image getIcon() {
         return IconDescriptorUpdaters.getIcon(variable, 0);
-      }
+      }                                                                                                   
     };
   }
 }

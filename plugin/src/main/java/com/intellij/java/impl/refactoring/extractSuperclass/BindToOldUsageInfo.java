@@ -16,9 +16,9 @@
 package com.intellij.java.impl.refactoring.extractSuperclass;
 
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiReference;
-import com.intellij.refactoring.util.MoveRenameUsageInfo;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiReference;
+import consulo.usage.MoveRenameUsageInfo;
 
 /**
  * @author dsl

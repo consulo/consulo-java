@@ -16,10 +16,11 @@
 package com.intellij.java.impl.ig.controlflow;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
@@ -100,7 +101,7 @@ public class UnnecessaryDefaultInspection extends BaseInspection {
         switchStatement, variable, true);
     }
 
-    @javax.annotation.Nullable
+    @Nullable
     private static PsiSwitchLabelStatement retrieveUnnecessaryDefault(
       PsiSwitchStatement statement) {
       final PsiExpression expression = statement.getExpression();

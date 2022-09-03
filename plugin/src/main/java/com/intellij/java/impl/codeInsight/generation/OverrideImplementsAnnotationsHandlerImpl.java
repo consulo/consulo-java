@@ -22,9 +22,9 @@ package com.intellij.java.impl.codeInsight.generation;
 
 import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.language.codeInsight.NullableNotNullManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.util.ArrayUtil;
+import consulo.project.Project;
+import consulo.util.lang.Comparing;
+import consulo.util.collection.ArrayUtil;
 import javax.annotation.Nonnull;
 
 import java.util.ArrayList;

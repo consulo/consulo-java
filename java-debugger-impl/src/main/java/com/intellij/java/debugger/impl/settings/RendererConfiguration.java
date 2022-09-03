@@ -25,8 +25,8 @@ import org.jetbrains.annotations.TestOnly;
 import com.intellij.java.debugger.impl.DebuggerUtilsEx;
 import com.intellij.java.debugger.impl.ui.tree.render.NodeRenderer;
 import consulo.logging.Logger;
-import com.intellij.openapi.util.JDOMExternalizable;
-import com.intellij.openapi.util.WriteExternalException;
+import consulo.util.xml.serializer.JDOMExternalizable;
+import consulo.util.xml.serializer.WriteExternalException;
 import com.intellij.util.containers.InternalIterator;
 
 public class RendererConfiguration implements Cloneable, JDOMExternalizable

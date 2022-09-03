@@ -17,32 +17,28 @@ package com.intellij.java.language.psi.util;
 
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.ProjectRootModificationTracker;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.openapi.util.NotNullComputable;
-import com.intellij.openapi.util.RecursionGuard;
-import com.intellij.openapi.util.RecursionManager;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiManager;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.util.CachedValue;
-import com.intellij.psi.util.CachedValueProvider;
-import com.intellij.psi.util.CachedValuesManager;
-import com.intellij.psi.util.PsiUtilCore;
-import com.intellij.util.Processor;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.application.util.*;
+import consulo.application.util.function.Processor;
 import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.ast.IElementType;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiManager;
+import consulo.language.psi.PsiUtilCore;
+import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.logging.Logger;
+import consulo.project.Project;
+import consulo.project.content.ProjectRootModificationTracker;
+import consulo.util.collection.ContainerUtil;
 import consulo.util.collection.primitive.objects.ObjectIntMap;
 import consulo.util.collection.primitive.objects.ObjectMaps;
 import consulo.util.dataholder.Key;
+import consulo.util.lang.Comparing;
 import org.jetbrains.annotations.Contract;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.function.Supplier;
 
 import static consulo.java.language.module.util.JavaClassNames.JAVA_LANG_STRING;
 
@@ -172,7 +168,7 @@ public class TypeConversionUtil {
   /**
    * @return true if fromType can be casted to toType
    */
-  public static boolean areTypesConvertible(@Nonnull PsiType fromType, @Nonnull PsiType toType, @javax.annotation.Nullable LanguageLevel languageLevel) {
+  public static boolean areTypesConvertible(@Nonnull PsiType fromType, @Nonnull PsiType toType, @Nullable LanguageLevel languageLevel) {
     if (fromType == toType) {
       return true;
     }
@@ -571,7 +567,7 @@ public class TypeConversionUtil {
     return PsiType.VOID.equals(type);
   }
 
-  public static boolean isBooleanType(@javax.annotation.Nullable PsiType type) {
+  public static boolean isBooleanType(@Nullable PsiType type) {
     if (type instanceof PsiCapturedWildcardType) {
       return isBooleanType(((PsiCapturedWildcardType) type).getUpperBound());
     }
@@ -1192,10 +1188,10 @@ public class TypeConversionUtil {
           return rightWildcard.isExtends() && isAssignable(leftBound, rightWildcard.getBound(), allowUncheckedConversion, false);
         } else { //isSuper
           if (rightWildcard.isSuper()) {
-            final Boolean assignable = ourGuard.doPreventingRecursion(rightWildcard, true, new NotNullComputable<Boolean>() {
+            final Boolean assignable = ourGuard.doPreventingRecursion(rightWildcard, true, new Supplier<Boolean>() {
               @Nonnull
               @Override
-              public Boolean compute() {
+              public Boolean get() {
                 return isAssignable(rightWildcard.getBound(), leftBound, allowUncheckedConversion, false);
               }
             });
@@ -1209,10 +1205,10 @@ public class TypeConversionUtil {
         if (leftWildcard.isExtends()) {
           return isAssignable(leftBound, typeRight, false, false);
         } else { // isSuper
-          final Boolean assignable = ourGuard.doPreventingRecursion(leftWildcard, true, new NotNullComputable<Boolean>() {
+          final Boolean assignable = ourGuard.doPreventingRecursion(leftWildcard, true, new Supplier<Boolean>() {
             @Nonnull
             @Override
-            public Boolean compute() {
+            public Boolean get() {
               return isAssignable(typeRight, leftBound, false, false);
             }
           });
@@ -1224,7 +1220,7 @@ public class TypeConversionUtil {
     }
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public static PsiSubstitutor getClassSubstitutor(@Nonnull PsiClass superClassCandidate, @Nonnull PsiClass derivedClassCandidate, @Nonnull PsiSubstitutor derivedSubstitutor) {
     if (superClassCandidate.getManager().areElementsEquivalent(superClassCandidate, derivedClassCandidate)) {
       PsiTypeParameter[] baseParams = superClassCandidate.getTypeParameters();
@@ -1466,7 +1462,7 @@ public class TypeConversionUtil {
   }
 
   @Contract("null -> null")
-  public static PsiType erasure(@javax.annotation.Nullable PsiType type) {
+  public static PsiType erasure(@Nullable PsiType type) {
     return erasure(type, PsiSubstitutor.EMPTY);
   }
 
@@ -1476,7 +1472,7 @@ public class TypeConversionUtil {
       return null;
     }
     return type.accept(new PsiTypeVisitor<PsiType>() {
-      @javax.annotation.Nullable
+      @Nullable
       @Override
       public PsiType visitType(PsiType type) {
         return type;
@@ -1496,7 +1492,7 @@ public class TypeConversionUtil {
         return wildcardType;
       }
 
-      @javax.annotation.Nullable
+      @Nullable
       @Override
       public PsiType visitCapturedWildcardType(PsiCapturedWildcardType capturedWildcardType) {
         return capturedWildcardType.getUpperBound().accept(this);
@@ -1614,7 +1610,7 @@ public class TypeConversionUtil {
     return opSign;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public static PsiType calcTypeForBinaryExpression(PsiType lType, PsiType rType, @Nonnull IElementType sign, boolean accessLType) {
     if (sign == JavaTokenType.PLUS) {
       // evaluate right argument first, since '+-/*%' is left associative and left operand tends to be bigger

@@ -16,10 +16,11 @@
 package com.intellij.java.impl.codeInsight.editorActions.wordSelection;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.util.TextRange;
+import consulo.codeEditor.Editor;
+import consulo.document.util.TextRange;
 import com.intellij.psi.*;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -79,7 +80,7 @@ public class VarargsSelectioner extends BasicSelectioner {
     return Arrays.copyOfRange(expressions, varargIndex, expressions.length);
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private static PsiParameterList getParameterList(@Nonnull PsiExpressionList list) {
     if (!(list.getParent() instanceof PsiMethodCallExpression)) {
       return null;

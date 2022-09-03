@@ -4,14 +4,14 @@ package com.intellij.java.analysis.impl.codeInspection.dataFlow.inference;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.ContractReturnValue;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.StandardMethodContract;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.StandardMethodContract.ValueConstraint;
-import com.intellij.lang.LighterAST;
-import com.intellij.lang.LighterASTNode;
+import consulo.language.ast.LighterAST;
+import consulo.language.ast.LighterASTNode;
 import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.java.language.impl.psi.impl.source.tree.ElementType;
-import com.intellij.psi.impl.source.tree.RecursiveLighterASTNodeWalkingVisitor;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.tree.TokenSet;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.ide.impl.psi.impl.source.tree.RecursiveLighterASTNodeWalkingVisitor;
+import consulo.language.ast.IElementType;
+import consulo.language.ast.TokenSet;
+import consulo.util.collection.ContainerUtil;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -24,8 +24,8 @@ import static com.intellij.java.analysis.impl.codeInspection.dataFlow.ContractRe
 import static com.intellij.java.analysis.impl.codeInspection.dataFlow.StandardMethodContract.ValueConstraint.*;
 import static com.intellij.java.language.impl.psi.impl.source.JavaLightTreeUtil.*;
 import static com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType.*;
-import static com.intellij.psi.impl.source.tree.LightTreeUtil.firstChildOfType;
-import static com.intellij.psi.impl.source.tree.LightTreeUtil.getChildrenOfType;
+import static consulo.language.ast.LightTreeUtil.firstChildOfType;
+import static consulo.language.ast.LightTreeUtil.getChildrenOfType;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 

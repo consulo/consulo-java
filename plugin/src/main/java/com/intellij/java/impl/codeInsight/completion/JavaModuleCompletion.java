@@ -15,12 +15,12 @@
  */
 package com.intellij.java.impl.codeInsight.completion;
 
-import com.intellij.codeInsight.TailType;
+import consulo.language.editor.completion.lookup.TailType;
 import com.intellij.codeInsight.completion.*;
-import com.intellij.codeInsight.lookup.LookupElement;
-import com.intellij.codeInsight.lookup.LookupElementBuilder;
-import com.intellij.codeInsight.lookup.TailTypeDecorator;
-import com.intellij.icons.AllIcons;
+import consulo.language.editor.completion.lookup.LookupElement;
+import consulo.language.editor.completion.lookup.LookupElementBuilder;
+import consulo.language.editor.completion.lookup.TailTypeDecorator;
+import consulo.application.AllIcons;
 import com.intellij.java.impl.codeInsight.completion.JavaKeywordCompletion.OverrideableSpace;
 import com.intellij.java.indexing.impl.stubs.index.JavaAutoModuleNameIndex;
 import com.intellij.java.indexing.impl.stubs.index.JavaModuleNameIndex;
@@ -28,16 +28,16 @@ import com.intellij.java.indexing.impl.stubs.index.JavaSourceModuleNameIndex;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleUtilCore;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.ModuleRootManager;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.module.Module;
+import consulo.language.util.ModuleUtilCore;
+import consulo.project.Project;
+import consulo.module.content.ModuleRootManager;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.psi.*;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.psi.search.ProjectScope;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.Consumer;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.ide.impl.idea.util.Consumer;
 import consulo.java.language.impl.JavaIcons;
 import consulo.psi.PsiPackage;
 

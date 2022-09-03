@@ -15,18 +15,18 @@
  */
 package com.intellij.java.impl.codeInspection.deadCode;
 
-import com.intellij.codeInsight.intention.IntentionAction;
-import com.intellij.codeInspection.CommonProblemDescriptor;
-import com.intellij.codeInspection.InspectionsBundle;
-import com.intellij.codeInspection.ProblemDescriptor;
-import com.intellij.codeInspection.ProblemHighlightType;
+import consulo.language.editor.intention.IntentionAction;
+import consulo.language.editor.inspection.CommonProblemDescriptor;
+import consulo.language.editor.inspection.InspectionsBundle;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.editor.inspection.ProblemHighlightType;
 import com.intellij.codeInspection.ex.*;
-import com.intellij.codeInspection.reference.RefElement;
-import com.intellij.codeInspection.reference.RefElementImpl;
-import com.intellij.codeInspection.reference.RefEntity;
-import com.intellij.codeInspection.reference.RefUtil;
+import consulo.language.editor.inspection.reference.RefElement;
+import consulo.ide.impl.idea.codeInspection.reference.RefElementImpl;
+import consulo.language.editor.inspection.reference.RefEntity;
+import consulo.ide.impl.idea.codeInspection.reference.RefUtil;
 import com.intellij.codeInspection.ui.*;
-import com.intellij.icons.AllIcons;
+import consulo.application.AllIcons;
 import com.intellij.java.analysis.codeInspection.GlobalJavaInspectionContext;
 import com.intellij.java.analysis.codeInspection.ex.EntryPointsManager;
 import com.intellij.java.analysis.codeInspection.reference.RefJavaElement;
@@ -38,29 +38,30 @@ import com.intellij.java.analysis.impl.codeInspection.ex.EntryPointsManagerBase;
 import com.intellij.java.analysis.impl.codeInspection.reference.RefJavaElementImpl;
 import com.intellij.java.analysis.impl.codeInspection.util.RefFilter;
 import com.intellij.java.impl.codeInspection.ui.EntryPointsNode;
-import com.intellij.lang.annotation.HighlightSeverity;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.openapi.util.SystemInfo;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.openapi.vcs.FileStatus;
-import com.intellij.psi.PsiDocumentManager;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
+import consulo.language.editor.annotation.HighlightSeverity;
+import consulo.application.ApplicationManager;
+import consulo.document.Document;
+import consulo.codeEditor.Editor;
+import consulo.project.Project;
+import consulo.util.lang.Comparing;
+import consulo.application.util.SystemInfo;
+import consulo.document.util.TextRange;
+import consulo.virtualFileSystem.status.FileStatus;
+import consulo.language.psi.PsiDocumentManager;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
 import com.intellij.java.language.psi.PsiModifierListOwner;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.PsiUtilCore;
-import com.intellij.refactoring.safeDelete.SafeDeleteHandler;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.text.CharArrayUtil;
-import com.intellij.util.text.DateFormatUtil;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.psi.PsiUtilCore;
+import consulo.language.editor.refactoring.safeDelete.SafeDeleteHandler;
+import consulo.language.util.IncorrectOperationException;
+import consulo.util.lang.CharArrayUtil;
+import consulo.application.util.DateFormatUtil;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.swing.*;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
@@ -532,7 +533,7 @@ public class UnusedDeclarationPresentation extends DefaultInspectionToolPresenta
   }
 
   @Override
-  @javax.annotation.Nullable
+  @Nullable
   public IntentionAction findQuickFixes(@Nonnull final CommonProblemDescriptor descriptor, final String hint) {
     if (descriptor instanceof ProblemDescriptor) {
       if (DELETE.equals(hint)) {

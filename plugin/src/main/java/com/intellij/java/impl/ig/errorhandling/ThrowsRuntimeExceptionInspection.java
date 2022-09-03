@@ -17,19 +17,19 @@ package com.intellij.java.impl.ig.errorhandling;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.codeInspection.ProblemDescriptor;
+import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
 import com.intellij.lang.LanguageDocumentation;
-import com.intellij.lang.documentation.CodeDocumentationProvider;
-import com.intellij.lang.documentation.CompositeDocumentationProvider;
-import com.intellij.lang.documentation.DocumentationProvider;
-import com.intellij.openapi.project.Project;
+import consulo.language.editor.documentation.CodeDocumentationProvider;
+import consulo.language.editor.documentation.CompositeDocumentationProvider;
+import consulo.language.editor.documentation.DocumentationProvider;
+import consulo.project.Project;
 import com.intellij.psi.*;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.java.language.psi.javadoc.PsiDocTag;
 import com.intellij.java.language.psi.javadoc.PsiDocTagValue;
 import com.intellij.java.language.psi.util.InheritanceUtil;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;

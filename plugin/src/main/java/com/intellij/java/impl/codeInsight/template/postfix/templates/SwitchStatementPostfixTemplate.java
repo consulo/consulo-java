@@ -18,11 +18,11 @@ package com.intellij.java.impl.codeInsight.template.postfix.templates;
 import com.intellij.java.impl.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.util.Condition;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
+import consulo.application.ApplicationManager;
+import consulo.codeEditor.Editor;
+import consulo.util.lang.function.Condition;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
 import consulo.java.language.module.util.JavaClassNames;
 
 import javax.annotation.Nonnull;

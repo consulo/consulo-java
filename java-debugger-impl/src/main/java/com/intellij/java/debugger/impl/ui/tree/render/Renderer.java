@@ -15,7 +15,7 @@
  */
 package com.intellij.java.debugger.impl.ui.tree.render;
 
-import com.intellij.openapi.util.JDOMExternalizable;
+import consulo.util.xml.serializer.JDOMExternalizable;
 import consulo.internal.com.sun.jdi.Type;
 
 public interface Renderer extends Cloneable, JDOMExternalizable {

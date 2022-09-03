@@ -16,8 +16,8 @@
 
 package com.intellij.java.language.psi;
 
-import com.intellij.psi.PsiFile;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.psi.PsiFile;
+import consulo.language.util.IncorrectOperationException;
 
 import javax.annotation.Nonnull;
 

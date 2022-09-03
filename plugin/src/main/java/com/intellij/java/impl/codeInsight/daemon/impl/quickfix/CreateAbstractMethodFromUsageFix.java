@@ -21,7 +21,7 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiMethodCallExpression;
 import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.java.language.psi.PsiReferenceExpression;

@@ -16,23 +16,24 @@
 package com.intellij.java.analysis.impl.codeInspection.reference;
 
 import com.intellij.java.language.impl.codeInsight.ExceptionUtil;
-import com.intellij.codeInspection.reference.RefElement;
-import com.intellij.codeInspection.reference.RefElementImpl;
-import com.intellij.codeInspection.reference.RefManager;
-import com.intellij.codeInspection.reference.RefVisitor;
+import consulo.language.editor.inspection.reference.RefElement;
+import consulo.ide.impl.idea.codeInspection.reference.RefElementImpl;
+import consulo.language.editor.inspection.reference.RefManager;
+import consulo.language.editor.inspection.reference.RefVisitor;
 import com.intellij.java.analysis.codeInspection.reference.*;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.*;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.util.Comparing;
+import consulo.application.ApplicationManager;
+import consulo.util.lang.Comparing;
 import com.intellij.psi.*;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.psi.util.*;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.SmartList;
+import consulo.language.util.IncorrectOperationException;
+import consulo.util.collection.SmartList;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.*;
 
 /**
@@ -500,12 +501,12 @@ public class RefMethodImpl extends RefJavaElementImpl implements RefMethod {
     return result[0];
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public static RefMethod methodFromExternalName(RefManager manager, String externalName) {
     return (RefMethod) manager.getReference(findPsiMethod(PsiManager.getInstance(manager.getProject()), externalName));
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public static PsiMethod findPsiMethod(PsiManager manager, String externalName) {
     final int spaceIdx = externalName.indexOf(' ');
     final String className = externalName.substring(0, spaceIdx);
@@ -672,7 +673,7 @@ public class RefMethodImpl extends RefJavaElementImpl implements RefMethod {
   }
 
   @Override
-  @javax.annotation.Nullable
+  @Nullable
   public PsiClass[] getUnThrownExceptions() {
     if (myUnThrownExceptions == null) {
       return null;

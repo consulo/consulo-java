@@ -15,9 +15,9 @@
  */
 package com.intellij.java.impl.codeInsight.documentation;
 
-import com.intellij.codeInsight.documentation.DocCommentFixer;
-import com.intellij.codeInspection.InspectionManager;
-import com.intellij.codeInspection.ProblemDescriptor;
+import consulo.language.editor.documentation.DocCommentFixer;
+import consulo.language.editor.inspection.scheme.InspectionManager;
+import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.codeInspection.QuickFix;
 import com.intellij.java.impl.codeInspection.javaDoc.JavaDocLocalInspection;
 import com.intellij.java.impl.codeInspection.javaDoc.JavaDocReferenceInspection;
@@ -27,18 +27,18 @@ import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.java.language.psi.javadoc.PsiDocTag;
 import com.intellij.java.language.psi.javadoc.PsiDocTagValue;
 import com.intellij.java.language.psi.javadoc.PsiDocToken;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Pair;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.PsiComment;
-import com.intellij.psi.PsiDocumentManager;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.util.containers.ContainerUtilRt;
-import com.intellij.util.text.CharArrayUtil;
+import consulo.document.Document;
+import consulo.codeEditor.Editor;
+import consulo.project.Project;
+import consulo.util.lang.Pair;
+import consulo.document.util.TextRange;
+import consulo.util.lang.StringUtil;
+import consulo.language.psi.PsiComment;
+import consulo.language.psi.PsiDocumentManager;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.ide.impl.idea.util.containers.ContainerUtilRt;
+import consulo.util.lang.CharArrayUtil;
 
 import javax.annotation.Nonnull;
 import java.util.*;

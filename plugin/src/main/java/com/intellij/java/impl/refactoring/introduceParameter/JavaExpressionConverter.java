@@ -15,9 +15,9 @@
  */
 package com.intellij.java.impl.refactoring.introduceParameter;
 
-import com.intellij.openapi.project.Project;
+import consulo.project.Project;
 import com.intellij.java.language.psi.JavaPsiFacade;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 
 /**
  * @author Maxim.Medvedev

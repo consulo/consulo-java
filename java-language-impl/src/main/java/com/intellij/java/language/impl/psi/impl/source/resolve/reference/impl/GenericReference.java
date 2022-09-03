@@ -15,12 +15,11 @@
  */
 package com.intellij.java.language.impl.psi.impl.source.resolve.reference.impl;
 
-import com.intellij.codeInsight.daemon.EmptyResolveMessageProvider;
 import com.intellij.java.language.impl.psi.impl.source.resolve.reference.impl.providers.GenericReferenceProvider;
-import com.intellij.psi.*;
-import com.intellij.psi.impl.source.resolve.reference.impl.CachingReference;
-import com.intellij.psi.scope.PsiScopeProcessor;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.psi.*;
+import consulo.language.psi.resolve.PsiScopeProcessor;
+import consulo.language.psi.resolve.ResolveState;
+import consulo.language.util.IncorrectOperationException;
 
 import javax.annotation.Nullable;
 

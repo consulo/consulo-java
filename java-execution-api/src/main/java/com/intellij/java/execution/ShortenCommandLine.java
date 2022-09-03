@@ -13,7 +13,7 @@
 // limitations under the License.
 package com.intellij.java.execution;
 
-import com.intellij.openapi.project.Project;
+import consulo.project.Project;
 import consulo.java.execution.projectRoots.OwnJdkUtil;
 import org.jdom.Element;
 

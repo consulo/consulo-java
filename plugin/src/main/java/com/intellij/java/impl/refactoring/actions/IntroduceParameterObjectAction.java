@@ -17,11 +17,11 @@ package com.intellij.java.impl.refactoring.actions;
 
 import com.intellij.java.impl.refactoring.introduceparameterobject.IntroduceParameterObjectHandler;
 import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.refactoring.RefactoringActionHandler;
-import com.intellij.refactoring.actions.BaseRefactoringAction;
+import consulo.dataContext.DataContext;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.editor.refactoring.action.RefactoringActionHandler;
+import consulo.language.editor.refactoring.action.BaseRefactoringAction;
 
 import javax.annotation.Nonnull;
 

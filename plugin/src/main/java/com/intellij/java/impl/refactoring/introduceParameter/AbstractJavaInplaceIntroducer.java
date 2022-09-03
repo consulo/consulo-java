@@ -1,30 +1,31 @@
 package com.intellij.java.impl.refactoring.introduceParameter;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.intellij.java.impl.codeInsight.intention.impl.TypeExpression;
-import com.intellij.codeInsight.lookup.LookupElement;
-import com.intellij.codeInsight.template.Expression;
-import com.intellij.codeInsight.template.ExpressionContext;
-import com.intellij.codeInsight.template.Result;
-import com.intellij.codeInsight.template.TextResult;
+import consulo.language.editor.completion.lookup.LookupElement;
+import consulo.language.editor.template.Expression;
+import consulo.language.editor.template.ExpressionContext;
+import consulo.language.editor.template.Result;
+import consulo.language.editor.template.TextResult;
 import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.RangeMarker;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.openapi.util.Computable;
+import consulo.application.ApplicationManager;
+import consulo.codeEditor.Editor;
+import consulo.document.RangeMarker;
+import consulo.project.Project;
+import consulo.util.lang.Comparing;
+import consulo.application.util.function.Computable;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
-import com.intellij.psi.impl.source.tree.injected.InjectedLanguageUtil;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.refactoring.introduce.inplace.AbstractInplaceIntroducer;
+import consulo.language.inject.impl.internal.InjectedLanguageUtil;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.editor.refactoring.introduce.inplace.AbstractInplaceIntroducer;
 import com.intellij.java.impl.refactoring.ui.TypeSelectorManagerImpl;
-import com.intellij.util.ArrayUtil;
+import consulo.util.collection.ArrayUtil;
 
 /**
  * User: anna
@@ -129,7 +130,7 @@ public abstract class AbstractJavaInplaceIntroducer extends AbstractInplaceIntro
     return names;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public static PsiExpression restoreExpression(PsiFile containingFile,
                                                 PsiVariable psiVariable,
                                                 PsiElementFactory elementFactory,

@@ -15,11 +15,11 @@
  */
 package com.intellij.java.impl.refactoring.wrapreturnvalue;
 
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.project.Project;
+import consulo.util.lang.StringUtil;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.PsiTypeParameter;
-import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
+import consulo.language.codeStyle.CodeStyleSettingsManager;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
 import org.jetbrains.annotations.NonNls;

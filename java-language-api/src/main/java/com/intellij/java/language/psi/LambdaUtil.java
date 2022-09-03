@@ -21,23 +21,27 @@ import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.impl.source.resolve.graphInference.PsiPolyExpressionUtil;
 import com.intellij.java.language.psi.infos.MethodCandidateInfo;
 import com.intellij.java.language.psi.util.*;
-import com.intellij.openapi.util.Computable;
-import com.intellij.openapi.util.RecursionGuard;
-import com.intellij.openapi.util.RecursionManager;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.util.CachedValueProvider;
-import com.intellij.psi.util.CachedValuesManager;
-import com.intellij.psi.util.PsiModificationTracker;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.*;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.application.util.CachedValueProvider;
+import consulo.application.util.RecursionGuard;
+import consulo.application.util.RecursionManager;
+import consulo.application.util.function.Computable;
+import consulo.application.util.function.Processor;
 import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiModificationTracker;
+import consulo.language.psi.util.LanguageCachedValueUtil;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
+import consulo.util.collection.ContainerUtil;
+import consulo.util.lang.SystemProperties;
 import org.jetbrains.annotations.Contract;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 /**
  * User: anna
@@ -50,7 +54,7 @@ public class LambdaUtil {
   public static final ThreadLocal<Map<PsiElement, PsiType>> ourFunctionTypes = new ThreadLocal<Map<PsiElement, PsiType>>();
   private static final Logger LOG = Logger.getInstance(LambdaUtil.class);
 
-  @javax.annotation.Nullable
+  @Nullable
   public static PsiType getFunctionalInterfaceReturnType(PsiFunctionalExpression expr) {
     return getFunctionalInterfaceReturnType(expr.getFunctionalInterfaceType());
   }
@@ -70,8 +74,8 @@ public class LambdaUtil {
   }
 
   @Contract("null -> null")
-  @javax.annotation.Nullable
-  public static PsiMethod getFunctionalInterfaceMethod(@javax.annotation.Nullable PsiType functionalInterfaceType) {
+  @Nullable
+  public static PsiMethod getFunctionalInterfaceMethod(@Nullable PsiType functionalInterfaceType) {
     return getFunctionalInterfaceMethod(PsiUtil.resolveGenericsClassInType(functionalInterfaceType));
   }
 
@@ -186,8 +190,8 @@ public class LambdaUtil {
   @Nullable
   public static MethodSignature getFunction(final PsiClass psiClass) {
     if (isPlainInterface(psiClass)) {
-      return CachedValuesManager.getCachedValue(psiClass, new CachedValueProvider<MethodSignature>() {
-        @javax.annotation.Nullable
+      return LanguageCachedValueUtil.getCachedValue(psiClass, new CachedValueProvider<MethodSignature>() {
+        @Nonnull
         @Override
         public Result<MethodSignature> compute() {
           return Result.create(calcFunction(psiClass), PsiModificationTracker.JAVA_STRUCTURE_MODIFICATION_COUNT);
@@ -230,8 +234,8 @@ public class LambdaUtil {
   }
 
   private static boolean hasManyInheritedAbstractMethods(@Nonnull PsiClass psiClass) {
-    final Set<String> abstractNames = ContainerUtil.newHashSet();
-    final Set<String> defaultNames = ContainerUtil.newHashSet();
+    final Set<String> abstractNames = new HashSet<>();
+    final Set<String> defaultNames = new HashSet<>();
     InheritanceUtil.processSupers(psiClass, true, new Processor<PsiClass>() {
       @Override
       public boolean process(PsiClass psiClass) {
@@ -530,7 +534,7 @@ public class LambdaUtil {
           for (JavaResolveResult result : results) {
             final PsiType functionalExpressionType = getSubstitutedType(functionalExpression, true, lambdaIdx, result);
             if (functionalExpressionType != null && types.add(functionalExpressionType)) {
-              overloadProcessor.consume(functionalExpressionType);
+              overloadProcessor.accept(functionalExpressionType);
             }
           }
           return true;
@@ -879,24 +883,19 @@ public class LambdaUtil {
     return copyCall;
   }
 
-  public static <T> T performWithSubstitutedParameterBounds(final PsiTypeParameter[] typeParameters, final PsiSubstitutor substitutor, final Producer<T> producer) {
+  public static <T> T performWithSubstitutedParameterBounds(final PsiTypeParameter[] typeParameters, final PsiSubstitutor substitutor, final Supplier<T> producer) {
     try {
       for (PsiTypeParameter parameter : typeParameters) {
         final PsiClassType[] types = parameter.getExtendsListTypes();
         if (types.length > 0) {
-          final List<PsiType> conjuncts = ContainerUtil.map(types, new Function<PsiClassType, PsiType>() {
-            @Override
-            public PsiType fun(PsiClassType type) {
-              return substitutor.substitute(type);
-            }
-          });
+          final List<PsiType> conjuncts = ContainerUtil.map(types, type -> substitutor.substitute(type));
           //don't glb to avoid flattening = Object&Interface would be preserved
           //otherwise methods with different signatures could get same erasure
           final PsiType upperBound = PsiIntersectionType.createIntersection(false, conjuncts.toArray(new PsiType[conjuncts.size()]));
           getFunctionalTypeMap().put(parameter, upperBound);
         }
       }
-      return producer.produce();
+      return producer.get();
     } finally {
       for (PsiTypeParameter parameter : typeParameters) {
         getFunctionalTypeMap().remove(parameter);
@@ -904,10 +903,10 @@ public class LambdaUtil {
     }
   }
 
-  public static <T> T performWithLambdaTargetType(PsiLambdaExpression lambdaExpression, PsiType targetType, Producer<T> producer) {
+  public static <T> T performWithLambdaTargetType(PsiLambdaExpression lambdaExpression, PsiType targetType, Supplier<T> producer) {
     try {
       getFunctionalTypeMap().put(lambdaExpression, targetType);
-      return producer.produce();
+      return producer.get();
     } finally {
       getFunctionalTypeMap().remove(lambdaExpression);
     }
@@ -1081,7 +1080,7 @@ public class LambdaUtil {
       return true;
     }
 
-    @javax.annotation.Nullable
+    @Nullable
     @Override
     public Boolean visitLambdaExpressionType(PsiLambdaExpressionType lambdaExpressionType) {
       return true;

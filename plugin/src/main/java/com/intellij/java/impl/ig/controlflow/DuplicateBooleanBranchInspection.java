@@ -23,11 +23,11 @@ import javax.annotation.Nonnull;
 
 import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.java.language.psi.PsiBinaryExpression;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiParenthesizedExpression;
 import com.intellij.java.language.psi.PsiPolyadicExpression;
-import com.intellij.psi.tree.IElementType;
+import consulo.language.ast.IElementType;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;

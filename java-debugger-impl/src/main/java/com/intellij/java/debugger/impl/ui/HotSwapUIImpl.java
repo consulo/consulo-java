@@ -25,10 +25,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
+import consulo.ui.ex.awt.DialogWrapper;
+import consulo.ui.ex.awt.Messages;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
-import com.intellij.CommonBundle;
+import consulo.application.CommonBundle;
 import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.impl.DebuggerManagerEx;
 import com.intellij.java.debugger.impl.DebuggerManagerListener;
@@ -36,22 +38,22 @@ import com.intellij.java.debugger.impl.DebuggerSession;
 import com.intellij.java.debugger.impl.HotSwapFile;
 import com.intellij.java.debugger.impl.HotSwapManager;
 import com.intellij.java.debugger.impl.settings.DebuggerSettings;
-import com.intellij.notification.NotificationType;
-import com.intellij.openapi.application.Application;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.application.ModalityState;
-import com.intellij.openapi.compiler.CompilationStatusListener;
-import com.intellij.openapi.compiler.CompileContext;
-import com.intellij.openapi.compiler.CompilerManager;
+import consulo.ui.NotificationType;
+import consulo.application.Application;
+import consulo.application.ApplicationManager;
+import consulo.ui.ModalityState;
+import consulo.compiler.event.CompilationStatusListener;
+import consulo.compiler.CompileContext;
+import consulo.compiler.CompilerManager;
 import com.intellij.openapi.compiler.CompilerTopics;
-import com.intellij.openapi.progress.ProgressManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.DialogWrapper;
-import com.intellij.openapi.ui.Messages;
-import com.intellij.openapi.util.Ref;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.util.containers.ContainerUtil;
-import com.intellij.util.messages.MessageBusConnection;
+import consulo.application.progress.ProgressManager;
+import consulo.project.Project;
+import consulo.util.lang.ref.Ref;
+import consulo.util.lang.StringUtil;
+import consulo.util.collection.ContainerUtil;
+import consulo.component.messagebus.MessageBusConnection;
+
+import javax.annotation.Nullable;
 
 /**
  * User: lex
@@ -134,7 +136,7 @@ public class HotSwapUIImpl extends HotSwapUI
 		return false;
 	}
 
-	private void hotSwapSessions(final List<DebuggerSession> sessions, @javax.annotation.Nullable final Map<String, List<String>> generatedPaths)
+	private void hotSwapSessions(final List<DebuggerSession> sessions, @Nullable final Map<String, List<String>> generatedPaths)
 	{
 		final boolean shouldAskBeforeHotswap = myAskBeforeHotswap;
 		myAskBeforeHotswap = true;

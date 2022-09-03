@@ -15,13 +15,13 @@
  */
 package com.intellij.java.impl.openapi.roots.impl;
 
-import com.intellij.internal.statistic.AbstractApplicationUsagesCollector;
-import com.intellij.internal.statistic.beans.UsageDescriptor;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.ModuleRootManager;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.externalService.statistic.AbstractApplicationUsagesCollector;
+import consulo.externalService.statistic.UsageDescriptor;
+import consulo.module.Module;
+import consulo.module.ModuleManager;
+import consulo.project.Project;
+import consulo.module.content.ModuleRootManager;
+import consulo.util.collection.ContainerUtil;
 import java.util.HashSet;
 import consulo.java.language.module.extension.JavaModuleExtension;
 

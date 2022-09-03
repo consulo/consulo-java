@@ -16,20 +16,20 @@
 package com.intellij.java.analysis.impl;
 
 import com.intellij.java.language.impl.JavaFileType;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleUtil;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.ModuleRootManager;
-import com.intellij.openapi.roots.ProjectFileIndex;
-import com.intellij.openapi.roots.impl.FilePropertyPusher;
-import com.intellij.openapi.roots.impl.PushedFilePropertiesUpdater;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.openapi.vfs.newvfs.FileAttribute;
+import consulo.module.Module;
+import consulo.ide.impl.idea.openapi.module.ModuleUtil;
+import consulo.project.Project;
+import consulo.module.content.ModuleRootManager;
+import consulo.module.content.ProjectFileIndex;
+import consulo.module.content.FilePropertyPusher;
+import consulo.module.content.PushedFilePropertiesUpdater;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.virtualFileSystem.FileAttribute;
 import com.intellij.java.language.LanguageLevel;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.util.io.DataInputOutputUtil;
-import com.intellij.util.messages.MessageBus;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.index.io.data.DataInputOutputUtil;
+import consulo.component.messagebus.MessageBus;
 import consulo.java.language.module.extension.JavaModuleExtension;
 import consulo.util.dataholder.Key;
 

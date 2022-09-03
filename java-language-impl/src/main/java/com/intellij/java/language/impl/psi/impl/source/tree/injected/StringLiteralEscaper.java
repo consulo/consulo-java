@@ -15,10 +15,10 @@
  */
 package com.intellij.java.language.impl.psi.impl.source.tree.injected;
 
-import com.intellij.openapi.util.ProperTextRange;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.LiteralTextEscaper;
-import com.intellij.psi.PsiLanguageInjectionHost;
+import consulo.document.util.ProperTextRange;
+import consulo.document.util.TextRange;
+import consulo.language.psi.LiteralTextEscaper;
+import consulo.language.psi.PsiLanguageInjectionHost;
 import com.intellij.java.language.impl.psi.impl.source.tree.java.PsiLiteralExpressionImpl;
 import javax.annotation.Nonnull;
 

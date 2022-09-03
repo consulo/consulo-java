@@ -19,14 +19,14 @@ import javax.annotation.Nonnull;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
-import com.intellij.openapi.components.ServiceManager;
+import consulo.ide.ServiceManager;
 import consulo.logging.Logger;
-import com.intellij.openapi.project.Project;
+import consulo.project.Project;
 import com.intellij.java.language.psi.JavaPsiFacade;
-import com.intellij.psi.PsiManager;
+import consulo.language.psi.PsiManager;
 import com.intellij.java.language.psi.PsiMigration;
-import com.intellij.psi.impl.PsiManagerEx;
-import com.intellij.psi.impl.PsiManagerImpl;
+import consulo.language.impl.internal.psi.PsiManagerEx;
+import consulo.language.impl.internal.psi.PsiManagerImpl;
 
 @Singleton
 public class PsiMigrationManager {

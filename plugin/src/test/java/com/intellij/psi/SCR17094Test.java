@@ -6,12 +6,12 @@ import java.io.File;
 
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.roots.ModuleRootModificationUtil;
-import com.intellij.openapi.util.Computable;
-import com.intellij.openapi.vfs.LocalFileSystem;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.application.ApplicationManager;
+import consulo.ide.impl.idea.openapi.roots.ModuleRootModificationUtil;
+import consulo.application.util.function.Computable;
+import consulo.virtualFileSystem.LocalFileSystem;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.testFramework.PsiTestCase;
 
 /**

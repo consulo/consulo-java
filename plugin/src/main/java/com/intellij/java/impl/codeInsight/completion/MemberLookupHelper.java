@@ -20,8 +20,8 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import com.intellij.codeInsight.lookup.LookupElementPresentation;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.language.editor.completion.lookup.LookupElementPresentation;
+import consulo.util.lang.StringUtil;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiClassType;
 import com.intellij.java.language.psi.PsiField;
@@ -31,10 +31,10 @@ import com.intellij.java.language.psi.PsiSubstitutor;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.PsiWildcardType;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
-import com.intellij.psi.util.PsiFormatUtilBase;
+import consulo.ide.impl.psi.util.PsiFormatUtilBase;
 import com.intellij.java.language.psi.util.PsiTypesUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.util.collection.ContainerUtil;
 
 /**
  * @author peter
@@ -52,7 +52,7 @@ public class MemberLookupHelper
 		this(overloads.get(0), containingClass, shouldImport, true);
 	}
 
-	public MemberLookupHelper(PsiMember member, @javax.annotation.Nullable PsiClass containingClass, boolean shouldImport, final boolean mergedOverloads)
+	public MemberLookupHelper(PsiMember member, @Nullable PsiClass containingClass, boolean shouldImport, final boolean mergedOverloads)
 	{
 		myMember = member;
 		myContainingClass = containingClass;
@@ -65,7 +65,7 @@ public class MemberLookupHelper
 		return myMember;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public PsiClass getContainingClass()
 	{
 		return myContainingClass;
@@ -119,7 +119,7 @@ public class MemberLookupHelper
 		}
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	private PsiType patchGetClass(@Nullable PsiType type)
 	{
 		if(myMember instanceof PsiMethod && PsiTypesUtil.isGetClass((PsiMethod) myMember) && type instanceof PsiClassType)

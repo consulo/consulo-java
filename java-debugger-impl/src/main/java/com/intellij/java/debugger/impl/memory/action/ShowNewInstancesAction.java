@@ -18,10 +18,10 @@ package com.intellij.java.debugger.impl.memory.action;
 import com.intellij.java.debugger.impl.memory.ui.ClassesTable;
 import com.intellij.java.debugger.impl.memory.ui.InstancesWindow;
 import com.intellij.java.debugger.impl.memory.utils.InstancesProvider;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.project.Project;
-import com.intellij.xdebugger.XDebugSession;
-import com.intellij.xdebugger.XDebuggerManager;
+import consulo.execution.debug.XDebuggerManager;
+import consulo.ui.ex.action.AnActionEvent;
+import consulo.project.Project;
+import consulo.execution.debug.XDebugSession;
 import consulo.internal.com.sun.jdi.ReferenceType;
 
 public class ShowNewInstancesAction extends ShowInstancesAction

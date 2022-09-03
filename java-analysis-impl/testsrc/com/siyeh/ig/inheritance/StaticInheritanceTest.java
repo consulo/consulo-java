@@ -18,7 +18,7 @@ package com.siyeh.ig.inheritance;
 import javax.annotation.Nonnull;
 
 import com.intellij.codeInsight.daemon.quickFix.LightQuickFixTestCase;
-import com.intellij.codeInspection.LocalInspectionTool;
+import consulo.language.editor.inspection.LocalInspectionTool;
 import com.intellij.openapi.application.PluginPathManager;
 
 /**

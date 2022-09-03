@@ -1,10 +1,10 @@
 package consulo.java.execution.impl.util;
 
-import com.intellij.execution.ExecutionException;
+import consulo.process.ExecutionException;
 import com.intellij.java.language.projectRoots.JavaSdk;
 import com.intellij.java.language.projectRoots.JavaSdkVersion;
-import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.projectRoots.SdkTable;
+import consulo.content.bundle.Sdk;
+import consulo.content.bundle.SdkTable;
 import com.intellij.java.language.LanguageLevel;
 import consulo.platform.Platform;
 import consulo.util.collection.ContainerUtil;

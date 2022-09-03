@@ -32,10 +32,10 @@ import javax.swing.JPanel;
 
 import com.intellij.java.debugger.impl.breakpoints.properties.JavaFieldBreakpointProperties;
 import com.intellij.java.debugger.DebuggerBundle;
-import com.intellij.ui.IdeBorderFactory;
-import com.intellij.util.ui.DialogUtil;
-import com.intellij.xdebugger.breakpoints.XLineBreakpoint;
-import com.intellij.xdebugger.breakpoints.ui.XBreakpointCustomPropertiesPanel;
+import consulo.execution.debug.breakpoint.XLineBreakpoint;
+import consulo.execution.debug.breakpoint.ui.XBreakpointCustomPropertiesPanel;
+import consulo.ui.ex.awt.IdeBorderFactory;
+import consulo.ui.ex.awt.util.DialogUtil;
 
 public class FieldBreakpointPropertiesPanel extends XBreakpointCustomPropertiesPanel<XLineBreakpoint<JavaFieldBreakpointProperties>>
 {

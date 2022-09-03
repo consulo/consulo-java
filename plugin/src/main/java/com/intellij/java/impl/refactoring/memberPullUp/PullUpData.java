@@ -17,10 +17,10 @@ package com.intellij.java.impl.refactoring.memberPullUp;
 
 import java.util.Set;
 
-import com.intellij.openapi.project.Project;
+import consulo.project.Project;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMember;
-import com.intellij.refactoring.util.DocCommentPolicy;
+import consulo.ide.impl.idea.refactoring.util.DocCommentPolicy;
 
 /**
  * Created by Max Medvedev on 10/3/13

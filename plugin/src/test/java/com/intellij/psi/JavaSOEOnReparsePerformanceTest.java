@@ -16,7 +16,7 @@
 package com.intellij.psi;
 
 import com.intellij.codeInsight.daemon.LightDaemonAnalyzerTestCase;
-import com.intellij.openapi.application.ApplicationManager;
+import consulo.application.ApplicationManager;
 
 public abstract class JavaSOEOnReparsePerformanceTest extends LightDaemonAnalyzerTestCase {
   private StringBuilder myHugeExpr;

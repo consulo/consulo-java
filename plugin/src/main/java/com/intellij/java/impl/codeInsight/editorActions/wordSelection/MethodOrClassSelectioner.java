@@ -22,18 +22,18 @@ import java.util.List;
 import javax.annotation.Nonnull;
 
 import com.intellij.java.language.JavaLanguage;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.util.TextRange;
+import consulo.codeEditor.Editor;
+import consulo.document.util.TextRange;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiComment;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiComment;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiIdentifier;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiTypeParameter;
 import com.intellij.java.language.psi.PsiTypeParameterList;
-import com.intellij.psi.PsiWhiteSpace;
+import consulo.language.psi.PsiWhiteSpace;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.util.collection.ContainerUtil;
 
 /**
  *

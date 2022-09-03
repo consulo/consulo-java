@@ -15,45 +15,44 @@
  */
 package com.intellij.java.impl.codeInspection.magicConstant;
 
-import com.intellij.analysis.AnalysisScope;
+import consulo.language.editor.scope.AnalysisScope;
 import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.language.codeInsight.ExternalAnnotationsManager;
-import com.intellij.codeInsight.daemon.GroupNames;
-import com.intellij.codeInspection.*;
-import com.intellij.ide.util.treeView.AbstractTreeNode;
+import consulo.ide.impl.idea.codeInsight.daemon.GroupNames;
+import consulo.project.ui.view.tree.AbstractTreeNode;
 import com.intellij.java.analysis.impl.codeInspection.BaseJavaLocalInspectionTool;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PropertyUtil;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.project.Project;
+import consulo.application.ApplicationManager;
+import consulo.project.Project;
 import com.intellij.java.language.projectRoots.JavaSdk;
-import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.projectRoots.SdkModificator;
+import consulo.content.bundle.Sdk;
+import consulo.content.bundle.SdkModificator;
 import com.intellij.java.impl.openapi.projectRoots.impl.JavaSdkImpl;
-import com.intellij.openapi.roots.ModuleExtensionWithSdkOrderEntry;
-import com.intellij.openapi.roots.OrderEntry;
-import com.intellij.openapi.roots.ProjectRootManager;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.module.content.layer.orderEntry.ModuleExtensionWithSdkOrderEntry;
+import consulo.module.content.layer.orderEntry.OrderEntry;
+import consulo.module.content.ProjectRootManager;
+import consulo.util.lang.Comparing;
+import consulo.ide.impl.idea.openapi.util.io.FileUtil;
+import consulo.util.lang.StringUtil;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.java.language.psi.javadoc.PsiDocTag;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.search.LocalSearchScope;
-import com.intellij.psi.tree.IElementType;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.scope.LocalSearchScope;
+import consulo.language.ast.IElementType;
 import com.intellij.psi.util.*;
 import com.intellij.java.impl.slicer.DuplicateMap;
 import com.intellij.java.impl.slicer.SliceAnalysisParams;
 import com.intellij.java.impl.slicer.SliceRootNode;
 import com.intellij.java.impl.slicer.SliceUsage;
-import com.intellij.util.Function;
-import com.intellij.util.Processor;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.ide.impl.idea.util.Function;
+import consulo.application.util.function.Processor;
+import consulo.util.collection.ContainerUtil;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.util.dataholder.Key;
 import org.intellij.lang.annotations.MagicConstant;
@@ -61,6 +60,7 @@ import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.*;
 
 public class MagicConstantInspection extends BaseJavaLocalInspectionTool
@@ -573,7 +573,7 @@ public class MagicConstantInspection extends BaseJavaLocalInspectionTool
 	{
 		return CachedValuesManager.getCachedValue(element, new CachedValueProvider<PsiAnnotation[]>()
 		{
-			@javax.annotation.Nullable
+			@Nullable
 			@Override
 			public Result<PsiAnnotation[]> compute()
 			{
@@ -793,7 +793,7 @@ public class MagicConstantInspection extends BaseJavaLocalInspectionTool
 			@Nonnull AllowedValues allowedValues,
 			@Nonnull PsiElement scope,
 			@Nonnull PsiManager manager,
-			@javax.annotation.Nullable Set<PsiExpression> visited)
+			@Nullable Set<PsiExpression> visited)
 	{
 		PsiExpression expression = PsiUtil.deparenthesizeExpression(e);
 		if(expression == null)

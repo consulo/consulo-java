@@ -16,10 +16,10 @@
 package com.intellij.java.impl.codeInsight.generation.actions;
 
 import com.intellij.java.impl.codeInsight.generation.GenerateEqualsHandler;
-import com.intellij.openapi.editor.Editor;
+import consulo.codeEditor.Editor;
 import com.intellij.java.language.psi.PsiAnonymousClass;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiFile;
+import consulo.language.psi.PsiFile;
 
 /**
  * @author dsl

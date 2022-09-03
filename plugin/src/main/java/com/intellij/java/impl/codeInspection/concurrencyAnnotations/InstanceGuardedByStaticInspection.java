@@ -15,14 +15,14 @@
  */
 package com.intellij.java.impl.codeInspection.concurrencyAnnotations;
 
-import com.intellij.codeInsight.daemon.GroupNames;
-import com.intellij.codeInspection.ProblemsHolder;
+import consulo.ide.impl.idea.codeInsight.daemon.GroupNames;
+import consulo.language.editor.inspection.ProblemsHolder;
 import com.intellij.java.analysis.impl.codeInspection.BaseJavaLocalInspectionTool;
 import com.intellij.java.analysis.impl.codeInspection.concurrencyAnnotations.JCiPUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
 import com.intellij.java.language.psi.javadoc.PsiDocTag;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.Nls;
 
 import javax.annotation.Nonnull;

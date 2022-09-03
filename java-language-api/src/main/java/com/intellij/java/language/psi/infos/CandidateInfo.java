@@ -20,8 +20,8 @@ import javax.annotation.Nonnull;
 import com.intellij.java.language.projectRoots.JavaSdkVersion;
 import com.intellij.java.language.projectRoots.JavaVersionService;
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.*;
-import com.intellij.psi.util.PsiUtilCore;
+import consulo.language.psi.PsiUtilCore;
+import consulo.language.psi.PsiElement;
 
 /**
  * @author ik, dsl

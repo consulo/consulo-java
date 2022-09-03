@@ -15,10 +15,10 @@
  */
 package com.intellij.java.impl.psi.codeStyle;
 
-import com.intellij.lang.ASTNode;
-import com.intellij.lang.Language;
-import com.intellij.lang.LanguageExtension;
-import com.intellij.openapi.project.Project;
+import consulo.language.ast.ASTNode;
+import consulo.language.Language;
+import consulo.language.extension.LanguageExtension;
+import consulo.project.Project;
 
 /**
  * @author Max Medvedev

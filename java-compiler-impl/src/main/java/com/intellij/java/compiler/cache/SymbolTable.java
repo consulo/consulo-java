@@ -21,12 +21,13 @@
  */
 package com.intellij.java.compiler.cache;
 
-import com.intellij.compiler.make.CacheCorruptedException;
-import com.intellij.openapi.compiler.CompilerBundle;
-import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.util.containers.SLRUCache;
-import com.intellij.util.io.PersistentEnumerator;
-import com.intellij.util.io.PersistentStringEnumerator;
+import consulo.compiler.CacheCorruptedException;
+import consulo.compiler.CompilerBundle;
+import consulo.ide.impl.idea.openapi.util.io.FileUtil;
+import consulo.util.collection.SLRUCache;
+import consulo.index.io.PersistentEnumerator;
+import consulo.index.io.PersistentStringEnumerator;
+
 import javax.annotation.Nonnull;
 
 import java.io.File;

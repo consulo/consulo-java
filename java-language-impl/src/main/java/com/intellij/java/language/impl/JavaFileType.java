@@ -16,7 +16,7 @@
 package com.intellij.java.language.impl;
 
 import com.intellij.java.language.JavaLanguage;
-import com.intellij.openapi.fileTypes.LanguageFileType;
+import consulo.language.file.LanguageFileType;
 import consulo.java.language.impl.JavaIcons;
 import consulo.localize.LocalizeValue;
 import consulo.platform.base.localize.IdeLocalize;

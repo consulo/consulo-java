@@ -17,14 +17,14 @@ package com.intellij.java.impl.ig.numeric;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
-import com.intellij.psi.tree.IElementType;
+import consulo.language.ast.IElementType;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.intellij.java.impl.ig.fixes.ExtractMethodFix;
 import com.siyeh.ig.psiutils.TypeUtils;
-import com.intellij.codeInspection.ui.SingleIntegerFieldOptionsPanel;
+import consulo.ide.impl.idea.codeInspection.ui.SingleIntegerFieldOptionsPanel;
 import javax.annotation.Nonnull;
 
 import javax.swing.*;

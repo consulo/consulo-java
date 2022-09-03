@@ -17,7 +17,7 @@
 package com.intellij.java.analysis.impl.codeInspection.bytecodeAnalysis;
 
 import com.intellij.java.analysis.impl.codeInspection.bytecodeAnalysis.asm.ASMUtils;
-import com.intellij.util.ArrayUtil;
+import consulo.util.collection.ArrayUtil;
 import consulo.internal.org.objectweb.asm.Opcodes;
 import consulo.internal.org.objectweb.asm.Type;
 import consulo.internal.org.objectweb.asm.tree.*;

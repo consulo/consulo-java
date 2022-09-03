@@ -15,12 +15,12 @@
  */
 package com.intellij.java.impl.ig.bugs;
 
-import com.intellij.codeInspection.ProblemDescriptor;
+import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.project.Project;
+import consulo.project.Project;
 import com.intellij.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
 import com.siyeh.HardcodedMethodConstants;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
@@ -30,6 +30,7 @@ import com.siyeh.ig.psiutils.ExpressionUtils;
 import consulo.java.language.module.util.JavaClassNames;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class ImplicitArrayToStringInspection extends BaseInspection {
 
@@ -63,7 +64,7 @@ public class ImplicitArrayToStringInspection extends BaseInspection {
   }
 
   @Override
-  @javax.annotation.Nullable
+  @Nullable
   protected InspectionGadgetsFix buildFix(Object... infos) {
     final PsiExpression expression = (PsiExpression)infos[0];
     final boolean removeToString = ((Boolean)infos[1]).booleanValue();

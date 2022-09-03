@@ -16,12 +16,13 @@
 package com.intellij.java.impl.application.options;
 
 import javax.annotation.Nonnull;
-import com.intellij.lang.Language;
+
+import consulo.application.ApplicationBundle;
+import consulo.configurable.Configurable;
+import consulo.language.Language;
 import com.intellij.java.language.JavaLanguage;
-import com.intellij.openapi.application.ApplicationBundle;
-import com.intellij.openapi.options.Configurable;
-import com.intellij.psi.codeStyle.CodeStyleSettings;
-import com.intellij.psi.codeStyle.CodeStyleSettingsProvider;
+import consulo.language.codeStyle.CodeStyleSettings;
+import consulo.language.codeStyle.setting.CodeStyleSettingsProvider;
 
 /**
  * @author yole

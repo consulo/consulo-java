@@ -26,17 +26,17 @@ import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
-import com.intellij.application.options.codeStyle.OptionTreeWithPreviewPanel;
+import consulo.application.ApplicationBundle;
+import consulo.language.codeStyle.ui.setting.OptionTreeWithPreviewPanel;
 import com.intellij.java.language.impl.JavaFileType;
-import com.intellij.lang.Language;
+import consulo.language.Language;
 import com.intellij.java.language.JavaLanguage;
-import com.intellij.openapi.application.ApplicationBundle;
-import com.intellij.openapi.fileTypes.FileType;
-import com.intellij.openapi.ui.OnePixelDivider;
-import com.intellij.psi.codeStyle.CodeStyleSettings;
+import consulo.ui.ex.awt.OnePixelDivider;
+import consulo.virtualFileSystem.fileType.FileType;
+import consulo.language.codeStyle.CodeStyleSettings;
 import com.intellij.java.impl.psi.codeStyle.JavaCodeStyleSettings;
-import com.intellij.psi.codeStyle.LanguageCodeStyleSettingsProvider;
-import com.intellij.ui.border.CustomLineBorder;
+import consulo.language.codeStyle.setting.LanguageCodeStyleSettingsProvider;
+import consulo.ui.ex.awt.CustomLineBorder;
 
 /**
  * @author max

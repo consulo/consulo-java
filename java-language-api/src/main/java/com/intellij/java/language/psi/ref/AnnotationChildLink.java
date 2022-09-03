@@ -15,15 +15,16 @@
  */
 package com.intellij.java.language.psi.ref;
 
-import javax.annotation.Nonnull;
-
-import org.jetbrains.annotations.NonNls;
 import com.intellij.java.language.psi.PsiAnnotation;
-import com.intellij.psi.PsiChildLink;
-import com.intellij.psi.PsiElementRef;
 import com.intellij.java.language.psi.PsiModifierList;
 import com.intellij.java.language.psi.PsiModifierListOwner;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.psi.PsiChildLink;
+import consulo.language.psi.PsiElementRef;
+import consulo.language.util.IncorrectOperationException;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * @author peter
@@ -44,7 +45,7 @@ public class AnnotationChildLink extends PsiChildLink<PsiModifierListOwner, PsiA
   }
 
   @Override
-  public PsiAnnotation findLinkedChild(@javax.annotation.Nullable PsiModifierListOwner member) {
+  public PsiAnnotation findLinkedChild(@Nullable PsiModifierListOwner member) {
     if (member == null) return null;
 
     final PsiModifierList modifierList = member.getModifierList();

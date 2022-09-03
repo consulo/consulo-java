@@ -18,10 +18,10 @@ package com.intellij.java.impl.refactoring.extractclass.usageInfo;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiPostfixExpression;
 import com.intellij.java.language.psi.PsiPrefixExpression;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.impl.refactoring.psi.MutationUtils;
 import com.intellij.java.impl.refactoring.util.FixableUsageInfo;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
 
 public class ReplaceStaticVariableIncrementDecrement extends FixableUsageInfo {
   private final PsiExpression reference;

@@ -15,26 +15,27 @@
  */
 package com.intellij.java.impl.codeInsight.editorActions;
 
-import com.intellij.codeInsight.CodeInsightSettings;
-import com.intellij.codeInsight.daemon.impl.CollectHighlightsUtil;
-import com.intellij.codeInsight.editorActions.CopyPastePostProcessor;
+import consulo.language.editor.CodeInsightSettings;
+import consulo.language.editor.util.CollectHighlightsUtil;
+import consulo.ide.impl.idea.codeInsight.editorActions.CopyPastePostProcessor;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiClassOwner;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.RangeMarker;
-import com.intellij.openapi.project.DumbService;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.openapi.util.Ref;
-import com.intellij.openapi.util.TextRange;
+import consulo.application.ApplicationManager;
+import consulo.document.Document;
+import consulo.codeEditor.Editor;
+import consulo.document.RangeMarker;
+import consulo.project.DumbService;
+import consulo.project.Project;
+import consulo.util.lang.Comparing;
+import consulo.util.lang.ref.Ref;
+import consulo.document.util.TextRange;
 import com.intellij.psi.*;
-import com.intellij.util.ArrayUtil;
+import consulo.util.collection.ArrayUtil;
 import consulo.logging.Logger;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
@@ -128,7 +129,7 @@ public abstract class CopyPasteReferenceProcessor<TRef extends PsiElement> exten
   }
 
   protected static void addReferenceData(final PsiElement element, final ArrayList<ReferenceData> array, final int startOffset,
-                                         final String qClassName, @javax.annotation.Nullable final String staticMemberName) {
+                                         final String qClassName, @Nullable final String staticMemberName) {
     final TextRange range = element.getTextRange();
     array.add(new ReferenceData(range.getStartOffset() - startOffset, range.getEndOffset() - startOffset, qClassName, staticMemberName));
   }

@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ide.util;
 
-import com.intellij.ide.util.AbstractTreeClassChooserDialog;
+import consulo.ide.impl.idea.ide.util.AbstractTreeClassChooserDialog;
 import com.intellij.java.impl.ide.projectView.impl.nodes.ClassTreeNode;
 import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
 import com.intellij.java.language.psi.PsiClass;
@@ -23,14 +23,14 @@ import com.intellij.java.language.psi.PsiJavaFile;
 import com.intellij.java.language.psi.search.PsiShortNamesCache;
 import com.intellij.java.language.util.ClassFilter;
 import com.intellij.java.language.util.TreeClassChooser;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Computable;
-import com.intellij.openapi.util.Condition;
-import com.intellij.openapi.util.Conditions;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.util.Query;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.application.ApplicationManager;
+import consulo.project.Project;
+import consulo.application.util.function.Computable;
+import consulo.util.lang.function.Condition;
+import consulo.util.lang.function.Conditions;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.application.util.query.Query;
+import consulo.util.collection.ContainerUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

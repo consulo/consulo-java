@@ -15,11 +15,11 @@
  */
 package com.intellij.java.language.impl.psi.impl.source.tree.java;
 
-import com.intellij.lang.ASTNode;
-import com.intellij.psi.impl.source.tree.CompositePsiElement;
+import consulo.language.ast.ASTNode;
+import consulo.language.impl.psi.CompositePsiElement;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaSourceUtil;
-import com.intellij.psi.impl.source.tree.TreeElement;
-import com.intellij.psi.tree.IElementType;
+import consulo.language.impl.ast.TreeElement;
+import consulo.language.ast.IElementType;
 
 import javax.annotation.Nonnull;
 

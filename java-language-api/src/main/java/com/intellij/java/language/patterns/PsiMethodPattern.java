@@ -20,18 +20,18 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.search.searches.SuperMethodsSearch;
 import com.intellij.java.language.psi.util.MethodSignatureBackedByPsiMethod;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.openapi.util.Ref;
-import com.intellij.patterns.ElementPattern;
-import com.intellij.patterns.PatternCondition;
-import com.intellij.patterns.PatternConditionPlus;
-import com.intellij.util.ArrayUtil;
-import com.intellij.util.PairProcessor;
-import com.intellij.util.ProcessingContext;
-import com.intellij.util.Processor;
+import consulo.application.util.function.Processor;
+import consulo.language.pattern.ElementPattern;
+import consulo.language.pattern.PatternCondition;
+import consulo.language.pattern.PatternConditionPlus;
+import consulo.language.util.ProcessingContext;
+import consulo.util.collection.ArrayUtil;
+import consulo.util.lang.Comparing;
+import consulo.util.lang.ref.Ref;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
+import java.util.function.BiPredicate;
 
 /**
  * @author peter
@@ -107,13 +107,13 @@ public class PsiMethodPattern extends PsiMemberPattern<PsiMethod,PsiMethodPatter
     return with(new PatternConditionPlus<PsiMethod, PsiClass>("definedInClass", pattern) {
 
       @Override
-      public boolean processValues(PsiMethod t, final ProcessingContext context, final PairProcessor<PsiClass, ProcessingContext> processor) {
-        if (!processor.process(t.getContainingClass(), context)) return false;
+      public boolean processValues(PsiMethod t, final ProcessingContext context, final BiPredicate<PsiClass, ProcessingContext> processor) {
+        if (!processor.test(t.getContainingClass(), context)) return false;
         final Ref<Boolean> result = Ref.create(Boolean.TRUE);
         SuperMethodsSearch.search(t, null, true, false).forEach(new Processor<MethodSignatureBackedByPsiMethod>() {
           @Override
           public boolean process(final MethodSignatureBackedByPsiMethod signature) {
-            if (!processor.process(signature.getMethod().getContainingClass(), context)) {
+            if (!processor.test(signature.getMethod().getContainingClass(), context)) {
               result.set(Boolean.FALSE);
               return false;
             }

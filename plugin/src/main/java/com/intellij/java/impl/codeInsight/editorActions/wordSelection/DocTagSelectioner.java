@@ -15,16 +15,16 @@
  */
 package com.intellij.java.impl.codeInsight.editorActions.wordSelection;
 
-import com.intellij.codeInsight.editorActions.wordSelection.WordSelectioner;
+import consulo.ide.impl.idea.codeInsight.editorActions.wordSelection.WordSelectioner;
 import com.intellij.java.language.psi.JavaDocTokenType;
 import com.intellij.java.language.psi.javadoc.PsiDocTag;
 import com.intellij.java.language.psi.javadoc.PsiDocToken;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiWhiteSpace;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.util.text.CharArrayUtil;
+import consulo.codeEditor.Editor;
+import consulo.document.util.TextRange;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiWhiteSpace;
+import consulo.language.ast.IElementType;
+import consulo.util.lang.CharArrayUtil;
 import consulo.annotation.access.RequiredReadAction;
 
 import java.util.List;

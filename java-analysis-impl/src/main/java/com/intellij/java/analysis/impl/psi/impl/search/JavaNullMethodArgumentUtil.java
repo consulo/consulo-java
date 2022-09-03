@@ -24,16 +24,16 @@ import javax.annotation.Nullable;
 
 import com.intellij.java.language.psi.*;
 import consulo.logging.Logger;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.psi.*;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.search.GlobalSearchScopeUtil;
-import com.intellij.psi.search.GlobalSearchScopesCore;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.ide.impl.psi.search.GlobalSearchScopeUtil;
+import consulo.language.psi.scope.GlobalSearchScopesCore;
 import com.intellij.java.indexing.search.searches.MethodReferencesSearch;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.util.CommonProcessors;
-import com.intellij.util.Processor;
-import com.intellij.util.indexing.FileBasedIndex;
+import consulo.application.util.function.CommonProcessors;
+import consulo.application.util.function.Processor;
+import consulo.language.psi.stub.FileBasedIndex;
 
 public class JavaNullMethodArgumentUtil
 {

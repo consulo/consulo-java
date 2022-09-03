@@ -22,31 +22,39 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.infos.MethodCandidateInfo;
 import com.intellij.java.language.psi.infos.MethodCandidateInfo.ApplicabilityLevel;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
-import com.intellij.openapi.module.ModuleUtilCore;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.VfsUtilCore;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.*;
-import com.intellij.psi.meta.PsiMetaData;
-import com.intellij.psi.meta.PsiMetaOwner;
-import com.intellij.psi.search.ProjectScope;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.tree.TokenSet;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.PsiUtilCore;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.TimeoutUtil;
-import com.intellij.util.containers.ContainerUtil;
-import com.intellij.util.containers.EmptyIterable;
 import consulo.annotation.access.RequiredReadAction;
+import consulo.document.util.TextRange;
 import consulo.java.language.module.extension.JavaModuleExtension;
 import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.ast.IElementType;
+import consulo.language.ast.TokenSet;
+import consulo.language.psi.PsiBundle;
+import consulo.language.psi.PsiCodeFragment;
+import consulo.language.psi.PsiDirectory;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiInvalidElementAccessException;
+import consulo.language.psi.PsiManager;
+import consulo.language.psi.PsiNamedElement;
+import consulo.language.psi.PsiUtilCore;
+import consulo.language.psi.ResolveResult;
+import consulo.language.psi.meta.PsiMetaData;
+import consulo.language.psi.meta.PsiMetaOwner;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.language.util.ModuleUtilCore;
 import consulo.logging.Logger;
+import consulo.project.Project;
+import consulo.project.content.scope.ProjectScopes;
+import consulo.util.collection.ContainerUtil;
 import consulo.util.dataholder.Key;
-import consulo.vfs.ArchiveFileSystem;
+import consulo.util.lang.Comparing;
+import consulo.util.lang.StringUtil;
+import consulo.util.lang.TimeoutUtil;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.virtualFileSystem.archive.ArchiveFileSystem;
+import consulo.virtualFileSystem.archive.ArchiveVfsUtil;
 import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
@@ -959,7 +967,7 @@ public final class PsiUtil extends PsiUtilCore {
   public static VirtualFile getJarFile(@Nonnull PsiElement candidate) {
     VirtualFile file = candidate.getContainingFile().getVirtualFile();
     if (file != null && file.getFileSystem() instanceof ArchiveFileSystem) {
-      return VfsUtilCore.getVirtualFileForJar(file);
+      return ArchiveVfsUtil.getVirtualFileForJar(file);
     }
     return file;
   }
@@ -1024,7 +1032,7 @@ public final class PsiUtil extends PsiUtilCore {
     }
 
     if (result == null) {
-      return EmptyIterable.getInstance();
+      return List.of();
     }
     return result;
   }
@@ -1285,7 +1293,7 @@ public final class PsiUtil extends PsiUtilCore {
 
     final Project project = resourceClass.getProject();
     final JavaPsiFacade facade = JavaPsiFacade.getInstance(project);
-    final PsiClass autoCloseable = facade.findClass(JavaClassNames.JAVA_LANG_AUTO_CLOSEABLE, ProjectScope.getLibrariesScope(project));
+    final PsiClass autoCloseable = facade.findClass(JavaClassNames.JAVA_LANG_AUTO_CLOSEABLE, (GlobalSearchScope) ProjectScopes.getLibrariesScope(project));
     if (autoCloseable == null) {
       return null;
     }
@@ -1324,7 +1332,7 @@ public final class PsiUtil extends PsiUtilCore {
 
     final Project project = resourceClass.getProject();
     final JavaPsiFacade facade = JavaPsiFacade.getInstance(project);
-    final PsiClass autoCloseable = facade.findClass(JavaClassNames.JAVA_LANG_AUTO_CLOSEABLE, ProjectScope.getLibrariesScope(project));
+    final PsiClass autoCloseable = facade.findClass(JavaClassNames.JAVA_LANG_AUTO_CLOSEABLE, (GlobalSearchScope) ProjectScopes.getLibrariesScope(project));
     if (autoCloseable == null) {
       return null;
     }
@@ -1443,9 +1451,9 @@ public final class PsiUtil extends PsiUtilCore {
   }
 
   private static <T extends PsiElement> void addStatements(@Nonnull List<? super T> vector,
-                                                           @Nonnull PsiElement element,
-                                                           @Nonnull Class<? extends T> clazz,
-                                                           @Nonnull Predicate<? super PsiElement> stopAt) {
+                                                                                @Nonnull PsiElement element,
+                                                                                @Nonnull Class<? extends T> clazz,
+                                                                                @Nonnull Predicate<? super PsiElement> stopAt) {
     if (PsiTreeUtil.instanceOf(element, clazz)) {
       //noinspection unchecked
       vector.add((T) element);

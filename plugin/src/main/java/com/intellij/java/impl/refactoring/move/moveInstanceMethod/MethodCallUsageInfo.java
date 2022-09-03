@@ -15,10 +15,10 @@
  */
 package com.intellij.java.impl.refactoring.move.moveInstanceMethod;
 
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiMethodReferenceExpression;
 import com.intellij.java.language.psi.PsiReferenceExpression;
-import com.intellij.usageView.UsageInfo;
+import consulo.usage.UsageInfo;
 
 /**
  * @author ven

@@ -16,13 +16,14 @@
 package org.intellij.plugins.intelliLang.util;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.ElementManipulators;
-import com.intellij.psi.PsiElement;
+import consulo.document.util.TextRange;
+import consulo.language.psi.ElementManipulators;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiLiteralExpression;
-import com.intellij.psi.PsiReference;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.psi.PsiReference;
+import consulo.language.util.IncorrectOperationException;
 
 /**
  * Base class for references in String literals.
@@ -59,7 +60,7 @@ public abstract class StringLiteralReference implements PsiReference {
     return resolve() == element;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   protected String getValue() {
     return (String)myValue.getValue();
   }

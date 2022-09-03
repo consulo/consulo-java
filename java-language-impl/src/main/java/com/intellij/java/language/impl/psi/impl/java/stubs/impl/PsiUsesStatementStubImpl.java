@@ -15,13 +15,13 @@
  */
 package com.intellij.java.language.impl.psi.impl.java.stubs.impl;
 
-import static com.intellij.util.ObjectUtil.notNull;
+import static consulo.util.lang.ObjectUtil.notNull;
 
 import com.intellij.java.language.psi.PsiUsesStatement;
 import com.intellij.java.language.impl.psi.impl.java.stubs.JavaStubElementTypes;
 import com.intellij.java.language.impl.psi.impl.java.stubs.PsiUsesStatementStub;
-import com.intellij.psi.stubs.StubBase;
-import com.intellij.psi.stubs.StubElement;
+import consulo.language.psi.stub.StubBase;
+import consulo.language.psi.stub.StubElement;
 
 public class PsiUsesStatementStubImpl extends StubBase<PsiUsesStatement> implements PsiUsesStatementStub
 {

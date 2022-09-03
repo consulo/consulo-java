@@ -25,7 +25,7 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaVariable
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.util.ArrayUtil;
+import consulo.util.collection.ArrayUtil;
 import com.siyeh.ig.callMatcher.CallMapper;
 import com.siyeh.ig.callMatcher.CallMatcher;
 import com.siyeh.ig.psiutils.ExpectedTypeUtils;
@@ -38,7 +38,7 @@ import java.util.Objects;
 import java.util.function.UnaryOperator;
 
 import static com.intellij.java.language.psi.CommonClassNames.*;
-import static com.intellij.util.ObjectUtils.tryCast;
+import static consulo.ide.impl.idea.util.ObjectUtils.tryCast;
 import static com.siyeh.ig.callMatcher.CallMatcher.*;
 
 public class StreamChainInliner implements CallInliner {

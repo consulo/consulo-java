@@ -20,18 +20,19 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.swing.JComponent;
 
-import com.intellij.codeInspection.ui.SingleCheckboxOptionsPanel;
+import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
 import com.intellij.java.language.psi.JavaTokenType;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiIfStatement;
 import com.intellij.java.language.psi.PsiMethodCallExpression;
 import com.intellij.java.language.psi.PsiParenthesizedExpression;
 import com.intellij.java.language.psi.PsiPolyadicExpression;
 import com.intellij.java.language.psi.PsiStatement;
-import com.intellij.psi.tree.IElementType;
+import consulo.language.ast.IElementType;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
@@ -57,7 +58,7 @@ public class DuplicateConditionInspection extends BaseInspection {
     return InspectionGadgetsBundle.message("duplicate.condition.problem.descriptor");
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public JComponent createOptionsPanel() {
     return new SingleCheckboxOptionsPanel(InspectionGadgetsBundle.message("duplicate.condition.ignore.method.calls.option"),
                                           this, "ignoreMethodCalls");

@@ -15,8 +15,8 @@
  */
 package com.intellij.java.language.psi;
 
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.ResolveResult;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.ResolveResult;
 
 /**
  * JavaResolveResult holds additional information that is obtained

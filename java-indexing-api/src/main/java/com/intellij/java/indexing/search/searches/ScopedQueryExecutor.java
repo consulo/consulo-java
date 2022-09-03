@@ -15,9 +15,10 @@
  */
 package com.intellij.java.indexing.search.searches;
 
+import consulo.application.util.query.QueryExecutor;
+import consulo.language.psi.scope.GlobalSearchScope;
+
 import javax.annotation.Nonnull;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.util.QueryExecutor;
 
 /**
  * A query executor that handles all searches within the specified scope, requesting the default query
@@ -25,11 +26,10 @@ import com.intellij.util.QueryExecutor;
  *
  * @author yole
  */
-public interface ScopedQueryExecutor<Result, Param> extends QueryExecutor<Result, Param>
-{
-	/**
-	 * Returns the scope handled by this executor.
-	 */
-	@Nonnull
-	GlobalSearchScope getScope(Param param);
+public interface ScopedQueryExecutor<Result, Param> extends QueryExecutor<Result, Param> {
+  /**
+   * Returns the scope handled by this executor.
+   */
+  @Nonnull
+  GlobalSearchScope getScope(Param param);
 }

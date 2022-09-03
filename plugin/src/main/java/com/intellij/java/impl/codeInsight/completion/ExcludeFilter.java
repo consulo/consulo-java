@@ -16,10 +16,11 @@
 package com.intellij.java.impl.codeInsight.completion;
 
 import com.intellij.java.language.psi.PsiVariable;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.filters.ElementFilter;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.filter.ElementFilter;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * @author peter
@@ -34,7 +35,7 @@ class ExcludeFilter implements ElementFilter
 	}
 
 	@Override
-	public boolean isAcceptable(Object element, @javax.annotation.Nullable PsiElement context)
+	public boolean isAcceptable(Object element, @Nullable PsiElement context)
 	{
 		return element != myExcluded;
 	}

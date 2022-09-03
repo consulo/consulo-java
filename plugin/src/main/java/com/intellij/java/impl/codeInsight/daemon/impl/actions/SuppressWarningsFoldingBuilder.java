@@ -22,15 +22,15 @@ package com.intellij.java.impl.codeInsight.daemon.impl.actions;
 
 import com.intellij.java.language.codeInsight.folding.JavaCodeFoldingSettings;
 import com.intellij.java.language.psi.*;
-import com.intellij.lang.ASTNode;
-import com.intellij.lang.folding.FoldingBuilderEx;
-import com.intellij.lang.folding.FoldingDescriptor;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.language.ast.ASTNode;
+import consulo.language.editor.folding.FoldingBuilderEx;
+import consulo.language.editor.folding.FoldingDescriptor;
+import consulo.document.Document;
+import consulo.util.lang.Comparing;
+import consulo.util.lang.StringUtil;
 import com.intellij.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.util.Function;
+import consulo.ide.impl.idea.util.Function;
 import javax.annotation.Nonnull;
 
 import java.util.ArrayList;

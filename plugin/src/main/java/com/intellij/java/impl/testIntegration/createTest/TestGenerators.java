@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.testIntegration.createTest;
 
-import com.intellij.lang.LanguageExtension;
+import consulo.language.extension.LanguageExtension;
 
 /**
  * @author Max Medvedev

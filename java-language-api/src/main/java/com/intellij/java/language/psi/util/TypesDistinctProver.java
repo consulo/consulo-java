@@ -18,10 +18,10 @@ package com.intellij.java.language.psi.util;
 import java.util.Set;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.util.Comparing;
 
 import java.util.HashSet;
 import consulo.java.language.module.util.JavaClassNames;
+import consulo.util.lang.Comparing;
 
 /**
  * User: anna

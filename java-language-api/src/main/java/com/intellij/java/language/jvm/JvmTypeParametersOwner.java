@@ -16,17 +16,18 @@
 package com.intellij.java.language.jvm;
 
 import javax.annotation.Nonnull;
+import java.lang.reflect.GenericDeclaration;
 
 /**
  * Represents an element which declares type parameters.
  *
- * @see java.lang.reflect.GenericDeclaration
+ * @see GenericDeclaration
  */
 public interface JvmTypeParametersOwner extends JvmMember
 {
 
 	/**
-	 * @see java.lang.reflect.GenericDeclaration#getTypeParameters
+	 * @see GenericDeclaration#getTypeParameters
 	 */
 	@Nonnull
 	JvmTypeParameter[] getTypeParameters();

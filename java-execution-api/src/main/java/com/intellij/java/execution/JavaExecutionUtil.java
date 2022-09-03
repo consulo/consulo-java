@@ -15,35 +15,40 @@
  */
 package com.intellij.java.execution;
 
-import com.intellij.execution.*;
-import com.intellij.execution.configurations.RunProfile;
-import com.intellij.execution.configurations.RunProfileState;
-import com.intellij.execution.executors.DefaultRunExecutor;
-import com.intellij.execution.filters.Filter;
-import com.intellij.execution.filters.TextConsoleBuilder;
-import com.intellij.execution.filters.TextConsoleBuilderFactory;
-import com.intellij.execution.runners.ExecutionEnvironment;
-import com.intellij.execution.runners.ProgramRunner;
-import com.intellij.execution.util.ExecutionErrorDialog;
 import com.intellij.java.execution.configurations.JavaCommandLineState;
 import com.intellij.java.execution.configurations.JavaRunConfigurationModule;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiClassOwner;
-import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleUtilCore;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Condition;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.*;
-import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.java.language.psi.util.ClassUtil;
 import com.intellij.java.language.psi.util.PsiClassUtil;
-import com.intellij.psi.util.PsiTreeUtil;
 import consulo.annotation.DeprecationInfo;
+import consulo.dataContext.DataContext;
+import consulo.execution.ExecutionBundle;
+import consulo.execution.RunnerRegistry;
+import consulo.execution.action.Location;
+import consulo.execution.action.PsiLocation;
+import consulo.execution.configuration.RunProfile;
+import consulo.execution.configuration.RunProfileState;
+import consulo.execution.executor.DefaultRunExecutor;
+import consulo.execution.executor.Executor;
+import consulo.execution.runner.ExecutionEnvironment;
+import consulo.execution.runner.ProgramRunner;
+import consulo.execution.ui.console.Filter;
+import consulo.execution.ui.console.TextConsoleBuilder;
+import consulo.execution.ui.console.TextConsoleBuilderFactory;
 import consulo.java.execution.configurations.OwnJavaParameters;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiManager;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.ModuleUtilCore;
+import consulo.module.Module;
+import consulo.process.ExecutionException;
+import consulo.project.Project;
 import consulo.ui.image.Image;
+import consulo.util.lang.StringUtil;
+import consulo.util.lang.function.Condition;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -217,10 +222,6 @@ public class JavaExecutionUtil {
       return "";
     }
     return StringUtil.getShortName(fqName);
-  }
-
-  public static void showExecutionErrorMessage(final ExecutionException e, final String title, final Project project) {
-    ExecutionErrorDialog.show(e, title, project);
   }
 
   public static boolean isRunnableClass(final PsiClass aClass) {

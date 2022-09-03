@@ -19,11 +19,11 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import com.intellij.java.language.impl.codeInsight.generation.GenerationInfo;
 import com.intellij.java.language.codeInsight.MemberImplementorExplorer;
-import com.intellij.openapi.extensions.ExtensionPointName;
+import consulo.component.extension.ExtensionPointName;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.util.Consumer;
-import com.intellij.util.IncorrectOperationException;
+import consulo.ide.impl.idea.util.Consumer;
+import consulo.language.util.IncorrectOperationException;
 
 /**
  * @author peter

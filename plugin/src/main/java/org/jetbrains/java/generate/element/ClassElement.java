@@ -17,7 +17,7 @@ package org.jetbrains.java.generate.element;
 
 import java.util.Arrays;
 
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.util.lang.StringUtil;
 
 /**
  * Information about the class that contains the fields that are target for the toString() code generation.

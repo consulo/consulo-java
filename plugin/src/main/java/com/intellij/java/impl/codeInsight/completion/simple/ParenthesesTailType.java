@@ -16,9 +16,9 @@
 
 package com.intellij.java.impl.codeInsight.completion.simple;
 
-import com.intellij.codeInsight.TailType;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
+import consulo.language.editor.completion.lookup.TailType;
+import consulo.codeEditor.Editor;
+import consulo.language.codeStyle.CommonCodeStyleSettings;
 
 /**
  * @author peter

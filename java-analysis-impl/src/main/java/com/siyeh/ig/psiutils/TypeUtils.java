@@ -16,9 +16,9 @@
 package com.siyeh.ig.psiutils;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.project.Project;
+import consulo.project.Project;
 import com.intellij.psi.*;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
@@ -52,7 +52,7 @@ public class TypeUtils
 	}
 
 	@Contract("_, null -> false")
-	public static boolean typeEquals(@NonNls @Nonnull String typeName, @javax.annotation.Nullable PsiType targetType)
+	public static boolean typeEquals(@NonNls @Nonnull String typeName, @Nullable PsiType targetType)
 	{
 		return targetType != null && targetType.equalsToText(typeName);
 	}
@@ -83,7 +83,7 @@ public class TypeUtils
 	/**
 	 * JLS 5.1.3. Narrowing Primitive Conversion
 	 */
-	public static boolean isNarrowingConversion(@javax.annotation.Nullable PsiType sourceType, @Nullable PsiType targetType)
+	public static boolean isNarrowingConversion(@Nullable PsiType sourceType, @Nullable PsiType targetType)
 	{
 		final Integer sourcePrecision = typePrecisions.get(sourceType);
 		final Integer targetPrecision = typePrecisions.get(targetType);
@@ -233,7 +233,7 @@ public class TypeUtils
 		return false;
 	}
 
-	public static boolean hasFloatingPointType(@javax.annotation.Nullable PsiExpression expression)
+	public static boolean hasFloatingPointType(@Nullable PsiExpression expression)
 	{
 		if(expression == null)
 		{

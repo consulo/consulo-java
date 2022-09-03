@@ -29,14 +29,14 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiClassType;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.PsiTypeParameter;
 import com.intellij.java.language.psi.PsiTypeParameterListOwner;
 import com.intellij.java.language.psi.TypeAnnotationProvider;
 import com.intellij.java.language.psi.augment.TypeAnnotationModifier;
 import com.intellij.java.language.impl.psi.impl.light.LightTypeParameter;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 

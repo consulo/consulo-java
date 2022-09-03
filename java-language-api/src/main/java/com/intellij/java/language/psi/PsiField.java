@@ -16,10 +16,11 @@
 package com.intellij.java.language.psi;
 
 import com.intellij.java.language.jvm.JvmField;
-import com.intellij.util.ArrayFactory;
-import com.intellij.util.IncorrectOperationException;
+import consulo.util.collection.ArrayFactory;
+import consulo.language.util.IncorrectOperationException;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Represents a Java field or enum constant.
@@ -41,7 +42,7 @@ public interface PsiField extends PsiMember, PsiVariable, PsiDocCommentOwner, Jv
 	 * @throws IncorrectOperationException if the modifications fails for some reason.
 	 * @since 5.0.2
 	 */
-	void setInitializer(@javax.annotation.Nullable PsiExpression initializer) throws IncorrectOperationException;
+	void setInitializer(@Nullable PsiExpression initializer) throws IncorrectOperationException;
 
 	@Override
 	@Nonnull

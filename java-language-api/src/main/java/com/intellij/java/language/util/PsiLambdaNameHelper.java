@@ -16,10 +16,15 @@
 package com.intellij.java.language.util;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.util.*;
+import consulo.application.util.CachedValueProvider;
+import consulo.application.util.CachedValuesManager;
+import consulo.application.util.ParameterizedCachedValue;
+import consulo.application.util.ParameterizedCachedValueProvider;
+import consulo.language.psi.util.PsiTreeUtil;
 import consulo.util.dataholder.Key;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,7 +32,7 @@ public class PsiLambdaNameHelper
 {
 	private static final Key<ParameterizedCachedValue<Map<PsiLambdaExpression, String>, PsiClass>> LAMBDA_NAME = Key.create("ANONYMOUS_CLASS_NAME");
 
-	@javax.annotation.Nullable
+	@Nullable
 	public static String getVMName(@Nonnull PsiLambdaExpression lambdaExpression)
 	{
 		final PsiClass upper = PsiTreeUtil.getParentOfType(lambdaExpression, PsiClass.class);

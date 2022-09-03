@@ -17,13 +17,13 @@ package com.intellij.java.impl.ide.util.projectWizard.importSources;
 
 import javax.annotation.Nullable;
 import com.intellij.java.language.impl.lexer.JavaLexer;
-import com.intellij.lexer.Lexer;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.language.lexer.Lexer;
+import consulo.util.lang.StringUtil;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.java.language.impl.psi.impl.source.tree.ElementType;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.tree.TokenSet;
+import consulo.language.ast.IElementType;
+import consulo.language.ast.TokenSet;
 
 
 public class JavaSourceRootDetectionUtil

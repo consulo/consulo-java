@@ -45,40 +45,40 @@ import com.intellij.java.debugger.impl.jdi.ThreadReferenceProxyImpl;
 import com.intellij.java.debugger.impl.ui.breakpoints.Breakpoint;
 import com.intellij.java.debugger.impl.ui.breakpoints.BreakpointWithHighlighter;
 import com.intellij.java.debugger.impl.ui.breakpoints.LineBreakpoint;
-import com.intellij.execution.ExecutionException;
-import com.intellij.execution.ExecutionResult;
+import consulo.execution.ExecutionResult;
+import consulo.execution.configuration.RunProfileState;
+import consulo.execution.debug.AbstractDebuggerSession;
+import consulo.execution.debug.XDebugSession;
+import consulo.process.ExecutionException;
 import com.intellij.java.execution.configurations.RemoteConnection;
 import com.intellij.java.execution.configurations.RemoteState;
-import com.intellij.execution.configurations.RunProfileState;
-import com.intellij.execution.process.ProcessHandler;
-import com.intellij.execution.process.ProcessOutputTypes;
-import com.intellij.idea.ActionsBundle;
-import com.intellij.notification.Notification;
-import com.intellij.notification.NotificationListener;
-import com.intellij.notification.NotificationType;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.application.ModalityState;
-import com.intellij.openapi.extensions.Extensions;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.ui.Messages;
-import com.intellij.openapi.util.Comparing;
+import consulo.process.ProcessHandler;
+import consulo.process.ProcessOutputTypes;
+import consulo.project.ui.notification.Notification;
+import consulo.project.ui.notification.event.NotificationListener;
+import consulo.ui.ex.action.ActionsBundle;
+import consulo.ui.NotificationType;
+import consulo.application.ApplicationManager;
+import consulo.ui.ModalityState;
+import consulo.component.extension.Extensions;
+import consulo.project.Project;
+import consulo.content.bundle.Sdk;
+import consulo.ui.ex.awt.Messages;
+import consulo.ui.ex.awt.util.Alarm;
+import consulo.util.lang.Comparing;
 import consulo.disposer.Disposer;
-import com.intellij.openapi.util.Pair;
-import com.intellij.psi.PsiCompiledElement;
+import consulo.util.lang.Pair;
+import consulo.language.psi.PsiCompiledElement;
 import com.intellij.java.language.psi.PsiElementFinder;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.java.execution.unscramble.ThreadState;
-import com.intellij.util.Alarm;
-import com.intellij.util.TimeoutUtil;
-import com.intellij.util.ui.UIUtil;
-import com.intellij.xdebugger.AbstractDebuggerSession;
-import com.intellij.xdebugger.XDebugSession;
-import com.intellij.xdebugger.XSourcePosition;
-import com.intellij.xdebugger.impl.XDebugSessionImpl;
-import com.intellij.xdebugger.impl.actions.XDebuggerActions;
-import com.intellij.xdebugger.impl.evaluate.quick.common.ValueLookupManager;
+import consulo.util.lang.TimeoutUtil;
+import consulo.ui.ex.awt.UIUtil;
+import consulo.execution.debug.XSourcePosition;
+import consulo.ide.impl.idea.xdebugger.impl.XDebugSessionImpl;
+import consulo.ide.impl.idea.xdebugger.impl.actions.XDebuggerActions;
+import consulo.ide.impl.idea.xdebugger.impl.evaluate.quick.common.ValueLookupManager;
 import consulo.internal.com.sun.jdi.ObjectCollectedException;
 import consulo.internal.com.sun.jdi.ThreadReference;
 import consulo.internal.com.sun.jdi.request.EventRequest;
@@ -276,7 +276,7 @@ public class DebuggerSession implements AbstractDebuggerSession
 		myState = new DebuggerSessionState(State.STOPPED, null);
 		myDebugProcess.addDebugProcessListener(new MyDebugProcessListener(debugProcess));
 		myDebugProcess.addEvaluationListener(new MyEvaluationListener());
-		ValueLookupManager.getInstance(getProject()).startListening();
+		consulo.ide.impl.idea.xdebugger.impl.evaluate.quick.common.ValueLookupManager.getInstance(getProject()).startListening();
 		mySearchScope = environment.getSearchScope();
 		myAlternativeJre = environment.getAlternativeJre();
 		myRunJre = environment.getRunJre();
@@ -407,7 +407,7 @@ public class DebuggerSession implements AbstractDebuggerSession
 		stepOver(ignoreBreakpoints, StepRequest.STEP_LINE);
 	}
 
-	public void stepInto(final boolean ignoreFilters, final @javax.annotation.Nullable MethodFilter smartStepFilter, int stepSize)
+	public void stepInto(final boolean ignoreFilters, final @Nullable MethodFilter smartStepFilter, int stepSize)
 	{
 		final SuspendContextImpl suspendContext = getSuspendContext();
 		DebugProcessImpl.ResumeCommand cmd = null;
@@ -427,7 +427,7 @@ public class DebuggerSession implements AbstractDebuggerSession
 		resumeAction(cmd, Event.STEP);
 	}
 
-	public void stepInto(final boolean ignoreFilters, final @javax.annotation.Nullable MethodFilter smartStepFilter)
+	public void stepInto(final boolean ignoreFilters, final @Nullable MethodFilter smartStepFilter)
 	{
 		stepInto(ignoreFilters, smartStepFilter, StepRequest.STEP_LINE);
 	}
@@ -600,7 +600,7 @@ public class DebuggerSession implements AbstractDebuggerSession
 					List<Pair<Breakpoint, consulo.internal.com.sun.jdi.event.Event>> descriptors = DebuggerUtilsEx.getEventDescriptors(suspendContext);
 					if(!descriptors.isEmpty())
 					{
-						XDebugSessionImpl.NOTIFICATION_GROUP.createNotification(DebuggerBundle.message("status.breakpoint.reached.in.thread", thread.name()), DebuggerBundle.message("status" +
+						consulo.ide.impl.idea.xdebugger.impl.XDebugSessionImpl.NOTIFICATION_GROUP.createNotification(DebuggerBundle.message("status.breakpoint.reached.in.thread", thread.name()), DebuggerBundle.message("status" +
 								".breakpoint.reached.in.thread.switch"), NotificationType.INFORMATION, new NotificationListener()
 						{
 							@Override
@@ -956,7 +956,7 @@ public class DebuggerSession implements AbstractDebuggerSession
 		}
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public XDebugSession getXDebugSession()
 	{
 		JavaDebugProcess process = myDebugProcess.getXdebugProcess();

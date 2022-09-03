@@ -15,16 +15,16 @@
  */
 package com.intellij.java.impl.ig.fixes;
 
-import com.intellij.codeInspection.ProblemDescriptor;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.application.Application;
-import com.intellij.openapi.actionSystem.DataContext;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.project.Project;
+import consulo.application.ApplicationManager;
+import consulo.application.Application;
+import consulo.dataContext.DataContext;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiElement;
-import com.intellij.refactoring.RefactoringActionHandler;
-import com.intellij.refactoring.RefactoringActionHandlerFactory;
-import com.intellij.ide.DataManager;
+import consulo.language.psi.PsiElement;
+import consulo.language.editor.refactoring.action.RefactoringActionHandler;
+import consulo.language.editor.refactoring.action.RefactoringActionHandlerFactory;
+import consulo.dataContext.DataManager;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.InspectionGadgetsBundle;
 import javax.annotation.Nonnull;

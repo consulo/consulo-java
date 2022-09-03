@@ -19,13 +19,13 @@
  */
 package com.intellij.java.impl.lang.java;
 
-import com.intellij.ide.structureView.StructureViewBuilder;
-import com.intellij.ide.structureView.StructureViewModel;
-import com.intellij.ide.structureView.TreeBasedStructureViewBuilder;
+import consulo.fileEditor.structureView.StructureViewBuilder;
+import consulo.fileEditor.structureView.StructureViewModel;
+import consulo.fileEditor.structureView.TreeBasedStructureViewBuilder;
 import com.intellij.java.impl.ide.structureView.impl.java.JavaFileTreeModel;
-import com.intellij.lang.PsiStructureViewFactory;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.psi.PsiFile;
+import consulo.language.editor.structureView.PsiStructureViewFactory;
+import consulo.codeEditor.Editor;
+import consulo.language.psi.PsiFile;
 import com.intellij.java.language.psi.PsiJavaFile;
 
 import javax.annotation.Nonnull;

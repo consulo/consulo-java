@@ -15,15 +15,15 @@
  */
 package com.intellij.java.impl.psi.impl.cache.impl.idCache;
 
-import com.intellij.lexer.Lexer;
+import consulo.language.lexer.Lexer;
 import com.intellij.java.language.psi.JavaTokenType;
-import com.intellij.psi.TokenType;
-import com.intellij.psi.impl.cache.impl.BaseFilterLexer;
-import com.intellij.psi.impl.cache.impl.OccurrenceConsumer;
+import consulo.language.ast.TokenType;
+import consulo.language.psi.stub.BaseFilterLexer;
+import consulo.language.psi.stub.OccurrenceConsumer;
 import com.intellij.java.language.impl.psi.impl.source.tree.ElementType;
-import com.intellij.psi.search.UsageSearchContext;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.tree.TokenSet;
+import consulo.language.psi.search.UsageSearchContext;
+import consulo.language.ast.IElementType;
+import consulo.language.ast.TokenSet;
 
 /**
  * @author ven

@@ -16,15 +16,16 @@
 package com.intellij.java.language.impl.psi.impl;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-import com.intellij.lang.ASTNode;
-import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.language.ast.ASTNode;
+import consulo.ide.ServiceManager;
+import consulo.project.Project;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.psi.PsiCatchSection;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiImportList;
 import com.intellij.java.language.psi.PsiImportStatementBase;
 import com.intellij.java.language.psi.PsiJavaFile;
@@ -50,12 +51,12 @@ public abstract class JavaPsiImplementationHelper
 	 * @param virtualFile virtual file for which language level is requested.
 	 * @return language level for classes root or null if file is not under a library source root or no matching classes root is found.
 	 */
-	@javax.annotation.Nullable
+	@Nullable
 	public abstract LanguageLevel getClassesLanguageLevel(VirtualFile virtualFile);
 
 	public abstract ASTNode getDefaultImportAnchor(PsiImportList list, PsiImportStatementBase statement);
 
-	@javax.annotation.Nullable
+	@Nullable
 	public abstract PsiElement getDefaultMemberAnchor(@Nonnull PsiClass psiClass, @Nonnull PsiMember firstPsi);
 
 	public abstract void setupCatchBlock(String exceptionName, PsiElement context, PsiCatchSection element);

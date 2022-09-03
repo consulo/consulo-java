@@ -8,15 +8,16 @@ import com.intellij.java.analysis.impl.codeInspection.bytecodeAnalysis.ProjectBy
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.*;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.inference.JavaSourceInference;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.project.Project;
+import consulo.util.lang.StringUtil;
 import com.intellij.psi.*;
 import com.intellij.java.language.impl.psi.impl.source.PsiMethodImpl;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.util.collection.ContainerUtil;
 import com.siyeh.ig.callMatcher.CallMatcher;
 import one.util.streamex.EntryStream;
 import one.util.streamex.StreamEx;
+import org.jetbrains.annotations.Contract;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -136,7 +137,7 @@ public class DefaultInferredAnnotationProvider implements InferredAnnotationProv
 	 * There is a number of well-known methods where automatic inference fails (for example, {@link Objects#requireNonNull(Object)}.
 	 * For such methods, contracts are hardcoded, and for their parameters inferred @NotNull are suppressed.<p/>
 	 * <p>
-	 * {@link org.jetbrains.annotations.Contract} and {@link Nonnull} annotations on methods are not necessarily applicable to the overridden implementations, so they're ignored, too.<p/>
+	 * {@link Contract} and {@link Nonnull} annotations on methods are not necessarily applicable to the overridden implementations, so they're ignored, too.<p/>
 	 *
 	 * @return whether inference is to be suppressed the given annotation on the given method or parameter
 	 */

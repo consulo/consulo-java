@@ -21,11 +21,11 @@ import javax.swing.JComponent;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nullable;
-import com.intellij.codeInspection.ui.MultipleCheckboxOptionsPanel;
+import consulo.ide.impl.idea.codeInspection.ui.MultipleCheckboxOptionsPanel;
 import com.intellij.java.language.psi.PsiCatchSection;
 import com.intellij.java.language.psi.PsiCodeBlock;
-import com.intellij.psi.PsiComment;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiComment;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiParameter;
 import com.intellij.java.language.psi.PsiTryStatement;
 import com.siyeh.InspectionGadgetsBundle;

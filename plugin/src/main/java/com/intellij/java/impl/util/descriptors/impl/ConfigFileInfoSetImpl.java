@@ -17,10 +17,10 @@
 package com.intellij.java.impl.util.descriptors.impl;
 
 import com.intellij.java.impl.util.descriptors.*;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.openapi.util.InvalidDataException;
-import com.intellij.openapi.util.MultiValuesMap;
-import com.intellij.openapi.util.WriteExternalException;
+import consulo.util.lang.Comparing;
+import consulo.util.xml.serializer.InvalidDataException;
+import consulo.util.collection.MultiValuesMap;
+import consulo.util.xml.serializer.WriteExternalException;
 import consulo.logging.Logger;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;

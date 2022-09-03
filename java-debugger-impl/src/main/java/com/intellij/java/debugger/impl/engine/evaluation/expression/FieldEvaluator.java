@@ -21,6 +21,7 @@
 package com.intellij.java.debugger.impl.engine.evaluation.expression;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.intellij.java.debugger.engine.evaluation.expression.Modifier;
 import org.jetbrains.annotations.NonNls;
@@ -32,7 +33,7 @@ import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
 import com.intellij.java.debugger.impl.DebuggerUtilsEx;
 import com.intellij.java.debugger.impl.ui.impl.watch.FieldDescriptorImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.NodeDescriptorImpl;
-import com.intellij.openapi.project.Project;
+import consulo.project.Project;
 import com.intellij.java.language.psi.PsiAnonymousClass;
 import com.intellij.java.language.psi.PsiArrayType;
 import com.intellij.java.language.psi.PsiClass;
@@ -70,7 +71,7 @@ public class FieldEvaluator implements Evaluator
 	}
 
 	@Nonnull
-	public static TargetClassFilter createClassFilter(@javax.annotation.Nullable PsiType psiType)
+	public static TargetClassFilter createClassFilter(@Nullable PsiType psiType)
 	{
 		if(psiType == null || psiType instanceof PsiArrayType)
 		{
@@ -98,8 +99,8 @@ public class FieldEvaluator implements Evaluator
 		return name != null ? new FQNameClassFilter(name) : TargetClassFilter.ALL;
 	}
 
-	@javax.annotation.Nullable
-	private Field findField(@javax.annotation.Nullable Type t)
+	@Nullable
+	private Field findField(@Nullable Type t)
 	{
 		if(t instanceof ClassType)
 		{

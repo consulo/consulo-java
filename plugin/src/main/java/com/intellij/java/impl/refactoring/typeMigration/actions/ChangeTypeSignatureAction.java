@@ -17,19 +17,19 @@ package com.intellij.java.impl.refactoring.typeMigration.actions;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
+import consulo.dataContext.DataContext;
+import consulo.codeEditor.Editor;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiReferenceParameterList;
 import com.intellij.java.language.psi.PsiTypeElement;
 import com.intellij.java.language.psi.PsiVariable;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.refactoring.RefactoringActionHandler;
-import com.intellij.refactoring.actions.BaseRefactoringAction;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.editor.refactoring.action.RefactoringActionHandler;
+import consulo.language.editor.refactoring.action.BaseRefactoringAction;
 import com.intellij.java.impl.refactoring.typeMigration.ChangeTypeSignatureHandler;
-import consulo.codeInsight.TargetElementUtil;
+import consulo.language.editor.TargetElementUtil;
 
 public class ChangeTypeSignatureAction extends BaseRefactoringAction
 {

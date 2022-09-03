@@ -16,19 +16,19 @@
 package com.intellij.java.impl.vcsUtil;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.fileEditor.FileDocumentManager;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.openapi.vcs.VcsBundle;
-import com.intellij.openapi.vcs.actions.VcsContext;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiCompiledElement;
-import com.intellij.psi.PsiElement;
-import com.intellij.util.containers.ContainerUtil;
-import com.intellij.vcsUtil.VcsSelection;
-import com.intellij.vcsUtil.VcsSelectionProvider;
-import consulo.codeInsight.TargetElementUtil;
+import consulo.document.Document;
+import consulo.codeEditor.Editor;
+import consulo.document.FileDocumentManager;
+import consulo.document.util.TextRange;
+import consulo.versionControlSystem.VcsBundle;
+import consulo.versionControlSystem.action.VcsContext;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.language.psi.PsiCompiledElement;
+import consulo.language.psi.PsiElement;
+import consulo.util.collection.ContainerUtil;
+import consulo.versionControlSystem.history.VcsSelection;
+import consulo.versionControlSystem.history.VcsSelectionProvider;
+import consulo.language.editor.TargetElementUtil;
 import consulo.codeInsight.TargetElementUtilEx;
 import consulo.ui.annotation.RequiredUIAccess;
 

@@ -28,21 +28,21 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.event.DocumentEvent;
 
+import consulo.ui.ex.awt.TextFieldWithBrowseButton;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nullable;
-import com.intellij.CommonBundle;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.application.ApplicationNamesInfo;
-import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.DialogWrapper;
-import com.intellij.openapi.ui.Messages;
-import com.intellij.openapi.ui.TextFieldWithBrowseButton;
-import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.ui.DocumentAdapter;
-import com.intellij.ui.components.JBRadioButton;
+import consulo.application.CommonBundle;
+import consulo.application.ApplicationManager;
+import consulo.application.impl.internal.ApplicationNamesInfo;
+import consulo.fileChooser.FileChooserDescriptorFactory;
+import consulo.module.Module;
+import consulo.project.Project;
+import consulo.ui.ex.awt.DialogWrapper;
+import consulo.ui.ex.awt.Messages;
+import consulo.ide.impl.idea.openapi.util.io.FileUtil;
+import consulo.ui.ex.awt.event.DocumentAdapter;
+import consulo.ide.impl.idea.ui.components.JBRadioButton;
 import consulo.disposer.Disposer;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 
@@ -51,8 +51,8 @@ public class LocateLibraryDialog extends DialogWrapper
 	private final List<String> myDefaultLibraryPaths;
 	private JPanel myContentPane;
 	private TextFieldWithBrowseButton myCopyToDir;
-	private JBRadioButton myUseBundledRadioButton;
-	private JBRadioButton myCopyLibraryFilesRadioButton;
+	private consulo.ide.impl.idea.ui.components.JBRadioButton myUseBundledRadioButton;
+	private consulo.ide.impl.idea.ui.components.JBRadioButton myCopyLibraryFilesRadioButton;
 
 	private final Project myProject;
 	private List<String> myResultingLibraryPaths;

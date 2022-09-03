@@ -20,15 +20,15 @@
  */
 package com.intellij.java.impl.refactoring.inlineSuperClass;
 
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.project.Project;
+import consulo.util.lang.StringUtil;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.impl.refactoring.JavaRefactoringSettings;
-import com.intellij.refactoring.RefactoringBundle;
-import com.intellij.refactoring.inline.InlineOptionsDialog;
-import com.intellij.refactoring.ui.DocCommentPanel;
-import com.intellij.ui.IdeBorderFactory;
-import com.intellij.util.Function;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.ide.impl.idea.refactoring.inline.InlineOptionsDialog;
+import consulo.ide.impl.idea.refactoring.ui.DocCommentPanel;
+import consulo.ui.ex.awt.IdeBorderFactory;
+import consulo.ide.impl.idea.util.Function;
 import javax.annotation.Nonnull;
 
 import javax.swing.*;

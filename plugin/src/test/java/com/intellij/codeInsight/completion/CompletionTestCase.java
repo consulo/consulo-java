@@ -16,13 +16,14 @@
 package com.intellij.codeInsight.completion;
 
 import com.intellij.codeInsight.daemon.DaemonAnalyzerTestCase;
-import com.intellij.codeInsight.lookup.LookupElement;
-import com.intellij.codeInsight.lookup.LookupManager;
-import com.intellij.codeInsight.lookup.impl.LookupImpl;
+import consulo.language.editor.completion.lookup.LookupElement;
+import consulo.language.editor.completion.lookup.LookupManager;
+import consulo.ide.impl.idea.codeInsight.lookup.impl.LookupImpl;
 import com.intellij.testFramework.PlatformTestCase;
-import com.intellij.util.Function;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.ide.impl.idea.util.Function;
+import consulo.util.collection.ContainerUtil;
 
+import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.List;
 
@@ -104,7 +105,7 @@ public abstract class CompletionTestCase extends DaemonAnalyzerTestCase {
     assertEquals(Arrays.toString(myItems), finalCount, index);
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   protected LookupImpl getActiveLookup() {
     return (LookupImpl)LookupManager.getActiveLookup(myEditor);
   }

@@ -15,21 +15,21 @@
  */
 package com.intellij.java.language.impl.psi.impl.java.stubs;
 
-import com.intellij.lang.ASTNode;
-import com.intellij.lang.LighterAST;
-import com.intellij.lang.LighterASTNode;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.language.ast.ASTNode;
+import consulo.language.ast.LighterAST;
+import consulo.language.ast.LighterASTNode;
+import consulo.util.lang.StringUtil;
 import com.intellij.java.language.psi.PsiAnnotation;
 import com.intellij.java.language.psi.PsiNameHelper;
 import com.intellij.java.language.impl.psi.impl.java.stubs.impl.PsiAnnotationStubImpl;
 import com.intellij.java.language.impl.psi.impl.java.stubs.index.JavaStubIndexKeys;
-import com.intellij.psi.impl.source.tree.LightTreeUtil;
+import consulo.language.ast.LightTreeUtil;
 import com.intellij.java.language.impl.psi.impl.source.tree.java.AnnotationElement;
 import com.intellij.java.language.impl.psi.impl.source.tree.java.PsiAnnotationImpl;
-import com.intellij.psi.stubs.IndexSink;
-import com.intellij.psi.stubs.StubElement;
-import com.intellij.psi.stubs.StubInputStream;
-import com.intellij.psi.stubs.StubOutputStream;
+import consulo.language.psi.stub.IndexSink;
+import consulo.language.psi.stub.StubElement;
+import consulo.language.psi.stub.StubInputStream;
+import consulo.language.psi.stub.StubOutputStream;
 import javax.annotation.Nonnull;
 
 import java.io.IOException;

@@ -1,6 +1,6 @@
 package com.intellij.java.analysis.impl.codeInspection.dataFlow.inference;
 
-import com.intellij.lang.LighterASTNode;
+import consulo.language.ast.LighterASTNode;
 
 import java.util.Map;
 import java.util.Objects;

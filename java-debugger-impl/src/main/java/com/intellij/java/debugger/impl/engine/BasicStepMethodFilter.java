@@ -16,15 +16,16 @@
 package com.intellij.java.debugger.impl.engine;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.intellij.java.debugger.impl.EvaluatingComputable;
 import com.intellij.java.debugger.SourcePosition;
 import com.intellij.java.debugger.engine.evaluation.EvaluateException;
 import com.intellij.java.debugger.impl.DebuggerUtilsEx;
-import com.intellij.openapi.application.ReadAction;
+import consulo.application.ReadAction;
 import consulo.logging.Logger;
 import com.intellij.java.language.psi.LambdaUtil;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiLambdaExpression;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiType;
@@ -46,7 +47,7 @@ public class BasicStepMethodFilter implements NamedMethodFilter
 	protected final JVMName myDeclaringClassName;
 	@Nonnull
 	private final String myTargetMethodName;
-	@javax.annotation.Nullable
+	@Nullable
 	protected final JVMName myTargetMethodSignature;
 	private final Range<Integer> myCallingExpressionLines;
 
@@ -55,7 +56,7 @@ public class BasicStepMethodFilter implements NamedMethodFilter
 		this(JVMNameUtil.getJVMQualifiedName(psiMethod.getContainingClass()), JVMNameUtil.getJVMMethodName(psiMethod), JVMNameUtil.getJVMSignature(psiMethod), callingExpressionLines);
 	}
 
-	protected BasicStepMethodFilter(@Nonnull JVMName declaringClassName, @Nonnull String targetMethodName, @javax.annotation.Nullable JVMName targetMethodSignature, Range<Integer> callingExpressionLines)
+	protected BasicStepMethodFilter(@Nonnull JVMName declaringClassName, @Nonnull String targetMethodName, @Nullable JVMName targetMethodSignature, Range<Integer> callingExpressionLines)
 	{
 		myDeclaringClassName = declaringClassName;
 		myTargetMethodName = targetMethodName;
@@ -147,7 +148,7 @@ public class BasicStepMethodFilter implements NamedMethodFilter
 		return false;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	@Override
 	public Range<Integer> getCallingExpressionLines()
 	{

@@ -17,12 +17,12 @@ package com.intellij.codeInsight;
 
 import javax.annotation.Nonnull;
 import com.intellij.JavaTestUtil;
-import com.intellij.openapi.actionSystem.IdeActions;
+import consulo.ui.ex.action.IdeActions;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.psi.JavaPsiFacade;
-import com.intellij.psi.codeStyle.CodeStyleSettings;
-import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
-import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
+import consulo.language.codeStyle.CodeStyleSettings;
+import consulo.language.codeStyle.CodeStyleSettingsManager;
+import consulo.language.codeStyle.CommonCodeStyleSettings;
 import com.intellij.testFramework.EditorActionTestCase;
 import com.intellij.testFramework.TestDataPath;
 

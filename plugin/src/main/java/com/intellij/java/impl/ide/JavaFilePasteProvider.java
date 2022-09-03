@@ -15,24 +15,24 @@
  */
 package com.intellij.java.impl.ide;
 
-import com.intellij.ide.IdeView;
-import com.intellij.ide.PasteProvider;
+import consulo.ide.IdeView;
+import consulo.ui.ex.PasteProvider;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.actionSystem.CommonDataKeys;
-import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.actionSystem.LangDataKeys;
-import com.intellij.openapi.application.Result;
-import com.intellij.openapi.command.CommandProcessor;
-import com.intellij.openapi.command.WriteCommandAction;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.fileEditor.OpenFileDescriptor;
-import com.intellij.openapi.ide.CopyPasteManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.TextRange;
+import consulo.language.editor.CommonDataKeys;
+import consulo.dataContext.DataContext;
+import consulo.language.editor.LangDataKeys;
+import consulo.application.Result;
+import consulo.undoRedo.CommandProcessor;
+import consulo.language.editor.WriteCommandAction;
+import consulo.document.Document;
+import consulo.navigation.OpenFileDescriptor;
+import consulo.ui.ex.awt.CopyPasteManager;
+import consulo.project.Project;
+import consulo.document.util.TextRange;
 import com.intellij.psi.*;
-import com.intellij.psi.codeStyle.CodeStyleManager;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.util.IncorrectOperationException;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

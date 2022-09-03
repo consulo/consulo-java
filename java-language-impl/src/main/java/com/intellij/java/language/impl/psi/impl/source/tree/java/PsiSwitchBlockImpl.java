@@ -2,10 +2,10 @@
 package com.intellij.java.language.impl.psi.impl.source.tree.java;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.impl.source.tree.CompositePsiElement;
+import consulo.language.impl.psi.CompositePsiElement;
 import com.intellij.java.language.impl.psi.impl.source.tree.ElementType;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
-import com.intellij.psi.tree.IElementType;
+import consulo.language.ast.IElementType;
 
 public abstract class PsiSwitchBlockImpl extends CompositePsiElement implements PsiSwitchBlock
 {

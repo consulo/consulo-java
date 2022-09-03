@@ -1,19 +1,19 @@
 package com.intellij.java.impl.codeInsight.hints;
 
-import com.intellij.codeInsight.dataflow.SetUtil;
-import com.intellij.codeInsight.hints.InlayInfo;
-import com.intellij.codeInsight.hints.settings.ParameterNameHintsSettings;
+import consulo.ide.impl.idea.codeInsight.dataflow.SetUtil;
+import consulo.ide.impl.idea.codeInsight.hints.InlayInfo;
+import consulo.ide.impl.idea.codeInsight.hints.settings.ParameterNameHintsSettings;
 import com.intellij.java.language.impl.psi.impl.source.tree.java.PsiNewExpressionImpl;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.impl.source.resolve.graphInference.PsiPolyExpressionUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.ResolveResult;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.util.ArrayUtil;
-import com.intellij.util.containers.ContainerUtil;
-import com.intellij.util.containers.JBIterable;
+import consulo.util.lang.StringUtil;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.ResolveResult;
+import consulo.language.ast.IElementType;
+import consulo.util.collection.ArrayUtil;
+import consulo.util.collection.ContainerUtil;
+import consulo.util.collection.JBIterable;
 import consulo.annotation.access.RequiredReadAction;
 
 import javax.annotation.Nonnull;
@@ -98,7 +98,7 @@ public class JavaInlayHintsProvider {
     return ContainerUtil.mapNotNull(ContainerUtil.filter(args, it -> isUnclearExpression(it.getArgument())), it -> createInlayInfo(it.getArgument(), it.getParameter()));
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   @RequiredReadAction
   private static InlayInfo getVarArgInlay(CallInfo info) {
     if (info.getVarArg() == null || info.getVarArgExpressions().isEmpty()) {

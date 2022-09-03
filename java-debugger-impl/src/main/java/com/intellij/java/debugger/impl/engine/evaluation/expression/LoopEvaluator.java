@@ -17,7 +17,7 @@ package com.intellij.java.debugger.impl.engine.evaluation.expression;
 
 import com.intellij.java.debugger.engine.evaluation.EvaluateException;
 import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
-import com.intellij.openapi.util.Comparing;
+import consulo.util.lang.Comparing;
 
 /**
  * @author egor

@@ -21,23 +21,23 @@
  */
 package com.intellij.java.compiler.cache;
 
-import com.intellij.compiler.impl.ExitException;
-import com.intellij.compiler.make.CacheCorruptedException;
+import consulo.compiler.CacheCorruptedException;
+import consulo.compiler.ExitException;
 import com.intellij.java.compiler.classParsing.*;
 import com.intellij.java.util.cls.ClsUtil;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.compiler.CompileContext;
-import com.intellij.openapi.compiler.CompilerManager;
-import com.intellij.openapi.compiler.ex.CompileContextEx;
-import com.intellij.openapi.progress.ProcessCanceledException;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Computable;
-import com.intellij.openapi.util.Pair;
-import com.intellij.openapi.util.Ref;
-import com.intellij.openapi.util.Trinity;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.util.ArrayUtil;
-import com.intellij.util.Function;
+import consulo.application.ApplicationManager;
+import consulo.compiler.CompileContext;
+import consulo.compiler.CompilerManager;
+import consulo.ide.impl.compiler.CompileContextEx;
+import consulo.component.ProcessCanceledException;
+import consulo.project.Project;
+import consulo.application.util.function.Computable;
+import consulo.util.lang.Pair;
+import consulo.util.lang.ref.Ref;
+import consulo.util.lang.Trinity;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.util.collection.ArrayUtil;
+import consulo.ide.impl.idea.util.Function;
 import com.intellij.java.language.util.cls.ClsFormatException;
 import consulo.compiler.make.DependencyCache;
 import consulo.logging.Logger;
@@ -641,7 +641,7 @@ public class JavaDependencyCache implements DependencyCache {
   }
 
   @Override
-  public void findDependentFiles(final CompileContextEx context,
+  public void findDependentFiles(final consulo.ide.impl.compiler.CompileContextEx context,
                                  Ref<CacheCorruptedException> exceptionRef,
                                  Function<Pair<int[], Set<VirtualFile>>, Pair<int[], Set<VirtualFile>>> filter,
                                  final Set<VirtualFile> dependentFiles,

@@ -5,24 +5,23 @@ import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.navigation.ItemPresentation;
-import com.intellij.navigation.ItemPresentationProviders;
-import com.intellij.openapi.util.AtomicNotNullLazyValue;
-import com.intellij.openapi.util.NotNullLazyValue;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.VfsUtilCore;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.openapi.vfs.VirtualFileVisitor;
-import com.intellij.psi.PsiDirectory;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiManager;
-import com.intellij.psi.impl.light.LightElement;
-import com.intellij.psi.util.CachedValueProvider;
-import com.intellij.psi.util.CachedValuesManager;
-import com.intellij.psi.util.PsiModificationTracker;
-import com.intellij.util.IncorrectOperationException;
+import consulo.application.util.CachedValueProvider;
+import consulo.language.impl.psi.LightElement;
+import consulo.language.psi.PsiDirectory;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiManager;
+import consulo.language.psi.PsiModificationTracker;
+import consulo.language.psi.util.LanguageCachedValueUtil;
+import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
-import consulo.psi.PsiPackage;
+import consulo.navigation.ItemPresentation;
+import consulo.navigation.ItemPresentationProvider;
+import consulo.util.lang.ObjectUtil;
+import consulo.util.lang.StringUtil;
+import consulo.util.lang.lazy.LazyValue;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.virtualFileSystem.util.VirtualFileUtil;
+import consulo.virtualFileSystem.util.VirtualFileVisitor;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -31,17 +30,16 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Supplier;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.intellij.util.ObjectUtils.notNull;
-
 public final class LightJavaModule extends LightElement implements PsiJavaModule {
   private final LightJavaModuleReferenceElement myRefElement;
   private final VirtualFile myRoot;
-  private final NotNullLazyValue<List<PsiPackageAccessibilityStatement>> myExports = AtomicNotNullLazyValue.createValue(() -> findExports());
+  private final Supplier<List<PsiPackageAccessibilityStatement>> myExports = LazyValue.atomicNotNull(this::findExports);
 
   private LightJavaModule(@Nonnull PsiManager manager, @Nonnull VirtualFile root, @Nonnull String name) {
     super(manager, JavaLanguage.INSTANCE);
@@ -70,16 +68,15 @@ public final class LightJavaModule extends LightElement implements PsiJavaModule
   }
 
   @Override
-  public
   @Nonnull
-  Iterable<PsiPackageAccessibilityStatement> getExports() {
-    return myExports.getValue();
+  public Iterable<PsiPackageAccessibilityStatement> getExports() {
+    return myExports.get();
   }
 
   private List<PsiPackageAccessibilityStatement> findExports() {
     List<PsiPackageAccessibilityStatement> exports = new ArrayList<>();
 
-    VfsUtilCore.visitChildrenRecursively(myRoot, new VirtualFileVisitor<Void>() {
+    VirtualFileUtil.visitChildrenRecursively(myRoot, new VirtualFileVisitor<Void>() {
       private final JavaDirectoryService service = JavaDirectoryService.getInstance();
 
       @Override
@@ -87,7 +84,7 @@ public final class LightJavaModule extends LightElement implements PsiJavaModule
         if (file.isDirectory() && !myRoot.equals(file)) {
           PsiDirectory directory = getManager().findDirectory(file);
           if (directory != null) {
-            PsiPackage pkg = service.getPackage(directory);
+            PsiJavaPackage pkg = service.getPackage(directory);
             if (pkg != null) {
               String packageName = pkg.getQualifiedName();
               if (!packageName.isEmpty() && !PsiUtil.isPackageEmpty(new PsiDirectory[]{directory}, packageName)) {
@@ -155,14 +152,13 @@ public final class LightJavaModule extends LightElement implements PsiJavaModule
 
   @Override
   public ItemPresentation getPresentation() {
-    return ItemPresentationProviders.getItemPresentation(this);
+    return ItemPresentationProvider.getItemPresentation(this);
   }
 
   @Override
-  public
   @Nonnull
-  PsiElement getNavigationElement() {
-    return notNull(myManager.findDirectory(myRoot), super.getNavigationElement());
+  public PsiElement getNavigationElement() {
+    return ObjectUtil.notNull(myManager.findDirectory(myRoot), super.getNavigationElement());
   }
 
   @Override
@@ -276,7 +272,7 @@ public final class LightJavaModule extends LightElement implements PsiJavaModule
       return null;
     }
     if (root.isInLocalFileSystem()) {
-      return CachedValuesManager.getCachedValue(directory, () -> {
+      return LanguageCachedValueUtil.getCachedValue(directory, () -> {
         VirtualFile manifest = root.findFileByRelativePath(JarFile.MANIFEST_NAME);
         if (manifest != null) {
           PsiElement file = manager.findFile(manifest);
@@ -289,7 +285,7 @@ public final class LightJavaModule extends LightElement implements PsiJavaModule
         return CachedValueProvider.Result.create(null, PsiModificationTracker.MODIFICATION_COUNT);
       });
     } else {
-      return CachedValuesManager.getCachedValue(directory, () -> {
+      return LanguageCachedValueUtil.getCachedValue(directory, () -> {
         LightJavaModule module = new LightJavaModule(manager, root, moduleName(root));
         return CachedValueProvider.Result.create(module, directory);
       });

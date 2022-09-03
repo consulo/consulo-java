@@ -19,6 +19,7 @@ package com.intellij.java.impl.util.descriptors;
 import org.jetbrains.annotations.NonNls;
 import consulo.logging.Logger;
 
+import javax.annotation.Nullable;
 import java.util.Arrays;
 
 /**
@@ -41,7 +42,7 @@ public class ConfigFileMetaData {
                             final @NonNls String fileName,
                             final @NonNls String directoryPath,
                             final ConfigFileVersion[] versions,
-                            final @javax.annotation.Nullable ConfigFileVersion defaultVersion,
+                            final @Nullable ConfigFileVersion defaultVersion,
                             final boolean optional,
                             final boolean fileNameFixed,
                             final boolean unique) {

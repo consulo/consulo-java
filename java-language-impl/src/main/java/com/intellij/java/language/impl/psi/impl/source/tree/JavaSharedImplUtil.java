@@ -20,23 +20,20 @@ import com.intellij.java.language.impl.psi.impl.PsiImplUtil;
 import com.intellij.java.language.impl.psi.impl.cache.TypeInfo;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.lang.ASTFactory;
-import com.intellij.lang.ASTNode;
-import com.intellij.psi.PsiComment;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiWhiteSpace;
-import com.intellij.psi.impl.GeneratedMarkerVisitor;
-import com.intellij.psi.impl.source.tree.CompositeElement;
-import com.intellij.psi.impl.source.tree.Factory;
-import com.intellij.psi.impl.source.tree.SharedImplUtil;
-import com.intellij.psi.impl.source.tree.TreeElement;
-import com.intellij.psi.tree.TokenSet;
-import com.intellij.util.CharTable;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.containers.ContainerUtil;
-import com.intellij.util.containers.JBIterable;
-import com.intellij.util.containers.Stack;
+import consulo.language.ast.ASTNode;
+import consulo.language.ast.TokenSet;
+import consulo.language.impl.ast.*;
+import consulo.language.impl.internal.psi.GeneratedMarkerVisitor;
+import consulo.language.psi.PsiComment;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiWhiteSpace;
+import consulo.language.util.CharTable;
+import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
+import consulo.util.collection.ContainerUtil;
+import consulo.util.collection.JBIterable;
+import consulo.util.collection.SmartList;
+import consulo.util.collection.Stack;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -54,7 +51,7 @@ public class JavaSharedImplUtil {
     return getType(typeElement, anchor, null);
   }
 
-  public static PsiType getType(@Nonnull PsiTypeElement typeElement, @Nonnull PsiElement anchor, @javax.annotation.Nullable PsiAnnotation stopAt) {
+  public static PsiType getType(@Nonnull PsiTypeElement typeElement, @Nonnull PsiElement anchor, @Nullable PsiAnnotation stopAt) {
     PsiType type = typeElement.getType();
 
     List<PsiAnnotation[]> allAnnotations = collectAnnotations(anchor, stopAt);
@@ -70,7 +67,7 @@ public class JavaSharedImplUtil {
 
   // collects annotations bound to C-style arrays
   private static List<PsiAnnotation[]> collectAnnotations(PsiElement anchor, PsiAnnotation stopAt) {
-    List<PsiAnnotation[]> annotations = ContainerUtil.newSmartList();
+    List<PsiAnnotation[]> annotations = new SmartList<>();
 
     List<PsiAnnotation> current = null;
     boolean found = (stopAt == null), stop = false;
@@ -81,7 +78,7 @@ public class JavaSharedImplUtil {
 
       if (child instanceof PsiAnnotation) {
         if (current == null) {
-          current = ContainerUtil.newSmartList();
+          current = new SmartList<>();
         }
         current.add((PsiAnnotation) child);
         if (child == stopAt) {

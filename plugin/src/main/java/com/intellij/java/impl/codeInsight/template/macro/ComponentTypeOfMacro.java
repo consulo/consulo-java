@@ -19,21 +19,21 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.codeInsight.CodeInsightBundle;
-import com.intellij.codeInsight.lookup.LookupElement;
+import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.completion.lookup.LookupElement;
 import com.intellij.java.impl.codeInsight.lookup.PsiTypeLookupItem;
-import com.intellij.codeInsight.template.Expression;
-import com.intellij.codeInsight.template.ExpressionContext;
+import consulo.language.editor.template.Expression;
+import consulo.language.editor.template.ExpressionContext;
 import com.intellij.java.impl.codeInsight.template.JavaCodeContextType;
-import com.intellij.codeInsight.template.Macro;
-import com.intellij.codeInsight.template.PsiElementResult;
+import consulo.language.editor.template.macro.Macro;
+import consulo.ide.impl.idea.codeInsight.template.PsiElementResult;
 import com.intellij.java.impl.codeInsight.template.PsiTypeResult;
-import com.intellij.codeInsight.template.Result;
-import com.intellij.codeInsight.template.TemplateContextType;
+import consulo.language.editor.template.Result;
+import consulo.language.editor.template.context.TemplateContextType;
 import com.intellij.java.language.psi.PsiArrayType;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiType;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.util.collection.ContainerUtil;
 
 public class ComponentTypeOfMacro extends Macro
 {

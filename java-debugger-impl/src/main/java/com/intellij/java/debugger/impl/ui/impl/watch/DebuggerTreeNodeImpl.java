@@ -31,15 +31,16 @@ import com.intellij.java.debugger.ui.tree.NodeDescriptor;
 import com.intellij.java.debugger.impl.ui.tree.ValueDescriptor;
 import com.intellij.java.debugger.impl.ui.tree.render.DescriptorLabelListener;
 import com.intellij.java.debugger.impl.ui.tree.render.NodeRenderer;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.ui.SimpleColoredText;
-import com.intellij.xdebugger.impl.ui.DebuggerUIUtil;
-import com.intellij.xdebugger.impl.ui.tree.ValueMarkup;
+import consulo.application.ApplicationManager;
+import consulo.project.Project;
+import consulo.ui.ex.SimpleColoredText;
+import consulo.ide.impl.idea.xdebugger.impl.ui.DebuggerUIUtil;
+import consulo.ide.impl.idea.xdebugger.impl.ui.tree.ValueMarkup;
 import consulo.ui.image.Image;
 import consulo.util.dataholder.Key;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.swing.*;
 import javax.swing.tree.MutableTreeNode;
 import java.util.HashMap;
@@ -127,7 +128,7 @@ public class DebuggerTreeNodeImpl extends TreeBuilderNode implements DebuggerTre
 		return myText;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public String getMarkupTooltipText()
 	{
 		return myMarkupTooltipText;

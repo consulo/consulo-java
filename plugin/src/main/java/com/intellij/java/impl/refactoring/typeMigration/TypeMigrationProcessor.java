@@ -16,35 +16,35 @@
 package com.intellij.java.impl.refactoring.typeMigration;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Ref;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.wm.ToolWindowId;
-import com.intellij.openapi.wm.ToolWindowManager;
+import consulo.application.ApplicationManager;
+import consulo.codeEditor.Editor;
+import consulo.project.Project;
+import consulo.util.lang.ref.Ref;
+import consulo.util.lang.StringUtil;
+import consulo.project.ui.wm.ToolWindowId;
+import consulo.project.ui.wm.ToolWindowManager;
 import com.intellij.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
-import com.intellij.psi.util.PsiUtilCore;
-import com.intellij.refactoring.BaseRefactoringProcessor;
+import consulo.language.psi.PsiUtilCore;
+import consulo.language.editor.refactoring.BaseRefactoringProcessor;
 import com.intellij.java.impl.refactoring.typeMigration.ui.FailedConversionsDialog;
 import com.intellij.java.impl.refactoring.typeMigration.ui.MigrationPanel;
 import com.intellij.java.impl.refactoring.typeMigration.usageInfo.TypeMigrationUsageInfo;
 import com.intellij.java.impl.refactoring.util.RefactoringUtil;
-import com.intellij.ui.content.Content;
-import com.intellij.usageView.UsageInfo;
-import com.intellij.usageView.UsageViewContentManager;
-import com.intellij.usageView.UsageViewDescriptor;
-import com.intellij.util.Function;
-import com.intellij.util.Functions;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.SmartList;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.ui.ex.content.Content;
+import consulo.usage.UsageInfo;
+import consulo.usage.UsageViewContentManager;
+import consulo.usage.UsageViewDescriptor;
+import consulo.ide.impl.idea.util.Function;
+import consulo.util.lang.function.Functions;
+import consulo.language.util.IncorrectOperationException;
+import consulo.util.collection.SmartList;
+import consulo.util.collection.ContainerUtil;
 
 import javax.annotation.Nonnull;
 import java.util.*;
 
-import static com.intellij.util.ObjectUtil.assertNotNull;
+import static consulo.util.lang.ObjectUtil.assertNotNull;
 
 public class TypeMigrationProcessor extends BaseRefactoringProcessor
 {

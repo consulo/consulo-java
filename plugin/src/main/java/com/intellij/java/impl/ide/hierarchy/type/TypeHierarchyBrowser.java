@@ -20,24 +20,25 @@ import java.util.Comparator;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.swing.JPanel;
 import javax.swing.JTree;
 
-import com.intellij.ide.hierarchy.HierarchyBrowserBaseEx;
-import com.intellij.ide.hierarchy.HierarchyNodeDescriptor;
-import com.intellij.ide.hierarchy.HierarchyTreeStructure;
+import consulo.ide.impl.idea.ide.hierarchy.HierarchyBrowserBaseEx;
+import consulo.ide.impl.idea.ide.hierarchy.HierarchyNodeDescriptor;
+import consulo.ide.impl.idea.ide.hierarchy.HierarchyTreeStructure;
 import com.intellij.java.impl.ide.hierarchy.JavaHierarchyUtil;
-import com.intellij.ide.hierarchy.TypeHierarchyBrowserBase;
-import com.intellij.ide.util.treeView.NodeDescriptor;
-import com.intellij.openapi.actionSystem.DefaultActionGroup;
-import com.intellij.openapi.actionSystem.IdeActions;
+import consulo.ide.impl.idea.ide.hierarchy.TypeHierarchyBrowserBase;
+import consulo.ui.ex.action.DefaultActionGroup;
+import consulo.ui.ex.tree.NodeDescriptor;
+import consulo.ui.ex.action.IdeActions;
 import consulo.logging.Logger;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Comparing;
+import consulo.project.Project;
+import consulo.util.lang.Comparing;
 import consulo.java.language.module.util.JavaClassNames;
 import com.intellij.java.language.psi.PsiAnonymousClass;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.impl.psi.presentation.java.ClassPresentationUtil;
 
 public class TypeHierarchyBrowser extends TypeHierarchyBrowserBase
@@ -93,7 +94,7 @@ public class TypeHierarchyBrowser extends TypeHierarchyBrowserBase
 	}
 
 	@Override
-	@javax.annotation.Nullable
+	@Nullable
 	protected JPanel createLegendPanel()
 	{
 		return null;

@@ -15,22 +15,22 @@
  */
 package com.intellij.java.impl.refactoring.introduceParameter;
 
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.LabeledComponent;
+import consulo.project.Project;
+import consulo.ui.ex.awt.LabeledComponent;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiLocalVariable;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiParameter;
-import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
+import consulo.language.codeStyle.CodeStyleSettingsManager;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.impl.refactoring.IntroduceParameterRefactoring;
 import com.intellij.java.impl.refactoring.JavaRefactoringSettings;
-import com.intellij.refactoring.RefactoringBundle;
-import com.intellij.refactoring.introduce.inplace.KeyboardComboSwitcher;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.ide.impl.idea.refactoring.introduce.inplace.KeyboardComboSwitcher;
 import com.intellij.java.impl.refactoring.ui.TypeSelectorManager;
-import com.intellij.ui.IdeBorderFactory;
-import com.intellij.ui.ListCellRendererWrapper;
-import com.intellij.util.ui.UIUtil;
+import consulo.ui.ex.awt.IdeBorderFactory;
+import consulo.ui.ex.awt.ListCellRendererWrapper;
+import consulo.ui.ex.awt.UIUtil;
 import consulo.util.collection.primitive.ints.IntList;
 
 import javax.swing.*;

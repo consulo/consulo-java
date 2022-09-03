@@ -15,8 +15,8 @@
  */
 package com.siyeh.ig.migration;
 
-import com.intellij.codeInspection.ex.LocalInspectionToolWrapper;
-import com.intellij.openapi.projectRoots.Sdk;
+import consulo.language.editor.inspection.scheme.LocalInspectionToolWrapper;
+import consulo.content.bundle.Sdk;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.testFramework.IdeaTestUtil;
 import com.siyeh.ig.IGInspectionTestCase;

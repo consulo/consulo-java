@@ -16,20 +16,21 @@
 package com.intellij.java.impl.codeInsight.template.postfix.util;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.intellij.java.language.psi.*;
 import org.jetbrains.annotations.Contract;
 import consulo.java.language.module.util.JavaClassNames;
 import com.intellij.java.impl.codeInsight.CodeInsightServicesUtil;
-import com.intellij.codeInsight.CodeInsightUtilCore;
-import com.intellij.codeInsight.template.postfix.templates.PostfixTemplatePsiInfo;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.util.Condition;
-import com.intellij.openapi.util.TextRange;
+import consulo.language.editor.CodeInsightUtilCore;
+import consulo.language.editor.postfixTemplate.PostfixTemplatePsiInfo;
+import consulo.codeEditor.Editor;
+import consulo.util.lang.function.Condition;
+import consulo.document.util.TextRange;
 import com.intellij.psi.*;
-import com.intellij.psi.codeStyle.CodeStyleManager;
+import consulo.language.codeStyle.CodeStyleManager;
 import com.intellij.java.language.psi.util.InheritanceUtil;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 
 public abstract class JavaPostfixTemplatesUtils {
 	private JavaPostfixTemplatesUtils() {
@@ -53,7 +54,7 @@ public abstract class JavaPostfixTemplatesUtils {
 			return JavaPostfixTemplatesUtils.createExpression(context, prefix, suffix);
 		}
 
-		@javax.annotation.Nullable
+		@Nullable
 		@Override
 		public PsiExpression getTopmostExpression(@Nonnull PsiElement element) {
 			return JavaPostfixTemplatesUtils.getTopmostExpression(element);
@@ -115,37 +116,37 @@ public abstract class JavaPostfixTemplatesUtils {
 	}
 
 	@Contract("null -> false")
-	public static boolean isNotPrimitiveTypeExpression(@javax.annotation.Nullable PsiExpression expression) {
+	public static boolean isNotPrimitiveTypeExpression(@Nullable PsiExpression expression) {
 		return expression != null && !(expression.getType() instanceof PsiPrimitiveType);
 	}
 
 	@Contract("null -> false")
-	public static boolean isIterable(@javax.annotation.Nullable PsiType type) {
+	public static boolean isIterable(@Nullable PsiType type) {
 		return type != null && InheritanceUtil.isInheritor(type, JavaClassNames.JAVA_LANG_ITERABLE);
 	}
 
 	@Contract("null -> false")
-	public static boolean isThrowable(@javax.annotation.Nullable PsiType type) {
+	public static boolean isThrowable(@Nullable PsiType type) {
 		return type != null && InheritanceUtil.isInheritor(type, JavaClassNames.JAVA_LANG_THROWABLE);
 	}
 
 	@Contract("null -> false")
-	public static boolean isArray(@javax.annotation.Nullable PsiType type) {
+	public static boolean isArray(@Nullable PsiType type) {
 		return type != null && type instanceof PsiArrayType;
 	}
 
 	@Contract("null -> false")
-	public static boolean isBoolean(@javax.annotation.Nullable PsiType type) {
+	public static boolean isBoolean(@Nullable PsiType type) {
 		return type != null && (PsiType.BOOLEAN.equals(type) || PsiType.BOOLEAN.equals(PsiPrimitiveType.getUnboxedType(type)));
 	}
 
 	@Contract("null -> false")
-	public static boolean isNonVoid(@javax.annotation.Nullable PsiType type) {
+	public static boolean isNonVoid(@Nullable PsiType type) {
 		return type != null && !PsiType.VOID.equals(type);
 	}
 
 	@Contract("null -> false")
-	public static boolean isNumber(@javax.annotation.Nullable PsiType type) {
+	public static boolean isNumber(@Nullable PsiType type) {
 		if (type == null) {
 			return false;
 		}
@@ -157,7 +158,7 @@ public abstract class JavaPostfixTemplatesUtils {
 		return PsiType.INT.equals(unboxedType) || PsiType.BYTE.equals(unboxedType) || PsiType.LONG.equals(unboxedType);
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public static PsiExpression getTopmostExpression(PsiElement context) {
 		PsiExpressionStatement statement = PsiTreeUtil.getNonStrictParentOfType(context, PsiExpressionStatement.class);
 		return statement != null ? PsiTreeUtil.getChildOfType(statement, PsiExpression.class) : null;

@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.internal.diGraph.analyzer;
 
-import com.intellij.openapi.util.Pair;
+import consulo.util.lang.Pair;
 
 /**
  * Created by IntelliJ IDEA.

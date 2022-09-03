@@ -1,5 +1,7 @@
 package com.siyeh.igtest.bugs.mismatched_array_read_write;
 
+import java.lang.Object;
+
 public class MismatchedArrayReadWrite {
     private int[] foo = new int[3];
     private int[] bar;
@@ -72,11 +74,11 @@ class Test{
         for(int i = 0; i < a.length; i++){
             a[i] = i;
         }
-        final java.lang.Object[] o = new java.lang.Object[]{a};
+        final Object[] o = new Object[]{a};
         foo(o);
     }
 
-    public void foo(java.lang.Object[] o){
+    public void foo(Object[] o){
 
     }
 

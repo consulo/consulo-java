@@ -15,17 +15,18 @@
  */
 package com.intellij.java.debugger.impl.actions;
 
-import com.intellij.codeInsight.unwrap.ScopeHighlighter;
+import consulo.language.editor.refactoring.unwrap.ScopeHighlighter;
 import com.intellij.java.debugger.DebuggerBundle;
-import com.intellij.icons.AllIcons;
-import com.intellij.openapi.editor.Editor;
+import consulo.application.AllIcons;
+import consulo.codeEditor.Editor;
 import com.intellij.openapi.ui.popup.*;
 import com.intellij.java.language.psi.PsiLambdaExpression;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiSubstitutor;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
-import consulo.ide.IconDescriptorUpdaters;
+import consulo.language.icon.IconDescriptorUpdaters;
 import consulo.ui.annotation.RequiredUIAccess;
+import consulo.ui.ex.popup.*;
 import consulo.ui.image.Image;
 
 import javax.annotation.Nonnull;

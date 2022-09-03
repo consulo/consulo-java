@@ -16,12 +16,13 @@
 package com.intellij.java.impl.ig.controlflow;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-import com.intellij.codeInspection.ProblemDescriptor;
+import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.project.Project;
+import consulo.project.Project;
 import com.intellij.psi.*;
-import com.intellij.psi.tree.IElementType;
+import consulo.language.ast.IElementType;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.siyeh.HardcodedMethodConstants;
 import com.siyeh.InspectionGadgetsBundle;
@@ -235,7 +236,7 @@ public class SimplifiableEqualsExpressionInspection extends BaseInspection {
       return PsiUtil.isConstantExpression(argument);
     }
 
-    @javax.annotation.Nullable
+    @Nullable
     private static PsiVariable getVariableFromNullComparison(PsiExpression expression, boolean equals) {
       if (!(expression instanceof PsiPolyadicExpression)) {
         return null;

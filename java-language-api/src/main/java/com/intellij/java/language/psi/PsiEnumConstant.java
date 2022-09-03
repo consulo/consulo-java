@@ -16,6 +16,7 @@
 package com.intellij.java.language.psi;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Represents a constant in a Java enum type.
@@ -30,7 +31,7 @@ public interface PsiEnumConstant extends PsiField, PsiConstructorCall {
    * @return the list of arguments, or null
    */
   @Override
-  @javax.annotation.Nullable
+  @Nullable
   PsiExpressionList getArgumentList();
 
   /**
@@ -39,7 +40,7 @@ public interface PsiEnumConstant extends PsiField, PsiConstructorCall {
    * @return the enum constant class body, or null if
    * the enum constant does not have one.
    */
-  @javax.annotation.Nullable
+  @Nullable
   PsiEnumConstantInitializer getInitializingClass();
 
   @Nonnull

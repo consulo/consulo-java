@@ -17,10 +17,10 @@ package com.intellij.java.impl.codeInsight.daemon.quickFix;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import com.intellij.openapi.extensions.ExtensionPointName;
-import com.intellij.openapi.module.Module;
+import consulo.component.extension.ExtensionPointName;
+import consulo.module.Module;
 import com.intellij.java.language.projectRoots.roots.ExternalLibraryDescriptor;
-import com.intellij.util.ThreeState;
+import consulo.util.lang.ThreeState;
 
 /**
  * @author nik
@@ -32,7 +32,7 @@ public abstract class ExternalLibraryResolver
 	@Nullable
 	public abstract ExternalClassResolveResult resolveClass(@Nonnull String shortClassName, @Nonnull ThreeState isAnnotation, @Nonnull Module contextModule);
 
-	@javax.annotation.Nullable
+	@Nullable
 	public ExternalLibraryDescriptor resolvePackage(@Nonnull String packageName)
 	{
 		return null;

@@ -16,24 +16,25 @@
 package com.intellij.java.execution.impl.filters;
 
 import com.intellij.execution.filters.Filter;
-import com.intellij.execution.filters.HyperlinkInfo;
-import com.intellij.execution.filters.OpenFileHyperlinkInfo;
-import com.intellij.ide.DataManager;
-import com.intellij.ide.util.EditSourceUtil;
-import com.intellij.ide.util.PsiElementListCellRenderer;
+import consulo.execution.ui.console.HyperlinkInfo;
+import consulo.execution.ui.console.OpenFileHyperlinkInfo;
+import consulo.dataContext.DataManager;
+import consulo.language.psi.util.EditSourceUtil;
+import consulo.language.editor.ui.PsiElementListCellRenderer;
 import com.intellij.java.language.psi.JavaDirectoryService;
 import com.intellij.java.language.psi.PsiJavaPackage;
-import com.intellij.openapi.actionSystem.PlatformDataKeys;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.popup.PopupChooserBuilder;
-import com.intellij.pom.Navigatable;
+import consulo.language.editor.PlatformDataKeys;
+import consulo.codeEditor.Editor;
+import consulo.project.Project;
+import consulo.ide.impl.ui.impl.PopupChooserBuilder;
+import consulo.navigation.Navigatable;
 import com.intellij.psi.*;
 import com.intellij.java.language.psi.search.PsiShortNamesCache;
-import com.intellij.ui.components.JBList;
+import consulo.ui.ex.awt.JBList;
 import consulo.logging.Logger;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.swing.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -128,7 +129,7 @@ public class YourkitFilter implements Filter {
       return element.getContainingFile().getName();
     }
 
-    @javax.annotation.Nullable
+    @Nullable
     protected String getContainerText(final PsiElement element, final String name) {
       final PsiDirectory parent = ((PsiFile) element).getParent();
       if (parent == null) return null;

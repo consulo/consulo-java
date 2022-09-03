@@ -15,17 +15,17 @@
  */
 package com.intellij.java.execution.impl.testframework;
 
-import com.intellij.execution.actions.ConfigurationContext;
-import com.intellij.execution.configurations.ConfigurationType;
+import consulo.execution.action.ConfigurationContext;
+import consulo.execution.configuration.ConfigurationType;
 import com.intellij.java.execution.impl.JavaTestConfigurationBase;
-import com.intellij.execution.testframework.TestsUIUtil;
-import com.intellij.openapi.actionSystem.CommonDataKeys;
-import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.psi.PsiElement;
+import consulo.execution.test.TestsUIUtil;
+import consulo.language.editor.CommonDataKeys;
+import consulo.dataContext.DataContext;
+import consulo.util.lang.Comparing;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.psi.search.PsiElementProcessor;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.resolve.PsiElementProcessor;
+import consulo.language.psi.util.PsiTreeUtil;
 
 import java.util.LinkedHashSet;
 import java.util.Set;

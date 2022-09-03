@@ -15,16 +15,16 @@
  */
 package com.intellij.java.compiler;
 
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleUtilCore;
-import com.intellij.openapi.project.Project;
+import consulo.application.ApplicationManager;
+import consulo.module.Module;
+import consulo.language.util.ModuleUtilCore;
+import consulo.project.Project;
 import com.intellij.java.language.projectRoots.JavaSdk;
 import com.intellij.java.language.projectRoots.JavaSdkVersion;
-import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.util.Computable;
+import consulo.content.bundle.Sdk;
+import consulo.application.util.function.Computable;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiManager;
+import consulo.language.psi.PsiManager;
 import com.intellij.java.language.psi.util.ClassUtil;
 import consulo.annotation.DeprecationInfo;
 import consulo.internal.org.objectweb.asm.ClassWriter;

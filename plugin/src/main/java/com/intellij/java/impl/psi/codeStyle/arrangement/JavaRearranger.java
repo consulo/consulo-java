@@ -17,26 +17,26 @@ package com.intellij.java.impl.psi.codeStyle.arrangement;
 
 import com.intellij.java.analysis.impl.ide.highlighter.JavaHighlightingColors;
 import com.intellij.java.language.JavaLanguage;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.colors.EditorColors;
-import com.intellij.openapi.editor.colors.EditorColorsScheme;
-import com.intellij.openapi.editor.colors.TextAttributesKey;
-import com.intellij.openapi.editor.markup.TextAttributes;
-import com.intellij.openapi.util.Pair;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.codeStyle.CodeStyleSettings;
-import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
+import consulo.document.Document;
+import consulo.codeEditor.EditorColors;
+import consulo.colorScheme.EditorColorsScheme;
+import consulo.colorScheme.TextAttributesKey;
+import consulo.colorScheme.TextAttributes;
+import consulo.util.lang.Pair;
+import consulo.document.util.TextRange;
+import consulo.language.psi.PsiElement;
+import consulo.language.codeStyle.CodeStyleSettings;
+import consulo.language.codeStyle.CommonCodeStyleSettings;
 import com.intellij.psi.codeStyle.arrangement.*;
-import com.intellij.psi.codeStyle.arrangement.group.ArrangementGroupingRule;
-import com.intellij.psi.codeStyle.arrangement.match.ArrangementEntryMatcher;
-import com.intellij.psi.codeStyle.arrangement.match.StdArrangementEntryMatcher;
-import com.intellij.psi.codeStyle.arrangement.match.StdArrangementMatchRule;
-import com.intellij.psi.codeStyle.arrangement.model.ArrangementAtomMatchCondition;
-import com.intellij.psi.codeStyle.arrangement.model.ArrangementCompositeMatchCondition;
-import com.intellij.psi.codeStyle.arrangement.model.ArrangementMatchCondition;
+import consulo.language.codeStyle.arrangement.group.ArrangementGroupingRule;
+import consulo.language.codeStyle.arrangement.match.ArrangementEntryMatcher;
+import consulo.language.codeStyle.arrangement.match.StdArrangementEntryMatcher;
+import consulo.language.codeStyle.arrangement.match.StdArrangementMatchRule;
+import consulo.language.codeStyle.arrangement.model.ArrangementAtomMatchCondition;
+import consulo.language.codeStyle.arrangement.model.ArrangementCompositeMatchCondition;
+import consulo.language.codeStyle.arrangement.model.ArrangementMatchCondition;
 import com.intellij.psi.codeStyle.arrangement.std.*;
-import com.intellij.util.containers.ContainerUtilRt;
+import consulo.ide.impl.idea.util.containers.ContainerUtilRt;
 import consulo.ui.color.ColorValue;
 
 import javax.annotation.Nonnull;
@@ -45,11 +45,11 @@ import java.awt.*;
 import java.util.List;
 import java.util.*;
 
-import static com.intellij.psi.codeStyle.arrangement.std.StdArrangementTokens.EntryType.*;
-import static com.intellij.psi.codeStyle.arrangement.std.StdArrangementTokens.General.*;
-import static com.intellij.psi.codeStyle.arrangement.std.StdArrangementTokens.Grouping.*;
-import static com.intellij.psi.codeStyle.arrangement.std.StdArrangementTokens.Modifier.*;
-import static com.intellij.psi.codeStyle.arrangement.std.StdArrangementTokens.Order.*;
+import static consulo.language.codeStyle.arrangement.std.StdArrangementTokens.EntryType.*;
+import static consulo.language.codeStyle.arrangement.std.StdArrangementTokens.General.*;
+import static consulo.language.codeStyle.arrangement.std.StdArrangementTokens.Grouping.*;
+import static consulo.language.codeStyle.arrangement.std.StdArrangementTokens.Modifier.*;
+import static consulo.language.codeStyle.arrangement.std.StdArrangementTokens.Order.*;
 
 /**
  * @author Denis Zhdanov
@@ -211,7 +211,7 @@ public class JavaRearranger implements Rearranger<JavaElementArrangementEntry>, 
   @Override
   public Pair<JavaElementArrangementEntry, List<JavaElementArrangementEntry>> parseWithNew(
       @Nonnull PsiElement root,
-      @javax.annotation.Nullable Document document,
+      @Nullable Document document,
       @Nonnull Collection<TextRange> ranges,
       @Nonnull PsiElement element,
       @Nonnull ArrangementSettings settings) {
@@ -263,7 +263,7 @@ public class JavaRearranger implements Rearranger<JavaElementArrangementEntry>, 
   @Override
   public int getBlankLines(
       @Nonnull CodeStyleSettings settings,
-      @javax.annotation.Nullable JavaElementArrangementEntry parent,
+      @Nullable JavaElementArrangementEntry parent,
       @Nullable JavaElementArrangementEntry previous,
       @Nonnull JavaElementArrangementEntry target) {
     if (previous == null) {
@@ -319,7 +319,7 @@ public class JavaRearranger implements Rearranger<JavaElementArrangementEntry>, 
   }
 
   @Override
-  public boolean isEnabled(@Nonnull ArrangementSettingsToken token, @javax.annotation.Nullable ArrangementMatchCondition current) {
+  public boolean isEnabled(@Nonnull ArrangementSettingsToken token, @Nullable ArrangementMatchCondition current) {
     if (SUPPORTED_TYPES.contains(token) || SUPPORTED_ORDERS.contains(token) || StdArrangementTokens.Regexp.NAME.equals(token)) {
       return true;
     }

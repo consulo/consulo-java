@@ -15,14 +15,14 @@
  */
 package com.intellij.java.impl.ig.controlflow;
 
-import com.intellij.codeInspection.ProblemDescriptor;
-import com.intellij.codeInspection.ui.SingleCheckboxOptionsPanel;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.project.Project;
+import consulo.project.Project;
 import com.intellij.psi.*;
-import com.intellij.psi.tree.IElementType;
+import consulo.language.ast.IElementType;
 import com.intellij.java.language.psi.util.ConstantExpressionUtil;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
@@ -353,7 +353,7 @@ public class PointlessBooleanExpressionInspection extends BaseInspection {
   }
 
   @Nullable
-  private Boolean evaluate(@javax.annotation.Nullable PsiExpression expression) {
+  private Boolean evaluate(@Nullable PsiExpression expression) {
     if (expression == null || m_ignoreExpressionsContainingConstants && containsReference(expression)) {
       return null;
     }

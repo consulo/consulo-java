@@ -1,7 +1,6 @@
 package com.intellij.java.impl.codeInspection.inheritance;
 
-import com.intellij.codeInsight.daemon.GroupNames;
-import com.intellij.codeInspection.*;
+import consulo.ide.impl.idea.codeInsight.daemon.GroupNames;
 import com.intellij.java.impl.codeInspection.inheritance.search.InheritorsStatisticalDataSearch;
 import com.intellij.java.impl.codeInspection.inheritance.search.InheritorsStatisticsSearchResult;
 import com.intellij.java.analysis.impl.codeInspection.BaseJavaLocalInspectionTool;
@@ -9,6 +8,7 @@ import com.intellij.java.language.psi.*;
 import consulo.java.language.module.util.JavaClassNames;
 import org.jetbrains.annotations.Nls;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -41,7 +41,7 @@ public class SuperClassHasFrequentlyUsedInheritorsInspection extends BaseJavaLoc
     return true;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   @Override
   public ProblemDescriptor[] checkClass(@Nonnull final PsiClass aClass,
                                         @Nonnull final InspectionManager manager,
@@ -85,7 +85,7 @@ public class SuperClassHasFrequentlyUsedInheritorsInspection extends BaseJavaLoc
                                ProblemHighlightType.INFORMATION)};
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private static PsiClass getSuperIfUnique(final @Nonnull PsiClass aClass) {
     if (aClass instanceof PsiAnonymousClass) {
       return (PsiClass)((PsiAnonymousClass)aClass).getBaseClassReference().resolve();

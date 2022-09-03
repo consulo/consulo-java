@@ -28,17 +28,17 @@ import javax.annotation.Nonnull;
 import com.intellij.JavaTestUtil;
 import com.intellij.java.language.psi.JavaDirectoryService;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiDirectory;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiDirectory;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiJavaPackage;
 import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.refactoring.MultiFileTestCase;
 import com.intellij.java.impl.refactoring.memberPullUp.PullUpConflictsUtil;
 import com.intellij.java.impl.refactoring.memberPullUp.PullUpProcessor;
-import com.intellij.refactoring.util.DocCommentPolicy;
+import consulo.ide.impl.idea.refactoring.util.DocCommentPolicy;
 import com.intellij.java.impl.refactoring.util.classMembers.MemberInfo;
-import com.intellij.util.containers.MultiMap;
+import consulo.util.collection.MultiMap;
 
 //pull first method from class a.A to class b.B
 public abstract class PullUpMultifileTest extends MultiFileTestCase

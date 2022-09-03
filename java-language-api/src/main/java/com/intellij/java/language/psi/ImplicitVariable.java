@@ -15,7 +15,7 @@
  */
 package com.intellij.java.language.psi;
 
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 
 public interface ImplicitVariable extends PsiLocalVariable {
   // todo: probably move getDeclarationScope to PsiLocalVariable?

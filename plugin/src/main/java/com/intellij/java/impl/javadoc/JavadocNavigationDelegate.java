@@ -19,20 +19,20 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.codeInsight.CodeInsightSettings;
-import com.intellij.openapi.actionSystem.CommonDataKeys;
-import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.actionSystem.LangDataKeys;
-import com.intellij.openapi.editor.CaretModel;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.Editor;
+import consulo.language.editor.CodeInsightSettings;
+import consulo.language.editor.CommonDataKeys;
+import consulo.dataContext.DataContext;
+import consulo.language.editor.LangDataKeys;
+import consulo.codeEditor.CaretModel;
+import consulo.document.Document;
+import consulo.codeEditor.Editor;
 import com.intellij.openapi.editor.EditorNavigationDelegateAdapter;
-import com.intellij.openapi.editor.LogicalPosition;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Pair;
-import com.intellij.psi.PsiDocumentManager;
-import com.intellij.psi.PsiFile;
-import com.intellij.util.text.CharArrayUtil;
+import consulo.codeEditor.LogicalPosition;
+import consulo.project.Project;
+import consulo.util.lang.Pair;
+import consulo.language.psi.PsiDocumentManager;
+import consulo.language.psi.PsiFile;
+import consulo.util.lang.CharArrayUtil;
 
 /**
  * Holds javadoc-specific navigation logic.

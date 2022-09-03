@@ -15,14 +15,14 @@
  */
 package com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix;
 
-import com.intellij.codeInsight.daemon.impl.HighlightInfo;
-import com.intellij.codeInsight.daemon.impl.quickfix.QuickFixAction;
+import consulo.language.editor.rawHighlight.HighlightInfo;
+import consulo.language.editor.intention.QuickFixAction;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.openapi.util.TextRange;
+import consulo.util.lang.Comparing;
+import consulo.document.util.TextRange;
 import com.intellij.psi.*;
 import com.intellij.java.language.psi.infos.CandidateInfo;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 
 import javax.annotation.Nullable;

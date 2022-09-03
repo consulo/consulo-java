@@ -19,19 +19,19 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.Nonnull;
-import com.intellij.execution.Location;
-import com.intellij.execution.PsiLocation;
+import consulo.execution.action.Location;
+import consulo.execution.action.PsiLocation;
 import com.intellij.java.execution.impl.junit2.PsiMemberParameterizedLocation;
 import com.intellij.java.execution.impl.junit2.info.MethodLocation;
-import com.intellij.execution.testframework.sm.runner.SMTestLocator;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.execution.test.sm.runner.SMTestLocator;
+import consulo.project.Project;
+import consulo.util.lang.StringUtil;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiManager;
+import consulo.language.psi.PsiManager;
 import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.java.language.psi.util.ClassUtil;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.util.collection.ContainerUtil;
 
 public class JavaTestLocator implements SMTestLocator
 {

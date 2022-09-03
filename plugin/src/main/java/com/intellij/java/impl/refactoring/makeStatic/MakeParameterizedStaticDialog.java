@@ -42,12 +42,12 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 
-import com.intellij.lang.findUsages.DescriptiveNameUtil;
-import com.intellij.openapi.help.HelpManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.ComboBox;
-import com.intellij.openapi.ui.Messages;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.language.findUsage.DescriptiveNameUtil;
+import consulo.application.HelpManager;
+import consulo.project.Project;
+import consulo.ui.ex.awt.ComboBox;
+import consulo.ui.ex.awt.Messages;
+import consulo.util.lang.StringUtil;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiNameHelper;
@@ -55,11 +55,11 @@ import com.intellij.java.language.psi.PsiParameter;
 import com.intellij.java.language.psi.PsiParameterList;
 import com.intellij.java.language.psi.PsiTypeParameterListOwner;
 import com.intellij.java.impl.refactoring.HelpID;
-import com.intellij.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.RefactoringBundle;
 import com.intellij.java.impl.refactoring.util.ParameterTablePanel;
 import com.intellij.java.analysis.impl.refactoring.util.VariableData;
-import com.intellij.ui.DocumentAdapter;
-import com.intellij.usageView.UsageViewUtil;
+import consulo.ui.ex.awt.event.DocumentAdapter;
+import consulo.usage.UsageViewUtil;
 
 public class MakeParameterizedStaticDialog extends AbstractMakeStaticDialog {
   private final Project myProject;

@@ -15,25 +15,26 @@
  */
 package com.intellij.java.impl.codeInsight.intention.impl;
 
-import com.intellij.codeInsight.CodeInsightBundle;
-import com.intellij.codeInsight.FileModificationService;
-import com.intellij.codeInsight.highlighting.HighlightManager;
-import com.intellij.codeInsight.intention.PsiElementBaseIntentionAction;
+import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.FileModificationService;
+import consulo.language.editor.highlight.HighlightManager;
+import consulo.language.editor.intention.PsiElementBaseIntentionAction;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.colors.EditorColors;
-import com.intellij.openapi.editor.colors.EditorColorsManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Comparing;
+import consulo.codeEditor.Editor;
+import consulo.codeEditor.EditorColors;
+import consulo.colorScheme.EditorColorsManager;
+import consulo.project.Project;
+import consulo.util.lang.Comparing;
 import com.intellij.psi.*;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.util.collection.primitive.ints.IntList;
 import consulo.util.collection.primitive.ints.IntLists;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.PrimitiveIterator;
 
@@ -57,7 +58,7 @@ public class AddOnDemandStaticImportAction extends PsiElementBaseIntentionAction
 	 * @param element element to check
 	 * @return target class that may be statically imported if any; <code>null</code> otherwise
 	 */
-	@javax.annotation.Nullable
+	@Nullable
 	public static PsiClass getClassToPerformStaticImport(@Nonnull PsiElement element)
 	{
 		if(!PsiUtil.isLanguageLevel5OrHigher(element))

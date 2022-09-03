@@ -15,8 +15,8 @@
  */
 package com.intellij.java.impl.codeInspection.defaultFileTemplateUsage;
 
-import com.intellij.codeInspection.LocalQuickFix;
-import com.intellij.codeInspection.InspectionsBundle;
+import consulo.language.editor.inspection.LocalQuickFix;
+import consulo.language.editor.inspection.InspectionsBundle;
 import javax.annotation.Nonnull;
 
 /**

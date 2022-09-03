@@ -15,19 +15,19 @@
  */
 package com.intellij.java.impl.analysis;
 
-import com.intellij.analysis.AnalysisScope;
-import com.intellij.analysis.AnalysisScopeBundle;
-import com.intellij.analysis.BaseAnalysisAction;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.compiler.CompileContext;
-import com.intellij.openapi.compiler.CompileStatusNotification;
-import com.intellij.openapi.compiler.CompilerManager;
-import com.intellij.openapi.fileEditor.FileDocumentManager;
-import com.intellij.openapi.progress.ProgressIndicator;
-import com.intellij.openapi.progress.ProgressManager;
-import com.intellij.openapi.progress.Task;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.Messages;
+import consulo.language.editor.scope.AnalysisScope;
+import consulo.language.editor.scope.AnalysisScopeBundle;
+import consulo.ide.impl.idea.analysis.BaseAnalysisAction;
+import consulo.application.ApplicationManager;
+import consulo.compiler.CompileContext;
+import consulo.compiler.CompileStatusNotification;
+import consulo.compiler.CompilerManager;
+import consulo.document.FileDocumentManager;
+import consulo.application.progress.ProgressIndicator;
+import consulo.application.progress.ProgressManager;
+import consulo.application.progress.Task;
+import consulo.project.Project;
+import consulo.ui.ex.awt.Messages;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

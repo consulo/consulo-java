@@ -17,12 +17,14 @@ package com.intellij.java.language.psi;
 
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.psi.javadoc.PsiDocTag;
-import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.ast.IElementType;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.util.IncorrectOperationException;
+import consulo.ide.ServiceManager;
+import consulo.language.parser.PsiBuilder;
+import consulo.language.parser.PsiParser;
+import consulo.project.Project;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
@@ -192,7 +194,7 @@ public interface PsiElementFactory extends PsiJavaParserFacade, JVMElementFactor
    * @return the class type instance.
    */
   @Nonnull
-  PsiClassType createType(@Nonnull PsiClass resolve, @Nonnull PsiSubstitutor substitutor, @javax.annotation.Nullable LanguageLevel languageLevel);
+  PsiClassType createType(@Nonnull PsiClass resolve, @Nonnull PsiSubstitutor substitutor, @Nullable LanguageLevel languageLevel);
 
   @Nonnull
   PsiClassType createType(@Nonnull PsiClass resolve, @Nonnull PsiSubstitutor substitutor, @Nullable LanguageLevel languageLevel, @Nonnull PsiAnnotation[] annotations);
@@ -243,7 +245,7 @@ public interface PsiElementFactory extends PsiJavaParserFacade, JVMElementFactor
 
   /**
    * The same as {@link #createTypeByFQClassName(String, GlobalSearchScope)}
-   * with {@link GlobalSearchScope#allScope(com.intellij.openapi.project.Project)}.
+   * with {@link GlobalSearchScope#allScope(Project)}.
    *
    * @param qName the full-qualified name of the class to create the reference to.
    * @return the class type instance.
@@ -490,7 +492,7 @@ public interface PsiElementFactory extends PsiJavaParserFacade, JVMElementFactor
   /**
    * Create a lightweight PsiElement of given element type in a lightweight non-physical PsiFile (aka DummyHolder) in a given context.
    * Element type's language should have a parser definition which supports parsing for this element type (first
-   * parameter in {@link com.intellij.lang.PsiParser#parse(com.intellij.psi.tree.IElementType, com.intellij.lang.PsiBuilder, com.intellij.lang.LanguageVersion)}.
+   * parameter in {@link PsiParser#parse(IElementType, PsiBuilder, com.intellij.lang.LanguageVersion)}.
    *
    * @param text    text to parse
    * @param type    node type
@@ -498,7 +500,7 @@ public interface PsiElementFactory extends PsiJavaParserFacade, JVMElementFactor
    * @return PsiElement of the desired element type
    */
   @Nonnull
-  PsiElement createDummyHolder(@Nonnull String text, @Nonnull IElementType type, @javax.annotation.Nullable PsiElement context);
+  PsiElement createDummyHolder(@Nonnull String text, @Nonnull IElementType type, @Nullable PsiElement context);
 
   /**
    * Creates a <code>catch</code> section for catching an exception of the specified

@@ -15,10 +15,10 @@
  */
 package com.intellij.java.impl.slicer;
 
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.util.Computable;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.usageView.UsageInfo;
+import consulo.application.ApplicationManager;
+import consulo.application.util.function.Computable;
+import consulo.document.util.TextRange;
+import consulo.usage.UsageInfo;
 import consulo.util.collection.HashingStrategy;
 import consulo.util.collection.Maps;
 

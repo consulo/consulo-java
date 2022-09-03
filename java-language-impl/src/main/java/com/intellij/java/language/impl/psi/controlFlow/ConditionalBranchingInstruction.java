@@ -15,7 +15,7 @@
  */
 package com.intellij.java.language.impl.psi.controlFlow;
 
-import com.intellij.openapi.diagnostic.Logger;
+import consulo.logging.Logger;
 import com.intellij.java.language.psi.PsiExpression;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

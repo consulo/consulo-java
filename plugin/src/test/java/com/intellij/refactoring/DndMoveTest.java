@@ -16,10 +16,9 @@
 package com.intellij.refactoring;
 
 import com.intellij.codeInsight.CodeInsightTestCase;
-import com.intellij.openapi.util.Computable;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.*;
-import com.intellij.refactoring.move.MoveHandler;
+import consulo.application.util.function.Computable;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.language.editor.refactoring.move.MoveHandler;
 import com.intellij.testFramework.PsiTestUtil;
 import javax.annotation.Nullable;
 

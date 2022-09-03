@@ -25,7 +25,7 @@
 package com.intellij.java.impl.refactoring.rename;
 
 
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 
 class LocalHidesFieldUsageInfo extends ResolvableCollisionUsageInfo {
   public LocalHidesFieldUsageInfo(PsiElement element, PsiElement referencedElement) {

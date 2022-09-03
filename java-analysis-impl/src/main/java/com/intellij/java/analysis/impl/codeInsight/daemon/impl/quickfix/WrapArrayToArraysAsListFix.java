@@ -16,21 +16,22 @@
 package com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import consulo.java.analysis.impl.JavaQuickFixBundle;
-import com.intellij.openapi.project.Project;
+import consulo.project.Project;
 import consulo.java.language.module.util.JavaClassNames;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiArrayType;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiClassType;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiExpressionList;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.util.InheritanceUtil;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
 
 /**
  * @author Dmitry Batkovich
@@ -64,7 +65,7 @@ public class WrapArrayToArraysAsListFix extends MethodArgumentFix
 	public static class MyFixerActionFactory extends ArgumentFixerActionFactory
 	{
 
-		@javax.annotation.Nullable
+		@Nullable
 		@Override
 		protected PsiExpression getModifiedArgument(final PsiExpression expression,
 				final PsiType toType) throws IncorrectOperationException
@@ -98,7 +99,7 @@ public class WrapArrayToArraysAsListFix extends MethodArgumentFix
 			return (PsiExpression) JavaCodeStyleManager.getInstance(project).shortenClassReferences(newExpression);
 		}
 
-		@javax.annotation.Nullable
+		@Nullable
 		private static PsiClass getJavaUtilList(final PsiElement context)
 		{
 			return JavaPsiFacade.getInstance(context.getProject()).findClass(JavaClassNames.JAVA_UTIL_LIST,

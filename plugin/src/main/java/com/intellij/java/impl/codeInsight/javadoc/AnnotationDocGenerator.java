@@ -20,18 +20,19 @@ import java.util.List;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.intellij.java.language.impl.codeInsight.javadoc.JavaDocUtil;
 import com.intellij.java.language.psi.*;
 import org.intellij.lang.annotations.Flow;
 import com.intellij.java.language.codeInsight.AnnotationUtil;
 import consulo.logging.Logger;
-import com.intellij.openapi.project.IndexNotReadyException;
+import consulo.application.dumb.IndexNotReadyException;
 import com.intellij.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.util.ObjectUtil;
-import com.intellij.util.containers.ContainerUtil;
-import com.intellij.xml.util.XmlStringUtil;
+import consulo.util.lang.ObjectUtil;
+import consulo.util.collection.ContainerUtil;
+import consulo.util.lang.xml.XmlStringUtil;
 
 public class AnnotationDocGenerator
 {
@@ -42,7 +43,7 @@ public class AnnotationDocGenerator
 	private final PsiJavaCodeReferenceElement myNameReference;
 	@Nonnull
 	private final PsiModifierListOwner myOwner;
-	@javax.annotation.Nullable
+	@Nullable
 	private final PsiClass myTargetClass;
 	private final boolean myResolveNotPossible;
 

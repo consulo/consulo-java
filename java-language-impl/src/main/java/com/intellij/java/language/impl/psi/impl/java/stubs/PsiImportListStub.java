@@ -20,7 +20,7 @@
 package com.intellij.java.language.impl.psi.impl.java.stubs;
 
 import com.intellij.java.language.psi.PsiImportList;
-import com.intellij.psi.stubs.StubElement;
+import consulo.language.psi.stub.StubElement;
 
 public interface PsiImportListStub extends StubElement<PsiImportList> {
 }

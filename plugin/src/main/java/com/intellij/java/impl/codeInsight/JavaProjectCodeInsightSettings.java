@@ -15,15 +15,15 @@
  */
 package com.intellij.java.impl.codeInsight;
 
-import com.intellij.codeInsight.CodeInsightSettings;
+import consulo.language.editor.CodeInsightSettings;
 import com.intellij.openapi.components.*;
-import com.intellij.openapi.project.Project;
-import com.intellij.util.PatternUtil;
-import com.intellij.util.containers.ConcurrentFactoryMap;
-import com.intellij.util.containers.ContainerUtil;
-import com.intellij.util.xmlb.XmlSerializerUtil;
-import com.intellij.util.xmlb.annotations.AbstractCollection;
-import com.intellij.util.xmlb.annotations.Tag;
+import consulo.project.Project;
+import consulo.util.lang.PatternUtil;
+import consulo.application.util.ConcurrentFactoryMap;
+import consulo.util.collection.ContainerUtil;
+import consulo.util.xml.serializer.XmlSerializerUtil;
+import consulo.util.xml.serializer.annotation.AbstractCollection;
+import consulo.util.xml.serializer.annotation.Tag;
 import consulo.disposer.Disposable;
 import consulo.disposer.Disposer;
 import jakarta.inject.Singleton;

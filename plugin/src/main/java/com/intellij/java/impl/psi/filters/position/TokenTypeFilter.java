@@ -15,13 +15,13 @@
  */
 package com.intellij.java.impl.psi.filters.position;
 
-import com.intellij.lang.ASTNode;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.filters.ElementFilter;
+import consulo.language.ast.ASTNode;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.filter.ElementFilter;
 import com.intellij.java.language.psi.javadoc.PsiDocToken;
-import com.intellij.psi.tree.IElementType;
+import consulo.language.ast.IElementType;
 import com.intellij.psi.xml.XmlToken;
-import com.intellij.util.ReflectionUtil;
+import consulo.util.lang.reflect.ReflectionUtil;
 
 /**
  * Created by IntelliJ IDEA.

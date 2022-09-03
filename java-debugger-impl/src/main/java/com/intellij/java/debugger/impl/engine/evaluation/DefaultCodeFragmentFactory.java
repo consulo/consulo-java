@@ -18,9 +18,10 @@ package com.intellij.java.debugger.impl.engine.evaluation;
 import java.util.concurrent.atomic.AtomicReference;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-import com.intellij.codeInsight.completion.CompletionParameters;
-import com.intellij.codeInsight.completion.CompletionService;
+import consulo.language.editor.completion.CompletionParameters;
+import consulo.language.editor.completion.CompletionService;
 import com.intellij.java.debugger.impl.DebuggerManagerEx;
 import com.intellij.java.debugger.impl.codeinsight.RuntimeTypeEvaluator;
 import com.intellij.java.debugger.engine.evaluation.CodeFragmentFactory;
@@ -32,19 +33,19 @@ import com.intellij.java.debugger.impl.DebuggerSession;
 import com.intellij.java.debugger.impl.ui.DebuggerExpressionComboBox;
 import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.java.debugger.engine.evaluation.TextWithImports;
-import com.intellij.openapi.fileTypes.LanguageFileType;
-import com.intellij.openapi.progress.ProgressManager;
-import com.intellij.openapi.project.Project;
+import consulo.language.file.LanguageFileType;
+import consulo.application.progress.ProgressManager;
+import consulo.project.Project;
 import consulo.util.dataholder.Key;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.util.lang.StringUtil;
 import com.intellij.java.language.psi.JavaCodeFragment;
 import com.intellij.java.language.psi.JavaCodeFragmentFactory;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiExpression;
-import com.intellij.psi.PsiFile;
+import consulo.language.psi.PsiFile;
 import com.intellij.java.language.psi.PsiType;
-import com.intellij.util.PairFunction;
-import com.intellij.util.concurrency.Semaphore;
+import consulo.util.lang.function.PairFunction;
+import consulo.application.util.Semaphore;
 import consulo.java.analysis.impl.codeInsight.completion.JavaCompletionUtilCore;
 
 /**
@@ -123,7 +124,7 @@ public class DefaultCodeFragmentFactory extends CodeFragmentFactory
 					final RuntimeTypeEvaluator worker = new RuntimeTypeEvaluator(null, expression, debuggerContext, ProgressManager.getInstance().getProgressIndicator())
 					{
 						@Override
-						protected void typeCalculationFinished(@javax.annotation.Nullable PsiType type)
+						protected void typeCalculationFinished(@Nullable PsiType type)
 						{
 							nameRef.set(type);
 							semaphore.up();

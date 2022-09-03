@@ -22,16 +22,15 @@ import com.intellij.java.impl.codeInsight.intention.impl.ImplementAbstractMethod
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.*;
-import com.intellij.psi.codeStyle.CodeStyleSettings;
-import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
-import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
+import consulo.language.codeStyle.CodeStyleSettings;
+import consulo.language.codeStyle.CodeStyleSettingsManager;
+import consulo.language.codeStyle.CommonCodeStyleSettings;
 import com.intellij.java.language.psi.util.MethodSignature;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import com.intellij.testFramework.LightCodeInsightTestCase;
-import com.intellij.util.FunctionUtil;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.ide.impl.idea.util.FunctionUtil;
+import consulo.util.collection.ContainerUtil;
 import javax.annotation.Nullable;
 
 import java.util.Collection;
@@ -148,7 +147,7 @@ public abstract class OverrideImplementTest extends LightCodeInsightTestCase {
     doTest(copyJavadoc, toImplement);
   }
 
-  private void doTest(boolean copyJavadoc, @javax.annotation.Nullable Boolean toImplement) {
+  private void doTest(boolean copyJavadoc, @Nullable Boolean toImplement) {
     String name = getTestName(false);
     configureByFile(BASE_DIR + "before" + name + ".java");
     int offset = getEditor().getCaretModel().getOffset();

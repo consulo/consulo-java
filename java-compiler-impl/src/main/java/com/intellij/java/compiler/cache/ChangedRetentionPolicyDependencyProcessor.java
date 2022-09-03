@@ -15,15 +15,15 @@
  */
 package com.intellij.java.compiler.cache;
 
-import com.intellij.compiler.make.CacheCorruptedException;
+import consulo.compiler.CacheCorruptedException;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiJavaFile;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.progress.ProcessCanceledException;
-import com.intellij.openapi.project.Project;
+import consulo.application.ApplicationManager;
+import consulo.component.ProcessCanceledException;
+import consulo.project.Project;
 import com.intellij.psi.*;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.java.util.cls.ClsUtil;
 import consulo.logging.Logger;
 

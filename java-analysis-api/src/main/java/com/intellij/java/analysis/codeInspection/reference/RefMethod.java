@@ -130,7 +130,7 @@ public interface RefMethod extends RefJavaElement {
    *
    * @return the method return value or null if it's different or impossible to determine.
    */
-  @javax.annotation.Nullable
+  @Nullable
   String getReturnValueIfSame();
 
   /**

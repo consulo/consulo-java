@@ -15,22 +15,22 @@
  */
 package com.intellij.codeInsight.daemon;
 
-import com.intellij.codeInsight.daemon.impl.HighlightInfo;
-import com.intellij.codeInspection.LocalInspectionTool;
+import consulo.language.editor.rawHighlight.HighlightInfo;
+import consulo.language.editor.inspection.LocalInspectionTool;
 import com.intellij.java.impl.codeInspection.compiler.JavacQuirksInspection;
 import com.intellij.java.impl.codeInspection.deadCode.UnusedDeclarationInspection;
 import com.intellij.java.impl.codeInspection.defUse.DefUseInspection;
 import com.intellij.java.analysis.impl.codeInspection.redundantCast.RedundantCastInspection;
-import com.intellij.codeInspection.reference.EntryPoint;
-import com.intellij.codeInspection.reference.RefElement;
+import consulo.ide.impl.idea.codeInspection.reference.EntryPoint;
+import consulo.language.editor.inspection.reference.RefElement;
 import com.intellij.java.impl.codeInspection.uncheckedWarnings.UncheckedWarningLocalInspection;
 import com.intellij.java.impl.codeInspection.unusedSymbol.UnusedSymbolLocalInspection;
-import com.intellij.lang.annotation.HighlightSeverity;
-import com.intellij.openapi.application.Application;
-import com.intellij.openapi.extensions.ExtensionPoint;
+import consulo.language.editor.annotation.HighlightSeverity;
+import consulo.application.Application;
+import consulo.component.extension.ExtensionPoint;
 import com.intellij.java.language.projectRoots.JavaSdkVersion;
 import com.intellij.java.language.LanguageLevel;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.testFramework.IdeaTestUtil;
 import consulo.java.analysis.codeInspection.JavaExtensionPoints;
 import org.jdom.Element;

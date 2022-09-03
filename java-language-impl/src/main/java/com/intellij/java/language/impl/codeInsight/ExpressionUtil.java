@@ -4,7 +4,7 @@
 package com.intellij.java.language.impl.codeInsight;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 
 public class ExpressionUtil

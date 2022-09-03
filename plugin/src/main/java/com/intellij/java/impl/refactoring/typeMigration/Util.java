@@ -19,12 +19,13 @@ import java.util.Arrays;
 import java.util.List;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.SmartList;
-import com.intellij.util.containers.Queue;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.util.collection.SmartList;
+import consulo.ide.impl.idea.util.containers.Queue;
 
 /**
  * @author db
@@ -47,7 +48,7 @@ public class Util
 		return parent;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public static PsiElement normalizeElement(final PsiElement element)
 	{
 		if(element instanceof PsiMethod)
@@ -115,7 +116,7 @@ public class Util
 		return Arrays.stream(es).allMatch(Util::canBeMigrated);
 	}
 
-	private static boolean canBeMigrated(@javax.annotation.Nullable final PsiElement e)
+	private static boolean canBeMigrated(@Nullable final PsiElement e)
 	{
 		if(e == null)
 		{

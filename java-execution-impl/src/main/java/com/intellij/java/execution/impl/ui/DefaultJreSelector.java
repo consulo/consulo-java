@@ -16,19 +16,19 @@
 
 package com.intellij.java.execution.impl.ui;
 
-import com.intellij.BundleBase;
-import com.intellij.application.options.ModuleDescriptionsComboBox;
-import com.intellij.application.options.ModulesComboBox;
+import consulo.component.util.localize.BundleBase;
+import consulo.module.ui.awt.ModuleDescriptionsComboBox;
+import consulo.module.ui.awt.ModulesComboBox;
 import com.intellij.java.execution.impl.util.JavaParametersUtil;
-import com.intellij.openapi.editor.event.DocumentEvent;
-import com.intellij.openapi.editor.event.DocumentListener;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleUtilCore;
-import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.ui.ComboBox;
-import com.intellij.openapi.util.Pair;
+import consulo.document.event.DocumentEvent;
+import consulo.document.event.DocumentListener;
+import consulo.module.Module;
+import consulo.language.util.ModuleUtilCore;
+import consulo.content.bundle.Sdk;
+import consulo.ui.ex.awt.ComboBox;
+import consulo.util.lang.Pair;
 import com.intellij.java.language.impl.ui.EditorTextFieldWithBrowseButton;
-import com.intellij.util.ObjectUtil;
+import consulo.util.lang.ObjectUtil;
 import consulo.annotation.DeprecationInfo;
 import consulo.java.execution.configurations.OwnJavaParameters;
 import consulo.java.language.module.extension.JavaModuleExtension;

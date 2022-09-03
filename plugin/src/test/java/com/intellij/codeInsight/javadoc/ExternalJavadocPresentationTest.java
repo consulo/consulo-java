@@ -25,12 +25,12 @@ import java.io.StringReader;
 import javax.annotation.Nonnull;
 
 import com.intellij.java.impl.codeInsight.javadoc.JavaDocExternalFilter;
+import consulo.virtualFileSystem.LocalFileSystem;
 import org.jetbrains.annotations.NonNls;
 import com.intellij.JavaTestUtil;
-import com.intellij.openapi.fileEditor.impl.LoadTextUtil;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.LocalFileSystem;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.language.impl.internal.psi.LoadTextUtil;
+import consulo.project.Project;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.testFramework.LightCodeInsightTestCase;
 
 /**

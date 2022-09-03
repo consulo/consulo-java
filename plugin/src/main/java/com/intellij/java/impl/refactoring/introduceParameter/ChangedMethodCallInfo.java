@@ -24,7 +24,7 @@
  */
 package com.intellij.java.impl.refactoring.introduceParameter;
 
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 
 /**
  * recursive call usages inside method

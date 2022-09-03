@@ -17,9 +17,9 @@ package com.intellij.java.impl.refactoring.rename;
 
 import consulo.java.impl.util.JavaProjectRootsUtil;
 import com.intellij.java.impl.lang.java.JavaRefactoringSupportProvider;
-import com.intellij.openapi.util.Condition;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
+import consulo.util.lang.function.Condition;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
 import com.intellij.java.language.psi.PsiJavaFile;
 
 public class JavaVetoRenameCondition implements Condition<PsiElement>

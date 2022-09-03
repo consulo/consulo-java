@@ -6,11 +6,11 @@ import java.io.IOException;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.intellij.coverage.CoverageEngine;
-import com.intellij.coverage.CoverageRunner;
+import consulo.execution.coverage.CoverageEngine;
+import consulo.execution.coverage.CoverageRunner;
 import consulo.logging.Logger;
-import com.intellij.openapi.util.SystemInfo;
-import com.intellij.openapi.util.io.FileUtil;
+import consulo.application.util.SystemInfo;
+import consulo.ide.impl.idea.openapi.util.io.FileUtil;
 import consulo.container.boot.ContainerPathManager;
 import consulo.java.execution.configurations.OwnJavaParameters;
 

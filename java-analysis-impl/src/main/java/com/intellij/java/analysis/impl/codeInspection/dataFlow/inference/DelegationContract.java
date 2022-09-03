@@ -24,8 +24,8 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.instructions.Meth
 import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.util.ObjectUtil;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.util.lang.ObjectUtil;
+import consulo.util.collection.ContainerUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

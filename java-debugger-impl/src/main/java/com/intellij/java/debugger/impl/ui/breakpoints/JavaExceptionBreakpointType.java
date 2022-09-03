@@ -23,19 +23,19 @@ import com.intellij.java.debugger.impl.breakpoints.properties.JavaExceptionBreak
 import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.impl.HelpID;
 import com.intellij.java.debugger.impl.engine.JVMNameUtil;
-import com.intellij.icons.AllIcons;
+import consulo.application.AllIcons;
 import com.intellij.java.language.util.TreeClassChooser;
 import com.intellij.java.language.util.TreeClassChooserFactory;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Computable;
+import consulo.application.ApplicationManager;
+import consulo.execution.debug.XDebuggerManager;
+import consulo.execution.debug.breakpoint.XBreakpoint;
+import consulo.execution.debug.breakpoint.ui.XBreakpointCustomPropertiesPanel;
+import consulo.project.Project;
+import consulo.application.util.function.Computable;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiClassOwner;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.xdebugger.XDebuggerManager;
-import com.intellij.xdebugger.breakpoints.XBreakpoint;
-import com.intellij.xdebugger.breakpoints.ui.XBreakpointCustomPropertiesPanel;
+import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.ui.image.Image;
 
 /**
@@ -97,7 +97,7 @@ public class JavaExceptionBreakpointType extends JavaBreakpointTypeBase<JavaExce
 		return new JavaExceptionBreakpointProperties();
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	@Override
 	public XBreakpointCustomPropertiesPanel<XBreakpoint<JavaExceptionBreakpointProperties>> createCustomPropertiesPanel()
 	{
@@ -116,7 +116,7 @@ public class JavaExceptionBreakpointType extends JavaBreakpointTypeBase<JavaExce
 	//  return ExceptionBreakpoint.CATEGORY;
 	//}
 
-	@javax.annotation.Nullable
+	@Nullable
 	@Override
 	public XBreakpoint<JavaExceptionBreakpointProperties> addBreakpoint(final Project project, JComponent parentComponent)
 	{

@@ -16,28 +16,28 @@
 package com.intellij.java.impl.codeInsight.intention.impl;
 
 import com.intellij.java.language.impl.codeInsight.ChangeContextUtil;
-import com.intellij.codeInsight.CodeInsightBundle;
+import consulo.language.editor.CodeInsightBundle;
 import com.intellij.java.impl.codeInsight.generation.GenerateMembersUtil;
 import com.intellij.java.impl.codeInsight.generation.OverrideImplementUtil;
 import com.intellij.java.impl.ide.util.MethodCellRenderer;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.application.Result;
-import com.intellij.openapi.command.WriteCommandAction;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.ScrollType;
-import com.intellij.openapi.fileEditor.FileEditorManager;
-import com.intellij.openapi.fileEditor.OpenFileDescriptor;
-import com.intellij.openapi.progress.ProgressManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.Messages;
-import com.intellij.openapi.ui.popup.PopupChooserBuilder;
-import com.intellij.openapi.util.Comparing;
+import consulo.application.Result;
+import consulo.language.editor.WriteCommandAction;
+import consulo.codeEditor.Editor;
+import consulo.codeEditor.ScrollType;
+import consulo.fileEditor.FileEditorManager;
+import consulo.navigation.OpenFileDescriptor;
+import consulo.application.progress.ProgressManager;
+import consulo.project.Project;
+import consulo.ui.ex.awt.JBList;
+import consulo.ui.ex.awt.Messages;
+import consulo.ide.impl.ui.impl.PopupChooserBuilder;
+import consulo.util.lang.Comparing;
 import com.intellij.psi.*;
 import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
-import com.intellij.psi.util.PsiUtilCore;
+import consulo.language.psi.PsiUtilCore;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
-import com.intellij.ui.components.JBList;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 
 import javax.swing.*;
@@ -99,7 +99,7 @@ public class CopyAbstractMethodImplementationHandler {
           copyImplementation(element);
         }
       };
-      new PopupChooserBuilder(list)
+      new consulo.ide.impl.ui.impl.PopupChooserBuilder(list)
         .setTitle(CodeInsightBundle.message("copy.abstract.method.popup.title"))
         .setItemChoosenCallback(runnable)
         .createPopup()

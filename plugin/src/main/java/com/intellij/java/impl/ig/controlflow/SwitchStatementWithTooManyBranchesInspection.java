@@ -17,7 +17,7 @@ package com.intellij.java.impl.ig.controlflow;
 
 import com.intellij.java.language.psi.PsiCodeBlock;
 import com.intellij.java.language.psi.PsiSwitchStatement;
-import com.intellij.codeInspection.ui.SingleIntegerFieldOptionsPanel;
+import consulo.ide.impl.idea.codeInspection.ui.SingleIntegerFieldOptionsPanel;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;

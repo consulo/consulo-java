@@ -21,19 +21,19 @@ import java.util.List;
 import javax.annotation.Nonnull;
 
 import com.intellij.java.debugger.impl.memory.ui.InstancesWindow;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.xdebugger.XDebugSession;
-import com.intellij.xdebugger.XDebuggerManager;
-import com.intellij.xdebugger.impl.ui.tree.nodes.XValueNodeImpl;
+import consulo.ui.ex.action.AnActionEvent;
+import consulo.project.Project;
+import consulo.util.lang.StringUtil;
+import consulo.execution.debug.XDebugSession;
+import consulo.execution.debug.XDebuggerManager;
+import consulo.ide.impl.idea.xdebugger.impl.ui.tree.nodes.XValueNodeImpl;
 import consulo.internal.com.sun.jdi.ObjectReference;
 import consulo.internal.com.sun.jdi.ReferenceType;
 
 public class ShowInstancesByClassAction extends DebuggerTreeAction
 {
 	@Override
-	protected boolean isEnabled(@Nonnull XValueNodeImpl node, @Nonnull AnActionEvent e)
+	protected boolean isEnabled(@Nonnull consulo.ide.impl.idea.xdebugger.impl.ui.tree.nodes.XValueNodeImpl node, @Nonnull AnActionEvent e)
 	{
 		final ObjectReference ref = getObjectReference(node);
 		final boolean enabled = ref != null && ref.virtualMachine().canGetInstanceInfo();

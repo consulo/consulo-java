@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ipp.integer;
 
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiLiteralExpression;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.util.PsiUtil;

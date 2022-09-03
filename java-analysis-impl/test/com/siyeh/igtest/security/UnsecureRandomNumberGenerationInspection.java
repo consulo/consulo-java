@@ -7,7 +7,7 @@ public class UnsecureRandomNumberGenerationInspection
     public void foo()
     {
        new Random();
-       new java.util.Random();
+       new Random();
        Math.random();
     }
 }

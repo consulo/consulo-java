@@ -3,21 +3,21 @@ package com.intellij.java.language.impl.parser;
 
 import com.intellij.java.language.impl.codeInsight.daemon.JavaErrorBundle;
 import com.intellij.java.language.JavaPsiBundle;
-import com.intellij.lang.PsiBuilder;
-import com.intellij.lang.WhitespacesBinders;
+import consulo.language.parser.PsiBuilder;
+import consulo.language.parser.WhitespacesBinders;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.java.language.psi.PsiKeyword;
 import com.intellij.java.language.impl.psi.impl.source.tree.ElementType;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.tree.ILazyParseableElementType;
-import com.intellij.psi.tree.TokenSet;
+import consulo.language.ast.IElementType;
+import consulo.language.ast.ILazyParseableElementType;
+import consulo.language.ast.TokenSet;
 import javax.annotation.Nonnull;
 
 import javax.annotation.Nullable;
 
-import static com.intellij.lang.PsiBuilderUtil.*;
+import static consulo.language.parser.PsiBuilderUtil.*;
 import static com.intellij.java.language.impl.parser.JavaParserUtil.*;
 
 public class StatementParser

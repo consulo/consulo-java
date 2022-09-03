@@ -16,18 +16,18 @@
 package com.intellij.java.impl.refactoring.extractInterface;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.project.Project;
+import consulo.project.Project;
 import com.intellij.java.impl.refactoring.HelpID;
 import com.intellij.java.impl.refactoring.JavaRefactoringSettings;
-import com.intellij.refactoring.RefactoringBundle;
-import com.intellij.refactoring.classMembers.DelegatingMemberInfoModel;
-import com.intellij.refactoring.classMembers.MemberInfoBase;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.classMember.DelegatingMemberInfoModel;
+import consulo.language.editor.refactoring.classMember.MemberInfoBase;
 import com.intellij.java.impl.refactoring.extractSuperclass.ExtractSuperBaseProcessor;
 import com.intellij.java.impl.refactoring.extractSuperclass.JavaExtractSuperBaseDialog;
 import com.intellij.java.impl.refactoring.ui.MemberSelectionPanel;
-import com.intellij.refactoring.util.DocCommentPolicy;
+import consulo.ide.impl.idea.refactoring.util.DocCommentPolicy;
 import com.intellij.java.impl.refactoring.util.classMembers.MemberInfo;
-import com.intellij.util.ArrayUtil;
+import consulo.util.collection.ArrayUtil;
 
 import javax.swing.*;
 import java.awt.*;

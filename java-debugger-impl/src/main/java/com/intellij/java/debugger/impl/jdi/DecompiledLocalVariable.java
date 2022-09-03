@@ -18,8 +18,9 @@ package com.intellij.java.debugger.impl.jdi;
 import java.util.Collection;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.util.lang.StringUtil;
 
 /**
  * @author Eugene Zhuravlev
@@ -34,7 +35,7 @@ public class DecompiledLocalVariable
 	private final boolean myIsParam;
 	private final Collection<String> myMatchedNames;
 
-	public DecompiledLocalVariable(int slot, boolean isParam, @javax.annotation.Nullable String signature, @Nonnull Collection<String> names)
+	public DecompiledLocalVariable(int slot, boolean isParam, @Nullable String signature, @Nonnull Collection<String> names)
 	{
 		mySlot = slot;
 		myIsParam = isParam;
@@ -47,7 +48,7 @@ public class DecompiledLocalVariable
 		return mySlot;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public String getSignature()
 	{
 		return mySignature;
@@ -90,7 +91,7 @@ public class DecompiledLocalVariable
 		return getDisplayName() + " (slot " + mySlot + ", " + mySignature + ")";
 	}
 
-	public static int getParamId(@javax.annotation.Nullable String name)
+	public static int getParamId(@Nullable String name)
 	{
 		if(!StringUtil.isEmpty(name))
 		{

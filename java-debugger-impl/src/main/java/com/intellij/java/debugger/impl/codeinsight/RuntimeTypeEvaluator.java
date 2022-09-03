@@ -28,11 +28,11 @@ import com.intellij.java.debugger.engine.evaluation.expression.ExpressionEvaluat
 import com.intellij.java.debugger.impl.DebuggerContextImpl;
 import com.intellij.java.debugger.impl.ui.EditorEvaluationCommand;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.application.ReadAction;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.progress.ProcessCanceledException;
-import com.intellij.openapi.progress.ProgressIndicator;
-import com.intellij.openapi.project.Project;
+import consulo.application.ReadAction;
+import consulo.codeEditor.Editor;
+import consulo.component.ProcessCanceledException;
+import consulo.application.progress.ProgressIndicator;
+import consulo.project.Project;
 import com.intellij.psi.*;
 import consulo.internal.com.sun.jdi.ClassType;
 import consulo.internal.com.sun.jdi.InterfaceType;
@@ -40,12 +40,14 @@ import consulo.internal.com.sun.jdi.Type;
 import consulo.internal.com.sun.jdi.Value;
 import consulo.java.language.module.util.JavaClassNames;
 
+import javax.annotation.Nullable;
+
 /**
  * @author peter
  */
 public abstract class RuntimeTypeEvaluator extends EditorEvaluationCommand<PsiType>
 {
-	public RuntimeTypeEvaluator(@javax.annotation.Nullable Editor editor, PsiElement expression, DebuggerContextImpl context, final ProgressIndicator indicator)
+	public RuntimeTypeEvaluator(@Nullable Editor editor, PsiElement expression, DebuggerContextImpl context, final ProgressIndicator indicator)
 	{
 		super(editor, expression, context, indicator);
 	}
@@ -70,10 +72,10 @@ public abstract class RuntimeTypeEvaluator extends EditorEvaluationCommand<PsiTy
 		}
 	}
 
-	protected abstract void typeCalculationFinished(@javax.annotation.Nullable PsiType type);
+	protected abstract void typeCalculationFinished(@Nullable PsiType type);
 
 	@Override
-	@javax.annotation.Nullable
+	@Nullable
 	protected PsiType evaluate(final EvaluationContextImpl evaluationContext) throws EvaluateException
 	{
 		final Project project = evaluationContext.getProject();
@@ -96,7 +98,7 @@ public abstract class RuntimeTypeEvaluator extends EditorEvaluationCommand<PsiTy
 		throw EvaluateExceptionUtil.createEvaluateException(DebuggerBundle.message("evaluation.error.surrounded.expression.null"));
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public static PsiType getCastableRuntimeType(Project project, Value value)
 	{
 		Type type = value.type();

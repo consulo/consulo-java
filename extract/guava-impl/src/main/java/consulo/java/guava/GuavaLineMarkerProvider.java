@@ -16,163 +16,151 @@
 
 package consulo.java.guava;
 
-import java.util.Collection;
+import com.intellij.java.indexing.search.searches.AnnotatedMembersSearch;
+import com.intellij.java.language.JavaLanguage;
+import com.intellij.java.language.codeInsight.AnnotationUtil;
+import com.intellij.java.language.impl.psi.impl.source.PsiImmediateClassType;
+import com.intellij.java.language.psi.*;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.application.ReadAction;
+import consulo.application.progress.ProgressManager;
+import consulo.application.util.CachedValueProvider;
+import consulo.application.util.query.FilteredQuery;
+import consulo.application.util.query.Query;
+import consulo.codeEditor.markup.GutterIconRenderer;
+import consulo.java.language.impl.JavaIcons;
+import consulo.language.Language;
+import consulo.language.editor.Pass;
+import consulo.language.editor.gutter.GutterIconNavigationHandler;
+import consulo.language.editor.gutter.LineMarkerInfo;
+import consulo.language.editor.gutter.LineMarkerProvider;
+import consulo.language.editor.ui.DefaultPsiElementCellRenderer;
+import consulo.language.editor.ui.PsiElementListNavigator;
+import consulo.language.psi.NavigatablePsiElement;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.resolve.PsiElementProcessor;
+import consulo.language.psi.util.LanguageCachedValueUtil;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.module.content.ProjectRootManager;
+import consulo.util.lang.function.Functions;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.swing.JComponent;
-
-import com.intellij.codeHighlighting.Pass;
-import com.intellij.java.language.codeInsight.AnnotationUtil;
-import com.intellij.codeInsight.daemon.GutterIconNavigationHandler;
-import com.intellij.codeInsight.daemon.LineMarkerInfo;
-import com.intellij.codeInsight.daemon.LineMarkerProvider;
-import com.intellij.codeInsight.daemon.impl.PsiElementListNavigator;
-import com.intellij.ide.util.DefaultPsiElementCellRenderer;
-import com.intellij.java.language.psi.*;
-import com.intellij.openapi.application.ReadAction;
-import com.intellij.openapi.editor.markup.GutterIconRenderer;
-import com.intellij.openapi.progress.ProgressManager;
-import com.intellij.openapi.roots.ProjectRootManager;
-import com.intellij.psi.*;
-import com.intellij.java.language.impl.psi.impl.source.PsiImmediateClassType;
-import com.intellij.psi.search.PsiElementProcessor;
-import com.intellij.psi.search.PsiElementProcessorAdapter;
-import com.intellij.java.indexing.search.searches.AnnotatedMembersSearch;
-import com.intellij.psi.util.CachedValueProvider;
-import com.intellij.psi.util.CachedValuesManager;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.FilteredQuery;
-import com.intellij.util.Functions;
-import com.intellij.util.Query;
-import consulo.annotation.access.RequiredReadAction;
-import consulo.java.language.impl.JavaIcons;
+import javax.swing.*;
+import java.util.Collection;
 
 /**
  * @author VISTALL
  * @since 24-Feb-17
  */
-public class GuavaLineMarkerProvider implements LineMarkerProvider
-{
-	private static final GutterIconNavigationHandler<PsiElement> ourClassNavigator = (e, elt) ->
-	{
-		PsiClass psiClass = PsiTreeUtil.getParentOfType(elt, PsiClass.class);
-		if(psiClass == null)
-		{
-			return;
-		}
-		PsiClass anno = findSubscribeAnnotation(psiClass);
-		if(anno == null)
-		{
-			return;
-		}
-		PsiElementProcessor.CollectElements<PsiMember> collector = new PsiElementProcessor.CollectElements<>();
-		if(!ProgressManager.getInstance().runProcessWithProgressSynchronously(() ->
-		{
+@ExtensionImpl
+public class GuavaLineMarkerProvider implements LineMarkerProvider {
+  private static final GutterIconNavigationHandler<PsiElement> ourClassNavigator = (e, elt) ->
+  {
+    PsiClass psiClass = PsiTreeUtil.getParentOfType(elt, PsiClass.class);
+    if (psiClass == null) {
+      return;
+    }
+    PsiClass anno = findSubscribeAnnotation(psiClass);
+    if (anno == null) {
+      return;
+    }
+    PsiElementProcessor.CollectElements<PsiMember> collector = new PsiElementProcessor.CollectElements<>();
+    if (!ProgressManager.getInstance().runProcessWithProgressSynchronously(() ->
+    {
 
-			createQuery(psiClass, anno).forEach(new PsiElementProcessorAdapter<>(collector));
-		}, "Searching event methods", true, psiClass.getProject(), (JComponent) e.getComponent()))
-		{
-			return;
-		}
+      createQuery(psiClass, anno).forEach(new PsiElementProcessorAdapter<>(collector));
+    }, "Searching event methods", true, psiClass.getProject(), (JComponent) e.getComponent())) {
+      return;
+    }
 
-		Collection<PsiMember> collection = collector.getCollection();
-		PsiElementListNavigator.openTargets(e, collection.toArray(new NavigatablePsiElement[collection.size()]), "Event Methods", "Event Methods", new DefaultPsiElementCellRenderer());
-	};
+    Collection<PsiMember> collection = collector.getCollection();
+    PsiElementListNavigator.openTargets(e, collection.toArray(new NavigatablePsiElement[collection.size()]), "Event Methods", "Event Methods", new DefaultPsiElementCellRenderer());
+  };
 
-	private static final GutterIconNavigationHandler<PsiElement> ourMethodNavigator = (e, elt) ->
-	{
-		PsiMethod psiMethod = PsiTreeUtil.getParentOfType(elt, PsiMethod.class);
-		if(psiMethod == null)
-		{
-			return;
-		}
+  private static final GutterIconNavigationHandler<PsiElement> ourMethodNavigator = (e, elt) ->
+  {
+    PsiMethod psiMethod = PsiTreeUtil.getParentOfType(elt, PsiMethod.class);
+    if (psiMethod == null) {
+      return;
+    }
 
-		PsiParameter[] parameters = psiMethod.getParameterList().getParameters();
-		if(parameters.length == 1)
-		{
-			PsiParameter psiParameter = parameters[0];
-			PsiType type = psiParameter.getType();
-			if(type instanceof PsiClassType)
-			{
-				PsiClass resolvedClas = ((PsiClassType) type).resolve();
-				if(resolvedClas != null)
-				{
-					resolvedClas.navigate(true);
-				}
-			}
-		}
-	};
+    PsiParameter[] parameters = psiMethod.getParameterList().getParameters();
+    if (parameters.length == 1) {
+      PsiParameter psiParameter = parameters[0];
+      PsiType type = psiParameter.getType();
+      if (type instanceof PsiClassType) {
+        PsiClass resolvedClas = ((PsiClassType) type).resolve();
+        if (resolvedClas != null) {
+          resolvedClas.navigate(true);
+        }
+      }
+    }
+  };
 
-	@RequiredReadAction
-	@Nullable
-	@Override
-	public LineMarkerInfo getLineMarkerInfo(@Nonnull PsiElement element)
-	{
-		PsiElement parent;
-		if(element instanceof PsiIdentifier && (parent = element.getParent()) instanceof PsiClass)
-		{
-			PsiClass annotation = findSubscribeAnnotation(element);
-			if(annotation == null)
-			{
-				return null;
-			}
+  @RequiredReadAction
+  @Nullable
+  @Override
+  public LineMarkerInfo getLineMarkerInfo(@Nonnull PsiElement element) {
+    PsiElement parent;
+    if (element instanceof PsiIdentifier && (parent = element.getParent()) instanceof PsiClass) {
+      PsiClass annotation = findSubscribeAnnotation(element);
+      if (annotation == null) {
+        return null;
+      }
 
-			if(createQuery((PsiClass) parent, annotation).findFirst() != null)
-			{
-				return new LineMarkerInfo<>(element, element.getTextRange(), JavaIcons.Gutter.EventMethod, Pass.LINE_MARKERS, Functions.constant("Event Object"), ourClassNavigator,
-						GutterIconRenderer.Alignment.RIGHT);
-			}
-		}
-		else if(element instanceof PsiIdentifier && (parent = element.getParent()) instanceof PsiMethod)
-		{
-			PsiClass annotation = findSubscribeAnnotation(element);
-			if(annotation == null)
-			{
-				return null;
-			}
+      if (createQuery((PsiClass) parent, annotation).findFirst() != null) {
+        return new LineMarkerInfo<>(element, element.getTextRange(), JavaIcons.Gutter.EventMethod, Pass.LINE_MARKERS, Functions.constant("Event Object"), ourClassNavigator,
+            GutterIconRenderer.Alignment.RIGHT);
+      }
+    } else if (element instanceof PsiIdentifier && (parent = element.getParent()) instanceof PsiMethod) {
+      PsiClass annotation = findSubscribeAnnotation(element);
+      if (annotation == null) {
+        return null;
+      }
 
-			PsiMethod method = (PsiMethod) parent;
-			if(!method.hasModifierProperty(PsiModifier.STATIC))
-			{
-				PsiParameterList parameterList = method.getParameterList();
-				PsiParameter[] parameters = parameterList.getParameters();
-				if(parameters.length == 1 && parameters[0].getType() instanceof PsiClassType && AnnotationUtil.isAnnotated(method, GuavaLibrary.Subscribe, false))
-				{
-					return new LineMarkerInfo<>(element, element.getTextRange(), JavaIcons.Gutter.EventMethod, Pass.LINE_MARKERS, Functions.constant("Event Method"), ourMethodNavigator,
-							GutterIconRenderer.Alignment.RIGHT);
-				}
-			}
-		}
-		return null;
-	}
+      PsiMethod method = (PsiMethod) parent;
+      if (!method.hasModifierProperty(PsiModifier.STATIC)) {
+        PsiParameterList parameterList = method.getParameterList();
+        PsiParameter[] parameters = parameterList.getParameters();
+        if (parameters.length == 1 && parameters[0].getType() instanceof PsiClassType && AnnotationUtil.isAnnotated(method, GuavaLibrary.Subscribe, false)) {
+          return new LineMarkerInfo<>(element, element.getTextRange(), JavaIcons.Gutter.EventMethod, Pass.LINE_MARKERS, Functions.constant("Event Method"), ourMethodNavigator,
+              GutterIconRenderer.Alignment.RIGHT);
+        }
+      }
+    }
+    return null;
+  }
 
-	@Nonnull
-	private static Query<PsiMember> createQuery(@Nonnull PsiClass target, @Nonnull PsiClass annClass)
-	{
-		PsiImmediateClassType type = new PsiImmediateClassType(target, PsiSubstitutor.EMPTY);
-		return new FilteredQuery<>(AnnotatedMembersSearch.search(annClass), psiMember -> ReadAction.compute(() ->
-		{
-			if(psiMember instanceof PsiMethod && !psiMember.hasModifierProperty(PsiModifier.STATIC))
-			{
-				PsiParameterList parameterList = ((PsiMethod) psiMember).getParameterList();
-				PsiParameter[] parameters = parameterList.getParameters();
-				if(parameters.length == 1 && parameters[0].getType().equals(type))
-				{
-					return true;
-				}
-			}
-			return false;
-		}));
-	}
+  @Nonnull
+  private static Query<PsiMember> createQuery(@Nonnull PsiClass target, @Nonnull PsiClass annClass) {
+    PsiImmediateClassType type = new PsiImmediateClassType(target, PsiSubstitutor.EMPTY);
+    return new FilteredQuery<>(AnnotatedMembersSearch.search(annClass), psiMember -> ReadAction.compute(() ->
+    {
+      if (psiMember instanceof PsiMethod && !psiMember.hasModifierProperty(PsiModifier.STATIC)) {
+        PsiParameterList parameterList = ((PsiMethod) psiMember).getParameterList();
+        PsiParameter[] parameters = parameterList.getParameters();
+        if (parameters.length == 1 && parameters[0].getType().equals(type)) {
+          return true;
+        }
+      }
+      return false;
+    }));
+  }
 
-	@Nullable
-	private static PsiClass findSubscribeAnnotation(@Nonnull PsiElement element)
-	{
-		return CachedValuesManager.getCachedValue(element, () ->
-		{
-			PsiClass javaClass = JavaPsiFacade.getInstance(element.getProject()).findClass(GuavaLibrary.Subscribe, element.getResolveScope());
-			return CachedValueProvider.Result.create(javaClass, ProjectRootManager.getInstance(element.getProject()));
-		});
-	}
+  @Nullable
+  private static PsiClass findSubscribeAnnotation(@Nonnull PsiElement element) {
+    return LanguageCachedValueUtil.getCachedValue(element, () ->
+    {
+      PsiClass javaClass = JavaPsiFacade.getInstance(element.getProject()).findClass(GuavaLibrary.Subscribe, element.getResolveScope());
+      return CachedValueProvider.Result.create(javaClass, ProjectRootManager.getInstance(element.getProject()));
+    });
+  }
+
+  @Nonnull
+  @Override
+  public Language getLanguage() {
+    return JavaLanguage.INSTANCE;
+  }
 }

@@ -25,8 +25,8 @@ import com.intellij.java.analysis.impl.codeInspection.reference.RefMethodImpl;
 import com.intellij.java.impl.codeInspection.reference.RefFieldImpl;
 import com.intellij.java.language.impl.psi.controlFlow.*;
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.PsiElement;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.language.psi.PsiElement;
+import consulo.util.collection.ContainerUtil;
 
 import javax.annotation.Nonnull;
 import java.util.*;

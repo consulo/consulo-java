@@ -15,9 +15,10 @@
  */
 package com.intellij.jam;
 
-import com.intellij.openapi.components.ServiceManager;
-import com.intellij.psi.PsiElementRef;
-import com.intellij.util.NotNullFunction;
+import consulo.ide.ServiceManager;
+import consulo.language.psi.PsiElementRef;
+
+import java.util.function.Function;
 
 /**
  * @author peter
@@ -28,6 +29,6 @@ public abstract class JamClassGenerator {
     return ServiceManager.getService(JamClassGenerator.class);
   }
 
-  public abstract <T> NotNullFunction<PsiElementRef, T> generateJamElementFactory(Class<T> aClass);
+  public abstract <T> Function<PsiElementRef, T> generateJamElementFactory(Class<T> aClass);
 
 }

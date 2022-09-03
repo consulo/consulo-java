@@ -18,22 +18,23 @@ package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 import java.util.List;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.intellij.java.language.psi.*;
 import org.jetbrains.annotations.NonNls;
 import com.intellij.java.impl.codeInsight.ExpectedTypeInfo;
-import com.intellij.codeInsight.FileModificationService;
-import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Pair;
+import consulo.language.editor.FileModificationService;
+import consulo.language.editor.inspection.LocalQuickFixAndIntentionActionOnPsiElement;
+import consulo.codeEditor.Editor;
+import consulo.project.Project;
+import consulo.util.lang.Pair;
 import com.intellij.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
-import com.intellij.psi.util.PsiFormatUtilBase;
-import com.intellij.util.Function;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.ide.impl.psi.util.PsiFormatUtilBase;
+import consulo.ide.impl.idea.util.Function;
+import consulo.language.util.IncorrectOperationException;
+import consulo.util.collection.ContainerUtil;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 
 public class CreateMethodQuickFix extends LocalQuickFixAndIntentionActionOnPsiElement {
@@ -69,7 +70,7 @@ public class CreateMethodQuickFix extends LocalQuickFixAndIntentionActionOnPsiEl
   @Override
   public void invoke(@Nonnull Project project,
                      @Nonnull PsiFile file,
-                     @javax.annotation.Nullable Editor editor,
+                     @Nullable Editor editor,
                      @Nonnull PsiElement startElement,
                      @Nonnull PsiElement endElement) {
     PsiClass myTargetClass = (PsiClass)startElement;
@@ -98,7 +99,7 @@ public class CreateMethodQuickFix extends LocalQuickFixAndIntentionActionOnPsiEl
     return elementFactory.createMethodFromText(methodText, null);
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public static CreateMethodQuickFix createFix(@Nonnull PsiClass targetClass, @NonNls final String signature, @NonNls final String body) {
     CreateMethodQuickFix fix = new CreateMethodQuickFix(targetClass, signature, body);
     try {

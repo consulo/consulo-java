@@ -23,7 +23,7 @@ import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMember;
 import com.intellij.java.impl.refactoring.listeners.JavaRefactoringListenerManager;
 import com.intellij.java.impl.refactoring.listeners.MoveMemberListener;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.util.collection.ContainerUtil;
 
 /**
  * @author yole

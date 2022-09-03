@@ -2,9 +2,9 @@ package com.intellij.codeInsight.daemon.quickFix;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.codeInsight.CodeInsightSettings;
-import com.intellij.codeInsight.intention.IntentionAction;
-import com.intellij.codeInspection.LocalInspectionTool;
+import consulo.language.editor.CodeInsightSettings;
+import consulo.language.editor.intention.IntentionAction;
+import consulo.language.editor.inspection.LocalInspectionTool;
 import com.intellij.java.analysis.impl.codeInspection.unusedImport.UnusedImportLocalInspection;
 
 

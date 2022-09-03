@@ -20,7 +20,7 @@ import java.util.Arrays;
 import javax.annotation.Nonnull;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.util.Comparing;
+import consulo.util.lang.Comparing;
 import com.intellij.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.util.InheritanceUtil;
@@ -28,7 +28,7 @@ import com.intellij.java.language.psi.util.TypeConversionUtil;
 import com.intellij.java.impl.refactoring.typeMigration.TypeConversionDescriptorBase;
 import com.intellij.java.impl.refactoring.typeMigration.TypeEvaluator;
 import com.intellij.java.impl.refactoring.typeMigration.TypeMigrationLabeler;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
 import com.intellij.java.impl.ig.style.UnnecessarilyQualifiedStaticUsageInspection;
 
 /**

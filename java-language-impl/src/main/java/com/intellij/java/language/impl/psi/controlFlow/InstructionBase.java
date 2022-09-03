@@ -17,24 +17,20 @@
 package com.intellij.java.language.impl.psi.controlFlow;
 
 import org.jetbrains.annotations.NonNls;
+
 import javax.annotation.Nonnull;
 
-public abstract class InstructionBase implements Instruction, Cloneable
-{
-	@Nonnull
-	@Override
-	public Instruction clone()
-	{
-		try
-		{
-			return (Instruction) super.clone();
-		}
-		catch(CloneNotSupportedException e)
-		{
-			throw new RuntimeException(e);
-		}
-	}
+public abstract class InstructionBase implements Instruction, Cloneable {
+  @Nonnull
+  @Override
+  public Instruction clone() {
+    try {
+      return (Instruction) super.clone();
+    } catch (CloneNotSupportedException e) {
+      throw new RuntimeException(e);
+    }
+  }
 
-	@NonNls
-	public abstract String toString();
+  @NonNls
+  public abstract String toString();
 }

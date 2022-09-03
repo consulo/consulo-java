@@ -3,36 +3,34 @@ package com.intellij.java.language.impl.psi.impl.light;
 
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.psi.*;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.SyntheticElement;
+
 import javax.annotation.Nonnull;
 
-public class LightRecordCanonicalConstructor extends LightMethod implements SyntheticElement
-{
-	public LightRecordCanonicalConstructor(@Nonnull PsiMethod method,
-										   @Nonnull PsiClass containingClass)
-	{
-		super(method.getManager(), method, containingClass);
-	}
+public class LightRecordCanonicalConstructor extends LightMethod implements SyntheticElement {
+  public LightRecordCanonicalConstructor(@Nonnull PsiMethod method,
+                                         @Nonnull PsiClass containingClass) {
+    super(method.getManager(), method, containingClass);
+  }
 
-	@Override
-	public int getTextOffset()
-	{
-		return getNavigationElement().getTextOffset();
-	}
+  @Override
+  public int getTextOffset() {
+    return getNavigationElement().getTextOffset();
+  }
 
-	@Nonnull
-	@Override
-	public PsiElement getNavigationElement()
-	{
-		return getContainingClass();
-	}
+  @Nonnull
+  @Override
+  public PsiElement getNavigationElement() {
+    return getContainingClass();
+  }
 
-	@Override
-	public PsiFile getContainingFile()
-	{
-		PsiClass containingClass = getContainingClass();
-		return containingClass.getContainingFile();
-	}
+  @Override
+  public PsiFile getContainingFile() {
+    PsiClass containingClass = getContainingClass();
+    return containingClass.getContainingFile();
+  }
 
 //	@Override
 //	public Icon getElementIcon(final int flags)
@@ -46,9 +44,8 @@ public class LightRecordCanonicalConstructor extends LightMethod implements Synt
 //		return baseIcon;
 //	}
 
-	@Override
-	public PsiElement getContext()
-	{
-		return getContainingClass();
-	}
+  @Override
+  public PsiElement getContext() {
+    return getContainingClass();
+  }
 }

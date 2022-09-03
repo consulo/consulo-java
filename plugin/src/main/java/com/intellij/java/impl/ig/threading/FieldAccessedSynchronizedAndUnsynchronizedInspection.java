@@ -18,8 +18,8 @@ package com.intellij.java.impl.ig.threading;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiModifier;
-import com.intellij.psi.PsiElement;
-import com.intellij.codeInspection.ui.SingleCheckboxOptionsPanel;
+import consulo.language.psi.PsiElement;
+import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
@@ -27,6 +27,7 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.intellij.java.impl.ig.fixes.MakeFieldFinalFix;
 import javax.annotation.Nonnull;
 
+import javax.annotation.Nullable;
 import javax.swing.*;
 import java.util.Set;
 
@@ -53,7 +54,7 @@ public class FieldAccessedSynchronizedAndUnsynchronizedInspection
   }
 
   @Override
-  @javax.annotation.Nullable
+  @Nullable
   public JComponent createOptionsPanel() {
     return new SingleCheckboxOptionsPanel(
       InspectionGadgetsBundle.message(

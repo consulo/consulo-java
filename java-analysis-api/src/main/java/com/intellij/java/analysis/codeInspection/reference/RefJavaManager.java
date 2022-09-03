@@ -20,9 +20,9 @@
  */
 package com.intellij.java.analysis.codeInspection.reference;
 
-import com.intellij.codeInspection.lang.RefManagerExtension;
+import consulo.language.editor.inspection.reference.RefManagerExtension;
 import com.intellij.java.analysis.codeInspection.ex.EntryPointsManager;
-import com.intellij.lang.Language;
+import consulo.language.Language;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;

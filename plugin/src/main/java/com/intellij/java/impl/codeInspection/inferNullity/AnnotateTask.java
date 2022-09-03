@@ -16,11 +16,11 @@
 package com.intellij.java.impl.codeInspection.inferNullity;
 
 import com.intellij.java.language.codeInsight.NullableNotNullManager;
-import com.intellij.openapi.progress.ProgressIndicator;
-import com.intellij.openapi.project.Project;
-import com.intellij.usageView.UsageInfo;
-import com.intellij.util.SequentialModalProgressTask;
-import com.intellij.util.SequentialTask;
+import consulo.application.progress.ProgressIndicator;
+import consulo.project.Project;
+import consulo.usage.UsageInfo;
+import consulo.ide.impl.idea.util.SequentialModalProgressTask;
+import consulo.ide.impl.idea.util.SequentialTask;
 
 class AnnotateTask implements SequentialTask
 {

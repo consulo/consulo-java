@@ -22,13 +22,13 @@ import java.util.Collections;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import com.intellij.codeInsight.CodeInsightBundle;
-import com.intellij.codeInsight.intention.IntentionAction;
+import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.intention.IntentionAction;
 import com.intellij.java.analysis.codeInsight.intention.QuickFixFactory;
-import com.intellij.codeInspection.LocalQuickFix;
-import com.intellij.ide.TypePresentationService;
+import consulo.language.editor.inspection.LocalQuickFix;
+import consulo.application.presentation.TypePresentationService;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiMember;
 import com.intellij.java.language.psi.PsiMethod;

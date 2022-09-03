@@ -15,29 +15,32 @@
  */
 package com.intellij.jam;
 
-import static com.intellij.java.language.patterns.PsiJavaPatterns.psiLiteral;
-import static com.intellij.java.language.patterns.PsiJavaPatterns.psiNameValuePair;
-
-import java.util.List;
-
-import javax.annotation.Nonnull;
-
-import com.intellij.codeInsight.completion.CompletionUtil;
 import com.intellij.jam.reflect.JamAnnotationMeta;
 import com.intellij.jam.reflect.JamAttributeMeta;
 import com.intellij.jam.reflect.JamStringAttributeMeta;
+import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.patterns.PsiJavaElementPattern;
 import com.intellij.java.language.patterns.PsiJavaPatterns;
 import com.intellij.java.language.patterns.PsiNameValuePairPattern;
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.*;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.ProcessingContext;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.Language;
+import consulo.language.editor.completion.CompletionUtilCore;
+import consulo.language.psi.*;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.ProcessingContext;
+import consulo.util.collection.ContainerUtil;
+
+import javax.annotation.Nonnull;
+import java.util.List;
+
+import static com.intellij.java.language.patterns.PsiJavaPatterns.psiLiteral;
+import static com.intellij.java.language.patterns.PsiJavaPatterns.psiNameValuePair;
 
 /**
  * @author peter
  */
+@ExtensionImpl
 public class JamReferenceContributor extends PsiReferenceContributor {
   private static final PsiNameValuePairPattern NAME_VALUE_PAIR = psiNameValuePair().withParent(PsiAnnotationParameterList.class);
   public static final PsiJavaElementPattern.Capture<PsiLiteral> STRING_IN_ANNO = psiLiteral().withParent(
@@ -52,7 +55,7 @@ public class JamReferenceContributor extends PsiReferenceContributor {
       public PsiReference[] getReferencesByElement(@Nonnull PsiElement element, @Nonnull ProcessingContext context) {
         final PsiNameValuePair pair = PsiTreeUtil.getParentOfType(element, PsiNameValuePair.class);
         final PsiAnnotation anno = (PsiAnnotation)pair.getParent().getParent();
-        final PsiAnnotation originalAnno = CompletionUtil.getOriginalOrSelf(anno);
+        final PsiAnnotation originalAnno = anno == null ? null :  CompletionUtilCore.getOriginalElement(anno);
         final JamService service = JamService.getJamService(pair.getProject());
         final JamAnnotationMeta annotationMeta = service.getMeta(originalAnno);
         if (annotationMeta != null) {
@@ -80,4 +83,9 @@ public class JamReferenceContributor extends PsiReferenceContributor {
     });
   }
 
+  @Nonnull
+  @Override
+  public Language getLanguage() {
+    return JavaLanguage.INSTANCE;
+  }
 }

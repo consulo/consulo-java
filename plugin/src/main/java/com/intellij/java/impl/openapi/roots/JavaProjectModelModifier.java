@@ -17,11 +17,11 @@ package com.intellij.java.impl.openapi.roots;
 
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.projectRoots.roots.ExternalLibraryDescriptor;
-import com.intellij.openapi.extensions.ExtensionPointName;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.roots.DependencyScope;
-import com.intellij.openapi.roots.libraries.Library;
-import com.intellij.openapi.util.AsyncResult;
+import consulo.component.extension.ExtensionPointName;
+import consulo.module.Module;
+import consulo.module.content.layer.orderEntry.DependencyScope;
+import consulo.content.library.Library;
+import consulo.util.concurrent.AsyncResult;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -59,7 +59,7 @@ public abstract class JavaProjectModelModifier {
    * @return {@link AsyncResult} instance if dependencies of these modules can be handled by this dependencies management system or
    * {@code null} otherwise
    */
-  @javax.annotation.Nullable
+  @Nullable
   public abstract AsyncResult<Void> addExternalLibraryDependency(@Nonnull Collection<Module> modules, @Nonnull ExternalLibraryDescriptor descriptor, @Nonnull DependencyScope scope);
 
   /**
@@ -82,6 +82,6 @@ public abstract class JavaProjectModelModifier {
    *
    * @return {@link AsyncResult} instance if language level can be set by this dependencies management system or {@code null} otherwise
    */
-  @javax.annotation.Nullable
+  @Nullable
   public abstract AsyncResult<Void> changeLanguageLevel(@Nonnull Module module, @Nonnull LanguageLevel level);
 }

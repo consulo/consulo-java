@@ -15,12 +15,10 @@
  */
 package com.intellij.java.impl.refactoring.extractMethod;
 
-import com.intellij.diff.DiffContentFactory;
-import com.intellij.diff.DiffManager;
-import com.intellij.diff.DiffRequestPanel;
+import consulo.diff.*;
 import com.intellij.diff.contents.DocumentContent;
-import com.intellij.diff.requests.SimpleDiffRequest;
-import com.intellij.diff.util.DiffUserDataKeys;
+import consulo.diff.request.SimpleDiffRequest;
+import consulo.diff.DiffUserDataKeys;
 import com.intellij.java.analysis.impl.codeInsight.JavaPsiEquivalenceUtil;
 import com.intellij.java.analysis.impl.refactoring.extractMethod.InputVariables;
 import com.intellij.java.analysis.impl.refactoring.extractMethod.ParametersFolder;
@@ -31,29 +29,31 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.command.WriteCommandAction;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.DialogWrapper;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiDocumentManager;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.codeStyle.SuggestedNameInfo;
-import com.intellij.psi.search.LocalSearchScope;
-import com.intellij.psi.search.searches.ReferencesSearch;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.PsiUtilCore;
+import consulo.application.ApplicationManager;
+import consulo.language.editor.WriteCommandAction;
+import consulo.project.Project;
+import consulo.ui.ex.awt.DialogWrapper;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.language.psi.PsiDocumentManager;
+import consulo.language.psi.PsiElement;
+import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
+import consulo.language.psi.scope.LocalSearchScope;
+import consulo.language.psi.search.ReferencesSearch;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.psi.PsiUtilCore;
 import com.intellij.java.impl.refactoring.util.RefactoringUtil;
 import com.intellij.java.impl.refactoring.util.duplicates.MethodDuplicatesHandler;
-import com.intellij.ui.IdeBorderFactory;
-import com.intellij.util.text.UniqueNameGenerator;
-import com.intellij.util.ui.JBUI;
+import consulo.ui.ex.awt.IdeBorderFactory;
+import consulo.component.util.text.UniqueNameGenerator;
+import consulo.ui.ex.awt.JBUI;
+import consulo.diff.DiffRequestPanel;
 import consulo.logging.Logger;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.util.collection.HashingStrategy;
 import consulo.util.collection.Maps;
 import consulo.util.collection.Sets;
 
+import javax.annotation.Nullable;
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
@@ -128,7 +128,7 @@ public class ExtractMethodSignatureSuggester {
     return myVariableData;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public List<Match> findDuplicatesSignature(final PsiMethod method, ParametersFolder folder) {
     final List<PsiExpression> copies = new ArrayList<PsiExpression>();
     final InputVariables variables = detectTopLevelExpressionsToReplaceWithParameters(copies);
@@ -293,7 +293,7 @@ public class ExtractMethodSignatureSuggester {
   }
 
 
-  @javax.annotation.Nullable
+  @Nullable
   private InputVariables detectTopLevelExpressionsToReplaceWithParameters(List<PsiExpression> copies) {
     final PsiParameter[] parameters = myExtractedMethod.getParameterList().getParameters();
     final List<PsiVariable> inputVariables = new ArrayList<PsiVariable>(Arrays.asList(parameters));
@@ -387,14 +387,14 @@ public class ExtractMethodSignatureSuggester {
       init();
     }
 
-    @javax.annotation.Nullable
+    @Nullable
     @Override
     protected JComponent createNorthPanel() {
       return new JLabel("<html><b>No exact method duplicates were found</b>, though changed method as shown below has " + myDuplicatesNumber + " duplicate" + (myDuplicatesNumber > 1 ? "s" :
           "") + " </html>");
     }
 
-    @javax.annotation.Nullable
+    @Nullable
     @Override
     @RequiredUIAccess
     protected JComponent createCenterPanel() {

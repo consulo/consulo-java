@@ -18,8 +18,9 @@ package com.intellij.java.language;
 import java.util.Arrays;
 
 import javax.annotation.Nonnull;
-import com.intellij.lang.Language;
-import consulo.lang.LanguageVersion;
+
+import consulo.language.version.LanguageVersion;
+import consulo.language.Language;
 
 /**
  * @author max

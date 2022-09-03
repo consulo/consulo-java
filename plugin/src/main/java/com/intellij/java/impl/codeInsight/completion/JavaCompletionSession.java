@@ -15,16 +15,17 @@
  */
 package com.intellij.java.impl.codeInsight.completion;
 
-import com.intellij.codeInsight.completion.CompletionResultSet;
-import com.intellij.codeInsight.completion.PrefixMatcher;
-import com.intellij.codeInsight.lookup.AutoCompletionPolicy;
-import com.intellij.codeInsight.lookup.LookupElement;
+import consulo.language.editor.completion.CompletionResultSet;
+import consulo.application.util.matcher.PrefixMatcher;
+import consulo.language.editor.completion.AutoCompletionPolicy;
+import consulo.language.editor.completion.lookup.LookupElement;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.util.containers.ContainerUtil;
-import com.intellij.util.containers.MultiMap;
+import consulo.util.collection.ContainerUtil;
+import consulo.util.collection.MultiMap;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
@@ -67,7 +68,7 @@ public class JavaCompletionSession {
     return myResult.getPrefixMatcher();
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private static PsiClass extractClass(LookupElement lookupElement) {
     final Object object = lookupElement.getObject();
     if (object instanceof PsiClass) {
@@ -83,7 +84,7 @@ public class JavaCompletionSession {
     ContainerUtil.addIfNotNull(myAddedClasses, getClassName(psiClass));
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private static String getClassName(@Nonnull PsiClass psiClass) {
     String name = psiClass.getQualifiedName();
     return name == null ? psiClass.getName() : name;

@@ -15,22 +15,23 @@
  */
 package com.intellij.java.impl.codeInsight.template.postfix.templates;
 
-import com.intellij.codeInsight.template.Template;
-import com.intellij.codeInsight.template.TemplateManager;
-import com.intellij.codeInsight.template.impl.MacroCallNode;
-import com.intellij.codeInsight.template.postfix.templates.PostfixTemplate;
-import com.intellij.codeInsight.template.postfix.templates.PostfixTemplatesUtils;
+import consulo.language.editor.template.Template;
+import consulo.language.editor.template.TemplateManager;
+import consulo.language.editor.template.macro.MacroCallNode;
+import consulo.language.editor.postfixTemplate.PostfixTemplate;
+import consulo.language.editor.postfixTemplate.PostfixTemplatesUtils;
 import com.intellij.java.impl.codeInsight.template.macro.SuggestVariableNameMacro;
 import com.intellij.java.impl.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiType;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Pair;
-import com.intellij.psi.PsiElement;
+import consulo.document.Document;
+import consulo.codeEditor.Editor;
+import consulo.project.Project;
+import consulo.util.lang.Pair;
+import consulo.language.psi.PsiElement;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public abstract class ForIndexedPostfixTemplate extends PostfixTemplate {
   protected ForIndexedPostfixTemplate(@Nonnull String key, @Nonnull String example) {
@@ -87,13 +88,13 @@ public abstract class ForIndexedPostfixTemplate extends PostfixTemplate {
   @Nonnull
   protected abstract String getComparativeSign(@Nonnull PsiExpression expr);
 
-  @javax.annotation.Nullable
+  @Nullable
   protected abstract Pair<String, String> calculateBounds(@Nonnull PsiExpression expression);
 
   @Nonnull
   protected abstract String getOperator();
 
-  @javax.annotation.Nullable
+  @Nullable
   protected static String getExpressionBound(@Nonnull PsiExpression expr) {
     PsiType type = expr.getType();
     if (JavaPostfixTemplatesUtils.isNumber(type)) {

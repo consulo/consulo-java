@@ -1,9 +1,9 @@
 package com.intellij.codeInspection;
 
 import com.intellij.java.impl.codeInspection.ex.EntryPointsManagerImpl;
-import com.intellij.codeInspection.reference.SmartRefElementPointer;
-import com.intellij.openapi.util.JDOMExternalizableStringList;
-import com.intellij.openapi.util.JDOMUtil;
+import consulo.ide.impl.idea.codeInspection.reference.SmartRefElementPointer;
+import consulo.util.xml.serializer.JDOMExternalizableStringList;
+import consulo.util.jdom.JDOMUtil;
 import java.util.HashMap;
 import junit.framework.TestCase;
 import org.jdom.Element;

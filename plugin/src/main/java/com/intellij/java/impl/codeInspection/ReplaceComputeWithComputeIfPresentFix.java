@@ -1,13 +1,13 @@
 // Copyright 2000-2018 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.impl.codeInspection;
 
-import com.intellij.codeInsight.intention.HighPriorityAction;
-import com.intellij.codeInspection.LocalQuickFix;
-import com.intellij.codeInspection.ProblemDescriptor;
+import consulo.language.editor.intention.HighPriorityAction;
+import consulo.language.editor.inspection.LocalQuickFix;
+import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.project.Project;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.siyeh.ig.callMatcher.CallMatcher;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import consulo.java.analysis.impl.codeInsight.JavaInspectionsBundle;
@@ -15,7 +15,7 @@ import org.jetbrains.annotations.Contract;
 
 import javax.annotation.Nonnull;
 
-import static com.intellij.util.ObjectUtils.tryCast;
+import static consulo.ide.impl.idea.util.ObjectUtils.tryCast;
 
 public class ReplaceComputeWithComputeIfPresentFix implements LocalQuickFix, HighPriorityAction {
   private static final CallMatcher MAP_COMPUTE = CallMatcher.instanceCall(CommonClassNames.JAVA_UTIL_MAP, "compute").

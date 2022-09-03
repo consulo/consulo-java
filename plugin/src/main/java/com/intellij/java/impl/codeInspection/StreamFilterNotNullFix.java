@@ -15,20 +15,20 @@
  */
 package com.intellij.java.impl.codeInspection;
 
-import com.intellij.codeInsight.intention.HighPriorityAction;
-import com.intellij.codeInspection.LocalQuickFix;
-import com.intellij.codeInspection.ProblemDescriptor;
+import consulo.language.editor.intention.HighPriorityAction;
+import consulo.language.editor.inspection.LocalQuickFix;
+import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.analysis.impl.codeInspection.LambdaCanBeMethodReferenceInspection;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.codeStyle.SuggestedNameInfo;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.ArrayUtil;
+import consulo.project.Project;
+import consulo.language.psi.PsiElement;
+import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.util.collection.ArrayUtil;
 import com.siyeh.ig.psiutils.StreamApiUtil;
 import consulo.java.analysis.impl.codeInsight.JavaInspectionsBundle;
 import consulo.java.language.module.util.JavaClassNames;
@@ -36,7 +36,7 @@ import consulo.java.language.module.util.JavaClassNames;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import static com.intellij.util.ObjectUtil.tryCast;
+import static consulo.util.lang.ObjectUtil.tryCast;
 
 public class StreamFilterNotNullFix implements LocalQuickFix, HighPriorityAction {
   @Override

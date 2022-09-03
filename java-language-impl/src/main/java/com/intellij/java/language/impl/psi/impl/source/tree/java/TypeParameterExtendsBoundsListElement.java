@@ -15,34 +15,29 @@
  */
 package com.intellij.java.language.impl.psi.impl.source.tree.java;
 
-import com.intellij.lang.ASTNode;
-import com.intellij.java.language.psi.JavaTokenType;
-import com.intellij.java.language.psi.PsiKeyword;
 import com.intellij.java.language.impl.psi.impl.source.tree.ChildRole;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
-import com.intellij.psi.tree.ChildRoleBase;
-import com.intellij.psi.tree.IElementType;
+import com.intellij.java.language.psi.JavaTokenType;
+import com.intellij.java.language.psi.PsiKeyword;
+import consulo.language.ast.ASTNode;
+import consulo.language.ast.ChildRoleBase;
+import consulo.language.ast.IElementType;
 
-public class TypeParameterExtendsBoundsListElement extends ReferenceListElement
-{
-	public TypeParameterExtendsBoundsListElement()
-	{
-		super(JavaElementType.EXTENDS_BOUND_LIST, JavaTokenType.EXTENDS_KEYWORD, PsiKeyword.EXTENDS, JavaTokenType.AND, "&");
-	}
+public class TypeParameterExtendsBoundsListElement extends ReferenceListElement {
+  public TypeParameterExtendsBoundsListElement() {
+    super(JavaElementType.EXTENDS_BOUND_LIST, JavaTokenType.EXTENDS_KEYWORD, PsiKeyword.EXTENDS, JavaTokenType.AND, "&");
+  }
 
-	@Override
-	public int getChildRole(ASTNode child)
-	{
-		assert child.getTreeParent() == this : child;
-		IElementType childType = child.getElementType();
-		if(childType == JavaTokenType.AND)
-		{
-			return ChildRole.AMPERSAND_IN_BOUNDS_LIST;
-		}
-		if(childType == JavaElementType.JAVA_CODE_REFERENCE)
-		{
-			return ChildRole.BASE_CLASS_REFERENCE;
-		}
-		return ChildRoleBase.NONE;
-	}
+  @Override
+  public int getChildRole(ASTNode child) {
+    assert child.getTreeParent() == this : child;
+    IElementType childType = child.getElementType();
+    if (childType == JavaTokenType.AND) {
+      return ChildRole.AMPERSAND_IN_BOUNDS_LIST;
+    }
+    if (childType == JavaElementType.JAVA_CODE_REFERENCE) {
+      return ChildRole.BASE_CLASS_REFERENCE;
+    }
+    return ChildRoleBase.NONE;
+  }
 }

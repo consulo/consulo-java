@@ -17,18 +17,18 @@ package com.intellij.java.impl.codeInsight.generation.ui;
 
 import com.intellij.java.impl.codeInsight.generation.EqualsHashCodeTemplatesManager;
 import com.intellij.java.impl.codeInsight.generation.GenerateEqualsHelper;
-import com.intellij.openapi.options.ConfigurationException;
-import com.intellij.openapi.options.UnnamedConfigurable;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.NamedItemsListEditor;
+import consulo.configurable.ConfigurationException;
+import consulo.configurable.UnnamedConfigurable;
+import consulo.project.Project;
+import consulo.ide.impl.idea.openapi.ui.NamedItemsListEditor;
 import com.intellij.openapi.ui.Namer;
-import com.intellij.openapi.ui.Splitter;
+import consulo.ui.ex.awt.Splitter;
 import com.intellij.openapi.util.Cloner;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.openapi.util.Couple;
-import com.intellij.openapi.util.Factory;
-import com.intellij.ui.TitledSeparator;
-import com.intellij.util.ui.JBUI;
+import consulo.ui.ex.awt.TitledSeparator;
+import consulo.util.lang.Comparing;
+import consulo.util.lang.Couple;
+import consulo.language.impl.ast.Factory;
+import consulo.ui.ex.awt.JBUI;
 import consulo.util.collection.HashingStrategy;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
@@ -36,6 +36,7 @@ import org.jetbrains.java.generate.template.TemplateResource;
 import org.jetbrains.java.generate.view.GenerateTemplateConfigurable;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
@@ -140,7 +141,7 @@ public class EqualsHashCodeTemplatesPanel extends NamedItemsListEditor<Couple<Te
 	}
 
 	@Override
-	@javax.annotation.Nullable
+	@Nullable
 	@NonNls
 	public String getHelpTopic()
 	{
@@ -166,7 +167,7 @@ public class EqualsHashCodeTemplatesPanel extends NamedItemsListEditor<Couple<Te
 		final GenerateTemplateConfigurable hashCodeConfigurable = new GenerateTemplateConfigurable(item.second, GenerateEqualsHelper.getHashCodeImplicitVars(), myProject);
 		return new UnnamedConfigurable()
 		{
-			@javax.annotation.Nullable
+			@Nullable
 			@Override
 			public JComponent createComponent()
 			{

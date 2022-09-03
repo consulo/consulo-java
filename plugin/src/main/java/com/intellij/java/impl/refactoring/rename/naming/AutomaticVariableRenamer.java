@@ -19,15 +19,15 @@ import com.intellij.java.impl.psi.impl.source.tree.StdTokenSets;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
-import com.intellij.lang.ASTNode;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiNamedElement;
-import com.intellij.psi.impl.source.tree.TreeUtil;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.refactoring.RefactoringBundle;
-import com.intellij.refactoring.rename.naming.AutomaticRenamer;
-import com.intellij.usageView.UsageInfo;
+import consulo.language.ast.ASTNode;
+import consulo.util.lang.StringUtil;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiNamedElement;
+import consulo.language.impl.ast.TreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.rename.AutomaticRenamer;
+import consulo.usage.UsageInfo;
 
 import java.util.*;
 

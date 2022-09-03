@@ -17,12 +17,12 @@ package com.intellij.java.impl.codeInsight.generation;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.codeInsight.hint.HintManager;
-import com.intellij.lang.LanguageCodeInsightActionHandler;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
+import consulo.language.editor.hint.HintManager;
+import consulo.language.editor.action.LanguageCodeInsightActionHandler;
+import consulo.codeEditor.Editor;
+import consulo.project.Project;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiFile;
+import consulo.language.psi.PsiFile;
 import com.intellij.java.language.psi.PsiJavaFile;
 
 /**

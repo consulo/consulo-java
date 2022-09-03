@@ -15,7 +15,7 @@
  */
 package com.intellij.java.debugger.engine.evaluation;
 
-import com.intellij.openapi.fileTypes.FileType;
+import consulo.virtualFileSystem.fileType.FileType;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 

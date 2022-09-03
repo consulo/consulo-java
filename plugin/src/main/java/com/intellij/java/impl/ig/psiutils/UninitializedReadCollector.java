@@ -17,9 +17,9 @@ package com.intellij.java.impl.ig.psiutils;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.MethodSignature;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiReference;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiReference;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.siyeh.ig.psiutils.BoolUtils;
 import com.siyeh.ig.psiutils.ClassUtils;
 
@@ -46,7 +46,7 @@ public class UninitializedReadCollector {
     return blockAssignsVariable(block, variable, counter, new HashSet<MethodSignature>());
   }
 
-  private boolean blockAssignsVariable(@javax.annotation.Nullable PsiCodeBlock block, @Nonnull PsiVariable variable,
+  private boolean blockAssignsVariable(@Nullable PsiCodeBlock block, @Nonnull PsiVariable variable,
                                        int stamp, @Nonnull Set<MethodSignature> checkedMethods) {
     if (counter != stamp) {
       return true;

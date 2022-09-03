@@ -22,10 +22,10 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.util.Comparing;
+import consulo.util.lang.Comparing;
 import com.intellij.psi.*;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.ast.IElementType;
+import consulo.language.psi.util.PsiTreeUtil;
 
 public class EquivalenceChecker
 {
@@ -362,7 +362,7 @@ public class EquivalenceChecker
 		return Decision.exact(name1.equals(name2));
 	}
 
-	public boolean typesAreEquivalent(@javax.annotation.Nullable PsiType type1, @Nullable PsiType type2)
+	public boolean typesAreEquivalent(@Nullable PsiType type1, @Nullable PsiType type2)
 	{
 		if(type1 == null)
 		{
@@ -555,7 +555,7 @@ public class EquivalenceChecker
 		return Decision.exact(text1.equals(text2));
 	}
 
-	public boolean codeBlocksAreEquivalent(@javax.annotation.Nullable PsiCodeBlock block1, @javax.annotation.Nullable PsiCodeBlock block2)
+	public boolean codeBlocksAreEquivalent(@Nullable PsiCodeBlock block1, @Nullable PsiCodeBlock block2)
 	{
 		return codeBlocksAreEquivalentDecision(block1, block2).getExactlyMatches();
 	}
@@ -639,12 +639,12 @@ public class EquivalenceChecker
 		return expressionListsAreEquivalent(expressions1, expressions2);
 	}
 
-	public boolean expressionsAreEquivalent(@Nullable PsiExpression expression1, @javax.annotation.Nullable PsiExpression expression2)
+	public boolean expressionsAreEquivalent(@Nullable PsiExpression expression1, @Nullable PsiExpression expression2)
 	{
 		return expressionsAreEquivalentDecision(expression1, expression2).getExactlyMatches();
 	}
 
-	public Decision expressionsAreEquivalentDecision(@javax.annotation.Nullable PsiExpression expression1, @Nullable PsiExpression expression2)
+	public Decision expressionsAreEquivalentDecision(@Nullable PsiExpression expression1, @Nullable PsiExpression expression2)
 	{
 		expression1 = ParenthesesUtils.stripParentheses(expression1);
 		expression2 = ParenthesesUtils.stripParentheses(expression2);
@@ -1046,7 +1046,7 @@ public class EquivalenceChecker
 		return EXACTLY_UN_MATCHES;
 	}
 
-	protected Decision expressionListsAreEquivalent(@javax.annotation.Nullable PsiExpression[] expressions1, @javax.annotation.Nullable PsiExpression[] expressions2)
+	protected Decision expressionListsAreEquivalent(@Nullable PsiExpression[] expressions1, @Nullable PsiExpression[] expressions2)
 	{
 		if(expressions1 == null && expressions2 == null)
 		{

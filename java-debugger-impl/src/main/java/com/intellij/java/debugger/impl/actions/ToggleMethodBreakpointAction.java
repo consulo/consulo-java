@@ -23,22 +23,24 @@ import com.intellij.java.debugger.impl.ui.breakpoints.BreakpointManager;
 import com.intellij.java.debugger.impl.ui.breakpoints.MethodBreakpoint;
 import com.intellij.java.language.impl.JavaClassFileType;
 import com.intellij.java.language.impl.JavaFileType;
-import com.intellij.openapi.actionSystem.ActionPlaces;
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.CommonDataKeys;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.fileEditor.FileEditorManager;
-import com.intellij.openapi.fileTypes.FileType;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiDocumentManager;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
+import consulo.fileEditor.FileEditorManager;
+import consulo.ui.ex.action.ActionPlaces;
+import consulo.ui.ex.action.AnAction;
+import consulo.ui.ex.action.AnActionEvent;
+import consulo.language.editor.CommonDataKeys;
+import consulo.document.Document;
+import consulo.codeEditor.Editor;
+import consulo.virtualFileSystem.fileType.FileType;
+import consulo.project.Project;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.language.psi.PsiDocumentManager;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
 import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.util.DocumentUtil;
-import com.intellij.util.text.CharArrayUtil;
+import consulo.document.util.DocumentUtil;
+import consulo.util.lang.CharArrayUtil;
+
+import javax.annotation.Nullable;
 
 public class ToggleMethodBreakpointAction extends AnAction
 {
@@ -86,7 +88,7 @@ public class ToggleMethodBreakpointAction extends AnAction
 		}
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	private static PlaceInDocument getPlace(AnActionEvent event)
 	{
 		final Project project = event.getData(CommonDataKeys.PROJECT);
@@ -138,7 +140,7 @@ public class ToggleMethodBreakpointAction extends AnAction
 		return method != null ? new PlaceInDocument(document, method.getTextOffset()) : null;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	private static PsiMethod findMethod(Project project, Editor editor)
 	{
 		if(editor == null)

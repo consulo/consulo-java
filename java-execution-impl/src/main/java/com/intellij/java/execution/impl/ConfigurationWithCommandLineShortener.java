@@ -2,7 +2,7 @@
 package com.intellij.java.execution.impl;
 
 import com.intellij.java.execution.ShortenCommandLine;
-import com.intellij.openapi.project.Project;
+import consulo.project.Project;
 
 import javax.annotation.Nullable;
 

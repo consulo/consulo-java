@@ -15,8 +15,8 @@
  */
 package com.intellij.java.impl.ide.structureView.impl.java;
 
-import com.intellij.ide.util.treeView.smartTree.ActionPresentation;
-import com.intellij.ide.util.treeView.smartTree.Sorter;
+import consulo.fileEditor.structureView.tree.ActionPresentation;
+import consulo.fileEditor.structureView.tree.Sorter;
 import com.intellij.java.language.psi.PsiMethod;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;

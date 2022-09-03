@@ -22,9 +22,9 @@ import javax.annotation.Nonnull;
 
 import com.intellij.java.language.psi.*;
 import org.jetbrains.annotations.NonNls;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.project.Project;
+import consulo.util.lang.StringUtil;
+import consulo.language.psi.scope.GlobalSearchScope;
 import com.siyeh.ig.psiutils.ClassUtils;
 import com.intellij.java.impl.ig.psiutils.LibraryUtil;
 

@@ -15,11 +15,11 @@
  */
 package org.jetbrains.java.generate.view;
 
+import consulo.ui.ex.awt.Messages;
 import org.jetbrains.java.generate.config.CancelPolicy;
 import org.jetbrains.java.generate.config.ConflictResolutionPolicy;
 import org.jetbrains.java.generate.config.DuplicatePolicy;
 import org.jetbrains.java.generate.config.ReplacePolicy;
-import com.intellij.openapi.ui.Messages;
 
 /**
  * This is a dialog when the <code>toString()</code> method already exists.

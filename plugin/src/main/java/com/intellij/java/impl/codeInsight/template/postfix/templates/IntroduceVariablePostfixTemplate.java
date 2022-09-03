@@ -17,13 +17,13 @@ package com.intellij.java.impl.codeInsight.template.postfix.templates;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiElement;
+import consulo.application.ApplicationManager;
+import consulo.codeEditor.Editor;
+import consulo.project.Project;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiType;
-import com.intellij.refactoring.introduce.inplace.OccurrencesChooser;
+import consulo.language.editor.refactoring.introduce.inplace.OccurrencesChooser;
 import com.intellij.java.impl.refactoring.introduceVariable.InputValidator;
 import com.intellij.java.impl.refactoring.introduceVariable.IntroduceVariableHandler;
 import com.intellij.java.impl.refactoring.introduceVariable.IntroduceVariableSettings;

@@ -16,10 +16,12 @@
 package com.intellij.java.language.impl.psi.impl.light;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.*;
-import com.intellij.util.IncorrectOperationException;
-import javax.annotation.Nullable;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiManager;
+import consulo.language.util.IncorrectOperationException;
+
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class LightPackageReferenceExpression extends LightPackageReference implements PsiReferenceExpression {
   public LightPackageReferenceExpression(PsiManager manager, PsiJavaPackage refPackage) {
@@ -27,7 +29,7 @@ public class LightPackageReferenceExpression extends LightPackageReference imple
   }
 
   @Override
-  public PsiExpression getQualifierExpression(){
+  public PsiExpression getQualifierExpression() {
     return null;
   }
 
@@ -42,7 +44,7 @@ public class LightPackageReferenceExpression extends LightPackageReference imple
   }
 
   @Override
-  public PsiType getType(){
+  public PsiType getType() {
     return null;
   }
 

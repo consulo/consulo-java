@@ -15,11 +15,11 @@
  */
 package com.intellij.java.impl.codeInsight.editorActions.smartEnter;
 
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.psi.PsiElement;
+import consulo.document.Document;
+import consulo.codeEditor.Editor;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiTryStatement;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
 
 public class MissingTryBodyFixer implements Fixer
 {

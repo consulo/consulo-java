@@ -16,16 +16,17 @@
 package com.intellij.java.language.psi.codeStyle;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.codeStyle.SuggestedNameInfo;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
+import consulo.language.util.IncorrectOperationException;
+import consulo.ide.ServiceManager;
+import consulo.project.Project;
 import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Collection;
 
 /**
@@ -143,7 +144,7 @@ public abstract class JavaCodeStyleManager {
     }
   }
 
-  public SuggestedNameInfo suggestVariableName(@Nonnull final VariableKind kind, @javax.annotation.Nullable final String propertyName, @javax.annotation.Nullable final PsiExpression expr, @javax.annotation.Nullable PsiType type) {
+  public SuggestedNameInfo suggestVariableName(@Nonnull final VariableKind kind, @Nullable final String propertyName, @Nullable final PsiExpression expr, @Nullable PsiType type) {
     return suggestVariableName(kind, propertyName, expr, type, true);
   }
 
@@ -158,7 +159,7 @@ public abstract class JavaCodeStyleManager {
 
 
   @Nonnull
-  public abstract SuggestedNameInfo suggestVariableName(@Nonnull VariableKind kind, @javax.annotation.Nullable String propertyName, @javax.annotation.Nullable PsiExpression expr, @javax.annotation.Nullable PsiType type, boolean correctKeywords);
+  public abstract SuggestedNameInfo suggestVariableName(@Nonnull VariableKind kind, @Nullable String propertyName, @Nullable PsiExpression expr, @Nullable PsiType type, boolean correctKeywords);
 
   /**
    * Generates a stripped-down name (with no code style defined prefixes or suffixes, usable as
@@ -238,6 +239,6 @@ public abstract class JavaCodeStyleManager {
    */
   public abstract void removeRedundantImports(@Nonnull PsiJavaFile file) throws IncorrectOperationException;
 
-  @javax.annotation.Nullable
+  @Nullable
   public abstract Collection<PsiImportStatementBase> findRedundantImports(@Nonnull PsiJavaFile file);
 }

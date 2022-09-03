@@ -19,14 +19,15 @@ package com.intellij.java.impl.util.xml;
 import com.intellij.java.impl.psi.impl.source.resolve.reference.impl.providers.JavaClassReferenceProvider;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.util.ClassKind;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiReference;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.project.Project;
+import consulo.util.lang.StringUtil;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiReference;
+import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.util.xml.*;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * @author Dmitry Avdeev
@@ -41,8 +42,8 @@ public class PsiClassConverter extends Converter<PsiClass> implements CustomRefe
     return DomJavaUtil.findClass(s.trim(), context.getFile(), context.getModule(), scope);
   }
 
-  @javax.annotation.Nullable
-  public String getErrorMessage(@javax.annotation.Nullable final String s, final ConvertContext context) {
+  @Nullable
+  public String getErrorMessage(@Nullable final String s, final ConvertContext context) {
     return null;
   }
 
@@ -108,7 +109,7 @@ public class PsiClassConverter extends Converter<PsiClass> implements CustomRefe
     return provider;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   protected GlobalSearchScope getScope(@Nonnull ConvertContext context) {
     return context.getSearchScope();
   }

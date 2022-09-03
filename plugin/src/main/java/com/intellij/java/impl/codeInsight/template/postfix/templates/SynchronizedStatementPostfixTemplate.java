@@ -16,8 +16,8 @@
 package com.intellij.java.impl.codeInsight.template.postfix.templates;
 
 import com.intellij.java.impl.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.psi.PsiElement;
+import consulo.codeEditor.Editor;
+import consulo.language.psi.PsiElement;
 
 import javax.annotation.Nonnull;
 

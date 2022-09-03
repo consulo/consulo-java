@@ -24,30 +24,30 @@ import java.util.List;
 import javax.annotation.Nonnull;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.lang.findUsages.DescriptiveNameUtil;
+import consulo.language.findUsage.DescriptiveNameUtil;
 import consulo.logging.Logger;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Ref;
+import consulo.project.Project;
+import consulo.util.lang.ref.Ref;
 import com.intellij.psi.*;
 import com.intellij.java.language.impl.psi.impl.source.javadoc.PsiDocMethodOrFieldRef;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.search.searches.ReferencesSearch;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.search.ReferencesSearch;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.refactoring.BaseRefactoringProcessor;
-import com.intellij.refactoring.RefactoringBundle;
-import com.intellij.refactoring.rename.NonCodeUsageInfoFactory;
+import consulo.language.editor.refactoring.BaseRefactoringProcessor;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.rename.NonCodeUsageInfoFactory;
 import com.intellij.java.impl.refactoring.util.ConflictsUtil;
 import com.intellij.java.impl.refactoring.util.InlineUtil;
-import com.intellij.refactoring.util.NonCodeSearchDescriptionLocation;
-import com.intellij.refactoring.util.NonCodeUsageInfo;
-import com.intellij.refactoring.util.RefactoringUIUtil;
-import com.intellij.refactoring.util.TextOccurrencesUtil;
-import com.intellij.usageView.UsageInfo;
-import com.intellij.usageView.UsageInfoFactory;
-import com.intellij.usageView.UsageViewDescriptor;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.containers.MultiMap;
+import consulo.language.editor.refactoring.util.NonCodeSearchDescriptionLocation;
+import consulo.usage.NonCodeUsageInfo;
+import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
+import consulo.language.editor.refactoring.util.TextOccurrencesUtil;
+import consulo.usage.UsageInfo;
+import consulo.usage.UsageInfoFactory;
+import consulo.usage.UsageViewDescriptor;
+import consulo.language.util.IncorrectOperationException;
+import consulo.util.collection.MultiMap;
 
 /**
  * @author ven

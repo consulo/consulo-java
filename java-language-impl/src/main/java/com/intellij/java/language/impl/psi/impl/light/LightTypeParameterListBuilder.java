@@ -18,10 +18,10 @@ package com.intellij.java.language.impl.psi.impl.light;
 import com.intellij.java.language.psi.JavaElementVisitor;
 import com.intellij.java.language.psi.PsiTypeParameter;
 import com.intellij.java.language.psi.PsiTypeParameterList;
-import com.intellij.lang.Language;
-import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.PsiManager;
-import com.intellij.psi.impl.light.LightElement;
+import consulo.language.Language;
+import consulo.language.psi.PsiElementVisitor;
+import consulo.language.psi.PsiManager;
+import consulo.language.impl.psi.LightElement;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;

@@ -16,19 +16,22 @@
 package com.intellij.java.language.impl.core;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
-import com.intellij.psi.codeStyle.SuggestedNameInfo;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
-import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.util.ArrayUtil;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiNamedElement;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.util.collection.ArrayUtil;
+import consulo.util.lang.Comparing;
 import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 
@@ -41,9 +44,9 @@ public class CoreJavaCodeStyleManager extends JavaCodeStyleManager {
   @Override
   public PsiElement shortenClassReferences(@Nonnull PsiElement element,
                                            @MagicConstant(flags = {DO_NOT_ADD_IMPORTS,
-                                                   INCOMPLETE_CODE
+                                               INCOMPLETE_CODE
                                            }) int flags)
-    throws IncorrectOperationException {
+      throws IncorrectOperationException {
     return null;
   }
 
@@ -84,9 +87,9 @@ public class CoreJavaCodeStyleManager extends JavaCodeStyleManager {
 
   @Override
   public SuggestedNameInfo suggestVariableName(@Nonnull VariableKind kind,
-                                               @javax.annotation.Nullable String propertyName,
-                                               @javax.annotation.Nullable PsiExpression expr,
-                                               @javax.annotation.Nullable PsiType type,
+                                               @Nullable String propertyName,
+                                               @Nullable PsiExpression expr,
+                                               @Nullable PsiType type,
                                                boolean correctKeywords) {
     return SuggestedNameInfo.NULL_INFO;
   }
@@ -125,14 +128,14 @@ public class CoreJavaCodeStyleManager extends JavaCodeStyleManager {
                 public void visitAnonymousClass(final PsiAnonymousClass aClass) {
                 }
 
-                @Override public void visitVariable(PsiVariable variable) {
+                @Override
+                public void visitVariable(PsiVariable variable) {
                   if (name1.equals(variable.getName())) {
                     throw new CancelException();
                   }
                 }
               });
-            }
-            catch (CancelException e) {
+            } catch (CancelException e) {
               continue NextName;
             }
             run = run.getNextSibling();
@@ -157,7 +160,7 @@ public class CoreJavaCodeStyleManager extends JavaCodeStyleManager {
     final LinkedHashSet<String> uniqueNames = new LinkedHashSet<String>(names.length);
     for (String name : names) {
       if (ignorePlaceName && place instanceof PsiNamedElement) {
-        final String placeName = ((PsiNamedElement)place).getName();
+        final String placeName = ((PsiNamedElement) place).getName();
         if (Comparing.strEqual(placeName, name)) {
           uniqueNames.add(name);
           continue;

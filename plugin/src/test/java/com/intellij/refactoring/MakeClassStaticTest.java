@@ -10,15 +10,15 @@ import java.util.ArrayList;
 import javax.annotation.Nonnull;
 import com.intellij.JavaTestUtil;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.codeStyle.CodeStyleSettings;
-import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
+import consulo.language.psi.PsiElement;
+import consulo.language.codeStyle.CodeStyleSettings;
+import consulo.language.codeStyle.CodeStyleSettingsManager;
 import com.intellij.java.impl.refactoring.makeStatic.MakeClassStaticProcessor;
 import com.intellij.java.impl.refactoring.makeStatic.MakeStaticUtil;
 import com.intellij.java.impl.refactoring.makeStatic.Settings;
 import com.intellij.java.analysis.impl.refactoring.util.VariableData;
-import com.intellij.util.containers.ContainerUtil;
-import consulo.codeInsight.TargetElementUtil;
+import consulo.util.collection.ContainerUtil;
+import consulo.language.editor.TargetElementUtil;
 import consulo.codeInsight.TargetElementUtilEx;
 
 public abstract class MakeClassStaticTest extends LightRefactoringTestCase {

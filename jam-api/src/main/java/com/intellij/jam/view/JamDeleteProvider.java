@@ -15,10 +15,10 @@
  */
 package com.intellij.jam.view;
 
-import com.intellij.ide.DeleteProvider;
+import consulo.ui.ex.DeleteProvider;
 import com.intellij.jam.model.common.CommonModelElement;
 import com.intellij.jam.model.common.CommonModelManager;
-import com.intellij.openapi.actionSystem.DataContext;
+import consulo.dataContext.DataContext;
 
 import javax.annotation.Nonnull;
 import java.util.Collection;

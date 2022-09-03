@@ -17,20 +17,22 @@ package com.intellij.java.impl.refactoring.rename;
 
 import com.intellij.java.language.psi.PsiJavaPackage;
 import com.intellij.java.language.psi.PsiNameHelper;
-import com.intellij.openapi.fileTypes.FileTypeManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.patterns.ElementPattern;
-import com.intellij.patterns.PlatformPatterns;
-import com.intellij.psi.PsiElement;
-import com.intellij.refactoring.rename.RenameInputValidatorEx;
-import com.intellij.util.ProcessingContext;
+import consulo.language.file.FileTypeManager;
+import consulo.project.Project;
+import consulo.language.pattern.ElementPattern;
+import consulo.language.pattern.PlatformPatterns;
+import consulo.language.psi.PsiElement;
+import consulo.language.editor.refactoring.rename.RenameInputValidatorEx;
+import consulo.language.util.ProcessingContext;
+
+import javax.annotation.Nullable;
 
 /**
  * User: anna
  * Date: 3/14/11
  */
 public class PsiPackageRenameValidator implements RenameInputValidatorEx {
-  @javax.annotation.Nullable
+  @Nullable
   @Override
   public String getErrorMessage(String newName, Project project) {
     if (FileTypeManager.getInstance().isFileIgnored(newName)) {

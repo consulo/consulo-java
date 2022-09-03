@@ -17,8 +17,10 @@ package com.intellij.java.impl.lang.java;
 
 import com.intellij.java.impl.codeInsight.javadoc.JavaDocExternalFilter;
 import com.intellij.java.impl.codeInsight.javadoc.JavaDocInfoGenerator;
-import com.intellij.lang.documentation.AbstractDocumentationProvider;
-import com.intellij.psi.PsiElement;
+import consulo.language.editor.documentation.AbstractDocumentationProvider;
+import consulo.language.psi.PsiElement;
+
+import javax.annotation.Nullable;
 
 /**
  * @author spleaner
@@ -26,7 +28,7 @@ import com.intellij.psi.PsiElement;
 public class FileDocumentationProvider extends AbstractDocumentationProvider {
 
   @Override
-  public String generateDoc(PsiElement element, @javax.annotation.Nullable PsiElement originalElement) {
+  public String generateDoc(PsiElement element, @Nullable PsiElement originalElement) {
     final JavaDocInfoGenerator javaDocInfoGenerator = new JavaDocInfoGenerator(element.getProject(), element);
     return JavaDocExternalFilter.filterInternalDocInfo(javaDocInfoGenerator.generateFileInfo());
   }

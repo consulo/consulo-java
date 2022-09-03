@@ -15,18 +15,18 @@
  */
 package com.intellij.java.language.impl.psi.impl.source.tree.java;
 
-import javax.annotation.Nonnull;
-
-import com.intellij.java.language.psi.*;
-import com.intellij.lang.ASTNode;
-import consulo.logging.Logger;
-import com.intellij.psi.*;
 import com.intellij.java.language.impl.psi.impl.source.tree.ChildRole;
 import com.intellij.java.language.impl.psi.impl.source.tree.ElementType;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
-import com.intellij.psi.tree.ChildRoleBase;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.tree.TokenSet;
+import com.intellij.java.language.psi.*;
+import consulo.language.ast.ASTNode;
+import consulo.language.ast.ChildRoleBase;
+import consulo.language.ast.IElementType;
+import consulo.language.ast.TokenSet;
+import consulo.language.psi.PsiElementVisitor;
+import consulo.logging.Logger;
+
+import javax.annotation.Nonnull;
 
 public class PsiAssignmentExpressionImpl extends ExpressionPsiElement implements PsiAssignmentExpression {
   private static final Logger LOG = Logger.getInstance(PsiAssignmentExpressionImpl.class);
@@ -38,18 +38,18 @@ public class PsiAssignmentExpressionImpl extends ExpressionPsiElement implements
   @Override
   @Nonnull
   public PsiExpression getLExpression() {
-    return (PsiExpression)findChildByRoleAsPsiElement(ChildRole.LOPERAND);
+    return (PsiExpression) findChildByRoleAsPsiElement(ChildRole.LOPERAND);
   }
 
   @Override
   public PsiExpression getRExpression() {
-    return (PsiExpression)findChildByRoleAsPsiElement(ChildRole.ROPERAND);
+    return (PsiExpression) findChildByRoleAsPsiElement(ChildRole.ROPERAND);
   }
 
   @Override
   @Nonnull
   public PsiJavaToken getOperationSign() {
-    return (PsiJavaToken)findChildByRoleAsPsiElement(ChildRole.OPERATION_SIGN);
+    return (PsiJavaToken) findChildByRoleAsPsiElement(ChildRole.OPERATION_SIGN);
   }
 
   @Override
@@ -88,26 +88,23 @@ public class PsiAssignmentExpressionImpl extends ExpressionPsiElement implements
       if (child == getFirstChildNode()) return ChildRole.LOPERAND;
       if (child == getLastChildNode()) return ChildRole.ROPERAND;
       return ChildRoleBase.NONE;
-    }
-    else if (OUR_OPERATIONS_BIT_SET.contains(child.getElementType())) {
+    } else if (OUR_OPERATIONS_BIT_SET.contains(child.getElementType())) {
       return ChildRole.OPERATION_SIGN;
-    }
-    else {
+    } else {
       return ChildRoleBase.NONE;
     }
   }
 
   private static final TokenSet OUR_OPERATIONS_BIT_SET = TokenSet.create(JavaTokenType.EQ, JavaTokenType.ASTERISKEQ, JavaTokenType.DIVEQ,
-                                                                         JavaTokenType.PERCEQ, JavaTokenType.PLUSEQ, JavaTokenType.MINUSEQ,
-                                                                         JavaTokenType.LTLTEQ, JavaTokenType.GTGTEQ, JavaTokenType.GTGTGTEQ,
-                                                                         JavaTokenType.ANDEQ, JavaTokenType.OREQ, JavaTokenType.XOREQ);
+      JavaTokenType.PERCEQ, JavaTokenType.PLUSEQ, JavaTokenType.MINUSEQ,
+      JavaTokenType.LTLTEQ, JavaTokenType.GTGTEQ, JavaTokenType.GTGTGTEQ,
+      JavaTokenType.ANDEQ, JavaTokenType.OREQ, JavaTokenType.XOREQ);
 
   @Override
   public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
-      ((JavaElementVisitor)visitor).visitAssignmentExpression(this);
-    }
-    else {
+      ((JavaElementVisitor) visitor).visitAssignmentExpression(this);
+    } else {
       visitor.visitElement(this);
     }
   }

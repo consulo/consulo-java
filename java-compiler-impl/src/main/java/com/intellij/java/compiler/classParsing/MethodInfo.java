@@ -22,10 +22,10 @@
 package com.intellij.java.compiler.classParsing;
 
 import com.intellij.java.compiler.cache.SymbolTable;
-import com.intellij.compiler.make.CacheCorruptedException;
-import com.intellij.compiler.make.CacheUtils;
-import com.intellij.util.ArrayUtil;
-import com.intellij.util.ObjectUtil;
+import consulo.compiler.CacheCorruptedException;
+import consulo.ide.impl.idea.compiler.make.CacheUtils;
+import consulo.util.collection.ArrayUtil;
+import consulo.util.lang.ObjectUtil;
 import com.intellij.java.util.cls.ClsUtil;
 import consulo.logging.Logger;
 import consulo.util.collection.primitive.ints.IntSet;

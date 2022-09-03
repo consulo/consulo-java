@@ -15,22 +15,23 @@
  */
 package com.intellij.java.impl.ide.util;
 
-import com.intellij.codeInspection.InspectionsBundle;
-import com.intellij.lang.findUsages.DescriptiveNameUtil;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.ui.DialogWrapper;
-import com.intellij.openapi.ui.Messages;
-import com.intellij.openapi.ui.popup.JBPopupFactory;
+import consulo.language.editor.inspection.InspectionsBundle;
+import consulo.language.findUsage.DescriptiveNameUtil;
+import consulo.application.ApplicationManager;
+import consulo.codeEditor.Editor;
+import consulo.ui.ex.popup.JBPopupFactory;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifier;
-import com.intellij.psi.presentation.java.SymbolPresentationUtil;
-import com.intellij.psi.search.PsiElementProcessor;
+import consulo.language.psi.util.SymbolPresentationUtil;
+import consulo.language.psi.resolve.PsiElementProcessor;
 import com.intellij.java.language.psi.search.searches.DeepestSuperMethodsSearch;
-import com.intellij.ui.components.JBList;
-import com.intellij.util.ArrayUtil;
+import consulo.ui.ex.awt.JBList;
+import consulo.util.collection.ArrayUtil;
+import consulo.ui.ex.awt.DialogWrapper;
+import consulo.ui.ex.awt.Messages;
+
 import javax.annotation.Nonnull;
 
 import java.util.Collection;

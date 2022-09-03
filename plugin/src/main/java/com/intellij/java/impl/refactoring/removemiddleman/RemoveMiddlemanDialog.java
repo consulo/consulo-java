@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.refactoring.removemiddleman;
 
-import com.intellij.openapi.help.HelpManager;
+import consulo.application.HelpManager;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiMember;
 import com.intellij.java.language.psi.PsiMethod;
@@ -23,10 +23,10 @@ import com.intellij.java.language.psi.PsiSubstitutor;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
 import com.intellij.java.impl.refactoring.HelpID;
 import com.intellij.java.impl.refactoring.RefactorJBundle;
-import com.intellij.refactoring.classMembers.DelegatingMemberInfoModel;
+import consulo.language.editor.refactoring.classMember.DelegatingMemberInfoModel;
 import com.intellij.java.impl.refactoring.ui.MemberSelectionPanel;
 import com.intellij.java.impl.refactoring.ui.MemberSelectionTable;
-import com.intellij.refactoring.ui.RefactoringDialog;
+import consulo.language.editor.refactoring.ui.RefactoringDialog;
 import com.intellij.java.impl.refactoring.util.classMembers.MemberInfo;
 import javax.annotation.Nonnull;
 

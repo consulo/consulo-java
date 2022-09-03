@@ -20,9 +20,9 @@
  */
 package com.intellij.java.impl.refactoring.extractMethodObject;
 
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.usageView.UsageViewDescriptor;
+import consulo.usage.UsageViewDescriptor;
 import javax.annotation.Nonnull;
 
 public class ExtractMethodObjectViewDescriptor implements UsageViewDescriptor {

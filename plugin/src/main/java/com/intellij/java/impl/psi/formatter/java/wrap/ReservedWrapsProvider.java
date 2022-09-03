@@ -15,9 +15,9 @@
  */
 package com.intellij.java.impl.psi.formatter.java.wrap;
 
-import com.intellij.formatting.Wrap;
+import consulo.language.codeStyle.Wrap;
 import com.intellij.java.impl.psi.formatter.java.AbstractJavaBlock;
-import com.intellij.psi.tree.IElementType;
+import consulo.language.ast.IElementType;
 import javax.annotation.Nullable;
 
 /**

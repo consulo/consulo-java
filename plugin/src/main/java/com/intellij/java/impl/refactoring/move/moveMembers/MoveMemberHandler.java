@@ -19,13 +19,13 @@ import java.util.Set;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import com.intellij.lang.LanguageExtension;
+import consulo.language.extension.LanguageExtension;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiMember;
 import com.intellij.java.language.psi.PsiModifierList;
-import com.intellij.psi.PsiReference;
-import com.intellij.util.containers.MultiMap;
+import consulo.language.psi.PsiReference;
+import consulo.util.collection.MultiMap;
 
 /**
  * @author Maxim.Medvedev
@@ -38,7 +38,7 @@ public interface MoveMemberHandler
 	MoveMembersProcessor.MoveMembersUsageInfo getUsage(@Nonnull PsiMember member, @Nonnull PsiReference ref, @Nonnull Set<PsiMember> membersToMove,
 			@Nonnull PsiClass targetClass);
 
-	void checkConflictsOnUsage(@Nonnull MoveMembersProcessor.MoveMembersUsageInfo usageInfo, @javax.annotation.Nullable String newVisibility,
+	void checkConflictsOnUsage(@Nonnull MoveMembersProcessor.MoveMembersUsageInfo usageInfo, @Nullable String newVisibility,
 			@Nullable PsiModifierList modifierListCopy, @Nonnull PsiClass targetClass, @Nonnull Set<PsiMember> membersToMove,
 			@Nonnull MultiMap<PsiElement, String> conflicts);
 
@@ -51,7 +51,7 @@ public interface MoveMemberHandler
 	boolean changeExternalUsage(@Nonnull MoveMembersOptions options, @Nonnull MoveMembersProcessor.MoveMembersUsageInfo usage);
 
 	@Nonnull
-	PsiMember doMove(@Nonnull MoveMembersOptions options, @Nonnull PsiMember member, @javax.annotation.Nullable PsiElement anchor, @Nonnull PsiClass targetClass);
+	PsiMember doMove(@Nonnull MoveMembersOptions options, @Nonnull PsiMember member, @Nullable PsiElement anchor, @Nonnull PsiClass targetClass);
 
 	void decodeContextInfo(@Nonnull PsiElement scope);
 }

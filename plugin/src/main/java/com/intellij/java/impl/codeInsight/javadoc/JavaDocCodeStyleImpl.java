@@ -5,9 +5,9 @@ import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
 import com.intellij.java.language.JavaLanguage;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
-import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
+import consulo.project.Project;
+import consulo.language.codeStyle.CodeStyleSettingsManager;
+import consulo.language.codeStyle.CommonCodeStyleSettings;
 
 @Singleton
 public class JavaDocCodeStyleImpl extends JavaDocCodeStyle

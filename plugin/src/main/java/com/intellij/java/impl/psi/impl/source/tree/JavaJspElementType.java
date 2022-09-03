@@ -15,8 +15,8 @@
  */
 package com.intellij.java.impl.psi.impl.source.tree;
 
-import com.intellij.psi.TokenType;
-import com.intellij.psi.tree.TokenSet;
+import consulo.language.ast.TokenType;
+import consulo.language.ast.TokenSet;
 
 /**
  * @author yole

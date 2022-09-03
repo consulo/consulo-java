@@ -1,12 +1,14 @@
 package consulo.java.jam.impl;
 
-import com.intellij.semantic.SemContributor;
-import com.intellij.semantic.SemRegistrar;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.sem.SemContributor;
+import consulo.language.sem.SemRegistrar;
 
 /**
  * @author VISTALL
  * @since 14-Jan-17
  */
+@ExtensionImpl
 public class JamToSemContributor extends SemContributor {
   @Override
   public void registerSemProviders(SemRegistrar semRegistrar) {

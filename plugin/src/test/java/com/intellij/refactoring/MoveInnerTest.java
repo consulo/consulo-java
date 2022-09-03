@@ -4,15 +4,16 @@ import com.intellij.JavaTestUtil;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiJavaPackage;
-import com.intellij.openapi.fileEditor.FileDocumentManager;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.*;
-import com.intellij.psi.impl.source.PostprocessReformattingAspect;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.document.FileDocumentManager;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.language.codeStyle.PostprocessReformattingAspect;
+import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.java.impl.refactoring.move.moveInner.MoveInnerDialog;
 import com.intellij.java.impl.refactoring.move.moveInner.MoveInnerImpl;
 import com.intellij.java.impl.refactoring.move.moveInner.MoveInnerProcessor;
 import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nullable;
 
 /**
  *  @author dsl
@@ -107,7 +108,7 @@ public abstract class MoveInnerTest extends MultiFileTestCase {
                                      @NonNls final String parameterName,
                                      final boolean searchInComments,
                                      final boolean searchInNonJava,
-                                     @NonNls @javax.annotation.Nullable final String packageName) {
+                                     @NonNls @Nullable final String packageName) {
     return new MyPerformAction(innerClassName, newClassName, passOuterClass, parameterName, searchInComments, searchInNonJava, packageName);
   }
 

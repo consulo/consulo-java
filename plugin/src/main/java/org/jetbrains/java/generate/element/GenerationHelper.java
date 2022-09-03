@@ -17,9 +17,9 @@ package org.jetbrains.java.generate.element;
 
 import java.util.List;
 
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.codeStyle.CodeStyleSettings;
+import consulo.project.Project;
+import consulo.util.lang.StringUtil;
+import consulo.language.codeStyle.CodeStyleSettings;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.impl.psi.codeStyle.JavaCodeStyleSettings;
 import com.intellij.java.language.psi.codeStyle.VariableKind;

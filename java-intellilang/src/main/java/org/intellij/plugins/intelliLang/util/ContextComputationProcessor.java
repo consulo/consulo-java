@@ -16,13 +16,13 @@
 package org.intellij.plugins.intelliLang.util;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Ref;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.*;
-import com.intellij.util.SmartList;
-import javax.annotation.Nonnull;
+import consulo.language.psi.PsiElement;
+import consulo.project.Project;
+import consulo.util.collection.SmartList;
+import consulo.util.lang.StringUtil;
+import consulo.util.lang.ref.Ref;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +31,7 @@ import java.util.List;
  * that computes the values not only for compile-time constants, but also for elements annotated with a substitution
  * annotation.
  *
- * @see org.intellij.plugins.intelliLang.util.SubstitutedExpressionEvaluationHelper
+ * @see SubstitutedExpressionEvaluationHelper
  */
 public class ContextComputationProcessor {
 

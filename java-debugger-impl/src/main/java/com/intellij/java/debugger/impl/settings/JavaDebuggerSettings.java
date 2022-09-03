@@ -24,16 +24,17 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import consulo.configurable.Configurable;
+import consulo.execution.debug.setting.DebuggerSettingsCategory;
 import jakarta.inject.Inject;
 
 import org.jdom.Element;
 import com.intellij.java.debugger.DebuggerBundle;
-import com.intellij.openapi.options.Configurable;
-import com.intellij.openapi.options.OptionsBundle;
-import com.intellij.openapi.options.SimpleConfigurable;
-import com.intellij.openapi.util.Getter;
-import com.intellij.xdebugger.settings.DebuggerSettingsCategory;
-import com.intellij.xdebugger.settings.XDebuggerSettings;
+import consulo.configurable.OptionsBundle;
+import consulo.options.SimpleConfigurable;
+import consulo.ide.impl.idea.openapi.util.Getter;
+import consulo.execution.debug.setting.XDebuggerSettings;
 
 /**
  * We cannot now transform DebuggerSettings to XDebuggerSettings: getState/loadState is not called for EP,

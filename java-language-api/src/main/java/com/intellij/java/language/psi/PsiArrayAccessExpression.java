@@ -16,6 +16,7 @@
 package com.intellij.java.language.psi;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Represents an array access expession, for example, <code>i [1]</code>.
@@ -34,6 +35,6 @@ public interface PsiArrayAccessExpression extends PsiExpression {
    *
    * @return the index expression, or null if the array access expression is incomplete.
    */
-  @javax.annotation.Nullable
+  @Nullable
   PsiExpression getIndexExpression();
 }

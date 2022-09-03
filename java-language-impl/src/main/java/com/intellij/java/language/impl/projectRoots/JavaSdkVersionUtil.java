@@ -17,13 +17,14 @@ package com.intellij.java.language.impl.projectRoots;
 
 import com.intellij.java.language.projectRoots.JavaSdk;
 import com.intellij.java.language.projectRoots.JavaSdkVersion;
-import com.intellij.openapi.module.ModuleUtilCore;
-import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.psi.PsiElement;
+import consulo.language.util.ModuleUtilCore;
+import consulo.content.bundle.Sdk;
+import consulo.language.psi.PsiElement;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.java.language.module.extension.JavaModuleExtension;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * User: anna
@@ -41,7 +42,7 @@ public class JavaSdkVersionUtil {
     return getJavaSdkVersion(sdk);
   }
 
-  public static JavaSdkVersion getJavaSdkVersion(@javax.annotation.Nullable Sdk sdk) {
+  public static JavaSdkVersion getJavaSdkVersion(@Nullable Sdk sdk) {
     return sdk != null && sdk.getSdkType() instanceof JavaSdk ? ((JavaSdk) sdk.getSdkType()).getVersion(sdk) : null;
   }
 }

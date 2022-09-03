@@ -15,8 +15,8 @@
  */
 package com.intellij.java.impl.codeInsight.intention.impl;
 
-import com.intellij.codeInsight.CodeInsightBundle;
-import com.intellij.codeInsight.intention.PsiElementBaseIntentionAction;
+import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.intention.PsiElementBaseIntentionAction;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.java.language.psi.PsiJavaToken;
@@ -24,19 +24,19 @@ import com.intellij.java.language.psi.PsiLiteralExpression;
 import com.intellij.javaee.ExternalResourceManager;
 import com.intellij.java.language.JavaLanguage;
 import consulo.logging.Logger;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Pair;
-import com.intellij.openapi.vfs.VfsUtil;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.codeEditor.Editor;
+import consulo.project.Project;
+import consulo.util.lang.Pair;
+import consulo.ide.impl.idea.openapi.vfs.VfsUtil;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
-import com.intellij.psi.search.PsiElementProcessor;
-import com.intellij.psi.tree.TokenSet;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.resolve.PsiElementProcessor;
+import consulo.language.ast.TokenSet;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.psi.xml.XmlEntityDecl;
 import com.intellij.psi.xml.XmlFile;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
 import com.intellij.xml.util.XmlUtil;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -89,7 +89,7 @@ public class ConvertToBasicLatinAction extends PsiElementBaseIntentionAction {
     workElement.replace(newElement);
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private static Pair<PsiElement, Handler> findHandler(final PsiElement element) {
     for (final Handler handler : ourHandlers) {
       final PsiElement applicable = handler.findApplicable(element);

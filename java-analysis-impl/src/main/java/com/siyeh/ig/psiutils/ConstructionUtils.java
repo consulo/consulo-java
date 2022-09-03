@@ -19,11 +19,12 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.util.collection.ContainerUtil;
 import com.siyeh.ig.callMatcher.CallMatcher;
 import consulo.java.language.module.util.JavaClassNames;
 import org.jetbrains.annotations.Contract;
 
+import javax.annotation.Nullable;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -301,7 +302,7 @@ public class ConstructionUtils
 	 * @param expression expression to test
 	 * @return true if supplied expression is an empty array initializer
 	 */
-	public static boolean isEmptyArrayInitializer(@javax.annotation.Nullable PsiExpression expression)
+	public static boolean isEmptyArrayInitializer(@Nullable PsiExpression expression)
 	{
 		expression = PsiUtil.skipParenthesizedExprDown(expression);
 		if(!(expression instanceof PsiNewExpression))

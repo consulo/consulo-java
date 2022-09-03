@@ -20,13 +20,13 @@ import java.util.List;
 import javax.annotation.Nonnull;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.diagnostic.Attachment;
-import com.intellij.openapi.diagnostic.RuntimeExceptionWithAttachments;
+import consulo.logging.attachment.Attachment;
+import consulo.logging.attachment.RuntimeExceptionWithAttachments;
 import com.intellij.psi.*;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.ArrayUtil;
-import com.intellij.util.ObjectUtil;
+import consulo.language.ast.IElementType;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.util.collection.ArrayUtil;
+import consulo.util.lang.ObjectUtil;
 import one.util.streamex.StreamEx;
 
 public class StatementExtractor

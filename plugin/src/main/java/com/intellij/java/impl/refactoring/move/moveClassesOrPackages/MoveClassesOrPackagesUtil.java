@@ -15,28 +15,28 @@
  */
 package com.intellij.java.impl.refactoring.move.moveClassesOrPackages;
 
-import com.intellij.ide.util.DirectoryChooserUtil;
+import consulo.ide.util.DirectoryChooserUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.impl.lang.java.JavaFindUsagesProvider;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.ProjectFileIndex;
-import com.intellij.openapi.roots.ProjectRootManager;
-import com.intellij.openapi.util.Computable;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.openapi.vfs.VfsUtil;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.application.ApplicationManager;
+import consulo.project.Project;
+import consulo.module.content.ProjectFileIndex;
+import consulo.module.content.ProjectRootManager;
+import consulo.application.util.function.Computable;
+import consulo.document.util.TextRange;
+import consulo.ide.impl.idea.openapi.vfs.VfsUtil;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.psi.*;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.search.searches.ReferencesSearch;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.search.ReferencesSearch;
 import com.intellij.java.impl.refactoring.MoveDestination;
 import com.intellij.java.impl.refactoring.PackageWrapper;
-import com.intellij.refactoring.move.moveFilesOrDirectories.MoveFilesOrDirectoriesUtil;
-import com.intellij.refactoring.util.MoveRenameUsageInfo;
+import consulo.language.editor.refactoring.move.fileOrDirectory.MoveFilesOrDirectoriesUtil;
+import consulo.usage.MoveRenameUsageInfo;
 import com.intellij.java.impl.refactoring.util.RefactoringUtil;
-import com.intellij.refactoring.util.TextOccurrencesUtil;
-import com.intellij.usageView.UsageInfo;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.editor.refactoring.util.TextOccurrencesUtil;
+import consulo.usage.UsageInfo;
+import consulo.language.util.IncorrectOperationException;
 import java.util.HashMap;
 
 import consulo.logging.Logger;
@@ -159,7 +159,7 @@ public class MoveClassesOrPackagesUtil {
     }
     final PsiDirectory subdirectoryInDest;
     final boolean isSourceRoot = RefactoringUtil.isSourceRoot(dir);
-    if (VfsUtil.isAncestor(sourceVFile, destVFile, false) || isSourceRoot) {
+    if (consulo.ide.impl.idea.openapi.vfs.VfsUtil.isAncestor(sourceVFile, destVFile, false) || isSourceRoot) {
       PsiDirectory exitsingSubdir = destination.findSubdirectory(targetName);
       if (exitsingSubdir == null) {
         subdirectoryInDest = destination.createSubdirectory(targetName);
@@ -339,7 +339,7 @@ public class MoveClassesOrPackagesUtil {
     for (VirtualFile root : contentSourceRoots) {
       final PsiDirectory[] directories = aPackage.getDirectories();
       for (PsiDirectory directory : directories) {
-        if (VfsUtil.isAncestor(root, directory.getVirtualFile(), false)) {
+        if (consulo.ide.impl.idea.openapi.vfs.VfsUtil.isAncestor(root, directory.getVirtualFile(), false)) {
           targetDirectories.add(directory);
           continue sourceRoots;
         }

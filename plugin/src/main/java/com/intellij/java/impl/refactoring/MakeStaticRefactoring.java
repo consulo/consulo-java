@@ -17,7 +17,7 @@ package com.intellij.java.impl.refactoring;
 
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiTypeParameterListOwner;
-import com.intellij.refactoring.Refactoring;
+import consulo.language.editor.refactoring.Refactoring;
 
 import javax.annotation.Nullable;
 import java.util.List;

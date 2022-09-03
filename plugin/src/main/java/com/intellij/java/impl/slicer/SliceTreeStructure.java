@@ -15,9 +15,9 @@
  */
 package com.intellij.java.impl.slicer;
 
-import com.intellij.ide.projectView.TreeStructureProvider;
-import com.intellij.ide.util.treeView.AbstractTreeStructureBase;
-import com.intellij.openapi.project.Project;
+import consulo.project.ui.view.tree.TreeStructureProvider;
+import consulo.ide.impl.idea.ide.util.treeView.AbstractTreeStructureBase;
+import consulo.project.Project;
 import javax.annotation.Nonnull;
 
 import java.util.Collections;

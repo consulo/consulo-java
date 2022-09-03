@@ -26,7 +26,7 @@ import com.intellij.java.debugger.impl.jdi.*;
 import com.intellij.java.debugger.impl.ui.tree.NodeDescriptorFactory;
 import com.intellij.java.debugger.impl.ui.tree.UserExpressionDescriptor;
 import com.intellij.java.debugger.ui.tree.NodeDescriptor;
-import com.intellij.openapi.project.Project;
+import consulo.project.Project;
 import consulo.internal.com.sun.jdi.*;
 import consulo.logging.Logger;
 
@@ -75,7 +75,7 @@ public class NodeDescriptorFactoryImpl implements NodeDescriptorFactory {
     return descriptor;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   protected <T extends NodeDescriptor> T findDisplayDescriptor(NodeDescriptor parent, T descriptor, DisplayKey<T> key) {
     return myDisplayDescriptorSearcher.search(parent, descriptor, key);
   }
@@ -160,7 +160,7 @@ public class NodeDescriptorFactoryImpl implements NodeDescriptorFactory {
     return getDescriptor(parent, new ArgValueData(variable, value));
   }
 
-  public StackFrameDescriptorImpl getStackFrameDescriptor(@javax.annotation.Nullable NodeDescriptorImpl parent, @Nonnull StackFrameProxyImpl frameProxy) {
+  public StackFrameDescriptorImpl getStackFrameDescriptor(@Nullable NodeDescriptorImpl parent, @Nonnull StackFrameProxyImpl frameProxy) {
     return getDescriptor(parent, new StackFrameData(frameProxy));
   }
 
@@ -193,7 +193,7 @@ public class NodeDescriptorFactoryImpl implements NodeDescriptorFactory {
     return getDescriptor(parent, data);
   }
 
-  public WatchItemDescriptor getWatchItemDescriptor(NodeDescriptor parent, TextWithImports text, @javax.annotation.Nullable Value value) {
+  public WatchItemDescriptor getWatchItemDescriptor(NodeDescriptor parent, TextWithImports text, @Nullable Value value) {
     return getDescriptor(parent, new WatchItemData(text, value));
   }
 

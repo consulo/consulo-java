@@ -15,10 +15,10 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.analysis;
 
-import com.intellij.codeInsight.highlighting.HighlightErrorFilter;
-import com.intellij.psi.PsiErrorElement;
+import consulo.language.editor.HighlightErrorFilter;
+import consulo.language.psi.PsiErrorElement;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 import javax.annotation.Nonnull;
 
 /**

@@ -9,12 +9,12 @@ import com.intellij.java.impl.refactoring.inline.InlineParameterExpressionProces
 import com.intellij.java.impl.refactoring.inline.InlineParameterHandler;
 import org.jetbrains.annotations.NonNls;
 import com.intellij.JavaTestUtil;
-import com.intellij.psi.PsiElement;
-import com.intellij.refactoring.BaseRefactoringProcessor;
+import consulo.language.psi.PsiElement;
+import consulo.language.editor.refactoring.BaseRefactoringProcessor;
 import com.intellij.refactoring.LightRefactoringTestCase;
-import com.intellij.refactoring.util.CommonRefactoringUtil;
-import com.intellij.util.containers.ContainerUtil;
-import consulo.codeInsight.TargetElementUtil;
+import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
+import consulo.util.collection.ContainerUtil;
+import consulo.language.editor.TargetElementUtil;
 import consulo.codeInsight.TargetElementUtilEx;
 
 /**

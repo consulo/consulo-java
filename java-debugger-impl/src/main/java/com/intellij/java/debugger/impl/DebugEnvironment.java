@@ -15,11 +15,11 @@
  */
 package com.intellij.java.debugger.impl;
 
-import com.intellij.execution.ExecutionException;
-import com.intellij.execution.ExecutionResult;
+import consulo.execution.ExecutionResult;
+import consulo.process.ExecutionException;
 import com.intellij.java.execution.configurations.RemoteConnection;
-import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.content.bundle.Sdk;
+import consulo.language.psi.scope.GlobalSearchScope;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -30,7 +30,7 @@ public interface DebugEnvironment
 	int LOCAL_START_TIMEOUT = 30000;
 
 	@Nullable
-	ExecutionResult createExecutionResult() throws ExecutionException;
+  ExecutionResult createExecutionResult() throws ExecutionException;
 
 	@Nonnull
 	GlobalSearchScope getSearchScope();

@@ -18,8 +18,8 @@ package com.intellij.java.language.psi.infos;
 import javax.annotation.Nonnull;
 
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiElement;
 import com.intellij.java.language.psi.PsiSubstitutor;
+import consulo.language.psi.PsiElement;
 
 /**
  * Created by IntelliJ IDEA.

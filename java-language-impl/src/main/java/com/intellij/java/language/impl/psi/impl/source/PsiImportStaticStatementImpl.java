@@ -15,14 +15,16 @@
  */
 package com.intellij.java.language.impl.psi.impl.source;
 
-import javax.annotation.Nonnull;
-
-import com.intellij.java.language.psi.*;
-import com.intellij.lang.ASTNode;
-import com.intellij.psi.*;
 import com.intellij.java.language.impl.psi.impl.java.stubs.JavaStubElementTypes;
 import com.intellij.java.language.impl.psi.impl.java.stubs.PsiImportStatementStub;
-import com.intellij.util.ArrayFactory;
+import com.intellij.java.language.psi.*;
+import consulo.language.ast.ASTNode;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiElementVisitor;
+import consulo.util.collection.ArrayFactory;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class PsiImportStaticStatementImpl extends PsiImportStatementBaseImpl implements PsiImportStaticStatement {
   public static final PsiImportStaticStatementImpl[] EMPTY_ARRAY = new PsiImportStaticStatementImpl[0];
@@ -49,8 +51,7 @@ public class PsiImportStaticStatementImpl extends PsiImportStatementBaseImpl imp
     final PsiElement result = classReference.resolve();
     if (result instanceof PsiClass) {
       return (PsiClass) result;
-    }
-    else {
+    } else {
       return null;
     }
   }
@@ -61,49 +62,44 @@ public class PsiImportStaticStatementImpl extends PsiImportStatementBaseImpl imp
     final PsiImportStaticReferenceElement memberReference = getMemberReference();
     if (memberReference != null) {
       return memberReference.getReferenceName();
-    }
-    else {
+    } else {
       return null;
     }
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private PsiImportStaticReferenceElement getMemberReference() {
     if (isOnDemand()) {
       return null;
-    }
-    else {
+    } else {
       return (PsiImportStaticReferenceElement) getImportReference();
     }
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public PsiJavaCodeReferenceElement getClassReference() {
     if (isOnDemand()) {
       return getImportReference();
-    }
-    else {
+    } else {
       final PsiImportStaticReferenceElement memberReference = getMemberReference();
       if (memberReference != null) {
         return memberReference.getClassReference();
-      }
-      else {
+      } else {
         return null;
       }
     }
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor){
+  public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
-      ((JavaElementVisitor)visitor).visitImportStaticStatement(this);
-    }
-    else {
+      ((JavaElementVisitor) visitor).visitImportStaticStatement(this);
+    } else {
       visitor.visitElement(this);
     }
   }
 
-  public String toString(){
+  public String toString() {
     return "PsiImportStaticStatement";
   }
 }

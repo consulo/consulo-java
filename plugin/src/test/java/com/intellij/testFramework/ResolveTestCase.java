@@ -21,13 +21,13 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 
+import consulo.virtualFileSystem.LocalFileSystem;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nullable;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.LocalFileSystem;
-import com.intellij.openapi.vfs.VfsUtil;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiReference;
+import consulo.util.lang.StringUtil;
+import consulo.ide.impl.idea.openapi.vfs.VfsUtil;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.language.psi.PsiReference;
 
 public abstract class ResolveTestCase extends PsiTestCase {
   @NonNls protected static final String MARKER = "<ref>";
@@ -52,7 +52,7 @@ public abstract class ResolveTestCase extends PsiTestCase {
     return configureByFileText(fileText, fileName, null);
   }
   
-  protected PsiReference configureByFileText(String fileText, String fileName, @javax.annotation.Nullable final VirtualFile parentDir) throws Exception {
+  protected PsiReference configureByFileText(String fileText, String fileName, @Nullable final VirtualFile parentDir) throws Exception {
     int offset = fileText.indexOf(MARKER);
     assertTrue(offset >= 0);
     fileText = fileText.substring(0, offset) + fileText.substring(offset + MARKER.length());

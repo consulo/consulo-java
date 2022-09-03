@@ -10,9 +10,10 @@ import java.io.IOException;
 import java.util.Collection;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-import com.intellij.coverage.BaseCoverageSuite;
-import com.intellij.coverage.CoverageSuite;
+import consulo.execution.coverage.BaseCoverageSuite;
+import consulo.execution.coverage.CoverageSuite;
 import org.jacoco.core.analysis.Analyzer;
 import org.jacoco.core.analysis.CoverageBuilder;
 import org.jacoco.core.analysis.IClassCoverage;
@@ -23,12 +24,12 @@ import org.jacoco.core.data.ExecutionDataReader;
 import org.jacoco.core.data.ExecutionDataStore;
 import org.jacoco.core.data.ISessionInfoVisitor;
 import org.jacoco.core.data.SessionInfo;
-import com.intellij.ide.plugins.PluginManager;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.VfsUtil;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.ide.impl.idea.ide.plugins.PluginManager;
+import consulo.module.Module;
+import consulo.module.ModuleManager;
+import consulo.project.Project;
+import consulo.ide.impl.idea.openapi.vfs.VfsUtil;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.rt.coverage.data.ClassData;
 import com.intellij.rt.coverage.data.LineCoverage;
 import com.intellij.rt.coverage.data.LineData;
@@ -41,7 +42,7 @@ import consulo.roots.impl.TestContentFolderTypeProvider;
 public class JaCoCoCoverageRunner extends JavaCoverageRunner
 {
 	@Override
-	public ProjectData loadCoverageData(@Nonnull File sessionDataFile, @javax.annotation.Nullable CoverageSuite baseCoverageSuite)
+	public ProjectData loadCoverageData(@Nonnull File sessionDataFile, @Nullable CoverageSuite baseCoverageSuite)
 	{
 		final ProjectData data = new ProjectData();
 		try
@@ -100,13 +101,13 @@ public class JaCoCoCoverageRunner extends JavaCoverageRunner
 			VirtualFile compilerOutput = compilerModuleExtension.getCompilerOutput(ProductionContentFolderTypeProvider.getInstance());
 			if(compilerOutput != null)
 			{
-				analyzer.analyzeAll(VfsUtil.virtualToIoFile(compilerOutput));
+				analyzer.analyzeAll(consulo.ide.impl.idea.openapi.vfs.VfsUtil.virtualToIoFile(compilerOutput));
 			}
 
 			compilerOutput = compilerModuleExtension.getCompilerOutput(TestContentFolderTypeProvider.getInstance());
 			if(compilerOutput != null)
 			{
-				analyzer.analyzeAll(VfsUtil.virtualToIoFile(compilerOutput));
+				analyzer.analyzeAll(consulo.ide.impl.idea.openapi.vfs.VfsUtil.virtualToIoFile(compilerOutput));
 			}
 		}
 

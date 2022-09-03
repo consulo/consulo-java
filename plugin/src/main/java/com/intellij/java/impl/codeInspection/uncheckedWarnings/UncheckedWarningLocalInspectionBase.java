@@ -32,26 +32,26 @@ import com.intellij.java.language.impl.codeInsight.daemon.JavaErrorBundle;
 import com.intellij.java.language.codeInsight.daemon.impl.analysis.JavaGenericsUtil;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.JavaHighlightUtil;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix.VariableArrayTypeFix;
-import com.intellij.codeInsight.intention.IntentionAction;
+import consulo.language.editor.intention.IntentionAction;
 import com.intellij.java.analysis.codeInsight.intention.QuickFixFactory;
 import com.intellij.java.analysis.impl.codeInsight.quickfix.ChangeVariableTypeQuickFixProvider;
 import com.intellij.java.analysis.codeInspection.BaseJavaBatchLocalInspectionTool;
-import com.intellij.codeInspection.InspectionsBundle;
-import com.intellij.codeInspection.LocalInspectionToolSession;
-import com.intellij.codeInspection.LocalQuickFix;
-import com.intellij.codeInspection.ProblemsHolder;
+import consulo.language.editor.inspection.InspectionsBundle;
+import consulo.language.editor.inspection.LocalInspectionToolSession;
+import consulo.language.editor.inspection.LocalQuickFix;
+import consulo.language.editor.inspection.ProblemsHolder;
 import consulo.logging.Logger;
-import com.intellij.openapi.extensions.Extensions;
+import consulo.component.extension.Extensions;
 import com.intellij.java.language.projectRoots.JavaSdkVersion;
 import com.intellij.java.language.projectRoots.JavaVersionService;
 import com.intellij.openapi.util.Pass;
-import com.intellij.openapi.util.WriteExternalException;
+import consulo.util.xml.serializer.WriteExternalException;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.psi.*;
 import com.intellij.java.language.psi.util.MethodSignature;
 import com.intellij.java.language.psi.util.MethodSignatureBackedByPsiMethod;
 import com.intellij.java.language.psi.util.MethodSignatureUtil;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiTypesUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
@@ -79,7 +79,7 @@ public class UncheckedWarningLocalInspectionBase extends BaseJavaBatchLocalInspe
 	}
 
 	@Nonnull
-	private static LocalQuickFix[] getChangeVariableTypeFixes(@Nonnull PsiVariable parameter, @javax.annotation.Nullable PsiType itemType, LocalQuickFix[] generifyFixes)
+	private static LocalQuickFix[] getChangeVariableTypeFixes(@Nonnull PsiVariable parameter, @Nullable PsiType itemType, LocalQuickFix[] generifyFixes)
 	{
 		if(itemType instanceof PsiMethodReferenceType)
 		{

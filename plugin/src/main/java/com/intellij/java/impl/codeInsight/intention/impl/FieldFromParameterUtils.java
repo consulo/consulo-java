@@ -17,20 +17,20 @@ package com.intellij.java.impl.codeInsight.intention.impl;
 
 import com.intellij.java.language.codeInsight.NullableNotNullManager;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Pair;
-import com.intellij.openapi.util.Ref;
-import com.intellij.openapi.util.TextRange;
+import consulo.codeEditor.Editor;
+import consulo.project.Project;
+import consulo.util.lang.Pair;
+import consulo.util.lang.ref.Ref;
+import consulo.document.util.TextRange;
 import com.intellij.psi.*;
-import com.intellij.psi.codeStyle.CodeStyleManager;
-import com.intellij.psi.search.LocalSearchScope;
-import com.intellij.psi.search.searches.ReferencesSearch;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.psi.scope.LocalSearchScope;
+import consulo.language.psi.search.ReferencesSearch;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import com.intellij.java.impl.refactoring.util.RefactoringUtil;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
@@ -65,7 +65,7 @@ public final class FieldFromParameterUtils
 		return null;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public static PsiType getType(@Nullable PsiParameter myParameter)
 	{
 		if(myParameter == null)
@@ -77,7 +77,7 @@ public final class FieldFromParameterUtils
 	}
 
 	@Nullable
-	public static PsiType getSubstitutedType(@javax.annotation.Nullable PsiParameter parameter)
+	public static PsiType getSubstitutedType(@Nullable PsiParameter parameter)
 	{
 		if(parameter == null)
 		{
@@ -123,7 +123,7 @@ public final class FieldFromParameterUtils
 		return psiClass instanceof PsiTypeParameter ? subst.substitute((PsiTypeParameter) psiClass) : elementFactory.createType(psiClass, substitutor);
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public static PsiField getParameterAssignedToField(final PsiParameter parameter)
 	{
 		for(PsiReference reference : ReferencesSearch.search(parameter, new LocalSearchScope(parameter.getDeclarationScope()), false))
@@ -322,7 +322,7 @@ public final class FieldFromParameterUtils
 	}
 
 	public static boolean isAvailable(@Nullable PsiParameter myParameter,
-									  @javax.annotation.Nullable PsiType type,
+									  @Nullable PsiType type,
 									  @Nullable PsiClass targetClass)
 	{
 		return myParameter != null

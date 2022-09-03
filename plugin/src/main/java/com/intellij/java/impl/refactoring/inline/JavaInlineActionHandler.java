@@ -15,9 +15,9 @@
  */
 package com.intellij.java.impl.refactoring.inline;
 
-import com.intellij.lang.Language;
+import consulo.language.Language;
 import com.intellij.java.language.JavaLanguage;
-import com.intellij.lang.refactoring.InlineActionHandler;
+import consulo.language.editor.refactoring.inline.InlineActionHandler;
 
 /**
  * @author yole

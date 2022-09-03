@@ -23,10 +23,10 @@ import com.intellij.java.compiler.OutputParser;
 import com.intellij.java.compiler.impl.javaCompiler.FileObject;
 import com.intellij.java.language.impl.JavaClassFileType;
 import com.intellij.java.language.impl.JavaFileType;
-import com.intellij.openapi.compiler.CompilerBundle;
+import consulo.compiler.CompilerBundle;
 import consulo.logging.Logger;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.openapi.util.io.FileUtil;
+import consulo.util.lang.Comparing;
+import consulo.ide.impl.idea.openapi.util.io.FileUtil;
 
 /**
  * @author Eugene Zhuravlev

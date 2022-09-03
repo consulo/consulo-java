@@ -18,18 +18,18 @@ package com.intellij.refactoring.inline;
 import com.intellij.JavaTestUtil;
 import com.intellij.java.impl.refactoring.inline.InlineToAnonymousClassHandler;
 import com.intellij.java.impl.refactoring.inline.InlineToAnonymousClassProcessor;
-import com.intellij.openapi.vfs.LocalFileSystem;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.virtualFileSystem.LocalFileSystem;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.impl.source.PostprocessReformattingAspect;
+import consulo.language.psi.PsiElement;
+import consulo.language.codeStyle.PostprocessReformattingAspect;
 import com.intellij.psi.search.ProjectScope;
 import com.intellij.refactoring.RefactoringTestCase;
 import com.intellij.testFramework.IdeaTestUtil;
 import com.intellij.testFramework.PlatformTestUtil;
 import com.intellij.testFramework.PsiTestUtil;
-import com.intellij.usageView.UsageInfo;
-import com.intellij.util.containers.MultiMap;
+import consulo.usage.UsageInfo;
+import consulo.util.collection.MultiMap;
 
 import java.io.File;
 

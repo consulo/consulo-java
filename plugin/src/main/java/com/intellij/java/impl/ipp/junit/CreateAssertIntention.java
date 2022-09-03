@@ -17,9 +17,9 @@ package com.intellij.java.impl.ipp.junit;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.ast.IElementType;
+import consulo.language.util.IncorrectOperationException;
 import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.impl.ipp.base.Intention;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
@@ -51,7 +51,7 @@ public class CreateAssertIntention extends Intention {
     else {
       specifierString = "";
     }
-    if (com.siyeh.ig.psiutils.BoolUtils.isNegation(expression)) {
+    if (BoolUtils.isNegation(expression)) {
       @NonNls final String newExpression =
         specifierString + "assertFalse(" +
         BoolUtils.getNegatedExpressionText(expression) + ");";

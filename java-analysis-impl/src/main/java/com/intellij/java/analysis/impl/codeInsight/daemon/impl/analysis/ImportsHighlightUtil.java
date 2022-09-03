@@ -15,12 +15,12 @@
  */
 package com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis;
 
-import com.intellij.codeInsight.daemon.impl.HighlightInfo;
-import com.intellij.codeInsight.daemon.impl.HighlightInfoType;
-import com.intellij.psi.PsiElement;
+import consulo.language.editor.rawHighlight.HighlightInfo;
+import consulo.language.editor.rawHighlight.HighlightInfoType;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiImportStaticStatement;
 import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
-import com.intellij.util.ObjectUtil;
+import consulo.util.lang.ObjectUtil;
 
 public class ImportsHighlightUtil {
   public static HighlightInfo checkStaticOnDemandImportResolvesToClass(PsiImportStaticStatement statement) {

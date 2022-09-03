@@ -21,23 +21,24 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-import com.intellij.codeInsight.FileModificationService;
-import consulo.codeInsight.TargetElementUtil;
-import com.intellij.codeInsight.intention.IntentionAction;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
+import consulo.language.editor.FileModificationService;
+import consulo.language.editor.TargetElementUtil;
+import consulo.language.editor.intention.IntentionAction;
+import consulo.codeEditor.Editor;
+import consulo.project.Project;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
 import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
 import com.intellij.java.language.psi.PsiJavaFile;
 import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.psi.PsiReference;
+import consulo.language.psi.PsiReference;
 import com.intellij.java.language.psi.PsiReferenceList;
 import com.intellij.java.language.psi.util.MethodSignatureUtil;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
 import java.util.HashMap;
 
 public class UnimplementInterfaceAction implements IntentionAction {
@@ -86,7 +87,7 @@ public class UnimplementInterfaceAction implements IntentionAction {
     return true;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private static PsiJavaCodeReferenceElement getTopLevelRef(PsiReference psiReference, PsiReferenceList referenceList) {
     PsiElement element = psiReference.getElement();
     while (element.getParent() != referenceList) {

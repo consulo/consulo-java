@@ -15,7 +15,7 @@
  */
 package com.intellij.java.language.impl.psi.controlFlow;
 
-import com.intellij.openapi.diagnostic.Logger;
+import consulo.logging.Logger;
 import javax.annotation.Nonnull;
 
 public class GoToInstruction extends BranchingInstruction

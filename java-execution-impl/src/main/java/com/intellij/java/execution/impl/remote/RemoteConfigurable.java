@@ -20,16 +20,16 @@
  */
 package com.intellij.java.execution.impl.remote;
 
-import com.intellij.execution.ExecutionBundle;
+import consulo.configurable.ConfigurationException;
+import consulo.execution.ExecutionBundle;
 import com.intellij.java.execution.configurations.RemoteConnection;
 import com.intellij.java.execution.impl.ui.ConfigurationArgumentsHelpArea;
 import com.intellij.java.execution.impl.ui.ConfigurationModuleSelector;
-import com.intellij.openapi.options.ConfigurationException;
-import com.intellij.openapi.options.SettingsEditor;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.LabeledComponent;
-import com.intellij.openapi.util.SystemInfo;
-import com.intellij.ui.DocumentAdapter;
+import consulo.execution.configuration.ui.SettingsEditor;
+import consulo.project.Project;
+import consulo.ui.ex.awt.LabeledComponent;
+import consulo.application.util.SystemInfo;
+import consulo.ui.ex.awt.event.DocumentAdapter;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
 

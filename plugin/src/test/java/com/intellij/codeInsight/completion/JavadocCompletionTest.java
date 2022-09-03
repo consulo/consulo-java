@@ -8,20 +8,20 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 import com.intellij.JavaTestUtil;
-import com.intellij.codeInsight.CodeInsightSettings;
-import com.intellij.codeInsight.lookup.LookupElement;
+import consulo.language.editor.CodeInsightSettings;
+import consulo.language.editor.completion.lookup.LookupElement;
 import com.intellij.java.impl.codeInspection.javaDoc.JavaDocLocalInspection;
 import com.intellij.java.language.JavaLanguage;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiReference;
-import com.intellij.psi.PsiReferenceBase;
-import com.intellij.psi.PsiReferenceProvider;
-import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
-import com.intellij.psi.impl.source.resolve.reference.PsiReferenceRegistrarImpl;
-import com.intellij.psi.impl.source.resolve.reference.ReferenceProvidersRegistry;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiReference;
+import consulo.language.psi.PsiReferenceBase;
+import consulo.language.psi.PsiReferenceProvider;
+import consulo.language.codeStyle.CodeStyleSettingsManager;
+import consulo.ide.impl.psi.impl.source.resolve.reference.PsiReferenceRegistrarImpl;
+import consulo.language.psi.ReferenceProvidersRegistry;
 import com.intellij.java.language.psi.javadoc.PsiDocTag;
-import com.intellij.util.ObjectUtil;
-import com.intellij.util.ProcessingContext;
+import consulo.util.lang.ObjectUtil;
+import consulo.language.util.ProcessingContext;
 
 
 /**

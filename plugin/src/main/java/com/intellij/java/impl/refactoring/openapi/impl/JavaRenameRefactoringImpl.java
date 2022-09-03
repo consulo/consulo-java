@@ -18,9 +18,9 @@ package com.intellij.java.impl.refactoring.openapi.impl;
 import com.intellij.java.impl.refactoring.JavaRenameRefactoring;
 import com.intellij.java.impl.refactoring.rename.naming.AutomaticInheritorRenamerFactory;
 import com.intellij.java.impl.refactoring.rename.naming.AutomaticVariableRenamerFactory;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiElement;
-import com.intellij.refactoring.openapi.impl.RenameRefactoringImpl;
+import consulo.project.Project;
+import consulo.language.psi.PsiElement;
+import consulo.ide.impl.idea.refactoring.openapi.impl.RenameRefactoringImpl;
 
 /**
  * @author dsl

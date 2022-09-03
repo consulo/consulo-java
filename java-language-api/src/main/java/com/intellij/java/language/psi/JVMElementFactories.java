@@ -15,9 +15,8 @@
  */
 package com.intellij.java.language.psi;
 
-import com.intellij.lang.Language;
-import com.intellij.lang.LanguageExtension;
-import com.intellij.openapi.project.Project;
+import consulo.language.Language;
+import consulo.project.Project;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -25,23 +24,15 @@ import javax.annotation.Nullable;
 /**
  * @author Medvedev Max
  */
-public class JVMElementFactories extends LanguageExtension<JVMElementFactoryProvider> {
-  private static final JVMElementFactories INSTANCE = new JVMElementFactories();
-
-  private JVMElementFactories() {
-    super("consulo.java.generation.topLevelFactory");
-  }
-
+@Deprecated
+public class JVMElementFactories {
   @Nullable
   public static JVMElementFactory getFactory(@Nonnull Language language, @Nonnull Project project) {
-    final JVMElementFactoryProvider provider = INSTANCE.forLanguage(language);
-    return provider != null? provider.getFactory(project) : null;
+    return JVMElementFactoryProvider.forLanguage(project, language);
   }
 
   @Nonnull
   public static JVMElementFactory requireFactory(@Nonnull Language language, @Nonnull Project project) {
-    final JVMElementFactory factory = getFactory(language, project);
-    assert factory != null : language;
-    return factory;
+    return JVMElementFactoryProvider.forLanguageRequired(project, language);
   }
 }

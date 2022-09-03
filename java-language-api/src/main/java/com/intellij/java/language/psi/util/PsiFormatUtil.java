@@ -16,12 +16,11 @@
 package com.intellij.java.language.psi.util;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.PsiBundle;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.util.PsiFormatUtilBase;
-import com.intellij.psi.util.PsiTreeUtil;
 import consulo.annotation.access.RequiredReadAction;
+import consulo.language.psi.PsiBundle;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.util.lang.StringUtil;
 import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.NonNls;
 

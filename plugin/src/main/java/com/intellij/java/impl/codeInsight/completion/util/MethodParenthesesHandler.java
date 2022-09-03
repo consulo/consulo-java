@@ -15,11 +15,11 @@
  */
 package com.intellij.java.impl.codeInsight.completion.util;
 
-import com.intellij.codeInsight.completion.InsertionContext;
-import com.intellij.codeInsight.completion.util.ParenthesesInsertHandler;
-import com.intellij.codeInsight.lookup.LookupElement;
+import consulo.language.editor.completion.lookup.InsertionContext;
+import consulo.language.editor.completion.lookup.ParenthesesInsertHandler;
+import consulo.language.editor.completion.lookup.LookupElement;
 import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 
 /**
  * @author peter

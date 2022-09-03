@@ -15,12 +15,12 @@
  */
 package com.intellij.java.language.psi;
 
-import com.intellij.openapi.extensions.ExtensionPointName;
-import com.intellij.psi.PsiDirectory;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.util.Processor;
-import com.intellij.util.SmartList;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.application.util.function.Processor;
+import consulo.component.extension.ExtensionPointName;
+import consulo.language.psi.PsiDirectory;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.util.collection.ContainerUtil;
+import consulo.util.collection.SmartList;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -80,7 +80,7 @@ public abstract class PsiElementFinder {
    * @param psiPackage the package to return the list of subpackages for.
    * @param scope      the scope in which subpackages are searched.
    * @return the list of subpackages.
-   * @see consulo.psi.PsiPackage#getSubPackages(GlobalSearchScope)
+   * @see PsiJavaPackage#getSubPackages(GlobalSearchScope)
    */
   @Nonnull
   public PsiJavaPackage[] getSubPackages(@Nonnull PsiJavaPackage psiPackage, @Nonnull GlobalSearchScope scope) {
@@ -138,7 +138,7 @@ public abstract class PsiElementFinder {
    * @param psiPackage the package to return the list of classes in.
    * @param scope      the scope in which classes are searched.
    * @return the list of classes.
-   * @see consulo.psi.PsiPackage#getClasses(GlobalSearchScope)
+   * @see PsiJavaPackage#getClasses(GlobalSearchScope)
    */
   @Nonnull
   public PsiClass[] getClasses(@Nullable String className, @Nonnull PsiJavaPackage psiPackage, @Nonnull GlobalSearchScope scope) {

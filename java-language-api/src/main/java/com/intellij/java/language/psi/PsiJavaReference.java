@@ -15,8 +15,8 @@
  */
 package com.intellij.java.language.psi;
 
-import com.intellij.psi.PsiPolyVariantReference;
-import com.intellij.psi.scope.PsiScopeProcessor;
+import consulo.language.psi.PsiPolyVariantReference;
+import consulo.language.psi.resolve.PsiScopeProcessor;
 
 import javax.annotation.Nonnull;
 

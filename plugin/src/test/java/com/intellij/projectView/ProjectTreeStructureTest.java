@@ -1,6 +1,6 @@
 package com.intellij.projectView;
 
-import com.intellij.openapi.ui.Queryable;
+import consulo.application.util.Queryable;
 
 public abstract class ProjectTreeStructureTest extends BaseProjectViewTestCase {
 

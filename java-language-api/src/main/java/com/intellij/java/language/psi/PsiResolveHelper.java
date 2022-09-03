@@ -18,11 +18,11 @@ package com.intellij.java.language.psi;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.psi.impl.source.resolve.ParameterTypeInferencePolicy;
 import com.intellij.java.language.psi.infos.CandidateInfo;
-import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.RecursionGuard;
-import com.intellij.openapi.util.RecursionManager;
-import com.intellij.psi.PsiElement;
+import consulo.application.util.RecursionManager;
+import consulo.ide.ServiceManager;
+import consulo.language.psi.PsiElement;
+import consulo.project.Project;
+import consulo.application.util.RecursionGuard;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -136,9 +136,9 @@ public interface PsiResolveHelper {
                        @Nullable PsiModifierList modifierList,
                        @Nonnull PsiElement place,
                        @Nullable PsiClass accessObjectClass,
-                       @javax.annotation.Nullable PsiElement currentFileResolveScope);
+                       @Nullable PsiElement currentFileResolveScope);
 
-  boolean isAccessible(@Nonnull PsiMember member, @Nonnull PsiElement place, @javax.annotation.Nullable PsiClass accessObjectClass);
+  boolean isAccessible(@Nonnull PsiMember member, @Nonnull PsiElement place, @Nullable PsiClass accessObjectClass);
 
   /**
    * @return {@link PsiType#NULL} iff no type could be inferred

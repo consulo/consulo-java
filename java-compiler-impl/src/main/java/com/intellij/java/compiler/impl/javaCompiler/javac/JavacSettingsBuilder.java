@@ -15,10 +15,10 @@
  */
 package com.intellij.java.compiler.impl.javaCompiler.javac;
 
-import com.intellij.compiler.CompilerEncodingService;
-import com.intellij.compiler.impl.ModuleChunk;
-import com.intellij.openapi.module.Module;
-import com.intellij.util.Chunk;
+import consulo.compiler.CompilerEncodingService;
+import consulo.ide.impl.idea.compiler.impl.ModuleChunk;
+import consulo.module.Module;
+import consulo.util.collection.Chunk;
 
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -77,7 +77,7 @@ public class JavacSettingsBuilder {
     return true;
   }
 
-  public String getOptionsString(final ModuleChunk chunk) {
+  public String getOptionsString(final consulo.ide.impl.idea.compiler.impl.ModuleChunk chunk) {
     final StringBuilder options = new StringBuilder();
     for (String option : getOptions(chunk)) {
       if (options.length() > 0) {

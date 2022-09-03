@@ -25,6 +25,7 @@ import com.intellij.java.language.impl.psi.scope.ElementClassHint;
 import com.intellij.java.language.impl.psi.scope.NameHint;
 import com.intellij.java.language.impl.psi.scope.processor.FilterScopeProcessor;
 import com.intellij.java.language.impl.psi.scope.processor.MethodResolverProcessor;
+import com.intellij.java.language.psi.PsiElementFactory;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.infos.MethodCandidateInfo;
 import com.intellij.java.language.psi.search.PackageScope;
@@ -32,33 +33,39 @@ import com.intellij.java.language.psi.util.MethodSignature;
 import com.intellij.java.language.psi.util.MethodSignatureUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
-import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.progress.ProgressIndicatorProvider;
-import com.intellij.openapi.roots.FileIndexFacade;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.openapi.util.Pair;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.*;
-import com.intellij.psi.impl.ResolveScopeManager;
-import com.intellij.psi.scope.PsiScopeProcessor;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.search.LocalSearchScope;
-import com.intellij.psi.search.SearchScope;
-import com.intellij.psi.stubs.StubElement;
-import com.intellij.psi.util.*;
-import com.intellij.util.*;
-import com.intellij.util.containers.ConcurrentFactoryMap;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.application.progress.ProgressIndicatorProvider;
+import consulo.application.util.*;
+import consulo.content.scope.SearchScope;
+import consulo.ide.ServiceManager;
 import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.content.FileIndexFacade;
+import consulo.language.impl.psi.ResolveScopeManager;
+import consulo.language.psi.*;
+import consulo.language.psi.resolve.PsiScopeProcessor;
+import consulo.language.psi.resolve.ResolveState;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.scope.LocalSearchScope;
+import consulo.language.psi.stub.StubElement;
+import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
+import consulo.util.collection.ContainerUtil;
+import consulo.util.collection.SmartList;
 import consulo.util.dataholder.Key;
 import consulo.util.dataholder.UserDataHolderEx;
+import consulo.util.lang.Comparing;
+import consulo.util.lang.ObjectUtil;
+import consulo.util.lang.Pair;
+import consulo.util.lang.SystemProperties;
+import consulo.util.lang.function.PairProcessor;
+import consulo.virtualFileSystem.VirtualFile;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.swing.*;
 import java.util.*;
 import java.util.concurrent.ConcurrentMap;
+import java.util.function.Function;
 
 /**
  * @author ik
@@ -91,7 +98,7 @@ public class PsiClassImplUtil {
     return classes.toArray(new PsiClass[classes.size()]);
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public static PsiField findFieldByName(@Nonnull PsiClass aClass, String name, boolean checkBases) {
     List<PsiMember> byMap = findByMap(aClass, name, checkBases, MemberType.FIELD);
     return byMap.isEmpty() ? null : (PsiField) byMap.get(0);
@@ -104,7 +111,7 @@ public class PsiClassImplUtil {
     return methods.toArray(new PsiMethod[methods.size()]);
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public static PsiMethod findMethodBySignature(@Nonnull PsiClass aClass, @Nonnull PsiMethod patternMethod, final boolean checkBases) {
     final List<PsiMethod> result = findMethodsBySignature(aClass, patternMethod, checkBases, true);
     return result.isEmpty() ? null : result.get(0);
@@ -143,7 +150,7 @@ public class PsiClassImplUtil {
 
   // ----------------------------------------------------------------------------------------
 
-  @javax.annotation.Nullable
+  @Nullable
   public static PsiClass findInnerByName(@Nonnull PsiClass aClass, String name, boolean checkBases) {
     List<PsiMember> byMap = findByMap(aClass, name, checkBases, MemberType.CLASS);
     return byMap.isEmpty() ? null : (PsiClass) byMap.get(0);
@@ -372,7 +379,7 @@ public class PsiClassImplUtil {
             PsiUtilCore.ensureValid(element);
             allMembers.add((PsiMember) element);
             String currentName = ((PsiMember) element).getName();
-            List<PsiMember> listByName = map.computeIfAbsent(currentName, __ -> ContainerUtil.newSmartList());
+            List<PsiMember> listByName = map.computeIfAbsent(currentName, __ -> new SmartList<>());
             listByName.add((PsiMember) element);
           }
         }
@@ -406,7 +413,7 @@ public class PsiClassImplUtil {
   public static boolean processDeclarationsInClass(@Nonnull PsiClass aClass,
                                                    @Nonnull final PsiScopeProcessor processor,
                                                    @Nonnull ResolveState state,
-                                                   @javax.annotation.Nullable Set<PsiClass> visited,
+                                                   @Nullable Set<PsiClass> visited,
                                                    PsiElement last,
                                                    @Nonnull PsiElement place,
                                                    @Nonnull LanguageLevel languageLevel,
@@ -417,7 +424,7 @@ public class PsiClassImplUtil {
   private static boolean processDeclarationsInClass(@Nonnull PsiClass aClass,
                                                     @Nonnull final PsiScopeProcessor processor,
                                                     @Nonnull ResolveState state,
-                                                    @javax.annotation.Nullable Set<PsiClass> visited,
+                                                    @Nullable Set<PsiClass> visited,
                                                     PsiElement last,
                                                     @Nonnull PsiElement place,
                                                     @Nonnull LanguageLevel languageLevel,
@@ -444,7 +451,7 @@ public class PsiClassImplUtil {
   private static boolean processCachedMembersByName(@Nonnull final PsiClass aClass,
                                                     @Nonnull PsiScopeProcessor processor,
                                                     @Nonnull ResolveState state,
-                                                    @javax.annotation.Nullable Set<PsiClass> visited,
+                                                    @Nullable Set<PsiClass> visited,
                                                     PsiElement last,
                                                     @Nonnull final PsiElement place,
                                                     final boolean isRaw,
@@ -457,7 +464,7 @@ public class PsiClassImplUtil {
       final PsiElementFactory factory = JavaPsiFacade.getInstance(aClass.getProject()).getElementFactory();
 
       @Override
-      public PsiSubstitutor fun(PsiMember member) {
+      public PsiSubstitutor apply(PsiMember member) {
         PsiClass containingClass = ObjectUtil.assertNotNull(member.getContainingClass());
         PsiSubstitutor superSubstitutor = hierarchy.getSuperMembersSubstitutor(containingClass, languageLevel);
         PsiSubstitutor finalSubstitutor = obtainFinalSubstitutor(containingClass, superSubstitutor == null ? PsiSubstitutor.EMPTY : superSubstitutor, aClass, substitutor, factory,
@@ -489,7 +496,7 @@ public class PsiClassImplUtil {
             }
 
             processor.handleEvent(PsiScopeProcessor.Event.SET_DECLARATION_HOLDER, containingClass);
-            if (!processor.execute(candidateField, state.put(PsiSubstitutor.KEY, finalSubstitutor.fun(candidateField)))) {
+            if (!processor.execute(candidateField, state.put(PsiSubstitutor.KEY, finalSubstitutor.apply(candidateField)))) {
               resolved = true;
             }
           }
@@ -529,7 +536,7 @@ public class PsiClassImplUtil {
               PsiClass containingClass = inner.getContainingClass();
               if (containingClass != null) {
                 processor.handleEvent(PsiScopeProcessor.Event.SET_DECLARATION_HOLDER, containingClass);
-                if (!processor.execute(inner, state.put(PsiSubstitutor.KEY, finalSubstitutor.fun(inner)))) {
+                if (!processor.execute(inner, state.put(PsiSubstitutor.KEY, finalSubstitutor.apply(inner)))) {
                   resolved = true;
                 }
               }
@@ -573,7 +580,7 @@ public class PsiClassImplUtil {
           }
 
           processor.handleEvent(PsiScopeProcessor.Event.SET_DECLARATION_HOLDER, containingClass);
-          if (!processor.execute(candidateMethod, state.put(PsiSubstitutor.KEY, finalSubstitutor.fun(candidateMethod)))) {
+          if (!processor.execute(candidateMethod, state.put(PsiSubstitutor.KEY, finalSubstitutor.apply(candidateMethod)))) {
             resolved = true;
           }
         }
@@ -625,7 +632,7 @@ public class PsiClassImplUtil {
   private static boolean processDeclarationsInClassNotCached(@Nonnull PsiClass aClass,
                                                              @Nonnull final PsiScopeProcessor processor,
                                                              @Nonnull final ResolveState state,
-                                                             @javax.annotation.Nullable Set<PsiClass> visited,
+                                                             @Nullable Set<PsiClass> visited,
                                                              final PsiElement last,
                                                              @Nonnull final PsiElement place,
                                                              final boolean isRaw,
@@ -714,8 +721,8 @@ public class PsiClassImplUtil {
     });
   }
 
-  @javax.annotation.Nullable
-  public static <T extends PsiType> T correctType(@javax.annotation.Nullable final T originalType, @Nonnull final GlobalSearchScope resolveScope) {
+  @Nullable
+  public static <T extends PsiType> T correctType(@Nullable final T originalType, @Nonnull final GlobalSearchScope resolveScope) {
     if (originalType == null || !JAVA_CORRECT_CLASS_TYPE_BY_PLACE_RESOLVE_SCOPE) {
       return originalType;
     }
@@ -745,7 +752,7 @@ public class PsiClassImplUtil {
     return !resolved;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public static PsiClass getSuperClass(@Nonnull PsiClass psiClass) {
     if (psiClass.isInterface()) {
       return findSpecialSuperClass(psiClass, JavaClassNames.JAVA_LANG_OBJECT);
@@ -777,7 +784,7 @@ public class PsiClassImplUtil {
     return psiResolved == null ? findSpecialSuperClass(psiClass, JavaClassNames.JAVA_LANG_OBJECT) : psiResolved;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private static PsiClass findSpecialSuperClass(@Nonnull PsiClass psiClass, String className) {
     return JavaPsiFacade.getInstance(psiClass.getProject()).findClass(className, psiClass.getResolveScope());
   }
@@ -997,7 +1004,7 @@ public class PsiClassImplUtil {
     final LanguageLevel level = PsiUtil.getLanguageLevel(psiClass);
     return ContainerUtil.map(members, new Function<PsiMember, Pair<T, PsiSubstitutor>>() {
       @Override
-      public Pair<T, PsiSubstitutor> fun(PsiMember member) {
+      public Pair<T, PsiSubstitutor> apply(PsiMember member) {
         PsiClass containingClass = member.getContainingClass();
         PsiSubstitutor substitutor = containingClass == null ? null : hierarchy.getSuperMembersSubstitutor(containingClass, level);
         //noinspection unchecked
@@ -1048,7 +1055,7 @@ public class PsiClassImplUtil {
     return PsiClassType.EMPTY_ARRAY;
   }
 
-  static boolean isInExtendsList(@Nonnull PsiClass psiClass, @Nonnull PsiClass baseClass, @javax.annotation.Nullable String baseName, @Nonnull PsiManager manager) {
+  static boolean isInExtendsList(@Nonnull PsiClass psiClass, @Nonnull PsiClass baseClass, @Nullable String baseName, @Nonnull PsiManager manager) {
     if (psiClass.isEnum()) {
       return JavaClassNames.JAVA_LANG_ENUM.equals(baseClass.getQualifiedName());
     }
@@ -1075,7 +1082,7 @@ public class PsiClassImplUtil {
     return isInReferenceList(psiClass.getExtendsList(), baseClass, baseName, manager);
   }
 
-  static boolean isInReferenceList(@javax.annotation.Nullable PsiReferenceList list, @Nonnull PsiClass baseClass, @javax.annotation.Nullable String baseName, @Nonnull PsiManager manager) {
+  static boolean isInReferenceList(@Nullable PsiReferenceList list, @Nonnull PsiClass baseClass, @Nullable String baseName, @Nonnull PsiManager manager) {
     if (list == null) {
       return false;
     }

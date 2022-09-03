@@ -24,37 +24,41 @@ import com.intellij.java.language.impl.psi.impl.source.tree.JavaDocElementType;
 import com.intellij.java.language.impl.psi.scope.ElementClassHint;
 import com.intellij.java.language.impl.psi.scope.processor.FilterScopeProcessor;
 import com.intellij.java.language.impl.psi.scope.util.PsiScopesUtil;
+import com.intellij.java.language.psi.PsiElementFactory;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.java.language.psi.search.PackageScope;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.lang.ASTNode;
-import com.intellij.lang.FileASTNode;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.*;
-import com.intellij.psi.filters.ElementFilter;
-import com.intellij.psi.impl.DebugUtil;
-import com.intellij.psi.impl.ResolveScopeManager;
-import com.intellij.psi.impl.source.resolve.ResolveCache;
-import com.intellij.psi.impl.source.tree.*;
-import com.intellij.psi.scope.PsiScopeProcessor;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.search.LocalSearchScope;
-import com.intellij.psi.search.SearchScope;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.tree.TokenSet;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.PsiUtilCore;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.PairFunction;
-import com.intellij.util.SmartList;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.application.ApplicationManager;
+import consulo.content.scope.SearchScope;
+import consulo.language.ast.ASTNode;
+import consulo.language.ast.FileASTNode;
+import consulo.language.ast.IElementType;
+import consulo.language.ast.TokenSet;
+import consulo.language.impl.DebugUtil;
+import consulo.language.impl.ast.CompositeElement;
+import consulo.language.impl.ast.LeafElement;
+import consulo.language.impl.ast.SharedImplUtil;
+import consulo.language.impl.ast.TreeElement;
+import consulo.language.impl.psi.CompositePsiElement;
+import consulo.language.impl.psi.ResolveScopeManager;
+import consulo.language.psi.*;
+import consulo.language.psi.filter.ElementFilter;
+import consulo.language.psi.resolve.PsiScopeProcessor;
+import consulo.language.psi.resolve.ResolveCache;
+import consulo.language.psi.resolve.ResolveState;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.scope.LocalSearchScope;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
+import consulo.project.Project;
+import consulo.util.collection.SmartList;
 import consulo.util.dataholder.Key;
+import consulo.util.lang.Comparing;
+import consulo.util.lang.StringUtil;
+import consulo.util.lang.function.PairFunction;
+import consulo.virtualFileSystem.VirtualFile;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
@@ -78,7 +82,7 @@ public class PsiImplUtil {
     for (PsiMethod method : aClass.getMethods()) {
       if (method.isConstructor()) {
         if (result == null) {
-          result = ContainerUtil.newSmartList();
+          result = new SmartList<>();
         }
         result.add(method);
       }
@@ -320,7 +324,7 @@ public class PsiImplUtil {
     return new PsiImmediateClassType(classClass, substitutor);
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public static PsiAnnotation findAnnotation(@Nullable PsiAnnotationOwner annotationOwner, @Nonnull String qualifiedName) {
     if (annotationOwner == null) {
       return null;
@@ -492,7 +496,7 @@ public class PsiImplUtil {
     return getServerPageFile(element) != null;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public static ServerPageFile getServerPageFile(final PsiElement element) {
     final PsiFile psiFile = PsiUtilCore.getTemplateLanguageFile(element);
     return psiFile instanceof ServerPageFile ? (ServerPageFile) psiFile : null;
@@ -529,7 +533,7 @@ public class PsiImplUtil {
 
   @Nullable
   public static PsiAnnotationMemberValue setDeclaredAttributeValue(@Nonnull PsiAnnotation psiAnnotation,
-                                                                   @javax.annotation.Nullable String attributeName,
+                                                                   @Nullable String attributeName,
                                                                    @Nullable PsiAnnotationMemberValue value,
                                                                    @Nonnull PairFunction<Project, String, PsiAnnotation> annotationCreator) {
     PsiAnnotationMemberValue existing = psiAnnotation.findDeclaredAttributeValue(attributeName);
@@ -569,7 +573,7 @@ public class PsiImplUtil {
     return annotationCreator.fun(value.getProject(), "@A(" + namePrefix + value.getText() + ")").getParameterList().getAttributes()[0];
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public static ASTNode skipWhitespaceAndComments(final ASTNode node) {
     return skipWhitespaceCommentsAndTokens(node, TokenSet.EMPTY);
   }
@@ -683,7 +687,7 @@ public class PsiImplUtil {
     return element instanceof PsiMirrorElement ? ((PsiMirrorElement) element).getPrototype() : element;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public static PsiModifierList findNeighbourModifierList(@Nonnull PsiJavaCodeReferenceElement ref) {
     PsiElement parent = PsiTreeUtil.skipParentsOfType(ref, PsiJavaCodeReferenceElement.class);
     if (parent instanceof PsiTypeElement) {
@@ -696,7 +700,7 @@ public class PsiImplUtil {
     return null;
   }
 
-  public static boolean isTypeAnnotation(@javax.annotation.Nullable PsiElement element) {
+  public static boolean isTypeAnnotation(@Nullable PsiElement element) {
     return element instanceof PsiAnnotation && AnnotationTargetUtil.isTypeAnnotation((PsiAnnotation) element);
   }
 
@@ -751,7 +755,7 @@ public class PsiImplUtil {
     }
   }
 
-  public static boolean isLeafElementOfType(@javax.annotation.Nullable PsiElement element, IElementType type) {
+  public static boolean isLeafElementOfType(@Nullable PsiElement element, IElementType type) {
     return element instanceof LeafElement && ((LeafElement) element).getElementType() == type;
   }
 

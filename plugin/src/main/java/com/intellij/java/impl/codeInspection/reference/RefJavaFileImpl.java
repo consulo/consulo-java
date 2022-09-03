@@ -20,8 +20,8 @@
  */
 package com.intellij.java.impl.codeInspection.reference;
 
-import com.intellij.codeInspection.reference.RefFileImpl;
-import com.intellij.codeInspection.reference.RefManager;
+import consulo.ide.impl.idea.codeInspection.reference.RefFileImpl;
+import consulo.language.editor.inspection.reference.RefManager;
 import com.intellij.java.analysis.codeInspection.reference.RefJavaManager;
 import com.intellij.java.analysis.impl.codeInspection.reference.RefPackageImpl;
 import com.intellij.java.language.psi.PsiJavaFile;

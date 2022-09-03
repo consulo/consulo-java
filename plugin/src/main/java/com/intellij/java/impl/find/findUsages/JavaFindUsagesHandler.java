@@ -15,11 +15,11 @@
  */
 package com.intellij.java.impl.find.findUsages;
 
-import com.intellij.CommonBundle;
-import com.intellij.find.FindBundle;
-import com.intellij.find.findUsages.AbstractFindUsagesDialog;
-import com.intellij.find.findUsages.FindUsagesHandler;
-import com.intellij.find.findUsages.FindUsagesOptions;
+import consulo.application.CommonBundle;
+import consulo.find.FindBundle;
+import consulo.find.ui.AbstractFindUsagesDialog;
+import consulo.find.FindUsagesHandler;
+import consulo.find.FindUsagesOptions;
 import com.intellij.java.analysis.impl.find.findUsages.JavaFindUsagesHelper;
 import com.intellij.java.analysis.impl.psi.impl.search.ThrowSearchUtil;
 import com.intellij.java.impl.ide.util.SuperMethodWarningUtil;
@@ -31,22 +31,23 @@ import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
 import com.intellij.java.language.psi.util.PropertyUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.ui.Messages;
-import com.intellij.openapi.util.Condition;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiReference;
-import com.intellij.psi.search.SearchScope;
-import com.intellij.psi.util.PsiUtilCore;
-import com.intellij.refactoring.util.NonCodeSearchDescriptionLocation;
-import com.intellij.usageView.UsageInfo;
-import com.intellij.util.Processor;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.dataContext.DataContext;
+import consulo.application.ApplicationManager;
+import consulo.ui.ex.awt.Messages;
+import consulo.util.lang.function.Condition;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiReference;
+import consulo.content.scope.SearchScope;
+import consulo.language.psi.PsiUtilCore;
+import consulo.language.editor.refactoring.util.NonCodeSearchDescriptionLocation;
+import consulo.usage.UsageInfo;
+import consulo.application.util.function.Processor;
+import consulo.util.collection.ContainerUtil;
 import consulo.logging.Logger;
 import consulo.psi.PsiPackage;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.*;
 
 /**
@@ -208,7 +209,7 @@ public class JavaFindUsagesHandler extends FindUsagesHandler {
 
   @Override
   @Nonnull
-  public FindUsagesOptions getFindUsagesOptions(@javax.annotation.Nullable final DataContext dataContext) {
+  public FindUsagesOptions getFindUsagesOptions(@Nullable final DataContext dataContext) {
     PsiElement element = getPsiElement();
     if (element instanceof PsiPackage) {
       return myFactory.getFindPackageOptions();

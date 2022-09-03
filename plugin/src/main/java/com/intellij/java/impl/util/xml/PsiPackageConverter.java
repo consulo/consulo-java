@@ -18,9 +18,9 @@ package com.intellij.java.impl.util.xml;
 import com.intellij.java.impl.psi.impl.source.resolve.reference.impl.providers.PackageReferenceSet;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiJavaPackage;
-import com.intellij.psi.ElementManipulators;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiReference;
+import consulo.language.psi.ElementManipulators;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiReference;
 import com.intellij.util.xml.ConvertContext;
 import com.intellij.util.xml.Converter;
 import com.intellij.util.xml.CustomReferenceConverter;
@@ -39,7 +39,7 @@ public class PsiPackageConverter extends Converter<PsiJavaPackage> implements Cu
     return JavaPsiFacade.getInstance(context.getPsiManager().getProject()).findPackage(s);
   }
 
-  public String toString(@javax.annotation.Nullable PsiJavaPackage psiPackage, final ConvertContext context) {
+  public String toString(@Nullable PsiJavaPackage psiPackage, final ConvertContext context) {
     return psiPackage == null ? null : psiPackage.getQualifiedName();
   }
 

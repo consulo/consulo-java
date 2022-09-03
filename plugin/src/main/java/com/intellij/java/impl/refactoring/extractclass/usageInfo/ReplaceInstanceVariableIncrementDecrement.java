@@ -17,15 +17,15 @@ package com.intellij.java.impl.refactoring.extractclass.usageInfo;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.impl.refactoring.psi.MutationUtils;
 import com.intellij.java.impl.refactoring.util.FixableUsageInfo;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
 import javax.annotation.Nullable;
 
 public class ReplaceInstanceVariableIncrementDecrement extends FixableUsageInfo {
   private final PsiExpression reference;
-  private final @javax.annotation.Nullable
+  private final @Nullable
   String setterName;
   private final @Nullable String getterName;
   private final String delegateName;

@@ -17,14 +17,14 @@ package com.intellij.refactoring;
 
 import java.io.File;
 
+import consulo.virtualFileSystem.LocalFileSystem;
 import org.jetbrains.annotations.NonNls;
 import com.intellij.codeInsight.CodeInsightTestCase;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.fileEditor.FileDocumentManager;
-import com.intellij.openapi.vfs.LocalFileSystem;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiDocumentManager;
-import com.intellij.psi.impl.source.PostprocessReformattingAspect;
+import consulo.application.ApplicationManager;
+import consulo.document.FileDocumentManager;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.language.psi.PsiDocumentManager;
+import consulo.language.codeStyle.PostprocessReformattingAspect;
 import com.intellij.testFramework.PlatformTestCase;
 import com.intellij.testFramework.PlatformTestUtil;
 import com.intellij.testFramework.PsiTestUtil;

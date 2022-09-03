@@ -34,7 +34,7 @@ public interface PsiDoWhileStatement extends PsiConditionalLoopStatement {
    *
    * @return the keyword, or null if the statement is incomplete.
    */
-  @javax.annotation.Nullable
+  @Nullable
   PsiKeyword getWhileKeyword();
 
   /**
@@ -42,7 +42,7 @@ public interface PsiDoWhileStatement extends PsiConditionalLoopStatement {
    *
    * @return the opening parenthesis, or null if the statement is incomplete.
    */
-  @javax.annotation.Nullable
+  @Nullable
   PsiJavaToken getLParenth();
 
   /**

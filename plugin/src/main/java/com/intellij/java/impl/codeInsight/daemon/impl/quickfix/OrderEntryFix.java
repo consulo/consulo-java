@@ -15,37 +15,37 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
-import com.intellij.codeInsight.daemon.QuickFixActionRegistrar;
+import consulo.language.editor.intention.QuickFixActionRegistrar;
 import com.intellij.java.impl.codeInsight.daemon.impl.actions.AddImportAction;
 import com.intellij.java.impl.codeInsight.daemon.quickFix.ExternalLibraryResolver;
 import com.intellij.java.impl.codeInsight.daemon.quickFix.ExternalLibraryResolver.ExternalClassResolveResult;
-import com.intellij.codeInsight.intention.IntentionAction;
-import com.intellij.codeInspection.LocalQuickFix;
-import com.intellij.codeInspection.ProblemDescriptor;
+import consulo.language.editor.intention.IntentionAction;
+import consulo.language.editor.inspection.LocalQuickFix;
+import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.projectRoots.roots.ExternalLibraryDescriptor;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiAnnotation;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiImportStatement;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.project.DumbService;
-import com.intellij.openapi.project.Project;
+import consulo.codeEditor.Editor;
+import consulo.module.Module;
+import consulo.project.DumbService;
+import consulo.project.Project;
 import com.intellij.openapi.roots.*;
-import com.intellij.openapi.roots.libraries.Library;
-import com.intellij.openapi.vfs.LocalFileSystem;
-import com.intellij.openapi.vfs.VfsUtil;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.packageDependencies.DependencyValidationManager;
+import consulo.content.library.Library;
+import consulo.virtualFileSystem.LocalFileSystem;
+import consulo.ide.impl.idea.openapi.vfs.VfsUtil;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.ide.impl.idea.packageDependencies.DependencyValidationManager;
 import com.intellij.psi.*;
 import com.intellij.java.language.impl.psi.impl.source.PsiJavaModuleReferenceImpl;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.java.language.psi.search.PsiShortNamesCache;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.util.ThreeState;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.util.lang.ThreeState;
+import consulo.util.collection.ContainerUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -82,7 +82,7 @@ public abstract class OrderEntryFix implements IntentionAction, LocalQuickFix
 		invoke(project, null, descriptor.getPsiElement().getContainingFile());
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public static List<LocalQuickFix> registerFixes(@Nonnull QuickFixActionRegistrar registrar, @Nonnull PsiReference reference)
 	{
 		PsiElement psiElement = reference.getElement();
@@ -274,7 +274,7 @@ public abstract class OrderEntryFix implements IntentionAction, LocalQuickFix
 		return ThreeState.NO;
 	}
 
-	public static void importClass(@Nonnull Module currentModule, @Nullable Editor editor, @Nullable PsiReference reference, @javax.annotation.Nullable String className)
+	public static void importClass(@Nonnull Module currentModule, @Nullable Editor editor, @Nullable PsiReference reference, @Nullable String className)
 	{
 		Project project = currentModule.getProject();
 		if(editor != null && reference != null && className != null)
@@ -291,12 +291,12 @@ public abstract class OrderEntryFix implements IntentionAction, LocalQuickFix
 		}
 	}
 
-	public static void addJarToRoots(@Nonnull String jarPath, final @Nonnull Module module, @javax.annotation.Nullable PsiElement location)
+	public static void addJarToRoots(@Nonnull String jarPath, final @Nonnull Module module, @Nullable PsiElement location)
 	{
 		addJarsToRoots(Collections.singletonList(jarPath), null, module, location);
 	}
 
-	public static void addJarsToRoots(@Nonnull List<String> jarPaths, @Nullable String libraryName, @Nonnull Module module, @javax.annotation.Nullable PsiElement location)
+	public static void addJarsToRoots(@Nonnull List<String> jarPaths, @Nullable String libraryName, @Nonnull Module module, @Nullable PsiElement location)
 	{
 		List<String> urls = refreshAndConvertToUrls(jarPaths);
 		DependencyScope scope = suggestScopeByLocation(module, location);
@@ -310,7 +310,7 @@ public abstract class OrderEntryFix implements IntentionAction, LocalQuickFix
 	}
 
 	@Nonnull
-	public static DependencyScope suggestScopeByLocation(@Nonnull Module module, @javax.annotation.Nullable PsiElement location)
+	public static DependencyScope suggestScopeByLocation(@Nonnull Module module, @Nullable PsiElement location)
 	{
 		if(location != null)
 		{
@@ -328,6 +328,6 @@ public abstract class OrderEntryFix implements IntentionAction, LocalQuickFix
 	{
 		final File libraryRoot = new File(jarPath);
 		LocalFileSystem.getInstance().refreshAndFindFileByIoFile(libraryRoot);
-		return VfsUtil.getUrlForLibraryRoot(libraryRoot);
+		return consulo.ide.impl.idea.openapi.vfs.VfsUtil.getUrlForLibraryRoot(libraryRoot);
 	}
 }

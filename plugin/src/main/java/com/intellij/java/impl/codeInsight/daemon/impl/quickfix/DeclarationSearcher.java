@@ -55,7 +55,7 @@ public class DeclarationSearcher {
     return null;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private PsiVariable getLocalDeclaration(@Nonnull PsiElement endPositionElement) {
     final PsiElement parent = endPositionElement.getParent();
 

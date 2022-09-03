@@ -24,7 +24,7 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaValue;
 import com.intellij.java.language.psi.PsiAssignmentExpression;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiVariable;
-import com.intellij.util.ObjectUtils;
+import consulo.ide.impl.idea.util.ObjectUtils;
 import org.jetbrains.annotations.Contract;
 import javax.annotation.Nullable;
 

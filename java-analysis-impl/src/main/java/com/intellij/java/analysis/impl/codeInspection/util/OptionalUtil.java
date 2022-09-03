@@ -9,6 +9,11 @@ import org.jetbrains.annotations.Contract;
 
 import javax.annotation.Nonnull;
 
+import java.util.Optional;
+import java.util.OptionalDouble;
+import java.util.OptionalInt;
+import java.util.OptionalLong;
+
 import static com.intellij.java.language.psi.CommonClassNames.JAVA_UTIL_OPTIONAL;
 
 public class OptionalUtil {
@@ -53,7 +58,7 @@ public class OptionalUtil {
   }
 
   /**
-   * Unwraps an {@link java.util.Optional}, {@link java.util.OptionalInt}, {@link java.util.OptionalLong} or {@link java.util.OptionalDouble}
+   * Unwraps an {@link Optional}, {@link OptionalInt}, {@link OptionalLong} or {@link OptionalDouble}
    * returning its element type
    *
    * @param type a type representing optional (e.g. {@code Optional<String>} or {@code OptionalInt})

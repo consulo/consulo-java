@@ -17,12 +17,12 @@ package com.intellij.java.impl.util.xml;
 
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.roots.ProjectFileIndex;
-import com.intellij.openapi.roots.ProjectRootManager;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.module.Module;
+import consulo.module.content.ProjectFileIndex;
+import consulo.module.content.ProjectRootManager;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.psi.xml.XmlElement;
 import com.intellij.util.xml.DomElement;
 
@@ -37,7 +37,7 @@ public class DomJavaUtil {
   }
 
   @Nullable
-  public static PsiClass findClass(@Nullable String name, @Nonnull PsiFile file, @javax.annotation.Nullable final Module module, @Nullable final GlobalSearchScope searchScope) {
+  public static PsiClass findClass(@Nullable String name, @Nonnull PsiFile file, @Nullable final Module module, @Nullable final GlobalSearchScope searchScope) {
     if (name == null) return null;
     if (name.indexOf('$') >= 0) name = name.replace('$', '.');
 

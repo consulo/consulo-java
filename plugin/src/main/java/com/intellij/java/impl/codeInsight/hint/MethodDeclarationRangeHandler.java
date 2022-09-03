@@ -15,10 +15,10 @@
  */
 package com.intellij.java.impl.codeInsight.hint;
 
-import com.intellij.codeInsight.hint.DeclarationRangeHandler;
+import consulo.language.editor.hint.DeclarationRangeHandler;
 import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.PsiElement;
+import consulo.document.util.TextRange;
+import consulo.language.psi.PsiElement;
 
 import javax.annotation.Nonnull;
 

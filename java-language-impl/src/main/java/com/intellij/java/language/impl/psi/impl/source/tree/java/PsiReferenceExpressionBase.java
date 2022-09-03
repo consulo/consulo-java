@@ -19,15 +19,15 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import com.intellij.java.language.psi.JavaResolveResult;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiExpression;
-import com.intellij.psi.PsiReference;
+import consulo.language.psi.PsiReference;
 import com.intellij.java.language.psi.PsiReferenceExpression;
 import com.intellij.java.language.psi.PsiReferenceParameterList;
 import com.intellij.java.language.psi.PsiType;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.ast.IElementType;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
 
 public abstract class PsiReferenceExpressionBase extends ExpressionPsiElement implements PsiReferenceExpression
 {

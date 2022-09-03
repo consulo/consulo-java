@@ -16,7 +16,7 @@
 package com.intellij.java.impl.ig.naming;
 
 import com.intellij.java.language.psi.PsiCatchSection;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiForeachStatement;
 import com.intellij.java.language.psi.PsiParameter;
 import com.siyeh.InspectionGadgetsBundle;

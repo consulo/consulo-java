@@ -21,27 +21,27 @@
  */
 package com.intellij.java.compiler.impl.javaCompiler;
 
-import com.intellij.CommonBundle;
+import consulo.application.CommonBundle;
 import com.intellij.java.compiler.CompilerException;
-import com.intellij.compiler.ModuleCompilerUtil;
-import com.intellij.compiler.impl.CompileContextExProxy;
+import consulo.ide.impl.compiler.ModuleCompilerUtil;
+import consulo.ide.impl.idea.compiler.impl.CompileContextExProxy;
 import com.intellij.java.compiler.impl.javaCompiler.javac.JavacCompiler;
-import com.intellij.compiler.make.CacheCorruptedException;
+import consulo.compiler.CacheCorruptedException;
 import com.intellij.java.language.impl.JavaClassFileType;
 import com.intellij.java.language.impl.JavaFileType;
-import com.intellij.openapi.application.ApplicationManager;
+import consulo.application.ApplicationManager;
 import com.intellij.openapi.compiler.*;
-import com.intellij.openapi.compiler.ex.CompileContextEx;
-import com.intellij.openapi.fileTypes.FileType;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.ui.configuration.ProjectSettingsService;
-import com.intellij.openapi.ui.Messages;
-import com.intellij.openapi.vfs.LocalFileSystem;
-import com.intellij.openapi.vfs.VfsUtil;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.util.Chunk;
-import com.intellij.util.ExceptionUtil;
+import consulo.ide.impl.compiler.CompileContextEx;
+import consulo.ui.ex.awt.Messages;
+import consulo.virtualFileSystem.LocalFileSystem;
+import consulo.virtualFileSystem.fileType.FileType;
+import consulo.module.Module;
+import consulo.project.Project;
+import consulo.project.ui.view.internal.ProjectSettingsService;
+import consulo.ide.impl.idea.openapi.vfs.VfsUtil;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.util.collection.Chunk;
+import consulo.util.lang.ExceptionUtil;
 import consulo.java.compiler.impl.javaCompiler.JavaAdditionalOutputDirectoriesProvider;
 import consulo.logging.Logger;
 import jakarta.inject.Inject;
@@ -87,7 +87,7 @@ public class AnnotationProcessingCompiler implements TranslatingCompiler
 			return;
 		}
 		final LocalFileSystem lfs = LocalFileSystem.getInstance();
-		final CompileContextEx _context = new CompileContextExProxy((CompileContextEx) context)
+		final CompileContextEx _context = new consulo.ide.impl.idea.compiler.impl.CompileContextExProxy((CompileContextEx) context)
 		{
 			@Override
 			public VirtualFile getModuleOutputDirectory(Module module)

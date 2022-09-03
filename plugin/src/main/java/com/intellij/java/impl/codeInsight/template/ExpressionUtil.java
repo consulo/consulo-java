@@ -15,18 +15,18 @@
  */
 package com.intellij.java.impl.codeInsight.template;
 
-import com.intellij.codeInsight.template.ExpressionContext;
+import consulo.language.editor.template.ExpressionContext;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiDocumentManager;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.codeStyle.SuggestedNameInfo;
-import com.intellij.psi.text.BlockSupport;
-import com.intellij.util.IncorrectOperationException;
+import consulo.application.ApplicationManager;
+import consulo.project.Project;
+import consulo.language.psi.PsiDocumentManager;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
+import consulo.language.impl.internal.psi.diff.BlockSupport;
+import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 
 import javax.annotation.Nullable;
@@ -40,7 +40,7 @@ public class ExpressionUtil {
   private ExpressionUtil() {
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public static String[] getNames(final ExpressionContext context) {
     final Project project = context.getProject();
     final int offset = context.getStartOffset();

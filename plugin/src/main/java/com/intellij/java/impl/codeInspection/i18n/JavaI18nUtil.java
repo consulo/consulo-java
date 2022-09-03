@@ -24,16 +24,16 @@ import com.intellij.lang.properties.PropertiesUtil;
 import com.intellij.lang.properties.psi.PropertiesFile;
 import com.intellij.java.impl.lang.properties.psi.PropertyCreationHandler;
 import com.intellij.lang.properties.references.I18nUtil;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Pair;
-import com.intellij.openapi.util.Ref;
-import com.intellij.openapi.util.TextRange;
+import consulo.codeEditor.Editor;
+import consulo.project.Project;
+import consulo.util.lang.Pair;
+import consulo.util.lang.ref.Ref;
+import consulo.document.util.TextRange;
 import com.intellij.psi.*;
-import com.intellij.psi.scope.PsiScopeProcessor;
+import consulo.language.psi.resolve.PsiScopeProcessor;
 import com.intellij.java.language.impl.psi.scope.util.PsiScopesUtil;
 import com.intellij.psi.util.*;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
 import consulo.util.dataholder.Key;
 
 import javax.annotation.Nonnull;
@@ -84,8 +84,8 @@ public class JavaI18nUtil extends I18nUtil {
   public static boolean isPassedToAnnotatedParam(@Nonnull Project project,
                                                  @Nonnull PsiExpression expression,
                                                  final String annFqn,
-                                                 @javax.annotation.Nullable Map<String, Object> annotationAttributeValues,
-                                                 @javax.annotation.Nullable final Set<PsiModifierListOwner> nonNlsTargets) {
+                                                 @Nullable Map<String, Object> annotationAttributeValues,
+                                                 @Nullable final Set<PsiModifierListOwner> nonNlsTargets) {
     expression = getToplevelExpression(project, expression);
     final PsiElement parent = expression.getParent();
 
@@ -171,7 +171,7 @@ public class JavaI18nUtil extends I18nUtil {
                                                        @Nullable Collection<PsiMethod> processed,
                                                        final String annFqn,
                                                        @Nullable Map<String, Object> annotationAttributeValues,
-                                                       @javax.annotation.Nullable final Set<PsiModifierListOwner> nonNlsTargets) {
+                                                       @Nullable final Set<PsiModifierListOwner> nonNlsTargets) {
     if (processed != null) {
       if (processed.contains(method)) return false;
     }
@@ -213,7 +213,7 @@ public class JavaI18nUtil extends I18nUtil {
     return false;
   }
 
-  private static boolean processAnnotationAttributes(@javax.annotation.Nullable Map<String, Object> annotationAttributeValues, @Nonnull PsiAnnotation annotation) {
+  private static boolean processAnnotationAttributes(@Nullable Map<String, Object> annotationAttributeValues, @Nonnull PsiAnnotation annotation) {
     if (annotationAttributeValues != null) {
       final PsiAnnotationParameterList parameterList = annotation.getParameterList();
       final PsiNameValuePair[] attributes = parameterList.getAttributes();

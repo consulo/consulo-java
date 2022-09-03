@@ -16,19 +16,20 @@
  */
 package com.intellij.java.impl.codeInsight.template.macro;
 
-import com.intellij.codeInsight.CodeInsightBundle;
+import consulo.language.editor.CodeInsightBundle;
 import com.intellij.java.analysis.codeInsight.guess.GuessManager;
-import com.intellij.codeInsight.lookup.LookupElement;
+import consulo.language.editor.completion.lookup.LookupElement;
 import com.intellij.codeInsight.template.*;
 import com.intellij.java.impl.codeInsight.template.JavaCodeContextType;
 import com.intellij.java.impl.codeInsight.template.PsiTypeResult;
 import com.intellij.java.impl.codeInsight.template.impl.JavaTemplateUtil;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.TextRange;
+import consulo.project.Project;
+import consulo.document.util.TextRange;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.PsiWildcardType;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -68,7 +69,7 @@ public class GuessElementTypeMacro extends Macro {
     return set.toArray(new LookupElement[set.size()]);
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private static PsiType[] guessTypes(Expression[] params, ExpressionContext context) {
     if (params.length != 1) return null;
     final Result result = params[0].calculateResult(context);

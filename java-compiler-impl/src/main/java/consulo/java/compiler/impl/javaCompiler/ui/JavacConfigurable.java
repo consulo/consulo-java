@@ -2,8 +2,8 @@ package consulo.java.compiler.impl.javaCompiler.ui;
 
 import com.intellij.java.compiler.impl.javaCompiler.javac.JavacCompilerConfiguration;
 import com.intellij.java.compiler.impl.javaCompiler.javac.JpsJavaCompilerOptions;
-import com.intellij.openapi.options.Configurable;
-import com.intellij.util.execution.ParametersListUtil;
+import consulo.configurable.Configurable;
+import consulo.process.cmd.ParametersListUtil;
 import consulo.disposer.Disposable;
 import consulo.localize.LocalizeValue;
 import consulo.options.SimpleConfigurableByProperties;

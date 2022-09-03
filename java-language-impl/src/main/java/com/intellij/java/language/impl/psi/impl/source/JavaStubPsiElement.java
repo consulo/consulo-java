@@ -19,29 +19,30 @@
  */
 package com.intellij.java.language.impl.psi.impl.source;
 
-import com.intellij.extapi.psi.StubBasedPsiElementBase;
-import com.intellij.ide.util.PsiNavigationSupport;
+import consulo.language.impl.psi.stub.StubBasedPsiElementBase;
+import consulo.language.psi.PsiNavigationSupport;
 import com.intellij.java.language.JavaLanguage;
-import com.intellij.lang.ASTNode;
-import com.intellij.lang.Language;
-import com.intellij.pom.Navigatable;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.StubBasedPsiElement;
-import com.intellij.psi.impl.CheckUtil;
-import com.intellij.psi.impl.source.SourceTreeToPsiMap;
-import com.intellij.psi.impl.source.codeStyle.CodeEditUtil;
-import com.intellij.psi.impl.source.tree.ChangeUtil;
-import com.intellij.psi.impl.source.tree.CompositeElement;
-import com.intellij.psi.impl.source.tree.SharedImplUtil;
-import com.intellij.psi.impl.source.tree.TreeElement;
-import com.intellij.psi.stubs.IStubElementType;
-import com.intellij.psi.stubs.StubElement;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.ast.ASTNode;
+import consulo.language.Language;
+import consulo.navigation.Navigatable;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiElementVisitor;
+import consulo.language.psi.StubBasedPsiElement;
+import consulo.language.impl.psi.CheckUtil;
+import consulo.language.impl.psi.SourceTreeToPsiMap;
+import consulo.language.impl.psi.CodeEditUtil;
+import consulo.language.impl.ast.ChangeUtil;
+import consulo.language.impl.ast.CompositeElement;
+import consulo.language.impl.ast.SharedImplUtil;
+import consulo.language.impl.ast.TreeElement;
+import consulo.language.psi.stub.IStubElementType;
+import consulo.language.psi.stub.StubElement;
+import consulo.language.util.IncorrectOperationException;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.logging.Logger;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public abstract class JavaStubPsiElement<T extends StubElement> extends StubBasedPsiElementBase<T> implements StubBasedPsiElement<T> {
   private static final Logger LOG = Logger.getInstance(JavaStubPsiElement.class);
@@ -91,7 +92,7 @@ public abstract class JavaStubPsiElement<T extends StubElement> extends StubBase
   }
 
   @Override
-  public PsiElement addAfter(@Nonnull PsiElement element, @javax.annotation.Nullable PsiElement anchor) throws IncorrectOperationException {
+  public PsiElement addAfter(@Nonnull PsiElement element, @Nullable PsiElement anchor) throws IncorrectOperationException {
     CheckUtil.checkWritable(this);
     TreeElement elementCopy = ChangeUtil.copyToElement(element);
     calcTreeElement().addInternal(elementCopy, elementCopy, SourceTreeToPsiMap.psiElementToTree(anchor), Boolean.FALSE);

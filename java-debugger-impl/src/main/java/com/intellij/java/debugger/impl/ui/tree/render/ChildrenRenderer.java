@@ -20,7 +20,7 @@ import com.intellij.java.debugger.engine.evaluation.EvaluateException;
 import com.intellij.java.debugger.engine.evaluation.EvaluationContext;
 import com.intellij.java.debugger.impl.ui.tree.DebuggerTreeNode;
 import com.intellij.java.debugger.ui.tree.NodeDescriptor;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import consulo.internal.com.sun.jdi.Value;
 
 public interface ChildrenRenderer extends Renderer

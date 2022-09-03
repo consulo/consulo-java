@@ -15,7 +15,7 @@
  */
 package com.intellij.java.language.spi;
 
-import com.intellij.lang.Language;
+import consulo.language.Language;
 
 /**
  * User: anna

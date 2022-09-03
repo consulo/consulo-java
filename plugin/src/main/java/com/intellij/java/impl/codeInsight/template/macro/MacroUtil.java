@@ -22,26 +22,26 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import com.intellij.java.language.impl.codeInsight.completion.proc.VariablesProcessor;
-import com.intellij.codeInsight.template.ExpressionContext;
-import com.intellij.codeInsight.template.PsiElementResult;
+import consulo.language.editor.template.ExpressionContext;
+import consulo.ide.impl.idea.codeInsight.template.PsiElementResult;
 import com.intellij.java.impl.codeInsight.template.PsiTypeResult;
-import com.intellij.codeInsight.template.Result;
+import consulo.language.editor.template.Result;
 import com.intellij.java.language.psi.*;
 import consulo.logging.Logger;
-import com.intellij.openapi.project.Project;
+import consulo.project.Project;
 import com.intellij.psi.*;
 import com.intellij.java.language.impl.psi.scope.util.PsiScopesUtil;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.util.collection.ContainerUtil;
 import consulo.annotation.access.RequiredReadAction;
 
 public class MacroUtil
 {
 	private static final Logger LOG = Logger.getInstance(MacroUtil.class);
 
-	@javax.annotation.Nullable
+	@Nullable
 	@RequiredReadAction
 	public static PsiType resultToPsiType(Result result, ExpressionContext context)
 	{
@@ -188,7 +188,7 @@ public class MacroUtil
 	}
 
 	@Nonnull
-	public static PsiVariable[] getVariablesVisibleAt(@javax.annotation.Nullable final PsiElement place, String prefix)
+	public static PsiVariable[] getVariablesVisibleAt(@Nullable final PsiElement place, String prefix)
 	{
 		if(place == null)
 		{

@@ -17,22 +17,22 @@ package com.intellij.java.impl.ig.fixes;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.codeInspection.ProblemDescriptor;
-import com.intellij.openapi.application.AccessToken;
-import com.intellij.openapi.application.WriteAction;
-import com.intellij.openapi.project.Project;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.application.AccessToken;
+import consulo.application.WriteAction;
+import consulo.project.Project;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.java.language.psi.PsiModifierList;
 import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.refactoring.ui.ConflictsDialog;
-import com.intellij.refactoring.util.RefactoringUIUtil;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.Processor;
-import com.intellij.util.Query;
-import com.intellij.util.containers.MultiMap;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.editor.refactoring.ui.ConflictsDialog;
+import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.application.util.function.Processor;
+import consulo.application.util.query.Query;
+import consulo.util.collection.MultiMap;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.InspectionGadgetsFix;
 

@@ -16,29 +16,29 @@
 package com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis;
 
 import com.intellij.java.language.impl.codeInsight.ExceptionUtil;
-import com.intellij.codeInsight.daemon.DaemonBundle;
+import consulo.language.editor.DaemonBundle;
 import com.intellij.java.language.impl.codeInsight.daemon.JavaErrorBundle;
-import com.intellij.codeInsight.daemon.impl.HighlightInfo;
-import com.intellij.codeInsight.daemon.impl.HighlightInfoType;
-import com.intellij.codeInsight.daemon.impl.analysis.HighlightInfoHolder;
+import consulo.language.editor.rawHighlight.HighlightInfo;
+import consulo.language.editor.rawHighlight.HighlightInfoType;
+import consulo.language.editor.rawHighlight.HighlightInfoHolder;
 import com.intellij.java.language.codeInsight.daemon.impl.analysis.JavaGenericsUtil;
-import com.intellij.codeInsight.daemon.impl.quickfix.QuickFixAction;
-import com.intellij.codeInsight.daemon.impl.quickfix.QuickFixActionRegistrarImpl;
-import com.intellij.codeInsight.intention.IntentionAction;
-import com.intellij.codeInsight.quickfix.UnresolvedReferenceQuickFixProvider;
-import com.intellij.codeInspection.LocalQuickFixOnPsiElementAsIntentionAdapter;
+import consulo.language.editor.intention.QuickFixAction;
+import consulo.language.editor.internal.QuickFixActionRegistrarImpl;
+import consulo.language.editor.intention.IntentionAction;
+import consulo.language.editor.intention.UnresolvedReferenceQuickFixProvider;
+import consulo.language.editor.inspection.LocalQuickFixOnPsiElementAsIntentionAdapter;
 import com.intellij.java.analysis.codeInsight.intention.QuickFixFactory;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix.*;
 import com.intellij.java.analysis.impl.psi.util.PsiMatchers;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.*;
-import com.intellij.openapi.project.IndexNotReadyException;
+import consulo.application.dumb.IndexNotReadyException;
 import com.intellij.java.language.projectRoots.JavaSdkVersion;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.openapi.util.Ref;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.util.lang.Comparing;
+import consulo.util.lang.ref.Ref;
+import consulo.document.util.TextRange;
+import consulo.util.lang.StringUtil;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.psi.*;
 import com.intellij.java.language.impl.psi.impl.PsiSuperMethodImplUtil;
@@ -46,12 +46,12 @@ import com.intellij.java.language.psi.infos.CandidateInfo;
 import com.intellij.java.language.psi.infos.MethodCandidateInfo;
 import com.intellij.psi.util.*;
 import com.intellij.java.language.impl.refactoring.util.RefactoringChangeUtil;
-import com.intellij.ui.ColorUtil;
-import com.intellij.util.ObjectUtil;
+import consulo.ui.ex.awt.util.ColorUtil;
+import consulo.util.lang.ObjectUtil;
 import com.intellij.java.language.util.VisibilityUtil;
-import com.intellij.util.containers.MostlySingularMultiMap;
-import com.intellij.util.ui.UIUtil;
-import com.intellij.xml.util.XmlStringUtil;
+import consulo.util.collection.MostlySingularMultiMap;
+import consulo.ui.ex.awt.UIUtil;
+import consulo.util.lang.xml.XmlStringUtil;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.logging.Logger;
 import org.intellij.lang.annotations.Language;
@@ -911,7 +911,7 @@ public class HighlightMethodUtil {
   }
 
   private static String createShortMismatchedArgumentsHtmlTooltip(PsiExpressionList list,
-                                                                  @javax.annotation.Nullable MethodCandidateInfo info,
+                                                                  @Nullable MethodCandidateInfo info,
                                                                   PsiParameter[] parameters,
                                                                   String methodName,
                                                                   PsiSubstitutor substitutor,
@@ -1122,7 +1122,7 @@ public class HighlightMethodUtil {
     return errorResult;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public static HighlightInfo checkDuplicateMethod(PsiClass aClass, @Nonnull PsiMethod method, @Nonnull MostlySingularMultiMap<MethodSignature, PsiMethod> duplicateMethods) {
     if (aClass == null || method instanceof ExternallyDefinedPsiElement) {
       return null;
@@ -1147,7 +1147,7 @@ public class HighlightMethodUtil {
     return null;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public static HighlightInfo checkMethodCanHaveBody(@Nonnull PsiMethod method, @Nonnull LanguageLevel languageLevel) {
     PsiClass aClass = method.getContainingClass();
     boolean hasNoBody = method.getBody() == null;
@@ -1202,7 +1202,7 @@ public class HighlightMethodUtil {
     return info;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public static HighlightInfo checkConstructorCallMustBeFirstStatement(@Nonnull PsiMethodCallExpression methodCall) {
     if (!RefactoringChangeUtil.isSuperOrThisMethodCall(methodCall)) {
       return null;

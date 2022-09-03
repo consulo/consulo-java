@@ -15,17 +15,18 @@
  */
 package com.intellij.java.impl.refactoring;
 
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiDirectory;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
+import consulo.project.Project;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.language.psi.PsiDirectory;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
 import com.intellij.java.language.psi.PsiJavaPackage;
-import com.intellij.usageView.UsageInfo;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.containers.MultiMap;
+import consulo.usage.UsageInfo;
+import consulo.language.util.IncorrectOperationException;
+import consulo.util.collection.MultiMap;
 import javax.annotation.Nullable;
 
+import java.lang.String;
 import java.util.Collection;
 
 /**
@@ -37,7 +38,7 @@ import java.util.Collection;
  * Instances of this interface can be obtained via methods of {@link RefactoringFactory}.
  *
  * @see JavaRefactoringFactory#createSourceFolderPreservingMoveDestination(String) 
- * @see JavaRefactoringFactory#createSourceRootMoveDestination(java.lang.String, com.intellij.openapi.vfs.VirtualFile)
+ * @see JavaRefactoringFactory#createSourceRootMoveDestination(String, com.intellij.openapi.vfs.VirtualFile)
  *  @author dsl
  */
 public interface MoveDestination {
@@ -57,7 +58,7 @@ public interface MoveDestination {
 
   @Nullable
   String verify(PsiFile source);
-  @javax.annotation.Nullable
+  @Nullable
   String verify(PsiDirectory source);
   @Nullable
   String verify(PsiJavaPackage source);

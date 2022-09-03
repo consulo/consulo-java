@@ -16,11 +16,11 @@
 
 package consulo.java.analysis.impl.codeInsight.completion;
 
-import com.intellij.codeInsight.completion.CompletionParameters;
-import com.intellij.psi.PsiElement;
+import consulo.language.editor.completion.CompletionParameters;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiType;
-import com.intellij.util.PairFunction;
+import consulo.util.lang.function.PairFunction;
 import com.siyeh.ig.psiutils.SideEffectChecker;
 import consulo.util.dataholder.Key;
 

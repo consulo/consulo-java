@@ -33,26 +33,26 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.util.lang.Comparing;
+import consulo.util.lang.StringUtil;
 import com.intellij.psi.*;
 import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
 import com.intellij.java.language.psi.util.MethodSignature;
 import com.intellij.java.language.psi.util.MethodSignatureUtil;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
-import com.intellij.refactoring.RefactoringBundle;
-import com.intellij.refactoring.util.CommonRefactoringUtil;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import com.intellij.java.impl.refactoring.util.RefactoringConflictsUtil;
 import com.intellij.java.impl.refactoring.util.RefactoringHierarchyUtil;
-import com.intellij.refactoring.util.RefactoringUIUtil;
+import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
 import com.intellij.java.impl.refactoring.util.classMembers.ClassMemberReferencesVisitor;
 import com.intellij.java.impl.refactoring.util.classMembers.InterfaceContainmentVerifier;
 import com.intellij.java.impl.refactoring.util.classMembers.MemberInfo;
-import com.intellij.usageView.UsageInfo;
+import consulo.usage.UsageInfo;
 import com.intellij.java.language.util.VisibilityUtil;
-import com.intellij.util.containers.MultiMap;
+import consulo.util.collection.MultiMap;
 
 public class PullUpConflictsUtil {
   private PullUpConflictsUtil() {}

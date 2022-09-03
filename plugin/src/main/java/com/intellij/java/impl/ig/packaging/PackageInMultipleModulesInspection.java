@@ -15,17 +15,18 @@
  */
 package com.intellij.java.impl.ig.packaging;
 
-import com.intellij.analysis.AnalysisScope;
-import com.intellij.codeInspection.CommonProblemDescriptor;
-import com.intellij.codeInspection.GlobalInspectionContext;
-import com.intellij.codeInspection.InspectionManager;
+import consulo.language.editor.scope.AnalysisScope;
+import consulo.language.editor.inspection.CommonProblemDescriptor;
+import consulo.language.editor.inspection.GlobalInspectionContext;
+import consulo.language.editor.inspection.scheme.InspectionManager;
 import com.intellij.java.analysis.codeInspection.reference.RefClass;
-import com.intellij.codeInspection.reference.RefEntity;
-import com.intellij.codeInspection.reference.RefModule;
+import consulo.language.editor.inspection.reference.RefEntity;
+import consulo.language.editor.inspection.reference.RefModule;
 import com.intellij.java.analysis.codeInspection.reference.RefPackage;
 import com.siyeh.InspectionGadgetsBundle;
 import com.intellij.java.impl.ig.BaseGlobalInspection;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.HashSet;
 import java.util.List;
@@ -41,7 +42,7 @@ public class PackageInMultipleModulesInspection extends BaseGlobalInspection {
   }
 
   @Override
-  @javax.annotation.Nullable
+  @Nullable
   public CommonProblemDescriptor[] checkElement(
     RefEntity refEntity, AnalysisScope analysisScope,
     InspectionManager inspectionManager,

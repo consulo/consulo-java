@@ -20,25 +20,25 @@ import static com.intellij.java.language.impl.psi.impl.PsiImplUtil.isTypeAnnotat
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import com.intellij.formatting.Wrap;
-import com.intellij.formatting.WrapType;
+import consulo.language.codeStyle.Wrap;
+import consulo.language.codeStyle.WrapType;
 import com.intellij.java.language.psi.*;
-import com.intellij.lang.ASTNode;
-import com.intellij.openapi.project.DumbService;
+import consulo.language.ast.ASTNode;
+import consulo.project.DumbService;
 import com.intellij.psi.*;
-import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
+import consulo.language.codeStyle.CommonCodeStyleSettings;
 import com.intellij.java.impl.psi.codeStyle.JavaCodeStyleSettings;
-import com.intellij.psi.formatter.FormatterUtil;
+import consulo.language.codeStyle.FormatterUtil;
 import com.intellij.java.impl.psi.formatter.java.AbstractJavaBlock;
 import com.intellij.java.impl.psi.formatter.java.JavaFormatterUtil;
 import com.intellij.java.impl.psi.formatter.java.wrap.JavaWrapManager;
 import com.intellij.java.impl.psi.formatter.java.wrap.ReservedWrapsProvider;
 import com.intellij.java.language.impl.psi.impl.source.tree.ChildRole;
-import com.intellij.psi.impl.source.tree.CompositeElement;
+import consulo.language.impl.ast.CompositeElement;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.ArrayUtil;
+import consulo.language.ast.IElementType;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.util.collection.ArrayUtil;
 
 /**
  * Encapsulates the implementation of

@@ -15,11 +15,11 @@
  */
 package com.intellij.java.execution.impl.stacktrace;
 
-import com.intellij.execution.Location;
+import consulo.execution.action.Location;
 import com.intellij.java.execution.impl.junit2.info.MethodLocation;
-import com.intellij.openapi.fileEditor.OpenFileDescriptor;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.navigation.OpenFileDescriptor;
+import consulo.project.Project;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 

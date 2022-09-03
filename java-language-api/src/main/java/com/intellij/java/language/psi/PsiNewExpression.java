@@ -30,7 +30,7 @@ public interface PsiNewExpression extends PsiCallExpression, PsiConstructorCall
 	 *
 	 * @return the qualifier, or null if the expression is not qualified.
 	 */
-	@javax.annotation.Nullable
+	@Nullable
 	PsiExpression getQualifier();
 
 	/**
@@ -58,7 +58,7 @@ public interface PsiNewExpression extends PsiCallExpression, PsiConstructorCall
 	 *
 	 * @return class reference, or null if the expression is incomplete.
 	 */
-	@javax.annotation.Nullable
+	@Nullable
 	PsiJavaCodeReferenceElement getClassReference();
 
 	/**
@@ -66,7 +66,7 @@ public interface PsiNewExpression extends PsiCallExpression, PsiConstructorCall
 	 *
 	 * @return the anonymous class, or null if the expression does not create an anonymous class.
 	 */
-	@javax.annotation.Nullable
+	@Nullable
 	PsiAnonymousClass getAnonymousClass();
 
 	/**
@@ -85,7 +85,7 @@ public interface PsiNewExpression extends PsiCallExpression, PsiConstructorCall
 	 * @param annotation annotation to find the type for.
 	 * @return annotated subtype or null, if annotation is incorrectly placed.
 	 */
-	@javax.annotation.Nullable
+	@Nullable
 	PsiType getOwner(@Nonnull PsiAnnotation annotation);
 
 	/**

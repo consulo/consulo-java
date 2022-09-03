@@ -16,7 +16,7 @@
 
 package com.intellij.java.impl.refactoring.rename;
 
-import com.intellij.openapi.util.Condition;
+import consulo.util.lang.function.Condition;
 import org.jetbrains.annotations.NonNls;
 
 /**

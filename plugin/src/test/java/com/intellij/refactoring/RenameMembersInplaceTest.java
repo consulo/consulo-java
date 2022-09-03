@@ -22,11 +22,11 @@ import static org.junit.Assert.fail;
 import javax.annotation.Nonnull;
 
 import com.intellij.JavaTestUtil;
-import com.intellij.psi.PsiElement;
-import com.intellij.refactoring.rename.inplace.MemberInplaceRenameHandler;
+import consulo.language.psi.PsiElement;
+import consulo.language.editor.refactoring.rename.inplace.MemberInplaceRenameHandler;
 import com.intellij.testFramework.LightCodeInsightTestCase;
 import com.intellij.testFramework.fixtures.CodeInsightTestUtil;
-import consulo.codeInsight.TargetElementUtil;
+import consulo.language.editor.TargetElementUtil;
 
 /**
  * User: anna

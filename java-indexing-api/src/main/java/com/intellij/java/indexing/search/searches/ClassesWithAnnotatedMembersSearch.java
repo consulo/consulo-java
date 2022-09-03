@@ -15,12 +15,12 @@
  */
 package com.intellij.java.indexing.search.searches;
 
-import com.intellij.openapi.extensions.ExtensionPointName;
+import consulo.component.extension.ExtensionPointName;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.search.SearchScope;
-import com.intellij.psi.search.searches.ExtensibleQueryFactory;
-import com.intellij.util.Query;
-import com.intellij.util.QueryExecutor;
+import consulo.content.scope.SearchScope;
+import consulo.application.util.query.ExtensibleQueryFactory;
+import consulo.application.util.query.Query;
+import consulo.application.util.query.QueryExecutor;
 
 import javax.annotation.Nonnull;
 
@@ -30,7 +30,6 @@ import javax.annotation.Nonnull;
  * @author yole
  */
 public class ClassesWithAnnotatedMembersSearch extends ExtensibleQueryFactory<PsiClass, ClassesWithAnnotatedMembersSearch.Parameters> {
-  public static final ExtensionPointName<QueryExecutor> EP_NAME = ExtensionPointName.create("consulo.java.classesWithAnnotatedMembersSearch");
   public static final ClassesWithAnnotatedMembersSearch INSTANCE = new ClassesWithAnnotatedMembersSearch();
 
   public static class Parameters {
@@ -52,7 +51,7 @@ public class ClassesWithAnnotatedMembersSearch extends ExtensibleQueryFactory<Ps
   }
 
   public ClassesWithAnnotatedMembersSearch() {
-    super("consulo.java");
+    super(ClassesWithAnnotatedMembersSearchExecutor.class);
   }
 
   public static Query<PsiClass> search(@Nonnull PsiClass annotationClass, @Nonnull SearchScope scope) {

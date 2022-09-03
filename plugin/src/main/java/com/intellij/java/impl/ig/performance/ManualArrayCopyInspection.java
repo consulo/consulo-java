@@ -17,12 +17,12 @@ package com.intellij.java.impl.ig.performance;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.codeInspection.ProblemDescriptor;
+import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.project.Project;
+import consulo.project.Project;
 import com.intellij.psi.*;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.ast.IElementType;
+import consulo.language.util.IncorrectOperationException;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
@@ -552,9 +552,9 @@ public class ManualArrayCopyInspection extends BaseInspection {
     }
 
     private static boolean expressionIsArrayCopy(
-      @javax.annotation.Nullable PsiExpression expression,
+      @Nullable PsiExpression expression,
       @Nonnull PsiVariable variable,
-      @javax.annotation.Nullable PsiVariable variable2) {
+      @Nullable PsiVariable variable2) {
       final PsiExpression strippedExpression =
         ParenthesesUtils.stripParentheses(expression);
       if (strippedExpression == null) {
@@ -605,7 +605,7 @@ public class ManualArrayCopyInspection extends BaseInspection {
     }
 
     private static boolean areExpressionsCopyable(
-      @javax.annotation.Nullable PsiExpression lhs, @Nullable PsiExpression rhs) {
+      @Nullable PsiExpression lhs, @Nullable PsiExpression rhs) {
       if (lhs == null || rhs == null) {
         return false;
       }

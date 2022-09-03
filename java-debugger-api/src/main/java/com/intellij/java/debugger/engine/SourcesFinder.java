@@ -15,8 +15,8 @@
  */
 package com.intellij.java.debugger.engine;
 
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiFile;
+import consulo.project.Project;
+import consulo.language.psi.PsiFile;
 import javax.annotation.Nullable;
 
 /**

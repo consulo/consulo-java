@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.psi.formatter.java;
 
-import com.intellij.lang.ASTNode;
+import consulo.language.ast.ASTNode;
 
 public interface JavaBlock {
   ASTNode getFirstTreeNode();

@@ -15,9 +15,8 @@
  */
 package com.intellij.java.language.psi;
 
-import com.intellij.psi.NavigatablePsiElement;
-import com.intellij.psi.PsiNameIdentifierOwner;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.language.psi.NavigatablePsiElement;
+import consulo.language.psi.PsiNameIdentifierOwner;
 
 import javax.annotation.Nonnull;
 import java.util.Set;
@@ -27,39 +26,38 @@ import java.util.Set;
  *
  * @since 2016.3
  */
-public interface PsiJavaModule extends NavigatablePsiElement, PsiNameIdentifierOwner, PsiModifierListOwner, PsiJavaDocumentedElement
-{
-	String MODULE_INFO_CLASS = "module-info";
-	String MODULE_INFO_FILE = MODULE_INFO_CLASS + ".java";
-	String MODULE_INFO_CLS_FILE = MODULE_INFO_CLASS + ".class";
-	String JAVA_BASE = "java.base";
-	String AUTO_MODULE_NAME = "Automatic-Module-Name";
+public interface PsiJavaModule extends NavigatablePsiElement, PsiNameIdentifierOwner, PsiModifierListOwner, PsiJavaDocumentedElement {
+  String MODULE_INFO_CLASS = "module-info";
+  String MODULE_INFO_FILE = MODULE_INFO_CLASS + ".java";
+  String MODULE_INFO_CLS_FILE = MODULE_INFO_CLASS + ".class";
+  String JAVA_BASE = "java.base";
+  String AUTO_MODULE_NAME = "Automatic-Module-Name";
 
-	/* See http://openjdk.java.net/jeps/261#Class-loaders, "Class loaders" */
-	Set<String> UPGRADEABLE = ContainerUtil.immutableSet(
-			"java.activation", "java.compiler", "java.corba", "java.transaction", "java.xml.bind", "java.xml.ws", "java.xml.ws.annotation",
-			"jdk.internal.vm.compiler", "jdk.xml.bind", "jdk.xml.ws");
+  /* See http://openjdk.java.net/jeps/261#Class-loaders, "Class loaders" */
+  Set<String> UPGRADEABLE = Set.of(
+      "java.activation", "java.compiler", "java.corba", "java.transaction", "java.xml.bind", "java.xml.ws", "java.xml.ws.annotation",
+      "jdk.internal.vm.compiler", "jdk.xml.bind", "jdk.xml.ws");
 
-	@Override
-	@Nonnull
-	PsiJavaModuleReferenceElement getNameIdentifier();
+  @Override
+  @Nonnull
+  PsiJavaModuleReferenceElement getNameIdentifier();
 
-	@Override
-	@Nonnull
-	String getName();
+  @Override
+  @Nonnull
+  String getName();
 
-	@Nonnull
-	Iterable<PsiRequiresStatement> getRequires();
+  @Nonnull
+  Iterable<PsiRequiresStatement> getRequires();
 
-	@Nonnull
-	Iterable<PsiPackageAccessibilityStatement> getExports();
+  @Nonnull
+  Iterable<PsiPackageAccessibilityStatement> getExports();
 
-	@Nonnull
-	Iterable<PsiPackageAccessibilityStatement> getOpens();
+  @Nonnull
+  Iterable<PsiPackageAccessibilityStatement> getOpens();
 
-	@Nonnull
-	Iterable<PsiUsesStatement> getUses();
+  @Nonnull
+  Iterable<PsiUsesStatement> getUses();
 
-	@Nonnull
-	Iterable<PsiProvidesStatement> getProvides();
+  @Nonnull
+  Iterable<PsiProvidesStatement> getProvides();
 }

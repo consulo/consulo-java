@@ -17,18 +17,18 @@ package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.codeInsight.CodeInsightBundle;
-import com.intellij.codeInsight.CodeInsightUtilBase;
-import com.intellij.codeInsight.FileModificationService;
-import com.intellij.codeInsight.intention.IntentionAction;
+import consulo.language.editor.CodeInsightBundle;
+import consulo.ide.impl.idea.codeInsight.CodeInsightUtilBase;
+import consulo.language.editor.FileModificationService;
+import consulo.language.editor.intention.IntentionAction;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.ScrollType;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.TextRange;
+import consulo.codeEditor.Editor;
+import consulo.codeEditor.ScrollType;
+import consulo.project.Project;
+import consulo.document.util.TextRange;
 import com.intellij.psi.*;
 import com.intellij.java.language.psi.util.PsiTypesUtil;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 
 public class AddVariableInitializerFix implements IntentionAction {

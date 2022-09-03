@@ -20,12 +20,14 @@ import com.intellij.java.debugger.engine.evaluation.CodeFragmentKind;
 import com.intellij.java.debugger.engine.evaluation.TextWithImports;
 import com.intellij.java.debugger.impl.engine.evaluation.TextWithImportsImpl;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.util.Pair;
-import com.intellij.openapi.util.TextRange;
+import consulo.util.lang.Pair;
+import consulo.document.util.TextRange;
 import com.intellij.psi.*;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
+
+import javax.annotation.Nullable;
 
 /**
  * @author Maxim.Medvedev
@@ -54,7 +56,7 @@ public class JavaEditorTextProviderImpl implements EditorTextProvider {
     return result != null? new TextWithImportsImpl(CodeFragmentKind.EXPRESSION, result) : null;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private static PsiElement findExpression(PsiElement element) {
     PsiElement e = PsiTreeUtil.getParentOfType(element, PsiVariable.class, PsiExpression.class, PsiMethod.class);
     if (e instanceof PsiVariable) {
@@ -82,7 +84,7 @@ public class JavaEditorTextProviderImpl implements EditorTextProvider {
     return e;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public Pair<PsiElement, TextRange> findExpression(PsiElement element, boolean allowMethodCalls) {
     if (!(element instanceof PsiIdentifier || element instanceof PsiKeyword)) {
       return null;
@@ -132,8 +134,8 @@ public class JavaEditorTextProviderImpl implements EditorTextProvider {
     return null;
   }
 
-  @javax.annotation.Nullable
-  private static String qualifyEnumConstant(PsiElement resolved, @javax.annotation.Nullable String def) {
+  @Nullable
+  private static String qualifyEnumConstant(PsiElement resolved, @Nullable String def) {
     if (resolved instanceof PsiEnumConstant) {
       final PsiEnumConstant enumConstant = (PsiEnumConstant)resolved;
       final PsiClass enumClass = enumConstant.getContainingClass();

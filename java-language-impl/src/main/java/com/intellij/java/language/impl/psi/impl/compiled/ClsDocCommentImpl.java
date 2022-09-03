@@ -20,16 +20,16 @@ import javax.annotation.Nonnull;
 import com.intellij.java.language.psi.JavaElementVisitor;
 import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.java.language.psi.PsiDocCommentOwner;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiElementVisitor;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiElementVisitor;
 import com.intellij.java.language.psi.PsiJavaDocumentedElement;
 import com.intellij.java.language.psi.PsiJavaToken;
 import com.intellij.java.language.impl.psi.impl.PsiImplUtil;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaDocElementType;
-import com.intellij.psi.impl.source.tree.TreeElement;
+import consulo.language.impl.ast.TreeElement;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.java.language.psi.javadoc.PsiDocTag;
-import com.intellij.psi.tree.IElementType;
+import consulo.language.ast.IElementType;
 
 class ClsDocCommentImpl extends ClsElementImpl implements PsiDocComment, JavaTokenType, PsiJavaToken
 {

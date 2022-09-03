@@ -20,8 +20,8 @@ import java.util.List;
 import javax.annotation.Nonnull;
 
 import com.intellij.java.debugger.impl.engine.DebugProcessImpl;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.xdebugger.XExpression;
+import consulo.util.lang.StringUtil;
+import consulo.execution.debug.breakpoint.XExpression;
 import consulo.internal.com.sun.jdi.ObjectReference;
 
 /**

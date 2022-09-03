@@ -18,13 +18,13 @@ package com.intellij.java.impl.refactoring.rename.naming;
 import com.intellij.java.impl.refactoring.JavaRefactoringSettings;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.refactoring.RefactoringBundle;
-import com.intellij.refactoring.rename.naming.AutomaticRenamer;
-import com.intellij.refactoring.rename.naming.AutomaticRenamerFactory;
-import com.intellij.usageView.UsageInfo;
+import consulo.project.Project;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.rename.AutomaticRenamer;
+import consulo.language.editor.refactoring.rename.AutomaticRenamerFactory;
+import consulo.usage.UsageInfo;
 
 import java.util.Collection;
 

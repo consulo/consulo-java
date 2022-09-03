@@ -20,17 +20,17 @@ import com.intellij.java.debugger.impl.breakpoints.properties.JavaBreakpointProp
 import com.intellij.java.debugger.impl.ui.breakpoints.EditClassFiltersDialog;
 import com.intellij.java.debugger.impl.ui.breakpoints.EditInstanceFiltersDialog;
 import com.intellij.java.debugger.ui.classFilter.ClassFilter;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.DialogWrapper;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.project.Project;
+import consulo.ui.ex.awt.DialogWrapper;
+import consulo.ui.ex.awt.FieldPanel;
+import consulo.util.lang.StringUtil;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.ui.FieldPanel;
-import com.intellij.ui.MultiLineTooltipUI;
-import com.intellij.xdebugger.XSourcePosition;
-import com.intellij.xdebugger.breakpoints.XBreakpoint;
-import com.intellij.xdebugger.breakpoints.ui.XBreakpointCustomPropertiesPanel;
-import com.intellij.xdebugger.impl.breakpoints.XBreakpointBase;
-import com.intellij.xdebugger.impl.ui.DebuggerUIUtil;
+import consulo.ide.impl.idea.ui.MultiLineTooltipUI;
+import consulo.execution.debug.XSourcePosition;
+import consulo.execution.debug.breakpoint.XBreakpoint;
+import consulo.execution.debug.breakpoint.ui.XBreakpointCustomPropertiesPanel;
+import consulo.ide.impl.idea.xdebugger.impl.breakpoints.XBreakpointBase;
+import consulo.ide.impl.idea.xdebugger.impl.ui.DebuggerUIUtil;
 
 import javax.annotation.Nonnull;
 import javax.swing.*;
@@ -128,7 +128,7 @@ public class JavaBreakpointFiltersPanel<T extends JavaBreakpointProperties, B ex
 		insert(myInstanceFiltersFieldPanel, myInstanceFiltersField);
 		insert(myClassFiltersFieldPanel, myClassFiltersField);
 
-		DebuggerUIUtil.focusEditorOnCheck(myPassCountCheckbox, myPassCountField);
+		consulo.ide.impl.idea.xdebugger.impl.ui.DebuggerUIUtil.focusEditorOnCheck(myPassCountCheckbox, myPassCountField);
 		DebuggerUIUtil.focusEditorOnCheck(myInstanceFiltersCheckBox, myInstanceFiltersField.getTextField());
 		DebuggerUIUtil.focusEditorOnCheck(myClassFiltersCheckBox, myClassFiltersField.getTextField());
 	}

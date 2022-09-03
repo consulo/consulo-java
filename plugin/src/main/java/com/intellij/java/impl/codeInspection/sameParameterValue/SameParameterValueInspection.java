@@ -15,9 +15,8 @@
  */
 package com.intellij.java.impl.codeInspection.sameParameterValue;
 
-import com.intellij.analysis.AnalysisScope;
-import com.intellij.codeInsight.daemon.GroupNames;
-import com.intellij.codeInspection.*;
+import consulo.language.editor.scope.AnalysisScope;
+import consulo.ide.impl.idea.codeInsight.daemon.GroupNames;
 import com.intellij.codeInspection.reference.*;
 import com.intellij.java.analysis.codeInspection.GlobalJavaInspectionContext;
 import com.intellij.java.analysis.codeInspection.GlobalJavaInspectionTool;
@@ -25,18 +24,18 @@ import com.intellij.java.analysis.codeInspection.reference.RefJavaVisitor;
 import com.intellij.java.analysis.codeInspection.reference.RefMethod;
 import com.intellij.java.analysis.codeInspection.reference.RefParameter;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.application.ApplicationManager;
+import consulo.application.ApplicationManager;
 import consulo.logging.Logger;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Comparing;
+import consulo.project.Project;
+import consulo.util.lang.Comparing;
 import com.intellij.psi.*;
-import com.intellij.psi.search.searches.ReferencesSearch;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.search.ReferencesSearch;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.impl.refactoring.changeSignature.ChangeSignatureProcessor;
 import com.intellij.java.impl.refactoring.changeSignature.ParameterInfoImpl;
-import com.intellij.refactoring.util.CommonRefactoringUtil;
+import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import com.intellij.java.impl.refactoring.util.InlineUtil;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -52,7 +51,7 @@ public class SameParameterValueInspection extends GlobalJavaInspectionTool
   private static final Logger LOG = Logger.getInstance(SameParameterValueInspection.class);
 
   @Override
-  @javax.annotation.Nullable
+  @Nullable
   public CommonProblemDescriptor[] checkElement(RefEntity refEntity, AnalysisScope scope, InspectionManager manager, GlobalInspectionContext globalContext,
                                                 ProblemDescriptionsProcessor processor) {
     ArrayList<ProblemDescriptor> problems = null;
@@ -135,7 +134,7 @@ public class SameParameterValueInspection extends GlobalJavaInspectionTool
   }
 
   @Override
-  @javax.annotation.Nullable
+  @Nullable
   public String getHint(final QuickFix fix) {
     final InlineParameterValueFix valueFix = (InlineParameterValueFix)fix;
     return valueFix.getParamName() + " " + valueFix.getValue();

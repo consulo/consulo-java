@@ -15,7 +15,9 @@
  */
 package com.intellij.java.execution.unscramble;
 
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.execution.unscramble.ThreadOperation;
+import consulo.execution.unscramble.ThreadState;
+import consulo.util.lang.StringUtil;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nullable;
@@ -112,7 +114,7 @@ public class ThreadDumpParser {
     });
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private static String findWaitingForLock(final String stackTrace) {
     Matcher m = ourWaitingForLockPattern.matcher(stackTrace);
     if (m.find()) {
@@ -185,7 +187,7 @@ public class ThreadDumpParser {
   private static ThreadState tryParseThreadStart(final String line) {
     Matcher m = ourThreadStartPattern.matcher(line);
     if (m.find()) {
-      final ThreadState state = new ThreadState(m.group(1), m.group(3));
+      final ThreadState state = new JavaThreadState(m.group(1), m.group(3));
       if (line.contains(" daemon ")) {
         state.setDaemon(true);
       }

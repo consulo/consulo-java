@@ -15,17 +15,18 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
-import com.intellij.codeInspection.IntentionAndQuickFixAction;
-import com.intellij.openapi.actionSystem.ActionManager;
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.actionSystem.IdeActions;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleUtilCore;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.ui.configuration.ProjectSettingsService;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
+import consulo.language.editor.inspection.IntentionAndQuickFixAction;
+import consulo.ui.ex.action.ActionManager;
+import consulo.ui.ex.action.AnAction;
+import consulo.ui.ex.action.IdeActions;
+import consulo.codeEditor.Editor;
+import consulo.module.Module;
+import consulo.language.util.ModuleUtilCore;
+import consulo.project.Project;
+import consulo.project.ui.view.internal.ProjectSettingsService;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -59,7 +60,7 @@ public class ShowModulePropertiesFix extends IntentionAndQuickFixAction {
   }
 
   @Override
-  public void applyFix(@Nonnull Project project, PsiFile file, @javax.annotation.Nullable Editor editor) {
+  public void applyFix(@Nonnull Project project, PsiFile file, @Nullable Editor editor) {
     ProjectSettingsService.getInstance(project).showModuleConfigurationDialog(myModuleName, null);
   }
 

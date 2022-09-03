@@ -15,10 +15,10 @@
  */
 package com.intellij.java.execution.runners;
 
-import com.intellij.execution.ExecutionException;
-import com.intellij.execution.process.ProcessHandler;
+import consulo.process.ExecutionException;
+import consulo.process.ProcessHandler;
 import com.intellij.java.execution.configurations.JavaCommandLine;
-import com.intellij.openapi.components.ServiceManager;
+import consulo.ide.ServiceManager;
 
 import javax.annotation.Nullable;
 

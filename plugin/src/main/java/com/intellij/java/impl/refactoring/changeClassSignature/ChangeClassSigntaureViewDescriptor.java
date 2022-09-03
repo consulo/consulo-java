@@ -18,10 +18,10 @@ package com.intellij.java.impl.refactoring.changeClassSignature;
 import javax.annotation.Nonnull;
 
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiElement;
-import com.intellij.refactoring.ui.UsageViewDescriptorAdapter;
-import com.intellij.usageView.UsageViewUtil;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.language.psi.PsiElement;
+import consulo.language.editor.refactoring.ui.UsageViewDescriptorAdapter;
+import consulo.usage.UsageViewUtil;
+import consulo.util.lang.StringUtil;
 
 /**
  * @author dsl

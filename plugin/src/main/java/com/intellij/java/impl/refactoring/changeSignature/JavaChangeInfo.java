@@ -17,7 +17,7 @@ package com.intellij.java.impl.refactoring.changeSignature;
 
 import com.intellij.java.impl.refactoring.util.CanonicalTypes;
 import com.intellij.java.language.psi.*;
-import com.intellij.refactoring.changeSignature.ChangeInfo;
+import consulo.language.editor.refactoring.changeSignature.ChangeInfo;
 
 import javax.annotation.Nonnull;
 import java.util.Collection;

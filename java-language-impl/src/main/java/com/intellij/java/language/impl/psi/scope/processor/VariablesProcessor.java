@@ -19,14 +19,14 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 import consulo.util.dataholder.Key;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.java.language.psi.PsiVariable;
-import com.intellij.psi.ResolveState;
-import com.intellij.psi.scope.BaseScopeProcessor;
+import consulo.language.psi.resolve.ResolveState;
+import consulo.language.psi.resolve.BaseScopeProcessor;
 import com.intellij.java.language.impl.psi.scope.ElementClassHint;
 import com.intellij.java.language.psi.scope.JavaScopeProcessorEvent;
-import com.intellij.util.SmartList;
+import consulo.util.collection.SmartList;
 
 public abstract class VariablesProcessor extends BaseScopeProcessor implements ElementClassHint {
   private boolean myStaticScopeFlag = false;

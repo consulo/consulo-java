@@ -15,12 +15,14 @@
  */
 package com.intellij.java.impl.codeInsight.navigation.actions;
 
-import com.intellij.codeInsight.navigation.actions.GotoDeclarationHandlerBase;
+import consulo.ide.impl.idea.codeInsight.navigation.actions.GotoDeclarationHandlerBase;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.tree.IElementType;
+import consulo.codeEditor.Editor;
+import consulo.language.psi.PsiElement;
+import consulo.language.ast.IElementType;
 import consulo.logging.Logger;
+
+import javax.annotation.Nullable;
 
 /**
  * @author yole
@@ -29,7 +31,7 @@ public class GotoBreakContinueHandler extends GotoDeclarationHandlerBase {
   private static final Logger LOG = Logger.getInstance(GotoBreakContinueHandler.class);
 
   @Override
-  @javax.annotation.Nullable
+  @Nullable
   public PsiElement getGotoDeclarationTarget(final PsiElement elementAt, Editor editor) {
     if (elementAt instanceof PsiKeyword) {
       IElementType type = ((PsiKeyword) elementAt).getTokenType();

@@ -20,9 +20,9 @@
 package com.intellij.java.language.psi;
 
 import com.intellij.java.language.LanguageLevel;
-import com.intellij.openapi.components.ServiceManager;
-import com.intellij.psi.PsiDirectory;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.psi.PsiDirectory;
+import consulo.language.util.IncorrectOperationException;
+import consulo.ide.ServiceManager;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

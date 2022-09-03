@@ -15,24 +15,24 @@
  */
 package com.intellij.java.impl.refactoring.changeClassSignature;
 
-import com.intellij.history.LocalHistory;
+import consulo.localHistory.LocalHistory;
 import com.intellij.history.LocalHistoryAction;
 import com.intellij.java.language.psi.*;
 import consulo.logging.Logger;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Ref;
+import consulo.project.Project;
+import consulo.util.lang.ref.Ref;
 import com.intellij.psi.*;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.search.searches.ReferencesSearch;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.search.ReferencesSearch;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.refactoring.BaseRefactoringProcessor;
+import consulo.language.editor.refactoring.BaseRefactoringProcessor;
 import com.intellij.java.impl.refactoring.changeSignature.ChangeSignatureUtil;
-import com.intellij.refactoring.util.RefactoringUIUtil;
-import com.intellij.usageView.UsageInfo;
-import com.intellij.usageView.UsageViewDescriptor;
-import com.intellij.util.ArrayUtil;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.containers.MultiMap;
+import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
+import consulo.usage.UsageInfo;
+import consulo.usage.UsageViewDescriptor;
+import consulo.util.collection.ArrayUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.util.collection.MultiMap;
 import javax.annotation.Nonnull;
 
 import java.util.*;

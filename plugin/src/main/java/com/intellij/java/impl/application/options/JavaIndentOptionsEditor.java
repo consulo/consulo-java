@@ -15,18 +15,18 @@
  */
 package com.intellij.java.impl.application.options;
 
-import com.intellij.application.options.SmartIndentOptionsEditor;
+import consulo.application.ApplicationBundle;
+import consulo.language.codeStyle.ui.setting.SmartIndentOptionsEditor;
 import com.intellij.java.language.JavaLanguage;
-import com.intellij.openapi.application.ApplicationBundle;
-import com.intellij.psi.codeStyle.CodeStyleSettings;
-import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
-import com.intellij.ui.components.fields.IntegerField;
+import consulo.language.codeStyle.CodeStyleSettings;
+import consulo.language.codeStyle.CommonCodeStyleSettings;
+import consulo.ui.ex.awt.IntegerField;
 
 import javax.annotation.Nonnull;
 import javax.swing.*;
 
-import static com.intellij.psi.codeStyle.CodeStyleConstraints.MAX_INDENT_SIZE;
-import static com.intellij.psi.codeStyle.CodeStyleConstraints.MIN_INDENT_SIZE;
+import static consulo.language.codeStyle.CodeStyleConstraints.MAX_INDENT_SIZE;
+import static consulo.language.codeStyle.CodeStyleConstraints.MIN_INDENT_SIZE;
 
 /**
  * @author yole

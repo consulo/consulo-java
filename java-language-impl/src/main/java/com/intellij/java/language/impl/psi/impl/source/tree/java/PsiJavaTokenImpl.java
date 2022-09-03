@@ -16,10 +16,10 @@
 package com.intellij.java.language.impl.psi.impl.source.tree.java;
 
 import com.intellij.java.language.psi.JavaElementVisitor;
-import com.intellij.psi.PsiElementVisitor;
+import consulo.language.psi.PsiElementVisitor;
 import com.intellij.java.language.psi.PsiJavaToken;
-import com.intellij.psi.impl.source.tree.LeafPsiElement;
-import com.intellij.psi.tree.IElementType;
+import consulo.language.impl.psi.LeafPsiElement;
+import consulo.language.ast.IElementType;
 import javax.annotation.Nonnull;
 
 public class PsiJavaTokenImpl extends LeafPsiElement implements PsiJavaToken{

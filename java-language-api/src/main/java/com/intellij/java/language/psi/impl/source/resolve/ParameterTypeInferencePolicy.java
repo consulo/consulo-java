@@ -15,25 +15,27 @@
  */
 package com.intellij.java.language.psi.impl.source.resolve;
 
-import com.intellij.openapi.util.Pair;
 import com.intellij.java.language.psi.ConstraintType;
 import com.intellij.java.language.psi.PsiCallExpression;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiExpressionList;
-import com.intellij.psi.PsiManager;
+import consulo.language.psi.PsiManager;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.PsiTypeParameter;
+import consulo.util.lang.Pair;
+
+import javax.annotation.Nullable;
 
 /**
  * @author yole
  */
 public abstract class ParameterTypeInferencePolicy
 {
-	@javax.annotation.Nullable
+	@Nullable
 	public abstract Pair<PsiType, ConstraintType> inferTypeConstraintFromCallContext(PsiExpression innerMethodCall,
-			PsiExpressionList parent,
-			PsiCallExpression contextCall,
-			PsiTypeParameter typeParameter);
+                                                                                                     PsiExpressionList parent,
+                                                                                                     PsiCallExpression contextCall,
+                                                                                                     PsiTypeParameter typeParameter);
 
 	public abstract PsiType getDefaultExpectedType(PsiCallExpression methodCall);
 

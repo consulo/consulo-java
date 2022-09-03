@@ -1,24 +1,24 @@
 package com.intellij.codeInsight.completion;
 
 import com.intellij.JavaTestUtil;
-import com.intellij.codeInsight.CodeInsightSettings;
-import com.intellij.codeInsight.lookup.Lookup;
-import com.intellij.codeInsight.lookup.LookupElement;
-import com.intellij.codeInsight.lookup.LookupElementPresentation;
+import consulo.language.editor.CodeInsightSettings;
+import consulo.language.editor.completion.lookup.Lookup;
+import consulo.language.editor.completion.lookup.LookupElement;
+import consulo.language.editor.completion.lookup.LookupElementPresentation;
 import com.intellij.java.impl.codeInsight.completion.StaticallyImportable;
 import com.intellij.java.impl.codeInsight.template.SmartCompletionContextType;
-import com.intellij.codeInsight.template.Template;
-import com.intellij.codeInsight.template.TemplateContextType;
-import com.intellij.codeInsight.template.TemplateManager;
-import com.intellij.codeInsight.template.impl.TemplateImpl;
-import com.intellij.codeInsight.template.impl.TemplateSettings;
+import consulo.language.editor.template.Template;
+import consulo.language.editor.template.context.TemplateContextType;
+import consulo.language.editor.template.TemplateManager;
+import consulo.language.editor.impl.internal.template.TemplateImpl;
+import consulo.language.editor.template.TemplateSettings;
 import com.intellij.java.language.JavaLanguage;
-import com.intellij.openapi.fileEditor.FileDocumentManager;
-import com.intellij.openapi.util.Condition;
-import com.intellij.psi.codeStyle.CodeStyleSettings;
-import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
-import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.document.FileDocumentManager;
+import consulo.util.lang.function.Condition;
+import consulo.language.codeStyle.CodeStyleSettings;
+import consulo.language.codeStyle.CodeStyleSettingsManager;
+import consulo.language.codeStyle.CommonCodeStyleSettings;
+import consulo.util.collection.ContainerUtil;
 
 public abstract class SmartTypeCompletionTest extends LightFixtureCompletionTestCase {
 

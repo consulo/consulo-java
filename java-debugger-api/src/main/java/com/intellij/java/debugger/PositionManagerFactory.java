@@ -17,7 +17,7 @@ package com.intellij.java.debugger;
 
 import javax.annotation.Nullable;
 import com.intellij.java.debugger.engine.DebugProcess;
-import com.intellij.openapi.extensions.ExtensionPointName;
+import consulo.component.extension.ExtensionPointName;
 
 /**
  * @author yole

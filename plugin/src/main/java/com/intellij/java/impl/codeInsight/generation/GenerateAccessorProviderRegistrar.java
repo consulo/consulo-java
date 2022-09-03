@@ -21,12 +21,12 @@ import java.util.Collection;
 import java.util.List;
 
 import com.intellij.java.language.impl.codeInsight.generation.EncapsulatableClassMember;
-import com.intellij.openapi.extensions.ExtensionPointName;
-import com.intellij.openapi.extensions.Extensions;
+import consulo.component.extension.ExtensionPointName;
+import consulo.component.extension.Extensions;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.util.Function;
-import com.intellij.util.NotNullFunction;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.ide.impl.idea.util.Function;
+import consulo.ide.impl.idea.util.NotNullFunction;
+import consulo.util.collection.ContainerUtil;
 
 /**
  * @author peter

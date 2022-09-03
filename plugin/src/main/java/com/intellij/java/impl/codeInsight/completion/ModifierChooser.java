@@ -23,11 +23,11 @@ import javax.annotation.Nullable;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
-import com.intellij.psi.filters.FilterPositionUtil;
+import consulo.language.psi.filter.FilterPositionUtil;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.ArrayUtil;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.util.collection.ArrayUtil;
+import consulo.util.collection.ContainerUtil;
 
 /**
  * @author ik

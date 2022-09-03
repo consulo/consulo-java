@@ -17,7 +17,7 @@ package com.intellij.java.debugger.ui.classFilter;
 
 import java.util.List;
 
-import com.intellij.openapi.extensions.ExtensionPointName;
+import consulo.component.extension.ExtensionPointName;
 
 /**
  * @author Eugene Zhuravlev

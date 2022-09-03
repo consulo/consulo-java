@@ -21,7 +21,9 @@ import java.util.List;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
+import consulo.execution.debug.setting.XDebuggerSettingsManager;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
 import com.intellij.java.debugger.DebuggerBundle;
@@ -42,18 +44,18 @@ import com.intellij.java.debugger.impl.ui.tree.NodeDescriptorFactory;
 import com.intellij.java.debugger.impl.ui.tree.NodeManager;
 import com.intellij.java.debugger.impl.ui.tree.ValueDescriptor;
 import consulo.logging.Logger;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.openapi.util.DefaultJDOMExternalizer;
-import com.intellij.openapi.util.InvalidDataException;
-import com.intellij.openapi.util.WriteExternalException;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.util.lang.Comparing;
+import consulo.util.xml.serializer.DefaultJDOMExternalizer;
+import consulo.util.xml.serializer.InvalidDataException;
+import consulo.util.xml.serializer.WriteExternalException;
+import consulo.util.lang.StringUtil;
 import consulo.java.language.module.util.JavaClassNames;
 import com.intellij.java.language.psi.JavaPsiFacade;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiElementFactory;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
 import java.util.HashSet;
-import com.intellij.xdebugger.settings.XDebuggerSettingsManager;
+
 import consulo.internal.com.sun.jdi.*;
 
 /**
@@ -349,7 +351,7 @@ public class ClassRenderer extends NodeRendererImpl
 		LOG.assertTrue(false);
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public static String getEnumConstantName(@Nonnull ObjectReference objRef, ClassType classType)
 	{
 		do

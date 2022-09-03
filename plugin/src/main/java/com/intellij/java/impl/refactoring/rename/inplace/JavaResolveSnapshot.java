@@ -20,11 +20,11 @@ import com.intellij.java.language.psi.JavaResolveResult;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiReferenceExpression;
 import consulo.logging.Logger;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.project.Project;
+import consulo.document.Document;
+import consulo.project.Project;
 import com.intellij.psi.*;
 import com.intellij.java.impl.refactoring.rename.RenameJavaMemberProcessor;
-import com.intellij.refactoring.rename.ResolveSnapshotProvider;
+import consulo.language.editor.refactoring.ResolveSnapshotProvider;
 import java.util.HashMap;
 
 import java.util.Map;

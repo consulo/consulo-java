@@ -15,7 +15,7 @@
  */
 package com.intellij.java.language.psi.javadoc;
 
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 
 /**
  * @author mike

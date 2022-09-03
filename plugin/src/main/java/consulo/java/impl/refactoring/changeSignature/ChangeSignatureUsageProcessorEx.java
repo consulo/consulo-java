@@ -16,11 +16,11 @@
 
 package consulo.java.impl.refactoring.changeSignature;
 
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Ref;
-import com.intellij.refactoring.changeSignature.ChangeInfo;
-import com.intellij.refactoring.changeSignature.ChangeSignatureUsageProcessor;
-import com.intellij.usageView.UsageInfo;
+import consulo.project.Project;
+import consulo.util.lang.ref.Ref;
+import consulo.language.editor.refactoring.changeSignature.ChangeInfo;
+import consulo.language.editor.refactoring.changeSignature.ChangeSignatureUsageProcessor;
+import consulo.usage.UsageInfo;
 
 /**
  * @author VISTALL

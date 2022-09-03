@@ -17,7 +17,7 @@ package com.intellij.java.impl.codeInsight.template.postfix.templates;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.openapi.editor.Editor;
+import consulo.codeEditor.Editor;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiElementFactory;
 import com.intellij.java.language.psi.PsiExpression;

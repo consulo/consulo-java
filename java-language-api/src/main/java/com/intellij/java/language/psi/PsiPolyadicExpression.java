@@ -17,7 +17,7 @@ package com.intellij.java.language.psi;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.psi.tree.IElementType;
+import consulo.language.ast.IElementType;
 
 import javax.annotation.Nullable;
 

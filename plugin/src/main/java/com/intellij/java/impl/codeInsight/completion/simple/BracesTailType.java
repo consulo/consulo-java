@@ -16,18 +16,18 @@
 
 package com.intellij.java.impl.codeInsight.completion.simple;
 
-import com.intellij.codeInsight.TailType;
+import consulo.language.editor.completion.lookup.TailType;
 import com.intellij.codeInsight.editorActions.EnterHandler;
-import com.intellij.codeInsight.editorActions.enter.EnterAfterUnmatchedBraceHandler;
-import com.intellij.ide.DataManager;
-import com.intellij.openapi.actionSystem.IdeActions;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.actionSystem.EditorActionManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiDocumentManager;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.codeStyle.CodeStyleManager;
-import com.intellij.util.text.CharArrayUtil;
+import consulo.ide.impl.idea.codeInsight.editorActions.enter.EnterAfterUnmatchedBraceHandler;
+import consulo.dataContext.DataManager;
+import consulo.ui.ex.action.IdeActions;
+import consulo.codeEditor.Editor;
+import consulo.codeEditor.action.EditorActionManager;
+import consulo.project.Project;
+import consulo.language.psi.PsiDocumentManager;
+import consulo.language.psi.PsiFile;
+import consulo.language.codeStyle.CodeStyleManager;
+import consulo.util.lang.CharArrayUtil;
 
 /**
  * @author peter

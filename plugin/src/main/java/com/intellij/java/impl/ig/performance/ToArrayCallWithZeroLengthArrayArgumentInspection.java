@@ -16,14 +16,15 @@
 package com.intellij.java.impl.ig.performance;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.intellij.java.language.psi.*;
 import org.jetbrains.annotations.NonNls;
-import com.intellij.codeInspection.ProblemDescriptor;
-import com.intellij.openapi.project.Project;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.project.Project;
 import com.intellij.psi.*;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.PsiReplacementUtil;
@@ -33,7 +34,7 @@ public class ToArrayCallWithZeroLengthArrayArgumentInspection extends ToArrayCal
 {
 
 	@Override
-	@javax.annotation.Nullable
+	@Nullable
 	protected InspectionGadgetsFix buildFix(Object... infos)
 	{
 		return new ToArrayCallWithZeroLengthArrayArgumentFix();

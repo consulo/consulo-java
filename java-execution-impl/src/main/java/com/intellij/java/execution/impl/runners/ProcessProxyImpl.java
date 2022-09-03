@@ -13,15 +13,15 @@ import java.nio.channels.CompletionHandler;
 import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Nonnull;
-import com.intellij.execution.process.BaseOSProcessHandler;
-import com.intellij.execution.process.ProcessHandler;
-import com.intellij.execution.process.UnixProcessManager;
-import com.intellij.ide.plugins.PluginManager;
+import consulo.process.internal.BaseOSProcessHandler;
+import consulo.process.ProcessHandler;
+import consulo.process.internal.UnixProcessManager;
+import consulo.ide.impl.idea.ide.plugins.PluginManager;
 import com.intellij.java.execution.runners.ProcessProxy;
 import consulo.logging.Logger;
 import consulo.util.dataholder.Key;
-import com.intellij.openapi.util.SystemInfo;
-import com.intellij.util.ThrowableRunnable;
+import consulo.application.util.SystemInfo;
+import consulo.util.lang.function.ThrowableRunnable;
 import consulo.execution.process.OSProcessUtil;
 import consulo.java.language.module.util.JavaClassNames;
 

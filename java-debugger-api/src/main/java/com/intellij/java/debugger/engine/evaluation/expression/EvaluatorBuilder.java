@@ -18,7 +18,7 @@ package com.intellij.java.debugger.engine.evaluation.expression;
 import com.intellij.java.debugger.SourcePosition;
 import com.intellij.java.debugger.engine.evaluation.EvaluateException;
 import com.intellij.java.debugger.engine.evaluation.CodeFragmentFactory;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 
 /**
  * Main interface to extend evaluation for different JVM languages.

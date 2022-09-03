@@ -15,12 +15,16 @@
  */
 package com.intellij.java.impl.application.options;
 
-import com.intellij.openapi.application.ApplicationBundle;
-import com.intellij.psi.codeStyle.PackageEntry;
-import com.intellij.psi.codeStyle.PackageEntryTable;
+import consulo.application.ApplicationBundle;
+import consulo.language.codeStyle.PackageEntry;
+import consulo.language.codeStyle.PackageEntryTable;
 import com.intellij.ui.*;
-import com.intellij.ui.table.JBTable;
-import com.intellij.util.ui.UIUtil;
+import consulo.ui.ex.awt.table.JBTable;
+import consulo.ui.ex.awt.UIUtil;
+import consulo.ui.ex.awt.AnActionButton;
+import consulo.ui.ex.awt.AnActionButtonRunnable;
+import consulo.ui.ex.awt.IdeBorderFactory;
+import consulo.ui.ex.awt.ToolbarDecorator;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;

@@ -15,23 +15,23 @@
  */
 package com.intellij.java.language.impl.psi.impl.source.resolve;
 
-import java.util.Arrays;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-
-import com.intellij.java.language.psi.*;
-import com.intellij.java.language.psi.impl.source.resolve.DefaultParameterTypeInferencePolicy;
-import com.intellij.openapi.util.Computable;
-import com.intellij.openapi.util.Pair;
 import com.intellij.java.language.LanguageLevel;
-import com.intellij.psi.*;
-import com.intellij.java.language.psi.infos.MethodCandidateInfo;
 import com.intellij.java.language.impl.psi.scope.MethodProcessorSetupFailedException;
 import com.intellij.java.language.impl.psi.scope.processor.MethodCandidatesProcessor;
 import com.intellij.java.language.impl.psi.scope.util.PsiScopesUtil;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.impl.source.resolve.DefaultParameterTypeInferencePolicy;
+import com.intellij.java.language.psi.infos.MethodCandidateInfo;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.util.ArrayUtilRt;
+import consulo.application.util.function.Computable;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.util.collection.ArrayUtil;
+import consulo.util.lang.Pair;
+
+import javax.annotation.Nonnull;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * User: anna
@@ -54,7 +54,7 @@ public class ProcessCandidateParameterTypeInferencePolicy extends DefaultParamet
 		{
 			parent = parent.getParent();
 		}
-		int i = ArrayUtilRt.find(expressions, parent);
+		int i = ArrayUtil.find(expressions, parent);
 		if(i < 0)
 		{
 			return null;

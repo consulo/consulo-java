@@ -16,11 +16,11 @@
 package com.intellij.java.execution.impl.jar;
 
 import javax.annotation.Nonnull;
-import com.intellij.execution.ExecutionException;
+import consulo.process.ExecutionException;
 import com.intellij.java.execution.impl.application.BaseJavaApplicationCommandLineState;
-import com.intellij.execution.runners.ExecutionEnvironment;
+import consulo.execution.runner.ExecutionEnvironment;
 import com.intellij.java.execution.impl.util.JavaParametersUtil;
-import com.intellij.openapi.util.io.FileUtil;
+import consulo.ide.impl.idea.openapi.util.io.FileUtil;
 import consulo.java.execution.configurations.OwnJavaParameters;
 
 /**

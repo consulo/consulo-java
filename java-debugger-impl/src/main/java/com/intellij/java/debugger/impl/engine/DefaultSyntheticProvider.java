@@ -15,46 +15,38 @@
  */
 package com.intellij.java.debugger.impl.engine;
 
-import javax.annotation.Nonnull;
-
-import com.intellij.java.debugger.impl.DebuggerUtilsEx;
 import com.intellij.java.debugger.engine.SyntheticTypeComponentProvider;
+import com.intellij.java.debugger.impl.DebuggerUtilsEx;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.internal.com.sun.jdi.TypeComponent;
 import consulo.internal.com.sun.jdi.VirtualMachine;
+
+import javax.annotation.Nonnull;
 
 /**
  * @author Nikolay.Tropin
  */
-public class DefaultSyntheticProvider implements SyntheticTypeComponentProvider
-{
-	@Override
-	public boolean isSynthetic(@Nonnull TypeComponent typeComponent)
-	{
-		return checkIsSynthetic(typeComponent);
-	}
+@ExtensionImpl(id = "default")
+public class DefaultSyntheticProvider implements SyntheticTypeComponentProvider {
+  @Override
+  public boolean isSynthetic(@Nonnull TypeComponent typeComponent) {
+    return checkIsSynthetic(typeComponent);
+  }
 
-	public static boolean checkIsSynthetic(@Nonnull TypeComponent typeComponent)
-	{
-		String name = typeComponent.name();
-		if(DebuggerUtilsEx.isLambdaName(name))
-		{
-			return false;
-		}
-		else
-		{
-			if(DebuggerUtilsEx.isLambdaClassName(typeComponent.declaringType().name()))
-			{
-				return true;
-			}
-		}
-		VirtualMachine machine = typeComponent.virtualMachine();
-		if(machine != null && machine.canGetSyntheticAttribute())
-		{
-			return typeComponent.isSynthetic();
-		}
-		else
-		{
-			return name.contains("$");
-		}
-	}
+  public static boolean checkIsSynthetic(@Nonnull TypeComponent typeComponent) {
+    String name = typeComponent.name();
+    if (DebuggerUtilsEx.isLambdaName(name)) {
+      return false;
+    } else {
+      if (DebuggerUtilsEx.isLambdaClassName(typeComponent.declaringType().name())) {
+        return true;
+      }
+    }
+    VirtualMachine machine = typeComponent.virtualMachine();
+    if (machine != null && machine.canGetSyntheticAttribute()) {
+      return typeComponent.isSynthetic();
+    } else {
+      return name.contains("$");
+    }
+  }
 }

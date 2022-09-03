@@ -16,8 +16,8 @@
 package com.intellij.jam.view.ui;
 
 import com.intellij.jam.JamMessages;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiElement;
+import consulo.project.Project;
+import consulo.language.psi.PsiElement;
 import javax.annotation.Nonnull;
 
 import javax.swing.*;

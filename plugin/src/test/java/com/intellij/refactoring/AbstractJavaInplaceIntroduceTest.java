@@ -17,15 +17,15 @@ package com.intellij.refactoring;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.projectRoots.Sdk;
+import consulo.codeEditor.Editor;
+import consulo.project.Project;
+import consulo.content.bundle.Sdk;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiLocalVariable;
 import com.intellij.java.language.psi.PsiMethodCallExpression;
 import com.intellij.java.language.psi.PsiReferenceExpression;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.refactoring.introduce.inplace.AbstractInplaceIntroducer;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.editor.refactoring.introduce.inplace.AbstractInplaceIntroducer;
 import com.intellij.testFramework.IdeaTestUtil;
 import com.intellij.testFramework.LightPlatformTestCase;
 

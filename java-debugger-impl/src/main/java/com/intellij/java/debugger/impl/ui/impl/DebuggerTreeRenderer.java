@@ -15,7 +15,7 @@
  */
 package com.intellij.java.debugger.impl.ui.impl;
 
-import com.intellij.icons.AllIcons;
+import consulo.application.AllIcons;
 import com.intellij.java.analysis.impl.ide.highlighter.JavaHighlightingColors;
 import com.intellij.java.debugger.engine.evaluation.EvaluateException;
 import com.intellij.java.debugger.impl.DebuggerContextImpl;
@@ -24,17 +24,19 @@ import com.intellij.java.debugger.impl.ui.impl.watch.*;
 import com.intellij.java.debugger.impl.ui.tree.ValueDescriptor;
 import com.intellij.java.debugger.impl.ui.tree.render.EnumerationChildrenRenderer;
 import com.intellij.java.debugger.ui.tree.NodeDescriptor;
-import com.intellij.openapi.editor.colors.EditorColorsScheme;
-import com.intellij.openapi.editor.markup.TextAttributes;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.colorScheme.EditorColorsScheme;
+import consulo.colorScheme.TextAttributes;
+import consulo.execution.debug.XDebugSession;
+import consulo.execution.debug.XDebuggerManager;
+import consulo.execution.debug.ui.XDebuggerUIConstants;
+import consulo.ui.ex.SimpleColoredText;
+import consulo.ui.ex.awt.tree.ColoredTreeCellRenderer;
+import consulo.util.lang.StringUtil;
 import com.intellij.ui.*;
-import com.intellij.xdebugger.XDebugSession;
-import com.intellij.xdebugger.XDebuggerManager;
-import com.intellij.xdebugger.impl.XDebugSessionImpl;
-import com.intellij.xdebugger.impl.ui.DebuggerUIUtil;
-import com.intellij.xdebugger.impl.ui.XDebugSessionTab;
-import com.intellij.xdebugger.impl.ui.XDebuggerUIConstants;
-import com.intellij.xdebugger.impl.ui.tree.ValueMarkup;
+import consulo.ide.impl.idea.xdebugger.impl.XDebugSessionImpl;
+import consulo.ide.impl.idea.xdebugger.impl.ui.DebuggerUIUtil;
+import consulo.ide.impl.idea.xdebugger.impl.ui.XDebugSessionTab;
+import consulo.ide.impl.idea.xdebugger.impl.ui.tree.ValueMarkup;
 import consulo.internal.com.sun.jdi.ObjectReference;
 import consulo.internal.com.sun.jdi.Value;
 import consulo.ui.image.Image;
@@ -138,7 +140,7 @@ public class DebuggerTreeRenderer extends ColoredTreeCellRenderer {
     if (valueDescriptor instanceof WatchItemDescriptor && nodeIcon != AllIcons.Debugger.Watch) {
       XDebugSession session = XDebuggerManager.getInstance(valueDescriptor.getProject()).getCurrentSession();
       if (session != null) {
-        XDebugSessionTab tab = ((XDebugSessionImpl) session).getSessionTab();
+        consulo.ide.impl.idea.xdebugger.impl.ui.XDebugSessionTab tab = ((XDebugSessionImpl) session).getSessionTab();
         if (tab != null && tab.isWatchesInVariables()) {
           nodeIcon = AllIcons.Debugger.Watch;
         }
@@ -169,11 +171,11 @@ public class DebuggerTreeRenderer extends ColoredTreeCellRenderer {
   }
 
   public static SimpleColoredText getDescriptorText(final DebuggerContextImpl debuggerContext, NodeDescriptorImpl descriptor, boolean multiline) {
-    return getDescriptorText(debuggerContext, descriptor, DebuggerUIUtil.getColorScheme(null), multiline, true);
+    return getDescriptorText(debuggerContext, descriptor, consulo.ide.impl.idea.xdebugger.impl.ui.DebuggerUIUtil.getColorScheme(null), multiline, true);
   }
 
   public static SimpleColoredText getDescriptorTitle(final DebuggerContextImpl debuggerContext, NodeDescriptorImpl descriptor) {
-    return getDescriptorText(debuggerContext, descriptor, DebuggerUIUtil.getColorScheme(null), false, false);
+    return getDescriptorText(debuggerContext, descriptor, consulo.ide.impl.idea.xdebugger.impl.ui.DebuggerUIUtil.getColorScheme(null), false, false);
   }
 
   private static SimpleColoredText getDescriptorText(DebuggerContextImpl debuggerContext, NodeDescriptorImpl descriptor, EditorColorsScheme colorScheme, boolean multiline, boolean appendValue) {
@@ -196,7 +198,7 @@ public class DebuggerTreeRenderer extends ColoredTreeCellRenderer {
     }
 
     if (descriptor instanceof ValueDescriptor) {
-      final ValueMarkup markup = ((ValueDescriptor) descriptor).getMarkup(debuggerContext.getDebugProcess());
+      final consulo.ide.impl.idea.xdebugger.impl.ui.tree.ValueMarkup markup = ((ValueDescriptor) descriptor).getMarkup(debuggerContext.getDebugProcess());
       if (markup != null) {
         descriptorText.append("[" + markup.getText() + "] ", new SimpleTextAttributes(SimpleTextAttributes.STYLE_BOLD, markup.getColor()));
       }

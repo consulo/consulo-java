@@ -17,10 +17,10 @@ package com.intellij.java.impl.codeInsight.problems;
 
 import jakarta.inject.Inject;
 
-import com.intellij.openapi.compiler.CompilerManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Condition;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.compiler.CompilerManager;
+import consulo.project.Project;
+import consulo.util.lang.function.Condition;
+import consulo.virtualFileSystem.VirtualFile;
 import consulo.java.impl.util.JavaProjectRootsUtil;
 
 /**

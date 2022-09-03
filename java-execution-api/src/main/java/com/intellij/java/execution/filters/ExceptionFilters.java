@@ -15,8 +15,8 @@
  */
 package com.intellij.java.execution.filters;
 
-import com.intellij.execution.filters.Filter;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.execution.ui.console.Filter;
+import consulo.language.psi.scope.GlobalSearchScope;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;

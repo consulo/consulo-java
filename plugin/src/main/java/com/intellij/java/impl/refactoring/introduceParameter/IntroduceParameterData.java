@@ -15,8 +15,8 @@
  */
 package com.intellij.java.impl.refactoring.introduceParameter;
 
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiElement;
+import consulo.project.Project;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiType;
 import consulo.util.collection.primitive.ints.IntList;

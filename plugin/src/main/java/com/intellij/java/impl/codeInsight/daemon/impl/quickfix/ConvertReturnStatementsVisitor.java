@@ -16,12 +16,12 @@
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.util.Computable;
+import consulo.application.ApplicationManager;
+import consulo.application.util.function.Computable;
 import com.intellij.psi.*;
 import com.intellij.java.language.impl.psi.controlFlow.ReturnStatementsVisitor;
 import com.intellij.java.language.psi.util.PsiTypesUtil;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 

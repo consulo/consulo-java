@@ -22,23 +22,30 @@ import com.intellij.java.language.impl.psi.scope.ElementClassHint;
 import com.intellij.java.language.impl.psi.scope.NameHint;
 import com.intellij.java.language.impl.psi.scope.util.PsiScopesUtil;
 import com.intellij.java.language.psi.*;
-import com.intellij.lang.Language;
-import com.intellij.openapi.command.undo.BasicUndoableAction;
-import com.intellij.openapi.command.undo.UndoManager;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.fileTypes.FileType;
-import com.intellij.openapi.fileTypes.FileTypeManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.*;
-import com.intellij.psi.impl.PsiManagerEx;
-import com.intellij.psi.impl.file.impl.FileManager;
-import com.intellij.psi.impl.source.PsiFileImpl;
-import com.intellij.psi.impl.source.tree.FileElement;
-import com.intellij.psi.scope.PsiScopeProcessor;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.testFramework.LightVirtualFile;
+import consulo.document.Document;
+import consulo.language.Language;
+import consulo.language.ast.IElementType;
+import consulo.language.ast.TokenType;
+import consulo.language.editor.intention.IntentionFilterOwner;
+import consulo.language.file.FileTypeManager;
+import consulo.language.file.FileViewProvider;
+import consulo.language.file.light.LightVirtualFile;
+import consulo.language.impl.ast.FileElement;
+import consulo.language.impl.file.SingleRootFileViewProvider;
+import consulo.language.impl.internal.file.FileManager;
+import consulo.language.impl.internal.psi.PsiManagerEx;
+import consulo.language.impl.psi.PsiFileImpl;
+import consulo.language.psi.PsiDocumentManager;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiElementVisitor;
+import consulo.language.psi.resolve.PsiScopeProcessor;
+import consulo.language.psi.resolve.ResolveState;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.project.Project;
+import consulo.undoRedo.BasicUndoableAction;
+import consulo.undoRedo.ProjectUndoManager;
+import consulo.util.lang.StringUtil;
+import consulo.virtualFileSystem.fileType.FileType;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
@@ -229,7 +236,7 @@ public class PsiCodeFragmentImpl extends PsiFileImpl implements JavaCodeFragment
     if (isPhysical()) {
       final Project project = myManager.getProject();
       final Document document = PsiDocumentManager.getInstance(project).getDocument(this);
-      UndoManager.getInstance(project).undoableActionPerformed(new ImportClassUndoableAction(className, qName, document, myPseudoImports));
+      ProjectUndoManager.getInstance(project).undoableActionPerformed(new ImportClassUndoableAction(className, qName, document, myPseudoImports));
     }
     return true;
     //}

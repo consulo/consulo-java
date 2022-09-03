@@ -15,9 +15,9 @@
  */
 package com.intellij.java.compiler.cache;
 
-import com.intellij.compiler.make.CacheCorruptedException;
-import com.intellij.openapi.compiler.CompileContext;
-import com.intellij.openapi.extensions.ExtensionPointName;
+import consulo.compiler.CacheCorruptedException;
+import consulo.compiler.CompileContext;
+import consulo.component.extension.ExtensionPointName;
 
 /**
  * @author Eugene Zhuravlev

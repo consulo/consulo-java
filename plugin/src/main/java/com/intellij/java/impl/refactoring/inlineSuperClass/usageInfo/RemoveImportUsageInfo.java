@@ -22,7 +22,7 @@ package com.intellij.java.impl.refactoring.inlineSuperClass.usageInfo;
 
 import com.intellij.java.language.psi.PsiImportStatement;
 import com.intellij.java.impl.refactoring.util.FixableUsageInfo;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
 
 public class RemoveImportUsageInfo extends FixableUsageInfo{
   private final PsiImportStatement myImportStatement;

@@ -17,14 +17,17 @@ package com.intellij.java.indexing.impl.search;
 
 import com.intellij.java.indexing.search.searches.AnnotatedElementsSearch;
 import com.intellij.java.indexing.search.searches.ClassesWithAnnotatedMembersSearch;
+import com.intellij.java.indexing.search.searches.ClassesWithAnnotatedMembersSearchExecutor;
 import com.intellij.java.indexing.search.searches.ScopedQueryExecutor;
-import com.intellij.openapi.application.QueryExecutorBase;
-import com.intellij.openapi.application.ReadAction;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.search.SearchScope;
-import com.intellij.util.Processor;
-import com.intellij.util.QueryExecutor;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.application.Application;
+import consulo.application.ReadAction;
+import consulo.application.util.function.Processor;
+import consulo.application.util.query.QueryExecutor;
+import consulo.content.scope.SearchScope;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.project.util.query.QueryExecutorBase;
 
 import javax.annotation.Nonnull;
 import java.util.HashSet;
@@ -33,11 +36,12 @@ import java.util.Set;
 /**
  * @author yole
  */
-public class ClassesWithAnnotatedMembersSearcher extends QueryExecutorBase<PsiClass, ClassesWithAnnotatedMembersSearch.Parameters> {
+@ExtensionImpl
+public class ClassesWithAnnotatedMembersSearcher extends QueryExecutorBase<PsiClass, ClassesWithAnnotatedMembersSearch.Parameters> implements ClassesWithAnnotatedMembersSearchExecutor {
   @Override
   public void processQuery(@Nonnull ClassesWithAnnotatedMembersSearch.Parameters queryParameters, @Nonnull final Processor<? super PsiClass> consumer) {
     SearchScope scope = queryParameters.getScope();
-    for (QueryExecutor executor : ClassesWithAnnotatedMembersSearch.EP_NAME.getExtensionList()) {
+    for (QueryExecutor executor : Application.get().getExtensionList(ClassesWithAnnotatedMembersSearchExecutor.class)) {
       if (executor instanceof ScopedQueryExecutor) {
         scope = scope.intersectWith(GlobalSearchScope.notScope(((ScopedQueryExecutor) executor).getScope(queryParameters)));
       }

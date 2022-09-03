@@ -23,30 +23,33 @@ import com.intellij.java.language.impl.psi.scope.ElementClassHint;
 import com.intellij.java.language.impl.psi.scope.NameHint;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.lang.Language;
-import com.intellij.openapi.progress.ProcessCanceledException;
-import com.intellij.openapi.ui.Queryable;
-import com.intellij.openapi.util.Condition;
-import com.intellij.openapi.util.Conditions;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.*;
-import com.intellij.psi.impl.file.PsiPackageBase;
-import com.intellij.psi.scope.PsiScopeProcessor;
-import com.intellij.psi.search.DelegatingGlobalSearchScope;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.util.*;
-import com.intellij.reference.SoftReference;
-import com.intellij.util.ArrayFactory;
-import com.intellij.util.CommonProcessors;
-import com.intellij.util.containers.ContainerUtil;
 import consulo.annotation.access.RequiredReadAction;
+import consulo.application.util.CachedValue;
+import consulo.application.util.CachedValueProvider;
+import consulo.application.util.CachedValuesManager;
+import consulo.application.util.Queryable;
+import consulo.application.util.function.CommonProcessors;
+import consulo.component.ProcessCanceledException;
+import consulo.language.Language;
+import consulo.language.impl.psi.PsiPackageBase;
+import consulo.language.psi.*;
+import consulo.language.psi.resolve.PsiScopeProcessor;
+import consulo.language.psi.resolve.ResolveState;
+import consulo.language.psi.scope.DelegatingGlobalSearchScope;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.util.PsiTreeUtil;
 import consulo.logging.Logger;
 import consulo.module.extension.ModuleExtension;
-import consulo.psi.PsiPackage;
-import consulo.psi.PsiPackageManager;
+import consulo.util.collection.ArrayFactory;
+import consulo.util.collection.ContainerUtil;
+import consulo.util.lang.function.Condition;
+import consulo.util.lang.function.Conditions;
+import consulo.util.lang.ref.SoftReference;
+import consulo.virtualFileSystem.VirtualFile;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -136,7 +139,7 @@ public class PsiPackageImpl extends PsiPackageBase implements PsiJavaPackage, Qu
   }
 
   @Override
-  @javax.annotation.Nullable
+  @Nullable
   public PsiModifierList getAnnotationList() {
     if (myAnnotationList == null) {
       myAnnotationList = CachedValuesManager.getManager(myManager.getProject()).createCachedValue(new PackageAnnotationValueProvider(), false);
@@ -204,7 +207,7 @@ public class PsiPackageImpl extends PsiPackageBase implements PsiJavaPackage, Qu
     return getFacade().findClassByShortName(name, this, scope);
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private PsiJavaPackage findSubPackageByName(String name) {
     final String qName = getQualifiedName();
     final String subpackageQName = qName.isEmpty() ? name : qName + "." + name;
@@ -308,7 +311,7 @@ public class PsiPackageImpl extends PsiPackageBase implements PsiJavaPackage, Qu
       final JavaPsiFacade facade = getFacade();
       final GlobalSearchScope scope = allScope();
       for (PsiClass aClass : facade.findClasses(getQualifiedName() + ".package-info", scope)) {
-        ContainerUtil.addIfNotNull(aClass.getModifierList(), list);
+        ContainerUtil.addIfNotNull(list, aClass.getModifierList());
       }
 
       return new Result<PsiModifierList>(list.isEmpty() ? null : new PsiCompositeModifierList(getManager(), list), OOCB_DEPENDENCY);
@@ -316,7 +319,7 @@ public class PsiPackageImpl extends PsiPackageBase implements PsiJavaPackage, Qu
   }
 
   @Override
-  @javax.annotation.Nullable
+  @Nullable
   public PsiModifierList getModifierList() {
     return getAnnotationList();
   }

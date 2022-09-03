@@ -1,6 +1,7 @@
 package com.siyeh.igtest.style.size_replaceable_by_is_empty;
 
 import java.util.Collection;
+import java.util.List;
 
 public class SizeReplaceableByIsEmpty {
 
@@ -26,7 +27,7 @@ public class SizeReplaceableByIsEmpty {
     }
   }
 
-  abstract class MyList<T> implements java.util.List<T>
+  abstract class MyList<T> implements List<T>
   {
     public boolean isEmpty()
     {

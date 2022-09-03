@@ -15,24 +15,28 @@
  */
 package com.intellij.java.language.impl.psi.impl.source.tree.java;
 
+import com.intellij.java.language.JavaLanguage;
+import com.intellij.java.language.impl.psi.impl.PsiImplUtil;
 import com.intellij.java.language.impl.psi.impl.source.tree.ChildRole;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
-import com.intellij.java.language.psi.*;
-import com.intellij.lang.ASTNode;
-import com.intellij.java.language.JavaLanguage;
-import com.intellij.openapi.util.Pair;
-import com.intellij.openapi.util.Ref;
-import com.intellij.psi.*;
-import com.intellij.java.language.impl.psi.impl.PsiImplUtil;
-import com.intellij.psi.impl.source.tree.*;
-import com.intellij.psi.scope.BaseScopeProcessor;
 import com.intellij.java.language.impl.psi.scope.ElementClassHint;
 import com.intellij.java.language.impl.psi.scope.NameHint;
-import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.java.language.impl.psi.scope.util.PsiScopesUtil;
-import com.intellij.psi.tree.ChildRoleBase;
-import com.intellij.psi.tree.IElementType;
+import com.intellij.java.language.psi.*;
+import consulo.language.ast.ASTNode;
+import consulo.language.ast.ChildRoleBase;
+import consulo.language.ast.IElementType;
+import consulo.language.impl.ast.TreeElement;
+import consulo.language.impl.ast.TreeUtil;
+import consulo.language.impl.psi.LazyParseablePsiElement;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiElementVisitor;
+import consulo.language.psi.resolve.BaseScopeProcessor;
+import consulo.language.psi.resolve.PsiScopeProcessor;
+import consulo.language.psi.resolve.ResolveState;
 import consulo.logging.Logger;
+import consulo.util.lang.Pair;
+import consulo.util.lang.ref.Ref;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -81,12 +85,12 @@ public class PsiCodeBlockImpl extends LazyParseablePsiElement implements PsiCode
 
   @Override
   public PsiJavaToken getLBrace() {
-    return (PsiJavaToken)findChildByRoleAsPsiElement(ChildRole.LBRACE);
+    return (PsiJavaToken) findChildByRoleAsPsiElement(ChildRole.LBRACE);
   }
 
   @Override
   public PsiJavaToken getRBrace() {
-    return (PsiJavaToken)findChildByRoleAsPsiElement(ChildRole.RBRACE);
+    return (PsiJavaToken) findChildByRoleAsPsiElement(ChildRole.RBRACE);
   }
 
   private volatile Set<String> myVariablesSet = null;
@@ -107,16 +111,15 @@ public class PsiCodeBlockImpl extends LazyParseablePsiElement implements PsiCode
         @Override
         public boolean execute(@Nonnull PsiElement element, ResolveState state) {
           if (element instanceof PsiLocalVariable) {
-            final PsiLocalVariable variable = (PsiLocalVariable)element;
+            final PsiLocalVariable variable = (PsiLocalVariable) element;
             final String name = variable.getName();
             if (!localsSet.add(name)) {
               conflict.set(Boolean.TRUE);
               localsSet.clear();
               classesSet.clear();
             }
-          }
-          else if (element instanceof PsiClass) {
-            final PsiClass psiClass = (PsiClass)element;
+          } else if (element instanceof PsiClass) {
+            final PsiClass psiClass = (PsiClass) element;
             final String name = psiClass.getName();
             if (!classesSet.add(name)) {
               conflict.set(Boolean.TRUE);
@@ -137,12 +140,11 @@ public class PsiCodeBlockImpl extends LazyParseablePsiElement implements PsiCode
 
   @Override
   public TreeElement addInternal(TreeElement first, ASTNode last, ASTNode anchor, Boolean before) {
-    if (anchor == null){
-      if (before == null || before.booleanValue()){
+    if (anchor == null) {
+      if (before == null || before.booleanValue()) {
         anchor = findChildByRole(ChildRole.RBRACE);
         before = Boolean.TRUE;
-      }
-      else{
+      } else {
         anchor = findChildByRole(ChildRole.LBRACE);
         before = Boolean.FALSE;
       }
@@ -153,8 +155,7 @@ public class PsiCodeBlockImpl extends LazyParseablePsiElement implements PsiCode
         anchor = anchor.getTreePrev();
         before = Boolean.FALSE;
       }
-    }
-    else if (before == Boolean.FALSE) {
+    } else if (before == Boolean.FALSE) {
       while (isNonJavaStatement(anchor)) {
         anchor = anchor.getTreeNext();
         before = Boolean.TRUE;
@@ -172,7 +173,7 @@ public class PsiCodeBlockImpl extends LazyParseablePsiElement implements PsiCode
   @Override
   public ASTNode findChildByRole(int role) {
     LOG.assertTrue(ChildRole.isUnique(role));
-    switch(role){
+    switch (role) {
       default:
         return null;
 
@@ -190,11 +191,9 @@ public class PsiCodeBlockImpl extends LazyParseablePsiElement implements PsiCode
     IElementType i = child.getElementType();
     if (i == JavaTokenType.LBRACE) {
       return getChildRole(child, ChildRole.LBRACE);
-    }
-    else if (i == JavaTokenType.RBRACE) {
+    } else if (i == JavaTokenType.RBRACE) {
       return getChildRole(child, ChildRole.RBRACE);
-    }
-    else {
+    } else {
       return ChildRoleBase.NONE;
     }
   }
@@ -202,9 +201,8 @@ public class PsiCodeBlockImpl extends LazyParseablePsiElement implements PsiCode
   @Override
   public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
-      ((JavaElementVisitor)visitor).visitCodeBlock(this);
-    }
-    else {
+      ((JavaElementVisitor) visitor).visitCodeBlock(this);
+    } else {
       visitor.visitElement(this);
     }
   }
@@ -235,8 +233,7 @@ public class PsiCodeBlockImpl extends LazyParseablePsiElement implements PsiCode
       if ((elementClassHint == null || elementClassHint.shouldProcess(ElementClassHint.DeclarationKind.VARIABLE)) && variablesSet.contains(name)) {
         return PsiScopesUtil.walkChildrenScopes(this, processor, state, lastParent, place);
       }
-    }
-    else {
+    } else {
       return PsiScopesUtil.walkChildrenScopes(this, processor, state, lastParent, place);
     }
     return true;

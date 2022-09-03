@@ -22,14 +22,14 @@ import java.util.ArrayList;
 
 import javax.annotation.Nonnull;
 import com.intellij.JavaTestUtil;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.impl.refactoring.makeStatic.MakeMethodStaticProcessor;
 import com.intellij.java.impl.refactoring.makeStatic.MakeStaticUtil;
 import com.intellij.java.impl.refactoring.makeStatic.Settings;
 import com.intellij.java.analysis.impl.refactoring.util.VariableData;
-import com.intellij.util.containers.ContainerUtil;
-import consulo.codeInsight.TargetElementUtil;
+import consulo.util.collection.ContainerUtil;
+import consulo.language.editor.TargetElementUtil;
 import consulo.codeInsight.TargetElementUtilEx;
 
 public abstract class MakeMethodStaticTest extends LightRefactoringTestCase {

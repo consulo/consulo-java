@@ -16,7 +16,7 @@
 
 package com.intellij.java.impl.util.xml.converters.values;
 
-import com.intellij.openapi.components.ServiceManager;
+import consulo.ide.ServiceManager;
 
 public abstract class ClassArrayConverter extends ClassValueConverter {
 

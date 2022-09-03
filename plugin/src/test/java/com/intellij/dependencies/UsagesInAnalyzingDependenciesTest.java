@@ -16,24 +16,24 @@
 package com.intellij.dependencies;
 
 import com.intellij.JavaTestUtil;
-import com.intellij.analysis.AnalysisScope;
+import consulo.language.editor.scope.AnalysisScope;
 import com.intellij.java.impl.analysis.JavaAnalysisScope;
-import com.intellij.packageDependencies.BackwardDependenciesBuilder;
-import com.intellij.packageDependencies.DependenciesBuilder;
-import com.intellij.packageDependencies.FindDependencyUtil;
-import com.intellij.packageDependencies.ForwardDependenciesBuilder;
+import consulo.ide.impl.idea.packageDependencies.BackwardDependenciesBuilder;
+import consulo.ide.impl.idea.packageDependencies.DependenciesBuilder;
+import consulo.ide.impl.idea.packageDependencies.FindDependencyUtil;
+import consulo.ide.impl.idea.packageDependencies.ForwardDependenciesBuilder;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiFile;
+import consulo.language.psi.PsiFile;
 import com.intellij.java.language.psi.PsiJavaPackage;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.testFramework.IdeaTestUtil;
 import com.intellij.testFramework.PsiTestCase;
 import com.intellij.testFramework.PsiTestUtil;
-import com.intellij.usageView.UsageInfo;
+import consulo.usage.UsageInfo;
 import com.intellij.usages.TextChunk;
-import com.intellij.usages.Usage;
-import com.intellij.usages.UsageInfo2UsageAdapter;
+import consulo.usage.Usage;
+import consulo.usage.UsageInfo2UsageAdapter;
 
 import java.util.HashSet;
 import java.util.Set;

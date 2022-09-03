@@ -24,34 +24,34 @@ import com.intellij.java.language.impl.codeInsight.generation.GenerationInfo;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
-import com.intellij.lang.ASTNode;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.RangeMarker;
-import com.intellij.openapi.editor.ScrollType;
-import com.intellij.openapi.extensions.Extensions;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleUtilCore;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.openapi.util.Condition;
-import com.intellij.openapi.util.Pair;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.language.ast.ASTNode;
+import consulo.document.Document;
+import consulo.codeEditor.Editor;
+import consulo.document.RangeMarker;
+import consulo.codeEditor.ScrollType;
+import consulo.component.extension.Extensions;
+import consulo.module.Module;
+import consulo.language.util.ModuleUtilCore;
+import consulo.project.Project;
+import consulo.util.lang.Comparing;
+import consulo.util.lang.function.Condition;
+import consulo.util.lang.Pair;
+import consulo.util.lang.StringUtil;
 import com.intellij.psi.*;
 import com.intellij.psi.codeStyle.*;
 import com.intellij.java.language.impl.psi.impl.light.LightTypeElement;
 import com.intellij.java.impl.psi.impl.source.codeStyle.JavaCodeStyleManagerImpl;
-import com.intellij.psi.impl.source.tree.PsiWhiteSpaceImpl;
+import consulo.language.impl.psi.PsiWhiteSpaceImpl;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.java.language.psi.util.PropertyUtil;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import com.intellij.java.impl.refactoring.util.RefactoringUtil;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
 import com.intellij.java.language.util.VisibilityUtil;
-import com.intellij.util.text.UniqueNameGenerator;
+import consulo.component.util.text.UniqueNameGenerator;
 import consulo.logging.Logger;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.java.generate.GenerationUtil;
@@ -153,7 +153,7 @@ public class GenerateMembersUtil
 	}
 
 	@Nonnull
-	public static <T extends GenerationInfo> List<T> insertMembersBeforeAnchor(PsiClass aClass, @javax.annotation.Nullable PsiElement anchor, @Nonnull List<T> memberPrototypes) throws IncorrectOperationException
+	public static <T extends GenerationInfo> List<T> insertMembersBeforeAnchor(PsiClass aClass, @Nullable PsiElement anchor, @Nonnull List<T> memberPrototypes) throws IncorrectOperationException
 	{
 		boolean before = true;
 		for(T memberPrototype : memberPrototypes)
@@ -292,7 +292,7 @@ public class GenerateMembersUtil
 		}
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	private static PsiClass findClassAtOffset(PsiFile file, PsiElement leaf)
 	{
 		PsiElement element = leaf;
@@ -337,7 +337,7 @@ public class GenerateMembersUtil
 		return substituteGenericMethod(method, substitutor, null);
 	}
 
-	public static PsiMethod substituteGenericMethod(@Nonnull PsiMethod sourceMethod, @Nonnull PsiSubstitutor substitutor, @javax.annotation.Nullable PsiElement target)
+	public static PsiMethod substituteGenericMethod(@Nonnull PsiMethod sourceMethod, @Nonnull PsiSubstitutor substitutor, @Nullable PsiElement target)
 	{
 		final Project project = sourceMethod.getProject();
 		final JVMElementFactory factory = getFactory(sourceMethod.getProject(), target);
@@ -387,9 +387,9 @@ public class GenerateMembersUtil
 
 	@Nonnull
 	private static PsiSubstitutor substituteTypeParameters(@Nonnull JVMElementFactory factory,
-			@javax.annotation.Nullable PsiElement target,
+			@Nullable PsiElement target,
 			@Nullable PsiTypeParameterList sourceTypeParameterList,
-			@javax.annotation.Nullable PsiTypeParameterList targetTypeParameterList,
+			@Nullable PsiTypeParameterList targetTypeParameterList,
 			@Nonnull PsiSubstitutor substitutor,
 			@Nonnull PsiMethod sourceMethod)
 	{
@@ -434,7 +434,7 @@ public class GenerateMembersUtil
 	}
 
 	@Nonnull
-	private static String suggestUniqueTypeParameterName(String baseName, @Nonnull PsiTypeParameterList typeParameterList, @javax.annotation.Nullable PsiClass targetClass)
+	private static String suggestUniqueTypeParameterName(String baseName, @Nonnull PsiTypeParameterList typeParameterList, @Nullable PsiClass targetClass)
 	{
 		int i = 0;
 		while(true)
@@ -448,7 +448,7 @@ public class GenerateMembersUtil
 	}
 
 
-	private static boolean checkUniqueTypeParameterName(@Nonnull String baseName, @javax.annotation.Nullable PsiTypeParameterList typeParameterList)
+	private static boolean checkUniqueTypeParameterName(@Nonnull String baseName, @Nullable PsiTypeParameterList typeParameterList)
 	{
 		if(typeParameterList == null)
 		{
@@ -604,7 +604,7 @@ public class GenerateMembersUtil
 		return factory.createMethod(method.getName(), PsiType.VOID, target);
 	}
 
-	private static void substituteReturnType(@Nonnull PsiManager manager, @Nonnull PsiMethod method, @javax.annotation.Nullable PsiType returnType, @Nonnull PsiSubstitutor substitutor)
+	private static void substituteReturnType(@Nonnull PsiManager manager, @Nonnull PsiMethod method, @Nullable PsiType returnType, @Nonnull PsiSubstitutor substitutor)
 	{
 		final PsiTypeElement returnTypeElement = method.getReturnTypeElement();
 		if(returnTypeElement == null || returnType == null)
@@ -617,7 +617,7 @@ public class GenerateMembersUtil
 	}
 
 	@Nonnull
-	private static JVMElementFactory getFactory(@Nonnull Project p, @javax.annotation.Nullable PsiElement target)
+	private static JVMElementFactory getFactory(@Nonnull Project p, @Nullable PsiElement target)
 	{
 		return target == null ? JavaPsiFacade.getInstance(p).getElementFactory() : JVMElementFactories.requireFactory(target.getLanguage(), p);
 	}
@@ -877,7 +877,7 @@ public class GenerateMembersUtil
 		return generatePrototype(field, result);
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	private static PsiMethod generatePrototype(@Nonnull PsiField field, PsiMethod result)
 	{
 		return setVisibility(field, annotateOnOverrideImplement(field.getContainingClass(), result));
@@ -909,8 +909,8 @@ public class GenerateMembersUtil
 		return prototype;
 	}
 
-	@javax.annotation.Nullable
-	public static PsiMethod annotateOnOverrideImplement(@javax.annotation.Nullable PsiClass targetClass, @Nullable PsiMethod generated)
+	@Nullable
+	public static PsiMethod annotateOnOverrideImplement(@Nullable PsiClass targetClass, @Nullable PsiMethod generated)
 	{
 		if(generated == null || targetClass == null)
 		{

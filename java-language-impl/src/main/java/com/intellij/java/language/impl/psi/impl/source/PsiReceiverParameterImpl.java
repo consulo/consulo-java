@@ -15,121 +15,103 @@
  */
 package com.intellij.java.language.impl.psi.impl.source;
 
+import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
+import com.intellij.java.language.impl.psi.impl.source.tree.JavaSharedImplUtil;
+import com.intellij.java.language.psi.*;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.language.impl.psi.CompositePsiElement;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiElementVisitor;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.intellij.java.language.psi.*;
-import com.intellij.psi.*;
-import com.intellij.psi.impl.source.tree.CompositePsiElement;
-import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
-import com.intellij.java.language.impl.psi.impl.source.tree.JavaSharedImplUtil;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.IncorrectOperationException;
-import consulo.annotation.access.RequiredReadAction;
+public class PsiReceiverParameterImpl extends CompositePsiElement implements PsiReceiverParameter {
+  public PsiReceiverParameterImpl() {
+    super(JavaElementType.RECEIVER_PARAMETER);
+  }
 
-public class PsiReceiverParameterImpl extends CompositePsiElement implements PsiReceiverParameter
-{
-	public PsiReceiverParameterImpl()
-	{
-		super(JavaElementType.RECEIVER_PARAMETER);
-	}
+  @Override
+  @Nonnull
+  public PsiThisExpression getIdentifier() {
+    return PsiTreeUtil.getRequiredChildOfType(this, PsiThisExpression.class);
+  }
 
-	@Override
-	@Nonnull
-	public PsiThisExpression getIdentifier()
-	{
-		return PsiTreeUtil.getRequiredChildOfType(this, PsiThisExpression.class);
-	}
+  @Nullable
+  @Override
+  public PsiModifierList getModifierList() {
+    return PsiTreeUtil.getChildOfType(this, PsiModifierList.class);
+  }
 
-	@javax.annotation.Nullable
-	@Override
-	public PsiModifierList getModifierList()
-	{
-		return PsiTreeUtil.getChildOfType(this, PsiModifierList.class);
-	}
+  @Override
+  public boolean hasModifierProperty(@PsiModifier.ModifierConstant @Nonnull String name) {
+    PsiModifierList modifierList = getModifierList();
+    return modifierList != null && modifierList.hasModifierProperty(name);
+  }
 
-	@Override
-	public boolean hasModifierProperty(@PsiModifier.ModifierConstant @Nonnull String name)
-	{
-		PsiModifierList modifierList = getModifierList();
-		return modifierList != null && modifierList.hasModifierProperty(name);
-	}
+  @Nonnull
+  @Override
+  public PsiType getType() {
+    return JavaSharedImplUtil.getType(getTypeElement(), getIdentifier());
+  }
 
-	@Nonnull
-	@Override
-	public PsiType getType()
-	{
-		return JavaSharedImplUtil.getType(getTypeElement(), getIdentifier());
-	}
+  @Nonnull
+  @Override
+  public PsiTypeElement getTypeElement() {
+    return PsiTreeUtil.getRequiredChildOfType(this, PsiTypeElement.class);
+  }
 
-	@Nonnull
-	@Override
-	public PsiTypeElement getTypeElement()
-	{
-		return PsiTreeUtil.getRequiredChildOfType(this, PsiTypeElement.class);
-	}
+  @Nullable
+  @Override
+  public PsiExpression getInitializer() {
+    return null;
+  }
 
-	@Nullable
-	@Override
-	public PsiExpression getInitializer()
-	{
-		return null;
-	}
+  @Override
+  public boolean hasInitializer() {
+    return false;
+  }
 
-	@Override
-	public boolean hasInitializer()
-	{
-		return false;
-	}
+  @Nullable
+  @Override
+  public PsiIdentifier getNameIdentifier() {
+    return null;
+  }
 
-	@Nullable
-	@Override
-	public PsiIdentifier getNameIdentifier()
-	{
-		return null;
-	}
+  @Override
+  public PsiElement setName(@Nonnull String name) throws IncorrectOperationException {
+    throw new IncorrectOperationException("Cannot rename receiver parameter");
+  }
 
-	@Override
-	public PsiElement setName(@Nonnull String name) throws IncorrectOperationException
-	{
-		throw new IncorrectOperationException("Cannot rename receiver parameter");
-	}
+  @Override
+  public void normalizeDeclaration() throws IncorrectOperationException {
+  }
 
-	@Override
-	public void normalizeDeclaration() throws IncorrectOperationException
-	{
-	}
+  @Nullable
+  @Override
+  public Object computeConstantValue() {
+    return null;
+  }
 
-	@Nullable
-	@Override
-	public Object computeConstantValue()
-	{
-		return null;
-	}
+  @Override
+  public void accept(@Nonnull PsiElementVisitor visitor) {
+    if (visitor instanceof JavaElementVisitor) {
+      ((JavaElementVisitor) visitor).visitReceiverParameter(this);
+    } else {
+      visitor.visitElement(this);
+    }
+  }
 
-	@Override
-	public void accept(@Nonnull PsiElementVisitor visitor)
-	{
-		if(visitor instanceof JavaElementVisitor)
-		{
-			((JavaElementVisitor) visitor).visitReceiverParameter(this);
-		}
-		else
-		{
-			visitor.visitElement(this);
-		}
-	}
+  @RequiredReadAction
+  @Override
+  public int getTextOffset() {
+    return getIdentifier().getTextOffset();
+  }
 
-	@RequiredReadAction
-	@Override
-	public int getTextOffset()
-	{
-		return getIdentifier().getTextOffset();
-	}
-
-	@Override
-	public String toString()
-	{
-		return "PsiReceiverParameter";
-	}
+  @Override
+  public String toString() {
+    return "PsiReceiverParameter";
+  }
 }

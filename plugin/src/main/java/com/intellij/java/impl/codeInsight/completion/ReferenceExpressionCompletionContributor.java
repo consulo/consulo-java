@@ -15,12 +15,12 @@
  */
 package com.intellij.java.impl.codeInsight.completion;
 
-import com.intellij.codeInsight.completion.CompletionUtil;
-import com.intellij.codeInsight.completion.InsertionContext;
-import com.intellij.codeInsight.completion.PrefixMatcher;
-import com.intellij.codeInsight.lookup.LookupElement;
-import com.intellij.featureStatistics.FeatureUsageTracker;
-import com.intellij.icons.AllIcons;
+import consulo.externalService.statistic.FeatureUsageTracker;
+import consulo.language.editor.impl.internal.completion.CompletionUtil;
+import consulo.language.editor.completion.lookup.InsertionContext;
+import consulo.application.util.matcher.PrefixMatcher;
+import consulo.language.editor.completion.lookup.LookupElement;
+import consulo.application.AllIcons;
 import com.intellij.java.impl.codeInsight.lookup.ExpressionLookupItem;
 import com.intellij.java.impl.psi.filters.ElementExtractorFilter;
 import com.intellij.java.impl.psi.filters.types.AssignableFromFilter;
@@ -32,23 +32,23 @@ import com.intellij.java.language.psi.infos.CandidateInfo;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Iconable;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.patterns.ElementPattern;
-import com.intellij.patterns.StandardPatterns;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiReference;
-import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
-import com.intellij.psi.filters.AndFilter;
-import com.intellij.psi.filters.ClassFilter;
-import com.intellij.psi.filters.ElementFilter;
-import com.intellij.psi.filters.TrueFilter;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.Consumer;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.containers.ContainerUtil;
-import consulo.ide.IconDescriptorUpdaters;
+import consulo.project.Project;
+import consulo.component.util.Iconable;
+import consulo.util.lang.StringUtil;
+import consulo.language.pattern.ElementPattern;
+import consulo.language.pattern.StandardPatterns;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiReference;
+import consulo.language.codeStyle.CodeStyleSettingsManager;
+import consulo.language.psi.filter.AndFilter;
+import consulo.language.psi.filter.ClassFilter;
+import consulo.language.psi.filter.ElementFilter;
+import consulo.language.psi.filter.TrueFilter;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.ide.impl.idea.util.Consumer;
+import consulo.language.util.IncorrectOperationException;
+import consulo.util.collection.ContainerUtil;
+import consulo.language.icon.IconDescriptorUpdaters;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.logging.Logger;
 import org.jetbrains.annotations.NonNls;
@@ -241,7 +241,7 @@ public class ReferenceExpressionCompletionContributor {
     return Collections.emptySet();
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private static ExpressionLookupItem getSingleArrayElementAccess(PsiElement element, LookupElement item) {
     if (item.getObject() instanceof PsiLocalVariable) {
       final PsiLocalVariable variable = (PsiLocalVariable) item.getObject();

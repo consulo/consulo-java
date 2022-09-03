@@ -15,8 +15,8 @@
  */
 package com.intellij.java.impl.refactoring.introduceParameter;
 
-import com.intellij.psi.PsiElement;
-import com.intellij.usageView.UsageInfo;
+import consulo.language.psi.PsiElement;
+import consulo.usage.UsageInfo;
 
 /**
  * @author dsl

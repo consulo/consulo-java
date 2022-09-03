@@ -18,14 +18,14 @@ package com.intellij.java.impl.psi.impl.file;
 import javax.annotation.Nonnull;
 
 import com.intellij.java.language.impl.JavaClassFileType;
+import consulo.language.file.FileTypeManager;
 import consulo.logging.Logger;
-import com.intellij.openapi.fileTypes.FileType;
-import com.intellij.openapi.fileTypes.FileTypeManager;
+import consulo.virtualFileSystem.fileType.FileType;
 import com.intellij.java.language.psi.JavaDirectoryService;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiDirectory;
-import com.intellij.psi.PsiElement;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.psi.PsiDirectory;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
 import consulo.psi.PsiDirectoryMethodProxy;
 
 public class JavaPsiDirectoryMethodProxy implements PsiDirectoryMethodProxy

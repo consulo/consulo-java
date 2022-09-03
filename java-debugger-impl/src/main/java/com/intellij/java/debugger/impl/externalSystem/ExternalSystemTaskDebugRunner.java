@@ -16,18 +16,18 @@
 package com.intellij.java.debugger.impl.externalSystem;
 
 import com.intellij.java.debugger.impl.GenericDebuggerRunner;
-import com.intellij.execution.ExecutionException;
 import com.intellij.java.execution.configurations.RemoteConnection;
-import com.intellij.execution.configurations.RunProfile;
-import com.intellij.execution.configurations.RunProfileState;
-import com.intellij.execution.executors.DefaultDebugExecutor;
-import com.intellij.execution.runners.ExecutionEnvironment;
-import com.intellij.execution.ui.RunContentDescriptor;
-import com.intellij.openapi.externalSystem.service.execution.ExternalSystemRunConfiguration;
-import com.intellij.openapi.externalSystem.util.ExternalSystemConstants;
+import consulo.execution.configuration.RunProfile;
+import consulo.execution.configuration.RunProfileState;
+import consulo.execution.debug.DefaultDebugExecutor;
+import consulo.execution.runner.ExecutionEnvironment;
+import consulo.execution.ui.RunContentDescriptor;
+import consulo.externalSystem.util.ExternalSystemConstants;
 import consulo.logging.Logger;
+import consulo.process.ExecutionException;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * @author Denis Zhdanov
@@ -47,7 +47,7 @@ public class ExternalSystemTaskDebugRunner extends GenericDebuggerRunner {
     return profile instanceof ExternalSystemRunConfiguration && DefaultDebugExecutor.EXECUTOR_ID.equals(executorId);
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   @Override
   protected RunContentDescriptor createContentDescriptor(@Nonnull RunProfileState state, @Nonnull ExecutionEnvironment environment) throws
       ExecutionException {

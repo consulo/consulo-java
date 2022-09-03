@@ -2,10 +2,10 @@
 package com.intellij.java.analysis.impl.codeInspection.bytecodeAnalysis;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.util.ThreadLocalCachedValue;
+import consulo.util.lang.ThreadLocalCachedValue;
 import com.intellij.psi.*;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
-import com.intellij.util.io.DigestUtil;
+import consulo.ide.impl.idea.util.io.DigestUtil;
 import javax.annotation.Nonnull;
 
 import javax.annotation.Nullable;

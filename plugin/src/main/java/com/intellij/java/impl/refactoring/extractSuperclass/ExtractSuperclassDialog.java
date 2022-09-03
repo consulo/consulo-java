@@ -21,22 +21,22 @@ import java.util.List;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
-import com.intellij.openapi.project.Project;
+import consulo.project.Project;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMember;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.impl.refactoring.HelpID;
 import com.intellij.java.impl.refactoring.JavaRefactoringSettings;
-import com.intellij.refactoring.RefactoringBundle;
-import com.intellij.refactoring.classMembers.MemberInfoChange;
-import com.intellij.refactoring.classMembers.MemberInfoModel;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.classMember.MemberInfoChange;
+import consulo.language.editor.refactoring.classMember.MemberInfoModel;
 import com.intellij.java.impl.refactoring.memberPullUp.PullUpProcessor;
 import com.intellij.java.impl.refactoring.ui.MemberSelectionPanel;
-import com.intellij.refactoring.util.DocCommentPolicy;
+import consulo.ide.impl.idea.refactoring.util.DocCommentPolicy;
 import com.intellij.java.impl.refactoring.util.classMembers.InterfaceContainmentVerifier;
 import com.intellij.java.impl.refactoring.util.classMembers.MemberInfo;
 import com.intellij.java.impl.refactoring.util.classMembers.UsesAndInterfacesDependencyMemberInfoModel;
-import com.intellij.util.ArrayUtil;
+import consulo.util.collection.ArrayUtil;
 
 class ExtractSuperclassDialog extends JavaExtractSuperBaseDialog {
   private final InterfaceContainmentVerifier myContainmentVerifier = new InterfaceContainmentVerifier() {

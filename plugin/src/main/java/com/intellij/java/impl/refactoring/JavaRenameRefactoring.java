@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.refactoring;
 
-import com.intellij.refactoring.RenameRefactoring;
+import consulo.language.editor.refactoring.RenameRefactoring;
 
 /**
  * @author yole

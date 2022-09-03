@@ -35,10 +35,10 @@ import javax.swing.JPanel;
 
 import org.jetbrains.annotations.NonNls;
 import com.intellij.java.debugger.DebuggerBundle;
-import com.intellij.ide.BrowserUtil;
-import com.intellij.openapi.ui.DialogWrapper;
-import com.intellij.ui.DoubleClickListener;
-import com.intellij.ui.JBColor;
+import consulo.ide.impl.idea.ide.BrowserUtil;
+import consulo.ui.ex.awt.DialogWrapper;
+import consulo.ui.ex.awt.event.DoubleClickListener;
+import consulo.ui.ex.JBColor;
 
 public class GetJPDADialog extends DialogWrapper {
   private static final @NonNls String JPDA_URL = "http://java.sun.com/products/jpda";
@@ -67,7 +67,7 @@ public class GetJPDADialog extends DialogWrapper {
     new DoubleClickListener() {
       @Override
       protected boolean onDoubleClick(MouseEvent e) {
-        BrowserUtil.browse(JPDA_URL);
+        consulo.ide.impl.idea.ide.BrowserUtil.browse(JPDA_URL);
         return true;
       }
     }.installOn(label2);

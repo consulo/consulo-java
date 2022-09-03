@@ -15,39 +15,41 @@
  */
 package com.intellij.java.impl.testIntegration;
 
+import com.intellij.java.impl.codeInsight.daemon.impl.quickfix.CreateFromUsageUtils;
+import com.intellij.java.impl.codeInsight.generation.GenerateMembersUtil;
+import com.intellij.java.impl.refactoring.util.classMembers.MemberInfo;
+import com.intellij.java.language.codeInsight.TestFrameworks;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.testIntegration.JavaTestFramework;
+import com.intellij.java.language.testIntegration.TestFramework;
+import consulo.application.ApplicationManager;
+import consulo.codeEditor.Editor;
+import consulo.component.extension.Extensions;
+import consulo.document.util.TextRange;
+import consulo.fileTemplate.FileTemplate;
+import consulo.fileTemplate.FileTemplateDescriptor;
+import consulo.fileTemplate.FileTemplateManager;
+import consulo.language.editor.template.ConstantNode;
+import consulo.language.editor.template.Expression;
+import consulo.language.editor.template.Template;
+import consulo.language.editor.template.TemplateManager;
+import consulo.language.editor.template.event.TemplateEditingAdapter;
+import consulo.language.psi.PsiDocumentManager;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.logging.Logger;
+import consulo.project.Project;
+import consulo.util.collection.SmartList;
+import consulo.util.lang.StringUtil;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
-
-import javax.annotation.Nonnull;
-
-import com.intellij.java.language.codeInsight.TestFrameworks;
-import com.intellij.java.impl.codeInsight.daemon.impl.quickfix.CreateFromUsageUtils;
-import com.intellij.java.impl.codeInsight.generation.GenerateMembersUtil;
-import com.intellij.codeInsight.template.Expression;
-import com.intellij.codeInsight.template.Template;
-import com.intellij.codeInsight.template.TemplateEditingAdapter;
-import com.intellij.codeInsight.template.TemplateManager;
-import com.intellij.codeInsight.template.impl.ConstantNode;
-import com.intellij.ide.fileTemplates.FileTemplate;
-import com.intellij.ide.fileTemplates.FileTemplateDescriptor;
-import com.intellij.ide.fileTemplates.FileTemplateManager;
-import com.intellij.java.language.psi.*;
-import com.intellij.java.language.testIntegration.JavaTestFramework;
-import com.intellij.java.language.testIntegration.TestFramework;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.extensions.Extensions;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.*;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.java.impl.refactoring.util.classMembers.MemberInfo;
-import com.intellij.util.SmartList;
-import consulo.logging.Logger;
 
 public class TestIntegrationUtils {
   private static final Logger LOG = Logger.getInstance(TestIntegrationUtils.class);
@@ -95,7 +97,7 @@ public class TestIntegrationUtils {
     return klass != null && TestFrameworks.getInstance().isTestClass(klass);
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public static PsiClass findOuterClass(@Nonnull PsiElement element) {
     PsiClass result = PsiTreeUtil.getParentOfType(element, PsiClass.class, false);
     if (result == null) {
@@ -141,7 +143,7 @@ public class TestIntegrationUtils {
                                            final Editor editor,
                                            final PsiClass targetClass,
                                            final PsiMethod method,
-                                           @javax.annotation.Nullable String name,
+                                           @Nullable String name,
                                            boolean automatic) {
     Template template = createTestMethodTemplate(methodKind, framework, targetClass, name, automatic);
 
@@ -184,7 +186,7 @@ public class TestIntegrationUtils {
   private static Template createTestMethodTemplate(MethodKind methodKind,
                                                    TestFramework descriptor,
                                                    PsiClass targetClass,
-                                                   @javax.annotation.Nullable String name,
+                                                   @Nullable String name,
                                                    boolean automatic) {
     FileTemplateDescriptor templateDesc = methodKind.getFileTemplateDescriptor(descriptor);
     String templateName = templateDesc.getFileName();

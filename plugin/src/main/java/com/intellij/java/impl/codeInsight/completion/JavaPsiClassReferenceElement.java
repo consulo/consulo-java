@@ -15,26 +15,27 @@
  */
 package com.intellij.java.impl.codeInsight.completion;
 
-import com.intellij.codeInsight.TailType;
-import com.intellij.codeInsight.lookup.DefaultLookupItemRenderer;
-import com.intellij.codeInsight.lookup.LookupElement;
-import com.intellij.codeInsight.lookup.LookupElementPresentation;
-import com.intellij.codeInsight.lookup.LookupItem;
+import consulo.language.editor.completion.ClassConditionKey;
+import consulo.language.editor.completion.lookup.TailType;
+import consulo.language.editor.completion.lookup.DefaultLookupItemRenderer;
+import consulo.language.editor.completion.lookup.LookupElement;
+import consulo.language.editor.completion.lookup.LookupElementPresentation;
+import consulo.language.editor.completion.lookup.LookupItem;
 import com.intellij.java.impl.codeInsight.lookup.PsiTypeLookupItem;
 import com.intellij.java.impl.codeInsight.lookup.TypedLookupItem;
 import com.intellij.java.impl.codeInsight.lookup.impl.JavaElementLookupRenderer;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
-import com.intellij.openapi.util.ClassConditionKey;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.SmartPointerManager;
-import com.intellij.psi.SmartPsiElementPointer;
-import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
-import com.intellij.psi.util.PsiUtilCore;
-import com.intellij.util.ObjectUtil;
+import consulo.util.lang.Comparing;
+import consulo.util.lang.StringUtil;
+import consulo.language.psi.SmartPointerManager;
+import consulo.language.psi.SmartPsiElementPointer;
+import consulo.language.codeStyle.CodeStyleSettingsManager;
+import consulo.language.psi.PsiUtilCore;
+import consulo.util.lang.ObjectUtil;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.Set;
 
@@ -65,7 +66,7 @@ public class JavaPsiClassReferenceElement extends LookupItem<Object> implements 
 		return myForcedPresentableName;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	@Override
 	public PsiType getType()
 	{
@@ -230,7 +231,7 @@ public class JavaPsiClassReferenceElement extends LookupItem<Object> implements 
 		return StringUtil.notNullize(name);
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	private static String formatTypeParameters(@Nonnull final PsiSubstitutor substitutor, final PsiTypeParameter[] params)
 	{
 		final boolean space = showSpaceAfterComma(params[0]);

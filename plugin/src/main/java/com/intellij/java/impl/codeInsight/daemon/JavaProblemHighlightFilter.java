@@ -15,11 +15,11 @@
  */
 package com.intellij.java.impl.codeInsight.daemon;
 
-import com.intellij.codeInsight.daemon.ProblemHighlightFilter;
+import consulo.language.editor.ProblemHighlightFilter;
 import com.intellij.java.language.impl.JavaFileType;
-import com.intellij.openapi.roots.ProjectRootManager;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiFile;
+import consulo.module.content.ProjectRootManager;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.language.psi.PsiFile;
 import consulo.java.impl.util.JavaProjectRootsUtil;
 
 import javax.annotation.Nonnull;

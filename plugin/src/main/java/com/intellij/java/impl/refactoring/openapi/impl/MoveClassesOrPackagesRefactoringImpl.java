@@ -18,9 +18,8 @@ package com.intellij.java.impl.refactoring.openapi.impl;
 import com.intellij.java.impl.refactoring.MoveClassesOrPackagesRefactoring;
 import com.intellij.java.impl.refactoring.MoveDestination;
 import com.intellij.java.impl.refactoring.PackageWrapper;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiElement;
-import com.intellij.refactoring.*;
+import consulo.project.Project;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.impl.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesProcessor;
 
 import java.util.List;

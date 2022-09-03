@@ -20,19 +20,19 @@ import javax.annotation.Nonnull;
 import org.jetbrains.annotations.Nls;
 
 import javax.annotation.Nullable;
-import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
+import consulo.language.editor.inspection.LocalQuickFixAndIntentionActionOnPsiElement;
+import consulo.codeEditor.Editor;
+import consulo.project.Project;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.JavaTokenType;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
 import com.intellij.java.language.psi.PsiJavaModule;
 import com.intellij.java.language.psi.PsiJavaModuleReferenceElement;
 import com.intellij.java.language.psi.PsiJavaParserFacade;
 import com.intellij.java.language.psi.PsiRequiresStatement;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.util.collection.ContainerUtil;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 
 /**
@@ -72,7 +72,7 @@ public class AddRequiredModuleFix extends LocalQuickFixAndIntentionActionOnPsiEl
 	}
 
 	@Override
-	public void invoke(@Nonnull Project project, @Nonnull PsiFile file, @javax.annotation.Nullable Editor editor, @Nonnull PsiElement startElement, @Nonnull PsiElement endElement)
+	public void invoke(@Nonnull Project project, @Nonnull PsiFile file, @Nullable Editor editor, @Nonnull PsiElement startElement, @Nonnull PsiElement endElement)
 	{
 		PsiJavaModule module = (PsiJavaModule) startElement;
 
@@ -94,7 +94,7 @@ public class AddRequiredModuleFix extends LocalQuickFixAndIntentionActionOnPsiEl
 		return true;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	private static PsiElement findAddingPlace(@Nonnull PsiJavaModule module)
 	{
 		PsiElement addingPlace = ContainerUtil.iterateAndGetLastItem(module.getRequires());

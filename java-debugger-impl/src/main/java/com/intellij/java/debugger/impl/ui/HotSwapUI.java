@@ -19,8 +19,8 @@ package com.intellij.java.debugger.impl.ui;
 import javax.annotation.Nonnull;
 
 import com.intellij.java.debugger.impl.DebuggerSession;
-import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.project.Project;
+import consulo.ide.ServiceManager;
+import consulo.project.Project;
 
 /**
  * @author nik

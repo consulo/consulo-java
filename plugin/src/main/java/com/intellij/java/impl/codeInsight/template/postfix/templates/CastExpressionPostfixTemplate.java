@@ -15,10 +15,10 @@
  */
 package com.intellij.java.impl.codeInsight.template.postfix.templates;
 
-import com.intellij.codeInsight.template.postfix.templates.PostfixTemplatesUtils;
+import consulo.language.editor.postfixTemplate.PostfixTemplatesUtils;
 import com.intellij.java.impl.codeInsight.generation.surroundWith.JavaWithCastSurrounder;
 import com.intellij.java.language.psi.PsiExpression;
-import com.intellij.openapi.editor.Editor;
+import consulo.codeEditor.Editor;
 
 import javax.annotation.Nonnull;
 

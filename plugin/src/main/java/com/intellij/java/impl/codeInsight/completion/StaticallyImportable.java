@@ -1,6 +1,6 @@
 package com.intellij.java.impl.codeInsight.completion;
 
-import com.intellij.openapi.util.ClassConditionKey;
+import consulo.language.editor.completion.ClassConditionKey;
 
 /**
  * @author peter

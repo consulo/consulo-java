@@ -17,21 +17,22 @@ package com.intellij.java.language.impl.psi;
 
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.impl.psi.impl.compiled.ClsFileImpl;
-import com.intellij.lang.Language;
-import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.fileTypes.FileType;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.FileIndexFacade;
-import com.intellij.openapi.util.Ref;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.*;
-import com.intellij.psi.impl.PsiManagerImpl;
-import com.intellij.psi.impl.file.PsiBinaryFileImpl;
+import consulo.ide.ServiceManager;
 import consulo.internal.org.objectweb.asm.ClassReader;
 import consulo.internal.org.objectweb.asm.ClassVisitor;
 import consulo.internal.org.objectweb.asm.Opcodes;
+import consulo.language.Language;
+import consulo.language.content.FileIndexFacade;
+import consulo.language.impl.file.SingleRootFileViewProvider;
+import consulo.language.impl.internal.psi.PsiManagerImpl;
+import consulo.language.impl.psi.PsiBinaryFileImpl;
+import consulo.language.psi.*;
 import consulo.logging.Logger;
+import consulo.project.Project;
 import consulo.util.dataholder.Key;
+import consulo.util.lang.ref.Ref;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.virtualFileSystem.fileType.FileType;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -80,7 +81,7 @@ public class ClassFileViewProvider extends SingleRootFileViewProvider {
     return detectInnerClass(file, content);
   }
 
-  private static boolean detectInnerClass(VirtualFile file, @javax.annotation.Nullable byte[] content) {
+  private static boolean detectInnerClass(VirtualFile file, @Nullable byte[] content) {
     String name = file.getNameWithoutExtension();
     int p = name.lastIndexOf('$', name.length() - 2);
     if (p <= 0) {

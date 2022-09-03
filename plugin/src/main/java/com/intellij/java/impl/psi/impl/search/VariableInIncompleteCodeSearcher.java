@@ -20,14 +20,14 @@ import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
 import com.intellij.java.language.psi.PsiLocalVariable;
 import com.intellij.java.language.psi.PsiParameter;
 import com.intellij.java.language.psi.PsiVariable;
-import com.intellij.openapi.application.QueryExecutorBase;
+import consulo.project.util.query.QueryExecutorBase;
 import com.intellij.psi.*;
-import com.intellij.psi.search.LocalSearchScope;
-import com.intellij.psi.search.PsiElementProcessor;
-import com.intellij.psi.search.SearchScope;
-import com.intellij.psi.search.searches.ReferencesSearch;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.Processor;
+import consulo.language.psi.scope.LocalSearchScope;
+import consulo.language.psi.resolve.PsiElementProcessor;
+import consulo.content.scope.SearchScope;
+import consulo.language.psi.search.ReferencesSearch;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.application.util.function.Processor;
 import javax.annotation.Nonnull;
 
 /**

@@ -16,10 +16,10 @@
 package com.intellij.java.impl.refactoring.util.classMembers;
 
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.refactoring.classMembers.MemberInfoBase;
+import consulo.language.editor.refactoring.classMember.MemberInfoBase;
 
 public class ClassMembersUtil {
   public static boolean isProperMember(MemberInfoBase memberInfo) {

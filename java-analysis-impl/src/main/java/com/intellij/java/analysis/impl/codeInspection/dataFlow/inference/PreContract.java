@@ -21,6 +21,7 @@ import com.intellij.java.language.psi.PsiCodeBlock;
 import com.intellij.java.language.psi.PsiMethod;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -32,7 +33,7 @@ interface PreContract
 	@Nonnull
 	List<StandardMethodContract> toContracts(PsiMethod method, Supplier<PsiCodeBlock> body);
 
-	@javax.annotation.Nullable
+	@Nullable
 	default PreContract negate()
 	{
 		return new NegatingContract(this);

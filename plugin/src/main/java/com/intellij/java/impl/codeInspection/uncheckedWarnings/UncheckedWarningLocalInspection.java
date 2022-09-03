@@ -26,9 +26,9 @@ import javax.swing.JPanel;
 
 import javax.annotation.Nonnull;
 import com.intellij.java.impl.codeInsight.daemon.impl.quickfix.GenerifyFileFix;
-import com.intellij.codeInspection.LocalQuickFix;
+import consulo.language.editor.inspection.LocalQuickFix;
 import com.intellij.openapi.util.Pass;
-import com.intellij.util.ui.JBUI;
+import consulo.ui.ex.awt.JBUI;
 
 public class UncheckedWarningLocalInspection extends UncheckedWarningLocalInspectionBase
 {

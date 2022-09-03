@@ -23,26 +23,27 @@ import java.awt.event.ActionListener;
 import java.util.Arrays;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
+import consulo.configurable.ConfigurationException;
+import consulo.configurable.SearchableConfigurable;
 import org.intellij.plugins.intelliLang.util.PsiUtilEx;
 import org.jetbrains.annotations.Nls;
 import com.intellij.java.language.util.ClassFilter;
 import com.intellij.java.language.util.TreeClassChooser;
 import com.intellij.java.language.util.TreeClassChooserFactory;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.options.ConfigurationException;
-import com.intellij.openapi.options.SearchableConfigurable;
-import com.intellij.openapi.project.Project;
+import consulo.document.Document;
+import consulo.project.Project;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.ui.ReferenceEditorWithBrowseButton;
-import com.intellij.util.Function;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.editor.ui.awt.ReferenceEditorWithBrowseButton;
+import consulo.ide.impl.idea.util.Function;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.annotation.access.RequiredReadAction;
 
@@ -113,7 +114,7 @@ public class AdvancedSettingsUI implements SearchableConfigurable
 		return "IntelliLang.Advanced";
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	@Override
 	public Runnable enableSearch(String option)
 	{

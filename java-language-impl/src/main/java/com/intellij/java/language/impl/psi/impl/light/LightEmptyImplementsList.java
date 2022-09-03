@@ -20,10 +20,10 @@ import com.intellij.java.language.psi.JavaElementVisitor;
 import com.intellij.java.language.psi.PsiClassType;
 import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
 import com.intellij.java.language.psi.PsiReferenceList;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.PsiManager;
-import com.intellij.psi.impl.light.LightElement;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiElementVisitor;
+import consulo.language.psi.PsiManager;
+import consulo.language.impl.psi.LightElement;
 
 import javax.annotation.Nonnull;
 

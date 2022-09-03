@@ -17,18 +17,18 @@ package com.intellij.java.language.impl.psi.impl.source.tree.java;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.lang.ASTNode;
+import consulo.language.ast.ASTNode;
 import consulo.logging.Logger;
 import com.intellij.java.language.psi.JavaElementVisitor;
-import com.intellij.psi.PsiElementVisitor;
+import consulo.language.psi.PsiElementVisitor;
 import com.intellij.java.language.psi.PsiExpressionList;
 import com.intellij.java.language.psi.PsiExpressionListStatement;
 import com.intellij.java.language.impl.psi.impl.source.tree.ChildRole;
-import com.intellij.psi.impl.source.tree.CompositePsiElement;
-import com.intellij.psi.impl.source.tree.TreeUtil;
+import consulo.language.impl.psi.CompositePsiElement;
+import consulo.language.impl.ast.TreeUtil;
 import com.intellij.java.language.impl.psi.impl.source.Constants;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.tree.ChildRoleBase;
+import consulo.language.ast.IElementType;
+import consulo.language.ast.ChildRoleBase;
 
 public class PsiExpressionListStatementImpl extends CompositePsiElement implements PsiExpressionListStatement, Constants {
   private static final Logger LOG = Logger.getInstance(PsiExpressionListStatementImpl.class);

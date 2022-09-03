@@ -15,11 +15,11 @@
  */
 package com.intellij.java.impl.codeInsight.editorActions.smartEnter;
 
-import com.intellij.openapi.editor.Editor;
+import consulo.codeEditor.Editor;
 import com.intellij.java.language.psi.JavaTokenType;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiNewExpression;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
 
 public class MissingArrayConstructorBracketFixer implements Fixer
 {

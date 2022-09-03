@@ -25,13 +25,13 @@ import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiParameter;
-import com.intellij.openapi.fileEditor.FileDocumentManager;
-import com.intellij.openapi.vfs.LocalFileSystem;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.document.FileDocumentManager;
+import consulo.virtualFileSystem.LocalFileSystem;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.java.impl.refactoring.introduceparameterobject.IntroduceParameterObjectProcessor;
 import com.intellij.java.analysis.impl.refactoring.util.VariableData;
-import com.intellij.util.Function;
+import consulo.ide.impl.idea.util.Function;
 import com.intellij.java.language.util.VisibilityUtil;
 import consulo.java.language.module.util.JavaClassNames;
 

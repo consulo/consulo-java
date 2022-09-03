@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.visibility;
 
-import com.intellij.codeInspection.ui.MultipleCheckboxOptionsPanel;
+import consulo.ide.impl.idea.codeInspection.ui.MultipleCheckboxOptionsPanel;
 import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
 import com.siyeh.HardcodedMethodConstants;
@@ -27,6 +27,7 @@ import com.intellij.java.impl.ig.fixes.RenameFix;
 import com.siyeh.ig.psiutils.ClassUtils;
 import javax.annotation.Nonnull;
 
+import javax.annotation.Nullable;
 import javax.swing.*;
 
 public class ParameterHidingMemberVariableInspection extends BaseInspection {
@@ -125,7 +126,7 @@ public class ParameterHidingMemberVariableInspection extends BaseInspection {
       registerVariableError(variable, aClass);
     }
 
-    @javax.annotation.Nullable
+    @Nullable
     private PsiClass checkFieldName(PsiVariable variable, PsiMethod method) {
       final String variableName = variable.getName();
       if (variableName == null) {

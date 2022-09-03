@@ -16,9 +16,9 @@
 package com.intellij.java.impl.refactoring.util.occurrences;
 
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiExpression;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.impl.refactoring.introduceField.ElementToWorkOn;
 import com.intellij.java.impl.refactoring.util.RefactoringUtil;
 

@@ -19,17 +19,17 @@ import static com.intellij.java.impl.psi.formatter.java.JavaFormatterUtil.getWra
 
 import java.util.List;
 
-import com.intellij.formatting.Alignment;
-import com.intellij.formatting.Block;
-import com.intellij.formatting.Indent;
-import com.intellij.formatting.Wrap;
-import com.intellij.lang.ASTNode;
+import consulo.language.codeStyle.Alignment;
+import consulo.language.codeStyle.Block;
+import consulo.language.codeStyle.Indent;
+import consulo.language.codeStyle.Wrap;
+import consulo.language.ast.ASTNode;
 import com.intellij.java.language.psi.JavaTokenType;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiNameValuePair;
-import com.intellij.psi.PsiWhiteSpace;
+import consulo.language.psi.PsiWhiteSpace;
 import com.intellij.java.impl.psi.codeStyle.JavaCodeStyleSettings;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 
 public class AnnotationInitializerBlocksBuilder
 {

@@ -15,9 +15,9 @@
  */
 package com.intellij.java.execution.filters;
 
-import com.intellij.execution.filters.Filter;
-import com.intellij.openapi.project.DumbAware;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.application.dumb.DumbAware;
+import consulo.execution.ui.console.Filter;
+import consulo.language.psi.scope.GlobalSearchScope;
 
 import javax.annotation.Nonnull;
 

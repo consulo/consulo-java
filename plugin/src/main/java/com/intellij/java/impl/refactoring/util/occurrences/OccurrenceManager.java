@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.refactoring.util.occurrences;
 
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiExpression;
 
 /**

@@ -16,7 +16,7 @@
 package com.intellij.java.impl.refactoring.ui;
 
 import com.intellij.java.language.psi.PsiType;
-import com.intellij.psi.codeStyle.SuggestedNameInfo;
+import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
 
 public interface NameSuggestionsGenerator {
   SuggestedNameInfo getSuggestedNameInfo(PsiType type);

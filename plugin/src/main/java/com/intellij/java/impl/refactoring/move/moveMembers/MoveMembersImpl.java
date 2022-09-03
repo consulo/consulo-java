@@ -21,13 +21,13 @@
 package com.intellij.java.impl.refactoring.move.moveMembers;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.project.Project;
+import consulo.project.Project;
 import com.intellij.psi.*;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
 import com.intellij.java.impl.refactoring.HelpID;
-import com.intellij.refactoring.RefactoringBundle;
-import com.intellij.refactoring.move.MoveCallback;
-import com.intellij.refactoring.util.CommonRefactoringUtil;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.move.MoveCallback;
+import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 
 import java.util.HashSet;
 import java.util.Set;

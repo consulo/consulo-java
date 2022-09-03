@@ -1,16 +1,16 @@
 package com.intellij.codeInsight.defaultAction;
 
-import com.intellij.codeInsight.editorActions.CodeBlockEndAction;
-import com.intellij.codeInsight.editorActions.CodeBlockStartAction;
-import com.intellij.ide.highlighter.HighlighterFactory;
-import com.intellij.openapi.editor.actionSystem.EditorActionHandler;
-import com.intellij.openapi.editor.highlighter.EditorHighlighter;
-import com.intellij.openapi.editor.highlighter.HighlighterIterator;
-import com.intellij.openapi.fileTypes.FileType;
-import com.intellij.openapi.fileTypes.FileTypeManager;
-import com.intellij.openapi.fileTypes.impl.AbstractFileType;
-import com.intellij.psi.CustomHighlighterTokenType;
-import com.intellij.psi.StringEscapesTokenTypes;
+import consulo.codeEditor.action.EditorActionHandler;
+import consulo.ide.impl.idea.codeInsight.editorActions.CodeBlockEndAction;
+import consulo.ide.impl.idea.codeInsight.editorActions.CodeBlockStartAction;
+import consulo.language.editor.highlight.HighlighterFactory;
+import consulo.codeEditor.EditorHighlighter;
+import consulo.codeEditor.HighlighterIterator;
+import consulo.virtualFileSystem.fileType.FileType;
+import consulo.language.file.FileTypeManager;
+import consulo.ide.impl.idea.openapi.fileTypes.impl.AbstractFileType;
+import consulo.language.internal.custom.CustomHighlighterTokenType;
+import consulo.language.ast.StringEscapesTokenTypes;
 import com.intellij.testFramework.EditorTestUtil;
 import com.intellij.testFramework.LightCodeInsightTestCase;
 

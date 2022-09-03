@@ -15,15 +15,16 @@
  */
 package com.intellij.java.language.impl.psi.impl.source.resolve;
 
-import com.intellij.java.language.psi.*;
-import consulo.util.dataholder.Key;
-import com.intellij.psi.*;
-import com.intellij.java.language.psi.infos.CandidateInfo;
-import com.intellij.psi.scope.BaseScopeProcessor;
 import com.intellij.java.language.impl.psi.scope.NameHint;
-import com.intellij.util.SmartList;
-import javax.annotation.Nonnull;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.infos.CandidateInfo;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.resolve.BaseScopeProcessor;
+import consulo.language.psi.resolve.ResolveState;
+import consulo.util.collection.SmartList;
+import consulo.util.dataholder.Key;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -41,16 +42,14 @@ public class StaticImportResolveProcessor extends BaseScopeProcessor implements 
 
   @Override
   public boolean execute(@Nonnull final PsiElement candidate, final ResolveState state) {
-    if (candidate instanceof PsiMember && ((PsiModifierListOwner)candidate).hasModifierProperty(PsiModifier.STATIC)) {
+    if (candidate instanceof PsiMember && ((PsiModifierListOwner) candidate).hasModifierProperty(PsiModifier.STATIC)) {
       if (candidate instanceof PsiField) {
-        if (checkDomination((PsiMember)candidate, myFieldResults)) return true;
+        if (checkDomination((PsiMember) candidate, myFieldResults)) return true;
         myFieldResults.add(new OurResolveResult(candidate, myReference));
-      }
-      else if (candidate instanceof PsiClass) {
-        if (checkDomination((PsiMember)candidate, myClassResult)) return true;
+      } else if (candidate instanceof PsiClass) {
+        if (checkDomination((PsiMember) candidate, myClassResult)) return true;
         myClassResult.add(new OurResolveResult(candidate, myReference));
-      }
-      else {
+      } else {
         myResults.add(new OurResolveResult(candidate, myReference));
       }
     }
@@ -59,12 +58,11 @@ public class StaticImportResolveProcessor extends BaseScopeProcessor implements 
 
   private static boolean checkDomination(final PsiMember candidate, final List<JavaResolveResult> results) {
     if (results.size() > 0) {
-      for (ListIterator<JavaResolveResult> i = results.listIterator(results.size()); i.hasPrevious();) {
-        final Domination domination = dominates(candidate, (PsiMember)i.previous().getElement());
+      for (ListIterator<JavaResolveResult> i = results.listIterator(results.size()); i.hasPrevious(); ) {
+        final Domination domination = dominates(candidate, (PsiMember) i.previous().getElement());
         if (domination == Domination.DOMINATED_BY) {
           return true;
-        }
-        else if (domination == Domination.DOMINATES) {
+        } else if (domination == Domination.DOMINATES) {
           i.remove();
         }
       }
@@ -78,8 +76,7 @@ public class StaticImportResolveProcessor extends BaseScopeProcessor implements 
     if (class1 != null && class2 != null) {
       if (class1.isInheritor(class2, true)) {
         return Domination.DOMINATES;
-      }
-      else if (class2.isInheritor(class1, true)) {
+      } else if (class2.isInheritor(class1, true)) {
         return Domination.DOMINATED_BY;
       }
     }
@@ -95,7 +92,7 @@ public class StaticImportResolveProcessor extends BaseScopeProcessor implements 
   public <T> T getHint(@Nonnull final Key<T> hintKey) {
     if (hintKey == NameHint.KEY) {
       //noinspection unchecked
-      return (T)this;
+      return (T) this;
     }
     return super.getHint(hintKey);
   }
@@ -117,7 +114,7 @@ public class StaticImportResolveProcessor extends BaseScopeProcessor implements 
 
   private static void filterInvalid(final List<JavaResolveResult> resultList) {
     if (resultList.isEmpty()) return;
-    for (ListIterator<JavaResolveResult> i = resultList.listIterator(resultList.size()); i.hasPrevious();) {
+    for (ListIterator<JavaResolveResult> i = resultList.listIterator(resultList.size()); i.hasPrevious(); ) {
       if (!i.previous().isValidResult()) i.remove();
     }
   }
@@ -134,7 +131,7 @@ public class StaticImportResolveProcessor extends BaseScopeProcessor implements 
     public boolean isAccessible() {
       final PsiResolveHelper resolveHelper = JavaPsiFacade.getInstance(myReference.getProject()).getResolveHelper();
       final PsiElement element = getElement();
-      return element instanceof PsiMember && resolveHelper.isAccessible((PsiMember)element, myReference, null);
+      return element instanceof PsiMember && resolveHelper.isAccessible((PsiMember) element, myReference, null);
     }
 
     @Override

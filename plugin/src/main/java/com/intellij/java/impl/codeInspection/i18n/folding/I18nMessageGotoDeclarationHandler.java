@@ -15,17 +15,17 @@
  */
 package com.intellij.java.impl.codeInspection.i18n.folding;
 
-import com.intellij.codeInsight.folding.impl.EditorFoldingInfo;
-import com.intellij.codeInsight.navigation.actions.GotoDeclarationHandlerBase;
+import consulo.ide.impl.idea.codeInsight.folding.impl.EditorFoldingInfo;
+import consulo.ide.impl.idea.codeInsight.navigation.actions.GotoDeclarationHandlerBase;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiJavaToken;
 import com.intellij.java.language.psi.PsiLiteralExpression;
 import com.intellij.java.language.psi.PsiMethodCallExpression;
-import com.intellij.lang.ASTNode;
-import com.intellij.lang.folding.CompositeFoldingBuilder;
-import com.intellij.lang.folding.FoldingBuilder;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.FoldRegion;
+import consulo.language.ast.ASTNode;
+import consulo.language.editor.internal.CompositeFoldingBuilder;
+import consulo.language.editor.folding.FoldingBuilder;
+import consulo.codeEditor.Editor;
+import consulo.codeEditor.FoldRegion;
 import consulo.util.dataholder.Key;
 import com.intellij.psi.*;
 import javax.annotation.Nullable;

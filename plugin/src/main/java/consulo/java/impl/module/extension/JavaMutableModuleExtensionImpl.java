@@ -15,8 +15,8 @@
  */
 package consulo.java.impl.module.extension;
 
-import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.util.Comparing;
+import consulo.content.bundle.Sdk;
+import consulo.util.lang.Comparing;
 import com.intellij.java.language.LanguageLevel;
 import consulo.disposer.Disposable;
 import consulo.java.language.module.extension.JavaMutableModuleExtension;

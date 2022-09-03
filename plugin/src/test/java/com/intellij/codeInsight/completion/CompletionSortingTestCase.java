@@ -5,13 +5,13 @@
 package com.intellij.codeInsight.completion;
 
 import org.jetbrains.annotations.NonNls;
-import com.intellij.codeInsight.CodeInsightSettings;
-import com.intellij.codeInsight.lookup.LookupElement;
-import com.intellij.codeInsight.lookup.LookupManager;
-import com.intellij.codeInsight.lookup.impl.LookupImpl;
-import com.intellij.ide.ui.UISettings;
-import com.intellij.psi.statistics.StatisticsManager;
-import com.intellij.psi.statistics.impl.StatisticsManagerImpl;
+import consulo.language.editor.CodeInsightSettings;
+import consulo.language.editor.completion.lookup.LookupElement;
+import consulo.language.editor.completion.lookup.LookupManager;
+import consulo.ide.impl.idea.codeInsight.lookup.impl.LookupImpl;
+import consulo.application.ui.UISettings;
+import consulo.ide.impl.psi.statistics.StatisticsManager;
+import consulo.ide.impl.psi.statistics.impl.StatisticsManagerImpl;
 import com.intellij.testFramework.TestDataPath;
 
 /**

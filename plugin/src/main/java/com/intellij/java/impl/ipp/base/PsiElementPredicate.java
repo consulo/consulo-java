@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ipp.base;
 
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 
 public interface PsiElementPredicate {
   /**

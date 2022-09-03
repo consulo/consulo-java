@@ -20,12 +20,12 @@
  */
 package com.intellij.java.impl.codeInspection;
 
-import com.intellij.codeInspection.InspectionsBundle;
-import com.intellij.codeInspection.lang.HTMLComposerExtension;
+import consulo.language.editor.inspection.InspectionsBundle;
+import consulo.language.editor.inspection.HTMLComposerExtension;
 import com.intellij.java.analysis.codeInspection.reference.RefClass;
 import com.intellij.java.analysis.codeInspection.reference.RefMethod;
 import com.intellij.java.language.JavaLanguage;
-import com.intellij.lang.Language;
+import consulo.language.Language;
 import consulo.util.dataholder.Key;
 
 public abstract class HTMLJavaHTMLComposer implements HTMLComposerExtension<HTMLJavaHTMLComposer> {

@@ -15,14 +15,14 @@
  */
 package com.intellij.java.impl.codeInsight.completion;
 
-import com.intellij.codeInsight.TailType;
+import consulo.language.editor.completion.lookup.TailType;
 import com.intellij.codeInsight.completion.*;
-import com.intellij.codeInsight.completion.util.CompletionStyleUtil;
-import com.intellij.codeInsight.completion.util.ParenthesesInsertHandler;
-import com.intellij.codeInsight.lookup.LookupElement;
-import com.intellij.codeInsight.lookup.LookupElementBuilder;
-import com.intellij.codeInsight.lookup.LookupElementDecorator;
-import com.intellij.codeInsight.lookup.TailTypeDecorator;
+import consulo.language.editor.completion.CompletionStyleUtil;
+import consulo.language.editor.completion.lookup.ParenthesesInsertHandler;
+import consulo.language.editor.completion.lookup.LookupElement;
+import consulo.language.editor.completion.lookup.LookupElementBuilder;
+import consulo.language.editor.completion.lookup.LookupElementDecorator;
+import consulo.language.editor.completion.lookup.TailTypeDecorator;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.LambdaHighlightingUtil;
 import com.intellij.java.impl.codeInsight.ExpectedTypeInfo;
 import com.intellij.java.impl.codeInsight.TailTypes;
@@ -34,21 +34,21 @@ import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.openapi.util.AtomicNotNullLazyValue;
-import com.intellij.openapi.util.NotNullLazyValue;
-import com.intellij.patterns.ElementPattern;
+import consulo.ide.impl.idea.openapi.util.AtomicNotNullLazyValue;
+import consulo.ide.impl.idea.openapi.util.NotNullLazyValue;
+import consulo.language.pattern.ElementPattern;
 import com.intellij.psi.*;
 import com.intellij.psi.filters.*;
-import com.intellij.psi.filters.position.FilterPattern;
-import com.intellij.psi.filters.position.LeftNeighbour;
-import com.intellij.psi.filters.position.ParentElementFilter;
-import com.intellij.psi.filters.position.SuperParentFilter;
-import com.intellij.psi.templateLanguages.OuterLanguageElement;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.Consumer;
-import com.intellij.util.ObjectUtil;
-import com.intellij.util.ProcessingContext;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.language.pattern.FilterPattern;
+import consulo.language.psi.filter.position.LeftNeighbour;
+import consulo.language.psi.filter.position.ParentElementFilter;
+import consulo.language.psi.filter.position.SuperParentFilter;
+import consulo.language.psi.OuterLanguageElement;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.ide.impl.idea.util.Consumer;
+import consulo.util.lang.ObjectUtil;
+import consulo.language.util.ProcessingContext;
+import consulo.util.collection.ContainerUtil;
 import consulo.java.language.module.util.JavaClassNames;
 
 import javax.annotation.Nonnull;
@@ -58,9 +58,9 @@ import java.util.List;
 import java.util.Set;
 
 import static com.intellij.java.language.patterns.PsiJavaPatterns.*;
-import static com.intellij.openapi.util.Conditions.notInstanceOf;
-import static com.intellij.patterns.StandardPatterns.not;
-import static com.intellij.psi.SyntaxTraverser.psiApi;
+import static consulo.util.lang.function.Conditions.notInstanceOf;
+import static consulo.language.pattern.StandardPatterns.not;
+import static consulo.language.psi.SyntaxTraverser.psiApi;
 
 public class JavaKeywordCompletion {
   public static final ElementPattern<PsiElement> AFTER_DOT = psiElement().afterLeaf(".");

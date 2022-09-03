@@ -16,16 +16,16 @@
 package com.intellij.java.impl.ipp.annotation;
 
 import com.intellij.java.language.codeInsight.ExternalAnnotationsManager;
-import com.intellij.codeInsight.FileModificationService;
+import consulo.language.editor.FileModificationService;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.command.undo.UndoUtil;
-import com.intellij.openapi.project.Project;
+import consulo.undoRedo.util.UndoUtil;
+import consulo.project.Project;
 import com.intellij.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.java.indexing.search.searches.OverridingMethodsSearch;
 import com.intellij.java.language.psi.util.ClassUtil;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
 import com.siyeh.IntentionPowerPackBundle;
 import com.intellij.java.impl.ipp.base.MutablyNamedIntention;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;

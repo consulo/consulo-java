@@ -16,9 +16,9 @@
 package com.intellij.java.impl.refactoring.util.classRefs;
 
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiReference;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.search.searches.ReferencesSearch;
+import consulo.language.psi.PsiReference;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.search.ReferencesSearch;
 
 /**
  * @author dsl

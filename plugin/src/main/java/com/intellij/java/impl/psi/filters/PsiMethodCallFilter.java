@@ -20,8 +20,8 @@ import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiMethodCallExpression;
 import com.intellij.java.language.psi.util.InheritanceUtil;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.filters.ElementFilter;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.filter.ElementFilter;
 import org.jetbrains.annotations.NonNls;
 
 import java.util.Arrays;

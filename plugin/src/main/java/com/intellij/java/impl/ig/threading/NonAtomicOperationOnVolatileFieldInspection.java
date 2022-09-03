@@ -17,13 +17,14 @@ package com.intellij.java.impl.ig.threading;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
-import com.intellij.psi.tree.IElementType;
+import consulo.language.ast.IElementType;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.intellij.java.impl.ig.psiutils.SynchronizationUtil;
 import com.siyeh.ig.psiutils.VariableAccessUtils;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class NonAtomicOperationOnVolatileFieldInspection
   extends BaseInspection {
@@ -116,7 +117,7 @@ public class NonAtomicOperationOnVolatileFieldInspection
       registerError(operand);
     }
 
-    @javax.annotation.Nullable
+    @Nullable
     private static PsiField findNonSynchronizedVolatileField(
       PsiExpression expression) {
       if (!(expression instanceof PsiReferenceExpression)) {

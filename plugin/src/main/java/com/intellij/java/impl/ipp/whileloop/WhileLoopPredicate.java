@@ -16,10 +16,10 @@
 package com.intellij.java.impl.ipp.whileloop;
 
 import com.intellij.java.language.psi.JavaTokenType;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiJavaToken;
 import com.intellij.java.language.psi.PsiWhileStatement;
-import com.intellij.psi.tree.IElementType;
+import consulo.language.ast.IElementType;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 
 class WhileLoopPredicate implements PsiElementPredicate {

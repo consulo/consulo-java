@@ -18,10 +18,10 @@ package com.intellij.java.impl.codeInsight.editorActions;
 import java.util.ArrayList;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.editor.RangeMarker;
-import com.intellij.openapi.util.TextRange;
+import consulo.document.RangeMarker;
+import consulo.document.util.TextRange;
 import com.intellij.psi.*;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 
 /**

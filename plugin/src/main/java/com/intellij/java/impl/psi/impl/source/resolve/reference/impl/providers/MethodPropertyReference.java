@@ -17,15 +17,16 @@ package com.intellij.java.impl.psi.impl.source.resolve.reference.impl.providers;
 
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.util.PropertyUtil;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiReference;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiReference;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.BasicAttributeValueReference;
 import com.intellij.psi.xml.XmlAttribute;
 import com.intellij.psi.xml.XmlAttributeValue;
 import com.intellij.psi.xml.XmlTag;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * @author peter
@@ -85,7 +86,7 @@ public class MethodPropertyReference extends BasicAttributeValueReference {
   }
 
   @Override
-  @javax.annotation.Nullable
+  @Nullable
   public PsiElement resolve() {
     return/* JspSpiUtil.resolveMethodPropertyReference(this, */resolveClass()/*, myReadable)*/;
   }

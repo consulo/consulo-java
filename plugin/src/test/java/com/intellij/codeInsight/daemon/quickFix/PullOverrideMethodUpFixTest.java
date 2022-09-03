@@ -15,7 +15,7 @@
  */
 package com.intellij.codeInsight.daemon.quickFix;
 
-import com.intellij.codeInsight.intention.IntentionAction;
+import consulo.language.editor.intention.IntentionAction;
 
 public abstract class PullOverrideMethodUpFixTest extends LightQuickFixTestCase {
   public void test1() throws Exception {

@@ -22,8 +22,5 @@
 
 		<projectService serviceInterface="com.intellij.jam.JamService" serviceImplementation="com.intellij.jam.JamService"/>
 
-		<psi.referenceContributor language="JAVA" implementation="com.intellij.jam.JamReferenceContributor"/>
-
-		<semContributor implementation="consulo.java.jam.impl.JamToSemContributor"/>
 	</extensions>
 </consulo-plugin>

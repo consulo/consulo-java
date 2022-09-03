@@ -1,17 +1,17 @@
 package com.intellij.roots;
 
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.projectRoots.SdkModificator;
-import com.intellij.openapi.roots.OrderRootType;
-import com.intellij.openapi.roots.libraries.Library;
-import com.intellij.openapi.roots.libraries.LibraryTablesRegistrar;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.module.Module;
+import consulo.content.bundle.Sdk;
+import consulo.content.bundle.SdkModificator;
+import consulo.content.OrderRootType;
+import consulo.content.library.Library;
+import consulo.content.library.LibraryTablesRegistrar;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.testFramework.ModuleTestCase;
 import com.intellij.testFramework.PsiTestUtil;
-import com.intellij.util.PathsList;
+import consulo.virtualFileSystem.util.PathsList;
 import consulo.container.boot.ContainerPathManager;
-import consulo.vfs.util.ArchiveVfsUtil;
+import consulo.virtualFileSystem.archive.ArchiveVfsUtil;
 
 import java.io.IOException;
 

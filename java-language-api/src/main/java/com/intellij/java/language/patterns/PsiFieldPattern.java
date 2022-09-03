@@ -16,8 +16,10 @@
 package com.intellij.java.language.patterns;
 
 import com.intellij.java.language.psi.PsiField;
-import com.intellij.patterns.InitialPatternCondition;
-import com.intellij.util.ProcessingContext;
+import consulo.language.pattern.InitialPatternCondition;
+import consulo.language.util.ProcessingContext;
+
+import javax.annotation.Nullable;
 
 /**
  * @author peter
@@ -25,7 +27,7 @@ import com.intellij.util.ProcessingContext;
 public class PsiFieldPattern extends PsiMemberPattern<PsiField, PsiFieldPattern>{
   public PsiFieldPattern() {
     super(new InitialPatternCondition<PsiField>(PsiField.class) {
-      public boolean accepts(@javax.annotation.Nullable final Object o, final ProcessingContext context) {
+      public boolean accepts(@Nullable final Object o, final ProcessingContext context) {
         return o instanceof PsiField;
       }
     });

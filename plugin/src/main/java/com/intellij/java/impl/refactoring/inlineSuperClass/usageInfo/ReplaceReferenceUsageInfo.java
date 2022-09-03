@@ -25,11 +25,11 @@ import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiElementFactory;
 import com.intellij.java.language.psi.PsiReferenceExpression;
 import consulo.logging.Logger;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.util.lang.StringUtil;
 import com.intellij.psi.*;
 import com.intellij.java.impl.refactoring.util.FixableUsageInfo;
-import com.intellij.util.Function;
-import com.intellij.util.IncorrectOperationException;
+import consulo.ide.impl.idea.util.Function;
+import consulo.language.util.IncorrectOperationException;
 
 public class ReplaceReferenceUsageInfo extends FixableUsageInfo {
   public static final Logger LOG = Logger.getInstance(ReplaceReferenceUsageInfo.class);

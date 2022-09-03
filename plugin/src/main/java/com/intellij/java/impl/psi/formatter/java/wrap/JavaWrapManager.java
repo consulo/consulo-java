@@ -15,15 +15,17 @@
  */
 package com.intellij.java.impl.psi.formatter.java.wrap;
 
-import com.intellij.formatting.ASTBlock;
-import com.intellij.formatting.Block;
-import com.intellij.formatting.Wrap;
-import com.intellij.lang.ASTNode;
-import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
+import consulo.language.codeStyle.ASTBlock;
+import consulo.language.codeStyle.Block;
+import consulo.language.codeStyle.Wrap;
+import consulo.language.ast.ASTNode;
+import consulo.language.codeStyle.CommonCodeStyleSettings;
 import com.intellij.java.impl.psi.codeStyle.JavaCodeStyleSettings;
 import com.intellij.java.impl.psi.formatter.java.AbstractJavaBlock;
 import com.intellij.java.impl.psi.formatter.java.wrap.impl.JavaChildBlockWrapFactory;
 import com.intellij.java.impl.psi.formatter.java.wrap.impl.JavaChildWrapArranger;
+
+import javax.annotation.Nullable;
 
 /**
  * Defines common contract for {@link Wrap wraps} manipulation during java {@link Block blocks} processing.
@@ -82,7 +84,7 @@ public class JavaWrapManager
 	 * @return wrap to use for the given {@code 'child'} node if it's possible to define the one;
 	 * {@code null} otherwise
 	 */
-	@javax.annotation.Nullable
+	@Nullable
 	public Wrap arrangeChildWrap(ASTNode child, ASTNode parent, CommonCodeStyleSettings settings, JavaCodeStyleSettings javaSettings, Wrap suggestedWrap, AbstractJavaBlock reservedWrapsProvider)
 	{
 		return myChildArranger.arrange(child, parent, settings, javaSettings, suggestedWrap, reservedWrapsProvider);
@@ -98,7 +100,7 @@ public class JavaWrapManager
 	 *                              soon as formatting code refactoring is done
 	 * @return wrap to use for the sub-blocks of the given block
 	 */
-	@javax.annotation.Nullable
+	@Nullable
 	public Wrap createChildBlockWrap(ASTBlock block, CommonCodeStyleSettings settings, ReservedWrapsProvider reservedWrapsProvider)
 	{
 		return myChildBlockFactory.create(block, settings, reservedWrapsProvider);

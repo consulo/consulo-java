@@ -11,7 +11,7 @@
     <properties/>
     <border type="none"/>
     <children>
-      <component id="9636d" class="com.intellij.openapi.ui.TextFieldWithBrowseButton" binding="myClassChooser">
+      <component id="9636d" class="consulo.ui.ex.awt.TextFieldWithBrowseButton" binding="myClassChooser">
         <constraints>
           <xy x="0" y="26" width="245" height="22"/>
           <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1">
@@ -20,7 +20,7 @@
         </constraints>
         <properties/>
       </component>
-      <component id="c2ef3" class="com.intellij.openapi.ui.TextFieldWithBrowseButton" binding="myFieldChooser">
+      <component id="c2ef3" class="consulo.ui.ex.awt.TextFieldWithBrowseButton" binding="myFieldChooser">
         <constraints>
           <xy x="0" y="80" width="245" height="22"/>
           <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1">

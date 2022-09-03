@@ -1,8 +1,8 @@
 package com.intellij.codeInsight.completion;
 
 import com.intellij.JavaTestUtil;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.roots.ModuleRootModificationUtil;
+import consulo.module.Module;
+import consulo.ide.impl.idea.openapi.roots.ModuleRootModificationUtil;
 import com.intellij.testFramework.PsiTestUtil;
 import com.intellij.testFramework.fixtures.JavaCodeInsightFixtureTestCase;
 

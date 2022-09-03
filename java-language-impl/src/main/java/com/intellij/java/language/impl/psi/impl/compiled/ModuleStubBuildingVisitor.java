@@ -15,131 +15,103 @@
  */
 package com.intellij.java.language.impl.psi.impl.compiled;
 
-import static com.intellij.java.language.impl.psi.impl.java.stubs.JavaStubElementTypes.EXPORTS_STATEMENT;
-import static com.intellij.java.language.impl.psi.impl.java.stubs.JavaStubElementTypes.OPENS_STATEMENT;
-import static com.intellij.java.language.impl.psi.impl.java.stubs.JavaStubElementTypes.PROVIDES_WITH_LIST;
-import static com.intellij.util.BitUtil.isSet;
-import static com.intellij.util.containers.ContainerUtil.map2Array;
-
-import java.util.Arrays;
-
+import com.intellij.java.language.impl.psi.impl.cache.ModifierFlags;
+import com.intellij.java.language.impl.psi.impl.java.stubs.PsiJavaFileStub;
+import com.intellij.java.language.impl.psi.impl.java.stubs.PsiJavaModuleStub;
+import com.intellij.java.language.impl.psi.impl.java.stubs.impl.*;
 import consulo.internal.org.objectweb.asm.AnnotationVisitor;
 import consulo.internal.org.objectweb.asm.ClassVisitor;
 import consulo.internal.org.objectweb.asm.ModuleVisitor;
 import consulo.internal.org.objectweb.asm.Opcodes;
-import com.intellij.java.language.impl.psi.impl.cache.ModifierFlags;
-import com.intellij.java.language.impl.psi.impl.java.stubs.PsiJavaFileStub;
-import com.intellij.java.language.impl.psi.impl.java.stubs.PsiJavaModuleStub;
-import com.intellij.java.language.impl.psi.impl.java.stubs.impl.PsiAnnotationStubImpl;
-import com.intellij.java.language.impl.psi.impl.java.stubs.impl.PsiClassReferenceListStubImpl;
-import com.intellij.java.language.impl.psi.impl.java.stubs.impl.PsiJavaModuleStubImpl;
-import com.intellij.java.language.impl.psi.impl.java.stubs.impl.PsiModifierListStubImpl;
-import com.intellij.java.language.impl.psi.impl.java.stubs.impl.PsiPackageAccessibilityStatementStubImpl;
-import com.intellij.java.language.impl.psi.impl.java.stubs.impl.PsiProvidesStatementStubImpl;
-import com.intellij.java.language.impl.psi.impl.java.stubs.impl.PsiRequiresStatementStubImpl;
-import com.intellij.java.language.impl.psi.impl.java.stubs.impl.PsiUsesStatementStubImpl;
-import com.intellij.util.ArrayUtil;
-import com.intellij.util.Function;
+import consulo.util.collection.ArrayUtil;
 
-public class ModuleStubBuildingVisitor extends ClassVisitor
-{
-	private static final Function<String, String> NAME_MAPPER = name1 -> name1.replace('/', '.');
+import java.util.Arrays;
+import java.util.function.Function;
 
-	private final PsiJavaFileStub myParent;
-	private PsiJavaModuleStub myResult;
-	private PsiModifierListStubImpl myModList;
+import static com.intellij.java.language.impl.psi.impl.java.stubs.JavaStubElementTypes.*;
+import static consulo.util.collection.ContainerUtil.map2Array;
+import static consulo.util.lang.BitUtil.isSet;
 
-	public ModuleStubBuildingVisitor(PsiJavaFileStub parent)
-	{
-		super(Opcodes.API_VERSION);
-		myParent = parent;
-	}
+public class ModuleStubBuildingVisitor extends ClassVisitor {
+  private static final Function<String, String> NAME_MAPPER = name1 -> name1.replace('/', '.');
 
-	public PsiJavaModuleStub getResult()
-	{
-		return myResult;
-	}
+  private final PsiJavaFileStub myParent;
+  private PsiJavaModuleStub myResult;
+  private PsiModifierListStubImpl myModList;
 
-	@Override
-	public ModuleVisitor visitModule(String name, int access, String version)
-	{
-		myResult = new PsiJavaModuleStubImpl(myParent, name);
+  public ModuleStubBuildingVisitor(PsiJavaFileStub parent) {
+    super(Opcodes.API_VERSION);
+    myParent = parent;
+  }
 
-		myModList = new PsiModifierListStubImpl(myResult, moduleFlags(access));
+  public PsiJavaModuleStub getResult() {
+    return myResult;
+  }
 
-		return new ModuleVisitor(Opcodes.API_VERSION)
-		{
-			@Override
-			public void visitRequire(String module, int access, String version)
-			{
-				if(!isGenerated(access))
-				{
-					PsiRequiresStatementStubImpl statementStub = new PsiRequiresStatementStubImpl(myResult, module);
-					new PsiModifierListStubImpl(statementStub, requiresFlags(access));
-				}
-			}
+  @Override
+  public ModuleVisitor visitModule(String name, int access, String version) {
+    myResult = new PsiJavaModuleStubImpl(myParent, name);
 
-			@Override
-			public void visitExport(String packageName, int access, String... modules)
-			{
-				if(!isGenerated(access))
-				{
-					new PsiPackageAccessibilityStatementStubImpl(myResult, EXPORTS_STATEMENT, NAME_MAPPER.fun(packageName), modules == null ? null : Arrays.asList(modules));
-				}
-			}
+    myModList = new PsiModifierListStubImpl(myResult, moduleFlags(access));
 
-			@Override
-			public void visitOpen(String packageName, int access, String... modules)
-			{
-				if(!isGenerated(access))
-				{
-					new PsiPackageAccessibilityStatementStubImpl(myResult, OPENS_STATEMENT, NAME_MAPPER.fun(packageName), modules == null ? null : Arrays.asList(modules));
-				}
-			}
+    return new ModuleVisitor(Opcodes.API_VERSION) {
+      @Override
+      public void visitRequire(String module, int access, String version) {
+        if (!isGenerated(access)) {
+          PsiRequiresStatementStubImpl statementStub = new PsiRequiresStatementStubImpl(myResult, module);
+          new PsiModifierListStubImpl(statementStub, requiresFlags(access));
+        }
+      }
 
-			@Override
-			public void visitUse(String service)
-			{
-				new PsiUsesStatementStubImpl(myResult, NAME_MAPPER.fun(service));
-			}
+      @Override
+      public void visitExport(String packageName, int access, String... modules) {
+        if (!isGenerated(access)) {
+          new PsiPackageAccessibilityStatementStubImpl(myResult, EXPORTS_STATEMENT, NAME_MAPPER.apply(packageName), modules == null ? null : Arrays.asList(modules));
+        }
+      }
 
-			@Override
-			public void visitProvide(String service, String... providers)
-			{
-				PsiProvidesStatementStubImpl statementStub = new PsiProvidesStatementStubImpl(myResult, NAME_MAPPER.fun(service));
-				String[] names = map2Array(providers, String.class, NAME_MAPPER);
-				new PsiClassReferenceListStubImpl(PROVIDES_WITH_LIST, statementStub, names.length == 0 ? ArrayUtil.EMPTY_STRING_ARRAY : names);
-			}
-		};
-	}
+      @Override
+      public void visitOpen(String packageName, int access, String... modules) {
+        if (!isGenerated(access)) {
+          new PsiPackageAccessibilityStatementStubImpl(myResult, OPENS_STATEMENT, NAME_MAPPER.apply(packageName), modules == null ? null : Arrays.asList(modules));
+        }
+      }
 
-	@Override
-	public AnnotationVisitor visitAnnotation(String desc, boolean visible)
-	{
-		return StubBuildingVisitor.getAnnotationTextCollector(desc, text -> new PsiAnnotationStubImpl(myModList, text));
-	}
+      @Override
+      public void visitUse(String service) {
+        new PsiUsesStatementStubImpl(myResult, NAME_MAPPER.apply(service));
+      }
 
-	private static boolean isGenerated(int access)
-	{
-		return isSet(access, Opcodes.ACC_SYNTHETIC) || isSet(access, Opcodes.ACC_MANDATED);
-	}
+      @Override
+      public void visitProvide(String service, String... providers) {
+        PsiProvidesStatementStubImpl statementStub = new PsiProvidesStatementStubImpl(myResult, NAME_MAPPER.apply(service));
+        String[] names = map2Array(providers, String.class, NAME_MAPPER);
+        new PsiClassReferenceListStubImpl(PROVIDES_WITH_LIST, statementStub, names.length == 0 ? ArrayUtil.EMPTY_STRING_ARRAY : names);
+      }
+    };
+  }
 
-	private static int moduleFlags(int access)
-	{
-		return isSet(access, Opcodes.ACC_OPEN) ? ModifierFlags.OPEN_MASK : 0;
-	}
+  @Override
+  public AnnotationVisitor visitAnnotation(String desc, boolean visible) {
+    return StubBuildingVisitor.getAnnotationTextCollector(desc, text -> new PsiAnnotationStubImpl(myModList, text));
+  }
 
-	private static int requiresFlags(int access)
-	{
-		int flags = 0;
-		if(isSet(access, Opcodes.ACC_TRANSITIVE))
-		{
-			flags |= ModifierFlags.TRANSITIVE_MASK;
-		}
-		if(isSet(access, Opcodes.ACC_STATIC_PHASE))
-		{
-			flags |= ModifierFlags.STATIC_MASK;
-		}
-		return flags;
-	}
+  private static boolean isGenerated(int access) {
+    return isSet(access, Opcodes.ACC_SYNTHETIC) || isSet(access, Opcodes.ACC_MANDATED);
+  }
+
+  private static int moduleFlags(int access) {
+    return isSet(access, Opcodes.ACC_OPEN) ? ModifierFlags.OPEN_MASK : 0;
+  }
+
+  private static int requiresFlags(int access) {
+    int flags = 0;
+    if (isSet(access, Opcodes.ACC_TRANSITIVE)) {
+      flags |= ModifierFlags.TRANSITIVE_MASK;
+    }
+    if (isSet(access, Opcodes.ACC_STATIC_PHASE)) {
+      flags |= ModifierFlags.STATIC_MASK;
+    }
+    return flags;
+  }
 }

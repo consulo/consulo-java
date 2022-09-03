@@ -15,20 +15,22 @@
  */
 package com.intellij.java.impl.codeInsight.editorActions.smartEnter;
 
-import com.intellij.ide.DataManager;
-import com.intellij.lang.ASTNode;
-import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.actionSystem.IdeActions;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.actionSystem.EditorActionHandler;
-import com.intellij.openapi.editor.actionSystem.EditorActionManager;
+import consulo.codeEditor.action.EditorActionManager;
+import consulo.dataContext.DataManager;
+import consulo.language.ast.ASTNode;
+import consulo.dataContext.DataContext;
+import consulo.ui.ex.action.IdeActions;
+import consulo.codeEditor.Editor;
+import consulo.codeEditor.action.EditorActionHandler;
 import com.intellij.java.language.psi.PsiCodeBlock;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiReturnStatement;
 import com.intellij.java.language.psi.PsiThrowStatement;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
-import com.intellij.psi.tree.TokenSet;
-import com.intellij.util.text.CharArrayUtil;
+import consulo.language.ast.TokenSet;
+import consulo.util.lang.CharArrayUtil;
+
+import javax.annotation.Nullable;
 
 public class LeaveCodeBlockEnterProcessor implements EnterProcessor
 {
@@ -105,7 +107,7 @@ public class LeaveCodeBlockEnterProcessor implements EnterProcessor
 	 * @param element
 	 * @return
 	 */
-	private static boolean isControlFlowBreak(@javax.annotation.Nullable PsiElement element)
+	private static boolean isControlFlowBreak(@Nullable PsiElement element)
 	{
 		return element instanceof PsiReturnStatement || element instanceof PsiThrowStatement;
 	}

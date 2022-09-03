@@ -15,33 +15,33 @@
  */
 package com.intellij.java.impl.unscramble;
 
-import com.intellij.execution.ui.RunContentDescriptor;
-import com.intellij.icons.AllIcons;
-import com.intellij.ide.IdeBundle;
-import com.intellij.ide.util.PropertiesComponent;
+import consulo.execution.ui.RunContentDescriptor;
+import consulo.application.AllIcons;
+import consulo.fileChooser.FileChooserDescriptor;
+import consulo.ide.IdeBundle;
+import consulo.ide.impl.idea.ide.util.PropertiesComponent;
 import com.intellij.java.execution.unscramble.ThreadDumpPanel;
 import com.intellij.java.execution.unscramble.ThreadDumpParser;
 import com.intellij.java.execution.unscramble.ThreadState;
-import com.intellij.openapi.extensions.Extensions;
-import com.intellij.openapi.fileChooser.FileChooser;
-import com.intellij.openapi.fileChooser.FileChooserDescriptor;
-import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
-import com.intellij.openapi.help.HelpManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.DialogWrapper;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.openapi.util.Condition;
-import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vcs.ProjectLevelVcsManager;
-import com.intellij.openapi.vcs.configurable.VcsContentAnnotationConfigurable;
-import com.intellij.ui.GuiUtils;
-import com.intellij.ui.ListCellRendererWrapper;
-import com.intellij.ui.TextFieldWithHistory;
-import com.intellij.unscramble.AnalyzeStacktraceUtil;
-import com.intellij.util.ArrayUtil;
-import com.intellij.util.containers.ContainerUtil;
-import com.intellij.util.text.CharArrayUtil;
+import consulo.component.extension.Extensions;
+import consulo.ui.ex.awt.internal.GuiUtils;
+import consulo.ui.fileChooser.FileChooser;
+import consulo.fileChooser.FileChooserDescriptorFactory;
+import consulo.application.HelpManager;
+import consulo.project.Project;
+import consulo.ui.ex.awt.DialogWrapper;
+import consulo.util.lang.Comparing;
+import consulo.util.lang.function.Condition;
+import consulo.ide.impl.idea.openapi.util.io.FileUtil;
+import consulo.util.lang.StringUtil;
+import consulo.versionControlSystem.ProjectLevelVcsManager;
+import consulo.ide.impl.idea.openapi.vcs.configurable.VcsContentAnnotationConfigurable;
+import consulo.ui.ex.awt.ListCellRendererWrapper;
+import consulo.ui.ex.awt.TextFieldWithHistory;
+import consulo.ide.impl.idea.unscramble.AnalyzeStacktraceUtil;
+import consulo.util.collection.ArrayUtil;
+import consulo.util.collection.ContainerUtil;
+import consulo.util.lang.CharArrayUtil;
 import consulo.java.impl.unscramble.UnscrambleManager;
 import consulo.ui.image.Image;
 import org.jetbrains.annotations.NonNls;
@@ -150,7 +150,7 @@ public class UnscrambleDialog extends DialogWrapper {
   private void createUIComponents() {
     myBottomPanel = new JPanel(new BorderLayout());
     if (ProjectLevelVcsManager.getInstance(myProject).hasActiveVcss()) {
-      myConfigurable = new VcsContentAnnotationConfigurable(myProject);
+      myConfigurable = new consulo.ide.impl.idea.openapi.vcs.configurable.VcsContentAnnotationConfigurable(myProject);
       myBottomPanel.add(myConfigurable.createComponent(getDisposable()), BorderLayout.CENTER);
       myConfigurable.reset();
     }

@@ -15,9 +15,8 @@
  */
 package com.intellij.java.impl.ig.classlayout;
 
-import com.intellij.analysis.AnalysisScope;
-import com.intellij.codeInspection.*;
-import com.intellij.codeInspection.reference.RefEntity;
+import consulo.language.editor.scope.AnalysisScope;
+import consulo.language.editor.inspection.reference.RefEntity;
 import com.intellij.java.analysis.codeInspection.reference.RefMethod;
 import com.intellij.java.language.psi.*;
 import consulo.util.dataholder.Key;

@@ -7,10 +7,10 @@ import static org.junit.Assert.assertTrue;
 import java.io.File;
 
 import com.intellij.JavaTestUtil;
-import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.util.SystemInfo;
+import consulo.content.bundle.Sdk;
+import consulo.application.util.SystemInfo;
 import com.intellij.testFramework.IdeaTestCase;
-import com.intellij.util.io.URLUtil;
+import consulo.util.io.URLUtil;
 
 public abstract class JarFileSystemTest extends IdeaTestCase
 {

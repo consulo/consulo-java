@@ -16,8 +16,8 @@
 package com.intellij.java.language.psi.stubs;
 
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.stubs.PsiFileStub;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.stub.PsiFileStub;
 
 /**
  * @author ilyas

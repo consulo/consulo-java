@@ -20,8 +20,9 @@ import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiParameter;
 import com.intellij.java.language.psi.PsiTypeElement;
 import com.intellij.java.language.util.VisibilityUtil;
-import com.intellij.refactoring.changeSignature.MethodDescriptor;
+import consulo.ide.impl.idea.refactoring.changeSignature.MethodDescriptor;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,7 +67,7 @@ public class JavaMethodDescriptor implements MethodDescriptor<ParameterInfoImpl,
     return myMethod.getParameterList().getParametersCount();
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public String getReturnTypeText() {
     final PsiTypeElement typeElement = myMethod.getReturnTypeElement();
     return typeElement != null ? typeElement.getText() : null;

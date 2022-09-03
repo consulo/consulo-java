@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.internal.diGraph.analyzer;
 
-import com.intellij.openapi.util.Pair;
+import consulo.util.lang.Pair;
 
 import java.util.Iterator;
 import java.util.LinkedList;

@@ -15,10 +15,10 @@
  */
 package com.intellij.java.debugger.impl.ui;
 
-import com.intellij.ide.DataManager;
-import com.intellij.openapi.actionSystem.CommonDataKeys;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.project.ProjectManager;
+import consulo.dataContext.DataManager;
+import consulo.language.editor.CommonDataKeys;
+import consulo.project.Project;
+import consulo.project.ProjectManager;
 
 /**
  * @author nik

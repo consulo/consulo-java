@@ -22,31 +22,32 @@ import static com.intellij.java.impl.application.options.JavaDocFormattingPanel.
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import com.intellij.application.options.CodeStyleAbstractConfigurable;
-import com.intellij.application.options.CodeStyleAbstractPanel;
-import com.intellij.application.options.CodeStyleBean;
-import com.intellij.application.options.IndentOptionsEditor;
+
+import consulo.application.ApplicationBundle;
+import consulo.language.codeStyle.ui.setting.CodeStyleAbstractConfigurable;
+import consulo.language.codeStyle.ui.setting.CodeStyleAbstractPanel;
+import consulo.language.codeStyle.setting.CodeStyleBean;
+import consulo.language.codeStyle.setting.IndentOptionsEditor;
 import com.intellij.java.impl.application.options.JavaCodeStyleMainPanel;
 import com.intellij.java.impl.application.options.JavaIndentOptionsEditor;
 import com.intellij.java.language.impl.JavaFileType;
-import com.intellij.lang.Language;
+import consulo.language.Language;
 import com.intellij.java.language.JavaLanguage;
-import com.intellij.openapi.application.ApplicationBundle;
-import com.intellij.openapi.options.Configurable;
-import com.intellij.openapi.project.Project;
+import consulo.configurable.Configurable;
+import consulo.project.Project;
 import com.intellij.java.language.LanguageLevel;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiFileFactory;
-import com.intellij.psi.codeStyle.CodeStyleSettings;
-import com.intellij.psi.codeStyle.CodeStyleSettingsCustomizable;
-import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
-import com.intellij.psi.codeStyle.CustomCodeStyleSettings;
-import com.intellij.psi.codeStyle.DocCommentSettings;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiFileFactory;
+import consulo.language.codeStyle.CodeStyleSettings;
+import consulo.language.codeStyle.setting.CodeStyleSettingsCustomizable;
+import consulo.language.codeStyle.CommonCodeStyleSettings;
+import consulo.language.codeStyle.CustomCodeStyleSettings;
+import consulo.language.codeStyle.DocCommentSettings;
 import com.intellij.java.impl.psi.codeStyle.JavaCodeStyleBean;
 import com.intellij.java.impl.psi.codeStyle.JavaCodeStyleSettings;
-import com.intellij.psi.codeStyle.LanguageCodeStyleSettingsProvider;
+import consulo.language.codeStyle.setting.LanguageCodeStyleSettingsProvider;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.util.LocalTimeCounter;
+import consulo.util.lang.LocalTimeCounter;
 
 /**
  * @author rvishnyakov

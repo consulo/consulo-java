@@ -21,9 +21,9 @@ package com.intellij.java.language.projectRoots;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.openapi.components.ServiceManager;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.ide.ServiceManager;
 
 public class JavaVersionService {
   public static JavaVersionService getInstance() {

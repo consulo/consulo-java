@@ -16,23 +16,24 @@
 package com.intellij.java.impl.javadoc;
 
 import javax.annotation.Nonnull;
+
+import consulo.execution.executor.DefaultRunExecutor;
+import consulo.process.ExecutionException;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
 import org.jdom.Element;
-import com.intellij.CommonBundle;
-import com.intellij.analysis.AnalysisScope;
-import com.intellij.execution.ExecutionException;
-import com.intellij.execution.executors.DefaultRunExecutor;
-import com.intellij.execution.runners.ExecutionEnvironmentBuilder;
-import com.intellij.execution.util.ExecutionErrorDialog;
-import com.intellij.openapi.components.PersistentStateComponent;
-import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.components.State;
-import com.intellij.openapi.components.Storage;
-import com.intellij.openapi.components.StoragePathMacros;
-import com.intellij.openapi.project.Project;
-import com.intellij.util.xmlb.XmlSerializer;
+import consulo.application.CommonBundle;
+import consulo.language.editor.scope.AnalysisScope;
+import consulo.execution.runner.ExecutionEnvironmentBuilder;
+import consulo.ide.impl.idea.execution.util.ExecutionErrorDialog;
+import consulo.component.persist.PersistentStateComponent;
+import consulo.ide.ServiceManager;
+import consulo.component.persist.State;
+import consulo.component.persist.Storage;
+import consulo.component.persist.StoragePathMacros;
+import consulo.project.Project;
+import consulo.util.xml.serializer.XmlSerializer;
 
 @Singleton
 @State(name = "JavadocGenerationManager", storages = @Storage(file = StoragePathMacros.PROJECT_CONFIG_DIR + "/misc.xml"))

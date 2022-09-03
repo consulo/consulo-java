@@ -15,6 +15,8 @@
  */
 package com.intellij.java.language.psi;
 
+import javax.annotation.Nullable;
+
 /**
  * Represents a Java <code>synchronized</code> statement.
  */
@@ -24,7 +26,7 @@ public interface PsiSynchronizedStatement extends PsiStatement {
    *
    * @return the expression for the value, or null if the statement is incomplete.
    */
-  @javax.annotation.Nullable
+  @Nullable
   PsiExpression getLockExpression();
 
   /**
@@ -32,6 +34,6 @@ public interface PsiSynchronizedStatement extends PsiStatement {
    *
    * @return the body of the statement, or null if the statement is incomplete. 
    */
-  @javax.annotation.Nullable
+  @Nullable
   PsiCodeBlock getBody();
 }

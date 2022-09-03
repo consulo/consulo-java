@@ -15,17 +15,19 @@
  */
 package com.intellij.java.impl.psi.formatter.java.wrap.impl;
 
-import com.intellij.formatting.ASTBlock;
-import com.intellij.formatting.Wrap;
-import com.intellij.formatting.WrapType;
-import com.intellij.lang.ASTNode;
+import consulo.language.codeStyle.ASTBlock;
+import consulo.language.codeStyle.Wrap;
+import consulo.language.codeStyle.WrapType;
+import consulo.language.ast.ASTNode;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiPolyadicExpression;
-import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
+import consulo.language.codeStyle.CommonCodeStyleSettings;
 import com.intellij.java.impl.psi.formatter.java.JavaFormatterUtil;
 import com.intellij.java.impl.psi.formatter.java.wrap.ReservedWrapsProvider;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
-import com.intellij.psi.tree.IElementType;
+import consulo.language.ast.IElementType;
+
+import javax.annotation.Nullable;
 
 /**
  * Encapsulates algorithm of construction {@link Wrap wraps} for sub-blocks of particular {@link ASTBlock block} taking into
@@ -49,7 +51,7 @@ public class JavaChildBlockWrapFactory
 	 *                              soon as formatting code refactoring is done
 	 * @return wrap to use for the sub-blocks of the given block
 	 */
-	@javax.annotation.Nullable
+	@Nullable
 	public Wrap create(ASTBlock block, CommonCodeStyleSettings settings, ReservedWrapsProvider reservedWrapsProvider)
 	{
 		ASTNode node = block.getNode();

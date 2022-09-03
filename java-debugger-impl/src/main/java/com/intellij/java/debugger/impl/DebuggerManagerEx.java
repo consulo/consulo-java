@@ -18,12 +18,13 @@ package com.intellij.java.debugger.impl;
 import java.util.Collection;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.intellij.java.debugger.DebuggerManager;
 import com.intellij.java.debugger.engine.DebugProcess;
 import com.intellij.java.debugger.impl.ui.breakpoints.BreakpointManager;
-import com.intellij.execution.ExecutionException;
-import com.intellij.openapi.project.Project;
+import consulo.process.ExecutionException;
+import consulo.project.Project;
 
 public abstract class DebuggerManagerEx extends DebuggerManager
 {
@@ -46,6 +47,6 @@ public abstract class DebuggerManagerEx extends DebuggerManager
 
 	public abstract void removeDebuggerManagerListener(DebuggerManagerListener debuggerManagerListener);
 
-	@javax.annotation.Nullable
+	@Nullable
 	public abstract DebuggerSession attachVirtualMachine(@Nonnull DebugEnvironment environment) throws ExecutionException;
 }

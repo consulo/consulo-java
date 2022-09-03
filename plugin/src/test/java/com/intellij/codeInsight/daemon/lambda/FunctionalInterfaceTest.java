@@ -22,12 +22,14 @@ import org.jetbrains.annotations.NonNls;
 import com.intellij.codeInsight.daemon.LightDaemonAnalyzerTestCase;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.LambdaHighlightingUtil;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.language.psi.scope.GlobalSearchScope;
+
+import javax.annotation.Nullable;
 
 public abstract class FunctionalInterfaceTest extends LightDaemonAnalyzerTestCase {
   @NonNls static final String BASE_PATH = "/codeInsight/daemonCodeAnalyzer/lambda/functionalInterface";
 
-  private void doTestFunctionalInterface(@javax.annotation.Nullable String expectedErrorMessage) throws Exception {
+  private void doTestFunctionalInterface(@Nullable String expectedErrorMessage) throws Exception {
     String filePath = BASE_PATH + "/" + getTestName(false) + ".java";
     configureByFile(filePath);
     final PsiClass psiClass = getJavaFacade().findClass("Foo", GlobalSearchScope.projectScope(getProject()));

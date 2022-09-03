@@ -20,8 +20,8 @@
  */
 package com.intellij.java.impl.refactoring.replaceConstructorWithBuilder;
 
-import com.intellij.psi.PsiElement;
-import com.intellij.refactoring.ui.UsageViewDescriptorAdapter;
+import consulo.language.psi.PsiElement;
+import consulo.language.editor.refactoring.ui.UsageViewDescriptorAdapter;
 import javax.annotation.Nonnull;
 
 public class ReplaceConstructorWithBuilderViewDescriptor extends UsageViewDescriptorAdapter{

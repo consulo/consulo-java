@@ -15,8 +15,8 @@
  */
 package com.intellij.java.impl.slicer;
 
-import com.intellij.openapi.project.Project;
-import com.intellij.ui.SimpleTextAttributes;
+import consulo.project.Project;
+import consulo.ui.ex.SimpleTextAttributes;
 import javax.annotation.Nonnull;
 
 import javax.swing.*;

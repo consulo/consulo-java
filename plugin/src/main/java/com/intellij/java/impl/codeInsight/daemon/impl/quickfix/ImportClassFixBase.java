@@ -15,40 +15,41 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
-import com.intellij.codeInsight.CodeInsightSettings;
+import consulo.language.editor.CodeInsightSettings;
 import com.intellij.java.impl.codeInsight.CodeInsightUtil;
-import com.intellij.codeInsight.FileModificationService;
+import consulo.language.editor.FileModificationService;
 import com.intellij.java.language.codeInsight.ImportFilter;
 import com.intellij.java.impl.codeInsight.completion.JavaCompletionUtil;
-import com.intellij.codeInsight.daemon.DaemonCodeAnalyzerSettings;
-import com.intellij.codeInsight.daemon.impl.DaemonListeners;
-import com.intellij.codeInsight.daemon.impl.ShowAutoImportPass;
+import consulo.language.editor.DaemonCodeAnalyzerSettings;
+import consulo.ide.impl.idea.codeInsight.daemon.impl.DaemonListeners;
+import consulo.ide.impl.idea.codeInsight.daemon.impl.ShowAutoImportPass;
 import com.intellij.java.impl.codeInsight.daemon.impl.actions.AddImportAction;
-import com.intellij.codeInsight.hint.HintManager;
-import com.intellij.codeInsight.hint.QuestionAction;
-import com.intellij.codeInsight.intention.HighPriorityAction;
-import com.intellij.codeInspection.HintAction;
+import consulo.language.editor.hint.HintManager;
+import consulo.language.editor.hint.QuestionAction;
+import consulo.language.editor.intention.HighPriorityAction;
+import consulo.language.editor.intention.HintAction;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.application.impl.LaterInvocator;
-import com.intellij.openapi.command.CommandProcessor;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.packageDependencies.DependencyRule;
-import com.intellij.packageDependencies.DependencyValidationManager;
+import consulo.application.ApplicationManager;
+import consulo.application.impl.internal.LaterInvocator;
+import consulo.undoRedo.CommandProcessor;
+import consulo.codeEditor.Editor;
+import consulo.project.Project;
+import consulo.document.util.TextRange;
+import consulo.util.lang.StringUtil;
+import consulo.ide.impl.idea.packageDependencies.DependencyRule;
+import consulo.ide.impl.idea.packageDependencies.DependencyValidationManager;
 import com.intellij.psi.*;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.java.language.psi.search.PsiShortNamesCache;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.util.collection.ContainerUtil;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.ui.impl.ModalityPerProjectEAPDescriptor;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -97,7 +98,7 @@ public abstract class ImportClassFixBase<T extends PsiElement, R extends PsiRefe
 		return manager.isInProject(file) && !getClassesToImport(true).isEmpty();
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	protected abstract String getReferenceName(@Nonnull R reference);
 
 	protected abstract PsiElement getReferenceNameElement(@Nonnull R reference);
@@ -300,7 +301,7 @@ public abstract class ImportClassFixBase<T extends PsiElement, R extends PsiRefe
 		}
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	protected String getRequiredMemberName(T reference)
 	{
 		return null;

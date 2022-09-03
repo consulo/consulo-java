@@ -15,12 +15,12 @@
  */
 package com.intellij.java.analysis.impl.codeInspection;
 
-import com.intellij.codeInsight.daemon.HighlightDisplayKey;
-import com.intellij.codeInspection.SuppressQuickFix;
+import consulo.language.editor.rawHighlight.HighlightDisplayKey;
+import consulo.language.editor.inspection.SuppressQuickFix;
 import com.intellij.java.analysis.codeInspection.BatchSuppressManager;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.actions.*;
 import com.intellij.java.language.psi.PsiDocCommentOwner;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiModifierListOwner;
 import jakarta.inject.Singleton;
 
@@ -80,7 +80,7 @@ public class BatchSuppressManagerImpl implements BatchSuppressManager {
   }
 
   @Override
-  @javax.annotation.Nullable
+  @Nullable
   public PsiElement getElementToolSuppressedIn(@Nonnull final PsiElement place, final String toolId) {
     return JavaSuppressionUtil.getElementToolSuppressedIn(place, toolId);
   }

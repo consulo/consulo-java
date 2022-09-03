@@ -3,15 +3,15 @@ package com.intellij.psi;
 import static org.junit.Assert.assertEquals;
 
 import org.jetbrains.annotations.NonNls;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.command.CommandProcessor;
-import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.fileTypes.FileType;
-import com.intellij.psi.impl.DebugUtil;
-import com.intellij.psi.impl.source.SourceTreeToPsiMap;
-import com.intellij.psi.text.BlockSupport;
+import consulo.application.ApplicationManager;
+import consulo.undoRedo.CommandProcessor;
+import consulo.ide.ServiceManager;
+import consulo.virtualFileSystem.fileType.FileType;
+import consulo.language.impl.DebugUtil;
+import consulo.language.impl.psi.SourceTreeToPsiMap;
+import consulo.language.impl.internal.psi.diff.BlockSupport;
 import com.intellij.testFramework.PsiTestCase;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
 
 /**
  * @author maxim

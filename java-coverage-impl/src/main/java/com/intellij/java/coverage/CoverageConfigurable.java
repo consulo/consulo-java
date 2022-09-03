@@ -16,13 +16,16 @@
 
 package com.intellij.java.coverage;
 
-import com.intellij.codeInsight.CodeInsightBundle;
-import com.intellij.coverage.CoverageRunner;
-import com.intellij.execution.ExecutionBundle;
-import com.intellij.execution.configurations.ModuleBasedConfiguration;
-import com.intellij.execution.configurations.RunConfigurationBase;
-import com.intellij.execution.configurations.coverage.CoverageEnabledConfiguration;
-import com.intellij.icons.AllIcons;
+import consulo.configurable.Configurable;
+import consulo.configurable.ConfigurationException;
+import consulo.execution.ExecutionBundle;
+import consulo.execution.configuration.ModuleBasedConfiguration;
+import consulo.execution.configuration.ui.SettingsEditor;
+import consulo.execution.coverage.CoverageRunner;
+import consulo.language.editor.CodeInsightBundle;
+import consulo.execution.configuration.RunConfigurationBase;
+import consulo.execution.coverage.CoverageEnabledConfiguration;
+import consulo.application.AllIcons;
 import com.intellij.java.debugger.impl.classFilter.ClassFilterEditor;
 import com.intellij.java.execution.CommonJavaRunConfigurationParameters;
 import com.intellij.java.execution.impl.util.JreVersionDetector;
@@ -31,20 +34,19 @@ import com.intellij.java.language.impl.ui.PackageChooser;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiJavaPackage;
 import com.intellij.java.language.util.ClassFilter;
-import com.intellij.openapi.extensions.Extensions;
-import com.intellij.openapi.options.ConfigurationException;
-import com.intellij.openapi.options.SettingsEditor;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.VerticalFlowLayout;
-import com.intellij.ui.IdeBorderFactory;
-import com.intellij.ui.ListCellRendererWrapper;
-import com.intellij.util.IconUtil;
-import com.intellij.util.ui.UIUtil;
-import consulo.awt.TargetAWT;
+import consulo.component.extension.Extensions;
+import consulo.project.Project;
+import consulo.ui.ex.awt.ListCellRendererWrapper;
+import consulo.ui.ex.awt.VerticalFlowLayout;
+import consulo.ui.ex.awt.IdeBorderFactory;
+import consulo.ide.impl.idea.util.IconUtil;
+import consulo.ui.ex.awt.UIUtil;
+import consulo.ui.ex.awtUnsafe.TargetAWT;
 import consulo.logging.Logger;
 import consulo.ui.image.Image;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -52,7 +54,7 @@ import java.awt.event.ActionListener;
 import java.util.List;
 
 /**
- * Base {@link com.intellij.openapi.options.Configurable} for configuring code coverage
+ * Base {@link Configurable} for configuring code coverage
  * To obtain a full configurable use
  * <code>
  * SettingsEditorGroup<YourConfiguration> group = new SettingsEditorGroup<YourConfiguration>();
@@ -267,7 +269,7 @@ public class CoverageConfigurable extends SettingsEditor<RunConfigurationBase> {
     return result;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private CoverageRunner getSelectedRunner() {
     final CoverageRunnerItem runnerItem = (CoverageRunnerItem)myCoverageRunnerCb.getSelectedItem();
     if (runnerItem == null) {

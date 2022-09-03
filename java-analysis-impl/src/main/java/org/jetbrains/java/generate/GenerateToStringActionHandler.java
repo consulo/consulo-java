@@ -15,7 +15,7 @@
  */
 package org.jetbrains.java.generate;
 
-import com.intellij.openapi.project.Project;
+import consulo.project.Project;
 import com.intellij.java.language.psi.PsiClass;
 
 /**

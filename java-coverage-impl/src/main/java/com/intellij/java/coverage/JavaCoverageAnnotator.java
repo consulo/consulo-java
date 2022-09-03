@@ -1,19 +1,19 @@
 package com.intellij.java.coverage;
 
-import com.intellij.coverage.BaseCoverageAnnotator;
-import com.intellij.coverage.CoverageDataManager;
-import com.intellij.coverage.CoverageSuite;
-import com.intellij.coverage.CoverageSuitesBundle;
+import consulo.execution.coverage.*;
+import consulo.execution.coverage.CoverageSuitesBundle;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.ProjectFileIndex;
-import com.intellij.openapi.roots.ProjectRootManager;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.application.ApplicationManager;
+import consulo.ide.ServiceManager;
+import consulo.module.Module;
+import consulo.project.Project;
+import consulo.module.content.ProjectFileIndex;
+import consulo.module.content.ProjectRootManager;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.psi.*;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.execution.coverage.CoverageDataManager;
+import consulo.execution.coverage.CoverageSuite;
 import consulo.psi.PsiPackage;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
@@ -187,7 +187,7 @@ public class JavaCoverageAnnotator extends BaseCoverageAnnotator {
    * @param flatten
    * @return human-readable coverage information
    */
-  @javax.annotation.Nullable
+  @Nullable
   public String getPackageCoverageInformationString(final PsiPackage psiPackage,
                                                     @Nullable final Module module,
                                                     @Nonnull final CoverageDataManager coverageDataManager,

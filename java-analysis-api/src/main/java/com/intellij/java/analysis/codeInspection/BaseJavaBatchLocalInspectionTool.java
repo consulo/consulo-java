@@ -15,19 +15,20 @@
  */
 package com.intellij.java.analysis.codeInspection;
 
-import com.intellij.codeInsight.daemon.HighlightDisplayKey;
-import com.intellij.codeInspection.BatchSuppressableTool;
-import com.intellij.codeInspection.LocalInspectionTool;
-import com.intellij.codeInspection.SuppressQuickFix;
-import com.intellij.psi.PsiElement;
+import consulo.language.editor.rawHighlight.HighlightDisplayKey;
+import consulo.language.editor.inspection.BatchSuppressableTool;
+import consulo.language.editor.inspection.LocalInspectionTool;
+import consulo.language.editor.inspection.SuppressQuickFix;
+import consulo.language.psi.PsiElement;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public abstract class BaseJavaBatchLocalInspectionTool extends AbstractBaseJavaLocalInspectionTool implements BatchSuppressableTool
 {
   @Nonnull
   @Override
-  public SuppressQuickFix[] getBatchSuppressActions(@javax.annotation.Nullable PsiElement element) {
+  public SuppressQuickFix[] getBatchSuppressActions(@Nullable PsiElement element) {
     return BatchSuppressManager.SERVICE.getInstance().createBatchSuppressActions(HighlightDisplayKey.find(getShortName()));
   }
 

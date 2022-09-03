@@ -18,17 +18,17 @@ package com.intellij.java.debugger.impl;
 import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.impl.engine.DebuggerManagerThreadImpl;
 import com.intellij.java.debugger.impl.engine.events.DebuggerCommandImpl;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.OrderEnumerator;
-import com.intellij.openapi.util.Computable;
-import com.intellij.openapi.util.Pair;
-import com.intellij.openapi.util.SystemInfo;
-import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.VfsUtil;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.application.ApplicationManager;
+import consulo.ide.ServiceManager;
+import consulo.project.Project;
+import consulo.module.content.layer.OrderEnumerator;
+import consulo.application.util.function.Computable;
+import consulo.util.lang.Pair;
+import consulo.application.util.SystemInfo;
+import consulo.ide.impl.idea.openapi.util.io.FileUtil;
+import consulo.util.lang.StringUtil;
+import consulo.ide.impl.idea.openapi.vfs.VfsUtil;
+import consulo.virtualFileSystem.VirtualFile;
 import jakarta.inject.Singleton;
 
 import javax.annotation.Nonnull;
@@ -80,7 +80,7 @@ public class HotSwapManager {
 
     List<File> outputRoots = ApplicationManager.getApplication().runReadAction((Computable<List<File>>) () -> {
       final List<VirtualFile> allDirs = OrderEnumerator.orderEntries(session.getProject()).withoutSdk().withoutLibraries().getPathsList().getRootDirs();
-      return allDirs.stream().map(VfsUtil::virtualToIoFile).collect(Collectors.toList());
+      return allDirs.stream().map(consulo.ide.impl.idea.openapi.vfs.VfsUtil::virtualToIoFile).collect(Collectors.toList());
     });
 
     for (File root : outputRoots) {
@@ -129,7 +129,7 @@ public class HotSwapManager {
 
   public static Map<DebuggerSession, Map<String, HotSwapFile>> findModifiedClasses(List<DebuggerSession> sessions,
                                                                                    Map<String, List<String>> generatedPaths) {
-    final Map<DebuggerSession, Map<String, HotSwapFile>> result = new java.util.HashMap<>();
+    final Map<DebuggerSession, Map<String, HotSwapFile>> result = new HashMap<>();
     List<Pair<DebuggerSession, Long>> sessionWithStamps = new ArrayList<>();
     for (DebuggerSession session : sessions) {
       sessionWithStamps.add(new Pair<>(session, getInstance(session.getProject()).getTimeStamp(session)));
@@ -148,7 +148,7 @@ public class HotSwapManager {
             if (fileStamp > pair.second) {
               Map<String, HotSwapFile> container = result.get(session);
               if (container == null) {
-                container = new java.util.HashMap<>();
+                container = new HashMap<>();
                 result.put(session, container);
               }
               container.put(qualifiedName, hotswapFile);

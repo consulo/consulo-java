@@ -15,10 +15,10 @@
  */
 package com.intellij.java.impl.codeInsight.completion;
 
-import com.intellij.codeInsight.TailType;
+import consulo.externalService.statistic.FeatureUsageTracker;
+import consulo.language.editor.completion.lookup.TailType;
 import com.intellij.codeInsight.completion.*;
 import com.intellij.codeInsight.lookup.*;
-import com.intellij.featureStatistics.FeatureUsageTracker;
 import com.intellij.java.impl.codeInsight.ExpectedTypeInfo;
 import com.intellij.java.impl.codeInsight.ExpectedTypesProvider;
 import com.intellij.java.impl.codeInsight.completion.scope.JavaCompletionProcessor;
@@ -41,31 +41,31 @@ import com.intellij.java.language.patterns.PsiNameValuePairPattern;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
-import com.intellij.lang.LangBundle;
-import com.intellij.openapi.actionSystem.IdeActions;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.ex.EditorEx;
-import com.intellij.openapi.editor.highlighter.HighlighterIterator;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.openapi.util.Condition;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.patterns.ElementPattern;
-import com.intellij.patterns.PatternCondition;
-import com.intellij.psi.PsiDocumentManager;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiReference;
-import com.intellij.psi.codeStyle.CodeStyleManager;
+import consulo.language.LangBundle;
+import consulo.ui.ex.action.IdeActions;
+import consulo.document.Document;
+import consulo.codeEditor.Editor;
+import consulo.codeEditor.EditorEx;
+import consulo.codeEditor.HighlighterIterator;
+import consulo.project.Project;
+import consulo.util.lang.Comparing;
+import consulo.util.lang.function.Condition;
+import consulo.util.lang.StringUtil;
+import consulo.language.pattern.ElementPattern;
+import consulo.language.pattern.PatternCondition;
+import consulo.language.psi.PsiDocumentManager;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiReference;
+import consulo.language.codeStyle.CodeStyleManager;
 import com.intellij.psi.filters.*;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.PsiUtilCore;
-import com.intellij.util.Consumer;
-import com.intellij.util.DocumentUtil;
-import com.intellij.util.ProcessingContext;
-import com.intellij.util.containers.ContainerUtil;
-import com.intellij.util.containers.MultiMap;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.psi.PsiUtilCore;
+import consulo.ide.impl.idea.util.Consumer;
+import consulo.document.util.DocumentUtil;
+import consulo.language.util.ProcessingContext;
+import consulo.util.collection.ContainerUtil;
+import consulo.util.collection.MultiMap;
 import consulo.logging.Logger;
 
 import javax.annotation.Nonnull;
@@ -73,7 +73,7 @@ import javax.annotation.Nullable;
 import java.util.*;
 
 import static com.intellij.java.language.patterns.PsiJavaPatterns.*;
-import static com.intellij.util.ObjectUtil.assertNotNull;
+import static consulo.util.lang.ObjectUtil.assertNotNull;
 
 /**
  * @author peter
@@ -106,7 +106,7 @@ public class JavaCompletionContributor extends CompletionContributor {
   private static final ElementPattern<PsiElement> CATCH_OR_FINALLY = psiElement().afterLeaf(psiElement().withText("}").withParent(psiElement(PsiCodeBlock.class).afterLeaf(PsiKeyword.TRY)));
   private static final ElementPattern<PsiElement> INSIDE_CONSTRUCTOR = psiElement().inside(psiMethod().constructor(true));
 
-  @javax.annotation.Nullable
+  @Nullable
   public static ElementFilter getReferenceFilter(PsiElement position) {
     // Completion after extends in interface, type parameter and implements in class
     final PsiClass containingClass = PsiTreeUtil.getParentOfType(position, PsiClass.class, false, PsiCodeBlock.class, PsiMethod.class, PsiExpressionList.class, PsiVariable.class, PsiAnnotation
@@ -874,7 +874,7 @@ public class JavaCompletionContributor extends CompletionContributor {
     }
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private static PsiJavaCodeReferenceElement extractReference(@Nullable PsiElement expression) {
     if (expression instanceof PsiJavaCodeReferenceElement) {
       return (PsiJavaCodeReferenceElement) expression;

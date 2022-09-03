@@ -21,20 +21,20 @@ import static org.junit.Assert.assertNotNull;
 import javax.swing.ListModel;
 
 import org.jetbrains.annotations.NonNls;
-import com.intellij.ide.projectView.ViewSettings;
-import com.intellij.ide.projectView.impl.AbstractProjectTreeStructure;
+import consulo.project.ui.view.tree.ViewSettings;
+import consulo.ide.impl.idea.ide.projectView.impl.AbstractProjectTreeStructure;
 import com.intellij.java.impl.ide.projectView.impl.ClassesTreeStructureProvider;
-import com.intellij.ide.projectView.impl.nodes.PackageElementNode;
-import com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode;
-import com.intellij.ide.util.treeView.AbstractTreeNode;
-import com.intellij.ide.util.treeView.AbstractTreeStructure;
-import com.intellij.openapi.ui.Queryable;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiDirectory;
+import consulo.project.ui.view.tree.PackageElementNode;
+import consulo.project.ui.view.tree.PsiDirectoryNode;
+import consulo.project.ui.view.tree.AbstractTreeNode;
+import consulo.ui.ex.tree.AbstractTreeStructure;
+import consulo.application.util.Queryable;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.language.psi.PsiDirectory;
 import com.intellij.testFramework.PlatformTestUtil;
 import com.intellij.testFramework.ProjectViewTestUtil;
 import com.intellij.testFramework.TestSourceBasedTestCase;
-import com.intellij.util.Function;
+import consulo.ide.impl.idea.util.Function;
 
 public abstract class BaseProjectViewTestCase extends TestSourceBasedTestCase {
   protected TestProjectTreeStructure myStructure;

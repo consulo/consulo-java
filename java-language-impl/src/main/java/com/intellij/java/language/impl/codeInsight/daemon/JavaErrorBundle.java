@@ -15,34 +15,29 @@
  */
 package com.intellij.java.language.impl.codeInsight.daemon;
 
+import consulo.component.util.localize.AbstractBundle;
 import org.jetbrains.annotations.PropertyKey;
-import com.intellij.AbstractBundle;
 
 /**
  * @author max
  */
-public class JavaErrorBundle extends AbstractBundle
-{
-	public static final String BUNDLE = "messages.JavaErrorBundle";
-	private static final JavaErrorBundle ourInstance = new JavaErrorBundle();
+public class JavaErrorBundle extends AbstractBundle {
+  public static final String BUNDLE = "messages.JavaErrorBundle";
+  private static final JavaErrorBundle ourInstance = new JavaErrorBundle();
 
-	public static JavaErrorBundle getInstance()
-	{
-		return ourInstance;
-	}
+  public static JavaErrorBundle getInstance() {
+    return ourInstance;
+  }
 
-	private JavaErrorBundle()
-	{
-		super(BUNDLE);
-	}
+  private JavaErrorBundle() {
+    super(BUNDLE);
+  }
 
-	public static String message(@PropertyKey(resourceBundle = BUNDLE) String key)
-	{
-		return ourInstance.getMessage(key);
-	}
+  public static String message(@PropertyKey(resourceBundle = BUNDLE) String key) {
+    return ourInstance.getMessage(key);
+  }
 
-	public static String message(@PropertyKey(resourceBundle = BUNDLE) String key, Object... params)
-	{
-		return ourInstance.getMessage(key, params);
-	}
+  public static String message(@PropertyKey(resourceBundle = BUNDLE) String key, Object... params) {
+    return ourInstance.getMessage(key, params);
+  }
 }

@@ -15,19 +15,19 @@
  */
 package com.intellij.java.execution.impl.actions;
 
-import com.intellij.execution.Location;
-import com.intellij.execution.configurations.ModuleBasedConfiguration;
-import com.intellij.execution.configurations.RunConfiguration;
-import com.intellij.execution.testframework.AbstractTestProxy;
+import consulo.execution.action.Location;
+import consulo.execution.configuration.ModuleBasedConfiguration;
+import consulo.execution.configuration.RunConfiguration;
+import consulo.execution.test.AbstractTestProxy;
 import com.intellij.java.execution.configurations.JavaRunConfigurationModule;
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.CommonDataKeys;
-import com.intellij.openapi.actionSystem.Presentation;
-import com.intellij.openapi.project.Project;
+import consulo.ui.ex.action.AnAction;
+import consulo.ui.ex.action.AnActionEvent;
+import consulo.language.editor.CommonDataKeys;
+import consulo.ui.ex.action.Presentation;
+import consulo.project.Project;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.logging.Logger;
 import consulo.ui.annotation.RequiredUIAccess;
 

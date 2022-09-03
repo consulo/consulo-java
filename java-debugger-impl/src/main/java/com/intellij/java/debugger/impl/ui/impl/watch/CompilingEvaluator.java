@@ -18,6 +18,7 @@ package com.intellij.java.debugger.impl.ui.impl.watch;
 import java.util.Collection;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import consulo.internal.org.objectweb.asm.ClassReader;
 import consulo.internal.org.objectweb.asm.ClassVisitor;
@@ -156,6 +157,6 @@ public abstract class CompilingEvaluator implements ExpressionEvaluator
 	///////////////// Compiler stuff
 
 	@Nonnull
-	protected abstract Collection<ClassObject> compile(@javax.annotation.Nullable JavaSdkVersion debuggeeVersion) throws EvaluateException;
+	protected abstract Collection<ClassObject> compile(@Nullable JavaSdkVersion debuggeeVersion) throws EvaluateException;
 
 }

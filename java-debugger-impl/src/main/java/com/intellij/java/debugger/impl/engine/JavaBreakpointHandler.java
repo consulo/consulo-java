@@ -16,6 +16,7 @@
 package com.intellij.java.debugger.impl.engine;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.intellij.java.debugger.impl.engine.events.DebuggerCommandImpl;
 import com.intellij.java.debugger.impl.ui.breakpoints.Breakpoint;
@@ -25,9 +26,9 @@ import com.intellij.java.debugger.impl.ui.breakpoints.JavaFieldBreakpointType;
 import com.intellij.java.debugger.impl.ui.breakpoints.JavaLineBreakpointType;
 import com.intellij.java.debugger.impl.ui.breakpoints.JavaMethodBreakpointType;
 import com.intellij.java.debugger.impl.ui.breakpoints.JavaWildcardMethodBreakpointType;
-import com.intellij.xdebugger.breakpoints.XBreakpoint;
-import com.intellij.xdebugger.breakpoints.XBreakpointHandler;
-import com.intellij.xdebugger.breakpoints.XBreakpointType;
+import consulo.execution.debug.breakpoint.XBreakpoint;
+import consulo.execution.debug.breakpoint.XBreakpointHandler;
+import consulo.execution.debug.breakpoint.XBreakpointType;
 
 /**
  * @author egor
@@ -42,7 +43,7 @@ public class JavaBreakpointHandler extends XBreakpointHandler
 		myProcess = process;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	protected Breakpoint createJavaBreakpoint(@Nonnull XBreakpoint xBreakpoint)
 	{
 		return null;

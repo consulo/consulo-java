@@ -1,13 +1,13 @@
 package com.intellij.java.impl.codeInsight.generation.ui;
 
-import com.intellij.codeInsight.CodeInsightBundle;
-import com.intellij.ide.wizard.AbstractWizard;
-import com.intellij.ide.wizard.Step;
-import com.intellij.ide.wizard.StepAdapter;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiElement;
-import com.intellij.refactoring.classMembers.MemberInfoBase;
-import com.intellij.refactoring.ui.AbstractMemberSelectionPanel;
+import consulo.language.editor.CodeInsightBundle;
+import consulo.ide.impl.idea.ide.wizard.AbstractWizard;
+import consulo.ide.impl.idea.ide.wizard.Step;
+import consulo.ide.impl.idea.ide.wizard.StepAdapter;
+import consulo.project.Project;
+import consulo.language.psi.PsiElement;
+import consulo.language.editor.refactoring.classMember.MemberInfoBase;
+import consulo.ide.impl.idea.refactoring.ui.AbstractMemberSelectionPanel;
 
 import javax.swing.*;
 import javax.swing.event.TableModelEvent;
@@ -21,7 +21,7 @@ import java.util.List;
  * Nikolay.Tropin
  * 8/20/13
  */
-public abstract class AbstractGenerateEqualsWizard<C extends PsiElement, M extends PsiElement, I extends MemberInfoBase<M>> extends AbstractWizard<Step>
+public abstract class AbstractGenerateEqualsWizard<C extends PsiElement, M extends PsiElement, I extends MemberInfoBase<M>> extends AbstractWizard<consulo.ide.impl.idea.ide.wizard.Step>
 {
 
 	protected final C myClass;

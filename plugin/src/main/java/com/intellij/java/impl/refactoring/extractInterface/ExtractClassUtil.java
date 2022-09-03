@@ -15,13 +15,13 @@
  */
 package com.intellij.java.impl.refactoring.extractInterface;
 
-import com.intellij.openapi.application.ApplicationNamesInfo;
-import com.intellij.openapi.project.Project;
+import consulo.application.impl.internal.ApplicationNamesInfo;
+import consulo.project.Project;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.SmartPsiElementPointer;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.SmartPsiElementPointer;
 import com.intellij.java.impl.refactoring.JavaRefactoringSettings;
-import com.intellij.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.RefactoringBundle;
 import com.intellij.java.impl.refactoring.turnRefsToSuper.TurnRefsToSuperProcessor;
 import com.intellij.java.impl.refactoring.ui.YesNoPreviewUsagesDialog;
 

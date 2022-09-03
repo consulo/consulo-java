@@ -28,24 +28,24 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import com.intellij.openapi.help.HelpManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.DialogWrapper;
+import consulo.application.HelpManager;
+import consulo.project.Project;
+import consulo.ui.ex.awt.DialogWrapper;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiNameHelper;
 import com.intellij.java.language.psi.PsiType;
-import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
-import com.intellij.psi.codeStyle.SuggestedNameInfo;
+import consulo.language.codeStyle.CodeStyleSettingsManager;
+import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
 import com.intellij.java.impl.refactoring.HelpID;
 import com.intellij.java.impl.refactoring.JavaRefactoringSettings;
-import com.intellij.refactoring.RefactoringBundle;
-import com.intellij.refactoring.ui.NameSuggestionsField;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.ui.NameSuggestionsField;
 import com.intellij.java.impl.refactoring.ui.NameSuggestionsGenerator;
 import com.intellij.java.impl.refactoring.ui.NameSuggestionsManager;
 import com.intellij.java.impl.refactoring.ui.TypeSelector;
 import com.intellij.java.impl.refactoring.ui.TypeSelectorManager;
-import com.intellij.ui.NonFocusableCheckBox;
-import com.intellij.ui.StateRestoringCheckBox;
+import consulo.ui.ex.awt.NonFocusableCheckBox;
+import consulo.ui.ex.awt.StateRestoringCheckBox;
 
 class IntroduceVariableDialog extends DialogWrapper implements IntroduceVariableSettings {
   private final Project myProject;

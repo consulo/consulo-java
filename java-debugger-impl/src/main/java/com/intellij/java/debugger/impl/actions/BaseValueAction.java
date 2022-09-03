@@ -29,12 +29,12 @@ import com.intellij.java.debugger.impl.DebuggerUtilsEx;
 import com.intellij.java.debugger.impl.ui.impl.watch.DebuggerTreeNodeImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.NodeDescriptorImpl;
 import com.intellij.java.debugger.impl.ui.tree.ValueDescriptor;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.CommonDataKeys;
-import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.actionSystem.Presentation;
-import com.intellij.openapi.progress.util.ProgressWindowWithNotification;
-import com.intellij.openapi.project.Project;
+import consulo.ui.ex.action.AnActionEvent;
+import consulo.language.editor.CommonDataKeys;
+import consulo.dataContext.DataContext;
+import consulo.ui.ex.action.Presentation;
+import consulo.ide.impl.idea.openapi.progress.util.ProgressWindowWithNotification;
+import consulo.project.Project;
 import consulo.internal.com.sun.jdi.Value;
 
 /*

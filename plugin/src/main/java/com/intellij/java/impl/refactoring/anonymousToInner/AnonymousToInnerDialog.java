@@ -26,26 +26,27 @@ import javax.swing.JPanel;
 import javax.annotation.Nonnull;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.help.HelpManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.DialogWrapper;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.application.HelpManager;
+import consulo.project.Project;
+import consulo.ui.ex.awt.DialogWrapper;
+import consulo.ui.ex.awt.NonFocusableCheckBox;
+import consulo.ui.util.FormBuilder;
+import consulo.util.lang.StringUtil;
 import com.intellij.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import com.intellij.java.impl.refactoring.HelpID;
-import com.intellij.refactoring.RefactoringBundle;
-import com.intellij.refactoring.ui.NameSuggestionsField;
-import com.intellij.refactoring.util.CommonRefactoringUtil;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.ui.NameSuggestionsField;
+import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import com.intellij.java.impl.refactoring.util.ParameterTablePanel;
 import com.intellij.java.impl.refactoring.util.RefactoringMessageUtil;
 import com.intellij.java.analysis.impl.refactoring.util.VariableData;
-import com.intellij.ui.IdeBorderFactory;
-import com.intellij.ui.NonFocusableCheckBox;
-import com.intellij.util.Function;
+import consulo.ui.ex.awt.IdeBorderFactory;
+import consulo.ide.impl.idea.util.Function;
 import java.util.HashMap;
-import com.intellij.util.ui.FormBuilder;
+
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.logging.Logger;
 

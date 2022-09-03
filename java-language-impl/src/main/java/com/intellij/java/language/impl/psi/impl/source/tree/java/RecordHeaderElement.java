@@ -15,14 +15,14 @@
  */
 package com.intellij.java.language.impl.psi.impl.source.tree.java;
 
-import com.intellij.lang.ASTNode;
+import consulo.language.ast.ASTNode;
 import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.java.language.impl.psi.impl.source.Constants;
-import com.intellij.psi.impl.source.tree.CompositeElement;
+import consulo.language.impl.ast.CompositeElement;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaSourceUtil;
-import com.intellij.psi.impl.source.tree.TreeElement;
-import com.intellij.psi.tree.TokenSet;
+import consulo.language.impl.ast.TreeElement;
+import consulo.language.ast.TokenSet;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 

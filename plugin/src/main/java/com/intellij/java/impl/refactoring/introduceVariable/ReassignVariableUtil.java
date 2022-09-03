@@ -21,27 +21,27 @@ import javax.annotation.Nullable;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
 
-import com.intellij.codeInsight.template.impl.TemplateManagerImpl;
-import com.intellij.codeInsight.template.impl.TemplateState;
+import consulo.ide.impl.idea.codeInsight.template.impl.TemplateManagerImpl;
+import consulo.language.editor.template.TemplateState;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.application.Result;
-import com.intellij.openapi.command.WriteCommandAction;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.RangeMarker;
-import com.intellij.openapi.editor.VisualPosition;
-import com.intellij.openapi.ui.popup.JBPopupFactory;
+import consulo.application.Result;
+import consulo.language.editor.WriteCommandAction;
+import consulo.codeEditor.Editor;
+import consulo.document.RangeMarker;
+import consulo.codeEditor.VisualPosition;
+import consulo.ui.ex.popup.JBPopupFactory;
 import consulo.util.dataholder.Key;
 import com.intellij.psi.*;
 import com.intellij.java.language.impl.psi.scope.processor.VariablesProcessor;
 import com.intellij.java.language.impl.psi.scope.util.PsiScopesUtil;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
-import com.intellij.refactoring.rename.inplace.InplaceRefactoring;
-import com.intellij.ui.ListCellRendererWrapper;
-import com.intellij.ui.awt.RelativePoint;
-import com.intellij.ui.components.JBList;
-import consulo.awt.TargetAWT;
-import consulo.ide.IconDescriptorUpdaters;
+import consulo.language.editor.refactoring.rename.inplace.InplaceRefactoring;
+import consulo.ui.ex.awt.ListCellRendererWrapper;
+import consulo.ui.ex.RelativePoint;
+import consulo.ui.ex.awt.JBList;
+import consulo.ui.ex.awtUnsafe.TargetAWT;
+import consulo.language.icon.IconDescriptorUpdaters;
 
 /**
  * User: anna

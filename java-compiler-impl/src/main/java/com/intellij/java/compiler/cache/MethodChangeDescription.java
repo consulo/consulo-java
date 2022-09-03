@@ -19,8 +19,8 @@ import com.intellij.java.compiler.classParsing.ConstantValue;
 import com.intellij.java.compiler.classParsing.GenericMethodSignature;
 import com.intellij.java.compiler.classParsing.MethodInfo;
 import com.intellij.java.compiler.classParsing.SignatureParsingException;
-import com.intellij.compiler.make.CacheCorruptedException;
-import com.intellij.compiler.make.CacheUtils;
+import consulo.compiler.CacheCorruptedException;
+import consulo.ide.impl.idea.compiler.make.CacheUtils;
 import com.intellij.java.util.cls.ClsUtil;
 
 import java.util.Arrays;

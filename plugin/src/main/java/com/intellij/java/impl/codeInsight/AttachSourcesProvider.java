@@ -20,10 +20,10 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.openapi.extensions.ExtensionPointName;
-import com.intellij.openapi.roots.LibraryOrderEntry;
-import com.intellij.openapi.util.ActionCallback;
-import com.intellij.psi.PsiFile;
+import consulo.component.extension.ExtensionPointName;
+import consulo.module.content.layer.orderEntry.LibraryOrderEntry;
+import consulo.util.concurrent.ActionCallback;
+import consulo.language.psi.PsiFile;
 
 public interface AttachSourcesProvider {
   ExtensionPointName<AttachSourcesProvider> EP_NAME =

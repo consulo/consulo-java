@@ -16,29 +16,26 @@
 
 package com.intellij.java.language.impl.psi.controlFlow;
 
-import com.intellij.openapi.diagnostic.Logger;
+import consulo.logging.Logger;
+
 import javax.annotation.Nonnull;
 
-public abstract class SimpleInstruction extends InstructionBase
-{
-	private static final Logger LOG = Logger.getInstance(SimpleInstruction.class);
+public abstract class SimpleInstruction extends InstructionBase {
+  private static final Logger LOG = Logger.getInstance(SimpleInstruction.class);
 
-	@Override
-	public int nNext()
-	{
-		return 1;
-	}
+  @Override
+  public int nNext() {
+    return 1;
+  }
 
-	@Override
-	public int getNext(int index, int no)
-	{
-		LOG.assertTrue(no == 0);
-		return index + 1;
-	}
+  @Override
+  public int getNext(int index, int no) {
+    LOG.assertTrue(no == 0);
+    return index + 1;
+  }
 
-	@Override
-	public void accept(@Nonnull ControlFlowInstructionVisitor visitor, int offset, int nextOffset)
-	{
-		visitor.visitSimpleInstruction(this, offset, nextOffset);
-	}
+  @Override
+  public void accept(@Nonnull ControlFlowInstructionVisitor visitor, int offset, int nextOffset) {
+    visitor.visitSimpleInstruction(this, offset, nextOffset);
+  }
 }

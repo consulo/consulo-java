@@ -16,18 +16,18 @@
 package com.intellij.java.impl.refactoring.introduceField;
 
 import com.intellij.java.language.codeInsight.TestFrameworks;
-import com.intellij.ide.util.PropertiesComponent;
+import consulo.ide.impl.idea.ide.util.PropertiesComponent;
 import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
-import com.intellij.psi.search.LocalSearchScope;
-import com.intellij.psi.search.searches.ReferencesSearch;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.scope.LocalSearchScope;
+import consulo.language.psi.search.ReferencesSearch;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.RefactoringBundle;
 import com.intellij.java.impl.refactoring.ui.TypeSelectorManager;
-import com.intellij.ui.NonFocusableCheckBox;
-import com.intellij.ui.StateRestoringCheckBox;
-import com.intellij.util.Processor;
+import consulo.ui.ex.awt.NonFocusableCheckBox;
+import consulo.ui.ex.awt.StateRestoringCheckBox;
+import consulo.application.util.function.Processor;
 import consulo.logging.Logger;
 import org.jetbrains.annotations.TestOnly;
 

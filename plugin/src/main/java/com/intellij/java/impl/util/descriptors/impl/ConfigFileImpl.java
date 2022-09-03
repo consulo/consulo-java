@@ -3,17 +3,18 @@ package com.intellij.java.impl.util.descriptors.impl;
 import com.intellij.java.impl.util.descriptors.ConfigFile;
 import com.intellij.java.impl.util.descriptors.ConfigFileInfo;
 import com.intellij.java.impl.util.descriptors.ConfigFileMetaData;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.openapi.vfs.pointers.VirtualFilePointer;
-import com.intellij.openapi.vfs.pointers.VirtualFilePointerListener;
-import com.intellij.openapi.vfs.pointers.VirtualFilePointerManager;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiManager;
+import consulo.project.Project;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.virtualFileSystem.pointer.VirtualFilePointer;
+import consulo.virtualFileSystem.pointer.VirtualFilePointerListener;
+import consulo.virtualFileSystem.pointer.VirtualFilePointerManager;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiManager;
 import com.intellij.psi.xml.XmlDocument;
 import com.intellij.psi.xml.XmlFile;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.lang.ref.Reference;
 import java.lang.ref.SoftReference;
 
@@ -63,13 +64,13 @@ public class ConfigFileImpl implements ConfigFile {
   }
 
   @Override
-  @javax.annotation.Nullable
+  @Nullable
   public VirtualFile getVirtualFile() {
     return myFilePointer.isValid() ? myFilePointer.getFile() : null;
   }
 
   @Override
-  @javax.annotation.Nullable
+  @Nullable
   public PsiFile getPsiFile() {
     Reference<PsiFile> ref = myPsiFile;
     PsiFile psiFile = ref == null ? null : ref.get();
@@ -89,7 +90,7 @@ public class ConfigFileImpl implements ConfigFile {
   }
 
   @Override
-  @javax.annotation.Nullable
+  @Nullable
   public XmlFile getXmlFile() {
     final PsiFile file = getPsiFile();
     return file instanceof XmlFile ? (XmlFile) file : null;

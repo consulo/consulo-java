@@ -18,18 +18,21 @@ package com.intellij.java.language.jvm.types;
 import javax.annotation.Nonnull;
 import com.intellij.java.language.jvm.JvmAnnotation;
 
+import java.lang.reflect.AnnotatedType;
+import java.lang.reflect.Type;
+
 /**
  * Represents an type which is supported by JVM.
  *
- * @see java.lang.reflect.Type
- * @see java.lang.reflect.AnnotatedType
+ * @see Type
+ * @see AnnotatedType
  */
 public interface JvmType
 {
 
 	/**
 	 * @return type annotations
-	 * @see java.lang.reflect.AnnotatedType#getAnnotations
+	 * @see AnnotatedType#getAnnotations
 	 */
 	@Nonnull
 	JvmAnnotation[] getAnnotations();

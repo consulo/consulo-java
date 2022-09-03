@@ -15,18 +15,18 @@
  */
 package com.intellij.java.impl.application.options;
 
-import com.intellij.application.options.codeStyle.CommenterForm;
-import com.intellij.codeInsight.daemon.DaemonCodeAnalyzer;
+import consulo.application.ApplicationBundle;
+import consulo.configurable.Configurable;
+import consulo.ide.impl.idea.application.options.codeStyle.CommenterForm;
+import consulo.language.editor.DaemonCodeAnalyzer;
 import com.intellij.java.language.JavaLanguage;
-import com.intellij.openapi.application.ApplicationBundle;
-import com.intellij.openapi.options.Configurable;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.project.ProjectManager;
-import com.intellij.psi.codeStyle.CodeStyleSettings;
+import consulo.project.Project;
+import consulo.project.ProjectManager;
+import consulo.language.codeStyle.CodeStyleSettings;
 import com.intellij.java.impl.psi.codeStyle.JavaCodeStyleSettings;
-import com.intellij.ui.ToolbarDecorator;
-import com.intellij.ui.components.JBList;
-import com.intellij.util.ui.JBUI;
+import consulo.ui.ex.awt.ToolbarDecorator;
+import consulo.ui.ex.awt.JBList;
+import consulo.ui.ex.awt.JBUI;
 import consulo.ui.annotation.RequiredUIAccess;
 
 import javax.swing.*;

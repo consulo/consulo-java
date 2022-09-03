@@ -30,26 +30,26 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import com.intellij.java.compiler.cache.Cache;
 import com.intellij.java.compiler.cache.JavaDependencyCache;
-import com.intellij.compiler.impl.ModuleChunk;
+import consulo.compiler.CacheCorruptedException;
+import consulo.ide.impl.idea.compiler.impl.ModuleChunk;
 import com.intellij.java.compiler.impl.javaCompiler.FileObject;
 import com.intellij.java.compiler.impl.javaCompiler.JavaCompiler;
 import com.intellij.compiler.instrumentation.InstrumentationClassFinder;
-import com.intellij.compiler.make.CacheCorruptedException;
-import com.intellij.openapi.compiler.ClassInstrumentingCompiler;
-import com.intellij.openapi.compiler.CompileContext;
-import com.intellij.openapi.compiler.CompileScope;
-import com.intellij.openapi.compiler.CompilerMessageCategory;
-import com.intellij.openapi.compiler.TimestampValidityState;
-import com.intellij.openapi.compiler.ValidityState;
-import com.intellij.openapi.compiler.ex.CompileContextEx;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleUtilCore;
-import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.openapi.vfs.VfsUtil;
-import com.intellij.openapi.vfs.VfsUtilCore;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.util.Chunk;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.compiler.ClassInstrumentingCompiler;
+import consulo.compiler.CompileContext;
+import consulo.compiler.scope.CompileScope;
+import consulo.compiler.CompilerMessageCategory;
+import consulo.compiler.TimestampValidityState;
+import consulo.compiler.ValidityState;
+import consulo.ide.impl.compiler.CompileContextEx;
+import consulo.module.Module;
+import consulo.language.util.ModuleUtilCore;
+import consulo.ide.impl.idea.openapi.util.io.FileUtil;
+import consulo.ide.impl.idea.openapi.vfs.VfsUtil;
+import consulo.ide.impl.idea.openapi.vfs.VfsUtilCore;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.util.collection.Chunk;
+import consulo.util.collection.ContainerUtil;
 import consulo.compiler.ModuleCompilerPathsManager;
 import consulo.java.compiler.JavaCompilerUtil;
 import consulo.java.language.module.extension.JavaModuleExtension;
@@ -154,7 +154,7 @@ public class JavaBytecodeProcessorCompiler implements ClassInstrumentingCompiler
 	@Override
 	public ProcessingItem[] process(CompileContext compileContext, ProcessingItem[] processingItems)
 	{
-		JavaDependencyCache dependencyCache = ((CompileContextEx) compileContext).getDependencyCache().findChild(JavaDependencyCache.class);
+		JavaDependencyCache dependencyCache = ((consulo.ide.impl.compiler.CompileContextEx) compileContext).getDependencyCache().findChild(JavaDependencyCache.class);
 
 		final Cache cache;
 		try

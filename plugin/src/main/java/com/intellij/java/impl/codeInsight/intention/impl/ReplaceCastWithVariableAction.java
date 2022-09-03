@@ -16,19 +16,20 @@
 package com.intellij.java.impl.codeInsight.intention.impl;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-import com.intellij.codeInsight.CodeInsightBundle;
+import consulo.language.editor.CodeInsightBundle;
 import com.intellij.java.impl.codeInsight.CodeInsightUtil;
-import com.intellij.codeInsight.intention.PsiElementBaseIntentionAction;
+import consulo.language.editor.intention.PsiElementBaseIntentionAction;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.progress.ProgressIndicatorProvider;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Ref;
-import com.intellij.openapi.util.TextRange;
+import consulo.codeEditor.Editor;
+import consulo.application.progress.ProgressIndicatorProvider;
+import consulo.project.Project;
+import consulo.util.lang.ref.Ref;
+import consulo.document.util.TextRange;
 import com.intellij.psi.*;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
 
 /**
  * @author Danila Ponomarenko
@@ -80,7 +81,7 @@ public class ReplaceCastWithVariableAction extends PsiElementBaseIntentionAction
     toReplace.replace(factory.createExpressionFromText(myReplaceVariableName, toReplace));
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private static PsiLocalVariable findReplacement(@Nonnull PsiMethod method,
                                                   @Nonnull PsiVariable castedVar,
                                                   @Nonnull PsiTypeCastExpression expression) {
@@ -148,7 +149,7 @@ public class ReplaceCastWithVariableAction extends PsiElementBaseIntentionAction
     return result.get() == Boolean.TRUE;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private static PsiLocalVariable getVariable(@Nonnull PsiExpression occurrence) {
     final PsiElement parent = occurrence.getParent();
 

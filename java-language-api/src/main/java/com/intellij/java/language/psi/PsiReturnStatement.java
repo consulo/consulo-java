@@ -16,8 +16,9 @@
 package com.intellij.java.language.psi;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-import com.intellij.util.ArrayFactory;
+import consulo.util.collection.ArrayFactory;
 
 /**
  * Represents a Java <code>return</code> statement.
@@ -41,6 +42,6 @@ public interface PsiReturnStatement extends PsiStatement
 	 *
 	 * @return the return value expression, or null if the statement does not return any value.
 	 */
-	@javax.annotation.Nullable
+	@Nullable
 	PsiExpression getReturnValue();
 }

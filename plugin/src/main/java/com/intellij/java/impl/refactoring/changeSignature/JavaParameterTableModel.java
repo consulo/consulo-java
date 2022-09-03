@@ -15,26 +15,26 @@
  */
 package com.intellij.java.impl.refactoring.changeSignature;
 
-import com.intellij.codeInsight.lookup.LookupElement;
-import com.intellij.codeInsight.lookup.LookupManager;
+import consulo.language.editor.completion.lookup.LookupElement;
+import consulo.language.editor.completion.lookup.LookupManager;
 import com.intellij.java.impl.codeInsight.completion.JavaCompletionUtil;
 import com.intellij.java.impl.refactoring.ui.JavaCodeFragmentTableCellEditor;
 import com.intellij.java.impl.refactoring.util.CanonicalTypes;
 import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiElement;
-import com.intellij.refactoring.changeSignature.ChangeSignatureDialogBase;
-import com.intellij.refactoring.changeSignature.ParameterTableModelBase;
-import com.intellij.refactoring.changeSignature.ParameterTableModelItemBase;
-import com.intellij.refactoring.ui.RefactoringDialog;
-import com.intellij.refactoring.ui.StringTableCellEditor;
-import com.intellij.ui.ColoredTableCellRenderer;
-import com.intellij.ui.EditorTextField;
-import com.intellij.ui.SimpleTextAttributes;
-import com.intellij.util.ui.ColumnInfo;
+import consulo.codeEditor.Editor;
+import consulo.project.Project;
+import consulo.language.psi.PsiElement;
+import consulo.ide.impl.idea.refactoring.changeSignature.ChangeSignatureDialogBase;
+import consulo.ide.impl.idea.refactoring.changeSignature.ParameterTableModelBase;
+import consulo.ide.impl.idea.refactoring.changeSignature.ParameterTableModelItemBase;
+import consulo.language.editor.refactoring.ui.RefactoringDialog;
+import consulo.language.editor.refactoring.ui.StringTableCellEditor;
+import consulo.ui.ex.awt.ColoredTableCellRenderer;
+import consulo.language.editor.ui.awt.EditorTextField;
+import consulo.ui.ex.SimpleTextAttributes;
+import consulo.ui.ex.awt.ColumnInfo;
 
 import javax.annotation.Nullable;
 import javax.swing.*;
@@ -79,7 +79,7 @@ public class JavaParameterTableModel extends ParameterTableModelBase<ParameterIn
   }
 
   @Override
-  protected ParameterTableModelItemBase<ParameterInfoImpl> createRowItem(@javax.annotation.Nullable ParameterInfoImpl parameterInfo) {
+  protected ParameterTableModelItemBase<ParameterInfoImpl> createRowItem(@Nullable ParameterInfoImpl parameterInfo) {
     if (parameterInfo == null) {
       parameterInfo = new ParameterInfoImpl(-1);
     }

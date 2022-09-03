@@ -150,7 +150,7 @@ public class TemplateResource implements Serializable
 		return getMethodBody(template);
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	private static String getMethodBody(String template)
 	{
 		String signature = getMethodSignature(template);

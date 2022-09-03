@@ -1,9 +1,8 @@
 package com.intellij.roots;
 
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.roots.*;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.util.PathsList;
+import consulo.module.Module;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.virtualFileSystem.util.PathsList;
 
 /**
  * @author nik

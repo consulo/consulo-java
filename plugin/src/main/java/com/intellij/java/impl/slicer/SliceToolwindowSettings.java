@@ -18,12 +18,12 @@ package com.intellij.java.impl.slicer;
 import javax.annotation.Nonnull;
 import jakarta.inject.Singleton;
 
-import com.intellij.openapi.components.PersistentStateComponent;
-import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.components.State;
-import com.intellij.openapi.components.Storage;
-import com.intellij.openapi.components.StoragePathMacros;
-import com.intellij.openapi.project.Project;
+import consulo.component.persist.PersistentStateComponent;
+import consulo.ide.ServiceManager;
+import consulo.component.persist.State;
+import consulo.component.persist.Storage;
+import consulo.component.persist.StoragePathMacros;
+import consulo.project.Project;
 
 @Singleton
 @State(

@@ -16,8 +16,8 @@
 package com.intellij.java.language.impl.psi.impl.source.tree;
 
 import com.intellij.java.language.impl.psi.impl.source.javadoc.PsiDocTagValueImpl;
-import com.intellij.psi.impl.source.tree.CompositeElement;
-import com.intellij.psi.tree.IElementType;
+import consulo.language.impl.ast.CompositeElement;
+import consulo.language.ast.IElementType;
 import consulo.java.language.impl.psi.CoreJavaASTCompositeFactory;
 
 import javax.annotation.Nonnull;

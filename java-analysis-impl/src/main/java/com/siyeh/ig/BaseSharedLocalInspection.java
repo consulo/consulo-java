@@ -18,7 +18,7 @@ package com.siyeh.ig;
 import javax.annotation.Nonnull;
 
 import org.jetbrains.annotations.Nls;
-import com.intellij.codeInspection.GlobalInspectionTool;
+import consulo.language.editor.inspection.GlobalInspectionTool;
 
 /**
  * @author Bas Leijdekkers

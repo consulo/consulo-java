@@ -15,20 +15,20 @@
  */
 package com.intellij.java.impl.codeInsight.generation;
 
-import com.intellij.codeInsight.CodeInsightBundle;
-import com.intellij.codeInsight.generation.ClassMember;
-import com.intellij.codeInsight.hint.HintManager;
+import consulo.language.editor.CodeInsightBundle;
+import consulo.ide.impl.idea.codeInsight.generation.ClassMember;
+import consulo.language.editor.hint.HintManager;
 import com.intellij.java.impl.codeInsight.generation.ui.GenerateEqualsWizard;
 import com.intellij.java.language.impl.codeInsight.generation.GenerationInfo;
 import com.intellij.java.language.impl.codeInsight.generation.PsiElementClassMember;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.Messages;
-import com.intellij.openapi.util.Computable;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.util.IncorrectOperationException;
+import consulo.application.ApplicationManager;
+import consulo.codeEditor.Editor;
+import consulo.project.Project;
+import consulo.ui.ex.awt.Messages;
+import consulo.application.util.function.Computable;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.util.IncorrectOperationException;
 import consulo.java.impl.codeInsight.JavaCodeInsightSettings;
 import consulo.logging.Logger;
 

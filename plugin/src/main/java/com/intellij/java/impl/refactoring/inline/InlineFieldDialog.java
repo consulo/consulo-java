@@ -21,10 +21,10 @@ import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiReferenceExpression;
 import com.intellij.java.language.psi.PsiSubstitutor;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
-import com.intellij.openapi.help.HelpManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.refactoring.RefactoringBundle;
-import com.intellij.refactoring.inline.InlineOptionsWithSearchSettingsDialog;
+import consulo.application.HelpManager;
+import consulo.project.Project;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.ide.impl.idea.refactoring.inline.InlineOptionsWithSearchSettingsDialog;
 
 public class InlineFieldDialog extends InlineOptionsWithSearchSettingsDialog {
   public static final String REFACTORING_NAME = RefactoringBundle.message("inline.field.title");

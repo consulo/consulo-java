@@ -16,15 +16,17 @@
 package com.intellij.java.language.psi.util;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.roots.FileIndexFacade;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.*;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.language.content.FileIndexFacade;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.virtualFileSystem.VirtualFile;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.util.collection.Maps;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.*;
 
 public class PsiSuperMethodUtil
@@ -192,7 +194,7 @@ public class PsiSuperMethodUtil
 		return overrideEquivalent;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public static PsiClass correctClassByScope(PsiClass psiClass, final GlobalSearchScope resolveScope)
 	{
 		if(psiClass == null)

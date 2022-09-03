@@ -2,8 +2,8 @@ package com.intellij.java.language.codeInsight;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.openapi.extensions.ExtensionPointName;
-import com.intellij.psi.PsiFile;
+import consulo.component.extension.ExtensionPointName;
+import consulo.language.psi.PsiFile;
 
 /**
  * @author Eugene.Kudelevsky

@@ -15,19 +15,19 @@
  */
 package com.intellij.java.impl.psi.filters.getters;
 
-import com.intellij.codeInsight.TailType;
+import consulo.language.editor.completion.lookup.TailType;
 import com.intellij.codeInsight.completion.*;
-import com.intellij.codeInsight.lookup.LookupElement;
-import com.intellij.codeInsight.lookup.TailTypeDecorator;
+import consulo.language.editor.completion.lookup.LookupElement;
+import consulo.language.editor.completion.lookup.TailTypeDecorator;
 import com.intellij.java.impl.codeInsight.completion.*;
 import com.intellij.java.impl.codeInsight.lookup.VariableLookupItem;
 import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.ast.IElementType;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.util.Consumer;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.ide.impl.idea.util.Consumer;
+import consulo.util.collection.ContainerUtil;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -104,7 +104,7 @@ public class JavaMembersGetter extends MembersGetter {
     }
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private static PsiClass getCalledClass(@Nullable PsiElement call) {
     if (call instanceof PsiMethodCallExpression) {
       for (final JavaResolveResult result : ((PsiMethodCallExpression)call).getMethodExpression().multiResolve(true)) {

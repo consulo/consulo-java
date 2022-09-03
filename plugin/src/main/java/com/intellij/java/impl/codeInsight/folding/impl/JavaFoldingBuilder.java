@@ -23,16 +23,16 @@ import com.intellij.java.impl.codeInsight.ExpectedTypeInfo;
 import com.intellij.java.impl.codeInsight.ExpectedTypesProvider;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.impl.codeInsight.folding.impl.JavaFoldingBuilderBase;
-import com.intellij.openapi.editor.colors.EditorColorsManager;
-import com.intellij.openapi.editor.colors.EditorFontType;
-import com.intellij.openapi.project.Project;
+import consulo.colorScheme.EditorColorsManager;
+import consulo.colorScheme.EditorFontType;
+import consulo.project.Project;
 import com.intellij.java.language.psi.PsiAnonymousClass;
 import com.intellij.java.language.psi.PsiAssignmentExpression;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiNewExpression;
 import com.intellij.java.language.psi.PsiReferenceExpression;
-import com.intellij.psi.codeStyle.CodeStyleSettings;
-import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
+import consulo.language.codeStyle.CodeStyleSettings;
+import consulo.language.codeStyle.CodeStyleSettingsManager;
 import com.intellij.util.FontUtil;
 
 public class JavaFoldingBuilder extends JavaFoldingBuilderBase

@@ -1,6 +1,6 @@
 package com.siyeh.ig.logging;
 
-import com.intellij.codeInspection.LocalInspectionTool;
+import consulo.language.editor.inspection.LocalInspectionTool;
 import com.siyeh.ig.LightInspectionTestCase;
 
 public class StringConcatenationArgumentToLogCallInspectionTest extends LightInspectionTestCase {

@@ -16,7 +16,7 @@
 package com.intellij.java.impl.javadoc;
 
 import com.intellij.java.language.psi.PsiKeyword;
-import com.intellij.util.xmlb.SerializationFilter;
+import consulo.util.xml.serializer.SerializationFilter;
 
 /**
  * @author Eugene Zhuravlev

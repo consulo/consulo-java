@@ -15,14 +15,14 @@
  */
 package com.intellij.java.impl.application.options;
 
-import com.intellij.application.options.IndentOptionsEditor;
+import consulo.language.codeStyle.setting.IndentOptionsEditor;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.openapi.fileTypes.FileType;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
-import com.intellij.psi.codeStyle.FileTypeIndentOptionsProvider;
+import consulo.virtualFileSystem.fileType.FileType;
+import consulo.language.psi.PsiFile;
+import consulo.language.codeStyle.CommonCodeStyleSettings;
+import consulo.language.codeStyle.setting.FileTypeIndentOptionsProvider;
 import org.jetbrains.annotations.NonNls;
 
 /**

@@ -15,109 +15,92 @@
  */
 package com.intellij.java.language.impl.psi.impl.java.stubs;
 
-import java.io.IOException;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-
-import com.intellij.lang.ASTNode;
-import com.intellij.lang.LighterAST;
-import com.intellij.lang.LighterASTNode;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.java.language.psi.PsiPackageAccessibilityStatement;
 import com.intellij.java.language.impl.psi.impl.java.stubs.impl.PsiPackageAccessibilityStatementStubImpl;
 import com.intellij.java.language.impl.psi.impl.source.PackageAccessibilityStatementElement;
 import com.intellij.java.language.impl.psi.impl.source.PsiPackageAccessibilityStatementImpl;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaSourceUtil;
-import com.intellij.psi.stubs.IndexSink;
-import com.intellij.psi.stubs.StubElement;
-import com.intellij.psi.stubs.StubInputStream;
-import com.intellij.psi.stubs.StubOutputStream;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.util.containers.ContainerUtil;
-import com.intellij.util.io.StringRef;
+import com.intellij.java.language.psi.PsiPackageAccessibilityStatement;
+import consulo.index.io.StringRef;
+import consulo.language.ast.ASTNode;
+import consulo.language.ast.IElementType;
+import consulo.language.ast.LighterAST;
+import consulo.language.ast.LighterASTNode;
+import consulo.language.psi.stub.IndexSink;
+import consulo.language.psi.stub.StubElement;
+import consulo.language.psi.stub.StubInputStream;
+import consulo.language.psi.stub.StubOutputStream;
+import consulo.util.collection.SmartList;
+import consulo.util.lang.StringUtil;
 
-public class JavaPackageAccessibilityStatementElementType extends JavaStubElementType<PsiPackageAccessibilityStatementStub, PsiPackageAccessibilityStatement>
-{
-	public JavaPackageAccessibilityStatementElementType(@Nonnull String debugName)
-	{
-		super(debugName);
-	}
+import javax.annotation.Nonnull;
+import java.io.IOException;
+import java.util.List;
 
-	@Override
-	public PsiPackageAccessibilityStatement createPsi(@Nonnull PsiPackageAccessibilityStatementStub stub)
-	{
-		return getPsiFactory(stub).createPackageAccessibilityStatement(stub);
-	}
+public class JavaPackageAccessibilityStatementElementType extends JavaStubElementType<PsiPackageAccessibilityStatementStub, PsiPackageAccessibilityStatement> {
+  public JavaPackageAccessibilityStatementElementType(@Nonnull String debugName) {
+    super(debugName);
+  }
 
-	@Override
-	public PsiPackageAccessibilityStatement createPsi(@Nonnull ASTNode node)
-	{
-		return new PsiPackageAccessibilityStatementImpl(node);
-	}
+  @Override
+  public PsiPackageAccessibilityStatement createPsi(@Nonnull PsiPackageAccessibilityStatementStub stub) {
+    return getPsiFactory(stub).createPackageAccessibilityStatement(stub);
+  }
 
-	@Nonnull
-	@Override
-	public ASTNode createCompositeNode()
-	{
-		return new PackageAccessibilityStatementElement(this);
-	}
+  @Override
+  public PsiPackageAccessibilityStatement createPsi(@Nonnull ASTNode node) {
+    return new PsiPackageAccessibilityStatementImpl(node);
+  }
 
-	@Override
-	public PsiPackageAccessibilityStatementStub createStub(LighterAST tree, LighterASTNode node, StubElement parentStub)
-	{
-		String refText = null;
-		List<String> to = ContainerUtil.newSmartList();
+  @Nonnull
+  @Override
+  public ASTNode createCompositeNode() {
+    return new PackageAccessibilityStatementElement(this);
+  }
 
-		for(LighterASTNode child : tree.getChildren(node))
-		{
-			IElementType type = child.getTokenType();
-			if(type == JavaElementType.JAVA_CODE_REFERENCE)
-			{
-				refText = JavaSourceUtil.getReferenceText(tree, child);
-			}
-			else if(type == JavaElementType.MODULE_REFERENCE)
-			{
-				to.add(JavaSourceUtil.getReferenceText(tree, child));
-			}
-		}
+  @Override
+  public PsiPackageAccessibilityStatementStub createStub(LighterAST tree, LighterASTNode node, StubElement parentStub) {
+    String refText = null;
+    List<String> to = new SmartList<>();
 
-		return new PsiPackageAccessibilityStatementStubImpl(parentStub, this, refText, to);
-	}
+    for (LighterASTNode child : tree.getChildren(node)) {
+      IElementType type = child.getTokenType();
+      if (type == JavaElementType.JAVA_CODE_REFERENCE) {
+        refText = JavaSourceUtil.getReferenceText(tree, child);
+      } else if (type == JavaElementType.MODULE_REFERENCE) {
+        to.add(JavaSourceUtil.getReferenceText(tree, child));
+      }
+    }
 
-	@Override
-	public void serialize(@Nonnull PsiPackageAccessibilityStatementStub stub, @Nonnull StubOutputStream dataStream) throws IOException
-	{
-		dataStream.writeName(stub.getPackageName());
-		dataStream.writeUTFFast(StringUtil.join(stub.getTargets(), "/"));
-	}
+    return new PsiPackageAccessibilityStatementStubImpl(parentStub, this, refText, to);
+  }
 
-	@Nonnull
-	@Override
-	public PsiPackageAccessibilityStatementStub deserialize(@Nonnull StubInputStream dataStream, StubElement parentStub) throws IOException
-	{
-		String packageName = StringRef.toString(dataStream.readName());
-		List<String> targets = StringUtil.split(dataStream.readUTFFast(), "/");
-		return new PsiPackageAccessibilityStatementStubImpl(parentStub, this, packageName, targets);
-	}
+  @Override
+  public void serialize(@Nonnull PsiPackageAccessibilityStatementStub stub, @Nonnull StubOutputStream dataStream) throws IOException {
+    dataStream.writeName(stub.getPackageName());
+    dataStream.writeUTFFast(StringUtil.join(stub.getTargets(), "/"));
+  }
 
-	@Override
-	public void indexStub(@Nonnull PsiPackageAccessibilityStatementStub stub, @Nonnull IndexSink sink)
-	{
-	}
+  @Nonnull
+  @Override
+  public PsiPackageAccessibilityStatementStub deserialize(@Nonnull StubInputStream dataStream, StubElement parentStub) throws IOException {
+    String packageName = StringRef.toString(dataStream.readName());
+    List<String> targets = StringUtil.split(dataStream.readUTFFast(), "/");
+    return new PsiPackageAccessibilityStatementStubImpl(parentStub, this, packageName, targets);
+  }
 
-	@Nonnull
-	public static PsiPackageAccessibilityStatement.Role typeToRole(@Nonnull IElementType type)
-	{
-		if(type == JavaElementType.EXPORTS_STATEMENT)
-		{
-			return PsiPackageAccessibilityStatement.Role.EXPORTS;
-		}
-		if(type == JavaElementType.OPENS_STATEMENT)
-		{
-			return PsiPackageAccessibilityStatement.Role.OPENS;
-		}
-		throw new IllegalArgumentException("Unknown type: " + type);
-	}
+  @Override
+  public void indexStub(@Nonnull PsiPackageAccessibilityStatementStub stub, @Nonnull IndexSink sink) {
+  }
+
+  @Nonnull
+  public static PsiPackageAccessibilityStatement.Role typeToRole(@Nonnull IElementType type) {
+    if (type == JavaElementType.EXPORTS_STATEMENT) {
+      return PsiPackageAccessibilityStatement.Role.EXPORTS;
+    }
+    if (type == JavaElementType.OPENS_STATEMENT) {
+      return PsiPackageAccessibilityStatement.Role.OPENS;
+    }
+    throw new IllegalArgumentException("Unknown type: " + type);
+  }
 }

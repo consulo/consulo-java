@@ -15,11 +15,11 @@
  */
 package com.intellij.java.impl.codeInsight.completion;
 
-import com.intellij.psi.util.proximity.ProximityStatistician;
-import com.intellij.psi.util.ProximityLocation;
-import com.intellij.psi.statistics.StatisticsInfo;
+import consulo.ide.impl.psi.util.proximity.ProximityStatistician;
+import consulo.ide.impl.psi.util.ProximityLocation;
+import consulo.ide.impl.psi.statistics.StatisticsInfo;
 import com.intellij.java.impl.psi.statistics.JavaStatisticsManager;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiMember;
 
 /**
@@ -27,7 +27,7 @@ import com.intellij.java.language.psi.PsiMember;
  */
 public class JavaProximityStatistician extends ProximityStatistician{
   @Override
-  public StatisticsInfo serialize(final PsiElement element, final ProximityLocation location) {
+  public consulo.ide.impl.psi.statistics.StatisticsInfo serialize(final PsiElement element, final ProximityLocation location) {
     return element instanceof PsiMember ? JavaStatisticsManager.createInfo(null, (PsiMember)element) : null;
   }
 }

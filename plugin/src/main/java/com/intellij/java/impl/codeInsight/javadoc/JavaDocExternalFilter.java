@@ -20,22 +20,23 @@ import java.util.regex.Pattern;
 
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-import com.intellij.codeInsight.documentation.AbstractExternalFilter;
-import com.intellij.codeInsight.documentation.DocumentationManager;
-import com.intellij.codeInsight.documentation.DocumentationManagerProtocol;
-import com.intellij.codeInsight.documentation.PlatformDocumentationUtil;
-import com.intellij.ide.BrowserUtil;
+import consulo.ide.impl.idea.codeInsight.documentation.AbstractExternalFilter;
+import consulo.ide.impl.idea.codeInsight.documentation.DocumentationManager;
+import consulo.language.editor.documentation.DocumentationManagerProtocol;
+import consulo.ide.impl.idea.codeInsight.documentation.PlatformDocumentationUtil;
+import consulo.ide.impl.idea.ide.BrowserUtil;
 import com.intellij.java.impl.lang.java.JavaDocumentationProvider;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.NullableComputable;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.application.ApplicationManager;
+import consulo.project.Project;
+import consulo.ide.impl.idea.openapi.util.NullableComputable;
+import consulo.util.lang.StringUtil;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.language.psi.scope.GlobalSearchScope;
 
 /**
  * Created by IntelliJ IDEA.
@@ -86,7 +87,7 @@ public class JavaDocExternalFilter extends AbstractExternalFilter
 				@Override
 				protected String convertReference(String root, String href)
 				{
-					if(BrowserUtil.isAbsoluteURL(href))
+					if(consulo.ide.impl.idea.ide.BrowserUtil.isAbsoluteURL(href))
 					{
 						return href;
 					}
@@ -128,7 +129,7 @@ public class JavaDocExternalFilter extends AbstractExternalFilter
 		return myReferenceConvertors;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public static String filterInternalDocInfo(String text)
 	{
 		if(text == null)
@@ -140,7 +141,7 @@ public class JavaDocExternalFilter extends AbstractExternalFilter
 	}
 
 	@Override
-	@javax.annotation.Nullable
+	@Nullable
 	public String getExternalDocInfoForElement(final String docURL, final PsiElement element) throws Exception
 	{
 		String externalDoc = super.getExternalDocInfoForElement(docURL, element);
@@ -152,7 +153,7 @@ public class JavaDocExternalFilter extends AbstractExternalFilter
 																								   NullableComputable<String>()
 				{
 					@Override
-					@javax.annotation.Nullable
+					@Nullable
 					public String compute()
 					{
 						PsiClass aClass = ((PsiMethod) element).getContainingClass();

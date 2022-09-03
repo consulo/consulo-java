@@ -18,7 +18,7 @@ package consulo.java.debugger.impl.settings;
 
 import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.impl.settings.ThreadsViewSettings;
-import com.intellij.openapi.options.Configurable;
+import consulo.configurable.Configurable;
 import consulo.disposer.Disposable;
 import consulo.localize.LocalizeValue;
 import consulo.options.SimpleConfigurableByProperties;

@@ -16,6 +16,7 @@
 package com.intellij.java.debugger.impl.memory.utils;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.intellij.java.debugger.impl.engine.JavaValue;
 import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
@@ -30,7 +31,7 @@ public class InstanceJavaValue extends JavaValue
 		super(null, valueDescriptor, evaluationContext, nodeManager, false);
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	@Override
 	public String getEvaluationExpression()
 	{

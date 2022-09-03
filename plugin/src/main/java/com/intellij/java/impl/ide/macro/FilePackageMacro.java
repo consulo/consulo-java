@@ -15,14 +15,14 @@
  */
 package com.intellij.java.impl.ide.macro;
 
-import com.intellij.ide.IdeBundle;
-import com.intellij.ide.macro.Macro;
+import consulo.ide.IdeBundle;
+import consulo.pathMacro.Macro;
 import com.intellij.java.language.psi.JavaDirectoryService;
 import com.intellij.java.language.psi.PsiJavaPackage;
-import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.actionSystem.LangDataKeys;
-import com.intellij.psi.PsiDirectory;
-import com.intellij.psi.PsiFile;
+import consulo.dataContext.DataContext;
+import consulo.language.editor.LangDataKeys;
+import consulo.language.psi.PsiDirectory;
+import consulo.language.psi.PsiFile;
 
 import javax.annotation.Nullable;
 

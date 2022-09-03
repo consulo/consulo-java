@@ -17,7 +17,7 @@ package com.intellij.java.impl.ig.naming;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
-import com.intellij.util.ui.CheckBox;
+import consulo.ui.CheckBox;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;

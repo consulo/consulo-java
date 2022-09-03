@@ -19,7 +19,7 @@ import com.intellij.java.language.impl.psi.scope.processor.ConflictFilterProcess
 import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
 import com.intellij.java.language.impl.psi.impl.PsiImplUtil;
-import com.intellij.psi.scope.BaseScopeProcessor;
+import consulo.language.psi.resolve.BaseScopeProcessor;
 import com.intellij.java.language.psi.util.MethodSignature;
 import com.intellij.java.language.psi.util.PsiUtil;
 

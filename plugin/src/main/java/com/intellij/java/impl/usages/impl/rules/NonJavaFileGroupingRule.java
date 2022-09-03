@@ -17,17 +17,17 @@ package com.intellij.java.impl.usages.impl.rules;
 
 import com.intellij.java.language.psi.PsiJavaFile;
 import com.intellij.java.language.psi.ServerPageFile;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiFile;
-import com.intellij.usages.Usage;
-import com.intellij.usages.UsageGroup;
-import com.intellij.usages.UsageTarget;
-import com.intellij.usages.impl.rules.FileGroupingRule;
+import consulo.project.Project;
+import consulo.language.psi.PsiFile;
+import consulo.usage.Usage;
+import consulo.usage.UsageGroup;
+import consulo.usage.UsageTarget;
+import consulo.ide.impl.idea.usages.impl.rules.FileGroupingRule;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class NonJavaFileGroupingRule extends FileGroupingRule {
+public class NonJavaFileGroupingRule extends consulo.ide.impl.idea.usages.impl.rules.FileGroupingRule {
   public NonJavaFileGroupingRule(Project project) {
     super(project);
   }

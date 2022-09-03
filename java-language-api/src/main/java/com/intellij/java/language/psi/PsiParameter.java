@@ -16,8 +16,9 @@
 package com.intellij.java.language.psi;
 
 import com.intellij.java.language.jvm.JvmParameter;
-import com.intellij.psi.PsiElement;
-import com.intellij.util.ArrayFactory;
+import consulo.language.psi.NavigatablePsiElement;
+import consulo.language.psi.PsiElement;
+import consulo.util.collection.ArrayFactory;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -25,7 +26,7 @@ import javax.annotation.Nullable;
 /**
  * Represents the parameter of a Java method, foreach (enhanced for) statement or catch block.
  */
-public interface PsiParameter extends PsiVariable, JvmParameter, PsiJvmModifiersOwner {
+public interface PsiParameter extends PsiVariable, JvmParameter, PsiJvmModifiersOwner, NavigatablePsiElement {
   /**
    * The empty array of PSI parameters which can be reused to avoid unnecessary allocations.
    */

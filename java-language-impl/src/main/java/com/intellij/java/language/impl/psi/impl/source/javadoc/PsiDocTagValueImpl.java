@@ -15,11 +15,11 @@
  */
 package com.intellij.java.language.impl.psi.impl.source.javadoc;
 
-import com.intellij.psi.PsiReference;
+import consulo.language.psi.PsiReference;
 import com.intellij.java.language.psi.javadoc.JavadocManager;
 import com.intellij.java.language.psi.javadoc.JavadocTagInfo;
 import com.intellij.java.language.psi.javadoc.PsiDocTag;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 
 /**
  * @author mike

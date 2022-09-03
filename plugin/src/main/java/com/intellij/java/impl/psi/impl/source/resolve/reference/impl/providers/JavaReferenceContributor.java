@@ -3,10 +3,10 @@ package com.intellij.java.impl.psi.impl.source.resolve.reference.impl.providers;
 import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.impl.codeInspection.i18n.JavaI18nUtil;
 import com.intellij.java.language.psi.PsiLiteralExpression;
-import com.intellij.patterns.PlatformPatterns;
+import consulo.language.pattern.PlatformPatterns;
 import com.intellij.psi.*;
-import com.intellij.psi.filters.ElementFilter;
-import com.intellij.psi.filters.position.FilterPattern;
+import consulo.language.psi.filter.ElementFilter;
+import consulo.language.pattern.FilterPattern;
 
 import java.util.HashMap;
 import java.util.Map;

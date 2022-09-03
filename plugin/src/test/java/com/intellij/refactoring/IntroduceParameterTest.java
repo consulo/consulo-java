@@ -18,15 +18,16 @@ import consulo.util.collection.primitive.ints.IntList;
 import java.util.List;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import consulo.util.collection.primitive.ints.IntLists;
 import org.jetbrains.annotations.NonNls;
 import com.intellij.JavaTestUtil;
 import com.intellij.java.impl.codeInsight.CodeInsightUtil;
-import com.intellij.openapi.actionSystem.DataContext;
+import consulo.dataContext.DataContext;
 import consulo.util.dataholder.Key;
 import com.intellij.java.language.LanguageLevel;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiLocalVariable;
 import com.intellij.java.language.psi.PsiMethod;
@@ -413,7 +414,7 @@ public abstract class IntroduceParameterTest extends LightRefactoringTestCase
 			myEditor.getSettings().setVariableInplaceRenameEnabled(false);
 			new IntroduceParameterHandler().invoke(getProject(), myEditor, myFile, new DataContext()
 			{
-				@javax.annotation.Nullable
+				@Nullable
 				@Override
 				public <T> T getData(@Nonnull Key<T> key)
 				{

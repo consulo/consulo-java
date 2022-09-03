@@ -20,8 +20,8 @@ import javax.annotation.Nullable;
 import com.intellij.java.debugger.PositionManager;
 import com.intellij.java.debugger.engine.evaluation.EvaluationContext;
 import com.intellij.java.debugger.impl.jdi.StackFrameProxyImpl;
-import com.intellij.util.ThreeState;
-import com.intellij.xdebugger.frame.XStackFrame;
+import consulo.execution.debug.frame.XStackFrame;
+import consulo.util.lang.ThreeState;
 import consulo.internal.com.sun.jdi.Location;
 
 public abstract class PositionManagerEx implements PositionManager

@@ -15,19 +15,23 @@
  */
 package com.intellij.java.language.impl.psi.impl.source.tree.java;
 
-import javax.annotation.Nonnull;
-
-import com.intellij.java.language.impl.psi.impl.source.tree.ChildRole;
-import com.intellij.lang.ASTNode;
-import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.java.language.impl.psi.impl.PsiImplUtil;
 import com.intellij.java.language.impl.psi.impl.source.Constants;
-import com.intellij.psi.impl.source.tree.*;
-import com.intellij.psi.tree.ChildRoleBase;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.util.CharTable;
-import com.intellij.util.IncorrectOperationException;
+import com.intellij.java.language.impl.psi.impl.source.tree.ChildRole;
+import consulo.language.ast.ASTNode;
+import consulo.language.ast.ChildRoleBase;
+import consulo.language.ast.IElementType;
+import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.impl.ast.CompositeElement;
+import consulo.language.impl.ast.Factory;
+import consulo.language.impl.ast.SharedImplUtil;
+import consulo.language.impl.ast.TreeElement;
+import consulo.language.util.CharTable;
+import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class ParameterListElement extends CompositeElement implements Constants {
   private static final Logger LOG = Logger.getInstance(ParameterListElement.class);
@@ -42,8 +46,7 @@ public class ParameterListElement extends CompositeElement implements Constants 
       if (before == null || before.booleanValue()) {
         anchor = findChildByRole(ChildRole.RPARENTH);
         before = Boolean.TRUE;
-      }
-      else {
+      } else {
         anchor = findChildByRole(ChildRole.LPARENTH);
         before = Boolean.FALSE;
       }
@@ -51,7 +54,7 @@ public class ParameterListElement extends CompositeElement implements Constants 
     TreeElement firstAdded = super.addInternal(first, last, anchor, before);
     if (first == last && first.getElementType() == PARAMETER) {
       final CharTable treeCharTab = SharedImplUtil.findCharTableByTree(this);
-      for (ASTNode child = ((ASTNode)first).getTreeNext(); child != null; child = child.getTreeNext()) {
+      for (ASTNode child = ((ASTNode) first).getTreeNext(); child != null; child = child.getTreeNext()) {
         if (child.getElementType() == COMMA) break;
         if (child.getElementType() == PARAMETER) {
           TreeElement comma = Factory.createSingleLeafElement(COMMA, ",", 0, 1, treeCharTab, getManager());
@@ -59,7 +62,7 @@ public class ParameterListElement extends CompositeElement implements Constants 
           break;
         }
       }
-      for (ASTNode child = ((ASTNode)first).getTreePrev(); child != null; child = child.getTreePrev()) {
+      for (ASTNode child = ((ASTNode) first).getTreePrev(); child != null; child = child.getTreePrev()) {
         if (child.getElementType() == COMMA) break;
         if (child.getElementType() == PARAMETER) {
           TreeElement comma = Factory.createSingleLeafElement(COMMA, ",", 0, 1, treeCharTab, getManager());
@@ -72,8 +75,7 @@ public class ParameterListElement extends CompositeElement implements Constants 
     //todo[max] hack?
     try {
       CodeStyleManager.getInstance(getManager().getProject()).reformat(getPsi());
-    }
-    catch (IncorrectOperationException e) {
+    } catch (IncorrectOperationException e) {
       LOG.error(e);
     }
     return firstAdded;
@@ -87,8 +89,7 @@ public class ParameterListElement extends CompositeElement implements Constants 
       ASTNode next = PsiImplUtil.skipWhitespaceAndComments(child.getTreeNext());
       if (next != null && next.getElementType() == COMMA) {
         deleteChildInternal(next);
-      }
-      else {
+      } else {
         ASTNode prev = PsiImplUtil.skipWhitespaceAndCommentsBack(child.getTreePrev());
         if (prev != null && prev.getElementType() == COMMA) {
           deleteChildInternal(prev);
@@ -106,7 +107,7 @@ public class ParameterListElement extends CompositeElement implements Constants 
       if (oldLastNodeInsideParens.getElementType() != WHITE_SPACE) {
         deleteChildInternal(newLastNodeInsideParens);
       } else {
-        replaceChild(newLastNodeInsideParens, (ASTNode)oldLastNodeInsideParens.clone());
+        replaceChild(newLastNodeInsideParens, (ASTNode) oldLastNodeInsideParens.clone());
       }
     }
 
@@ -115,15 +116,14 @@ public class ParameterListElement extends CompositeElement implements Constants 
       if (oldFirstNodeInsideParens == null || oldFirstNodeInsideParens.getElementType() != WHITE_SPACE) {
         deleteChildInternal(newFirstNodeInsideParens);
       } else {
-        replaceChild(newFirstNodeInsideParens, (ASTNode)oldFirstNodeInsideParens.clone());
+        replaceChild(newFirstNodeInsideParens, (ASTNode) oldFirstNodeInsideParens.clone());
       }
     }
 
     //todo[max] hack?
     try {
       CodeStyleManager.getInstance(getManager().getProject()).reformat(getPsi());
-    }
-    catch (IncorrectOperationException e) {
+    } catch (IncorrectOperationException e) {
       LOG.error(e);
     }
   }
@@ -138,16 +138,14 @@ public class ParameterListElement extends CompositeElement implements Constants 
       case ChildRole.LPARENTH:
         if (getFirstChildNode().getElementType() == LPARENTH) {
           return getFirstChildNode();
-        }
-        else {
+        } else {
           return null;
         }
 
       case ChildRole.RPARENTH:
         if (getLastChildNode().getElementType() == RPARENTH) {
           return getLastChildNode();
-        }
-        else {
+        } else {
           return null;
         }
     }
@@ -159,34 +157,30 @@ public class ParameterListElement extends CompositeElement implements Constants 
     IElementType i = child.getElementType();
     if (i == PARAMETER) {
       return ChildRole.PARAMETER;
-    }
-    else if (i == COMMA) {
+    } else if (i == COMMA) {
       return ChildRole.COMMA;
-    }
-    else if (i == LPARENTH) {
+    } else if (i == LPARENTH) {
       return getChildRole(child, ChildRole.LPARENTH);
-    }
-    else if (i == RPARENTH) {
+    } else if (i == RPARENTH) {
       return getChildRole(child, ChildRole.RPARENTH);
-    }
-    else {
+    } else {
       return ChildRoleBase.NONE;
     }
   }
 
   /**
-   * @return    last node before closing right paren if possible; <code>null</code> otherwise
+   * @return last node before closing right paren if possible; <code>null</code> otherwise
    */
-  @javax.annotation.Nullable
+  @Nullable
   private TreeElement getLastNodeInsideParens() {
     TreeElement lastNode = getLastChildNode();
     return lastNode.getElementType() == RPARENTH ? lastNode.getTreePrev() : null;
   }
 
-   /**
-   * @return    first node after opening left paren if possible; <code>null</code> otherwise
+  /**
+   * @return first node after opening left paren if possible; <code>null</code> otherwise
    */
-  @javax.annotation.Nullable
+  @Nullable
   private TreeElement getFirstNodeInsideParens() {
     TreeElement firstNode = getFirstChildNode();
     return firstNode.getElementType() == LPARENTH ? firstNode.getTreeNext() : null;

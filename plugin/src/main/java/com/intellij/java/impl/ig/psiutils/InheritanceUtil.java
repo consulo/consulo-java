@@ -15,16 +15,16 @@
  */
 package com.intellij.java.impl.ig.psiutils;
 
-import com.intellij.openapi.progress.ProgressManager;
+import consulo.application.progress.ProgressManager;
 import consulo.java.language.module.util.JavaClassNames;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.java.language.psi.PsiTypeParameter;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.search.SearchScope;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.content.scope.SearchScope;
 import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
-import com.intellij.util.Processor;
-import com.intellij.util.Query;
+import consulo.application.util.function.Processor;
+import consulo.application.util.query.Query;
 
 import java.util.concurrent.atomic.AtomicInteger;
 

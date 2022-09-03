@@ -3,10 +3,10 @@ package com.intellij.java.language.impl.psi.util;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.ObjectUtils;
+import consulo.language.ast.IElementType;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.util.lang.ObjectUtil;
 import org.jetbrains.annotations.Contract;
 
 import javax.annotation.Nonnull;
@@ -56,11 +56,10 @@ public final class JavaPsiPatternUtil {
    * @param variable pattern variable
    * @return effective initializer expression for the variable; null if cannot be determined
    */
-  public static
   @Nullable
-  String getEffectiveInitializerText(@Nonnull PsiPatternVariable variable) {
+  public static String getEffectiveInitializerText(@Nonnull PsiPatternVariable variable) {
     PsiPattern pattern = variable.getPattern();
-    PsiInstanceOfExpression instanceOf = ObjectUtils.tryCast(pattern.getParent(), PsiInstanceOfExpression.class);
+    PsiInstanceOfExpression instanceOf = ObjectUtil.tryCast(pattern.getParent(), PsiInstanceOfExpression.class);
     if (instanceOf == null) {
       return null;
     }

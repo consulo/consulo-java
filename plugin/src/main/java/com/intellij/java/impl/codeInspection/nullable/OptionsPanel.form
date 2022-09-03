@@ -61,7 +61,7 @@
           <text value="Report @NotNull &amp;parameters overriding non-annotated"/>
         </properties>
       </component>
-      <component id="9b307" class="com.intellij.ui.components.JBCheckBox" binding="myReportNullLiteralsPassedNotNullParameter" default-binding="true">
+      <component id="9b307" class="consulo.ui.ex.awt.JBCheckBox" binding="myReportNullLiteralsPassedNotNullParameter" default-binding="true">
         <constraints>
           <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>

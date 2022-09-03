@@ -16,7 +16,7 @@
 package com.intellij.java.language.psi;
 
 import com.intellij.java.language.LanguageLevel;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import consulo.annotation.access.RequiredReadAction;
 
 import javax.annotation.Nonnull;

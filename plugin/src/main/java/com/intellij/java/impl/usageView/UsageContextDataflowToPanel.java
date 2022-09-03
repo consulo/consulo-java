@@ -16,21 +16,21 @@
 
 package com.intellij.java.impl.usageView;
 
-import com.intellij.analysis.AnalysisScope;
+import consulo.language.editor.scope.AnalysisScope;
 import com.intellij.java.impl.slicer.*;
 import com.intellij.java.language.psi.PsiJavaFile;
 import com.intellij.java.language.psi.PsiVariable;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.wm.ToolWindow;
-import com.intellij.openapi.wm.ToolWindowId;
-import com.intellij.openapi.wm.ToolWindowManager;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.usageView.UsageInfo;
-import com.intellij.usageView.UsageViewBundle;
+import consulo.project.Project;
+import consulo.project.ui.wm.ToolWindowId;
+import consulo.ui.ex.toolWindow.ToolWindow;
+import consulo.project.ui.wm.ToolWindowManager;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.usage.UsageInfo;
+import consulo.usage.UsageViewBundle;
 import com.intellij.usages.*;
-import com.intellij.usages.impl.UsageContextPanelBase;
-import com.intellij.usages.impl.UsageViewImpl;
+import consulo.ide.impl.idea.usages.impl.UsageContextPanelBase;
+import consulo.ide.impl.idea.usages.impl.UsageViewImpl;
 import consulo.disposer.Disposable;
 import consulo.disposer.Disposer;
 
@@ -49,12 +49,12 @@ public class UsageContextDataflowToPanel extends UsageContextPanelBase {
     @Nonnull
     @Override
     public UsageContextPanel create(@Nonnull UsageView usageView) {
-      return new UsageContextDataflowToPanel(((UsageViewImpl) usageView).getProject(), usageView.getPresentation());
+      return new UsageContextDataflowToPanel(((consulo.ide.impl.idea.usages.impl.UsageViewImpl) usageView).getProject(), usageView.getPresentation());
     }
 
     @Override
     public boolean isAvailableFor(@Nonnull UsageView usageView) {
-      UsageTarget[] targets = ((UsageViewImpl) usageView).getTargets();
+      UsageTarget[] targets = ((consulo.ide.impl.idea.usages.impl.UsageViewImpl) usageView).getTargets();
       if (targets.length == 0) {
         return false;
       }

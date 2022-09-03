@@ -15,10 +15,8 @@
  */
 package consulo.java.analysis.codeInspection;
 
-import com.intellij.codeInspection.reference.EntryPoint;
-import com.intellij.openapi.extensions.ExtensionPointName;
-import com.intellij.openapi.util.Condition;
-import com.intellij.psi.PsiElement;
+import com.intellij.java.analysis.codeInspection.ex.EntryPoint;
+import consulo.component.extension.ExtensionPointName;
 
 import javax.annotation.Nonnull;
 
@@ -26,11 +24,12 @@ import javax.annotation.Nonnull;
  * @author VISTALL
  * @since 10:38/21.05.13
  */
-public interface JavaExtensionPoints
-{
-	@Nonnull
-	ExtensionPointName<EntryPoint> DEAD_CODE_EP_NAME = ExtensionPointName.create("consulo.java.deadCode");
+@Deprecated
+public interface JavaExtensionPoints {
+  @Nonnull
+  @Deprecated
+  ExtensionPointName<EntryPoint> DEAD_CODE_EP_NAME = ExtensionPointName.create(EntryPoint.class);
 
-	@Nonnull
-	ExtensionPointName<Condition<PsiElement>> CANT_BE_STATIC_EP_NAME = ExtensionPointName.create("consulo.java.cantBeStatic");
+  @Nonnull
+  ExtensionPointName<CantBeStaticCondition> CANT_BE_STATIC_EP_NAME = ExtensionPointName.create(CantBeStaticCondition.class);
 }

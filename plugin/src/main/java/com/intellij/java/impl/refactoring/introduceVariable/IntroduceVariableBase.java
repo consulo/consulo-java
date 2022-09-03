@@ -23,76 +23,76 @@ import java.util.LinkedHashSet;
 import java.util.List;
 
 import com.intellij.java.language.psi.*;
+import consulo.externalService.statistic.FeatureUsageTracker;
 import consulo.logging.Logger;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import com.intellij.java.impl.codeInsight.CodeInsightUtil;
 import com.intellij.java.impl.codeInsight.completion.JavaCompletionUtil;
-import com.intellij.codeInsight.highlighting.HighlightManager;
+import consulo.language.editor.highlight.HighlightManager;
 import com.intellij.java.impl.codeInsight.intention.impl.TypeExpression;
-import com.intellij.codeInsight.lookup.LookupManager;
-import com.intellij.codeInsight.unwrap.ScopeHighlighter;
-import com.intellij.featureStatistics.FeatureUsageTracker;
-import com.intellij.featureStatistics.ProductivityFeatureNames;
-import com.intellij.ide.util.PropertiesComponent;
+import consulo.language.editor.completion.lookup.LookupManager;
+import consulo.language.editor.refactoring.unwrap.ScopeHighlighter;
+import consulo.ide.impl.idea.featureStatistics.ProductivityFeatureNames;
+import consulo.ide.impl.idea.ide.util.PropertiesComponent;
 import com.intellij.lang.LanguageRefactoringSupport;
-import com.intellij.lang.injection.InjectedLanguageManager;
-import com.intellij.lang.refactoring.RefactoringSupportProvider;
-import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.command.CommandProcessor;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.LogicalPosition;
-import com.intellij.openapi.editor.RangeMarker;
-import com.intellij.openapi.editor.ScrollType;
-import com.intellij.openapi.editor.SelectionModel;
-import com.intellij.openapi.editor.colors.EditorColors;
-import com.intellij.openapi.editor.colors.EditorColorsManager;
-import com.intellij.openapi.editor.markup.TextAttributes;
-import com.intellij.openapi.fileEditor.FileDocumentManager;
-import com.intellij.openapi.project.Project;
+import consulo.language.inject.InjectedLanguageManager;
+import consulo.language.editor.refactoring.RefactoringSupportProvider;
+import consulo.dataContext.DataContext;
+import consulo.application.ApplicationManager;
+import consulo.undoRedo.CommandProcessor;
+import consulo.document.Document;
+import consulo.codeEditor.Editor;
+import consulo.codeEditor.LogicalPosition;
+import consulo.document.RangeMarker;
+import consulo.codeEditor.ScrollType;
+import consulo.codeEditor.SelectionModel;
+import consulo.codeEditor.EditorColors;
+import consulo.colorScheme.EditorColorsManager;
+import consulo.colorScheme.TextAttributes;
+import consulo.document.FileDocumentManager;
+import consulo.project.Project;
 import consulo.util.dataholder.Key;
 import com.intellij.openapi.util.Pass;
-import com.intellij.openapi.util.Ref;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.wm.WindowManager;
+import consulo.util.lang.ref.Ref;
+import consulo.document.util.TextRange;
+import consulo.util.lang.StringUtil;
+import consulo.project.ui.wm.WindowManager;
 import com.intellij.psi.*;
-import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
+import consulo.language.codeStyle.CodeStyleSettingsManager;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
-import com.intellij.psi.codeStyle.SuggestedNameInfo;
+import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
 import com.intellij.java.language.impl.psi.impl.PsiDiamondTypeUtil;
-import com.intellij.psi.impl.source.tree.injected.InjectedLanguageUtil;
+import consulo.language.inject.impl.internal.InjectedLanguageUtil;
 import com.intellij.java.language.impl.psi.impl.source.tree.java.ReplaceExpressionUtil;
 import com.intellij.java.language.impl.psi.scope.processor.VariablesProcessor;
 import com.intellij.java.language.impl.psi.scope.util.PsiScopesUtil;
 import com.intellij.java.language.psi.util.PsiExpressionTrimRenderer;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.psi.util.PsiUtilCore;
+import consulo.language.psi.PsiUtilCore;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import com.intellij.java.impl.refactoring.HelpID;
 import com.intellij.java.impl.refactoring.IntroduceHandlerBase;
-import com.intellij.refactoring.IntroduceTargetChooser;
+import consulo.language.editor.refactoring.IntroduceTargetChooser;
 import com.intellij.java.impl.refactoring.JavaRefactoringSettings;
-import com.intellij.refactoring.RefactoringBundle;
-import com.intellij.refactoring.introduce.inplace.AbstractInplaceIntroducer;
-import com.intellij.refactoring.introduce.inplace.OccurrencesChooser;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.introduce.inplace.AbstractInplaceIntroducer;
+import consulo.language.editor.refactoring.introduce.inplace.OccurrencesChooser;
 import com.intellij.java.impl.refactoring.introduceField.ElementToWorkOn;
 import com.intellij.java.impl.refactoring.ui.TypeSelectorManagerImpl;
-import com.intellij.refactoring.util.CommonRefactoringUtil;
+import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import com.intellij.java.impl.refactoring.util.FieldConflictsResolver;
-import com.intellij.refactoring.util.RefactoringUIUtil;
+import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
 import com.intellij.java.impl.refactoring.util.RefactoringUtil;
 import com.intellij.java.impl.refactoring.util.occurrences.ExpressionOccurrenceManager;
 import com.intellij.java.impl.refactoring.util.occurrences.NotInSuperCallOccurrenceFilter;
-import com.intellij.util.ArrayUtilRt;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.containers.ContainerUtil;
-import com.intellij.util.containers.MultiMap;
+import consulo.ide.impl.idea.util.ArrayUtilRt;
+import consulo.language.util.IncorrectOperationException;
+import consulo.util.collection.ContainerUtil;
+import consulo.util.collection.MultiMap;
 import consulo.psi.PsiPackage;
 
 /**
@@ -299,7 +299,7 @@ public abstract class IntroduceVariableBase extends IntroduceHandlerBase
 
 	private boolean invoke(final Project project, final Editor editor, PsiFile file, int startOffset, int endOffset)
 	{
-		FeatureUsageTracker.getInstance().triggerFeatureUsed(ProductivityFeatureNames.REFACTORING_INTRODUCE_VARIABLE);
+		FeatureUsageTracker.getInstance().triggerFeatureUsed(consulo.ide.impl.idea.featureStatistics.ProductivityFeatureNames.REFACTORING_INTRODUCE_VARIABLE);
 		PsiDocumentManager.getInstance(project).commitAllDocuments();
 
 
@@ -578,7 +578,7 @@ public abstract class IntroduceVariableBase extends IntroduceHandlerBase
 				injectedLanguageManager.injectedToHost(file, endOffset));
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public static String getErrorMessage(PsiExpression expr)
 	{
 		final Boolean needParenthesis = expr.getCopyableUserData(NEED_PARENTHESIS);

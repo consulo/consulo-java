@@ -15,22 +15,22 @@
  */
 package consulo.java.impl.ide;
 
-import com.intellij.icons.AllIcons;
+import consulo.application.AllIcons;
 import com.intellij.java.language.impl.JavaClassFileType;
 import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.fileTypes.FileType;
-import com.intellij.openapi.project.DumbService;
-import com.intellij.openapi.util.Iconable;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.virtualFileSystem.fileType.FileType;
+import consulo.project.DumbService;
+import consulo.component.util.Iconable;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PsiClassUtil;
 import com.intellij.java.language.psi.util.PsiMethodUtil;
 import consulo.annotation.access.RequiredReadAction;
-import consulo.ide.IconDescriptor;
-import consulo.ide.IconDescriptorUpdater;
-import consulo.ide.IconDescriptorUpdaters;
+import consulo.language.icon.IconDescriptor;
+import consulo.language.icon.IconDescriptorUpdater;
+import consulo.language.icon.IconDescriptorUpdaters;
 import consulo.java.language.impl.JavaIcons;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.java.psi.impl.icon.JavaPsiImplIconGroup;

@@ -15,14 +15,14 @@
  */
 package com.intellij.java.impl.ide.util;
 
-import com.intellij.icons.AllIcons;
+import consulo.application.AllIcons;
 import consulo.logging.Logger;
-import com.intellij.openapi.editor.colors.EditorColorsManager;
-import com.intellij.openapi.editor.colors.EditorColorsScheme;
+import consulo.colorScheme.EditorColorsManager;
+import consulo.colorScheme.EditorColorsScheme;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.ui.SimpleColoredComponent;
-import com.intellij.ui.SimpleTextAttributes;
-import consulo.ide.IconDescriptorUpdaters;
+import consulo.ui.ex.awt.SimpleColoredComponent;
+import consulo.ui.ex.SimpleTextAttributes;
+import consulo.language.icon.IconDescriptorUpdaters;
 
 import javax.swing.*;
 import java.awt.*;

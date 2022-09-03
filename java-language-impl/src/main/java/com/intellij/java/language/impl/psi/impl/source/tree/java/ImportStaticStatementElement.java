@@ -15,10 +15,10 @@
  */
 package com.intellij.java.language.impl.psi.impl.source.tree.java;
 
-import com.intellij.lang.ASTNode;
+import consulo.language.ast.ASTNode;
 import com.intellij.java.language.impl.psi.impl.source.tree.ChildRole;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
-import com.intellij.psi.tree.ChildRoleBase;
+import consulo.language.ast.ChildRoleBase;
 
 public class ImportStaticStatementElement extends ImportStatementBaseElement {
 

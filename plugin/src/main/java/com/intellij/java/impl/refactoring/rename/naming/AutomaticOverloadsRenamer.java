@@ -22,7 +22,7 @@ package com.intellij.java.impl.refactoring.rename.naming;
 
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.refactoring.rename.naming.AutomaticRenamer;
+import consulo.language.editor.refactoring.rename.AutomaticRenamer;
 
 public class AutomaticOverloadsRenamer extends AutomaticRenamer {
   public AutomaticOverloadsRenamer(PsiMethod method, String newName) {

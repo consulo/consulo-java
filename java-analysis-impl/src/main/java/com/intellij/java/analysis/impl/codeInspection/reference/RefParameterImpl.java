@@ -24,17 +24,17 @@
  */
 package com.intellij.java.analysis.impl.codeInspection.reference;
 
-import com.intellij.codeInspection.reference.RefElement;
-import com.intellij.codeInspection.reference.RefElementImpl;
-import com.intellij.codeInspection.reference.RefManager;
-import com.intellij.codeInspection.reference.RefVisitor;
+import consulo.language.editor.inspection.reference.RefElement;
+import consulo.ide.impl.idea.codeInspection.reference.RefElementImpl;
+import consulo.language.editor.inspection.reference.RefManager;
+import consulo.language.editor.inspection.reference.RefVisitor;
 import com.intellij.java.analysis.codeInspection.reference.RefJavaManager;
 import com.intellij.java.analysis.codeInspection.reference.RefJavaVisitor;
 import com.intellij.java.analysis.codeInspection.reference.RefMethod;
 import com.intellij.java.analysis.codeInspection.reference.RefParameter;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.util.Comparing;
+import consulo.application.ApplicationManager;
+import consulo.util.lang.Comparing;
 import com.intellij.psi.*;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
 

@@ -21,7 +21,7 @@ import com.intellij.java.language.patterns.PsiJavaPatterns;
 import com.intellij.lang.properties.ResourceBundleReferenceProvider;
 import com.intellij.lang.properties.psi.impl.PropertyValueImpl;
 import com.intellij.psi.*;
-import com.intellij.util.ProcessingContext;
+import consulo.language.util.ProcessingContext;
 
 import javax.annotation.Nonnull;
 

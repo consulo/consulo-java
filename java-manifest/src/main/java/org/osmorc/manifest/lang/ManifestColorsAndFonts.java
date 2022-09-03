@@ -25,8 +25,8 @@
 
 package org.osmorc.manifest.lang;
 
-import com.intellij.openapi.editor.DefaultLanguageHighlighterColors;
-import com.intellij.openapi.editor.colors.TextAttributesKey;
+import consulo.codeEditor.DefaultLanguageHighlighterColors;
+import consulo.colorScheme.TextAttributesKey;
 
 /**
  * @author Robert F. Beeger (robert@beeger.net)

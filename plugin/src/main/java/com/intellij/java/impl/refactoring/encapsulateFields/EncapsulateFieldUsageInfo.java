@@ -17,8 +17,8 @@ package com.intellij.java.impl.refactoring.encapsulateFields;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.psi.PsiReference;
-import com.intellij.usageView.UsageInfo;
+import consulo.language.psi.PsiReference;
+import consulo.usage.UsageInfo;
 
 /**
  * @author Max Medvedev

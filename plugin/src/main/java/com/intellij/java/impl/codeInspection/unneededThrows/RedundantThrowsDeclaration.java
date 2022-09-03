@@ -17,15 +17,15 @@ package com.intellij.java.impl.codeInspection.unneededThrows;
 
 import com.intellij.java.impl.codeInspection.DeleteThrowsFix;
 import com.intellij.java.language.impl.codeInsight.ExceptionUtil;
-import com.intellij.codeInsight.daemon.GroupNames;
+import consulo.ide.impl.idea.codeInsight.daemon.GroupNames;
 import com.intellij.java.language.impl.codeInsight.daemon.JavaErrorBundle;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.JavaHighlightUtil;
-import com.intellij.codeInspection.*;
 import com.intellij.java.analysis.codeInspection.BaseJavaBatchLocalInspectionTool;
 import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -57,7 +57,7 @@ public class RedundantThrowsDeclaration extends BaseJavaBatchLocalInspectionTool
   }
 
   @Override
-  @javax.annotation.Nullable
+  @Nullable
   public ProblemDescriptor[] checkFile(@Nonnull PsiFile file, @Nonnull final InspectionManager manager, final boolean isOnTheFly) {
     final Set<ProblemDescriptor> problems = new HashSet<ProblemDescriptor>();
     file.accept(new JavaRecursiveElementWalkingVisitor() {

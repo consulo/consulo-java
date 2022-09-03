@@ -16,19 +16,19 @@
 package com.intellij.jam.reflect;
 
 import com.intellij.jam.JamElement;
-import com.intellij.patterns.ElementPattern;
-import com.intellij.pom.PomTarget;
 import com.intellij.java.language.psi.PsiAnnotation;
 import com.intellij.java.language.psi.PsiModifierListOwner;
-import com.intellij.semantic.SemRegistrar;
-import com.intellij.util.Consumer;
-import com.intellij.util.PairConsumer;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.language.pattern.ElementPattern;
+import consulo.language.pom.PomTarget;
+import consulo.language.sem.SemRegistrar;
+import consulo.util.collection.ContainerUtil;
+import consulo.util.lang.function.PairConsumer;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * @author peter
@@ -99,7 +99,7 @@ public class JamMemberArchetype<Psi extends PsiModifierListOwner, Jam extends Ja
   public List<PomTarget> getAssociatedTargets(@Nonnull Jam element) {
     final ArrayList<PomTarget> list = ContainerUtil.newArrayList();
     final Consumer<PomTarget> targetConsumer = new Consumer<PomTarget>() {
-      public void consume(PomTarget target) {
+      public void accept(PomTarget target) {
         list.add(target);
       }
     };

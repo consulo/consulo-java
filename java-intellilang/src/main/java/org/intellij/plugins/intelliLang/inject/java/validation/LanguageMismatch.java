@@ -15,12 +15,12 @@
  */
 package org.intellij.plugins.intelliLang.inject.java.validation;
 
-import com.intellij.codeInspection.LocalInspectionTool;
-import com.intellij.codeInspection.ProblemsHolder;
+import consulo.language.editor.inspection.LocalInspectionTool;
+import consulo.language.editor.inspection.ProblemsHolder;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.util.Pair;
+import consulo.util.lang.Pair;
 import com.intellij.psi.*;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 import org.intellij.plugins.intelliLang.Configuration;
 import org.intellij.plugins.intelliLang.pattern.PatternValidator;
 import org.intellij.plugins.intelliLang.util.AnnotateFix;

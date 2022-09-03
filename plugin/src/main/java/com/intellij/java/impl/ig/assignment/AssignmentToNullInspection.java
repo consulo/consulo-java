@@ -17,7 +17,7 @@ package com.intellij.java.impl.ig.assignment;
 
 import com.intellij.java.language.codeInsight.NullableNotNullManager;
 import com.intellij.java.analysis.impl.codeInsight.intention.AddAnnotationFix;
-import com.intellij.codeInspection.ui.SingleCheckboxOptionsPanel;
+import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
 import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
 import com.siyeh.InspectionGadgetsBundle;

@@ -26,11 +26,11 @@
 package org.osmorc.manifest.lang.psi;
 
 import org.osmorc.manifest.lang.ManifestFileType;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.AbstractElementManipulator;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiFileFactory;
-import com.intellij.util.IncorrectOperationException;
+import consulo.document.util.TextRange;
+import consulo.language.psi.AbstractElementManipulator;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiFileFactory;
+import consulo.language.util.IncorrectOperationException;
 
 /**
  * @author Robert F. Beeger (robert@beeger.net)

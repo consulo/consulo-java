@@ -19,16 +19,16 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.lang.refactoring.RefactoringSupportProvider;
+import consulo.language.editor.refactoring.RefactoringSupportProvider;
 import com.intellij.psi.*;
 import com.intellij.java.language.impl.psi.impl.light.LightMethodBuilder;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
-import com.intellij.psi.search.LocalSearchScope;
-import com.intellij.psi.search.PsiSearchHelper;
-import com.intellij.psi.search.SearchScope;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.refactoring.RefactoringActionHandler;
-import com.intellij.refactoring.changeSignature.ChangeSignatureHandler;
+import consulo.language.psi.scope.LocalSearchScope;
+import consulo.language.psi.search.PsiSearchHelper;
+import consulo.content.scope.SearchScope;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.editor.refactoring.action.RefactoringActionHandler;
+import consulo.language.editor.refactoring.changeSignature.ChangeSignatureHandler;
 import com.intellij.java.impl.refactoring.changeSignature.JavaChangeSignatureHandler;
 import com.intellij.java.impl.refactoring.extractInterface.ExtractInterfaceHandler;
 import com.intellij.java.impl.refactoring.extractMethod.ExtractMethodHandler;
@@ -184,7 +184,7 @@ public class JavaRefactoringSupportProvider extends RefactoringSupportProvider
 		return PsiTreeUtil.isAncestor(containingFile, scopeElements[0], false);
 	}
 
-	public static boolean isDisableRefactoringForLightElement(@javax.annotation.Nullable PsiElement element)
+	public static boolean isDisableRefactoringForLightElement(@Nullable PsiElement element)
 	{
 		if(element instanceof LightMethodBuilder)
 		{

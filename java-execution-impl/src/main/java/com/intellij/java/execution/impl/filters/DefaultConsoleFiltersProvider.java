@@ -20,11 +20,11 @@
  */
 package com.intellij.java.execution.impl.filters;
 
-import com.intellij.execution.filters.ConsoleFilterProviderEx;
+import consulo.execution.ui.console.ConsoleFilterProviderEx;
 import com.intellij.execution.filters.Filter;
 import com.intellij.java.execution.filters.ExceptionFilters;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.project.Project;
+import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.java.language.module.extension.JavaModuleExtension;
 import consulo.module.extension.ModuleExtensionHelper;
 

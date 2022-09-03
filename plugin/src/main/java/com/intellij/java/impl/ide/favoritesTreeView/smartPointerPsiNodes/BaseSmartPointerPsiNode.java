@@ -15,21 +15,21 @@
  */
 package com.intellij.java.impl.ide.favoritesTreeView.smartPointerPsiNodes;
 
-import com.intellij.ide.projectView.PresentationData;
-import com.intellij.ide.projectView.ProjectViewNode;
-import com.intellij.ide.projectView.ProjectViewNodeDecorator;
-import com.intellij.ide.projectView.ViewSettings;
-import com.intellij.ide.util.treeView.AbstractTreeNode;
+import consulo.ui.ex.tree.PresentationData;
+import consulo.project.ui.view.tree.ProjectViewNode;
+import consulo.project.ui.view.tree.ProjectViewNodeDecorator;
+import consulo.project.ui.view.tree.ViewSettings;
+import consulo.project.ui.view.tree.AbstractTreeNode;
 import com.intellij.java.language.psi.PsiDocCommentOwner;
-import com.intellij.navigation.NavigationItem;
-import com.intellij.navigation.PsiElementNavigationItem;
-import com.intellij.openapi.editor.colors.CodeInsightColors;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Iconable;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.navigation.NavigationItem;
+import consulo.language.psi.PsiElementNavigationItem;
+import consulo.codeEditor.CodeInsightColors;
+import consulo.project.Project;
+import consulo.component.util.Iconable;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.psi.*;
-import com.intellij.psi.util.PsiUtilCore;
-import consulo.ide.IconDescriptorUpdaters;
+import consulo.language.psi.PsiUtilCore;
+import consulo.language.icon.IconDescriptorUpdaters;
 import consulo.ide.projectView.impl.nodes.PackageElement;
 import consulo.logging.Logger;
 import consulo.ui.image.Image;

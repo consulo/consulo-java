@@ -19,8 +19,8 @@ import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.util.MethodSignatureBackedByPsiMethod;
 import com.intellij.java.language.psi.util.MethodSignatureUtil;
-import com.intellij.psi.search.searches.ExtensibleQueryFactory;
-import com.intellij.util.Query;
+import consulo.application.util.query.ExtensibleQueryFactory;
+import consulo.application.util.query.Query;
 
 import javax.annotation.Nullable;
 
@@ -28,7 +28,7 @@ import javax.annotation.Nullable;
  * @author max
  */
 public class SuperMethodsSearch extends ExtensibleQueryFactory<MethodSignatureBackedByPsiMethod, SuperMethodsSearch.SearchParameters> {
-  public static final SuperMethodsSearch SUPER_METHODS_SEARCH_INSTANCE = new SuperMethodsSearch();
+  private static final SuperMethodsSearch INSTANCE = new SuperMethodsSearch();
 
   public static class SearchParameters {
     private final PsiMethod myMethod;
@@ -67,12 +67,12 @@ public class SuperMethodsSearch extends ExtensibleQueryFactory<MethodSignatureBa
   }
 
   private SuperMethodsSearch() {
-    super("consulo.java");
+    super(SuperMethodsSearchExecutor.class);
   }
 
   public static Query<MethodSignatureBackedByPsiMethod> search(final PsiMethod derivedMethod, @Nullable final PsiClass psiClass, boolean checkBases, boolean allowStaticMethod) {
     final SearchParameters parameters = new SearchParameters(derivedMethod, psiClass, checkBases, allowStaticMethod);
-    return SUPER_METHODS_SEARCH_INSTANCE.createUniqueResultsQuery(parameters, MethodSignatureUtil.METHOD_BASED_HASHING_STRATEGY);
+    return INSTANCE.createUniqueResultsQuery(parameters, MethodSignatureUtil.METHOD_BASED_HASHING_STRATEGY);
   }
 
 }

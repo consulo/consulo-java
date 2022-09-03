@@ -16,15 +16,17 @@
 package com.intellij.java.language.impl.psi.impl.source;
 
 import com.intellij.java.language.impl.JavaFileType;
-import com.intellij.java.language.psi.*;
-import com.intellij.lang.ASTNode;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.*;
 import com.intellij.java.language.impl.psi.impl.java.stubs.JavaStubElementTypes;
 import com.intellij.java.language.impl.psi.impl.java.stubs.PsiMethodStub;
 import com.intellij.java.language.impl.psi.impl.source.tree.ChildRole;
-import com.intellij.reference.SoftReference;
+import com.intellij.java.language.psi.*;
+import consulo.language.ast.ASTNode;
+import consulo.language.psi.PsiElementVisitor;
+import consulo.language.psi.PsiFileFactory;
+import consulo.util.lang.StringUtil;
+import consulo.util.lang.ref.SoftReference;
 import org.jetbrains.annotations.NonNls;
+
 import javax.annotation.Nonnull;
 
 /**
@@ -67,8 +69,8 @@ public class PsiAnnotationMethodImpl extends PsiMethodImpl implements PsiAnnotat
 
       @NonNls final String annoText = "@interface _Dummy_ { Class foo() default " + text + "; }";
       final PsiFileFactory factory = PsiFileFactory.getInstance(getProject());
-      final PsiJavaFile file = (PsiJavaFile)factory.createFileFromText("a.java", JavaFileType.INSTANCE, annoText);
-      final PsiAnnotationMemberValue value = ((PsiAnnotationMethod)file.getClasses()[0].getMethods()[0]).getDefaultValue();
+      final PsiJavaFile file = (PsiJavaFile) factory.createFileFromText("a.java", JavaFileType.INSTANCE, annoText);
+      final PsiAnnotationMemberValue value = ((PsiAnnotationMethod) file.getClasses()[0].getMethods()[0]).getDefaultValue();
       myCachedDefaultValue = new SoftReference<PsiAnnotationMemberValue>(value);
       return value;
     }
@@ -77,7 +79,7 @@ public class PsiAnnotationMethodImpl extends PsiMethodImpl implements PsiAnnotat
 
     final ASTNode node = getNode().findChildByRole(ChildRole.ANNOTATION_DEFAULT_VALUE);
     if (node == null) return null;
-    return (PsiAnnotationMemberValue)node.getPsi();
+    return (PsiAnnotationMemberValue) node.getPsi();
   }
 
   @NonNls
@@ -88,9 +90,8 @@ public class PsiAnnotationMethodImpl extends PsiMethodImpl implements PsiAnnotat
   @Override
   public final void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
-      ((JavaElementVisitor)visitor).visitAnnotationMethod(this);
-    }
-    else {
+      ((JavaElementVisitor) visitor).visitAnnotationMethod(this);
+    } else {
       visitor.visitElement(this);
     }
   }

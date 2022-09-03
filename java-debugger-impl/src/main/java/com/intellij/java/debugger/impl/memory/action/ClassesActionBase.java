@@ -16,10 +16,12 @@
 package com.intellij.java.debugger.impl.memory.action;
 
 import com.intellij.java.debugger.impl.memory.ui.ClassesTable;
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.project.Project;
+import consulo.ui.ex.action.AnAction;
+import consulo.ui.ex.action.AnActionEvent;
+import consulo.project.Project;
 import consulo.internal.com.sun.jdi.ReferenceType;
+
+import javax.annotation.Nullable;
 
 public abstract class ClassesActionBase extends AnAction
 {
@@ -43,7 +45,7 @@ public abstract class ClassesActionBase extends AnAction
 
 	protected abstract void perform(AnActionEvent e);
 
-	@javax.annotation.Nullable
+	@Nullable
 	protected ReferenceType getSelectedClass(AnActionEvent e)
 	{
 		return e.getData(ClassesTable.SELECTED_CLASS_KEY);

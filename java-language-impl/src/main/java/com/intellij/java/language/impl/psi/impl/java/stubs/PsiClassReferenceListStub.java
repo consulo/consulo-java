@@ -22,7 +22,7 @@ package com.intellij.java.language.impl.psi.impl.java.stubs;
 import com.intellij.java.language.psi.PsiClassType;
 import com.intellij.java.language.psi.PsiReferenceList;
 import com.intellij.java.language.impl.psi.impl.cache.TypeInfo;
-import com.intellij.psi.stubs.StubElement;
+import consulo.language.psi.stub.StubElement;
 import javax.annotation.Nonnull;
 
 public interface PsiClassReferenceListStub extends StubElement<PsiReferenceList>

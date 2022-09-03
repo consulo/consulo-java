@@ -16,9 +16,9 @@
 package com.intellij.java.impl.refactoring.safeDelete.usageInfo;
 
 import com.intellij.java.impl.refactoring.safeDelete.ImportSearcher;
-import com.intellij.psi.PsiElement;
-import com.intellij.refactoring.safeDelete.usageInfo.SafeDeleteReferenceSimpleDeleteUsageInfo;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.psi.PsiElement;
+import consulo.language.editor.refactoring.safeDelete.usageInfo.SafeDeleteReferenceSimpleDeleteUsageInfo;
+import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 
 /**

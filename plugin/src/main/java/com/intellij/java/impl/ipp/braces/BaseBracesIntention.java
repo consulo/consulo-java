@@ -16,9 +16,10 @@
 package com.intellij.java.impl.ipp.braces;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.util.TextRange;
+import consulo.document.util.TextRange;
 import com.intellij.psi.*;
 import com.siyeh.IntentionPowerPackBundle;
 import com.intellij.java.impl.ipp.base.MutablyNamedIntention;
@@ -53,7 +54,7 @@ public abstract class BaseBracesIntention extends MutablyNamedIntention {
   }
 
 
-  @javax.annotation.Nullable
+  @Nullable
   protected static PsiStatement getSurroundingStatement(@Nonnull PsiElement element) {
     final PsiElement parent = element.getParent();
     if (parent instanceof PsiIfStatement) {

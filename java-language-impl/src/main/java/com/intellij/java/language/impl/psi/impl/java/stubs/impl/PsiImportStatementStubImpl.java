@@ -23,11 +23,11 @@ import com.intellij.java.language.psi.PsiJavaParserFacade;
 import com.intellij.java.language.impl.psi.impl.java.stubs.JavaStubElementTypes;
 import com.intellij.java.language.impl.psi.impl.java.stubs.PsiImportStatementStub;
 import com.intellij.java.language.impl.psi.impl.source.PsiJavaCodeReferenceElementImpl;
-import com.intellij.psi.stubs.StubBase;
-import com.intellij.psi.stubs.StubElement;
-import com.intellij.reference.SoftReference;
-import com.intellij.util.BitUtil;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.psi.stub.StubBase;
+import consulo.language.psi.stub.StubElement;
+import consulo.util.lang.ref.SoftReference;
+import consulo.util.lang.BitUtil;
+import consulo.language.util.IncorrectOperationException;
 
 /**
  * @author max

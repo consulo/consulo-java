@@ -15,9 +15,9 @@
  */
 package com.intellij.java.impl.codeInsight.completion;
 
-import com.intellij.codeInsight.completion.CompletionType;
-import com.intellij.codeInsight.lookup.LookupElement;
-import com.intellij.codeInsight.lookup.LookupElementWeigher;
+import consulo.language.editor.completion.CompletionType;
+import consulo.language.editor.completion.lookup.LookupElement;
+import consulo.language.editor.completion.lookup.LookupElementWeigher;
 import com.intellij.java.analysis.impl.codeInsight.JavaPsiEquivalenceUtil;
 import com.intellij.java.impl.codeInsight.ExpectedTypeInfo;
 import com.intellij.java.impl.psi.filters.element.ExcludeDeclaredFilter;
@@ -27,14 +27,14 @@ import com.intellij.java.language.impl.psi.scope.ElementClassFilter;
 import com.intellij.java.language.patterns.PsiJavaPatterns;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PropertyUtil;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.patterns.StandardPatterns;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.filters.AndFilter;
-import com.intellij.psi.filters.ClassFilter;
-import com.intellij.psi.filters.ElementFilter;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.CommonProcessors;
+import consulo.util.lang.Comparing;
+import consulo.language.pattern.StandardPatterns;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.filter.AndFilter;
+import consulo.language.psi.filter.ClassFilter;
+import consulo.language.psi.filter.ElementFilter;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.application.util.function.CommonProcessors;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -166,7 +166,7 @@ class RecursionWeigher extends LookupElementWeigher {
     return Result.normal;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private String getSetterPropertyName(@Nullable PsiMethod calledMethod) {
     if (PropertyUtil.isSimplePropertySetter(calledMethod)) {
       assert calledMethod != null;

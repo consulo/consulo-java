@@ -2,24 +2,24 @@
 package com.intellij.java.impl.ide.navigationToolbar;
 
 import com.google.common.collect.ImmutableList;
-import com.intellij.ide.navigationToolbar.StructureAwareNavBarModelExtension;
-import com.intellij.ide.ui.UISettings;
-import com.intellij.ide.util.treeView.smartTree.NodeProvider;
+import consulo.fileEditor.structureView.tree.NodeProvider;
+import consulo.ide.navigationToolbar.StructureAwareNavBarModelExtension;
+import consulo.application.ui.UISettings;
 import com.intellij.java.impl.ide.structureView.impl.java.JavaAnonymousClassesNodeProvider;
 import com.intellij.java.impl.ide.structureView.impl.java.JavaLambdaNodeProvider;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
 import com.intellij.java.language.vfs.jrt.JrtFileSystem;
-import com.intellij.lang.Language;
-import com.intellij.openapi.roots.ProjectFileIndex;
-import com.intellij.openapi.roots.ProjectRootManager;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.ElementDescriptionUtil;
-import com.intellij.psi.PsiDirectory;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.usageView.UsageViewShortNameLocation;
+import consulo.language.Language;
+import consulo.module.content.ProjectFileIndex;
+import consulo.module.content.ProjectRootManager;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.language.psi.ElementDescriptionUtil;
+import consulo.language.psi.PsiDirectory;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.usage.UsageViewShortNameLocation;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.java.impl.JavaBundle;
 import consulo.psi.PsiPackage;
@@ -28,7 +28,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
-import static com.intellij.psi.util.PsiFormatUtilBase.*;
+import static consulo.ide.impl.psi.util.PsiFormatUtilBase.*;
 
 /**
  * @author anna

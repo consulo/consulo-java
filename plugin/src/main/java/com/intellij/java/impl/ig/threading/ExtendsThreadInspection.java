@@ -26,6 +26,8 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.intellij.java.impl.ig.fixes.ReplaceInheritanceWithDelegationFix;
 
+import java.lang.Object;
+
 public class ExtendsThreadInspection extends BaseInspection {
 
   @Override
@@ -52,7 +54,7 @@ public class ExtendsThreadInspection extends BaseInspection {
   }
 
   /**
-   * @see ExtendsConcreteCollectionInspection#buildFix(java.lang.Object...)
+   * @see ExtendsConcreteCollectionInspection#buildFix(Object...)
    */
   @Override
   protected InspectionGadgetsFix buildFix(Object... infos) {

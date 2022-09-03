@@ -15,14 +15,14 @@
  */
 package com.intellij.codeInspection;
 
-import com.intellij.codeInsight.daemon.HighlightDisplayKey;
+import consulo.language.editor.rawHighlight.HighlightDisplayKey;
 import com.intellij.java.impl.codeInspection.dataFlow.DataFlowInspection;
 import com.intellij.java.impl.codeInspection.deadCode.UnusedDeclarationInspection;
 import com.intellij.codeInspection.ex.*;
-import com.intellij.openapi.util.JDOMUtil;
-import com.intellij.openapi.util.WriteExternalException;
-import com.intellij.profile.Profile;
-import com.intellij.profile.codeInspection.InspectionProfileManager;
+import consulo.util.jdom.JDOMUtil;
+import consulo.util.xml.serializer.WriteExternalException;
+import consulo.language.editor.inspection.scheme.Profile;
+import consulo.language.editor.inspection.scheme.InspectionProfileManager;
 import com.intellij.testFramework.LightIdeaTestCase;
 import org.jdom.Document;
 import org.jdom.Element;

@@ -17,12 +17,12 @@ package com.intellij.java.impl.refactoring.wrapreturnvalue;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.impl.refactoring.RefactorJBundle;
 import com.intellij.java.impl.refactoring.psi.MyUsageViewUtil;
-import com.intellij.usageView.UsageInfo;
-import com.intellij.usageView.UsageViewDescriptor;
+import consulo.usage.UsageInfo;
+import consulo.usage.UsageViewDescriptor;
 
 class WrapReturnValueUsageViewDescriptor implements UsageViewDescriptor {
 

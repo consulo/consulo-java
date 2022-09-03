@@ -15,27 +15,27 @@
  */
 package com.intellij.java.impl.packageDependencies.ui;
 
-import com.intellij.analysis.AnalysisScopeBundle;
-import com.intellij.icons.AllIcons;
-import com.intellij.ide.projectView.impl.ModuleGroup;
+import consulo.language.editor.scope.AnalysisScopeBundle;
+import consulo.application.AllIcons;
+import consulo.project.ui.view.tree.ModuleGroup;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiJavaPackage;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleManager;
-import com.intellij.openapi.progress.ProgressIndicator;
-import com.intellij.openapi.progress.ProgressManager;
-import com.intellij.openapi.project.Project;
+import consulo.module.Module;
+import consulo.module.ModuleManager;
+import consulo.application.progress.ProgressIndicator;
+import consulo.application.progress.ProgressManager;
+import consulo.project.Project;
 import com.intellij.openapi.roots.*;
-import com.intellij.openapi.roots.libraries.LibraryUtil;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.openapi.util.Pair;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.VfsUtilCore;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.openapi.vfs.VirtualFileVisitor;
+import consulo.ide.impl.idea.openapi.roots.libraries.LibraryUtil;
+import consulo.util.lang.Comparing;
+import consulo.util.lang.Pair;
+import consulo.util.lang.StringUtil;
+import consulo.ide.impl.idea.openapi.vfs.VfsUtilCore;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.virtualFileSystem.util.VirtualFileVisitor;
 import com.intellij.packageDependencies.ui.*;
-import com.intellij.psi.PsiFile;
-import com.intellij.util.ui.tree.TreeUtil;
+import consulo.language.psi.PsiFile;
+import consulo.ui.ex.awt.tree.TreeUtil;
 import consulo.logging.Logger;
 import consulo.util.dataholder.Key;
 
@@ -265,7 +265,7 @@ public class TreeModelBuilder {
     return new TreeModel(myRoot, myTotalFileCount, myMarkedFileCount);
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private PackageDependenciesNode buildFileNode(final VirtualFile file, @Nullable PackageDependenciesNode parent) {
     final ProgressIndicator indicator = ProgressManager.getInstance().getProgressIndicator();
     if (indicator != null) {
@@ -290,7 +290,7 @@ public class TreeModelBuilder {
     return null;
   }
 
-  public @javax.annotation.Nullable
+  public @Nullable
   PackageDependenciesNode getFileParentNode(VirtualFile vFile) {
     LOG.assertTrue(vFile != null);
     final VirtualFile containingDirectory = vFile.getParent();
@@ -318,7 +318,7 @@ public class TreeModelBuilder {
     return ScopeType.SOURCE;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private OrderEntry getLibraryForFile(VirtualFile virtualFile) {
     if (virtualFile == null) return null;
     List<OrderEntry> orders = myFileIndex.getOrderEntriesForFile(virtualFile);
@@ -382,7 +382,7 @@ public class TreeModelBuilder {
   }
 
 
-  @javax.annotation.Nullable
+  @Nullable
   private PackageDependenciesNode getModuleNode(Module module, ScopeType scopeType) {
     if (module == null || !myShowModules) {
       return getRootNode(scopeType);

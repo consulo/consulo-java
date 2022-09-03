@@ -15,17 +15,17 @@
  */
 package com.intellij.java.language.impl.psi.impl.java.stubs;
 
-import com.intellij.lang.ASTNode;
-import com.intellij.lang.LighterAST;
-import com.intellij.lang.LighterASTNode;
+import consulo.language.ast.ASTNode;
+import consulo.language.ast.LighterAST;
+import consulo.language.ast.LighterASTNode;
 import com.intellij.java.language.psi.PsiAnnotationParameterList;
 import com.intellij.java.language.impl.psi.impl.java.stubs.impl.PsiAnnotationParameterListStubImpl;
 import com.intellij.java.language.impl.psi.impl.source.tree.java.AnnotationParamListElement;
 import com.intellij.java.language.impl.psi.impl.source.tree.java.PsiAnnotationParamListImpl;
-import com.intellij.psi.stubs.IndexSink;
-import com.intellij.psi.stubs.StubElement;
-import com.intellij.psi.stubs.StubInputStream;
-import com.intellij.psi.stubs.StubOutputStream;
+import consulo.language.psi.stub.IndexSink;
+import consulo.language.psi.stub.StubElement;
+import consulo.language.psi.stub.StubInputStream;
+import consulo.language.psi.stub.StubOutputStream;
 import javax.annotation.Nonnull;
 
 import java.io.IOException;

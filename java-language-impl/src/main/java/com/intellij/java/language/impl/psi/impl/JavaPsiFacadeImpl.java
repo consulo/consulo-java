@@ -18,32 +18,30 @@ package com.intellij.java.language.impl.psi.impl;
 import com.intellij.java.language.impl.psi.impl.file.impl.JavaFileManager;
 import com.intellij.java.language.impl.psi.impl.source.JavaDummyHolder;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
+import com.intellij.java.language.psi.PsiElementFactory;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.application.ReadActionProcessor;
-import com.intellij.openapi.progress.ProgressIndicatorProvider;
-import com.intellij.openapi.project.DumbAware;
-import com.intellij.openapi.project.DumbService;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.FileIndexFacade;
-import com.intellij.openapi.roots.impl.DirectoryIndex;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.openapi.vfs.VirtualFileFilter;
-import com.intellij.psi.*;
-import com.intellij.psi.impl.PsiManagerImpl;
-import com.intellij.psi.impl.source.resolve.FileContextUtil;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.stubs.StubTreeLoader;
-import com.intellij.psi.util.PsiModificationTracker;
-import com.intellij.psi.util.PsiUtilCore;
-import com.intellij.util.Processor;
-import com.intellij.util.SmartList;
-import com.intellij.util.containers.ContainerUtil;
 import consulo.annotation.access.RequiredReadAction;
+import consulo.application.dumb.DumbAware;
+import consulo.application.progress.ProgressIndicatorProvider;
+import consulo.application.util.ReadActionProcessor;
+import consulo.application.util.function.Processor;
 import consulo.disposer.Disposable;
 import consulo.java.language.module.extension.JavaModuleExtension;
-import consulo.psi.PsiPackageManager;
+import consulo.language.content.FileIndexFacade;
+import consulo.language.impl.internal.psi.PsiManagerImpl;
+import consulo.language.psi.*;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.stub.StubTreeLoader;
+import consulo.module.content.DirectoryIndex;
+import consulo.project.DumbService;
+import consulo.project.Project;
+import consulo.util.collection.ContainerUtil;
+import consulo.util.collection.Lists;
+import consulo.util.collection.SmartList;
+import consulo.util.lang.Comparing;
+import consulo.util.lang.StringUtil;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.virtualFileSystem.VirtualFileFilter;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import org.jetbrains.annotations.TestOnly;
@@ -71,7 +69,7 @@ public class JavaPsiFacadeImpl extends JavaPsiFacadeEx {
     myPackageManager = psiManager;
     myConstantEvaluationHelper = new PsiConstantEvaluationHelperImpl();
 
-    project.getMessageBus().connect().subscribe(PsiModificationTracker.TOPIC, () -> {
+    project.getMessageBus().connect().subscribe(PsiModificationTrackerListener.class, () -> {
       // todo myClassCache.clear();
       // todo myPackageCache.clear();
       myModuleCache.clear();
@@ -343,7 +341,7 @@ public class JavaPsiFacadeImpl extends JavaPsiFacadeEx {
       }
 
       if (list.size() > 1) {
-        ContainerUtil.quickSort(list, new Comparator<PsiClass>() {
+        Lists.quickSort(list, new Comparator<PsiClass>() {
           @Override
           public int compare(PsiClass o1, PsiClass o2) {
             VirtualFile file1 = PsiUtilCore.getVirtualFile(o1);

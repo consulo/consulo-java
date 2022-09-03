@@ -15,7 +15,7 @@
  */
 package com.intellij.jam;
 
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 
 /**
  * @author peter

@@ -16,25 +16,26 @@
 package com.intellij.java.compiler.artifact.impl.artifacts.sourceItems.actions;
 
 import com.intellij.java.compiler.artifact.impl.ManifestFileUtil;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.Presentation;
-import com.intellij.openapi.roots.ui.configuration.artifacts.ArtifactEditorEx;
-import com.intellij.openapi.roots.ui.configuration.artifacts.ArtifactEditorImpl;
-import com.intellij.openapi.roots.ui.configuration.artifacts.sourceItems.SourceItemsTree;
-import com.intellij.openapi.roots.ui.configuration.artifacts.sourceItems.actions.PutIntoDefaultLocationActionBase;
-import com.intellij.openapi.util.EmptyRunnable;
-import com.intellij.openapi.util.Pair;
-import com.intellij.openapi.util.Ref;
-import com.intellij.packaging.artifacts.Artifact;
-import com.intellij.packaging.elements.CompositePackagingElement;
-import com.intellij.packaging.elements.PackagingElement;
-import com.intellij.packaging.impl.artifacts.ArtifactUtil;
-import com.intellij.packaging.impl.artifacts.ParentElementProcessor;
-import com.intellij.packaging.ui.ArtifactEditor;
-import com.intellij.packaging.ui.ArtifactEditorContext;
-import com.intellij.packaging.ui.PackagingSourceItem;
+import consulo.ui.ex.action.AnActionEvent;
+import consulo.ui.ex.action.Presentation;
+import consulo.ide.impl.idea.openapi.roots.ui.configuration.artifacts.ArtifactEditorEx;
+import consulo.ide.impl.idea.openapi.roots.ui.configuration.artifacts.ArtifactEditorImpl;
+import consulo.ide.impl.idea.openapi.roots.ui.configuration.artifacts.sourceItems.SourceItemsTree;
+import consulo.ide.impl.idea.openapi.roots.ui.configuration.artifacts.sourceItems.actions.PutIntoDefaultLocationActionBase;
+import consulo.util.lang.EmptyRunnable;
+import consulo.util.lang.Pair;
+import consulo.util.lang.ref.Ref;
+import consulo.compiler.artifact.Artifact;
+import consulo.compiler.artifact.element.CompositePackagingElement;
+import consulo.compiler.artifact.element.PackagingElement;
+import consulo.ide.impl.idea.packaging.impl.artifacts.ArtifactUtil;
+import consulo.ide.impl.idea.packaging.impl.artifacts.ParentElementProcessor;
+import consulo.compiler.artifact.ui.ArtifactEditor;
+import consulo.compiler.artifact.ui.ArtifactEditorContext;
+import consulo.compiler.artifact.ui.PackagingSourceItem;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,10 +71,10 @@ public class PutSourceItemIntoParentAndLinkViaManifestAction extends PutIntoDefa
     presentation.setEnabled(enable);
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private ParentElementsInfo findParentAndGrandParent(Artifact artifact) {
     final Ref<ParentElementsInfo> result = Ref.create(null);
-    ArtifactUtil.processParents(artifact, myArtifactEditor.getContext(), new ParentElementProcessor() {
+    consulo.ide.impl.idea.packaging.impl.artifacts.ArtifactUtil.processParents(artifact, myArtifactEditor.getContext(), new ParentElementProcessor() {
       @Override
       public boolean process(@Nonnull CompositePackagingElement<?> element, @Nonnull List<Pair<Artifact,
           CompositePackagingElement<?>>> parents, @Nonnull Artifact artifact) {

@@ -22,10 +22,11 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import consulo.logging.Logger;
 import org.jetbrains.annotations.Nls;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiJavaModule;
 import com.intellij.java.language.psi.PsiKeyword;
 import com.intellij.java.language.psi.PsiPackageAccessibilityStatement;
@@ -100,8 +101,8 @@ public class MergePackageAccessibilityStatementsFix extends MergeModuleStatement
 		return StreamSupport.stream(getStatements(javaModule, myRole).spliterator(), false).filter(statement -> myPackageName.equals(statement.getPackageName())).collect(Collectors.toList());
 	}
 
-	@javax.annotation.Nullable
-	public static MergeModuleStatementsFix createFix(@javax.annotation.Nullable PsiPackageAccessibilityStatement statement)
+	@Nullable
+	public static MergeModuleStatementsFix createFix(@Nullable PsiPackageAccessibilityStatement statement)
 	{
 		if(statement != null)
 		{

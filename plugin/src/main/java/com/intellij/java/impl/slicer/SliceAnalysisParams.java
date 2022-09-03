@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.slicer;
 
-import com.intellij.analysis.AnalysisScope;
+import consulo.language.editor.scope.AnalysisScope;
 
 /**
  * User: cdr

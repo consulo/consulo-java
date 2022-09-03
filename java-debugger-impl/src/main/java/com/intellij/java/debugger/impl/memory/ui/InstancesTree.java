@@ -25,20 +25,20 @@ import javax.annotation.Nullable;
 import com.intellij.java.debugger.impl.ui.impl.watch.NodeDescriptorProvider;
 import com.intellij.java.debugger.ui.tree.NodeDescriptor;
 import com.intellij.java.debugger.impl.ui.tree.ValueDescriptor;
-import com.intellij.openapi.project.Project;
-import com.intellij.ui.SimpleTextAttributes;
-import com.intellij.xdebugger.evaluation.XDebuggerEditorsProvider;
-import com.intellij.xdebugger.frame.XCompositeNode;
-import com.intellij.xdebugger.frame.XValue;
-import com.intellij.xdebugger.frame.XValueChildrenList;
-import com.intellij.xdebugger.frame.XValueNode;
-import com.intellij.xdebugger.frame.XValuePlace;
-import com.intellij.xdebugger.impl.actions.XDebuggerActions;
-import com.intellij.xdebugger.impl.frame.XValueMarkers;
-import com.intellij.xdebugger.impl.ui.XDebuggerUIConstants;
-import com.intellij.xdebugger.impl.ui.tree.XDebuggerTree;
-import com.intellij.xdebugger.impl.ui.tree.XDebuggerTreeState;
-import com.intellij.xdebugger.impl.ui.tree.nodes.XValueNodeImpl;
+import consulo.execution.debug.evaluation.XDebuggerEditorsProvider;
+import consulo.execution.debug.frame.XValue;
+import consulo.execution.debug.frame.XValueChildrenList;
+import consulo.project.Project;
+import consulo.ui.ex.SimpleTextAttributes;
+import consulo.execution.debug.frame.XCompositeNode;
+import consulo.execution.debug.frame.XValueNode;
+import consulo.execution.debug.frame.XValuePlace;
+import consulo.ide.impl.idea.xdebugger.impl.actions.XDebuggerActions;
+import consulo.ide.impl.idea.xdebugger.impl.frame.XValueMarkers;
+import consulo.execution.debug.ui.XDebuggerUIConstants;
+import consulo.ide.impl.idea.xdebugger.impl.ui.tree.XDebuggerTree;
+import consulo.ide.impl.idea.xdebugger.impl.ui.tree.XDebuggerTreeState;
+import consulo.ide.impl.idea.xdebugger.impl.ui.tree.nodes.XValueNodeImpl;
 import consulo.internal.com.sun.jdi.ObjectReference;
 import consulo.internal.com.sun.jdi.Value;
 
@@ -48,11 +48,11 @@ public class InstancesTree extends XDebuggerTree
 	private final Runnable myOnRootExpandAction;
 	private List<XValueChildrenList> myChildren;
 
-	InstancesTree(@Nonnull Project project, @Nonnull XDebuggerEditorsProvider editorsProvider, @javax.annotation.Nullable XValueMarkers<?, ?> valueMarkers, @Nonnull Runnable onRootExpand)
+	InstancesTree(@Nonnull Project project, @Nonnull XDebuggerEditorsProvider editorsProvider, @Nullable XValueMarkers<?, ?> valueMarkers, @Nonnull Runnable onRootExpand)
 	{
-		super(project, editorsProvider, null, XDebuggerActions.INSPECT_TREE_POPUP_GROUP, valueMarkers);
+		super(project, editorsProvider, null, consulo.ide.impl.idea.xdebugger.impl.actions.XDebuggerActions.INSPECT_TREE_POPUP_GROUP, valueMarkers);
 		myOnRootExpandAction = onRootExpand;
-		myRoot = new XValueNodeImpl(this, null, "root", new MyRootValue());
+		myRoot = new consulo.ide.impl.idea.xdebugger.impl.ui.tree.nodes.XValueNodeImpl(this, null, "root", new MyRootValue());
 
 		myRoot.children();
 		setRoot(myRoot, false);
@@ -101,7 +101,7 @@ public class InstancesTree extends XDebuggerTree
 		Object selectedItem = selectionPath != null ? selectionPath.getLastPathComponent() : null;
 		if(selectedItem instanceof XValueNodeImpl)
 		{
-			XValueNodeImpl xValueNode = (XValueNodeImpl) selectedItem;
+			XValueNodeImpl xValueNode = (consulo.ide.impl.idea.xdebugger.impl.ui.tree.nodes.XValueNodeImpl) selectedItem;
 			XValue valueContainer = xValueNode.getValueContainer();
 
 			if(valueContainer instanceof NodeDescriptorProvider)

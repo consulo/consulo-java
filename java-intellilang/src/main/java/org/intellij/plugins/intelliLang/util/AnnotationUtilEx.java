@@ -16,20 +16,21 @@
 package org.intellij.plugins.intelliLang.util;
 
 import com.intellij.java.language.codeInsight.AnnotationUtil;
-import com.intellij.java.language.psi.*;
-import com.intellij.openapi.util.Pair;
-import com.intellij.psi.*;
 import com.intellij.java.language.impl.psi.impl.PsiConstantEvaluationHelperImpl;
+import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.search.searches.SuperMethodsSearch;
 import com.intellij.java.language.psi.util.MethodSignatureBackedByPsiMethod;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.Processor;
-import com.intellij.util.containers.ContainerUtil;
 import consulo.annotation.access.RequiredReadAction;
+import consulo.application.util.function.Processor;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.util.collection.ContainerUtil;
+import consulo.util.lang.Pair;
 import org.jetbrains.annotations.NonNls;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
+import java.lang.String;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -55,7 +56,7 @@ public class AnnotationUtilEx {
    * usage context ("expected type").
    */
   @Nullable
-  public static PsiModifierListOwner getAnnotatedElementFor(@javax.annotation.Nullable PsiElement element, LookupType type) {
+  public static PsiModifierListOwner getAnnotatedElementFor(@Nullable PsiElement element, LookupType type) {
     while (element != null) {
       if (type == LookupType.PREFER_DECLARATION || type == LookupType.DECLARATION_ONLY) {
         if (element instanceof PsiReferenceExpression) {
@@ -276,7 +277,7 @@ public class AnnotationUtilEx {
   /**
    * Returns all annotations for <code>listOwner</code>, possibly walking up the method hierarchy.
    *
-   * @see AnnotationUtil#isAnnotated(PsiModifierListOwner, java.lang.String, boolean)
+   * @see AnnotationUtil#isAnnotated(PsiModifierListOwner, String, boolean)
    */
   private static PsiAnnotation[] getAnnotations(@Nonnull PsiModifierListOwner listOwner, boolean inHierarchy) {
     final PsiModifierList modifierList = listOwner.getModifierList();

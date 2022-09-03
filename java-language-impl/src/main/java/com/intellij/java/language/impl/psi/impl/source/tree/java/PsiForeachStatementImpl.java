@@ -15,25 +15,28 @@
  */
 package com.intellij.java.language.impl.psi.impl.source.tree.java;
 
-import javax.annotation.Nonnull;
-
-import com.intellij.java.language.psi.*;
-import com.intellij.lang.ASTNode;
-import consulo.logging.Logger;
-import com.intellij.psi.*;
 import com.intellij.java.language.impl.psi.impl.PsiImplUtil;
 import com.intellij.java.language.impl.psi.impl.source.Constants;
 import com.intellij.java.language.impl.psi.impl.source.tree.ChildRole;
-import com.intellij.psi.impl.source.tree.CompositePsiElement;
-import com.intellij.psi.scope.PsiScopeProcessor;
-import com.intellij.psi.tree.ChildRoleBase;
-import com.intellij.psi.tree.IElementType;
+import com.intellij.java.language.psi.*;
+import consulo.language.ast.ASTNode;
+import consulo.language.ast.ChildRoleBase;
+import consulo.language.ast.IElementType;
+import consulo.language.impl.psi.CompositePsiElement;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiElementVisitor;
+import consulo.language.psi.resolve.PsiScopeProcessor;
+import consulo.language.psi.resolve.ResolveState;
+import consulo.logging.Logger;
+
+import javax.annotation.Nonnull;
 
 /**
  * @author dsl
  */
 public class PsiForeachStatementImpl extends CompositePsiElement implements PsiForeachStatement, Constants {
   private static final Logger LOG = Logger.getInstance(PsiForeachStatementImpl.class);
+
   public PsiForeachStatementImpl() {
     super(FOREACH_STATEMENT);
   }
@@ -69,7 +72,7 @@ public class PsiForeachStatementImpl extends CompositePsiElement implements PsiF
   public ASTNode findChildByRole(int role) {
     LOG.assertTrue(ChildRole.isUnique(role));
 
-    switch(role) {
+    switch (role) {
       case ChildRole.LOOP_BODY:
         return PsiImplUtil.findStatementChild(this);
 
@@ -103,27 +106,20 @@ public class PsiForeachStatementImpl extends CompositePsiElement implements PsiF
     IElementType i = child.getElementType();
     if (i == FOR_KEYWORD) {
       return ChildRole.FOR_KEYWORD;
-    }
-    else if (i == LPARENTH) {
+    } else if (i == LPARENTH) {
       return ChildRole.LPARENTH;
-    }
-    else if (i == RPARENTH) {
+    } else if (i == RPARENTH) {
       return ChildRole.RPARENTH;
-    }
-    else if (i == PARAMETER) {
+    } else if (i == PARAMETER) {
       return ChildRole.FOR_ITERATION_PARAMETER;
-    }
-    else if (i == COLON) {
+    } else if (i == COLON) {
       return ChildRole.COLON;
-    }
-    else {
+    } else {
       if (EXPRESSION_BIT_SET.contains(child.getElementType())) {
         return ChildRole.FOR_ITERATED_VALUE;
-      }
-      else if (child.getPsi() instanceof PsiStatement) {
+      } else if (child.getPsi() instanceof PsiStatement) {
         return ChildRole.LOOP_BODY;
-      }
-      else {
+      } else {
         return ChildRoleBase.NONE;
       }
     }
@@ -146,9 +142,8 @@ public class PsiForeachStatementImpl extends CompositePsiElement implements PsiF
   @Override
   public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
-      ((JavaElementVisitor)visitor).visitForeachStatement(this);
-    }
-    else {
+      ((JavaElementVisitor) visitor).visitForeachStatement(this);
+    } else {
       visitor.visitElement(this);
     }
   }

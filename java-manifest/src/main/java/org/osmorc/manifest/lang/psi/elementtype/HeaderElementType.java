@@ -25,11 +25,11 @@
 
 package org.osmorc.manifest.lang.psi.elementtype;
 
-import com.intellij.lang.ASTNode;
-import com.intellij.psi.stubs.IndexSink;
-import com.intellij.psi.stubs.StubElement;
-import com.intellij.psi.stubs.StubInputStream;
-import com.intellij.psi.stubs.StubOutputStream;
+import consulo.language.ast.ASTNode;
+import consulo.language.psi.stub.IndexSink;
+import consulo.language.psi.stub.StubElement;
+import consulo.language.psi.stub.StubInputStream;
+import consulo.language.psi.stub.StubOutputStream;
 import javax.annotation.Nonnull;
 import org.osmorc.manifest.lang.psi.Header;
 import org.osmorc.manifest.lang.psi.impl.HeaderImpl;

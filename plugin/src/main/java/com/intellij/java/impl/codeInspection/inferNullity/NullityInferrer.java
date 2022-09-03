@@ -25,20 +25,20 @@ import javax.swing.SwingUtilities;
 import javax.annotation.Nullable;
 
 import com.intellij.java.language.psi.*;
+import consulo.ui.ex.awt.Messages;
 import org.jetbrains.annotations.TestOnly;
 import com.intellij.java.language.codeInsight.NullableNotNullManager;
 import com.intellij.java.analysis.impl.codeInsight.intention.AddAnnotationFix;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.Messages;
+import consulo.project.Project;
 import com.intellij.psi.*;
-import com.intellij.psi.search.LocalSearchScope;
+import consulo.language.psi.scope.LocalSearchScope;
 import com.intellij.java.indexing.search.searches.OverridingMethodsSearch;
-import com.intellij.psi.search.searches.ReferencesSearch;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.search.ReferencesSearch;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.usageView.UsageInfo;
-import com.intellij.util.ArrayUtil;
-import com.intellij.util.Query;
+import consulo.usage.UsageInfo;
+import consulo.util.collection.ArrayUtil;
+import consulo.application.util.query.Query;
 
 public class NullityInferrer
 {
@@ -57,7 +57,7 @@ public class NullityInferrer
 		myPointerManager = SmartPointerManager.getInstance(project);
 	}
 
-	private boolean expressionIsNeverNull(@javax.annotation.Nullable PsiExpression expression)
+	private boolean expressionIsNeverNull(@Nullable PsiExpression expression)
 	{
 		if(expression == null)
 		{

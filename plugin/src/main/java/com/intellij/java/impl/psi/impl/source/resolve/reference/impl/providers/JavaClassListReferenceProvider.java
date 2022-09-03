@@ -15,16 +15,16 @@
  */
 package com.intellij.java.impl.psi.impl.source.resolve.reference.impl.providers;
 
-import com.intellij.openapi.progress.ProgressManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.NotNullLazyValue;
-import com.intellij.psi.PsiElement;
+import consulo.application.progress.ProgressManager;
+import consulo.project.Project;
+import consulo.ide.impl.idea.openapi.util.NotNullLazyValue;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiJavaPackage;
-import com.intellij.psi.PsiReference;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.templateLanguages.OuterLanguageElement;
+import consulo.language.psi.PsiReference;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.OuterLanguageElement;
 import com.intellij.psi.xml.XmlTag;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.util.collection.ContainerUtil;
 import javax.annotation.Nonnull;
 
 import java.util.ArrayList;

@@ -25,26 +25,28 @@ import java.util.Map;
 import java.util.StringTokenizer;
 
 import com.intellij.java.language.psi.*;
+import consulo.language.editor.hint.HintManager;
 import org.jetbrains.java.generate.config.*;
 import org.jetbrains.java.generate.exception.GenerateCodeException;
 import org.jetbrains.java.generate.psi.PsiAdapter;
 import org.jetbrains.java.generate.template.TemplateResource;
 import org.jetbrains.java.generate.view.MethodExistsDialog;
-import com.intellij.codeInsight.hint.HintManager;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.command.CommandProcessor;
+import consulo.application.ApplicationManager;
+import consulo.undoRedo.CommandProcessor;
 import consulo.logging.Logger;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.ScrollType;
-import com.intellij.openapi.editor.VisualPosition;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.codeEditor.Editor;
+import consulo.codeEditor.ScrollType;
+import consulo.codeEditor.VisualPosition;
+import consulo.util.lang.StringUtil;
 import com.intellij.java.language.psi.JVMElementFactory;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.codeStyle.CodeStyleManager;
+import consulo.language.psi.PsiFile;
+import consulo.language.codeStyle.CodeStyleManager;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
+
+import javax.annotation.Nullable;
 
 public class GenerateToStringWorker
 {
@@ -74,7 +76,7 @@ public class GenerateToStringWorker
 	 * @throws GenerateCodeException       is thrown when there is an error generating the javacode.
 	 * @throws IncorrectOperationException is thrown by IDEA.
 	 */
-	@javax.annotation.Nullable
+	@Nullable
 	private PsiMethod createToStringMethod(Collection<PsiMember> selectedMembers,
 			ConflictResolutionPolicy policy,
 			Map<String, String> params,

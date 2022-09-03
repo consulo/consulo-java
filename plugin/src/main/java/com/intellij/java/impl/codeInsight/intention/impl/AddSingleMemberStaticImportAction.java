@@ -21,21 +21,21 @@ package com.intellij.java.impl.codeInsight.intention.impl;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.codeInsight.CodeInsightBundle;
-import com.intellij.codeInsight.FileModificationService;
-import com.intellij.codeInsight.intention.PsiElementBaseIntentionAction;
+import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.FileModificationService;
+import consulo.language.editor.intention.PsiElementBaseIntentionAction;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.logging.Logger;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Comparing;
+import consulo.codeEditor.Editor;
+import consulo.project.Project;
+import consulo.util.lang.Comparing;
 import consulo.util.dataholder.Key;
 import com.intellij.psi.*;
 import com.intellij.java.language.impl.psi.impl.source.tree.java.PsiReferenceExpressionImpl;
 import com.intellij.psi.util.*;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
 
 import javax.annotation.Nullable;
 
@@ -111,7 +111,7 @@ public class AddSingleMemberStaticImportAction extends PsiElementBaseIntentionAc
     return parameterList != null && parameterList.getFirstChild() != null;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private static PsiClass getResolvedClass(PsiElement element, PsiMember resolved) {
     PsiClass aClass = resolved.getContainingClass();
     if (aClass != null && !PsiUtil.isAccessible(aClass, element, null)) {

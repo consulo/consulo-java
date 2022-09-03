@@ -15,41 +15,45 @@
  */
 package com.intellij.java.execution.impl.filters;
 
-import com.intellij.execution.filters.FileHyperlinkInfo;
-import com.intellij.execution.filters.Filter;
-import com.intellij.execution.filters.FilterMixin;
-import com.intellij.execution.filters.HyperlinkInfo;
 import com.intellij.java.execution.filters.ExceptionFilterFactory;
 import com.intellij.java.execution.filters.ExceptionInfoCache;
 import com.intellij.java.execution.filters.ExceptionWorker;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiCodeBlock;
 import com.intellij.java.language.psi.PsiTryStatement;
-import com.intellij.openapi.application.AccessToken;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.markup.EffectType;
-import com.intellij.openapi.editor.markup.TextAttributes;
-import com.intellij.openapi.fileEditor.OpenFileDescriptor;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.openapi.util.Trinity;
-import com.intellij.psi.*;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.Consumer;
-import com.intellij.util.ui.UIUtil;
-import consulo.awt.TargetAWT;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.application.AccessToken;
+import consulo.application.ApplicationManager;
+import consulo.colorScheme.EffectType;
+import consulo.colorScheme.TextAttributes;
+import consulo.document.Document;
+import consulo.document.util.TextRange;
+import consulo.execution.ui.console.FileHyperlinkInfo;
+import consulo.execution.ui.console.Filter;
+import consulo.execution.ui.console.FilterMixin;
+import consulo.execution.ui.console.HyperlinkInfo;
+import consulo.language.psi.PsiCompiledFile;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.navigation.OpenFileDescriptor;
 import consulo.ui.color.ColorValue;
+import consulo.ui.ex.awt.UIUtil;
+import consulo.ui.ex.awtUnsafe.TargetAWT;
+import consulo.util.lang.Trinity;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Consumer;
 
 /**
  * @author gregsh
  */
+@ExtensionImpl
 public class ExceptionExFilterFactory implements ExceptionFilterFactory {
   @Nonnull
   @Override
@@ -135,7 +139,7 @@ public class ExceptionExFilterFactory implements ExceptionFilterFactory {
         }
         int off = startOffset + lineStartOffset;
         final ColorValue color = TargetAWT.from(UIUtil.getInactiveTextColor());
-        consumer.consume(new AdditionalHighlight(off + info.first.getStartOffset(), off + info.second.getEndOffset()) {
+        consumer.accept(new AdditionalHighlight(off + info.first.getStartOffset(), off + info.second.getEndOffset()) {
           @Nonnull
           @Override
           public TextAttributes getTextAttributes(@Nullable TextAttributes source) {

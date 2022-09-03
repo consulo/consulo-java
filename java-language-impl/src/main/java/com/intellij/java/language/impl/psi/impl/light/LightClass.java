@@ -17,10 +17,10 @@ package com.intellij.java.language.impl.psi.impl.light;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.lang.Language;
+import consulo.language.Language;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 
 /**
  * @author peter

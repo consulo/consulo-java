@@ -15,23 +15,26 @@
  */
 package com.intellij.java.impl.codeInsight.generation;
 
-import com.intellij.codeInsight.CodeInsightBundle;
-import com.intellij.codeInsight.generation.ClassMember;
-import com.intellij.icons.AllIcons;
-import com.intellij.ide.util.MemberChooser;
-import com.intellij.ide.util.PropertiesComponent;
+import consulo.language.editor.CodeInsightBundle;
+import consulo.ide.impl.idea.codeInsight.generation.ClassMember;
+import consulo.application.AllIcons;
+import consulo.ide.impl.idea.ide.util.MemberChooser;
+import consulo.ide.impl.idea.ide.util.PropertiesComponent;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.psi.infos.CandidateInfo;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.openapi.actionSystem.*;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.keymap.KeymapManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.DialogWrapper;
-import com.intellij.openapi.util.NotNullLazyValue;
-import com.intellij.psi.PsiElement;
-import com.intellij.util.Function;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.application.ApplicationManager;
+import consulo.ui.ex.awt.DialogWrapper;
+import consulo.ui.ex.keymap.KeymapManager;
+import consulo.project.Project;
+import consulo.ide.impl.idea.openapi.util.NotNullLazyValue;
+import consulo.language.psi.PsiElement;
+import consulo.ide.impl.idea.util.Function;
+import consulo.util.collection.ContainerUtil;
+import consulo.ui.ex.action.Constraints;
+import consulo.ui.ex.action.DefaultActionGroup;
+import consulo.ui.ex.action.ToggleAction;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;

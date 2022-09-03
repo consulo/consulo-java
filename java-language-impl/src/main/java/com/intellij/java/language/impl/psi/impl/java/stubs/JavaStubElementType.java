@@ -15,13 +15,13 @@
  */
 package com.intellij.java.language.impl.psi.impl.java.stubs;
 
-import com.intellij.lang.ASTNode;
+import consulo.language.ast.ASTNode;
 import com.intellij.java.language.JavaLanguage;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.stubs.ILightStubElementType;
-import com.intellij.psi.stubs.PsiFileStub;
-import com.intellij.psi.stubs.StubElement;
-import com.intellij.psi.tree.ICompositeElementType;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.stub.ILightStubElementType;
+import consulo.language.psi.stub.PsiFileStub;
+import consulo.language.psi.stub.StubElement;
+import consulo.language.ast.ICompositeElementType;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
 

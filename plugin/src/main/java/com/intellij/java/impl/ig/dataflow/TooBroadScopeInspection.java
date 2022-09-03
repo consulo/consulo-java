@@ -15,18 +15,18 @@
  */
 package com.intellij.java.impl.ig.dataflow;
 
-import com.intellij.codeInspection.ProblemDescriptor;
-import com.intellij.codeInspection.ui.MultipleCheckboxOptionsPanel;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.ide.impl.idea.codeInspection.ui.MultipleCheckboxOptionsPanel;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.project.Project;
+import consulo.project.Project;
 import com.intellij.psi.*;
-import com.intellij.psi.codeStyle.CodeStyleManager;
-import com.intellij.psi.search.searches.ReferencesSearch;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.psi.search.ReferencesSearch;
+import consulo.language.ast.IElementType;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.Query;
+import consulo.language.util.IncorrectOperationException;
+import consulo.application.util.query.Query;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
@@ -168,7 +168,7 @@ public class TooBroadScopeInspection extends BaseInspection {
       }
     }
 
-    private PsiDeclarationStatement createNewDeclaration(@Nonnull PsiVariable variable, @javax.annotation.Nullable PsiExpression initializer)
+    private PsiDeclarationStatement createNewDeclaration(@Nonnull PsiVariable variable, @Nullable PsiExpression initializer)
       throws IncorrectOperationException {
       final Project project = variable.getProject();
       final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);

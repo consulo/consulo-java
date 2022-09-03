@@ -16,15 +16,16 @@
 package com.intellij.java.language.jvm;
 
 import javax.annotation.Nullable;
+import java.lang.reflect.Member;
 
 /**
- * @see java.lang.reflect.Member
+ * @see Member
  */
 public interface JvmMember extends JvmModifiersOwner, JvmNamedElement
 {
 
 	/**
-	 * @see java.lang.reflect.Member#getDeclaringClass
+	 * @see Member#getDeclaringClass
 	 */
 	@Nullable
 	JvmClass getContainingClass();

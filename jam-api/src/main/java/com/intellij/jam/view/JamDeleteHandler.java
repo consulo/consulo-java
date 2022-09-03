@@ -16,8 +16,8 @@
 package com.intellij.jam.view;
 
 import com.intellij.jam.model.common.CommonModelElement;
-import com.intellij.psi.PsiElement;
-import com.intellij.util.xml.DomElement;
+import consulo.language.psi.PsiElement;
+import consulo.xml.util.xml.DomElement;
 
 import java.util.Collection;
 

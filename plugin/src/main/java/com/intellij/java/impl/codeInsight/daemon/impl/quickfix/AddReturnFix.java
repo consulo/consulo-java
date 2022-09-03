@@ -22,15 +22,15 @@ import javax.annotation.Nonnull;
 
 import com.intellij.java.language.psi.*;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
-import com.intellij.codeInsight.FileModificationService;
-import com.intellij.codeInsight.intention.IntentionAction;
+import consulo.language.editor.FileModificationService;
+import consulo.language.editor.intention.IntentionAction;
 import consulo.logging.Logger;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
+import consulo.codeEditor.Editor;
+import consulo.project.Project;
 import com.intellij.psi.*;
 import com.intellij.java.language.psi.util.PsiTypesUtil;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.util.collection.ContainerUtil;
 
 public class AddReturnFix implements IntentionAction {
   private static final Logger LOG = Logger.getInstance(AddReturnFix.class);

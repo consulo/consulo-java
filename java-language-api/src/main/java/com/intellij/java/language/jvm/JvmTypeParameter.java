@@ -19,25 +19,27 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import com.intellij.java.language.jvm.types.JvmReferenceType;
 
+import java.lang.reflect.TypeVariable;
+
 /**
  * Represents a type parameter.
  *
- * @see java.lang.reflect.TypeVariable
+ * @see TypeVariable
  */
 public interface JvmTypeParameter extends JvmTypeDeclaration
 {
 
 	/**
 	 * @return bounds of this type parameter
-	 * @see java.lang.reflect.TypeVariable#getBounds
-	 * @see java.lang.reflect.TypeVariable#getAnnotatedBounds
+	 * @see TypeVariable#getBounds
+	 * @see TypeVariable#getAnnotatedBounds
 	 */
 	@Nonnull
 	JvmReferenceType[] getBounds();
 
 	/**
 	 * @return the element which is parameterized by this type parameter
-	 * @see java.lang.reflect.TypeVariable#getGenericDeclaration
+	 * @see TypeVariable#getGenericDeclaration
 	 */
 	@Nullable
 	JvmTypeParametersOwner getOwner();

@@ -16,15 +16,15 @@
  */
 package com.intellij.java.impl.codeInsight.generation.surroundWith;
 
-import com.intellij.codeInsight.CodeInsightUtilBase;
+import consulo.ide.impl.idea.codeInsight.CodeInsightUtilBase;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.TextRange;
+import consulo.codeEditor.Editor;
+import consulo.project.Project;
+import consulo.document.util.TextRange;
 import com.intellij.psi.*;
-import com.intellij.psi.codeStyle.CodeStyleManager;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
 import org.jetbrains.annotations.NonNls;
 
 class JavaWithNullCheckSurrounder extends JavaExpressionSurrounder{

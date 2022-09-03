@@ -16,16 +16,17 @@
 package com.intellij.java.debugger.impl.ui.breakpoints;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.intellij.java.debugger.impl.breakpoints.properties.JavaMethodBreakpointProperties;
 import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.impl.HelpID;
-import com.intellij.icons.AllIcons;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.xdebugger.breakpoints.XBreakpoint;
-import com.intellij.xdebugger.breakpoints.XLineBreakpoint;
-import com.intellij.xdebugger.breakpoints.ui.XBreakpointCustomPropertiesPanel;
+import consulo.application.AllIcons;
+import consulo.execution.debug.breakpoint.XLineBreakpoint;
+import consulo.execution.debug.breakpoint.ui.XBreakpointCustomPropertiesPanel;
+import consulo.project.Project;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.execution.debug.breakpoint.XBreakpoint;
 import consulo.ui.image.Image;
 
 /**
@@ -102,21 +103,21 @@ public class JavaMethodBreakpointType extends JavaLineBreakpointTypeBase<JavaMet
 		return buffer.toString();
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	@Override
 	public XBreakpointCustomPropertiesPanel createCustomPropertiesPanel()
 	{
 		return new MethodBreakpointPropertiesPanel();
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	@Override
 	public JavaMethodBreakpointProperties createProperties()
 	{
 		return new JavaMethodBreakpointProperties();
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	@Override
 	public JavaMethodBreakpointProperties createBreakpointProperties(@Nonnull VirtualFile file, int line)
 	{

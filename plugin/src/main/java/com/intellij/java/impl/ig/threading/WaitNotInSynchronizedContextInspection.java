@@ -17,7 +17,7 @@ package com.intellij.java.impl.ig.threading;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.siyeh.HardcodedMethodConstants;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
@@ -25,6 +25,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import consulo.java.language.module.util.JavaClassNames;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class WaitNotInSynchronizedContextInspection
   extends BaseInspection {
@@ -110,7 +111,7 @@ public class WaitNotInSynchronizedContextInspection
     }
 
     private static boolean isSynchronizedOn(@Nonnull PsiElement element,
-                                            @javax.annotation.Nullable PsiElement target) {
+                                            @Nullable PsiElement target) {
       if (target == null) {
         return false;
       }

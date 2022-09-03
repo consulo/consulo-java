@@ -15,24 +15,24 @@
  */
 package com.intellij.java.impl.codeInsight.editorActions;
 
-import static com.intellij.formatting.Indent.Type.CONTINUATION;
-import static com.intellij.psi.impl.source.codeStyle.lineIndent.JavaLikeLangLineIndentProvider.JavaLikeElement.*;
+import static consulo.language.codeStyle.Indent.Type.CONTINUATION;
+import static consulo.ide.impl.psi.impl.source.codeStyle.lineIndent.JavaLikeLangLineIndentProvider.JavaLikeElement.*;
 
 import java.util.HashMap;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import com.intellij.formatting.Indent;
-import com.intellij.lang.Language;
+import consulo.language.codeStyle.Indent;
+import consulo.language.Language;
 import com.intellij.java.language.JavaLanguage;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
+import consulo.codeEditor.Editor;
+import consulo.project.Project;
 import com.intellij.java.language.psi.JavaDocTokenType;
 import com.intellij.java.language.psi.JavaTokenType;
-import com.intellij.psi.TokenType;
-import com.intellij.psi.impl.source.codeStyle.SemanticEditorPosition;
-import com.intellij.psi.impl.source.codeStyle.lineIndent.JavaLikeLangLineIndentProvider;
-import com.intellij.psi.tree.IElementType;
+import consulo.language.ast.TokenType;
+import consulo.ide.impl.psi.impl.source.codeStyle.SemanticEditorPosition;
+import consulo.ide.impl.psi.impl.source.codeStyle.lineIndent.JavaLikeLangLineIndentProvider;
+import consulo.language.ast.IElementType;
 
 /**
  * @author Rustam Vishnyakov

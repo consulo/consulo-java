@@ -4,9 +4,10 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-import com.intellij.coverage.CoverageSuite;
-import com.intellij.ide.plugins.PluginManager;
+import consulo.execution.coverage.CoverageSuite;
+import consulo.ide.impl.idea.ide.plugins.PluginManager;
 import consulo.logging.Logger;
 import com.intellij.rt.coverage.data.ProjectData;
 import com.intellij.rt.coverage.util.ProjectDataLoader;
@@ -21,7 +22,7 @@ public class IDEACoverageRunner extends JavaCoverageRunner
 	private static final Logger LOG = Logger.getInstance(IDEACoverageRunner.class);
 
 	@Override
-	public ProjectData loadCoverageData(@Nonnull final File sessionDataFile, @javax.annotation.Nullable final CoverageSuite coverageSuite)
+	public ProjectData loadCoverageData(@Nonnull final File sessionDataFile, @Nullable final CoverageSuite coverageSuite)
 	{
 		return ProjectDataLoader.load(sessionDataFile);
 	}

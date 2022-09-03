@@ -25,7 +25,9 @@ import java.util.Objects;
 import java.util.function.Function;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
+import consulo.execution.debug.breakpoint.*;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
 import com.intellij.java.debugger.impl.breakpoints.properties.JavaBreakpointProperties;
@@ -59,29 +61,27 @@ import com.intellij.java.debugger.requests.ClassPrepareRequestor;
 import com.intellij.java.debugger.requests.Requestor;
 import com.intellij.java.debugger.impl.settings.DebuggerSettings;
 import com.intellij.java.debugger.impl.ui.impl.watch.CompilingEvaluatorImpl;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.application.ReadAction;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.InvalidDataException;
-import com.intellij.openapi.util.JDOMExternalizerUtil;
+import consulo.application.ApplicationManager;
+import consulo.application.ReadAction;
+import consulo.project.Project;
+import consulo.util.xml.serializer.InvalidDataException;
+import consulo.util.xml.serializer.JDOMExternalizerUtil;
 import consulo.util.dataholder.Key;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiCodeFragment;
-import com.intellij.psi.PsiElement;
-import com.intellij.ui.AppUIUtil;
+import consulo.language.psi.PsiCodeFragment;
+import consulo.language.psi.PsiElement;
+import consulo.ide.impl.idea.ui.AppUIUtil;
 import com.intellij.java.debugger.ui.classFilter.ClassFilter;
-import com.intellij.util.ObjectUtil;
-import com.intellij.util.ThreeState;
-import com.intellij.xdebugger.XExpression;
-import com.intellij.xdebugger.breakpoints.SuspendPolicy;
-import com.intellij.xdebugger.breakpoints.XBreakpoint;
-import com.intellij.xdebugger.breakpoints.XLineBreakpoint;
-import com.intellij.xdebugger.impl.XDebugSessionImpl;
-import com.intellij.xdebugger.impl.XDebuggerHistoryManager;
-import com.intellij.xdebugger.impl.XDebuggerUtilImpl;
-import com.intellij.xdebugger.impl.breakpoints.XBreakpointBase;
-import com.intellij.xdebugger.impl.breakpoints.XExpressionImpl;
-import com.intellij.xdebugger.impl.breakpoints.ui.XBreakpointActionsPanel;
+import consulo.util.lang.ObjectUtil;
+import consulo.util.lang.ThreeState;
+import consulo.execution.debug.breakpoint.XBreakpoint;
+import consulo.execution.debug.breakpoint.XLineBreakpoint;
+import consulo.ide.impl.idea.xdebugger.impl.XDebugSessionImpl;
+import consulo.ide.impl.idea.xdebugger.impl.XDebuggerHistoryManager;
+import consulo.ide.impl.idea.xdebugger.impl.XDebuggerUtilImpl;
+import consulo.ide.impl.idea.xdebugger.impl.breakpoints.XBreakpointBase;
+import consulo.ide.impl.idea.xdebugger.impl.breakpoints.XExpressionImpl;
+import consulo.ide.impl.idea.xdebugger.impl.breakpoints.ui.XBreakpointActionsPanel;
 import consulo.internal.com.sun.jdi.Location;
 import consulo.internal.com.sun.jdi.ObjectReference;
 import consulo.internal.com.sun.jdi.ReferenceType;
@@ -127,7 +127,7 @@ public abstract class Breakpoint<P extends JavaBreakpointProperties> implements 
 		return myXBreakpoint;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public abstract PsiClass getPsiClass();
 
 	/**
@@ -142,7 +142,7 @@ public abstract class Breakpoint<P extends JavaBreakpointProperties> implements 
 		return ReadAction.compute(() ->
 		{
 			JavaDebugProcess process = debugProcess.getXdebugProcess();
-			return process != null && debugProcess.isAttached() && (xBreakpoint == null || ((XDebugSessionImpl) process.getSession()).isBreakpointActive(xBreakpoint)) && (forPreparedClass ||
+			return process != null && debugProcess.isAttached() && (xBreakpoint == null || ((consulo.ide.impl.idea.xdebugger.impl.XDebugSessionImpl) process.getSession()).isBreakpointActive(xBreakpoint)) && (forPreparedClass ||
 					debugProcess.getRequestsManager().findRequests(requestor).isEmpty());
 		});
 	}
@@ -172,7 +172,7 @@ public abstract class Breakpoint<P extends JavaBreakpointProperties> implements 
 		return getDisplayName();
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public String getClassName()
 	{
 		return null;
@@ -196,7 +196,7 @@ public abstract class Breakpoint<P extends JavaBreakpointProperties> implements 
 		}
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public String getShortClassName()
 	{
 		final String className = getClassName();
@@ -209,7 +209,7 @@ public abstract class Breakpoint<P extends JavaBreakpointProperties> implements 
 		return dotIndex >= 0 && dotIndex + 1 < className.length() ? className.substring(dotIndex + 1) : className;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public String getPackageName()
 	{
 		return null;
@@ -458,7 +458,7 @@ public abstract class Breakpoint<P extends JavaBreakpointProperties> implements 
 			myEvaluator = evaluator;
 		}
 
-		@javax.annotation.Nullable
+		@Nullable
 		static ExpressionEvaluator cacheOrGet(String propertyName,
 				EventRequest request,
 				PsiElement context,
@@ -517,7 +517,7 @@ public abstract class Breakpoint<P extends JavaBreakpointProperties> implements 
 		return event.location().declaringType().name();
 	}
 
-	protected static boolean typeMatchesClassFilters(@javax.annotation.Nullable String typeName, ClassFilter[] includeFilters, ClassFilter[] exludeFilters)
+	protected static boolean typeMatchesClassFilters(@Nullable String typeName, ClassFilter[] includeFilters, ClassFilter[] exludeFilters)
 	{
 		if(typeName == null)
 		{
@@ -597,10 +597,10 @@ public abstract class Breakpoint<P extends JavaBreakpointProperties> implements 
 			String logMessage = JDOMExternalizerUtil.readField(parentNode, LOG_MESSAGE_OPTION_NAME);
 			if(logMessage != null && !logMessage.isEmpty())
 			{
-				XExpressionImpl expression = XExpressionImpl.fromText(logMessage);
-				XDebuggerHistoryManager.getInstance(myProject).addRecentExpression(XBreakpointActionsPanel.LOG_EXPRESSION_HISTORY_ID, expression);
+				consulo.ide.impl.idea.xdebugger.impl.breakpoints.XExpressionImpl expression = consulo.ide.impl.idea.xdebugger.impl.breakpoints.XExpressionImpl.fromText(logMessage);
+				consulo.ide.impl.idea.xdebugger.impl.XDebuggerHistoryManager.getInstance(myProject).addRecentExpression(XBreakpointActionsPanel.LOG_EXPRESSION_HISTORY_ID, expression);
 				myXBreakpoint.setLogExpressionObject(expression);
-				((XBreakpointBase) myXBreakpoint).setLogExpressionEnabled(Boolean.valueOf(JDOMExternalizerUtil.readField(parentNode, "LOG_EXPRESSION_ENABLED")));
+				((consulo.ide.impl.idea.xdebugger.impl.breakpoints.XBreakpointBase) myXBreakpoint).setLogExpressionEnabled(Boolean.valueOf(JDOMExternalizerUtil.readField(parentNode, "LOG_EXPRESSION_ENABLED")));
 			}
 		}
 		catch(Exception ignored)
@@ -615,7 +615,7 @@ public abstract class Breakpoint<P extends JavaBreakpointProperties> implements 
 		}
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public abstract PsiElement getEvaluationElement();
 
 	protected TextWithImports getLogMessage()
@@ -650,7 +650,7 @@ public abstract class Breakpoint<P extends JavaBreakpointProperties> implements 
 
 	protected boolean isLogExpressionEnabled()
 	{
-		if(XDebuggerUtilImpl.isEmptyExpression(myXBreakpoint.getLogExpressionObject()))
+		if(consulo.ide.impl.idea.xdebugger.impl.XDebuggerUtilImpl.isEmptyExpression(myXBreakpoint.getLogExpressionObject()))
 		{
 			return false;
 		}
@@ -810,14 +810,14 @@ public abstract class Breakpoint<P extends JavaBreakpointProperties> implements 
 	public boolean isConditionEnabled()
 	{
 		XExpression condition = myXBreakpoint.getConditionExpression();
-		if(XDebuggerUtilImpl.isEmptyExpression(condition))
+		if(consulo.ide.impl.idea.xdebugger.impl.XDebuggerUtilImpl.isEmptyExpression(condition))
 		{
 			return false;
 		}
 		return !getCondition().isEmpty();
 	}
 
-	public void setCondition(@javax.annotation.Nullable TextWithImports condition)
+	public void setCondition(@Nullable TextWithImports condition)
 	{
 		myXBreakpoint.setConditionExpression(TextWithImportsImpl.toXExpression(condition));
 	}
@@ -829,6 +829,6 @@ public abstract class Breakpoint<P extends JavaBreakpointProperties> implements 
 
 	protected void fireBreakpointChanged()
 	{
-		((XBreakpointBase) myXBreakpoint).fireBreakpointChanged();
+		((consulo.ide.impl.idea.xdebugger.impl.breakpoints.XBreakpointBase) myXBreakpoint).fireBreakpointChanged();
 	}
 }

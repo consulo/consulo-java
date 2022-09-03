@@ -18,24 +18,25 @@ package com.intellij.java.impl.codeInsight;
 import com.intellij.java.language.codeInsight.AnnotationTargetUtil;
 import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.openapi.util.Pair;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.module.Module;
+import consulo.project.Project;
+import consulo.util.lang.Comparing;
+import consulo.util.lang.Pair;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.psi.*;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.java.indexing.search.searches.AnnotatedElementsSearch;
 import com.intellij.java.indexing.search.searches.DirectClassInheritorsSearch;
 import com.intellij.psi.util.*;
-import com.intellij.util.containers.ConcurrentFactoryMap;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.application.util.ConcurrentFactoryMap;
+import consulo.util.collection.ContainerUtil;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.util.collection.HashingStrategy;
 import consulo.util.collection.Sets;
 import consulo.util.dataholder.Key;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.*;
 import java.util.concurrent.ConcurrentMap;
 import java.util.stream.Stream;
@@ -198,7 +199,7 @@ public class MetaAnnotationUtil
 		return false;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	private static PsiAnnotation metaAnnotationCached(PsiClass subjectAnnotation, String annotationToFind)
 	{
 		ConcurrentMap<String, PsiAnnotation> cachedValue = CachedValuesManager.getCachedValue(subjectAnnotation, () ->
@@ -209,7 +210,7 @@ public class MetaAnnotationUtil
 		return cachedValue.get(annotationToFind);
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	private static PsiAnnotation findMetaAnnotation(PsiClass aClass, final String annotation, final Set<PsiClass> visited)
 	{
 		PsiAnnotation directAnnotation = AnnotationUtil.findAnnotation(aClass, annotation);

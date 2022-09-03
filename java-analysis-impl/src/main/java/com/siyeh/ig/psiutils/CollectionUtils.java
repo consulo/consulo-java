@@ -169,7 +169,7 @@ public class CollectionUtils
 	}
 
 	@Contract("null -> false")
-	public static boolean isConcreteCollectionClass(@javax.annotation.Nullable PsiType type)
+	public static boolean isConcreteCollectionClass(@Nullable PsiType type)
 	{
 		if(!(type instanceof PsiClassType))
 		{
@@ -246,7 +246,7 @@ public class CollectionUtils
 		return false;
 	}
 
-	public static boolean isWeakCollectionClass(@javax.annotation.Nullable PsiType type)
+	public static boolean isWeakCollectionClass(@Nullable PsiType type)
 	{
 		if(!(type instanceof PsiClassType))
 		{

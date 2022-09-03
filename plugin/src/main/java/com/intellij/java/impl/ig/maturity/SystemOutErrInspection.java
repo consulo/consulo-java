@@ -16,7 +16,7 @@
 package com.intellij.java.impl.ig.maturity;
 
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiReferenceExpression;
 import com.siyeh.HardcodedMethodConstants;

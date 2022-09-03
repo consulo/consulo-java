@@ -17,9 +17,9 @@ package com.intellij.java.impl.psi.formatter.java;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.formatting.alignment.AlignmentStrategy;
-import com.intellij.lang.ASTNode;
-import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
+import consulo.language.codeStyle.AlignmentStrategy;
+import consulo.language.ast.ASTNode;
+import consulo.language.codeStyle.CommonCodeStyleSettings;
 
 public class SubsequentClassMemberAlignment extends ChildAlignmentStrategyProvider
 {

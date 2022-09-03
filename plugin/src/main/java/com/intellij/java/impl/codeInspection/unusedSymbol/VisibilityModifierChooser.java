@@ -15,21 +15,21 @@
  */
 package com.intellij.java.impl.codeInspection.unusedSymbol;
 
-import com.intellij.icons.AllIcons;
-import com.intellij.openapi.ui.popup.JBPopup;
-import com.intellij.openapi.ui.popup.JBPopupFactory;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.application.AllIcons;
+import consulo.ui.ex.UserActivityProviderComponent;
+import consulo.ui.ex.popup.JBPopup;
+import consulo.ui.ex.popup.JBPopupFactory;
+import consulo.util.lang.StringUtil;
 import com.intellij.java.language.psi.PsiModifier;
-import com.intellij.ui.ClickListener;
-import com.intellij.ui.UserActivityProviderComponent;
-import com.intellij.ui.awt.RelativePoint;
-import com.intellij.util.ArrayUtil;
-import com.intellij.util.Consumer;
+import consulo.ui.ex.awt.ClickListener;
+import consulo.ui.ex.RelativePoint;
+import consulo.util.collection.ArrayUtil;
+import consulo.ide.impl.idea.util.Consumer;
 import com.intellij.java.language.util.VisibilityUtil;
 import java.util.HashSet;
-import com.intellij.util.ui.JBUI;
-import com.intellij.util.ui.UIUtil;
-import consulo.awt.TargetAWT;
+import consulo.ui.ex.awt.JBUI;
+import consulo.ui.ex.awt.UIUtil;
+import consulo.ui.ex.awtUnsafe.TargetAWT;
 
 import javax.annotation.Nonnull;
 import javax.swing.*;

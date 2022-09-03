@@ -17,9 +17,10 @@ package com.intellij.java.language.psi.compiled;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import com.intellij.psi.stubs.PsiFileStub;
+
 import com.intellij.java.language.util.cls.ClsFormatException;
-import com.intellij.util.indexing.FileContent;
+import consulo.language.psi.stub.FileContent;
+import consulo.language.psi.stub.PsiFileStub;
 
 public abstract class ClsStubBuilder
 {

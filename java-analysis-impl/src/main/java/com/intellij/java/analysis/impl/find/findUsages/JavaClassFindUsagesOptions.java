@@ -3,8 +3,8 @@ package com.intellij.java.analysis.impl.find.findUsages;
 import java.util.LinkedHashSet;
 
 import javax.annotation.Nonnull;
-import com.intellij.find.FindBundle;
-import com.intellij.openapi.project.Project;
+import consulo.find.FindBundle;
+import consulo.project.Project;
 
 /**
  * @author peter

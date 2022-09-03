@@ -15,14 +15,14 @@
  */
 package com.intellij.java.impl.ig.packaging;
 
-import com.intellij.analysis.AnalysisScope;
-import com.intellij.codeInspection.CommonProblemDescriptor;
-import com.intellij.codeInspection.GlobalInspectionContext;
-import com.intellij.codeInspection.InspectionManager;
+import consulo.language.editor.scope.AnalysisScope;
+import consulo.language.editor.inspection.CommonProblemDescriptor;
+import consulo.language.editor.inspection.GlobalInspectionContext;
+import consulo.language.editor.inspection.scheme.InspectionManager;
 import com.intellij.java.analysis.codeInspection.reference.RefClass;
-import com.intellij.codeInspection.reference.RefEntity;
+import consulo.language.editor.inspection.reference.RefEntity;
 import com.intellij.java.analysis.codeInspection.reference.RefPackage;
-import com.intellij.codeInspection.ui.SingleIntegerFieldOptionsPanel;
+import consulo.ide.impl.idea.codeInspection.ui.SingleIntegerFieldOptionsPanel;
 import com.siyeh.InspectionGadgetsBundle;
 import com.intellij.java.impl.ig.BaseGlobalInspection;
 import javax.annotation.Nonnull;

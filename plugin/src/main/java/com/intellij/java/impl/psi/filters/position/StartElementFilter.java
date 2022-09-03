@@ -16,8 +16,8 @@
 package com.intellij.java.impl.psi.filters.position;
 
 import com.intellij.java.impl.psi.filters.FilterUtil;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.filters.position.PositionElementFilter;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.filter.position.PositionElementFilter;
 
 /**
  * Created by IntelliJ IDEA.

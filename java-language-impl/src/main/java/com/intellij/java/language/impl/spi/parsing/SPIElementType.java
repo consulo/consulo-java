@@ -15,7 +15,7 @@
  */
 package com.intellij.java.language.impl.spi.parsing;
 
-import com.intellij.psi.tree.IElementType;
+import consulo.language.ast.IElementType;
 import com.intellij.java.language.spi.SPILanguage;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;

@@ -16,6 +16,7 @@
 package com.intellij.java.impl.ig.internationalization;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import consulo.java.language.module.util.JavaClassNames;
 import com.intellij.java.language.psi.PsiBinaryExpression;
@@ -71,7 +72,7 @@ public class CharacterComparisonInspection extends BaseInspection {
       registerError(expression);
     }
 
-    private static boolean isCharacter(@javax.annotation.Nullable PsiExpression expression) {
+    private static boolean isCharacter(@Nullable PsiExpression expression) {
       return ExpressionUtils.hasType(expression, PsiKeyword.CHAR) ||
              ExpressionUtils.hasType(expression, JavaClassNames.JAVA_LANG_CHARACTER);
     }

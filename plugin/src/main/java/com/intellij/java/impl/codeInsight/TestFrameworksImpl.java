@@ -26,11 +26,11 @@ import com.intellij.java.language.codeInsight.TestFrameworks;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
-import com.intellij.openapi.extensions.Extensions;
+import consulo.component.extension.Extensions;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.testIntegration.TestFramework;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
 
 @Singleton
 public class TestFrameworksImpl extends TestFrameworks
@@ -69,7 +69,7 @@ public class TestFrameworksImpl extends TestFrameworks
 	}
 
 	@Override
-	@javax.annotation.Nullable
+	@Nullable
 	public PsiMethod findOrCreateSetUpMethod(final PsiClass psiClass)
 	{
 		final TestFramework[] testFrameworks = Extensions.getExtensions(TestFramework.EXTENSION_NAME);
@@ -95,7 +95,7 @@ public class TestFrameworksImpl extends TestFrameworks
 	}
 
 	@Override
-	@javax.annotation.Nullable
+	@Nullable
 	public PsiMethod findSetUpMethod(final PsiClass psiClass)
 	{
 		final TestFramework[] testFrameworks = Extensions.getExtensions(TestFramework.EXTENSION_NAME);

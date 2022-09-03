@@ -15,13 +15,13 @@
  */
 package com.intellij.java.impl.psi.impl.migration;
 
-import com.intellij.openapi.application.ApplicationManager;
+import consulo.application.ApplicationManager;
 import consulo.logging.Logger;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMigration;
 import com.intellij.java.language.psi.PsiJavaPackage;
-import com.intellij.psi.impl.PsiManagerImpl;
+import consulo.language.impl.internal.psi.PsiManagerImpl;
 import java.util.HashMap;
 
 import java.util.ArrayList;

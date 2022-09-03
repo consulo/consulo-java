@@ -1,10 +1,10 @@
 package com.intellij.codeInsight;
 
-import com.intellij.ide.DataManager;
-import com.intellij.openapi.actionSystem.IdeActions;
-import com.intellij.openapi.editor.actionSystem.EditorActionHandler;
-import com.intellij.openapi.editor.actionSystem.EditorActionManager;
-import com.intellij.openapi.editor.impl.TrailingSpacesStripper;
+import consulo.codeEditor.action.EditorActionHandler;
+import consulo.codeEditor.action.EditorActionManager;
+import consulo.dataContext.DataManager;
+import consulo.ui.ex.action.IdeActions;
+import consulo.ide.impl.idea.openapi.editor.impl.TrailingSpacesStripper;
 import com.intellij.testFramework.PlatformTestCase;
 
 /**

@@ -27,12 +27,12 @@ package com.intellij.java.language.util;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiBundle;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.ArrayUtilRt;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.psi.PsiBundle;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+import consulo.util.collection.ArrayUtil;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
 
@@ -53,7 +53,7 @@ public class VisibilityUtil {
   }
 
   public static int compare(@PsiModifier.ModifierConstant String v1, @PsiModifier.ModifierConstant String v2) {
-    return ArrayUtilRt.find(visibilityModifiers, v2) - ArrayUtilRt.find(visibilityModifiers, v1);
+    return ArrayUtil.find(visibilityModifiers, v2) - ArrayUtil.find(visibilityModifiers, v1);
   }
 
   @PsiModifier.ModifierConstant

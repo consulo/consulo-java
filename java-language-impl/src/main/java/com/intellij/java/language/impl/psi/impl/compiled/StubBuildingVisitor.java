@@ -9,15 +9,13 @@ import com.intellij.java.language.impl.psi.impl.java.stubs.impl.*;
 import com.intellij.java.language.psi.CommonClassNames;
 import com.intellij.java.language.psi.PsiNameHelper;
 import com.intellij.java.language.util.cls.ClsFormatException;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.stubs.PsiFileStub;
-import com.intellij.psi.stubs.StubElement;
-import com.intellij.util.Consumer;
-import com.intellij.util.Function;
-import com.intellij.util.SmartList;
-import com.intellij.util.containers.ContainerUtil;
 import consulo.internal.org.objectweb.asm.*;
+import consulo.language.psi.stub.PsiFileStub;
+import consulo.language.psi.stub.StubElement;
 import consulo.logging.Logger;
+import consulo.util.collection.ContainerUtil;
+import consulo.util.collection.SmartList;
+import consulo.util.lang.StringUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -28,8 +26,10 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
-import static com.intellij.util.BitUtil.isSet;
+import static consulo.util.lang.BitUtil.isSet;
 
 /**
  * @author max
@@ -493,7 +493,7 @@ public class StubBuildingVisitor<T> extends ClassVisitor {
       throw new ClsFormatException();
     iterator.next();
     if (iterator.current() == ')') {
-      result.argTypes = ContainerUtil.emptyList();
+      result.argTypes = List.of();
     } else {
       result.argTypes = new SmartList<>();
       while (iterator.current() != ')' && iterator.current() != CharacterIterator.DONE) {
@@ -833,7 +833,7 @@ public class StubBuildingVisitor<T> extends ClassVisitor {
       dimensions = type.getDimensions();
       type = type.getElementType();
     }
-    String text = type.getSort() == Type.OBJECT ? mapping.fun(type.getInternalName()) : type.getClassName();
+    String text = type.getSort() == Type.OBJECT ? mapping.apply(type.getInternalName()) : type.getClassName();
     if (dimensions > 0)
       text += StringUtil.repeat("[]", dimensions);
     return text;

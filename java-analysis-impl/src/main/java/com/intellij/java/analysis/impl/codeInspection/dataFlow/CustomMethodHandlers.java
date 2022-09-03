@@ -12,12 +12,12 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaValueFac
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.RelationType;
 import com.intellij.java.analysis.impl.codeInspection.util.OptionalUtil;
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.util.CachedValueProvider;
-import com.intellij.psi.util.CachedValuesManager;
+import consulo.application.util.CachedValueProvider;
+import consulo.application.util.CachedValuesManager;
 import com.intellij.java.language.psi.util.ClassUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.util.ArrayUtil;
-import com.intellij.util.ReflectionUtil;
+import consulo.util.collection.ArrayUtil;
+import consulo.util.lang.reflect.ReflectionUtil;
 import com.siyeh.ig.callMatcher.CallMapper;
 import com.siyeh.ig.callMatcher.CallMatcher;
 import com.siyeh.ig.psiutils.TypeUtils;

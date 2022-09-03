@@ -15,29 +15,29 @@
  */
 package com.intellij.java.analysis.impl.codeInsight.daemon.impl;
 
-import com.intellij.codeInsight.daemon.ImplicitUsageProvider;
-import com.intellij.codeInsight.daemon.impl.HighlightInfo;
-import com.intellij.codeInsight.daemon.impl.HighlightInfoType;
-import com.intellij.codeInsight.daemon.impl.quickfix.QuickFixAction;
-import com.intellij.codeInsight.intention.IntentionAction;
+import consulo.language.editor.ImplicitUsageProvider;
+import consulo.language.editor.rawHighlight.HighlightInfo;
+import consulo.language.editor.rawHighlight.HighlightInfoType;
+import consulo.language.editor.intention.QuickFixAction;
+import consulo.language.editor.intention.IntentionAction;
 import com.intellij.codeInspection.reference.UnusedDeclarationFixProvider;
-import com.intellij.find.findUsages.FindUsagesOptions;
+import consulo.find.FindUsagesOptions;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.JavaHighlightUtil;
 import com.intellij.java.analysis.impl.codeInspection.ex.EntryPointsManagerBase;
 import com.intellij.java.analysis.impl.find.findUsages.*;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.progress.ProgressIndicator;
-import com.intellij.openapi.progress.ProgressManager;
-import com.intellij.openapi.project.Project;
+import consulo.application.progress.ProgressIndicator;
+import consulo.application.progress.ProgressManager;
+import consulo.project.Project;
 import com.intellij.psi.*;
 import com.intellij.java.language.impl.psi.impl.FindSuperElementsHelper;
 import com.intellij.java.language.impl.psi.impl.source.PsiClassImpl;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.search.PsiSearchHelper;
-import com.intellij.psi.search.SearchScope;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.search.PsiSearchHelper;
+import consulo.content.scope.SearchScope;
 import com.intellij.java.language.psi.util.PropertyUtil;
-import com.intellij.usageView.UsageInfo;
-import com.intellij.util.Processor;
+import consulo.usage.UsageInfo;
+import consulo.application.util.function.Processor;
 import consulo.java.language.impl.psi.augment.JavaEnumAugmentProvider;
 import consulo.psi.PsiPackage;
 
@@ -112,7 +112,7 @@ public class UnusedSymbolUtil
 		return isInjected(project, element);
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public static HighlightInfo createUnusedSymbolInfo(@Nonnull PsiElement element,
 													   @Nonnull String message,
 													   @Nonnull final HighlightInfoType highlightInfoType)
@@ -262,7 +262,7 @@ public class UnusedSymbolUtil
 										@Nonnull PsiFile containingFile,
 										@Nonnull PsiMember member,
 										@Nonnull ProgressIndicator progress,
-										@javax.annotation.Nullable PsiFile ignoreFile,
+										@Nullable PsiFile ignoreFile,
 										@Nonnull Processor<UsageInfo> usageInfoProcessor)
 	{
 		String name = member.getName();

@@ -22,7 +22,7 @@
 package com.intellij.java.compiler.cache;
 
 
-import com.intellij.compiler.make.CacheCorruptedException;
+import consulo.compiler.CacheCorruptedException;
 
 public interface ClassInfoProcessor {
   /**

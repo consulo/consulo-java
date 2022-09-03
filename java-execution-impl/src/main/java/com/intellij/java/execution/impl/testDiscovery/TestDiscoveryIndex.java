@@ -15,13 +15,13 @@
  */
 package com.intellij.java.execution.impl.testDiscovery;
 
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.startup.StartupManager;
-import com.intellij.util.ThrowableConvertor;
-import com.intellij.util.io.DataInputOutputUtil;
-import com.intellij.util.io.IOUtil;
-import com.intellij.util.io.PathKt;
+import consulo.application.ApplicationManager;
+import consulo.project.Project;
+import consulo.project.startup.StartupManager;
+import consulo.ide.impl.idea.util.ThrowableConvertor;
+import consulo.index.io.data.DataInputOutputUtil;
+import consulo.index.io.data.IOUtil;
+import consulo.ide.impl.idea.util.io.PathKt;
 import consulo.disposer.Disposable;
 import consulo.logging.Logger;
 import consulo.util.collection.primitive.ints.IntList;
@@ -343,14 +343,14 @@ public class TestDiscoveryIndex implements Disposable
 		}
 	}
 
-	public void updateFromTestTrace(@Nonnull File file, @javax.annotation.Nullable final String moduleName, @Nonnull final String frameworkPrefix) throws IOException
+	public void updateFromTestTrace(@Nonnull File file, @Nullable final String moduleName, @Nonnull final String frameworkPrefix) throws IOException
 	{
 		int fileNameDotIndex = file.getName().lastIndexOf('.');
 		final String testName = fileNameDotIndex != -1 ? file.getName().substring(0, fileNameDotIndex) : file.getName();
 		doUpdateFromTestTrace(file, testName, moduleName != null ? frameworkPrefix + moduleName : null);
 	}
 
-	private void doUpdateFromTestTrace(File file, final String testName, @javax.annotation.Nullable final String moduleName) throws IOException
+	private void doUpdateFromTestTrace(File file, final String testName, @Nullable final String moduleName) throws IOException
 	{
 		myLocalTestRunDataController.withTestDataHolder((ThrowableConvertor<TestInfoHolder, Void, IOException>) localHolder ->
 		{

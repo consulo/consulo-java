@@ -26,13 +26,13 @@ package com.intellij.java.impl.refactoring.makeStatic;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiMember;
-import com.intellij.refactoring.RefactoringBundle;
-import com.intellij.usageView.UsageViewBundle;
-import com.intellij.usageView.UsageViewDescriptor;
-import com.intellij.usageView.UsageViewUtil;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.usage.UsageViewBundle;
+import consulo.usage.UsageViewDescriptor;
+import consulo.usage.UsageViewUtil;
+import consulo.util.lang.StringUtil;
 
 public class MakeMethodOrClassStaticViewDescriptor implements UsageViewDescriptor {
 

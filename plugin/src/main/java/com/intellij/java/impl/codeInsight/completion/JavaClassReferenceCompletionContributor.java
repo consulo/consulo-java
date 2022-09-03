@@ -19,12 +19,12 @@ import com.intellij.codeInsight.completion.*;
 import com.intellij.java.impl.psi.impl.source.resolve.reference.impl.providers.JavaClassReference;
 import com.intellij.java.impl.psi.impl.source.resolve.reference.impl.providers.JavaClassReferenceSet;
 import com.intellij.java.language.psi.PsiJavaPackage;
-import com.intellij.openapi.actionSystem.IdeActions;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiReference;
-import com.intellij.psi.impl.source.resolve.reference.impl.PsiMultiReference;
+import consulo.ui.ex.action.IdeActions;
+import consulo.util.lang.StringUtil;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiReference;
+import consulo.language.psi.PsiMultiReference;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

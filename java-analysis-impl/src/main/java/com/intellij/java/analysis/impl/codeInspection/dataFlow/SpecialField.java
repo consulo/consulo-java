@@ -14,7 +14,7 @@ import com.intellij.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
-import com.intellij.util.ObjectUtils;
+import consulo.ide.impl.idea.util.ObjectUtils;
 import com.siyeh.ig.callMatcher.CallMatcher;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
@@ -23,6 +23,7 @@ import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.PropertyKey;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Objects;
 
 import static com.intellij.java.analysis.impl.codeInspection.dataFlow.ContractReturnValue.returnFalse;
@@ -107,7 +108,7 @@ public enum SpecialField implements VariableDescriptor
 
 				@Nonnull
 				@Override
-				public DfType fromConstant(@javax.annotation.Nullable Object obj)
+				public DfType fromConstant(@Nullable Object obj)
 				{
 					return obj instanceof String ? DfTypes.intValue(((String) obj).length()) : DfTypes.TOP;
 				}
@@ -141,7 +142,7 @@ public enum SpecialField implements VariableDescriptor
 
 				@Nonnull
 				@Override
-				public DfType fromConstant(@javax.annotation.Nullable Object obj)
+				public DfType fromConstant(@Nullable Object obj)
 				{
 					if(obj instanceof PsiField && DfaUtil.isEmptyCollectionConstantField((PsiVariable) obj))
 					{
@@ -152,7 +153,7 @@ public enum SpecialField implements VariableDescriptor
 
 				@Nonnull
 				@Override
-				public DfaValue createValue(@Nonnull DfaValueFactory factory, @javax.annotation.Nullable DfaValue qualifier, boolean forAccessor)
+				public DfaValue createValue(@Nonnull DfaValueFactory factory, @Nullable DfaValue qualifier, boolean forAccessor)
 				{
 					if(qualifier instanceof DfaVariableValue)
 					{
@@ -194,7 +195,7 @@ public enum SpecialField implements VariableDescriptor
 
 				@Nonnull
 				@Override
-				public DfaValue createValue(@Nonnull DfaValueFactory factory, @javax.annotation.Nullable DfaValue qualifier, boolean forAccessor)
+				public DfaValue createValue(@Nonnull DfaValueFactory factory, @Nullable DfaValue qualifier, boolean forAccessor)
 				{
 					if(qualifier instanceof DfaBoxedValue)
 					{
@@ -243,7 +244,7 @@ public enum SpecialField implements VariableDescriptor
 				}
 
 				@Override
-				public String getPresentationText(@Nonnull DfType dfType, @javax.annotation.Nullable PsiType type)
+				public String getPresentationText(@Nonnull DfType dfType, @Nullable PsiType type)
 				{
 					if(dfType == DfTypes.NULL)
 					{
@@ -295,7 +296,7 @@ public enum SpecialField implements VariableDescriptor
 
 	public
 	@Nls
-	String getPresentationText(@Nonnull DfType dfType, @javax.annotation.Nullable PsiType type)
+	String getPresentationText(@Nonnull DfType dfType, @Nullable PsiType type)
 	{
 		if(getDefaultValue(false).equals(dfType))
 		{
@@ -311,7 +312,7 @@ public enum SpecialField implements VariableDescriptor
 	 * @return found special field or null if accessor cannot be used to access a special field
 	 */
 	@Contract("null -> null")
-	@javax.annotation.Nullable
+	@Nullable
 	public static SpecialField findSpecialField(PsiElement accessor)
 	{
 		if(!(accessor instanceof PsiMember))
@@ -338,14 +339,14 @@ public enum SpecialField implements VariableDescriptor
 	 */
 	@Override
 	@Nonnull
-	public final DfaValue createValue(@Nonnull DfaValueFactory factory, @javax.annotation.Nullable DfaValue qualifier)
+	public final DfaValue createValue(@Nonnull DfaValueFactory factory, @Nullable DfaValue qualifier)
 	{
 		return createValue(factory, qualifier, false);
 	}
 
 	@Nonnull
 	@Override
-	public DfaValue createValue(@Nonnull DfaValueFactory factory, @javax.annotation.Nullable DfaValue qualifier, boolean forAccessor)
+	public DfaValue createValue(@Nonnull DfaValueFactory factory, @Nullable DfaValue qualifier, boolean forAccessor)
 	{
 		if(qualifier instanceof DfaVariableValue)
 		{
@@ -398,7 +399,7 @@ public enum SpecialField implements VariableDescriptor
 	}
 
 	@Nonnull
-	public DfType fromConstant(@javax.annotation.Nullable Object obj)
+	public DfType fromConstant(@Nullable Object obj)
 	{
 		return DfTypes.TOP;
 	}
@@ -451,7 +452,7 @@ public enum SpecialField implements VariableDescriptor
 	 * @return a dfType that represents a value having this special field restricted to the supplied dfType
 	 */
 	@Nonnull
-	public DfType asDfType(@Nonnull DfType fieldValue, @javax.annotation.Nullable PsiType exactResultType)
+	public DfType asDfType(@Nonnull DfType fieldValue, @Nullable PsiType exactResultType)
 	{
 		DfType dfType = asDfType(fieldValue);
 		if(exactResultType == null)
@@ -502,7 +503,7 @@ public enum SpecialField implements VariableDescriptor
 	 * @return a special field; null if no special field is available for given type
 	 */
 	@Contract("null -> null")
-	@javax.annotation.Nullable
+	@Nullable
 	public static SpecialField fromQualifierType(PsiType type)
 	{
 		if(type == null)
@@ -525,7 +526,7 @@ public enum SpecialField implements VariableDescriptor
 	 * @param value a qualifier value
 	 * @return a special field; null if no special field is detected to be related to given qualifier
 	 */
-	@javax.annotation.Nullable
+	@Nullable
 	public static SpecialField fromQualifier(@Nonnull DfaValue value)
 	{
 		DfReferenceType dfType = ObjectUtils.tryCast(value.getDfType(), DfReferenceType.class);

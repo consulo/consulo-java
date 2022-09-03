@@ -1,20 +1,20 @@
 package com.intellij.projectView;
 
-import com.intellij.ide.projectView.impl.AbstractProjectViewPSIPane;
+import consulo.fileEditor.FileEditorManager;
+import consulo.ide.impl.idea.ide.projectView.impl.AbstractProjectViewPSIPane;
 import com.intellij.java.impl.ide.structureView.impl.java.JavaInheritedMembersNodeProvider;
-import com.intellij.ide.structureView.newStructureView.StructureViewComponent;
-import com.intellij.openapi.fileEditor.FileEditor;
-import com.intellij.openapi.fileEditor.FileEditorManager;
+import consulo.ide.impl.idea.ide.structureView.newStructureView.StructureViewComponent;
+import consulo.fileEditor.FileEditor;
 import consulo.disposer.Disposer;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.java.language.psi.JavaDirectoryService;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiField;
-import com.intellij.psi.PsiFile;
+import consulo.language.psi.PsiFile;
 import com.intellij.testFramework.IdeaTestUtil;
 import com.intellij.testFramework.ProjectViewTestUtil;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.ui.tree.TreeUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.ui.ex.awt.tree.TreeUtil;
 
 import java.io.IOException;
 

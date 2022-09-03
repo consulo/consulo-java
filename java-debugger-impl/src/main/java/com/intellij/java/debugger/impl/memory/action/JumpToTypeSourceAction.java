@@ -18,13 +18,14 @@ package com.intellij.java.debugger.impl.memory.action;
 import java.util.List;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-import com.intellij.codeInsight.navigation.NavigationUtil;
+import consulo.navigation.NavigationUtil;
 import com.intellij.java.debugger.engine.DebuggerUtils;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.project.Project;
+import consulo.ui.ex.action.AnActionEvent;
+import consulo.project.Project;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.internal.com.sun.jdi.ArrayType;
 import consulo.internal.com.sun.jdi.ReferenceType;
 import consulo.internal.com.sun.jdi.VirtualMachine;
@@ -50,7 +51,7 @@ public class JumpToTypeSourceAction extends ClassesActionBase
 		}
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	private PsiClass getPsiClass(AnActionEvent e)
 	{
 		final ReferenceType selectedClass = getSelectedClass(e);
@@ -69,7 +70,7 @@ public class JumpToTypeSourceAction extends ClassesActionBase
 		return null;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	private static ReferenceType getObjectType(@Nonnull ReferenceType ref)
 	{
 		if(!(ref instanceof ArrayType))

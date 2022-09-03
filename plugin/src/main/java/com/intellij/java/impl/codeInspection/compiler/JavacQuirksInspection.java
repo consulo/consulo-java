@@ -17,9 +17,9 @@ package com.intellij.java.impl.codeInspection.compiler;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.codeInsight.daemon.GroupNames;
-import com.intellij.codeInspection.InspectionsBundle;
-import com.intellij.codeInspection.ProblemsHolder;
+import consulo.ide.impl.idea.codeInsight.daemon.GroupNames;
+import consulo.language.editor.inspection.InspectionsBundle;
+import consulo.language.editor.inspection.ProblemsHolder;
 import com.intellij.java.analysis.impl.codeInspection.ex.BaseLocalInspectionTool;
 import com.intellij.psi.*;
 import org.jetbrains.annotations.Nls;

@@ -16,24 +16,24 @@
 package com.intellij.java.impl.codeInspection.nullable;
 
 import com.intellij.java.impl.codeInsight.NullableNotNullDialog;
-import com.intellij.codeInspection.InspectionsBundle;
-import com.intellij.codeInspection.LocalQuickFix;
-import com.intellij.codeInspection.LocalQuickFixOnPsiElement;
-import com.intellij.find.findUsages.PsiElement2UsageTargetAdapter;
+import consulo.language.editor.inspection.InspectionsBundle;
+import consulo.language.editor.inspection.LocalQuickFix;
+import consulo.language.editor.inspection.LocalQuickFixOnPsiElement;
+import consulo.ide.impl.find.PsiElement2UsageTargetAdapter;
 import com.intellij.java.analysis.impl.codeInspection.nullable.NullableStuffInspectionBase;
-import com.intellij.openapi.application.ReadAction;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
+import consulo.application.ReadAction;
+import consulo.project.Project;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiParameter;
 import com.intellij.java.analysis.impl.psi.impl.search.JavaNullMethodArgumentUtil;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.ui.components.JBCheckBox;
-import com.intellij.usageView.UsageInfo;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.ui.ex.awt.JBCheckBox;
+import consulo.usage.UsageInfo;
 import com.intellij.usages.*;
-import com.intellij.util.ArrayUtil;
-import com.intellij.util.Processor;
+import consulo.util.collection.ArrayUtil;
+import consulo.application.util.function.Processor;
 import org.jetbrains.annotations.Nls;
 import javax.annotation.Nonnull;
 

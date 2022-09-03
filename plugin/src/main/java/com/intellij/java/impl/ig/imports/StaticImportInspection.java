@@ -25,9 +25,9 @@ import javax.swing.JPanel;
 
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiImportStaticStatement;
-import com.intellij.util.SmartList;
-import com.intellij.util.containers.ContainerUtil;
-import com.intellij.util.ui.CheckBox;
+import consulo.util.collection.SmartList;
+import consulo.util.collection.ContainerUtil;
+import consulo.ui.CheckBox;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.intellij.java.impl.ig.fixes.IgnoreClassFix;

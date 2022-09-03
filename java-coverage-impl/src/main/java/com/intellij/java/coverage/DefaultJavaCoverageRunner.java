@@ -17,16 +17,16 @@ package com.intellij.java.coverage;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.coverage.CoverageEngine;
-import com.intellij.coverage.CoverageExecutor;
-import com.intellij.coverage.CoverageRunnerData;
-import com.intellij.execution.configurations.ConfigurationInfoProvider;
-import com.intellij.execution.configurations.RunConfigurationBase;
-import com.intellij.execution.configurations.RunProfile;
-import com.intellij.execution.configurations.RunnerSettings;
+import consulo.execution.configuration.RunConfigurationBase;
+import consulo.execution.configuration.RunProfile;
+import consulo.execution.coverage.CoverageEngine;
+import consulo.execution.coverage.CoverageExecutor;
+import consulo.execution.coverage.CoverageRunnerData;
+import consulo.execution.configuration.ConfigurationInfoProvider;
+import consulo.execution.configuration.RunnerSettings;
 import com.intellij.java.execution.impl.DefaultJavaProgramRunner;
-import com.intellij.execution.runners.RunConfigurationWithSuppressedDefaultRunAction;
-import com.intellij.openapi.extensions.Extensions;
+import consulo.execution.configuration.RunConfigurationWithSuppressedDefaultRunAction;
+import consulo.component.extension.Extensions;
 
 public class DefaultJavaCoverageRunner extends DefaultJavaProgramRunner {
   public boolean canRun(@Nonnull final String executorId, @Nonnull final RunProfile profile) {

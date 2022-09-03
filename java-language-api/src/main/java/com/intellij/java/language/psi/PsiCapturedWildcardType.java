@@ -16,12 +16,12 @@
 package com.intellij.java.language.psi;
 
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.openapi.util.RecursionGuard;
-import com.intellij.openapi.util.RecursionManager;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiManager;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.application.util.RecursionManager;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiManager;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.util.lang.Comparing;
+import consulo.application.util.RecursionGuard;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

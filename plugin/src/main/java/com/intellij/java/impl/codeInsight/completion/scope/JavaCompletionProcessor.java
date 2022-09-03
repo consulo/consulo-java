@@ -19,21 +19,21 @@ import com.intellij.java.analysis.codeInspection.SuppressManager;
 import com.intellij.java.impl.codeInspection.accessStaticViaInstance.AccessStaticViaInstanceBase;
 import com.intellij.java.language.impl.codeInsight.completion.scope.JavaCompletionHints;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.util.Condition;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.util.lang.function.Condition;
+import consulo.util.lang.StringUtil;
 import com.intellij.psi.*;
-import com.intellij.psi.filters.ElementFilter;
+import consulo.language.psi.filter.ElementFilter;
 import com.intellij.java.language.impl.psi.impl.light.LightMethodBuilder;
 import com.intellij.java.language.impl.psi.impl.source.resolve.JavaResolveUtil;
 import com.intellij.java.language.psi.infos.CandidateInfo;
-import com.intellij.psi.scope.BaseScopeProcessor;
+import consulo.language.psi.resolve.BaseScopeProcessor;
 import com.intellij.java.language.impl.psi.scope.ElementClassHint;
 import com.intellij.java.language.psi.scope.JavaScopeProcessorEvent;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiTypesUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.psi.util.PsiUtilCore;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.language.psi.PsiUtilCore;
+import consulo.util.collection.ContainerUtil;
 import consulo.psi.PsiPackage;
 import consulo.util.dataholder.Key;
 
@@ -303,7 +303,7 @@ public class JavaCompletionProcessor extends BaseScopeProcessor implements Eleme
 		return myQualifierType;
 	}
 
-	public boolean isAccessible(@javax.annotation.Nullable final PsiElement element)
+	public boolean isAccessible(@Nullable final PsiElement element)
 	{
 		// if checkAccess is false, we only show inaccessible source elements because their access modifiers can be changed later by the user.
 		// compiled element can't be changed so we don't pollute the completion with them. In Javadoc, everything is allowed.

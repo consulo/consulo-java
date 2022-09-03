@@ -19,12 +19,11 @@ import com.intellij.java.language.psi.JavaCodeFragment;
 import com.intellij.java.language.psi.JavaCodeFragmentFactory;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiJavaPackage;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiDocumentManager;
-import com.intellij.ui.ReferenceEditorWithBrowseButton;
-import com.intellij.util.NullableFunction;
 import consulo.annotation.access.RequiredReadAction;
+import consulo.document.Document;
+import consulo.language.editor.ui.awt.ReferenceEditorWithBrowseButton;
+import consulo.language.psi.PsiDocumentManager;
+import consulo.project.Project;
 
 import javax.annotation.Nullable;
 import java.awt.event.ActionListener;
@@ -41,11 +40,7 @@ public class JavaReferenceEditorUtil {
                                                                                       final Project project,
                                                                                       final boolean toAcceptClasses) {
     return new ReferenceEditorWithBrowseButton(browseActionListener, project,
-                                               new NullableFunction<String,Document>() {
-      public Document fun(final String s) {
-        return createDocument(s, project, toAcceptClasses);
-      }
-    }, text);
+        s -> createDocument(s, project, toAcceptClasses), text);
   }
 
   @Nullable
@@ -68,3 +63,4 @@ public class JavaReferenceEditorUtil {
     return PsiDocumentManager.getInstance(project).getDocument(fragment);
   }
 }
+                                                                                                                                  

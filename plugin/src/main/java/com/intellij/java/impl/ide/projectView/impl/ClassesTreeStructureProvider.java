@@ -15,19 +15,19 @@
  */
 package com.intellij.java.impl.ide.projectView.impl;
 
-import com.intellij.ide.projectView.SelectableTreeStructureProvider;
-import com.intellij.ide.projectView.ViewSettings;
+import consulo.project.ui.view.tree.SelectableTreeStructureProvider;
+import consulo.project.ui.view.tree.ViewSettings;
 import com.intellij.java.impl.ide.projectView.impl.nodes.ClassTreeNode;
-import com.intellij.ide.projectView.impl.nodes.PsiFileNode;
-import com.intellij.ide.util.treeView.AbstractTreeNode;
-import com.intellij.ide.util.treeView.AbstractTreeUi;
+import consulo.project.ui.view.tree.PsiFileNode;
+import consulo.project.ui.view.tree.AbstractTreeNode;
+import consulo.ui.ex.awt.tree.AbstractTreeUi;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.progress.ProgressManager;
-import com.intellij.openapi.project.DumbAware;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.ProjectFileIndex;
-import com.intellij.openapi.roots.ProjectRootManager;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.application.progress.ProgressManager;
+import consulo.application.dumb.DumbAware;
+import consulo.project.Project;
+import consulo.module.content.ProjectFileIndex;
+import consulo.module.content.ProjectRootManager;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.psi.*;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.java.impl.ide.JavaModuleIconDescriptorUpdater;

@@ -15,12 +15,12 @@
  */
 package com.intellij.java.language.impl.psi.scope.conflictResolvers;
 
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.infos.CandidateInfo;
 import com.intellij.java.language.psi.infos.MethodCandidateInfo;
 import com.intellij.java.language.impl.psi.scope.PsiConflictResolver;
-import com.intellij.psi.util.PsiUtilCore;
+import consulo.language.psi.PsiUtilCore;
 
 import javax.annotation.Nonnull;
 import java.util.HashMap;

@@ -16,41 +16,41 @@
 package com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis;
 
 import com.intellij.java.language.impl.codeInsight.daemon.JavaErrorBundle;
-import com.intellij.codeInsight.daemon.impl.HighlightInfo;
-import com.intellij.codeInsight.daemon.impl.HighlightInfoType;
-import com.intellij.codeInsight.daemon.impl.quickfix.QuickFixAction;
-import com.intellij.codeInsight.daemon.impl.quickfix.QuickFixActionRegistrarImpl;
+import consulo.language.editor.rawHighlight.HighlightInfo;
+import consulo.language.editor.rawHighlight.HighlightInfoType;
+import consulo.language.editor.intention.QuickFixAction;
+import consulo.language.editor.internal.QuickFixActionRegistrarImpl;
 import com.intellij.java.analysis.codeInsight.intention.QuickFixFactory;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix.AddRequiredModuleFix;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix.GoToSymbolFix;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix.MergeModuleStatementsFix;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix.MoveFileFix;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleUtilCore;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.ProjectFileIndex;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.openapi.util.Trinity;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.application.ApplicationManager;
+import consulo.module.Module;
+import consulo.language.util.ModuleUtilCore;
+import consulo.project.Project;
+import consulo.module.content.ProjectFileIndex;
+import consulo.document.util.TextRange;
+import consulo.util.lang.Trinity;
+import consulo.util.lang.StringUtil;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.java.language.psi.PsiPackageAccessibilityStatement.Role;
 import com.intellij.java.language.impl.psi.impl.light.LightJavaModule;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
-import com.intellij.psi.search.FilenameIndex;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.language.psi.search.FilenameIndex;
+import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.java.language.psi.util.ClassUtil;
 import com.intellij.java.language.psi.util.InheritanceUtil;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.util.ObjectUtil;
-import com.intellij.util.containers.ContainerUtil;
-import com.intellij.util.containers.JBIterable;
+import consulo.util.lang.ObjectUtil;
+import consulo.util.collection.ContainerUtil;
+import consulo.util.collection.JBIterable;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.psi.PsiPackage;
-import consulo.vfs.ArchiveFileSystem;
+import consulo.virtualFileSystem.archive.ArchiveFileSystem;
 import org.jetbrains.annotations.PropertyKey;
 
 import javax.annotation.Nonnull;
@@ -106,7 +106,7 @@ public class ModuleHighlightUtil {
     return null;
   }
 
-  public static HighlightInfo checkPackageStatement(@Nonnull PsiPackageStatement statement, @Nonnull PsiFile file, @javax.annotation.Nullable PsiJavaModule module) {
+  public static HighlightInfo checkPackageStatement(@Nonnull PsiPackageStatement statement, @Nonnull PsiFile file, @Nullable PsiJavaModule module) {
     if (PsiUtil.isModuleFile(file)) {
       String message = JavaErrorBundle.message("module.no.package");
       HighlightInfo info = HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(statement).descriptionAndTooltip(message).create();
@@ -264,7 +264,7 @@ public class ModuleHighlightUtil {
     return null;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public static HighlightInfo checkHostModuleStrength(@Nonnull PsiPackageAccessibilityStatement statement) {
     PsiElement parent;
     if (statement.getRole() == Role.OPENS && (parent = statement.getParent()) instanceof PsiJavaModule && ((PsiJavaModule) parent).hasModifierProperty(PsiModifier.OPEN)) {
@@ -278,7 +278,7 @@ public class ModuleHighlightUtil {
     return null;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public static HighlightInfo checkPackageReference(@Nonnull PsiPackageAccessibilityStatement statement) {
     PsiJavaCodeReferenceElement refElement = statement.getPackageReference();
     if (refElement != null) {
@@ -405,7 +405,7 @@ public class ModuleHighlightUtil {
     return results;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public static HighlightInfo checkPackageAccessibility(@Nonnull PsiJavaCodeReferenceElement ref, @Nonnull PsiElement target, @Nonnull PsiJavaModule refModule) {
     if (PsiTreeUtil.getParentOfType(ref, PsiDocComment.class) == null) {
       Module module = findModule(refModule);
@@ -459,7 +459,7 @@ public class ModuleHighlightUtil {
     return null;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public static HighlightInfo checkClashingReads(@Nonnull PsiJavaModule module) {
     Trinity<String, PsiJavaModule, PsiJavaModule> conflict = JavaModuleGraphUtil.findConflict(module);
     if (conflict != null) {

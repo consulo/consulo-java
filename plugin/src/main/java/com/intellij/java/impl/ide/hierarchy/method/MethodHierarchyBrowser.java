@@ -22,22 +22,22 @@ import javax.annotation.Nonnull;
 import javax.swing.JPanel;
 import javax.swing.JTree;
 
-import com.intellij.ide.IdeBundle;
-import com.intellij.ide.hierarchy.HierarchyNodeDescriptor;
-import com.intellij.ide.hierarchy.HierarchyTreeBuilder;
-import com.intellij.ide.hierarchy.HierarchyTreeStructure;
+import consulo.ide.IdeBundle;
+import consulo.ide.impl.idea.ide.hierarchy.HierarchyNodeDescriptor;
+import consulo.ide.impl.idea.ide.hierarchy.HierarchyTreeBuilder;
+import consulo.ide.impl.idea.ide.hierarchy.HierarchyTreeStructure;
 import com.intellij.java.impl.ide.hierarchy.JavaHierarchyUtil;
-import com.intellij.ide.hierarchy.MethodHierarchyBrowserBase;
-import com.intellij.ide.util.treeView.NodeDescriptor;
-import com.intellij.openapi.actionSystem.ActionGroup;
-import com.intellij.openapi.actionSystem.ActionManager;
-import com.intellij.openapi.actionSystem.ActionPlaces;
-import com.intellij.openapi.actionSystem.IdeActions;
+import consulo.ide.impl.idea.ide.hierarchy.MethodHierarchyBrowserBase;
+import consulo.ui.ex.action.IdeActions;
+import consulo.ui.ex.tree.NodeDescriptor;
+import consulo.ui.ex.action.ActionGroup;
+import consulo.ui.ex.action.ActionManager;
+import consulo.ui.ex.action.ActionPlaces;
 import consulo.logging.Logger;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiElement;
+import consulo.project.Project;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.ui.PopupHandler;
+import consulo.ui.ex.awt.PopupHandler;
 
 public class MethodHierarchyBrowser extends MethodHierarchyBrowserBase {
   private static final Logger LOG = Logger.getInstance(MethodHierarchyBrowser.class);

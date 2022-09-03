@@ -16,17 +16,17 @@
 
 package com.intellij.java.analysis.impl.codeInsight.daemon.impl;
 
-import com.intellij.codeHighlighting.TextEditorHighlightingPass;
-import com.intellij.codeInsight.daemon.impl.HighlightInfo;
-import com.intellij.codeInsight.daemon.impl.UpdateHighlightersUtil;
+import consulo.language.editor.impl.highlight.TextEditorHighlightingPass;
+import consulo.language.editor.rawHighlight.HighlightInfo;
+import consulo.ide.impl.idea.codeInsight.daemon.impl.UpdateHighlightersUtil;
 import com.intellij.java.language.impl.lexer.JavaLexer;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.progress.ProgressIndicator;
+import consulo.document.Document;
+import consulo.application.progress.ProgressIndicator;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.psi.JavaRecursiveElementVisitor;
 import com.intellij.java.language.psi.PsiJavaFile;
 import com.intellij.java.language.psi.PsiKeyword;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.util.collection.ContainerUtil;
 import consulo.annotation.access.RequiredReadAction;
 
 import javax.annotation.Nonnull;

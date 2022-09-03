@@ -17,10 +17,10 @@ package com.intellij.java.impl.refactoring.safeDelete.usageInfo;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
-import com.intellij.psi.PsiElement;
-import com.intellij.refactoring.safeDelete.usageInfo.SafeDeleteReferenceUsageInfo;
-import com.intellij.util.ArrayUtilRt;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.psi.PsiElement;
+import consulo.language.editor.refactoring.safeDelete.usageInfo.SafeDeleteReferenceUsageInfo;
+import consulo.ide.impl.idea.util.ArrayUtilRt;
+import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 
 /**

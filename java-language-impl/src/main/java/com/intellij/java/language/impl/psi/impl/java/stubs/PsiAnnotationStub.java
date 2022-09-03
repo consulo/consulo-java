@@ -17,8 +17,8 @@ package com.intellij.java.language.impl.psi.impl.java.stubs;
 
 import javax.annotation.Nonnull;
 import com.intellij.java.language.psi.PsiAnnotation;
-import com.intellij.psi.stubs.StubElement;
-import com.intellij.util.ArrayFactory;
+import consulo.language.psi.stub.StubElement;
+import consulo.util.collection.ArrayFactory;
 
 /**
  * @author max

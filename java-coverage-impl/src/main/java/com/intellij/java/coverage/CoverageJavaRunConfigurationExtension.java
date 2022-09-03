@@ -4,40 +4,41 @@
  */
 package com.intellij.java.coverage;
 
-import com.intellij.coverage.*;
 import com.intellij.coverage.listeners.CoverageListener;
 import com.intellij.java.execution.CommonJavaRunConfigurationParameters;
-import com.intellij.execution.Location;
+import consulo.execution.action.Location;
 import com.intellij.java.execution.impl.RunConfigurationExtension;
-import com.intellij.execution.configurations.RunConfigurationBase;
-import com.intellij.execution.configurations.RunnerSettings;
-import com.intellij.execution.configurations.RuntimeConfigurationException;
-import com.intellij.execution.configurations.coverage.CoverageEnabledConfiguration;
+import consulo.execution.configuration.RunConfigurationBase;
+import consulo.execution.configuration.RunnerSettings;
+import consulo.execution.RuntimeConfigurationException;
+import consulo.execution.configuration.ui.SettingsEditor;
+import consulo.execution.coverage.CoverageEnabledConfiguration;
 import com.intellij.java.execution.impl.junit.RefactoringListeners;
-import com.intellij.execution.process.ProcessHandler;
-import com.intellij.notification.Notification;
-import com.intellij.notification.NotificationType;
-import com.intellij.notification.Notifications;
-import com.intellij.openapi.options.SettingsEditor;
-import com.intellij.openapi.project.Project;
+import consulo.process.ProcessHandler;
+import consulo.project.ui.notification.Notification;
+import consulo.project.ui.notification.Notifications;
+import consulo.ui.NotificationType;
+import consulo.project.Project;
 import com.intellij.java.language.projectRoots.JavaSdk;
 import com.intellij.java.language.projectRoots.JavaSdkVersion;
-import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.util.InvalidDataException;
-import com.intellij.openapi.util.WriteExternalException;
+import consulo.content.bundle.Sdk;
+import consulo.util.xml.serializer.InvalidDataException;
+import consulo.util.xml.serializer.WriteExternalException;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiJavaPackage;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.refactoring.listeners.RefactoringElementListener;
-import com.intellij.refactoring.listeners.RefactoringElementListenerComposite;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.editor.refactoring.event.RefactoringElementListener;
+import consulo.ide.impl.idea.refactoring.listeners.RefactoringElementListenerComposite;
 import com.intellij.java.debugger.ui.classFilter.ClassFilter;
-import com.intellij.util.ArrayUtil;
+import consulo.util.collection.ArrayUtil;
+import consulo.execution.coverage.*;
 import consulo.java.execution.configurations.OwnJavaParameters;
 import org.jdom.Element;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,7 +50,7 @@ public class CoverageJavaRunConfigurationExtension extends RunConfigurationExten
     CoverageDataManager.getInstance(configuration.getProject()).attachToProcess(handler, configuration, runnerSettings);
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public SettingsEditor createEditor(@Nonnull RunConfigurationBase configuration) {
     return new CoverageConfigurable(configuration);
   }
@@ -173,7 +174,7 @@ public class CoverageJavaRunConfigurationExtension extends RunConfigurationExten
     return listener;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private static String[] getFilters(JavaCoverageEnabledConfiguration coverageEnabledConfiguration) {
     final ClassFilter[] patterns = coverageEnabledConfiguration.getCoveragePatterns();
     if (patterns != null) {

@@ -20,12 +20,12 @@
  */
 package com.intellij.java.impl.codeInsight.hint;
 
-import com.intellij.codeInsight.hint.ImplementationTextSelectioner;
+import consulo.language.editor.ImplementationTextSelectioner;
 import com.intellij.java.language.psi.PsiDocCommentOwner;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiWhiteSpace;
+import consulo.document.util.TextRange;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiWhiteSpace;
 import consulo.logging.Logger;
 
 import javax.annotation.Nonnull;

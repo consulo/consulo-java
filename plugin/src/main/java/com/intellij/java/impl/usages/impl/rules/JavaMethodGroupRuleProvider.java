@@ -15,9 +15,9 @@
  */
 package com.intellij.java.impl.usages.impl.rules;
 
-import com.intellij.usages.impl.FileStructureGroupRuleProvider;
-import com.intellij.usages.rules.UsageGroupingRule;
-import com.intellij.openapi.project.Project;
+import consulo.usage.rule.FileStructureGroupRuleProvider;
+import consulo.usage.rule.UsageGroupingRule;
+import consulo.project.Project;
 
 /**
  * @author yole

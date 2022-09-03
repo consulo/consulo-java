@@ -15,12 +15,12 @@
  */
 package com.intellij.java.impl.ide.util;
 
-import com.intellij.CommonBundle;
-import com.intellij.ide.IdeBundle;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.DialogWrapper;
-import com.intellij.openapi.ui.Messages;
-import com.intellij.ui.components.JBLabel;
+import consulo.application.CommonBundle;
+import consulo.ide.IdeBundle;
+import consulo.project.Project;
+import consulo.ui.ex.awt.DialogWrapper;
+import consulo.ui.ex.awt.JBLabel;
+import consulo.ui.ex.awt.Messages;
 import consulo.ui.image.Image;
 
 import javax.annotation.Nonnull;

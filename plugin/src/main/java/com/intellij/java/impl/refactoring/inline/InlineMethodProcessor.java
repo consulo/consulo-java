@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.refactoring.inline;
 
-import com.intellij.history.LocalHistory;
+import consulo.localHistory.LocalHistory;
 import com.intellij.history.LocalHistoryAction;
 import com.intellij.java.impl.refactoring.introduceParameter.Util;
 import com.intellij.java.impl.refactoring.rename.RenameJavaVariableProcessor;
@@ -34,31 +34,31 @@ import com.intellij.java.language.psi.infos.MethodCandidateInfo;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PsiTypesUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.lang.Language;
-import com.intellij.lang.findUsages.DescriptiveNameUtil;
-import com.intellij.lang.refactoring.InlineHandler;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.LogicalPosition;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Ref;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.language.Language;
+import consulo.language.findUsage.DescriptiveNameUtil;
+import consulo.language.editor.refactoring.inline.InlineHandler;
+import consulo.codeEditor.Editor;
+import consulo.codeEditor.LogicalPosition;
+import consulo.project.Project;
+import consulo.util.lang.ref.Ref;
+import consulo.util.lang.StringUtil;
 import com.intellij.psi.*;
-import com.intellij.psi.codeStyle.CodeStyleManager;
-import com.intellij.psi.impl.source.codeStyle.CodeEditUtil;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.search.LocalSearchScope;
-import com.intellij.psi.search.searches.ReferencesSearch;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.refactoring.BaseRefactoringProcessor;
-import com.intellij.refactoring.RefactoringBundle;
-import com.intellij.refactoring.inline.GenericInlineHandler;
-import com.intellij.refactoring.rename.NonCodeUsageInfoFactory;
+import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.impl.psi.CodeEditUtil;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.scope.LocalSearchScope;
+import consulo.language.psi.search.ReferencesSearch;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.editor.refactoring.BaseRefactoringProcessor;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.ide.impl.idea.refactoring.inline.GenericInlineHandler;
+import consulo.language.editor.refactoring.rename.NonCodeUsageInfoFactory;
 import com.intellij.refactoring.util.*;
-import com.intellij.usageView.UsageInfo;
-import com.intellij.usageView.UsageViewDescriptor;
-import com.intellij.util.Function;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.containers.MultiMap;
+import consulo.usage.UsageInfo;
+import consulo.usage.UsageViewDescriptor;
+import consulo.ide.impl.idea.util.Function;
+import consulo.language.util.IncorrectOperationException;
+import consulo.util.collection.MultiMap;
 import consulo.logging.Logger;
 import consulo.util.dataholder.Key;
 import org.jetbrains.annotations.NonNls;
@@ -1382,7 +1382,7 @@ public class InlineMethodProcessor extends BaseRefactoringProcessor {
     }
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private PsiExpression getSimpleFieldInitializer(PsiField field, PsiClassInitializer initializer) {
     final PsiStatement[] statements = initializer.getBody().getStatements();
     if (statements.length != 1) return null;

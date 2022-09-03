@@ -16,7 +16,7 @@
 
 package com.intellij.java.impl.util.descriptors;
 
-import com.intellij.openapi.util.JDOMExternalizable;
+import consulo.util.xml.serializer.JDOMExternalizable;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nullable;
 

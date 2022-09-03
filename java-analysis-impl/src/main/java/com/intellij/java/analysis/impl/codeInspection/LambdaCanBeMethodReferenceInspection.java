@@ -15,30 +15,30 @@
  */
 package com.intellij.java.analysis.impl.codeInspection;
 
-import com.intellij.codeInsight.daemon.GroupNames;
-import com.intellij.codeInspection.LocalQuickFix;
-import com.intellij.codeInspection.ProblemDescriptor;
-import com.intellij.codeInspection.ProblemHighlightType;
-import com.intellij.codeInspection.ProblemsHolder;
+import consulo.ide.impl.idea.codeInsight.daemon.GroupNames;
+import consulo.language.editor.inspection.LocalQuickFix;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.editor.inspection.ProblemHighlightType;
+import consulo.language.editor.inspection.ProblemsHolder;
 import com.intellij.java.analysis.codeInspection.BaseJavaBatchLocalInspectionTool;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.*;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Condition;
-import com.intellij.openapi.util.Conditions;
+import consulo.project.Project;
+import consulo.util.lang.function.Condition;
+import consulo.util.lang.function.Conditions;
 import com.intellij.java.language.LanguageLevel;
-import com.intellij.profile.codeInspection.InspectionProjectProfileManager;
+import consulo.language.editor.inspection.scheme.InspectionProjectProfileManager;
 import com.intellij.psi.*;
-import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
+import consulo.language.codeStyle.CodeStyleSettingsManager;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.impl.psi.impl.source.resolve.graphInference.FunctionalInterfaceParameterizationUtil;
 import com.intellij.java.language.psi.infos.MethodCandidateInfo;
-import com.intellij.psi.tree.IElementType;
+import consulo.language.ast.IElementType;
 import com.intellij.psi.util.*;
 import com.intellij.java.language.impl.refactoring.util.RefactoringChangeUtil;
-import com.intellij.util.ArrayUtil;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.util.collection.ArrayUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.util.collection.ContainerUtil;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import consulo.logging.Logger;
 import org.jetbrains.annotations.Contract;
@@ -108,13 +108,13 @@ public class LambdaCanBeMethodReferenceInspection extends BaseJavaBatchLocalInsp
     };
   }
 
-  @javax.annotation.Nullable
-  public static PsiExpression canBeMethodReferenceProblem(@javax.annotation.Nullable final PsiElement body, final PsiVariable[] parameters, PsiType functionalInterfaceType, @javax.annotation.Nullable PsiElement context) {
+  @Nullable
+  public static PsiExpression canBeMethodReferenceProblem(@Nullable final PsiElement body, final PsiVariable[] parameters, PsiType functionalInterfaceType, @Nullable PsiElement context) {
     PsiExpression methodRefCandidate = extractMethodReferenceCandidateExpression(body, true);
     return canBeMethodReferenceProblem(parameters, functionalInterfaceType, context, methodRefCandidate);
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public static PsiExpression canBeMethodReferenceProblem(final PsiVariable[] parameters, PsiType functionalInterfaceType, @Nullable PsiElement context, final PsiExpression methodRefCandidate) {
     if (methodRefCandidate instanceof PsiNewExpression) {
       final PsiNewExpression newExpression = (PsiNewExpression) methodRefCandidate;
@@ -246,7 +246,7 @@ public class LambdaCanBeMethodReferenceInspection extends BaseJavaBatchLocalInsp
     return expression instanceof PsiReferenceExpression && ((PsiReferenceExpression) expression).resolve() == parameter;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public static PsiExpression extractMethodReferenceCandidateExpression(PsiElement body, boolean checkSideEffectPureQualifier) {
     final PsiExpression expression = LambdaUtil.extractSingleExpressionFromBody(body);
     if (expression == null) {
@@ -301,7 +301,7 @@ public class LambdaCanBeMethodReferenceInspection extends BaseJavaBatchLocalInsp
     return tryConvertToMethodReference(lambda, candidate);
   }
 
-  public static boolean checkQualifier(@javax.annotation.Nullable PsiElement qualifier) {
+  public static boolean checkQualifier(@Nullable PsiElement qualifier) {
     if (qualifier == null) {
       return true;
     }
@@ -356,13 +356,13 @@ public class LambdaCanBeMethodReferenceInspection extends BaseJavaBatchLocalInsp
         TypeConversionUtil.areTypesConvertible(nonReceiverCandidateParams[0].getType(), receiverType);
   }
 
-  private static boolean isSoleParameter(@Nonnull PsiVariable[] parameters, @javax.annotation.Nullable PsiExpression expression) {
+  private static boolean isSoleParameter(@Nonnull PsiVariable[] parameters, @Nullable PsiExpression expression) {
     return parameters.length == 1 &&
         expression instanceof PsiReferenceExpression &&
         parameters[0] == ((PsiReferenceExpression) expression).resolve();
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   static String createMethodReferenceText(final PsiElement element, final PsiType functionalInterfaceType, final PsiVariable[] parameters) {
     if (element instanceof PsiMethodCallExpression) {
       final PsiMethodCallExpression methodCall = (PsiMethodCallExpression) element;
@@ -450,7 +450,7 @@ public class LambdaCanBeMethodReferenceInspection extends BaseJavaBatchLocalInsp
     return classOrPrimitiveName;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private static String getQualifierTextByMethodCall(final PsiMethodCallExpression methodCall,
                                                      final PsiType functionalInterfaceType,
                                                      final PsiVariable[] parameters,
@@ -493,7 +493,7 @@ public class LambdaCanBeMethodReferenceInspection extends BaseJavaBatchLocalInsp
     }
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private static String composeReceiverQualifierText(PsiVariable[] parameters, PsiMethod psiMethod, PsiClass containingClass, @Nonnull PsiExpression qualifierExpression) {
     if (psiMethod.hasModifierProperty(PsiModifier.STATIC)) {
       return null;

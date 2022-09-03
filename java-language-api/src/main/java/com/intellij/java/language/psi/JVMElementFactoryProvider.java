@@ -15,11 +15,42 @@
  */
 package com.intellij.java.language.psi;
 
-import com.intellij.openapi.project.Project;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ExtensionAPI;
+import consulo.component.extension.ExtensionPoint;
+import consulo.component.extension.ExtensionPointCacheKey;
+import consulo.language.Language;
+import consulo.language.extension.LanguageExtension;
+import consulo.project.Project;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author Medvedev Max
  */
-public interface JVMElementFactoryProvider {
+@ExtensionAPI(ComponentScope.PROJECT)
+public interface JVMElementFactoryProvider extends LanguageExtension {
+  ExtensionPointCacheKey<JVMElementFactoryProvider, Map<Language, JVMElementFactoryProvider>> CACHE_KEY = ExtensionPointCacheKey.groupBy("JVMElementFactoryProvider", JVMElementFactoryProvider::getLanguage);
+
+  @Nonnull
+  static JVMElementFactory forLanguageRequired(@Nonnull Project project, @Nonnull Language language) {
+    return Objects.requireNonNull(forLanguage(project, language), () -> "JVMElementFactoryProvider impl is not registered for language: " + language);
+  }
+
+  @Nullable
+  static JVMElementFactory forLanguage(@Nonnull Project project, @Nonnull Language language) {
+    ExtensionPoint<JVMElementFactoryProvider> point = project.getExtensionPoint(JVMElementFactoryProvider.class);
+    Map<Language, JVMElementFactoryProvider> map = point.getOrBuildCache(CACHE_KEY);
+    JVMElementFactoryProvider provider = map.get(language);
+    if (provider == null) {
+      return null;
+    }
+    return provider.getFactory(project);
+  }
+
+  @Nonnull
   JVMElementFactory getFactory(Project project);
 }

@@ -20,10 +20,10 @@ import com.intellij.java.impl.refactoring.JavaRefactoringSettings;
 import com.intellij.java.language.psi.PsiCall;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
-import com.intellij.openapi.help.HelpManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.refactoring.RefactoringBundle;
-import com.intellij.refactoring.inline.InlineOptionsWithSearchSettingsDialog;
+import consulo.application.HelpManager;
+import consulo.project.Project;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.ide.impl.idea.refactoring.inline.InlineOptionsWithSearchSettingsDialog;
 
 /**
  * @author yole

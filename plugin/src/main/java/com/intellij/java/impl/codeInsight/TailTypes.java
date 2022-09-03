@@ -15,12 +15,12 @@
  */
 package com.intellij.java.impl.codeInsight;
 
-import com.intellij.codeInsight.TailType;
+import consulo.language.editor.completion.lookup.TailType;
 import com.intellij.java.impl.codeInsight.completion.simple.BracesTailType;
 import com.intellij.java.impl.codeInsight.completion.simple.ParenthesesTailType;
 import com.intellij.java.impl.codeInsight.completion.simple.RParenthTailType;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
+import consulo.codeEditor.Editor;
+import consulo.language.codeStyle.CommonCodeStyleSettings;
 
 public class TailTypes {
   public static final TailType CALL_RPARENTH = new RParenthTailType() {

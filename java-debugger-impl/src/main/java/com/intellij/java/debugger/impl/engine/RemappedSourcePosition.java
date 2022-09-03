@@ -17,9 +17,9 @@ package com.intellij.java.debugger.impl.engine;
 
 import javax.annotation.Nonnull;
 import com.intellij.java.debugger.SourcePosition;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
+import consulo.codeEditor.Editor;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
 
 /**
  * @author egor

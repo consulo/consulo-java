@@ -26,17 +26,17 @@ package org.osmorc.manifest.lang.psi;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import com.intellij.codeInsight.daemon.EmptyResolveMessageProvider;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleUtil;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.openapi.util.TextRange;
+import consulo.language.psi.EmptyResolveMessageProvider;
+import consulo.module.Module;
+import consulo.ide.impl.idea.openapi.module.ModuleUtil;
+import consulo.util.lang.Comparing;
+import consulo.document.util.TextRange;
 import com.intellij.java.language.psi.JavaPsiFacade;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiJavaPackage;
-import com.intellij.psi.PsiReferenceBase;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.util.ArrayUtil;
+import consulo.language.psi.PsiReferenceBase;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.util.collection.ArrayUtil;
 
 /**
  * @author Robert F. Beeger (robert@beeger.net)
@@ -69,7 +69,7 @@ public class PackageReference extends PsiReferenceBase<PsiElement> implements Em
     return true;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public PsiJavaPackage resolve() {
     final PsiJavaPackage parentPackage = getPsiPackage();
     if (parentPackage != null) {

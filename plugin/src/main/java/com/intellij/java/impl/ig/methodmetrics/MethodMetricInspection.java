@@ -16,7 +16,7 @@
 package com.intellij.java.impl.ig.methodmetrics;
 
 import com.siyeh.ig.BaseInspection;
-import com.intellij.codeInspection.ui.SingleIntegerFieldOptionsPanel;
+import consulo.ide.impl.idea.codeInspection.ui.SingleIntegerFieldOptionsPanel;
 
 import javax.swing.JComponent;
 

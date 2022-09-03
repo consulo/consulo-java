@@ -16,24 +16,25 @@
 package com.intellij.java.impl.ig.migration;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.intellij.java.language.psi.*;
 import org.jetbrains.annotations.NonNls;
-import com.intellij.codeInspection.ProblemDescriptor;
-import com.intellij.openapi.project.Project;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.project.Project;
 import com.intellij.psi.*;
-import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
+import consulo.language.codeStyle.CodeStyleSettingsManager;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.impl.psi.codeStyle.JavaCodeStyleSettings;
-import com.intellij.psi.codeStyle.SuggestedNameInfo;
+import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
-import com.intellij.psi.search.searches.ReferencesSearch;
+import consulo.language.psi.search.ReferencesSearch;
 import com.intellij.java.language.psi.util.InheritanceUtil;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
-import com.intellij.util.ArrayUtil;
-import com.intellij.util.Query;
+import consulo.util.collection.ArrayUtil;
+import consulo.application.util.query.Query;
 import com.siyeh.HardcodedMethodConstants;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
@@ -191,7 +192,7 @@ public class WhileCanBeForeachInspection extends BaseInspection {
       replaceStatementAndShortenClassNames(whileStatement, result);
     }
 
-    @javax.annotation.Nullable
+    @Nullable
     private static PsiType getContentType(PsiType type, PsiElement context) {
       if (!(type instanceof PsiClassType)) {
         return null;
@@ -331,7 +332,7 @@ public class WhileCanBeForeachInspection extends BaseInspection {
       return codeStyleManager.suggestUniqueVariableName(baseName, scope, true);
     }
 
-    @javax.annotation.Nullable
+    @Nullable
     private static PsiStatement getFirstStatement(@Nonnull PsiStatement body) {
       if (body instanceof PsiBlockStatement) {
         final PsiBlockStatement block = (PsiBlockStatement)body;
@@ -495,7 +496,7 @@ public class WhileCanBeForeachInspection extends BaseInspection {
     }
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public static PsiStatement getPreviousStatement(PsiElement context) {
     final PsiElement prevStatement = PsiTreeUtil.skipSiblingsBackward(context, PsiWhiteSpace.class, PsiComment.class);
     if (!(prevStatement instanceof PsiStatement)) {

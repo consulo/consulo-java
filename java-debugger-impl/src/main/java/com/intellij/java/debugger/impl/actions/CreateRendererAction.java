@@ -26,13 +26,13 @@ import com.intellij.java.debugger.impl.DebuggerContextImpl;
 import com.intellij.java.debugger.impl.settings.NodeRendererSettings;
 import com.intellij.java.debugger.impl.settings.UserRenderersConfigurable;
 import com.intellij.java.debugger.impl.ui.tree.render.NodeRenderer;
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.actionSystem.AnActionEvent;
+import consulo.ui.ex.action.AnAction;
+import consulo.ui.ex.action.AnActionEvent;
 import com.intellij.openapi.options.ConfigurableBase;
-import com.intellij.openapi.options.ex.SingleConfigurableEditor;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.xdebugger.impl.ui.DebuggerUIUtil;
+import consulo.ide.impl.idea.openapi.options.ex.SingleConfigurableEditor;
+import consulo.project.Project;
+import consulo.util.lang.StringUtil;
+import consulo.ide.impl.idea.xdebugger.impl.ui.DebuggerUIUtil;
 import consulo.internal.com.sun.jdi.Type;
 
 public class CreateRendererAction extends AnAction
@@ -72,7 +72,7 @@ public class CreateRendererAction extends AnAction
 			{
 				Type type = javaValue.getDescriptor().getType();
 				final String name = type != null ? type.name() : null;
-				DebuggerUIUtil.invokeLater(() ->
+				consulo.ide.impl.idea.xdebugger.impl.ui.DebuggerUIUtil.invokeLater(() ->
 				{
 					final UserRenderersConfigurable ui = new UserRenderersConfigurable();
 					ConfigurableBase<UserRenderersConfigurable, NodeRendererSettings> configurable = new ConfigurableBase<UserRenderersConfigurable, NodeRendererSettings>("reference.idesettings" +

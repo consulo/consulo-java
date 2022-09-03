@@ -15,12 +15,12 @@
  */
 package com.intellij.java.language.impl.codeInsight.highlighting;
 
-import com.intellij.codeInsight.highlighting.ReadWriteAccessDetector;
+import consulo.language.editor.highlight.ReadWriteAccessDetector;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PropertyUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiReference;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiReference;
 
 /**
  * @author yole

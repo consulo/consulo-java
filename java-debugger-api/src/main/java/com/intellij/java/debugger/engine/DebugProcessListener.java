@@ -17,9 +17,9 @@ package com.intellij.java.debugger.engine;
 
 import java.util.EventListener;
 
-import com.intellij.execution.ExecutionException;
+import consulo.execution.configuration.RunProfileState;
+import consulo.process.ExecutionException;
 import com.intellij.java.execution.configurations.RemoteConnection;
-import com.intellij.execution.configurations.RunProfileState;
 import consulo.internal.com.sun.jdi.ThreadReference;
 
 public interface DebugProcessListener extends EventListener

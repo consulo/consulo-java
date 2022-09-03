@@ -15,12 +15,12 @@
  */
 package com.intellij.java.impl.find.findUsages;
 
-import com.intellij.find.findUsages.FindUsagesHandler;
-import com.intellij.find.findUsages.FindUsagesOptions;
+import consulo.find.FindUsagesHandler;
+import consulo.find.FindUsagesOptions;
 import com.intellij.java.analysis.impl.find.findUsages.JavaVariableFindUsagesOptions;
 import com.intellij.java.language.psi.PsiField;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiElement;
+import consulo.project.Project;
+import consulo.language.psi.PsiElement;
 
 import javax.swing.*;
 

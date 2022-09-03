@@ -21,7 +21,7 @@
 package com.intellij.java.impl.refactoring.extractclass;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.util.Condition;
+import consulo.util.lang.function.Condition;
 import com.intellij.psi.*;
 
 public class BackpointerUtil {

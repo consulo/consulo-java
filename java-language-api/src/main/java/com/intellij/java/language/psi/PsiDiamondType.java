@@ -16,11 +16,12 @@
 package com.intellij.java.language.psi;
 
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.openapi.util.RecursionGuard;
-import com.intellij.openapi.util.RecursionManager;
-import com.intellij.psi.PsiElement;
+import consulo.application.util.RecursionGuard;
+import consulo.application.util.RecursionManager;
+import consulo.language.psi.PsiElement;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -203,6 +204,6 @@ public abstract class PsiDiamondType extends PsiType {
     return expression.resolveMethodGenerics();
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public abstract JavaResolveResult getStaticFactory();
 }

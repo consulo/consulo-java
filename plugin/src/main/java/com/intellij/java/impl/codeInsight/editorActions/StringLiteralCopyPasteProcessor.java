@@ -15,29 +15,29 @@
  */
 package com.intellij.java.impl.codeInsight.editorActions;
 
-import com.intellij.codeInsight.editorActions.CopyPastePreProcessor;
+import consulo.codeEditor.RawText;
+import consulo.language.editor.action.CopyPastePreProcessor;
 import com.intellij.java.language.psi.JavaTokenType;
-import com.intellij.lang.ASTNode;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.RawText;
-import com.intellij.openapi.editor.SelectionModel;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.TextRange;
+import consulo.language.ast.ASTNode;
+import consulo.document.Document;
+import consulo.codeEditor.Editor;
+import consulo.codeEditor.SelectionModel;
+import consulo.project.Project;
+import consulo.document.util.TextRange;
 import com.intellij.openapi.util.text.LineTokenizer;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.PsiDocumentManager;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.codeStyle.CodeStyleSettings;
-import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.util.lang.StringUtil;
+import consulo.language.psi.PsiDocumentManager;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.codeStyle.CodeStyleSettings;
+import consulo.language.codeStyle.CodeStyleSettingsManager;
+import consulo.language.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import static com.intellij.openapi.util.text.StringUtil.unescapeStringCharacters;
+import static consulo.util.lang.StringUtil.unescapeStringCharacters;
 
 public class StringLiteralCopyPasteProcessor implements CopyPastePreProcessor {
 

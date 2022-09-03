@@ -15,13 +15,12 @@
  */
 package com.intellij.java.language.psi;
 
-import com.intellij.codeInsight.PsiEquivalenceUtil;
 import com.intellij.java.language.psi.util.*;
-import com.intellij.openapi.util.Ref;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.util.PsiFormatUtilBase;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.editor.PsiEquivalenceUtil;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.util.PsiTreeUtil;
 import consulo.logging.Logger;
+import consulo.util.lang.ref.Ref;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

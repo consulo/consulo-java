@@ -15,8 +15,8 @@
  */
 package com.intellij.java.execution.configurations;
 
-import com.intellij.execution.ExecutionException;
-import com.intellij.execution.configurations.RunProfileState;
+import consulo.execution.configuration.RunProfileState;
+import consulo.process.ExecutionException;
 import consulo.java.execution.configurations.OwnJavaParameters;
 
 public interface JavaCommandLine extends RunProfileState

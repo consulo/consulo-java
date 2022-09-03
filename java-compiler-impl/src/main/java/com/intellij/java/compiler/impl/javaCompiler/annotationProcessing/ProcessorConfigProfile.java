@@ -36,7 +36,7 @@ public interface ProcessorConfigProfile extends AnnotationProcessingConfiguratio
 
   void setEnabled(boolean enabled);
 
-  void setProcessorPath(@javax.annotation.Nullable String processorPath);
+  void setProcessorPath(@Nullable String processorPath);
 
   void setObtainProcessorsFromClasspath(boolean value);
 
@@ -63,7 +63,7 @@ public interface ProcessorConfigProfile extends AnnotationProcessingConfiguratio
 
   String setOption(String key, String value);
 
-  @javax.annotation.Nullable
+  @Nullable
   String getOption(String key);
 
   void clearProcessorOptions();

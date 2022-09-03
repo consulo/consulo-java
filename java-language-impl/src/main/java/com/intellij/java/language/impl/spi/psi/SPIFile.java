@@ -15,29 +15,25 @@
  */
 package com.intellij.java.language.impl.spi.psi;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.intellij.java.language.impl.spi.SPIFileType;
+import com.intellij.java.language.psi.JavaPsiFacade;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiJavaPackage;
+import com.intellij.java.language.psi.util.ClassUtil;
+import com.intellij.java.language.spi.SPILanguage;
+import consulo.application.ApplicationManager;
+import consulo.application.util.function.Computable;
+import consulo.document.util.TextRange;
+import consulo.language.file.FileViewProvider;
+import consulo.language.impl.psi.PsiFileBase;
+import consulo.language.psi.*;
+import consulo.language.util.IncorrectOperationException;
+import consulo.virtualFileSystem.fileType.FileType;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import com.intellij.extapi.psi.PsiFileBase;
-import com.intellij.java.language.spi.SPILanguage;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.fileTypes.FileType;
-import com.intellij.openapi.util.Computable;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.FileViewProvider;
-import com.intellij.java.language.psi.JavaPsiFacade;
-import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.java.language.psi.PsiJavaPackage;
-import com.intellij.psi.PsiReference;
-import com.intellij.psi.PsiReferenceBase;
-import com.intellij.java.language.psi.util.ClassUtil;
-import com.intellij.java.language.impl.spi.SPIFileType;
-import com.intellij.util.IncorrectOperationException;
-import consulo.psi.PsiPackage;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * User: anna
@@ -52,7 +48,7 @@ public class SPIFile extends PsiFileBase {
     return new SPIFileName2ClassReference(this, ApplicationManager.getApplication().runReadAction(new Computable<PsiClass>() {
       @Override
       public PsiClass compute() {
-        return ClassUtil.findPsiClass(getManager(), getName(), null, true, getResolveScope()); 
+        return ClassUtil.findPsiClass(getManager(), getName(), null, true, getResolveScope());
       }
     }));
   }
@@ -74,9 +70,9 @@ public class SPIFile extends PsiFileBase {
     final PsiReference reference = getReference();
     PsiElement resolve = reference.resolve();
     while (resolve instanceof PsiClass) {
-      resolve = ((PsiClass)resolve).getContainingClass();
+      resolve = ((PsiClass) resolve).getContainingClass();
       if (resolve != null) {
-        final String jvmClassName = ClassUtil.getJVMClassName((PsiClass)resolve);
+        final String jvmClassName = ClassUtil.getJVMClassName((PsiClass) resolve);
         if (jvmClassName != null) {
           refs.add(new SPIFileName2PackageReference(this, resolve));
         }
@@ -91,7 +87,7 @@ public class SPIFile extends PsiFileBase {
   public FileType getFileType() {
     return SPIFileType.INSTANCE;
   }
-  
+
   private static class SPIFileName2ClassReference extends PsiReferenceBase<PsiFile> {
     private final PsiClass myClass;
 
@@ -100,7 +96,7 @@ public class SPIFile extends PsiFileBase {
       myClass = aClass;
     }
 
-    @javax.annotation.Nullable
+    @Nullable
     @Override
     public PsiElement resolve() {
       return myClass;
@@ -121,7 +117,7 @@ public class SPIFile extends PsiFileBase {
     @Override
     public PsiElement bindToElement(@Nonnull PsiElement element) throws IncorrectOperationException {
       if (element instanceof PsiClass) {
-        final String className = ClassUtil.getJVMClassName((PsiClass)element);
+        final String className = ClassUtil.getJVMClassName((PsiClass) element);
         if (className != null) {
           return getElement().setName(className);
         }
@@ -142,7 +138,7 @@ public class SPIFile extends PsiFileBase {
     @Override
     public String getCanonicalText() {
       return myPackageOrContainingClass instanceof PsiJavaPackage
-             ? ((PsiPackage)myPackageOrContainingClass).getQualifiedName() : ClassUtil.getJVMClassName((PsiClass)myPackageOrContainingClass);
+          ? ((PsiPackage) myPackageOrContainingClass).getQualifiedName() : ClassUtil.getJVMClassName((PsiClass) myPackageOrContainingClass);
     }
 
     @Nullable
@@ -159,9 +155,9 @@ public class SPIFile extends PsiFileBase {
     @Override
     public PsiElement bindToElement(@Nonnull PsiElement element) throws IncorrectOperationException {
       if (element instanceof PsiPackage) {
-        return handleElementRename(((PsiPackage)element).getQualifiedName());
+        return handleElementRename(((PsiPackage) element).getQualifiedName());
       } else if (element instanceof PsiClass) {
-        final String className = ClassUtil.getJVMClassName((PsiClass)element);
+        final String className = ClassUtil.getJVMClassName((PsiClass) element);
         if (className != null) {
           return handleElementRename(className);
         }

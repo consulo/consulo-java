@@ -16,7 +16,7 @@
 package com.intellij.java.debugger.impl.memory.utils;
 
 import com.intellij.java.debugger.impl.engine.SuspendContextImpl;
-import com.intellij.util.Alarm;
+import consulo.ui.ex.awt.util.Alarm;
 import consulo.disposer.Disposable;
 
 import javax.annotation.Nonnull;

@@ -24,12 +24,12 @@
  */
 package com.intellij.java.impl.refactoring.makeStatic;
 
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiReferenceExpression;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.impl.refactoring.util.RefactoringUtil;
-import com.intellij.usageView.UsageInfo;
+import consulo.usage.UsageInfo;
 
 class InternalUsageInfo extends UsageInfo{
   private final PsiElement myReferencedElement;

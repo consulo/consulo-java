@@ -53,7 +53,7 @@ public class LibraryUtil {
   }
 
   public static boolean isOverrideOfLibraryMethodParameter(
-    @javax.annotation.Nullable PsiVariable variable) {
+    @Nullable PsiVariable variable) {
     if (!(variable instanceof PsiParameter)) {
       return false;
     }

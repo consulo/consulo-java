@@ -24,25 +24,25 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import com.intellij.java.analysis.impl.codeInspection.RedundantLambdaCodeBlockInspection;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.ui.Messages;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.application.ApplicationManager;
+import consulo.codeEditor.Editor;
+import consulo.ui.ex.awt.Messages;
+import consulo.util.lang.StringUtil;
 import com.intellij.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
-import com.intellij.psi.codeStyle.SuggestedNameInfo;
+import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
 import com.intellij.java.language.psi.impl.source.resolve.DefaultParameterTypeInferencePolicy;
 import com.intellij.java.language.impl.psi.impl.source.resolve.graphInference.FunctionalInterfaceParameterizationUtil;
 import com.intellij.java.language.psi.infos.MethodCandidateInfo;
 import com.intellij.java.language.psi.util.MethodSignature;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiTypesUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.impl.refactoring.introduceField.ElementToWorkOn;
 import com.intellij.java.impl.refactoring.introduceVariable.IntroduceVariableHandler;
-import com.intellij.util.Function;
-import com.intellij.util.text.UniqueNameGenerator;
+import consulo.ide.impl.idea.util.Function;
+import consulo.component.util.text.UniqueNameGenerator;
 import com.siyeh.ig.psiutils.SideEffectChecker;
 import consulo.logging.Logger;
 
@@ -360,7 +360,7 @@ public class LambdaRefactoringUtil
 		return false;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public static String createLambdaParameterListWithFormalTypes(PsiType functionalInterfaceType, PsiLambdaExpression lambdaExpression, boolean checkApplicability)
 	{
 		final PsiClassType.ClassResolveResult resolveResult = PsiUtil.resolveGenericsClassInType(functionalInterfaceType);
@@ -403,7 +403,7 @@ public class LambdaRefactoringUtil
 		return specifyLambdaParameterTypes(lambdaExpression.getFunctionalInterfaceType(), lambdaExpression);
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public static PsiParameterList specifyLambdaParameterTypes(PsiType functionalInterfaceType, PsiLambdaExpression lambdaExpression)
 	{
 		String typedParamList = createLambdaParameterListWithFormalTypes(functionalInterfaceType, lambdaExpression, false);

@@ -1,7 +1,7 @@
 package consulo.java.analysis.codeInsight;
 
 import org.jetbrains.annotations.PropertyKey;
-import com.intellij.AbstractBundle;
+import consulo.component.util.localize.AbstractBundle;
 
 /**
  * @author VISTALL

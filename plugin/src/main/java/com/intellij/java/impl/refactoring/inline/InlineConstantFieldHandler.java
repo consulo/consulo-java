@@ -15,26 +15,26 @@
  */
 package com.intellij.java.impl.refactoring.inline;
 
-import consulo.codeInsight.TargetElementUtil;
+import consulo.language.editor.TargetElementUtil;
 import com.intellij.java.language.JavaLanguage;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.progress.ProgressManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Ref;
-import com.intellij.psi.PsiCompiledElement;
-import com.intellij.psi.PsiElement;
+import consulo.codeEditor.Editor;
+import consulo.application.progress.ProgressManager;
+import consulo.project.Project;
+import consulo.util.lang.ref.Ref;
+import consulo.language.psi.PsiCompiledElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiEnumConstant;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiModifier;
-import com.intellij.psi.PsiReference;
+import consulo.language.psi.PsiReference;
 import com.intellij.java.language.psi.PsiReferenceExpression;
 import com.intellij.psi.search.ProjectScope;
-import com.intellij.psi.search.searches.ReferencesSearch;
+import consulo.language.psi.search.ReferencesSearch;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.impl.refactoring.HelpID;
-import com.intellij.refactoring.RefactoringBundle;
-import com.intellij.refactoring.util.CommonRefactoringUtil;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 
 /**
  * @author ven

@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.codeInsight.editorActions;
 
-import com.intellij.codeInsight.editorActions.TextBlockTransferableData;
+import consulo.ide.impl.idea.codeInsight.editorActions.TextBlockTransferableData;
 
 import java.awt.datatransfer.DataFlavor;
 import java.io.Serializable;

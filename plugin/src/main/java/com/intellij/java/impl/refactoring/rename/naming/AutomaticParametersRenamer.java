@@ -23,9 +23,9 @@ package com.intellij.java.impl.refactoring.rename.naming;
 import com.intellij.java.indexing.search.searches.OverridingMethodsSearch;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiParameter;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.psi.PsiElement;
-import com.intellij.refactoring.rename.naming.AutomaticRenamer;
+import consulo.util.lang.Comparing;
+import consulo.language.psi.PsiElement;
+import consulo.language.editor.refactoring.rename.AutomaticRenamer;
 
 public class AutomaticParametersRenamer extends AutomaticRenamer {
   public AutomaticParametersRenamer(PsiParameter param, String newParamName) {

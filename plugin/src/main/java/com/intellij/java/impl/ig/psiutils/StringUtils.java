@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.psiutils;
 
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.util.lang.StringUtil;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
 

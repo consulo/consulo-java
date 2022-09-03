@@ -32,10 +32,10 @@ import javax.swing.JPanel;
 
 import com.intellij.java.debugger.impl.breakpoints.properties.JavaExceptionBreakpointProperties;
 import com.intellij.java.debugger.DebuggerBundle;
-import com.intellij.ui.IdeBorderFactory;
-import com.intellij.util.ui.DialogUtil;
-import com.intellij.xdebugger.breakpoints.XBreakpoint;
-import com.intellij.xdebugger.breakpoints.ui.XBreakpointCustomPropertiesPanel;
+import consulo.execution.debug.breakpoint.XBreakpoint;
+import consulo.ui.ex.awt.IdeBorderFactory;
+import consulo.ui.ex.awt.util.DialogUtil;
+import consulo.execution.debug.breakpoint.ui.XBreakpointCustomPropertiesPanel;
 
 public class ExceptionBreakpointPropertiesPanel extends XBreakpointCustomPropertiesPanel<XBreakpoint<JavaExceptionBreakpointProperties>>
 {

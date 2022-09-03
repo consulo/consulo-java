@@ -15,12 +15,12 @@
  */
 package com.siyeh.ig.ui;
 
-import com.intellij.openapi.util.InvalidDataException;
-import com.intellij.openapi.util.JDOMExternalizable;
-import com.intellij.openapi.util.WriteExternalException;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.util.ArrayUtil;
-import com.intellij.util.containers.OrderedSet;
+import consulo.util.xml.serializer.InvalidDataException;
+import consulo.util.xml.serializer.JDOMExternalizable;
+import consulo.util.xml.serializer.WriteExternalException;
+import consulo.util.lang.StringUtil;
+import consulo.util.collection.ArrayUtil;
+import consulo.util.collection.OrderedSet;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
 

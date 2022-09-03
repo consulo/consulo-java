@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -35,9 +36,9 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableColumn;
 
-import com.intellij.lang.findUsages.DescriptiveNameUtil;
+import consulo.language.findUsage.DescriptiveNameUtil;
 import consulo.logging.Logger;
-import com.intellij.openapi.project.Project;
+import consulo.project.Project;
 import com.intellij.java.language.psi.JavaCodeFragmentFactory;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiNameHelper;
@@ -46,20 +47,20 @@ import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.PsiTypeCodeFragment;
 import com.intellij.java.language.psi.PsiTypeParameter;
 import com.intellij.java.impl.refactoring.HelpID;
-import com.intellij.refactoring.RefactoringBundle;
-import com.intellij.refactoring.ui.CodeFragmentTableCellRenderer;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.ide.impl.idea.refactoring.ui.CodeFragmentTableCellRenderer;
 import com.intellij.java.impl.refactoring.ui.JavaCodeFragmentTableCellEditor;
-import com.intellij.refactoring.ui.RefactoringDialog;
-import com.intellij.refactoring.ui.StringTableCellEditor;
-import com.intellij.refactoring.util.CommonRefactoringUtil;
-import com.intellij.ui.ColoredTableCellRenderer;
-import com.intellij.ui.SeparatorFactory;
-import com.intellij.ui.TableColumnAnimator;
-import com.intellij.ui.TableUtil;
-import com.intellij.ui.ToolbarDecorator;
-import com.intellij.ui.table.JBTable;
-import com.intellij.util.containers.ContainerUtil;
-import com.intellij.util.ui.EditableModel;
+import consulo.language.editor.refactoring.ui.RefactoringDialog;
+import consulo.language.editor.refactoring.ui.StringTableCellEditor;
+import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
+import consulo.ui.ex.awt.ColoredTableCellRenderer;
+import consulo.ui.ex.awt.SeparatorFactory;
+import consulo.ide.impl.idea.ui.TableColumnAnimator;
+import consulo.ui.ex.awt.util.TableUtil;
+import consulo.ui.ex.awt.ToolbarDecorator;
+import consulo.ui.ex.awt.table.JBTable;
+import consulo.util.collection.ContainerUtil;
+import consulo.ui.ex.awt.EditableModel;
 
 /**
  * @author dsl
@@ -255,7 +256,7 @@ public class ChangeClassSignatureDialog extends RefactoringDialog {
       return myTypeParameterInfos.size();
     }
 
-    @javax.annotation.Nullable
+    @Nullable
     public Class getColumnClass(int columnIndex) {
       return columnIndex == NAME_COLUMN ? String.class : null;
     }

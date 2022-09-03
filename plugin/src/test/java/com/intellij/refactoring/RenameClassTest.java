@@ -1,14 +1,14 @@
 package com.intellij.refactoring;
 
 import com.intellij.JavaTestUtil;
-import com.intellij.openapi.extensions.Extensions;
-import com.intellij.openapi.fileEditor.FileDocumentManager;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.component.extension.Extensions;
+import consulo.document.FileDocumentManager;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiDocumentManager;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.refactoring.rename.RenameProcessor;
-import com.intellij.refactoring.rename.naming.AutomaticRenamerFactory;
+import consulo.language.psi.PsiDocumentManager;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.editor.refactoring.rename.RenameProcessor;
+import consulo.language.editor.refactoring.rename.AutomaticRenamerFactory;
 import org.jetbrains.annotations.NonNls;
 
 public abstract class RenameClassTest extends MultiFileTestCase {

@@ -21,15 +21,16 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.jetbrains.annotations.Nls;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
 import com.intellij.java.language.psi.PsiJavaModule;
 import com.intellij.java.language.psi.PsiKeyword;
 import com.intellij.java.language.psi.PsiProvidesStatement;
 import com.intellij.java.language.psi.PsiReferenceList;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.util.collection.ContainerUtil;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 
 /**
@@ -99,8 +100,8 @@ public class MergeProvidesStatementsFix extends MergeModuleStatementsFix<PsiProv
 		}).collect(Collectors.toList());
 	}
 
-	@javax.annotation.Nullable
-	public static MergeModuleStatementsFix createFix(@javax.annotation.Nullable PsiProvidesStatement statement)
+	@Nullable
+	public static MergeModuleStatementsFix createFix(@Nullable PsiProvidesStatement statement)
 	{
 		if(statement != null)
 		{

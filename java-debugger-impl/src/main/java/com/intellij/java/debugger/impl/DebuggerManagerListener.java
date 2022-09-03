@@ -17,7 +17,7 @@ package com.intellij.java.debugger.impl;
 
 import java.util.EventListener;
 
-import com.intellij.openapi.extensions.ExtensionPointName;
+import consulo.component.extension.ExtensionPointName;
 
 public interface DebuggerManagerListener extends EventListener
 {

@@ -6,7 +6,7 @@
 
 	<groupId>consulo.plugin</groupId>
 	<artifactId>consulo.java-java.rt.shaded</artifactId>
-	<version>2-SNAPSHOT</version>
+	<version>3-SNAPSHOT</version>
 
 	<build>
 		<plugins>

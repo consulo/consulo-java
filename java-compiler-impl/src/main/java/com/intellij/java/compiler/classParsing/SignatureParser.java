@@ -15,7 +15,7 @@
  */
 package com.intellij.java.compiler.classParsing;
 
-import com.intellij.openapi.compiler.CompilerBundle;
+import consulo.compiler.CompilerBundle;
 
 import java.text.CharacterIterator;
 

@@ -15,13 +15,13 @@
  */
 package com.intellij.java.impl.refactoring.introduceParameter;
 
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiManager;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiManager;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.impl.refactoring.util.usageInfo.DefaultConstructorImplicitUsageInfo;
 import com.intellij.java.impl.refactoring.util.usageInfo.NoConstructorClassUsageInfo;
-import com.intellij.usageView.UsageInfo;
-import com.intellij.util.IncorrectOperationException;
+import consulo.usage.UsageInfo;
+import consulo.language.util.IncorrectOperationException;
 
 import java.util.ArrayList;
 import java.util.List;

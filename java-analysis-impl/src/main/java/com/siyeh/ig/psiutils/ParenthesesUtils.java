@@ -25,8 +25,8 @@ import org.jetbrains.annotations.Contract;
 
 import javax.annotation.Nullable;
 import com.intellij.psi.*;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.ast.IElementType;
+import consulo.language.psi.util.PsiTreeUtil;
 import consulo.java.language.module.util.JavaClassNames;
 
 public class ParenthesesUtils

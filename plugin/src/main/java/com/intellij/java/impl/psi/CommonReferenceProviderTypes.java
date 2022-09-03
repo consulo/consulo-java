@@ -15,10 +15,10 @@
  */
 package com.intellij.java.impl.psi;
 
-import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiReferenceProvider;
-import com.intellij.psi.ReferenceProviderType;
+import consulo.ide.ServiceManager;
+import consulo.project.Project;
+import consulo.language.psi.PsiReferenceProvider;
+import consulo.language.psi.ReferenceProviderType;
 
 /**
  * @author peter

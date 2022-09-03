@@ -15,35 +15,37 @@
  */
 package com.intellij.java.language.impl.psi.impl.compiled;
 
-import java.util.Collection;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-
-import com.intellij.java.language.psi.*;
-import org.jetbrains.annotations.NonNls;
-import com.intellij.openapi.util.Pair;
-import com.intellij.psi.*;
 import com.intellij.java.language.impl.psi.impl.InheritanceImplUtil;
 import com.intellij.java.language.impl.psi.impl.PsiClassImplUtil;
 import com.intellij.java.language.impl.psi.impl.PsiSuperMethodImplUtil;
 import com.intellij.java.language.impl.psi.impl.java.stubs.JavaStubElementTypes;
 import com.intellij.java.language.impl.psi.impl.java.stubs.PsiTypeParameterStub;
 import com.intellij.java.language.impl.psi.impl.light.LightEmptyImplementsList;
-import com.intellij.psi.impl.meta.MetaRegistry;
-import com.intellij.psi.impl.source.SourceTreeToPsiMap;
-import com.intellij.psi.impl.source.tree.TreeElement;
+import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
-import com.intellij.psi.meta.PsiMetaData;
-import com.intellij.psi.scope.PsiScopeProcessor;
-import com.intellij.psi.search.SearchScope;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.util.IncorrectOperationException;
+import consulo.content.scope.SearchScope;
+import consulo.language.impl.ast.TreeElement;
+import consulo.language.impl.psi.SourceTreeToPsiMap;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiElementVisitor;
+import consulo.language.psi.meta.MetaDataService;
+import consulo.language.psi.meta.PsiMetaData;
+import consulo.language.psi.meta.PsiMetaOwner;
+import consulo.language.psi.resolve.PsiScopeProcessor;
+import consulo.language.psi.resolve.ResolveState;
+import consulo.language.util.IncorrectOperationException;
+import consulo.util.lang.Pair;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * @author max
  */
-public class ClsTypeParameterImpl extends ClsRepositoryPsiElement<PsiTypeParameterStub> implements PsiTypeParameter {
+public class ClsTypeParameterImpl extends ClsRepositoryPsiElement<PsiTypeParameterStub> implements PsiTypeParameter, PsiMetaOwner {
   private final LightEmptyImplementsList myLightEmptyImplementsList;
 
   public ClsTypeParameterImpl(@Nonnull PsiTypeParameterStub stub) {
@@ -349,7 +351,7 @@ public class ClsTypeParameterImpl extends ClsRepositoryPsiElement<PsiTypeParamet
   }
 
   public PsiMetaData getMetaData() {
-    return MetaRegistry.getMeta(this);
+    return MetaDataService.getInstance().getMeta(this);
   }
 
   @Override

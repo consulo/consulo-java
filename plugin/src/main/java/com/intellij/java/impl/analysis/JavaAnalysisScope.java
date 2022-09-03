@@ -20,22 +20,22 @@
  */
 package com.intellij.java.impl.analysis;
 
-import com.intellij.analysis.AnalysisScope;
-import com.intellij.analysis.AnalysisScopeBundle;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.search.PackageScope;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.ProjectFileIndex;
-import com.intellij.openapi.roots.ProjectRootManager;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiDirectory;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.search.SearchScope;
-import com.intellij.util.Processor;
-import com.intellij.util.containers.ContainerUtil;
-import consulo.psi.PsiPackage;
+import consulo.application.ApplicationManager;
+import consulo.application.util.function.Processor;
+import consulo.content.scope.SearchScope;
+import consulo.language.editor.scope.AnalysisScope;
+import consulo.language.editor.scope.AnalysisScopeBundle;
+import consulo.language.psi.PsiDirectory;
+import consulo.language.psi.PsiPackage;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.module.Module;
+import consulo.module.content.ProjectFileIndex;
+import consulo.module.content.ProjectRootManager;
+import consulo.project.Project;
+import consulo.util.collection.ContainerUtil;
+import consulo.virtualFileSystem.VirtualFile;
 
 import javax.annotation.Nonnull;
 import java.util.HashSet;
@@ -85,7 +85,7 @@ public class JavaAnalysisScope extends AnalysisScope {
       }
       return collectScopes(defaultProject, modules);
     }
-    return super.getNarrowedComplementaryScope(defaultProject);
+    return super.getNarrowedComplementaryScope(defaultProject);         
   }
 
 

@@ -27,17 +27,17 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.DialogWrapper;
-import com.intellij.refactoring.RefactoringBundle;
-import com.intellij.ui.AnActionButton;
-import com.intellij.ui.AnActionButtonRunnable;
-import com.intellij.ui.DocumentAdapter;
-import com.intellij.ui.ScrollPaneFactory;
-import com.intellij.ui.ToolbarDecorator;
-import com.intellij.ui.table.JBTable;
-import com.intellij.util.ui.FormBuilder;
-import com.intellij.util.ui.UIUtil;
+import consulo.project.Project;
+import consulo.ui.ex.awt.*;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.ui.ex.awt.AnActionButton;
+import consulo.ui.ex.awt.event.DocumentAdapter;
+import consulo.ui.ex.awt.ScrollPaneFactory;
+import consulo.ui.ex.awt.ToolbarDecorator;
+import consulo.ui.ex.awt.table.JBTable;
+import consulo.ui.util.FormBuilder;
+import consulo.ui.ex.awt.UIUtil;
+import consulo.ui.ex.awt.DialogWrapper;
 
 public class EditMigrationDialog extends DialogWrapper
 {

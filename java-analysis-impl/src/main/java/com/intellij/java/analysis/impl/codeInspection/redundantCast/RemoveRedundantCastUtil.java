@@ -1,12 +1,12 @@
 // Copyright 2000-2018 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.analysis.impl.codeInspection.redundantCast;
 
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiParenthesizedExpression;
 import com.intellij.java.language.psi.PsiTypeCastExpression;
 import com.intellij.java.language.psi.util.PsiPrecedenceUtil;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
 import com.siyeh.ig.psiutils.CommentTracker;
 import consulo.logging.Logger;
 

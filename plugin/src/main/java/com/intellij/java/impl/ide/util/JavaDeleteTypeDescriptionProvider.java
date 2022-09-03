@@ -15,12 +15,12 @@
  */
 package com.intellij.java.impl.ide.util;
 
-import com.intellij.ide.IdeBundle;
-import com.intellij.ide.util.DeleteTypeDescriptionLocation;
+import consulo.ide.IdeBundle;
+import consulo.language.editor.refactoring.util.DeleteTypeDescriptionLocation;
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.ElementDescriptionLocation;
-import com.intellij.psi.ElementDescriptionProvider;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.ElementDescriptionLocation;
+import consulo.language.psi.ElementDescriptionProvider;
+import consulo.language.psi.PsiElement;
 
 import javax.annotation.Nonnull;
 

@@ -23,9 +23,9 @@ import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.java.language.psi.PsiModifierListOwner;
 import com.intellij.psi.*;
-import com.intellij.psi.util.PsiMatcherExpression;
+import consulo.ide.impl.psi.util.PsiMatcherExpression;
 import com.intellij.psi.xml.XmlTag;
-import com.intellij.util.ArrayUtil;
+import consulo.util.collection.ArrayUtil;
 
 import javax.annotation.Nonnull;
 

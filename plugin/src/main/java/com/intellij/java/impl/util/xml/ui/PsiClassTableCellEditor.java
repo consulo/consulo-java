@@ -19,16 +19,16 @@ import javax.swing.KeyStroke;
 import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.java.language.util.TreeClassChooser;
 import com.intellij.java.language.util.TreeClassChooserFactory;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.FixedSizeButton;
-import com.intellij.openapi.util.Conditions;
+import consulo.document.Document;
+import consulo.project.Project;
+import consulo.ui.ex.UIBundle;
+import consulo.ui.ex.awt.FixedSizeButton;
+import consulo.util.lang.function.Conditions;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.ui.EditorTextField;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.editor.ui.awt.EditorTextField;
 import com.intellij.java.language.impl.ui.JavaReferenceEditorUtil;
-import com.intellij.ui.UIBundle;
-import com.intellij.util.ui.AbstractTableCellEditor;
+import consulo.ui.ex.awt.AbstractTableCellEditor;
 
 /**
  * @author peter

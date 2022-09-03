@@ -15,9 +15,9 @@
  */
 package com.intellij.java.impl.ide.structureView.impl.java;
 
-import com.intellij.ide.util.treeView.smartTree.ActionPresentation;
-import com.intellij.ide.util.treeView.smartTree.Sorter;
-import com.intellij.ide.util.treeView.smartTree.SorterUtil;
+import consulo.fileEditor.structureView.tree.ActionPresentation;
+import consulo.fileEditor.structureView.tree.Sorter;
+import consulo.fileEditor.structureView.tree.SorterUtil;
 import javax.annotation.Nonnull;
 
 import java.util.Comparator;

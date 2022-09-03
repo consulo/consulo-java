@@ -31,24 +31,24 @@ import javax.swing.event.DocumentEvent;
 
 import com.intellij.java.language.impl.codeInsight.generation.PsiElementClassMember;
 import com.intellij.java.debugger.DebuggerBundle;
-import com.intellij.ide.util.MemberChooser;
+import consulo.ide.impl.idea.ide.util.MemberChooser;
 import com.intellij.java.language.util.TreeClassChooser;
 import com.intellij.java.language.util.TreeClassChooserFactory;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.DialogWrapper;
-import com.intellij.openapi.ui.TextFieldWithBrowseButton;
+import consulo.project.Project;
+import consulo.ui.ex.awt.DialogWrapper;
+import consulo.ui.ex.awt.TextFieldWithBrowseButton;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiDirectory;
+import consulo.language.psi.PsiDirectory;
 import com.intellij.java.language.psi.PsiField;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiManager;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiManager;
 import com.intellij.java.language.psi.PsiSubstitutor;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
-import com.intellij.psi.util.PsiFormatUtilBase;
-import com.intellij.ui.DocumentAdapter;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.ide.impl.psi.util.PsiFormatUtilBase;
+import consulo.ui.ex.awt.event.DocumentAdapter;
+import consulo.util.collection.ContainerUtil;
 
 abstract class AddFieldBreakpointDialog extends DialogWrapper
 {

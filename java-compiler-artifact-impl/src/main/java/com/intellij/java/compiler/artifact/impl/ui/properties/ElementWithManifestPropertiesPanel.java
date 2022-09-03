@@ -19,6 +19,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
+import javax.annotation.Nullable;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -28,20 +29,20 @@ import javax.swing.event.DocumentEvent;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.openapi.fileChooser.FileChooser;
-import com.intellij.openapi.fileChooser.FileChooserDescriptor;
-import com.intellij.openapi.ui.Messages;
-import com.intellij.openapi.ui.TextFieldWithBrowseButton;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.fileChooser.FileChooserDescriptor;
+import consulo.ui.ex.awt.TextFieldWithBrowseButton;
+import consulo.ui.fileChooser.FileChooser;
+import consulo.ui.ex.awt.Messages;
+import consulo.util.lang.Comparing;
+import consulo.ide.impl.idea.openapi.util.io.FileUtil;
+import consulo.util.lang.StringUtil;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.java.compiler.artifact.impl.ManifestFileUtil;
-import com.intellij.packaging.impl.elements.CompositeElementWithManifest;
-import com.intellij.packaging.ui.ArtifactEditorContext;
+import consulo.ide.impl.idea.packaging.impl.elements.CompositeElementWithManifest;
+import consulo.compiler.artifact.ui.ArtifactEditorContext;
 import com.intellij.java.compiler.artifact.impl.ui.ManifestFileConfiguration;
-import com.intellij.packaging.ui.PackagingElementPropertiesPanel;
-import com.intellij.ui.DocumentAdapter;
+import consulo.compiler.artifact.ui.PackagingElementPropertiesPanel;
+import consulo.ui.ex.awt.event.DocumentAdapter;
 
 /**
  * @author nik
@@ -175,7 +176,7 @@ public abstract class ElementWithManifestPropertiesPanel<E extends CompositeElem
 				.getManifestFilePath(), getConfiguredManifestPath()));
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	private String getConfiguredManifestPath()
 	{
 		final String path = myManifestPathField.getText();
@@ -205,7 +206,7 @@ public abstract class ElementWithManifestPropertiesPanel<E extends CompositeElem
 		return myMainPanel;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	private String getConfiguredMainClass()
 	{
 		final String className = myMainClassField.getText();

@@ -16,9 +16,9 @@
 package com.intellij.java.debugger.engine;
 
 import com.intellij.java.debugger.SourcePosition;
-import com.intellij.openapi.extensions.ExtensionPointName;
-import com.intellij.openapi.project.DumbService;
-import com.intellij.openapi.util.TextRange;
+import consulo.component.extension.ExtensionPointName;
+import consulo.project.DumbService;
+import consulo.document.util.TextRange;
 
 import javax.annotation.Nullable;
 

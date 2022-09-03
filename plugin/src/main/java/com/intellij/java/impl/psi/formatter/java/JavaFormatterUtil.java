@@ -22,12 +22,12 @@ import java.util.Set;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.formatting.WrapType;
-import com.intellij.lang.ASTNode;
+import consulo.language.codeStyle.WrapType;
+import consulo.language.ast.ASTNode;
 import com.intellij.java.language.psi.PsiPolyadicExpression;
-import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
+import consulo.language.codeStyle.CommonCodeStyleSettings;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
-import com.intellij.psi.tree.IElementType;
+import consulo.language.ast.IElementType;
 
 /**
  * @author Denis Zhdanov

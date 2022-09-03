@@ -15,29 +15,29 @@
  */
 package com.intellij.java.impl.ig.packaging;
 
-import com.intellij.analysis.AnalysisScope;
-import com.intellij.codeInspection.*;
-import com.intellij.codeInspection.reference.RefElement;
-import com.intellij.codeInspection.ui.SingleCheckboxOptionsPanel;
-import com.intellij.openapi.application.Application;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.ContentIterator;
-import com.intellij.openapi.roots.ProjectFileIndex;
-import com.intellij.openapi.roots.ProjectRootManager;
-import com.intellij.openapi.util.Computable;
-import com.intellij.openapi.vfs.VfsUtilCore;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.openapi.vfs.VirtualFileManager;
-import com.intellij.psi.PsiDirectory;
-import com.intellij.psi.PsiManager;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.search.SearchScope;
+import consulo.language.editor.scope.AnalysisScope;
+import consulo.language.editor.inspection.reference.RefElement;
+import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
+import consulo.application.Application;
+import consulo.application.ApplicationManager;
+import consulo.project.Project;
+import consulo.content.ContentIterator;
+import consulo.module.content.ProjectFileIndex;
+import consulo.module.content.ProjectRootManager;
+import consulo.application.util.function.Computable;
+import consulo.ide.impl.idea.openapi.vfs.VfsUtilCore;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.virtualFileSystem.VirtualFileManager;
+import consulo.language.psi.PsiDirectory;
+import consulo.language.psi.PsiManager;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.content.scope.SearchScope;
 import com.siyeh.InspectionGadgetsBundle;
 import com.intellij.java.impl.ig.BaseGlobalInspection;
 import org.jetbrains.annotations.Nls;
 import javax.annotation.Nonnull;
 
+import javax.annotation.Nullable;
 import javax.swing.*;
 
 public class EmptyDirectoryInspection extends BaseGlobalInspection {
@@ -110,7 +110,7 @@ public class EmptyDirectoryInspection extends BaseGlobalInspection {
     });
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private static String getPathRelativeToModule(VirtualFile file, Project project) {
     final ProjectRootManager rootManager = ProjectRootManager.getInstance(project);
     final Application application = ApplicationManager.getApplication();

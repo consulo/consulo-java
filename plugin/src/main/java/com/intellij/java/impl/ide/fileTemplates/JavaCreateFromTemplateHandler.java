@@ -15,9 +15,9 @@
  */
 package com.intellij.java.impl.ide.fileTemplates;
 
-import com.intellij.ide.IdeBundle;
-import com.intellij.ide.fileTemplates.CreateFromTemplateHandler;
-import com.intellij.ide.fileTemplates.FileTemplate;
+import consulo.ide.IdeBundle;
+import consulo.fileTemplate.CreateFromTemplateHandler;
+import consulo.fileTemplate.FileTemplate;
 import com.intellij.java.impl.psi.impl.file.JavaDirectoryServiceImpl;
 import com.intellij.java.language.JavaCoreBundle;
 import com.intellij.java.language.LanguageLevel;
@@ -27,16 +27,16 @@ import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiJavaFile;
 import com.intellij.java.language.psi.PsiPackageStatement;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.openapi.fileTypes.FileType;
-import com.intellij.openapi.fileTypes.ex.FileTypeManagerEx;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiDirectory;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiFileFactory;
-import com.intellij.psi.codeStyle.CodeStyleManager;
-import com.intellij.util.ArrayUtil;
-import com.intellij.util.IncorrectOperationException;
+import consulo.virtualFileSystem.fileType.FileType;
+import consulo.ide.impl.idea.openapi.fileTypes.ex.FileTypeManagerEx;
+import consulo.project.Project;
+import consulo.language.psi.PsiDirectory;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiFileFactory;
+import consulo.language.codeStyle.CodeStyleManager;
+import consulo.util.collection.ArrayUtil;
+import consulo.language.util.IncorrectOperationException;
 
 import javax.annotation.Nonnull;
 import java.util.Map;

@@ -18,11 +18,11 @@ package com.intellij.java.language.impl.psi.impl.source.tree.java;
 import com.intellij.java.language.impl.psi.impl.source.tree.ChildRole;
 import com.intellij.java.language.impl.psi.impl.source.tree.ElementType;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
-import com.intellij.lang.ASTNode;
 import com.intellij.java.language.psi.JavaTokenType;
-import com.intellij.psi.impl.source.tree.*;
-import com.intellij.psi.tree.ChildRoleBase;
-import com.intellij.psi.tree.IElementType;
+import consulo.language.ast.ASTNode;
+import consulo.language.ast.ChildRoleBase;
+import consulo.language.ast.IElementType;
+import consulo.language.impl.ast.CompositeElement;
 import consulo.logging.Logger;
 
 /**

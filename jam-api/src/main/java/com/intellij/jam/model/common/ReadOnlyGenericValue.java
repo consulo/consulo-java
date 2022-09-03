@@ -16,9 +16,9 @@
 package com.intellij.jam.model.common;
 
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiNamedElement;
-import com.intellij.util.xml.GenericValue;
-import consulo.psi.PsiPackage;
+import consulo.language.psi.PsiNamedElement;
+import consulo.language.psi.PsiPackage;
+import consulo.xml.util.xml.GenericValue;
 
 /**
  * @author peter

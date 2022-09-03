@@ -12,7 +12,7 @@
 		<projectService serviceInterface="com.intellij.java.coverage.JavaCoverageAnnotator"
 						serviceImplementation="com.intellij.java.coverage.JavaCoverageAnnotator"/>
 		<programRunner implementation="com.intellij.java.coverage.DefaultJavaCoverageRunner" id="DefaultJavaCoverageRunner"/>
-		<selectInTarget implementation="com.intellij.coverage.view.SelectInCoverageView"/>
+		<selectInTarget implementation="consulo.ide.impl.idea.coverage.view.SelectInCoverageView"/>
 	</extensions>
 
 	<extensionPoints>

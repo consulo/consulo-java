@@ -17,9 +17,9 @@
 package com.intellij.java.debugger.impl.actions;
 
 import com.intellij.java.debugger.impl.DebugException;
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.project.DumbAware;
+import consulo.ui.ex.action.AnAction;
+import consulo.ui.ex.action.AnActionEvent;
+import consulo.application.dumb.DumbAware;
 
 public class ThrowDebugExceptionAction extends AnAction implements DumbAware {
 

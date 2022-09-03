@@ -3,7 +3,7 @@ package com.intellij.java.language.codeInsight;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.util.collection.ContainerUtil;
 
 import javax.annotation.Nullable;
 import java.util.Set;

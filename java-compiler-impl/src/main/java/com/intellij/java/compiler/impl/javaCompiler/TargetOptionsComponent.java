@@ -15,18 +15,19 @@
  */
 package com.intellij.java.compiler.impl.javaCompiler;
 
-import com.intellij.icons.AllIcons;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.ComboBox;
-import com.intellij.ui.JBColor;
-import com.intellij.ui.TableUtil;
-import com.intellij.ui.ToolbarDecorator;
-import com.intellij.ui.table.JBTable;
-import com.intellij.util.ui.ItemRemovable;
-import consulo.awt.TargetAWT;
+import consulo.application.AllIcons;
+import consulo.module.Module;
+import consulo.module.ModuleManager;
+import consulo.project.Project;
+import consulo.ui.ex.awt.ComboBox;
+import consulo.ui.ex.JBColor;
+import consulo.ui.ex.awt.ToolbarDecorator;
+import consulo.ui.ex.awt.table.JBTable;
+import consulo.ui.ex.awt.util.TableUtil;
+import consulo.ui.ex.awt.ItemRemovable;
+import consulo.ui.ex.awtUnsafe.TargetAWT;
 
+import javax.annotation.Nullable;
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicComboBoxEditor;
 import javax.swing.table.AbstractTableModel;
@@ -392,7 +393,7 @@ public class TargetOptionsComponent extends JPanel
 		myCbProjectTargetLevel.setSelectedItem(level == null ? "" : level);
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public String getProjectBytecodeTarget()
 	{
 		String item = ((String) myCbProjectTargetLevel.getSelectedItem()).trim();

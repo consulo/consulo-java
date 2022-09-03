@@ -21,12 +21,12 @@
 package com.intellij.java.debugger.impl;
 
 import com.intellij.java.execution.filters.ExceptionFilters;
-import com.intellij.execution.filters.LineNumbersMapping;
-import com.intellij.execution.filters.TextConsoleBuilder;
-import com.intellij.execution.filters.TextConsoleBuilderFactory;
-import com.intellij.execution.ui.ConsoleView;
-import com.intellij.execution.ui.RunnerLayoutUi;
-import com.intellij.execution.ui.layout.impl.RunnerContentUi;
+import consulo.execution.ui.console.LineNumbersMapping;
+import consulo.execution.ui.console.TextConsoleBuilder;
+import consulo.execution.ui.console.TextConsoleBuilderFactory;
+import consulo.execution.ui.console.ConsoleView;
+import consulo.execution.ui.layout.RunnerLayoutUi;
+import consulo.ide.impl.idea.execution.ui.layout.impl.RunnerContentUi;
 import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.SourcePosition;
@@ -48,36 +48,36 @@ import com.intellij.java.debugger.impl.ui.tree.DebuggerTreeNode;
 import com.intellij.java.debugger.requests.Requestor;
 import com.intellij.java.debugger.ui.classFilter.ClassFilter;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.actionSystem.DefaultActionGroup;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.application.ReadAction;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.fileTypes.FileType;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.ProjectFileIndex;
-import com.intellij.openapi.roots.ProjectRootManager;
+import consulo.ui.ex.action.AnActionEvent;
+import consulo.dataContext.DataContext;
+import consulo.ui.ex.action.DefaultActionGroup;
+import consulo.application.ApplicationManager;
+import consulo.application.ReadAction;
+import consulo.document.Document;
+import consulo.codeEditor.Editor;
+import consulo.ui.ex.content.Content;
+import consulo.virtualFileSystem.fileType.FileType;
+import consulo.project.Project;
+import consulo.module.content.ProjectFileIndex;
+import consulo.module.content.ProjectRootManager;
 import com.intellij.openapi.util.*;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.pom.Navigatable;
+import consulo.util.lang.StringUtil;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.navigation.Navigatable;
 import com.intellij.psi.*;
-import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.ui.content.Content;
+import consulo.language.codeStyle.CodeStyleSettingsManager;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.execution.unscramble.ThreadDumpPanel;
 import com.intellij.java.execution.unscramble.ThreadState;
-import com.intellij.util.DocumentUtil;
-import com.intellij.util.SmartList;
-import com.intellij.util.containers.ContainerUtil;
-import com.intellij.xdebugger.XDebugSession;
-import com.intellij.xdebugger.XDebuggerManager;
-import com.intellij.xdebugger.XSourcePosition;
-import com.intellij.xdebugger.frame.XValueNode;
-import com.intellij.xdebugger.impl.XSourcePositionImpl;
-import com.intellij.xdebugger.impl.ui.ExecutionPointHighlighter;
+import consulo.document.util.DocumentUtil;
+import consulo.util.collection.SmartList;
+import consulo.util.collection.ContainerUtil;
+import consulo.execution.debug.XDebugSession;
+import consulo.execution.debug.XDebuggerManager;
+import consulo.execution.debug.XSourcePosition;
+import consulo.execution.debug.frame.XValueNode;
+import consulo.ide.impl.idea.xdebugger.impl.XSourcePositionImpl;
+import consulo.ide.impl.idea.xdebugger.impl.ui.ExecutionPointHighlighter;
 import consulo.disposer.Disposable;
 import consulo.disposer.Disposer;
 import consulo.internal.com.sun.jdi.*;
@@ -806,7 +806,7 @@ public abstract class DebuggerUtilsEx extends DebuggerUtils
 		}
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public static Method getMethod(Location location)
 	{
 		try
@@ -958,15 +958,15 @@ public abstract class DebuggerUtilsEx extends DebuggerUtils
 		map.put(className, source);
 	}
 
-	@javax.annotation.Nullable
-	public static String getAlternativeSourceUrl(@javax.annotation.Nullable String className, Project project)
+	@Nullable
+	public static String getAlternativeSourceUrl(@Nullable String className, Project project)
 	{
 		Map<String, String> map = project.getUserData(DEBUGGER_ALTERNATIVE_SOURCE_MAPPING);
 		return map != null ? map.get(className) : null;
 	}
 
 	@Nullable
-	public static XSourcePosition toXSourcePosition(@javax.annotation.Nullable SourcePosition position)
+	public static XSourcePosition toXSourcePosition(@Nullable SourcePosition position)
 	{
 		if(position != null)
 		{
@@ -983,7 +983,7 @@ public abstract class DebuggerUtilsEx extends DebuggerUtils
 		return null;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public static SourcePosition toSourcePosition(@Nullable XSourcePosition position, Project project)
 	{
 		if(position != null)
@@ -1001,7 +1001,7 @@ public abstract class DebuggerUtilsEx extends DebuggerUtils
 		return null;
 	}
 
-	private static class JavaXSourcePosition implements XSourcePosition, ExecutionPointHighlighter.HighlighterProvider
+	private static class JavaXSourcePosition implements XSourcePosition, consulo.ide.impl.idea.xdebugger.impl.ui.ExecutionPointHighlighter.HighlighterProvider
 	{
 		private final SourcePosition mySourcePosition;
 		@Nonnull
@@ -1065,7 +1065,7 @@ public abstract class DebuggerUtilsEx extends DebuggerUtils
 	/**
 	 * Decompiler aware version
 	 */
-	@javax.annotation.Nullable
+	@Nullable
 	public static PsiElement findElementAt(@Nullable PsiFile file, int offset)
 	{
 		return file != null ? file.findElementAt(offset) : null;
@@ -1109,12 +1109,12 @@ public abstract class DebuggerUtilsEx extends DebuggerUtils
 		return StringUtil.substringBefore(typeName, "$$Lambda$");
 	}
 
-	public static boolean isLambdaName(@javax.annotation.Nullable String name)
+	public static boolean isLambdaName(@Nullable String name)
 	{
 		return !StringUtil.isEmpty(name) && name.startsWith("lambda$");
 	}
 
-	public static boolean isLambda(@javax.annotation.Nullable Method method)
+	public static boolean isLambda(@Nullable Method method)
 	{
 		return method != null && isLambdaName(method.name());
 	}
@@ -1322,14 +1322,14 @@ public abstract class DebuggerUtilsEx extends DebuggerUtils
 		}
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public static PsiElement getContainingMethod(@Nullable PsiElement elem)
 	{
 		return PsiTreeUtil.getContextOfType(elem, PsiMethod.class, PsiLambdaExpression.class, PsiClassInitializer.class);
 	}
 
-	@javax.annotation.Nullable
-	public static PsiElement getContainingMethod(@javax.annotation.Nullable SourcePosition position)
+	@Nullable
+	public static PsiElement getContainingMethod(@Nullable SourcePosition position)
 	{
 		if(position == null)
 		{
@@ -1387,7 +1387,7 @@ public abstract class DebuggerUtilsEx extends DebuggerUtils
 		return -1;
 	}
 
-	public static boolean isInLibraryContent(@javax.annotation.Nullable VirtualFile file, @Nonnull Project project)
+	public static boolean isInLibraryContent(@Nullable VirtualFile file, @Nonnull Project project)
 	{
 		return ReadAction.compute(() ->
 		{

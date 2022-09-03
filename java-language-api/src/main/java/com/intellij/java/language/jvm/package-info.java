@@ -22,7 +22,7 @@
  * E.g. if a framework provides an annotation and requires that signatures of methods annotated by it must satisfy some requirements
  * it's possible to write a single inspection which will check this for all JVM-based languages which supports these interfaces.
  *
- * @see com.intellij.java.language.jvm.JvmElement
+ * @see JvmElement
  */
 package com.intellij.java.language.jvm;
 

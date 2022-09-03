@@ -1,15 +1,15 @@
 // Copyright 2000-2019 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.impl.codeInsight.completion;
 
-import com.intellij.codeInsight.AutoPopupController;
-import com.intellij.codeInsight.CodeInsightSettings;
-import com.intellij.codeInsight.CodeInsightUtilCore;
-import com.intellij.codeInsight.TailType;
+import consulo.language.editor.AutoPopupController;
+import consulo.language.editor.CodeInsightSettings;
+import consulo.language.editor.CodeInsightUtilCore;
+import consulo.language.editor.completion.lookup.TailType;
 import com.intellij.codeInsight.completion.*;
-import com.intellij.codeInsight.completion.impl.CamelHumpMatcher;
-import com.intellij.codeInsight.completion.util.CompletionStyleUtil;
-import com.intellij.codeInsight.completion.util.ParenthesesInsertHandler;
-import com.intellij.codeInsight.editorActions.TabOutScopesTracker;
+import consulo.language.editor.completion.CamelHumpMatcher;
+import consulo.language.editor.completion.CompletionStyleUtil;
+import consulo.language.editor.completion.lookup.ParenthesesInsertHandler;
+import consulo.codeEditor.action.TabOutScopesTracker;
 import com.intellij.codeInsight.lookup.*;
 import com.intellij.java.analysis.codeInsight.guess.GuessManager;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.LambdaHighlightingUtil;
@@ -32,30 +32,30 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
 import com.intellij.java.language.psi.util.*;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.RangeMarker;
-import com.intellij.openapi.fileEditor.FileDocumentManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Condition;
-import com.intellij.openapi.util.Conditions;
-import com.intellij.openapi.util.NullableLazyKey;
-import com.intellij.openapi.util.Ref;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.document.Document;
+import consulo.codeEditor.Editor;
+import consulo.document.RangeMarker;
+import consulo.document.FileDocumentManager;
+import consulo.project.Project;
+import consulo.util.lang.function.Condition;
+import consulo.util.lang.function.Conditions;
+import consulo.ide.impl.idea.openapi.util.NullableLazyKey;
+import consulo.util.lang.ref.Ref;
+import consulo.util.lang.StringUtil;
 import com.intellij.psi.*;
-import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
-import com.intellij.psi.codeStyle.SuggestedNameInfo;
-import com.intellij.psi.filters.ElementFilter;
-import com.intellij.psi.impl.FakePsiElement;
-import com.intellij.psi.impl.source.PostprocessReformattingAspect;
-import com.intellij.psi.scope.PsiScopeProcessor;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.PsiUtilCore;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.ObjectUtils;
-import com.intellij.util.PairFunction;
-import com.intellij.util.containers.ContainerUtil;
-import com.intellij.util.containers.JBIterable;
+import consulo.language.codeStyle.CommonCodeStyleSettings;
+import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
+import consulo.language.psi.filter.ElementFilter;
+import consulo.language.impl.psi.FakePsiElement;
+import consulo.language.codeStyle.PostprocessReformattingAspect;
+import consulo.language.psi.resolve.PsiScopeProcessor;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.psi.PsiUtilCore;
+import consulo.language.util.IncorrectOperationException;
+import consulo.ide.impl.idea.util.ObjectUtils;
+import consulo.util.lang.function.PairFunction;
+import consulo.util.collection.ContainerUtil;
+import consulo.util.collection.JBIterable;
 import com.siyeh.ig.psiutils.SideEffectChecker;
 import consulo.logging.Logger;
 import consulo.psi.PsiPackage;
@@ -70,7 +70,7 @@ import java.util.*;
 
 import static com.intellij.java.impl.codeInsight.completion.ReferenceExpressionCompletionContributor.findConstantsUsedInSwitch;
 import static com.intellij.java.impl.psi.util.proximity.ReferenceListWeigher.ReferenceListApplicability.inapplicable;
-import static com.intellij.patterns.PlatformPatterns.psiElement;
+import static consulo.language.pattern.PlatformPatterns.psiElement;
 
 public class JavaCompletionUtil {
   public static final Key<Boolean> FORCE_SHOW_SIGNATURE_ATTR = Key.create("forceShowSignature");
@@ -230,7 +230,7 @@ public class JavaCompletionUtil {
       }
 
       @Override
-      public void handleEvent(Event event, @javax.annotation.Nullable Object associated) {
+      public void handleEvent(Event event, @Nullable Object associated) {
 
       }
 

@@ -15,7 +15,7 @@
  */
 package com.intellij.java.analysis.codeInspection.reference;
 
-import com.intellij.codeInspection.reference.RefEntity;
+import consulo.language.editor.inspection.reference.RefEntity;
 
 /**
  * A node in the reference graph corresponding to a Java package.

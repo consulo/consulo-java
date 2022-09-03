@@ -25,20 +25,21 @@ import com.intellij.java.language.impl.psi.impl.source.resolve.graphInference.In
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.infos.MethodCandidateInfo;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.lang.ASTNode;
-import com.intellij.openapi.util.Computable;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.ResolveState;
-import com.intellij.psi.scope.PsiScopeProcessor;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.ast.ASTNode;
+import consulo.application.util.function.Computable;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiElementVisitor;
+import consulo.language.psi.resolve.ResolveState;
+import consulo.language.psi.resolve.PsiScopeProcessor;
+import consulo.language.psi.util.PsiTreeUtil;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Map;
 
 public class PsiLambdaExpressionImpl extends JavaStubPsiElement<FunctionalExpressionStub<PsiLambdaExpression>> implements PsiLambdaExpression {
   private static final ControlFlowPolicy ourPolicy = new ControlFlowPolicy() {
-    @javax.annotation.Nullable
+    @Nullable
     @Override
     public PsiVariable getUsedVariable(@Nonnull PsiReferenceExpression refExpr) {
       return null;
@@ -76,7 +77,7 @@ public class PsiLambdaExpressionImpl extends JavaStubPsiElement<FunctionalExpres
   }
 
 
-  @javax.annotation.Nullable
+  @Nullable
   @Override
   public PsiType getFunctionalInterfaceType() {
     return FunctionalInterfaceParameterizationUtil.getGroundTargetType(LambdaUtil.getFunctionalInterfaceType(this, true), this);

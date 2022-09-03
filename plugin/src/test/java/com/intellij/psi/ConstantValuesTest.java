@@ -9,12 +9,12 @@ import java.io.IOException;
 import com.intellij.JavaTestUtil;
 import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.application.ApplicationManager;
+import consulo.application.ApplicationManager;
 import consulo.logging.Logger;
-import com.intellij.openapi.roots.ModuleRootModificationUtil;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.ide.impl.idea.openapi.roots.ModuleRootModificationUtil;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.java.language.impl.psi.impl.JavaConstantExpressionEvaluator;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.testFramework.PsiTestCase;
 import com.intellij.testFramework.PsiTestUtil;
 

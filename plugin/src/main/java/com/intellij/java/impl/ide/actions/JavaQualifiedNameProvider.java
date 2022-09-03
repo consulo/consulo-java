@@ -15,26 +15,26 @@
  */
 package com.intellij.java.impl.ide.actions;
 
-import com.intellij.codeInsight.CodeInsightUtilBase;
-import com.intellij.ide.actions.QualifiedNameProvider;
+import consulo.ide.impl.idea.codeInsight.CodeInsightUtilBase;
+import consulo.language.editor.QualifiedNameProvider;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.search.PsiShortNamesCache;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.RangeMarker;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.ProjectRootManager;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.LocalFileSystem;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.document.Document;
+import consulo.codeEditor.Editor;
+import consulo.document.RangeMarker;
+import consulo.project.Project;
+import consulo.module.content.ProjectRootManager;
+import consulo.util.lang.StringUtil;
+import consulo.virtualFileSystem.LocalFileSystem;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.psi.*;
-import com.intellij.psi.codeStyle.CodeStyleManager;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.LogicalRoot;
+import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.ide.impl.idea.util.LogicalRoot;
 import com.intellij.util.LogicalRootsManager;
 import consulo.logging.Logger;
 
@@ -246,7 +246,7 @@ public class JavaQualifiedNameProvider implements QualifiedNameProvider {
     return aClass == targetElement.getContainingClass();
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private static PsiElement getMember(final PsiElement element) {
     if (element instanceof PsiMember) return element;
     if (element instanceof PsiReference) {

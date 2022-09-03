@@ -15,6 +15,8 @@
  */
 package com.intellij.java.language.psi;
 
+import javax.annotation.Nullable;
+
 /**
  * Represents a Java <code>super</code> expression in a super method call. Note that the qualifier of
  * a super constructor call is represented as a {@link PsiKeyword} rather than a <code>PsiSuperExpression</code>.  
@@ -27,6 +29,6 @@ public interface PsiSuperExpression extends PsiQualifiedExpression {
    * @return the qualifier, or null if the expression has no qualifier.
    */
   @Override
-  @javax.annotation.Nullable
+  @Nullable
   PsiJavaCodeReferenceElement getQualifier();
 }

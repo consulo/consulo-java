@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.threading;
 
-import com.intellij.codeInspection.ui.SingleCheckboxOptionsPanel;
+import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
 import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
@@ -81,7 +81,7 @@ public class WhileLoopSpinsOnFieldInspection extends BaseInspection {
       registerStatementError(statement);
     }
 
-    @javax.annotation.Nullable
+    @Nullable
     private PsiField getFieldIfSimpleFieldComparison(PsiExpression condition) {
       condition = PsiUtil.deparenthesizeExpression(condition);
       if (condition == null) {
@@ -118,7 +118,7 @@ public class WhileLoopSpinsOnFieldInspection extends BaseInspection {
       return null;
     }
 
-    @javax.annotation.Nullable
+    @Nullable
     private PsiField getFieldIfSimpleFieldAccess(PsiExpression expression) {
       expression = PsiUtil.deparenthesizeExpression(expression);
       if (expression == null) {

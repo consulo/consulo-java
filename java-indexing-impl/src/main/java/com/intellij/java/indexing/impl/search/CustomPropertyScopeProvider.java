@@ -13,18 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.intellij.java.language.impl.psi.impl;
+package com.intellij.java.indexing.impl.search;
 
-import com.intellij.lang.LanguageExtension;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ExtensionAPI;
+import consulo.component.extension.ExtensionPointName;
+import consulo.content.scope.SearchScope;
+import consulo.project.Project;
 
-/**
- * @author Serega.Vasiliev
- */
-public class LanguageConstantExpressionEvaluator extends LanguageExtension<ConstantExpressionEvaluator> {
-  public static final LanguageConstantExpressionEvaluator INSTANCE = new LanguageConstantExpressionEvaluator();
+@ExtensionAPI(ComponentScope.APPLICATION)
+public interface CustomPropertyScopeProvider {
+  ExtensionPointName<CustomPropertyScopeProvider> EP_NAME = ExtensionPointName.create(CustomPropertyScopeProvider.class);
 
-  private LanguageConstantExpressionEvaluator() {
-    super("consulo.java.constantExpressionEvaluator");
-  }
+  SearchScope getScope(final Project project);
 }
-

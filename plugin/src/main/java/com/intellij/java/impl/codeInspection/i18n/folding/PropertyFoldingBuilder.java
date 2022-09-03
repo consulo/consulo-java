@@ -27,23 +27,23 @@ import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.language.codeInsight.folding.JavaCodeFoldingSettings;
 import com.intellij.java.impl.codeInspection.i18n.JavaI18nUtil;
 import com.intellij.java.language.psi.*;
-import com.intellij.lang.ASTNode;
-import com.intellij.lang.folding.FoldingBuilderEx;
-import com.intellij.lang.folding.FoldingDescriptor;
+import consulo.language.ast.ASTNode;
+import consulo.language.editor.folding.FoldingBuilderEx;
+import consulo.language.editor.folding.FoldingDescriptor;
 import com.intellij.lang.properties.IProperty;
 import com.intellij.lang.properties.parsing.PropertiesElementTypes;
 import com.intellij.lang.properties.psi.Property;
 import com.intellij.lang.properties.psi.impl.PropertyImpl;
 import com.intellij.lang.properties.psi.impl.PropertyStubImpl;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.project.Project;
+import consulo.document.Document;
+import consulo.project.Project;
 import consulo.util.dataholder.Key;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.util.lang.StringUtil;
 import com.intellij.psi.*;
 import com.intellij.java.language.impl.psi.impl.JavaConstantExpressionEvaluator;
-import com.intellij.psi.impl.source.SourceTreeToPsiMap;
-import com.intellij.psi.util.PsiModificationTracker;
-import com.intellij.util.ObjectUtil;
+import consulo.language.impl.psi.SourceTreeToPsiMap;
+import consulo.language.psi.PsiModificationTracker;
+import consulo.util.lang.ObjectUtil;
 
 /**
  * @author Konstantin Bulenkov

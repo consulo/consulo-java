@@ -15,8 +15,8 @@
  */
 package com.intellij.java.execution.impl.junit;
 
-import com.intellij.execution.Location;
-import com.intellij.execution.actions.ConfigurationContext;
+import consulo.execution.action.ConfigurationContext;
+import consulo.execution.action.Location;
 import com.intellij.java.execution.impl.junit2.PsiMemberParameterizedLocation;
 import com.intellij.java.execution.impl.junit2.info.MethodLocation;
 import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
@@ -26,19 +26,19 @@ import com.intellij.java.language.psi.PsiClassOwner;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.java.language.psi.util.PsiClassUtil;
-import com.intellij.openapi.actionSystem.PlatformDataKeys;
-import com.intellij.openapi.application.ReadAction;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.fileEditor.FileEditor;
-import com.intellij.openapi.fileEditor.TextEditor;
-import com.intellij.openapi.progress.ProgressManager;
-import com.intellij.openapi.ui.popup.JBPopupFactory;
-import com.intellij.openapi.util.Condition;
-import com.intellij.psi.PsiDocumentManager;
-import com.intellij.psi.PsiFile;
-import com.intellij.ui.ColoredListCellRenderer;
-import com.intellij.ui.components.JBList;
-import com.intellij.util.ArrayUtil;
+import consulo.fileEditor.TextEditor;
+import consulo.language.editor.PlatformDataKeys;
+import consulo.application.ReadAction;
+import consulo.document.Document;
+import consulo.fileEditor.FileEditor;
+import consulo.application.progress.ProgressManager;
+import consulo.ui.ex.awt.ColoredListCellRenderer;
+import consulo.ui.ex.awt.JBList;
+import consulo.ui.ex.popup.JBPopupFactory;
+import consulo.util.lang.function.Condition;
+import consulo.language.psi.PsiDocumentManager;
+import consulo.language.psi.PsiFile;
+import consulo.util.collection.ArrayUtil;
 
 import javax.swing.*;
 import java.util.ArrayList;

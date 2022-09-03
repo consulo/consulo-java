@@ -20,8 +20,8 @@
 package com.intellij.java.language.impl.psi.scope;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.*;
-import com.intellij.psi.filters.ElementFilter;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.filter.ElementFilter;
 
 public class ElementClassFilter implements ElementFilter {
   public static final ElementClassFilter PACKAGE = new ElementClassFilter(ElementClassHint.DeclarationKind.PACKAGE);
@@ -32,7 +32,7 @@ public class ElementClassFilter implements ElementFilter {
   public static final ElementClassFilter ENUM_CONST = new ElementClassFilter(ElementClassHint.DeclarationKind.ENUM_CONST);
 
   private final ElementClassHint.DeclarationKind myKind;
-  
+
   private ElementClassFilter(ElementClassHint.DeclarationKind kind) {
     myKind = kind;
   }

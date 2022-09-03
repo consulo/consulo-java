@@ -21,19 +21,19 @@ import com.intellij.java.debugger.impl.memory.tracking.TrackingType;
 import com.intellij.java.debugger.impl.memory.utils.AbstractTableColumnDescriptor;
 import com.intellij.java.debugger.impl.memory.utils.AbstractTableModelWithColumns;
 import com.intellij.java.debugger.impl.memory.utils.InstancesProvider;
-import com.intellij.openapi.actionSystem.DataProvider;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.codeStyle.MinusculeMatcher;
-import com.intellij.psi.codeStyle.NameUtil;
-import com.intellij.ui.ColoredTableCellRenderer;
-import com.intellij.ui.JBColor;
-import com.intellij.ui.SimpleTextAttributes;
-import com.intellij.ui.speedSearch.SpeedSearchUtil;
-import com.intellij.ui.table.JBTable;
-import com.intellij.util.containers.FList;
-import com.intellij.util.ui.JBDimension;
-import com.intellij.util.ui.JBUI;
+import consulo.dataContext.DataProvider;
+import consulo.application.ApplicationManager;
+import consulo.document.util.TextRange;
+import consulo.application.util.matcher.MinusculeMatcher;
+import consulo.application.util.matcher.NameUtil;
+import consulo.ui.ex.awt.ColoredTableCellRenderer;
+import consulo.ui.ex.JBColor;
+import consulo.ui.ex.SimpleTextAttributes;
+import consulo.ui.ex.awt.speedSearch.SpeedSearchUtil;
+import consulo.ui.ex.awt.table.JBTable;
+import consulo.util.collection.FList;
+import consulo.ui.ex.awt.JBDimension;
+import consulo.ui.ex.awt.JBUI;
 import consulo.disposer.Disposable;
 import consulo.internal.com.sun.jdi.ObjectReference;
 import consulo.internal.com.sun.jdi.ReferenceType;
@@ -175,7 +175,7 @@ public class ClassesTable extends JBTable implements DataProvider, Disposable
 		return null;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	ReferenceType getClassByName(@Nonnull String name)
 	{
 		for(ReferenceType ref : myItems)

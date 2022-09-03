@@ -26,9 +26,9 @@ import com.intellij.java.debugger.engine.evaluation.EvaluateException;
 import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
 import com.intellij.java.debugger.engine.evaluation.TextWithImports;
 import com.intellij.java.debugger.impl.PositionUtil;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.psi.PsiCodeFragment;
+import consulo.project.Project;
+import consulo.util.lang.Comparing;
+import consulo.language.psi.PsiCodeFragment;
 import consulo.internal.com.sun.jdi.Value;
 
 /**
@@ -37,7 +37,7 @@ import consulo.internal.com.sun.jdi.Value;
 public class WatchItemDescriptor extends EvaluationDescriptor
 {
 
-	@javax.annotation.Nullable
+	@Nullable
 	private final String myCustomName;
 
 	public WatchItemDescriptor(Project project, TextWithImports text)

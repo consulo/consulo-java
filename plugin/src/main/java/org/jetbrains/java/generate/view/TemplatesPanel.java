@@ -19,14 +19,14 @@
  */
 package org.jetbrains.java.generate.view;
 
-import com.intellij.openapi.options.ConfigurationException;
-import com.intellij.openapi.options.UnnamedConfigurable;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.NamedItemsListEditor;
+import consulo.configurable.ConfigurationException;
+import consulo.configurable.UnnamedConfigurable;
+import consulo.project.Project;
+import consulo.ide.impl.idea.openapi.ui.NamedItemsListEditor;
 import com.intellij.openapi.ui.Namer;
 import com.intellij.openapi.util.Cloner;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.openapi.util.Factory;
+import consulo.util.lang.Comparing;
+import consulo.language.impl.ast.Factory;
 import com.intellij.java.language.psi.PsiType;
 import consulo.util.collection.HashingStrategy;
 import org.jetbrains.annotations.Nls;

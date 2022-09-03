@@ -29,7 +29,7 @@ import consulo.logging.Logger;
 import org.intellij.lang.annotations.MagicConstant;
 
 import javax.annotation.Nullable;
-import com.intellij.Patches;
+import consulo.application.util.Patches;
 import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.engine.evaluation.EvaluateException;
 import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
@@ -37,10 +37,10 @@ import com.intellij.java.debugger.impl.engine.events.SuspendContextCommandImpl;
 import com.intellij.java.debugger.impl.DebuggerUtilsEx;
 import com.intellij.java.debugger.impl.jdi.StackFrameProxyImpl;
 import com.intellij.java.debugger.impl.jdi.ThreadReferenceProxyImpl;
-import com.intellij.diagnostic.ThreadDumper;
-import com.intellij.openapi.util.Comparing;
+import consulo.application.util.concurrent.ThreadDumper;
+import consulo.util.lang.Comparing;
 import java.util.HashSet;
-import com.intellij.xdebugger.frame.XSuspendContext;
+import consulo.execution.debug.frame.XSuspendContext;
 import consulo.internal.com.sun.jdi.ObjectReference;
 import consulo.internal.com.sun.jdi.ThreadReference;
 import consulo.internal.com.sun.jdi.event.EventSet;
@@ -158,7 +158,7 @@ public abstract class SuspendContextImpl extends XSuspendContext implements Susp
 		}
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	@Override
 	public ThreadReferenceProxyImpl getThread()
 	{
@@ -178,7 +178,7 @@ public abstract class SuspendContextImpl extends XSuspendContext implements Susp
 		myVotesToVote = 1000000000;
 	}
 
-	public boolean isExplicitlyResumed(@javax.annotation.Nullable ThreadReferenceProxyImpl thread)
+	public boolean isExplicitlyResumed(@Nullable ThreadReferenceProxyImpl thread)
 	{
 		return myResumedThreads != null && myResumedThreads.contains(thread);
 	}

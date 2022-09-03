@@ -15,16 +15,14 @@
  */
 package com.intellij.java.debugger.engine;
 
-import consulo.extensions.CompositeExtensionPointName;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ExtensionAPI;
 import consulo.internal.com.sun.jdi.TypeComponent;
 
 /**
  * @author Nikolay.Tropin
  */
-public interface SyntheticTypeComponentProvider
-{
-	CompositeExtensionPointName<SyntheticTypeComponentProvider> EP_NAME = CompositeExtensionPointName.applicationPoint("consulo.java.debugger.syntheticProvider",
-			SyntheticTypeComponentProvider.class);
-
-	boolean isSynthetic(TypeComponent typeComponent);
+@ExtensionAPI(ComponentScope.APPLICATION)
+public interface SyntheticTypeComponentProvider {
+  boolean isSynthetic(TypeComponent typeComponent);
 }

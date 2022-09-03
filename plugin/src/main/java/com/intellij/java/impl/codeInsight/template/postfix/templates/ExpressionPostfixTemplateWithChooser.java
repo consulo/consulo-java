@@ -15,24 +15,24 @@
  */
 package com.intellij.java.impl.codeInsight.template.postfix.templates;
 
-import com.intellij.codeInsight.template.postfix.templates.PostfixLiveTemplate;
-import com.intellij.codeInsight.template.postfix.templates.PostfixTemplate;
-import com.intellij.codeInsight.template.postfix.templates.PostfixTemplatesUtils;
-import com.intellij.codeInsight.unwrap.ScopeHighlighter;
+import consulo.ide.impl.idea.codeInsight.template.postfix.templates.PostfixLiveTemplate;
+import consulo.language.editor.postfixTemplate.PostfixTemplate;
+import consulo.language.editor.postfixTemplate.PostfixTemplatesUtils;
+import consulo.language.editor.refactoring.unwrap.ScopeHighlighter;
 import com.intellij.java.impl.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils;
 import com.intellij.java.impl.refactoring.introduceVariable.IntroduceVariableBase;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.util.PsiExpressionTrimRenderer;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.command.CommandProcessor;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.util.Condition;
+import consulo.application.ApplicationManager;
+import consulo.undoRedo.CommandProcessor;
+import consulo.document.Document;
+import consulo.codeEditor.Editor;
+import consulo.util.lang.function.Condition;
 import com.intellij.openapi.util.Pass;
-import com.intellij.psi.PsiElement;
-import com.intellij.refactoring.IntroduceTargetChooser;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.language.psi.PsiElement;
+import consulo.language.editor.refactoring.IntroduceTargetChooser;
+import consulo.util.collection.ContainerUtil;
 
 import javax.annotation.Nonnull;
 import java.util.List;

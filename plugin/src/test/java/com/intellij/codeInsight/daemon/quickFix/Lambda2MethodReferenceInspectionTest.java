@@ -18,7 +18,7 @@ package com.intellij.codeInsight.daemon.quickFix;
 import javax.annotation.Nonnull;
 
 import com.intellij.java.analysis.impl.codeInspection.LambdaCanBeMethodReferenceInspection;
-import com.intellij.codeInspection.LocalInspectionTool;
+import consulo.language.editor.inspection.LocalInspectionTool;
 
 
 public abstract class Lambda2MethodReferenceInspectionTest extends LightQuickFixTestCase {

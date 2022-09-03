@@ -18,9 +18,9 @@ package com.intellij.java.impl.psi.statistics;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
-import com.intellij.psi.statistics.StatisticsInfo;
-import com.intellij.psi.statistics.StatisticsManager;
-import com.intellij.util.ArrayUtil;
+import consulo.ide.impl.psi.statistics.StatisticsInfo;
+import consulo.ide.impl.psi.statistics.StatisticsManager;
+import consulo.util.collection.ArrayUtil;
 import consulo.logging.Logger;
 import org.jetbrains.annotations.NonNls;
 
@@ -36,12 +36,12 @@ public abstract class JavaStatisticsManager {
   @NonNls
   public static final String CLASS_PREFIX = "class#";
 
-  private static StatisticsInfo createVariableUseInfo(final String name, final VariableKind variableKind,
-                                                      final String propertyName,
-                                                      final PsiType type) {
+  private static consulo.ide.impl.psi.statistics.StatisticsInfo createVariableUseInfo(final String name, final VariableKind variableKind,
+                                                                                      final String propertyName,
+                                                                                      final PsiType type) {
     String key1 = getVariableNameUseKey1(propertyName, type);
     String key2 = getVariableNameUseKey2(variableKind, name);
-    return new StatisticsInfo(key1, key2);
+    return new consulo.ide.impl.psi.statistics.StatisticsInfo(key1, key2);
   }
 
   private static String getVariableNameUseKey1(String propertyName, PsiType type) {
@@ -99,7 +99,7 @@ public abstract class JavaStatisticsManager {
 
   @NonNls
   @Nonnull
-  public static String getMemberUseKey1(@javax.annotation.Nullable PsiType qualifierType) {
+  public static String getMemberUseKey1(@Nullable PsiType qualifierType) {
     qualifierType = TypeConversionUtil.erasure(qualifierType);
     return "member#" + (qualifierType == null ? "" : qualifierType.getCanonicalText());
   }
@@ -125,16 +125,16 @@ public abstract class JavaStatisticsManager {
     return CLASS_PREFIX + ((PsiClass) member).getQualifiedName();
   }
 
-  public static StatisticsInfo createInfo(@Nullable final PsiType qualifierType, final PsiMember member) {
-    return new StatisticsInfo(getMemberUseKey1(qualifierType), getMemberUseKey2(member));
+  public static consulo.ide.impl.psi.statistics.StatisticsInfo createInfo(@Nullable final PsiType qualifierType, final PsiMember member) {
+    return new consulo.ide.impl.psi.statistics.StatisticsInfo(getMemberUseKey1(qualifierType), getMemberUseKey2(member));
   }
 
   public static String[] getAllVariableNamesUsed(VariableKind variableKind, String propertyName, PsiType type) {
-    StatisticsInfo[] keys2 = StatisticsManager.getInstance().getAllValues(getVariableNameUseKey1(propertyName, type));
+    consulo.ide.impl.psi.statistics.StatisticsInfo[] keys2 = consulo.ide.impl.psi.statistics.StatisticsManager.getInstance().getAllValues(getVariableNameUseKey1(propertyName, type));
 
     ArrayList<String> list = new ArrayList<String>();
 
-    for (StatisticsInfo key2 : keys2) {
+    for (consulo.ide.impl.psi.statistics.StatisticsInfo key2 : keys2) {
       VariableKind variableKind1 = getVariableKindFromKey2(key2.getValue());
       if (variableKind1 != variableKind) continue;
       String name = getVariableNameFromKey2(key2.getValue());

@@ -20,39 +20,39 @@ import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.language.codeInsight.ExternalAnnotationsListener;
 import com.intellij.java.language.codeInsight.ExternalAnnotationsManager;
 import com.intellij.java.language.codeInsight.NullableNotNullManager;
+import consulo.virtualFileSystem.LocalFileSystem;
 import org.jetbrains.annotations.NonNls;
 import com.intellij.java.analysis.impl.codeInsight.intention.AddAnnotationPsiFix;
-import com.intellij.codeInsight.intention.IntentionAction;
+import consulo.language.editor.intention.IntentionAction;
 import com.intellij.java.impl.codeInsight.intention.impl.DeannotateIntentionAction;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.application.Result;
-import com.intellij.openapi.command.WriteCommandAction;
-import com.intellij.openapi.editor.CaretModel;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.fileEditor.FileDocumentManager;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.project.Project;
+import consulo.application.ApplicationManager;
+import consulo.application.Result;
+import consulo.language.editor.WriteCommandAction;
+import consulo.codeEditor.CaretModel;
+import consulo.codeEditor.Editor;
+import consulo.document.FileDocumentManager;
+import consulo.module.Module;
+import consulo.project.Project;
 import com.intellij.java.language.projectRoots.roots.AnnotationOrderRootType;
-import com.intellij.openapi.roots.ModifiableRootModel;
-import com.intellij.openapi.roots.ModuleRootManager;
-import com.intellij.openapi.roots.OrderRootType;
-import com.intellij.openapi.roots.libraries.Library;
-import com.intellij.openapi.roots.libraries.LibraryTable;
-import com.intellij.openapi.util.Trinity;
-import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.openapi.util.io.StreamUtil;
-import com.intellij.openapi.vfs.LocalFileSystem;
-import com.intellij.openapi.vfs.VfsUtil;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.module.content.layer.ModifiableRootModel;
+import consulo.module.content.ModuleRootManager;
+import consulo.content.OrderRootType;
+import consulo.content.library.Library;
+import consulo.content.library.LibraryTable;
+import consulo.util.lang.Trinity;
+import consulo.ide.impl.idea.openapi.util.io.FileUtil;
+import consulo.util.io.StreamUtil;
+import consulo.ide.impl.idea.openapi.vfs.VfsUtil;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiAnnotation;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
 import com.intellij.java.language.psi.PsiJavaFile;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifierListOwner;
 import com.intellij.java.language.psi.PsiParameter;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.testFramework.PsiTestUtil;
 import com.intellij.testFramework.UsefulTestCase;
 import com.intellij.testFramework.builders.JavaModuleFixtureBuilder;
@@ -61,7 +61,7 @@ import com.intellij.testFramework.fixtures.IdeaProjectTestFixture;
 import com.intellij.testFramework.fixtures.IdeaTestFixtureFactory;
 import com.intellij.testFramework.fixtures.JavaTestFixtureFactory;
 import com.intellij.testFramework.fixtures.TestFixtureBuilder;
-import com.intellij.util.messages.MessageBusConnection;
+import consulo.component.messagebus.MessageBusConnection;
 
 public abstract class AddAnnotationFixTest extends UsefulTestCase {
   private CodeInsightTestFixture myFixture;
@@ -110,9 +110,9 @@ public abstract class AddAnnotationFixTest extends UsefulTestCase {
         final Library library = libraryTable.createLibrary("test");
 
         final Library.ModifiableModel libraryModel = library.getModifiableModel();
-        libraryModel.addRoot(VfsUtil.pathToUrl(myFixture.getTempDirPath() + "/lib"), OrderRootType.SOURCES);
+        libraryModel.addRoot(consulo.ide.impl.idea.openapi.vfs.VfsUtil.pathToUrl(myFixture.getTempDirPath() + "/lib"), OrderRootType.SOURCES);
         for (String annotationsDir : annotationsDirs) {
-          libraryModel.addRoot(VfsUtil.pathToUrl(myFixture.getTempDirPath() + annotationsDir), AnnotationOrderRootType.getInstance());
+          libraryModel.addRoot(consulo.ide.impl.idea.openapi.vfs.VfsUtil.pathToUrl(myFixture.getTempDirPath() + annotationsDir), AnnotationOrderRootType.getInstance());
         }
         libraryModel.commit();
         model.commit();
@@ -413,7 +413,7 @@ public abstract class AddAnnotationFixTest extends UsefulTestCase {
         VirtualFile file = LocalFileSystem.getInstance().findFileByPath(myFixture.getTempDirPath() + "/content/anno/p/annotations.xml");
         assert file != null;
         String newText = "  " + StreamUtil.readText(file.getInputStream()) + "      "; // adding newspace to the beginning and end of file
-        FileUtil.writeToFile(VfsUtil.virtualToIoFile(file), newText); // writing using java.io.File to make this change external
+        FileUtil.writeToFile(consulo.ide.impl.idea.openapi.vfs.VfsUtil.virtualToIoFile(file), newText); // writing using java.io.File to make this change external
         file.refresh(false, false);
       }
     }.execute();

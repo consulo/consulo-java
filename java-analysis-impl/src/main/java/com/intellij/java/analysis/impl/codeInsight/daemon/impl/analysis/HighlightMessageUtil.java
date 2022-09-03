@@ -16,10 +16,10 @@
 package com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.lang.LangBundle;
+import consulo.language.LangBundle;
 import com.intellij.psi.*;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
-import com.intellij.psi.util.PsiFormatUtilBase;
+import consulo.ide.impl.psi.util.PsiFormatUtilBase;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

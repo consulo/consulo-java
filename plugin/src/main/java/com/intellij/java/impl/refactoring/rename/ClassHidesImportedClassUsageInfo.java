@@ -17,7 +17,7 @@ package com.intellij.java.impl.refactoring.rename;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
 
 /**
  * @author dsl

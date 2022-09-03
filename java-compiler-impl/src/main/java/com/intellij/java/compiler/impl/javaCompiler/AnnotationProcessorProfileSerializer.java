@@ -16,8 +16,8 @@
 package com.intellij.java.compiler.impl.javaCompiler;
 
 import com.intellij.java.compiler.impl.javaCompiler.annotationProcessing.ProcessorConfigProfile;
-import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.ide.impl.idea.openapi.util.io.FileUtil;
+import consulo.util.lang.StringUtil;
 import org.jdom.Element;
 
 import java.io.File;

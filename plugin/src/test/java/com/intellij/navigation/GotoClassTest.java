@@ -3,12 +3,12 @@ package com.intellij.navigation;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import com.intellij.codeInsight.navigation.NavigationUtil;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.fileEditor.FileEditor;
+import consulo.fileEditor.TextEditor;
+import consulo.navigation.NavigationUtil;
+import consulo.codeEditor.Editor;
+import consulo.fileEditor.FileEditor;
 import com.intellij.openapi.fileEditor.HeavyFileEditorManagerTestCase;
-import com.intellij.openapi.fileEditor.TextEditor;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiJavaFile;
 

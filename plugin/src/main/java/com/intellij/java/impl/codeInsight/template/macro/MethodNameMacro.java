@@ -17,12 +17,12 @@ package com.intellij.java.impl.codeInsight.template.macro;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.codeInsight.CodeInsightBundle;
+import consulo.language.editor.CodeInsightBundle;
 import com.intellij.codeInsight.template.*;
 import com.intellij.java.impl.codeInsight.template.JavaCodeContextType;
-import com.intellij.lang.LangBundle;
+import consulo.language.LangBundle;
 import com.intellij.java.language.psi.PsiClassInitializer;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifier;
 

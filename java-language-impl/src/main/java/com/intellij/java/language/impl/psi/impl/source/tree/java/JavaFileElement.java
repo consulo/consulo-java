@@ -17,18 +17,18 @@ package com.intellij.java.language.impl.psi.impl.source.tree.java;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import com.intellij.lang.ASTNode;
+import consulo.language.ast.ASTNode;
 import consulo.logging.Logger;
 import com.intellij.java.language.psi.PsiJavaFile;
-import com.intellij.psi.TokenType;
+import consulo.language.ast.TokenType;
 import com.intellij.java.language.impl.psi.impl.java.stubs.JavaStubElementTypes;
-import com.intellij.psi.impl.source.SourceTreeToPsiMap;
+import consulo.language.impl.psi.SourceTreeToPsiMap;
 import com.intellij.java.language.impl.psi.impl.source.tree.ChildRole;
-import com.intellij.psi.impl.source.tree.FileElement;
+import consulo.language.impl.ast.FileElement;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
-import com.intellij.psi.impl.source.tree.TreeElement;
-import com.intellij.psi.tree.ChildRoleBase;
-import com.intellij.psi.tree.IElementType;
+import consulo.language.impl.ast.TreeElement;
+import consulo.language.ast.ChildRoleBase;
+import consulo.language.ast.IElementType;
 
 public class JavaFileElement extends FileElement
 {

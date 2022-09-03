@@ -15,10 +15,12 @@
  */
 package com.intellij.java.language.psi;
 
+import javax.annotation.Nullable;
+
 /**
  *  @author dsl
  */
 public interface SmartTypePointer {
-  @javax.annotation.Nullable
+  @Nullable
   PsiType getType();
 }

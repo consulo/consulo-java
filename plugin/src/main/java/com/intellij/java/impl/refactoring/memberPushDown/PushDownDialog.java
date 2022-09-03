@@ -15,20 +15,20 @@
  */
 package com.intellij.java.impl.refactoring.memberPushDown;
 
-import com.intellij.openapi.help.HelpManager;
-import com.intellij.openapi.project.Project;
+import consulo.application.HelpManager;
+import consulo.project.Project;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMember;
 import com.intellij.java.impl.refactoring.HelpID;
 import com.intellij.java.impl.refactoring.JavaRefactoringSettings;
-import com.intellij.refactoring.RefactoringBundle;
-import com.intellij.refactoring.classMembers.MemberInfoChange;
-import com.intellij.refactoring.classMembers.MemberInfoModel;
-import com.intellij.refactoring.classMembers.UsedByDependencyMemberInfoModel;
-import com.intellij.refactoring.ui.DocCommentPanel;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.classMember.MemberInfoChange;
+import consulo.language.editor.refactoring.classMember.MemberInfoModel;
+import consulo.language.editor.refactoring.classMember.UsedByDependencyMemberInfoModel;
+import consulo.ide.impl.idea.refactoring.ui.DocCommentPanel;
 import com.intellij.java.impl.refactoring.ui.MemberSelectionPanel;
-import com.intellij.refactoring.ui.RefactoringDialog;
-import com.intellij.refactoring.util.DocCommentPolicy;
+import consulo.language.editor.refactoring.ui.RefactoringDialog;
+import consulo.ide.impl.idea.refactoring.util.DocCommentPolicy;
 import com.intellij.java.impl.refactoring.util.classMembers.MemberInfo;
 
 import javax.swing.*;

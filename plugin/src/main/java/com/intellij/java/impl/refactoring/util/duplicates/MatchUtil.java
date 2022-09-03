@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.refactoring.util.duplicates;
 
-import com.intellij.codeInsight.PsiEquivalenceUtil;
+import consulo.language.editor.PsiEquivalenceUtil;
 import com.intellij.java.analysis.impl.refactoring.util.duplicates.Match;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
@@ -24,12 +24,13 @@ import com.intellij.java.impl.refactoring.changeSignature.ParameterInfoImpl;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 public class MatchUtil {
-  @javax.annotation.Nullable
+  @Nullable
   public static String getChangedSignature(Match match, final PsiMethod method, final boolean shouldBeStatic, String visibility) {
     final PsiType returnType = match.getChangedReturnType(method);
     if (!match.myChangedParams.isEmpty() || returnType != null) {

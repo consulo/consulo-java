@@ -2,7 +2,7 @@
 package com.intellij.java.language.impl.psi.impl.compiled;
 
 import javax.annotation.Nonnull;
-import com.intellij.psi.PsiFile;
+import consulo.language.psi.PsiFile;
 
 /**
  * @deprecated use {@link ClsCustomNavigationPolicy} directly

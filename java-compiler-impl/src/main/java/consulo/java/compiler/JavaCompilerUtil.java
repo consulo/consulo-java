@@ -15,19 +15,19 @@
  */
 package consulo.java.compiler;
 
-import com.intellij.compiler.impl.ModuleChunk;
+import consulo.ide.impl.idea.compiler.impl.ModuleChunk;
 import com.intellij.java.compiler.impl.javaCompiler.JavaCompilerConfiguration;
-import com.intellij.execution.configurations.ParametersList;
-import com.intellij.openapi.compiler.CompileContext;
-import com.intellij.openapi.compiler.CompilerBundle;
+import consulo.process.cmd.ParametersList;
+import consulo.compiler.CompileContext;
+import consulo.compiler.CompilerBundle;
 import com.intellij.java.language.module.EffectiveLanguageLevelUtil;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleUtilCore;
+import consulo.module.Module;
+import consulo.language.util.ModuleUtilCore;
 import com.intellij.java.language.projectRoots.JavaSdkVersion;
-import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.CharsetToolkit;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.content.bundle.Sdk;
+import consulo.util.lang.StringUtil;
+import consulo.util.io.CharsetToolkit;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.java.language.LanguageLevel;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.java.language.module.extension.JavaModuleExtension;
@@ -47,7 +47,7 @@ import java.util.Set;
 public class JavaCompilerUtil
 {
 	@RequiredReadAction
-	public static void addTargetCommandLineSwitch(final ModuleChunk chunk, final ParametersList parametersList)
+	public static void addTargetCommandLineSwitch(final consulo.ide.impl.idea.compiler.impl.ModuleChunk chunk, final ParametersList parametersList)
 	{
 		String optionValue = null;
 
@@ -195,7 +195,7 @@ public class JavaCompilerUtil
 	}
 
 	@Nullable
-	public static Sdk getSdkForCompilation(final ModuleChunk chunk)
+	public static Sdk getSdkForCompilation(final consulo.ide.impl.idea.compiler.impl.ModuleChunk chunk)
 	{
 		return getSdkForCompilation(chunk.getModule());
 	}
@@ -212,7 +212,7 @@ public class JavaCompilerUtil
 	}
 
 	@Nonnull
-	public static Set<VirtualFile> getCompilationBootClasspath(@Nonnull CompileContext compileContext, final ModuleChunk moduleChunk)
+	public static Set<VirtualFile> getCompilationBootClasspath(@Nonnull CompileContext compileContext, final consulo.ide.impl.idea.compiler.impl.ModuleChunk moduleChunk)
 	{
 		JavaModuleExtension<?> extension = ModuleUtilCore.getExtension(moduleChunk.getModule(), JavaModuleExtension.class);
 		if(extension == null)
@@ -224,7 +224,7 @@ public class JavaCompilerUtil
 
 	@Nullable
 	@RequiredReadAction
-	public static LanguageLevel getLanguageLevelForCompilation(final ModuleChunk chunk)
+	public static LanguageLevel getLanguageLevelForCompilation(final consulo.ide.impl.idea.compiler.impl.ModuleChunk chunk)
 	{
 		return EffectiveLanguageLevelUtil.getEffectiveLanguageLevel(chunk.getModule());
 	}

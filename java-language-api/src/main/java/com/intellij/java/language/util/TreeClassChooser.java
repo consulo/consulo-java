@@ -15,9 +15,9 @@
  */
 package com.intellij.java.language.util;
 
-import com.intellij.ide.util.TreeChooser;
+import consulo.language.editor.ui.TreeChooser;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiDirectory;
+import consulo.language.psi.PsiDirectory;
 
 /**
  * User: anna

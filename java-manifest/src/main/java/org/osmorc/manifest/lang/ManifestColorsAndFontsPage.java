@@ -24,15 +24,16 @@
  */
 package org.osmorc.manifest.lang;
 
-import com.intellij.openapi.editor.colors.TextAttributesKey;
-import com.intellij.openapi.fileTypes.SyntaxHighlighter;
-import com.intellij.openapi.options.colors.AttributesDescriptor;
-import com.intellij.openapi.options.colors.ColorDescriptor;
-import com.intellij.openapi.options.colors.ColorSettingsPage;
+import consulo.colorScheme.TextAttributesKey;
+import consulo.language.editor.highlight.SyntaxHighlighter;
+import consulo.colorScheme.setting.AttributesDescriptor;
+import consulo.colorScheme.setting.ColorDescriptor;
+import consulo.language.editor.colorScheme.setting.ColorSettingsPage;
 import consulo.java.manifest.lang.ManifestLanguageVersion;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
 
+import javax.annotation.Nullable;
 import javax.swing.*;
 import java.util.HashMap;
 import java.util.Map;
@@ -76,7 +77,7 @@ public class ManifestColorsAndFontsPage implements ColorSettingsPage
 		return "Manifest & Bnd";
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public Icon getIcon()
 	{
 		return null;
@@ -88,7 +89,7 @@ public class ManifestColorsAndFontsPage implements ColorSettingsPage
 		return ATTRIBUTE_DESCRIPTORS;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public Map<String, TextAttributesKey> getAdditionalHighlightingTagToDescriptorMap()
 	{
 		return ADDITIONAL_HIGHLIGHTING;

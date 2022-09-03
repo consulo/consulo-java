@@ -1,16 +1,16 @@
 // Copyright 2000-2018 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.impl.codeInsight.daemon.impl;
 
-import com.intellij.codeInsight.hint.HintUtil;
-import com.intellij.ide.actions.QualifiedNameProviderUtil;
+import consulo.language.editor.ui.awt.HintUtil;
+import consulo.language.editor.QualifiedNameProviderUtil;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.actionSystem.ActionManager;
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.keymap.KeymapUtil;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.ui.ex.action.ActionManager;
+import consulo.ui.ex.action.AnAction;
+import consulo.ui.ex.keymap.util.KeymapUtil;
+import consulo.util.lang.StringUtil;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.psi.*;
-import com.intellij.ui.JBColor;
+import consulo.ui.ex.JBColor;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -19,10 +19,10 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import static com.intellij.openapi.util.io.FileUtil.toSystemIndependentName;
-import static com.intellij.psi.util.PsiTreeUtil.getStubOrPsiParentOfType;
-import static com.intellij.psi.util.PsiUtilCore.getVirtualFile;
-import static com.intellij.ui.ColorUtil.toHex;
+import static consulo.ide.impl.idea.openapi.util.io.FileUtil.toSystemIndependentName;
+import static consulo.language.psi.util.PsiTreeUtil.getStubOrPsiParentOfType;
+import static consulo.language.psi.PsiUtilCore.getVirtualFile;
+import static consulo.ui.ex.awt.util.ColorUtil.toHex;
 
 public final class GutterTooltipHelper
 {

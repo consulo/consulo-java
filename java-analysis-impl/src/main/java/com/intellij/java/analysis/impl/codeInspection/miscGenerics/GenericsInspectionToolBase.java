@@ -16,12 +16,13 @@
 package com.intellij.java.analysis.impl.codeInspection.miscGenerics;
 
 import com.intellij.java.analysis.codeInspection.BaseJavaBatchLocalInspectionTool;
-import com.intellij.codeInspection.InspectionManager;
-import com.intellij.codeInspection.ProblemDescriptor;
+import consulo.language.editor.inspection.scheme.InspectionManager;
+import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.util.collection.ContainerUtil;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,6 +71,6 @@ public abstract class GenericsInspectionToolBase extends BaseJavaBatchLocalInspe
     return null;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public abstract ProblemDescriptor[] getDescriptions(PsiElement place, InspectionManager manager, boolean isOnTheFly);
 }

@@ -23,17 +23,17 @@ import java.util.Set;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.codeInsight.daemon.EmptyResolveMessageProvider;
+import consulo.language.psi.EmptyResolveMessageProvider;
 import com.intellij.java.language.impl.codeInsight.daemon.JavaErrorBundle;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.ElementManipulator;
-import com.intellij.psi.ElementManipulators;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiElementResolveResult;
+import consulo.document.util.TextRange;
+import consulo.language.psi.ElementManipulator;
+import consulo.language.psi.ElementManipulators;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiElementResolveResult;
 import com.intellij.java.language.psi.PsiJavaPackage;
-import com.intellij.psi.PsiPolyVariantReferenceBase;
-import com.intellij.psi.ResolveResult;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.psi.PsiPolyVariantReferenceBase;
+import consulo.language.psi.ResolveResult;
+import consulo.language.util.IncorrectOperationException;
 
 public class PsiPackageReference extends PsiPolyVariantReferenceBase<PsiElement> implements EmptyResolveMessageProvider
 {

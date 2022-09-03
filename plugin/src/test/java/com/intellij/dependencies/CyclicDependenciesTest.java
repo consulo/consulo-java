@@ -16,7 +16,7 @@
 package com.intellij.dependencies;
 
 import com.intellij.JavaTestUtil;
-import com.intellij.analysis.AnalysisScope;
+import consulo.language.editor.scope.AnalysisScope;
 import com.intellij.java.impl.analysis.JavaAnalysisScope;
 import com.intellij.java.impl.cyclicDependencies.CyclicDependenciesBuilder;
 import com.intellij.java.language.psi.JavaPsiFacade;

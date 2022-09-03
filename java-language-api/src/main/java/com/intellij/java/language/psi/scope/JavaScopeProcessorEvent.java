@@ -15,7 +15,7 @@
  */
 package com.intellij.java.language.psi.scope;
 
-import com.intellij.psi.scope.PsiScopeProcessor;
+import consulo.language.psi.resolve.PsiScopeProcessor;
 
 /**
  * @author yole

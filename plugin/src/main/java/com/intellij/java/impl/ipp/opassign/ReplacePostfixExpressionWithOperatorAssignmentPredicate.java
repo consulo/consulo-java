@@ -16,10 +16,10 @@
 package com.intellij.java.impl.ipp.opassign;
 
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiPostfixExpression;
 import com.intellij.java.language.psi.JavaTokenType;
-import com.intellij.psi.tree.IElementType;
+import consulo.language.ast.IElementType;
 
 class ReplacePostfixExpressionWithOperatorAssignmentPredicate implements PsiElementPredicate {
 

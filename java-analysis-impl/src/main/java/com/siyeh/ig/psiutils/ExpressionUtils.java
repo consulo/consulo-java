@@ -22,13 +22,13 @@ import com.intellij.java.language.psi.util.ConstantExpressionUtil;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.TextRange;
+import consulo.project.Project;
+import consulo.document.util.TextRange;
 import com.intellij.psi.*;
-import com.intellij.psi.search.searches.ReferencesSearch;
-import com.intellij.psi.tree.IElementType;
+import consulo.language.psi.search.ReferencesSearch;
+import consulo.language.ast.IElementType;
 import com.intellij.psi.util.*;
-import com.intellij.util.ArrayUtil;
+import consulo.util.collection.ArrayUtil;
 import com.siyeh.HardcodedMethodConstants;
 import consulo.java.language.module.util.JavaClassNames;
 import one.util.streamex.StreamEx;
@@ -44,7 +44,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-import static com.intellij.util.ObjectUtil.tryCast;
+import static consulo.util.lang.ObjectUtil.tryCast;
 
 public class ExpressionUtils
 {
@@ -100,7 +100,7 @@ public class ExpressionUtils
 		return ControlFlowUtils.hasChildrenOfTypeCount(expressionList, count, PsiExpression.class);
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public static PsiExpression getFirstExpressionInList(@Nullable PsiExpressionList expressionList)
 	{
 		return PsiTreeUtil.getChildOfType(expressionList, PsiExpression.class);
@@ -218,7 +218,7 @@ public class ExpressionUtils
 		return false;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public static String getLiteralString(@Nullable PsiExpression expression)
 	{
 		final PsiLiteralExpression literal = getLiteral(expression);
@@ -272,7 +272,7 @@ public class ExpressionUtils
 	}
 
 	@Contract("null -> false")
-	public static boolean isNullLiteral(@javax.annotation.Nullable PsiExpression expression)
+	public static boolean isNullLiteral(@Nullable PsiExpression expression)
 	{
 		expression = PsiUtil.deparenthesizeExpression(expression);
 		return expression != null && PsiType.NULL.equals(expression.getType());
@@ -458,7 +458,7 @@ public class ExpressionUtils
 		return false;
 	}
 
-	public static boolean isOffsetArrayAccess(@javax.annotation.Nullable PsiExpression expression, @Nonnull PsiVariable variable)
+	public static boolean isOffsetArrayAccess(@Nullable PsiExpression expression, @Nonnull PsiVariable variable)
 	{
 		final PsiExpression strippedExpression = ParenthesesUtils.stripParentheses(expression);
 		if(!(strippedExpression instanceof PsiArrayAccessExpression))
@@ -606,7 +606,7 @@ public class ExpressionUtils
 		return TypeUtils.typeEquals(typeName, type);
 	}
 
-	public static boolean hasStringType(@javax.annotation.Nullable PsiExpression expression)
+	public static boolean hasStringType(@Nullable PsiExpression expression)
 	{
 		return hasType(expression, JavaClassNames.JAVA_LANG_STRING);
 	}
@@ -754,7 +754,7 @@ public class ExpressionUtils
 	}
 
 	@Contract("null, _ -> null")
-	@javax.annotation.Nullable
+	@Nullable
 	public static PsiVariable getVariableFromNullComparison(PsiExpression expression, boolean equals)
 	{
 		final PsiReferenceExpression referenceExpression = getReferenceExpressionFromNullComparison(expression, equals);
@@ -1040,7 +1040,7 @@ public class ExpressionUtils
 	 * @return operand or null
 	 */
 	@Contract("null, _ -> null; !null, null -> null")
-	public static PsiExpression getOtherOperand(@Nullable PsiBinaryExpression binOp, @javax.annotation.Nullable PsiVariable variable)
+	public static PsiExpression getOtherOperand(@Nullable PsiBinaryExpression binOp, @Nullable PsiVariable variable)
 	{
 		if(binOp == null || variable == null)
 		{
@@ -1235,7 +1235,7 @@ public class ExpressionUtils
 	}
 
 	@Contract(value = "null -> null")
-	@javax.annotation.Nullable
+	@Nullable
 	public static PsiLocalVariable resolveLocalVariable(@Nullable PsiExpression expression)
 	{
 		PsiReferenceExpression referenceExpression = tryCast(expression, PsiReferenceExpression.class);

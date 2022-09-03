@@ -20,6 +20,7 @@
  */
 package com.intellij.java.compiler.cache;
 
+import consulo.compiler.CacheCorruptedException;
 import org.jetbrains.annotations.NonNls;
 import consulo.internal.org.objectweb.asm.Opcodes;
 import com.intellij.java.compiler.classParsing.AnnotationConstantValue;
@@ -27,18 +28,19 @@ import com.intellij.java.compiler.classParsing.AnnotationNameValuePair;
 import com.intellij.java.compiler.classParsing.ConstantValue;
 import com.intellij.java.compiler.classParsing.ConstantValueArray;
 import com.intellij.java.compiler.classParsing.EnumConstantValue;
-import com.intellij.compiler.make.CacheCorruptedException;
-import com.intellij.compiler.make.MakeUtil;
-import com.intellij.openapi.application.ApplicationManager;
+import consulo.ide.impl.idea.compiler.make.MakeUtil;
+import consulo.application.ApplicationManager;
 import consulo.logging.Logger;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.util.Computable;
-import com.intellij.openapi.util.SystemInfo;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.VfsUtil;
+import consulo.module.Module;
+import consulo.application.util.function.Computable;
+import consulo.application.util.SystemInfo;
+import consulo.util.lang.StringUtil;
+import consulo.ide.impl.idea.openapi.vfs.VfsUtil;
 import com.intellij.java.util.cls.ClsUtil;
 import consulo.compiler.ModuleCompilerPathsManager;
 import consulo.roots.impl.ProductionContentFolderTypeProvider;
+
+import javax.annotation.Nullable;
 
 public class JavaMakeUtil extends MakeUtil
 {
@@ -132,7 +134,7 @@ public class JavaMakeUtil extends MakeUtil
 		return false;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	@SuppressWarnings({"HardCodedStringLiteral"})
 	public static String relativeClassPathToQName(String relativePath, char separator)
 	{
@@ -309,7 +311,7 @@ public class JavaMakeUtil extends MakeUtil
 				{
 					return null;
 				}
-				return VfsUtil.urlToPath(url);
+				return consulo.ide.impl.idea.openapi.vfs.VfsUtil.urlToPath(url);
 			}
 		});
 	}

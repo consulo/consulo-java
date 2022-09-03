@@ -15,10 +15,17 @@
  */
 package com.intellij.java.language.impl.psi.impl;
 
+import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.PsiConstantEvaluationHelper;
-import com.intellij.psi.PsiElement;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.Language;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiExpression;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+@ExtensionImpl
 public class PsiExpressionEvaluator implements ConstantExpressionEvaluator {
 
   @Override
@@ -27,7 +34,13 @@ public class PsiExpressionEvaluator implements ConstantExpressionEvaluator {
   }
 
   @Override
-  public Object computeExpression(PsiElement expression, boolean throwExceptionOnOverflow, @javax.annotation.Nullable PsiConstantEvaluationHelper.AuxEvaluator auxEvaluator) {
+  public Object computeExpression(PsiElement expression, boolean throwExceptionOnOverflow, @Nullable PsiConstantEvaluationHelper.AuxEvaluator auxEvaluator) {
     return expression instanceof PsiExpression ? JavaConstantExpressionEvaluator.computeConstantExpression((PsiExpression)expression, null, throwExceptionOnOverflow, auxEvaluator) : null;
+  }
+
+  @Nonnull
+  @Override
+  public Language getLanguage() {
+    return JavaLanguage.INSTANCE;
   }
 }

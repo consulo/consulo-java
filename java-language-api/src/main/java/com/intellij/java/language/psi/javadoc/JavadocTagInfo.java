@@ -15,9 +15,9 @@
  */
 package com.intellij.java.language.psi.javadoc;
 
-import com.intellij.openapi.extensions.ExtensionPointName;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiReference;
+import consulo.component.extension.ExtensionPointName;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiReference;
 
 import javax.annotation.Nullable;
 
@@ -42,6 +42,6 @@ public interface JavadocTagInfo {
   @Nullable
   String checkTagValue(PsiDocTagValue value);
 
-  @javax.annotation.Nullable
+  @Nullable
   PsiReference getReference(PsiDocTagValue value);
 }

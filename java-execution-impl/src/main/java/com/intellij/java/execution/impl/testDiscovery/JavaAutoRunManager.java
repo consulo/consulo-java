@@ -16,20 +16,21 @@
 package com.intellij.java.execution.impl.testDiscovery;
 
 import javax.annotation.Nonnull;
+
+import consulo.execution.test.autotest.AbstractAutoTestManager;
+import consulo.execution.test.autotest.AutoTestWatcher;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
-import com.intellij.execution.testframework.autotest.AbstractAutoTestManager;
-import com.intellij.execution.testframework.autotest.AutoTestWatcher;
 import consulo.disposer.Disposable;
-import com.intellij.openapi.compiler.CompilationStatusListener;
-import com.intellij.openapi.compiler.CompileContext;
+import consulo.compiler.event.CompilationStatusListener;
+import consulo.compiler.CompileContext;
 import com.intellij.openapi.compiler.CompilerTopics;
-import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.components.State;
-import com.intellij.openapi.components.Storage;
-import com.intellij.openapi.components.StoragePathMacros;
-import com.intellij.openapi.project.Project;
+import consulo.ide.ServiceManager;
+import consulo.component.persist.State;
+import consulo.component.persist.Storage;
+import consulo.component.persist.StoragePathMacros;
+import consulo.project.Project;
 import consulo.disposer.Disposer;
 
 @Singleton

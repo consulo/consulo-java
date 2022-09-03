@@ -25,16 +25,16 @@ import javax.annotation.Nullable;
 import javax.swing.*;
 
 import javax.annotation.Nonnull;
-import com.intellij.find.FindSettings;
-import com.intellij.ide.util.scopeChooser.ScopeChooserCombo;
+import consulo.find.FindSettings;
+import consulo.ui.ex.awt.scopeChooser.ScopeChooserCombo;
 import consulo.logging.Logger;
-import com.intellij.openapi.help.HelpManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.DialogWrapper;
+import consulo.application.HelpManager;
+import consulo.project.Project;
+import consulo.ui.ex.awt.DialogWrapper;
 import consulo.disposer.Disposer;
-import com.intellij.psi.search.SearchScope;
+import consulo.content.scope.SearchScope;
 import com.intellij.java.impl.refactoring.HelpID;
-import com.intellij.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.ui.annotation.RequiredUIAccess;
 
 public class MigrationDialog extends DialogWrapper

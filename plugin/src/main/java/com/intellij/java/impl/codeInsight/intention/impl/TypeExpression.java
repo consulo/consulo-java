@@ -15,18 +15,18 @@
  */
 package com.intellij.java.impl.codeInsight.intention.impl;
 
-import com.intellij.codeInsight.lookup.LookupElement;
+import consulo.language.editor.completion.lookup.LookupElement;
 import com.intellij.java.impl.codeInsight.lookup.PsiTypeLookupItem;
-import com.intellij.codeInsight.template.Expression;
-import com.intellij.codeInsight.template.ExpressionContext;
+import consulo.language.editor.template.Expression;
+import consulo.language.editor.template.ExpressionContext;
 import com.intellij.java.impl.codeInsight.template.PsiTypeResult;
-import com.intellij.codeInsight.template.Result;
+import consulo.language.editor.template.Result;
 import com.intellij.java.impl.codeInsight.template.impl.JavaTemplateUtil;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.SmartTypePointer;
 import com.intellij.java.language.psi.SmartTypePointerManager;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.project.Project;
+import consulo.document.Document;
+import consulo.project.Project;
 import com.intellij.psi.*;
 
 import java.util.ArrayList;

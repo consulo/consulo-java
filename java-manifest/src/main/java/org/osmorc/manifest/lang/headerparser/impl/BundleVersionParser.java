@@ -26,7 +26,7 @@ package org.osmorc.manifest.lang.headerparser.impl;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.lang.annotation.AnnotationHolder;
+import consulo.language.editor.annotation.AnnotationHolder;
 import org.osmorc.manifest.lang.psi.HeaderValuePart;
 import org.osmorc.manifest.lang.valueparser.ValueParser;
 import org.osmorc.manifest.lang.valueparser.impl.VersionParser;

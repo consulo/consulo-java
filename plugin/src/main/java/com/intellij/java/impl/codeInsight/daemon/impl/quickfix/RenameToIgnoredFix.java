@@ -15,8 +15,8 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
-import com.intellij.codeInsight.daemon.impl.quickfix.RenameElementFix;
-import com.intellij.psi.PsiNamedElement;
+import consulo.ide.impl.idea.codeInsight.daemon.impl.quickfix.RenameElementFix;
+import consulo.language.psi.PsiNamedElement;
 
 import javax.annotation.Nonnull;
 

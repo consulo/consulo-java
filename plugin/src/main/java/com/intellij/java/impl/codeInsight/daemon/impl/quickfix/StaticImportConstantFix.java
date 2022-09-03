@@ -20,20 +20,20 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiElement;
+import consulo.codeEditor.Editor;
+import consulo.project.Project;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
 import com.intellij.java.language.psi.PsiSubstitutor;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.PsiTypeElement;
-import com.intellij.psi.SmartPointerManager;
-import com.intellij.psi.SmartPsiElementPointer;
+import consulo.language.psi.SmartPointerManager;
+import consulo.language.psi.SmartPsiElementPointer;
 import com.intellij.java.language.psi.search.PsiShortNamesCache;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
-import com.intellij.psi.util.PsiFormatUtilBase;
+import consulo.ide.impl.psi.util.PsiFormatUtilBase;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
@@ -111,7 +111,7 @@ public class StaticImportConstantFix extends StaticImportMemberFix<PsiField>
 		return myRef.getElement();
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	@Override
 	protected PsiElement getQualifierExpression()
 	{
@@ -119,7 +119,7 @@ public class StaticImportConstantFix extends StaticImportMemberFix<PsiField>
 		return element != null ? element.getQualifier() : null;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	@Override
 	protected PsiElement resolveRef()
 	{

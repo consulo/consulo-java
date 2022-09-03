@@ -15,38 +15,35 @@
  */
 package com.intellij.java.debugger;
 
-import java.util.List;
-
-import javax.annotation.Nonnull;
-
-import com.intellij.openapi.application.ApplicationManager;
-import consulo.logging.Logger;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.fileEditor.FileEditorManager;
-import com.intellij.openapi.fileEditor.OpenFileDescriptor;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.openapi.util.Computable;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.pom.Navigatable;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiClassOwner;
-import com.intellij.psi.PsiComment;
-import com.intellij.psi.PsiDocumentManager;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
 import com.intellij.java.language.psi.PsiForStatement;
-import com.intellij.psi.SyntheticElement;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.application.ApplicationManager;
+import consulo.application.util.function.Computable;
+import consulo.codeEditor.Editor;
+import consulo.document.Document;
+import consulo.fileEditor.FileEditorManager;
+import consulo.language.psi.*;
+import consulo.logging.Logger;
+import consulo.navigation.Navigatable;
+import consulo.navigation.OpenFileDescriptorFactory;
+import consulo.project.Project;
+import consulo.util.collection.ContainerUtil;
+import consulo.util.lang.Comparing;
+import consulo.virtualFileSystem.VirtualFile;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.List;
 
 /**
  * User: lex
  * Date: Oct 24, 2003
  * Time: 8:23:06 PM
  */
-public abstract class SourcePosition implements Navigatable{
+public abstract class SourcePosition implements Navigatable {
   private static final Logger LOG = Logger.getInstance(SourcePosition.class);
+
   @Nonnull
   public abstract PsiFile getFile();
 
@@ -63,7 +60,7 @@ public abstract class SourcePosition implements Navigatable{
 
   private abstract static class SourcePositionCache extends SourcePosition {
     @Nonnull
-	private final PsiFile myFile;
+    private final PsiFile myFile;
     private long myModificationStamp = -1L;
 
     private PsiElement myPsiElement;
@@ -119,11 +116,11 @@ public abstract class SourcePosition implements Navigatable{
       if (offset < 0) {
         return null;
       }
-      return FileEditorManager.getInstance(project).openTextEditor(new OpenFileDescriptor(project, virtualFile, offset), requestFocus);
+      return FileEditorManager.getInstance(project).openTextEditor(OpenFileDescriptorFactory.getInstance(project).builder(virtualFile).offset(offset).build(), requestFocus);
     }
 
     private void updateData() {
-      if(dataUpdateNeeded()) {
+      if (dataUpdateNeeded()) {
         myModificationStamp = myFile.getModificationStamp();
         myLine = null;
         myOffset = null;
@@ -171,15 +168,13 @@ public abstract class SourcePosition implements Navigatable{
       Document document = null;
       try {
         document = PsiDocumentManager.getInstance(file.getProject()).getDocument(file);
-      }
-      catch (Throwable e) {
+      } catch (Throwable e) {
         LOG.error(e);
       }
       if (document != null) {
         try {
           return document.getLineNumber(calcOffset());
-        }
-        catch (IndexOutOfBoundsException e) {
+        } catch (IndexOutOfBoundsException e) {
           // may happen if document has been changed since the this SourcePosition was created
         }
       }
@@ -192,19 +187,18 @@ public abstract class SourcePosition implements Navigatable{
       if (document != null) {
         try {
           return document.getLineStartOffset(calcLine());
-        }
-        catch (IndexOutOfBoundsException e) {
+        } catch (IndexOutOfBoundsException e) {
           // may happen if document has been changed since the this SourcePosition was created
         }
       }
       return -1;
     }
 
-    @javax.annotation.Nullable
+    @Nullable
     protected PsiElement calcPsiElement() {
       PsiFile psiFile = getFile();
       int lineNumber = getLine();
-      if(lineNumber < 0) {
+      if (lineNumber < 0) {
         return psiFile;
       }
 
@@ -216,7 +210,7 @@ public abstract class SourcePosition implements Navigatable{
         return psiFile;
       }
       int startOffset = document.getLineStartOffset(lineNumber);
-      if(startOffset == -1) {
+      if (startOffset == -1) {
         return null;
       }
 
@@ -227,14 +221,14 @@ public abstract class SourcePosition implements Navigatable{
         PsiClassOwner owner = ContainerUtil.findInstance(allFiles, PsiClassOwner.class);
         if (owner != null) {
           PsiClass[] classes = owner.getClasses();
-          if (classes.length == 1 && classes[0]  instanceof SyntheticElement) {
+          if (classes.length == 1 && classes[0] instanceof SyntheticElement) {
             rootElement = classes[0];
           }
         }
       }
 
       PsiElement element;
-      while(true) {
+      while (true) {
         final CharSequence charsSequence = document.getCharsSequence();
         for (; startOffset < charsSequence.length(); startOffset++) {
           char c = charsSequence.charAt(startOffset);
@@ -244,16 +238,15 @@ public abstract class SourcePosition implements Navigatable{
         }
         element = rootElement.findElementAt(startOffset);
 
-        if(element instanceof PsiComment) {
+        if (element instanceof PsiComment) {
           startOffset = element.getTextRange().getEndOffset() + 1;
-        }
-        else{
+        } else {
           break;
         }
       }
 
       if (element != null && element.getParent() instanceof PsiForStatement) {
-        return ((PsiForStatement)element.getParent()).getInitialization();
+        return ((PsiForStatement) element.getParent()).getInitialization();
       }
       return element;
     }
@@ -286,7 +279,7 @@ public abstract class SourcePosition implements Navigatable{
       }
     };
   }
-     
+
   public static SourcePosition createFromElement(PsiElement element) {
     final PsiElement navigationElement = element.getNavigationElement();
     final PsiFile psiFile;
@@ -296,7 +289,7 @@ public abstract class SourcePosition implements Navigatable{
       psiFile = JspPsiUtil.getJspFile(navigationElement);
     }
     else { */
-      psiFile = navigationElement.getContainingFile();
+    psiFile = navigationElement.getContainingFile();
     //}
     return new SourcePositionCache(psiFile) {
       @Override
@@ -312,8 +305,8 @@ public abstract class SourcePosition implements Navigatable{
   }
 
   public boolean equals(Object o) {
-    if(o instanceof SourcePosition) {
-      SourcePosition sourcePosition = (SourcePosition)o;
+    if (o instanceof SourcePosition) {
+      SourcePosition sourcePosition = (SourcePosition) o;
       return Comparing.equal(sourcePosition.getFile(), getFile()) && sourcePosition.getOffset() == getOffset();
     }
 

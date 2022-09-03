@@ -29,6 +29,7 @@ import java.awt.Window;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import javax.annotation.Nullable;
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
 import javax.swing.JToolTip;
@@ -43,18 +44,18 @@ import org.jetbrains.annotations.NonNls;
 import com.intellij.java.debugger.impl.ui.impl.watch.DebuggerTreeNodeImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.NodeDescriptorImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.ValueDescriptorImpl;
-import com.intellij.ide.dnd.aware.DnDAwareTree;
+import consulo.ide.impl.idea.ide.dnd.aware.DnDAwareTree;
 import com.intellij.java.language.impl.JavaFileType;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.JDOMUtil;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
-import com.intellij.ui.ScreenUtil;
-import com.intellij.ui.ScrollPaneFactory;
-import com.intellij.util.text.StringTokenizer;
-import com.intellij.util.ui.GeometryUtil;
-import com.intellij.util.ui.UIUtil;
-import com.intellij.util.ui.tree.TreeUtil;
+import consulo.project.Project;
+import consulo.util.jdom.JDOMUtil;
+import consulo.util.lang.StringUtil;
+import consulo.language.codeStyle.CodeStyleSettingsManager;
+import consulo.ui.ex.awt.util.ScreenUtil;
+import consulo.ui.ex.awt.ScrollPaneFactory;
+import consulo.util.lang.text.StringTokenizer;
+import consulo.ide.impl.idea.util.ui.GeometryUtil;
+import consulo.ui.ex.awt.UIUtil;
+import consulo.ui.ex.awt.tree.TreeUtil;
 import consulo.disposer.Disposable;
 import consulo.disposer.Disposer;
 
@@ -169,7 +170,7 @@ public class DebuggerTreeBase extends DnDAwareTree implements Disposable
                           bounds.y + bounds.height - bounds.height / 4, 0, false);
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public JComponent createToolTip(MouseEvent e) {
     final DebuggerTreeNodeImpl node = getNodeToShowTip(e);
     if (node == null) {
@@ -246,7 +247,7 @@ public class DebuggerTreeBase extends DnDAwareTree implements Disposable
     return myCurrentTooltip;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private String getTipText(DebuggerTreeNodeImpl node) {
     NodeDescriptorImpl descriptor = node.getDescriptor();
     if (descriptor instanceof ValueDescriptorImpl) {
@@ -273,7 +274,7 @@ public class DebuggerTreeBase extends DnDAwareTree implements Disposable
     return node.getMarkupTooltipText() != null? "" : null;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private DebuggerTreeNodeImpl getNodeToShowTip(MouseEvent event) {
     TreePath path = getPathForLocation(event.getX(), event.getY());
     if (path != null) {

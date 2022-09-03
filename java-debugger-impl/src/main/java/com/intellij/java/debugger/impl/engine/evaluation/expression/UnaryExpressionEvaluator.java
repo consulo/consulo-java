@@ -28,7 +28,7 @@ import com.intellij.java.debugger.impl.DebuggerUtilsEx;
 import com.intellij.java.debugger.impl.jdi.VirtualMachineProxyImpl;
 import com.intellij.java.debugger.engine.evaluation.expression.Modifier;
 import com.intellij.java.language.psi.JavaTokenType;
-import com.intellij.psi.tree.IElementType;
+import consulo.language.ast.IElementType;
 import consulo.internal.com.sun.jdi.BooleanValue;
 import consulo.internal.com.sun.jdi.PrimitiveValue;
 import consulo.internal.com.sun.jdi.Value;

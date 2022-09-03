@@ -16,6 +16,7 @@
 package com.intellij.java.debugger.impl.ui.impl.watch;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.DebuggerContext;
@@ -35,15 +36,15 @@ import com.intellij.java.debugger.impl.engine.evaluation.expression.UnsupportedE
 import com.intellij.java.debugger.impl.DebuggerContextImpl;
 import com.intellij.java.debugger.impl.DebuggerUtilsEx;
 import com.intellij.java.debugger.impl.jdi.StackFrameProxyImpl;
-import com.intellij.openapi.application.ReadAction;
-import com.intellij.openapi.project.IndexNotReadyException;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiCodeFragment;
-import com.intellij.psi.PsiDocumentManager;
-import com.intellij.psi.PsiElement;
+import consulo.application.ReadAction;
+import consulo.application.dumb.IndexNotReadyException;
+import consulo.project.Project;
+import consulo.language.psi.PsiCodeFragment;
+import consulo.language.psi.PsiDocumentManager;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiExpressionCodeFragment;
-import com.intellij.xdebugger.frame.XValueModifier;
+import consulo.execution.debug.frame.XValueModifier;
 import consulo.internal.com.sun.jdi.ClassNotLoadedException;
 import consulo.internal.com.sun.jdi.IncompatibleThreadStateException;
 import consulo.internal.com.sun.jdi.InvalidTypeException;
@@ -158,7 +159,7 @@ public abstract class EvaluationDescriptor extends ValueDescriptorImpl
 		}
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public Modifier getModifier()
 	{
 		return myModifier;

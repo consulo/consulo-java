@@ -15,14 +15,14 @@
  */
 package com.intellij.java.impl.codeInsight.template;
 
-import com.intellij.codeInsight.template.TemplateContextType;
+import consulo.language.editor.template.context.TemplateContextType;
 import com.intellij.java.language.JavaLanguage;
-import com.intellij.psi.PsiComment;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiWhiteSpace;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.PsiUtilCore;
+import consulo.language.psi.PsiComment;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiWhiteSpace;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.psi.PsiUtilCore;
 
 import javax.annotation.Nonnull;
 

@@ -15,9 +15,9 @@
  */
 package com.intellij.java.impl.pom.java;
 
-import com.intellij.openapi.project.Project;
-import com.intellij.pom.PomModel;
-import com.intellij.pom.PomModelAspect;
+import consulo.project.Project;
+import consulo.language.pom.PomModel;
+import consulo.language.pom.PomModelAspect;
 
 public abstract class PomJavaAspect implements PomModelAspect {
   public static PomJavaAspect getInstance(Project project) {

@@ -16,8 +16,9 @@
 package com.intellij.java.impl.psi.impl.source.codeStyle.javadoc;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.util.lang.StringUtil;
 
 /**
  * User: Lepenkin Y.
@@ -56,7 +57,7 @@ public enum JDTag
 		return "@" + myTag + " ";
 	}
 
-	public boolean tagEqual(@javax.annotation.Nullable String tag)
+	public boolean tagEqual(@Nullable String tag)
 	{
 		return myTag.equals(tag);
 	}

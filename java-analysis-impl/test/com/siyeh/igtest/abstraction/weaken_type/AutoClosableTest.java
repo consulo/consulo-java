@@ -1,5 +1,9 @@
 package com.siyeh.igtest.abstraction.weaken_type;
 
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.Reader;
+
 public class AutoClosableTest
 {
     public static class Foo
@@ -36,8 +40,8 @@ class AutoClosableTest2
         }
     }
 
-    void dodo() throws java.io.IOException {
-        try (java.io.Reader  reader = new java.io.FileReader("/home/steve/foo.txt")) {
+    void dodo() throws IOException {
+        try (Reader  reader = new FileReader("/home/steve/foo.txt")) {
             System.out.println(reader);
         }
     }

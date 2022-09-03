@@ -15,18 +15,18 @@
  */
 package com.intellij.java.impl.codeInsight.highlighting;
 
-import com.intellij.codeInsight.CodeInsightBundle;
-import com.intellij.codeInsight.highlighting.HighlightUsagesHandlerBase;
+import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.highlight.usage.HighlightUsagesHandlerBase;
 import com.intellij.java.language.impl.codeInsight.ExceptionUtil;
 import com.intellij.java.language.psi.*;
-import com.intellij.lang.LangBundle;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Condition;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiReference;
-import com.intellij.util.Consumer;
+import consulo.language.LangBundle;
+import consulo.codeEditor.Editor;
+import consulo.project.Project;
+import consulo.util.lang.function.Condition;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiReference;
+import consulo.ide.impl.idea.util.Consumer;
 
 import java.util.Arrays;
 import java.util.List;

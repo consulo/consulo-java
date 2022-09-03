@@ -15,36 +15,36 @@
  */
 package com.intellij.java.impl.lang.java;
 
-import com.intellij.codeInsight.CodeInsightBundle;
-import com.intellij.codeInsight.documentation.DocumentationManagerProtocol;
-import com.intellij.codeInsight.documentation.PlatformDocumentationUtil;
-import com.intellij.codeInsight.editorActions.CodeDocumentationUtil;
+import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.documentation.DocumentationManagerProtocol;
+import consulo.ide.impl.idea.codeInsight.documentation.PlatformDocumentationUtil;
+import consulo.ide.impl.idea.codeInsight.editorActions.CodeDocumentationUtil;
 import com.intellij.java.impl.codeInsight.javadoc.JavaDocExternalFilter;
 import com.intellij.java.impl.codeInsight.javadoc.JavaDocInfoGenerator;
 import com.intellij.java.language.impl.codeInsight.javadoc.JavaDocUtil;
 import com.intellij.java.language.psi.*;
-import com.intellij.lang.CodeDocumentationAwareCommenter;
-import com.intellij.lang.LangBundle;
+import consulo.language.CodeDocumentationAwareCommenter;
+import consulo.language.LangBundle;
 import com.intellij.lang.LanguageCommenters;
-import com.intellij.lang.documentation.CodeDocumentationProvider;
-import com.intellij.lang.documentation.CompositeDocumentationProvider;
-import com.intellij.lang.documentation.DocumentationProviderEx;
-import com.intellij.lang.documentation.ExternalDocumentationProvider;
+import consulo.language.editor.documentation.CodeDocumentationProvider;
+import consulo.language.editor.documentation.CompositeDocumentationProvider;
+import consulo.language.editor.documentation.DocumentationProviderEx;
+import consulo.language.editor.documentation.ExternalDocumentationProvider;
 import consulo.logging.Logger;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.progress.ProcessCanceledException;
-import com.intellij.openapi.project.IndexNotReadyException;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.OrderEntry;
-import com.intellij.openapi.roots.OrderRootType;
-import com.intellij.openapi.roots.ProjectFileIndex;
-import com.intellij.openapi.roots.ProjectRootManager;
-import com.intellij.openapi.util.Pair;
-import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.openapi.vfs.VirtualFileSystem;
+import consulo.codeEditor.Editor;
+import consulo.module.Module;
+import consulo.component.ProcessCanceledException;
+import consulo.application.dumb.IndexNotReadyException;
+import consulo.project.Project;
+import consulo.module.content.layer.orderEntry.OrderEntry;
+import consulo.content.OrderRootType;
+import consulo.module.content.ProjectFileIndex;
+import consulo.module.content.ProjectRootManager;
+import consulo.util.lang.Pair;
+import consulo.ide.impl.idea.openapi.util.io.FileUtil;
+import consulo.util.lang.StringUtil;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.virtualFileSystem.VirtualFileSystem;
 import com.intellij.psi.*;
 import com.intellij.java.language.impl.psi.impl.PsiImplUtil;
 import com.intellij.java.impl.psi.impl.beanProperties.BeanPropertyElement;
@@ -53,14 +53,14 @@ import com.intellij.java.language.psi.infos.CandidateInfo;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.java.language.psi.javadoc.PsiDocTag;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
-import com.intellij.psi.util.PsiFormatUtilBase;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.ide.impl.psi.util.PsiFormatUtilBase;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.util.collection.ContainerUtil;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.psi.PsiPackage;
 import consulo.roots.OrderEntryWithTracking;
-import consulo.vfs.ArchiveFileSystem;
+import consulo.virtualFileSystem.archive.ArchiveFileSystem;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -673,7 +673,7 @@ public class JavaDocumentationProvider extends DocumentationProviderEx implement
 		return null;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public static String generateExternalJavadoc(@Nonnull final PsiElement element)
 	{
 		List<String> docURLs = getExternalJavaDocUrl(element);
@@ -941,7 +941,7 @@ public class JavaDocumentationProvider extends DocumentationProviderEx implement
 		return null;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public static List<String> findUrlForPackage(PsiPackage aPackage)
 	{
 		String qName = aPackage.getQualifiedName();
@@ -988,7 +988,7 @@ public class JavaDocumentationProvider extends DocumentationProviderEx implement
 
 	@Nullable
 	@Override
-	public PsiElement getCustomDocumentationElement(@Nonnull Editor editor, @Nonnull PsiFile file, @javax.annotation.Nullable PsiElement contextElement)
+	public PsiElement getCustomDocumentationElement(@Nonnull Editor editor, @Nonnull PsiFile file, @Nullable PsiElement contextElement)
 	{
 		PsiDocComment docComment = PsiTreeUtil.getParentOfType(contextElement, PsiDocComment.class, false);
 		if(docComment != null && JavaDocUtil.isInsidePackageInfo(docComment))

@@ -26,16 +26,16 @@ import com.intellij.java.debugger.engine.evaluation.CodeFragmentKind;
 import com.intellij.java.debugger.engine.evaluation.expression.EvaluatorBuilder;
 import com.intellij.java.debugger.impl.ui.impl.watch.ValueDescriptorImpl;
 import com.intellij.java.debugger.engine.evaluation.TextWithImports;
-import com.intellij.openapi.fileTypes.LanguageFileType;
-import com.intellij.openapi.project.Project;
+import consulo.language.file.LanguageFileType;
+import consulo.project.Project;
 import consulo.util.dataholder.Key;
-import com.intellij.openapi.util.Pair;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.util.lang.Pair;
+import consulo.util.lang.StringUtil;
 import com.intellij.java.language.psi.JavaCodeFragment;
 import com.intellij.java.language.psi.JavaRecursiveElementVisitor;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiLocalVariable;
-import com.intellij.xdebugger.impl.ui.tree.ValueMarkup;
+import consulo.ide.impl.idea.xdebugger.impl.ui.tree.ValueMarkup;
 import consulo.internal.com.sun.jdi.ObjectCollectedException;
 import consulo.internal.com.sun.jdi.ObjectReference;
 import consulo.internal.com.sun.jdi.Value;
@@ -118,15 +118,15 @@ public class CodeFragmentFactoryContextWrapper extends CodeFragmentFactory
 		return context;
 	}
 
-	private static Pair<String, Map<String, ObjectReference>> createMarkupVariablesText(Map<ObjectReference, ValueMarkup> markupMap)
+	private static Pair<String, Map<String, ObjectReference>> createMarkupVariablesText(Map<ObjectReference, consulo.ide.impl.idea.xdebugger.impl.ui.tree.ValueMarkup> markupMap)
 	{
 		final Map<String, ObjectReference> reverseMap = new HashMap<>();
 		final StringBuilder buffer = new StringBuilder();
-		for(Iterator<Map.Entry<ObjectReference, ValueMarkup>> it = markupMap.entrySet().iterator(); it.hasNext(); )
+		for(Iterator<Map.Entry<ObjectReference, consulo.ide.impl.idea.xdebugger.impl.ui.tree.ValueMarkup>> it = markupMap.entrySet().iterator(); it.hasNext(); )
 		{
 			Map.Entry<ObjectReference, ValueMarkup> entry = it.next();
 			final ObjectReference objectRef = entry.getKey();
-			final ValueMarkup markup = entry.getValue();
+			final consulo.ide.impl.idea.xdebugger.impl.ui.tree.ValueMarkup markup = entry.getValue();
 			String labelName = markup.getText();
 			if(!StringUtil.isJavaIdentifier(labelName))
 			{

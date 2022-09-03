@@ -18,10 +18,10 @@ package com.intellij.java.impl.refactoring.memberPushDown;
 import javax.annotation.Nonnull;
 
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiElement;
-import com.intellij.refactoring.RefactoringBundle;
-import com.intellij.usageView.UsageViewBundle;
-import com.intellij.usageView.UsageViewDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.usage.UsageViewBundle;
+import consulo.usage.UsageViewDescriptor;
 
 class PushDownUsageViewDescriptor implements UsageViewDescriptor {
   private final PsiClass myClass;

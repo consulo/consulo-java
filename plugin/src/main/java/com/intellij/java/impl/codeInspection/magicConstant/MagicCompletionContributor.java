@@ -17,21 +17,21 @@ package com.intellij.java.impl.codeInspection.magicConstant;
 
 import com.intellij.java.impl.codeInsight.ExpectedTypeInfo;
 import com.intellij.codeInsight.completion.*;
-import com.intellij.codeInsight.lookup.LookupElement;
-import com.intellij.codeInsight.lookup.LookupElementBuilder;
+import consulo.language.editor.completion.lookup.LookupElement;
+import consulo.language.editor.completion.lookup.LookupElementBuilder;
 import com.intellij.java.impl.codeInsight.completion.JavaKeywordCompletion;
 import com.intellij.java.impl.codeInsight.completion.JavaSmartCompletionContributor;
 import com.intellij.java.impl.codeInsight.lookup.LookupItemUtil;
 import com.intellij.java.impl.codeInsight.lookup.VariableLookupItem;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.util.Pair;
-import com.intellij.patterns.ElementPattern;
+import consulo.util.lang.Pair;
+import consulo.language.pattern.ElementPattern;
 import com.intellij.psi.*;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.util.ArrayUtil;
-import com.intellij.util.Consumer;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.util.collection.ArrayUtil;
+import consulo.ide.impl.idea.util.Consumer;
+import consulo.util.collection.ContainerUtil;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.util.collection.HashingStrategy;
 import consulo.util.collection.Sets;
@@ -43,7 +43,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import static com.intellij.patterns.PlatformPatterns.psiElement;
+import static consulo.language.pattern.PlatformPatterns.psiElement;
 
 public class MagicCompletionContributor extends CompletionContributor
 {
@@ -76,7 +76,7 @@ public class MagicCompletionContributor extends CompletionContributor
 		addCompletionVariants(parameters, result, pos, allowedValues);
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	private static MagicConstantInspection.AllowedValues getAllowedValues(@Nonnull PsiElement pos)
 	{
 		MagicConstantInspection.AllowedValues allowedValues = null;

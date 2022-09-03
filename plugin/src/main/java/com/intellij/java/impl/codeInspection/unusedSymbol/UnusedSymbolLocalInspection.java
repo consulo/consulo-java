@@ -19,6 +19,7 @@ package com.intellij.java.impl.codeInspection.unusedSymbol;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.annotation.Nullable;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -27,7 +28,7 @@ import javax.swing.JPanel;
 import com.intellij.java.analysis.impl.codeInspection.unusedSymbol.UnusedSymbolLocalInspectionBase;
 import com.intellij.java.impl.codeInspection.deadCode.UnusedDeclarationInspection;
 import com.intellij.java.language.psi.PsiModifier;
-import com.intellij.util.ui.UIUtil;
+import consulo.ui.ex.awt.UIUtil;
 
 public class UnusedSymbolLocalInspection extends UnusedSymbolLocalInspectionBase
 {
@@ -134,7 +135,7 @@ public class UnusedSymbolLocalInspection extends UnusedSymbolLocalInspectionBase
 	}
 
 	@Override
-	@javax.annotation.Nullable
+	@Nullable
 	public JComponent createOptionsPanel()
 	{
 		return new OptionsPanel().getPanel();

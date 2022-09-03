@@ -15,10 +15,10 @@
  */
 package com.intellij.java.language.psi;
 
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.util.ArrayFactory;
-import consulo.psi.PsiPackage;
+import consulo.language.psi.PsiPackage;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.util.collection.ArrayFactory;
+import consulo.virtualFileSystem.VirtualFile;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
@@ -34,13 +34,7 @@ public interface PsiJavaPackage extends PsiJvmModifiersOwner, PsiPackage
 
   PsiJavaPackage[] EMPTY_ARRAY = new PsiJavaPackage[0];
 
-  ArrayFactory<PsiJavaPackage> ARRAY_FACTORY = new ArrayFactory<PsiJavaPackage>() {
-    @Nonnull
-    @Override
-    public PsiJavaPackage[] create(final int count) {
-      return count == 0 ? EMPTY_ARRAY : new PsiJavaPackage[count];
-    }
-  };
+  ArrayFactory<PsiJavaPackage> ARRAY_FACTORY = count -> count == 0 ? EMPTY_ARRAY : new PsiJavaPackage[count];
 
   @Nullable
   PsiJavaPackage getParentPackage();

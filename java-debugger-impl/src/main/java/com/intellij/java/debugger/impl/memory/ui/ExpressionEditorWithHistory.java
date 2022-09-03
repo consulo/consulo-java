@@ -23,25 +23,26 @@ import javax.swing.ListCellRenderer;
 import javax.swing.SwingWorker;
 
 import javax.annotation.Nullable;
-import com.intellij.codeInsight.lookup.LookupManager;
+
+import consulo.execution.debug.breakpoint.XExpression;
+import consulo.execution.debug.evaluation.XDebuggerEditorsProvider;
+import consulo.language.editor.completion.lookup.LookupManager;
 import com.intellij.java.debugger.engine.DebuggerUtils;
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.CustomShortcutSet;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.editor.ex.util.EditorUtil;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.popup.PopupStep;
-import com.intellij.openapi.ui.popup.util.BaseListPopupStep;
+import consulo.ui.ex.action.AnAction;
+import consulo.ui.ex.action.AnActionEvent;
+import consulo.ui.ex.action.CustomShortcutSet;
+import consulo.application.ApplicationManager;
+import consulo.ide.impl.idea.openapi.editor.ex.util.EditorUtil;
+import consulo.project.Project;
+import consulo.ui.ex.awt.ColoredListCellRenderer;
+import consulo.ui.ex.popup.BaseListPopupStep;
+import consulo.ui.ex.popup.PopupStep;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.ui.ColoredListCellRenderer;
-import com.intellij.ui.SimpleTextAttributes;
-import com.intellij.ui.popup.list.ListPopupImpl;
-import com.intellij.xdebugger.XExpression;
-import com.intellij.xdebugger.evaluation.XDebuggerEditorsProvider;
-import com.intellij.xdebugger.impl.breakpoints.XExpressionImpl;
-import com.intellij.xdebugger.impl.ui.XDebuggerExpressionEditor;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.ui.ex.SimpleTextAttributes;
+import consulo.ide.impl.idea.ui.popup.list.ListPopupImpl;
+import consulo.ide.impl.idea.xdebugger.impl.breakpoints.XExpressionImpl;
+import consulo.ide.impl.idea.xdebugger.impl.ui.XDebuggerExpressionEditor;
 import consulo.disposer.Disposable;
 
 class ExpressionEditorWithHistory extends XDebuggerExpressionEditor

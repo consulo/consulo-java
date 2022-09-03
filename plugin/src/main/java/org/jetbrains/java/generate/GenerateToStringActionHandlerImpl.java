@@ -25,7 +25,12 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.annotation.Nonnull;
+
+import consulo.language.editor.hint.HintManager;
+import consulo.ui.ex.awt.ComboBox;
 import jakarta.inject.Singleton;
+
+import javax.annotation.Nullable;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -36,29 +41,27 @@ import org.jetbrains.java.generate.config.Config;
 import org.jetbrains.java.generate.template.TemplateResource;
 import org.jetbrains.java.generate.template.toString.ToStringTemplatesManager;
 import org.jetbrains.java.generate.view.TemplatesPanel;
-import com.intellij.codeInsight.CodeInsightActionHandler;
+import consulo.language.editor.action.CodeInsightActionHandler;
 import com.intellij.java.language.impl.codeInsight.generation.PsiElementClassMember;
-import com.intellij.codeInsight.hint.HintManager;
-import com.intellij.ide.util.MemberChooser;
+import consulo.ide.impl.idea.ide.util.MemberChooser;
 import consulo.disposer.Disposable;
-import com.intellij.openapi.application.ApplicationManager;
+import consulo.application.ApplicationManager;
 import consulo.logging.Logger;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.options.Configurable;
-import com.intellij.openapi.options.ConfigurationException;
-import com.intellij.openapi.options.ShowSettingsUtil;
-import com.intellij.openapi.options.TabbedConfigurable;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.ComboBox;
-import com.intellij.openapi.ui.DialogWrapper;
+import consulo.codeEditor.Editor;
+import consulo.configurable.Configurable;
+import consulo.configurable.ConfigurationException;
+import consulo.ide.setting.ShowSettingsUtil;
+import consulo.ide.impl.idea.openapi.options.TabbedConfigurable;
+import consulo.project.Project;
+import consulo.ui.ex.awt.DialogWrapper;
 import consulo.disposer.Disposer;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiField;
-import com.intellij.psi.PsiFile;
+import consulo.language.psi.PsiFile;
 import com.intellij.java.language.psi.PsiMember;
 import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 
 /**
@@ -115,7 +118,7 @@ public class GenerateToStringActionHandlerImpl implements GenerateToStringAction
 				}
 				final MemberChooser<PsiElementClassMember> chooser = new MemberChooser<PsiElementClassMember>(dialogMembers, true, true, project, PsiUtil.isLanguageLevel5OrHigher(clazz), header)
 				{
-					@javax.annotation.Nullable
+					@Nullable
 					@Override
 					protected String getHelpId()
 					{
@@ -184,7 +187,7 @@ public class GenerateToStringActionHandlerImpl implements GenerateToStringAction
 		return GenerationUtil.combineToClassMemberList(filteredFields, filteredMethods);
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	private static PsiClass getSubjectClass(Editor editor, final PsiFile file)
 	{
 		if(file == null)

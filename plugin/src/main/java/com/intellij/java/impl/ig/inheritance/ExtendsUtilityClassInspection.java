@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.inheritance;
 
-import com.intellij.codeInspection.ui.SingleCheckboxOptionsPanel;
+import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiModifier;
 import com.siyeh.InspectionGadgetsBundle;
@@ -24,6 +24,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.intellij.java.impl.ig.psiutils.UtilityClassUtil;
 import javax.annotation.Nonnull;
 
+import javax.annotation.Nullable;
 import javax.swing.*;
 
 public class ExtendsUtilityClassInspection extends BaseInspection {
@@ -45,7 +46,7 @@ public class ExtendsUtilityClassInspection extends BaseInspection {
     return InspectionGadgetsBundle.message("class.extends.utility.class.problem.descriptor", superClassName);
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   @Override
   public JComponent createOptionsPanel() {
     return new SingleCheckboxOptionsPanel(InspectionGadgetsBundle.message("class.extends.utility.class.ignore.utility.class.option"),

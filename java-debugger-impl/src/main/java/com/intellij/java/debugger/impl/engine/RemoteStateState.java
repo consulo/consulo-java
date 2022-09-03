@@ -17,15 +17,15 @@ package com.intellij.java.debugger.impl.engine;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.execution.DefaultExecutionResult;
-import com.intellij.execution.ExecutionException;
-import com.intellij.execution.ExecutionResult;
-import com.intellij.execution.Executor;
+import consulo.execution.DefaultExecutionResult;
+import consulo.execution.ExecutionResult;
+import consulo.process.ExecutionException;
+import consulo.execution.executor.Executor;
 import com.intellij.java.execution.configurations.RemoteConnection;
 import com.intellij.java.execution.configurations.RemoteState;
-import com.intellij.execution.impl.ConsoleViewImpl;
-import com.intellij.execution.runners.ProgramRunner;
-import com.intellij.openapi.project.Project;
+import consulo.ide.impl.idea.execution.impl.ConsoleViewImpl;
+import consulo.execution.runner.ProgramRunner;
+import consulo.project.Project;
 
 /**
  * @author lex

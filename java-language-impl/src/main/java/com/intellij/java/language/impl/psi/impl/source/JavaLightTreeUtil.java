@@ -15,13 +15,13 @@
  */
 package com.intellij.java.language.impl.psi.impl.source;
 
-import com.intellij.lang.LighterAST;
-import com.intellij.lang.LighterASTNode;
+import consulo.language.ast.LighterAST;
+import consulo.language.ast.LighterASTNode;
 import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.java.language.impl.psi.impl.cache.RecordUtil;
 import com.intellij.java.language.impl.psi.impl.source.tree.ElementType;
-import com.intellij.psi.impl.source.tree.LightTreeUtil;
-import com.intellij.psi.tree.IElementType;
+import consulo.language.ast.LightTreeUtil;
+import consulo.language.ast.IElementType;
 import org.jetbrains.annotations.Contract;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

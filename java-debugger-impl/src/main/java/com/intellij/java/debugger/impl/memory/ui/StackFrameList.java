@@ -22,20 +22,20 @@ import javax.annotation.Nonnull;
 import com.intellij.java.debugger.impl.engine.DebugProcessImpl;
 import com.intellij.java.debugger.impl.engine.events.DebuggerCommandImpl;
 import com.intellij.java.debugger.impl.memory.utils.StackFrameItem;
-import com.intellij.execution.filters.OpenFileHyperlinkInfo;
-import com.intellij.openapi.editor.ScrollType;
-import com.intellij.openapi.fileEditor.FileEditor;
-import com.intellij.openapi.fileEditor.FileEditorManager;
-import com.intellij.openapi.fileEditor.OpenFileDescriptor;
-import com.intellij.openapi.fileEditor.impl.FileEditorManagerImpl;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.xdebugger.XSourcePosition;
-import com.intellij.xdebugger.frame.XStackFrame;
-import com.intellij.xdebugger.impl.frame.XDebuggerFramesList;
-import com.intellij.xdebugger.impl.ui.DebuggerUIUtil;
+import consulo.execution.debug.XSourcePosition;
+import consulo.execution.debug.frame.XStackFrame;
+import consulo.execution.ui.console.OpenFileHyperlinkInfo;
+import consulo.codeEditor.ScrollType;
+import consulo.fileEditor.FileEditor;
+import consulo.fileEditor.FileEditorManager;
+import consulo.navigation.OpenFileDescriptor;
+import consulo.ide.impl.idea.openapi.fileEditor.impl.FileEditorManagerImpl;
+import consulo.project.Project;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.ide.impl.idea.xdebugger.impl.frame.XDebuggerFramesList;
+import consulo.ide.impl.idea.xdebugger.impl.ui.DebuggerUIUtil;
 
-class StackFrameList extends XDebuggerFramesList
+class StackFrameList extends consulo.ide.impl.idea.xdebugger.impl.frame.XDebuggerFramesList
 {
 	private static final MyOpenFilesState myEditorState = new MyOpenFilesState();
 
@@ -73,7 +73,7 @@ class StackFrameList extends XDebuggerFramesList
 						{
 							StackFrameItem.CapturedStackFrame frame = frameInfo.createFrame(myDebugProcess);
 							frame.setWithSeparator(separator);
-							DebuggerUIUtil.invokeLater(() -> getModel().addElement(frame));
+							consulo.ide.impl.idea.xdebugger.impl.ui.DebuggerUIUtil.invokeLater(() -> getModel().addElement(frame));
 							separator = false;
 						}
 					}

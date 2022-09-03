@@ -15,13 +15,13 @@
  */
 package com.intellij.java.impl.ig.j2me;
 
-import com.intellij.codeInspection.ProblemDescriptor;
-import com.intellij.codeInspection.ui.SingleCheckboxOptionsPanel;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.project.Project;
+import consulo.project.Project;
 import com.intellij.psi.*;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.ast.IElementType;
+import consulo.language.util.IncorrectOperationException;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
@@ -31,6 +31,7 @@ import com.siyeh.ig.psiutils.ParenthesesUtils;
 import com.intellij.java.impl.ig.psiutils.WellFormednessUtils;
 import javax.annotation.Nonnull;
 
+import javax.annotation.Nullable;
 import javax.swing.*;
 
 public class MultiplyOrDivideByPowerOfTwoInspection
@@ -47,7 +48,7 @@ public class MultiplyOrDivideByPowerOfTwoInspection
       "multiply.or.divide.by.power.of.two.display.name");
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public JComponent createOptionsPanel() {
     return new SingleCheckboxOptionsPanel(InspectionGadgetsBundle.message(
       "multiply.or.divide.by.power.of.two.divide.option"), this,

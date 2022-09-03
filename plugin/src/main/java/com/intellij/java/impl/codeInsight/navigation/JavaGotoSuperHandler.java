@@ -15,26 +15,26 @@
  */
 package com.intellij.java.impl.codeInsight.navigation;
 
-import com.intellij.codeInsight.CodeInsightActionHandler;
-import com.intellij.codeInsight.CodeInsightBundle;
-import com.intellij.codeInsight.daemon.impl.PsiElementListNavigator;
-import com.intellij.codeInsight.navigation.NavigationUtil;
-import com.intellij.codeInsight.navigation.actions.GotoSuperAction;
-import com.intellij.featureStatistics.FeatureUsageTracker;
+import consulo.fileEditor.FileEditorManager;
+import consulo.language.editor.action.CodeInsightActionHandler;
+import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.ui.PsiElementListNavigator;
+import consulo.navigation.NavigationUtil;
+import consulo.ide.impl.idea.codeInsight.navigation.actions.GotoSuperAction;
+import consulo.externalService.statistic.FeatureUsageTracker;
 import com.intellij.java.impl.ide.util.MethodCellRenderer;
 import com.intellij.java.language.impl.psi.impl.FindSuperElementsHelper;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.fileEditor.FileEditorManager;
-import com.intellij.openapi.fileEditor.OpenFileDescriptor;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiNameIdentifierOwner;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.codeEditor.Editor;
+import consulo.navigation.OpenFileDescriptor;
+import consulo.project.Project;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiNameIdentifierOwner;
+import consulo.language.psi.util.PsiTreeUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

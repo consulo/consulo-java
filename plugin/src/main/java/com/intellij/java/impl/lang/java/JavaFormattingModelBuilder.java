@@ -21,30 +21,30 @@ package com.intellij.java.impl.lang.java;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import com.intellij.formatting.Block;
-import com.intellij.formatting.FormatTextRanges;
-import com.intellij.formatting.FormattingMode;
-import com.intellij.formatting.FormattingModel;
-import com.intellij.formatting.FormattingModelBuilderEx;
+import consulo.language.codeStyle.Block;
+import consulo.language.codeStyle.FormatTextRanges;
+import consulo.language.codeStyle.FormattingMode;
+import consulo.language.codeStyle.FormattingModel;
+import consulo.language.codeStyle.FormattingModelBuilderEx;
 import com.intellij.java.language.JavaLanguage;
-import com.intellij.lang.ASTNode;
+import consulo.language.ast.ASTNode;
 import consulo.logging.Logger;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.PsiElement;
+import consulo.document.util.TextRange;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiExpression;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.TokenType;
-import com.intellij.psi.codeStyle.CodeStyleSettings;
-import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
+import consulo.language.psi.PsiFile;
+import consulo.language.ast.TokenType;
+import consulo.language.codeStyle.CodeStyleSettings;
+import consulo.language.codeStyle.CommonCodeStyleSettings;
 import com.intellij.java.impl.psi.codeStyle.JavaCodeStyleSettings;
-import com.intellij.psi.formatter.FormatterUtil;
-import com.intellij.psi.formatter.FormattingDocumentModelImpl;
+import consulo.language.codeStyle.FormatterUtil;
+import consulo.ide.impl.psi.formatter.FormattingDocumentModelImpl;
 import com.intellij.java.impl.psi.formatter.java.AbstractJavaBlock;
-import com.intellij.psi.impl.source.SourceTreeToPsiMap;
+import consulo.language.impl.psi.SourceTreeToPsiMap;
 import com.intellij.java.impl.psi.impl.source.codeStyle.PsiBasedFormatterModelWithShiftIndentInside;
-import com.intellij.psi.impl.source.tree.FileElement;
-import com.intellij.psi.impl.source.tree.TreeElement;
-import com.intellij.psi.impl.source.tree.TreeUtil;
+import consulo.language.impl.ast.FileElement;
+import consulo.language.impl.ast.TreeElement;
+import consulo.language.impl.ast.TreeUtil;
 
 public class JavaFormattingModelBuilder implements FormattingModelBuilderEx
 {

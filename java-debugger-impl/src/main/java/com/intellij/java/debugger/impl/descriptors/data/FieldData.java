@@ -16,7 +16,7 @@
 package com.intellij.java.debugger.impl.descriptors.data;
 
 import com.intellij.java.debugger.impl.ui.impl.watch.FieldDescriptorImpl;
-import com.intellij.openapi.project.Project;
+import consulo.project.Project;
 import consulo.internal.com.sun.jdi.Field;
 import consulo.internal.com.sun.jdi.ObjectReference;
 import javax.annotation.Nonnull;

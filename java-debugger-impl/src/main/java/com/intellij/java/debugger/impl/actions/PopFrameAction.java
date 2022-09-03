@@ -19,7 +19,8 @@
  */
 package com.intellij.java.debugger.impl.actions;
 
-import com.intellij.idea.ActionsBundle;
+import consulo.ui.ex.action.ActionPlaces;
+import consulo.ui.ex.action.ActionsBundle;
 import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.impl.DebuggerContextImpl;
 import com.intellij.java.debugger.impl.engine.DebugProcessImpl;
@@ -27,11 +28,10 @@ import com.intellij.java.debugger.impl.engine.SuspendContextImpl;
 import com.intellij.java.debugger.impl.jdi.StackFrameProxyImpl;
 import com.intellij.java.debugger.impl.jdi.VirtualMachineProxyImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.*;
-import com.intellij.openapi.actionSystem.ActionPlaces;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.CommonDataKeys;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.Messages;
+import consulo.ui.ex.action.AnActionEvent;
+import consulo.language.editor.CommonDataKeys;
+import consulo.project.Project;
+import consulo.ui.ex.awt.Messages;
 import consulo.internal.com.sun.jdi.InvalidStackFrameException;
 import consulo.internal.com.sun.jdi.NativeMethodException;
 import consulo.internal.com.sun.jdi.VMDisconnectedException;

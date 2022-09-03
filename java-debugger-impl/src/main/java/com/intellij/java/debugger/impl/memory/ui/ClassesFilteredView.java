@@ -15,7 +15,7 @@
  */
 package com.intellij.java.debugger.impl.memory.ui;
 
-import com.intellij.icons.AllIcons;
+import consulo.application.AllIcons;
 import com.intellij.java.debugger.DebuggerManager;
 import com.intellij.java.debugger.engine.DebugProcess;
 import com.intellij.java.debugger.engine.DebugProcessListener;
@@ -40,15 +40,15 @@ import com.intellij.java.debugger.impl.memory.utils.SingleAlarmWithMutableDelay;
 import com.intellij.java.debugger.requests.ClassPrepareRequestor;
 import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.actionSystem.impl.ActionButton;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.wm.IdeFocusManager;
+import consulo.application.ApplicationManager;
+import consulo.application.ui.wm.IdeFocusManager;
+import consulo.execution.debug.XDebugSession;
+import consulo.execution.debug.event.XDebugSessionListener;
+import consulo.project.Project;
 import com.intellij.ui.*;
-import com.intellij.util.ui.JBDimension;
-import com.intellij.util.ui.components.BorderLayoutPanel;
-import com.intellij.xdebugger.XDebugSession;
-import com.intellij.xdebugger.XDebugSessionListener;
-import com.intellij.xdebugger.XDebuggerManager;
+import consulo.ui.ex.awt.JBDimension;
+import consulo.ui.ex.awt.BorderLayoutPanel;
+import consulo.execution.debug.XDebuggerManager;
 import consulo.disposer.Disposable;
 import consulo.disposer.Disposer;
 import consulo.internal.com.sun.jdi.ObjectReference;
@@ -56,6 +56,12 @@ import consulo.internal.com.sun.jdi.ReferenceType;
 import consulo.internal.com.sun.jdi.VirtualMachine;
 import consulo.internal.com.sun.jdi.request.ClassPrepareRequest;
 import consulo.logging.Logger;
+import consulo.ui.ex.action.ActionPlaces;
+import consulo.ui.ex.action.DefaultActionGroup;
+import consulo.ui.ex.awt.PopupHandler;
+import consulo.ui.ex.awt.ScrollPaneFactory;
+import consulo.ui.ex.awt.SearchTextField;
+import consulo.ui.ex.awt.event.DoubleClickListener;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -313,7 +319,7 @@ public class ClassesFilteredView extends BorderLayoutPanel implements Disposable
     }
   }
 
-  private void handleClassSelection(@javax.annotation.Nullable ReferenceType ref) {
+  private void handleClassSelection(@Nullable ReferenceType ref) {
     final XDebugSession debugSession = XDebuggerManager.getInstance(myProject).getCurrentSession();
     if (ref != null && debugSession != null && debugSession.isSuspended()) {
       new InstancesWindow(debugSession, limit ->
@@ -399,7 +405,7 @@ public class ClassesFilteredView extends BorderLayoutPanel implements Disposable
 
   private final class MyUpdateClassesCommand extends LowestPriorityCommand {
 
-    MyUpdateClassesCommand(@javax.annotation.Nullable SuspendContextImpl suspendContext) {
+    MyUpdateClassesCommand(@Nullable SuspendContextImpl suspendContext) {
       super(suspendContext);
     }
 

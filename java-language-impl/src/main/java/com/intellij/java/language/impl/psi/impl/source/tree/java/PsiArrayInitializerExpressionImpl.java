@@ -15,19 +15,21 @@
  */
 package com.intellij.java.language.impl.psi.impl.source.tree.java;
 
-import javax.annotation.Nonnull;
-
+import com.intellij.java.language.impl.psi.impl.source.Constants;
 import com.intellij.java.language.impl.psi.impl.source.tree.ChildRole;
 import com.intellij.java.language.impl.psi.impl.source.tree.ElementType;
 import com.intellij.java.language.psi.*;
-import com.intellij.lang.ASTNode;
+import consulo.language.ast.ASTNode;
+import consulo.language.ast.ChildRoleBase;
+import consulo.language.ast.IElementType;
+import consulo.language.impl.ast.Factory;
+import consulo.language.impl.ast.SharedImplUtil;
+import consulo.language.impl.ast.TreeElement;
+import consulo.language.psi.PsiElementVisitor;
+import consulo.language.util.CharTable;
 import consulo.logging.Logger;
-import com.intellij.psi.*;
-import com.intellij.java.language.impl.psi.impl.source.Constants;
-import com.intellij.psi.impl.source.tree.*;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.tree.ChildRoleBase;
-import com.intellij.util.CharTable;
+
+import javax.annotation.Nonnull;
 
 public class PsiArrayInitializerExpressionImpl extends ExpressionPsiElement implements PsiArrayInitializerExpression, Constants {
   private static final Logger LOG = Logger.getInstance(PsiArrayInitializerExpressionImpl.class);

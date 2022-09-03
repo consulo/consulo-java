@@ -15,14 +15,14 @@
  */
 package com.intellij.java.impl.ig.bugs;
 
-import com.intellij.codeInspection.ui.MultipleCheckboxOptionsPanel;
+import consulo.ide.impl.idea.codeInspection.ui.MultipleCheckboxOptionsPanel;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.progress.ProgressManager;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.search.PsiElementProcessor;
-import com.intellij.psi.search.PsiElementProcessorAdapter;
+import consulo.application.progress.ProgressManager;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.resolve.PsiElementProcessor;
+import consulo.ide.impl.psi.search.PsiElementProcessorAdapter;
 import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
@@ -195,7 +195,7 @@ public class ObjectEqualityInspection extends BaseInspection {
       return rawType.equalsToText(JavaClassNames.JAVA_LANG_CLASS);
     }
 
-    private boolean isEnumType(@javax.annotation.Nullable PsiExpression expression) {
+    private boolean isEnumType(@Nullable PsiExpression expression) {
       return expression != null && TypeUtils.expressionHasTypeOrSubtype(expression, JavaClassNames.JAVA_LANG_ENUM);
     }
 

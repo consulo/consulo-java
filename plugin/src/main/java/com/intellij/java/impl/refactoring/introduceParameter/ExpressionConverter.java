@@ -16,10 +16,10 @@
 package com.intellij.java.impl.refactoring.introduceParameter;
 
 import javax.annotation.Nullable;
-import com.intellij.lang.Language;
-import com.intellij.lang.LanguageExtension;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiElement;
+import consulo.language.Language;
+import consulo.language.extension.LanguageExtension;
+import consulo.project.Project;
+import consulo.language.psi.PsiElement;
 
 /**
  * @author Maxim.Medvedev

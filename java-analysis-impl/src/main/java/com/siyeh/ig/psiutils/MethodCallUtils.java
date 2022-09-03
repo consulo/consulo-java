@@ -19,11 +19,11 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.instructions.Meth
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.psi.*;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.java.language.psi.util.MethodSignatureUtil;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.util.ArrayUtil;import com.siyeh.HardcodedMethodConstants;
+import consulo.util.collection.ArrayUtil;import com.siyeh.HardcodedMethodConstants;
 import consulo.java.language.module.util.JavaClassNames;
 import org.jetbrains.annotations.NonNls;import javax.annotation.Nonnull;
 
@@ -33,7 +33,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.intellij.util.ObjectUtil.tryCast;
+import static consulo.util.lang.ObjectUtil.tryCast;
 
 public class MethodCallUtils
 {
@@ -123,7 +123,7 @@ public class MethodCallUtils
 	}
 
 	public static boolean isSimpleCallToMethod(@Nonnull PsiMethodCallExpression expression,
-			@NonNls @javax.annotation.Nullable String calledOnClassName,
+			@NonNls @Nullable String calledOnClassName,
 			@Nullable PsiType returnType,
 			@NonNls @Nullable String methodName,
 			@NonNls @Nullable String... parameterTypeStrings)
@@ -202,8 +202,8 @@ public class MethodCallUtils
 	}
 
 	public static boolean isCallToMethod(@Nonnull PsiMethodCallExpression expression,
-			@NonNls @javax.annotation.Nullable String calledOnClassName,
-			@javax.annotation.Nullable PsiType returnType,
+			@NonNls @Nullable String calledOnClassName,
+			@Nullable PsiType returnType,
 			@NonNls @Nullable String methodName,
 			@Nullable PsiType... parameterTypes)
 	{

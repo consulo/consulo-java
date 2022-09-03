@@ -17,13 +17,13 @@ package com.intellij.java.impl.codeInsight.hint.api.impls;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.codeInsight.lookup.LookupElement;
+import consulo.language.editor.completion.lookup.LookupElement;
 import com.intellij.java.language.psi.*;
 import com.intellij.lang.parameterInfo.*;
-import com.intellij.openapi.project.DumbAware;
+import consulo.application.dumb.DumbAware;
 import com.intellij.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.util.text.CharArrayUtil;
+import consulo.util.lang.CharArrayUtil;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nullable;

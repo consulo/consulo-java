@@ -18,10 +18,10 @@ package com.intellij.java.debugger.impl;
 import org.jdom.Element;
 import com.intellij.java.debugger.impl.settings.DebuggerSettings;
 import com.intellij.java.execution.configurations.DebuggingRunnerData;
-import com.intellij.execution.configurations.RunnerSettings;
-import com.intellij.util.xmlb.SmartSerializer;
-import com.intellij.util.xmlb.annotations.OptionTag;
-import com.intellij.util.xmlb.annotations.Transient;
+import consulo.execution.configuration.RunnerSettings;
+import consulo.util.xml.serializer.SmartSerializer;
+import consulo.util.xml.serializer.annotation.OptionTag;
+import consulo.util.xml.serializer.annotation.Transient;
 
 public class GenericDebuggerRunnerSettings implements DebuggingRunnerData, RunnerSettings
 {

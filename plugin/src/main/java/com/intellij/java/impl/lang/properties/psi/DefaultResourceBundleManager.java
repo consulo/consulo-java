@@ -21,14 +21,14 @@
  */
 package com.intellij.java.impl.lang.properties.psi;
 
-import com.intellij.codeInsight.CodeInsightBundle;
+import consulo.language.editor.CodeInsightBundle;
 import com.intellij.java.impl.codeInsight.daemon.impl.quickfix.SetupJDKFix;
 import com.intellij.java.impl.ide.fileTemplates.JavaTemplateUtil;
-import com.intellij.openapi.project.Project;
+import consulo.project.Project;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.scope.GlobalSearchScope;
 import javax.annotation.Nullable;
 
 public class DefaultResourceBundleManager extends ResourceBundleManager {

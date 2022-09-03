@@ -15,16 +15,15 @@
  */
 package com.intellij.java.impl.codeInspection.i18n;
 
-import com.intellij.codeHighlighting.HighlightDisplayLevel;
-import com.intellij.codeInspection.*;
-import com.intellij.codeInspection.reference.RefManager;
-import com.intellij.codeInspection.ui.MultipleCheckboxOptionsPanel;
+import consulo.language.editor.rawHighlight.HighlightDisplayLevel;
+import consulo.language.editor.inspection.reference.RefManager;
+import consulo.ide.impl.idea.codeInspection.ui.MultipleCheckboxOptionsPanel;
 import com.intellij.lang.properties.ResourceBundle;
 import com.intellij.lang.properties.*;
 import com.intellij.lang.properties.psi.PropertiesFile;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.psi.PsiFile;
-import com.intellij.util.containers.BidirectionalMap;
+import consulo.util.lang.Comparing;
+import consulo.language.psi.PsiFile;
+import consulo.util.collection.BidirectionalMap;
 import consulo.util.dataholder.Key;
 
 import javax.annotation.Nonnull;

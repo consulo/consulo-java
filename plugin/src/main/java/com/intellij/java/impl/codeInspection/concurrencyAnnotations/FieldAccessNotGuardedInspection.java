@@ -16,14 +16,15 @@
 package com.intellij.java.impl.codeInspection.concurrencyAnnotations;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-import com.intellij.codeInsight.daemon.GroupNames;
+import consulo.ide.impl.idea.codeInsight.daemon.GroupNames;
 import com.intellij.java.analysis.impl.codeInspection.BaseJavaLocalInspectionTool;
-import com.intellij.codeInspection.ProblemsHolder;
+import consulo.language.editor.inspection.ProblemsHolder;
 import com.intellij.java.analysis.impl.codeInspection.concurrencyAnnotations.JCiPUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.Nls;
 
 public class FieldAccessNotGuardedInspection extends BaseJavaLocalInspectionTool {
@@ -120,7 +121,7 @@ public class FieldAccessNotGuardedInspection extends BaseJavaLocalInspectionTool
       myHolder.registerProblem(expression, "Access to field <code>#ref</code> outside of declared guards #loc");
     }
 
-    @javax.annotation.Nullable
+    @Nullable
     private static PsiTryStatement findLockTryStatement(PsiReferenceExpression expression, String guard) {
       PsiTryStatement tryStatement = PsiTreeUtil.getParentOfType(expression, PsiTryStatement.class);
       while (tryStatement != null) {

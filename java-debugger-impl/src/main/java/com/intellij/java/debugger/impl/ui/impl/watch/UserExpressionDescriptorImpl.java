@@ -28,14 +28,16 @@ import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
 import com.intellij.java.debugger.engine.evaluation.TextWithImports;
 import com.intellij.java.debugger.impl.DebuggerUtilsImpl;
 import com.intellij.java.debugger.impl.ui.tree.UserExpressionDescriptor;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Pair;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.project.Project;
+import consulo.util.lang.Pair;
+import consulo.util.lang.StringUtil;
 import com.intellij.java.language.psi.JavaCodeFragment;
-import com.intellij.psi.PsiCodeFragment;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiCodeFragment;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiType;
 import consulo.internal.com.sun.jdi.Type;
+
+import javax.annotation.Nullable;
 
 public class UserExpressionDescriptorImpl extends EvaluationDescriptor implements UserExpressionDescriptor
 {
@@ -58,7 +60,7 @@ public class UserExpressionDescriptorImpl extends EvaluationDescriptor implement
 		return StringUtil.isEmpty(myName) ? myText.getText() : myName;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	@Override
 	public String getDeclaredType()
 	{

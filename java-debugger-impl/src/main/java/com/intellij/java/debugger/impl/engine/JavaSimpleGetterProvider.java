@@ -18,16 +18,16 @@ package com.intellij.java.debugger.impl.engine;
 import javax.annotation.Nonnull;
 
 import com.intellij.java.debugger.engine.SimplePropertyGetterProvider;
-import com.intellij.openapi.util.Comparing;
+import consulo.util.lang.Comparing;
 import com.intellij.java.language.psi.PsiCodeBlock;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiReferenceExpression;
 import com.intellij.java.language.psi.PsiReturnStatement;
 import com.intellij.java.language.psi.PsiStatement;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 
 /**
  * @author Nikolay.Tropin

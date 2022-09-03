@@ -19,29 +19,30 @@ import java.util.Arrays;
 import java.util.HashSet;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-import com.intellij.codeInsight.hint.HintManager;
-import com.intellij.codeInsight.intention.LowPriorityAction;
-import com.intellij.codeInsight.intention.PsiElementBaseIntentionAction;
-import com.intellij.codeInsight.template.Template;
-import com.intellij.codeInsight.template.TemplateBuilderImpl;
+import consulo.language.editor.hint.HintManager;
+import consulo.language.editor.intention.LowPriorityAction;
+import consulo.language.editor.intention.PsiElementBaseIntentionAction;
+import consulo.language.editor.template.Template;
+import consulo.language.editor.impl.internal.template.TemplateBuilderImpl;
 import com.intellij.java.impl.codeInsight.template.impl.TextExpression;
-import com.intellij.icons.AllIcons;
+import consulo.application.AllIcons;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.RangeMarker;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Iconable;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.application.ApplicationManager;
+import consulo.codeEditor.Editor;
+import consulo.document.RangeMarker;
+import consulo.project.Project;
+import consulo.component.util.Iconable;
+import consulo.util.lang.StringUtil;
 import com.intellij.psi.*;
-import com.intellij.psi.codeStyle.CodeStyleManager;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.impl.refactoring.util.RefactoringUtil;
-import com.intellij.util.ArrayUtil;
-import com.intellij.util.Function;
-import com.intellij.util.IncorrectOperationException;
+import consulo.util.collection.ArrayUtil;
+import consulo.ide.impl.idea.util.Function;
+import consulo.language.util.IncorrectOperationException;
 import consulo.ui.image.Image;
 
 /**
@@ -163,7 +164,7 @@ public class DelegateWithDefaultParamValueIntentionAction extends PsiElementBase
     }
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   protected PsiParameter[] getParams(PsiElement element) {
     return new PsiParameter[]{PsiTreeUtil.getParentOfType(element, PsiParameter.class)};
   }

@@ -2,9 +2,9 @@ package consulo.java.manifest.editor.models;
 
 import org.osmorc.manifest.lang.psi.Clause;
 import org.osmorc.manifest.lang.psi.Directive;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.util.ui.ColumnInfo;
-import com.intellij.util.ui.ListTableModel;
+import consulo.application.ApplicationManager;
+import consulo.ui.ex.awt.ColumnInfo;
+import consulo.ui.ex.awt.table.ListTableModel;
 
 /**
  * @author VISTALL

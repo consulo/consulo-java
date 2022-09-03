@@ -18,14 +18,15 @@ package com.intellij.java.language.impl.psi.scope.processor;
 
 import consulo.util.dataholder.Key;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.psi.ResolveState;
+import consulo.language.psi.resolve.ResolveState;
 import com.intellij.java.language.impl.psi.scope.ElementClassHint;
 import com.intellij.java.language.impl.psi.scope.NameHint;
-import com.intellij.psi.scope.PsiScopeProcessor;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.language.psi.resolve.PsiScopeProcessor;
+import consulo.util.collection.ContainerUtil;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -87,7 +88,7 @@ public class MethodResolveProcessor implements PsiScopeProcessor, ElementClassHi
   }
 
 
-  @javax.annotation.Nullable
+  @Nullable
   @Override
   public String getName(ResolveState state) {
     return myNameHint;

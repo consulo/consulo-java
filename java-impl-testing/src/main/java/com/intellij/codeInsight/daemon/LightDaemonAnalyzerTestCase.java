@@ -15,22 +15,22 @@
  */
 package com.intellij.codeInsight.daemon;
 
-import com.intellij.codeHighlighting.Pass;
-import com.intellij.codeInsight.daemon.impl.DaemonCodeAnalyzerImpl;
-import com.intellij.codeInsight.daemon.impl.HighlightInfo;
-import com.intellij.injected.editor.EditorWindow;
-import com.intellij.lang.annotation.HighlightSeverity;
-import com.intellij.lang.injection.InjectedLanguageManager;
-import com.intellij.openapi.command.CommandProcessor;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.vfs.VirtualFileFilter;
+import consulo.language.editor.Pass;
+import consulo.ide.impl.idea.codeInsight.daemon.impl.DaemonCodeAnalyzerImpl;
+import consulo.language.editor.rawHighlight.HighlightInfo;
+import consulo.language.editor.inject.EditorWindow;
+import consulo.language.editor.annotation.HighlightSeverity;
+import consulo.language.inject.InjectedLanguageManager;
+import consulo.undoRedo.CommandProcessor;
+import consulo.codeEditor.Editor;
+import consulo.virtualFileSystem.VirtualFileFilter;
 import com.intellij.java.language.psi.JavaPsiFacade;
-import com.intellij.psi.PsiDocumentManager;
-import com.intellij.psi.PsiFile;
+import consulo.language.psi.PsiDocumentManager;
+import consulo.language.psi.PsiFile;
 import com.intellij.java.language.impl.psi.impl.source.resolve.PsiResolveHelperImpl;
 import com.intellij.testFramework.*;
 import com.intellij.testFramework.fixtures.impl.CodeInsightTestFixtureImpl;
-import com.intellij.util.ArrayUtil;
+import consulo.util.collection.ArrayUtil;
 import consulo.util.collection.primitive.ints.IntList;
 import consulo.util.collection.primitive.ints.IntLists;
 import org.jetbrains.annotations.NonNls;

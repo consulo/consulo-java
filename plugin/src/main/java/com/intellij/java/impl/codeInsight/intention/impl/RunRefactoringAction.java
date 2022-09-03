@@ -17,13 +17,13 @@ package com.intellij.java.impl.codeInsight.intention.impl;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.icons.AllIcons;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiElement;
-import com.intellij.refactoring.BaseRefactoringIntentionAction;
-import com.intellij.refactoring.RefactoringActionHandler;
-import com.intellij.util.IncorrectOperationException;
+import consulo.application.AllIcons;
+import consulo.codeEditor.Editor;
+import consulo.project.Project;
+import consulo.language.psi.PsiElement;
+import consulo.language.editor.refactoring.action.BaseRefactoringIntentionAction;
+import consulo.language.editor.refactoring.action.RefactoringActionHandler;
+import consulo.language.util.IncorrectOperationException;
 import consulo.ui.image.Image;
 
 /**

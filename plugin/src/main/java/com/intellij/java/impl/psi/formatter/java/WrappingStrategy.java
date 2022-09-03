@@ -15,9 +15,9 @@
  */
 package com.intellij.java.impl.psi.formatter.java;
 
-import com.intellij.formatting.Wrap;
+import consulo.language.codeStyle.Wrap;
 import com.intellij.java.language.psi.JavaTokenType;
-import com.intellij.psi.tree.IElementType;
+import consulo.language.ast.IElementType;
 
 public abstract class WrappingStrategy
 {

@@ -15,26 +15,29 @@
  */
 package com.intellij.java.indexing.search.searches;
 
-import com.intellij.openapi.application.DumbAwareSearchParameters;
-import com.intellij.openapi.extensions.ExtensionPointName;
-import com.intellij.openapi.project.Project;
 import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.psi.PsiReference;
-import com.intellij.psi.search.*;
-import com.intellij.psi.search.searches.ExtensibleQueryFactory;
-import com.intellij.psi.search.searches.ReferenceDescriptor;
-import com.intellij.psi.util.PsiUtilCore;
-import com.intellij.util.*;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.application.util.query.ExtensibleQueryFactory;
+import consulo.application.util.query.MergeQuery;
+import consulo.application.util.query.Query;
+import consulo.application.util.query.UniqueResultsQuery;
+import consulo.content.scope.SearchScope;
+import consulo.language.psi.PsiReference;
+import consulo.language.psi.PsiUtilCore;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.search.*;
+import consulo.project.Project;
+import consulo.project.util.query.DumbAwareSearchParameters;
+import consulo.util.collection.ContainerUtil;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.function.BiPredicate;
+import java.util.function.Predicate;
 
 /**
  * @author max
  */
-public class MethodReferencesSearch extends ExtensibleQueryFactory<PsiReference,
-    MethodReferencesSearch.SearchParameters> {
-  public static final ExtensionPointName<QueryExecutor> EP_NAME = ExtensionPointName.create("consulo.java.methodReferencesSearch");
+public class MethodReferencesSearch extends ExtensibleQueryFactory<PsiReference, MethodReferencesSearch.SearchParameters> {
   public static final MethodReferencesSearch INSTANCE = new MethodReferencesSearch();
 
   public static class SearchParameters implements DumbAwareSearchParameters {
@@ -48,7 +51,7 @@ public class MethodReferencesSearch extends ExtensibleQueryFactory<PsiReference,
     public SearchParameters(@Nonnull PsiMethod method,
                             @Nonnull SearchScope scope,
                             boolean strictSignatureSearch,
-                            @javax.annotation.Nullable SearchRequestCollector optimizer) {
+                            @Nullable SearchRequestCollector optimizer) {
       myMethod = method;
       myScope = scope;
       myStrictSignatureSearch = strictSignatureSearch;
@@ -100,13 +103,13 @@ public class MethodReferencesSearch extends ExtensibleQueryFactory<PsiReference,
 
     @Nonnull
     public SearchScope getEffectiveSearchScope() {
-      SearchScope accessScope = PsiSearchHelper.SERVICE.getInstance(myMethod.getProject()).getUseScope(myMethod);
+      SearchScope accessScope = PsiSearchHelper.getInstance(myMethod.getProject()).getUseScope(myMethod);
       return myScope.intersectWith(accessScope);
     }
   }
 
   private MethodReferencesSearch() {
-    super("consulo.java");
+    super(MethodReferencesSearchExecutor.class);
   }
 
   public static Query<PsiReference> search(@Nonnull PsiMethod method,
@@ -119,14 +122,8 @@ public class MethodReferencesSearch extends ExtensibleQueryFactory<PsiReference,
                                      SearchScope scope,
                                      final boolean strictSignatureSearch,
                                      @Nonnull SearchRequestCollector collector,
-                                     final Processor<PsiReference> processor) {
-    searchOptimized(method, scope, strictSignatureSearch, collector, false, new PairProcessor<PsiReference,
-        SearchRequestCollector>() {
-      @Override
-      public boolean process(PsiReference psiReference, SearchRequestCollector collector) {
-        return processor.process(psiReference);
-      }
-    });
+                                     final Predicate<PsiReference> processor) {
+    searchOptimized(method, scope, strictSignatureSearch, collector, false, (psiReference, collector1) -> processor.test(psiReference));
   }
 
   public static void searchOptimized(final PsiMethod method,
@@ -134,7 +131,7 @@ public class MethodReferencesSearch extends ExtensibleQueryFactory<PsiReference,
                                      final boolean strictSignatureSearch,
                                      SearchRequestCollector collector,
                                      final boolean inReadAction,
-                                     PairProcessor<PsiReference, SearchRequestCollector> processor) {
+                                     BiPredicate<PsiReference, SearchRequestCollector> processor) {
     final SearchRequestCollector nested = new SearchRequestCollector(collector.getSearchSession());
     collector.searchQuery(new QuerySearchRequest(search(new SearchParameters(method, scope, strictSignatureSearch,
         nested)), nested, inReadAction, processor));

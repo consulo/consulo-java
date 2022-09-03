@@ -24,30 +24,30 @@ import javax.annotation.Nullable;
 
 import com.intellij.java.language.psi.*;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
-import com.intellij.codeInsight.CodeInsightUtilCore;
+import consulo.language.editor.CodeInsightUtilCore;
 import com.intellij.java.impl.codeInsight.ExpectedTypeInfo;
-import com.intellij.codeInsight.daemon.impl.DaemonCodeAnalyzerEx;
-import com.intellij.codeInsight.daemon.impl.HighlightInfo;
-import com.intellij.codeInsight.template.Template;
-import com.intellij.codeInsight.template.TemplateBuilderImpl;
-import com.intellij.codeInsight.template.TemplateEditingAdapter;
-import com.intellij.lang.annotation.HighlightSeverity;
-import com.intellij.openapi.command.WriteCommandAction;
+import consulo.language.editor.impl.internal.daemon.DaemonCodeAnalyzerEx;
+import consulo.language.editor.rawHighlight.HighlightInfo;
+import consulo.language.editor.template.Template;
+import consulo.language.editor.impl.internal.template.TemplateBuilderImpl;
+import consulo.language.editor.template.event.TemplateEditingAdapter;
+import consulo.language.editor.annotation.HighlightSeverity;
+import consulo.language.editor.WriteCommandAction;
 import consulo.logging.Logger;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.RangeMarker;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.openapi.util.Pair;
-import com.intellij.openapi.util.TextRange;
+import consulo.document.Document;
+import consulo.codeEditor.Editor;
+import consulo.document.RangeMarker;
+import consulo.project.Project;
+import consulo.util.lang.Comparing;
+import consulo.util.lang.Pair;
+import consulo.document.util.TextRange;
 import com.intellij.psi.*;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.impl.refactoring.util.RefactoringChangeUtil;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.Processor;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.application.util.function.Processor;
+import consulo.util.collection.ContainerUtil;
 
 /**
  * @author Mike
@@ -215,7 +215,7 @@ public class CreateMethodFromUsageFix extends CreateFromUsageBaseFix {
   }
 
   public static void doCreate(PsiClass targetClass, PsiMethod method, List<Pair<PsiExpression, PsiType>> arguments, PsiSubstitutor substitutor,
-                              ExpectedTypeInfo[] expectedTypes, @javax.annotation.Nullable PsiElement context) {
+                              ExpectedTypeInfo[] expectedTypes, @Nullable PsiElement context) {
     doCreate(targetClass, method, shouldBeAbstractImpl(null, targetClass), arguments, substitutor, expectedTypes, context);
   }
 

@@ -16,32 +16,33 @@
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
 import com.intellij.java.impl.codeInsight.daemon.impl.actions.AddImportAction;
-import com.intellij.codeInsight.hint.QuestionAction;
+import consulo.language.editor.hint.QuestionAction;
 import com.intellij.java.impl.codeInsight.intention.impl.AddSingleMemberStaticImportAction;
 import com.intellij.java.language.impl.codeInsight.PsiClassListCellRenderer;
-import com.intellij.ide.util.PsiElementListCellRenderer;
+import consulo.language.editor.ui.PsiElementListCellRenderer;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiDocCommentOwner;
 import com.intellij.java.language.psi.PsiMember;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.command.WriteCommandAction;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.markup.TextAttributes;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.popup.PopupStep;
-import com.intellij.openapi.ui.popup.util.BaseListPopupStep;
+import consulo.application.ApplicationManager;
+import consulo.language.editor.WriteCommandAction;
+import consulo.codeEditor.Editor;
+import consulo.colorScheme.TextAttributes;
+import consulo.project.Project;
+import consulo.ui.ex.popup.BaseListPopupStep;
+import consulo.ui.ex.popup.PopupStep;
 import com.intellij.psi.*;
 import com.intellij.java.language.impl.psi.presentation.java.ClassPresentationUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.ui.popup.list.ListPopupImpl;
-import com.intellij.ui.popup.list.PopupListElementRenderer;
-import consulo.ide.IconDescriptorUpdaters;
+import consulo.ide.impl.idea.ui.popup.list.ListPopupImpl;
+import consulo.ide.impl.idea.ui.popup.list.PopupListElementRenderer;
+import consulo.language.icon.IconDescriptorUpdaters;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.logging.Logger;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.image.Image;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
@@ -198,7 +199,7 @@ public class StaticImportMethodQuestionAction<T extends PsiMember> implements Qu
 						return 0;
 					}
 
-					@javax.annotation.Nullable
+					@Nullable
 					@Override
 					protected TextAttributes getNavigationItemAttributes(Object value)
 					{

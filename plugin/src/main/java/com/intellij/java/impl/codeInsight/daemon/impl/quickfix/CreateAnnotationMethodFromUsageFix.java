@@ -16,18 +16,19 @@
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.intellij.java.impl.codeInsight.ExpectedTypeInfo;
 import com.intellij.java.impl.codeInsight.ExpectedTypesProvider;
-import com.intellij.codeInsight.TailType;
+import consulo.language.editor.completion.lookup.TailType;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.AnnotationsHighlightUtil;
 import com.intellij.java.language.psi.*;
 import consulo.logging.Logger;
-import com.intellij.openapi.util.Pair;
+import consulo.util.lang.Pair;
 import com.intellij.psi.*;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.util.collection.ContainerUtil;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 
 public class CreateAnnotationMethodFromUsageFix extends CreateFromUsageBaseFix
@@ -110,7 +111,7 @@ public class CreateAnnotationMethodFromUsageFix extends CreateFromUsageBaseFix
 				(nameValuePair), expectedTypes, context);
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public static PsiType getAnnotationValueType(PsiAnnotationMemberValue value)
 	{
 		PsiType type = null;
@@ -182,7 +183,7 @@ public class CreateAnnotationMethodFromUsageFix extends CreateFromUsageBaseFix
 		return JavaQuickFixBundle.message("create.method.from.usage.family");
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	protected PsiNameValuePair getNameValuePair()
 	{
 		return myNameValuePair.getElement();

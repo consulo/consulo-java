@@ -26,32 +26,34 @@ import java.util.Set;
 
 import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.language.impl.codeInsight.ChangeContextUtil;
-import com.intellij.codeInsight.PsiEquivalenceUtil;
+import consulo.language.editor.PsiEquivalenceUtil;
 import com.intellij.java.analysis.impl.codeInsight.intention.AddAnnotationFix;
 import com.intellij.java.language.psi.*;
-import com.intellij.lang.Language;
+import consulo.language.Language;
 import consulo.logging.Logger;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Condition;
+import consulo.project.Project;
+import consulo.util.lang.function.Condition;
 import consulo.util.dataholder.Key;
 import com.intellij.psi.*;
-import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
+import consulo.language.codeStyle.CodeStyleSettingsManager;
 import com.intellij.java.impl.psi.codeStyle.JavaCodeStyleSettings;
-import com.intellij.psi.search.LocalSearchScope;
+import consulo.language.psi.scope.LocalSearchScope;
 import com.intellij.java.indexing.search.searches.OverridingMethodsSearch;
-import com.intellij.psi.search.searches.ReferencesSearch;
+import consulo.language.psi.search.ReferencesSearch;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.MethodSignatureUtil;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.refactoring.util.DocCommentPolicy;
+import consulo.ide.impl.idea.refactoring.util.DocCommentPolicy;
 import com.intellij.java.language.impl.refactoring.util.RefactoringChangeUtil;
 import com.intellij.java.impl.refactoring.util.RefactoringHierarchyUtil;
 import com.intellij.java.impl.refactoring.util.RefactoringUtil;
 import com.intellij.java.impl.refactoring.util.classMembers.ClassMemberReferencesVisitor;
 import com.intellij.java.impl.refactoring.util.classMembers.MemberInfo;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
 import com.intellij.java.language.util.VisibilityUtil;
+
+import javax.annotation.Nullable;
 import java.util.HashMap;
 
 /**
@@ -621,7 +623,7 @@ public class JavaPullUpHelper implements PullUpHelper<MemberInfo>
 		}
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	private PsiStatement hasCommonInitializer(PsiStatement commonInitializer,
 			PsiMethod subConstructor,
 			PsiField field,

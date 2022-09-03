@@ -23,19 +23,23 @@ package com.intellij.java.debugger.impl.classFilter;
 import com.intellij.java.language.util.ClassFilter;
 import com.intellij.java.language.util.TreeClassChooser;
 import com.intellij.java.language.util.TreeClassChooserFactory;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.project.Project;
+import consulo.ui.ex.UIBundle;
+import consulo.ui.ex.action.AnActionEvent;
+import consulo.project.Project;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.ui.*;
-import com.intellij.ui.table.JBTable;
-import com.intellij.util.IconUtil;
-import com.intellij.util.containers.ContainerUtil;
-import com.intellij.util.ui.ComponentWithEmptyText;
-import com.intellij.util.ui.ItemRemovable;
-import com.intellij.util.ui.StatusText;
-import com.intellij.util.ui.UIUtil;
+import consulo.ui.ex.awt.table.JBTable;
+import consulo.ide.impl.idea.util.IconUtil;
+import consulo.util.collection.ContainerUtil;
+import consulo.ui.ex.awt.ComponentWithEmptyText;
+import consulo.ui.ex.awt.ItemRemovable;
+import consulo.ui.ex.awt.StatusText;
+import consulo.ui.ex.awt.UIUtil;
+import consulo.ui.ex.awt.AnActionButton;
+import consulo.ui.ex.awt.AnActionButtonRunnable;
+import consulo.ui.ex.awt.ToolbarDecorator;
 import consulo.ui.image.Image;
 
 import javax.annotation.Nonnull;
@@ -330,7 +334,7 @@ public class ClassFilterEditor extends JPanel implements ComponentWithEmptyText 
     }
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private static String getJvmClassName(PsiClass aClass) {
     PsiClass parentClass = PsiTreeUtil.getParentOfType(aClass, PsiClass.class, true);
     if (parentClass != null) {

@@ -15,7 +15,9 @@
  */
 package com.intellij.java.debugger.impl.breakpoints.properties;
 
-import com.intellij.util.xmlb.annotations.Attribute;
+import consulo.util.xml.serializer.annotation.Attribute;
+
+import javax.annotation.Nullable;
 
 /**
  * @author egor
@@ -41,7 +43,7 @@ public class JavaFieldBreakpointProperties extends JavaBreakpointProperties<Java
 	{
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	@Override
 	public JavaFieldBreakpointProperties getState()
 	{

@@ -15,9 +15,11 @@
  */
 package com.intellij.java.execution;
 
-import com.intellij.openapi.extensions.ExtensionPointName;
-import com.intellij.openapi.module.Module;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ExtensionAPI;
+import consulo.component.extension.ExtensionPointName;
 import consulo.java.execution.configurations.OwnJavaParameters;
+import consulo.module.Module;
 
 import javax.annotation.Nonnull;
 
@@ -25,9 +27,9 @@ import javax.annotation.Nonnull;
  * User: anna
  * Date: Mar 4, 2005
  */
-public interface JavaTestPatcher
-{
-	ExtensionPointName<JavaTestPatcher> EP_NAME = ExtensionPointName.create("consulo.java.testPatcher");
+@ExtensionAPI(ComponentScope.APPLICATION)
+public interface JavaTestPatcher {
+  ExtensionPointName<JavaTestPatcher> EP_NAME = ExtensionPointName.create(JavaTestPatcher.class);
 
-	void patchJavaParameters(@Nonnull Module module, @Nonnull OwnJavaParameters javaParameters);
+  void patchJavaParameters(@Nonnull Module module, @Nonnull OwnJavaParameters javaParameters);
 }

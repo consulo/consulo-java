@@ -16,12 +16,12 @@
 package consulo.java.execution.impl.testframework;
 
 import javax.annotation.Nonnull;
-import com.intellij.icons.AllIcons;
-import com.intellij.psi.PsiElement;
+import consulo.application.AllIcons;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.testIntegration.TestFramework;
 import consulo.annotation.access.RequiredReadAction;
-import consulo.ide.IconDescriptor;
-import consulo.ide.IconDescriptorUpdater;
+import consulo.language.icon.IconDescriptor;
+import consulo.language.icon.IconDescriptorUpdater;
 
 /**
  * @author VISTALL

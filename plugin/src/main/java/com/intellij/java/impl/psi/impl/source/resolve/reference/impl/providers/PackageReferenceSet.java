@@ -21,18 +21,19 @@ import java.util.Collections;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-import com.intellij.openapi.util.Comparing;
-import com.intellij.openapi.util.Condition;
-import com.intellij.openapi.util.TextRange;
+import consulo.util.lang.Comparing;
+import consulo.util.lang.function.Condition;
+import consulo.document.util.TextRange;
 import com.intellij.java.language.psi.JavaPsiFacade;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiJavaPackage;
-import com.intellij.psi.ResolveResult;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.util.ReferenceSetBase;
-import com.intellij.util.NullableFunction;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.language.psi.ResolveResult;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.ide.impl.psi.util.ReferenceSetBase;
+import consulo.ide.impl.idea.util.NullableFunction;
+import consulo.util.collection.ContainerUtil;
 
 /**
  * @author Dmitry Avdeev
@@ -59,7 +60,7 @@ public class PackageReferenceSet extends ReferenceSetBase<PsiPackageReference>
 		return new PsiPackageReference(this, range, index);
 	}
 
-	public Collection<PsiJavaPackage> resolvePackageName(@javax.annotation.Nullable PsiJavaPackage context, final String packageName)
+	public Collection<PsiJavaPackage> resolvePackageName(@Nullable PsiJavaPackage context, final String packageName)
 	{
 		if(context != null)
 		{

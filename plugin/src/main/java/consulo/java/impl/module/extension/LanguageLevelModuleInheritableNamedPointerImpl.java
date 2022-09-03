@@ -17,8 +17,8 @@ package consulo.java.impl.module.extension;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleUtilCore;
+import consulo.module.Module;
+import consulo.language.util.ModuleUtilCore;
 import com.intellij.java.language.LanguageLevel;
 import consulo.java.language.module.extension.JavaModuleExtension;
 import consulo.module.extension.impl.ModuleInheritableNamedPointerImpl;

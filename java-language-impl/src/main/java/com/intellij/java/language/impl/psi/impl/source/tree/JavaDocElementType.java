@@ -23,38 +23,35 @@ import com.intellij.java.language.impl.parser.JavadocParser;
 import com.intellij.java.language.impl.psi.impl.source.javadoc.*;
 import com.intellij.java.language.module.EffectiveLanguageLevelUtil;
 import com.intellij.java.language.psi.tree.java.IJavaDocElementType;
-import com.intellij.lang.ASTNode;
-import com.intellij.lang.Language;
-import com.intellij.lang.PsiBuilder;
-import com.intellij.lexer.Lexer;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleUtilCore;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.impl.source.tree.LazyParseablePsiElement;
-import com.intellij.psi.tree.*;
-import com.intellij.util.ReflectionUtil;
+import consulo.language.Language;
+import consulo.language.ast.*;
+import consulo.language.impl.psi.LazyParseablePsiElement;
+import consulo.language.lexer.Lexer;
+import consulo.language.psi.PsiFile;
+import consulo.language.util.ModuleUtilCore;
+import consulo.module.Module;
+import consulo.project.Project;
+import consulo.util.lang.StringUtil;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.lang.reflect.Constructor;
+import java.util.function.Supplier;
 
 public interface JavaDocElementType {
   @SuppressWarnings("deprecation")
   class JavaDocCompositeElementType extends IJavaDocElementType implements ICompositeElementType {
-    private final Constructor<? extends ASTNode> myConstructor;
+    private final Supplier<ASTNode> myFactory;
 
-    private JavaDocCompositeElementType(@NonNls final String debugName, final Class<? extends ASTNode> nodeClass) {
+    private JavaDocCompositeElementType(@NonNls final String debugName, final Supplier<ASTNode> factory) {
       super(debugName);
-      myConstructor = ReflectionUtil.getDefaultConstructor(nodeClass);
+      myFactory = factory;
     }
 
     @Nonnull
     @Override
     public ASTNode createCompositeNode() {
-      return ReflectionUtil.createInstance(myConstructor);
+      return myFactory.get();
     }
   }
 
@@ -69,19 +66,14 @@ public interface JavaDocElementType {
     }
   }
 
-  IElementType DOC_TAG = new JavaDocCompositeElementType("DOC_TAG", PsiDocTagImpl.class);
-  IElementType DOC_INLINE_TAG = new JavaDocCompositeElementType("DOC_INLINE_TAG", PsiInlineDocTagImpl.class);
-  IElementType DOC_METHOD_OR_FIELD_REF = new JavaDocCompositeElementType("DOC_METHOD_OR_FIELD_REF", PsiDocMethodOrFieldRef.class);
-  IElementType DOC_PARAMETER_REF = new JavaDocCompositeElementType("DOC_PARAMETER_REF", PsiDocParamRef.class);
+  IElementType DOC_TAG = new JavaDocCompositeElementType("DOC_TAG", PsiDocTagImpl::new);
+  IElementType DOC_INLINE_TAG = new JavaDocCompositeElementType("DOC_INLINE_TAG", PsiInlineDocTagImpl::new);
+  IElementType DOC_METHOD_OR_FIELD_REF = new JavaDocCompositeElementType("DOC_METHOD_OR_FIELD_REF", PsiDocMethodOrFieldRef::new);
+  IElementType DOC_PARAMETER_REF = new JavaDocCompositeElementType("DOC_PARAMETER_REF", PsiDocParamRef::new);
   IElementType DOC_TAG_VALUE_ELEMENT = new IJavaDocElementType("DOC_TAG_VALUE_ELEMENT");
 
   ILazyParseableElementType DOC_REFERENCE_HOLDER = new JavaDocLazyElementType("DOC_REFERENCE_HOLDER") {
-    private final JavaParserUtil.ParserWrapper myParser = new JavaParserUtil.ParserWrapper() {
-      @Override
-      public void parse(final PsiBuilder builder) {
-        JavadocParser.parseJavadocReference(builder);
-      }
-    };
+    private final JavaParserUtil.ParserWrapper myParser = JavadocParser::parseJavadocReference;
 
     @Nullable
     @Override
@@ -91,14 +83,9 @@ public interface JavaDocElementType {
   };
 
   ILazyParseableElementType DOC_TYPE_HOLDER = new JavaDocLazyElementType("DOC_TYPE_HOLDER") {
-    private final JavaParserUtil.ParserWrapper myParser = new JavaParserUtil.ParserWrapper() {
-      @Override
-      public void parse(final PsiBuilder builder) {
-        JavadocParser.parseJavadocType(builder);
-      }
-    };
+    private final JavaParserUtil.ParserWrapper myParser = JavadocParser::parseJavadocType;
 
-    @javax.annotation.Nullable
+    @Nullable
     @Override
     public ASTNode parseContents(final ASTNode chameleon) {
       return JavaParserUtil.parseFragment(chameleon, myParser, false, LanguageLevel.JDK_1_3);
@@ -106,12 +93,7 @@ public interface JavaDocElementType {
   };
 
   ILazyParseableElementType DOC_COMMENT = new IReparseableElementType("DOC_COMMENT", JavaLanguage.INSTANCE) {
-    private final JavaParserUtil.ParserWrapper myParser = new JavaParserUtil.ParserWrapper() {
-      @Override
-      public void parse(final PsiBuilder builder) {
-        JavadocParser.parseDocCommentText(builder);
-      }
-    };
+    private final JavaParserUtil.ParserWrapper myParser = JavadocParser::parseDocCommentText;
 
     @Override
     public ASTNode createNode(final CharSequence text) {

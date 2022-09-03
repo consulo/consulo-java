@@ -19,25 +19,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-import com.intellij.codeInsight.FileModificationService;
-import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement;
+import consulo.language.editor.FileModificationService;
+import consulo.language.editor.inspection.LocalQuickFixAndIntentionActionOnPsiElement;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.command.undo.UndoUtil;
+import consulo.application.ApplicationManager;
+import consulo.ui.ex.awt.DialogWrapper;
+import consulo.undoRedo.util.UndoUtil;
 import consulo.logging.Logger;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.DialogWrapper;
-import com.intellij.openapi.ui.Messages;
+import consulo.codeEditor.Editor;
+import consulo.project.Project;
+import consulo.ui.ex.awt.Messages;
 import com.intellij.psi.*;
-import com.intellij.psi.search.PsiElementProcessor;
-import com.intellij.psi.search.PsiElementProcessorAdapter;
+import consulo.language.psi.resolve.PsiElementProcessor;
+import consulo.ide.impl.psi.search.PsiElementProcessorAdapter;
 import com.intellij.java.indexing.search.searches.OverridingMethodsSearch;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
-import com.intellij.psi.util.PsiFormatUtilBase;
+import consulo.ide.impl.psi.util.PsiFormatUtilBase;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
 import com.intellij.java.language.util.VisibilityUtil;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 
@@ -136,7 +137,7 @@ public class ModifierFix extends LocalQuickFixAndIntentionActionOnPsiElement {
   @Override
   public void invoke(@Nonnull Project project,
                      @Nonnull PsiFile file,
-                     @javax.annotation.Nullable Editor editor,
+                     @Nullable Editor editor,
                      @Nonnull PsiElement startElement,
                      @Nonnull PsiElement endElement) {
     final PsiModifierList myModifierList = (PsiModifierList)startElement;

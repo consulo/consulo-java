@@ -17,9 +17,11 @@ package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
 import java.util.Collection;
 
-import com.intellij.ide.util.PropertiesComponent;
+import consulo.ide.impl.idea.ide.util.PropertiesComponent;
 import com.intellij.java.language.psi.PsiAnonymousClass;
 import com.intellij.java.language.psi.PsiClass;
+
+import javax.annotation.Nullable;
 
 public class AnonymousTargetClassPreselectionUtil
 {
@@ -33,7 +35,7 @@ public class AnonymousTargetClassPreselectionUtil
 		}
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public static PsiClass getPreselection(Collection<PsiClass> classes, PsiClass firstClass)
 	{
 		if(firstClass instanceof PsiAnonymousClass && !PropertiesComponent.getInstance().getBoolean(PRESELECT_ANONYMOUS, true))

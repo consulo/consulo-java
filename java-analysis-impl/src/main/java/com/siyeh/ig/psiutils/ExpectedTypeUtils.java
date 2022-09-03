@@ -17,14 +17,14 @@ package com.siyeh.ig.psiutils;
 
 import com.intellij.java.language.impl.codeInsight.ExceptionUtil;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.project.Project;
+import consulo.project.Project;
 import com.intellij.psi.*;
-import com.intellij.psi.tree.IElementType;
+import consulo.language.ast.IElementType;
 import com.intellij.java.language.psi.util.PsiTypesUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
-import com.intellij.util.ArrayUtil;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.util.collection.ArrayUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.util.collection.ContainerUtil;
 import consulo.java.language.module.util.JavaClassNames;
 
 import javax.annotation.Nonnull;
@@ -39,7 +39,7 @@ public class ExpectedTypeUtils
 	{
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public static PsiType findExpectedType(@Nonnull PsiExpression expression, boolean calculateTypeForComplexReferences)
 	{
 		return findExpectedType(expression, calculateTypeForComplexReferences, false);
@@ -622,7 +622,7 @@ public class ExpectedTypeUtils
 			}
 		}
 
-		@javax.annotation.Nullable
+		@Nullable
 		private static PsiMethod findDeepestVisibleSuperMethod(PsiMethod method, PsiType returnType, PsiElement element)
 		{
 			if(method.isConstructor())

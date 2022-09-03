@@ -15,8 +15,8 @@
  */
 package com.intellij.java.language.psi;
 
-import com.intellij.psi.PsiElement;
-import com.intellij.util.ArrayFactory;
+import consulo.language.psi.PsiElement;
+import consulo.util.collection.ArrayFactory;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -61,7 +61,7 @@ public interface PsiImportStatementBase extends PsiElement {
    *
    * @return the target element, or null if it was not possible to resolve the reference to a valid target.
    */
-  @javax.annotation.Nullable
+  @Nullable
   PsiElement resolve();
 
   boolean isForeignFileImport();

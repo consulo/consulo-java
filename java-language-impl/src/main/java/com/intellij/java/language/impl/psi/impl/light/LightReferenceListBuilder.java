@@ -17,10 +17,10 @@ package com.intellij.java.language.impl.psi.impl.light;
 
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.*;
-import com.intellij.lang.Language;
-import com.intellij.psi.PsiManager;
-import com.intellij.psi.impl.light.LightElement;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.language.Language;
+import consulo.language.impl.psi.LightElement;
+import consulo.language.psi.PsiManager;
+import consulo.util.collection.ContainerUtil;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -75,7 +75,7 @@ public class LightReferenceListBuilder extends LightElement implements PsiRefere
       if (myRefs.isEmpty()) {
         myCachedRefs = PsiJavaCodeReferenceElement.EMPTY_ARRAY;
       } else {
-        myCachedRefs = ContainerUtil.toArray(myRefs, new PsiJavaCodeReferenceElement[myRefs.size()]);
+        myCachedRefs = myRefs.toArray(new PsiJavaCodeReferenceElement[myRefs.size()]);
       }
     }
     return myCachedRefs;

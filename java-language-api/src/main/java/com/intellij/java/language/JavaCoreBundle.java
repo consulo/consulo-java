@@ -15,8 +15,8 @@
  */
 package com.intellij.java.language;
 
+import consulo.component.util.localize.AbstractBundle;
 import org.jetbrains.annotations.PropertyKey;
-import com.intellij.AbstractBundle;
 
 public class JavaCoreBundle extends AbstractBundle
 {

@@ -20,16 +20,16 @@ import com.intellij.java.language.impl.codeInsight.daemon.JavaErrorBundle;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.HighlightMessageUtil;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.JavaHighlightUtil;
 import com.intellij.java.analysis.codeInspection.BaseJavaBatchLocalInspectionTool;
-import com.intellij.codeInspection.DeprecationUtil;
-import com.intellij.codeInspection.ProblemHighlightType;
-import com.intellij.codeInspection.ProblemsHolder;
-import com.intellij.codeInspection.ui.MultipleCheckboxOptionsPanel;
+import consulo.language.editor.DeprecationUtil;
+import consulo.language.editor.inspection.ProblemHighlightType;
+import consulo.language.editor.inspection.ProblemsHolder;
+import consulo.ide.impl.idea.codeInspection.ui.MultipleCheckboxOptionsPanel;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.util.TextRange;
+import consulo.document.util.TextRange;
 import com.intellij.psi.*;
 import com.intellij.java.language.psi.infos.MethodCandidateInfo;
 import com.intellij.java.language.psi.util.MethodSignatureBackedByPsiMethod;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 import consulo.annotation.DeprecationInfo;
 import org.jetbrains.annotations.NonNls;
 
@@ -340,7 +340,7 @@ public class DeprecationInspection extends BaseJavaBatchLocalInspectionTool
 
 	public static void checkDeprecated(PsiElement refElement,
 			PsiElement elementToHighlight,
-			@javax.annotation.Nullable TextRange rangeInElement,
+			@Nullable TextRange rangeInElement,
 			boolean ignoreInsideDeprecated,
 			boolean ignoreImportStatements,
 			boolean ignoreMethodsOfDeprecated,

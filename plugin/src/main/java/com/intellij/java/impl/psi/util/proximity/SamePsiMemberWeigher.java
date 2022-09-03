@@ -17,13 +17,13 @@ package com.intellij.java.impl.psi.util.proximity;
 
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMember;
-import com.intellij.openapi.util.NotNullLazyKey;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.util.ProximityLocation;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.proximity.ProximityWeigher;
-import com.intellij.util.NotNullFunction;
+import consulo.util.dataholder.NotNullLazyKey;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.ide.impl.psi.util.ProximityLocation;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.ide.impl.psi.util.proximity.ProximityWeigher;
+import consulo.ide.impl.idea.util.NotNullFunction;
 
 import javax.annotation.Nonnull;
 

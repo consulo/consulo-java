@@ -15,10 +15,10 @@
  */
 package com.intellij.java.language.psi;
 
-import com.intellij.util.ArrayFactory;
-import com.intellij.util.Function;
+import consulo.util.collection.ArrayFactory;
 
 import javax.annotation.Nullable;
+import java.util.function.Function;
 
 /**
  * Represents a Java expression.
@@ -31,7 +31,7 @@ public interface PsiExpression extends PsiAnnotationMemberValue {
 
   ArrayFactory<PsiExpression> ARRAY_FACTORY = count -> count == 0 ? PsiExpression.EMPTY_ARRAY : new PsiExpression[count];
 
-  Function<PsiExpression, PsiType> EXPRESSION_TO_TYPE = expression -> expression.getType();
+  Function<PsiExpression, PsiType> EXPRESSION_TO_TYPE = PsiExpression::getType;
 
   /**
    * Returns the type of the expression.

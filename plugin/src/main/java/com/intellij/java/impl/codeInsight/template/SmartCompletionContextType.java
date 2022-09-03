@@ -15,9 +15,9 @@
  */
 package com.intellij.java.impl.codeInsight.template;
 
-import com.intellij.codeInsight.CodeInsightBundle;
-import com.intellij.codeInsight.template.TemplateContextType;
-import com.intellij.psi.PsiFile;
+import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.template.context.TemplateContextType;
+import consulo.language.psi.PsiFile;
 
 import javax.annotation.Nonnull;
 

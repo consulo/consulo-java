@@ -19,14 +19,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-import com.intellij.codeInsight.FileModificationService;
-import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
+import consulo.language.editor.FileModificationService;
+import consulo.language.editor.inspection.LocalQuickFixAndIntentionActionOnPsiElement;
+import consulo.codeEditor.Editor;
+import consulo.project.Project;
+import consulo.util.lang.Comparing;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiParameter;
 import com.intellij.java.impl.refactoring.changeSignature.ChangeSignatureProcessor;
@@ -69,7 +70,7 @@ public class RemoveUnusedParameterFix extends LocalQuickFixAndIntentionActionOnP
   @Override
   public void invoke(@Nonnull Project project,
                      @Nonnull PsiFile file,
-                     @javax.annotation.Nullable Editor editor,
+                     @Nullable Editor editor,
                      @Nonnull PsiElement startElement,
                      @Nonnull PsiElement endElement) {
     final PsiParameter myParameter = (PsiParameter)startElement;

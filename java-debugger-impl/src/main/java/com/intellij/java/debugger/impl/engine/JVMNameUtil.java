@@ -27,16 +27,16 @@ import com.intellij.java.debugger.engine.evaluation.EvaluateException;
 import com.intellij.java.debugger.engine.evaluation.EvaluateExceptionUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.util.JavaAnonymousClassesHelper;
-import com.intellij.openapi.application.ApplicationManager;
+import consulo.application.ApplicationManager;
 import consulo.logging.Logger;
-import com.intellij.openapi.progress.ProcessCanceledException;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.openapi.util.Computable;
-import com.intellij.openapi.util.Ref;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.component.ProcessCanceledException;
+import consulo.util.lang.Comparing;
+import consulo.application.util.function.Computable;
+import consulo.util.lang.ref.Ref;
+import consulo.util.lang.StringUtil;
 import com.intellij.psi.*;
 import com.intellij.java.language.psi.util.ClassUtil;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.internal.com.sun.jdi.ReferenceType;
@@ -444,7 +444,7 @@ public class JVMNameUtil
 		return signature.toName();
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public static PsiClass getClassAt(@Nullable SourcePosition position)
 	{
 		if(position == null)

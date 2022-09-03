@@ -20,18 +20,18 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.swing.Icon;
 
+import consulo.configurable.OptionsBundle;
 import org.jetbrains.annotations.NonNls;
-import com.intellij.application.options.colors.InspectionColorSettingsPage;
-import com.intellij.codeHighlighting.RainbowHighlighter;
+import consulo.ide.impl.idea.application.options.colors.InspectionColorSettingsPage;
+import consulo.language.editor.rawHighlight.RainbowHighlighter;
 import com.intellij.java.impl.ide.highlighter.JavaFileHighlighter;
 import com.intellij.java.analysis.impl.ide.highlighter.JavaHighlightingColors;
-import com.intellij.openapi.editor.colors.CodeInsightColors;
-import com.intellij.openapi.editor.colors.TextAttributesKey;
-import com.intellij.openapi.fileTypes.SyntaxHighlighter;
-import com.intellij.openapi.options.OptionsBundle;
-import com.intellij.openapi.options.colors.AttributesDescriptor;
-import com.intellij.openapi.options.colors.ColorDescriptor;
-import com.intellij.openapi.options.colors.ColorSettingsPage;
+import consulo.codeEditor.CodeInsightColors;
+import consulo.colorScheme.TextAttributesKey;
+import consulo.language.editor.highlight.SyntaxHighlighter;
+import consulo.colorScheme.setting.AttributesDescriptor;
+import consulo.colorScheme.setting.ColorDescriptor;
+import consulo.language.editor.colorScheme.setting.ColorSettingsPage;
 import com.intellij.java.language.LanguageLevel;
 import consulo.java.impl.JavaBundle;
 

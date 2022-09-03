@@ -16,7 +16,7 @@
 
 package consulo.java.debugger.impl;
 
-import com.intellij.execution.configurations.ModuleRunProfile;
+import consulo.execution.configuration.ModuleRunProfile;
 import com.intellij.java.debugger.impl.GenericDebuggerRunner;
 
 /**

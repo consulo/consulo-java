@@ -10,25 +10,25 @@ import com.intellij.java.debugger.engine.evaluation.CodeFragmentFactory;
 import com.intellij.java.debugger.engine.evaluation.TextWithImports;
 import com.intellij.java.debugger.impl.engine.evaluation.TextWithImportsImpl;
 import com.intellij.java.language.impl.JavaFileType;
-import com.intellij.lang.Language;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.fileTypes.FileType;
-import com.intellij.openapi.project.Project;
+import consulo.execution.debug.breakpoint.XExpression;
+import consulo.execution.debug.evaluation.EvaluationMode;
+import consulo.language.Language;
+import consulo.document.Document;
+import consulo.virtualFileSystem.fileType.FileType;
+import consulo.project.Project;
 import com.intellij.java.language.psi.JavaCodeFragment;
 import com.intellij.java.language.psi.JavaCodeFragmentFactory;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiClassType;
-import com.intellij.psi.PsiDocumentManager;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.xdebugger.XExpression;
-import com.intellij.xdebugger.XSourcePosition;
-import com.intellij.xdebugger.evaluation.EvaluationMode;
-import com.intellij.xdebugger.evaluation.XDebuggerEditorsProviderBase;
-import com.intellij.xdebugger.impl.breakpoints.XExpressionImpl;
+import consulo.language.psi.PsiDocumentManager;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.execution.debug.XSourcePosition;
+import consulo.execution.debug.evaluation.XDebuggerEditorsProviderBase;
+import consulo.ide.impl.idea.xdebugger.impl.breakpoints.XExpressionImpl;
 
 public class JavaDebuggerEditorsProvider extends XDebuggerEditorsProviderBase
 {
@@ -40,7 +40,7 @@ public class JavaDebuggerEditorsProvider extends XDebuggerEditorsProviderBase
 	}
 
 	@Override
-	protected PsiFile createExpressionCodeFragment(@Nonnull Project project, @Nonnull String text, @javax.annotation.Nullable PsiElement context, boolean isPhysical)
+	protected PsiFile createExpressionCodeFragment(@Nonnull Project project, @Nonnull String text, @Nullable PsiElement context, boolean isPhysical)
 	{
 		return JavaCodeFragmentFactory.getInstance(project).createExpressionCodeFragment(text, context, null, isPhysical);
 	}
@@ -70,7 +70,7 @@ public class JavaDebuggerEditorsProvider extends XDebuggerEditorsProviderBase
 		PsiFile psiFile = PsiDocumentManager.getInstance(project).getPsiFile(document);
 		if(psiFile != null)
 		{
-			return new XExpressionImpl(psiFile.getText(), language, ((JavaCodeFragment) psiFile).importsToString(), mode);
+			return new consulo.ide.impl.idea.xdebugger.impl.breakpoints.XExpressionImpl(psiFile.getText(), language, ((JavaCodeFragment) psiFile).importsToString(), mode);
 		}
 		return super.createExpression(project, document, language, mode);
 	}

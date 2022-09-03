@@ -1,25 +1,25 @@
 // Copyright 2000-2018 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.language.impl.parser;
 
-import static com.intellij.lang.PsiBuilderUtil.expect;
+import static consulo.language.parser.PsiBuilderUtil.expect;
 import static com.intellij.java.language.impl.parser.JavaParserUtil.emptyElement;
 import static com.intellij.java.language.impl.parser.JavaParserUtil.error;
 import static com.intellij.java.language.impl.parser.JavaParserUtil.expectOrError;
 import static com.intellij.java.language.impl.parser.JavaParserUtil.getLanguageLevel;
-import static com.intellij.util.BitUtil.isSet;
-import static com.intellij.util.BitUtil.set;
+import static consulo.util.lang.BitUtil.isSet;
+import static consulo.util.lang.BitUtil.set;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import com.intellij.java.language.impl.codeInsight.daemon.JavaErrorBundle;
-import com.intellij.lang.PsiBuilder;
+import consulo.language.parser.PsiBuilder;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.java.language.psi.PsiKeyword;
 import com.intellij.java.language.impl.psi.impl.source.tree.ElementType;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.tree.TokenSet;
+import consulo.language.ast.IElementType;
+import consulo.language.ast.TokenSet;
 
 public class ReferenceParser
 {

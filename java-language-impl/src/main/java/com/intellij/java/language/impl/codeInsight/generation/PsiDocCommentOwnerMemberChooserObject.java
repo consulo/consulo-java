@@ -15,9 +15,9 @@
  */
 package com.intellij.java.language.impl.codeInsight.generation;
 
-import com.intellij.codeInsight.generation.PsiElementMemberChooserObject;
 import com.intellij.java.language.psi.PsiDocCommentOwner;
-import com.intellij.ui.SimpleTextAttributes;
+import consulo.language.editor.generation.PsiElementMemberChooserObject;
+import consulo.ui.ex.SimpleTextAttributes;
 import consulo.ui.image.Image;
 
 import javax.swing.*;

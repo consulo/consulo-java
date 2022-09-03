@@ -18,9 +18,9 @@ package com.intellij.java.language.impl.psi.impl.java.stubs.impl;
 import com.intellij.java.language.psi.PsiNameValuePair;
 import com.intellij.java.language.impl.psi.impl.java.stubs.JavaStubElementTypes;
 import com.intellij.java.language.impl.psi.impl.java.stubs.PsiNameValuePairStub;
-import com.intellij.psi.stubs.StubBase;
-import com.intellij.psi.stubs.StubElement;
-import com.intellij.util.io.StringRef;
+import consulo.language.psi.stub.StubBase;
+import consulo.language.psi.stub.StubElement;
+import consulo.index.io.StringRef;
 import javax.annotation.Nullable;
 
 /**
@@ -29,11 +29,11 @@ import javax.annotation.Nullable;
  */
 public class PsiNameValuePairStubImpl extends StubBase<PsiNameValuePair> implements PsiNameValuePairStub {
 
-  @javax.annotation.Nullable
+  @Nullable
   private final StringRef myName;
   @Nullable private final StringRef myValue;
 
-  public PsiNameValuePairStubImpl(StubElement parent, @javax.annotation.Nullable StringRef name, @javax.annotation.Nullable StringRef value) {
+  public PsiNameValuePairStubImpl(StubElement parent, @Nullable StringRef name, @Nullable StringRef value) {
     super(parent, JavaStubElementTypes.NAME_VALUE_PAIR);
     myName = name;
     myValue = value;

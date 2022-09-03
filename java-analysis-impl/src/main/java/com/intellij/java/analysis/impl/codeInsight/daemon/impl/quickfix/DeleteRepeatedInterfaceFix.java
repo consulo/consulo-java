@@ -18,23 +18,23 @@ package com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix;
 import java.util.List;
 
 import javax.annotation.Nonnull;
-import com.intellij.codeInsight.FileModificationService;
-import com.intellij.codeInsight.intention.IntentionAction;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Condition;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.language.editor.FileModificationService;
+import consulo.language.editor.intention.IntentionAction;
+import consulo.codeEditor.Editor;
+import consulo.project.Project;
+import consulo.util.lang.function.Condition;
+import consulo.util.lang.StringUtil;
 import com.intellij.java.language.psi.JavaPsiFacade;
-import com.intellij.psi.PsiFile;
+import consulo.language.psi.PsiFile;
 import com.intellij.java.language.psi.PsiIntersectionType;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.PsiTypeCastExpression;
 import com.intellij.java.language.psi.PsiTypeElement;
-import com.intellij.psi.codeStyle.CodeStyleManager;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.Function;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.ide.impl.idea.util.Function;
+import consulo.language.util.IncorrectOperationException;
+import consulo.util.collection.ContainerUtil;
 
 public class DeleteRepeatedInterfaceFix implements IntentionAction
 {

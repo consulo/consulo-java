@@ -21,14 +21,14 @@ import javax.annotation.Nonnull;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.DependencyScope;
+import consulo.module.Module;
+import consulo.project.Project;
+import consulo.module.content.layer.orderEntry.DependencyScope;
 import com.intellij.java.language.projectRoots.roots.ExternalLibraryDescriptor;
 import com.intellij.java.impl.openapi.roots.JavaProjectModelModificationService;
 import com.intellij.java.impl.openapi.roots.JavaProjectModelModifier;
-import com.intellij.openapi.roots.libraries.Library;
-import com.intellij.openapi.util.AsyncResult;
+import consulo.content.library.Library;
+import consulo.util.concurrent.AsyncResult;
 import com.intellij.java.language.LanguageLevel;
 
 /**

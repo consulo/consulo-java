@@ -15,9 +15,9 @@
  */
 package com.intellij.java.impl.codeInspection.reference;
 
-import com.intellij.codeInspection.reference.RefElementImpl;
-import com.intellij.codeInspection.reference.RefManager;
-import com.intellij.codeInspection.reference.RefVisitor;
+import consulo.ide.impl.idea.codeInspection.reference.RefElementImpl;
+import consulo.language.editor.inspection.reference.RefManager;
+import consulo.language.editor.inspection.reference.RefVisitor;
 import com.intellij.java.analysis.codeInspection.reference.RefClass;
 import com.intellij.java.analysis.codeInspection.reference.RefField;
 import com.intellij.java.analysis.codeInspection.reference.RefJavaUtil;
@@ -28,13 +28,14 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.ClassUtil;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.util.Computable;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiManager;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.application.ApplicationManager;
+import consulo.application.util.function.Computable;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiManager;
+import consulo.language.psi.util.PsiTreeUtil;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * @author max
@@ -178,12 +179,12 @@ public class RefFieldImpl extends RefJavaElementImpl implements RefField {
     });
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public static RefField fieldFromExternalName(RefManager manager, String externalName) {
     return (RefField) manager.getReference(findPsiField(PsiManager.getInstance(manager.getProject()), externalName));
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public static PsiField findPsiField(PsiManager manager, String externalName) {
     int classNameDelimeter = externalName.lastIndexOf(' ');
     if (classNameDelimeter > 0 && classNameDelimeter < externalName.length() - 1) {

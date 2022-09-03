@@ -15,13 +15,13 @@
  */
 package com.intellij.java.impl.slicer;
 
-import com.intellij.openapi.editor.markup.EffectType;
-import com.intellij.openapi.editor.markup.TextAttributes;
-import com.intellij.psi.PsiElement;
+import consulo.colorScheme.EffectType;
+import consulo.colorScheme.TextAttributes;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiSubstitutor;
 import com.intellij.usages.TextChunk;
-import com.intellij.usages.UsagePresentation;
-import com.intellij.util.Processor;
+import consulo.usage.UsagePresentation;
+import consulo.application.util.function.Processor;
 import consulo.ui.image.Image;
 import consulo.ui.style.StandardColors;
 

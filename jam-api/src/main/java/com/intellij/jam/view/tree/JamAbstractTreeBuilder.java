@@ -15,21 +15,17 @@
  */
 package com.intellij.jam.view.tree;
 
-import com.intellij.ide.util.treeView.AbstractTreeBuilder;
-import com.intellij.ide.util.treeView.AbstractTreeStructure;
-import com.intellij.ide.util.treeView.AlphaComparator;
-import com.intellij.ide.util.treeView.NodeDescriptor;
-import com.intellij.openapi.progress.ProgressIndicator;
-import com.intellij.openapi.progress.util.ProgressIndicatorBase;
-import com.intellij.openapi.progress.util.ProgressIndicatorUtils;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiDirectory;
-import com.intellij.psi.PsiFile;
-import com.intellij.ui.treeStructure.SimpleNode;
-import com.intellij.ui.treeStructure.SimpleTreeStructure;
-import javax.annotation.Nonnull;
+import consulo.language.psi.PsiDirectory;
+import consulo.language.psi.PsiFile;
+import consulo.project.Project;
+import consulo.ui.ex.awt.tree.AbstractTreeBuilder;
+import consulo.ui.ex.awt.tree.SimpleNode;
+import consulo.ui.ex.awt.tree.SimpleTreeStructure;
+import consulo.ui.ex.tree.AlphaComparator;
+import consulo.ui.ex.tree.NodeDescriptor;
+import consulo.virtualFileSystem.VirtualFile;
 
+import javax.annotation.Nonnull;
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
@@ -83,11 +79,11 @@ public class JamAbstractTreeBuilder extends AbstractTreeBuilder {
     return nodeDescriptor;
   }
 
-  protected ProgressIndicator createProgressIndicator() {
-    AbstractTreeStructure structure = getTreeStructure();
-    if (structure != null && structure.isToBuildChildrenInBackground(getRootElement())) {
-      return ProgressIndicatorUtils.forceWriteActionPriority(new ProgressIndicatorBase(true), this);
-    }
-    return super.createProgressIndicator();
-  }
+//  protected ProgressIndicator createProgressIndicator() {
+//    AbstractTreeStructure structure = getTreeStructure();
+//    if (structure != null && structure.isToBuildChildrenInBackground(getRootElement())) {
+//      return ProgressIndicatorUtils.forceWriteActionPriority(new ProgressIndicatorBase(true), this);
+//    }
+//    return super.createProgressIndicator();
+//  }
 }

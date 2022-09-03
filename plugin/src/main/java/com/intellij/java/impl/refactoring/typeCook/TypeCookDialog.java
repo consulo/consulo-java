@@ -15,17 +15,17 @@
  */
 package com.intellij.java.impl.refactoring.typeCook;
 
-import com.intellij.lang.findUsages.DescriptiveNameUtil;
-import com.intellij.openapi.help.HelpManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.PsiElement;
+import consulo.language.findUsage.DescriptiveNameUtil;
+import consulo.application.HelpManager;
+import consulo.project.Project;
+import consulo.util.lang.StringUtil;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.impl.refactoring.HelpID;
 import com.intellij.java.impl.refactoring.JavaRefactoringSettings;
-import com.intellij.refactoring.RefactoringBundle;
-import com.intellij.refactoring.ui.RefactoringDialog;
-import com.intellij.usageView.UsageViewUtil;
-import com.intellij.xml.util.XmlStringUtil;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.ui.RefactoringDialog;
+import consulo.usage.UsageViewUtil;
+import consulo.util.lang.xml.XmlStringUtil;
 
 import javax.swing.*;
 import java.awt.*;

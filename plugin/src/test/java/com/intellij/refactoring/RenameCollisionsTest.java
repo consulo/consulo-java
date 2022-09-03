@@ -10,13 +10,13 @@ import java.util.HashMap;
 import javax.annotation.Nonnull;
 import org.junit.Assert;
 import com.intellij.JavaTestUtil;
-import com.intellij.psi.PsiElement;
-import com.intellij.refactoring.rename.RenameProcessor;
-import com.intellij.refactoring.rename.RenameUtil;
-import com.intellij.refactoring.util.MoveRenameUsageInfo;
-import com.intellij.usageView.UsageInfo;
-import com.intellij.util.containers.ContainerUtil;
-import consulo.codeInsight.TargetElementUtil;
+import consulo.language.psi.PsiElement;
+import consulo.language.editor.refactoring.rename.RenameProcessor;
+import consulo.language.editor.refactoring.rename.RenameUtil;
+import consulo.usage.MoveRenameUsageInfo;
+import consulo.usage.UsageInfo;
+import consulo.util.collection.ContainerUtil;
+import consulo.language.editor.TargetElementUtil;
 import consulo.codeInsight.TargetElementUtilEx;
 
 /**

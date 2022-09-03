@@ -18,10 +18,10 @@ package com.intellij.java.impl.codeInsight.folding.impl;
 import com.intellij.java.language.impl.codeInsight.folding.impl.JavaCodeFoldingSettingsBase;
 import jakarta.inject.Singleton;
 
-import com.intellij.openapi.components.PersistentStateComponent;
-import com.intellij.openapi.components.State;
-import com.intellij.openapi.components.Storage;
-import com.intellij.util.xmlb.XmlSerializerUtil;
+import consulo.component.persist.PersistentStateComponent;
+import consulo.component.persist.State;
+import consulo.component.persist.Storage;
+import consulo.util.xml.serializer.XmlSerializerUtil;
 
 @Singleton
 @State(name="JavaCodeFoldingSettings", storages= @Storage("editor.codeinsight.xml"))

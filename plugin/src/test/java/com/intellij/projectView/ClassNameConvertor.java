@@ -5,15 +5,15 @@ import java.util.Collection;
 import java.util.Collections;
 
 import javax.annotation.Nonnull;
-import com.intellij.ide.projectView.PresentationData;
-import com.intellij.ide.projectView.ProjectViewNode;
-import com.intellij.ide.projectView.TreeStructureProvider;
-import com.intellij.ide.projectView.ViewSettings;
-import com.intellij.ide.util.treeView.AbstractTreeNode;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.Queryable;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiFile;
+import consulo.ui.ex.tree.PresentationData;
+import consulo.project.ui.view.tree.ProjectViewNode;
+import consulo.project.ui.view.tree.TreeStructureProvider;
+import consulo.project.ui.view.tree.ViewSettings;
+import consulo.project.ui.view.tree.AbstractTreeNode;
+import consulo.project.Project;
+import consulo.application.util.Queryable;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.language.psi.PsiFile;
 
 class ClassNameConvertor implements TreeStructureProvider {
 

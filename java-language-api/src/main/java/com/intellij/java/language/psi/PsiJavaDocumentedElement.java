@@ -16,7 +16,7 @@
 package com.intellij.java.language.psi;
 
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 
 import javax.annotation.Nullable;
 

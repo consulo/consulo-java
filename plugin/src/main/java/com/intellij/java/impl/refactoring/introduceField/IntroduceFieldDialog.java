@@ -19,6 +19,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 
+import javax.annotation.Nullable;
 import javax.swing.Action;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -27,10 +28,10 @@ import javax.swing.JPanel;
 import javax.annotation.Nonnull;
 
 import com.intellij.java.impl.codeInsight.completion.JavaCompletionUtil;
-import com.intellij.openapi.help.HelpManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.DialogWrapper;
-import com.intellij.openapi.ui.Messages;
+import consulo.application.HelpManager;
+import consulo.project.Project;
+import consulo.ui.ex.awt.DialogWrapper;
+import consulo.ui.ex.awt.Messages;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiField;
@@ -39,20 +40,20 @@ import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.java.language.psi.PsiNameHelper;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
-import com.intellij.psi.codeStyle.SuggestedNameInfo;
+import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
 import com.intellij.java.impl.refactoring.HelpID;
 import com.intellij.java.impl.refactoring.JavaRefactoringSettings;
-import com.intellij.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.RefactoringBundle;
 import com.intellij.java.impl.refactoring.introduceParameter.AbstractJavaInplaceIntroducer;
-import com.intellij.refactoring.ui.NameSuggestionsField;
+import consulo.language.editor.refactoring.ui.NameSuggestionsField;
 import com.intellij.java.impl.refactoring.ui.NameSuggestionsGenerator;
 import com.intellij.java.impl.refactoring.ui.NameSuggestionsManager;
 import com.intellij.java.impl.refactoring.ui.TypeSelector;
 import com.intellij.java.impl.refactoring.ui.TypeSelectorManager;
-import com.intellij.refactoring.util.CommonRefactoringUtil;
+import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import com.intellij.java.impl.refactoring.util.RefactoringMessageUtil;
-import com.intellij.util.ArrayUtil;
+import consulo.util.collection.ArrayUtil;
 
 class IntroduceFieldDialog extends DialogWrapper {
 
@@ -222,7 +223,7 @@ class IntroduceFieldDialog extends DialogWrapper {
                                                   final PsiLocalVariable localVariable,
                                                   final PsiExpression initializerExpression,
                                                   final boolean isInvokedOnDeclaration,
-                                                  @javax.annotation.Nullable final String enteredName,
+                                                  @Nullable final String enteredName,
                                                   final PsiClass parentClass,
                                                   final Project project) {
     return new NameSuggestionsGenerator() {

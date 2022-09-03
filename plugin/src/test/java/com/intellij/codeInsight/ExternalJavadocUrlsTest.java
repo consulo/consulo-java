@@ -18,9 +18,9 @@ package com.intellij.codeInsight;
 import static org.junit.Assert.*;
 
 import com.intellij.java.impl.lang.java.JavaDocumentationProvider;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
 
 /**

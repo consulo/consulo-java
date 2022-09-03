@@ -15,10 +15,11 @@
  */
 package com.intellij.java.language.psi;
 
-import com.intellij.psi.PsiElement;
-import com.intellij.util.ArrayFactory;
+import consulo.language.psi.PsiElement;
+import consulo.util.collection.ArrayFactory;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.List;
 
 /**
@@ -45,7 +46,7 @@ public interface PsiCatchSection extends PsiElement {
    *
    * @return the parameter for the called variable, or null if none is specified.
    */
-  @javax.annotation.Nullable
+  @Nullable
   PsiParameter getParameter();
 
   /**
@@ -53,7 +54,7 @@ public interface PsiCatchSection extends PsiElement {
    *
    * @return the code block, or null if the section is incomplete.
    */
-  @javax.annotation.Nullable
+  @Nullable
   PsiCodeBlock getCatchBlock();
 
   /**
@@ -61,7 +62,7 @@ public interface PsiCatchSection extends PsiElement {
    *
    * @return the type, or null if the section is incomplete.
    */
-  @javax.annotation.Nullable
+  @Nullable
   PsiType getCatchType();
 
   /**
@@ -85,9 +86,9 @@ public interface PsiCatchSection extends PsiElement {
   @Nonnull
   PsiTryStatement getTryStatement();
 
-  @javax.annotation.Nullable
+  @Nullable
   PsiJavaToken getRParenth();
 
-  @javax.annotation.Nullable
+  @Nullable
   PsiJavaToken getLParenth();
 }

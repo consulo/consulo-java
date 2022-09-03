@@ -21,8 +21,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import com.intellij.java.debugger.impl.engine.DebuggerManagerThreadImpl;
 import com.intellij.java.debugger.impl.settings.DebuggerSettings;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.util.ArrayUtil;
+import consulo.util.lang.Comparing;
+import consulo.util.collection.ArrayUtil;
 import consulo.internal.com.sun.jdi.Method;
 import consulo.internal.com.sun.jdi.ObjectCollectedException;
 import consulo.internal.com.sun.jdi.ThreadReference;
@@ -163,7 +163,7 @@ public class MethodReturnValueWatcher
 		return myLastExecutedMethod;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public Value getLastMethodReturnValue()
 	{
 		return myLastMethodReturnValue;

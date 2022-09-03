@@ -17,7 +17,7 @@ package com.intellij.java.impl.codeInsight.generation;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.lang.LanguageExtension;
+import consulo.language.extension.LanguageExtension;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiParameter;
 

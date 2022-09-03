@@ -17,13 +17,13 @@ package com.intellij.java.impl.spi;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.lang.annotation.AnnotationHolder;
-import com.intellij.lang.annotation.Annotator;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.language.editor.annotation.AnnotationHolder;
+import consulo.language.editor.annotation.Annotator;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.util.ClassUtil;
-import com.intellij.psi.util.PsiUtilCore;
+import consulo.language.psi.PsiUtilCore;
 import com.intellij.java.impl.spi.psi.SPIClassProviderReferenceElement;
 import com.intellij.java.language.impl.spi.psi.SPIFile;
 

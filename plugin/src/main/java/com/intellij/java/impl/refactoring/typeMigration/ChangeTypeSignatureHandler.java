@@ -8,20 +8,21 @@ import java.util.Arrays;
 import java.util.List;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.actionSystem.DataContext;
+import consulo.dataContext.DataContext;
 import consulo.logging.Logger;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.ScrollType;
-import com.intellij.openapi.project.Project;
+import consulo.codeEditor.Editor;
+import consulo.codeEditor.ScrollType;
+import consulo.project.Project;
 import com.intellij.psi.*;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.refactoring.RefactoringActionHandler;
-import com.intellij.refactoring.RefactoringBundle;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.editor.refactoring.action.RefactoringActionHandler;
+import consulo.language.editor.refactoring.RefactoringBundle;
 import com.intellij.java.impl.refactoring.typeMigration.ui.TypeMigrationDialog;
-import com.intellij.refactoring.util.CommonRefactoringUtil;
-import consulo.codeInsight.TargetElementUtil;
+import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
+import consulo.language.editor.TargetElementUtil;
 
 public class ChangeTypeSignatureHandler implements RefactoringActionHandler
 {
@@ -94,7 +95,7 @@ public class ChangeTypeSignatureHandler implements RefactoringActionHandler
 		return false;
 	}
 
-	private static void invoke(@Nonnull Project project, @Nonnull PsiElement[] roots, @javax.annotation.Nullable Editor editor)
+	private static void invoke(@Nonnull Project project, @Nonnull PsiElement[] roots, @Nullable Editor editor)
 	{
 		if(Util.canBeMigrated(roots))
 		{

@@ -16,7 +16,7 @@
 
 package com.intellij.java.language.impl.spi.parsing;
 
-import com.intellij.lexer.FlexAdapter;
+import consulo.language.lexer.FlexAdapter;
 
 
 public class SPILexer extends FlexAdapter {

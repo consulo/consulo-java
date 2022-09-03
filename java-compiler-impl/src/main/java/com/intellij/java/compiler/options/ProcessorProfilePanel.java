@@ -16,17 +16,18 @@
 package com.intellij.java.compiler.options;
 
 import com.intellij.java.compiler.impl.javaCompiler.annotationProcessing.ProcessorConfigProfile;
-import com.intellij.openapi.fileChooser.FileChooser;
-import com.intellij.openapi.fileChooser.FileChooserDescriptor;
-import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.TextFieldWithBrowseButton;
-import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.ui.ex.awt.*;
+import consulo.ui.ex.awt.table.JBTable;
+import consulo.ui.fileChooser.FileChooser;
+import consulo.fileChooser.FileChooserDescriptor;
+import consulo.fileChooser.FileChooserDescriptorFactory;
+import consulo.project.Project;
+import consulo.ui.ex.awt.TextFieldWithBrowseButton;
+import consulo.ide.impl.idea.openapi.util.io.FileUtil;
+import consulo.util.lang.StringUtil;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.ui.*;
-import com.intellij.ui.table.JBTable;
-import com.intellij.util.ui.EditableModel;
+import consulo.ui.ex.awt.EditableModel;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -98,7 +99,7 @@ public class ProcessorProfilePanel extends JPanel {
     myProcessorPathField = new TextFieldWithBrowseButton(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
         final FileChooserDescriptor descriptor = FileChooserDescriptorFactory.createAllButJarContentsDescriptor();
-        final VirtualFile[] files = FileChooser.chooseFiles(descriptor, myProcessorPathField, myProject, null);
+        final VirtualFile[] files = consulo.ui.fileChooser.FileChooser.chooseFiles(descriptor, myProcessorPathField, myProject, null);
         if (files.length > 0) {
           final StringBuilder builder = new StringBuilder();
           for (VirtualFile file : files) {
@@ -389,7 +390,7 @@ public class ProcessorProfilePanel extends JPanel {
     }
 
     public Map<String, String> getOptions() {
-      final Map<String, String> map = new java.util.HashMap<String, String>();
+      final Map<String, String> map = new HashMap<String, String>();
       for (KeyValuePair pair : myRows) {
         map.put(pair.key.trim(), pair.value.trim());
       }

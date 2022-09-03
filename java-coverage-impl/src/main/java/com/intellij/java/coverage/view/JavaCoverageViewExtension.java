@@ -1,22 +1,22 @@
 package com.intellij.java.coverage.view;
 
-import com.intellij.coverage.CoverageSuite;
-import com.intellij.coverage.CoverageSuitesBundle;
+import consulo.execution.coverage.CoverageSuite;
+import consulo.execution.coverage.CoverageSuitesBundle;
 import com.intellij.coverage.view.*;
-import com.intellij.ide.util.treeView.AbstractTreeNode;
+import consulo.project.ui.view.tree.AbstractTreeNode;
 import com.intellij.java.coverage.JavaCoverageAnnotator;
 import com.intellij.java.coverage.JavaCoverageSuite;
 import com.intellij.java.coverage.PackageAnnotator;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Computable;
-import com.intellij.openapi.util.NullableComputable;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.application.ApplicationManager;
+import consulo.project.Project;
+import consulo.application.util.function.Computable;
+import consulo.ide.impl.idea.openapi.util.NullableComputable;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.psi.*;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.ui.ColumnInfo;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.ui.ex.awt.ColumnInfo;
 import consulo.psi.PsiPackage;
 
 import javax.annotation.Nullable;

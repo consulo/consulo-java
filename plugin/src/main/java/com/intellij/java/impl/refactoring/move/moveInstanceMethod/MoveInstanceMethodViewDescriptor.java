@@ -18,11 +18,11 @@ package com.intellij.java.impl.refactoring.move.moveInstanceMethod;
 import javax.annotation.Nonnull;
 
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiVariable;
-import com.intellij.refactoring.RefactoringBundle;
-import com.intellij.refactoring.ui.UsageViewDescriptorAdapter;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.ui.UsageViewDescriptorAdapter;
 
 /**
  * @author dsl

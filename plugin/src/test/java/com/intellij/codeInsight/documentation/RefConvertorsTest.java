@@ -27,9 +27,9 @@ import java.util.jar.JarOutputStream;
 
 import com.intellij.JavaTestUtil;
 import com.intellij.java.impl.codeInsight.javadoc.JavaDocExternalFilter;
-import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.openapi.util.io.FileUtilRt;
-import com.intellij.openapi.vfs.LocalFileSystem;
+import consulo.ide.impl.idea.openapi.util.io.FileUtil;
+import consulo.ide.impl.idea.openapi.util.io.FileUtilRt;
+import consulo.virtualFileSystem.LocalFileSystem;
 import com.intellij.testFramework.LightCodeInsightTestCase;
 
 /**

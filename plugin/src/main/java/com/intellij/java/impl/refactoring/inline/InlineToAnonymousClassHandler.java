@@ -22,27 +22,27 @@ import javax.annotation.Nullable;
 
 import com.intellij.java.language.psi.*;
 import consulo.annotation.access.RequiredReadAction;
-import consulo.codeInsight.TargetElementUtil;
+import consulo.language.editor.TargetElementUtil;
 import com.intellij.java.language.JavaLanguage;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.progress.ProgressManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Ref;
-import com.intellij.patterns.ElementPattern;
-import com.intellij.patterns.PlatformPatterns;
+import consulo.application.ApplicationManager;
+import consulo.codeEditor.Editor;
+import consulo.application.progress.ProgressManager;
+import consulo.project.Project;
+import consulo.util.lang.ref.Ref;
+import consulo.language.pattern.ElementPattern;
+import consulo.language.pattern.PlatformPatterns;
 import com.intellij.psi.*;
 import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
 import com.intellij.java.indexing.search.searches.FunctionalExpressionSearch;
-import com.intellij.psi.search.searches.ReferencesSearch;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.search.ReferencesSearch;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
-import com.intellij.refactoring.RefactoringBundle;
-import com.intellij.refactoring.util.CommonRefactoringUtil;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import com.intellij.java.impl.refactoring.util.RefactoringUtil;
-import com.intellij.util.ArrayUtil;
-import com.intellij.util.Processor;
+import consulo.util.collection.ArrayUtil;
+import consulo.application.util.function.Processor;
 import consulo.java.language.module.util.JavaClassNames;
 
 /**
@@ -249,7 +249,7 @@ public class InlineToAnonymousClassHandler extends JavaInlineActionHandler
 	}
 
 
-	@javax.annotation.Nullable
+	@Nullable
 	public static PsiCall findCallToInline(final Editor editor)
 	{
 		PsiCall callToInline = null;
@@ -265,7 +265,7 @@ public class InlineToAnonymousClassHandler extends JavaInlineActionHandler
 		return callToInline;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public static String getCannotInlineMessage(final PsiClass psiClass)
 	{
 		if(psiClass instanceof PsiTypeParameter)

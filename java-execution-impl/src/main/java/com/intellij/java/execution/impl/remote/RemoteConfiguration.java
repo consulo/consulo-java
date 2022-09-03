@@ -23,32 +23,31 @@ import java.util.Collection;
 
 import javax.annotation.Nonnull;
 
+import consulo.execution.ExecutionBundle;
+import consulo.execution.configuration.*;
+import consulo.execution.configuration.ui.SettingsEditorGroup;
+import consulo.execution.runner.ExecutionEnvironment;
+import consulo.process.ExecutionException;
 import org.jdom.Element;
-import com.intellij.compiler.options.CompileStepBeforeRun;
+import consulo.compiler.execution.CompileStepBeforeRun;
 import com.intellij.java.debugger.impl.engine.RemoteStateState;
 import consulo.java.debugger.impl.GenericDebugRunnerConfiguration;
 import com.intellij.java.debugger.impl.GenericDebuggerRunnerSettings;
 import com.intellij.java.debugger.impl.settings.DebuggerSettings;
-import com.intellij.diagnostic.logging.LogConfigurationPanel;
-import com.intellij.execution.ExecutionBundle;
-import com.intellij.execution.ExecutionException;
-import com.intellij.execution.Executor;
-import com.intellij.execution.configurations.ConfigurationFactory;
+import consulo.execution.configuration.log.ui.LogConfigurationPanel;
+import consulo.execution.executor.Executor;
 import com.intellij.java.execution.configurations.JavaRunConfigurationModule;
-import com.intellij.execution.configurations.ModuleBasedConfiguration;
+import consulo.execution.configuration.ModuleBasedConfiguration;
 import com.intellij.java.execution.configurations.RemoteConnection;
-import com.intellij.execution.configurations.RemoteRunProfile;
-import com.intellij.execution.configurations.RunConfiguration;
-import com.intellij.execution.configurations.RunProfileState;
-import com.intellij.execution.runners.ExecutionEnvironment;
-import com.intellij.execution.runners.RunConfigurationWithSuppressedDefaultRunAction;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.options.SettingsEditor;
-import com.intellij.openapi.options.SettingsEditorGroup;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.DefaultJDOMExternalizer;
-import com.intellij.openapi.util.InvalidDataException;
-import com.intellij.openapi.util.WriteExternalException;
+import consulo.execution.configuration.RunConfiguration;
+import consulo.execution.configuration.RunProfileState;
+import consulo.execution.configuration.RunConfigurationWithSuppressedDefaultRunAction;
+import consulo.module.Module;
+import consulo.execution.configuration.ui.SettingsEditor;
+import consulo.project.Project;
+import consulo.util.xml.serializer.DefaultJDOMExternalizer;
+import consulo.util.xml.serializer.InvalidDataException;
+import consulo.util.xml.serializer.WriteExternalException;
 
 public class RemoteConfiguration extends ModuleBasedConfiguration<JavaRunConfigurationModule> implements
 		RunConfigurationWithSuppressedDefaultRunAction, CompileStepBeforeRun.Suppressor, GenericDebugRunnerConfiguration, RemoteRunProfile

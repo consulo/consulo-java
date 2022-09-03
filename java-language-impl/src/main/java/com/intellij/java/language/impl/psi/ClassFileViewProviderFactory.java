@@ -16,11 +16,11 @@
 package com.intellij.java.language.impl.psi;
 
 import com.intellij.java.language.psi.compiled.ClassFileDecompilers;
-import com.intellij.lang.Language;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.FileViewProvider;
-import com.intellij.psi.FileViewProviderFactory;
-import com.intellij.psi.PsiManager;
+import consulo.language.Language;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.language.file.FileViewProvider;
+import consulo.language.file.FileViewProviderFactory;
+import consulo.language.psi.PsiManager;
 
 import javax.annotation.Nonnull;
 

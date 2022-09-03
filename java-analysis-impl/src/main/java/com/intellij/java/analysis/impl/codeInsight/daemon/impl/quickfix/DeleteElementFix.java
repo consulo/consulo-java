@@ -20,14 +20,14 @@ import javax.annotation.Nonnull;
 import org.jetbrains.annotations.Nls;
 
 import javax.annotation.Nullable;
-import com.intellij.codeInsight.FileModificationService;
-import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement;
-import com.intellij.openapi.application.WriteAction;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.util.ObjectUtil;
+import consulo.language.editor.FileModificationService;
+import consulo.language.editor.inspection.LocalQuickFixAndIntentionActionOnPsiElement;
+import consulo.application.WriteAction;
+import consulo.codeEditor.Editor;
+import consulo.project.Project;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.util.lang.ObjectUtil;
 import com.siyeh.ig.psiutils.CommentTracker;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 

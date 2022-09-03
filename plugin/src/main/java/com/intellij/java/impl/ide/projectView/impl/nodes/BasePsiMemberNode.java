@@ -20,11 +20,11 @@
  */
 package com.intellij.java.impl.ide.projectView.impl.nodes;
 
-import com.intellij.ide.projectView.ViewSettings;
-import com.intellij.ide.projectView.impl.nodes.BasePsiNode;
+import consulo.project.ui.view.tree.ViewSettings;
+import consulo.project.ui.view.tree.BasePsiNode;
 import com.intellij.java.language.psi.PsiDocCommentOwner;
 import com.intellij.java.language.psi.PsiModifierListOwner;
-import com.intellij.openapi.project.Project;
+import consulo.project.Project;
 
 public abstract class BasePsiMemberNode<T extends PsiModifierListOwner> extends BasePsiNode<T> {
   protected BasePsiMemberNode(Project project, T value, ViewSettings viewSettings) {

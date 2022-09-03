@@ -23,6 +23,7 @@ import com.intellij.java.language.psi.*;
 import consulo.java.language.module.util.JavaClassNames;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -30,7 +31,7 @@ import java.util.Set;
 public class ClassUtil {
   private ClassUtil() { }
 
-  @javax.annotation.Nullable
+  @Nullable
   public static PsiMethod getAnyAbstractMethod(@Nonnull PsiClass aClass) {
     PsiMethod methodToImplement = getAnyMethodToImplement(aClass);
     if (methodToImplement != null) {
@@ -44,7 +45,7 @@ public class ClassUtil {
     return null;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public static PsiMethod getAnyMethodToImplement(@Nonnull PsiClass aClass) {
     Set<PsiMethod> alreadyImplemented = new HashSet<PsiMethod>();
     for (HierarchicalMethodSignature signatureHierarchical : aClass.getVisibleSignatures()) {
@@ -78,7 +79,7 @@ public class ClassUtil {
     return checkPackageLocalInSuperClass(aClass);
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private static PsiMethod checkPackageLocalInSuperClass(@Nonnull PsiClass aClass) {
     // super class can have package local abstract methods not accessible for overriding
     PsiClass superClass = aClass.getSuperClass();

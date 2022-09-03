@@ -2,9 +2,9 @@
 package com.intellij.java.impl.openapi.vfs.impl.jrt;
 
 import consulo.logging.Logger;
-import com.intellij.openapi.util.SystemInfo;
-import com.intellij.openapi.vfs.impl.ArchiveHandler;
-import com.intellij.reference.SoftReference;
+import consulo.application.util.SystemInfo;
+import consulo.ide.impl.idea.openapi.vfs.impl.ArchiveHandler;
+import consulo.util.lang.ref.SoftReference;
 import javax.annotation.Nonnull;
 
 import java.io.File;

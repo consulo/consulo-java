@@ -15,20 +15,22 @@
  */
 package com.intellij.java.execution.filters;
 
-import com.intellij.execution.filters.Filter;
-import com.intellij.openapi.extensions.ExtensionPointName;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ExtensionAPI;
+import consulo.component.extension.ExtensionPointName;
+import consulo.execution.ui.console.Filter;
+import consulo.language.psi.scope.GlobalSearchScope;
 
 import javax.annotation.Nonnull;
 
 /**
- * Created by IntelliJ IDEA.
  * User: Irina.Chernushina
  * Date: 8/5/11
  * Time: 7:46 PM
  */
+@ExtensionAPI(ComponentScope.APPLICATION)
 public interface ExceptionFilterFactory {
-  ExtensionPointName<ExceptionFilterFactory> EP_NAME = ExtensionPointName.create("consulo.java.exceptionFilter");
+  ExtensionPointName<ExceptionFilterFactory> EP_NAME = ExtensionPointName.create(ExceptionFilterFactory.class);
 
   @Nonnull
   Filter create(@Nonnull GlobalSearchScope searchScope);

@@ -19,42 +19,34 @@
  */
 package com.intellij.java.execution.configurations;
 
-import com.intellij.execution.CantRunException;
-import com.intellij.execution.configurations.GeneralCommandLine;
-import com.intellij.openapi.project.Project;
+import consulo.execution.CantRunException;
 import consulo.java.execution.OwnSimpleJavaParameters;
+import consulo.process.cmd.GeneralCommandLine;
+import consulo.project.Project;
 
 /**
  * @deprecated use {@link OwnSimpleJavaParameters#toCommandLine()} (to be removed in IDEA 2019)
  */
 @SuppressWarnings("unused")
-public class CommandLineBuilder
-{
-	private CommandLineBuilder()
-	{
-	}
+public class CommandLineBuilder {
+  private CommandLineBuilder() {
+  }
 
-	public static GeneralCommandLine createFromJavaParameters(final OwnSimpleJavaParameters javaParameters) throws CantRunException
-	{
-		return javaParameters.toCommandLine();
-	}
+  public static GeneralCommandLine createFromJavaParameters(final OwnSimpleJavaParameters javaParameters) throws CantRunException {
+    return javaParameters.toCommandLine();
+  }
 
-	public static GeneralCommandLine createFromJavaParameters(final OwnSimpleJavaParameters javaParameters, final Project project, final boolean dynamicClasspath) throws CantRunException
-	{
-		if(dynamicClasspath)
-		{
-			javaParameters.setUseDynamicClasspath(project);
-		}
-		else
-		{
-			javaParameters.setUseDynamicClasspath(false);
-		}
-		return javaParameters.toCommandLine();
-	}
+  public static GeneralCommandLine createFromJavaParameters(final OwnSimpleJavaParameters javaParameters, final Project project, final boolean dynamicClasspath) throws CantRunException {
+    if (dynamicClasspath) {
+      javaParameters.setUseDynamicClasspath(project);
+    } else {
+      javaParameters.setUseDynamicClasspath(false);
+    }
+    return javaParameters.toCommandLine();
+  }
 
-	public static GeneralCommandLine createFromJavaParameters(final OwnSimpleJavaParameters javaParameters, final boolean forceDynamicClasspath) throws CantRunException
-	{
-		javaParameters.setUseDynamicClasspath(forceDynamicClasspath);
-		return javaParameters.toCommandLine();
-	}
+  public static GeneralCommandLine createFromJavaParameters(final OwnSimpleJavaParameters javaParameters, final boolean forceDynamicClasspath) throws CantRunException {
+    javaParameters.setUseDynamicClasspath(forceDynamicClasspath);
+    return javaParameters.toCommandLine();
+  }
 }

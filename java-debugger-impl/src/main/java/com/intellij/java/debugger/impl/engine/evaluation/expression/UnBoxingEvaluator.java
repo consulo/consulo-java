@@ -19,11 +19,12 @@ import java.util.Collections;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.intellij.java.debugger.engine.evaluation.EvaluateException;
 import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
 import consulo.logging.Logger;
-import com.intellij.openapi.util.Couple;
+import consulo.util.lang.Couple;
 import consulo.java.language.module.util.JavaClassNames;
 import com.intellij.java.language.impl.psi.impl.PsiJavaParserFacadeImpl;
 import java.util.HashMap;
@@ -73,7 +74,7 @@ public class UnBoxingEvaluator implements Evaluator
 		return unbox(myOperand.evaluate(context), context);
 	}
 
-	public static Object unbox(@javax.annotation.Nullable Object value, EvaluationContextImpl context) throws EvaluateException
+	public static Object unbox(@Nullable Object value, EvaluationContextImpl context) throws EvaluateException
 	{
 		if(value == null)
 		{
@@ -109,7 +110,7 @@ public class UnBoxingEvaluator implements Evaluator
 		return context.getDebugProcess().invokeMethod(context, value, method, Collections.emptyList());
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public static PrimitiveValue getInnerPrimitiveValue(ObjectReference value)
 	{
 		ReferenceType type = value.referenceType();

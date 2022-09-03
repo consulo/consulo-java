@@ -15,10 +15,10 @@
  */
 package com.intellij.java.impl.codeInsight.generation;
 
-import com.intellij.codeInsight.CodeInsightBundle;
-import com.intellij.codeInsight.CodeInsightUtilBase;
-import com.intellij.codeInsight.generation.ClassMember;
-import com.intellij.ide.util.MemberChooser;
+import consulo.language.editor.CodeInsightBundle;
+import consulo.ide.impl.idea.codeInsight.CodeInsightUtilBase;
+import consulo.ide.impl.idea.codeInsight.generation.ClassMember;
+import consulo.ide.impl.idea.ide.util.MemberChooser;
 import com.intellij.java.language.impl.codeInsight.generation.OverrideImplementExploreUtil;
 import com.intellij.java.language.impl.codeInsight.generation.PsiElementClassMember;
 import com.intellij.java.language.impl.psi.scope.processor.VariablesProcessor;
@@ -29,17 +29,17 @@ import com.intellij.java.language.psi.util.MethodSignature;
 import com.intellij.java.language.psi.util.PropertyUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
-import com.intellij.lang.LanguageCodeInsightActionHandler;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.ScrollType;
-import com.intellij.openapi.fileEditor.FileDocumentManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.DialogWrapper;
+import consulo.language.editor.action.LanguageCodeInsightActionHandler;
+import consulo.application.ApplicationManager;
+import consulo.codeEditor.Editor;
+import consulo.codeEditor.ScrollType;
+import consulo.document.FileDocumentManager;
+import consulo.project.Project;
+import consulo.ui.ex.awt.DialogWrapper;
 import com.intellij.psi.*;
-import com.intellij.psi.codeStyle.CodeStyleManager;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.logging.Logger;
 import org.jetbrains.annotations.NonNls;
@@ -344,7 +344,7 @@ public class GenerateDelegateHandler implements LanguageCodeInsightActionHandler
     return targetElements != null && targetElements.length > 0;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private static PsiElementClassMember chooseTarget(PsiFile file, Editor editor, Project project) {
     final PsiElementClassMember[] targetElements = getTargetElements(file, editor);
     if (targetElements == null || targetElements.length == 0) {
@@ -371,7 +371,7 @@ public class GenerateDelegateHandler implements LanguageCodeInsightActionHandler
     return null;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private static PsiElementClassMember[] getTargetElements(PsiFile file, Editor editor) {
     int offset = editor.getCaretModel().getOffset();
     PsiElement element = file.findElementAt(offset);

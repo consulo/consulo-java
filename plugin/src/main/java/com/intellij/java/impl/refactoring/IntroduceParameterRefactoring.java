@@ -16,7 +16,7 @@
 package com.intellij.java.impl.refactoring;
 
 import com.intellij.java.language.psi.PsiType;
-import com.intellij.refactoring.Refactoring;
+import consulo.language.editor.refactoring.Refactoring;
 
 /**
  * @author dsl

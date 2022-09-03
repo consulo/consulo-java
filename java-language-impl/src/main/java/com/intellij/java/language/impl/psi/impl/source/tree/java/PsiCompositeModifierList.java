@@ -20,10 +20,10 @@
 package com.intellij.java.language.impl.psi.impl.source.tree.java;
 
 import com.intellij.java.language.psi.PsiAnnotation;
-import com.intellij.psi.PsiManager;
+import consulo.language.psi.PsiManager;
 import com.intellij.java.language.psi.PsiModifierList;
 import com.intellij.java.language.impl.psi.impl.light.LightModifierList;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.util.collection.ContainerUtil;
 import javax.annotation.Nonnull;
 
 import java.util.ArrayList;

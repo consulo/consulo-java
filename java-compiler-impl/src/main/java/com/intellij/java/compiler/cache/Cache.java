@@ -15,20 +15,20 @@
  */
 package com.intellij.java.compiler.cache;
 
-import com.intellij.compiler.make.CacheCorruptedException;
-import com.intellij.compiler.make.CacheUtils;
+import consulo.compiler.CacheCorruptedException;
+import consulo.ide.impl.idea.compiler.make.CacheUtils;
 import com.intellij.java.compiler.classParsing.*;
-import com.intellij.openapi.progress.ProgressManager;
-import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.util.ArrayUtil;
+import consulo.application.progress.ProgressManager;
+import consulo.ide.impl.idea.openapi.util.io.FileUtil;
+import consulo.util.collection.ArrayUtil;
 import com.intellij.java.language.util.cls.ClsFormatException;
-import com.intellij.util.indexing.ValueContainer;
-import com.intellij.util.indexing.impl.ChangeTrackingValueContainer;
-import com.intellij.util.indexing.impl.MapIndexStorage;
-import com.intellij.util.io.DataExternalizer;
-import com.intellij.util.io.EnumeratorIntegerDescriptor;
-import com.intellij.util.io.KeyDescriptor;
-import com.intellij.util.io.PersistentHashMap;
+import consulo.ide.impl.idea.util.indexing.ValueContainer;
+import consulo.ide.impl.idea.util.indexing.impl.ChangeTrackingValueContainer;
+import consulo.ide.impl.idea.util.indexing.impl.MapIndexStorage;
+import consulo.index.io.data.DataExternalizer;
+import consulo.index.io.EnumeratorIntegerDescriptor;
+import consulo.index.io.KeyDescriptor;
+import consulo.index.io.PersistentHashMap;
 import consulo.logging.Logger;
 import org.jetbrains.annotations.NonNls;
 

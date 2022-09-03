@@ -21,7 +21,7 @@ package com.intellij.java.impl.codeInsight.daemon.impl;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.codeInsight.daemon.ChangeLocalityDetector;
+import consulo.language.editor.ChangeLocalityDetector;
 import com.intellij.java.language.psi.PsiAnonymousClass;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiCodeBlock;

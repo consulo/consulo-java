@@ -1,10 +1,10 @@
 // Copyright 2000-2020 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.impl.ide.structureView.impl.java;
 
-import com.intellij.ide.structureView.StructureViewTreeElement;
-import com.intellij.ide.util.treeView.smartTree.SortableTreeElement;
-import com.intellij.openapi.project.DumbService;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.fileEditor.structureView.StructureViewTreeElement;
+import consulo.fileEditor.structureView.tree.SortableTreeElement;
+import consulo.project.DumbService;
+import consulo.util.lang.StringUtil;
 import com.intellij.java.language.psi.PsiEnumConstant;
 import com.intellij.java.language.psi.PsiEnumConstantInitializer;
 import com.intellij.java.language.psi.PsiField;

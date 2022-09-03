@@ -16,7 +16,7 @@
 
 package com.intellij.java.impl.ide.scopeView.nodes;
 
-import com.intellij.ide.scopeView.nodes.BasePsiNode;
+import consulo.ide.impl.idea.ide.scopeView.nodes.BasePsiNode;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiSubstitutor;
 import com.intellij.java.language.psi.util.PsiFormatUtil;

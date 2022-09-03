@@ -15,9 +15,9 @@
  */
 package com.intellij.java.impl.refactoring.rename.naming;
 
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.usages.RenameableUsage;
-import com.intellij.util.IncorrectOperationException;
+import consulo.usage.RenameableUsage;
+import consulo.util.lang.StringUtil;
+import consulo.language.util.IncorrectOperationException;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 

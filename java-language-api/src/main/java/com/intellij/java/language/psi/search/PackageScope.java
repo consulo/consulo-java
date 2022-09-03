@@ -22,14 +22,14 @@ package com.intellij.java.language.psi.search;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClassOwner;
 import com.intellij.java.language.psi.PsiJavaPackage;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.impl.DirectoryIndex;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.openapi.vfs.VfsUtilCore;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.module.Module;
+import consulo.module.content.DirectoryIndex;
+import consulo.project.Project;
+import consulo.util.lang.Comparing;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.virtualFileSystem.util.VirtualFileUtil;
 
 import javax.annotation.Nonnull;
 import java.util.Collection;
@@ -61,7 +61,7 @@ public class PackageScope extends GlobalSearchScope {
   public boolean contains(VirtualFile file) {
     for (VirtualFile scopeDir : myDirs) {
       boolean inDir = myIncludeSubpackages
-          ? VfsUtilCore.isAncestor(scopeDir, file, false)
+          ? VirtualFileUtil.isAncestor(scopeDir, file, false)
           : Comparing.equal(file.getParent(), scopeDir);
       if (inDir) return true;
     }

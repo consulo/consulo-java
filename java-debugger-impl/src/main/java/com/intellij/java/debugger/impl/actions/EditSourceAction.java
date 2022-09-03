@@ -26,12 +26,12 @@ import com.intellij.java.debugger.impl.DebuggerSession;
 import com.intellij.java.debugger.impl.ui.impl.watch.DebuggerTreeNodeImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.NodeDescriptorImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.WatchItemDescriptor;
-import com.intellij.openapi.actionSystem.ActionManager;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.IdeActions;
-import com.intellij.openapi.actionSystem.Presentation;
-import com.intellij.openapi.application.ReadAction;
-import com.intellij.openapi.project.Project;
+import consulo.ui.ex.action.ActionManager;
+import consulo.ui.ex.action.AnActionEvent;
+import consulo.ui.ex.action.IdeActions;
+import consulo.ui.ex.action.Presentation;
+import consulo.application.ReadAction;
+import consulo.project.Project;
 
 public class EditSourceAction extends DebuggerAction
 {

@@ -17,7 +17,7 @@ package com.intellij.java.debugger.impl.engine;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.xdebugger.frame.XValueMarkerProvider;
+import consulo.execution.debug.frame.XValueMarkerProvider;
 import consulo.internal.com.sun.jdi.ObjectReference;
 import consulo.internal.com.sun.jdi.Value;
 

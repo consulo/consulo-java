@@ -21,26 +21,25 @@ import java.util.List;
 import javax.annotation.Nonnull;
 
 import com.intellij.java.execution.impl.JavaTestConfigurationBase;
-import com.intellij.execution.Location;
-import com.intellij.execution.PsiLocation;
-import com.intellij.execution.RunnerAndConfigurationSettings;
-import com.intellij.execution.actions.ConfigurationContext;
-import com.intellij.execution.actions.ConfigurationFromContext;
-import com.intellij.execution.configurations.ConfigurationType;
+import consulo.execution.RunnerAndConfigurationSettings;
+import consulo.execution.action.*;
+import consulo.execution.action.ConfigurationFromContext;
+import consulo.execution.configuration.ConfigurationType;
 import com.intellij.java.execution.impl.junit.InheritorChooser;
 import com.intellij.java.execution.impl.junit2.PsiMemberParameterizedLocation;
 import com.intellij.java.execution.impl.junit2.info.MethodLocation;
+import consulo.execution.action.PsiLocation;
 import consulo.logging.Logger;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Ref;
+import consulo.module.Module;
+import consulo.project.Project;
+import consulo.util.lang.ref.Ref;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiClassOwner;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiMember;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifier;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 
 public abstract class AbstractInClassConfigurationProducer<T extends JavaTestConfigurationBase> extends AbstractJavaTestConfigurationProducer<T>
 {

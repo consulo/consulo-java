@@ -16,61 +16,54 @@
 package com.intellij.java.execution.impl.application;
 
 import com.intellij.java.execution.CommonJavaRunConfigurationParameters;
-import com.intellij.execution.ExecutionException;
+import com.intellij.java.execution.configurations.JavaCommandLineState;
 import com.intellij.java.execution.impl.JavaRunConfigurationExtensionManager;
 import com.intellij.java.execution.impl.RunConfigurationExtension;
-import com.intellij.java.execution.configurations.JavaCommandLineState;
-import com.intellij.execution.configurations.RunConfigurationBase;
-import com.intellij.execution.process.KillableColoredProcessHandler;
-import com.intellij.execution.process.OSProcessHandler;
-import com.intellij.execution.process.ProcessTerminatedListener;
-import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.java.execution.impl.util.JavaParametersUtil;
+import consulo.execution.configuration.RunConfigurationBase;
+import consulo.execution.process.ProcessTerminatedListener;
+import consulo.execution.runner.ExecutionEnvironment;
+import consulo.ide.impl.idea.execution.process.KillableColoredProcessHandler;
 import consulo.java.execution.configurations.OwnJavaParameters;
+import consulo.process.ExecutionException;
+import consulo.process.internal.OSProcessHandler;
 
 import javax.annotation.Nonnull;
 
 /**
  * @author nik
  */
-public abstract class BaseJavaApplicationCommandLineState<T extends RunConfigurationBase & CommonJavaRunConfigurationParameters> extends JavaCommandLineState
-{
-	protected final T myConfiguration;
+public abstract class BaseJavaApplicationCommandLineState<T extends RunConfigurationBase & CommonJavaRunConfigurationParameters> extends JavaCommandLineState {
+  protected final T myConfiguration;
 
-	public BaseJavaApplicationCommandLineState(ExecutionEnvironment environment, @Nonnull final T configuration)
-	{
-		super(environment);
-		myConfiguration = configuration;
-	}
+  public BaseJavaApplicationCommandLineState(ExecutionEnvironment environment, @Nonnull final T configuration) {
+    super(environment);
+    myConfiguration = configuration;
+  }
 
-	protected void setupJavaParameters(OwnJavaParameters params) throws ExecutionException
-	{
-		JavaParametersUtil.configureConfiguration(params, myConfiguration);
+  protected void setupJavaParameters(OwnJavaParameters params) throws ExecutionException {
+    JavaParametersUtil.configureConfiguration(params, myConfiguration);
 
-		for(RunConfigurationExtension ext : RunConfigurationExtension.EP_NAME.getExtensionList())
-		{
-			ext.updateJavaParameters(getConfiguration(), params, getRunnerSettings());
-		}
-	}
+    for (RunConfigurationExtension ext : RunConfigurationExtension.EP_NAME.getExtensionList()) {
+      ext.updateJavaParameters(getConfiguration(), params, getRunnerSettings());
+    }
+  }
 
-	@Nonnull
-	@Override
-	protected OSProcessHandler startProcess() throws ExecutionException
-	{
-		OSProcessHandler handler = new KillableColoredProcessHandler.Silent(createCommandLine());
-		ProcessTerminatedListener.attach(handler);
-		JavaRunConfigurationExtensionManager.getInstance().attachExtensionsToProcess(getConfiguration(), handler, getRunnerSettings());
-		return handler;
-	}
+  @Nonnull
+  @Override
+  protected OSProcessHandler startProcess() throws ExecutionException {
+    OSProcessHandler handler = new KillableColoredProcessHandler.Silent(createCommandLine());
+    ProcessTerminatedListener.attach(handler);
+    JavaRunConfigurationExtensionManager.getInstance().attachExtensionsToProcess(getConfiguration(), handler, getRunnerSettings());
+    return handler;
+  }
 
-	@Override
-	protected boolean ansiColoringEnabled()
-	{
-		return true;
-	}
+  @Override
+  protected boolean ansiColoringEnabled() {
+    return true;
+  }
 
-	protected T getConfiguration()
-	{
-		return myConfiguration;
-	}
+  protected T getConfiguration() {
+    return myConfiguration;
+  }
 }

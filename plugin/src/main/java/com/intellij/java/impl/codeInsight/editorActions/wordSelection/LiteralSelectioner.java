@@ -15,12 +15,12 @@
  */
 package com.intellij.java.impl.codeInsight.editorActions.wordSelection;
 
-import com.intellij.codeInsight.editorActions.SelectWordUtil;
-import com.intellij.lexer.StringLiteralLexer;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.util.TextRange;
+import consulo.language.editor.action.SelectWordUtil;
+import consulo.language.lexer.StringLiteralLexer;
+import consulo.codeEditor.Editor;
+import consulo.document.util.TextRange;
 import com.intellij.java.language.psi.JavaTokenType;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiLiteralExpression;
 
 import java.util.List;

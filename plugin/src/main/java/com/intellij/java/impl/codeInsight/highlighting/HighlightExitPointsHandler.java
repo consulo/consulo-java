@@ -15,19 +15,19 @@
  */
 package com.intellij.java.impl.codeInsight.highlighting;
 
-import com.intellij.codeInsight.CodeInsightBundle;
-import com.intellij.codeInsight.highlighting.HighlightUsagesHandler;
-import com.intellij.codeInsight.highlighting.HighlightUsagesHandlerBase;
-import com.intellij.featureStatistics.FeatureUsageTracker;
-import com.intellij.featureStatistics.ProductivityFeatureNames;
+import consulo.externalService.statistic.FeatureUsageTracker;
+import consulo.language.editor.CodeInsightBundle;
+import consulo.ide.impl.idea.codeInsight.highlighting.HighlightUsagesHandler;
+import consulo.language.editor.highlight.usage.HighlightUsagesHandlerBase;
+import consulo.ide.impl.idea.featureStatistics.ProductivityFeatureNames;
 import com.intellij.java.language.impl.psi.controlFlow.*;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.Consumer;
+import consulo.codeEditor.Editor;
+import consulo.project.Project;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.ide.impl.idea.util.Consumer;
 import consulo.util.collection.primitive.ints.IntLists;
 
 import javax.annotation.Nullable;

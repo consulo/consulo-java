@@ -32,7 +32,7 @@
         </constraints>
         <properties/>
       </component>
-      <component id="13f65" class="com.intellij.ui.NonFocusableCheckBox" binding="myCbPassOuterClass">
+      <component id="13f65" class="consulo.ui.ex.awt.NonFocusableCheckBox" binding="myCbPassOuterClass">
         <constraints>
           <grid row="4" column="0" row-span="1" col-span="2" vsize-policy="3" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -61,13 +61,13 @@
         <properties/>
         <border type="none"/>
         <children>
-          <component id="46c54" class="com.intellij.ui.NonFocusableCheckBox" binding="myCbSearchInComments">
+          <component id="46c54" class="consulo.ui.ex.awt.NonFocusableCheckBox" binding="myCbSearchInComments">
             <constraints/>
             <properties>
               <text resource-bundle="messages/RefactoringBundle" key="search.in.comments.and.strings"/>
             </properties>
           </component>
-          <component id="e1ccb" class="com.intellij.ui.NonFocusableCheckBox" binding="myCbSearchForTextOccurences">
+          <component id="e1ccb" class="consulo.ui.ex.awt.NonFocusableCheckBox" binding="myCbSearchForTextOccurences">
             <constraints/>
             <properties>
               <text resource-bundle="messages/RefactoringBundle" key="search.for.text.occurrences"/>

@@ -33,20 +33,20 @@ import java.util.Map;
 
 import javax.annotation.Nonnull;
 import org.jetbrains.java.generate.element.FieldElement;
-import com.intellij.openapi.components.PersistentStateComponent;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Comparing;
+import consulo.component.persist.PersistentStateComponent;
+import consulo.project.Project;
+import consulo.util.lang.Comparing;
 import consulo.util.dataholder.Key;
-import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.CharsetToolkit;
+import consulo.ide.impl.idea.openapi.util.io.FileUtil;
+import consulo.util.lang.StringUtil;
+import consulo.util.io.CharsetToolkit;
 import consulo.java.language.module.util.JavaClassNames;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiType;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.util.Function;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.ide.impl.idea.util.Function;
+import consulo.util.collection.ContainerUtil;
 
 public abstract class TemplatesManager implements PersistentStateComponent<TemplatesState>
 {
@@ -62,7 +62,7 @@ public abstract class TemplatesManager implements PersistentStateComponent<Templ
 	 *
 	 * @param resource the resource name. Will lookup using the classpath.
 	 * @return the content if the resource
-	 * @throws java.io.IOException error reading the file.
+	 * @throws IOException error reading the file.
 	 */
 	protected static String readFile(String resource, Class<? extends TemplatesManager> templatesManagerClass) throws IOException
 	{

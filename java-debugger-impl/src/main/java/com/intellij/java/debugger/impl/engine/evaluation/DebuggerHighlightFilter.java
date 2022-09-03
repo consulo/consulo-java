@@ -16,10 +16,10 @@
 package com.intellij.java.debugger.impl.engine.evaluation;
 
 import javax.annotation.Nonnull;
-import com.intellij.codeInsight.daemon.impl.HighlightInfo;
-import com.intellij.codeInsight.daemon.impl.HighlightInfoFilter;
-import com.intellij.codeInsight.daemon.impl.HighlightInfoType;
-import com.intellij.psi.PsiFile;
+import consulo.language.editor.rawHighlight.HighlightInfo;
+import consulo.language.editor.rawHighlight.HighlightInfoFilter;
+import consulo.language.editor.rawHighlight.HighlightInfoType;
+import consulo.language.psi.PsiFile;
 
 public class DebuggerHighlightFilter implements HighlightInfoFilter
 {

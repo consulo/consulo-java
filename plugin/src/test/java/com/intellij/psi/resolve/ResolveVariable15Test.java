@@ -3,10 +3,10 @@
  */
 package com.intellij.psi.resolve;
 
-import com.intellij.psi.PsiReference;
+import consulo.language.psi.PsiReference;
 import com.intellij.java.language.psi.JavaResolveResult;
 import com.intellij.java.language.psi.PsiJavaReference;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 
 /**
  * @author ven

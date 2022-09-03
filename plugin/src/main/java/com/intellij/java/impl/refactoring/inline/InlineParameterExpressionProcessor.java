@@ -20,20 +20,20 @@ import com.intellij.java.impl.codeInspection.sameParameterValue.SameParameterVal
 import com.intellij.java.language.psi.*;
 import consulo.logging.Logger;
 import consulo.util.dataholder.Key;
-import com.intellij.openapi.util.Ref;
+import consulo.util.lang.ref.Ref;
 import com.intellij.psi.*;
 import com.intellij.java.analysis.impl.psi.controlFlow.DefUseUtil;
-import com.intellij.psi.search.searches.ReferencesSearch;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.search.ReferencesSearch;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.refactoring.BaseRefactoringProcessor;
+import consulo.language.editor.refactoring.BaseRefactoringProcessor;
 import com.intellij.java.impl.refactoring.util.InlineUtil;
-import com.intellij.refactoring.util.RefactoringUIUtil;
+import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
 import com.intellij.java.impl.refactoring.util.RefactoringUtil;
-import com.intellij.usageView.UsageInfo;
-import com.intellij.usageView.UsageViewDescriptor;
-import com.intellij.usageView.UsageViewUtil;
-import com.intellij.util.containers.MultiMap;
+import consulo.usage.UsageInfo;
+import consulo.usage.UsageViewDescriptor;
+import consulo.usage.UsageViewUtil;
+import consulo.util.collection.MultiMap;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -309,12 +309,12 @@ public class InlineParameterExpressionProcessor extends BaseRefactoringProcessor
       myReplacement = replacement;
     }
 
-    @javax.annotation.Nullable
+    @Nullable
     public PsiElement getReplacement() {
       return myReplacement.isValid() ? myReplacement : null;
     }
 
-    @javax.annotation.Nullable
+    @Nullable
     public PsiVariable getVariable() {
       return myVariable != null && myVariable.isValid() ? myVariable : null;
     }

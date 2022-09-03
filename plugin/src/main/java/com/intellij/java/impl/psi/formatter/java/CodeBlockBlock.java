@@ -20,27 +20,27 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import com.intellij.formatting.Alignment;
-import com.intellij.formatting.Block;
-import com.intellij.formatting.ChildAttributes;
-import com.intellij.formatting.FormattingMode;
-import com.intellij.formatting.Indent;
-import com.intellij.formatting.Wrap;
-import com.intellij.formatting.alignment.AlignmentStrategy;
-import com.intellij.lang.ASTNode;
+import consulo.language.codeStyle.Alignment;
+import consulo.language.codeStyle.Block;
+import consulo.language.codeStyle.ChildAttributes;
+import consulo.language.codeStyle.FormattingMode;
+import consulo.language.codeStyle.Indent;
+import consulo.language.codeStyle.Wrap;
+import consulo.language.codeStyle.AlignmentStrategy;
+import consulo.language.ast.ASTNode;
 import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiJavaModule;
 import com.intellij.java.language.psi.PsiSyntheticClass;
-import com.intellij.psi.TokenType;
-import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
+import consulo.language.ast.TokenType;
+import consulo.language.codeStyle.CommonCodeStyleSettings;
 import com.intellij.java.impl.psi.codeStyle.JavaCodeStyleSettings;
-import com.intellij.psi.formatter.FormatterUtil;
-import com.intellij.psi.formatter.common.AbstractBlock;
+import consulo.language.codeStyle.FormatterUtil;
+import consulo.language.codeStyle.AbstractBlock;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaDocElementType;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
 import com.intellij.java.impl.psi.impl.source.tree.StdTokenSets;
-import com.intellij.psi.tree.IElementType;
+import consulo.language.ast.IElementType;
 
 public class CodeBlockBlock extends AbstractJavaBlock
 {

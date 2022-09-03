@@ -20,19 +20,19 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.lang.ASTNode;
+import consulo.language.ast.ASTNode;
 import com.intellij.java.language.psi.JavaElementVisitor;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiElementVisitor;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiElementVisitor;
 import com.intellij.java.language.psi.PsiResourceList;
 import com.intellij.java.language.psi.PsiResourceListElement;
 import com.intellij.java.language.psi.PsiResourceVariable;
-import com.intellij.psi.ResolveState;
+import consulo.language.psi.resolve.ResolveState;
 import com.intellij.java.language.impl.psi.impl.PsiImplUtil;
-import com.intellij.psi.impl.source.tree.CompositePsiElement;
+import consulo.language.impl.psi.CompositePsiElement;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
-import com.intellij.psi.scope.PsiScopeProcessor;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.resolve.PsiScopeProcessor;
+import consulo.language.psi.util.PsiTreeUtil;
 
 public class PsiResourceListImpl extends CompositePsiElement implements PsiResourceList
 {

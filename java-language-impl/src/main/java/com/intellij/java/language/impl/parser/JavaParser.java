@@ -17,60 +17,52 @@ package com.intellij.java.language.impl.parser;
 
 import javax.annotation.Nonnull;
 
-public class JavaParser
-{
-	public static final JavaParser INSTANCE = new JavaParser();
+public class JavaParser {
+  public static final JavaParser INSTANCE = new JavaParser();
 
-	private final FileParser myFileParser;
-	private final ModuleParser myModuleParser;
-	private final DeclarationParser myDeclarationParser;
-	private final StatementParser myStatementParser;
-	private final ExpressionParser myExpressionParser;
-	private final ReferenceParser myReferenceParser;
+  private final FileParser myFileParser;
+  private final ModuleParser myModuleParser;
+  private final DeclarationParser myDeclarationParser;
+  private final StatementParser myStatementParser;
+  private final ExpressionParser myExpressionParser;
+  private final ReferenceParser myReferenceParser;
 
-	public JavaParser()
-	{
-		myFileParser = new FileParser(this);
-		myModuleParser = new ModuleParser(this);
-		myDeclarationParser = new DeclarationParser(this);
-		myStatementParser = new StatementParser(this);
-		myExpressionParser = new ExpressionParser(this);
-		myReferenceParser = new ReferenceParser(this);
-	}
+  public JavaParser() {
+    myFileParser = new FileParser(this);
+    myModuleParser = new ModuleParser(this);
+    myDeclarationParser = new DeclarationParser(this);
+    myStatementParser = new StatementParser(this);
+    myExpressionParser = new ExpressionParser(this);
+    myReferenceParser = new ReferenceParser(this);
+  }
 
-	@Nonnull
-	public FileParser getFileParser()
-	{
-		return myFileParser;
-	}
+  @Nonnull
+  public FileParser getFileParser() {
+    return myFileParser;
+  }
 
-	@Nonnull
-	public ModuleParser getModuleParser()
-	{
-		return myModuleParser;
-	}
+  @Nonnull
+  public ModuleParser getModuleParser() {
+    return myModuleParser;
+  }
 
-	@Nonnull
-	public DeclarationParser getDeclarationParser()
-	{
-		return myDeclarationParser;
-	}
+  @Nonnull
+  public DeclarationParser getDeclarationParser() {
+    return myDeclarationParser;
+  }
 
-	@Nonnull
-	public StatementParser getStatementParser()
-	{
-		return myStatementParser;
-	}
+  @Nonnull
+  public StatementParser getStatementParser() {
+    return myStatementParser;
+  }
 
-	@Nonnull
-	public ExpressionParser getExpressionParser()
-	{
-		return myExpressionParser;
-	}
+  @Nonnull
+  public ExpressionParser getExpressionParser() {
+    return myExpressionParser;
+  }
 
-	@Nonnull
-	public ReferenceParser getReferenceParser()
-	{
-		return myReferenceParser;
-	}
+  @Nonnull
+  public ReferenceParser getReferenceParser() {
+    return myReferenceParser;
+  }
 }

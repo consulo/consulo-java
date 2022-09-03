@@ -18,42 +18,47 @@ package com.intellij.java.indexing.impl.search;
 import com.google.common.annotations.VisibleForTesting;
 import com.intellij.java.indexing.impl.stubs.index.JavaMethodParameterTypesIndex;
 import com.intellij.java.indexing.search.searches.FunctionalExpressionSearch;
+import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.MethodSignature;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.application.QueryExecutorBase;
-import com.intellij.openapi.application.ReadAction;
-import com.intellij.openapi.application.ReadActionProcessor;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleManager;
-import com.intellij.openapi.module.ModuleUtilCore;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Computable;
-import com.intellij.openapi.util.Ref;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.java.language.LanguageLevel;
-import com.intellij.psi.*;
-import com.intellij.psi.impl.search.PsiSearchHelperImpl;
-import com.intellij.psi.search.*;
-import com.intellij.psi.search.searches.ReferencesSearch;
-import com.intellij.psi.stubs.StubIndex;
-import com.intellij.psi.stubs.StubIndexKey;
-import com.intellij.psi.util.*;
-import com.intellij.util.CommonProcessors;
-import com.intellij.util.Function;
-import com.intellij.util.Processor;
-import com.intellij.util.indexing.FileBasedIndex;
 import consulo.annotation.access.RequiredReadAction;
+import consulo.application.ApplicationManager;
+import consulo.application.ReadAction;
+import consulo.application.util.ReadActionProcessor;
+import consulo.application.util.function.CommonProcessors;
+import consulo.application.util.function.Computable;
+import consulo.application.util.function.Processor;
+import consulo.content.scope.SearchScope;
 import consulo.java.language.module.extension.JavaModuleExtension;
+import consulo.language.psi.*;
+import consulo.language.psi.scope.EverythingGlobalScope;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.scope.LocalSearchScope;
+import consulo.language.psi.search.PsiSearchHelper;
+import consulo.language.psi.search.ReferencesSearch;
+import consulo.language.psi.search.UsageSearchContext;
+import consulo.language.psi.stub.FileBasedIndex;
+import consulo.language.psi.stub.StubIndex;
+import consulo.language.psi.stub.StubIndexKey;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.ModuleUtilCore;
 import consulo.logging.Logger;
+import consulo.module.Module;
+import consulo.module.ModuleManager;
+import consulo.project.Project;
+import consulo.project.util.query.QueryExecutorBase;
+import consulo.util.lang.ref.Ref;
+import consulo.virtualFileSystem.VirtualFile;
 
 import javax.annotation.Nonnull;
 import java.util.*;
+import java.util.function.Function;
 
-import static com.intellij.util.containers.ContainerUtil.*;
-import static com.intellij.util.containers.ContainerUtilRt.newHashSet;
+import static consulo.ide.impl.idea.util.containers.ContainerUtilRt.newHashSet;
+import static consulo.util.collection.ContainerUtil.addIfNotNull;
+import static consulo.util.collection.ContainerUtil.process;
 
 public class JavaFunctionalExpressionSearcher extends QueryExecutorBase<PsiFunctionalExpression, FunctionalExpressionSearch.SearchParameters> {
   private static record ClassLambdaInfo(Project project, GlobalSearchScope scope, int expectedFunExprParamsCount) {
@@ -65,7 +70,6 @@ public class JavaFunctionalExpressionSearcher extends QueryExecutorBase<PsiFunct
    * and more advanced ways of searching become necessary: e.g. first searching for methods where the functional interface class is used
    * and then for their usages,
    */
-  @VisibleForTesting
   public static final int SMART_SEARCH_THRESHOLD = 5;
 
   @Override
@@ -188,11 +192,11 @@ public class JavaFunctionalExpressionSearcher extends QueryExecutorBase<PsiFunct
 
         GlobalSearchScope visibleFromCandidates = combineResolveScopes(project, candidateFiles);
 
-        final Set<String> usedMethodNames = newHashSet();
+        final Set<String> usedMethodNames = new HashSet<>();
         FileBasedIndex.getInstance().processAllKeys(JavaFunctionalExpressionIndex.JAVA_FUNCTIONAL_EXPRESSION_INDEX_ID, new CommonProcessors.CollectProcessor<String>(usedMethodNames),
             candidateScope, null);
 
-        final LinkedHashSet<PsiMethod> methods = newLinkedHashSet();
+        final LinkedHashSet<PsiMethod> methods = new LinkedHashSet<>();
         Processor<PsiMethod> methodProcessor = new Processor<PsiMethod>() {
           @Override
           public boolean process(PsiMethod method) {
@@ -228,8 +232,8 @@ public class JavaFunctionalExpressionSearcher extends QueryExecutorBase<PsiFunct
 
   @Nonnull
   private static Set<VirtualFile> getFilesWithFunctionalExpressionsScope(Project project, GlobalSearchScope useScope) {
-    final Set<VirtualFile> files = newLinkedHashSet();
-    final PsiSearchHelperImpl helper = (PsiSearchHelperImpl) PsiSearchHelper.SERVICE.getInstance(project);
+    final Set<VirtualFile> files = new LinkedHashSet<>();
+    final PsiSearchHelper helper = (PsiSearchHelperImpl) PsiSearchHelper.SERVICE.getInstance(project);
     final CommonProcessors.CollectProcessor<VirtualFile> processor = new CommonProcessors.CollectProcessor<VirtualFile>(files);
     helper.processFilesWithText(useScope, UsageSearchContext.IN_CODE, true, "::", processor);
     helper.processFilesWithText(useScope, UsageSearchContext.IN_CODE, true, "->", processor);

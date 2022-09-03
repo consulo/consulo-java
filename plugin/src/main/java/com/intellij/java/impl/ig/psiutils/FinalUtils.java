@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.psiutils;
 
-import com.intellij.codeInsight.daemon.impl.HighlightInfo;
+import consulo.language.editor.rawHighlight.HighlightInfo;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.HighlightControlFlowUtil;
 import com.intellij.java.language.impl.psi.controlFlow.ControlFlowUtil;
 import com.intellij.java.language.impl.psi.controlFlow.LocalsOrMyInstanceFieldsControlFlowPolicy;
@@ -24,9 +24,9 @@ import com.intellij.java.language.psi.PsiParameter;
 import com.intellij.java.language.psi.PsiReferenceExpression;
 import com.intellij.java.language.psi.PsiVariable;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.search.PsiElementProcessor;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.resolve.PsiElementProcessor;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.siyeh.ig.psiutils.VariableAccessUtils;
 import consulo.internal.java.gnu.trove.THashMap;
 

@@ -22,31 +22,31 @@ import java.util.Set;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import com.intellij.application.options.ModuleListCellRenderer;
+import consulo.module.ui.awt.ModuleListCellRenderer;
 import com.intellij.java.impl.codeInsight.daemon.impl.actions.AddImportAction;
-import com.intellij.compiler.ModuleCompilerUtil;
+import consulo.ide.impl.compiler.ModuleCompilerUtil;
 import consulo.logging.Logger;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleUtilCore;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.DependencyScope;
+import consulo.codeEditor.Editor;
+import consulo.module.Module;
+import consulo.language.util.ModuleUtilCore;
+import consulo.project.Project;
+import consulo.module.content.layer.orderEntry.DependencyScope;
 import com.intellij.java.impl.openapi.roots.JavaProjectModelModificationService;
-import com.intellij.openapi.roots.ModuleRootManager;
-import com.intellij.openapi.roots.ProjectFileIndex;
-import com.intellij.openapi.roots.ProjectRootManager;
-import com.intellij.openapi.ui.Messages;
-import com.intellij.openapi.ui.popup.JBPopup;
-import com.intellij.openapi.ui.popup.JBPopupFactory;
-import com.intellij.openapi.util.Pair;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.module.content.ModuleRootManager;
+import consulo.module.content.ProjectFileIndex;
+import consulo.module.content.ProjectRootManager;
+import consulo.ui.ex.awt.JBList;
+import consulo.ui.ex.awt.Messages;
+import consulo.ui.ex.popup.JBPopup;
+import consulo.ui.ex.popup.JBPopupFactory;
+import consulo.util.lang.Pair;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiReference;
-import com.intellij.ui.components.JBList;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiReference;
+import consulo.util.collection.ContainerUtil;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 
 /**
@@ -138,7 +138,7 @@ class AddModuleDependencyFix extends AddOrderEntryFix
 	}
 
 	@Override
-	public void invoke(@Nonnull Project project, @javax.annotation.Nullable Editor editor, PsiFile file)
+	public void invoke(@Nonnull Project project, @Nullable Editor editor, PsiFile file)
 	{
 		if(myModules.size() == 1)
 		{

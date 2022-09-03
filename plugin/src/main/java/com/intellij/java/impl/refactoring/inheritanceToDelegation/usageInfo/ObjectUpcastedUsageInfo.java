@@ -16,7 +16,7 @@
 package com.intellij.java.impl.refactoring.inheritanceToDelegation.usageInfo;
 
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 
 /**
  * @author dsl

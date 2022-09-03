@@ -7,7 +7,7 @@ package com.intellij.codeInsight.daemon.quickFix;
 import javax.annotation.Nonnull;
 
 import org.jetbrains.annotations.NonNls;
-import com.intellij.codeInspection.LocalInspectionTool;
+import consulo.language.editor.inspection.LocalInspectionTool;
 import com.intellij.java.impl.codeInspection.dataFlow.DataFlowInspection;
 
 public abstract class FixAllQuickfixTest extends LightQuickFixTestCase {

@@ -19,9 +19,9 @@ import javax.annotation.Nonnull;
 
 import com.intellij.java.language.psi.*;
 import org.jetbrains.annotations.NonNls;
-import com.intellij.codeInspection.ProblemHighlightType;
-import com.intellij.codeInspection.ProblemsHolder;
-import com.intellij.openapi.util.TextRange;
+import consulo.language.editor.inspection.ProblemHighlightType;
+import consulo.language.editor.inspection.ProblemsHolder;
+import consulo.document.util.TextRange;
 import com.intellij.psi.*;
 
 public abstract class BaseInspectionVisitor extends JavaElementVisitor {

@@ -17,14 +17,14 @@ package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.codeInsight.intention.HighPriorityAction;
-import com.intellij.codeInsight.intention.IntentionAction;
+import consulo.language.editor.intention.HighPriorityAction;
+import consulo.language.editor.intention.IntentionAction;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.command.undo.UndoUtil;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
+import consulo.undoRedo.util.UndoUtil;
+import consulo.codeEditor.Editor;
+import consulo.project.Project;
 import com.intellij.psi.*;
-import com.intellij.psi.util.PsiMatcherImpl;
+import consulo.ide.impl.psi.util.PsiMatcherImpl;
 import com.intellij.java.analysis.impl.psi.util.PsiMatchers;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 

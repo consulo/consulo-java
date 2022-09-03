@@ -6,25 +6,25 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.coverage.*;
+import consulo.execution.coverage.*;
 import consulo.logging.Logger;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nullable;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.openapi.util.Computable;
-import com.intellij.openapi.util.InvalidDataException;
-import com.intellij.openapi.util.WriteExternalException;
+import consulo.application.ApplicationManager;
+import consulo.project.Project;
+import consulo.util.lang.Comparing;
+import consulo.application.util.function.Computable;
+import consulo.util.xml.serializer.InvalidDataException;
+import consulo.util.xml.serializer.WriteExternalException;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiJavaPackage;
-import com.intellij.psi.PsiManager;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.language.psi.PsiManager;
+import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.rt.coverage.data.ProjectData;
-import com.intellij.util.ArrayUtil;
+import consulo.util.collection.ArrayUtil;
 
 /**
  * @author ven
@@ -160,7 +160,7 @@ public class JavaCoverageSuite extends BaseCoverageSuite {
     return myCoverageEngine;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public String getSuiteToMerge() {
     return mySuiteToMerge;
   }
@@ -233,7 +233,7 @@ public class JavaCoverageSuite extends BaseCoverageSuite {
       for (final String className : classNames) {
         final PsiClass aClass =
           ApplicationManager.getApplication().runReadAction(new Computable<PsiClass>() {
-            @javax.annotation.Nullable
+            @Nullable
             public PsiClass compute() {
               return JavaPsiFacade.getInstance(psiManager.getProject()).findClass(className.replace("$", "."), GlobalSearchScope.allScope(project));
             }

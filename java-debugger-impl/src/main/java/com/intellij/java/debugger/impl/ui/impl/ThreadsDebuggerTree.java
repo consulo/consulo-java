@@ -45,10 +45,10 @@ import com.intellij.java.debugger.impl.ui.impl.watch.NodeManagerImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.StackFrameDescriptorImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.ThreadDescriptorImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.ThreadGroupDescriptorImpl;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.util.ui.tree.TreeModelAdapter;
-import com.intellij.xdebugger.XDebuggerBundle;
+import consulo.application.ApplicationManager;
+import consulo.execution.debug.XDebuggerBundle;
+import consulo.project.Project;
+import consulo.ui.ex.awt.tree.TreeModelAdapter;
 import consulo.logging.Logger;
 
 /**

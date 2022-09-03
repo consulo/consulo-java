@@ -15,9 +15,9 @@
  */
 package com.intellij.java.impl.ig.fixes;
 
-import com.intellij.codeInspection.ProblemDescriptor;
-import com.intellij.codeInspection.RefactoringQuickFix;
-import com.intellij.openapi.project.Project;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.editor.refactoring.RefactoringQuickFix;
+import consulo.project.Project;
 import com.siyeh.ig.InspectionGadgetsFix;
 
 /**

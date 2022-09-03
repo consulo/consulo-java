@@ -15,16 +15,15 @@
  */
 package com.intellij.java.language.impl.psi.impl.light;
 
-import com.intellij.codeInsight.completion.originInfo.OriginInfoAwareElement;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.impl.psi.impl.PsiImplUtil;
 import com.intellij.java.language.psi.*;
-import com.intellij.lang.Language;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiManager;
-import com.intellij.psi.impl.light.LightElement;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.Language;
+import consulo.language.impl.psi.LightElement;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiManager;
+import consulo.language.util.IncorrectOperationException;
+import consulo.util.lang.StringUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -79,7 +78,7 @@ public abstract class LightVariableBase extends LightElement implements PsiVaria
   }
 
   @Override
-  public PsiElement setName(@Nonnull String name) throws IncorrectOperationException{
+  public PsiElement setName(@Nonnull String name) throws IncorrectOperationException {
     PsiImplUtil.setName(getNameIdentifier(), name);
     return this;
   }

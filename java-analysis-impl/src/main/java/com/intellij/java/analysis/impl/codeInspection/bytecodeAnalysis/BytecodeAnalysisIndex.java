@@ -2,14 +2,14 @@
 package com.intellij.java.analysis.impl.codeInspection.bytecodeAnalysis;
 
 import com.intellij.java.language.impl.JavaClassFileType;
-import com.intellij.openapi.progress.ProcessCanceledException;
-import com.intellij.openapi.util.Pair;
-import com.intellij.openapi.util.io.DataInputOutputUtilRt;
+import consulo.component.ProcessCanceledException;
+import consulo.util.lang.Pair;
+import consulo.ide.impl.idea.openapi.util.io.DataInputOutputUtilRt;
 import com.intellij.util.indexing.*;
-import com.intellij.util.io.DataExternalizer;
-import com.intellij.util.io.DataInputOutputUtil;
-import com.intellij.util.io.DifferentSerializableBytesImplyNonEqualityPolicy;
-import com.intellij.util.io.KeyDescriptor;
+import consulo.index.io.data.DataExternalizer;
+import consulo.index.io.data.DataInputOutputUtil;
+import consulo.index.io.DifferentSerializableBytesImplyNonEqualityPolicy;
+import consulo.index.io.KeyDescriptor;
 import consulo.internal.org.objectweb.asm.*;
 import one.util.streamex.StreamEx;
 

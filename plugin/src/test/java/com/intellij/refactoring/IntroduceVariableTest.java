@@ -16,19 +16,19 @@
 package com.intellij.refactoring;
 
 import com.intellij.JavaTestUtil;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
+import consulo.codeEditor.Editor;
+import consulo.project.Project;
 import consulo.java.language.module.util.JavaClassNames;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiType;
-import com.intellij.refactoring.introduce.inplace.OccurrencesChooser;
+import consulo.language.editor.refactoring.introduce.inplace.OccurrencesChooser;
 import com.intellij.java.impl.refactoring.introduceVariable.InputValidator;
 import com.intellij.java.impl.refactoring.introduceVariable.IntroduceVariableBase;
 import com.intellij.java.impl.refactoring.introduceVariable.IntroduceVariableSettings;
 import com.intellij.java.impl.refactoring.ui.TypeSelectorManagerImpl;
 import com.intellij.testFramework.LightCodeInsightTestCase;
-import com.intellij.util.containers.MultiMap;
+import consulo.util.collection.MultiMap;
 import junit.framework.Assert;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;

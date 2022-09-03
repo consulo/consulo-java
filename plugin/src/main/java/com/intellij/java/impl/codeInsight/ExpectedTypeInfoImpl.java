@@ -15,15 +15,16 @@
  */
 package com.intellij.java.impl.codeInsight;
 
-import com.intellij.codeInsight.TailType;
+import consulo.language.editor.completion.lookup.TailType;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.openapi.util.NullableComputable;
-import com.intellij.openapi.util.NullableLazyValue;
-import com.intellij.openapi.util.VolatileNullableLazyValue;
+import consulo.ide.impl.idea.openapi.util.NullableComputable;
+import consulo.ide.impl.idea.openapi.util.NullableLazyValue;
+import consulo.ide.impl.idea.openapi.util.VolatileNullableLazyValue;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class ExpectedTypeInfoImpl implements ExpectedTypeInfo {
   public static final NullableComputable<String> NULL = new NullableComputable<String>() {
@@ -70,7 +71,7 @@ public class ExpectedTypeInfoImpl implements ExpectedTypeInfo {
     myCalledMethod = calledMethod;
     this.expectedNameComputable = expectedName;
     expectedNameLazyValue = new VolatileNullableLazyValue<String>() {
-      @javax.annotation.Nullable
+      @Nullable
       @Override
       protected String compute() {
         return expectedNameComputable.compute();
@@ -81,7 +82,7 @@ public class ExpectedTypeInfoImpl implements ExpectedTypeInfo {
     PsiUtil.ensureValidType(defaultType);
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public String getExpectedName() {
     return expectedNameLazyValue.getValue();
   }

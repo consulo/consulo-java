@@ -20,11 +20,11 @@ import static org.junit.Assert.assertTrue;
 import java.io.File;
 
 import org.jetbrains.annotations.NonNls;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.openapi.vfs.LocalFileSystem;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiDirectory;
+import consulo.application.ApplicationManager;
+import consulo.ide.impl.idea.openapi.util.io.FileUtil;
+import consulo.virtualFileSystem.LocalFileSystem;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.language.psi.PsiDirectory;
 
 @SuppressWarnings({"HardCodedStringLiteral", "ConstantConditions", "JUnitTestCaseInProductSource"})
 @NonNls public abstract class TestSourceBasedTestCase extends IdeaTestCase {

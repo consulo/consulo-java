@@ -15,11 +15,11 @@
  */
 package com.intellij.java.language.impl.core;
 
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.java.language.psi.PsiJavaPackage;
 import com.intellij.java.language.impl.psi.impl.file.PsiPackageImplementationHelper;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.util.ArrayUtil;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.util.collection.ArrayUtil;
 
 /**
  * @author yole

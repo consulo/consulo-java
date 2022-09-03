@@ -16,9 +16,10 @@
 package com.intellij.java.impl.ipp.conditional;
 
 import com.intellij.java.language.psi.PsiConditionalExpression;
-import com.intellij.psi.PsiElement;
+import com.siyeh.ig.psiutils.BoolUtils;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiExpression;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
 import com.intellij.java.impl.ipp.base.Intention;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import javax.annotation.Nonnull;
@@ -42,7 +43,7 @@ public class FlipConditionalIntention extends Intention {
     assert elseExpression != null;
     assert thenExpression != null;
     final String newExpression =
-      com.siyeh.ig.psiutils.BoolUtils.getNegatedExpressionText(condition) + '?' +
+      BoolUtils.getNegatedExpressionText(condition) + '?' +
       elseExpression.getText() +
       ':' +
       thenExpression.getText();

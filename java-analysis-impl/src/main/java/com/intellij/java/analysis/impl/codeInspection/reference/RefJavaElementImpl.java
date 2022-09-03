@@ -20,19 +20,21 @@
  */
 package com.intellij.java.analysis.impl.codeInspection.reference;
 
-import com.intellij.codeInspection.InspectionsBundle;
-import com.intellij.codeInspection.reference.RefElement;
-import com.intellij.codeInspection.reference.RefElementImpl;
-import com.intellij.codeInspection.reference.RefManager;
+import consulo.ide.impl.VfsIconUtil;
+import consulo.language.editor.inspection.InspectionsBundle;
+import consulo.language.editor.inspection.reference.RefElement;
+import consulo.ide.impl.idea.codeInspection.reference.RefElementImpl;
+import consulo.language.editor.inspection.reference.RefManager;
 import com.intellij.java.analysis.codeInspection.reference.*;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.util.Iconable;
+import consulo.component.util.Iconable;
 import com.intellij.psi.*;
-import com.intellij.util.containers.Stack;
-import consulo.fileTypes.impl.VfsIconUtil;
+import consulo.util.collection.Stack;
+import consulo.ide.impl.VfsIconUtil;
 import consulo.ui.image.Image;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -160,7 +162,7 @@ public abstract class RefJavaElementImpl extends RefElementImpl implements RefJa
   }
 
   @Override
-  @javax.annotation.Nullable
+  @Nullable
   public String getAccessModifier() {
     long access_id = myFlags & ACCESS_MODIFIER_MASK;
     if (access_id == ACCESS_PRIVATE) {

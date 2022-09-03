@@ -16,11 +16,11 @@
 package com.intellij.java.impl.javadoc;
 
 import com.intellij.java.language.JavadocBundle;
-import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
-import com.intellij.openapi.ui.TextFieldWithBrowseButton;
+import consulo.fileChooser.FileChooserDescriptorFactory;
+import consulo.ui.ex.awt.TextFieldWithBrowseButton;
 import com.intellij.java.language.psi.PsiKeyword;
-import com.intellij.ui.Gray;
-import com.intellij.util.ui.UIUtil;
+import consulo.ui.ex.Gray;
+import consulo.ui.ex.awt.UIUtil;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;

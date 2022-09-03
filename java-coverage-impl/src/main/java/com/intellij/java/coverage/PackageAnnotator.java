@@ -9,29 +9,29 @@ import java.util.Map;
 
 import javax.annotation.Nullable;
 
-import com.intellij.coverage.CoverageDataManager;
-import com.intellij.coverage.CoverageSuite;
-import com.intellij.coverage.CoverageSuitesBundle;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleManager;
-import com.intellij.openapi.module.ModuleUtil;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.ContentEntry;
-import com.intellij.openapi.roots.ContentFolder;
-import com.intellij.openapi.roots.ModuleFileIndex;
-import com.intellij.openapi.roots.ModuleRootManager;
-import com.intellij.openapi.roots.ProjectRootManager;
-import com.intellij.openapi.util.Computable;
-import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.VfsUtil;
-import com.intellij.openapi.vfs.VfsUtilCore;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.execution.coverage.CoverageDataManager;
+import consulo.execution.coverage.CoverageSuite;
+import consulo.execution.coverage.CoverageSuitesBundle;
+import consulo.module.Module;
+import consulo.module.ModuleManager;
+import consulo.ide.impl.idea.openapi.module.ModuleUtil;
+import consulo.project.Project;
+import consulo.module.content.layer.ContentEntry;
+import consulo.module.content.layer.ContentFolder;
+import consulo.module.content.ModuleFileIndex;
+import consulo.module.content.ModuleRootManager;
+import consulo.module.content.ProjectRootManager;
+import consulo.application.util.function.Computable;
+import consulo.ide.impl.idea.openapi.util.io.FileUtil;
+import consulo.util.lang.StringUtil;
+import consulo.ide.impl.idea.openapi.vfs.VfsUtil;
+import consulo.ide.impl.idea.openapi.vfs.VfsUtilCore;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiJavaPackage;
-import com.intellij.psi.PsiManager;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.language.psi.PsiManager;
+import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.rt.coverage.data.ClassData;
 import com.intellij.rt.coverage.data.LineCoverage;
 import com.intellij.rt.coverage.data.LineData;
@@ -158,7 +158,7 @@ public class PackageAnnotator
 			final String rootPackageVMName = qualifiedName.replaceAll("\\.", "/");
 			final VirtualFile output = myCoverageManager.doInReadActionIfProjectOpen(new Computable<VirtualFile>()
 			{
-				@javax.annotation.Nullable
+				@Nullable
 				public VirtualFile compute()
 				{
 					return ModuleCompilerPathsManager.getInstance(module).getCompilerOutput(ProductionContentFolderTypeProvider.getInstance());
@@ -358,7 +358,7 @@ public class PackageAnnotator
 					{
 						for(DirCoverageInfo dirCoverageInfo : dirs)
 						{
-							if(dirCoverageInfo.sourceRoot != null && VfsUtil.isAncestor(dirCoverageInfo.sourceRoot, containingFile[0], false))
+							if(dirCoverageInfo.sourceRoot != null && consulo.ide.impl.idea.openapi.vfs.VfsUtil.isAncestor(dirCoverageInfo.sourceRoot, containingFile[0], false))
 							{
 								collectClassCoverageInformation(child, dirCoverageInfo, projectInfo, toplevelClassCoverage,
 										classFqVMName.replace("/", "."), toplevelClassSrcFQName);

@@ -17,7 +17,7 @@ import com.intellij.java.language.impl.psi.impl.JavaConstantExpressionEvaluator;
 import com.intellij.java.language.impl.psi.impl.light.LightRecordMethod;
 import com.intellij.java.language.impl.psi.impl.source.PsiImmediateClassType;
 import com.intellij.psi.util.*;
-import com.intellij.util.ObjectUtils;
+import consulo.ide.impl.idea.util.ObjectUtils;
 import com.siyeh.ig.callMatcher.CallMatcher;
 import com.siyeh.ig.psiutils.ClassUtils;
 import com.siyeh.ig.psiutils.ExpressionUtils;

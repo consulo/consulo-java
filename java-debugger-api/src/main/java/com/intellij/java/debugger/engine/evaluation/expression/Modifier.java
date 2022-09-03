@@ -22,7 +22,7 @@ package com.intellij.java.debugger.engine.evaluation.expression;
 
 import com.intellij.java.debugger.engine.evaluation.EvaluateException;
 import com.intellij.java.debugger.ui.tree.NodeDescriptor;
-import com.intellij.openapi.project.Project;
+import consulo.project.Project;
 import consulo.internal.com.sun.jdi.ClassNotLoadedException;
 import consulo.internal.com.sun.jdi.InvalidTypeException;
 import consulo.internal.com.sun.jdi.Type;

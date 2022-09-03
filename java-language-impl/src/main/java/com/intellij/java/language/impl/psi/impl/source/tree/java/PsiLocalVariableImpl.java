@@ -18,29 +18,33 @@ package com.intellij.java.language.impl.psi.impl.source.tree.java;
 import com.intellij.java.language.impl.psi.impl.PsiConstantEvaluationHelperImpl;
 import com.intellij.java.language.impl.psi.impl.PsiImplUtil;
 import com.intellij.java.language.impl.psi.impl.PsiVariableEx;
+import com.intellij.java.language.impl.psi.impl.source.Constants;
+import com.intellij.java.language.impl.psi.impl.source.JavaDummyHolder;
 import com.intellij.java.language.impl.psi.impl.source.tree.ChildRole;
 import com.intellij.java.language.impl.psi.impl.source.tree.ElementType;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaSharedImplUtil;
 import com.intellij.java.language.psi.*;
-import com.intellij.lang.ASTNode;
-import com.intellij.navigation.ItemPresentation;
-import com.intellij.navigation.ItemPresentationProviders;
-import com.intellij.psi.*;
-import com.intellij.psi.impl.*;
-import com.intellij.java.language.impl.psi.impl.source.Constants;
-import com.intellij.java.language.impl.psi.impl.source.JavaDummyHolder;
-import com.intellij.psi.impl.source.SourceTreeToPsiMap;
-import com.intellij.psi.impl.source.codeStyle.CodeEditUtil;
-import com.intellij.psi.impl.source.tree.*;
-import com.intellij.psi.scope.PsiScopeProcessor;
-import com.intellij.psi.search.LocalSearchScope;
-import com.intellij.psi.search.SearchScope;
-import com.intellij.psi.tree.ChildRoleBase;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.CharTable;
-import com.intellij.util.IncorrectOperationException;
+import consulo.content.scope.SearchScope;
+import consulo.language.ast.ASTNode;
+import consulo.language.ast.ChildRoleBase;
+import consulo.language.ast.IElementType;
+import consulo.language.ast.TokenType;
+import consulo.language.impl.ast.CompositeElement;
+import consulo.language.impl.ast.Factory;
+import consulo.language.impl.ast.SharedImplUtil;
+import consulo.language.impl.ast.TreeUtil;
+import consulo.language.impl.psi.*;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiElementVisitor;
+import consulo.language.psi.resolve.PsiScopeProcessor;
+import consulo.language.psi.resolve.ResolveState;
+import consulo.language.psi.scope.LocalSearchScope;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.CharTable;
+import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
+import consulo.navigation.ItemPresentation;
+import consulo.navigation.ItemPresentationProvider;
 
 import javax.annotation.Nonnull;
 import java.util.Arrays;
@@ -308,7 +312,7 @@ public class PsiLocalVariableImpl extends CompositePsiElement implements PsiLoca
 
   @Override
   public ItemPresentation getPresentation() {
-    return ItemPresentationProviders.getItemPresentation(this);
+    return ItemPresentationProvider.getItemPresentation(this);
   }
 
   public String toString() {

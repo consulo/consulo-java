@@ -1,13 +1,13 @@
 package com.intellij.codeInspection;
 
 import com.intellij.JavaTestUtil;
-import com.intellij.codeInsight.intention.IntentionAction;
-import com.intellij.codeInspection.ex.QuickFixWrapper;
+import consulo.language.editor.intention.IntentionAction;
+import consulo.ide.impl.idea.codeInspection.ex.QuickFixWrapper;
 import com.intellij.java.impl.codeInspection.inheritance.ChangeSuperClassFix;
 import com.intellij.java.impl.codeInspection.inheritance.SuperClassHasFrequentlyUsedInheritorsInspection;
-import com.intellij.openapi.util.Pair;
+import consulo.util.lang.Pair;
 import com.intellij.testFramework.fixtures.JavaCodeInsightFixtureTestCase;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.util.collection.ContainerUtil;
 import java.util.HashSet;
 import javax.annotation.Nullable;
 

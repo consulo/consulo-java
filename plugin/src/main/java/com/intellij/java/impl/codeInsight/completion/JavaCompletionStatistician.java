@@ -15,17 +15,17 @@
  */
 package com.intellij.java.impl.codeInsight.completion;
 
-import com.intellij.codeInsight.completion.CompletionLocation;
-import com.intellij.codeInsight.completion.CompletionStatistician;
-import com.intellij.codeInsight.lookup.LookupElement;
-import com.intellij.codeInsight.lookup.LookupItem;
+import consulo.language.editor.completion.CompletionLocation;
+import consulo.ide.impl.idea.codeInsight.completion.CompletionStatistician;
+import consulo.language.editor.completion.lookup.LookupElement;
+import consulo.language.editor.completion.lookup.LookupItem;
 import com.intellij.java.impl.codeInsight.ExpectedTypeInfo;
 import com.intellij.java.impl.codeInsight.ExpectedTypeInfoImpl;
 import com.intellij.java.impl.psi.statistics.JavaStatisticsManager;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
-import com.intellij.psi.statistics.StatisticsInfo;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.ide.impl.psi.statistics.StatisticsInfo;
+import consulo.util.collection.ContainerUtil;
 
 import java.util.List;
 
@@ -34,11 +34,11 @@ import java.util.List;
  */
 public class JavaCompletionStatistician extends CompletionStatistician {
   @Override
-  public StatisticsInfo serialize(final LookupElement element, final CompletionLocation location) {
+  public consulo.ide.impl.psi.statistics.StatisticsInfo serialize(final LookupElement element, final CompletionLocation location) {
     Object o = element.getObject();
 
     if (o instanceof PsiLocalVariable || o instanceof PsiParameter || o instanceof PsiThisExpression || o instanceof PsiKeyword) {
-      return StatisticsInfo.EMPTY;
+      return consulo.ide.impl.psi.statistics.StatisticsInfo.EMPTY;
     }
 
     LookupItem item = element.as(LookupItem.CLASS_CONDITION_KEY);
@@ -54,7 +54,7 @@ public class JavaCompletionStatistician extends CompletionStatistician {
       String key2 = JavaStatisticsManager.getMemberUseKey2((PsiMember) o);
       if (o instanceof PsiClass) {
         PsiType expectedType = firstInfo != null ? firstInfo.getDefaultType() : null;
-        return new StatisticsInfo(JavaStatisticsManager.getAfterNewKey(expectedType), key2);
+        return new consulo.ide.impl.psi.statistics.StatisticsInfo(JavaStatisticsManager.getAfterNewKey(expectedType), key2);
       }
 
       PsiClass containingClass = ((PsiMember) o).getContainingClass();
@@ -66,19 +66,19 @@ public class JavaCompletionStatistician extends CompletionStatistician {
         if (o instanceof PsiMethod) {
           String memberValue = JavaStatisticsManager.getMemberUseKey2(RecursionWeigher.findDeepestSuper((PsiMethod) o));
 
-          List<StatisticsInfo> superMethodInfos = ContainerUtil.newArrayList(new StatisticsInfo(contextPrefix + context, memberValue));
+          List<consulo.ide.impl.psi.statistics.StatisticsInfo> superMethodInfos = ContainerUtil.newArrayList(new consulo.ide.impl.psi.statistics.StatisticsInfo(contextPrefix + context, memberValue));
           for (PsiClass superClass : InheritanceUtil.getSuperClasses(containingClass)) {
             superMethodInfos.add(new StatisticsInfo(contextPrefix + JavaStatisticsManager.getMemberUseKey2(superClass), memberValue));
           }
-          return StatisticsInfo.createComposite(superMethodInfos);
+          return consulo.ide.impl.psi.statistics.StatisticsInfo.createComposite(superMethodInfos);
         }
 
-        return new StatisticsInfo(context, key2);
+        return new consulo.ide.impl.psi.statistics.StatisticsInfo(context, key2);
       }
     }
 
     if (qualifierType != null) {
-      return StatisticsInfo.EMPTY;
+      return consulo.ide.impl.psi.statistics.StatisticsInfo.EMPTY;
     }
 
     return null;

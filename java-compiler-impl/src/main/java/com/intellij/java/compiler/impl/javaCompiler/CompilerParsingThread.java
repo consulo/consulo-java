@@ -21,14 +21,14 @@ import java.util.concurrent.BlockingQueue;
 import javax.annotation.Nullable;
 
 import com.intellij.java.compiler.OutputParser;
-import com.intellij.compiler.impl.CompileDriver;
-import com.intellij.compiler.make.CacheCorruptedException;
-import com.intellij.execution.process.ProcessAdapter;
-import com.intellij.execution.process.ProcessEvent;
-import com.intellij.execution.process.ProcessHandler;
-import com.intellij.execution.process.ProcessOutputTypes;
-import com.intellij.openapi.compiler.CompileContext;
-import com.intellij.openapi.compiler.CompilerMessageCategory;
+import consulo.compiler.CacheCorruptedException;
+import consulo.ide.impl.idea.compiler.impl.CompileDriver;
+import consulo.process.event.ProcessAdapter;
+import consulo.process.event.ProcessEvent;
+import consulo.process.ProcessHandler;
+import consulo.process.ProcessOutputTypes;
+import consulo.compiler.CompileContext;
+import consulo.compiler.CompilerMessageCategory;
 import consulo.logging.Logger;
 import consulo.util.dataholder.Key;
 

@@ -15,8 +15,8 @@
  */
 package com.intellij.java.debugger.impl.ui.impl.watch;
 
-import com.intellij.openapi.project.Project;
-import com.intellij.xdebugger.impl.ui.tree.TreeInplaceEditor;
+import consulo.project.Project;
+import consulo.ide.impl.idea.xdebugger.impl.ui.tree.TreeInplaceEditor;
 
 import javax.swing.*;
 import javax.swing.tree.TreePath;

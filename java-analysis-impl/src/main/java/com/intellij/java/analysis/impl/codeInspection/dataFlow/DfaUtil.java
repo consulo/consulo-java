@@ -10,12 +10,12 @@ import com.intellij.java.analysis.impl.psi.controlFlow.DefUseUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
 import com.intellij.java.language.impl.psi.impl.source.resolve.JavaResolveUtil;
-import com.intellij.psi.tree.IElementType;
+import consulo.language.ast.IElementType;
 import com.intellij.java.language.psi.util.PsiPrecedenceUtil;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.util.collection.ContainerUtil;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
 import one.util.streamex.StreamEx;
@@ -26,7 +26,7 @@ import java.util.*;
 import java.util.function.Predicate;
 
 import static com.intellij.java.language.psi.CommonClassNames.JAVA_UTIL_COLLECTIONS;
-import static com.intellij.util.ObjectUtils.tryCast;
+import static consulo.ide.impl.idea.util.ObjectUtils.tryCast;
 
 /**
  * @author Gregory.Shrago

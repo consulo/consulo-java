@@ -15,8 +15,8 @@
  */
 package com.intellij.psi.formatter.java;
 
-import com.intellij.openapi.util.TextRange;
-import com.intellij.util.IncorrectOperationException;
+import consulo.document.util.TextRange;
+import consulo.language.util.IncorrectOperationException;
 
 /**
  * @author Denis Zhdanov

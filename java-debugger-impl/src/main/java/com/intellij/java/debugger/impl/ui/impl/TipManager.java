@@ -38,22 +38,22 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 
-import com.intellij.ide.FrameStateListener;
-import com.intellij.ide.FrameStateManager;
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.CustomShortcutSet;
-import com.intellij.openapi.keymap.KeymapUtil;
+import consulo.component.util.Weighted;
+import consulo.ide.impl.idea.ide.FrameStateListener;
+import consulo.ide.impl.idea.ide.FrameStateManager;
+import consulo.ui.ex.action.AnAction;
+import consulo.ui.ex.action.AnActionEvent;
+import consulo.ui.ex.action.CustomShortcutSet;
+import consulo.ui.ex.awt.util.Alarm;
+import consulo.ui.ex.awt.util.IdeGlassPaneUtil;
+import consulo.ui.ex.keymap.util.KeymapUtil;
 import consulo.disposer.Disposable;
 import consulo.disposer.Disposer;
-import com.intellij.openapi.util.Weighted;
-import com.intellij.openapi.wm.IdeGlassPane;
-import com.intellij.openapi.wm.IdeGlassPaneUtil;
-import com.intellij.util.Alarm;
-import com.intellij.util.ui.UIUtil;
-import com.intellij.util.ui.update.Activatable;
-import com.intellij.util.ui.update.UiNotifyConnector;
-import com.intellij.xdebugger.settings.XDebuggerSettingsManager;
+import consulo.ui.ex.IdeGlassPane;
+import consulo.ui.ex.awt.UIUtil;
+import consulo.ui.ex.update.Activatable;
+import consulo.ui.ex.awt.update.UiNotifyConnector;
+import consulo.execution.debug.setting.XDebuggerSettingsManager;
 
 /**
  * @author lex

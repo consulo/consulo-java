@@ -26,11 +26,13 @@ import com.intellij.java.language.psi.PsiAnonymousClass;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiJavaPackage;
 import consulo.logging.Logger;
-import com.intellij.openapi.project.Project;
+import consulo.project.Project;
 import com.intellij.psi.*;
-import com.intellij.refactoring.RefactoringBundle;
-import com.intellij.refactoring.move.MoveCallback;
-import com.intellij.refactoring.util.CommonRefactoringUtil;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.move.MoveCallback;
+import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
+
+import javax.annotation.Nullable;
 
 public class MoveInnerImpl {
   private static final Logger LOG = Logger.getInstance(MoveInnerImpl.class);
@@ -59,7 +61,7 @@ public class MoveInnerImpl {
   /**
    * must be called in atomic action
    */
-  @javax.annotation.Nullable
+  @Nullable
   public static PsiElement getTargetContainer(PsiClass innerClass, final boolean chooseIfNotUnderSource) {
     final PsiClass outerClass = innerClass.getContainingClass();
     assert outerClass != null; // Only inner classes allowed.

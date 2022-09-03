@@ -15,12 +15,12 @@
  */
 package com.intellij.java.impl.ig.logging;
 
-import com.intellij.codeInspection.ProblemDescriptor;
+import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.project.Project;
+import consulo.util.lang.StringUtil;
 import com.intellij.psi.*;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
@@ -32,6 +32,7 @@ import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -65,7 +66,7 @@ public class StringConcatenationArgumentToLogCallInspection extends BaseInspecti
     return InspectionGadgetsBundle.message("string.concatenation.argument.to.log.call.problem.descriptor");
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   @Override
   protected InspectionGadgetsFix buildFix(Object... infos) {
     if (!StringConcatenationArgumentToLogCallFix.isAvailable((PsiExpression)infos[0])) {
@@ -273,7 +274,7 @@ public class StringConcatenationArgumentToLogCallInspection extends BaseInspecti
       registerMethodCallError(expression, argument);
     }
 
-    private static boolean containsNonConstantConcatenation(@javax.annotation.Nullable PsiExpression expression) {
+    private static boolean containsNonConstantConcatenation(@Nullable PsiExpression expression) {
       if (expression instanceof PsiParenthesizedExpression) {
         final PsiParenthesizedExpression parenthesizedExpression = (PsiParenthesizedExpression)expression;
         return containsNonConstantConcatenation(parenthesizedExpression.getExpression());

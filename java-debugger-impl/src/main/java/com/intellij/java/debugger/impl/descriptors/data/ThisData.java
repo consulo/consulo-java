@@ -16,7 +16,7 @@
 package com.intellij.java.debugger.impl.descriptors.data;
 
 import com.intellij.java.debugger.impl.ui.impl.watch.ThisDescriptorImpl;
-import com.intellij.openapi.project.Project;
+import consulo.project.Project;
 import consulo.util.dataholder.Key;
 
 public final class ThisData extends DescriptorData<ThisDescriptorImpl>{

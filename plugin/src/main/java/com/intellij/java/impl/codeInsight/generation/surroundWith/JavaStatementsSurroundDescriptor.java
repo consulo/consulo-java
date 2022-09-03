@@ -15,12 +15,12 @@
  */
 package com.intellij.java.impl.codeInsight.generation.surroundWith;
 
-import com.intellij.lang.surroundWith.SurroundDescriptor;
-import com.intellij.lang.surroundWith.Surrounder;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
+import consulo.language.editor.surroundWith.SurroundDescriptor;
+import consulo.language.editor.surroundWith.Surrounder;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
 import com.intellij.java.impl.codeInsight.CodeInsightUtil;
-import com.intellij.featureStatistics.FeatureUsageTracker;
+import consulo.externalService.statistic.FeatureUsageTracker;
 import javax.annotation.Nonnull;
 
 /**

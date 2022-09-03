@@ -18,7 +18,7 @@ package consulo.java.language.psi;
 
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.LanguageLevel;
-import consulo.lang.LanguageVersion;
+import consulo.language.version.LanguageVersion;
 
 import javax.annotation.Nonnull;
 

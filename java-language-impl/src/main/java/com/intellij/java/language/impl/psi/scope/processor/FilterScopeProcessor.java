@@ -20,13 +20,13 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import consulo.util.dataholder.Key;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiSubstitutor;
-import com.intellij.psi.ResolveState;
-import com.intellij.psi.filters.ElementFilter;
-import com.intellij.psi.scope.BaseScopeProcessor;
-import com.intellij.psi.scope.PsiScopeProcessor;
-import com.intellij.util.SmartList;
+import consulo.language.psi.resolve.ResolveState;
+import consulo.language.psi.filter.ElementFilter;
+import consulo.language.psi.resolve.BaseScopeProcessor;
+import consulo.language.psi.resolve.PsiScopeProcessor;
+import consulo.util.collection.SmartList;
 
 /**
  * @author ik

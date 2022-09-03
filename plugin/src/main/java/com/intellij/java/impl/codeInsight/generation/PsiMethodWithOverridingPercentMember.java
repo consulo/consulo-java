@@ -24,10 +24,12 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.swing.JTree;
 
+import consulo.ui.ex.awt.SimpleColoredComponent;
 import org.jetbrains.annotations.TestOnly;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.util.lang.StringUtil;
 import com.intellij.java.language.psi.PsiArrayType;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiClassType;
@@ -40,9 +42,8 @@ import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.impl.psi.impl.source.PsiExtensibleClass;
 import com.intellij.java.language.psi.infos.CandidateInfo;
 import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
-import com.intellij.ui.SimpleColoredComponent;
-import com.intellij.ui.SimpleTextAttributes;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.ui.ex.SimpleTextAttributes;
+import consulo.util.collection.ContainerUtil;
 
 /**
  * @author Dmitry Batkovich <dmitry.batkovich@jetbrains.com>
@@ -190,7 +191,7 @@ public class PsiMethodWithOverridingPercentMember extends PsiMethodMember
 		return true;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	private static String getTypeShortName(@Nonnull final PsiType type)
 	{
 		if(type instanceof PsiPrimitiveType)

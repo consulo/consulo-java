@@ -1,20 +1,20 @@
 // Copyright 2000-2019 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.impl.ide.structureView.impl.java;
 
-import com.intellij.icons.AllIcons;
-import com.intellij.ide.structureView.impl.common.PsiTreeElementBase;
-import com.intellij.ide.util.FileStructureNodeProvider;
-import com.intellij.ide.util.treeView.smartTree.ActionPresentation;
-import com.intellij.ide.util.treeView.smartTree.ActionPresentationData;
-import com.intellij.ide.util.treeView.smartTree.TreeElement;
-import com.intellij.navigation.AnonymousElementProvider;
-import com.intellij.openapi.actionSystem.KeyboardShortcut;
-import com.intellij.openapi.actionSystem.Shortcut;
-import com.intellij.openapi.project.DumbAware;
-import com.intellij.openapi.util.PropertyOwner;
-import com.intellij.openapi.util.SystemInfo;
+import consulo.application.AllIcons;
+import consulo.language.editor.structureView.PsiTreeElementBase;
+import consulo.fileEditor.structureView.tree.FileStructureNodeProvider;
+import consulo.fileEditor.structureView.tree.ActionPresentation;
+import consulo.fileEditor.structureView.tree.ActionPresentationData;
+import consulo.fileEditor.structureView.tree.TreeElement;
+import consulo.language.navigation.AnonymousElementProvider;
+import consulo.ui.ex.action.KeyboardShortcut;
+import consulo.ui.ex.action.Shortcut;
+import consulo.application.dumb.DumbAware;
+import consulo.ide.impl.idea.openapi.util.PropertyOwner;
+import consulo.application.util.SystemInfo;
 import com.intellij.java.language.psi.PsiAnonymousClass;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import consulo.java.analysis.codeInsight.JavaCodeInsightBundle;
 
 import javax.annotation.Nonnull;
@@ -26,7 +26,7 @@ import java.util.List;
 /**
  * @author Konstantin Bulenkov
  */
-public class JavaAnonymousClassesNodeProvider implements FileStructureNodeProvider<JavaAnonymousClassTreeElement>, PropertyOwner, DumbAware
+public class JavaAnonymousClassesNodeProvider implements FileStructureNodeProvider<JavaAnonymousClassTreeElement>, consulo.ide.impl.idea.openapi.util.PropertyOwner, DumbAware
 {
 	public static final String ID = "SHOW_ANONYMOUS";
 	public static final String JAVA_ANONYMOUS_PROPERTY_NAME = "java.anonymous.provider";

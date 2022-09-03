@@ -16,8 +16,9 @@
 package com.intellij.java.impl.debugger.codeinsight;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-import com.intellij.codeInsight.CodeInsightBundle;
+import consulo.language.editor.CodeInsightBundle;
 import com.intellij.java.impl.codeInsight.generation.surroundWith.JavaExpressionSurrounder;
 import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.impl.DebuggerInvocationUtil;
@@ -26,24 +27,24 @@ import com.intellij.java.debugger.impl.engine.evaluation.DefaultCodeFragmentFact
 import com.intellij.java.debugger.impl.DebuggerContextImpl;
 import com.intellij.java.debugger.impl.DebuggerSession;
 import com.intellij.java.debugger.impl.codeinsight.RuntimeTypeEvaluator;
-import com.intellij.openapi.application.Result;
-import com.intellij.openapi.command.WriteCommandAction;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.ScrollType;
-import com.intellij.openapi.progress.ProgressIndicator;
-import com.intellij.openapi.progress.util.ProgressWindowWithNotification;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.TextRange;
+import consulo.application.Result;
+import consulo.language.editor.WriteCommandAction;
+import consulo.codeEditor.Editor;
+import consulo.codeEditor.ScrollType;
+import consulo.application.progress.ProgressIndicator;
+import consulo.ide.impl.idea.openapi.progress.util.ProgressWindowWithNotification;
+import consulo.project.Project;
+import consulo.document.util.TextRange;
 import com.intellij.java.language.psi.JavaPsiFacade;
-import com.intellij.psi.PsiCodeFragment;
+import consulo.language.psi.PsiCodeFragment;
 import com.intellij.java.language.psi.PsiElementFactory;
 import com.intellij.java.language.psi.PsiExpression;
-import com.intellij.psi.PsiFile;
+import consulo.language.psi.PsiFile;
 import com.intellij.java.language.psi.PsiParenthesizedExpression;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.PsiTypeCastExpression;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
 
 /**
  * User: lex
@@ -105,7 +106,7 @@ public class JavaWithRuntimeCastSurrounder extends JavaExpressionSurrounder
 		}
 
 		@Override
-		protected void typeCalculationFinished(@javax.annotation.Nullable final PsiType type)
+		protected void typeCalculationFinished(@Nullable final PsiType type)
 		{
 			if(type == null)
 			{

@@ -6,12 +6,12 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import com.intellij.java.impl.javadoc.JavadocHelper;
-import com.intellij.openapi.editor.CaretModel;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.LogicalPosition;
-import com.intellij.openapi.util.Pair;
-import com.intellij.psi.PsiFile;
+import consulo.codeEditor.CaretModel;
+import consulo.document.Document;
+import consulo.codeEditor.Editor;
+import consulo.codeEditor.LogicalPosition;
+import consulo.util.lang.Pair;
+import consulo.language.psi.PsiFile;
 
 /**
  * Serves as a facade for javadoc smart completion.

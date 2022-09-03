@@ -18,11 +18,12 @@ package com.intellij.java.impl.ig.logging;
 import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.*;
 
@@ -210,7 +211,7 @@ public class LoggingConditionDisagreesWithLogStatementInspection extends BaseIns
       return !loggingLevel.equals(priority);
     }
 
-    @javax.annotation.Nullable
+    @Nullable
     public static String getLoggingLevelFromArgument(PsiExpression argument) {
       if (!(argument instanceof PsiReferenceExpression)) {
         return null;

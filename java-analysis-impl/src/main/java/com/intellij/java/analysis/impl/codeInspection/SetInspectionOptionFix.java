@@ -1,19 +1,18 @@
 // Copyright 2000-2017 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.analysis.impl.codeInspection;
 
-import com.intellij.codeInsight.intention.LowPriorityAction;
-import com.intellij.codeInspection.*;
-import com.intellij.codeInspection.ex.InspectionToolWrapper;
-import com.intellij.icons.AllIcons;
-import com.intellij.openapi.command.undo.BasicUndoableAction;
-import com.intellij.openapi.command.undo.UndoManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Iconable;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.profile.codeInspection.InspectionProjectProfileManager;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiManager;
-import com.intellij.util.ReflectionUtil;
+import consulo.language.editor.intention.LowPriorityAction;
+import consulo.language.editor.inspection.scheme.InspectionToolWrapper;
+import consulo.application.AllIcons;
+import consulo.undoRedo.BasicUndoableAction;
+import consulo.undoRedo.UndoManager;
+import consulo.project.Project;
+import consulo.component.util.Iconable;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.language.editor.inspection.scheme.InspectionProjectProfileManager;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiManager;
+import consulo.util.lang.reflect.ReflectionUtil;
 import consulo.ui.image.Image;
 import org.jetbrains.annotations.Nls;
 

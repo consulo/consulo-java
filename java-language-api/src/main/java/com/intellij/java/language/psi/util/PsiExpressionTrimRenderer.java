@@ -21,9 +21,9 @@
 package com.intellij.java.language.psi.util;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.util.PsiFormatUtilBase;
-import com.intellij.util.Function;
+import consulo.language.psi.PsiElement;
+
+import java.util.function.Function;
 
 public class PsiExpressionTrimRenderer extends JavaRecursiveElementWalkingVisitor {
   private final StringBuilder myBuf;
@@ -264,7 +264,7 @@ public class PsiExpressionTrimRenderer extends JavaRecursiveElementWalkingVisito
 
   public static class RenderFunction implements Function<PsiExpression, String> {
     @Override
-    public String fun(PsiExpression psiExpression) {
+    public String apply(PsiExpression psiExpression) {
       return render(psiExpression);
     }
   }

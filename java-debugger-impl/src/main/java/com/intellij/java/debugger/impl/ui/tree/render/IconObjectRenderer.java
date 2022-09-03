@@ -29,8 +29,8 @@ import com.intellij.java.debugger.impl.DebuggerUtilsImpl;
 import com.intellij.java.debugger.impl.settings.NodeRendererSettings;
 import com.intellij.java.debugger.impl.ui.impl.watch.ValueDescriptorImpl;
 import com.intellij.java.debugger.impl.ui.tree.ValueDescriptor;
-import com.intellij.util.ui.JBUI;
-import com.intellij.xdebugger.frame.XFullValueEvaluator;
+import consulo.ui.ex.awt.JBUI;
+import consulo.execution.debug.frame.XFullValueEvaluator;
 import consulo.ui.image.Image;
 
 /**

@@ -15,11 +15,11 @@
  */
 package com.intellij.java.impl.ig.maturity;
 
-import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.PsiComment;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.search.PsiTodoSearchHelper;
-import com.intellij.psi.search.TodoItem;
+import consulo.document.util.TextRange;
+import consulo.language.psi.PsiComment;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.search.PsiTodoSearchHelper;
+import consulo.language.psi.search.TodoItem;
 
 public class TodoUtil {
   private TodoUtil() {

@@ -23,17 +23,17 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import com.intellij.openapi.application.WriteAction;
-import com.intellij.openapi.command.WriteCommandAction;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleManager;
-import com.intellij.openapi.util.Ref;
-import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.openapi.vfs.LocalFileSystem;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.util.Consumer;
-import com.intellij.util.SmartList;
-import com.intellij.util.lang.CompoundRuntimeException;
+import consulo.application.WriteAction;
+import consulo.language.editor.WriteCommandAction;
+import consulo.module.Module;
+import consulo.module.ModuleManager;
+import consulo.util.lang.ref.Ref;
+import consulo.ide.impl.idea.openapi.util.io.FileUtil;
+import consulo.virtualFileSystem.LocalFileSystem;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.ide.impl.idea.util.Consumer;
+import consulo.util.collection.SmartList;
+import consulo.util.lang.CompoundRuntimeException;
 
 public abstract class ModuleTestCase extends IdeaTestCase
 {

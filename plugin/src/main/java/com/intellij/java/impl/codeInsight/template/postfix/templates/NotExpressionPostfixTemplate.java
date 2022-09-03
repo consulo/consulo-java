@@ -18,8 +18,8 @@ package com.intellij.java.impl.codeInsight.template.postfix.templates;
 import javax.annotation.Nonnull;
 import com.intellij.java.impl.codeInsight.CodeInsightServicesUtil;
 import com.intellij.java.impl.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.util.Condition;
+import consulo.codeEditor.Editor;
+import consulo.util.lang.function.Condition;
 import com.intellij.java.language.psi.PsiExpression;
 
 public class NotExpressionPostfixTemplate extends ExpressionPostfixTemplateWithChooser {

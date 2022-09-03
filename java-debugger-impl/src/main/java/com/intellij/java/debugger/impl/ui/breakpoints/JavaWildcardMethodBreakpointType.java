@@ -22,13 +22,13 @@ import javax.swing.JComponent;
 import com.intellij.java.debugger.impl.breakpoints.properties.JavaMethodBreakpointProperties;
 import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.impl.HelpID;
-import com.intellij.icons.AllIcons;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Computable;
-import com.intellij.xdebugger.XDebuggerManager;
-import com.intellij.xdebugger.breakpoints.XBreakpoint;
-import com.intellij.xdebugger.breakpoints.ui.XBreakpointCustomPropertiesPanel;
+import consulo.application.AllIcons;
+import consulo.application.ApplicationManager;
+import consulo.execution.debug.breakpoint.XBreakpoint;
+import consulo.project.Project;
+import consulo.application.util.function.Computable;
+import consulo.execution.debug.XDebuggerManager;
+import consulo.execution.debug.breakpoint.ui.XBreakpointCustomPropertiesPanel;
 import consulo.ui.image.Image;
 
 /**

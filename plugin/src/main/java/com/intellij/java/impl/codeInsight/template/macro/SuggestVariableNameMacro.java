@@ -15,18 +15,19 @@
  */
 package com.intellij.java.impl.codeInsight.template.macro;
 
-import com.intellij.codeInsight.CodeInsightBundle;
-import com.intellij.codeInsight.lookup.LookupElement;
-import com.intellij.codeInsight.lookup.LookupItem;
+import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.completion.lookup.LookupElement;
+import consulo.language.editor.completion.lookup.LookupItem;
 import com.intellij.codeInsight.template.*;
 import com.intellij.java.impl.codeInsight.template.ExpressionUtil;
 import com.intellij.java.impl.codeInsight.template.JavaCodeContextType;
-import com.intellij.psi.PsiDocumentManager;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
+import consulo.language.psi.PsiDocumentManager;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
 import com.intellij.java.language.psi.PsiVariable;
-import com.intellij.util.ArrayUtil;
+import consulo.util.collection.ArrayUtil;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -56,7 +57,7 @@ public class SuggestVariableNameMacro extends Macro {
     return new TextResult(names[0]);
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   @Override
   public Result calculateQuickResult(@Nonnull Expression[] params, ExpressionContext context) {
     return calculateResult(params, context);

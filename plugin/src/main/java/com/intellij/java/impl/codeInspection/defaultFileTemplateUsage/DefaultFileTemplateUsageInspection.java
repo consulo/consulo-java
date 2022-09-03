@@ -20,17 +20,17 @@ import javax.annotation.Nullable;
 
 import org.jetbrains.annotations.NonNls;
 import com.intellij.java.analysis.impl.codeInspection.BaseJavaLocalInspectionTool;
-import com.intellij.codeInspection.InspectionManager;
-import com.intellij.codeInspection.InspectionsBundle;
-import com.intellij.codeInspection.LocalQuickFix;
-import com.intellij.codeInspection.ProblemDescriptor;
-import com.intellij.ide.fileTemplates.FileTemplate;
-import com.intellij.ide.fileTemplates.FileTemplateManager;
-import com.intellij.ide.fileTemplates.impl.FileTemplateConfigurable;
-import com.intellij.openapi.command.WriteCommandAction;
-import com.intellij.openapi.options.ShowSettingsUtil;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiFile;
+import consulo.language.editor.inspection.scheme.InspectionManager;
+import consulo.language.editor.inspection.InspectionsBundle;
+import consulo.language.editor.inspection.LocalQuickFix;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.fileTemplate.FileTemplate;
+import consulo.fileTemplate.FileTemplateManager;
+import consulo.ide.impl.idea.ide.fileTemplates.impl.FileTemplateConfigurable;
+import consulo.language.editor.WriteCommandAction;
+import consulo.ide.setting.ShowSettingsUtil;
+import consulo.project.Project;
+import consulo.language.psi.PsiFile;
 
 /**
  * @author cdr

@@ -26,13 +26,13 @@ import java.util.jar.Manifest;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import consulo.logging.Logger;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.roots.LibraryOrderEntry;
-import com.intellij.openapi.roots.ModuleRootManager;
-import com.intellij.openapi.roots.OrderEntry;
-import com.intellij.openapi.util.io.JarUtil;
-import com.intellij.openapi.vfs.VirtualFile;
-import consulo.vfs.ArchiveFileSystem;
+import consulo.module.Module;
+import consulo.module.content.layer.orderEntry.LibraryOrderEntry;
+import consulo.module.content.ModuleRootManager;
+import consulo.module.content.layer.orderEntry.OrderEntry;
+import consulo.ide.impl.idea.openapi.util.io.JarUtil;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.virtualFileSystem.archive.ArchiveFileSystem;
 
 public class JarVersionDetectionUtil
 {

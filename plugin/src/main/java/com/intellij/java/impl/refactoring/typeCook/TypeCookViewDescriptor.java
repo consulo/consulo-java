@@ -15,10 +15,10 @@
  */
 package com.intellij.java.impl.refactoring.typeCook;
 
-import com.intellij.psi.PsiElement;
-import com.intellij.refactoring.RefactoringBundle;
-import com.intellij.usageView.UsageViewBundle;
-import com.intellij.usageView.UsageViewDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.usage.UsageViewBundle;
+import consulo.usage.UsageViewDescriptor;
 import javax.annotation.Nonnull;
 
 class TypeCookViewDescriptor implements UsageViewDescriptor {

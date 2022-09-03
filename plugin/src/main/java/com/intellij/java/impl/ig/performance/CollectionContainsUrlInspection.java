@@ -17,7 +17,7 @@ package com.intellij.java.impl.ig.performance;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
@@ -113,7 +113,7 @@ public class CollectionContainsUrlInspection extends BaseInspection {
     }
 
     private static ClassType isMapOrSet(
-      @javax.annotation.Nullable PsiClass aClass, Set<PsiClass> visitedClasses) {
+      @Nullable PsiClass aClass, Set<PsiClass> visitedClasses) {
       if (aClass == null) {
         return ClassType.OTHER;
       }

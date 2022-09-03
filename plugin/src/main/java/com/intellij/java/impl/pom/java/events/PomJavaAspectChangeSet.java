@@ -18,9 +18,9 @@ package com.intellij.java.impl.pom.java.events;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.pom.PomModel;
-import com.intellij.pom.PomModelAspect;
-import com.intellij.pom.event.PomChangeSet;
+import consulo.language.pom.PomModel;
+import consulo.language.pom.PomModelAspect;
+import consulo.language.pom.event.PomChangeSet;
 import com.intellij.java.impl.pom.java.PomJavaAspect;
 
 public class PomJavaAspectChangeSet implements PomChangeSet{

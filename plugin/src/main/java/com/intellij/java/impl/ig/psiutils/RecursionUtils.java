@@ -16,8 +16,8 @@
 package com.intellij.java.impl.ig.psiutils;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.tree.IElementType;
+import consulo.language.psi.PsiElement;
+import consulo.language.ast.IElementType;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 
 import javax.annotation.Nonnull;

@@ -18,7 +18,7 @@ package com.intellij.java.impl.refactoring.openapi.impl;
 import jakarta.inject.Singleton;
 
 import com.intellij.java.analysis.refactoring.JavaRefactoringActionHandlerFactory;
-import com.intellij.refactoring.RefactoringActionHandler;
+import consulo.language.editor.refactoring.action.RefactoringActionHandler;
 import com.intellij.java.impl.refactoring.anonymousToInner.AnonymousToInnerHandler;
 import com.intellij.java.impl.refactoring.changeSignature.JavaChangeSignatureHandler;
 import com.intellij.java.impl.refactoring.convertToInstanceMethod.ConvertToInstanceMethodHandler;
@@ -27,7 +27,7 @@ import com.intellij.java.impl.refactoring.extractInterface.ExtractInterfaceHandl
 import com.intellij.java.impl.refactoring.extractMethod.ExtractMethodHandler;
 import com.intellij.java.impl.refactoring.extractSuperclass.ExtractSuperclassHandler;
 import com.intellij.java.impl.refactoring.inheritanceToDelegation.InheritanceToDelegationHandler;
-import com.intellij.refactoring.inline.InlineRefactoringActionHandler;
+import consulo.ide.impl.idea.refactoring.inline.InlineRefactoringActionHandler;
 import com.intellij.java.impl.refactoring.introduceField.IntroduceConstantHandler;
 import com.intellij.java.impl.refactoring.introduceField.IntroduceFieldHandler;
 import com.intellij.java.impl.refactoring.introduceParameter.IntroduceParameterHandler;

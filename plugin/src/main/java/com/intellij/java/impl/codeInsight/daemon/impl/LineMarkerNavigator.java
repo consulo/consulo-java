@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl;
 
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 
 import java.awt.event.MouseEvent;
 

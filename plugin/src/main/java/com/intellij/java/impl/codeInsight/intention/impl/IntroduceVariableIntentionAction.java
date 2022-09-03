@@ -17,18 +17,18 @@ package com.intellij.java.impl.codeInsight.intention.impl;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.codeInsight.CodeInsightBundle;
+import consulo.language.editor.CodeInsightBundle;
 import com.intellij.java.language.psi.PsiAssignmentExpression;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiExpressionStatement;
 import com.intellij.java.language.psi.PsiType;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
+import consulo.codeEditor.Editor;
+import consulo.project.Project;
 import com.intellij.psi.*;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.refactoring.BaseRefactoringIntentionAction;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.editor.refactoring.action.BaseRefactoringIntentionAction;
 import com.intellij.java.impl.refactoring.introduceVariable.IntroduceVariableHandler;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
 
 /**
  * @author Danila Ponomarenko

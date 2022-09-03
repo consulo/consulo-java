@@ -19,21 +19,22 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
 import com.intellij.java.language.psi.util.PropertyUtil;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiNamedElement;
-import com.intellij.psi.codeStyle.NameUtil;
-import com.intellij.psi.codeStyle.SuggestedNameInfo;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.refactoring.rename.NameSuggestionProvider;
-import com.intellij.usageView.UsageViewUtil;
-import com.intellij.util.ArrayUtil;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.util.lang.StringUtil;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiNamedElement;
+import consulo.application.util.matcher.NameUtil;
+import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.editor.refactoring.rename.NameSuggestionProvider;
+import consulo.usage.UsageViewUtil;
+import consulo.util.collection.ArrayUtil;
+import consulo.util.collection.ContainerUtil;
 
+import javax.annotation.Nullable;
 import java.util.*;
 
 public class JavaNameSuggestionProvider implements NameSuggestionProvider {
-  @javax.annotation.Nullable
+  @Nullable
   public SuggestedNameInfo getSuggestedNames(final PsiElement element, final PsiElement nameSuggestionContext, Set<String> result) {
     String initialName = UsageViewUtil.getShortName(element);
     SuggestedNameInfo info = suggestNamesForElement(element, nameSuggestionContext);
@@ -80,7 +81,7 @@ public class JavaNameSuggestionProvider implements NameSuggestionProvider {
     return info;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private static String getSuperMethodName(final PsiParameter psiParameter, final PsiMethod method) {
     final int index = method.getParameterList().getParameterIndex(psiParameter);
     final PsiMethod[] superMethods = method.findSuperMethods();
@@ -93,7 +94,7 @@ public class JavaNameSuggestionProvider implements NameSuggestionProvider {
     return null;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private static String[] suggestProperlyCasedName(PsiElement psiElement) {
     if (!(psiElement instanceof PsiNamedElement)) return null;
     String name = ((PsiNamedElement) psiElement).getName();
@@ -140,7 +141,7 @@ public class JavaNameSuggestionProvider implements NameSuggestionProvider {
     return buffer.toString();
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private static SuggestedNameInfo suggestNamesForElement(final PsiElement element, PsiElement nameSuggestionContext) {
     PsiVariable var = null;
     if (element instanceof PsiVariable) {

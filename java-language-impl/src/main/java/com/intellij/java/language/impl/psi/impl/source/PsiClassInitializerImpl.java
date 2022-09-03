@@ -15,18 +15,20 @@
  */
 package com.intellij.java.language.impl.psi.impl.source;
 
-import javax.annotation.Nonnull;
-
-import com.intellij.java.language.psi.*;
-import com.intellij.lang.ASTNode;
-import com.intellij.psi.*;
 import com.intellij.java.language.impl.psi.impl.java.stubs.JavaStubElementTypes;
 import com.intellij.java.language.impl.psi.impl.java.stubs.PsiClassInitializerStub;
 import com.intellij.java.language.impl.psi.impl.source.tree.ChildRole;
-import com.intellij.psi.impl.source.tree.CompositeElement;
-import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.java.language.impl.psi.scope.util.PsiScopesUtil;
-import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.java.language.psi.*;
+import consulo.language.ast.ASTNode;
+import consulo.language.impl.ast.CompositeElement;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiElementVisitor;
+import consulo.language.psi.resolve.PsiScopeProcessor;
+import consulo.language.psi.resolve.ResolveState;
+import consulo.language.psi.util.PsiTreeUtil;
+
+import javax.annotation.Nonnull;
 
 public class PsiClassInitializerImpl extends JavaStubPsiElement<PsiClassInitializerStub> implements PsiClassInitializer {
   public PsiClassInitializerImpl(final PsiClassInitializerStub stub) {
@@ -40,7 +42,7 @@ public class PsiClassInitializerImpl extends JavaStubPsiElement<PsiClassInitiali
   @Override
   public PsiClass getContainingClass() {
     PsiElement parent = getParent();
-    return parent instanceof PsiClass ? (PsiClass)parent : PsiTreeUtil.getParentOfType(this, PsiSyntheticClass.class);
+    return parent instanceof PsiClass ? (PsiClass) parent : PsiTreeUtil.getParentOfType(this, PsiSyntheticClass.class);
   }
 
   @Override
@@ -61,21 +63,20 @@ public class PsiClassInitializerImpl extends JavaStubPsiElement<PsiClassInitiali
 
   @Override
   @Nonnull
-  public PsiCodeBlock getBody(){
-    return (PsiCodeBlock)((CompositeElement)getNode()).findChildByRoleAsPsiElement(ChildRole.METHOD_BODY);
+  public PsiCodeBlock getBody() {
+    return (PsiCodeBlock) ((CompositeElement) getNode()).findChildByRoleAsPsiElement(ChildRole.METHOD_BODY);
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor){
+  public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
-      ((JavaElementVisitor)visitor).visitClassInitializer(this);
-    }
-    else {
+      ((JavaElementVisitor) visitor).visitClassInitializer(this);
+    } else {
       visitor.visitElement(this);
     }
   }
 
-  public String toString(){
+  public String toString() {
     return "PsiClassInitializer";
   }
 

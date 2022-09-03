@@ -20,8 +20,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import javax.annotation.Nonnull;
-import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.util.ArrayUtil;
+import consulo.ide.impl.idea.openapi.util.io.FileUtil;
+import consulo.util.collection.ArrayUtil;
 
 /**
  * @author cdr

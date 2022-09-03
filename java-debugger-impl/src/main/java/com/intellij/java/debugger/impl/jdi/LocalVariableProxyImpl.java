@@ -18,7 +18,7 @@ package com.intellij.java.debugger.impl.jdi;
 import com.intellij.java.debugger.engine.evaluation.EvaluateException;
 import com.intellij.java.debugger.engine.evaluation.EvaluateExceptionUtil;
 import com.intellij.java.debugger.engine.jdi.LocalVariableProxy;
-import com.intellij.openapi.util.Comparing;
+import consulo.util.lang.Comparing;
 import consulo.internal.com.sun.jdi.ClassNotLoadedException;
 import consulo.internal.com.sun.jdi.IncompatibleThreadStateException;
 import consulo.internal.com.sun.jdi.LocalVariable;

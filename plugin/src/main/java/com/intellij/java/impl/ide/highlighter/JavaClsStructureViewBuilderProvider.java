@@ -16,18 +16,19 @@
 package com.intellij.java.impl.ide.highlighter;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-import com.intellij.ide.structureView.StructureViewBuilder;
-import com.intellij.ide.structureView.StructureViewBuilderProvider;
+import consulo.fileEditor.structureView.StructureViewBuilder;
+import consulo.fileEditor.structureView.StructureViewBuilderProvider;
 import com.intellij.java.language.impl.JavaClassFileType;
 import com.intellij.lang.LanguageStructureViewBuilder;
-import com.intellij.lang.PsiStructureViewFactory;
-import com.intellij.openapi.fileTypes.FileType;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiCompiledFile;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiManager;
+import consulo.language.editor.structureView.PsiStructureViewFactory;
+import consulo.virtualFileSystem.fileType.FileType;
+import consulo.project.Project;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.language.psi.PsiCompiledFile;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiManager;
 
 /**
  * @author max
@@ -35,7 +36,7 @@ import com.intellij.psi.PsiManager;
 public class JavaClsStructureViewBuilderProvider implements StructureViewBuilderProvider
 {
 	@Override
-	@javax.annotation.Nullable
+	@Nullable
 	public StructureViewBuilder getStructureViewBuilder(@Nonnull FileType fileType, @Nonnull VirtualFile file, @Nonnull Project project)
 	{
 		if(fileType == JavaClassFileType.INSTANCE)

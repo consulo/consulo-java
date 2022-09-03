@@ -15,9 +15,9 @@
  */
 package com.intellij.java.impl.spi.psi;
 
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
+import consulo.language.impl.psi.ASTWrapperPsiElement;
 import com.intellij.java.language.impl.spi.parsing.SPIElementTypes;
-import com.intellij.lang.ASTNode;
+import consulo.language.ast.ASTNode;
 
 import javax.annotation.Nonnull;
 import java.util.List;

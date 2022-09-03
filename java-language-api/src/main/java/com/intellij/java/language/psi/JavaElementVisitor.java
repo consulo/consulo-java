@@ -2,7 +2,7 @@
 package com.intellij.java.language.psi;
 
 import com.intellij.java.language.psi.javadoc.*;
-import com.intellij.psi.PsiElementVisitor;
+import consulo.language.psi.PsiElementVisitor;
 
 public abstract class JavaElementVisitor extends PsiElementVisitor {
   public void visitAnonymousClass(PsiAnonymousClass aClass) {

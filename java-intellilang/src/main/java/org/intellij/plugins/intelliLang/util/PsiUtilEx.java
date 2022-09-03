@@ -15,22 +15,23 @@
  */
 package org.intellij.plugins.intelliLang.util;
 
-import javax.annotation.Nonnull;
-
-import com.intellij.java.language.psi.*;
-import consulo.annotation.access.RequiredReadAction;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.impl.DocumentImpl;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.ProjectFileIndex;
-import com.intellij.openapi.roots.ProjectRootManager;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.*;
-import com.intellij.psi.tree.IElementType;
 import com.intellij.java.language.impl.ui.JavaReferenceEditorUtil;
+import com.intellij.java.language.psi.*;
+import com.sun.org.apache.xerces.internal.dom.DocumentImpl;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.application.ApplicationManager;
+import consulo.document.Document;
 import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.ast.IElementType;
+import consulo.language.psi.PsiElement;
+import consulo.module.content.ProjectFileIndex;
+import consulo.module.content.ProjectRootManager;
+import consulo.project.Project;
+import consulo.util.lang.Comparing;
+import consulo.virtualFileSystem.VirtualFile;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class PsiUtilEx {
 
@@ -44,7 +45,7 @@ public class PsiUtilEx {
     return index.isInContent(file);
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public static PsiParameter getParameterForArgument(PsiElement element) {
     PsiElement p = element.getParent();
     if (!(p instanceof PsiExpressionList)) return null;

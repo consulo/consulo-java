@@ -15,14 +15,14 @@
  */
 package com.intellij.java.impl.refactoring.rename;
 
-import com.intellij.openapi.extensions.Extensions;
-import com.intellij.pom.PomTarget;
-import com.intellij.pom.PomTargetPsiElement;
-import com.intellij.pom.references.PomService;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.targets.AliasingPsiTarget;
-import com.intellij.psi.targets.AliasingPsiTargetMapper;
-import com.intellij.refactoring.rename.RenamePsiElementProcessor;
+import consulo.component.extension.Extensions;
+import consulo.language.pom.PomTarget;
+import consulo.language.pom.PomTargetPsiElement;
+import consulo.language.pom.PomService;
+import consulo.language.psi.PsiElement;
+import consulo.ide.impl.psi.targets.AliasingPsiTarget;
+import consulo.ide.impl.psi.targets.AliasingPsiTargetMapper;
+import consulo.language.editor.refactoring.rename.RenamePsiElementProcessor;
 
 import javax.annotation.Nonnull;
 import java.util.Map;

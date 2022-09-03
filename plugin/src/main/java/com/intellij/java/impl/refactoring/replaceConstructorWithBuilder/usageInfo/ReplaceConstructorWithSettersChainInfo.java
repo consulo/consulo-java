@@ -21,13 +21,13 @@
 package com.intellij.java.impl.refactoring.replaceConstructorWithBuilder.usageInfo;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.util.lang.Comparing;
+import consulo.util.lang.StringUtil;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
 import com.intellij.java.impl.refactoring.replaceConstructorWithBuilder.ParameterData;
 import com.intellij.java.impl.refactoring.util.FixableUsageInfo;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
 
 import java.util.Map;
 

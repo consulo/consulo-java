@@ -16,27 +16,27 @@
 package com.intellij.java.impl.psi.impl.file;
 
 import com.intellij.java.language.impl.psi.impl.file.PsiPackageImplementationHelper;
+import consulo.fileEditor.FileEditorManager;
 import jakarta.inject.Singleton;
 
-import com.intellij.ide.projectView.ProjectView;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.fileEditor.FileEditorManager;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleUtil;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.ProjectRootManager;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.openapi.wm.ToolWindow;
-import com.intellij.openapi.wm.ToolWindowId;
-import com.intellij.openapi.wm.ToolWindowManager;
+import consulo.project.ui.view.ProjectView;
+import consulo.document.Document;
+import consulo.codeEditor.Editor;
+import consulo.module.Module;
+import consulo.ide.impl.idea.openapi.module.ModuleUtil;
+import consulo.project.Project;
+import consulo.module.content.ProjectRootManager;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.ui.ex.toolWindow.ToolWindow;
+import consulo.project.ui.wm.ToolWindowId;
+import consulo.project.ui.wm.ToolWindowManager;
 import com.intellij.java.language.impl.psi.NonClasspathClassFinder;
-import com.intellij.psi.PsiDirectory;
-import com.intellij.psi.PsiDocumentManager;
-import com.intellij.psi.PsiFile;
+import consulo.language.psi.PsiDirectory;
+import consulo.language.psi.PsiDocumentManager;
+import consulo.language.psi.PsiFile;
 import com.intellij.java.language.psi.PsiJavaPackage;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.util.PsiModificationTracker;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.PsiModificationTracker;
 
 /**
  * @author yole

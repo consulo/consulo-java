@@ -2,8 +2,8 @@ package org.osmorc.manifest.lang;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.openapi.fileTypes.FileTypeConsumer;
-import com.intellij.openapi.fileTypes.FileTypeFactory;
+import consulo.virtualFileSystem.fileType.FileTypeConsumer;
+import consulo.virtualFileSystem.fileType.FileTypeFactory;
 import consulo.java.manifest.lang.BndFileType;
 
 /**

@@ -15,14 +15,16 @@
  */
 package com.intellij.java.execution.impl.jar;
 
-import com.intellij.execution.Location;
-import com.intellij.execution.actions.ConfigurationContext;
-import com.intellij.execution.actions.RunConfigurationProducer;
-import com.intellij.openapi.util.Ref;
-import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.openapi.util.io.FileUtilRt;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiElement;
+import consulo.execution.action.ConfigurationContext;
+import consulo.execution.action.RunConfigurationProducer;
+import consulo.util.lang.ref.Ref;
+import consulo.ide.impl.idea.openapi.util.io.FileUtil;
+import consulo.ide.impl.idea.openapi.util.io.FileUtilRt;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.language.psi.PsiElement;
+import consulo.execution.action.Location;
+
+import javax.annotation.Nullable;
 
 /**
  * @author nik
@@ -47,7 +49,7 @@ public class JarApplicationConfigurationProducer extends RunConfigurationProduce
 		return false;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	private static VirtualFile getJarFileFromContext(ConfigurationContext context)
 	{
 		Location location = context.getLocation();

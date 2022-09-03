@@ -15,11 +15,11 @@
  */
 package com.intellij.java.impl.codeInsight.unwrap;
 
-import com.intellij.codeInsight.unwrap.AbstractUnwrapper;
+import consulo.language.editor.refactoring.unwrap.AbstractUnwrapper;
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiWhiteSpace;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiWhiteSpace;
+import consulo.language.util.IncorrectOperationException;
 
 public abstract class JavaUnwrapper extends AbstractUnwrapper<JavaUnwrapper.Context> {
 

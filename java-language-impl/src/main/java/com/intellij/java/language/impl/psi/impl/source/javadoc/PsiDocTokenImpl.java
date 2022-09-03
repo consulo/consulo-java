@@ -18,10 +18,10 @@ package com.intellij.java.language.impl.psi.impl.source.javadoc;
 import javax.annotation.Nonnull;
 
 import com.intellij.java.language.psi.JavaElementVisitor;
-import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.impl.source.tree.LeafPsiElement;
+import consulo.language.psi.PsiElementVisitor;
+import consulo.language.impl.psi.LeafPsiElement;
 import com.intellij.java.language.psi.javadoc.PsiDocToken;
-import com.intellij.psi.tree.IElementType;
+import consulo.language.ast.IElementType;
 
 public class PsiDocTokenImpl extends LeafPsiElement implements PsiDocToken{
   public PsiDocTokenImpl(IElementType type, CharSequence text) {

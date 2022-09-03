@@ -21,8 +21,10 @@
  */
 package com.intellij.java.compiler.impl.javaCompiler;
 
-import com.intellij.openapi.compiler.TranslatingCompiler;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.compiler.TranslatingCompiler;
+import consulo.virtualFileSystem.VirtualFile;
+
+import javax.annotation.Nullable;
 
 public class OutputItemImpl implements TranslatingCompiler.OutputItem{
 
@@ -37,7 +39,7 @@ public class OutputItemImpl implements TranslatingCompiler.OutputItem{
    * @param outputPath absolute path of the output file ('/' slashes used)
    * @param sourceFile corresponding source file
    */
-  public OutputItemImpl(@javax.annotation.Nullable String outputPath, VirtualFile sourceFile) {
+  public OutputItemImpl(@Nullable String outputPath, VirtualFile sourceFile) {
     myOutputPath = outputPath;
     mySourceFile = sourceFile;
   }

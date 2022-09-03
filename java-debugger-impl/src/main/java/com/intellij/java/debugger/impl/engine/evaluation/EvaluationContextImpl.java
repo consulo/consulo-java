@@ -16,6 +16,7 @@
 package com.intellij.java.debugger.impl.engine.evaluation;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.intellij.java.debugger.impl.engine.DebugProcessImpl;
 import com.intellij.java.debugger.impl.engine.DebuggerManagerThreadImpl;
@@ -23,8 +24,8 @@ import com.intellij.java.debugger.impl.engine.SuspendContextImpl;
 import com.intellij.java.debugger.impl.jdi.StackFrameProxyImpl;
 import com.intellij.java.debugger.engine.evaluation.EvaluateException;
 import com.intellij.java.debugger.engine.evaluation.EvaluationContext;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.NullableLazyValue;
+import consulo.project.Project;
+import consulo.ide.impl.idea.openapi.util.NullableLazyValue;
 import consulo.internal.com.sun.jdi.ClassLoaderReference;
 import consulo.internal.com.sun.jdi.Value;
 
@@ -36,7 +37,7 @@ public final class EvaluationContextImpl implements EvaluationContext
 	private boolean myAutoLoadClasses = true;
 	private ClassLoaderReference myClassLoader;
 
-	public EvaluationContextImpl(@Nonnull SuspendContextImpl suspendContext, StackFrameProxyImpl frameProxy, @javax.annotation.Nullable Value thisObject)
+	public EvaluationContextImpl(@Nonnull SuspendContextImpl suspendContext, StackFrameProxyImpl frameProxy, @Nullable Value thisObject)
 	{
 		myThisObject = NullableLazyValue.of(() -> thisObject);
 		myFrameProxy = frameProxy;
@@ -60,7 +61,7 @@ public final class EvaluationContextImpl implements EvaluationContext
 		mySuspendContext = suspendContext;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	@Override
 	public Value getThisObject()
 	{
@@ -107,7 +108,7 @@ public final class EvaluationContextImpl implements EvaluationContext
 		return copy;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	@Override
 	public ClassLoaderReference getClassLoader() throws EvaluateException
 	{

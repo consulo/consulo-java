@@ -16,17 +16,17 @@
 package com.intellij.java.language.impl.ui;
 
 import com.intellij.java.language.impl.JavaFileType;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.fileTypes.FileType;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.ComponentWithBrowseButton;
+import consulo.document.Document;
+import consulo.ui.ex.awt.TextAccessor;
+import consulo.virtualFileSystem.fileType.FileType;
+import consulo.project.Project;
+import consulo.ui.ex.awt.ComponentWithBrowseButton;
 import com.intellij.java.language.psi.JavaCodeFragment;
 import com.intellij.java.language.psi.JavaCodeFragmentFactory;
 import com.intellij.java.language.psi.JavaPsiFacade;
-import com.intellij.psi.PsiDocumentManager;
-import com.intellij.psi.PsiElement;
-import com.intellij.ui.EditorTextField;
-import com.intellij.ui.TextAccessor;
+import consulo.language.psi.PsiDocumentManager;
+import consulo.language.psi.PsiElement;
+import consulo.language.editor.ui.awt.EditorTextField;
 
 /**
  * User: anna

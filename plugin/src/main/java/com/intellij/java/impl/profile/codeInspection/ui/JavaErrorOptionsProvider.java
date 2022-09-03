@@ -24,9 +24,9 @@ import java.util.function.Consumer;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.codeInsight.daemon.DaemonCodeAnalyzerSettings;
-import com.intellij.openapi.application.ApplicationBundle;
-import consulo.codeInspection.ui.ErrorPropertiesProvider;
+import consulo.application.ApplicationBundle;
+import consulo.language.editor.DaemonCodeAnalyzerSettings;
+import consulo.ide.impl.codeInspection.ui.ErrorPropertiesProvider;
 import consulo.options.SimpleConfigurableByProperties;
 import consulo.ui.CheckBox;
 import consulo.ui.Component;

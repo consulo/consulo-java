@@ -20,7 +20,7 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import com.intellij.java.debugger.impl.jdi.ThreadReferenceProxyImpl;
-import com.intellij.util.containers.SmartHashSet;
+import consulo.util.collection.SmartHashSet;
 import consulo.internal.com.sun.jdi.request.EventRequest;
 import consulo.logging.Logger;
 
@@ -80,7 +80,7 @@ public class SuspendManagerUtil
 		return result;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public static SuspendContextImpl getSuspendingContext(@Nonnull SuspendManager suspendManager, ThreadReferenceProxyImpl thread)
 	{
 		DebuggerManagerThreadImpl.assertIsManagerThread();

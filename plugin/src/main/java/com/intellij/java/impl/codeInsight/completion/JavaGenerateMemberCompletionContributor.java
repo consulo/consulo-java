@@ -16,10 +16,10 @@
 package com.intellij.java.impl.codeInsight.completion;
 
 import com.intellij.codeInsight.completion.*;
-import com.intellij.codeInsight.lookup.LookupElement;
-import com.intellij.codeInsight.lookup.LookupElementBuilder;
-import com.intellij.codeInspection.ex.GlobalInspectionContextBase;
-import com.intellij.icons.AllIcons;
+import consulo.language.editor.completion.lookup.LookupElement;
+import consulo.language.editor.completion.lookup.LookupElementBuilder;
+import consulo.ide.impl.idea.codeInspection.ex.GlobalInspectionContextBase;
+import consulo.application.AllIcons;
 import com.intellij.java.impl.codeInsight.generation.*;
 import com.intellij.java.language.impl.codeInsight.generation.GenerationInfo;
 import com.intellij.java.language.impl.codeInsight.generation.OverrideImplementExploreUtil;
@@ -28,13 +28,13 @@ import com.intellij.java.language.psi.infos.CandidateInfo;
 import com.intellij.java.language.psi.util.MethodSignature;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
 import com.intellij.java.language.util.VisibilityUtil;
-import com.intellij.openapi.util.Iconable;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.util.PsiFormatUtilBase;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.ObjectUtil;
-import com.intellij.util.containers.ContainerUtil;
-import consulo.ide.IconDescriptorUpdaters;
+import consulo.component.util.Iconable;
+import consulo.language.psi.PsiElement;
+import consulo.ide.impl.psi.util.PsiFormatUtilBase;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.util.lang.ObjectUtil;
+import consulo.util.collection.ContainerUtil;
+import consulo.language.icon.IconDescriptorUpdaters;
 import consulo.ui.image.Image;
 import consulo.ui.image.ImageEffects;
 import consulo.util.dataholder.Key;
@@ -44,7 +44,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import static com.intellij.patterns.PlatformPatterns.psiElement;
+import static consulo.language.pattern.PlatformPatterns.psiElement;
 
 /**
  * @author peter

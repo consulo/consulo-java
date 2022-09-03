@@ -15,47 +15,47 @@
  */
 package com.intellij.java.compiler.impl.javaCompiler;
 
-import com.intellij.compiler.CompilerEncodingService;
+import consulo.compiler.CacheCorruptedException;
+import consulo.compiler.CompilerEncodingService;
 import com.intellij.java.compiler.CompilerException;
 import com.intellij.java.compiler.OutputParser;
 import com.intellij.java.compiler.cache.Cache;
 import com.intellij.java.compiler.cache.JavaDependencyCache;
 import com.intellij.java.compiler.cache.JavaMakeUtil;
-import com.intellij.compiler.impl.CompileDriver;
-import com.intellij.compiler.impl.CompilerUtil;
-import com.intellij.compiler.impl.ModuleChunk;
-import com.intellij.compiler.make.CacheCorruptedException;
-import com.intellij.execution.ExecutionException;
-import com.intellij.execution.configurations.GeneralCommandLine;
-import com.intellij.execution.process.ProcessHandler;
-import com.intellij.openapi.application.Application;
-import com.intellij.openapi.application.ApplicationManager;
+import consulo.ide.impl.idea.compiler.impl.CompileDriver;
+import consulo.ide.impl.idea.compiler.impl.CompilerUtil;
+import consulo.ide.impl.idea.compiler.impl.ModuleChunk;
+import consulo.process.ExecutionException;
+import consulo.process.cmd.GeneralCommandLine;
+import consulo.process.ProcessHandler;
+import consulo.application.Application;
+import consulo.application.ApplicationManager;
 import com.intellij.openapi.compiler.*;
-import com.intellij.openapi.compiler.ex.CompileContextEx;
-import com.intellij.openapi.fileTypes.FileType;
-import com.intellij.openapi.fileTypes.FileTypeManager;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.project.Project;
+import consulo.ide.impl.compiler.CompileContextEx;
+import consulo.virtualFileSystem.fileType.FileType;
+import consulo.language.file.FileTypeManager;
+import consulo.module.Module;
+import consulo.project.Project;
 import com.intellij.openapi.roots.*;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.openapi.util.Computable;
-import com.intellij.openapi.util.Pair;
-import com.intellij.openapi.util.Ref;
-import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.LocalFileSystem;
-import com.intellij.openapi.vfs.VfsUtilCore;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.openapi.vfs.VirtualFileVisitor;
+import consulo.util.lang.Comparing;
+import consulo.application.util.function.Computable;
+import consulo.util.lang.Pair;
+import consulo.util.lang.ref.Ref;
+import consulo.ide.impl.idea.openapi.util.io.FileUtil;
+import consulo.util.lang.StringUtil;
+import consulo.virtualFileSystem.LocalFileSystem;
+import consulo.ide.impl.idea.openapi.vfs.VfsUtilCore;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.virtualFileSystem.util.VirtualFileVisitor;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.search.GlobalSearchScopes;
-import com.intellij.util.Chunk;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.ide.impl.psi.search.GlobalSearchScopes;
+import consulo.util.collection.Chunk;
 import com.intellij.java.language.util.cls.ClsFormatException;
-import com.intellij.util.concurrency.AppExecutorUtil;
+import consulo.application.util.concurrent.AppExecutorUtil;
 import consulo.application.AccessRule;
-import consulo.compiler.make.impl.CompositeDependencyCache;
+import consulo.ide.impl.compiler.make.CompositeDependencyCache;
 import consulo.java.compiler.impl.javaCompiler.BackendCompilerMonitor;
 import consulo.java.compiler.impl.javaCompiler.BackendCompilerProcessBuilder;
 import consulo.logging.Logger;
@@ -104,7 +104,7 @@ public class BackendCompilerWrapper
 								  Chunk<Module> chunk,
 								  @Nonnull final Project project,
 								  @Nonnull List<VirtualFile> filesToCompile,
-								  @Nonnull CompileContextEx compileContext,
+								  @Nonnull consulo.ide.impl.compiler.CompileContextEx compileContext,
 								  @Nonnull BackendCompiler compiler,
 								  TranslatingCompiler.OutputSink sink)
 	{
@@ -201,7 +201,7 @@ public class BackendCompilerWrapper
 		{
 			return Collections.singletonMap(myChunk.getNodes().iterator().next(), Collections.unmodifiableList(filesToCompile));
 		}
-		return CompilerUtil.buildModuleToFilesMap(myCompileContext, filesToCompile);
+		return consulo.ide.impl.idea.compiler.impl.CompilerUtil.buildModuleToFilesMap(myCompileContext, filesToCompile);
 	}
 
 	private void compileModules(final Map<Module, List<VirtualFile>> moduleToFilesMap, Map<File, FileObject> parsingInfo) throws CompilerException
@@ -252,7 +252,7 @@ public class BackendCompilerWrapper
 		}
 	}
 
-	private void validateEncoding(ModuleChunk chunk, String chunkPresentableName)
+	private void validateEncoding(consulo.ide.impl.idea.compiler.impl.ModuleChunk chunk, String chunkPresentableName)
 	{
 		final CompilerEncodingService es = CompilerEncodingService.getInstance(myProject);
 		Charset charset = null;
@@ -364,7 +364,7 @@ public class BackendCompilerWrapper
 		{ // chunk has several modules
 			final File outputDir = Files.createTempDirectory("compileOutput").toFile();
 			fileToDelete = outputDir;
-			dirs.add(new OutputDir(outputDir.getPath(), ModuleChunk.ALL_SOURCES));
+			dirs.add(new OutputDir(outputDir.getPath(), consulo.ide.impl.idea.compiler.impl.ModuleChunk.ALL_SOURCES));
 		}
 		return fileToDelete;
 	}
@@ -506,7 +506,7 @@ public class BackendCompilerWrapper
 			}
 			finally
 			{
-				if(CompileDriver.ourDebugMode)
+				if(consulo.ide.impl.idea.compiler.impl.CompileDriver.ourDebugMode)
 				{
 					System.out.println("Compiler exit code is " + exitValue);
 				}
@@ -558,7 +558,7 @@ public class BackendCompilerWrapper
 			{
 				threadFuture.get();
 			}
-			catch(InterruptedException | java.util.concurrent.ExecutionException ignored)
+			catch(InterruptedException | ExecutionException ignored)
 			{
 				LOG.info("Thread interrupted", ignored);
 			}
@@ -741,7 +741,7 @@ public class BackendCompilerWrapper
 		}
 		finally
 		{
-			CompilerUtil.refreshIOFiles(toRefresh);
+			consulo.ide.impl.idea.compiler.impl.CompilerUtil.refreshIOFiles(toRefresh);
 			for(Iterator<Map.Entry<String, Collection<TranslatingCompiler.OutputItem>>> it = results.entrySet().iterator(); it.hasNext(); )
 			{
 				Map.Entry<String, Collection<TranslatingCompiler.OutputItem>> entry = it.next();
@@ -844,7 +844,7 @@ public class BackendCompilerWrapper
 									   Map<String, Collection<TranslatingCompiler.OutputItem>> results,
 									   final GlobalSearchScope srcRootScope) throws CacheCorruptedException
 	{
-		CompositeDependencyCache dependencyCache = myCompileContext.getDependencyCache();
+		consulo.ide.impl.compiler.make.CompositeDependencyCache dependencyCache = myCompileContext.getDependencyCache();
 		JavaDependencyCache child = dependencyCache.findChild(JavaDependencyCache.class);
 		final Cache newCache = child.getNewClassesCache();
 		final Set<CompiledClass> paths = myFileNameToSourceMap.get(srcFile.getName());

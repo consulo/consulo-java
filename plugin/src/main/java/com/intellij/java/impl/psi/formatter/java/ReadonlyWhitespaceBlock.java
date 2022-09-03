@@ -21,13 +21,13 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import com.intellij.formatting.Alignment;
-import com.intellij.formatting.Block;
-import com.intellij.formatting.ChildAttributes;
-import com.intellij.formatting.Indent;
-import com.intellij.formatting.Spacing;
-import com.intellij.formatting.Wrap;
-import com.intellij.openapi.util.TextRange;
+import consulo.language.codeStyle.Alignment;
+import consulo.language.codeStyle.Block;
+import consulo.language.codeStyle.ChildAttributes;
+import consulo.language.codeStyle.Indent;
+import consulo.language.codeStyle.Spacing;
+import consulo.language.codeStyle.Wrap;
+import consulo.document.util.TextRange;
 
 /**
  * @author max
@@ -62,21 +62,21 @@ public class ReadonlyWhitespaceBlock implements Block
 	}
 
 	@Override
-	@javax.annotation.Nullable
+	@Nullable
 	public Wrap getWrap()
 	{
 		return myWrap;
 	}
 
 	@Override
-	@javax.annotation.Nullable
+	@Nullable
 	public Indent getIndent()
 	{
 		return myIndent;
 	}
 
 	@Override
-	@javax.annotation.Nullable
+	@Nullable
 	public Alignment getAlignment()
 	{
 		return myAlignment;

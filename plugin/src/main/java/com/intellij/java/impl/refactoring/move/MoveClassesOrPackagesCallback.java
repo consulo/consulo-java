@@ -24,7 +24,7 @@ package com.intellij.java.impl.refactoring.move;
 
 import com.intellij.java.impl.refactoring.MoveDestination;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.refactoring.move.MoveCallback;
+import consulo.language.editor.refactoring.move.MoveCallback;
 
 import javax.annotation.Nullable;
 

@@ -15,11 +15,11 @@
  */
 package com.intellij.java.impl.refactoring.introduceparameterobject;
 
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.impl.refactoring.RefactorJBundle;
 import com.intellij.java.impl.refactoring.psi.MyUsageViewUtil;
-import com.intellij.refactoring.ui.UsageViewDescriptorAdapter;
+import consulo.language.editor.refactoring.ui.UsageViewDescriptorAdapter;
 
 class IntroduceParameterObjectUsageViewDescriptor extends UsageViewDescriptorAdapter {
 

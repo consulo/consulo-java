@@ -11,18 +11,18 @@ import java.util.List;
 import javax.annotation.Nonnull;
 
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.HighlightUtil;
-import com.intellij.codeInsight.intention.IntentionAction;
+import consulo.language.editor.intention.IntentionAction;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
+import consulo.codeEditor.Editor;
+import consulo.project.Project;
 import com.intellij.psi.*;
 import com.intellij.java.language.psi.impl.source.resolve.DefaultParameterTypeInferencePolicy;
-import com.intellij.psi.search.PsiSearchHelper;
+import consulo.language.psi.search.PsiSearchHelper;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.impl.refactoring.typeMigration.TypeMigrationProcessor;
 import com.intellij.java.impl.refactoring.typeMigration.TypeMigrationRules;
-import com.intellij.usageView.UsageViewUtil;
-import com.intellij.util.IncorrectOperationException;
+import consulo.usage.UsageViewUtil;
+import consulo.language.util.IncorrectOperationException;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 
 public class VariableTypeFromCallFix implements IntentionAction

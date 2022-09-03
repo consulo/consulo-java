@@ -15,31 +15,27 @@
  */
 package com.intellij.java.language.impl.psi.impl;
 
-import java.util.Set;
-import java.util.concurrent.ConcurrentMap;
+import com.intellij.java.language.psi.*;
+import consulo.application.util.CachedValue;
+import consulo.application.util.CachedValueProvider;
+import consulo.application.util.CachedValuesManager;
+import consulo.language.psi.PsiCompiledElement;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiModificationTracker;
+import consulo.project.Project;
+import consulo.util.collection.ContainerUtil;
+import consulo.util.collection.Maps;
+import consulo.util.dataholder.Key;
+import consulo.util.lang.ObjectUtil;
 
 import javax.annotation.Nonnull;
-
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Factory;
-import consulo.util.dataholder.Key;
-import com.intellij.java.language.psi.JavaRecursiveElementWalkingVisitor;
-import com.intellij.psi.PsiCompiledElement;
-import com.intellij.java.language.psi.PsiConstantEvaluationHelper;
-import com.intellij.psi.PsiElement;
-import com.intellij.java.language.psi.PsiExpression;
-import com.intellij.java.language.psi.PsiPrefixExpression;
-import com.intellij.java.language.psi.PsiVariable;
-import com.intellij.psi.util.CachedValue;
-import com.intellij.psi.util.CachedValueProvider;
-import com.intellij.psi.util.CachedValuesManager;
-import com.intellij.psi.util.PsiModificationTracker;
-import com.intellij.util.ConcurrencyUtil;
-import com.intellij.util.ObjectUtil;
-import com.intellij.util.containers.ContainerUtil;
+import javax.annotation.Nullable;
+import java.util.Set;
+import java.util.concurrent.ConcurrentMap;
+import java.util.function.Supplier;
 
 public class JavaConstantExpressionEvaluator extends JavaRecursiveElementWalkingVisitor {
-  private final Factory<ConcurrentMap<PsiElement, Object>> myMapFactory;
+  private final Supplier<ConcurrentMap<PsiElement, Object>> myMapFactory;
   private final Project myProject;
 
   private static final Key<CachedValue<ConcurrentMap<PsiElement,Object>>> CONSTANT_VALUE_WO_OVERFLOW_MAP_KEY = Key.create("CONSTANT_VALUE_WO_OVERFLOW_MAP_KEY");
@@ -48,14 +44,14 @@ public class JavaConstantExpressionEvaluator extends JavaRecursiveElementWalking
   private final ConstantExpressionVisitor myConstantExpressionVisitor;
 
   private JavaConstantExpressionEvaluator(Set<PsiVariable> visitedVars, final boolean throwExceptionOnOverflow, final Project project, final PsiConstantEvaluationHelper.AuxEvaluator auxEvaluator) {
-    myMapFactory = auxEvaluator != null ? new Factory<ConcurrentMap<PsiElement, Object>>() {
+    myMapFactory = auxEvaluator != null ? new Supplier<ConcurrentMap<PsiElement, Object>>() {
       @Override
-      public ConcurrentMap<PsiElement, Object> create() {
+      public ConcurrentMap<PsiElement, Object> get() {
         return auxEvaluator.getCacheMap(throwExceptionOnOverflow);
       }
-    } : new Factory<ConcurrentMap<PsiElement, Object>>() {
+    } : new Supplier<ConcurrentMap<PsiElement, Object>>() {
       @Override
-      public ConcurrentMap<PsiElement, Object> create() {
+      public ConcurrentMap<PsiElement, Object> get() {
         final Key<CachedValue<ConcurrentMap<PsiElement, Object>>> key =
           throwExceptionOnOverflow ? CONSTANT_VALUE_WITH_OVERFLOW_MAP_KEY : CONSTANT_VALUE_WO_OVERFLOW_MAP_KEY;
         return CachedValuesManager.getManager(myProject).getCachedValue(myProject, key, PROVIDER, false);
@@ -98,8 +94,8 @@ public class JavaConstantExpressionEvaluator extends JavaRecursiveElementWalking
   private Object getCached(@Nonnull PsiElement element) {
     return map().get(element);
   }
-  private Object cache(@Nonnull PsiElement element, @javax.annotation.Nullable Object value) {
-    value = ConcurrencyUtil.cacheOrGet(map(), element, value == null ? NO_VALUE : value);
+  private Object cache(@Nonnull PsiElement element, @Nullable Object value) {
+    value = Maps.cacheOrGet(map(), element, value == null ? NO_VALUE : value);
     if (value == NO_VALUE) {
       value = null;
     }
@@ -108,14 +104,14 @@ public class JavaConstantExpressionEvaluator extends JavaRecursiveElementWalking
 
   @Nonnull
   private ConcurrentMap<PsiElement, Object> map() {
-    return myMapFactory.create();
+    return myMapFactory.get();
   }
 
-  public static Object computeConstantExpression(PsiExpression expression, @javax.annotation.Nullable Set<PsiVariable> visitedVars, boolean throwExceptionOnOverflow) {
+  public static Object computeConstantExpression(PsiExpression expression, @Nullable Set<PsiVariable> visitedVars, boolean throwExceptionOnOverflow) {
     return computeConstantExpression(expression, visitedVars, throwExceptionOnOverflow, null);
   }
 
-  public static Object computeConstantExpression(PsiExpression expression, @javax.annotation.Nullable Set<PsiVariable> visitedVars, boolean throwExceptionOnOverflow,
+  public static Object computeConstantExpression(PsiExpression expression, @Nullable Set<PsiVariable> visitedVars, boolean throwExceptionOnOverflow,
                                                  final PsiConstantEvaluationHelper.AuxEvaluator auxEvaluator) {
     if (expression == null) return null;
 

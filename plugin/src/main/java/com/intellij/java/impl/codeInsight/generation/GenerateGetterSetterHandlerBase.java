@@ -15,26 +15,26 @@
  */
 package com.intellij.java.impl.codeInsight.generation;
 
-import com.intellij.codeInsight.generation.ClassMember;
-import com.intellij.codeInsight.hint.HintManager;
+import consulo.ide.impl.idea.codeInsight.generation.ClassMember;
+import consulo.language.editor.hint.HintManager;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.impl.codeInsight.generation.EncapsulatableClassMember;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiEnumConstant;
 import com.intellij.java.language.psi.PsiField;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.options.ShowSettingsUtil;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.ComboBox;
-import com.intellij.openapi.ui.ComponentWithBrowseButton;
-import com.intellij.openapi.util.Condition;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.ui.ListCellRendererWrapper;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.NotNullFunction;
-import com.intellij.util.containers.ContainerUtil;
-import com.intellij.util.ui.UIUtil;
+import consulo.codeEditor.Editor;
+import consulo.ide.setting.ShowSettingsUtil;
+import consulo.project.Project;
+import consulo.util.lang.function.Condition;
+import consulo.util.lang.StringUtil;
+import consulo.ui.ex.awt.ListCellRendererWrapper;
+import consulo.language.util.IncorrectOperationException;
+import consulo.ide.impl.idea.util.NotNullFunction;
+import consulo.util.collection.ContainerUtil;
+import consulo.ui.ex.awt.UIUtil;
 import consulo.logging.Logger;
+import consulo.ui.ex.awt.ComboBox;
+import consulo.ui.ex.awt.ComponentWithBrowseButton;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.java.generate.exception.GenerateCodeException;
 import org.jetbrains.java.generate.template.TemplateResource;
@@ -42,6 +42,7 @@ import org.jetbrains.java.generate.template.TemplatesManager;
 import org.jetbrains.java.generate.view.TemplatesPanel;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -162,7 +163,7 @@ public abstract class GenerateGetterSetterHandlerBase extends GenerateMembersHan
   }
 
   @Override
-  @javax.annotation.Nullable
+  @Nullable
   protected ClassMember[] getAllOriginalMembers(final PsiClass aClass) {
     final List<EncapsulatableClassMember> list = GenerateAccessorProviderRegistrar.getEncapsulatableClassMembers(aClass);
     if (list.isEmpty()) {

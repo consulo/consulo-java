@@ -15,18 +15,19 @@
  */
 package com.intellij.java.analysis.impl.codeInsight.daemon.impl;
 
-import com.intellij.codeInsight.daemon.impl.HighlightInfo;
-import com.intellij.codeInsight.daemon.impl.HighlightInfoType;
-import com.intellij.lang.ASTNode;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.TokenType;
+import consulo.language.editor.rawHighlight.HighlightInfo;
+import consulo.language.editor.rawHighlight.HighlightInfoType;
+import consulo.language.ast.ASTNode;
+import consulo.util.lang.StringUtil;
+import consulo.language.psi.PsiElement;
+import consulo.language.ast.TokenType;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class DefaultHighlightUtil
 {
-	@javax.annotation.Nullable
+	@Nullable
 	public static HighlightInfo checkBadCharacter(@Nonnull PsiElement element)
 	{
 		ASTNode node = element.getNode();

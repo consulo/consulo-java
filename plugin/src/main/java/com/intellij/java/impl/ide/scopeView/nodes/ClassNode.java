@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ide.scopeView.nodes;
 
-import com.intellij.ide.scopeView.nodes.BasePsiNode;
+import consulo.ide.impl.idea.ide.scopeView.nodes.BasePsiNode;
 import com.intellij.java.impl.ide.projectView.impl.nodes.ClassTreeNode;
 import com.intellij.java.language.impl.psi.presentation.java.ClassPresentationUtil;
 import com.intellij.java.language.psi.PsiClass;

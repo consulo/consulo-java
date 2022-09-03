@@ -20,7 +20,7 @@ import java.util.Set;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.openapi.roots.ModifiableRootModel;
+import consulo.module.content.layer.ModifiableRootModel;
 import consulo.module.extension.ModuleExtension;
 import consulo.roots.ContentFolderSupportPatcher;
 import consulo.roots.ContentFolderTypeProvider;

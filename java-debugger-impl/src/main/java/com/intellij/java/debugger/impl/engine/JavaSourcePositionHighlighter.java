@@ -18,9 +18,9 @@ package com.intellij.java.debugger.impl.engine;
 import com.intellij.java.debugger.SourcePosition;
 import com.intellij.java.debugger.impl.DebuggerUtilsEx;
 import com.intellij.java.debugger.engine.SourcePositionHighlighter;
-import com.intellij.openapi.project.DumbAware;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.PsiElement;
+import consulo.application.dumb.DumbAware;
+import consulo.document.util.TextRange;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiLambdaExpression;
 
 /**

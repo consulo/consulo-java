@@ -1,10 +1,9 @@
 package com.intellij.psi.resolve;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.*;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.infos.MethodCandidateInfo;
-import com.intellij.navigation.NavigationItem;
+import consulo.navigation.NavigationItem;
 import consulo.java.language.module.util.JavaClassNames;
 import org.jetbrains.annotations.NonNls;
 import static org.junit.Assert.assertThat;

@@ -15,16 +15,16 @@
  */
 package com.intellij.java.language.impl.psi.impl.source;
 
-import com.intellij.lang.ASTNode;
+import consulo.language.ast.ASTNode;
 import com.intellij.java.language.psi.JavaElementVisitor;
-import com.intellij.psi.PsiElementVisitor;
+import consulo.language.psi.PsiElementVisitor;
 import com.intellij.java.language.psi.PsiParameter;
 import com.intellij.java.language.psi.PsiParameterList;
 import com.intellij.java.language.impl.psi.impl.PsiImplUtil;
 import com.intellij.java.language.impl.psi.impl.java.stubs.JavaStubElementTypes;
 import com.intellij.java.language.impl.psi.impl.java.stubs.PsiParameterListStub;
-import com.intellij.psi.impl.source.tree.CompositeElement;
-import com.intellij.psi.stubs.StubElement;
+import consulo.language.impl.ast.CompositeElement;
+import consulo.language.psi.stub.StubElement;
 import consulo.logging.Logger;
 
 import javax.annotation.Nonnull;

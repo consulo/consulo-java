@@ -17,12 +17,12 @@ package com.intellij.java.impl.refactoring.typeMigration;
 
 import java.util.concurrent.atomic.AtomicReference;
 
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.ui.Messages;
+import consulo.application.ApplicationManager;
+import consulo.ui.ex.awt.Messages;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.impl.refactoring.typeMigration.usageInfo.OverriddenUsageInfo;
-import com.intellij.util.ui.UIUtil;
+import consulo.ui.ex.awt.UIUtil;
 
 /**
  * @author Dmitry Batkovich

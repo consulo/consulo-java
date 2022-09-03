@@ -15,178 +15,141 @@
  */
 package com.intellij.java.language.impl.psi.impl.source.tree.java;
 
-import javax.annotation.Nonnull;
-
+import com.intellij.java.language.impl.psi.impl.PsiImplUtil;
+import com.intellij.java.language.impl.psi.impl.source.Constants;
 import com.intellij.java.language.impl.psi.impl.source.tree.ChildRole;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaDocElementType;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
-import com.intellij.lang.ASTNode;
-import consulo.logging.Logger;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.psi.TokenType;
-import com.intellij.java.language.impl.psi.impl.PsiImplUtil;
-import com.intellij.java.language.impl.psi.impl.source.Constants;
-import com.intellij.psi.impl.source.tree.*;
-import com.intellij.psi.tree.ChildRoleBase;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.util.CharTable;
 import consulo.annotation.access.RequiredReadAction;
+import consulo.language.ast.ASTNode;
+import consulo.language.ast.ChildRoleBase;
+import consulo.language.ast.IElementType;
+import consulo.language.ast.TokenType;
+import consulo.language.impl.ast.*;
+import consulo.language.util.CharTable;
+import consulo.logging.Logger;
 
-public class MethodElement extends CompositeElement implements Constants
-{
-	private static final Logger LOG = Logger.getInstance(MethodElement.class);
+import javax.annotation.Nonnull;
 
-	public MethodElement()
-	{
-		super(METHOD);
-	}
+public class MethodElement extends CompositeElement implements Constants {
+  private static final Logger LOG = Logger.getInstance(MethodElement.class);
 
-	protected MethodElement(IElementType type)
-	{
-		super(type);
-	}
+  public MethodElement() {
+    super(METHOD);
+  }
 
-	@RequiredReadAction
-	@Override
-	public int getTextOffset()
-	{
-		ASTNode name = findChildByType(IDENTIFIER);
-		return name != null ? name.getStartOffset() : this.getStartOffset();
-	}
+  protected MethodElement(IElementType type) {
+    super(type);
+  }
 
-	@Override
-	public TreeElement addInternal(TreeElement first, ASTNode last, ASTNode anchor, Boolean before)
-	{
-		if(first == last && first.getElementType() == JavaElementType.CODE_BLOCK)
-		{
-			ASTNode semicolon = TreeUtil.findChildBackward(this, SEMICOLON);
-			if(semicolon != null)
-			{
-				deleteChildInternal(semicolon);
-			}
-		}
-		return super.addInternal(first, last, anchor, before);
-	}
+  @RequiredReadAction
+  @Override
+  public int getTextOffset() {
+    ASTNode name = findChildByType(IDENTIFIER);
+    return name != null ? name.getStartOffset() : this.getStartOffset();
+  }
 
-	@Override
-	public ASTNode copyElement()
-	{
-		CharTable table = SharedImplUtil.findCharTableByTree(this);
-		final PsiClass psiClass = ((PsiMethod) getPsi()).getContainingClass();
-		return psiClass != null ? ChangeUtil.copyElement(this, psiClass.getTypeParameterList(), table) : super.copyElement();
-	}
+  @Override
+  public TreeElement addInternal(TreeElement first, ASTNode last, ASTNode anchor, Boolean before) {
+    if (first == last && first.getElementType() == JavaElementType.CODE_BLOCK) {
+      ASTNode semicolon = TreeUtil.findChildBackward(this, SEMICOLON);
+      if (semicolon != null) {
+        deleteChildInternal(semicolon);
+      }
+    }
+    return super.addInternal(first, last, anchor, before);
+  }
 
-	@Override
-	public void deleteChildInternal(@Nonnull ASTNode child)
-	{
-		if(child.getElementType() == CODE_BLOCK)
-		{
-			final ASTNode prevWS = TreeUtil.prevLeaf(child);
-			if(prevWS != null && prevWS.getElementType() == TokenType.WHITE_SPACE)
-			{
-				removeChild(prevWS);
-			}
-			super.deleteChildInternal(child);
-			final CharTable treeCharTab = SharedImplUtil.findCharTableByTree(this);
-			LeafElement semicolon = Factory.createSingleLeafElement(SEMICOLON, ";", 0, 1, treeCharTab, getManager());
-			addInternal(semicolon, semicolon, null, Boolean.TRUE);
-		}
-		else
-		{
-			super.deleteChildInternal(child);
-		}
-	}
+  @Override
+  public ASTNode copyElement() {
+    CharTable table = SharedImplUtil.findCharTableByTree(this);
+    final PsiClass psiClass = ((PsiMethod) getPsi()).getContainingClass();
+    return psiClass != null ? ChangeUtil.copyElement(this, psiClass.getTypeParameterList(), table) : super.copyElement();
+  }
 
-	@Override
-	public ASTNode findChildByRole(int role)
-	{
-		LOG.assertTrue(ChildRole.isUnique(role));
-		switch(role)
-		{
-			default:
-				return null;
+  @Override
+  public void deleteChildInternal(@Nonnull ASTNode child) {
+    if (child.getElementType() == CODE_BLOCK) {
+      final ASTNode prevWS = TreeUtil.prevLeaf(child);
+      if (prevWS != null && prevWS.getElementType() == TokenType.WHITE_SPACE) {
+        removeChild(prevWS);
+      }
+      super.deleteChildInternal(child);
+      final CharTable treeCharTab = SharedImplUtil.findCharTableByTree(this);
+      LeafElement semicolon = Factory.createSingleLeafElement(SEMICOLON, ";", 0, 1, treeCharTab, getManager());
+      addInternal(semicolon, semicolon, null, Boolean.TRUE);
+    } else {
+      super.deleteChildInternal(child);
+    }
+  }
 
-			case ChildRole.DOC_COMMENT:
-				return PsiImplUtil.findDocComment(this);
+  @Override
+  public ASTNode findChildByRole(int role) {
+    LOG.assertTrue(ChildRole.isUnique(role));
+    switch (role) {
+      default:
+        return null;
 
-			case ChildRole.MODIFIER_LIST:
-				return findChildByType(MODIFIER_LIST);
+      case ChildRole.DOC_COMMENT:
+        return PsiImplUtil.findDocComment(this);
 
-			case ChildRole.TYPE_PARAMETER_LIST:
-				return findChildByType(TYPE_PARAMETER_LIST);
+      case ChildRole.MODIFIER_LIST:
+        return findChildByType(MODIFIER_LIST);
 
-			case ChildRole.NAME:
-				return findChildByType(IDENTIFIER);
+      case ChildRole.TYPE_PARAMETER_LIST:
+        return findChildByType(TYPE_PARAMETER_LIST);
 
-			case ChildRole.TYPE:
-				return findChildByType(TYPE);
+      case ChildRole.NAME:
+        return findChildByType(IDENTIFIER);
 
-			case ChildRole.METHOD_BODY:
-				return findChildByType(CODE_BLOCK);
+      case ChildRole.TYPE:
+        return findChildByType(TYPE);
 
-			case ChildRole.PARAMETER_LIST:
-				return findChildByType(PARAMETER_LIST);
+      case ChildRole.METHOD_BODY:
+        return findChildByType(CODE_BLOCK);
 
-			case ChildRole.THROWS_LIST:
-				return findChildByType(THROWS_LIST);
+      case ChildRole.PARAMETER_LIST:
+        return findChildByType(PARAMETER_LIST);
 
-			case ChildRole.CLOSING_SEMICOLON:
-				return TreeUtil.findChildBackward(this, SEMICOLON);
+      case ChildRole.THROWS_LIST:
+        return findChildByType(THROWS_LIST);
 
-			case ChildRole.DEFAULT_KEYWORD:
-				return findChildByType(DEFAULT_KEYWORD);
-		}
-	}
+      case ChildRole.CLOSING_SEMICOLON:
+        return TreeUtil.findChildBackward(this, SEMICOLON);
 
-	@Override
-	public int getChildRole(ASTNode child)
-	{
-		LOG.assertTrue(child.getTreeParent() == this);
-		IElementType i = child.getElementType();
-		if(i == JavaDocElementType.DOC_COMMENT)
-		{
-			return getChildRole(child, ChildRole.DOC_COMMENT);
-		}
-		else if(i == MODIFIER_LIST)
-		{
-			return ChildRole.MODIFIER_LIST;
-		}
-		else if(i == TYPE_PARAMETER_LIST)
-		{
-			return ChildRole.TYPE_PARAMETER_LIST;
-		}
-		else if(i == CODE_BLOCK)
-		{
-			return ChildRole.METHOD_BODY;
-		}
-		else if(i == PARAMETER_LIST)
-		{
-			return ChildRole.PARAMETER_LIST;
-		}
-		else if(i == THROWS_LIST)
-		{
-			return ChildRole.THROWS_LIST;
-		}
-		else if(i == TYPE)
-		{
-			return getChildRole(child, ChildRole.TYPE);
-		}
-		else if(i == IDENTIFIER)
-		{
-			return getChildRole(child, ChildRole.NAME);
-		}
-		else if(i == SEMICOLON)
-		{
-			return getChildRole(child, ChildRole.CLOSING_SEMICOLON);
-		}
-		else if(i == DEFAULT_KEYWORD)
-		{
-			return ChildRole.DEFAULT_KEYWORD;
-		}
-		else
-		{
-			return ChildRoleBase.NONE;
-		}
-	}
+      case ChildRole.DEFAULT_KEYWORD:
+        return findChildByType(DEFAULT_KEYWORD);
+    }
+  }
+
+  @Override
+  public int getChildRole(ASTNode child) {
+    LOG.assertTrue(child.getTreeParent() == this);
+    IElementType i = child.getElementType();
+    if (i == JavaDocElementType.DOC_COMMENT) {
+      return getChildRole(child, ChildRole.DOC_COMMENT);
+    } else if (i == MODIFIER_LIST) {
+      return ChildRole.MODIFIER_LIST;
+    } else if (i == TYPE_PARAMETER_LIST) {
+      return ChildRole.TYPE_PARAMETER_LIST;
+    } else if (i == CODE_BLOCK) {
+      return ChildRole.METHOD_BODY;
+    } else if (i == PARAMETER_LIST) {
+      return ChildRole.PARAMETER_LIST;
+    } else if (i == THROWS_LIST) {
+      return ChildRole.THROWS_LIST;
+    } else if (i == TYPE) {
+      return getChildRole(child, ChildRole.TYPE);
+    } else if (i == IDENTIFIER) {
+      return getChildRole(child, ChildRole.NAME);
+    } else if (i == SEMICOLON) {
+      return getChildRole(child, ChildRole.CLOSING_SEMICOLON);
+    } else if (i == DEFAULT_KEYWORD) {
+      return ChildRole.DEFAULT_KEYWORD;
+    } else {
+      return ChildRoleBase.NONE;
+    }
+  }
 }

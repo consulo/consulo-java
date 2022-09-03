@@ -18,17 +18,17 @@ package com.intellij.java.language.psi.util;
 
 import com.intellij.java.language.codeInsight.runner.JavaMainMethodProvider;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.util.Condition;
 
 import javax.annotation.Nullable;
+import java.util.function.Predicate;
 
 /**
  * @author mike
  */
 public class PsiMethodUtil {
-  public static final Condition<PsiClass> MAIN_CLASS = new Condition<PsiClass>() {
+  public static final Predicate<PsiClass> MAIN_CLASS = new Predicate<PsiClass>() {
     @Override
-    public boolean value(final PsiClass psiClass) {
+    public boolean test(final PsiClass psiClass) {
       if (psiClass instanceof PsiAnonymousClass) return false;
       if (psiClass.isInterface()) return false;
       return psiClass.getContainingClass() == null || psiClass.hasModifierProperty(PsiModifier.STATIC);
@@ -81,7 +81,7 @@ public class PsiMethodUtil {
 
   @Nullable
   public static PsiMethod findMainInClass(final PsiClass aClass) {
-    if (!MAIN_CLASS.value(aClass)) return null;
+    if (!MAIN_CLASS.test(aClass)) return null;
     for (JavaMainMethodProvider provider : JavaMainMethodProvider.EP_NAME.getExtensionList()) {
       if (provider.isApplicable(aClass)) {
         return provider.findMainInClass(aClass);

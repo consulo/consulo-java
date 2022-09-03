@@ -21,10 +21,10 @@ import static org.junit.Assert.assertNull;
 import java.io.IOException;
 
 import com.intellij.JavaTestUtil;
-import com.intellij.codeInsight.lookup.LookupManager;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.fileEditor.FileDocumentManager;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.language.editor.completion.lookup.LookupManager;
+import consulo.application.ApplicationManager;
+import consulo.document.FileDocumentManager;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.testFramework.TestDataPath;
 
 @TestDataPath("$CONTENT_ROOT/testData")

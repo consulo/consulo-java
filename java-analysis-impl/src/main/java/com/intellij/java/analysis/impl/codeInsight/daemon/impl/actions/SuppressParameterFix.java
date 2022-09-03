@@ -15,16 +15,16 @@
  */
 package com.intellij.java.analysis.impl.codeInsight.daemon.impl.actions;
 
-import com.intellij.codeInsight.daemon.HighlightDisplayKey;
-import com.intellij.codeInsight.daemon.impl.actions.AbstractBatchSuppressByNoInspectionCommentFix;
+import consulo.language.editor.rawHighlight.HighlightDisplayKey;
+import consulo.language.editor.inspection.AbstractBatchSuppressByNoInspectionCommentFix;
 import com.intellij.java.analysis.impl.codeInspection.JavaSuppressionUtil;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiElement;
+import consulo.project.Project;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiModifierList;
 import com.intellij.java.language.psi.PsiModifierListOwner;
 import com.intellij.java.language.psi.PsiParameter;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

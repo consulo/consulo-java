@@ -15,17 +15,17 @@
  */
 package com.intellij.java.impl.codeInsight.editorActions;
 
-import com.intellij.codeInsight.editorActions.JavaLikeQuoteHandler;
-import com.intellij.codeInsight.editorActions.SimpleTokenSetQuoteHandler;
+import consulo.language.editor.action.JavaLikeQuoteHandler;
+import consulo.language.editor.action.SimpleTokenSetQuoteHandler;
 import com.intellij.java.language.impl.psi.impl.source.tree.ElementType;
 import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.java.language.psi.PsiLiteralExpression;
 import com.intellij.java.language.psi.PsiReferenceExpression;
-import com.intellij.openapi.editor.highlighter.HighlighterIterator;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.StringEscapesTokenTypes;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.tree.TokenSet;
+import consulo.codeEditor.HighlighterIterator;
+import consulo.language.psi.PsiElement;
+import consulo.language.ast.StringEscapesTokenTypes;
+import consulo.language.ast.IElementType;
+import consulo.language.ast.TokenSet;
 
 import javax.annotation.Nonnull;
 

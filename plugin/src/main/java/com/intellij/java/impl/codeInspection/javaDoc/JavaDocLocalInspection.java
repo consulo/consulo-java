@@ -37,35 +37,37 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.extensions.ExtensionPointName;
+import consulo.component.extension.ExtensionPointName;
 import consulo.logging.Logger;
+import consulo.ui.ex.awt.FieldPanel;
+import consulo.ui.ex.awt.IdeBorderFactory;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nullable;
 import com.intellij.java.impl.codeInsight.CodeInsightUtil;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
-import com.intellij.codeInspection.InspectionManager;
-import com.intellij.codeInspection.InspectionProfile;
-import com.intellij.codeInspection.InspectionsBundle;
-import com.intellij.codeInspection.LocalQuickFix;
-import com.intellij.codeInspection.ProblemDescriptor;
-import com.intellij.codeInspection.ProblemHighlightType;
+import consulo.language.editor.inspection.scheme.InspectionManager;
+import consulo.language.editor.inspection.scheme.InspectionProfile;
+import consulo.language.editor.inspection.InspectionsBundle;
+import consulo.language.editor.inspection.LocalQuickFix;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.editor.inspection.ProblemHighlightType;
 import com.intellij.java.analysis.impl.codeInspection.ex.BaseLocalInspectionTool;
 import com.intellij.java.analysis.codeInspection.reference.RefJavaUtil;
-import com.intellij.lang.ASTNode;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.ScrollType;
-import com.intellij.openapi.fileEditor.FileEditorManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.openapi.util.Condition;
-import com.intellij.openapi.util.DefaultJDOMExternalizer;
-import com.intellij.openapi.util.InvalidDataException;
-import com.intellij.openapi.util.JDOMExternalizable;
-import com.intellij.openapi.util.WriteExternalException;
-import com.intellij.profile.codeInspection.InspectionProfileManager;
-import com.intellij.profile.codeInspection.InspectionProjectProfileManager;
+import consulo.language.ast.ASTNode;
+import consulo.codeEditor.Editor;
+import consulo.codeEditor.ScrollType;
+import consulo.fileEditor.FileEditorManager;
+import consulo.project.Project;
+import consulo.util.lang.Comparing;
+import consulo.util.lang.function.Condition;
+import consulo.util.xml.serializer.DefaultJDOMExternalizer;
+import consulo.util.xml.serializer.InvalidDataException;
+import consulo.util.xml.serializer.JDOMExternalizable;
+import consulo.util.xml.serializer.WriteExternalException;
+import consulo.language.editor.inspection.scheme.InspectionProfileManager;
+import consulo.language.editor.inspection.scheme.InspectionProjectProfileManager;
 import com.intellij.psi.*;
 import com.intellij.java.language.impl.psi.impl.source.javadoc.PsiDocParamRef;
 import com.intellij.java.language.psi.javadoc.JavadocManager;
@@ -77,16 +79,14 @@ import com.intellij.java.language.psi.javadoc.PsiDocToken;
 import com.intellij.java.language.psi.javadoc.PsiInlineDocTag;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PropertyUtil;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.ui.DocumentAdapter;
-import com.intellij.ui.FieldPanel;
-import com.intellij.ui.Gray;
-import com.intellij.ui.IdeBorderFactory;
-import com.intellij.ui.components.JBTabbedPane;
-import com.intellij.util.IJSwingUtilities;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.containers.ContainerUtil;
-import com.intellij.util.ui.UIUtil;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.ui.ex.awt.event.DocumentAdapter;
+import consulo.ui.ex.Gray;
+import consulo.ui.ex.awt.JBTabbedPane;
+import consulo.ui.ex.awt.IJSwingUtilities;
+import consulo.language.util.IncorrectOperationException;
+import consulo.util.collection.ContainerUtil;
+import consulo.ui.ex.awt.UIUtil;
 
 public class JavaDocLocalInspection extends BaseLocalInspectionTool {
   private static final String REQUIRED_JAVADOC_IS_ABSENT = InspectionsBundle.message("inspection.javadoc.problem.descriptor");
@@ -558,7 +558,7 @@ public class JavaDocLocalInspection extends BaseLocalInspectionTool {
   }
 
   @Override
-  @javax.annotation.Nullable
+  @Nullable
   public ProblemDescriptor[] checkField(@Nonnull PsiField psiField, @Nonnull InspectionManager manager, boolean isOnTheFly) {
     if (IGNORE_DEPRECATED && (psiField.isDeprecated() || psiField.getContainingClass().isDeprecated())) {
       return null;

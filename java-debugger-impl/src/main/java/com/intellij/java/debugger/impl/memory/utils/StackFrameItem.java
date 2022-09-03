@@ -15,7 +15,7 @@
  */
 package com.intellij.java.debugger.impl.memory.utils;
 
-import com.intellij.icons.AllIcons;
+import consulo.application.AllIcons;
 import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.engine.DebuggerUtils;
 import com.intellij.java.debugger.engine.evaluation.EvaluateException;
@@ -27,16 +27,16 @@ import com.intellij.java.debugger.impl.settings.DebuggerSettings;
 import com.intellij.java.debugger.impl.settings.NodeRendererSettings;
 import com.intellij.java.debugger.impl.ui.breakpoints.StackCapturingLineBreakpoint;
 import com.intellij.java.debugger.impl.ui.tree.render.ClassRenderer;
-import com.intellij.openapi.options.ShowSettingsUtil;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.ui.ColoredTextContainer;
-import com.intellij.ui.SimpleTextAttributes;
-import com.intellij.util.containers.ContainerUtil;
-import com.intellij.xdebugger.XSourcePosition;
+import consulo.execution.debug.ui.XDebuggerUIConstants;
+import consulo.ide.setting.ShowSettingsUtil;
+import consulo.util.lang.StringUtil;
+import consulo.ui.ex.ColoredTextContainer;
+import consulo.ui.ex.SimpleTextAttributes;
+import consulo.util.collection.ContainerUtil;
+import consulo.execution.debug.XSourcePosition;
 import com.intellij.xdebugger.frame.*;
-import com.intellij.xdebugger.frame.presentation.XStringValuePresentation;
-import com.intellij.xdebugger.impl.frame.XDebuggerFramesList;
-import com.intellij.xdebugger.impl.ui.XDebuggerUIConstants;
+import consulo.execution.debug.frame.presentation.XStringValuePresentation;
+import consulo.ide.impl.idea.xdebugger.impl.frame.XDebuggerFramesList;
 import consulo.internal.com.sun.jdi.*;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.logging.Logger;
@@ -212,7 +212,7 @@ public class StackFrameItem {
     return new CapturedStackFrame(debugProcess, this);
   }
 
-  public static class CapturedStackFrame extends XStackFrame implements JVMStackFrameInfoProvider, XDebuggerFramesList.ItemWithSeparatorAbove {
+  public static class CapturedStackFrame extends XStackFrame implements JVMStackFrameInfoProvider, consulo.ide.impl.idea.xdebugger.impl.frame.XDebuggerFramesList.ItemWithSeparatorAbove {
     private final XSourcePosition mySourcePosition;
     private final boolean myIsSynthetic;
     private final boolean myIsInLibraryContent;
@@ -236,7 +236,7 @@ public class StackFrameItem {
       myVariables = item.myVariables;
     }
 
-    @javax.annotation.Nullable
+    @Nullable
     @Override
     public XSourcePosition getSourcePosition() {
       return mySourcePosition;

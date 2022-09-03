@@ -10,13 +10,13 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.instructions.Retu
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaValue;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaValueFactory;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaVariableValue;
-import com.intellij.openapi.project.Project;
+import consulo.project.Project;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifierListOwner;
 import com.intellij.java.language.psi.PsiParameter;
 import com.intellij.java.language.psi.PsiPrimitiveType;
 import com.intellij.java.analysis.impl.psi.impl.search.JavaNullMethodArgumentUtil;
-import com.intellij.util.SmartList;
+import consulo.util.collection.SmartList;
 import javax.annotation.Nonnull;
 
 import java.util.Collection;

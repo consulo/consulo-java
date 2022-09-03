@@ -16,10 +16,10 @@
 package com.intellij.java.indexing.search.searches;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.search.SearchScope;
-import com.intellij.psi.search.searches.ExtensibleQueryFactory;
-import com.intellij.util.InstanceofQuery;
-import com.intellij.util.Query;
+import consulo.content.scope.SearchScope;
+import consulo.application.util.query.ExtensibleQueryFactory;
+import consulo.application.util.query.InstanceofQuery;
+import consulo.application.util.query.Query;
 
 import javax.annotation.Nonnull;
 
@@ -51,7 +51,7 @@ public class AnnotatedElementsSearch extends ExtensibleQueryFactory<PsiModifierL
   }
 
   private AnnotatedElementsSearch() {
-    super("consulo.java");
+    super(AnnotatedElementsSearchExecutor.class);
   }
 
   private static Query<PsiModifierListOwner> createDelegateQuery(PsiClass annotationClass,

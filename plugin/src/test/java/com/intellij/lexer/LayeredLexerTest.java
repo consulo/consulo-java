@@ -3,7 +3,7 @@ package com.intellij.lexer;
 import com.intellij.java.language.impl.lexer.JavaLexer;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.psi.JavaTokenType;
-import com.intellij.psi.tree.IElementType;
+import consulo.language.ast.IElementType;
 import junit.framework.TestCase;
 
 /**

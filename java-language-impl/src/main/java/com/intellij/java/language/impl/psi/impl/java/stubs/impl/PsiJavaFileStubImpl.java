@@ -25,9 +25,9 @@ import com.intellij.java.language.impl.psi.impl.java.stubs.JavaStubElementTypes;
 import com.intellij.java.language.impl.psi.impl.java.stubs.PsiJavaFileStub;
 import com.intellij.java.language.impl.psi.impl.java.stubs.SourceStubPsiFactory;
 import com.intellij.java.language.impl.psi.impl.java.stubs.StubPsiFactory;
-import com.intellij.psi.stubs.PsiFileStubImpl;
-import com.intellij.psi.stubs.StubElement;
-import com.intellij.psi.tree.IStubFileElementType;
+import consulo.language.psi.stub.PsiFileStubImpl;
+import consulo.language.psi.stub.StubElement;
+import consulo.language.psi.stub.IStubFileElementType;
 
 /**
  * @author max

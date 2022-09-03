@@ -17,7 +17,7 @@ package com.intellij.java.language.impl.psi.impl.source.tree;
 
 import com.intellij.java.language.psi.JavaDocTokenType;
 import com.intellij.java.language.psi.JavaTokenType;
-import com.intellij.psi.tree.TokenSet;
+import consulo.language.ast.TokenSet;
 
 public interface ElementType extends JavaTokenType, JavaDocTokenType, JavaElementType, JavaDocElementType
 {

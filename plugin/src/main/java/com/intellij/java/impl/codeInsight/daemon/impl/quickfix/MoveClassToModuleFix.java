@@ -18,44 +18,45 @@ package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import consulo.language.editor.hint.QuestionAction;
+import consulo.ui.ex.popup.JBPopupFactory;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-import com.intellij.codeInsight.daemon.QuickFixActionRegistrar;
+import consulo.language.editor.intention.QuickFixActionRegistrar;
 import com.intellij.java.impl.codeInsight.daemon.impl.actions.AddImportAction;
-import com.intellij.codeInsight.hint.QuestionAction;
-import com.intellij.codeInsight.intention.IntentionAction;
-import com.intellij.ide.DataManager;
+import consulo.language.editor.intention.IntentionAction;
+import consulo.dataContext.DataManager;
 import com.intellij.java.language.impl.codeInsight.PackageUtil;
-import com.intellij.ide.util.PsiElementListCellRenderer;
-import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.actionSystem.LangDataKeys;
-import com.intellij.openapi.actionSystem.impl.SimpleDataContext;
+import consulo.language.editor.ui.PsiElementListCellRenderer;
+import consulo.dataContext.DataContext;
+import consulo.language.editor.LangDataKeys;
+import consulo.ide.impl.idea.openapi.actionSystem.impl.SimpleDataContext;
 import consulo.logging.Logger;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.ModuleRootManager;
-import com.intellij.openapi.roots.ProjectFileIndex;
-import com.intellij.openapi.roots.ProjectRootManager;
-import com.intellij.openapi.ui.popup.JBPopupFactory;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.codeEditor.Editor;
+import consulo.module.Module;
+import consulo.project.Project;
+import consulo.module.content.ModuleRootManager;
+import consulo.module.content.ProjectFileIndex;
+import consulo.module.content.ProjectRootManager;
+import consulo.util.lang.StringUtil;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiDirectory;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
+import consulo.language.psi.PsiDirectory;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
 import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
 import com.intellij.java.language.psi.PsiJavaFile;
-import com.intellij.psi.PsiManager;
-import com.intellij.psi.PsiReference;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.language.psi.PsiManager;
+import consulo.language.psi.PsiReference;
+import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.java.language.psi.search.PsiShortNamesCache;
-import com.intellij.refactoring.RefactoringActionHandler;
-import com.intellij.refactoring.RefactoringActionHandlerFactory;
-import com.intellij.ui.components.JBList;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.editor.refactoring.action.RefactoringActionHandler;
+import consulo.language.editor.refactoring.action.RefactoringActionHandlerFactory;
+import consulo.ui.ex.awt.JBList;
+import consulo.language.util.IncorrectOperationException;
 
 /**
  * @author cdr
@@ -125,7 +126,7 @@ public class MoveClassToModuleFix implements IntentionAction {
           return psiClass.getQualifiedName();
         }
 
-        @javax.annotation.Nullable
+        @Nullable
         @Override
         protected String getContainerText(PsiClass element, String name) {
           return null;

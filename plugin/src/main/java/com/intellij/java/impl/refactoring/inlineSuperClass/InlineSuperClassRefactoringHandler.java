@@ -22,19 +22,19 @@ package com.intellij.java.impl.refactoring.inlineSuperClass;
 
 import java.util.Collection;
 
-import consulo.codeInsight.TargetElementUtil;
+import consulo.language.editor.TargetElementUtil;
 import com.intellij.java.language.JavaLanguage;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
+import consulo.codeEditor.Editor;
+import consulo.project.Project;
 import com.intellij.java.language.psi.PsiAnonymousClass;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiReference;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiReference;
 import com.intellij.java.language.psi.PsiReferenceList;
 import com.intellij.java.indexing.search.searches.DirectClassInheritorsSearch;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.impl.refactoring.inline.JavaInlineActionHandler;
-import com.intellij.refactoring.util.CommonRefactoringUtil;
+import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 
 public class InlineSuperClassRefactoringHandler extends JavaInlineActionHandler {
   public static final String REFACTORING_NAME = "Inline Super Class";

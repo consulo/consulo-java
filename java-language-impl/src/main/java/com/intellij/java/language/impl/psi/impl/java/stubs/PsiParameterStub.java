@@ -3,7 +3,7 @@ package com.intellij.java.language.impl.psi.impl.java.stubs;
 
 import com.intellij.java.language.psi.PsiParameter;
 import com.intellij.java.language.impl.psi.impl.cache.TypeInfo;
-import com.intellij.psi.stubs.NamedStub;
+import consulo.language.psi.stub.NamedStub;
 import javax.annotation.Nonnull;
 
 public interface PsiParameterStub extends NamedStub<PsiParameter>

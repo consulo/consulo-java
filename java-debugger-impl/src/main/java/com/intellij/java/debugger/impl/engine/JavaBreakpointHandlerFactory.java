@@ -15,7 +15,7 @@
  */
 package com.intellij.java.debugger.impl.engine;
 
-import com.intellij.openapi.extensions.ExtensionPointName;
+import consulo.component.extension.ExtensionPointName;
 
 /**
  * @author egor

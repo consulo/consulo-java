@@ -15,22 +15,24 @@
  */
 package com.intellij.java.language.impl.psi.impl.source.tree.java;
 
-import javax.annotation.Nonnull;
-
-import com.intellij.java.language.psi.JavaElementVisitor;
-import com.intellij.java.language.psi.PsiTypeParameter;
-import com.intellij.java.language.psi.PsiTypeParameterList;
-import com.intellij.lang.ASTNode;
-import consulo.logging.Logger;
-import com.intellij.psi.*;
 import com.intellij.java.language.impl.psi.impl.PsiImplUtil;
 import com.intellij.java.language.impl.psi.impl.java.stubs.JavaStubElementTypes;
 import com.intellij.java.language.impl.psi.impl.java.stubs.PsiTypeParameterListStub;
 import com.intellij.java.language.impl.psi.impl.source.JavaStubPsiElement;
-import com.intellij.psi.scope.PsiScopeProcessor;
+import com.intellij.java.language.psi.JavaElementVisitor;
+import com.intellij.java.language.psi.PsiTypeParameter;
+import com.intellij.java.language.psi.PsiTypeParameterList;
+import consulo.language.ast.ASTNode;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiElementVisitor;
+import consulo.language.psi.resolve.PsiScopeProcessor;
+import consulo.language.psi.resolve.ResolveState;
+import consulo.logging.Logger;
+
+import javax.annotation.Nonnull;
 
 /**
- *  @author dsl
+ * @author dsl
  */
 public class PsiTypeParameterListImpl extends JavaStubPsiElement<PsiTypeParameterListStub> implements PsiTypeParameterList {
   private static final Logger LOG = Logger.getInstance(PsiTypeParameterListImpl.class);
@@ -66,9 +68,8 @@ public class PsiTypeParameterListImpl extends JavaStubPsiElement<PsiTypeParamete
   @Override
   public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
-      ((JavaElementVisitor)visitor).visitTypeParameterList(this);
-    }
-    else {
+      ((JavaElementVisitor) visitor).visitTypeParameterList(this);
+    } else {
       visitor.visitElement(this);
     }
   }

@@ -31,14 +31,14 @@ import com.intellij.java.debugger.impl.ui.impl.watch.FieldDescriptorImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.NodeManagerImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.ValueDescriptorImpl;
 import com.intellij.java.language.psi.PsiExpression;
-import com.intellij.xdebugger.frame.XCompositeNode;
-import com.intellij.xdebugger.frame.XFullValueEvaluator;
-import com.intellij.xdebugger.frame.XValueChildrenList;
-import com.intellij.xdebugger.frame.XValueModifier;
-import com.intellij.xdebugger.frame.XValueNode;
-import com.intellij.xdebugger.frame.XValuePlace;
-import com.intellij.xdebugger.frame.presentation.XValuePresentation;
-import com.intellij.xdebugger.impl.ui.tree.nodes.XValueNodePresentationConfigurator;
+import consulo.execution.debug.frame.*;
+import consulo.execution.debug.frame.XValueModifier;
+import consulo.execution.debug.frame.XValueNode;
+import consulo.execution.debug.frame.XValuePlace;
+import consulo.execution.debug.frame.presentation.XValuePresentation;
+import consulo.ide.impl.idea.xdebugger.impl.ui.tree.nodes.XValueNodePresentationConfigurator;
+import consulo.execution.debug.frame.XCompositeNode;
+import consulo.execution.debug.frame.XValueChildrenList;
 import consulo.internal.com.sun.jdi.Field;
 import consulo.internal.com.sun.jdi.ObjectCollectedException;
 import consulo.internal.com.sun.jdi.ObjectReference;
@@ -173,7 +173,7 @@ public class JavaReferringObjectsValue extends JavaValue
 							return " in ";
 						}
 
-						@javax.annotation.Nullable
+						@Nullable
 						@Override
 						public String getType()
 						{
@@ -214,7 +214,7 @@ public class JavaReferringObjectsValue extends JavaValue
 		return null;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	@Override
 	public XValueModifier getModifier()
 	{

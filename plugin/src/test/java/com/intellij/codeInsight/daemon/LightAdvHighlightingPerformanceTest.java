@@ -15,14 +15,14 @@
  */
 package com.intellij.codeInsight.daemon;
 
-import com.intellij.codeInsight.daemon.impl.HighlightInfo;
-import com.intellij.codeInsight.intention.IntentionManager;
-import com.intellij.concurrency.JobSchedulerImpl;
-import com.intellij.openapi.extensions.ExtensionPoint;
-import com.intellij.psi.PsiDocumentManager;
+import consulo.language.editor.rawHighlight.HighlightInfo;
+import consulo.language.editor.intention.IntentionManager;
+import consulo.ide.impl.idea.concurrency.JobSchedulerImpl;
+import consulo.component.extension.ExtensionPoint;
+import consulo.language.psi.PsiDocumentManager;
 import com.intellij.testFramework.PlatformTestUtil;
 import com.intellij.testFramework.fixtures.impl.CodeInsightTestFixtureImpl;
-import com.intellij.util.ThrowableRunnable;
+import consulo.util.lang.function.ThrowableRunnable;
 import consulo.disposer.Disposable;
 import consulo.disposer.Disposer;
 

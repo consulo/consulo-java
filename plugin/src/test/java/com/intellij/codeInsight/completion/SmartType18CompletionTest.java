@@ -21,7 +21,7 @@ import static org.junit.Assert.assertTrue;
 import javax.annotation.Nonnull;
 
 import com.intellij.JavaTestUtil;
-import com.intellij.codeInsight.lookup.Lookup;
+import consulo.language.editor.completion.lookup.Lookup;
 import com.intellij.testFramework.TestModuleDescriptor;
 
 public abstract class SmartType18CompletionTest extends LightFixtureCompletionTestCase {

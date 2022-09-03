@@ -15,7 +15,7 @@
  */
 package com.intellij.java.execution;
 
-import com.intellij.openapi.util.io.FileUtil;
+import consulo.util.io.FileUtil;
 
 import javax.annotation.Nonnull;
 import java.io.BufferedOutputStream;
@@ -28,38 +28,33 @@ import java.util.jar.Attributes;
 import java.util.jar.JarOutputStream;
 import java.util.jar.Manifest;
 
-public class CommandLineWrapperUtil
-{
-	@Nonnull
-	public static File createClasspathJarFile(Manifest manifest, List<String> pathList) throws IOException
-	{
-		return createClasspathJarFile(manifest, pathList, false);
-	}
+public class CommandLineWrapperUtil {
+  @Nonnull
+  public static File createClasspathJarFile(Manifest manifest, List<String> pathList) throws IOException {
+    return createClasspathJarFile(manifest, pathList, false);
+  }
 
-	@Nonnull
-	@SuppressWarnings({
-			"deprecation",
-			"IOResourceOpenedButNotSafelyClosed"
-	})
-	public static File createClasspathJarFile(Manifest manifest, List<String> pathList, boolean notEscape) throws IOException
-	{
-		manifest.getMainAttributes().put(Attributes.Name.MANIFEST_VERSION, "1.0");
+  @Nonnull
+  @SuppressWarnings({
+      "deprecation",
+      "IOResourceOpenedButNotSafelyClosed"
+  })
+  public static File createClasspathJarFile(Manifest manifest, List<String> pathList, boolean notEscape) throws IOException {
+    manifest.getMainAttributes().put(Attributes.Name.MANIFEST_VERSION, "1.0");
 
-		StringBuilder classPath = new StringBuilder();
-		for(String path : pathList)
-		{
-			if(classPath.length() > 0)
-			{
-				classPath.append(' ');
-			}
-			File classpathElement = new File(path);
-			String url = (notEscape ? classpathElement.toURL() : classpathElement.toURI().toURL()).toString();
-			classPath.append(url);
-		}
-		manifest.getMainAttributes().put(Attributes.Name.CLASS_PATH, classPath.toString());
+    StringBuilder classPath = new StringBuilder();
+    for (String path : pathList) {
+      if (classPath.length() > 0) {
+        classPath.append(' ');
+      }
+      File classpathElement = new File(path);
+      String url = (notEscape ? classpathElement.toURL() : classpathElement.toURI().toURL()).toString();
+      classPath.append(url);
+    }
+    manifest.getMainAttributes().put(Attributes.Name.CLASS_PATH, classPath.toString());
 
-		File jarFile = FileUtil.createTempFile("classpath" + Math.abs(new Random().nextInt()), ".jar", true);
-		new JarOutputStream(new BufferedOutputStream(new FileOutputStream(jarFile)), manifest).close();
-		return jarFile;
-	}
+    File jarFile = FileUtil.createTempFile("classpath" + Math.abs(new Random().nextInt()), ".jar", true);
+    new JarOutputStream(new BufferedOutputStream(new FileOutputStream(jarFile)), manifest).close();
+    return jarFile;
+  }
 }

@@ -16,7 +16,7 @@
 package com.intellij.java.language.impl.psi.impl.java.stubs;
 
 import com.intellij.java.language.psi.PsiJavaModule;
-import com.intellij.psi.stubs.StubElement;
+import consulo.language.psi.stub.StubElement;
 
 public interface PsiJavaModuleStub extends StubElement<PsiJavaModule>
 {

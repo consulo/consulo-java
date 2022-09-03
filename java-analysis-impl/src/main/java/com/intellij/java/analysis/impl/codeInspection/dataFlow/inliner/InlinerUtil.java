@@ -7,7 +7,7 @@ import com.siyeh.ig.psiutils.MethodCallUtils;
 
 import java.util.function.Predicate;
 
-import static com.intellij.util.ObjectUtils.tryCast;
+import static consulo.ide.impl.idea.util.ObjectUtils.tryCast;
 
 class InlinerUtil
 {

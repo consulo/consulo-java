@@ -19,15 +19,15 @@
  */
 package com.intellij.java.impl.find.findUsages;
 
-import com.intellij.find.findUsages.PsiElement2UsageTargetAdapter;
+import consulo.ide.impl.find.PsiElement2UsageTargetAdapter;
 import com.intellij.java.language.psi.PsiKeyword;
 import com.intellij.java.language.psi.PsiThrowStatement;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.usages.UsageTarget;
-import com.intellij.usages.UsageTargetProvider;
-import consulo.codeInsight.TargetElementUtil;
+import consulo.codeEditor.Editor;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.usage.UsageTarget;
+import consulo.usage.UsageTargetProvider;
+import consulo.language.editor.TargetElementUtil;
 
 import javax.annotation.Nullable;
 

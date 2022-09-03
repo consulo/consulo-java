@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.threading;
 
-import com.intellij.codeInspection.ui.SingleCheckboxOptionsPanel;
+import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
 import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
 import com.siyeh.InspectionGadgetsBundle;
@@ -27,6 +27,7 @@ import consulo.java.language.module.util.JavaClassNames;
 
 import javax.annotation.Nonnull;
 
+import javax.annotation.Nullable;
 import javax.swing.*;
 
 public class SynchronizedOnLiteralObjectInspection extends BaseInspection {
@@ -56,7 +57,7 @@ public class SynchronizedOnLiteralObjectInspection extends BaseInspection {
     }
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   @Override
   public JComponent createOptionsPanel() {
     return new SingleCheckboxOptionsPanel(InspectionGadgetsBundle.message("synchronized.on.literal.object.warn.on.all.option"),

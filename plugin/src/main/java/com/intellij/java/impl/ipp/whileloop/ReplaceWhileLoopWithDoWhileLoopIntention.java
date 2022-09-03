@@ -17,7 +17,7 @@ package com.intellij.java.impl.ipp.whileloop;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
 import com.intellij.java.impl.ipp.base.Intention;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import javax.annotation.Nonnull;

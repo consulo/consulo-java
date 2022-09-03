@@ -18,7 +18,7 @@ package com.intellij.java.language.impl.psi.impl.source.resolve.graphInference.c
 import java.util.List;
 
 import consulo.logging.Logger;
-import com.intellij.openapi.util.Comparing;
+import consulo.util.lang.Comparing;
 import com.intellij.java.language.psi.PsiArrayType;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiClassType;

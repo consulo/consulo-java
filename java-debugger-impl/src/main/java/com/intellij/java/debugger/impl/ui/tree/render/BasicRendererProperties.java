@@ -20,7 +20,7 @@ import javax.annotation.Nonnull;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
 import consulo.logging.Logger;
-import com.intellij.openapi.util.JDOMExternalizerUtil;
+import consulo.util.xml.serializer.JDOMExternalizerUtil;
 
 public final class BasicRendererProperties implements Cloneable
 {

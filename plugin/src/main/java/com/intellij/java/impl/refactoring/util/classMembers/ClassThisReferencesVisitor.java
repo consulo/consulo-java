@@ -20,7 +20,7 @@ import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
 import com.intellij.java.language.psi.PsiSuperExpression;
 import com.intellij.java.language.psi.PsiThisExpression;
 import com.intellij.psi.*;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 
 import java.util.HashSet;
 

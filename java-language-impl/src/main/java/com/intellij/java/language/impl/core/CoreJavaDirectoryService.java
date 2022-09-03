@@ -15,21 +15,21 @@
  */
 package com.intellij.java.language.impl.core;
 
+import com.intellij.java.language.LanguageLevel;
+import com.intellij.java.language.impl.psi.impl.compiled.ClsFileImpl;
 import com.intellij.java.language.psi.JavaDirectoryService;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiClassOwner;
 import com.intellij.java.language.psi.PsiJavaPackage;
-import com.intellij.openapi.roots.FileIndexFacade;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.java.language.LanguageLevel;
-import com.intellij.psi.*;
-import com.intellij.java.language.impl.psi.impl.compiled.ClsFileImpl;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.language.content.FileIndexFacade;
+import consulo.language.psi.PsiDirectory;
+import consulo.language.psi.PsiFile;
+import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
+import consulo.util.collection.ContainerUtil;
+import consulo.virtualFileSystem.VirtualFile;
 
 import javax.annotation.Nonnull;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;

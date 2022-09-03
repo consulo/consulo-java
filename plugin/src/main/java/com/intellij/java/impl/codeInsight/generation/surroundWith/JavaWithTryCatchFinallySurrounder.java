@@ -16,7 +16,7 @@
  */
 package com.intellij.java.impl.codeInsight.generation.surroundWith;
 
-import com.intellij.codeInsight.CodeInsightBundle;
+import consulo.language.editor.CodeInsightBundle;
 
 class JavaWithTryCatchFinallySurrounder extends JavaWithTryCatchSurrounder{
   @Override

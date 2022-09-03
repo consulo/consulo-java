@@ -15,18 +15,19 @@
  */
 package org.intellij.plugins.intelliLang.util;
 
-import com.intellij.codeInsight.FileModificationService;
-import com.intellij.codeInspection.LocalQuickFix;
-import com.intellij.codeInspection.ProblemDescriptor;
+import consulo.language.editor.FileModificationService;
+import consulo.language.editor.inspection.LocalQuickFix;
+import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
-import com.intellij.navigation.NavigationItem;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.navigation.NavigationItem;
+import consulo.project.Project;
+import consulo.util.lang.StringUtil;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class AnnotateFix implements LocalQuickFix {
   private final PsiModifierListOwner myElement;
@@ -37,7 +38,7 @@ public class AnnotateFix implements LocalQuickFix {
     this(owner, annotationClassname, null);
   }
 
-  public AnnotateFix(@Nonnull PsiModifierListOwner owner, String annotationClassname, @javax.annotation.Nullable String argList) {
+  public AnnotateFix(@Nonnull PsiModifierListOwner owner, String annotationClassname, @Nullable String argList) {
     myElement = owner;
     myAnnotationName = annotationClassname;
     myArgList = argList;

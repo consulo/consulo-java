@@ -15,16 +15,16 @@
  */
 package com.intellij.java.impl.refactoring.introduceVariable;
 
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiElement;
+import consulo.project.Project;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiVariable;
-import com.intellij.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.RefactoringBundle;
 import com.intellij.java.impl.refactoring.rename.JavaUnresolvableLocalCollisionDetector;
-import com.intellij.refactoring.util.RefactoringUIUtil;
+import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
 import com.intellij.java.impl.refactoring.util.occurrences.ExpressionOccurrenceManager;
 import java.util.HashSet;
-import com.intellij.util.containers.MultiMap;
+import consulo.util.collection.MultiMap;
 
 public class InputValidator implements IntroduceVariableBase.Validator {
   private final Project myProject;

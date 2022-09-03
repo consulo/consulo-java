@@ -19,9 +19,9 @@ import javax.annotation.Nonnull;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.impl.psi.impl.java.stubs.PsiFieldStub;
-import com.intellij.psi.impl.source.SourceTreeToPsiMap;
-import com.intellij.psi.impl.source.tree.TreeElement;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.impl.psi.SourceTreeToPsiMap;
+import consulo.language.impl.ast.TreeElement;
+import consulo.language.util.IncorrectOperationException;
 
 /**
  * @author ven

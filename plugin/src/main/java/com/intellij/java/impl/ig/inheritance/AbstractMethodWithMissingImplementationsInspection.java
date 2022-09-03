@@ -16,10 +16,10 @@
 package com.intellij.java.impl.ig.inheritance;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.progress.ProgressManager;
-import com.intellij.openapi.util.Pair;
+import consulo.application.progress.ProgressManager;
+import consulo.util.lang.Pair;
 import com.intellij.psi.*;
-import com.intellij.psi.search.SearchScope;
+import consulo.content.scope.SearchScope;
 import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
 import com.intellij.java.language.psi.util.MethodSignature;
 import com.intellij.java.language.psi.util.MethodSignatureUtil;

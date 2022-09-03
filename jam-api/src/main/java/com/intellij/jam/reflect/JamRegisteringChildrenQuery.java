@@ -15,9 +15,9 @@
  */
 package com.intellij.jam.reflect;
 
-import com.intellij.semantic.SemRegistrar;
-import com.intellij.patterns.ElementPattern;
-import com.intellij.psi.PsiElement;
+import consulo.language.sem.SemRegistrar;
+import consulo.language.pattern.ElementPattern;
+import consulo.language.psi.PsiElement;
 
 /**
  * @author Serega.Vasiliev

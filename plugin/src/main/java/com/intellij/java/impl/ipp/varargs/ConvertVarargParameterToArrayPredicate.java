@@ -17,7 +17,7 @@ package com.intellij.java.impl.ipp.varargs;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiParameterList;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;

@@ -17,14 +17,14 @@ package com.intellij.java.compiler.impl.javaCompiler.javac;
 
 import com.intellij.java.compiler.OutputParser;
 import com.intellij.java.language.impl.JavaFileType;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.compiler.CompilerBundle;
-import com.intellij.openapi.compiler.CompilerMessageCategory;
-import com.intellij.openapi.editor.ex.util.EditorUtil;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.LocalFileSystem;
-import com.intellij.openapi.vfs.VirtualFileManager;
-import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
+import consulo.application.ApplicationManager;
+import consulo.compiler.CompilerBundle;
+import consulo.compiler.CompilerMessageCategory;
+import consulo.ide.impl.idea.openapi.editor.ex.util.EditorUtil;
+import consulo.project.Project;
+import consulo.virtualFileSystem.LocalFileSystem;
+import consulo.virtualFileSystem.VirtualFileManager;
+import consulo.language.codeStyle.CodeStyleSettingsManager;
 import consulo.java.rt.compiler.JavacResourcesReaderConstants;
 import org.jetbrains.annotations.NonNls;
 
@@ -258,7 +258,7 @@ public class JavacOutputParser extends OutputParser implements JavacResourcesRea
 			myParserActions.add(new JavacParserAction(createMatcher(resourceBundleValue))
 			{
 				@Override
-				protected void doExecute(final String line, @javax.annotation.Nullable String parsedData, final Callback callback)
+				protected void doExecute(final String line, @Nullable String parsedData, final Callback callback)
 				{
 					callback.setProgressText(CompilerBundle.message("progress.loading.classes"));
 				}
@@ -292,7 +292,7 @@ public class JavacOutputParser extends OutputParser implements JavacResourcesRea
 			myParserActions.add(new JavacParserAction(createMatcher(resourceBundleValue))
 			{
 				@Override
-				protected void doExecute(final String line, @javax.annotation.Nullable String parsedData, final Callback callback)
+				protected void doExecute(final String line, @Nullable String parsedData, final Callback callback)
 				{
 					// empty
 				}
@@ -303,7 +303,7 @@ public class JavacOutputParser extends OutputParser implements JavacResourcesRea
 			myParserActions.add(new JavacParserAction(createMatcher(resourceBundleValue))
 			{
 				@Override
-				protected void doExecute(final String line, @javax.annotation.Nullable String parsedData, final Callback callback)
+				protected void doExecute(final String line, @Nullable String parsedData, final Callback callback)
 				{
 					// ignored
 				}

@@ -20,16 +20,16 @@
  */
 package com.intellij.java.impl.analysis;
 
-import com.intellij.analysis.AnalysisScope;
-import com.intellij.analysis.AnalysisScopeUtil;
-import com.intellij.ide.impl.dataRules.GetDataRule;
+import consulo.language.editor.scope.AnalysisScope;
+import consulo.ide.impl.idea.analysis.AnalysisScopeUtil;
+import consulo.dataContext.GetDataRule;
 import com.intellij.java.language.psi.PsiJavaFile;
 import com.intellij.java.language.psi.PsiJavaPackage;
-import com.intellij.openapi.actionSystem.DataProvider;
-import com.intellij.openapi.actionSystem.LangDataKeys;
-import com.intellij.psi.PsiDirectory;
-import com.intellij.psi.PsiManager;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.dataContext.DataProvider;
+import consulo.language.editor.LangDataKeys;
+import consulo.language.psi.PsiDirectory;
+import consulo.language.psi.PsiManager;
+import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.util.dataholder.Key;
 
 import javax.annotation.Nonnull;

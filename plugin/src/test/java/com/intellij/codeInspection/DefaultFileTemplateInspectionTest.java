@@ -2,7 +2,7 @@ package com.intellij.codeInspection;
 
 import com.intellij.JavaTestUtil;
 import com.intellij.java.impl.codeInspection.defaultFileTemplateUsage.DefaultFileTemplateUsageInspection;
-import com.intellij.openapi.projectRoots.Sdk;
+import consulo.content.bundle.Sdk;
 import com.intellij.testFramework.InspectionTestCase;
 
 public abstract class DefaultFileTemplateInspectionTest extends InspectionTestCase {

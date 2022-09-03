@@ -15,30 +15,31 @@
  */
 package com.intellij.java.impl.testIntegration;
 
-import com.intellij.codeInsight.CodeInsightActionHandler;
-import com.intellij.codeInsight.CodeInsightUtilBase;
+import consulo.language.editor.action.CodeInsightActionHandler;
+import consulo.ide.impl.idea.codeInsight.CodeInsightUtilBase;
 import com.intellij.java.impl.codeInsight.generation.GenerateMembersUtil;
 import com.intellij.java.impl.codeInsight.generation.OverrideImplementUtil;
 import com.intellij.java.impl.codeInsight.generation.PsiGenerationInfo;
 import com.intellij.java.impl.codeInsight.generation.actions.BaseGenerateAction;
-import com.intellij.codeInsight.hint.HintManager;
+import consulo.language.editor.hint.HintManager;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.testIntegration.TestFramework;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.popup.PopupChooserBuilder;
+import consulo.application.ApplicationManager;
+import consulo.codeEditor.Editor;
+import consulo.project.Project;
+import consulo.ide.impl.ui.impl.PopupChooserBuilder;
 import com.intellij.psi.*;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.refactoring.util.CommonRefactoringUtil;
-import com.intellij.ui.ColoredListCellRenderer;
-import com.intellij.ui.components.JBList;
-import com.intellij.util.Function;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
+import consulo.ui.ex.awt.ColoredListCellRenderer;
+import consulo.ui.ex.awt.JBList;
+import consulo.ide.impl.idea.util.Function;
+import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.swing.*;
 import java.util.Collections;
 import java.util.List;
@@ -58,7 +59,7 @@ public class BaseGenerateTestSupportMethodAction extends BaseGenerateAction
 		return findTargetClass(editor, file);
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	private static PsiClass findTargetClass(Editor editor, PsiFile file)
 	{
 		int offset = editor.getCaretModel().getOffset();
@@ -153,7 +154,7 @@ public class BaseGenerateTestSupportMethodAction extends BaseGenerateAction
 				}
 			};
 
-			PopupChooserBuilder builder = new PopupChooserBuilder(list);
+			consulo.ide.impl.ui.impl.PopupChooserBuilder builder = new consulo.ide.impl.ui.impl.PopupChooserBuilder(list);
 			builder.setFilteringEnabled(new Function<Object, String>()
 			{
 				@Override
@@ -202,7 +203,7 @@ public class BaseGenerateTestSupportMethodAction extends BaseGenerateAction
 			});
 		}
 
-		@javax.annotation.Nullable
+		@Nullable
 		private static PsiMethod generateDummyMethod(Editor editor, PsiFile file) throws IncorrectOperationException
 		{
 			final PsiMethod method = TestIntegrationUtils.createDummyMethod(file);

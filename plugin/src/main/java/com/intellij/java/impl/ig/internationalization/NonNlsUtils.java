@@ -19,7 +19,7 @@ import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.language.psi.*;
 import consulo.util.dataholder.Key;
 import com.intellij.psi.*;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 import javax.annotation.Nullable;
 
 public class NonNlsUtils {
@@ -50,7 +50,7 @@ public class NonNlsUtils {
     return null;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public static PsiModifierListOwner getAnnotatableQualifier(
     PsiReferenceExpression expression) {
     final PsiExpression qualifierExpression =
@@ -67,7 +67,7 @@ public class NonNlsUtils {
   }
 
   public static boolean isNonNlsAnnotated(
-    @javax.annotation.Nullable PsiExpression expression) {
+    @Nullable PsiExpression expression) {
     if (isReferenceToNonNlsAnnotatedElement(expression)) {
       return true;
     }
@@ -143,7 +143,7 @@ public class NonNlsUtils {
     }
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private static <T> T getCachedValue(PsiExpression expression, Key<T> key) {
     final T data = expression.getUserData(key);
     if (!(expression instanceof PsiBinaryExpression)) {
@@ -284,7 +284,7 @@ public class NonNlsUtils {
   }
 
   private static boolean isNonNlsAnnotatedModifierListOwner(
-    @javax.annotation.Nullable PsiElement element) {
+    @Nullable PsiElement element) {
     if (!(element instanceof PsiModifierListOwner)) {
       return false;
     }

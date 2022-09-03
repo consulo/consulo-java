@@ -17,13 +17,13 @@ package com.intellij.java.impl.codeInsight.completion;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.codeInsight.lookup.LookupElementBuilder;
+import consulo.language.editor.completion.lookup.LookupElementBuilder;
 import com.intellij.java.language.psi.*;
-import consulo.ide.IconDescriptorUpdaters;
-import com.intellij.openapi.util.Iconable;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.language.icon.IconDescriptorUpdaters;
+import consulo.component.util.Iconable;
+import consulo.util.lang.StringUtil;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
-import com.intellij.psi.util.PsiFormatUtilBase;
+import consulo.ide.impl.psi.util.PsiFormatUtilBase;
 
 import javax.annotation.Nullable;
 
@@ -52,7 +52,7 @@ public class JavaLookupElementBuilder {
 
   public static LookupElementBuilder forMethod(@Nonnull PsiMethod method,
                                                @Nonnull String lookupString, final @Nonnull PsiSubstitutor substitutor,
-                                               @javax.annotation.Nullable PsiClass qualifierClass) {
+                                               @Nullable PsiClass qualifierClass) {
     LookupElementBuilder builder = LookupElementBuilder.create(method, lookupString)
       .withIcon(IconDescriptorUpdaters.getIcon(method, Iconable.ICON_FLAG_VISIBILITY))
       .withPresentableText(method.getName())
@@ -67,7 +67,7 @@ public class JavaLookupElementBuilder {
     return builder;
   }
 
-  private static LookupElementBuilder setBoldIfInClass(@Nonnull PsiMember member, @javax.annotation.Nullable PsiClass psiClass, @Nonnull LookupElementBuilder builder) {
+  private static LookupElementBuilder setBoldIfInClass(@Nonnull PsiMember member, @Nullable PsiClass psiClass, @Nonnull LookupElementBuilder builder) {
     if (psiClass != null && member.getManager().areElementsEquivalent(member.getContainingClass(), psiClass)) {
       return builder.bold();
     }

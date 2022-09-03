@@ -20,12 +20,12 @@
  */
 package com.intellij.java.impl.analysis;
 
-import com.intellij.openapi.extensions.Extensions;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.search.scope.ProjectProductionScope;
-import com.intellij.psi.search.scope.TestsScope;
-import com.intellij.psi.search.scope.packageSet.CustomScopesProviderEx;
-import com.intellij.psi.search.scope.packageSet.NamedScope;
+import consulo.component.extension.Extensions;
+import consulo.project.Project;
+import consulo.ide.impl.psi.search.scope.ProjectProductionScope;
+import consulo.ide.impl.psi.search.scope.TestsScope;
+import consulo.ide.impl.psi.search.scope.packageSet.CustomScopesProviderEx;
+import consulo.content.scope.NamedScope;
 import javax.annotation.Nonnull;
 
 import java.util.Arrays;

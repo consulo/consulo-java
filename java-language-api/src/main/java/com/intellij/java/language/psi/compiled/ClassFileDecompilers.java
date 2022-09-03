@@ -17,10 +17,12 @@ package com.intellij.java.language.psi.compiled;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import com.intellij.openapi.extensions.ExtensionPointName;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.FileViewProvider;
-import com.intellij.psi.PsiManager;
+
+import consulo.language.psi.PsiManager;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.language.file.FileViewProvider;
+import consulo.component.extension.ExtensionPointName;
+import consulo.language.Language;
 
 /**
  * An API to extend default IDEA .class file decompiler and handle files compiled from sources other than Java.
@@ -76,7 +78,7 @@ public class ClassFileDecompilers
 		 * <p/>
 		 * <p>3. A language compiler may produce auxiliary .class files which should be handled as part of their parent classes.
 		 * A standard practice is to hide such files by returning {@code null} from
-		 * {@link FileViewProvider#getPsi(com.intellij.lang.Language)}.</p>
+		 * {@link FileViewProvider#getPsi(Language)}.</p>
 		 */
 		@Nonnull
 		public abstract FileViewProvider createFileViewProvider(@Nonnull VirtualFile file, @Nonnull PsiManager manager, boolean physical);

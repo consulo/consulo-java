@@ -21,9 +21,9 @@ import javax.annotation.Nonnull;
 
 import com.intellij.java.compiler.impl.javaCompiler.BackendCompiler;
 import com.intellij.openapi.extensions.AbstractExtensionPointBean;
-import com.intellij.openapi.project.Project;
-import com.intellij.util.ReflectionUtil;
-import com.intellij.util.xmlb.annotations.Attribute;
+import consulo.project.Project;
+import consulo.util.lang.reflect.ReflectionUtil;
+import consulo.util.xml.serializer.annotation.Attribute;
 
 /**
  * @author VISTALL

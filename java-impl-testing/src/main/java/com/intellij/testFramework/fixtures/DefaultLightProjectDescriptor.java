@@ -17,14 +17,14 @@ package com.intellij.testFramework.fixtures;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.roots.ContentEntry;
-import com.intellij.openapi.roots.ModifiableRootModel;
+import consulo.module.Module;
+import consulo.content.bundle.Sdk;
+import consulo.module.content.layer.ContentEntry;
+import consulo.module.content.layer.ModifiableRootModel;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.testFramework.IdeaTestUtil;
 import com.intellij.testFramework.TestModuleDescriptor;
-import com.intellij.util.Consumer;
+import consulo.ide.impl.idea.util.Consumer;
 import consulo.java.language.module.extension.JavaMutableModuleExtension;
 
 /**

@@ -16,8 +16,9 @@
 package com.intellij.java.language.psi;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
 
 /**
  * Represents a Java <code>if</code> or <code>if ... else</code> statement.
@@ -28,7 +29,7 @@ public interface PsiIfStatement extends PsiStatement {
    *
    * @return the expression instance, or null if the statement is incomplete.
    */
-  @javax.annotation.Nullable
+  @Nullable
   PsiExpression getCondition();
 
   /**
@@ -36,7 +37,7 @@ public interface PsiIfStatement extends PsiStatement {
    *
    * @return the statement instance, or null if the statement is incomplete.
    */
-  @javax.annotation.Nullable
+  @Nullable
   PsiStatement getThenBranch();
 
   /**
@@ -45,7 +46,7 @@ public interface PsiIfStatement extends PsiStatement {
    * @return the statement instance, or null if the statement has no <code>else</code>
    * part or is incomplete.
    */
-  @javax.annotation.Nullable
+  @Nullable
   PsiStatement getElseBranch();
 
   /**
@@ -54,7 +55,7 @@ public interface PsiIfStatement extends PsiStatement {
    * @return the keyword instance, or null if the statement has no <code>else</code>
    * part.
    */
-  @javax.annotation.Nullable
+  @Nullable
   PsiKeyword getElseElement();
 
   /**
@@ -82,7 +83,7 @@ public interface PsiIfStatement extends PsiStatement {
    *
    * @return the opening parenthesis, or null if the statement is incomplete.
    */
-  @javax.annotation.Nullable
+  @Nullable
   PsiJavaToken getLParenth();
 
   /**
@@ -90,6 +91,6 @@ public interface PsiIfStatement extends PsiStatement {
    *
    * @return the closing parenthesis, or null if the statement is incomplete.
    */
-  @javax.annotation.Nullable
+  @Nullable
   PsiJavaToken getRParenth();
 }

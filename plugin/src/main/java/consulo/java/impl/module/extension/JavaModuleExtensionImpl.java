@@ -15,15 +15,15 @@
  */
 package consulo.java.impl.module.extension;
 
-import com.intellij.compiler.impl.ModuleChunk;
+import consulo.ide.impl.idea.compiler.impl.ModuleChunk;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.projectRoots.JavaSdk;
 import com.intellij.java.language.projectRoots.JavaSdkVersion;
-import com.intellij.openapi.compiler.CompileContext;
-import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.projectRoots.SdkType;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.compiler.CompileContext;
+import consulo.content.bundle.Sdk;
+import consulo.content.bundle.SdkType;
+import consulo.util.lang.StringUtil;
+import consulo.virtualFileSystem.VirtualFile;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.java.language.module.extension.JavaModuleExtension;
 import consulo.java.language.module.extension.SpecialDirLocation;
@@ -114,7 +114,7 @@ public class JavaModuleExtensionImpl extends ModuleExtensionWithSdkImpl<JavaModu
 
   @Nonnull
   @Override
-  public Set<VirtualFile> getCompilationBootClasspath(@Nonnull CompileContext compileContext, @Nonnull ModuleChunk moduleChunk) {
+  public Set<VirtualFile> getCompilationBootClasspath(@Nonnull CompileContext compileContext, @Nonnull consulo.ide.impl.idea.compiler.impl.ModuleChunk moduleChunk) {
     return moduleChunk.getCompilationBootClasspathFiles(JavaSdk.getInstance());
   }
 

@@ -23,19 +23,20 @@ import com.intellij.java.compiler.impl.javaCompiler.JavaCompilerConfiguration;
 import com.intellij.compiler.instrumentation.FailSafeClassReader;
 import com.intellij.compiler.instrumentation.InstrumentationClassFinder;
 import com.intellij.compiler.instrumentation.InstrumenterClassWriter;
-import com.intellij.compiler.make.CacheCorruptedException;
+import consulo.compiler.CacheCorruptedException;
 import com.intellij.compiler.notNullVerification.NotNullVerifyingInstrumenter;
-import com.intellij.openapi.compiler.CompileContext;
-import com.intellij.openapi.module.Module;
+import consulo.compiler.CompileContext;
+import consulo.module.Module;
 import com.intellij.java.language.projectRoots.JavaSdk;
 import com.intellij.java.language.projectRoots.JavaSdkVersion;
-import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.util.ThrowableComputable;
-import com.intellij.util.ArrayUtil;
+import consulo.content.bundle.Sdk;
+import consulo.application.util.function.ThrowableComputable;
+import consulo.util.collection.ArrayUtil;
 import consulo.java.compiler.JavaCompilerUtil;
 import consulo.java.compiler.bytecodeProcessing.JavaBytecodeProcessor;
 import consulo.internal.org.objectweb.asm.ClassWriter;
 
+import javax.annotation.Nullable;
 import java.io.File;
 import java.io.IOException;
 
@@ -45,7 +46,7 @@ import java.io.IOException;
  */
 public class NotNullJavaBytecodeProcessorCompiler implements JavaBytecodeProcessor
 {
-	@javax.annotation.Nullable
+	@Nullable
 	@Override
 	public byte[] processClassFile(CompileContext compileContext,
 			Module affectedModule,

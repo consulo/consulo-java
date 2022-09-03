@@ -20,36 +20,32 @@
 package com.intellij.java.indexing.impl.stubs.index;
 
 import com.intellij.java.indexing.impl.search.JavaSourceFilterScope;
-import com.intellij.openapi.project.Project;
-import com.intellij.java.language.psi.PsiAnnotation;
 import com.intellij.java.language.impl.psi.impl.java.stubs.index.JavaStubIndexKeys;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.stubs.StringStubIndexExtension;
-import com.intellij.psi.stubs.StubIndex;
-import com.intellij.psi.stubs.StubIndexKey;
+import com.intellij.java.language.psi.PsiAnnotation;
+import consulo.language.psi.stub.StringStubIndexExtension;
+import consulo.language.psi.stub.StubIndex;
+import consulo.language.psi.stub.StubIndexKey;
+import consulo.project.Project;
+import consulo.project.content.scope.ProjectAwareSearchScope;
 
 import javax.annotation.Nonnull;
 import java.util.Collection;
 
-public class JavaAnnotationIndex extends StringStubIndexExtension<PsiAnnotation>
-{
-	private static final JavaAnnotationIndex ourInstance = new JavaAnnotationIndex();
+public class JavaAnnotationIndex extends StringStubIndexExtension<PsiAnnotation> {
+  private static final JavaAnnotationIndex ourInstance = new JavaAnnotationIndex();
 
-	public static JavaAnnotationIndex getInstance()
-	{
-		return ourInstance;
-	}
+  public static JavaAnnotationIndex getInstance() {
+    return ourInstance;
+  }
 
-	@Nonnull
-	@Override
-	public StubIndexKey<String, PsiAnnotation> getKey()
-	{
-		return JavaStubIndexKeys.ANNOTATIONS;
-	}
+  @Nonnull
+  @Override
+  public StubIndexKey<String, PsiAnnotation> getKey() {
+    return JavaStubIndexKeys.ANNOTATIONS;
+  }
 
-	@Override
-	public Collection<PsiAnnotation> get(@Nonnull final String s, @Nonnull final Project project, @Nonnull final GlobalSearchScope scope)
-	{
-		return StubIndex.getElements(getKey(), s, project, new JavaSourceFilterScope(scope), PsiAnnotation.class);
-	}
+  @Override
+  public Collection<PsiAnnotation> get(@Nonnull final String s, @Nonnull final Project project, @Nonnull final ProjectAwareSearchScope scope) {
+    return StubIndex.getElements(getKey(), s, project, new JavaSourceFilterScope(scope), PsiAnnotation.class);
+  }
 }

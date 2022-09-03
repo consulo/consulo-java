@@ -15,11 +15,11 @@
  */
 package com.intellij.java.impl.codeInsight.template.macro;
 
-import com.intellij.codeInsight.CodeInsightBundle;
+import consulo.language.editor.CodeInsightBundle;
 import com.intellij.java.impl.codeInsight.ExpectedTypeInfo;
 import com.intellij.java.impl.codeInsight.ExpectedTypesProvider;
-import com.intellij.codeInsight.completion.CompletionUtil;
-import com.intellij.codeInsight.lookup.LookupElement;
+import consulo.language.editor.impl.internal.completion.CompletionUtil;
+import consulo.language.editor.completion.lookup.LookupElement;
 import com.intellij.codeInsight.template.*;
 import com.intellij.java.impl.codeInsight.template.JavaCodeContextType;
 import com.intellij.java.impl.codeInsight.template.PsiTypeResult;
@@ -27,10 +27,11 @@ import com.intellij.java.impl.codeInsight.template.impl.JavaTemplateUtil;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiIdentifier;
 import com.intellij.java.language.psi.PsiType;
-import com.intellij.openapi.project.Project;
+import consulo.project.Project;
 import com.intellij.psi.*;
-import com.intellij.psi.text.BlockSupport;
+import consulo.language.impl.internal.psi.diff.BlockSupport;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -71,7 +72,7 @@ public class ExpectedTypeMacro extends Macro {
     return set.toArray(new LookupElement[set.size()]);
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private static PsiType[] getExpectedTypes(Expression[] params, final ExpressionContext context) {
     if (params.length != 0) return null;
 

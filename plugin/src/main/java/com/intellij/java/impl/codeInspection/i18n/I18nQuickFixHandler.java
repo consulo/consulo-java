@@ -15,15 +15,16 @@
  */
 package com.intellij.java.impl.codeInspection.i18n;
 
-import com.intellij.psi.PsiFile;
+import consulo.language.psi.PsiFile;
 import com.intellij.java.language.psi.PsiLiteralExpression;
 import com.intellij.java.language.psi.PsiExpression;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
-import com.intellij.util.IncorrectOperationException;
+import consulo.codeEditor.Editor;
+import consulo.project.Project;
+import consulo.language.util.IncorrectOperationException;
 import com.intellij.lang.properties.psi.PropertiesFile;
 import com.intellij.java.impl.lang.properties.psi.PropertyCreationHandler;
 
+import javax.annotation.Nullable;
 import java.util.Collection;
 
 /**
@@ -42,6 +43,6 @@ public interface I18nQuickFixHandler {
                           PsiExpression[] parameters,
                           PropertyCreationHandler propertyCreationHandler) throws IncorrectOperationException;
 
-  @javax.annotation.Nullable
+  @Nullable
   JavaI18nizeQuickFixDialog createDialog(Project project, Editor editor, PsiFile psiFile);
 }

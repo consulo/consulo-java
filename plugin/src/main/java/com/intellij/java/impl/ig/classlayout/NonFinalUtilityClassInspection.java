@@ -16,6 +16,7 @@
 package com.intellij.java.impl.ig.classlayout;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiModifier;
@@ -45,7 +46,7 @@ public class NonFinalUtilityClassInspection extends BaseInspection {
     return InspectionGadgetsBundle.message("non.final.utility.class.problem.descriptor");
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   @Override
   protected InspectionGadgetsFix buildFix(Object... infos) {
     return new MakeClassFinalFix((PsiClass)infos[0]);

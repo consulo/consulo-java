@@ -26,11 +26,11 @@ package org.osmorc.manifest.lang.psi.impl;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.extapi.psi.StubBasedPsiElementBase;
-import com.intellij.lang.ASTNode;
-import com.intellij.lang.Language;
-import com.intellij.psi.stubs.IStubElementType;
-import com.intellij.psi.stubs.StubElement;
+import consulo.language.impl.psi.stub.StubBasedPsiElementBase;
+import consulo.language.ast.ASTNode;
+import consulo.language.Language;
+import consulo.language.psi.stub.IStubElementType;
+import consulo.language.psi.stub.StubElement;
 import org.osmorc.manifest.lang.ManifestLanguage;
 
 /**

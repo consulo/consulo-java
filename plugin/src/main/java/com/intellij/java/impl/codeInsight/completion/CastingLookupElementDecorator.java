@@ -15,19 +15,21 @@
  */
 package com.intellij.java.impl.codeInsight.completion;
 
-import com.intellij.codeInsight.completion.CompletionUtil;
-import com.intellij.codeInsight.completion.InsertionContext;
-import com.intellij.codeInsight.completion.util.CompletionStyleUtil;
-import com.intellij.codeInsight.lookup.LookupElement;
-import com.intellij.codeInsight.lookup.LookupElementDecorator;
-import com.intellij.codeInsight.lookup.LookupElementPresentation;
+import consulo.language.editor.impl.internal.completion.CompletionUtil;
+import consulo.language.editor.completion.lookup.InsertionContext;
+import consulo.language.editor.completion.CompletionStyleUtil;
+import consulo.language.editor.completion.lookup.LookupElement;
+import consulo.language.editor.completion.lookup.LookupElementDecorator;
+import consulo.language.editor.completion.lookup.LookupElementPresentation;
 import com.intellij.java.impl.codeInsight.lookup.PsiTypeLookupItem;
 import com.intellij.java.impl.codeInsight.lookup.TypedLookupItem;
 import com.intellij.java.language.psi.PsiType;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.util.ClassConditionKey;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
+import consulo.codeEditor.Editor;
+import consulo.language.editor.completion.ClassConditionKey;
+import consulo.language.psi.PsiElement;
+import consulo.language.codeStyle.CommonCodeStyleSettings;
+
+import javax.annotation.Nullable;
 
 /**
  * @author peter
@@ -38,7 +40,7 @@ public class CastingLookupElementDecorator extends LookupElementDecorator<Lookup
   private final LookupElement myCastItem;
   private final PsiType myCastType;
 
-  @javax.annotation.Nullable
+  @Nullable
   private static String getItemText(LookupElementPresentation base, LookupElement castItem) {
     final LookupElementPresentation castPresentation = new LookupElementPresentation();
     castItem.renderElement(castPresentation);

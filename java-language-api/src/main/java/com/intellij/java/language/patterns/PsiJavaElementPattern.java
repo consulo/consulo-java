@@ -16,10 +16,16 @@
 package com.intellij.java.language.patterns;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.patterns.*;
-import com.intellij.psi.PsiElement;
-import com.intellij.util.ProcessingContext;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.language.pattern.ElementPattern;
+import consulo.language.pattern.InitialPatternCondition;
+import consulo.language.pattern.PatternCondition;
+import consulo.language.pattern.PlatformPatterns;
+import consulo.language.pattern.PsiElementPattern;
+import consulo.language.pattern.PsiNamePatternCondition;
+import consulo.language.psi.PsiElement;
+import consulo.language.pattern.StandardPatterns;
+import consulo.language.util.ProcessingContext;
+import consulo.util.collection.ContainerUtil;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;

@@ -15,10 +15,10 @@
  */
 package com.intellij.java.impl.ide.util.treeView;
 
-import com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode;
-import com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode;
-import com.intellij.ide.projectView.impl.nodes.PsiFileNode;
-import com.intellij.ide.util.treeView.NodeDescriptor;
+import consulo.ide.impl.idea.ide.projectView.impl.nodes.ProjectViewProjectNode;
+import consulo.project.ui.view.tree.PsiDirectoryNode;
+import consulo.project.ui.view.tree.PsiFileNode;
+import consulo.ui.ex.tree.NodeDescriptor;
 import com.intellij.java.impl.ide.projectView.impl.nodes.ClassTreeNode;
 
 import java.util.Comparator;

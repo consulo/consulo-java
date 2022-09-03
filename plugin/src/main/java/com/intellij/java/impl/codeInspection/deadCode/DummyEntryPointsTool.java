@@ -16,13 +16,14 @@
 package com.intellij.java.impl.codeInspection.deadCode;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-import com.intellij.analysis.AnalysisScope;
-import com.intellij.codeInspection.GlobalInspectionContext;
-import com.intellij.codeInspection.InspectionManager;
-import com.intellij.codeInspection.InspectionsBundle;
-import com.intellij.codeInspection.ProblemDescriptionsProcessor;
-import com.intellij.codeInspection.ex.JobDescriptor;
+import consulo.language.editor.scope.AnalysisScope;
+import consulo.language.editor.inspection.GlobalInspectionContext;
+import consulo.language.editor.inspection.scheme.InspectionManager;
+import consulo.language.editor.inspection.InspectionsBundle;
+import consulo.language.editor.inspection.ProblemDescriptionsProcessor;
+import consulo.language.editor.inspection.scheme.JobDescriptor;
 
 /**
  * @author max
@@ -41,7 +42,7 @@ public class DummyEntryPointsTool extends UnusedDeclarationInspection
 	{
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	@Override
 	public JobDescriptor[] getAdditionalJobs()
 	{

@@ -21,7 +21,7 @@ import com.intellij.java.debugger.engine.evaluation.TextWithImports;
 import com.intellij.java.debugger.impl.ui.impl.watch.UserExpressionDescriptorImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.ValueDescriptorImpl;
 import com.intellij.java.debugger.impl.ui.tree.UserExpressionDescriptor;
-import com.intellij.openapi.project.Project;
+import consulo.project.Project;
 
 public class UserExpressionData extends DescriptorData<UserExpressionDescriptor>
 {

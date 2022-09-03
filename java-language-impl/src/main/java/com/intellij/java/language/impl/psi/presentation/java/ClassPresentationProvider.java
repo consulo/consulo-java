@@ -15,22 +15,32 @@
  */
 package com.intellij.java.language.impl.psi.presentation.java;
 
-import com.intellij.navigation.ColoredItemPresentation;
-import com.intellij.navigation.ItemPresentation;
-import com.intellij.navigation.ItemPresentationProvider;
-import com.intellij.openapi.editor.colors.CodeInsightColors;
-import com.intellij.openapi.editor.colors.TextAttributesKey;
-import com.intellij.openapi.util.Iconable;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiClassOwner;
-import com.intellij.psi.PsiFile;
-import consulo.ide.IconDescriptorUpdaters;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.codeEditor.CodeInsightColors;
+import consulo.colorScheme.TextAttributesKey;
+import consulo.component.util.Iconable;
+import consulo.language.icon.IconDescriptorUpdaters;
+import consulo.language.psi.PsiFile;
+import consulo.navigation.ItemPresentation;
+import consulo.navigation.ItemPresentationProvider;
+import consulo.ui.ex.ColoredItemPresentation;
 import consulo.ui.image.Image;
+
+import javax.annotation.Nonnull;
 
 /**
  * @author yole
  */
+@ExtensionImpl
 public class ClassPresentationProvider implements ItemPresentationProvider<PsiClass> {
+  @Nonnull
+  @Override
+  public Class<PsiClass> getItemClass() {
+    return PsiClass.class;
+  }
+
   @Override
   public ItemPresentation getPresentation(final PsiClass psiClass) {
     return new ColoredItemPresentation() {
@@ -43,7 +53,7 @@ public class ClassPresentationProvider implements ItemPresentationProvider<PsiCl
       public String getLocationString() {
         PsiFile file = psiClass.getContainingFile();
         if (file instanceof PsiClassOwner) {
-          PsiClassOwner classOwner = (PsiClassOwner)file;
+          PsiClassOwner classOwner = (PsiClassOwner) file;
           String packageName = classOwner.getPackageName();
           if (packageName.length() == 0) return null;
           return "(" + packageName + ")";

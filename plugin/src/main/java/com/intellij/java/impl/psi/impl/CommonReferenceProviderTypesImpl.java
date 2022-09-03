@@ -18,7 +18,7 @@ package com.intellij.java.impl.psi.impl;
 import jakarta.inject.Singleton;
 
 import com.intellij.java.impl.psi.CommonReferenceProviderTypes;
-import com.intellij.psi.PsiReferenceProvider;
+import consulo.language.psi.PsiReferenceProvider;
 import com.intellij.java.impl.psi.impl.source.resolve.reference.impl.providers.JavaClassReferenceProvider;
 
 /**

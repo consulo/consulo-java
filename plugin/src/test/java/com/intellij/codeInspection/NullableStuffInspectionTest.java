@@ -7,13 +7,13 @@
 package com.intellij.codeInspection;
 
 import com.intellij.JavaTestUtil;
-import com.intellij.codeInspection.ex.LocalInspectionToolWrapper;
+import consulo.language.editor.inspection.scheme.LocalInspectionToolWrapper;
 import com.intellij.java.impl.codeInspection.nullable.NullableStuffInspection;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.projectRoots.SdkModificator;
-import com.intellij.openapi.roots.OrderRootType;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.application.ApplicationManager;
+import consulo.content.bundle.Sdk;
+import consulo.content.bundle.SdkModificator;
+import consulo.content.OrderRootType;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.testFramework.InspectionTestCase;
 
 public abstract class NullableStuffInspectionTest extends InspectionTestCase {

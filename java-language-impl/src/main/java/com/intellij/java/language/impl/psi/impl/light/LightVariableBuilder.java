@@ -1,20 +1,17 @@
 package com.intellij.java.language.impl.psi.impl.light;
 
-import com.intellij.codeInsight.completion.originInfo.OriginInfoAwareElement;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.*;
-import com.intellij.lang.Language;
-import com.intellij.navigation.NavigationItem;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiManager;
-import com.intellij.psi.impl.light.LightElement;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.PlatformIcons;
+import consulo.language.Language;
+import consulo.language.impl.psi.LightElement;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiManager;
+import consulo.language.util.IncorrectOperationException;
+import consulo.navigation.NavigationItem;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.swing.*;
 
 /**
  * @author peter
@@ -24,7 +21,6 @@ public class LightVariableBuilder<T extends LightVariableBuilder> extends LightE
   private final String myName;
   private final PsiType myType;
   private volatile LightModifierList myModifierList;
-  private volatile Icon myBaseIcon = PlatformIcons.VARIABLE_ICON;
   private String myOriginInfo;
 
   public LightVariableBuilder(@Nonnull String name, @Nonnull String type, @Nonnull PsiElement navigationElement) {
@@ -117,13 +113,7 @@ public class LightVariableBuilder<T extends LightVariableBuilder> extends LightE
         ".LightVariableBuilder");
   }
 
-  @Deprecated
-  public T setBaseIcon(Icon baseIcon) {
-    myBaseIcon = baseIcon;
-    return (T) this;
-  }
-
-  @javax.annotation.Nullable
+  @Nullable
   @Override
   public String getOriginInfo() {
     return myOriginInfo;

@@ -15,12 +15,12 @@
  */
 package com.intellij.java.impl.codeInsight.completion;
 
-import com.intellij.codeInsight.completion.CompletionParameters;
+import consulo.language.editor.completion.CompletionParameters;
 import com.intellij.java.language.impl.psi.impl.source.tree.java.PsiReferenceExpressionImpl;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.openapi.util.registry.Registry;
-import com.intellij.psi.PsiElement;
-import com.intellij.util.Processor;
+import consulo.application.util.registry.Registry;
+import consulo.language.psi.PsiElement;
+import consulo.application.util.function.Processor;
 import consulo.logging.Logger;
 
 import java.util.HashSet;

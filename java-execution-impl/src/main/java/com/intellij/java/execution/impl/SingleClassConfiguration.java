@@ -20,11 +20,10 @@ import com.intellij.java.language.psi.PsiClass;
 /**
  * @author dyoma
  */
-public interface SingleClassConfiguration
-{
-	void setMainClass(final PsiClass psiClass);
+public interface SingleClassConfiguration {
+  void setMainClass(final PsiClass psiClass);
 
-	PsiClass getMainClass();
+  PsiClass getMainClass();
 
-	void setMainClassName(String qualifiedName);
+  void setMainClassName(String qualifiedName);
 }

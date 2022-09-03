@@ -17,7 +17,7 @@ package com.intellij.java.impl.codeInsight.template.postfix.templates;
 
 import com.intellij.java.impl.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils;
 import com.intellij.java.language.psi.PsiExpression;
-import com.intellij.openapi.util.Pair;
+import consulo.util.lang.Pair;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

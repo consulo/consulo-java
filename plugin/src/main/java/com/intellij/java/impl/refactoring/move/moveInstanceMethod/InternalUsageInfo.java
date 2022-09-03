@@ -15,9 +15,9 @@
  */
 package com.intellij.java.impl.refactoring.move.moveInstanceMethod;
 
-import com.intellij.usageView.UsageInfo;
+import consulo.usage.UsageInfo;
 import com.intellij.java.language.psi.PsiReferenceExpression;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiNewExpression;
 import consulo.logging.Logger;

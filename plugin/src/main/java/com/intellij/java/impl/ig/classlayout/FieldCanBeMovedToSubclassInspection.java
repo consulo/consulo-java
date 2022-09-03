@@ -15,10 +15,10 @@
  */
 package com.intellij.java.impl.ig.classlayout;
 
-import com.intellij.analysis.AnalysisScope;
-import com.intellij.codeInspection.CommonProblemDescriptor;
-import com.intellij.codeInspection.GlobalInspectionContext;
-import com.intellij.codeInspection.InspectionManager;
+import consulo.language.editor.scope.AnalysisScope;
+import consulo.language.editor.inspection.CommonProblemDescriptor;
+import consulo.language.editor.inspection.GlobalInspectionContext;
+import consulo.language.editor.inspection.scheme.InspectionManager;
 import com.intellij.codeInspection.reference.*;
 import com.intellij.java.analysis.codeInspection.reference.RefClass;
 import com.intellij.java.analysis.codeInspection.reference.RefField;
@@ -27,6 +27,7 @@ import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.impl.ig.BaseGlobalInspection;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -41,7 +42,7 @@ public class FieldCanBeMovedToSubclassInspection extends BaseGlobalInspection {
     //return InspectionGadgetsBundle.message("field.can.be.moved.so.subclass.display.name");
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public CommonProblemDescriptor[] checkElement(
     RefEntity refEntity, AnalysisScope analysisScope,
     InspectionManager inspectionManager,

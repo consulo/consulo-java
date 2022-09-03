@@ -16,8 +16,8 @@
 package com.intellij.java.impl.refactoring.typeMigration.rules;
 
 import javax.annotation.Nullable;
-import com.intellij.openapi.extensions.ExtensionPointName;
-import com.intellij.openapi.util.Pair;
+import consulo.component.extension.ExtensionPointName;
+import consulo.util.lang.Pair;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiMember;
 import com.intellij.java.language.psi.PsiMethod;

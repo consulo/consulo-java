@@ -15,13 +15,13 @@
  */
 package com.intellij.java.language.projectRoots.roots;
 
-import com.intellij.openapi.roots.OrderEntry;
-import com.intellij.openapi.roots.OrderRootType;
-import com.intellij.openapi.roots.RootPolicy;
-import com.intellij.openapi.vfs.VfsUtilCore;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.util.ArrayUtil;
-import consulo.roots.OrderEntryWithTracking;
+import consulo.content.OrderRootType;
+import consulo.module.content.layer.orderEntry.OrderEntry;
+import consulo.module.content.layer.orderEntry.OrderEntryWithTracking;
+import consulo.module.content.layer.orderEntry.RootPolicy;
+import consulo.util.collection.ArrayUtil;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.virtualFileSystem.util.VirtualFileUtil;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -54,7 +54,7 @@ public class AnnotationOrderRootType extends OrderRootType {
       }
     };
     entry.accept(policy, result);
-    return VfsUtilCore.toVirtualFileArray(result);
+    return VirtualFileUtil.toVirtualFileArray(result);
   }
 
   @Nonnull

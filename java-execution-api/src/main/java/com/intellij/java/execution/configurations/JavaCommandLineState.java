@@ -15,12 +15,12 @@
  */
 package com.intellij.java.execution.configurations;
 
-import com.intellij.execution.ExecutionException;
-import com.intellij.execution.configurations.CommandLineState;
-import com.intellij.execution.configurations.GeneralCommandLine;
-import com.intellij.execution.process.OSProcessHandler;
-import com.intellij.execution.runners.ExecutionEnvironment;
+import consulo.execution.configuration.CommandLineState;
+import consulo.execution.runner.ExecutionEnvironment;
 import consulo.java.execution.configurations.OwnJavaParameters;
+import consulo.process.ExecutionException;
+import consulo.process.ProcessHandler;
+import consulo.process.cmd.GeneralCommandLine;
 
 import javax.annotation.Nonnull;
 
@@ -45,7 +45,7 @@ public abstract class JavaCommandLineState extends CommandLineState implements J
 
   @Override
   @Nonnull
-  protected OSProcessHandler startProcess() throws ExecutionException {
+  protected ProcessHandler startProcess() throws ExecutionException {
     return JavaCommandLineStateUtil.startProcess(createCommandLine(), ansiColoringEnabled());
   }
 

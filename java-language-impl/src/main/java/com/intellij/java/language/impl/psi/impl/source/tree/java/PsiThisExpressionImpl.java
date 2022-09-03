@@ -15,18 +15,19 @@
  */
 package com.intellij.java.language.impl.psi.impl.source.tree.java;
 
-import javax.annotation.Nonnull;
-
-import com.intellij.java.language.psi.*;
-import com.intellij.lang.ASTNode;
-import com.intellij.psi.*;
 import com.intellij.java.language.impl.psi.impl.source.Constants;
 import com.intellij.java.language.impl.psi.impl.source.PsiClassReferenceType;
 import com.intellij.java.language.impl.psi.impl.source.PsiImmediateClassType;
 import com.intellij.java.language.impl.psi.impl.source.tree.ChildRole;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.tree.ChildRoleBase;
+import com.intellij.java.language.psi.*;
+import consulo.language.ast.ASTNode;
+import consulo.language.ast.ChildRoleBase;
+import consulo.language.ast.IElementType;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiElementVisitor;
 import consulo.logging.Logger;
+
+import javax.annotation.Nonnull;
 
 public class PsiThisExpressionImpl extends ExpressionPsiElement implements PsiThisExpression, Constants {
   private static final Logger LOG = Logger.getInstance(PsiThisExpressionImpl.class);
@@ -37,28 +38,26 @@ public class PsiThisExpressionImpl extends ExpressionPsiElement implements PsiTh
 
   @Override
   public PsiJavaCodeReferenceElement getQualifier() {
-    return (PsiJavaCodeReferenceElement)findChildByRoleAsPsiElement(ChildRole.QUALIFIER);
+    return (PsiJavaCodeReferenceElement) findChildByRoleAsPsiElement(ChildRole.QUALIFIER);
   }
 
   @Override
   public PsiType getType() {
     PsiJavaCodeReferenceElement qualifier = getQualifier();
-    if (qualifier != null){
-      PsiClass qualifierResolve = (PsiClass)qualifier.resolve();
+    if (qualifier != null) {
+      PsiClass qualifierResolve = (PsiClass) qualifier.resolve();
       if (qualifierResolve != null) return new PsiImmediateClassType(qualifierResolve, PsiSubstitutor.EMPTY);
 
       return new PsiClassReferenceType(qualifier, null);
     }
-    for(PsiElement scope = getContext(); scope != null; scope = scope.getContext()){
-      if (scope instanceof PsiClass){
-        PsiClass aClass = (PsiClass)scope;
+    for (PsiElement scope = getContext(); scope != null; scope = scope.getContext()) {
+      if (scope instanceof PsiClass) {
+        PsiClass aClass = (PsiClass) scope;
         return new PsiImmediateClassType(aClass, PsiSubstitutor.EMPTY);
-      }
-      else if (scope instanceof PsiExpressionList && scope.getParent() instanceof PsiAnonymousClass){
+      } else if (scope instanceof PsiExpressionList && scope.getParent() instanceof PsiAnonymousClass) {
         scope = scope.getParent();
-      }
-      else if (scope instanceof JavaCodeFragment){
-        PsiType fragmentThisType = ((JavaCodeFragment)scope).getThisType();
+      } else if (scope instanceof JavaCodeFragment) {
+        PsiType fragmentThisType = ((JavaCodeFragment) scope).getThisType();
         if (fragmentThisType != null) return fragmentThisType;
       }
     }
@@ -68,15 +67,14 @@ public class PsiThisExpressionImpl extends ExpressionPsiElement implements PsiTh
   @Override
   public ASTNode findChildByRole(int role) {
     LOG.assertTrue(ChildRole.isUnique(role));
-    switch(role){
+    switch (role) {
       default:
         return null;
 
       case ChildRole.QUALIFIER:
-        if (getFirstChildNode().getElementType() == JAVA_CODE_REFERENCE){
+        if (getFirstChildNode().getElementType() == JAVA_CODE_REFERENCE) {
           return getFirstChildNode();
-        }
-        else{
+        } else {
           return null;
         }
 
@@ -94,14 +92,11 @@ public class PsiThisExpressionImpl extends ExpressionPsiElement implements PsiTh
     IElementType i = child.getElementType();
     if (i == JAVA_CODE_REFERENCE) {
       return ChildRole.QUALIFIER;
-    }
-    else if (i == DOT) {
+    } else if (i == DOT) {
       return ChildRole.DOT;
-    }
-    else if (i == THIS_KEYWORD) {
+    } else if (i == THIS_KEYWORD) {
       return ChildRole.THIS_KEYWORD;
-    }
-    else {
+    } else {
       return ChildRoleBase.NONE;
     }
   }
@@ -109,9 +104,8 @@ public class PsiThisExpressionImpl extends ExpressionPsiElement implements PsiTh
   @Override
   public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
-      ((JavaElementVisitor)visitor).visitThisExpression(this);
-    }
-    else {
+      ((JavaElementVisitor) visitor).visitThisExpression(this);
+    } else {
       visitor.visitElement(this);
     }
   }

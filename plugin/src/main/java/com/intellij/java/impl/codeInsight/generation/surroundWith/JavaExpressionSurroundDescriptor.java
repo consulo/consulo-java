@@ -16,13 +16,13 @@
 package com.intellij.java.impl.codeInsight.generation.surroundWith;
 
 import com.intellij.java.impl.codeInsight.CodeInsightUtil;
-import com.intellij.featureStatistics.FeatureUsageTracker;
-import com.intellij.lang.surroundWith.SurroundDescriptor;
-import com.intellij.lang.surroundWith.Surrounder;
-import com.intellij.openapi.extensions.Extensions;
-import com.intellij.psi.PsiElement;
+import consulo.externalService.statistic.FeatureUsageTracker;
+import consulo.language.editor.surroundWith.SurroundDescriptor;
+import consulo.language.editor.surroundWith.Surrounder;
+import consulo.component.extension.Extensions;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiExpression;
-import com.intellij.psi.PsiFile;
+import consulo.language.psi.PsiFile;
 import com.intellij.java.impl.refactoring.introduceVariable.IntroduceVariableBase;
 import javax.annotation.Nonnull;
 

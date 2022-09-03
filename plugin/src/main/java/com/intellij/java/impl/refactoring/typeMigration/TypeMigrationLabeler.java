@@ -5,36 +5,36 @@ import com.intellij.java.impl.codeInsight.generation.GenerateMembersUtil;
 import com.intellij.java.impl.codeInsight.generation.GetterSetterPrototypeProvider;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.Messages;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.openapi.util.Pair;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.application.ApplicationManager;
+import consulo.project.Project;
+import consulo.ui.ex.awt.Messages;
+import consulo.util.lang.Comparing;
+import consulo.util.lang.Pair;
+import consulo.document.util.TextRange;
+import consulo.util.lang.StringUtil;
 import com.intellij.psi.*;
 import com.intellij.java.language.impl.psi.impl.source.PsiImmediateClassType;
 import com.intellij.java.language.psi.javadoc.PsiDocTagValue;
-import com.intellij.psi.search.PsiSearchScopeUtil;
-import com.intellij.psi.search.SearchScope;
+import consulo.language.psi.scope.PsiSearchScopeUtil;
+import consulo.content.scope.SearchScope;
 import com.intellij.java.indexing.search.searches.OverridingMethodsSearch;
-import com.intellij.psi.search.searches.ReferencesSearch;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.search.ReferencesSearch;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiTypesUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
-import com.intellij.refactoring.rename.RenameProcessor;
+import consulo.language.editor.refactoring.rename.RenameProcessor;
 import com.intellij.java.impl.refactoring.typeMigration.usageInfo.OverriddenUsageInfo;
 import com.intellij.java.impl.refactoring.typeMigration.usageInfo.OverriderUsageInfo;
 import com.intellij.java.impl.refactoring.typeMigration.usageInfo.TypeMigrationUsageInfo;
-import com.intellij.usageView.UsageInfo;
+import consulo.usage.UsageInfo;
 import com.intellij.util.*;
-import com.intellij.util.concurrency.Semaphore;
-import com.intellij.util.containers.ContainerUtil;
-import com.intellij.util.containers.MultiMap;
-import com.intellij.util.graph.DFSTBuilder;
-import com.intellij.util.graph.GraphGenerator;
-import com.intellij.util.graph.InboundSemiGraph;
+import consulo.application.util.Semaphore;
+import consulo.util.collection.ContainerUtil;
+import consulo.util.collection.MultiMap;
+import consulo.component.util.graph.DFSTBuilder;
+import consulo.component.util.graph.GraphGenerator;
+import consulo.component.util.graph.InboundSemiGraph;
 import consulo.logging.Logger;
 import org.jetbrains.annotations.TestOnly;
 
@@ -146,7 +146,7 @@ public class TypeMigrationLabeler
 			return new UsageInfo(expr)
 			{
 				@Override
-				@javax.annotation.Nullable
+				@Nullable
 				public String getTooltipText()
 				{
 					final PsiType type = expr.isValid() ? expr.getType() : null;
@@ -311,7 +311,7 @@ public class TypeMigrationLabeler
 		return new MigrationProducer(conversions);
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public <T> T getSettings(Class<T> aClass)
 	{
 		return myRules.getConversionSettings(aClass);
@@ -494,7 +494,7 @@ public class TypeMigrationLabeler
 		TypeMigrationReplacementUtil.tryToReplaceWithDiamond(expression, null);
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	Object getConversion(PsiElement element)
 	{
 		return myConversions.get(element);
@@ -511,7 +511,7 @@ public class TypeMigrationLabeler
 		return myMigratedUsages;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public Set<PsiElement> getTypeUsages(final TypeMigrationUsageInfo element, final TypeMigrationUsageInfo currentRoot)
 	{
 		return myRootUsagesTree.get(Pair.create(element, currentRoot));
@@ -912,7 +912,7 @@ public class TypeMigrationLabeler
 		return null;
 	}
 
-	private boolean typeContainsTypeParameters(@javax.annotation.Nullable PsiType type, @Nonnull Set<PsiTypeParameter> excluded)
+	private boolean typeContainsTypeParameters(@Nullable PsiType type, @Nonnull Set<PsiTypeParameter> excluded)
 	{
 		if(!(type instanceof PsiClassType))
 		{
@@ -931,7 +931,7 @@ public class TypeMigrationLabeler
 	}
 
 
-	@javax.annotation.Nullable
+	@Nullable
 	public static PsiType getElementType(final PsiElement resolved)
 	{
 		if(resolved instanceof PsiVariable)
@@ -1393,7 +1393,7 @@ public class TypeMigrationLabeler
 		return refs;
 	}
 
-	private static boolean canBeRoot(@javax.annotation.Nullable PsiElement element, @Nonnull SearchScope migrationScope)
+	private static boolean canBeRoot(@Nullable PsiElement element, @Nonnull SearchScope migrationScope)
 	{
 		if(element == null)
 		{

@@ -23,11 +23,11 @@ import com.intellij.java.language.impl.psi.impl.source.tree.java.PsiKeywordImpl;
 import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.java.language.psi.tree.java.IJavaDocElementType;
 import com.intellij.java.language.psi.tree.java.IJavaElementType;
-import com.intellij.psi.impl.source.tree.LeafElement;
-import com.intellij.psi.impl.source.tree.PsiCoreCommentImpl;
-import com.intellij.psi.tree.IElementType;
-import consulo.lang.LanguageVersion;
-import consulo.psi.tree.ASTLeafFactory;
+import consulo.language.ast.IElementType;
+import consulo.language.impl.ast.ASTLeafFactory;
+import consulo.language.impl.ast.LeafElement;
+import consulo.language.impl.psi.PsiCoreCommentImpl;
+import consulo.language.version.LanguageVersion;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -56,7 +56,7 @@ public class CoreJavaASTLeafFactory implements Constants, ASTLeafFactory {
   }
 
   @Override
-  public boolean apply(@Nullable IElementType input) {
+  public boolean test(@Nullable IElementType input) {
     return input == JavaTokenType.C_STYLE_COMMENT ||
         input == JavaTokenType.END_OF_LINE_COMMENT ||
         input == JavaTokenType.IDENTIFIER ||

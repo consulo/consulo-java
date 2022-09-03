@@ -20,21 +20,21 @@ import com.intellij.java.impl.refactoring.JavaRefactoringSettings;
 import com.intellij.java.language.psi.JavaDirectoryService;
 import com.intellij.java.language.psi.PsiJavaPackage;
 import com.intellij.java.language.psi.PsiPackageStatement;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiDirectory;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiReference;
-import com.intellij.psi.search.searches.ReferencesSearch;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.refactoring.RefactoringSettings;
-import com.intellij.refactoring.listeners.RefactoringElementListener;
-import com.intellij.refactoring.rename.RenameDialog;
-import com.intellij.refactoring.rename.RenamePsiElementProcessor;
-import com.intellij.refactoring.rename.RenameUtil;
-import com.intellij.refactoring.rename.RenameWithOptionalReferencesDialog;
-import com.intellij.usageView.UsageInfo;
-import com.intellij.util.IncorrectOperationException;
+import consulo.codeEditor.Editor;
+import consulo.project.Project;
+import consulo.language.psi.PsiDirectory;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiReference;
+import consulo.language.psi.search.ReferencesSearch;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.editor.refactoring.RefactoringSettings;
+import consulo.language.editor.refactoring.event.RefactoringElementListener;
+import consulo.language.editor.refactoring.rename.RenameDialog;
+import consulo.language.editor.refactoring.rename.RenamePsiElementProcessor;
+import consulo.language.editor.refactoring.rename.RenameUtil;
+import consulo.ide.impl.idea.refactoring.rename.RenameWithOptionalReferencesDialog;
+import consulo.usage.UsageInfo;
+import consulo.language.util.IncorrectOperationException;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
@@ -66,7 +66,7 @@ public class RenamePsiDirectoryProcessor extends RenamePsiElementProcessor {
   public void renameElement(final PsiElement element,
                             final String newName,
                             final UsageInfo[] usages,
-                            @javax.annotation.Nullable RefactoringElementListener listener) throws IncorrectOperationException {
+                            @Nullable RefactoringElementListener listener) throws IncorrectOperationException {
     PsiDirectory aDirectory = (PsiDirectory) element;
     // rename all non-package statement references
     for (UsageInfo usage : usages) {
@@ -103,7 +103,7 @@ public class RenamePsiDirectoryProcessor extends RenamePsiElementProcessor {
     return ReferencesSearch.search(element).findAll();
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   @Override
   public PsiElement getElementToSearchInStringsAndComments(PsiElement element) {
     final PsiJavaPackage aPackage = JavaDirectoryService.getInstance().getPackage((PsiDirectory) element);

@@ -17,12 +17,12 @@ package com.intellij.java.impl.refactoring.encapsulateFields;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import com.intellij.lang.Language;
-import com.intellij.lang.LanguageExtension;
+import consulo.language.Language;
+import consulo.language.extension.LanguageExtension;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.psi.PsiReference;
+import consulo.language.psi.PsiReference;
 
 /**
  * @author Max Medvedev

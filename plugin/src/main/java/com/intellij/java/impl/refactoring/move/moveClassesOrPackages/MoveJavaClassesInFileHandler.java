@@ -2,9 +2,9 @@ package com.intellij.java.impl.refactoring.move.moveClassesOrPackages;
 
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiClassOwner;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.impl.psi.impl.light.LightClass;
-import com.intellij.util.ArrayUtil;
+import consulo.util.collection.ArrayUtil;
 import javax.annotation.Nonnull;
 
 import java.util.Map;

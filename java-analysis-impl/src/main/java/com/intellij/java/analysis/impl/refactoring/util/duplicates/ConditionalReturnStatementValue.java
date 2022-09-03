@@ -15,10 +15,10 @@
  */
 package com.intellij.java.analysis.impl.refactoring.util.duplicates;
 
-import com.intellij.codeInsight.PsiEquivalenceUtil;
+import consulo.language.editor.PsiEquivalenceUtil;
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.codeStyle.CodeStyleManager;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.util.IncorrectOperationException;
 
 /**
  * @author ven

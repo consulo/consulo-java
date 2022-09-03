@@ -36,18 +36,18 @@ import com.intellij.java.debugger.impl.settings.DebuggerSettings;
 import com.intellij.java.debugger.impl.ui.breakpoints.Breakpoint;
 import com.intellij.java.debugger.impl.ui.breakpoints.StackCapturingLineBreakpoint;
 import com.intellij.java.execution.configurations.RemoteConnection;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.application.ModalityState;
+import consulo.application.ApplicationManager;
+import consulo.ui.ModalityState;
 import consulo.logging.Logger;
-import com.intellij.openapi.extensions.Extensions;
-import com.intellij.openapi.progress.ProcessCanceledException;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.MessageType;
-import com.intellij.openapi.ui.Messages;
-import com.intellij.openapi.util.Pair;
-import com.intellij.xdebugger.XDebugSession;
-import com.intellij.xdebugger.breakpoints.XBreakpoint;
-import com.intellij.xdebugger.impl.XDebugSessionImpl;
+import consulo.component.extension.Extensions;
+import consulo.component.ProcessCanceledException;
+import consulo.project.Project;
+import consulo.ide.impl.idea.openapi.ui.MessageType;
+import consulo.ui.ex.awt.Messages;
+import consulo.util.lang.Pair;
+import consulo.execution.debug.XDebugSession;
+import consulo.execution.debug.breakpoint.XBreakpoint;
+import consulo.ide.impl.idea.xdebugger.impl.XDebugSessionImpl;
 import consulo.internal.com.sun.jdi.InternalException;
 import consulo.internal.com.sun.jdi.ThreadReference;
 import consulo.internal.com.sun.jdi.VMDisconnectedException;
@@ -57,6 +57,8 @@ import consulo.internal.com.sun.jdi.request.EventRequest;
 import consulo.internal.com.sun.jdi.request.EventRequestManager;
 import consulo.internal.com.sun.jdi.request.ThreadDeathRequest;
 import consulo.internal.com.sun.jdi.request.ThreadStartRequest;
+
+import javax.annotation.Nullable;
 
 /**
  * @author lex
@@ -630,7 +632,7 @@ public class DebugProcessEvents extends DebugProcessImpl
 		XDebugSessionImpl.NOTIFICATION_GROUP.createNotification(DebuggerBundle.message("message.breakpoint.skipped", event.location()), MessageType.INFO).notify(getProject());
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	private static LocatableEvent getLocatableEvent(EventSet eventSet)
 	{
 		return (LocatableEvent) eventSet.stream().filter(event -> event instanceof LocatableEvent).findFirst().orElse(null);

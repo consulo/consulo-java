@@ -16,157 +16,128 @@
 package com.intellij.java.language.impl.psi.impl.java.stubs;
 
 import com.intellij.java.language.impl.psi.impl.source.*;
+import com.intellij.java.language.impl.psi.impl.source.tree.java.*;
 import com.intellij.java.language.psi.*;
-import com.intellij.java.language.impl.psi.impl.source.tree.java.PsiAnnotationImpl;
-import com.intellij.java.language.impl.psi.impl.source.tree.java.PsiAnnotationParamListImpl;
-import com.intellij.java.language.impl.psi.impl.source.tree.java.PsiNameValuePairImpl;
-import com.intellij.java.language.impl.psi.impl.source.tree.java.PsiTypeParameterImpl;
-import com.intellij.java.language.impl.psi.impl.source.tree.java.PsiTypeParameterListImpl;
 
 /**
  * @author max
  */
-public class SourceStubPsiFactory extends StubPsiFactory
-{
-	public static final SourceStubPsiFactory INSTANCE = new SourceStubPsiFactory();
+public class SourceStubPsiFactory extends StubPsiFactory {
+  public static final SourceStubPsiFactory INSTANCE = new SourceStubPsiFactory();
 
-	@Override
-	public PsiClass createClass(PsiClassStub stub)
-	{
-		if(stub.isEnumConstantInitializer())
-		{
-			return new PsiEnumConstantInitializerImpl(stub);
-		}
-		if(stub.isAnonymous())
-		{
-			return new PsiAnonymousClassImpl(stub);
-		}
-		return new PsiClassImpl(stub);
-	}
+  @Override
+  public PsiClass createClass(PsiClassStub stub) {
+    if (stub.isEnumConstantInitializer()) {
+      return new PsiEnumConstantInitializerImpl(stub);
+    }
+    if (stub.isAnonymous()) {
+      return new PsiAnonymousClassImpl(stub);
+    }
+    return new PsiClassImpl(stub);
+  }
 
-	@Override
-	public PsiAnnotation createAnnotation(PsiAnnotationStub stub)
-	{
-		return new PsiAnnotationImpl(stub);
-	}
+  @Override
+  public PsiAnnotation createAnnotation(PsiAnnotationStub stub) {
+    return new PsiAnnotationImpl(stub);
+  }
 
-	@Override
-	public PsiClassInitializer createClassInitializer(PsiClassInitializerStub stub)
-	{
-		return new PsiClassInitializerImpl(stub);
-	}
+  @Override
+  public PsiClassInitializer createClassInitializer(PsiClassInitializerStub stub) {
+    return new PsiClassInitializerImpl(stub);
+  }
 
-	@Override
-	public PsiReferenceList createClassReferenceList(PsiClassReferenceListStub stub)
-	{
-		return new PsiReferenceListImpl(stub);
-	}
+  @Override
+  public PsiReferenceList createClassReferenceList(PsiClassReferenceListStub stub) {
+    return new PsiReferenceListImpl(stub);
+  }
 
-	@Override
-	public PsiField createField(PsiFieldStub stub)
-	{
-		return stub.isEnumConstant() ? new PsiEnumConstantImpl(stub) : new PsiFieldImpl(stub);
-	}
+  @Override
+  public PsiField createField(PsiFieldStub stub) {
+    return stub.isEnumConstant() ? new PsiEnumConstantImpl(stub) : new PsiFieldImpl(stub);
+  }
 
-	@Override
-	public PsiImportList createImportList(PsiImportListStub stub)
-	{
-		return new PsiImportListImpl(stub);
-	}
+  @Override
+  public PsiImportList createImportList(PsiImportListStub stub) {
+    return new PsiImportListImpl(stub);
+  }
 
-	@Override
-	public PsiImportStatementBase createImportStatement(PsiImportStatementStub stub)
-	{
-		return stub.isStatic() ? new PsiImportStaticStatementImpl(stub) : new PsiImportStatementImpl(stub);
-	}
+  @Override
+  public PsiImportStatementBase createImportStatement(PsiImportStatementStub stub) {
+    return stub.isStatic() ? new PsiImportStaticStatementImpl(stub) : new PsiImportStatementImpl(stub);
+  }
 
-	@Override
-	public PsiMethod createMethod(PsiMethodStub stub)
-	{
-		return stub.isAnnotationMethod() ? new PsiAnnotationMethodImpl(stub) : new PsiMethodImpl(stub);
-	}
+  @Override
+  public PsiMethod createMethod(PsiMethodStub stub) {
+    return stub.isAnnotationMethod() ? new PsiAnnotationMethodImpl(stub) : new PsiMethodImpl(stub);
+  }
 
-	@Override
-	public PsiModifierList createModifierList(PsiModifierListStub stub)
-	{
-		return new PsiModifierListImpl(stub);
-	}
+  @Override
+  public PsiModifierList createModifierList(PsiModifierListStub stub) {
+    return new PsiModifierListImpl(stub);
+  }
 
-	@Override
-	public PsiParameter createParameter(PsiParameterStub stub)
-	{
-		return new PsiParameterImpl(stub);
-	}
+  @Override
+  public PsiParameter createParameter(PsiParameterStub stub) {
+    return new PsiParameterImpl(stub);
+  }
 
-	@Override
-	public PsiParameterList createParameterList(PsiParameterListStub stub)
-	{
-		return new PsiParameterListImpl(stub);
-	}
+  @Override
+  public PsiParameterList createParameterList(PsiParameterListStub stub) {
+    return new PsiParameterListImpl(stub);
+  }
 
-	@Override
-	public PsiTypeParameter createTypeParameter(PsiTypeParameterStub stub)
-	{
-		return new PsiTypeParameterImpl(stub);
-	}
+  @Override
+  public PsiTypeParameter createTypeParameter(PsiTypeParameterStub stub) {
+    return new PsiTypeParameterImpl(stub);
+  }
 
-	@Override
-	public PsiTypeParameterList createTypeParameterList(PsiTypeParameterListStub stub)
-	{
-		return new PsiTypeParameterListImpl(stub);
-	}
+  @Override
+  public PsiTypeParameterList createTypeParameterList(PsiTypeParameterListStub stub) {
+    return new PsiTypeParameterListImpl(stub);
+  }
 
-	@Override
-	public PsiAnnotationParameterList createAnnotationParameterList(PsiAnnotationParameterListStub stub)
-	{
-		return new PsiAnnotationParamListImpl(stub);
-	}
+  @Override
+  public PsiAnnotationParameterList createAnnotationParameterList(PsiAnnotationParameterListStub stub) {
+    return new PsiAnnotationParamListImpl(stub);
+  }
 
-	@Override
-	public PsiNameValuePair createNameValuePair(PsiNameValuePairStub stub)
-	{
-		return new PsiNameValuePairImpl(stub);
-	}
+  @Override
+  public PsiNameValuePair createNameValuePair(PsiNameValuePairStub stub) {
+    return new PsiNameValuePairImpl(stub);
+  }
 
-	@Override
-	public PsiJavaModule createModule(PsiJavaModuleStub stub)
-	{
-		return new PsiJavaModuleImpl(stub);
-	}
+  @Override
+  public PsiJavaModule createModule(PsiJavaModuleStub stub) {
+    return new PsiJavaModuleImpl(stub);
+  }
 
-	@Override
-	public PsiRequiresStatement createRequiresStatement(PsiRequiresStatementStub stub)
-	{
-		return new PsiRequiresStatementImpl(stub);
-	}
+  @Override
+  public PsiRequiresStatement createRequiresStatement(PsiRequiresStatementStub stub) {
+    return new PsiRequiresStatementImpl(stub);
+  }
 
-	@Override
-	public PsiPackageAccessibilityStatement createPackageAccessibilityStatement(PsiPackageAccessibilityStatementStub stub)
-	{
-		return new PsiPackageAccessibilityStatementImpl(stub);
-	}
+  @Override
+  public PsiPackageAccessibilityStatement createPackageAccessibilityStatement(PsiPackageAccessibilityStatementStub stub) {
+    return new PsiPackageAccessibilityStatementImpl(stub);
+  }
 
-	@Override
-	public PsiUsesStatement createUsesStatement(PsiUsesStatementStub stub)
-	{
-		return new PsiUsesStatementImpl(stub);
-	}
+  @Override
+  public PsiUsesStatement createUsesStatement(PsiUsesStatementStub stub) {
+    return new PsiUsesStatementImpl(stub);
+  }
 
-	@Override
-	public PsiProvidesStatement createProvidesStatement(PsiProvidesStatementStub stub)
-	{
-		return new PsiProvidesStatementImpl(stub);
-	}
+  @Override
+  public PsiProvidesStatement createProvidesStatement(PsiProvidesStatementStub stub) {
+    return new PsiProvidesStatementImpl(stub);
+  }
 
-	@Override
-	public PsiRecordComponent createRecordComponent(PsiRecordComponentStub stub)
-	{
-		return new PsiRecordComponentImpl(stub);
-	}
+  @Override
+  public PsiRecordComponent createRecordComponent(PsiRecordComponentStub stub) {
+    return new PsiRecordComponentImpl(stub);
+  }
 
-	@Override
-	public PsiRecordHeader createRecordHeader(PsiRecordHeaderStub stub)
-	{
-		return new PsiRecordHeaderImpl(stub);
-	}
+  @Override
+  public PsiRecordHeader createRecordHeader(PsiRecordHeaderStub stub) {
+    return new PsiRecordHeaderImpl(stub);
+  }
 }

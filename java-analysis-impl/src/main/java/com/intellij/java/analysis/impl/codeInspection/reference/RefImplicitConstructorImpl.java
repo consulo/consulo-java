@@ -24,13 +24,13 @@
  */
 package com.intellij.java.analysis.impl.codeInspection.reference;
 
-import com.intellij.codeInspection.InspectionsBundle;
+import consulo.language.editor.inspection.InspectionsBundle;
 import com.intellij.java.analysis.codeInspection.reference.RefClass;
 import com.intellij.java.analysis.codeInspection.reference.RefImplicitConstructor;
 import com.intellij.java.analysis.codeInspection.reference.RefJavaUtil;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.util.Computable;
-import com.intellij.psi.PsiFile;
+import consulo.application.ApplicationManager;
+import consulo.application.util.function.Computable;
+import consulo.language.psi.PsiFile;
 import com.intellij.java.language.psi.PsiModifierListOwner;
 
 import javax.annotation.Nullable;

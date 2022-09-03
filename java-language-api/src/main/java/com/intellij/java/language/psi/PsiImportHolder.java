@@ -15,7 +15,7 @@
  */
 package com.intellij.java.language.psi;
 
-import com.intellij.psi.PsiFile;
+import consulo.language.psi.PsiFile;
 
 /**
  * Represents a file or code fragment to which import statements can be added.

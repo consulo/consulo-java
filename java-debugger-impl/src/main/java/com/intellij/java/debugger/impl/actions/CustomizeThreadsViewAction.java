@@ -17,11 +17,11 @@ package com.intellij.java.debugger.impl.actions;
 
 import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.impl.settings.ThreadsViewSettings;
-import com.intellij.idea.ActionsBundle;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.CommonDataKeys;
-import com.intellij.openapi.options.ShowSettingsUtil;
-import com.intellij.openapi.project.Project;
+import consulo.ui.ex.action.ActionsBundle;
+import consulo.ui.ex.action.AnActionEvent;
+import consulo.language.editor.CommonDataKeys;
+import consulo.ide.setting.ShowSettingsUtil;
+import consulo.project.Project;
 import consulo.java.debugger.impl.settings.ThreadsViewConfigurable;
 import consulo.ui.annotation.RequiredUIAccess;
 

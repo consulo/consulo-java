@@ -19,13 +19,13 @@ import com.intellij.java.language.psi.*;
 import consulo.logging.Logger;
 import consulo.util.dataholder.Key;
 import com.intellij.psi.*;
-import com.intellij.psi.search.SearchScope;
+import consulo.content.scope.SearchScope;
 import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
-import com.intellij.psi.search.searches.ReferencesSearch;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.search.ReferencesSearch;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.RedundantCastUtil;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.Processor;
+import consulo.language.util.IncorrectOperationException;
+import consulo.application.util.function.Processor;
 import java.util.HashMap;
 
 import java.util.Map;

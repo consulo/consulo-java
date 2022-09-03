@@ -16,9 +16,9 @@
 package com.intellij.java.impl.lang.java;
 
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.refactoring.classMembers.ClassMembersRefactoringSupport;
-import com.intellij.refactoring.classMembers.DependentMembersCollectorBase;
-import com.intellij.refactoring.classMembers.MemberInfoBase;
+import consulo.language.editor.refactoring.classMember.ClassMembersRefactoringSupport;
+import consulo.language.editor.refactoring.classMember.DependentMembersCollectorBase;
+import consulo.language.editor.refactoring.classMember.MemberInfoBase;
 import com.intellij.java.impl.refactoring.util.classMembers.ClassMembersUtil;
 import com.intellij.java.impl.refactoring.util.classMembers.DependentMembersCollector;
 

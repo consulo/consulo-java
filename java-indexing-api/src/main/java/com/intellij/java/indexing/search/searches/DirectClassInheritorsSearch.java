@@ -15,14 +15,13 @@
  */
 package com.intellij.java.indexing.search.searches;
 
-import com.intellij.openapi.util.Condition;
 import com.intellij.java.language.psi.PsiAnonymousClass;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.search.SearchScope;
-import com.intellij.psi.search.searches.ExtensibleQueryFactory;
-import com.intellij.util.FilteredQuery;
-import com.intellij.util.Query;
+import consulo.application.util.query.ExtensibleQueryFactory;
+import consulo.application.util.query.FilteredQuery;
+import consulo.application.util.query.Query;
+import consulo.content.scope.SearchScope;
+import consulo.language.psi.scope.GlobalSearchScope;
 
 /**
  * @author max
@@ -69,7 +68,7 @@ public class DirectClassInheritorsSearch extends ExtensibleQueryFactory<PsiClass
   }
 
   private DirectClassInheritorsSearch() {
-    super("consulo.java");
+    super(DirectClassInheritorsSearchExecutor.class);
   }
 
   public static Query<PsiClass> search(final PsiClass aClass) {
@@ -88,12 +87,7 @@ public class DirectClassInheritorsSearch extends ExtensibleQueryFactory<PsiClass
     final Query<PsiClass> raw = INSTANCE.createUniqueResultsQuery(new SearchParameters(aClass, scope, includeAnonymous, checkInheritance));
 
     if (!includeAnonymous) {
-      return new FilteredQuery<PsiClass>(raw, new Condition<PsiClass>() {
-        @Override
-        public boolean value(final PsiClass psiClass) {
-          return !(psiClass instanceof PsiAnonymousClass);
-        }
-      });
+      return new FilteredQuery<PsiClass>(raw, psiClass -> !(psiClass instanceof PsiAnonymousClass));
     }
 
     return raw;

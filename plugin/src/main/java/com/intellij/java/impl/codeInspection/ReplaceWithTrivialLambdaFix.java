@@ -15,15 +15,15 @@
  */
 package com.intellij.java.impl.codeInspection;
 
-import com.intellij.codeInspection.LocalQuickFix;
-import com.intellij.codeInspection.ProblemDescriptor;
+import consulo.language.editor.inspection.LocalQuickFix;
+import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.impl.refactoring.util.LambdaRefactoringUtil;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiLambdaExpression;
 import com.intellij.java.language.psi.PsiMethodReferenceExpression;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiElement;
-import com.intellij.util.ObjectUtil;
+import consulo.project.Project;
+import consulo.language.psi.PsiElement;
+import consulo.util.lang.ObjectUtil;
 import consulo.java.analysis.impl.codeInsight.JavaInspectionsBundle;
 import org.jetbrains.annotations.Nls;
 

@@ -24,14 +24,14 @@
  */
 package com.intellij.java.impl.refactoring.makeStatic;
 
-import com.intellij.openapi.project.Project;
+import consulo.project.Project;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiTypeParameterListOwner;
-import com.intellij.refactoring.RefactoringBundle;
-import com.intellij.refactoring.ui.RefactoringDialog;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.ui.RefactoringDialog;
 import com.intellij.java.analysis.impl.refactoring.util.VariableData;
-import com.intellij.usageView.UsageViewUtil;
+import consulo.usage.UsageViewUtil;
 
 import javax.swing.*;
 

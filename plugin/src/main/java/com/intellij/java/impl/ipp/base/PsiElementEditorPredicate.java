@@ -15,8 +15,8 @@
  */
 package com.intellij.java.impl.ipp.base;
 
-import com.intellij.openapi.editor.Editor;
-import com.intellij.psi.PsiElement;
+import consulo.codeEditor.Editor;
+import consulo.language.psi.PsiElement;
 import javax.annotation.Nullable;
 
 public abstract class PsiElementEditorPredicate implements PsiElementPredicate {

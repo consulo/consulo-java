@@ -20,39 +20,35 @@
 package com.intellij.java.indexing.impl.stubs.index;
 
 import com.intellij.java.indexing.impl.search.JavaSourceFilterScope;
-import com.intellij.openapi.project.Project;
-import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.impl.psi.impl.java.stubs.index.JavaStubIndexKeys;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.stubs.StringStubIndexExtension;
-import com.intellij.psi.stubs.StubIndex;
-import com.intellij.psi.stubs.StubIndexKey;
+import com.intellij.java.language.psi.PsiMethod;
+import consulo.language.psi.stub.StringStubIndexExtension;
+import consulo.language.psi.stub.StubIndex;
+import consulo.language.psi.stub.StubIndexKey;
+import consulo.project.Project;
+import consulo.project.content.scope.ProjectAwareSearchScope;
 
 import javax.annotation.Nonnull;
 import java.util.Collection;
 
-public class JavaMethodParameterTypesIndex extends StringStubIndexExtension<PsiMethod>
-{
+public class JavaMethodParameterTypesIndex extends StringStubIndexExtension<PsiMethod> {
 
-	private static final JavaMethodParameterTypesIndex ourInstance = new JavaMethodParameterTypesIndex();
+  private static final JavaMethodParameterTypesIndex ourInstance = new JavaMethodParameterTypesIndex();
 
-	public static JavaMethodParameterTypesIndex getInstance()
-	{
-		return ourInstance;
-	}
+  public static JavaMethodParameterTypesIndex getInstance() {
+    return ourInstance;
+  }
 
-	@Nonnull
-	@Override
-	public StubIndexKey<String, PsiMethod> getKey()
-	{
-		return JavaStubIndexKeys.METHOD_TYPES;
-	}
+  @Nonnull
+  @Override
+  public StubIndexKey<String, PsiMethod> getKey() {
+    return JavaStubIndexKeys.METHOD_TYPES;
+  }
 
-	@Override
-	public Collection<PsiMethod> get(@Nonnull final String s,
-			@Nonnull final Project project,
-			@Nonnull final GlobalSearchScope scope)
-	{
-		return StubIndex.getElements(getKey(), s, project, new JavaSourceFilterScope(scope), PsiMethod.class);
-	}
+  @Override
+  public Collection<PsiMethod> get(@Nonnull final String s,
+                                   @Nonnull final Project project,
+                                   @Nonnull final ProjectAwareSearchScope scope) {
+    return StubIndex.getElements(getKey(), s, project, new JavaSourceFilterScope(scope), PsiMethod.class);
+  }
 }

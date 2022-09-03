@@ -15,13 +15,13 @@
  */
 package com.intellij.java.language.impl.psi.impl.compiled;
 
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.PsiElement;
+import consulo.util.lang.StringUtil;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiReferenceParameterList;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.PsiTypeElement;
 import com.intellij.java.language.impl.psi.impl.cache.TypeAnnotationContainer;
-import com.intellij.psi.impl.source.tree.TreeElement;
+import consulo.language.impl.ast.TreeElement;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
 

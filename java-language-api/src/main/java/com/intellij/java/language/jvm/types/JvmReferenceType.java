@@ -16,19 +16,24 @@
 package com.intellij.java.language.jvm.types;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.intellij.java.language.jvm.JvmTypeDeclaration;
+
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
 
 /**
  * Represents a type which could be resolved into a class or a type parameter and optionally has type arguments.
  * <br/>
  * Such type appears in throws, bounds, extends, implements.
  * <p>
- * While {@link Class} and {@link java.lang.reflect.TypeVariable TypeVariable}
- * <b>are</b> {@link java.lang.reflect.Type types} because they are resolved at runtime,
+ * While {@link Class} and {@link TypeVariable TypeVariable}
+ * <b>are</b> {@link Type types} because they are resolved at runtime,
  * this interface defines the contract for delaying actual resolution of the type declaration.
  *
- * @see java.lang.reflect.ParameterizedType
+ * @see ParameterizedType
  */
 public interface JvmReferenceType extends JvmType
 {
@@ -41,7 +46,7 @@ public interface JvmReferenceType extends JvmType
 	/**
 	 * @return declaration that declares this type or {@code null} if it cannot be resolved
 	 */
-	@javax.annotation.Nullable
+	@Nullable
 	default JvmTypeDeclaration resolve()
 	{
 		JvmTypeResolveResult result = resolveType();
@@ -51,12 +56,12 @@ public interface JvmReferenceType extends JvmType
 	/**
 	 * @return resolve result or {@code null} if it cannot be resolved
 	 */
-	@javax.annotation.Nullable
+	@Nullable
 	JvmTypeResolveResult resolveType();
 
 	/**
 	 * @return type arguments or empty iterable if this type is not a parameterized type
-	 * @see java.lang.reflect.ParameterizedType#getActualTypeArguments
+	 * @see ParameterizedType#getActualTypeArguments
 	 */
 	@Nonnull
 	Iterable<JvmType> typeArguments();

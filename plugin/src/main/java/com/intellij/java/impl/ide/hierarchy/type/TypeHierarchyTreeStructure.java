@@ -15,8 +15,8 @@
  */
 package com.intellij.java.impl.ide.hierarchy.type;
 
-import com.intellij.ide.hierarchy.HierarchyNodeDescriptor;
-import com.intellij.openapi.project.Project;
+import consulo.ide.impl.idea.ide.hierarchy.HierarchyNodeDescriptor;
+import consulo.project.Project;
 import consulo.java.language.module.util.JavaClassNames;
 import com.intellij.java.language.psi.PsiClass;
 

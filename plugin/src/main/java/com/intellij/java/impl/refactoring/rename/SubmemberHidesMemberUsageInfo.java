@@ -25,12 +25,12 @@
 package com.intellij.java.impl.refactoring.rename;
 
 import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.psi.PsiElement;
-import com.intellij.refactoring.RefactoringBundle;
-import com.intellij.refactoring.rename.UnresolvableCollisionUsageInfo;
-import com.intellij.refactoring.util.CommonRefactoringUtil;
-import com.intellij.refactoring.util.RefactoringUIUtil;
-import com.intellij.usageView.UsageViewUtil;
+import consulo.language.psi.PsiElement;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.rename.UnresolvableCollisionUsageInfo;
+import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
+import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
+import consulo.usage.UsageViewUtil;
 
 public class SubmemberHidesMemberUsageInfo extends UnresolvableCollisionUsageInfo {
   public SubmemberHidesMemberUsageInfo(PsiElement element, PsiElement referencedElement) {

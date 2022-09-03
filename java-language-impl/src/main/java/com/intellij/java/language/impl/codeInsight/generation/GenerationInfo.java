@@ -17,11 +17,12 @@ package com.intellij.java.language.impl.codeInsight.generation;
 
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMember;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.psi.PsiElement;
-import com.intellij.util.IncorrectOperationException;
+import consulo.codeEditor.Editor;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * @author Medvedev Max
@@ -38,7 +39,7 @@ public interface GenerationInfo {
    * @param leaf leaf element. Is guaranteed to be a tree descendant of aClass.
    * @return the value that will be passed to the {@link #insert(PsiClass, com.intellij.psi.PsiElement, boolean)} method later.
    */
-  @javax.annotation.Nullable
+  @Nullable
   PsiElement findInsertionAnchor(@Nonnull PsiClass aClass, @Nonnull PsiElement leaf);
 
   /**

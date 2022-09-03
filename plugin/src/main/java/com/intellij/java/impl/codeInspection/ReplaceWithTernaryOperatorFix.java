@@ -15,21 +15,21 @@
  */
 package com.intellij.java.impl.codeInspection;
 
-import com.intellij.codeInspection.InspectionsBundle;
-import com.intellij.codeInspection.LocalQuickFix;
-import com.intellij.codeInspection.ProblemDescriptor;
-import com.intellij.ide.SelectInEditorManager;
+import consulo.fileEditor.SelectInEditorManager;
+import consulo.language.editor.inspection.InspectionsBundle;
+import consulo.language.editor.inspection.LocalQuickFix;
+import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.impl.refactoring.util.LambdaRefactoringUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiTypesUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.openapi.project.Project;
-import com.intellij.pom.Navigatable;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.codeStyle.CodeStyleManager;
-import com.intellij.util.ArrayUtil;
-import com.intellij.util.ObjectUtil;
+import consulo.project.Project;
+import consulo.navigation.Navigatable;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.codeStyle.CodeStyleManager;
+import consulo.util.collection.ArrayUtil;
+import consulo.util.lang.ObjectUtil;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
 import consulo.java.analysis.impl.codeInsight.JavaInspectionsBundle;
 

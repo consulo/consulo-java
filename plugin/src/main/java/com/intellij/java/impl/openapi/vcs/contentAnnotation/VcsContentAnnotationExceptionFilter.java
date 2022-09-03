@@ -16,38 +16,38 @@
 package com.intellij.java.impl.openapi.vcs.contentAnnotation;
 
 import com.intellij.execution.filters.Filter;
-import com.intellij.execution.filters.FilterMixin;
+import consulo.execution.ui.console.FilterMixin;
 import com.intellij.java.execution.filters.ExceptionInfoCache;
 import com.intellij.java.execution.filters.ExceptionWorker;
 import com.intellij.java.language.psi.JavaRecursiveElementVisitor;
 import com.intellij.java.language.psi.PsiCallExpression;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.diff.DiffColors;
-import com.intellij.openapi.editor.DefaultLanguageHighlighterColors;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.colors.EditorColorsManager;
-import com.intellij.openapi.editor.colors.EditorColorsScheme;
-import com.intellij.openapi.editor.markup.TextAttributes;
-import com.intellij.openapi.fileEditor.FileDocumentManager;
-import com.intellij.openapi.localVcs.UpToDateLineNumberProvider;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Computable;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.openapi.util.Trinity;
-import com.intellij.openapi.vcs.FileStatus;
-import com.intellij.openapi.vcs.changes.ChangeListManager;
-import com.intellij.openapi.vcs.contentAnnotation.VcsContentAnnotation;
-import com.intellij.openapi.vcs.contentAnnotation.VcsContentAnnotationImpl;
-import com.intellij.openapi.vcs.contentAnnotation.VcsContentAnnotationSettings;
-import com.intellij.openapi.vcs.history.VcsRevisionNumber;
-import com.intellij.openapi.vcs.impl.UpToDateLineNumberProviderImpl;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.util.Consumer;
-import com.intellij.util.SmartList;
+import consulo.application.ApplicationManager;
+import consulo.ide.impl.idea.openapi.diff.DiffColors;
+import consulo.codeEditor.DefaultLanguageHighlighterColors;
+import consulo.document.Document;
+import consulo.colorScheme.EditorColorsManager;
+import consulo.colorScheme.EditorColorsScheme;
+import consulo.colorScheme.TextAttributes;
+import consulo.document.FileDocumentManager;
+import consulo.ide.impl.idea.openapi.localVcs.UpToDateLineNumberProvider;
+import consulo.project.Project;
+import consulo.application.util.function.Computable;
+import consulo.document.util.TextRange;
+import consulo.util.lang.Trinity;
+import consulo.virtualFileSystem.status.FileStatus;
+import consulo.versionControlSystem.change.ChangeListManager;
+import consulo.ide.impl.idea.openapi.vcs.contentAnnotation.VcsContentAnnotation;
+import consulo.ide.impl.idea.openapi.vcs.contentAnnotation.VcsContentAnnotationImpl;
+import consulo.ide.impl.idea.openapi.vcs.contentAnnotation.VcsContentAnnotationSettings;
+import consulo.versionControlSystem.history.VcsRevisionNumber;
+import consulo.ide.impl.idea.openapi.vcs.impl.UpToDateLineNumberProviderImpl;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.ide.impl.idea.util.Consumer;
+import consulo.util.collection.SmartList;
 import consulo.logging.Logger;
 
 import javax.annotation.Nonnull;
@@ -83,7 +83,7 @@ public class VcsContentAnnotationExceptionFilter implements Filter, FilterMixin 
     @Override
     public TextAttributes getTextAttributes(@Nullable TextAttributes source) {
       EditorColorsScheme globalScheme = EditorColorsManager.getInstance().getGlobalScheme();
-      final TextAttributes changedColor = globalScheme.getAttributes(DiffColors.DIFF_MODIFIED);
+      final TextAttributes changedColor = globalScheme.getAttributes(consulo.ide.impl.idea.openapi.diff.DiffColors.DIFF_MODIFIED);
       if (source == null) {
         TextAttributes attrs = globalScheme.getAttributes(DefaultLanguageHighlighterColors.CLASS_NAME).clone();
         attrs.setBackgroundColor(changedColor.getBackgroundColor());
@@ -223,7 +223,7 @@ public class VcsContentAnnotationExceptionFilter implements Filter, FilterMixin 
     private UpToDateLineNumberProvider getProvider(VirtualFile vf, Document document) {
       UpToDateLineNumberProvider provider = myRecentlyChanged.get(vf);
       if (provider == null) {
-        provider = new UpToDateLineNumberProviderImpl(document, myProject);
+        provider = new consulo.ide.impl.idea.openapi.vcs.impl.UpToDateLineNumberProviderImpl(document, myProject);
         myRecentlyChanged.put(vf, provider);
       }
       return provider;

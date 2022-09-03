@@ -1,9 +1,9 @@
 package com.intellij.java.analysis.impl.find.findUsages;
 
-import com.intellij.find.FindBundle;
-import com.intellij.find.findUsages.FindUsagesOptions;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.find.FindBundle;
+import consulo.find.FindUsagesOptions;
+import consulo.project.Project;
+import consulo.util.lang.StringUtil;
 
 import javax.annotation.Nonnull;
 import java.util.LinkedHashSet;

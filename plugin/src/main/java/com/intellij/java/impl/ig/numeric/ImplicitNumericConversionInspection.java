@@ -15,12 +15,12 @@
  */
 package com.intellij.java.impl.ig.numeric;
 
-import com.intellij.codeInspection.ProblemDescriptor;
-import com.intellij.codeInspection.ui.MultipleCheckboxOptionsPanel;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.ide.impl.idea.codeInspection.ui.MultipleCheckboxOptionsPanel;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.project.Project;
+import consulo.project.Project;
 import com.intellij.psi.*;
-import com.intellij.psi.tree.IElementType;
+import consulo.language.ast.IElementType;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.siyeh.HardcodedMethodConstants;
 import com.siyeh.InspectionGadgetsBundle;
@@ -223,7 +223,7 @@ public class ImplicitNumericConversionInspection extends BaseInspection {
       return operand instanceof PsiLiteralExpression;
     }
 
-    private static boolean isIntegral(@javax.annotation.Nullable PsiType expressionType) {
+    private static boolean isIntegral(@Nullable PsiType expressionType) {
       return PsiType.INT.equals(expressionType) || PsiType.LONG.equals(expressionType);
     }
 

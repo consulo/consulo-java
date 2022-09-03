@@ -15,14 +15,14 @@
  */
 package com.intellij.jam;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.jam.model.util.JamCommonUtil;
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.*;
 import com.intellij.java.language.psi.ref.AnnotationAttributeChildLink;
-import com.intellij.util.xml.MutableGenericValue;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiElementRef;
+import consulo.xml.util.xml.MutableGenericValue;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
@@ -70,7 +70,7 @@ public class JamStringAttributeElement<T> extends JamAttributeElement<T> impleme
     }
 
     final PsiAnnotation annotation = getParentAnnotationElement().ensurePsiElementExists();
-    PsiAnnotationSupport support = LanguageAnnotationSupport.INSTANCE.forLanguage(annotation.getLanguage());
+    PsiAnnotationSupport support = PsiAnnotationSupport.forLanguage(annotation.getLanguage());
     assert support != null;
 
     final PsiAnnotationMemberValue valueElement = value == null

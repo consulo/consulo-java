@@ -24,16 +24,16 @@
  */
 package com.intellij.java.impl.codeInsight.completion;
 
-import com.intellij.codeInsight.lookup.CharFilter;
-import com.intellij.codeInsight.lookup.Lookup;
-import com.intellij.codeInsight.lookup.LookupElement;
-import com.intellij.codeInsight.lookup.impl.LookupImpl;
+import consulo.language.editor.completion.lookup.CharFilter;
+import consulo.language.editor.completion.lookup.Lookup;
+import consulo.language.editor.completion.lookup.LookupElement;
+import consulo.ide.impl.idea.codeInsight.lookup.impl.LookupImpl;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.patterns.PsiJavaPatterns;
 import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 
 public class JavaCharFilter extends CharFilter {
 

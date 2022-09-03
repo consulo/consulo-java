@@ -16,17 +16,17 @@
 
 package com.intellij.java.impl.psi.impl.source.resolve.reference.impl.providers;
 
-import com.intellij.openapi.util.TextRange;
-import com.intellij.openapi.util.text.CharFilter;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.ElementManipulator;
-import com.intellij.psi.ElementManipulators;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiReference;
+import consulo.document.util.TextRange;
+import consulo.util.lang.CharFilter;
+import consulo.util.lang.StringUtil;
+import consulo.language.psi.ElementManipulator;
+import consulo.language.psi.ElementManipulators;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiReference;
 import com.intellij.psi.impl.source.resolve.reference.PsiReferenceProviderBase;
-import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferenceSet;
-import com.intellij.util.ArrayUtil;
-import com.intellij.util.ProcessingContext;
+import consulo.language.psi.path.FileReferenceSet;
+import consulo.util.collection.ArrayUtil;
+import consulo.language.util.ProcessingContext;
 
 import javax.annotation.Nonnull;
 

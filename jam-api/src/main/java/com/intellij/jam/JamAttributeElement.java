@@ -15,16 +15,16 @@
  */
 package com.intellij.jam;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import com.intellij.java.language.psi.PsiAnnotation;
 import com.intellij.java.language.psi.PsiAnnotationMemberValue;
-import com.intellij.psi.PsiElementRef;
-import com.intellij.psi.PsiManager;
 import com.intellij.java.language.psi.ref.AnnotationAttributeChildLink;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.xml.GenericValue;
+import consulo.language.psi.PsiElementRef;
+import consulo.language.psi.PsiManager;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.xml.util.xml.GenericValue;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * @author peter

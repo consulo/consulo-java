@@ -4,7 +4,7 @@ package com.intellij.java.analysis.impl.codeInspection;
 import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
 import com.intellij.java.language.impl.psi.impl.PsiDiamondTypeUtil;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.siyeh.ig.psiutils.CommentTracker;
 import consulo.logging.Logger;
 

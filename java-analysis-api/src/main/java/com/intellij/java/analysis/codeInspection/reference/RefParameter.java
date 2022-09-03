@@ -55,7 +55,7 @@ public interface RefParameter extends RefJavaElement
 	 *
 	 * @return the parameter value or null if it's different or impossible to determine.
 	 */
-	@javax.annotation.Nullable
+	@Nullable
 	String getActualValueIfSame();
 
 	/**

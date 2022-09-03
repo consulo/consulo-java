@@ -18,8 +18,8 @@ package com.intellij.java.language.impl.psi.scope.processor;
 import java.util.List;
 
 import com.intellij.java.language.psi.PsiVariable;
-import com.intellij.psi.ResolveState;
-import com.intellij.util.SmartList;
+import consulo.language.psi.resolve.ResolveState;
+import consulo.util.collection.SmartList;
 
 public class VariablesNotProcessor extends VariablesProcessor
 {

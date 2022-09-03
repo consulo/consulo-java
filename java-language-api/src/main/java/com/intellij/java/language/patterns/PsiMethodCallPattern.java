@@ -17,9 +17,9 @@ package com.intellij.java.language.patterns;
 
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiMethodCallExpression;
-import com.intellij.patterns.ElementPattern;
-import com.intellij.patterns.PatternCondition;
-import com.intellij.util.ProcessingContext;
+import consulo.language.pattern.ElementPattern;
+import consulo.language.util.ProcessingContext;
+import consulo.language.pattern.PatternCondition;
 
 import javax.annotation.Nonnull;
 

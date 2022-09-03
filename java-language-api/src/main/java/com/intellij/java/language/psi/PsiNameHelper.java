@@ -17,12 +17,12 @@ package com.intellij.java.language.psi;
 
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.ArrayUtil;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.util.lang.StringUtil;
+import consulo.util.collection.ArrayUtil;
+import consulo.ide.ServiceManager;
+import consulo.project.Project;
 import org.jetbrains.annotations.Contract;
 
 import javax.annotation.Nonnull;
@@ -31,7 +31,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import static com.intellij.util.ObjectUtil.notNull;
+import static consulo.util.lang.ObjectUtil.notNull;
 
 /**
  * Service for validating and parsing Java identifiers.

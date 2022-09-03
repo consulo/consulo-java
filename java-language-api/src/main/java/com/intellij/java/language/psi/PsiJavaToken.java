@@ -15,8 +15,8 @@
  */
 package com.intellij.java.language.psi;
 
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.tree.IElementType;
+import consulo.language.psi.PsiElement;
+import consulo.language.ast.IElementType;
 
 /**
  * Represents a single token in a Java file (the lowest-level element in the Java PSI tree).

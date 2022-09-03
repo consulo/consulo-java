@@ -15,11 +15,11 @@ import org.jdom.Document;
 import org.jdom.Element;
 import javax.annotation.Nullable;
 import com.intellij.codeInsight.CodeInsightTestCase;
-import com.intellij.ide.hierarchy.HierarchyNodeDescriptor;
-import com.intellij.ide.hierarchy.HierarchyTreeStructure;
-import com.intellij.openapi.util.Computable;
-import com.intellij.openapi.util.JDOMUtil;
-import com.intellij.openapi.util.io.FileUtil;
+import consulo.ide.impl.idea.ide.hierarchy.HierarchyNodeDescriptor;
+import consulo.ide.impl.idea.ide.hierarchy.HierarchyTreeStructure;
+import consulo.application.util.function.Computable;
+import consulo.util.jdom.JDOMUtil;
+import consulo.ide.impl.idea.openapi.util.io.FileUtil;
 
 /**
  * Checks tree structure for Type Hierarchy (Ctrl+H), Call Hierarchy (Ctrl+Alt+H), Method Hierarchy (Ctrl+Shift+H).
@@ -53,7 +53,7 @@ public abstract class HierarchyViewTestBase extends CodeInsightTestCase {
     }
   }
 
-  private static String dump(final HierarchyTreeStructure treeStructure, @javax.annotation.Nullable HierarchyNodeDescriptor descriptor, int level) {
+  private static String dump(final HierarchyTreeStructure treeStructure, @Nullable HierarchyNodeDescriptor descriptor, int level) {
     StringBuilder s = new StringBuilder();
     dump(treeStructure, descriptor, level, s);
     return s.toString();

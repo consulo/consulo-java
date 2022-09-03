@@ -17,6 +17,11 @@ package org.jetbrains.java.generate.element;
 
 import com.intellij.java.language.psi.PsiField;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 /**
  * This is an Element.
  * <p/>
@@ -55,16 +60,16 @@ public interface Element
 	boolean isNestedArray();
 
 	/**
-	 * Is this element a {@link java.util.Collection} type (isAssignableFrom java.util.Collection)
+	 * Is this element a {@link Collection} type (isAssignableFrom java.util.Collection)
 	 *
-	 * @return true if this element is a {@link java.util.Collection} type.
+	 * @return true if this element is a {@link Collection} type.
 	 */
 	boolean isCollection();
 
 	/**
-	 * Is this element a {@link java.util.Map} type (isAssignableFrom java.util.Map)
+	 * Is this element a {@link Map} type (isAssignableFrom java.util.Map)
 	 *
-	 * @return true if this element is a {@link java.util.Map} type.
+	 * @return true if this element is a {@link Map} type.
 	 */
 	boolean isMap();
 
@@ -118,16 +123,16 @@ public interface Element
 	boolean isDate();
 
 	/**
-	 * Is this element a {@link java.util.Set} type (isAssignableFrom java.util.Set)
+	 * Is this element a {@link Set} type (isAssignableFrom java.util.Set)
 	 *
-	 * @return true if this element is a {@link java.util.Set} type.
+	 * @return true if this element is a {@link Set} type.
 	 */
 	boolean isSet();
 
 	/**
-	 * Is this element a {@link java.util.List} type (isAssignableFrom java.util.List)
+	 * Is this element a {@link List} type (isAssignableFrom java.util.List)
 	 *
-	 * @return true if this element is a {@link java.util.List} type.
+	 * @return true if this element is a {@link List} type.
 	 */
 	boolean isList();
 

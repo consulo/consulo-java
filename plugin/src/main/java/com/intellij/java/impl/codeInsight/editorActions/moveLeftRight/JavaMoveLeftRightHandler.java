@@ -15,10 +15,10 @@
  */
 package com.intellij.java.impl.codeInsight.editorActions.moveLeftRight;
 
-import com.intellij.codeInsight.editorActions.moveLeftRight.MoveElementLeftRightHandler;
+import consulo.language.editor.moveLeftRight.MoveElementLeftRightHandler;
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.util.PsiTreeUtil;
 import consulo.annotation.access.RequiredReadAction;
 
 import javax.annotation.Nonnull;

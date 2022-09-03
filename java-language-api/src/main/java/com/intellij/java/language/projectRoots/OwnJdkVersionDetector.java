@@ -4,8 +4,8 @@
 package com.intellij.java.language.projectRoots;
 
 import com.intellij.java.language.util.Bitness;
-import com.intellij.openapi.components.ServiceManager;
-import com.intellij.util.lang.JavaVersion;
+import consulo.ide.ServiceManager;
+import consulo.application.util.JavaVersion;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

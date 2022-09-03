@@ -16,8 +16,8 @@
 package com.intellij.psi.formatter.java;
 
 import com.intellij.java.language.JavaLanguage;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
+import consulo.document.util.TextRange;
+import consulo.language.codeStyle.CommonCodeStyleSettings;
 
 /**
  * Is intended to hold specific java formatting tests for 'wrapping' settings.

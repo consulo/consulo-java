@@ -26,7 +26,7 @@ import javax.annotation.Nullable;
  */
 public abstract class I18nizedTextGenerator {
 
-  public abstract String getI18nizedText(String propertyKey, final @javax.annotation.Nullable PropertiesFile propertiesFile,
+  public abstract String getI18nizedText(String propertyKey, final @Nullable PropertiesFile propertiesFile,
                                          final PsiLiteralExpression context);
 
   public abstract String getI18nizedConcatenationText(String propertyKey, String parametersString,

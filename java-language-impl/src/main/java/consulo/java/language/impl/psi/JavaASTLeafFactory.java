@@ -15,29 +15,26 @@
  */
 package consulo.java.language.impl.psi;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.java.language.impl.psi.impl.source.tree.CoreJavaASTLeafFactory;
-import com.intellij.psi.impl.source.tree.LeafElement;
-import com.intellij.psi.impl.source.tree.PsiCommentImpl;
-import com.intellij.psi.tree.IElementType;
-import consulo.lang.LanguageVersion;
+import consulo.language.ast.IElementType;
+import consulo.language.impl.ast.LeafElement;
+import consulo.language.impl.psi.PsiCommentImpl;
+import consulo.language.version.LanguageVersion;
+
+import javax.annotation.Nonnull;
 
 /**
  * @author VISTALL
  * @since 21:13/09.07.13
  */
-public class JavaASTLeafFactory extends CoreJavaASTLeafFactory
-{
-	@Override
-	@Nonnull
-	public LeafElement createLeaf(@Nonnull final IElementType type, @Nonnull LanguageVersion languageVersion, @Nonnull final CharSequence text)
-	{
-		if(type == C_STYLE_COMMENT || type == END_OF_LINE_COMMENT)
-		{
-			return new PsiCommentImpl(type, text);
-		}
+public class JavaASTLeafFactory extends CoreJavaASTLeafFactory {
+  @Override
+  @Nonnull
+  public LeafElement createLeaf(@Nonnull final IElementType type, @Nonnull LanguageVersion languageVersion, @Nonnull final CharSequence text) {
+    if (type == C_STYLE_COMMENT || type == END_OF_LINE_COMMENT) {
+      return new PsiCommentImpl(type, text);
+    }
 
-		return super.createLeaf(type, languageVersion, text);
-	}
+    return super.createLeaf(type, languageVersion, text);
+  }
 }

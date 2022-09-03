@@ -7,19 +7,19 @@ import java.util.HashSet;
 
 import javax.annotation.Nonnull;
 import com.intellij.JavaTestUtil;
-import com.intellij.codeInsight.template.impl.TemplateManagerImpl;
-import com.intellij.codeInsight.template.impl.TemplateState;
+import consulo.ide.impl.idea.codeInsight.template.impl.TemplateManagerImpl;
+import consulo.language.editor.template.TemplateState;
 import com.intellij.java.impl.lang.java.JavaRefactoringSupportProvider;
-import com.intellij.openapi.command.WriteCommandAction;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.PsiElement;
+import consulo.language.editor.WriteCommandAction;
+import consulo.document.util.TextRange;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.impl.refactoring.rename.JavaNameSuggestionProvider;
-import com.intellij.refactoring.rename.RenameProcessor;
+import consulo.language.editor.refactoring.rename.RenameProcessor;
 import com.intellij.java.impl.refactoring.rename.RenameWrongRefHandler;
-import com.intellij.refactoring.rename.inplace.VariableInplaceRenameHandler;
+import consulo.language.editor.refactoring.rename.inplace.VariableInplaceRenameHandler;
 import com.intellij.testFramework.fixtures.CodeInsightTestUtil;
-import com.intellij.util.containers.ContainerUtil;
-import consulo.codeInsight.TargetElementUtil;
+import consulo.util.collection.ContainerUtil;
+import consulo.language.editor.TargetElementUtil;
 import consulo.codeInsight.TargetElementUtilEx;
 
 /**

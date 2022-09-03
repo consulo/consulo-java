@@ -16,14 +16,14 @@
 package com.intellij.java.compiler.cache;
 
 import com.intellij.java.language.impl.JavaFileType;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Pair;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiReference;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.search.searches.ReferencesSearch;
-import com.intellij.util.Query;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.project.Project;
+import consulo.util.lang.Pair;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiReference;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.search.ReferencesSearch;
+import consulo.application.util.query.Query;
+import consulo.util.collection.ContainerUtil;
 
 import java.util.Collection;
 import java.util.Map;

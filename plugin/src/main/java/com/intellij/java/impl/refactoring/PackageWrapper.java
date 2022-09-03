@@ -17,11 +17,11 @@ package com.intellij.java.impl.refactoring;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.util.lang.StringUtil;
 import com.intellij.java.language.psi.JavaPsiFacade;
-import com.intellij.psi.PsiDirectory;
+import consulo.language.psi.PsiDirectory;
 import com.intellij.java.language.psi.PsiJavaPackage;
-import com.intellij.psi.PsiManager;
+import consulo.language.psi.PsiManager;
 
 /**
  * Represents a package. 

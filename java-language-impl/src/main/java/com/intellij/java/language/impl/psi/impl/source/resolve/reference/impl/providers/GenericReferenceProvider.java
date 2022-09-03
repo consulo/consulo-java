@@ -15,9 +15,9 @@
  */
 package com.intellij.java.language.impl.psi.impl.source.resolve.reference.impl.providers;
 
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiReferenceProvider;
-import com.intellij.psi.scope.PsiScopeProcessor;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiReferenceProvider;
+import consulo.language.psi.resolve.PsiScopeProcessor;
 import com.intellij.java.language.impl.psi.scope.util.PsiScopesUtil;
 
 /**

@@ -16,18 +16,19 @@
 package com.intellij.java.impl.slicer;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.progress.ProgressManager;
-import com.intellij.openapi.util.Pair;
+import consulo.application.progress.ProgressManager;
+import consulo.util.lang.Pair;
 import com.intellij.psi.*;
 import com.intellij.java.indexing.search.searches.MethodReferencesSearch;
 import com.intellij.java.indexing.search.searches.OverridingMethodsSearch;
-import com.intellij.psi.search.searches.ReferencesSearch;
+import consulo.language.psi.search.ReferencesSearch;
 import com.intellij.java.language.psi.util.MethodSignatureUtil;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.ArrayUtilRt;
-import com.intellij.util.Processor;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.ide.impl.idea.util.ArrayUtilRt;
+import consulo.application.util.function.Processor;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.*;
 
 /**
@@ -234,7 +235,7 @@ public class SliceForwardUtil
 	}
 
 	private static boolean searchReferencesAndProcessAssignmentTarget(@Nonnull PsiElement element,
-			@javax.annotation.Nullable final PsiElement context,
+			@Nullable final PsiElement context,
 			final SliceUsage parent,
 			final Processor<SliceUsage> processor)
 	{

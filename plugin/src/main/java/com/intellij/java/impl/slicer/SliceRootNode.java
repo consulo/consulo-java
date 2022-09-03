@@ -15,10 +15,10 @@
  */
 package com.intellij.java.impl.slicer;
 
-import com.intellij.ide.projectView.PresentationData;
-import com.intellij.ide.util.treeView.AbstractTreeNode;
-import com.intellij.openapi.progress.ProgressIndicator;
-import com.intellij.openapi.project.Project;
+import consulo.ui.ex.tree.PresentationData;
+import consulo.project.ui.view.tree.AbstractTreeNode;
+import consulo.application.progress.ProgressIndicator;
+import consulo.project.Project;
 
 import javax.annotation.Nonnull;
 import javax.swing.*;

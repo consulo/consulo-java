@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.refactoring.move.moveInstanceMethod;
 
-import com.intellij.usageView.UsageInfo;
+import consulo.usage.UsageInfo;
 import com.intellij.java.language.psi.PsiClass;
 
 /**

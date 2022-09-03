@@ -15,16 +15,16 @@
  */
 package com.intellij.java.impl.codeInsight.editorActions.smartEnter;
 
-import com.intellij.openapi.actionSystem.IdeActions;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.EditorModificationUtil;
-import com.intellij.openapi.editor.actionSystem.EditorActionHandler;
-import com.intellij.openapi.editor.actionSystem.EditorActionManager;
-import com.intellij.openapi.editor.ex.EditorEx;
+import consulo.codeEditor.action.EditorActionManager;
+import consulo.ui.ex.action.IdeActions;
+import consulo.codeEditor.Editor;
+import consulo.ide.impl.idea.openapi.editor.EditorModificationUtil;
+import consulo.codeEditor.action.EditorActionHandler;
+import consulo.codeEditor.EditorEx;
 import com.intellij.java.language.psi.JavaTokenType;
-import com.intellij.psi.PsiComment;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.PsiComment;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.util.PsiTreeUtil;
 
 /**
  * Created by IntelliJ IDEA.

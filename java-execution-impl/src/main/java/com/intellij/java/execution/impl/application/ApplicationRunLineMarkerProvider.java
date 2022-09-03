@@ -16,17 +16,17 @@
 package com.intellij.java.execution.impl.application;
 
 import javax.annotation.Nullable;
-import com.intellij.execution.lineMarker.ExecutorAction;
-import com.intellij.execution.lineMarker.RunLineMarkerContributor;
-import com.intellij.icons.AllIcons;
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.execution.lineMarker.ExecutorAction;
+import consulo.execution.lineMarker.RunLineMarkerContributor;
+import consulo.application.AllIcons;
+import consulo.ui.ex.action.AnAction;
+import consulo.util.lang.StringUtil;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiIdentifier;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.util.PsiMethodUtil;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.util.collection.ContainerUtil;
 
 /**
  * @author Dmitry Avdeev

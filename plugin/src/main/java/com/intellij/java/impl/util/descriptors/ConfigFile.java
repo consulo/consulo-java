@@ -19,9 +19,9 @@ package com.intellij.java.impl.util.descriptors;
 import javax.annotation.Nonnull;
 
 import consulo.disposer.Disposable;
-import com.intellij.openapi.util.ModificationTracker;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiFile;
+import consulo.component.util.ModificationTracker;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.language.psi.PsiFile;
 import com.intellij.psi.xml.XmlFile;
 
 import javax.annotation.Nullable;
@@ -34,7 +34,7 @@ public interface ConfigFile extends Disposable, ModificationTracker {
  
   String getUrl();
 
-  @javax.annotation.Nullable
+  @Nullable
   VirtualFile getVirtualFile();
 
   @Nullable

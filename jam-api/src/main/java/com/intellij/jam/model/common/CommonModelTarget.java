@@ -16,7 +16,7 @@
 
 package com.intellij.jam.model.common;
 
-import com.intellij.psi.PsiTarget;
+import consulo.language.psi.PsiTarget;
 
 /**
  * @author Gregory.Shrago

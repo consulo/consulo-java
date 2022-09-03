@@ -15,15 +15,17 @@
  */
 package com.intellij.java.language.impl.psi.impl.compiled;
 
-import javax.annotation.Nonnull;
-
-import com.intellij.java.language.psi.*;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.*;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
-import com.intellij.psi.impl.source.tree.TreeElement;
-import com.intellij.psi.scope.PsiScopeProcessor;
-import com.intellij.util.IncorrectOperationException;
+import com.intellij.java.language.psi.*;
+import consulo.document.util.TextRange;
+import consulo.language.impl.ast.TreeElement;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiElementVisitor;
+import consulo.language.psi.resolve.PsiScopeProcessor;
+import consulo.language.util.IncorrectOperationException;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class ClsReferenceExpressionImpl extends ClsElementImpl implements PsiReferenceExpression {
   private final ClsElementImpl myParent;
@@ -64,7 +66,7 @@ public class ClsReferenceExpressionImpl extends ClsElementImpl implements PsiRef
   }
 
   @Override
-  public void setQualifierExpression(@javax.annotation.Nullable PsiExpression newQualifier) throws IncorrectOperationException {
+  public void setQualifierExpression(@Nullable PsiExpression newQualifier) throws IncorrectOperationException {
     throw new IncorrectOperationException("This method should not be called for compiled elements");
   }
 

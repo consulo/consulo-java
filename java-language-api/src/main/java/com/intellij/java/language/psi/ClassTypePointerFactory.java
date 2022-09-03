@@ -16,9 +16,10 @@
 package com.intellij.java.language.psi;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-import com.intellij.openapi.extensions.ExtensionPointName;
-import com.intellij.openapi.project.Project;
+import consulo.component.extension.ExtensionPointName;
+import consulo.project.Project;
 
 /**
  * Created by Max Medvedev on 10/25/13
@@ -27,6 +28,6 @@ public interface ClassTypePointerFactory
 {
 	ExtensionPointName<ClassTypePointerFactory> EP_NAME = ExtensionPointName.create("consulo.java.classTypePointerFactory");
 
-	@javax.annotation.Nullable
+	@Nullable
 	SmartTypePointer createClassTypePointer(@Nonnull PsiClassType classType, @Nonnull Project project);
 }

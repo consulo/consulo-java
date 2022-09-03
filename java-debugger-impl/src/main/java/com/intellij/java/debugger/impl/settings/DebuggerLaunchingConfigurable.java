@@ -29,8 +29,8 @@ import javax.swing.JRadioButton;
 import com.intellij.java.debugger.DebuggerBundle;
 import consulo.java.debugger.impl.apiAdapters.TransportClassDelegates;
 import com.intellij.openapi.options.ConfigurableUi;
-import com.intellij.ui.StateRestoringCheckBox;
-import com.intellij.ui.components.panels.VerticalBox;
+import consulo.ui.ex.awt.StateRestoringCheckBox;
+import consulo.ide.impl.idea.ui.components.panels.VerticalBox;
 
 class DebuggerLaunchingConfigurable implements ConfigurableUi<DebuggerSettings>
 {
@@ -106,7 +106,7 @@ class DebuggerLaunchingConfigurable implements ConfigurableUi<DebuggerSettings>
 		transportPanel.add(new JLabel(DebuggerBundle.message("label.debugger.launching.configurable.debugger.transport")), BorderLayout.WEST);
 		transportPanel.add(box, BorderLayout.CENTER);
 
-		VerticalBox panel = new VerticalBox();
+		consulo.ide.impl.idea.ui.components.panels.VerticalBox panel = new VerticalBox();
 		panel.setOpaque(false);
 		panel.add(transportPanel);
 		panel.add(myCbForceClassicVM);

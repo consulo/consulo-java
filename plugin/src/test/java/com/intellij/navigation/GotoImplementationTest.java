@@ -3,11 +3,11 @@ package com.intellij.navigation;
 import com.intellij.codeInsight.CodeInsightTestCase;
 import com.intellij.java.indexing.impl.ClassImplementationsSearch;
 import com.intellij.java.indexing.impl.MethodImplementationsSearch;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleManager;
+import consulo.module.Module;
+import consulo.module.ModuleManager;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.language.psi.scope.GlobalSearchScope;
 
 import java.util.*;
 

@@ -10,7 +10,7 @@ import javax.annotation.Nullable;
 import com.intellij.java.language.psi.PsiAnnotation;
 import com.intellij.java.language.psi.PsiAnnotationMemberValue;
 import com.intellij.java.language.psi.PsiArrayInitializerMemberValue;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiEnumConstant;
 import com.intellij.java.language.psi.PsiLiteral;
 import com.intellij.java.language.psi.PsiReferenceExpression;

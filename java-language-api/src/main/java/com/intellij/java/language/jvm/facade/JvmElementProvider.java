@@ -19,8 +19,8 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 import com.intellij.java.language.jvm.JvmClass;
-import com.intellij.openapi.extensions.ExtensionPointName;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.component.extension.ExtensionPointName;
+import consulo.language.psi.scope.GlobalSearchScope;
 
 public interface JvmElementProvider
 {

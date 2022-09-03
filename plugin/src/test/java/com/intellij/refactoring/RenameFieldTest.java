@@ -31,12 +31,12 @@ import javax.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 import com.intellij.JavaTestUtil;
 import com.intellij.java.language.JavaLanguage;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
-import com.intellij.refactoring.rename.RenameProcessor;
+import consulo.language.psi.PsiElement;
+import consulo.language.codeStyle.CodeStyleSettingsManager;
+import consulo.language.editor.refactoring.rename.RenameProcessor;
 import com.intellij.java.impl.refactoring.rename.RenameWrongRefHandler;
-import com.intellij.util.containers.ContainerUtil;
-import consulo.codeInsight.TargetElementUtil;
+import consulo.util.collection.ContainerUtil;
+import consulo.language.editor.TargetElementUtil;
 import consulo.codeInsight.TargetElementUtilEx;
 
 public abstract class RenameFieldTest extends LightRefactoringTestCase

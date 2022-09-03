@@ -17,7 +17,7 @@ package com.intellij.java.impl.ig.bugs;
 
 import consulo.java.language.module.util.JavaClassNames;
 import com.intellij.java.language.psi.PsiType;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.util.collection.ContainerUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;

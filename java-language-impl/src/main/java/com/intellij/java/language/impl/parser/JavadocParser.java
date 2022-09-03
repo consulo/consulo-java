@@ -15,14 +15,14 @@
  */
 package com.intellij.java.language.impl.parser;
 
-import com.intellij.lang.PsiBuilder;
+import consulo.language.parser.PsiBuilder;
 import consulo.util.dataholder.Key;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.psi.JavaDocTokenType;
-import com.intellij.psi.TokenType;
+import consulo.language.ast.TokenType;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaDocElementType;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.tree.TokenSet;
+import consulo.language.ast.IElementType;
+import consulo.language.ast.TokenSet;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;

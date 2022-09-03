@@ -15,93 +15,81 @@
  */
 package com.intellij.java.language.impl.projectRoots.ex;
 
+import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.impl.projectRoots.JavaSdkVersionUtil;
 import com.intellij.java.language.projectRoots.JavaSdk;
 import com.intellij.java.language.projectRoots.JavaSdkVersion;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleUtilCore;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.projectRoots.*;
-import com.intellij.java.language.LanguageLevel;
-import com.intellij.util.PathsList;
 import consulo.annotation.DeprecationInfo;
 import consulo.container.plugin.PluginManager;
+import consulo.content.bundle.Sdk;
+import consulo.content.bundle.SdkTypeId;
 import consulo.java.language.module.extension.JavaModuleExtension;
+import consulo.language.util.ModuleUtilCore;
+import consulo.module.Module;
+import consulo.project.Project;
+import consulo.virtualFileSystem.util.PathsList;
 import org.jetbrains.annotations.Contract;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.File;
 
-public class JavaSdkUtil
-{
-	public static void addRtJar(PathsList pathsList)
-	{
-		pathsList.addFirst(getJavaRtJarPath());
-	}
+public class JavaSdkUtil {
+  public static void addRtJar(PathsList pathsList) {
+    pathsList.addFirst(getJavaRtJarPath());
+  }
 
-	@Nonnull
-	@Deprecated
-	@DeprecationInfo("Use #getJavaRtJarPath()")
-	public static String getIdeaRtJarPath()
-	{
-		return getJavaRtJarPath();
-	}
+  @Nonnull
+  @Deprecated
+  @DeprecationInfo("Use #getJavaRtJarPath()")
+  public static String getIdeaRtJarPath() {
+    return getJavaRtJarPath();
+  }
 
-	@Nonnull
-	public static String getJavaRtJarPath()
-	{
-		File pluginPath = PluginManager.getPluginPath(JavaSdkUtil.class);
-		File jarFile = new File(pluginPath, "java-rt-shaded.jar");
-		return jarFile.getPath();
-	}
+  @Nonnull
+  public static String getJavaRtJarPath() {
+    File pluginPath = PluginManager.getPluginPath(JavaSdkUtil.class);
+    File jarFile = new File(pluginPath, "java-rt-shaded.jar");
+    return jarFile.getPath();
+  }
 
-	@Nonnull
-	public static String getJavaRtJarNotShadedPath()
-	{
-		File pluginPath = PluginManager.getPluginPath(JavaSdkUtil.class);
-		File jarFile = new File(pluginPath, "java-rt.jar");
-		return jarFile.getPath();
-	}
+  @Nonnull
+  public static String getJavaRtJarNotShadedPath() {
+    File pluginPath = PluginManager.getPluginPath(JavaSdkUtil.class);
+    File jarFile = new File(pluginPath, "java-rt.jar");
+    return jarFile.getPath();
+  }
 
-	public static boolean isLanguageLevelAcceptable(@Nonnull Project project, @Nonnull Module module, @Nonnull LanguageLevel level)
-	{
-		return isJdkSupportsLevel(getRelevantJdk(project, module), level);
-	}
+  public static boolean isLanguageLevelAcceptable(@Nonnull Project project, @Nonnull Module module, @Nonnull LanguageLevel level) {
+    return isJdkSupportsLevel(getRelevantJdk(project, module), level);
+  }
 
-	private static boolean isJdkSupportsLevel(@Nullable final Sdk jdk, @Nonnull LanguageLevel level)
-	{
-		if(jdk == null)
-		{
-			return true;
-		}
-		JavaSdkVersion version = JavaSdkVersionUtil.getJavaSdkVersion(jdk);
-		return version != null && version.getMaxLanguageLevel().isAtLeast(level);
-	}
+  private static boolean isJdkSupportsLevel(@Nullable final Sdk jdk, @Nonnull LanguageLevel level) {
+    if (jdk == null) {
+      return true;
+    }
+    JavaSdkVersion version = JavaSdkVersionUtil.getJavaSdkVersion(jdk);
+    return version != null && version.getMaxLanguageLevel().isAtLeast(level);
+  }
 
-	@Nullable
-	private static Sdk getRelevantJdk(@Nonnull Project project, @Nonnull Module module)
-	{
-		Sdk moduleJdk = ModuleUtilCore.getSdk(module, JavaModuleExtension.class);
-		return moduleJdk == null ? null : moduleJdk;
-	}
+  @Nullable
+  private static Sdk getRelevantJdk(@Nonnull Project project, @Nonnull Module module) {
+    Sdk moduleJdk = ModuleUtilCore.getSdk(module, JavaModuleExtension.class);
+    return moduleJdk == null ? null : moduleJdk;
+  }
 
-	@Contract("null, _ -> false")
-	public static boolean isJdkAtLeast(@javax.annotation.Nullable Sdk jdk, @Nonnull JavaSdkVersion expected)
-	{
-		if(jdk != null)
-		{
-			SdkTypeId type = jdk.getSdkType();
-			if(type instanceof JavaSdk)
-			{
-				JavaSdkVersion actual = ((JavaSdk) type).getVersion(jdk);
-				if(actual != null)
-				{
-					return actual.isAtLeast(expected);
-				}
-			}
-		}
+  @Contract("null, _ -> false")
+  public static boolean isJdkAtLeast(@Nullable Sdk jdk, @Nonnull JavaSdkVersion expected) {
+    if (jdk != null) {
+      SdkTypeId type = jdk.getSdkType();
+      if (type instanceof JavaSdk) {
+        JavaSdkVersion actual = ((JavaSdk) type).getVersion(jdk);
+        if (actual != null) {
+          return actual.isAtLeast(expected);
+        }
+      }
+    }
 
-		return false;
-	}
+    return false;
+  }
 }

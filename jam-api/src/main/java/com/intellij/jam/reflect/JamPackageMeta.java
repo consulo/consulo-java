@@ -15,16 +15,15 @@
  */
 package com.intellij.jam.reflect;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.jam.JamElement;
-import com.intellij.pom.PomTarget;
 import com.intellij.java.language.psi.PsiJavaPackage;
-import com.intellij.semantic.SemKey;
-import com.intellij.util.Consumer;
-import com.intellij.util.PairConsumer;
+import consulo.language.pom.PomTarget;
+import consulo.language.sem.SemKey;
+import consulo.util.lang.function.PairConsumer;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.function.Consumer;
 
 /**
  * @author Gregory.Shrago

@@ -15,21 +15,22 @@
  */
 package com.intellij.java.impl.ide.util.gotoByName;
 
-import com.intellij.navigation.ChooseByNameContributorEx;
+import consulo.ide.navigation.ChooseByNameContributorEx;
 import com.intellij.navigation.GotoClassContributor;
-import com.intellij.navigation.NavigationItem;
-import com.intellij.openapi.project.Project;
+import consulo.navigation.NavigationItem;
+import consulo.project.Project;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.presentation.java.SymbolPresentationUtil;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.language.psi.util.SymbolPresentationUtil;
+import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.java.language.psi.search.PsiShortNamesCache;
-import com.intellij.util.ArrayUtil;
-import com.intellij.util.CommonProcessors;
-import com.intellij.util.Processor;
-import com.intellij.util.indexing.FileBasedIndex;
-import com.intellij.util.indexing.FindSymbolParameters;
-import com.intellij.util.indexing.IdFilter;
+import consulo.util.collection.ArrayUtil;
+import consulo.application.util.function.CommonProcessors;
+import consulo.application.util.function.Processor;
+import consulo.language.psi.stub.FileBasedIndex;
+import consulo.language.psi.search.FindSymbolParameters;
+import consulo.language.psi.stub.IdFilter;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.ArrayList;
 
@@ -88,7 +89,7 @@ public class DefaultClassNavigationContributor implements ChooseByNameContributo
   }
 
   @Override
-  public void processNames(@Nonnull Processor<String> processor, @Nonnull GlobalSearchScope scope, @javax.annotation.Nullable IdFilter filter) {
+  public void processNames(@Nonnull Processor<String> processor, @Nonnull GlobalSearchScope scope, @Nullable IdFilter filter) {
     PsiShortNamesCache.getInstance(scope.getProject()).processAllClassNames(processor, scope, filter);
   }
 

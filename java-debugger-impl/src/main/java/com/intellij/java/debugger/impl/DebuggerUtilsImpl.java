@@ -15,7 +15,7 @@
  */
 package com.intellij.java.debugger.impl;
 
-import com.intellij.execution.ExecutionException;
+import consulo.process.ExecutionException;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.util.TreeClassChooser;
 import com.intellij.java.language.util.TreeClassChooserFactory;
@@ -34,21 +34,21 @@ import com.intellij.java.debugger.impl.settings.DebuggerSettings;
 import com.intellij.java.debugger.impl.ui.impl.watch.DebuggerTreeNodeExpression;
 import com.intellij.java.debugger.impl.ui.tree.DebuggerTreeNode;
 import com.intellij.java.debugger.impl.ui.tree.render.BatchEvaluator;
-import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.application.ex.ApplicationManagerEx;
-import com.intellij.openapi.progress.ProcessCanceledException;
-import com.intellij.openapi.progress.util.ProgressIndicatorUtils;
-import com.intellij.openapi.project.Project;
+import consulo.dataContext.DataContext;
+import consulo.application.internal.ApplicationManagerEx;
+import consulo.component.ProcessCanceledException;
+import consulo.application.impl.internal.progress.ProgressIndicatorUtils;
+import consulo.project.Project;
 import com.intellij.openapi.util.*;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.util.lang.StringUtil;
 import com.intellij.psi.*;
 import com.intellij.java.language.impl.psi.impl.PsiJavaParserFacadeImpl;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.util.net.NetUtils;
-import com.intellij.util.xmlb.SkipDefaultValuesSerializationFilters;
-import com.intellij.util.xmlb.XmlSerializer;
-import com.intellij.xdebugger.XExpression;
-import com.intellij.xdebugger.impl.breakpoints.XExpressionState;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.ide.impl.idea.util.net.NetUtils;
+import consulo.util.xml.serializer.SkipDefaultValuesSerializationFilters;
+import consulo.util.xml.serializer.XmlSerializer;
+import consulo.execution.debug.breakpoint.XExpression;
+import consulo.ide.impl.idea.xdebugger.impl.breakpoints.XExpressionState;
 import consulo.internal.com.sun.jdi.InternalException;
 import consulo.internal.com.sun.jdi.ObjectCollectedException;
 import consulo.internal.com.sun.jdi.VMDisconnectedException;
@@ -134,7 +134,7 @@ public class DebuggerUtilsImpl extends DebuggerUtilsEx
 			XExpression expression = TextWithImportsImpl.toXExpression(value);
 			if(expression != null)
 			{
-				XmlSerializer.serializeInto(new XExpressionState(expression), element, new SkipDefaultValuesSerializationFilters());
+				XmlSerializer.serializeInto(new consulo.ide.impl.idea.xdebugger.impl.breakpoints.XExpressionState(expression), element, new SkipDefaultValuesSerializationFilters());
 			}
 		}
 	}
@@ -225,7 +225,7 @@ public class DebuggerUtilsImpl extends DebuggerUtilsEx
 			final int freePort;
 			try
 			{
-				freePort = NetUtils.findAvailableSocketPort();
+				freePort = consulo.ide.impl.idea.util.net.NetUtils.findAvailableSocketPort();
 			}
 			catch(IOException e)
 			{

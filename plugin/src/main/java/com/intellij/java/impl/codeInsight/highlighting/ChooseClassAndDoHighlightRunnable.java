@@ -15,12 +15,12 @@
  */
 package com.intellij.java.impl.codeInsight.highlighting;
 
-import com.intellij.codeInsight.highlighting.ChooseOneOrAllRunnable;
-import com.intellij.ide.util.PsiElementListCellRenderer;
+import consulo.ide.impl.idea.codeInsight.highlighting.ChooseOneOrAllRunnable;
+import consulo.language.editor.ui.PsiElementListCellRenderer;
 import com.intellij.java.language.impl.codeInsight.PsiClassListCellRenderer;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiClassType;
-import com.intellij.openapi.editor.Editor;
+import consulo.codeEditor.Editor;
 
 import java.util.ArrayList;
 import java.util.List;

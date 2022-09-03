@@ -21,20 +21,20 @@
 package com.intellij.refactoring;
 
 import com.intellij.JavaTestUtil;
-import com.intellij.openapi.fileEditor.FileDocumentManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.LocalFileSystem;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.document.FileDocumentManager;
+import consulo.project.Project;
+import consulo.virtualFileSystem.LocalFileSystem;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiModifier;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.java.language.psi.util.PropertyUtil;
 import com.intellij.java.impl.refactoring.encapsulateFields.EncapsulateFieldsDescriptor;
 import com.intellij.java.impl.refactoring.encapsulateFields.EncapsulateFieldsProcessor;
 import com.intellij.java.impl.refactoring.encapsulateFields.FieldDescriptor;
 import com.intellij.java.impl.refactoring.encapsulateFields.FieldDescriptorImpl;
-import com.intellij.refactoring.util.DocCommentPolicy;
+import consulo.ide.impl.idea.refactoring.util.DocCommentPolicy;
 import junit.framework.Assert;
 
 public abstract class EncapsulateFieldsTest extends MultiFileTestCase{

@@ -16,10 +16,10 @@
 package org.jetbrains.java.generate.config;
 
 import javax.annotation.Nonnull;
-import com.intellij.openapi.editor.Editor;
+import consulo.codeEditor.Editor;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
 
 /**
  * This policy is to replace the existing <code>toString</code> method.

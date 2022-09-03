@@ -27,9 +27,9 @@ package org.osmorc.manifest.lang.psi;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiNamedElement;
-import com.intellij.psi.StubBasedPsiElement;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiNamedElement;
+import consulo.language.psi.StubBasedPsiElement;
 import org.osmorc.manifest.lang.psi.stub.AssignmentExpressionStub;
 
 /**

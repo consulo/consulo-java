@@ -27,42 +27,46 @@ import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
 import com.intellij.java.language.impl.psi.scope.ElementClassHint;
 import com.intellij.java.language.impl.psi.scope.NameHint;
 import com.intellij.java.language.module.EffectiveLanguageLevelUtil;
+import com.intellij.java.language.psi.PsiElementFactory;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.scope.JavaScopeProcessorEvent;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.lang.ASTNode;
-import com.intellij.lang.Language;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleUtilCore;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.NotNullLazyKey;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.*;
-import com.intellij.psi.impl.PsiFileEx;
-import com.intellij.psi.impl.source.PsiFileImpl;
-import com.intellij.psi.impl.source.SourceTreeToPsiMap;
-import com.intellij.psi.scope.PsiScopeProcessor;
-import com.intellij.psi.stubs.StubElement;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.util.*;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.NotNullFunction;
-import com.intellij.util.Processor;
-import com.intellij.util.containers.MostlySingularMultiMap;
-import com.intellij.util.indexing.IndexingDataKeys;
 import consulo.annotation.access.RequiredReadAction;
+import consulo.application.util.CachedValue;
+import consulo.application.util.CachedValueProvider;
+import consulo.application.util.CachedValuesManager;
+import consulo.application.util.function.Processor;
 import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.Language;
+import consulo.language.ast.ASTNode;
+import consulo.language.ast.IElementType;
+import consulo.language.file.FileViewProvider;
+import consulo.language.impl.psi.PsiFileImpl;
+import consulo.language.impl.psi.SourceTreeToPsiMap;
+import consulo.language.psi.*;
+import consulo.language.psi.resolve.PsiScopeProcessor;
+import consulo.language.psi.resolve.ResolveState;
+import consulo.language.psi.stub.IndexingDataKeys;
+import consulo.language.psi.stub.StubElement;
+import consulo.language.util.IncorrectOperationException;
+import consulo.language.util.ModuleUtilCore;
 import consulo.logging.Logger;
-import consulo.psi.PsiPackage;
+import consulo.module.Module;
+import consulo.project.Project;
+import consulo.util.collection.MostlySingularMultiMap;
 import consulo.util.dataholder.Key;
+import consulo.util.dataholder.NotNullLazyKey;
+import consulo.virtualFileSystem.VirtualFile;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.function.Function;
 
 public abstract class PsiJavaFileBaseImpl extends PsiFileImpl implements PsiJavaFile {
   private static final Logger LOG = Logger.getInstance(PsiJavaFileBaseImpl.class);
@@ -145,7 +149,7 @@ public abstract class PsiJavaFileBaseImpl extends PsiFileImpl implements PsiJava
   }
 
   @Override
-  @javax.annotation.Nullable
+  @Nullable
   public PsiImportList getImportList() {
     StubElement<?> stub = getGreenStub();
     if (stub != null) {
@@ -460,16 +464,16 @@ public abstract class PsiJavaFileBaseImpl extends PsiFileImpl implements PsiJava
     return JavaCodeStyleManager.getInstance(getProject()).addImport(this, aClass);
   }
 
-  private static final NotNullLazyKey<LanguageLevel, PsiJavaFileBaseImpl> LANGUAGE_LEVEL_KEY = NotNullLazyKey.create("LANGUAGE_LEVEL", new NotNullFunction<PsiJavaFileBaseImpl, LanguageLevel>() {
+  private static final NotNullLazyKey<LanguageLevel, PsiJavaFileBaseImpl> LANGUAGE_LEVEL_KEY = NotNullLazyKey.create("LANGUAGE_LEVEL", new Function<PsiJavaFileBaseImpl, LanguageLevel>() {
     @Override
     @Nonnull
-    public LanguageLevel fun(PsiJavaFileBaseImpl file) {
+    public LanguageLevel apply(PsiJavaFileBaseImpl file) {
       return file.getLanguageLevelInner();
     }
   });
 
   @RequiredReadAction
-  @javax.annotation.Nullable
+  @Nullable
   @Override
   public PsiJavaModule getModuleDeclaration() {
     return null;

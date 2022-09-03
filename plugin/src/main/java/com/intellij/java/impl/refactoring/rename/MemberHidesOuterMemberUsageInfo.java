@@ -25,7 +25,7 @@
 package com.intellij.java.impl.refactoring.rename;
 
 
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiMember;
 
 class MemberHidesOuterMemberUsageInfo extends ResolvableCollisionUsageInfo {

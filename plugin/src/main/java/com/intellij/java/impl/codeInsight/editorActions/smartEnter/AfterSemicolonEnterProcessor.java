@@ -16,9 +16,9 @@
 package com.intellij.java.impl.codeInsight.editorActions.smartEnter;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.editor.Editor;
+import consulo.codeEditor.Editor;
 import com.intellij.psi.*;
-import com.intellij.util.text.CharArrayUtil;
+import consulo.util.lang.CharArrayUtil;
 
 /**
  * Created by IntelliJ IDEA.

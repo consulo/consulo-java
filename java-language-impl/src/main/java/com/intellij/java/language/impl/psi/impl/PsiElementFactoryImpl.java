@@ -28,24 +28,27 @@ import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleSettingsFacade;
 import com.intellij.java.language.psi.javadoc.PsiDocTag;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.lang.*;
-import com.intellij.lexer.Lexer;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiManager;
-import com.intellij.psi.codeStyle.CodeStyleManager;
-import com.intellij.psi.impl.GeneratedMarkerVisitor;
-import com.intellij.psi.impl.source.DummyHolder;
-import com.intellij.psi.impl.source.DummyHolderFactory;
-import com.intellij.psi.impl.source.SourceTreeToPsiMap;
-import com.intellij.psi.impl.source.codeStyle.CodeEditUtil;
-import com.intellij.psi.impl.source.tree.FileElement;
-import com.intellij.psi.impl.source.tree.TreeElement;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.util.IncorrectOperationException;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.java.language.psi.JavaLanguageVersion;
+import consulo.language.Language;
+import consulo.language.ast.ASTNode;
+import consulo.language.ast.IElementType;
+import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.impl.ast.FileElement;
+import consulo.language.impl.ast.TreeElement;
+import consulo.language.impl.psi.CodeEditUtil;
+import consulo.language.impl.psi.DummyHolder;
+import consulo.language.impl.psi.DummyHolderFactory;
+import consulo.language.impl.psi.SourceTreeToPsiMap;
+import consulo.language.lexer.Lexer;
+import consulo.language.parser.ParserDefinition;
+import consulo.language.parser.PsiBuilder;
+import consulo.language.parser.PsiBuilderFactory;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiManager;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import org.jetbrains.annotations.NonNls;
@@ -105,7 +108,7 @@ public class PsiElementFactoryImpl extends PsiJavaParserFacadeImpl implements Ps
 
   @Nonnull
   @Override
-  public PsiClassType createType(@Nonnull PsiClass resolve, @Nonnull PsiSubstitutor substitutor, @javax.annotation.Nullable LanguageLevel languageLevel) {
+  public PsiClassType createType(@Nonnull PsiClass resolve, @Nonnull PsiSubstitutor substitutor, @Nullable LanguageLevel languageLevel) {
     return new PsiImmediateClassType(resolve, substitutor, languageLevel);
   }
 
@@ -290,7 +293,7 @@ public class PsiElementFactoryImpl extends PsiJavaParserFacadeImpl implements Ps
     PsiParameter parameter = createParameterFromText(text, null);
     final CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(myManager.getProject());
     PsiUtil.setModifierProperty(parameter, PsiModifier.FINAL, JavaCodeStyleSettingsFacade.getInstance(myManager.getProject()).isGenerateFinalParameters());
-    GeneratedMarkerVisitor.markGenerated(parameter);
+    CodeEditUtil.markGenerated(parameter.getNode());
     parameter = (PsiParameter) JavaCodeStyleManager.getInstance(myManager.getProject()).shortenClassReferences(parameter);
     return (PsiParameter) codeStyleManager.reformat(parameter);
   }
@@ -368,7 +371,7 @@ public class PsiElementFactoryImpl extends PsiJavaParserFacadeImpl implements Ps
     final DummyHolder result = DummyHolderFactory.createHolder(myManager, context);
     final FileElement holder = result.getTreeElement();
     final Language language = type.getLanguage();
-    final ParserDefinition parserDefinition = LanguageParserDefinitions.INSTANCE.forLanguage(language);
+    final ParserDefinition parserDefinition = ParserDefinition.forLanguage(language);
     assert parserDefinition != null : "No parser definition for language " + language;
     final Project project = myManager.getProject();
     JavaLanguageVersion highestLangVersion = LanguageLevel.HIGHEST.toLangVersion();
@@ -630,7 +633,7 @@ public class PsiElementFactoryImpl extends PsiJavaParserFacadeImpl implements Ps
     if (initializer != null) {
       replace(variable.getInitializer(), initializer, text);
     }
-    GeneratedMarkerVisitor.markGenerated(statement);
+    CodeEditUtil.markGenerated(statement.getNode());
     return statement;
   }
 
@@ -653,9 +656,9 @@ public class PsiElementFactoryImpl extends PsiJavaParserFacadeImpl implements Ps
 
   @Nonnull
   @Override
-  public PsiAnnotation createAnnotationFromText(@Nonnull final String annotationText, @javax.annotation.Nullable final PsiElement context) throws IncorrectOperationException {
+  public PsiAnnotation createAnnotationFromText(@Nonnull final String annotationText, @Nullable final PsiElement context) throws IncorrectOperationException {
     final PsiAnnotation psiAnnotation = super.createAnnotationFromText(annotationText, context);
-    GeneratedMarkerVisitor.markGenerated(psiAnnotation);
+    CodeEditUtil.markGenerated(psiAnnotation.getNode());
     return psiAnnotation;
   }
 
@@ -663,15 +666,15 @@ public class PsiElementFactoryImpl extends PsiJavaParserFacadeImpl implements Ps
   @Override
   public PsiCodeBlock createCodeBlockFromText(@Nonnull final CharSequence text, @Nullable final PsiElement context) throws IncorrectOperationException {
     final PsiCodeBlock psiCodeBlock = super.createCodeBlockFromText(text, context);
-    GeneratedMarkerVisitor.markGenerated(psiCodeBlock);
+    CodeEditUtil.markGenerated(psiCodeBlock.getNode());
     return psiCodeBlock;
   }
 
   @Nonnull
   @Override
-  public PsiEnumConstant createEnumConstantFromText(@Nonnull final String text, @javax.annotation.Nullable final PsiElement context) throws IncorrectOperationException {
+  public PsiEnumConstant createEnumConstantFromText(@Nonnull final String text, @Nullable final PsiElement context) throws IncorrectOperationException {
     final PsiEnumConstant enumConstant = super.createEnumConstantFromText(text, context);
-    GeneratedMarkerVisitor.markGenerated(enumConstant);
+    CodeEditUtil.markGenerated(enumConstant.getNode());
     return enumConstant;
   }
 
@@ -679,7 +682,7 @@ public class PsiElementFactoryImpl extends PsiJavaParserFacadeImpl implements Ps
   @Override
   public PsiExpression createExpressionFromText(@Nonnull final String text, @Nullable final PsiElement context) throws IncorrectOperationException {
     final PsiExpression expression = super.createExpressionFromText(text, context);
-    GeneratedMarkerVisitor.markGenerated(expression);
+    CodeEditUtil.markGenerated(expression.getNode());
     return expression;
   }
 
@@ -687,15 +690,15 @@ public class PsiElementFactoryImpl extends PsiJavaParserFacadeImpl implements Ps
   @Override
   public PsiField createFieldFromText(@Nonnull final String text, @Nullable final PsiElement context) throws IncorrectOperationException {
     final PsiField psiField = super.createFieldFromText(text, context);
-    GeneratedMarkerVisitor.markGenerated(psiField);
+    CodeEditUtil.markGenerated(psiField.getNode());
     return psiField;
   }
 
   @Nonnull
   @Override
-  public PsiParameter createParameterFromText(@Nonnull final String text, @javax.annotation.Nullable final PsiElement context) throws IncorrectOperationException {
+  public PsiParameter createParameterFromText(@Nonnull final String text, @Nullable final PsiElement context) throws IncorrectOperationException {
     final PsiParameter parameter = super.createParameterFromText(text, context);
-    GeneratedMarkerVisitor.markGenerated(parameter);
+    CodeEditUtil.markGenerated(parameter.getNode());
     return parameter;
   }
 
@@ -703,7 +706,7 @@ public class PsiElementFactoryImpl extends PsiJavaParserFacadeImpl implements Ps
   @Override
   public PsiStatement createStatementFromText(@Nonnull final String text, @Nullable final PsiElement context) throws IncorrectOperationException {
     final PsiStatement statement = super.createStatementFromText(text, context);
-    GeneratedMarkerVisitor.markGenerated(statement);
+    CodeEditUtil.markGenerated(statement.getNode());
     return statement;
   }
 
@@ -717,7 +720,7 @@ public class PsiElementFactoryImpl extends PsiJavaParserFacadeImpl implements Ps
   @Override
   public PsiTypeParameter createTypeParameterFromText(@Nonnull final String text, final PsiElement context) throws IncorrectOperationException {
     final PsiTypeParameter typeParameter = super.createTypeParameterFromText(text, context);
-    GeneratedMarkerVisitor.markGenerated(typeParameter);
+    CodeEditUtil.markGenerated(typeParameter.getNode());
     return typeParameter;
   }
 
@@ -725,7 +728,7 @@ public class PsiElementFactoryImpl extends PsiJavaParserFacadeImpl implements Ps
   @Override
   public PsiMethod createMethodFromText(@Nonnull final String text, final PsiElement context, final LanguageLevel level) throws IncorrectOperationException {
     final PsiMethod method = super.createMethodFromText(text, context, level);
-    GeneratedMarkerVisitor.markGenerated(method);
+    CodeEditUtil.markGenerated(method.getNode());
     return method;
   }
 
@@ -753,7 +756,7 @@ public class PsiElementFactoryImpl extends PsiJavaParserFacadeImpl implements Ps
   @Override
   public PsiCatchSection createCatchSection(@Nonnull final PsiType exceptionType,
                                             @Nonnull final String exceptionName,
-                                            @javax.annotation.Nullable final PsiElement context) throws IncorrectOperationException {
+                                            @Nullable final PsiElement context) throws IncorrectOperationException {
     if (!(exceptionType instanceof PsiClassType || exceptionType instanceof PsiDisjunctionType)) {
       throw new IncorrectOperationException("Unexpected type:" + exceptionType);
     }
@@ -771,7 +774,7 @@ public class PsiElementFactoryImpl extends PsiJavaParserFacadeImpl implements Ps
     final CodeStyleManager styleManager = CodeStyleManager.getInstance(project);
     final PsiCatchSection catchSection = (PsiCatchSection) styleManager.reformat(element);
 
-    GeneratedMarkerVisitor.markGenerated(catchSection);
+    CodeEditUtil.markGenerated(catchSection.getNode());
     return catchSection;
   }
 }

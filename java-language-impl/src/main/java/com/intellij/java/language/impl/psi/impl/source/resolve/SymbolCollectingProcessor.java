@@ -16,14 +16,14 @@
 package com.intellij.java.language.impl.psi.impl.source.resolve;
 
 import consulo.util.dataholder.Key;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiNamedElement;
-import com.intellij.psi.ResolveState;
-import com.intellij.psi.scope.BaseScopeProcessor;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiNamedElement;
+import consulo.language.psi.resolve.ResolveState;
+import consulo.language.psi.resolve.BaseScopeProcessor;
 import com.intellij.java.language.impl.psi.scope.ElementClassHint;
 import com.intellij.java.language.psi.scope.JavaScopeProcessorEvent;
-import com.intellij.psi.scope.PsiScopeProcessor;
-import com.intellij.util.containers.MostlySingularMultiMap;
+import consulo.language.psi.resolve.PsiScopeProcessor;
+import consulo.util.collection.MostlySingularMultiMap;
 import javax.annotation.Nonnull;
 
 /**

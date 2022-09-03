@@ -18,9 +18,9 @@ package com.intellij.java.impl.openapi.roots.ui.configuration.libraryEditor;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.projectRoots.ui.SdkPathEditor;
-import com.intellij.openapi.roots.ui.OrderRootTypeUIFactory;
+import consulo.content.bundle.Sdk;
+import consulo.ide.ui.SdkPathEditor;
+import consulo.ide.ui.OrderRootTypeUIFactory;
 import consulo.java.impl.JavaBundle;
 import consulo.java.language.impl.JavaIcons;
 import consulo.ui.image.Image;

@@ -15,18 +15,18 @@
  */
 package com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis;
 
-import com.intellij.codeInsight.daemon.HighlightDisplayKey;
-import com.intellij.codeInsight.daemon.ImplicitUsageProvider;
+import consulo.language.editor.rawHighlight.HighlightDisplayKey;
+import consulo.language.editor.ImplicitUsageProvider;
 import com.intellij.java.language.impl.codeInsight.daemon.JavaErrorBundle;
 import com.intellij.codeInsight.daemon.impl.*;
-import com.intellij.codeInsight.daemon.impl.analysis.HighlightInfoHolder;
-import com.intellij.codeInsight.daemon.impl.analysis.HighlightingLevelManager;
-import com.intellij.codeInsight.daemon.impl.quickfix.QuickFixAction;
-import com.intellij.codeInsight.intention.EmptyIntentionAction;
-import com.intellij.codeInsight.intention.IntentionAction;
-import com.intellij.codeInspection.InspectionProfile;
-import com.intellij.codeInspection.InspectionsBundle;
-import com.intellij.codeInspection.SuppressionUtil;
+import consulo.language.editor.rawHighlight.HighlightInfoHolder;
+import consulo.language.editor.highlight.HighlightingLevelManager;
+import consulo.language.editor.intention.QuickFixAction;
+import consulo.language.editor.internal.intention.EmptyIntentionAction;
+import consulo.language.editor.intention.IntentionAction;
+import consulo.language.editor.inspection.scheme.InspectionProfile;
+import consulo.language.editor.inspection.InspectionsBundle;
+import consulo.language.editor.inspection.SuppressionUtil;
 import com.intellij.java.analysis.codeInsight.daemon.UnusedImportProvider;
 import com.intellij.java.analysis.codeInsight.intention.QuickFixFactory;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.GlobalUsageHelper;
@@ -37,28 +37,28 @@ import com.intellij.java.analysis.impl.codeInspection.unusedImport.UnusedImportL
 import com.intellij.java.analysis.impl.codeInspection.unusedSymbol.UnusedSymbolLocalInspectionBase;
 import com.intellij.java.analysis.impl.codeInspection.util.SpecialAnnotationsUtilBase;
 import com.intellij.java.language.psi.*;
-import com.intellij.lang.Language;
-import com.intellij.lang.annotation.HighlightSeverity;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.application.TransactionGuard;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.extensions.Extensions;
-import com.intellij.openapi.progress.ProcessCanceledException;
-import com.intellij.openapi.progress.ProgressIndicator;
-import com.intellij.openapi.project.Project;
-import com.intellij.pom.PomNamedTarget;
-import com.intellij.profile.codeInspection.InspectionProjectProfileManager;
+import consulo.language.Language;
+import consulo.language.editor.annotation.HighlightSeverity;
+import consulo.application.ApplicationManager;
+import consulo.application.TransactionGuard;
+import consulo.document.Document;
+import consulo.component.extension.Extensions;
+import consulo.component.ProcessCanceledException;
+import consulo.application.progress.ProgressIndicator;
+import consulo.project.Project;
+import consulo.language.pom.PomNamedTarget;
+import consulo.language.editor.inspection.scheme.InspectionProjectProfileManager;
 import com.intellij.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.impl.psi.impl.PsiClassImplUtil;
 import com.intellij.java.indexing.search.searches.OverridingMethodsSearch;
 import com.intellij.java.language.psi.search.searches.SuperMethodsSearch;
 import com.intellij.java.language.psi.util.PropertyUtil;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.psi.util.PsiUtilCore;
+import consulo.language.psi.PsiUtilCore;
 import com.intellij.java.language.util.VisibilityUtil;
-import com.intellij.util.containers.ConcurrentFactoryMap;
+import consulo.application.util.ConcurrentFactoryMap;
 import consulo.disposer.Disposable;
 import consulo.disposer.Disposer;
 import consulo.logging.Logger;
@@ -66,6 +66,7 @@ import consulo.psi.PsiPackage;
 import org.jetbrains.annotations.PropertyKey;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -213,7 +214,7 @@ public class PostHighlightingVisitor {
     return false;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private HighlightInfo processIdentifier(@Nonnull PsiIdentifier identifier, @Nonnull ProgressIndicator progress, @Nonnull GlobalUsageHelper helper) {
     PsiElement parent = identifier.getParent();
     if (!(parent instanceof PsiVariable || parent instanceof PsiMember)) {
@@ -269,7 +270,7 @@ public class PostHighlightingVisitor {
     return false;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private HighlightInfo processLocalVariable(@Nonnull PsiLocalVariable variable, @Nonnull PsiIdentifier identifier, @Nonnull ProgressIndicator progress) {
     if (variable instanceof PsiResourceVariable && PsiUtil.isIgnoredName(variable.getName())) {
       return null;
@@ -308,7 +309,7 @@ public class PostHighlightingVisitor {
     return null;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private HighlightInfo processField(@Nonnull final Project project,
                                      @Nonnull final PsiField field,
                                      @Nonnull PsiIdentifier identifier,
@@ -387,7 +388,7 @@ public class PostHighlightingVisitor {
     return isOverriddenOrOverrides.get(method);
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private HighlightInfo processParameter(@Nonnull Project project, @Nonnull PsiParameter parameter, @Nonnull PsiIdentifier identifier, @Nonnull ProgressIndicator progress) {
     PsiElement declarationScope = parameter.getDeclarationScope();
     if (declarationScope instanceof PsiMethod) {
@@ -418,7 +419,7 @@ public class PostHighlightingVisitor {
     return null;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private HighlightInfo checkUnusedParameter(@Nonnull PsiParameter parameter, @Nonnull PsiIdentifier identifier, @Nonnull ProgressIndicator progress) {
     if (!myRefCountHolder.isReferenced(parameter) && !UnusedSymbolUtil.isImplicitUsage(myProject, parameter, progress)) {
       String message = JavaErrorBundle.message("parameter.is.not.used", identifier.getText());
@@ -427,7 +428,7 @@ public class PostHighlightingVisitor {
     return null;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private HighlightInfo processMethod(@Nonnull final Project project,
                                       @Nonnull final PsiMethod method,
                                       @Nonnull PsiIdentifier identifier,
@@ -455,7 +456,7 @@ public class PostHighlightingVisitor {
     return highlightInfo;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private HighlightInfo processClass(@Nonnull Project project, @Nonnull PsiClass aClass, @Nonnull PsiIdentifier identifier, @Nonnull ProgressIndicator progress, @Nonnull GlobalUsageHelper helper) {
     if (UnusedSymbolUtil.isClassUsed(project, myFile, aClass, progress, helper)) {
       return null;
@@ -494,7 +495,7 @@ public class PostHighlightingVisitor {
     return highlightInfo;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private HighlightInfo processImport(@Nonnull PsiImportStatementBase importStatement, @Nonnull HighlightDisplayKey unusedImportKey) {
     // jsp include directive hack
     if (importStatement.isForeignFileImport()) {

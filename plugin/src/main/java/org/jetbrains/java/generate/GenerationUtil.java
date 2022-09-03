@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 import consulo.logging.Logger;
+import consulo.ui.ex.awt.Messages;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
 import org.jetbrains.java.generate.element.ClassElement;
@@ -39,16 +40,17 @@ import org.jetbrains.java.generate.velocity.VelocityFactory;
 import com.intellij.java.language.impl.codeInsight.generation.PsiElementClassMember;
 import com.intellij.java.impl.codeInsight.generation.PsiFieldMember;
 import com.intellij.java.impl.codeInsight.generation.PsiMethodMember;
-import com.intellij.openapi.progress.ProcessCanceledException;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.Messages;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.component.ProcessCanceledException;
+import consulo.project.Project;
+import consulo.util.lang.StringUtil;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiMember;
 import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.language.codeStyle.CodeStyleSettingsManager;
+import consulo.util.collection.ContainerUtil;
+
+import javax.annotation.Nullable;
 
 public class GenerationUtil
 {
@@ -125,7 +127,7 @@ public class GenerationUtil
 	 * @param classMemberList list of {@link PsiElementClassMember}
 	 * @return a list of {PsiMember} objects.
 	 */
-	public static List<PsiMember> convertClassMembersToPsiMembers(@javax.annotation.Nullable List<PsiElementClassMember> classMemberList)
+	public static List<PsiMember> convertClassMembersToPsiMembers(@Nullable List<PsiElementClassMember> classMemberList)
 	{
 		if(classMemberList == null || classMemberList.isEmpty())
 		{
@@ -183,7 +185,7 @@ public class GenerationUtil
 	 * @return code (usually javacode). Returns null if templateMacro is null.
 	 * @throws GenerateCodeException is thrown when there is an error generating the javacode.
 	 */
-	public static String velocityGenerateCode(@javax.annotation.Nullable PsiClass clazz,
+	public static String velocityGenerateCode(@Nullable PsiClass clazz,
 			Collection<? extends PsiMember> selectedMembers,
 			Collection<? extends PsiMember> selectedNotNullMembers,
 			Map<String, String> params,

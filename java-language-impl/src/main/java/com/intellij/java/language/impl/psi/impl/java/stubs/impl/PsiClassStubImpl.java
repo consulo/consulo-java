@@ -15,16 +15,16 @@
  */
 package com.intellij.java.language.impl.psi.impl.java.stubs.impl;
 
-import com.intellij.extapi.psi.StubBasedPsiElementBase;
+import consulo.language.impl.psi.stub.StubBasedPsiElementBase;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.impl.DebugUtil;
+import consulo.language.impl.DebugUtil;
 import com.intellij.java.language.impl.psi.impl.java.stubs.JavaClassElementType;
 import com.intellij.java.language.impl.psi.impl.java.stubs.PsiClassStub;
 import com.intellij.java.language.impl.psi.impl.java.stubs.PsiJavaFileStub;
-import com.intellij.psi.stubs.StubBase;
-import com.intellij.psi.stubs.StubElement;
-import com.intellij.util.BitUtil;
+import consulo.language.psi.stub.StubBase;
+import consulo.language.psi.stub.StubElement;
+import consulo.util.lang.BitUtil;
 
 import javax.annotation.Nullable;
 

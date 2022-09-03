@@ -19,7 +19,7 @@ package consulo.java.language.impl.psi.augment;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.augment.PsiAugmentProvider;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.impl.psi.impl.light.LightMethodBuilder;
 import com.intellij.java.language.impl.psi.impl.source.PsiImmediateClassType;
 import consulo.java.language.module.util.JavaClassNames;

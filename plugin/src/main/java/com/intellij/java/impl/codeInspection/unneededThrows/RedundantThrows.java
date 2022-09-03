@@ -15,11 +15,10 @@
  */
 package com.intellij.java.impl.codeInspection.unneededThrows;
 
-import com.intellij.analysis.AnalysisScope;
+import consulo.language.editor.scope.AnalysisScope;
 import com.intellij.java.language.impl.codeInsight.ExceptionUtil;
-import com.intellij.codeInsight.FileModificationService;
-import com.intellij.codeInsight.daemon.GroupNames;
-import com.intellij.codeInspection.*;
+import consulo.language.editor.FileModificationService;
+import consulo.ide.impl.idea.codeInsight.daemon.GroupNames;
 import com.intellij.codeInspection.reference.*;
 import com.intellij.java.analysis.codeInspection.GlobalJavaInspectionContext;
 import com.intellij.java.analysis.codeInspection.GlobalJavaInspectionTool;
@@ -27,19 +26,20 @@ import com.intellij.java.analysis.codeInspection.reference.RefJavaVisitor;
 import com.intellij.java.analysis.codeInspection.reference.RefMethod;
 import com.intellij.java.language.psi.*;
 import consulo.logging.Logger;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.openapi.util.Pair;
+import consulo.project.Project;
+import consulo.util.lang.Comparing;
+import consulo.util.lang.Pair;
 import com.intellij.psi.*;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.java.indexing.search.searches.AllOverridingMethodsSearch;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.Processor;
-import com.intellij.util.Query;
-import com.intellij.util.containers.BidirectionalMap;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.application.util.function.Processor;
+import consulo.application.util.query.Query;
+import consulo.util.collection.BidirectionalMap;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,7 +55,7 @@ public class RedundantThrows extends GlobalJavaInspectionTool
   @NonNls private static final String SHORT_NAME = "RedundantThrows";
 
   @Override
-  @javax.annotation.Nullable
+  @Nullable
   public CommonProblemDescriptor[] checkElement(RefEntity refEntity,
                                                 AnalysisScope scope,
                                                 InspectionManager manager,
@@ -182,13 +182,13 @@ public class RedundantThrows extends GlobalJavaInspectionTool
 
 
   @Override
-  @javax.annotation.Nullable
+  @Nullable
   public QuickFix getQuickFix(String hint) {
     return getFix(null, hint);
   }
 
   @Override
-  @javax.annotation.Nullable
+  @Nullable
   public String getHint(final QuickFix fix) {
     final List<String> hints = myQuickFixes.getKeysByValue(fix);
     LOG.assertTrue(hints != null && hints.size() == 1);
@@ -236,9 +236,9 @@ public class RedundantThrows extends GlobalJavaInspectionTool
       return getName();
     }
 
-    private void removeExcessiveThrows(@javax.annotation.Nullable RefMethod refMethod, @javax.annotation.Nullable final PsiModifierListOwner element, final CommonProblemDescriptor[] problems) {
+    private void removeExcessiveThrows(@Nullable RefMethod refMethod, @Nullable final PsiModifierListOwner element, final CommonProblemDescriptor[] problems) {
       try {
-        @javax.annotation.Nullable final PsiMethod psiMethod;
+        @Nullable final PsiMethod psiMethod;
         if (element == null) {
           LOG.assertTrue(refMethod != null);
           psiMethod = (PsiMethod)refMethod.getElement();

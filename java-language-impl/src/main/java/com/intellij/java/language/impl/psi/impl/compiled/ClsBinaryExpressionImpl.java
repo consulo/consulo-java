@@ -15,136 +15,114 @@
  */
 package com.intellij.java.language.impl.psi.impl.compiled;
 
+import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
+import com.intellij.java.language.psi.*;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.language.ast.IElementType;
+import consulo.language.impl.ast.TreeElement;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiElementVisitor;
+
 import javax.annotation.Nonnull;
 
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.java.language.psi.JavaElementVisitor;
-import com.intellij.java.language.psi.PsiBinaryExpression;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiElementVisitor;
-import com.intellij.java.language.psi.PsiExpression;
-import com.intellij.java.language.psi.PsiJavaToken;
-import com.intellij.java.language.psi.PsiType;
-import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
-import com.intellij.psi.impl.source.tree.TreeElement;
-import com.intellij.psi.tree.IElementType;
+class ClsBinaryExpressionImpl extends ClsElementImpl implements PsiBinaryExpression {
+  private final ClsElementImpl myParent;
+  private final PsiJavaToken myOperator;
+  private final PsiExpression myLOperand;
+  private final PsiExpression myROperand;
 
-class ClsBinaryExpressionImpl extends ClsElementImpl implements PsiBinaryExpression
-{
-	private final ClsElementImpl myParent;
-	private final PsiJavaToken myOperator;
-	private final PsiExpression myLOperand;
-	private final PsiExpression myROperand;
+  ClsBinaryExpressionImpl(ClsElementImpl parent, PsiJavaToken sign, PsiExpression left, PsiExpression right) {
+    myParent = parent;
+    myOperator = new ClsJavaTokenImpl(this, sign.getTokenType(), sign.getText());
+    myLOperand = ClsParsingUtil.psiToClsExpression(left, this);
+    myROperand = ClsParsingUtil.psiToClsExpression(right, this);
+  }
 
-	ClsBinaryExpressionImpl(ClsElementImpl parent, PsiJavaToken sign, PsiExpression left, PsiExpression right)
-	{
-		myParent = parent;
-		myOperator = new ClsJavaTokenImpl(this, sign.getTokenType(), sign.getText());
-		myLOperand = ClsParsingUtil.psiToClsExpression(left, this);
-		myROperand = ClsParsingUtil.psiToClsExpression(right, this);
-	}
+  @Override
+  public void appendMirrorText(int indentLevel, @Nonnull StringBuilder buffer) {
+    buffer.append(getText());
+  }
 
-	@Override
-	public void appendMirrorText(int indentLevel, @Nonnull StringBuilder buffer)
-	{
-		buffer.append(getText());
-	}
+  @Override
+  public void setMirror(@Nonnull TreeElement element) throws InvalidMirrorException {
+    setMirrorCheckingType(element, JavaElementType.BINARY_EXPRESSION);
+  }
 
-	@Override
-	public void setMirror(@Nonnull TreeElement element) throws InvalidMirrorException
-	{
-		setMirrorCheckingType(element, JavaElementType.BINARY_EXPRESSION);
-	}
+  @Override
+  @RequiredReadAction
+  public String getText() {
+    return myLOperand.getText() + " " + myOperator.getText() + " " + myROperand.getText();
+  }
 
-	@Override
-	public String getText()
-	{
-		return StringUtil.join(myLOperand.getText(), " ", myOperator.getText(), " ", myROperand.getText());
-	}
+  @Nonnull
+  @Override
+  public PsiElement[] getChildren() {
+    return new PsiElement[]{
+        myLOperand,
+        myOperator,
+        myROperand
+    };
+  }
 
-	@Nonnull
-	@Override
-	public PsiElement[] getChildren()
-	{
-		return new PsiElement[]{
-				myLOperand,
-				myOperator,
-				myROperand
-		};
-	}
+  @Override
+  public PsiElement getParent() {
+    return myParent;
+  }
 
-	@Override
-	public PsiElement getParent()
-	{
-		return myParent;
-	}
+  @Override
+  public void accept(@Nonnull PsiElementVisitor visitor) {
+    if (visitor instanceof JavaElementVisitor) {
+      ((JavaElementVisitor) visitor).visitBinaryExpression(this);
+    } else {
+      visitor.visitElement(this);
+    }
+  }
 
-	@Override
-	public void accept(@Nonnull PsiElementVisitor visitor)
-	{
-		if(visitor instanceof JavaElementVisitor)
-		{
-			((JavaElementVisitor) visitor).visitBinaryExpression(this);
-		}
-		else
-		{
-			visitor.visitElement(this);
-		}
-	}
+  @Nonnull
+  @Override
+  public PsiExpression getLOperand() {
+    return myLOperand;
+  }
 
-	@Nonnull
-	@Override
-	public PsiExpression getLOperand()
-	{
-		return myLOperand;
-	}
+  @Nonnull
+  @Override
+  public PsiExpression getROperand() {
+    return myROperand;
+  }
 
-	@Nonnull
-	@Override
-	public PsiExpression getROperand()
-	{
-		return myROperand;
-	}
+  @Nonnull
+  @Override
+  public PsiJavaToken getOperationSign() {
+    return myOperator;
+  }
 
-	@Nonnull
-	@Override
-	public PsiJavaToken getOperationSign()
-	{
-		return myOperator;
-	}
+  @Nonnull
+  @Override
+  public IElementType getOperationTokenType() {
+    return myOperator.getTokenType();
+  }
 
-	@Nonnull
-	@Override
-	public IElementType getOperationTokenType()
-	{
-		return myOperator.getTokenType();
-	}
+  @Override
+  public PsiJavaToken getTokenBeforeOperand(@Nonnull PsiExpression operand) {
+    return getOperationSign();
+  }
 
-	@Override
-	public PsiJavaToken getTokenBeforeOperand(@Nonnull PsiExpression operand)
-	{
-		return getOperationSign();
-	}
+  @Override
+  public PsiType getType() {
+    return myLOperand.getType();
+  }
 
-	@Override
-	public PsiType getType()
-	{
-		return myLOperand.getType();
-	}
+  @Nonnull
+  @Override
+  public PsiExpression[] getOperands() {
+    return new PsiExpression[]{
+        getLOperand(),
+        getROperand()
+    };
+  }
 
-	@Nonnull
-	@Override
-	public PsiExpression[] getOperands()
-	{
-		return new PsiExpression[]{
-				getLOperand(),
-				getROperand()
-		};
-	}
-
-	@Override
-	public String toString()
-	{
-		return "PsiBinaryExpression:" + getText();
-	}
+  @Override
+  public String toString() {
+    return "PsiBinaryExpression:" + getText();
+  }
 }

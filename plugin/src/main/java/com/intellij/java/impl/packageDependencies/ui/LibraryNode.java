@@ -15,12 +15,12 @@
  */
 package com.intellij.java.impl.packageDependencies.ui;
 
-import com.intellij.icons.AllIcons;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.ModuleExtensionWithSdkOrderEntry;
-import com.intellij.openapi.roots.OrderEntry;
-import com.intellij.packageDependencies.ui.PackageDependenciesNode;
-import com.intellij.psi.PsiFile;
+import consulo.application.AllIcons;
+import consulo.project.Project;
+import consulo.module.content.layer.orderEntry.ModuleExtensionWithSdkOrderEntry;
+import consulo.module.content.layer.orderEntry.OrderEntry;
+import consulo.ide.impl.idea.packageDependencies.ui.PackageDependenciesNode;
+import consulo.language.psi.PsiFile;
 import consulo.java.psi.impl.icon.JavaPsiImplIconGroup;
 import consulo.ui.image.Image;
 

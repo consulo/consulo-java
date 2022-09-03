@@ -15,28 +15,30 @@
  */
 package com.intellij.java.language.impl.psi.impl.source.tree.java;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import com.intellij.java.language.psi.*;
-import com.intellij.lang.ASTNode;
-import consulo.logging.Logger;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.*;
 import com.intellij.java.language.impl.psi.impl.PsiImplUtil;
 import com.intellij.java.language.impl.psi.impl.java.stubs.JavaStubElementTypes;
 import com.intellij.java.language.impl.psi.impl.java.stubs.PsiNameValuePairStub;
 import com.intellij.java.language.impl.psi.impl.source.JavaStubPsiElement;
-import com.intellij.psi.impl.source.SourceTreeToPsiMap;
 import com.intellij.java.language.impl.psi.impl.source.tree.ChildRole;
 import com.intellij.java.language.impl.psi.impl.source.tree.ElementType;
+import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.MethodSignature;
 import com.intellij.java.language.psi.util.MethodSignatureUtil;
-import com.intellij.util.IncorrectOperationException;
+import consulo.document.util.TextRange;
+import consulo.language.ast.ASTNode;
+import consulo.language.impl.psi.SourceTreeToPsiMap;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiElementVisitor;
+import consulo.language.psi.PsiReference;
+import consulo.language.util.IncorrectOperationException;
+import consulo.logging.Logger;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * @author Dmitry Avdeev
- *         Date: 7/27/12
+ * Date: 7/27/12
  */
 public class PsiNameValuePairImpl extends JavaStubPsiElement<PsiNameValuePairStub> implements PsiNameValuePair {
 
@@ -51,7 +53,7 @@ public class PsiNameValuePairImpl extends JavaStubPsiElement<PsiNameValuePairStu
   @Nonnull
   @Override
   public NameValuePairElement getNode() {
-    return (NameValuePairElement)super.getNode();
+    return (NameValuePairElement) super.getNode();
   }
 
   @Override
@@ -60,8 +62,7 @@ public class PsiNameValuePairImpl extends JavaStubPsiElement<PsiNameValuePairStu
     if (stub == null) {
       PsiIdentifier nameIdentifier = getNameIdentifier();
       return nameIdentifier == null ? null : nameIdentifier.getText();
-    }
-    else {
+    } else {
       return stub.getName();
     }
   }
@@ -75,13 +76,13 @@ public class PsiNameValuePairImpl extends JavaStubPsiElement<PsiNameValuePairStu
   @Override
   public PsiIdentifier getNameIdentifier() {
     ASTNode node = getNode().findChildByRole(ChildRole.NAME);
-    return node == null ? null : (PsiIdentifier)node.getPsi();
+    return node == null ? null : (PsiIdentifier) node.getPsi();
   }
 
   @Override
   public PsiAnnotationMemberValue getValue() {
     ASTNode node = getNode().findChildByRole(ChildRole.ANNOTATION_VALUE);
-    return node == null ? null : (PsiAnnotationMemberValue)node.getPsi();
+    return node == null ? null : (PsiAnnotationMemberValue) node.getPsi();
   }
 
   @Nonnull
@@ -98,11 +99,11 @@ public class PsiNameValuePairImpl extends JavaStubPsiElement<PsiNameValuePairStu
       @Nullable
       private PsiClass getReferencedClass() {
         LOG.assertTrue(getParent() instanceof PsiAnnotationParameterList && getParent().getParent() instanceof PsiAnnotation);
-        PsiAnnotation annotation = (PsiAnnotation)getParent().getParent();
+        PsiAnnotation annotation = (PsiAnnotation) getParent().getParent();
         PsiJavaCodeReferenceElement nameRef = annotation.getNameReferenceElement();
         if (nameRef == null) return null;
         PsiElement target = nameRef.resolve();
-        return target instanceof PsiClass ? (PsiClass)target : null;
+        return target instanceof PsiClass ? (PsiClass) target : null;
       }
 
       @Override
@@ -130,7 +131,7 @@ public class PsiNameValuePairImpl extends JavaStubPsiElement<PsiNameValuePairStu
         String name = getName();
         if (name == null) name = PsiAnnotation.DEFAULT_REFERENCED_METHOD_NAME;
         MethodSignature signature = MethodSignatureUtil
-          .createMethodSignature(name, PsiType.EMPTY_ARRAY, PsiTypeParameter.EMPTY_ARRAY, PsiSubstitutor.EMPTY);
+            .createMethodSignature(name, PsiType.EMPTY_ARRAY, PsiTypeParameter.EMPTY_ARRAY, PsiSubstitutor.EMPTY);
         return MethodSignatureUtil.findMethodBySignature(refClass, signature, false);
       }
 
@@ -146,8 +147,7 @@ public class PsiNameValuePairImpl extends JavaStubPsiElement<PsiNameValuePairStu
         PsiIdentifier nameIdentifier = getNameIdentifier();
         if (nameIdentifier != null) {
           PsiImplUtil.setName(nameIdentifier, newElementName);
-        }
-        else if (ElementType.ANNOTATION_MEMBER_VALUE_BIT_SET.contains(getNode().getFirstChildNode().getElementType())) {
+        } else if (ElementType.ANNOTATION_MEMBER_VALUE_BIT_SET.contains(getNode().getFirstChildNode().getElementType())) {
           PsiElementFactory factory = JavaPsiFacade.getInstance(getProject()).getElementFactory();
           nameIdentifier = factory.createIdentifier(newElementName);
           addBefore(nameIdentifier, SourceTreeToPsiMap.treeElementToPsi(getNode().getFirstChildNode()));
@@ -176,9 +176,8 @@ public class PsiNameValuePairImpl extends JavaStubPsiElement<PsiNameValuePairStu
   @Override
   public final void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
-      ((JavaElementVisitor)visitor).visitNameValuePair(this);
-    }
-    else {
+      ((JavaElementVisitor) visitor).visitNameValuePair(this);
+    } else {
       visitor.visitElement(this);
     }
   }

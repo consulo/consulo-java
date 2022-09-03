@@ -1,13 +1,13 @@
 package com.intellij.java.analysis.impl.codeInspection.dataFlow.inference;
 
-import com.intellij.lang.LighterAST;
-import com.intellij.lang.LighterASTNode;
+import consulo.language.ast.LighterAST;
+import consulo.language.ast.LighterASTNode;
 import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.java.language.impl.psi.impl.source.JavaLightStubBuilder;
 import com.intellij.java.language.impl.psi.impl.source.JavaLightTreeUtil;
-import com.intellij.psi.impl.source.tree.LightTreeUtil;
-import com.intellij.psi.impl.source.tree.RecursiveLighterASTNodeWalkingVisitor;
-import com.intellij.psi.tree.IElementType;
+import consulo.language.ast.LightTreeUtil;
+import consulo.ide.impl.psi.impl.source.tree.RecursiveLighterASTNodeWalkingVisitor;
+import consulo.language.ast.IElementType;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

@@ -18,8 +18,8 @@ package com.intellij.codeInsight.daemon;
 import javax.annotation.Nonnull;
 
 import org.jetbrains.annotations.NonNls;
-import com.intellij.codeHighlighting.HighlightDisplayLevel;
-import com.intellij.codeInspection.ex.LocalInspectionToolWrapper;
+import consulo.language.editor.rawHighlight.HighlightDisplayLevel;
+import consulo.language.editor.inspection.scheme.LocalInspectionToolWrapper;
 import com.intellij.java.impl.codeInspection.unusedSymbol.UnusedSymbolLocalInspection;
 
 public abstract class HighlightSeverityTest extends LightDaemonAnalyzerTestCase {

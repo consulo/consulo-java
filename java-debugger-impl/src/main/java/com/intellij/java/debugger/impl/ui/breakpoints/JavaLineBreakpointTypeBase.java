@@ -16,17 +16,18 @@
 package com.intellij.java.debugger.impl.ui.breakpoints;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
+import consulo.execution.debug.breakpoint.ui.XBreakpointCustomPropertiesPanel;
+import consulo.execution.debug.evaluation.XDebuggerEditorsProvider;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
 import com.intellij.java.debugger.impl.JavaDebuggerEditorsProvider;
 import com.intellij.java.debugger.impl.breakpoints.JavaBreakpointFiltersPanel;
 import com.intellij.java.debugger.impl.breakpoints.properties.JavaBreakpointProperties;
-import com.intellij.openapi.project.Project;
-import com.intellij.xdebugger.breakpoints.XLineBreakpoint;
-import com.intellij.xdebugger.breakpoints.XLineBreakpointType;
-import com.intellij.xdebugger.breakpoints.ui.XBreakpointCustomPropertiesPanel;
-import com.intellij.xdebugger.evaluation.XDebuggerEditorsProvider;
+import consulo.project.Project;
+import consulo.execution.debug.breakpoint.XLineBreakpoint;
+import consulo.execution.debug.breakpoint.XLineBreakpointType;
 
 /**
  * Base class for java line-connected exceptions (line, method, field)
@@ -52,14 +53,14 @@ public abstract class JavaLineBreakpointTypeBase<P extends JavaBreakpointPropert
 		return true;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	@Override
 	public final XBreakpointCustomPropertiesPanel<XLineBreakpoint<P>> createCustomRightPropertiesPanel(@Nonnull Project project)
 	{
 		return new JavaBreakpointFiltersPanel<P, XLineBreakpoint<P>>(project);
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	@Override
 	public final XDebuggerEditorsProvider getEditorsProvider(@Nonnull XLineBreakpoint<P> breakpoint, @Nonnull Project project)
 	{

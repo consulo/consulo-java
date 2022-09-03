@@ -18,11 +18,11 @@ package com.intellij.java.impl.refactoring.changeSignature.inCallers;
 import java.util.Set;
 
 import com.intellij.java.language.impl.JavaFileType;
-import com.intellij.openapi.project.Project;
+import consulo.project.Project;
 import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.refactoring.changeSignature.CallerChooserBase;
+import consulo.ide.impl.idea.refactoring.changeSignature.CallerChooserBase;
 import com.intellij.ui.treeStructure.Tree;
-import com.intellij.util.Consumer;
+import consulo.ide.impl.idea.util.Consumer;
 import java.util.HashSet;
 
 public class JavaCallerChooser extends CallerChooserBase<PsiMethod> {

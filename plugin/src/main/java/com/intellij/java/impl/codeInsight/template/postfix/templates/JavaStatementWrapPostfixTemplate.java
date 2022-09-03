@@ -16,11 +16,11 @@
 package com.intellij.java.impl.codeInsight.template.postfix.templates;
 
 
-import com.intellij.codeInsight.template.postfix.templates.PostfixTemplatePsiInfo;
-import com.intellij.codeInsight.template.postfix.templates.StatementWrapPostfixTemplate;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.util.Condition;
-import com.intellij.psi.PsiElement;
+import consulo.language.editor.postfixTemplate.PostfixTemplatePsiInfo;
+import consulo.language.editor.postfixTemplate.StatementWrapPostfixTemplate;
+import consulo.codeEditor.Editor;
+import consulo.util.lang.function.Condition;
+import consulo.language.psi.PsiElement;
 
 import javax.annotation.Nonnull;
 

@@ -15,20 +15,18 @@
  */
 package com.intellij.java.indexing.impl.search;
 
-import com.intellij.openapi.application.QueryExecutorBase;
-import com.intellij.openapi.extensions.Extensions;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.PsiElement;
 import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.psi.PsiReference;
-import com.intellij.psi.impl.search.CustomPropertyScopeProvider;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.search.SearchRequestCollector;
-import com.intellij.psi.search.SearchScope;
-import com.intellij.psi.search.UsageSearchContext;
-import com.intellij.psi.search.searches.ReferencesSearch;
 import com.intellij.java.language.psi.util.PropertyUtil;
-import com.intellij.util.Processor;
+import consulo.application.util.function.Processor;
+import consulo.content.scope.SearchScope;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiReference;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.search.ReferencesSearch;
+import consulo.language.psi.search.SearchRequestCollector;
+import consulo.language.psi.search.UsageSearchContext;
+import consulo.project.util.query.QueryExecutorBase;
+import consulo.util.lang.StringUtil;
 
 import javax.annotation.Nonnull;
 
@@ -53,7 +51,7 @@ public class SimpleAccessorReferenceSearcher extends QueryExecutorBase<PsiRefere
     final String propertyName = PropertyUtil.getPropertyName(method);
     if (StringUtil.isNotEmpty(propertyName)) {
       SearchScope additional = GlobalSearchScope.EMPTY_SCOPE;
-      for (CustomPropertyScopeProvider provider : Extensions.getExtensions(CustomPropertyScopeProvider.EP_NAME)) {
+      for (CustomPropertyScopeProvider provider : CustomPropertyScopeProvider.EP_NAME.getExtensionList()) {
         additional = additional.union(provider.getScope(method.getProject()));
       }
       assert propertyName != null;

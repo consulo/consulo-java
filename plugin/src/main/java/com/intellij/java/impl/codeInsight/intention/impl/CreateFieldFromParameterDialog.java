@@ -26,6 +26,7 @@ import java.awt.event.ItemListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
+import javax.annotation.Nullable;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -35,19 +36,19 @@ import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.event.DocumentEvent;
 
+import consulo.ui.ex.awt.ComboBox;
 import org.jetbrains.annotations.NonNls;
-import com.intellij.codeInsight.CodeInsightBundle;
-import com.intellij.ide.util.PropertiesComponent;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.ComboBox;
-import com.intellij.openapi.ui.DialogWrapper;
-import com.intellij.openapi.ui.Messages;
+import consulo.language.editor.CodeInsightBundle;
+import consulo.ide.impl.idea.ide.util.PropertiesComponent;
+import consulo.project.Project;
+import consulo.ui.ex.awt.DialogWrapper;
+import consulo.ui.ex.awt.Messages;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiNameHelper;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.impl.refactoring.ui.TypeSelector;
-import com.intellij.ui.DocumentAdapter;
+import consulo.ui.ex.awt.event.DocumentAdapter;
 
 public class CreateFieldFromParameterDialog extends DialogWrapper {
   private final Project myProject;
@@ -295,7 +296,7 @@ public class CreateFieldFromParameterDialog extends DialogWrapper {
     return myNameField;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public PsiType getType() {
     return myTypeSelector.getSelectedType();
   }

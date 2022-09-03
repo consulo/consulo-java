@@ -15,13 +15,13 @@
  */
 package com.intellij.java.impl.codeInsight.completion;
 
-import com.intellij.codeInsight.CharTailType;
-import com.intellij.codeInsight.TailType;
+import consulo.language.editor.completion.lookup.CharTailType;
+import consulo.language.editor.completion.lookup.TailType;
 import com.intellij.codeInsight.completion.*;
-import com.intellij.codeInsight.completion.util.ParenthesesInsertHandler;
-import com.intellij.codeInsight.lookup.LookupElement;
-import com.intellij.codeInsight.lookup.LookupElementPresentation;
-import com.intellij.codeInsight.lookup.TailTypeDecorator;
+import consulo.language.editor.completion.lookup.ParenthesesInsertHandler;
+import consulo.language.editor.completion.lookup.LookupElement;
+import consulo.language.editor.completion.lookup.LookupElementPresentation;
+import consulo.language.editor.completion.lookup.TailTypeDecorator;
 import com.intellij.java.impl.codeInsight.ExpectedTypeInfo;
 import com.intellij.java.impl.codeInsight.ExpectedTypesProvider;
 import com.intellij.java.impl.codeInsight.lookup.PsiTypeLookupItem;
@@ -29,17 +29,17 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
-import com.intellij.openapi.util.Pair;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.patterns.ElementPattern;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.Consumer;
-import com.intellij.util.ProcessingContext;
-import com.intellij.util.containers.ContainerUtil;
-import com.intellij.util.containers.JBIterable;
+import consulo.util.lang.Pair;
+import consulo.util.lang.StringUtil;
+import consulo.language.pattern.ElementPattern;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.ide.impl.idea.util.Consumer;
+import consulo.language.util.ProcessingContext;
+import consulo.util.collection.ContainerUtil;
+import consulo.util.collection.JBIterable;
 import consulo.annotation.access.RequiredReadAction;
-import consulo.codeInsight.completion.CompletionProvider;
+import consulo.language.editor.completion.CompletionProvider;
 import consulo.logging.Logger;
 
 import javax.annotation.Nonnull;
@@ -59,7 +59,7 @@ class TypeArgumentCompletionProvider implements CompletionProvider {
   @Nullable
   private final JavaCompletionSession mySession;
 
-  TypeArgumentCompletionProvider(boolean smart, @javax.annotation.Nullable JavaCompletionSession session) {
+  TypeArgumentCompletionProvider(boolean smart, @Nullable JavaCompletionSession session) {
     mySmart = smart;
     mySession = session;
   }
@@ -147,7 +147,7 @@ class TypeArgumentCompletionProvider implements CompletionProvider {
     return paramOwner instanceof PsiClass && ConstructorInsertHandler.hasConstructorParameters((PsiClass) paramOwner, context);
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private static PsiType getExpectedTypeArg(PsiElement context, PsiClassType.ClassResolveResult expectedType, PsiSubstitutor currentSubstitutor, PsiTypeParameter typeParam) {
     PsiClass expectedClass = expectedType.getElement();
     assert expectedClass != null;
@@ -180,7 +180,7 @@ class TypeArgumentCompletionProvider implements CompletionProvider {
     return last ? new CharTailType('>') : TailType.COMMA;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   static Pair<PsiTypeParameterListOwner, Integer> getTypeParameterInfo(PsiElement context) {
     final PsiReferenceParameterList parameterList = PsiTreeUtil.getContextOfType(context, PsiReferenceParameterList.class, true);
     if (parameterList == null) {

@@ -15,10 +15,10 @@
  */
 package com.intellij.java.compiler.cache;
 
-import com.intellij.util.containers.SLRUCache;
-import com.intellij.util.io.DataExternalizer;
-import com.intellij.util.io.KeyDescriptor;
-import com.intellij.util.io.PersistentHashMap;
+import consulo.util.collection.SLRUCache;
+import consulo.index.io.data.DataExternalizer;
+import consulo.index.io.KeyDescriptor;
+import consulo.index.io.PersistentHashMap;
 import consulo.disposer.Disposable;
 import consulo.logging.Logger;
 import consulo.util.collection.primitive.ints.IntSet;

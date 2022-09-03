@@ -15,10 +15,11 @@
  */
 package com.intellij.java.execution.impl.filters;
 
-import com.intellij.execution.filters.Filter;
 import com.intellij.java.execution.filters.ExceptionFilter;
 import com.intellij.java.execution.filters.ExceptionFilterFactory;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.execution.ui.console.Filter;
+import consulo.language.psi.scope.GlobalSearchScope;
 
 import javax.annotation.Nonnull;
 
@@ -28,6 +29,7 @@ import javax.annotation.Nonnull;
  * Date: 8/8/11
  * Time: 12:11 PM
  */
+@ExtensionImpl
 public class ExceptionBaseFilterFactory implements ExceptionFilterFactory {
   @Nonnull
   @Override

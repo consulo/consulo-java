@@ -37,7 +37,7 @@ public interface PsiForeachStatement extends PsiLoopStatement {
    *
    * @return the iterated value expression instance, or null if the statement is incomplete.
    */
-  @javax.annotation.Nullable
+  @Nullable
   PsiExpression getIteratedValue();
 
   /**

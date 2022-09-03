@@ -15,12 +15,12 @@
  */
 package com.intellij.java.impl.internal.psiView;
 
-import com.intellij.internal.psiView.PsiViewerExtension;
+import consulo.ide.impl.idea.internal.psiView.PsiViewerExtension;
 import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiElementFactory;
-import com.intellij.openapi.fileTypes.FileType;
-import com.intellij.openapi.project.Project;
+import consulo.virtualFileSystem.fileType.FileType;
+import consulo.project.Project;
 
 import javax.annotation.Nonnull;
 

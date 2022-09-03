@@ -22,16 +22,16 @@ import java.util.List;
 import javax.swing.JTree;
 
 import javax.annotation.Nonnull;
-import com.intellij.ide.projectView.PresentationData;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.ui.SimpleTextAttributes;
-import com.intellij.usageView.UsageViewBundle;
-import com.intellij.usages.ChunkExtractor;
+import consulo.ui.ex.tree.PresentationData;
+import consulo.project.Project;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.ui.ex.SimpleTextAttributes;
+import consulo.usage.Usage;
+import consulo.usage.UsageInfo2UsageAdapter;
+import consulo.usage.UsageViewBundle;
+import consulo.usage.internal.ChunkExtractor;
 import com.intellij.usages.TextChunk;
-import com.intellij.usages.Usage;
-import com.intellij.usages.UsageInfo2UsageAdapter;
 
 /**
  * @author cdr

@@ -5,8 +5,8 @@ import java.io.IOException;
 import javax.annotation.Nonnull;
 
 import com.intellij.JavaTestUtil;
-import com.intellij.openapi.fileTypes.MockLanguageFileType;
-import com.intellij.openapi.fileTypes.ex.FileTypeManagerEx;
+import consulo.ide.impl.idea.openapi.fileTypes.MockLanguageFileType;
+import consulo.ide.impl.idea.openapi.fileTypes.ex.FileTypeManagerEx;
 
 /**
  * @author Maxim.Mossienko
@@ -39,14 +39,14 @@ public abstract class CustomFileTypeCompletionTest extends LightCompletionTestCa
   }
 
   public void testPlainTextSubstitution() throws IOException {
-    FileTypeManagerEx.getInstanceEx().registerFileType(MockLanguageFileType.INSTANCE, "xxx");
+    FileTypeManagerEx.getInstanceEx().registerFileType(consulo.ide.impl.idea.openapi.fileTypes.MockLanguageFileType.INSTANCE, "xxx");
     try {
       configureFromFileText("a.xxx", "aaa a<caret>");
       complete();
       checkResultByText("aaa aaa<caret>");
     }
     finally {
-      FileTypeManagerEx.getInstanceEx().unregisterFileType(MockLanguageFileType.INSTANCE);
+      FileTypeManagerEx.getInstanceEx().unregisterFileType(consulo.ide.impl.idea.openapi.fileTypes.MockLanguageFileType.INSTANCE);
 
     }
   }

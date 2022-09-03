@@ -16,7 +16,7 @@
 package com.intellij.java.analysis.impl.find.findUsages;
 
 import com.intellij.java.analysis.impl.psi.impl.search.ThrowSearchUtil;
-import com.intellij.openapi.project.Project;
+import consulo.project.Project;
 
 import javax.annotation.Nonnull;
 

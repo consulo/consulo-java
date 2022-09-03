@@ -17,9 +17,9 @@ package com.intellij.java.impl.ig.classmetrics;
 
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.util.ui.CheckBox;
-import com.intellij.util.ui.GridBag;
-import com.intellij.util.ui.UIUtil;
+import consulo.ui.CheckBox;
+import consulo.ui.ex.awt.GridBag;
+import consulo.ui.ex.awt.UIUtil;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
 import javax.annotation.Nonnull;

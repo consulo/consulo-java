@@ -15,13 +15,13 @@
  */
 package com.intellij.java.impl.application.options;
 
-import com.intellij.application.options.CodeStyleAbstractPanel;
+import consulo.application.ApplicationBundle;
+import consulo.language.codeStyle.ui.setting.CodeStyleAbstractPanel;
 import com.intellij.java.language.impl.JavaFileType;
-import com.intellij.openapi.application.ApplicationBundle;
-import com.intellij.openapi.editor.colors.EditorColorsScheme;
-import com.intellij.openapi.editor.highlighter.EditorHighlighter;
-import com.intellij.openapi.fileTypes.FileType;
-import com.intellij.psi.codeStyle.CodeStyleSettings;
+import consulo.colorScheme.EditorColorsScheme;
+import consulo.codeEditor.EditorHighlighter;
+import consulo.virtualFileSystem.fileType.FileType;
+import consulo.language.codeStyle.CodeStyleSettings;
 
 import javax.annotation.Nonnull;
 import javax.swing.*;

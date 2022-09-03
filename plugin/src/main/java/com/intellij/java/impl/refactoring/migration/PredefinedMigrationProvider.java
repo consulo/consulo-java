@@ -18,7 +18,7 @@ package com.intellij.java.impl.refactoring.migration;
 import java.net.URL;
 
 import javax.annotation.Nonnull;
-import com.intellij.openapi.extensions.ExtensionPointName;
+import consulo.component.extension.ExtensionPointName;
 
 public interface PredefinedMigrationProvider
 {

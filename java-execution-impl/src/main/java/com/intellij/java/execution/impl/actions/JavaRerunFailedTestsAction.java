@@ -19,11 +19,11 @@ import javax.annotation.Nonnull;
 
 import com.intellij.execution.testframework.Filter;
 import com.intellij.java.execution.impl.testframework.JavaAwareFilter;
-import com.intellij.execution.testframework.TestConsoleProperties;
-import com.intellij.execution.testframework.actions.AbstractRerunFailedTestsAction;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.ComponentContainer;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.execution.test.TestConsoleProperties;
+import consulo.execution.test.action.AbstractRerunFailedTestsAction;
+import consulo.project.Project;
+import consulo.ui.ex.ComponentContainer;
+import consulo.language.psi.scope.GlobalSearchScope;
 
 /**
  * @author anna

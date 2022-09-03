@@ -16,8 +16,8 @@
 package com.intellij.java.language.jvm;
 
 import javax.annotation.Nullable;
-import com.intellij.pom.PomTarget;
-import com.intellij.psi.PsiElement;
+import consulo.language.pom.PomTarget;
+import consulo.language.psi.PsiElement;
 
 /**
  * Base interface for all JVM elements.
@@ -31,5 +31,5 @@ public interface JvmElement extends PomTarget
 	 * @return corresponsing source element or {@code null} if no source element is available
 	 */
 	@Nullable
-	PsiElement getSourceElement();
+  PsiElement getSourceElement();
 }

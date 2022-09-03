@@ -10,11 +10,11 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaVariable
 import com.intellij.java.language.impl.psi.impl.ConstantExpressionEvaluator;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.openapi.util.TextRange;
+import consulo.document.util.TextRange;
 import com.intellij.psi.*;
 import com.intellij.psi.util.*;
 import com.intellij.java.language.util.JavaPsiConstructorUtil;
-import com.intellij.util.ThreeState;
+import consulo.util.lang.ThreeState;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import one.util.streamex.StreamEx;
 import org.jetbrains.annotations.Contract;

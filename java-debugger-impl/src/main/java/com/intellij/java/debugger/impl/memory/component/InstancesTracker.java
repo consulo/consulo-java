@@ -18,9 +18,9 @@ package com.intellij.java.debugger.impl.memory.component;
 import com.intellij.java.debugger.impl.memory.event.InstancesTrackerListener;
 import com.intellij.java.debugger.impl.memory.tracking.TrackingType;
 import com.intellij.openapi.components.*;
-import com.intellij.openapi.project.Project;
-import com.intellij.util.EventDispatcher;
-import com.intellij.util.xmlb.annotations.AbstractCollection;
+import consulo.project.Project;
+import consulo.proxy.EventDispatcher;
+import consulo.util.xml.serializer.annotation.AbstractCollection;
 import consulo.disposer.Disposable;
 import jakarta.inject.Singleton;
 
@@ -52,7 +52,7 @@ public class InstancesTracker implements PersistentStateComponent<InstancesTrack
 		return myState.isBackgroundTrackingEnabled;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public TrackingType getTrackingType(@Nonnull String className)
 	{
 		return myState.classes.getOrDefault(className, null);

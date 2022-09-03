@@ -16,7 +16,7 @@
 package org.jetbrains.java.generate.inspection;
 
 import javax.annotation.Nonnull;
-import com.intellij.codeInspection.LocalInspectionTool;
+import consulo.language.editor.inspection.LocalInspectionTool;
 import consulo.logging.Logger;
 
 /**

@@ -19,9 +19,12 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.psi.*;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.language.psi.PsiDirectory;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.PsiManager;
+import consulo.util.lang.Comparing;
 
 public class ClassUtil
 {
@@ -96,7 +99,7 @@ public class ClassUtil
 		}
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	private static PsiClass getContainerClass(final PsiClass aClass)
 	{
 		PsiElement parent = aClass.getContext();
@@ -237,20 +240,20 @@ public class ClassUtil
 	 * @param externalName class qualified name
 	 * @return found psiClass
 	 */
-	@javax.annotation.Nullable
+	@Nullable
 	public static PsiClass findPsiClass(final PsiManager psiManager, String externalName)
 	{
 		return findPsiClass(psiManager, externalName, null, false);
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public static PsiClass findPsiClass(final PsiManager psiManager, String externalName, PsiClass psiClass, boolean jvmCompatible)
 	{
 		return findPsiClass(psiManager, externalName, psiClass, jvmCompatible, GlobalSearchScope.allScope(psiManager.getProject()));
 	}
 
-	@javax.annotation.Nullable
-	public static PsiClass findPsiClass(final PsiManager psiManager, String externalName, @javax.annotation.Nullable PsiClass psiClass, boolean jvmCompatible, final GlobalSearchScope scope)
+	@Nullable
+	public static PsiClass findPsiClass(final PsiManager psiManager, String externalName, @Nullable PsiClass psiClass, boolean jvmCompatible, final GlobalSearchScope scope)
 	{
 		final int topIdx = externalName.indexOf('$');
 		if(topIdx > -1)
@@ -309,7 +312,7 @@ public class ClassUtil
 	}
 
 
-	@javax.annotation.Nullable
+	@Nullable
 	public static PsiClass findPsiClassByJVMName(final PsiManager manager, final String jvmClassName)
 	{
 		return findPsiClass(manager, jvmClassName.replace('/', '.'), null, true);

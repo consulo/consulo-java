@@ -15,13 +15,13 @@
  */
 package com.intellij.java.impl.codeInspection.duplicateThrows;
 
-import com.intellij.codeInsight.daemon.GroupNames;
+import consulo.ide.impl.idea.codeInsight.daemon.GroupNames;
 import com.intellij.java.impl.codeInspection.DeleteThrowsFix;
-import com.intellij.codeInspection.InspectionsBundle;
-import com.intellij.codeInspection.ProblemHighlightType;
-import com.intellij.codeInspection.ProblemsHolder;
+import consulo.language.editor.inspection.InspectionsBundle;
+import consulo.language.editor.inspection.ProblemHighlightType;
+import consulo.language.editor.inspection.ProblemsHolder;
 import com.intellij.java.analysis.impl.codeInspection.ex.BaseLocalInspectionTool;
-import com.intellij.codeInspection.ui.SingleCheckboxOptionsPanel;
+import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
 import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
 import javax.annotation.Nonnull;

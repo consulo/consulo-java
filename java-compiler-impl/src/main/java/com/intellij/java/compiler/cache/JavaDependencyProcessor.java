@@ -21,18 +21,18 @@
  */
 package com.intellij.java.compiler.cache;
 
-import com.intellij.compiler.make.CacheCorruptedException;
-import com.intellij.compiler.make.CacheUtils;
+import consulo.compiler.CacheCorruptedException;
+import consulo.ide.impl.idea.compiler.make.CacheUtils;
 import com.intellij.java.compiler.classParsing.*;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.util.cls.ClsUtil;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Computable;
+import consulo.application.ApplicationManager;
+import consulo.project.Project;
+import consulo.application.util.function.Computable;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.psi.*;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.util.IncorrectOperationException;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.logging.Logger;
 import consulo.util.collection.primitive.ints.IntMaps;

@@ -19,7 +19,7 @@ import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiJavaPackage;
 import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 
 public class AuthorDocTagInfo extends SimpleDocTagInfo {
   public AuthorDocTagInfo() {

@@ -24,27 +24,28 @@ import java.util.Map;
 import java.util.Optional;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-import com.intellij.ide.IdeView;
-import com.intellij.ide.fileTemplates.FileTemplate;
-import com.intellij.ide.fileTemplates.FileTemplateManager;
-import com.intellij.ide.fileTemplates.actions.AttributesDefaults;
-import com.intellij.ide.fileTemplates.actions.CreateFromTemplateActionBase;
+import consulo.ide.IdeView;
+import consulo.fileTemplate.FileTemplate;
+import consulo.fileTemplate.FileTemplateManager;
+import consulo.fileTemplate.AttributesDefaults;
+import consulo.ide.action.CreateFromTemplateActionBase;
 import com.intellij.java.language.impl.JavaFileType;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.actionSystem.LangDataKeys;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleUtilCore;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.ProjectFileIndex;
-import com.intellij.openapi.roots.ProjectRootManager;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiDirectory;
-import com.intellij.psi.PsiFile;
+import consulo.ui.ex.action.AnActionEvent;
+import consulo.dataContext.DataContext;
+import consulo.language.editor.LangDataKeys;
+import consulo.module.Module;
+import consulo.language.util.ModuleUtilCore;
+import consulo.project.Project;
+import consulo.module.content.ProjectFileIndex;
+import consulo.module.content.ProjectRootManager;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.language.psi.PsiDirectory;
+import consulo.language.psi.PsiFile;
 import com.intellij.java.language.impl.psi.impl.light.LightJavaModule;
-import com.intellij.psi.search.FilenameIndex;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.language.psi.search.FilenameIndex;
+import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.java.impl.JavaBundle;
 import consulo.roots.ContentFolderScopes;
@@ -69,7 +70,7 @@ public class CreateModuleInfoAction extends CreateFromTemplateActionBase
 		e.getPresentation().setEnabledAndVisible(available);
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	@Override
 	protected PsiDirectory getTargetDirectory(DataContext ctx, IdeView view)
 	{

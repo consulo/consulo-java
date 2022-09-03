@@ -22,11 +22,11 @@ import java.util.Collections;
 import java.util.List;
 
 import consulo.java.impl.library.JavaSourceRootDetector;
-import com.intellij.openapi.roots.libraries.ui.OrderRoot;
-import com.intellij.openapi.roots.libraries.ui.impl.LibraryRootsDetectorImpl;
-import com.intellij.openapi.roots.libraries.ui.impl.RootDetectionUtil;
-import com.intellij.openapi.vfs.VfsUtil;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.content.library.OrderRoot;
+import consulo.content.library.ui.LibraryRootsDetectorImpl;
+import consulo.ide.impl.idea.openapi.roots.libraries.ui.impl.RootDetectionUtil;
+import consulo.ide.impl.idea.openapi.vfs.VfsUtil;
+import consulo.virtualFileSystem.VirtualFile;
 
 /**
  * This utility class contains utility methods for selecting paths.
@@ -53,6 +53,6 @@ public class PathUIUtils {
     for (OrderRoot root : orderRoots) {
       result.add(root.getFile());
     }
-    return VfsUtil.toVirtualFileArray(result);
+    return consulo.ide.impl.idea.openapi.vfs.VfsUtil.toVirtualFileArray(result);
   }
 }

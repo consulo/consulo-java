@@ -15,8 +15,10 @@
  */
 package com.intellij.java.impl.codeInsight.lookup;
 
-import com.intellij.openapi.util.ClassConditionKey;
+import consulo.language.editor.completion.ClassConditionKey;
 import com.intellij.java.language.psi.PsiType;
+
+import javax.annotation.Nullable;
 
 /**
  * @author peter
@@ -24,6 +26,6 @@ import com.intellij.java.language.psi.PsiType;
 public interface TypedLookupItem {
   ClassConditionKey<TypedLookupItem> CLASS_CONDITION_KEY = ClassConditionKey.create(TypedLookupItem.class);
 
-  @javax.annotation.Nullable
+  @Nullable
   PsiType getType();
 }

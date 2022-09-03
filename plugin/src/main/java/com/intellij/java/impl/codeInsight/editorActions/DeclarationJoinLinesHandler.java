@@ -15,16 +15,16 @@
  */
 package com.intellij.java.impl.codeInsight.editorActions;
 
-import com.intellij.codeInsight.editorActions.JoinLinesHandlerDelegate;
+import consulo.language.editor.action.JoinLinesHandlerDelegate;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.openapi.editor.Document;
+import consulo.document.Document;
 import com.intellij.psi.*;
-import com.intellij.psi.codeStyle.CodeStyleManager;
-import com.intellij.psi.search.LocalSearchScope;
-import com.intellij.psi.search.searches.ReferencesSearch;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.psi.scope.LocalSearchScope;
+import consulo.language.psi.search.ReferencesSearch;
+import consulo.language.ast.IElementType;
+import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 
 public class DeclarationJoinLinesHandler implements JoinLinesHandlerDelegate {

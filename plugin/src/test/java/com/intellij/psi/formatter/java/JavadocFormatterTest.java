@@ -17,7 +17,7 @@ package com.intellij.psi.formatter.java;
 
 
 import com.intellij.java.language.JavaLanguage;
-import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
+import consulo.language.codeStyle.CommonCodeStyleSettings;
 
 /**
  * @author Denis Zhdanov

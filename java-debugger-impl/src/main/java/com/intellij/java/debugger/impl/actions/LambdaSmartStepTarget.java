@@ -15,7 +15,7 @@
  */
 package com.intellij.java.debugger.impl.actions;
 
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiLambdaExpression;
 import com.intellij.util.Range;
 import consulo.platform.base.icon.PlatformIconGroup;

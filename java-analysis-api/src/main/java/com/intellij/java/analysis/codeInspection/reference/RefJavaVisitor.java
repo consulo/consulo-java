@@ -15,7 +15,7 @@
  */
 package com.intellij.java.analysis.codeInspection.reference;
 
-import com.intellij.codeInspection.reference.RefVisitor;
+import consulo.language.editor.inspection.reference.RefVisitor;
 
 import javax.annotation.Nonnull;
 

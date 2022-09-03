@@ -16,15 +16,15 @@
 package com.intellij.java.impl.refactoring.util.occurrences;
 
 import com.intellij.java.impl.codeInsight.CodeInsightUtil;
-import com.intellij.find.FindManager;
-import com.intellij.find.FindModel;
-import com.intellij.find.FindResult;
+import consulo.find.FindManager;
+import consulo.find.FindModel;
+import consulo.find.FindResult;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiLiteralExpression;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.util.lang.StringUtil;
 import com.intellij.psi.*;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.impl.refactoring.introduceVariable.IntroduceVariableBase;
 import com.intellij.java.impl.refactoring.util.RefactoringUtil;
 

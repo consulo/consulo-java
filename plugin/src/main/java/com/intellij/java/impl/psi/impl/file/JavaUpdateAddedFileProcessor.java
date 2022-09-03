@@ -18,11 +18,11 @@ package com.intellij.java.impl.psi.impl.file;
 import com.intellij.java.language.psi.JavaDirectoryService;
 import com.intellij.java.language.psi.PsiClassOwner;
 import com.intellij.java.language.psi.PsiJavaPackage;
-import com.intellij.psi.PsiDirectory;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.impl.file.UpdateAddedFileProcessor;
-import com.intellij.psi.templateLanguages.TemplateLanguageFileViewProvider;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.psi.PsiDirectory;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.UpdateAddedFileProcessor;
+import consulo.language.template.TemplateLanguageFileViewProvider;
+import consulo.language.util.IncorrectOperationException;
 
 /**
  * @author Maxim.Mossienko

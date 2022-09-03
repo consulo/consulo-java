@@ -20,20 +20,20 @@
  */
 package com.intellij.java.impl.packageDependencies.ui;
 
-import com.intellij.ide.IdeBundle;
+import consulo.ide.IdeBundle;
 import com.intellij.java.impl.ide.util.scopeChooser.GroupByScopeTypeAction;
 import com.intellij.java.impl.psi.search.scope.packageSet.PatternPackageSet;
 import com.intellij.java.language.psi.PsiClassOwner;
 import com.intellij.java.language.psi.PsiNameHelper;
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.ProjectRootManager;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.ui.ex.action.AnAction;
+import consulo.project.Project;
+import consulo.module.content.ProjectRootManager;
+import consulo.util.lang.StringUtil;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.packageDependencies.ui.*;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.search.scope.packageSet.PackageSet;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.content.scope.PackageSet;
 import consulo.logging.Logger;
 import consulo.platform.base.icon.PlatformIconGroup;
 import consulo.ui.image.Image;

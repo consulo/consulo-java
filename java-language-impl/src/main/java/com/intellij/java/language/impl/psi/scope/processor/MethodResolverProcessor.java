@@ -19,17 +19,17 @@ import javax.annotation.Nonnull;
 
 import com.intellij.java.language.psi.PsiCallExpression;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiExpressionList;
-import com.intellij.psi.PsiFile;
+import consulo.language.psi.PsiFile;
 import com.intellij.java.language.psi.PsiMethodCallExpression;
-import com.intellij.psi.ResolveState;
+import consulo.language.psi.resolve.ResolveState;
 import com.intellij.java.language.psi.infos.CandidateInfo;
 import com.intellij.java.language.psi.scope.JavaScopeProcessorEvent;
 import com.intellij.java.language.impl.psi.scope.PsiConflictResolver;
 import com.intellij.java.language.impl.psi.scope.conflictResolvers.JavaMethodsConflictResolver;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.util.SmartList;
+import consulo.util.collection.SmartList;
 
 public class MethodResolverProcessor extends MethodCandidatesProcessor
 {

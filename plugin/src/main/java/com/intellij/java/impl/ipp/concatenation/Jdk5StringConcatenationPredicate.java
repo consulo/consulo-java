@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ipp.concatenation;
 
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.util.PsiUtil;
 
 class Jdk5StringConcatenationPredicate extends SimpleStringConcatenationPredicate {

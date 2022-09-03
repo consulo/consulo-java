@@ -18,7 +18,7 @@ package com.intellij.codeInsight.completion;
 import javax.annotation.Nonnull;
 
 import com.intellij.JavaTestUtil;
-import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
+import consulo.language.codeStyle.CodeStyleSettingsManager;
 import org.jetbrains.annotations.NonNls;
 
 /**

@@ -26,9 +26,9 @@ package com.intellij.java.impl.refactoring.util.classMembers;
 
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMember;
-import com.intellij.refactoring.classMembers.DependencyMemberInfoModel;
-import com.intellij.refactoring.classMembers.MemberInfoBase;
-import com.intellij.refactoring.classMembers.MemberInfoTooltipManager;
+import consulo.language.editor.refactoring.classMember.DependencyMemberInfoModel;
+import consulo.language.editor.refactoring.classMember.MemberInfoBase;
+import consulo.language.editor.refactoring.classMember.MemberInfoTooltipManager;
 
 public class InterfaceDependencyMemberInfoModel<T extends PsiMember, M extends MemberInfoBase<T>> extends
 		DependencyMemberInfoModel<T, M>

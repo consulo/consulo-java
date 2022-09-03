@@ -2,14 +2,14 @@ package consulo.java.manifest.lang;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import com.intellij.lang.Language;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
+import consulo.language.Language;
+import consulo.project.Project;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
 import consulo.annotation.access.RequiredReadAction;
-import consulo.lang.LanguageVersion;
-import consulo.lang.LanguageVersionResolver;
+import consulo.language.version.LanguageVersion;
+import consulo.language.version.LanguageVersionResolver;
 
 /**
  * @author VISTALL

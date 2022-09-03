@@ -1,12 +1,12 @@
 package com.intellij.refactoring;
 
-import com.intellij.openapi.fileEditor.FileDocumentManager;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.document.FileDocumentManager;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.refactoring.rename.RenameProcessor;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.editor.refactoring.rename.RenameProcessor;
 import com.intellij.JavaTestUtil;
 import org.junit.Assert;
 

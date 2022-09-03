@@ -20,16 +20,20 @@
  */
 package com.intellij.java.analysis.codeInspection;
 
-import com.intellij.codeInsight.daemon.HighlightDisplayKey;
-import com.intellij.codeInspection.*;
-import com.intellij.codeInspection.reference.RefManager;
-import com.intellij.psi.PsiElement;
+import consulo.language.editor.inspection.CustomSuppressableInspectionTool;
+import consulo.language.editor.inspection.GlobalInspectionContext;
+import consulo.language.editor.inspection.GlobalInspectionTool;
+import consulo.language.editor.inspection.ProblemDescriptionsProcessor;
+import consulo.language.editor.inspection.reference.RefManager;
+import consulo.language.editor.inspection.scheme.InspectionManager;
+import consulo.language.editor.intention.SuppressIntentionAction;
+import consulo.language.editor.rawHighlight.HighlightDisplayKey;
+import consulo.language.psi.PsiElement;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public abstract class GlobalJavaInspectionTool extends GlobalInspectionTool implements CustomSuppressableInspectionTool
-{
+public abstract class GlobalJavaInspectionTool extends GlobalInspectionTool implements CustomSuppressableInspectionTool {
   @Override
   public boolean queryExternalUsagesRequests(final InspectionManager manager,
                                              final GlobalInspectionContext globalContext,
@@ -47,7 +51,7 @@ public abstract class GlobalJavaInspectionTool extends GlobalInspectionTool impl
     return SuppressManager.getInstance().createSuppressActions(HighlightDisplayKey.find(getShortName()));
   }
 
-  @Override
+  @Override                                                           
   public boolean isSuppressedFor(@Nonnull final PsiElement element) {
     return SuppressManager.getInstance().isSuppressedFor(element, getShortName());
   }

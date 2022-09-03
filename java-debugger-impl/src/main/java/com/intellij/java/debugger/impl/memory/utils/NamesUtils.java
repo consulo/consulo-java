@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.util.lang.StringUtil;
 import consulo.internal.com.sun.jdi.ArrayReference;
 import consulo.internal.com.sun.jdi.ObjectReference;
 

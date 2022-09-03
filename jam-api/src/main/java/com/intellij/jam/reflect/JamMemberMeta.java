@@ -18,20 +18,22 @@ package com.intellij.jam.reflect;
 import com.intellij.jam.JamClassGenerator;
 import com.intellij.jam.JamElement;
 import com.intellij.jam.JamService;
-import com.intellij.patterns.ElementPattern;
-import com.intellij.pom.PomTarget;
-import com.intellij.psi.PsiElementRef;
 import com.intellij.java.language.psi.PsiModifierListOwner;
-import com.intellij.semantic.SemElement;
-import com.intellij.semantic.SemKey;
-import com.intellij.semantic.SemRegistrar;
-import com.intellij.semantic.SemService;
-import com.intellij.util.*;
+import consulo.language.pattern.ElementPattern;
+import consulo.language.pom.PomTarget;
+import consulo.language.psi.PsiElementRef;
+import consulo.language.sem.SemElement;
+import consulo.language.sem.SemKey;
+import consulo.language.sem.SemRegistrar;
+import consulo.language.sem.SemService;
+import consulo.util.lang.function.PairConsumer;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * @author peter
@@ -39,7 +41,7 @@ import java.util.List;
 public class JamMemberMeta<Psi extends PsiModifierListOwner, Jam extends JamElement> extends JamMemberArchetype<Psi, Jam> implements SemElement {
   private final SemKey<Jam> myJamKey;
   private final SemKey<JamMemberMeta> myMetaKey;
-  private final NotNullFunction<PsiElementRef,? extends Jam> myCreator;
+  private final Function<PsiElementRef,? extends Jam> myCreator;
 
   private final List<JamAnnotationMeta> myRootAnnos = new ArrayList<JamAnnotationMeta>(1);
 
@@ -71,9 +73,14 @@ public class JamMemberMeta<Psi extends PsiModifierListOwner, Jam extends JamElem
   }
 
   public void register(SemRegistrar registrar, ElementPattern<? extends Psi> pattern) {
-    registrar.registerSemElementProvider(myMetaKey, pattern, new ConstantFunction<Psi, JamMemberMeta>(this));
-    registrar.registerSemElementProvider(myJamKey, pattern, new NullableFunction<Psi, Jam>() {
-      public Jam fun(Psi psi) {
+    registrar.registerSemElementProvider(myMetaKey, pattern, new Function<Psi, JamMemberMeta>() {
+      @Override
+      public JamMemberMeta apply(Psi o) {
+        return JamMemberMeta.this;
+      }
+    });
+    registrar.registerSemElementProvider(myJamKey, pattern, new Function<Psi, Jam>() {
+      public Jam apply(Psi psi) {
         return createJamElement(PsiElementRef.real(psi));
       }
     });
@@ -98,7 +105,7 @@ public class JamMemberMeta<Psi extends PsiModifierListOwner, Jam extends JamElem
 
   @Nullable
   public Jam createJamElement(PsiElementRef<Psi> ref) {
-    return myCreator.fun(ref);
+    return myCreator.apply(ref);
   }
 
   public JamMemberMeta<Psi, Jam> addAnnotation(JamAnnotationMeta meta) {

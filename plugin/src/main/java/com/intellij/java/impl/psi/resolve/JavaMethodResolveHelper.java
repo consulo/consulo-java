@@ -21,15 +21,15 @@ import com.intellij.psi.*;
 import com.intellij.java.language.psi.infos.CandidateInfo;
 import com.intellij.java.language.psi.infos.MethodCandidateInfo;
 import com.intellij.java.language.impl.psi.scope.PsiConflictResolver;
-import com.intellij.psi.scope.PsiScopeProcessor;
+import consulo.language.psi.resolve.PsiScopeProcessor;
 import com.intellij.java.language.impl.psi.scope.conflictResolvers.DuplicateConflictResolver;
 import com.intellij.java.language.impl.psi.scope.conflictResolvers.JavaMethodsConflictResolver;
 import com.intellij.java.language.impl.psi.scope.processor.MethodCandidatesProcessor;
 import com.intellij.java.language.impl.psi.scope.processor.MethodResolverProcessor;
 import com.intellij.java.language.psi.util.MethodSignature;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.util.Function;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.ide.impl.idea.util.Function;
+import consulo.util.collection.ContainerUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

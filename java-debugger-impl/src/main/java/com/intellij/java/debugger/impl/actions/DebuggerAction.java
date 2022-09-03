@@ -38,19 +38,19 @@ import com.intellij.java.debugger.impl.DebuggerStateManager;
 import com.intellij.java.debugger.impl.ui.impl.DebuggerTreePanel;
 import com.intellij.java.debugger.impl.ui.impl.watch.DebuggerTree;
 import com.intellij.java.debugger.impl.ui.impl.watch.DebuggerTreeNodeImpl;
-import com.intellij.ide.DataManager;
-import com.intellij.openapi.actionSystem.ActionManager;
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.CommonDataKeys;
-import com.intellij.openapi.actionSystem.CommonShortcuts;
-import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.project.Project;
-import com.intellij.ui.DoubleClickListener;
-import com.intellij.xdebugger.XDebugProcess;
-import com.intellij.xdebugger.XDebugSession;
-import com.intellij.xdebugger.impl.frame.XDebugView;
-import com.intellij.xdebugger.impl.ui.tree.nodes.XValueNodeImpl;
+import consulo.dataContext.DataManager;
+import consulo.execution.debug.XDebugProcess;
+import consulo.ui.ex.action.ActionManager;
+import consulo.ui.ex.action.AnAction;
+import consulo.ui.ex.action.AnActionEvent;
+import consulo.language.editor.CommonDataKeys;
+import consulo.ui.ex.action.CommonShortcuts;
+import consulo.dataContext.DataContext;
+import consulo.project.Project;
+import consulo.ui.ex.awt.event.DoubleClickListener;
+import consulo.execution.debug.XDebugSession;
+import consulo.ide.impl.idea.xdebugger.impl.frame.XDebugView;
+import consulo.ide.impl.idea.xdebugger.impl.ui.tree.nodes.XValueNodeImpl;
 import consulo.disposer.Disposable;
 
 public abstract class DebuggerAction extends AnAction
@@ -63,13 +63,13 @@ public abstract class DebuggerAction extends AnAction
 		return dataContext.getData(DebuggerTree.DATA_KEY);
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public static DebuggerTreePanel getPanel(DataContext dataContext)
 	{
 		return dataContext.getData(DebuggerTreePanel.DATA_KEY);
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public static DebuggerTreeNodeImpl getSelectedNode(DataContext dataContext)
 	{
 		DebuggerTree tree = getTree(dataContext);
@@ -205,9 +205,9 @@ public abstract class DebuggerAction extends AnAction
 		});
 	}
 
-	public static void refreshViews(@Nonnull XValueNodeImpl node)
+	public static void refreshViews(@Nonnull consulo.ide.impl.idea.xdebugger.impl.ui.tree.nodes.XValueNodeImpl node)
 	{
-		refreshViews(XDebugView.getSession(node.getTree()));
+		refreshViews(consulo.ide.impl.idea.xdebugger.impl.frame.XDebugView.getSession(node.getTree()));
 	}
 
 	public static void refreshViews(@Nullable XDebugSession session)

@@ -17,11 +17,11 @@ package com.intellij.java.debugger.impl.settings;
 
 import jakarta.inject.Singleton;
 
-import com.intellij.openapi.components.PersistentStateComponent;
-import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.components.State;
-import com.intellij.openapi.components.Storage;
-import com.intellij.util.xmlb.XmlSerializerUtil;
+import consulo.component.persist.PersistentStateComponent;
+import consulo.ide.ServiceManager;
+import consulo.component.persist.State;
+import consulo.component.persist.Storage;
+import consulo.util.xml.serializer.XmlSerializerUtil;
 
 @Singleton
 @State(name = "ThreadsViewSettings", storages = @Storage("debugger.threadsview.xml"))

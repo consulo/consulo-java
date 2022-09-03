@@ -1,6 +1,6 @@
 package com.intellij.java.analysis.impl.find.findUsages;
 
-import com.intellij.openapi.project.Project;
+import consulo.project.Project;
 
 import javax.annotation.Nonnull;
 

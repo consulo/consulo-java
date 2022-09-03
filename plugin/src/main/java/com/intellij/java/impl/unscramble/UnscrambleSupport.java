@@ -15,9 +15,10 @@
  */
 package com.intellij.java.impl.unscramble;
 
+import consulo.component.extension.ExtensionPointName;
+import consulo.project.Project;
+
 import javax.annotation.Nullable;
-import com.intellij.openapi.extensions.ExtensionPointName;
-import com.intellij.openapi.project.Project;
 
 public interface UnscrambleSupport {
   ExtensionPointName<UnscrambleSupport> EP_NAME = ExtensionPointName.create("consulo.java.unscrambleSupport");

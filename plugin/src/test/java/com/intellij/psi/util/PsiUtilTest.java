@@ -6,7 +6,7 @@ import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiElementFactory;
 import com.intellij.java.language.psi.PsiTypeParameter;
 import com.intellij.testFramework.LightCodeInsightTestCase;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
 
 import java.util.ArrayList;
 import java.util.Arrays;

@@ -15,8 +15,8 @@
  */
 package com.intellij.java.language.impl.codeInsight.generation;
 
-import com.intellij.codeInsight.generation.ClassMember;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.editor.generation.ClassMember;
+import consulo.language.util.IncorrectOperationException;
 
 import javax.annotation.Nullable;
 

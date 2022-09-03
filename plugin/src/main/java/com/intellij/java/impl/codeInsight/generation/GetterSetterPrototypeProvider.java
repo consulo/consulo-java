@@ -15,8 +15,8 @@
  */
 package com.intellij.java.impl.codeInsight.generation;
 
-import com.intellij.openapi.extensions.ExtensionPointName;
-import com.intellij.openapi.extensions.Extensions;
+import consulo.component.extension.ExtensionPointName;
+import consulo.component.extension.Extensions;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiMethod;

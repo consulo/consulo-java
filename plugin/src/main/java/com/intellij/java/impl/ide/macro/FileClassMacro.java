@@ -15,13 +15,13 @@
  */
 package com.intellij.java.impl.ide.macro;
 
-import com.intellij.ide.IdeBundle;
-import com.intellij.ide.macro.Macro;
+import consulo.ide.IdeBundle;
+import consulo.pathMacro.Macro;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiJavaFile;
-import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.actionSystem.LangDataKeys;
-import com.intellij.psi.PsiFile;
+import consulo.dataContext.DataContext;
+import consulo.language.editor.LangDataKeys;
+import consulo.language.psi.PsiFile;
 
 public final class FileClassMacro extends Macro {
   public String getName() {

@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.abstraction;
 
-import com.intellij.codeInspection.ui.SingleCheckboxOptionsPanel;
+import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
 import com.intellij.java.language.psi.PsiCatchSection;
 import com.intellij.java.language.psi.PsiParameter;
 import com.intellij.java.language.psi.PsiTypeElement;

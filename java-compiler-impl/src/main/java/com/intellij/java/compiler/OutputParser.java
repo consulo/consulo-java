@@ -16,8 +16,8 @@
 package com.intellij.java.compiler;
 
 import com.intellij.java.compiler.impl.javaCompiler.FileObject;
-import com.intellij.openapi.compiler.CompilerMessageCategory;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.compiler.CompilerMessageCategory;
+import consulo.util.lang.StringUtil;
 import org.jetbrains.annotations.NonNls;
 
 import java.util.ArrayList;

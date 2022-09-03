@@ -15,8 +15,8 @@
  */
 package com.intellij.java.language.psi;
 
-import com.intellij.psi.PsiCodeFragment;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiCodeFragment;
 
 /**
  * Represents a fragment of Java code which exists outside of a project structure (for example,

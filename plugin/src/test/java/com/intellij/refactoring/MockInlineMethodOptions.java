@@ -15,7 +15,7 @@
  */
 package com.intellij.refactoring;
 
-import com.intellij.refactoring.inline.InlineOptions;
+import consulo.ide.impl.idea.refactoring.inline.InlineOptions;
 
 /**
  * @author dyoma

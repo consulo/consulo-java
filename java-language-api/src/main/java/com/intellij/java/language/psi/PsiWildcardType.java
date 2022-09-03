@@ -15,9 +15,9 @@
  */
 package com.intellij.java.language.psi;
 
-import com.intellij.openapi.util.Comparing;
-import com.intellij.psi.PsiManager;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.util.lang.Comparing;
+import consulo.language.psi.PsiManager;
+import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.logging.Logger;
 import consulo.util.dataholder.Key;
@@ -179,7 +179,7 @@ public class PsiWildcardType extends PsiType.Stub {
    *
    * @return {@code null} if unbounded, a bound otherwise.
    */
-  @javax.annotation.Nullable
+  @Nullable
   public PsiType getBound() {
     return myBound;
   }

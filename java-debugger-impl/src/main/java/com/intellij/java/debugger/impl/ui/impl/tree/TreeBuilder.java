@@ -15,7 +15,7 @@
  */
 package com.intellij.java.debugger.impl.ui.impl.tree;
 
-import com.intellij.util.EventDispatcher;
+import consulo.proxy.EventDispatcher;
 
 import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;

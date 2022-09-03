@@ -18,10 +18,10 @@ package com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis;
 import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
-import com.intellij.psi.util.PsiFormatUtilBase;
+import consulo.ide.impl.psi.util.PsiFormatUtilBase;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import com.intellij.java.language.util.JavaPsiConstructorUtil;
-import com.intellij.util.ObjectUtils;
+import consulo.ide.impl.idea.util.ObjectUtils;
 import consulo.java.language.module.util.JavaClassNames;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
@@ -90,7 +90,7 @@ public class JavaHighlightUtil
 	}
 
 	@Nonnull
-	public static String formatType(@javax.annotation.Nullable PsiType type)
+	public static String formatType(@Nullable PsiType type)
 	{
 		if(type == null)
 		{

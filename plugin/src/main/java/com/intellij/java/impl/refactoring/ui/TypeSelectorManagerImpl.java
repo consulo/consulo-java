@@ -18,20 +18,21 @@ package com.intellij.java.impl.refactoring.ui;
 import com.intellij.java.impl.codeInsight.ExpectedTypeInfo;
 import com.intellij.java.impl.codeInsight.ExpectedTypeUtil;
 import com.intellij.java.impl.codeInsight.ExpectedTypesProvider;
-import com.intellij.codeInsight.TailType;
+import consulo.language.editor.completion.lookup.TailType;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.project.Project;
+import consulo.project.Project;
 import com.intellij.psi.*;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.statistics.StatisticsInfo;
-import com.intellij.psi.statistics.StatisticsManager;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.ide.impl.psi.statistics.StatisticsInfo;
+import consulo.ide.impl.psi.statistics.StatisticsManager;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import com.intellij.java.impl.refactoring.util.RefactoringHierarchyUtil;
-import com.intellij.util.ArrayUtil;
+import consulo.util.collection.ArrayUtil;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.*;
 
 /**
@@ -364,10 +365,10 @@ public class TypeSelectorManagerImpl implements TypeSelectorManager
 			map.put(serialize(type), type);
 		}
 
-		for(StatisticsInfo info : StatisticsManager.getInstance().getAllValues(getStatsKey()))
+		for(StatisticsInfo info : consulo.ide.impl.psi.statistics.StatisticsManager.getInstance().getAllValues(getStatsKey()))
 		{
 			final PsiType candidate = map.get(info.getValue());
-			if(candidate != null && StatisticsManager.getInstance().getUseCount(info) > 0)
+			if(candidate != null && consulo.ide.impl.psi.statistics.StatisticsManager.getInstance().getUseCount(info) > 0)
 			{
 				myTypeSelector.selectType(candidate);
 				return;
@@ -403,13 +404,13 @@ public class TypeSelectorManagerImpl implements TypeSelectorManager
 		typeSelected(type, getDefaultType());
 	}
 
-	public static void typeSelected(@Nonnull final PsiType type, @javax.annotation.Nullable final PsiType defaultType)
+	public static void typeSelected(@Nonnull final PsiType type, @Nullable final PsiType defaultType)
 	{
 		if(defaultType == null)
 		{
 			return;
 		}
-		StatisticsManager.getInstance().incUseCount(new StatisticsInfo(getStatsKey(defaultType), serialize(type)));
+		consulo.ide.impl.psi.statistics.StatisticsManager.getInstance().incUseCount(new StatisticsInfo(getStatsKey(defaultType), serialize(type)));
 	}
 
 	private String getStatsKey()

@@ -15,17 +15,17 @@
  */
 package com.intellij.java.impl.slicer;
 
-import com.intellij.analysis.AnalysisScope;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.progress.ProgressIndicator;
-import com.intellij.openapi.progress.ProgressManager;
-import com.intellij.openapi.util.Computable;
-import com.intellij.psi.PsiElement;
+import consulo.language.editor.scope.AnalysisScope;
+import consulo.application.ApplicationManager;
+import consulo.application.progress.ProgressIndicator;
+import consulo.application.progress.ProgressManager;
+import consulo.application.util.function.Computable;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiSubstitutor;
-import com.intellij.usageView.UsageInfo;
-import com.intellij.usages.UsageInfo2UsageAdapter;
-import com.intellij.util.CommonProcessors;
-import com.intellij.util.Processor;
+import consulo.usage.UsageInfo;
+import consulo.usage.UsageInfo2UsageAdapter;
+import consulo.application.util.function.CommonProcessors;
+import consulo.application.util.function.Processor;
 import consulo.util.collection.HashingStrategy;
 
 import javax.annotation.Nonnull;

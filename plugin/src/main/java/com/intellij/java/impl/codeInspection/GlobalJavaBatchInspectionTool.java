@@ -20,14 +20,14 @@
  */
 package com.intellij.java.impl.codeInspection;
 
-import com.intellij.codeInsight.daemon.HighlightDisplayKey;
-import com.intellij.codeInspection.*;
-import com.intellij.codeInspection.reference.RefManager;
+import consulo.language.editor.rawHighlight.HighlightDisplayKey;
+import consulo.language.editor.inspection.reference.RefManager;
 import com.intellij.java.analysis.codeInspection.BatchSuppressManager;
 import com.intellij.java.analysis.codeInspection.GlobalJavaInspectionContext;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public abstract class GlobalJavaBatchInspectionTool extends GlobalInspectionTool implements BatchSuppressableTool {
   @Override
@@ -43,7 +43,7 @@ public abstract class GlobalJavaBatchInspectionTool extends GlobalInspectionTool
 
   @Nonnull
   @Override
-  public SuppressQuickFix[] getBatchSuppressActions(@javax.annotation.Nullable PsiElement element) {
+  public SuppressQuickFix[] getBatchSuppressActions(@Nullable PsiElement element) {
     return BatchSuppressManager.SERVICE.getInstance().createBatchSuppressActions(HighlightDisplayKey.find(getShortName()));
   }
 

@@ -17,12 +17,12 @@ package com.intellij.java.impl.refactoring.memberPullUp;
 
 import java.util.LinkedHashSet;
 
-import com.intellij.lang.LanguageExtension;
-import com.intellij.psi.PsiElement;
+import consulo.language.extension.LanguageExtension;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiMember;
 import com.intellij.java.language.psi.PsiSubstitutor;
-import com.intellij.refactoring.classMembers.MemberInfoBase;
+import consulo.language.editor.refactoring.classMember.MemberInfoBase;
 
 /**
  * Created by Max Medvedev on 10/4/13

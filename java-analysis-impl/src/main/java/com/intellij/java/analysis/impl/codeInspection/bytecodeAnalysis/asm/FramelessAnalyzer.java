@@ -1,7 +1,8 @@
 // Copyright 2000-2018 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.analysis.impl.codeInspection.bytecodeAnalysis.asm;
 
-import com.intellij.util.containers.ContainerUtil;
+import consulo.internal.org.objectweb.asm.tree.analysis.Analyzer;
+import consulo.util.collection.ContainerUtil;
 import consulo.internal.org.objectweb.asm.tree.*;
 import consulo.internal.org.objectweb.asm.tree.analysis.AnalyzerException;
 
@@ -9,7 +10,7 @@ import javax.annotation.Nullable;
 import java.util.*;
 
 /**
- * Specialized version of {@link consulo.internal.org.objectweb.asm.tree.analysis.Analyzer}.
+ * Specialized version of {@link Analyzer}.
  * Calculation of fix-point of frames is removed, since frames are not needed to build control flow graph.
  * So, the main point here is handling of subroutines (jsr) and try-catch-finally blocks.
  */

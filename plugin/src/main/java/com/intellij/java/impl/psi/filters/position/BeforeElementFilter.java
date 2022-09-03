@@ -15,9 +15,9 @@
  */
 package com.intellij.java.impl.psi.filters.position;
 
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.filters.ElementFilter;
-import com.intellij.psi.filters.position.PositionElementFilter;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.filter.ElementFilter;
+import consulo.language.psi.filter.position.PositionElementFilter;
 
 /**
  * Created by IntelliJ IDEA.

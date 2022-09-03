@@ -17,7 +17,7 @@ package com.intellij.java.impl.refactoring.util.classMembers;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.MethodSignatureUtil;
-import com.intellij.refactoring.classMembers.AbstractMemberInfoStorage;
+import consulo.language.editor.refactoring.classMember.AbstractMemberInfoStorage;
 
 import java.util.ArrayList;
 

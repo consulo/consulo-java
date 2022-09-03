@@ -10,7 +10,7 @@ import javax.annotation.Nonnull;
 
 import static com.intellij.java.language.psi.CommonClassNames.JAVA_LANG_CLASS;
 import static com.intellij.java.language.psi.CommonClassNames.JAVA_LANG_OBJECT;
-import static com.intellij.util.ObjectUtils.tryCast;
+import static consulo.ide.impl.idea.util.ObjectUtils.tryCast;
 
 /**
  * Inline class.isInstance(obj) and class.isAssignableFrom(obj.getClass())

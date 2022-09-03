@@ -15,8 +15,8 @@
  */
 package com.intellij.java.impl.slicer;
 
-import com.intellij.codeInsight.CodeInsightActionHandler;
-import com.intellij.codeInsight.actions.CodeInsightAction;
+import consulo.language.editor.action.CodeInsightActionHandler;
+import consulo.language.editor.action.CodeInsightAction;
 import javax.annotation.Nonnull;
 
 /**

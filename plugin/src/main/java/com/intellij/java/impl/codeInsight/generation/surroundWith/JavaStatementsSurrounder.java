@@ -20,12 +20,12 @@ import javax.annotation.Nonnull;
 
 import com.intellij.psi.*;
 
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.editor.Editor;
+import consulo.project.Project;
+import consulo.codeEditor.Editor;
 
-import com.intellij.openapi.util.TextRange;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.lang.surroundWith.Surrounder;
+import consulo.document.util.TextRange;
+import consulo.language.util.IncorrectOperationException;
+import consulo.language.editor.surroundWith.Surrounder;
 
 import javax.annotation.Nullable;
 
@@ -44,6 +44,6 @@ abstract class JavaStatementsSurrounder implements Surrounder {
     return surroundStatements (project, editor, container, elements);
   }
 
- @javax.annotation.Nullable
+ @Nullable
  protected abstract TextRange surroundStatements(final Project project, final Editor editor, final PsiElement container, final PsiElement[] statements) throws IncorrectOperationException;
 }

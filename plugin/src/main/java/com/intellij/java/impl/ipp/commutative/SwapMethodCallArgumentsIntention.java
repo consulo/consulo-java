@@ -22,8 +22,8 @@ import com.intellij.java.impl.ipp.base.MutablyNamedIntention;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.siyeh.IntentionPowerPackBundle;
 import com.intellij.psi.*;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.util.lang.StringUtil;
 import org.jetbrains.annotations.NonNls;
 
 public class SwapMethodCallArgumentsIntention extends MutablyNamedIntention {

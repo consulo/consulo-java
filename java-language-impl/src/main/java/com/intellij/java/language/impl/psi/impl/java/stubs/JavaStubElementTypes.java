@@ -19,8 +19,8 @@ import com.intellij.java.language.impl.psi.impl.source.JavaFileElementType;
 import com.intellij.java.language.impl.psi.impl.source.tree.java.*;
 import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.java.language.psi.PsiKeyword;
-import com.intellij.lang.ASTNode;
-import com.intellij.psi.tree.IStubFileElementType;
+import consulo.language.ast.ASTNode;
+import consulo.language.psi.stub.IStubFileElementType;
 
 import javax.annotation.Nonnull;
 

@@ -17,11 +17,11 @@
 package com.intellij.java.impl.ipp.psiutils;
 
 import com.intellij.java.language.psi.JavaRecursiveElementWalkingVisitor;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.SelectionModel;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.openapi.util.UnfairTextRange;
+import consulo.codeEditor.Editor;
+import consulo.codeEditor.SelectionModel;
+import consulo.project.Project;
+import consulo.document.util.TextRange;
+import consulo.document.util.UnfairTextRange;
 import com.intellij.psi.*;
 import javax.annotation.Nonnull;
 

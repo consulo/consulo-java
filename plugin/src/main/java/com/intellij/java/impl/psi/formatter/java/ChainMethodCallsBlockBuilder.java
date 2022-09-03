@@ -22,15 +22,15 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.formatting.Alignment;
-import com.intellij.formatting.Block;
-import com.intellij.formatting.FormattingMode;
-import com.intellij.formatting.Indent;
-import com.intellij.formatting.Wrap;
-import com.intellij.lang.ASTNode;
+import consulo.language.codeStyle.Alignment;
+import consulo.language.codeStyle.Block;
+import consulo.language.codeStyle.FormattingMode;
+import consulo.language.codeStyle.Indent;
+import consulo.language.codeStyle.Wrap;
+import consulo.language.ast.ASTNode;
 import com.intellij.java.language.psi.JavaTokenType;
-import com.intellij.psi.PsiComment;
-import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
+import consulo.language.psi.PsiComment;
+import consulo.language.codeStyle.CommonCodeStyleSettings;
 import com.intellij.java.impl.psi.codeStyle.JavaCodeStyleSettings;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
 

@@ -19,6 +19,7 @@ import java.util.Collections;
 import java.util.Iterator;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.engine.evaluation.EvaluateException;
@@ -29,11 +30,11 @@ import com.intellij.java.debugger.impl.jdi.ThreadGroupReferenceProxyImpl;
 import com.intellij.java.debugger.impl.jdi.ThreadReferenceProxyImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.MethodsTracker;
 import com.intellij.java.debugger.impl.ui.impl.watch.StackFrameDescriptorImpl;
-import com.intellij.icons.AllIcons;
+import consulo.application.AllIcons;
+import consulo.execution.debug.frame.XExecutionStack;
+import consulo.execution.debug.frame.XStackFrame;
+import consulo.execution.debug.setting.XDebuggerSettingsManager;
 import consulo.logging.Logger;
-import com.intellij.xdebugger.frame.XExecutionStack;
-import com.intellij.xdebugger.frame.XStackFrame;
-import com.intellij.xdebugger.settings.XDebuggerSettingsManager;
 import consulo.internal.com.sun.jdi.Location;
 import consulo.internal.com.sun.jdi.ThreadReference;
 import consulo.ui.image.Image;
@@ -121,7 +122,7 @@ public class JavaExecutionStack extends XExecutionStack
 		return new JavaStackFrame(descriptor, true);
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	@Override
 	public XStackFrame getTopFrame()
 	{

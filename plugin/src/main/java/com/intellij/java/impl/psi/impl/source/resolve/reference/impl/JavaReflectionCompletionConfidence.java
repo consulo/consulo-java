@@ -17,10 +17,10 @@ package com.intellij.java.impl.psi.impl.source.resolve.reference.impl;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.codeInsight.completion.CompletionConfidence;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.util.ThreeState;
+import consulo.language.editor.completion.CompletionConfidence;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.util.lang.ThreeState;
 
 /**
  * @author Konstantin Bulenkov

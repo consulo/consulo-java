@@ -20,7 +20,7 @@ import com.intellij.java.language.psi.PsiJavaToken;
 import com.intellij.java.language.psi.PsiResourceList;
 import com.intellij.java.language.psi.PsiTryStatement;
 import com.intellij.psi.*;
-import com.intellij.psi.tree.IElementType;
+import consulo.language.ast.IElementType;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 
 class AutomaticResourceManagementPredicate

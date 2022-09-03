@@ -22,7 +22,7 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaTypeValu
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaValue;
 import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
-import com.intellij.util.ObjectUtils;
+import consulo.ide.impl.idea.util.ObjectUtils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

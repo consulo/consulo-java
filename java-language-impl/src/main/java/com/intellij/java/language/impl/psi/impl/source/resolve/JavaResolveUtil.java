@@ -29,17 +29,16 @@ import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PsiTypesUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.*;
-import com.intellij.psi.impl.source.DummyHolder;
-import com.intellij.psi.impl.source.DummyHolderFactory;
-import com.intellij.psi.impl.source.resolve.FileContextUtil;
-import com.intellij.psi.impl.source.resolve.ResolveCache;
-import com.intellij.psi.impl.source.tree.FileElement;
-import com.intellij.psi.impl.source.tree.TreeElement;
-import com.intellij.psi.scope.PsiScopeProcessor;
 import consulo.java.language.module.util.JavaClassNames;
-import consulo.psi.PsiPackage;
+import consulo.language.impl.ast.FileElement;
+import consulo.language.impl.ast.TreeElement;
+import consulo.language.impl.psi.DummyHolder;
+import consulo.language.impl.psi.DummyHolderFactory;
+import consulo.language.psi.*;
+import consulo.language.psi.resolve.PsiScopeProcessor;
+import consulo.language.psi.resolve.ResolveCache;
+import consulo.language.psi.resolve.ResolveState;
+import consulo.project.Project;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -74,11 +73,11 @@ public class JavaResolveUtil {
   }
 
   public static boolean isAccessible(@Nonnull PsiMember member,
-                                     @javax.annotation.Nullable PsiClass memberClass,
+                                     @Nullable PsiClass memberClass,
                                      @Nullable PsiModifierList modifierList,
                                      @Nonnull PsiElement place,
-                                     @javax.annotation.Nullable PsiClass accessObjectClass,
-                                     @javax.annotation.Nullable PsiElement fileResolveScope,
+                                     @Nullable PsiClass accessObjectClass,
+                                     @Nullable PsiElement fileResolveScope,
                                      @Nullable PsiFile placeFile) {
     if (modifierList == null || isInJavaDoc(place)) {
       return true;

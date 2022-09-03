@@ -15,20 +15,20 @@
  */
 package com.intellij.java.language.impl.psi.impl.source.tree.java;
 
-import javax.annotation.Nonnull;
-
-import com.intellij.java.language.psi.*;
-import com.intellij.lang.ASTNode;
-import consulo.logging.Logger;
-import com.intellij.psi.*;
 import com.intellij.java.language.impl.psi.impl.source.Constants;
 import com.intellij.java.language.impl.psi.impl.source.tree.ChildRole;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.tree.ChildRoleBase;
-import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.ast.ASTNode;
+import consulo.language.ast.ChildRoleBase;
+import consulo.language.ast.IElementType;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiElementVisitor;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.logging.Logger;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class PsiSuperExpressionImpl extends ExpressionPsiElement implements PsiSuperExpression, Constants {
@@ -40,7 +40,7 @@ public class PsiSuperExpressionImpl extends ExpressionPsiElement implements PsiS
 
   @Override
   public PsiJavaCodeReferenceElement getQualifier() {
-    return (PsiJavaCodeReferenceElement)findChildByRoleAsPsiElement(ChildRole.QUALIFIER);
+    return (PsiJavaCodeReferenceElement) findChildByRoleAsPsiElement(ChildRole.QUALIFIER);
   }
 
   @Override
@@ -49,20 +49,19 @@ public class PsiSuperExpressionImpl extends ExpressionPsiElement implements PsiS
     if (qualifier != null) {
       final PsiElement aClass = qualifier.resolve();
       if (!(aClass instanceof PsiClass)) return null;
-      return getSuperType((PsiClass)aClass, PsiUtil.isLanguageLevel8OrHigher(this));
+      return getSuperType((PsiClass) aClass, PsiUtil.isLanguageLevel8OrHigher(this));
     }
 
     for (PsiElement scope = getContext(); scope != null; scope = scope.getContext()) {
       if (scope instanceof PsiClass) {
-        final PsiClass aClass = (PsiClass)scope;
+        final PsiClass aClass = (PsiClass) scope;
         return getSuperType(aClass, false);
       }
       if (scope instanceof PsiExpressionList && scope.getParent() instanceof PsiAnonymousClass) {
         //noinspection AssignmentToForLoopParameter
         scope = scope.getParent();
-      }
-      else if (scope instanceof JavaCodeFragment) {
-        PsiType fragmentSuperType = ((JavaCodeFragment)scope).getSuperType();
+      } else if (scope instanceof JavaCodeFragment) {
+        PsiType fragmentSuperType = ((JavaCodeFragment) scope).getSuperType();
         if (fragmentSuperType != null) return fragmentSuperType;
       }
     }
@@ -79,11 +78,9 @@ public class PsiSuperExpressionImpl extends ExpressionPsiElement implements PsiS
       final PsiClassType[] superTypes;
       if (containingClass.isInterface()) {
         superTypes = containingClass.getExtendsListTypes();
-      }
-      else if (containingClass instanceof PsiAnonymousClass) {
-        superTypes = new PsiClassType[]{((PsiAnonymousClass)containingClass).getBaseClassType()};
-      }
-      else {
+      } else if (containingClass instanceof PsiAnonymousClass) {
+        superTypes = new PsiClassType[]{((PsiAnonymousClass) containingClass).getBaseClassType()};
+      } else {
         superTypes = containingClass.getImplementsListTypes();
       }
 
@@ -98,7 +95,7 @@ public class PsiSuperExpressionImpl extends ExpressionPsiElement implements PsiS
     }
 
     if (aClass instanceof PsiAnonymousClass) {
-      final PsiClassType baseClassType = ((PsiAnonymousClass)aClass).getBaseClassType();
+      final PsiClassType baseClassType = ((PsiAnonymousClass) aClass).getBaseClassType();
       final PsiClass psiClass = baseClassType.resolve();
       return psiClass != null && !psiClass.isInterface() ? baseClassType : PsiType.getJavaLangObject(getManager(), getResolveScope());
     }
@@ -131,14 +128,11 @@ public class PsiSuperExpressionImpl extends ExpressionPsiElement implements PsiS
     IElementType i = child.getElementType();
     if (i == JAVA_CODE_REFERENCE) {
       return ChildRole.QUALIFIER;
-    }
-    else if (i == DOT) {
+    } else if (i == DOT) {
       return ChildRole.DOT;
-    }
-    else if (i == SUPER_KEYWORD) {
+    } else if (i == SUPER_KEYWORD) {
       return ChildRole.SUPER_KEYWORD;
-    }
-    else {
+    } else {
       return ChildRoleBase.NONE;
     }
   }
@@ -146,9 +140,8 @@ public class PsiSuperExpressionImpl extends ExpressionPsiElement implements PsiS
   @Override
   public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
-      ((JavaElementVisitor)visitor).visitSuperExpression(this);
-    }
-    else {
+      ((JavaElementVisitor) visitor).visitSuperExpression(this);
+    } else {
       visitor.visitElement(this);
     }
   }

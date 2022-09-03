@@ -24,13 +24,13 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JToggleButton;
 
-import com.intellij.codeInsight.CodeInsightSettings;
-import com.intellij.codeInsight.daemon.DaemonCodeAnalyzer;
-import com.intellij.codeInsight.daemon.DaemonCodeAnalyzerSettings;
-import com.intellij.openapi.application.ApplicationBundle;
-import com.intellij.openapi.options.Configurable;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.project.ProjectManager;
+import consulo.application.ApplicationBundle;
+import consulo.language.editor.CodeInsightSettings;
+import consulo.language.editor.DaemonCodeAnalyzer;
+import consulo.language.editor.DaemonCodeAnalyzerSettings;
+import consulo.configurable.Configurable;
+import consulo.project.Project;
+import consulo.project.ProjectManager;
 import consulo.ui.annotation.RequiredUIAccess;
 
 

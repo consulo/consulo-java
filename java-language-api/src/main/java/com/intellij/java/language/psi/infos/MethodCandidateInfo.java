@@ -16,20 +16,20 @@
 package com.intellij.java.language.psi.infos;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.project.Project;
 import com.intellij.java.language.projectRoots.JavaSdkVersion;
 import com.intellij.java.language.projectRoots.JavaVersionService;
-import com.intellij.openapi.util.Computable;
-import com.intellij.openapi.util.RecursionGuard;
-import com.intellij.openapi.util.RecursionManager;
+import consulo.application.util.RecursionManager;
+import consulo.application.util.function.Computable;
+import consulo.application.util.RecursionGuard;
 import com.intellij.java.language.LanguageLevel;
-import com.intellij.psi.*;
 import com.intellij.java.language.psi.impl.source.resolve.DefaultParameterTypeInferencePolicy;
 import com.intellij.java.language.psi.impl.source.resolve.ParameterTypeInferencePolicy;
-import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.util.ThreeState;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.util.collection.ContainerUtil;
+import consulo.util.lang.ThreeState;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.project.Project;
 import org.intellij.lang.annotations.MagicConstant;
 
 import javax.annotation.Nonnull;
@@ -521,7 +521,7 @@ public class MethodCandidateInfo extends CandidateInfo
 		}
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public PsiType[] getArgumentTypes()
 	{
 		return myArgumentTypes;

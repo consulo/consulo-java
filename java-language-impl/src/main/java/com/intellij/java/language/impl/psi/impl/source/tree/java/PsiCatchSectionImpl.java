@@ -15,29 +15,34 @@
  */
 package com.intellij.java.language.impl.psi.impl.source.tree.java;
 
-import com.intellij.java.language.impl.codeInsight.ExceptionUtil;
-import com.intellij.java.language.psi.*;
-import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.lang.ASTNode;
-import consulo.logging.Logger;
 import com.intellij.java.language.LanguageLevel;
-import com.intellij.psi.*;
+import com.intellij.java.language.impl.codeInsight.ExceptionUtil;
 import com.intellij.java.language.impl.psi.impl.source.Constants;
 import com.intellij.java.language.impl.psi.impl.source.tree.ChildRole;
-import com.intellij.psi.impl.source.tree.CompositePsiElement;
-import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.java.language.impl.psi.scope.util.PsiScopesUtil;
-import com.intellij.psi.tree.ChildRoleBase;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.util.*;
-import com.intellij.util.NullableFunction;
-import com.intellij.util.containers.ContainerUtil;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.application.util.CachedValue;
+import consulo.application.util.CachedValueProvider;
+import consulo.application.util.CachedValuesManager;
+import consulo.language.ast.ASTNode;
+import consulo.language.ast.ChildRoleBase;
+import consulo.language.ast.IElementType;
+import consulo.language.impl.psi.CompositePsiElement;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiElementVisitor;
+import consulo.language.psi.PsiModificationTracker;
+import consulo.language.psi.resolve.PsiScopeProcessor;
+import consulo.language.psi.resolve.ResolveState;
+import consulo.logging.Logger;
+import consulo.util.collection.ContainerUtil;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Function;
 
 /**
  * @author ven
@@ -54,12 +59,12 @@ public class PsiCatchSectionImpl extends CompositePsiElement implements PsiCatch
 
   @Override
   public PsiParameter getParameter() {
-    return (PsiParameter)findChildByRoleAsPsiElement(ChildRole.PARAMETER);
+    return (PsiParameter) findChildByRoleAsPsiElement(ChildRole.PARAMETER);
   }
 
   @Override
   public PsiCodeBlock getCatchBlock() {
-    return (PsiCodeBlock)findChildByRoleAsPsiElement(ChildRole.CATCH_BLOCK);
+    return (PsiCodeBlock) findChildByRoleAsPsiElement(ChildRole.CATCH_BLOCK);
   }
 
   @Override
@@ -91,11 +96,12 @@ public class PsiCatchSectionImpl extends CompositePsiElement implements PsiCatch
       if (myTypesCache == null) {
         final CachedValuesManager cacheManager = CachedValuesManager.getManager(getProject());
         myTypesCache = cacheManager.createCachedValue(new CachedValueProvider<List<PsiType>>() {
-            @Override public Result<List<PsiType>> compute() {
-              final List<PsiType> types = computePreciseCatchTypes(getParameter());
-              return Result.create(types, PsiModificationTracker.MODIFICATION_COUNT);
-            }
-          }, false);
+          @Override
+          public Result<List<PsiType>> compute() {
+            final List<PsiType> types = computePreciseCatchTypes(getParameter());
+            return Result.create(types, PsiModificationTracker.MODIFICATION_COUNT);
+          }
+        }, false);
       }
       return myTypesCache;
     }
@@ -103,7 +109,7 @@ public class PsiCatchSectionImpl extends CompositePsiElement implements PsiCatch
 
   private List<PsiType> computePreciseCatchTypes(@Nullable final PsiParameter parameter) {
     if (parameter == null) {
-      return ContainerUtil.emptyList();
+      return List.of();
     }
 
     PsiType declaredType = parameter.getType();
@@ -118,9 +124,9 @@ public class PsiCatchSectionImpl extends CompositePsiElement implements PsiCatch
       // ... and for all exception parameters Ei declared by any catch clauses Ci, 1 <= i < j,
       //     declared to the left of Cj for the same try statement, T is not assignable to Ei ...
       final PsiParameter[] parameters = statement.getCatchBlockParameters();
-      List<PsiType> uncaughtTypes = ContainerUtil.mapNotNull(thrownTypes, new NullableFunction<PsiClassType, PsiType>() {
+      List<PsiType> uncaughtTypes = ContainerUtil.mapNotNull(thrownTypes, new Function<PsiClassType, PsiType>() {
         @Override
-        public PsiType fun(final PsiClassType thrownType) {
+        public PsiType apply(final PsiClassType thrownType) {
           for (int i = 0; i < parameters.length && parameters[i] != parameter; i++) {
             final PsiType catchType = parameters[i].getType();
             if (catchType.isAssignableFrom(thrownType)) return null;
@@ -177,27 +183,26 @@ public class PsiCatchSectionImpl extends CompositePsiElement implements PsiCatch
   @Override
   @Nonnull
   public PsiTryStatement getTryStatement() {
-    return (PsiTryStatement)getParent();
+    return (PsiTryStatement) getParent();
   }
 
   @Override
-  @javax.annotation.Nullable
+  @Nullable
   public PsiJavaToken getLParenth() {
-    return (PsiJavaToken)findChildByRole(ChildRole.CATCH_BLOCK_PARAMETER_LPARENTH);
+    return (PsiJavaToken) findChildByRole(ChildRole.CATCH_BLOCK_PARAMETER_LPARENTH);
   }
 
   @Override
   @Nullable
   public PsiJavaToken getRParenth() {
-    return (PsiJavaToken)findChildByRole(ChildRole.CATCH_BLOCK_PARAMETER_RPARENTH);
+    return (PsiJavaToken) findChildByRole(ChildRole.CATCH_BLOCK_PARAMETER_RPARENTH);
   }
 
   @Override
   public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
-      ((JavaElementVisitor)visitor).visitCatchSection(this);
-    }
-    else {
+      ((JavaElementVisitor) visitor).visitCatchSection(this);
+    } else {
       visitor.visitElement(this);
     }
   }
@@ -208,7 +213,7 @@ public class PsiCatchSectionImpl extends CompositePsiElement implements PsiCatch
 
   @Override
   public ASTNode findChildByRole(int role) {
-    switch(role) {
+    switch (role) {
       default:
         return null;
 

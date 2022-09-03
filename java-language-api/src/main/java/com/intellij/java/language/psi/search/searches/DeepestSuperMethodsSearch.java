@@ -16,20 +16,20 @@
 package com.intellij.java.language.psi.search.searches;
 
 import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.psi.search.searches.ExtensibleQueryFactory;
-import com.intellij.util.Query;
+import consulo.application.util.query.Query;
+import consulo.application.util.query.ExtensibleQueryFactory;
 
 /**
  * @author max
  */
 public class DeepestSuperMethodsSearch extends ExtensibleQueryFactory<PsiMethod, PsiMethod> {
-  public static final DeepestSuperMethodsSearch DEEPEST_SUPER_METHODS_SEARCH_INSTANCE = new DeepestSuperMethodsSearch();
+  public static final DeepestSuperMethodsSearch INSTANCE = new DeepestSuperMethodsSearch();
 
   private DeepestSuperMethodsSearch() {
-    super("consulo.java");
+    super(DeepestSuperMethodsSearchExecutor.class);
   }
 
   public static Query<PsiMethod> search(PsiMethod method) {
-    return DEEPEST_SUPER_METHODS_SEARCH_INSTANCE.createQuery(method);
+    return INSTANCE.createQuery(method);
   }
 }

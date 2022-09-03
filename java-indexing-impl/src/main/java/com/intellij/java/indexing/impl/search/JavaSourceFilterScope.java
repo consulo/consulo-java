@@ -15,82 +15,72 @@
  */
 package com.intellij.java.indexing.impl.search;
 
+import com.intellij.java.language.impl.JavaClassFileType;
+import consulo.language.psi.scope.DelegatingGlobalSearchScope;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.module.content.ProjectFileIndex;
+import consulo.module.content.ProjectRootManager;
+import consulo.project.Project;
+import consulo.project.content.scope.ProjectAwareSearchScope;
+import consulo.util.lang.Comparing;
+import consulo.virtualFileSystem.VirtualFile;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
-import com.intellij.java.language.impl.JavaClassFileType;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.ProjectFileIndex;
-import com.intellij.openapi.roots.ProjectRootManager;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.search.DelegatingGlobalSearchScope;
-import com.intellij.psi.search.GlobalSearchScope;
 
 /**
  * @author max
  */
-public class JavaSourceFilterScope extends DelegatingGlobalSearchScope
-{
-	@Nullable
-	private final ProjectFileIndex myIndex;
-	private final boolean myIncludeVersions;
+public class JavaSourceFilterScope extends DelegatingGlobalSearchScope {
+  @Nullable
+  private final ProjectFileIndex myIndex;
+  private final boolean myIncludeVersions;
 
-	public JavaSourceFilterScope(@Nonnull GlobalSearchScope delegate)
-	{
-		this(delegate, false);
-	}
+  public JavaSourceFilterScope(@Nonnull ProjectAwareSearchScope delegate) {
+    this((GlobalSearchScope) delegate, false);
+  }
 
-	/**
-	 * By default, the scope excludes version-specific classes of multi-release .jar files
-	 * (i.e. *.class files located under META-INF/versions/ directory).
-	 * Setting {@code includeVersions} parameter to {@code true} allows such files to pass the filter.
-	 */
-	public JavaSourceFilterScope(@Nonnull GlobalSearchScope delegate, boolean includeVersions)
-	{
-		super(delegate);
-		Project project = getProject();
-		myIndex = project == null ? null : ProjectRootManager.getInstance(project).getFileIndex();
-		myIncludeVersions = includeVersions;
-	}
+  /**
+   * By default, the scope excludes version-specific classes of multi-release .jar files
+   * (i.e. *.class files located under META-INF/versions/ directory).
+   * Setting {@code includeVersions} parameter to {@code true} allows such files to pass the filter.
+   */
+  public JavaSourceFilterScope(@Nonnull GlobalSearchScope delegate, boolean includeVersions) {
+    super(delegate);
+    Project project = getProject();
+    myIndex = project == null ? null : ProjectRootManager.getInstance(project).getFileIndex();
+    myIncludeVersions = includeVersions;
+  }
 
-	@Override
-	public boolean contains(@Nonnull VirtualFile file)
-	{
-		if(!super.contains(file))
-		{
-			return false;
-		}
+  @Override
+  public boolean contains(@Nonnull VirtualFile file) {
+    if (!super.contains(file)) {
+      return false;
+    }
 
-		if(myIndex == null)
-		{
-			return false;
-		}
+    if (myIndex == null) {
+      return false;
+    }
 
-		if(file.getFileType() == JavaClassFileType.INSTANCE)
-		{
-			return myIndex.isInLibraryClasses(file) && (myIncludeVersions || !isVersioned(file, myIndex));
-		}
+    if (file.getFileType() == JavaClassFileType.INSTANCE) {
+      return myIndex.isInLibraryClasses(file) && (myIncludeVersions || !isVersioned(file, myIndex));
+    }
 
-		return myIndex.isInSourceContent(file) ||
-				myBaseScope.isForceSearchingInLibrarySources() && myIndex.isInLibrarySource(file);
-	}
+    return myIndex.isInSourceContent(file) ||
+        myBaseScope.isForceSearchingInLibrarySources() && myIndex.isInLibrarySource(file);
+  }
 
-	private static boolean isVersioned(VirtualFile file, ProjectFileIndex index)
-	{
-		VirtualFile root = index.getClassRootForFile(file);
-		while((file = file.getParent()) != null && !file.equals(root))
-		{
-			if(Comparing.equal(file.getNameSequence(), "versions"))
-			{
-				VirtualFile parent = file.getParent();
-				if(parent != null && Comparing.equal(parent.getNameSequence(), "META-INF"))
-				{
-					return true;
-				}
-			}
-		}
+  private static boolean isVersioned(VirtualFile file, ProjectFileIndex index) {
+    VirtualFile root = index.getClassRootForFile(file);
+    while ((file = file.getParent()) != null && !file.equals(root)) {
+      if (Comparing.equal(file.getNameSequence(), "versions")) {
+        VirtualFile parent = file.getParent();
+        if (parent != null && Comparing.equal(parent.getNameSequence(), "META-INF")) {
+          return true;
+        }
+      }
+    }
 
-		return false;
-	}
+    return false;
+  }
 }

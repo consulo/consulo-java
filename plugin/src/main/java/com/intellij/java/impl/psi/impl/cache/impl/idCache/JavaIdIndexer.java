@@ -16,10 +16,10 @@
 package com.intellij.java.impl.psi.impl.cache.impl.idCache;
 
 import com.intellij.java.language.impl.lexer.JavaLexer;
-import com.intellij.lexer.Lexer;
+import consulo.language.lexer.Lexer;
 import com.intellij.java.language.LanguageLevel;
-import com.intellij.psi.impl.cache.impl.OccurrenceConsumer;
-import com.intellij.psi.impl.cache.impl.id.LexerBasedIdIndexer;
+import consulo.language.psi.stub.OccurrenceConsumer;
+import consulo.language.psi.stub.LexerBasedIdIndexer;
 
 public class JavaIdIndexer extends LexerBasedIdIndexer
 {

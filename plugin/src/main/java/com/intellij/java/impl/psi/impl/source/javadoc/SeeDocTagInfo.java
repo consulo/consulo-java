@@ -17,8 +17,8 @@ package com.intellij.java.impl.psi.impl.source.javadoc;
 
 import org.jetbrains.annotations.NonNls;
 import com.intellij.java.language.LanguageLevel;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiReference;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiReference;
 import com.intellij.java.language.psi.javadoc.JavadocTagInfo;
 import com.intellij.java.language.psi.javadoc.PsiDocTagValue;
 import com.intellij.java.language.psi.util.PsiUtil;

@@ -18,13 +18,13 @@ package com.intellij.java.debugger.impl.actions;
 import com.intellij.java.debugger.SourcePosition;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.fileEditor.FileDocumentManager;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.document.Document;
+import consulo.document.FileDocumentManager;
+import consulo.document.util.TextRange;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.util.Range;
-import com.intellij.util.text.CharArrayUtil;
+import consulo.util.lang.CharArrayUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

@@ -17,9 +17,9 @@ package com.intellij.java.impl.util.xml;
 
 import com.intellij.java.impl.psi.impl.source.resolve.reference.impl.providers.JavaClassReferenceProvider;
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiReference;
-import com.intellij.util.containers.BidirectionalMap;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiReference;
+import consulo.util.collection.BidirectionalMap;
 import com.intellij.util.xml.ConvertContext;
 import com.intellij.util.xml.CustomReferenceConverter;
 import com.intellij.util.xml.GenericDomValue;
@@ -62,7 +62,7 @@ public class JvmPsiTypeConverterImpl extends JvmPsiTypeConverter implements Cust
     return convertFromString(s, context);
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public static PsiType convertFromString(final String s, final ConvertContext context) {
     if (s == null) return null;
 
@@ -127,7 +127,7 @@ public class JvmPsiTypeConverterImpl extends JvmPsiTypeConverter implements Cust
     return null;
   }
 
-  @NonNls @javax.annotation.Nullable
+  @NonNls @Nullable
   private static String toStringArray(final PsiType psiType) {
     if (psiType instanceof PsiArrayType) {
       return '[' + toStringArray(((PsiArrayType)psiType).getComponentType());

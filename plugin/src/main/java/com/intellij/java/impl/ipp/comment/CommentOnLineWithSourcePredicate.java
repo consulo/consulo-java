@@ -17,10 +17,10 @@ package com.intellij.java.impl.ipp.comment;
 
 import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.psi.*;
-import com.intellij.psi.impl.source.tree.injected.InjectedLanguageUtil;
+import consulo.language.inject.impl.internal.InjectedLanguageUtil;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.ast.IElementType;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 
 class CommentOnLineWithSourcePredicate implements PsiElementPredicate {

@@ -16,12 +16,12 @@
 
 package com.intellij.java.impl.psi.impl.source.resolve.reference.impl.manipulators;
 
-import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.AbstractElementManipulator;
+import consulo.document.util.TextRange;
+import consulo.language.psi.AbstractElementManipulator;
 import com.intellij.java.language.psi.JavaPsiFacade;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.javadoc.PsiDocTag;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
 
 /**
  * @author Gregory.Shrago

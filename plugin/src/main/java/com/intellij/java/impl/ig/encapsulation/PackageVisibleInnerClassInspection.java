@@ -15,9 +15,9 @@
  */
 package com.intellij.java.impl.ig.encapsulation;
 
-import com.intellij.codeInspection.ui.MultipleCheckboxOptionsPanel;
+import consulo.ide.impl.idea.codeInspection.ui.MultipleCheckboxOptionsPanel;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiModifier;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
@@ -27,6 +27,7 @@ import com.intellij.java.impl.ig.fixes.MoveClassFix;
 import com.siyeh.ig.psiutils.ClassUtils;
 import javax.annotation.Nonnull;
 
+import javax.annotation.Nullable;
 import javax.swing.*;
 
 public class PackageVisibleInnerClassInspection extends BaseInspection {
@@ -52,7 +53,7 @@ public class PackageVisibleInnerClassInspection extends BaseInspection {
   }
 
   @Override
-  @javax.annotation.Nullable
+  @Nullable
   public JComponent createOptionsPanel() {
     final MultipleCheckboxOptionsPanel panel = new MultipleCheckboxOptionsPanel(this);
     panel.addCheckbox(InspectionGadgetsBundle.message("package.visible.inner.class.ignore.enum.option"), "ignoreEnums");

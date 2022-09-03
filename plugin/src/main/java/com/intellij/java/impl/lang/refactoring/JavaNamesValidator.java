@@ -16,8 +16,8 @@
 package com.intellij.java.impl.lang.refactoring;
 
 import com.intellij.java.language.psi.PsiNameHelper;
-import com.intellij.lang.refactoring.NamesValidator;
-import com.intellij.openapi.project.Project;
+import consulo.language.editor.refactoring.NamesValidator;
+import consulo.project.Project;
 
 /**
  * Default NamesValidator interface implementation. Uses java language keyword set and java language rules for identifier.

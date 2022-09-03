@@ -3,110 +3,99 @@ package com.intellij.java.language.impl.psi.impl.light;
 
 import com.intellij.java.language.codeInsight.AnnotationTargetUtil;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.project.DumbService;
-import com.intellij.psi.*;
-import com.intellij.psi.search.LocalSearchScope;
-import com.intellij.psi.search.SearchScope;
-import com.intellij.psi.util.CachedValueProvider;
-import com.intellij.psi.util.CachedValuesManager;
-import com.intellij.util.IncorrectOperationException;
-import javax.annotation.Nonnull;
+import consulo.application.util.CachedValueProvider;
+import consulo.content.scope.SearchScope;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiManager;
+import consulo.language.psi.scope.LocalSearchScope;
+import consulo.language.psi.util.LanguageCachedValueUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.DumbService;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.Objects;
 
-public class LightRecordField extends LightField implements LightRecordMember
-{
-	private final
-	@Nonnull
+public class LightRecordField extends LightField implements LightRecordMember {
+  private final
+  @Nonnull
   PsiRecordComponent myRecordComponent;
 
-	public LightRecordField(@Nonnull PsiManager manager,
-							@Nonnull PsiField field,
-							@Nonnull PsiClass containingClass,
-							@Nonnull PsiRecordComponent component)
-	{
-		super(manager, field, containingClass);
-		myRecordComponent = component;
-	}
+  public LightRecordField(@Nonnull PsiManager manager,
+                          @Nonnull PsiField field,
+                          @Nonnull PsiClass containingClass,
+                          @Nonnull PsiRecordComponent component) {
+    super(manager, field, containingClass);
+    myRecordComponent = component;
+  }
 
-	@Override
-	@Nonnull
-	public PsiRecordComponent getRecordComponent()
-	{
-		return myRecordComponent;
-	}
+  @Override
+  @Nonnull
+  public PsiRecordComponent getRecordComponent() {
+    return myRecordComponent;
+  }
 
-	@Override
-	public int getTextOffset()
-	{
-		return myRecordComponent.getTextOffset();
-	}
+  @Override
+  public int getTextOffset() {
+    return myRecordComponent.getTextOffset();
+  }
 
-	@Nonnull
-	@Override
-	public PsiElement getNavigationElement()
-	{
-		return myRecordComponent.getNavigationElement();
-	}
+  @Nonnull
+  @Override
+  public PsiElement getNavigationElement() {
+    return myRecordComponent.getNavigationElement();
+  }
 
-	@Override
-	public boolean isWritable()
-	{
-		return true;
-	}
+  @Override
+  public boolean isWritable() {
+    return true;
+  }
 
-	@Override
-	public PsiFile getContainingFile()
-	{
-		PsiClass containingClass = getContainingClass();
-		if(containingClass == null)
-		{
-			return null;
-		}
-		return containingClass.getContainingFile();
-	}
+  @Override
+  public PsiFile getContainingFile() {
+    PsiClass containingClass = getContainingClass();
+    if (containingClass == null) {
+      return null;
+    }
+    return containingClass.getContainingFile();
+  }
 
-	@Override
-	public
-	@Nonnull
-  PsiType getType()
-	{
-		if(DumbService.isDumb(myRecordComponent.getProject()))
-		{
-			return myRecordComponent.getType();
-		}
-		return CachedValuesManager.getCachedValue(this, () -> {
-			PsiType type = myRecordComponent.getType()
-					.annotate(() -> Arrays.stream(myRecordComponent.getAnnotations())
-							.filter(LightRecordField::hasApplicableAnnotationTarget)
-							.toArray(PsiAnnotation[]::new)
-					);
-			return CachedValueProvider.Result.create(type, this);
-		});
-	}
+  @Override
+  public
+  @Nonnull
+  PsiType getType() {
+    if (DumbService.isDumb(myRecordComponent.getProject())) {
+      return myRecordComponent.getType();
+    }
+    return LanguageCachedValueUtil.getCachedValue(this, () -> {
+      PsiType type = myRecordComponent.getType()
+          .annotate(() -> Arrays.stream(myRecordComponent.getAnnotations())
+              .filter(LightRecordField::hasApplicableAnnotationTarget)
+              .toArray(PsiAnnotation[]::new)
+          );
+      return CachedValueProvider.Result.create(type, this);
+    });
+  }
 
-	@Override
-	@Nonnull
-	public PsiAnnotation[] getAnnotations()
-	{
-		return getType().getAnnotations();
-	}
+  @Override
+  @Nonnull
+  public PsiAnnotation[] getAnnotations() {
+    return getType().getAnnotations();
+  }
 
-	@Override
-	public boolean hasAnnotation(@Nonnull String fqn)
-	{
-		PsiType type = getType();
-		return type.hasAnnotation(fqn);
-	}
+  @Override
+  public boolean hasAnnotation(@Nonnull String fqn) {
+    PsiType type = getType();
+    return type.hasAnnotation(fqn);
+  }
 
-	@Override
-	@Nullable
-	public PsiAnnotation getAnnotation(@Nonnull String fqn)
-	{
-		return getType().findAnnotation(fqn);
-	}
+  @Override
+  @Nullable
+  public PsiAnnotation getAnnotation(@Nonnull String fqn) {
+    return getType().findAnnotation(fqn);
+  }
 
 //	@Override
 //	public Icon getElementIcon(final int flags)
@@ -120,53 +109,45 @@ public class LightRecordField extends LightField implements LightRecordMember
 //		return baseIcon;
 //	}
 
-	@Override
-	public PsiElement getContext()
-	{
-		return getContainingClass();
-	}
+  @Override
+  public PsiElement getContext() {
+    return getContainingClass();
+  }
 
-	@Override
-	public
-	@Nonnull
-	SearchScope getUseScope()
-	{
-		PsiClass aClass = Objects.requireNonNull(getContainingClass());
-		PsiClass containingClass = aClass.getContainingClass();
-		while(containingClass != null)
-		{
-			aClass = containingClass;
-			containingClass = containingClass.getContainingClass();
-		}
-		return new LocalSearchScope(aClass);
-	}
+  @Override
+  public
+  @Nonnull
+  SearchScope getUseScope() {
+    PsiClass aClass = Objects.requireNonNull(getContainingClass());
+    PsiClass containingClass = aClass.getContainingClass();
+    while (containingClass != null) {
+      aClass = containingClass;
+      containingClass = containingClass.getContainingClass();
+    }
+    return new LocalSearchScope(aClass);
+  }
 
-	private static boolean hasApplicableAnnotationTarget(PsiAnnotation annotation)
-	{
-		return AnnotationTargetUtil.findAnnotationTarget(annotation, PsiAnnotation.TargetType.TYPE_USE, PsiAnnotation.TargetType.FIELD) != null;
-	}
+  private static boolean hasApplicableAnnotationTarget(PsiAnnotation annotation) {
+    return AnnotationTargetUtil.findAnnotationTarget(annotation, PsiAnnotation.TargetType.TYPE_USE, PsiAnnotation.TargetType.FIELD) != null;
+  }
 
-	@Override
-	public void normalizeDeclaration() throws IncorrectOperationException
-	{
-		// no-op
-	}
+  @Override
+  public void normalizeDeclaration() throws IncorrectOperationException {
+    // no-op
+  }
 
-	@Override
-	public boolean equals(Object o)
-	{
-		if(this == o)
-		{
-			return true;
-		}
-		return o instanceof LightRecordField &&
-				myRecordComponent.equals(((LightRecordField) o).myRecordComponent);
-	}
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    return o instanceof LightRecordField &&
+        myRecordComponent.equals(((LightRecordField) o).myRecordComponent);
+  }
 
-	@Override
-	public int hashCode()
-	{
-		return Objects.hash(myRecordComponent);
-	}
+  @Override
+  public int hashCode() {
+    return Objects.hash(myRecordComponent);
+  }
 
 }

@@ -18,6 +18,8 @@ package com.intellij.java.debugger.impl.ui.breakpoints;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import consulo.execution.debug.XSourcePosition;
+import consulo.execution.debug.breakpoint.XLineBreakpoint;
 import org.jdom.Element;
 import com.intellij.java.debugger.impl.breakpoints.properties.JavaBreakpointProperties;
 import com.intellij.java.debugger.DebuggerBundle;
@@ -33,24 +35,22 @@ import com.intellij.java.debugger.impl.engine.events.DebuggerCommandImpl;
 import com.intellij.java.debugger.impl.engine.requests.RequestManagerImpl;
 import com.intellij.java.debugger.impl.DebuggerContextImpl;
 import com.intellij.java.debugger.impl.DebuggerUtilsEx;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.application.ReadAction;
+import consulo.application.ApplicationManager;
+import consulo.application.ReadAction;
 import consulo.logging.Logger;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.fileEditor.FileDocumentManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.InvalidDataException;
+import consulo.document.Document;
+import consulo.document.FileDocumentManager;
+import consulo.project.Project;
+import consulo.util.xml.serializer.InvalidDataException;
 import consulo.util.dataholder.Key;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiDocumentManager;
-import com.intellij.psi.PsiFile;
+import consulo.language.psi.PsiDocumentManager;
+import consulo.language.psi.PsiFile;
 import com.intellij.java.debugger.ui.classFilter.ClassFilter;
-import com.intellij.xdebugger.XDebuggerManager;
-import com.intellij.xdebugger.XSourcePosition;
-import com.intellij.xdebugger.breakpoints.XBreakpoint;
-import com.intellij.xdebugger.breakpoints.XLineBreakpoint;
-import com.intellij.xml.CommonXmlStrings;
+import consulo.execution.debug.XDebuggerManager;
+import consulo.execution.debug.breakpoint.XBreakpoint;
+import consulo.util.lang.xml.CommonXmlStrings;
 import consulo.internal.com.sun.jdi.Location;
 import consulo.internal.com.sun.jdi.ReferenceType;
 import consulo.ui.image.Image;
@@ -59,14 +59,14 @@ public abstract class BreakpointWithHighlighter<P extends JavaBreakpointProperti
 {
 	private static final Logger LOG = Logger.getInstance(BreakpointWithHighlighter.class);
 
-	@javax.annotation.Nullable
+	@Nullable
 	private SourcePosition mySourcePosition;
 
 	private boolean myVisible = true;
 	private volatile Image myIcon = getSetIcon(false);
-	@javax.annotation.Nullable
+	@Nullable
 	private String myClassName;
-	@javax.annotation.Nullable
+	@Nullable
 	private String myPackageName;
 	@Nullable
 	private String myInvalidMessage;
@@ -114,14 +114,14 @@ public abstract class BreakpointWithHighlighter<P extends JavaBreakpointProperti
 		return super.getShortClassName();
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	@Override
 	public String getPackageName()
 	{
 		return myPackageName;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public BreakpointWithHighlighter init()
 	{
 		if(!isValid())
@@ -145,7 +145,7 @@ public abstract class BreakpointWithHighlighter<P extends JavaBreakpointProperti
 		myPackageName = JVMNameUtil.getSourcePositionPackageDisplayName(debugProcess, getSourcePosition());
 	}
 
-	private Image calcIcon(@javax.annotation.Nullable DebugProcessImpl debugProcess)
+	private Image calcIcon(@Nullable DebugProcessImpl debugProcess)
 	{
 		final boolean muted = debugProcess != null && isMuted(debugProcess);
 		if(!isEnabled())
@@ -206,7 +206,7 @@ public abstract class BreakpointWithHighlighter<P extends JavaBreakpointProperti
 		return ReadAction.compute(() -> sourcePosition != null && sourcePosition.getFile().isValid()).booleanValue();
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public SourcePosition getSourcePosition()
 	{
 		return mySourcePosition;
@@ -259,7 +259,7 @@ public abstract class BreakpointWithHighlighter<P extends JavaBreakpointProperti
 		}
 	}
 
-	static void createLocationBreakpointRequest(@Nonnull FilteredRequestor requestor, @javax.annotation.Nullable Location location, @Nonnull DebugProcessImpl debugProcess)
+	static void createLocationBreakpointRequest(@Nonnull FilteredRequestor requestor, @Nullable Location location, @Nonnull DebugProcessImpl debugProcess)
 	{
 		if(location != null)
 		{

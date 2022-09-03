@@ -17,11 +17,11 @@ package com.intellij.java.impl.refactoring.safeDelete;
 
 import java.util.List;
 
-import com.intellij.lang.LanguageExtension;
+import consulo.language.extension.LanguageExtension;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiParameter;
-import com.intellij.psi.PsiReference;
-import com.intellij.usageView.UsageInfo;
+import consulo.language.psi.PsiReference;
+import consulo.usage.UsageInfo;
 
 /**
  * @author Max Medvedev

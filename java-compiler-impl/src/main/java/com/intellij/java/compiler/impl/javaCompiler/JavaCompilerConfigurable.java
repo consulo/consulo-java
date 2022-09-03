@@ -6,16 +6,16 @@ import javax.swing.JComponent;
 import javax.swing.JList;
 import javax.swing.JPanel;
 
+import consulo.configurable.Configurable;
+import consulo.configurable.ConfigurationException;
 import org.jetbrains.annotations.Nls;
 import javax.annotation.Nullable;
 import consulo.java.compiler.JavaCompilerBundle;
-import com.intellij.openapi.options.Configurable;
-import com.intellij.openapi.options.ConfigurationException;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.LabeledComponent;
-import com.intellij.openapi.ui.VerticalFlowLayout;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.ui.ListCellRendererWrapper;
+import consulo.project.Project;
+import consulo.ui.ex.awt.LabeledComponent;
+import consulo.ui.ex.awt.VerticalFlowLayout;
+import consulo.util.lang.Comparing;
+import consulo.ui.ex.awt.ListCellRendererWrapper;
 import consulo.java.compiler.impl.javaCompiler.BackendCompilerEP;
 
 public class JavaCompilerConfigurable implements Configurable

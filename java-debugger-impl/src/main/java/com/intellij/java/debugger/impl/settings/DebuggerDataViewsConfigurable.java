@@ -21,6 +21,7 @@ import java.awt.Insets;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
+import javax.annotation.Nullable;
 import javax.swing.ButtonGroup;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
@@ -37,13 +38,13 @@ import com.intellij.java.debugger.impl.ui.JavaDebuggerSupport;
 import com.intellij.java.debugger.impl.ui.tree.render.ClassRenderer;
 import com.intellij.java.debugger.impl.ui.tree.render.PrimitiveRenderer;
 import com.intellij.java.debugger.impl.ui.tree.render.ToStringRenderer;
-import com.intellij.openapi.options.OptionsBundle;
-import com.intellij.openapi.options.SearchableConfigurable;
-import com.intellij.openapi.project.Project;
-import com.intellij.ui.IdeBorderFactory;
-import com.intellij.ui.StateRestoringCheckBox;
+import consulo.configurable.OptionsBundle;
+import consulo.configurable.SearchableConfigurable;
+import consulo.project.Project;
+import consulo.ui.ex.awt.IdeBorderFactory;
+import consulo.ui.ex.awt.StateRestoringCheckBox;
 import com.intellij.java.debugger.impl.classFilter.ClassFilterEditor;
-import com.intellij.util.ui.JBUI;
+import consulo.ui.ex.awt.JBUI;
 import consulo.ui.annotation.RequiredUIAccess;
 
 /**
@@ -70,7 +71,7 @@ public class DebuggerDataViewsConfigurable implements SearchableConfigurable
 
 	private Project myProject;
 
-	public DebuggerDataViewsConfigurable(@javax.annotation.Nullable Project project)
+	public DebuggerDataViewsConfigurable(@Nullable Project project)
 	{
 		myProject = project;
 	}

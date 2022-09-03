@@ -15,14 +15,16 @@
  */
 package com.intellij.java.debugger.impl.engine;
 
-import com.intellij.Patches;
-import com.intellij.execution.CantRunException;
-import com.intellij.execution.ExecutionException;
-import com.intellij.execution.ExecutionResult;
+import consulo.application.util.Patches;
+import consulo.execution.CantRunException;
+import consulo.execution.ExecutionResult;
+import consulo.execution.debug.XSourcePosition;
+import consulo.process.ExecutionException;
 import com.intellij.java.execution.configurations.RemoteConnection;
 import com.intellij.execution.process.*;
-import com.intellij.execution.runners.ExecutionUtil;
-import com.intellij.idea.ActionsBundle;
+import consulo.execution.ExecutionUtil;
+import consulo.project.ui.wm.ToolWindowId;
+import consulo.ui.ex.action.ActionsBundle;
 import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.PositionManager;
 import com.intellij.java.debugger.engine.DebugProcess;
@@ -59,34 +61,32 @@ import com.intellij.java.debugger.impl.ui.tree.render.NodeRenderer;
 import com.intellij.java.debugger.impl.ui.tree.render.PrimitiveRenderer;
 import com.intellij.java.debugger.ui.classFilter.ClassFilter;
 import com.intellij.java.debugger.ui.classFilter.DebuggerClassFilterProvider;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.application.ApplicationNamesInfo;
-import com.intellij.openapi.project.Project;
+import consulo.application.ApplicationManager;
+import consulo.application.impl.internal.ApplicationNamesInfo;
+import consulo.project.Project;
 import com.intellij.java.language.projectRoots.JavaSdk;
 import com.intellij.openapi.projectRoots.JavaSdkType;
-import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.projectRoots.SdkTable;
-import com.intellij.openapi.ui.MessageType;
-import com.intellij.openapi.ui.Messages;
-import com.intellij.openapi.util.Pair;
-import com.intellij.openapi.util.SystemInfo;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.wm.ToolWindowId;
-import com.intellij.openapi.wm.impl.status.StatusBarUtil;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiManager;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.util.Alarm;
-import com.intellij.util.Consumer;
-import com.intellij.util.EventDispatcher;
-import com.intellij.util.ReflectionUtil;
-import com.intellij.util.concurrency.Semaphore;
-import com.intellij.util.containers.ContainerUtil;
-import com.intellij.util.ui.UIUtil;
-import com.intellij.xdebugger.XDebugSession;
-import com.intellij.xdebugger.XSourcePosition;
-import com.intellij.xdebugger.impl.XDebugSessionImpl;
-import com.intellij.xdebugger.impl.actions.XDebuggerActions;
+import consulo.content.bundle.Sdk;
+import consulo.content.bundle.SdkTable;
+import consulo.ide.impl.idea.openapi.ui.MessageType;
+import consulo.ui.ex.awt.Messages;
+import consulo.ui.ex.awt.util.Alarm;
+import consulo.util.lang.Pair;
+import consulo.application.util.SystemInfo;
+import consulo.util.lang.StringUtil;
+import consulo.language.editor.ui.util.StatusBarUtil;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiManager;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.ide.impl.idea.util.Consumer;
+import consulo.proxy.EventDispatcher;
+import consulo.util.lang.reflect.ReflectionUtil;
+import consulo.application.util.Semaphore;
+import consulo.util.collection.ContainerUtil;
+import consulo.ui.ex.awt.UIUtil;
+import consulo.execution.debug.XDebugSession;
+import consulo.ide.impl.idea.xdebugger.impl.XDebugSessionImpl;
+import consulo.ide.impl.idea.xdebugger.impl.actions.XDebuggerActions;
 import consulo.disposer.Disposable;
 import consulo.disposer.Disposer;
 import consulo.internal.com.sun.jdi.*;
@@ -157,7 +157,7 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
   private final Semaphore myWaitFor = new Semaphore();
   private final AtomicBoolean myIsFailed = new AtomicBoolean(false);
   protected DebuggerSession mySession;
-  @javax.annotation.Nullable
+  @Nullable
   protected MethodReturnValueWatcher myReturnValueWatcher;
   protected final Disposable myDisposable = Disposable.newDisposable();
   private final Alarm myStatusUpdateAlarm = new Alarm(Alarm.ThreadToUse.POOLED_THREAD, myDisposable);
@@ -204,7 +204,7 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
     });
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public Pair<Method, Value> getLastExecutedMethod() {
     final MethodReturnValueWatcher watcher = myReturnValueWatcher;
     if (watcher == null) {
@@ -434,7 +434,7 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
     }
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   static String getCurrentClassName(ThreadReferenceProxyImpl thread) {
     try {
       if (thread != null && thread.frameCount() > 0) {
@@ -599,7 +599,7 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
       if ((runjre == null || runjre.getSdkType() instanceof JavaSdkType) && !versionMatch(runjre, version)) {
         SdkTable.getInstance().getSdksOfType(JavaSdk.getInstance()).stream().filter(sdk -> versionMatch(sdk, version)).findFirst().ifPresent(sdk ->
         {
-          XDebugSessionImpl.NOTIFICATION_GROUP.createNotification(DebuggerBundle.message("message.remote.jre.version.mismatch", version, runjre != null ? runjre.getVersionString() :
+          consulo.ide.impl.idea.xdebugger.impl.XDebugSessionImpl.NOTIFICATION_GROUP.createNotification(DebuggerBundle.message("message.remote.jre.version.mismatch", version, runjre != null ? runjre.getVersionString() :
               "unknown", sdk.getName()), MessageType.INFO).notify(myProject);
           getSession().setAlternativeJre(sdk);
         });
@@ -607,7 +607,7 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
     }
   }
 
-  private static boolean versionMatch(@javax.annotation.Nullable Sdk sdk, String version) {
+  private static boolean versionMatch(@Nullable Sdk sdk, String version) {
     if (sdk != null && sdk.getSdkType() instanceof JavaSdkType) {
       String versionString = sdk.getVersionString();
       return versionString != null && versionString.contains(version);
@@ -727,7 +727,7 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
 
   private volatile RunToCursorBreakpoint myRunToCursorBreakpoint;
 
-  public void setRunToCursorBreakpoint(@javax.annotation.Nullable RunToCursorBreakpoint breakpoint) {
+  public void setRunToCursorBreakpoint(@Nullable RunToCursorBreakpoint breakpoint) {
     myRunToCursorBreakpoint = breakpoint;
   }
 
@@ -818,7 +818,7 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
   }
 
   @Nonnull
-  public static String processIOException(@Nonnull IOException e, @javax.annotation.Nullable String address) {
+  public static String processIOException(@Nonnull IOException e, @Nullable String address) {
     if (e instanceof UnknownHostException) {
       return DebuggerBundle.message("error.unknown.host") + (address != null ? " (" + address + ")" : "") + ":\n" + e.getLocalizedMessage();
     }
@@ -1428,7 +1428,7 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
     private final StepIntoBreakpoint myBreakpoint;
     private final int myStepSize;
 
-    public StepIntoCommand(SuspendContextImpl suspendContext, boolean ignoreFilters, @javax.annotation.Nullable final MethodFilter methodFilter, int stepSize) {
+    public StepIntoCommand(SuspendContextImpl suspendContext, boolean ignoreFilters, @Nullable final MethodFilter methodFilter, int stepSize) {
       super(suspendContext);
       myForcedIgnoreFilters = ignoreFilters || methodFilter != null;
       mySmartStepFilter = methodFilter;
@@ -1580,7 +1580,7 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
   }
 
   public abstract class ResumeCommand extends SuspendContextCommandImpl {
-    @javax.annotation.Nullable
+    @Nullable
     protected final ThreadReferenceProxyImpl myContextThread;
 
     public ResumeCommand(SuspendContextImpl suspendContext) {
@@ -1605,7 +1605,7 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
       getSuspendManager().resume(getSuspendContext());
     }
 
-    @javax.annotation.Nullable
+    @Nullable
     public ThreadReferenceProxyImpl getContextThread() {
       return myContextThread;
     }
@@ -1753,7 +1753,7 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
       private void doReattach() {
         DebuggerInvocationUtil.swingInvokeLater(myProject, () ->
         {
-          ((XDebugSessionImpl) getXdebugProcess().getSession()).reset();
+          ((consulo.ide.impl.idea.xdebugger.impl.XDebugSessionImpl) getXdebugProcess().getSession()).reset();
           myState.set(State.INITIAL);
           myConnection = environment.getRemoteConnection();
           getManagerThread().restartIfNeeded();
@@ -1763,7 +1763,7 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
     });
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public ExecutionResult attachVirtualMachine(final DebugEnvironment environment, final DebuggerSession session) throws ExecutionException {
     mySession = session;
     myWaitFor.down();
@@ -2074,7 +2074,7 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
     myXDebugProcess = XDebugProcess;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public JavaDebugProcess getXdebugProcess() {
     return myXDebugProcess;
   }

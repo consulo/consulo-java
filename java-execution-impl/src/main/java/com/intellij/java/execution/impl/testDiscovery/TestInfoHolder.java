@@ -15,8 +15,8 @@
  */
 package com.intellij.java.execution.impl.testDiscovery;
 
-import com.intellij.openapi.vfs.newvfs.persistent.FlushingDaemon;
-import com.intellij.util.io.DataOutputStream;
+import consulo.ide.impl.idea.openapi.vfs.newvfs.persistent.FlushingDaemon;
+import consulo.index.io.data.DataOutputStream;
 import com.intellij.util.io.*;
 import consulo.util.collection.primitive.ints.*;
 

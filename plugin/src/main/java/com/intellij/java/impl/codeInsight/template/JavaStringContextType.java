@@ -15,13 +15,13 @@
  */
 package com.intellij.java.impl.codeInsight.template;
 
-import com.intellij.codeInsight.template.TemplateContextType;
+import consulo.language.editor.template.context.TemplateContextType;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.java.language.psi.PsiJavaToken;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.util.PsiUtilCore;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiUtilCore;
 
 import javax.annotation.Nonnull;
 

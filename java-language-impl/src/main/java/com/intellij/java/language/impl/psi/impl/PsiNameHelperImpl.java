@@ -18,7 +18,7 @@ package com.intellij.java.language.impl.psi.impl;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.psi.PsiNameHelper;
 import com.intellij.java.language.impl.lexer.JavaLexer;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.util.lang.StringUtil;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
@@ -43,12 +43,12 @@ public class PsiNameHelperImpl extends PsiNameHelper {
   }
 
   @Override
-  public boolean isKeyword(@javax.annotation.Nullable String text) {
+  public boolean isKeyword(@Nullable String text) {
     return text != null && JavaLexer.isKeyword(text, getLanguageLevel());
   }
 
   @Override
-  public boolean isQualifiedName(@javax.annotation.Nullable String text) {
+  public boolean isQualifiedName(@Nullable String text) {
     if (text == null) return false;
     int index = 0;
     while (true) {

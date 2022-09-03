@@ -24,6 +24,8 @@ import com.intellij.java.language.impl.psi.impl.source.resolve.graphInference.In
 import com.intellij.java.language.impl.psi.impl.source.resolve.graphInference.InferenceVariable;
 import com.intellij.java.language.psi.util.PsiUtil;
 
+import javax.annotation.Nullable;
+
 /**
  * User: anna
  * Date: 9/25/13
@@ -115,7 +117,7 @@ public abstract class InputOutputConstraintFormula implements ConstraintFormula
 	}
 
 
-	@javax.annotation.Nullable
+	@Nullable
 	public Set<InferenceVariable> getOutputVariables(Set<InferenceVariable> inputVariables, InferenceSession session)
 	{
 		final HashSet<InferenceVariable> mentionedVariables = new HashSet<InferenceVariable>();

@@ -16,8 +16,8 @@
 package com.intellij.java.impl.psi.filters;
 
 import com.intellij.java.language.psi.infos.CandidateInfo;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.filters.ElementFilter;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.filter.ElementFilter;
 
 /**
  * Created by IntelliJ IDEA.

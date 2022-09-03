@@ -18,7 +18,6 @@ package com.intellij.java.impl.codeInspection.dataFlow;
 import com.intellij.java.impl.codeInsight.NullableNotNullDialog;
 import com.intellij.java.impl.codeInsight.daemon.impl.quickfix.DeleteSideEffectsAwareFix;
 import com.intellij.java.impl.codeInsight.daemon.impl.quickfix.UnwrapSwitchLabelFix;
-import com.intellij.codeInspection.*;
 import com.intellij.java.impl.codeInspection.*;
 import com.intellij.java.impl.codeInspection.dataFlow.fix.FindDfaProblemCauseFix;
 import com.intellij.java.impl.codeInspection.nullable.NullableStuffInspection;
@@ -31,15 +30,15 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.fix.SurroundWithR
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
-import com.intellij.psi.tree.IElementType;
+import consulo.language.ast.IElementType;
 import com.intellij.java.language.psi.util.PsiPrecedenceUtil;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.impl.refactoring.util.RefactoringUtil;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.SmartList;
-import com.intellij.util.containers.ContainerUtil;
-import com.intellij.util.ui.JBUI;
+import consulo.language.util.IncorrectOperationException;
+import consulo.util.collection.SmartList;
+import consulo.util.collection.ContainerUtil;
+import consulo.ui.ex.awt.JBUI;
 import com.intellij.java.impl.ig.fixes.IntroduceVariableFix;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
@@ -54,8 +53,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-import static com.intellij.codeInspection.InspectionsBundle.message;
-import static com.intellij.xml.util.XmlStringUtil.wrapInHtml;
+import static consulo.language.editor.inspection.InspectionsBundle.message;
+import static consulo.util.lang.xml.XmlStringUtil.wrapInHtml;
 import static javax.swing.SwingConstants.TOP;
 
 public class DataFlowInspection extends DataFlowInspectionBase {

@@ -35,14 +35,16 @@ import com.intellij.java.debugger.impl.ui.tree.DebuggerTreeNode;
 import com.intellij.java.debugger.ui.tree.NodeDescriptor;
 import com.intellij.java.debugger.impl.ui.tree.NodeManager;
 import com.intellij.java.debugger.impl.ui.tree.ValueDescriptor;
-import com.intellij.openapi.util.DefaultJDOMExternalizer;
-import com.intellij.openapi.util.InvalidDataException;
+import consulo.util.xml.serializer.DefaultJDOMExternalizer;
+import consulo.util.xml.serializer.InvalidDataException;
 import consulo.util.dataholder.Key;
-import com.intellij.openapi.util.WriteExternalException;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.util.xml.serializer.WriteExternalException;
+import consulo.util.lang.StringUtil;
 import com.intellij.java.language.psi.PsiExpression;
 import consulo.internal.com.sun.jdi.BooleanValue;
 import consulo.internal.com.sun.jdi.Value;
+
+import javax.annotation.Nullable;
 
 public class ExpressionChildrenRenderer extends TypeRenderer implements ChildrenRenderer
 {
@@ -92,7 +94,7 @@ public class ExpressionChildrenRenderer extends TypeRenderer implements Children
 		}
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public static NodeRenderer getLastChildrenRenderer(ValueDescriptor descriptor)
 	{
 		return descriptor.getUserData(LAST_CHILDREN_RENDERER);

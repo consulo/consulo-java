@@ -20,16 +20,16 @@ import javax.annotation.Nullable;
 import com.intellij.java.debugger.impl.ui.impl.watch.NodeDescriptorProvider;
 import com.intellij.java.debugger.ui.tree.NodeDescriptor;
 import com.intellij.java.debugger.impl.ui.tree.ValueDescriptor;
-import com.intellij.xdebugger.frame.XValue;
-import com.intellij.xdebugger.impl.ui.tree.actions.XDebuggerTreeActionBase;
-import com.intellij.xdebugger.impl.ui.tree.nodes.XValueNodeImpl;
+import consulo.execution.debug.frame.XValue;
+import consulo.ide.impl.idea.xdebugger.impl.ui.tree.actions.XDebuggerTreeActionBase;
+import consulo.ide.impl.idea.xdebugger.impl.ui.tree.nodes.XValueNodeImpl;
 import consulo.internal.com.sun.jdi.ObjectReference;
 import consulo.internal.com.sun.jdi.Value;
 
 public abstract class DebuggerTreeAction extends XDebuggerTreeActionBase
 {
 	@Nullable
-	protected ObjectReference getObjectReference(@Nonnull XValueNodeImpl node)
+	protected ObjectReference getObjectReference(@Nonnull consulo.ide.impl.idea.xdebugger.impl.ui.tree.nodes.XValueNodeImpl node)
 	{
 		XValue valueContainer = node.getValueContainer();
 		if(valueContainer instanceof NodeDescriptorProvider)

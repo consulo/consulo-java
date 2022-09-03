@@ -15,30 +15,30 @@
  */
 package com.intellij.java.compiler.artifact.impl.artifacts;
 
-import com.intellij.CommonBundle;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.OrderEnumerator;
-import com.intellij.openapi.roots.OrderRootType;
-import com.intellij.openapi.roots.ProjectRootManager;
-import com.intellij.openapi.roots.libraries.Library;
-import com.intellij.openapi.roots.ui.configuration.ModulesProvider;
-import com.intellij.openapi.ui.Messages;
-import com.intellij.openapi.util.ThrowableComputable;
-import com.intellij.openapi.vfs.VfsUtil;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.packaging.artifacts.ArtifactTemplate;
+import consulo.application.CommonBundle;
+import consulo.application.ApplicationManager;
+import consulo.module.Module;
+import consulo.project.Project;
+import consulo.module.content.layer.OrderEnumerator;
+import consulo.content.OrderRootType;
+import consulo.module.content.ProjectRootManager;
+import consulo.content.library.Library;
+import consulo.module.content.layer.ModulesProvider;
+import consulo.ui.ex.awt.Messages;
+import consulo.application.util.function.ThrowableComputable;
+import consulo.ide.impl.idea.openapi.vfs.VfsUtil;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.compiler.artifact.ArtifactTemplate;
 import com.intellij.packaging.elements.*;
 import com.intellij.java.compiler.artifact.impl.ManifestFileUtil;
-import com.intellij.packaging.impl.artifacts.ArtifactUtil;
-import com.intellij.packaging.impl.artifacts.PlainArtifactType;
-import com.intellij.packaging.impl.elements.LibraryPackagingElement;
-import com.intellij.packaging.impl.elements.moduleContent.ProductionModuleOutputElementType;
-import com.intellij.packaging.impl.elements.moduleContent.TestModuleOutputElementType;
-import com.intellij.util.CommonProcessors;
+import consulo.ide.impl.idea.packaging.impl.artifacts.ArtifactUtil;
+import consulo.ide.impl.idea.packaging.impl.artifacts.PlainArtifactType;
+import consulo.ide.impl.idea.packaging.impl.elements.LibraryPackagingElement;
+import consulo.ide.impl.idea.packaging.impl.elements.moduleContent.ProductionModuleOutputElementType;
+import consulo.ide.impl.idea.packaging.impl.elements.moduleContent.TestModuleOutputElementType;
+import consulo.application.util.function.CommonProcessors;
 import com.intellij.util.PathUtil;
-import com.intellij.util.Processor;
+import consulo.application.util.function.Processor;
 import consulo.logging.Logger;
 
 import javax.annotation.Nullable;
@@ -113,7 +113,7 @@ public class JarFromModulesTemplate extends ArtifactTemplate {
     enumerator.forEachModule(new Processor<Module>() {
       @Override
       public boolean process(Module module) {
-        if (ProductionModuleOutputElementType.getInstance().isSuitableModule(modulesProvider, module)) {
+        if (consulo.ide.impl.idea.packaging.impl.elements.moduleContent.ProductionModuleOutputElementType.getInstance().isSuitableModule(modulesProvider, module)) {
           archive.addOrFindChild(factory.createModuleOutput(module));
         }
         if (includeTests && TestModuleOutputElementType.getInstance().isSuitableModule(modulesProvider, module)) {
@@ -139,7 +139,7 @@ public class JarFromModulesTemplate extends ArtifactTemplate {
       root.addOrFindChild(archive);
       addLibraries(libraries, root, archive, classpath);
       ManifestFileUtil.updateManifest(manifestFile, mainClassName, classpath, true);
-      return new NewArtifactConfiguration(root, artifactName, PlainArtifactType.getInstance());
+      return new NewArtifactConfiguration(root, artifactName, consulo.ide.impl.idea.packaging.impl.artifacts.PlainArtifactType.getInstance());
     }
   }
 
@@ -147,7 +147,7 @@ public class JarFromModulesTemplate extends ArtifactTemplate {
                             List<String> classpath) {
     PackagingElementFactory factory = PackagingElementFactory.getInstance(myContext.getProject());
     for (Library library : libraries) {
-      if (LibraryPackagingElement.getKindForLibrary(library).containsDirectoriesWithClasses()) {
+      if (consulo.ide.impl.idea.packaging.impl.elements.LibraryPackagingElement.getKindForLibrary(library).containsDirectoriesWithClasses()) {
         for (VirtualFile classesRoot : library.getFiles(OrderRootType.CLASSES)) {
           if (classesRoot.isInLocalFileSystem()) {
             archive.addOrFindChild(factory.createDirectoryCopyWithParentDirectories(classesRoot.getPath(), "/"));

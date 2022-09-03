@@ -21,9 +21,10 @@ import com.intellij.java.language.psi.PsiClassType;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.TypeAnnotationProvider;
 import com.intellij.java.language.psi.augment.TypeAnnotationModifier;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.util.collection.ContainerUtil;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.List;
 
 /**
@@ -31,7 +32,7 @@ import java.util.List;
  */
 public class NullityAnnotationModifier extends TypeAnnotationModifier
 {
-	@javax.annotation.Nullable
+	@Nullable
 	@Override
 	public TypeAnnotationProvider modifyAnnotations(@Nonnull PsiType inferenceVariableType, @Nonnull PsiClassType boundType)
 	{

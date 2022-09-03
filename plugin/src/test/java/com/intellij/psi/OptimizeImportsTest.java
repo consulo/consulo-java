@@ -17,11 +17,11 @@ package com.intellij.psi;
 
 import static org.junit.Assert.assertEquals;
 
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.command.CommandProcessor;
+import consulo.application.ApplicationManager;
+import consulo.undoRedo.CommandProcessor;
 import consulo.logging.Logger;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
-import com.intellij.psi.impl.source.PostprocessReformattingAspect;
+import consulo.language.codeStyle.PostprocessReformattingAspect;
 import com.intellij.testFramework.PsiTestCase;
 
 public abstract class OptimizeImportsTest extends PsiTestCase

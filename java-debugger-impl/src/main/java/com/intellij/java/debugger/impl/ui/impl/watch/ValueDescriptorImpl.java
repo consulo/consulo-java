@@ -22,7 +22,7 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.intellij.Patches;
+import consulo.application.util.Patches;
 import com.intellij.java.debugger.DebuggerContext;
 import com.intellij.java.debugger.engine.DebugProcess;
 import com.intellij.java.debugger.impl.engine.DebugProcessImpl;
@@ -45,14 +45,14 @@ import com.intellij.java.debugger.impl.ui.tree.render.DescriptorLabelListener;
 import com.intellij.java.debugger.impl.ui.tree.render.NodeRenderer;
 import com.intellij.java.debugger.impl.ui.tree.render.NodeRendererImpl;
 import com.intellij.java.debugger.impl.ui.tree.render.Renderer;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.PsiElement;
+import consulo.application.ApplicationManager;
+import consulo.project.Project;
+import consulo.util.lang.StringUtil;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiExpression;
-import com.intellij.util.concurrency.Semaphore;
-import com.intellij.xdebugger.frame.XValueModifier;
-import com.intellij.xdebugger.impl.ui.tree.ValueMarkup;
+import consulo.application.util.Semaphore;
+import consulo.execution.debug.frame.XValueModifier;
+import consulo.ide.impl.idea.xdebugger.impl.ui.tree.ValueMarkup;
 import consulo.internal.com.sun.jdi.*;
 import consulo.ui.image.Image;
 
@@ -681,7 +681,7 @@ public abstract class ValueDescriptorImpl extends NodeDescriptorImpl implements 
 		if(value instanceof ObjectReference)
 		{
 			final ObjectReference objRef = (ObjectReference) value;
-			final Map<ObjectReference, ValueMarkup> map = getMarkupMap(debugProcess);
+			final Map<ObjectReference, consulo.ide.impl.idea.xdebugger.impl.ui.tree.ValueMarkup> map = getMarkupMap(debugProcess);
 			if(map != null)
 			{
 				return map.get(objRef);
@@ -691,12 +691,12 @@ public abstract class ValueDescriptorImpl extends NodeDescriptorImpl implements 
 	}
 
 	@Override
-	public void setMarkup(final DebugProcess debugProcess, @Nullable final ValueMarkup markup)
+	public void setMarkup(final DebugProcess debugProcess, @Nullable final consulo.ide.impl.idea.xdebugger.impl.ui.tree.ValueMarkup markup)
 	{
 		final Value value = getValue();
 		if(value instanceof ObjectReference)
 		{
-			final Map<ObjectReference, ValueMarkup> map = getMarkupMap(debugProcess);
+			final Map<ObjectReference, consulo.ide.impl.idea.xdebugger.impl.ui.tree.ValueMarkup> map = getMarkupMap(debugProcess);
 			if(map != null)
 			{
 				final ObjectReference objRef = (ObjectReference) value;

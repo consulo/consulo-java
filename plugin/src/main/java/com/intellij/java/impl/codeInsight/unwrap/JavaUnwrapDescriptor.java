@@ -15,8 +15,8 @@
  */
 package com.intellij.java.impl.codeInsight.unwrap;
 
-import com.intellij.codeInsight.unwrap.UnwrapDescriptorBase;
-import com.intellij.codeInsight.unwrap.Unwrapper;
+import consulo.language.editor.refactoring.unwrap.UnwrapDescriptorBase;
+import consulo.language.editor.refactoring.unwrap.Unwrapper;
 
 /**
  * @author Konstantin Bulenkov

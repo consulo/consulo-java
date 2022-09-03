@@ -18,29 +18,30 @@ package com.intellij.java.impl.refactoring.extractSuperclass;
 import com.intellij.java.impl.codeInsight.generation.OverrideImplementUtil;
 import com.intellij.java.language.psi.*;
 import consulo.logging.Logger;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleUtil;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.ProjectRootManager;
-import com.intellij.openapi.ui.DialogWrapper;
-import com.intellij.openapi.util.Condition;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.module.Module;
+import consulo.ide.impl.idea.openapi.module.ModuleUtil;
+import consulo.project.Project;
+import consulo.module.content.ProjectRootManager;
+import consulo.ui.ex.awt.DialogWrapper;
+import consulo.util.lang.function.Condition;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.psi.*;
-import com.intellij.psi.codeStyle.CodeStyleManager;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.java.language.psi.util.MethodSignature;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.psi.util.PsiUtilBase;
+import consulo.language.editor.util.PsiUtilBase;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import com.intellij.java.impl.refactoring.memberPullUp.PullUpProcessor;
-import com.intellij.refactoring.ui.ConflictsDialog;
-import com.intellij.refactoring.util.DocCommentPolicy;
+import consulo.language.editor.refactoring.ui.ConflictsDialog;
+import consulo.ide.impl.idea.refactoring.util.DocCommentPolicy;
 import com.intellij.java.impl.refactoring.util.RefactoringUtil;
 import com.intellij.java.impl.refactoring.util.classMembers.MemberInfo;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.containers.MultiMap;
+import consulo.language.util.IncorrectOperationException;
+import consulo.util.collection.MultiMap;
 import org.jetbrains.annotations.NonNls;
 
+import javax.annotation.Nullable;
 import java.util.*;
 
 /**
@@ -168,7 +169,7 @@ public class ExtractSuperClassUtil {
                                                                       final PsiClass derivedClass,
                                                                       final MemberInfo[] selectedMembers) throws IncorrectOperationException {
     final PsiManager manager = derivedClass.getManager();
-    Set<PsiElement> movedElements = new java.util.HashSet<PsiElement>();
+    Set<PsiElement> movedElements = new HashSet<PsiElement>();
     for (final MemberInfo info : selectedMembers) {
       movedElements.add(info.getMember());
     }
@@ -202,7 +203,7 @@ public class ExtractSuperClassUtil {
     return factory.createReferenceElementByType(type);
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public static PsiTypeParameter findTypeParameterInDerived(final PsiClass aClass, final String name) {
     for (PsiTypeParameter typeParameter : PsiUtil.typeParametersIterable(aClass)) {
       if (name.equals(typeParameter.getName())) return typeParameter;

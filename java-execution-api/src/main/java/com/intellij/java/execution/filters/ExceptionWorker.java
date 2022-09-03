@@ -15,29 +15,30 @@
  */
 package com.intellij.java.execution.filters;
 
-import com.intellij.execution.filters.Filter;
-import com.intellij.execution.filters.HyperlinkInfo;
-import com.intellij.execution.filters.HyperlinkInfoFactory;
-import com.intellij.openapi.editor.colors.CodeInsightColors;
-import com.intellij.openapi.editor.colors.EditorColorsManager;
-import com.intellij.openapi.editor.markup.TextAttributes;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.ProjectFileIndex;
-import com.intellij.openapi.roots.ProjectRootManager;
-import com.intellij.openapi.util.Pair;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.openapi.util.Trinity;
-import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiFile;
 import com.intellij.java.language.psi.search.PsiShortNamesCache;
-import com.intellij.util.ArrayUtil;
-import com.intellij.util.ui.UIUtil;
-import consulo.awt.TargetAWT;
+import consulo.codeEditor.CodeInsightColors;
+import consulo.colorScheme.EditorColorsManager;
+import consulo.colorScheme.TextAttributes;
+import consulo.document.util.TextRange;
+import consulo.execution.ui.console.Filter;
+import consulo.execution.ui.console.HyperlinkInfo;
+import consulo.execution.ui.console.HyperlinkInfoFactory;
+import consulo.language.psi.PsiFile;
+import consulo.module.content.ProjectFileIndex;
+import consulo.module.content.ProjectRootManager;
+import consulo.project.Project;
 import consulo.ui.color.ColorValue;
+import consulo.ui.ex.awt.UIUtil;
+import consulo.ui.ex.awtUnsafe.TargetAWT;
+import consulo.util.collection.ArrayUtil;
+import consulo.util.lang.Pair;
+import consulo.util.lang.Trinity;
+import consulo.virtualFileSystem.VirtualFile;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -175,7 +176,7 @@ public class ExceptionWorker {
   }
 
   //todo [roma] regexp
-  @javax.annotation.Nullable
+  @Nullable
   static Trinity<TextRange, TextRange, TextRange> parseExceptionLine(final String line) {
     int startIdx;
     if (line.startsWith(AT_PREFIX)) {

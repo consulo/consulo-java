@@ -20,22 +20,23 @@ import com.intellij.java.impl.lang.java.JavaRefactoringSupportProvider;
 import com.intellij.java.impl.refactoring.HelpID;
 import com.intellij.java.impl.refactoring.changeClassSignature.ChangeClassSignatureDialog;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.actionSystem.LangDataKeys;
-import com.intellij.openapi.actionSystem.PlatformDataKeys;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.ScrollType;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.DialogWrapper;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.refactoring.RefactoringBundle;
-import com.intellij.refactoring.changeSignature.ChangeSignatureHandler;
-import com.intellij.refactoring.util.CommonRefactoringUtil;
+import consulo.dataContext.DataContext;
+import consulo.language.editor.LangDataKeys;
+import consulo.language.editor.PlatformDataKeys;
+import consulo.codeEditor.Editor;
+import consulo.codeEditor.ScrollType;
+import consulo.project.Project;
+import consulo.ui.ex.awt.DialogWrapper;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.changeSignature.ChangeSignatureHandler;
+import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import consulo.java.impl.codeInsight.JavaTargetElementUtilEx;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class JavaChangeSignatureHandler implements ChangeSignatureHandler {
 
@@ -61,7 +62,7 @@ public class JavaChangeSignatureHandler implements ChangeSignatureHandler {
   }
 
   @Override
-  public void invoke(@Nonnull final Project project, @Nonnull final PsiElement[] elements, @javax.annotation.Nullable final DataContext dataContext) {
+  public void invoke(@Nonnull final Project project, @Nonnull final PsiElement[] elements, @Nullable final DataContext dataContext) {
     if (elements.length != 1) {
       return;
     }
@@ -69,13 +70,13 @@ public class JavaChangeSignatureHandler implements ChangeSignatureHandler {
     invokeOnElement(project, editor, elements[0]);
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   @Override
   public String getTargetNotFoundMessage() {
     return RefactoringBundle.message("error.wrong.caret.position.method.or.class.name");
   }
 
-  private static void invoke(final PsiMethod method, final Project project, @javax.annotation.Nullable final Editor editor) {
+  private static void invoke(final PsiMethod method, final Project project, @Nullable final Editor editor) {
     PsiMethod newMethod = SuperMethodWarningUtil.checkSuperMethod(method, RefactoringBundle.message("to.refactor"));
     if (newMethod == null) {
       return;
@@ -118,7 +119,7 @@ public class JavaChangeSignatureHandler implements ChangeSignatureHandler {
   }
 
   @Override
-  @javax.annotation.Nullable
+  @Nullable
   public PsiElement findTargetMember(PsiFile file, Editor editor) {
     PsiElement element = file.findElementAt(editor.getCaretModel().getOffset());
     return findTargetMember(element);

@@ -31,27 +31,27 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextArea;
 
 import com.intellij.java.language.psi.*;
+import consulo.application.ui.wm.IdeFocusManager;
 import org.jetbrains.annotations.NonNls;
-import com.intellij.openapi.editor.event.DocumentAdapter;
-import com.intellij.openapi.editor.event.DocumentEvent;
-import com.intellij.openapi.help.HelpManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.DialogWrapper;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.wm.IdeFocusManager;
+import consulo.document.event.DocumentAdapter;
+import consulo.document.event.DocumentEvent;
+import consulo.application.HelpManager;
+import consulo.project.Project;
+import consulo.ui.ex.awt.DialogWrapper;
+import consulo.util.lang.StringUtil;
 import com.intellij.psi.*;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
 import com.intellij.java.impl.refactoring.HelpID;
 import com.intellij.java.impl.refactoring.extractMethod.AbstractExtractDialog;
 import com.intellij.java.analysis.impl.refactoring.extractMethod.InputVariables;
-import com.intellij.refactoring.ui.ConflictsDialog;
+import consulo.language.editor.refactoring.ui.ConflictsDialog;
 import com.intellij.java.impl.refactoring.util.ParameterTablePanel;
 import com.intellij.java.analysis.impl.refactoring.util.VariableData;
-import com.intellij.ui.EditorTextField;
-import com.intellij.util.Function;
+import consulo.language.editor.ui.awt.EditorTextField;
+import consulo.ide.impl.idea.util.Function;
 import com.intellij.java.language.util.VisibilityUtil;
-import com.intellij.util.containers.MultiMap;
-import com.intellij.util.ui.UIUtil;
+import consulo.util.collection.MultiMap;
+import consulo.ui.ex.awt.UIUtil;
 
 
 public class ExtractMethodObjectDialog extends DialogWrapper implements AbstractExtractDialog

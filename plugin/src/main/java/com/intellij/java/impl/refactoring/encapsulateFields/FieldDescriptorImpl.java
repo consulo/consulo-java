@@ -18,6 +18,7 @@ package com.intellij.java.impl.refactoring.encapsulateFields;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiMethod;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * @author Max Medvedev
@@ -32,8 +33,8 @@ public class FieldDescriptorImpl implements FieldDescriptor {
   public FieldDescriptorImpl(@Nonnull PsiField field,
                              @Nonnull String getterName,
                              @Nonnull String setterName,
-                             @javax.annotation.Nullable PsiMethod getterPrototype,
-                             @javax.annotation.Nullable PsiMethod setterPrototype) {
+                             @Nullable PsiMethod getterPrototype,
+                             @Nullable PsiMethod setterPrototype) {
     myField = field;
     myGetterName = getterName;
     mySetterName = setterName;
@@ -59,13 +60,13 @@ public class FieldDescriptorImpl implements FieldDescriptor {
     return mySetterName;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   @Override
   public PsiMethod getGetterPrototype() {
     return myGetterPrototype;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   @Override
   public PsiMethod getSetterPrototype() {
     return mySetterPrototype;

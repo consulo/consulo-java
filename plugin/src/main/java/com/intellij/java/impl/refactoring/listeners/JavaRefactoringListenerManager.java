@@ -15,8 +15,8 @@
  */
 package com.intellij.java.impl.refactoring.listeners;
 
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.components.ServiceManager;
+import consulo.project.Project;
+import consulo.ide.ServiceManager;
 
 /**
  * @author yole

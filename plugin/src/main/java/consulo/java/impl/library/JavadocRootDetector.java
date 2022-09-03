@@ -21,12 +21,12 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.openapi.progress.ProgressIndicator;
-import com.intellij.openapi.roots.OrderRootType;
-import com.intellij.openapi.roots.libraries.ui.RootDetector;
-import com.intellij.openapi.vfs.VfsUtilCore;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.openapi.vfs.VirtualFileVisitor;
+import consulo.application.progress.ProgressIndicator;
+import consulo.content.OrderRootType;
+import consulo.content.library.ui.RootDetector;
+import consulo.ide.impl.idea.openapi.vfs.VfsUtilCore;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.virtualFileSystem.util.VirtualFileVisitor;
 
 public class JavadocRootDetector extends RootDetector
 {

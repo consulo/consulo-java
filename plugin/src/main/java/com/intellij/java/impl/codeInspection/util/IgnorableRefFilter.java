@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.codeInspection.util;
 
-import com.intellij.codeInspection.reference.RefElement;
+import consulo.language.editor.inspection.reference.RefElement;
 import com.intellij.java.analysis.impl.codeInspection.util.RefFilter;
 
 public abstract class IgnorableRefFilter extends RefFilter

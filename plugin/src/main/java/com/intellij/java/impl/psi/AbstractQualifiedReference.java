@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.psi;
 
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
+import consulo.language.impl.psi.ASTWrapperPsiElement;
 import com.intellij.java.impl.psi.impl.source.codeStyle.JavaReferenceAdjuster;
 import com.intellij.java.language.impl.psi.impl.source.resolve.JavaResolveUtil;
 import com.intellij.java.language.impl.psi.scope.util.PsiScopesUtil;
@@ -23,17 +23,17 @@ import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMember;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.scope.JavaScopeProcessorEvent;
-import com.intellij.lang.ASTNode;
-import com.intellij.openapi.util.TextRange;
+import consulo.language.ast.ASTNode;
+import consulo.document.util.TextRange;
 import com.intellij.psi.*;
-import com.intellij.psi.impl.CheckUtil;
-import com.intellij.psi.impl.source.resolve.ResolveCache;
-import com.intellij.psi.meta.PsiMetaData;
-import com.intellij.psi.meta.PsiMetaOwner;
-import com.intellij.psi.scope.BaseScopeProcessor;
-import com.intellij.psi.scope.PsiScopeProcessor;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.ObjectUtil;
+import consulo.language.impl.psi.CheckUtil;
+import consulo.language.psi.resolve.ResolveCache;
+import consulo.language.psi.meta.PsiMetaData;
+import consulo.language.psi.meta.PsiMetaOwner;
+import consulo.language.psi.resolve.BaseScopeProcessor;
+import consulo.language.psi.resolve.PsiScopeProcessor;
+import consulo.language.util.IncorrectOperationException;
+import consulo.util.lang.ObjectUtil;
 import consulo.psi.PsiPackage;
 import org.jetbrains.annotations.NonNls;
 
@@ -79,7 +79,7 @@ public abstract class AbstractQualifiedReference<T extends AbstractQualifiedRefe
   }
 
   @Override
-  @javax.annotation.Nullable
+  @Nullable
   public final PsiElement resolve() {
     final ResolveResult[] results = multiResolve(false);
     return results.length == 1 ? results[0].getElement() : null;
@@ -108,7 +108,7 @@ public abstract class AbstractQualifiedReference<T extends AbstractQualifiedRefe
 
   @Override
   @SuppressWarnings({"unchecked"})
-  @javax.annotation.Nullable
+  @Nullable
   public T getQualifier() {
     return (T) findChildByClass(getClass());
   }
@@ -226,7 +226,7 @@ public abstract class AbstractQualifiedReference<T extends AbstractQualifiedRefe
   @Nullable
   protected abstract PsiElement getSeparator();
 
-  @javax.annotation.Nullable
+  @Nullable
   protected abstract PsiElement getReferenceNameElement();
 
   @Override

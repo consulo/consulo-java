@@ -25,7 +25,7 @@ import com.intellij.java.debugger.impl.ui.tree.render.DescriptorLabelListener;
 import consulo.logging.Logger;
 import consulo.util.dataholder.Key;
 import java.util.HashMap;
-import com.intellij.xdebugger.impl.ui.tree.ValueMarkup;
+import consulo.ide.impl.idea.xdebugger.impl.ui.tree.ValueMarkup;
 import consulo.internal.com.sun.jdi.InconsistentDebugInfoException;
 import consulo.internal.com.sun.jdi.InvalidStackFrameException;
 import consulo.internal.com.sun.jdi.ObjectReference;
@@ -160,7 +160,7 @@ public abstract class NodeDescriptorImpl implements NodeDescriptor {
     }
     Map<ObjectReference, ValueMarkup> map = process.getUserData(MARKUP_MAP_KEY);
     if (map == null) {
-      map = new java.util.HashMap<ObjectReference, ValueMarkup>();
+      map = new HashMap<ObjectReference, ValueMarkup>();
       process.putUserData(MARKUP_MAP_KEY, map);
     }
     return map;

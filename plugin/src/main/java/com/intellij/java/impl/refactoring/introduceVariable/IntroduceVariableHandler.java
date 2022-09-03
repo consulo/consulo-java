@@ -15,24 +15,25 @@
  */
 package com.intellij.java.impl.refactoring.introduceVariable;
 
-import com.intellij.codeInsight.highlighting.HighlightManager;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.colors.EditorColors;
-import com.intellij.openapi.editor.colors.EditorColorsManager;
-import com.intellij.openapi.editor.markup.RangeHighlighter;
-import com.intellij.openapi.editor.markup.TextAttributes;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.DialogWrapper;
-import com.intellij.openapi.wm.WindowManager;
-import com.intellij.psi.PsiElement;
+import consulo.language.editor.highlight.HighlightManager;
+import consulo.codeEditor.Editor;
+import consulo.codeEditor.EditorColors;
+import consulo.colorScheme.EditorColorsManager;
+import consulo.codeEditor.markup.RangeHighlighter;
+import consulo.colorScheme.TextAttributes;
+import consulo.project.Project;
+import consulo.ui.ex.awt.DialogWrapper;
+import consulo.project.ui.wm.WindowManager;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.impl.refactoring.HelpID;
-import com.intellij.refactoring.RefactoringBundle;
-import com.intellij.refactoring.introduce.inplace.OccurrencesChooser;
-import com.intellij.refactoring.ui.ConflictsDialog;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.introduce.inplace.OccurrencesChooser;
+import consulo.language.editor.refactoring.ui.ConflictsDialog;
 import com.intellij.java.impl.refactoring.ui.TypeSelectorManagerImpl;
-import com.intellij.refactoring.util.CommonRefactoringUtil;
-import com.intellij.util.containers.MultiMap;
+import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
+import consulo.util.collection.MultiMap;
+
 import javax.annotation.Nonnull;
 
 import java.util.ArrayList;

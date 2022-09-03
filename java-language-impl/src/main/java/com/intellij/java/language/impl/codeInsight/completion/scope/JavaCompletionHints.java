@@ -15,7 +15,7 @@
  */
 package com.intellij.java.language.impl.codeInsight.completion.scope;
 
-import com.intellij.openapi.util.Condition;
+import consulo.util.lang.function.Condition;
 import consulo.util.dataholder.Key;
 
 /**

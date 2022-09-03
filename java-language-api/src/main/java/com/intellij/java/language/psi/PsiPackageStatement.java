@@ -15,7 +15,7 @@
  */
 package com.intellij.java.language.psi;
 
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 
 /**
  * Represents a <code>package</code> Java statement.

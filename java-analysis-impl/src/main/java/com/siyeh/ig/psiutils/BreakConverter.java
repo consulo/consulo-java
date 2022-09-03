@@ -3,7 +3,7 @@ package com.siyeh.ig.psiutils;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.siyeh.ig.fixes.DeleteUnnecessaryStatementFix;
 import javax.annotation.Nonnull;
 

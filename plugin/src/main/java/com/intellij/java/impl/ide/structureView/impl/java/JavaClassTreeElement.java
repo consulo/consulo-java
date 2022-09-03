@@ -1,11 +1,11 @@
 // Copyright 2000-2020 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.impl.ide.structureView.impl.java;
 
-import com.intellij.ide.structureView.StructureViewTreeElement;
+import consulo.fileEditor.structureView.StructureViewTreeElement;
 import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
 import com.intellij.java.language.impl.psi.impl.PsiImplUtil;
-import com.intellij.psi.impl.light.LightElement;
+import consulo.language.impl.psi.LightElement;
 import javax.annotation.Nonnull;
 
 import java.util.*;

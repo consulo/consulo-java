@@ -31,42 +31,42 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import com.intellij.java.language.psi.*;
+import consulo.ui.ex.awt.Messages;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nullable;
 import com.intellij.java.language.util.ClassFilter;
 import com.intellij.java.language.impl.codeInsight.PackageUtil;
 import com.intellij.java.language.util.TreeClassChooser;
 import com.intellij.java.language.util.TreeClassChooserFactory;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.command.CommandProcessor;
-import com.intellij.openapi.editor.event.DocumentAdapter;
-import com.intellij.openapi.editor.event.DocumentEvent;
-import com.intellij.openapi.help.HelpManager;
-import com.intellij.openapi.options.ConfigurationException;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.Messages;
-import com.intellij.openapi.util.Computable;
-import com.intellij.openapi.util.Ref;
+import consulo.application.ApplicationManager;
+import consulo.undoRedo.CommandProcessor;
+import consulo.document.event.DocumentAdapter;
+import consulo.document.event.DocumentEvent;
+import consulo.application.HelpManager;
+import consulo.configurable.ConfigurationException;
+import consulo.project.Project;
+import consulo.application.util.function.Computable;
+import consulo.util.lang.ref.Ref;
 import com.intellij.psi.*;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.impl.refactoring.HelpID;
 import com.intellij.java.impl.refactoring.JavaRefactoringSettings;
-import com.intellij.refactoring.RefactoringBundle;
-import com.intellij.refactoring.classMembers.MemberInfoChange;
-import com.intellij.refactoring.move.MoveCallback;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.classMember.MemberInfoChange;
+import consulo.language.editor.refactoring.move.MoveCallback;
 import com.intellij.java.impl.refactoring.ui.JavaVisibilityPanel;
 import com.intellij.java.impl.refactoring.ui.MemberSelectionPanel;
 import com.intellij.java.impl.refactoring.ui.MemberSelectionTable;
-import com.intellij.refactoring.ui.RefactoringDialog;
-import com.intellij.refactoring.util.CommonRefactoringUtil;
+import consulo.language.editor.refactoring.ui.RefactoringDialog;
+import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import com.intellij.java.impl.refactoring.util.classMembers.MemberInfo;
 import com.intellij.java.impl.refactoring.util.classMembers.UsesAndInterfacesDependencyMemberInfoModel;
-import com.intellij.ui.RecentsManager;
+import consulo.ui.ex.RecentsManager;
 import com.intellij.java.impl.ui.ReferenceEditorComboWithBrowseButton;
-import com.intellij.usageView.UsageViewUtil;
-import com.intellij.util.IncorrectOperationException;
+import consulo.usage.UsageViewUtil;
+import consulo.language.util.IncorrectOperationException;
 
 public class MoveMembersDialog extends RefactoringDialog implements MoveMembersOptions {
   @NonNls private static final String RECENTS_KEY = "MoveMembersDialog.RECENTS_KEY";
@@ -263,7 +263,7 @@ public class MoveMembersDialog extends RefactoringDialog implements MoveMembersO
     //if (getTargetClassName().length() == 0) throw new ConfigurationException("Destination class name not found");
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private String validateInputData() {
     final PsiManager manager = PsiManager.getInstance(myProject);
     final String fqName = getTargetClassName();
@@ -321,7 +321,7 @@ public class MoveMembersDialog extends RefactoringDialog implements MoveMembersO
     }
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private PsiClass findOrCreateTargetClass(final PsiManager manager, final String fqName) throws IncorrectOperationException {
     final String className;
     final String packageName;
@@ -409,7 +409,7 @@ public class MoveMembersDialog extends RefactoringDialog implements MoveMembersO
       super(mySourceClass, null, false, DEFAULT_CONTAINMENT_VERIFIER);
     }
 
-    @javax.annotation.Nullable
+    @Nullable
     public Boolean isFixedAbstract(MemberInfo member) {
       return null;
     }

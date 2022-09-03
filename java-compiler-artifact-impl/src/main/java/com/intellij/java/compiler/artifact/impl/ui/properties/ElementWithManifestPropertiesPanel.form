@@ -36,7 +36,7 @@
                   <text resource-bundle="messages/CompilerBundle" key="label.text.main.class"/>
                 </properties>
               </component>
-              <component id="d87aa" class="com.intellij.openapi.ui.TextFieldWithBrowseButton" binding="myMainClassField">
+              <component id="d87aa" class="consulo.ui.ex.awt.TextFieldWithBrowseButton" binding="myMainClassField">
                 <constraints>
                   <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>
@@ -50,7 +50,7 @@
                   <text resource-bundle="messages/CompilerBundle" key="label.text.class.path"/>
                 </properties>
               </component>
-              <component id="a5121" class="com.intellij.openapi.ui.TextFieldWithBrowseButton" binding="myClasspathField">
+              <component id="a5121" class="consulo.ui.ex.awt.TextFieldWithBrowseButton" binding="myClasspathField">
                 <constraints>
                   <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>

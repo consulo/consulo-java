@@ -16,11 +16,12 @@
 package com.intellij.java.impl.refactoring.rename.naming;
 
 import com.intellij.java.language.psi.PsiField;
-import com.intellij.psi.PsiElement;
-import com.intellij.refactoring.rename.naming.AutomaticRenamer;
-import com.intellij.refactoring.rename.naming.AutomaticRenamerFactory;
-import com.intellij.usageView.UsageInfo;
+import consulo.language.psi.PsiElement;
+import consulo.language.editor.refactoring.rename.AutomaticRenamer;
+import consulo.language.editor.refactoring.rename.AutomaticRenamerFactory;
+import consulo.usage.UsageInfo;
 
+import javax.annotation.Nullable;
 import java.util.Collection;
 
 public class ConstructorParameterOnFieldRenameRenamerFactory implements AutomaticRenamerFactory {
@@ -28,7 +29,7 @@ public class ConstructorParameterOnFieldRenameRenamerFactory implements Automati
     return element instanceof PsiField;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public String getOptionName() {
     return null;
   }

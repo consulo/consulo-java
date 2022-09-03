@@ -15,12 +15,13 @@
  */
 package com.intellij.java.language.impl.psi.impl.compiled;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.*;
-import com.intellij.psi.impl.source.SourceTreeToPsiMap;
-import com.intellij.psi.impl.source.tree.TreeElement;
+import consulo.language.impl.ast.TreeElement;
+import consulo.language.impl.psi.SourceTreeToPsiMap;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiElementVisitor;
+
+import javax.annotation.Nonnull;
 
 /**
  * @author ven
@@ -72,9 +73,8 @@ public class ClsAnnotationParameterListImpl extends ClsElementImpl implements Ps
   @Override
   public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
-      ((JavaElementVisitor)visitor).visitAnnotationParameterList(this);
-    }
-    else {
+      ((JavaElementVisitor) visitor).visitAnnotationParameterList(this);
+    } else {
       visitor.visitElement(this);
     }
   }

@@ -5,9 +5,8 @@ import com.intellij.codeInsight.CodeInsightTestCase;
 import com.intellij.java.impl.codeInsight.javadoc.JavaDocInfoGenerator;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.impl.lang.java.JavaDocumentationProvider;
-import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.*;
+import consulo.ide.impl.idea.openapi.util.io.FileUtil;
+import consulo.util.lang.StringUtil;
 import com.intellij.testFramework.PsiTestUtil;
 
 import java.io.File;

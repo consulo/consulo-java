@@ -22,11 +22,11 @@ import com.intellij.java.language.jvm.types.JvmSubstitutor;
 import com.intellij.java.language.jvm.types.JvmType;
 import com.intellij.java.language.jvm.types.JvmTypeResolveResult;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.util.ArrayFactory;
+import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.psi.PsiElement;
+import consulo.util.collection.ArrayFactory;
+import consulo.util.lang.Comparing;
 import org.jetbrains.annotations.Contract;
 
 import javax.annotation.Nonnull;

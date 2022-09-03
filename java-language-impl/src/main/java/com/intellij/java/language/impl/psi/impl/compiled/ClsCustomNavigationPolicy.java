@@ -3,8 +3,8 @@ package com.intellij.java.language.impl.psi.impl.compiled;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import com.intellij.openapi.extensions.ExtensionPointName;
-import com.intellij.psi.PsiElement;
+import consulo.component.extension.ExtensionPointName;
+import consulo.language.psi.PsiElement;
 
 public interface ClsCustomNavigationPolicy
 {

@@ -15,15 +15,16 @@
  */
 package com.intellij.java.impl.codeInsight.folding.impl;
 
-import com.intellij.codeInsight.folding.impl.AbstractElementSignatureProvider;
+import consulo.language.editor.folding.AbstractElementSignatureProvider;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
+import consulo.document.util.TextRange;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
 import consulo.logging.Logger;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 
@@ -32,7 +33,7 @@ public class JavaElementSignatureProvider extends AbstractElementSignatureProvid
   private static final Logger LOG = Logger.getInstance(JavaElementSignatureProvider.class);
 
   @Override
-  @javax.annotation.Nullable
+  @Nullable
   public String getSignature(@Nonnull final PsiElement element) {
     PsiFile file = element.getContainingFile();
     if (!(file instanceof PsiJavaFile)) {
@@ -161,7 +162,7 @@ public class JavaElementSignatureProvider extends AbstractElementSignatureProvid
                                                 @Nonnull PsiElement parent,
                                                 @Nonnull String type,
                                                 @Nonnull StringTokenizer tokenizer,
-                                                @javax.annotation.Nullable StringBuilder processingInfoStorage) {
+                                                @Nullable StringBuilder processingInfoStorage) {
     if (type.equals("imports")) {
       if (!(file instanceof PsiJavaFile)) return null;
       return ((PsiJavaFile) file).getImportList();

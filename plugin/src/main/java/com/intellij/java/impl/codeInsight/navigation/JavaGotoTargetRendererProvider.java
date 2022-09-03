@@ -15,14 +15,14 @@
  */
 package com.intellij.java.impl.codeInsight.navigation;
 
-import com.intellij.codeInsight.navigation.GotoTargetHandler;
-import com.intellij.codeInsight.navigation.GotoTargetRendererProvider;
-import com.intellij.ide.util.PsiElementListCellRenderer;
+import consulo.ide.impl.idea.codeInsight.navigation.GotoTargetHandler;
+import consulo.ide.navigation.GotoTargetRendererProvider;
+import consulo.language.editor.ui.PsiElementListCellRenderer;
 import com.intellij.java.impl.ide.util.MethodCellRenderer;
 import com.intellij.java.language.impl.codeInsight.PsiClassListCellRenderer;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 
 /**
  * @author yole

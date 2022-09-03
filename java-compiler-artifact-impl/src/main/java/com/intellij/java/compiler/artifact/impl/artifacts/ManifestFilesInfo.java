@@ -20,14 +20,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 import consulo.logging.Logger;
-import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.openapi.vfs.LocalFileSystem;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.packaging.artifacts.ArtifactType;
-import com.intellij.packaging.elements.CompositePackagingElement;
-import com.intellij.packaging.elements.PackagingElementResolvingContext;
+import consulo.ide.impl.idea.openapi.util.io.FileUtil;
+import consulo.virtualFileSystem.LocalFileSystem;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.compiler.artifact.ArtifactType;
+import consulo.compiler.artifact.element.CompositePackagingElement;
+import consulo.compiler.artifact.element.PackagingElementResolvingContext;
 import com.intellij.java.compiler.artifact.impl.ManifestFileUtil;
 import com.intellij.java.compiler.artifact.impl.ui.ManifestFileConfiguration;
+
+import javax.annotation.Nullable;
 
 public class ManifestFilesInfo
 {
@@ -35,7 +37,7 @@ public class ManifestFilesInfo
 	private final Map<VirtualFile, ManifestFileConfiguration> myManifestFiles = new HashMap<VirtualFile, ManifestFileConfiguration>();
 	private final Map<VirtualFile, ManifestFileConfiguration> myOriginalManifestFiles = new HashMap<VirtualFile, ManifestFileConfiguration>();
 
-	@javax.annotation.Nullable
+	@Nullable
 	public ManifestFileConfiguration getManifestFile(CompositePackagingElement<?> element, ArtifactType artifactType,
 			final PackagingElementResolvingContext context)
 	{

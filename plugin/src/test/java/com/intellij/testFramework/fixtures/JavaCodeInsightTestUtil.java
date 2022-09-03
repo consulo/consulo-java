@@ -19,23 +19,23 @@ import java.util.Set;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.openapi.application.Result;
-import com.intellij.openapi.command.WriteCommandAction;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.psi.PsiElement;
+import consulo.application.Result;
+import consulo.language.editor.WriteCommandAction;
+import consulo.codeEditor.Editor;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiLocalVariable;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiParameter;
-import com.intellij.psi.PsiReference;
+import consulo.language.psi.PsiReference;
 import com.intellij.java.language.psi.PsiReferenceExpression;
 import com.intellij.java.impl.refactoring.inline.InlineConstantFieldProcessor;
 import com.intellij.java.impl.refactoring.inline.InlineLocalHandler;
 import com.intellij.java.impl.refactoring.inline.InlineMethodProcessor;
 import com.intellij.java.impl.refactoring.inline.InlineParameterHandler;
 import com.intellij.java.impl.refactoring.util.InlineUtil;
-import com.intellij.util.containers.ContainerUtil;
-import consulo.codeInsight.TargetElementUtil;
+import consulo.util.collection.ContainerUtil;
+import consulo.language.editor.TargetElementUtil;
 import consulo.codeInsight.TargetElementUtilEx;
 
 

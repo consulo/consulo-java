@@ -16,8 +16,8 @@
 package com.intellij.java.impl.psi.formatter;
 
 import com.intellij.java.language.psi.JavaDocTokenType;
-import com.intellij.lang.ASTNode;
-import com.intellij.psi.formatter.WhiteSpaceFormattingStrategyAdapter;
+import consulo.language.ast.ASTNode;
+import consulo.language.codeStyle.WhiteSpaceFormattingStrategyAdapter;
 
 import javax.annotation.Nonnull;
 

@@ -16,6 +16,7 @@
 package com.intellij.java.impl.ig.internationalization;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.analysis.impl.codeInsight.intention.AddAnnotationFix;
@@ -51,7 +52,7 @@ public class StringToUpperWithoutLocaleInspection extends BaseInspection {
   }
 
   @Override
-  @javax.annotation.Nullable
+  @Nullable
   protected InspectionGadgetsFix buildFix(Object... infos) {
     final PsiReferenceExpression methodExpression =
       (PsiReferenceExpression)infos[0];

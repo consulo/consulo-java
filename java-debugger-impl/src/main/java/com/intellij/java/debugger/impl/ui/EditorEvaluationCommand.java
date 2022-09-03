@@ -15,8 +15,8 @@
  */
 package com.intellij.java.debugger.impl.ui;
 
-import com.intellij.codeInsight.hint.HintManager;
-import com.intellij.codeInsight.hint.HintManagerImpl;
+import consulo.language.editor.hint.HintManager;
+import consulo.ide.impl.idea.codeInsight.hint.HintManagerImpl;
 import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.impl.DebuggerInvocationUtil;
 import com.intellij.java.debugger.impl.DebuggerManagerEx;
@@ -24,13 +24,14 @@ import com.intellij.java.debugger.engine.evaluation.EvaluateException;
 import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
 import com.intellij.java.debugger.impl.engine.events.DebuggerContextCommandImpl;
 import com.intellij.java.debugger.impl.DebuggerContextImpl;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.progress.ProcessCanceledException;
-import com.intellij.openapi.progress.ProgressIndicator;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Computable;
-import com.intellij.psi.PsiElement;
+import consulo.application.ApplicationManager;
+import consulo.codeEditor.Editor;
+import consulo.component.ProcessCanceledException;
+import consulo.application.progress.ProgressIndicator;
+import consulo.project.Project;
+import consulo.application.util.function.Computable;
+import consulo.language.psi.PsiElement;
+
 import javax.annotation.Nullable;
 
 /**

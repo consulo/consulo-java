@@ -25,14 +25,14 @@ import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.util.TreeClassChooser;
 import com.intellij.java.language.util.TreeClassChooserFactory;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.DialogWrapper;
-import com.intellij.openapi.ui.Messages;
-import com.intellij.openapi.ui.TextFieldWithBrowseButton;
+import consulo.project.Project;
+import consulo.ui.ex.UIBundle;
+import consulo.ui.ex.awt.TextFieldWithBrowseButton;
 import com.intellij.psi.*;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.ui.UIBundle;
-import com.intellij.ui.components.JBLabel;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.ui.ex.awt.JBLabel;
+import consulo.ui.ex.awt.DialogWrapper;
+import consulo.ui.ex.awt.Messages;
 
 import javax.annotation.Nullable;
 import javax.swing.*;
@@ -43,7 +43,7 @@ import java.awt.event.ActionListener;
 class ClassFilterEditorAddDialog extends DialogWrapper {
   private final Project myProject;
   private TextFieldWithBrowseButton myClassName;
-  @javax.annotation.Nullable
+  @Nullable
   private final String myHelpId;
 
   public ClassFilterEditorAddDialog(Project project, @Nullable String helpId) {
@@ -112,7 +112,7 @@ class ClassFilterEditorAddDialog extends DialogWrapper {
     return "#com.intellij.debugger.ui.breakpoints.BreakpointsConfigurationDialogFactory.BreakpointsConfigurationDialog.AddFieldBreakpointDialog";
   }
 
-  @Override @javax.annotation.Nullable
+  @Override @Nullable
   protected String getHelpId() {
     return myHelpId;
   }

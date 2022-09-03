@@ -1,23 +1,20 @@
 // Copyright 2000-2019 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.impl.openapi.vfs.impl.jrt;
 
-import com.intellij.openapi.application.Application;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.application.ModalityState;
-import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.LocalFileSystem;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.openapi.vfs.VirtualFileManager;
-import com.intellij.openapi.vfs.impl.ArchiveHandler;
+import consulo.application.Application;
+import consulo.application.ApplicationManager;
+import consulo.ui.ModalityState;
+import consulo.ide.impl.idea.openapi.util.io.FileUtil;
+import consulo.util.lang.StringUtil;
+import consulo.virtualFileSystem.*;
+import consulo.ide.impl.idea.openapi.vfs.impl.ArchiveHandler;
 import com.intellij.java.language.vfs.jrt.JrtFileSystem;
-import com.intellij.openapi.vfs.newvfs.BulkFileListener;
-import com.intellij.openapi.vfs.newvfs.NewVirtualFile;
-import com.intellij.openapi.vfs.newvfs.RefreshQueue;
-import com.intellij.openapi.vfs.newvfs.VfsImplUtil;
-import com.intellij.openapi.vfs.newvfs.events.VFileContentChangeEvent;
-import com.intellij.openapi.vfs.newvfs.events.VFileDeleteEvent;
-import com.intellij.openapi.vfs.newvfs.events.VFileEvent;
+import consulo.virtualFileSystem.event.BulkFileListener;
+import consulo.virtualFileSystem.RefreshQueue;
+import consulo.ide.impl.idea.openapi.vfs.newvfs.VfsImplUtil;
+import consulo.virtualFileSystem.event.VFileContentChangeEvent;
+import consulo.virtualFileSystem.event.VFileDeleteEvent;
+import consulo.virtualFileSystem.event.VFileEvent;
 import consulo.java.execution.projectRoots.OwnJdkUtil;
 import consulo.util.collection.Maps;
 

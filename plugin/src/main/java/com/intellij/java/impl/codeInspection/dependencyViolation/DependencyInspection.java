@@ -28,27 +28,27 @@ import javax.swing.JPanel;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nullable;
-import com.intellij.analysis.AnalysisScope;
-import com.intellij.codeHighlighting.HighlightDisplayLevel;
-import com.intellij.codeInspection.InspectionManager;
-import com.intellij.codeInspection.InspectionsBundle;
-import com.intellij.codeInspection.LocalQuickFix;
-import com.intellij.codeInspection.ProblemDescriptor;
-import com.intellij.codeInspection.ProblemHighlightType;
+import consulo.language.editor.scope.AnalysisScope;
+import consulo.language.editor.rawHighlight.HighlightDisplayLevel;
+import consulo.language.editor.inspection.scheme.InspectionManager;
+import consulo.language.editor.inspection.InspectionsBundle;
+import consulo.language.editor.inspection.LocalQuickFix;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.editor.inspection.ProblemHighlightType;
 import com.intellij.java.analysis.impl.codeInspection.ex.BaseLocalInspectionTool;
-import com.intellij.ide.DataManager;
+import consulo.dataContext.DataManager;
 import com.intellij.java.language.JavaLanguage;
-import com.intellij.openapi.actionSystem.CommonDataKeys;
-import com.intellij.openapi.options.ShowSettingsUtil;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.project.ProjectManager;
-import com.intellij.packageDependencies.DependenciesBuilder;
-import com.intellij.packageDependencies.DependencyRule;
-import com.intellij.packageDependencies.DependencyValidationManager;
-import com.intellij.packageDependencies.ForwardDependenciesBuilder;
-import com.intellij.packageDependencies.ui.DependencyConfigurable;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
+import consulo.language.editor.CommonDataKeys;
+import consulo.ide.setting.ShowSettingsUtil;
+import consulo.project.Project;
+import consulo.project.ProjectManager;
+import consulo.ide.impl.idea.packageDependencies.DependenciesBuilder;
+import consulo.ide.impl.idea.packageDependencies.DependencyRule;
+import consulo.ide.impl.idea.packageDependencies.DependencyValidationManager;
+import consulo.ide.impl.idea.packageDependencies.ForwardDependenciesBuilder;
+import consulo.ide.impl.idea.packageDependencies.ui.DependencyConfigurable;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
 
 /**
  * User: anna

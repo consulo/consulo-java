@@ -15,10 +15,10 @@
  */
 package com.intellij.java.impl.application.options;
 
-import com.intellij.application.options.TabbedLanguageCodeStylePanel;
+import consulo.language.codeStyle.ui.setting.TabbedLanguageCodeStylePanel;
 import com.intellij.java.language.JavaLanguage;
-import com.intellij.psi.codeStyle.CodeStyleSettings;
-import com.intellij.psi.codeStyle.CodeStyleSettingsProvider;
+import consulo.language.codeStyle.CodeStyleSettings;
+import consulo.language.codeStyle.setting.CodeStyleSettingsProvider;
 
 /**
  * @author Rustam Vishnyakov

@@ -16,9 +16,9 @@
 package com.intellij.java.impl.ipp.asserttoif;
 
 import com.intellij.java.language.psi.PsiAssertStatement;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiExpression;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
 import com.intellij.java.impl.ipp.base.Intention;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.siyeh.ig.psiutils.BoolUtils;

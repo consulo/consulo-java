@@ -20,15 +20,16 @@ import com.intellij.java.language.jvm.JvmParameter;
 import com.intellij.java.language.jvm.types.JvmReferenceType;
 import com.intellij.java.language.psi.util.MethodSignature;
 import com.intellij.java.language.psi.util.MethodSignatureBackedByPsiMethod;
-import com.intellij.pom.PomRenameableTarget;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiNameIdentifierOwner;
-import com.intellij.psi.PsiTarget;
-import com.intellij.util.ArrayFactory;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiNameIdentifierOwner;
+import consulo.language.psi.PsiTarget;
+import consulo.util.collection.ArrayFactory;
+import consulo.language.pom.PomRenameableTarget;
+import consulo.language.util.IncorrectOperationException;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.List;
 
 /**
@@ -50,7 +51,7 @@ public interface PsiMethod extends PsiMember, PsiNameIdentifierOwner, PsiModifie
    *
    * @return the method return type, or null if the method is a constructor.
    */
-  @javax.annotation.Nullable
+  @Nullable
   PsiType getReturnType();
 
   /**
@@ -58,7 +59,7 @@ public interface PsiMethod extends PsiMember, PsiNameIdentifierOwner, PsiModifie
    *
    * @return the type element for the return type, or null if the method is a constructor.
    */
-  @javax.annotation.Nullable
+  @Nullable
   PsiTypeElement getReturnTypeElement();
 
   /**
@@ -84,7 +85,7 @@ public interface PsiMethod extends PsiMember, PsiNameIdentifierOwner, PsiModifie
    * @return the method body, or null if the method belongs to a compiled class.
    */
   @Override
-  @javax.annotation.Nullable
+  @Nullable
   PsiCodeBlock getBody();
 
   /**
@@ -117,7 +118,7 @@ public interface PsiMethod extends PsiMember, PsiNameIdentifierOwner, PsiModifie
    * @return the name identifier instance.
    */
   @Override
-  @javax.annotation.Nullable
+  @Nullable
   PsiIdentifier getNameIdentifier();
 
   /**
@@ -181,7 +182,7 @@ public interface PsiMethod extends PsiMember, PsiNameIdentifierOwner, PsiModifie
    * or implement any other method.
    * @deprecated use {@link #findDeepestSuperMethods()} instead
    */
-  @javax.annotation.Nullable
+  @Nullable
   PsiMethod findDeepestSuperMethod();
 
   @Nonnull

@@ -21,10 +21,10 @@ import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiExpressionCodeFragment;
 import com.intellij.java.language.psi.PsiType;
-import com.intellij.lang.ASTNode;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.impl.source.SourceTreeToPsiMap;
+import consulo.language.ast.ASTNode;
+import consulo.project.Project;
+import consulo.language.psi.PsiElement;
+import consulo.language.impl.psi.SourceTreeToPsiMap;
 import consulo.logging.Logger;
 import org.jetbrains.annotations.NonNls;
 
@@ -38,13 +38,13 @@ public class PsiExpressionCodeFragmentImpl extends PsiCodeFragmentImpl implement
                                        boolean isPhysical,
                                        @NonNls String name,
                                        CharSequence text,
-                                       @javax.annotation.Nullable final PsiType expectedType,
+                                       @Nullable final PsiType expectedType,
                                        @Nullable PsiElement context) {
     super(project, JavaElementType.EXPRESSION_TEXT, isPhysical, name, text, context);
     setExpectedType(expectedType);
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   @Override
   public PsiExpression getExpression() {
     ASTNode exprChild = calcTreeElement().findChildByType(ElementType.EXPRESSION_BIT_SET);
@@ -62,7 +62,7 @@ public class PsiExpressionCodeFragmentImpl extends PsiCodeFragmentImpl implement
   }
 
   @Override
-  public void setExpectedType(@javax.annotation.Nullable PsiType type) {
+  public void setExpectedType(@Nullable PsiType type) {
     myExpectedType = type;
     if (type != null) {
       LOG.assertTrue(type.isValid());

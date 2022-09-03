@@ -16,22 +16,23 @@
 package com.intellij.java.impl.psi.impl.beanProperties;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.intellij.java.language.psi.*;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import com.intellij.java.impl.codeInsight.daemon.impl.quickfix.CreateFromUsageUtils;
-import com.intellij.codeInsight.intention.IntentionAction;
-import com.intellij.codeInspection.LocalQuickFix;
-import com.intellij.codeInspection.ProblemDescriptor;
-import com.intellij.openapi.command.WriteCommandAction;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
+import consulo.language.editor.intention.IntentionAction;
+import consulo.language.editor.inspection.LocalQuickFix;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.editor.WriteCommandAction;
+import consulo.codeEditor.Editor;
+import consulo.project.Project;
 import com.intellij.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.java.language.psi.util.PropertyUtil;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import org.jetbrains.annotations.NonNls;
 
@@ -49,11 +50,11 @@ public abstract class CreateBeanPropertyFix implements LocalQuickFix, IntentionA
   @Nonnull
   protected final PsiType myType;
 
-  public static LocalQuickFix[] createFixes(String propertyName, @Nonnull PsiClass psiClass, @javax.annotation.Nullable PsiType type, final boolean createSetter) {
+  public static LocalQuickFix[] createFixes(String propertyName, @Nonnull PsiClass psiClass, @Nullable PsiType type, final boolean createSetter) {
     return (LocalQuickFix[])create(propertyName, psiClass, type, createSetter);
   }
 
-  public static IntentionAction[] createActions(String propertyName, @Nonnull PsiClass psiClass, @javax.annotation.Nullable PsiType type, final boolean createSetter) {
+  public static IntentionAction[] createActions(String propertyName, @Nonnull PsiClass psiClass, @Nullable PsiType type, final boolean createSetter) {
     return (IntentionAction[])create(propertyName, psiClass, type, createSetter);
   }
 

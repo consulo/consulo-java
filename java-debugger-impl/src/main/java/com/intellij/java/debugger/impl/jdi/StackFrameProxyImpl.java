@@ -181,7 +181,7 @@ public class StackFrameProxyImpl extends JdiProxy implements StackFrameProxy
 		return (VirtualMachineProxyImpl) myTimer;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	@Override
 	public Location location() throws EvaluateException
 	{
@@ -227,7 +227,7 @@ public class StackFrameProxyImpl extends JdiProxy implements StackFrameProxy
 		}
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public ObjectReference thisObject() throws EvaluateException
 	{
 		DebuggerManagerThreadImpl.assertIsManagerThread();

@@ -15,17 +15,17 @@
  */
 package com.intellij.java.language.impl.psi.impl.source.tree.java;
 
-import javax.annotation.Nonnull;
-
-import com.intellij.java.language.psi.*;
-import com.intellij.lang.ASTNode;
-import consulo.logging.Logger;
-import com.intellij.psi.*;
 import com.intellij.java.language.impl.psi.impl.source.tree.ChildRole;
 import com.intellij.java.language.impl.psi.impl.source.tree.ElementType;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
-import com.intellij.psi.tree.ChildRoleBase;
-import com.intellij.psi.tree.IElementType;
+import com.intellij.java.language.psi.*;
+import consulo.language.ast.ASTNode;
+import consulo.language.ast.ChildRoleBase;
+import consulo.language.ast.IElementType;
+import consulo.language.psi.PsiElementVisitor;
+import consulo.logging.Logger;
+
+import javax.annotation.Nonnull;
 
 public class PsiPrefixExpressionImpl extends ExpressionPsiElement implements PsiPrefixExpression {
   private static final Logger LOG = Logger.getInstance(PsiPrefixExpressionImpl.class);
@@ -36,13 +36,13 @@ public class PsiPrefixExpressionImpl extends ExpressionPsiElement implements Psi
 
   @Override
   public PsiExpression getOperand() {
-    return (PsiExpression)findChildByRoleAsPsiElement(ChildRole.OPERAND);
+    return (PsiExpression) findChildByRoleAsPsiElement(ChildRole.OPERAND);
   }
 
   @Override
   @Nonnull
   public PsiJavaToken getOperationSign() {
-    return (PsiJavaToken)findChildByRoleAsPsiElement(ChildRole.OPERATION_SIGN);
+    return (PsiJavaToken) findChildByRoleAsPsiElement(ChildRole.OPERATION_SIGN);
   }
 
   @Override
@@ -61,14 +61,11 @@ public class PsiPrefixExpressionImpl extends ExpressionPsiElement implements Psi
       if (type == null) return null;
       if (type instanceof PsiClassType) type = PsiPrimitiveType.getUnboxedType(type);
       return PsiType.BYTE.equals(type) || PsiType.CHAR.equals(type) || PsiType.SHORT.equals(type) ? PsiType.INT : type;
-    }
-    else if (opCode == JavaTokenType.PLUSPLUS || opCode == JavaTokenType.MINUSMINUS) {
+    } else if (opCode == JavaTokenType.PLUSPLUS || opCode == JavaTokenType.MINUSMINUS) {
       return type;
-    }
-    else if (opCode == JavaTokenType.EXCL) {
+    } else if (opCode == JavaTokenType.EXCL) {
       return PsiType.BOOLEAN;
-    }
-    else {
+    } else {
       LOG.assertTrue(false);
       return null;
     }
@@ -77,7 +74,7 @@ public class PsiPrefixExpressionImpl extends ExpressionPsiElement implements Psi
   @Override
   public ASTNode findChildByRole(int role) {
     LOG.assertTrue(ChildRole.isUnique(role));
-    switch(role){
+    switch (role) {
       default:
         return null;
 
@@ -93,16 +90,16 @@ public class PsiPrefixExpressionImpl extends ExpressionPsiElement implements Psi
   public int getChildRole(ASTNode child) {
     LOG.assertTrue(child.getTreeParent() == this);
     if (child == getFirstChildNode()) return ChildRole.OPERATION_SIGN;
-    if (child == getLastChildNode() && ElementType.EXPRESSION_BIT_SET.contains(child.getElementType())) return ChildRole.OPERAND;
+    if (child == getLastChildNode() && ElementType.EXPRESSION_BIT_SET.contains(child.getElementType()))
+      return ChildRole.OPERAND;
     return ChildRoleBase.NONE;
   }
 
   @Override
   public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
-      ((JavaElementVisitor)visitor).visitPrefixExpression(this);
-    }
-    else {
+      ((JavaElementVisitor) visitor).visitPrefixExpression(this);
+    } else {
       visitor.visitElement(this);
     }
   }

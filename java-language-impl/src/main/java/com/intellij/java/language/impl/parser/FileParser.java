@@ -1,22 +1,22 @@
 // Copyright 2000-2018 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.language.impl.parser;
 
-import com.intellij.AbstractBundle;
+import consulo.component.util.localize.AbstractBundle;
 import com.intellij.java.language.impl.codeInsight.daemon.JavaErrorBundle;
-import com.intellij.lang.PsiBuilder;
-import com.intellij.openapi.util.Pair;
+import consulo.language.parser.PsiBuilder;
+import consulo.util.lang.Pair;
 import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.java.language.psi.PsiKeyword;
 import com.intellij.java.language.impl.psi.impl.source.tree.ElementType;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.tree.TokenSet;
+import consulo.language.ast.IElementType;
+import consulo.language.ast.TokenSet;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import java.util.function.Predicate;
 
-import static com.intellij.lang.PsiBuilderUtil.expect;
+import static consulo.language.parser.PsiBuilderUtil.expect;
 import static com.intellij.java.language.impl.parser.JavaParserUtil.*;
 
 public class FileParser

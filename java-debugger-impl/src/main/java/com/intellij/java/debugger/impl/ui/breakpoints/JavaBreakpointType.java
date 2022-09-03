@@ -16,8 +16,8 @@
 package com.intellij.java.debugger.impl.ui.breakpoints;
 
 import com.intellij.java.debugger.impl.breakpoints.properties.JavaBreakpointProperties;
-import com.intellij.openapi.project.Project;
-import com.intellij.xdebugger.breakpoints.XBreakpoint;
+import consulo.execution.debug.breakpoint.XBreakpoint;
+import consulo.project.Project;
 
 /**
  * Base class for all Java breakpoint types

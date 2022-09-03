@@ -23,12 +23,12 @@ package com.intellij.java.impl.packageDependencies;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.packageDependencies.DependenciesBuilder;
-import com.intellij.packageDependencies.DependenciesVisitorFactory;
-import com.intellij.packageDependencies.DependencyValidationManager;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.PsiReference;
+import consulo.ide.impl.idea.packageDependencies.DependenciesBuilder;
+import consulo.ide.impl.idea.packageDependencies.DependenciesVisitorFactory;
+import consulo.ide.impl.idea.packageDependencies.DependencyValidationManager;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiElementVisitor;
+import consulo.language.psi.PsiReference;
 
 public class JavaDependenciesVisitorFactory extends DependenciesVisitorFactory {
   @Override

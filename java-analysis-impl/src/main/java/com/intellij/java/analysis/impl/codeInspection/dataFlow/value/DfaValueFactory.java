@@ -11,14 +11,14 @@ import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Pair;
-import com.intellij.patterns.ElementPattern;
+import consulo.project.Project;
+import consulo.util.lang.Pair;
+import consulo.language.pattern.ElementPattern;
 import com.intellij.psi.*;
 import com.intellij.java.language.impl.psi.impl.source.PsiFieldImpl;
 import com.intellij.psi.util.*;
-import com.intellij.util.containers.FList;
-import com.intellij.util.containers.FactoryMap;
+import consulo.util.collection.FList;
+import consulo.util.collection.FactoryMap;
 import com.siyeh.ig.callMatcher.CallMatcher;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import org.jetbrains.annotations.Contract;
@@ -30,7 +30,7 @@ import java.util.*;
 
 import static com.intellij.java.language.patterns.PsiJavaPatterns.psiMember;
 import static com.intellij.java.language.patterns.PsiJavaPatterns.psiParameter;
-import static com.intellij.patterns.StandardPatterns.or;
+import static consulo.language.pattern.StandardPatterns.or;
 
 public class DfaValueFactory {
   private final

@@ -16,10 +16,10 @@
 package com.intellij.java.impl.ipp.comment;
 
 import com.intellij.java.language.psi.JavaTokenType;
-import com.intellij.psi.PsiComment;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiComment;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
-import com.intellij.psi.tree.IElementType;
+import consulo.language.ast.IElementType;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 
 import java.util.regex.Pattern;

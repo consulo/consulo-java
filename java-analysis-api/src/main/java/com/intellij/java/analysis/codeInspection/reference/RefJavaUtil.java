@@ -20,12 +20,12 @@
  */
 package com.intellij.java.analysis.codeInspection.reference;
 
-import com.intellij.codeInspection.reference.RefElement;
-import com.intellij.codeInspection.reference.RefEntity;
-import com.intellij.codeInspection.reference.RefManager;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.components.ServiceManager;
-import com.intellij.psi.*;
+import consulo.ide.ServiceManager;
+import consulo.language.editor.inspection.reference.RefElement;
+import consulo.language.editor.inspection.reference.RefEntity;
+import consulo.language.editor.inspection.reference.RefManager;
+import consulo.language.psi.PsiElement;
 
 import javax.annotation.Nullable;
 
@@ -58,15 +58,15 @@ public abstract class RefJavaUtil {
   public abstract boolean isMethodOnlyCallsSuper(final PsiMethod derivedMethod);
 
   public static boolean isDeprecated(PsiElement psiResolved) {
-    return psiResolved instanceof PsiDocCommentOwner && ((PsiDocCommentOwner)psiResolved).isDeprecated();
+    return psiResolved instanceof PsiDocCommentOwner && ((PsiDocCommentOwner) psiResolved).isDeprecated();
   }
 
   @Nullable
   public static RefPackage getPackage(RefEntity refEntity) {
-   while (refEntity != null && !(refEntity instanceof RefPackage)) refEntity = refEntity.getOwner();
+    while (refEntity != null && !(refEntity instanceof RefPackage)) refEntity = refEntity.getOwner();
 
-   return (RefPackage)refEntity;
- }
+    return (RefPackage) refEntity;
+  }
 
   public static RefJavaUtil getInstance() {
     return ServiceManager.getService(RefJavaUtil.class);

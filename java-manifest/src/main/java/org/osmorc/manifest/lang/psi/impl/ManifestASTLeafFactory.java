@@ -28,9 +28,9 @@ package org.osmorc.manifest.lang.psi.impl;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.osmorc.manifest.lang.ManifestTokenType;
-import com.intellij.psi.impl.source.tree.LeafElement;
-import com.intellij.psi.tree.IElementType;
-import consulo.lang.LanguageVersion;
+import consulo.language.impl.ast.LeafElement;
+import consulo.language.ast.IElementType;
+import consulo.language.version.LanguageVersion;
 import consulo.psi.tree.ASTLeafFactory;
 
 /**

@@ -16,12 +16,14 @@
 package com.intellij.java.debugger.impl.breakpoints.properties;
 
 import com.intellij.java.debugger.impl.InstanceFilter;
-import com.intellij.openapi.util.Comparing;
+import consulo.util.lang.Comparing;
 import com.intellij.java.debugger.ui.classFilter.ClassFilter;
-import com.intellij.util.xmlb.annotations.AbstractCollection;
-import com.intellij.util.xmlb.annotations.OptionTag;
-import com.intellij.util.xmlb.annotations.Tag;
-import com.intellij.xdebugger.breakpoints.XBreakpointProperties;
+import consulo.util.xml.serializer.annotation.AbstractCollection;
+import consulo.util.xml.serializer.annotation.OptionTag;
+import consulo.util.xml.serializer.annotation.Tag;
+import consulo.execution.debug.breakpoint.XBreakpointProperties;
+
+import javax.annotation.Nullable;
 
 /**
  * @author egor
@@ -97,7 +99,7 @@ public class JavaBreakpointProperties<T extends JavaBreakpointProperties> extend
 		return changed;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	@Override
 	public T getState()
 	{

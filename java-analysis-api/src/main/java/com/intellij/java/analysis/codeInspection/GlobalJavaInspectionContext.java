@@ -21,16 +21,16 @@
 package com.intellij.java.analysis.codeInspection;
 
 import com.intellij.java.analysis.codeInspection.ex.EntryPointsManager;
-import com.intellij.codeInspection.lang.GlobalInspectionContextExtension;
+import consulo.language.editor.inspection.GlobalInspectionContextExtension;
 import com.intellij.java.analysis.codeInspection.reference.RefClass;
 import com.intellij.java.analysis.codeInspection.reference.RefField;
-import com.intellij.codeInspection.reference.RefManager;
+import consulo.language.editor.inspection.reference.RefManager;
 import com.intellij.java.analysis.codeInspection.reference.RefMethod;
 import consulo.util.dataholder.Key;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.psi.PsiReference;
-import com.intellij.util.Processor;
+import consulo.language.psi.PsiReference;
+import consulo.application.util.function.Processor;
 
 public abstract class GlobalJavaInspectionContext implements GlobalInspectionContextExtension<GlobalJavaInspectionContext> {
   public static final Key<GlobalJavaInspectionContext> CONTEXT = Key.create("GlobalJavaInspectionContext");

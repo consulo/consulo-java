@@ -15,7 +15,7 @@
  */
 package com.intellij.psi.formatter.java;
 
-import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
+import consulo.language.codeStyle.CommonCodeStyleSettings;
 
 /**
  * Is intended to hold specific java formatting tests for 'spacing' settings.

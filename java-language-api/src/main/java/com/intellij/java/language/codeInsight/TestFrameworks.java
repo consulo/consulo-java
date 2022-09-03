@@ -15,108 +15,91 @@
  */
 package com.intellij.java.language.codeInsight;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiMethod;
+import com.intellij.java.language.testIntegration.TestFramework;
+import consulo.application.util.CachedValueProvider;
+import consulo.ide.ServiceManager;
+import consulo.language.psi.PsiModificationTracker;
+import consulo.language.psi.util.LanguageCachedValueUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.extensions.Extensions;
-import com.intellij.java.language.psi.PsiClass;
-import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.psi.util.CachedValueProvider;
-import com.intellij.psi.util.CachedValuesManager;
-import com.intellij.psi.util.PsiModificationTracker;
-import com.intellij.java.language.testIntegration.TestFramework;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  * @author yole
  */
-public abstract class TestFrameworks
-{
-	public static TestFrameworks getInstance()
-	{
-		return ServiceManager.getService(TestFrameworks.class);
-	}
+public abstract class TestFrameworks {
+  public static TestFrameworks getInstance() {
+    return ServiceManager.getService(TestFrameworks.class);
+  }
 
-	public abstract boolean isTestClass(PsiClass psiClass);
+  public abstract boolean isTestClass(PsiClass psiClass);
 
-	public abstract boolean isPotentialTestClass(PsiClass psiClass);
+  public abstract boolean isPotentialTestClass(PsiClass psiClass);
 
-	@Nullable
-	public abstract PsiMethod findOrCreateSetUpMethod(PsiClass psiClass);
+  @Nullable
+  public abstract PsiMethod findOrCreateSetUpMethod(PsiClass psiClass);
 
-	@Nullable
-	public abstract PsiMethod findSetUpMethod(PsiClass psiClass);
+  @Nullable
+  public abstract PsiMethod findSetUpMethod(PsiClass psiClass);
 
-	@Nullable
-	public abstract PsiMethod findTearDownMethod(PsiClass psiClass);
+  @Nullable
+  public abstract PsiMethod findTearDownMethod(PsiClass psiClass);
 
-	protected abstract boolean hasConfigMethods(PsiClass psiClass);
+  protected abstract boolean hasConfigMethods(PsiClass psiClass);
 
-	public abstract boolean isTestMethod(PsiMethod method);
+  public abstract boolean isTestMethod(PsiMethod method);
 
-	public boolean isTestOrConfig(PsiClass psiClass)
-	{
-		return isTestClass(psiClass) || hasConfigMethods(psiClass);
-	}
+  public boolean isTestOrConfig(PsiClass psiClass) {
+    return isTestClass(psiClass) || hasConfigMethods(psiClass);
+  }
 
-	@Nullable
-	public static TestFramework detectFramework(@Nonnull final PsiClass psiClass)
-	{
-		return CachedValuesManager.getCachedValue(psiClass, () -> CachedValueProvider.Result.create(computeFramework(psiClass), PsiModificationTracker.JAVA_STRUCTURE_MODIFICATION_COUNT));
-	}
+  @Nullable
+  public static TestFramework detectFramework(@Nonnull final PsiClass psiClass) {
+    return LanguageCachedValueUtil.getCachedValue(psiClass, () -> CachedValueProvider.Result.create(computeFramework(psiClass), PsiModificationTracker.JAVA_STRUCTURE_MODIFICATION_COUNT));
+  }
 
-	@Nonnull
-	public static Set<TestFramework> detectApplicableFrameworks(@Nonnull final PsiClass psiClass)
-	{
-		return CachedValuesManager.getCachedValue(psiClass, () -> CachedValueProvider.Result.create(computeFrameworks(psiClass), PsiModificationTracker.JAVA_STRUCTURE_MODIFICATION_COUNT));
-	}
+  @Nonnull
+  public static Set<TestFramework> detectApplicableFrameworks(@Nonnull final PsiClass psiClass) {
+    return LanguageCachedValueUtil.getCachedValue(psiClass, () -> CachedValueProvider.Result.create(computeFrameworks(psiClass), PsiModificationTracker.JAVA_STRUCTURE_MODIFICATION_COUNT));
+  }
 
-	private static Set<TestFramework> computeFrameworks(PsiClass psiClass)
-	{
-		Set<TestFramework> frameworks = new LinkedHashSet<>();
-		for(TestFramework framework : Extensions.getExtensions(TestFramework.EXTENSION_NAME))
-		{
-			if(framework.isTestClass(psiClass))
-			{
-				frameworks.add(framework);
-			}
-		}
+  private static Set<TestFramework> computeFrameworks(PsiClass psiClass) {
+    Set<TestFramework> frameworks = new LinkedHashSet<>();
+    for (TestFramework framework : TestFramework.EXTENSION_NAME.getExtensionList()) {
+      if (framework.isTestClass(psiClass)) {
+        frameworks.add(framework);
+      }
+    }
 
-		for(TestFramework framework : Extensions.getExtensions(TestFramework.EXTENSION_NAME))
-		{
-			if(frameworks.contains(framework))
-			{
-				continue;
-			}
+    for (TestFramework framework : TestFramework.EXTENSION_NAME.getExtensionList()) {
+      if (frameworks.contains(framework)) {
+        continue;
+      }
 
-			if(framework.findSetUpMethod(psiClass) != null || framework.findTearDownMethod(psiClass) != null)
-			{
-				frameworks.add(framework);
-			}
-		}
-		return frameworks;
-	}
+      if (framework.findSetUpMethod(psiClass) != null || framework.findTearDownMethod(psiClass) != null) {
+        frameworks.add(framework);
+      }
+    }
+    return frameworks;
+  }
 
-	@Nullable
-	private static TestFramework computeFramework(PsiClass psiClass)
-	{
-		for(TestFramework framework : Extensions.getExtensions(TestFramework.EXTENSION_NAME))
-		{
-			if(framework.isTestClass(psiClass))
-			{
-				return framework;
-			}
-		}
+  @Nullable
+  private static TestFramework computeFramework(PsiClass psiClass) {
+    for (TestFramework framework : TestFramework.EXTENSION_NAME.getExtensionList()) {
+      if (framework.isTestClass(psiClass)) {
+        return framework;
+      }
+    }
 
-		for(TestFramework framework : Extensions.getExtensions(TestFramework.EXTENSION_NAME))
-		{
-			if(framework.findSetUpMethod(psiClass) != null || framework.findTearDownMethod(psiClass) != null)
-			{
-				return framework;
-			}
-		}
-		return null;
-	}
+    for (TestFramework framework : TestFramework.EXTENSION_NAME.getExtensionList()) {
+      if (framework.findSetUpMethod(psiClass) != null || framework.findTearDownMethod(psiClass) != null) {
+        return framework;
+      }
+    }
+    return null;
+  }
 }

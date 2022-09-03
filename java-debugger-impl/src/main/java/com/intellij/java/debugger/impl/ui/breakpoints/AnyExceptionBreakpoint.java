@@ -20,16 +20,16 @@
  */
 package com.intellij.java.debugger.impl.ui.breakpoints;
 
+import consulo.execution.debug.breakpoint.XBreakpoint;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
 import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.engine.DebugProcess;
 import com.intellij.java.debugger.impl.engine.DebugProcessImpl;
 import com.intellij.java.debugger.impl.engine.DebuggerManagerThreadImpl;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.InvalidDataException;
+import consulo.project.Project;
+import consulo.util.xml.serializer.InvalidDataException;
 import consulo.util.dataholder.Key;
-import com.intellij.xdebugger.breakpoints.XBreakpoint;
 import consulo.internal.com.sun.jdi.ReferenceType;
 
 public class AnyExceptionBreakpoint extends ExceptionBreakpoint

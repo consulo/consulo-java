@@ -16,12 +16,12 @@
 
 package consulo.java.impl.ide.newProjectOrModule;
 
-import com.intellij.icons.AllIcons;
-import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.roots.ContentEntry;
-import com.intellij.openapi.roots.ModifiableRootModel;
+import consulo.application.AllIcons;
+import consulo.content.bundle.Sdk;
+import consulo.module.content.layer.ContentEntry;
+import consulo.module.content.layer.ModifiableRootModel;
 import consulo.annotation.access.RequiredReadAction;
-import consulo.ide.impl.UnzipNewModuleBuilderProcessor;
+import consulo.ide.newModule.UnzipNewModuleBuilderProcessor;
 import consulo.ide.newProject.NewModuleBuilder;
 import consulo.ide.newProject.NewModuleBuilderProcessor;
 import consulo.ide.newProject.NewModuleContext;

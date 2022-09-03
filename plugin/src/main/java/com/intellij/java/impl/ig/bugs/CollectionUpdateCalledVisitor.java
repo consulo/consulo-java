@@ -19,6 +19,7 @@ import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.Set;
 
@@ -29,7 +30,7 @@ class CollectionUpdateCalledVisitor extends JavaRecursiveElementVisitor {
   private boolean updated = false;
   private final PsiVariable variable;
 
-  CollectionUpdateCalledVisitor(@javax.annotation.Nullable PsiVariable variable, Set<String> updateNames) {
+  CollectionUpdateCalledVisitor(@Nullable PsiVariable variable, Set<String> updateNames) {
     this.variable = variable;
     this.updateNames = updateNames;
   }

@@ -16,11 +16,11 @@
 package com.intellij.java.impl.ig.controlflow;
 
 import com.intellij.java.impl.codeInsight.daemon.impl.quickfix.ConvertSwitchToIfIntention;
-import com.intellij.codeInspection.ProblemDescriptor;
-import com.intellij.codeInspection.ui.SingleIntegerFieldOptionsPanel;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.ide.impl.idea.codeInspection.ui.SingleIntegerFieldOptionsPanel;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.project.Project;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;

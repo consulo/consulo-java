@@ -16,17 +16,18 @@
 package com.intellij.java.language.impl.psi.impl.light;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiField;
-import com.intellij.psi.PsiManager;
+import consulo.language.psi.PsiManager;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
 
 /**
  * @author Maxim.Medvedev
@@ -56,7 +57,7 @@ public class LightFieldBuilder extends LightVariableBuilder<LightFieldBuilder> i
   }
 
   @Override
-  public void setInitializer(@javax.annotation.Nullable PsiExpression initializer) throws IncorrectOperationException {
+  public void setInitializer(@Nullable PsiExpression initializer) throws IncorrectOperationException {
     myInitializer = initializer;
   }
 

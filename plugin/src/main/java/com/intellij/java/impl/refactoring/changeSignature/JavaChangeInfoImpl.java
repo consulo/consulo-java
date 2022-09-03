@@ -27,15 +27,16 @@ import java.util.List;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.lang.Language;
+import consulo.language.Language;
 import com.intellij.java.language.JavaLanguage;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.util.lang.Comparing;
+import consulo.util.lang.StringUtil;
 import com.intellij.psi.*;
 import com.intellij.java.impl.refactoring.util.CanonicalTypes;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 
 public class JavaChangeInfoImpl implements JavaChangeInfo {
@@ -304,7 +305,7 @@ public class JavaChangeInfoImpl implements JavaChangeInfo {
     return result.toArray(new ParameterInfoImpl[result.size()]);
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public PsiExpression getValue(int i, PsiCallExpression expr) throws IncorrectOperationException {
     if (defaultValues[i] != null) return defaultValues[i];
     return newParms[i].getValue(expr);

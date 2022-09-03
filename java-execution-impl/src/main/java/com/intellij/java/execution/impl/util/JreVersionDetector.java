@@ -23,13 +23,13 @@
 package com.intellij.java.execution.impl.util;
 
 import com.intellij.java.execution.CommonJavaRunConfigurationParameters;
-import com.intellij.execution.configurations.ModuleBasedConfiguration;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleUtil;
+import consulo.execution.configuration.ModuleBasedConfiguration;
+import consulo.module.Module;
+import consulo.ide.impl.idea.openapi.module.ModuleUtil;
 import com.intellij.java.language.projectRoots.JavaSdk;
 import com.intellij.java.language.projectRoots.JavaSdkVersion;
 import com.intellij.java.language.projectRoots.OwnJdkVersionDetector;
-import com.intellij.openapi.projectRoots.Sdk;
+import consulo.content.bundle.Sdk;
 import consulo.java.language.module.extension.JavaModuleExtension;
 
 public class JreVersionDetector

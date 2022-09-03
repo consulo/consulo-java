@@ -15,12 +15,12 @@
  */
 package com.intellij.java.impl.codeInspection.compiler;
 
-import com.intellij.codeInspection.InspectionsBundle;
-import com.intellij.codeInspection.ProblemsHolder;
+import consulo.language.editor.inspection.InspectionsBundle;
+import consulo.language.editor.inspection.ProblemsHolder;
 import com.intellij.java.language.psi.*;
-import com.intellij.patterns.ElementPattern;
+import consulo.language.pattern.ElementPattern;
 import com.intellij.psi.*;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 
 import static com.intellij.java.language.patterns.PsiJavaPatterns.psiElement;

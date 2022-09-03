@@ -20,12 +20,12 @@
 package com.intellij.java.indexing.impl.stubs.index;
 
 import com.intellij.java.indexing.impl.search.JavaSourceFilterScope;
-import com.intellij.openapi.project.Project;
-import com.intellij.java.language.psi.PsiAnonymousClass;
 import com.intellij.java.language.impl.psi.impl.java.stubs.index.JavaStubIndexKeys;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.stubs.StringStubIndexExtension;
-import com.intellij.psi.stubs.StubIndexKey;
+import com.intellij.java.language.psi.PsiAnonymousClass;
+import consulo.language.psi.stub.StringStubIndexExtension;
+import consulo.language.psi.stub.StubIndexKey;
+import consulo.project.Project;
+import consulo.project.content.scope.ProjectAwareSearchScope;
 
 import javax.annotation.Nonnull;
 import java.util.Collection;
@@ -33,6 +33,7 @@ import java.util.Collection;
 public class JavaAnonymousClassBaseRefOccurenceIndex extends StringStubIndexExtension<PsiAnonymousClass> {
 
   private static final JavaAnonymousClassBaseRefOccurenceIndex ourInstance = new JavaAnonymousClassBaseRefOccurenceIndex();
+
   public static JavaAnonymousClassBaseRefOccurenceIndex getInstance() {
     return ourInstance;
   }
@@ -45,7 +46,7 @@ public class JavaAnonymousClassBaseRefOccurenceIndex extends StringStubIndexExte
   }
 
   @Override
-  public Collection<PsiAnonymousClass> get(final String s, final Project project, @Nonnull final GlobalSearchScope scope) {
+  public Collection<PsiAnonymousClass> get(final String s, final Project project, @Nonnull final ProjectAwareSearchScope scope) {
     return super.get(s, project, new JavaSourceFilterScope(scope));
   }
 }

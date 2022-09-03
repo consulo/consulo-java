@@ -15,13 +15,13 @@
  */
 package com.intellij.java.language;
 
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.util.ArrayUtil;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.component.util.pointer.Named;
+import consulo.component.util.pointer.NamedPointer;
 import consulo.java.language.psi.JavaLanguageVersion;
+import consulo.util.collection.ArrayUtil;
+import consulo.util.collection.ContainerUtil;
 import consulo.util.dataholder.Key;
-import consulo.util.pointers.Named;
-import consulo.util.pointers.NamedPointer;
+import consulo.util.lang.StringUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

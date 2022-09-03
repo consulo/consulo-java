@@ -2,8 +2,7 @@
 
 package com.intellij.java.analysis.impl.codeInspection.dataFlow;
 
-import com.intellij.codeInsight.intention.impl.BaseIntentionAction;
-import com.intellij.codeInspection.*;
+import consulo.language.editor.intention.BaseIntentionAction;
 import com.intellij.java.analysis.JavaAnalysisBundle;
 import com.intellij.java.analysis.codeInspection.AbstractBaseJavaLocalInspectionTool;
 import com.intellij.java.analysis.impl.codeInsight.intention.AddAnnotationPsiFix;
@@ -26,19 +25,19 @@ import com.intellij.java.language.psi.util.PsiTypesUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import com.intellij.java.language.util.JavaPsiConstructorUtil;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.openapi.util.WriteExternalException;
-import com.intellij.openapi.util.registry.Registry;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.application.ApplicationManager;
+import consulo.logging.Logger;
+import consulo.project.Project;
+import consulo.document.util.TextRange;
+import consulo.util.xml.serializer.WriteExternalException;
+import consulo.application.util.registry.Registry;
+import consulo.util.lang.StringUtil;
 import com.intellij.psi.*;
 import com.intellij.java.language.impl.psi.impl.PsiImplUtil;
-import com.intellij.psi.tree.IElementType;
+import consulo.language.ast.IElementType;
 import com.intellij.psi.util.*;
 import com.intellij.util.*;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.util.collection.ContainerUtil;
 import com.siyeh.ig.bugs.EqualsWithItselfInspection;
 import com.siyeh.ig.fixes.EqualsToEqualityFix;
 import com.siyeh.ig.psiutils.*;
@@ -49,11 +48,12 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.PropertyKey;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.swing.*;
 import java.util.*;
 import java.util.function.Consumer;
 
-import static com.intellij.util.ObjectUtils.tryCast;
+import static consulo.ide.impl.idea.util.ObjectUtils.tryCast;
 
 public abstract class DataFlowInspectionBase extends AbstractBaseJavaLocalInspectionTool {
   static final Logger LOG = Logger.getInstance(DataFlowInspectionBase.class);
@@ -279,13 +279,13 @@ public abstract class DataFlowInspectionBase extends AbstractBaseJavaLocalInspec
   }
 
   protected
-  @javax.annotation.Nullable
+  @Nullable
   LocalQuickFix createUnwrapSwitchLabelFix() {
     return null;
   }
 
   protected
-  @javax.annotation.Nullable
+  @Nullable
   LocalQuickFix createIntroduceVariableFix() {
     return null;
   }
@@ -833,7 +833,7 @@ public abstract class DataFlowInspectionBase extends AbstractBaseJavaLocalInspec
   }
 
   private static
-  @javax.annotation.Nullable
+  @Nullable
   PsiField getAssignedField(PsiElement assignedValue) {
     PsiElement parent = PsiUtil.skipParenthesizedExprUp(assignedValue.getParent());
     if (parent instanceof PsiAssignmentExpression) {
@@ -926,7 +926,7 @@ public abstract class DataFlowInspectionBase extends AbstractBaseJavaLocalInspec
   }
 
   protected
-  @javax.annotation.Nullable
+  @Nullable
   LocalQuickFix createExplainFix(PsiExpression anchor, TrackingRunner.DfaProblemType problemType) {
     return null;
   }
@@ -1053,7 +1053,7 @@ public abstract class DataFlowInspectionBase extends AbstractBaseJavaLocalInspec
   }
 
   private static
-  @javax.annotation.Nullable
+  @Nullable
   PsiMethod getScopeMethod(PsiElement block) {
     PsiElement parent = block.getParent();
     if (parent instanceof PsiMethod) {
@@ -1285,7 +1285,7 @@ public abstract class DataFlowInspectionBase extends AbstractBaseJavaLocalInspec
   }
 
   private
-  @javax.annotation.Nullable
+  @Nullable
   LocalQuickFix createSimplifyBooleanExpressionFix(PsiElement element, final boolean value) {
     LocalQuickFixOnPsiElement fix = createSimplifyBooleanFix(element, value);
     if (fix == null) {
@@ -1400,7 +1400,7 @@ public abstract class DataFlowInspectionBase extends AbstractBaseJavaLocalInspec
 
     static
     @Nonnull
-    ConstantResult mergeValue(@javax.annotation.Nullable ConstantResult state, @Nonnull DfaMemoryState memState, @javax.annotation.Nullable DfaValue value) {
+    ConstantResult mergeValue(@Nullable ConstantResult state, @Nonnull DfaMemoryState memState, @Nullable DfaValue value) {
       if (state == UNKNOWN || value == null) {
         return UNKNOWN;
       }

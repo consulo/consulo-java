@@ -27,11 +27,11 @@ import com.intellij.java.debugger.impl.engine.DebugProcessImpl;
 import com.intellij.java.debugger.impl.engine.DebuggerManagerThreadImpl;
 import com.intellij.java.debugger.impl.jdi.VirtualMachineProxyImpl;
 import com.intellij.java.debugger.impl.ui.breakpoints.BreakpointManager;
-import com.intellij.openapi.progress.ProcessCanceledException;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.util.ui.MessageCategory;
-import com.intellij.util.ui.UIUtil;
+import consulo.component.ProcessCanceledException;
+import consulo.project.Project;
+import consulo.ide.impl.idea.openapi.util.io.FileUtil;
+import consulo.ui.ex.MessageCategory;
+import consulo.ui.ex.awt.UIUtil;
 import consulo.internal.com.sun.jdi.ReferenceType;
 import consulo.logging.Logger;
 

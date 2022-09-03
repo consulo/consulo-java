@@ -17,7 +17,7 @@ package com.intellij.java.impl.refactoring.removemiddleman.usageInfo;
 
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.impl.refactoring.util.FixableUsageInfo;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
 
 public class DeleteMethod extends FixableUsageInfo {
     private final PsiMethod method;

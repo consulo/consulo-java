@@ -24,9 +24,9 @@ package com.intellij.java.impl.codeInsight.intention.impl;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Pair;
-import com.intellij.util.ArrayUtil;
+import consulo.project.Project;
+import consulo.util.lang.Pair;
+import consulo.util.collection.ArrayUtil;
 
 public class AddDeprecationAnnotationIntention extends AddAnnotationIntention {
   @Nonnull

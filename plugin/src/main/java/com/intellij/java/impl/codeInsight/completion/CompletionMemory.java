@@ -16,19 +16,20 @@
 
 package com.intellij.java.impl.codeInsight.completion;
 
-import com.intellij.codeInsight.completion.CompletionUtil;
+import consulo.language.editor.impl.internal.completion.CompletionUtil;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.RangeMarker;
-import com.intellij.openapi.util.Segment;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.SmartPointerManager;
-import com.intellij.psi.SmartPsiElementPointer;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.document.Document;
+import consulo.document.RangeMarker;
+import consulo.document.util.Segment;
+import consulo.document.util.TextRange;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.SmartPointerManager;
+import consulo.language.psi.SmartPsiElementPointer;
+import consulo.util.collection.ContainerUtil;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.util.dataholder.Key;
 
+import javax.annotation.Nullable;
 import java.util.LinkedList;
 
 /**
@@ -75,7 +76,7 @@ public class CompletionMemory {
     return marker;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   @RequiredReadAction
   private static TextRange getAnchorRange(PsiCall call) {
     if (call instanceof PsiMethodCallExpression) {
@@ -98,7 +99,7 @@ public class CompletionMemory {
     return null;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   @RequiredReadAction
   public static PsiMethod getChosenMethod(PsiCall call) {
     TextRange range = getAnchorRange(call);

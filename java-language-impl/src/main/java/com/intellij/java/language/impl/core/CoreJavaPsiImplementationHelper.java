@@ -15,19 +15,14 @@
  */
 package com.intellij.java.language.impl.core;
 
-import javax.annotation.Nonnull;
-
-import com.intellij.lang.ASTNode;
-import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.java.language.LanguageLevel;
-import com.intellij.java.language.psi.PsiCatchSection;
-import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiElement;
-import com.intellij.java.language.psi.PsiImportList;
-import com.intellij.java.language.psi.PsiImportStatementBase;
-import com.intellij.java.language.psi.PsiJavaFile;
-import com.intellij.java.language.psi.PsiMember;
 import com.intellij.java.language.impl.psi.impl.JavaPsiImplementationHelper;
+import com.intellij.java.language.psi.*;
+import consulo.language.ast.ASTNode;
+import consulo.language.psi.PsiElement;
+import consulo.virtualFileSystem.VirtualFile;
+
+import javax.annotation.Nonnull;
 
 /**
  * @author yole

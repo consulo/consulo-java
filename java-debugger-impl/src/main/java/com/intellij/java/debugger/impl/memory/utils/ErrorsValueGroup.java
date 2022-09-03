@@ -15,11 +15,11 @@
  */
 package com.intellij.java.debugger.impl.memory.utils;
 
-import com.intellij.icons.AllIcons;
-import com.intellij.xdebugger.frame.XCompositeNode;
-import com.intellij.xdebugger.frame.XNamedValue;
-import com.intellij.xdebugger.frame.XValueChildrenList;
-import com.intellij.xdebugger.frame.XValueGroup;
+import consulo.application.AllIcons;
+import consulo.execution.debug.frame.XValueChildrenList;
+import consulo.execution.debug.frame.XValueGroup;
+import consulo.execution.debug.frame.XCompositeNode;
+import consulo.execution.debug.frame.XNamedValue;
 import consulo.ui.image.Image;
 
 import javax.annotation.Nonnull;

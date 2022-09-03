@@ -24,10 +24,10 @@ import javax.annotation.Nonnull;
 
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifierListOwner;
-import com.intellij.psi.PsiNamedElement;
+import consulo.language.psi.PsiNamedElement;
 import com.intellij.java.language.psi.PsiParameter;
-import com.intellij.util.containers.ContainerUtil;
-import com.intellij.util.containers.MultiMap;
+import consulo.util.collection.ContainerUtil;
+import consulo.util.collection.MultiMap;
 
 public class NonCodeAnnotationGenerator
 {

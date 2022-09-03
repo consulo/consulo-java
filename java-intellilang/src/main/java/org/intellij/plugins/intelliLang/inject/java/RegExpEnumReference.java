@@ -16,12 +16,12 @@
 
 package org.intellij.plugins.intelliLang.inject.java;
 
-import com.intellij.codeInsight.lookup.LookupElementBuilder;
-import com.intellij.icons.AllIcons;
-import com.intellij.psi.PsiElement;
+import consulo.language.editor.completion.lookup.LookupElementBuilder;
+import consulo.application.AllIcons;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiLiteralExpression;
-import com.intellij.util.ArrayUtil;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.util.collection.ArrayUtil;
+import consulo.util.collection.ContainerUtil;
 import org.intellij.plugins.intelliLang.util.RegExpUtil;
 import org.intellij.plugins.intelliLang.util.StringLiteralReference;
 

@@ -22,12 +22,12 @@ package com.intellij.java.impl.psi.impl.source.codeStyle;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
 import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.java.language.psi.PsiJavaFile;
-import com.intellij.lang.ASTNode;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.impl.source.codeStyle.IndentHelper;
-import com.intellij.psi.impl.source.codeStyle.IndentHelperImpl;
-import com.intellij.psi.impl.source.tree.CompositeElement;
-import com.intellij.psi.impl.source.tree.TreeUtil;
+import consulo.language.ast.ASTNode;
+import consulo.language.psi.PsiFile;
+import consulo.language.impl.internal.psi.IndentHelper;
+import consulo.ide.impl.psi.impl.source.codeStyle.IndentHelperImpl;
+import consulo.language.impl.ast.CompositeElement;
+import consulo.language.impl.ast.TreeUtil;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.psi.impl.source.codeStyle.IndentHelperExtension;
 

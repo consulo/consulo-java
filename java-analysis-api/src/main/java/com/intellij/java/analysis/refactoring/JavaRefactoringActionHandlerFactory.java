@@ -15,14 +15,14 @@
  */
 package com.intellij.java.analysis.refactoring;
 
-import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.project.Project;
+import consulo.dataContext.DataContext;
+import consulo.ide.ServiceManager;
+import consulo.project.Project;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.refactoring.RefactoringActionHandler;
+import consulo.language.editor.refactoring.action.RefactoringActionHandler;
 
 public abstract class JavaRefactoringActionHandlerFactory {
   public static JavaRefactoringActionHandlerFactory getInstance() {

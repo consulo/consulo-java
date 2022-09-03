@@ -19,8 +19,8 @@ import com.intellij.java.language.psi.PsiConstantEvaluationHelper;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.PsiVariable;
-import com.intellij.psi.*;
 import com.intellij.java.language.psi.util.ConstantExpressionUtil;
+import consulo.language.psi.PsiElement;
 
 import java.util.Set;
 
@@ -37,7 +37,7 @@ public class PsiConstantEvaluationHelperImpl extends PsiConstantEvaluationHelper
   @Override
   public Object computeConstantExpression(PsiElement expression, boolean throwExceptionOnOverflow) {
     if (expression == null) return null;
-    ConstantExpressionEvaluator expressionEvaluator = LanguageConstantExpressionEvaluator.INSTANCE.forLanguage(expression.getLanguage());
+    ConstantExpressionEvaluator expressionEvaluator = ConstantExpressionEvaluator.forLanguage(expression.getLanguage());
     assert expressionEvaluator != null;
 
     return expressionEvaluator.computeConstantExpression(expression, throwExceptionOnOverflow);
@@ -46,7 +46,7 @@ public class PsiConstantEvaluationHelperImpl extends PsiConstantEvaluationHelper
   @Override
   public Object computeExpression(final PsiExpression expression, final boolean throwExceptionOnOverflow, final AuxEvaluator auxEvaluator) {
     if (expression == null) return null;
-    ConstantExpressionEvaluator expressionEvaluator = LanguageConstantExpressionEvaluator.INSTANCE.forLanguage(expression.getLanguage());
+    ConstantExpressionEvaluator expressionEvaluator = ConstantExpressionEvaluator.forLanguage(expression.getLanguage());
     assert expressionEvaluator != null;
     return expressionEvaluator.computeExpression(expression, throwExceptionOnOverflow, auxEvaluator);
   }

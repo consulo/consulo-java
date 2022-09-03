@@ -9,14 +9,14 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import com.intellij.JavaTestUtil;
-import com.intellij.openapi.roots.OrderRootType;
-import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.LocalFileSystem;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.content.OrderRootType;
+import consulo.ide.impl.idea.openapi.util.io.FileUtil;
+import consulo.util.lang.StringUtil;
+import consulo.virtualFileSystem.LocalFileSystem;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.java.language.impl.psi.impl.compiled.ClsFileImpl;
-import com.intellij.psi.stubs.PsiFileStub;
-import com.intellij.psi.stubs.StubBase;
+import consulo.language.psi.stub.PsiFileStub;
+import consulo.language.psi.stub.StubBase;
 import com.intellij.testFramework.LightIdeaTestCase;
 import com.intellij.java.language.util.cls.ClsFormatException;
 

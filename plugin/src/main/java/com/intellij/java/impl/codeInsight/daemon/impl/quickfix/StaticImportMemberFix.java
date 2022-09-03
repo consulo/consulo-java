@@ -19,20 +19,20 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import com.intellij.codeInsight.CodeInsightSettings;
-import com.intellij.codeInsight.FileModificationService;
+import consulo.language.editor.CodeInsightSettings;
+import consulo.language.editor.FileModificationService;
 import com.intellij.java.impl.codeInsight.JavaProjectCodeInsightSettings;
-import com.intellij.codeInsight.daemon.impl.ShowAutoImportPass;
-import com.intellij.codeInsight.hint.HintManager;
-import com.intellij.codeInsight.hint.QuestionAction;
-import com.intellij.codeInsight.intention.IntentionAction;
-import com.intellij.codeInspection.HintAction;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
+import consulo.ide.impl.idea.codeInsight.daemon.impl.ShowAutoImportPass;
+import consulo.language.editor.hint.HintManager;
+import consulo.language.editor.hint.QuestionAction;
+import consulo.language.editor.intention.IntentionAction;
+import consulo.language.editor.intention.HintAction;
+import consulo.application.ApplicationManager;
+import consulo.codeEditor.Editor;
+import consulo.project.Project;
+import consulo.document.util.TextRange;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
 import com.intellij.java.language.psi.PsiJavaFile;
 import com.intellij.java.language.psi.PsiMember;
 import com.intellij.java.language.psi.util.PsiUtil;
@@ -97,7 +97,7 @@ public abstract class StaticImportMemberFix<T extends PsiMember> implements Inte
 	@Nullable
 	protected abstract PsiElement getElement();
 
-	@javax.annotation.Nullable
+	@Nullable
 	protected abstract PsiElement getQualifierExpression();
 
 	@Nullable

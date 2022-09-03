@@ -16,8 +16,8 @@
 package com.intellij.java.impl.refactoring.util;
 
 import com.intellij.java.language.impl.JavaClassFileType;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.openapi.vfs.WritingAccessProvider;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.virtualFileSystem.WritingAccessProvider;
 import javax.annotation.Nonnull;
 
 import java.util.Collection;

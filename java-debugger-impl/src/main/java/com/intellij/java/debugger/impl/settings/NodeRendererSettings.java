@@ -33,16 +33,16 @@ import com.intellij.java.debugger.impl.ui.impl.watch.WatchItemDescriptor;
 import com.intellij.java.debugger.impl.ui.tree.DebuggerTreeNode;
 import com.intellij.java.debugger.impl.ui.tree.ValueDescriptor;
 import com.intellij.java.debugger.impl.ui.tree.render.*;
-import com.intellij.openapi.components.PersistentStateComponent;
-import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.components.State;
-import com.intellij.openapi.components.Storage;
-import com.intellij.openapi.project.Project;
+import consulo.component.persist.PersistentStateComponent;
+import consulo.ide.ServiceManager;
+import consulo.component.persist.State;
+import consulo.component.persist.Storage;
+import consulo.project.Project;
 import com.intellij.openapi.util.*;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.PsiElement;
-import com.intellij.util.EventDispatcher;
-import com.intellij.util.IncorrectOperationException;
+import consulo.util.lang.StringUtil;
+import consulo.language.psi.PsiElement;
+import consulo.proxy.EventDispatcher;
+import consulo.language.util.IncorrectOperationException;
 import consulo.disposer.Disposable;
 import consulo.internal.com.sun.jdi.Value;
 import consulo.java.language.module.util.JavaClassNames;
@@ -486,7 +486,7 @@ public class NodeRendererSettings implements PersistentStateComponent<Element> {
 
   private static class DescriptorUpdater implements DescriptorLabelListener {
     private final ValueDescriptor myTargetDescriptor;
-    @javax.annotation.Nullable
+    @Nullable
     private ValueDescriptorImpl myKeyDescriptor;
     @Nullable
     private ValueDescriptorImpl myValueDescriptor;

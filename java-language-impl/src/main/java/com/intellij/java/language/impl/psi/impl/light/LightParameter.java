@@ -17,10 +17,10 @@ package com.intellij.java.language.impl.psi.impl.light;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.lang.Language;
+import consulo.language.Language;
 import com.intellij.java.language.psi.JavaElementVisitor;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiElementVisitor;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiElementVisitor;
 import com.intellij.java.language.psi.PsiEllipsisType;
 import com.intellij.java.language.psi.PsiParameter;
 import com.intellij.java.language.psi.PsiType;

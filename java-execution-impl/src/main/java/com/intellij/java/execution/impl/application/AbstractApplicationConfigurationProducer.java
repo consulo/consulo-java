@@ -18,18 +18,18 @@ package com.intellij.java.execution.impl.application;
 import javax.annotation.Nullable;
 import com.intellij.java.language.codeInsight.TestFrameworks;
 import com.intellij.java.execution.JavaExecutionUtil;
-import com.intellij.execution.Location;
-import com.intellij.execution.actions.ConfigurationContext;
+import consulo.execution.action.ConfigurationContext;
+import consulo.execution.action.Location;
 import com.intellij.java.execution.configurations.ConfigurationUtil;
 import com.intellij.java.execution.impl.junit.JavaRunConfigurationProducerBase;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.openapi.util.Ref;
+import consulo.module.Module;
+import consulo.util.lang.Comparing;
+import consulo.util.lang.ref.Ref;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.util.PsiMethodUtil;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 
 public abstract class AbstractApplicationConfigurationProducer<T extends ApplicationConfiguration> extends JavaRunConfigurationProducerBase<T>
 {

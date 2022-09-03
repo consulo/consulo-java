@@ -16,13 +16,13 @@
 package com.intellij.java.impl.ipp.increment;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.project.Project;
+import consulo.project.Project;
 import com.intellij.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
-import com.intellij.psi.search.LocalSearchScope;
-import com.intellij.psi.search.SearchScope;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.psi.scope.LocalSearchScope;
+import consulo.content.scope.SearchScope;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
 import com.siyeh.IntentionPowerPackBundle;
 import com.intellij.java.impl.ipp.base.MutablyNamedIntention;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
@@ -267,7 +267,7 @@ public class ExtractIncrementIntention extends MutablyNamedIntention {
 
   private static void getElementText(
     @Nonnull PsiElement element,
-    @javax.annotation.Nullable PsiElement elementToReplace,
+    @Nullable PsiElement elementToReplace,
     @Nullable String replacement,
     @Nonnull StringBuilder out) {
     if (element.equals(elementToReplace)) {

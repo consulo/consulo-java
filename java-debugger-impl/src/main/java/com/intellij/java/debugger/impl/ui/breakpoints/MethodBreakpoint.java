@@ -32,6 +32,8 @@ import java.util.stream.Stream;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import consulo.execution.debug.XDebuggerManager;
+import consulo.execution.debug.breakpoint.XBreakpoint;
 import consulo.logging.Logger;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
@@ -53,31 +55,29 @@ import com.intellij.java.debugger.impl.DebuggerUtilsEx;
 import com.intellij.java.debugger.impl.PositionUtil;
 import com.intellij.java.debugger.impl.jdi.MethodBytecodeUtil;
 import com.intellij.java.debugger.requests.Requestor;
-import com.intellij.icons.AllIcons;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.application.ReadAction;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.progress.ProgressIndicator;
-import com.intellij.openapi.progress.ProgressManager;
-import com.intellij.openapi.progress.util.ProgressWindow;
-import com.intellij.openapi.project.IndexNotReadyException;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.openapi.util.InvalidDataException;
-import com.intellij.openapi.util.JDOMExternalizerUtil;
+import consulo.application.AllIcons;
+import consulo.application.ApplicationManager;
+import consulo.application.ReadAction;
+import consulo.document.Document;
+import consulo.application.progress.ProgressIndicator;
+import consulo.application.progress.ProgressManager;
+import consulo.ide.impl.idea.openapi.progress.util.ProgressWindow;
+import consulo.application.dumb.IndexNotReadyException;
+import consulo.project.Project;
+import consulo.util.lang.Comparing;
+import consulo.util.xml.serializer.InvalidDataException;
+import consulo.util.xml.serializer.JDOMExternalizerUtil;
 import consulo.util.dataholder.Key;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiDocumentManager;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
+import consulo.language.psi.PsiDocumentManager;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
 import com.intellij.java.language.psi.PsiIdentifier;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifier;
-import com.intellij.util.containers.ContainerUtil;
-import com.intellij.util.containers.MultiMap;
-import com.intellij.xdebugger.XDebuggerManager;
-import com.intellij.xdebugger.breakpoints.XBreakpoint;
-import com.intellij.xdebugger.breakpoints.XBreakpointListener;
+import consulo.util.collection.ContainerUtil;
+import consulo.util.collection.MultiMap;
+import consulo.execution.debug.event.XBreakpointListener;
 import consulo.internal.com.sun.jdi.AbsentInformationException;
 import consulo.internal.com.sun.jdi.ClassType;
 import consulo.internal.com.sun.jdi.InterfaceType;
@@ -507,7 +507,7 @@ public class MethodBreakpoint extends BreakpointWithHighlighter<JavaMethodBreakp
 	/**
 	 * finds FQ method's class name and method's signature
 	 */
-	@javax.annotation.Nullable
+	@Nullable
 	private static MethodDescriptor getMethodDescriptor(@Nonnull final Project project, @Nonnull final PsiFile psiJavaFile, @Nonnull final SourcePosition sourcePosition)
 	{
 		final PsiDocumentManager docManager = PsiDocumentManager.getInstance(project);
@@ -560,7 +560,7 @@ public class MethodBreakpoint extends BreakpointWithHighlighter<JavaMethodBreakp
 		return descriptor;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	@SuppressWarnings("unchecked")
 	static <T extends EventRequest> T findRequest(@Nonnull DebugProcessImpl debugProcess, Class<T> requestClass, Requestor requestor)
 	{
@@ -639,7 +639,7 @@ public class MethodBreakpoint extends BreakpointWithHighlighter<JavaMethodBreakp
 		int methodLine;
 	}
 
-	private static boolean instanceOf(@javax.annotation.Nullable ReferenceType type, @Nonnull ReferenceType superType)
+	private static boolean instanceOf(@Nullable ReferenceType type, @Nonnull ReferenceType superType)
 	{
 		if(type == null)
 		{

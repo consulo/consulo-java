@@ -21,18 +21,18 @@ package com.intellij.java.impl.psi.impl.search;
 
 import com.intellij.java.language.psi.*;
 import consulo.logging.Logger;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.module.Module;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.psi.*;
-import com.intellij.psi.impl.PsiManagerImpl;
+import consulo.language.impl.internal.psi.PsiManagerImpl;
 import com.intellij.java.indexing.impl.stubs.index.JavaAnnotationIndex;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.search.PsiSearchHelper;
-import com.intellij.psi.search.SearchScope;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.search.PsiSearchHelper;
+import consulo.content.scope.SearchScope;
 import com.intellij.java.impl.psi.search.searches.AnnotatedPackagesSearch;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.Processor;
-import com.intellij.util.QueryExecutor;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.application.util.function.Processor;
+import consulo.application.util.query.QueryExecutor;
 import javax.annotation.Nonnull;
 
 import java.util.Collection;

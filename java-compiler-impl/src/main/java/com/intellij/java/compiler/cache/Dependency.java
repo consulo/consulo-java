@@ -20,10 +20,10 @@
  */
 package com.intellij.java.compiler.cache;
 
-import com.intellij.compiler.make.CacheCorruptedException;
-import com.intellij.compiler.make.CacheUtils;
+import consulo.compiler.CacheCorruptedException;
+import consulo.ide.impl.idea.compiler.make.CacheUtils;
 import consulo.logging.Logger;
-import com.intellij.util.ArrayUtil;
+import consulo.util.collection.ArrayUtil;
 import org.jetbrains.annotations.NonNls;
 
 import java.util.*;
@@ -89,7 +89,7 @@ public class Dependency {
     public String getDescriptor(SymbolTable symbolTable) throws CacheCorruptedException {
       final String descriptorStr = symbolTable.getSymbol(descriptor);
       final String nameStr = symbolTable.getSymbol(name);
-      return CacheUtils.getMethodSignature(nameStr, descriptorStr);
+      return consulo.ide.impl.idea.compiler.make.CacheUtils.getMethodSignature(nameStr, descriptorStr);
     }
 
 

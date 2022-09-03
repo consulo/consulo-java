@@ -15,13 +15,13 @@
  */
 package com.intellij.java.language.impl.psi.impl.source;
 
-import com.intellij.lang.ASTNode;
-import com.intellij.psi.PsiElement;
+import consulo.language.ast.ASTNode;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiImportStatementBase;
 import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
 import com.intellij.java.language.impl.psi.impl.java.stubs.PsiImportStatementStub;
 import com.intellij.java.language.impl.psi.impl.source.tree.ChildRole;
-import com.intellij.psi.stubs.IStubElementType;
+import consulo.language.psi.stub.IStubElementType;
 
 /**
  * @author dsl

@@ -43,22 +43,21 @@ import com.intellij.java.language.psi.*;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nullable;
-import com.intellij.analysis.AnalysisScope;
-import com.intellij.codeInsight.FileModificationService;
-import com.intellij.codeInsight.daemon.GroupNames;
-import com.intellij.codeInsight.daemon.impl.IdentifierUtil;
-import com.intellij.codeInspection.*;
+import consulo.language.editor.scope.AnalysisScope;
+import consulo.language.editor.FileModificationService;
+import consulo.ide.impl.idea.codeInsight.daemon.GroupNames;
+import consulo.ide.impl.idea.codeInsight.daemon.impl.IdentifierUtil;
 import com.intellij.java.analysis.codeInspection.ex.EntryPointsManager;
 import com.intellij.codeInspection.reference.*;
 import consulo.logging.Logger;
-import com.intellij.openapi.project.Project;
+import consulo.project.Project;
 import com.intellij.psi.*;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.search.PsiNonJavaFileReferenceProcessor;
-import com.intellij.psi.search.PsiSearchHelper;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.search.PsiNonJavaFileReferenceProcessor;
+import consulo.language.psi.search.PsiSearchHelper;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
 
 public class VisibilityInspection extends GlobalJavaInspectionTool
 {

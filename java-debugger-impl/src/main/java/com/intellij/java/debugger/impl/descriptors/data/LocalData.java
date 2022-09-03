@@ -17,7 +17,7 @@ package com.intellij.java.debugger.impl.descriptors.data;
 
 import com.intellij.java.debugger.impl.jdi.LocalVariableProxyImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.LocalVariableDescriptorImpl;
-import com.intellij.openapi.project.Project;
+import consulo.project.Project;
 
 public class LocalData extends DescriptorData<LocalVariableDescriptorImpl>
 {

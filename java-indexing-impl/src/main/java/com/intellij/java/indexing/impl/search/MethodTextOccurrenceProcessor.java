@@ -19,12 +19,12 @@ import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.java.language.psi.PsiSubstitutor;
-import com.intellij.psi.*;
-import com.intellij.psi.search.RequestResultProcessor;
 import com.intellij.java.language.psi.util.MethodSignature;
 import com.intellij.java.language.psi.util.MethodSignatureUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
-import com.intellij.util.Processor;
+import consulo.application.util.function.Processor;
+import consulo.language.psi.*;
+import consulo.language.psi.search.RequestResultProcessor;
 
 import javax.annotation.Nonnull;
 import java.util.Arrays;
@@ -32,113 +32,92 @@ import java.util.Arrays;
 /**
  * @author peter
  */
-public class MethodTextOccurrenceProcessor extends RequestResultProcessor
-{
-	private static final PsiReferenceService ourReferenceService = PsiReferenceService.getService();
-	private final PsiMethod[] myMethods;
-	protected final PsiClass myContainingClass;
-	protected final boolean myStrictSignatureSearch;
+public class MethodTextOccurrenceProcessor extends RequestResultProcessor {
+  private static final PsiReferenceService ourReferenceService = PsiReferenceService.getService();
+  private final PsiMethod[] myMethods;
+  protected final PsiClass myContainingClass;
+  protected final boolean myStrictSignatureSearch;
 
-	public MethodTextOccurrenceProcessor(@Nonnull final PsiClass aClass,
-			final boolean strictSignatureSearch,
-			final PsiMethod... methods)
-	{
-		super(strictSignatureSearch, Arrays.asList(methods));
-		myMethods = methods;
-		myContainingClass = aClass;
-		myStrictSignatureSearch = strictSignatureSearch;
-	}
+  public MethodTextOccurrenceProcessor(@Nonnull final PsiClass aClass,
+                                       final boolean strictSignatureSearch,
+                                       final PsiMethod... methods) {
+    super(strictSignatureSearch, Arrays.asList(methods));
+    myMethods = methods;
+    myContainingClass = aClass;
+    myStrictSignatureSearch = strictSignatureSearch;
+  }
 
-	@Override
-	public final boolean processTextOccurrence(@Nonnull PsiElement element,
-			int offsetInElement,
-			@Nonnull final Processor<? super PsiReference> consumer)
-	{
-		for(PsiReference ref : ourReferenceService.getReferences(element, new PsiReferenceService.Hints(myMethods[0],
-				offsetInElement)))
-		{
-			if(ReferenceRange.containsOffsetInElement(ref, offsetInElement) && !processReference(consumer, ref))
-			{
-				return false;
-			}
-		}
-		return true;
-	}
+  @Override
+  public final boolean processTextOccurrence(@Nonnull PsiElement element,
+                                             int offsetInElement,
+                                             @Nonnull final Processor<? super PsiReference> consumer) {
+    for (PsiReference ref : ourReferenceService.getReferences(element, new PsiReferenceService.Hints(myMethods[0],
+        offsetInElement))) {
+      if (ReferenceRange.containsOffsetInElement(ref, offsetInElement) && !processReference(consumer, ref)) {
+        return false;
+      }
+    }
+    return true;
+  }
 
-	private boolean processReference(Processor<? super PsiReference> consumer, PsiReference ref)
-	{
-		for(PsiMethod method : myMethods)
-		{
-			if(!method.isValid())
-			{
-				continue;
-			}
+  private boolean processReference(Processor<? super PsiReference> consumer, PsiReference ref) {
+    for (PsiMethod method : myMethods) {
+      if (!method.isValid()) {
+        continue;
+      }
 
-			if(ref instanceof ResolvingHint && !((ResolvingHint) ref).canResolveTo(PsiMethod.class))
-			{
-				return true;
-			}
-			if(ref.isReferenceTo(method))
-			{
-				return consumer.process(ref);
-			}
+      if (ref instanceof ResolvingHint && !((ResolvingHint) ref).canResolveTo(PsiMethod.class)) {
+        return true;
+      }
+      if (ref.isReferenceTo(method)) {
+        return consumer.process(ref);
+      }
 
-			if(!processInexactReference(ref, ref.resolve(), method, consumer))
-			{
-				return false;
-			}
-		}
+      if (!processInexactReference(ref, ref.resolve(), method, consumer)) {
+        return false;
+      }
+    }
 
-		return true;
-	}
+    return true;
+  }
 
-	protected boolean processInexactReference(PsiReference ref,
-			PsiElement refElement,
-			PsiMethod method,
-			Processor<? super PsiReference> consumer)
-	{
-		if(refElement instanceof PsiMethod)
-		{
-			PsiMethod refMethod = (PsiMethod) refElement;
-			PsiClass refMethodClass = refMethod.getContainingClass();
-			if(refMethodClass == null)
-			{
-				return true;
-			}
+  protected boolean processInexactReference(PsiReference ref,
+                                            PsiElement refElement,
+                                            PsiMethod method,
+                                            Processor<? super PsiReference> consumer) {
+    if (refElement instanceof PsiMethod) {
+      PsiMethod refMethod = (PsiMethod) refElement;
+      PsiClass refMethodClass = refMethod.getContainingClass();
+      if (refMethodClass == null) {
+        return true;
+      }
 
-			if(!refMethod.hasModifierProperty(PsiModifier.STATIC))
-			{
-				PsiSubstitutor substitutor = TypeConversionUtil.getClassSubstitutor(myContainingClass, refMethodClass,
-						PsiSubstitutor.EMPTY);
-				if(substitutor != null)
-				{
-					MethodSignature superSignature = method.getSignature(substitutor);
-					MethodSignature refSignature = refMethod.getSignature(PsiSubstitutor.EMPTY);
+      if (!refMethod.hasModifierProperty(PsiModifier.STATIC)) {
+        PsiSubstitutor substitutor = TypeConversionUtil.getClassSubstitutor(myContainingClass, refMethodClass,
+            PsiSubstitutor.EMPTY);
+        if (substitutor != null) {
+          MethodSignature superSignature = method.getSignature(substitutor);
+          MethodSignature refSignature = refMethod.getSignature(PsiSubstitutor.EMPTY);
 
-					if(MethodSignatureUtil.isSubsignature(superSignature, refSignature))
-					{
-						if(!consumer.process(ref))
-						{
-							return false;
-						}
-					}
-				}
-			}
+          if (MethodSignatureUtil.isSubsignature(superSignature, refSignature)) {
+            if (!consumer.process(ref)) {
+              return false;
+            }
+          }
+        }
+      }
 
-			if(!myStrictSignatureSearch)
-			{
-				PsiManager manager = method.getManager();
-				if(manager.areElementsEquivalent(refMethodClass, myContainingClass))
-				{
-					if(!consumer.process(ref))
-					{
-						return false;
-					}
-				}
-			}
-		}
+      if (!myStrictSignatureSearch) {
+        PsiManager manager = method.getManager();
+        if (manager.areElementsEquivalent(refMethodClass, myContainingClass)) {
+          if (!consumer.process(ref)) {
+            return false;
+          }
+        }
+      }
+    }
 
-		return true;
-	}
+    return true;
+  }
 
 }

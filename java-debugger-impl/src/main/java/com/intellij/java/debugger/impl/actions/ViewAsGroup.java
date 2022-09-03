@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.intellij.java.debugger.impl.engine.DebugProcessImpl;
 import com.intellij.java.debugger.impl.engine.JavaValue;
@@ -27,17 +28,12 @@ import com.intellij.java.debugger.impl.DebuggerContextImpl;
 import com.intellij.java.debugger.impl.settings.NodeRendererSettings;
 import com.intellij.java.debugger.impl.ui.impl.watch.ValueDescriptorImpl;
 import com.intellij.java.debugger.impl.ui.tree.render.NodeRenderer;
-import com.intellij.openapi.actionSystem.ActionGroup;
-import com.intellij.openapi.actionSystem.ActionManager;
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.AnSeparator;
-import com.intellij.openapi.actionSystem.DefaultActionGroup;
-import com.intellij.openapi.actionSystem.ToggleAction;
-import com.intellij.openapi.project.DumbAware;
-import com.intellij.xdebugger.frame.XValue;
-import com.intellij.xdebugger.impl.ui.tree.actions.XDebuggerTreeActionBase;
-import com.intellij.xdebugger.impl.ui.tree.nodes.XValueNodeImpl;
+import consulo.execution.debug.frame.XValue;
+import consulo.ui.ex.action.*;
+import consulo.ui.ex.action.ToggleAction;
+import consulo.application.dumb.DumbAware;
+import consulo.ide.impl.idea.xdebugger.impl.ui.tree.actions.XDebuggerTreeActionBase;
+import consulo.ide.impl.idea.xdebugger.impl.ui.tree.nodes.XValueNodeImpl;
 import consulo.logging.Logger;
 
 public class ViewAsGroup extends ActionGroup implements DumbAware
@@ -87,7 +83,7 @@ public class ViewAsGroup extends ActionGroup implements DumbAware
 
 			final DebuggerContextImpl debuggerContext = DebuggerAction.getDebuggerContext(e.getDataContext());
 			final List<JavaValue> values = getSelectedValues(e);
-			final List<XValueNodeImpl> selectedNodes = XDebuggerTreeActionBase.getSelectedNodes(e.getDataContext());
+			final List<XValueNodeImpl> selectedNodes = consulo.ide.impl.idea.xdebugger.impl.ui.tree.actions.XDebuggerTreeActionBase.getSelectedNodes(e.getDataContext());
 
 			LOG.assertTrue(!values.isEmpty());
 
@@ -115,7 +111,7 @@ public class ViewAsGroup extends ActionGroup implements DumbAware
 	}
 
 	@Nonnull
-	public AnAction[] getChildren(@javax.annotation.Nullable final AnActionEvent e)
+	public AnAction[] getChildren(@Nullable final AnActionEvent e)
 	{
 		return myChildren;
 	}
@@ -221,7 +217,7 @@ public class ViewAsGroup extends ActionGroup implements DumbAware
 	@Nonnull
 	public static List<JavaValue> getSelectedValues(AnActionEvent event)
 	{
-		List<XValueNodeImpl> selectedNodes = XDebuggerTreeActionBase.getSelectedNodes(event.getDataContext());
+		List<XValueNodeImpl> selectedNodes = consulo.ide.impl.idea.xdebugger.impl.ui.tree.actions.XDebuggerTreeActionBase.getSelectedNodes(event.getDataContext());
 		List<JavaValue> values = new ArrayList<>();
 		for(XValueNodeImpl node : selectedNodes)
 		{

@@ -15,14 +15,16 @@
  */
 package com.intellij.java.impl.refactoring.ui;
 
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.ComboBox;
-import com.intellij.openapi.util.Comparing;
+import consulo.project.Project;
+import consulo.ui.ex.awt.ComboBox;
+import consulo.util.lang.Comparing;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.SmartTypePointer;
 import com.intellij.java.language.psi.SmartTypePointerManager;
+
 import javax.annotation.Nonnull;
 
+import javax.annotation.Nullable;
 import javax.swing.*;
 import java.awt.event.ItemListener;
 
@@ -122,7 +124,7 @@ public class TypeSelector {
     }
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public PsiType getSelectedType() {
     if (myComponent instanceof JLabel) {
       return myType;
@@ -171,7 +173,7 @@ public class TypeSelector {
       myTypePointer = SmartTypePointerManager.getInstance(project).createSmartTypePointer(type);
     }
 
-    @javax.annotation.Nullable
+    @Nullable
     public PsiType getType() {
       return myTypePointer.getType();
     }

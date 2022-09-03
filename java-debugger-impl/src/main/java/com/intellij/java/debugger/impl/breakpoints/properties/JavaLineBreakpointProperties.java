@@ -15,7 +15,7 @@
  */
 package com.intellij.java.debugger.impl.breakpoints.properties;
 
-import com.intellij.util.xmlb.annotations.OptionTag;
+import consulo.util.xml.serializer.annotation.OptionTag;
 
 /**
  * @author egor

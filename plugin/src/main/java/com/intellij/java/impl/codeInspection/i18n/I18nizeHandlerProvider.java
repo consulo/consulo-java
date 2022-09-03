@@ -17,10 +17,10 @@ package com.intellij.java.impl.codeInspection.i18n;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.extensions.ExtensionPointName;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.PsiFile;
+import consulo.codeEditor.Editor;
+import consulo.component.extension.ExtensionPointName;
+import consulo.document.util.TextRange;
+import consulo.language.psi.PsiFile;
 
 /**
  * @author sergey.evdokimov

@@ -18,10 +18,10 @@ package com.intellij.java.impl.refactoring.rename;
 import com.intellij.java.impl.refactoring.util.ConflictsUtil;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
-import com.intellij.psi.PsiElement;
-import com.intellij.refactoring.RefactoringBundle;
-import com.intellij.refactoring.rename.UnresolvableCollisionUsageInfo;
-import com.intellij.refactoring.util.RefactoringUIUtil;
+import consulo.language.psi.PsiElement;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.rename.UnresolvableCollisionUsageInfo;
+import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
 
 /**
  * @author dsl

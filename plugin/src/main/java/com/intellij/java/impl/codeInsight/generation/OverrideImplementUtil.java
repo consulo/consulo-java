@@ -15,16 +15,17 @@
  */
 package com.intellij.java.impl.codeInsight.generation;
 
-import com.intellij.codeInsight.CodeInsightActionHandler;
-import com.intellij.codeInsight.CodeInsightBundle;
+import consulo.externalService.statistic.FeatureUsageTracker;
+import consulo.fileEditor.FileEditorManager;
+import consulo.language.editor.action.CodeInsightActionHandler;
+import consulo.language.editor.CodeInsightBundle;
 import com.intellij.codeInsight.generation.ImplementMethodsHandler;
 import com.intellij.codeInsight.generation.OverrideMethodsHandler;
-import com.intellij.featureStatistics.FeatureUsageTracker;
-import com.intellij.featureStatistics.ProductivityFeatureNames;
-import com.intellij.ide.fileTemplates.FileTemplate;
-import com.intellij.ide.fileTemplates.FileTemplateManager;
-import com.intellij.ide.fileTemplates.FileTemplateUtil;
-import com.intellij.ide.util.MemberChooser;
+import consulo.ide.impl.idea.featureStatistics.ProductivityFeatureNames;
+import consulo.fileTemplate.FileTemplate;
+import consulo.fileTemplate.FileTemplateManager;
+import consulo.fileTemplate.FileTemplateUtil;
+import consulo.ide.impl.idea.ide.util.MemberChooser;
 import com.intellij.java.analysis.impl.codeInsight.intention.AddAnnotationFix;
 import com.intellij.java.analysis.impl.codeInsight.intention.AddAnnotationPsiFix;
 import com.intellij.java.impl.codeInsight.MethodImplementor;
@@ -38,39 +39,38 @@ import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.infos.CandidateInfo;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.java.language.psi.util.*;
-import com.intellij.openapi.actionSystem.KeyboardShortcut;
-import com.intellij.openapi.actionSystem.Shortcut;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.application.Result;
-import com.intellij.openapi.command.CommandProcessor;
-import com.intellij.openapi.command.WriteCommandAction;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.ScrollType;
-import com.intellij.openapi.extensions.Extensions;
-import com.intellij.openapi.fileEditor.FileEditorManager;
-import com.intellij.openapi.fileEditor.OpenFileDescriptor;
-import com.intellij.openapi.fileTypes.FileType;
-import com.intellij.openapi.fileTypes.FileTypeManager;
-import com.intellij.openapi.keymap.Keymap;
-import com.intellij.openapi.keymap.KeymapManager;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleUtilCore;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.DialogWrapper;
-import com.intellij.openapi.ui.Messages;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.PsiDocumentManager;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.codeStyle.CodeStyleManager;
-import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
-import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.Consumer;
-import com.intellij.util.Function;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.language.file.FileTypeManager;
+import consulo.ui.ex.action.KeyboardShortcut;
+import consulo.ui.ex.action.Shortcut;
+import consulo.application.ApplicationManager;
+import consulo.application.Result;
+import consulo.ui.ex.awt.DialogWrapper;
+import consulo.undoRedo.CommandProcessor;
+import consulo.language.editor.WriteCommandAction;
+import consulo.codeEditor.Editor;
+import consulo.codeEditor.ScrollType;
+import consulo.component.extension.Extensions;
+import consulo.navigation.OpenFileDescriptor;
+import consulo.virtualFileSystem.fileType.FileType;
+import consulo.ui.ex.keymap.Keymap;
+import consulo.ui.ex.keymap.KeymapManager;
+import consulo.module.Module;
+import consulo.language.util.ModuleUtilCore;
+import consulo.project.Project;
+import consulo.ui.ex.awt.Messages;
+import consulo.util.lang.StringUtil;
+import consulo.language.psi.PsiDocumentManager;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.codeStyle.CodeStyleSettingsManager;
+import consulo.language.codeStyle.CommonCodeStyleSettings;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.ide.impl.idea.util.Consumer;
+import consulo.ide.impl.idea.util.Function;
+import consulo.language.util.IncorrectOperationException;
+import consulo.util.collection.ContainerUtil;
 import consulo.logging.Logger;
 import org.jetbrains.annotations.NonNls;
 
@@ -437,7 +437,7 @@ public class OverrideImplementUtil extends OverrideImplementExploreUtil {
   }
 
   public static void chooseAndImplementMethods(Project project, Editor editor, PsiClass aClass) {
-    FeatureUsageTracker.getInstance().triggerFeatureUsed(ProductivityFeatureNames.CODEASSISTS_OVERRIDE_IMPLEMENT);
+    FeatureUsageTracker.getInstance().triggerFeatureUsed(consulo.ide.impl.idea.featureStatistics.ProductivityFeatureNames.CODEASSISTS_OVERRIDE_IMPLEMENT);
     chooseAndOverrideOrImplementMethods(project, editor, aClass, true);
   }
 
@@ -470,7 +470,7 @@ public class OverrideImplementUtil extends OverrideImplementExploreUtil {
   /**
    * @param candidates, secondary should allow modifications
    */
-  @javax.annotation.Nullable
+  @Nullable
   public static MemberChooser<PsiMethodMember> showOverrideImplementChooser(Editor editor,
                                                                             final PsiElement aClass,
                                                                             final boolean toImplement,
@@ -634,7 +634,7 @@ public class OverrideImplementUtil extends OverrideImplementExploreUtil {
     }
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public static PsiClass getContextClass(Project project, Editor editor, PsiFile file, boolean allowInterface) {
     PsiDocumentManager.getInstance(project).commitAllDocuments();
 

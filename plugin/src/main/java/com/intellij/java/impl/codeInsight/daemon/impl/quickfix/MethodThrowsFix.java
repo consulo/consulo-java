@@ -16,20 +16,21 @@
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-import com.intellij.codeInsight.FileModificationService;
+import consulo.language.editor.FileModificationService;
 import com.intellij.java.language.psi.*;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
-import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement;
-import com.intellij.openapi.command.undo.UndoUtil;
+import consulo.language.editor.inspection.LocalQuickFixAndIntentionActionOnPsiElement;
+import consulo.undoRedo.util.UndoUtil;
 import consulo.logging.Logger;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
+import consulo.codeEditor.Editor;
+import consulo.project.Project;
 import com.intellij.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
-import com.intellij.psi.util.PsiFormatUtilBase;
-import com.intellij.util.IncorrectOperationException;
+import consulo.ide.impl.psi.util.PsiFormatUtilBase;
+import consulo.language.util.IncorrectOperationException;
 
 public class MethodThrowsFix extends LocalQuickFixAndIntentionActionOnPsiElement {
   private static final Logger LOG = Logger.getInstance(MethodThrowsFix.class);
@@ -76,7 +77,7 @@ public class MethodThrowsFix extends LocalQuickFixAndIntentionActionOnPsiElement
   @Override
   public void invoke(@Nonnull Project project,
                      @Nonnull PsiFile file,
-                     @javax.annotation.Nullable Editor editor,
+                     @Nullable Editor editor,
                      @Nonnull PsiElement startElement,
                      @Nonnull PsiElement endElement) {
     final PsiMethod myMethod = (PsiMethod)startElement;

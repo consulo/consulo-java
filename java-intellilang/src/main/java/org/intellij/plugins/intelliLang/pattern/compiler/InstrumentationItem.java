@@ -19,10 +19,10 @@ import java.io.File;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.openapi.compiler.FileProcessingCompiler;
-import com.intellij.openapi.compiler.ValidityState;
-import com.intellij.openapi.vfs.VfsUtilCore;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.compiler.FileProcessingCompiler;
+import consulo.compiler.ValidityState;
+import consulo.ide.impl.idea.openapi.vfs.VfsUtilCore;
+import consulo.virtualFileSystem.VirtualFile;
 
 class InstrumentationItem implements FileProcessingCompiler.ProcessingItem
 {

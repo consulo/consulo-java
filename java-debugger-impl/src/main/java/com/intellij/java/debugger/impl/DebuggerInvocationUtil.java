@@ -16,11 +16,11 @@
 package com.intellij.java.debugger.impl;
 
 import com.intellij.java.debugger.engine.evaluation.EvaluateException;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.application.ModalityState;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Computable;
-import com.intellij.psi.PsiDocumentManager;
+import consulo.application.ApplicationManager;
+import consulo.ui.ModalityState;
+import consulo.project.Project;
+import consulo.application.util.function.Computable;
+import consulo.language.psi.PsiDocumentManager;
 import javax.annotation.Nonnull;
 
 import javax.swing.*;

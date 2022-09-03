@@ -20,12 +20,12 @@
  */
 package com.intellij.java.impl.ide.util.scopeChooser;
 
-import com.intellij.icons.AllIcons;
-import com.intellij.ide.IdeBundle;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.ToggleAction;
-import com.intellij.packageDependencies.DependencyUISettings;
-import com.intellij.packageDependencies.ui.ProjectPatternProvider;
+import consulo.application.AllIcons;
+import consulo.ide.IdeBundle;
+import consulo.ui.ex.action.AnActionEvent;
+import consulo.ui.ex.action.ToggleAction;
+import consulo.ide.impl.idea.packageDependencies.DependencyUISettings;
+import consulo.ide.impl.idea.packageDependencies.ui.ProjectPatternProvider;
 
 public final class GroupByScopeTypeAction extends ToggleAction {
   private final Runnable myUpdate;

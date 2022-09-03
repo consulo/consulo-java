@@ -15,11 +15,11 @@
  */
 package com.intellij.java.impl.ide.structureView.impl.java;
 
-import com.intellij.icons.AllIcons;
-import com.intellij.ide.IdeBundle;
-import com.intellij.ide.util.treeView.AbstractTreeNode;
+import consulo.application.AllIcons;
+import consulo.ide.IdeBundle;
+import consulo.project.ui.view.tree.AbstractTreeNode;
 import com.intellij.ide.util.treeView.smartTree.*;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;

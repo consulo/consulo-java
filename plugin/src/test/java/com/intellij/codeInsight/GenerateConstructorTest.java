@@ -17,12 +17,12 @@ package com.intellij.codeInsight;
 
 import java.util.List;
 
-import com.intellij.codeInsight.generation.ClassMember;
+import consulo.ide.impl.idea.codeInsight.generation.ClassMember;
 import com.intellij.java.impl.codeInsight.generation.GenerateConstructorHandler;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
-import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
+import consulo.codeEditor.Editor;
+import consulo.project.Project;
+import consulo.language.codeStyle.CodeStyleSettingsManager;
+import consulo.language.codeStyle.CommonCodeStyleSettings;
 import com.intellij.testFramework.LightCodeInsightTestCase;
 
 /**

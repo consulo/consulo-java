@@ -1,13 +1,13 @@
 package com.intellij.java.impl.codeInspection.unnecessaryModuleDependency;
 
-import com.intellij.codeInspection.reference.RefElement;
-import com.intellij.codeInspection.reference.RefGraphAnnotator;
-import com.intellij.codeInspection.reference.RefManager;
-import com.intellij.codeInspection.reference.RefModule;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleUtil;
+import consulo.language.editor.inspection.reference.RefElement;
+import consulo.language.editor.inspection.reference.RefGraphAnnotator;
+import consulo.language.editor.inspection.reference.RefManager;
+import consulo.language.editor.inspection.reference.RefModule;
+import consulo.module.Module;
+import consulo.ide.impl.idea.openapi.module.ModuleUtil;
 import consulo.util.dataholder.Key;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 
 import java.util.HashSet;
 import java.util.Set;

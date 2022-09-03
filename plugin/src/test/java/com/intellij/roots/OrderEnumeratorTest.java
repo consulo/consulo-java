@@ -1,15 +1,14 @@
 package com.intellij.roots;
 
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.roots.*;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.util.ArrayUtil;
+import consulo.module.Module;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.util.collection.ArrayUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.intellij.openapi.roots.OrderEnumerator.orderEntries;
+import static consulo.module.content.layer.OrderEnumerator.orderEntries;
 
 
 /**

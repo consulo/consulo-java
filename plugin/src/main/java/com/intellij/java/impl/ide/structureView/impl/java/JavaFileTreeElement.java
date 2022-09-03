@@ -15,9 +15,9 @@
  */
 package com.intellij.java.impl.ide.structureView.impl.java;
 
-import com.intellij.ide.structureView.StructureViewTreeElement;
-import com.intellij.ide.structureView.impl.common.PsiTreeElementBase;
-import com.intellij.navigation.ItemPresentation;
+import consulo.fileEditor.structureView.StructureViewTreeElement;
+import consulo.language.editor.structureView.PsiTreeElementBase;
+import consulo.navigation.ItemPresentation;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiClassOwner;
 import javax.annotation.Nonnull;

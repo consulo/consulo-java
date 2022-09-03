@@ -16,17 +16,17 @@
 
 package com.intellij.java.analysis.impl.codeInspection.dataFlow.inference;
 
-import com.intellij.lang.LighterAST;
-import com.intellij.psi.PsiFile;
+import consulo.language.ast.LighterAST;
+import consulo.language.psi.PsiFile;
 import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.psi.impl.source.PsiFileImpl;
+import consulo.language.impl.psi.PsiFileImpl;
 import com.intellij.java.language.impl.psi.impl.source.PsiMethodImpl;
-import com.intellij.psi.impl.source.StubbedSpine;
+import consulo.language.psi.stub.internal.StubbedSpine;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
-import com.intellij.psi.util.CachedValueProvider;
-import com.intellij.psi.util.CachedValuesManager;
-import com.intellij.util.gist.GistManager;
-import com.intellij.util.gist.PsiFileGist;
+import consulo.application.util.CachedValueProvider;
+import consulo.application.util.CachedValuesManager;
+import consulo.ide.impl.idea.util.gist.GistManager;
+import consulo.ide.impl.idea.util.gist.PsiFileGist;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

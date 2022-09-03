@@ -15,15 +15,15 @@
  */
 package com.intellij.java.impl.find.findUsages;
 
-import com.intellij.find.FindBundle;
-import com.intellij.find.findUsages.FindUsagesHandler;
+import consulo.find.FindBundle;
+import consulo.find.FindUsagesHandler;
 import com.intellij.java.analysis.impl.find.findUsages.JavaThrowFindUsagesOptions;
 import com.intellij.java.analysis.impl.psi.impl.search.ThrowSearchUtil;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiElement;
-import com.intellij.ui.IdeBorderFactory;
-import com.intellij.ui.StateRestoringCheckBox;
-import com.intellij.util.ui.UIUtil;
+import consulo.project.Project;
+import consulo.language.psi.PsiElement;
+import consulo.ui.ex.awt.IdeBorderFactory;
+import consulo.ui.ex.awt.StateRestoringCheckBox;
+import consulo.ui.ex.awt.UIUtil;
 
 import javax.annotation.Nonnull;
 import javax.swing.*;

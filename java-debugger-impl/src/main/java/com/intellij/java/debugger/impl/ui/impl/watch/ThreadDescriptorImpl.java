@@ -27,7 +27,7 @@ import com.intellij.java.debugger.impl.jdi.ThreadGroupReferenceProxyImpl;
 import com.intellij.java.debugger.impl.jdi.ThreadReferenceProxyImpl;
 import com.intellij.java.debugger.impl.ui.tree.ThreadDescriptor;
 import com.intellij.java.debugger.impl.ui.tree.render.DescriptorLabelListener;
-import com.intellij.icons.AllIcons;
+import consulo.application.AllIcons;
 import consulo.internal.com.sun.jdi.ObjectCollectedException;
 import consulo.internal.com.sun.jdi.ThreadReference;
 import consulo.ui.image.Image;

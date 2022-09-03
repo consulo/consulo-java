@@ -16,12 +16,13 @@
 package com.intellij.java.impl.codeInsight.editorActions.smartEnter;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.editor.Editor;
+import consulo.codeEditor.Editor;
 import com.intellij.psi.*;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
 
 @SuppressWarnings({"HardCodedStringLiteral"})
 public class MissingReturnExpressionFixer implements Fixer
@@ -67,7 +68,7 @@ public class MissingReturnExpressionFixer implements Fixer
 		}
 	}
 
-	private static boolean fixMethodCallWithoutTrailingSemicolon(@javax.annotation.Nullable PsiReturnStatement returnStatement, @Nonnull Editor editor, @Nonnull JavaSmartEnterProcessor processor)
+	private static boolean fixMethodCallWithoutTrailingSemicolon(@Nullable PsiReturnStatement returnStatement, @Nonnull Editor editor, @Nonnull JavaSmartEnterProcessor processor)
 	{
 		if(returnStatement == null)
 		{

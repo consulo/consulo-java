@@ -15,11 +15,11 @@
  */
 package com.intellij.java.language.impl.codeInsight;
 
-import com.intellij.codeInsight.ContainerProvider;
+import consulo.language.psi.search.ContainerProvider;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMember;
 import com.intellij.java.language.psi.PsiTypeParameter;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 
 import javax.annotation.Nonnull;
 

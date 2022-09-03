@@ -26,16 +26,16 @@ import javax.annotation.Nullable;
 import com.intellij.java.debugger.impl.DebuggerManagerEx;
 import com.intellij.java.debugger.impl.DebuggerSession;
 import com.intellij.java.execution.CommonJavaRunConfigurationParameters;
-import com.intellij.execution.Executor;
-import com.intellij.execution.Location;
-import com.intellij.execution.PsiLocation;
+import consulo.execution.action.Location;
+import consulo.execution.action.PsiLocation;
+import consulo.execution.configuration.ModuleBasedConfiguration;
+import consulo.execution.configuration.RunConfiguration;
+import consulo.execution.executor.Executor;
 import com.intellij.java.execution.configurations.JavaRunConfigurationModule;
-import com.intellij.execution.configurations.ModuleBasedConfiguration;
-import com.intellij.execution.configurations.RunConfiguration;
 import com.intellij.java.execution.impl.stacktrace.StackTraceLine;
-import com.intellij.execution.testframework.sm.runner.SMTRunnerConsoleProperties;
+import consulo.execution.test.sm.runner.SMTRunnerConsoleProperties;
 import com.intellij.openapi.diff.LineTokenizer;
-import com.intellij.pom.Navigatable;
+import consulo.navigation.Navigatable;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 
@@ -80,7 +80,7 @@ public abstract class JavaAwareTestConsoleProperties<T extends ModuleBasedConfig
 		return getStackTraceErrorNavigatable(location, stacktrace);
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public static Navigatable getStackTraceErrorNavigatable(@Nonnull Location<?> location, @Nonnull String stacktrace)
 	{
 		final PsiLocation<?> psiLocation = location.toPsiLocation();
@@ -121,7 +121,7 @@ public abstract class JavaAwareTestConsoleProperties<T extends ModuleBasedConfig
 		return lastLine != null ? lastLine.getOpenFileDescriptor(containingClass.getContainingFile().getVirtualFile()) : null;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public DebuggerSession getDebugSession()
 	{
 		final DebuggerManagerEx debuggerManager = DebuggerManagerEx.getInstanceEx(getProject());

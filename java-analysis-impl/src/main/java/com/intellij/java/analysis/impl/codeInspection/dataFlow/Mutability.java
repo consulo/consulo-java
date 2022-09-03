@@ -10,14 +10,14 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.types.DfType;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.types.DfTypes;
 import com.intellij.java.analysis.JavaAnalysisBundle;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.ModificationTracker;
-import com.intellij.psi.impl.light.LightElement;
+import consulo.project.Project;
+import consulo.component.util.ModificationTracker;
+import consulo.language.impl.psi.LightElement;
 import com.intellij.java.language.impl.psi.impl.source.PsiMethodImpl;
 import com.intellij.psi.util.*;
-import com.intellij.testFramework.LightVirtualFile;
-import com.intellij.util.ObjectUtils;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.language.file.light.LightVirtualFile;
+import consulo.ide.impl.idea.util.ObjectUtils;
+import consulo.util.collection.ContainerUtil;
 import com.siyeh.ig.psiutils.ClassUtils;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import consulo.util.dataholder.Key;
@@ -28,6 +28,7 @@ import javax.annotation.Nullable;
 
 import org.jetbrains.annotations.PropertyKey;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -43,7 +44,7 @@ public enum Mutability
 	MUTABLE("mutability.modifiable", null),
 	/**
 	 * A value is known to be an immutable view over a possibly mutable value: it cannot be mutated directly using this
-	 * reference; however subsequent reads (e.g. {@link java.util.Collection#size}) may return different results if the
+	 * reference; however subsequent reads (e.g. {@link Collection#size}) may return different results if the
 	 * underlying value is mutated by somebody else.
 	 */
 	UNMODIFIABLE_VIEW("mutability.unmodifiable.view", "org.jetbrains.annotations.UnmodifiableView"),

@@ -16,9 +16,9 @@
 package com.intellij.java.language.psi.util;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.*;
-import com.intellij.psi.tree.IElementType;
 import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.ast.IElementType;
+import consulo.language.psi.PsiElement;
 
 import java.util.HashMap;
 import java.util.Map;

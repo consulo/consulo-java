@@ -19,18 +19,18 @@ import javax.annotation.Nonnull;
 
 import com.intellij.java.execution.JavaExecutionUtil;
 import com.intellij.java.execution.impl.SingleClassConfiguration;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.module.Module;
+import consulo.util.lang.StringUtil;
 import com.intellij.java.language.psi.JavaDirectoryService;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiJavaPackage;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.refactoring.listeners.RefactoringElementAdapter;
-import com.intellij.refactoring.listeners.RefactoringElementListener;
-import com.intellij.refactoring.listeners.UndoRefactoringElementListener;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.ide.impl.idea.refactoring.listeners.RefactoringElementAdapter;
+import consulo.language.editor.refactoring.event.RefactoringElementListener;
+import consulo.language.editor.refactoring.event.UndoRefactoringElementListener;
 
 public class RefactoringListeners
 {

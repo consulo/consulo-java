@@ -15,10 +15,10 @@
  */
 package com.intellij.java.impl.codeInsight.completion;
 
-import com.intellij.codeInsight.TailType;
+import consulo.language.editor.completion.lookup.TailType;
 import com.intellij.codeInsight.completion.*;
-import com.intellij.codeInsight.lookup.LookupElement;
-import com.intellij.codeInsight.lookup.LookupElementDecorator;
+import consulo.language.editor.completion.lookup.LookupElement;
+import consulo.language.editor.completion.lookup.LookupElementDecorator;
 import com.intellij.java.impl.codeInsight.ExpectedTypeInfo;
 import com.intellij.java.impl.codeInsight.ExpectedTypeInfoImpl;
 import com.intellij.java.impl.codeInsight.ExpectedTypesProvider;
@@ -31,16 +31,16 @@ import com.intellij.java.impl.psi.filters.types.AssignableToFilter;
 import com.intellij.java.impl.psi.util.proximity.ReferenceListWeigher;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.infos.CandidateInfo;
-import com.intellij.patterns.ElementPattern;
-import com.intellij.psi.PsiComment;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.filters.ElementFilter;
-import com.intellij.psi.filters.OrFilter;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.pattern.ElementPattern;
+import consulo.language.psi.PsiComment;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.filter.ElementFilter;
+import consulo.language.psi.filter.OrFilter;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.util.*;
-import com.intellij.util.containers.ContainerUtil;
-import consulo.codeInsight.completion.CompletionProvider;
+import consulo.util.collection.ContainerUtil;
+import consulo.language.editor.completion.CompletionProvider;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.util.collection.HashingStrategy;
 import consulo.util.collection.Sets;
@@ -49,8 +49,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 
-import static com.intellij.patterns.PlatformPatterns.psiElement;
-import static com.intellij.patterns.StandardPatterns.or;
+import static consulo.language.pattern.PlatformPatterns.psiElement;
+import static consulo.language.pattern.StandardPatterns.or;
 
 /**
  * @author peter

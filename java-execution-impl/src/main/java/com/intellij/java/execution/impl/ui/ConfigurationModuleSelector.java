@@ -22,19 +22,20 @@ import java.util.List;
 import javax.swing.JComboBox;
 
 import javax.annotation.Nullable;
-import com.intellij.application.options.ModuleDescriptionsComboBox;
-import com.intellij.application.options.ModuleListCellRenderer;
-import com.intellij.application.options.ModulesComboBox;
+
+import consulo.execution.configuration.ModuleBasedConfiguration;
+import consulo.module.ui.awt.ModuleDescriptionsComboBox;
+import consulo.module.ui.awt.ModuleListCellRenderer;
+import consulo.module.ui.awt.ModulesComboBox;
 import com.intellij.java.execution.configurations.JavaRunConfigurationModule;
-import com.intellij.execution.configurations.ModuleBasedConfiguration;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleManager;
-import com.intellij.openapi.module.ModuleUtilCore;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.ui.configuration.ModulesAlphaComparator;
+import consulo.module.Module;
+import consulo.module.ModuleManager;
+import consulo.language.util.ModuleUtilCore;
+import consulo.project.Project;
+import consulo.module.ModulesAlphaComparator;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.ui.ComboboxSpeedSearch;
-import com.intellij.ui.SortedComboBoxModel;
+import consulo.ui.ex.awt.ComboboxSpeedSearch;
+import consulo.ui.ex.awt.SortedComboBoxModel;
 import consulo.java.language.module.extension.JavaModuleExtension;
 
 public class ConfigurationModuleSelector

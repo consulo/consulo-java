@@ -13,20 +13,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 
-import com.intellij.ide.fileTemplates.impl.CustomFileTemplate;
+import consulo.fileTemplate.impl.internal.CustomFileTemplate;
 import com.intellij.java.impl.ide.fileTemplates.JavaTemplateUtil;
-import com.intellij.openapi.roots.ModuleRootManager;
-import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.LocalFileSystem;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.module.content.ModuleRootManager;
+import consulo.ide.impl.idea.openapi.util.io.FileUtil;
+import consulo.util.lang.StringUtil;
+import consulo.virtualFileSystem.LocalFileSystem;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.java.language.psi.JavaDirectoryService;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiDirectory;
-import com.intellij.psi.PsiManager;
+import consulo.language.psi.PsiDirectory;
+import consulo.language.psi.PsiManager;
 import com.intellij.testFramework.IdeaTestCase;
 import com.intellij.testFramework.PsiTestUtil;
-import com.intellij.util.properties.EncodingAwareProperties;
+import consulo.ide.impl.idea.util.properties.EncodingAwareProperties;
 
 @SuppressWarnings({"HardCodedStringLiteral"})
 public abstract class FileTemplatesTest extends IdeaTestCase {

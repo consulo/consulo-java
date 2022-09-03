@@ -15,19 +15,20 @@
  */
 package com.intellij.java.impl.codeInsight.completion.util;
 
-import com.intellij.codeInsight.completion.InsertionContext;
-import com.intellij.codeInsight.lookup.LookupElement;
-import com.intellij.codeInsight.lookup.LookupElementPresentation;
-import com.intellij.openapi.util.Iconable;
+import consulo.language.editor.completion.lookup.InsertionContext;
+import consulo.language.editor.completion.lookup.LookupElement;
+import consulo.language.editor.completion.lookup.LookupElementPresentation;
+import consulo.component.util.Iconable;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiPrimitiveType;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.ide.IconDescriptorUpdaters;
+import consulo.language.icon.IconDescriptorUpdaters;
 import consulo.ui.image.Image;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * @author peter
@@ -53,7 +54,7 @@ public class PsiTypeCanonicalLookupElement extends LookupElement {
     return super.getObject();
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public PsiClass getPsiClass() {
     return PsiUtil.resolveClassInType(myType);
   }

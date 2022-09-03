@@ -21,6 +21,7 @@ import com.intellij.java.impl.util.descriptors.ConfigFileMetaDataRegistry;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -51,7 +52,7 @@ public class ConfigFileMetaDataRegistryImpl implements ConfigFileMetaDataRegistr
     return myCachedMetaData;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public ConfigFileMetaData findMetaData(@NonNls @Nonnull final String id) {
     return myId2MetaData.get(id);
   }

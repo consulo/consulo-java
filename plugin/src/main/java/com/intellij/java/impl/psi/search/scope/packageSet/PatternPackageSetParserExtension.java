@@ -20,12 +20,12 @@
  */
 package com.intellij.java.impl.psi.search.scope.packageSet;
 
-import com.intellij.analysis.AnalysisScopeBundle;
-import com.intellij.lexer.Lexer;
-import com.intellij.psi.search.scope.packageSet.PackageSet;
-import com.intellij.psi.search.scope.packageSet.PackageSetParserExtension;
-import com.intellij.psi.search.scope.packageSet.ParsingException;
-import com.intellij.psi.search.scope.packageSet.lexer.ScopeTokenTypes;
+import consulo.language.editor.scope.AnalysisScopeBundle;
+import consulo.language.lexer.Lexer;
+import consulo.content.scope.PackageSet;
+import consulo.ide.impl.psi.search.scope.packageSet.PackageSetParserExtension;
+import consulo.content.scope.ParsingException;
+import consulo.ide.impl.psi.search.scope.packageSet.lexer.ScopeTokenTypes;
 
 public class PatternPackageSetParserExtension implements PackageSetParserExtension {
 

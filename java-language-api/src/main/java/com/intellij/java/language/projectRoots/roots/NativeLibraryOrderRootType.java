@@ -15,7 +15,7 @@
  */
 package com.intellij.java.language.projectRoots.roots;
 
-import com.intellij.openapi.roots.OrderRootType;
+import consulo.content.OrderRootType;
 
 /**
  * @author nik

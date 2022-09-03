@@ -15,11 +15,11 @@
  */
 package com.intellij.java.impl.refactoring.extractclass.usageInfo;
 
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiReferenceExpression;
 import com.intellij.java.impl.refactoring.psi.MutationUtils;
 import com.intellij.java.impl.refactoring.util.FixableUsageInfo;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
 
 public class ReplaceInstanceVariableAccess extends FixableUsageInfo {
     private final PsiReferenceExpression expression;

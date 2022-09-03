@@ -18,6 +18,7 @@ package com.intellij.java.impl.psi.impl;
 import java.util.Locale;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.intellij.lang.regexp.AsciiUtil;
 import org.intellij.lang.regexp.DefaultRegExpPropertiesProvider;
@@ -29,13 +30,13 @@ import org.intellij.lang.regexp.psi.RegExpGroup;
 import org.intellij.lang.regexp.psi.RegExpNamedCharacter;
 import org.intellij.lang.regexp.psi.RegExpNamedGroupRef;
 import org.intellij.lang.regexp.psi.RegExpSimpleClass;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleUtilCore;
+import consulo.module.Module;
+import consulo.language.util.ModuleUtilCore;
 import com.intellij.java.language.projectRoots.JavaSdk;
 import com.intellij.java.language.projectRoots.JavaSdkVersion;
-import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.PsiElement;
+import consulo.content.bundle.Sdk;
+import consulo.util.lang.StringUtil;
+import consulo.language.psi.PsiElement;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.java.language.module.extension.JavaModuleExtension;
 
@@ -545,9 +546,9 @@ public class JavaRegExpHost implements RegExpLanguageHost
 		return myPropertyNames;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	@Override
-	public String getPropertyDescription(@javax.annotation.Nullable String name)
+	public String getPropertyDescription(@Nullable String name)
 	{
 		if(StringUtil.isEmptyOrSpaces(name))
 		{

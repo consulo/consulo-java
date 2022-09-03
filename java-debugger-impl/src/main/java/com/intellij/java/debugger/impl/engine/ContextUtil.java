@@ -25,18 +25,18 @@ import com.intellij.java.debugger.engine.jdi.StackFrameProxy;
 import com.intellij.java.debugger.impl.jdi.LocalVariableProxyImpl;
 import com.intellij.java.debugger.impl.jdi.StackFrameProxyImpl;
 import com.intellij.java.debugger.engine.StackFrameContext;
-import com.intellij.openapi.application.ReadAction;
+import consulo.application.ReadAction;
 import consulo.logging.Logger;
-import com.intellij.openapi.util.Comparing;
+import consulo.util.lang.Comparing;
 import consulo.util.dataholder.Key;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiCodeBlock;
 import com.intellij.java.language.psi.PsiDeclarationStatement;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiElementFactory;
 import com.intellij.java.language.psi.PsiResolveHelper;
 import com.intellij.java.language.psi.PsiStatement;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
 import consulo.internal.com.sun.jdi.Location;
 
 public class ContextUtil
@@ -45,7 +45,7 @@ public class ContextUtil
 	private static final Logger LOG = Logger.getInstance("#com.intellij.java.debugger.impl.PositionUtil");
 
 	@Nullable
-	public static SourcePosition getSourcePosition(@javax.annotation.Nullable final StackFrameContext context)
+	public static SourcePosition getSourcePosition(@Nullable final StackFrameContext context)
 	{
 		if(context == null)
 		{
@@ -165,7 +165,7 @@ public class ContextUtil
 	}
 
 	@Nullable
-	public static PsiElement getContextElement(@javax.annotation.Nullable SourcePosition position)
+	public static PsiElement getContextElement(@Nullable SourcePosition position)
 	{
 		return position == null ? null : position.getElementAt();
 	}

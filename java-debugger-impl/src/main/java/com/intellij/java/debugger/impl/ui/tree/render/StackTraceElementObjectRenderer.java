@@ -28,11 +28,11 @@ import com.intellij.java.debugger.impl.settings.NodeRendererSettings;
 import com.intellij.java.debugger.impl.ui.impl.watch.ValueDescriptorImpl;
 import com.intellij.java.execution.filters.ExceptionFilter;
 import com.intellij.execution.filters.Filter;
-import com.intellij.execution.filters.HyperlinkInfo;
-import com.intellij.openapi.application.ApplicationManager;
+import consulo.execution.ui.console.HyperlinkInfo;
+import consulo.application.ApplicationManager;
 import consulo.logging.Logger;
-import com.intellij.xdebugger.frame.XFullValueEvaluator;
-import com.intellij.xdebugger.impl.ui.DebuggerUIUtil;
+import consulo.execution.debug.frame.XFullValueEvaluator;
+import consulo.ide.impl.idea.xdebugger.impl.ui.DebuggerUIUtil;
 import consulo.internal.com.sun.jdi.*;
 
 /**
@@ -82,7 +82,7 @@ class StackTraceElementObjectRenderer extends ToStringBasedRenderer implements F
 										final HyperlinkInfo info = result.getFirstHyperlinkInfo();
 										if(info != null)
 										{
-											DebuggerUIUtil.invokeLater(new Runnable()
+											consulo.ide.impl.idea.xdebugger.impl.ui.DebuggerUIUtil.invokeLater(new Runnable()
 											{
 												@Override
 												public void run()

@@ -15,8 +15,8 @@
  */
 package com.intellij.java.compiler.classParsing;
 
-import com.intellij.openapi.compiler.CompilerBundle;
-import com.intellij.util.ArrayUtil;
+import consulo.compiler.CompilerBundle;
+import consulo.util.collection.ArrayUtil;
 
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;

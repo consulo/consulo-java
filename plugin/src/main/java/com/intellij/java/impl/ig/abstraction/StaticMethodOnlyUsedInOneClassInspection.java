@@ -18,39 +18,40 @@ package com.intellij.java.impl.ig.abstraction;
 import java.util.concurrent.atomic.AtomicReference;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.swing.JComponent;
 
-import com.intellij.analysis.AnalysisScope;
-import com.intellij.codeInspection.CommonProblemDescriptor;
-import com.intellij.codeInspection.GlobalInspectionContext;
+import consulo.language.editor.scope.AnalysisScope;
+import consulo.language.editor.inspection.CommonProblemDescriptor;
+import consulo.language.editor.inspection.GlobalInspectionContext;
 import com.intellij.java.analysis.codeInspection.GlobalJavaInspectionContext;
-import com.intellij.codeInspection.InspectionManager;
-import com.intellij.codeInspection.LocalInspectionTool;
-import com.intellij.codeInspection.ProblemDescriptionsProcessor;
-import com.intellij.codeInspection.ProblemDescriptor;
-import com.intellij.codeInspection.ProblemHighlightType;
+import consulo.language.editor.inspection.scheme.InspectionManager;
+import consulo.language.editor.inspection.LocalInspectionTool;
+import consulo.language.editor.inspection.ProblemDescriptionsProcessor;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.editor.inspection.ProblemHighlightType;
 import com.intellij.java.analysis.codeInspection.reference.RefClass;
-import com.intellij.codeInspection.reference.RefElement;
-import com.intellij.codeInspection.reference.RefEntity;
+import consulo.language.editor.inspection.reference.RefElement;
+import consulo.language.editor.inspection.reference.RefEntity;
 import com.intellij.java.analysis.codeInspection.reference.RefJavaUtil;
 import com.intellij.java.analysis.codeInspection.reference.RefJavaVisitor;
 import com.intellij.java.analysis.codeInspection.reference.RefMethod;
-import com.intellij.codeInspection.ui.MultipleCheckboxOptionsPanel;
+import consulo.ide.impl.idea.codeInspection.ui.MultipleCheckboxOptionsPanel;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.actionSystem.LangDataKeys;
-import com.intellij.openapi.actionSystem.impl.SimpleDataContext;
-import com.intellij.openapi.progress.ProgressManager;
+import consulo.dataContext.DataContext;
+import consulo.language.editor.LangDataKeys;
+import consulo.ide.impl.idea.openapi.actionSystem.impl.SimpleDataContext;
+import consulo.application.progress.ProgressManager;
 import consulo.util.dataholder.Key;
-import com.intellij.openapi.util.Ref;
+import consulo.util.lang.ref.Ref;
 import com.intellij.psi.*;
 import com.intellij.java.indexing.search.searches.MethodReferencesSearch;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.refactoring.RefactoringActionHandler;
-import com.intellij.refactoring.RefactoringActionHandlerFactory;
-import com.intellij.util.Processor;
-import com.intellij.util.Query;
+import consulo.language.editor.refactoring.action.RefactoringActionHandler;
+import consulo.language.editor.refactoring.action.RefactoringActionHandlerFactory;
+import consulo.application.util.function.Processor;
+import consulo.application.util.query.Query;
 import com.siyeh.InspectionGadgetsBundle;
 import com.intellij.java.impl.ig.BaseGlobalInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
@@ -82,7 +83,7 @@ public class StaticMethodOnlyUsedInOneClassInspection extends BaseGlobalInspecti
 		return InspectionGadgetsBundle.message("static.method.only.used.in.one.class.display.name");
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	@Override
 	public JComponent createOptionsPanel()
 	{
@@ -93,7 +94,7 @@ public class StaticMethodOnlyUsedInOneClassInspection extends BaseGlobalInspecti
 		return panel;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	@Override
 	public CommonProblemDescriptor[] checkElement(@Nonnull RefEntity refEntity, @Nonnull AnalysisScope scope, @Nonnull InspectionManager manager, @Nonnull GlobalInspectionContext globalContext)
 	{
@@ -323,7 +324,7 @@ public class StaticMethodOnlyUsedInOneClassInspection extends BaseGlobalInspecti
 		 * @return the class the specified method is used from, or null if it is
 		 * used from 0 or more than 1 other classes.
 		 */
-		@javax.annotation.Nullable
+		@Nullable
 		public PsiClass findUsageClass(final PsiMethod method)
 		{
 			ProgressManager.getInstance().runProcess(() ->
@@ -338,7 +339,7 @@ public class StaticMethodOnlyUsedInOneClassInspection extends BaseGlobalInspecti
 		}
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	@Override
 	public LocalInspectionTool getSharedLocalInspectionTool()
 	{
@@ -363,7 +364,7 @@ public class StaticMethodOnlyUsedInOneClassInspection extends BaseGlobalInspecti
 		}
 
 		@Override
-		@javax.annotation.Nullable
+		@Nullable
 		protected InspectionGadgetsFix buildFix(Object... infos)
 		{
 			final PsiClass usageClass = (PsiClass) infos[0];

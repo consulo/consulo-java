@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.codeInsight;
 
-import com.intellij.codeInsight.TailType;
+import consulo.language.editor.completion.lookup.TailType;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiType;
 import org.intellij.lang.annotations.MagicConstant;

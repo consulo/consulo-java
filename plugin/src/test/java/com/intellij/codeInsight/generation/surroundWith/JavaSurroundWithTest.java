@@ -15,11 +15,11 @@
  */
 package com.intellij.codeInsight.generation.surroundWith;
 
-import com.intellij.codeInsight.template.impl.TemplateManagerImpl;
-import com.intellij.codeInsight.template.impl.TemplateState;
+import consulo.ide.impl.idea.codeInsight.template.impl.TemplateManagerImpl;
+import consulo.language.editor.template.TemplateState;
 import com.intellij.java.impl.codeInsight.generation.surroundWith.*;
-import com.intellij.lang.surroundWith.Surrounder;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.language.editor.surroundWith.Surrounder;
+import consulo.util.lang.StringUtil;
 import com.intellij.testFramework.LightCodeInsightTestCase;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

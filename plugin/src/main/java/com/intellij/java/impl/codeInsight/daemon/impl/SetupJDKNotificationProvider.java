@@ -21,21 +21,21 @@ import com.intellij.ProjectTopics;
 import com.intellij.java.language.JavaCoreBundle;
 import com.intellij.java.language.impl.JavaClassFileType;
 import com.intellij.java.language.JavaLanguage;
-import com.intellij.openapi.fileEditor.FileEditor;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleUtilCore;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.ModuleRootAdapter;
-import com.intellij.openapi.roots.ModuleRootEvent;
-import com.intellij.openapi.roots.ui.configuration.ProjectSettingsService;
+import consulo.fileEditor.FileEditor;
+import consulo.module.Module;
+import consulo.language.util.ModuleUtilCore;
+import consulo.project.Project;
+import consulo.module.content.layer.event.ModuleRootAdapter;
+import consulo.module.content.layer.event.ModuleRootEvent;
+import consulo.project.ui.view.internal.ProjectSettingsService;
 import consulo.util.dataholder.Key;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiManager;
-import com.intellij.ui.EditorNotificationPanel;
-import com.intellij.ui.EditorNotifications;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiManager;
+import consulo.ide.impl.idea.ui.EditorNotificationPanel;
+import consulo.fileEditor.EditorNotifications;
 import consulo.annotation.access.RequiredReadAction;
-import consulo.editor.notifications.EditorNotificationProvider;
+import consulo.fileEditor.EditorNotificationProvider;
 import consulo.java.language.module.extension.JavaModuleExtension;
 import consulo.module.extension.ModuleExtension;
 
@@ -44,7 +44,7 @@ import consulo.module.extension.ModuleExtension;
  */
 public class SetupJDKNotificationProvider implements EditorNotificationProvider<EditorNotificationPanel>
 {
-	private static final Key<EditorNotificationPanel> KEY = Key.create("setup.jdk.notifier");
+	private static final Key<consulo.ide.impl.idea.ui.EditorNotificationPanel> KEY = Key.create("setup.jdk.notifier");
 
 	private final Project myProject;
 
@@ -110,7 +110,7 @@ public class SetupJDKNotificationProvider implements EditorNotificationProvider<
 	@Nonnull
 	private static EditorNotificationPanel createPanel(final @Nonnull Project project, final @Nonnull PsiFile file)
 	{
-		EditorNotificationPanel panel = new EditorNotificationPanel();
+		EditorNotificationPanel panel = new consulo.ide.impl.idea.ui.EditorNotificationPanel();
 		panel.setText(JavaCoreBundle.message("module.jdk.not.defined"));
 		panel.createActionLabel(JavaCoreBundle.message("module.jdk.setup"), () ->
 		{

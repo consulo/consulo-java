@@ -4,8 +4,8 @@
 package com.intellij.psi;
 
 import org.jetbrains.annotations.NonNls;
-import com.intellij.openapi.editor.Document;
-import com.intellij.psi.impl.DebugUtil;
+import consulo.document.Document;
+import consulo.language.impl.DebugUtil;
 import com.intellij.testFramework.LightCodeInsightTestCase;
 
 public abstract class TreeIsCorrectAfterDiffReparseTest extends LightCodeInsightTestCase {

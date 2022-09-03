@@ -15,7 +15,7 @@
  */
 package com.intellij.java.language.psi;
 
-import com.intellij.psi.PsiNameIdentifierOwner;
+import consulo.language.psi.PsiNameIdentifierOwner;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

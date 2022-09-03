@@ -17,7 +17,7 @@ package com.intellij.java.language.impl.psi.impl.source;
 
 import com.intellij.java.language.psi.HierarchicalMethodSignature;
 import com.intellij.java.language.psi.util.MethodSignatureBackedByPsiMethod;
-import com.intellij.util.SmartList;
+import consulo.util.collection.SmartList;
 import javax.annotation.Nonnull;
 
 import java.util.Collections;

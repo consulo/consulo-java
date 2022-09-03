@@ -15,18 +15,18 @@
  */
 package com.intellij.java.execution.impl;
 
-import com.intellij.execution.testframework.TestSearchScope;
-import com.intellij.openapi.application.ReadAction;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.progress.ProcessCanceledException;
-import com.intellij.openapi.progress.ProgressManager;
-import com.intellij.openapi.roots.OrderEnumerator;
-import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.VfsUtilCore;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.util.ArrayUtil;
-import com.intellij.util.PathsList;
+import consulo.execution.test.TestSearchScope;
+import consulo.application.ReadAction;
+import consulo.module.Module;
+import consulo.component.ProcessCanceledException;
+import consulo.application.progress.ProgressManager;
+import consulo.module.content.layer.OrderEnumerator;
+import consulo.ide.impl.idea.openapi.util.io.FileUtil;
+import consulo.util.lang.StringUtil;
+import consulo.ide.impl.idea.openapi.vfs.VfsUtilCore;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.util.collection.ArrayUtil;
+import consulo.virtualFileSystem.util.PathsList;
 import consulo.compiler.ModuleCompilerPathsManager;
 import consulo.logging.Logger;
 import consulo.roots.impl.TestContentFolderTypeProvider;

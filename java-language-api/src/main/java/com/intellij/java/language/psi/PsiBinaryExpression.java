@@ -15,10 +15,11 @@
  */
 package com.intellij.java.language.psi;
 
-import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.tree.TokenSet;
+import consulo.language.ast.IElementType;
+import consulo.language.ast.TokenSet;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Represents a Java binary expression (addition, multiplication and so on).
@@ -42,7 +43,7 @@ public interface PsiBinaryExpression extends PsiPolyadicExpression
 	 *
 	 * @return the right operand, or null if the expression is incomplete.
 	 */
-	@javax.annotation.Nullable
+	@Nullable
 	PsiExpression getROperand();
 
 	/**

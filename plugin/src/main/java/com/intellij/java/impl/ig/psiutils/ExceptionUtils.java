@@ -17,7 +17,7 @@ package com.intellij.java.impl.ig.psiutils;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.siyeh.ig.psiutils.BoolUtils;
 import consulo.java.language.module.util.JavaClassNames;
 
@@ -104,7 +104,7 @@ public class ExceptionUtils {
     }
   }
 
-  public static boolean blockThrowsException(@javax.annotation.Nullable PsiCodeBlock block) {
+  public static boolean blockThrowsException(@Nullable PsiCodeBlock block) {
     if (block == null) {
       return false;
     }

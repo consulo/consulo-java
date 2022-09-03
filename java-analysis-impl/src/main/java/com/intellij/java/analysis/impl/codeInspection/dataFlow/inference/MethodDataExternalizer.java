@@ -19,9 +19,9 @@ package com.intellij.java.analysis.impl.codeInspection.dataFlow.inference;
 import com.intellij.java.language.codeInsight.Nullability;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.ContractReturnValue;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.StandardMethodContract;
-import com.intellij.openapi.util.Pair;
-import com.intellij.util.io.DataExternalizer;
-import com.intellij.util.io.DataInputOutputUtil;
+import consulo.util.lang.Pair;
+import consulo.index.io.data.DataExternalizer;
+import consulo.index.io.data.DataInputOutputUtil;
 
 import javax.annotation.Nonnull;
 import java.io.DataInput;

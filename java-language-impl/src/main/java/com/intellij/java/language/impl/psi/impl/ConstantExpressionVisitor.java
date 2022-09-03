@@ -16,19 +16,19 @@
 package com.intellij.java.language.impl.psi.impl;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.*;
-import com.intellij.psi.tree.IElementType;
 import com.intellij.java.language.psi.util.ConstantEvaluationOverflowException;
 import com.intellij.java.language.psi.util.ConstantExpressionUtil;
-import com.intellij.util.containers.Interner;
+import consulo.language.ast.IElementType;
+import consulo.language.psi.PsiElement;
 import consulo.util.dataholder.Key;
+import consulo.util.interner.Interner;
 
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ConcurrentMap;
 
 class ConstantExpressionVisitor extends JavaElementVisitor implements PsiConstantEvaluationHelper.AuxEvaluator {
-  
+
   private final Interner<String> myInterner = Interner.createStringInterner();
 
   private Set<PsiVariable> myVisitedVars;
@@ -50,18 +50,20 @@ class ConstantExpressionVisitor extends JavaElementVisitor implements PsiConstan
     store(element, myResult);
     return myResult;
   }
+
   private static final Key<Object> VALUE = Key.create("VALUE");
+
   private static Object getStoredValue(PsiElement element) {
     if (element == null) {
       return null;
     }
     try {
       return element.getUserData(VALUE);
-    }
-    finally {
+    } finally {
       element.putUserData(VALUE, null);
     }
   }
+
   static void store(PsiElement element, Object value) {
     element.putUserData(VALUE, value);
   }
@@ -69,7 +71,7 @@ class ConstantExpressionVisitor extends JavaElementVisitor implements PsiConstan
   @Override
   public void visitLiteralExpression(PsiLiteralExpression expression) {
     final Object value = expression.getValue();
-    myResult = value instanceof String ? myInterner.intern((String)value) : value;
+    myResult = value instanceof String ? myInterner.intern((String) value) : value;
   }
 
   @Override
@@ -78,7 +80,7 @@ class ConstantExpressionVisitor extends JavaElementVisitor implements PsiConstan
 
     PsiExpression operand = expression.getOperand();
     Object opValue = getStoredValue(operand);
-    if(castTypeElement == null || opValue == null) {
+    if (castTypeElement == null || opValue == null) {
       myResult = null;
       return;
     }
@@ -87,7 +89,8 @@ class ConstantExpressionVisitor extends JavaElementVisitor implements PsiConstan
     myResult = ConstantExpressionUtil.computeCastTo(opValue, castType);
   }
 
-  @Override public void visitConditionalExpression(PsiConditionalExpression expression) {
+  @Override
+  public void visitConditionalExpression(PsiConditionalExpression expression) {
     Object then = getStoredValue(expression.getThenExpression());
     Object els = getStoredValue(expression.getElseExpression());
     Object condition = getStoredValue(expression.getCondition());
@@ -99,7 +102,7 @@ class ConstantExpressionVisitor extends JavaElementVisitor implements PsiConstan
     Object value = null;
 
     if (condition instanceof Boolean) {
-      value = ((Boolean)condition).booleanValue() ? then : els;
+      value = ((Boolean) condition).booleanValue() ? then : els;
     }
 
     myResult = value;
@@ -128,7 +131,7 @@ class ConstantExpressionVisitor extends JavaElementVisitor implements PsiConstan
       lValue = myResult;
     }
     if (myResult instanceof String) {
-      myResult = myInterner.intern((String)myResult);
+      myResult = myInterner.intern((String) myResult);
     }
   }
 
@@ -139,302 +142,254 @@ class ConstantExpressionVisitor extends JavaElementVisitor implements PsiConstan
         String l = lOperandValue.toString();
         String r = rOperandValue.toString();
         value = l + r;
-      }
-      else {
-        if (lOperandValue instanceof Character) lOperandValue = Integer.valueOf(((Character)lOperandValue).charValue());
-        if (rOperandValue instanceof Character) rOperandValue = Integer.valueOf(((Character)rOperandValue).charValue());
+      } else {
+        if (lOperandValue instanceof Character)
+          lOperandValue = Integer.valueOf(((Character) lOperandValue).charValue());
+        if (rOperandValue instanceof Character)
+          rOperandValue = Integer.valueOf(((Character) rOperandValue).charValue());
 
         if (lOperandValue instanceof Number && rOperandValue instanceof Number) {
           if (lOperandValue instanceof Double || rOperandValue instanceof Double) {
-            value = new Double(((Number)lOperandValue).doubleValue() + ((Number)rOperandValue).doubleValue());
-            checkRealNumberOverflow(value, lOperandValue, rOperandValue,expression);
-          }
-          else if (lOperandValue instanceof Float || rOperandValue instanceof Float) {
-            value = new Float(((Number)lOperandValue).floatValue() + ((Number)rOperandValue).floatValue());
+            value = new Double(((Number) lOperandValue).doubleValue() + ((Number) rOperandValue).doubleValue());
             checkRealNumberOverflow(value, lOperandValue, rOperandValue, expression);
-          }
-          else if (lOperandValue instanceof Long || rOperandValue instanceof Long) {
-            final long l = ((Number)lOperandValue).longValue();
-            final long r = ((Number)rOperandValue).longValue();
+          } else if (lOperandValue instanceof Float || rOperandValue instanceof Float) {
+            value = new Float(((Number) lOperandValue).floatValue() + ((Number) rOperandValue).floatValue());
+            checkRealNumberOverflow(value, lOperandValue, rOperandValue, expression);
+          } else if (lOperandValue instanceof Long || rOperandValue instanceof Long) {
+            final long l = ((Number) lOperandValue).longValue();
+            final long r = ((Number) rOperandValue).longValue();
             value = Long.valueOf(l + r);
-            checkAdditionOverflow(((Long)value).longValue() >= 0, l >= 0, r >= 0, expression);
-          }
-          else {
-            final int l = ((Number)lOperandValue).intValue();
-            final int r = ((Number)rOperandValue).intValue();
+            checkAdditionOverflow(((Long) value).longValue() >= 0, l >= 0, r >= 0, expression);
+          } else {
+            final int l = ((Number) lOperandValue).intValue();
+            final int r = ((Number) rOperandValue).intValue();
             value = Integer.valueOf(l + r);
-            checkAdditionOverflow(((Integer)value).intValue() >= 0, l >= 0, r >= 0, expression);
+            checkAdditionOverflow(((Integer) value).intValue() >= 0, l >= 0, r >= 0, expression);
           }
         }
       }
-    }
-    else if (tokenType == JavaTokenType.MINUS) {
-      if (lOperandValue instanceof Character) lOperandValue = Integer.valueOf(((Character)lOperandValue).charValue());
-      if (rOperandValue instanceof Character) rOperandValue = Integer.valueOf(((Character)rOperandValue).charValue());
+    } else if (tokenType == JavaTokenType.MINUS) {
+      if (lOperandValue instanceof Character) lOperandValue = Integer.valueOf(((Character) lOperandValue).charValue());
+      if (rOperandValue instanceof Character) rOperandValue = Integer.valueOf(((Character) rOperandValue).charValue());
       if (lOperandValue instanceof Number && rOperandValue instanceof Number) {
         if (lOperandValue instanceof Double || rOperandValue instanceof Double) {
-          value = new Double(((Number)lOperandValue).doubleValue() - ((Number)rOperandValue).doubleValue());
+          value = new Double(((Number) lOperandValue).doubleValue() - ((Number) rOperandValue).doubleValue());
           checkRealNumberOverflow(value, lOperandValue, rOperandValue, expression);
-        }
-        else if (lOperandValue instanceof Float || rOperandValue instanceof Float) {
-          value = new Float(((Number)lOperandValue).floatValue() - ((Number)rOperandValue).floatValue());
+        } else if (lOperandValue instanceof Float || rOperandValue instanceof Float) {
+          value = new Float(((Number) lOperandValue).floatValue() - ((Number) rOperandValue).floatValue());
           checkRealNumberOverflow(value, lOperandValue, rOperandValue, expression);
-        }
-        else if (lOperandValue instanceof Long || rOperandValue instanceof Long) {
-          final long l = ((Number)lOperandValue).longValue();
-          final long r = ((Number)rOperandValue).longValue();
+        } else if (lOperandValue instanceof Long || rOperandValue instanceof Long) {
+          final long l = ((Number) lOperandValue).longValue();
+          final long r = ((Number) rOperandValue).longValue();
           value = Long.valueOf(l - r);
-          checkAdditionOverflow(((Long)value).longValue() >= 0, l >= 0, r < 0, expression);
-        }
-        else {
-          final int l = ((Number)lOperandValue).intValue();
-          final int r = ((Number)rOperandValue).intValue();
+          checkAdditionOverflow(((Long) value).longValue() >= 0, l >= 0, r < 0, expression);
+        } else {
+          final int l = ((Number) lOperandValue).intValue();
+          final int r = ((Number) rOperandValue).intValue();
           value = Integer.valueOf(l - r);
-          checkAdditionOverflow(((Integer)value).intValue() >= 0, l >= 0, r < 0, expression);
+          checkAdditionOverflow(((Integer) value).intValue() >= 0, l >= 0, r < 0, expression);
         }
       }
-    }
-    else if (tokenType == JavaTokenType.ANDAND) {
-      if (lOperandValue instanceof Boolean && !((Boolean)lOperandValue).booleanValue()) {
+    } else if (tokenType == JavaTokenType.ANDAND) {
+      if (lOperandValue instanceof Boolean && !((Boolean) lOperandValue).booleanValue()) {
         value = Boolean.FALSE;
-      }
-      else if (rOperandValue instanceof Boolean && !((Boolean)rOperandValue).booleanValue()) {
+      } else if (rOperandValue instanceof Boolean && !((Boolean) rOperandValue).booleanValue()) {
         value = Boolean.FALSE;
+      } else if (lOperandValue instanceof Boolean && rOperandValue instanceof Boolean) {
+        value = Boolean.valueOf(((Boolean) lOperandValue).booleanValue() && ((Boolean) rOperandValue).booleanValue());
       }
-      else if (lOperandValue instanceof Boolean && rOperandValue instanceof Boolean) {
-        value = Boolean.valueOf(((Boolean)lOperandValue).booleanValue() && ((Boolean)rOperandValue).booleanValue());
-      }
-    }
-    else if (tokenType == JavaTokenType.OROR) {
-      if (lOperandValue instanceof Boolean && ((Boolean)lOperandValue).booleanValue()) {
+    } else if (tokenType == JavaTokenType.OROR) {
+      if (lOperandValue instanceof Boolean && ((Boolean) lOperandValue).booleanValue()) {
         value = Boolean.TRUE;
-      }
-      else if (rOperandValue instanceof Boolean && ((Boolean)rOperandValue).booleanValue()) {
+      } else if (rOperandValue instanceof Boolean && ((Boolean) rOperandValue).booleanValue()) {
         value = Boolean.TRUE;
+      } else if (lOperandValue instanceof Boolean && rOperandValue instanceof Boolean) {
+        value = Boolean.valueOf(((Boolean) lOperandValue).booleanValue() || ((Boolean) rOperandValue).booleanValue());
       }
-      else if (lOperandValue instanceof Boolean && rOperandValue instanceof Boolean) {
-        value = Boolean.valueOf(((Boolean)lOperandValue).booleanValue() || ((Boolean)rOperandValue).booleanValue());
-      }
-    }
-    else if (tokenType == JavaTokenType.LT) {
-      if (lOperandValue instanceof Character) lOperandValue = Integer.valueOf(((Character)lOperandValue).charValue());
-      if (rOperandValue instanceof Character) rOperandValue = Integer.valueOf(((Character)rOperandValue).charValue());
+    } else if (tokenType == JavaTokenType.LT) {
+      if (lOperandValue instanceof Character) lOperandValue = Integer.valueOf(((Character) lOperandValue).charValue());
+      if (rOperandValue instanceof Character) rOperandValue = Integer.valueOf(((Character) rOperandValue).charValue());
       if (lOperandValue instanceof Number && rOperandValue instanceof Number) {
-        value = Boolean.valueOf(((Number)lOperandValue).doubleValue() < ((Number)rOperandValue).doubleValue());
+        value = Boolean.valueOf(((Number) lOperandValue).doubleValue() < ((Number) rOperandValue).doubleValue());
       }
-    }
-    else if (tokenType == JavaTokenType.LE) {
-      if (lOperandValue instanceof Character) lOperandValue = Integer.valueOf(((Character)lOperandValue).charValue());
-      if (rOperandValue instanceof Character) rOperandValue = Integer.valueOf(((Character)rOperandValue).charValue());
+    } else if (tokenType == JavaTokenType.LE) {
+      if (lOperandValue instanceof Character) lOperandValue = Integer.valueOf(((Character) lOperandValue).charValue());
+      if (rOperandValue instanceof Character) rOperandValue = Integer.valueOf(((Character) rOperandValue).charValue());
       if (lOperandValue instanceof Number && rOperandValue instanceof Number) {
-        value = Boolean.valueOf(((Number)lOperandValue).doubleValue() <= ((Number)rOperandValue).doubleValue());
+        value = Boolean.valueOf(((Number) lOperandValue).doubleValue() <= ((Number) rOperandValue).doubleValue());
       }
-    }
-    else if (tokenType == JavaTokenType.GT) {
-      if (lOperandValue instanceof Character) lOperandValue = Integer.valueOf(((Character)lOperandValue).charValue());
-      if (rOperandValue instanceof Character) rOperandValue = Integer.valueOf(((Character)rOperandValue).charValue());
+    } else if (tokenType == JavaTokenType.GT) {
+      if (lOperandValue instanceof Character) lOperandValue = Integer.valueOf(((Character) lOperandValue).charValue());
+      if (rOperandValue instanceof Character) rOperandValue = Integer.valueOf(((Character) rOperandValue).charValue());
       if (lOperandValue instanceof Number && rOperandValue instanceof Number) {
-        value = Boolean.valueOf(((Number)lOperandValue).doubleValue() > ((Number)rOperandValue).doubleValue());
+        value = Boolean.valueOf(((Number) lOperandValue).doubleValue() > ((Number) rOperandValue).doubleValue());
       }
-    }
-    else if (tokenType == JavaTokenType.GE) {
-      if (lOperandValue instanceof Character) lOperandValue = Integer.valueOf(((Character)lOperandValue).charValue());
-      if (rOperandValue instanceof Character) rOperandValue = Integer.valueOf(((Character)rOperandValue).charValue());
+    } else if (tokenType == JavaTokenType.GE) {
+      if (lOperandValue instanceof Character) lOperandValue = Integer.valueOf(((Character) lOperandValue).charValue());
+      if (rOperandValue instanceof Character) rOperandValue = Integer.valueOf(((Character) rOperandValue).charValue());
       if (lOperandValue instanceof Number && rOperandValue instanceof Number) {
-        value = Boolean.valueOf(((Number)lOperandValue).doubleValue() >= ((Number)rOperandValue).doubleValue());
+        value = Boolean.valueOf(((Number) lOperandValue).doubleValue() >= ((Number) rOperandValue).doubleValue());
       }
-    }
-    else if (tokenType == JavaTokenType.EQEQ) {
-      if (lOperandValue instanceof Character) lOperandValue = Integer.valueOf(((Character)lOperandValue).charValue());
-      if (rOperandValue instanceof Character) rOperandValue = Integer.valueOf(((Character)rOperandValue).charValue());
+    } else if (tokenType == JavaTokenType.EQEQ) {
+      if (lOperandValue instanceof Character) lOperandValue = Integer.valueOf(((Character) lOperandValue).charValue());
+      if (rOperandValue instanceof Character) rOperandValue = Integer.valueOf(((Character) rOperandValue).charValue());
       if (lOperandValue instanceof Number && rOperandValue instanceof Number) {
-        value = Boolean.valueOf(((Number)lOperandValue).doubleValue() == ((Number)rOperandValue).doubleValue());
-      }
-      else if (lOperandValue instanceof String && rOperandValue instanceof String) {
+        value = Boolean.valueOf(((Number) lOperandValue).doubleValue() == ((Number) rOperandValue).doubleValue());
+      } else if (lOperandValue instanceof String && rOperandValue instanceof String) {
         value = Boolean.valueOf(lOperandValue == rOperandValue);
+      } else if (lOperandValue instanceof Boolean && rOperandValue instanceof Boolean) {
+        value = Boolean.valueOf(((Boolean) lOperandValue).booleanValue() == ((Boolean) rOperandValue).booleanValue());
       }
-      else if (lOperandValue instanceof Boolean && rOperandValue instanceof Boolean) {
-        value = Boolean.valueOf(((Boolean)lOperandValue).booleanValue() == ((Boolean)rOperandValue).booleanValue());
-      }
-    }
-    else if (tokenType == JavaTokenType.NE) {
-      if (lOperandValue instanceof Character) lOperandValue = Integer.valueOf(((Character)lOperandValue).charValue());
-      if (rOperandValue instanceof Character) rOperandValue = Integer.valueOf(((Character)rOperandValue).charValue());
+    } else if (tokenType == JavaTokenType.NE) {
+      if (lOperandValue instanceof Character) lOperandValue = Integer.valueOf(((Character) lOperandValue).charValue());
+      if (rOperandValue instanceof Character) rOperandValue = Integer.valueOf(((Character) rOperandValue).charValue());
       if (lOperandValue instanceof Number && rOperandValue instanceof Number) {
-        value = Boolean.valueOf(((Number)lOperandValue).doubleValue() != ((Number)rOperandValue).doubleValue());
-      }
-      else if (lOperandValue instanceof String && rOperandValue instanceof String) {
+        value = Boolean.valueOf(((Number) lOperandValue).doubleValue() != ((Number) rOperandValue).doubleValue());
+      } else if (lOperandValue instanceof String && rOperandValue instanceof String) {
         value = Boolean.valueOf(lOperandValue != rOperandValue);
+      } else if (lOperandValue instanceof Boolean && rOperandValue instanceof Boolean) {
+        value = Boolean.valueOf(((Boolean) lOperandValue).booleanValue() != ((Boolean) rOperandValue).booleanValue());
       }
-      else if (lOperandValue instanceof Boolean && rOperandValue instanceof Boolean) {
-        value = Boolean.valueOf(((Boolean)lOperandValue).booleanValue() != ((Boolean)rOperandValue).booleanValue());
-      }
-    }
-    else if (tokenType == JavaTokenType.ASTERISK) {
-      if (lOperandValue instanceof Character) lOperandValue = Integer.valueOf(((Character)lOperandValue).charValue());
-      if (rOperandValue instanceof Character) rOperandValue = Integer.valueOf(((Character)rOperandValue).charValue());
+    } else if (tokenType == JavaTokenType.ASTERISK) {
+      if (lOperandValue instanceof Character) lOperandValue = Integer.valueOf(((Character) lOperandValue).charValue());
+      if (rOperandValue instanceof Character) rOperandValue = Integer.valueOf(((Character) rOperandValue).charValue());
       if (lOperandValue instanceof Number && rOperandValue instanceof Number) {
         if (lOperandValue instanceof Double || rOperandValue instanceof Double) {
-          value = new Double(((Number)lOperandValue).doubleValue() * ((Number)rOperandValue).doubleValue());
+          value = new Double(((Number) lOperandValue).doubleValue() * ((Number) rOperandValue).doubleValue());
           checkRealNumberOverflow(value, lOperandValue, rOperandValue, expression);
-        }
-        else if (lOperandValue instanceof Float || rOperandValue instanceof Float) {
-          value = new Float(((Number)lOperandValue).floatValue() * ((Number)rOperandValue).floatValue());
+        } else if (lOperandValue instanceof Float || rOperandValue instanceof Float) {
+          value = new Float(((Number) lOperandValue).floatValue() * ((Number) rOperandValue).floatValue());
           checkRealNumberOverflow(value, lOperandValue, rOperandValue, expression);
-        }
-        else if (lOperandValue instanceof Long || rOperandValue instanceof Long) {
-          final long l = ((Number)lOperandValue).longValue();
-          final long r = ((Number)rOperandValue).longValue();
+        } else if (lOperandValue instanceof Long || rOperandValue instanceof Long) {
+          final long l = ((Number) lOperandValue).longValue();
+          final long r = ((Number) rOperandValue).longValue();
           value = Long.valueOf(l * r);
-          checkMultiplicationOverflow(((Long)value).longValue(), l, r, expression);
-        }
-        else {
-          final int l = ((Number)lOperandValue).intValue();
-          final int r = ((Number)rOperandValue).intValue();
+          checkMultiplicationOverflow(((Long) value).longValue(), l, r, expression);
+        } else {
+          final int l = ((Number) lOperandValue).intValue();
+          final int r = ((Number) rOperandValue).intValue();
           value = Integer.valueOf(l * r);
-          checkMultiplicationOverflow(((Integer)value).intValue(), l, r, expression);
+          checkMultiplicationOverflow(((Integer) value).intValue(), l, r, expression);
         }
       }
-    }
-    else if (tokenType == JavaTokenType.DIV) {
-      if (lOperandValue instanceof Character) lOperandValue = Integer.valueOf(((Character)lOperandValue).charValue());
-      if (rOperandValue instanceof Character) rOperandValue = Integer.valueOf(((Character)rOperandValue).charValue());
+    } else if (tokenType == JavaTokenType.DIV) {
+      if (lOperandValue instanceof Character) lOperandValue = Integer.valueOf(((Character) lOperandValue).charValue());
+      if (rOperandValue instanceof Character) rOperandValue = Integer.valueOf(((Character) rOperandValue).charValue());
       if (lOperandValue instanceof Number && rOperandValue instanceof Number) {
         if (lOperandValue instanceof Double || rOperandValue instanceof Double) {
-          value = new Double(((Number)lOperandValue).doubleValue() / ((Number)rOperandValue).doubleValue());
+          value = new Double(((Number) lOperandValue).doubleValue() / ((Number) rOperandValue).doubleValue());
           checkRealNumberOverflow(value, lOperandValue, rOperandValue, expression);
-        }
-        else if (lOperandValue instanceof Float || rOperandValue instanceof Float) {
-          value = new Float(((Number)lOperandValue).floatValue() / ((Number)rOperandValue).floatValue());
+        } else if (lOperandValue instanceof Float || rOperandValue instanceof Float) {
+          value = new Float(((Number) lOperandValue).floatValue() / ((Number) rOperandValue).floatValue());
           checkRealNumberOverflow(value, lOperandValue, rOperandValue, expression);
-        }
-        else if (lOperandValue instanceof Long || rOperandValue instanceof Long) {
-          final long r = ((Number)rOperandValue).longValue();
-          final long l = ((Number)lOperandValue).longValue();
+        } else if (lOperandValue instanceof Long || rOperandValue instanceof Long) {
+          final long r = ((Number) rOperandValue).longValue();
+          final long l = ((Number) lOperandValue).longValue();
           checkDivisionOverflow(l, r, Long.MIN_VALUE, expression);
           value = r == 0 ? null : Long.valueOf(l / r);
-        }
-        else {
-          final int r = ((Number)rOperandValue).intValue();
-          final int l = ((Number)lOperandValue).intValue();
+        } else {
+          final int r = ((Number) rOperandValue).intValue();
+          final int l = ((Number) lOperandValue).intValue();
           checkDivisionOverflow(l, r, Integer.MIN_VALUE, expression);
           value = r == 0 ? null : Integer.valueOf(l / r);
         }
       }
-    }
-    else if (tokenType == JavaTokenType.PERC) {
-      if (lOperandValue instanceof Character) lOperandValue = Integer.valueOf(((Character)lOperandValue).charValue());
-      if (rOperandValue instanceof Character) rOperandValue = Integer.valueOf(((Character)rOperandValue).charValue());
+    } else if (tokenType == JavaTokenType.PERC) {
+      if (lOperandValue instanceof Character) lOperandValue = Integer.valueOf(((Character) lOperandValue).charValue());
+      if (rOperandValue instanceof Character) rOperandValue = Integer.valueOf(((Character) rOperandValue).charValue());
       if (lOperandValue instanceof Number && rOperandValue instanceof Number) {
-        double rVal = ((Number)rOperandValue).doubleValue();
+        double rVal = ((Number) rOperandValue).doubleValue();
         if (myThrowExceptionOnOverflow && rVal == 0) throw new ConstantEvaluationOverflowException(expression);
         if (lOperandValue instanceof Double || rOperandValue instanceof Double) {
-          value = new Double(((Number)lOperandValue).doubleValue() % ((Number)rOperandValue).doubleValue());
+          value = new Double(((Number) lOperandValue).doubleValue() % ((Number) rOperandValue).doubleValue());
           checkRealNumberOverflow(value, lOperandValue, rOperandValue, expression);
-        }
-        else if (lOperandValue instanceof Float || rOperandValue instanceof Float) {
-          value = new Float(((Number)lOperandValue).floatValue() % ((Number)rOperandValue).floatValue());
+        } else if (lOperandValue instanceof Float || rOperandValue instanceof Float) {
+          value = new Float(((Number) lOperandValue).floatValue() % ((Number) rOperandValue).floatValue());
           checkRealNumberOverflow(value, lOperandValue, rOperandValue, expression);
-        }
-        else if (lOperandValue instanceof Long || rOperandValue instanceof Long) {
-          final long l = ((Number)lOperandValue).longValue();
-          final long r = ((Number)rOperandValue).longValue();
+        } else if (lOperandValue instanceof Long || rOperandValue instanceof Long) {
+          final long l = ((Number) lOperandValue).longValue();
+          final long r = ((Number) rOperandValue).longValue();
           checkDivisionOverflow(l, r, Long.MIN_VALUE, expression);
           value = r == 0 ? null : Long.valueOf(l % r);
-        }
-        else {
-          final int l = ((Number)lOperandValue).intValue();
-          final int r = ((Number)rOperandValue).intValue();
+        } else {
+          final int l = ((Number) lOperandValue).intValue();
+          final int r = ((Number) rOperandValue).intValue();
           checkDivisionOverflow(l, r, Integer.MIN_VALUE, expression);
           value = r == 0 ? null : Integer.valueOf(l % r);
         }
       }
-    }
-    else if (tokenType == JavaTokenType.LTLT) {
-      if (lOperandValue instanceof Character) lOperandValue = Integer.valueOf(((Character)lOperandValue).charValue());
-      if (rOperandValue instanceof Character) rOperandValue = Integer.valueOf(((Character)rOperandValue).charValue());
+    } else if (tokenType == JavaTokenType.LTLT) {
+      if (lOperandValue instanceof Character) lOperandValue = Integer.valueOf(((Character) lOperandValue).charValue());
+      if (rOperandValue instanceof Character) rOperandValue = Integer.valueOf(((Character) rOperandValue).charValue());
       if (isIntegral(lOperandValue) && isIntegral(rOperandValue)) {
         if (lOperandValue instanceof Long) {
-          value = Long.valueOf(((Number)lOperandValue).longValue() << ((Number)rOperandValue).longValue());
-        }
-        else {
-          value = Integer.valueOf(((Number)lOperandValue).intValue() << ((Number)rOperandValue).intValue());
+          value = Long.valueOf(((Number) lOperandValue).longValue() << ((Number) rOperandValue).longValue());
+        } else {
+          value = Integer.valueOf(((Number) lOperandValue).intValue() << ((Number) rOperandValue).intValue());
         }
       }
-    }
-    else if (tokenType == JavaTokenType.GTGT) {
-      if (lOperandValue instanceof Character) lOperandValue = Integer.valueOf(((Character)lOperandValue).charValue());
-      if (rOperandValue instanceof Character) rOperandValue = Integer.valueOf(((Character)rOperandValue).charValue());
+    } else if (tokenType == JavaTokenType.GTGT) {
+      if (lOperandValue instanceof Character) lOperandValue = Integer.valueOf(((Character) lOperandValue).charValue());
+      if (rOperandValue instanceof Character) rOperandValue = Integer.valueOf(((Character) rOperandValue).charValue());
       if (isIntegral(lOperandValue) && isIntegral(rOperandValue)) {
         if (lOperandValue instanceof Long) {
-          value = Long.valueOf(((Number)lOperandValue).longValue() >> ((Number)rOperandValue).longValue());
-        }
-        else {
-          value = Integer.valueOf(((Number)lOperandValue).intValue() >> ((Number)rOperandValue).intValue());
+          value = Long.valueOf(((Number) lOperandValue).longValue() >> ((Number) rOperandValue).longValue());
+        } else {
+          value = Integer.valueOf(((Number) lOperandValue).intValue() >> ((Number) rOperandValue).intValue());
         }
       }
-    }
-    else if (tokenType == JavaTokenType.GTGTGT) {
-      if (lOperandValue instanceof Character) lOperandValue = Integer.valueOf(((Character)lOperandValue).charValue());
-      if (rOperandValue instanceof Character) rOperandValue = Integer.valueOf(((Character)rOperandValue).charValue());
+    } else if (tokenType == JavaTokenType.GTGTGT) {
+      if (lOperandValue instanceof Character) lOperandValue = Integer.valueOf(((Character) lOperandValue).charValue());
+      if (rOperandValue instanceof Character) rOperandValue = Integer.valueOf(((Character) rOperandValue).charValue());
       if (isIntegral(lOperandValue) && isIntegral(rOperandValue)) {
         if (lOperandValue instanceof Long) {
-          value = Long.valueOf(((Number)lOperandValue).longValue() >>> ((Number)rOperandValue).longValue());
-        }
-        else {
-          value = Integer.valueOf(((Number)lOperandValue).intValue() >>> ((Number)rOperandValue).intValue());
+          value = Long.valueOf(((Number) lOperandValue).longValue() >>> ((Number) rOperandValue).longValue());
+        } else {
+          value = Integer.valueOf(((Number) lOperandValue).intValue() >>> ((Number) rOperandValue).intValue());
         }
       }
-    }
-    else if (tokenType == JavaTokenType.AND) {
-      if (lOperandValue instanceof Character) lOperandValue = Integer.valueOf(((Character)lOperandValue).charValue());
-      if (rOperandValue instanceof Character) rOperandValue = Integer.valueOf(((Character)rOperandValue).charValue());
+    } else if (tokenType == JavaTokenType.AND) {
+      if (lOperandValue instanceof Character) lOperandValue = Integer.valueOf(((Character) lOperandValue).charValue());
+      if (rOperandValue instanceof Character) rOperandValue = Integer.valueOf(((Character) rOperandValue).charValue());
       if (isIntegral(lOperandValue) && isIntegral(rOperandValue)) {
         if (lOperandValue instanceof Long || rOperandValue instanceof Long) {
-          value = Long.valueOf(((Number)lOperandValue).longValue() & ((Number)rOperandValue).longValue());
+          value = Long.valueOf(((Number) lOperandValue).longValue() & ((Number) rOperandValue).longValue());
+        } else {
+          value = Integer.valueOf(((Number) lOperandValue).intValue() & ((Number) rOperandValue).intValue());
         }
-        else {
-          value = Integer.valueOf(((Number)lOperandValue).intValue() & ((Number)rOperandValue).intValue());
-        }
+      } else if (lOperandValue instanceof Boolean && rOperandValue instanceof Boolean) {
+        value = Boolean.valueOf(((Boolean) lOperandValue).booleanValue() && ((Boolean) rOperandValue).booleanValue());
       }
-      else if (lOperandValue instanceof Boolean && rOperandValue instanceof Boolean) {
-        value = Boolean.valueOf(((Boolean)lOperandValue).booleanValue() && ((Boolean)rOperandValue).booleanValue());
-      }
-    }
-    else if (tokenType == JavaTokenType.OR) {
-      if (lOperandValue instanceof Character) lOperandValue = Integer.valueOf(((Character)lOperandValue).charValue());
-      if (rOperandValue instanceof Character) rOperandValue = Integer.valueOf(((Character)rOperandValue).charValue());
+    } else if (tokenType == JavaTokenType.OR) {
+      if (lOperandValue instanceof Character) lOperandValue = Integer.valueOf(((Character) lOperandValue).charValue());
+      if (rOperandValue instanceof Character) rOperandValue = Integer.valueOf(((Character) rOperandValue).charValue());
       if (isIntegral(lOperandValue) && isIntegral(rOperandValue)) {
         if (lOperandValue instanceof Long || rOperandValue instanceof Long) {
-          value = Long.valueOf(((Number)lOperandValue).longValue() | ((Number)rOperandValue).longValue());
+          value = Long.valueOf(((Number) lOperandValue).longValue() | ((Number) rOperandValue).longValue());
+        } else {
+          value = Integer.valueOf(((Number) lOperandValue).intValue() | ((Number) rOperandValue).intValue());
         }
-        else {
-          value = Integer.valueOf(((Number)lOperandValue).intValue() | ((Number)rOperandValue).intValue());
-        }
+      } else if (lOperandValue instanceof Boolean && rOperandValue instanceof Boolean) {
+        value = Boolean.valueOf(((Boolean) lOperandValue).booleanValue() || ((Boolean) rOperandValue).booleanValue());
       }
-      else if (lOperandValue instanceof Boolean && rOperandValue instanceof Boolean) {
-        value = Boolean.valueOf(((Boolean)lOperandValue).booleanValue() || ((Boolean)rOperandValue).booleanValue());
-      }
-    }
-    else if (tokenType == JavaTokenType.XOR) {
-      if (lOperandValue instanceof Character) lOperandValue = Integer.valueOf(((Character)lOperandValue).charValue());
-      if (rOperandValue instanceof Character) rOperandValue = Integer.valueOf(((Character)rOperandValue).charValue());
+    } else if (tokenType == JavaTokenType.XOR) {
+      if (lOperandValue instanceof Character) lOperandValue = Integer.valueOf(((Character) lOperandValue).charValue());
+      if (rOperandValue instanceof Character) rOperandValue = Integer.valueOf(((Character) rOperandValue).charValue());
       if (isIntegral(lOperandValue) && isIntegral(rOperandValue)) {
         if (lOperandValue instanceof Long || rOperandValue instanceof Long) {
-          value = Long.valueOf(((Number)lOperandValue).longValue() ^ ((Number)rOperandValue).longValue());
+          value = Long.valueOf(((Number) lOperandValue).longValue() ^ ((Number) rOperandValue).longValue());
+        } else {
+          value = Integer.valueOf(((Number) lOperandValue).intValue() ^ ((Number) rOperandValue).intValue());
         }
-        else {
-          value = Integer.valueOf(((Number)lOperandValue).intValue() ^ ((Number)rOperandValue).intValue());
-        }
-      }
-      else if (lOperandValue instanceof Boolean && rOperandValue instanceof Boolean) {
-        value = Boolean.valueOf(((Boolean)lOperandValue).booleanValue() ^ ((Boolean)rOperandValue).booleanValue());
+      } else if (lOperandValue instanceof Boolean && rOperandValue instanceof Boolean) {
+        value = Boolean.valueOf(((Boolean) lOperandValue).booleanValue() ^ ((Boolean) rOperandValue).booleanValue());
       }
     }
     return value;
   }
 
-  @Override public void visitPrefixExpression(PsiPrefixExpression expression) {
+  @Override
+  public void visitPrefixExpression(PsiPrefixExpression expression) {
     PsiExpression operand = expression.getOperand();
     Object operandValue = getStoredValue(operand);
     if (operandValue == null) {
@@ -444,67 +399,63 @@ class ConstantExpressionVisitor extends JavaElementVisitor implements PsiConstan
     IElementType tokenType = expression.getOperationTokenType();
     Object value = null;
     if (tokenType == JavaTokenType.MINUS) {
-      if (operandValue instanceof Character) operandValue = Integer.valueOf(((Character)operandValue).charValue());
+      if (operandValue instanceof Character) operandValue = Integer.valueOf(((Character) operandValue).charValue());
       if (operandValue instanceof Number) {
         if (operandValue instanceof Double) {
-          value = new Double(-((Number)operandValue).doubleValue());
+          value = new Double(-((Number) operandValue).doubleValue());
           checkRealNumberOverflow(value, null, null, expression);
-        }
-        else if (operandValue instanceof Float) {
-          value = new Float(-((Number)operandValue).floatValue());
+        } else if (operandValue instanceof Float) {
+          value = new Float(-((Number) operandValue).floatValue());
           checkRealNumberOverflow(value, null, null, expression);
-        }
-        else if (operandValue instanceof Long) {
-          value = Long.valueOf(-((Number)operandValue).longValue());
+        } else if (operandValue instanceof Long) {
+          value = Long.valueOf(-((Number) operandValue).longValue());
           if (myThrowExceptionOnOverflow
               && !(operand instanceof PsiLiteralExpression)
-              && ((Number)operandValue).longValue() == Long.MIN_VALUE) {
+              && ((Number) operandValue).longValue() == Long.MIN_VALUE) {
             throw new ConstantEvaluationOverflowException(expression);
           }
-        }
-        else {
-          value = Integer.valueOf(-((Number)operandValue).intValue());
+        } else {
+          value = Integer.valueOf(-((Number) operandValue).intValue());
           if (myThrowExceptionOnOverflow
               && !(operand instanceof PsiLiteralExpression)
-              && ((Number)operandValue).intValue() == Integer.MIN_VALUE) {
+              && ((Number) operandValue).intValue() == Integer.MIN_VALUE) {
             throw new ConstantEvaluationOverflowException(expression);
           }
         }
       }
-    }
-    else if (tokenType == JavaTokenType.PLUS) {
-      if (operandValue instanceof Character) operandValue = Integer.valueOf(((Character)operandValue).charValue());
+    } else if (tokenType == JavaTokenType.PLUS) {
+      if (operandValue instanceof Character) operandValue = Integer.valueOf(((Character) operandValue).charValue());
       if (operandValue instanceof Number) {
         value = operandValue;
       }
-    }
-    else if (tokenType == JavaTokenType.TILDE) {
-      if (operandValue instanceof Character) operandValue = Integer.valueOf(((Character)operandValue).charValue());
+    } else if (tokenType == JavaTokenType.TILDE) {
+      if (operandValue instanceof Character) operandValue = Integer.valueOf(((Character) operandValue).charValue());
       if (isIntegral(operandValue)) {
         value = operandValue instanceof Long
-                ? Long.valueOf(~((Number)operandValue).longValue())
-                : Integer.valueOf(~((Number)operandValue).intValue());
+            ? Long.valueOf(~((Number) operandValue).longValue())
+            : Integer.valueOf(~((Number) operandValue).intValue());
       }
-    }
-    else if (tokenType == JavaTokenType.EXCL) {
+    } else if (tokenType == JavaTokenType.EXCL) {
       if (operandValue instanceof Boolean) {
-        value = Boolean.valueOf(!((Boolean)operandValue).booleanValue());
+        value = Boolean.valueOf(!((Boolean) operandValue).booleanValue());
       }
     }
 
     myResult = value;
   }
 
-  @Override public void visitParenthesizedExpression(PsiParenthesizedExpression expression) {
+  @Override
+  public void visitParenthesizedExpression(PsiParenthesizedExpression expression) {
     myResult = getStoredValue(expression.getExpression());
   }
 
   @Override
   public void visitMethodCallExpression(final PsiMethodCallExpression expression) {
-    myResult = myAuxEvaluator != null? myAuxEvaluator.computeExpression(expression, this) : null;
+    myResult = myAuxEvaluator != null ? myAuxEvaluator.computeExpression(expression, this) : null;
   }
 
-  @Override public void visitReferenceExpression(PsiReferenceExpression expression) {
+  @Override
+  public void visitReferenceExpression(PsiReferenceExpression expression) {
     PsiExpression qualifierExpression = expression.getQualifierExpression();
     while (qualifierExpression != null) {
       if (!(qualifierExpression instanceof PsiReferenceExpression)) {
@@ -531,15 +482,16 @@ class ConstantExpressionVisitor extends JavaElementVisitor implements PsiConstan
       }
 
       Set<PsiVariable> oldVisitedVars = myVisitedVars;
-      if (myVisitedVars == null) { myVisitedVars = new HashSet<PsiVariable>(); }
+      if (myVisitedVars == null) {
+        myVisitedVars = new HashSet<PsiVariable>();
+      }
 
       myVisitedVars.add(variable);
       try {
-        myResult = variable instanceof PsiVariableEx? ((PsiVariableEx) variable).computeConstantValue(myVisitedVars) : null;
+        myResult = variable instanceof PsiVariableEx ? ((PsiVariableEx) variable).computeConstantValue(myVisitedVars) : null;
         if (myResult == null && myAuxEvaluator != null) myResult = myAuxEvaluator.computeExpression(expression, this);
         return;
-      }
-      finally {
+      } finally {
         myVisitedVars.remove(variable);
         myVisitedVars = oldVisitedVars;
       }
@@ -561,7 +513,8 @@ class ConstantExpressionVisitor extends JavaElementVisitor implements PsiConstan
   private void checkMultiplicationOverflow(long result, long l, long r, PsiElement expression) {
     if (!myThrowExceptionOnOverflow) return;
     if (r == 0 || l == 0) return;
-    if (result / r != l || ((l < 0) ^ (r < 0) != (result < 0))) throw new ConstantEvaluationOverflowException(expression);
+    if (result / r != l || ((l < 0) ^ (r < 0) != (result < 0)))
+      throw new ConstantEvaluationOverflowException(expression);
   }
 
   private void checkAdditionOverflow(boolean resultPositive,
@@ -581,8 +534,10 @@ class ConstantExpressionVisitor extends JavaElementVisitor implements PsiConstan
     if (rOperandValue instanceof Float && ((Float) rOperandValue).isInfinite()) return;
     if (rOperandValue instanceof Double && ((Double) rOperandValue).isInfinite()) return;
 
-    if (result instanceof Float && ((Float) result).isInfinite()) throw new ConstantEvaluationOverflowException(expression);
-    if (result instanceof Double && ((Double) result).isInfinite()) throw new ConstantEvaluationOverflowException(expression);
+    if (result instanceof Float && ((Float) result).isInfinite())
+      throw new ConstantEvaluationOverflowException(expression);
+    if (result instanceof Double && ((Double) result).isInfinite())
+      throw new ConstantEvaluationOverflowException(expression);
   }
 
   @Override

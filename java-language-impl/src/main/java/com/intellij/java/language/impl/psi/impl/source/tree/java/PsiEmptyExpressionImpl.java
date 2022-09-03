@@ -18,7 +18,7 @@ package com.intellij.java.language.impl.psi.impl.source.tree.java;
 import javax.annotation.Nonnull;
 
 import com.intellij.java.language.psi.JavaElementVisitor;
-import com.intellij.psi.PsiElementVisitor;
+import consulo.language.psi.PsiElementVisitor;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.impl.psi.impl.source.Constants;

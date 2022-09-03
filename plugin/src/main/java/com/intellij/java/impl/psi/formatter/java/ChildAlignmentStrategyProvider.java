@@ -16,11 +16,12 @@
 package com.intellij.java.impl.psi.formatter.java;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-import com.intellij.formatting.alignment.AlignmentStrategy;
-import com.intellij.lang.ASTNode;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.TokenType;
+import consulo.language.codeStyle.AlignmentStrategy;
+import consulo.language.ast.ASTNode;
+import consulo.util.lang.StringUtil;
+import consulo.language.ast.TokenType;
 
 public abstract class ChildAlignmentStrategyProvider
 {
@@ -36,7 +37,7 @@ public abstract class ChildAlignmentStrategyProvider
 		}
 	};
 
-	public static boolean isWhiteSpaceWithBlankLines(@javax.annotation.Nullable ASTNode node)
+	public static boolean isWhiteSpaceWithBlankLines(@Nullable ASTNode node)
 	{
 		return node != null && node.getElementType() == TokenType.WHITE_SPACE && StringUtil.countNewLines(node.getChars()) > 1;
 	}

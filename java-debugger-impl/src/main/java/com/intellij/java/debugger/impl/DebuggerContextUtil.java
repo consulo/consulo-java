@@ -15,24 +15,24 @@
  */
 package com.intellij.java.debugger.impl;
 
-import com.intellij.codeInsight.daemon.impl.IdentifierHighlighterPass;
+import consulo.execution.debug.XDebugSession;
+import consulo.fileEditor.FileEditorManager;
+import consulo.ide.impl.idea.codeInsight.daemon.impl.IdentifierHighlighterPass;
 import com.intellij.java.debugger.SourcePosition;
 import com.intellij.java.debugger.impl.engine.SuspendContextImpl;
 import com.intellij.java.debugger.impl.engine.SuspendManagerUtil;
 import com.intellij.java.debugger.impl.jdi.StackFrameProxyImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.ThreadDescriptorImpl;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.fileEditor.FileEditorManager;
-import com.intellij.openapi.fileEditor.impl.FileEditorManagerImpl;
-import com.intellij.openapi.util.Couple;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
+import consulo.application.ApplicationManager;
+import consulo.codeEditor.Editor;
+import consulo.ide.impl.idea.openapi.fileEditor.impl.FileEditorManagerImpl;
+import consulo.util.lang.Couple;
+import consulo.document.util.TextRange;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
 import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.xdebugger.XDebugSession;
-import com.intellij.xdebugger.XSourcePosition;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.execution.debug.XSourcePosition;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;

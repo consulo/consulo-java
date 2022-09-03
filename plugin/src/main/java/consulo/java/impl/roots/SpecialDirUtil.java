@@ -23,11 +23,11 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleUtilCore;
-import com.intellij.openapi.roots.ModuleRootManager;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.vcsUtil.VcsUtil;
+import consulo.module.Module;
+import consulo.language.util.ModuleUtilCore;
+import consulo.module.content.ModuleRootManager;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.versionControlSystem.util.VcsUtil;
 import consulo.java.language.module.extension.JavaModuleExtension;
 import consulo.roots.ContentFolderScopes;
 

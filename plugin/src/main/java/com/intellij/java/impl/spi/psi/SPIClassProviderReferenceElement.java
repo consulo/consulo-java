@@ -20,14 +20,14 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.codeInsight.lookup.LookupElementBuilder;
-import com.intellij.lang.ASTNode;
+import consulo.language.editor.completion.lookup.LookupElementBuilder;
+import consulo.language.ast.ASTNode;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
 import com.intellij.java.language.psi.util.ClassUtil;
-import com.intellij.util.ArrayUtil;
-import com.intellij.util.Processor;
+import consulo.util.collection.ArrayUtil;
+import consulo.application.util.function.Processor;
 
 /**
  * User: anna

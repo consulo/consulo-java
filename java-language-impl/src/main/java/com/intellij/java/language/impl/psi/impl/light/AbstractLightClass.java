@@ -25,12 +25,16 @@ import com.intellij.java.language.impl.psi.impl.PsiImplUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.lang.Language;
-import com.intellij.openapi.util.Pair;
-import com.intellij.psi.*;
-import com.intellij.psi.impl.light.LightElement;
-import com.intellij.psi.scope.PsiScopeProcessor;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.Language;
+import consulo.language.impl.psi.LightElement;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiElementVisitor;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiManager;
+import consulo.language.psi.resolve.PsiScopeProcessor;
+import consulo.language.psi.resolve.ResolveState;
+import consulo.language.util.IncorrectOperationException;
+import consulo.util.lang.Pair;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
@@ -55,7 +59,7 @@ public abstract class AbstractLightClass extends LightElement implements PsiClas
 
   @Override
   @NonNls
-  @javax.annotation.Nullable
+  @Nullable
   public String getName() {
     return getDelegate().getName();
   }
@@ -72,7 +76,7 @@ public abstract class AbstractLightClass extends LightElement implements PsiClas
   }
 
   @Override
-  @javax.annotation.Nullable
+  @Nullable
   public PsiDocComment getDocComment() {
     return null;
   }
@@ -88,7 +92,7 @@ public abstract class AbstractLightClass extends LightElement implements PsiClas
   }
 
   @Override
-  @javax.annotation.Nullable
+  @Nullable
   public PsiTypeParameterList getTypeParameterList() {
     return getDelegate().getTypeParameterList();
   }
@@ -101,7 +105,7 @@ public abstract class AbstractLightClass extends LightElement implements PsiClas
 
   @Override
   @NonNls
-  @javax.annotation.Nullable
+  @Nullable
   public String getQualifiedName() {
     return getDelegate().getQualifiedName();
   }
@@ -128,7 +132,7 @@ public abstract class AbstractLightClass extends LightElement implements PsiClas
   }
 
   @Override
-  @javax.annotation.Nullable
+  @Nullable
   public PsiReferenceList getImplementsList() {
     return getDelegate().getImplementsList();
   }
@@ -231,13 +235,13 @@ public abstract class AbstractLightClass extends LightElement implements PsiClas
   }
 
   @Override
-  @javax.annotation.Nullable
+  @Nullable
   public PsiField findFieldByName(@NonNls String name, boolean checkBases) {
     return PsiClassImplUtil.findFieldByName(this, name, checkBases);
   }
 
   @Override
-  @javax.annotation.Nullable
+  @Nullable
   public PsiMethod findMethodBySignature(PsiMethod patternMethod, boolean checkBases) {
     return PsiClassImplUtil.findMethodBySignature(this, patternMethod, checkBases);
   }
@@ -267,13 +271,13 @@ public abstract class AbstractLightClass extends LightElement implements PsiClas
   }
 
   @Override
-  @javax.annotation.Nullable
+  @Nullable
   public PsiClass findInnerClassByName(@NonNls String name, boolean checkBases) {
     return getDelegate().findInnerClassByName(name, checkBases);
   }
 
   @Override
-  @javax.annotation.Nullable
+  @Nullable
   public PsiElement getLBrace() {
     return getDelegate().getLBrace();
   }
@@ -301,12 +305,12 @@ public abstract class AbstractLightClass extends LightElement implements PsiClas
   }
 
   @Override
-  public boolean isInheritorDeep(PsiClass baseClass, @javax.annotation.Nullable PsiClass classToByPass) {
+  public boolean isInheritorDeep(PsiClass baseClass, @Nullable PsiClass classToByPass) {
     return getDelegate().isInheritorDeep(baseClass, classToByPass);
   }
 
   @Override
-  @javax.annotation.Nullable
+  @Nullable
   public PsiClass getContainingClass() {
     return getDelegate().getContainingClass();
   }

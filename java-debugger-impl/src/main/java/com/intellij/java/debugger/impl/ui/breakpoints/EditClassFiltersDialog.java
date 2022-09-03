@@ -22,9 +22,9 @@ package com.intellij.java.debugger.impl.ui.breakpoints;
 
 import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.language.util.ClassFilter;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.DialogWrapper;
-import com.intellij.ui.IdeBorderFactory;
+import consulo.project.Project;
+import consulo.ui.ex.awt.DialogWrapper;
+import consulo.ui.ex.awt.IdeBorderFactory;
 import com.intellij.java.debugger.impl.classFilter.ClassFilterEditor;
 
 import javax.swing.*;

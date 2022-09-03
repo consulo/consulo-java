@@ -16,7 +16,8 @@
 package com.intellij.java.debugger.impl.settings;
 
 import com.intellij.java.debugger.DebuggerBundle;
-import com.intellij.openapi.options.SearchableConfigurable;
+import consulo.configurable.SearchableConfigurable;
+
 import javax.annotation.Nonnull;
 
 import javax.swing.*;

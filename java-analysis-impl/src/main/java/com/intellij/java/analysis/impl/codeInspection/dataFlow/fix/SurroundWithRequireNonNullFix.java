@@ -18,13 +18,13 @@ package com.intellij.java.analysis.impl.codeInspection.dataFlow.fix;
 import javax.annotation.Nonnull;
 
 import org.jetbrains.annotations.Nls;
-import com.intellij.codeInspection.LocalQuickFix;
-import com.intellij.codeInspection.ProblemDescriptor;
-import com.intellij.openapi.project.Project;
+import consulo.language.editor.inspection.LocalQuickFix;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.project.Project;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiExpression;
-import com.intellij.psi.SmartPointerManager;
-import com.intellij.psi.SmartPsiElementPointer;
+import consulo.language.psi.SmartPointerManager;
+import consulo.language.psi.SmartPsiElementPointer;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import consulo.java.analysis.impl.codeInsight.JavaInspectionsBundle;
 

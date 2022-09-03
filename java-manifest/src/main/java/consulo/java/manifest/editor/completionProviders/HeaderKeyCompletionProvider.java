@@ -1,7 +1,7 @@
 package consulo.java.manifest.editor.completionProviders;
 
-import com.intellij.codeInsight.completion.CompletionParameters;
-import com.intellij.ui.TextFieldWithAutoCompletionListProvider;
+import consulo.language.editor.completion.CompletionParameters;
+import consulo.language.editor.ui.awt.TextFieldWithAutoCompletionListProvider;
 import consulo.java.manifest.lang.headerparser.HeaderParserEP;
 import consulo.ui.image.Image;
 import org.osmorc.manifest.lang.ManifestFileType;

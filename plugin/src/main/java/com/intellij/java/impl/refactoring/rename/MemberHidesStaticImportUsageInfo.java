@@ -15,8 +15,8 @@
  */
 package com.intellij.java.impl.refactoring.rename;
 
-import com.intellij.psi.PsiElement;
-import com.intellij.refactoring.util.RelatedUsageInfo;
+import consulo.language.psi.PsiElement;
+import consulo.language.editor.refactoring.util.RelatedUsageInfo;
 
 /**
  * @author yole

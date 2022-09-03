@@ -17,19 +17,19 @@ package com.intellij.java.impl.codeInspection.miscGenerics;
 
 import com.intellij.java.impl.codeInsight.ExpectedTypeInfo;
 import com.intellij.java.impl.codeInsight.ExpectedTypesProvider;
-import com.intellij.codeInsight.FileModificationService;
-import com.intellij.codeInsight.daemon.GroupNames;
-import com.intellij.codeInspection.*;
+import consulo.language.editor.FileModificationService;
+import consulo.ide.impl.idea.codeInsight.daemon.GroupNames;
 import com.intellij.java.analysis.impl.codeInspection.miscGenerics.GenericsInspectionToolBase;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.project.Project;
+import consulo.project.Project;
 import com.intellij.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.impl.refactoring.util.InlineUtil;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -166,7 +166,7 @@ public class RedundantArrayForVarargsCallInspection extends GenericsInspectionTo
     return problems.toArray(new ProblemDescriptor[problems.size()]);
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private static PsiExpression[] getInitializers(final PsiNewExpression newExpression) {
     PsiArrayInitializerExpression initializer = newExpression.getArrayInitializer();
     if (initializer != null) {

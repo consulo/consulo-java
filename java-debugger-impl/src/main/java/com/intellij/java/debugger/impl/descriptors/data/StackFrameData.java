@@ -19,8 +19,8 @@ import com.intellij.java.debugger.impl.jdi.StackFrameProxyImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.MethodsTracker;
 import com.intellij.java.debugger.impl.ui.impl.watch.NodeManagerImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.StackFrameDescriptorImpl;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Comparing;
+import consulo.project.Project;
+import consulo.util.lang.Comparing;
 
 public class StackFrameData extends DescriptorData<StackFrameDescriptorImpl>{
   private final StackFrameProxyImpl myFrame;

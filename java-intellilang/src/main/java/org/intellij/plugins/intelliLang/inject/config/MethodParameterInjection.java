@@ -16,21 +16,22 @@
 package org.intellij.plugins.intelliLang.inject.config;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.InvalidDataException;
-import com.intellij.openapi.util.JDOMExternalizableStringList;
-import com.intellij.openapi.util.JDOMExternalizer;
-import com.intellij.openapi.util.Pair;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.patterns.compiler.PatternCompiler;
+import consulo.project.Project;
+import consulo.util.xml.serializer.InvalidDataException;
+import consulo.util.xml.serializer.JDOMExternalizableStringList;
+import consulo.ide.impl.idea.openapi.util.JDOMExternalizer;
+import consulo.util.lang.Pair;
+import consulo.util.lang.StringUtil;
+import consulo.language.pattern.compiler.PatternCompiler;
 import com.intellij.psi.*;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
 import org.intellij.plugins.intelliLang.inject.java.JavaLanguageInjectionSupport;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.*;
 
 public class MethodParameterInjection extends BaseInjection {
@@ -210,7 +211,7 @@ public class MethodParameterInjection extends BaseInjection {
     return new MethodInfo(signature, new boolean[method.getParameterList().getParametersCount()], false);
   }
 
-  public static boolean isInjectable(@javax.annotation.Nullable final PsiType type, final Project project) {
+  public static boolean isInjectable(@Nullable final PsiType type, final Project project) {
     if (type == null) return false;
     if (type instanceof PsiPrimitiveType) return false;
     if (project.isDefault()) {
@@ -223,7 +224,7 @@ public class MethodParameterInjection extends BaseInjection {
     }
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public static PsiMethod makeMethod(final Project project, final String signature) {
     if (StringUtil.isEmpty(signature)) return null;
     try {

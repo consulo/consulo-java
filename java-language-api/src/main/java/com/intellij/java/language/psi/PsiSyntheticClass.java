@@ -15,7 +15,7 @@
  */
 package com.intellij.java.language.psi;
 
-import com.intellij.psi.SyntheticElement;
+import consulo.language.psi.SyntheticElement;
 
 /**
  * @author yole

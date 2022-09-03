@@ -15,29 +15,28 @@
  */
 package com.intellij.java.language.impl.psi.impl.source.tree.java;
 
-import javax.annotation.Nonnull;
-
-import com.intellij.java.language.psi.*;
-import com.intellij.lang.ASTNode;
-import consulo.logging.Logger;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.openapi.util.Condition;
 import com.intellij.java.language.LanguageLevel;
-import com.intellij.psi.*;
-import com.intellij.psi.impl.DebugUtil;
 import com.intellij.java.language.impl.psi.impl.PsiImplUtil;
 import com.intellij.java.language.impl.psi.impl.source.resolve.JavaResolveCache;
 import com.intellij.java.language.impl.psi.impl.source.tree.ChildRole;
 import com.intellij.java.language.impl.psi.impl.source.tree.ElementType;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
-import com.intellij.psi.tree.ChildRoleBase;
-import com.intellij.psi.tree.IElementType;
+import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiTypesUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
-import com.intellij.util.Function;
+import consulo.language.ast.ASTNode;
+import consulo.language.ast.ChildRoleBase;
+import consulo.language.ast.IElementType;
+import consulo.language.impl.DebugUtil;
+import consulo.language.psi.PsiElementVisitor;
+import consulo.logging.Logger;
+import consulo.util.lang.Comparing;
+import consulo.util.lang.function.Condition;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.function.Function;
 
 public class PsiMethodCallExpressionImpl extends ExpressionPsiElement implements PsiMethodCallExpression {
   private static final Logger LOG = Logger.getInstance(PsiMethodCallExpressionImpl.class);
@@ -53,7 +52,7 @@ public class PsiMethodCallExpressionImpl extends ExpressionPsiElement implements
 
   @Override
   public PsiMethod resolveMethod() {
-    return (PsiMethod)getMethodExpression().resolve();
+    return (PsiMethod) getMethodExpression().resolve();
   }
 
   @Override
@@ -89,13 +88,13 @@ public class PsiMethodCallExpressionImpl extends ExpressionPsiElement implements
   @Override
   @Nonnull
   public PsiReferenceExpression getMethodExpression() {
-    return (PsiReferenceExpression)findChildByRoleAsPsiElement(ChildRole.METHOD_EXPRESSION);
+    return (PsiReferenceExpression) findChildByRoleAsPsiElement(ChildRole.METHOD_EXPRESSION);
   }
 
   @Override
   @Nonnull
   public PsiExpressionList getArgumentList() {
-    PsiExpressionList list = (PsiExpressionList)findChildByRoleAsPsiElement(ChildRole.ARGUMENT_LIST);
+    PsiExpressionList list = (PsiExpressionList) findChildByRoleAsPsiElement(ChildRole.ARGUMENT_LIST);
     if (list != null) return list;
     LOG.error("Invalid PSI. Children:" + DebugUtil.psiToString(this, false));
     return list;
@@ -122,8 +121,7 @@ public class PsiMethodCallExpressionImpl extends ExpressionPsiElement implements
     IElementType i = child.getElementType();
     if (i == JavaElementType.EXPRESSION_LIST) {
       return ChildRole.ARGUMENT_LIST;
-    }
-    else {
+    } else {
       if (ElementType.EXPRESSION_BIT_SET.contains(child.getElementType())) {
         return ChildRole.METHOD_EXPRESSION;
       }
@@ -134,9 +132,8 @@ public class PsiMethodCallExpressionImpl extends ExpressionPsiElement implements
   @Override
   public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
-      ((JavaElementVisitor)visitor).visitMethodCallExpression(this);
-    }
-    else {
+      ((JavaElementVisitor) visitor).visitMethodCallExpression(this);
+    } else {
       visitor.visitElement(this);
     }
   }
@@ -150,7 +147,7 @@ public class PsiMethodCallExpressionImpl extends ExpressionPsiElement implements
   private static class TypeEvaluator implements Function<PsiMethodCallExpression, PsiType> {
     @Override
     @Nullable
-    public PsiType fun(final PsiMethodCallExpression call) {
+    public PsiType apply(final PsiMethodCallExpression call) {
       PsiReferenceExpression methodExpression = call.getMethodExpression();
       PsiType theOnly = null;
       final JavaResolveResult[] results = methodExpression.multiResolve(false);
@@ -163,8 +160,7 @@ public class PsiMethodCallExpressionImpl extends ExpressionPsiElement implements
 
         if (i == 0) {
           theOnly = type;
-        }
-        else if (!theOnly.equals(type)) {
+        } else if (!theOnly.equals(type)) {
           return null;
         }
       }
@@ -177,17 +173,17 @@ public class PsiMethodCallExpressionImpl extends ExpressionPsiElement implements
                                          PsiReferenceExpression methodExpression,
                                          JavaResolveResult result,
                                          @Nonnull final LanguageLevel languageLevel) {
-      final PsiMethod method = (PsiMethod)result.getElement();
+      final PsiMethod method = (PsiMethod) result.getElement();
       if (method == null) return null;
 
       boolean is15OrHigher = languageLevel.compareTo(LanguageLevel.JDK_1_5) >= 0;
       final PsiType getClassReturnType = PsiTypesUtil.patchMethodGetClassReturnType(call, methodExpression, method,
-                                                                                    new Condition<IElementType>() {
-                                                                                      @Override
-                                                                                      public boolean value(IElementType type) {
-                                                                                        return type != JavaElementType.CLASS;
-                                                                                      }
-                                                                                    }, languageLevel);
+          new Condition<IElementType>() {
+            @Override
+            public boolean value(IElementType type) {
+              return type != JavaElementType.CLASS;
+            }
+          }, languageLevel);
 
       if (getClassReturnType != null) {
         return getClassReturnType;
@@ -196,7 +192,7 @@ public class PsiMethodCallExpressionImpl extends ExpressionPsiElement implements
       PsiType ret = method.getReturnType();
       if (ret == null) return null;
       if (ret instanceof PsiClassType) {
-        ret = ((PsiClassType)ret).setLanguageLevel(languageLevel);
+        ret = ((PsiClassType) ret).setLanguageLevel(languageLevel);
       }
       if (is15OrHigher) {
         return captureReturnType(call, method, ret, result.getSubstitutor());
@@ -219,9 +215,9 @@ public class PsiMethodCallExpressionImpl extends ExpressionPsiElement implements
     }
     PsiType lowerBound = PsiType.NULL;
     if (substitutedReturnType instanceof PsiCapturedWildcardType) {
-      lowerBound = ((PsiCapturedWildcardType)substitutedReturnType).getLowerBound();
+      lowerBound = ((PsiCapturedWildcardType) substitutedReturnType).getLowerBound();
     } else if (substitutedReturnType instanceof PsiWildcardType) {
-      lowerBound = ((PsiWildcardType)substitutedReturnType).getSuperBound();
+      lowerBound = ((PsiWildcardType) substitutedReturnType).getSuperBound();
     }
     if (lowerBound != PsiType.NULL) { //? super
       final PsiClass containingClass = method.getContainingClass();

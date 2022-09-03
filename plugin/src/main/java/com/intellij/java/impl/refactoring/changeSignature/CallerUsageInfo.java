@@ -16,7 +16,7 @@
 package com.intellij.java.impl.refactoring.changeSignature;
 
 import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.usageView.UsageInfo;
+import consulo.usage.UsageInfo;
 
 /**
  * @author ven

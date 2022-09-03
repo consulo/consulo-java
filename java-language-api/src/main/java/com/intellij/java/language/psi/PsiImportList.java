@@ -15,8 +15,8 @@
  */
 package com.intellij.java.language.psi;
 
-import com.intellij.psi.PsiElement;
-import com.intellij.util.ArrayFactory;
+import consulo.language.psi.PsiElement;
+import consulo.util.collection.ArrayFactory;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
@@ -67,7 +67,7 @@ public interface PsiImportList extends PsiElement {
    * @param qName the full-qualified name of the imported class.
    * @return the import statement, or null if one was not found.
    */
-  @javax.annotation.Nullable
+  @Nullable
   PsiImportStatement findSingleClassImportStatement(String qName);
 
   /**
@@ -76,7 +76,7 @@ public interface PsiImportList extends PsiElement {
    * @param packageName the name of the imported package.
    * @return the import statement, or null if one was not found.
    */
-  @javax.annotation.Nullable
+  @Nullable
   PsiImportStatement findOnDemandImportStatement(@NonNls String packageName);
 
   /**

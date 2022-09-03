@@ -15,90 +15,72 @@
  */
 package com.intellij.java.language.impl.codeInsight;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
+import com.intellij.java.language.projectRoots.roots.AnnotationOrderRootType;
+import consulo.language.psi.PsiManager;
+import consulo.module.Module;
+import consulo.module.ModuleManager;
+import consulo.module.content.ModuleRootManager;
+import consulo.module.content.ProjectFileIndex;
+import consulo.module.content.ProjectRootManager;
+import consulo.module.content.layer.orderEntry.ModuleOrderEntry;
+import consulo.module.content.layer.orderEntry.OrderEntry;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.virtualFileSystem.util.VirtualFileUtil;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.*;
 
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleManager;
-import com.intellij.java.language.projectRoots.roots.AnnotationOrderRootType;
-import com.intellij.openapi.roots.ModuleOrderEntry;
-import com.intellij.openapi.roots.ModuleRootManager;
-import com.intellij.openapi.roots.OrderEntry;
-import com.intellij.openapi.roots.ProjectFileIndex;
-import com.intellij.openapi.roots.ProjectRootManager;
-import com.intellij.openapi.vfs.VfsUtilCore;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiManager;
+public class ReadableExternalAnnotationsManager extends BaseExternalAnnotationsManager {
+  @Nullable
+  private Set<VirtualFile> myAnnotationsRoots = null;
 
-public class ReadableExternalAnnotationsManager extends BaseExternalAnnotationsManager
-{
-	@javax.annotation.Nullable
-	private Set<VirtualFile> myAnnotationsRoots = null;
+  public ReadableExternalAnnotationsManager(PsiManager psiManager) {
+    super(psiManager);
+  }
 
-	public ReadableExternalAnnotationsManager(PsiManager psiManager)
-	{
-		super(psiManager);
-	}
+  @Override
+  protected boolean hasAnyAnnotationsRoots() {
+    return !initRoots().isEmpty();
+  }
 
-	@Override
-	protected boolean hasAnyAnnotationsRoots()
-	{
-		return !initRoots().isEmpty();
-	}
+  @Nonnull
+  private synchronized Set<VirtualFile> initRoots() {
+    if (myAnnotationsRoots == null) {
+      myAnnotationsRoots = new HashSet<VirtualFile>();
+      final Module[] modules = ModuleManager.getInstance(myPsiManager.getProject()).getModules();
+      for (Module module : modules) {
+        for (OrderEntry entry : ModuleRootManager.getInstance(module).getOrderEntries()) {
+          final VirtualFile[] files = AnnotationOrderRootType.getFiles(entry);
+          if (files.length > 0) {
+            Collections.addAll(myAnnotationsRoots, files);
+          }
+        }
+      }
+    }
+    return myAnnotationsRoots;
+  }
 
-	@Nonnull
-	private synchronized Set<VirtualFile> initRoots()
-	{
-		if(myAnnotationsRoots == null)
-		{
-			myAnnotationsRoots = new HashSet<VirtualFile>();
-			final Module[] modules = ModuleManager.getInstance(myPsiManager.getProject()).getModules();
-			for(Module module : modules)
-			{
-				for(OrderEntry entry : ModuleRootManager.getInstance(module).getOrderEntries())
-				{
-					final VirtualFile[] files = AnnotationOrderRootType.getFiles(entry);
-					if(files.length > 0)
-					{
-						Collections.addAll(myAnnotationsRoots, files);
-					}
-				}
-			}
-		}
-		return myAnnotationsRoots;
-	}
+  @Override
+  @Nonnull
+  protected List<VirtualFile> getExternalAnnotationsRoots(@Nonnull VirtualFile libraryFile) {
+    ProjectFileIndex fileIndex = ProjectRootManager.getInstance(myPsiManager.getProject()).getFileIndex();
+    Set<VirtualFile> result = new LinkedHashSet<VirtualFile>();
+    for (OrderEntry entry : fileIndex.getOrderEntriesForFile(libraryFile)) {
+      if (!(entry instanceof ModuleOrderEntry)) {
+        Collections.addAll(result, AnnotationOrderRootType.getFiles(entry));
+      }
+    }
+    return new ArrayList<VirtualFile>(result);
+  }
 
-	@Override
-	@Nonnull
-	protected List<VirtualFile> getExternalAnnotationsRoots(@Nonnull VirtualFile libraryFile)
-	{
-		ProjectFileIndex fileIndex = ProjectRootManager.getInstance(myPsiManager.getProject()).getFileIndex();
-		Set<VirtualFile> result = new LinkedHashSet<VirtualFile>();
-		for(OrderEntry entry : fileIndex.getOrderEntriesForFile(libraryFile))
-		{
-			if(!(entry instanceof ModuleOrderEntry))
-			{
-				Collections.addAll(result, AnnotationOrderRootType.getFiles(entry));
-			}
-		}
-		return new ArrayList<VirtualFile>(result);
-	}
+  @Override
+  protected synchronized void dropCache() {
+    myAnnotationsRoots = null;
+    super.dropCache();
+  }
 
-	@Override
-	protected synchronized void dropCache()
-	{
-		myAnnotationsRoots = null;
-		super.dropCache();
-	}
-
-	public boolean isUnderAnnotationRoot(VirtualFile file)
-	{
-		return VfsUtilCore.isUnder(file, initRoots());
-	}
+  public boolean isUnderAnnotationRoot(VirtualFile file) {
+    return VirtualFileUtil.isUnder(file, initRoots());
+  }
 }

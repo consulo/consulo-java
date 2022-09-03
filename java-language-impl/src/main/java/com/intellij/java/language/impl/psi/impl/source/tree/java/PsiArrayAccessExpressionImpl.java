@@ -15,16 +15,16 @@
  */
 package com.intellij.java.language.impl.psi.impl.source.tree.java;
 
-import javax.annotation.Nonnull;
-
-import com.intellij.java.language.psi.*;
-import com.intellij.lang.ASTNode;
-import consulo.logging.Logger;
-import com.intellij.psi.*;
 import com.intellij.java.language.impl.psi.impl.source.Constants;
 import com.intellij.java.language.impl.psi.impl.source.tree.ChildRole;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.tree.ChildRoleBase;
+import com.intellij.java.language.psi.*;
+import consulo.language.ast.ASTNode;
+import consulo.language.ast.ChildRoleBase;
+import consulo.language.ast.IElementType;
+import consulo.language.psi.PsiElementVisitor;
+import consulo.logging.Logger;
+
+import javax.annotation.Nonnull;
 
 public class PsiArrayAccessExpressionImpl extends ExpressionPsiElement implements PsiArrayAccessExpression, Constants {
   private static final Logger LOG = Logger.getInstance(PsiArrayAccessExpressionImpl.class);
@@ -36,42 +36,41 @@ public class PsiArrayAccessExpressionImpl extends ExpressionPsiElement implement
   @Override
   @Nonnull
   public PsiExpression getArrayExpression() {
-    return (PsiExpression)findChildByRoleAsPsiElement(ChildRole.ARRAY);
+    return (PsiExpression) findChildByRoleAsPsiElement(ChildRole.ARRAY);
   }
 
   @Override
   public PsiExpression getIndexExpression() {
-    return (PsiExpression)findChildByRoleAsPsiElement(ChildRole.INDEX);
+    return (PsiExpression) findChildByRoleAsPsiElement(ChildRole.INDEX);
   }
 
   @Override
   public PsiType getType() {
     PsiType arrayType = getArrayExpression().getType();
     if (!(arrayType instanceof PsiArrayType)) return null;
-    return GenericsUtil.getVariableTypeByExpressionType(((PsiArrayType)arrayType).getComponentType(), false);
+    return GenericsUtil.getVariableTypeByExpressionType(((PsiArrayType) arrayType).getComponentType(), false);
   }
 
   @Override
   public ASTNode findChildByRole(int role) {
     LOG.assertTrue(ChildRole.isUnique(role));
-    switch(role){
+    switch (role) {
       default:
         return null;
 
       case ChildRole.ARRAY:
         return getFirstChildNode();
 
-      case ChildRole.INDEX:
-        {
-          ASTNode lbracket = findChildByRole(ChildRole.LBRACKET);
-          if (lbracket == null) return null;
-          for(ASTNode child = lbracket.getTreeNext(); child != null; child = child.getTreeNext()){
-            if (EXPRESSION_BIT_SET.contains(child.getElementType())){
-              return child;
-            }
+      case ChildRole.INDEX: {
+        ASTNode lbracket = findChildByRole(ChildRole.LBRACKET);
+        if (lbracket == null) return null;
+        for (ASTNode child = lbracket.getTreeNext(); child != null; child = child.getTreeNext()) {
+          if (EXPRESSION_BIT_SET.contains(child.getElementType())) {
+            return child;
           }
-          return null;
         }
+        return null;
+      }
 
       case ChildRole.LBRACKET:
         return findChildByType(LBRACKET);
@@ -87,15 +86,12 @@ public class PsiArrayAccessExpressionImpl extends ExpressionPsiElement implement
     IElementType i = child.getElementType();
     if (i == LBRACKET) {
       return ChildRole.LBRACKET;
-    }
-    else if (i == RBRACKET) {
+    } else if (i == RBRACKET) {
       return ChildRole.RBRACKET;
-    }
-    else {
+    } else {
       if (EXPRESSION_BIT_SET.contains(child.getElementType())) {
         return child == getFirstChildNode() ? ChildRole.ARRAY : ChildRole.INDEX;
-      }
-      else {
+      } else {
         return ChildRoleBase.NONE;
       }
     }
@@ -104,9 +100,8 @@ public class PsiArrayAccessExpressionImpl extends ExpressionPsiElement implement
   @Override
   public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
-      ((JavaElementVisitor)visitor).visitArrayAccessExpression(this);
-    }
-    else {
+      ((JavaElementVisitor) visitor).visitArrayAccessExpression(this);
+    } else {
       visitor.visitElement(this);
     }
   }

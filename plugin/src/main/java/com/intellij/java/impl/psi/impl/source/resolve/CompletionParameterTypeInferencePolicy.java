@@ -18,10 +18,10 @@ package com.intellij.java.impl.psi.impl.source.resolve;
 import com.intellij.java.impl.codeInsight.ExpectedTypeInfo;
 import com.intellij.java.impl.codeInsight.ExpectedTypesProvider;
 import com.intellij.java.language.impl.psi.impl.source.resolve.ProcessCandidateParameterTypeInferencePolicy;
-import com.intellij.openapi.util.Pair;
+import consulo.util.lang.Pair;
 import com.intellij.java.language.psi.ConstraintType;
 import com.intellij.java.language.psi.PsiCallExpression;
-import com.intellij.psi.PsiManager;
+import consulo.language.psi.PsiManager;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.PsiWildcardType;
 

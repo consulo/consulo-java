@@ -20,17 +20,18 @@
  */
 package com.intellij.java.compiler.classParsing;
 
-import com.intellij.compiler.make.CacheCorruptedException;
+import consulo.compiler.CacheCorruptedException;
 import com.intellij.java.compiler.cache.SymbolTable;
 import com.intellij.java.util.cls.BytePointer;
 import com.intellij.java.util.cls.ClsUtil;
-import com.intellij.openapi.compiler.CompilerBundle;
-import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.util.ArrayUtil;
+import consulo.compiler.CompilerBundle;
+import consulo.ide.impl.idea.openapi.util.io.FileUtil;
+import consulo.util.collection.ArrayUtil;
 import com.intellij.java.language.util.cls.ClsFormatException;
 import consulo.java.language.module.util.JavaClassNames;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -56,7 +57,7 @@ public class ClassFileReader {
   private static final String CONSTRUCTOR_NAME = "<init>";
   private boolean myParsingDone;
 
-  public ClassFileReader(@Nonnull File file, SymbolTable symbolTable, @javax.annotation.Nullable final byte[] fileContent) {
+  public ClassFileReader(@Nonnull File file, SymbolTable symbolTable, @Nullable final byte[] fileContent) {
     mySymbolTable = symbolTable;
     myFile = file;
     myData = fileContent;

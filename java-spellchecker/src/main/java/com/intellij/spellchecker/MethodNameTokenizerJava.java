@@ -17,8 +17,8 @@ package com.intellij.spellchecker;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.openapi.roots.ProjectRootManager;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.module.content.ProjectRootManager;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.spellchecker.tokenizer.TokenConsumer;
 

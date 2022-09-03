@@ -17,7 +17,7 @@ package com.intellij.java.impl.refactoring.inheritanceToDelegation;
 
 import com.intellij.java.language.psi.*;
 import consulo.logging.Logger;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
 
 /**
  * @author dsl

@@ -19,7 +19,7 @@ import com.intellij.java.impl.codeInsight.daemon.impl.quickfix.ConvertSwitchToIf
 import com.intellij.java.language.psi.PsiJavaToken;
 import com.intellij.java.language.psi.PsiSwitchStatement;
 import com.intellij.psi.*;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
 import com.intellij.java.impl.ipp.base.Intention;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import javax.annotation.Nonnull;

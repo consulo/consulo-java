@@ -26,10 +26,10 @@ package com.intellij.java.impl.refactoring.ui;
 
 import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.java.language.util.VisibilityUtil;
-import com.intellij.refactoring.RefactoringBundle;
-import com.intellij.refactoring.ui.VisibilityPanelBase;
-import com.intellij.ui.IdeBorderFactory;
-import com.intellij.util.ui.UIUtil;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.ide.impl.idea.refactoring.ui.VisibilityPanelBase;
+import consulo.ui.ex.awt.IdeBorderFactory;
+import consulo.ui.ex.awt.UIUtil;
 
 import javax.annotation.Nullable;
 import javax.swing.*;

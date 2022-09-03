@@ -16,19 +16,19 @@
 
 package com.intellij.java.impl.codeInsight.generation.actions;
 
-import com.intellij.codeInsight.CodeInsightActionHandler;
-import com.intellij.codeInsight.actions.CodeInsightAction;
-import com.intellij.codeInsight.generation.actions.GenerateActionPopupTemplateInjector;
+import consulo.language.editor.action.CodeInsightActionHandler;
+import consulo.language.editor.action.CodeInsightAction;
+import consulo.language.editor.generation.GenerateActionPopupTemplateInjector;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiJavaFile;
-import com.intellij.lang.ContextAwareActionHandler;
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.actionSystem.Presentation;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
+import consulo.language.editor.refactoring.ContextAwareActionHandler;
+import consulo.ui.ex.action.AnAction;
+import consulo.dataContext.DataContext;
+import consulo.ui.ex.action.Presentation;
+import consulo.codeEditor.Editor;
+import consulo.project.Project;
 import com.intellij.psi.*;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

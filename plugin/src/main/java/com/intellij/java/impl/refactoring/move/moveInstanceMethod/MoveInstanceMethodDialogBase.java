@@ -31,22 +31,22 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import com.intellij.lang.findUsages.DescriptiveNameUtil;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.Messages;
+import consulo.language.findUsage.DescriptiveNameUtil;
+import consulo.project.Project;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiSubstitutor;
 import com.intellij.java.language.psi.PsiVariable;
 import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
-import com.intellij.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.RefactoringBundle;
 import com.intellij.java.impl.refactoring.ui.JavaVisibilityPanel;
-import com.intellij.refactoring.ui.RefactoringDialog;
-import com.intellij.ui.ScrollPaneFactory;
-import com.intellij.ui.components.JBList;
-import consulo.awt.TargetAWT;
-import consulo.ide.IconDescriptorUpdaters;
+import consulo.language.editor.refactoring.ui.RefactoringDialog;
+import consulo.ui.ex.awt.JBList;
+import consulo.ui.ex.awtUnsafe.TargetAWT;
+import consulo.language.icon.IconDescriptorUpdaters;
+import consulo.ui.ex.awt.Messages;
+import consulo.ui.ex.awt.ScrollPaneFactory;
 
 /**
  * @author dsl

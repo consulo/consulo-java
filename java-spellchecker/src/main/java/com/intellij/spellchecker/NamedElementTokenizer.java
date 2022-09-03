@@ -18,9 +18,9 @@ package com.intellij.spellchecker;
 import javax.annotation.Nonnull;
 
 import com.intellij.java.language.psi.PsiIdentifier;
-import com.intellij.psi.PsiNamedElement;
+import consulo.language.psi.PsiNamedElement;
 import com.intellij.java.language.psi.PsiTypeElement;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.spellchecker.tokenizer.TokenConsumer;
 import com.intellij.spellchecker.tokenizer.Tokenizer;
 

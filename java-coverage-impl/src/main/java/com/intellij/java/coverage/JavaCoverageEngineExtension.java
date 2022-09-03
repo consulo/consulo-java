@@ -6,12 +6,12 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.intellij.coverage.CoverageSuitesBundle;
-import com.intellij.execution.configurations.RunConfigurationBase;
-import com.intellij.openapi.extensions.ExtensionPointName;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.execution.coverage.CoverageSuitesBundle;
+import consulo.execution.configuration.RunConfigurationBase;
+import consulo.component.extension.ExtensionPointName;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiFile;
+import consulo.language.psi.PsiFile;
 
 /**
  * User: anna
@@ -29,7 +29,7 @@ public abstract class JavaCoverageEngineExtension
 		return false;
 	}
 
-	public boolean collectOutputFiles(@Nonnull final PsiFile srcFile, @javax.annotation.Nullable final VirtualFile output, @javax.annotation.Nullable final VirtualFile testoutput,
+	public boolean collectOutputFiles(@Nonnull final PsiFile srcFile, @Nullable final VirtualFile output, @Nullable final VirtualFile testoutput,
                                     @Nonnull final CoverageSuitesBundle suite, @Nonnull final Set<File> classFiles)
 	{
 		return false;

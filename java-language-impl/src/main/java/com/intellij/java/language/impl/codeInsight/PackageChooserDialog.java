@@ -15,38 +15,38 @@
  */
 package com.intellij.java.language.impl.codeInsight;
 
-import com.intellij.CommonBundle;
-import com.intellij.icons.AllIcons;
-import com.intellij.ide.IdeBundle;
+import com.intellij.java.language.impl.ui.PackageChooser;
 import com.intellij.java.language.psi.JavaDirectoryService;
 import com.intellij.java.language.psi.PsiJavaPackage;
-import com.intellij.openapi.actionSystem.*;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.command.CommandProcessor;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.ContentIterator;
-import com.intellij.openapi.roots.FileIndex;
-import com.intellij.openapi.roots.ModuleRootManager;
-import com.intellij.openapi.roots.ProjectRootManager;
-import com.intellij.openapi.ui.InputValidator;
-import com.intellij.openapi.ui.Messages;
-import com.intellij.java.language.impl.ui.PackageChooser;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiDirectory;
-import com.intellij.psi.PsiManager;
-import com.intellij.psi.PsiNamedElement;
-import com.intellij.ui.ScrollPaneFactory;
-import com.intellij.ui.TreeSpeedSearch;
-import com.intellij.ui.treeStructure.Tree;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.PlatformIcons;
-import com.intellij.util.containers.Convertor;
-import com.intellij.util.ui.UIUtil;
-import com.intellij.util.ui.tree.TreeUtil;
+import consulo.application.AllIcons;
+import consulo.application.ApplicationManager;
+import consulo.application.CommonBundle;
+import consulo.content.ContentIterator;
+import consulo.content.FileIndex;
+import consulo.ide.IdeBundle;
+import consulo.language.psi.PsiDirectory;
+import consulo.language.psi.PsiManager;
+import consulo.language.psi.PsiNamedElement;
+import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
+import consulo.module.Module;
+import consulo.module.content.ModuleRootManager;
+import consulo.module.content.ProjectRootManager;
+import consulo.platform.base.icon.PlatformIconGroup;
+import consulo.project.Project;
+import consulo.ui.ex.InputValidator;
+import consulo.ui.ex.action.*;
+import consulo.ui.ex.awt.Messages;
+import consulo.ui.ex.awt.ScrollPaneFactory;
+import consulo.ui.ex.awt.UIUtil;
+import consulo.ui.ex.awt.speedSearch.TreeSpeedSearch;
+import consulo.ui.ex.awt.tree.Tree;
+import consulo.ui.ex.awt.tree.TreeUtil;
+import consulo.ui.ex.awtUnsafe.TargetAWT;
+import consulo.undoRedo.CommandProcessor;
+import consulo.util.lang.Comparing;
+import consulo.util.lang.StringUtil;
+import consulo.virtualFileSystem.VirtualFile;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -61,6 +61,7 @@ import java.awt.*;
 import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.function.Function;
 
 public class PackageChooserDialog extends PackageChooser {
   private static final Logger LOG = Logger.getInstance(PackageChooserDialog.class);
@@ -108,7 +109,7 @@ public class PackageChooserDialog extends PackageChooser {
           boolean hasFocus
         ) {
           super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
-          setIcon(PlatformIcons.PACKAGE_ICON);
+          setIcon(TargetAWT.to(PlatformIconGroup.nodesPackage()));
 
           if (value instanceof DefaultMutableTreeNode) {
             DefaultMutableTreeNode node = (DefaultMutableTreeNode)value;
@@ -131,8 +132,8 @@ public class PackageChooserDialog extends PackageChooser {
     JScrollPane scrollPane = ScrollPaneFactory.createScrollPane(myTree);
     scrollPane.setPreferredSize(new Dimension(500, 300));
 
-    new TreeSpeedSearch(myTree, new Convertor<TreePath, String>() {
-      public String convert(TreePath path) {
+    new TreeSpeedSearch(myTree, new Function<TreePath, String>() {
+      public String apply(TreePath path) {
         DefaultMutableTreeNode node = (DefaultMutableTreeNode)path.getLastPathComponent();
         Object object = node.getUserObject();
         if (object instanceof PsiJavaPackage) return ((PsiJavaPackage)object).getName();
@@ -207,7 +208,7 @@ public class PackageChooserDialog extends PackageChooser {
       }, ModalityState.stateForComponent(getRootPane()));*/
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private PsiJavaPackage getTreeSelection() {
     if (myTree == null) return null;
     TreePath path = myTree.getSelectionPath();
@@ -356,7 +357,7 @@ public class PackageChooserDialog extends PackageChooser {
                 catch (IncorrectOperationException e) {
                   Messages.showMessageDialog(
                     getContentPane(),
-                    StringUtil.getMessage(e),
+                    e.getMessage(),
                     CommonBundle.getErrorTitle(),
                     Messages.getErrorIcon()
                   );

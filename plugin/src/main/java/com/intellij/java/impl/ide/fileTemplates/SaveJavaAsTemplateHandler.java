@@ -15,17 +15,19 @@
  */
 package com.intellij.java.impl.ide.fileTemplates;
 
-import com.intellij.psi.PsiFile;
+import consulo.language.psi.PsiFile;
 import com.intellij.java.language.psi.PsiJavaFile;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.ide.actions.SaveFileAsTemplateHandler;
+import consulo.util.lang.StringUtil;
+import consulo.ide.impl.idea.ide.actions.SaveFileAsTemplateHandler;
+
+import javax.annotation.Nullable;
 
 /**
  * @author yole
  */
 public class SaveJavaAsTemplateHandler implements SaveFileAsTemplateHandler {
-  @javax.annotation.Nullable
+  @Nullable
   public String getTemplateText(final PsiFile psiFile, String fileText, String nameWithoutExtension) {
     if(psiFile instanceof PsiJavaFile){
       PsiJavaFile javaFile = (PsiJavaFile)psiFile;

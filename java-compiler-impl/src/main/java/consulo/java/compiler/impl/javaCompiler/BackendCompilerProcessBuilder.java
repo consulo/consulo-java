@@ -1,13 +1,13 @@
 package consulo.java.compiler.impl.javaCompiler;
 
-import com.intellij.compiler.impl.ModuleChunk;
+import consulo.ide.impl.idea.compiler.impl.ModuleChunk;
 import com.intellij.java.compiler.impl.javaCompiler.javac.JpsJavaCompilerOptions;
-import com.intellij.execution.ExecutionException;
-import com.intellij.execution.configurations.GeneralCommandLine;
-import com.intellij.execution.process.ProcessHandler;
-import com.intellij.execution.process.ProcessHandlerFactory;
-import com.intellij.openapi.compiler.CompileContext;
-import com.intellij.openapi.util.io.FileUtil;
+import consulo.process.ExecutionException;
+import consulo.process.cmd.GeneralCommandLine;
+import consulo.process.ProcessHandler;
+import consulo.process.local.ProcessHandlerFactory;
+import consulo.compiler.CompileContext;
+import consulo.ide.impl.idea.openapi.util.io.FileUtil;
 import consulo.annotation.access.RequiredReadAction;
 
 import javax.annotation.Nonnull;
@@ -30,11 +30,11 @@ public abstract class BackendCompilerProcessBuilder
 	protected final JpsJavaCompilerOptions myJavaCompilerOptions;
 	protected final boolean myAnnotationProcessorsEnabled;
 
-	protected BackendCompilerProcessBuilder(ModuleChunk moduleChunk,
-											String outputPath,
-											CompileContext compileContext,
-											JpsJavaCompilerOptions javaCompilerOptions,
-											boolean annotationProcessorsEnabled)
+	protected BackendCompilerProcessBuilder(consulo.ide.impl.idea.compiler.impl.ModuleChunk moduleChunk,
+                                          String outputPath,
+                                          CompileContext compileContext,
+                                          JpsJavaCompilerOptions javaCompilerOptions,
+                                          boolean annotationProcessorsEnabled)
 	{
 		myModuleChunk = moduleChunk;
 		myOutputPath = outputPath;

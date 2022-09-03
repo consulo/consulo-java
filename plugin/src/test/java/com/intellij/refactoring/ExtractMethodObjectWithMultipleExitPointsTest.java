@@ -8,8 +8,8 @@ import javax.annotation.Nonnull;
 
 import com.intellij.JavaTestUtil;
 import com.intellij.java.impl.codeInsight.CodeInsightUtil;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.psi.PsiElement;
+import consulo.application.ApplicationManager;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.impl.refactoring.extractMethodObject.ExtractMethodObjectHandler;
 import com.intellij.java.impl.refactoring.extractMethodObject.ExtractMethodObjectProcessor;

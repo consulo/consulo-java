@@ -20,12 +20,13 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.intellij.java.language.impl.codeInsight.ExceptionUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.psi.*;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.impl.refactoring.util.RefactoringChangeUtil;
 import consulo.java.language.module.util.JavaClassNames;
 
@@ -47,13 +48,13 @@ public class ExceptionUtils
 	}
 
 	@Nonnull
-	public static Set<PsiClassType> calculateExceptionsThrown(@javax.annotation.Nullable PsiElement element)
+	public static Set<PsiClassType> calculateExceptionsThrown(@Nullable PsiElement element)
 	{
 		return calculateExceptionsThrown(element, new LinkedHashSet<>(5));
 	}
 
 	@Nonnull
-	public static Set<PsiClassType> calculateExceptionsThrown(@javax.annotation.Nullable PsiElement element, @Nonnull Set<PsiClassType> out)
+	public static Set<PsiClassType> calculateExceptionsThrown(@Nullable PsiElement element, @Nonnull Set<PsiClassType> out)
 	{
 		if(element == null)
 		{
@@ -72,7 +73,7 @@ public class ExceptionUtils
 		return out;
 	}
 
-	public static boolean isGenericExceptionClass(@javax.annotation.Nullable PsiType exceptionType)
+	public static boolean isGenericExceptionClass(@Nullable PsiType exceptionType)
 	{
 		if(!(exceptionType instanceof PsiClassType))
 		{
@@ -166,7 +167,7 @@ public class ExceptionUtils
 		}
 	}
 
-	static boolean blockThrowsException(@javax.annotation.Nullable PsiCodeBlock block)
+	static boolean blockThrowsException(@Nullable PsiCodeBlock block)
 	{
 		if(block == null)
 		{

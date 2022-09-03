@@ -19,14 +19,15 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import consulo.process.cmd.GeneralCommandLine;
 import org.junit.Assert;
 import com.intellij.JavaTestUtil;
-import com.intellij.execution.CantRunException;
-import com.intellij.execution.ExecutionBundle;
-import com.intellij.execution.ExecutionException;
-import com.intellij.execution.process.OSProcessHandler;
-import com.intellij.ide.IdeBundle;
-import com.intellij.openapi.projectRoots.Sdk;
+import consulo.execution.CantRunException;
+import consulo.execution.ExecutionBundle;
+import consulo.process.ExecutionException;
+import consulo.process.internal.OSProcessHandler;
+import consulo.ide.IdeBundle;
+import consulo.content.bundle.Sdk;
 import com.intellij.testFramework.LightIdeaTestCase;
 import consulo.java.execution.configurations.OwnJavaParameters;
 

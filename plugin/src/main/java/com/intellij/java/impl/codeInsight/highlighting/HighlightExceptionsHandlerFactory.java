@@ -15,17 +15,18 @@
  */
 package com.intellij.java.impl.codeInsight.highlighting;
 
-import com.intellij.codeInsight.highlighting.HighlightUsagesHandlerBase;
-import com.intellij.codeInsight.highlighting.HighlightUsagesHandlerFactory;
-import com.intellij.featureStatistics.FeatureUsageTracker;
+import consulo.externalService.statistic.FeatureUsageTracker;
+import consulo.language.editor.highlight.usage.HighlightUsagesHandlerBase;
+import consulo.language.editor.highlight.usage.HighlightUsagesHandlerFactory;
 import com.intellij.java.language.impl.codeInsight.ExceptionUtil;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.util.Condition;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import consulo.codeInsight.TargetElementUtil;
+import consulo.codeEditor.Editor;
+import consulo.util.lang.function.Condition;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.editor.TargetElementUtil;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -52,7 +53,7 @@ public class HighlightExceptionsHandlerFactory implements HighlightUsagesHandler
     return null;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private static HighlightUsagesHandlerBase createHighlightTryHandler(final Editor editor,
                                                                       final PsiFile file,
                                                                       final PsiElement target,
@@ -65,7 +66,7 @@ public class HighlightExceptionsHandlerFactory implements HighlightUsagesHandler
     return new HighlightExceptionsHandler(editor, file, target, psiClassTypes.toArray(new PsiClassType[psiClassTypes.size()]), tryBlock, Condition.TRUE);
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private static HighlightUsagesHandlerBase createHighlightCatchHandler(final Editor editor,
                                                                         final PsiFile file,
                                                                         final PsiElement target,
@@ -106,7 +107,7 @@ public class HighlightExceptionsHandlerFactory implements HighlightUsagesHandler
         tryStatement.getTryBlock(), filter);
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private static HighlightUsagesHandlerBase createThrowsHandler(final Editor editor, final PsiFile file, final PsiElement target) {
     FeatureUsageTracker.getInstance().triggerFeatureUsed("codeassists.highlight.throws");
     PsiElement grand = target.getParent().getParent();

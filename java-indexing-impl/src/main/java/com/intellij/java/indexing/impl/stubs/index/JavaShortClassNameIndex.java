@@ -20,49 +20,43 @@
 package com.intellij.java.indexing.impl.stubs.index;
 
 import com.intellij.java.indexing.impl.search.JavaSourceFilterScope;
-import com.intellij.openapi.project.Project;
-import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.impl.psi.impl.java.stubs.index.JavaStubIndexKeys;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.stubs.StringStubIndexExtension;
-import com.intellij.psi.stubs.StubIndex;
-import com.intellij.psi.stubs.StubIndexKey;
-import com.intellij.util.indexing.FileBasedIndex;
+import com.intellij.java.language.psi.PsiClass;
+import consulo.language.psi.stub.FileBasedIndex;
+import consulo.language.psi.stub.StringStubIndexExtension;
+import consulo.language.psi.stub.StubIndex;
+import consulo.language.psi.stub.StubIndexKey;
+import consulo.project.Project;
+import consulo.project.content.scope.ProjectAwareSearchScope;
 
 import javax.annotation.Nonnull;
 import java.util.Collection;
 
-public class JavaShortClassNameIndex extends StringStubIndexExtension<PsiClass>
-{
-	private static final JavaShortClassNameIndex ourInstance = new JavaShortClassNameIndex();
+public class JavaShortClassNameIndex extends StringStubIndexExtension<PsiClass> {
+  private static final JavaShortClassNameIndex ourInstance = new JavaShortClassNameIndex();
 
-	public static JavaShortClassNameIndex getInstance()
-	{
-		return ourInstance;
-	}
+  public static JavaShortClassNameIndex getInstance() {
+    return ourInstance;
+  }
 
-	@Override
-	public int getVersion()
-	{
-		return super.getVersion() + (FileBasedIndex.ourEnableTracingOfKeyHashToVirtualFileMapping ? 1 : 0);
-	}
+  @Override
+  public int getVersion() {
+    return super.getVersion() + (FileBasedIndex.ourEnableTracingOfKeyHashToVirtualFileMapping ? 1 : 0);
+  }
 
-	@Nonnull
-	@Override
-	public StubIndexKey<String, PsiClass> getKey()
-	{
-		return JavaStubIndexKeys.CLASS_SHORT_NAMES;
-	}
+  @Nonnull
+  @Override
+  public StubIndexKey<String, PsiClass> getKey() {
+    return JavaStubIndexKeys.CLASS_SHORT_NAMES;
+  }
 
-	@Override
-	public Collection<PsiClass> get(@Nonnull final String s, @Nonnull final Project project, @Nonnull final GlobalSearchScope scope)
-	{
-		return StubIndex.getElements(getKey(), s, project, new JavaSourceFilterScope(scope), PsiClass.class);
-	}
+  @Override
+  public Collection<PsiClass> get(@Nonnull final String s, @Nonnull final Project project, @Nonnull final ProjectAwareSearchScope scope) {
+    return StubIndex.getElements(getKey(), s, project, new JavaSourceFilterScope(scope), PsiClass.class);
+  }
 
-	@Override
-	public boolean traceKeyHashToVirtualFileMapping()
-	{
-		return FileBasedIndex.ourEnableTracingOfKeyHashToVirtualFileMapping;
-	}
+  @Override
+  public boolean traceKeyHashToVirtualFileMapping() {
+    return FileBasedIndex.ourEnableTracingOfKeyHashToVirtualFileMapping;
+  }
 }

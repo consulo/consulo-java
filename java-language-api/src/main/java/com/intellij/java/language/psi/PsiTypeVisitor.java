@@ -42,7 +42,7 @@ public class PsiTypeVisitor<A>
 		return visitType(arrayType);
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public A visitClassType(PsiClassType classType)
 	{
 		return visitType(classType);
@@ -85,7 +85,7 @@ public class PsiTypeVisitor<A>
 		return visitType(diamondType);
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public A visitLambdaExpressionType(PsiLambdaExpressionType lambdaExpressionType)
 	{
 		final PsiLambdaExpression lambdaExpression = lambdaExpressionType.getExpression();

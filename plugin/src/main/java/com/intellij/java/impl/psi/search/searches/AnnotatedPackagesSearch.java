@@ -17,10 +17,10 @@ package com.intellij.java.impl.psi.search.searches;
 
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiJavaPackage;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.search.SearchScope;
-import com.intellij.psi.search.searches.ExtensibleQueryFactory;
-import com.intellij.util.Query;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.content.scope.SearchScope;
+import consulo.application.util.query.ExtensibleQueryFactory;
+import consulo.application.util.query.Query;
 
 import javax.annotation.Nonnull;
 

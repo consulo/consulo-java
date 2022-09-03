@@ -15,7 +15,7 @@
  */
 package com.intellij.java.util.cls;
 
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.util.lang.StringUtil;
 import com.intellij.java.language.util.cls.ClsFormatException;
 import org.jetbrains.annotations.NonNls;
 

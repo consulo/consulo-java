@@ -15,28 +15,28 @@
  */
 package com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis;
 
-import com.intellij.application.options.colors.ScopeAttributesUtil;
-import com.intellij.codeHighlighting.RainbowHighlighter;
-import com.intellij.codeInsight.daemon.impl.HighlightInfo;
-import com.intellij.codeInsight.daemon.impl.HighlightInfoType;
+import consulo.ide.impl.idea.application.options.colors.ScopeAttributesUtil;
+import consulo.language.editor.rawHighlight.RainbowHighlighter;
+import consulo.language.editor.rawHighlight.HighlightInfo;
+import consulo.language.editor.rawHighlight.HighlightInfoType;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.JavaHighlightInfoTypes;
 import com.intellij.java.language.psi.*;
-import com.intellij.lang.ASTNode;
+import consulo.language.ast.ASTNode;
 import com.intellij.java.language.JavaLanguage;
-import com.intellij.openapi.editor.colors.TextAttributesKey;
-import com.intellij.openapi.editor.colors.TextAttributesScheme;
-import com.intellij.openapi.editor.markup.TextAttributes;
-import com.intellij.openapi.util.Pair;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.packageDependencies.DependencyValidationManager;
-import com.intellij.packageDependencies.DependencyValidationManagerImpl;
+import consulo.colorScheme.TextAttributesKey;
+import consulo.colorScheme.TextAttributesScheme;
+import consulo.colorScheme.TextAttributes;
+import consulo.util.lang.Pair;
+import consulo.document.util.TextRange;
+import consulo.ide.impl.idea.packageDependencies.DependencyValidationManager;
+import consulo.ide.impl.idea.packageDependencies.DependencyValidationManagerImpl;
 import com.intellij.psi.*;
 import com.intellij.java.language.impl.psi.impl.source.tree.ElementType;
-import com.intellij.psi.impl.source.tree.TreeUtil;
-import com.intellij.psi.search.scope.packageSet.NamedScope;
-import com.intellij.psi.search.scope.packageSet.NamedScopesHolder;
-import com.intellij.psi.search.scope.packageSet.PackageSet;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.impl.ast.TreeUtil;
+import consulo.content.scope.NamedScope;
+import consulo.content.scope.NamedScopesHolder;
+import consulo.content.scope.PackageSet;
+import consulo.language.psi.util.PsiTreeUtil;
 import consulo.logging.Logger;
 
 import javax.annotation.Nonnull;

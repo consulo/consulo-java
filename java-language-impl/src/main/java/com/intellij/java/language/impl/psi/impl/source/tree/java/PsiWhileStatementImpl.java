@@ -15,18 +15,18 @@
  */
 package com.intellij.java.language.impl.psi.impl.source.tree.java;
 
-import javax.annotation.Nonnull;
-
-import com.intellij.java.language.psi.*;
-import com.intellij.lang.ASTNode;
-import consulo.logging.Logger;
-import com.intellij.psi.*;
 import com.intellij.java.language.impl.psi.impl.PsiImplUtil;
-import com.intellij.java.language.impl.psi.impl.source.tree.ChildRole;
-import com.intellij.psi.impl.source.tree.CompositePsiElement;
 import com.intellij.java.language.impl.psi.impl.source.Constants;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.tree.ChildRoleBase;
+import com.intellij.java.language.impl.psi.impl.source.tree.ChildRole;
+import com.intellij.java.language.psi.*;
+import consulo.language.ast.ASTNode;
+import consulo.language.ast.ChildRoleBase;
+import consulo.language.ast.IElementType;
+import consulo.language.impl.psi.CompositePsiElement;
+import consulo.language.psi.PsiElementVisitor;
+import consulo.logging.Logger;
+
+import javax.annotation.Nonnull;
 
 public class PsiWhileStatementImpl extends CompositePsiElement implements PsiWhileStatement, Constants {
   private static final Logger LOG = Logger.getInstance(PsiWhileStatementImpl.class);
@@ -36,13 +36,13 @@ public class PsiWhileStatementImpl extends CompositePsiElement implements PsiWhi
   }
 
   @Override
-  public PsiExpression getCondition(){
-    return (PsiExpression)findChildByRoleAsPsiElement(ChildRole.CONDITION);
+  public PsiExpression getCondition() {
+    return (PsiExpression) findChildByRoleAsPsiElement(ChildRole.CONDITION);
   }
 
   @Override
-  public PsiStatement getBody(){
-    return (PsiStatement)findChildByRoleAsPsiElement(ChildRole.LOOP_BODY);
+  public PsiStatement getBody() {
+    return (PsiStatement) findChildByRoleAsPsiElement(ChildRole.LOOP_BODY);
   }
 
   @Override
@@ -56,9 +56,9 @@ public class PsiWhileStatementImpl extends CompositePsiElement implements PsiWhi
   }
 
   @Override
-  public ASTNode findChildByRole(int role){
+  public ASTNode findChildByRole(int role) {
     LOG.assertTrue(ChildRole.isUnique(role));
-    switch(role){
+    switch (role) {
       default:
         return null;
 
@@ -85,37 +85,31 @@ public class PsiWhileStatementImpl extends CompositePsiElement implements PsiWhi
     IElementType i = child.getElementType();
     if (i == WHILE_KEYWORD) {
       return ChildRole.WHILE_KEYWORD;
-    }
-    else if (i == LPARENTH) {
+    } else if (i == LPARENTH) {
       return ChildRole.LPARENTH;
-    }
-    else if (i == RPARENTH) {
+    } else if (i == RPARENTH) {
       return ChildRole.RPARENTH;
-    }
-    else {
+    } else {
       if (EXPRESSION_BIT_SET.contains(child.getElementType())) {
         return ChildRole.CONDITION;
-      }
-      else if (child.getPsi() instanceof PsiStatement) {
+      } else if (child.getPsi() instanceof PsiStatement) {
         return ChildRole.LOOP_BODY;
-      }
-      else {
+      } else {
         return ChildRoleBase.NONE;
       }
     }
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor){
+  public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
-      ((JavaElementVisitor)visitor).visitWhileStatement(this);
-    }
-    else {
+      ((JavaElementVisitor) visitor).visitWhileStatement(this);
+    } else {
       visitor.visitElement(this);
     }
   }
 
-  public String toString(){
+  public String toString() {
     return "PsiWhileStatement";
   }
 }

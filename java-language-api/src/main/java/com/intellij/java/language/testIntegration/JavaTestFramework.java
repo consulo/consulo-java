@@ -17,30 +17,30 @@ package com.intellij.java.language.testIntegration;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import com.intellij.execution.configurations.ConfigurationType;
-import com.intellij.ide.fileTemplates.FileTemplate;
-import com.intellij.ide.fileTemplates.FileTemplateDescriptor;
-import com.intellij.ide.fileTemplates.FileTemplateManager;
-import com.intellij.lang.Language;
+import consulo.execution.configuration.ConfigurationType;
+import consulo.fileTemplate.FileTemplateDescriptor;
+import consulo.language.Language;
 import com.intellij.java.language.JavaLanguage;
-import com.intellij.openapi.module.Module;
 import com.intellij.java.language.projectRoots.roots.ExternalLibraryDescriptor;
-import com.intellij.openapi.roots.ProjectRootManager;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.language.psi.PsiFile;
+import consulo.module.content.ProjectRootManager;
+import consulo.util.lang.StringUtil;
 import com.intellij.java.language.psi.JVMElementFactory;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.util.IncorrectOperationException;
+import consulo.fileTemplate.FileTemplate;
+import consulo.fileTemplate.FileTemplateManager;
+import consulo.module.Module;
+import consulo.virtualFileSystem.VirtualFile;
 
 public abstract class JavaTestFramework implements TestFramework
 {
 	@Override
-	public boolean isLibraryAttached(@Nonnull Module module)
+	public boolean isLibraryAttached(@Nonnull consulo.module.Module module)
 	{
 		GlobalSearchScope scope = GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(module);
 		PsiClass c = JavaPsiFacade.getInstance(module.getProject()).findClass(getMarkerClassFQName(), scope);
@@ -108,7 +108,7 @@ public abstract class JavaTestFramework implements TestFramework
 		return clazz instanceof PsiClass ? findTearDownMethod((PsiClass) clazz) : null;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	protected abstract PsiMethod findTearDownMethod(@Nonnull PsiClass clazz);
 
 	@Override
@@ -138,7 +138,7 @@ public abstract class JavaTestFramework implements TestFramework
 		return false;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public PsiMethod findParametersMethod(PsiClass clazz)
 	{
 		return null;

@@ -19,17 +19,19 @@ import javax.annotation.Nonnull;
 
 import com.intellij.java.language.jvm.types.JvmType;
 
+import java.lang.reflect.Parameter;
+
 /**
  * Represents a parameter of a method or a constructor.
  *
- * @see java.lang.reflect.Parameter
+ * @see Parameter
  */
 public interface JvmParameter extends JvmNamedElement, JvmModifiersOwner
 {
 
 	/**
-	 * @see java.lang.reflect.Parameter#getParameterizedType
-	 * @see java.lang.reflect.Parameter#getAnnotatedType
+	 * @see Parameter#getParameterizedType
+	 * @see Parameter#getAnnotatedType
 	 */
 	@Nonnull
 	JvmType getType();

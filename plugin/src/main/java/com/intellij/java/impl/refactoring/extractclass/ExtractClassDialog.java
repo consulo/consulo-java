@@ -20,32 +20,33 @@ import com.intellij.java.impl.refactoring.ui.MemberSelectionPanel;
 import com.intellij.java.impl.refactoring.ui.MemberSelectionTable;
 import com.intellij.java.impl.refactoring.ui.PackageNameReferenceEditorCombo;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.help.HelpManager;
-import com.intellij.openapi.options.ConfigurationException;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.ProjectRootManager;
-import com.intellij.openapi.ui.Messages;
+import consulo.application.HelpManager;
+import consulo.configurable.ConfigurationException;
+import consulo.project.Project;
+import consulo.module.content.ProjectRootManager;
+import consulo.ui.ex.awt.Messages;
 import com.intellij.psi.*;
-import com.intellij.psi.presentation.java.SymbolPresentationUtil;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.SymbolPresentationUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.impl.refactoring.HelpID;
 import com.intellij.java.impl.refactoring.PackageWrapper;
 import com.intellij.java.impl.refactoring.RefactorJBundle;
-import com.intellij.refactoring.RefactoringBundle;
-import com.intellij.refactoring.classMembers.DelegatingMemberInfoModel;
-import com.intellij.refactoring.classMembers.MemberInfoBase;
-import com.intellij.refactoring.classMembers.MemberInfoChange;
-import com.intellij.refactoring.classMembers.MemberInfoChangeListener;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.classMember.DelegatingMemberInfoModel;
+import consulo.language.editor.refactoring.classMember.MemberInfoBase;
+import consulo.language.editor.refactoring.classMember.MemberInfoChange;
+import consulo.language.editor.refactoring.classMember.MemberInfoChangeListener;
 import com.intellij.java.impl.refactoring.move.moveClassesOrPackages.DestinationFolderComboBox;
 import com.intellij.refactoring.ui.*;
 import com.intellij.java.impl.refactoring.util.classMembers.MemberInfo;
-import com.intellij.ui.DocumentAdapter;
+import consulo.ui.ex.awt.event.DocumentAdapter;
 import com.intellij.java.impl.ui.ReferenceEditorComboWithBrowseButton;
-import com.intellij.ui.components.JBLabelDecorator;
-import com.intellij.util.ui.FormBuilder;
-import com.intellij.util.ui.UIUtil;
+import consulo.ui.ex.awt.JBLabelDecorator;
+import consulo.ui.util.FormBuilder;
+import consulo.ui.ex.awt.UIUtil;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -269,7 +270,7 @@ class ExtractClassDialog extends RefactoringDialog implements MemberInfoChangeLi
         @Override
         protected MemberSelectionTable createMemberSelectionTable(final List<MemberInfo> memberInfo, String abstractColumnHeader) {
           return new MemberSelectionTable(memberInfo, abstractColumnHeader) {
-            @javax.annotation.Nullable
+            @Nullable
             @Override
             protected Object getAbstractColumnValue(MemberInfo memberInfo) {
               if (isExtractAsEnum()) {

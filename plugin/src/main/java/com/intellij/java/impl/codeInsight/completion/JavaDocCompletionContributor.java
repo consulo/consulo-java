@@ -15,11 +15,11 @@
  */
 package com.intellij.java.impl.codeInsight.completion;
 
-import com.intellij.codeInsight.TailType;
+import consulo.language.editor.completion.lookup.TailType;
 import com.intellij.codeInsight.completion.*;
 import com.intellij.codeInsight.lookup.*;
-import com.intellij.codeInspection.InspectionProfile;
-import com.intellij.codeInspection.SuppressionUtil;
+import consulo.language.editor.inspection.scheme.InspectionProfile;
+import consulo.language.editor.inspection.SuppressionUtil;
 import com.intellij.java.impl.codeInsight.completion.scope.JavaCompletionProcessor;
 import com.intellij.java.impl.codeInsight.editorActions.wordSelection.DocTagSelectioner;
 import com.intellij.java.impl.codeInsight.lookup.LookupItemUtil;
@@ -35,25 +35,25 @@ import com.intellij.java.language.psi.javadoc.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import com.intellij.openapi.editor.*;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.openapi.util.Conditions;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.profile.codeInspection.InspectionProjectProfileManager;
-import com.intellij.psi.PsiDocumentManager;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiRecursiveElementWalkingVisitor;
-import com.intellij.psi.PsiReference;
-import com.intellij.psi.codeStyle.CodeStyleSettings;
-import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
-import com.intellij.psi.filters.TrueFilter;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.ProcessingContext;
-import com.intellij.util.SystemProperties;
-import com.intellij.util.containers.ContainerUtil;
-import com.intellij.util.text.CharArrayUtil;
-import consulo.codeInsight.completion.CompletionProvider;
+import consulo.project.Project;
+import consulo.util.lang.Comparing;
+import consulo.util.lang.function.Conditions;
+import consulo.util.lang.StringUtil;
+import consulo.language.editor.inspection.scheme.InspectionProjectProfileManager;
+import consulo.language.psi.PsiDocumentManager;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiRecursiveElementWalkingVisitor;
+import consulo.language.psi.PsiReference;
+import consulo.language.codeStyle.CodeStyleSettings;
+import consulo.language.codeStyle.CodeStyleSettingsManager;
+import consulo.language.psi.filter.TrueFilter;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.language.util.ProcessingContext;
+import consulo.util.lang.SystemProperties;
+import consulo.util.collection.ContainerUtil;
+import consulo.util.lang.CharArrayUtil;
+import consulo.language.editor.completion.CompletionProvider;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.logging.Logger;
 import org.jetbrains.annotations.NonNls;
@@ -61,8 +61,8 @@ import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
 import java.util.*;
 
-import static com.intellij.patterns.PlatformPatterns.psiElement;
-import static com.intellij.patterns.StandardPatterns.string;
+import static consulo.language.pattern.PlatformPatterns.psiElement;
+import static consulo.language.pattern.StandardPatterns.string;
 
 /**
  * User: ik
@@ -407,12 +407,12 @@ public class JavaDocCompletionContributor extends CompletionContributor {
         } else if (chars.charAt(currentOffset + 1) == '}' && chars.charAt(currentOffset) == ' ') {
           caretModel.moveToOffset(offset + 2);
         } else if (name.equals(LINK_TAG)) {
-          EditorModificationUtil.insertStringAtCaret(editor, " }");
+          consulo.ide.impl.idea.openapi.editor.EditorModificationUtil.insertStringAtCaret(editor, " }");
           caretModel.moveToOffset(offset + 1);
           editor.getScrollingModel().scrollToCaret(ScrollType.RELATIVE);
           editor.getSelectionModel().removeSelection();
         } else {
-          EditorModificationUtil.insertStringAtCaret(editor, "}");
+          consulo.ide.impl.idea.openapi.editor.EditorModificationUtil.insertStringAtCaret(editor, "}");
           caretModel.moveToOffset(offset + 1);
         }
       }
@@ -474,7 +474,7 @@ public class JavaDocCompletionContributor extends CompletionContributor {
         }
       }
       String insertString = buffer.toString();
-      EditorModificationUtil.insertStringAtCaret(editor, insertString);
+      consulo.ide.impl.idea.openapi.editor.EditorModificationUtil.insertStringAtCaret(editor, insertString);
       editor.getCaretModel().moveToOffset(afterSharp + buffer.length());
       editor.getScrollingModel().scrollToCaret(ScrollType.RELATIVE);
       PsiDocumentManager.getInstance(project).commitDocument(editor.getDocument());

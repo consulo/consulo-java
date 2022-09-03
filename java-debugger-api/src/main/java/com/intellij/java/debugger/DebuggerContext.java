@@ -17,7 +17,7 @@ package com.intellij.java.debugger;
 
 import com.intellij.java.debugger.engine.StackFrameContext;
 import com.intellij.java.debugger.engine.SuspendContext;
-import com.intellij.openapi.project.Project;
+import consulo.project.Project;
 
 public interface DebuggerContext extends StackFrameContext{
   SuspendContext getSuspendContext();

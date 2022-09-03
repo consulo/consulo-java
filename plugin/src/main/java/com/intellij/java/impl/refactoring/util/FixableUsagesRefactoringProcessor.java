@@ -15,14 +15,14 @@
  */
 package com.intellij.java.impl.refactoring.util;
 
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Ref;
-import com.intellij.psi.PsiElement;
-import com.intellij.refactoring.BaseRefactoringProcessor;
-import com.intellij.refactoring.util.CommonRefactoringUtil;
-import com.intellij.usageView.UsageInfo;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.containers.MultiMap;
+import consulo.project.Project;
+import consulo.util.lang.ref.Ref;
+import consulo.language.psi.PsiElement;
+import consulo.language.editor.refactoring.BaseRefactoringProcessor;
+import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
+import consulo.usage.UsageInfo;
+import consulo.language.util.IncorrectOperationException;
+import consulo.util.collection.MultiMap;
 import com.intellij.xml.util.XmlUtil;
 import consulo.logging.Logger;
 

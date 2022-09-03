@@ -15,12 +15,12 @@
  */
 package com.intellij.java.impl.codeInsight.template.macro;
 
-import com.intellij.codeInsight.lookup.LookupElement;
-import com.intellij.codeInsight.template.ExpressionContext;
-import com.intellij.codeInsight.template.macro.TemplateCompletionProcessor;
+import consulo.language.editor.completion.lookup.LookupElement;
+import consulo.language.editor.template.ExpressionContext;
+import consulo.language.editor.template.TemplateCompletionProcessor;
 import com.intellij.java.impl.codeInsight.completion.JavaCompletionUtil;
 import com.intellij.java.language.psi.PsiJavaPackage;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 
 import java.util.List;
 

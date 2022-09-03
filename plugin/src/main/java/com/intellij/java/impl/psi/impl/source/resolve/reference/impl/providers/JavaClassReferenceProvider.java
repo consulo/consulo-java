@@ -23,16 +23,16 @@ import com.intellij.java.language.psi.PsiJavaPackage;
 import com.intellij.java.language.psi.PsiNameHelper;
 import com.intellij.java.language.psi.util.ClassKind;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.project.Project;
+import consulo.util.lang.StringUtil;
 import com.intellij.psi.*;
-import com.intellij.psi.impl.source.resolve.reference.impl.providers.CustomizableReferenceProvider;
-import com.intellij.psi.scope.PsiScopeProcessor;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.language.psi.path.CustomizableReferenceProvider;
+import consulo.language.psi.resolve.PsiScopeProcessor;
+import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.psi.util.*;
-import com.intellij.util.NullableFunction;
-import com.intellij.util.ProcessingContext;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.ide.impl.idea.util.NullableFunction;
+import consulo.language.util.ProcessingContext;
+import consulo.util.collection.ContainerUtil;
 import consulo.psi.PsiPackage;
 import consulo.util.dataholder.Key;
 
@@ -61,7 +61,7 @@ public class JavaClassReferenceProvider extends GenericReferenceProvider impleme
   public static final CustomizationKey<Boolean> JVM_FORMAT = new CustomizationKey<Boolean>("JVM_FORMAT");
   public static final CustomizationKey<Boolean> ALLOW_DOLLAR_NAMES = new CustomizationKey<Boolean>("ALLOW_DOLLAR_NAMES");
   public static final CustomizationKey<String> DEFAULT_PACKAGE = new CustomizationKey<String>("DEFAULT_PACKAGE");
-  @javax.annotation.Nullable
+  @Nullable
   private Map<CustomizationKey, Object> myOptions;
 
   private boolean myAllowEmpty;
@@ -94,12 +94,12 @@ public class JavaClassReferenceProvider extends GenericReferenceProvider impleme
     option.putValue(myOptions, value);
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public <T> T getOption(CustomizationKey<T> option) {
     return myOptions == null ? null : (T) myOptions.get(option);
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public GlobalSearchScope getScope(Project project) {
     return null;
   }
@@ -166,7 +166,7 @@ public class JavaClassReferenceProvider extends GenericReferenceProvider impleme
   }
 
   @Override
-  public void setOptions(@javax.annotation.Nullable Map<CustomizationKey, Object> options) {
+  public void setOptions(@Nullable Map<CustomizationKey, Object> options) {
     myOptions = options;
   }
 

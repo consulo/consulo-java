@@ -15,8 +15,8 @@
  */
 package com.intellij.java.impl.ide.fileTemplates;
 
-import com.intellij.ide.fileTemplates.DefaultTemplatePropertiesProvider;
-import com.intellij.psi.PsiDirectory;
+import consulo.fileTemplate.DefaultTemplatePropertiesProvider;
+import consulo.language.psi.PsiDirectory;
 
 import java.util.Properties;
 

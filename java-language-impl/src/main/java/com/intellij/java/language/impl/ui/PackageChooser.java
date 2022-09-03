@@ -17,8 +17,8 @@
 package com.intellij.java.language.impl.ui;
 
 import com.intellij.java.language.psi.PsiJavaPackage;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.DialogWrapper;
+import consulo.project.Project;
+import consulo.ui.ex.awt.DialogWrapper;
 
 import java.util.List;
 

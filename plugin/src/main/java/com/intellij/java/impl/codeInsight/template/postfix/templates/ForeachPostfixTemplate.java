@@ -15,20 +15,20 @@
  */
 package com.intellij.java.impl.codeInsight.template.postfix.templates;
 
-import com.intellij.codeInsight.template.Template;
-import com.intellij.codeInsight.template.TemplateManager;
-import com.intellij.codeInsight.template.impl.MacroCallNode;
-import com.intellij.codeInsight.template.impl.VariableNode;
-import com.intellij.codeInsight.template.postfix.templates.PostfixTemplate;
+import consulo.language.editor.template.Template;
+import consulo.language.editor.template.TemplateManager;
+import consulo.language.editor.template.macro.MacroCallNode;
+import consulo.language.editor.template.VariableNode;
+import consulo.language.editor.postfixTemplate.PostfixTemplate;
 import com.intellij.java.impl.codeInsight.template.impl.TextExpression;
 import com.intellij.java.impl.codeInsight.template.macro.IterableComponentTypeMacro;
 import com.intellij.java.impl.codeInsight.template.macro.SuggestVariableNameMacro;
 import com.intellij.java.impl.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils;
 import com.intellij.java.language.psi.PsiExpression;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiElement;
+import consulo.document.Document;
+import consulo.codeEditor.Editor;
+import consulo.project.Project;
+import consulo.language.psi.PsiElement;
 
 import javax.annotation.Nonnull;
 

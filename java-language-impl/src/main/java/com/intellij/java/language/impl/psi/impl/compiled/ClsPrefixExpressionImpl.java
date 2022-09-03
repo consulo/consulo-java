@@ -15,110 +15,89 @@
  */
 package com.intellij.java.language.impl.psi.impl.compiled;
 
+import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
+import com.intellij.java.language.psi.*;
+import consulo.language.ast.IElementType;
+import consulo.language.impl.ast.TreeElement;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiElementVisitor;
+
 import javax.annotation.Nonnull;
 
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.java.language.psi.JavaElementVisitor;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiElementVisitor;
-import com.intellij.java.language.psi.PsiExpression;
-import com.intellij.java.language.psi.PsiJavaToken;
-import com.intellij.java.language.psi.PsiPrefixExpression;
-import com.intellij.java.language.psi.PsiType;
-import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
-import com.intellij.psi.impl.source.tree.TreeElement;
-import com.intellij.psi.tree.IElementType;
+class ClsPrefixExpressionImpl extends ClsElementImpl implements PsiPrefixExpression {
+  private final ClsElementImpl myParent;
+  private final PsiJavaToken myOperator;
+  private final PsiExpression myOperand;
 
-class ClsPrefixExpressionImpl extends ClsElementImpl implements PsiPrefixExpression
-{
-	private final ClsElementImpl myParent;
-	private final PsiJavaToken myOperator;
-	private final PsiExpression myOperand;
+  ClsPrefixExpressionImpl(ClsElementImpl parent, PsiJavaToken sign, PsiExpression operand) {
+    myParent = parent;
+    myOperator = new ClsJavaTokenImpl(this, sign.getTokenType(), sign.getText());
+    myOperand = ClsParsingUtil.psiToClsExpression(operand, this);
+  }
 
-	ClsPrefixExpressionImpl(ClsElementImpl parent, PsiJavaToken sign, PsiExpression operand)
-	{
-		myParent = parent;
-		myOperator = new ClsJavaTokenImpl(this, sign.getTokenType(), sign.getText());
-		myOperand = ClsParsingUtil.psiToClsExpression(operand, this);
-	}
+  @Nonnull
+  @Override
+  public PsiExpression getOperand() {
+    return myOperand;
+  }
 
-	@Nonnull
-	@Override
-	public PsiExpression getOperand()
-	{
-		return myOperand;
-	}
+  @Nonnull
+  @Override
+  public PsiJavaToken getOperationSign() {
+    return myOperator;
+  }
 
-	@Nonnull
-	@Override
-	public PsiJavaToken getOperationSign()
-	{
-		return myOperator;
-	}
+  @Nonnull
+  @Override
+  public IElementType getOperationTokenType() {
+    return myOperator.getTokenType();
+  }
 
-	@Nonnull
-	@Override
-	public IElementType getOperationTokenType()
-	{
-		return myOperator.getTokenType();
-	}
+  @Override
+  public PsiType getType() {
+    return myOperand.getType();
+  }
 
-	@Override
-	public PsiType getType()
-	{
-		return myOperand.getType();
-	}
+  @Override
+  public PsiElement getParent() {
+    return myParent;
+  }
 
-	@Override
-	public PsiElement getParent()
-	{
-		return myParent;
-	}
+  @Nonnull
+  @Override
+  public PsiElement[] getChildren() {
+    return new PsiElement[]{
+        myOperator,
+        myOperand
+    };
+  }
 
-	@Nonnull
-	@Override
-	public PsiElement[] getChildren()
-	{
-		return new PsiElement[]{
-				myOperator,
-				myOperand
-		};
-	}
+  @Override
+  public String getText() {
+    return myOperator.getText() + myOperand.getText();
+  }
 
-	@Override
-	public String getText()
-	{
-		return StringUtil.join(myOperator.getText(), myOperand.getText());
-	}
+  @Override
+  public void appendMirrorText(int indentLevel, @Nonnull StringBuilder buffer) {
+    buffer.append(getText());
+  }
 
-	@Override
-	public void appendMirrorText(int indentLevel, @Nonnull StringBuilder buffer)
-	{
-		buffer.append(getText());
-	}
+  @Override
+  public void setMirror(@Nonnull TreeElement element) throws InvalidMirrorException {
+    setMirrorCheckingType(element, JavaElementType.PREFIX_EXPRESSION);
+  }
 
-	@Override
-	public void setMirror(@Nonnull TreeElement element) throws InvalidMirrorException
-	{
-		setMirrorCheckingType(element, JavaElementType.PREFIX_EXPRESSION);
-	}
+  @Override
+  public void accept(@Nonnull PsiElementVisitor visitor) {
+    if (visitor instanceof JavaElementVisitor) {
+      ((JavaElementVisitor) visitor).visitPrefixExpression(this);
+    } else {
+      visitor.visitElement(this);
+    }
+  }
 
-	@Override
-	public void accept(@Nonnull PsiElementVisitor visitor)
-	{
-		if(visitor instanceof JavaElementVisitor)
-		{
-			((JavaElementVisitor) visitor).visitPrefixExpression(this);
-		}
-		else
-		{
-			visitor.visitElement(this);
-		}
-	}
-
-	@Override
-	public String toString()
-	{
-		return "PsiPrefixExpression:" + getText();
-	}
+  @Override
+  public String toString() {
+    return "PsiPrefixExpression:" + getText();
+  }
 }

@@ -19,9 +19,10 @@ import javax.annotation.Nonnull;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
 import com.intellij.java.impl.ipp.base.Intention;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
+import com.siyeh.ig.psiutils.BoolUtils;
 
 public class IfToAssertionIntention extends Intention {
 
@@ -42,7 +43,7 @@ public class IfToAssertionIntention extends Intention {
 
     final PsiExpression condition = ifStatement.getCondition();
     final String negatedExpressionText =
-      com.siyeh.ig.psiutils.BoolUtils.getNegatedExpressionText(condition);
+      BoolUtils.getNegatedExpressionText(condition);
     final StringBuilder newStatementText = new StringBuilder("assert ");
     newStatementText.append(negatedExpressionText);
     final PsiStatement thenBranch = ifStatement.getThenBranch();

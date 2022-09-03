@@ -5,11 +5,11 @@ import com.intellij.java.language.impl.psi.impl.light.LightRecordCanonicalConstr
 import com.intellij.java.language.impl.psi.impl.light.LightRecordField;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.SyntheticElement;
-import com.intellij.psi.impl.source.DummyHolder;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.ObjectUtils;
+import consulo.language.impl.psi.DummyHolder;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.SyntheticElement;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.util.lang.ObjectUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -30,7 +30,7 @@ public final class JavaPsiRecordUtil {
     if (aClass == null) {
       PsiElement parent = accessor.getParent();
       if (parent instanceof DummyHolder) {
-        aClass = ObjectUtils.tryCast(parent.getContext(), PsiClass.class);
+        aClass = ObjectUtil.tryCast(parent.getContext(), PsiClass.class);
       }
     }
     if (aClass == null || !aClass.isRecord())

@@ -18,10 +18,10 @@ package com.intellij.java.impl.refactoring.safeDelete.usageInfo;
 import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.language.psi.PsiAnnotation;
 import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.psi.PsiElement;
-import com.intellij.refactoring.safeDelete.usageInfo.SafeDeleteCustomUsageInfo;
-import com.intellij.refactoring.safeDelete.usageInfo.SafeDeleteUsageInfo;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.psi.PsiElement;
+import consulo.language.editor.refactoring.safeDelete.usageInfo.SafeDeleteCustomUsageInfo;
+import consulo.language.editor.refactoring.safeDelete.usageInfo.SafeDeleteUsageInfo;
+import consulo.language.util.IncorrectOperationException;
 import consulo.java.language.module.util.JavaClassNames;
 
 /**

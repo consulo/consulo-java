@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.intellij.openapi.util.Pair;
+import consulo.util.lang.Pair;
 import consulo.java.language.module.util.JavaClassNames;
 import com.intellij.java.language.psi.GenericsUtil;
 import com.intellij.java.language.psi.PsiClass;
@@ -38,9 +38,9 @@ import com.intellij.java.language.impl.psi.impl.source.resolve.graphInference.co
 import com.intellij.java.language.impl.psi.impl.source.resolve.graphInference.constraints.TypeEqualityConstraint;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
-import com.intellij.util.Processor;
-import com.intellij.util.SystemProperties;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.application.util.function.Processor;
+import consulo.util.lang.SystemProperties;
+import consulo.util.collection.ContainerUtil;
 import consulo.logging.Logger;
 
 /**

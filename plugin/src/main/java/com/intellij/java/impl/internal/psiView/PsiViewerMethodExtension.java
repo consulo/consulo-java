@@ -15,9 +15,9 @@
  */
 package com.intellij.java.impl.internal.psiView;
 
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiElement;
-import com.intellij.util.PlatformIcons;
+import consulo.project.Project;
+import consulo.language.psi.PsiElement;
+import consulo.ide.impl.idea.util.PlatformIcons;
 
 import javax.swing.*;
 
@@ -31,7 +31,7 @@ public class PsiViewerMethodExtension extends JavaPsiViewerExtension {
   }
 
   public Icon getIcon() {
-    return PlatformIcons.METHOD_ICON;
+    return consulo.ide.impl.idea.util.PlatformIcons.METHOD_ICON;
   }
 
   public PsiElement createElement(Project project, String text) {

@@ -15,14 +15,14 @@
  */
 package com.intellij.java.impl.codeInsight.generation;
 
-import com.intellij.codeInsight.CodeInsightBundle;
-import com.intellij.codeInsight.generation.ClassMember;
+import consulo.language.editor.CodeInsightBundle;
+import consulo.ide.impl.idea.codeInsight.generation.ClassMember;
 import com.intellij.java.language.impl.codeInsight.generation.EncapsulatableClassMember;
 import com.intellij.java.language.impl.codeInsight.generation.GenerationInfo;
 import com.intellij.java.language.impl.codeInsight.generation.PropertyClassMember;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.openapi.project.Project;
-import com.intellij.util.IncorrectOperationException;
+import consulo.project.Project;
+import consulo.language.util.IncorrectOperationException;
 import consulo.java.analysis.codeInsight.JavaCodeInsightBundle;
 
 import javax.annotation.Nullable;

@@ -31,25 +31,25 @@ import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
 import com.intellij.java.debugger.impl.DebuggerUtilsEx;
 import com.intellij.java.debugger.impl.jdi.MethodBytecodeUtil;
 import com.intellij.java.debugger.impl.jdi.StackFrameProxyImpl;
-import com.intellij.icons.AllIcons;
+import consulo.application.AllIcons;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.application.ReadAction;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.ProjectFileIndex;
-import com.intellij.openapi.roots.ProjectRootManager;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.application.ReadAction;
+import consulo.document.Document;
+import consulo.execution.debug.XSourcePosition;
+import consulo.module.Module;
+import consulo.project.Project;
+import consulo.module.content.ProjectFileIndex;
+import consulo.module.content.ProjectRootManager;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.java.indexing.impl.stubs.index.JavaFullClassNameIndex;
-import com.intellij.psi.search.EverythingGlobalScope;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.containers.ContainerUtil;
-import com.intellij.xdebugger.XDebuggerUtil;
-import com.intellij.xdebugger.XSourcePosition;
-import com.intellij.xdebugger.breakpoints.XBreakpoint;
-import com.intellij.xdebugger.breakpoints.XBreakpointType;
+import consulo.language.psi.scope.EverythingGlobalScope;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.util.collection.ContainerUtil;
+import consulo.execution.debug.XDebuggerUtil;
+import consulo.execution.debug.breakpoint.XBreakpoint;
+import consulo.execution.debug.breakpoint.XBreakpointType;
 import consulo.internal.com.sun.jdi.*;
 import consulo.internal.com.sun.jdi.event.LocatableEvent;
 import consulo.logging.Logger;
@@ -314,7 +314,7 @@ public class LineBreakpoint<P extends JavaBreakpointProperties> extends Breakpoi
 		return true;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	private Collection<VirtualFile> findClassCandidatesInSourceContent(final String className, final GlobalSearchScope scope, final ProjectFileIndex fileIndex)
 	{
 		final int dollarIndex = className.indexOf("$");
@@ -607,7 +607,7 @@ public class LineBreakpoint<P extends JavaBreakpointProperties> extends Breakpoi
 		return canAdd[0];
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public String getMethodName()
 	{
 		XSourcePosition position = myXBreakpoint.getSourcePosition();

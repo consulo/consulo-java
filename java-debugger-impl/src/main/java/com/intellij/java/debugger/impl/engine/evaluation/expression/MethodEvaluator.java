@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.intellij.Patches;
+import consulo.application.util.Patches;
 import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.engine.DebugProcess;
 import com.intellij.java.debugger.impl.engine.DebugProcessImpl;

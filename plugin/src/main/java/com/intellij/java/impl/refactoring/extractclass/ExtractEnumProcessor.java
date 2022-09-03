@@ -13,23 +13,23 @@ import java.util.Set;
 
 import com.intellij.java.impl.codeInsight.generation.GenerateMembersUtil;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Ref;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.project.Project;
+import consulo.util.lang.ref.Ref;
+import consulo.util.lang.StringUtil;
 import com.intellij.psi.*;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.PsiUtilCore;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.psi.PsiUtilCore;
 import com.intellij.java.impl.refactoring.extractclass.usageInfo.ReplaceStaticVariableAccess;
 import com.intellij.java.impl.refactoring.psi.MutationUtils;
 import com.intellij.java.impl.refactoring.typeMigration.TypeMigrationProcessor;
 import com.intellij.java.impl.refactoring.typeMigration.TypeMigrationRules;
 import com.intellij.java.impl.refactoring.util.EnumConstantsUtil;
 import com.intellij.java.impl.refactoring.util.FixableUsageInfo;
-import com.intellij.refactoring.util.RefactoringUIUtil;
-import com.intellij.usageView.UsageInfo;
-import com.intellij.util.Functions;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
+import consulo.usage.UsageInfo;
+import consulo.util.lang.function.Functions;
+import consulo.language.util.IncorrectOperationException;
 
 public class ExtractEnumProcessor
 {

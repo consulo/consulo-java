@@ -17,12 +17,12 @@ package com.intellij.java.impl.psi.filters.classes;
 
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiManager;
-import com.intellij.psi.filters.ElementFilter;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.reference.SoftReference;
-import com.intellij.util.ReflectionUtil;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiManager;
+import consulo.language.psi.filter.ElementFilter;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.util.lang.ref.SoftReference;
+import consulo.util.lang.reflect.ReflectionUtil;
 
 /**
  * Created by IntelliJ IDEA.

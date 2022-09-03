@@ -1,11 +1,11 @@
 package com.intellij.roots.libraries;
 
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.roots.OrderRootType;
-import com.intellij.openapi.roots.RootProvider;
-import com.intellij.openapi.roots.libraries.Library;
-import com.intellij.openapi.roots.libraries.LibraryTable;
-import com.intellij.openapi.roots.libraries.LibraryTablesRegistrar;
+import consulo.application.ApplicationManager;
+import consulo.content.OrderRootType;
+import consulo.content.RootProvider;
+import consulo.content.library.Library;
+import consulo.content.library.LibraryTable;
+import consulo.content.library.LibraryTablesRegistrar;
 import com.intellij.testFramework.IdeaTestCase;
 import org.jdom.Element;
 import org.jdom.output.XMLOutputter;

@@ -15,12 +15,12 @@
  */
 package com.intellij.java.impl.codeInsight.editorActions;
 
-import com.intellij.codeInsight.editorActions.JoinLinesHandlerDelegate;
+import consulo.language.editor.action.JoinLinesHandlerDelegate;
 import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.java.language.psi.PsiJavaToken;
-import com.intellij.openapi.editor.Document;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
+import consulo.document.Document;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
 
 public class LiteralJoinLinesHandler implements JoinLinesHandlerDelegate {
   @Override

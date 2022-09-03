@@ -17,10 +17,8 @@ package com.intellij.java.language.psi;
 
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.util.Function;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.util.lang.StringUtil;
 
 import javax.annotation.Nonnull;
 import java.util.*;
@@ -62,7 +60,7 @@ public class PsiIntersectionType extends PsiType.Stub {
 
   private static PsiType[] flattenAndRemoveDuplicates(final PsiType[] conjuncts) {
     try {
-      final Set<PsiType> flattenConjuncts = PsiCapturedWildcardType.guard.doPreventingRecursion(conjuncts, true, () -> flatten(conjuncts, ContainerUtil.<PsiType>newLinkedHashSet()));
+      final Set<PsiType> flattenConjuncts = PsiCapturedWildcardType.guard.doPreventingRecursion(conjuncts, true, () -> flatten(conjuncts, new LinkedHashSet<>()));
       if (flattenConjuncts == null) {
         return conjuncts;
       }
@@ -111,12 +109,7 @@ public class PsiIntersectionType extends PsiType.Stub {
   @Nonnull
   @Override
   public String getPresentableText(final boolean annotated) {
-    return StringUtil.join(myConjuncts, new Function<PsiType, String>() {
-      @Override
-      public String fun(PsiType psiType) {
-        return psiType.getPresentableText(annotated);
-      }
-    }, " & ");
+    return StringUtil.join(myConjuncts, psiType -> psiType.getPresentableText(annotated), " & ");
   }
 
   @Nonnull
@@ -128,12 +121,7 @@ public class PsiIntersectionType extends PsiType.Stub {
   @Nonnull
   @Override
   public String getInternalCanonicalText() {
-    return StringUtil.join(myConjuncts, new Function<PsiType, String>() {
-      @Override
-      public String fun(PsiType psiType) {
-        return psiType.getInternalCanonicalText();
-      }
-    }, " & ");
+    return StringUtil.join(myConjuncts, PsiType::getInternalCanonicalText, " & ");
   }
 
   @Override

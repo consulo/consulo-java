@@ -15,16 +15,20 @@
  */
 package com.intellij.java.language.impl.codeInsight;
 
-import com.intellij.java.language.psi.*;
-import consulo.logging.Logger;
-import consulo.util.dataholder.Key;
-import com.intellij.psi.*;
-import com.intellij.java.language.psi.util.InheritanceUtil;
-import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.java.language.impl.refactoring.util.RefactoringChangeUtil;
-import com.intellij.util.ArrayUtil;
-import com.intellij.util.IncorrectOperationException;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.InheritanceUtil;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiManager;
+import consulo.language.psi.PsiReference;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.logging.Logger;
+import consulo.util.collection.ArrayUtil;
+import consulo.util.dataholder.Key;
+
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class ChangeContextUtil {
   private static final Logger LOG = Logger.getInstance(ChangeContextUtil.class);
@@ -113,8 +117,8 @@ public class ChangeContextUtil {
   }
 
   public static PsiElement decodeContextInfo(@Nonnull PsiElement scope,
-                                             @javax.annotation.Nullable PsiClass thisClass,
-                                             @javax.annotation.Nullable PsiExpression thisAccessExpr) throws IncorrectOperationException {
+                                             @Nullable PsiClass thisClass,
+                                             @Nullable PsiExpression thisAccessExpr) throws IncorrectOperationException {
     if (scope.getCopyableUserData(ENCODED_KEY) != null) {
       scope.putCopyableUserData(ENCODED_KEY, null);
 

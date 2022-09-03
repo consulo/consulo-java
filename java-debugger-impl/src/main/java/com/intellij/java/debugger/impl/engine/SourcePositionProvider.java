@@ -16,24 +16,25 @@
 package com.intellij.java.debugger.impl.engine;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.intellij.java.debugger.SourcePosition;
 import com.intellij.java.debugger.impl.DebuggerContextImpl;
 import com.intellij.java.debugger.ui.tree.NodeDescriptor;
-import com.intellij.openapi.extensions.ExtensionPointName;
-import com.intellij.openapi.project.Project;
+import consulo.component.extension.ExtensionPointName;
+import consulo.project.Project;
 
 public abstract class SourcePositionProvider
 {
 	public static final ExtensionPointName<SourcePositionProvider> EP_NAME = ExtensionPointName.create("consulo.java.debugger.sourcePositionProvider");
 
-	@javax.annotation.Nullable
+	@Nullable
 	public static SourcePosition getSourcePosition(@Nonnull NodeDescriptor descriptor, @Nonnull Project project, @Nonnull DebuggerContextImpl context)
 	{
 		return getSourcePosition(descriptor, project, context, false);
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public static SourcePosition getSourcePosition(@Nonnull NodeDescriptor descriptor, @Nonnull Project project, @Nonnull DebuggerContextImpl context, boolean nearest)
 	{
 		for(SourcePositionProvider provider : EP_NAME.getExtensions())
@@ -47,6 +48,6 @@ public abstract class SourcePositionProvider
 		return null;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	protected abstract SourcePosition computeSourcePosition(@Nonnull NodeDescriptor descriptor, @Nonnull Project project, @Nonnull DebuggerContextImpl context, boolean nearest);
 }

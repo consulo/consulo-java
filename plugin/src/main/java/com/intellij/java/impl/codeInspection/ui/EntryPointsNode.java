@@ -15,11 +15,11 @@
  */
 package com.intellij.java.impl.codeInspection.ui;
 
-import com.intellij.codeInspection.ex.GlobalInspectionContextImpl;
-import com.intellij.codeInspection.ex.GlobalInspectionToolWrapper;
-import com.intellij.codeInspection.ex.InspectionToolWrapper;
-import com.intellij.codeInspection.ui.InspectionNode;
-import com.intellij.icons.AllIcons;
+import consulo.ide.impl.idea.codeInspection.ex.GlobalInspectionContextImpl;
+import consulo.ide.impl.idea.codeInspection.ex.GlobalInspectionToolWrapper;
+import consulo.language.editor.inspection.scheme.InspectionToolWrapper;
+import consulo.ide.impl.idea.codeInspection.ui.InspectionNode;
+import consulo.application.AllIcons;
 import com.intellij.java.impl.codeInspection.deadCode.DummyEntryPointsEP;
 import consulo.ui.image.Image;
 

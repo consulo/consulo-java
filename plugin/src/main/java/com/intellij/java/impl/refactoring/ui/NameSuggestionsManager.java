@@ -16,8 +16,8 @@
 package com.intellij.java.impl.refactoring.ui;
 
 import com.intellij.java.language.psi.PsiType;
-import com.intellij.psi.codeStyle.SuggestedNameInfo;
-import com.intellij.refactoring.ui.NameSuggestionsField;
+import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
+import consulo.language.editor.refactoring.ui.NameSuggestionsField;
 
 import javax.swing.*;
 import java.awt.event.ItemEvent;

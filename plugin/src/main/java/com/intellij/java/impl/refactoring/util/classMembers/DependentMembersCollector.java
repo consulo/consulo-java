@@ -20,7 +20,7 @@ import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
 import com.intellij.java.language.psi.PsiMember;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.psi.*;
-import com.intellij.refactoring.classMembers.DependentMembersCollectorBase;
+import consulo.language.editor.refactoring.classMember.DependentMembersCollectorBase;
 
 /**
 * @author max

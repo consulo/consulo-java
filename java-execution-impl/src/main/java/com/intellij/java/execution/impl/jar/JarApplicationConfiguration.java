@@ -9,36 +9,35 @@ import java.util.Map;
 
 import javax.annotation.Nonnull;
 
+import consulo.execution.RuntimeConfigurationException;
+import consulo.execution.RuntimeConfigurationWarning;
+import consulo.execution.configuration.*;
+import consulo.execution.configuration.ui.SettingsEditor;
+import consulo.execution.configuration.ui.SettingsEditorGroup;
+import consulo.execution.executor.Executor;
+import consulo.execution.runner.ExecutionEnvironment;
+import consulo.process.ExecutionException;
 import org.jdom.Element;
 
 import javax.annotation.Nullable;
-import com.intellij.diagnostic.logging.LogConfigurationPanel;
+import consulo.execution.configuration.log.ui.LogConfigurationPanel;
 import com.intellij.java.execution.CommonJavaRunConfigurationParameters;
-import com.intellij.execution.ExecutionBundle;
-import com.intellij.execution.ExecutionException;
-import com.intellij.execution.Executor;
+import consulo.execution.ExecutionBundle;
 import com.intellij.java.execution.impl.JavaRunConfigurationExtensionManager;
-import com.intellij.execution.configuration.EnvironmentVariablesComponent;
-import com.intellij.execution.configurations.ConfigurationFactory;
+import consulo.execution.ui.awt.EnvironmentVariablesComponent;
 import com.intellij.java.execution.configurations.JavaRunConfigurationModule;
-import com.intellij.execution.configurations.LocatableConfigurationBase;
-import com.intellij.execution.configurations.RunConfiguration;
-import com.intellij.execution.configurations.RunProfileState;
-import com.intellij.execution.configurations.RuntimeConfigurationException;
-import com.intellij.execution.configurations.RuntimeConfigurationWarning;
-import com.intellij.execution.configurations.SearchScopeProvidingRunProfile;
-import com.intellij.execution.runners.ExecutionEnvironment;
+import consulo.execution.configuration.RunConfiguration;
+import consulo.execution.configuration.RunProfileState;
+import consulo.execution.configuration.SearchScopeProvidingRunProfile;
 import com.intellij.java.execution.impl.util.JavaParametersUtil;
-import com.intellij.execution.util.ProgramParametersUtil;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.options.SettingsEditor;
-import com.intellij.openapi.options.SettingsEditorGroup;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.InvalidDataException;
-import com.intellij.openapi.util.WriteExternalException;
-import com.intellij.util.xmlb.SkipDefaultValuesSerializationFilters;
-import com.intellij.util.xmlb.XmlSerializer;
-import com.intellij.util.xmlb.XmlSerializerUtil;
+import consulo.ide.impl.idea.execution.util.ProgramParametersUtil;
+import consulo.module.Module;
+import consulo.project.Project;
+import consulo.util.xml.serializer.InvalidDataException;
+import consulo.util.xml.serializer.WriteExternalException;
+import consulo.util.xml.serializer.SkipDefaultValuesSerializationFilters;
+import consulo.util.xml.serializer.XmlSerializer;
+import consulo.util.xml.serializer.XmlSerializerUtil;
 
 /**
  * @author nik
@@ -131,7 +130,7 @@ public class JarApplicationConfiguration extends LocatableConfigurationBase impl
 		return module != null ? new Module[]{module} : Module.EMPTY_ARRAY;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	@Override
 	public RunProfileState getState(@Nonnull Executor executor, @Nonnull ExecutionEnvironment environment) throws ExecutionException
 	{
@@ -172,7 +171,7 @@ public class JarApplicationConfiguration extends LocatableConfigurationBase impl
 		myBean.ALTERNATIVE_JRE_PATH_ENABLED = enabled;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	@Override
 	public String getAlternativeJrePath()
 	{
@@ -185,14 +184,14 @@ public class JarApplicationConfiguration extends LocatableConfigurationBase impl
 		myBean.ALTERNATIVE_JRE_PATH = path;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	@Override
 	public String getRunClass()
 	{
 		return null;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	@Override
 	public String getPackage()
 	{
@@ -200,12 +199,12 @@ public class JarApplicationConfiguration extends LocatableConfigurationBase impl
 	}
 
 	@Override
-	public void setProgramParameters(@javax.annotation.Nullable String value)
+	public void setProgramParameters(@Nullable String value)
 	{
 		myBean.PROGRAM_PARAMETERS = value;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	@Override
 	public String getProgramParameters()
 	{
@@ -218,7 +217,7 @@ public class JarApplicationConfiguration extends LocatableConfigurationBase impl
 		myBean.WORKING_DIRECTORY = value;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	@Override
 	public String getWorkingDirectory()
 	{

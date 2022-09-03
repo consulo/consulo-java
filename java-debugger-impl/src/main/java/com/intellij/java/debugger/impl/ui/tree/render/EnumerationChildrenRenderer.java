@@ -35,11 +35,13 @@ import com.intellij.java.debugger.impl.ui.tree.NodeDescriptorFactory;
 import com.intellij.java.debugger.impl.ui.tree.NodeManager;
 import com.intellij.java.debugger.impl.ui.tree.UserExpressionDescriptor;
 import com.intellij.java.debugger.impl.ui.tree.ValueDescriptor;
-import com.intellij.openapi.util.InvalidDataException;
-import com.intellij.openapi.util.JDOMExternalizerUtil;
-import com.intellij.openapi.util.WriteExternalException;
-import com.intellij.psi.PsiElement;
+import consulo.util.xml.serializer.InvalidDataException;
+import consulo.util.xml.serializer.JDOMExternalizerUtil;
+import consulo.util.xml.serializer.WriteExternalException;
+import consulo.language.psi.PsiElement;
 import consulo.internal.com.sun.jdi.Value;
+
+import javax.annotation.Nullable;
 
 public final class EnumerationChildrenRenderer extends TypeRenderer implements ChildrenRenderer
 {
@@ -189,7 +191,7 @@ public final class EnumerationChildrenRenderer extends TypeRenderer implements C
 		myChildren = children;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public static EnumerationChildrenRenderer getCurrent(ValueDescriptorImpl valueDescriptor)
 	{
 		Renderer renderer = valueDescriptor.getLastRenderer();

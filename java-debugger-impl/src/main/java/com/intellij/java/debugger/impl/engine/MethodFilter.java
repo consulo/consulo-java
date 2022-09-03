@@ -16,6 +16,7 @@
 package com.intellij.java.debugger.impl.engine;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.intellij.java.debugger.impl.EvaluatingComputable;
 import com.intellij.java.debugger.engine.evaluation.EvaluateException;
@@ -32,7 +33,7 @@ public interface MethodFilter
 		return locationMatches(process, location);
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	Range<Integer> getCallingExpressionLines();
 
 	default int onReached(SuspendContextImpl context, RequestHint hint)

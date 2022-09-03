@@ -16,7 +16,7 @@
 package com.intellij.java.language.impl.psi.impl.source;
 
 import com.intellij.java.language.impl.psi.impl.source.tree.ElementType;
-import com.intellij.psi.tree.TokenSet;
+import consulo.language.ast.TokenSet;
 
 public interface Constants extends ElementType {
   TokenSet CLASS_BIT_SET = TokenSet.create(CLASS, ANONYMOUS_CLASS, ENUM_CONSTANT_INITIALIZER);

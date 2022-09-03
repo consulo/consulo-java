@@ -25,7 +25,7 @@
 
 package org.osmorc.manifest.lang.psi.stub;
 
-import com.intellij.psi.stubs.StubElement;
+import consulo.language.psi.stub.StubElement;
 import org.osmorc.manifest.lang.psi.Clause;
 
 /**

@@ -15,7 +15,6 @@
  */
 package com.intellij.java.language.impl.psi.impl.light;
 
-import com.intellij.codeInsight.completion.originInfo.OriginInfoAwareElement;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.impl.psi.impl.PsiClassImplUtil;
 import com.intellij.java.language.impl.psi.impl.PsiImplUtil;
@@ -24,19 +23,20 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.java.language.psi.util.MethodSignature;
 import com.intellij.java.language.psi.util.MethodSignatureBackedByPsiMethod;
-import com.intellij.lang.Language;
-import com.intellij.navigation.ItemPresentation;
-import com.intellij.navigation.ItemPresentationProviders;
-import com.intellij.openapi.util.Computable;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiManager;
-import com.intellij.psi.impl.light.LightElement;
-import com.intellij.psi.search.SearchScope;
-import com.intellij.util.IncorrectOperationException;
+import consulo.application.util.function.Computable;
+import consulo.content.scope.SearchScope;
+import consulo.language.Language;
+import consulo.language.impl.psi.LightElement;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiElementVisitor;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiManager;
+import consulo.language.util.IncorrectOperationException;
+import consulo.navigation.ItemPresentation;
+import consulo.navigation.ItemPresentationProvider;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.swing.*;
 import java.util.List;
 
@@ -96,7 +96,7 @@ public class LightMethodBuilder extends LightElement implements PsiMethod, Origi
 
   @Override
   public ItemPresentation getPresentation() {
-    return ItemPresentationProviders.getItemPresentation(this);
+    return ItemPresentationProvider.getItemPresentation(this);
   }
 
   @Override
@@ -356,7 +356,7 @@ public class LightMethodBuilder extends LightElement implements PsiMethod, Origi
     return PsiImplUtil.getMemberUseScope(this);
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   @Override
   public PsiFile getContainingFile() {
     final PsiClass containingClass = getContainingClass();
@@ -416,13 +416,13 @@ public class LightMethodBuilder extends LightElement implements PsiMethod, Origi
     return this;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   @Override
   public String getOriginInfo() {
     return myOriginInfo;
   }
 
-  public void setOriginInfo(@javax.annotation.Nullable String originInfo) {
+  public void setOriginInfo(@Nullable String originInfo) {
     myOriginInfo = originInfo;
   }
 

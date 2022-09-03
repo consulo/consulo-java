@@ -16,24 +16,24 @@
 package com.intellij.java.impl.codeInspection.varScopeCanBeNarrowed;
 
 import com.intellij.java.impl.codeInsight.CodeInsightUtil;
-import com.intellij.codeInspection.InspectionsBundle;
-import com.intellij.codeInspection.LocalQuickFix;
-import com.intellij.codeInspection.ProblemDescriptor;
+import consulo.language.editor.inspection.InspectionsBundle;
+import consulo.language.editor.inspection.LocalQuickFix;
+import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.application.ApplicationManager;
+import consulo.application.ApplicationManager;
 import consulo.logging.Logger;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.ScrollType;
-import com.intellij.openapi.fileEditor.FileEditorManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Computable;
+import consulo.codeEditor.Editor;
+import consulo.codeEditor.ScrollType;
+import consulo.fileEditor.FileEditorManager;
+import consulo.project.Project;
+import consulo.application.util.function.Computable;
 import com.intellij.psi.*;
-import com.intellij.psi.search.searches.ReferencesSearch;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.search.ReferencesSearch;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.util.IJSwingUtilities;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.NotNullFunction;
+import consulo.ui.ex.awt.IJSwingUtilities;
+import consulo.language.util.IncorrectOperationException;
+import consulo.ide.impl.idea.util.NotNullFunction;
 import java.util.HashSet;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -89,7 +89,7 @@ public abstract class BaseConvertToLocalQuickFix<V extends PsiVariable> implemen
   protected void beforeDelete(@Nonnull Project project, @Nonnull V variable, @Nonnull PsiElement newDeclaration) {
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private PsiElement moveDeclaration(@Nonnull Project project, @Nonnull V variable) {
     final Collection<PsiReference> references = ReferencesSearch.search(variable).findAll();
     if (references.isEmpty()) return null;
@@ -145,7 +145,7 @@ public abstract class BaseConvertToLocalQuickFix<V extends PsiVariable> implemen
 
   protected PsiElement applyChanges(final @Nonnull Project project,
                                     final @Nonnull String localName,
-                                    final @javax.annotation.Nullable PsiExpression initializer,
+                                    final @Nullable PsiExpression initializer,
                                     final @Nonnull V variable,
                                     final @Nonnull Collection<PsiReference> references,
                                     final @Nonnull NotNullFunction<PsiDeclarationStatement, PsiElement> action) {
@@ -177,8 +177,8 @@ public abstract class BaseConvertToLocalQuickFix<V extends PsiVariable> implemen
     return newDeclaration;
   }
 
-  @javax.annotation.Nullable
-  private static PsiAssignmentExpression searchAssignmentExpression(@javax.annotation.Nullable PsiElement anchor) {
+  @Nullable
+  private static PsiAssignmentExpression searchAssignmentExpression(@Nullable PsiElement anchor) {
     if (!(anchor instanceof PsiExpressionStatement)) {
       return null;
     }
@@ -238,7 +238,7 @@ public abstract class BaseConvertToLocalQuickFix<V extends PsiVariable> implemen
     return getName();
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private static PsiElement getAnchorElement(PsiCodeBlock anchorBlock, @Nonnull PsiElement firstElement) {
     PsiElement element = firstElement;
     while (element != null && element.getParent() != anchorBlock) {

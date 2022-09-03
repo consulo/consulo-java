@@ -17,18 +17,18 @@ package com.intellij.java.execution.impl;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.codeInsight.completion.CompletionResultSet;
-import com.intellij.codeInsight.lookup.LookupElementBuilder;
-import com.intellij.execution.ExecutionBundle;
-import com.intellij.execution.configuration.BrowseModuleValueActionListener;
+import consulo.execution.ExecutionBundle;
+import consulo.language.editor.completion.CompletionResultSet;
+import consulo.language.editor.completion.lookup.LookupElementBuilder;
+import consulo.ide.impl.idea.execution.configuration.BrowseModuleValueActionListener;
 import com.intellij.java.execution.impl.ui.ConfigurationModuleSelector;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.Messages;
-import com.intellij.openapi.util.Condition;
+import consulo.project.Project;
+import consulo.ui.ex.awt.Messages;
+import consulo.util.lang.function.Condition;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.ui.EditorTextField;
-import com.intellij.util.TextFieldCompletionProvider;
+import consulo.language.editor.ui.awt.EditorTextField;
+import consulo.language.editor.ui.awt.TextFieldCompletionProvider;
 
 public abstract class MethodBrowser extends BrowseModuleValueActionListener
 {

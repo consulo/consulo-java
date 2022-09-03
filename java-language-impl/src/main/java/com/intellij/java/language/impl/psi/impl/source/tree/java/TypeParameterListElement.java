@@ -15,16 +15,20 @@
  */
 package com.intellij.java.language.impl.psi.impl.source.tree.java;
 
+import com.intellij.java.language.impl.psi.impl.PsiImplUtil;
 import com.intellij.java.language.impl.psi.impl.source.tree.ChildRole;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
-import com.intellij.lang.ASTNode;
-import consulo.logging.Logger;
 import com.intellij.java.language.psi.JavaTokenType;
-import com.intellij.java.language.impl.psi.impl.PsiImplUtil;
-import com.intellij.psi.impl.source.tree.*;
-import com.intellij.psi.tree.ChildRoleBase;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.util.CharTable;
+import consulo.language.ast.ASTNode;
+import consulo.language.ast.ChildRoleBase;
+import consulo.language.ast.IElementType;
+import consulo.language.impl.ast.CompositeElement;
+import consulo.language.impl.ast.Factory;
+import consulo.language.impl.ast.SharedImplUtil;
+import consulo.language.impl.ast.TreeElement;
+import consulo.language.util.CharTable;
+import consulo.logging.Logger;
+
 import javax.annotation.Nonnull;
 
 /**
@@ -43,42 +47,37 @@ public class TypeParameterListElement extends CompositeElement {
     final IElementType elType = child.getElementType();
     if (elType == JavaElementType.TYPE_PARAMETER) {
       return ChildRole.TYPE_PARAMETER_IN_LIST;
-    }
-    else if (elType == JavaTokenType.COMMA) {
+    } else if (elType == JavaTokenType.COMMA) {
       return ChildRole.COMMA;
-    }
-    else if (elType == JavaTokenType.LT) {
+    } else if (elType == JavaTokenType.LT) {
       return ChildRole.LT_IN_TYPE_LIST;
-    }
-    else if (elType == JavaTokenType.GT) {
+    } else if (elType == JavaTokenType.GT) {
       return ChildRole.GT_IN_TYPE_LIST;
-    }
-    else {
+    } else {
       return ChildRoleBase.NONE;
     }
   }
 
   @Override
   public TreeElement addInternal(final TreeElement first, final ASTNode last, ASTNode anchor, Boolean before) {
-    TreeElement lt = (TreeElement)findChildByRole(ChildRole.LT_IN_TYPE_LIST);
+    TreeElement lt = (TreeElement) findChildByRole(ChildRole.LT_IN_TYPE_LIST);
     final CharTable treeCharTab = SharedImplUtil.findCharTableByTree(this);
     if (lt == null) {
       lt = Factory.createSingleLeafElement(JavaTokenType.LT, "<", 0, 1, treeCharTab, getManager());
       super.addInternal(lt, lt, getFirstChildNode(), Boolean.TRUE);
     }
 
-    TreeElement gt = (TreeElement)findChildByRole(ChildRole.GT_IN_TYPE_LIST);
+    TreeElement gt = (TreeElement) findChildByRole(ChildRole.GT_IN_TYPE_LIST);
     if (gt == null) {
       gt = Factory.createSingleLeafElement(JavaTokenType.GT, ">", 0, 1, treeCharTab, getManager());
       super.addInternal(gt, gt, getLastChildNode(), Boolean.FALSE);
     }
 
     if (anchor == null) {
-      if (before == null || before.booleanValue()){
+      if (before == null || before.booleanValue()) {
         anchor = gt;
         before = Boolean.TRUE;
-      }
-      else{
+      } else {
         anchor = lt;
         before = Boolean.FALSE;
       }
@@ -87,17 +86,17 @@ public class TypeParameterListElement extends CompositeElement {
     final TreeElement firstAdded = super.addInternal(first, last, anchor, before);
 
     if (first == last && first.getElementType() == JavaElementType.TYPE_PARAMETER) {
-      for(ASTNode child = first.getTreeNext(); child != null; child = child.getTreeNext()){
+      for (ASTNode child = first.getTreeNext(); child != null; child = child.getTreeNext()) {
         if (child.getElementType() == JavaTokenType.COMMA) break;
-        if (child.getElementType() == JavaElementType.TYPE_PARAMETER){
+        if (child.getElementType() == JavaElementType.TYPE_PARAMETER) {
           final TreeElement comma = Factory.createSingleLeafElement(JavaTokenType.COMMA, ",", 0, 1, treeCharTab, getManager());
           super.addInternal(comma, comma, first, Boolean.FALSE);
           break;
         }
       }
-      for(ASTNode child = first.getTreePrev(); child != null; child = child.getTreePrev()){
+      for (ASTNode child = first.getTreePrev(); child != null; child = child.getTreePrev()) {
         if (child.getElementType() == JavaTokenType.COMMA) break;
-        if (child.getElementType() == JavaElementType.TYPE_PARAMETER){
+        if (child.getElementType() == JavaElementType.TYPE_PARAMETER) {
           final TreeElement comma = Factory.createSingleLeafElement(JavaTokenType.COMMA, ",", 0, 1, treeCharTab, getManager());
           super.addInternal(comma, comma, child, Boolean.FALSE);
           break;
@@ -109,14 +108,13 @@ public class TypeParameterListElement extends CompositeElement {
 
   @Override
   public void deleteChildInternal(@Nonnull final ASTNode child) {
-    if (child.getElementType() == JavaElementType.TYPE_PARAMETER){
+    if (child.getElementType() == JavaElementType.TYPE_PARAMETER) {
       final ASTNode next = PsiImplUtil.skipWhitespaceAndComments(child.getTreeNext());
-      if (next != null && next.getElementType() == JavaTokenType.COMMA){
+      if (next != null && next.getElementType() == JavaTokenType.COMMA) {
         deleteChildInternal(next);
-      }
-      else{
+      } else {
         final ASTNode prev = PsiImplUtil.skipWhitespaceAndCommentsBack(child.getTreePrev());
-        if (prev != null && prev.getElementType() == JavaTokenType.COMMA){
+        if (prev != null && prev.getElementType() == JavaTokenType.COMMA) {
           deleteChildInternal(prev);
         }
       }

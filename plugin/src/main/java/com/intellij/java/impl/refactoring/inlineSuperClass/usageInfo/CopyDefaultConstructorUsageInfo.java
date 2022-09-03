@@ -25,7 +25,7 @@ import com.intellij.psi.*;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import com.intellij.java.impl.refactoring.util.FixableUsageInfo;
 import com.intellij.java.impl.refactoring.util.InlineUtil;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
 
 public class CopyDefaultConstructorUsageInfo extends FixableUsageInfo{
   private final PsiClass myTargetClass;

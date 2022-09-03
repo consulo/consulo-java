@@ -15,11 +15,11 @@
  */
 package com.intellij.java.impl.psi.impl.source.resolve.reference.impl.providers;
 
-import com.intellij.codeInsight.daemon.impl.quickfix.QuickFixActionRegistrarImpl;
-import com.intellij.codeInsight.lookup.LookupElement;
-import com.intellij.codeInsight.lookup.LookupElementBuilder;
-import com.intellij.codeInspection.LocalQuickFix;
-import com.intellij.codeInspection.LocalQuickFixProvider;
+import consulo.language.editor.internal.QuickFixActionRegistrarImpl;
+import consulo.language.editor.completion.lookup.LookupElement;
+import consulo.language.editor.completion.lookup.LookupElementBuilder;
+import consulo.language.editor.inspection.LocalQuickFix;
+import consulo.language.editor.inspection.LocalQuickFixProvider;
 import com.intellij.java.analysis.codeInsight.intention.QuickFixFactory;
 import com.intellij.java.impl.codeInsight.completion.JavaClassNameCompletionContributor;
 import com.intellij.java.impl.codeInsight.completion.JavaLookupElementBuilder;
@@ -38,26 +38,26 @@ import com.intellij.java.language.psi.search.PackageScope;
 import com.intellij.java.language.psi.util.ClassKind;
 import com.intellij.java.language.psi.util.ClassUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleUtilCore;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Condition;
-import com.intellij.openapi.util.Iconable;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.module.Module;
+import consulo.language.util.ModuleUtilCore;
+import consulo.project.Project;
+import consulo.util.lang.function.Condition;
+import consulo.component.util.Iconable;
+import consulo.document.util.TextRange;
+import consulo.util.lang.StringUtil;
 import com.intellij.psi.*;
-import com.intellij.psi.impl.source.resolve.ResolveCache;
-import com.intellij.psi.impl.source.resolve.reference.impl.CachingReference;
-import com.intellij.psi.impl.source.resolve.reference.impl.providers.CustomizableReferenceProvider;
-import com.intellij.psi.scope.PsiScopeProcessor;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.language.psi.resolve.ResolveCache;
+import consulo.language.psi.CachingReference;
+import consulo.language.psi.path.CustomizableReferenceProvider;
+import consulo.language.psi.resolve.PsiScopeProcessor;
+import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.psi.search.ProjectScope;
-import com.intellij.util.ArrayUtil;
-import com.intellij.util.Consumer;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.containers.ContainerUtil;
-import com.intellij.util.text.CharArrayUtil;
-import consulo.ide.IconDescriptorUpdaters;
+import consulo.util.collection.ArrayUtil;
+import consulo.ide.impl.idea.util.Consumer;
+import consulo.language.util.IncorrectOperationException;
+import consulo.util.collection.ContainerUtil;
+import consulo.util.lang.CharArrayUtil;
+import consulo.language.icon.IconDescriptorUpdaters;
 import consulo.logging.Logger;
 import consulo.psi.PsiPackage;
 import consulo.util.dataholder.Key;
@@ -91,7 +91,7 @@ public class JavaClassReference extends GenericReference implements PsiJavaRefer
   }
 
   @Override
-  @javax.annotation.Nullable
+  @Nullable
   public PsiElement getContext() {
     final PsiReference contextRef = getContextReference();
     assert contextRef != this : getCanonicalText();
@@ -152,7 +152,7 @@ public class JavaClassReference extends GenericReference implements PsiJavaRefer
   }
 
   @Override
-  @javax.annotation.Nullable
+  @Nullable
   public PsiReference getContextReference() {
     return myIndex > 0 ? myJavaClassReferenceSet.getReference(myIndex - 1) : null;
   }
@@ -259,7 +259,7 @@ public class JavaClassReference extends GenericReference implements PsiJavaRefer
     return ArrayUtil.EMPTY_OBJECT_ARRAY;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public PsiElement getCompletionContext() {
     PsiElement context = getContext();
     return context == null ? JavaPsiFacade.getInstance(getElement().getProject()).findPackage("") : context;
@@ -308,13 +308,13 @@ public class JavaClassReference extends GenericReference implements PsiJavaRefer
     return list.toArray(new LookupElement[list.size()]);
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public ClassKind getClassKind() {
     return JavaClassReferenceProvider.CLASS_KIND.getValue(getOptions());
   }
 
   private static boolean isClassAccepted(final PsiClass clazz,
-                                         @javax.annotation.Nullable final ClassKind classKind,
+                                         @Nullable final ClassKind classKind,
                                          final boolean instantiatable,
                                          final boolean concrete,
                                          final boolean notInterface,
@@ -484,7 +484,7 @@ public class JavaClassReference extends GenericReference implements PsiJavaRefer
     return new JavaResolveResult[]{javaResolveResult};
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private List<? extends LocalQuickFix> registerFixes() {
     final List<LocalQuickFix> list = QuickFixFactory.getInstance().registerOrderEntryFixes(new QuickFixActionRegistrarImpl(null), this);
 
@@ -569,7 +569,7 @@ public class JavaClassReference extends GenericReference implements PsiJavaRefer
     return list == null ? LocalQuickFix.EMPTY_ARRAY : list.toArray(new LocalQuickFix[list.size()]);
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public static PsiElement resolveMember(String fqn, PsiManager manager, GlobalSearchScope resolveScope) {
     PsiClass aClass = JavaPsiFacade.getInstance(manager.getProject()).findClass(fqn, resolveScope);
     if (aClass != null) {
@@ -588,7 +588,7 @@ public class JavaClassReference extends GenericReference implements PsiJavaRefer
     return doResolveMember(aClass, memberName);
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private static PsiElement doResolveMember(PsiClass aClass, String memberName) {
     PsiMember member = aClass.findFieldByName(memberName, true);
     if (member != null) {

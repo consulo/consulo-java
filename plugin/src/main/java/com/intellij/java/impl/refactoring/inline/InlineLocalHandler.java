@@ -21,38 +21,39 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.intellij.java.language.impl.codeInsight.ExceptionUtil;
 import com.intellij.java.language.psi.*;
-import consulo.codeInsight.TargetElementUtil;
-import com.intellij.codeInsight.highlighting.HighlightManager;
+import consulo.language.editor.TargetElementUtil;
+import consulo.language.editor.highlight.HighlightManager;
 import com.intellij.java.analysis.codeInsight.intention.QuickFixFactory;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.command.CommandProcessor;
+import consulo.application.ApplicationManager;
+import consulo.project.ui.wm.WindowManager;
+import consulo.undoRedo.CommandProcessor;
 import consulo.logging.Logger;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.colors.EditorColors;
-import com.intellij.openapi.editor.colors.EditorColorsManager;
-import com.intellij.openapi.editor.markup.TextAttributes;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.wm.WindowManager;
+import consulo.codeEditor.Editor;
+import consulo.codeEditor.EditorColors;
+import consulo.colorScheme.EditorColorsManager;
+import consulo.colorScheme.TextAttributes;
+import consulo.project.Project;
 import com.intellij.psi.*;
 import com.intellij.java.analysis.impl.psi.controlFlow.DefUseUtil;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.search.searches.ReferencesSearch;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.search.ReferencesSearch;
+import consulo.language.ast.IElementType;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.psi.util.PsiUtilBase;
+import consulo.language.editor.util.PsiUtilBase;
 import com.intellij.java.impl.refactoring.HelpID;
-import com.intellij.refactoring.RefactoringBundle;
-import com.intellij.refactoring.util.CommonRefactoringUtil;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import com.intellij.java.impl.refactoring.util.InlineUtil;
-import com.intellij.refactoring.util.RefactoringMessageDialog;
-import com.intellij.util.ArrayUtil;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.Processor;
-import com.intellij.util.Query;
+import consulo.language.editor.refactoring.util.RefactoringMessageDialog;
+import consulo.util.collection.ArrayUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.application.util.function.Processor;
+import consulo.application.util.query.Query;
 
 public class InlineLocalHandler extends JavaInlineActionHandler {
   private static final Logger LOG = Logger.getInstance(InlineLocalHandler.class);
@@ -273,7 +274,7 @@ public class InlineLocalHandler extends JavaInlineActionHandler {
     }, RefactoringBundle.message("inline.command", localName), null);
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public static PsiElement checkRefsInAugmentedAssignmentOrUnaryModified(final PsiElement[] refsToInline) {
     for (PsiElement element : refsToInline) {
 
@@ -314,7 +315,7 @@ public class InlineLocalHandler extends JavaInlineActionHandler {
     return defToInline.getParent() instanceof PsiVariable;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private static PsiExpression getDefToInline(final PsiLocalVariable local,
                                               final PsiElement refExpr,
                                               final PsiCodeBlock block) {

@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -51,40 +52,40 @@ import com.intellij.java.debugger.impl.ui.impl.watch.DebuggerTreeNodeImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.MessageDescriptor;
 import com.intellij.java.debugger.impl.ui.impl.watch.NodeManagerImpl;
 import com.intellij.java.debugger.ui.tree.NodeDescriptor;
+import consulo.application.ui.wm.IdeFocusManager;
 import consulo.disposer.Disposable;
-import com.intellij.openapi.actionSystem.ActionManager;
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.actionSystem.PlatformDataKeys;
-import com.intellij.openapi.actionSystem.ex.AnActionListener;
-import com.intellij.openapi.application.ApplicationManager;
+import consulo.execution.debug.breakpoint.XExpression;
+import consulo.execution.debug.event.XDebugSessionListener;
+import consulo.ui.ex.action.ActionManager;
+import consulo.ui.ex.action.AnAction;
+import consulo.ui.ex.action.AnActionEvent;
+import consulo.dataContext.DataContext;
+import consulo.language.editor.PlatformDataKeys;
+import consulo.ui.ex.action.event.AnActionListener;
+import consulo.application.ApplicationManager;
 import consulo.logging.Logger;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.DialogWrapper;
+import consulo.project.Project;
+import consulo.ui.ex.awt.DialogWrapper;
 import consulo.disposer.Disposer;
-import com.intellij.openapi.wm.IdeFocusManager;
-import com.intellij.ui.DoubleClickListener;
-import com.intellij.ui.JBColor;
-import com.intellij.ui.components.JBLabel;
-import com.intellij.ui.components.JBPanel;
-import com.intellij.util.ui.JBDimension;
-import com.intellij.util.ui.JBUI;
-import com.intellij.util.ui.UIUtil;
-import com.intellij.util.ui.update.UiNotifyConnector;
-import com.intellij.xdebugger.XDebugSession;
-import com.intellij.xdebugger.XDebugSessionListener;
-import com.intellij.xdebugger.XExpression;
-import com.intellij.xdebugger.frame.XValue;
-import com.intellij.xdebugger.frame.XValueChildrenList;
-import com.intellij.xdebugger.impl.XDebugSessionImpl;
-import com.intellij.xdebugger.impl.actions.XDebuggerActionBase;
-import com.intellij.xdebugger.impl.frame.XValueMarkers;
-import com.intellij.xdebugger.impl.ui.XDebuggerExpressionEditor;
-import com.intellij.xdebugger.impl.ui.tree.ValueMarkup;
-import com.intellij.xdebugger.impl.ui.tree.XDebuggerTreeState;
-import com.intellij.xdebugger.impl.ui.tree.actions.XDebuggerTreeActionBase;
-import com.intellij.xdebugger.impl.ui.tree.nodes.XValueNodeImpl;
+import consulo.ui.ex.awt.JBLabel;
+import consulo.ui.ex.awt.event.DoubleClickListener;
+import consulo.ui.ex.JBColor;
+import consulo.ui.ex.awt.JBPanel;
+import consulo.ui.ex.awt.JBDimension;
+import consulo.ui.ex.awt.JBUI;
+import consulo.ui.ex.awt.UIUtil;
+import consulo.ui.ex.awt.update.UiNotifyConnector;
+import consulo.execution.debug.XDebugSession;
+import consulo.execution.debug.frame.XValue;
+import consulo.execution.debug.frame.XValueChildrenList;
+import consulo.ide.impl.idea.xdebugger.impl.XDebugSessionImpl;
+import consulo.ide.impl.idea.xdebugger.impl.actions.XDebuggerActionBase;
+import consulo.ide.impl.idea.xdebugger.impl.frame.XValueMarkers;
+import consulo.ide.impl.idea.xdebugger.impl.ui.XDebuggerExpressionEditor;
+import consulo.ide.impl.idea.xdebugger.impl.ui.tree.ValueMarkup;
+import consulo.ide.impl.idea.xdebugger.impl.ui.tree.XDebuggerTreeState;
+import consulo.ide.impl.idea.xdebugger.impl.ui.tree.actions.XDebuggerTreeActionBase;
+import consulo.ide.impl.idea.xdebugger.impl.ui.tree.nodes.XValueNodeImpl;
 import consulo.internal.com.sun.jdi.ObjectReference;
 
 public class InstancesWindow extends DialogWrapper
@@ -131,7 +132,7 @@ public class InstancesWindow extends DialogWrapper
 		root.setDefaultButton(myInstancesView.myFilterButton);
 	}
 
-	private void addWarningMessage(@javax.annotation.Nullable String message)
+	private void addWarningMessage(@Nullable String message)
 	{
 		String warning = message == null ? "" : String.format(". Warning: %s", message);
 		setTitle(String.format("Instances of %s%s", myClassName, warning));
@@ -144,14 +145,14 @@ public class InstancesWindow extends DialogWrapper
 		return "#org.jetbrains.debugger.memory.view.InstancesWindow";
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	@Override
 	protected JComponent createCenterPanel()
 	{
 		return myInstancesView;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	@Override
 	protected JComponent createSouthPanel()
 	{
@@ -180,7 +181,7 @@ public class InstancesWindow extends DialogWrapper
 		private static final int FILTERING_PROGRESS_UPDATING_MIN_DELAY_MILLIS = 17; // ~ 60 fps
 
 		private final InstancesTree myInstancesTree;
-		private final XDebuggerExpressionEditor myFilterConditionEditor;
+		private final consulo.ide.impl.idea.xdebugger.impl.ui.XDebuggerExpressionEditor myFilterConditionEditor;
 		private final XDebugSessionListener myDebugSessionListener = new MySessionListener();
 
 		private final MyNodeManager myNodeManager = new MyNodeManager(myProject);
@@ -199,7 +200,7 @@ public class InstancesWindow extends DialogWrapper
 			super(new BorderLayout(0, JBUI.scale(BORDER_LAYOUT_DEFAULT_GAP)));
 
 			Disposer.register(InstancesWindow.this.myDisposable, this);
-			final XValueMarkers<?, ?> markers = getValueMarkers(session);
+			final consulo.ide.impl.idea.xdebugger.impl.frame.XValueMarkers<?, ?> markers = getValueMarkers(session);
 			if(markers != null)
 			{
 				final MyActionListener listener = new MyActionListener(markers);
@@ -333,7 +334,7 @@ public class InstancesWindow extends DialogWrapper
 
 		private class MySessionListener implements XDebugSessionListener
 		{
-			private volatile XDebuggerTreeState myTreeState = null;
+			private volatile consulo.ide.impl.idea.xdebugger.impl.ui.tree.XDebuggerTreeState myTreeState = null;
 
 			@Override
 			public void sessionResumed()
@@ -372,7 +373,7 @@ public class InstancesWindow extends DialogWrapper
 			{
 				if(dataContext.getData(PlatformDataKeys.CONTEXT_COMPONENT) == myInstancesTree && (isAddToWatchesAction(action) || isEvaluateExpressionAction(action)))
 				{
-					XValueNodeImpl selectedNode = XDebuggerTreeActionBase.getSelectedNode(dataContext);
+					XValueNodeImpl selectedNode = consulo.ide.impl.idea.xdebugger.impl.ui.tree.actions.XDebuggerTreeActionBase.getSelectedNode(dataContext);
 
 					if(selectedNode != null)
 					{
@@ -382,12 +383,12 @@ public class InstancesWindow extends DialogWrapper
 							currentNode = currentNode.getParent();
 						}
 
-						final XValue valueContainer = ((XValueNodeImpl) currentNode).getValueContainer();
+						final XValue valueContainer = ((consulo.ide.impl.idea.xdebugger.impl.ui.tree.nodes.XValueNodeImpl) currentNode).getValueContainer();
 
 						final String expression = valueContainer.getEvaluationExpression();
 						if(expression != null)
 						{
-							myValueMarkers.markValue(valueContainer, new ValueMarkup(expression.replace("@", ""), new JBColor(0, 0), null));
+							myValueMarkers.markValue(valueContainer, new consulo.ide.impl.idea.xdebugger.impl.ui.tree.ValueMarkup(expression.replace("@", ""), new JBColor(0, 0), null));
 						}
 
 						ApplicationManager.getApplication().invokeLater(() -> myInstancesTree.rebuildTree(InstancesTree.RebuildPolicy.ONLY_UPDATE_LABELS));
@@ -398,7 +399,7 @@ public class InstancesWindow extends DialogWrapper
 			private boolean isAddToWatchesAction(AnAction action)
 			{
 				final String className = action.getClass().getSimpleName();
-				return action instanceof XDebuggerTreeActionBase && className.equals("XAddToWatchesAction");
+				return action instanceof consulo.ide.impl.idea.xdebugger.impl.ui.tree.actions.XDebuggerTreeActionBase && className.equals("XAddToWatchesAction");
 			}
 
 			private boolean isEvaluateExpressionAction(AnAction action)

@@ -33,17 +33,17 @@ import com.intellij.java.debugger.impl.jdi.StackFrameProxyImpl;
 import com.intellij.java.debugger.impl.settings.ThreadsViewSettings;
 import com.intellij.java.debugger.impl.ui.tree.StackFrameDescriptor;
 import com.intellij.java.debugger.impl.ui.tree.render.DescriptorLabelListener;
-import com.intellij.icons.AllIcons;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.roots.ProjectFileIndex;
-import com.intellij.openapi.roots.ProjectRootManager;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiFile;
-import com.intellij.ui.FileColorManager;
-import com.intellij.xdebugger.XDebugSession;
-import com.intellij.xdebugger.impl.XDebugSessionImpl;
-import com.intellij.xdebugger.impl.frame.XValueMarkers;
-import com.intellij.xdebugger.impl.ui.tree.ValueMarkup;
+import consulo.application.AllIcons;
+import consulo.application.ApplicationManager;
+import consulo.execution.debug.XDebugSession;
+import consulo.module.content.ProjectFileIndex;
+import consulo.module.content.ProjectRootManager;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.language.psi.PsiFile;
+import consulo.ide.impl.idea.ui.FileColorManager;
+import consulo.ide.impl.idea.xdebugger.impl.XDebugSessionImpl;
+import consulo.ide.impl.idea.xdebugger.impl.frame.XValueMarkers;
+import consulo.ide.impl.idea.xdebugger.impl.ui.tree.ValueMarkup;
 import consulo.internal.com.sun.jdi.AbsentInformationException;
 import consulo.internal.com.sun.jdi.InternalException;
 import consulo.internal.com.sun.jdi.Location;
@@ -158,7 +158,7 @@ public class StackFrameDescriptorImpl extends NodeDescriptorImpl implements Stac
 		return myBackgroundColor;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public Method getMethod()
 	{
 		return myMethodOccurrence.getMethod();
@@ -174,7 +174,7 @@ public class StackFrameDescriptorImpl extends NodeDescriptorImpl implements Stac
 		return myMethodOccurrence.isRecursive();
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public ValueMarkup getValueMarkup()
 	{
 		if(myThisObject != null)
@@ -183,7 +183,7 @@ public class StackFrameDescriptorImpl extends NodeDescriptorImpl implements Stac
 			if(process instanceof DebugProcessImpl)
 			{
 				XDebugSession session = ((DebugProcessImpl) process).getSession().getXDebugSession();
-				if(session instanceof XDebugSessionImpl)
+				if(session instanceof consulo.ide.impl.idea.xdebugger.impl.XDebugSessionImpl)
 				{
 					XValueMarkers<?, ?> markers = ((XDebugSessionImpl) session).getValueMarkers();
 					if(markers != null)

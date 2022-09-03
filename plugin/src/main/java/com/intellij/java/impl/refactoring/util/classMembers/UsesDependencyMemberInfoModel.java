@@ -26,12 +26,12 @@ package com.intellij.java.impl.refactoring.util.classMembers;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.psi.NavigatablePsiElement;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.NavigatablePsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.java.language.psi.PsiModifierListOwner;
-import com.intellij.refactoring.classMembers.MemberInfoBase;
-import com.intellij.refactoring.classMembers.AbstractUsesDependencyMemberInfoModel;
+import consulo.language.editor.refactoring.classMember.MemberInfoBase;
+import consulo.language.editor.refactoring.classMember.AbstractUsesDependencyMemberInfoModel;
 
 public class UsesDependencyMemberInfoModel<T extends NavigatablePsiElement, C extends PsiElement, M extends MemberInfoBase<T>>
   extends AbstractUsesDependencyMemberInfoModel<T,C,M> {

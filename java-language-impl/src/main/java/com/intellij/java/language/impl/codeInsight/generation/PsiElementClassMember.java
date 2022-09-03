@@ -15,15 +15,15 @@
  */
 package com.intellij.java.language.impl.codeInsight.generation;
 
-import com.intellij.codeInsight.generation.ClassMemberWithElement;
-import com.intellij.codeInsight.generation.MemberChooserObject;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiDocCommentOwner;
 import com.intellij.java.language.psi.PsiSubstitutor;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
-import com.intellij.openapi.util.Iconable;
-import com.intellij.psi.util.PsiFormatUtilBase;
-import consulo.ide.IconDescriptorUpdaters;
+import com.intellij.java.language.psi.util.PsiFormatUtilBase;
+import consulo.component.util.Iconable;
+import consulo.language.editor.generation.ClassMemberWithElement;
+import consulo.language.editor.generation.MemberChooserObject;
+import consulo.language.icon.IconDescriptorUpdaters;
 
 /**
  * @author peter

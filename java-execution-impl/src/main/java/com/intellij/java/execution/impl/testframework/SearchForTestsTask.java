@@ -22,22 +22,23 @@ import java.net.Socket;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-import com.intellij.concurrency.SensitiveProgressWrapper;
-import com.intellij.execution.ExecutionBundle;
-import com.intellij.execution.ExecutionException;
-import com.intellij.execution.process.OSProcessHandler;
-import com.intellij.execution.process.ProcessAdapter;
-import com.intellij.execution.process.ProcessEvent;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.progress.ProcessCanceledException;
-import com.intellij.openapi.progress.ProgressIndicator;
-import com.intellij.openapi.progress.ProgressManager;
-import com.intellij.openapi.progress.Task;
-import com.intellij.openapi.progress.impl.BackgroundableProcessIndicator;
-import com.intellij.openapi.progress.util.ProgressIndicatorUtils;
-import com.intellij.openapi.project.DumbService;
-import com.intellij.openapi.project.Project;
+import consulo.application.impl.internal.progress.SensitiveProgressWrapper;
+import consulo.execution.ExecutionBundle;
+import consulo.process.ExecutionException;
+import consulo.process.internal.OSProcessHandler;
+import consulo.process.event.ProcessAdapter;
+import consulo.process.event.ProcessEvent;
+import consulo.application.ApplicationManager;
+import consulo.component.ProcessCanceledException;
+import consulo.application.progress.ProgressIndicator;
+import consulo.application.progress.ProgressManager;
+import consulo.application.progress.Task;
+import consulo.ide.impl.idea.openapi.progress.impl.BackgroundableProcessIndicator;
+import consulo.application.impl.internal.progress.ProgressIndicatorUtils;
+import consulo.project.DumbService;
+import consulo.project.Project;
 import consulo.logging.Logger;
 import consulo.platform.Platform;
 
@@ -50,7 +51,7 @@ public abstract class SearchForTestsTask extends Task.Backgroundable
 	private ServerSocket myServerSocket;
 	private ProgressIndicator myProcessIndicator;
 
-	public SearchForTestsTask(@javax.annotation.Nullable final Project project, final ServerSocket socket)
+	public SearchForTestsTask(@Nullable final Project project, final ServerSocket socket)
 	{
 		super(project, ExecutionBundle.message("searching.test.progress.title"), true);
 		myServerSocket = socket;

@@ -17,10 +17,10 @@ package com.intellij.java.language.psi.util;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import com.intellij.openapi.components.ServiceManager;
+import consulo.ide.ServiceManager;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiSubstitutor;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.language.psi.scope.GlobalSearchScope;
 
 /**
  * @author peter

@@ -17,7 +17,7 @@ package com.intellij.java.impl.psi.filters.types;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
-import com.intellij.psi.filters.ElementFilter;
+import consulo.language.psi.filter.ElementFilter;
 import com.intellij.java.impl.psi.filters.FilterUtil;
 import com.intellij.java.language.psi.infos.CandidateInfo;
 import com.intellij.java.language.psi.util.PsiUtil;

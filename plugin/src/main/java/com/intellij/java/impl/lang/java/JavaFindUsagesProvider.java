@@ -20,19 +20,19 @@ import javax.annotation.Nonnull;
 import com.intellij.java.language.psi.*;
 import consulo.psi.PsiPackage;
 import com.intellij.find.impl.HelpID;
-import com.intellij.ide.TypePresentationService;
-import com.intellij.lang.LangBundle;
-import com.intellij.lang.cacheBuilder.WordsScanner;
-import com.intellij.lang.findUsages.FindUsagesProvider;
-import com.intellij.openapi.roots.ProjectFileIndex;
-import com.intellij.openapi.roots.ProjectRootManager;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.application.presentation.TypePresentationService;
+import consulo.language.LangBundle;
+import consulo.language.cacheBuilder.WordsScanner;
+import consulo.language.findUsage.FindUsagesProvider;
+import consulo.module.content.ProjectFileIndex;
+import consulo.module.content.ProjectRootManager;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.java.analysis.impl.psi.impl.search.ThrowSearchUtil;
-import com.intellij.psi.meta.PsiMetaOwner;
+import consulo.language.psi.meta.PsiMetaOwner;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
-import com.intellij.psi.util.PsiFormatUtilBase;
-import com.intellij.usageView.UsageViewBundle;
+import consulo.ide.impl.psi.util.PsiFormatUtilBase;
+import consulo.usage.UsageViewBundle;
 
 /**
  * @author ven

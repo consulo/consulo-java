@@ -7,9 +7,9 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaTypeValu
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaValue;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaValueFactory;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaVariableValue;
-import com.intellij.openapi.progress.ProgressManager;
-import com.intellij.util.containers.ContainerUtil;
-import com.intellij.util.containers.MultiMap;
+import consulo.application.progress.ProgressManager;
+import consulo.util.collection.ContainerUtil;
+import consulo.util.collection.MultiMap;
 import one.util.streamex.LongStreamEx;
 import one.util.streamex.StreamEx;
 

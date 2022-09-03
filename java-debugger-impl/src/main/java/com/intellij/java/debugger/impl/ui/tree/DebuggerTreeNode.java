@@ -17,7 +17,7 @@ package com.intellij.java.debugger.impl.ui.tree;
 
 import com.intellij.java.debugger.impl.ui.tree.render.NodeRenderer;
 import com.intellij.java.debugger.ui.tree.NodeDescriptor;
-import com.intellij.openapi.project.Project;
+import consulo.project.Project;
 
 public interface DebuggerTreeNode
 {

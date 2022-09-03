@@ -16,19 +16,20 @@
 package com.intellij.java.impl.codeInsight.editorActions.smartEnter;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.lang.ASTNode;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.language.ast.ASTNode;
+import consulo.document.Document;
+import consulo.codeEditor.Editor;
+import consulo.document.util.TextRange;
+import consulo.util.lang.StringUtil;
 import com.intellij.psi.*;
-import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
+import consulo.language.codeStyle.CodeStyleSettingsManager;
 import com.intellij.java.language.impl.psi.impl.source.tree.ElementType;
-import com.intellij.psi.impl.source.tree.TreeUtil;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.impl.ast.TreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
 
 /**
  * @author max
@@ -42,7 +43,7 @@ public class SemicolonFixer implements Fixer
 		@SuppressWarnings("unused") boolean b = fixReturn(editor, psiElement) || fixForUpdate(editor, psiElement) || fixAfterLastValidElement(editor, psiElement);
 	}
 
-	private static boolean fixReturn(@Nonnull Editor editor, @javax.annotation.Nullable PsiElement psiElement)
+	private static boolean fixReturn(@Nonnull Editor editor, @Nullable PsiElement psiElement)
 	{
 		if(psiElement instanceof PsiReturnStatement)
 		{
@@ -61,7 +62,7 @@ public class SemicolonFixer implements Fixer
 		return false;
 	}
 
-	private static boolean fixForUpdate(@Nonnull Editor editor, @javax.annotation.Nullable PsiElement psiElement)
+	private static boolean fixForUpdate(@Nonnull Editor editor, @Nullable PsiElement psiElement)
 	{
 		if(!(psiElement instanceof PsiForStatement))
 		{
@@ -95,7 +96,7 @@ public class SemicolonFixer implements Fixer
 		return true;
 	}
 
-	private static boolean fixAfterLastValidElement(@Nonnull Editor editor, @javax.annotation.Nullable PsiElement psiElement)
+	private static boolean fixAfterLastValidElement(@Nonnull Editor editor, @Nullable PsiElement psiElement)
 	{
 		if(psiElement instanceof PsiExpressionStatement  ||
 				psiElement instanceof PsiDeclarationStatement ||

@@ -20,13 +20,16 @@ import com.intellij.java.language.jvm.types.JvmType;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Executable;
+import java.lang.reflect.Method;
 
 /**
  * Represents a method or a constructor.
  *
- * @see java.lang.reflect.Method
- * @see java.lang.reflect.Constructor
- * @see java.lang.reflect.Executable
+ * @see Method
+ * @see Constructor
+ * @see Executable
  */
 public interface JvmMethod extends JvmTypeParametersOwner {
 
@@ -36,7 +39,7 @@ public interface JvmMethod extends JvmTypeParametersOwner {
   boolean isConstructor();
 
   /**
-   * @see java.lang.reflect.Executable#getName
+   * @see Executable#getName
    */
   @Nonnull
   @Override
@@ -44,26 +47,26 @@ public interface JvmMethod extends JvmTypeParametersOwner {
 
   /**
    * @return return type of a method or {@code null} if this {@code JvmMethod} represents a constructor
-   * @see java.lang.reflect.Method#getGenericReturnType
-   * @see java.lang.reflect.Method#getAnnotatedReturnType
+   * @see Method#getGenericReturnType
+   * @see Method#getAnnotatedReturnType
    */
   @Nullable
   JvmType getReturnType();
 
   /**
-   * @see java.lang.reflect.Executable#getParameters
+   * @see Executable#getParameters
    */
   @Nonnull
   JvmParameter[] getParameters();
 
   /**
-   * @see java.lang.reflect.Executable#isVarArgs
+   * @see Executable#isVarArgs
    */
   boolean isVarArgs();
 
   /**
-   * @see java.lang.reflect.Method#getGenericExceptionTypes
-   * @see java.lang.reflect.Method#getAnnotatedExceptionTypes
+   * @see Method#getGenericExceptionTypes
+   * @see Method#getAnnotatedExceptionTypes
    */
   @Nonnull
   JvmReferenceType[] getThrowsTypes();

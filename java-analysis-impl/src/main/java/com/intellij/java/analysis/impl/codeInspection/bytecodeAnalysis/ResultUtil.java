@@ -16,7 +16,7 @@
 
 package com.intellij.java.analysis.impl.codeInspection.bytecodeAnalysis;
 
-import com.intellij.util.ArrayUtil;
+import consulo.util.collection.ArrayUtil;
 import javax.annotation.Nonnull;
 
 import javax.annotation.Nullable;

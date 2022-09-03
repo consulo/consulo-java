@@ -16,11 +16,12 @@
 package com.intellij.java.language.jvm.types;
 
 import javax.annotation.Nonnull;
+import java.lang.reflect.WildcardType;
 
 /**
  * Represents wildcard type, for example {@code ? extends Number} in {@code List<? extends Number>}.
  *
- * @see java.lang.reflect.WildcardType
+ * @see WildcardType
  */
 public interface JvmWildcardType extends JvmType
 {
@@ -36,7 +37,7 @@ public interface JvmWildcardType extends JvmType
 	 * <p>
 	 *
 	 * @return an upper bound
-	 * @see java.lang.reflect.WildcardType#getUpperBounds
+	 * @see WildcardType#getUpperBounds
 	 */
 	@Nonnull
 	JvmType upperBound();
@@ -51,7 +52,7 @@ public interface JvmWildcardType extends JvmType
 	 * </ul>
 	 *
 	 * @return a lower bound
-	 * @see java.lang.reflect.WildcardType#getLowerBounds()
+	 * @see WildcardType#getLowerBounds()
 	 */
 	@Nonnull
 	JvmType lowerBound();

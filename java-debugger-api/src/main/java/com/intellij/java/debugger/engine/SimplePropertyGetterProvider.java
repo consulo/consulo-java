@@ -16,8 +16,8 @@
 package com.intellij.java.debugger.engine;
 
 import javax.annotation.Nonnull;
-import com.intellij.openapi.extensions.ExtensionPointName;
-import com.intellij.psi.PsiElement;
+import consulo.component.extension.ExtensionPointName;
+import consulo.language.psi.PsiElement;
 
 public interface SimplePropertyGetterProvider
 {

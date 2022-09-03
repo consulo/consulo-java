@@ -16,13 +16,14 @@
 package com.intellij.java.language.impl.psi.impl.source;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-import com.intellij.lang.ASTNode;
+import consulo.language.ast.ASTNode;
 import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.java.language.impl.psi.impl.PsiImplUtil;
-import com.intellij.psi.impl.source.tree.CompositeElement;
+import consulo.language.impl.ast.CompositeElement;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
-import com.intellij.psi.tree.IElementType;
+import consulo.language.ast.IElementType;
 
 /**
  * @author Pavel.Dolgov
@@ -56,7 +57,7 @@ public class PackageAccessibilityStatementElement extends CompositeElement
 		super.deleteChildInternal(child);
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	private static ASTNode findNearestComma(@Nonnull ASTNode child)
 	{
 		ASTNode next = PsiImplUtil.skipWhitespaceAndComments(child.getTreeNext());

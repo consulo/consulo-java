@@ -19,6 +19,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.intellij.java.debugger.SourcePosition;
 import com.intellij.java.debugger.impl.engine.BreakpointStepMethodFilter;
@@ -31,8 +32,8 @@ import com.intellij.java.debugger.engine.evaluation.EvaluateException;
 import com.intellij.java.debugger.impl.engine.events.SuspendContextCommandImpl;
 import com.intellij.java.debugger.impl.DebuggerUtilsEx;
 import consulo.logging.Logger;
-import com.intellij.openapi.project.Project;
-import com.intellij.util.containers.MultiMap;
+import consulo.project.Project;
+import consulo.util.collection.MultiMap;
 import consulo.internal.com.sun.jdi.ClassNotPreparedException;
 import consulo.internal.com.sun.jdi.Location;
 import consulo.internal.com.sun.jdi.Method;
@@ -49,7 +50,7 @@ public class StepIntoBreakpoint extends RunToCursorBreakpoint
 	private static final Logger LOG = Logger.getInstance(StepIntoBreakpoint.class);
 	@Nonnull
 	private final BreakpointStepMethodFilter myFilter;
-	@javax.annotation.Nullable
+	@Nullable
 	private RequestHint myHint;
 
 	protected StepIntoBreakpoint(@Nonnull Project project, @Nonnull SourcePosition pos, @Nonnull BreakpointStepMethodFilter filter)
@@ -153,7 +154,7 @@ public class StepIntoBreakpoint extends RunToCursorBreakpoint
 		return true;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	protected static StepIntoBreakpoint create(@Nonnull Project project, @Nonnull BreakpointStepMethodFilter filter)
 	{
 		final SourcePosition pos = filter.getBreakpointPosition();

@@ -17,7 +17,7 @@ package com.intellij.java.impl.refactoring.move.moveInner;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.lang.LanguageExtension;
+import consulo.language.extension.LanguageExtension;
 import com.intellij.java.language.psi.PsiClass;
 
 public interface MoveInnerHandler {

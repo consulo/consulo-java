@@ -1,24 +1,24 @@
 package consulo.java.compiler.impl.javaCompiler;
 
-import com.intellij.compiler.impl.CompilerUtil;
-import com.intellij.compiler.impl.ModuleChunk;
+import consulo.ide.impl.idea.compiler.impl.CompilerUtil;
+import consulo.ide.impl.idea.compiler.impl.ModuleChunk;
 import com.intellij.java.compiler.impl.javaCompiler.javac.JavacCompiler;
 import com.intellij.java.compiler.impl.javaCompiler.javac.JavacSettingsBuilder;
 import com.intellij.java.compiler.impl.javaCompiler.javac.JpsJavaCompilerOptions;
-import com.intellij.execution.CantRunException;
-import com.intellij.execution.ExecutionException;
-import com.intellij.execution.configurations.GeneralCommandLine;
-import com.intellij.execution.configurations.ParametersList;
-import com.intellij.execution.process.OSProcessHandler;
-import com.intellij.execution.process.ProcessHandler;
-import com.intellij.openapi.compiler.CompileContext;
+import consulo.execution.CantRunException;
+import consulo.process.ExecutionException;
+import consulo.process.cmd.GeneralCommandLine;
+import consulo.process.cmd.ParametersList;
+import consulo.process.internal.OSProcessHandler;
+import consulo.process.ProcessHandler;
+import consulo.compiler.CompileContext;
 import com.intellij.java.language.projectRoots.JavaSdk;
 import com.intellij.java.language.projectRoots.JavaSdkVersion;
-import com.intellij.openapi.projectRoots.Sdk;
+import consulo.content.bundle.Sdk;
 import com.intellij.java.language.impl.projectRoots.ex.JavaSdkUtil;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.util.PathUtil;
-import com.intellij.util.io.BaseOutputReader;
+import consulo.process.io.BaseOutputReader;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.java.compiler.JavaCompilerBundle;
 import consulo.java.compiler.JavaCompilerUtil;
@@ -26,7 +26,7 @@ import consulo.java.execution.OwnSimpleJavaParameters;
 import consulo.java.rt.JavaRtClassNames;
 import consulo.java.rt.common.compiler.JavaCompilerInterface;
 import consulo.logging.Logger;
-import consulo.net.util.NetUtil;
+import consulo.util.io.NetUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.thrift.TServiceClient;
 
@@ -44,11 +44,11 @@ public class NewBackendCompilerProcessBuilder extends BackendCompilerProcessBuil
 
 	private int myPort;
 
-	public NewBackendCompilerProcessBuilder(ModuleChunk moduleChunk,
-											String outputPath,
-											CompileContext compileContext,
-											JpsJavaCompilerOptions javaCompilerOptions,
-											boolean annotationProcessorsEnabled)
+	public NewBackendCompilerProcessBuilder(consulo.ide.impl.idea.compiler.impl.ModuleChunk moduleChunk,
+                                          String outputPath,
+                                          CompileContext compileContext,
+                                          JpsJavaCompilerOptions javaCompilerOptions,
+                                          boolean annotationProcessorsEnabled)
 	{
 		super(moduleChunk, outputPath, compileContext, javaCompilerOptions, annotationProcessorsEnabled);
 

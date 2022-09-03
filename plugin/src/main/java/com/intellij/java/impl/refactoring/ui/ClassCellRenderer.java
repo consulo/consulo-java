@@ -19,12 +19,12 @@ import javax.annotation.Nonnull;
 import javax.swing.JList;
 import javax.swing.ListCellRenderer;
 
-import com.intellij.openapi.util.Iconable;
+import consulo.component.util.Iconable;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.refactoring.RefactoringBundle;
-import com.intellij.ui.ListCellRendererWrapper;
-import consulo.awt.TargetAWT;
-import consulo.ide.IconDescriptorUpdaters;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.ui.ex.awt.ListCellRendererWrapper;
+import consulo.ui.ex.awtUnsafe.TargetAWT;
+import consulo.language.icon.IconDescriptorUpdaters;
 
 /**
  * Renders a list cell which contains a class.

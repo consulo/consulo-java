@@ -21,29 +21,30 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-import com.intellij.lang.ASTNode;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.editor.CaretModel;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.LogicalPosition;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Pair;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.language.ast.ASTNode;
+import consulo.application.ApplicationManager;
+import consulo.codeEditor.CaretModel;
+import consulo.document.Document;
+import consulo.codeEditor.Editor;
+import consulo.codeEditor.LogicalPosition;
+import consulo.project.Project;
+import consulo.util.lang.Pair;
+import consulo.util.lang.StringUtil;
 import com.intellij.java.language.psi.JavaDocTokenType;
-import com.intellij.psi.PsiDocumentManager;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiWhiteSpace;
-import com.intellij.psi.codeStyle.CodeStyleSettings;
-import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
+import consulo.language.psi.PsiDocumentManager;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiWhiteSpace;
+import consulo.language.codeStyle.CodeStyleSettings;
+import consulo.language.codeStyle.CodeStyleSettingsManager;
 import com.intellij.java.impl.psi.codeStyle.JavaCodeStyleSettings;
 import com.intellij.java.language.psi.javadoc.PsiDocTag;
 import com.intellij.java.language.psi.javadoc.PsiDocTagValue;
 import com.intellij.java.language.psi.javadoc.PsiDocToken;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.ast.IElementType;
+import consulo.language.psi.util.PsiTreeUtil;
 
 /**
  * This class is not singleton but provides {@link #getInstance() single-point-of-usage field}.
@@ -216,7 +217,7 @@ public class JavadocHelper
 		return new Pair<JavadocParameterInfo, List<JavadocParameterInfo>>(anchorInfo, result);
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	private static JavadocParameterInfo parse(@Nonnull PsiElement element, @Nonnull Editor editor)
 	{
 		final PsiDocTag tag = PsiTreeUtil.getParentOfType(element, PsiDocTag.class, false);
@@ -277,7 +278,7 @@ public class JavadocHelper
 		 */
 		@Nonnull
 		public final LogicalPosition parameterNameEndPosition;
-		@javax.annotation.Nullable
+		@Nullable
 		public final LogicalPosition parameterDescriptionStartPosition;
 		/**
 		 * Last logical line occupied by the current javadoc parameter.

@@ -15,10 +15,10 @@
  */
 package com.intellij.java.language.codeInsight;
 
-import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.project.Project;
 
+import consulo.ide.ServiceManager;
+import consulo.util.collection.ContainerUtil;
 import jakarta.inject.Singleton;
 import java.util.ArrayList;
 import java.util.List;

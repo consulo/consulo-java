@@ -1,14 +1,14 @@
 package com.intellij.java.impl.codeInsight.completion;
 
-import com.intellij.codeInsight.lookup.LookupItem;
+import consulo.language.editor.completion.lookup.LookupItem;
 import com.intellij.java.impl.codeInsight.lookup.TypedLookupItem;
-import com.intellij.codeInsight.template.Template;
-import com.intellij.codeInsight.template.impl.TemplateImpl;
+import consulo.language.editor.template.Template;
+import consulo.language.editor.impl.internal.template.TemplateImpl;
 import com.intellij.java.language.psi.JavaPsiFacade;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiType;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
 import org.jetbrains.annotations.NonNls;
 
 /**

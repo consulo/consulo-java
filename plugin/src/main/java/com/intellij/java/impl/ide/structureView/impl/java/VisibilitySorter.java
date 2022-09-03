@@ -15,10 +15,10 @@
  */
 package com.intellij.java.impl.ide.structureView.impl.java;
 
-import com.intellij.icons.AllIcons;
-import com.intellij.ide.IdeBundle;
-import com.intellij.ide.util.treeView.smartTree.ActionPresentation;
-import com.intellij.ide.util.treeView.smartTree.Sorter;
+import consulo.application.AllIcons;
+import consulo.ide.IdeBundle;
+import consulo.fileEditor.structureView.tree.ActionPresentation;
+import consulo.fileEditor.structureView.tree.Sorter;
 import consulo.ui.image.Image;
 import org.jetbrains.annotations.NonNls;
 

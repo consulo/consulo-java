@@ -18,7 +18,7 @@ package com.intellij.java.debugger.impl.descriptors.data;
 import javax.annotation.Nonnull;
 
 import com.intellij.java.debugger.impl.ui.impl.watch.StaticDescriptorImpl;
-import com.intellij.openapi.project.Project;
+import consulo.project.Project;
 import consulo.util.dataholder.Key;
 import consulo.internal.com.sun.jdi.ReferenceType;
 

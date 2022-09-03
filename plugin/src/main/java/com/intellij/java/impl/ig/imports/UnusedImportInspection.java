@@ -16,6 +16,7 @@
 package com.intellij.java.impl.ig.imports;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.intellij.java.language.psi.*;
 import com.siyeh.InspectionGadgetsBundle;
@@ -77,7 +78,7 @@ public class UnusedImportInspection extends BaseInspection {
       checkImports(importStatements, classes, annotationList);
     }
 
-    private void checkImports(PsiImportStatementBase[] importStatements, PsiClass[] classes, @javax.annotation.Nullable PsiModifierList annotationList) {
+    private void checkImports(PsiImportStatementBase[] importStatements, PsiClass[] classes, @Nullable PsiModifierList annotationList) {
       if (importStatements.length == 0) {
         return;
       }

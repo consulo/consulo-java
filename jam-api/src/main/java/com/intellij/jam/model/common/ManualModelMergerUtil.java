@@ -17,26 +17,28 @@ package com.intellij.jam.model.common;
 
 import com.intellij.jam.JamElement;
 import com.intellij.java.language.psi.PsiMember;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleUtil;
-import com.intellij.openapi.progress.ProgressManager;
-import com.intellij.pom.PomRenameableTarget;
-import com.intellij.pom.PomTarget;
-import com.intellij.pom.PomTargetPsiElement;
-import com.intellij.pom.references.PomService;
-import com.intellij.psi.*;
-import com.intellij.psi.xml.XmlTag;
-import com.intellij.util.Function;
-import com.intellij.util.NullableFunction;
-import com.intellij.util.containers.ContainerUtil;
-import com.intellij.util.xml.DomElement;
-import com.intellij.util.xml.DomUtil;
-import com.intellij.util.xml.GenericValue;
-import com.intellij.util.xml.MergedObject;
+import consulo.application.progress.ProgressManager;
+import consulo.language.pom.PomRenameableTarget;
+import consulo.language.pom.PomService;
+import consulo.language.pom.PomTarget;
+import consulo.language.pom.PomTargetPsiElement;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiManager;
+import consulo.language.psi.PsiTarget;
+import consulo.language.util.ModuleUtilCore;
+import consulo.module.Module;
+import consulo.util.collection.ContainerUtil;
+import consulo.xml.psi.xml.XmlTag;
+import consulo.xml.util.xml.DomElement;
+import consulo.xml.util.xml.DomUtil;
+import consulo.xml.util.xml.GenericValue;
+import consulo.xml.util.xml.MergedObject;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.function.Function;
 
 /**
  * @author Gregory.Shrago
@@ -66,14 +68,17 @@ public class ManualModelMergerUtil {
 
   public static <T, V, X extends T> List<GenericValue<X>> joinValues(Iterable<? extends V> list, final Function<V, Collection<? extends GenericValue<X>>> mapper) {
     return join(list, new Joiner<V, GenericValue<X>>() {
+      @Override
       public Collection<? extends GenericValue<X>> map(final V v) {
-        return mapper.fun(v);
+        return mapper.apply(v);
       }
 
+      @Override
       public Object key(final GenericValue<X> value) {
         return value.getValue();
       }
 
+      @Override
       @Nonnull
       public GenericValue<X> join(@Nullable final GenericValue<X> prev, final GenericValue<X> next,
                                   final Collection<GenericValue<X>> notToBeMergedSet) {
@@ -85,7 +90,7 @@ public class ManualModelMergerUtil {
   public static <T, V, X extends T> GenericValue<X> joinValue(Iterable<? extends V> list, Function<V, GenericValue<X>> mapper) {
     GenericValue<X> prev = null;
     for (final V v : list) {
-      final GenericValue<X> value = mapper.fun(v);
+      final GenericValue<X> value = mapper.apply(v);
       if (prev == null) prev = value;
       else if (prev instanceof MyGenericValue) ((MyGenericValue<X>)prev).addImplementation(value);
       else prev = new MyGenericValue<X>(prev, value);
@@ -97,7 +102,7 @@ public class ManualModelMergerUtil {
   public static <T, V> T findDom(Iterable<? extends V> list, Function<V, T> mapper, T defValue) {
     for (V v : list) {
       if (v instanceof DomElement) {
-        return mapper.fun(v);
+        return mapper.apply(v);
       }
     }
     return defValue;
@@ -106,7 +111,7 @@ public class ManualModelMergerUtil {
   public static <T, V> V findLast(List<? extends T> list, Function<T, V> mapping, V defValue) {
     final ListIterator<? extends T> listIterator = list.listIterator(list.size());
     while (listIterator.hasPrevious()) {
-      final V v = mapping.fun(listIterator.previous());
+      final V v = mapping.apply(listIterator.previous());
       if (v != null) return v;
     }
     return defValue;
@@ -116,8 +121,8 @@ public class ManualModelMergerUtil {
     final ListIterator<? extends T> listIterator = list.listIterator(list.size());
     while (listIterator.hasPrevious()) {
       final T dom = listIterator.previous();
-      final V v = mapping.fun(dom);
-      if (v != null) return resultMapping.fun(dom);
+      final V v = mapping.apply(dom);
+      if (v != null) return resultMapping.apply(dom);
     }
     return defValue;
   }
@@ -131,6 +136,7 @@ public class ManualModelMergerUtil {
   }
 
   public static abstract class SimpleJoiner<V, T extends CommonModelElement> implements Joiner<V, T> {
+    @Override
     @Nonnull
     public final T join(@Nullable T prev, T next, final Collection<T> notToBeMergedSet) {
       return prev == null ? next : prev instanceof MyMergedObject ? ((MyMergedObject<T>)prev).addImplementation(next) : createMergedImplementation(prev, next);
@@ -141,6 +147,7 @@ public class ManualModelMergerUtil {
   }
 
   public static abstract class NextJoiner<V, T> implements Joiner<V, T> {
+    @Override
     @Nonnull
     public final T join(@Nullable T prev, T next, final Collection<T> notToBeMergedSet) {
       return next;
@@ -148,6 +155,7 @@ public class ManualModelMergerUtil {
   }
 
   public static abstract class AnnoJoiner<V, T extends CommonModelElement, Psi extends PsiMember> implements Joiner<V, T> {
+    @Override
     @Nonnull
     public final T join(@Nullable T prev, T next, final Collection<T> notToBeMergedSet) {
       if (shouldNotBeMerged(next)) {
@@ -195,6 +203,7 @@ public class ManualModelMergerUtil {
       myTs = ts;
     }
 
+    @Override
     public List<T> getImplementations() {
       return myTs;
     }
@@ -204,6 +213,7 @@ public class ManualModelMergerUtil {
       return (T)this;
     }
 
+    @Override
     public boolean isValid() {
       for (T t : myTs) {
         if (!t.isValid()) return false;
@@ -211,23 +221,26 @@ public class ManualModelMergerUtil {
       return true;
     }
 
+    @Override
     public XmlTag getXmlTag() {
-      return findDom(myTs, new NullableFunction<T, XmlTag>() {
-        public XmlTag fun(final T t) {
+      return findDom(myTs, new Function<T, XmlTag>() {
+        public XmlTag apply(final T t) {
           return t.getXmlTag();
         }
       }, null);
     }
 
+    @Override
     public PsiManager getPsiManager() {
       return myTs.get(0).getPsiManager();
     }
 
+    @Override
     public Module getModule() {
       for (T t : myTs) {
         final PsiElement element = t.getIdentifyingPsiElement();
         if (element != null) {
-          final Module module = ModuleUtil.findModuleForPsiElement(element);
+          final Module module = ModuleUtilCore.findModuleForPsiElement(element);
           if (module != null) {
             return module;
           }
@@ -236,6 +249,7 @@ public class ManualModelMergerUtil {
       return null;
     }
 
+    @Override
     public PsiElement getIdentifyingPsiElement() {
       if (myTs.size() == 1) return myTs.get(0).getIdentifyingPsiElement();
       final List<? extends PomTarget> targets = getPomTargets(this);
@@ -255,6 +269,7 @@ public class ManualModelMergerUtil {
       return PomService.convertToPsi(getPsiManager().getProject(), target);
     }
 
+    @Override
     public PsiFile getContainingFile() {
       final PsiElement element = getIdentifyingPsiElement();
       return element == null? null : element.getContainingFile();
@@ -280,8 +295,8 @@ public class ManualModelMergerUtil {
   }
 
   private static <T extends CommonModelElement> List<PomTarget> getPomTargets(MyMergedObject<T> object) {
-    return ContainerUtil.mapNotNull(object.getImplementations(), new NullableFunction<T, PomTarget>() {
-      public PomTarget fun(final T t) {
+    return ContainerUtil.mapNotNull(object.getImplementations(), new Function<T, PomTarget>() {
+      public PomTarget apply(final T t) {
         final PsiElement element = t.getIdentifyingPsiElement();
         if (element instanceof PomTarget) return (PomTarget)element;
         if (element instanceof PomTargetPsiElement) {
@@ -301,10 +316,12 @@ public class ManualModelMergerUtil {
       myTargets = targets;
     }
 
+    @Override
     public CommonModelElement getCommonElement() {
       return myObject;
     }
 
+    @Override
     public boolean isValid() {
       for (PomTarget target : myTargets) {
         if (!target.isValid()) return false;
@@ -312,26 +329,29 @@ public class ManualModelMergerUtil {
       return true;
     }
 
+    @Override
     public void navigate(final boolean requestFocus) {
-      final PomTarget target = findLast(myTargets, new NullableFunction<PomTarget, PomTarget>() {
-        public PomTarget fun(final PomTarget target) {
+      final PomTarget target = findLast(myTargets, new Function<T, PomTarget>() {
+        public PomTarget apply(final PomTarget target) {
           return target.canNavigate() ? target : null;
         }
       }, null);
       if (target != null) target.navigate(requestFocus);
     }
 
+    @Override
     public boolean canNavigate() {
-      return findLast(myTargets, new NullableFunction<PomTarget, PomTarget>() {
-        public PomTarget fun(final PomTarget target) {
+      return findLast(myTargets, new Function<PomTarget, PomTarget>() {
+        public PomTarget apply(final PomTarget target) {
           return target.canNavigate() ? target : null;
         }
       }, null) != null;
     }
 
+    @Override
     public boolean canNavigateToSource() {
-      return findLast(myTargets, new NullableFunction<PomTarget, PomTarget>() {
-        public PomTarget fun(final PomTarget target) {
+      return findLast(myTargets, new Function<PomTarget, PomTarget>() {
+        public PomTarget apply(final PomTarget target) {
           return target.canNavigateToSource() ? target : null;
         }
       }, null) != null;
@@ -355,15 +375,17 @@ public class ManualModelMergerUtil {
       return myTargets.hashCode();
     }
 
+    @Override
     @Nonnull
     public PsiElement getNavigationElement() {
       return findLast(myTargets, new Function<T, PsiElement>() {
-        public PsiElement fun(final T t) {
-          return t instanceof PsiTarget? ((PsiTarget)t).getNavigationElement() : null;
+        public PsiElement apply(final T t) {
+          return t instanceof PsiTarget ? ((PsiTarget)t).getNavigationElement() : null;
         }
       }, null);
     }
 
+    @Override
     public List<T> getImplementations() {
       return myTargets;
     }
@@ -374,6 +396,7 @@ public class ManualModelMergerUtil {
       super(object, targets);
     }
 
+    @Override
     public boolean isWritable() {
       for (PomRenameableTarget target : myTargets) {
         if (!target.isWritable()) return false;
@@ -381,6 +404,7 @@ public class ManualModelMergerUtil {
       return true;
     }
 
+    @Override
     public MyRenameableTarget setName(@Nonnull final String newName) {
       final ArrayList<PomRenameableTarget> list = new ArrayList<PomRenameableTarget>(myTargets.size());
       for (PomRenameableTarget target : myTargets) {
@@ -392,9 +416,10 @@ public class ManualModelMergerUtil {
       return new MyRenameableTarget(getCommonElement(), list);
     }
 
+    @Override
     public String getName() {
-      final PomRenameableTarget target = findLast(myTargets, new NullableFunction<PomRenameableTarget, PomRenameableTarget>() {
-        public PomRenameableTarget fun(final PomRenameableTarget target) {
+      final PomRenameableTarget target = findLast(myTargets, new Function<PomRenameableTarget, PomRenameableTarget>() {
+        public PomRenameableTarget apply(final PomRenameableTarget target) {
           return target.getName() != null ? target : null;
         }
       }, null);
@@ -412,6 +437,7 @@ public class ManualModelMergerUtil {
       ContainerUtil.addAll(myTs, ts);
     }
 
+    @Override
     public List<GenericValue<? extends T>> getImplementations() {
       return myTs;
     }
@@ -421,17 +447,19 @@ public class ManualModelMergerUtil {
       return this;
     }
 
+    @Override
     public String getStringValue() {
-      return findLast(myTs, new NullableFunction<GenericValue<? extends T>, String>() {
-        public String fun(final GenericValue<? extends T> value) {
+      return findLast(myTs, new Function<GenericValue<? extends T>, String>() {
+        public String apply(final GenericValue<? extends T> value) {
           return value.getStringValue();
         }
       }, null);
     }
 
+    @Override
     public T getValue() {
-      return findLast(myTs, new NullableFunction<GenericValue<? extends T>, T>() {
-        public T fun(final GenericValue<? extends T> value) {
+      return findLast(myTs, new Function<GenericValue<? extends T>, T>() {
+        public T apply(final GenericValue<? extends T> value) {
           if (value instanceof DomElement && !DomUtil.hasXml(((DomElement)value))) return null;
           return value.getValue();
         }

@@ -17,7 +17,7 @@ package com.intellij.java.language.psi;
 
 import com.intellij.java.language.jvm.JvmTypeParameter;
 import com.intellij.java.language.jvm.types.JvmReferenceType;
-import com.intellij.util.ArrayFactory;
+import consulo.util.collection.ArrayFactory;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
 

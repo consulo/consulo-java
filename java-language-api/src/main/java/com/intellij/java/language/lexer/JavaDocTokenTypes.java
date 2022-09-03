@@ -16,8 +16,8 @@
 package com.intellij.java.language.lexer;
 
 import com.intellij.java.language.psi.JavaDocTokenType;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.tree.TokenSet;
+import consulo.language.ast.IElementType;
+import consulo.language.ast.TokenSet;
 
 /**
  * @author yole

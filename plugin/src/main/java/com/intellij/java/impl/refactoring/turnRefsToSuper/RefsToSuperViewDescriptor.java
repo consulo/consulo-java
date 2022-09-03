@@ -17,10 +17,10 @@
 package com.intellij.java.impl.refactoring.turnRefsToSuper;
 
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.usageView.*;
-import com.intellij.usageView.UsageViewBundle;
-import com.intellij.refactoring.RefactoringBundle;
+import consulo.usage.UsageViewBundle;
+import consulo.language.editor.refactoring.RefactoringBundle;
 import javax.annotation.Nonnull;
 
 class RefsToSuperViewDescriptor implements UsageViewDescriptor{

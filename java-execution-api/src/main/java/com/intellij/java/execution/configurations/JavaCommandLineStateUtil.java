@@ -15,34 +15,30 @@
  */
 package com.intellij.java.execution.configurations;
 
-import com.intellij.execution.ExecutionException;
-import com.intellij.execution.configurations.GeneralCommandLine;
-import com.intellij.execution.process.ColoredProcessHandler;
-import com.intellij.execution.process.OSProcessHandler;
-import com.intellij.execution.process.ProcessTerminatedListener;
+import consulo.execution.process.ProcessTerminatedListener;
+import consulo.process.ExecutionException;
+import consulo.process.ProcessHandler;
+import consulo.process.cmd.GeneralCommandLine;
+import consulo.process.local.ProcessHandlerFactory;
 
 import javax.annotation.Nonnull;
 
 /**
  * @author spleaner
  */
-public class JavaCommandLineStateUtil
-{
-	private JavaCommandLineStateUtil()
-	{
-	}
+public class JavaCommandLineStateUtil {
+  private JavaCommandLineStateUtil() {
+  }
 
-	@Nonnull
-	public static OSProcessHandler startProcess(@Nonnull final GeneralCommandLine commandLine) throws ExecutionException
-	{
-		return startProcess(commandLine, false);
-	}
+  @Nonnull
+  public static ProcessHandler startProcess(@Nonnull final GeneralCommandLine commandLine) throws ExecutionException {
+    return startProcess(commandLine, false);
+  }
 
-	@Nonnull
-	public static OSProcessHandler startProcess(@Nonnull final GeneralCommandLine commandLine, final boolean ansiColoring) throws ExecutionException
-	{
-		OSProcessHandler processHandler = ansiColoring ? new ColoredProcessHandler(commandLine) : new OSProcessHandler(commandLine);
-		ProcessTerminatedListener.attach(processHandler);
-		return processHandler;
-	}
+  @Nonnull
+  public static ProcessHandler startProcess(@Nonnull final GeneralCommandLine commandLine, final boolean ansiColoring) throws ExecutionException {
+    ProcessHandler processHandler = ansiColoring ? ProcessHandlerFactory.getInstance().createColoredProcessHandler(commandLine) : ProcessHandlerFactory.getInstance().createProcessHandler(commandLine);
+    ProcessTerminatedListener.attach(processHandler);
+    return processHandler;
+  }
 }

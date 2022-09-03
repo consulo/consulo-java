@@ -26,15 +26,15 @@ import com.intellij.java.debugger.impl.engine.evaluation.expression.UnsupportedE
 import com.intellij.java.debugger.impl.DebuggerUtilsEx;
 import com.intellij.java.debugger.impl.DebuggerUtilsImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.CompilingEvaluatorImpl;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Pair;
+import consulo.project.Project;
+import consulo.util.lang.Pair;
 import com.intellij.java.language.psi.JavaCodeFragment;
-import com.intellij.psi.PsiDocumentManager;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiDocumentManager;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiExpressionCodeFragment;
 import com.intellij.java.language.psi.PsiType;
-import com.intellij.reference.SoftReference;
+import consulo.util.lang.ref.SoftReference;
 
 public abstract class CachedEvaluator
 {

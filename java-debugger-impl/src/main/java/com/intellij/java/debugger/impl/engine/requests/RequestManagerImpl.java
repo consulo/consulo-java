@@ -37,11 +37,11 @@ import com.intellij.java.debugger.requests.RequestManager;
 import com.intellij.java.debugger.requests.Requestor;
 import com.intellij.java.debugger.impl.settings.DebuggerSettings;
 import com.intellij.java.debugger.impl.ui.breakpoints.FilteredRequestor;
-import com.intellij.diagnostic.ThreadDumper;
-import com.intellij.openapi.application.ReadAction;
+import consulo.application.util.concurrent.ThreadDumper;
+import consulo.application.ReadAction;
 import consulo.logging.Logger;
 import consulo.util.dataholder.Key;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.util.lang.StringUtil;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.debugger.ui.classFilter.ClassFilter;
 import java.util.HashMap;
@@ -73,7 +73,7 @@ public class RequestManagerImpl extends DebugProcessAdapterImpl implements Reque
 	private final Map<Requestor, Set<EventRequest>> myRequestorToBelongedRequests = new HashMap<>();
 	private EventRequestManager myEventRequestManager;
 	private
-	@javax.annotation.Nullable
+	@Nullable
 	ThreadReference myFilterThread;
 
 	public RequestManagerImpl(DebugProcessImpl debugProcess)
@@ -109,7 +109,7 @@ public class RequestManagerImpl extends DebugProcessAdapterImpl implements Reque
 		return Collections.unmodifiableSet(requestSet);
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public Requestor findRequestor(EventRequest request)
 	{
 		DebuggerManagerThreadImpl.assertIsManagerThread();

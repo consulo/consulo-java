@@ -19,10 +19,10 @@ package com.intellij.java.analysis.impl.codeInspection.unusedImport;
 import javax.annotation.Nonnull;
 
 import org.jetbrains.annotations.NonNls;
-import com.intellij.codeInsight.daemon.GroupNames;
+import consulo.ide.impl.idea.codeInsight.daemon.GroupNames;
 import com.intellij.java.analysis.impl.codeInspection.BaseJavaLocalInspectionTool;
-import com.intellij.codeInspection.InspectionsBundle;
-import com.intellij.codeInspection.ex.PairedUnfairLocalInspectionTool;
+import consulo.language.editor.inspection.InspectionsBundle;
+import consulo.language.editor.inspection.PairedUnfairLocalInspectionTool;
 
 /**
  * User: anna

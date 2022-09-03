@@ -21,10 +21,10 @@
 package com.intellij.refactoring;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.fileEditor.FileDocumentManager;
-import com.intellij.openapi.vfs.LocalFileSystem;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.document.FileDocumentManager;
+import consulo.virtualFileSystem.LocalFileSystem;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.java.impl.refactoring.extractclass.ExtractClassProcessor;
 import com.intellij.java.impl.refactoring.util.classMembers.MemberInfo;
 import junit.framework.Assert;

@@ -27,20 +27,30 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.project.Project;
+import consulo.project.Project;
 import com.intellij.java.language.projectRoots.JavaSdkVersion;
 import com.intellij.java.language.projectRoots.JavaVersionService;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.util.lang.StringUtil;
 import com.intellij.psi.*;
-import com.intellij.psi.codeStyle.CodeStyleManager;
+import consulo.language.codeStyle.CodeStyleManager;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PropertyUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.util.ArrayUtil;
-import com.intellij.util.IncorrectOperationException;
+import consulo.util.collection.ArrayUtil;
+import consulo.language.util.IncorrectOperationException;
+
+import java.lang.Boolean;
+import java.lang.Object;
+import java.lang.String;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Basic PSI Adapter with common function that works in all supported versions of IDEA.
@@ -143,7 +153,7 @@ public class PsiAdapter
 	}
 
 	/**
-	 * Is the given field a {@link java.util.Collection} type?
+	 * Is the given field a {@link Collection} type?
 	 *
 	 * @param factory element factory.
 	 * @param type    type.
@@ -155,7 +165,7 @@ public class PsiAdapter
 	}
 
 	/**
-	 * Is the given field a {@link java.util.Map} type?
+	 * Is the given field a {@link Map} type?
 	 *
 	 * @param factory element factory.
 	 * @param type    type.
@@ -167,7 +177,7 @@ public class PsiAdapter
 	}
 
 	/**
-	 * Is the given field a {@link java.util.Set} type?
+	 * Is the given field a {@link Set} type?
 	 *
 	 * @param factory element factory.
 	 * @param type    type.
@@ -179,7 +189,7 @@ public class PsiAdapter
 	}
 
 	/**
-	 * Is the given field a {@link java.util.List} type?
+	 * Is the given field a {@link List} type?
 	 *
 	 * @param factory element factory.
 	 * @param type    type.
@@ -191,7 +201,7 @@ public class PsiAdapter
 	}
 
 	/**
-	 * Is the given field a {@link java.lang.String} type?
+	 * Is the given field a {@link String} type?
 	 *
 	 * @param factory element factory.
 	 * @param type    type.
@@ -203,7 +213,7 @@ public class PsiAdapter
 	}
 
 	/**
-	 * Is the given field assignable from {@link java.lang.Object}?
+	 * Is the given field assignable from {@link Object}?
 	 *
 	 * @param factory element factory.
 	 * @param type    type.
@@ -215,7 +225,7 @@ public class PsiAdapter
 	}
 
 	/**
-	 * Is the given field a {@link java.util.Date} type?
+	 * Is the given field a {@link Date} type?
 	 *
 	 * @param factory element factory.
 	 * @param type    type.
@@ -227,7 +237,7 @@ public class PsiAdapter
 	}
 
 	/**
-	 * Is the given field a {@link java.util.Calendar} type?
+	 * Is the given field a {@link Calendar} type?
 	 *
 	 * @param factory element factory.
 	 * @param type    type.
@@ -239,7 +249,7 @@ public class PsiAdapter
 	}
 
 	/**
-	 * Is the given field a {@link java.lang.Boolean} type or a primitive boolean type?
+	 * Is the given field a {@link Boolean} type or a primitive boolean type?
 	 *
 	 * @param factory element factory.
 	 * @param type    type.
@@ -312,7 +322,7 @@ public class PsiAdapter
 	 *
 	 * @param javaFile                javafile.
 	 * @param importStatementOnDemand name of import statement, must be with a wildcard (etc. java.util.*).
-	 * @throws com.intellij.util.IncorrectOperationException is thrown if there is an error creating the import statement.
+	 * @throws consulo.language.util.IncorrectOperationException is thrown if there is an error creating the import statement.
 	 */
 	public static void addImportStatement(PsiJavaFile javaFile, String importStatementOnDemand)
 	{
@@ -395,7 +405,7 @@ public class PsiAdapter
 	 * @return the classname, null if the field is a primitive.
 	 * @see #getTypeQualifiedClassName(PsiType) for the qualified version.
 	 */
-	@javax.annotation.Nullable
+	@Nullable
 	public static String getTypeClassName(PsiType type)
 	{
 		String name = getTypeQualifiedClassName(type);
@@ -416,7 +426,7 @@ public class PsiAdapter
 	 * @param clazz the class.
 	 * @return the method if it exists, null if not.
 	 */
-	@javax.annotation.Nullable
+	@Nullable
 	public static PsiMethod findPublicStaticVoidMainMethod(PsiClass clazz)
 	{
 		PsiMethod[] methods = clazz.findMethodsByName("main", false);
@@ -558,7 +568,7 @@ public class PsiAdapter
 	 * @return the fieldname if this is a getter method.
 	 * @see #isGetterMethod(PsiMethod) for the getter check
 	 */
-	@javax.annotation.Nullable
+	@Nullable
 	public static String getGetterFieldName(PsiMethod method)
 	{
 		// must be a getter
@@ -658,7 +668,7 @@ public class PsiAdapter
 	 * @param clazz the class.
 	 * @return the method if it exists, null if not.
 	 */
-	@javax.annotation.Nullable
+	@Nullable
 	public static PsiMethod findHashCodeMethod(PsiClass clazz)
 	{
 		PsiMethod[] methods = clazz.findMethodsByName("hashCode", false);

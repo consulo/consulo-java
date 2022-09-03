@@ -21,20 +21,20 @@
 package com.intellij.java.compiler.cache;
 
 import com.intellij.java.compiler.classParsing.FieldInfo;
-import com.intellij.compiler.impl.ExitException;
-import com.intellij.compiler.impl.ExitStatus;
-import com.intellij.compiler.make.CacheCorruptedException;
+import consulo.compiler.CacheCorruptedException;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.search.PackageScope;
-import com.intellij.openapi.compiler.CompileContext;
+import consulo.compiler.CompileContext;
+import consulo.compiler.ExitException;
+import consulo.compiler.ExitStatus;
 import consulo.logging.Logger;
-import com.intellij.openapi.progress.ProcessCanceledException;
-import com.intellij.openapi.project.DumbService;
-import com.intellij.openapi.project.Project;
+import consulo.component.ProcessCanceledException;
+import consulo.project.DumbService;
+import consulo.project.Project;
 import consulo.util.dataholder.Key;
-import com.intellij.openapi.util.Ref;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.util.lang.ref.Ref;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.psi.search.*;
 import com.intellij.java.language.psi.util.PsiUtil;
@@ -278,7 +278,7 @@ public class ChangedConstantsDependencyProcessor {
   }
   */
 
-  @javax.annotation.Nullable
+  @Nullable
   private static PsiField getOwnerField(PsiElement element) {
     while (!(element instanceof PsiFile)) {
       if (element instanceof PsiClass) {
@@ -292,7 +292,7 @@ public class ChangedConstantsDependencyProcessor {
     return null;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private FieldChangeInfo findChangeInfo(PsiField field) throws CacheCorruptedException {
     String name = field.getName();
     for (final FieldChangeInfo changeInfo : myChangedFields) {

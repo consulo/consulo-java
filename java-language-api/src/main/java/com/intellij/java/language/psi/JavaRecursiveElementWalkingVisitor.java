@@ -19,9 +19,9 @@
  */
 package com.intellij.java.language.psi;
 
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiRecursiveVisitor;
-import com.intellij.psi.PsiWalkingState;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiRecursiveVisitor;
+import consulo.language.psi.PsiWalkingState;
 
 import javax.annotation.Nonnull;
 

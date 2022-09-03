@@ -16,8 +16,8 @@
 package com.intellij.psi.formatter.java;
 
 import com.intellij.java.language.impl.JavaFileType;
-import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.codeStyle.CommonCodeStyleSettings;
+import consulo.language.util.IncorrectOperationException;
 
 /**
  * Is intended to hold specific java formatting tests for <code>'Place on New Line'</code> settings (

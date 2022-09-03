@@ -16,7 +16,7 @@
 package com.intellij.java.impl.refactoring.util.usageInfo;
 
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.usageView.UsageInfo;
+import consulo.usage.UsageInfo;
 
 /**
  * @author dsl

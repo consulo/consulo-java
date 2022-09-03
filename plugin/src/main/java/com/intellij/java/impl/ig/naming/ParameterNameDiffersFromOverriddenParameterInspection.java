@@ -15,14 +15,14 @@
  */
 package com.intellij.java.impl.ig.naming;
 
-import com.intellij.codeInspection.ui.MultipleCheckboxOptionsPanel;
+import consulo.ide.impl.idea.codeInspection.ui.MultipleCheckboxOptionsPanel;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiParameter;
 import com.intellij.java.language.psi.PsiParameterList;
 import com.intellij.java.language.psi.search.searches.SuperMethodsSearch;
 import com.intellij.java.language.psi.util.MethodSignatureBackedByPsiMethod;
-import com.intellij.util.Query;
+import consulo.application.util.query.Query;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
@@ -31,6 +31,7 @@ import com.intellij.java.impl.ig.fixes.RenameParameterFix;
 import com.intellij.java.impl.ig.psiutils.LibraryUtil;
 import javax.annotation.Nonnull;
 
+import javax.annotation.Nullable;
 import javax.swing.*;
 
 public class ParameterNameDiffersFromOverriddenParameterInspection
@@ -71,7 +72,7 @@ public class ParameterNameDiffersFromOverriddenParameterInspection
     return optionsPanel;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   protected InspectionGadgetsFix buildFix(Object... infos) {
     return new RenameParameterFix((String)infos[0]);
   }

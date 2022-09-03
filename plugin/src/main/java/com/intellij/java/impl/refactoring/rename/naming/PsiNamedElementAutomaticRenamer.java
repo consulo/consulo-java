@@ -15,9 +15,9 @@
  */
 package com.intellij.java.impl.refactoring.rename.naming;
 
-import com.intellij.psi.PsiNamedElement;
-import com.intellij.refactoring.rename.naming.NameSuggester;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.psi.PsiNamedElement;
+import consulo.language.editor.refactoring.rename.NameSuggester;
+import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 
 import java.util.List;

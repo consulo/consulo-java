@@ -23,9 +23,9 @@ package com.intellij.java.impl.refactoring.introduceparameterobject.usageInfo;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.impl.refactoring.util.FixableUsageInfo;
-import com.intellij.usageView.UsageInfo;
-import com.intellij.usageView.UsageViewUtil;
-import com.intellij.util.IncorrectOperationException;
+import consulo.usage.UsageInfo;
+import consulo.usage.UsageViewUtil;
+import consulo.language.util.IncorrectOperationException;
 import com.intellij.java.language.util.VisibilityUtil;
 
 public class BeanClassVisibilityUsageInfo extends FixableUsageInfo

@@ -16,7 +16,7 @@
 package com.intellij.java.debugger;
 
 import org.jetbrains.annotations.PropertyKey;
-import com.intellij.AbstractBundle;
+import consulo.component.util.localize.AbstractBundle;
 import com.intellij.java.execution.configurations.RemoteConnection;
 
 public class DebuggerBundle extends AbstractBundle

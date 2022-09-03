@@ -24,8 +24,8 @@
  */
 package com.intellij.java.impl.refactoring.rename;
 
-import com.intellij.psi.PsiElement;
-import com.intellij.refactoring.rename.CollisionUsageInfo;
+import consulo.language.psi.PsiElement;
+import consulo.language.editor.refactoring.rename.CollisionUsageInfo;
 
 public abstract class ResolvableCollisionUsageInfo extends CollisionUsageInfo {
   public ResolvableCollisionUsageInfo(PsiElement element, PsiElement referencedElement) {

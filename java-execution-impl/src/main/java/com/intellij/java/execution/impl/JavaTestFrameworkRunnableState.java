@@ -15,26 +15,32 @@
  */
 package com.intellij.java.execution.impl;
 
-import com.intellij.diagnostic.logging.OutputFileUtil;
+import consulo.execution.DefaultExecutionResult;
+import consulo.execution.ExecutionBundle;
+import consulo.execution.ExecutionResult;
+import consulo.execution.configuration.ModuleBasedConfiguration;
+import consulo.execution.configuration.RunConfigurationModule;
+import consulo.execution.configuration.RunnerSettings;
+import consulo.execution.configuration.log.OutputFileUtil;
 import com.intellij.execution.*;
 import com.intellij.execution.configurations.*;
-import com.intellij.execution.filters.ArgumentFileFilter;
-import com.intellij.execution.impl.ConsoleBuffer;
-import com.intellij.execution.process.OSProcessHandler;
-import com.intellij.execution.process.ProcessAdapter;
-import com.intellij.execution.process.ProcessEvent;
-import com.intellij.execution.runners.ExecutionEnvironment;
-import com.intellij.execution.runners.ProgramRunner;
+import consulo.execution.runner.ProgramRunner;
+import consulo.execution.test.sm.SMTestRunnerConnectionUtil;
+import consulo.execution.test.sm.runner.SMRunnerConsolePropertiesProvider;
+import consulo.execution.test.sm.ui.SMTestRunnerResultsForm;
+import consulo.ide.impl.idea.execution.filters.ArgumentFileFilter;
+import consulo.execution.internal.ConsoleBuffer;
+import consulo.process.internal.OSProcessHandler;
+import consulo.process.event.ProcessAdapter;
+import consulo.process.event.ProcessEvent;
+import consulo.execution.runner.ExecutionEnvironment;
 import com.intellij.execution.testframework.*;
-import com.intellij.execution.testframework.actions.AbstractRerunFailedTestsAction;
-import com.intellij.execution.testframework.autotest.AbstractAutoTestManager;
-import com.intellij.execution.testframework.autotest.ToggleAutoTestAction;
-import com.intellij.execution.testframework.sm.SMTestRunnerConnectionUtil;
-import com.intellij.execution.testframework.sm.runner.SMRunnerConsolePropertiesProvider;
-import com.intellij.execution.testframework.sm.runner.SMTRunnerConsoleProperties;
-import com.intellij.execution.testframework.sm.runner.ui.SMTRunnerConsoleView;
-import com.intellij.execution.testframework.sm.runner.ui.SMTestRunnerResultsForm;
-import com.intellij.execution.testframework.ui.BaseTestsOutputConsoleView;
+import consulo.execution.test.action.AbstractRerunFailedTestsAction;
+import consulo.execution.test.autotest.AbstractAutoTestManager;
+import consulo.execution.test.action.ToggleAutoTestAction;
+import consulo.execution.test.sm.runner.SMTRunnerConsoleProperties;
+import consulo.execution.test.sm.ui.SMTRunnerConsoleView;
+import consulo.execution.test.ui.BaseTestsOutputConsoleView;
 import com.intellij.java.debugger.impl.GenericDebuggerRunnerSettings;
 import com.intellij.java.execution.CommonJavaRunConfigurationParameters;
 import com.intellij.java.execution.JavaTestPatcher;
@@ -45,30 +51,34 @@ import com.intellij.java.execution.configurations.RemoteConnectionCreator;
 import com.intellij.java.execution.impl.testDiscovery.JavaAutoRunManager;
 import com.intellij.java.execution.impl.testframework.SearchForTestsTask;
 import com.intellij.java.execution.impl.util.JavaParametersUtil;
-import com.intellij.openapi.components.PathMacroUtil;
-import com.intellij.openapi.extensions.Extensions;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleUtilCore;
-import com.intellij.openapi.project.Project;
+import consulo.component.macro.PathMacroUtil;
+import consulo.component.extension.Extensions;
+import consulo.module.Module;
+import consulo.language.util.ModuleUtilCore;
+import consulo.project.Project;
 import com.intellij.openapi.projectRoots.JavaSdkType;
-import com.intellij.openapi.projectRoots.Sdk;
+import consulo.content.bundle.Sdk;
 import com.intellij.java.language.impl.projectRoots.ex.JavaSdkUtil;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.CharsetToolkit;
+import consulo.util.lang.Comparing;
+import consulo.ide.impl.idea.openapi.util.io.FileUtil;
+import consulo.util.lang.StringUtil;
+import consulo.util.io.CharsetToolkit;
 import com.intellij.java.language.psi.JavaPsiFacade;
-import com.intellij.psi.PsiDirectory;
+import consulo.language.psi.PsiDirectory;
 import com.intellij.java.language.psi.PsiJavaPackage;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.search.GlobalSearchScopesCore;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.scope.GlobalSearchScopesCore;
 import com.intellij.util.PathUtil;
-import com.intellij.util.ui.UIUtil;
+import consulo.ui.ex.awt.UIUtil;
 import consulo.disposer.Disposer;
+import consulo.execution.executor.Executor;
 import consulo.java.execution.configurations.OwnJavaParameters;
 import consulo.java.execution.projectRoots.OwnJdkUtil;
 import consulo.java.language.module.extension.JavaModuleExtension;
 import consulo.logging.Logger;
+import consulo.process.ExecutionException;
+import consulo.process.cmd.GeneralCommandLine;
+import consulo.process.cmd.ParametersList;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -117,7 +127,7 @@ public abstract class JavaTestFrameworkRunnableState<T extends ModuleBasedConfig
   @Nonnull
   protected abstract T getConfiguration();
 
-  @javax.annotation.Nullable
+  @Nullable
   protected abstract TestSearchScope getScope();
 
   @Nonnull
@@ -243,7 +253,7 @@ public abstract class JavaTestFrameworkRunnableState<T extends ModuleBasedConfig
     }
 
     // Append coverage parameters if appropriate
-    for (RunConfigurationExtension ext : Extensions.getExtensions(RunConfigurationExtension.EP_NAME)) {
+    for (RunConfigurationExtension ext : RunConfigurationExtension.EP_NAME.getExtensionList()) {
       ext.updateJavaParameters(getConfiguration(), javaParameters, getRunnerSettings());
     }
 
@@ -264,7 +274,7 @@ public abstract class JavaTestFrameworkRunnableState<T extends ModuleBasedConfig
 
   private ServerSocket myForkSocket = null;
 
-  @javax.annotation.Nullable
+  @Nullable
   public ServerSocket getForkSocket() {
     if (myForkSocket == null && (!Comparing.strEqual(getForkMode(), "none") || forkPerModule()) && getRunnerSettings() != null) {
       try {

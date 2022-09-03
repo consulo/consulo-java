@@ -16,7 +16,7 @@
 package com.intellij.java.impl.ipp.constant;
 
 import com.intellij.java.language.psi.PsiClassObjectAccessExpression;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiLiteralExpression;
 import com.intellij.java.language.psi.PsiPolyadicExpression;

@@ -17,10 +17,10 @@ package com.intellij.java.language.psi;
 
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiManager;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiManager;
+import consulo.language.psi.scope.GlobalSearchScope;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -157,7 +157,7 @@ public class PsiPrimitiveType extends PsiType.Stub {
     return unboxed.annotate(type.getAnnotationProvider());
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public static PsiPrimitiveType getOptionallyUnboxedType(PsiType type) {
     return type instanceof PsiPrimitiveType ? (PsiPrimitiveType) type : getUnboxedType(type);
   }

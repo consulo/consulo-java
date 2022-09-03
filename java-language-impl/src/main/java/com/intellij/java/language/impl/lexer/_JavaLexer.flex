@@ -3,8 +3,8 @@ package com.intellij.java.language.impl.lexer;
 
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.psi.JavaTokenType;
-import com.intellij.lexer.FlexLexer;
-import com.intellij.psi.tree.IElementType;
+import consulo.language.ast.IElementType;
+import consulo.language.lexer.FlexLexer;
 
 @SuppressWarnings("ALL")
 %%

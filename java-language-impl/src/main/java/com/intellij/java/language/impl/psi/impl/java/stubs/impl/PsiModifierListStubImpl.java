@@ -22,8 +22,8 @@ package com.intellij.java.language.impl.psi.impl.java.stubs.impl;
 import com.intellij.java.language.psi.PsiModifierList;
 import com.intellij.java.language.impl.psi.impl.java.stubs.JavaStubElementTypes;
 import com.intellij.java.language.impl.psi.impl.java.stubs.PsiModifierListStub;
-import com.intellij.psi.stubs.StubBase;
-import com.intellij.psi.stubs.StubElement;
+import consulo.language.psi.stub.StubBase;
+import consulo.language.psi.stub.StubElement;
 
 public class PsiModifierListStubImpl extends StubBase<PsiModifierList> implements PsiModifierListStub {
   private final int myMask;

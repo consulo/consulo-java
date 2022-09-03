@@ -16,8 +16,9 @@
 package org.jetbrains.java.generate.config;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-import com.intellij.openapi.editor.Editor;
+import consulo.codeEditor.Editor;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 
@@ -36,6 +37,6 @@ public interface InsertNewMethodStrategy
 	 * @param editor
 	 * @return if the policy was executed normally (not cancelled)
 	 */
-	@javax.annotation.Nullable
+	@Nullable
 	PsiMethod insertNewMethod(PsiClass clazz, @Nonnull PsiMethod newMethod, Editor editor);
 }

@@ -15,34 +15,34 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
-import com.intellij.codeInsight.CodeInsightUtilBase;
-import com.intellij.codeInsight.FileModificationService;
-import com.intellij.codeInsight.PsiEquivalenceUtil;
+import consulo.ide.impl.idea.codeInsight.CodeInsightUtilBase;
+import consulo.language.editor.FileModificationService;
+import consulo.language.editor.PsiEquivalenceUtil;
 import com.intellij.java.language.psi.*;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
-import com.intellij.codeInsight.intention.impl.BaseIntentionAction;
-import com.intellij.codeInsight.lookup.LookupElement;
-import com.intellij.codeInsight.lookup.LookupElementBuilder;
+import consulo.language.editor.intention.BaseIntentionAction;
+import consulo.language.editor.completion.lookup.LookupElement;
+import consulo.language.editor.completion.lookup.LookupElementBuilder;
 import com.intellij.codeInsight.template.*;
-import com.intellij.ide.DataManager;
-import com.intellij.openapi.application.ApplicationManager;
+import consulo.dataContext.DataManager;
+import consulo.application.ApplicationManager;
 import consulo.logging.Logger;
-import com.intellij.openapi.editor.CaretModel;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.actions.EnterAction;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.TextRange;
+import consulo.codeEditor.CaretModel;
+import consulo.codeEditor.Editor;
+import consulo.ide.impl.idea.openapi.editor.actions.EnterAction;
+import consulo.project.Project;
+import consulo.document.util.TextRange;
 import com.intellij.psi.*;
-import com.intellij.psi.codeStyle.CodeStyleManager;
+import consulo.language.codeStyle.CodeStyleManager;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
-import com.intellij.psi.codeStyle.SuggestedNameInfo;
+import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import com.intellij.java.impl.refactoring.JavaRefactoringSettings;
-import com.intellij.util.ArrayUtil;
-import com.intellij.util.IncorrectOperationException;
+import consulo.util.collection.ArrayUtil;
+import consulo.language.util.IncorrectOperationException;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -137,7 +137,7 @@ public class CreateLocalVarFromInstanceofAction extends BaseIntentionAction {
     return null;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private static PsiInstanceOfExpression retrieveInstanceOfFromCondition(Editor editor,
                                                                          PsiElement element,
                                                                          PsiStatement statement,
@@ -245,7 +245,7 @@ public class CreateLocalVarFromInstanceofAction extends BaseIntentionAction {
     }
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   protected static PsiStatement getExpressionStatementInside(PsiFile file, Editor editor, @Nonnull PsiExpression operand) {
     PsiElement elementAt = file.findElementAt(editor.getCaretModel().getOffset());
 
@@ -279,7 +279,7 @@ public class CreateLocalVarFromInstanceofAction extends BaseIntentionAction {
     return null;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private static PsiDeclarationStatement createLocalVariableDeclaration(final PsiInstanceOfExpression instanceOfExpression,
                                                                         final PsiStatement statementInside) throws IncorrectOperationException {
     PsiElementFactory factory = JavaPsiFacade.getInstance(instanceOfExpression.getProject()).getElementFactory();
@@ -304,7 +304,7 @@ public class CreateLocalVarFromInstanceofAction extends BaseIntentionAction {
     }
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   static PsiElement insertAtAnchor(final PsiInstanceOfExpression instanceOfExpression, PsiElement toInsert) throws IncorrectOperationException {
     boolean negated = isNegated(instanceOfExpression);
     PsiStatement statement = PsiTreeUtil.getParentOfType(instanceOfExpression, PsiStatement.class);

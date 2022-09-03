@@ -18,11 +18,11 @@ package com.intellij.jam.reflect;
 import com.intellij.jam.JamEnumAttributeElement;
 import com.intellij.java.language.psi.PsiAnnotation;
 import com.intellij.java.language.psi.PsiAnnotationMemberValue;
-import com.intellij.psi.PsiElementRef;
-import com.intellij.util.NullableFunction;
-import javax.annotation.Nonnull;
+import consulo.language.psi.PsiElementRef;
 
+import javax.annotation.Nonnull;
 import java.util.List;
+import java.util.function.Function;
 
 /**
  * @author peter
@@ -62,8 +62,8 @@ public abstract class JamEnumAttributeMeta<T extends Enum<T>, JamType> extends J
 
     @Nonnull
     public List<JamEnumAttributeElement<T>> getJam(PsiElementRef<PsiAnnotation> anno) {
-      return getCollectionJam(anno, new NullableFunction<PsiAnnotationMemberValue, JamEnumAttributeElement<T>>() {
-        public JamEnumAttributeElement<T> fun(PsiAnnotationMemberValue psiAnnotationMemberValue) {
+      return getCollectionJam(anno, new Function<PsiAnnotationMemberValue, JamEnumAttributeElement<T>>() {
+        public JamEnumAttributeElement<T> apply(PsiAnnotationMemberValue psiAnnotationMemberValue) {
           return new JamEnumAttributeElement<T>(psiAnnotationMemberValue, myModelEnum);
         }
       });

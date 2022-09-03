@@ -19,7 +19,7 @@ import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
 import com.intellij.java.language.impl.psi.impl.JavaConstantExpressionEvaluator;
 import com.intellij.java.language.psi.util.PsiTypesUtil;
-import com.intellij.ui.ColorUtil;
+import consulo.ui.ex.awt.util.ColorUtil;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.access.RequiredWriteAction;
 import consulo.language.editor.ElementColorProvider;

@@ -17,9 +17,10 @@ package com.intellij.java.language.impl.psi.impl;
 
 import com.intellij.java.language.psi.PsiVariable;
 
+import javax.annotation.Nullable;
 import java.util.Set;
 
 public interface PsiVariableEx extends PsiVariable {
-  @javax.annotation.Nullable
+  @Nullable
   Object computeConstantValue(Set<PsiVariable> visitedVars);
 }

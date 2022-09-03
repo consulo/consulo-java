@@ -15,8 +15,10 @@
  */
 package com.intellij.java.impl.testIntegration.createTest;
 
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiElement;
+import consulo.project.Project;
+import consulo.language.psi.PsiElement;
+
+import javax.annotation.Nullable;
 
 /**
  * @author Maxim.Medvedev
@@ -26,7 +28,7 @@ public interface TestGenerator {
    *
    * @return generated test (i.e. PsiClass)
    */
-  @javax.annotation.Nullable
+  @Nullable
   PsiElement generateTest(final Project project, final CreateTestDialog d);
 
   /**

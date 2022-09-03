@@ -19,26 +19,26 @@ import static com.intellij.java.impl.ide.fileTemplates.JavaTemplateUtil.INTERNAL
 
 import javax.annotation.Nullable;
 
-import com.intellij.CommonBundle;
-import com.intellij.ide.IdeBundle;
-import com.intellij.ide.IdeView;
-import com.intellij.ide.fileTemplates.FileTemplate;
-import com.intellij.ide.fileTemplates.FileTemplateManager;
-import com.intellij.ide.fileTemplates.actions.AttributesDefaults;
-import com.intellij.ide.fileTemplates.actions.CreateFromTemplateActionBase;
+import consulo.application.CommonBundle;
+import consulo.ide.IdeBundle;
+import consulo.ide.IdeView;
+import consulo.fileTemplate.FileTemplate;
+import consulo.fileTemplate.FileTemplateManager;
+import consulo.fileTemplate.AttributesDefaults;
+import consulo.ide.action.CreateFromTemplateActionBase;
 import com.intellij.java.language.impl.JavaFileType;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.CommonDataKeys;
-import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.actionSystem.LangDataKeys;
-import com.intellij.openapi.project.DumbAware;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.ProjectFileIndex;
-import com.intellij.openapi.roots.ProjectRootManager;
-import com.intellij.openapi.ui.Messages;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.ui.ex.action.AnActionEvent;
+import consulo.language.editor.CommonDataKeys;
+import consulo.dataContext.DataContext;
+import consulo.language.editor.LangDataKeys;
+import consulo.application.dumb.DumbAware;
+import consulo.project.Project;
+import consulo.module.content.ProjectFileIndex;
+import consulo.module.content.ProjectRootManager;
+import consulo.ui.ex.awt.Messages;
+import consulo.util.lang.StringUtil;
 import com.intellij.java.language.psi.JavaDirectoryService;
-import com.intellij.psi.PsiDirectory;
+import consulo.language.psi.PsiDirectory;
 import com.intellij.java.language.psi.PsiJavaPackage;
 import com.intellij.java.language.psi.PsiNameHelper;
 import com.intellij.java.language.psi.util.PsiUtil;
@@ -132,7 +132,7 @@ public class CreatePackageInfoAction extends CreateFromTemplateActionBase implem
 		return false;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	@Override
 	public AttributesDefaults getAttributesDefaults(DataContext dataContext)
 	{

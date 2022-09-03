@@ -15,10 +15,10 @@
  */
 package com.intellij.java.impl.psi.impl.cache.impl.idCache;
 
-import com.intellij.lexer.Lexer;
-import com.intellij.psi.impl.cache.impl.IdAndToDoScannerBasedOnFilterLexer;
-import com.intellij.psi.impl.cache.impl.OccurrenceConsumer;
-import com.intellij.psi.impl.cache.impl.todo.LexerBasedTodoIndexer;
+import consulo.language.lexer.Lexer;
+import consulo.language.psi.stub.IdAndToDoScannerBasedOnFilterLexer;
+import consulo.language.psi.stub.OccurrenceConsumer;
+import consulo.language.psi.stub.todo.LexerBasedTodoIndexer;
 
 public class JavaTodoIndexer extends LexerBasedTodoIndexer implements IdAndToDoScannerBasedOnFilterLexer {
   @Override

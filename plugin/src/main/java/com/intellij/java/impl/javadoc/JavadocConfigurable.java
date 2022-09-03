@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.javadoc;
 
-import com.intellij.openapi.options.Configurable;
+import consulo.configurable.Configurable;
 import com.intellij.java.language.psi.PsiKeyword;
 
 import javax.swing.*;

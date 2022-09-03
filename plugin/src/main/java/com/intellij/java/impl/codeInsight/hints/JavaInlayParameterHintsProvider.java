@@ -1,12 +1,12 @@
 package com.intellij.java.impl.codeInsight.hints;
 
-import com.intellij.codeInsight.hints.InlayInfo;
-import com.intellij.codeInsight.hints.InlayParameterHintsProvider;
-import com.intellij.codeInsight.hints.MethodInfo;
+import consulo.ide.impl.idea.codeInsight.hints.InlayInfo;
+import consulo.ide.impl.idea.codeInsight.hints.InlayParameterHintsProvider;
+import consulo.ide.impl.idea.codeInsight.hints.MethodInfo;
 import com.intellij.java.language.psi.PsiCallExpression;
 import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.psi.PsiElement;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.language.psi.PsiElement;
+import consulo.util.collection.ContainerUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

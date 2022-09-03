@@ -16,18 +16,19 @@
 
 package com.intellij.java.impl.codeInsight.generation;
 
-import com.intellij.codeInsight.generation.ClassMember;
+import consulo.ide.impl.idea.codeInsight.generation.ClassMember;
 import com.intellij.java.language.impl.codeInsight.generation.GenerationInfo;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
 import com.intellij.java.language.psi.util.PropertyMemberType;
 import com.intellij.java.language.psi.util.PropertyUtil;
-import com.intellij.openapi.project.Project;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.project.Project;
+import consulo.language.util.IncorrectOperationException;
+import consulo.util.collection.ContainerUtil;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -102,7 +103,7 @@ public class GenerateFieldOrPropertyHandler extends GenerateMembersHandlerBase {
     }
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public PsiMember findExistingMember(@Nonnull PsiClass aClass, @Nonnull PropertyMemberType memberType) {
     if (memberType == PropertyMemberType.FIELD) {
       return aClass.findFieldByName(getFieldName(aClass), false);

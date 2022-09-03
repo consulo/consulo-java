@@ -15,16 +15,17 @@
  */
 package com.intellij.java.impl.codeInsight.highlighting;
 
-import com.intellij.codeInsight.hint.DeclarationRangeUtil;
+import consulo.language.editor.hint.DeclarationRangeUtil;
 import com.intellij.java.language.psi.*;
-import com.intellij.lang.BracePair;
-import com.intellij.lang.PairedBraceMatcher;
-import com.intellij.openapi.util.TextRange;
+import consulo.language.BracePair;
+import consulo.language.PairedBraceMatcher;
+import consulo.document.util.TextRange;
 import com.intellij.psi.*;
 import com.intellij.java.language.impl.psi.impl.source.tree.ElementType;
-import com.intellij.psi.tree.IElementType;
+import consulo.language.ast.IElementType;
 import com.intellij.java.language.psi.tree.java.IJavaElementType;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class JavaBraceMatcher implements PairedBraceMatcher {
   private final BracePair[] pairs = new BracePair[] {
@@ -40,7 +41,7 @@ public class JavaBraceMatcher implements PairedBraceMatcher {
   }
 
   @Override
-  public boolean isPairedBracesAllowedBeforeType(@Nonnull final IElementType lbraceType, @javax.annotation.Nullable final IElementType contextType) {
+  public boolean isPairedBracesAllowedBeforeType(@Nonnull final IElementType lbraceType, @Nullable final IElementType contextType) {
     if (contextType instanceof IJavaElementType) return isPairedBracesAllowedBeforeTypeInJava(contextType);
     return true;
   }

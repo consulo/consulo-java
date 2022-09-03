@@ -23,15 +23,15 @@ import java.util.List;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
-import com.intellij.ide.projectView.PresentationData;
-import com.intellij.ide.util.treeView.AbstractTreeNode;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Pair;
-import com.intellij.psi.PsiElement;
+import consulo.ui.ex.tree.PresentationData;
+import consulo.project.ui.view.tree.AbstractTreeNode;
+import consulo.project.Project;
+import consulo.util.lang.Pair;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.impl.refactoring.typeMigration.TypeMigrationLabeler;
 import com.intellij.java.impl.refactoring.typeMigration.usageInfo.TypeMigrationUsageInfo;
-import com.intellij.ui.DuplicateNodeRenderer;
+import consulo.ide.impl.idea.ui.DuplicateNodeRenderer;
 
 /**
  * @author anna

@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.refactoring;
 
-import com.intellij.CommonBundle;
+import consulo.application.CommonBundle;
 import org.jetbrains.annotations.PropertyKey;
 
 import java.util.ResourceBundle;

@@ -5,16 +5,16 @@ import static org.junit.Assert.assertEquals;
 import java.io.File;
 import java.io.IOException;
 
-import com.intellij.openapi.application.ApplicationManager;
+import consulo.application.ApplicationManager;
 import consulo.logging.Logger;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleUtil;
-import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.openapi.vfs.LocalFileSystem;
-import com.intellij.openapi.vfs.VfsUtil;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.module.Module;
+import consulo.ide.impl.idea.openapi.module.ModuleUtil;
+import consulo.ide.impl.idea.openapi.util.io.FileUtil;
+import consulo.virtualFileSystem.LocalFileSystem;
+import consulo.ide.impl.idea.openapi.vfs.VfsUtil;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiFile;
+import consulo.language.psi.PsiFile;
 import com.intellij.testFramework.PsiTestCase;
 import com.intellij.testFramework.PsiTestUtil;
 
@@ -53,7 +53,7 @@ public abstract class SCR20733Test extends PsiTestCase
 
 					myPackDir = mySrcDir1.createChildDirectory(null, "p");
 					VirtualFile file1 = myPackDir.createChildData(null, "A.java");
-					VfsUtil.saveText(file1, "package p; public class A{ public void foo(); }");
+					consulo.ide.impl.idea.openapi.vfs.VfsUtil.saveText(file1, "package p; public class A{ public void foo(); }");
 
 					PsiTestUtil.addContentRoot(myModule, myPrjDir1);
 					PsiTestUtil.addSourceRoot(myModule, mySrcDir1);

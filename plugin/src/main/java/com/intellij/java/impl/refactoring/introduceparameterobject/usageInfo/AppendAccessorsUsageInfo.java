@@ -21,16 +21,16 @@
 package com.intellij.java.impl.refactoring.introduceparameterobject.usageInfo;
 
 import consulo.logging.Logger;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.PsiElement;
+import consulo.util.lang.StringUtil;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiParameter;
 import com.intellij.java.language.psi.util.PropertyUtil;
 import com.intellij.java.impl.refactoring.RefactorJBundle;
 import com.intellij.java.impl.refactoring.introduceparameterobject.IntroduceParameterObjectProcessor;
 import com.intellij.java.impl.refactoring.util.FixableUsageInfo;
-import com.intellij.util.Function;
-import com.intellij.util.IncorrectOperationException;
+import consulo.ide.impl.idea.util.Function;
+import consulo.language.util.IncorrectOperationException;
 
 import java.util.List;
 import java.util.Set;

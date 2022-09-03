@@ -18,7 +18,7 @@ package com.intellij.java.language.psi.util;
 import javax.annotation.Nonnull;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.*;
+import consulo.language.psi.PsiInvalidElementAccessException;
 import consulo.logging.Logger;
 
 public class MethodSignatureBackedByPsiMethod extends MethodSignatureBase {

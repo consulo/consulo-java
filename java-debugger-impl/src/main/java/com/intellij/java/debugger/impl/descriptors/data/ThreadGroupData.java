@@ -17,7 +17,7 @@ package com.intellij.java.debugger.impl.descriptors.data;
 
 import com.intellij.java.debugger.impl.jdi.ThreadGroupReferenceProxyImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.ThreadGroupDescriptorImpl;
-import com.intellij.openapi.project.Project;
+import consulo.project.Project;
 
 public class ThreadGroupData extends DescriptorData<ThreadGroupDescriptorImpl>{
   private final ThreadGroupReferenceProxyImpl myThreadGroup;

@@ -1,6 +1,6 @@
 package com.intellij.java.execution;
 
-import com.intellij.openapi.extensions.ExtensionPointName;
+import consulo.component.extension.ExtensionPointName;
 import com.intellij.java.language.psi.PsiMethod;
 
 import javax.annotation.Nonnull;

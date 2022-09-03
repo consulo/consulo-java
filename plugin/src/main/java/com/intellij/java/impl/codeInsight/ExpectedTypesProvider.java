@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.codeInsight;
 
-import com.intellij.codeInsight.TailType;
+import consulo.language.editor.completion.lookup.TailType;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.LambdaHighlightingUtil;
 import com.intellij.java.impl.psi.impl.source.resolve.CompletionParameterTypeInferencePolicy;
 import com.intellij.java.language.psi.*;
@@ -30,18 +30,18 @@ import com.intellij.java.language.psi.search.searches.DeepestSuperMethodsSearch;
 import com.intellij.java.language.psi.util.PropertyUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
-import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.NullableComputable;
+import consulo.ide.ServiceManager;
+import consulo.project.Project;
+import consulo.ide.impl.idea.openapi.util.NullableComputable;
 import com.intellij.psi.*;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.ArrayUtil;
-import com.intellij.util.NullableFunction;
-import com.intellij.util.Processor;
-import com.intellij.util.containers.ContainerUtil;
-import com.intellij.util.containers.Stack;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.ast.IElementType;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.util.collection.ArrayUtil;
+import consulo.ide.impl.idea.util.NullableFunction;
+import consulo.application.util.function.Processor;
+import consulo.util.collection.ContainerUtil;
+import consulo.util.collection.Stack;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.logging.Logger;
 import jakarta.inject.Singleton;
@@ -125,7 +125,7 @@ public class ExpectedTypesProvider {
   }
 
   @Nonnull
-  public static ExpectedTypeInfo[] getExpectedTypes(@javax.annotation.Nullable PsiExpression expr, boolean forCompletion) {
+  public static ExpectedTypeInfo[] getExpectedTypes(@Nullable PsiExpression expr, boolean forCompletion) {
     return getExpectedTypes(expr, forCompletion, false, false);
   }
 
@@ -762,8 +762,8 @@ public class ExpectedTypesProvider {
       }
     }
 
-    @javax.annotation.Nullable
-    private static ExpectedTypeInfo getEqualsType(@javax.annotation.Nullable PsiExpression anotherExpr) {
+    @Nullable
+    private static ExpectedTypeInfo getEqualsType(@Nullable PsiExpression anotherExpr) {
       PsiType anotherType = anotherExpr != null ? anotherExpr.getType() : null;
       if (anotherType == null) {
         return null;
@@ -924,7 +924,7 @@ public class ExpectedTypesProvider {
           final ExpectedTypeInfo info = types[i];
           types[i] = createInfoImpl(info.getType(), info.getKind(), info.getDefaultType(),
               TailType.COND_EXPR_COLON, info.getCalledMethod(), new NullableComputable<String>() {
-                @javax.annotation.Nullable
+                @Nullable
                 @Override
                 public String compute() {
                   return ((ExpectedTypeInfoImpl) info).getExpectedName();

@@ -15,24 +15,25 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
-import com.intellij.codeInsight.intention.IntentionAction;
-import com.intellij.codeInsight.template.impl.InvokeTemplateAction;
-import com.intellij.codeInsight.template.impl.TemplateImpl;
-import com.intellij.codeInsight.template.impl.TemplateManagerImpl;
-import com.intellij.codeInsight.template.impl.TemplateSettings;
+import consulo.language.editor.intention.IntentionAction;
+import consulo.ide.impl.idea.codeInsight.template.impl.InvokeTemplateAction;
+import consulo.language.editor.impl.internal.template.TemplateImpl;
+import consulo.ide.impl.idea.codeInsight.template.impl.TemplateManagerImpl;
+import consulo.language.editor.template.TemplateSettings;
 import com.intellij.java.language.psi.*;
 import consulo.logging.Logger;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.SelectionModel;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.TextRange;
+import consulo.codeEditor.Editor;
+import consulo.codeEditor.SelectionModel;
+import consulo.project.Project;
+import consulo.document.util.TextRange;
 import com.intellij.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
 import consulo.java.language.module.util.JavaClassNames;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.HashSet;
 
@@ -70,7 +71,7 @@ public class IterateOverIterableIntention implements IntentionAction {
     return false;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private static TemplateImpl getTemplate() {
     return TemplateSettings.getInstance().getTemplate("I", "surround");
   }
@@ -82,7 +83,7 @@ public class IterateOverIterableIntention implements IntentionAction {
     return "Iterate";
   }
   
-  @javax.annotation.Nullable
+  @Nullable
   private static PsiExpression getIterableExpression(Editor editor, PsiFile file) {
     final SelectionModel selectionModel = editor.getSelectionModel();
     if (selectionModel.hasSelection()) {

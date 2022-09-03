@@ -9,24 +9,25 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import com.intellij.codeInsight.FileModificationService;
+
+import consulo.fileEditor.FileEditorManager;
+import consulo.language.editor.FileModificationService;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.HighlightControlFlowUtil;
-import com.intellij.codeInsight.intention.HighPriorityAction;
-import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement;
+import consulo.language.editor.intention.HighPriorityAction;
+import consulo.language.editor.inspection.LocalQuickFixAndIntentionActionOnPsiElement;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.command.undo.UndoUtil;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.ScrollType;
-import com.intellij.openapi.fileEditor.FileEditorManager;
-import com.intellij.openapi.fileEditor.OpenFileDescriptor;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.openapi.util.TextRange;
+import consulo.undoRedo.util.UndoUtil;
+import consulo.codeEditor.Editor;
+import consulo.codeEditor.ScrollType;
+import consulo.navigation.OpenFileDescriptor;
+import consulo.project.Project;
+import consulo.util.lang.Comparing;
+import consulo.document.util.TextRange;
 import com.intellij.psi.*;
 import com.intellij.java.language.impl.psi.controlFlow.AnalysisCanceledException;
 import com.intellij.java.language.impl.psi.controlFlow.ControlFlow;
 import com.intellij.java.language.impl.psi.controlFlow.ControlFlowUtil;
-import com.intellij.psi.search.LocalSearchScope;
+import consulo.language.psi.scope.LocalSearchScope;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PsiTypesUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
@@ -36,8 +37,8 @@ import com.intellij.java.impl.refactoring.changeSignature.OverriderUsageInfo;
 import com.intellij.java.impl.refactoring.changeSignature.ParameterInfoImpl;
 import com.intellij.java.impl.refactoring.typeMigration.TypeMigrationProcessor;
 import com.intellij.java.impl.refactoring.typeMigration.TypeMigrationRules;
-import com.intellij.usageView.UsageInfo;
-import com.intellij.util.IncorrectOperationException;
+import consulo.usage.UsageInfo;
+import consulo.language.util.IncorrectOperationException;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.logging.Logger;
 
@@ -409,7 +410,7 @@ public class MethodReturnTypeFix extends LocalQuickFixAndIntentionActionOnPsiEle
 		return false;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	private static PsiReferenceParameterList findTypeArgumentsList(final PsiClass superClass, final PsiClass derivedClass)
 	{
 		PsiReferenceParameterList referenceParameterList = null;

@@ -18,11 +18,11 @@ package com.intellij.testFramework;
 import java.io.IOException;
 
 import org.junit.Assert;
-import com.intellij.ide.DataManager;
-import com.intellij.openapi.actionSystem.ActionManager;
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.psi.PsiDocumentManager;
+import consulo.dataContext.DataManager;
+import consulo.ui.ex.action.ActionManager;
+import consulo.ui.ex.action.AnAction;
+import consulo.ui.ex.action.AnActionEvent;
+import consulo.language.psi.PsiDocumentManager;
 
 /**
  * A TestCase for testing some action in editor

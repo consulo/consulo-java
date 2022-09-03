@@ -21,7 +21,7 @@ import com.intellij.java.debugger.engine.evaluation.EvaluateException;
 import com.intellij.java.debugger.engine.evaluation.EvaluationContext;
 import com.intellij.java.debugger.impl.settings.NodeRendererSettings;
 import com.intellij.java.debugger.impl.ui.tree.ValueDescriptor;
-import consulo.awt.TargetAWT;
+import consulo.ui.ex.awtUnsafe.TargetAWT;
 import consulo.internal.com.sun.jdi.Field;
 import consulo.internal.com.sun.jdi.IntegerValue;
 import consulo.internal.com.sun.jdi.ObjectReference;

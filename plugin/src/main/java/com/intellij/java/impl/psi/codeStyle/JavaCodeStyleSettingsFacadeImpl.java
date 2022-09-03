@@ -17,8 +17,8 @@ package com.intellij.java.impl.psi.codeStyle;
 
 import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleSettingsFacade;
-import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
-import com.intellij.psi.codeStyle.ProjectCodeStyleSettingsManager;
+import consulo.language.codeStyle.CodeStyleSettingsManager;
+import consulo.language.codeStyle.ProjectCodeStyleSettingsManager;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 

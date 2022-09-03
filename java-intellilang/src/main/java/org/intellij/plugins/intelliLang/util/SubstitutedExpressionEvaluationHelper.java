@@ -19,10 +19,11 @@ import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.DfaPsiUtil;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.DfaUtil;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.project.Project;
+import consulo.project.Project;
 import com.intellij.psi.*;
 import org.intellij.plugins.intelliLang.Configuration;
 
+import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -53,7 +54,7 @@ public class SubstitutedExpressionEvaluationHelper {
     final ConcurrentMap<PsiElement, Object> map = new ConcurrentHashMap<PsiElement, Object>();
     //if (true) return myHelper.computeConstantExpression(e, false);
     return myHelper.computeExpression(e, false, new PsiConstantEvaluationHelper.AuxEvaluator() {
-      @javax.annotation.Nullable
+      @Nullable
       public Object computeExpression(final PsiExpression o, final PsiConstantEvaluationHelper.AuxEvaluator auxEvaluator) {
         PsiType resolvedType = null;
         if (o instanceof PsiMethodCallExpression) {
@@ -125,7 +126,7 @@ public class SubstitutedExpressionEvaluationHelper {
     });
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private Object calcSubstituted(final PsiModifierListOwner owner) {
     final PsiAnnotation annotation = AnnotationUtil.findAnnotation(owner, myConfiguration.getAdvancedConfiguration().getSubstAnnotationPair().second);
     if (annotation != null) {

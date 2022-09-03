@@ -19,25 +19,25 @@ import com.intellij.JavaTestUtil;
 import com.intellij.codeInsight.CodeInsightTestCase;
 import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.EditorFactory;
-import com.intellij.openapi.editor.event.DocumentEvent;
-import com.intellij.openapi.editor.event.DocumentListener;
-import com.intellij.openapi.editor.event.EditorEventMulticaster;
-import com.intellij.openapi.fileEditor.FileDocumentManager;
-import com.intellij.openapi.vfs.VfsUtil;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.impl.source.PsiFileImpl;
-import com.intellij.psi.impl.source.tree.FileElement;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.stubs.StubTree;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.document.Document;
+import consulo.codeEditor.EditorFactory;
+import consulo.document.event.DocumentEvent;
+import consulo.document.event.DocumentListener;
+import consulo.codeEditor.event.EditorEventMulticaster;
+import consulo.document.FileDocumentManager;
+import consulo.ide.impl.idea.openapi.vfs.VfsUtil;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.language.impl.psi.PsiFileImpl;
+import consulo.language.impl.ast.FileElement;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.stub.StubTree;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.psi.util.PsiUtilBase;
+import consulo.language.editor.util.PsiUtilBase;
 import com.intellij.testFramework.IdeaTestUtil;
 import com.intellij.testFramework.PlatformTestCase;
 import com.intellij.testFramework.PsiTestUtil;
-import com.intellij.util.FileContentUtil;
+import consulo.ide.impl.idea.util.FileContentUtil;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -299,7 +299,7 @@ public abstract class SmartPsiElementPointersTest extends CodeInsightTestCase {
 
   public void testCreatePointerDoesNotLoadPsiTree() throws IOException {
     VirtualFile vfile = myRoot.createChildData(this, "X.java");
-    VfsUtil.saveText(vfile, "public class X { public int X; }");
+    consulo.ide.impl.idea.openapi.vfs.VfsUtil.saveText(vfile, "public class X { public int X; }");
 
     PsiClass aClass = myJavaFacade.findClass("X", GlobalSearchScope.allScope(getProject()));
     assertNotNull(aClass);

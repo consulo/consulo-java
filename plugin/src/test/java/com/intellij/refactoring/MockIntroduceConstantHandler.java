@@ -8,9 +8,8 @@ import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.java.language.psi.PsiType;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.*;
+import consulo.codeEditor.Editor;
+import consulo.project.Project;
 import com.intellij.java.impl.refactoring.introduceField.IntroduceConstantHandler;
 
 public class MockIntroduceConstantHandler extends IntroduceConstantHandler{

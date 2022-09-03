@@ -18,10 +18,9 @@ package com.intellij.psi;
 import com.intellij.JavaTestUtil;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.roots.*;
-import com.intellij.openapi.vfs.LocalFileSystem;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.application.ApplicationManager;
+import consulo.virtualFileSystem.LocalFileSystem;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.testFramework.PsiTestCase;
 
 import java.io.File;

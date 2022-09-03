@@ -1,7 +1,7 @@
 package com.intellij.codeInsight.intention;
 
 import com.intellij.java.impl.codeInsight.intention.impl.SplitIfAction;
-import com.intellij.psi.codeStyle.CodeStyleSettingsManager;
+import consulo.language.codeStyle.CodeStyleSettingsManager;
 import com.intellij.testFramework.LightCodeInsightTestCase;
 
 /**

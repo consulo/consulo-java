@@ -15,10 +15,10 @@
  */
 package com.intellij.java.impl.codeInsight.unwrap;
 
-import com.intellij.codeInsight.CodeInsightBundle;
+import consulo.language.editor.CodeInsightBundle;
 import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
 
 public class JavaBracesUnwrapper extends JavaUnwrapper {
   public JavaBracesUnwrapper() {

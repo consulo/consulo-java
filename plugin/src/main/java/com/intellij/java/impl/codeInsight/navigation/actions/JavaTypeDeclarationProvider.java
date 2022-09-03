@@ -15,23 +15,24 @@
  */
 package com.intellij.java.impl.codeInsight.navigation.actions;
 
-import com.intellij.codeInsight.navigation.actions.TypeDeclarationProvider;
+import consulo.language.editor.action.TypeDeclarationProvider;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiReference;
+import consulo.codeEditor.Editor;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiReference;
 import consulo.annotation.access.RequiredReadAction;
-import consulo.codeInsight.TargetElementUtil;
+import consulo.language.editor.TargetElementUtil;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * @author yole
  */
 public class JavaTypeDeclarationProvider extends TypeDeclarationProvider {
   @RequiredReadAction
-  @javax.annotation.Nullable
+  @Nullable
   @Override
   public PsiElement[] getSymbolTypeDeclarations(@Nonnull PsiElement targetElement, Editor editor, int offset) {
     PsiType type;

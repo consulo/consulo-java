@@ -15,12 +15,12 @@
  */
 package com.intellij.execution.configurations;
 
-import com.intellij.execution.CantRunException;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.DependencyScope;
-import com.intellij.openapi.roots.ModuleRootModificationUtil;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.execution.CantRunException;
+import consulo.module.Module;
+import consulo.project.Project;
+import consulo.module.content.layer.orderEntry.DependencyScope;
+import consulo.ide.impl.idea.openapi.roots.ModuleRootModificationUtil;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.roots.ModuleRootManagerTestCase;
 import consulo.java.execution.configurations.OwnJavaParameters;
 

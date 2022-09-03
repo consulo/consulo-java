@@ -18,7 +18,7 @@ package com.intellij.java.impl.refactoring;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiVariable;
-import com.intellij.refactoring.Refactoring;
+import consulo.language.editor.refactoring.Refactoring;
 
 /**
  * @author ven

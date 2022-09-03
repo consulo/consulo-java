@@ -15,13 +15,13 @@
  */
 package com.intellij.java.execution.impl.junit2.info;
 
-import com.intellij.execution.Location;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleUtilCore;
+import consulo.execution.action.Location;
+import consulo.module.Module;
+import consulo.language.util.ModuleUtilCore;
 import com.intellij.java.language.psi.JavaPsiFacade;
-import com.intellij.psi.PsiDirectory;
+import consulo.language.psi.PsiDirectory;
 import com.intellij.java.language.psi.PsiJavaPackage;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.annotation.UsedInPlugin;
 
 import javax.annotation.Nonnull;

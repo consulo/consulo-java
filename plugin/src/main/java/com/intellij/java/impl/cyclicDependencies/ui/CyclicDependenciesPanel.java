@@ -37,39 +37,41 @@ import javax.swing.tree.TreeSelectionModel;
 
 import com.intellij.java.impl.packageDependencies.ui.PackageNode;
 import com.intellij.java.impl.packageDependencies.ui.TreeModelBuilder;
+import consulo.language.editor.PlatformDataKeys;
+import consulo.ui.ex.action.*;
+import consulo.ui.ex.awt.*;
+import consulo.ui.ex.awt.tree.TreeUtil;
+import consulo.ui.ex.content.Content;
 import org.jetbrains.annotations.NonNls;
-import com.intellij.CommonBundle;
-import com.intellij.analysis.AnalysisScopeBundle;
+import consulo.application.CommonBundle;
+import consulo.language.editor.scope.AnalysisScopeBundle;
 import com.intellij.java.impl.cyclicDependencies.CyclicDependenciesBuilder;
 import com.intellij.java.impl.cyclicDependencies.actions.CyclicDependenciesHandler;
-import com.intellij.icons.AllIcons;
-import com.intellij.ide.actions.ContextHelpAction;
+import consulo.application.AllIcons;
+import consulo.ui.ex.action.ContextHelpAction;
 import consulo.disposer.Disposable;
 import com.intellij.openapi.actionSystem.*;
-import com.intellij.openapi.project.DumbAware;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.Splitter;
+import consulo.application.dumb.DumbAware;
+import consulo.project.Project;
+import consulo.ui.ex.awt.Splitter;
 import consulo.disposer.Disposer;
 import consulo.util.dataholder.Key;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.packageDependencies.DependenciesToolWindow;
-import com.intellij.packageDependencies.DependencyUISettings;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.ide.impl.idea.packageDependencies.DependenciesToolWindow;
+import consulo.ide.impl.idea.packageDependencies.DependencyUISettings;
 import com.intellij.packageDependencies.ui.*;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
 import com.intellij.java.language.psi.PsiJavaPackage;
-import com.intellij.ui.ColoredTreeCellRenderer;
-import com.intellij.ui.PopupHandler;
-import com.intellij.ui.ScrollPaneFactory;
-import com.intellij.ui.SimpleTextAttributes;
-import com.intellij.ui.SmartExpander;
-import com.intellij.ui.TreeSpeedSearch;
-import com.intellij.ui.content.Content;
+import consulo.ui.ex.awt.tree.ColoredTreeCellRenderer;
+import consulo.ui.ex.awt.ScrollPaneFactory;
+import consulo.ui.ex.SimpleTextAttributes;
+import consulo.ide.impl.idea.ui.SmartExpander;
+import consulo.ui.ex.awt.speedSearch.TreeSpeedSearch;
 import com.intellij.ui.treeStructure.Tree;
-import com.intellij.util.EditSourceOnDoubleClickHandler;
-import com.intellij.util.ui.UIUtil;
-import com.intellij.util.ui.tree.TreeUtil;
+import consulo.ui.ex.awt.EditSourceOnDoubleClickHandler;
+import consulo.ui.ex.awt.UIUtil;
 import consulo.java.language.impl.JavaIcons;
 
 /**
@@ -107,7 +109,7 @@ public class CyclicDependenciesPanel extends JPanel implements Disposable, DataP
     mySettings.UI_SHOW_MODULES = false; //exist without modules - and doesn't with
 
     final Splitter treeSplitter = new Splitter();
-    Disposer.register(this, new consulo.disposer.Disposable(){
+    Disposer.register(this, new Disposable(){
       public void dispose() {
         treeSplitter.dispose();
       }

@@ -32,29 +32,27 @@ import javax.swing.JComboBox;
 import javax.swing.JList;
 import javax.swing.SwingUtilities;
 
-import com.intellij.ide.util.DirectoryChooser;
-import com.intellij.openapi.editor.event.DocumentAdapter;
-import com.intellij.openapi.editor.event.DocumentEvent;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleUtil;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.ProjectFileIndex;
-import com.intellij.openapi.roots.ProjectRootManager;
-import com.intellij.openapi.ui.ComboBoxWithWidePopup;
-import com.intellij.openapi.util.Comparing;
+import consulo.ide.impl.idea.ide.util.DirectoryChooser;
+import consulo.document.event.DocumentAdapter;
+import consulo.document.event.DocumentEvent;
+import consulo.module.Module;
+import consulo.ide.impl.idea.openapi.module.ModuleUtil;
+import consulo.project.Project;
+import consulo.module.content.ProjectFileIndex;
+import consulo.module.content.ProjectRootManager;
+import consulo.ui.ex.awt.*;
+import consulo.util.lang.Comparing;
 import com.intellij.openapi.util.Pass;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiDirectory;
-import com.intellij.psi.PsiManager;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.language.psi.PsiDirectory;
+import consulo.language.psi.PsiManager;
+import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.java.impl.refactoring.MoveDestination;
 import com.intellij.java.impl.refactoring.PackageWrapper;
-import com.intellij.ui.CollectionComboBoxModel;
-import com.intellij.ui.ComboboxSpeedSearch;
-import com.intellij.ui.ComboboxWithBrowseButton;
-import com.intellij.ui.EditorComboBox;
-import com.intellij.ui.ListCellRendererWrapper;
-import consulo.awt.TargetAWT;
+import consulo.ui.ex.awt.CollectionComboBoxModel;
+import consulo.language.editor.ui.awt.EditorComboBox;
+import consulo.ui.ex.awt.ListCellRendererWrapper;
+import consulo.ui.ex.awtUnsafe.TargetAWT;
 
 /**
  * User: anna
@@ -278,7 +276,7 @@ public abstract class DestinationFolderComboBox extends ComboboxWithBrowseButton
     }
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private static DirectoryChooser.ItemWrapper chooseSelection(final VirtualFile initialTargetDirectorySourceRoot,
                                                               final ProjectFileIndex fileIndex,
                                                               final ArrayList<DirectoryChooser.ItemWrapper> items,

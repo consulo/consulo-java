@@ -16,7 +16,7 @@
 package com.intellij.java.impl.ig.imports;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.util.lang.StringUtil;
 import com.intellij.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import javax.annotation.Nonnull;

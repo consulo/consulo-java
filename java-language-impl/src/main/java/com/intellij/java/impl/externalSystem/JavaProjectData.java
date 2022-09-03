@@ -13,19 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.intellij.java.language.impl.externalSystem;
+package com.intellij.java.impl.externalSystem;
 
-import consulo.logging.Logger;
-import com.intellij.openapi.externalSystem.model.Key;
-import com.intellij.openapi.externalSystem.model.ProjectKeys;
-import com.intellij.openapi.externalSystem.model.ProjectSystemId;
-import com.intellij.openapi.externalSystem.model.project.AbstractExternalEntityData;
-import com.intellij.openapi.externalSystem.util.ExternalSystemApiUtil;
-import com.intellij.java.language.projectRoots.JavaSdkVersion;
 import com.intellij.java.language.LanguageLevel;
+import com.intellij.java.language.projectRoots.JavaSdkVersion;
+import consulo.externalSystem.model.Key;
+import consulo.externalSystem.model.ProjectKeys;
+import consulo.externalSystem.model.ProjectSystemId;
+import consulo.externalSystem.service.project.AbstractExternalEntityData;
+import consulo.externalSystem.util.ExternalSystemApiUtil;
+import consulo.logging.Logger;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -130,7 +130,7 @@ public class JavaProjectData extends AbstractExternalEntityData {
     myLanguageLevel = level;
   }
 
-  public void setLanguageLevel(@javax.annotation.Nullable String languageLevel) {
+  public void setLanguageLevel(@Nullable String languageLevel) {
     LanguageLevel level = LanguageLevel.parse(languageLevel);
     if (level != null) {
       myLanguageLevel = level;

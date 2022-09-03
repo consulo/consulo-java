@@ -20,7 +20,7 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.DataFlowRunner;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.DfaInstructionState;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.DfaMemoryState;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.InstructionVisitor;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import javax.annotation.Nonnull;
 
 /**

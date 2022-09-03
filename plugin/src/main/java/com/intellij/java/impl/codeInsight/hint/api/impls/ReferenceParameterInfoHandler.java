@@ -15,12 +15,12 @@
  */
 package com.intellij.java.impl.codeInsight.hint.api.impls;
 
-import com.intellij.codeInsight.lookup.LookupElement;
+import consulo.language.editor.completion.lookup.LookupElement;
 import com.intellij.java.language.psi.*;
 import com.intellij.lang.parameterInfo.*;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.util.lang.StringUtil;
 import com.intellij.psi.*;
-import com.intellij.util.Function;
+import consulo.ide.impl.idea.util.Function;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
 

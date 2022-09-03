@@ -38,7 +38,7 @@ public abstract class DebuggerContextCommandImpl extends SuspendContextCommandIm
 		this(debuggerContext, null);
 	}
 
-	protected DebuggerContextCommandImpl(@Nonnull DebuggerContextImpl debuggerContext, @javax.annotation.Nullable ThreadReferenceProxyImpl customThread)
+	protected DebuggerContextCommandImpl(@Nonnull DebuggerContextImpl debuggerContext, @Nullable ThreadReferenceProxyImpl customThread)
 	{
 		super(debuggerContext.getSuspendContext());
 		myDebuggerContext = debuggerContext;

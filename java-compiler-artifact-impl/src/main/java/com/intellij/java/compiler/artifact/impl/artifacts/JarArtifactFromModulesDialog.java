@@ -15,21 +15,22 @@
  */
 package com.intellij.java.compiler.artifact.impl.artifacts;
 
-import com.intellij.icons.AllIcons;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.ui.configuration.ModulesAlphaComparator;
-import com.intellij.openapi.ui.DialogWrapper;
-import com.intellij.openapi.ui.TextFieldWithBrowseButton;
-import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.packaging.elements.PackagingElementResolvingContext;
+import consulo.application.AllIcons;
+import consulo.module.Module;
+import consulo.project.Project;
+import consulo.module.ModulesAlphaComparator;
+import consulo.ui.ex.awt.DialogWrapper;
+import consulo.ui.ex.awt.TextFieldWithBrowseButton;
+import consulo.ide.impl.idea.openapi.util.io.FileUtil;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.compiler.artifact.element.PackagingElementResolvingContext;
 import com.intellij.java.compiler.artifact.impl.ManifestFileUtil;
-import com.intellij.ui.ColoredListCellRenderer;
-import com.intellij.ui.ComboboxSpeedSearch;
-import com.intellij.ui.DocumentAdapter;
+import consulo.ui.ex.awt.ColoredListCellRenderer;
+import consulo.ui.ex.awt.ComboboxSpeedSearch;
+import consulo.ui.ex.awt.event.DocumentAdapter;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import java.awt.event.ActionEvent;
@@ -125,7 +126,7 @@ public class JarArtifactFromModulesDialog extends DialogWrapper
 		}
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	private Module getSelectedModule()
 	{
 		return (Module) myModuleComboBox.getSelectedItem();

@@ -16,11 +16,11 @@
 package com.intellij.java.debugger.impl.ui;
 
 import com.intellij.java.debugger.DebuggerBundle;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.Messages;
+import consulo.project.Project;
+import consulo.ui.ex.awt.Messages;
 import com.intellij.java.debugger.ui.classFilter.ClassFilter;
 import com.intellij.java.debugger.impl.classFilter.ClassFilterEditor;
-import com.intellij.util.IconUtil;
+import consulo.ide.impl.idea.util.IconUtil;
 import consulo.ui.image.Image;
 
 /**

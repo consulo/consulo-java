@@ -16,7 +16,7 @@
 package com.intellij.java.impl.ig.errorhandling;
 
 import com.intellij.java.language.psi.JavaRecursiveElementVisitor;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiParameter;
 import com.intellij.java.language.psi.PsiReferenceExpression;
 import javax.annotation.Nonnull;

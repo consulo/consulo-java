@@ -20,18 +20,18 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import com.intellij.formatting.ASTBlock;
-import com.intellij.formatting.Alignment;
-import com.intellij.formatting.Block;
-import com.intellij.formatting.ChildAttributes;
-import com.intellij.formatting.FormattingRangesInfo;
-import com.intellij.formatting.Indent;
-import com.intellij.formatting.Spacing;
-import com.intellij.formatting.Wrap;
-import com.intellij.lang.ASTNode;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.formatter.common.ExtraRangesProvider;
-import com.intellij.psi.formatter.common.NodeIndentRangesCalculator;
+import consulo.language.codeStyle.ASTBlock;
+import consulo.language.codeStyle.Alignment;
+import consulo.language.codeStyle.Block;
+import consulo.language.codeStyle.ChildAttributes;
+import consulo.language.codeStyle.FormattingRangesInfo;
+import consulo.language.codeStyle.Indent;
+import consulo.language.codeStyle.Spacing;
+import consulo.language.codeStyle.Wrap;
+import consulo.language.ast.ASTNode;
+import consulo.document.util.TextRange;
+import consulo.language.codeStyle.ExtraRangesProvider;
+import consulo.language.codeStyle.NodeIndentRangesCalculator;
 import com.intellij.java.impl.psi.impl.source.codeStyle.ShiftIndentInsideHelper;
 
 public class LeafBlock implements ASTBlock, ExtraRangesProvider

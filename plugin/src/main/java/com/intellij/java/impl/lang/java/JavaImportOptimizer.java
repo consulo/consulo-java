@@ -22,14 +22,14 @@ import com.intellij.java.language.psi.PsiImportList;
 import com.intellij.java.language.psi.PsiImportStatement;
 import com.intellij.java.language.psi.PsiImportStaticStatement;
 import com.intellij.java.language.psi.PsiJavaFile;
-import com.intellij.lang.ImportOptimizer;
+import consulo.language.editor.refactoring.ImportOptimizer;
 import consulo.logging.Logger;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.EmptyRunnable;
+import consulo.document.Document;
+import consulo.project.Project;
+import consulo.util.lang.EmptyRunnable;
 import com.intellij.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
 
 import javax.annotation.Nonnull;
 

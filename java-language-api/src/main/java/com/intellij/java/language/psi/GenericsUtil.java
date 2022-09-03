@@ -19,16 +19,16 @@ import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import com.intellij.java.language.psi.util.TypesDistinctProver;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.openapi.util.Couple;
-import com.intellij.openapi.util.Pair;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiManager;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.util.lang.Comparing;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiManager;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.util.collection.ContainerUtil;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.logging.Logger;
+import consulo.util.lang.Couple;
+import consulo.util.lang.Pair;
 import org.jetbrains.annotations.Contract;
 
 import javax.annotation.Nonnull;
@@ -51,7 +51,7 @@ public class GenericsUtil {
     return PsiIntersectionType.createIntersection(type1, type2);
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public static PsiType getLeastUpperBound(PsiType type1, PsiType type2, PsiManager manager) {
     if (TypeConversionUtil.isPrimitiveAndNotNull(type1) || TypeConversionUtil.isPrimitiveAndNotNull(type2)) {
       return null;
@@ -253,9 +253,9 @@ public class GenericsUtil {
   }
 
   public static Pair<PsiTypeParameter, PsiType> findTypeParameterWithBoundError(final PsiTypeParameter[] typeParams,
-                                                                                final PsiSubstitutor substitutor,
-                                                                                final PsiElement context,
-                                                                                final boolean allowUncheckedConversion) {
+                                                                                                  final PsiSubstitutor substitutor,
+                                                                                                  final PsiElement context,
+                                                                                                  final boolean allowUncheckedConversion) {
     for (PsiTypeParameter typeParameter : typeParams) {
       PsiType boundError = findTypeParameterBoundError(typeParameter, typeParameter.getExtendsListTypes(), substitutor, context, allowUncheckedConversion);
       if (boundError != null) {

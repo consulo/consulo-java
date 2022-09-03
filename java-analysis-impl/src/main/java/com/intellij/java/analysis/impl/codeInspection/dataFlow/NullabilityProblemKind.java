@@ -5,7 +5,7 @@ import com.intellij.java.language.codeInsight.Nullability;
 import com.intellij.java.analysis.JavaAnalysisBundle;
 import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
-import com.intellij.psi.tree.IElementType;
+import consulo.language.ast.IElementType;
 import com.intellij.java.language.psi.util.PsiTypesUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
@@ -27,7 +27,7 @@ import java.util.function.Supplier;
 import static com.intellij.java.analysis.JavaAnalysisBundle.BUNDLE;
 import static com.intellij.java.language.psi.CommonClassNames.JAVA_LANG_NULL_POINTER_EXCEPTION;
 import static com.intellij.java.language.psi.CommonClassNames.JAVA_LANG_RUNTIME_EXCEPTION;
-import static com.intellij.util.ObjectUtils.tryCast;
+import static consulo.ide.impl.idea.util.ObjectUtils.tryCast;
 
 /**
  * Represents a kind of nullability problem

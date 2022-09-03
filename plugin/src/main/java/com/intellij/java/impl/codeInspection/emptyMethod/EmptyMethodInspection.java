@@ -15,9 +15,9 @@
  */
 package com.intellij.java.impl.codeInspection.emptyMethod;
 
-import com.intellij.analysis.AnalysisScope;
+import consulo.language.editor.scope.AnalysisScope;
 import com.intellij.java.language.codeInsight.AnnotationUtil;
-import com.intellij.codeInsight.daemon.GroupNames;
+import consulo.ide.impl.idea.codeInsight.daemon.GroupNames;
 import com.intellij.java.analysis.codeInspection.GlobalJavaInspectionContext;
 import com.intellij.java.analysis.codeInspection.GlobalJavaInspectionTool;
 import com.intellij.java.analysis.codeInspection.reference.RefJavaUtil;
@@ -25,23 +25,22 @@ import com.intellij.java.analysis.codeInspection.reference.RefJavaVisitor;
 import com.intellij.java.analysis.codeInspection.reference.RefMethod;
 import com.intellij.java.language.psi.*;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
-import com.intellij.codeInspection.*;
 import com.intellij.codeInspection.reference.*;
 import com.intellij.java.impl.codeInspection.util.SpecialAnnotationsUtil;
 import com.intellij.java.analysis.impl.codeInspection.util.SpecialAnnotationsUtilBase;
-import com.intellij.openapi.application.ApplicationManager;
+import consulo.application.ApplicationManager;
 import consulo.logging.Logger;
-import com.intellij.openapi.extensions.ExtensionPointName;
-import com.intellij.openapi.project.Project;
+import consulo.component.extension.ExtensionPointName;
+import consulo.project.Project;
 import com.intellij.openapi.util.*;
 import com.intellij.psi.*;
 import com.intellij.java.indexing.search.searches.AllOverridingMethodsSearch;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.PsiUtilCore;
-import com.intellij.refactoring.safeDelete.SafeDeleteHandler;
-import com.intellij.util.Processor;
-import com.intellij.util.Query;
-import com.intellij.util.containers.BidirectionalMap;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.psi.PsiUtilCore;
+import consulo.language.editor.refactoring.safeDelete.SafeDeleteHandler;
+import consulo.application.util.function.Processor;
+import consulo.application.util.query.Query;
+import consulo.util.collection.BidirectionalMap;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
@@ -183,7 +182,7 @@ public class EmptyMethodInspection extends GlobalJavaInspectionTool
     return true;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private static RefMethod findSuperWithBody(RefMethod refMethod) {
     for (RefMethod refSuper : refMethod.getSuperMethods()) {
       if (refSuper.hasBody()) return refSuper;
@@ -285,7 +284,7 @@ public class EmptyMethodInspection extends GlobalJavaInspectionTool
   }
 
   @Override
-  @javax.annotation.Nullable
+  @Nullable
   public LocalQuickFix getQuickFix(final String hint) {
     return new DeleteMethodIntention(hint);
   }

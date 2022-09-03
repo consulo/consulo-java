@@ -15,41 +15,42 @@
  */
 package com.intellij.java.impl.openapi.projectRoots.impl;
 
-import com.intellij.execution.configurations.GeneralCommandLine;
-import com.intellij.ide.plugins.PluginManager;
 import com.intellij.java.language.projectRoots.JavaSdk;
 import com.intellij.java.language.projectRoots.JavaSdkVersion;
 import com.intellij.java.language.projectRoots.OwnJdkVersionDetector;
 import com.intellij.java.language.projectRoots.roots.AnnotationOrderRootType;
 import com.intellij.java.language.vfs.jrt.JrtFileSystem;
-import com.intellij.openapi.fileChooser.FileChooserDescriptor;
-import com.intellij.openapi.project.ProjectBundle;
-import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.projectRoots.SdkModificator;
-import com.intellij.openapi.projectRoots.SdkTable;
-import com.intellij.openapi.roots.OrderRootType;
-import com.intellij.openapi.util.SystemInfo;
-import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.LocalFileSystem;
-import com.intellij.openapi.vfs.VfsUtil;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.openapi.vfs.VirtualFileManager;
-import com.intellij.util.SystemProperties;
-import com.intellij.util.containers.ContainerUtil;
-import consulo.fileTypes.ZipArchiveFileType;
-import consulo.java.impl.bundle.JavaHomePredefinedBundleProvider;
-import consulo.java.language.impl.JavaIcons;
+import consulo.application.util.SystemInfo;
+import consulo.container.plugin.PluginManager;
+import consulo.content.OrderRootType;
+import consulo.content.base.BinariesOrderRootType;
+import consulo.content.base.DocumentationOrderRootType;
+import consulo.content.base.SourcesOrderRootType;
+import consulo.content.bundle.Sdk;
+import consulo.content.bundle.SdkModificator;
+import consulo.content.bundle.SdkTable;
+import consulo.fileChooser.FileChooserDescriptor;
 import consulo.java.execution.projectRoots.OwnJdkUtil;
+import consulo.java.impl.bundle.JavaHomePredefinedBundleProvider;
 import consulo.java.language.fileTypes.JModFileType;
+import consulo.java.language.impl.JavaIcons;
 import consulo.logging.Logger;
 import consulo.platform.Platform;
-import consulo.roots.types.BinariesOrderRootType;
-import consulo.roots.types.DocumentationOrderRootType;
-import consulo.roots.types.SourcesOrderRootType;
+import consulo.process.cmd.GeneralCommandLine;
+import consulo.project.ProjectBundle;
 import consulo.ui.image.Image;
+import consulo.util.collection.ContainerUtil;
+import consulo.util.collection.Sets;
 import consulo.util.dataholder.Key;
-import consulo.vfs.util.ArchiveVfsUtil;
+import consulo.util.io.FileUtil;
+import consulo.util.lang.StringUtil;
+import consulo.util.lang.SystemProperties;
+import consulo.virtualFileSystem.LocalFileSystem;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.virtualFileSystem.VirtualFileManager;
+import consulo.virtualFileSystem.archive.ArchiveVfsUtil;
+import consulo.virtualFileSystem.archive.ZipArchiveFileType;
+import consulo.virtualFileSystem.util.VirtualFileUtil;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
@@ -515,7 +516,7 @@ public class JavaSdkImpl extends JavaSdk {
 
     List<File> rootFiles = getJdkClassesRoots(file, isJre);
     for (File child : rootFiles) {
-      String url = VfsUtil.getUrlForLibraryRoot(child);
+      String url = VirtualFileUtil.getUrlForLibraryRoot(child);
       VirtualFile vFile = VirtualFileManager.getInstance().findFileByUrl(url);
       if (vFile != null) {
         result.add(vFile);
@@ -565,7 +566,7 @@ public class JavaSdkImpl extends JavaSdk {
       };
     }
 
-    Set<String> pathFilter = ContainerUtil.newTroveSet(FileUtil.PATH_HASHING_STRATEGY);
+    Set<String> pathFilter = Sets.newHashSet(FileUtil.PATH_HASHING_STRATEGY);
     List<File> rootFiles = ContainerUtil.newArrayList();
     for (File jarDir : jarDirs) {
       if (jarDir != null && jarDir.isDirectory()) {

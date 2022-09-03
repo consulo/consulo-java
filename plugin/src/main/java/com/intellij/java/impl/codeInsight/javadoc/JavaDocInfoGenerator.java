@@ -41,30 +41,30 @@ import org.jdom.JDOMException;
 
 import javax.annotation.Nullable;
 import com.intellij.java.language.codeInsight.AnnotationUtil;
-import com.intellij.codeInsight.CodeInsightBundle;
+import consulo.language.editor.CodeInsightBundle;
 import com.intellij.java.language.codeInsight.ExternalAnnotationsManager;
 import com.intellij.java.language.codeInsight.InferredAnnotationsManager;
-import com.intellij.codeInsight.documentation.DocumentationManagerProtocol;
-import com.intellij.codeInsight.documentation.DocumentationManagerUtil;
+import consulo.language.editor.documentation.DocumentationManagerProtocol;
+import consulo.ide.impl.idea.codeInsight.documentation.DocumentationManagerUtil;
 import com.intellij.java.impl.javadoc.JavadocGeneratorRunProfile;
-import com.intellij.lang.ASTNode;
-import com.intellij.lang.LangBundle;
+import consulo.language.ast.ASTNode;
+import consulo.language.LangBundle;
 import com.intellij.java.impl.lang.java.JavaDocumentationProvider;
 import consulo.logging.Logger;
-import com.intellij.openapi.project.Project;
+import consulo.project.Project;
 import com.intellij.java.language.projectRoots.JavaSdk;
 import com.intellij.java.language.projectRoots.JavaSdkVersion;
-import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.roots.ProjectFileIndex;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.openapi.util.Couple;
-import com.intellij.openapi.util.JDOMUtil;
-import com.intellij.openapi.util.Pair;
-import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.CharsetToolkit;
-import com.intellij.openapi.vfs.VfsUtilCore;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.content.bundle.Sdk;
+import consulo.module.content.ProjectFileIndex;
+import consulo.util.lang.Comparing;
+import consulo.util.lang.Couple;
+import consulo.util.jdom.JDOMUtil;
+import consulo.util.lang.Pair;
+import consulo.ide.impl.idea.openapi.util.io.FileUtil;
+import consulo.util.lang.StringUtil;
+import consulo.util.io.CharsetToolkit;
+import consulo.ide.impl.idea.openapi.vfs.VfsUtilCore;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.java.language.impl.psi.impl.JavaConstantExpressionEvaluator;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaDocElementType;
@@ -74,16 +74,16 @@ import com.intellij.java.language.psi.javadoc.PsiDocTag;
 import com.intellij.java.language.psi.javadoc.PsiDocTagValue;
 import com.intellij.java.language.psi.javadoc.PsiDocToken;
 import com.intellij.java.language.psi.javadoc.PsiInlineDocTag;
-import com.intellij.psi.search.EverythingGlobalScope;
+import consulo.language.psi.scope.EverythingGlobalScope;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
-import com.intellij.psi.util.PsiFormatUtilBase;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.ArrayUtil;
-import com.intellij.util.ArrayUtilRt;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.ObjectUtil;
-import com.intellij.util.containers.ContainerUtil;
-import com.intellij.xml.util.XmlStringUtil;
+import consulo.ide.impl.psi.util.PsiFormatUtilBase;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.util.collection.ArrayUtil;
+import consulo.ide.impl.idea.util.ArrayUtilRt;
+import consulo.language.util.IncorrectOperationException;
+import consulo.util.lang.ObjectUtil;
+import consulo.util.collection.ContainerUtil;
+import consulo.util.lang.xml.XmlStringUtil;
 import consulo.java.language.module.util.JavaClassNames;
 
 public class JavaDocInfoGenerator
@@ -302,7 +302,7 @@ public class JavaDocInfoGenerator
 		return fixupDoc(buffer);
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	private String fixupDoc(@Nonnull final StringBuilder buffer)
 	{
 		String text = buffer.toString();
@@ -546,7 +546,7 @@ public class JavaDocInfoGenerator
 		return buf.toString();
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public String generateDocInfo(List<String> docURLs)
 	{
 		StringBuilder buffer = new StringBuilder();
@@ -1087,7 +1087,7 @@ public class JavaDocInfoGenerator
 	}
 
 	public static
-	@javax.annotation.Nullable
+	@Nullable
 	PsiExpression calcInitializerExpression(PsiVariable variable)
 	{
 		PsiExpression initializer = variable.getInitializer();
@@ -2126,7 +2126,7 @@ public class JavaDocInfoGenerator
 	}
 
 	private
-	@javax.annotation.Nullable
+	@Nullable
 	ParamInfo findDocTag(PsiDocTag[] localTags, String paramName, PsiMethod method, DocTagLocator<PsiDocTag> tagLocator)
 	{
 		PsiDocTag localTag = getTagByName(localTags, paramName);
@@ -2799,7 +2799,7 @@ public class JavaDocInfoGenerator
 		});
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	private static PsiMethod findDelegateMethod(@Nonnull PsiMethod method)
 	{
 		PsiDocCommentOwner delegate = DocumentationDelegateProvider.findDocumentationDelegate(method);

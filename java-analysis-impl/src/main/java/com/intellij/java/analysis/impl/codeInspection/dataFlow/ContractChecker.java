@@ -13,7 +13,7 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.RelationTyp
 import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.util.collection.ContainerUtil;
 import com.siyeh.ig.psiutils.ControlFlowUtils;
 
 import javax.annotation.Nonnull;

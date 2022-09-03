@@ -15,15 +15,15 @@
  */
 package com.intellij.java.impl.lang.java;
 
-import com.intellij.lang.ASTNode;
-import com.intellij.lang.CodeDocumentationAwareCommenterEx;
+import consulo.language.ast.ASTNode;
+import consulo.language.CodeDocumentationAwareCommenterEx;
 import com.intellij.java.language.psi.JavaDocTokenType;
 import com.intellij.java.language.psi.JavaTokenType;
-import com.intellij.psi.PsiComment;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiComment;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaDocElementType;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
-import com.intellij.psi.tree.IElementType;
+import consulo.language.ast.IElementType;
 import javax.annotation.Nullable;
 
 /**
@@ -57,13 +57,13 @@ public class JavaCommenter implements CodeDocumentationAwareCommenterEx {
   }
 
   @Override
-  @javax.annotation.Nullable
+  @Nullable
   public IElementType getLineCommentTokenType() {
     return JavaTokenType.END_OF_LINE_COMMENT;
   }
 
   @Override
-  @javax.annotation.Nullable
+  @Nullable
   public IElementType getBlockCommentTokenType() {
     return JavaTokenType.C_STYLE_COMMENT;
   }

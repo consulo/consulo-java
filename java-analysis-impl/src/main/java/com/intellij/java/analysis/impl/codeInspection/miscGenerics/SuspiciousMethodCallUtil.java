@@ -2,16 +2,16 @@
 package com.intellij.java.analysis.impl.codeInspection.miscGenerics;
 
 import com.intellij.java.language.codeInsight.daemon.impl.analysis.JavaGenericsUtil;
-import com.intellij.codeInspection.InspectionsBundle;
+import consulo.language.editor.inspection.InspectionsBundle;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.*;
-import com.intellij.openapi.util.NullableLazyValue;
+import consulo.ide.impl.idea.openapi.util.NullableLazyValue;
 import com.intellij.psi.*;
 import com.intellij.java.language.psi.impl.source.resolve.graphInference.PsiPolyExpressionUtil;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.psi.util.*;
-import com.intellij.util.ArrayUtil;
-import com.intellij.util.ObjectUtils;
+import consulo.util.collection.ArrayUtil;
+import consulo.ide.impl.idea.util.ObjectUtils;
 import com.siyeh.ig.callMatcher.CallMatcher;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.TypeUtils;

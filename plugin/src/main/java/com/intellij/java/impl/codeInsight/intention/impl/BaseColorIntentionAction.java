@@ -15,16 +15,17 @@
  */
 package com.intellij.java.impl.codeInsight.intention.impl;
 
-import com.intellij.codeInsight.intention.HighPriorityAction;
-import com.intellij.codeInsight.intention.PsiElementBaseIntentionAction;
+import consulo.language.editor.intention.HighPriorityAction;
+import consulo.language.editor.intention.PsiElementBaseIntentionAction;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
+import consulo.codeEditor.Editor;
+import consulo.project.Project;
 import com.intellij.psi.*;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-import static com.intellij.patterns.PlatformPatterns.psiElement;
+import static consulo.language.pattern.PlatformPatterns.psiElement;
 
 /**
  * @author Danila Ponomarenko
@@ -46,7 +47,7 @@ public abstract class BaseColorIntentionAction extends PsiElementBaseIntentionAc
     return isJavaAwtColor(expression.getClassOrAnonymousClassReference()) && isValueArguments(expression.getArgumentList());
   }
 
-  private static boolean isJavaAwtColor(@javax.annotation.Nullable PsiJavaCodeReferenceElement ref) {
+  private static boolean isJavaAwtColor(@Nullable PsiJavaCodeReferenceElement ref) {
     if (ref == null) {
       return false;
     }
@@ -64,7 +65,7 @@ public abstract class BaseColorIntentionAction extends PsiElementBaseIntentionAc
     return false;
   }
 
-  private static boolean isValueArguments(@javax.annotation.Nullable PsiExpressionList arguments) {
+  private static boolean isValueArguments(@Nullable PsiExpressionList arguments) {
     if (arguments == null) {
       return false;
     }

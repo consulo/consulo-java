@@ -15,13 +15,13 @@
  */
 package com.intellij.java.impl.slicer;
 
-import com.intellij.analysis.AnalysisScope;
-import com.intellij.analysis.AnalysisUIOptions;
-import com.intellij.analysis.BaseAnalysisActionDialog;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleUtilCore;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiElement;
+import consulo.language.editor.scope.AnalysisScope;
+import consulo.ide.impl.idea.analysis.AnalysisUIOptions;
+import consulo.ide.impl.idea.analysis.BaseAnalysisActionDialog;
+import consulo.module.Module;
+import consulo.language.util.ModuleUtilCore;
+import consulo.project.Project;
+import consulo.language.psi.PsiElement;
 
 import javax.swing.*;
 

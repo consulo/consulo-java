@@ -20,11 +20,11 @@ import jakarta.inject.Singleton;
 
 import com.intellij.java.debugger.impl.memory.event.MemoryViewManagerListener;
 import consulo.disposer.Disposable;
-import com.intellij.openapi.components.PersistentStateComponent;
-import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.components.State;
-import com.intellij.openapi.components.Storage;
-import com.intellij.util.EventDispatcher;
+import consulo.component.persist.PersistentStateComponent;
+import consulo.ide.ServiceManager;
+import consulo.component.persist.State;
+import consulo.component.persist.Storage;
+import consulo.proxy.EventDispatcher;
 
 @Singleton
 @State(name = "MemoryViewSettings", storages = @Storage("memory.view.xml"))

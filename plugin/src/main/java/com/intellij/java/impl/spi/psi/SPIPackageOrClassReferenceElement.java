@@ -16,21 +16,22 @@
 package com.intellij.java.impl.spi.psi;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import consulo.psi.PsiPackage;
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
-import com.intellij.lang.ASTNode;
-import com.intellij.openapi.util.TextRange;
+import consulo.language.impl.psi.ASTWrapperPsiElement;
+import consulo.language.ast.ASTNode;
+import consulo.document.util.TextRange;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFileFactory;
-import com.intellij.psi.PsiReference;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFileFactory;
+import consulo.language.psi.PsiReference;
 import com.intellij.java.language.psi.util.ClassUtil;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.impl.spi.SPIFileType;
-import com.intellij.util.ArrayUtil;
-import com.intellij.util.IncorrectOperationException;
+import consulo.util.collection.ArrayUtil;
+import consulo.language.util.IncorrectOperationException;
 
 /**
  * User: anna
@@ -65,7 +66,7 @@ public class SPIPackageOrClassReferenceElement extends ASTWrapperPsiElement impl
     return replace(firstChild.getElements().get(0));
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   @Override
   public PsiElement resolve() {
     PsiPackage aPackage = JavaPsiFacade.getInstance(getProject()).findPackage(getText());

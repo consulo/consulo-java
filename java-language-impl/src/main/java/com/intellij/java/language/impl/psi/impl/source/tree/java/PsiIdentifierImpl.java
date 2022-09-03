@@ -15,15 +15,16 @@
  */
 package com.intellij.java.language.impl.psi.impl.source.tree.java;
 
-import javax.annotation.Nonnull;
-
-import com.intellij.java.language.psi.*;
-import com.intellij.psi.*;
 import com.intellij.java.language.impl.psi.impl.source.Constants;
-import com.intellij.psi.impl.source.codeStyle.CodeEditUtil;
-import com.intellij.psi.impl.source.tree.LeafPsiElement;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.util.IncorrectOperationException;
+import com.intellij.java.language.psi.*;
+import consulo.language.ast.IElementType;
+import consulo.language.impl.psi.CodeEditUtil;
+import consulo.language.impl.psi.LeafPsiElement;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiElementVisitor;
+import consulo.language.util.IncorrectOperationException;
+
+import javax.annotation.Nonnull;
 
 public class PsiIdentifierImpl extends LeafPsiElement implements PsiIdentifier, PsiJavaToken {
   public PsiIdentifierImpl(CharSequence text) {
@@ -36,11 +37,10 @@ public class PsiIdentifierImpl extends LeafPsiElement implements PsiIdentifier, 
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor){
+  public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
-      ((JavaElementVisitor)visitor).visitIdentifier(this);
-    }
-    else {
+      ((JavaElementVisitor) visitor).visitIdentifier(this);
+    } else {
       visitor.visitElement(this);
     }
   }
@@ -59,14 +59,14 @@ public class PsiIdentifierImpl extends LeafPsiElement implements PsiIdentifier, 
     //                     int j) {}
     PsiElement methodCandidate = result.getParent();
     if (methodCandidate instanceof PsiMethod) {
-      PsiMethod method = (PsiMethod)methodCandidate;
+      PsiMethod method = (PsiMethod) methodCandidate;
       CodeEditUtil.markToReformat(method.getParameterList().getNode(), true);
     }
 
     return result;
   }
 
-  public String toString(){
+  public String toString() {
     return "PsiIdentifier:" + getText();
   }
 }

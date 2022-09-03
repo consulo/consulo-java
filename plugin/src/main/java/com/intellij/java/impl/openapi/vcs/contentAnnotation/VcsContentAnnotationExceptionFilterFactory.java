@@ -15,11 +15,12 @@
  */
 package com.intellij.java.impl.openapi.vcs.contentAnnotation;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.java.execution.filters.ExceptionFilterFactory;
-import com.intellij.execution.filters.Filter;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.execution.ui.console.Filter;
+import consulo.language.psi.scope.GlobalSearchScope;
+
+import javax.annotation.Nonnull;
 
 /**
  * Created by IntelliJ IDEA.
@@ -27,12 +28,11 @@ import com.intellij.psi.search.GlobalSearchScope;
  * Date: 8/5/11
  * Time: 8:03 PM
  */
-public class VcsContentAnnotationExceptionFilterFactory implements ExceptionFilterFactory
-{
-	@Nonnull
-	@Override
-	public Filter create(@Nonnull GlobalSearchScope searchScope)
-	{
-		return new VcsContentAnnotationExceptionFilter(searchScope);
-	}
+@ExtensionImpl
+public class VcsContentAnnotationExceptionFilterFactory implements ExceptionFilterFactory {
+  @Nonnull
+  @Override
+  public Filter create(@Nonnull GlobalSearchScope searchScope) {
+    return new VcsContentAnnotationExceptionFilter(searchScope);
+  }
 }

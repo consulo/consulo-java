@@ -17,23 +17,23 @@ package com.intellij.java.language.impl.psi.presentation.java;
 
 import javax.annotation.Nullable;
 
-import com.intellij.navigation.ColoredItemPresentation;
-import com.intellij.navigation.ItemPresentation;
-import com.intellij.openapi.editor.colors.CodeInsightColors;
-import com.intellij.openapi.editor.colors.TextAttributesKey;
-import com.intellij.openapi.util.Iconable;
-import com.intellij.psi.PsiBundle;
+import consulo.ui.ex.ColoredItemPresentation;
+import consulo.navigation.ItemPresentation;
+import consulo.codeEditor.CodeInsightColors;
+import consulo.colorScheme.TextAttributesKey;
+import consulo.component.util.Iconable;
+import consulo.language.psi.PsiBundle;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiField;
-import com.intellij.psi.PsiFile;
+import consulo.language.psi.PsiFile;
 import com.intellij.java.language.psi.PsiJavaFile;
 import com.intellij.java.language.psi.PsiMember;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiSubstitutor;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
-import com.intellij.psi.util.PsiTreeUtil;
-import consulo.ide.IconDescriptorUpdaters;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.icon.IconDescriptorUpdaters;
 import consulo.ui.image.Image;
 
 public class JavaPresentationUtil {

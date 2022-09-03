@@ -19,35 +19,36 @@ import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.impl.engine.JVMNameUtil;
 import com.intellij.java.debugger.impl.jdi.DecompiledLocalVariable;
 import com.intellij.java.debugger.impl.ui.JavaDebuggerSupport;
-import com.intellij.icons.AllIcons;
+import consulo.application.AllIcons;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.CustomShortcutSet;
+import consulo.configurable.SearchableConfigurable;
+import consulo.fileChooser.FileChooserDescriptor;
+import consulo.ui.ex.action.AnActionEvent;
+import consulo.ui.ex.action.CustomShortcutSet;
 import consulo.logging.Logger;
-import com.intellij.openapi.fileChooser.FileChooser;
-import com.intellij.openapi.fileChooser.FileChooserDescriptor;
-import com.intellij.openapi.fileChooser.FileChooserFactory;
-import com.intellij.openapi.fileChooser.FileSaverDescriptor;
-import com.intellij.openapi.options.ConfigurationException;
-import com.intellij.openapi.options.SearchableConfigurable;
-import com.intellij.openapi.project.DumbAwareAction;
-import com.intellij.openapi.project.IndexNotReadyException;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.Messages;
-import com.intellij.openapi.util.JDOMUtil;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.openapi.vfs.VirtualFileWrapper;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.ui.ex.action.DumbAwareAction;
+import consulo.ui.ex.awt.*;
+import consulo.ui.fileChooser.FileChooser;
+import consulo.fileChooser.FileChooserFactory;
+import consulo.fileChooser.FileSaverDescriptor;
+import consulo.configurable.ConfigurationException;
+import consulo.application.dumb.IndexNotReadyException;
+import consulo.project.Project;
+import consulo.ui.ex.awt.Messages;
+import consulo.util.jdom.JDOMUtil;
+import consulo.util.lang.StringUtil;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.virtualFileSystem.VirtualFileWrapper;
+import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.java.indexing.search.searches.AnnotatedElementsSearch;
 import com.intellij.ui.*;
-import com.intellij.ui.table.JBTable;
-import com.intellij.util.ArrayUtil;
-import com.intellij.util.ui.ItemRemovable;
-import com.intellij.util.ui.JBUI;
-import com.intellij.util.ui.components.BorderLayoutPanel;
-import com.intellij.util.xmlb.XmlSerializer;
-import consulo.fileTypes.ArchiveFileType;
+import consulo.ui.ex.awt.table.JBTable;
+import consulo.util.collection.ArrayUtil;
+import consulo.ui.ex.awt.ItemRemovable;
+import consulo.ui.ex.awt.JBUI;
+import consulo.ui.ex.awt.BorderLayoutPanel;
+import consulo.util.xml.serializer.XmlSerializer;
+import consulo.virtualFileSystem.archive.ArchiveFileType;
 import consulo.java.debugger.impl.JavaRegistry;
 import consulo.localize.LocalizeValue;
 import org.jdom.Document;
@@ -56,6 +57,7 @@ import org.jetbrains.annotations.Debugger;
 import org.jetbrains.annotations.Nls;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableColumnModel;
@@ -80,7 +82,7 @@ public class CaptureConfigurable implements SearchableConfigurable
 		return "reference.idesettings.debugger.capture";
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	@Override
 	public JComponent createComponent()
 	{
@@ -126,7 +128,7 @@ public class CaptureConfigurable implements SearchableConfigurable
 			}
 		});
 
-		decorator.addExtraAction(new DumbAwareActionButton(LocalizeValue.of("Duplicate"), LocalizeValue.of("Duplicate"), AllIcons.Actions.Copy)
+		decorator.addExtraAction(new consulo.ide.impl.idea.ui.DumbAwareActionButton(LocalizeValue.of("Duplicate"), LocalizeValue.of("Duplicate"), AllIcons.Actions.Copy)
 		{
 			@Override
 			public boolean isEnabled()
@@ -152,7 +154,7 @@ public class CaptureConfigurable implements SearchableConfigurable
 			}
 		});
 
-		decorator.addExtraAction(new DumbAwareActionButton(LocalizeValue.of("Enable Selected"), LocalizeValue.of("Enable Selected"), AllIcons.Actions.Selectall)
+		decorator.addExtraAction(new consulo.ide.impl.idea.ui.DumbAwareActionButton(LocalizeValue.of("Enable Selected"), LocalizeValue.of("Enable Selected"), AllIcons.Actions.Selectall)
 		{
 			@Override
 			public boolean isEnabled()
@@ -167,7 +169,7 @@ public class CaptureConfigurable implements SearchableConfigurable
 				table.repaint();
 			}
 		});
-		decorator.addExtraAction(new DumbAwareActionButton(LocalizeValue.of("Disable Selected"), LocalizeValue.of("Disable Selected"), AllIcons.Actions.Unselectall)
+		decorator.addExtraAction(new consulo.ide.impl.idea.ui.DumbAwareActionButton(LocalizeValue.of("Disable Selected"), LocalizeValue.of("Disable Selected"), AllIcons.Actions.Unselectall)
 		{
 			@Override
 			public boolean isEnabled()
@@ -199,7 +201,7 @@ public class CaptureConfigurable implements SearchableConfigurable
 			}
 		}.registerCustomShortcutSet(new CustomShortcutSet(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0)), table);
 
-		decorator.addExtraAction(new DumbAwareActionButton(LocalizeValue.of("Import"), LocalizeValue.of("Import"), AllIcons.Actions.Install)
+		decorator.addExtraAction(new consulo.ide.impl.idea.ui.DumbAwareActionButton(LocalizeValue.of("Import"), LocalizeValue.of("Import"), AllIcons.Actions.Install)
 		{
 			@Override
 			public void actionPerformed(@Nonnull final AnActionEvent e)
@@ -249,7 +251,7 @@ public class CaptureConfigurable implements SearchableConfigurable
 				}
 			}
 		});
-		decorator.addExtraAction(new DumbAwareActionButton(LocalizeValue.of("Export"), LocalizeValue.of("Export"), AllIcons.Actions.Export)
+		decorator.addExtraAction(new consulo.ide.impl.idea.ui.DumbAwareActionButton(LocalizeValue.of("Export"), LocalizeValue.of("Export"), AllIcons.Actions.Export)
 		{
 			@Override
 			public void actionPerformed(@Nonnull final AnActionEvent e)

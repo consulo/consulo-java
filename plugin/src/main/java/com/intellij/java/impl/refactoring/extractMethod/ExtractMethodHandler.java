@@ -18,44 +18,45 @@ package com.intellij.java.impl.refactoring.extractMethod;
 import java.util.List;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.intellij.java.impl.codeInsight.CodeInsightUtil;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.JavaHighlightUtil;
-import com.intellij.codeInsight.highlighting.HighlightManager;
-import com.intellij.openapi.actionSystem.CommonDataKeys;
-import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.command.CommandProcessor;
+import consulo.fileEditor.FileEditorManager;
+import consulo.language.editor.highlight.HighlightManager;
+import consulo.language.editor.CommonDataKeys;
+import consulo.dataContext.DataContext;
+import consulo.undoRedo.CommandProcessor;
 import consulo.logging.Logger;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.LogicalPosition;
-import com.intellij.openapi.editor.ScrollType;
-import com.intellij.openapi.editor.colors.EditorColors;
-import com.intellij.openapi.editor.colors.EditorColorsManager;
-import com.intellij.openapi.editor.markup.TextAttributes;
-import com.intellij.openapi.fileEditor.FileEditorManager;
-import com.intellij.openapi.fileEditor.OpenFileDescriptor;
-import com.intellij.openapi.project.Project;
+import consulo.codeEditor.Editor;
+import consulo.codeEditor.LogicalPosition;
+import consulo.codeEditor.ScrollType;
+import consulo.codeEditor.EditorColors;
+import consulo.colorScheme.EditorColorsManager;
+import consulo.colorScheme.TextAttributes;
+import consulo.navigation.OpenFileDescriptor;
+import consulo.project.Project;
 import com.intellij.openapi.util.Pass;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.openapi.wm.WindowManager;
-import com.intellij.psi.PsiDocumentManager;
-import com.intellij.psi.PsiElement;
+import consulo.document.util.TextRange;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.project.ui.wm.WindowManager;
+import consulo.language.psi.PsiDocumentManager;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiExpression;
-import com.intellij.psi.PsiFile;
+import consulo.language.psi.PsiFile;
 import com.intellij.java.language.psi.PsiStatement;
 import com.intellij.java.language.psi.PsiType;
-import com.intellij.psi.impl.source.PostprocessReformattingAspect;
+import consulo.language.codeStyle.PostprocessReformattingAspect;
 import com.intellij.java.language.psi.util.PsiExpressionTrimRenderer;
 import com.intellij.java.impl.refactoring.HelpID;
-import com.intellij.refactoring.IntroduceTargetChooser;
-import com.intellij.refactoring.RefactoringActionHandler;
-import com.intellij.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.IntroduceTargetChooser;
+import consulo.language.editor.refactoring.action.RefactoringActionHandler;
+import consulo.language.editor.refactoring.RefactoringBundle;
 import com.intellij.java.impl.refactoring.introduceVariable.IntroduceVariableBase;
-import com.intellij.refactoring.util.CommonRefactoringUtil;
+import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import com.intellij.java.impl.refactoring.util.RefactoringUtil;
 import com.intellij.java.impl.refactoring.util.duplicates.DuplicatesImpl;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
 
 public class ExtractMethodHandler implements RefactoringActionHandler
 {
@@ -204,13 +205,13 @@ public class ExtractMethodHandler implements RefactoringActionHandler
 		}, REFACTORING_NAME, null);
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	private static ExtractMethodProcessor getProcessor(final PsiElement[] elements,
 			final Project project,
 			final PsiFile file,
 			final Editor editor,
 			final boolean showErrorMessages,
-			final @javax.annotation.Nullable Pass<ExtractMethodProcessor> pass)
+			final @Nullable Pass<ExtractMethodProcessor> pass)
 	{
 		if(elements == null || elements.length == 0)
 		{
@@ -271,7 +272,7 @@ public class ExtractMethodHandler implements RefactoringActionHandler
 		}
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public static ExtractMethodProcessor getProcessor(final Project project, final PsiElement[] elements, final PsiFile file, final boolean openEditor)
 	{
 		return getProcessor(elements, project, file, openEditor ? openEditor(project, file) : null, false, null);
@@ -282,7 +283,7 @@ public class ExtractMethodHandler implements RefactoringActionHandler
 		return invokeOnElements(project, openEditor(project, file), processor, directTypes);
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	private static Editor openEditor(final Project project, final PsiFile file)
 	{
 		final VirtualFile virtualFile = file.getVirtualFile();

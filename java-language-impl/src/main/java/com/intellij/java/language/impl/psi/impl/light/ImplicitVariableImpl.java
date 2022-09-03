@@ -15,16 +15,18 @@
  */
 package com.intellij.java.language.impl.psi.impl.light;
 
+import com.intellij.java.language.psi.*;
+import consulo.content.scope.SearchScope;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiElementVisitor;
+import consulo.language.psi.PsiManager;
+import consulo.language.psi.scope.LocalSearchScope;
+import consulo.language.util.IncorrectOperationException;
+
 import javax.annotation.Nonnull;
 
-import com.intellij.java.language.psi.*;
-import com.intellij.psi.*;
-import com.intellij.psi.search.SearchScope;
-import com.intellij.psi.search.LocalSearchScope;
-import com.intellij.util.IncorrectOperationException;
-
 /**
- *  @author dsl
+ * @author dsl
  */
 public abstract class ImplicitVariableImpl extends LightVariableBase implements ImplicitVariable {
 
@@ -35,9 +37,8 @@ public abstract class ImplicitVariableImpl extends LightVariableBase implements 
   @Override
   public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
-      ((JavaElementVisitor)visitor).visitImplicitVariable(this);
-    }
-    else {
+      ((JavaElementVisitor) visitor).visitImplicitVariable(this);
+    } else {
       visitor.visitElement(this);
     }
   }

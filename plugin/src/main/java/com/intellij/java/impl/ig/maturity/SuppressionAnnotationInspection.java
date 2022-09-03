@@ -18,12 +18,12 @@ package com.intellij.java.impl.ig.maturity;
 import javax.annotation.Nonnull;
 
 import com.intellij.java.analysis.codeInspection.SuppressManager;
-import com.intellij.codeInspection.SuppressionUtil;
+import consulo.language.editor.inspection.SuppressionUtil;
 import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.java.language.psi.PsiAnnotation;
-import com.intellij.psi.PsiComment;
+import consulo.language.psi.PsiComment;
 import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
-import com.intellij.psi.tree.IElementType;
+import consulo.language.ast.IElementType;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;

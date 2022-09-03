@@ -15,14 +15,14 @@
  */
 package com.intellij.java.execution.impl.testframework;
 
-import com.intellij.execution.Location;
-import com.intellij.execution.PsiLocation;
+import consulo.execution.action.Location;
+import consulo.execution.action.PsiLocation;
 import com.intellij.java.execution.impl.junit2.info.MethodLocation;
-import com.intellij.execution.testframework.AbstractTestProxy;
+import consulo.execution.test.AbstractTestProxy;
 import com.intellij.execution.testframework.Filter;
-import com.intellij.openapi.project.Project;
+import consulo.project.Project;
 import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.language.psi.scope.GlobalSearchScope;
 
 import javax.annotation.Nonnull;
 

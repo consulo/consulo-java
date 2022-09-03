@@ -32,20 +32,20 @@ import com.intellij.java.debugger.impl.ui.impl.watch.MethodReturnValueDescriptor
 import com.intellij.java.debugger.impl.ui.tree.FieldDescriptor;
 import com.intellij.java.debugger.impl.ui.tree.LocalVariableDescriptor;
 import com.intellij.java.debugger.ui.tree.NodeDescriptor;
-import com.intellij.openapi.project.Project;
+import consulo.project.Project;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiField;
-import com.intellij.psi.PsiFile;
+import consulo.language.psi.PsiFile;
 import com.intellij.java.language.psi.PsiVariable;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.util.PsiTreeUtil;
 import consulo.internal.com.sun.jdi.*;
 
 public class DefaultSourcePositionProvider extends SourcePositionProvider
 {
-	@javax.annotation.Nullable
+	@Nullable
 	@Override
 	protected SourcePosition computeSourcePosition(@Nonnull NodeDescriptor descriptor, @Nonnull Project project, @Nonnull DebuggerContextImpl context, boolean nearest)
 	{

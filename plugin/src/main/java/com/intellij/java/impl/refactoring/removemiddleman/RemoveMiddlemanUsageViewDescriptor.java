@@ -15,11 +15,11 @@
  */
 package com.intellij.java.impl.refactoring.removemiddleman;
 
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.impl.refactoring.RefactorJBundle;
 import com.intellij.java.impl.refactoring.psi.MyUsageViewUtil;
-import com.intellij.usageView.UsageViewDescriptor;
+import consulo.usage.UsageViewDescriptor;
 import javax.annotation.Nonnull;
 
 class RemoveMiddlemanUsageViewDescriptor implements UsageViewDescriptor {

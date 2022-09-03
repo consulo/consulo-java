@@ -15,17 +15,17 @@
  */
 package com.intellij.java.impl.ide.util;
 
-import com.intellij.ide.util.TreeFileChooser;
-import com.intellij.ide.util.TreeFileChooserDialog;
+import consulo.language.editor.ui.TreeFileChooser;
+import consulo.ide.impl.idea.ide.util.TreeFileChooserDialog;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.util.ClassFilter;
 import com.intellij.java.language.util.TreeClassChooser;
 import com.intellij.java.language.util.TreeClassChooserFactory;
-import com.intellij.openapi.fileTypes.FileType;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Condition;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.virtualFileSystem.fileType.FileType;
+import consulo.project.Project;
+import consulo.util.lang.function.Condition;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.scope.GlobalSearchScope;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 

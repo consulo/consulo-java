@@ -17,8 +17,8 @@ package com.intellij.java.impl.codeInsight.folding.impl.actions;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.codeInsight.CodeInsightActionHandler;
-import com.intellij.codeInsight.actions.BaseCodeInsightAction;
+import consulo.language.editor.action.CodeInsightActionHandler;
+import consulo.language.editor.impl.action.BaseCodeInsightAction;
 import com.intellij.java.impl.codeInsight.folding.impl.CollapseBlockHandler;
 
 /**

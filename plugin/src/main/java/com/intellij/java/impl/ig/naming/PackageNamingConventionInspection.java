@@ -15,17 +15,17 @@
  */
 package com.intellij.java.impl.ig.naming;
 
-import com.intellij.analysis.AnalysisScope;
-import com.intellij.codeInspection.CommonProblemDescriptor;
-import com.intellij.codeInspection.GlobalInspectionContext;
-import com.intellij.codeInspection.InspectionManager;
-import com.intellij.codeInspection.reference.RefEntity;
+import consulo.language.editor.scope.AnalysisScope;
+import consulo.language.editor.inspection.CommonProblemDescriptor;
+import consulo.language.editor.inspection.GlobalInspectionContext;
+import consulo.language.editor.inspection.scheme.InspectionManager;
+import consulo.language.editor.inspection.reference.RefEntity;
 import com.intellij.java.analysis.codeInspection.reference.RefPackage;
-import com.intellij.openapi.util.InvalidDataException;
-import com.intellij.ui.DocumentAdapter;
-import com.intellij.util.ui.RegExFormatter;
-import com.intellij.util.ui.RegExInputVerifier;
-import com.intellij.util.ui.UIUtil;
+import consulo.util.xml.serializer.InvalidDataException;
+import consulo.ui.ex.awt.event.DocumentAdapter;
+import consulo.ide.impl.idea.util.ui.RegExFormatter;
+import consulo.ide.impl.idea.util.ui.RegExInputVerifier;
+import consulo.ui.ex.awt.UIUtil;
 import com.siyeh.InspectionGadgetsBundle;
 import com.intellij.java.impl.ig.BaseGlobalInspection;
 import org.jdom.Element;

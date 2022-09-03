@@ -19,12 +19,12 @@
  */
 package com.intellij.java.indexing.search.searches;
 
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Condition;
+import consulo.project.Project;
+import consulo.util.lang.function.Condition;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.search.SearchScope;
-import com.intellij.psi.search.searches.ExtensibleQueryFactory;
-import com.intellij.util.Query;
+import consulo.content.scope.SearchScope;
+import consulo.application.util.query.ExtensibleQueryFactory;
+import consulo.application.util.query.Query;
 
 public class AllClassesSearch extends ExtensibleQueryFactory<PsiClass, AllClassesSearch.SearchParameters> {
   public static final AllClassesSearch INSTANCE = new AllClassesSearch();
@@ -58,7 +58,7 @@ public class AllClassesSearch extends ExtensibleQueryFactory<PsiClass, AllClasse
   }
 
   private AllClassesSearch() {
-    super("consulo.java");
+    super(AllClassesSearchExecutor.class);
   }
 
   public static Query<PsiClass> search(SearchScope scope, Project project) {

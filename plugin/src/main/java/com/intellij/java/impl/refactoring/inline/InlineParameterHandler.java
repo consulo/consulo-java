@@ -15,29 +15,29 @@
  */
 package com.intellij.java.impl.refactoring.inline;
 
-import com.intellij.codeInsight.PsiEquivalenceUtil;
+import consulo.language.editor.PsiEquivalenceUtil;
 import com.intellij.java.impl.codeInspection.sameParameterValue.SameParameterValueInspection;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.application.Result;
-import com.intellij.openapi.command.WriteCommandAction;
+import consulo.application.ApplicationManager;
+import consulo.application.Result;
+import consulo.language.editor.WriteCommandAction;
 import consulo.logging.Logger;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Ref;
+import consulo.codeEditor.Editor;
+import consulo.project.Project;
+import consulo.util.lang.ref.Ref;
 import com.intellij.psi.*;
 import com.intellij.java.analysis.impl.psi.controlFlow.DefUseUtil;
 import com.intellij.java.indexing.search.searches.OverridingMethodsSearch;
-import com.intellij.psi.search.searches.ReferencesSearch;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.search.ReferencesSearch;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.impl.refactoring.HelpID;
-import com.intellij.refactoring.RefactoringBundle;
-import com.intellij.refactoring.util.CommonRefactoringUtil;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import com.intellij.java.impl.refactoring.util.InlineUtil;
-import com.intellij.refactoring.util.RefactoringMessageDialog;
-import com.intellij.util.Processor;
+import consulo.language.editor.refactoring.util.RefactoringMessageDialog;
+import consulo.application.util.function.Processor;
 import javax.annotation.Nullable;
 
 import java.util.*;
@@ -258,7 +258,7 @@ public class InlineParameterHandler extends JavaInlineActionHandler {
     return value1 != null && value2 != null && value1.equals(value2);
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private static String getCannotInlineMessage(final PsiParameter psiParameter, final PsiMethod method) {
     if (psiParameter.isVarArgs()) {
       return RefactoringBundle.message("inline.parameter.error.varargs");

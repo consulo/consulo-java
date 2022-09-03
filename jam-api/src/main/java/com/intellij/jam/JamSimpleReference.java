@@ -15,11 +15,11 @@
  */
 package com.intellij.jam;
 
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiLiteral;
-import com.intellij.psi.PsiReferenceBase;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.ObjectUtil;
+import consulo.language.psi.PsiReferenceBase;
+import consulo.language.util.IncorrectOperationException;
+import consulo.util.lang.ObjectUtil;
 import javax.annotation.Nonnull;
 
 /**

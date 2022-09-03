@@ -19,19 +19,19 @@ import java.nio.charset.Charset;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import com.intellij.execution.CantRunException;
-import com.intellij.execution.ExecutionException;
+import consulo.execution.CantRunException;
+import consulo.execution.process.ProcessTerminatedListener;
+import consulo.process.ExecutionException;
 import com.intellij.java.execution.ShortenCommandLine;
-import com.intellij.execution.configurations.GeneralCommandLine;
-import com.intellij.execution.configurations.ParametersList;
-import com.intellij.execution.configurations.SimpleProgramParameters;
-import com.intellij.execution.process.OSProcessHandler;
-import com.intellij.execution.process.ProcessTerminatedListener;
+import consulo.process.cmd.GeneralCommandLine;
+import consulo.process.cmd.ParametersList;
+import consulo.process.cmd.SimpleProgramParameters;
+import consulo.process.internal.OSProcessHandler;
 import consulo.logging.Logger;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.vfs.CharsetToolkit;
-import com.intellij.util.PathsList;
+import consulo.project.Project;
+import consulo.content.bundle.Sdk;
+import consulo.util.io.CharsetToolkit;
+import consulo.virtualFileSystem.util.PathsList;
 import consulo.java.execution.projectRoots.OwnJdkUtil;
 
 /**
@@ -58,7 +58,7 @@ public class OwnSimpleJavaParameters extends SimpleProgramParameters
 	private boolean myClasspathFile = true;
 	private String myJarPath;
 
-	@javax.annotation.Nullable
+	@Nullable
 	public Sdk getJdk()
 	{
 		return myJdk;
@@ -104,13 +104,13 @@ public class OwnSimpleJavaParameters extends SimpleProgramParameters
 		return myVmParameters;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public Charset getCharset()
 	{
 		return myCharset;
 	}
 
-	public void setCharset(@javax.annotation.Nullable Charset charset)
+	public void setCharset(@Nullable Charset charset)
 	{
 		myCharset = charset;
 	}
@@ -125,7 +125,7 @@ public class OwnSimpleJavaParameters extends SimpleProgramParameters
 		myUseDynamicClasspath = useDynamicClasspath && (myArgFile || myUseClasspathJar || myClasspathFile);
 	}
 
-	public void setUseDynamicClasspath(@javax.annotation.Nullable Project project)
+	public void setUseDynamicClasspath(@Nullable Project project)
 	{
 		setUseDynamicClasspath(OwnJdkUtil.useDynamicClasspath(project));
 	}

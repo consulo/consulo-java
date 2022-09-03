@@ -18,7 +18,7 @@ package com.intellij.java.compiler.artifact.impl;
 import java.util.jar.Attributes;
 
 import org.jetbrains.annotations.NonNls;
-import com.intellij.openapi.application.ApplicationNamesInfo;
+import consulo.application.impl.internal.ApplicationNamesInfo;
 
 public class ManifestBuilder
 {

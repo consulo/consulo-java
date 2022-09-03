@@ -15,9 +15,9 @@
  */
 package com.intellij.java.impl.cyclicDependencies;
 
-import com.intellij.util.Chunk;
-import com.intellij.util.graph.DFSTBuilder;
-import com.intellij.util.graph.Graph;
+import consulo.util.collection.Chunk;
+import consulo.component.util.graph.DFSTBuilder;
+import consulo.component.util.graph.Graph;
 import consulo.util.collection.primitive.ints.IntList;
 
 import java.util.*;

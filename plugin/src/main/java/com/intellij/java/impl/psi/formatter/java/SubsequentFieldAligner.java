@@ -19,18 +19,18 @@ import java.util.Set;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.formatting.alignment.AlignmentInColumnsConfig;
-import com.intellij.formatting.alignment.AlignmentInColumnsHelper;
-import com.intellij.formatting.alignment.AlignmentStrategy;
-import com.intellij.lang.ASTNode;
+import consulo.ide.impl.idea.formatting.alignment.AlignmentInColumnsConfig;
+import consulo.ide.impl.idea.formatting.alignment.AlignmentInColumnsHelper;
+import consulo.language.codeStyle.AlignmentStrategy;
+import consulo.language.ast.ASTNode;
 import com.intellij.java.language.psi.JavaTokenType;
-import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
+import consulo.language.codeStyle.CommonCodeStyleSettings;
 import com.intellij.java.language.impl.psi.impl.source.tree.ElementType;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
 import com.intellij.java.impl.psi.impl.source.tree.JavaJspElementType;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.tree.TokenSet;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.language.ast.IElementType;
+import consulo.language.ast.TokenSet;
+import consulo.util.collection.ContainerUtil;
 
 public class SubsequentFieldAligner extends ChildAlignmentStrategyProvider
 {

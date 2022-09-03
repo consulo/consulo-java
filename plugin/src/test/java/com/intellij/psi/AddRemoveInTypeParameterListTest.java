@@ -1,10 +1,10 @@
 package com.intellij.psi;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.application.ApplicationManager;
+import consulo.application.ApplicationManager;
 import com.intellij.testFramework.LightIdeaTestCase;
 import com.intellij.testFramework.PsiTestUtil;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
 
 public abstract class AddRemoveInTypeParameterListTest extends LightIdeaTestCase{
   public void testAdd() throws IncorrectOperationException {

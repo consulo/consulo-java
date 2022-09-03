@@ -20,7 +20,7 @@ import jakarta.inject.Singleton;
 
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiType;
-import com.intellij.util.Consumer;
+import consulo.ide.impl.idea.util.Consumer;
 import com.intellij.java.impl.util.xml.CanonicalPsiTypeConverter;
 import com.intellij.java.impl.util.xml.CanonicalPsiTypeConverterImpl;
 import com.intellij.util.xml.ConverterManager;

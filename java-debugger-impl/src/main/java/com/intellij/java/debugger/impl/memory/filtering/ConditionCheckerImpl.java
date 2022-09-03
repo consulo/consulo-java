@@ -18,6 +18,7 @@ package com.intellij.java.debugger.impl.memory.filtering;
 import java.util.concurrent.atomic.AtomicReference;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.intellij.java.debugger.impl.engine.DebugProcessImpl;
 import com.intellij.java.debugger.impl.engine.SuspendContextImpl;
@@ -28,8 +29,8 @@ import com.intellij.java.debugger.engine.evaluation.expression.ExpressionEvaluat
 import com.intellij.java.debugger.impl.engine.events.DebuggerContextCommandImpl;
 import com.intellij.java.debugger.impl.DebuggerUtilsEx;
 import com.intellij.java.debugger.impl.ui.tree.render.CachedEvaluator;
-import com.intellij.openapi.project.Project;
-import com.intellij.xdebugger.XExpression;
+import consulo.project.Project;
+import consulo.execution.debug.breakpoint.XExpression;
 import consulo.internal.com.sun.jdi.ObjectReference;
 
 /**
@@ -41,7 +42,7 @@ public class ConditionCheckerImpl implements ConditionChecker
 	private final MyCachedEvaluator myEvaluator;
 	private final AtomicReference<CheckingResult> myResultReference = new AtomicReference<>();
 
-	public ConditionCheckerImpl(@Nonnull DebugProcessImpl debugProcess, @javax.annotation.Nullable XExpression expression, @Nonnull String className)
+	public ConditionCheckerImpl(@Nonnull DebugProcessImpl debugProcess, @Nullable XExpression expression, @Nonnull String className)
 	{
 		myDebugProcess = debugProcess;
 		myEvaluator = new MyCachedEvaluator(myDebugProcess.getProject(), className);

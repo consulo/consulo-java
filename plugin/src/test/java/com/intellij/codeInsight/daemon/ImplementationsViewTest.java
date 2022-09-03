@@ -10,14 +10,14 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.junit.Assert;
-import com.intellij.codeInsight.hint.ImplementationViewComponent;
+import consulo.ide.impl.idea.codeInsight.hint.ImplementationViewComponent;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
 import com.intellij.java.indexing.search.searches.OverridingMethodsSearch;
 import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
-import consulo.codeInsight.TargetElementUtil;
+import consulo.language.editor.TargetElementUtil;
 
 /**
  * User: anna

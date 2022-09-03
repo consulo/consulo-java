@@ -15,9 +15,11 @@
  */
 package com.intellij.java.impl.refactoring.changeSignature;
 
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.usageView.UsageInfo;
+import consulo.usage.UsageInfo;
+
+import javax.annotation.Nullable;
 
 /**
  * @author ven
@@ -57,7 +59,7 @@ public class OverriderUsageInfo extends UsageInfo
 	/**
 	 * @deprecated use {@link #getOverridingMethod()} instead
 	 */
-	@javax.annotation.Nullable
+	@Nullable
 	@Override
 	public PsiMethod getElement()
 	{

@@ -16,22 +16,23 @@
 package com.intellij.java.impl.codeInsight.completion;
 
 import com.intellij.codeInsight.completion.*;
-import com.intellij.codeInsight.completion.impl.BetterPrefixMatcher;
-import com.intellij.codeInsight.completion.impl.CamelHumpMatcher;
-import com.intellij.codeInsight.lookup.AutoCompletionPolicy;
-import com.intellij.codeInsight.lookup.LookupElement;
+import consulo.ide.impl.idea.codeInsight.completion.impl.BetterPrefixMatcher;
+import consulo.language.editor.completion.CamelHumpMatcher;
+import consulo.language.editor.completion.AutoCompletionPolicy;
+import consulo.language.editor.completion.lookup.LookupElement;
 import com.intellij.java.impl.codeInsight.ExpectedTypeInfo;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.search.PsiShortNamesCache;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.filters.ElementFilter;
-import com.intellij.util.CollectConsumer;
-import com.intellij.util.Consumer;
+import consulo.util.lang.StringUtil;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.filter.ElementFilter;
+import consulo.ide.impl.idea.util.CollectConsumer;
+import consulo.ide.impl.idea.util.Consumer;
 import consulo.psi.PsiPackage;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -176,7 +177,7 @@ public class JavaNoVariantsDelegator extends CompletionContributor {
     return allClasses;
   }
 
-  private static void suggestNonImportedClasses(CompletionParameters parameters, CompletionResultSet result, @javax.annotation.Nullable JavaCompletionSession session) {
+  private static void suggestNonImportedClasses(CompletionParameters parameters, CompletionResultSet result, @Nullable JavaCompletionSession session) {
     JavaClassNameCompletionContributor.addAllClasses(parameters, true, result.getPrefixMatcher(), element ->
     {
       if (session != null && session.alreadyProcessed(element)) {

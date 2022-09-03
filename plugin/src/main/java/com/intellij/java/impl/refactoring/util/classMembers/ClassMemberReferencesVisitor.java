@@ -26,7 +26,7 @@ package com.intellij.java.impl.refactoring.util.classMembers;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 
 public abstract class ClassMemberReferencesVisitor extends JavaRecursiveElementWalkingVisitor {
   private final PsiClass myClass;

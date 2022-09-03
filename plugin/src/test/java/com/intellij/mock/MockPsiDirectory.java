@@ -6,12 +6,11 @@ package com.intellij.mock;
 import javax.annotation.Nonnull;
 
 import com.intellij.java.language.psi.PsiJavaPackage;
-import com.intellij.navigation.ItemPresentation;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.*;
-import com.intellij.psi.search.PsiElementProcessor;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.lang.Language;
+import consulo.navigation.ItemPresentation;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.language.psi.resolve.PsiElementProcessor;
+import consulo.language.util.IncorrectOperationException;
+import consulo.language.Language;
 import consulo.disposer.Disposable;
 import org.jetbrains.annotations.NonNls;
 
@@ -133,7 +132,7 @@ public class MockPsiDirectory extends MockPsiElement implements PsiDirectory {
   }
 
   @Override
-  @javax.annotation.Nullable
+  @Nullable
   public ItemPresentation getPresentation() {
     throw new UnsupportedOperationException("Method getPresentation is not yet implemented in " + getClass().getName());
   }

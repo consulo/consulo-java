@@ -15,15 +15,18 @@
  */
 package com.intellij.java.impl.refactoring.rename.naming;
 
-import com.intellij.openapi.application.ApplicationManager;
+import consulo.application.ApplicationManager;
 import consulo.logging.Logger;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.DialogWrapper;
+import consulo.project.Project;
+import consulo.ui.Table;
+import consulo.ui.ex.awt.ColoredTableCellRenderer;
+import consulo.ui.ex.awt.DialogWrapper;
 import com.intellij.ui.*;
-import com.intellij.ui.components.panels.ValidatingComponent;
-import com.intellij.util.ui.Table;
-import com.intellij.refactoring.RefactoringBundle;
-import com.intellij.ide.IdeBundle;
+import consulo.ide.impl.idea.ui.components.panels.ValidatingComponent;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.ide.IdeBundle;
+import consulo.ui.ex.awt.ScrollPaneFactory;
+
 import javax.annotation.Nullable;
 
 import javax.swing.*;
@@ -114,7 +117,7 @@ public class AutomaticUsageRenamingDialog<T> extends DialogWrapper {
     }
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private String getErrorText(T element) {
     return isChecked(element) ? myRenamer.getErrorText(element) : null;
   }
@@ -146,7 +149,7 @@ public class AutomaticUsageRenamingDialog<T> extends DialogWrapper {
     setupOldNameColumn();
     setupNewNameColumn();
 
-    myValidatingComponent = new ValidatingComponent() {
+    myValidatingComponent = new consulo.ide.impl.idea.ui.components.panels.ValidatingComponent() {
       protected JComponent createMainComponent() {
         return ScrollPaneFactory.createScrollPane(myTable);
       }

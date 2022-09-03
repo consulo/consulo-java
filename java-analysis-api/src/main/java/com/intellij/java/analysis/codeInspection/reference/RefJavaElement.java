@@ -20,10 +20,11 @@
  */
 package com.intellij.java.analysis.codeInspection.reference;
 
-import com.intellij.codeInspection.reference.RefElement;
+import consulo.language.editor.inspection.reference.RefElement;
 import com.intellij.java.language.psi.PsiModifier;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Collection;
 
 public interface RefJavaElement extends RefElement
@@ -71,7 +72,7 @@ public interface RefJavaElement extends RefElement
 	 *
 	 * @return the modifier, or null if the element does not have any access modifier.
 	 */
-	@javax.annotation.Nullable
+	@Nullable
 	@PsiModifier.ModifierConstant
 	String getAccessModifier();
 }

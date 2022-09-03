@@ -18,15 +18,15 @@ package com.intellij.java.debugger.impl.ui.tree.actions;
 
 import com.intellij.java.debugger.impl.DebuggerUtilsEx;
 import com.intellij.java.debugger.impl.settings.NodeRendererSettings;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.ToggleAction;
-import com.intellij.openapi.project.DumbAware;
-import com.intellij.openapi.project.Project;
+import consulo.execution.debug.XDebuggerManager;
+import consulo.ui.ex.action.AnActionEvent;
+import consulo.ui.ex.action.ToggleAction;
+import consulo.application.dumb.DumbAware;
+import consulo.project.Project;
 import consulo.util.dataholder.Key;
-import com.intellij.xdebugger.XDebugSession;
-import com.intellij.xdebugger.XDebuggerManager;
-import com.intellij.xdebugger.impl.XDebugSessionImpl;
-import com.intellij.xdebugger.impl.ui.XDebugSessionData;
+import consulo.execution.debug.XDebugSession;
+import consulo.ide.impl.idea.xdebugger.impl.XDebugSessionImpl;
+import consulo.ide.impl.idea.xdebugger.impl.ui.XDebugSessionData;
 import consulo.ui.annotation.RequiredUIAccess;
 
 /**

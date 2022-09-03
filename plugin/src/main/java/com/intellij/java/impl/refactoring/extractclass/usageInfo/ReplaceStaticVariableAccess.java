@@ -19,11 +19,11 @@ import com.intellij.java.language.psi.*;
 import consulo.logging.Logger;
 import com.intellij.psi.*;
 import com.intellij.java.language.psi.util.PropertyUtil;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.impl.refactoring.psi.MutationUtils;
 import com.intellij.java.impl.refactoring.util.FixableUsageInfo;
-import com.intellij.util.ArrayUtilRt;
-import com.intellij.util.IncorrectOperationException;
+import consulo.ide.impl.idea.util.ArrayUtilRt;
+import consulo.language.util.IncorrectOperationException;
 
 public class ReplaceStaticVariableAccess extends FixableUsageInfo {
   private final PsiReferenceExpression expression;

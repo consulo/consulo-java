@@ -15,15 +15,25 @@
  */
 package com.intellij.java.language.impl.psi.presentation.java;
 
-import com.intellij.icons.AllIcons;
-import com.intellij.navigation.ColoredItemPresentation;
-import com.intellij.navigation.ItemPresentation;
-import com.intellij.navigation.ItemPresentationProvider;
-import com.intellij.openapi.editor.colors.TextAttributesKey;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.application.AllIcons;
+import consulo.ui.ex.ColoredItemPresentation;
+import consulo.navigation.ItemPresentation;
+import consulo.navigation.ItemPresentationProvider;
+import consulo.colorScheme.TextAttributesKey;
 import com.intellij.java.language.psi.PsiJavaPackage;
 import consulo.ui.image.Image;
 
+import javax.annotation.Nonnull;
+
+@ExtensionImpl
 public class PackagePresentationProvider implements ItemPresentationProvider<PsiJavaPackage> {
+  @Nonnull
+  @Override
+  public Class<PsiJavaPackage> getItemClass() {
+    return PsiJavaPackage.class;
+  }
+
   @Override
   public ItemPresentation getPresentation(final PsiJavaPackage aPackage) {
     return new ColoredItemPresentation() {

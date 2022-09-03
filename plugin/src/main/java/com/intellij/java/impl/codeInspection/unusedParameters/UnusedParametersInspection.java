@@ -24,10 +24,9 @@
  */
 package com.intellij.java.impl.codeInspection.unusedParameters;
 
-import com.intellij.analysis.AnalysisScope;
-import com.intellij.codeInsight.FileModificationService;
-import com.intellij.codeInsight.daemon.GroupNames;
-import com.intellij.codeInspection.*;
+import consulo.language.editor.scope.AnalysisScope;
+import consulo.language.editor.FileModificationService;
+import consulo.ide.impl.idea.codeInsight.daemon.GroupNames;
 import com.intellij.java.analysis.codeInspection.GlobalJavaInspectionContext;
 import com.intellij.java.analysis.codeInspection.ex.EntryPointsManager;
 import com.intellij.codeInspection.reference.*;
@@ -37,17 +36,17 @@ import com.intellij.java.analysis.codeInspection.reference.RefParameter;
 import com.intellij.java.impl.codeInspection.GlobalJavaBatchInspectionTool;
 import com.intellij.java.impl.codeInspection.HTMLJavaHTMLComposer;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.project.Project;
+import consulo.project.Project;
 import com.intellij.openapi.project.ProjectUtil;
-import com.intellij.openapi.util.Comparing;
+import consulo.util.lang.Comparing;
 import com.intellij.psi.*;
-import com.intellij.psi.search.PsiReferenceProcessor;
-import com.intellij.psi.search.PsiReferenceProcessorAdapter;
-import com.intellij.psi.search.PsiSearchHelper;
+import consulo.ide.impl.psi.search.PsiReferenceProcessor;
+import consulo.ide.impl.psi.search.PsiReferenceProcessorAdapter;
+import consulo.language.psi.search.PsiSearchHelper;
 import com.intellij.java.indexing.search.searches.OverridingMethodsSearch;
-import com.intellij.psi.search.searches.ReferencesSearch;
-import com.intellij.psi.util.PsiModificationTracker;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.search.ReferencesSearch;
+import consulo.language.psi.PsiModificationTracker;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.impl.refactoring.changeSignature.ChangeSignatureProcessor;
 import com.intellij.java.impl.refactoring.changeSignature.ParameterInfoImpl;
 import org.jetbrains.annotations.NonNls;
@@ -168,13 +167,13 @@ public class UnusedParametersInspection extends GlobalJavaBatchInspectionTool {
   }
 
   @Override
-  @javax.annotation.Nullable
+  @Nullable
   public String getHint(@Nonnull final QuickFix fix) {
     return ((AcceptSuggested)fix).getHint();
   }
 
   @Override
-  @javax.annotation.Nullable
+  @Nullable
   public QuickFix getQuickFix(final String hint) {
     return new AcceptSuggested(null, null, hint);
   }

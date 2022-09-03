@@ -18,8 +18,8 @@ package com.intellij.java.impl.openapi.fileTypes.impl;
 import com.intellij.java.language.impl.JarArchiveFileType;
 import com.intellij.java.language.impl.JavaClassFileType;
 import com.intellij.java.language.impl.JavaFileType;
-import com.intellij.openapi.fileTypes.FileTypeConsumer;
-import com.intellij.openapi.fileTypes.FileTypeFactory;
+import consulo.virtualFileSystem.fileType.FileTypeConsumer;
+import consulo.virtualFileSystem.fileType.FileTypeFactory;
 import consulo.java.language.fileTypes.JModFileType;
 
 import javax.annotation.Nonnull;

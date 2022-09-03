@@ -1,11 +1,11 @@
 package com.intellij.java.impl.codeInsight.completion;
 
-import com.intellij.codeInsight.completion.InsertHandler;
-import com.intellij.codeInsight.completion.InsertionContext;
-import com.intellij.codeInsight.lookup.DefaultLookupItemRenderer;
-import com.intellij.codeInsight.lookup.LookupElement;
-import com.intellij.codeInsight.lookup.LookupElementPresentation;
-import com.intellij.featureStatistics.FeatureUsageTracker;
+import consulo.language.editor.completion.lookup.InsertHandler;
+import consulo.language.editor.completion.lookup.InsertionContext;
+import consulo.language.editor.completion.lookup.DefaultLookupItemRenderer;
+import consulo.language.editor.completion.lookup.LookupElement;
+import consulo.language.editor.completion.lookup.LookupElementPresentation;
+import consulo.externalService.statistic.FeatureUsageTracker;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMember;
 import com.intellij.java.language.psi.PsiMethod;
@@ -15,7 +15,7 @@ import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Set;
 
-import static com.intellij.util.ObjectUtil.assertNotNull;
+import static consulo.util.lang.ObjectUtil.assertNotNull;
 
 /**
  * @author peter

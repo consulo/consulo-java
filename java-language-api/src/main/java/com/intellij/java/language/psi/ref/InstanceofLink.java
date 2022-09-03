@@ -15,12 +15,12 @@
  */
 package com.intellij.java.language.psi.ref;
 
+import consulo.language.psi.PsiChildLink;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
-import com.intellij.psi.PsiChildLink;
-import com.intellij.psi.PsiElement;
-import com.intellij.util.IncorrectOperationException;
 
 /**
  * @author peter
@@ -47,7 +47,7 @@ public class InstanceofLink<Parent extends PsiElement, Child extends PsiElement,
   }
 
   public static <Parent extends PsiElement, Child extends PsiElement, CastTo extends Child> InstanceofLink<Parent, Child, CastTo> create(
-    PsiChildLink<Parent, Child> delegate, Class<CastTo> castTo) {
+      PsiChildLink<Parent, Child> delegate, Class<CastTo> castTo) {
     return new InstanceofLink<Parent, Child, CastTo>(delegate, castTo);
   }
 }

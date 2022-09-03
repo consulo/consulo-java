@@ -16,13 +16,14 @@
 package com.intellij.java.impl.ig.inheritance;
 
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.codeInspection.ui.SingleCheckboxOptionsPanel;
+import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.intellij.java.impl.ig.psiutils.InheritanceUtil;
 import javax.annotation.Nonnull;
 
+import javax.annotation.Nullable;
 import javax.swing.*;
 
 public class InterfaceNeverImplementedInspection extends BaseInspection {
@@ -38,7 +39,7 @@ public class InterfaceNeverImplementedInspection extends BaseInspection {
       "interface.never.implemented.display.name");
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public JComponent createOptionsPanel() {
     return new SingleCheckboxOptionsPanel(
       InspectionGadgetsBundle.message(

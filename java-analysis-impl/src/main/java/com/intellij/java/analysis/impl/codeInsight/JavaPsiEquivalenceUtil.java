@@ -15,7 +15,7 @@
  */
 package com.intellij.java.analysis.impl.codeInsight;
 
-import com.intellij.codeInsight.PsiEquivalenceUtil;
+import consulo.language.editor.PsiEquivalenceUtil;
 import com.intellij.java.language.impl.psi.PsiDiamondTypeImpl;
 import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;

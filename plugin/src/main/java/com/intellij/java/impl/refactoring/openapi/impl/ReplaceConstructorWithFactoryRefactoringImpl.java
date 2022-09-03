@@ -15,10 +15,10 @@
  */
 package com.intellij.java.impl.refactoring.openapi.impl;
 
-import com.intellij.openapi.project.Project;
+import consulo.project.Project;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.refactoring.RefactoringImpl;
+import consulo.language.editor.refactoring.RefactoringImpl;
 import com.intellij.java.impl.refactoring.ReplaceConstructorWithFactoryRefactoring;
 import com.intellij.java.impl.refactoring.replaceConstructorWithFactory.ReplaceConstructorWithFactoryProcessor;
 

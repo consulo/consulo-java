@@ -1,11 +1,11 @@
 package consulo.java.impl.ide;
 
 import com.intellij.java.language.vfs.jrt.JrtFileSystem;
-import com.intellij.psi.PsiDirectory;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiDirectory;
+import consulo.language.psi.PsiElement;
 import consulo.annotation.access.RequiredReadAction;
-import consulo.ide.IconDescriptor;
-import consulo.ide.IconDescriptorUpdater;
+import consulo.language.icon.IconDescriptor;
+import consulo.language.icon.IconDescriptorUpdater;
 import consulo.java.language.fileTypes.JModFileType;
 
 import javax.annotation.Nonnull;

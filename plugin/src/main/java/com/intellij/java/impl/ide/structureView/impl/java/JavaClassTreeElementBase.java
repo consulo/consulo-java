@@ -15,18 +15,18 @@
  */
 package com.intellij.java.impl.ide.structureView.impl.java;
 
-import com.intellij.ide.structureView.impl.common.PsiTreeElementBase;
+import consulo.language.editor.structureView.PsiTreeElementBase;
 import com.intellij.java.language.psi.*;
-import com.intellij.navigation.ColoredItemPresentation;
-import com.intellij.navigation.LocationPresentation;
-import com.intellij.openapi.editor.colors.CodeInsightColors;
-import com.intellij.openapi.editor.colors.TextAttributesKey;
-import com.intellij.openapi.project.IndexNotReadyException;
-import com.intellij.openapi.util.registry.Registry;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.ui.ex.ColoredItemPresentation;
+import consulo.navigation.LocationPresentation;
+import consulo.codeEditor.CodeInsightColors;
+import consulo.colorScheme.TextAttributesKey;
+import consulo.application.dumb.IndexNotReadyException;
+import consulo.application.util.registry.Registry;
+import consulo.util.lang.StringUtil;
 import com.intellij.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.util.ui.UIUtil;
+import consulo.ui.ex.awt.UIUtil;
 
 public abstract class JavaClassTreeElementBase<Value extends PsiElement> extends PsiTreeElementBase<Value> implements AccessLevelProvider,
 		ColoredItemPresentation,

@@ -15,7 +15,7 @@
  */
 package com.intellij.jam.view.tree;
 
-import com.intellij.ide.util.treeView.NodeDescriptor;
+import consulo.ui.ex.tree.NodeDescriptor;
 
 /**
  * @author cdr

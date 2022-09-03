@@ -24,7 +24,7 @@
  */
 package org.osmorc.manifest.lang.headerparser.impl;
 
-import com.intellij.psi.PsiReference;
+import consulo.language.psi.PsiReference;
 import javax.annotation.Nonnull;
 import org.osmorc.manifest.lang.psi.Clause;
 import org.osmorc.manifest.lang.psi.HeaderValuePart;

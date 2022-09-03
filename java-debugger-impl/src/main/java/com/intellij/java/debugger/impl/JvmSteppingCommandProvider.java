@@ -18,7 +18,7 @@ package com.intellij.java.debugger.impl;
 import com.intellij.java.debugger.impl.engine.DebugProcessImpl;
 import com.intellij.java.debugger.impl.engine.MethodFilter;
 import com.intellij.java.debugger.impl.engine.SuspendContextImpl;
-import com.intellij.openapi.extensions.ExtensionPointName;
+import consulo.component.extension.ExtensionPointName;
 
 /**
  * @author egor

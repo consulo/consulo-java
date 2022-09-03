@@ -21,11 +21,11 @@
 package com.intellij.java.impl.refactoring.inlineSuperClass.usageInfo;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.util.lang.StringUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import com.intellij.java.impl.refactoring.util.FixableUsageInfo;
-import com.intellij.util.Function;
-import com.intellij.util.IncorrectOperationException;
+import consulo.ide.impl.idea.util.Function;
+import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 
 public class ReplaceWithSubtypeUsageInfo extends FixableUsageInfo {

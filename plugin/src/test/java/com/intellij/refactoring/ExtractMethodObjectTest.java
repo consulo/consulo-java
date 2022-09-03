@@ -9,13 +9,13 @@ import static org.junit.Assert.assertTrue;
 import javax.annotation.Nonnull;
 
 import com.intellij.JavaTestUtil;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.psi.PsiElement;
+import consulo.application.ApplicationManager;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.impl.refactoring.extractMethodObject.ExtractMethodObjectHandler;
 import com.intellij.java.impl.refactoring.extractMethodObject.ExtractMethodObjectProcessor;
-import com.intellij.util.containers.ContainerUtil;
-import consulo.codeInsight.TargetElementUtil;
+import consulo.util.collection.ContainerUtil;
+import consulo.language.editor.TargetElementUtil;
 import consulo.codeInsight.TargetElementUtilEx;
 
 public abstract class ExtractMethodObjectTest extends LightRefactoringTestCase {

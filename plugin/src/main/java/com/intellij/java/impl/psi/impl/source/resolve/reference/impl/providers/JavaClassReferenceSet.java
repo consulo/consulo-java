@@ -18,11 +18,11 @@ package com.intellij.java.impl.psi.impl.source.resolve.reference.impl.providers;
 import com.intellij.java.language.impl.codeInsight.daemon.JavaErrorBundle;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.lang.xml.XMLLanguage;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiReference;
-import com.intellij.psi.impl.source.resolve.reference.impl.providers.CustomizableReferenceProvider;
-import com.intellij.util.ArrayUtil;
+import consulo.document.util.TextRange;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiReference;
+import consulo.language.psi.path.CustomizableReferenceProvider;
+import consulo.util.collection.ArrayUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

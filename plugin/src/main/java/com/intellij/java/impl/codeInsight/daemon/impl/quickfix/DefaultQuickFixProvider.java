@@ -19,16 +19,17 @@ import java.util.EnumMap;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-import com.intellij.codeInsight.daemon.QuickFixActionRegistrar;
+import consulo.language.editor.intention.QuickFixActionRegistrar;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.HighlightMethodUtil;
-import com.intellij.codeInsight.intention.IntentionAction;
+import consulo.language.editor.intention.IntentionAction;
 import com.intellij.java.analysis.codeInsight.intention.QuickFixFactory;
-import com.intellij.codeInsight.intention.impl.PriorityIntentionActionWrapper;
-import com.intellij.codeInsight.quickfix.UnresolvedReferenceQuickFixProvider;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.PsiElement;
+import consulo.ide.impl.idea.codeInsight.intention.impl.PriorityIntentionActionWrapper;
+import consulo.language.editor.intention.UnresolvedReferenceQuickFixProvider;
+import consulo.document.util.TextRange;
+import consulo.util.lang.StringUtil;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiExpressionList;
 import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
 import com.intellij.java.language.psi.PsiMethod;
@@ -37,7 +38,7 @@ import com.intellij.java.language.psi.PsiReferenceExpression;
 import com.intellij.java.language.psi.PsiTypeElement;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 
 public class DefaultQuickFixProvider extends UnresolvedReferenceQuickFixProvider<PsiJavaCodeReferenceElement>
@@ -121,7 +122,7 @@ public class DefaultQuickFixProvider extends UnresolvedReferenceQuickFixProvider
 		}
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	private static VariableKind getKind(@Nonnull JavaCodeStyleManager styleManager, @Nonnull PsiReferenceExpression refExpr)
 	{
 		final String reference = refExpr.getText();

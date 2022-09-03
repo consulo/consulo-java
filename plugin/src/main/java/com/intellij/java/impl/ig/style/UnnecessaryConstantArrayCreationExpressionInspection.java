@@ -16,6 +16,7 @@
 package com.intellij.java.impl.ig.style;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
@@ -23,9 +24,9 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.InspectionGadgetsBundle;
-import com.intellij.openapi.project.Project;
-import com.intellij.codeInspection.ProblemDescriptor;
-import com.intellij.util.IncorrectOperationException;
+import consulo.project.Project;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.util.IncorrectOperationException;
 
 public class UnnecessaryConstantArrayCreationExpressionInspection
   extends BaseInspection {
@@ -45,7 +46,7 @@ public class UnnecessaryConstantArrayCreationExpressionInspection
   }
 
   @Override
-  @javax.annotation.Nullable
+  @Nullable
   protected InspectionGadgetsFix buildFix(Object... infos) {
     return new UnnecessaryConstantArrayCreationExpressionFix();
   }

@@ -18,12 +18,11 @@ package com.intellij.java.language.patterns;
 import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.language.psi.PsiModifierList;
 import com.intellij.java.language.psi.PsiModifierListOwner;
-import com.intellij.openapi.util.Condition;
-import com.intellij.patterns.InitialPatternCondition;
-import com.intellij.patterns.PatternCondition;
-import com.intellij.patterns.PsiElementPattern;
-import com.intellij.util.ProcessingContext;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.language.pattern.InitialPatternCondition;
+import consulo.language.pattern.PatternCondition;
+import consulo.language.pattern.PsiElementPattern;
+import consulo.language.util.ProcessingContext;
+import consulo.util.collection.ContainerUtil;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
@@ -43,11 +42,7 @@ public class PsiModifierListOwnerPattern<T extends PsiModifierListOwner, Self ex
   public Self withModifiers(final String... modifiers) {
     return with(new PatternCondition<T>("withModifiers") {
       public boolean accepts(@Nonnull final T t, final ProcessingContext context) {
-        return ContainerUtil.and(modifiers, new Condition<String>() {
-          public boolean value(final String s) {
-            return t.hasModifierProperty(s);
-          }
-        });
+        return ContainerUtil.and(modifiers, s -> t.hasModifierProperty(s));
       }
     });
   }
@@ -55,11 +50,7 @@ public class PsiModifierListOwnerPattern<T extends PsiModifierListOwner, Self ex
   public Self withoutModifiers(final String... modifiers) {
     return with(new PatternCondition<T>("withoutModifiers") {
       public boolean accepts(@Nonnull final T t, final ProcessingContext context) {
-        return ContainerUtil.and(modifiers, new Condition<String>() {
-          public boolean value(final String s) {
-            return !t.hasModifierProperty(s);
-          }
-        });
+        return ContainerUtil.and(modifiers, s -> !t.hasModifierProperty(s));
       }
     });
   }

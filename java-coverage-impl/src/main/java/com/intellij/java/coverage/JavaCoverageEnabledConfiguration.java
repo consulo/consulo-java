@@ -22,17 +22,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-import com.intellij.execution.configurations.coverage.CoverageEnabledConfiguration;
+import consulo.execution.coverage.CoverageEnabledConfiguration;
+import consulo.execution.configuration.RunConfigurationBase;
+import consulo.execution.coverage.CoverageRunner;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
-import com.intellij.coverage.CoverageRunner;
-import com.intellij.execution.configurations.RunConfigurationBase;
 import consulo.logging.Logger;
-import com.intellij.openapi.util.InvalidDataException;
-import com.intellij.openapi.util.WriteExternalException;
+import consulo.util.xml.serializer.InvalidDataException;
+import consulo.util.xml.serializer.WriteExternalException;
 import com.intellij.java.debugger.ui.classFilter.ClassFilter;
-import com.intellij.util.ArrayUtil;
+import consulo.util.collection.ArrayUtil;
 import consulo.java.execution.configurations.OwnJavaParameters;
 
 /**
@@ -60,7 +61,7 @@ public class JavaCoverageEnabledConfiguration extends CoverageEnabledConfigurati
     setCoverageRunner(CoverageRunner.getInstance(IDEACoverageRunner.class));
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public static JavaCoverageEnabledConfiguration getFrom(final RunConfigurationBase configuration) {
     final CoverageEnabledConfiguration coverageEnabledConfiguration = getOrCreate(configuration);
     if (coverageEnabledConfiguration instanceof JavaCoverageEnabledConfiguration) {
@@ -98,7 +99,7 @@ public class JavaCoverageEnabledConfiguration extends CoverageEnabledConfigurati
     return myCoveragePatterns;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public String [] getPatterns() {
     if (myCoveragePatterns != null) {
       List<String> patterns = new ArrayList<String>();
@@ -191,7 +192,7 @@ public class JavaCoverageEnabledConfiguration extends CoverageEnabledConfigurati
     }
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public String getCoverageFilePath() {
     if (myCoverageFilePath != null ) {
       return myCoverageFilePath;

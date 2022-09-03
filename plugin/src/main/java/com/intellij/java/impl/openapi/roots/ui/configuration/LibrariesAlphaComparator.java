@@ -15,9 +15,9 @@
  */
 package com.intellij.java.impl.openapi.roots.ui.configuration;
 
-import com.intellij.openapi.roots.OrderRootType;
-import com.intellij.openapi.roots.libraries.Library;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.content.OrderRootType;
+import consulo.content.library.Library;
+import consulo.virtualFileSystem.VirtualFile;
 
 import java.util.Comparator;
 

@@ -15,8 +15,8 @@
  */
 package com.intellij.java.language.psi;
 
-import com.intellij.psi.PsiElement;
-import com.intellij.util.ArrayFactory;
+import consulo.util.collection.ArrayFactory;
+import consulo.language.psi.PsiElement;
 
 import javax.annotation.Nonnull;
 

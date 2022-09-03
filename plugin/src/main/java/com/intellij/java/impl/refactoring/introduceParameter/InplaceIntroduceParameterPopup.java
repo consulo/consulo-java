@@ -16,33 +16,34 @@
 package com.intellij.java.impl.refactoring.introduceParameter;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.command.CommandProcessor;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.impl.DocumentMarkupModel;
-import com.intellij.openapi.editor.markup.EffectType;
-import com.intellij.openapi.editor.markup.HighlighterTargetArea;
-import com.intellij.openapi.editor.markup.MarkupModel;
-import com.intellij.openapi.editor.markup.TextAttributes;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Computable;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.application.ApplicationManager;
+import consulo.undoRedo.CommandProcessor;
+import consulo.codeEditor.Editor;
+import consulo.codeEditor.DocumentMarkupModel;
+import consulo.colorScheme.EffectType;
+import consulo.codeEditor.markup.HighlighterTargetArea;
+import consulo.codeEditor.markup.MarkupModel;
+import consulo.colorScheme.TextAttributes;
+import consulo.project.Project;
+import consulo.application.util.function.Computable;
+import consulo.document.util.TextRange;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
-import com.intellij.psi.search.LocalSearchScope;
-import com.intellij.psi.search.SearchScope;
+import consulo.language.psi.scope.LocalSearchScope;
+import consulo.content.scope.SearchScope;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.impl.refactoring.JavaRefactoringSettings;
-import com.intellij.refactoring.RefactoringActionHandler;
+import consulo.language.editor.refactoring.action.RefactoringActionHandler;
 import com.intellij.java.impl.refactoring.ui.TypeSelectorManagerImpl;
-import com.intellij.usageView.UsageInfo;
+import consulo.usage.UsageInfo;
 import consulo.logging.Logger;
 import consulo.ui.style.StandardColors;
 import consulo.util.collection.primitive.ints.IntList;
 import consulo.util.collection.primitive.ints.IntLists;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
@@ -166,7 +167,7 @@ public class InplaceIntroduceParameterPopup extends AbstractJavaInplaceIntroduce
 	}
 
 
-	@javax.annotation.Nullable
+	@Nullable
 	private PsiParameter getParameter()
 	{
 		if(!myMethod.isValid())
@@ -277,7 +278,7 @@ public class InplaceIntroduceParameterPopup extends AbstractJavaInplaceIntroduce
 	}
 
 	@Override
-	protected void updateTitle(@javax.annotation.Nullable PsiVariable variable)
+	protected void updateTitle(@Nullable PsiVariable variable)
 	{
 		if(variable == null)
 		{
@@ -287,7 +288,7 @@ public class InplaceIntroduceParameterPopup extends AbstractJavaInplaceIntroduce
 	}
 
 	@Override
-	protected void updateTitle(@javax.annotation.Nullable final PsiVariable variable, final String value)
+	protected void updateTitle(@Nullable final PsiVariable variable, final String value)
 	{
 		final PsiElement declarationScope = variable != null ? ((PsiParameter) variable).getDeclarationScope() : null;
 		if(declarationScope instanceof PsiMethod)

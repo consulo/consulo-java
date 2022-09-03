@@ -18,15 +18,15 @@ package com.intellij.java.debugger.impl;
 import com.intellij.java.debugger.SourcePosition;
 import com.intellij.java.debugger.impl.engine.ContextUtil;
 import com.intellij.java.debugger.engine.StackFrameContext;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Computable;
-import com.intellij.psi.PsiDocumentManager;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.text.CharArrayUtil;
+import consulo.application.ApplicationManager;
+import consulo.document.Document;
+import consulo.project.Project;
+import consulo.application.util.function.Computable;
+import consulo.language.psi.PsiDocumentManager;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.util.lang.CharArrayUtil;
 import javax.annotation.Nullable;
 
 /**

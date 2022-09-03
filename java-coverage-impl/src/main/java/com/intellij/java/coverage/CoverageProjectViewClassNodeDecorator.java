@@ -1,22 +1,22 @@
 package com.intellij.java.coverage;
 
-import com.intellij.coverage.AbstractCoverageProjectViewNodeDecorator;
-import com.intellij.coverage.CoverageAnnotator;
-import com.intellij.coverage.CoverageDataManager;
-import com.intellij.coverage.CoverageSuitesBundle;
+import consulo.ide.impl.idea.coverage.AbstractCoverageProjectViewNodeDecorator;
+import consulo.execution.coverage.CoverageAnnotator;
+import consulo.execution.coverage.CoverageDataManager;
+import consulo.execution.coverage.CoverageSuitesBundle;
 import jakarta.inject.Inject;
 
-import com.intellij.ide.projectView.PresentationData;
-import com.intellij.ide.projectView.ProjectViewNode;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.packageDependencies.ui.PackageDependenciesNode;
+import consulo.ui.ex.tree.PresentationData;
+import consulo.project.ui.view.tree.ProjectViewNode;
+import consulo.project.Project;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.ide.impl.idea.packageDependencies.ui.PackageDependenciesNode;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.SmartPsiElementPointer;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.util.PsiUtilCore;
-import com.intellij.ui.ColoredTreeCellRenderer;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.SmartPsiElementPointer;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.PsiUtilCore;
+import consulo.ui.ex.awt.tree.ColoredTreeCellRenderer;
 import consulo.ide.projectView.impl.nodes.PackageElement;
 
 import javax.annotation.Nullable;
@@ -24,7 +24,7 @@ import javax.annotation.Nullable;
 /**
  * @author yole
  */
-public class CoverageProjectViewClassNodeDecorator extends AbstractCoverageProjectViewNodeDecorator
+public class CoverageProjectViewClassNodeDecorator extends consulo.ide.impl.idea.coverage.AbstractCoverageProjectViewNodeDecorator
 {
 	@Inject
 	public CoverageProjectViewClassNodeDecorator(final CoverageDataManager coverageDataManager)

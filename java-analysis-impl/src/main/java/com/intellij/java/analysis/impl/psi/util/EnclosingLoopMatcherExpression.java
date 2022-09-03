@@ -21,7 +21,7 @@ package com.intellij.java.analysis.impl.psi.util;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
-import com.intellij.psi.util.PsiMatcherExpression;
+import consulo.ide.impl.psi.util.PsiMatcherExpression;
 
 public class EnclosingLoopMatcherExpression implements PsiMatcherExpression {
   public static final PsiMatcherExpression INSTANCE = new EnclosingLoopMatcherExpression();

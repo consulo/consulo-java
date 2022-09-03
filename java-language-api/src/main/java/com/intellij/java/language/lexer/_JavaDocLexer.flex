@@ -1,8 +1,8 @@
 /* It's an automatically generated code. Do not modify it. */
 package com.intellij.java.language.lexer;
 
-import com.intellij.lexer.FlexLexer;
-import com.intellij.psi.tree.IElementType;
+import consulo.language.ast.IElementType;
+import consulo.language.lexer.FlexLexer;
 
 %%
 

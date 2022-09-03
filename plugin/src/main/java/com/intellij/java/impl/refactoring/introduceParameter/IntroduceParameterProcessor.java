@@ -29,19 +29,19 @@ import com.intellij.java.impl.refactoring.util.FieldConflictsResolver;
 import com.intellij.java.impl.refactoring.util.RefactoringUtil;
 import com.intellij.java.language.impl.codeInsight.ChangeContextUtil;
 import com.intellij.java.language.psi.*;
-import com.intellij.lang.findUsages.DescriptiveNameUtil;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Pair;
-import com.intellij.openapi.util.Ref;
+import consulo.language.findUsage.DescriptiveNameUtil;
+import consulo.project.Project;
+import consulo.util.lang.Pair;
+import consulo.util.lang.ref.Ref;
 import com.intellij.psi.*;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.java.indexing.search.searches.MethodReferencesSearch;
 import com.intellij.java.indexing.search.searches.OverridingMethodsSearch;
 import com.intellij.java.language.psi.util.PropertyUtil;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.refactoring.BaseRefactoringProcessor;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.editor.refactoring.BaseRefactoringProcessor;
 import com.intellij.java.impl.refactoring.IntroduceParameterRefactoring;
-import com.intellij.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.RefactoringBundle;
 import com.intellij.java.impl.refactoring.changeSignature.ChangeSignatureProcessor;
 import com.intellij.java.impl.refactoring.introduceVariable.IntroduceVariableBase;
 import com.intellij.refactoring.util.*;
@@ -50,15 +50,16 @@ import com.intellij.java.impl.refactoring.util.occurrences.LocalVariableOccurren
 import com.intellij.java.impl.refactoring.util.occurrences.OccurrenceManager;
 import com.intellij.java.impl.refactoring.util.usageInfo.DefaultConstructorImplicitUsageInfo;
 import com.intellij.java.impl.refactoring.util.usageInfo.NoConstructorClassUsageInfo;
-import com.intellij.usageView.UsageInfo;
-import com.intellij.usageView.UsageViewDescriptor;
-import com.intellij.usageView.UsageViewUtil;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.containers.MultiMap;
+import consulo.usage.UsageInfo;
+import consulo.usage.UsageViewDescriptor;
+import consulo.usage.UsageViewUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.util.collection.MultiMap;
 import consulo.logging.Logger;
 import consulo.util.collection.primitive.ints.IntList;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -673,7 +674,7 @@ public class IntroduceParameterProcessor extends BaseRefactoringProcessor implem
 		return RefactoringBundle.message("introduce.parameter.command", DescriptiveNameUtil.getDescriptiveName(myMethodToReplaceIn));
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	private static PsiParameter getAnchorParameter(PsiMethod methodToReplaceIn)
 	{
 		PsiParameterList parameterList = methodToReplaceIn.getParameterList();

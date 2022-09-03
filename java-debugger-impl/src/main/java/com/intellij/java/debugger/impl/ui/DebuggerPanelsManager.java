@@ -17,6 +17,12 @@ package com.intellij.java.debugger.impl.ui;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import consulo.execution.debug.XDebugProcess;
+import consulo.execution.executor.Executor;
+import consulo.execution.ui.RunContentDescriptor;
+import consulo.execution.ui.RunContentManager;
+import consulo.process.ExecutionException;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
@@ -30,21 +36,16 @@ import com.intellij.java.debugger.impl.DebuggerContextImpl;
 import com.intellij.java.debugger.impl.DebuggerSession;
 import com.intellij.java.debugger.impl.DebuggerStateManager;
 import com.intellij.java.debugger.impl.ui.tree.render.BatchEvaluator;
-import com.intellij.execution.ExecutionException;
-import com.intellij.execution.Executor;
 import com.intellij.java.execution.configurations.RemoteConnection;
-import com.intellij.execution.configurations.RunProfileState;
-import com.intellij.execution.executors.DefaultDebugExecutor;
-import com.intellij.execution.runners.ExecutionEnvironment;
-import com.intellij.execution.ui.RunContentDescriptor;
-import com.intellij.execution.ui.RunContentManager;
-import com.intellij.execution.ui.RunContentWithExecutorListener;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.xdebugger.XDebugProcess;
-import com.intellij.xdebugger.XDebugProcessStarter;
-import com.intellij.xdebugger.XDebugSession;
-import com.intellij.xdebugger.XDebuggerManager;
+import consulo.execution.configuration.RunProfileState;
+import consulo.execution.debug.DefaultDebugExecutor;
+import consulo.execution.runner.ExecutionEnvironment;
+import consulo.execution.ui.event.RunContentWithExecutorListener;
+import consulo.project.Project;
+import consulo.util.lang.Comparing;
+import consulo.xdebugger.XDebugProcessStarter;
+import consulo.execution.debug.XDebugSession;
+import consulo.execution.debug.XDebuggerManager;
 
 @Singleton
 public class DebuggerPanelsManager
@@ -93,9 +94,9 @@ public class DebuggerPanelsManager
 
 	@Nullable
 	public RunContentDescriptor attachVirtualMachine(@Nonnull ExecutionEnvironment environment,
-													 RunProfileState state,
-													 RemoteConnection remoteConnection,
-													 boolean pollConnection) throws ExecutionException
+                                                   RunProfileState state,
+                                                   RemoteConnection remoteConnection,
+                                                   boolean pollConnection) throws ExecutionException
 	{
 		return attachVirtualMachine(new DefaultDebugUIEnvironment(environment, state, remoteConnection, pollConnection));
 	}

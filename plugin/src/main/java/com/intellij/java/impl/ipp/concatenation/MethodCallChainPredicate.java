@@ -19,6 +19,8 @@ import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 
+import javax.annotation.Nullable;
+
 class MethodCallChainPredicate implements PsiElementPredicate {
 
   public boolean satisfiedBy(PsiElement element) {
@@ -71,7 +73,7 @@ class MethodCallChainPredicate implements PsiElementPredicate {
     return true;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private static PsiClass getQualifierExpressionType(PsiElement element) {
     if (!(element instanceof PsiMethodCallExpression)) {
       return null;

@@ -15,15 +15,15 @@
  */
 package consulo.java.impl.spi;
 
-import com.intellij.lang.Language;
+import consulo.language.Language;
 import com.intellij.java.language.spi.SPILanguage;
-import com.intellij.openapi.extensions.ExtensionPointName;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleUtilCore;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Condition;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.LanguageSubstitutor;
+import consulo.component.extension.ExtensionPointName;
+import consulo.module.Module;
+import consulo.language.util.ModuleUtilCore;
+import consulo.project.Project;
+import consulo.util.lang.function.Condition;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.language.psi.LanguageSubstitutor;
 import consulo.java.impl.roots.SpecialDirUtil;
 
 import javax.annotation.Nonnull;

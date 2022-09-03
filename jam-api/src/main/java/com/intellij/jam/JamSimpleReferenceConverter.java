@@ -15,22 +15,21 @@
  */
 package com.intellij.jam;
 
-import java.util.Collection;
-import java.util.Collections;
+import com.intellij.jam.model.common.CommonModelElement;
+import com.intellij.java.language.psi.PsiLiteral;
+import consulo.language.editor.completion.lookup.LookupElement;
+import consulo.language.editor.completion.lookup.LookupElementBuilder;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiNamedElement;
+import consulo.language.psi.PsiReference;
+import consulo.util.collection.ContainerUtil;
+import consulo.xml.util.xml.ElementPresentationManager;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
-import com.intellij.codeInsight.lookup.LookupElement;
-import com.intellij.codeInsight.lookup.LookupElementBuilder;
-import com.intellij.jam.model.common.CommonModelElement;
-import com.intellij.psi.PsiElement;
-import com.intellij.java.language.psi.PsiLiteral;
-import com.intellij.psi.PsiNamedElement;
-import com.intellij.psi.PsiReference;
-import com.intellij.util.NotNullFunction;
-import com.intellij.util.containers.ContainerUtil;
-import com.intellij.util.xml.ElementPresentationManager;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.function.Function;
 
 /**
  * @author peter
@@ -73,9 +72,9 @@ public abstract class JamSimpleReferenceConverter<T> extends JamConverter<T>{
   }
 
   public LookupElement[] getLookupVariants(JamStringAttributeElement<T> context) {
-    return ContainerUtil.map2Array(getVariants(context), LookupElement.class, new NotNullFunction<T, LookupElement>() {
+    return ContainerUtil.map2Array(getVariants(context), LookupElement.class, new Function<T, LookupElement>() {
       @Nonnull
-      public LookupElement fun(T t) {
+      public LookupElement apply(T t) {
         return createLookupElementFor(t);
       }
     });

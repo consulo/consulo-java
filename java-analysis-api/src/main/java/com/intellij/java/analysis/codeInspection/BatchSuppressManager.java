@@ -15,11 +15,11 @@
  */
 package com.intellij.java.analysis.codeInspection;
 
-import com.intellij.codeInsight.daemon.HighlightDisplayKey;
-import com.intellij.codeInspection.SuppressQuickFix;
-import com.intellij.openapi.components.ServiceManager;
+import consulo.language.editor.rawHighlight.HighlightDisplayKey;
+import consulo.language.editor.inspection.SuppressQuickFix;
+import consulo.ide.ServiceManager;
 import com.intellij.java.language.psi.PsiDocCommentOwner;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiModifierListOwner;
 
 import javax.annotation.Nonnull;

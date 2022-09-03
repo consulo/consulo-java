@@ -16,10 +16,10 @@
 package com.intellij.java.impl.util.text;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.psi.xml.XmlTag;
 
 public abstract class ElementPresentation {

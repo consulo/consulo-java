@@ -18,72 +18,64 @@ package com.intellij.java.language.impl.psi.impl.light;
 import com.intellij.java.language.psi.JavaResolveResult;
 import com.intellij.java.language.psi.PsiClassType;
 import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
-import com.intellij.psi.*;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiManager;
+import consulo.language.psi.scope.GlobalSearchScope;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class LightClassTypeReference extends LightClassReferenceBase implements PsiJavaCodeReferenceElement
-{
+public class LightClassTypeReference extends LightClassReferenceBase implements PsiJavaCodeReferenceElement {
 
-	@Nonnull
-	private final
+  @Nonnull
+  private final
   PsiClassType myType;
 
-	private LightClassTypeReference(@Nonnull PsiManager manager, @Nonnull String text, @Nonnull PsiClassType type)
-	{
-		super(manager, text);
-		myType = type;
-	}
+  private LightClassTypeReference(@Nonnull PsiManager manager, @Nonnull String text, @Nonnull PsiClassType type) {
+    super(manager, text);
+    myType = type;
+  }
 
-	public LightClassTypeReference(@Nonnull PsiManager manager, @Nonnull PsiClassType type)
-	{
-		this(manager, type.getCanonicalText(true), type);
-	}
+  public LightClassTypeReference(@Nonnull PsiManager manager, @Nonnull PsiClassType type) {
+    this(manager, type.getCanonicalText(true), type);
+  }
 
-	@Nullable
-	@Override
-	public PsiElement resolve()
-	{
-		return myType.resolve();
-	}
+  @Nullable
+  @Override
+  public PsiElement resolve() {
+    return myType.resolve();
+  }
 
-	@Nonnull
-	@Override
-	public JavaResolveResult advancedResolve(boolean incompleteCode)
-	{
-		return myType.resolveGenerics();
-	}
+  @Nonnull
+  @Override
+  public JavaResolveResult advancedResolve(boolean incompleteCode) {
+    return myType.resolveGenerics();
+  }
 
-	@Nullable
-	@Override
-	public String getReferenceName()
-	{
-		return myType.getClassName();
-	}
+  @Nullable
+  @Override
+  public String getReferenceName() {
+    return myType.getClassName();
+  }
 
-	@Override
-	public PsiElement copy()
-	{
-		return new LightClassTypeReference(myManager, myText, myType);
-	}
+  @Override
+  public PsiElement copy() {
+    return new LightClassTypeReference(myManager, myText, myType);
+  }
 
-	@Override
-	public boolean isValid()
-	{
-		return myType.isValid();
-	}
+  @Override
+  public boolean isValid() {
+    return myType.isValid();
+  }
 
-	@Nonnull
-	public PsiClassType getType()
-	{
-		return myType;
-	}
+  @Nonnull
+  public PsiClassType getType() {
+    return myType;
+  }
 
-	@Nonnull
-	@Override
-	public GlobalSearchScope getResolveScope()
-	{
-		return myType.getResolveScope();
-	}
+  @Nonnull
+  @Override
+  public GlobalSearchScope getResolveScope() {
+    return myType.getResolveScope();
+  }
 }

@@ -15,7 +15,7 @@
  */
 package com.intellij.java.execution.runners;
 
-import com.intellij.execution.process.ProcessHandler;
+import consulo.process.ProcessHandler;
 
 import javax.annotation.Nonnull;
 

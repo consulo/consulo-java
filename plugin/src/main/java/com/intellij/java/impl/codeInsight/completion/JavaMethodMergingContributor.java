@@ -16,14 +16,15 @@
 package com.intellij.java.impl.codeInsight.completion;
 
 import com.intellij.codeInsight.completion.*;
-import com.intellij.codeInsight.lookup.LookupElement;
+import consulo.language.editor.completion.lookup.LookupElement;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiType;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 
-import static com.intellij.util.ObjectUtil.assertNotNull;
+import static consulo.util.lang.ObjectUtil.assertNotNull;
 
 /**
  * @author peter
@@ -84,7 +85,7 @@ public class JavaMethodMergingContributor extends CompletionContributor {
     return (PsiType.VOID.equals(method.getReturnType()) ? 0 : 1) + (method.getParameterList().getParametersCount() > 0 ? 2 : 0);
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private static PsiMethod getItemMethod(LookupElement item) {
     Object o = item.getPsiElement();
     return o instanceof PsiMethod ? (PsiMethod) o : null;

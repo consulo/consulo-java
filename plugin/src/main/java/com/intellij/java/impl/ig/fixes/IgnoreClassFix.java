@@ -3,11 +3,11 @@
  */
 package com.intellij.java.impl.ig.fixes;
 
-import com.intellij.codeInspection.ProblemDescriptor;
-import com.intellij.openapi.command.undo.BasicUndoableAction;
-import com.intellij.openapi.command.undo.UndoManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.undoRedo.BasicUndoableAction;
+import consulo.undoRedo.UndoManager;
+import consulo.project.Project;
+import consulo.virtualFileSystem.VirtualFile;
 import com.siyeh.ig.InspectionGadgetsFix;
 import org.jetbrains.annotations.Nls;
 

@@ -20,7 +20,7 @@
           <text value="Move"/>
         </properties>
       </component>
-      <component id="74471" class="com.intellij.ui.NonFocusableCheckBox" binding="myCbSearchInComments">
+      <component id="74471" class="consulo.ui.ex.awt.NonFocusableCheckBox" binding="myCbSearchInComments">
         <constraints>
           <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="3" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -29,7 +29,7 @@
           <text resource-bundle="messages/RefactoringBundle" key="search.in.comments.and.strings"/>
         </properties>
       </component>
-      <component id="a7936" class="com.intellij.ui.NonFocusableCheckBox" binding="myCbSearchTextOccurences">
+      <component id="a7936" class="consulo.ui.ex.awt.NonFocusableCheckBox" binding="myCbSearchTextOccurences">
         <constraints>
           <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="3" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -129,7 +129,7 @@
               <text resource-bundle="messages/RefactoringBundle" key="target.destination.folder"/>
             </properties>
           </component>
-          <component id="36327" class="com.intellij.ui.ComboboxWithBrowseButton" binding="myDestinationFolderCB" custom-create="true">
+          <component id="36327" class="consulo.ui.ex.awt.ComboboxWithBrowseButton" binding="myDestinationFolderCB" custom-create="true">
             <constraints>
               <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>

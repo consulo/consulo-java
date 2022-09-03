@@ -15,12 +15,12 @@
  */
 package consulo.java.language.module.extension;
 
-import com.intellij.compiler.impl.ModuleChunk;
 import com.intellij.java.language.LanguageLevel;
-import com.intellij.openapi.compiler.CompileContext;
-import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.compiler.CompileContext;
+import consulo.compiler.ModuleChunk;
+import consulo.content.bundle.Sdk;
 import consulo.module.extension.ModuleExtensionWithSdk;
+import consulo.virtualFileSystem.VirtualFile;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

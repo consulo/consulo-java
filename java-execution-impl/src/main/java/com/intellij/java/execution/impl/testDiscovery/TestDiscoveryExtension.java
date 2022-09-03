@@ -22,32 +22,33 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
+import consulo.execution.configuration.RunnerSettings;
 import consulo.platform.Platform;
 import org.jdom.Element;
 import com.intellij.java.execution.impl.JavaTestConfigurationBase;
 import com.intellij.java.execution.impl.RunConfigurationExtension;
-import com.intellij.execution.configurations.RunConfigurationBase;
-import com.intellij.execution.configurations.RunnerSettings;
-import com.intellij.execution.process.ProcessHandler;
+import consulo.execution.configuration.RunConfigurationBase;
+import consulo.process.ProcessHandler;
 import com.intellij.java.execution.impl.testframework.JavaTestLocator;
-import com.intellij.execution.testframework.sm.runner.SMTRunnerEventsAdapter;
-import com.intellij.execution.testframework.sm.runner.SMTRunnerEventsListener;
-import com.intellij.execution.testframework.sm.runner.SMTestProxy;
+import consulo.execution.test.sm.runner.SMTRunnerEventsAdapter;
+import consulo.execution.test.sm.runner.SMTRunnerEventsListener;
+import consulo.execution.test.sm.runner.SMTestProxy;
 import consulo.logging.Logger;
-import com.intellij.openapi.project.Project;
+import consulo.project.Project;
 import com.intellij.openapi.project.ProjectUtil;
 import consulo.disposer.Disposable;
 import consulo.disposer.Disposer;
-import com.intellij.openapi.util.InvalidDataException;
-import com.intellij.openapi.util.WriteExternalException;
-import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.util.xml.serializer.InvalidDataException;
+import consulo.util.xml.serializer.WriteExternalException;
+import consulo.ide.impl.idea.openapi.util.io.FileUtil;
+import consulo.util.lang.StringUtil;
 import com.intellij.rt.coverage.data.ProjectData;
-import com.intellij.util.Alarm;
-import com.intellij.util.ArrayUtil;
+import consulo.ui.ex.awt.util.Alarm;
+import consulo.util.collection.ArrayUtil;
 import com.intellij.util.PathUtil;
-import com.intellij.util.messages.MessageBusConnection;
+import consulo.component.messagebus.MessageBusConnection;
 import consulo.java.execution.configurations.OwnJavaParameters;
 
 public class TestDiscoveryExtension extends RunConfigurationExtension
@@ -64,7 +65,7 @@ public class TestDiscoveryExtension extends RunConfigurationExtension
 	}
 
 	@Override
-	protected void attachToProcess(@Nonnull final RunConfigurationBase configuration, @Nonnull final ProcessHandler handler, @javax.annotation.Nullable RunnerSettings runnerSettings)
+	protected void attachToProcess(@Nonnull final RunConfigurationBase configuration, @Nonnull final ProcessHandler handler, @Nullable RunnerSettings runnerSettings)
 	{
 		if(runnerSettings == null && isApplicableFor(configuration))
 		{

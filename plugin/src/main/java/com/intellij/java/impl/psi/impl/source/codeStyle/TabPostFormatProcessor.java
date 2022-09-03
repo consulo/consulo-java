@@ -16,18 +16,18 @@
 package com.intellij.java.impl.psi.impl.source.codeStyle;
 
 import com.intellij.java.language.JavaLanguage;
-import com.intellij.lang.ASTNode;
-import com.intellij.lang.Language;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.fileTypes.LanguageFileType;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.codeStyle.CodeStyleSettings;
-import com.intellij.psi.formatter.FormatterUtil;
-import com.intellij.psi.impl.source.codeStyle.PostFormatProcessor;
-import com.intellij.psi.impl.source.tree.TreeUtil;
+import consulo.language.ast.ASTNode;
+import consulo.language.Language;
+import consulo.document.Document;
+import consulo.language.file.LanguageFileType;
+import consulo.document.util.TextRange;
+import consulo.util.lang.StringUtil;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.codeStyle.CodeStyleSettings;
+import consulo.language.codeStyle.FormatterUtil;
+import consulo.ide.impl.psi.impl.source.codeStyle.PostFormatProcessor;
+import consulo.language.impl.ast.TreeUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -298,7 +298,7 @@ public class TabPostFormatProcessor implements PostFormatProcessor {
     /**
      * @return previous line indent space if current line is not the first one; <code>null</code> otherwise
      */
-    @javax.annotation.Nullable
+    @Nullable
     CharSequence getPrevLineIndent();
 
     int getCurrentLineStartOffset();
@@ -493,7 +493,7 @@ public class TabPostFormatProcessor implements PostFormatProcessor {
   }
 
   interface TreeHelper {
-    @javax.annotation.Nullable
+    @Nullable
     ASTNode prevLeaf(@Nonnull ASTNode current);
 
     @Nullable
@@ -512,7 +512,7 @@ public class TabPostFormatProcessor implements PostFormatProcessor {
       return TreeUtil.prevLeaf(current);
     }
 
-    @javax.annotation.Nullable
+    @Nullable
     @Override
     public ASTNode nextLeaf(@Nonnull ASTNode current) {
       return TreeUtil.nextLeaf(current);

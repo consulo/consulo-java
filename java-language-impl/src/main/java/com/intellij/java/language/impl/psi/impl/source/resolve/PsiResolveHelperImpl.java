@@ -17,17 +17,20 @@ package com.intellij.java.language.impl.psi.impl.source.resolve;
 
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.impl.psi.PsiInferenceHelper;
-import com.intellij.java.language.psi.*;
-import com.intellij.java.language.psi.impl.source.resolve.ParameterTypeInferencePolicy;
-import com.intellij.java.language.psi.infos.CandidateInfo;
-import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.psi.*;
 import com.intellij.java.language.impl.psi.impl.source.resolve.graphInference.PsiGraphInferenceHelper;
 import com.intellij.java.language.impl.psi.scope.MethodProcessorSetupFailedException;
 import com.intellij.java.language.impl.psi.scope.processor.MethodCandidatesProcessor;
 import com.intellij.java.language.impl.psi.scope.processor.MethodResolverProcessor;
 import com.intellij.java.language.impl.psi.scope.util.PsiScopesUtil;
-import com.intellij.util.IncorrectOperationException;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.impl.source.resolve.ParameterTypeInferencePolicy;
+import com.intellij.java.language.psi.infos.CandidateInfo;
+import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiManager;
+import consulo.language.psi.resolve.ResolveState;
+import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
@@ -108,7 +111,7 @@ public class PsiResolveHelperImpl implements PsiResolveHelper {
     return problemWithAccess[0] ? null : variable;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private PsiVariable resolveVar(@Nonnull String referenceText, final PsiElement context, final boolean[] problemWithAccess) {
     final PsiJavaParserFacade parserFacade = JavaPsiFacade.getInstance(myManager.getProject()).getParserFacade();
     try {
@@ -120,16 +123,16 @@ public class PsiResolveHelperImpl implements PsiResolveHelper {
   }
 
   @Override
-  public boolean isAccessible(@Nonnull PsiMember member, @Nonnull PsiElement place, @javax.annotation.Nullable PsiClass accessObjectClass) {
+  public boolean isAccessible(@Nonnull PsiMember member, @Nonnull PsiElement place, @Nullable PsiClass accessObjectClass) {
     return isAccessible(member, member.getModifierList(), place, accessObjectClass, null);
   }
 
   @Override
   public boolean isAccessible(@Nonnull PsiMember member,
-                              @javax.annotation.Nullable PsiModifierList modifierList,
+                              @Nullable PsiModifierList modifierList,
                               @Nonnull PsiElement place,
-                              @javax.annotation.Nullable PsiClass accessObjectClass,
-                              @javax.annotation.Nullable PsiElement currentFileResolveScope) {
+                              @Nullable PsiClass accessObjectClass,
+                              @Nullable PsiElement currentFileResolveScope) {
     PsiClass containingClass = member.getContainingClass();
     return JavaResolveUtil.isAccessible(member, containingClass, modifierList, place, accessObjectClass, currentFileResolveScope);
   }

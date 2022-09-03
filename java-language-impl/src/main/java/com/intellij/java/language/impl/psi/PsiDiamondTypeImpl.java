@@ -29,26 +29,26 @@ import com.intellij.java.language.psi.infos.MethodCandidateInfo;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import com.intellij.java.language.util.VisibilityUtil;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.openapi.util.Computable;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiManager;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.util.CachedValueProvider;
-import com.intellij.psi.util.CachedValuesManager;
-import com.intellij.psi.util.PsiModificationTracker;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.Function;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.text.UniqueNameGenerator;
+import consulo.application.util.CachedValueProvider;
+import consulo.application.util.function.Computable;
+import consulo.component.util.text.UniqueNameGenerator;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiManager;
+import consulo.language.psi.PsiModificationTracker;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.util.LanguageCachedValueUtil;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
+import consulo.project.Project;
+import consulo.util.lang.Comparing;
+import consulo.util.lang.StringUtil;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.function.Function;
 
 /**
  * @author anna
@@ -125,7 +125,7 @@ public class PsiDiamondTypeImpl extends PsiDiamondType {
     return PsiTreeUtil.getParentOfType(typeElementWithDiamondTypeArgument, PsiNewExpression.class, true, PsiTypeElement.class);
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   @Override
   public JavaResolveResult getStaticFactory() {
     final PsiNewExpression newExpression = getNewExpression();
@@ -164,7 +164,7 @@ public class PsiDiamondTypeImpl extends PsiDiamondType {
   }
 
   private static JavaResolveResult getStaticFactory(final PsiNewExpression newExpression, final PsiElement context) {
-    return context == newExpression ? CachedValuesManager.getCachedValue(newExpression, new CachedValueProvider<JavaResolveResult>() {
+    return context == newExpression ? LanguageCachedValueUtil.getCachedValue(newExpression, new CachedValueProvider<JavaResolveResult>() {
       @Nullable
       @Override
       public Result<JavaResolveResult> compute() {
@@ -313,7 +313,7 @@ public class PsiDiamondTypeImpl extends PsiDiamondType {
     return processor.getResult();
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private static PsiClass findClass(PsiNewExpression newExpression) {
     final PsiJavaCodeReferenceElement classReference = newExpression.getClassOrAnonymousClassReference();
     if (classReference != null) {
@@ -356,14 +356,14 @@ public class PsiDiamondTypeImpl extends PsiDiamondType {
     final UniqueNameGenerator generator = new UniqueNameGenerator();
     buf.append(StringUtil.join(params, new Function<PsiTypeParameter, String>() {
       @Override
-      public String fun(PsiTypeParameter psiTypeParameter) {
+      public String apply(PsiTypeParameter psiTypeParameter) {
         String extendsList = "";
         if (psiTypeParameter.getLanguage().isKindOf(JavaLanguage.INSTANCE)) {
           final PsiClassType[] extendsListTypes = psiTypeParameter.getExtendsListTypes();
           if (extendsListTypes.length > 0) {
             final Function<PsiClassType, String> canonicalTypePresentationFun = new Function<PsiClassType, String>() {
               @Override
-              public String fun(PsiClassType type) {
+              public String apply(PsiClassType type) {
                 return type.getCanonicalText();
               }
             };
@@ -396,7 +396,7 @@ public class PsiDiamondTypeImpl extends PsiDiamondType {
     buf.append("<");
     buf.append(StringUtil.join(parameters, new Function<PsiTypeParameter, String>() {
       @Override
-      public String fun(PsiTypeParameter psiTypeParameter) {
+      public String apply(PsiTypeParameter psiTypeParameter) {
         return psiTypeParameter.getName();
       }
     }, ", "));
@@ -413,7 +413,7 @@ public class PsiDiamondTypeImpl extends PsiDiamondType {
         int myIdx;
 
         @Override
-        public String fun(PsiParameter psiParameter) {
+        public String apply(PsiParameter psiParameter) {
           return psiParameter.getType().getCanonicalText() + " p" + myIdx++;
         }
       }, ",")).append(")");

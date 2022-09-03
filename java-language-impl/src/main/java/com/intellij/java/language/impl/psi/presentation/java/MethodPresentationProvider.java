@@ -15,14 +15,24 @@
  */
 package com.intellij.java.language.impl.psi.presentation.java;
 
-import com.intellij.navigation.ItemPresentation;
-import com.intellij.navigation.ItemPresentationProvider;
 import com.intellij.java.language.psi.PsiMethod;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.navigation.ItemPresentation;
+import consulo.navigation.ItemPresentationProvider;
+
+import javax.annotation.Nonnull;
 
 /**
  * @author yole
  */
+@ExtensionImpl
 public class MethodPresentationProvider implements ItemPresentationProvider<PsiMethod> {
+  @Nonnull
+  @Override
+  public Class<PsiMethod> getItemClass() {
+    return PsiMethod.class;
+  }
+
   @Override
   public ItemPresentation getPresentation(PsiMethod item) {
     return JavaPresentationUtil.getMethodPresentation(item);

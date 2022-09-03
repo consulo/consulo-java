@@ -13,17 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.intellij.java.language.psi;
 
-import com.intellij.lang.LanguageExtension;
+
+package com.intellij.java.language.projectRoots;
+
+import consulo.annotation.DeprecationInfo;
+import consulo.content.bundle.Sdk;
+import consulo.process.cmd.GeneralCommandLine;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
 
 /**
- * @author Serega.Vasiliev
+ * User: anna
+ * Date: 14-Jan-2008
  */
-public class LanguageAnnotationSupport extends LanguageExtension<PsiAnnotationSupport> {
-  public static final LanguageAnnotationSupport INSTANCE = new LanguageAnnotationSupport();
+@Deprecated
+@DeprecationInfo("Use JavaSdk")
+public interface JavaSdkType {
+  @NonNls
+  String getBinPath(Sdk sdk);
 
-  private LanguageAnnotationSupport() {
-    super("consulo.java.annotationSupport");
-  }
+  @NonNls
+  String getToolsPath(Sdk sdk);
+
+  void setupCommandLine(@Nonnull GeneralCommandLine commandLine, @Nonnull Sdk sdk);
 }

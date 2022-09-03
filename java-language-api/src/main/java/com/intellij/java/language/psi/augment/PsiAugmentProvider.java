@@ -6,22 +6,27 @@ import com.intellij.java.language.psi.PsiModifierList;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.PsiTypeElement;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.openapi.extensions.ExtensionPointName;
-import com.intellij.openapi.progress.ProcessCanceledException;
-import com.intellij.openapi.project.DumbAware;
-import com.intellij.openapi.project.DumbService;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Ref;
-import com.intellij.psi.*;
-import com.intellij.psi.util.*;
-import com.intellij.util.Processor;
-import com.intellij.util.SmartList;
-import com.intellij.util.containers.ConcurrentFactoryMap;
+import consulo.application.dumb.DumbAware;
+import consulo.application.util.CachedValue;
+import consulo.application.util.CachedValueProvider;
+import consulo.application.util.ConcurrentFactoryMap;
+import consulo.application.util.function.Processor;
+import consulo.component.ProcessCanceledException;
+import consulo.component.extension.ExtensionPointName;
+import consulo.component.util.PluginExceptionUtil;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiModificationTracker;
+import consulo.language.psi.PsiNamedElement;
+import consulo.language.psi.PsiUtilCore;
+import consulo.language.psi.util.LanguageCachedValueUtil;
 import consulo.logging.Logger;
-import consulo.util.PluginExceptionUtil;
+import consulo.project.DumbService;
+import consulo.project.Project;
+import consulo.util.collection.SmartList;
 import consulo.util.dataholder.Key;
-import javax.annotation.Nonnull;
+import consulo.util.lang.ref.Ref;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
@@ -61,8 +66,8 @@ public abstract class PsiAugmentProvider
 	})
 	@Nonnull
 	protected <Psi extends PsiElement> List<Psi> getAugments(@Nonnull PsiElement element,
-															 @Nonnull Class<Psi> type,
-															 @Nullable String nameHint)
+                                                                                @Nonnull Class<Psi> type,
+                                                                                @Nullable String nameHint)
 	{
 		if(nameHint == null)
 		{
@@ -70,7 +75,7 @@ public abstract class PsiAugmentProvider
 		}
 
 		// cache to emulate previous behavior where augmenters were called just once, not for each name hint separately
-		Map<Class, List> cache = CachedValuesManager.getCachedValue(element, myCacheKey, () -> {
+		Map<Class, List> cache = LanguageCachedValueUtil.getCachedValue(element, myCacheKey, () -> {
 			Map<Class, List> map = ConcurrentFactoryMap.createMap(c -> getAugments(element, c));
 			return CachedValueProvider.Result.create(map, PsiModificationTracker.MODIFICATION_COUNT);
 		});
@@ -145,7 +150,7 @@ public abstract class PsiAugmentProvider
 
 	@Nonnull
 	public static <Psi extends PsiElement> List<Psi> collectAugments(@Nonnull PsiElement element, @Nonnull Class<? extends Psi> type,
-																	 @Nullable String nameHint)
+                                                                                        @Nullable String nameHint)
 	{
 		List<Psi> result = new SmartList<>();
 

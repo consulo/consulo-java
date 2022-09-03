@@ -20,20 +20,21 @@
  */
 package com.intellij.java.impl.ide.util.scopeChooser;
 
-import com.intellij.ide.IdeBundle;
-import com.intellij.ide.util.scopeChooser.ScopeDescriptor;
+import consulo.ide.IdeBundle;
+import consulo.content.scope.ScopeDescriptor;
 import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
 import com.intellij.java.language.impl.psi.presentation.java.ClassPresentationUtil;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.util.TreeClassChooser;
 import com.intellij.java.language.util.TreeClassChooserFactory;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.search.LocalSearchScope;
-import com.intellij.psi.search.SearchScope;
-import com.intellij.psi.util.PsiUtilBase;
+import consulo.project.Project;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.scope.LocalSearchScope;
+import consulo.content.scope.SearchScope;
+import consulo.language.editor.util.PsiUtilBase;
 import consulo.java.impl.JavaBundle;
 
+import javax.annotation.Nullable;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -51,7 +52,7 @@ public class ClassHierarchyScopeDescriptor extends ScopeDescriptor {
     return JavaBundle.message("java.scope.class.hierarchy");
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public SearchScope getScope() {
     if (myCachedScope == null) {
       TreeClassChooser chooser = TreeClassChooserFactory.getInstance(myProject).createAllProjectScopeChooser(IdeBundle.message("prompt.choose.base.class.of.the.hierarchy"));

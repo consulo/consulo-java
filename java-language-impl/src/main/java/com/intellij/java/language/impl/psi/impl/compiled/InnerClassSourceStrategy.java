@@ -20,10 +20,9 @@ import javax.annotation.Nullable;
 /**
  * @author max
  */
-public interface InnerClassSourceStrategy<T>
-{
-	@Nullable
-	T findInnerClass(String name, T outerClass);
+public interface InnerClassSourceStrategy<T> {
+  @Nullable
+  T findInnerClass(String name, T outerClass);
 
-	void accept(T innerClass, StubBuildingVisitor<T> visitor);
+  void accept(T innerClass, StubBuildingVisitor<T> visitor);
 }

@@ -19,9 +19,9 @@ import javax.annotation.Nonnull;
 import javax.swing.JComponent;
 
 import javax.annotation.Nullable;
-import com.intellij.codeInsight.daemon.ImplicitUsageProvider;
-import com.intellij.codeInspection.ui.SingleCheckboxOptionsPanel;
-import com.intellij.openapi.extensions.Extensions;
+import consulo.language.editor.ImplicitUsageProvider;
+import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
+import consulo.component.extension.Extensions;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiClassInitializer;
 import com.intellij.java.language.psi.PsiCodeBlock;

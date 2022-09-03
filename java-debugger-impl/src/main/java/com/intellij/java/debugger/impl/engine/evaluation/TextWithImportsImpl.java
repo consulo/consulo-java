@@ -16,23 +16,24 @@
 package com.intellij.java.debugger.impl.engine.evaluation;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.java.debugger.engine.evaluation.CodeFragmentKind;
 import com.intellij.java.debugger.engine.evaluation.TextWithImports;
-import com.intellij.lang.LanguageUtil;
-import com.intellij.openapi.fileTypes.FileType;
-import com.intellij.openapi.fileTypes.FileTypeManager;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.openapi.util.Trinity;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.execution.debug.breakpoint.XExpression;
+import consulo.execution.debug.evaluation.EvaluationMode;
+import consulo.language.util.LanguageUtil;
+import consulo.virtualFileSystem.fileType.FileType;
+import consulo.language.file.FileTypeManager;
+import consulo.util.lang.Comparing;
+import consulo.util.lang.Trinity;
+import consulo.util.lang.StringUtil;
 import com.intellij.java.language.psi.JavaCodeFragment;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiExpressionCodeFragment;
-import com.intellij.psi.PsiFile;
-import com.intellij.xdebugger.XExpression;
-import com.intellij.xdebugger.evaluation.EvaluationMode;
-import com.intellij.xdebugger.impl.breakpoints.XExpressionImpl;
+import consulo.language.psi.PsiFile;
+import consulo.ide.impl.idea.xdebugger.impl.breakpoints.XExpressionImpl;
 
 public final class TextWithImportsImpl implements TextWithImports
 {
@@ -64,7 +65,7 @@ public final class TextWithImportsImpl implements TextWithImports
 		}
 	}
 
-	public TextWithImportsImpl(CodeFragmentKind kind, @Nonnull String text, @Nonnull String imports, @javax.annotation.Nullable FileType fileType)
+	public TextWithImportsImpl(CodeFragmentKind kind, @Nonnull String text, @Nonnull String imports, @Nullable FileType fileType)
 	{
 		myKind = kind;
 		myText = text;
@@ -160,12 +161,12 @@ public final class TextWithImportsImpl implements TextWithImports
 		return myFileType;
 	}
 
-	@javax.annotation.Nullable
-	public static XExpression toXExpression(@javax.annotation.Nullable TextWithImports text)
+	@Nullable
+	public static XExpression toXExpression(@Nullable TextWithImports text)
 	{
 		if(text != null && !text.getText().isEmpty())
 		{
-			return new XExpressionImpl(text.getText(), LanguageUtil.getFileTypeLanguage(text.getFileType()), StringUtil.nullize(text.getImports()), getMode(text.getKind()));
+			return new consulo.ide.impl.idea.xdebugger.impl.breakpoints.XExpressionImpl(text.getText(), LanguageUtil.getFileTypeLanguage(text.getFileType()), StringUtil.nullize(text.getImports()), getMode(text.getKind()));
 		}
 		return null;
 	}
@@ -194,7 +195,7 @@ public final class TextWithImportsImpl implements TextWithImports
 		throw new IllegalStateException("Unknown mode " + mode);
 	}
 
-	public static TextWithImports fromXExpression(@javax.annotation.Nullable XExpression expression)
+	public static TextWithImports fromXExpression(@Nullable XExpression expression)
 	{
 		if(expression == null)
 		{

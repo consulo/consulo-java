@@ -15,33 +15,41 @@
  */
 package com.intellij.java.language.impl.psi.impl.source.javadoc;
 
-import com.intellij.java.language.impl.psi.impl.source.tree.ElementType;
-import com.intellij.java.language.psi.*;
-import com.intellij.lang.ASTNode;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.*;
 import com.intellij.java.language.impl.psi.impl.source.Constants;
-import com.intellij.psi.impl.source.SourceTreeToPsiMap;
 import com.intellij.java.language.impl.psi.impl.source.resolve.JavaResolveUtil;
-import com.intellij.psi.impl.source.tree.*;
+import com.intellij.java.language.impl.psi.impl.source.tree.ElementType;
+import com.intellij.java.language.impl.psi.scope.ElementClassFilter;
+import com.intellij.java.language.impl.psi.scope.processor.FilterScopeProcessor;
+import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.infos.CandidateInfo;
 import com.intellij.java.language.psi.javadoc.PsiDocTag;
 import com.intellij.java.language.psi.javadoc.PsiDocTagValue;
-import com.intellij.java.language.impl.psi.scope.ElementClassFilter;
-import com.intellij.psi.scope.PsiScopeProcessor;
-import com.intellij.java.language.impl.psi.scope.processor.FilterScopeProcessor;
 import com.intellij.java.language.psi.util.MethodSignature;
 import com.intellij.java.language.psi.util.MethodSignatureUtil;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.ArrayUtil;
-import com.intellij.util.CharTable;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.SmartList;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.document.util.TextRange;
+import consulo.language.ast.ASTNode;
+import consulo.language.impl.ast.CompositeElement;
+import consulo.language.impl.ast.Factory;
+import consulo.language.impl.ast.LeafElement;
+import consulo.language.impl.ast.SharedImplUtil;
+import consulo.language.impl.psi.CompositePsiElement;
+import consulo.language.impl.psi.SourceTreeToPsiMap;
+import consulo.language.psi.PsiComment;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiElementVisitor;
+import consulo.language.psi.PsiReference;
+import consulo.language.psi.resolve.PsiScopeProcessor;
+import consulo.language.psi.resolve.ResolveState;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.CharTable;
+import consulo.language.util.IncorrectOperationException;
+import consulo.util.collection.ArrayUtil;
+import consulo.util.collection.ContainerUtil;
+import consulo.util.collection.SmartList;
 import org.jetbrains.annotations.NonNls;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import java.util.ArrayList;
 import java.util.List;
 

@@ -21,12 +21,12 @@ import com.intellij.java.debugger.impl.breakpoints.properties.JavaLineBreakpoint
 import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.SourcePosition;
 import com.intellij.java.debugger.impl.engine.DebugProcessImpl;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiManager;
-import com.intellij.xdebugger.XSourcePosition;
-import com.intellij.xdebugger.breakpoints.XLineBreakpointType;
+import consulo.execution.debug.XSourcePosition;
+import consulo.project.Project;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiManager;
+import consulo.execution.debug.breakpoint.XLineBreakpointType;
 import consulo.internal.com.sun.jdi.event.LocatableEvent;
 import consulo.xdebugger.breakpoints.XLineBreakpointResolverTypeExtension;
 
@@ -174,7 +174,7 @@ public class RunToCursorBreakpoint extends LineBreakpoint<JavaLineBreakpointProp
 		return null;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	protected static RunToCursorBreakpoint create(@Nonnull Project project, @Nonnull XSourcePosition position, boolean restoreBreakpoints)
 	{
 		PsiFile psiFile = PsiManager.getInstance(project).findFile(position.getFile());

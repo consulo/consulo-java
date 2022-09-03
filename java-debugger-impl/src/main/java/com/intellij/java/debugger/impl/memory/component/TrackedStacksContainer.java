@@ -18,6 +18,7 @@ package com.intellij.java.debugger.impl.memory.component;
 import java.util.List;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.intellij.java.debugger.impl.memory.utils.StackFrameItem;
 import consulo.internal.com.sun.jdi.ObjectReference;
@@ -28,7 +29,7 @@ import consulo.internal.com.sun.jdi.ReferenceType;
  */
 public interface TrackedStacksContainer
 {
-	@javax.annotation.Nullable
+	@Nullable
 	List<StackFrameItem> getStack(@Nonnull ObjectReference reference);
 
 	void addStack(@Nonnull ObjectReference ref, @Nonnull List<StackFrameItem> frames);

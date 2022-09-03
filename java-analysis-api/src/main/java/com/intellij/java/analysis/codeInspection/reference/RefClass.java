@@ -15,7 +15,7 @@
  */
 package com.intellij.java.analysis.codeInspection.reference;
 
-import com.intellij.codeInspection.reference.RefElement;
+import consulo.language.editor.inspection.reference.RefElement;
 import com.intellij.java.language.psi.PsiClass;
 
 import javax.annotation.Nonnull;

@@ -34,7 +34,7 @@ public interface PsiForStatement extends PsiConditionalLoopStatement {
    *
    * @return the condition part, or null if the statement is incomplete.
    */
-  @javax.annotation.Nullable
+  @Nullable
   PsiExpression getCondition();
 
   /**
@@ -42,7 +42,7 @@ public interface PsiForStatement extends PsiConditionalLoopStatement {
    *
    * @return the update part, or null if the statement is incomplete.
    */
-  @javax.annotation.Nullable
+  @Nullable
   PsiStatement getUpdate();
 
   /**
@@ -50,7 +50,7 @@ public interface PsiForStatement extends PsiConditionalLoopStatement {
    *
    * @return the opening parenthesis, or null if the statement is incomplete.
    */
-  @javax.annotation.Nullable
+  @Nullable
   PsiJavaToken getLParenth();
 
   /**
@@ -58,6 +58,6 @@ public interface PsiForStatement extends PsiConditionalLoopStatement {
    *
    * @return the closing parenthesis, or null if the statement is incomplete.
    */
-  @javax.annotation.Nullable
+  @Nullable
   PsiJavaToken getRParenth();
 }

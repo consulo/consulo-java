@@ -19,7 +19,7 @@ package com.intellij.java.analysis.impl.codeInspection.dataFlow.instructions;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.ControlTransferInstruction;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.DfaControlTransferValue;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.ExceptionTransfer;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 

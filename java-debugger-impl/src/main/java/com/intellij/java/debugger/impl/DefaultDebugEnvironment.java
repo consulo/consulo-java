@@ -18,24 +18,25 @@ package com.intellij.java.debugger.impl;
 import java.util.Comparator;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.intellij.java.debugger.impl.settings.DebuggerSettings;
-import com.intellij.execution.ExecutionException;
-import com.intellij.execution.ExecutionResult;
+import consulo.execution.ExecutionResult;
+import consulo.execution.configuration.RunProfileState;
+import consulo.execution.runner.ExecutionEnvironment;
+import consulo.process.ExecutionException;
 import com.intellij.java.execution.configurations.JavaCommandLine;
 import com.intellij.java.execution.configurations.RemoteConnection;
 import com.intellij.java.execution.configurations.RemoteState;
-import com.intellij.execution.configurations.RunProfile;
-import com.intellij.execution.configurations.RunProfileState;
-import com.intellij.execution.configurations.SearchScopeProvider;
-import com.intellij.execution.runners.ExecutionEnvironment;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.roots.ProjectFileIndex;
-import com.intellij.openapi.roots.ProjectRootManager;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.search.DelegatingGlobalSearchScope;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.execution.configuration.RunProfile;
+import consulo.content.scope.SearchScopeProvider;
+import consulo.project.Project;
+import consulo.content.bundle.Sdk;
+import consulo.module.content.ProjectFileIndex;
+import consulo.module.content.ProjectRootManager;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.language.psi.scope.DelegatingGlobalSearchScope;
+import consulo.language.psi.scope.GlobalSearchScope;
 
 public class DefaultDebugEnvironment implements DebugEnvironment
 {
@@ -62,7 +63,7 @@ public class DefaultDebugEnvironment implements DebugEnvironment
 		myNeedParametersSet = remoteConnection.isServerMode() && remoteConnection.isUseSockets() && "0".equals(remoteConnection.getAddress());
 	}
 
-	private static GlobalSearchScope createSearchScope(@Nonnull Project project, @javax.annotation.Nullable RunProfile runProfile)
+	private static GlobalSearchScope createSearchScope(@Nonnull Project project, @Nullable RunProfile runProfile)
 	{
 		GlobalSearchScope scope = SearchScopeProvider.createSearchScope(project, runProfile);
 		if(scope.equals(GlobalSearchScope.allScope(project)))
@@ -126,14 +127,14 @@ public class DefaultDebugEnvironment implements DebugEnvironment
 		return environment.getRunProfile().getName();
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	@Override
 	public Sdk getAlternativeJre()
 	{
 		return AlternativeJreClassFinder.getAlternativeJre(environment.getRunProfile());
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	@Override
 	public Sdk getRunJre()
 	{

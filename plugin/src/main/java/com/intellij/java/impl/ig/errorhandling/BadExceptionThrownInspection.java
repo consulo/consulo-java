@@ -15,9 +15,9 @@
  */
 package com.intellij.java.impl.ig.errorhandling;
 
-import com.intellij.codeInspection.ui.ListTable;
-import com.intellij.codeInspection.ui.ListWrappingTableModel;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.ide.impl.idea.codeInspection.ui.ListTable;
+import consulo.ide.impl.idea.codeInspection.ui.ListWrappingTableModel;
+import consulo.util.lang.StringUtil;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiThrowStatement;
 import com.intellij.java.language.psi.PsiType;

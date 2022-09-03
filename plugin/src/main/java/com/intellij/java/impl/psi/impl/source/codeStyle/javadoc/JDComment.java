@@ -21,11 +21,11 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.intellij.formatting.IndentInfo;
+import consulo.language.codeStyle.internal.IndentInfo;
 import com.intellij.java.language.impl.JavaFileType;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.codeStyle.CodeStyleSettings;
-import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
+import consulo.util.lang.StringUtil;
+import consulo.language.codeStyle.CodeStyleSettings;
+import consulo.language.codeStyle.CommonCodeStyleSettings;
 
 /**
  * @author Dmitry Skavish

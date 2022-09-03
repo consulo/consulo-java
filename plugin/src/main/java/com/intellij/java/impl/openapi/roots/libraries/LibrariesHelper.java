@@ -15,9 +15,9 @@
  */
 package com.intellij.java.impl.openapi.roots.libraries;
 
-import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.roots.libraries.Library;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.ide.ServiceManager;
+import consulo.content.library.Library;
+import consulo.virtualFileSystem.VirtualFile;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nullable;
@@ -38,6 +38,6 @@ public abstract class LibrariesHelper {
   @Nullable
   public abstract VirtualFile findJarByClass(final Library library, @NonNls String fqn);
 
-  @javax.annotation.Nullable
+  @Nullable
   public abstract VirtualFile findRootByClass(List<VirtualFile> roots, String fqn);
 }

@@ -17,13 +17,14 @@
 package com.intellij.java.impl.util.descriptors.impl;
 
 import com.intellij.java.impl.util.descriptors.*;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.MultiValuesMap;
+import consulo.project.Project;
+import consulo.util.collection.MultiValuesMap;
 import com.intellij.openapi.vfs.*;
-import com.intellij.util.EventDispatcher;
+import consulo.proxy.EventDispatcher;
 import consulo.disposer.Disposable;
 import consulo.disposer.Disposer;
 
+import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
@@ -70,14 +71,14 @@ public class ConfigFileContainerImpl implements ConfigFileContainer {
   private void fileChanged(final VirtualFile file) {
     for (ConfigFile descriptor : myConfigFiles.values()) {
       final VirtualFile virtualFile = descriptor.getVirtualFile();
-      if (virtualFile != null && VfsUtil.isAncestor(file, virtualFile, false)) {
+      if (virtualFile != null && consulo.ide.impl.idea.openapi.vfs.VfsUtil.isAncestor(file, virtualFile, false)) {
         myConfiguration.updateConfigFile(descriptor);
         fireDescriptorChanged(descriptor);
       }
     }
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public ConfigFile getConfigFile(ConfigFileMetaData metaData) {
     final Collection<ConfigFile> descriptors = myConfigFiles.get(metaData);
     if (descriptors == null || descriptors.isEmpty()) {

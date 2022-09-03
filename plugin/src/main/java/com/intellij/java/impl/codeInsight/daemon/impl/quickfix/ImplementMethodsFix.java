@@ -19,25 +19,26 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-import com.intellij.codeInsight.FileModificationService;
+import consulo.language.editor.FileModificationService;
 import com.intellij.java.language.impl.codeInsight.generation.OverrideImplementExploreUtil;
 import com.intellij.java.impl.codeInsight.generation.OverrideImplementUtil;
 import com.intellij.java.impl.codeInsight.generation.PsiMethodMember;
-import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement;
-import com.intellij.featureStatistics.FeatureUsageTracker;
-import com.intellij.featureStatistics.ProductivityFeatureNames;
-import com.intellij.ide.util.MemberChooser;
-import com.intellij.openapi.application.Result;
-import com.intellij.openapi.command.WriteCommandAction;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
+import consulo.language.editor.inspection.LocalQuickFixAndIntentionActionOnPsiElement;
+import consulo.externalService.statistic.FeatureUsageTracker;
+import consulo.ide.impl.idea.featureStatistics.ProductivityFeatureNames;
+import consulo.ide.impl.idea.ide.util.MemberChooser;
+import consulo.application.Result;
+import consulo.language.editor.WriteCommandAction;
+import consulo.codeEditor.Editor;
+import consulo.project.Project;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiEnumConstant;
-import com.intellij.psi.PsiFile;
+import consulo.language.psi.PsiFile;
 import com.intellij.java.language.psi.infos.CandidateInfo;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.util.collection.ContainerUtil;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 
 public class ImplementMethodsFix extends LocalQuickFixAndIntentionActionOnPsiElement {
@@ -69,7 +70,7 @@ public class ImplementMethodsFix extends LocalQuickFixAndIntentionActionOnPsiEle
   @Override
   public void invoke(@Nonnull Project project,
                      @Nonnull PsiFile file,
-                     @javax.annotation.Nullable final Editor editor,
+                     @Nullable final Editor editor,
                      @Nonnull PsiElement startElement,
                      @Nonnull PsiElement endElement) {
     final PsiElement myPsiElement = startElement;
@@ -105,12 +106,12 @@ public class ImplementMethodsFix extends LocalQuickFixAndIntentionActionOnPsiEle
   }
 
 
-  @javax.annotation.Nullable
+  @Nullable
   protected static MemberChooser<PsiMethodMember> chooseMethodsToImplement(Editor editor,
                                                                            PsiElement startElement,
                                                                            PsiClass aClass,
                                                                            boolean implemented) {
-    FeatureUsageTracker.getInstance().triggerFeatureUsed(ProductivityFeatureNames.CODEASSISTS_OVERRIDE_IMPLEMENT);
+    FeatureUsageTracker.getInstance().triggerFeatureUsed(consulo.ide.impl.idea.featureStatistics.ProductivityFeatureNames.CODEASSISTS_OVERRIDE_IMPLEMENT);
 
     final Collection<CandidateInfo> overrideImplement = OverrideImplementExploreUtil.getMapToOverrideImplement(aClass, true, implemented).values();
     return OverrideImplementUtil

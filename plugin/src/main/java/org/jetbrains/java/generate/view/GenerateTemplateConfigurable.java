@@ -30,31 +30,32 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 
 import javax.annotation.Nonnull;
+
+import consulo.configurable.ConfigurationException;
+import consulo.configurable.UnnamedConfigurable;
 import org.jetbrains.java.generate.element.ClassElement;
 import org.jetbrains.java.generate.element.FieldElement;
 import org.jetbrains.java.generate.element.GenerationHelper;
 import org.jetbrains.java.generate.template.TemplateResource;
 import org.jetbrains.java.generate.template.TemplatesManager;
-import com.intellij.openapi.application.Result;
-import com.intellij.openapi.command.WriteCommandAction;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.EditorFactory;
-import com.intellij.openapi.fileTypes.FileType;
-import com.intellij.openapi.fileTypes.FileTypeManager;
-import com.intellij.openapi.fileTypes.PlainTextFileType;
-import com.intellij.openapi.options.ConfigurationException;
-import com.intellij.openapi.options.UnnamedConfigurable;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.ex.MultiLineLabel;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.PsiDocumentManager;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiFileFactory;
+import consulo.application.Result;
+import consulo.language.editor.WriteCommandAction;
+import consulo.document.Document;
+import consulo.codeEditor.Editor;
+import consulo.codeEditor.EditorFactory;
+import consulo.virtualFileSystem.fileType.FileType;
+import consulo.language.file.FileTypeManager;
+import consulo.language.plain.PlainTextFileType;
+import consulo.project.Project;
+import consulo.ide.impl.idea.openapi.ui.ex.MultiLineLabel;
+import consulo.util.lang.Comparing;
+import consulo.util.lang.StringUtil;
+import consulo.language.psi.PsiDocumentManager;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiFileFactory;
 import com.intellij.java.language.psi.PsiType;
-import com.intellij.util.LocalTimeCounter;
-import com.intellij.util.ui.JBUI;
+import consulo.util.lang.LocalTimeCounter;
+import consulo.ui.ex.awt.JBUI;
 
 public class GenerateTemplateConfigurable implements UnnamedConfigurable
 {

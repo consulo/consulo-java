@@ -15,17 +15,17 @@
  */
 package com.intellij.java.impl.ide.fileTemplates;
 
-import com.intellij.ide.fileTemplates.FileTemplate;
+import consulo.fileTemplate.FileTemplate;
 import com.intellij.java.language.psi.JavaDirectoryService;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.psi.PsiDirectory;
+import consulo.language.psi.PsiDirectory;
 import consulo.psi.PsiPackage;
 
 import javax.annotation.Nonnull;
 import java.util.Properties;
 
-import static com.intellij.util.ObjectUtil.notNull;
+import static consulo.util.lang.ObjectUtil.notNull;
 
 /**
  * @author yole

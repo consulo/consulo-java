@@ -20,7 +20,7 @@ import com.intellij.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PropertyUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
 import consulo.psi.PsiPackage;
 
 import javax.annotation.Nonnull;
@@ -178,7 +178,7 @@ public class RemoveUnusedVariableUtil {
    * @param sideEffects if null, delete usages, otherwise collect side effects
    * @return true if there are at least one unrecoverable side effect found, false if no side effects,
    *         null if read usage found (may happen if interval between fix creation in invoke() call was long enough)
-   * @throws com.intellij.util.IncorrectOperationException
+   * @throws consulo.language.util.IncorrectOperationException
    */
   static Boolean processUsage(PsiElement element, PsiVariable variable, List<PsiElement> sideEffects, int deleteMode)
     throws IncorrectOperationException {

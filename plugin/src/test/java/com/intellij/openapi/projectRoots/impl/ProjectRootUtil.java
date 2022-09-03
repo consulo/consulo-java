@@ -16,8 +16,8 @@
 
 package com.intellij.openapi.projectRoots.impl;
 
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiDirectory;
+import consulo.project.Project;
+import consulo.language.psi.PsiDirectory;
 
 /**
  * @author VISTALL

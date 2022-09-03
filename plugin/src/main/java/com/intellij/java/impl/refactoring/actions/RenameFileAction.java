@@ -16,12 +16,13 @@
 package com.intellij.java.impl.refactoring.actions;
 
 import com.intellij.openapi.actionSystem.*;
-import com.intellij.openapi.project.DumbAware;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.application.dumb.DumbAware;
+import consulo.project.Project;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.java.language.psi.PsiClassOwner;
-import com.intellij.psi.PsiFile;
-import com.intellij.refactoring.rename.PsiElementRenameHandler;
+import consulo.language.psi.PsiFile;
+import consulo.language.editor.refactoring.rename.PsiElementRenameHandler;
+import consulo.ui.ex.action.ActionPlaces;
 
 /**
  * @author ven

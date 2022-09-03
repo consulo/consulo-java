@@ -16,8 +16,8 @@
 package com.intellij.java.impl.ig.dependency;
 
 import com.intellij.java.analysis.codeInspection.reference.RefClass;
-import com.intellij.codeInspection.reference.RefElement;
-import com.intellij.codeInspection.reference.RefEntity;
+import consulo.language.editor.inspection.reference.RefElement;
+import consulo.language.editor.inspection.reference.RefEntity;
 import com.intellij.java.analysis.codeInspection.reference.RefJavaUtil;
 import consulo.util.dataholder.Key;
 

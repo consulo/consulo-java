@@ -15,26 +15,27 @@
  */
 package com.intellij.java.impl.codeInspection.varScopeCanBeNarrowed;
 
-import com.intellij.codeInsight.daemon.GroupNames;
-import com.intellij.codeInspection.InspectionManager;
-import com.intellij.codeInspection.InspectionsBundle;
-import com.intellij.codeInspection.ProblemDescriptor;
-import com.intellij.codeInspection.ProblemHighlightType;
+import consulo.ide.impl.idea.codeInsight.daemon.GroupNames;
+import consulo.language.editor.inspection.scheme.InspectionManager;
+import consulo.language.editor.inspection.InspectionsBundle;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.editor.inspection.ProblemHighlightType;
 import com.intellij.java.analysis.impl.codeInspection.BaseJavaLocalInspectionTool;
 import com.intellij.java.language.impl.psi.controlFlow.*;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.search.searches.SuperMethodsSearch;
 import com.intellij.java.language.util.VisibilityUtil;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiReference;
+import consulo.project.Project;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiReference;
 import com.intellij.java.impl.refactoring.changeSignature.ChangeSignatureProcessor;
 import com.intellij.java.impl.refactoring.changeSignature.ParameterInfoImpl;
-import com.intellij.usageView.UsageInfo;
-import com.intellij.util.NotNullFunction;
+import consulo.usage.UsageInfo;
+import consulo.ide.impl.idea.util.NotNullFunction;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.*;
 
 /**
@@ -140,7 +141,7 @@ public class ParameterCanBeLocalInspection extends BaseJavaLocalInspectionTool {
     return SuperMethodsSearch.search(method, null, true, false).findFirst() != null;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private static ControlFlow getControlFlow(final PsiElement context) {
     try {
       return ControlFlowFactory.getInstance(context.getProject())
@@ -159,7 +160,7 @@ public class ParameterCanBeLocalInspection extends BaseJavaLocalInspectionTool {
     @Override
     protected PsiElement applyChanges(@Nonnull final Project project,
                                       @Nonnull final String localName,
-                                      @javax.annotation.Nullable final PsiExpression initializer,
+                                      @Nullable final PsiExpression initializer,
                                       @Nonnull final PsiParameter parameter,
                                       @Nonnull final Collection<PsiReference> references,
                                       @Nonnull final NotNullFunction<PsiDeclarationStatement, PsiElement> action) {

@@ -15,11 +15,12 @@
  */
 package com.intellij.java.language.psi;
 
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiModificationTracker;
 
 /**
  * Represents psi element, which can be modified without caches reset.
- * @see com.intellij.psi.util.PsiModificationTracker#getOutOfCodeBlockModificationCount()
+ * @see PsiModificationTracker#getOutOfCodeBlockModificationCount()
  */
 public interface PsiModifiableCodeBlock {
   /**

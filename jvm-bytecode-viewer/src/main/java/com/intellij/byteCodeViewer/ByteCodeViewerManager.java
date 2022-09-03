@@ -9,31 +9,31 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import consulo.logging.Logger;
+import consulo.ui.ex.content.Content;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
 import consulo.internal.org.objectweb.asm.ClassReader;
 import consulo.internal.org.objectweb.asm.util.Textifier;
 import consulo.internal.org.objectweb.asm.util.TraceClassVisitor;
-import com.intellij.codeInsight.documentation.DockablePopupManager;
+import consulo.ide.impl.idea.codeInsight.documentation.DockablePopupManager;
 import com.intellij.java.debugger.impl.engine.JVMNameUtil;
-import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleUtilCore;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.ProjectRootManager;
-import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.ide.ServiceManager;
+import consulo.codeEditor.Editor;
+import consulo.module.Module;
+import consulo.language.util.ModuleUtilCore;
+import consulo.project.Project;
+import consulo.module.content.ProjectRootManager;
+import consulo.ide.impl.idea.openapi.util.io.FileUtil;
+import consulo.util.lang.StringUtil;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.presentation.java.SymbolPresentationUtil;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.PsiUtilCore;
-import com.intellij.ui.content.Content;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.util.SymbolPresentationUtil;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.psi.PsiUtilCore;
 import consulo.compiler.ModuleCompilerPathsManager;
 import consulo.roots.impl.ProductionContentFolderTypeProvider;
 import consulo.roots.impl.TestContentFolderTypeProvider;
@@ -94,7 +94,7 @@ public class ByteCodeViewerManager extends DockablePopupManager<ByteCodeViewerCo
     return new ByteCodeViewerComponent(myProject, createActions());
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   protected String getTitle(PsiElement element) {
     PsiClass aClass = getContainingClass(element);
     if (aClass == null) return null;

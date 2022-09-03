@@ -3,7 +3,7 @@ package com.intellij.java.impl.codeInsight;
 
 import com.intellij.java.language.codeInsight.InferredAnnotationProvider;
 import com.intellij.java.language.codeInsight.InferredAnnotationsManager;
-import com.intellij.openapi.project.Project;
+import consulo.project.Project;
 import consulo.util.dataholder.Key;
 import com.intellij.java.language.psi.PsiAnnotation;
 import com.intellij.java.language.psi.PsiModifierListOwner;

@@ -15,52 +15,46 @@
  */
 package com.intellij.java.language.impl.codeInsight;
 
-import com.intellij.ide.util.treeView.NodeDescriptor;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiDocCommentOwner;
 import com.intellij.java.language.psi.PsiMember;
-import com.intellij.openapi.roots.ui.CellAppearanceEx;
-import com.intellij.openapi.roots.ui.FileAppearanceService;
-import com.intellij.openapi.roots.ui.ModifiableCellAppearanceEx;
-import com.intellij.openapi.roots.ui.util.CompositeAppearance;
-import com.intellij.psi.PsiElement;
-import com.intellij.ui.ColoredTreeCellRenderer;
-import com.intellij.ui.SimpleTextAttributes;
+import consulo.language.psi.PsiElement;
+import consulo.ui.ex.ColoredTextContainer;
+import consulo.ui.ex.SimpleTextAttributes;
+import consulo.ui.ex.awt.tree.ColoredTreeCellRenderer;
+import consulo.ui.ex.tree.NodeDescriptor;
 
+import javax.annotation.Nonnull;
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
 
 public class StructureNodeRenderer extends ColoredTreeCellRenderer {
-  public void customizeCellRenderer(JTree tree, Object value, boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus) {
-    forNodeDescriptorInTree(value, expanded).customize(this);
+  @Override
+  public void customizeCellRenderer(@Nonnull JTree tree, Object value, boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus) {
+    forNodeDescriptorInTree(this, value, expanded);
   }
 
-  public static CellAppearanceEx forNodeDescriptorInTree(Object node, boolean expanded) {
+  public static void forNodeDescriptorInTree(ColoredTextContainer component, Object node, boolean expanded) {
     NodeDescriptor descriptor = getNodeDescriptor(node);
-    if (descriptor == null) return FileAppearanceService.getInstance().empty();
+    if (descriptor == null) return;
     String name = descriptor.toString();
     Object psiElement = descriptor.getElement();
-    ModifiableCellAppearanceEx result;
-    if (psiElement instanceof PsiElement && !((PsiElement)psiElement).isValid()) {
-      result = CompositeAppearance.single(name);
-    }
-    else {
+    if (psiElement instanceof PsiElement && !((PsiElement) psiElement).isValid()) {
+      component.append(name);
+    } else {
       PsiClass psiClass = getContainingClass(psiElement);
+
       if (isInheritedMember(node, psiClass) && psiClass != null) {
-        CompositeAppearance.DequeEnd ending = new CompositeAppearance().getEnding();
-        ending.addText(name, applyDeprecation(psiElement, SimpleTextAttributes.DARK_TEXT));
-        ending.addComment(psiClass.getName(), applyDeprecation(psiClass, SimpleTextAttributes.GRAY_ATTRIBUTES));
-        result = ending.getAppearance();
-      }
-      else {
+        component.append(name, applyDeprecation(psiElement, SimpleTextAttributes.DARK_TEXT));
+        component.append("(" + psiClass.getName() + ")", applyDeprecation(psiClass, SimpleTextAttributes.GRAY_ATTRIBUTES));
+      } else {
         SimpleTextAttributes textAttributes = applyDeprecation(psiElement, SimpleTextAttributes.REGULAR_ATTRIBUTES);
-        result = CompositeAppearance.single(name, textAttributes);
+        component.append(name, textAttributes);
       }
     }
 
-    result.setIcon(descriptor.getIcon());
-    return result;
+    component.setIcon(descriptor.getIcon());
   }
 
   private static boolean isInheritedMember(Object node, PsiClass psiClass) {
@@ -77,7 +71,7 @@ public class StructureNodeRenderer extends ColoredTreeCellRenderer {
   }
 
   private static boolean isDeprecated(Object psiElement) {
-    return psiElement instanceof PsiDocCommentOwner && ((PsiDocCommentOwner)psiElement).isDeprecated();
+    return psiElement instanceof PsiDocCommentOwner && ((PsiDocCommentOwner) psiElement).isDeprecated();
   }
 
   private static PsiClass getContainingClass(Object element) {
@@ -102,7 +96,7 @@ public class StructureNodeRenderer extends ColoredTreeCellRenderer {
       DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
       Object userObject = node.getUserObject();
       if (userObject instanceof NodeDescriptor) {
-        return (NodeDescriptor)userObject;
+        return (NodeDescriptor) userObject;
       }
     }
     return null;

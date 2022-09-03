@@ -15,20 +15,20 @@
  */
 package com.intellij.java.language.impl.psi.impl.source.tree.java;
 
-import javax.annotation.Nonnull;
-
+import com.intellij.java.language.impl.psi.impl.PsiImplUtil;
+import com.intellij.java.language.impl.psi.impl.source.Constants;
+import com.intellij.java.language.impl.psi.impl.source.tree.ChildRole;
 import com.intellij.java.language.psi.JavaElementVisitor;
 import com.intellij.java.language.psi.PsiClassObjectAccessExpression;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.PsiTypeElement;
-import com.intellij.lang.ASTNode;
+import consulo.language.ast.ASTNode;
+import consulo.language.ast.ChildRoleBase;
+import consulo.language.ast.IElementType;
+import consulo.language.psi.PsiElementVisitor;
 import consulo.logging.Logger;
-import com.intellij.psi.*;
-import com.intellij.java.language.impl.psi.impl.PsiImplUtil;
-import com.intellij.java.language.impl.psi.impl.source.Constants;
-import com.intellij.java.language.impl.psi.impl.source.tree.ChildRole;
-import com.intellij.psi.tree.ChildRoleBase;
-import com.intellij.psi.tree.IElementType;
+
+import javax.annotation.Nonnull;
 
 public class PsiClassObjectAccessExpressionImpl extends ExpressionPsiElement implements PsiClassObjectAccessExpression, Constants {
   private static final Logger LOG = Logger.getInstance(PsiClassObjectAccessExpressionImpl.class);
@@ -45,13 +45,13 @@ public class PsiClassObjectAccessExpressionImpl extends ExpressionPsiElement imp
   @Override
   @Nonnull
   public PsiTypeElement getOperand() {
-    return (PsiTypeElement)findChildByRoleAsPsiElement(ChildRole.TYPE);
+    return (PsiTypeElement) findChildByRoleAsPsiElement(ChildRole.TYPE);
   }
 
   @Override
   public ASTNode findChildByRole(int role) {
     LOG.assertTrue(ChildRole.isUnique(role));
-    switch(role){
+    switch (role) {
       default:
         return null;
 
@@ -72,14 +72,11 @@ public class PsiClassObjectAccessExpressionImpl extends ExpressionPsiElement imp
     IElementType i = child.getElementType();
     if (i == TYPE) {
       return ChildRole.TYPE;
-    }
-    else if (i == DOT) {
+    } else if (i == DOT) {
       return ChildRole.DOT;
-    }
-    else if (i == CLASS_KEYWORD) {
+    } else if (i == CLASS_KEYWORD) {
       return ChildRole.CLASS_KEYWORD;
-    }
-    else {
+    } else {
       return ChildRoleBase.NONE;
     }
   }
@@ -87,9 +84,8 @@ public class PsiClassObjectAccessExpressionImpl extends ExpressionPsiElement imp
   @Override
   public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
-      ((JavaElementVisitor)visitor).visitClassObjectAccessExpression(this);
-    }
-    else {
+      ((JavaElementVisitor) visitor).visitClassObjectAccessExpression(this);
+    } else {
       visitor.visitElement(this);
     }
   }

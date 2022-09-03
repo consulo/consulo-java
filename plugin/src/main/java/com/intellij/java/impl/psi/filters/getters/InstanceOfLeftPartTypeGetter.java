@@ -18,7 +18,7 @@ package com.intellij.java.impl.psi.filters.getters;
 import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
 import com.intellij.java.impl.psi.filters.FilterUtil;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 
 /**
  * Created by IntelliJ IDEA.

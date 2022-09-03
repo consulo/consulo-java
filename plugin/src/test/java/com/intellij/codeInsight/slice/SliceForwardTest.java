@@ -15,12 +15,12 @@
  */
 package com.intellij.codeInsight.slice;
 
-import com.intellij.analysis.AnalysisScope;
+import consulo.language.editor.scope.AnalysisScope;
 import com.intellij.codeInsight.daemon.DaemonAnalyzerTestCase;
-import com.intellij.codeInsight.daemon.impl.HighlightInfo;
-import com.intellij.openapi.editor.RangeMarker;
-import com.intellij.psi.PsiDocumentManager;
-import com.intellij.psi.PsiElement;
+import consulo.language.editor.rawHighlight.HighlightInfo;
+import consulo.document.RangeMarker;
+import consulo.language.psi.PsiDocumentManager;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.impl.slicer.SliceAnalysisParams;
 import com.intellij.java.impl.slicer.SliceForwardHandler;
 import com.intellij.java.impl.slicer.SliceUsage;

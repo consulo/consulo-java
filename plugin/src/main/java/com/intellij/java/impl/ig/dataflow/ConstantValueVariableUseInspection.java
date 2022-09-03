@@ -17,13 +17,13 @@ package com.intellij.java.impl.ig.dataflow;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.codeInspection.ProblemDescriptor;
+import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.project.Project;
+import consulo.project.Project;
 import com.intellij.psi.*;
-import com.intellij.psi.tree.IElementType;
+import consulo.language.ast.IElementType;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
@@ -116,7 +116,7 @@ public class ConstantValueVariableUseInspection extends BaseInspection {
       checkCondition(condition, body);
     }
 
-    private boolean checkCondition(@javax.annotation.Nullable PsiExpression condition,
+    private boolean checkCondition(@Nullable PsiExpression condition,
                                    @Nullable PsiStatement body) {
       if (body == null) {
         return false;
@@ -150,7 +150,7 @@ public class ConstantValueVariableUseInspection extends BaseInspection {
     }
 
     private boolean checkConstantValueVariableUse(
-      @javax.annotation.Nullable PsiExpression expression,
+      @Nullable PsiExpression expression,
       @Nonnull PsiExpression constantExpression,
       @Nonnull PsiElement body) {
       final PsiType constantType = constantExpression.getType();

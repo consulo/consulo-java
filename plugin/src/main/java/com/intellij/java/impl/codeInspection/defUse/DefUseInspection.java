@@ -24,7 +24,7 @@
  */
 package com.intellij.java.impl.codeInspection.defUse;
 
-import com.intellij.codeInspection.LocalQuickFix;
+import consulo.language.editor.inspection.LocalQuickFix;
 import com.intellij.java.impl.codeInspection.RemoveInitializerFix;
 
 public class DefUseInspection extends DefUseInspectionBase {

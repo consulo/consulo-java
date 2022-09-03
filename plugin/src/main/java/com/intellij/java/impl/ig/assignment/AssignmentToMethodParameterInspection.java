@@ -17,8 +17,8 @@ package com.intellij.java.impl.ig.assignment;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.codeInspection.ui.SingleCheckboxOptionsPanel;
+import consulo.language.ast.IElementType;
+import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
@@ -147,7 +147,7 @@ public class AssignmentToMethodParameterInspection
       registerError(operand);
     }
 
-    @javax.annotation.Nullable
+    @Nullable
     private PsiParameter getMethodParameter(PsiExpression expression) {
       if (!(expression instanceof PsiReferenceExpression)) {
         return null;

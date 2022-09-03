@@ -21,11 +21,11 @@ import java.awt.event.MouseEvent;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import com.intellij.java.debugger.impl.memory.filtering.FilteringResult;
-import com.intellij.icons.AllIcons;
-import com.intellij.ui.JBProgressBar;
-import com.intellij.ui.components.JBLabel;
-import com.intellij.util.ui.UIUtil;
-import com.intellij.util.ui.components.BorderLayoutPanel;
+import consulo.application.AllIcons;
+import consulo.ui.ex.awt.JBLabel;
+import consulo.ui.ex.awt.JBProgressBar;
+import consulo.ui.ex.awt.UIUtil;
+import consulo.ui.ex.awt.BorderLayoutPanel;
 
 class FilteringProgressView extends BorderLayoutPanel
 {

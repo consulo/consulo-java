@@ -15,34 +15,33 @@
  */
 package com.intellij.codeInsight.daemon;
 
-import com.intellij.codeInsight.daemon.impl.HighlightInfo;
-import com.intellij.codeInspection.LocalInspectionTool;
+import consulo.language.editor.rawHighlight.HighlightInfo;
+import consulo.language.editor.inspection.LocalInspectionTool;
 import com.intellij.java.impl.codeInspection.accessStaticViaInstance.AccessStaticViaInstance;
 import com.intellij.java.impl.codeInspection.deadCode.UnusedDeclarationInspection;
 import com.intellij.java.analysis.impl.codeInspection.deprecation.DeprecationInspection;
 import com.intellij.java.impl.codeInspection.javaDoc.JavaDocLocalInspection;
-import com.intellij.codeInspection.reference.EntryPoint;
-import com.intellij.codeInspection.reference.RefElement;
+import consulo.ide.impl.idea.codeInspection.reference.EntryPoint;
+import consulo.language.editor.inspection.reference.RefElement;
 import com.intellij.java.impl.codeInspection.sillyAssignment.SillyAssignmentInspection;
 import com.intellij.java.impl.codeInspection.uncheckedWarnings.UncheckedWarningLocalInspection;
 import com.intellij.java.impl.codeInspection.unneededThrows.RedundantThrowsDeclaration;
 import com.intellij.java.analysis.impl.codeInspection.unusedImport.UnusedImportLocalInspection;
 import com.intellij.java.impl.codeInspection.unusedSymbol.UnusedSymbolLocalInspection;
 import com.intellij.java.language.psi.*;
-import com.intellij.lang.Language;
+import consulo.language.Language;
 import com.intellij.lang.LanguageAnnotators;
-import com.intellij.lang.annotation.AnnotationHolder;
-import com.intellij.lang.annotation.Annotator;
-import com.intellij.lang.annotation.HighlightSeverity;
+import consulo.language.editor.annotation.AnnotationHolder;
+import consulo.language.editor.annotation.Annotator;
+import consulo.language.editor.annotation.HighlightSeverity;
 import com.intellij.lang.xml.XMLLanguage;
-import com.intellij.openapi.application.Application;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.extensions.ExtensionPoint;
+import consulo.application.Application;
+import consulo.application.ApplicationManager;
+import consulo.component.extension.ExtensionPoint;
 import com.intellij.java.language.projectRoots.JavaSdkVersion;
-import com.intellij.openapi.vfs.VfsUtil;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.ide.impl.idea.openapi.vfs.VfsUtil;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.java.language.LanguageLevel;
-import com.intellij.psi.*;
 import com.intellij.psi.xml.XmlAttribute;
 import com.intellij.psi.xml.XmlTag;
 import com.intellij.psi.xml.XmlToken;
@@ -280,7 +279,7 @@ public abstract class LightAdvHighlightingTest extends LightDaemonAnalyzerTestCa
         VirtualFile vFile = txt.getVirtualFile();
         assertNotNull(txt.toString(), vFile);
         try {
-          VfsUtil.saveText(vFile, "XXX");
+          consulo.ide.impl.idea.openapi.vfs.VfsUtil.saveText(vFile, "XXX");
         }
         catch (IOException e) {
           throw new RuntimeException(e);

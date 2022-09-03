@@ -18,7 +18,7 @@ package com.intellij.java.language.impl.psi;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.impl.source.resolve.ParameterTypeInferencePolicy;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

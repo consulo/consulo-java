@@ -15,8 +15,8 @@
  */
 package com.intellij.java.impl.refactoring.rename.inplace;
 
-import com.intellij.psi.PsiElement;
-import com.intellij.refactoring.rename.ResolveSnapshotProvider;
+import consulo.language.psi.PsiElement;
+import consulo.language.editor.refactoring.ResolveSnapshotProvider;
 
 /**
  * User: Maxim.Mossienko

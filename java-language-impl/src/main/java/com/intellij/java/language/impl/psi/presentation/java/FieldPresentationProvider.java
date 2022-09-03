@@ -15,14 +15,25 @@
  */
 package com.intellij.java.language.impl.psi.presentation.java;
 
-import com.intellij.navigation.ItemPresentation;
-import com.intellij.navigation.ItemPresentationProvider;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.navigation.ItemPresentation;
+import consulo.navigation.ItemPresentationProvider;
 import com.intellij.java.language.psi.PsiField;
+
+import javax.annotation.Nonnull;
 
 /**
  * @author yole
  */
+@ExtensionImpl
 public class FieldPresentationProvider implements ItemPresentationProvider<PsiField> {
+  @Nonnull
+  @Override
+  public Class<PsiField> getItemClass() {
+    return PsiField.class;
+  }
+
+  @Nonnull
   @Override
   public ItemPresentation getPresentation(PsiField item) {
     return JavaPresentationUtil.getFieldPresentation(item);

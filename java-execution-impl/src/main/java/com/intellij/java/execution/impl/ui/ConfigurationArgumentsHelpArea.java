@@ -15,17 +15,17 @@
  */
 package com.intellij.java.execution.impl.ui;
 
-import com.intellij.execution.ExecutionBundle;
-import com.intellij.openapi.actionSystem.ActionManager;
-import com.intellij.openapi.actionSystem.ActionPlaces;
-import com.intellij.openapi.actionSystem.ActionPopupMenu;
-import com.intellij.openapi.actionSystem.DefaultActionGroup;
-import com.intellij.openapi.ide.CopyPasteManager;
-import com.intellij.openapi.ui.FixedSizeButton;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.ui.components.JBLabel;
-import com.intellij.util.PlatformIcons;
-import consulo.awt.TargetAWT;
+import consulo.execution.ExecutionBundle;
+import consulo.ui.ex.action.ActionManager;
+import consulo.ui.ex.action.ActionPlaces;
+import consulo.ui.ex.action.ActionPopupMenu;
+import consulo.ui.ex.action.DefaultActionGroup;
+import consulo.ui.ex.awt.CopyPasteManager;
+import consulo.ui.ex.awt.FixedSizeButton;
+import consulo.util.lang.StringUtil;
+import consulo.ui.ex.awt.JBLabel;
+import consulo.ide.impl.idea.util.PlatformIcons;
+import consulo.ui.ex.awtUnsafe.TargetAWT;
 import consulo.ui.TextBoxWithExpandAction;
 
 import javax.swing.*;
@@ -51,7 +51,7 @@ public class ConfigurationArgumentsHelpArea extends JPanel
 		add(TargetAWT.to(myHelpArea), BorderLayout.CENTER);
 
 		myCopyButton = new FixedSizeButton();
-		myCopyButton.setIcon(PlatformIcons.COPY_ICON);
+		myCopyButton.setIcon(consulo.ide.impl.idea.util.PlatformIcons.COPY_ICON);
 		myCopyButton.addActionListener(e -> {
 			final StringSelection contents = new StringSelection(myHelpArea.getValueOrError().trim());
 			CopyPasteManager.getInstance().setContents(contents);

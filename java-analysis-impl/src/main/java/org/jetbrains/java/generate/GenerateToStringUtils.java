@@ -20,6 +20,7 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
+import org.jetbrains.java.generate.config.Config;
 import org.jetbrains.java.generate.config.FilterPattern;
 import org.jetbrains.java.generate.psi.PsiAdapter;
 import consulo.logging.Logger;
@@ -42,7 +43,7 @@ public class GenerateToStringUtils
 	}
 
 	/**
-	 * Filters the list of fields from the class with the given parameters from the {@link org.jetbrains.java.generate.config.Config config} settings.
+	 * Filters the list of fields from the class with the given parameters from the {@link Config config} settings.
 	 *
 	 * @param clazz   the class to filter it's fields
 	 * @param pattern the filter pattern to filter out unwanted fields

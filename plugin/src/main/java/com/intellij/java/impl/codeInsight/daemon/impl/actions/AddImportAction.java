@@ -2,32 +2,32 @@
 package com.intellij.java.impl.codeInsight.daemon.impl.actions;
 
 import com.intellij.java.impl.application.options.editor.JavaAutoImportConfigurable;
-import com.intellij.codeInsight.CodeInsightSettings;
+import consulo.language.editor.CodeInsightSettings;
 import com.intellij.java.impl.codeInsight.CodeInsightUtil;
-import com.intellij.codeInsight.actions.OptimizeImportsProcessor;
-import com.intellij.codeInsight.hint.QuestionAction;
-import com.intellij.codeInsight.navigation.NavigationUtil;
-import com.intellij.ide.util.DefaultPsiElementCellRenderer;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.command.WriteCommandAction;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.ScrollType;
-import com.intellij.openapi.options.ShowSettingsUtil;
-import com.intellij.openapi.project.DumbService;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.popup.PopupStep;
-import com.intellij.openapi.ui.popup.util.BaseListPopupStep;
+import consulo.ide.impl.idea.codeInsight.actions.OptimizeImportsProcessor;
+import consulo.language.editor.hint.QuestionAction;
+import consulo.navigation.NavigationUtil;
+import consulo.language.editor.ui.DefaultPsiElementCellRenderer;
+import consulo.application.ApplicationManager;
+import consulo.language.editor.WriteCommandAction;
+import consulo.document.Document;
+import consulo.codeEditor.Editor;
+import consulo.codeEditor.ScrollType;
+import consulo.ide.setting.ShowSettingsUtil;
+import consulo.project.DumbService;
+import consulo.project.Project;
+import consulo.ui.ex.popup.PopupStep;
+import consulo.ui.ex.popup.BaseListPopupStep;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiDocumentManager;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiReference;
+import consulo.language.psi.PsiDocumentManager;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiReference;
 import com.intellij.java.impl.psi.statistics.JavaStatisticsManager;
-import com.intellij.psi.statistics.StatisticsManager;
-import com.intellij.ui.popup.list.ListPopupImpl;
-import com.intellij.ui.popup.list.PopupListElementRenderer;
-import com.intellij.util.IncorrectOperationException;
-import consulo.ide.IconDescriptorUpdaters;
+import consulo.ide.impl.psi.statistics.StatisticsManager;
+import consulo.ide.impl.idea.ui.popup.list.ListPopupImpl;
+import consulo.ide.impl.idea.ui.popup.list.PopupListElementRenderer;
+import consulo.language.util.IncorrectOperationException;
+import consulo.language.icon.IconDescriptorUpdaters;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.logging.Logger;
 import consulo.ui.annotation.RequiredUIAccess;
@@ -242,7 +242,7 @@ public class AddImportAction implements QuestionAction
 				return;
 			}
 
-			StatisticsManager.getInstance().incUseCount(JavaStatisticsManager.createInfo(null, targetClass));
+			consulo.ide.impl.psi.statistics.StatisticsManager.getInstance().incUseCount(JavaStatisticsManager.createInfo(null, targetClass));
 			WriteCommandAction.runWriteCommandAction(myProject, JavaQuickFixBundle.message("add.import"), null,
 					() -> _addImport(ref, targetClass),
 					ref.getElement().getContainingFile());

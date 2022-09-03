@@ -17,7 +17,7 @@ package com.intellij.java.impl.refactoring.inheritanceToDelegation;
 
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
 
 abstract class InnerClassMethod {
   final PsiMethod myMethod;

@@ -15,11 +15,11 @@
  */
 package com.intellij.java.execution.runners;
 
-import com.intellij.execution.ExecutionException;
-import com.intellij.execution.Executor;
-import com.intellij.execution.configurations.RunProfile;
-import com.intellij.execution.configurations.RunnerSettings;
-import com.intellij.execution.runners.GenericProgramRunner;
+import consulo.execution.configuration.RunnerSettings;
+import consulo.execution.executor.Executor;
+import consulo.process.ExecutionException;
+import consulo.execution.configuration.RunProfile;
+import consulo.execution.runner.GenericProgramRunner;
 import consulo.java.execution.configurations.OwnJavaParameters;
 
 /**

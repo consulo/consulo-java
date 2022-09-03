@@ -17,7 +17,7 @@ package com.intellij.java.debugger.impl.descriptors.data;
 
 import com.intellij.java.debugger.impl.ui.impl.watch.ArrayElementDescriptorImpl;
 import consulo.logging.Logger;
-import com.intellij.openapi.project.Project;
+import consulo.project.Project;
 import consulo.internal.com.sun.jdi.ArrayReference;
 import javax.annotation.Nonnull;
 

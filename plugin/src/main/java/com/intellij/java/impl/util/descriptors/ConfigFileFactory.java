@@ -16,9 +16,11 @@
 
 package com.intellij.java.impl.util.descriptors;
 
-import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.ide.ServiceManager;
+import consulo.project.Project;
+import consulo.virtualFileSystem.VirtualFile;
+
+import javax.annotation.Nullable;
 
 /**
  * @author nik
@@ -39,8 +41,8 @@ public abstract class ConfigFileFactory {
 
   public abstract ConfigFileMetaDataRegistry createMetaDataRegistry();
 
-  @javax.annotation.Nullable
-  public abstract VirtualFile createFile(@javax.annotation.Nullable Project project, String url, ConfigFileVersion version, final boolean forceNew);
+  @Nullable
+  public abstract VirtualFile createFile(@Nullable Project project, String url, ConfigFileVersion version, final boolean forceNew);
 
   public abstract ConfigFileContainer createSingleFileContainer(Project project, ConfigFileMetaData metaData);
 }

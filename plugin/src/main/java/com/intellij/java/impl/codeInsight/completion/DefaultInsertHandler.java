@@ -15,14 +15,14 @@
  */
 package com.intellij.java.impl.codeInsight.completion;
 
-import com.intellij.codeInsight.AutoPopupController;
-import com.intellij.codeInsight.CharTailType;
-import com.intellij.codeInsight.TailType;
-import com.intellij.codeInsight.completion.InsertHandler;
-import com.intellij.codeInsight.completion.InsertionContext;
-import com.intellij.codeInsight.lookup.LookupElement;
-import com.intellij.codeInsight.lookup.LookupItem;
-import com.intellij.openapi.editor.Editor;
+import consulo.language.editor.AutoPopupController;
+import consulo.language.editor.completion.lookup.CharTailType;
+import consulo.language.editor.completion.lookup.TailType;
+import consulo.language.editor.completion.lookup.InsertHandler;
+import consulo.language.editor.completion.lookup.InsertionContext;
+import consulo.language.editor.completion.lookup.LookupElement;
+import consulo.language.editor.completion.lookup.LookupItem;
+import consulo.codeEditor.Editor;
 
 /**
  * Please implement InsertHandler instead.

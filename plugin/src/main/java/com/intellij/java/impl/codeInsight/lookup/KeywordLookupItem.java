@@ -15,12 +15,12 @@
  */
 package com.intellij.java.impl.codeInsight.lookup;
 
-import com.intellij.codeInsight.lookup.LookupElementPresentation;
-import com.intellij.codeInsight.lookup.LookupItem;
+import consulo.language.editor.completion.lookup.LookupElementPresentation;
+import consulo.language.editor.completion.lookup.LookupItem;
 import com.intellij.java.impl.psi.filters.FilterUtil;
 import com.intellij.java.language.psi.PsiKeyword;
 import com.intellij.java.language.psi.PsiType;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 
 import javax.annotation.Nonnull;
 

@@ -20,7 +20,7 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.ContractReturnVal
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.StandardMethodContract;
 import com.intellij.java.language.psi.PsiCodeBlock;
 import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.util.collection.ContainerUtil;
 
 import javax.annotation.Nonnull;
 import java.util.List;

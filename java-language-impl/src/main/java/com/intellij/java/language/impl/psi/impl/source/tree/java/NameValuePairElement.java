@@ -15,23 +15,23 @@
  */
 package com.intellij.java.language.impl.psi.impl.source.tree.java;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.java.language.impl.psi.impl.source.tree.ChildRole;
 import com.intellij.java.language.impl.psi.impl.source.tree.ElementType;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
-import com.intellij.lang.ASTNode;
 import com.intellij.java.language.psi.JavaTokenType;
-import com.intellij.psi.impl.source.tree.*;
-import com.intellij.psi.tree.ChildRoleBase;
-import com.intellij.util.CharTable;
+import consulo.language.ast.ASTNode;
+import consulo.language.ast.ChildRoleBase;
+import consulo.language.impl.ast.*;
+import consulo.language.util.CharTable;
+
+import javax.annotation.Nonnull;
 
 /**
  * @author ven
  */
 
 //Retrieves method reference from this pair, do NOT reuse!!!
-public class NameValuePairElement extends CompositeElement  {
+public class NameValuePairElement extends CompositeElement {
 
   public NameValuePairElement() {
     super(JavaElementType.NAME_VALUE_PAIR);

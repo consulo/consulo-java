@@ -47,7 +47,7 @@ public class MemoryViewDebugProcessData
 
 		private final Map<ReferenceType, Map<ObjectReference, List<StackFrameItem>>> myPinnedType2Reference2Stack = new ConcurrentHashMap<>();
 
-		@javax.annotation.Nullable
+		@Nullable
 		@Override
 		public List<StackFrameItem> getStack(@Nonnull ObjectReference reference)
 		{

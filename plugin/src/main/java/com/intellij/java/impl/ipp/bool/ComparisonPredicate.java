@@ -16,7 +16,7 @@
 package com.intellij.java.impl.ipp.bool;
 
 import com.intellij.java.language.psi.PsiBinaryExpression;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiExpression;
 import com.siyeh.ig.psiutils.ComparisonUtils;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;

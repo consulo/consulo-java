@@ -17,16 +17,16 @@ package com.intellij.java.impl.psi.impl.migration;
 
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.util.Pair;
+import consulo.util.lang.Pair;
 import com.intellij.psi.*;
 import com.intellij.java.language.impl.psi.impl.InheritanceImplUtil;
 import com.intellij.java.language.impl.psi.impl.PsiClassImplUtil;
-import com.intellij.psi.impl.light.LightElement;
+import consulo.language.impl.psi.LightElement;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
-import com.intellij.psi.meta.PsiMetaData;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.search.SearchScope;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.psi.meta.PsiMetaData;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.content.scope.SearchScope;
+import consulo.language.util.IncorrectOperationException;
 import consulo.java.language.module.util.JavaClassNames;
 
 import javax.annotation.Nonnull;

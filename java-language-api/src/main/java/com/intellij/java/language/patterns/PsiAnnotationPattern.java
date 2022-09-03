@@ -17,12 +17,12 @@ package com.intellij.java.language.patterns;
 
 import com.intellij.java.language.psi.PsiAnnotation;
 import com.intellij.java.language.psi.PsiArrayInitializerMemberValue;
-import com.intellij.patterns.ElementPattern;
-import com.intellij.patterns.PatternCondition;
-import com.intellij.patterns.PsiElementPattern;
-import com.intellij.patterns.StandardPatterns;
-import com.intellij.psi.PsiElement;
-import com.intellij.util.ProcessingContext;
+import consulo.language.pattern.PatternCondition;
+import consulo.language.psi.PsiElement;
+import consulo.language.pattern.ElementPattern;
+import consulo.language.pattern.PsiElementPattern;
+import consulo.language.pattern.StandardPatterns;
+import consulo.language.util.ProcessingContext;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;

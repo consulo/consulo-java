@@ -27,29 +27,30 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.MethodSignature;
 import com.intellij.java.language.psi.util.MethodSignatureUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.util.Comparing;
+import consulo.codeEditor.Editor;
+import consulo.util.lang.Comparing;
 import com.intellij.openapi.util.Pass;
 import com.intellij.psi.*;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.search.PsiElementProcessor;
-import com.intellij.psi.search.SearchScope;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.refactoring.RefactoringBundle;
-import com.intellij.refactoring.listeners.RefactoringElementListener;
-import com.intellij.refactoring.rename.PsiElementRenameHandler;
-import com.intellij.refactoring.rename.RenameProcessor;
-import com.intellij.refactoring.rename.UnresolvableCollisionUsageInfo;
-import com.intellij.refactoring.util.MoveRenameUsageInfo;
-import com.intellij.refactoring.util.RefactoringUIUtil;
-import com.intellij.usageView.UsageInfo;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.Processor;
-import com.intellij.util.containers.MultiMap;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.resolve.PsiElementProcessor;
+import consulo.content.scope.SearchScope;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.event.RefactoringElementListener;
+import consulo.language.editor.refactoring.rename.PsiElementRenameHandler;
+import consulo.language.editor.refactoring.rename.RenameProcessor;
+import consulo.language.editor.refactoring.rename.UnresolvableCollisionUsageInfo;
+import consulo.usage.MoveRenameUsageInfo;
+import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
+import consulo.usage.UsageInfo;
+import consulo.language.util.IncorrectOperationException;
+import consulo.application.util.function.Processor;
+import consulo.util.collection.MultiMap;
 import consulo.logging.Logger;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.*;
 
 public class RenameJavaMethodProcessor extends RenameJavaMemberProcessor {
@@ -62,7 +63,7 @@ public class RenameJavaMethodProcessor extends RenameJavaMemberProcessor {
   public void renameElement(final PsiElement psiElement,
                             final String newName,
                             final UsageInfo[] usages,
-                            @javax.annotation.Nullable RefactoringElementListener listener) throws IncorrectOperationException {
+                            @Nullable RefactoringElementListener listener) throws IncorrectOperationException {
     PsiMethod method = (PsiMethod) psiElement;
     Set<PsiMethod> methodAndOverriders = new HashSet<PsiMethod>();
     Set<PsiClass> containingClasses = new HashSet<PsiClass>();
@@ -134,7 +135,7 @@ public class RenameJavaMethodProcessor extends RenameJavaMemberProcessor {
    * @param newName
    * @return
    */
-  @javax.annotation.Nullable
+  @Nullable
   protected PsiElement processRef(PsiReference ref, String newName) {
     return ref.handleElementRename(newName);
   }
@@ -295,7 +296,7 @@ public class RenameJavaMethodProcessor extends RenameJavaMemberProcessor {
     JavaRefactoringSettings.getInstance().RENAME_SEARCH_IN_COMMENTS_FOR_METHOD = enabled;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public PsiElement substituteElementToRename(PsiElement element, Editor editor) {
     PsiMethod psiMethod = (PsiMethod) element;
     if (psiMethod.isConstructor()) {

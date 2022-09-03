@@ -1,9 +1,9 @@
 package com.intellij.codeInsight.intention;
 
 import com.intellij.java.impl.codeInsight.intention.impl.CreateSubclassAction;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiDirectory;
+import consulo.language.psi.PsiDirectory;
 import com.intellij.psi.search.ProjectScope;
 import com.intellij.refactoring.MultiFileTestCase;
 

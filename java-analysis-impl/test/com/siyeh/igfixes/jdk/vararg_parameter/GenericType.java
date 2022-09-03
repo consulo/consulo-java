@@ -1,8 +1,10 @@
 package com.siyeh.igfixes.jdk.vararg_parameter;
 
+import java.lang.SafeVarargs;
+
 @SuppressWarnings("UnusedDeclaration")
 public class GenericType {
-  @java.lang.SafeVarargs
+  @SafeVarargs
   final void addCl<caret>asses(Class<? extends Number>... classes) {
   }
 

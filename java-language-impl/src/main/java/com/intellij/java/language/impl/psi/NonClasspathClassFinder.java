@@ -20,30 +20,28 @@ import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiClassOwner;
 import com.intellij.java.language.psi.PsiElementFinder;
 import com.intellij.java.language.psi.PsiJavaPackage;
-import com.intellij.openapi.extensions.Extensions;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.impl.PackageDirectoryCache;
-import com.intellij.openapi.util.LowMemoryWatcher;
-import com.intellij.openapi.util.Ref;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.openapi.vfs.VirtualFileManager;
-import com.intellij.openapi.vfs.newvfs.BulkFileListener;
-import com.intellij.openapi.vfs.newvfs.events.VFileEvent;
-import com.intellij.psi.PsiDirectory;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiManager;
-import com.intellij.psi.search.EverythingGlobalScope;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.search.NonClasspathDirectoriesScope;
-import com.intellij.util.ArrayUtil;
-import com.intellij.util.CommonProcessors;
-import com.intellij.util.Processor;
-import com.intellij.util.containers.ContainerUtil;
-import com.intellij.util.containers.MultiMap;
-import com.intellij.util.messages.MessageBusConnection;
+import consulo.application.util.LowMemoryWatcher;
+import consulo.application.util.function.CommonProcessors;
+import consulo.application.util.function.Processor;
+import consulo.component.extension.Extensions;
+import consulo.component.messagebus.MessageBusConnection;
 import consulo.java.language.module.extension.JavaModuleExtension;
-import consulo.psi.PsiPackageManager;
+import consulo.language.psi.PsiDirectory;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiManager;
+import consulo.language.psi.PsiPackageManager;
+import consulo.language.psi.scope.EverythingGlobalScope;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.module.content.PackageDirectoryCache;
+import consulo.project.Project;
+import consulo.util.collection.ArrayUtil;
+import consulo.util.collection.ContainerUtil;
+import consulo.util.collection.MultiMap;
+import consulo.util.lang.StringUtil;
+import consulo.util.lang.ref.Ref;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.virtualFileSystem.event.BulkFileListener;
+import consulo.virtualFileSystem.event.VFileEvent;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -69,7 +67,7 @@ public abstract class NonClasspathClassFinder extends PsiElementFinder {
     myManager = PsiManager.getInstance(myProject);
     myFileExtensions = ArrayUtil.append(fileExtensions, "class");
     final MessageBusConnection connection = project.getMessageBus().connect(project);
-    connection.subscribe(VirtualFileManager.VFS_CHANGES, new BulkFileListener() {
+    connection.subscribe(BulkFileListener.class, new BulkFileListener() {
       @Override
       public void after(@Nonnull List<? extends VFileEvent> events) {
         clearCache();
@@ -180,7 +178,7 @@ public abstract class NonClasspathClassFinder extends PsiElementFinder {
     return processDirectories(psiPackage.getQualifiedName(), scope, dir ->
     {
       final PsiDirectory psiDirectory = psiPackage.getManager().findDirectory(dir);
-      return psiDirectory == null || consumer.process(psiDirectory);
+      return psiDirectory == null || consumer.process(psiDirectory);                                  
     });
   }
 

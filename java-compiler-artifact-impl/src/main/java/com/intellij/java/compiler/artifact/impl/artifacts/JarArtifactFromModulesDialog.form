@@ -21,7 +21,7 @@
           <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
         </constraints>
       </vspacer>
-      <component id="535a8" class="com.intellij.openapi.ui.TextFieldWithBrowseButton" binding="myMainClassField">
+      <component id="535a8" class="consulo.ui.ex.awt.TextFieldWithBrowseButton" binding="myMainClassField">
         <constraints>
           <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -52,7 +52,7 @@
           <text value="&amp;Directory for META-INF/MANIFEST.MF:"/>
         </properties>
       </component>
-      <component id="1ea2d" class="com.intellij.openapi.ui.TextFieldWithBrowseButton" binding="myManifestDirField">
+      <component id="1ea2d" class="consulo.ui.ex.awt.TextFieldWithBrowseButton" binding="myManifestDirField">
         <constraints>
           <grid row="4" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="0" fill="1" indent="2" use-parent-layout="false"/>
         </constraints>

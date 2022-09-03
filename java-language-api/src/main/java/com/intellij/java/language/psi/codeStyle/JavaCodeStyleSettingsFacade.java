@@ -15,8 +15,8 @@
  */
 package com.intellij.java.language.psi.codeStyle;
 
-import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.project.Project;
+import consulo.ide.ServiceManager;
+import consulo.project.Project;
 
 /**
  * @author yole

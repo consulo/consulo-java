@@ -17,17 +17,18 @@ package com.intellij.java.impl.psi.util.proximity;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
-import com.intellij.openapi.util.NotNullLazyKey;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.util.ProximityLocation;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.proximity.ProximityWeigher;
-import com.intellij.util.NotNullFunction;
-import com.intellij.util.Processor;
-import com.intellij.util.containers.ContainerUtilRt;
+import consulo.util.dataholder.NotNullLazyKey;
+import consulo.language.psi.PsiElement;
+import consulo.ide.impl.psi.util.ProximityLocation;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.ide.impl.psi.util.proximity.ProximityWeigher;
+import consulo.ide.impl.idea.util.NotNullFunction;
+import consulo.application.util.function.Processor;
+import consulo.ide.impl.idea.util.containers.ContainerUtilRt;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -85,7 +86,7 @@ public class JavaInheritanceWeigher extends ProximityWeigher {
     return false;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private static PsiClass findPlaceClass(PsiElement element, PsiElement position) {
     if (position.getParent() instanceof PsiReferenceExpression) {
       final PsiExpression qualifierExpression = ((PsiReferenceExpression) position.getParent()).getQualifierExpression();
@@ -102,7 +103,7 @@ public class JavaInheritanceWeigher extends ProximityWeigher {
     return PsiTreeUtil.getContextOfType(element, PsiClass.class, false);
   }
 
-  private static boolean isTooGeneral(@javax.annotation.Nullable final PsiClass element) {
+  private static boolean isTooGeneral(@Nullable final PsiClass element) {
     if (element == null) {
       return true;
     }

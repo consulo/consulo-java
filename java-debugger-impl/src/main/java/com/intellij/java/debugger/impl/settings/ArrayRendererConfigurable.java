@@ -17,12 +17,12 @@ package com.intellij.java.debugger.impl.settings;
 
 import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.impl.ui.tree.render.ArrayRenderer;
-import com.intellij.openapi.application.ApplicationNamesInfo;
-import com.intellij.openapi.options.Configurable;
-import com.intellij.openapi.options.ConfigurationException;
-import com.intellij.openapi.options.UnnamedConfigurable;
-import com.intellij.openapi.ui.Messages;
-import com.intellij.util.ui.JBUI;
+import consulo.application.impl.internal.ApplicationNamesInfo;
+import consulo.configurable.Configurable;
+import consulo.configurable.ConfigurationException;
+import consulo.configurable.UnnamedConfigurable;
+import consulo.ui.ex.awt.Messages;
+import consulo.ui.ex.awt.JBUI;
 import consulo.ui.annotation.RequiredUIAccess;
 
 import javax.swing.*;

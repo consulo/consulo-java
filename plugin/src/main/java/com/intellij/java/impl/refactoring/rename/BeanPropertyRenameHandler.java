@@ -20,15 +20,15 @@ import com.intellij.java.impl.psi.impl.beanProperties.BeanProperty;
 import com.intellij.java.impl.refactoring.openapi.impl.JavaRenameRefactoringImpl;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.util.PropertyUtil;
-import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.DialogWrapper;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.refactoring.RenameRefactoring;
-import com.intellij.refactoring.rename.RenameDialog;
-import com.intellij.refactoring.rename.RenameHandler;
+import consulo.dataContext.DataContext;
+import consulo.codeEditor.Editor;
+import consulo.project.Project;
+import consulo.ui.ex.awt.DialogWrapper;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.editor.refactoring.RenameRefactoring;
+import consulo.language.editor.refactoring.rename.RenameDialog;
+import consulo.language.editor.refactoring.rename.RenameHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -54,7 +54,7 @@ public abstract class BeanPropertyRenameHandler implements RenameHandler {
     performInvoke(null, dataContext);
   }
 
-  private void performInvoke(@javax.annotation.Nullable Editor editor, DataContext dataContext) {
+  private void performInvoke(@Nullable Editor editor, DataContext dataContext) {
     final BeanProperty property = getProperty(dataContext);
     new PropertyRenameDialog(property, editor).show();
   }

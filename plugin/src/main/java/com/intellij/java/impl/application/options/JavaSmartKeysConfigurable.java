@@ -15,11 +15,11 @@
  */
 package com.intellij.java.impl.application.options;
 
+import consulo.configurable.BeanConfigurable;
 import org.jetbrains.annotations.Nls;
 import javax.annotation.Nullable;
 import com.intellij.java.language.JavadocBundle;
-import com.intellij.openapi.options.BeanConfigurable;
-import com.intellij.openapi.options.Configurable;
+import consulo.configurable.Configurable;
 import consulo.java.impl.application.options.JavaSmartKeysSettings;
 
 /**

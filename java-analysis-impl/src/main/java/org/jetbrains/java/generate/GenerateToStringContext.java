@@ -19,11 +19,11 @@ import javax.annotation.Nonnull;
 import jakarta.inject.Singleton;
 
 import org.jetbrains.java.generate.config.Config;
-import com.intellij.openapi.components.PersistentStateComponent;
-import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.components.State;
-import com.intellij.openapi.components.Storage;
-import com.intellij.openapi.components.StoragePathMacros;
+import consulo.component.persist.PersistentStateComponent;
+import consulo.ide.ServiceManager;
+import consulo.component.persist.State;
+import consulo.component.persist.Storage;
+import consulo.component.persist.StoragePathMacros;
 
 /**
  * Application context for this plugin.

@@ -15,24 +15,24 @@
  */
 package com.intellij.java.language.impl.psi.impl.source;
 
-import static com.intellij.util.BitUtil.isSet;
+import static consulo.util.lang.BitUtil.isSet;
 
 import javax.annotation.Nonnull;
 
 import org.jetbrains.annotations.NonNls;
 import consulo.logging.Logger;
-import com.intellij.openapi.project.Project;
+import consulo.project.Project;
 import com.intellij.java.language.psi.JavaCodeFragmentFactory;
 import com.intellij.java.language.psi.PsiDisjunctionType;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiEllipsisType;
-import com.intellij.psi.PsiErrorElement;
-import com.intellij.psi.PsiRecursiveElementWalkingVisitor;
+import consulo.language.psi.PsiErrorElement;
+import consulo.language.psi.PsiRecursiveElementWalkingVisitor;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.PsiTypeCodeFragment;
 import com.intellij.java.language.psi.PsiTypeElement;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 
 /**

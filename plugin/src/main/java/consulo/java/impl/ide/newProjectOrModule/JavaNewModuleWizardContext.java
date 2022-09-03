@@ -1,6 +1,6 @@
 package consulo.java.impl.ide.newProjectOrModule;
 
-import com.intellij.openapi.projectRoots.Sdk;
+import consulo.content.bundle.Sdk;
 import consulo.ide.wizard.newModule.NewModuleWizardContextBase;
 
 /**

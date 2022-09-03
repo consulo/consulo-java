@@ -23,7 +23,7 @@ import javax.annotation.Nullable;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
-import com.intellij.psi.tree.IElementType;
+import consulo.language.ast.IElementType;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
 
 public class EquivalenceChecker {
@@ -31,7 +31,7 @@ public class EquivalenceChecker {
   private EquivalenceChecker() {}
 
   public static boolean modifierListsAreEquivalent(
-    @javax.annotation.Nullable PsiModifierList list1, @javax.annotation.Nullable PsiModifierList list2) {
+    @Nullable PsiModifierList list1, @Nullable PsiModifierList list2) {
     if (list1 == null) {
       return list2 == null;
     }
@@ -96,7 +96,7 @@ public class EquivalenceChecker {
              !list2.hasModifierProperty(PsiModifier.VOLATILE));
   }
 
-  public static boolean statementsAreEquivalent(@javax.annotation.Nullable PsiStatement statement1, @Nullable PsiStatement statement2) {
+  public static boolean statementsAreEquivalent(@Nullable PsiStatement statement1, @Nullable PsiStatement statement2) {
     if (statement1 == null) {
       return statement2 == null;
     } else if (statement2 == null) {
@@ -317,7 +317,7 @@ public class EquivalenceChecker {
   }
 
   public static boolean typesAreEquivalent(
-    @javax.annotation.Nullable PsiType type1, @Nullable PsiType type2) {
+    @Nullable PsiType type1, @Nullable PsiType type2) {
     if (type1 == null) {
       return type2 == null;
     }
@@ -568,7 +568,7 @@ public class EquivalenceChecker {
     return expressionListsAreEquivalent(expressions1, expressions2);
   }
 
-  public static boolean expressionsAreEquivalent(@javax.annotation.Nullable PsiExpression expression1, @javax.annotation.Nullable PsiExpression expression2) {
+  public static boolean expressionsAreEquivalent(@Nullable PsiExpression expression1, @Nullable PsiExpression expression2) {
     expression1 = ParenthesesUtils.stripParentheses(expression1);
     expression2 = ParenthesesUtils.stripParentheses(expression2);
     if (expression1 == null) {
@@ -915,7 +915,7 @@ public class EquivalenceChecker {
 
   private static boolean expressionListsAreEquivalent(
     @Nullable PsiExpression[] expressions1,
-    @javax.annotation.Nullable PsiExpression[] expressions2) {
+    @Nullable PsiExpression[] expressions2) {
     if (expressions1 == null && expressions2 == null) {
       return true;
     }

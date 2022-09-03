@@ -17,11 +17,11 @@ package com.intellij.java.impl.codeInsight.generation.actions;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.codeInsight.CodeInsightActionHandler;
-import com.intellij.codeInsight.actions.BaseCodeInsightAction;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiFile;
+import consulo.language.editor.action.CodeInsightActionHandler;
+import consulo.language.editor.impl.action.BaseCodeInsightAction;
+import consulo.codeEditor.Editor;
+import consulo.project.Project;
+import consulo.language.psi.PsiFile;
 import com.intellij.java.language.psi.PsiJavaFile;
 import com.intellij.java.language.psi.PsiMethod;
 

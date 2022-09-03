@@ -17,11 +17,11 @@ package com.intellij.java.impl.refactoring.introduceField;
 
 import com.intellij.java.language.codeInsight.TestFrameworks;
 import com.intellij.java.language.psi.*;
-import com.intellij.ui.ListCellRendererWrapper;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.ui.ex.awt.ListCellRendererWrapper;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.impl.refactoring.JavaRefactoringSettings;
-import com.intellij.refactoring.RefactoringBundle;
-import com.intellij.refactoring.introduce.inplace.KeyboardComboSwitcher;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.ide.impl.idea.refactoring.introduce.inplace.KeyboardComboSwitcher;
 import com.intellij.java.impl.refactoring.ui.TypeSelectorManager;
 import javax.annotation.Nullable;
 
@@ -36,7 +36,7 @@ import java.awt.event.ItemListener;
  * Date: 4/8/11
  */
 public class IntroduceFieldPopupPanel extends IntroduceFieldCentralPanel {
-  private @javax.annotation.Nullable
+  private @Nullable
   JComboBox myInitializerCombo;
   private JComboBox myVisibilityCombo;
   private DefaultComboBoxModel myInitialisersPlaceModel;

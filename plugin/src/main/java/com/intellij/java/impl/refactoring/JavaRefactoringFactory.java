@@ -16,11 +16,11 @@
 package com.intellij.java.impl.refactoring;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiElement;
-import com.intellij.refactoring.RefactoringFactory;
+import consulo.ide.ServiceManager;
+import consulo.project.Project;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.language.psi.PsiElement;
+import consulo.language.editor.refactoring.RefactoringFactory;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

@@ -15,30 +15,30 @@
  */
 package com.intellij.jam;
 
-import static com.intellij.jam.model.util.JamCommonUtil.findAnnotatedElements;
-import static com.intellij.jam.model.util.JamCommonUtil.getSuperClassList;
-
-import java.util.Arrays;
-import java.util.List;
+import com.intellij.jam.reflect.JamAnnotationMeta;
+import com.intellij.jam.reflect.JamMemberMeta;
+import com.intellij.java.language.psi.*;
+import consulo.application.util.function.Processor;
+import consulo.ide.ServiceManager;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiInvalidElementAccessException;
+import consulo.language.psi.PsiManager;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.sem.SemKey;
+import consulo.language.sem.SemService;
+import consulo.project.Project;
+import consulo.util.collection.ContainerUtil;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
+import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Arrays;
+import java.util.List;
 
-import com.intellij.java.language.psi.*;
-import jakarta.inject.Inject;
-import jakarta.inject.Singleton;
-
-import org.jetbrains.annotations.NonNls;
-import com.intellij.jam.reflect.JamAnnotationMeta;
-import com.intellij.jam.reflect.JamMemberMeta;
-import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.*;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.semantic.SemKey;
-import com.intellij.semantic.SemService;
-import com.intellij.util.Processor;
-import com.intellij.util.containers.ContainerUtil;
+import static com.intellij.jam.model.util.JamCommonUtil.findAnnotatedElements;
+import static com.intellij.jam.model.util.JamCommonUtil.getSuperClassList;
 
 /**
  * @author peter
@@ -155,7 +155,7 @@ public class JamService {
     processMembers(psiClass, checkClass, checkMethods, checkFields, checkDeep, new Processor<PsiMember>() {
       public boolean process(PsiMember member) {
         for (JamMemberMeta<? extends PsiMember, ? extends T> meta : metas) {
-          ContainerUtil.addIfNotNull(mySemService.getSemElement(meta.getJamKey(), member), result);
+          ContainerUtil.addIfNotNull(result, mySemService.getSemElement(meta.getJamKey(), member));
         }
         return true;
       }
@@ -167,7 +167,7 @@ public class JamService {
     final List<T> result = ContainerUtil.newArrayList();
     findAnnotatedElements(PsiClass.class, anno, myPsiManager, scope, new Processor<PsiClass>() {
       public boolean process(final PsiClass psiMember) {
-        ContainerUtil.addIfNotNull(getJamElement(c, psiMember), result);
+        ContainerUtil.addIfNotNull(result, getJamElement(c, psiMember));
         return true;
       }
     });
@@ -178,7 +178,7 @@ public class JamService {
     final List<T> result = ContainerUtil.newArrayList();
     findAnnotatedElements(PsiMethod.class, anno, myPsiManager, scope, new Processor<PsiMethod>() {
       public boolean process(final PsiMethod psiMember) {
-        ContainerUtil.addIfNotNull(getJamElement(c, psiMember), result);
+        ContainerUtil.addIfNotNull(result, getJamElement(c, psiMember));
         return true;
       }
     });
@@ -189,7 +189,7 @@ public class JamService {
     final List<T> result = ContainerUtil.newArrayList();
     findAnnotatedElements(PsiField.class, anno, myPsiManager, scope, new Processor<PsiField>() {
       public boolean process(final PsiField psiMember) {
-        ContainerUtil.addIfNotNull(getJamElement(c, psiMember), result);
+        ContainerUtil.addIfNotNull(result, getJamElement(c, psiMember));
         return true;
       }
     });
@@ -200,7 +200,7 @@ public class JamService {
     final List<T> result = ContainerUtil.newArrayList();
     findAnnotatedElements(PsiParameter.class, anno, myPsiManager, scope, new Processor<PsiParameter>() {
       public boolean process(final PsiParameter psiParameter) {
-        ContainerUtil.addIfNotNull(getJamElement(c, psiParameter), result);
+        ContainerUtil.addIfNotNull(result, getJamElement(c, psiParameter));
         return true;
       }
     });
@@ -216,7 +216,7 @@ public class JamService {
     final List<T> result = ContainerUtil.newArrayList();
     processMembers(psiClass, checkClass, checkMethods, checkFields, checkDeep, new Processor<PsiMember>() {
       public boolean process(PsiMember member) {
-        ContainerUtil.addIfNotNull(getJamElement(clazz, member), result);
+        ContainerUtil.addIfNotNull(result, getJamElement(clazz, member));
         return true;
       }
     });

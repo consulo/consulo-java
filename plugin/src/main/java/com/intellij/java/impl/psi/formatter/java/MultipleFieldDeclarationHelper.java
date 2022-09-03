@@ -17,13 +17,13 @@ package com.intellij.java.impl.psi.formatter.java;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.lang.ASTNode;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.language.ast.ASTNode;
+import consulo.util.lang.StringUtil;
 import com.intellij.java.language.psi.JavaTokenType;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiTypeElement;
 import com.intellij.java.language.psi.PsiVariable;
-import com.intellij.psi.TokenType;
+import consulo.language.ast.TokenType;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
 import com.intellij.java.impl.psi.impl.source.tree.JavaJspElementType;
 import com.intellij.java.impl.psi.impl.source.tree.StdTokenSets;

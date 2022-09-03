@@ -17,7 +17,7 @@ package com.intellij.java.language.psi;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.util.ArrayFactory;
+import consulo.util.collection.ArrayFactory;
 
 /**
  * Represents a Java class initializer block.

@@ -21,10 +21,10 @@ import java.util.regex.Pattern;
 
 import consulo.logging.Logger;
 import org.jdom.Element;
-import com.intellij.openapi.util.DefaultJDOMExternalizer;
-import com.intellij.openapi.util.InvalidDataException;
-import com.intellij.openapi.util.JDOMExternalizable;
-import com.intellij.openapi.util.WriteExternalException;
+import consulo.util.xml.serializer.DefaultJDOMExternalizer;
+import consulo.util.xml.serializer.InvalidDataException;
+import consulo.util.xml.serializer.JDOMExternalizable;
+import consulo.util.xml.serializer.WriteExternalException;
 
 public class ClassFilter implements JDOMExternalizable, Cloneable{
   private static final Logger LOG = Logger.getInstance(ClassFilter.class);

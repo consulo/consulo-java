@@ -15,18 +15,28 @@
  */
 package com.intellij.java.impl.psi.impl.source.tree.java;
 
+import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiAnnotationSupport;
 import com.intellij.java.language.psi.PsiLiteral;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.PsiElement;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.Language;
+import consulo.util.lang.StringUtil;
+import consulo.language.psi.PsiElement;
 
 import javax.annotation.Nonnull;
 
+@ExtensionImpl
 public class JavaAnnotationSupport implements PsiAnnotationSupport {
   @Override
   @Nonnull
   public PsiLiteral createLiteralValue(@Nonnull String value, @Nonnull PsiElement context) {
     return (PsiLiteral)JavaPsiFacade.getInstance(context.getProject()).getElementFactory().createExpressionFromText("\"" + StringUtil.escapeStringCharacters(value) + "\"", null);
+  }
+
+  @Nonnull
+  @Override
+  public Language getLanguage() {
+    return JavaLanguage.INSTANCE;
   }
 }

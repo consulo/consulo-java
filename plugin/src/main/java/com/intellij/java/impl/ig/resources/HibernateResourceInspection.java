@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.resources;
 
-import com.intellij.codeInspection.ui.SingleCheckboxOptionsPanel;
+import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
 import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
 import com.siyeh.HardcodedMethodConstants;

@@ -19,6 +19,7 @@ import java.awt.BorderLayout;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nullable;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
@@ -26,20 +27,20 @@ import javax.swing.SwingUtilities;
 import javax.annotation.Nonnull;
 
 import com.intellij.java.language.codeInsight.AnnotationUtil;
-import com.intellij.codeInspection.ProblemDescriptor;
+import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.impl.codeInspection.util.SpecialAnnotationsUtil;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.Messages;
+import consulo.project.Project;
+import consulo.ui.ex.awt.Messages;
 import com.intellij.psi.*;
-import com.intellij.psi.codeStyle.CodeStyleManager;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.search.SearchScope;
+import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.content.scope.SearchScope;
 import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
-import com.intellij.psi.search.searches.ReferencesSearch;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.Query;
-import com.intellij.util.ui.CheckBox;
+import consulo.language.psi.search.ReferencesSearch;
+import consulo.language.util.IncorrectOperationException;
+import consulo.application.util.query.Query;
+import consulo.ui.CheckBox;
 import com.siyeh.HardcodedMethodConstants;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
@@ -70,7 +71,7 @@ public class UtilityClassWithoutPrivateConstructorInspection extends BaseInspect
   }
 
   @Override
-  @javax.annotation.Nullable
+  @Nullable
   public JComponent createOptionsPanel() {
     final JPanel panel = new JPanel(new BorderLayout());
     final JPanel annotationsPanel = SpecialAnnotationsUtil.createSpecialAnnotationsListControl(
@@ -262,7 +263,7 @@ public class UtilityClassWithoutPrivateConstructorInspection extends BaseInspect
     }
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   static PsiMethod getNullArgConstructor(PsiClass aClass) {
     final PsiMethod[] constructors = aClass.getConstructors();
     for (final PsiMethod constructor : constructors) {

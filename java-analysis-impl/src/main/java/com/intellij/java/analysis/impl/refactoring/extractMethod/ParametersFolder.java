@@ -20,17 +20,17 @@
  */
 package com.intellij.java.analysis.impl.refactoring.extractMethod;
 
-import com.intellij.codeInsight.PsiEquivalenceUtil;
+import consulo.language.editor.PsiEquivalenceUtil;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.util.Pair;
+import consulo.util.lang.Pair;
 import com.intellij.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
-import com.intellij.psi.codeStyle.SuggestedNameInfo;
+import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
-import com.intellij.psi.search.LocalSearchScope;
-import com.intellij.psi.search.SearchScope;
-import com.intellij.psi.search.searches.ReferencesSearch;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.scope.LocalSearchScope;
+import consulo.content.scope.SearchScope;
+import consulo.language.psi.search.ReferencesSearch;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.analysis.impl.refactoring.util.VariableData;
 import com.intellij.java.analysis.impl.refactoring.util.duplicates.DuplicatesFinder;
@@ -292,7 +292,7 @@ public class ParametersFolder {
     return false;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private static PsiExpression findEquivalent(PsiExpression expr, PsiElement element) {
     PsiElement expression = element;
     while (expression  != null) {

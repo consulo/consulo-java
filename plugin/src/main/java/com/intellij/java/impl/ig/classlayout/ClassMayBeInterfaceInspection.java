@@ -16,15 +16,16 @@
 package com.intellij.java.impl.ig.classlayout;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-import com.intellij.codeInspection.ProblemDescriptor;
+import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.project.Project;
+import consulo.project.Project;
 import com.intellij.psi.*;
-import com.intellij.psi.search.SearchScope;
+import consulo.content.scope.SearchScope;
 import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
@@ -130,7 +131,7 @@ public class ClassMayBeInterfaceInspection extends BaseInspection {
 
     private static void moveReference(
       @Nonnull PsiReferenceList source,
-      @javax.annotation.Nullable PsiReferenceList target,
+      @Nullable PsiReferenceList target,
       @Nonnull PsiJavaCodeReferenceElement reference)
       throws IncorrectOperationException {
       final PsiJavaCodeReferenceElement[] sourceReferences =

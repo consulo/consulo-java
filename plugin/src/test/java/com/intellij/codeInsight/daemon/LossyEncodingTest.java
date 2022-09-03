@@ -24,16 +24,16 @@
  */
 package com.intellij.codeInsight.daemon;
 
-import com.intellij.codeInsight.daemon.impl.DaemonCodeAnalyzerEx;
-import com.intellij.codeInsight.daemon.impl.HighlightInfo;
-import com.intellij.codeInspection.LocalInspectionTool;
-import com.intellij.codeInspection.LossyEncodingInspection;
-import com.intellij.openapi.fileEditor.FileDocumentManager;
-import com.intellij.openapi.vfs.CharsetToolkit;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.openapi.vfs.encoding.EncodingManager;
-import com.intellij.openapi.vfs.encoding.EncodingProjectManager;
-import com.intellij.util.ui.UIUtil;
+import consulo.language.editor.impl.internal.daemon.DaemonCodeAnalyzerEx;
+import consulo.language.editor.rawHighlight.HighlightInfo;
+import consulo.language.editor.inspection.LocalInspectionTool;
+import consulo.ide.impl.idea.codeInspection.LossyEncodingInspection;
+import consulo.document.FileDocumentManager;
+import consulo.util.io.CharsetToolkit;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.virtualFileSystem.encoding.EncodingManager;
+import consulo.virtualFileSystem.encoding.EncodingProjectManager;
+import consulo.ui.ex.awt.UIUtil;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
 

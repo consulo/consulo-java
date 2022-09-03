@@ -1,8 +1,8 @@
 package consulo.java.impl.library;
 
 import com.intellij.java.language.impl.JavaFileType;
-import com.intellij.openapi.roots.OrderRootType;
-import com.intellij.openapi.roots.libraries.ui.FileTypeBasedRootFilter;
+import consulo.content.OrderRootType;
+import consulo.content.library.ui.FileTypeBasedRootFilter;
 
 /**
  * @author VISTALL

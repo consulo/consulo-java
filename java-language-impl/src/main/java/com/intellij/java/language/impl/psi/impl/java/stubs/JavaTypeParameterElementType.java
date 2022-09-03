@@ -19,21 +19,21 @@ import java.io.IOException;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.lang.ASTNode;
-import com.intellij.lang.LighterAST;
-import com.intellij.lang.LighterASTNode;
+import consulo.language.ast.ASTNode;
+import consulo.language.ast.LighterAST;
+import consulo.language.ast.LighterASTNode;
 import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.java.language.psi.PsiTypeParameter;
 import com.intellij.java.language.impl.psi.impl.cache.RecordUtil;
 import com.intellij.java.language.impl.psi.impl.java.stubs.impl.PsiTypeParameterStubImpl;
-import com.intellij.psi.impl.source.tree.LightTreeUtil;
+import consulo.language.ast.LightTreeUtil;
 import com.intellij.java.language.impl.psi.impl.source.tree.java.PsiTypeParameterImpl;
 import com.intellij.java.language.impl.psi.impl.source.tree.java.TypeParameterElement;
-import com.intellij.psi.stubs.IndexSink;
-import com.intellij.psi.stubs.StubElement;
-import com.intellij.psi.stubs.StubInputStream;
-import com.intellij.psi.stubs.StubOutputStream;
-import com.intellij.util.io.StringRef;
+import consulo.language.psi.stub.IndexSink;
+import consulo.language.psi.stub.StubElement;
+import consulo.language.psi.stub.StubInputStream;
+import consulo.language.psi.stub.StubOutputStream;
+import consulo.index.io.StringRef;
 
 /**
  * @author max

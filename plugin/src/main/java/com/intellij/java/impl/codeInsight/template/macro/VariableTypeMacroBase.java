@@ -15,13 +15,14 @@
  */
 package com.intellij.java.impl.codeInsight.template.macro;
 
-import com.intellij.codeInsight.lookup.LookupElement;
+import consulo.language.editor.completion.lookup.LookupElement;
 import com.intellij.codeInsight.template.*;
 import com.intellij.java.impl.codeInsight.template.JavaCodeContextType;
 import com.intellij.java.impl.codeInsight.template.JavaPsiElementResult;
 import com.intellij.java.impl.codeInsight.template.impl.JavaTemplateUtil;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -30,7 +31,7 @@ import java.util.Set;
  * @author ven
  */
 public abstract class VariableTypeMacroBase extends Macro {
-  @javax.annotation.Nullable
+  @Nullable
   protected abstract PsiElement[] getVariables(Expression[] params, final ExpressionContext context);
 
   @Override

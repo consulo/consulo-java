@@ -15,18 +15,18 @@
  */
 package com.intellij.java.execution.impl.stacktrace;
 
-import com.intellij.execution.Location;
-import com.intellij.execution.PsiLocation;
+import consulo.execution.action.Location;
+import consulo.execution.action.PsiLocation;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.openapi.fileEditor.OpenFileDescriptor;
-import com.intellij.openapi.project.Project;
+import consulo.navigation.OpenFileDescriptor;
+import consulo.project.Project;
 import com.intellij.openapi.util.text.LineTokenizer;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.psi.*;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NonNls;
 
 public class StackTraceLine {

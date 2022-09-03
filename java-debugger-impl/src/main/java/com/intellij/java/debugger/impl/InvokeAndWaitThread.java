@@ -15,7 +15,7 @@
  */
 package com.intellij.java.debugger.impl;
 
-import com.intellij.openapi.project.Project;
+import consulo.project.Project;
 
 /**
  * @author lex

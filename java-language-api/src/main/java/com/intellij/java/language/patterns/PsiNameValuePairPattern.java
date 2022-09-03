@@ -17,9 +17,9 @@
 package com.intellij.java.language.patterns;
 
 import com.intellij.java.language.psi.PsiNameValuePair;
-import com.intellij.patterns.PatternCondition;
-import com.intellij.patterns.PsiElementPattern;
-import com.intellij.util.ProcessingContext;
+import consulo.language.pattern.PsiElementPattern;
+import consulo.language.pattern.PatternCondition;
+import consulo.language.util.ProcessingContext;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;

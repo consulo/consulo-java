@@ -15,68 +15,57 @@
  */
 package com.intellij.java.language.impl.psi.impl.source;
 
-import com.intellij.java.language.psi.*;
-import com.intellij.lang.ASTNode;
-import com.intellij.psi.*;
 import com.intellij.java.language.impl.psi.impl.java.stubs.JavaStubElementTypes;
 import com.intellij.java.language.impl.psi.impl.java.stubs.PsiProvidesStatementStub;
-import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.java.language.psi.*;
+import consulo.language.ast.ASTNode;
+import consulo.language.psi.PsiElementVisitor;
+import consulo.language.psi.util.PsiTreeUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class PsiProvidesStatementImpl extends JavaStubPsiElement<PsiProvidesStatementStub> implements PsiProvidesStatement
-{
-	public PsiProvidesStatementImpl(@Nonnull PsiProvidesStatementStub stub)
-	{
-		super(stub, JavaStubElementTypes.PROVIDES_STATEMENT);
-	}
+public class PsiProvidesStatementImpl extends JavaStubPsiElement<PsiProvidesStatementStub> implements PsiProvidesStatement {
+  public PsiProvidesStatementImpl(@Nonnull PsiProvidesStatementStub stub) {
+    super(stub, JavaStubElementTypes.PROVIDES_STATEMENT);
+  }
 
-	public PsiProvidesStatementImpl(@Nonnull ASTNode node)
-	{
-		super(node);
-	}
+  public PsiProvidesStatementImpl(@Nonnull ASTNode node) {
+    super(node);
+  }
 
-	@Nullable
-	@Override
-	public PsiJavaCodeReferenceElement getInterfaceReference()
-	{
-		return PsiTreeUtil.getChildOfType(this, PsiJavaCodeReferenceElement.class);
-	}
+  @Nullable
+  @Override
+  public PsiJavaCodeReferenceElement getInterfaceReference() {
+    return PsiTreeUtil.getChildOfType(this, PsiJavaCodeReferenceElement.class);
+  }
 
-	@Nullable
-	@Override
-	public PsiClassType getInterfaceType()
-	{
-		PsiProvidesStatementStub stub = getStub();
-		PsiJavaCodeReferenceElement ref =
-				stub != null ? JavaPsiFacade.getElementFactory(getProject()).createReferenceFromText(stub.getInterface(), this) : getInterfaceReference();
-		return ref != null ? new PsiClassReferenceType(ref, null, PsiAnnotation.EMPTY_ARRAY) : null;
-	}
+  @Nullable
+  @Override
+  public PsiClassType getInterfaceType() {
+    PsiProvidesStatementStub stub = getStub();
+    PsiJavaCodeReferenceElement ref =
+        stub != null ? JavaPsiFacade.getElementFactory(getProject()).createReferenceFromText(stub.getInterface(), this) : getInterfaceReference();
+    return ref != null ? new PsiClassReferenceType(ref, null, PsiAnnotation.EMPTY_ARRAY) : null;
+  }
 
-	@Nullable
-	@Override
-	public PsiReferenceList getImplementationList()
-	{
-		return PsiTreeUtil.getChildOfType(this, PsiReferenceList.class);
-	}
+  @Nullable
+  @Override
+  public PsiReferenceList getImplementationList() {
+    return PsiTreeUtil.getChildOfType(this, PsiReferenceList.class);
+  }
 
-	@Override
-	public void accept(@Nonnull PsiElementVisitor visitor)
-	{
-		if(visitor instanceof JavaElementVisitor)
-		{
-			((JavaElementVisitor) visitor).visitProvidesStatement(this);
-		}
-		else
-		{
-			visitor.visitElement(this);
-		}
-	}
+  @Override
+  public void accept(@Nonnull PsiElementVisitor visitor) {
+    if (visitor instanceof JavaElementVisitor) {
+      ((JavaElementVisitor) visitor).visitProvidesStatement(this);
+    } else {
+      visitor.visitElement(this);
+    }
+  }
 
-	@Override
-	public String toString()
-	{
-		return "PsiProvidesStatement";
-	}
+  @Override
+  public String toString() {
+    return "PsiProvidesStatement";
+  }
 }

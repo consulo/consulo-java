@@ -21,14 +21,14 @@ import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
 import com.intellij.java.language.JavaLanguage;
-import com.intellij.pom.PomModel;
-import com.intellij.pom.PomModelAspect;
-import com.intellij.pom.event.PomModelEvent;
+import consulo.language.pom.PomModel;
+import consulo.language.pom.PomModelAspect;
+import consulo.language.pom.event.PomModelEvent;
 import com.intellij.java.impl.pom.java.PomJavaAspect;
 import com.intellij.java.impl.pom.java.events.PomJavaAspectChangeSet;
-import com.intellij.pom.tree.TreeAspect;
-import com.intellij.pom.tree.events.TreeChangeEvent;
-import com.intellij.psi.PsiFile;
+import consulo.language.pom.TreeAspect;
+import consulo.language.pom.event.TreeChangeEvent;
+import consulo.language.psi.PsiFile;
 
 @Singleton
 public class PomJavaAspectImpl extends PomJavaAspect {

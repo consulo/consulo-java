@@ -1,22 +1,21 @@
 package com.intellij.psi.impl.file.impl;
 
 
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.fileTypes.FileTypeManager;
-import com.intellij.openapi.fileTypes.ex.FileTypeManagerEx;
-import com.intellij.openapi.roots.ModuleRootModificationUtil;
-import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.openapi.vfs.LocalFileSystem;
-import com.intellij.openapi.vfs.VfsUtil;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.*;
-import com.intellij.psi.impl.PsiTreeChangeEventImpl;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.application.ApplicationManager;
+import consulo.document.Document;
+import consulo.language.file.FileTypeManager;
+import consulo.ide.impl.idea.openapi.fileTypes.ex.FileTypeManagerEx;
+import consulo.ide.impl.idea.openapi.roots.ModuleRootModificationUtil;
+import consulo.ide.impl.idea.openapi.util.io.FileUtil;
+import consulo.virtualFileSystem.LocalFileSystem;
+import consulo.ide.impl.idea.openapi.vfs.VfsUtil;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.language.impl.internal.psi.PsiTreeChangeEventImpl;
+import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.testFramework.PsiTestCase;
 import com.intellij.testFramework.PsiTestUtil;
-import com.intellij.util.WaitFor;
-import com.intellij.util.io.ReadOnlyAttributeUtil;
+import consulo.ide.impl.idea.util.WaitFor;
+import consulo.ide.impl.idea.util.io.ReadOnlyAttributeUtil;
 import consulo.logging.Logger;
 
 import javax.annotation.Nonnull;
@@ -275,7 +274,7 @@ public abstract class PsiEventsTest extends PsiTestCase {
     final EventsTestListener listener = new EventsTestListener();
     myPsiManager.addPsiTreeChangeListener(listener,getTestRootDisposable());
 
-    ReadOnlyAttributeUtil.setReadOnlyAttribute(file, true);
+    consulo.ide.impl.idea.util.io.ReadOnlyAttributeUtil.setReadOnlyAttribute(file, true);
 
     String string = listener.getEventsString();
     final String expected =
@@ -427,7 +426,7 @@ public abstract class PsiEventsTest extends PsiTestCase {
   public void testChangeFile() throws Exception {
     FileManager fileManager = myPsiManager.getFileManager();
     VirtualFile file = myPrjDir1.createChildData(null, "a.txt");
-    VfsUtil.saveText(file, "aaa");
+    consulo.ide.impl.idea.openapi.vfs.VfsUtil.saveText(file, "aaa");
     PsiFile psiFile = fileManager.findFile(file);
     psiFile.getText();
 

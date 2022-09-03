@@ -15,12 +15,12 @@
  */
 package com.intellij.java.impl.codeInsight.completion;
 
-import com.intellij.codeInsight.completion.CompletionParameters;
-import com.intellij.codeInsight.completion.CompletionResultSet;
-import com.intellij.codeInsight.completion.PrefixMatcher;
-import com.intellij.codeInsight.lookup.AutoCompletionPolicy;
-import com.intellij.codeInsight.lookup.LookupElement;
-import com.intellij.codeInsight.lookup.LookupElementDecorator;
+import consulo.language.editor.completion.CompletionParameters;
+import consulo.language.editor.completion.CompletionResultSet;
+import consulo.application.util.matcher.PrefixMatcher;
+import consulo.language.editor.completion.AutoCompletionPolicy;
+import consulo.language.editor.completion.lookup.LookupElement;
+import consulo.language.editor.completion.lookup.LookupElementDecorator;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.HighlightClassUtil;
 import com.intellij.java.impl.codeInsight.CodeInsightUtil;
 import com.intellij.java.impl.codeInsight.ExpectedTypeInfo;
@@ -36,16 +36,16 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiTypesUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
-import com.intellij.psi.PsiCompiledElement;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.statistics.StatisticsInfo;
-import com.intellij.psi.statistics.StatisticsManager;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.PsiCompiledElement;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.ide.impl.psi.statistics.StatisticsInfo;
+import consulo.ide.impl.psi.statistics.StatisticsManager;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.util.*;
-import com.intellij.util.containers.ContainerUtil;
-import consulo.codeInsight.completion.CompletionProvider;
+import consulo.util.collection.ContainerUtil;
+import consulo.language.editor.completion.CompletionProvider;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.logging.Logger;
 
@@ -251,8 +251,8 @@ public class JavaInheritorsGetter implements CompletionProvider {
       final PsiSubstitutor baseSubstitutor = baseResult.getSubstitutor();
 
       final Processor<PsiClass> processor = CodeInsightUtil.createInheritorsProcessor(context, type, 0, false, consumer, baseClass, baseSubstitutor);
-      final StatisticsInfo[] stats = StatisticsManager.getInstance().getAllValues(JavaStatisticsManager.getAfterNewKey(type));
-      for (final StatisticsInfo statisticsInfo : stats) {
+      final StatisticsInfo[] stats = consulo.ide.impl.psi.statistics.StatisticsManager.getInstance().getAllValues(JavaStatisticsManager.getAfterNewKey(type));
+      for (final consulo.ide.impl.psi.statistics.StatisticsInfo statisticsInfo : stats) {
         final String value = statisticsInfo.getValue();
         if (value.startsWith(JavaStatisticsManager.CLASS_PREFIX)) {
           final String qname = value.substring(JavaStatisticsManager.CLASS_PREFIX.length());

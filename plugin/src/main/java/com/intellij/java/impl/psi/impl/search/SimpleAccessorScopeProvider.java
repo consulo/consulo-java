@@ -17,10 +17,10 @@ package com.intellij.java.impl.psi.impl.search;
 
 import com.intellij.ide.highlighter.XHtmlFileType;
 import com.intellij.ide.highlighter.XmlFileType;
-import com.intellij.openapi.project.Project;
+import consulo.project.Project;
 import com.intellij.psi.impl.search.CustomPropertyScopeProvider;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.search.SearchScope;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.content.scope.SearchScope;
 
 public class SimpleAccessorScopeProvider implements CustomPropertyScopeProvider {
   @Override

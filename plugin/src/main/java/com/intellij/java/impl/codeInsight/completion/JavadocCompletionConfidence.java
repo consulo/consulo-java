@@ -15,18 +15,19 @@
  */
 package com.intellij.java.impl.codeInsight.completion;
 
-import com.intellij.codeInsight.completion.CompletionConfidence;
+import consulo.language.editor.completion.CompletionConfidence;
 import com.intellij.java.language.psi.JavaDocTokenType;
 import com.intellij.java.language.psi.PsiJavaReference;
 import com.intellij.java.language.psi.javadoc.PsiDocTag;
-import com.intellij.patterns.PlatformPatterns;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiReference;
-import com.intellij.psi.impl.source.resolve.reference.impl.PsiMultiReference;
-import com.intellij.util.ThreeState;
+import consulo.language.pattern.PlatformPatterns;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiReference;
+import consulo.language.psi.PsiMultiReference;
+import consulo.util.lang.ThreeState;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import static com.intellij.java.language.patterns.PsiJavaPatterns.psiElement;
 
@@ -52,7 +53,7 @@ public class JavadocCompletionConfidence extends CompletionConfidence {
     return super.shouldSkipAutopopup(contextElement, psiFile, offset);
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private static PsiJavaReference findJavaReference(final PsiFile file, final int offset) {
     PsiReference reference = file.findReferenceAt(offset);
     if (reference instanceof PsiMultiReference) {

@@ -16,18 +16,18 @@
 
 package com.intellij.java.impl.util.descriptors.impl;
 
-import com.intellij.ide.IdeBundle;
-import com.intellij.ide.fileTemplates.FileTemplate;
-import com.intellij.ide.fileTemplates.FileTemplateManager;
+import consulo.ide.IdeBundle;
+import consulo.fileTemplate.FileTemplate;
+import consulo.fileTemplate.FileTemplateManager;
 import com.intellij.java.impl.util.descriptors.*;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.Messages;
-import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.openapi.vfs.LocalFileSystem;
-import com.intellij.openapi.vfs.VfsUtil;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.util.FileContentUtil;
+import consulo.application.ApplicationManager;
+import consulo.project.Project;
+import consulo.ui.ex.awt.Messages;
+import consulo.ide.impl.idea.openapi.util.io.FileUtil;
+import consulo.virtualFileSystem.LocalFileSystem;
+import consulo.ide.impl.idea.openapi.vfs.VfsUtil;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.ide.impl.idea.util.FileContentUtil;
 import consulo.logging.Logger;
 import jakarta.inject.Singleton;
 
@@ -80,7 +80,7 @@ public class ConfigFileFactoryImpl extends ConfigFileFactory {
   @Nullable
   private VirtualFile createFileFromTemplate(@Nullable final Project project, String url, final String templateName, final boolean forceNew) {
     final LocalFileSystem fileSystem = LocalFileSystem.getInstance();
-    final File file = new File(VfsUtil.urlToPath(url));
+    final File file = new File(consulo.ide.impl.idea.openapi.vfs.VfsUtil.urlToPath(url));
     VirtualFile existingFile = fileSystem.refreshAndFindFileByIoFile(file);
     if (existingFile != null) {
       existingFile.refresh(false, false);

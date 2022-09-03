@@ -15,34 +15,34 @@
  */
 package com.intellij.java.impl.refactoring.move.moveClassesOrPackages;
 
-import com.intellij.ide.util.DirectoryUtil;
+import consulo.fileChooser.FileChooserDescriptor;
+import consulo.fileChooser.FileChooserDescriptorFactory;
+import consulo.language.editor.refactoring.util.DirectoryUtil;
 import com.intellij.java.language.psi.JavaDirectoryService;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiJavaPackage;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.fileChooser.FileChooser;
-import com.intellij.openapi.fileChooser.FileChooserDescriptor;
-import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.ProjectFileIndex;
-import com.intellij.openapi.roots.ProjectRootManager;
-import com.intellij.openapi.ui.DialogWrapper;
-import com.intellij.openapi.ui.Messages;
-import com.intellij.openapi.ui.TextFieldWithBrowseButton;
-import com.intellij.openapi.util.Computable;
-import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.application.ApplicationManager;
+import consulo.ui.ex.awt.DialogWrapper;
+import consulo.ui.fileChooser.FileChooser;
+import consulo.module.Module;
+import consulo.project.Project;
+import consulo.module.content.ProjectFileIndex;
+import consulo.module.content.ProjectRootManager;
+import consulo.ui.ex.awt.Messages;
+import consulo.ui.ex.awt.TextFieldWithBrowseButton;
+import consulo.application.util.function.Computable;
+import consulo.ide.impl.idea.openapi.util.io.FileUtil;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.java.impl.refactoring.JavaRefactoringFactory;
 import com.intellij.java.impl.refactoring.JavaRefactoringSettings;
 import com.intellij.java.impl.refactoring.MoveDestination;
-import com.intellij.refactoring.RefactoringBundle;
-import com.intellij.refactoring.move.MoveCallback;
-import com.intellij.refactoring.move.MoveHandler;
-import com.intellij.ui.DocumentAdapter;
-import com.intellij.usageView.UsageViewUtil;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.move.MoveCallback;
+import consulo.language.editor.refactoring.move.MoveHandler;
+import consulo.ui.ex.awt.event.DocumentAdapter;
+import consulo.usage.UsageViewUtil;
+import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 
 import javax.annotation.Nonnull;
@@ -82,7 +82,7 @@ public class MoveClassesOrPackagesToNewDirectoryDialog extends DialogWrapper {
     final FileChooserDescriptor descriptor = FileChooserDescriptorFactory.createSingleFolderDescriptor();
     myDestDirectoryField.getButton().addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        final VirtualFile file = FileChooser.chooseFile(descriptor, myDirectory.getProject(), directory.getVirtualFile());
+        final VirtualFile file = consulo.ui.fileChooser.FileChooser.chooseFile(descriptor, myDirectory.getProject(), directory.getVirtualFile());
         if (file != null) {
           myDestDirectoryField.setText(FileUtil.toSystemDependentName(file.getPath()));
         }

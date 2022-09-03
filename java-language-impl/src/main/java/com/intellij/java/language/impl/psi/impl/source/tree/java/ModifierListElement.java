@@ -18,14 +18,17 @@ package com.intellij.java.language.impl.psi.impl.source.tree.java;
 import com.intellij.java.language.impl.psi.impl.source.tree.ChildRole;
 import com.intellij.java.language.impl.psi.impl.source.tree.ElementType;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
-import com.intellij.lang.ASTNode;
-import consulo.logging.Logger;
 import com.intellij.java.language.psi.PsiKeyword;
 import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.java.language.psi.PsiModifierList;
-import com.intellij.psi.impl.source.SourceTreeToPsiMap;
-import com.intellij.psi.impl.source.tree.*;
-import com.intellij.psi.tree.ChildRoleBase;
+import consulo.language.ast.ASTNode;
+import consulo.language.ast.ChildRoleBase;
+import consulo.language.impl.ast.CompositeElement;
+import consulo.language.impl.ast.TreeElement;
+import consulo.language.impl.psi.SourceTreeToPsiMap;
+import consulo.logging.Logger;
+
+import javax.annotation.Nullable;
 import java.util.HashMap;
 
 public class ModifierListElement extends CompositeElement {
@@ -70,7 +73,7 @@ public class ModifierListElement extends CompositeElement {
     ourModifierToOrderMap.put(PsiModifier.STRICTFP, 6);
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private static ASTNode getDefaultAnchor(PsiModifierList modifierList, PsiKeyword modifier) {
     Integer order = ourModifierToOrderMap.get(modifier.getText());
     if (order == null) return null;

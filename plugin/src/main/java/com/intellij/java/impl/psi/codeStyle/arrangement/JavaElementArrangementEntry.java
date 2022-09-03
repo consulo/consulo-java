@@ -15,11 +15,11 @@
  */
 package com.intellij.java.impl.psi.codeStyle.arrangement;
 
-import com.intellij.openapi.util.TextRange;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.document.util.TextRange;
+import consulo.util.lang.StringUtil;
 import com.intellij.psi.codeStyle.arrangement.*;
-import com.intellij.psi.codeStyle.arrangement.std.ArrangementSettingsToken;
-import com.intellij.util.containers.ContainerUtilRt;
+import consulo.language.codeStyle.arrangement.std.ArrangementSettingsToken;
+import consulo.ide.impl.idea.util.containers.ContainerUtilRt;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

@@ -17,11 +17,12 @@
 package com.intellij.java.analysis.impl.codeInspection.bytecodeAnalysis;
 
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.ContractReturnValue;
+import consulo.internal.org.objectweb.asm.tree.analysis.Value;
 
 import java.util.stream.Stream;
 
 // data for data analysis
-abstract class DataValue implements consulo.internal.org.objectweb.asm.tree.analysis.Value
+abstract class DataValue implements Value
 {
 	public static final DataValue[] EMPTY = new DataValue[0];
 

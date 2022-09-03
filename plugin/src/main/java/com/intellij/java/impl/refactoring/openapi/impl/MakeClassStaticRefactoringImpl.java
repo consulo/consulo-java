@@ -15,11 +15,11 @@
  */
 package com.intellij.java.impl.refactoring.openapi.impl;
 
-import com.intellij.openapi.project.Project;
+import consulo.project.Project;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.impl.refactoring.MakeStaticRefactoring;
-import com.intellij.refactoring.RefactoringImpl;
+import consulo.language.editor.refactoring.RefactoringImpl;
 import com.intellij.java.impl.refactoring.makeStatic.MakeClassStaticProcessor;
 import com.intellij.java.impl.refactoring.makeStatic.Settings;
 

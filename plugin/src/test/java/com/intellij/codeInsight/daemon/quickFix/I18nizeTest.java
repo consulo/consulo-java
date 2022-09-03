@@ -10,14 +10,14 @@ import org.jetbrains.annotations.NonNls;
 import com.intellij.java.impl.codeInspection.i18n.I18nQuickFixHandler;
 import com.intellij.java.impl.codeInspection.i18n.I18nizeAction;
 import com.intellij.java.impl.codeInspection.i18n.JavaI18nUtil;
-import com.intellij.ide.DataManager;
+import consulo.dataContext.DataManager;
 import com.intellij.lang.properties.psi.PropertiesFile;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.DataContext;
+import consulo.ui.ex.action.AnActionEvent;
+import consulo.dataContext.DataContext;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiLiteralExpression;
 import com.intellij.testFramework.LightCodeInsightTestCase;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
 
 
 public abstract class I18nizeTest extends LightCodeInsightTestCase {

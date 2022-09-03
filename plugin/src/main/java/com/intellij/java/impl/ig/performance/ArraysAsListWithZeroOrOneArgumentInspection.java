@@ -16,12 +16,13 @@
 package com.intellij.java.impl.ig.performance;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-import com.intellij.codeInspection.ProblemDescriptor;
+import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.project.Project;
+import consulo.project.Project;
 import com.intellij.psi.*;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
@@ -52,7 +53,7 @@ public class ArraysAsListWithZeroOrOneArgumentInspection extends BaseInspection 
     }
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   @Override
   protected InspectionGadgetsFix buildFix(Object... infos) {
     final Boolean isEmpty = (Boolean)infos[0];

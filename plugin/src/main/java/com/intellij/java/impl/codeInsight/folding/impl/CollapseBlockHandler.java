@@ -15,19 +15,19 @@
  */
 package com.intellij.java.impl.codeInsight.folding.impl;
 
-import com.intellij.codeInsight.CodeInsightActionHandler;
-import com.intellij.codeInsight.folding.impl.EditorFoldingInfo;
-import com.intellij.codeInsight.folding.impl.FoldingUtil;
+import consulo.language.editor.action.CodeInsightActionHandler;
+import consulo.ide.impl.idea.codeInsight.folding.impl.EditorFoldingInfo;
+import consulo.ide.impl.idea.codeInsight.folding.impl.FoldingUtil;
 import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.java.language.psi.PsiCodeBlock;
 import com.intellij.java.language.psi.PsiJavaToken;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.FoldRegion;
-import com.intellij.openapi.editor.ex.FoldingModelEx;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.codeEditor.Editor;
+import consulo.codeEditor.FoldRegion;
+import consulo.codeEditor.FoldingModelEx;
+import consulo.project.Project;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.util.PsiTreeUtil;
 import consulo.logging.Logger;
 
 import javax.annotation.Nonnull;

@@ -20,8 +20,8 @@ import com.intellij.java.language.psi.PsiExpressionList;
 import com.intellij.java.language.psi.PsiJavaToken;
 import com.intellij.java.language.psi.PsiParameterList;
 import com.intellij.psi.*;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.openapi.editor.Editor;
+import consulo.document.util.TextRange;
+import consulo.codeEditor.Editor;
 
 import java.util.List;
 import java.util.ArrayList;

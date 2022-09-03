@@ -18,9 +18,11 @@ package com.intellij.java.language.impl.psi.impl.compiled;
 import com.intellij.java.language.psi.JavaElementVisitor;
 import com.intellij.java.language.psi.PsiAnnotationMemberValue;
 import com.intellij.java.language.psi.PsiArrayInitializerMemberValue;
-import com.intellij.psi.*;
-import com.intellij.psi.impl.source.SourceTreeToPsiMap;
-import com.intellij.psi.impl.source.tree.TreeElement;
+import consulo.language.impl.ast.TreeElement;
+import consulo.language.impl.psi.SourceTreeToPsiMap;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiElementVisitor;
+
 import javax.annotation.Nonnull;
 
 /**
@@ -72,9 +74,8 @@ public class ClsArrayInitializerMemberValueImpl extends ClsElementImpl implement
   @Override
   public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
-      ((JavaElementVisitor)visitor).visitAnnotationArrayInitializer(this);
-    }
-    else {
+      ((JavaElementVisitor) visitor).visitAnnotationArrayInitializer(this);
+    } else {
       visitor.visitElement(this);
     }
   }

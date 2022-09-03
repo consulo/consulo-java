@@ -31,38 +31,38 @@ import com.intellij.java.debugger.impl.DebuggerContextImpl;
 import com.intellij.java.debugger.impl.DebuggerSession;
 import com.intellij.java.debugger.impl.DebuggerUtilsEx;
 import com.intellij.java.debugger.impl.settings.DebuggerSettings;
-import com.intellij.ide.util.PsiElementModuleRenderer;
-import com.intellij.openapi.fileEditor.FileEditor;
-import com.intellij.openapi.fileEditor.FileEditorManager;
-import com.intellij.openapi.project.DumbService;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.ComboBox;
+import consulo.fileEditor.FileEditorManager;
+import consulo.language.editor.ui.PsiElementModuleRenderer;
+import consulo.fileEditor.FileEditor;
+import consulo.project.DumbService;
+import consulo.project.Project;
+import consulo.ui.ex.awt.ComboBox;
 import consulo.util.dataholder.Key;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.util.lang.StringUtil;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiFile;
+import consulo.language.psi.PsiFile;
 import com.intellij.java.language.psi.PsiJavaFile;
-import com.intellij.psi.PsiManager;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.ui.EditorNotificationPanel;
-import com.intellij.ui.EditorNotifications;
-import com.intellij.ui.components.JBList;
-import com.intellij.util.containers.ContainerUtil;
-import com.intellij.xdebugger.XDebugSession;
-import com.intellij.xdebugger.XDebuggerManager;
-import com.intellij.xdebugger.XSourcePosition;
-import com.intellij.xdebugger.frame.XStackFrame;
-import com.intellij.xdebugger.impl.ui.DebuggerUIUtil;
+import consulo.language.psi.PsiManager;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.ide.impl.idea.ui.EditorNotificationPanel;
+import consulo.fileEditor.EditorNotifications;
+import consulo.ui.ex.awt.JBList;
+import consulo.util.collection.ContainerUtil;
+import consulo.execution.debug.XDebugSession;
+import consulo.execution.debug.XDebuggerManager;
+import consulo.execution.debug.XSourcePosition;
+import consulo.execution.debug.frame.XStackFrame;
+import consulo.ide.impl.idea.xdebugger.impl.ui.DebuggerUIUtil;
 import consulo.internal.com.sun.jdi.Location;
 
 /**
  * @author egor
  */
-public class AlternativeSourceNotificationProvider extends EditorNotifications.Provider<EditorNotificationPanel>
+public class AlternativeSourceNotificationProvider extends EditorNotifications.Provider<consulo.ide.impl.idea.ui.EditorNotificationPanel>
 {
-	private static final Key<EditorNotificationPanel> KEY = Key.create("AlternativeSource");
+	private static final Key<consulo.ide.impl.idea.ui.EditorNotificationPanel> KEY = Key.create("AlternativeSource");
 	private static final Key<Boolean> FILE_PROCESSED_KEY = Key.create("AlternativeSourceCheckDone");
 	private final Project myProject;
 
@@ -80,7 +80,7 @@ public class AlternativeSourceNotificationProvider extends EditorNotifications.P
 
 	@Nullable
 	@Override
-	public EditorNotificationPanel createNotificationPanel(@Nonnull VirtualFile file, @Nonnull FileEditor fileEditor)
+	public consulo.ide.impl.idea.ui.EditorNotificationPanel createNotificationPanel(@Nonnull VirtualFile file, @Nonnull FileEditor fileEditor)
 	{
 		if(!DebuggerSettings.getInstance().SHOW_ALTERNATIVE_SOURCE)
 		{
@@ -195,7 +195,7 @@ public class AlternativeSourceNotificationProvider extends EditorNotifications.P
 		return FILE_PROCESSED_KEY.get(file) != null;
 	}
 
-	private static class AlternativeSourceNotificationPanel extends EditorNotificationPanel
+	private static class AlternativeSourceNotificationPanel extends consulo.ide.impl.idea.ui.EditorNotificationPanel
 	{
 		public AlternativeSourceNotificationPanel(ComboBoxClassElement[] alternatives, final PsiClass aClass, final Project project, final VirtualFile file, String locationDeclName)
 		{
@@ -221,7 +221,7 @@ public class AlternativeSourceNotificationProvider extends EditorNotifications.P
 								{
 									DebuggerUtilsEx.setAlternativeSourceUrl(locationDeclName, vFile.getUrl(), project);
 								}
-								DebuggerUIUtil.invokeLater(() ->
+								consulo.ide.impl.idea.xdebugger.impl.ui.DebuggerUIUtil.invokeLater(() ->
 								{
 									FileEditorManager.getInstance(project).closeFile(file);
 									session.refresh(true);

@@ -18,6 +18,7 @@ package com.intellij.java.impl.ig.internationalization;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import javax.annotation.Nullable;
 import javax.swing.JComponent;
 
 import com.intellij.java.language.psi.*;
@@ -26,11 +27,11 @@ import javax.annotation.Nonnull;
 
 import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.analysis.impl.codeInsight.intention.AddAnnotationFix;
-import com.intellij.codeInspection.ui.MultipleCheckboxOptionsPanel;
+import consulo.ide.impl.idea.codeInspection.ui.MultipleCheckboxOptionsPanel;
 import com.intellij.psi.*;
-import com.intellij.psi.tree.IElementType;
+import consulo.language.ast.IElementType;
 import com.intellij.java.language.psi.util.InheritanceUtil;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.impl.refactoring.util.RefactoringChangeUtil;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
@@ -120,7 +121,7 @@ public class StringConcatenationInspection extends BaseInspection {
     return result.toArray(new InspectionGadgetsFix[result.size()]);
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public static PsiModifierListOwner getAnnotatableElement(PsiExpression expression) {
     if (!(expression instanceof PsiReferenceExpression)) {
       return null;
@@ -134,7 +135,7 @@ public class StringConcatenationInspection extends BaseInspection {
   }
 
   @Override
-  @javax.annotation.Nullable
+  @Nullable
   public JComponent createOptionsPanel() {
     final MultipleCheckboxOptionsPanel optionsPanel = new MultipleCheckboxOptionsPanel(this);
     optionsPanel.addCheckbox(InspectionGadgetsBundle.message("string.concatenation.ignore.assert.option"), "ignoreAsserts");

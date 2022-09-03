@@ -15,20 +15,20 @@
  */
 package com.intellij.java.compiler.artifact.impl.elements;
 
-import com.intellij.icons.AllIcons;
-import com.intellij.openapi.compiler.CompilerBundle;
-import com.intellij.openapi.module.ModuleUtil;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.Messages;
-import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.packaging.artifacts.Artifact;
-import com.intellij.packaging.elements.CompositePackagingElement;
-import com.intellij.packaging.elements.CompositePackagingElementType;
-import com.intellij.packaging.elements.PackagingElement;
-import com.intellij.packaging.elements.PackagingElementFactory;
-import com.intellij.packaging.impl.elements.FilePathValidator;
-import com.intellij.packaging.impl.elements.PackagingElementFactoryImpl;
-import com.intellij.packaging.ui.ArtifactEditorContext;
+import consulo.application.AllIcons;
+import consulo.compiler.CompilerBundle;
+import consulo.ide.impl.idea.openapi.module.ModuleUtil;
+import consulo.project.Project;
+import consulo.ui.ex.awt.Messages;
+import consulo.ide.impl.idea.openapi.util.io.FileUtil;
+import consulo.compiler.artifact.Artifact;
+import consulo.compiler.artifact.element.CompositePackagingElement;
+import consulo.compiler.artifact.element.CompositePackagingElementType;
+import consulo.compiler.artifact.element.PackagingElement;
+import consulo.compiler.artifact.element.PackagingElementFactory;
+import consulo.ide.impl.idea.packaging.impl.elements.FilePathValidator;
+import consulo.ide.impl.idea.packaging.impl.elements.PackagingElementFactoryImpl;
+import consulo.compiler.artifact.ui.ArtifactEditorContext;
 import com.intellij.util.PathUtil;
 import consulo.java.language.module.extension.JavaModuleExtension;
 import consulo.ui.image.Image;
@@ -76,7 +76,7 @@ public class JarArchiveElementType extends CompositePackagingElementType<JarArch
   @Override
   public CompositePackagingElement<?> createComposite(CompositePackagingElement<?> parent, @Nullable String baseName,
                                                       @Nonnull ArtifactEditorContext context) {
-    final String initialValue = PackagingElementFactoryImpl.suggestFileName(parent, baseName != null ? baseName : "archive", ".jar");
+    final String initialValue = consulo.ide.impl.idea.packaging.impl.elements.PackagingElementFactoryImpl.suggestFileName(parent, baseName != null ? baseName : "archive", ".jar");
     String path = Messages.showInputDialog(context.getProject(), "Enter archive name: ", "New Archive", null, initialValue,
         new FilePathValidator());
     if (path == null) {

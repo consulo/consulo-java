@@ -20,15 +20,15 @@
  */
 package com.intellij.java.impl.codeInspection;
 
-import com.intellij.codeInsight.daemon.HighlightDisplayKey;
-import com.intellij.codeInspection.SuppressIntentionAction;
-import com.intellij.codeInspection.SuppressIntentionActionFromFix;
-import com.intellij.codeInspection.SuppressQuickFix;
+import consulo.language.editor.rawHighlight.HighlightDisplayKey;
+import consulo.language.editor.intention.SuppressIntentionAction;
+import consulo.language.editor.inspection.SuppressIntentionActionFromFix;
+import consulo.language.editor.inspection.SuppressQuickFix;
 import com.intellij.java.analysis.codeInspection.SuppressManager;
 import com.intellij.java.analysis.impl.codeInspection.JavaSuppressionUtil;
 import com.intellij.java.language.psi.PsiDocCommentOwner;
 import com.intellij.java.language.psi.PsiModifierListOwner;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import jakarta.inject.Singleton;
 
 import javax.annotation.Nonnull;

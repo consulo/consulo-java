@@ -21,15 +21,15 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import com.intellij.java.compiler.impl.javaCompiler.JavaCompilerConfiguration;
 import com.intellij.java.compiler.impl.javaCompiler.annotationProcessing.AnnotationProcessingConfiguration;
-import com.intellij.openapi.compiler.CompilerPaths;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.ModuleRootManager;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.VirtualFileManager;
-import com.intellij.util.ArrayUtil;
+import consulo.compiler.CompilerPaths;
+import consulo.module.Module;
+import consulo.project.Project;
+import consulo.module.content.ModuleRootManager;
+import consulo.util.lang.StringUtil;
+import consulo.virtualFileSystem.VirtualFileManager;
+import consulo.util.collection.ArrayUtil;
 import consulo.compiler.impl.AdditionalOutputDirectoriesProvider;
-import consulo.compiler.roots.CompilerPathsImpl;
+import consulo.ide.impl.compiler.CompilerPathsImpl;
 
 /**
  * @author VISTALL

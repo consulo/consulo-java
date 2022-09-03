@@ -16,20 +16,20 @@
 package com.intellij.java.analysis.impl.codeInspection;
 
 import com.intellij.java.language.codeInsight.AnnotationUtil;
-import com.intellij.codeInsight.FileModificationService;
-import com.intellij.codeInspection.LocalQuickFix;
-import com.intellij.codeInspection.ProblemDescriptor;
+import consulo.language.editor.FileModificationService;
+import consulo.language.editor.inspection.LocalQuickFix;
+import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.analysis.impl.codeInsight.intention.AddAnnotationPsiFix;
-import com.intellij.openapi.application.ReadAction;
-import com.intellij.openapi.command.undo.UndoUtil;
-import com.intellij.openapi.progress.ProgressManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiElement;
+import consulo.application.ReadAction;
+import consulo.undoRedo.util.UndoUtil;
+import consulo.application.progress.ProgressManager;
+import consulo.project.Project;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiNameValuePair;
 import com.intellij.java.indexing.search.searches.OverridingMethodsSearch;
 import com.intellij.java.language.psi.util.ClassUtil;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 import consulo.java.analysis.impl.codeInsight.JavaInspectionsBundle;
 import consulo.logging.Logger;
 

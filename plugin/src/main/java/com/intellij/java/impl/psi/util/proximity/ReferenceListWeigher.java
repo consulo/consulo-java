@@ -19,16 +19,17 @@ import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
 import com.intellij.java.language.psi.PsiReferenceList;
 import com.intellij.java.language.psi.util.InheritanceUtil;
-import com.intellij.openapi.roots.ProjectFileIndex;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.patterns.ElementPattern;
-import com.intellij.patterns.PlatformPatterns;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.util.ProximityLocation;
-import com.intellij.psi.util.proximity.ProximityWeigher;
+import consulo.module.content.ProjectFileIndex;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.language.pattern.ElementPattern;
+import consulo.language.pattern.PlatformPatterns;
+import consulo.language.psi.PsiElement;
+import consulo.ide.impl.psi.util.ProximityLocation;
+import consulo.ide.impl.psi.util.proximity.ProximityWeigher;
 import consulo.java.language.module.util.JavaClassNames;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import static com.intellij.java.impl.psi.util.proximity.ReferenceListWeigher.ReferenceListApplicability.*;
 
@@ -46,7 +47,7 @@ public class ReferenceListWeigher extends ProximityWeigher {
     Exceptions
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   protected Preference getPreferredCondition(@Nonnull final PsiElement position) {
     if (INSIDE_REFERENCE_LIST.accepts(position)) {
       PsiReferenceList list = (PsiReferenceList) position.getParent().getParent();

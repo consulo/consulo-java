@@ -18,8 +18,8 @@ package com.intellij.java.impl.refactoring;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
-import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.project.Project;
+import consulo.ide.ServiceManager;
+import consulo.project.Project;
 import com.intellij.java.impl.refactoring.migration.MigrationManager;
 
 @Singleton

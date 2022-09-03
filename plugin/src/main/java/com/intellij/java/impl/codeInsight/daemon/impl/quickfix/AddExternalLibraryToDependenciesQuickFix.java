@@ -15,21 +15,22 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
-import com.intellij.openapi.application.WriteAction;
+import consulo.application.WriteAction;
 import consulo.logging.Logger;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.project.IndexNotReadyException;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.DependencyScope;
+import consulo.codeEditor.Editor;
+import consulo.module.Module;
+import consulo.application.dumb.IndexNotReadyException;
+import consulo.project.Project;
+import consulo.module.content.layer.orderEntry.DependencyScope;
 import com.intellij.java.language.projectRoots.roots.ExternalLibraryDescriptor;
 import com.intellij.java.impl.openapi.roots.JavaProjectModelModificationService;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiReference;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiReference;
+import consulo.language.util.IncorrectOperationException;
 import org.jetbrains.annotations.Nls;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * @author nik
@@ -44,7 +45,7 @@ class AddExternalLibraryToDependenciesQuickFix extends AddOrderEntryFix
 	public AddExternalLibraryToDependenciesQuickFix(@Nonnull Module currentModule,
 													@Nonnull ExternalLibraryDescriptor libraryDescriptor,
 													@Nonnull PsiReference reference,
-													@javax.annotation.Nullable String qualifiedClassName)
+													@Nullable String qualifiedClassName)
 	{
 		super(reference);
 		myCurrentModule = currentModule;

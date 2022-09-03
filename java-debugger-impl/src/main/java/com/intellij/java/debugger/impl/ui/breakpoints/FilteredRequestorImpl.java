@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
@@ -36,16 +37,16 @@ import com.intellij.java.debugger.impl.engine.evaluation.TextWithImportsImpl;
 import com.intellij.java.debugger.impl.engine.events.SuspendContextCommandImpl;
 import com.intellij.java.debugger.impl.DebuggerUtilsEx;
 import com.intellij.java.debugger.impl.settings.DebuggerSettings;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.DefaultJDOMExternalizer;
-import com.intellij.openapi.util.InvalidDataException;
-import com.intellij.openapi.util.JDOMExternalizable;
-import com.intellij.openapi.util.JDOMExternalizerUtil;
-import com.intellij.openapi.util.WriteExternalException;
-import com.intellij.psi.PsiElement;
+import consulo.project.Project;
+import consulo.util.xml.serializer.DefaultJDOMExternalizer;
+import consulo.util.xml.serializer.InvalidDataException;
+import consulo.util.xml.serializer.JDOMExternalizable;
+import consulo.util.xml.serializer.JDOMExternalizerUtil;
+import consulo.util.xml.serializer.WriteExternalException;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.debugger.ui.classFilter.ClassFilter;
-import com.intellij.xdebugger.impl.XDebuggerHistoryManager;
-import com.intellij.xdebugger.impl.breakpoints.ui.XLightBreakpointPropertiesPanel;
+import consulo.ide.impl.idea.xdebugger.impl.XDebuggerHistoryManager;
+import consulo.ide.impl.idea.xdebugger.impl.breakpoints.ui.XLightBreakpointPropertiesPanel;
 import consulo.internal.com.sun.jdi.event.LocatableEvent;
 
 /*
@@ -226,7 +227,7 @@ public class FilteredRequestorImpl implements JDOMExternalizable, FilteredReques
 		return event.location().declaringType().name();
 	}
 
-	private boolean typeMatchesClassFilters(@javax.annotation.Nullable String typeName)
+	private boolean typeMatchesClassFilters(@Nullable String typeName)
 	{
 		if(typeName == null)
 		{

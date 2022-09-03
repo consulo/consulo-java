@@ -15,18 +15,14 @@
  */
 package com.intellij.java.language.psi.ref;
 
+import com.intellij.java.language.psi.*;
+import consulo.language.psi.PsiChildLink;
+import consulo.language.util.IncorrectOperationException;
+import consulo.util.lang.ObjectUtil;
+import org.jetbrains.annotations.NonNls;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
-import org.jetbrains.annotations.NonNls;
-import com.intellij.java.language.psi.JavaPsiFacade;
-import com.intellij.java.language.psi.PsiAnnotation;
-import com.intellij.java.language.psi.PsiAnnotationMemberValue;
-import com.intellij.psi.PsiChildLink;
-import com.intellij.java.language.psi.PsiExpression;
-import com.intellij.java.language.psi.PsiKeyword;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.ObjectUtil;
 
 /**
  * @author peter

@@ -15,16 +15,16 @@
  */
 package com.intellij.java.impl.ide.structureView.impl.java;
 
-import com.intellij.icons.AllIcons;
-import com.intellij.ide.util.treeView.WeighedItem;
-import com.intellij.ide.util.treeView.smartTree.Group;
-import com.intellij.ide.util.treeView.smartTree.TreeElement;
+import consulo.application.AllIcons;
+import consulo.component.util.WeighedItem;
+import consulo.fileEditor.structureView.tree.Group;
+import consulo.fileEditor.structureView.tree.TreeElement;
 import com.intellij.java.language.psi.*;
-import com.intellij.navigation.ColoredItemPresentation;
-import com.intellij.navigation.ItemPresentation;
-import com.intellij.openapi.editor.colors.CodeInsightColors;
-import com.intellij.openapi.editor.colors.TextAttributesKey;
-import com.intellij.openapi.project.Project;
+import consulo.ui.ex.ColoredItemPresentation;
+import consulo.navigation.ItemPresentation;
+import consulo.codeEditor.CodeInsightColors;
+import consulo.colorScheme.TextAttributesKey;
+import consulo.project.Project;
 import com.intellij.psi.*;
 import com.intellij.java.language.psi.util.PropertyUtil;
 import com.intellij.java.language.psi.util.PsiUtil;

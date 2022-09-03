@@ -17,7 +17,7 @@ package com.intellij.java.debugger.impl.descriptors.data;
 
 import com.intellij.java.debugger.impl.jdi.ThreadReferenceProxyImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.ThreadDescriptorImpl;
-import com.intellij.openapi.project.Project;
+import consulo.project.Project;
 
 public class ThreadData extends DescriptorData<ThreadDescriptorImpl> {
   private final ThreadReferenceProxyImpl myThread;

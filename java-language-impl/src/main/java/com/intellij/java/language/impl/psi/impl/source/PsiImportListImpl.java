@@ -15,24 +15,24 @@
  */
 package com.intellij.java.language.impl.psi.impl.source;
 
-import com.intellij.java.language.psi.*;
-import com.intellij.lang.ASTNode;
-import com.intellij.psi.*;
 import com.intellij.java.language.impl.psi.impl.java.stubs.JavaStubElementTypes;
 import com.intellij.java.language.impl.psi.impl.java.stubs.PsiImportListStub;
 import com.intellij.java.language.impl.psi.impl.source.tree.ElementType;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
-import com.intellij.psi.tree.TokenSet;
-import com.intellij.util.ArrayFactory;
-import java.util.HashMap;
-import javax.annotation.Nonnull;
+import com.intellij.java.language.psi.*;
+import consulo.language.ast.ASTNode;
+import consulo.language.ast.TokenSet;
+import consulo.language.psi.PsiElementVisitor;
+import consulo.util.collection.ArrayFactory;
 
+import javax.annotation.Nonnull;
+import java.util.HashMap;
 import java.util.Map;
 
 public class PsiImportListImpl extends JavaStubPsiElement<PsiImportListStub> implements PsiImportList {
-  private volatile Map<String,PsiImportStatement> myClassNameToImportMap = null;
-  private volatile Map<String,PsiImportStatement> myPackageNameToImportMap = null;
-  private volatile Map<String,PsiImportStatementBase> myNameToSingleImportMap = null;
+  private volatile Map<String, PsiImportStatement> myClassNameToImportMap = null;
+  private volatile Map<String, PsiImportStatement> myPackageNameToImportMap = null;
+  private volatile Map<String, PsiImportStatementBase> myNameToSingleImportMap = null;
   private static final PsiImportStatementBase[] EMPTY_ARRAY = new PsiImportStatementBase[0];
   private static final ArrayFactory<PsiImportStatementBase> ARRAY_FACTORY = new ArrayFactory<PsiImportStatementBase>() {
     @Nonnull
@@ -52,7 +52,7 @@ public class PsiImportListImpl extends JavaStubPsiElement<PsiImportListStub> imp
 
   @Override
   protected Object clone() {
-    PsiImportListImpl clone = (PsiImportListImpl)super.clone();
+    PsiImportListImpl clone = (PsiImportListImpl) super.clone();
     clone.myClassNameToImportMap = null;
     clone.myPackageNameToImportMap = null;
     clone.myNameToSingleImportMap = null;
@@ -94,8 +94,7 @@ public class PsiImportListImpl extends JavaStubPsiElement<PsiImportListStub> imp
       Map<String, PsiImportStatement> map = myClassNameToImportMap;
       if (map == null) {
         initializeMaps();
-      }
-      else {
+      } else {
         return map.get(name);
       }
     }
@@ -107,8 +106,7 @@ public class PsiImportListImpl extends JavaStubPsiElement<PsiImportListStub> imp
       Map<String, PsiImportStatement> map = myPackageNameToImportMap;
       if (map == null) {
         initializeMaps();
-      }
-      else {
+      } else {
         return map.get(name);
       }
     }
@@ -120,8 +118,7 @@ public class PsiImportListImpl extends JavaStubPsiElement<PsiImportListStub> imp
       Map<String, PsiImportStatementBase> map = myNameToSingleImportMap;
       if (map == null) {
         initializeMaps();
-      }
-      else {
+      } else {
         return map.get(name);
       }
     }
@@ -142,8 +139,7 @@ public class PsiImportListImpl extends JavaStubPsiElement<PsiImportListStub> imp
       if (qName == null) continue;
       if (anImport.isOnDemand()) {
         packageNameToImportMap.put(qName, anImport);
-      }
-      else {
+      } else {
         classNameToImportMap.put(qName, anImport);
         PsiJavaCodeReferenceElement importReference = anImport.getImportReference();
         if (importReference == null) continue;
@@ -169,9 +165,8 @@ public class PsiImportListImpl extends JavaStubPsiElement<PsiImportListStub> imp
   @Override
   public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
-      ((JavaElementVisitor)visitor).visitImportList(this);
-    }
-    else {
+      ((JavaElementVisitor) visitor).visitImportList(this);
+    } else {
       visitor.visitElement(this);
     }
   }

@@ -15,25 +15,25 @@
  */
 package com.intellij.java.execution.impl.util;
 
-import com.intellij.execution.CantRunException;
-import com.intellij.execution.configurations.RunConfigurationModule;
-import com.intellij.execution.configurations.RuntimeConfigurationWarning;
-import com.intellij.execution.util.ProgramParametersUtil;
+import consulo.execution.CantRunException;
+import consulo.execution.RuntimeConfigurationWarning;
+import consulo.execution.configuration.RunConfigurationModule;
+import consulo.ide.impl.idea.execution.util.ProgramParametersUtil;
 import com.intellij.java.execution.CommonJavaRunConfigurationParameters;
 import com.intellij.java.execution.JavaExecutionUtil;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleUtilCore;
-import com.intellij.openapi.project.Project;
+import consulo.module.Module;
+import consulo.language.util.ModuleUtilCore;
+import consulo.project.Project;
 import com.intellij.java.language.projectRoots.JavaSdk;
-import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.projectRoots.SdkTable;
+import consulo.content.bundle.Sdk;
+import consulo.content.bundle.SdkTable;
 import com.intellij.java.language.impl.projectRoots.ex.PathUtilEx;
 import com.intellij.openapi.roots.*;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.util.lang.StringUtil;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiFile;
-import com.intellij.util.ObjectUtil;
+import consulo.language.psi.PsiFile;
+import consulo.util.lang.ObjectUtil;
 import consulo.java.execution.JavaExecutionBundle;
 import consulo.java.execution.OwnSimpleJavaParameters;
 import consulo.java.execution.configurations.OwnJavaParameters;
@@ -196,7 +196,7 @@ public class JavaParametersUtil {
     }
   }
 
-  public static void checkAlternativeJRE(@javax.annotation.Nullable String jrePath) throws RuntimeConfigurationWarning {
+  public static void checkAlternativeJRE(@Nullable String jrePath) throws RuntimeConfigurationWarning {
     if (StringUtil.isEmptyOrSpaces(jrePath) || SdkTable.getInstance().findSdk(jrePath) == null && !OwnJdkUtil.checkForJre(jrePath)) {
       throw new RuntimeConfigurationWarning(JavaExecutionBundle.message("jre.path.is.not.valid.jre.home.error.message", jrePath));
     }

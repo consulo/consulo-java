@@ -16,7 +16,7 @@
 package com.intellij.java.language.impl.psi.impl.source;
 
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 
 /**
  * This interface should be implemented by all PsiJavaCodeReference implementations

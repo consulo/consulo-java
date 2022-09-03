@@ -20,8 +20,8 @@
  */
 package com.intellij.java.analysis.impl.codeInsight.quickfix;
 
-import com.intellij.codeInsight.intention.IntentionAction;
-import com.intellij.openapi.extensions.ExtensionPointName;
+import consulo.language.editor.intention.IntentionAction;
+import consulo.component.extension.ExtensionPointName;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.PsiVariable;
 

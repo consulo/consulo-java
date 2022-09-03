@@ -15,11 +15,11 @@
  */
 package com.intellij.java.impl.codeInsight.editorActions.smartEnter;
 
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.DumbService;
+import consulo.codeEditor.Editor;
+import consulo.project.DumbService;
 import com.intellij.java.language.psi.PsiCallExpression;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiErrorElement;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiErrorElement;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiExpressionList;
 import com.intellij.java.language.psi.PsiMethod;
@@ -27,9 +27,11 @@ import com.intellij.java.language.psi.PsiMethodCallExpression;
 import com.intellij.java.language.psi.PsiNewExpression;
 import com.intellij.java.language.psi.PsiResolveHelper;
 import com.intellij.java.language.psi.infos.CandidateInfo;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.text.CharArrayUtil;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.util.lang.CharArrayUtil;
+
+import javax.annotation.Nullable;
 
 public class MethodCallFixer implements Fixer
 {
@@ -108,7 +110,7 @@ public class MethodCallFixer implements Fixer
 		return parenth != null && ")".equals(parenth.getText());
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	private static Integer getUnambiguousParameterCount(PsiCallExpression call)
 	{
 		int argCount = -1;

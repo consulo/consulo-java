@@ -16,9 +16,9 @@
 package com.intellij.java.debugger.engine;
 
 import javax.annotation.Nullable;
-import com.intellij.openapi.extensions.ExtensionPointName;
+import consulo.component.extension.ExtensionPointName;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 
 /**
  * @author Max Medvedev

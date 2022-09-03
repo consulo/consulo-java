@@ -16,12 +16,12 @@
 package com.intellij.java.impl.testIntegration;
 
 import com.intellij.java.impl.testIntegration.createTest.CreateTestAction;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.testIntegration.TestCreator;
-import com.intellij.util.IncorrectOperationException;
+import consulo.codeEditor.Editor;
+import consulo.project.Project;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.editor.testIntegration.TestCreator;
+import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 
 public class JavaTestCreator implements TestCreator {

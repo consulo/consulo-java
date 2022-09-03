@@ -15,7 +15,7 @@
  */
 package com.intellij.java.analysis.impl.psi.controlFlow;
 
-import com.intellij.util.ArrayUtil;
+import consulo.util.collection.ArrayUtil;
 
 import javax.annotation.Nonnull;
 import java.util.Arrays;

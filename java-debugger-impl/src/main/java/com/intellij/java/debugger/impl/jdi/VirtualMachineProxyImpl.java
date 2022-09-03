@@ -30,6 +30,7 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import consulo.logging.Logger;
 import org.jetbrains.annotations.Contract;
@@ -38,8 +39,8 @@ import com.intellij.java.debugger.impl.engine.DebugProcessImpl;
 import com.intellij.java.debugger.impl.engine.DebuggerManagerThreadImpl;
 import com.intellij.java.debugger.engine.evaluation.EvaluateException;
 import com.intellij.java.debugger.engine.jdi.VirtualMachineProxy;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.util.ThreeState;
+import consulo.util.lang.StringUtil;
+import consulo.util.lang.ThreeState;
 import java.util.HashMap;
 import consulo.internal.com.sun.jdi.*;
 import consulo.internal.com.sun.jdi.event.EventQueue;
@@ -760,9 +761,9 @@ public class VirtualMachineProxyImpl implements JdiTimer, VirtualMachineProxy
 		myVirtualMachine.setDebugTraceMode(i);
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	@Contract("null -> null; !null -> !null")
-	public ThreadReferenceProxyImpl getThreadReferenceProxy(@javax.annotation.Nullable ThreadReference thread)
+	public ThreadReferenceProxyImpl getThreadReferenceProxy(@Nullable ThreadReference thread)
 	{
 		DebuggerManagerThreadImpl.assertIsManagerThread();
 		if(thread == null)

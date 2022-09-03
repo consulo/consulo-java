@@ -15,24 +15,27 @@
  */
 package com.intellij.java.language.impl.psi.impl.source.tree.java;
 
-import javax.annotation.Nonnull;
-
+import com.intellij.java.language.impl.psi.impl.PsiImplUtil;
+import com.intellij.java.language.impl.psi.impl.source.Constants;
 import com.intellij.java.language.impl.psi.impl.source.tree.ChildRole;
 import com.intellij.java.language.impl.psi.impl.source.tree.ElementType;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaDocElementType;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
-import com.intellij.lang.ASTNode;
 import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiField;
-import com.intellij.java.language.impl.psi.impl.PsiImplUtil;
-import com.intellij.java.language.impl.psi.impl.source.Constants;
-import com.intellij.psi.impl.source.tree.*;
-import com.intellij.psi.tree.ChildRoleBase;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.util.CharTable;
+import consulo.language.ast.ASTNode;
+import consulo.language.ast.ChildRoleBase;
+import consulo.language.ast.IElementType;
+import consulo.language.impl.ast.ChangeUtil;
+import consulo.language.impl.ast.CompositeElement;
+import consulo.language.impl.ast.SharedImplUtil;
+import consulo.language.impl.ast.TreeUtil;
+import consulo.language.util.CharTable;
 
-public class FieldElement extends CompositeElement{
+import javax.annotation.Nonnull;
+
+public class FieldElement extends CompositeElement {
   public FieldElement() {
     super(Constants.FIELD);
   }
@@ -48,9 +51,9 @@ public class FieldElement extends CompositeElement{
 
   @Override
   public void deleteChildInternal(@Nonnull ASTNode child) {
-    if (getChildRole(child) == ChildRole.INITIALIZER){
+    if (getChildRole(child) == ChildRole.INITIALIZER) {
       ASTNode eq = findChildByRole(ChildRole.INITIALIZER_EQ);
-      if (eq != null){
+      if (eq != null) {
         deleteChildInternal(eq);
       }
     }
@@ -58,9 +61,9 @@ public class FieldElement extends CompositeElement{
   }
 
   @Override
-  public ASTNode findChildByRole(int role){
+  public ASTNode findChildByRole(int role) {
     assert (ChildRole.isUnique(role));
-    switch(role){
+    switch (role) {
       default:
         return null;
 
@@ -93,26 +96,19 @@ public class FieldElement extends CompositeElement{
     IElementType i = child.getElementType();
     if (i == JavaDocElementType.DOC_COMMENT) {
       return getChildRole(child, ChildRole.DOC_COMMENT);
-    }
-    else if (i == JavaTokenType.C_STYLE_COMMENT || i == JavaTokenType.END_OF_LINE_COMMENT) {
+    } else if (i == JavaTokenType.C_STYLE_COMMENT || i == JavaTokenType.END_OF_LINE_COMMENT) {
       return ChildRoleBase.NONE;
-    }
-    else if (i == JavaElementType.MODIFIER_LIST) {
+    } else if (i == JavaElementType.MODIFIER_LIST) {
       return ChildRole.MODIFIER_LIST;
-    }
-    else if (i == JavaElementType.TYPE) {
+    } else if (i == JavaElementType.TYPE) {
       return getChildRole(child, ChildRole.TYPE);
-    }
-    else if (i == JavaTokenType.IDENTIFIER) {
+    } else if (i == JavaTokenType.IDENTIFIER) {
       return getChildRole(child, ChildRole.NAME);
-    }
-    else if (i == JavaTokenType.EQ) {
+    } else if (i == JavaTokenType.EQ) {
       return getChildRole(child, ChildRole.INITIALIZER_EQ);
-    }
-    else if (i == JavaTokenType.SEMICOLON) {
+    } else if (i == JavaTokenType.SEMICOLON) {
       return getChildRole(child, ChildRole.CLOSING_SEMICOLON);
-    }
-    else {
+    } else {
       if (ElementType.EXPRESSION_BIT_SET.contains(child.getElementType())) {
         return ChildRole.INITIALIZER;
       }
@@ -120,10 +116,10 @@ public class FieldElement extends CompositeElement{
     }
   }
 
-   @Override
+  @Override
   public ASTNode copyElement() {
     final CharTable table = SharedImplUtil.findCharTableByTree(this);
-    final PsiClass psiClass = ((PsiField)getPsi()).getContainingClass();
+    final PsiClass psiClass = ((PsiField) getPsi()).getContainingClass();
     return psiClass != null ? ChangeUtil.copyElement(this, psiClass.getTypeParameterList(), table) : super.copyElement();
   }
 }

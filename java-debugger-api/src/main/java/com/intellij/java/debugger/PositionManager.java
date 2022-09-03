@@ -19,12 +19,13 @@ import java.util.List;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.intellij.java.debugger.engine.JSR45PositionManager;
 import com.intellij.java.debugger.engine.jdi.VirtualMachineProxy;
 import com.intellij.java.debugger.requests.ClassPrepareRequestor;
 import com.intellij.java.debugger.requests.RequestManager;
-import com.intellij.openapi.fileTypes.FileType;
+import consulo.virtualFileSystem.fileType.FileType;
 import consulo.internal.com.sun.jdi.Location;
 import consulo.internal.com.sun.jdi.ReferenceType;
 import consulo.internal.com.sun.jdi.request.ClassPrepareRequest;
@@ -44,8 +45,8 @@ public interface PositionManager
 	 * @return the corresponding source position.
 	 * @throws NoDataException if the location is not in the code managed by this {@code PositionManager}
 	 */
-	@javax.annotation.Nullable
-	SourcePosition getSourcePosition(@javax.annotation.Nullable Location location) throws NoDataException;
+	@Nullable
+	SourcePosition getSourcePosition(@Nullable Location location) throws NoDataException;
 
 	/**
 	 * Returns the list of all Java classes corresponding to the specified position in the source code.
@@ -80,7 +81,7 @@ public interface PositionManager
 	 * @return the prepare request, or null if the code is managed by this {@code PositionManager} but no class prepare notification is needed
 	 * @throws NoDataException if the position is not in the code managed by this {@code PositionManager}
 	 */
-	@javax.annotation.Nullable
+	@Nullable
 	ClassPrepareRequest createPrepareRequest(@Nonnull ClassPrepareRequestor requestor, @Nonnull SourcePosition position) throws NoDataException;
 
 	/**
@@ -88,7 +89,7 @@ public interface PositionManager
 	 *
 	 * @return set of accepted file types, or null if it accepts all
 	 */
-	@javax.annotation.Nullable
+	@Nullable
 	default Set<? extends FileType> getAcceptedFileTypes()
 	{
 		return null;

@@ -15,8 +15,8 @@
  */
 package com.intellij.java.debugger.impl.memory.action;
 
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.Presentation;
+import consulo.ui.ex.action.AnActionEvent;
+import consulo.ui.ex.action.Presentation;
 import consulo.internal.com.sun.jdi.ReferenceType;
 
 abstract class ShowInstancesAction extends ClassesActionBase

@@ -19,12 +19,12 @@
  */
 package com.intellij.java.impl.lang.java;
 
-import com.intellij.lang.WordCompletionElementFilter;
+import consulo.language.editor.completion.WordCompletionElementFilter;
 import com.intellij.java.language.psi.JavaDocTokenType;
 import com.intellij.java.language.psi.JavaTokenType;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.tree.TokenSet;
-import consulo.lang.LanguageVersion;
+import consulo.language.ast.IElementType;
+import consulo.language.ast.TokenSet;
+import consulo.language.version.LanguageVersion;
 
 public class JavaWordCompletionFilter implements WordCompletionElementFilter {
   private static final TokenSet ENABLED_TOKENS = TokenSet.create(JavaTokenType.C_STYLE_COMMENT, JavaTokenType.END_OF_LINE_COMMENT,

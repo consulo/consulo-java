@@ -16,9 +16,11 @@
 package com.intellij.java.impl.psi.filters;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.filters.FilterPositionUtil;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.filter.FilterPositionUtil;
+import consulo.language.psi.util.PsiTreeUtil;
+
+import javax.annotation.Nullable;
 
 /**
  * Created by IntelliJ IDEA.
@@ -31,7 +33,7 @@ public class FilterUtil {
   private FilterUtil() {
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public static PsiType getTypeByElement(PsiElement element, PsiElement context) {
     //if(!element.isValid()) return null;
     if (element instanceof PsiType) {
@@ -84,7 +86,7 @@ public class FilterUtil {
     return null;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public static PsiElement getPreviousElement(final PsiElement element, boolean skipReference) {
     PsiElement prev = element;
     if (element != null) {

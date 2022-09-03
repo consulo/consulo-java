@@ -15,12 +15,12 @@
  */
 package com.intellij.java.impl.refactoring.openapi.impl;
 
-import com.intellij.openapi.project.Project;
+import consulo.project.Project;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiMember;
 import com.intellij.java.impl.refactoring.MoveMembersRefactoring;
-import com.intellij.refactoring.RefactoringImpl;
+import consulo.language.editor.refactoring.RefactoringImpl;
 import com.intellij.java.impl.refactoring.move.moveMembers.MoveMembersOptions;
 import com.intellij.java.impl.refactoring.move.moveMembers.MoveMembersProcessor;
 

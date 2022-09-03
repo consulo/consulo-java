@@ -24,22 +24,22 @@ import com.intellij.java.impl.codeInsight.generation.GetterSetterPrototypeProvid
 import com.intellij.java.impl.codeInsight.intention.impl.SplitDeclarationAction;
 import com.intellij.java.language.psi.*;
 import consulo.logging.Logger;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Pair;
+import consulo.project.Project;
+import consulo.util.lang.Pair;
 import com.intellij.psi.*;
 import com.intellij.java.analysis.impl.psi.controlFlow.DefUseUtil;
 import com.intellij.java.language.impl.psi.impl.PsiSubstitutorImpl;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.search.searches.ReferencesSearch;
-import com.intellij.psi.tree.IElementType;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.search.ReferencesSearch;
+import consulo.language.ast.IElementType;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PropertyUtil;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import com.intellij.java.impl.refactoring.typeMigration.usageInfo.TypeMigrationUsageInfo;
-import com.intellij.util.CommonProcessors;
-import com.intellij.util.IncorrectOperationException;
+import consulo.application.util.function.CommonProcessors;
+import consulo.language.util.IncorrectOperationException;
 
 /**
  * @author anna

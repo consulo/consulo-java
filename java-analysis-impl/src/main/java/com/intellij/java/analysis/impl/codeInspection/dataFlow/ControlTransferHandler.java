@@ -21,9 +21,9 @@ import com.intellij.java.language.psi.PsiCatchSection;
 import com.intellij.java.language.psi.PsiDisjunctionType;
 import com.intellij.java.language.psi.PsiParameter;
 import com.intellij.java.language.psi.PsiType;
-import com.intellij.util.ObjectUtil;
-import com.intellij.util.containers.ContainerUtil;
-import com.intellij.util.containers.FList;
+import consulo.util.lang.ObjectUtil;
+import consulo.util.collection.ContainerUtil;
+import consulo.util.collection.FList;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;

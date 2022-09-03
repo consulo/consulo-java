@@ -17,11 +17,11 @@ package com.intellij.java.impl.refactoring.removemiddleman;
 
 import com.intellij.java.impl.codeInsight.generation.GenerateMembersUtil;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Ref;
+import consulo.project.Project;
+import consulo.util.lang.ref.Ref;
 import com.intellij.psi.*;
-import com.intellij.psi.presentation.java.SymbolPresentationUtil;
-import com.intellij.psi.search.searches.ReferencesSearch;
+import consulo.language.psi.util.SymbolPresentationUtil;
+import consulo.language.psi.search.ReferencesSearch;
 import com.intellij.java.language.psi.util.PropertyUtil;
 import com.intellij.java.impl.refactoring.RefactorJBundle;
 import com.intellij.java.impl.refactoring.removemiddleman.usageInfo.DeleteMethod;
@@ -29,10 +29,10 @@ import com.intellij.java.impl.refactoring.removemiddleman.usageInfo.InlineDelega
 import com.intellij.java.impl.refactoring.util.FixableUsageInfo;
 import com.intellij.java.impl.refactoring.util.FixableUsagesRefactoringProcessor;
 import com.intellij.java.impl.refactoring.util.classMembers.MemberInfo;
-import com.intellij.usageView.UsageInfo;
-import com.intellij.usageView.UsageViewDescriptor;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.containers.MultiMap;
+import consulo.usage.UsageInfo;
+import consulo.usage.UsageViewDescriptor;
+import consulo.language.util.IncorrectOperationException;
+import consulo.util.collection.MultiMap;
 import consulo.logging.Logger;
 
 import javax.annotation.Nonnull;

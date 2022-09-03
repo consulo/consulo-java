@@ -15,8 +15,8 @@
  */
 package com.intellij.java.debugger.impl.ui.tree.render;
 
-import com.intellij.openapi.options.ConfigurationException;
-import com.intellij.openapi.options.UnnamedConfigurable;
+import consulo.configurable.ConfigurationException;
+import consulo.configurable.UnnamedConfigurable;
 
 import javax.swing.*;
 import java.awt.*;

@@ -16,16 +16,17 @@
 package com.intellij.java.impl.refactoring.move.moveClassesOrPackages;
 
 import com.intellij.java.language.psi.PsiJavaPackage;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.project.Project;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.java.impl.refactoring.PackageWrapper;
 import com.intellij.java.impl.refactoring.util.RefactoringUtil;
-import com.intellij.usageView.UsageInfo;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.containers.MultiMap;
+import consulo.usage.UsageInfo;
+import consulo.language.util.IncorrectOperationException;
+import consulo.util.collection.MultiMap;
 import consulo.logging.Logger;
 
+import javax.annotation.Nullable;
 import java.util.Collection;
 
 /**
@@ -71,7 +72,7 @@ public class MultipleRootsMoveDestination extends AutocreatingMoveDestination {
     return checkCanCreateInSourceRoot(sourceRootForFile);
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public String verify(PsiDirectory source) {
     VirtualFile virtualFile = source.getVirtualFile();
     final VirtualFile sourceRootForFile = myFileIndex.getSourceRootForFile(virtualFile);
@@ -82,7 +83,7 @@ public class MultipleRootsMoveDestination extends AutocreatingMoveDestination {
     return checkCanCreateInSourceRoot(sourceRootForFile);
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public String verify(PsiJavaPackage source) {
     PsiDirectory[] directories = source.getDirectories();
     for (final PsiDirectory directory : directories) {

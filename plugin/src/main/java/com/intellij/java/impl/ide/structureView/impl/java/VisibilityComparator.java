@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ide.structureView.impl.java;
 
-import com.intellij.ide.util.treeView.AlphaComparator;
+import consulo.ui.ex.tree.AlphaComparator;
 import com.intellij.java.impl.ide.util.treeView.SourceComparator;
 import consulo.logging.Logger;
 

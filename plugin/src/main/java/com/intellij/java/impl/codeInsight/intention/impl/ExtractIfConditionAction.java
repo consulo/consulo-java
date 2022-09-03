@@ -16,19 +16,20 @@
 package com.intellij.java.impl.codeInsight.intention.impl;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-import com.intellij.codeInsight.CodeInsightBundle;
-import com.intellij.codeInsight.intention.PsiElementBaseIntentionAction;
+import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.intention.PsiElementBaseIntentionAction;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.TextRange;
+import consulo.codeEditor.Editor;
+import consulo.project.Project;
+import consulo.document.util.TextRange;
 import com.intellij.psi.*;
-import com.intellij.psi.codeStyle.CodeStyleManager;
-import com.intellij.psi.tree.IElementType;
+import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.ast.IElementType;
 import com.intellij.java.language.psi.util.PsiExpressionTrimRenderer;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
 
 /**
  * @author Danila Ponomarenko
@@ -86,7 +87,7 @@ public class ExtractIfConditionAction extends PsiElementBaseIntentionAction {
     ifStatement.replace(codeStyleManager.reformat(newIfStatement));
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private static PsiStatement create(@Nonnull PsiElementFactory factory,
                                      @Nonnull PsiIfStatement ifStatement,
                                      @Nonnull PsiElement element) {
@@ -131,10 +132,10 @@ public class ExtractIfConditionAction extends PsiElementBaseIntentionAction {
     return factory.createExpressionFromText(sb.toString(), expression);
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private static PsiStatement create(@Nonnull PsiElementFactory factory,
-                                     @javax.annotation.Nullable PsiStatement thenBranch,
-                                     @javax.annotation.Nullable PsiStatement elseBranch,
+                                     @Nullable PsiStatement thenBranch,
+                                     @Nullable PsiStatement elseBranch,
                                      @Nonnull PsiExpression extract,
                                      @Nonnull PsiExpression leave,
                                      @Nonnull IElementType operation) {
@@ -155,7 +156,7 @@ public class ExtractIfConditionAction extends PsiElementBaseIntentionAction {
   @Nonnull
   private static PsiStatement createAndAnd(@Nonnull PsiElementFactory factory,
                                            @Nonnull PsiStatement thenBranch,
-                                           @javax.annotation.Nullable PsiStatement elseBranch,
+                                           @Nullable PsiStatement elseBranch,
                                            @Nonnull PsiExpression extract,
                                            @Nonnull PsiExpression leave) {
 
@@ -171,7 +172,7 @@ public class ExtractIfConditionAction extends PsiElementBaseIntentionAction {
   @Nonnull
   private static PsiStatement createOrOr(@Nonnull PsiElementFactory factory,
                                          @Nonnull PsiStatement thenBranch,
-                                         @javax.annotation.Nullable PsiStatement elseBranch,
+                                         @Nullable PsiStatement elseBranch,
                                          @Nonnull PsiExpression extract,
                                          @Nonnull PsiExpression leave) {
 
@@ -186,28 +187,28 @@ public class ExtractIfConditionAction extends PsiElementBaseIntentionAction {
   @Nonnull
   private static String createIfString(@Nonnull PsiExpression condition,
                                        @Nonnull PsiStatement thenBranch,
-                                       @javax.annotation.Nullable PsiStatement elseBranch) {
+                                       @Nullable PsiStatement elseBranch) {
     return createIfString(condition.getText(), toThenBranchString(thenBranch), toElseBranchString(elseBranch));
   }
 
   @Nonnull
   private static String createIfString(@Nonnull PsiExpression condition,
                                        @Nonnull PsiStatement thenBranch,
-                                       @javax.annotation.Nullable String elseBranch) {
+                                       @Nullable String elseBranch) {
     return createIfString(condition.getText(), toThenBranchString(thenBranch), elseBranch);
   }
 
   @Nonnull
   private static String createIfString(@Nonnull PsiExpression condition,
                                        @Nonnull String thenBranch,
-                                       @javax.annotation.Nullable PsiStatement elseBranch) {
+                                       @Nullable PsiStatement elseBranch) {
     return createIfString(condition.getText(), thenBranch, toElseBranchString(elseBranch));
   }
 
   @Nonnull
   private static String createIfString(@Nonnull String condition,
                                        @Nonnull String thenBranch,
-                                       @javax.annotation.Nullable String elseBranch) {
+                                       @Nullable String elseBranch) {
     final String elsePart = elseBranch != null ? " else " + elseBranch : "";
     return "if (" + condition + ")\n" + thenBranch + elsePart;
   }
@@ -221,8 +222,8 @@ public class ExtractIfConditionAction extends PsiElementBaseIntentionAction {
     return statement.getText();
   }
 
-  @javax.annotation.Nullable
-  private static String toElseBranchString(@javax.annotation.Nullable PsiStatement statement) {
+  @Nullable
+  private static String toElseBranchString(@Nullable PsiStatement statement) {
     if (statement == null) {
       return null;
     }
@@ -234,7 +235,7 @@ public class ExtractIfConditionAction extends PsiElementBaseIntentionAction {
     return "{ " + statement.getText() + " }";
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private static PsiExpression findOperand(@Nonnull PsiElement e, @Nonnull PsiPolyadicExpression expression) {
     final TextRange elementTextRange = e.getTextRange();
 

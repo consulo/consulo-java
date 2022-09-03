@@ -17,9 +17,9 @@
 package consulo.java.impl.ide.newProjectOrModule;
 
 import com.intellij.java.language.projectRoots.JavaSdk;
-import com.intellij.openapi.projectRoots.SdkTable;
-import consulo.bundle.ui.BundleBox;
-import consulo.bundle.ui.BundleBoxBuilder;
+import consulo.content.bundle.SdkTable;
+import consulo.module.ui.BundleBox;
+import consulo.module.ui.BundleBoxBuilder;
 import consulo.disposer.Disposable;
 import consulo.ide.newProject.ui.UnifiedProjectOrModuleNameStep;
 import consulo.localize.LocalizeValue;

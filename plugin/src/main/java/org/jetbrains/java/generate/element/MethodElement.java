@@ -15,7 +15,7 @@
  */
 package org.jetbrains.java.generate.element;
 
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.util.lang.StringUtil;
 
 /**
  * This is a method element containing information about the method.

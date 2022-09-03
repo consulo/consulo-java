@@ -2,11 +2,11 @@
 package com.intellij.java.impl.psi.codeStyle;
 
 import javax.annotation.Nonnull;
-import com.intellij.application.options.CodeStyleBean;
-import com.intellij.formatting.BraceStyle;
-import com.intellij.formatting.ForceBraces;
-import com.intellij.formatting.WrapType;
-import com.intellij.lang.Language;
+import consulo.language.codeStyle.setting.CodeStyleBean;
+import consulo.ide.impl.idea.formatting.BraceStyle;
+import consulo.ide.impl.idea.formatting.ForceBraces;
+import consulo.language.codeStyle.WrapType;
+import consulo.language.Language;
 import com.intellij.java.language.JavaLanguage;
 
 public class JavaCodeStyleBean extends CodeStyleBean

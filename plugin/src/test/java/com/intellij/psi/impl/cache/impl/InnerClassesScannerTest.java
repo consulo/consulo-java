@@ -7,21 +7,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.intellij.java.language.impl.JavaParserDefinition;
-import com.intellij.lexer.FilterLexer;
-import com.intellij.lexer.Lexer;
-import com.intellij.openapi.util.Ref;
-import com.intellij.openapi.util.TextRange;
+import consulo.language.lexer.FilterLexer;
+import consulo.language.lexer.Lexer;
+import consulo.util.lang.ref.Ref;
+import consulo.document.util.TextRange;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.psi.JavaRecursiveElementWalkingVisitor;
 import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
 import com.intellij.java.language.psi.PsiJavaFile;
 import com.intellij.java.language.psi.PsiTypeParameter;
 import com.intellij.java.language.impl.psi.impl.source.PsiJavaFileImpl;
 import com.intellij.java.impl.psi.impl.source.tree.StdTokenSets;
-import com.intellij.psi.tree.IElementType;
+import consulo.language.ast.IElementType;
 import com.intellij.testFramework.PsiTestCase;
 
 /**

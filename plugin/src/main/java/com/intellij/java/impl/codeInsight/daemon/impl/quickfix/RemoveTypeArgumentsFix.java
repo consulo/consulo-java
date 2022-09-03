@@ -18,13 +18,13 @@ package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.intellij.codeInsight.intention.HighPriorityAction;
-import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement;
+import consulo.language.editor.intention.HighPriorityAction;
+import consulo.language.editor.inspection.LocalQuickFixAndIntentionActionOnPsiElement;
 import consulo.logging.Logger;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
+import consulo.codeEditor.Editor;
+import consulo.project.Project;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
 import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
 import com.intellij.java.language.psi.PsiReferenceParameterList;
 import com.intellij.java.language.psi.PsiTypeElement;
@@ -37,7 +37,7 @@ import com.intellij.java.language.psi.PsiVariable;
 public class RemoveTypeArgumentsFix extends LocalQuickFixAndIntentionActionOnPsiElement implements HighPriorityAction {
   private static final Logger LOGGER = Logger.getInstance(RemoveTypeArgumentsFix.class);
 
-  public RemoveTypeArgumentsFix(@javax.annotation.Nullable PsiElement element) {
+  public RemoveTypeArgumentsFix(@Nullable PsiElement element) {
     super(element);
   }
 

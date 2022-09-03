@@ -16,8 +16,8 @@
 package com.intellij.java.language.impl.util.text;
 
 import com.intellij.java.language.psi.PsiType;
-import com.intellij.openapi.util.text.CharFilter;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.util.lang.CharFilter;
+import consulo.util.lang.StringUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

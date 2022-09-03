@@ -15,10 +15,10 @@
  */
 package com.intellij.java.impl.ide.macro;
 
-import com.intellij.ide.IdeBundle;
-import com.intellij.ide.macro.Macro;
+import consulo.ide.IdeBundle;
+import consulo.pathMacro.Macro;
 import com.intellij.java.language.psi.PsiJavaPackage;
-import com.intellij.openapi.actionSystem.DataContext;
+import consulo.dataContext.DataContext;
 
 public class FileFQPackage extends Macro {
   public String expand(DataContext dataContext) {

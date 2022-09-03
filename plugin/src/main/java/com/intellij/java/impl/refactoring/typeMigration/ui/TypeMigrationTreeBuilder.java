@@ -1,15 +1,16 @@
 // Copyright 2000-2017 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.impl.refactoring.typeMigration.ui;
 
+import javax.annotation.Nullable;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeModel;
 
-import com.intellij.ide.util.treeView.AbstractTreeBuilder;
-import com.intellij.ide.util.treeView.AlphaComparator;
-import com.intellij.ide.util.treeView.NodeDescriptor;
-import com.intellij.openapi.progress.ProgressIndicator;
-import com.intellij.openapi.progress.util.StatusBarProgress;
-import com.intellij.openapi.project.Project;
+import consulo.ui.ex.awt.tree.AbstractTreeBuilder;
+import consulo.ui.ex.tree.AlphaComparator;
+import consulo.ui.ex.tree.NodeDescriptor;
+import consulo.application.progress.ProgressIndicator;
+import consulo.ide.impl.idea.openapi.progress.util.StatusBarProgress;
+import consulo.project.Project;
 
 /**
  * @author anna
@@ -33,7 +34,7 @@ public class TypeMigrationTreeBuilder extends AbstractTreeBuilder
 		((TypeMigrationTreeStructure) getTreeStructure()).setRoots(root);
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	@Override
 	protected ProgressIndicator createProgressIndicator()
 	{

@@ -15,9 +15,9 @@
  */
 package com.intellij.java.impl.codeInspection.visibility;
 
-import com.intellij.codeInspection.ProblemDescriptionsProcessor;
-import com.intellij.codeInspection.reference.RefManager;
-import com.intellij.openapi.extensions.ExtensionPointName;
+import consulo.language.editor.inspection.ProblemDescriptionsProcessor;
+import consulo.language.editor.inspection.reference.RefManager;
+import consulo.component.extension.ExtensionPointName;
 
 public interface VisibilityExtension {
   ExtensionPointName<VisibilityExtension> EP_NAME = ExtensionPointName.create("consulo.java.visibility");

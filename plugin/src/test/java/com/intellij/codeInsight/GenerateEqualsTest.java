@@ -1,6 +1,6 @@
 package com.intellij.codeInsight;
 
-import com.intellij.openapi.projectRoots.Sdk;
+import consulo.content.bundle.Sdk;
 import com.intellij.testFramework.IdeaTestUtil;
 
 /**

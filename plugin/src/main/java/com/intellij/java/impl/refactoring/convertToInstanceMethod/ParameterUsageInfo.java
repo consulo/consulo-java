@@ -15,8 +15,8 @@
  */
 package com.intellij.java.impl.refactoring.convertToInstanceMethod;
 
-import com.intellij.psi.PsiReference;
-import com.intellij.usageView.UsageInfo;
+import consulo.language.psi.PsiReference;
+import consulo.usage.UsageInfo;
 
 /**
  * @author dsl

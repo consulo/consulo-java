@@ -1,13 +1,19 @@
 package com.intellij.java.execution.impl.junit;
 
 import com.intellij.java.execution.impl.JavaRunConfigurationExtensionManager;
-import com.intellij.execution.RunnerAndConfigurationSettings;
-import com.intellij.execution.actions.ConfigurationContext;
-import com.intellij.execution.actions.ConfigurationFromContext;
-import com.intellij.execution.actions.RunConfigurationProducer;
+import consulo.execution.RunnerAndConfigurationSettings;
+import consulo.execution.action.ConfigurationContext;
+import consulo.execution.action.ConfigurationFromContext;
+import consulo.execution.action.RunConfigurationProducer;
 import com.intellij.execution.configurations.*;
-import com.intellij.execution.testframework.TestSearchScope;
-import com.intellij.openapi.module.Module;
+import consulo.execution.test.TestSearchScope;
+import consulo.module.Module;
+import consulo.execution.configuration.ConfigurationFactory;
+import consulo.execution.configuration.ConfigurationType;
+import consulo.execution.configuration.ModuleBasedConfiguration;
+import consulo.execution.configuration.RunConfigurationBase;
+
+import javax.annotation.Nullable;
 
 /**
  * @author yole
@@ -21,7 +27,7 @@ public abstract class JavaRunConfigurationProducerBase<T extends ModuleBasedConf
     super(configurationType);
   }
 
-  protected boolean setupConfigurationModule(@javax.annotation.Nullable ConfigurationContext context, T configuration) {
+  protected boolean setupConfigurationModule(@Nullable ConfigurationContext context, T configuration) {
     if (context != null) {
       final RunnerAndConfigurationSettings template = context.getRunManager().getConfigurationTemplate(getConfigurationFactory());
       final Module contextModule = context.getModule();
@@ -57,7 +63,7 @@ public abstract class JavaRunConfigurationProducerBase<T extends ModuleBasedConf
     return scope;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   @Override
   public ConfigurationFromContext createConfigurationFromContext(ConfigurationContext context) {
     ConfigurationFromContext fromContext = super.createConfigurationFromContext(context);

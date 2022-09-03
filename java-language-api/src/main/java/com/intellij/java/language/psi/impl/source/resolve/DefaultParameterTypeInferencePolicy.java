@@ -16,12 +16,13 @@
 package com.intellij.java.language.psi.impl.source.resolve;
 
 import javax.annotation.Nullable;
-import com.intellij.openapi.util.Pair;
+
+import consulo.language.psi.PsiManager;
+import consulo.util.lang.Pair;
 import com.intellij.java.language.psi.ConstraintType;
 import com.intellij.java.language.psi.PsiCallExpression;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiExpressionList;
-import com.intellij.psi.PsiManager;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.PsiTypeParameter;
 

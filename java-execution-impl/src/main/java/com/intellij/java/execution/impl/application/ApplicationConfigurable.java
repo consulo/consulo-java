@@ -15,25 +15,25 @@
  */
 package com.intellij.java.execution.impl.application;
 
-import com.intellij.application.options.ModuleDescriptionsComboBox;
-import com.intellij.execution.ExecutionBundle;
+import consulo.module.ui.awt.ModuleDescriptionsComboBox;
+import consulo.execution.ExecutionBundle;
 import com.intellij.java.execution.CommonJavaRunConfigurationParameters;
 import com.intellij.java.execution.JavaExecutionUtil;
 import com.intellij.java.execution.ShortenCommandLine;
 import com.intellij.java.execution.configurations.ConfigurationUtil;
 import com.intellij.java.execution.impl.ui.*;
 import com.intellij.java.execution.impl.util.JreVersionDetector;
-import com.intellij.openapi.options.ConfigurationException;
-import com.intellij.openapi.options.SettingsEditor;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.LabeledComponent;
+import consulo.configurable.ConfigurationException;
+import consulo.execution.configuration.ui.SettingsEditor;
+import consulo.project.Project;
+import consulo.ui.ex.awt.JBCheckBox;
+import consulo.ui.ex.awt.LabeledComponent;
 import com.intellij.java.language.psi.JavaCodeFragment;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.util.PsiMethodUtil;
 import com.intellij.java.language.impl.ui.EditorTextFieldWithBrowseButton;
-import com.intellij.ui.components.JBCheckBox;
-import com.intellij.util.ui.UIUtil;
+import consulo.ui.ex.awt.UIUtil;
 import consulo.java.execution.JavaExecutionBundle;
 
 import javax.annotation.Nonnull;

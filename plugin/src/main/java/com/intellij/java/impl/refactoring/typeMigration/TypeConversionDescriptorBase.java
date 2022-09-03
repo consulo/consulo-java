@@ -16,11 +16,12 @@
 package com.intellij.java.impl.refactoring.typeMigration;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.impl.refactoring.typeMigration.usageInfo.TypeMigrationUsageInfo;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
 
 public class TypeConversionDescriptorBase
 {
@@ -43,7 +44,7 @@ public class TypeConversionDescriptorBase
 	/**
 	 * @return converted expression type or null if not known
 	 */
-	@javax.annotation.Nullable
+	@Nullable
 	public PsiType conversionType()
 	{
 		return null;

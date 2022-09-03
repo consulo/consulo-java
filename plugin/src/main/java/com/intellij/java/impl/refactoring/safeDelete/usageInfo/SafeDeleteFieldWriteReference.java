@@ -20,9 +20,9 @@ import com.intellij.java.language.psi.PsiAssignmentExpression;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiExpressionStatement;
 import com.intellij.java.language.psi.PsiField;
-import com.intellij.psi.PsiElement;
-import com.intellij.refactoring.safeDelete.usageInfo.SafeDeleteReferenceUsageInfo;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.psi.PsiElement;
+import consulo.language.editor.refactoring.safeDelete.usageInfo.SafeDeleteReferenceUsageInfo;
+import consulo.language.util.IncorrectOperationException;
 
 /**
  * @author dsl

@@ -16,15 +16,16 @@
 package com.intellij.java.impl.ig.threading;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.swing.JComponent;
 
-import com.intellij.codeInspection.ProblemDescriptor;
-import com.intellij.codeInspection.ui.SingleCheckboxOptionsPanel;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.project.Project;
+import consulo.project.Project;
 import com.intellij.psi.*;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.ast.IElementType;
+import consulo.language.util.IncorrectOperationException;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
@@ -55,7 +56,7 @@ public class DoubleCheckedLockingInspection extends BaseInspection {
   }
 
   @Override
-  @javax.annotation.Nullable
+  @Nullable
   public JComponent createOptionsPanel() {
     return new SingleCheckboxOptionsPanel(InspectionGadgetsBundle.message(
       "double.checked.locking.ignore.on.volatiles.option"), this,
@@ -155,7 +156,7 @@ public class DoubleCheckedLockingInspection extends BaseInspection {
       registerStatementError(statement, field);
     }
 
-    @javax.annotation.Nullable
+    @Nullable
     private PsiField findCheckedField(PsiExpression expression) {
       if (expression instanceof PsiReferenceExpression) {
         final PsiReferenceExpression referenceExpression =

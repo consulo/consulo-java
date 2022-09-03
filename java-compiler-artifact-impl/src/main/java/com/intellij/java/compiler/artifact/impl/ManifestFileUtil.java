@@ -16,49 +16,50 @@
 
 package com.intellij.java.compiler.artifact.impl;
 
-import com.intellij.CommonBundle;
+import consulo.application.CommonBundle;
 import com.intellij.java.language.util.ClassFilter;
 import com.intellij.java.language.util.TreeClassChooser;
 import com.intellij.java.language.util.TreeClassChooserFactory;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.application.WriteAction;
-import com.intellij.openapi.deployment.DeploymentUtil;
+import consulo.application.ApplicationManager;
+import consulo.application.WriteAction;
+import consulo.fileChooser.FileChooserDescriptor;
+import consulo.fileChooser.FileChooserDescriptorFactory;
+import consulo.ide.impl.idea.openapi.deployment.DeploymentUtil;
 import consulo.logging.Logger;
-import com.intellij.openapi.fileChooser.FileChooser;
-import com.intellij.openapi.fileChooser.FileChooserDescriptor;
-import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.OrderEnumerator;
-import com.intellij.openapi.roots.ProjectRootManager;
-import com.intellij.openapi.ui.Messages;
-import com.intellij.openapi.ui.TextFieldWithBrowseButton;
-import com.intellij.openapi.util.Computable;
-import com.intellij.openapi.util.Ref;
-import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.VfsUtil;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.packaging.artifacts.ArtifactType;
-import com.intellij.packaging.elements.CompositePackagingElement;
-import com.intellij.packaging.elements.PackagingElement;
-import com.intellij.packaging.elements.PackagingElementFactory;
-import com.intellij.packaging.elements.PackagingElementResolvingContext;
-import com.intellij.packaging.impl.artifacts.ArtifactUtil;
-import com.intellij.packaging.impl.artifacts.PackagingElementPath;
-import com.intellij.packaging.impl.artifacts.PackagingElementProcessor;
-import com.intellij.packaging.impl.elements.ArchivePackagingElement;
-import com.intellij.packaging.impl.elements.DirectoryCopyPackagingElement;
-import com.intellij.packaging.impl.elements.FileCopyPackagingElement;
-import com.intellij.packaging.ui.ArtifactEditorContext;
+import consulo.ui.ex.awt.TextFieldWithBrowseButton;
+import consulo.ui.fileChooser.FileChooser;
+import consulo.module.Module;
+import consulo.project.Project;
+import consulo.module.content.layer.OrderEnumerator;
+import consulo.module.content.ProjectRootManager;
+import consulo.ui.ex.awt.Messages;
+import consulo.application.util.function.Computable;
+import consulo.util.lang.ref.Ref;
+import consulo.ide.impl.idea.openapi.util.io.FileUtil;
+import consulo.util.lang.StringUtil;
+import consulo.ide.impl.idea.openapi.vfs.VfsUtil;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.compiler.artifact.ArtifactType;
+import consulo.compiler.artifact.element.CompositePackagingElement;
+import consulo.compiler.artifact.element.PackagingElement;
+import consulo.compiler.artifact.element.PackagingElementFactory;
+import consulo.compiler.artifact.element.PackagingElementResolvingContext;
+import consulo.ide.impl.idea.packaging.impl.artifacts.ArtifactUtil;
+import consulo.ide.impl.idea.packaging.impl.artifacts.PackagingElementPath;
+import consulo.ide.impl.idea.packaging.impl.artifacts.PackagingElementProcessor;
+import consulo.ide.impl.idea.packaging.impl.elements.ArchivePackagingElement;
+import consulo.ide.impl.idea.packaging.impl.elements.DirectoryCopyPackagingElement;
+import consulo.ide.impl.idea.packaging.impl.elements.FileCopyPackagingElement;
+import consulo.compiler.artifact.ui.ArtifactEditorContext;
 import com.intellij.java.compiler.artifact.impl.ui.ManifestFileConfiguration;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.java.language.psi.util.PsiMethodUtil;
 import com.intellij.util.PathUtil;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -85,13 +86,13 @@ public class ManifestFileUtil
 	{
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public static VirtualFile findManifestFile(@Nonnull CompositePackagingElement<?> root, PackagingElementResolvingContext context, ArtifactType artifactType)
 	{
-		return ArtifactUtil.findSourceFileByOutputPath(root, MANIFEST_PATH, context, artifactType);
+		return consulo.ide.impl.idea.packaging.impl.artifacts.ArtifactUtil.findSourceFileByOutputPath(root, MANIFEST_PATH, context, artifactType);
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public static VirtualFile suggestManifestFileDirectory(@Nonnull CompositePackagingElement<?> root, PackagingElementResolvingContext context, ArtifactType artifactType)
 	{
 		final VirtualFile metaInfDir = ArtifactUtil.findSourceFileByOutputPath(root, MANIFEST_DIR_NAME, context, artifactType);
@@ -138,8 +139,8 @@ public class ManifestFileUtil
 		return suggestBaseDir(project, sourceFile.get());
 	}
 
-	@javax.annotation.Nullable
-	public static VirtualFile suggestManifestFileDirectory(@Nonnull Project project, @javax.annotation.Nullable Module module)
+	@Nullable
+	public static VirtualFile suggestManifestFileDirectory(@Nonnull Project project, @Nullable Module module)
 	{
 		OrderEnumerator enumerator = module != null ? OrderEnumerator.orderEntries(module) : OrderEnumerator.orderEntries(project);
 		final VirtualFile[] files = enumerator.withoutDepModules().withoutLibraries().withoutSdk().productionOnly().sources().getRoots();
@@ -151,8 +152,8 @@ public class ManifestFileUtil
 	}
 
 
-	@javax.annotation.Nullable
-	private static VirtualFile suggestBaseDir(@Nonnull Project project, final @javax.annotation.Nullable VirtualFile file)
+	@Nullable
+	private static VirtualFile suggestBaseDir(@Nonnull Project project, final @Nullable VirtualFile file)
 	{
 		final VirtualFile[] contentRoots = ProjectRootManager.getInstance(project).getContentRoots();
 		if(file == null && contentRoots.length > 0)
@@ -197,8 +198,8 @@ public class ManifestFileUtil
 	}
 
 	public static void updateManifest(@Nonnull VirtualFile file,
-									  final @javax.annotation.Nullable String mainClass,
-									  final @javax.annotation.Nullable List<String> classpath,
+									  final @Nullable String mainClass,
+									  final @Nullable List<String> classpath,
 									  final boolean replaceValues)
 	{
 		final Manifest manifest = readManifest(file);
@@ -286,16 +287,16 @@ public class ManifestFileUtil
 			@Override
 			public boolean process(@Nonnull PackagingElement<?> element, @Nonnull PackagingElementPath path)
 			{
-				if(element instanceof FileCopyPackagingElement)
+				if(element instanceof consulo.ide.impl.idea.packaging.impl.elements.FileCopyPackagingElement)
 				{
-					final String fileName = ((FileCopyPackagingElement) element).getOutputFileName();
+					final String fileName = ((consulo.ide.impl.idea.packaging.impl.elements.FileCopyPackagingElement) element).getOutputFileName();
 					classpath.add(DeploymentUtil.appendToPath(path.getPathString(), fileName));
 				}
 				else if(element instanceof DirectoryCopyPackagingElement)
 				{
 					classpath.add(path.getPathString());
 				}
-				else if(element instanceof ArchivePackagingElement)
+				else if(element instanceof consulo.ide.impl.idea.packaging.impl.elements.ArchivePackagingElement)
 				{
 					final String archiveName = ((ArchivePackagingElement) element).getName();
 					classpath.add(DeploymentUtil.appendToPath(path.getPathString(), archiveName));
@@ -310,12 +311,12 @@ public class ManifestFileUtil
 		return classpath;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public static VirtualFile showDialogAndCreateManifest(final ArtifactEditorContext context, final CompositePackagingElement<?> element)
 	{
 		FileChooserDescriptor descriptor = createDescriptorForManifestDirectory();
 		final VirtualFile directory = suggestManifestFileDirectory(element, context, context.getArtifactType());
-		final VirtualFile file = FileChooser.chooseFile(descriptor, context.getProject(), directory);
+		final VirtualFile file = consulo.ui.fileChooser.FileChooser.chooseFile(descriptor, context.getProject(), directory);
 		if(file == null)
 		{
 			return null;
@@ -324,7 +325,7 @@ public class ManifestFileUtil
 		return createManifestFile(file, context.getProject());
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public static VirtualFile createManifestFile(final @Nonnull VirtualFile directory, final @Nonnull Project project)
 	{
 		ApplicationManager.getApplication().assertIsDispatchThread();
@@ -385,8 +386,8 @@ public class ManifestFileUtil
 		});
 	}
 
-	@javax.annotation.Nullable
-	public static PsiClass selectMainClass(Project project, final @javax.annotation.Nullable String initialClassName)
+	@Nullable
+	public static PsiClass selectMainClass(Project project, final @Nullable String initialClassName)
 	{
 		final TreeClassChooserFactory chooserFactory = TreeClassChooserFactory.getInstance(project);
 		final GlobalSearchScope searchScope = GlobalSearchScope.allScope(project);

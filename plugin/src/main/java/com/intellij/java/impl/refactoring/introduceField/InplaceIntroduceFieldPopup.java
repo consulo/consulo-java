@@ -16,19 +16,19 @@
 package com.intellij.java.impl.refactoring.introduceField;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.application.Result;
-import com.intellij.openapi.command.WriteCommandAction;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Computable;
+import consulo.application.ApplicationManager;
+import consulo.application.Result;
+import consulo.language.editor.WriteCommandAction;
+import consulo.codeEditor.Editor;
+import consulo.project.Project;
+import consulo.application.util.function.Computable;
 import com.intellij.psi.*;
-import com.intellij.psi.codeStyle.SuggestedNameInfo;
+import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
 import com.intellij.java.language.psi.util.PsiExpressionTrimRenderer;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.impl.refactoring.JavaRefactoringSettings;
-import com.intellij.refactoring.RefactoringActionHandler;
+import consulo.language.editor.refactoring.action.RefactoringActionHandler;
 import com.intellij.java.impl.refactoring.ui.TypeSelectorManagerImpl;
 import com.intellij.java.impl.refactoring.util.occurrences.OccurrenceManager;
 import javax.annotation.Nonnull;
@@ -108,8 +108,8 @@ public class InplaceIntroduceFieldPopup extends AbstractInplaceIntroduceFieldPop
     return suggestFieldName(defaultType, (PsiLocalVariable)getLocalVariable(), myExpr != null && myExpr.isValid() ? myExpr : null, myStatic, myParentClass).names;
   }
 
-  public static SuggestedNameInfo suggestFieldName(@javax.annotation.Nullable PsiType defaultType,
-                                                    @javax.annotation.Nullable final PsiLocalVariable localVariable,
+  public static SuggestedNameInfo suggestFieldName(@Nullable PsiType defaultType,
+                                                    @Nullable final PsiLocalVariable localVariable,
                                                     final PsiExpression initializer,
                                                     final boolean forStatic,
                                                     @Nonnull final PsiClass parentClass) {

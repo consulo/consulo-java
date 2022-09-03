@@ -16,9 +16,9 @@
 package com.intellij.java.impl.psi.filters.classes;
 
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.filters.ElementFilter;
-import com.intellij.util.ReflectionUtil;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.filter.ElementFilter;
+import consulo.util.lang.reflect.ReflectionUtil;
 
 /**
  * Created by IntelliJ IDEA.

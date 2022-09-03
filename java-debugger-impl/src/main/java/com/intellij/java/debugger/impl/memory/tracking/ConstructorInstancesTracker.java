@@ -21,6 +21,7 @@ import java.util.HashSet;
 import java.util.List;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.intellij.java.debugger.impl.breakpoints.properties.JavaLineBreakpointProperties;
 import com.intellij.java.debugger.DebuggerManager;
@@ -36,13 +37,13 @@ import com.intellij.java.debugger.impl.memory.event.InstancesTrackerListener;
 import com.intellij.java.debugger.impl.memory.utils.StackFrameItem;
 import com.intellij.java.debugger.impl.ui.breakpoints.JavaLineBreakpointType;
 import com.intellij.java.debugger.impl.ui.breakpoints.LineBreakpoint;
-import com.intellij.openapi.project.Project;
-import com.intellij.xdebugger.XDebugSession;
-import com.intellij.xdebugger.XDebuggerManager;
-import com.intellij.xdebugger.breakpoints.XBreakpoint;
-import com.intellij.xdebugger.impl.XDebuggerManagerImpl;
-import com.intellij.xdebugger.impl.breakpoints.LineBreakpointState;
-import com.intellij.xdebugger.impl.breakpoints.XLineBreakpointImpl;
+import consulo.execution.debug.XDebugSession;
+import consulo.execution.debug.breakpoint.XBreakpoint;
+import consulo.project.Project;
+import consulo.execution.debug.XDebuggerManager;
+import consulo.ide.impl.idea.xdebugger.impl.XDebuggerManagerImpl;
+import consulo.ide.impl.idea.xdebugger.impl.breakpoints.LineBreakpointState;
+import consulo.ide.impl.idea.xdebugger.impl.breakpoints.XLineBreakpointImpl;
 import consulo.disposer.Disposable;
 import consulo.internal.com.sun.jdi.Location;
 import consulo.internal.com.sun.jdi.Method;
@@ -59,7 +60,7 @@ public class ConstructorInstancesTracker implements TrackerForNewInstances, Disp
 	private final Project myProject;
 	private final MyConstructorBreakpoints myBreakpoint;
 
-	@javax.annotation.Nullable
+	@Nullable
 	private HashSet<ObjectReference> myNewObjects = null;
 
 	@Nonnull
@@ -105,7 +106,7 @@ public class ConstructorInstancesTracker implements TrackerForNewInstances, Disp
 
 		final JavaLineBreakpointType breakPointType = new JavaLineBreakpointType();
 
-		final XBreakpoint bpn = new XLineBreakpointImpl<>(breakPointType, ((XDebuggerManagerImpl) XDebuggerManager.getInstance(myProject)).getBreakpointManager(), new JavaLineBreakpointProperties(),
+		final XBreakpoint bpn = new XLineBreakpointImpl<>(breakPointType, ((consulo.ide.impl.idea.xdebugger.impl.XDebuggerManagerImpl) XDebuggerManager.getInstance(myProject)).getBreakpointManager(), new JavaLineBreakpointProperties(),
 				new LineBreakpointState<>());
 
 		myBreakpoint = new MyConstructorBreakpoints(myProject, bpn);

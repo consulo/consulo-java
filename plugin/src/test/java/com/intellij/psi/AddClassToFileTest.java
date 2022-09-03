@@ -19,10 +19,10 @@ import static org.junit.Assert.*;
 
 import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.fileEditor.FileDocumentManager;
-import com.intellij.openapi.fileEditor.impl.LoadTextUtil;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.document.Document;
+import consulo.document.FileDocumentManager;
+import consulo.language.impl.internal.psi.LoadTextUtil;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.testFramework.PlatformTestCase;
 import com.intellij.testFramework.PsiTestCase;
 import com.intellij.testFramework.PsiTestUtil;

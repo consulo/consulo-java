@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ipp.exceptions;
 
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiReferenceList;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;

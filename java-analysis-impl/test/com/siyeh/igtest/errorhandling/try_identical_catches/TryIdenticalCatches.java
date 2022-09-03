@@ -1,5 +1,7 @@
 package com.siyeh.igtest.errorhandling.try_identical_catches;
 
+import java.io.IOException;
+
 class TryIdenticalCatches {
   public void notIdentical() {
     try {
@@ -38,7 +40,7 @@ class TryIdenticalCatches {
     catch (StorageInitializationException e) {
       throw e;
     }
-    catch (java.io.IOException e) {
+    catch (IOException e) {
       throw new StorageInitializationException("Can not setup storage factory.", e);
     }
     catch (Exception e) {
@@ -46,7 +48,7 @@ class TryIdenticalCatches {
     }
   }
 
-  void throwAllExceptions() throws StorageInitializationException, java.io.IOException {
+  void throwAllExceptions() throws StorageInitializationException, IOException {
   }
 
   class StorageException extends Exception {

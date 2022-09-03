@@ -18,18 +18,18 @@ package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 import com.intellij.java.language.psi.*;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import com.intellij.java.language.impl.codeInsight.PsiClassListCellRenderer;
-import com.intellij.ide.util.PsiElementListCellRenderer;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.command.CommandProcessor;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.popup.PopupChooserBuilder;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.language.editor.ui.PsiElementListCellRenderer;
+import consulo.application.ApplicationManager;
+import consulo.undoRedo.CommandProcessor;
+import consulo.codeEditor.Editor;
+import consulo.project.Project;
+import consulo.ide.impl.ui.impl.PopupChooserBuilder;
+import consulo.util.lang.StringUtil;
 import com.intellij.psi.*;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.impl.refactoring.util.RefactoringUtil;
-import com.intellij.ui.components.JBList;
-import com.intellij.util.IncorrectOperationException;
+import consulo.ui.ex.awt.JBList;
+import consulo.language.util.IncorrectOperationException;
 import javax.annotation.Nonnull;
 
 import javax.swing.*;
@@ -112,7 +112,7 @@ public class CreateInnerClassFromUsageFix extends CreateClassFromUsageBaseFix {
     PsiElementListCellRenderer renderer = new PsiClassListCellRenderer();
     list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     list.setCellRenderer(renderer);
-    final PopupChooserBuilder builder = new PopupChooserBuilder(list);
+    final consulo.ide.impl.ui.impl.PopupChooserBuilder builder = new consulo.ide.impl.ui.impl.PopupChooserBuilder(list);
     renderer.installSpeedSearch(builder);
 
     Runnable runnable = new Runnable() {

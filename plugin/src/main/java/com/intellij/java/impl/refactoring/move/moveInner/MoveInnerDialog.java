@@ -31,35 +31,35 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import com.intellij.java.language.psi.*;
+import consulo.application.HelpManager;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.help.HelpManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.ProjectRootManager;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.openapi.util.NullableComputable;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.application.ApplicationManager;
+import consulo.project.Project;
+import consulo.module.content.ProjectRootManager;
+import consulo.util.lang.Comparing;
+import consulo.ide.impl.idea.openapi.util.NullableComputable;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
-import com.intellij.psi.codeStyle.SuggestedNameInfo;
+import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.impl.refactoring.HelpID;
 import com.intellij.java.impl.refactoring.JavaRefactoringSettings;
 import com.intellij.java.impl.refactoring.PackageWrapper;
-import com.intellij.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.RefactoringBundle;
 import com.intellij.java.impl.refactoring.move.MoveInstanceMembersUtil;
 import com.intellij.java.impl.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesUtil;
-import com.intellij.refactoring.ui.NameSuggestionsField;
+import consulo.language.editor.refactoring.ui.NameSuggestionsField;
 import com.intellij.java.impl.refactoring.ui.PackageNameReferenceEditorCombo;
-import com.intellij.refactoring.ui.RefactoringDialog;
-import com.intellij.refactoring.util.CommonRefactoringUtil;
+import consulo.language.editor.refactoring.ui.RefactoringDialog;
+import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import com.intellij.java.impl.refactoring.util.RefactoringMessageUtil;
 import com.intellij.java.impl.refactoring.util.RefactoringUtil;
-import com.intellij.ui.EditorTextField;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.editor.ui.awt.EditorTextField;
+import consulo.language.util.IncorrectOperationException;
 
 public class MoveInnerDialog extends RefactoringDialog {
   private final Project myProject;
@@ -192,7 +192,7 @@ public class MoveInnerDialog extends RefactoringDialog {
     return null;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private PsiElement getTargetContainer() {
     if (myTargetContainer instanceof PsiDirectory) {
       final PsiDirectory psiDirectory = (PsiDirectory)myTargetContainer;

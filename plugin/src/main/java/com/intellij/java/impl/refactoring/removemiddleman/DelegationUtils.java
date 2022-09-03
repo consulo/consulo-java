@@ -17,7 +17,7 @@ package com.intellij.java.impl.refactoring.removemiddleman;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
-import com.intellij.util.ArrayUtil;
+import consulo.util.collection.ArrayUtil;
 
 import java.util.HashSet;
 import java.util.Set;

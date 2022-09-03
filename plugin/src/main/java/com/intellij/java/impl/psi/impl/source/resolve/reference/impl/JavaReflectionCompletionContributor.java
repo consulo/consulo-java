@@ -18,19 +18,19 @@ package com.intellij.java.impl.psi.impl.source.resolve.reference.impl;
 import com.intellij.java.impl.codeInsight.completion.JavaLookupElementBuilder;
 import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.codeInsight.completion.*;
-import com.intellij.codeInsight.lookup.LookupElement;
-import com.intellij.codeInsight.lookup.LookupElementBuilder;
+import consulo.language.editor.completion.lookup.LookupElement;
+import consulo.language.editor.completion.lookup.LookupElementBuilder;
 import com.intellij.java.analysis.impl.psi.impl.source.resolve.reference.impl.JavaReflectionReferenceUtil;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.patterns.ElementPattern;
-import com.intellij.patterns.PatternCondition;
+import consulo.document.util.TextRange;
+import consulo.language.pattern.ElementPattern;
+import consulo.language.pattern.PatternCondition;
 import com.intellij.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.PsiUtilCore;
-import com.intellij.util.ProcessingContext;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.psi.PsiUtilCore;
+import consulo.language.util.ProcessingContext;
+import consulo.util.collection.ContainerUtil;
 import consulo.java.language.module.util.JavaClassNames;
 
 import javax.annotation.Nonnull;
@@ -40,7 +40,7 @@ import java.util.function.BiConsumer;
 import static com.intellij.java.impl.codeInsight.completion.JavaCompletionContributor.isInJavaContext;
 import static com.intellij.java.analysis.impl.psi.impl.source.resolve.reference.impl.JavaReflectionReferenceUtil.*;
 import static com.intellij.java.language.patterns.PsiJavaPatterns.*;
-import static com.intellij.patterns.StandardPatterns.or;
+import static consulo.language.pattern.StandardPatterns.or;
 
 /**
  * @author Pavel.Dolgov

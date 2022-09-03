@@ -26,16 +26,17 @@ package com.intellij.java.impl.refactoring.util;
 
 import com.intellij.java.language.psi.*;
 import consulo.logging.Logger;
-import com.intellij.openapi.util.Comparing;
+import consulo.util.lang.Comparing;
 import com.intellij.psi.*;
-import com.intellij.psi.search.PsiElementProcessor;
-import com.intellij.psi.search.PsiElementProcessorAdapter;
+import consulo.language.psi.resolve.PsiElementProcessor;
+import consulo.ide.impl.psi.search.PsiElementProcessorAdapter;
 import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import java.util.HashSet;
 import consulo.java.language.module.util.JavaClassNames;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.*;
 
@@ -50,7 +51,7 @@ public class RefactoringHierarchyUtil {
 
   public static boolean willBeInTargetClass(PsiElement place,
                                             @Nonnull Set<PsiMember> membersToMove,
-                                            @javax.annotation.Nullable PsiClass targetClass,
+                                            @Nullable PsiClass targetClass,
                                             boolean includeSubclasses) {
     PsiElement parent = place;
     while (parent != null) {
@@ -83,7 +84,7 @@ public class RefactoringHierarchyUtil {
     return null;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public static PsiClass getNearestBaseClass(PsiClass subClass, boolean includeNonProject) {
     PsiClassType[] superTypes = subClass.getSuperTypes();
 

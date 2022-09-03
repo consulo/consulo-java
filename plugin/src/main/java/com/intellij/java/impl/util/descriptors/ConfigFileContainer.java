@@ -16,9 +16,11 @@
 
 package com.intellij.java.impl.util.descriptors;
 
-import com.intellij.openapi.project.Project;
+import consulo.project.Project;
 import consulo.disposer.Disposable;
-import com.intellij.openapi.util.ModificationTracker;
+import consulo.component.util.ModificationTracker;
+
+import javax.annotation.Nullable;
 
 /**
  * @author nik
@@ -36,6 +38,6 @@ public interface ConfigFileContainer extends Disposable, ModificationTracker {
 
   ConfigFileInfoSet getConfiguration();
 
-  @javax.annotation.Nullable
+  @Nullable
   ConfigFile getConfigFile(ConfigFileMetaData metaData);
 }

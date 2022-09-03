@@ -16,17 +16,17 @@
 package com.intellij.java.debugger.impl;
 
 import com.intellij.java.execution.configurations.ConfigurationWithAlternativeJre;
-import com.intellij.execution.configurations.RunProfile;
+import consulo.execution.configuration.RunProfile;
 import com.intellij.java.debugger.DebuggerManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.projectRoots.SdkTable;
-import com.intellij.openapi.roots.OrderRootType;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.project.Project;
+import consulo.content.bundle.Sdk;
+import consulo.content.bundle.SdkTable;
+import consulo.content.OrderRootType;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.java.language.impl.psi.NonClasspathClassFinder;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.search.NonClasspathDirectoriesScope;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.ide.impl.psi.search.NonClasspathDirectoriesScope;
+import consulo.util.collection.ContainerUtil;
 import jakarta.inject.Inject;
 
 import javax.annotation.Nonnull;

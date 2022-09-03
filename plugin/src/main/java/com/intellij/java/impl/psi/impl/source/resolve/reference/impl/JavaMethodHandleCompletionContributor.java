@@ -17,18 +17,18 @@ package com.intellij.java.impl.psi.impl.source.resolve.reference.impl;
 
 import com.intellij.codeInsight.completion.*;
 import com.intellij.java.impl.codeInsight.lookup.ExpressionLookupItem;
-import com.intellij.codeInsight.lookup.LookupElement;
-import com.intellij.icons.AllIcons;
+import consulo.language.editor.completion.lookup.LookupElement;
+import consulo.application.AllIcons;
 import com.intellij.java.analysis.impl.psi.impl.source.resolve.reference.impl.JavaReflectionReferenceUtil;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.util.lang.StringUtil;
 import com.intellij.java.language.patterns.PsiJavaElementPattern;
 import com.intellij.java.language.patterns.PsiMethodPattern;
 import com.intellij.psi.*;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.ArrayUtil;
-import com.intellij.util.Consumer;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.util.collection.ArrayUtil;
+import consulo.ide.impl.idea.util.Consumer;
+import consulo.util.collection.ContainerUtil;
 import consulo.ui.image.Image;
 
 import javax.annotation.Nonnull;
@@ -40,7 +40,7 @@ import java.util.stream.Stream;
 
 import static com.intellij.java.impl.codeInsight.completion.JavaCompletionContributor.isInJavaContext;
 import static com.intellij.java.language.patterns.PsiJavaPatterns.*;
-import static com.intellij.patterns.StandardPatterns.or;
+import static consulo.language.pattern.StandardPatterns.or;
 import static com.intellij.java.analysis.impl.psi.impl.source.resolve.reference.impl.JavaReflectionReferenceUtil.*;
 
 /**

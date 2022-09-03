@@ -17,43 +17,43 @@ package com.intellij.java.compiler.impl.javaCompiler.javac;
 
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.JavaModuleGraphUtil;
 import com.intellij.java.compiler.OutputParser;
-import com.intellij.compiler.impl.ModuleChunk;
+import consulo.ide.impl.idea.compiler.impl.ModuleChunk;
 import com.intellij.java.compiler.impl.javaCompiler.BackendCompiler;
 import com.intellij.java.compiler.impl.javaCompiler.JavaCompilerConfiguration;
 import com.intellij.java.compiler.impl.javaCompiler.annotationProcessing.AnnotationProcessingConfiguration;
-import com.intellij.execution.configurations.ParametersList;
-import com.intellij.execution.process.ProcessHandler;
-import com.intellij.openapi.compiler.CompileContext;
-import com.intellij.openapi.compiler.CompileScope;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleUtilCore;
-import com.intellij.openapi.project.Project;
+import consulo.process.cmd.ParametersList;
+import consulo.process.ProcessHandler;
+import consulo.compiler.CompileContext;
+import consulo.compiler.scope.CompileScope;
+import consulo.module.Module;
+import consulo.language.util.ModuleUtilCore;
+import consulo.project.Project;
 import com.intellij.java.language.projectRoots.JavaSdk;
 import com.intellij.java.language.projectRoots.JavaSdkVersion;
-import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.projectRoots.SdkTypeId;
-import com.intellij.openapi.roots.DependencyScope;
-import com.intellij.openapi.roots.ExportableOrderEntry;
-import com.intellij.openapi.roots.ModuleRootManager;
-import com.intellij.openapi.roots.OrderEnumerator;
-import com.intellij.openapi.ui.Messages;
-import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.VfsUtil;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.content.bundle.Sdk;
+import consulo.content.bundle.SdkTypeId;
+import consulo.module.content.layer.orderEntry.DependencyScope;
+import consulo.module.content.layer.orderEntry.ExportableOrderEntry;
+import consulo.module.content.ModuleRootManager;
+import consulo.module.content.layer.OrderEnumerator;
+import consulo.ui.ex.awt.Messages;
+import consulo.ide.impl.idea.openapi.util.io.FileUtil;
+import consulo.util.lang.StringUtil;
+import consulo.ide.impl.idea.openapi.vfs.VfsUtil;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.java.language.vfs.jrt.JrtFileSystem;
 import com.intellij.java.language.LanguageLevel;
-import com.intellij.psi.PsiFile;
+import consulo.language.psi.PsiFile;
 import com.intellij.java.language.psi.PsiJavaFile;
 import com.intellij.java.language.psi.PsiJavaModule;
-import com.intellij.psi.PsiManager;
+import consulo.language.psi.PsiManager;
 import com.intellij.java.indexing.impl.stubs.index.JavaModuleNameIndex;
 import com.intellij.java.language.impl.psi.impl.light.LightJavaModule;
-import com.intellij.util.PathsList;
+import consulo.virtualFileSystem.util.PathsList;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.application.AccessRule;
 import consulo.compiler.ModuleCompilerPathsManager;
-import consulo.compiler.roots.CompilerPathsImpl;
+import consulo.ide.impl.compiler.CompilerPathsImpl;
 import consulo.java.compiler.JavaCompilerBundle;
 import consulo.java.compiler.JavaCompilerUtil;
 import consulo.java.compiler.impl.javaCompiler.BackendCompilerMonitor;
@@ -437,7 +437,7 @@ public class JavacCompiler implements BackendCompiler
 				if(url != null)
 				{
 					commandLine.add("--patch-module");
-					commandLine.add(moduleName + "=" + VfsUtil.urlToPath(url));
+					commandLine.add(moduleName + "=" + consulo.ide.impl.idea.openapi.vfs.VfsUtil.urlToPath(url));
 				}
 
 				String joinedModuleNames = String.join(",", moduleNames);
@@ -502,7 +502,7 @@ public class JavacCompiler implements BackendCompiler
 		{
 			commandLine.add("-s");
 			commandLine.add(outputPath.replace('/', File.separatorChar));
-			final String moduleOutputPath = CompilerPathsImpl.getModuleOutputPath(chunk.getModules()[0], ProductionContentFolderTypeProvider.getInstance());
+			final String moduleOutputPath = consulo.ide.impl.compiler.CompilerPathsImpl.getModuleOutputPath(chunk.getModules()[0], ProductionContentFolderTypeProvider.getInstance());
 			if(moduleOutputPath != null)
 			{
 				commandLine.add("-d");

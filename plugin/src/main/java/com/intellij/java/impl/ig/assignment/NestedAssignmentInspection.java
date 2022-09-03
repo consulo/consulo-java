@@ -16,7 +16,7 @@
 package com.intellij.java.impl.ig.assignment;
 
 import com.intellij.java.language.psi.PsiAssignmentExpression;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiExpressionListStatement;
 import com.intellij.java.language.psi.PsiExpressionStatement;
 import com.siyeh.InspectionGadgetsBundle;

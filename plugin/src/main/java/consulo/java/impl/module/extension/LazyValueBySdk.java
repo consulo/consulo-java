@@ -16,9 +16,9 @@
 
 package consulo.java.impl.module.extension;
 
-import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.util.Comparing;
-import com.intellij.util.NotNullFunction;
+import consulo.content.bundle.Sdk;
+import consulo.util.lang.Comparing;
+import consulo.ide.impl.idea.util.NotNullFunction;
 import consulo.module.extension.ModuleExtensionWithSdk;
 
 import javax.annotation.Nonnull;

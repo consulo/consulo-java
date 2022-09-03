@@ -15,9 +15,9 @@
  */
 package com.intellij.java.debugger.impl;
 
-import com.intellij.execution.configurations.RunProfile;
-import com.intellij.execution.ui.RunContentDescriptor;
-import com.intellij.openapi.actionSystem.DefaultActionGroup;
+import consulo.execution.configuration.RunProfile;
+import consulo.execution.ui.RunContentDescriptor;
+import consulo.ui.ex.action.DefaultActionGroup;
 import consulo.ui.image.Image;
 
 import javax.annotation.Nullable;

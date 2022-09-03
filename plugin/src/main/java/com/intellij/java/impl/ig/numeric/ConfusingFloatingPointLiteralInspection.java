@@ -16,13 +16,14 @@
 package com.intellij.java.impl.ig.numeric;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-import com.intellij.codeInspection.ProblemDescriptor;
-import com.intellij.openapi.project.Project;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.project.Project;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiLiteralExpression;
 import com.intellij.java.language.psi.PsiType;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
@@ -150,7 +151,7 @@ public class ConfusingFloatingPointLiteralInspection
     }
 
 
-    private static boolean isConfusing(@javax.annotation.Nullable CharSequence text) {
+    private static boolean isConfusing(@Nullable CharSequence text) {
       if (text == null) {
         return false;
       }

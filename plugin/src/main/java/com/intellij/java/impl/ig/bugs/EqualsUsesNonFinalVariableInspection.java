@@ -16,6 +16,7 @@
 package com.intellij.java.impl.ig.bugs;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
@@ -45,7 +46,7 @@ public class EqualsUsesNonFinalVariableInspection extends BaseInspection {
       "non.final.field.in.equals.problem.descriptor");
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   protected InspectionGadgetsFix buildFix(Object... infos) {
     final PsiField field = (PsiField)infos[0];
     return MakeFieldFinalFix.buildFix(field);

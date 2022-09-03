@@ -23,8 +23,8 @@ import com.intellij.java.impl.ipp.base.MutablyNamedIntention;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.siyeh.IntentionPowerPackBundle;
 import com.intellij.psi.*;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.ast.IElementType;
+import consulo.language.util.IncorrectOperationException;
 import javax.annotation.Nonnull;
 
 public class ReplaceAssignmentWithPostfixExpressionIntention

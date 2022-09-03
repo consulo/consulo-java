@@ -18,9 +18,9 @@ package com.intellij.java.impl.refactoring.rename;
 import com.intellij.java.language.psi.*;
 import consulo.logging.Logger;
 import com.intellij.psi.*;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.impl.refactoring.util.RefactoringUtil;
-import com.intellij.usageView.UsageInfo;
+import consulo.usage.UsageInfo;
 
 import java.util.List;
 

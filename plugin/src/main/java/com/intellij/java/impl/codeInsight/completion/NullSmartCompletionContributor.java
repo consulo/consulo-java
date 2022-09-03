@@ -16,18 +16,18 @@
 package com.intellij.java.impl.codeInsight.completion;
 
 import com.intellij.codeInsight.completion.*;
-import com.intellij.codeInsight.lookup.LookupElement;
+import consulo.language.editor.completion.lookup.LookupElement;
 import com.intellij.java.impl.codeInsight.ExpectedTypeInfo;
 import com.intellij.java.language.psi.PsiKeyword;
 import com.intellij.java.language.psi.PsiPrimitiveType;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.util.lang.StringUtil;
 
 import java.util.Collection;
 import java.util.LinkedHashSet;
 
 import static com.intellij.java.language.patterns.PsiJavaPatterns.psiElement;
-import static com.intellij.patterns.StandardPatterns.and;
-import static com.intellij.patterns.StandardPatterns.not;
+import static consulo.language.pattern.StandardPatterns.and;
+import static consulo.language.pattern.StandardPatterns.not;
 
 /**
  * @author peter

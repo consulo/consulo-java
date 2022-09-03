@@ -19,13 +19,13 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.util.ClassFilter;
 import com.intellij.java.language.util.TreeClassChooser;
 import com.intellij.java.language.util.TreeClassChooserFactory;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.project.Project;
+import consulo.document.Document;
+import consulo.project.Project;
 import consulo.util.dataholder.Key;
 import com.intellij.psi.*;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.util.Function;
-import com.intellij.ui.ReferenceEditorWithBrowseButton;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.ide.impl.idea.util.Function;
+import consulo.language.editor.ui.awt.ReferenceEditorWithBrowseButton;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -46,7 +46,7 @@ public class ClassNameReferenceEditor extends ReferenceEditorWithBrowseButton {
   }
 
   public ClassNameReferenceEditor(@Nonnull final Project project, @Nullable final PsiClass selectedClass,
-                                  @javax.annotation.Nullable final GlobalSearchScope resolveScope) {
+                                  @Nullable final GlobalSearchScope resolveScope) {
     super(null, project, new Function<String,Document>() {
       public Document fun(final String s) {
         PsiJavaPackage defaultPackage = JavaPsiFacade.getInstance(project).findPackage("");

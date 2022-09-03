@@ -25,6 +25,7 @@ import com.intellij.java.language.psi.PsiType;
 import javax.annotation.Nonnull;
 
 import javax.annotation.Nullable;
+import java.util.EmptyStackException;
 import java.util.Set;
 
 public interface DfaMemoryState
@@ -39,7 +40,7 @@ public interface DfaMemoryState
 	 * Pops single value from the top of the stack and returns it
 	 *
 	 * @return popped value
-	 * @throws java.util.EmptyStackException if stack is empty
+	 * @throws EmptyStackException if stack is empty
 	 */
 	@Nonnull
 	DfaValue pop();
@@ -48,7 +49,7 @@ public interface DfaMemoryState
 	 * Reads a value from the top of the stack without popping it
 	 *
 	 * @return top of stack value
-	 * @throws java.util.EmptyStackException if stack is empty
+	 * @throws EmptyStackException if stack is empty
 	 */
 	@Nonnull
 	DfaValue peek();

@@ -19,28 +19,28 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.search.searches.SuperMethodsSearch;
 import com.intellij.java.language.psi.util.MethodSignatureBackedByPsiMethod;
 import com.intellij.java.language.psi.util.PropertyUtil;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.util.TextRange;
+import consulo.document.Document;
+import consulo.document.util.TextRange;
 import com.intellij.psi.*;
-import com.intellij.psi.codeStyle.arrangement.ArrangementSettings;
-import com.intellij.psi.codeStyle.arrangement.ArrangementUtil;
-import com.intellij.psi.codeStyle.arrangement.DefaultArrangementEntry;
-import com.intellij.psi.codeStyle.arrangement.group.ArrangementGroupingRule;
-import com.intellij.psi.codeStyle.arrangement.std.ArrangementSettingsToken;
-import com.intellij.psi.codeStyle.arrangement.std.StdArrangementTokens;
-import com.intellij.util.Consumer;
-import com.intellij.util.Functions;
-import com.intellij.util.containers.ContainerUtil;
-import com.intellij.util.containers.ContainerUtilRt;
-import com.intellij.util.containers.Stack;
+import consulo.language.codeStyle.arrangement.ArrangementSettings;
+import consulo.language.codeStyle.arrangement.ArrangementUtil;
+import consulo.language.codeStyle.arrangement.DefaultArrangementEntry;
+import consulo.language.codeStyle.arrangement.group.ArrangementGroupingRule;
+import consulo.language.codeStyle.arrangement.std.ArrangementSettingsToken;
+import consulo.language.codeStyle.arrangement.std.StdArrangementTokens;
+import consulo.ide.impl.idea.util.Consumer;
+import consulo.util.lang.function.Functions;
+import consulo.util.collection.ContainerUtil;
+import consulo.ide.impl.idea.util.containers.ContainerUtilRt;
+import consulo.util.collection.Stack;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 
 import static com.intellij.java.impl.psi.codeStyle.arrangement.ArrangementSectionDetector.ArrangementSectionEntryTemplate;
-import static com.intellij.psi.codeStyle.arrangement.std.StdArrangementTokens.EntryType.*;
-import static com.intellij.psi.codeStyle.arrangement.std.StdArrangementTokens.Modifier.*;
+import static consulo.language.codeStyle.arrangement.std.StdArrangementTokens.EntryType.*;
+import static consulo.language.codeStyle.arrangement.std.StdArrangementTokens.Modifier.*;
 
 public class JavaArrangementVisitor extends JavaRecursiveElementVisitor {
 
@@ -483,7 +483,7 @@ public class JavaArrangementVisitor extends JavaRecursiveElementVisitor {
   }
 
   private void processEntry(
-      @javax.annotation.Nullable JavaElementArrangementEntry entry, @javax.annotation.Nullable PsiModifierListOwner modifier, @Nullable final PsiElement nextPsiRoot) {
+      @Nullable JavaElementArrangementEntry entry, @Nullable PsiModifierListOwner modifier, @Nullable final PsiElement nextPsiRoot) {
     if (entry == null) {
       return;
     }
@@ -520,9 +520,9 @@ public class JavaArrangementVisitor extends JavaRecursiveElementVisitor {
     }
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private JavaElementArrangementEntry createNewEntry(
-      @Nonnull PsiElement element, @Nonnull TextRange range, @Nonnull ArrangementSettingsToken type, @javax.annotation.Nullable String name, boolean canArrange) {
+      @Nonnull PsiElement element, @Nonnull TextRange range, @Nonnull ArrangementSettingsToken type, @Nullable String name, boolean canArrange) {
     if (!isWithinBounds(range)) {
       return null;
     }
@@ -554,7 +554,7 @@ public class JavaArrangementVisitor extends JavaRecursiveElementVisitor {
   }
 
   @SuppressWarnings("MagicConstant")
-  private static void parseModifiers(@javax.annotation.Nullable PsiModifierList modifierList, @Nonnull JavaElementArrangementEntry entry) {
+  private static void parseModifiers(@Nullable PsiModifierList modifierList, @Nonnull JavaElementArrangementEntry entry) {
     if (modifierList == null) {
       return;
     }
@@ -575,7 +575,7 @@ public class JavaArrangementVisitor extends JavaRecursiveElementVisitor {
 
     @Nonnull
     private final JavaArrangementParseInfo myInfo;
-    @javax.annotation.Nullable
+    @Nullable
     private PsiMethod myBaseMethod;
 
     MethodBodyProcessor(@Nonnull JavaArrangementParseInfo info) {

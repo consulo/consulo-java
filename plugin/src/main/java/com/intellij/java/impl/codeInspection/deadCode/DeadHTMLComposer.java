@@ -25,13 +25,13 @@
 package com.intellij.java.impl.codeInspection.deadCode;
 
 import com.intellij.java.impl.codeInspection.HTMLJavaHTMLComposer;
-import com.intellij.codeInspection.InspectionsBundle;
-import com.intellij.codeInspection.ex.DescriptorComposer;
-import com.intellij.codeInspection.ex.HTMLComposerImpl;
+import consulo.language.editor.inspection.InspectionsBundle;
+import consulo.ide.impl.idea.codeInspection.ex.DescriptorComposer;
+import consulo.ide.impl.idea.codeInspection.ex.HTMLComposerImpl;
 import com.intellij.codeInspection.reference.*;
-import com.intellij.codeInspection.ui.InspectionToolPresentation;
-import com.intellij.codeInspection.ui.InspectionTreeNode;
-import com.intellij.codeInspection.ui.RefElementNode;
+import consulo.ide.impl.idea.codeInspection.ui.InspectionToolPresentation;
+import consulo.ide.impl.idea.codeInspection.ui.InspectionTreeNode;
+import consulo.ide.impl.idea.codeInspection.ui.RefElementNode;
 import com.intellij.java.analysis.codeInspection.reference.*;
 import com.intellij.java.analysis.impl.codeInspection.reference.RefClassImpl;
 import com.intellij.java.analysis.impl.codeInspection.reference.RefMethodImpl;

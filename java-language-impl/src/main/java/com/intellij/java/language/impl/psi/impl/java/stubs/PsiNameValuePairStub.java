@@ -16,7 +16,9 @@
 package com.intellij.java.language.impl.psi.impl.java.stubs;
 
 import com.intellij.java.language.psi.PsiNameValuePair;
-import com.intellij.psi.stubs.StubElement;
+import consulo.language.psi.stub.StubElement;
+
+import javax.annotation.Nullable;
 
 /**
  * @author Dmitry Avdeev
@@ -26,6 +28,6 @@ public interface PsiNameValuePairStub extends StubElement<PsiNameValuePair> {
 
   String getName();
 
-  @javax.annotation.Nullable
+  @Nullable
   String getValue();
 }

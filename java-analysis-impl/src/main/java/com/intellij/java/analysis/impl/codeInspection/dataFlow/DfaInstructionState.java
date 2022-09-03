@@ -3,11 +3,11 @@
 package com.intellij.java.analysis.impl.codeInspection.dataFlow;
 
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.instructions.Instruction;
-import com.intellij.openapi.progress.ProgressManager;
-import com.intellij.openapi.util.Pair;
-import com.intellij.util.Processor;
-import com.intellij.util.containers.ContainerUtil;
-import com.intellij.util.containers.MultiMap;
+import consulo.application.progress.ProgressManager;
+import consulo.util.lang.Pair;
+import consulo.application.util.function.Processor;
+import consulo.util.collection.ContainerUtil;
+import consulo.util.collection.MultiMap;
 import one.util.streamex.StreamEx;
 
 import javax.annotation.Nonnull;

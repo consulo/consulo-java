@@ -15,20 +15,22 @@
  */
 package com.intellij.java.impl.refactoring.turnRefsToSuper;
 
-import com.intellij.openapi.help.HelpManager;
-import com.intellij.openapi.project.Project;
+import consulo.application.HelpManager;
+import consulo.project.Project;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.impl.refactoring.HelpID;
 import com.intellij.java.impl.refactoring.JavaRefactoringSettings;
-import com.intellij.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.RefactoringBundle;
 import com.intellij.java.impl.refactoring.ui.ClassCellRenderer;
-import com.intellij.refactoring.ui.RefactoringDialog;
+import consulo.language.editor.refactoring.ui.RefactoringDialog;
 import com.intellij.java.impl.refactoring.util.RefactoringHierarchyUtil;
-import com.intellij.ui.ScrollPaneFactory;
-import com.intellij.ui.components.JBList;
-import com.intellij.util.ui.UIUtil;
+import consulo.ui.ex.awt.JBList;
+import consulo.ui.ex.awt.ScrollPaneFactory;
+import consulo.ui.ex.awt.UIUtil;
+
 import javax.annotation.Nonnull;
 
+import javax.annotation.Nullable;
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
@@ -55,7 +57,7 @@ public class TurnRefsToSuperDialog extends RefactoringDialog {
     init();
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public PsiClass getSuperClass() {
     if(mySuperClassesList != null) {
       return (PsiClass) mySuperClassesList.getSelectedValue();

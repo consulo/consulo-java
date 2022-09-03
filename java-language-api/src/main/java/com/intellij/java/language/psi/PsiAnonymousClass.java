@@ -16,6 +16,7 @@
 package com.intellij.java.language.psi;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Represents a Java anonymous class.
@@ -44,7 +45,7 @@ public interface PsiAnonymousClass extends PsiClass {
    *
    * @return the argument list, or null if no argument list was specified.
    */
-  @javax.annotation.Nullable
+  @Nullable
   PsiExpressionList getArgumentList();
 
   boolean isInQualifiedNew();

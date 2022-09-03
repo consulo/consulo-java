@@ -3,22 +3,31 @@
  */
 package com.intellij.java.execution.impl.application;
 
-import com.intellij.diagnostic.logging.LogConfigurationPanel;
+import consulo.execution.ExecutionBundle;
+import consulo.execution.RuntimeConfigurationException;
+import consulo.execution.RuntimeConfigurationWarning;
+import consulo.execution.configuration.ConfigurationFactory;
+import consulo.execution.configuration.ModuleBasedConfiguration;
+import consulo.execution.configuration.RunConfiguration;
+import consulo.execution.configuration.RunProfileState;
+import consulo.execution.configuration.log.ui.LogConfigurationPanel;
 import com.intellij.execution.*;
-import com.intellij.execution.configuration.EnvironmentVariablesComponent;
+import consulo.execution.configuration.ui.SettingsEditor;
+import consulo.execution.configuration.ui.SettingsEditorGroup;
+import consulo.execution.runner.ExecutionEnvironment;
+import consulo.execution.ui.awt.EnvironmentVariablesComponent;
 import com.intellij.execution.configurations.*;
-import com.intellij.execution.filters.ArgumentFileFilter;
-import com.intellij.execution.filters.TextConsoleBuilderFactory;
+import consulo.ide.impl.idea.execution.filters.ArgumentFileFilter;
+import consulo.execution.ui.console.TextConsoleBuilderFactory;
 import com.intellij.java.execution.impl.ConfigurationWithCommandLineShortener;
 import com.intellij.java.execution.impl.JavaRunConfigurationExtensionManager;
 import com.intellij.java.execution.impl.RunConfigurationExtension;
 import com.intellij.java.execution.impl.SingleClassConfiguration;
 import com.intellij.java.execution.impl.junit.RefactoringListeners;
 import com.intellij.java.execution.impl.util.JavaParametersUtil;
-import com.intellij.execution.process.KillableProcessHandler;
-import com.intellij.execution.process.OSProcessHandler;
-import com.intellij.execution.runners.ExecutionEnvironment;
-import com.intellij.execution.util.ProgramParametersUtil;
+import consulo.ide.impl.idea.execution.process.KillableProcessHandler;
+import consulo.process.internal.OSProcessHandler;
+import consulo.ide.impl.idea.execution.util.ProgramParametersUtil;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.JavaModuleGraphUtil;
 import com.intellij.java.debugger.impl.settings.DebuggerSettings;
 import com.intellij.java.execution.CommonJavaRunConfigurationParameters;
@@ -26,26 +35,28 @@ import com.intellij.java.execution.JavaExecutionUtil;
 import com.intellij.java.execution.ShortenCommandLine;
 import com.intellij.java.execution.configurations.JavaCommandLineState;
 import com.intellij.java.execution.configurations.JavaRunConfigurationModule;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.options.SettingsEditor;
-import com.intellij.openapi.options.SettingsEditorGroup;
-import com.intellij.openapi.project.DumbService;
-import com.intellij.openapi.project.Project;
+import consulo.module.Module;
+import consulo.project.DumbService;
+import consulo.project.Project;
 import com.intellij.java.language.projectRoots.JavaSdkVersion;
 import com.intellij.java.language.impl.projectRoots.ex.JavaSdkUtil;
-import com.intellij.openapi.util.DefaultJDOMExternalizer;
+import consulo.util.xml.serializer.DefaultJDOMExternalizer;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiJavaModule;
 import com.intellij.java.language.psi.util.PsiMethodUtil;
-import com.intellij.refactoring.listeners.RefactoringElementListener;
-import com.intellij.util.PathsList;
+import consulo.language.editor.refactoring.event.RefactoringElementListener;
+import consulo.virtualFileSystem.util.PathsList;
+import consulo.execution.executor.Executor;
 import consulo.java.debugger.impl.GenericDebugRunnerConfiguration;
 import consulo.java.execution.configurations.OwnJavaParameters;
 import consulo.java.execution.projectRoots.OwnJdkUtil;
+import consulo.process.ExecutionException;
+import consulo.process.cmd.GeneralCommandLine;
 import org.jdom.Element;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -109,13 +120,13 @@ public class ApplicationConfiguration extends ModuleBasedConfiguration<JavaRunCo
   }
 
   @Override
-  @javax.annotation.Nullable
+  @Nullable
   public PsiClass getMainClass() {
     return getConfigurationModule().findClass(MAIN_CLASS_NAME);
   }
 
   @Override
-  @javax.annotation.Nullable
+  @Nullable
   public String suggestedName() {
     if (MAIN_CLASS_NAME == null) {
       return null;
@@ -201,13 +212,13 @@ public class ApplicationConfiguration extends ModuleBasedConfiguration<JavaRunCo
   }
 
   @Override
-  @javax.annotation.Nullable
+  @Nullable
   public String getRunClass() {
     return MAIN_CLASS_NAME;
   }
 
   @Override
-  @javax.annotation.Nullable
+  @Nullable
   public String getPackage() {
     return null;
   }
@@ -222,7 +233,7 @@ public class ApplicationConfiguration extends ModuleBasedConfiguration<JavaRunCo
     ALTERNATIVE_JRE_PATH_ENABLED = enabled;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   @Override
   public String getAlternativeJrePath() {
     return ALTERNATIVE_JRE_PATH;
@@ -269,7 +280,7 @@ public class ApplicationConfiguration extends ModuleBasedConfiguration<JavaRunCo
     ShortenCommandLine.writeShortenClasspathMethod(element, myShortenCommandLine);
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   @Override
   public ShortenCommandLine getShortenCommandLine() {
     return myShortenCommandLine;

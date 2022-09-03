@@ -16,25 +16,26 @@
 package com.intellij.java.impl.refactoring.inline;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Ref;
-import com.intellij.openapi.wm.WindowManager;
+import consulo.project.Project;
+import consulo.project.ui.wm.WindowManager;
+import consulo.util.lang.ref.Ref;
 import com.intellij.psi.*;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.search.searches.ReferencesSearch;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.search.ReferencesSearch;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.refactoring.BaseRefactoringProcessor;
-import com.intellij.refactoring.RefactoringBundle;
-import com.intellij.refactoring.rename.NonCodeUsageInfoFactory;
-import com.intellij.refactoring.util.TextOccurrencesUtil;
-import com.intellij.usageView.UsageInfo;
-import com.intellij.usageView.UsageViewDescriptor;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.containers.MultiMap;
+import consulo.language.editor.refactoring.BaseRefactoringProcessor;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.rename.NonCodeUsageInfoFactory;
+import consulo.language.editor.refactoring.util.TextOccurrencesUtil;
+import consulo.usage.UsageInfo;
+import consulo.usage.UsageViewDescriptor;
+import consulo.language.util.IncorrectOperationException;
+import consulo.util.collection.MultiMap;
 import consulo.logging.Logger;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.*;
 
@@ -52,7 +53,7 @@ public class InlineToAnonymousClassProcessor extends BaseRefactoringProcessor {
 
   protected InlineToAnonymousClassProcessor(Project project,
                                             PsiClass psiClass,
-                                            @javax.annotation.Nullable final PsiCall callToInline,
+                                            @Nullable final PsiCall callToInline,
                                             boolean inlineThisOnly,
                                             final boolean searchInComments,
                                             final boolean searchInNonJavaFiles) {
@@ -284,7 +285,7 @@ public class InlineToAnonymousClassProcessor extends BaseRefactoringProcessor {
     }
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public static PsiClassType getSuperType(final PsiClass aClass) {
     PsiElementFactory factory = JavaPsiFacade.getInstance(aClass.getProject()).getElementFactory();
 

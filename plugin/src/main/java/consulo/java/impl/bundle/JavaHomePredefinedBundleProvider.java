@@ -1,10 +1,10 @@
 package consulo.java.impl.bundle;
 
 import com.intellij.java.language.projectRoots.JavaSdk;
-import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.projectRoots.SdkModificator;
+import consulo.content.bundle.Sdk;
+import consulo.content.bundle.SdkModificator;
 import com.intellij.java.impl.openapi.projectRoots.impl.JavaSdkImpl;
-import consulo.bundle.PredefinedBundlesProvider;
+import consulo.content.bundle.PredefinedBundlesProvider;
 import consulo.platform.Platform;
 
 import javax.annotation.Nonnull;

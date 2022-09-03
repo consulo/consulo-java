@@ -16,7 +16,7 @@
 package com.intellij.java.impl.ig.psiutils;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.siyeh.HardcodedMethodConstants;
 import com.siyeh.ig.psiutils.MethodCallUtils;
 import consulo.java.language.module.util.JavaClassNames;

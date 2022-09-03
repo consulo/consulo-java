@@ -17,12 +17,12 @@ package com.intellij.java.impl.openapi.roots;
 
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.projectRoots.roots.ExternalLibraryDescriptor;
-import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.DependencyScope;
-import com.intellij.openapi.roots.libraries.Library;
-import com.intellij.openapi.util.AsyncResult;
+import consulo.ide.ServiceManager;
+import consulo.module.Module;
+import consulo.project.Project;
+import consulo.module.content.layer.orderEntry.DependencyScope;
+import consulo.content.library.Library;
+import consulo.util.concurrent.AsyncResult;
 
 import javax.annotation.Nonnull;
 import java.util.Collection;

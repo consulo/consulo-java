@@ -17,7 +17,7 @@
 package consulo.java.language.impl.psi.stub;
 
 import com.intellij.java.language.psi.PsiClassLevelDeclarationStatement;
-import com.intellij.psi.stubs.StubElement;
+import consulo.language.psi.stub.StubElement;
 
 /**
  * @author VISTALL

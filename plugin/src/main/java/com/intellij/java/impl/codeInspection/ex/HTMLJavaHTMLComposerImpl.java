@@ -20,18 +20,18 @@
  */
 package com.intellij.java.impl.codeInspection.ex;
 
-import com.intellij.codeInspection.HTMLComposer;
-import com.intellij.codeInspection.InspectionsBundle;
-import com.intellij.codeInspection.ex.HTMLComposerImpl;
-import com.intellij.codeInspection.reference.RefElement;
-import com.intellij.codeInspection.reference.RefElementImpl;
-import com.intellij.codeInspection.reference.RefEntity;
-import com.intellij.codeInspection.reference.RefFile;
+import consulo.language.editor.inspection.HTMLComposer;
+import consulo.language.editor.inspection.InspectionsBundle;
+import consulo.ide.impl.idea.codeInspection.ex.HTMLComposerImpl;
+import consulo.language.editor.inspection.reference.RefElement;
+import consulo.ide.impl.idea.codeInspection.reference.RefElementImpl;
+import consulo.language.editor.inspection.reference.RefEntity;
+import consulo.language.editor.inspection.reference.RefFile;
 import com.intellij.java.analysis.codeInspection.reference.*;
 import com.intellij.java.impl.codeInspection.HTMLJavaHTMLComposer;
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.PsiFile;
-import com.intellij.xml.util.XmlStringUtil;
+import consulo.language.psi.PsiFile;
+import consulo.util.lang.xml.XmlStringUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

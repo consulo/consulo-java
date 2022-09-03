@@ -15,16 +15,6 @@
  */
 package com.intellij.java.language.impl.psi.impl.source.tree.java;
 
-import java.util.Collection;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-
-import com.intellij.java.language.psi.*;
-import org.jetbrains.annotations.NonNls;
-import com.intellij.lang.ASTNode;
-import com.intellij.openapi.util.Pair;
-import com.intellij.psi.*;
 import com.intellij.java.language.impl.psi.impl.InheritanceImplUtil;
 import com.intellij.java.language.impl.psi.impl.PsiClassImplUtil;
 import com.intellij.java.language.impl.psi.impl.PsiImplUtil;
@@ -33,20 +23,34 @@ import com.intellij.java.language.impl.psi.impl.java.stubs.JavaStubElementTypes;
 import com.intellij.java.language.impl.psi.impl.java.stubs.PsiTypeParameterListStub;
 import com.intellij.java.language.impl.psi.impl.java.stubs.PsiTypeParameterStub;
 import com.intellij.java.language.impl.psi.impl.light.LightEmptyImplementsList;
-import com.intellij.psi.impl.meta.MetaRegistry;
 import com.intellij.java.language.impl.psi.impl.source.JavaStubPsiElement;
+import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
-import com.intellij.psi.meta.PsiMetaData;
-import com.intellij.psi.scope.PsiScopeProcessor;
-import com.intellij.psi.search.SearchScope;
-import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.util.IncorrectOperationException;
+import consulo.content.scope.SearchScope;
+import consulo.language.ast.ASTNode;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiElementVisitor;
+import consulo.language.psi.PsiInvalidElementAccessException;
+import consulo.language.psi.PsiManager;
+import consulo.language.psi.meta.MetaDataService;
+import consulo.language.psi.meta.PsiMetaData;
+import consulo.language.psi.meta.PsiMetaOwner;
+import consulo.language.psi.resolve.PsiScopeProcessor;
+import consulo.language.psi.resolve.ResolveState;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.util.lang.Pair;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * @author dsl
  */
-public class PsiTypeParameterImpl extends JavaStubPsiElement<PsiTypeParameterStub> implements PsiTypeParameter {
+public class PsiTypeParameterImpl extends JavaStubPsiElement<PsiTypeParameterStub> implements PsiTypeParameter, PsiMetaOwner {
   private final LightEmptyImplementsList myLightEmptyImplementsList = new LightEmptyImplementsList(null) {
     @Override
     public PsiManager getManager() {
@@ -169,7 +173,7 @@ public class PsiTypeParameterImpl extends JavaStubPsiElement<PsiTypeParameterStu
       return PsiTreeUtil.getParentOfType(this, PsiTypeParameterListOwner.class);
     }
 
-    return (PsiTypeParameterListOwner)parentParent;
+    return (PsiTypeParameterListOwner) parentParent;
   }
 
 
@@ -177,7 +181,7 @@ public class PsiTypeParameterImpl extends JavaStubPsiElement<PsiTypeParameterStu
   public int getIndex() {
     final PsiTypeParameterStub stub = getStub();
     if (stub != null) {
-      final PsiTypeParameterListStub parentStub = (PsiTypeParameterListStub)stub.getParentStub();
+      final PsiTypeParameterListStub parentStub = (PsiTypeParameterListStub) stub.getParentStub();
       return parentStub.getChildrenStubs().indexOf(stub);
     }
 
@@ -353,9 +357,8 @@ public class PsiTypeParameterImpl extends JavaStubPsiElement<PsiTypeParameterStu
   @Override
   public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
-      ((JavaElementVisitor)visitor).visitTypeParameter(this);
-    }
-    else {
+      ((JavaElementVisitor) visitor).visitTypeParameter(this);
+    } else {
       visitor.visitElement(this);
     }
   }
@@ -366,7 +369,7 @@ public class PsiTypeParameterImpl extends JavaStubPsiElement<PsiTypeParameterStu
   }
 
   public PsiMetaData getMetaData() {
-    return MetaRegistry.getMeta(this);
+    return MetaDataService.getInstance().getMeta(this);
   }
 
   @Override

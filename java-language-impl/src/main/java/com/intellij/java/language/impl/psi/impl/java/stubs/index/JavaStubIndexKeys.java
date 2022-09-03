@@ -16,7 +16,7 @@
 package com.intellij.java.language.impl.psi.impl.java.stubs.index;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.stubs.StubIndexKey;
+import consulo.language.psi.stub.StubIndexKey;
 
 /**
  * @author yole

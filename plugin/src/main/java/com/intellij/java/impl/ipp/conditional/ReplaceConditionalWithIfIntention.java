@@ -20,14 +20,14 @@ import javax.annotation.Nullable;
 
 import com.intellij.java.language.psi.*;
 import consulo.logging.Logger;
-import com.intellij.openapi.project.Project;
+import consulo.project.Project;
 import com.intellij.psi.*;
-import com.intellij.psi.codeStyle.CodeStyleManager;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.ast.IElementType;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.impl.refactoring.util.RefactoringUtil;
-import com.intellij.util.ArrayUtilRt;
-import com.intellij.util.IncorrectOperationException;
+import consulo.ide.impl.idea.util.ArrayUtilRt;
+import consulo.language.util.IncorrectOperationException;
 import com.siyeh.ig.PsiReplacementUtil;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
 import com.intellij.java.impl.ipp.base.Intention;
@@ -171,7 +171,7 @@ public class ReplaceConditionalWithIfIntention extends Intention
 	}
 
 	private static void appendElementText(@Nonnull PsiElement element, @Nonnull PsiElement elementToReplace,
-			@javax.annotation.Nullable PsiExpression replacementExpression, @Nonnull StringBuilder out)
+			@Nullable PsiExpression replacementExpression, @Nonnull StringBuilder out)
 	{
 		if(element.equals(elementToReplace))
 		{

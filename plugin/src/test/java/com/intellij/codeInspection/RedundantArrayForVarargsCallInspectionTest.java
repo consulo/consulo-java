@@ -2,7 +2,7 @@ package com.intellij.codeInspection;
 
 import com.intellij.JavaTestUtil;
 import com.intellij.java.impl.codeInspection.miscGenerics.RedundantArrayForVarargsCallInspection;
-import com.intellij.codeInspection.ex.LocalInspectionToolWrapper;
+import consulo.language.editor.inspection.scheme.LocalInspectionToolWrapper;
 import com.intellij.testFramework.InspectionTestCase;
 
 /**

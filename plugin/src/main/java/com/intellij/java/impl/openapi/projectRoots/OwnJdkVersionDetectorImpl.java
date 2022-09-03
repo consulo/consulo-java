@@ -18,14 +18,14 @@ import javax.annotation.Nullable;
 import com.intellij.java.language.projectRoots.OwnJdkVersionDetector;
 import jakarta.inject.Singleton;
 
-import com.intellij.openapi.application.Application;
+import consulo.application.Application;
 import consulo.logging.Logger;
-import com.intellij.openapi.util.SystemInfo;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.CharsetToolkit;
+import consulo.application.util.SystemInfo;
+import consulo.util.lang.StringUtil;
+import consulo.util.io.CharsetToolkit;
 import com.intellij.java.language.util.Bitness;
-import com.intellij.util.io.BaseOutputReader;
-import com.intellij.util.lang.JavaVersion;
+import consulo.process.io.BaseOutputReader;
+import consulo.application.util.JavaVersion;
 
 /**
  * @author nik

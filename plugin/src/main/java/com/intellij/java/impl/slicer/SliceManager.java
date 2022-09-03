@@ -19,36 +19,37 @@ import java.awt.Font;
 import java.util.regex.Pattern;
 
 import javax.annotation.Nonnull;
+
+import consulo.project.ui.wm.ToolWindowManager;
+import consulo.ui.ex.content.ContentManager;
+import consulo.ui.ex.toolWindow.ToolWindow;
+import consulo.ui.ex.toolWindow.ToolWindowAnchor;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
-import com.intellij.analysis.AnalysisUIOptions;
-import com.intellij.ide.impl.ContentManagerWatcher;
-import com.intellij.openapi.components.PersistentStateComponent;
-import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.components.State;
-import com.intellij.openapi.components.Storage;
-import com.intellij.openapi.components.StoragePathMacros;
-import com.intellij.openapi.progress.ProcessCanceledException;
-import com.intellij.openapi.progress.ProgressIndicator;
-import com.intellij.openapi.progress.ProgressManager;
-import com.intellij.openapi.project.Project;
+import consulo.ide.impl.idea.analysis.AnalysisUIOptions;
+import consulo.ui.ex.toolWindow.ContentManagerWatcher;
+import consulo.component.persist.PersistentStateComponent;
+import consulo.ide.ServiceManager;
+import consulo.component.persist.State;
+import consulo.component.persist.Storage;
+import consulo.component.persist.StoragePathMacros;
+import consulo.component.ProcessCanceledException;
+import consulo.application.progress.ProgressIndicator;
+import consulo.application.progress.ProgressManager;
+import consulo.project.Project;
 import consulo.disposer.Disposable;
 import consulo.disposer.Disposer;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.wm.ToolWindow;
-import com.intellij.openapi.wm.ToolWindowAnchor;
-import com.intellij.openapi.wm.ToolWindowManager;
-import com.intellij.psi.ElementDescriptionUtil;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiManager;
+import consulo.util.lang.StringUtil;
+import consulo.language.psi.ElementDescriptionUtil;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiManager;
 import com.intellij.java.language.psi.PsiReferenceExpression;
-import com.intellij.psi.PsiTreeChangeAdapter;
-import com.intellij.psi.PsiTreeChangeEvent;
-import com.intellij.refactoring.util.RefactoringDescriptionLocation;
-import com.intellij.ui.content.Content;
-import com.intellij.ui.content.ContentManager;
-import com.intellij.util.ui.UIUtil;
+import consulo.language.psi.event.PsiTreeChangeAdapter;
+import consulo.language.psi.event.PsiTreeChangeEvent;
+import consulo.language.editor.refactoring.util.RefactoringDescriptionLocation;
+import consulo.ui.ex.content.Content;
+import consulo.ui.ex.awt.UIUtil;
 
 @Singleton
 @State(name = "SliceManager", storages = {@Storage(file = StoragePathMacros.WORKSPACE_FILE)})

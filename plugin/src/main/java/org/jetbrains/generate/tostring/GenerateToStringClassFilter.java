@@ -15,7 +15,7 @@
  */
 package org.jetbrains.generate.tostring;
 
-import com.intellij.openapi.extensions.ExtensionPointName;
+import consulo.component.extension.ExtensionPointName;
 import com.intellij.java.language.psi.PsiClass;
 
 /**

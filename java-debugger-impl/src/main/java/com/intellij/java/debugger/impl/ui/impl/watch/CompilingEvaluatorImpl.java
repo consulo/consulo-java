@@ -23,12 +23,12 @@ import javax.annotation.Nullable;
 import com.intellij.java.debugger.engine.evaluation.EvaluateException;
 import com.intellij.java.debugger.engine.evaluation.expression.ExpressionEvaluator;
 import com.intellij.java.compiler.ClassObject;
-import com.intellij.openapi.project.Project;
+import consulo.project.Project;
 import com.intellij.java.language.projectRoots.JavaSdkVersion;
 import com.intellij.java.language.LanguageLevel;
-import com.intellij.psi.PsiCodeFragment;
-import com.intellij.psi.PsiElement;
-import com.intellij.util.SystemProperties;
+import consulo.language.psi.PsiCodeFragment;
+import consulo.language.psi.PsiElement;
+import consulo.util.lang.SystemProperties;
 
 // TODO [VISTALL] disabled
 // todo: consider batching compilations in order not to start a separate process for every class that needs to be compiled
@@ -150,7 +150,7 @@ public class CompilingEvaluatorImpl extends CompilingEvaluator
 		return file;
 	} */
 
-	@javax.annotation.Nullable
+	@Nullable
 	public static ExpressionEvaluator create(@Nonnull Project project, @Nullable PsiElement psiContext, @Nonnull Function<PsiElement, PsiCodeFragment> fragmentFactory) throws EvaluateException
 	{
 		/*if(DEBUGGER_COMPILING_EVALUATOR && psiContext != null)

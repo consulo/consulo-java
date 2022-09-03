@@ -1,16 +1,16 @@
 package com.intellij.java.indexing.impl.search;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.util.Computable;
-import com.intellij.psi.search.SearchScope;
+import consulo.application.ApplicationManager;
+import consulo.application.util.function.Computable;
+import consulo.content.scope.SearchScope;
 import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
 import com.intellij.java.indexing.search.searches.OverridingMethodsSearch;
 import com.intellij.java.language.psi.util.MethodSignature;
 import com.intellij.java.language.psi.util.MethodSignatureUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
-import com.intellij.util.Processor;
-import com.intellij.util.QueryExecutor;
+import consulo.application.util.function.Processor;
+import consulo.application.util.query.QueryExecutor;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -28,7 +28,7 @@ public class JavaOverridingMethodsSearcher implements QueryExecutor<PsiMethod, O
 
 		final PsiClass parentClass = ApplicationManager.getApplication().runReadAction(new Computable<PsiClass>()
 		{
-			@javax.annotation.Nullable
+			@Nullable
 			@Override
 			public PsiClass compute()
 			{
@@ -44,7 +44,7 @@ public class JavaOverridingMethodsSearcher implements QueryExecutor<PsiMethod, O
 				PsiMethod found = ApplicationManager.getApplication().runReadAction(new Computable<PsiMethod>()
 				{
 					@Override
-					@javax.annotation.Nullable
+					@Nullable
 					public PsiMethod compute()
 					{
 						return findOverridingMethod(inheritor, method, parentClass);

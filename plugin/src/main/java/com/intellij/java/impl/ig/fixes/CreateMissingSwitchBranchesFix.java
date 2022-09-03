@@ -2,7 +2,7 @@
 package com.intellij.java.impl.ig.fixes;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.util.collection.ContainerUtil;
 import com.intellij.java.impl.ig.psiutils.CreateSwitchBranchesUtil;
 import com.intellij.java.impl.ig.psiutils.SwitchUtils;
 import one.util.streamex.StreamEx;

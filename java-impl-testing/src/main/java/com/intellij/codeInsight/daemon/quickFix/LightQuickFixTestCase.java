@@ -15,7 +15,7 @@
  */
 package com.intellij.codeInsight.daemon.quickFix;
 
-import static com.intellij.util.ObjectUtil.notNull;
+import static consulo.util.lang.ObjectUtil.notNull;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -31,25 +31,25 @@ import javax.annotation.Nonnull;
 import org.intellij.lang.annotations.RegExp;
 import org.jetbrains.annotations.NonNls;
 import com.intellij.codeInsight.daemon.LightDaemonAnalyzerTestCase;
-import com.intellij.codeInsight.daemon.impl.HighlightInfo;
-import com.intellij.codeInsight.intention.IntentionAction;
-import com.intellij.codeInsight.intention.impl.ShowIntentionActionsHandler;
-import com.intellij.lang.Commenter;
+import consulo.language.editor.rawHighlight.HighlightInfo;
+import consulo.language.editor.intention.IntentionAction;
+import consulo.ide.impl.idea.codeInsight.intention.impl.ShowIntentionActionsHandler;
+import consulo.language.Commenter;
 import com.intellij.lang.LanguageCommenters;
-import com.intellij.lang.injection.InjectedLanguageManager;
-import com.intellij.openapi.command.CommandProcessor;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Pair;
-import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.CharsetToolkit;
-import com.intellij.psi.PsiFile;
+import consulo.language.inject.InjectedLanguageManager;
+import consulo.undoRedo.CommandProcessor;
+import consulo.codeEditor.Editor;
+import consulo.project.Project;
+import consulo.util.lang.Pair;
+import consulo.ide.impl.idea.openapi.util.io.FileUtil;
+import consulo.util.lang.StringUtil;
+import consulo.util.io.CharsetToolkit;
+import consulo.language.psi.PsiFile;
 import com.intellij.testFramework.LightPlatformCodeInsightTestCase;
 import com.intellij.testFramework.LightPlatformTestCase;
 import com.intellij.testFramework.fixtures.impl.CodeInsightTestFixtureImpl;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.ui.UIUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.ui.ex.awt.UIUtil;
 import junit.framework.ComparisonFailure;
 
 public abstract class LightQuickFixTestCase extends LightDaemonAnalyzerTestCase {

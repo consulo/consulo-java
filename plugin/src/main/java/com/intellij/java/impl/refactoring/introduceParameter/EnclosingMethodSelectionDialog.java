@@ -24,13 +24,14 @@
  */
 package com.intellij.java.impl.refactoring.introduceParameter;
 
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.DialogWrapper;
+import consulo.project.Project;
+import consulo.ui.ex.awt.DialogWrapper;
 import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.RefactoringBundle;
 import com.intellij.java.impl.refactoring.ui.MethodCellRenderer;
-import com.intellij.ui.ScrollPaneFactory;
-import com.intellij.ui.components.JBList;
+import consulo.ui.ex.awt.ScrollPaneFactory;
+import consulo.ui.ex.awt.JBList;
+
 import javax.annotation.Nonnull;
 
 import javax.swing.*;

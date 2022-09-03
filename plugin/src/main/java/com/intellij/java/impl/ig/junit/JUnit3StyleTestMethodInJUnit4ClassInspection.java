@@ -16,6 +16,7 @@
 package com.intellij.java.impl.ig.junit;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.intellij.java.language.psi.*;
 import org.jetbrains.annotations.Nls;
@@ -46,7 +47,7 @@ public class JUnit3StyleTestMethodInJUnit4ClassInspection extends BaseInspection
     return InspectionGadgetsBundle.message("junit3.style.test.method.in.junit4.class.problem.descriptor");
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   @Override
   protected InspectionGadgetsFix buildFix(Object... infos) {
     return new DelegatingFix(new AnnotateMethodFix("org.junit.Test"));

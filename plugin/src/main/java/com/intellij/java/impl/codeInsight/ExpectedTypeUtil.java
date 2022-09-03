@@ -21,7 +21,7 @@ import com.intellij.psi.*;
 import com.intellij.java.impl.psi.impl.source.resolve.CompletionParameterTypeInferencePolicy;
 import com.intellij.java.language.psi.impl.source.resolve.DefaultParameterTypeInferencePolicy;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.util.collection.ContainerUtil;
 import javax.annotation.Nullable;
 
 import java.util.*;

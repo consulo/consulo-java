@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.refactoring.safeDelete;
 
-import com.intellij.find.findUsages.PsiElement2UsageTargetAdapter;
+import consulo.ide.impl.find.PsiElement2UsageTargetAdapter;
 import com.intellij.java.impl.codeInsight.daemon.impl.quickfix.RemoveUnusedVariableUtil;
 import com.intellij.java.impl.codeInsight.generation.GetterSetterPrototypeProvider;
 import com.intellij.java.impl.ide.util.SuperMethodWarningUtil;
@@ -30,29 +30,29 @@ import com.intellij.java.language.psi.javadoc.PsiDocTag;
 import com.intellij.java.language.psi.util.MethodSignatureUtil;
 import com.intellij.java.language.psi.util.PropertyUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.DialogWrapper;
-import com.intellij.openapi.ui.Messages;
-import com.intellij.openapi.util.Condition;
-import com.intellij.openapi.util.TextRange;
+import consulo.application.ApplicationManager;
+import consulo.module.Module;
+import consulo.project.Project;
+import consulo.ui.ex.awt.DialogWrapper;
+import consulo.ui.ex.awt.Messages;
+import consulo.util.lang.function.Condition;
+import consulo.document.util.TextRange;
 import com.intellij.psi.*;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.search.searches.ReferencesSearch;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.refactoring.RefactoringBundle;
-import com.intellij.refactoring.safeDelete.NonCodeUsageSearchInfo;
-import com.intellij.refactoring.safeDelete.SafeDeleteHandler;
-import com.intellij.refactoring.safeDelete.SafeDeleteProcessor;
-import com.intellij.refactoring.safeDelete.SafeDeleteProcessorDelegateBase;
-import com.intellij.refactoring.util.RefactoringUIUtil;
-import com.intellij.usageView.UsageInfo;
-import com.intellij.usageView.UsageViewUtil;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.search.ReferencesSearch;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.safeDelete.NonCodeUsageSearchInfo;
+import consulo.language.editor.refactoring.safeDelete.SafeDeleteHandler;
+import consulo.language.editor.refactoring.safeDelete.SafeDeleteProcessor;
+import consulo.language.editor.refactoring.safeDelete.SafeDeleteProcessorDelegateBase;
+import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
+import consulo.usage.UsageInfo;
+import consulo.usage.UsageViewUtil;
 import com.intellij.usages.*;
-import com.intellij.util.ArrayUtil;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.Processor;
+import consulo.util.collection.ArrayUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.application.util.function.Processor;
 import consulo.logging.Logger;
 import consulo.psi.PsiPackage;
 
@@ -67,7 +67,7 @@ public class JavaSafeDeleteProcessor extends SafeDeleteProcessorDelegateBase {
         element instanceof PsiField || element instanceof PsiParameter || element instanceof PsiLocalVariable || element instanceof PsiPackage;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public NonCodeUsageSearchInfo findUsages(final PsiElement element, final PsiElement[] allElementsToDelete, final List<UsageInfo> usages) {
     Condition<PsiElement> insideDeletedCondition = getUsageInsideDeletedFilter(allElementsToDelete);
     if (element instanceof PsiClass) {
@@ -237,7 +237,7 @@ public class JavaSafeDeleteProcessor extends SafeDeleteProcessorDelegateBase {
     return null;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public UsageInfo[] preprocessUsages(final Project project, final UsageInfo[] usages) {
     ArrayList<UsageInfo> result = new ArrayList<UsageInfo>();
     ArrayList<UsageInfo> overridingMethods = new ArrayList<UsageInfo>();
@@ -432,7 +432,7 @@ public class JavaSafeDeleteProcessor extends SafeDeleteProcessorDelegateBase {
     }
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private static Condition<PsiElement> findMethodUsages(PsiMethod psiMethod, final PsiElement[] allElementsToDelete, List<UsageInfo> usages) {
     final Collection<PsiReference> references = ReferencesSearch.search(psiMethod).findAll();
 
@@ -482,7 +482,7 @@ public class JavaSafeDeleteProcessor extends SafeDeleteProcessorDelegateBase {
     return list.toArray(new PsiMethod[list.size()]);
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private static Condition<PsiElement> findConstructorUsages(PsiMethod constructor, Collection<PsiReference> originalReferences, List<UsageInfo> usages,
                                                              final PsiElement[] allElementsToDelete) {
     HashMap<PsiMethod, Collection<PsiReference>> constructorsToRefs = new HashMap<PsiMethod, Collection<PsiReference>>();
@@ -602,7 +602,7 @@ public class JavaSafeDeleteProcessor extends SafeDeleteProcessorDelegateBase {
     return false;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private static PsiMethod getOverridingConstructorOfSuperCall(final PsiElement element) {
     if (element instanceof PsiReferenceExpression && "super".equals(element.getText())) {
       PsiElement parent = element.getParent();

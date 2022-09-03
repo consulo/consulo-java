@@ -1,7 +1,7 @@
 package com.intellij.java.analysis.codeInsight.daemon;
 
-import com.intellij.codeInsight.daemon.ImplicitUsageProvider;
-import com.intellij.psi.PsiElement;
+import consulo.language.editor.ImplicitUsageProvider;
+import consulo.language.psi.PsiElement;
 
 import javax.annotation.Nonnull;
 

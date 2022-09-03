@@ -16,7 +16,7 @@
 package com.intellij.java.impl.ig.methodmetrics;
 
 import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.util.ui.CheckBox;
+import consulo.ui.CheckBox;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
 import javax.annotation.Nonnull;

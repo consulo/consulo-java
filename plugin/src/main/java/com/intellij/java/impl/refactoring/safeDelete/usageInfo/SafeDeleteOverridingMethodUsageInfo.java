@@ -16,9 +16,9 @@
 package com.intellij.java.impl.refactoring.safeDelete.usageInfo;
 
 import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.refactoring.safeDelete.usageInfo.SafeDeleteCustomUsageInfo;
-import com.intellij.refactoring.safeDelete.usageInfo.SafeDeleteUsageInfo;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.editor.refactoring.safeDelete.usageInfo.SafeDeleteCustomUsageInfo;
+import consulo.language.editor.refactoring.safeDelete.usageInfo.SafeDeleteUsageInfo;
+import consulo.language.util.IncorrectOperationException;
 
 /**
  * @author dsl

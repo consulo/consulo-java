@@ -28,7 +28,7 @@ import javax.annotation.Nonnull;
 
 import com.intellij.java.language.codeInsight.NullableNotNullManager;
 import com.intellij.java.language.psi.PsiModifierListOwner;
-import com.intellij.util.ArrayUtil;
+import consulo.util.collection.ArrayUtil;
 
 public class AddNullableAnnotationFix extends AddNullableNotNullAnnotationFix {
 	public AddNullableAnnotationFix(@Nonnull PsiModifierListOwner owner) {

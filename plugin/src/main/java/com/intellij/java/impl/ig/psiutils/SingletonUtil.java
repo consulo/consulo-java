@@ -18,8 +18,8 @@ package com.intellij.java.impl.ig.psiutils;
 import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
 import com.intellij.java.indexing.search.searches.MethodReferencesSearch;
-import com.intellij.util.Processor;
-import com.intellij.util.Query;
+import consulo.application.util.function.Processor;
+import consulo.application.util.query.Query;
 import javax.annotation.Nonnull;
 
 public class SingletonUtil {

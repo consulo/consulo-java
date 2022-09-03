@@ -15,10 +15,10 @@
  */
 package com.intellij.java.language.impl.psi.impl.file;
 
-import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.ide.ServiceManager;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.java.language.psi.PsiJavaPackage;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.language.psi.scope.GlobalSearchScope;
 
 /**
  * @author yole

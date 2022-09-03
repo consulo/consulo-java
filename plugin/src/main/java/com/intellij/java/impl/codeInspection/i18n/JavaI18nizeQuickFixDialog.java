@@ -19,11 +19,11 @@
  */
 package com.intellij.java.impl.codeInspection.i18n;
 
-import com.intellij.codeInsight.CodeInsightBundle;
-import com.intellij.codeInsight.intention.IntentionAction;
-import com.intellij.ide.fileTemplates.FileTemplate;
-import com.intellij.ide.fileTemplates.FileTemplateManager;
-import com.intellij.ide.fileTemplates.impl.FileTemplateConfigurable;
+import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.intention.IntentionAction;
+import consulo.fileTemplate.FileTemplate;
+import consulo.fileTemplate.FileTemplateManager;
+import consulo.ide.impl.idea.ide.fileTemplates.impl.FileTemplateConfigurable;
 import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.impl.lang.properties.psi.I18nizedTextGenerator;
@@ -31,18 +31,18 @@ import com.intellij.lang.properties.psi.PropertiesFile;
 import com.intellij.java.impl.lang.properties.psi.PropertyCreationHandler;
 import com.intellij.java.impl.lang.properties.psi.ResourceBundleManager;
 import com.intellij.lang.properties.references.I18nizeQuickFixDialog;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.event.DocumentAdapter;
-import com.intellij.openapi.options.ShowSettingsUtil;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.Messages;
-import com.intellij.openapi.ui.ex.MultiLineLabel;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.document.Document;
+import consulo.document.event.DocumentAdapter;
+import consulo.ide.setting.ShowSettingsUtil;
+import consulo.project.Project;
+import consulo.ui.ex.awt.HyperlinkLabel;
+import consulo.ui.ex.awt.Messages;
+import consulo.ide.impl.idea.openapi.ui.ex.MultiLineLabel;
+import consulo.util.lang.StringUtil;
 import com.intellij.psi.*;
-import com.intellij.ui.EditorComboBox;
-import com.intellij.ui.HyperlinkLabel;
-import com.intellij.util.ArrayUtil;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.editor.ui.awt.EditorComboBox;
+import consulo.util.collection.ArrayUtil;
+import consulo.language.util.IncorrectOperationException;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
@@ -82,7 +82,7 @@ public class JavaI18nizeQuickFixDialog extends I18nizeQuickFixDialog
 
 	public JavaI18nizeQuickFixDialog(@Nonnull Project project,
 									 @Nonnull final PsiFile context,
-									 @javax.annotation.Nullable final PsiLiteralExpression literalExpression,
+									 @Nullable final PsiLiteralExpression literalExpression,
 									 String defaultPropertyValue,
 									 DialogCustomization customization,
 									 final boolean showJavaCodeInfo,

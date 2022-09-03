@@ -15,13 +15,13 @@
  */
 package com.intellij.java.language.impl.psi.impl.compiled;
 
-import com.intellij.psi.*;
-import com.intellij.psi.stubs.IStubElementType;
-import com.intellij.psi.stubs.PsiFileStub;
-import com.intellij.psi.stubs.StubElement;
-import com.intellij.util.ArrayUtil;
-import javax.annotation.Nonnull;
+import consulo.language.psi.*;
+import consulo.language.psi.stub.IStubElementType;
+import consulo.language.psi.stub.PsiFileStub;
+import consulo.language.psi.stub.StubElement;
+import consulo.util.collection.ArrayUtil;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
 public abstract class ClsRepositoryPsiElement<T extends StubElement> extends ClsElementImpl implements StubBasedPsiElement<T> {

@@ -15,40 +15,40 @@
  */
 package com.intellij.java.language.impl.psi.impl.source;
 
-import com.intellij.extapi.psi.StubBasedPsiElementBase;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.impl.psi.impl.*;
-import com.intellij.java.language.psi.*;
-import com.intellij.java.language.psi.javadoc.PsiDocComment;
-import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.lang.ASTNode;
-import com.intellij.navigation.ItemPresentation;
-import com.intellij.navigation.ItemPresentationProviders;
-import com.intellij.openapi.ui.Queryable;
-import com.intellij.openapi.util.Pair;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.*;
-import com.intellij.psi.impl.*;
 import com.intellij.java.language.impl.psi.impl.java.stubs.JavaStubElementTypes;
 import com.intellij.java.language.impl.psi.impl.java.stubs.PsiClassInitializerStub;
 import com.intellij.java.language.impl.psi.impl.java.stubs.PsiClassStub;
 import com.intellij.java.language.impl.psi.impl.java.stubs.PsiMethodStub;
 import com.intellij.java.language.impl.psi.impl.source.tree.ChildRole;
-import com.intellij.psi.impl.source.tree.CompositeElement;
-import com.intellij.psi.scope.PsiScopeProcessor;
-import com.intellij.psi.search.SearchScope;
-import com.intellij.psi.stubs.IStubElementType;
-import com.intellij.psi.stubs.PsiFileStub;
-import com.intellij.psi.stubs.StubElement;
-import com.intellij.psi.util.CachedValueProvider;
-import com.intellij.psi.util.CachedValuesManager;
-import com.intellij.psi.util.PsiModificationTracker;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.IncorrectOperationException;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.javadoc.PsiDocComment;
+import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.application.util.CachedValueProvider;
+import consulo.application.util.Queryable;
+import consulo.content.scope.SearchScope;
 import consulo.java.language.impl.psi.augment.JavaEnumAugmentProvider;
 import consulo.java.language.impl.psi.stub.PsiClassLevelDeclarationStatementStub;
+import consulo.language.ast.ASTNode;
+import consulo.language.impl.DebugUtil;
+import consulo.language.impl.ast.CompositeElement;
+import consulo.language.impl.psi.stub.StubBasedPsiElementBase;
+import consulo.language.psi.*;
+import consulo.language.psi.resolve.PsiScopeProcessor;
+import consulo.language.psi.resolve.ResolveState;
+import consulo.language.psi.stub.IStubElementType;
+import consulo.language.psi.stub.PsiFileStub;
+import consulo.language.psi.stub.StubElement;
+import consulo.language.psi.util.LanguageCachedValueUtil;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
+import consulo.navigation.ItemPresentation;
+import consulo.navigation.ItemPresentationProvider;
 import consulo.util.dataholder.UserDataHolder;
+import consulo.util.lang.Pair;
+import consulo.util.lang.StringUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -115,7 +115,7 @@ public class PsiClassImpl extends JavaStubPsiElement<PsiClassStub<?>> implements
 
   @Override
   public PsiElement getOriginalElement() {
-    return CachedValuesManager.getCachedValue(this, new CachedValueProvider<PsiClass>() {
+    return LanguageCachedValueUtil.getCachedValue(this, new CachedValueProvider<PsiClass>() {
       @Nullable
       @Override
       public Result<PsiClass> compute() {
@@ -672,7 +672,7 @@ public class PsiClassImpl extends JavaStubPsiElement<PsiClassStub<?>> implements
 
   @Override
   public ItemPresentation getPresentation() {
-    return ItemPresentationProviders.getItemPresentation(this);
+    return ItemPresentationProvider.getItemPresentation(this);
   }
 
   @Override

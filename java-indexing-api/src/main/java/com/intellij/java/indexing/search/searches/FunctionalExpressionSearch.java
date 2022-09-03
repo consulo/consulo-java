@@ -15,26 +15,23 @@
  */
 package com.intellij.java.indexing.search.searches;
 
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.extensions.ExtensionPointName;
-import com.intellij.openapi.util.Computable;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiFunctionalExpression;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifier;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.search.PsiSearchHelper;
-import com.intellij.psi.search.SearchScope;
-import com.intellij.psi.search.searches.ExtensibleQueryFactory;
-import com.intellij.psi.util.PsiUtilCore;
-import com.intellij.util.EmptyQuery;
-import com.intellij.util.Query;
-import com.intellij.util.QueryExecutor;
+import consulo.application.ApplicationManager;
+import consulo.application.util.function.Computable;
+import consulo.application.util.query.EmptyQuery;
+import consulo.application.util.query.ExtensibleQueryFactory;
+import consulo.application.util.query.Query;
+import consulo.content.scope.SearchScope;
+import consulo.language.psi.PsiUtilCore;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.search.PsiSearchHelper;
 
 import javax.annotation.Nonnull;
 
 public class FunctionalExpressionSearch extends ExtensibleQueryFactory<PsiFunctionalExpression, FunctionalExpressionSearch.SearchParameters> {
-  public static final ExtensionPointName<QueryExecutor> EP_NAME = ExtensionPointName.create("consulo.java.functionalInterfaceSearch");
   public static final FunctionalExpressionSearch INSTANCE = new FunctionalExpressionSearch();
 
   public static class SearchParameters {
@@ -52,13 +49,13 @@ public class FunctionalExpressionSearch extends ExtensibleQueryFactory<PsiFuncti
 
     @Nonnull
     public SearchScope getEffectiveSearchScope() {
-      SearchScope accessScope = PsiSearchHelper.SERVICE.getInstance(myElementToSearch.getProject()).getUseScope(myElementToSearch);
+      SearchScope accessScope = PsiSearchHelper.getInstance(myElementToSearch.getProject()).getUseScope(myElementToSearch);
       return myScope.intersectWith(accessScope);
     }
   }
 
   public FunctionalExpressionSearch() {
-    super("consulo.java");
+    super(FunctionalExpressionSearchExecutor.class);
   }
 
   public static Query<PsiFunctionalExpression> search(@Nonnull final PsiClass aClass, @Nonnull SearchScope scope) {
@@ -70,18 +67,15 @@ public class FunctionalExpressionSearch extends ExtensibleQueryFactory<PsiFuncti
   }
 
   public static Query<PsiFunctionalExpression> search(@Nonnull final PsiMethod psiMethod, @Nonnull final SearchScope scope) {
-    return ApplicationManager.getApplication().runReadAction(new Computable<Query<PsiFunctionalExpression>>() {
-      @Override
-      public Query<PsiFunctionalExpression> compute() {
-        if (!psiMethod.hasModifierProperty(PsiModifier.STATIC) && !psiMethod.hasModifierProperty(PsiModifier.DEFAULT)) {
-          final PsiClass containingClass = psiMethod.getContainingClass();
-          if (containingClass != null) {
-            return INSTANCE.createUniqueResultsQuery(new SearchParameters(containingClass, scope));
-          }
+    return ApplicationManager.getApplication().runReadAction((Computable<Query<PsiFunctionalExpression>>) () -> {
+      if (!psiMethod.hasModifierProperty(PsiModifier.STATIC) && !psiMethod.hasModifierProperty(PsiModifier.DEFAULT)) {
+        final PsiClass containingClass = psiMethod.getContainingClass();
+        if (containingClass != null) {
+          return INSTANCE.createUniqueResultsQuery(new SearchParameters(containingClass, scope));
         }
-
-        return EmptyQuery.getEmptyQuery();
       }
+
+      return EmptyQuery.getEmptyQuery();
     });
   }
 

@@ -15,24 +15,25 @@
  */
 package com.intellij.java.analysis.impl.codeInsight.daemon.impl.actions;
 
-import com.intellij.codeInsight.FileModificationService;
-import com.intellij.codeInsight.daemon.HighlightDisplayKey;
-import com.intellij.codeInsight.daemon.impl.actions.AbstractBatchSuppressByNoInspectionCommentFix;
-import com.intellij.codeInspection.InspectionsBundle;
-import com.intellij.codeInspection.SuppressionUtil;
+import consulo.language.editor.FileModificationService;
+import consulo.language.editor.rawHighlight.HighlightDisplayKey;
+import consulo.language.editor.inspection.AbstractBatchSuppressByNoInspectionCommentFix;
+import consulo.language.editor.inspection.InspectionsBundle;
+import consulo.language.editor.inspection.SuppressionUtil;
 import com.intellij.java.analysis.impl.codeInspection.JavaSuppressionUtil;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.command.undo.UndoUtil;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.undoRedo.util.UndoUtil;
+import consulo.project.Project;
+import consulo.util.lang.StringUtil;
 import com.intellij.psi.*;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.java.language.psi.javadoc.PsiDocTag;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * @author ven
@@ -55,7 +56,7 @@ public class SuppressFix extends AbstractBatchSuppressByNoInspectionCommentFix {
   }
 
   @Override
-  @javax.annotation.Nullable
+  @Nullable
   public PsiDocCommentOwner getContainer(final PsiElement context) {
     if (context == null || !context.getManager().isInProject(context)) {
       return null;

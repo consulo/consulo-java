@@ -19,6 +19,8 @@ import java.awt.BorderLayout;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
+import consulo.ui.ex.awt.ScrollPaneFactory;
+import consulo.ui.ex.awt.util.Alarm;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
 import com.intellij.java.debugger.impl.actions.DebuggerAction;
@@ -37,16 +39,14 @@ import com.intellij.java.debugger.impl.ui.impl.watch.NodeDescriptorImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.StackFrameDescriptorImpl;
 import com.intellij.java.debugger.impl.ui.tree.render.DescriptorLabelListener;
 import consulo.disposer.Disposable;
-import com.intellij.openapi.actionSystem.ActionManager;
-import com.intellij.openapi.actionSystem.ActionPopupMenu;
-import com.intellij.openapi.actionSystem.DefaultActionGroup;
-import com.intellij.openapi.actionSystem.PlatformDataKeys;
-import com.intellij.openapi.application.ModalityState;
-import com.intellij.openapi.project.Project;
+import consulo.ui.ex.action.ActionManager;
+import consulo.ui.ex.action.ActionPopupMenu;
+import consulo.ui.ex.action.DefaultActionGroup;
+import consulo.language.editor.PlatformDataKeys;
+import consulo.ui.ModalityState;
+import consulo.project.Project;
 import consulo.disposer.Disposer;
 import consulo.util.dataholder.Key;
-import com.intellij.ui.ScrollPaneFactory;
-import com.intellij.util.Alarm;
 
 public class ThreadsPanel extends DebuggerTreePanel
 {

@@ -15,35 +15,36 @@
  */
 package com.intellij.java.impl.codeInsight.editorActions.smartEnter;
 
-import com.intellij.application.options.CodeStyle;
-import com.intellij.codeInsight.editorActions.smartEnter.SmartEnterProcessor;
-import com.intellij.codeInsight.lookup.LookupManager;
-import com.intellij.featureStatistics.FeatureUsageTracker;
+import consulo.codeEditor.action.EditorActionHandler;
+import consulo.language.codeStyle.CodeStyle;
+import consulo.language.editor.action.SmartEnterProcessor;
+import consulo.language.editor.completion.lookup.LookupManager;
+import consulo.externalService.statistic.FeatureUsageTracker;
 import com.intellij.java.impl.codeInsight.CodeInsightUtil;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.actionSystem.IdeActions;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.RangeMarker;
-import com.intellij.openapi.editor.actionSystem.EditorActionHandler;
-import com.intellij.openapi.editor.actionSystem.EditorActionManager;
-import com.intellij.openapi.editor.ex.EditorEx;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.PsiComment;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiWhiteSpace;
-import com.intellij.psi.codeStyle.CodeStyleManager;
-import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.text.CharArrayUtil;
+import consulo.ui.ex.action.IdeActions;
+import consulo.document.Document;
+import consulo.codeEditor.Editor;
+import consulo.document.RangeMarker;
+import consulo.codeEditor.action.EditorActionManager;
+import consulo.codeEditor.EditorEx;
+import consulo.project.Project;
+import consulo.document.util.TextRange;
+import consulo.language.psi.PsiComment;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiWhiteSpace;
+import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.codeStyle.CommonCodeStyleSettings;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.util.lang.CharArrayUtil;
 import consulo.logging.Logger;
 import consulo.util.dataholder.Key;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -329,7 +330,7 @@ public class JavaSmartEnterProcessor extends SmartEnterProcessor
 	}
 
 	@Override
-	@javax.annotation.Nullable
+	@Nullable
 	protected PsiElement getStatementAtCaret(Editor editor, PsiFile psiFile)
 	{
 		PsiElement atCaret = super.getStatementAtCaret(editor, psiFile);

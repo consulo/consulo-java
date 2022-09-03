@@ -15,18 +15,18 @@
  */
 package com.intellij.java.impl.codeInsight.lookup;
 
-import com.intellij.codeInsight.TailType;
-import com.intellij.codeInsight.lookup.LookupElement;
-import com.intellij.codeInsight.lookup.LookupItem;
-import com.intellij.codeInsight.lookup.LookupValueWithUIHint;
-import com.intellij.codeInsight.lookup.PresentableLookupValue;
-import com.intellij.codeInsight.template.Template;
+import consulo.language.editor.completion.lookup.TailType;
+import consulo.language.editor.completion.lookup.LookupElement;
+import consulo.language.editor.completion.lookup.LookupItem;
+import consulo.language.editor.completion.lookup.LookupValueWithUIHint;
+import consulo.language.editor.completion.lookup.PresentableLookupValue;
+import consulo.language.editor.template.Template;
 import com.intellij.java.impl.codeInsight.completion.JavaClassNameCompletionContributor;
 import com.intellij.java.impl.codeInsight.completion.JavaMethodCallElement;
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.meta.PsiMetaData;
-import com.intellij.psi.util.PsiUtilCore;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.meta.PsiMetaData;
+import consulo.language.psi.PsiUtilCore;
 import consulo.logging.Logger;
 
 import javax.annotation.Nonnull;

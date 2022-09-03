@@ -15,6 +15,8 @@
  */
 package com.intellij.java.debugger.impl.jdi;
 
+import javax.annotation.Nullable;
+
 /**
  * "Code" attribute parsing extracted from ASM4 library and adopted to finding operations with local variables
  */
@@ -186,7 +188,7 @@ public class InstructionParser
 		// override to perform actions
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	private static String getVarInstructionTypeSignature(int opcode)
 	{
 		switch(opcode)

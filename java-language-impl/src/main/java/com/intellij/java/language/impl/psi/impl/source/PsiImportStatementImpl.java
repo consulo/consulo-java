@@ -15,14 +15,15 @@
  */
 package com.intellij.java.language.impl.psi.impl.source;
 
+import com.intellij.java.language.impl.psi.impl.java.stubs.JavaStubElementTypes;
+import com.intellij.java.language.impl.psi.impl.java.stubs.PsiImportStatementStub;
 import com.intellij.java.language.psi.JavaElementVisitor;
 import com.intellij.java.language.psi.PsiImportStatement;
 import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
-import com.intellij.lang.ASTNode;
-import com.intellij.psi.*;
-import com.intellij.java.language.impl.psi.impl.java.stubs.JavaStubElementTypes;
-import com.intellij.java.language.impl.psi.impl.java.stubs.PsiImportStatementStub;
-import com.intellij.util.ArrayFactory;
+import consulo.language.ast.ASTNode;
+import consulo.language.psi.PsiElementVisitor;
+import consulo.util.collection.ArrayFactory;
+
 import javax.annotation.Nonnull;
 
 public class PsiImportStatementImpl extends PsiImportStatementBaseImpl implements PsiImportStatement {
@@ -50,16 +51,15 @@ public class PsiImportStatementImpl extends PsiImportStatementBaseImpl implement
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor){
+  public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
-      ((JavaElementVisitor)visitor).visitImportStatement(this);
-    }
-    else {
+      ((JavaElementVisitor) visitor).visitImportStatement(this);
+    } else {
       visitor.visitElement(this);
     }
   }
 
-  public String toString(){
+  public String toString() {
     return "PsiImportStatement";
   }
 }

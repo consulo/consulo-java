@@ -16,13 +16,14 @@
 package com.intellij.java.impl.ipp.decls;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.intellij.java.language.psi.PsiCodeBlock;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiLocalVariable;
 import com.intellij.psi.*;
-import com.intellij.psi.search.searches.ReferencesSearch;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.search.ReferencesSearch;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 
 class MoveDeclarationPredicate implements PsiElementPredicate {
@@ -74,7 +75,7 @@ class MoveDeclarationPredicate implements PsiElementPredicate {
     return !prevSibling.equals(variable.getParent());
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public static PsiElement getChildWhichContainsElement(
     @Nonnull PsiCodeBlock ancestor, @Nonnull PsiElement descendant) {
     PsiElement element = descendant;
@@ -88,7 +89,7 @@ class MoveDeclarationPredicate implements PsiElementPredicate {
     return descendant;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public static PsiCodeBlock getTightestBlock(
     @Nonnull PsiReference[] references) {
     PsiCodeBlock commonParentBlock = null;

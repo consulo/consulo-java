@@ -20,26 +20,26 @@ import javax.annotation.Nullable;
 import javax.swing.JComponent;
 
 import com.intellij.java.debugger.impl.breakpoints.properties.JavaFieldBreakpointProperties;
-import com.intellij.CommonBundle;
+import consulo.application.CommonBundle;
 import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.impl.HelpID;
-import com.intellij.icons.AllIcons;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.Messages;
-import com.intellij.openapi.util.Ref;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.application.AllIcons;
+import consulo.application.ApplicationManager;
+import consulo.document.Document;
+import consulo.execution.debug.breakpoint.XLineBreakpoint;
+import consulo.execution.debug.breakpoint.ui.XBreakpointCustomPropertiesPanel;
+import consulo.project.Project;
+import consulo.ui.ex.awt.Messages;
+import consulo.util.lang.ref.Ref;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiDocumentManager;
+import consulo.language.psi.PsiDocumentManager;
 import com.intellij.java.language.psi.PsiField;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.xdebugger.XDebuggerManager;
-import com.intellij.xdebugger.breakpoints.XBreakpoint;
-import com.intellij.xdebugger.breakpoints.XLineBreakpoint;
-import com.intellij.xdebugger.breakpoints.ui.XBreakpointCustomPropertiesPanel;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.execution.debug.XDebuggerManager;
+import consulo.execution.debug.breakpoint.XBreakpoint;
 import consulo.ui.image.Image;
 
 /**
@@ -115,21 +115,21 @@ public class JavaFieldBreakpointType extends JavaLineBreakpointTypeBase<JavaFiel
 		return new FieldBreakpointPropertiesPanel();
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	@Override
 	public JavaFieldBreakpointProperties createProperties()
 	{
 		return new JavaFieldBreakpointProperties();
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	@Override
 	public JavaFieldBreakpointProperties createBreakpointProperties(@Nonnull VirtualFile file, int line)
 	{
 		return new JavaFieldBreakpointProperties();
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	@Override
 	public XLineBreakpoint<JavaFieldBreakpointProperties> addBreakpoint(final Project project, JComponent parentComponent)
 	{

@@ -20,12 +20,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import com.intellij.openapi.project.Project;
-import com.intellij.packageDependencies.ui.UsagesPanel;
-import com.intellij.psi.PsiElement;
+import consulo.project.Project;
+import consulo.ide.impl.idea.packageDependencies.ui.UsagesPanel;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.impl.refactoring.typeMigration.TypeMigrationLabeler;
 import com.intellij.java.impl.refactoring.typeMigration.usageInfo.TypeMigrationUsageInfo;
-import com.intellij.usageView.UsageInfo;
+import consulo.usage.UsageInfo;
 
 /**
  * @author anna

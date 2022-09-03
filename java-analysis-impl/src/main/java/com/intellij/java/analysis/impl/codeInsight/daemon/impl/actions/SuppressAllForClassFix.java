@@ -15,20 +15,21 @@
  */
 package com.intellij.java.analysis.impl.codeInsight.daemon.impl.actions;
 
-import com.intellij.codeInsight.FileModificationService;
-import com.intellij.codeInspection.InspectionsBundle;
-import com.intellij.codeInspection.SuppressionUtil;
+import consulo.language.editor.FileModificationService;
+import consulo.language.editor.inspection.InspectionsBundle;
+import consulo.language.editor.inspection.SuppressionUtil;
 import com.intellij.java.analysis.impl.codeInspection.JavaSuppressionUtil;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.project.Project;
+import consulo.project.Project;
 import com.intellij.psi.*;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.java.language.psi.javadoc.PsiDocTag;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * User: anna
@@ -42,7 +43,7 @@ public class SuppressAllForClassFix extends SuppressFix {
   }
 
   @Override
-  @javax.annotation.Nullable
+  @Nullable
   public PsiDocCommentOwner getContainer(final PsiElement element) {
     PsiDocCommentOwner container = super.getContainer(element);
     if (container == null) {

@@ -15,8 +15,8 @@
  */
 package com.intellij.java.analysis.impl.codeInspection.canBeFinal;
 
-import com.intellij.openapi.extensions.ExtensionPointName;
-import com.intellij.openapi.extensions.Extensions;
+import consulo.component.extension.ExtensionPointName;
+import consulo.component.extension.Extensions;
 import com.intellij.java.language.psi.PsiMember;
 
 /**

@@ -24,15 +24,16 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.intellij.java.language.psi.*;
 import org.jetbrains.annotations.Nls;
-import com.intellij.codeInsight.intention.IntentionAction;
-import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
+import consulo.language.editor.intention.IntentionAction;
+import consulo.language.editor.inspection.LocalQuickFixAndIntentionActionOnPsiElement;
+import consulo.codeEditor.Editor;
+import consulo.project.Project;
 import com.intellij.psi.*;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.util.collection.ContainerUtil;
 
 /**
  * @author Pavel.Dolgov
@@ -66,7 +67,7 @@ public class AddAnnotationAttributeNameFix extends LocalQuickFixAndIntentionActi
 	@Override
 	public void invoke(@Nonnull Project project,
 			@Nonnull PsiFile file,
-			@javax.annotation.Nullable Editor editor,
+			@Nullable Editor editor,
 			@Nonnull PsiElement startElement,
 			@Nonnull PsiElement endElement)
 	{
@@ -106,7 +107,7 @@ public class AddAnnotationAttributeNameFix extends LocalQuickFixAndIntentionActi
 		return value != null ? name + "=" + value.getText() : name + "=";
 	}
 
-	public static boolean isCompatibleReturnType(@Nonnull PsiMethod psiMethod, @javax.annotation.Nullable PsiType valueType)
+	public static boolean isCompatibleReturnType(@Nonnull PsiMethod psiMethod, @Nullable PsiType valueType)
 	{
 		final PsiType expectedType = psiMethod.getReturnType();
 		if(expectedType == null || valueType == null || expectedType.isAssignableFrom(valueType))
@@ -157,7 +158,7 @@ public class AddAnnotationAttributeNameFix extends LocalQuickFixAndIntentionActi
 		return Arrays.stream(parameterList.getAttributes()).map(PsiNameValuePair::getName).filter(Objects::nonNull).collect(Collectors.toSet());
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	private static PsiClass getAnnotationClass(@Nonnull PsiAnnotationParameterList parameterList)
 	{
 		final PsiElement parent = parameterList.getParent();

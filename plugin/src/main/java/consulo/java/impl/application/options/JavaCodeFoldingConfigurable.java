@@ -17,8 +17,8 @@
 package consulo.java.impl.application.options;
 
 import com.intellij.java.language.codeInsight.folding.JavaCodeFoldingSettings;
-import com.intellij.openapi.application.ApplicationBundle;
-import com.intellij.openapi.options.Configurable;
+import consulo.application.ApplicationBundle;
+import consulo.configurable.Configurable;
 import consulo.disposer.Disposable;
 import consulo.java.impl.JavaBundle;
 import consulo.options.SimpleConfigurableByProperties;

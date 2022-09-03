@@ -20,12 +20,12 @@ import java.util.List;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import com.intellij.codeInsight.intention.IntentionAction;
+import consulo.language.editor.intention.IntentionAction;
 import com.intellij.lang.properties.references.I18nUtil;
-import com.intellij.openapi.extensions.ExtensionPointName;
-import com.intellij.openapi.project.Project;
+import consulo.component.extension.ExtensionPointName;
+import consulo.project.Project;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiFile;
+import consulo.language.psi.PsiFile;
 
 public abstract class ResourceBundleManager {
   private static final ExtensionPointName<ResourceBundleManager> RESOURCE_BUNDLE_MANAGER = ExtensionPointName.create("consulo.java.resourceBundleManager");
@@ -45,16 +45,16 @@ public abstract class ResourceBundleManager {
     return I18nUtil.defaultGetPropertyFiles(myProject);
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public I18nizedTextGenerator getI18nizedTextGenerator() {
     return null;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   @NonNls
   public abstract String getTemplateName();
 
-  @javax.annotation.Nullable
+  @Nullable
   @NonNls
   public abstract String getConcatenationTemplateName();
 
@@ -62,7 +62,7 @@ public abstract class ResourceBundleManager {
 
   public abstract boolean canShowJavaCodeInfo();
 
-  @javax.annotation.Nullable
+  @Nullable
   public static ResourceBundleManager getManager(PsiFile context) throws ResourceBundleNotFoundException {
     final Project project = context.getProject();
     final ResourceBundleManager[] managers = project.getExtensions(RESOURCE_BUNDLE_MANAGER);
@@ -75,12 +75,12 @@ public abstract class ResourceBundleManager {
     return manager.isActive(context) ? manager : null;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public PropertyCreationHandler getPropertyCreationHandler() {
     return null;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public String suggestPropertyKey(@Nonnull final String value) {
     return null;
   }

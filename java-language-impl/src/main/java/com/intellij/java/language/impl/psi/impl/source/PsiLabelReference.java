@@ -15,17 +15,17 @@
  */
 package com.intellij.java.language.impl.psi.impl.source;
 
+import com.intellij.java.language.impl.psi.impl.PsiImplUtil;
 import com.intellij.java.language.psi.PsiIdentifier;
 import com.intellij.java.language.psi.PsiLabeledStatement;
 import com.intellij.java.language.psi.PsiStatement;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.*;
-import com.intellij.java.language.impl.psi.impl.PsiImplUtil;
-import com.intellij.util.ArrayUtil;
-import com.intellij.util.IncorrectOperationException;
+import consulo.document.util.TextRange;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiReference;
+import consulo.language.util.IncorrectOperationException;
+import consulo.util.collection.ArrayUtil;
 
 import javax.annotation.Nonnull;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,7 +36,7 @@ import java.util.List;
  * Time: 23:32:45
  * To change this template use Options | File Templates.
  */
-public class PsiLabelReference implements PsiReference{
+public class PsiLabelReference implements PsiReference {
   private final PsiStatement myStatement;
   private PsiIdentifier myIdentifier;
 

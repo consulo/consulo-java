@@ -25,6 +25,8 @@ import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
 import com.intellij.java.debugger.engine.evaluation.expression.Modifier;
 import consulo.internal.com.sun.jdi.*;
 
+import javax.annotation.Nullable;
+
 /**
  * @author Eugene Zhuravlev
  *         Date: Feb 8, 2010
@@ -69,7 +71,7 @@ public class BoxingEvaluator implements Evaluator{
     throw new EvaluateException("Cannot perform boxing conversion for a value of type " + ((Value)result).type().name());
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public Modifier getModifier() {
     return null;
   }

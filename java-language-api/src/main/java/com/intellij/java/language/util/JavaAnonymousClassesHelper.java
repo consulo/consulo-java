@@ -16,7 +16,11 @@
 package com.intellij.java.language.util;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.util.*;
+import consulo.application.util.CachedValueProvider;
+import consulo.application.util.CachedValuesManager;
+import consulo.application.util.ParameterizedCachedValue;
+import consulo.application.util.ParameterizedCachedValueProvider;
+import consulo.language.psi.util.PsiTreeUtil;
 import consulo.util.dataholder.Key;
 
 import javax.annotation.Nonnull;

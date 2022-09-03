@@ -15,15 +15,15 @@
  */
 package com.intellij.java.impl.packageDependencies.ui;
 
-import com.intellij.icons.AllIcons;
+import consulo.application.AllIcons;
 import com.intellij.java.impl.cyclicDependencies.ui.CyclicDependenciesPanel;
 import com.intellij.java.language.psi.PsiJavaFile;
 import com.intellij.java.language.psi.PsiJavaPackage;
-import com.intellij.openapi.util.Comparing;
+import consulo.util.lang.Comparing;
 import com.intellij.packageDependencies.ui.FileNode;
-import com.intellij.packageDependencies.ui.PackageDependenciesNode;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
+import consulo.ide.impl.idea.packageDependencies.ui.PackageDependenciesNode;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
 import consulo.ui.image.Image;
 
 import java.util.Map;

@@ -15,21 +15,30 @@
  */
 package com.intellij.java.language.psi;
 
-import com.intellij.psi.PsiElement;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ExtensionAPI;
+import consulo.application.Application;
+import consulo.component.extension.ExtensionPointCacheKey;
+import consulo.language.Language;
+import consulo.language.extension.LanguageExtension;
+import consulo.language.psi.PsiElement;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Map;
 
 /**
  * @author Serega.Vasiliev
  */
-public interface PsiAnnotationSupport {
+@ExtensionAPI(ComponentScope.APPLICATION)
+public interface PsiAnnotationSupport extends LanguageExtension {
+  ExtensionPointCacheKey<PsiAnnotationSupport, Map<Language, PsiAnnotationSupport>> CACHE_KEY = ExtensionPointCacheKey.groupBy("PsiAnnotationSupport", PsiAnnotationSupport::getLanguage);
+
+  @Nullable
+  static PsiAnnotationSupport forLanguage(@Nonnull Language language) {
+    return Application.get().getExtensionPoint(PsiAnnotationSupport.class).getOrBuildCache(CACHE_KEY).get(language);
+  }
 
   @Nonnull
   PsiLiteral createLiteralValue(@Nonnull String value, @Nonnull PsiElement context);
-
-  /*@NotNull
-  PsiArrayInitializerMemberValue createArrayMemberValue(@Nullable PsiElement context);
-
-  @NotNull
-  PsiAnnotation createAnnotation(@NotNull String qname, @Nullable PsiElement context);*/
 }

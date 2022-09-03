@@ -17,13 +17,15 @@ package com.intellij.java.debugger.impl.engine;
 
 import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.ValueDescriptorImpl;
-import com.intellij.xdebugger.frame.XFullValueEvaluator;
+import consulo.execution.debug.frame.XFullValueEvaluator;
+
+import javax.annotation.Nullable;
 
 /**
  * @author egor
  */
 public interface FullValueEvaluatorProvider
 {
-	@javax.annotation.Nullable
-	XFullValueEvaluator getFullValueEvaluator(EvaluationContextImpl evaluationContext, ValueDescriptorImpl valueDescriptor);
+	@Nullable
+  XFullValueEvaluator getFullValueEvaluator(EvaluationContextImpl evaluationContext, ValueDescriptorImpl valueDescriptor);
 }

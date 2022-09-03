@@ -16,8 +16,8 @@
 package com.intellij.java.impl.ipp.interfacetoclass;
 
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.search.SearchScope;
+import consulo.language.psi.PsiElement;
+import consulo.content.scope.SearchScope;
 import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 

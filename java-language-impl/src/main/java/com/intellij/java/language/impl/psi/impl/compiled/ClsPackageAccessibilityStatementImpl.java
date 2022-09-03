@@ -15,117 +15,94 @@
  */
 package com.intellij.java.language.impl.psi.impl.compiled;
 
-import static com.intellij.openapi.util.text.StringUtil.nullize;
-
-import java.util.List;
-import java.util.Locale;
-
-import javax.annotation.Nonnull;
-
-import com.intellij.openapi.util.AtomicNotNullLazyValue;
-import com.intellij.openapi.util.AtomicNullableLazyValue;
-import com.intellij.openapi.util.NotNullLazyValue;
-import com.intellij.openapi.util.NullableLazyValue;
-import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.java.language.impl.psi.impl.java.stubs.JavaPackageAccessibilityStatementElementType;
+import com.intellij.java.language.impl.psi.impl.java.stubs.PsiPackageAccessibilityStatementStub;
 import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
 import com.intellij.java.language.psi.PsiJavaModuleReferenceElement;
 import com.intellij.java.language.psi.PsiPackageAccessibilityStatement;
-import com.intellij.java.language.impl.psi.impl.java.stubs.JavaPackageAccessibilityStatementElementType;
-import com.intellij.java.language.impl.psi.impl.java.stubs.PsiPackageAccessibilityStatementStub;
-import com.intellij.psi.impl.source.tree.TreeElement;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.application.util.AtomicNullableLazyValue;
+import consulo.language.impl.ast.TreeElement;
+import consulo.util.collection.ContainerUtil;
+import consulo.util.lang.StringUtil;
+import consulo.util.lang.lazy.LazyValue;
 
-public class ClsPackageAccessibilityStatementImpl extends ClsRepositoryPsiElement<PsiPackageAccessibilityStatementStub> implements PsiPackageAccessibilityStatement
-{
-	private final NullableLazyValue<PsiJavaCodeReferenceElement> myPackageReference;
-	private final NotNullLazyValue<Iterable<PsiJavaModuleReferenceElement>> myModuleReferences;
+import javax.annotation.Nonnull;
+import java.util.List;
+import java.util.Locale;
+import java.util.function.Supplier;
 
-	public ClsPackageAccessibilityStatementImpl(PsiPackageAccessibilityStatementStub stub)
-	{
-		super(stub);
-		myPackageReference = new AtomicNullableLazyValue<PsiJavaCodeReferenceElement>()
-		{
-			@Override
-			protected PsiJavaCodeReferenceElement compute()
-			{
-				String packageName = getPackageName();
-				return packageName != null ? new ClsJavaCodeReferenceElementImpl(ClsPackageAccessibilityStatementImpl.this, packageName) : null;
-			}
-		};
-		myModuleReferences = new AtomicNotNullLazyValue<Iterable<PsiJavaModuleReferenceElement>>()
-		{
-			@Nonnull
-			@Override
-			protected Iterable<PsiJavaModuleReferenceElement> compute()
-			{
-				return ContainerUtil.map(getStub().getTargets(), target -> new ClsJavaModuleReferenceElementImpl(ClsPackageAccessibilityStatementImpl.this, target));
-			}
-		};
-	}
+import static consulo.util.lang.StringUtil.nullize;
 
-	@Nonnull
-	@Override
-	public Role getRole()
-	{
-		return JavaPackageAccessibilityStatementElementType.typeToRole(getStub().getStubType());
-	}
+public class ClsPackageAccessibilityStatementImpl extends ClsRepositoryPsiElement<PsiPackageAccessibilityStatementStub> implements PsiPackageAccessibilityStatement {
+  private final AtomicNullableLazyValue<PsiJavaCodeReferenceElement> myPackageReference;
+  private final Supplier<Iterable<PsiJavaModuleReferenceElement>> myModuleReferences;
 
-	@Override
-	public PsiJavaCodeReferenceElement getPackageReference()
-	{
-		return myPackageReference.getValue();
-	}
+  public ClsPackageAccessibilityStatementImpl(PsiPackageAccessibilityStatementStub stub) {
+    super(stub);
+    myPackageReference = new AtomicNullableLazyValue<PsiJavaCodeReferenceElement>() {
+      @Override
+      protected PsiJavaCodeReferenceElement compute() {
+        String packageName = getPackageName();
+        return packageName != null ? new ClsJavaCodeReferenceElementImpl(ClsPackageAccessibilityStatementImpl.this, packageName) : null;
+      }
+    };
+    myModuleReferences = LazyValue.atomicNotNull(() -> {
+      return ContainerUtil.map(getStub().getTargets(), target -> new ClsJavaModuleReferenceElementImpl(ClsPackageAccessibilityStatementImpl.this, target));
+    });
+  }
 
-	@Override
-	public String getPackageName()
-	{
-		return nullize(getStub().getPackageName());
-	}
+  @Nonnull
+  @Override
+  public Role getRole() {
+    return JavaPackageAccessibilityStatementElementType.typeToRole(getStub().getStubType());
+  }
 
-	@Nonnull
-	@Override
-	public Iterable<PsiJavaModuleReferenceElement> getModuleReferences()
-	{
-		return myModuleReferences.getValue();
-	}
+  @Override
+  public PsiJavaCodeReferenceElement getPackageReference() {
+    return myPackageReference.getValue();
+  }
 
-	@Nonnull
-	@Override
-	public List<String> getModuleNames()
-	{
-		return getStub().getTargets();
-	}
+  @Override
+  public String getPackageName() {
+    return nullize(getStub().getPackageName());
+  }
 
-	@Override
-	public void appendMirrorText(int indentLevel, @Nonnull StringBuilder buffer)
-	{
-		StringUtil.repeatSymbol(buffer, ' ', indentLevel);
-		buffer.append(getRole().toString().toLowerCase(Locale.US)).append(' ').append(getPackageName());
-		List<String> targets = getStub().getTargets();
-		if(!targets.isEmpty())
-		{
-			buffer.append(" to ");
-			for(int i = 0; i < targets.size(); i++)
-			{
-				if(i > 0)
-				{
-					buffer.append(", ");
-				}
-				buffer.append(targets.get(i));
-			}
-		}
-		buffer.append(";\n");
-	}
+  @Nonnull
+  @Override
+  public Iterable<PsiJavaModuleReferenceElement> getModuleReferences() {
+    return myModuleReferences.get();
+  }
 
-	@Override
-	public void setMirror(@Nonnull TreeElement element) throws InvalidMirrorException
-	{
-		setMirrorCheckingType(element, getStub().getStubType());
-	}
+  @Nonnull
+  @Override
+  public List<String> getModuleNames() {
+    return getStub().getTargets();
+  }
 
-	@Override
-	public String toString()
-	{
-		return "PsiPackageAccessibilityStatement[" + getRole() + "]";
-	}
+  @Override
+  public void appendMirrorText(int indentLevel, @Nonnull StringBuilder buffer) {
+    StringUtil.repeatSymbol(buffer, ' ', indentLevel);
+    buffer.append(getRole().toString().toLowerCase(Locale.US)).append(' ').append(getPackageName());
+    List<String> targets = getStub().getTargets();
+    if (!targets.isEmpty()) {
+      buffer.append(" to ");
+      for (int i = 0; i < targets.size(); i++) {
+        if (i > 0) {
+          buffer.append(", ");
+        }
+        buffer.append(targets.get(i));
+      }
+    }
+    buffer.append(";\n");
+  }
+
+  @Override
+  public void setMirror(@Nonnull TreeElement element) throws InvalidMirrorException {
+    setMirrorCheckingType(element, getStub().getStubType());
+  }
+
+  @Override
+  public String toString() {
+    return "PsiPackageAccessibilityStatement[" + getRole() + "]";
+  }
 }

@@ -19,7 +19,7 @@ import javax.annotation.Nonnull;
 
 import org.jetbrains.annotations.NonNls;
 import com.intellij.codeInsight.daemon.LightDaemonAnalyzerTestCase;
-import com.intellij.codeInspection.LocalInspectionTool;
+import consulo.language.editor.inspection.LocalInspectionTool;
 import com.intellij.java.analysis.impl.codeInspection.redundantCast.RedundantCastInspection;
 
 public abstract class LambdaRedundantCastTest extends LightDaemonAnalyzerTestCase {

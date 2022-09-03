@@ -1,6 +1,6 @@
 package com.intellij.codeInsight.daemon.quickFix;
 
-import com.intellij.codeInsight.intention.IntentionAction;
+import consulo.language.editor.intention.IntentionAction;
 
 /**
  * tests corresponding intention for availability only, does not invoke action

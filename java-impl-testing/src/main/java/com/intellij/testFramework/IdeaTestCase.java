@@ -18,7 +18,7 @@ package com.intellij.testFramework;
 import java.util.Arrays;
 import java.util.Comparator;
 
-import com.intellij.openapi.projectRoots.Sdk;
+import consulo.content.bundle.Sdk;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.impl.psi.impl.JavaPsiFacadeEx;
 

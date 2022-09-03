@@ -27,10 +27,10 @@ import org.intellij.lang.annotations.Pattern;
 import org.jdom.Element;
 
 import javax.annotation.Nullable;
-import com.intellij.codeInspection.ui.SingleCheckboxOptionsPanel;
-import com.intellij.openapi.util.InvalidDataException;
-import com.intellij.openapi.util.JDOMExternalizer;
-import com.intellij.openapi.util.WriteExternalException;
+import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
+import consulo.util.xml.serializer.InvalidDataException;
+import consulo.ide.impl.idea.openapi.util.JDOMExternalizer;
+import consulo.util.xml.serializer.WriteExternalException;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiClassType;
 import com.intellij.java.language.psi.PsiExpressionList;

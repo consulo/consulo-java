@@ -22,8 +22,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.psi.*;
+import consulo.content.bundle.Sdk;
 import com.intellij.java.language.psi.infos.MethodCandidateInfo;
 import com.intellij.testFramework.IdeaTestUtil;
 import com.intellij.testFramework.ResolveTestCase;

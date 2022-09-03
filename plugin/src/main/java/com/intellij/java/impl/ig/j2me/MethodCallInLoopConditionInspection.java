@@ -16,6 +16,7 @@
 package com.intellij.java.impl.ig.j2me;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
@@ -44,7 +45,7 @@ public class MethodCallInLoopConditionInspection extends BaseInspection {
     return true;
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   @Override
   protected InspectionGadgetsFix buildFix(Object... infos) {
     return new IntroduceVariableFix(true);

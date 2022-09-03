@@ -23,7 +23,7 @@ class ConcreteClassUtil {
 
   private ConcreteClassUtil() {}
 
-  public static boolean typeIsConcreteClass(@javax.annotation.Nullable PsiTypeElement typeElement, boolean ignoreCastToAbstractClass) {
+  public static boolean typeIsConcreteClass(@Nullable PsiTypeElement typeElement, boolean ignoreCastToAbstractClass) {
     if (typeElement == null) {
       return false;
     }

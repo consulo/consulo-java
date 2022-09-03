@@ -20,7 +20,7 @@ import com.intellij.java.debugger.impl.engine.DebuggerManagerThreadImpl;
 import com.intellij.java.debugger.engine.evaluation.EvaluateException;
 import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
 import com.intellij.java.debugger.impl.ui.tree.render.DescriptorLabelListener;
-import com.intellij.xdebugger.impl.ui.XDebuggerUIConstants;
+import consulo.execution.debug.ui.XDebuggerUIConstants;
 
 public class MessageDescriptor extends NodeDescriptorImpl {
   public static final int ERROR = 0;

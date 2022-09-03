@@ -1,21 +1,21 @@
 // Copyright 2000-2018 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.impl.codeInsight.completion;
 
-import com.intellij.codeInsight.CodeInsightUtilCore;
+import consulo.language.editor.CodeInsightUtilCore;
 import com.intellij.codeInsight.completion.*;
 import com.intellij.java.indexing.impl.search.AllClassesSearchExecutor;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.RangeMarker;
-import com.intellij.openapi.progress.ProgressManager;
-import com.intellij.openapi.project.Project;
+import consulo.document.Document;
+import consulo.codeEditor.Editor;
+import consulo.document.RangeMarker;
+import consulo.application.progress.ProgressManager;
+import consulo.project.Project;
 import com.intellij.psi.*;
-import com.intellij.psi.impl.source.PostprocessReformattingAspect;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.util.Consumer;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.Processor;
+import consulo.language.codeStyle.PostprocessReformattingAspect;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.ide.impl.idea.util.Consumer;
+import consulo.language.util.IncorrectOperationException;
+import consulo.application.util.function.Processor;
 import consulo.logging.Logger;
 
 import javax.annotation.Nonnull;

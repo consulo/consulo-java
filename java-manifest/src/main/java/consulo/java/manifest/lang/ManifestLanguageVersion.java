@@ -5,11 +5,11 @@ import javax.annotation.Nonnull;
 import org.osmorc.manifest.lang.ManifestLanguage;
 import org.osmorc.manifest.lang.ManifestLexer;
 import org.osmorc.manifest.lang.ManifestParser;
-import com.intellij.lang.PsiParser;
-import com.intellij.lexer.Lexer;
-import com.intellij.psi.tree.TokenSet;
-import consulo.lang.LanguageVersion;
-import consulo.lang.LanguageVersionWithParsing;
+import consulo.language.parser.PsiParser;
+import consulo.language.lexer.Lexer;
+import consulo.language.ast.TokenSet;
+import consulo.language.version.LanguageVersion;
+import consulo.language.version.LanguageVersionWithParsing;
 
 /**
  * @author VISTALL

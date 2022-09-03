@@ -15,7 +15,7 @@
  */
 package com.intellij.java.debugger.ui.tree;
 
-import com.intellij.openapi.extensions.ExtensionPointName;
+import consulo.component.extension.ExtensionPointName;
 
 import javax.annotation.Nonnull;
 

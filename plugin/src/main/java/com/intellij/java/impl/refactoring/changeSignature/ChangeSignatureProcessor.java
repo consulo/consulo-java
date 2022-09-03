@@ -25,26 +25,27 @@ import com.intellij.java.impl.refactoring.util.CanonicalTypes;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.*;
 import com.intellij.java.language.util.VisibilityUtil;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.DialogWrapper;
-import com.intellij.openapi.ui.Messages;
-import com.intellij.openapi.util.Ref;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.codeStyle.CodeStyleManager;
-import com.intellij.refactoring.RefactoringBundle;
-import com.intellij.refactoring.changeSignature.ChangeSignatureProcessorBase;
-import com.intellij.refactoring.changeSignature.ChangeSignatureUsageProcessor;
-import com.intellij.refactoring.rename.RenameUtil;
-import com.intellij.refactoring.ui.ConflictsDialog;
-import com.intellij.usageView.UsageInfo;
-import com.intellij.usageView.UsageViewDescriptor;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.containers.MultiMap;
+import consulo.application.ApplicationManager;
+import consulo.project.Project;
+import consulo.ui.ex.awt.DialogWrapper;
+import consulo.ui.ex.awt.Messages;
+import consulo.util.lang.ref.Ref;
+import consulo.language.psi.PsiElement;
+import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.changeSignature.ChangeSignatureProcessorBase;
+import consulo.language.editor.refactoring.changeSignature.ChangeSignatureUsageProcessor;
+import consulo.language.editor.refactoring.rename.RenameUtil;
+import consulo.language.editor.refactoring.ui.ConflictsDialog;
+import consulo.usage.UsageInfo;
+import consulo.usage.UsageViewDescriptor;
+import consulo.language.util.IncorrectOperationException;
+import consulo.util.collection.MultiMap;
 import consulo.java.impl.refactoring.changeSignature.ChangeSignatureUsageProcessorEx;
 import consulo.logging.Logger;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.*;
 
 public class ChangeSignatureProcessor extends ChangeSignatureProcessorBase {
@@ -212,7 +213,7 @@ public class ChangeSignatureProcessor extends ChangeSignatureProcessorBase {
     PsiUtil.setModifierProperty(delegate, PsiModifier.ABSTRACT, false);
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   public static PsiCallExpression addDelegatingCallTemplate(final PsiMethod delegate, final String newName) throws IncorrectOperationException {
     Project project = delegate.getProject();
     PsiElementFactory factory = JavaPsiFacade.getInstance(project).getElementFactory();

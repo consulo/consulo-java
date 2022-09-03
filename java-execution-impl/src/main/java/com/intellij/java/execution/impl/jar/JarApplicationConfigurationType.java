@@ -5,15 +5,13 @@ package com.intellij.java.execution.impl.jar;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.execution.configuration.ConfigurationFactoryEx;
-import com.intellij.execution.configurations.ConfigurationType;
-import com.intellij.execution.configurations.ConfigurationTypeBase;
-import com.intellij.execution.configurations.ConfigurationTypeUtil;
-import com.intellij.execution.configurations.RunConfiguration;
-import com.intellij.icons.AllIcons;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.execution.configuration.*;
+import consulo.execution.configuration.RunConfiguration;
+import consulo.application.AllIcons;
+import consulo.project.Project;
+import consulo.ide.impl.idea.openapi.util.io.FileUtil;
+import consulo.util.lang.StringUtil;
+import consulo.execution.configuration.ConfigurationTypeUtil;
 import consulo.java.execution.JavaExecutionBundle;
 import consulo.java.language.module.extension.JavaModuleExtension;
 import consulo.module.extension.ModuleExtensionHelper;

@@ -18,10 +18,12 @@ package com.intellij.java.compiler.cache;
 import java.util.ArrayList;
 
 import com.intellij.java.compiler.classParsing.MethodInfo;
-import com.intellij.compiler.make.CacheCorruptedException;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.util.ArrayUtil;
+import consulo.compiler.CacheCorruptedException;
+import consulo.util.lang.StringUtil;
+import consulo.util.collection.ArrayUtil;
 import consulo.logging.Logger;
+
+import javax.annotation.Nullable;
 
 public class JavaCacheUtils
 {
@@ -53,7 +55,7 @@ public class JavaCacheUtils
 
 	@SuppressWarnings({"HardCodedStringLiteral"})
 	private static
-	@javax.annotation.Nullable
+	@Nullable
 	String parseParameterSignature(String signature)
 	{
 		if(StringUtil.startsWithChar(signature, 'B'))

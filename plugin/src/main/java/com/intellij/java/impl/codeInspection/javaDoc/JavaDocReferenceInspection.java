@@ -25,34 +25,35 @@ import javax.annotation.Nonnull;
 import javax.swing.JList;
 
 import com.intellij.java.language.psi.*;
+import consulo.language.editor.PlatformDataKeys;
+import consulo.ui.ex.awt.JBList;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nullable;
-import com.intellij.codeHighlighting.HighlightDisplayLevel;
-import com.intellij.codeInsight.FileModificationService;
+import consulo.language.editor.rawHighlight.HighlightDisplayLevel;
+import consulo.language.editor.FileModificationService;
 import com.intellij.java.impl.codeInsight.daemon.impl.quickfix.ImportClassFix;
-import com.intellij.codeInsight.lookup.LookupElement;
-import com.intellij.codeInsight.lookup.LookupElementBuilder;
-import com.intellij.codeInsight.lookup.LookupManager;
-import com.intellij.codeInspection.InspectionManager;
-import com.intellij.codeInspection.InspectionsBundle;
-import com.intellij.codeInspection.LocalQuickFix;
-import com.intellij.codeInspection.ProblemDescriptor;
-import com.intellij.codeInspection.ProblemDescriptorBase;
-import com.intellij.codeInspection.ProblemHighlightType;
+import consulo.language.editor.completion.lookup.LookupElement;
+import consulo.language.editor.completion.lookup.LookupElementBuilder;
+import consulo.language.editor.completion.lookup.LookupManager;
+import consulo.language.editor.inspection.scheme.InspectionManager;
+import consulo.language.editor.inspection.InspectionsBundle;
+import consulo.language.editor.inspection.LocalQuickFix;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.editor.inspection.ProblemDescriptorBase;
+import consulo.language.editor.inspection.ProblemHighlightType;
 import com.intellij.java.analysis.impl.codeInspection.ex.BaseLocalInspectionTool;
-import com.intellij.ide.DataManager;
+import consulo.dataContext.DataManager;
 import com.intellij.java.impl.ide.util.FQNameCellRenderer;
-import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.actionSystem.PlatformDataKeys;
-import com.intellij.openapi.application.Result;
-import com.intellij.openapi.command.WriteCommandAction;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.popup.PopupChooserBuilder;
-import com.intellij.openapi.util.AsyncResult;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.dataContext.DataContext;
+import consulo.application.Result;
+import consulo.language.editor.WriteCommandAction;
+import consulo.codeEditor.Editor;
+import consulo.project.Project;
+import consulo.ide.impl.ui.impl.PopupChooserBuilder;
+import consulo.util.concurrent.AsyncResult;
+import consulo.document.util.TextRange;
+import consulo.util.lang.StringUtil;
 import com.intellij.psi.*;
 import com.intellij.java.language.psi.javadoc.JavadocManager;
 import com.intellij.java.language.psi.javadoc.JavadocTagInfo;
@@ -60,9 +61,8 @@ import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.java.language.psi.javadoc.PsiDocTag;
 import com.intellij.java.language.psi.javadoc.PsiDocTagValue;
 import com.intellij.java.language.psi.javadoc.PsiInlineDocTag;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.proximity.PsiProximityComparator;
-import com.intellij.ui.components.JBList;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.ide.impl.psi.util.proximity.PsiProximityComparator;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 
 public class JavaDocReferenceInspection extends BaseLocalInspectionTool
@@ -83,14 +83,14 @@ public class JavaDocReferenceInspection extends BaseLocalInspectionTool
 	}
 
 	@Override
-	@javax.annotation.Nullable
+	@Nullable
 	public ProblemDescriptor[] checkField(@Nonnull PsiField field, @Nonnull InspectionManager manager, boolean isOnTheFly)
 	{
 		return checkMember(field, manager, isOnTheFly);
 	}
 
 	@Override
-	@javax.annotation.Nullable
+	@Nullable
 	public ProblemDescriptor[] checkClass(@Nonnull PsiClass aClass, @Nonnull InspectionManager manager, boolean isOnTheFly)
 	{
 		return checkMember(aClass, manager, isOnTheFly);
@@ -353,7 +353,7 @@ public class JavaDocReferenceInspection extends BaseLocalInspectionTool
 				};
 				final AsyncResult<DataContext> asyncResult = DataManager.getInstance().getDataContextFromFocus();
 				asyncResult.doWhenDone(dataContext -> {
-					new PopupChooserBuilder(list).
+					new consulo.ide.impl.ui.impl.PopupChooserBuilder(list).
 							setTitle(JavaQuickFixBundle.message("add.qualifier.original.class.chooser.title")).
 							setItemChoosenCallback(runnable).
 							createPopup().

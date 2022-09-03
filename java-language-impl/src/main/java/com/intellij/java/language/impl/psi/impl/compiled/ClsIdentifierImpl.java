@@ -19,13 +19,13 @@ import javax.annotation.Nonnull;
 
 import com.intellij.java.language.psi.JavaElementVisitor;
 import com.intellij.java.language.psi.JavaTokenType;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiElementVisitor;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiElementVisitor;
 import com.intellij.java.language.psi.PsiIdentifier;
 import com.intellij.java.language.psi.PsiJavaFile;
 import com.intellij.java.language.psi.PsiJavaToken;
-import com.intellij.psi.impl.source.tree.TreeElement;
-import com.intellij.psi.tree.IElementType;
+import consulo.language.impl.ast.TreeElement;
+import consulo.language.ast.IElementType;
 
 class ClsIdentifierImpl extends ClsElementImpl implements PsiIdentifier, PsiJavaToken
 {

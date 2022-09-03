@@ -16,8 +16,8 @@
 package com.intellij.java.language.impl.psi.filters;
 
 import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.filters.ClassFilter;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.filter.ClassFilter;
 
 /**
  * Created by IntelliJ IDEA.

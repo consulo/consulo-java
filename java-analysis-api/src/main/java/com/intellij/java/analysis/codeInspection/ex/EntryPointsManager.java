@@ -20,11 +20,11 @@
   */
 package com.intellij.java.analysis.codeInspection.ex;
 
-import com.intellij.codeInspection.reference.RefElement;
-import com.intellij.codeInspection.reference.RefManager;
-import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiElement;
+import consulo.language.editor.inspection.reference.RefElement;
+import consulo.language.editor.inspection.reference.RefManager;
+import consulo.ide.ServiceManager;
+import consulo.project.Project;
+import consulo.language.psi.PsiElement;
 import consulo.disposer.Disposable;
 
 import javax.annotation.Nonnull;

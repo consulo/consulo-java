@@ -1,9 +1,9 @@
 // Copyright 2000-2018 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.analysis.impl.codeInspection.bytecodeAnalysis;
 
-import com.intellij.openapi.util.Couple;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.util.lang.Couple;
+import consulo.util.lang.StringUtil;
+import consulo.util.collection.ContainerUtil;
 import consulo.internal.org.objectweb.asm.tree.FieldInsnNode;
 
 import java.util.Collections;

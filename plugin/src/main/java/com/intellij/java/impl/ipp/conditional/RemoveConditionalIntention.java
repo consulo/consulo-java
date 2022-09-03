@@ -18,9 +18,9 @@ package com.intellij.java.impl.ipp.conditional;
 import javax.annotation.Nonnull;
 
 import com.intellij.java.language.psi.PsiConditionalExpression;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiExpression;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
 import com.intellij.java.impl.ipp.base.Intention;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.siyeh.ig.psiutils.BoolUtils;

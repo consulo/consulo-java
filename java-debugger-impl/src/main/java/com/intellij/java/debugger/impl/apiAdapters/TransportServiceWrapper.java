@@ -23,9 +23,9 @@ import java.lang.reflect.InvocationTargetException;
 import javax.annotation.Nonnull;
 
 import com.intellij.java.debugger.impl.settings.DebuggerSettings;
-import com.intellij.execution.ExecutionException;
+import consulo.process.ExecutionException;
 import consulo.logging.Logger;
-import com.intellij.util.ArrayUtil;
+import consulo.util.collection.ArrayUtil;
 import consulo.internal.com.sun.jdi.connect.spi.TransportService;
 import consulo.java.debugger.impl.apiAdapters.TransportClassDelegates;
 

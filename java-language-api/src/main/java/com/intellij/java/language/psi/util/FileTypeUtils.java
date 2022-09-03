@@ -16,8 +16,8 @@
 package com.intellij.java.language.psi.util;
 
 import com.intellij.java.language.psi.ServerPageFile;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.util.PsiUtilCore;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiUtilCore;
 
 public class FileTypeUtils {
   public static boolean isInServerPageFile(PsiElement file) {

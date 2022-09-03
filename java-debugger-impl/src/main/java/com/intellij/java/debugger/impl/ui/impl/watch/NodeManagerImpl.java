@@ -28,7 +28,7 @@ import com.intellij.java.debugger.impl.ui.impl.nodes.NodeComparator;
 import com.intellij.java.debugger.impl.ui.tree.DebuggerTreeNode;
 import com.intellij.java.debugger.ui.tree.NodeDescriptor;
 import com.intellij.java.debugger.impl.ui.tree.NodeManager;
-import com.intellij.openapi.project.Project;
+import consulo.project.Project;
 import java.util.HashMap;
 import consulo.internal.com.sun.jdi.Location;
 import consulo.internal.com.sun.jdi.Method;

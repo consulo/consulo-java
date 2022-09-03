@@ -17,42 +17,40 @@ package com.intellij.java.debugger;
 
 import com.intellij.java.debugger.engine.DebugProcess;
 import com.intellij.java.debugger.engine.DebugProcessListener;
-import com.intellij.execution.process.ProcessHandler;
-import com.intellij.openapi.components.ProjectComponent;
-import com.intellij.openapi.project.Project;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.util.Function;
+import consulo.process.ProcessHandler;
+import consulo.project.Project;
+
+import java.util.function.Function;
 
 /**
  * @author lex
  */
-public abstract class DebuggerManager implements ProjectComponent
-{
-	public static DebuggerManager getInstance(Project project)
-	{
-		return project.getComponent(DebuggerManager.class);
-	}
+public abstract class DebuggerManager {
+  public static DebuggerManager getInstance(Project project) {
+    return project.getComponent(DebuggerManager.class);
+  }
 
-	public abstract DebugProcess getDebugProcess(ProcessHandler processHandler);
+  public abstract DebugProcess getDebugProcess(ProcessHandler processHandler);
 
-	public abstract void addDebugProcessListener(ProcessHandler processHandler, DebugProcessListener listener);
+  public abstract void addDebugProcessListener(ProcessHandler processHandler, DebugProcessListener listener);
 
-	public abstract void removeDebugProcessListener(ProcessHandler processHandler, DebugProcessListener listener);
+  public abstract void removeDebugProcessListener(ProcessHandler processHandler, DebugProcessListener listener);
 
-	public abstract boolean isDebuggerManagerThread();
+  public abstract boolean isDebuggerManagerThread();
 
-	public abstract void addClassNameMapper(NameMapper mapper);
+  public abstract void addClassNameMapper(NameMapper mapper);
 
-	public abstract void removeClassNameMapper(NameMapper mapper);
+  public abstract void removeClassNameMapper(NameMapper mapper);
 
-	public abstract String getVMClassQualifiedName(PsiClass aClass);
+  public abstract String getVMClassQualifiedName(PsiClass aClass);
 
-	/**
-	 * @deprecated use {@link PositionManagerFactory} extension point instead
-	 */
-	@Deprecated
-	public abstract void registerPositionManagerFactory(Function<DebugProcess, PositionManager> factory);
+  /**
+   * @deprecated use {@link PositionManagerFactory} extension point instead
+   */
+  @Deprecated
+  public abstract void registerPositionManagerFactory(Function<DebugProcess, PositionManager> factory);
 
-	@Deprecated
-	public abstract void unregisterPositionManagerFactory(Function<DebugProcess, PositionManager> factory);
+  @Deprecated
+  public abstract void unregisterPositionManagerFactory(Function<DebugProcess, PositionManager> factory);
 }

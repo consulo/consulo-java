@@ -15,9 +15,9 @@
  */
 package com.intellij.java.impl.ide.fileTemplates;
 
-import com.intellij.ide.fileTemplates.FileTemplate;
-import com.intellij.psi.PsiDirectory;
-import com.intellij.util.ArrayUtil;
+import consulo.fileTemplate.FileTemplate;
+import consulo.language.psi.PsiDirectory;
+import consulo.util.collection.ArrayUtil;
 
 import javax.annotation.Nonnull;
 

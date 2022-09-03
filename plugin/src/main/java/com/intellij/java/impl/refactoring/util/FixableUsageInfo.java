@@ -15,9 +15,9 @@
  */
 package com.intellij.java.impl.refactoring.util;
 
-import com.intellij.psi.PsiElement;
-import com.intellij.usageView.UsageInfo;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.psi.PsiElement;
+import consulo.usage.UsageInfo;
+import consulo.language.util.IncorrectOperationException;
 import javax.annotation.Nullable;
 
 

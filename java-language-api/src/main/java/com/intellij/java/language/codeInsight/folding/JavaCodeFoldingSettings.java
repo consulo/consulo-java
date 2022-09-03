@@ -16,7 +16,7 @@
 
 package com.intellij.java.language.codeInsight.folding;
 
-import com.intellij.openapi.components.ServiceManager;
+import consulo.ide.ServiceManager;
 
 public abstract class JavaCodeFoldingSettings
 {

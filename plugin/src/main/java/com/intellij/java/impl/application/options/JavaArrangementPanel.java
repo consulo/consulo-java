@@ -17,11 +17,11 @@ package com.intellij.java.impl.application.options;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.application.options.codeStyle.arrangement.ArrangementSettingsPanel;
+import consulo.language.codeStyle.ui.setting.arrangement.ArrangementSettingsPanel;
 import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.java.language.JavaLanguage;
-import com.intellij.openapi.fileTypes.FileType;
-import com.intellij.psi.codeStyle.CodeStyleSettings;
+import consulo.virtualFileSystem.fileType.FileType;
+import consulo.language.codeStyle.CodeStyleSettings;
 
 /**
  * @author Denis Zhdanov

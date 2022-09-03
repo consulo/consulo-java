@@ -15,11 +15,11 @@
  */
 package com.intellij.java.impl.psi.impl.search;
 
-import com.intellij.lexer.LexerBase;
-import com.intellij.openapi.editor.highlighter.EditorHighlighter;
-import com.intellij.openapi.editor.highlighter.HighlighterIterator;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.util.text.CharSequenceSubSequence;
+import consulo.language.lexer.LexerBase;
+import consulo.codeEditor.EditorHighlighter;
+import consulo.codeEditor.HighlighterIterator;
+import consulo.language.ast.IElementType;
+import consulo.util.lang.CharSequenceSubSequence;
 
 /**
 * @author Sergey Evdokimov

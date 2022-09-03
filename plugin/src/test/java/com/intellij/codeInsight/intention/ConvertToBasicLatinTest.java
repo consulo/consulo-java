@@ -16,8 +16,8 @@
 package com.intellij.codeInsight.intention;
 
 import com.intellij.JavaTestUtil;
-import com.intellij.codeInsight.CodeInsightBundle;
-import com.intellij.openapi.vfs.encoding.EncodingManager;
+import consulo.language.editor.CodeInsightBundle;
+import consulo.virtualFileSystem.encoding.EncodingManager;
 import com.intellij.testFramework.fixtures.CodeInsightTestUtil;
 import com.intellij.testFramework.fixtures.JavaCodeInsightFixtureTestCase;
 

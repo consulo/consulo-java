@@ -2,11 +2,11 @@
 package com.intellij.java.impl.psi.impl.source.tree.injected;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.lang.injection.MultiHostInjector;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Pair;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.impl.source.tree.injected.ConcatenationInjectorManager;
+import consulo.language.inject.MultiHostInjector;
+import consulo.project.Project;
+import consulo.util.lang.Pair;
+import consulo.language.psi.PsiElement;
+import consulo.language.inject.impl.internal.ConcatenationInjectorManager;
 
 import javax.annotation.Nonnull;
 

@@ -20,19 +20,20 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 
 import javax.annotation.Nullable;
-import com.intellij.application.options.ModulesComboBox;
+
+import consulo.execution.configuration.ui.SettingsEditor;
+import consulo.fileChooser.FileChooserDescriptor;
+import consulo.module.ui.awt.ModulesComboBox;
 import com.intellij.java.execution.impl.ui.CommonJavaParametersPanel;
 import com.intellij.java.execution.impl.ui.DefaultJreSelector;
 import com.intellij.java.execution.impl.ui.JrePathEditor;
-import com.intellij.openapi.fileChooser.FileChooserDescriptor;
-import com.intellij.openapi.options.ConfigurationException;
-import com.intellij.openapi.options.SettingsEditor;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.LabeledComponent;
-import com.intellij.openapi.ui.TextFieldWithBrowseButton;
-import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.ui.PanelWithAnchor;
-import com.intellij.util.ui.UIUtil;
+import consulo.configurable.ConfigurationException;
+import consulo.project.Project;
+import consulo.ui.ex.awt.LabeledComponent;
+import consulo.ui.ex.awt.TextFieldWithBrowseButton;
+import consulo.ide.impl.idea.openapi.util.io.FileUtil;
+import consulo.ui.ex.awt.PanelWithAnchor;
+import consulo.ui.ex.awt.UIUtil;
 
 public class JarApplicationConfigurable extends SettingsEditor<JarApplicationConfiguration> implements PanelWithAnchor
 {

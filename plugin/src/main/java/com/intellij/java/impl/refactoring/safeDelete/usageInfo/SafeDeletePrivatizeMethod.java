@@ -20,9 +20,9 @@ import com.intellij.java.language.psi.PsiAnnotation;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.refactoring.safeDelete.usageInfo.SafeDeleteCustomUsageInfo;
-import com.intellij.refactoring.safeDelete.usageInfo.SafeDeleteUsageInfo;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.editor.refactoring.safeDelete.usageInfo.SafeDeleteCustomUsageInfo;
+import consulo.language.editor.refactoring.safeDelete.usageInfo.SafeDeleteUsageInfo;
+import consulo.language.util.IncorrectOperationException;
 import consulo.java.language.module.util.JavaClassNames;
 
 /**

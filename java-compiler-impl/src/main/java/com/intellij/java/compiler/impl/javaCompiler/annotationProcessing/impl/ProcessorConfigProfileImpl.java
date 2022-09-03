@@ -18,6 +18,7 @@ package com.intellij.java.compiler.impl.javaCompiler.annotationProcessing.impl;
 import com.intellij.java.compiler.impl.javaCompiler.annotationProcessing.ProcessorConfigProfile;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.*;
 
 /**
@@ -90,7 +91,7 @@ public final class ProcessorConfigProfileImpl implements ProcessorConfigProfile 
   }
 
   @Override
-  public void setProcessorPath(@javax.annotation.Nullable String processorPath) {
+  public void setProcessorPath(@Nullable String processorPath) {
     myProcessorPath = processorPath != null? processorPath : "";
   }
 
@@ -111,7 +112,7 @@ public final class ProcessorConfigProfileImpl implements ProcessorConfigProfile 
   }
 
   @Override
-  public void setGeneratedSourcesDirectoryName(@javax.annotation.Nullable String name, boolean forTests) {
+  public void setGeneratedSourcesDirectoryName(@Nullable String name, boolean forTests) {
     if (forTests) {
       myGeneratedTestsDirectoryName = name != null? name.trim() : DEFAULT_TESTS_DIR_NAME;
     }
@@ -194,7 +195,7 @@ public final class ProcessorConfigProfileImpl implements ProcessorConfigProfile 
   }
 
   @Override
-  @javax.annotation.Nullable
+  @Nullable
   public String getOption(String key) {
     return myProcessorOptions.get(key);
   }

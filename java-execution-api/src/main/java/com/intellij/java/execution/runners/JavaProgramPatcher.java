@@ -1,8 +1,8 @@
 package com.intellij.java.execution.runners;
 
-import com.intellij.execution.Executor;
-import com.intellij.execution.configurations.RunProfile;
-import com.intellij.openapi.extensions.ExtensionPointName;
+import consulo.execution.configuration.RunProfile;
+import consulo.execution.executor.Executor;
+import consulo.component.extension.ExtensionPointName;
 import consulo.java.execution.configurations.OwnJavaParameters;
 
 /**

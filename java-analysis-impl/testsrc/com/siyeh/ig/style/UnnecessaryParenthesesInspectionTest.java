@@ -1,6 +1,6 @@
 package com.siyeh.ig.style;
 
-import com.intellij.codeInspection.ex.LocalInspectionToolWrapper;
+import consulo.language.editor.inspection.scheme.LocalInspectionToolWrapper;
 import com.intellij.java.language.LanguageLevel;
 import com.siyeh.ig.IGInspectionTestCase;
 

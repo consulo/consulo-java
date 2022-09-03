@@ -21,19 +21,19 @@ import javax.annotation.Nullable;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix.ArgumentFixerActionFactory;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix.MethodArgumentFix;
 import org.jetbrains.annotations.Nls;
-import com.intellij.codeInsight.intention.HighPriorityAction;
-import com.intellij.codeInspection.LocalQuickFixAndIntentionActionOnPsiElement;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
+import consulo.language.editor.intention.HighPriorityAction;
+import consulo.language.editor.inspection.LocalQuickFixAndIntentionActionOnPsiElement;
+import consulo.codeEditor.Editor;
+import consulo.project.Project;
 import com.intellij.java.language.psi.JavaPsiFacade;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiExpressionList;
-import com.intellij.psi.PsiFile;
+import consulo.language.psi.PsiFile;
 import com.intellij.java.language.psi.PsiPrimitiveType;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.util.IncorrectOperationException;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 
 /**
@@ -61,7 +61,7 @@ public class WrapLongWithMathToIntExactFix extends LocalQuickFixAndIntentionActi
 	@Override
 	public void invoke(@Nonnull Project project,
 			@Nonnull PsiFile file,
-			@javax.annotation.Nullable Editor editor,
+			@Nullable Editor editor,
 			@Nonnull PsiElement startElement,
 			@Nonnull PsiElement endElement)
 	{

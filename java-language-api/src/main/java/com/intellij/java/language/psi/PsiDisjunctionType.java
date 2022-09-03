@@ -15,14 +15,14 @@
  */
 package com.intellij.java.language.psi;
 
-import com.intellij.openapi.util.Comparing;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.PsiManager;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.util.CachedValue;
-import com.intellij.psi.util.CachedValueProvider;
-import com.intellij.psi.util.CachedValuesManager;
-import com.intellij.psi.util.PsiModificationTracker;
+import consulo.application.util.CachedValue;
+import consulo.application.util.CachedValueProvider;
+import consulo.language.psi.PsiModificationTracker;
+import consulo.util.lang.Comparing;
+import consulo.util.lang.StringUtil;
+import consulo.language.psi.PsiManager;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.application.util.CachedValuesManager;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;

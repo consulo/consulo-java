@@ -15,27 +15,27 @@
  */
 package com.intellij.java.impl.codeInsight.completion;
 
-import com.intellij.codeInsight.completion.CompletionContributor;
-import com.intellij.codeInsight.completion.CompletionService;
-import com.intellij.codeInsight.completion.PrefixMatcher;
-import com.intellij.codeInsight.lookup.LookupElement;
+import consulo.language.editor.completion.CompletionContributor;
+import consulo.language.editor.completion.CompletionService;
+import consulo.application.util.matcher.PrefixMatcher;
+import consulo.language.editor.completion.lookup.LookupElement;
 import com.intellij.java.impl.codeInsight.daemon.impl.quickfix.StaticImportMethodFix;
 import com.intellij.java.indexing.impl.stubs.index.JavaStaticMemberNameIndex;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.actionSystem.IdeActions;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Condition;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.util.Consumer;
-import com.intellij.util.PairConsumer;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.ui.ex.action.IdeActions;
+import consulo.project.Project;
+import consulo.util.lang.function.Condition;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.ide.impl.idea.util.Consumer;
+import consulo.util.lang.function.PairConsumer;
+import consulo.util.collection.ContainerUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 
-import static com.intellij.util.containers.ContainerUtil.addIfNotNull;
+import static consulo.util.collection.ContainerUtil.addIfNotNull;
 
 /**
  * @author peter

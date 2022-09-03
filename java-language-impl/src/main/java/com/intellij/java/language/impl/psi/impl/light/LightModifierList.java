@@ -17,16 +17,16 @@ package com.intellij.java.language.impl.psi.impl.light;
 
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.*;
-import com.intellij.lang.Language;
-import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.PsiManager;
-import com.intellij.psi.impl.light.LightElement;
-import com.intellij.util.ArrayUtil;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.containers.ContainerUtil;
+import consulo.language.Language;
+import consulo.language.impl.psi.LightElement;
+import consulo.language.psi.PsiElementVisitor;
+import consulo.language.psi.PsiManager;
+import consulo.language.util.IncorrectOperationException;
+import consulo.util.collection.ArrayUtil;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
+import java.util.HashSet;
 import java.util.Set;
 
 public class LightModifierList extends LightElement implements PsiModifierList {
@@ -43,7 +43,7 @@ public class LightModifierList extends LightElement implements PsiModifierList {
 
   public LightModifierList(PsiManager manager, final Language language, String... modifiers) {
     super(manager, language);
-    myModifiers = ContainerUtil.newTroveSet(modifiers);
+    myModifiers = new HashSet<>(Set.of(modifiers));
   }
 
   public void addModifier(String modifier) {

@@ -15,20 +15,20 @@
  */
 package com.intellij.java.language.impl.psi.impl.source.tree.java;
 
-import javax.annotation.Nonnull;
-
+import com.intellij.java.language.impl.psi.impl.source.Constants;
+import com.intellij.java.language.impl.psi.impl.source.tree.ChildRole;
 import com.intellij.java.language.psi.JavaElementVisitor;
 import com.intellij.java.language.psi.PsiCodeBlock;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiSynchronizedStatement;
-import com.intellij.lang.ASTNode;
+import consulo.language.ast.ASTNode;
+import consulo.language.ast.ChildRoleBase;
+import consulo.language.ast.IElementType;
+import consulo.language.impl.psi.CompositePsiElement;
+import consulo.language.psi.PsiElementVisitor;
 import consulo.logging.Logger;
-import com.intellij.psi.*;
-import com.intellij.java.language.impl.psi.impl.source.tree.ChildRole;
-import com.intellij.psi.impl.source.tree.CompositePsiElement;
-import com.intellij.java.language.impl.psi.impl.source.Constants;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.tree.ChildRoleBase;
+
+import javax.annotation.Nonnull;
 
 public class PsiSynchronizedStatementImpl extends CompositePsiElement implements PsiSynchronizedStatement, Constants {
   private static final Logger LOG = Logger.getInstance(PsiSynchronizedStatementImpl.class);

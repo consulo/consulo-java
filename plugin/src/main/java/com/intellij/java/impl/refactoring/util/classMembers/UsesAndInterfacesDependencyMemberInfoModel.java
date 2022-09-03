@@ -29,9 +29,9 @@ import javax.annotation.Nullable;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMember;
 import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.refactoring.classMembers.ANDCombinedMemberInfoModel;
-import com.intellij.refactoring.classMembers.DelegatingMemberInfoModel;
-import com.intellij.refactoring.classMembers.MemberInfoBase;
+import consulo.language.editor.refactoring.classMember.ANDCombinedMemberInfoModel;
+import consulo.language.editor.refactoring.classMember.DelegatingMemberInfoModel;
+import consulo.language.editor.refactoring.classMember.MemberInfoBase;
 
 public class UsesAndInterfacesDependencyMemberInfoModel<T extends PsiMember, M extends MemberInfoBase<T>> extends
 		DelegatingMemberInfoModel<T, M>

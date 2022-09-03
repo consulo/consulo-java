@@ -20,7 +20,7 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.intellij.util.containers.ContainerUtilRt;
+import consulo.ide.impl.idea.util.containers.ContainerUtilRt;
 
 /**
  * Class comment

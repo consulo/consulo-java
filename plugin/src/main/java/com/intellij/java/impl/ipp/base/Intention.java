@@ -17,27 +17,27 @@ package com.intellij.java.impl.ipp.base;
 
 import javax.annotation.Nonnull;
 
+import consulo.virtualFileSystem.ReadonlyStatusHandler;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nullable;
-import com.intellij.codeInsight.intention.BaseElementAtCaretIntentionAction;
+import consulo.language.editor.intention.BaseElementAtCaretIntentionAction;
 import com.intellij.java.language.JavaLanguage;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.ReadonlyStatusHandler;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.codeEditor.Editor;
+import consulo.project.Project;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiBinaryExpression;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiElementFactory;
 import com.intellij.java.language.psi.PsiExpression;
-import com.intellij.psi.PsiFile;
+import consulo.language.psi.PsiFile;
 import com.intellij.java.language.psi.PsiParenthesizedExpression;
 import com.intellij.java.language.psi.PsiReturnStatement;
 import com.intellij.java.language.psi.PsiStatement;
-import com.intellij.psi.codeStyle.CodeStyleManager;
+import consulo.language.codeStyle.CodeStyleManager;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
-import com.intellij.psi.util.PsiUtilCore;
+import consulo.language.psi.PsiUtilCore;
 import com.siyeh.IntentionPowerPackBundle;
 import com.siyeh.ig.psiutils.ComparisonUtils;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
@@ -90,8 +90,8 @@ public abstract class Intention extends BaseElementAtCaretIntentionAction {
     PsiExpression expressionToReplace = expression;
     final String newExpressionText = newExpression.getText();
     final String expString;
-    if (com.siyeh.ig.psiutils.BoolUtils.isNegated(expression)) {
-      expressionToReplace = com.siyeh.ig.psiutils.BoolUtils.findNegation(expression);
+    if (BoolUtils.isNegated(expression)) {
+      expressionToReplace = BoolUtils.findNegation(expression);
       expString = newExpressionText;
     }
     else if (ComparisonUtils.isComparison(newExpression)) {

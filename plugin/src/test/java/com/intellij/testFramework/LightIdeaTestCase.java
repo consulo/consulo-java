@@ -15,7 +15,7 @@
  */
 package com.intellij.testFramework;
 
-import com.intellij.openapi.projectRoots.Sdk;
+import consulo.content.bundle.Sdk;
 import com.intellij.java.language.impl.psi.impl.JavaPsiFacadeEx;
 
 /**

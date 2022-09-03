@@ -2,6 +2,7 @@ package com.siyeh.igtest.dataflow.scope;
 
 import java.util.ArrayList;
 import java.util.Collection; import java.util.List;
+import java.util.Random;
 
 public class TooBroadScope
 {
@@ -40,7 +41,7 @@ public class TooBroadScope
 
     private int foo() {
         final int flim;
-        final boolean bar = new java.util.Random().nextBoolean();
+        final boolean bar = new Random().nextBoolean();
         if(bar) {
             flim = 42;
         } else {

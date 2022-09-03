@@ -4,9 +4,9 @@
  */
 package com.intellij.psi.util.proximity;
 
-import com.intellij.openapi.application.Result;
-import com.intellij.openapi.command.WriteCommandAction;
-import com.intellij.openapi.vfs.VirtualFile;
+import consulo.application.Result;
+import consulo.language.editor.WriteCommandAction;
+import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.testFramework.PsiTestUtil;
 import com.intellij.testFramework.fixtures.IdeaTestFixtureFactory;
 import com.intellij.testFramework.fixtures.JavaCodeInsightFixtureTestCase;

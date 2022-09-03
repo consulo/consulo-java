@@ -23,26 +23,26 @@ import java.util.Comparator;
 
 import com.intellij.JavaTestUtil;
 import com.intellij.codeInsight.CodeInsightTestCase;
-import com.intellij.ide.todo.TodoConfiguration;
-import com.intellij.ide.todo.TodoIndexPatternProvider;
-import com.intellij.openapi.fileEditor.FileDocumentManager;
-import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.openapi.vfs.VfsUtil;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiDocumentManager;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.impl.cache.CacheManager;
-import com.intellij.psi.impl.cache.TodoCacheManager;
-import com.intellij.psi.impl.cache.impl.id.IdIndex;
-import com.intellij.psi.impl.cache.impl.todo.TodoIndex;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.search.TodoAttributesUtil;
-import com.intellij.psi.search.TodoPattern;
-import com.intellij.psi.search.UsageSearchContext;
+import consulo.ide.impl.idea.ide.todo.TodoConfiguration;
+import consulo.ide.impl.idea.ide.todo.TodoIndexPatternProvider;
+import consulo.document.FileDocumentManager;
+import consulo.ide.impl.idea.openapi.util.io.FileUtil;
+import consulo.ide.impl.idea.openapi.vfs.VfsUtil;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.language.psi.PsiDocumentManager;
+import consulo.language.psi.PsiFile;
+import consulo.language.cacheBuilder.CacheManager;
+import consulo.language.psi.stub.todo.TodoCacheManager;
+import consulo.ide.impl.psi.impl.cache.impl.id.IdIndex;
+import consulo.ide.impl.psi.impl.cache.impl.todo.TodoIndex;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.ide.impl.psi.search.TodoAttributesUtil;
+import consulo.language.psi.search.TodoPattern;
+import consulo.language.psi.search.UsageSearchContext;
 import com.intellij.testFramework.IdeaTestUtil;
 import com.intellij.testFramework.PsiTestUtil;
-import com.intellij.util.ArrayUtil;
-import com.intellij.util.indexing.FileBasedIndex;
+import consulo.util.collection.ArrayUtil;
+import consulo.language.psi.stub.FileBasedIndex;
 
 public abstract class IdCacheTest extends CodeInsightTestCase{
 
@@ -158,7 +158,7 @@ public abstract class IdCacheTest extends CodeInsightTestCase{
 
     checkCache(cache, todocache);
 
-    VfsUtil.saveText(child, "xxx");
+    consulo.ide.impl.idea.openapi.vfs.VfsUtil.saveText(child, "xxx");
     PsiDocumentManager.getInstance(myProject).commitAllDocuments();
 
     final GlobalSearchScope scope = GlobalSearchScope.projectScope(myProject);
@@ -202,7 +202,7 @@ public abstract class IdCacheTest extends CodeInsightTestCase{
     checkCache(cache, todocache);
 
     VirtualFile child = myRootDir.createChildData(null, "4.java");
-    VfsUtil.saveText(child, "xxx //todo");
+    consulo.ide.impl.idea.openapi.vfs.VfsUtil.saveText(child, "xxx //todo");
     PsiDocumentManager.getInstance(myProject).commitAllDocuments();
 
     final GlobalSearchScope scope = GlobalSearchScope.projectScope(myProject);

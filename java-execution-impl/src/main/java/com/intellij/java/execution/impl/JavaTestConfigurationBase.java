@@ -5,22 +5,22 @@ package com.intellij.java.execution.impl;
 
 import java.util.List;
 
-import com.intellij.execution.Location;
+import consulo.execution.action.Location;
 import com.intellij.java.execution.CommonJavaRunConfigurationParameters;
 import com.intellij.java.execution.ShortenCommandLine;
+import consulo.execution.configuration.ModuleBasedConfiguration;
 import org.jdom.Element;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import com.intellij.execution.configurations.ConfigurationFactory;
+import consulo.execution.configuration.ConfigurationFactory;
 import com.intellij.java.execution.configurations.JavaRunConfigurationModule;
-import com.intellij.execution.configurations.ModuleBasedConfiguration;
-import com.intellij.execution.configurations.RefactoringListenerProvider;
-import com.intellij.execution.testframework.TestSearchScope;
-import com.intellij.execution.testframework.sm.runner.SMRunnerConsolePropertiesProvider;
-import com.intellij.openapi.util.InvalidDataException;
-import com.intellij.openapi.util.WriteExternalException;
+import consulo.ide.impl.idea.execution.configurations.RefactoringListenerProvider;
+import consulo.execution.test.TestSearchScope;
+import consulo.execution.test.sm.runner.SMRunnerConsolePropertiesProvider;
+import consulo.util.xml.serializer.InvalidDataException;
+import consulo.util.xml.serializer.WriteExternalException;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiElement;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiMethod;
 
 public abstract class JavaTestConfigurationBase extends ModuleBasedConfiguration<JavaRunConfigurationModule> implements CommonJavaRunConfigurationParameters, ConfigurationWithCommandLineShortener,

@@ -18,27 +18,27 @@ package com.intellij.java.impl.usages.impl.rules;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiImportList;
 import com.intellij.java.language.psi.PsiJavaFile;
-import com.intellij.lang.injection.InjectedLanguageManager;
-import com.intellij.navigation.NavigationItemFileStatus;
-import com.intellij.openapi.actionSystem.DataSink;
-import com.intellij.openapi.actionSystem.LangDataKeys;
-import com.intellij.openapi.actionSystem.TypeSafeDataProvider;
-import com.intellij.openapi.util.Iconable;
-import com.intellij.openapi.vcs.FileStatus;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.SmartPointerManager;
-import com.intellij.psi.SmartPsiElementPointer;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.usageView.UsageInfo;
-import com.intellij.usages.Usage;
-import com.intellij.usages.UsageGroup;
-import com.intellij.usages.UsageView;
-import com.intellij.usages.impl.rules.FileGroupingRule;
-import com.intellij.usages.rules.PsiElementUsage;
-import com.intellij.usages.rules.UsageGroupingRule;
-import consulo.ide.IconDescriptorUpdaters;
+import consulo.dataContext.TypeSafeDataProvider;
+import consulo.language.inject.InjectedLanguageManager;
+import consulo.language.editor.util.NavigationItemFileStatus;
+import consulo.dataContext.DataSink;
+import consulo.language.editor.LangDataKeys;
+import consulo.component.util.Iconable;
+import consulo.usage.Usage;
+import consulo.usage.rule.PsiElementUsage;
+import consulo.virtualFileSystem.status.FileStatus;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.SmartPointerManager;
+import consulo.language.psi.SmartPsiElementPointer;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.usage.UsageInfo;
+import consulo.usage.UsageGroup;
+import consulo.usage.UsageView;
+import consulo.ide.impl.idea.usages.impl.rules.FileGroupingRule;
+import consulo.usage.rule.UsageGroupingRule;
+import consulo.language.icon.IconDescriptorUpdaters;
 import consulo.ui.image.Image;
 import consulo.util.dataholder.Key;
 
@@ -94,7 +94,7 @@ public class ClassGroupingRule implements UsageGroupingRule {
 
     final VirtualFile virtualFile = topLevelFile.getVirtualFile();
     if (virtualFile != null) {
-      return new FileGroupingRule.FileUsageGroup(topLevelFile.getProject(), virtualFile);
+      return new consulo.ide.impl.idea.usages.impl.rules.FileGroupingRule.FileUsageGroup(topLevelFile.getProject(), virtualFile);
     }
     return null;
   }

@@ -16,20 +16,20 @@
 
 package com.intellij.java.impl.codeInspection.suspiciousNameCombination;
 
-import com.intellij.codeInsight.daemon.GroupNames;
+import consulo.ide.impl.idea.codeInsight.daemon.GroupNames;
 import com.intellij.java.language.impl.codeInsight.daemon.JavaErrorBundle;
-import com.intellij.codeInspection.InspectionsBundle;
-import com.intellij.codeInspection.ProblemsHolder;
+import consulo.language.editor.inspection.InspectionsBundle;
+import consulo.language.editor.inspection.ProblemsHolder;
 import com.intellij.java.analysis.impl.codeInspection.ex.BaseLocalInspectionTool;
 import com.intellij.java.language.psi.*;
-import com.intellij.openapi.ui.Messages;
-import com.intellij.openapi.util.InvalidDataException;
-import com.intellij.openapi.util.WriteExternalException;
-import com.intellij.openapi.util.text.StringUtil;
+import consulo.ui.ex.awt.Messages;
+import consulo.util.xml.serializer.InvalidDataException;
+import consulo.util.xml.serializer.WriteExternalException;
+import consulo.util.lang.StringUtil;
 import com.intellij.psi.*;
-import com.intellij.psi.codeStyle.NameUtil;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.ui.AddEditDeleteListPanel;
+import consulo.application.util.matcher.NameUtil;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.ide.impl.idea.ui.AddEditDeleteListPanel;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
@@ -173,7 +173,7 @@ public class SuspiciousNameCombinationInspection extends BaseLocalInspectionTool
     }
 
     private void checkCombination(final PsiElement location,
-                                  @javax.annotation.Nullable final String name,
+                                  @Nullable final String name,
                                   @Nullable final String referenceName,
                                   final String key) {
       String nameGroup1 = findNameGroup(name);
@@ -183,7 +183,7 @@ public class SuspiciousNameCombinationInspection extends BaseLocalInspectionTool
       }
     }
 
-    @javax.annotation.Nullable
+    @Nullable
 	private String findNameGroup(@Nullable final String name) {
       if (name == null) {
         return null;
@@ -206,7 +206,7 @@ public class SuspiciousNameCombinationInspection extends BaseLocalInspectionTool
     }
   }
 
-  private class MyOptionsPanel extends AddEditDeleteListPanel<String> {
+  private class MyOptionsPanel extends consulo.ide.impl.idea.ui.AddEditDeleteListPanel<String> {
 
     public MyOptionsPanel() {
       super(InspectionsBundle.message("suspicious.name.combination.options.title"), myNameGroups);

@@ -15,17 +15,18 @@
  */
 package com.intellij.java.language.util;
 
-import com.intellij.ide.util.TreeFileChooser;
-import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.fileTypes.FileType;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Condition;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.search.GlobalSearchScope;
+import consulo.ide.ServiceManager;
+import consulo.language.editor.ui.TreeFileChooser;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.project.Project;
+import consulo.util.lang.function.Condition;
+import consulo.virtualFileSystem.fileType.FileType;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.function.Predicate;
 
 /**
  * User: anna
@@ -73,22 +74,22 @@ public abstract class TreeClassChooserFactory {
 
 
   @Nonnull
-  public abstract TreeFileChooser createFileChooser(@Nonnull String title, @javax.annotation.Nullable PsiFile initialFile, @javax.annotation.Nullable FileType fileType, @javax.annotation.Nullable TreeFileChooser.PsiFileFilter filter);
+  public abstract TreeFileChooser createFileChooser(@Nonnull String title, @Nullable PsiFile initialFile, @Nullable FileType fileType, @Nullable Predicate<PsiFile> filter);
 
 
   @Nonnull
   public abstract TreeFileChooser createFileChooser(@Nonnull String title,
-                                                    @javax.annotation.Nullable PsiFile initialFile,
-                                                    @javax.annotation.Nullable FileType fileType,
-                                                    @javax.annotation.Nullable TreeFileChooser.PsiFileFilter filter,
+                                                    @Nullable PsiFile initialFile,
+                                                    @Nullable FileType fileType,
+                                                    @Nullable Predicate<PsiFile> filter,
                                                     boolean disableStructureProviders);
 
 
   @Nonnull
   public abstract TreeFileChooser createFileChooser(@Nonnull String title,
-                                                    @javax.annotation.Nullable PsiFile initialFile,
-                                                    @javax.annotation.Nullable FileType fileType,
-                                                    @javax.annotation.Nullable TreeFileChooser.PsiFileFilter filter,
+                                                    @Nullable PsiFile initialFile,
+                                                    @Nullable FileType fileType,
+                                                    @Nullable Predicate<PsiFile> filter,
                                                     boolean disableStructureProviders,
                                                     boolean showLibraryContents);
 }

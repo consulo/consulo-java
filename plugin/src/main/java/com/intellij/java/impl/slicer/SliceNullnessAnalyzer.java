@@ -16,22 +16,22 @@
 package com.intellij.java.impl.slicer;
 
 import com.intellij.java.language.codeInsight.Nullability;
-import com.intellij.codeInsight.PsiEquivalenceUtil;
+import consulo.language.editor.PsiEquivalenceUtil;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.NullabilityUtil;
-import com.intellij.ide.util.treeView.AbstractTreeNode;
-import com.intellij.ide.util.treeView.AbstractTreeStructure;
-import com.intellij.openapi.application.ReadAction;
-import com.intellij.openapi.progress.ProgressIndicator;
-import com.intellij.openapi.progress.ProgressManager;
-import com.intellij.openapi.progress.Task;
-import com.intellij.openapi.util.Ref;
-import com.intellij.psi.PsiElement;
+import consulo.project.ui.view.tree.AbstractTreeNode;
+import consulo.ui.ex.tree.AbstractTreeStructure;
+import consulo.application.ReadAction;
+import consulo.application.progress.ProgressIndicator;
+import consulo.application.progress.ProgressManager;
+import consulo.application.progress.Task;
+import consulo.util.lang.ref.Ref;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiExpression;
-import com.intellij.util.NullableFunction;
-import com.intellij.util.PairProcessor;
-import com.intellij.util.WalkingState;
-import com.intellij.util.containers.ContainerUtil;
-import com.intellij.util.containers.FactoryMap;
+import consulo.ide.impl.idea.util.NullableFunction;
+import consulo.util.lang.function.PairProcessor;
+import consulo.util.collection.util.WalkingState;
+import consulo.util.collection.ContainerUtil;
+import consulo.util.collection.FactoryMap;
 import consulo.util.collection.Sets;
 import javax.annotation.Nonnull;
 

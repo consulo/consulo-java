@@ -17,23 +17,24 @@ package com.intellij.java.impl.slicer;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import com.intellij.analysis.AnalysisScope;
-import com.intellij.analysis.AnalysisUIOptions;
-import com.intellij.analysis.BaseAnalysisActionDialog;
-import com.intellij.codeInsight.CodeInsightActionHandler;
-import consulo.codeInsight.TargetElementUtil;
-import com.intellij.codeInsight.hint.HintManager;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleUtilCore;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiDocumentManager;
-import com.intellij.psi.PsiElement;
+
+import consulo.language.editor.hint.HintManager;
+import consulo.language.editor.scope.AnalysisScope;
+import consulo.ide.impl.idea.analysis.AnalysisUIOptions;
+import consulo.ide.impl.idea.analysis.BaseAnalysisActionDialog;
+import consulo.language.editor.action.CodeInsightActionHandler;
+import consulo.language.editor.TargetElementUtil;
+import consulo.codeEditor.Editor;
+import consulo.module.Module;
+import consulo.language.util.ModuleUtilCore;
+import consulo.project.Project;
+import consulo.language.psi.PsiDocumentManager;
+import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiExpression;
-import com.intellij.psi.PsiFile;
+import consulo.language.psi.PsiFile;
 import com.intellij.java.language.psi.PsiLiteralExpression;
 import com.intellij.java.language.psi.PsiVariable;
-import com.intellij.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.PsiTreeUtil;
 
 /**
  * @author cdr

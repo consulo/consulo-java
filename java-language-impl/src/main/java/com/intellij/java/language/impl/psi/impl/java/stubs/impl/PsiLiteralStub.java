@@ -21,9 +21,9 @@ import com.intellij.java.language.impl.lexer.JavaLexer;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.impl.psi.impl.java.stubs.JavaStubElementTypes;
 import com.intellij.java.language.impl.psi.impl.source.tree.java.PsiLiteralExpressionImpl;
-import com.intellij.psi.stubs.StubBase;
-import com.intellij.psi.stubs.StubElement;
-import com.intellij.psi.tree.IElementType;
+import consulo.language.psi.stub.StubBase;
+import consulo.language.psi.stub.StubElement;
+import consulo.language.ast.IElementType;
 
 /**
  * @author peter

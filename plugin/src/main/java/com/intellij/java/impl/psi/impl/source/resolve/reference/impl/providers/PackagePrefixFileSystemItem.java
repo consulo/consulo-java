@@ -17,19 +17,20 @@ package com.intellij.java.impl.psi.impl.source.resolve.reference.impl.providers;
 
 import com.intellij.java.language.psi.JavaDirectoryService;
 import com.intellij.java.language.psi.PsiJavaPackage;
-import com.intellij.lang.ASTNode;
-import com.intellij.lang.Language;
-import com.intellij.openapi.util.TextRange;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.openapi.vfs.ex.dummy.DummyFileSystem;
+import consulo.language.ast.ASTNode;
+import consulo.language.Language;
+import consulo.document.util.TextRange;
+import consulo.util.lang.StringUtil;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.ide.impl.idea.openapi.vfs.ex.dummy.DummyFileSystem;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.PsiElementBase;
-import com.intellij.psi.search.PsiElementProcessor;
-import com.intellij.util.ArrayUtil;
-import com.intellij.util.IncorrectOperationException;
+import consulo.language.psi.resolve.PsiElementProcessor;
+import consulo.util.collection.ArrayUtil;
+import consulo.language.util.IncorrectOperationException;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import java.util.ArrayList;
 
@@ -102,7 +103,7 @@ class PackagePrefixFileSystemItem extends PsiElementBase implements PsiFileSyste
   }
 
   @Override
-  @javax.annotation.Nullable
+  @Nullable
   public PsiElement findElementAt(final int offset) {
     return null;
   }
@@ -196,7 +197,7 @@ class PackagePrefixFileSystemItem extends PsiElementBase implements PsiFileSyste
   }
 
   @Override
-  @javax.annotation.Nullable
+  @Nullable
   public ASTNode getNode() {
     return null;
   }
