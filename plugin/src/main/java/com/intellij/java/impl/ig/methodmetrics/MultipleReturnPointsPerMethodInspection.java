@@ -79,8 +79,7 @@ public class MultipleReturnPointsPerMethodInspection
     final JPanel panel = new JPanel(new GridBagLayout());
     final JLabel label = new JLabel(InspectionGadgetsBundle.message(
       "return.point.limit.option"));
-    final JFormattedTextField termLimitTextField =
-      prepareNumberEditor("m_limit");
+    final JFormattedTextField termLimitTextField = prepareNumberEditor(() -> m_limit, i -> m_limit = i);
     final CheckBox ignoreGuardClausesCheckBox =
       new CheckBox(InspectionGadgetsBundle.message(
         "ignore.guard.clauses.option"),

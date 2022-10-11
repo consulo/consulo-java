@@ -15,21 +15,21 @@
  */
 package com.intellij.java.analysis.impl.codeInspection.reference;
 
-import com.intellij.java.language.impl.codeInsight.ExceptionUtil;
-import consulo.language.editor.inspection.reference.RefElement;
-import consulo.ide.impl.idea.codeInspection.reference.RefElementImpl;
-import consulo.language.editor.inspection.reference.RefManager;
-import consulo.language.editor.inspection.reference.RefVisitor;
 import com.intellij.java.analysis.codeInspection.reference.*;
+import com.intellij.java.language.impl.codeInsight.ExceptionUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.*;
 import consulo.application.ApplicationManager;
-import consulo.util.lang.Comparing;
-import com.intellij.psi.*;
+import consulo.language.editor.impl.inspection.reference.RefElementImpl;
+import consulo.language.editor.inspection.reference.RefElement;
+import consulo.language.editor.inspection.reference.RefManager;
+import consulo.language.editor.inspection.reference.RefVisitor;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiManager;
 import consulo.language.psi.scope.GlobalSearchScope;
-import com.intellij.psi.util.*;
 import consulo.language.util.IncorrectOperationException;
 import consulo.util.collection.SmartList;
+import consulo.util.lang.Comparing;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;

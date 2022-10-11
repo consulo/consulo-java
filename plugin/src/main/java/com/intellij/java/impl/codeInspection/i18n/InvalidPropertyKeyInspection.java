@@ -18,7 +18,7 @@ package com.intellij.java.impl.codeInspection.i18n;
 import consulo.language.editor.rawHighlight.HighlightDisplayLevel;
 import com.intellij.java.language.codeInsight.AnnotationUtil;
 import consulo.language.editor.CodeInsightBundle;
-import consulo.ide.impl.idea.codeInsight.daemon.GroupNames;
+import com.intellij.java.analysis.codeInspection.GroupNames;
 import com.intellij.java.analysis.impl.codeInspection.BaseJavaLocalInspectionTool;
 import com.intellij.java.language.psi.*;
 import com.intellij.lang.properties.PropertiesReferenceManager;

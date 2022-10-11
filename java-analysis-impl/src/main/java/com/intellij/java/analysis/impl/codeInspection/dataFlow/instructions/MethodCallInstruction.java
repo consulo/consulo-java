@@ -16,13 +16,13 @@
 
 package com.intellij.java.analysis.impl.codeInspection.dataFlow.instructions;
 
-import com.intellij.java.language.codeInsight.Nullability;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.*;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaTypeValue;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaValue;
+import com.intellij.java.language.codeInsight.Nullability;
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.*;
-import consulo.ide.impl.idea.util.ObjectUtils;
+import consulo.language.psi.PsiElement;
+import consulo.util.lang.ObjectUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -59,7 +59,7 @@ public class MethodCallInstruction extends ExpressionPushingInstruction<PsiExpre
     super(reference);
     myContext = reference;
     JavaResolveResult resolveResult = reference.advancedResolve(false);
-    myTargetMethod = ObjectUtils.tryCast(resolveResult.getElement(), PsiMethod.class);
+    myTargetMethod = ObjectUtil.tryCast(resolveResult.getElement(), PsiMethod.class);
     myContracts = Collections.unmodifiableList(contracts);
     myArgCount = myTargetMethod == null ? 0 : myTargetMethod.getParameterList().getParametersCount();
     if (myTargetMethod == null) {
@@ -86,7 +86,7 @@ public class MethodCallInstruction extends ExpressionPushingInstruction<PsiExpre
   }
 
   public MethodCallInstruction(@Nonnull PsiCall call, @Nullable DfaValue precalculatedReturnValue, List<? extends MethodContract> contracts) {
-    super(ObjectUtils.tryCast(call, PsiExpression.class));
+    super(ObjectUtil.tryCast(call, PsiExpression.class));
     myContext = call;
     myContracts = Collections.unmodifiableList(contracts);
     final PsiExpressionList argList = call.getArgumentList();
@@ -216,10 +216,9 @@ public class MethodCallInstruction extends ExpressionPushingInstruction<PsiExpre
     return visitor.visitMethodCall(this, runner, stateBefore);
   }
 
-  public
   @Nullable
-  PsiCall getCallExpression() {
-    return ObjectUtils.tryCast(myContext, PsiCall.class);
+  public PsiCall getCallExpression() {
+    return ObjectUtil.tryCast(myContext, PsiCall.class);
   }
 
   public

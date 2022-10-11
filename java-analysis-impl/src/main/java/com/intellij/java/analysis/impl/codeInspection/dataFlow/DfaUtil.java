@@ -1,23 +1,23 @@
 // Copyright 2000-2020 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.analysis.impl.codeInspection.dataFlow;
 
-import com.intellij.java.language.impl.codeInsight.ExpressionUtil;
-import com.intellij.java.language.codeInsight.Nullability;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.rangeSet.LongRangeSet;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.types.DfReferenceType;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.*;
 import com.intellij.java.analysis.impl.psi.controlFlow.DefUseUtil;
-import com.intellij.java.language.psi.*;
-import com.intellij.psi.*;
+import com.intellij.java.language.codeInsight.Nullability;
+import com.intellij.java.language.impl.codeInsight.ExpressionUtil;
 import com.intellij.java.language.impl.psi.impl.source.resolve.JavaResolveUtil;
-import consulo.language.ast.IElementType;
+import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiPrecedenceUtil;
-import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
-import consulo.util.collection.ContainerUtil;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
+import consulo.language.ast.IElementType;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.util.collection.ContainerUtil;
 import one.util.streamex.StreamEx;
 
 import javax.annotation.Nonnull;
@@ -26,7 +26,7 @@ import java.util.*;
 import java.util.function.Predicate;
 
 import static com.intellij.java.language.psi.CommonClassNames.JAVA_UTIL_COLLECTIONS;
-import static consulo.ide.impl.idea.util.ObjectUtils.tryCast;
+import static consulo.util.lang.ObjectUtil.tryCast;
 
 /**
  * @author Gregory.Shrago

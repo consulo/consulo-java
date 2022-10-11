@@ -25,41 +25,54 @@
 
 package com.intellij.java.analysis.impl.codeInspection.deadCode;
 
-import consulo.language.editor.scope.AnalysisScope;
-import consulo.ide.impl.idea.codeInsight.daemon.GroupNames;
-import consulo.language.editor.ImplicitUsageProvider;
-import com.intellij.java.language.impl.codeInsight.daemon.impl.analysis.HighlightUtilBase;
-import consulo.ide.impl.idea.codeInspection.ex.GlobalInspectionContextBase;
-import consulo.language.editor.inspection.scheme.JobDescriptor;
-import com.intellij.codeInspection.reference.*;
-import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.java.analysis.codeInspection.GlobalJavaInspectionContext;
+import com.intellij.java.analysis.codeInspection.GroupNames;
+import com.intellij.java.analysis.codeInspection.ex.EntryPoint;
 import com.intellij.java.analysis.codeInspection.ex.EntryPointsManager;
 import com.intellij.java.analysis.codeInspection.reference.*;
 import com.intellij.java.analysis.impl.codeInspection.reference.RefClassImpl;
 import com.intellij.java.analysis.impl.codeInspection.reference.RefJavaElementImpl;
 import com.intellij.java.analysis.impl.codeInspection.unusedSymbol.UnusedSymbolLocalInspectionBase;
 import com.intellij.java.analysis.impl.codeInspection.util.RefFilter;
-import com.intellij.java.language.psi.*;
-import consulo.application.ApplicationManager;
-import consulo.component.extension.Extensions;
-import consulo.application.progress.ProgressManager;
-import consulo.project.Project;
-import consulo.util.xml.serializer.InvalidDataException;
-import consulo.util.xml.serializer.WriteExternalException;
-import consulo.virtualFileSystem.VirtualFile;
-import com.intellij.psi.*;
+import com.intellij.java.language.impl.JavaFileType;
+import com.intellij.java.language.impl.codeInsight.daemon.impl.analysis.HighlightUtilBase;
 import com.intellij.java.language.impl.psi.impl.PsiClassImplUtil;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.PsiMethodUtil;
+import consulo.application.ApplicationManager;
+import consulo.application.progress.ProgressManager;
+import consulo.component.extension.Extensions;
+import consulo.java.analysis.codeInspection.JavaExtensionPoints;
+import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.editor.ImplicitUsageProvider;
+import consulo.language.editor.impl.inspection.reference.RefElementImpl;
+import consulo.language.editor.inspection.GlobalInspectionContext;
+import consulo.language.editor.inspection.GlobalInspectionTool;
+import consulo.language.editor.inspection.InspectionsBundle;
+import consulo.language.editor.inspection.ProblemDescriptionsProcessor;
+import consulo.language.editor.inspection.reference.RefElement;
+import consulo.language.editor.inspection.reference.RefEntity;
+import consulo.language.editor.inspection.reference.RefManager;
+import consulo.language.editor.inspection.reference.RefUtil;
+import consulo.language.editor.inspection.scheme.InspectionManager;
+import consulo.language.editor.inspection.scheme.JobDescriptor;
+import consulo.language.editor.rawHighlight.HighlightDisplayLevel;
+import consulo.language.editor.scope.AnalysisScope;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiReference;
 import consulo.language.psi.scope.DelegatingGlobalSearchScope;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.search.PsiNonJavaFileReferenceProcessor;
 import consulo.language.psi.search.PsiSearchHelper;
 import consulo.language.psi.search.ReferencesSearch;
-import com.intellij.java.language.psi.util.PsiMethodUtil;
-import consulo.util.collection.ContainerUtil;
-import consulo.java.analysis.codeInspection.JavaExtensionPoints;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.logging.Logger;
+import consulo.project.Project;
+import consulo.util.collection.ContainerUtil;
+import consulo.util.collection.Lists;
+import consulo.util.xml.serializer.InvalidDataException;
+import consulo.util.xml.serializer.WriteExternalException;
+import consulo.virtualFileSystem.VirtualFile;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.TestOnly;
@@ -68,7 +81,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 
-public class UnusedDeclarationInspectionBase extends GlobalInspectionTool {
+public abstract class UnusedDeclarationInspectionBase extends GlobalInspectionTool {
   public boolean ADD_MAINS_TO_ENTRIES = true;
 
   public boolean ADD_APPLET_TO_ENTRIES = true;
@@ -83,7 +96,7 @@ public class UnusedDeclarationInspectionBase extends GlobalInspectionTool {
   @NonNls
   public static final String ALTERNATIVE_ID = "UnusedDeclaration";
 
-  protected final List<EntryPoint> myExtensions = ContainerUtil.createLockFreeCopyOnWriteList();
+  protected final List<EntryPoint> myExtensions = Lists.newLockFreeCopyOnWriteList();
   private static final Logger LOG = Logger.getInstance(UnusedDeclarationInspectionBase.class);
   private GlobalInspectionContext myContext;
   protected final UnusedSymbolLocalInspectionBase myLocalInspectionBase = createUnusedSymbolLocalInspection();
@@ -105,6 +118,12 @@ public class UnusedDeclarationInspectionBase extends GlobalInspectionTool {
 
   public UnusedDeclarationInspectionBase() {
     this(!ApplicationManager.getApplication().isUnitTestMode());
+  }
+
+  @Nonnull
+  @Override
+  public HighlightDisplayLevel getDefaultLevel() {
+    return HighlightDisplayLevel.WARNING;
   }
 
   protected UnusedSymbolLocalInspectionBase createUnusedSymbolLocalInspection() {
@@ -331,8 +350,7 @@ public class UnusedDeclarationInspectionBase extends GlobalInspectionTool {
             return;
           }
           final boolean isSuppressed = refElement.isSuppressed(getShortName(), ALTERNATIVE_ID);
-          if (isSuppressed || !((GlobalInspectionContextBase) globalContext).isToCheckFile(file,
-              UnusedDeclarationInspectionBase.this)) {
+          if (isSuppressed || !globalContext.isToCheckFile(file, UnusedDeclarationInspectionBase.this)) {
             if (isSuppressed || !scope.contains(file)) {
               getEntryPointsManager().addEntryPoint(refElement, false);
             }
@@ -658,7 +676,7 @@ public class UnusedDeclarationInspectionBase extends GlobalInspectionTool {
       public void visitElement(@Nonnull RefEntity refEntity) {
         if (refEntity instanceof RefJavaElement) {
           final RefJavaElementImpl refElement = (RefJavaElementImpl) refEntity;
-          if (!((GlobalInspectionContextBase) context).isToCheckMember(refElement, UnusedDeclarationInspectionBase.this)) {
+          if (!context.isToCheckMember(refElement, UnusedDeclarationInspectionBase.this)) {
             return;
           }
           refElement.setReachable(false);

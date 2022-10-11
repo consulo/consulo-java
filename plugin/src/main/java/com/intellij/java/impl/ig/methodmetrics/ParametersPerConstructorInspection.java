@@ -94,7 +94,7 @@ public class ParametersPerConstructorInspection extends MethodMetricInspection {
   public JComponent createOptionsPanel() {
     final JPanel panel = new JPanel();
     final JLabel textFieldLabel = new JLabel(getConfigurationLabel());
-    final JFormattedTextField valueField = prepareNumberEditor("m_limit");
+    final JFormattedTextField valueField = prepareNumberEditor(() -> m_limit, i -> m_limit = i);
     final JLabel comboBoxLabel = new JLabel(InspectionGadgetsBundle.message("constructor.visibility.option"));
     final JComboBox comboBox = new JComboBox();
     comboBox.addItem(Scope.NONE);

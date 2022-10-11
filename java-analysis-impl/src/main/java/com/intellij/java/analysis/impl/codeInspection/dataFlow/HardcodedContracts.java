@@ -5,14 +5,15 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.StandardMethodCon
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.RelationType;
 import com.intellij.java.analysis.impl.codeInspection.util.OptionalUtil;
 import com.intellij.java.language.psi.*;
-import consulo.language.inject.InjectedLanguageManager;
-import com.intellij.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.util.collection.ContainerUtil;
 import com.siyeh.ig.callMatcher.CallMapper;
 import com.siyeh.ig.callMatcher.CallMatcher;
 import com.siyeh.ig.psiutils.MethodUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
+import consulo.language.inject.InjectedLanguageManager;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.SyntaxTraverser;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -30,7 +31,7 @@ import static com.siyeh.ig.callMatcher.CallMatcher.*;
  * @author peter
  */
 public final class HardcodedContracts {
-  private static final List<MethodContract> ARRAY_RANGE_CONTRACTS = ContainerUtil.immutableList(
+  private static final List<MethodContract> ARRAY_RANGE_CONTRACTS = List.of(
       singleConditionContract(ContractValue.argument(1), RelationType.GT, ContractValue.argument(0).specialField(SpecialField.ARRAY_LENGTH),
           fail()),
       singleConditionContract(ContractValue.argument(2), RelationType.GT, ContractValue.argument(0).specialField(SpecialField.ARRAY_LENGTH),

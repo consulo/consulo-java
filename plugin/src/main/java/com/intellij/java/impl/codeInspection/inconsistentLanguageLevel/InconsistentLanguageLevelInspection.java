@@ -21,7 +21,7 @@
 package com.intellij.java.impl.codeInspection.inconsistentLanguageLevel;
 
 import consulo.language.editor.scope.AnalysisScope;
-import consulo.ide.impl.idea.codeInsight.daemon.GroupNames;
+import com.intellij.java.analysis.codeInspection.GroupNames;
 import consulo.language.editor.inspection.reference.RefModule;
 import com.intellij.java.impl.codeInspection.unnecessaryModuleDependency.UnnecessaryModuleDependencyInspection;
 import com.intellij.java.language.module.EffectiveLanguageLevelUtil;

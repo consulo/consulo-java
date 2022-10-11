@@ -17,11 +17,8 @@ package com.siyeh.ig;
 
 import com.intellij.java.analysis.codeInspection.BaseJavaBatchLocalInspectionTool;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.ide.impl.idea.codeInspection.ex.InspectionProfileImpl;
 import consulo.language.editor.inspection.ProblemsHolder;
 import consulo.language.editor.inspection.scheme.InspectionProfileEntry;
-import consulo.language.editor.inspection.scheme.InspectionProjectProfileManager;
-import consulo.language.editor.rawHighlight.HighlightDisplayKey;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.PsiFile;
@@ -44,6 +41,8 @@ import java.lang.reflect.Field;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.List;
+import java.util.function.IntConsumer;
+import java.util.function.IntSupplier;
 
 public abstract class BaseInspection extends BaseJavaBatchLocalInspectionTool {
   private String m_shortName = null;
@@ -74,7 +73,7 @@ public abstract class BaseInspection extends BaseJavaBatchLocalInspectionTool {
     return GroupDisplayNameUtil.getGroupDisplayName(getClass());
   }
 
-  @Nonnull
+  @Nonnull                                                                                                      
   protected abstract String buildErrorString(Object... infos);
 
   protected boolean buildQuickFixesOnlyForOnTheFlyErrors() {
@@ -135,7 +134,7 @@ public abstract class BaseInspection extends BaseJavaBatchLocalInspectionTool {
 
   /**
    * To check precondition(s) on the entire file, to prevent doing the check on every PsiElement visited.
-   * Useful for e.g. a {@link PsiUtil#isLanguageLevel5OrHigher(com.intellij.psi.PsiElement)} check
+   * Useful for e.g. a {@link PsiUtil#isLanguageLevel5OrHigher(PsiElement)} check
    * which will be the same for all elements in the specified file.
    * When this method returns false, {@link #buildVisitor()} will not be called.
    */
@@ -143,11 +142,11 @@ public abstract class BaseInspection extends BaseJavaBatchLocalInspectionTool {
     return true;
   }
 
-  protected JFormattedTextField prepareNumberEditor(@NonNls final String fieldName) {
+  protected JFormattedTextField prepareNumberEditor(IntSupplier getter, IntConsumer setter) {
     final NumberFormat formatter = NumberFormat.getIntegerInstance();
     formatter.setParseIntegerOnly(true);
     final JFormattedTextField valueField = new JFormattedTextField(formatter);
-    Object value = ReflectionUtil.getField(getClass(), this, null, fieldName);
+    int value = getter.getAsInt();
     valueField.setValue(value);
     valueField.setColumns(2);
 
@@ -162,7 +161,7 @@ public abstract class BaseInspection extends BaseJavaBatchLocalInspectionTool {
         try {
           valueField.commitEdit();
           final Number number = (Number) valueField.getValue();
-          ReflectionUtil.setField(BaseInspection.this.getClass(), BaseInspection.this, int.class, fieldName, number.intValue());
+          setter.accept(number.intValue());
         } catch (ParseException e) {
           // No luck this time. Will update the field when correct value is entered.
         }
@@ -210,12 +209,5 @@ public abstract class BaseInspection extends BaseJavaBatchLocalInspectionTool {
       out.append(',');
       out.append(strings[i].get(index));
     }
-  }
-
-  public static boolean isInspectionEnabled(@NonNls String shortName, PsiElement context) {
-    final InspectionProjectProfileManager profileManager = InspectionProjectProfileManager.getInstance(context.getProject());
-    final InspectionProfileImpl profile = (InspectionProfileImpl) profileManager.getInspectionProfile();
-    final HighlightDisplayKey key = HighlightDisplayKey.find(shortName);
-    return profile.isToolEnabled(key, context);
   }
 }

@@ -15,21 +15,22 @@
  */
 package com.intellij.java.analysis.impl.psi.impl.search;
 
-import java.util.Set;
+import com.intellij.java.indexing.search.searches.MethodReferencesSearch;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.PsiFormatUtil;
+import com.intellij.java.language.psi.util.PsiFormatUtilBase;
+import consulo.application.util.function.Processor;
+import consulo.find.FindUsagesOptions;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiReference;
+import consulo.logging.Logger;
+import consulo.usage.UsageInfo;
+import consulo.util.dataholder.Key;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import consulo.find.FindUsagesOptions;
-import com.intellij.java.language.psi.*;
-import consulo.logging.Logger;
-import consulo.util.dataholder.Key;
-import com.intellij.psi.*;
-import com.intellij.java.indexing.search.searches.MethodReferencesSearch;
-import com.intellij.java.language.psi.util.PsiFormatUtil;
-import consulo.ide.impl.psi.util.PsiFormatUtilBase;
-import consulo.usage.UsageInfo;
-import consulo.application.util.function.Processor;
 import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Author: msk
@@ -86,8 +87,8 @@ public class ThrowSearchUtil {
     while (elem != null) {
       final PsiElement parent = elem.getParent();
       if (elem instanceof PsiMethod) {
-        final PsiMethod deepestSuperMethod = ((PsiMethod)elem).findDeepestSuperMethod();
-        final PsiMethod method = deepestSuperMethod != null ? deepestSuperMethod : (PsiMethod)elem;
+        final PsiMethod deepestSuperMethod = ((PsiMethod) elem).findDeepestSuperMethod();
+        final PsiMethod method = deepestSuperMethod != null ? deepestSuperMethod : (PsiMethod) elem;
         if (!processed.contains(method)) {
           processed.add(method);
           final PsiReference[] refs = MethodReferencesSearch.search(method, options.searchScope, true).toArray(PsiReference.EMPTY_ARRAY);
@@ -98,16 +99,15 @@ public class ThrowSearchUtil {
         return true;
       }
       if (elem instanceof PsiTryStatement) {
-        final PsiTryStatement aTry = (PsiTryStatement)elem;
+        final PsiTryStatement aTry = (PsiTryStatement) elem;
         final PsiParameter[] catches = aTry.getCatchBlockParameters();
         for (int i = 0; i != catches.length; ++i) {
           if (!processExn(catches[i], processor, root)) {
             return false;
           }
         }
-      }
-      else if (parent instanceof PsiTryStatement) {
-        final PsiTryStatement tryStmt = (PsiTryStatement)parent;
+      } else if (parent instanceof PsiTryStatement) {
+        final PsiTryStatement tryStmt = (PsiTryStatement) parent;
         if (elem != tryStmt.getTryBlock()) {
           elem = parent.getParent();
           continue;
@@ -135,16 +135,16 @@ public class ThrowSearchUtil {
   @Nullable
   public static Root[] getSearchRoots(final PsiElement element) {
     if (element instanceof PsiThrowStatement) {
-      final PsiThrowStatement aThrow = (PsiThrowStatement)element;
+      final PsiThrowStatement aThrow = (PsiThrowStatement) element;
       final PsiExpression exn = aThrow.getException();
       return new Root[]{new Root(aThrow.getParent(), exn.getType(), isExactExnType(exn))};
     }
     if (element instanceof PsiKeyword) {
-      final PsiKeyword kwd = (PsiKeyword)element;
+      final PsiKeyword kwd = (PsiKeyword) element;
       if (PsiKeyword.THROWS.equals(kwd.getText())) {
         final PsiElement parent = kwd.getParent();
         if (parent != null && parent.getParent() instanceof PsiMethod) {
-          final PsiMethod method = (PsiMethod)parent.getParent();
+          final PsiMethod method = (PsiMethod) parent.getParent();
           final PsiReferenceList throwsList = method.getThrowsList();
           final PsiClassType[] exns = throwsList.getReferencedTypes();
           final Root[] roots = new Root[exns.length];
@@ -165,7 +165,7 @@ public class ThrowSearchUtil {
 
   public static String getSearchableTypeName(final PsiElement e) {
     if (e instanceof PsiThrowStatement) {
-      final PsiThrowStatement aThrow = (PsiThrowStatement)e;
+      final PsiThrowStatement aThrow = (PsiThrowStatement) e;
       final PsiType type = aThrow.getException().getType();
       return PsiFormatUtil.formatType(type, PsiFormatUtilBase.SHOW_FQ_CLASS_NAMES, PsiSubstitutor.EMPTY);
     }

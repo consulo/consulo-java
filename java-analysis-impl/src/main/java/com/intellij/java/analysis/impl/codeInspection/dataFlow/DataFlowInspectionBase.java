@@ -2,7 +2,6 @@
 
 package com.intellij.java.analysis.impl.codeInspection.dataFlow;
 
-import consulo.language.editor.intention.BaseIntentionAction;
 import com.intellij.java.analysis.JavaAnalysisBundle;
 import com.intellij.java.analysis.codeInspection.AbstractBaseJavaLocalInspectionTool;
 import com.intellij.java.analysis.impl.codeInsight.intention.AddAnnotationPsiFix;
@@ -18,6 +17,7 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaValue;
 import com.intellij.java.analysis.impl.codeInspection.nullable.NullableStuffInspectionBase;
 import com.intellij.java.language.codeInsight.*;
 import com.intellij.java.language.impl.codeInsight.ExpressionUtil;
+import com.intellij.java.language.impl.psi.impl.PsiImplUtil;
 import com.intellij.java.language.impl.psi.util.JavaPsiPatternUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiExpressionTrimRenderer;
@@ -25,22 +25,27 @@ import com.intellij.java.language.psi.util.PsiTypesUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import com.intellij.java.language.util.JavaPsiConstructorUtil;
-import consulo.application.ApplicationManager;
-import consulo.logging.Logger;
-import consulo.project.Project;
-import consulo.document.util.TextRange;
-import consulo.util.xml.serializer.WriteExternalException;
-import consulo.application.util.registry.Registry;
-import consulo.util.lang.StringUtil;
-import com.intellij.psi.*;
-import com.intellij.java.language.impl.psi.impl.PsiImplUtil;
-import consulo.language.ast.IElementType;
-import com.intellij.psi.util.*;
-import com.intellij.util.*;
-import consulo.util.collection.ContainerUtil;
 import com.siyeh.ig.bugs.EqualsWithItselfInspection;
 import com.siyeh.ig.fixes.EqualsToEqualityFix;
 import com.siyeh.ig.psiutils.*;
+import consulo.application.ApplicationManager;
+import consulo.application.util.registry.Registry;
+import consulo.document.util.TextRange;
+import consulo.language.ast.IElementType;
+import consulo.language.editor.inspection.*;
+import consulo.language.editor.intention.BaseIntentionAction;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiElementVisitor;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.logging.Logger;
+import consulo.project.Project;
+import consulo.util.collection.ArrayUtil;
+import consulo.util.collection.ContainerUtil;
+import consulo.util.collection.SmartList;
+import consulo.util.lang.StringUtil;
+import consulo.util.lang.ThreeState;
+import consulo.util.xml.serializer.WriteExternalException;
 import one.util.streamex.StreamEx;
 import org.jdom.Element;
 import org.jetbrains.annotations.Contract;
@@ -53,7 +58,7 @@ import javax.swing.*;
 import java.util.*;
 import java.util.function.Consumer;
 
-import static consulo.ide.impl.idea.util.ObjectUtils.tryCast;
+import static consulo.util.lang.ObjectUtil.tryCast;
 
 public abstract class DataFlowInspectionBase extends AbstractBaseJavaLocalInspectionTool {
   static final Logger LOG = Logger.getInstance(DataFlowInspectionBase.class);
@@ -489,12 +494,12 @@ public abstract class DataFlowInspectionBase extends AbstractBaseJavaLocalInspec
     }
     if (reporter.isOnTheFly()) {
       if (ref instanceof PsiReferenceExpression) {
-        fixes.add(new SetInspectionOptionFix(this, "REPORT_CONSTANT_REFERENCE_VALUES",
+        fixes.add(new SetInspectionOptionFix<>(this, (i, v) -> i.REPORT_CONSTANT_REFERENCE_VALUES = v,
             JavaAnalysisBundle.message("inspection.data.flow.turn.off.constant.references.quickfix"),
             false));
       }
       if (isAssertion) {
-        fixes.add(new SetInspectionOptionFix(this, "DONT_REPORT_TRUE_ASSERT_STATEMENTS",
+        fixes.add(new SetInspectionOptionFix<>(this, (i, v) -> i.DONT_REPORT_TRUE_ASSERT_STATEMENTS = v,
             JavaAnalysisBundle.message("inspection.data.flow.turn.off.true.asserts.quickfix"), true));
       }
     }
@@ -745,7 +750,7 @@ public abstract class DataFlowInspectionBase extends AbstractBaseJavaLocalInspec
         .message("dataflow.message.return.notnull.from.nullable", NullableStuffInspectionBase.getPresentableAnnoName(annotation), method.getName());
     LocalQuickFix[] fixes = {AddAnnotationPsiFix.createAddNotNullFix(method)};
     if (holder.isOnTheFly()) {
-      fixes = ArrayUtil.append(fixes, new SetInspectionOptionFix(this, "REPORT_NULLABLE_METHODS_RETURNING_NOT_NULL",
+      fixes = ArrayUtil.append(fixes, new SetInspectionOptionFix<>(this, (i, v) -> i.REPORT_NULLABLE_METHODS_RETURNING_NOT_NULL = v,
           JavaAnalysisBundle
               .message(
                   "inspection.data.flow.turn.off.nullable.returning.notnull.quickfix"),
@@ -910,7 +915,7 @@ public abstract class DataFlowInspectionBase extends AbstractBaseJavaLocalInspec
     if (!isCoveredBySurroundingFix(psiAnchor, evaluatesToTrue)) {
       ContainerUtil.addIfNotNull(fixes, createSimplifyBooleanExpressionFix(psiAnchor, evaluatesToTrue));
       if (isAssertion && reporter.isOnTheFly()) {
-        fixes.add(new SetInspectionOptionFix(this, "DONT_REPORT_TRUE_ASSERT_STATEMENTS",
+        fixes.add(new SetInspectionOptionFix<>(this, (i, v) -> i.DONT_REPORT_TRUE_ASSERT_STATEMENTS = v,
             JavaAnalysisBundle.message("inspection.data.flow.turn.off.true.asserts.quickfix"), true));
       }
       ContainerUtil.addIfNotNull(fixes, createReplaceWithNullCheckFix(psiAnchor, evaluatesToTrue));

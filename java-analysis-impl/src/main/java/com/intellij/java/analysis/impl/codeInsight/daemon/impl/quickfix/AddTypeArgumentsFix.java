@@ -15,16 +15,16 @@
  */
 package com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix;
 
-import javax.annotation.Nonnull;
-
-import com.intellij.java.language.psi.*;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
-import consulo.logging.Logger;
 import com.intellij.java.language.LanguageLevel;
-import com.intellij.psi.*;
-import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.impl.refactoring.util.RefactoringChangeUtil;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
+import consulo.logging.Logger;
+
+import javax.annotation.Nonnull;
 
 public class AddTypeArgumentsFix extends MethodArgumentFix {
   private static final Logger LOG = Logger.getInstance(AddTypeArgumentsFix.class);
@@ -54,13 +54,13 @@ public class AddTypeArgumentsFix extends MethodArgumentFix {
       if (!PsiUtil.isLanguageLevel5OrHigher(expression)) return null;
 
       if (expression instanceof PsiMethodCallExpression) {
-        final PsiMethodCallExpression methodCall = (PsiMethodCallExpression)expression;
+        final PsiMethodCallExpression methodCall = (PsiMethodCallExpression) expression;
         final PsiReferenceParameterList list = methodCall.getMethodExpression().getParameterList();
         if (list == null || list.getTypeArguments().length > 0) return null;
         final JavaResolveResult resolveResult = methodCall.resolveMethodGenerics();
         final PsiElement element = resolveResult.getElement();
         if (element instanceof PsiMethod) {
-          final PsiMethod method = (PsiMethod)element;
+          final PsiMethod method = (PsiMethod) element;
           final PsiType returnType = method.getReturnType();
           if (returnType == null) return null;
 
@@ -77,7 +77,7 @@ public class AddTypeArgumentsFix extends MethodArgumentFix {
             }
 
             final PsiElementFactory factory = JavaPsiFacade.getInstance(expression.getProject()).getElementFactory();
-            PsiMethodCallExpression copy = (PsiMethodCallExpression)expression.copy();
+            PsiMethodCallExpression copy = (PsiMethodCallExpression) expression.copy();
             final PsiReferenceExpression methodExpression = copy.getMethodExpression();
             final PsiReferenceParameterList parameterList = methodExpression.getParameterList();
             LOG.assertTrue(parameterList != null);
@@ -107,7 +107,7 @@ public class AddTypeArgumentsFix extends MethodArgumentFix {
     @Override
     public boolean areTypesConvertible(final PsiType exprType, final PsiType parameterType, final PsiElement context) {
       return !(exprType instanceof PsiPrimitiveType) &&
-             !(parameterType instanceof PsiPrimitiveType);
+          !(parameterType instanceof PsiPrimitiveType);
     }
   }
 

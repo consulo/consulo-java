@@ -9,13 +9,13 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.rangeSet.LongRang
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.rangeSet.LongRangeSet;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.types.*;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.*;
-import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiType;
-import consulo.language.psi.util.PsiTreeUtil;
-import consulo.ide.impl.idea.util.ObjectUtils;
-import consulo.util.collection.ContainerUtil;
 import com.siyeh.ig.psiutils.ExpressionUtils;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.util.collection.ContainerUtil;
+import consulo.util.lang.ObjectUtil;
 import one.util.streamex.EntryStream;
 import one.util.streamex.StreamEx;
 import org.jetbrains.annotations.Contract;
@@ -442,7 +442,7 @@ public class TrackingDfaMemoryState extends DfaMemoryStateImpl {
         return ((ExpressionPushingInstruction<?>) myInstruction).getExpression();
       }
       if (myInstruction instanceof ConditionalGotoInstruction) {
-        return ObjectUtils.tryCast(((ConditionalGotoInstruction) myInstruction).getPsiAnchor(), PsiExpression.class);
+        return ObjectUtil.tryCast(((ConditionalGotoInstruction) myInstruction).getPsiAnchor(), PsiExpression.class);
       }
       return null;
     }

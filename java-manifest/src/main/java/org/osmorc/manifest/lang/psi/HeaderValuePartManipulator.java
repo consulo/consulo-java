@@ -25,25 +25,36 @@
 
 package org.osmorc.manifest.lang.psi;
 
-import org.osmorc.manifest.lang.ManifestFileType;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.document.util.TextRange;
 import consulo.language.psi.AbstractElementManipulator;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiFileFactory;
 import consulo.language.util.IncorrectOperationException;
+import org.osmorc.manifest.lang.ManifestFileType;
+
+import javax.annotation.Nonnull;
 
 /**
  * @author Robert F. Beeger (robert@beeger.net)
  */
+@ExtensionImpl
 public class HeaderValuePartManipulator extends AbstractElementManipulator<HeaderValuePart> {
+  @Override
   public HeaderValuePart handleContentChange(HeaderValuePart element, TextRange range, String newContent)
-    throws IncorrectOperationException {
+      throws IncorrectOperationException {
     String newText = range.replace(element.getText(), newContent);
     PsiFileFactory fileFactory = PsiFileFactory.getInstance(element.getProject());
     PsiFile fromText = fileFactory.createFileFromText("DUMMY.MF", ManifestFileType.INSTANCE, " " + newText);
-    Clause clause = (Clause)fromText.getFirstChild().getFirstChild().getNextSibling();
-    HeaderValuePart headerValue = (HeaderValuePart)clause.getFirstChild();
+    Clause clause = (Clause) fromText.getFirstChild().getFirstChild().getNextSibling();
+    HeaderValuePart headerValue = (HeaderValuePart) clause.getFirstChild();
 
-    return (HeaderValuePart)element.replace(headerValue);
+    return (HeaderValuePart) element.replace(headerValue);
+  }
+
+  @Nonnull
+  @Override
+  public Class<HeaderValuePart> getElementClass() {
+    return HeaderValuePart.class;
   }
 }

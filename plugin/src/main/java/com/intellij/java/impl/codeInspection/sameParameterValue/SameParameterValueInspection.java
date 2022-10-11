@@ -16,7 +16,7 @@
 package com.intellij.java.impl.codeInspection.sameParameterValue;
 
 import consulo.language.editor.scope.AnalysisScope;
-import consulo.ide.impl.idea.codeInsight.daemon.GroupNames;
+import com.intellij.java.analysis.codeInspection.GroupNames;
 import com.intellij.codeInspection.reference.*;
 import com.intellij.java.analysis.codeInspection.GlobalJavaInspectionContext;
 import com.intellij.java.analysis.codeInspection.GlobalJavaInspectionTool;

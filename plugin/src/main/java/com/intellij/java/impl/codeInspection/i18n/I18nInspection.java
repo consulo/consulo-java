@@ -21,7 +21,7 @@ package com.intellij.java.impl.codeInspection.i18n;
 
 import com.intellij.java.language.codeInsight.AnnotationUtil;
 import consulo.language.editor.CodeInsightBundle;
-import consulo.ide.impl.idea.codeInsight.daemon.GroupNames;
+import com.intellij.java.analysis.codeInspection.GroupNames;
 import com.intellij.java.analysis.impl.codeInsight.intention.AddAnnotationFix;
 import com.intellij.java.analysis.impl.codeInspection.ex.BaseLocalInspectionTool;
 import com.intellij.java.language.psi.*;

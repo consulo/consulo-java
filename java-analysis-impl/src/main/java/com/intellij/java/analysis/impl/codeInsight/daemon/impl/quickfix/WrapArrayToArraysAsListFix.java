@@ -15,109 +15,88 @@
  */
 package com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import consulo.java.analysis.impl.JavaQuickFixBundle;
-import consulo.project.Project;
-import consulo.java.language.module.util.JavaClassNames;
-import com.intellij.java.language.psi.JavaPsiFacade;
-import com.intellij.java.language.psi.PsiArrayType;
-import com.intellij.java.language.psi.PsiClass;
-import com.intellij.java.language.psi.PsiClassType;
-import consulo.language.psi.PsiElement;
-import com.intellij.java.language.psi.PsiExpression;
-import com.intellij.java.language.psi.PsiExpressionList;
-import com.intellij.java.language.psi.PsiType;
+import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.util.InheritanceUtil;
+import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * @author Dmitry Batkovich
  */
-public class WrapArrayToArraysAsListFix extends MethodArgumentFix
-{
-	public static final ArgumentFixerActionFactory REGISTAR = new MyFixerActionFactory();
+public class WrapArrayToArraysAsListFix extends MethodArgumentFix {
+  public static final ArgumentFixerActionFactory REGISTAR = new MyFixerActionFactory();
 
-	protected WrapArrayToArraysAsListFix(final @Nonnull PsiExpressionList list,
-			final int i,
-			final @Nonnull PsiType toType,
-			final @Nonnull ArgumentFixerActionFactory fixerActionFactory)
-	{
-		super(list, i, toType, fixerActionFactory);
-	}
+  protected WrapArrayToArraysAsListFix(final @Nonnull PsiExpressionList list,
+                                       final int i,
+                                       final @Nonnull PsiType toType,
+                                       final @Nonnull ArgumentFixerActionFactory fixerActionFactory) {
+    super(list, i, toType, fixerActionFactory);
+  }
 
-	@Nonnull
-	@Override
-	public String getText()
-	{
-		if(myArgList.getExpressions().length == 1)
-		{
-			return JavaQuickFixBundle.message("wrap.array.to.arrays.as.list.single.parameter.text");
-		}
-		else
-		{
-			return JavaQuickFixBundle.message("wrap.array.to.arrays.as.list.parameter.text", myIndex + 1);
-		}
-	}
+  @Nonnull
+  @Override
+  public String getText() {
+    if (myArgList.getExpressions().length == 1) {
+      return JavaQuickFixBundle.message("wrap.array.to.arrays.as.list.single.parameter.text");
+    } else {
+      return JavaQuickFixBundle.message("wrap.array.to.arrays.as.list.parameter.text", myIndex + 1);
+    }
+  }
 
-	public static class MyFixerActionFactory extends ArgumentFixerActionFactory
-	{
+  public static class MyFixerActionFactory extends ArgumentFixerActionFactory {
 
-		@Nullable
-		@Override
-		protected PsiExpression getModifiedArgument(final PsiExpression expression,
-				final PsiType toType) throws IncorrectOperationException
-		{
-			final PsiType exprType = expression.getType();
-			if(!(exprType instanceof PsiArrayType && toType instanceof PsiClassType))
-			{
-				return null;
-			}
-			final PsiClass resolvedToType = ((PsiClassType) toType).resolve();
-			if(resolvedToType == null)
-			{
-				return null;
-			}
-			final PsiClass javaUtilList = getJavaUtilList(expression);
-			if(javaUtilList == null || !InheritanceUtil.isInheritorOrSelf(javaUtilList, resolvedToType, true))
-			{
-				return null;
-			}
-			final PsiType[] parameters = ((PsiClassType) toType).getParameters();
-			final PsiType arrayComponentType = ((PsiArrayType) exprType).getComponentType();
-			if(!(parameters.length == 1 && parameters[0].equals(arrayComponentType)))
-			{
-				return null;
-			}
+    @Nullable
+    @Override
+    protected PsiExpression getModifiedArgument(final PsiExpression expression,
+                                                final PsiType toType) throws IncorrectOperationException {
+      final PsiType exprType = expression.getType();
+      if (!(exprType instanceof PsiArrayType && toType instanceof PsiClassType)) {
+        return null;
+      }
+      final PsiClass resolvedToType = ((PsiClassType) toType).resolve();
+      if (resolvedToType == null) {
+        return null;
+      }
+      final PsiClass javaUtilList = getJavaUtilList(expression);
+      if (javaUtilList == null || !InheritanceUtil.isInheritorOrSelf(javaUtilList, resolvedToType, true)) {
+        return null;
+      }
+      final PsiType[] parameters = ((PsiClassType) toType).getParameters();
+      final PsiType arrayComponentType = ((PsiArrayType) exprType).getComponentType();
+      if (!(parameters.length == 1 && parameters[0].equals(arrayComponentType))) {
+        return null;
+      }
 
-			final String rawNewExpression = String.format("java.util.Arrays.asList(%s)", expression.getText());
-			final Project project = expression.getProject();
-			final PsiExpression newExpression = JavaPsiFacade.getInstance(project).getElementFactory()
-					.createExpressionFromText(rawNewExpression, null);
-			return (PsiExpression) JavaCodeStyleManager.getInstance(project).shortenClassReferences(newExpression);
-		}
+      final String rawNewExpression = String.format("java.util.Arrays.asList(%s)", expression.getText());
+      final Project project = expression.getProject();
+      final PsiExpression newExpression = JavaPsiFacade.getInstance(project).getElementFactory()
+          .createExpressionFromText(rawNewExpression, null);
+      return (PsiExpression) JavaCodeStyleManager.getInstance(project).shortenClassReferences(newExpression);
+    }
 
-		@Nullable
-		private static PsiClass getJavaUtilList(final PsiElement context)
-		{
-			return JavaPsiFacade.getInstance(context.getProject()).findClass(JavaClassNames.JAVA_UTIL_LIST,
-					context.getResolveScope());
-		}
+    @Nullable
+    private static PsiClass getJavaUtilList(final PsiElement context) {
+      return JavaPsiFacade.getInstance(context.getProject()).findClass(JavaClassNames.JAVA_UTIL_LIST,
+          context.getResolveScope());
+    }
 
-		@Override
-		public boolean areTypesConvertible(final PsiType exprType,
-				final PsiType parameterType,
-				final PsiElement context)
-		{
-			return true;
-		}
+    @Override
+    public boolean areTypesConvertible(final PsiType exprType,
+                                       final PsiType parameterType,
+                                       final PsiElement context) {
+      return true;
+    }
 
-		@Override
-		public MethodArgumentFix createFix(final PsiExpressionList list, final int i, final PsiType toType)
-		{
-			return new WrapArrayToArraysAsListFix(list, i, toType, this);
-		}
-	}
+    @Override
+    public MethodArgumentFix createFix(final PsiExpressionList list, final int i, final PsiType toType) {
+      return new WrapArrayToArraysAsListFix(list, i, toType, this);
+    }
+  }
 }

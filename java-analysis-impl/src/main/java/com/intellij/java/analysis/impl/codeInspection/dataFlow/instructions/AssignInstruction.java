@@ -24,76 +24,65 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaValue;
 import com.intellij.java.language.psi.PsiAssignmentExpression;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiVariable;
-import consulo.ide.impl.idea.util.ObjectUtils;
+import consulo.util.lang.ObjectUtil;
 import org.jetbrains.annotations.Contract;
+
 import javax.annotation.Nullable;
 
-public class AssignInstruction extends ExpressionPushingInstruction<PsiAssignmentExpression>
-{
-	private final PsiExpression myRExpression;
-	private final PsiExpression myLExpression;
-	@Nullable
-	private final DfaValue myAssignedValue;
+public class AssignInstruction extends ExpressionPushingInstruction<PsiAssignmentExpression> {
+  private final PsiExpression myRExpression;
+  private final PsiExpression myLExpression;
+  @Nullable
+  private final DfaValue myAssignedValue;
 
-	public AssignInstruction(PsiExpression rExpression, @Nullable DfaValue assignedValue)
-	{
-		this(getLeftHandOfAssignment(rExpression), rExpression, assignedValue);
-	}
+  public AssignInstruction(PsiExpression rExpression, @Nullable DfaValue assignedValue) {
+    this(getLeftHandOfAssignment(rExpression), rExpression, assignedValue);
+  }
 
-	public AssignInstruction(PsiExpression lExpression, PsiExpression rExpression, @Nullable DfaValue assignedValue)
-	{
-		super(rExpression == null ? null : ObjectUtils.tryCast(rExpression.getParent(), PsiAssignmentExpression.class));
-		myLExpression = lExpression;
-		myRExpression = rExpression;
-		myAssignedValue = assignedValue;
-	}
+  public AssignInstruction(PsiExpression lExpression, PsiExpression rExpression, @Nullable DfaValue assignedValue) {
+    super(rExpression == null ? null : ObjectUtil.tryCast(rExpression.getParent(), PsiAssignmentExpression.class));
+    myLExpression = lExpression;
+    myRExpression = rExpression;
+    myAssignedValue = assignedValue;
+  }
 
-	@Override
-	public DfaInstructionState[] accept(DataFlowRunner runner, DfaMemoryState stateBefore, InstructionVisitor visitor)
-	{
-		return visitor.visitAssign(this, runner, stateBefore);
-	}
+  @Override
+  public DfaInstructionState[] accept(DataFlowRunner runner, DfaMemoryState stateBefore, InstructionVisitor visitor) {
+    return visitor.visitAssign(this, runner, stateBefore);
+  }
 
-	@Nullable
-	public PsiExpression getRExpression()
-	{
-		return myRExpression;
-	}
+  @Nullable
+  public PsiExpression getRExpression() {
+    return myRExpression;
+  }
 
-	@Nullable
-	public PsiExpression getLExpression()
-	{
-		return myLExpression;
-	}
+  @Nullable
+  public PsiExpression getLExpression() {
+    return myLExpression;
+  }
 
-	public boolean isVariableInitializer()
-	{
-		return myRExpression != null && myRExpression.getParent() instanceof PsiVariable;
-	}
+  public boolean isVariableInitializer() {
+    return myRExpression != null && myRExpression.getParent() instanceof PsiVariable;
+  }
 
-	@Nullable
-	public DfaValue getAssignedValue()
-	{
-		return myAssignedValue;
-	}
+  @Nullable
+  public DfaValue getAssignedValue() {
+    return myAssignedValue;
+  }
 
-	public String toString()
-	{
-		return "ASSIGN";
-	}
+  public String toString() {
+    return "ASSIGN";
+  }
 
-	@Contract("null -> null")
-	@Nullable
-	private static PsiExpression getLeftHandOfAssignment(PsiExpression rExpression)
-	{
-		if(rExpression == null)
-		{
-			return null;
-		}
-		if(rExpression.getParent() instanceof PsiAssignmentExpression)
-		{
-			return ((PsiAssignmentExpression) rExpression.getParent()).getLExpression();
-		}
-		return null;
-	}
+  @Contract("null -> null")
+  @Nullable
+  private static PsiExpression getLeftHandOfAssignment(PsiExpression rExpression) {
+    if (rExpression == null) {
+      return null;
+    }
+    if (rExpression.getParent() instanceof PsiAssignmentExpression) {
+      return ((PsiAssignmentExpression) rExpression.getParent()).getLExpression();
+    }
+    return null;
+  }
 }

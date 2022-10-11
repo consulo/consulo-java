@@ -23,22 +23,22 @@
  */
 package com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix;
 
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.impl.source.resolve.DefaultParameterTypeInferencePolicy;
+import com.intellij.java.language.psi.util.TypeConversionUtil;
+import consulo.codeEditor.Editor;
+import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.FileModificationService;
-import consulo.language.editor.rawHighlight.HighlightInfo;
-import consulo.language.editor.intention.QuickFixAction;
 import consulo.language.editor.intention.HighPriorityAction;
 import consulo.language.editor.intention.IntentionAction;
-import com.intellij.java.language.psi.*;
-import consulo.codeEditor.Editor;
+import consulo.language.editor.intention.QuickFixAction;
+import consulo.language.editor.rawHighlight.HighlightInfo;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
-import com.intellij.psi.*;
-import com.intellij.java.language.psi.impl.source.resolve.DefaultParameterTypeInferencePolicy;
-import consulo.language.psi.util.PsiTreeUtil;
-import com.intellij.java.language.psi.util.TypeConversionUtil;
-import consulo.ide.impl.idea.util.Function;
-import consulo.java.language.module.util.JavaClassNames;
-import consulo.logging.Logger;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -64,15 +64,11 @@ public class ChangeTypeArgumentsFix implements IntentionAction, HighPriorityActi
   @Nonnull
   public String getText() {
     final PsiSubstitutor substitutor = inferTypeArguments();
-    return "Change type arguments to <" + StringUtil.join(myPsiClass.getTypeParameters(), new Function<PsiTypeParameter, String>() {
-      @Override
-      public String fun(PsiTypeParameter typeParameter) {
-        final PsiType substituted = substitutor.substitute(typeParameter);
-        return substituted != null ? substituted.getPresentableText() : JavaClassNames.JAVA_LANG_OBJECT;
-      }
+    return "Change type arguments to <" + StringUtil.join(myPsiClass.getTypeParameters(), typeParameter -> {
+      final PsiType substituted = substitutor.substitute(typeParameter);
+      return substituted != null ? substituted.getPresentableText() : JavaClassNames.JAVA_LANG_OBJECT;
     }, ", ") + ">";
   }
-
 
   @Override
   @Nonnull

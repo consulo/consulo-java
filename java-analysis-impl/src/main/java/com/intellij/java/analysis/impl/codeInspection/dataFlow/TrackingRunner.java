@@ -1,9 +1,6 @@
 // Copyright 2000-2020 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.analysis.impl.codeInspection.dataFlow;
 
-import com.intellij.java.language.codeInsight.Nullability;
-import com.intellij.java.language.codeInsight.NullabilityAnnotationInfo;
-import com.intellij.java.language.codeInsight.NullableNotNullManager;
 import com.intellij.java.analysis.JavaAnalysisBundle;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.TrackingDfaMemoryState.FactDefinition;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.TrackingDfaMemoryState.FactExtractor;
@@ -14,32 +11,35 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.rangeSet.LongRang
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.rangeSet.LongRangeSet;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.types.DfConstantType;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.*;
-import com.intellij.java.language.psi.*;
-import consulo.language.ast.ASTNode;
-import consulo.document.Document;
-import consulo.application.progress.ProgressManager;
-import consulo.util.lang.function.Condition;
-import consulo.util.lang.Pair;
-import consulo.document.util.Segment;
-import consulo.document.util.TextRange;
-import consulo.util.lang.StringUtil;
-import com.intellij.psi.*;
+import com.intellij.java.language.codeInsight.Nullability;
+import com.intellij.java.language.codeInsight.NullabilityAnnotationInfo;
+import com.intellij.java.language.codeInsight.NullableNotNullManager;
 import com.intellij.java.language.impl.psi.impl.source.tree.ChildRole;
-import consulo.language.impl.ast.CompositeElement;
-import consulo.language.ast.IElementType;
+import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.JavaElementKind;
-import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
-import consulo.util.collection.ArrayUtil;
 import com.intellij.java.language.util.JavaPsiConstructorUtil;
-import consulo.ide.impl.idea.util.ObjectUtils;
-import consulo.util.lang.ThreeState;
-import consulo.util.collection.ContainerUtil;
 import com.siyeh.ig.psiutils.BoolUtils;
 import com.siyeh.ig.psiutils.EquivalenceChecker;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.MethodCallUtils;
+import consulo.application.progress.ProgressManager;
+import consulo.document.Document;
+import consulo.document.util.Segment;
+import consulo.document.util.TextRange;
+import consulo.language.ast.ASTNode;
+import consulo.language.ast.IElementType;
+import consulo.language.impl.ast.CompositeElement;
+import consulo.language.psi.*;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.util.collection.ArrayUtil;
+import consulo.util.collection.ContainerUtil;
+import consulo.util.lang.ObjectUtil;
+import consulo.util.lang.Pair;
+import consulo.util.lang.StringUtil;
+import consulo.util.lang.ThreeState;
+import consulo.util.lang.function.Condition;
 import one.util.streamex.IntStreamEx;
 import one.util.streamex.StreamEx;
 import org.jetbrains.annotations.Contract;
@@ -1120,7 +1120,7 @@ public final class TrackingRunner extends DataFlowRunner {
     for (MethodContract contract : contracts) {
       for (ContractValue condition : contract.getConditions()) {
         DfaCondition rel = condition.fromCall(getFactory(), callExpression);
-        ContainerUtil.addIfNotNull(results, ObjectUtils.tryCast(rel, DfaRelation.class));
+        ContainerUtil.addIfNotNull(results, ObjectUtil.tryCast(rel, DfaRelation.class));
       }
     }
     return results;
@@ -1156,7 +1156,7 @@ public final class TrackingRunner extends DataFlowRunner {
       }
     }
     if (expression instanceof PsiReferenceExpression) {
-      PsiVariable variable = ObjectUtils.tryCast(((PsiReferenceExpression) expression).resolve(), PsiVariable.class);
+      PsiVariable variable = ObjectUtil.tryCast(((PsiReferenceExpression) expression).resolve(), PsiVariable.class);
       if (variable != null) {
         CauseItem causeItem = fromMemberNullability(nullability, variable, JavaElementKind.fromElement(variable), expression);
         if (causeItem != null) {
@@ -1518,7 +1518,7 @@ public final class TrackingRunner extends DataFlowRunner {
                 String sign = binOp.getOperationSign().getText();
                 CauseItem cause = new CauseItem(new RangeDfaProblemType(
                     JavaAnalysisBundle.message("dfa.find.cause.result.of.numeric.operation.template", sign.equals("%") ? "%%" : sign),
-                    range, ObjectUtils.tryCast(type, PsiPrimitiveType.class)), factUse);
+                    range, ObjectUtil.tryCast(type, PsiPrimitiveType.class)), factUse);
                 CauseItem leftCause = null, rightCause = null;
                 if (!leftRange.equals(fromType)) {
                   leftCause = findRangeCause(leftPush, leftVal, leftRange,
@@ -1536,7 +1536,7 @@ public final class TrackingRunner extends DataFlowRunner {
         }
       }
     }
-    PsiPrimitiveType type = expression != null ? ObjectUtils.tryCast(expression.getType(), PsiPrimitiveType.class) : null;
+    PsiPrimitiveType type = expression != null ? ObjectUtil.tryCast(expression.getType(), PsiPrimitiveType.class) : null;
     CauseItem item = new CauseItem(new RangeDfaProblemType(template, range, type), factUse);
     FactDefinition<LongRangeSet> info = factUse.findFact(value, FactExtractor.range());
     MemoryStateChange factDef = range.equals(info.myFact) ? info.myChange : null;

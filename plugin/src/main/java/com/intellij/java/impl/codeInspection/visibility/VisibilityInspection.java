@@ -45,7 +45,7 @@ import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nullable;
 import consulo.language.editor.scope.AnalysisScope;
 import consulo.language.editor.FileModificationService;
-import consulo.ide.impl.idea.codeInsight.daemon.GroupNames;
+import com.intellij.java.analysis.codeInspection.GroupNames;
 import consulo.ide.impl.idea.codeInsight.daemon.impl.IdentifierUtil;
 import com.intellij.java.analysis.codeInspection.ex.EntryPointsManager;
 import com.intellij.codeInspection.reference.*;

@@ -24,40 +24,35 @@
  */
 package com.intellij.java.analysis.impl.psi.controlFlow;
 
+import com.intellij.java.language.impl.psi.controlFlow.ControlFlowPolicy;
 import com.intellij.java.language.psi.PsiLocalVariable;
 import com.intellij.java.language.psi.PsiParameter;
 import com.intellij.java.language.psi.PsiReferenceExpression;
 import com.intellij.java.language.psi.PsiVariable;
-import com.intellij.psi.*;
-import com.intellij.java.language.impl.psi.controlFlow.ControlFlowPolicy;
+import consulo.language.psi.PsiElement;
 
 import javax.annotation.Nonnull;
 
-public class AllVariablesControlFlowPolicy implements ControlFlowPolicy
-{
-	private static final AllVariablesControlFlowPolicy INSTANCE = new AllVariablesControlFlowPolicy();
+public class AllVariablesControlFlowPolicy implements ControlFlowPolicy {
+  private static final AllVariablesControlFlowPolicy INSTANCE = new AllVariablesControlFlowPolicy();
 
-	@Override
-	public PsiVariable getUsedVariable(@Nonnull PsiReferenceExpression refExpr)
-	{
-		PsiElement resolved = refExpr.resolve();
-		return resolved instanceof PsiVariable ? (PsiVariable) resolved : null;
-	}
+  @Override
+  public PsiVariable getUsedVariable(@Nonnull PsiReferenceExpression refExpr) {
+    PsiElement resolved = refExpr.resolve();
+    return resolved instanceof PsiVariable ? (PsiVariable) resolved : null;
+  }
 
-	@Override
-	public boolean isParameterAccepted(@Nonnull PsiParameter psiParameter)
-	{
-		return true;
-	}
+  @Override
+  public boolean isParameterAccepted(@Nonnull PsiParameter psiParameter) {
+    return true;
+  }
 
-	@Override
-	public boolean isLocalVariableAccepted(@Nonnull PsiLocalVariable psiVariable)
-	{
-		return true;
-	}
+  @Override
+  public boolean isLocalVariableAccepted(@Nonnull PsiLocalVariable psiVariable) {
+    return true;
+  }
 
-	public static AllVariablesControlFlowPolicy getInstance()
-	{
-		return INSTANCE;
-	}
+  public static AllVariablesControlFlowPolicy getInstance() {
+    return INSTANCE;
+  }
 }

@@ -15,66 +15,57 @@
  */
 package com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix;
 
-import javax.annotation.Nonnull;
-
-import org.jetbrains.annotations.Nls;
-
-import javax.annotation.Nullable;
-import consulo.language.editor.FileModificationService;
-import consulo.language.editor.inspection.LocalQuickFixAndIntentionActionOnPsiElement;
+import com.siyeh.ig.psiutils.CommentTracker;
 import consulo.application.WriteAction;
 import consulo.codeEditor.Editor;
-import consulo.project.Project;
+import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.language.editor.FileModificationService;
+import consulo.language.editor.inspection.LocalQuickFixAndIntentionActionOnPsiElement;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
+import consulo.project.Project;
 import consulo.util.lang.ObjectUtil;
-import com.siyeh.ig.psiutils.CommentTracker;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
+import org.jetbrains.annotations.Nls;
 
-public class DeleteElementFix extends LocalQuickFixAndIntentionActionOnPsiElement
-{
-	private final String myText;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-	public DeleteElementFix(@Nonnull PsiElement element)
-	{
-		super(element);
-		myText = null;
-	}
+public class DeleteElementFix extends LocalQuickFixAndIntentionActionOnPsiElement {
+  private final String myText;
 
-	public DeleteElementFix(@Nonnull PsiElement element, @Nonnull @Nls String text)
-	{
-		super(element);
-		myText = text;
-	}
+  public DeleteElementFix(@Nonnull PsiElement element) {
+    super(element);
+    myText = null;
+  }
 
-	@Nls
-	@Nonnull
-	@Override
-	public String getText()
-	{
-		return ObjectUtil.notNull(myText, getFamilyName());
-	}
+  public DeleteElementFix(@Nonnull PsiElement element, @Nonnull @Nls String text) {
+    super(element);
+    myText = text;
+  }
 
-	@Nls
-	@Nonnull
-	@Override
-	public String getFamilyName()
-	{
-		return JavaQuickFixBundle.message("delete.element.fix.text");
-	}
+  @Nls
+  @Nonnull
+  @Override
+  public String getText() {
+    return ObjectUtil.notNull(myText, getFamilyName());
+  }
 
-	@Override
-	public void invoke(@Nonnull Project project, @Nonnull PsiFile file, @Nullable Editor editor, @Nonnull PsiElement startElement, @Nonnull PsiElement endElement)
-	{
-		if(FileModificationService.getInstance().preparePsiElementForWrite(file))
-		{
-			WriteAction.run(() -> new CommentTracker().deleteAndRestoreComments(startElement));
-		}
-	}
+  @Nls
+  @Nonnull
+  @Override
+  public String getFamilyName() {
+    return JavaQuickFixBundle.message("delete.element.fix.text");
+  }
 
-	@Override
-	public boolean startInWriteAction()
-	{
-		return false;
-	}
+  @Override
+  public void invoke(@Nonnull Project project, @Nonnull PsiFile file, @Nullable Editor editor, @Nonnull PsiElement startElement, @Nonnull PsiElement endElement) {
+    if (FileModificationService.getInstance().preparePsiElementForWrite(file)) {
+      WriteAction.run(() -> new CommentTracker().deleteAndRestoreComments(startElement));
+    }
+  }
+
+  @Override
+  public boolean startInWriteAction() {
+    return false;
+  }
 }

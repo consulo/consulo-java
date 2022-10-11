@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.codeInspection.duplicateThrows;
 
-import consulo.ide.impl.idea.codeInsight.daemon.GroupNames;
+import com.intellij.java.analysis.codeInspection.GroupNames;
 import com.intellij.java.impl.codeInspection.DeleteThrowsFix;
 import consulo.language.editor.inspection.InspectionsBundle;
 import consulo.language.editor.inspection.ProblemHighlightType;

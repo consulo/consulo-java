@@ -21,7 +21,7 @@ import com.intellij.java.language.psi.PsiClass;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.inheritance.ExtendsConcreteCollectionInspectionBase;
 
-public class ExtendsConcreteCollectionInspection extends ExtendsConcreteCollectionInspectionBase {
+public abstract class ExtendsConcreteCollectionInspection extends ExtendsConcreteCollectionInspectionBase {
 
   @Override
   protected InspectionGadgetsFix buildFix(Object... infos) {

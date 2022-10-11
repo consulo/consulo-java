@@ -15,50 +15,43 @@
  */
 package com.intellij.java.analysis.impl.codeInspection.dataFlow.instructions;
 
-import java.util.Set;
-
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.DataFlowRunner;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.DfaInstructionState;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.DfaMemoryState;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.InstructionVisitor;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaVariableValue;
 import consulo.language.psi.PsiElement;
-import consulo.util.collection.ContainerUtil;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author peter
  */
-public class FinishElementInstruction extends Instruction
-{
-	private final Set<DfaVariableValue> myVarsToFlush = ContainerUtil.newHashSet();
-	private final PsiElement myElement;
+public class FinishElementInstruction extends Instruction {
+	private final Set<DfaVariableValue> myVarsToFlush = new HashSet<>();
+  private final PsiElement myElement;
 
-	public FinishElementInstruction(PsiElement element)
-	{
-		myElement = element;
-	}
+  public FinishElementInstruction(PsiElement element) {
+    myElement = element;
+  }
 
-	@Override
-	public DfaInstructionState[] accept(DataFlowRunner runner, DfaMemoryState state, InstructionVisitor visitor)
-	{
-		if(!myVarsToFlush.isEmpty())
-		{
-			for(DfaVariableValue value : myVarsToFlush)
-			{
-				state.flushVariable(value);
-			}
-		}
-		return nextInstruction(runner, state);
-	}
+  @Override
+  public DfaInstructionState[] accept(DataFlowRunner runner, DfaMemoryState state, InstructionVisitor visitor) {
+    if (!myVarsToFlush.isEmpty()) {
+      for (DfaVariableValue value : myVarsToFlush) {
+        state.flushVariable(value);
+      }
+    }
+    return nextInstruction(runner, state);
+  }
 
-	@Override
-	public String toString()
-	{
-		return "Finish " + myElement + "; flushing " + myVarsToFlush;
-	}
+  @Override
+  public String toString() {
+    return "Finish " + myElement + "; flushing " + myVarsToFlush;
+  }
 
-	public Set<DfaVariableValue> getVarsToFlush()
-	{
-		return myVarsToFlush;
-	}
+  public Set<DfaVariableValue> getVarsToFlush() {
+    return myVarsToFlush;
+  }
 }

@@ -15,41 +15,40 @@
  */
 package com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis;
 
-import com.intellij.java.language.impl.codeInsight.daemon.JavaErrorBundle;
-import consulo.language.editor.rawHighlight.HighlightInfo;
-import consulo.language.editor.rawHighlight.HighlightInfoType;
-import consulo.language.editor.intention.QuickFixAction;
-import consulo.language.editor.internal.QuickFixActionRegistrarImpl;
 import com.intellij.java.analysis.codeInsight.intention.QuickFixFactory;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix.AddRequiredModuleFix;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix.GoToSymbolFix;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix.MergeModuleStatementsFix;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix.MoveFileFix;
-import com.intellij.java.language.psi.*;
-import consulo.application.ApplicationManager;
-import consulo.module.Module;
-import consulo.language.util.ModuleUtilCore;
-import consulo.project.Project;
-import consulo.module.content.ProjectFileIndex;
-import consulo.document.util.TextRange;
-import consulo.util.lang.Trinity;
-import consulo.util.lang.StringUtil;
-import consulo.virtualFileSystem.VirtualFile;
-import com.intellij.psi.*;
-import com.intellij.java.language.psi.PsiPackageAccessibilityStatement.Role;
+import com.intellij.java.language.impl.codeInsight.daemon.JavaErrorBundle;
 import com.intellij.java.language.impl.psi.impl.light.LightJavaModule;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.PsiPackageAccessibilityStatement.Role;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
-import consulo.language.psi.search.FilenameIndex;
-import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.java.language.psi.util.ClassUtil;
 import com.intellij.java.language.psi.util.InheritanceUtil;
-import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.util.lang.ObjectUtil;
+import consulo.application.ApplicationManager;
+import consulo.document.util.TextRange;
+import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.language.editor.intention.QuickFixAction;
+import consulo.language.editor.internal.QuickFixActionRegistrarImpl;
+import consulo.language.editor.rawHighlight.HighlightInfo;
+import consulo.language.editor.rawHighlight.HighlightInfoType;
+import consulo.language.psi.*;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.search.FilenameIndex;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.ModuleUtilCore;
+import consulo.module.Module;
+import consulo.module.content.ProjectFileIndex;
+import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.collection.JBIterable;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
-import consulo.psi.PsiPackage;
+import consulo.util.lang.ObjectUtil;
+import consulo.util.lang.StringUtil;
+import consulo.util.lang.Trinity;
+import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.archive.ArchiveFileSystem;
 import org.jetbrains.annotations.PropertyKey;
 
@@ -160,7 +159,7 @@ public class ModuleHighlightUtil {
 
   @Nonnull
   public static List<HighlightInfo> checkDuplicateStatements(@Nonnull PsiJavaModule module) {
-    List<HighlightInfo> results = ContainerUtil.newSmartList();
+    List<HighlightInfo> results = new ArrayList<>();
 
     checkDuplicateRefs(module.getRequires(), st -> Optional.ofNullable(st.getReferenceElement()).map(PsiJavaModuleReferenceElement::getReferenceText), "module.duplicate.requires", results);
 
@@ -194,7 +193,7 @@ public class ModuleHighlightUtil {
 
   @Nonnull
   public static List<HighlightInfo> checkUnusedServices(@Nonnull PsiJavaModule module) {
-    List<HighlightInfo> results = ContainerUtil.newSmartList();
+    List<HighlightInfo> results = new ArrayList<>();
 
     Set<String> exports = JBIterable.from(module.getExports()).map(st -> refText(st.getPackageReference())).filter(Objects::nonNull).toSet();
     Set<String> uses = JBIterable.from(module.getUses()).map(st -> refText(st.getClassReference())).filter(Objects::nonNull).toSet();
@@ -302,7 +301,7 @@ public class ModuleHighlightUtil {
 
   @Nonnull
   public static List<HighlightInfo> checkPackageAccessTargets(@Nonnull PsiPackageAccessibilityStatement statement) {
-    List<HighlightInfo> results = ContainerUtil.newSmartList();
+    List<HighlightInfo> results = new ArrayList<>();
 
     Set<String> targets = new HashSet<>();
     for (PsiJavaModuleReferenceElement refElement : statement.getModuleReferences()) {
@@ -347,7 +346,7 @@ public class ModuleHighlightUtil {
       return Collections.emptyList();
     }
 
-    List<HighlightInfo> results = ContainerUtil.newSmartList();
+    List<HighlightInfo> results = new ArrayList<>();
     PsiJavaCodeReferenceElement intRef = statement.getInterfaceReference();
     PsiElement intTarget = intRef != null ? intRef.resolve() : null;
 

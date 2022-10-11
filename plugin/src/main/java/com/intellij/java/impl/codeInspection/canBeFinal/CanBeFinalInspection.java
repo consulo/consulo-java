@@ -26,7 +26,7 @@ package com.intellij.java.impl.codeInspection.canBeFinal;
 
 import consulo.language.editor.scope.AnalysisScope;
 import consulo.language.editor.FileModificationService;
-import consulo.ide.impl.idea.codeInsight.daemon.GroupNames;
+import com.intellij.java.analysis.codeInspection.GroupNames;
 import com.intellij.codeInspection.reference.*;
 import com.intellij.java.analysis.codeInspection.GlobalJavaInspectionContext;
 import com.intellij.java.analysis.codeInspection.GlobalJavaInspectionTool;

@@ -15,46 +15,36 @@
  */
 package com.intellij.java.language.psi.impl.source.resolve;
 
-import javax.annotation.Nullable;
-
+import com.intellij.java.language.psi.*;
 import consulo.language.psi.PsiManager;
 import consulo.util.lang.Pair;
-import com.intellij.java.language.psi.ConstraintType;
-import com.intellij.java.language.psi.PsiCallExpression;
-import com.intellij.java.language.psi.PsiExpression;
-import com.intellij.java.language.psi.PsiExpressionList;
-import com.intellij.java.language.psi.PsiType;
-import com.intellij.java.language.psi.PsiTypeParameter;
+
+import javax.annotation.Nullable;
 
 /**
  * @author yole
  */
-public class DefaultParameterTypeInferencePolicy extends ParameterTypeInferencePolicy
-{
-	public static final DefaultParameterTypeInferencePolicy INSTANCE = new DefaultParameterTypeInferencePolicy();
+public class DefaultParameterTypeInferencePolicy extends ParameterTypeInferencePolicy {
+  public static final DefaultParameterTypeInferencePolicy INSTANCE = new DefaultParameterTypeInferencePolicy();
 
-	@Nullable
-	@Override
-	public Pair<PsiType, ConstraintType> inferTypeConstraintFromCallContext(PsiExpression innerMethodCall, PsiExpressionList parent, PsiCallExpression contextCall, PsiTypeParameter typeParameter)
-	{
-		return null;
-	}
+  @Nullable
+  @Override
+  public Pair<PsiType, ConstraintType> inferTypeConstraintFromCallContext(PsiExpression innerMethodCall, PsiExpressionList parent, PsiCallExpression contextCall, PsiTypeParameter typeParameter) {
+    return null;
+  }
 
-	@Override
-	public PsiType getDefaultExpectedType(PsiCallExpression methodCall)
-	{
-		return PsiType.getJavaLangObject(methodCall.getManager(), methodCall.getResolveScope());
-	}
+  @Override
+  public PsiType getDefaultExpectedType(PsiCallExpression methodCall) {
+    return PsiType.getJavaLangObject(methodCall.getManager(), methodCall.getResolveScope());
+  }
 
-	@Override
-	public Pair<PsiType, ConstraintType> getInferredTypeWithNoConstraint(PsiManager manager, PsiType superType)
-	{
-		return Pair.create(superType, ConstraintType.SUBTYPE);
-	}
+  @Override
+  public Pair<PsiType, ConstraintType> getInferredTypeWithNoConstraint(PsiManager manager, PsiType superType) {
+    return Pair.create(superType, ConstraintType.SUBTYPE);
+  }
 
-	@Override
-	public PsiType adjustInferredType(PsiManager manager, PsiType guess, ConstraintType constraintType)
-	{
-		return guess;
-	}
+  @Override
+  public PsiType adjustInferredType(PsiManager manager, PsiType guess, ConstraintType constraintType) {
+    return guess;
+  }
 }

@@ -33,7 +33,6 @@ import consulo.language.psi.stub.FileBasedIndex;
 import consulo.language.psi.stub.FileBasedIndexExtension;
 import consulo.language.psi.stub.FileContent;
 import consulo.language.psi.util.PsiTreeUtil;
-import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.StringUtil;
 
 import javax.annotation.Nonnull;
@@ -42,7 +41,7 @@ import java.io.DataOutput;
 import java.io.IOException;
 import java.util.*;
 
-public class JavaFunctionalExpressionIndex extends FileBasedIndexExtension<String, Collection<JavaFunctionalExpressionIndex.IndexHolder>> implements PsiDependentIndex {
+public class JavaFunctionalExpressionIndex extends FileBasedIndexExtension<String, Collection<JavaFunctionalExpressionIndex.IndexHolder>> {
   public static final ID<String, Collection<IndexHolder>> JAVA_FUNCTIONAL_EXPRESSION_INDEX_ID = ID.create("java.functional.expression");
   private static final String THIS_REF_NAME = "this";
   private static final String SUPER_REF_NAME = "super";
@@ -73,7 +72,7 @@ public class JavaFunctionalExpressionIndex extends FileBasedIndexExtension<Strin
           return Collections.emptyMap();
         }
 
-				final HashMap<String, Collection<IndexHolder>> methodsMap = new HashMap<>();
+        final HashMap<String, Collection<IndexHolder>> methodsMap = new HashMap<>();
         for (PsiFunctionalExpression expression : SyntaxTraverser.psiTraverser().withRoot(file).filter(PsiFunctionalExpression.class)) {
           final PsiExpressionList expressionList = PsiTreeUtil.getParentOfType(expression, PsiExpressionList.class, true, PsiStatement.class, PsiModifierListOwner.class);
           if (expressionList != null) {

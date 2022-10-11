@@ -15,110 +15,90 @@
  */
 package com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix;
 
+import com.intellij.java.language.psi.*;
+import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.language.psi.PsiElement;
+import consulo.util.collection.ContainerUtil;
+import org.jetbrains.annotations.Nls;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import org.jetbrains.annotations.Nls;
-import consulo.language.psi.PsiElement;
-import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
-import com.intellij.java.language.psi.PsiJavaModule;
-import com.intellij.java.language.psi.PsiKeyword;
-import com.intellij.java.language.psi.PsiProvidesStatement;
-import com.intellij.java.language.psi.PsiReferenceList;
-import consulo.util.collection.ContainerUtil;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
-
 /**
  * @author Pavel.Dolgov
  */
-public class MergeProvidesStatementsFix extends MergeModuleStatementsFix<PsiProvidesStatement>
-{
-	private final String myInterfaceName;
+public class MergeProvidesStatementsFix extends MergeModuleStatementsFix<PsiProvidesStatement> {
+  private final String myInterfaceName;
 
-	MergeProvidesStatementsFix(@Nonnull PsiJavaModule javaModule, @Nonnull String interfaceName)
-	{
-		super(javaModule);
-		myInterfaceName = interfaceName;
-	}
+  MergeProvidesStatementsFix(@Nonnull PsiJavaModule javaModule, @Nonnull String interfaceName) {
+    super(javaModule);
+    myInterfaceName = interfaceName;
+  }
 
-	@Nonnull
-	@Override
-	public String getText()
-	{
-		return JavaQuickFixBundle.message("java.9.merge.module.statements.fix.name", PsiKeyword.PROVIDES, myInterfaceName);
-	}
+  @Nonnull
+  @Override
+  public String getText() {
+    return JavaQuickFixBundle.message("java.9.merge.module.statements.fix.name", PsiKeyword.PROVIDES, myInterfaceName);
+  }
 
-	@Nls
-	@Nonnull
-	@Override
-	public String getFamilyName()
-	{
-		return JavaQuickFixBundle.message("java.9.merge.module.statements.fix.family.name", PsiKeyword.PROVIDES);
-	}
+  @Nls
+  @Nonnull
+  @Override
+  public String getFamilyName() {
+    return JavaQuickFixBundle.message("java.9.merge.module.statements.fix.family.name", PsiKeyword.PROVIDES);
+  }
 
-	@Nonnull
-	@Override
-	protected String getReplacementText(@Nonnull List<PsiProvidesStatement> statementsToMerge)
-	{
-		final List<String> implementationNames = getImplementationNames(statementsToMerge);
-		LOG.assertTrue(!implementationNames.isEmpty());
-		return PsiKeyword.PROVIDES + " " + myInterfaceName + " " + PsiKeyword.WITH + " " + joinUniqueNames(implementationNames) + ";";
-	}
+  @Nonnull
+  @Override
+  protected String getReplacementText(@Nonnull List<PsiProvidesStatement> statementsToMerge) {
+    final List<String> implementationNames = getImplementationNames(statementsToMerge);
+    LOG.assertTrue(!implementationNames.isEmpty());
+    return PsiKeyword.PROVIDES + " " + myInterfaceName + " " + PsiKeyword.WITH + " " + joinUniqueNames(implementationNames) + ";";
+  }
 
-	@Nonnull
-	private static List<String> getImplementationNames(@Nonnull List<PsiProvidesStatement> statements)
-	{
-		List<String> list = new ArrayList<>();
-		for(PsiProvidesStatement statement : statements)
-		{
-			PsiReferenceList implementationList = statement.getImplementationList();
-			if(implementationList == null)
-			{
-				continue;
-			}
-			for(PsiJavaCodeReferenceElement element : implementationList.getReferenceElements())
-			{
-				ContainerUtil.addIfNotNull(list, element.getQualifiedName());
-			}
-		}
-		return list;
-	}
+  @Nonnull
+  private static List<String> getImplementationNames(@Nonnull List<PsiProvidesStatement> statements) {
+    List<String> list = new ArrayList<>();
+    for (PsiProvidesStatement statement : statements) {
+      PsiReferenceList implementationList = statement.getImplementationList();
+      if (implementationList == null) {
+        continue;
+      }
+      for (PsiJavaCodeReferenceElement element : implementationList.getReferenceElements()) {
+        ContainerUtil.addIfNotNull(list, element.getQualifiedName());
+      }
+    }
+    return list;
+  }
 
-	@Nonnull
-	@Override
-	protected List<PsiProvidesStatement> getStatementsToMerge(@Nonnull PsiJavaModule javaModule)
-	{
-		return StreamSupport.stream(javaModule.getProvides().spliterator(), false).filter(statement ->
-		{
-			final PsiJavaCodeReferenceElement reference = statement.getInterfaceReference();
-			return reference != null && myInterfaceName.equals(reference.getQualifiedName());
-		}).collect(Collectors.toList());
-	}
+  @Nonnull
+  @Override
+  protected List<PsiProvidesStatement> getStatementsToMerge(@Nonnull PsiJavaModule javaModule) {
+    return StreamSupport.stream(javaModule.getProvides().spliterator(), false).filter(statement ->
+    {
+      final PsiJavaCodeReferenceElement reference = statement.getInterfaceReference();
+      return reference != null && myInterfaceName.equals(reference.getQualifiedName());
+    }).collect(Collectors.toList());
+  }
 
-	@Nullable
-	public static MergeModuleStatementsFix createFix(@Nullable PsiProvidesStatement statement)
-	{
-		if(statement != null)
-		{
-			final PsiElement parent = statement.getParent();
-			if(parent instanceof PsiJavaModule)
-			{
-				final PsiJavaCodeReferenceElement interfaceReference = statement.getInterfaceReference();
-				if(interfaceReference != null)
-				{
-					final String interfaceName = interfaceReference.getQualifiedName();
-					if(interfaceName != null)
-					{
-						return new MergeProvidesStatementsFix((PsiJavaModule) parent, interfaceName);
-					}
-				}
-			}
-		}
-		return null;
-	}
+  @Nullable
+  public static MergeModuleStatementsFix createFix(@Nullable PsiProvidesStatement statement) {
+    if (statement != null) {
+      final PsiElement parent = statement.getParent();
+      if (parent instanceof PsiJavaModule) {
+        final PsiJavaCodeReferenceElement interfaceReference = statement.getInterfaceReference();
+        if (interfaceReference != null) {
+          final String interfaceName = interfaceReference.getQualifiedName();
+          if (interfaceName != null) {
+            return new MergeProvidesStatementsFix((PsiJavaModule) parent, interfaceName);
+          }
+        }
+      }
+    }
+    return null;
+  }
 }

@@ -18,13 +18,13 @@ package com.intellij.java.indexing.impl;
 import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
 import com.intellij.java.indexing.search.searches.FunctionalExpressionSearch;
 import com.intellij.java.language.psi.PsiClass;
-import consulo.language.psi.PsiElement;
-import consulo.language.psi.resolve.PsiElementProcessor;
-import consulo.ide.impl.psi.search.PsiElementProcessorAdapter;
-import consulo.content.scope.SearchScope;
-import consulo.language.psi.search.DefinitionsScopedSearch;
 import consulo.application.util.function.Processor;
 import consulo.application.util.query.QueryExecutor;
+import consulo.content.scope.SearchScope;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.resolve.PsiElementProcessor;
+import consulo.language.psi.resolve.PsiElementProcessorAdapter;
+import consulo.language.psi.search.DefinitionsScopedSearch;
 
 import javax.annotation.Nonnull;
 

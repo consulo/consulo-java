@@ -27,9 +27,11 @@ import java.util.Map;
  * @author peter
  */
 public abstract class GlobalUsageHelper {
-  final Map<PsiClass,Boolean> unusedClassCache = new HashMap<PsiClass, Boolean>();
+  final Map<PsiClass, Boolean> unusedClassCache = new HashMap<PsiClass, Boolean>();
 
   public abstract boolean shouldCheckUsages(@Nonnull PsiMember member);
+
   public abstract boolean isLocallyUsed(@Nonnull PsiNamedElement member);
+
   public abstract boolean isCurrentFileAlreadyChecked();
 }

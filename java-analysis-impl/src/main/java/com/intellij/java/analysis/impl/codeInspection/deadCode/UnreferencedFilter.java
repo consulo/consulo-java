@@ -24,13 +24,12 @@
  */
 package com.intellij.java.analysis.impl.codeInspection.deadCode;
 
-import javax.annotation.Nonnull;
-
+import com.intellij.java.analysis.codeInspection.reference.*;
+import consulo.language.editor.impl.inspection.reference.RefElementImpl;
 import consulo.language.editor.inspection.GlobalInspectionContext;
 import consulo.language.editor.inspection.GlobalInspectionTool;
-import consulo.ide.impl.idea.codeInspection.ex.GlobalInspectionContextBase;
-import com.intellij.codeInspection.reference.*;
-import com.intellij.java.analysis.codeInspection.reference.*;
+
+import javax.annotation.Nonnull;
 
 public class UnreferencedFilter extends RefUnreachableFilter {
   public UnreferencedFilter(@Nonnull GlobalInspectionTool tool, @Nonnull GlobalInspectionContext context) {
@@ -40,10 +39,11 @@ public class UnreferencedFilter extends RefUnreachableFilter {
   @Override
   public int getElementProblemCount(@Nonnull RefJavaElement refElement) {
     if (refElement instanceof RefParameter) return 0;
-    if (refElement.isEntry() || !((RefElementImpl)refElement).isSuspicious() || refElement.isSyntheticJSP()) return 0;
+    if (refElement.isEntry() || !((RefElementImpl) refElement).isSuspicious() || refElement.isSyntheticJSP()) return 0;
 
-    if (!(refElement instanceof RefMethod || refElement instanceof RefClass || refElement instanceof RefField)) return 0;
-    if (!((GlobalInspectionContextBase)myContext).isToCheckMember(refElement, myTool)) return 0;
+    if (!(refElement instanceof RefMethod || refElement instanceof RefClass || refElement instanceof RefField))
+      return 0;
+    if (!myContext.isToCheckMember(refElement, myTool)) return 0;
 
     if (refElement instanceof RefField) {
       RefField refField = (RefField) refElement;
@@ -51,7 +51,7 @@ public class UnreferencedFilter extends RefUnreachableFilter {
       if (refField.isUsedForWriting() && !refField.isUsedForReading()) return 1;
     }
 
-    if (refElement instanceof RefClass && ((RefClass)refElement).isAnonymous()) return 0;
+    if (refElement instanceof RefClass && ((RefClass) refElement).isAnonymous()) return 0;
     return -1;
   }
 }

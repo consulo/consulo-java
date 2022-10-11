@@ -7,25 +7,27 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.instructions.Inst
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.instructions.TypeCastInstruction;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaValue;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaVariableValue;
+import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
-import consulo.project.Project;
-import consulo.document.util.TextRange;
-import com.intellij.psi.*;
-import consulo.language.psi.scope.LocalSearchScope;
-import consulo.language.psi.resolve.PsiElementProcessor;
-import consulo.ide.impl.psi.search.PsiElementProcessorAdapter;
-import consulo.content.scope.SearchScope;
-import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
-import consulo.language.psi.search.ReferencesSearch;
-import com.intellij.psi.util.*;
-import consulo.util.collection.ArrayUtil;
-import consulo.util.lang.BitUtil;
-import consulo.util.collection.ContainerUtil;
-import consulo.util.collection.MultiMap;
 import com.siyeh.ig.callMatcher.CallMatcher;
 import com.siyeh.ig.psiutils.ExpressionUtils;
+import consulo.application.util.CachedValueProvider;
+import consulo.content.scope.SearchScope;
+import consulo.document.util.TextRange;
+import consulo.language.psi.*;
+import consulo.language.psi.resolve.PsiElementProcessor;
+import consulo.language.psi.resolve.PsiElementProcessorAdapter;
+import consulo.language.psi.scope.LocalSearchScope;
+import consulo.language.psi.search.ReferencesSearch;
+import consulo.language.psi.util.LanguageCachedValueUtil;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.project.Project;
+import consulo.util.collection.ArrayUtil;
+import consulo.util.collection.ContainerUtil;
+import consulo.util.collection.MultiMap;
+import consulo.util.lang.BitUtil;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
@@ -427,7 +429,7 @@ public final class GuessManagerImpl extends GuessManager {
 
   private static List<PsiElement> getPotentiallyAffectingElements(PsiExpression place) {
     PsiElement topmostBlock = getTopmostBlock(place);
-    return CachedValuesManager.getCachedValue(topmostBlock, () -> {
+    return LanguageCachedValueUtil.getCachedValue(topmostBlock, () -> {
       List<PsiElement> list = SyntaxTraverser.psiTraverser(topmostBlock).filter(e -> e instanceof PsiExpression || e instanceof PsiLocalVariable).toList();
       return new CachedValueProvider.Result<>(list, topmostBlock);
     });

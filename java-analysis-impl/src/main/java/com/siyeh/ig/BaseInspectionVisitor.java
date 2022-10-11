@@ -15,14 +15,16 @@
  */
 package com.siyeh.ig;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.java.language.psi.*;
-import org.jetbrains.annotations.NonNls;
+import consulo.document.util.TextRange;
 import consulo.language.editor.inspection.ProblemHighlightType;
 import consulo.language.editor.inspection.ProblemsHolder;
-import consulo.document.util.TextRange;
-import com.intellij.psi.*;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiWhiteSpace;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
 
 public abstract class BaseInspectionVisitor extends JavaElementVisitor {
 
@@ -43,27 +45,25 @@ public abstract class BaseInspectionVisitor extends JavaElementVisitor {
   }
 
   protected final void registerNewExpressionError(
-    @Nonnull PsiNewExpression expression, Object... infos) {
+      @Nonnull PsiNewExpression expression, Object... infos) {
     final PsiJavaCodeReferenceElement classReference =
-      expression.getClassOrAnonymousClassReference();
+        expression.getClassOrAnonymousClassReference();
     if (classReference == null) {
       registerError(expression, infos);
-    }
-    else {
+    } else {
       registerError(classReference, infos);
     }
   }
 
   protected final void registerMethodCallError(
-    @Nonnull PsiMethodCallExpression expression,
-    @NonNls Object... infos) {
+      @Nonnull PsiMethodCallExpression expression,
+      @NonNls Object... infos) {
     final PsiReferenceExpression methodExpression =
-      expression.getMethodExpression();
+        expression.getMethodExpression();
     final PsiElement nameToken = methodExpression.getReferenceNameElement();
     if (nameToken == null) {
       registerError(expression, infos);
-    }
-    else {
+    } else {
       registerError(nameToken, infos);
     }
   }
@@ -73,8 +73,7 @@ public abstract class BaseInspectionVisitor extends JavaElementVisitor {
     final PsiElement statementToken = statement.getFirstChild();
     if (statementToken == null) {
       registerError(statement, infos);
-    }
-    else {
+    } else {
       registerError(statementToken, infos);
     }
   }
@@ -84,16 +83,14 @@ public abstract class BaseInspectionVisitor extends JavaElementVisitor {
     PsiElement nameIdentifier;
     if (aClass instanceof PsiEnumConstantInitializer) {
       final PsiEnumConstantInitializer enumConstantInitializer =
-        (PsiEnumConstantInitializer)aClass;
+          (PsiEnumConstantInitializer) aClass;
       final PsiEnumConstant enumConstant =
-        enumConstantInitializer.getEnumConstant();
+          enumConstantInitializer.getEnumConstant();
       nameIdentifier = enumConstant.getNameIdentifier();
-    }
-    else if (aClass instanceof PsiAnonymousClass) {
-      final PsiAnonymousClass anonymousClass = (PsiAnonymousClass)aClass;
+    } else if (aClass instanceof PsiAnonymousClass) {
+      final PsiAnonymousClass anonymousClass = (PsiAnonymousClass) aClass;
       nameIdentifier = anonymousClass.getBaseClassReference();
-    }
-    else {
+    } else {
       nameIdentifier = aClass.getNameIdentifier();
     }
     if (nameIdentifier != null && !nameIdentifier.isPhysical()) {
@@ -101,8 +98,7 @@ public abstract class BaseInspectionVisitor extends JavaElementVisitor {
     }
     if (nameIdentifier == null || !nameIdentifier.isPhysical()) {
       registerError(aClass.getContainingFile(), infos);
-    }
-    else {
+    } else {
       registerError(nameIdentifier, infos);
     }
   }
@@ -112,8 +108,7 @@ public abstract class BaseInspectionVisitor extends JavaElementVisitor {
     final PsiElement nameIdentifier = method.getNameIdentifier();
     if (nameIdentifier == null) {
       registerError(method.getContainingFile(), infos);
-    }
-    else {
+    } else {
       registerError(nameIdentifier, infos);
     }
   }
@@ -123,19 +118,17 @@ public abstract class BaseInspectionVisitor extends JavaElementVisitor {
     final PsiElement nameIdentifier = variable.getNameIdentifier();
     if (nameIdentifier == null) {
       registerError(variable, infos);
-    }
-    else {
+    } else {
       registerError(nameIdentifier, infos);
     }
   }
 
   protected final void registerTypeParameterError(
-    @Nonnull PsiTypeParameter typeParameter, Object... infos) {
+      @Nonnull PsiTypeParameter typeParameter, Object... infos) {
     final PsiElement nameIdentifier = typeParameter.getNameIdentifier();
     if (nameIdentifier == null) {
       registerError(typeParameter, infos);
-    }
-    else {
+    } else {
       registerError(nameIdentifier, infos);
     }
   }
@@ -147,8 +140,8 @@ public abstract class BaseInspectionVisitor extends JavaElementVisitor {
   }
 
   protected final void registerModifierError(
-    @Nonnull String modifier, @Nonnull PsiModifierListOwner parameter,
-    Object... infos) {
+      @Nonnull String modifier, @Nonnull PsiModifierListOwner parameter,
+      Object... infos) {
     final PsiModifierList modifiers = parameter.getModifierList();
     if (modifiers == null) {
       return;
@@ -163,13 +156,12 @@ public abstract class BaseInspectionVisitor extends JavaElementVisitor {
   }
 
   protected final void registerClassInitializerError(
-    @Nonnull PsiClassInitializer initializer, Object... infos) {
+      @Nonnull PsiClassInitializer initializer, Object... infos) {
     final PsiCodeBlock body = initializer.getBody();
     final PsiJavaToken lBrace = body.getLBrace();
     if (lBrace == null) {
       registerError(initializer, infos);
-    }
-    else {
+    } else {
       registerError(lBrace, infos);
     }
   }
@@ -225,7 +217,7 @@ public abstract class BaseInspectionVisitor extends JavaElementVisitor {
 
   @Override
   public void visitReferenceExpression(
-    PsiReferenceExpression expression) {
+      PsiReferenceExpression expression) {
     visitExpression(expression);
   }
 

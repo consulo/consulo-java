@@ -16,7 +16,7 @@
 
 package com.intellij.java.impl.codeInspection.suspiciousNameCombination;
 
-import consulo.ide.impl.idea.codeInsight.daemon.GroupNames;
+import com.intellij.java.analysis.codeInspection.GroupNames;
 import com.intellij.java.language.impl.codeInsight.daemon.JavaErrorBundle;
 import consulo.language.editor.inspection.InspectionsBundle;
 import consulo.language.editor.inspection.ProblemsHolder;

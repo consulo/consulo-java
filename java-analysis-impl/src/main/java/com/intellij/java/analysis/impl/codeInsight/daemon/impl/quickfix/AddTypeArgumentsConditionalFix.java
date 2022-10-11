@@ -15,20 +15,20 @@
  */
 package com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix;
 
-import consulo.language.editor.rawHighlight.HighlightInfo;
-import consulo.language.editor.intention.QuickFixAction;
-import consulo.language.editor.intention.IntentionAction;
 import com.intellij.java.language.psi.*;
-import consulo.codeEditor.Editor;
-import consulo.project.Project;
-import consulo.util.lang.StringUtil;
-import com.intellij.psi.*;
 import com.intellij.java.language.psi.impl.source.resolve.DefaultParameterTypeInferencePolicy;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
-import consulo.ide.impl.idea.util.Function;
+import consulo.codeEditor.Editor;
+import consulo.language.editor.intention.IntentionAction;
+import consulo.language.editor.intention.QuickFixAction;
+import consulo.language.editor.rawHighlight.HighlightInfo;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
+import consulo.project.Project;
+import consulo.util.lang.StringUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -75,13 +75,10 @@ public class AddTypeArgumentsConditionalFix implements IntentionAction {
   @Override
   public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     final PsiTypeParameter[] typeParameters = myMethod.getTypeParameters();
-    final String typeArguments = "<" + StringUtil.join(typeParameters, new Function<PsiTypeParameter, String>() {
-      @Override
-      public String fun(PsiTypeParameter parameter) {
-        final PsiType substituteTypeParam = mySubstitutor.substitute(parameter);
-        LOG.assertTrue(substituteTypeParam != null);
-        return GenericsUtil.eliminateWildcards(substituteTypeParam).getCanonicalText();
-      }
+    final String typeArguments = "<" + StringUtil.join(typeParameters, parameter -> {
+      final PsiType substituteTypeParam = mySubstitutor.substitute(parameter);
+      LOG.assertTrue(substituteTypeParam != null);
+      return GenericsUtil.eliminateWildcards(substituteTypeParam).getCanonicalText();
     }, ", ") + ">";
     final PsiExpression expression = myExpression.getMethodExpression().getQualifierExpression();
     String withTypeArgsText;

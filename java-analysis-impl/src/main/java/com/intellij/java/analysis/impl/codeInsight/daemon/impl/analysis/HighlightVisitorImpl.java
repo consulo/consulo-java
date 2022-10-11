@@ -13,12 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.intellij.java.impl.codeInsight.daemon.impl.analysis;
+package com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis;
 
 import com.intellij.java.analysis.codeInsight.intention.QuickFixFactory;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.DefaultHighlightUtil;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.JavaHighlightInfoTypes;
-import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.*;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.HighlightUtil.Feature;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.impl.codeInsight.daemon.JavaErrorBundle;
@@ -45,12 +44,10 @@ import consulo.document.Document;
 import consulo.document.util.TextRange;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.Pass;
+import consulo.language.editor.impl.internal.daemon.DaemonCodeAnalyzerEx;
 import consulo.language.editor.inspection.LocalQuickFixAndIntentionActionOnPsiElement;
 import consulo.language.editor.intention.QuickFixAction;
-import consulo.language.editor.rawHighlight.HighlightInfo;
-import consulo.language.editor.rawHighlight.HighlightInfoHolder;
-import consulo.language.editor.rawHighlight.HighlightInfoType;
-import consulo.language.editor.rawHighlight.HighlightVisitor;
+import consulo.language.editor.rawHighlight.*;
 import consulo.language.inject.InjectedLanguageManager;
 import consulo.language.psi.*;
 import consulo.language.psi.util.PsiTreeUtil;
@@ -144,11 +141,6 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
   }
 
   @Override
-  public int order() {
-    return 0;
-  }
-
-  @Override
   public boolean suitableForFile(@Nonnull PsiFile file) {
     // both PsiJavaFile and PsiCodeFragment must match
     return file instanceof PsiImportHolder && !InjectedLanguageManager.getInstance(file.getProject()).isInjectedFragment(file);
@@ -172,28 +164,30 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
 
   @Override
   public boolean analyze(@Nonnull PsiFile file, boolean updateWholeFile, @Nonnull HighlightInfoHolder holder, @Nonnull Runnable highlight) {
-    boolean success = true;
     try {
       prepare(Holder.CHECK_ELEMENT_LEVEL ? new CheckLevelHighlightInfoHolder(file, holder) : holder, file);
       if (updateWholeFile) {
         ProgressIndicator progress = ProgressManager.getInstance().getProgressIndicator();
-        if (progress == null) {
-          throw new IllegalStateException("Must be run under progress");
-        }
-        RefCountHolder refCountHolder = RefCountHolder.get(file);
-        myRefCountHolder = refCountHolder;
+        if (progress == null) throw new IllegalStateException("Must be run under progress");
         Project project = file.getProject();
         Document document = PsiDocumentManager.getInstance(project).getDocument(file);
-        TextRange dirtyScope = Optional.ofNullable(document).map(doc -> DaemonCodeAnalyzerEx.getInstanceEx(project).getFileStatusMap().getFileDirtyScope(doc, Pass.UPDATE_ALL)).orElse(file
-            .getTextRange());
-        success = refCountHolder.analyze(file, dirtyScope, progress, () ->
-        {
-          highlight.run();
-          progress.checkCanceled();
-          if (document != null) {
-            new PostHighlightingVisitor(file, document, refCountHolder).collectHighlights(holder, progress);
-          }
-        });
+        TextRange dirtyScope = document == null ? null : DaemonCodeAnalyzerEx.getInstanceEx(project).getFileStatusMap().getFileDirtyScope(document, Pass.UPDATE_ALL);
+        if (dirtyScope == null) dirtyScope = file.getTextRange();
+        RefCountHolder refCountHolder = RefCountHolder.get(file, dirtyScope);
+        if (refCountHolder == null) {
+          // RefCountHolder was GCed and queried again for some inner code block
+          // "highlight.run()" can't fill it again because it runs for only a subset of elements,
+          // so we have to restart the daemon for the whole file
+          return false;
+        }
+        myRefCountHolder = refCountHolder;
+
+        highlight.run();
+        ProgressManager.checkCanceled();
+        refCountHolder.storeReadyHolder(file);
+        if (document != null) {
+          new PostHighlightingVisitor(file, document, refCountHolder).collectHighlights(holder, progress);
+        }
       } else {
         myRefCountHolder = null;
         highlight.run();
@@ -213,7 +207,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
       myOverrideEquivalentMethodsVisitedClasses.clear();
     }
 
-    return success;
+    return true;
   }
 
   protected void prepareToRunAsInspection(@Nonnull HighlightInfoHolder holder) {

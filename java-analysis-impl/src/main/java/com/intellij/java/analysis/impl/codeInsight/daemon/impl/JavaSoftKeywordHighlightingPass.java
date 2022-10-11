@@ -16,18 +16,18 @@
 
 package com.intellij.java.analysis.impl.codeInsight.daemon.impl;
 
-import consulo.language.editor.impl.highlight.TextEditorHighlightingPass;
-import consulo.language.editor.rawHighlight.HighlightInfo;
-import consulo.ide.impl.idea.codeInsight.daemon.impl.UpdateHighlightersUtil;
-import com.intellij.java.language.impl.lexer.JavaLexer;
-import consulo.document.Document;
-import consulo.application.progress.ProgressIndicator;
 import com.intellij.java.language.LanguageLevel;
+import com.intellij.java.language.impl.lexer.JavaLexer;
 import com.intellij.java.language.psi.JavaRecursiveElementVisitor;
 import com.intellij.java.language.psi.PsiJavaFile;
 import com.intellij.java.language.psi.PsiKeyword;
-import consulo.util.collection.ContainerUtil;
 import consulo.annotation.access.RequiredReadAction;
+import consulo.application.progress.ProgressIndicator;
+import consulo.document.Document;
+import consulo.language.editor.impl.highlight.TextEditorHighlightingPass;
+import consulo.language.editor.impl.highlight.UpdateHighlightersUtil;
+import consulo.language.editor.rawHighlight.HighlightInfo;
+import consulo.util.collection.ContainerUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -38,42 +38,34 @@ import java.util.List;
  * @author VISTALL
  * @since 09-Jan-17
  */
-public class JavaSoftKeywordHighlightingPass extends TextEditorHighlightingPass
-{
-	private final PsiJavaFile myFile;
-	private final List<HighlightInfo> myResults = new ArrayList<>();
+public class JavaSoftKeywordHighlightingPass extends TextEditorHighlightingPass {
+  private final PsiJavaFile myFile;
+  private final List<HighlightInfo> myResults = new ArrayList<>();
 
-	public JavaSoftKeywordHighlightingPass(@Nonnull PsiJavaFile file, @Nullable Document document)
-	{
-		super(file.getProject(), document);
-		myFile = file;
-	}
+  public JavaSoftKeywordHighlightingPass(@Nonnull PsiJavaFile file, @Nullable Document document) {
+    super(file.getProject(), document);
+    myFile = file;
+  }
 
-	@RequiredReadAction
-	@Override
-	public void doCollectInformation(@Nonnull ProgressIndicator progressIndicator)
-	{
-		LanguageLevel languageLevel = myFile.getLanguageLevel();
+  @RequiredReadAction
+  @Override
+  public void doCollectInformation(@Nonnull ProgressIndicator progressIndicator) {
+    LanguageLevel languageLevel = myFile.getLanguageLevel();
 
-		myFile.accept(new JavaRecursiveElementVisitor()
-		{
-			@Override
-			public void visitKeyword(PsiKeyword keyword)
-			{
-				if(JavaLexer.isSoftKeyword(keyword.getNode().getChars(), languageLevel))
-				{
-					ContainerUtil.addIfNotNull(myResults, HighlightInfo.newHighlightInfo(JavaHighlightInfoTypes.JAVA_KEYWORD).range(keyword).create());
-				}
-			}
-		});
-	}
+    myFile.accept(new JavaRecursiveElementVisitor() {
+      @Override
+      public void visitKeyword(PsiKeyword keyword) {
+        if (JavaLexer.isSoftKeyword(keyword.getNode().getChars(), languageLevel)) {
+          ContainerUtil.addIfNotNull(myResults, HighlightInfo.newHighlightInfo(JavaHighlightInfoTypes.JAVA_KEYWORD).range(keyword).create());
+        }
+      }
+    });
+  }
 
-	@Override
-	public void doApplyInformationToEditor()
-	{
-		if(!myResults.isEmpty())
-		{
-			UpdateHighlightersUtil.setHighlightersToEditor(myProject, myDocument, 0, myFile.getTextLength(), myResults, getColorsScheme(), getId());
-		}
-	}
+  @Override
+  public void doApplyInformationToEditor() {
+    if (!myResults.isEmpty()) {
+      UpdateHighlightersUtil.setHighlightersToEditor(myProject, myDocument, 0, myFile.getTextLength(), myResults, getColorsScheme(), getId());
+    }
+  }
 }

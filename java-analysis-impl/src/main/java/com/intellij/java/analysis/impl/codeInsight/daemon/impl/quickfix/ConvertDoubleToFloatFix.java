@@ -15,17 +15,18 @@
  */
 package com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix;
 
-import consulo.language.editor.rawHighlight.HighlightInfo;
-import consulo.language.editor.intention.QuickFixAction;
-import consulo.language.editor.intention.IntentionAction;
 import com.intellij.java.language.psi.*;
-import consulo.codeEditor.Editor;
-import consulo.project.Project;
-import consulo.document.util.TextRange;
-import consulo.util.lang.StringUtil;
-import com.intellij.psi.*;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
+import consulo.codeEditor.Editor;
+import consulo.document.util.TextRange;
+import consulo.language.editor.intention.IntentionAction;
+import consulo.language.editor.intention.QuickFixAction;
+import consulo.language.editor.rawHighlight.HighlightInfo;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+import consulo.util.lang.StringUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -57,9 +58,9 @@ public class ConvertDoubleToFloatFix implements IntentionAction {
   public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     if (myExpression.isValid()) {
       if (!StringUtil.endsWithIgnoreCase(myExpression.getText(), "f")) {
-        final PsiLiteralExpression expression = (PsiLiteralExpression)createFloatingPointExpression(project);
+        final PsiLiteralExpression expression = (PsiLiteralExpression) createFloatingPointExpression(project);
         final Object value = expression.getValue();
-        return value instanceof Float && !((Float)value).isInfinite() && !(((Float)value).floatValue() == 0 && !TypeConversionUtil.isFPZero(expression.getText()));
+        return value instanceof Float && !((Float) value).isInfinite() && !(((Float) value).floatValue() == 0 && !TypeConversionUtil.isFPZero(expression.getText()));
       }
     }
     return false;
@@ -101,7 +102,7 @@ public class ConvertDoubleToFloatFix implements IntentionAction {
                                         @Nonnull JavaResolveResult candidate,
                                         @Nonnull PsiElement context) {
     if (!candidate.isStaticsScopeCorrect()) return;
-    PsiMethod method = (PsiMethod)candidate.getElement();
+    PsiMethod method = (PsiMethod) candidate.getElement();
     if (method != null && context.getManager().isInProject(method)) {
       final PsiParameter[] parameters = method.getParameterList().getParameters();
       if (parameters.length == expressions.length) {

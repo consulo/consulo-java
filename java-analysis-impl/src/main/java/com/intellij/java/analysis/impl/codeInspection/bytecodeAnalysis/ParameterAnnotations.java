@@ -16,14 +16,12 @@
 
 package com.intellij.java.analysis.impl.codeInspection.bytecodeAnalysis;
 
-class ParameterAnnotations
-{
-	final boolean notNull;
-	final boolean nullable;
+class ParameterAnnotations {
+  final boolean notNull;
+  final boolean nullable;
 
-	ParameterAnnotations(boolean notNull, boolean nullable)
-	{
-		this.notNull = notNull;
-		this.nullable = nullable;
-	}
+  ParameterAnnotations(boolean notNull, boolean nullable) {
+    this.notNull = notNull;
+    this.nullable = nullable;
+  }
 }

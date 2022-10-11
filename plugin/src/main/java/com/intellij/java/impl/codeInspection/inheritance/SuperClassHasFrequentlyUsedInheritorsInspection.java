@@ -1,6 +1,6 @@
 package com.intellij.java.impl.codeInspection.inheritance;
 
-import consulo.ide.impl.idea.codeInsight.daemon.GroupNames;
+import com.intellij.java.analysis.codeInspection.GroupNames;
 import com.intellij.java.impl.codeInspection.inheritance.search.InheritorsStatisticalDataSearch;
 import com.intellij.java.impl.codeInspection.inheritance.search.InheritorsStatisticsSearchResult;
 import com.intellij.java.analysis.impl.codeInspection.BaseJavaLocalInspectionTool;

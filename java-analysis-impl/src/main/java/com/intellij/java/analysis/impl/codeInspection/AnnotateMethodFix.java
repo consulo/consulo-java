@@ -15,23 +15,23 @@
  */
 package com.intellij.java.analysis.impl.codeInspection;
 
+import com.intellij.java.analysis.impl.codeInsight.intention.AddAnnotationPsiFix;
+import com.intellij.java.indexing.search.searches.OverridingMethodsSearch;
 import com.intellij.java.language.codeInsight.AnnotationUtil;
+import com.intellij.java.language.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiNameValuePair;
+import com.intellij.java.language.psi.util.ClassUtil;
+import consulo.application.ReadAction;
+import consulo.application.progress.ProgressManager;
+import consulo.java.analysis.impl.codeInsight.JavaInspectionsBundle;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemDescriptor;
-import com.intellij.java.analysis.impl.codeInsight.intention.AddAnnotationPsiFix;
-import consulo.application.ReadAction;
-import consulo.undoRedo.util.UndoUtil;
-import consulo.application.progress.ProgressManager;
-import consulo.project.Project;
+import consulo.language.editor.util.LanguageUndoUtil;
 import consulo.language.psi.PsiElement;
-import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.java.language.psi.PsiNameValuePair;
-import com.intellij.java.indexing.search.searches.OverridingMethodsSearch;
-import com.intellij.java.language.psi.util.ClassUtil;
 import consulo.language.psi.util.PsiTreeUtil;
-import consulo.java.analysis.impl.codeInsight.JavaInspectionsBundle;
 import consulo.logging.Logger;
+import consulo.project.Project;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -115,7 +115,7 @@ public class AnnotateMethodFix implements LocalQuickFix {
     for (PsiMethod psiMethod : toAnnotate) {
       annotateMethod(psiMethod);
     }
-    UndoUtil.markPsiFileForUndo(method.getContainingFile());
+    LanguageUndoUtil.markPsiFileForUndo(method.getContainingFile());
   }
 
   protected boolean annotateOverriddenMethods() {

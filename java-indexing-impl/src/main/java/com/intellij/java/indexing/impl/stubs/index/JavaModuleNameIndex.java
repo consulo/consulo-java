@@ -4,6 +4,7 @@ package com.intellij.java.indexing.impl.stubs.index;
 import com.intellij.java.indexing.impl.search.JavaSourceFilterScope;
 import com.intellij.java.language.impl.psi.impl.java.stubs.index.JavaStubIndexKeys;
 import com.intellij.java.language.psi.PsiJavaModule;
+import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.stub.StringStubIndexExtension;
 import consulo.language.psi.stub.StubIndex;
 import consulo.language.psi.stub.StubIndexKey;
@@ -44,7 +45,7 @@ public class JavaModuleNameIndex extends StringStubIndexExtension<PsiJavaModule>
 
   @Override
   public Collection<PsiJavaModule> get(@Nonnull String name, @Nonnull Project project, @Nonnull ProjectAwareSearchScope scope) {
-    Collection<PsiJavaModule> modules = StubIndex.getElements(getKey(), name, project, new JavaSourceFilterScope(scope, true), PsiJavaModule.class);
+    Collection<PsiJavaModule> modules = StubIndex.getElements(getKey(), name, project, new JavaSourceFilterScope((GlobalSearchScope) scope, true), PsiJavaModule.class);
     if (modules.size() > 1) {
       modules = filterVersions(project, modules);
     }
@@ -91,7 +92,7 @@ public class JavaModuleNameIndex extends StringStubIndexExtension<PsiJavaModule>
   }
 
   private static List<VirtualFile> descriptorFiles(VirtualFile root, boolean checkAttribute, boolean filter) {
-    List<VirtualFile> results = ContainerUtil.newSmartList();
+    List<VirtualFile> results = new ArrayList<>();
 
     ContainerUtil.addIfNotNull(results, root.findChild(PsiJavaModule.MODULE_INFO_CLS_FILE));
 

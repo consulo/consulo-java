@@ -2,25 +2,30 @@
 
 package com.intellij.java.analysis.impl.codeInspection.dataFlow.value;
 
-import com.intellij.java.language.codeInsight.AnnotationUtil;
-import com.intellij.java.language.codeInsight.Nullability;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.*;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.types.DfType;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.types.DfTypes;
 import com.intellij.java.language.JavaLanguage;
+import com.intellij.java.language.codeInsight.AnnotationUtil;
+import com.intellij.java.language.codeInsight.Nullability;
+import com.intellij.java.language.impl.psi.impl.source.PsiFieldImpl;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.project.Project;
-import consulo.util.lang.Pair;
-import consulo.language.pattern.ElementPattern;
-import com.intellij.psi.*;
-import com.intellij.java.language.impl.psi.impl.source.PsiFieldImpl;
-import com.intellij.psi.util.*;
-import consulo.util.collection.FList;
-import consulo.util.collection.FactoryMap;
 import com.siyeh.ig.callMatcher.CallMatcher;
 import com.siyeh.ig.psiutils.ExpressionUtils;
+import consulo.application.util.CachedValueProvider;
+import consulo.language.pattern.ElementPattern;
+import consulo.language.psi.PsiCompiledElement;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiModificationTracker;
+import consulo.language.psi.SyntaxTraverser;
+import consulo.language.psi.util.LanguageCachedValueUtil;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.project.Project;
+import consulo.util.collection.FList;
+import consulo.util.collection.FactoryMap;
+import consulo.util.lang.Pair;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
 
@@ -375,7 +380,7 @@ public class DfaValueFactory {
         return;
       }
       // Indirect instantiation via other class is still possible, but hopefully unlikely
-      ClassInitializationInfo info = CachedValuesManager.getCachedValue(contextClass, () -> CachedValueProvider.Result
+      ClassInitializationInfo info = LanguageCachedValueUtil.getCachedValue(contextClass, () -> CachedValueProvider.Result
           .create(new ClassInitializationInfo(contextClass), PsiModificationTracker.MODIFICATION_COUNT));
       myCanInstantiateItself = info.myCanInstantiateItself;
       if (method.hasModifierProperty(PsiModifier.STATIC) || method.isConstructor()) {

@@ -7,7 +7,6 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaValueFac
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.RelationType;
 import consulo.document.util.TextRange;
 import consulo.util.lang.StringUtil;
-import consulo.util.collection.ContainerUtil;
 import one.util.streamex.IntStreamEx;
 import one.util.streamex.StreamEx;
 import org.jetbrains.annotations.Contract;
@@ -44,7 +43,7 @@ public final class StandardMethodContract extends MethodContract {
   }
 
   public List<ValueConstraint> getConstraints() {
-    return ContainerUtil.immutableList(myParameters);
+    return List.of(myParameters);
   }
 
   public

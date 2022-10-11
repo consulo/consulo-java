@@ -15,12 +15,12 @@
  */
 package com.intellij.java.analysis.impl.codeInspection.dataFlow.inliner;
 
-import com.intellij.java.language.codeInsight.Nullability;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.CFGBuilder;
+import com.intellij.java.language.codeInsight.Nullability;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.ide.impl.idea.util.ObjectUtils;
 import com.siyeh.ig.callMatcher.CallMatcher;
+import consulo.util.lang.ObjectUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -141,14 +141,14 @@ abstract class ComparatorModel {
     if (expression instanceof PsiReferenceExpression) {
       PsiReferenceExpression ref = (PsiReferenceExpression) expression;
       if ("CASE_INSENSITIVE_ORDER".equals(ref.getReferenceName())) {
-        PsiField field = ObjectUtils.tryCast(ref.resolve(), PsiField.class);
+        PsiField field = ObjectUtil.tryCast(ref.resolve(), PsiField.class);
         if (field != null && field.getContainingClass() != null &&
             CommonClassNames.JAVA_LANG_STRING.equals(field.getContainingClass().getQualifiedName())) {
           return new NullHostile();
         }
       }
     }
-    PsiMethodCallExpression call = ObjectUtils.tryCast(expression, PsiMethodCallExpression.class);
+    PsiMethodCallExpression call = ObjectUtil.tryCast(expression, PsiMethodCallExpression.class);
     if (call == null) return new Unknown(expression);
     PsiExpression qualifier = call.getMethodExpression().getQualifierExpression();
     if (REVERSED.test(call) && qualifier != null) {

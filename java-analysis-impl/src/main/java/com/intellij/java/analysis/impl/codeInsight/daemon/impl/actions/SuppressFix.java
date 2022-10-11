@@ -15,22 +15,26 @@
  */
 package com.intellij.java.analysis.impl.codeInsight.daemon.impl.actions;
 
-import consulo.language.editor.FileModificationService;
-import consulo.language.editor.rawHighlight.HighlightDisplayKey;
-import consulo.language.editor.inspection.AbstractBatchSuppressByNoInspectionCommentFix;
-import consulo.language.editor.inspection.InspectionsBundle;
-import consulo.language.editor.inspection.SuppressionUtil;
 import com.intellij.java.analysis.impl.codeInspection.JavaSuppressionUtil;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.*;
-import consulo.undoRedo.util.UndoUtil;
-import consulo.project.Project;
-import consulo.util.lang.StringUtil;
-import com.intellij.psi.*;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.java.language.psi.javadoc.PsiDocTag;
+import consulo.language.editor.FileModificationService;
+import consulo.language.editor.inspection.AbstractBatchSuppressByNoInspectionCommentFix;
+import consulo.language.editor.inspection.InspectionsBundle;
+import consulo.language.editor.inspection.SuppressionUtil;
+import consulo.language.editor.rawHighlight.HighlightDisplayKey;
+import consulo.language.editor.util.LanguageUndoUtil;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiManager;
+import consulo.language.psi.SyntheticElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+import consulo.undoRedo.util.UndoUtil;
+import consulo.util.lang.StringUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -98,7 +102,7 @@ public class SuppressFix extends AbstractBatchSuppressByNoInspectionCommentFix {
     }
     // todo suppress
     //DaemonCodeAnalyzer.getInstance(project).restart();
-    UndoUtil.markPsiFileForUndo(element.getContainingFile());
+    LanguageUndoUtil.markPsiFileForUndo(element.getContainingFile());
   }
 
   private boolean doSuppress(@Nonnull Project project, PsiDocCommentOwner container) {

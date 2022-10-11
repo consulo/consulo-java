@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.codeInspection.varScopeCanBeNarrowed;
 
-import consulo.ide.impl.idea.codeInsight.daemon.GroupNames;
+import com.intellij.java.analysis.codeInspection.GroupNames;
 import consulo.language.editor.inspection.scheme.InspectionManager;
 import consulo.language.editor.inspection.InspectionsBundle;
 import consulo.language.editor.inspection.ProblemDescriptor;

@@ -18,7 +18,7 @@ package com.intellij.java.impl.codeInspection.miscGenerics;
 import com.intellij.java.impl.codeInsight.ExpectedTypeInfo;
 import com.intellij.java.impl.codeInsight.ExpectedTypesProvider;
 import consulo.language.editor.FileModificationService;
-import consulo.ide.impl.idea.codeInsight.daemon.GroupNames;
+import com.intellij.java.analysis.codeInspection.GroupNames;
 import com.intellij.java.analysis.impl.codeInspection.miscGenerics.GenericsInspectionToolBase;
 import com.intellij.java.language.psi.*;
 import consulo.project.Project;

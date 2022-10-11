@@ -16,8 +16,7 @@
 
 package com.intellij.java.analysis.impl.codeInspection.dataFlow;
 
-import org.checkerframework.checker.index.qual.NonNegative;
-
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.List;
@@ -25,23 +24,20 @@ import java.util.List;
 /**
  * from kotlin
  */
-public interface TransferTarget
-{
-	/**
-	 * @return list of possible instruction offsets for given target
-	 */
-	@Nonnull
-	default Collection<Integer> getPossibleTargets()
-	{
-		return List.of();
-	}
+public interface TransferTarget {
+  /**
+   * @return list of possible instruction offsets for given target
+   */
+  @Nonnull
+  default Collection<Integer> getPossibleTargets() {
+    return List.of();
+  }
 
-	/**
-	 * @return next instruction states assuming no traps
-	 */
-	@NonNegative
-	default List<DfaInstructionState> dispatch(DfaMemoryState state, DataFlowRunner runner)
-	{
-		return List.of();
-	}
+  /**
+   * @return next instruction states assuming no traps
+   */
+  @Nonnegative
+  default List<DfaInstructionState> dispatch(DfaMemoryState state, DataFlowRunner runner) {
+    return List.of();
+  }
 }

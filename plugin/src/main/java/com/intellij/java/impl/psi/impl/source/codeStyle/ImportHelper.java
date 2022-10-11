@@ -3,7 +3,7 @@ package com.intellij.java.impl.psi.impl.source.codeStyle;
 
 import com.intellij.java.impl.psi.codeStyle.JavaCodeStyleSettings;
 import com.intellij.java.language.codeInsight.ImportFilter;
-import com.intellij.java.impl.codeInsight.daemon.impl.analysis.HighlightVisitorImpl;
+import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.HighlightVisitorImpl;
 import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.java.language.psi.*;
 import consulo.language.ast.ASTNode;

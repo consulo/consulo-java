@@ -15,9 +15,6 @@
  */
 package com.siyeh.ig.memory;
 
-import javax.annotation.Nonnull;
-
-import org.intellij.lang.annotations.Pattern;
 import com.intellij.java.language.psi.PsiArrayInitializerExpression;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiNewExpression;
@@ -26,79 +23,68 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ConstructionUtils;
 import com.siyeh.ig.psiutils.ExpressionUtils;
+import org.intellij.lang.annotations.Pattern;
 
-public class ZeroLengthArrayInitializationInspectionBase extends BaseInspection
-{
-	@Pattern(VALID_ID_PATTERN)
-	@Override
-	@Nonnull
-	public String getID()
-	{
-		return "ZeroLengthArrayAllocation";
-	}
+import javax.annotation.Nonnull;
 
-	@Override
-	@Nonnull
-	public String getDisplayName()
-	{
-		return InspectionGadgetsBundle.message("array.allocation.zero.length.display.name");
-	}
+public abstract class ZeroLengthArrayInitializationInspectionBase extends BaseInspection {
+  @Pattern(VALID_ID_PATTERN)
+  @Override
+  @Nonnull
+  public String getID() {
+    return "ZeroLengthArrayAllocation";
+  }
 
-	@Override
-	@Nonnull
-	public String buildErrorString(Object... infos)
-	{
-		return InspectionGadgetsBundle.message("array.allocation.zero.length.problem.descriptor");
-	}
+  @Override
+  @Nonnull
+  public String getDisplayName() {
+    return InspectionGadgetsBundle.message("array.allocation.zero.length.display.name");
+  }
 
-	@Override
-	public BaseInspectionVisitor buildVisitor()
-	{
-		return new ZeroLengthArrayInitializationVisitor();
-	}
+  @Override
+  @Nonnull
+  public String buildErrorString(Object... infos) {
+    return InspectionGadgetsBundle.message("array.allocation.zero.length.problem.descriptor");
+  }
 
-	@Override
-	protected boolean buildQuickFixesOnlyForOnTheFlyErrors()
-	{
-		return true;
-	}
+  @Override
+  public BaseInspectionVisitor buildVisitor() {
+    return new ZeroLengthArrayInitializationVisitor();
+  }
 
-	private static class ZeroLengthArrayInitializationVisitor extends BaseInspectionVisitor
-	{
+  @Override
+  protected boolean buildQuickFixesOnlyForOnTheFlyErrors() {
+    return true;
+  }
 
-		@Override
-		public void visitNewExpression(@Nonnull PsiNewExpression expression)
-		{
-			super.visitNewExpression(expression);
-			if(!ConstructionUtils.isEmptyArrayInitializer(expression))
-			{
-				return;
-			}
-			if(ExpressionUtils.isDeclaredConstant(expression))
-			{
-				return;
-			}
-			registerError(expression);
-		}
+  private static class ZeroLengthArrayInitializationVisitor extends BaseInspectionVisitor {
 
-		@Override
-		public void visitArrayInitializerExpression(PsiArrayInitializerExpression expression)
-		{
-			super.visitArrayInitializerExpression(expression);
-			final PsiExpression[] initializers = expression.getInitializers();
-			if(initializers.length > 0)
-			{
-				return;
-			}
-			if(expression.getParent() instanceof PsiNewExpression)
-			{
-				return;
-			}
-			if(ExpressionUtils.isDeclaredConstant(expression))
-			{
-				return;
-			}
-			registerError(expression);
-		}
-	}
+    @Override
+    public void visitNewExpression(@Nonnull PsiNewExpression expression) {
+      super.visitNewExpression(expression);
+      if (!ConstructionUtils.isEmptyArrayInitializer(expression)) {
+        return;
+      }
+      if (ExpressionUtils.isDeclaredConstant(expression)) {
+        return;
+      }
+      registerError(expression);
+    }
+
+    @Override
+    public void visitArrayInitializerExpression(PsiArrayInitializerExpression expression) {
+      super.visitArrayInitializerExpression(expression);
+      final PsiExpression[] initializers = expression.getInitializers();
+      if (initializers.length > 0) {
+        return;
+      }
+      if (expression.getParent() instanceof PsiNewExpression) {
+        return;
+      }
+      if (ExpressionUtils.isDeclaredConstant(expression)) {
+        return;
+      }
+      registerError(expression);
+    }
+  }
 }

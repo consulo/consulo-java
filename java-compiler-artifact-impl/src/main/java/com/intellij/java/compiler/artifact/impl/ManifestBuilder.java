@@ -15,37 +15,31 @@
  */
 package com.intellij.java.compiler.artifact.impl;
 
+import consulo.application.Application;
+import org.jetbrains.annotations.NonNls;
+
 import java.util.jar.Attributes;
 
-import org.jetbrains.annotations.NonNls;
-import consulo.application.impl.internal.ApplicationNamesInfo;
+public class ManifestBuilder {
+  @NonNls
+  private static final String NAME = "Created-By";
+  private static final Attributes.Name CREATED_BY = new Attributes.Name(NAME);
 
-public class ManifestBuilder
-{
-	@NonNls
-	private static final String NAME = "Created-By";
-	private static final Attributes.Name CREATED_BY = new Attributes.Name(NAME);
+  private ManifestBuilder() {
+  }
 
-	private ManifestBuilder()
-	{
-	}
+  public static void setGlobalAttributes(Attributes mainAttributes) {
+    setVersionAttribute(mainAttributes);
+    setIfNone(mainAttributes, CREATED_BY, Application.get().getName().get());
+  }
 
-	public static void setGlobalAttributes(Attributes mainAttributes)
-	{
-		setVersionAttribute(mainAttributes);
-		setIfNone(mainAttributes, CREATED_BY, ApplicationNamesInfo.getInstance().getFullProductName());
-	}
+  public static void setVersionAttribute(Attributes mainAttributes) {
+    setIfNone(mainAttributes, Attributes.Name.MANIFEST_VERSION, "1.0");
+  }
 
-	public static void setVersionAttribute(Attributes mainAttributes)
-	{
-		setIfNone(mainAttributes, Attributes.Name.MANIFEST_VERSION, "1.0");
-	}
-
-	private static void setIfNone(Attributes mainAttributes, Attributes.Name attrName, String value)
-	{
-		if(mainAttributes.getValue(attrName) == null)
-		{
-			mainAttributes.put(attrName, value);
-		}
-	}
+  private static void setIfNone(Attributes mainAttributes, Attributes.Name attrName, String value) {
+    if (mainAttributes.getValue(attrName) == null) {
+      mainAttributes.put(attrName, value);
+    }
+  }
 }

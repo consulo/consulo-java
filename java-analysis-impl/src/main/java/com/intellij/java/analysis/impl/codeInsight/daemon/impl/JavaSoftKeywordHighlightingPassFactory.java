@@ -16,12 +16,12 @@
 
 package com.intellij.java.analysis.impl.codeInsight.daemon.impl;
 
+import com.intellij.java.language.LanguageLevel;
+import com.intellij.java.language.psi.PsiJavaFile;
+import consulo.codeEditor.Editor;
 import consulo.language.editor.impl.highlight.TextEditorHighlightingPass;
 import consulo.language.editor.impl.highlight.TextEditorHighlightingPassFactory;
-import consulo.codeEditor.Editor;
-import com.intellij.java.language.LanguageLevel;
 import consulo.language.psi.PsiFile;
-import com.intellij.java.language.psi.PsiJavaFile;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -30,25 +30,19 @@ import javax.annotation.Nullable;
  * @author VISTALL
  * @since 09-Jan-17
  */
-public class JavaSoftKeywordHighlightingPassFactory implements TextEditorHighlightingPassFactory
-{
-	@Override
-	public void register(@Nonnull Registrar registrar)
-	{
-		registrar.registerTextEditorHighlightingPass(this, null, null, false, -1);
-	}
+public class JavaSoftKeywordHighlightingPassFactory implements TextEditorHighlightingPassFactory {
+  @Override
+  public void register(@Nonnull Registrar registrar) {
+    registrar.registerTextEditorHighlightingPass(this, null, null, false, -1);
+  }
 
-	@Nullable
-	@Override
-	public TextEditorHighlightingPass createHighlightingPass(@Nonnull PsiFile file, @Nonnull Editor editor)
-	{
-		if(file instanceof PsiJavaFile && ((PsiJavaFile) file).getLanguageLevel().isAtLeast(LanguageLevel.JDK_1_9))
-		{
-			return new JavaSoftKeywordHighlightingPass((PsiJavaFile) file, editor.getDocument());
-		}
-		else
-		{
-			return null;
-		}
-	}
+  @Nullable
+  @Override
+  public TextEditorHighlightingPass createHighlightingPass(@Nonnull PsiFile file, @Nonnull Editor editor) {
+    if (file instanceof PsiJavaFile && ((PsiJavaFile) file).getLanguageLevel().isAtLeast(LanguageLevel.JDK_1_9)) {
+      return new JavaSoftKeywordHighlightingPass((PsiJavaFile) file, editor.getDocument());
+    } else {
+      return null;
+    }
+  }
 }

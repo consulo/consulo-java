@@ -24,11 +24,11 @@
  */
 package org.osmorc.manifest.lang.psi;
 
-import javax.annotation.Nonnull;
-
 import consulo.document.util.TextRange;
 import consulo.language.psi.PsiElement;
-import consulo.ide.impl.psi.util.ReferenceSetBase;
+import consulo.language.psi.ReferenceSetBase;
+
+import javax.annotation.Nonnull;
 
 /**
  * @author Robert F. Beeger (robert@beeger.net)

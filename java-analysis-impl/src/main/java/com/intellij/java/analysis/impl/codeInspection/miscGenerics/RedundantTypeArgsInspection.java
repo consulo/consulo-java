@@ -15,23 +15,28 @@
  */
 package com.intellij.java.analysis.impl.codeInspection.miscGenerics;
 
-import consulo.ide.impl.idea.codeInsight.daemon.GroupNames;
+import com.intellij.java.analysis.codeInspection.GroupNames;
 import com.intellij.java.language.psi.*;
-import consulo.logging.Logger;
-import consulo.project.Project;
-import com.intellij.psi.*;
 import com.intellij.java.language.psi.impl.source.resolve.DefaultParameterTypeInferencePolicy;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.language.editor.inspection.InspectionsBundle;
+import consulo.language.editor.inspection.LocalQuickFix;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.editor.inspection.ProblemHighlightType;
+import consulo.language.editor.inspection.scheme.InspectionManager;
+import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
-import javax.annotation.Nonnull;
+import consulo.logging.Logger;
+import consulo.project.Project;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * @author ven
  */
-public class RedundantTypeArgsInspection extends GenericsInspectionToolBase {
+public abstract class RedundantTypeArgsInspection extends GenericsInspectionToolBase {
   private static final Logger LOG = Logger.getInstance(RedundantTypeArgsInspection.class);
 
   public RedundantTypeArgsInspection() {
@@ -59,7 +64,6 @@ public class RedundantTypeArgsInspection extends GenericsInspectionToolBase {
   }
 
 
-
   @Override
   public ProblemDescriptor[] checkMethod(@Nonnull PsiMethod psiMethod, @Nonnull InspectionManager manager, boolean isOnTheFly) {
     final PsiCodeBlock body = psiMethod.getBody();
@@ -73,14 +77,16 @@ public class RedundantTypeArgsInspection extends GenericsInspectionToolBase {
   public ProblemDescriptor[] getDescriptions(PsiElement place, final InspectionManager inspectionManager, boolean isOnTheFly) {
     final List<ProblemDescriptor> problems = new ArrayList<ProblemDescriptor>();
     place.accept(new JavaRecursiveElementWalkingVisitor() {
-      @Override public void visitMethodCallExpression(PsiMethodCallExpression expression) {
+      @Override
+      public void visitMethodCallExpression(PsiMethodCallExpression expression) {
         final PsiType[] typeArguments = expression.getTypeArguments();
         if (typeArguments.length > 0) {
           checkCallExpression(expression.getMethodExpression(), typeArguments, expression, inspectionManager, problems);
         }
       }
 
-      @Override public void visitNewExpression(PsiNewExpression expression) {
+      @Override
+      public void visitNewExpression(PsiNewExpression expression) {
         final PsiType[] typeArguments = expression.getTypeArguments();
         if (typeArguments.length > 0) {
           final PsiJavaCodeReferenceElement classReference = expression.getClassReference();
@@ -101,34 +107,34 @@ public class RedundantTypeArgsInspection extends GenericsInspectionToolBase {
 
         final PsiElement element = resolveResult.getElement();
         if (element instanceof PsiMethod && resolveResult.isValidResult()) {
-          PsiMethod method = (PsiMethod)element;
+          PsiMethod method = (PsiMethod) element;
           final PsiTypeParameter[] typeParameters = method.getTypeParameters();
           if (typeParameters.length == typeArguments.length) {
             final PsiParameter[] parameters = method.getParameterList().getParameters();
             PsiResolveHelper resolveHelper = JavaPsiFacade.getInstance(expression.getProject()).getResolveHelper();
             final PsiSubstitutor psiSubstitutor = resolveHelper
-              .inferTypeArguments(typeParameters, parameters, argumentList.getExpressions(), PsiSubstitutor.EMPTY, expression, DefaultParameterTypeInferencePolicy.INSTANCE);
+                .inferTypeArguments(typeParameters, parameters, argumentList.getExpressions(), PsiSubstitutor.EMPTY, expression, DefaultParameterTypeInferencePolicy.INSTANCE);
             for (int i = 0, length = typeParameters.length; i < length; i++) {
               PsiTypeParameter typeParameter = typeParameters[i];
               final PsiType inferredType = psiSubstitutor.getSubstitutionMap().get(typeParameter);
               if (!typeArguments[i].equals(inferredType)) return;
-              if (PsiUtil.resolveClassInType(method.getReturnType()) == typeParameter && PsiPrimitiveType.getUnboxedType(inferredType) != null) return;
+              if (PsiUtil.resolveClassInType(method.getReturnType()) == typeParameter && PsiPrimitiveType.getUnboxedType(inferredType) != null)
+                return;
             }
 
-            final PsiCallExpression copy = (PsiCallExpression)expression.copy(); //see IDEADEV-8174
+            final PsiCallExpression copy = (PsiCallExpression) expression.copy(); //see IDEADEV-8174
             try {
               copy.getTypeArgumentList().delete();
               if (copy.resolveMethod() != element) return;
-            }
-            catch (IncorrectOperationException e) {
+            } catch (IncorrectOperationException e) {
               LOG.error(e);
               return;
             }
 
             final ProblemDescriptor descriptor = inspectionManager.createProblemDescriptor(expression.getTypeArgumentList(),
-                                                                                           InspectionsBundle.message("inspection.redundant.type.problem.descriptor"),
-                                                                                           myQuickFixAction,
-                                                                                           ProblemHighlightType.LIKE_UNUSED_SYMBOL, false);
+                InspectionsBundle.message("inspection.redundant.type.problem.descriptor"),
+                myQuickFixAction,
+                ProblemHighlightType.LIKE_UNUSED_SYMBOL, false);
             problems.add(descriptor);
           }
         }
@@ -149,13 +155,12 @@ public class RedundantTypeArgsInspection extends GenericsInspectionToolBase {
 
     @Override
     public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
-      final PsiReferenceParameterList typeArgumentList = (PsiReferenceParameterList)descriptor.getPsiElement();
+      final PsiReferenceParameterList typeArgumentList = (PsiReferenceParameterList) descriptor.getPsiElement();
       try {
         final PsiMethodCallExpression expr =
-          (PsiMethodCallExpression)JavaPsiFacade.getInstance(project).getElementFactory().createExpressionFromText("foo()", null);
+            (PsiMethodCallExpression) JavaPsiFacade.getInstance(project).getElementFactory().createExpressionFromText("foo()", null);
         typeArgumentList.replace(expr.getTypeArgumentList());
-      }
-      catch (IncorrectOperationException e) {
+      } catch (IncorrectOperationException e) {
         LOG.error(e);
       }
     }

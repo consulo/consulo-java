@@ -1,15 +1,15 @@
 package consulo.java.manifest.editor.completionProviders;
 
-import consulo.language.editor.completion.CompletionParameters;
-import consulo.language.editor.QualifiedNameProvider;
-import consulo.navigation.ItemPresentation;
-import com.intellij.navigation.ItemPresentationProviders;
-import consulo.navigation.NavigationItem;
 import consulo.application.ApplicationManager;
 import consulo.application.util.function.Computable;
+import consulo.language.editor.QualifiedNameProvider;
+import consulo.language.editor.completion.CompletionParameters;
+import consulo.language.editor.ui.awt.TextFieldWithAutoCompletionListProvider;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
-import consulo.language.editor.ui.awt.TextFieldWithAutoCompletionListProvider;
+import consulo.navigation.ItemPresentation;
+import consulo.navigation.ItemPresentationProvider;
+import consulo.navigation.NavigationItem;
 import consulo.ui.image.Image;
 import org.osmorc.manifest.lang.headerparser.HeaderParser;
 import org.osmorc.manifest.lang.psi.Clause;
@@ -24,9 +24,9 @@ import java.util.Collections;
 import java.util.List;
 
 /**
-* @author VISTALL
-* @since 8:57/04.05.13
-*/
+ * @author VISTALL
+ * @since 8:57/04.05.13
+ */
 public class HeaderValueCompletionProvider extends TextFieldWithAutoCompletionListProvider<Object> {
 
   private final Header myHeaderByName;
@@ -57,7 +57,7 @@ public class HeaderValueCompletionProvider extends TextFieldWithAutoCompletionLi
         PsiReference[] references = myHeaderParser.getReferences(value);
         for (PsiReference reference : references) {
           for (Object o : reference.getVariants()) {
-            if(myHeaderParser.isAcceptable(o)) {
+            if (myHeaderParser.isAcceptable(o)) {
               objects.add(o);
             }
           }
@@ -71,7 +71,7 @@ public class HeaderValueCompletionProvider extends TextFieldWithAutoCompletionLi
   @Override
   protected Image getIcon(@Nonnull Object item) {
     if (item instanceof NavigationItem) {
-      ItemPresentation itemPresentation = ItemPresentationProviders.getItemPresentation((NavigationItem)item);
+      ItemPresentation itemPresentation = ItemPresentationProvider.getItemPresentation((NavigationItem) item);
       if (itemPresentation != null) {
         return itemPresentation.getIcon();
       }
@@ -84,7 +84,7 @@ public class HeaderValueCompletionProvider extends TextFieldWithAutoCompletionLi
   protected String getLookupString(@Nonnull Object item) {
     if (item instanceof PsiElement) {
       for (QualifiedNameProvider provider : QualifiedNameProvider.EP_NAME.getExtensionList()) {
-        String result = provider.getQualifiedName((PsiElement)item);
+        String result = provider.getQualifiedName((PsiElement) item);
         if (result != null) {
           return result;
         }

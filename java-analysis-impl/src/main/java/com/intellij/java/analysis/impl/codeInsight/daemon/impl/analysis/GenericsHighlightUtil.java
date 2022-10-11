@@ -15,41 +15,40 @@
  */
 package com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis;
 
-import com.intellij.java.language.impl.codeInsight.daemon.JavaErrorBundle;
-import consulo.language.editor.rawHighlight.HighlightInfo;
-import consulo.language.editor.rawHighlight.HighlightInfoType;
-import consulo.language.editor.rawHighlight.HighlightInfoHolder;
-import com.intellij.java.language.codeInsight.daemon.impl.analysis.JavaGenericsUtil;
-import consulo.language.editor.intention.QuickFixAction;
-import consulo.language.editor.internal.QuickFixActionRegistrarImpl;
 import com.intellij.java.analysis.codeInsight.intention.QuickFixFactory;
 import com.intellij.java.analysis.impl.psi.util.PsiMatchers;
-import com.intellij.java.language.psi.*;
-import com.intellij.java.language.psi.util.*;
-import consulo.project.DumbService;
-import consulo.application.dumb.IndexNotReadyException;
-import consulo.project.Project;
+import com.intellij.java.language.LanguageLevel;
+import com.intellij.java.language.codeInsight.daemon.impl.analysis.JavaGenericsUtil;
+import com.intellij.java.language.impl.codeInsight.daemon.JavaErrorBundle;
+import com.intellij.java.language.impl.psi.impl.PsiClassImplUtil;
 import com.intellij.java.language.projectRoots.JavaSdkVersion;
 import com.intellij.java.language.projectRoots.JavaVersionService;
+import com.intellij.java.language.psi.PsiElementFactory;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.search.PsiShortNamesCache;
+import com.intellij.java.language.psi.search.searches.SuperMethodsSearch;
+import com.intellij.java.language.psi.util.*;
+import consulo.application.dumb.IndexNotReadyException;
+import consulo.document.util.TextRange;
+import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.content.FileIndexFacade;
+import consulo.language.editor.intention.QuickFixAction;
+import consulo.language.editor.internal.QuickFixActionRegistrarImpl;
+import consulo.language.editor.rawHighlight.HighlightInfo;
+import consulo.language.editor.rawHighlight.HighlightInfoHolder;
+import consulo.language.editor.rawHighlight.HighlightInfoType;
+import consulo.language.psi.*;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.search.ReferencesSearch;
+import consulo.language.psi.util.PsiMatcherImpl;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.logging.Logger;
+import consulo.project.DumbService;
+import consulo.project.Project;
+import consulo.util.collection.*;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.Pair;
-import consulo.document.util.TextRange;
 import consulo.virtualFileSystem.VirtualFile;
-import com.intellij.java.language.LanguageLevel;
-import com.intellij.psi.*;
-import com.intellij.java.language.impl.psi.impl.PsiClassImplUtil;
-import consulo.language.psi.scope.GlobalSearchScope;
-import com.intellij.java.language.psi.search.PsiShortNamesCache;
-import consulo.language.psi.search.ReferencesSearch;
-import com.intellij.java.language.psi.search.searches.SuperMethodsSearch;
-import com.intellij.psi.util.*;
-import consulo.ide.impl.idea.util.ArrayUtilRt;
-import consulo.util.collection.ContainerUtil;
-import consulo.java.language.module.util.JavaClassNames;
-import consulo.logging.Logger;
-import consulo.util.collection.Maps;
-import consulo.util.collection.Sets;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
@@ -223,7 +222,7 @@ public class GenericsHighlightUtil {
         final PsiMethod method = ((PsiCallExpression) pParent).resolveMethod();
         if (method != null) {
           final PsiExpression[] expressions = ((PsiCallExpression) pParent).getArgumentList().getExpressions();
-          final int idx = ArrayUtilRt.find(expressions, newExpression);
+          final int idx = ArrayUtil.find(expressions, newExpression);
           if (idx > -1) {
             final PsiParameterList parameterList = method.getParameterList();
             if (idx < parameterList.getParametersCount()) {
@@ -915,7 +914,7 @@ public class GenericsHighlightUtil {
       if (!level.isAtLeast(LanguageLevel.JDK_1_7)) {
         for (PsiJavaCodeReferenceElement referenceElement : typeParameter1.getExtendsList().getReferenceElements()) {
           final PsiElement resolve = referenceElement.resolve();
-          if (resolve instanceof PsiTypeParameter && ArrayUtilRt.find(parameters, resolve) > i) {
+          if (resolve instanceof PsiTypeParameter && ArrayUtil.find(parameters, resolve) > i) {
             return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(referenceElement.getTextRange()).descriptionAndTooltip("Illegal forward reference").create();
           }
         }
@@ -1143,7 +1142,7 @@ public class GenericsHighlightUtil {
         list.add(HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(child).descriptionAndTooltip(description).create());
       }
     }
-    return ContainerUtil.notNullize(list);
+    return Lists.notNullize(list);
   }
 
   @Nullable

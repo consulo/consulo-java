@@ -1,35 +1,47 @@
 package com.intellij.java.analysis.impl.codeInspection.booleanIsAlwaysInverted;
 
-import consulo.language.editor.scope.AnalysisScope;
-import consulo.ide.impl.idea.codeInsight.daemon.GroupNames;
-import com.intellij.codeInspection.reference.*;
-import consulo.dataContext.DataManager;
 import com.intellij.java.analysis.codeInspection.GlobalJavaInspectionContext;
 import com.intellij.java.analysis.codeInspection.GlobalJavaInspectionTool;
+import com.intellij.java.analysis.codeInspection.GroupNames;
 import com.intellij.java.analysis.codeInspection.reference.RefJavaVisitor;
 import com.intellij.java.analysis.codeInspection.reference.RefMethod;
+import com.intellij.java.analysis.refactoring.JavaRefactoringActionHandlerFactory;
 import com.intellij.java.language.psi.*;
 import consulo.application.ApplicationManager;
+import consulo.dataContext.DataManager;
+import consulo.language.ast.IElementType;
+import consulo.language.editor.inspection.*;
+import consulo.language.editor.inspection.reference.RefElement;
+import consulo.language.editor.inspection.reference.RefEntity;
+import consulo.language.editor.inspection.reference.RefGraphAnnotator;
+import consulo.language.editor.inspection.reference.RefManager;
+import consulo.language.editor.inspection.scheme.InspectionManager;
+import consulo.language.editor.rawHighlight.HighlightDisplayLevel;
+import consulo.language.editor.refactoring.action.RefactoringActionHandler;
+import consulo.language.editor.scope.AnalysisScope;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiReference;
+import consulo.language.psi.util.PsiTreeUtil;
 import consulo.project.Project;
 import consulo.util.dataholder.Key;
-import com.intellij.psi.*;
-import consulo.language.ast.IElementType;
-import consulo.language.psi.util.PsiTreeUtil;
-import com.intellij.java.analysis.refactoring.JavaRefactoringActionHandlerFactory;
-import consulo.language.editor.refactoring.action.RefactoringActionHandler;
 import org.jetbrains.annotations.NonNls;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import java.util.Collection;
 
 /**
  * User: anna
  * Date: 06-Jan-2006
  */
-public class BooleanMethodIsAlwaysInvertedInspection extends GlobalJavaInspectionTool
-{
+public class BooleanMethodIsAlwaysInvertedInspection extends GlobalJavaInspectionTool {
   private static final Key<Boolean> ALWAYS_INVERTED = Key.create("ALWAYS_INVERTED_METHOD");
+
+  @Nonnull
+  @Override
+  public HighlightDisplayLevel getDefaultLevel() {
+    return HighlightDisplayLevel.WARNING;
+  }
 
   @Override
   @Nonnull
@@ -62,18 +74,18 @@ public class BooleanMethodIsAlwaysInvertedInspection extends GlobalJavaInspectio
                                                 final InspectionManager manager,
                                                 final GlobalInspectionContext globalContext) {
     if (refEntity instanceof RefMethod) {
-      RefMethod refMethod = (RefMethod)refEntity;
+      RefMethod refMethod = (RefMethod) refEntity;
       if (!refMethod.isReferenced()) return null;
       if (hasNonInvertedCalls(refMethod)) return null;
       if (!refMethod.getSuperMethods().isEmpty()) return null;
-      final PsiMethod psiMethod = (PsiMethod)refMethod.getElement();
+      final PsiMethod psiMethod = (PsiMethod) refMethod.getElement();
       final PsiIdentifier psiIdentifier = psiMethod.getNameIdentifier();
       if (psiIdentifier != null) {
         return new ProblemDescriptor[]{manager.createProblemDescriptor(psiIdentifier,
-                                                                       InspectionsBundle
-                                                                         .message("boolean.method.is.always.inverted.problem.descriptor"),
-                                                                       new InvertMethodFix(),
-                                                                       ProblemHighlightType.GENERIC_ERROR_OR_WARNING, false)};
+            InspectionsBundle
+                .message("boolean.method.is.always.inverted.problem.descriptor"),
+            new InvertMethodFix(),
+            ProblemHighlightType.GENERIC_ERROR_OR_WARNING, false)};
       }
     }
     return null;
@@ -103,7 +115,7 @@ public class BooleanMethodIsAlwaysInvertedInspection extends GlobalJavaInspectio
             public boolean process(PsiReference psiReference) {
               final PsiElement psiReferenceExpression = psiReference.getElement();
               if (psiReferenceExpression instanceof PsiReferenceExpression &&
-                  !isInvertedMethodCall((PsiReferenceExpression)psiReferenceExpression)) {
+                  !isInvertedMethodCall((PsiReferenceExpression) psiReferenceExpression)) {
                 descriptionsProcessor.ignoreElement(refMethod);
               }
               return false;
@@ -128,10 +140,10 @@ public class BooleanMethodIsAlwaysInvertedInspection extends GlobalJavaInspectio
 
   private static void checkMethodCall(RefElement refWhat, final PsiElement element) {
     if (!(refWhat instanceof RefMethod)) return;
-    final RefMethod refMethod = (RefMethod)refWhat;
+    final RefMethod refMethod = (RefMethod) refWhat;
     final PsiElement psiElement = refMethod.getElement();
     if (!(psiElement instanceof PsiMethod)) return;
-    final PsiMethod psiMethod = (PsiMethod)psiElement;
+    final PsiMethod psiMethod = (PsiMethod) psiElement;
     if (!PsiType.BOOLEAN.equals(psiMethod.getReturnType())) return;
     element.accept(new JavaRecursiveElementVisitor() {
       @Override
@@ -208,8 +220,7 @@ public class BooleanMethodIsAlwaysInvertedInspection extends GlobalJavaInspectio
       };
       if (ApplicationManager.getApplication().isUnitTestMode()) {
         runnable.run();
-      }
-      else {
+      } else {
         ApplicationManager.getApplication().invokeLater(runnable, project.getDisposed());
       }
     }

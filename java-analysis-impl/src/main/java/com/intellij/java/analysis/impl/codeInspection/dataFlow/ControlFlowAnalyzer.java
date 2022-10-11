@@ -1,9 +1,6 @@
 // Copyright 2000-2019 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.analysis.impl.codeInspection.dataFlow;
 
-import com.intellij.java.language.impl.codeInsight.ExceptionUtil;
-import com.intellij.java.language.codeInsight.Nullability;
-import consulo.language.editor.ImplicitUsageProvider;
 import com.intellij.java.analysis.codeInsight.daemon.JavaImplicitUsageProvider;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.UnusedSymbolUtil;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.ControlFlow.ControlFlowOffset;
@@ -17,23 +14,27 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.rangeSet.LongRang
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.types.DfType;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.types.DfTypes;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.*;
+import com.intellij.java.language.codeInsight.Nullability;
+import com.intellij.java.language.impl.codeInsight.ExceptionUtil;
 import com.intellij.java.language.psi.*;
-import consulo.logging.Logger;
-import consulo.project.Project;
-import com.intellij.psi.*;
-import consulo.language.psi.scope.GlobalSearchScope;
-import consulo.language.ast.IElementType;
 import com.intellij.java.language.psi.util.InheritanceUtil;
-import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
+import com.siyeh.ig.callMatcher.CallMatcher;
+import com.siyeh.ig.psiutils.*;
+import consulo.language.ast.IElementType;
+import consulo.language.editor.ImplicitUsageProvider;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiErrorElement;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
-import consulo.ide.impl.idea.util.ObjectUtils;
+import consulo.logging.Logger;
+import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.collection.FList;
 import consulo.util.collection.FactoryMap;
-import com.siyeh.ig.callMatcher.CallMatcher;
-import com.siyeh.ig.psiutils.*;
+import consulo.util.lang.ObjectUtil;
 import one.util.streamex.StreamEx;
 import org.jetbrains.annotations.Contract;
 
@@ -697,7 +698,7 @@ public class ControlFlowAnalyzer extends JavaElementVisitor {
     if (initialValue instanceof Number) {
       origin = myFactory.getConstant(initialValue, type);
     } else if (initializer instanceof PsiReferenceExpression) {
-      PsiVariable initialVariable = ObjectUtils.tryCast(((PsiReferenceExpression) initializer).resolve(), PsiVariable.class);
+      PsiVariable initialVariable = ObjectUtil.tryCast(((PsiReferenceExpression) initializer).resolve(), PsiVariable.class);
       if ((PsiUtil.isJvmLocalVariable(initialVariable))
           && !VariableAccessUtils.variableIsAssigned(initialVariable, statement.getBody())) {
         origin = myFactory.getVarFactory().createVariableValue(initialVariable);
@@ -1303,7 +1304,7 @@ public class ControlFlowAnalyzer extends JavaElementVisitor {
     PsiExpression[] initializers = expression.getInitializers();
     DfaExpressionFactory expressionFactory = myFactory.getExpressionFactory();
     if (arrayWriteTarget != null) {
-      PsiVariable arrayVariable = ObjectUtils.tryCast(arrayWriteTarget.getPsiVariable(), PsiVariable.class);
+      PsiVariable arrayVariable = ObjectUtil.tryCast(arrayWriteTarget.getPsiVariable(), PsiVariable.class);
       if (arrayWriteTarget.isFlushableByCalls() ||
           arrayVariable == null ||
           VariableAccessUtils.variableIsUsed(arrayVariable, expression) ||
@@ -1656,7 +1657,7 @@ public class ControlFlowAnalyzer extends JavaElementVisitor {
         pushUnknown();
         break;
       }
-      call = ObjectUtils.tryCast(PsiUtil.skipParenthesizedExprDown(qualifierExpression), PsiMethodCallExpression.class);
+      call = ObjectUtil.tryCast(PsiUtil.skipParenthesizedExprDown(qualifierExpression), PsiMethodCallExpression.class);
       if (call == null) {
         qualifierExpression.accept(this);
         break;
@@ -1698,7 +1699,7 @@ public class ControlFlowAnalyzer extends JavaElementVisitor {
 
   void addBareCall(@Nullable PsiMethodCallExpression expression, @Nonnull PsiReferenceExpression reference) {
     addConditionalErrorThrow();
-    PsiMethod method = ObjectUtils.tryCast(reference.resolve(), PsiMethod.class);
+    PsiMethod method = ObjectUtil.tryCast(reference.resolve(), PsiMethod.class);
     List<? extends MethodContract> contracts =
         method == null ? Collections.emptyList() :
             DfaUtil.addRangeContracts(method, JavaMethodContractUtil.getMethodCallContracts(method, expression));

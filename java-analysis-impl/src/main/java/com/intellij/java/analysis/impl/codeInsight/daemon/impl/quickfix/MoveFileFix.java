@@ -15,72 +15,60 @@
  */
 package com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix;
 
-import java.io.IOException;
-
-import javax.annotation.Nonnull;
-
-import org.jetbrains.annotations.Nls;
-import consulo.language.editor.intention.IntentionAction;
 import consulo.codeEditor.Editor;
-import consulo.project.Project;
-import consulo.virtualFileSystem.VirtualFile;
+import consulo.language.editor.intention.IntentionAction;
 import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+import consulo.virtualFileSystem.VirtualFile;
+import org.jetbrains.annotations.Nls;
 
-public class MoveFileFix implements IntentionAction
-{
-	private final VirtualFile myFile;
-	private final VirtualFile myTarget;
-	private final String myMessage;
+import javax.annotation.Nonnull;
+import java.io.IOException;
 
-	public MoveFileFix(@Nonnull VirtualFile file, @Nonnull VirtualFile target, @Nonnull @Nls String message)
-	{
-		myFile = file;
-		myTarget = target;
-		myMessage = message;
-	}
+public class MoveFileFix implements IntentionAction {
+  private final VirtualFile myFile;
+  private final VirtualFile myTarget;
+  private final String myMessage;
 
-	@Nls
-	@Nonnull
-	@Override
-	public String getText()
-	{
-		return myMessage;
-	}
+  public MoveFileFix(@Nonnull VirtualFile file, @Nonnull VirtualFile target, @Nonnull @Nls String message) {
+    myFile = file;
+    myTarget = target;
+    myMessage = message;
+  }
 
-	@Nls
-	@Nonnull
-	@Override
-	public String getFamilyName()
-	{
-		return getText();
-	}
+  @Nls
+  @Nonnull
+  @Override
+  public String getText() {
+    return myMessage;
+  }
 
-	@Override
-	public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file)
-	{
-		return true;
-	}
+  @Nls
+  @Nonnull
+  @Override
+  public String getFamilyName() {
+    return getText();
+  }
 
-	@Override
-	public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException
-	{
-		if(myFile.isValid() && myTarget.isValid())
-		{
-			try
-			{
-				myFile.move(this, myTarget);
-			}
-			catch(IOException e)
-			{
-				throw new IncorrectOperationException("Cannot move '" + myFile.getPath() + "' into '" + myTarget.getPath() + "'", (Throwable) e);
-			}
-		}
-	}
+  @Override
+  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+    return true;
+  }
 
-	@Override
-	public boolean startInWriteAction()
-	{
-		return true;
-	}
+  @Override
+  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+    if (myFile.isValid() && myTarget.isValid()) {
+      try {
+        myFile.move(this, myTarget);
+      } catch (IOException e) {
+        throw new IncorrectOperationException("Cannot move '" + myFile.getPath() + "' into '" + myTarget.getPath() + "'", (Throwable) e);
+      }
+    }
+  }
+
+  @Override
+  public boolean startInWriteAction() {
+    return true;
+  }
 }

@@ -15,90 +15,77 @@
  */
 package com.intellij.java.compiler.artifact.impl.artifacts;
 
+import com.intellij.java.compiler.artifact.impl.ManifestFileUtil;
+import com.intellij.java.compiler.artifact.impl.ui.ManifestFileConfiguration;
+import consulo.compiler.artifact.ArtifactType;
+import consulo.compiler.artifact.element.CompositePackagingElement;
+import consulo.compiler.artifact.element.PackagingElementResolvingContext;
+import consulo.logging.Logger;
+import consulo.util.io.FileUtil;
+import consulo.virtualFileSystem.LocalFileSystem;
+import consulo.virtualFileSystem.VirtualFile;
+
+import javax.annotation.Nullable;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import consulo.logging.Logger;
-import consulo.ide.impl.idea.openapi.util.io.FileUtil;
-import consulo.virtualFileSystem.LocalFileSystem;
-import consulo.virtualFileSystem.VirtualFile;
-import consulo.compiler.artifact.ArtifactType;
-import consulo.compiler.artifact.element.CompositePackagingElement;
-import consulo.compiler.artifact.element.PackagingElementResolvingContext;
-import com.intellij.java.compiler.artifact.impl.ManifestFileUtil;
-import com.intellij.java.compiler.artifact.impl.ui.ManifestFileConfiguration;
+public class ManifestFilesInfo {
+  private static final Logger LOG = Logger.getInstance(ManifestFilesInfo.class);
+  private final Map<VirtualFile, ManifestFileConfiguration> myManifestFiles = new HashMap<VirtualFile, ManifestFileConfiguration>();
+  private final Map<VirtualFile, ManifestFileConfiguration> myOriginalManifestFiles = new HashMap<VirtualFile, ManifestFileConfiguration>();
 
-import javax.annotation.Nullable;
+  @Nullable
+  public ManifestFileConfiguration getManifestFile(CompositePackagingElement<?> element, ArtifactType artifactType,
+                                                   final PackagingElementResolvingContext context) {
+    final VirtualFile manifestFile = ManifestFileUtil.findManifestFile(element, context, artifactType);
+    if (manifestFile == null) {
+      return null;
+    }
 
-public class ManifestFilesInfo
-{
-	private static final Logger LOG = Logger.getInstance(ManifestFilesInfo.class);
-	private final Map<VirtualFile, ManifestFileConfiguration> myManifestFiles = new HashMap<VirtualFile, ManifestFileConfiguration>();
-	private final Map<VirtualFile, ManifestFileConfiguration> myOriginalManifestFiles = new HashMap<VirtualFile, ManifestFileConfiguration>();
+    ManifestFileConfiguration configuration = myManifestFiles.get(manifestFile);
+    if (configuration == null) {
+      configuration = ManifestFileUtil.createManifestFileConfiguration(manifestFile);
+      myOriginalManifestFiles.put(manifestFile, new ManifestFileConfiguration(configuration));
+      myManifestFiles.put(manifestFile, configuration);
+    }
+    return configuration;
+  }
 
-	@Nullable
-	public ManifestFileConfiguration getManifestFile(CompositePackagingElement<?> element, ArtifactType artifactType,
-			final PackagingElementResolvingContext context)
-	{
-		final VirtualFile manifestFile = ManifestFileUtil.findManifestFile(element, context, artifactType);
-		if(manifestFile == null)
-		{
-			return null;
-		}
+  public void saveManifestFiles() {
+    for (Map.Entry<VirtualFile, ManifestFileConfiguration> entry : myManifestFiles.entrySet()) {
+      final ManifestFileConfiguration configuration = entry.getValue();
+      final String path = configuration.getManifestFilePath();
+      if (path == null) {
+        continue;
+      }
 
-		ManifestFileConfiguration configuration = myManifestFiles.get(manifestFile);
-		if(configuration == null)
-		{
-			configuration = ManifestFileUtil.createManifestFileConfiguration(manifestFile);
-			myOriginalManifestFiles.put(manifestFile, new ManifestFileConfiguration(configuration));
-			myManifestFiles.put(manifestFile, configuration);
-		}
-		return configuration;
-	}
+      final ManifestFileConfiguration original = myOriginalManifestFiles.get(entry.getKey());
+      if (original != null && original.equals(configuration)) {
+        continue;
+      }
 
-	public void saveManifestFiles()
-	{
-		for(Map.Entry<VirtualFile, ManifestFileConfiguration> entry : myManifestFiles.entrySet())
-		{
-			final ManifestFileConfiguration configuration = entry.getValue();
-			final String path = configuration.getManifestFilePath();
-			if(path == null)
-			{
-				continue;
-			}
+      VirtualFile file = LocalFileSystem.getInstance().findFileByPath(path);
+      if (file == null) {
+        final File ioFile = new File(FileUtil.toSystemDependentName(path));
+        FileUtil.createIfDoesntExist(ioFile);
+        file = LocalFileSystem.getInstance().refreshAndFindFileByIoFile(ioFile);
+        if (file == null) {
+          //todo[nik] improve
+          LOG.error("cannot create file: " + ioFile);
+        }
+      }
 
-			final ManifestFileConfiguration original = myOriginalManifestFiles.get(entry.getKey());
-			if(original != null && original.equals(configuration))
-			{
-				continue;
-			}
+      ManifestFileUtil.updateManifest(file, configuration.getMainClass(), configuration.getClasspath(), true);
+    }
+  }
 
-			VirtualFile file = LocalFileSystem.getInstance().findFileByPath(path);
-			if(file == null)
-			{
-				final File ioFile = new File(FileUtil.toSystemDependentName(path));
-				FileUtil.createIfDoesntExist(ioFile);
-				file = LocalFileSystem.getInstance().refreshAndFindFileByIoFile(ioFile);
-				if(file == null)
-				{
-					//todo[nik] improve
-					LOG.error("cannot create file: " + ioFile);
-				}
-			}
+  public boolean isManifestFilesModified() {
+    return !myOriginalManifestFiles.equals(myManifestFiles);
+  }
 
-			ManifestFileUtil.updateManifest(file, configuration.getMainClass(), configuration.getClasspath(), true);
-		}
-	}
-
-	public boolean isManifestFilesModified()
-	{
-		return !myOriginalManifestFiles.equals(myManifestFiles);
-	}
-
-	public void clear()
-	{
-		myManifestFiles.clear();
-		myOriginalManifestFiles.clear();
-	}
+  public void clear() {
+    myManifestFiles.clear();
+    myOriginalManifestFiles.clear();
+  }
 }

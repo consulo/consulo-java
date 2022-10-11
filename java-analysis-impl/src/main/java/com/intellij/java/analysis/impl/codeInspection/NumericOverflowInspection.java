@@ -15,19 +15,20 @@
  */
 package com.intellij.java.analysis.impl.codeInspection;
 
-import consulo.ide.impl.idea.codeInsight.daemon.GroupNames;
-import com.intellij.java.language.impl.codeInsight.daemon.JavaErrorBundle;
-import consulo.language.editor.inspection.ProblemHighlightType;
-import consulo.language.editor.inspection.ProblemsHolder;
 import com.intellij.java.analysis.codeInspection.BaseJavaBatchLocalInspectionTool;
+import com.intellij.java.analysis.codeInspection.GroupNames;
+import com.intellij.java.language.impl.codeInsight.daemon.JavaErrorBundle;
 import com.intellij.java.language.psi.JavaElementVisitor;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiReferenceExpression;
-import consulo.project.Project;
-import com.intellij.psi.*;
 import com.intellij.java.language.psi.util.ConstantEvaluationOverflowException;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
+import consulo.language.editor.inspection.ProblemHighlightType;
+import consulo.language.editor.inspection.ProblemsHolder;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiElementVisitor;
+import consulo.project.Project;
 import consulo.util.dataholder.Key;
 import org.jetbrains.annotations.Nls;
 
@@ -36,7 +37,7 @@ import javax.annotation.Nonnull;
 /**
  * User: cdr
  */
-public class NumericOverflowInspection extends BaseJavaBatchLocalInspectionTool {
+public abstract class NumericOverflowInspection extends BaseJavaBatchLocalInspectionTool {
   private static final Key<String> HAS_OVERFLOW_IN_CHILD = Key.create("HAS_OVERFLOW_IN_CHILD");
 
   @Nls

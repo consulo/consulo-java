@@ -22,10 +22,11 @@ package com.intellij.java.analysis.impl.psi.util;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.java.language.psi.PsiModifierListOwner;
-import com.intellij.psi.*;
-import consulo.ide.impl.psi.util.PsiMatcherExpression;
-import com.intellij.psi.xml.XmlTag;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiNamedElement;
+import consulo.language.psi.util.PsiMatcherExpression;
 import consulo.util.collection.ArrayUtil;
+import consulo.xml.psi.xml.XmlTag;
 
 import javax.annotation.Nonnull;
 

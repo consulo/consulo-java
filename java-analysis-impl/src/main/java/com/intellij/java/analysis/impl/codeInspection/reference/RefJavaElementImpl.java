@@ -20,18 +20,20 @@
  */
 package com.intellij.java.analysis.impl.codeInspection.reference;
 
-import consulo.ide.impl.VfsIconUtil;
-import consulo.language.editor.inspection.InspectionsBundle;
-import consulo.language.editor.inspection.reference.RefElement;
-import consulo.ide.impl.idea.codeInspection.reference.RefElementImpl;
-import consulo.language.editor.inspection.reference.RefManager;
 import com.intellij.java.analysis.codeInspection.reference.*;
 import com.intellij.java.language.psi.*;
 import consulo.component.util.Iconable;
-import com.intellij.psi.*;
-import consulo.util.collection.Stack;
-import consulo.ide.impl.VfsIconUtil;
+import consulo.language.editor.impl.inspection.reference.RefElementImpl;
+import consulo.language.editor.inspection.InspectionsBundle;
+import consulo.language.editor.inspection.reference.RefElement;
+import consulo.language.editor.inspection.reference.RefManager;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiNamedElement;
+import consulo.language.psi.SyntheticElement;
 import consulo.ui.image.Image;
+import consulo.util.collection.Stack;
+import consulo.virtualFileSystem.VirtualFileManager;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -291,7 +293,7 @@ public abstract class RefJavaElementImpl extends RefElementImpl implements RefJa
     if (isSyntheticJSP()) {
       final PsiElement element = getPsiElement();
       if (element != null && element.isValid()) {
-        return VfsIconUtil.getIcon(element.getContainingFile().getVirtualFile(), Iconable.ICON_FLAG_VISIBILITY | Iconable.ICON_FLAG_READ_STATUS, element.getProject());
+        return VirtualFileManager.getInstance().getFileIcon(element.getContainingFile().getVirtualFile(), element.getProject(), Iconable.ICON_FLAG_VISIBILITY | Iconable.ICON_FLAG_READ_STATUS);
       }
     }
     return super.getIcon(expanded);

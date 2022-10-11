@@ -16,20 +16,21 @@
 
 package com.intellij.java.analysis.impl.codeInspection.unusedImport;
 
-import javax.annotation.Nonnull;
-
-import org.jetbrains.annotations.NonNls;
-import consulo.ide.impl.idea.codeInsight.daemon.GroupNames;
+import com.intellij.java.analysis.codeInspection.GroupNames;
 import com.intellij.java.analysis.impl.codeInspection.BaseJavaLocalInspectionTool;
 import consulo.language.editor.inspection.InspectionsBundle;
 import consulo.language.editor.inspection.PairedUnfairLocalInspectionTool;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
 
 /**
  * User: anna
  * Date: 17-Feb-2006
  */
-public class UnusedImportLocalInspection extends BaseJavaLocalInspectionTool implements PairedUnfairLocalInspectionTool {
-  @NonNls public static final String SHORT_NAME = "UNUSED_IMPORT";
+public abstract class UnusedImportLocalInspection extends BaseJavaLocalInspectionTool implements PairedUnfairLocalInspectionTool {
+  @NonNls
+  public static final String SHORT_NAME = "UNUSED_IMPORT";
   public static final String DISPLAY_NAME = InspectionsBundle.message("unused.import");
 
   @Override

@@ -15,9 +15,9 @@
  */
 package com.intellij.java.compiler.artifact.impl.elements;
 
-import consulo.ide.impl.idea.packaging.impl.elements.ArchivePackagingElement;
-import consulo.packaging.elements.ArchivePackageWriter;
-import consulo.packaging.impl.elements.ZipArchivePackagingElement;
+import consulo.compiler.artifact.element.ArchivePackageWriter;
+import consulo.compiler.artifact.element.ArchivePackagingElement;
+import consulo.compiler.artifact.element.ZipArchivePackagingElement;
 
 import javax.annotation.Nonnull;
 

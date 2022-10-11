@@ -18,12 +18,13 @@ package com.intellij.java.analysis.impl.codeInspection.concurrencyAnnotations;
 import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.language.codeInsight.ConcurrencyAnnotationsManager;
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.*;
-import consulo.ide.impl.psi.impl.cache.impl.id.IdIndex;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.java.language.psi.javadoc.PsiDocTag;
 import consulo.application.util.CachedValueProvider;
-import consulo.application.util.CachedValuesManager;
+import consulo.language.psi.PsiCompiledElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.search.PsiSearchHelper;
+import consulo.language.psi.util.LanguageCachedValueUtil;
 import consulo.language.psi.util.PsiTreeUtil;
 
 import javax.annotation.Nonnull;
@@ -55,8 +56,8 @@ public class JCiPUtil {
   }
 
   private static boolean containsImmutableWord(PsiFile file) {
-    return CachedValuesManager.getCachedValue(file, () ->
-        CachedValueProvider.Result.create(IdIndex.hasIdentifierInFile(file, "Immutable"), file));
+    return LanguageCachedValueUtil.getCachedValue(file, () ->
+        CachedValueProvider.Result.create(PsiSearchHelper.getInstance(file.getProject()).hasIdentifierInFile(file, "Immutable"), file));
   }
 
   @Nullable

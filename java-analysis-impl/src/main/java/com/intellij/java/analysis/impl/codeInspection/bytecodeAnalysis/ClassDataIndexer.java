@@ -3,19 +3,18 @@ package com.intellij.java.analysis.impl.codeInspection.bytecodeAnalysis;
 
 import com.intellij.java.analysis.impl.codeInspection.bytecodeAnalysis.asm.*;
 import consulo.application.ApplicationManager;
-import consulo.component.ProcessCanceledException;
 import consulo.application.progress.ProgressManager;
-import consulo.project.Project;
-import consulo.virtualFileSystem.VirtualFile;
-import consulo.language.psi.scope.GlobalSearchScope;
-import consulo.ide.impl.idea.util.Consumer;
-import consulo.util.collection.ContainerUtil;
-import consulo.ide.impl.idea.util.gist.GistManager;
-import consulo.ide.impl.idea.util.gist.VirtualFileGist;
-import consulo.language.psi.stub.FileBasedIndex;
+import consulo.component.ProcessCanceledException;
 import consulo.internal.org.objectweb.asm.*;
 import consulo.internal.org.objectweb.asm.tree.MethodNode;
 import consulo.internal.org.objectweb.asm.tree.analysis.AnalyzerException;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.stub.FileBasedIndex;
+import consulo.language.psi.stub.gist.GistManager;
+import consulo.language.psi.stub.gist.VirtualFileGist;
+import consulo.project.Project;
+import consulo.util.collection.ContainerUtil;
+import consulo.virtualFileSystem.VirtualFile;
 import one.util.streamex.EntryStream;
 import one.util.streamex.StreamEx;
 
@@ -27,10 +26,7 @@ import java.io.IOException;
 import java.security.MessageDigest;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
-import java.util.function.BiFunction;
-import java.util.function.BinaryOperator;
-import java.util.function.Function;
-import java.util.function.IntFunction;
+import java.util.function.*;
 import java.util.stream.Stream;
 
 import static com.intellij.java.analysis.impl.codeInspection.bytecodeAnalysis.Direction.*;
@@ -45,7 +41,7 @@ import static com.intellij.java.analysis.impl.codeInspection.bytecodeAnalysis.Pr
  *
  * @author lambdamix
  */
-public class ClassDataIndexer implements VirtualFileGist.GistCalculator<Map<HMember, Equations>> {
+public class ClassDataIndexer implements BiFunction<Project, VirtualFile,Map<HMember, Equations>> {
   static final String STRING_CONCAT_FACTORY = "java/lang/invoke/StringConcatFactory";
 
   public static final Consumer<Map<HMember, Equations>> ourIndexSizeStatistics =
@@ -64,7 +60,7 @@ public class ClassDataIndexer implements VirtualFileGist.GistCalculator<Map<HMem
 
   @Nullable
   @Override
-  public Map<HMember, Equations> calcData(Project project, @Nonnull VirtualFile file) {
+  public Map<HMember, Equations> apply(Project project, @Nonnull VirtualFile file) {
     HashMap<HMember, Equations> map = new HashMap<>();
     if (isFileExcluded(file)) {
       return map;
@@ -82,7 +78,7 @@ public class ClassDataIndexer implements VirtualFileGist.GistCalculator<Map<HMem
       // so here we suppose that exception is due to incorrect bytecode
       LOG.debug("Unexpected Error during indexing of bytecode", e);
     }
-    ourIndexSizeStatistics.consume(map);
+    ourIndexSizeStatistics.accept(map);
     return map;
   }
 
@@ -230,7 +226,7 @@ public class ClassDataIndexer implements VirtualFileGist.GistCalculator<Map<HMem
     private static final AtomicLong ourTotalCount = new AtomicLong(0);
 
     @Override
-    public void consume(Map<HMember, Equations> map) {
+    public void accept(Map<HMember, Equations> map) {
       try {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         new BytecodeAnalysisIndex.EquationsExternalizer().save(new DataOutputStream(stream), map);

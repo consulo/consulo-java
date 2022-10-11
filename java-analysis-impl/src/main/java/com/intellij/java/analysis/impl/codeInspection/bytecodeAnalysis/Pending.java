@@ -17,62 +17,52 @@
 package com.intellij.java.analysis.impl.codeInspection.bytecodeAnalysis;
 
 import javax.annotation.Nonnull;
-
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.stream.Stream;
 
-final class Pending implements Result
-{
-	@Nonnull
-	final Component[] delta; // sum
+final class Pending implements Result {
+  @Nonnull
+  final Component[] delta; // sum
 
-	Pending(Collection<Component> delta)
-	{
-		this(delta.toArray(Component.EMPTY_ARRAY));
-	}
+  Pending(Collection<Component> delta) {
+    this(delta.toArray(Component.EMPTY_ARRAY));
+  }
 
-	Pending(@Nonnull Component[] delta)
-	{
-		this.delta = delta;
-	}
+  Pending(@Nonnull Component[] delta) {
+    this.delta = delta;
+  }
 
-	@Override
-	public boolean equals(Object o)
-	{
-		if(this == o)
-			return true;
-		if(o == null || getClass() != o.getClass())
-			return false;
-		return Arrays.equals(delta, ((Pending) o).delta);
-	}
+  @Override
+  public boolean equals(Object o) {
+    if (this == o)
+      return true;
+    if (o == null || getClass() != o.getClass())
+      return false;
+    return Arrays.equals(delta, ((Pending) o).delta);
+  }
 
-	@Override
-	public int hashCode()
-	{
-		return Arrays.hashCode(delta);
-	}
+  @Override
+  public int hashCode() {
+    return Arrays.hashCode(delta);
+  }
 
-	@Nonnull
-	Pending copy()
-	{
-		Component[] copy = new Component[delta.length];
-		for(int i = 0; i < delta.length; i++)
-		{
-			copy[i] = delta[i].copy();
-		}
-		return new Pending(copy);
-	}
+  @Nonnull
+  Pending copy() {
+    Component[] copy = new Component[delta.length];
+    for (int i = 0; i < delta.length; i++) {
+      copy[i] = delta[i].copy();
+    }
+    return new Pending(copy);
+  }
 
-	@Override
-	public Stream<EKey> dependencies()
-	{
-		return Arrays.stream(delta).flatMap(component -> Stream.of(component.ids));
-	}
+  @Override
+  public Stream<EKey> dependencies() {
+    return Arrays.stream(delta).flatMap(component -> Stream.of(component.ids));
+  }
 
-	@Override
-	public String toString()
-	{
-		return "Pending[" + delta.length + "]";
-	}
+  @Override
+  public String toString() {
+    return "Pending[" + delta.length + "]";
+  }
 }

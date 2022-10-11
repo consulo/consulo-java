@@ -15,31 +15,31 @@
  */
 package com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis;
 
+import com.intellij.java.analysis.codeInsight.intention.QuickFixFactory;
+import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.codeInsight.AnnotationTargetUtil;
 import com.intellij.java.language.impl.codeInsight.daemon.JavaErrorBundle;
-import consulo.language.editor.rawHighlight.HighlightInfo;
-import consulo.language.editor.rawHighlight.HighlightInfoType;
-import consulo.language.editor.intention.QuickFixAction;
-import consulo.language.editor.intention.IntentionAction;
-import com.intellij.java.analysis.codeInsight.intention.QuickFixFactory;
-import com.intellij.java.language.psi.*;
-import consulo.codeEditor.Editor;
-import consulo.project.Project;
-import consulo.util.lang.Comparing;
-import consulo.language.pattern.ElementPattern;
-import com.intellij.java.language.LanguageLevel;
-import com.intellij.psi.*;
 import com.intellij.java.language.impl.psi.impl.PsiImplUtil;
 import com.intellij.java.language.impl.psi.impl.source.PsiClassReferenceType;
 import com.intellij.java.language.impl.psi.impl.source.PsiImmediateClassType;
+import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.ClassUtil;
-import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
-import consulo.language.util.IncorrectOperationException;
-import consulo.util.lang.ObjectUtil;
+import consulo.codeEditor.Editor;
 import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.editor.intention.IntentionAction;
+import consulo.language.editor.intention.QuickFixAction;
+import consulo.language.editor.rawHighlight.HighlightInfo;
+import consulo.language.editor.rawHighlight.HighlightInfoType;
+import consulo.language.pattern.ElementPattern;
+import consulo.language.psi.*;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
+import consulo.project.Project;
+import consulo.util.lang.Comparing;
+import consulo.util.lang.ObjectUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

@@ -18,7 +18,7 @@ package com.intellij.java.impl.codeInspection.magicConstant;
 import consulo.language.editor.scope.AnalysisScope;
 import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.language.codeInsight.ExternalAnnotationsManager;
-import consulo.ide.impl.idea.codeInsight.daemon.GroupNames;
+import com.intellij.java.analysis.codeInspection.GroupNames;
 import consulo.project.ui.view.tree.AbstractTreeNode;
 import com.intellij.java.analysis.impl.codeInspection.BaseJavaLocalInspectionTool;
 import com.intellij.java.language.psi.*;

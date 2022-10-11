@@ -15,36 +15,36 @@
  */
 package com.intellij.java.analysis.impl.codeInsight;
 
-import consulo.language.editor.PsiEquivalenceUtil;
 import com.intellij.java.language.impl.psi.PsiDiamondTypeImpl;
-import com.intellij.java.language.psi.*;
-import com.intellij.psi.*;
 import com.intellij.java.language.impl.psi.impl.source.PsiDiamondTypeElementImpl;
+import com.intellij.java.language.psi.*;
+import consulo.language.editor.PsiEquivalenceUtil;
+import consulo.language.psi.PsiElement;
 
 import java.util.Comparator;
 
 public class JavaPsiEquivalenceUtil {
   public static boolean areExpressionsEquivalent(PsiExpression expr1, PsiExpression expr2) {
     return PsiEquivalenceUtil.areElementsEquivalent(expr1, expr2, new Comparator<PsiElement>() {
-                                                      @Override
-                                                      public int compare(PsiElement o1, PsiElement o2) {
-                                                        if (o1 instanceof PsiParameter && o2 instanceof PsiParameter && ((PsiParameter)o1).getDeclarationScope() instanceof PsiMethod) {
-                                                          return ((PsiParameter)o1).getName().compareTo(((PsiParameter)o2).getName());
-                                                        }
-                                                        return 1;
-                                                      }
-                                                    }, new Comparator<PsiElement>() {
-                                                      @Override
-                                                      public int compare(PsiElement o1, PsiElement o2) {
-                                                        if (!o1.textMatches(o2)) return 1;
+      @Override
+      public int compare(PsiElement o1, PsiElement o2) {
+        if (o1 instanceof PsiParameter && o2 instanceof PsiParameter && ((PsiParameter) o1).getDeclarationScope() instanceof PsiMethod) {
+          return ((PsiParameter) o1).getName().compareTo(((PsiParameter) o2).getName());
+        }
+        return 1;
+      }
+    }, new Comparator<PsiElement>() {
+      @Override
+      public int compare(PsiElement o1, PsiElement o2) {
+        if (!o1.textMatches(o2)) return 1;
 
-                                                        if (o1 instanceof PsiDiamondTypeElementImpl && o2 instanceof PsiDiamondTypeElementImpl) {
-                                                          final PsiDiamondType.DiamondInferenceResult thisInferenceResult = new PsiDiamondTypeImpl(o1.getManager(), (PsiTypeElement)o1).resolveInferredTypes();
-                                                          final PsiDiamondType.DiamondInferenceResult otherInferenceResult = new PsiDiamondTypeImpl(o2.getManager(), (PsiTypeElement)o2).resolveInferredTypes();
-                                                          return thisInferenceResult.equals(otherInferenceResult) ? 0 : 1;
-                                                        }
-                                                        return 0;
-                                                      }
-                                                    }, null, false);
+        if (o1 instanceof PsiDiamondTypeElementImpl && o2 instanceof PsiDiamondTypeElementImpl) {
+          final PsiDiamondType.DiamondInferenceResult thisInferenceResult = new PsiDiamondTypeImpl(o1.getManager(), (PsiTypeElement) o1).resolveInferredTypes();
+          final PsiDiamondType.DiamondInferenceResult otherInferenceResult = new PsiDiamondTypeImpl(o2.getManager(), (PsiTypeElement) o2).resolveInferredTypes();
+          return thisInferenceResult.equals(otherInferenceResult) ? 0 : 1;
+        }
+        return 0;
+      }
+    }, null, false);
   }
 }

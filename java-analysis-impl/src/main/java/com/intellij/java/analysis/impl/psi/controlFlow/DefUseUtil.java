@@ -20,14 +20,13 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.application.progress.ProgressManager;
 import consulo.language.psi.PsiElement;
-import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.psi.PsiUtilCore;
-import consulo.util.lang.ExceptionUtil;
-import consulo.ide.impl.idea.util.containers.Queue;
-import consulo.util.collection.Stack;
+import consulo.language.psi.util.PsiTreeUtil;
 import consulo.logging.Logger;
+import consulo.util.collection.Stack;
 import consulo.util.collection.primitive.ints.IntList;
 import consulo.util.collection.primitive.ints.IntLists;
+import consulo.util.lang.ExceptionUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -183,7 +182,7 @@ public class DefUseUtil {
 
     BitSet usefulWrites = new BitSet(instructions.size());
 
-    Queue<InstructionState> queue = new Queue<>(8);
+    Deque<InstructionState> queue = new ArrayDeque<>(8);
 
     for (int i = states.length - 1; i >= 0; i--) {
       final InstructionState outerState = states[i];
@@ -201,7 +200,7 @@ public class DefUseUtil {
 
       while (!queue.isEmpty()) {
         ProgressManager.checkCanceled();
-        InstructionState state = queue.pullFirst();
+        InstructionState state = queue.removeFirst();
         state.markVisited();
 
         InstructionKey key = state.getInstructionKey();

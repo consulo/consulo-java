@@ -15,18 +15,18 @@
  */
 package com.intellij.java.analysis.impl.codeInsight.daemon.impl.actions;
 
+import com.intellij.java.analysis.impl.codeInspection.JavaSuppressionUtil;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.javadoc.PsiDocComment;
+import com.intellij.java.language.psi.javadoc.PsiDocTag;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.inspection.InspectionsBundle;
 import consulo.language.editor.inspection.SuppressionUtil;
-import com.intellij.java.analysis.impl.codeInspection.JavaSuppressionUtil;
-import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import com.intellij.psi.*;
-import com.intellij.java.language.psi.javadoc.PsiDocComment;
-import com.intellij.java.language.psi.javadoc.PsiDocTag;
+import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
+import consulo.project.Project;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -36,7 +36,7 @@ import javax.annotation.Nullable;
  * Date: May 13, 2005
  */
 public class SuppressAllForClassFix extends SuppressFix {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.daemon.impl.actions.AddNoInspectionAllForClassFix");
+  private static final Logger LOG = Logger.getInstance(SuppressAllForClassFix.class);
 
   public SuppressAllForClassFix() {
     super(SuppressionUtil.ALL);

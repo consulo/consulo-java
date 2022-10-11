@@ -1,7 +1,7 @@
 package consulo.java.manifest;
 
 import consulo.annotation.DeprecationInfo;
-import consulo.java.psi.impl.icon.JavaPsiImplIconGroup;
+import consulo.java.language.impl.icon.JavaPsiImplIconGroup;
 import consulo.ui.image.Image;
 
 /**
@@ -10,8 +10,7 @@ import consulo.ui.image.Image;
  */
 @Deprecated
 @DeprecationInfo("Use JavaPsiImplIconGroup")
-public interface ManifestIcons
-{
-	Image ManifestFileType = JavaPsiImplIconGroup.fileTypesManifest();
-	Image BndFileType = JavaPsiImplIconGroup.fileTypesBnd();
+public interface ManifestIcons {
+  Image ManifestFileType = JavaPsiImplIconGroup.filetypesManifest();
+  Image BndFileType = JavaPsiImplIconGroup.filetypesBnd();
 }

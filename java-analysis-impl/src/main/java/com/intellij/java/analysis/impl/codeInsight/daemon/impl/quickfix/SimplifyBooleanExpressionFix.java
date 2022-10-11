@@ -19,28 +19,28 @@
  */
 package com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-
 import com.intellij.java.language.psi.*;
-import consulo.logging.Logger;
-import org.jetbrains.annotations.NonNls;
+import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.application.ApplicationManager;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.language.ast.IElementType;
+import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.inspection.LocalQuickFixOnPsiElement;
-import consulo.application.ApplicationManager;
-import consulo.project.Project;
-import consulo.util.lang.ref.Ref;
-import consulo.util.lang.StringUtil;
-import com.intellij.psi.*;
-import consulo.language.codeStyle.CodeStyleManager;
-import consulo.language.ast.IElementType;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiManager;
 import consulo.language.psi.util.PsiTreeUtil;
-import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.ide.impl.idea.util.Function;
 import consulo.language.util.IncorrectOperationException;
+import consulo.logging.Logger;
+import consulo.project.Project;
+import consulo.util.lang.StringUtil;
+import consulo.util.lang.ref.Ref;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SimplifyBooleanExpressionFix extends LocalQuickFixOnPsiElement {
   private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.daemon.impl.quickfix.SimplifyBooleanExpression");
@@ -71,10 +71,10 @@ public class SimplifyBooleanExpressionFix extends LocalQuickFixOnPsiElement {
   public boolean isAvailable() {
     PsiExpression expression = getSubExpression();
     return super.isAvailable()
-           && expression != null
-           && expression.isValid()
-           && expression.getManager().isInProject(expression)
-           && !PsiUtil.isAccessedForWriting(expression);
+        && expression != null
+        && expression.isValid()
+        && expression.getManager().isInProject(expression)
+        && !PsiUtil.isAccessedForWriting(expression);
   }
 
   @Override
@@ -95,33 +95,30 @@ public class SimplifyBooleanExpressionFix extends LocalQuickFixOnPsiElement {
     PsiExpression expression;
     if (subExpressionValue == null) {
       expression = subExpression;
-    }
-    else {
+    } else {
       final PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
       final PsiExpression constExpression = factory.createExpressionFromText(Boolean.toString(subExpressionValue.booleanValue()), subExpression);
-      expression = (PsiExpression)subExpression.replace(constExpression);
+      expression = (PsiExpression) subExpression.replace(constExpression);
     }
     while (expression.getParent() instanceof PsiExpression) {
-      expression = (PsiExpression)expression.getParent();
+      expression = (PsiExpression) expression.getParent();
     }
     simplifyExpression(expression);
   }
 
   public static void simplifyIfStatement(final PsiExpression expression) throws IncorrectOperationException {
     PsiElement parent = expression.getParent();
-    if (!(parent instanceof PsiIfStatement) || ((PsiIfStatement)parent).getCondition() != expression) return;
+    if (!(parent instanceof PsiIfStatement) || ((PsiIfStatement) parent).getCondition() != expression) return;
     if (!(expression instanceof PsiLiteralExpression) || !PsiType.BOOLEAN.equals(expression.getType())) return;
     boolean condition = Boolean.parseBoolean(expression.getText());
-    PsiIfStatement ifStatement = (PsiIfStatement)parent;
+    PsiIfStatement ifStatement = (PsiIfStatement) parent;
     if (condition) {
       replaceWithStatements(ifStatement, ifStatement.getThenBranch());
-    }
-    else {
+    } else {
       PsiStatement elseBranch = ifStatement.getElseBranch();
       if (elseBranch == null) {
         ifStatement.delete();
-      }
-      else {
+      } else {
         replaceWithStatements(ifStatement, elseBranch);
       }
     }
@@ -138,7 +135,7 @@ public class SimplifyBooleanExpressionFix extends LocalQuickFixOnPsiElement {
       // See IDEADEV-24277
       // Code block can only be inlined into another (parent) code block.
       // Code blocks, which are if or loop statement branches should not be inlined.
-      PsiCodeBlock codeBlock = ((PsiBlockStatement)statement).getCodeBlock();
+      PsiCodeBlock codeBlock = ((PsiBlockStatement) statement).getCodeBlock();
       PsiJavaToken lBrace = codeBlock.getLBrace();
       PsiJavaToken rBrace = codeBlock.getRBrace();
       if (lBrace == null || rBrace == null) return;
@@ -147,22 +144,21 @@ public class SimplifyBooleanExpressionFix extends LocalQuickFixOnPsiElement {
       final PsiElement[] children = codeBlock.getChildren();
       if (children.length > 2) {
         final PsiElement added =
-          parent.addRangeBefore(
-            children[1],
-            children[children.length - 2],
-            orig);
+            parent.addRangeBefore(
+                children[1],
+                children[children.length - 2],
+                orig);
         final CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(orig.getManager());
         codeStyleManager.reformat(added);
       }
       orig.delete();
-    }
-    else {
+    } else {
       orig.replace(statement);
     }
   }
 
   public static void simplifyExpression(PsiExpression expression) throws IncorrectOperationException {
-    final PsiExpression[] result = {(PsiExpression)expression.copy()};
+    final PsiExpression[] result = {(PsiExpression) expression.copy()};
     final ExpressionVisitor expressionVisitor = new ExpressionVisitor(expression.getManager(), true);
     final IncorrectOperationException[] exception = {null};
     result[0].accept(new JavaRecursiveElementVisitor() {
@@ -185,12 +181,10 @@ public class SimplifyBooleanExpressionFix extends LocalQuickFixOnPsiElement {
           try {
             if (expression != result[0]) {
               expression.replace(expressionVisitor.resultExpression);
-            }
-            else {
+            } else {
               result[0] = expressionVisitor.resultExpression;
             }
-          }
-          catch (IncorrectOperationException e) {
+          } catch (IncorrectOperationException e) {
             exception[0] = e;
           }
         }
@@ -199,10 +193,10 @@ public class SimplifyBooleanExpressionFix extends LocalQuickFixOnPsiElement {
     if (exception[0] != null) {
       throw exception[0];
     }
-    PsiExpression newExpression = (PsiExpression)expression.replace(result[0]);
+    PsiExpression newExpression = (PsiExpression) expression.replace(result[0]);
     if (newExpression instanceof PsiLiteralExpression) {
       final PsiElement parent = newExpression.getParent();
-      if (parent instanceof PsiAssertStatement && ((PsiLiteralExpression)newExpression).getValue() == Boolean.TRUE) {
+      if (parent instanceof PsiAssertStatement && ((PsiLiteralExpression) newExpression).getValue() == Boolean.TRUE) {
         parent.delete();
         return;
       }
@@ -211,7 +205,8 @@ public class SimplifyBooleanExpressionFix extends LocalQuickFixOnPsiElement {
   }
 
   public static boolean canBeSimplified(@Nonnull PsiExpression expression) {
-    if (!(expression instanceof PsiConditionalExpression) && !PsiType.BOOLEAN.equals(expression.getType())) return false;
+    if (!(expression instanceof PsiConditionalExpression) && !PsiType.BOOLEAN.equals(expression.getType()))
+      return false;
 
     final ExpressionVisitor expressionVisitor = new ExpressionVisitor(expression.getManager(), false);
     final Ref<Boolean> canBeSimplified = new Ref<Boolean>(Boolean.FALSE);
@@ -238,7 +233,7 @@ public class SimplifyBooleanExpressionFix extends LocalQuickFixOnPsiElement {
 
   private PsiExpression getSubExpression() {
     PsiElement element = getStartElement();
-    return element instanceof PsiExpression ? (PsiExpression)element : null;
+    return element instanceof PsiExpression ? (PsiExpression) element : null;
   }
 
   private static class ExpressionVisitor extends JavaElementVisitor {
@@ -257,8 +252,7 @@ public class SimplifyBooleanExpressionFix extends LocalQuickFixOnPsiElement {
     private static PsiExpression createExpression(final PsiManager psiManager, @NonNls String text) {
       try {
         return JavaPsiFacade.getInstance(psiManager.getProject()).getElementFactory().createExpressionFromText(text, null);
-      }
-      catch (IncorrectOperationException e) {
+      } catch (IncorrectOperationException e) {
         LOG.error(e);
         return null;
       }
@@ -292,12 +286,7 @@ public class SimplifyBooleanExpressionFix extends LocalQuickFixOnPsiElement {
         if (expressions.isEmpty()) {
           resultExpression = negate ? trueExpression : falseExpression;
         } else {
-          String simplifiedText = StringUtil.join(expressions, new Function<PsiExpression, String>() {
-            @Override
-            public String fun(PsiExpression expression) {
-              return expression.getText();
-            }
-          }, " ^ ");
+          String simplifiedText = StringUtil.join(expressions, expression1 -> expression1.getText(), " ^ ");
           if (negate) {
             if (expressions.size() > 1) {
               simplifiedText = "!(" + simplifiedText + ")";
@@ -314,21 +303,17 @@ public class SimplifyBooleanExpressionFix extends LocalQuickFixOnPsiElement {
           Boolean r = getConstBoolean(operand);
           if (l != null) {
             simplifyBinary(tokenType, l, operand);
-          }
-          else if (r != null) {
+          } else if (r != null) {
             simplifyBinary(tokenType, r, lExpr);
-          }
-          else {
+          } else {
             final PsiJavaToken javaToken = expression.getTokenBeforeOperand(operand);
             if (javaToken != null && !PsiTreeUtil.hasErrorElements(operand) && !PsiTreeUtil.hasErrorElements(lExpr)) {
               try {
                 resultExpression = JavaPsiFacade.getElementFactory(expression.getProject()).createExpressionFromText(lExpr.getText() + javaToken.getText() + operand.getText(), expression);
-              }
-              catch (IncorrectOperationException e) {
+              } catch (IncorrectOperationException e) {
                 resultExpression = null;
               }
-            }
-            else {
+            } else {
               resultExpression = null;
             }
           }
@@ -345,14 +330,11 @@ public class SimplifyBooleanExpressionFix extends LocalQuickFixOnPsiElement {
       }
       if (JavaTokenType.ANDAND == tokenType || JavaTokenType.AND == tokenType) {
         resultExpression = lConstBoolean.booleanValue() ? rOperand : falseExpression;
-      }
-      else if (JavaTokenType.OROR == tokenType || JavaTokenType.OR == tokenType) {
+      } else if (JavaTokenType.OROR == tokenType || JavaTokenType.OR == tokenType) {
         resultExpression = lConstBoolean.booleanValue() ? trueExpression : rOperand;
-      }
-      else if (JavaTokenType.EQEQ == tokenType) {
+      } else if (JavaTokenType.EQEQ == tokenType) {
         simplifyEquation(lConstBoolean, rOperand);
-      }
-      else if (JavaTokenType.NE == tokenType) {
+      } else if (JavaTokenType.NE == tokenType) {
         PsiPrefixExpression negatedExpression = createNegatedExpression(rOperand);
         resultExpression = negatedExpression;
         visitPrefixExpression(negatedExpression);
@@ -363,8 +345,7 @@ public class SimplifyBooleanExpressionFix extends LocalQuickFixOnPsiElement {
     private void simplifyEquation(Boolean constBoolean, PsiExpression otherOperand) {
       if (constBoolean.booleanValue()) {
         resultExpression = otherOperand;
-      }
-      else {
+      } else {
         PsiPrefixExpression negated = createNegatedExpression(otherOperand);
         resultExpression = negated;
         visitPrefixExpression(negated);
@@ -382,11 +363,10 @@ public class SimplifyBooleanExpressionFix extends LocalQuickFixOnPsiElement {
     }
 
     private static PsiPrefixExpression createNegatedExpression(PsiExpression otherOperand) {
-      PsiPrefixExpression expression = (PsiPrefixExpression)createExpression(otherOperand.getManager(), "!(xxx)");
+      PsiPrefixExpression expression = (PsiPrefixExpression) createExpression(otherOperand.getManager(), "!(xxx)");
       try {
         expression.getOperand().replace(otherOperand);
-      }
-      catch (IncorrectOperationException e) {
+      } catch (IncorrectOperationException e) {
         LOG.error(e);
       }
       return expression;

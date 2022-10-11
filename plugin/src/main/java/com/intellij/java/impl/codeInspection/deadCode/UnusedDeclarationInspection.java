@@ -15,14 +15,14 @@
  */
 package com.intellij.java.impl.codeInspection.deadCode;
 
-import com.intellij.java.impl.codeInspection.ex.EntryPointsManagerImpl;
-import consulo.ide.impl.idea.codeInspection.reference.EntryPoint;
-import com.intellij.java.impl.codeInspection.unusedSymbol.UnusedSymbolLocalInspection;
+import com.intellij.java.analysis.codeInspection.ex.EntryPoint;
 import com.intellij.java.analysis.impl.codeInspection.deadCode.UnusedDeclarationInspectionBase;
 import com.intellij.java.analysis.impl.codeInspection.unusedSymbol.UnusedSymbolLocalInspectionBase;
+import com.intellij.java.impl.codeInspection.ex.EntryPointsManagerImpl;
+import com.intellij.java.impl.codeInspection.unusedSymbol.UnusedSymbolLocalInspection;
+import consulo.java.analysis.impl.codeInsight.JavaInspectionsBundle;
 import consulo.ui.ex.awt.JBTabbedPane;
 import consulo.ui.ex.awt.JBUI;
-import consulo.java.analysis.impl.codeInsight.JavaInspectionsBundle;
 import org.jetbrains.annotations.TestOnly;
 
 import javax.swing.*;

@@ -1,26 +1,26 @@
 // Copyright 2000-2019 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.analysis.impl.codeInspection.dataFlow.value;
 
-import com.intellij.java.language.codeInsight.AnnotationUtil;
-import com.intellij.java.language.codeInsight.ConcurrencyAnnotationsManager;
-import com.intellij.java.language.codeInsight.Nullability;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.*;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.rangeSet.LongRangeSet;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.types.DfConstantType;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.types.DfLongType;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.types.DfType;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.types.DfTypes;
-import com.intellij.java.language.psi.*;
-import com.intellij.java.language.psi.util.*;
-import com.intellij.psi.*;
+import com.intellij.java.language.codeInsight.AnnotationUtil;
+import com.intellij.java.language.codeInsight.ConcurrencyAnnotationsManager;
+import com.intellij.java.language.codeInsight.Nullability;
 import com.intellij.java.language.impl.psi.impl.JavaConstantExpressionEvaluator;
 import com.intellij.java.language.impl.psi.impl.light.LightRecordMethod;
 import com.intellij.java.language.impl.psi.impl.source.PsiImmediateClassType;
-import com.intellij.psi.util.*;
-import consulo.ide.impl.idea.util.ObjectUtils;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.*;
 import com.siyeh.ig.callMatcher.CallMatcher;
 import com.siyeh.ig.psiutils.ClassUtils;
 import com.siyeh.ig.psiutils.ExpressionUtils;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.util.lang.ObjectUtil;
 import one.util.streamex.LongStreamEx;
 import org.jetbrains.annotations.Contract;
 
@@ -102,7 +102,7 @@ public class DfaExpressionFactory {
       PsiJavaCodeReferenceElement qualifier = ((PsiQualifiedExpression) expression).getQualifier();
       PsiClass target;
       if (qualifier != null) {
-        target = ObjectUtils.tryCast(qualifier.resolve(), PsiClass.class);
+        target = ObjectUtil.tryCast(qualifier.resolve(), PsiClass.class);
       } else {
         target = ClassUtils.getContainingClass(expression);
       }
@@ -334,7 +334,7 @@ public class DfaExpressionFactory {
   private static PsiSubstitutor getSubstitutor(PsiElement member, @Nullable DfaVariableValue qualifier) {
     if (member instanceof PsiMember && qualifier != null) {
       PsiClass fieldClass = ((PsiMember) member).getContainingClass();
-      PsiClassType classType = ObjectUtils.tryCast(qualifier.getType(), PsiClassType.class);
+      PsiClassType classType = ObjectUtil.tryCast(qualifier.getType(), PsiClassType.class);
       if (classType != null && InheritanceUtil.isInheritorOrSelf(classType.resolve(), fieldClass, true)) {
         return TypeConversionUtil.getSuperClassSubstitutor(fieldClass, classType);
       }
@@ -407,7 +407,7 @@ public class DfaExpressionFactory {
     @Override
     public DfaValue createValue(@Nonnull DfaValueFactory factory, @Nullable DfaValue qualifier, boolean forAccessor) {
       if (myVariable.hasModifierProperty(PsiModifier.VOLATILE)) {
-        PsiType type = getType(ObjectUtils.tryCast(qualifier, DfaVariableValue.class));
+        PsiType type = getType(ObjectUtil.tryCast(qualifier, DfaVariableValue.class));
         return factory.getObjectType(type, DfaPsiUtil.getElementNullability(type, myVariable));
       }
       if (PsiUtil.isJvmLocalVariable(myVariable) ||

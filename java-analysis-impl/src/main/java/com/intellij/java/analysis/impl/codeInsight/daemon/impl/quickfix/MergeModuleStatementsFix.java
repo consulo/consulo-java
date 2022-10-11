@@ -15,14 +15,15 @@
  */
 package com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix;
 
-import consulo.language.editor.inspection.LocalQuickFixAndIntentionActionOnPsiElement;
 import com.intellij.java.language.psi.*;
-import consulo.codeEditor.Editor;
-import consulo.project.Project;
-import com.intellij.psi.*;
-import consulo.language.codeStyle.CodeStyleManager;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.siyeh.ig.psiutils.CommentTracker;
+import consulo.codeEditor.Editor;
+import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.editor.inspection.LocalQuickFixAndIntentionActionOnPsiElement;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.project.Project;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -34,80 +35,68 @@ import java.util.stream.Collectors;
 /**
  * @author Pavel.Dolgov
  */
-public abstract class MergeModuleStatementsFix<T extends PsiElement> extends LocalQuickFixAndIntentionActionOnPsiElement
-{
+public abstract class MergeModuleStatementsFix<T extends PsiElement> extends LocalQuickFixAndIntentionActionOnPsiElement {
 
-	protected MergeModuleStatementsFix(@Nonnull PsiJavaModule javaModule)
-	{
-		super(javaModule);
-	}
+  protected MergeModuleStatementsFix(@Nonnull PsiJavaModule javaModule) {
+    super(javaModule);
+  }
 
-	@Override
-	public boolean isAvailable(@Nonnull Project project, @Nonnull PsiFile file, @Nonnull PsiElement startElement, @Nonnull PsiElement endElement)
-	{
-		return PsiUtil.isLanguageLevel9OrHigher(file);
-	}
+  @Override
+  public boolean isAvailable(@Nonnull Project project, @Nonnull PsiFile file, @Nonnull PsiElement startElement, @Nonnull PsiElement endElement) {
+    return PsiUtil.isLanguageLevel9OrHigher(file);
+  }
 
-	@Override
-	public void invoke(@Nonnull Project project, @Nonnull PsiFile file, @Nullable Editor editor, @Nonnull PsiElement startElement, @Nonnull PsiElement endElement)
-	{
-		if(startElement instanceof PsiJavaModule)
-		{
-			final PsiJavaModule javaModule = (PsiJavaModule) startElement;
-			final List<T> statementsToMerge = getStatementsToMerge(javaModule);
-			LOG.assertTrue(!statementsToMerge.isEmpty());
+  @Override
+  public void invoke(@Nonnull Project project, @Nonnull PsiFile file, @Nullable Editor editor, @Nonnull PsiElement startElement, @Nonnull PsiElement endElement) {
+    if (startElement instanceof PsiJavaModule) {
+      final PsiJavaModule javaModule = (PsiJavaModule) startElement;
+      final List<T> statementsToMerge = getStatementsToMerge(javaModule);
+      LOG.assertTrue(!statementsToMerge.isEmpty());
 
-			final String tempModuleText = PsiKeyword.MODULE + " " + javaModule.getName() + " {" + getReplacementText(statementsToMerge) + "}";
-			final PsiJavaModule tempModule = JavaPsiFacade.getInstance(project).getElementFactory().createModuleFromText(tempModuleText);
+      final String tempModuleText = PsiKeyword.MODULE + " " + javaModule.getName() + " {" + getReplacementText(statementsToMerge) + "}";
+      final PsiJavaModule tempModule = JavaPsiFacade.getInstance(project).getElementFactory().createModuleFromText(tempModuleText);
 
-			final List<T> tempStatements = getStatementsToMerge(tempModule);
-			LOG.assertTrue(!tempStatements.isEmpty());
-			final T replacement = tempStatements.get(0);
+      final List<T> tempStatements = getStatementsToMerge(tempModule);
+      LOG.assertTrue(!tempStatements.isEmpty());
+      final T replacement = tempStatements.get(0);
 
-			final T firstStatement = statementsToMerge.get(0);
-			final CommentTracker commentTracker = new CommentTracker();
-			final CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(project);
-			final PsiElement resultingStatement = codeStyleManager.reformat(commentTracker.replace(firstStatement, replacement));
+      final T firstStatement = statementsToMerge.get(0);
+      final CommentTracker commentTracker = new CommentTracker();
+      final CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(project);
+      final PsiElement resultingStatement = codeStyleManager.reformat(commentTracker.replace(firstStatement, replacement));
 
-			for(int i = 1; i < statementsToMerge.size(); i++)
-			{
-				T statement = statementsToMerge.get(i);
-				commentTracker.delete(statement);
-			}
-			commentTracker.insertCommentsBefore(resultingStatement);
+      for (int i = 1; i < statementsToMerge.size(); i++) {
+        T statement = statementsToMerge.get(i);
+        commentTracker.delete(statement);
+      }
+      commentTracker.insertCommentsBefore(resultingStatement);
 
-			if(editor != null)
-			{
-				final int offset = resultingStatement.getTextRange().getEndOffset();
-				editor.getCaretModel().moveToOffset(offset);
-			}
-		}
-	}
+      if (editor != null) {
+        final int offset = resultingStatement.getTextRange().getEndOffset();
+        editor.getCaretModel().moveToOffset(offset);
+      }
+    }
+  }
 
-	@Nonnull
-	protected abstract String getReplacementText(List<T> statementsToMerge);
+  @Nonnull
+  protected abstract String getReplacementText(List<T> statementsToMerge);
 
-	@Nonnull
-	protected abstract List<T> getStatementsToMerge(@Nonnull PsiJavaModule javaModule);
+  @Nonnull
+  protected abstract List<T> getStatementsToMerge(@Nonnull PsiJavaModule javaModule);
 
-	@Nonnull
-	protected static String joinUniqueNames(@Nonnull List<String> names)
-	{
-		final Set<String> unique = new HashSet<>();
-		return names.stream().filter(name -> unique.add(name)).collect(Collectors.joining(","));
-	}
+  @Nonnull
+  protected static String joinUniqueNames(@Nonnull List<String> names) {
+    final Set<String> unique = new HashSet<>();
+    return names.stream().filter(name -> unique.add(name)).collect(Collectors.joining(","));
+  }
 
-	@Nullable
-	public static MergeModuleStatementsFix createFix(@Nullable PsiElement statement)
-	{
-		if(statement instanceof PsiPackageAccessibilityStatement)
-		{
-			return MergePackageAccessibilityStatementsFix.createFix((PsiPackageAccessibilityStatement) statement);
-		}
-		else if(statement instanceof PsiProvidesStatement)
-		{
-			return MergeProvidesStatementsFix.createFix((PsiProvidesStatement) statement);
-		}
-		return null;
-	}
+  @Nullable
+  public static MergeModuleStatementsFix createFix(@Nullable PsiElement statement) {
+    if (statement instanceof PsiPackageAccessibilityStatement) {
+      return MergePackageAccessibilityStatementsFix.createFix((PsiPackageAccessibilityStatement) statement);
+    } else if (statement instanceof PsiProvidesStatement) {
+      return MergeProvidesStatementsFix.createFix((PsiProvidesStatement) statement);
+    }
+    return null;
+  }
 }

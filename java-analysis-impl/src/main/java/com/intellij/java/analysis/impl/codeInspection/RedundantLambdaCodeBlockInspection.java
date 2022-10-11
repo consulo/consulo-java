@@ -15,19 +15,22 @@
  */
 package com.intellij.java.analysis.impl.codeInspection;
 
-import consulo.ide.impl.idea.codeInsight.daemon.GroupNames;
-import consulo.language.editor.intention.HighPriorityAction;
+import com.intellij.java.analysis.codeInspection.BaseJavaBatchLocalInspectionTool;
+import com.intellij.java.analysis.codeInspection.GroupNames;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.editor.inspection.ProblemHighlightType;
 import consulo.language.editor.inspection.ProblemsHolder;
-import com.intellij.java.analysis.codeInspection.BaseJavaBatchLocalInspectionTool;
-import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import com.intellij.psi.*;
+import consulo.language.editor.intention.HighPriorityAction;
+import consulo.language.editor.rawHighlight.HighlightDisplayLevel;
+import consulo.language.psi.PsiComment;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.util.PsiTreeUtil;
-import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.logging.Logger;
+import consulo.project.Project;
 import org.jetbrains.annotations.Nls;
 
 import javax.annotation.Nonnull;
@@ -44,6 +47,12 @@ public class RedundantLambdaCodeBlockInspection extends BaseJavaBatchLocalInspec
   @Override
   public String getGroupDisplayName() {
     return GroupNames.LANGUAGE_LEVEL_SPECIFIC_GROUP_NAME;
+  }
+
+  @Nonnull
+  @Override
+  public HighlightDisplayLevel getDefaultLevel() {
+    return HighlightDisplayLevel.WARNING;
   }
 
   @Nls

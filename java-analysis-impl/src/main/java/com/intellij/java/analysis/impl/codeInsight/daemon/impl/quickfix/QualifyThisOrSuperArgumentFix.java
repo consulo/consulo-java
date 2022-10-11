@@ -23,74 +23,65 @@
  */
 package com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix;
 
-import javax.annotation.Nonnull;
-
-import consulo.language.editor.intention.IntentionAction;
-import consulo.logging.Logger;
-import consulo.codeEditor.Editor;
-import consulo.project.Project;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiExpression;
+import consulo.codeEditor.Editor;
+import consulo.language.editor.intention.IntentionAction;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiManager;
 import consulo.language.util.IncorrectOperationException;
+import consulo.logging.Logger;
+import consulo.project.Project;
 
-public abstract class QualifyThisOrSuperArgumentFix implements IntentionAction
-{
-	protected static final Logger LOG = Logger.getInstance(QualifyThisOrSuperArgumentFix.class);
-	protected final PsiExpression myExpression;
-	protected final PsiClass myPsiClass;
-	private String myText;
+import javax.annotation.Nonnull;
+
+public abstract class QualifyThisOrSuperArgumentFix implements IntentionAction {
+  protected static final Logger LOG = Logger.getInstance(QualifyThisOrSuperArgumentFix.class);
+  protected final PsiExpression myExpression;
+  protected final PsiClass myPsiClass;
+  private String myText;
 
 
-	public QualifyThisOrSuperArgumentFix(@Nonnull PsiExpression expression, @Nonnull PsiClass psiClass)
-	{
-		myExpression = expression;
-		myPsiClass = psiClass;
-	}
+  public QualifyThisOrSuperArgumentFix(@Nonnull PsiExpression expression, @Nonnull PsiClass psiClass) {
+    myExpression = expression;
+    myPsiClass = psiClass;
+  }
 
-	@Override
-	public boolean startInWriteAction()
-	{
-		return true;
-	}
+  @Override
+  public boolean startInWriteAction() {
+    return true;
+  }
 
-	@Nonnull
-	@Override
-	public String getText()
-	{
-		return myText;
-	}
+  @Nonnull
+  @Override
+  public String getText() {
+    return myText;
+  }
 
-	protected abstract String getQualifierText();
+  protected abstract String getQualifierText();
 
-	protected abstract PsiExpression getQualifier(PsiManager manager);
+  protected abstract PsiExpression getQualifier(PsiManager manager);
 
-	@Override
-	public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file)
-	{
-		if(!myExpression.isValid())
-		{
-			return false;
-		}
-		if(!myPsiClass.isValid())
-		{
-			return false;
-		}
-		myText = "Qualify " + getQualifierText() + " expression with \'" + myPsiClass.getQualifiedName() + "\'";
-		return true;
-	}
+  @Override
+  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+    if (!myExpression.isValid()) {
+      return false;
+    }
+    if (!myPsiClass.isValid()) {
+      return false;
+    }
+    myText = "Qualify " + getQualifierText() + " expression with \'" + myPsiClass.getQualifiedName() + "\'";
+    return true;
+  }
 
-	@Nonnull
-	@Override
-	public String getFamilyName()
-	{
-		return "Qualify " + getQualifierText();
-	}
+  @Nonnull
+  @Override
+  public String getFamilyName() {
+    return "Qualify " + getQualifierText();
+  }
 
-	@Override
-	public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException
-	{
-		myExpression.replace(getQualifier(PsiManager.getInstance(project)));
-	}
+  @Override
+  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+    myExpression.replace(getQualifier(PsiManager.getInstance(project)));
+  }
 }

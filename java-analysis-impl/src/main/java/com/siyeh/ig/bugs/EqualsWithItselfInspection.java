@@ -24,71 +24,61 @@ import com.siyeh.ig.psiutils.MethodCallUtils;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
 import com.siyeh.ig.psiutils.SideEffectChecker;
 import org.jetbrains.annotations.Nls;
+
 import javax.annotation.Nonnull;
 
 /**
  * @author Bas Leijdekkers
  */
-public class EqualsWithItselfInspection extends BaseInspection
-{
-	@Nls
-	@Nonnull
-	@Override
-	public String getDisplayName()
-	{
-		return InspectionGadgetsBundle.message("equals.with.itself.display.name");
-	}
+public abstract class EqualsWithItselfInspection extends BaseInspection {
+  @Nls
+  @Nonnull
+  @Override
+  public String getDisplayName() {
+    return InspectionGadgetsBundle.message("equals.with.itself.display.name");
+  }
 
-	@Nonnull
-	@Override
-	protected String buildErrorString(Object... infos)
-	{
-		return InspectionGadgetsBundle.message("equals.with.itself.problem.descriptor");
-	}
+  @Nonnull
+  @Override
+  protected String buildErrorString(Object... infos) {
+    return InspectionGadgetsBundle.message("equals.with.itself.problem.descriptor");
+  }
 
-	@Override
-	public BaseInspectionVisitor buildVisitor()
-	{
-		return new EqualsWithItselfVisitor();
-	}
+  @Override
+  public BaseInspectionVisitor buildVisitor() {
+    return new EqualsWithItselfVisitor();
+  }
 
-	private static class EqualsWithItselfVisitor extends BaseInspectionVisitor
-	{
+  private static class EqualsWithItselfVisitor extends BaseInspectionVisitor {
 
-		@Override
-		public void visitMethodCallExpression(PsiMethodCallExpression expression)
-		{
-			super.visitMethodCallExpression(expression);
-			if(isEqualsWithItself(expression))
-			{
-				registerMethodCallError(expression);
-			}
-		}
-	}
+    @Override
+    public void visitMethodCallExpression(PsiMethodCallExpression expression) {
+      super.visitMethodCallExpression(expression);
+      if (isEqualsWithItself(expression)) {
+        registerMethodCallError(expression);
+      }
+    }
+  }
 
-	public static boolean isEqualsWithItself(PsiMethodCallExpression expression)
-	{
-		if(!MethodCallUtils.isEqualsCall(expression) &&
-				!MethodCallUtils.isEqualsIgnoreCaseCall(expression) &&
-				!MethodCallUtils.isCompareToCall(expression) &&
-				!MethodCallUtils.isCompareToIgnoreCaseCall(expression))
-		{
-			return false;
-		}
-		final PsiReferenceExpression methodExpression = expression.getMethodExpression();
-		final PsiExpressionList argumentList = expression.getArgumentList();
-		final PsiExpression[] arguments = argumentList.getExpressions();
-		if(arguments.length != 1)
-		{
-			return false;
-		}
-		final PsiExpression argument = ParenthesesUtils.stripParentheses(arguments[0]);
-		final PsiExpression qualifier = methodExpression.getQualifierExpression();
-		if(qualifier != null)
-		{
-			return EquivalenceChecker.getCanonicalPsiEquivalence().expressionsAreEquivalent(qualifier, argument) &&
-					!SideEffectChecker.mayHaveSideEffects(qualifier);
-		}
-		return argument instanceof PsiThisExpression;
-	}
+  public static boolean isEqualsWithItself(PsiMethodCallExpression expression) {
+    if (!MethodCallUtils.isEqualsCall(expression) &&
+        !MethodCallUtils.isEqualsIgnoreCaseCall(expression) &&
+        !MethodCallUtils.isCompareToCall(expression) &&
+        !MethodCallUtils.isCompareToIgnoreCaseCall(expression)) {
+      return false;
+    }
+    final PsiReferenceExpression methodExpression = expression.getMethodExpression();
+    final PsiExpressionList argumentList = expression.getArgumentList();
+    final PsiExpression[] arguments = argumentList.getExpressions();
+    if (arguments.length != 1) {
+      return false;
+    }
+    final PsiExpression argument = ParenthesesUtils.stripParentheses(arguments[0]);
+    final PsiExpression qualifier = methodExpression.getQualifierExpression();
+    if (qualifier != null) {
+      return EquivalenceChecker.getCanonicalPsiEquivalence().expressionsAreEquivalent(qualifier, argument) &&
+          !SideEffectChecker.mayHaveSideEffects(qualifier);
+    }
+    return argument instanceof PsiThisExpression;
+  }
 }

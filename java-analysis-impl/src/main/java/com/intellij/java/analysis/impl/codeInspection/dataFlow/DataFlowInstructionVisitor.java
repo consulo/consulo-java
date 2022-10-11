@@ -7,22 +7,22 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.types.DfConstantT
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.types.DfType;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.*;
 import com.intellij.java.analysis.impl.codeInspection.util.OptionalUtil;
-import com.intellij.java.language.psi.*;
-import consulo.application.Application;
-import consulo.application.ApplicationManager;
-import consulo.logging.Logger;
-import consulo.util.lang.Pair;
-import consulo.document.util.TextRange;
-import com.intellij.psi.*;
 import com.intellij.java.language.impl.psi.impl.PsiImplUtil;
-import consulo.language.psi.util.PsiTreeUtil;
+import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiTypesUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
-import consulo.util.lang.ThreeState;
-import consulo.util.collection.ContainerUtil;
 import com.siyeh.ig.callMatcher.CallMatcher;
 import com.siyeh.ig.psiutils.TypeUtils;
+import consulo.application.Application;
+import consulo.application.ApplicationManager;
+import consulo.document.util.TextRange;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.logging.Logger;
+import consulo.util.collection.ContainerUtil;
+import consulo.util.lang.Pair;
+import consulo.util.lang.ThreeState;
 import one.util.streamex.EntryStream;
 import one.util.streamex.StreamEx;
 
@@ -31,7 +31,7 @@ import javax.annotation.Nullable;
 import java.util.*;
 import java.util.stream.Stream;
 
-import static consulo.ide.impl.idea.util.ObjectUtils.tryCast;
+import static consulo.util.lang.ObjectUtil.tryCast;
 
 final class DataFlowInstructionVisitor extends StandardInstructionVisitor {
   private static final Logger LOG = Logger.getInstance(DataFlowInstructionVisitor.class);

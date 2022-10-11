@@ -1,11 +1,11 @@
 // Copyright 2000-2019 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.analysis.impl.codeInspection.dataFlow.types;
 
-import consulo.util.lang.StringUtil;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiType;
-import consulo.ide.impl.idea.util.ObjectUtils;
+import consulo.util.lang.ObjectUtil;
+import consulo.util.lang.StringUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -74,7 +74,7 @@ public abstract class DfConstantType<T> implements DfType {
    */
   @Nullable
   public static <T> T getConstantOfType(@Nonnull DfType dfType, @Nonnull Class<T> clazz) {
-    return dfType instanceof DfConstantType ? ObjectUtils.tryCast(((DfConstantType<?>) dfType).getValue(), clazz) : null;
+    return dfType instanceof DfConstantType ? ObjectUtil.tryCast(((DfConstantType<?>) dfType).getValue(), clazz) : null;
   }
 
   /**

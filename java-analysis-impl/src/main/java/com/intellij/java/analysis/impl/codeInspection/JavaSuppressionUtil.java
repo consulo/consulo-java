@@ -15,29 +15,31 @@
  */
 package com.intellij.java.analysis.impl.codeInspection;
 
-import com.intellij.java.language.codeInsight.AnnotationUtil;
-import consulo.language.editor.DaemonCodeAnalyzerSettings;
-import consulo.language.editor.inspection.SuppressionUtil;
 import com.intellij.java.analysis.impl.codeInsight.intention.AddAnnotationPsiFix;
-import com.intellij.java.language.psi.*;
-import consulo.application.ApplicationManager;
-import consulo.module.Module;
-import consulo.ide.impl.idea.openapi.module.ModuleUtil;
-import consulo.language.util.ModuleUtilCore;
-import consulo.project.Project;
-import com.intellij.java.language.projectRoots.JavaSdkVersion;
-import consulo.content.bundle.Sdk;
-import consulo.application.util.function.Computable;
-import consulo.util.lang.StringUtil;
-import com.intellij.psi.*;
+import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.language.impl.psi.impl.PsiVariableEx;
+import com.intellij.java.language.projectRoots.JavaSdkVersion;
+import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.java.language.psi.javadoc.PsiDocTag;
-import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.language.util.IncorrectOperationException;
+import consulo.application.ApplicationManager;
+import consulo.application.util.function.Computable;
+import consulo.content.bundle.Sdk;
 import consulo.java.language.module.extension.JavaModuleExtension;
 import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.editor.DaemonCodeAnalyzerSettings;
+import consulo.language.editor.inspection.SuppressionUtil;
+import consulo.language.psi.PsiComment;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiWhiteSpace;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.language.util.ModuleUtilCore;
+import consulo.module.Module;
+import consulo.project.Project;
+import consulo.util.lang.StringUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -284,7 +286,7 @@ public class JavaSuppressionUtil {
   public static boolean canHave15Suppressions(@Nonnull PsiElement file) {
     final Module module = ModuleUtilCore.findModuleForPsiElement(file);
     if (module == null) return false;
-    final Sdk jdk = ModuleUtil.getSdk(module, JavaModuleExtension.class);
+    final Sdk jdk = ModuleUtilCore.getSdk(module, JavaModuleExtension.class);
     if (jdk == null) return false;
     JavaSdkVersion version = getVersion(jdk);
     if (version == null) return false;

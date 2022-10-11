@@ -15,109 +15,76 @@
  */
 package com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix;
 
-import java.util.List;
-
-import javax.annotation.Nonnull;
+import com.intellij.java.language.psi.*;
+import consulo.codeEditor.Editor;
+import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.intention.IntentionAction;
-import consulo.codeEditor.Editor;
-import consulo.project.Project;
-import consulo.util.lang.function.Condition;
-import consulo.util.lang.StringUtil;
-import com.intellij.java.language.psi.JavaPsiFacade;
 import consulo.language.psi.PsiFile;
-import com.intellij.java.language.psi.PsiIntersectionType;
-import com.intellij.java.language.psi.PsiType;
-import com.intellij.java.language.psi.PsiTypeCastExpression;
-import com.intellij.java.language.psi.PsiTypeElement;
-import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.psi.util.PsiTreeUtil;
-import consulo.ide.impl.idea.util.Function;
 import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
+import consulo.util.lang.StringUtil;
 
-public class DeleteRepeatedInterfaceFix implements IntentionAction
-{
-	private final PsiTypeElement myConjunct;
-	private final List<PsiTypeElement> myConjList;
+import javax.annotation.Nonnull;
+import java.util.List;
 
-	public DeleteRepeatedInterfaceFix(PsiTypeElement conjunct, List<PsiTypeElement> conjList)
-	{
-		myConjunct = conjunct;
-		myConjList = conjList;
-	}
+public class DeleteRepeatedInterfaceFix implements IntentionAction {
+  private final PsiTypeElement myConjunct;
+  private final List<PsiTypeElement> myConjList;
 
-	@Nonnull
-	@Override
-	public String getText()
-	{
-		return "Delete repeated '" + myConjunct.getText() + "'";
-	}
+  public DeleteRepeatedInterfaceFix(PsiTypeElement conjunct, List<PsiTypeElement> conjList) {
+    myConjunct = conjunct;
+    myConjList = conjList;
+  }
 
-	@Nonnull
-	@Override
-	public String getFamilyName()
-	{
-		return "Delete repeated interface";
-	}
+  @Nonnull
+  @Override
+  public String getText() {
+    return "Delete repeated '" + myConjunct.getText() + "'";
+  }
 
-	@Override
-	public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file)
-	{
-		for(PsiTypeElement element : myConjList)
-		{
-			if(!element.isValid())
-			{
-				return false;
-			}
-		}
-		return true;
-	}
+  @Nonnull
+  @Override
+  public String getFamilyName() {
+    return "Delete repeated interface";
+  }
 
-	@Override
-	public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException
-	{
-		if(!FileModificationService.getInstance().prepareFileForWrite(file))
-		{
-			return;
-		}
-		final PsiTypeCastExpression castExpression = PsiTreeUtil.getParentOfType(myConjunct,
-				PsiTypeCastExpression.class);
-		if(castExpression != null)
-		{
-			final PsiTypeElement castType = castExpression.getCastType();
-			if(castType != null)
-			{
-				final PsiType type = castType.getType();
-				if(type instanceof PsiIntersectionType)
-				{
-					final String typeText = StringUtil.join(ContainerUtil.filter(myConjList,
-							new Condition<PsiTypeElement>()
-					{
-						@Override
-						public boolean value(PsiTypeElement element)
-						{
-							return element != myConjunct;
-						}
-					}), new Function<PsiTypeElement, String>()
-					{
-						@Override
-						public String fun(PsiTypeElement element)
-						{
-							return element.getText();
-						}
-					}, " & ");
-					final PsiTypeCastExpression newCastExpr = (PsiTypeCastExpression) JavaPsiFacade.getElementFactory
-							(project).createExpressionFromText("(" + typeText + ")a", castType);
-					CodeStyleManager.getInstance(project).reformat(castType.replace(newCastExpr.getCastType()));
-				}
-			}
-		}
-	}
+  @Override
+  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+    for (PsiTypeElement element : myConjList) {
+      if (!element.isValid()) {
+        return false;
+      }
+    }
+    return true;
+  }
 
-	@Override
-	public boolean startInWriteAction()
-	{
-		return true;
-	}
+  @Override
+  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+    if (!FileModificationService.getInstance().prepareFileForWrite(file)) {
+      return;
+    }
+    final PsiTypeCastExpression castExpression = PsiTreeUtil.getParentOfType(myConjunct,
+        PsiTypeCastExpression.class);
+    if (castExpression != null) {
+      final PsiTypeElement castType = castExpression.getCastType();
+      if (castType != null) {
+        final PsiType type = castType.getType();
+        if (type instanceof PsiIntersectionType) {
+          final String typeText = StringUtil.join(ContainerUtil.filter(myConjList,
+              element -> element != myConjunct), element -> element.getText(), " & ");
+          final PsiTypeCastExpression newCastExpr = (PsiTypeCastExpression) JavaPsiFacade.getElementFactory
+              (project).createExpressionFromText("(" + typeText + ")a", castType);
+          CodeStyleManager.getInstance(project).reformat(castType.replace(newCastExpr.getCastType()));
+        }
+      }
+    }
+  }
+
+  @Override
+  public boolean startInWriteAction() {
+    return true;
+  }
 }

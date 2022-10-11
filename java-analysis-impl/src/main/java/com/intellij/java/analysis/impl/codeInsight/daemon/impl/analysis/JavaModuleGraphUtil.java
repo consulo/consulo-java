@@ -1,43 +1,44 @@
 // Copyright 2000-2020 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis;
 
-import com.google.common.base.Predicate;
-import com.intellij.java.language.JavaLanguage;
-import com.intellij.java.language.psi.*;
-import consulo.virtualFileSystem.fileType.FileTypeRegistry;
-import consulo.language.file.LanguageFileType;
-import consulo.module.Module;
-import consulo.module.ModuleManager;
-import consulo.project.Project;
-import consulo.module.content.ModuleRootManager;
-import consulo.module.content.ProjectFileIndex;
-import consulo.util.lang.Trinity;
-import consulo.virtualFileSystem.VirtualFile;
-import com.intellij.psi.*;
 import com.intellij.java.indexing.impl.stubs.index.JavaModuleNameIndex;
+import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.impl.psi.impl.light.LightJavaModule;
-import consulo.language.psi.scope.GlobalSearchScope;
-import com.intellij.psi.search.ProjectScope;
+import com.intellij.java.language.psi.*;
 import consulo.application.util.CachedValueProvider.Result;
 import consulo.application.util.CachedValuesManager;
-import consulo.language.psi.PsiModificationTracker;
-import consulo.ide.impl.idea.util.ObjectUtils;
-import consulo.util.collection.ContainerUtil;
-import consulo.util.collection.MultiMap;
 import consulo.component.util.graph.DFSTBuilder;
 import consulo.component.util.graph.Graph;
 import consulo.component.util.graph.GraphGenerator;
-import consulo.roots.ContentFolderScopes;
-import consulo.roots.ContentFolderTypeProvider;
+import consulo.content.ContentFolderTypeProvider;
+import consulo.language.content.LanguageContentFolderScopes;
+import consulo.language.file.LanguageFileType;
+import consulo.language.psi.*;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.util.LanguageCachedValueUtil;
+import consulo.module.Module;
+import consulo.module.ModuleManager;
+import consulo.module.content.ModuleRootManager;
+import consulo.module.content.ProjectFileIndex;
+import consulo.project.Project;
+import consulo.project.content.scope.ProjectAwareSearchScope;
+import consulo.project.content.scope.ProjectScopes;
+import consulo.util.collection.ContainerUtil;
+import consulo.util.collection.MultiMap;
+import consulo.util.lang.ObjectUtil;
+import consulo.util.lang.Trinity;
+import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.archive.ArchiveFileSystem;
+import consulo.virtualFileSystem.fileType.FileTypeRegistry;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.BiFunction;
+import java.util.function.Predicate;
 import java.util.jar.JarFile;
 
-import static consulo.ide.impl.idea.util.ObjectUtils.tryCast;
+import static consulo.util.lang.ObjectUtil.tryCast;
 
 public final class JavaModuleGraphUtil {
   private JavaModuleGraphUtil() {
@@ -86,7 +87,7 @@ public final class JavaModuleGraphUtil {
   @Nullable
   public static PsiJavaModule findDescriptorByModule(@Nullable Module module, boolean inTests) {
     if (module != null) {
-      Predicate<ContentFolderTypeProvider> rootType = inTests ? ContentFolderScopes.test() : ContentFolderScopes.production();
+      Predicate<ContentFolderTypeProvider> rootType = inTests ? LanguageContentFolderScopes.test() : LanguageContentFolderScopes.production();
       List<VirtualFile> files = ContainerUtil.mapNotNull(ModuleRootManager.getInstance(module).getContentFolderFiles(rootType),
           root -> root.findChild(PsiJavaModule.MODULE_INFO_FILE));
       if (files.size() == 1) {
@@ -115,11 +116,11 @@ public final class JavaModuleGraphUtil {
     Project project = module.getProject();
     List<Set<PsiJavaModule>> cycles = CachedValuesManager.getManager(project).getCachedValue(project, () ->
         Result.create(findCycles(project), cacheDependency()));
-    return ObjectUtils.notNull(ContainerUtil.find(cycles, set -> set.contains(module)), Collections.emptyList());
+    return ObjectUtil.notNull(ContainerUtil.find(cycles, set -> set.contains(module)), Collections.emptyList());
   }
 
   public static boolean exports(@Nonnull PsiJavaModule source, @Nonnull String packageName, @Nullable PsiJavaModule target) {
-    Map<String, Set<String>> exports = CachedValuesManager.getCachedValue(source, () ->
+    Map<String, Set<String>> exports = LanguageCachedValueUtil.getCachedValue(source, () ->
         Result.create(exportsMap(source), source.getContainingFile()));
     Set<String> targets = exports.get(packageName);
     return targets != null && (targets.isEmpty() || target != null && targets.contains(target.getName()));
@@ -224,7 +225,7 @@ public final class JavaModuleGraphUtil {
     Set<String> transitiveEdges = new HashSet<>();
 
     JavaModuleNameIndex index = JavaModuleNameIndex.getInstance();
-    GlobalSearchScope scope = ProjectScope.getAllScope(project);
+    ProjectAwareSearchScope scope = ProjectScopes.getAllScope(project);
     for (String key : index.getAllKeys(project)) {
       for (PsiJavaModule module : index.get(key, project, scope)) {
         visit(module, relations, transitiveEdges);

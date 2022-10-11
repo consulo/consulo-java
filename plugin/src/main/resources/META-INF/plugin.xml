@@ -994,7 +994,7 @@
 
 		<projectService serviceImplementation="com.intellij.java.impl.javadoc.JavadocGenerationManager"/>
 
-		<highlightVisitor implementation="com.intellij.java.impl.codeInsight.daemon.impl.analysis.HighlightVisitorImpl"/>
+		<highlightVisitor implementation="com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.HighlightVisitorImpl"/>
 
 		<lang.foldingBuilder language="JAVA" implementationClass="com.intellij.java.impl.codeInsight.daemon.impl.actions.SuppressWarningsFoldingBuilder"/>
 
@@ -1963,7 +1963,6 @@
 		<annotator language="JAVA-SPI" implementationClass="com.intellij.java.impl.spi.SPIAnnotator"/>
 		<lang.substitutor language="TEXT" implementationClass="consulo.java.impl.spi.SPILanguageSubstitutor"/>
 
-		<packaging.artifactType implementation="com.intellij.java.compiler.artifact.impl.artifacts.JarArtifactType" order="after zip-artifact"/>
 		<packaging.elementType implementation="com.intellij.java.compiler.artifact.impl.elements.JarArchiveElementType" order="after zip-archive-element"/>
 		<moduleExtensionProvider key="java"
 								 icon="consulo.java.psi.impl.JavaPsiImplIconGroup@java"

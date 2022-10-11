@@ -24,7 +24,7 @@ import com.siyeh.ig.psiutils.TypeUtils;
 
 import javax.annotation.Nonnull;
 
-public class ExtendsConcreteCollectionInspectionBase extends BaseInspection {
+public abstract class ExtendsConcreteCollectionInspectionBase extends BaseInspection {
   @Override
   @Nonnull
   public String getID() {

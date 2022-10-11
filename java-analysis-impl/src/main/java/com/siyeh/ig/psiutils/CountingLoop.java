@@ -17,13 +17,14 @@ package com.siyeh.ig.psiutils;
 
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.RelationType;
 import com.intellij.java.language.psi.*;
-import consulo.language.ast.IElementType;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
+import consulo.language.ast.IElementType;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import static consulo.ide.impl.idea.util.ObjectUtils.tryCast;
+import static consulo.util.lang.ObjectUtil.tryCast;
 
 /**
  * Represents a loop of form {@code for(int/long counter = initializer; counter </<= bound; counter++/--)}

@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.codeInspection.defUse;
 
-import consulo.ide.impl.idea.codeInsight.daemon.GroupNames;
+import com.intellij.java.analysis.codeInspection.GroupNames;
 import com.intellij.java.analysis.codeInspection.BaseJavaBatchLocalInspectionTool;
 import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;

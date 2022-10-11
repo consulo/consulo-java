@@ -16,7 +16,7 @@
 package com.intellij.java.impl.codeInspection.duplicateStringLiteral;
 
 import consulo.language.editor.FileModificationService;
-import consulo.ide.impl.idea.codeInsight.daemon.GroupNames;
+import com.intellij.java.analysis.codeInspection.GroupNames;
 import com.intellij.java.analysis.impl.codeInspection.ex.BaseLocalInspectionTool;
 import com.intellij.java.impl.codeInspection.i18n.JavaI18nUtil;
 import com.intellij.java.analysis.codeInspection.SuppressManager;

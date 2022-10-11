@@ -18,7 +18,7 @@ package com.intellij.java.impl.codeInspection.inheritance;
 import javax.annotation.Nonnull;
 
 import consulo.language.editor.FileModificationService;
-import consulo.ide.impl.idea.codeInsight.daemon.GroupNames;
+import com.intellij.java.analysis.codeInspection.GroupNames;
 import consulo.language.editor.intention.LowPriorityAction;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemDescriptor;

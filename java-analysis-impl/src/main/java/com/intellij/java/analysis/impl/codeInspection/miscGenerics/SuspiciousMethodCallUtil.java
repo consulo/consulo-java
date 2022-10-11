@@ -2,19 +2,20 @@
 package com.intellij.java.analysis.impl.codeInspection.miscGenerics;
 
 import com.intellij.java.language.codeInsight.daemon.impl.analysis.JavaGenericsUtil;
-import consulo.language.editor.inspection.InspectionsBundle;
 import com.intellij.java.language.psi.*;
-import com.intellij.java.language.psi.util.*;
-import consulo.ide.impl.idea.openapi.util.NullableLazyValue;
-import com.intellij.psi.*;
 import com.intellij.java.language.psi.impl.source.resolve.graphInference.PsiPolyExpressionUtil;
-import consulo.language.psi.scope.GlobalSearchScope;
-import com.intellij.psi.util.*;
-import consulo.util.collection.ArrayUtil;
-import consulo.ide.impl.idea.util.ObjectUtils;
+import com.intellij.java.language.psi.util.*;
 import com.siyeh.ig.callMatcher.CallMatcher;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
+import consulo.application.util.NullableLazyValue;
+import consulo.language.editor.inspection.InspectionsBundle;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiManager;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.util.collection.ArrayUtil;
+import consulo.util.lang.ObjectUtil;
 import org.jetbrains.annotations.Contract;
 
 import javax.annotation.Nonnull;
@@ -238,10 +239,10 @@ public class SuspiciousMethodCallUtil {
 
   @Nullable
   public static String getSuspiciousMethodCallMessage(PsiReferenceExpression methodExpression,
-                                               PsiType argType,
-                                               boolean reportConvertibleMethodCalls,
-                                               @Nonnull List<PatternMethod> patternMethods,
-                                               int argIdx) {
+                                                      PsiType argType,
+                                                      boolean reportConvertibleMethodCalls,
+                                                      @Nonnull List<PatternMethod> patternMethods,
+                                                      int argIdx) {
     final PsiExpression qualifier = methodExpression.getQualifierExpression();
     if (qualifier == null || qualifier instanceof PsiThisExpression || qualifier instanceof PsiSuperExpression) {
       return null;
@@ -371,12 +372,12 @@ public class SuspiciousMethodCallUtil {
   }
 
   private static boolean hasNullCollectionArg(PsiReferenceExpression methodExpression) {
-    PsiMethodCallExpression call = ObjectUtils.tryCast(methodExpression.getParent(), PsiMethodCallExpression.class);
+    PsiMethodCallExpression call = ObjectUtil.tryCast(methodExpression.getParent(), PsiMethodCallExpression.class);
     if (call != null) {
       PsiExpression arg =
           ExpressionUtils.resolveExpression(ArrayUtil.getFirstElement(call.getArgumentList().getExpressions()));
       PsiMethodCallExpression argCall =
-          ObjectUtils.tryCast(PsiUtil.skipParenthesizedExprDown(arg), PsiMethodCallExpression.class);
+          ObjectUtil.tryCast(PsiUtil.skipParenthesizedExprDown(arg), PsiMethodCallExpression.class);
       return SINGLETON_COLLECTION.test(argCall) && ExpressionUtils.isNullLiteral(argCall.getArgumentList().getExpressions()[0]);
     }
     return false;

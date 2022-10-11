@@ -94,6 +94,13 @@
 	</build>
 
 	<dependencies>
+		<dependency>
+			<groupId>consulo</groupId>
+			<artifactId>consulo-language-editor-impl</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
+
 		<!--just for correct working packaging-->
 		<dependency>
 			<groupId>${project.groupId}</groupId>

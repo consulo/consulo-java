@@ -19,7 +19,7 @@ import com.intellij.java.impl.ig.fixes.IntroduceConstantFix;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.memory.ZeroLengthArrayInitializationInspectionBase;
 
-public class ZeroLengthArrayInitializationInspection extends ZeroLengthArrayInitializationInspectionBase {
+public abstract class ZeroLengthArrayInitializationInspection extends ZeroLengthArrayInitializationInspectionBase {
 
   @Override
   protected InspectionGadgetsFix buildFix(Object... infos) {

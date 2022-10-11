@@ -15,21 +15,6 @@
  */
 package com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis;
 
-import consulo.language.editor.CodeInsightUtilCore;
-import consulo.language.psi.search.ContainerProvider;
-import com.intellij.java.language.impl.codeInsight.ExceptionUtil;
-import com.intellij.java.language.impl.codeInsight.daemon.JavaErrorBundle;
-import consulo.language.editor.rawHighlight.HighlightInfo;
-import consulo.language.editor.rawHighlight.HighlightInfoType;
-import com.intellij.java.language.impl.codeInsight.daemon.impl.analysis.HighlightUtilBase;
-import com.intellij.java.language.codeInsight.daemon.impl.analysis.JavaGenericsUtil;
-import consulo.language.editor.intention.QuickFixAction;
-import consulo.language.editor.internal.QuickFixActionRegistrarImpl;
-import consulo.language.editor.highlight.HighlightUsagesDescriptionLocation;
-import consulo.language.editor.intention.IntentionAction;
-import consulo.ide.impl.idea.codeInsight.intention.impl.PriorityActionWrapper;
-import consulo.language.editor.intention.UnresolvedReferenceQuickFixProvider;
-import consulo.language.editor.inspection.LocalQuickFixOnPsiElementAsIntentionAdapter;
 import com.intellij.java.analysis.codeInsight.intention.QuickFixFactory;
 import com.intellij.java.analysis.impl.JavaLanguageLevelPusher;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix.*;
@@ -38,48 +23,66 @@ import com.intellij.java.analysis.impl.psi.util.EnclosingLoopMatcherExpression;
 import com.intellij.java.analysis.impl.psi.util.EnclosingLoopOrSwitchMatcherExpression;
 import com.intellij.java.analysis.impl.psi.util.JavaMatchers;
 import com.intellij.java.analysis.impl.psi.util.PsiMatchers;
-import com.intellij.java.language.psi.*;
-import com.intellij.java.language.psi.util.*;
-import com.intellij.lang.findUsages.LanguageFindUsages;
 import com.intellij.java.language.JavaLanguage;
-import consulo.component.extension.Extensions;
-import com.intellij.java.language.module.EffectiveLanguageLevelUtil;
-import consulo.module.Module;
-import consulo.language.util.ModuleUtilCore;
-import consulo.project.Project;
-import com.intellij.java.language.projectRoots.JavaSdkVersion;
-import consulo.module.content.ProjectFileIndex;
-import consulo.module.content.FilePropertyPusher;
-import consulo.util.lang.Comparing;
-import consulo.util.lang.Pair;
-import consulo.util.lang.ref.Ref;
-import consulo.document.util.TextRange;
-import consulo.util.lang.StringUtil;
-import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.java.language.LanguageLevel;
-import com.intellij.psi.*;
+import com.intellij.java.language.codeInsight.daemon.impl.analysis.JavaGenericsUtil;
+import com.intellij.java.language.impl.codeInsight.ExceptionUtil;
+import com.intellij.java.language.impl.codeInsight.daemon.JavaErrorBundle;
+import com.intellij.java.language.impl.codeInsight.daemon.impl.analysis.HighlightUtilBase;
 import com.intellij.java.language.impl.psi.impl.source.resolve.JavaResolveUtil;
 import com.intellij.java.language.impl.psi.impl.source.resolve.graphInference.InferenceSession;
-import com.intellij.java.language.psi.impl.source.resolve.graphInference.PsiPolyExpressionUtil;
 import com.intellij.java.language.impl.psi.impl.source.tree.ElementType;
 import com.intellij.java.language.impl.psi.impl.source.tree.java.PsiReferenceExpressionImpl;
-import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.java.language.impl.psi.scope.processor.VariablesNotProcessor;
 import com.intellij.java.language.impl.psi.scope.util.PsiScopesUtil;
-import consulo.language.psi.scope.GlobalSearchScope;
-import consulo.language.psi.OuterLanguageElement;
-import consulo.language.ast.IElementType;
-import com.intellij.psi.util.*;
 import com.intellij.java.language.impl.refactoring.util.RefactoringChangeUtil;
-import com.intellij.util.*;
+import com.intellij.java.language.module.EffectiveLanguageLevelUtil;
+import com.intellij.java.language.projectRoots.JavaSdkVersion;
+import com.intellij.java.language.psi.PsiElementFactory;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.impl.source.resolve.graphInference.PsiPolyExpressionUtil;
+import com.intellij.java.language.psi.javadoc.PsiDocComment;
+import com.intellij.java.language.psi.util.*;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.component.extension.Extensions;
+import consulo.document.util.TextRange;
+import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.ast.IElementType;
+import consulo.language.editor.CodeInsightUtilCore;
+import consulo.language.editor.highlight.HighlightUsagesDescriptionLocation;
+import consulo.language.editor.inspection.LocalQuickFixOnPsiElementAsIntentionAdapter;
+import consulo.language.editor.inspection.PriorityActionWrapper;
+import consulo.language.editor.intention.IntentionAction;
+import consulo.language.editor.intention.QuickFixAction;
+import consulo.language.editor.intention.UnresolvedReferenceQuickFixProvider;
+import consulo.language.editor.internal.QuickFixActionRegistrarImpl;
+import consulo.language.editor.rawHighlight.HighlightInfo;
+import consulo.language.editor.rawHighlight.HighlightInfoType;
+import consulo.language.findUsage.FindUsagesProvider;
+import consulo.language.psi.*;
+import consulo.language.psi.resolve.ResolveState;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.search.ContainerProvider;
+import consulo.language.psi.util.PsiMatcherImpl;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.language.util.ModuleUtilCore;
+import consulo.logging.Logger;
+import consulo.module.Module;
+import consulo.module.content.FilePropertyPusher;
+import consulo.module.content.ProjectFileIndex;
+import consulo.project.Project;
+import consulo.ui.ex.awt.UIUtil;
+import consulo.util.collection.ArrayUtil;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.collection.MultiMap;
-import consulo.ui.ex.awt.UIUtil;
+import consulo.util.lang.Comparing;
+import consulo.util.lang.ObjectUtil;
+import consulo.util.lang.Pair;
+import consulo.util.lang.StringUtil;
+import consulo.util.lang.ref.Ref;
 import consulo.util.lang.xml.XmlStringUtil;
-import consulo.annotation.access.RequiredReadAction;
-import consulo.java.language.module.util.JavaClassNames;
-import consulo.logging.Logger;
-import consulo.psi.PsiPackage;
+import consulo.virtualFileSystem.VirtualFile;
 import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
@@ -108,50 +111,50 @@ public class HighlightUtil extends HighlightUtilBase {
   private static final Map<String, Set<String>> ourModuleIncompatibleModifiers = new HashMap<>(1);
   private static final Map<String, Set<String>> ourRequiresIncompatibleModifiers = new HashMap<>(2);
 
-  private static final Set<String> ourConstructorNotAllowedModifiers = ContainerUtil.newHashSet(PsiModifier.ABSTRACT, PsiModifier.STATIC, PsiModifier.NATIVE, PsiModifier.FINAL, PsiModifier
+  private static final Set<String> ourConstructorNotAllowedModifiers = Set.of(PsiModifier.ABSTRACT, PsiModifier.STATIC, PsiModifier.NATIVE, PsiModifier.FINAL, PsiModifier
       .STRICTFP, PsiModifier.SYNCHRONIZED);
 
   private static final String SERIAL_PERSISTENT_FIELDS_FIELD_NAME = "serialPersistentFields";
 
   static {
-    ourClassIncompatibleModifiers.put(PsiModifier.ABSTRACT, ContainerUtil.newHashSet(PsiModifier.FINAL));
-    ourClassIncompatibleModifiers.put(PsiModifier.FINAL, ContainerUtil.newHashSet(PsiModifier.ABSTRACT));
-    ourClassIncompatibleModifiers.put(PsiModifier.PACKAGE_LOCAL, ContainerUtil.newHashSet(PsiModifier.PRIVATE, PsiModifier.PUBLIC, PsiModifier.PROTECTED));
-    ourClassIncompatibleModifiers.put(PsiModifier.PRIVATE, ContainerUtil.newHashSet(PsiModifier.PACKAGE_LOCAL, PsiModifier.PUBLIC, PsiModifier.PROTECTED));
-    ourClassIncompatibleModifiers.put(PsiModifier.PUBLIC, ContainerUtil.newHashSet(PsiModifier.PACKAGE_LOCAL, PsiModifier.PRIVATE, PsiModifier.PROTECTED));
-    ourClassIncompatibleModifiers.put(PsiModifier.PROTECTED, ContainerUtil.newHashSet(PsiModifier.PACKAGE_LOCAL, PsiModifier.PUBLIC, PsiModifier.PRIVATE));
+    ourClassIncompatibleModifiers.put(PsiModifier.ABSTRACT, Set.of(PsiModifier.FINAL));
+    ourClassIncompatibleModifiers.put(PsiModifier.FINAL, Set.of(PsiModifier.ABSTRACT));
+    ourClassIncompatibleModifiers.put(PsiModifier.PACKAGE_LOCAL, Set.of(PsiModifier.PRIVATE, PsiModifier.PUBLIC, PsiModifier.PROTECTED));
+    ourClassIncompatibleModifiers.put(PsiModifier.PRIVATE, Set.of(PsiModifier.PACKAGE_LOCAL, PsiModifier.PUBLIC, PsiModifier.PROTECTED));
+    ourClassIncompatibleModifiers.put(PsiModifier.PUBLIC, Set.of(PsiModifier.PACKAGE_LOCAL, PsiModifier.PRIVATE, PsiModifier.PROTECTED));
+    ourClassIncompatibleModifiers.put(PsiModifier.PROTECTED, Set.of(PsiModifier.PACKAGE_LOCAL, PsiModifier.PUBLIC, PsiModifier.PRIVATE));
     ourClassIncompatibleModifiers.put(PsiModifier.STRICTFP, Collections.emptySet());
     ourClassIncompatibleModifiers.put(PsiModifier.STATIC, Collections.emptySet());
 
     ourInterfaceIncompatibleModifiers.put(PsiModifier.ABSTRACT, Collections.emptySet());
-    ourInterfaceIncompatibleModifiers.put(PsiModifier.PACKAGE_LOCAL, ContainerUtil.newHashSet(PsiModifier.PRIVATE, PsiModifier.PUBLIC, PsiModifier.PROTECTED));
-    ourInterfaceIncompatibleModifiers.put(PsiModifier.PRIVATE, ContainerUtil.newHashSet(PsiModifier.PACKAGE_LOCAL, PsiModifier.PUBLIC, PsiModifier.PROTECTED));
-    ourInterfaceIncompatibleModifiers.put(PsiModifier.PUBLIC, ContainerUtil.newHashSet(PsiModifier.PACKAGE_LOCAL, PsiModifier.PRIVATE, PsiModifier.PROTECTED));
-    ourInterfaceIncompatibleModifiers.put(PsiModifier.PROTECTED, ContainerUtil.newHashSet(PsiModifier.PACKAGE_LOCAL, PsiModifier.PUBLIC, PsiModifier.PRIVATE));
+    ourInterfaceIncompatibleModifiers.put(PsiModifier.PACKAGE_LOCAL, Set.of(PsiModifier.PRIVATE, PsiModifier.PUBLIC, PsiModifier.PROTECTED));
+    ourInterfaceIncompatibleModifiers.put(PsiModifier.PRIVATE, Set.of(PsiModifier.PACKAGE_LOCAL, PsiModifier.PUBLIC, PsiModifier.PROTECTED));
+    ourInterfaceIncompatibleModifiers.put(PsiModifier.PUBLIC, Set.of(PsiModifier.PACKAGE_LOCAL, PsiModifier.PRIVATE, PsiModifier.PROTECTED));
+    ourInterfaceIncompatibleModifiers.put(PsiModifier.PROTECTED, Set.of(PsiModifier.PACKAGE_LOCAL, PsiModifier.PUBLIC, PsiModifier.PRIVATE));
     ourInterfaceIncompatibleModifiers.put(PsiModifier.STRICTFP, Collections.emptySet());
     ourInterfaceIncompatibleModifiers.put(PsiModifier.STATIC, Collections.emptySet());
 
-    ourMethodIncompatibleModifiers.put(PsiModifier.ABSTRACT, ContainerUtil.newHashSet(PsiModifier.NATIVE, PsiModifier.STATIC, PsiModifier.FINAL, PsiModifier.PRIVATE, PsiModifier.STRICTFP,
+    ourMethodIncompatibleModifiers.put(PsiModifier.ABSTRACT, Set.of(PsiModifier.NATIVE, PsiModifier.STATIC, PsiModifier.FINAL, PsiModifier.PRIVATE, PsiModifier.STRICTFP,
         PsiModifier.SYNCHRONIZED, PsiModifier.DEFAULT));
-    ourMethodIncompatibleModifiers.put(PsiModifier.NATIVE, ContainerUtil.newHashSet(PsiModifier.ABSTRACT, PsiModifier.STRICTFP));
-    ourMethodIncompatibleModifiers.put(PsiModifier.PACKAGE_LOCAL, ContainerUtil.newHashSet(PsiModifier.PRIVATE, PsiModifier.PUBLIC, PsiModifier.PROTECTED));
-    ourMethodIncompatibleModifiers.put(PsiModifier.PRIVATE, ContainerUtil.newHashSet(PsiModifier.PACKAGE_LOCAL, PsiModifier.PUBLIC, PsiModifier.PROTECTED));
-    ourMethodIncompatibleModifiers.put(PsiModifier.PUBLIC, ContainerUtil.newHashSet(PsiModifier.PACKAGE_LOCAL, PsiModifier.PRIVATE, PsiModifier.PROTECTED));
-    ourMethodIncompatibleModifiers.put(PsiModifier.PROTECTED, ContainerUtil.newHashSet(PsiModifier.PACKAGE_LOCAL, PsiModifier.PUBLIC, PsiModifier.PRIVATE));
-    ourMethodIncompatibleModifiers.put(PsiModifier.STATIC, ContainerUtil.newHashSet(PsiModifier.ABSTRACT, PsiModifier.DEFAULT, PsiModifier.FINAL));
-    ourMethodIncompatibleModifiers.put(PsiModifier.DEFAULT, ContainerUtil.newHashSet(PsiModifier.ABSTRACT, PsiModifier.STATIC, PsiModifier.FINAL, PsiModifier.PRIVATE));
-    ourMethodIncompatibleModifiers.put(PsiModifier.SYNCHRONIZED, ContainerUtil.newHashSet(PsiModifier.ABSTRACT));
-    ourMethodIncompatibleModifiers.put(PsiModifier.STRICTFP, ContainerUtil.newHashSet(PsiModifier.ABSTRACT));
-    ourMethodIncompatibleModifiers.put(PsiModifier.FINAL, ContainerUtil.newHashSet(PsiModifier.ABSTRACT));
+    ourMethodIncompatibleModifiers.put(PsiModifier.NATIVE, Set.of(PsiModifier.ABSTRACT, PsiModifier.STRICTFP));
+    ourMethodIncompatibleModifiers.put(PsiModifier.PACKAGE_LOCAL, Set.of(PsiModifier.PRIVATE, PsiModifier.PUBLIC, PsiModifier.PROTECTED));
+    ourMethodIncompatibleModifiers.put(PsiModifier.PRIVATE, Set.of(PsiModifier.PACKAGE_LOCAL, PsiModifier.PUBLIC, PsiModifier.PROTECTED));
+    ourMethodIncompatibleModifiers.put(PsiModifier.PUBLIC, Set.of(PsiModifier.PACKAGE_LOCAL, PsiModifier.PRIVATE, PsiModifier.PROTECTED));
+    ourMethodIncompatibleModifiers.put(PsiModifier.PROTECTED, Set.of(PsiModifier.PACKAGE_LOCAL, PsiModifier.PUBLIC, PsiModifier.PRIVATE));
+    ourMethodIncompatibleModifiers.put(PsiModifier.STATIC, Set.of(PsiModifier.ABSTRACT, PsiModifier.DEFAULT, PsiModifier.FINAL));
+    ourMethodIncompatibleModifiers.put(PsiModifier.DEFAULT, Set.of(PsiModifier.ABSTRACT, PsiModifier.STATIC, PsiModifier.FINAL, PsiModifier.PRIVATE));
+    ourMethodIncompatibleModifiers.put(PsiModifier.SYNCHRONIZED, Set.of(PsiModifier.ABSTRACT));
+    ourMethodIncompatibleModifiers.put(PsiModifier.STRICTFP, Set.of(PsiModifier.ABSTRACT));
+    ourMethodIncompatibleModifiers.put(PsiModifier.FINAL, Set.of(PsiModifier.ABSTRACT));
 
-    ourFieldIncompatibleModifiers.put(PsiModifier.FINAL, ContainerUtil.newHashSet(PsiModifier.VOLATILE));
-    ourFieldIncompatibleModifiers.put(PsiModifier.PACKAGE_LOCAL, ContainerUtil.newHashSet(PsiModifier.PRIVATE, PsiModifier.PUBLIC, PsiModifier.PROTECTED));
-    ourFieldIncompatibleModifiers.put(PsiModifier.PRIVATE, ContainerUtil.newHashSet(PsiModifier.PACKAGE_LOCAL, PsiModifier.PUBLIC, PsiModifier.PROTECTED));
-    ourFieldIncompatibleModifiers.put(PsiModifier.PUBLIC, ContainerUtil.newHashSet(PsiModifier.PACKAGE_LOCAL, PsiModifier.PRIVATE, PsiModifier.PROTECTED));
-    ourFieldIncompatibleModifiers.put(PsiModifier.PROTECTED, ContainerUtil.newHashSet(PsiModifier.PACKAGE_LOCAL, PsiModifier.PUBLIC, PsiModifier.PRIVATE));
+    ourFieldIncompatibleModifiers.put(PsiModifier.FINAL, Set.of(PsiModifier.VOLATILE));
+    ourFieldIncompatibleModifiers.put(PsiModifier.PACKAGE_LOCAL, Set.of(PsiModifier.PRIVATE, PsiModifier.PUBLIC, PsiModifier.PROTECTED));
+    ourFieldIncompatibleModifiers.put(PsiModifier.PRIVATE, Set.of(PsiModifier.PACKAGE_LOCAL, PsiModifier.PUBLIC, PsiModifier.PROTECTED));
+    ourFieldIncompatibleModifiers.put(PsiModifier.PUBLIC, Set.of(PsiModifier.PACKAGE_LOCAL, PsiModifier.PRIVATE, PsiModifier.PROTECTED));
+    ourFieldIncompatibleModifiers.put(PsiModifier.PROTECTED, Set.of(PsiModifier.PACKAGE_LOCAL, PsiModifier.PUBLIC, PsiModifier.PRIVATE));
     ourFieldIncompatibleModifiers.put(PsiModifier.STATIC, Collections.emptySet());
     ourFieldIncompatibleModifiers.put(PsiModifier.TRANSIENT, Collections.emptySet());
-    ourFieldIncompatibleModifiers.put(PsiModifier.VOLATILE, ContainerUtil.newHashSet(PsiModifier.FINAL));
+    ourFieldIncompatibleModifiers.put(PsiModifier.VOLATILE, Set.of(PsiModifier.FINAL));
 
     ourClassInitializerIncompatibleModifiers.put(PsiModifier.STATIC, Collections.emptySet());
 
@@ -274,7 +277,7 @@ public class HighlightUtil extends HighlightUtilBase {
         modifierListCopy.setModifierProperty(modifier, true);
         if (facade.getResolveHelper().isAccessible(refElement, modifierListCopy, place, accessObjectClass, fileResolveScope)) {
           IntentionAction fix = QUICK_FIX_FACTORY.createModifierListFix(refElement, modifier, true, true);
-          TextRange fixRange = new TextRange(errorResult.startOffset, errorResult.endOffset);
+          TextRange fixRange = new TextRange(errorResult.getStartOffset(), errorResult.getEndOffset());
           PsiElement ref = place.getReferenceNameElement();
           if (ref != null) {
             fixRange = fixRange.union(ref.getTextRange());
@@ -1272,7 +1275,7 @@ public class HighlightUtil extends HighlightUtilBase {
   }
 
   private static HighlightInfo checkUnderscores(@Nonnull PsiElement expression, @Nonnull String text, boolean isInt) {
-    String[] parts = ArrayUtilRt.EMPTY_STRING_ARRAY;
+    String[] parts = ArrayUtil.EMPTY_STRING_ARRAY;
 
     if (isInt) {
       int start = 0;
@@ -1333,7 +1336,7 @@ public class HighlightUtil extends HighlightUtilBase {
 
   @Nonnull
   public static Set<PsiClassType> collectUnhandledExceptions(@Nonnull final PsiTryStatement statement) {
-    final Set<PsiClassType> thrownTypes = ContainerUtil.newHashSet();
+    final Set<PsiClassType> thrownTypes = new HashSet<>();
 
     final PsiCodeBlock tryBlock = statement.getTryBlock();
     if (tryBlock != null) {
@@ -1424,12 +1427,12 @@ public class HighlightUtil extends HighlightUtilBase {
 
     final PsiCatchSection catchSection = (PsiCatchSection) scope;
     final PsiCatchSection[] allCatchSections = catchSection.getTryStatement().getCatchSections();
-    final int idx = ArrayUtilRt.find(allCatchSections, catchSection);
+    final int idx = ArrayUtil.find(allCatchSections, catchSection);
     if (idx <= 0) {
       return Collections.emptyList();
     }
 
-    final Collection<PsiClassType> thrownTypes = ContainerUtil.newHashSet(thrownInTryStatement);
+    final Collection<PsiClassType> thrownTypes = new HashSet<>(thrownInTryStatement);
     final PsiManager manager = containingFile.getManager();
     final GlobalSearchScope parameterResolveScope = parameter.getResolveScope();
     thrownTypes.add(PsiType.getJavaLangError(manager, parameterResolveScope));
@@ -1449,7 +1452,7 @@ public class HighlightUtil extends HighlightUtilBase {
       if (caught.isEmpty()) {
         continue;
       }
-      final Collection<PsiClassType> caughtCopy = ContainerUtil.newHashSet(caught);
+      final Collection<PsiClassType> caughtCopy = new HashSet<>(caught);
 
       // exclude all which are caught by previous catch sections
       for (int i = 0; i < idx; i++) {
@@ -1829,7 +1832,7 @@ public class HighlightUtil extends HighlightUtilBase {
 
   @Nonnull
   public static String buildProblemWithStaticDescription(@Nonnull PsiElement refElement) {
-    String type = LanguageFindUsages.INSTANCE.forLanguage(JavaLanguage.INSTANCE).getType(refElement);
+    String type = FindUsagesProvider.forLanguage(JavaLanguage.INSTANCE).getType(refElement);
     String name = HighlightMessageUtil.getSymbolName(refElement, PsiSubstitutor.EMPTY);
     return JavaErrorBundle.message("non.static.symbol.referenced.from.static.context", type, name);
   }
@@ -2117,7 +2120,7 @@ public class HighlightUtil extends HighlightUtilBase {
       boolean defaultCase = labelStatement.isDefaultCase();
 
       if (defaultCase) {
-        values.putValue(defaultValue, ObjectUtils.notNull(labelStatement.getFirstChild(), labelStatement));
+        values.putValue(defaultValue, ObjectUtil.notNull(labelStatement.getFirstChild(), labelStatement));
         hasDefaultCase = true;
       } else {
         PsiExpressionList expressionList = labelStatement.getCaseValues();
@@ -2185,7 +2188,7 @@ public class HighlightUtil extends HighlightUtilBase {
         }
       }
       if (!exhaustive) {
-        PsiElement range = ObjectUtils.notNull(selectorExpression, switchBlock);
+        PsiElement range = ObjectUtil.notNull(selectorExpression, switchBlock);
         String message = JavaErrorBundle.message(values.isEmpty() ? "switch.expr.empty" : "switch.expr.incomplete");
         HighlightInfo info = HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(range).descriptionAndTooltip(message).create();
         if (!missingConstants.isEmpty()) {
@@ -2689,7 +2692,7 @@ public class HighlightUtil extends HighlightUtilBase {
 
     final PsiCatchSection catchSection = (PsiCatchSection) scope;
     final PsiCatchSection[] allCatchSections = catchSection.getTryStatement().getCatchSections();
-    final int startFrom = ArrayUtilRt.find(allCatchSections, catchSection) - 1;
+    final int startFrom = ArrayUtil.find(allCatchSections, catchSection) - 1;
     if (startFrom < 0) {
       return Collections.emptyList();
     }

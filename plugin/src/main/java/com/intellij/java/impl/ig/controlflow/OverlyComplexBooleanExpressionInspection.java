@@ -15,17 +15,17 @@
  */
 package com.intellij.java.impl.ig.controlflow;
 
+import com.intellij.java.impl.ig.fixes.ExtractMethodFix;
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.*;
-import consulo.language.ast.IElementType;
-import consulo.ui.CheckBox;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.fixes.ExtractMethodFix;
-import javax.annotation.Nonnull;
+import consulo.language.ast.IElementType;
+import consulo.language.psi.PsiElement;
+import consulo.ui.CheckBox;
 
+import javax.annotation.Nonnull;
 import javax.swing.*;
 import java.awt.*;
 import java.text.NumberFormat;
@@ -75,7 +75,7 @@ public class OverlyComplexBooleanExpressionInspection extends BaseInspection {
                    this, "m_ignorePureConjunctionsDisjunctions");
     final NumberFormat formatter = NumberFormat.getIntegerInstance();
     formatter.setParseIntegerOnly(true);
-    final JFormattedTextField termLimitTextField = prepareNumberEditor("m_limit");
+    final JFormattedTextField termLimitTextField = prepareNumberEditor(() -> m_limit, i -> m_limit = i);
 
     final GridBagConstraints constraints = new GridBagConstraints();
     final JLabel label = new JLabel(InspectionGadgetsBundle.message("overly.complex.boolean.expression.max.terms.option"));

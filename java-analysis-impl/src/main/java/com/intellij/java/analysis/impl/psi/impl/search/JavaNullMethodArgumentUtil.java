@@ -15,112 +15,98 @@
  */
 package com.intellij.java.analysis.impl.psi.impl.search;
 
+import com.intellij.java.indexing.search.searches.MethodReferencesSearch;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.application.util.function.CommonProcessors;
+import consulo.application.util.function.Processor;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiReference;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.scope.GlobalSearchScopeUtil;
+import consulo.language.psi.scope.GlobalSearchScopesCore;
+import consulo.language.psi.stub.FileBasedIndex;
+import consulo.logging.Logger;
+import consulo.virtualFileSystem.VirtualFile;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+public class JavaNullMethodArgumentUtil {
+  private static final Logger LOG = Logger.getInstance(JavaNullMethodArgumentUtil.class);
 
-import com.intellij.java.language.psi.*;
-import consulo.logging.Logger;
-import consulo.virtualFileSystem.VirtualFile;
-import com.intellij.psi.*;
-import consulo.language.psi.scope.GlobalSearchScope;
-import consulo.ide.impl.psi.search.GlobalSearchScopeUtil;
-import consulo.language.psi.scope.GlobalSearchScopesCore;
-import com.intellij.java.indexing.search.searches.MethodReferencesSearch;
-import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.application.util.function.CommonProcessors;
-import consulo.application.util.function.Processor;
-import consulo.language.psi.stub.FileBasedIndex;
+  public static boolean hasNullArgument(@Nonnull PsiMethod method, final int argumentIdx) {
+    final boolean[] result = {false};
+    searchNullArgument(method, argumentIdx, expression ->
+    {
+      result[0] = true;
+      return false;
+    });
+    return result[0];
+  }
 
-public class JavaNullMethodArgumentUtil
-{
-	private static final Logger LOG = Logger.getInstance(JavaNullMethodArgumentUtil.class);
+  public static void searchNullArgument(@Nonnull PsiMethod method, final int argumentIdx, @Nonnull Processor<PsiExpression> nullArgumentProcessor) {
+    final PsiParameter parameter = method.getParameterList().getParameters()[argumentIdx];
+    if (parameter.getType() instanceof PsiEllipsisType) {
+      return;
+    }
+    Collection<VirtualFile> candidateFiles = getFilesWithPotentialNullPassingCalls(method, argumentIdx);
 
-	public static boolean hasNullArgument(@Nonnull PsiMethod method, final int argumentIdx)
-	{
-		final boolean[] result = {false};
-		searchNullArgument(method, argumentIdx, expression ->
-		{
-			result[0] = true;
-			return false;
-		});
-		return result[0];
-	}
+    long start = System.currentTimeMillis();
 
-	public static void searchNullArgument(@Nonnull PsiMethod method, final int argumentIdx, @Nonnull Processor<PsiExpression> nullArgumentProcessor)
-	{
-		final PsiParameter parameter = method.getParameterList().getParameters()[argumentIdx];
-		if(parameter.getType() instanceof PsiEllipsisType)
-		{
-			return;
-		}
-		Collection<VirtualFile> candidateFiles = getFilesWithPotentialNullPassingCalls(method, argumentIdx);
+    processCallsWithNullArguments(method, argumentIdx, nullArgumentProcessor, candidateFiles);
 
-		long start = System.currentTimeMillis();
+    long duration = System.currentTimeMillis() - start;
+    if (duration > 200) {
+      LOG.trace("Long nullable argument search for " + method.getName() + "(" + PsiUtil.getMemberQualifiedName(method) + "): " + duration + "ms, " + candidateFiles.size() + " files");
+    }
+  }
 
-		processCallsWithNullArguments(method, argumentIdx, nullArgumentProcessor, candidateFiles);
+  private static void processCallsWithNullArguments(@Nonnull PsiMethod method, int argumentIdx, @Nonnull Processor<PsiExpression> nullArgumentProcessor, Collection<VirtualFile> candidateFiles) {
+    if (candidateFiles.isEmpty()) {
+      return;
+    }
 
-		long duration = System.currentTimeMillis() - start;
-		if(duration > 200)
-		{
-			LOG.trace("Long nullable argument search for " + method.getName() + "(" + PsiUtil.getMemberQualifiedName(method) + "): " + duration + "ms, " + candidateFiles.size() + " files");
-		}
-	}
+    GlobalSearchScope scope = GlobalSearchScope.filesScope(method.getProject(), candidateFiles);
+    MethodReferencesSearch.search(method, scope, true).forEach(ref ->
+    {
+      PsiExpression argument = getCallArgument(ref, argumentIdx);
+      if (argument instanceof PsiLiteralExpression && argument.textMatches(PsiKeyword.NULL)) {
+        return nullArgumentProcessor.process(argument);
+      }
+      return true;
+    });
+  }
 
-	private static void processCallsWithNullArguments(@Nonnull PsiMethod method, int argumentIdx, @Nonnull Processor<PsiExpression> nullArgumentProcessor, Collection<VirtualFile> candidateFiles)
-	{
-		if(candidateFiles.isEmpty())
-		{
-			return;
-		}
+  @Nullable
+  private static PsiExpression getCallArgument(PsiReference ref, int argumentIdx) {
+    PsiExpressionList argumentList = getCallArgumentList(ref.getElement());
+    PsiExpression[] arguments = argumentList == null ? PsiExpression.EMPTY_ARRAY : argumentList.getExpressions();
+    return argumentIdx < arguments.length ? arguments[argumentIdx] : null;
+  }
 
-		GlobalSearchScope scope = GlobalSearchScope.filesScope(method.getProject(), candidateFiles);
-		MethodReferencesSearch.search(method, scope, true).forEach(ref ->
-		{
-			PsiExpression argument = getCallArgument(ref, argumentIdx);
-			if(argument instanceof PsiLiteralExpression && argument.textMatches(PsiKeyword.NULL))
-			{
-				return nullArgumentProcessor.process(argument);
-			}
-			return true;
-		});
-	}
+  @Nullable
+  private static PsiExpressionList getCallArgumentList(@Nullable PsiElement psi) {
+    PsiElement parent = psi == null ? null : psi.getParent();
+    if (parent instanceof PsiCallExpression) {
+      return ((PsiCallExpression) parent).getArgumentList();
+    } else if (parent instanceof PsiAnonymousClass) {
+      return ((PsiAnonymousClass) parent).getArgumentList();
+    }
+    return null;
+  }
 
-	@Nullable
-	private static PsiExpression getCallArgument(PsiReference ref, int argumentIdx)
-	{
-		PsiExpressionList argumentList = getCallArgumentList(ref.getElement());
-		PsiExpression[] arguments = argumentList == null ? PsiExpression.EMPTY_ARRAY : argumentList.getExpressions();
-		return argumentIdx < arguments.length ? arguments[argumentIdx] : null;
-	}
-
-	@Nullable
-	private static PsiExpressionList getCallArgumentList(@Nullable PsiElement psi)
-	{
-		PsiElement parent = psi == null ? null : psi.getParent();
-		if(parent instanceof PsiCallExpression)
-		{
-			return ((PsiCallExpression) parent).getArgumentList();
-		}
-		else if(parent instanceof PsiAnonymousClass)
-		{
-			return ((PsiAnonymousClass) parent).getArgumentList();
-		}
-		return null;
-	}
-
-	@Nonnull
-	private static Collection<VirtualFile> getFilesWithPotentialNullPassingCalls(@Nonnull PsiMethod method, int parameterIndex)
-	{
-		final FileBasedIndex fileBasedIndex = FileBasedIndex.getInstance();
-		final CommonProcessors.CollectProcessor<VirtualFile> collector = new CommonProcessors.CollectProcessor<>(new ArrayList<>());
-		GlobalSearchScope searchScope = GlobalSearchScopeUtil.toGlobalSearchScope(method.getUseScope(), method.getProject());
-		searchScope = searchScope.intersectWith(GlobalSearchScopesCore.projectProductionScope(method.getProject()));
-		fileBasedIndex.getFilesWithKey(JavaNullMethodArgumentIndex.INDEX_ID, Collections.singleton(new JavaNullMethodArgumentIndex.MethodCallData(method.getName(), parameterIndex)), collector,
-				searchScope);
-		return collector.getResults();
-	}
+  @Nonnull
+  private static Collection<VirtualFile> getFilesWithPotentialNullPassingCalls(@Nonnull PsiMethod method, int parameterIndex) {
+    final FileBasedIndex fileBasedIndex = FileBasedIndex.getInstance();
+    final CommonProcessors.CollectProcessor<VirtualFile> collector = new CommonProcessors.CollectProcessor<>(new ArrayList<>());
+    GlobalSearchScope searchScope = GlobalSearchScopeUtil.toGlobalSearchScope(method.getUseScope(), method.getProject());
+    searchScope = searchScope.intersectWith(GlobalSearchScopesCore.projectProductionScope(method.getProject()));
+    fileBasedIndex.getFilesWithKey(JavaNullMethodArgumentIndex.INDEX_ID, Collections.singleton(new JavaNullMethodArgumentIndex.MethodCallData(method.getName(), parameterIndex)), collector,
+        searchScope);
+    return collector.getResults();
+  }
 }

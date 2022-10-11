@@ -2,7 +2,6 @@
 
 package com.intellij.java.analysis.impl.codeInspection.dataFlow;
 
-import com.intellij.java.language.codeInsight.Nullability;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.instructions.*;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.types.DfType;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.types.DfTypes;
@@ -10,25 +9,28 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaExpressi
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaValue;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaValueFactory;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaVariableValue;
+import com.intellij.java.language.codeInsight.Nullability;
 import com.intellij.java.language.psi.*;
-import consulo.application.ApplicationManager;
-import consulo.logging.attachment.Attachment;
-import consulo.logging.Logger;
-import consulo.logging.attachment.RuntimeExceptionWithAttachments;
-import consulo.component.ProcessCanceledException;
-import consulo.application.progress.ProgressManager;
-import consulo.project.Project;
-import consulo.util.lang.ref.Ref;
-import consulo.application.util.registry.Registry;
-import com.intellij.psi.*;
-import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
+import com.siyeh.ig.psiutils.VariableAccessUtils;
+import consulo.application.ApplicationManager;
+import consulo.application.progress.ProgressManager;
+import consulo.application.util.registry.Registry;
+import consulo.component.ProcessCanceledException;
+import consulo.language.psi.PsiCodeFragment;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.logging.Logger;
+import consulo.logging.attachment.Attachment;
+import consulo.logging.attachment.AttachmentFactory;
+import consulo.logging.attachment.RuntimeExceptionWithAttachments;
+import consulo.project.Project;
 import consulo.util.collection.ArrayUtil;
-import consulo.ide.impl.idea.util.ObjectUtils;
-import consulo.util.lang.ThreeState;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.collection.MultiMap;
-import com.siyeh.ig.psiutils.VariableAccessUtils;
+import consulo.util.lang.ObjectUtil;
+import consulo.util.lang.ThreeState;
+import consulo.util.lang.ref.Ref;
 import one.util.streamex.IntStreamEx;
 import one.util.streamex.StreamEx;
 
@@ -403,7 +405,7 @@ public class DataFlowRunner {
   private static void reportDfaProblem(@Nonnull PsiElement psiBlock,
                                        ControlFlow flow,
                                        DfaInstructionState lastInstructionState, Throwable e) {
-    Attachment[] attachments = {new Attachment("method_body.txt", psiBlock.getText())};
+    Attachment[] attachments = {AttachmentFactory.get().create("method_body.txt", psiBlock.getText())};
     if (flow != null) {
       String flowText = flow.toString();
       if (lastInstructionState != null) {
@@ -411,7 +413,7 @@ public class DataFlowRunner {
         flowText = flowText.replaceAll("(?m)^", "  ");
         flowText = flowText.replaceFirst("(?m)^ {2}" + index + ": ", "* " + index + ": ");
       }
-      attachments = ArrayUtil.append(attachments, new Attachment("flow.txt", flowText));
+      attachments = ArrayUtil.append(attachments, AttachmentFactory.get().create("flow.txt", flowText));
       if (lastInstructionState != null) {
         DfaMemoryState memoryState = lastInstructionState.getMemoryState();
         String memStateText = null;
@@ -421,7 +423,7 @@ public class DataFlowRunner {
           e.addSuppressed(second);
         }
         if (memStateText != null) {
-          attachments = ArrayUtil.append(attachments, new Attachment("memory_state.txt", memStateText));
+          attachments = ArrayUtil.append(attachments, AttachmentFactory.get().create("memory_state.txt", memStateText));
         }
       }
     }
@@ -506,7 +508,7 @@ public class DataFlowRunner {
     if (!DfaUtil.isEffectivelyUnqualified(var)) {
       return null;
     }
-    PsiField field = ObjectUtils.tryCast(var.getPsiVariable(), PsiField.class);
+    PsiField field = ObjectUtil.tryCast(var.getPsiVariable(), PsiField.class);
     if (field == null || DfaUtil.ignoreInitializer(field) || DfaUtil.hasInitializationHacks(field)) {
       return null;
     }

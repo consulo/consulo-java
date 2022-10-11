@@ -15,18 +15,6 @@
  */
 package com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis;
 
-import consulo.language.editor.rawHighlight.HighlightDisplayKey;
-import consulo.language.editor.ImplicitUsageProvider;
-import com.intellij.java.language.impl.codeInsight.daemon.JavaErrorBundle;
-import com.intellij.codeInsight.daemon.impl.*;
-import consulo.language.editor.rawHighlight.HighlightInfoHolder;
-import consulo.language.editor.highlight.HighlightingLevelManager;
-import consulo.language.editor.intention.QuickFixAction;
-import consulo.language.editor.internal.intention.EmptyIntentionAction;
-import consulo.language.editor.intention.IntentionAction;
-import consulo.language.editor.inspection.scheme.InspectionProfile;
-import consulo.language.editor.inspection.InspectionsBundle;
-import consulo.language.editor.inspection.SuppressionUtil;
 import com.intellij.java.analysis.codeInsight.daemon.UnusedImportProvider;
 import com.intellij.java.analysis.codeInsight.intention.QuickFixFactory;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.GlobalUsageHelper;
@@ -36,33 +24,48 @@ import com.intellij.java.analysis.impl.codeInspection.deadCode.UnusedDeclaration
 import com.intellij.java.analysis.impl.codeInspection.unusedImport.UnusedImportLocalInspection;
 import com.intellij.java.analysis.impl.codeInspection.unusedSymbol.UnusedSymbolLocalInspectionBase;
 import com.intellij.java.analysis.impl.codeInspection.util.SpecialAnnotationsUtilBase;
-import com.intellij.java.language.psi.*;
-import consulo.language.Language;
-import consulo.language.editor.annotation.HighlightSeverity;
-import consulo.application.ApplicationManager;
-import consulo.application.TransactionGuard;
-import consulo.document.Document;
-import consulo.component.extension.Extensions;
-import consulo.component.ProcessCanceledException;
-import consulo.application.progress.ProgressIndicator;
-import consulo.project.Project;
-import consulo.language.pom.PomNamedTarget;
-import consulo.language.editor.inspection.scheme.InspectionProjectProfileManager;
-import com.intellij.psi.*;
-import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
-import com.intellij.java.language.impl.psi.impl.PsiClassImplUtil;
 import com.intellij.java.indexing.search.searches.OverridingMethodsSearch;
+import com.intellij.java.language.impl.codeInsight.daemon.JavaErrorBundle;
+import com.intellij.java.language.impl.psi.impl.PsiClassImplUtil;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.search.searches.SuperMethodsSearch;
 import com.intellij.java.language.psi.util.PropertyUtil;
-import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.language.psi.PsiUtilCore;
 import com.intellij.java.language.util.VisibilityUtil;
+import consulo.application.ApplicationManager;
+import consulo.application.TransactionGuard;
+import consulo.application.progress.ProgressIndicator;
 import consulo.application.util.ConcurrentFactoryMap;
+import consulo.component.ProcessCanceledException;
+import consulo.component.extension.Extensions;
 import consulo.disposer.Disposable;
 import consulo.disposer.Disposer;
+import consulo.document.Document;
+import consulo.language.Language;
+import consulo.language.editor.DaemonCodeAnalyzer;
+import consulo.language.editor.FileStatusMap;
+import consulo.language.editor.ImplicitUsageProvider;
+import consulo.language.editor.annotation.HighlightSeverity;
+import consulo.language.editor.highlight.HighlightingLevelManager;
+import consulo.language.editor.inspection.InspectionsBundle;
+import consulo.language.editor.inspection.SuppressionUtil;
+import consulo.language.editor.inspection.scheme.InspectionProfile;
+import consulo.language.editor.inspection.scheme.InspectionProjectProfileManager;
+import consulo.language.editor.intention.IntentionAction;
+import consulo.language.editor.intention.QuickFixAction;
+import consulo.language.editor.internal.intention.EmptyIntentionAction;
+import consulo.language.editor.rawHighlight.HighlightDisplayKey;
+import consulo.language.editor.rawHighlight.HighlightInfo;
+import consulo.language.editor.rawHighlight.HighlightInfoHolder;
+import consulo.language.editor.rawHighlight.HighlightInfoType;
+import consulo.language.editor.util.CollectHighlightsUtil;
+import consulo.language.file.FileViewProvider;
+import consulo.language.pom.PomNamedTarget;
+import consulo.language.psi.*;
+import consulo.language.psi.util.PsiTreeUtil;
 import consulo.logging.Logger;
-import consulo.psi.PsiPackage;
+import consulo.project.Project;
 import org.jetbrains.annotations.PropertyKey;
 
 import javax.annotation.Nonnull;
@@ -106,13 +109,13 @@ public class PostHighlightingVisitor {
         });
       };
       try {
-        Disposer.register((DaemonProgressIndicator) progress, invokeFixLater);
+        Disposer.register((Disposable) progress, invokeFixLater);
       } catch (Exception ignored) {
         // suppress "parent already has been disposed" exception here
       }
       if (progress.isCanceled()) {
         Disposer.dispose(invokeFixLater);
-        Disposer.dispose((DaemonProgressIndicator) progress);
+        Disposer.dispose((Disposable) progress);
         progress.checkCanceled();
       }
     }
@@ -144,12 +147,12 @@ public class PostHighlightingVisitor {
   }
 
   public void collectHighlights(@Nonnull HighlightInfoHolder result, @Nonnull ProgressIndicator progress) {
-    DaemonCodeAnalyzerEx daemonCodeAnalyzer = DaemonCodeAnalyzerEx.getInstanceEx(myProject);
+    DaemonCodeAnalyzer daemonCodeAnalyzer = DaemonCodeAnalyzer.getInstance(myProject);
     FileStatusMap fileStatusMap = daemonCodeAnalyzer.getFileStatusMap();
     InspectionProfile profile = InspectionProjectProfileManager.getInstance(myProject).getInspectionProfile();
 
     boolean unusedSymbolEnabled = profile.isToolEnabled(myDeadCodeKey, myFile);
-    GlobalUsageHelper globalUsageHelper = myRefCountHolder.getGlobalUsageHelper(myFile, myDeadCodeInspection, unusedSymbolEnabled);
+    GlobalUsageHelper globalUsageHelper = myRefCountHolder.getGlobalUsageHelper(myFile, myDeadCodeInspection);
 
     boolean errorFound = false;
 

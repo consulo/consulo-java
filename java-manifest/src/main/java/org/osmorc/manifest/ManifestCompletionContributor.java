@@ -25,19 +25,17 @@
 
 package org.osmorc.manifest;
 
-import javax.annotation.Nonnull;
-
-import org.osmorc.manifest.lang.ManifestLanguage;
-import org.osmorc.manifest.lang.ManifestTokenType;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.java.manifest.lang.headerparser.HeaderParserEP;
-import consulo.language.editor.completion.CompletionContributor;
-import consulo.language.editor.completion.CompletionParameters;
-import consulo.language.editor.completion.CompletionResultSet;
-import consulo.language.editor.completion.CompletionType;
+import consulo.language.Language;
+import consulo.language.editor.completion.*;
 import consulo.language.editor.completion.lookup.LookupElementBuilder;
 import consulo.language.pattern.PlatformPatterns;
 import consulo.language.util.ProcessingContext;
-import consulo.language.editor.completion.CompletionProvider;
+import org.osmorc.manifest.lang.ManifestLanguage;
+import org.osmorc.manifest.lang.ManifestTokenType;
+
+import javax.annotation.Nonnull;
 
 /**
  * Completion contributor which adds the name of all known headers to the autocomplete list.
@@ -46,21 +44,28 @@ import consulo.language.editor.completion.CompletionProvider;
  * @author Robert F. Beeger (robert@beeger.net)
  * @version $Id:$
  */
+@ExtensionImpl
 public class ManifestCompletionContributor extends CompletionContributor {
   public ManifestCompletionContributor() {
     extend(CompletionType.BASIC, PlatformPatterns.psiElement(ManifestTokenType.HEADER_NAME).withLanguage(ManifestLanguage.INSTANCE),
-           new CompletionProvider() {
+        new CompletionProvider() {
+          @Override
+          public void addCompletions(@Nonnull CompletionParameters completionparameters,
+                                     ProcessingContext processingcontext,
+                                     @Nonnull CompletionResultSet completionresultset) {
+            for (HeaderParserEP ep : HeaderParserEP.EP_NAME.getExtensions()) {
+              if (ep.key.isEmpty()) {  //dont show default ep
+                continue;
+              }
+              completionresultset.addElement(LookupElementBuilder.create(ep.key));
+            }
+          }
+        });
+  }
 
-             public void addCompletions(@Nonnull CompletionParameters completionparameters,
-                                        ProcessingContext processingcontext,
-                                        @Nonnull CompletionResultSet completionresultset) {
-               for (HeaderParserEP ep : HeaderParserEP.EP_NAME.getExtensions()) {
-                 if(ep.key.isEmpty()) {  //dont show default ep
-                   continue;
-                 }
-                 completionresultset.addElement(LookupElementBuilder.create(ep.key));
-               }
-             }
-           });
+  @Nonnull
+  @Override
+  public Language getLanguage() {
+    return ManifestLanguage.INSTANCE;
   }
 }

@@ -15,64 +15,56 @@
  */
 package com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix;
 
-import javax.annotation.Nonnull;
-
-import org.jetbrains.annotations.Nls;
-import consulo.language.editor.intention.IntentionAction;
 import consulo.codeEditor.Editor;
-import consulo.project.Project;
+import consulo.language.editor.intention.IntentionAction;
 import consulo.language.psi.NavigatablePsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.SmartPointerManager;
 import consulo.language.psi.SmartPsiElementPointer;
 import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+import org.jetbrains.annotations.Nls;
 
-public class GoToSymbolFix implements IntentionAction
-{
-	private final SmartPsiElementPointer<NavigatablePsiElement> myPointer;
-	private final String myMessage;
+import javax.annotation.Nonnull;
 
-	public GoToSymbolFix(@Nonnull NavigatablePsiElement symbol, @Nonnull @Nls String message)
-	{
-		myPointer = SmartPointerManager.getInstance(symbol.getProject()).createSmartPsiElementPointer(symbol);
-		myMessage = message;
-	}
+public class GoToSymbolFix implements IntentionAction {
+  private final SmartPsiElementPointer<NavigatablePsiElement> myPointer;
+  private final String myMessage;
 
-	@Nls
-	@Nonnull
-	@Override
-	public String getText()
-	{
-		return myMessage;
-	}
+  public GoToSymbolFix(@Nonnull NavigatablePsiElement symbol, @Nonnull @Nls String message) {
+    myPointer = SmartPointerManager.getInstance(symbol.getProject()).createSmartPsiElementPointer(symbol);
+    myMessage = message;
+  }
 
-	@Nls
-	@Nonnull
-	@Override
-	public String getFamilyName()
-	{
-		return getText();
-	}
+  @Nls
+  @Nonnull
+  @Override
+  public String getText() {
+    return myMessage;
+  }
 
-	@Override
-	public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file)
-	{
-		return myPointer.getElement() != null;
-	}
+  @Nls
+  @Nonnull
+  @Override
+  public String getFamilyName() {
+    return getText();
+  }
 
-	@Override
-	public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException
-	{
-		NavigatablePsiElement e = myPointer.getElement();
-		if(e != null && e.isValid())
-		{
-			e.navigate(true);
-		}
-	}
+  @Override
+  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+    return myPointer.getElement() != null;
+  }
 
-	@Override
-	public boolean startInWriteAction()
-	{
-		return false;
-	}
+  @Override
+  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+    NavigatablePsiElement e = myPointer.getElement();
+    if (e != null && e.isValid()) {
+      e.navigate(true);
+    }
+  }
+
+  @Override
+  public boolean startInWriteAction() {
+    return false;
+  }
 }

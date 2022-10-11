@@ -15,25 +15,25 @@
  */
 package com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis;
 
-import consulo.language.editor.CodeInsightBundle;
-import consulo.language.editor.intention.IntentionAction;
-import consulo.application.ApplicationManager;
-import consulo.codeEditor.Editor;
-import consulo.module.Module;
-import consulo.language.util.ModuleUtilCore;
-import consulo.project.Project;
+import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.projectRoots.JavaSdk;
 import com.intellij.java.language.projectRoots.JavaSdkVersion;
+import consulo.application.ApplicationManager;
+import consulo.codeEditor.Editor;
 import consulo.content.bundle.Sdk;
-import consulo.module.content.layer.ModifiableRootModel;
-import consulo.module.content.ModuleRootManager;
-import consulo.virtualFileSystem.VirtualFile;
-import com.intellij.java.language.LanguageLevel;
-import consulo.language.psi.PsiFile;
-import consulo.language.util.IncorrectOperationException;
 import consulo.java.language.module.extension.JavaModuleExtension;
 import consulo.java.language.module.extension.JavaMutableModuleExtension;
+import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.intention.IntentionAction;
+import consulo.language.psi.PsiFile;
+import consulo.language.util.IncorrectOperationException;
+import consulo.language.util.ModuleUtilCore;
 import consulo.logging.Logger;
+import consulo.module.Module;
+import consulo.module.content.ModuleRootManager;
+import consulo.module.content.layer.ModifiableRootModel;
+import consulo.project.Project;
+import consulo.virtualFileSystem.VirtualFile;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -41,103 +41,87 @@ import javax.annotation.Nullable;
 /**
  * @author cdr
  */
-public class IncreaseLanguageLevelFix implements IntentionAction
-{
-	private static final Logger LOG = Logger.getInstance(IncreaseLanguageLevelFix.class);
+public class IncreaseLanguageLevelFix implements IntentionAction {
+  private static final Logger LOG = Logger.getInstance(IncreaseLanguageLevelFix.class);
 
-	private final LanguageLevel myLevel;
+  private final LanguageLevel myLevel;
 
-	public IncreaseLanguageLevelFix(LanguageLevel targetLevel)
-	{
-		myLevel = targetLevel;
-	}
+  public IncreaseLanguageLevelFix(LanguageLevel targetLevel) {
+    myLevel = targetLevel;
+  }
 
-	@Override
-	@Nonnull
-	public String getText()
-	{
-		return CodeInsightBundle.message("set.language.level.to.0", myLevel.getDescription());
-	}
+  @Override
+  @Nonnull
+  public String getText() {
+    return CodeInsightBundle.message("set.language.level.to.0", myLevel.getDescription());
+  }
 
-	@Override
-	@Nonnull
-	public String getFamilyName()
-	{
-		return CodeInsightBundle.message("set.language.level");
-	}
+  @Override
+  @Nonnull
+  public String getFamilyName() {
+    return CodeInsightBundle.message("set.language.level");
+  }
 
-	private static boolean isJdkSupportsLevel(@Nullable final Sdk jdk, final LanguageLevel level)
-	{
-		if(jdk == null)
-		{
-			return true;
-		}
-		final JavaSdk sdk = JavaSdk.getInstance();
-		final JavaSdkVersion version = sdk.getVersion(jdk);
-		return version != null && version.getMaxLanguageLevel().isAtLeast(level);
-	}
+  private static boolean isJdkSupportsLevel(@Nullable final Sdk jdk, final LanguageLevel level) {
+    if (jdk == null) {
+      return true;
+    }
+    final JavaSdk sdk = JavaSdk.getInstance();
+    final JavaSdkVersion version = sdk.getVersion(jdk);
+    return version != null && version.getMaxLanguageLevel().isAtLeast(level);
+  }
 
-	@Override
-	public boolean isAvailable(@Nonnull final Project project, final Editor editor, final PsiFile file)
-	{
-		final VirtualFile virtualFile = file.getVirtualFile();
-		if(virtualFile == null)
-		{
-			return false;
-		}
+  @Override
+  public boolean isAvailable(@Nonnull final Project project, final Editor editor, final PsiFile file) {
+    final VirtualFile virtualFile = file.getVirtualFile();
+    if (virtualFile == null) {
+      return false;
+    }
 
-		final Module module = ModuleUtilCore.findModuleForFile(virtualFile, project);
-		if(module == null)
-		{
-			return false;
-		}
+    final Module module = ModuleUtilCore.findModuleForFile(virtualFile, project);
+    if (module == null) {
+      return false;
+    }
 
-		return true;
-		//    return isLanguageLevelAcceptable(module, myLevel);
-	}
+    return true;
+    //    return isLanguageLevelAcceptable(module, myLevel);
+  }
 
-	public static boolean isLanguageLevelAcceptable(Module module, final LanguageLevel level)
-	{
-		return isJdkSupportsLevel(ModuleUtilCore.getSdk(module, JavaModuleExtension.class), level);
-	}
+  public static boolean isLanguageLevelAcceptable(Module module, final LanguageLevel level) {
+    return isJdkSupportsLevel(ModuleUtilCore.getSdk(module, JavaModuleExtension.class), level);
+  }
 
-	@Override
-	public void invoke(@Nonnull final Project project, final Editor editor, final PsiFile file) throws IncorrectOperationException
-	{
-		final VirtualFile virtualFile = file.getVirtualFile();
-		LOG.assertTrue(virtualFile != null);
-		final Module module = ModuleUtilCore.findModuleForFile(virtualFile, project);
-		if(module == null)
-		{
-			return;
-		}
+  @Override
+  public void invoke(@Nonnull final Project project, final Editor editor, final PsiFile file) throws IncorrectOperationException {
+    final VirtualFile virtualFile = file.getVirtualFile();
+    LOG.assertTrue(virtualFile != null);
+    final Module module = ModuleUtilCore.findModuleForFile(virtualFile, project);
+    if (module == null) {
+      return;
+    }
 
-		JavaModuleExtension extension = ModuleUtilCore.getExtension(module, JavaModuleExtension.class);
-		if(extension == null)
-		{
-			return;
-		}
+    JavaModuleExtension extension = ModuleUtilCore.getExtension(module, JavaModuleExtension.class);
+    if (extension == null) {
+      return;
+    }
 
-		final ModifiableRootModel rootModel = ModuleRootManager.getInstance(module).getModifiableModel();
-		JavaMutableModuleExtension mutableModuleExtension = rootModel.getExtension(JavaMutableModuleExtension.class);
+    final ModifiableRootModel rootModel = ModuleRootManager.getInstance(module).getModifiableModel();
+    JavaMutableModuleExtension mutableModuleExtension = rootModel.getExtension(JavaMutableModuleExtension.class);
 
-		assert mutableModuleExtension != null;
+    assert mutableModuleExtension != null;
 
-		mutableModuleExtension.getInheritableLanguageLevel().set(null, myLevel.getName());
+    mutableModuleExtension.getInheritableLanguageLevel().set(null, myLevel.getName());
 
-		ApplicationManager.getApplication().runWriteAction(new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				rootModel.commit();
-			}
-		});
-	}
+    ApplicationManager.getApplication().runWriteAction(new Runnable() {
+      @Override
+      public void run() {
+        rootModel.commit();
+      }
+    });
+  }
 
-	@Override
-	public boolean startInWriteAction()
-	{
-		return false;
-	}
+  @Override
+  public boolean startInWriteAction() {
+    return false;
+  }
 }

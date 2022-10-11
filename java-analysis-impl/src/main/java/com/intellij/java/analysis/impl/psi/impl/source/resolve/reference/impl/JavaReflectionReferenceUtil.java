@@ -1,35 +1,32 @@
 // Copyright 2000-2020 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.analysis.impl.psi.impl.source.resolve.reference.impl;
 
-import consulo.language.editor.completion.lookup.InsertHandler;
-import consulo.language.editor.completion.lookup.InsertionContext;
-import consulo.language.editor.completion.lookup.PrioritizedLookupElement;
-import consulo.language.editor.completion.lookup.LookupElement;
-import consulo.language.editor.completion.lookup.LookupElementBuilder;
+import com.intellij.java.language.impl.psi.impl.JavaConstantExpressionEvaluator;
 import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.util.PsiTypesUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
-import consulo.project.Project;
-import consulo.component.util.Iconable;
-import consulo.util.lang.Pair;
-import consulo.application.util.RecursionGuard;
-import consulo.application.util.RecursionManager;
-import com.intellij.psi.*;
-import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
-import com.intellij.java.language.impl.psi.impl.JavaConstantExpressionEvaluator;
-import consulo.language.psi.scope.GlobalSearchScope;
-import com.intellij.psi.util.*;
-import consulo.util.collection.ArrayUtil;
-import consulo.ide.impl.idea.util.ArrayUtilRt;
-import consulo.ide.impl.idea.util.ObjectUtils;
-import consulo.util.collection.ContainerUtil;
 import com.siyeh.ig.psiutils.DeclarationSearchUtils;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.MethodCallUtils;
+import consulo.application.util.RecursionGuard;
+import consulo.application.util.RecursionManager;
+import consulo.component.util.Iconable;
+import consulo.language.editor.completion.lookup.*;
 import consulo.language.icon.IconDescriptorUpdaters;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiUtilCore;
+import consulo.language.psi.SyntaxTraverser;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.util.PsiTreeUtil;
 import consulo.platform.base.icon.PlatformIconGroup;
+import consulo.project.Project;
 import consulo.ui.image.Image;
+import consulo.util.collection.ArrayUtil;
+import consulo.util.collection.ContainerUtil;
+import consulo.util.lang.ObjectUtil;
+import consulo.util.lang.Pair;
 import org.jetbrains.annotations.Contract;
 
 import javax.annotation.Nonnull;
@@ -233,7 +230,7 @@ public final class JavaReflectionReferenceUtil {
   public static <T> T computeConstantExpression(@Nullable PsiExpression expression, @Nonnull Class<T> expectedType) {
     expression = PsiUtil.skipParenthesizedExprDown(expression);
     final Object computed = JavaConstantExpressionEvaluator.computeConstantExpression(expression, false);
-    return ObjectUtils.tryCast(computed, expectedType);
+    return ObjectUtil.tryCast(computed, expectedType);
   }
 
   @Nullable
@@ -279,7 +276,7 @@ public final class JavaReflectionReferenceUtil {
     if (!field.hasModifierProperty(PsiModifier.FINAL)) {
       return null;
     }
-    final PsiClass psiClass = ObjectUtils.tryCast(field.getParent(), PsiClass.class);
+    final PsiClass psiClass = ObjectUtil.tryCast(field.getParent(), PsiClass.class);
     if (psiClass != null) {
       final boolean isStatic = field.hasModifierProperty(PsiModifier.STATIC);
       final List<PsiClassInitializer> initializers =
@@ -695,7 +692,7 @@ public final class JavaReflectionReferenceUtil {
 
   public static final class ReflectiveSignature implements Comparable<ReflectiveSignature> {
     public static final ReflectiveSignature NO_ARGUMENT_CONSTRUCTOR_SIGNATURE =
-        new ReflectiveSignature(null, PsiKeyword.VOID, ArrayUtilRt.EMPTY_STRING_ARRAY);
+        new ReflectiveSignature(null, PsiKeyword.VOID, ArrayUtil.EMPTY_STRING_ARRAY);
 
     private final Image myIcon;
     @Nonnull
@@ -711,7 +708,7 @@ public final class JavaReflectionReferenceUtil {
     @Nullable
     public static ReflectiveSignature create(@Nullable Image icon, @Nonnull List<String> typeTexts) {
       if (!typeTexts.isEmpty() && !typeTexts.contains(null)) {
-        final String[] argumentTypes = ArrayUtilRt.toStringArray(typeTexts.subList(1, typeTexts.size()));
+        final String[] argumentTypes = ArrayUtil.toStringArray(typeTexts.subList(1, typeTexts.size()));
         return new ReflectiveSignature(icon, typeTexts.get(0), argumentTypes);
       }
       return null;

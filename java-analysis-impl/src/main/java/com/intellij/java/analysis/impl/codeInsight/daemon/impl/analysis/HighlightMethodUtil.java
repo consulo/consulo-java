@@ -15,45 +15,47 @@
  */
 package com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis;
 
-import com.intellij.java.language.impl.codeInsight.ExceptionUtil;
-import consulo.language.editor.DaemonBundle;
-import com.intellij.java.language.impl.codeInsight.daemon.JavaErrorBundle;
-import consulo.language.editor.rawHighlight.HighlightInfo;
-import consulo.language.editor.rawHighlight.HighlightInfoType;
-import consulo.language.editor.rawHighlight.HighlightInfoHolder;
-import com.intellij.java.language.codeInsight.daemon.impl.analysis.JavaGenericsUtil;
-import consulo.language.editor.intention.QuickFixAction;
-import consulo.language.editor.internal.QuickFixActionRegistrarImpl;
-import consulo.language.editor.intention.IntentionAction;
-import consulo.language.editor.intention.UnresolvedReferenceQuickFixProvider;
-import consulo.language.editor.inspection.LocalQuickFixOnPsiElementAsIntentionAdapter;
 import com.intellij.java.analysis.codeInsight.intention.QuickFixFactory;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix.*;
 import com.intellij.java.analysis.impl.psi.util.PsiMatchers;
-import com.intellij.java.language.psi.*;
-import com.intellij.java.language.psi.util.*;
-import consulo.application.dumb.IndexNotReadyException;
-import com.intellij.java.language.projectRoots.JavaSdkVersion;
-import consulo.util.lang.Comparing;
-import consulo.util.lang.ref.Ref;
-import consulo.document.util.TextRange;
-import consulo.util.lang.StringUtil;
-import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.java.language.LanguageLevel;
-import com.intellij.psi.*;
+import com.intellij.java.language.codeInsight.daemon.impl.analysis.JavaGenericsUtil;
+import com.intellij.java.language.impl.codeInsight.ExceptionUtil;
+import com.intellij.java.language.impl.codeInsight.daemon.JavaErrorBundle;
 import com.intellij.java.language.impl.psi.impl.PsiSuperMethodImplUtil;
+import com.intellij.java.language.impl.refactoring.util.RefactoringChangeUtil;
+import com.intellij.java.language.projectRoots.JavaSdkVersion;
+import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.infos.CandidateInfo;
 import com.intellij.java.language.psi.infos.MethodCandidateInfo;
-import com.intellij.psi.util.*;
-import com.intellij.java.language.impl.refactoring.util.RefactoringChangeUtil;
-import consulo.ui.ex.awt.util.ColorUtil;
-import consulo.util.lang.ObjectUtil;
+import com.intellij.java.language.psi.util.*;
 import com.intellij.java.language.util.VisibilityUtil;
-import consulo.util.collection.MostlySingularMultiMap;
-import consulo.ui.ex.awt.UIUtil;
-import consulo.util.lang.xml.XmlStringUtil;
+import consulo.application.dumb.IndexNotReadyException;
+import consulo.document.util.TextRange;
+import consulo.document.util.TextRangeUtil;
 import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.editor.DaemonBundle;
+import consulo.language.editor.inspection.LocalQuickFixOnPsiElementAsIntentionAdapter;
+import consulo.language.editor.intention.IntentionAction;
+import consulo.language.editor.intention.QuickFixAction;
+import consulo.language.editor.intention.UnresolvedReferenceQuickFixProvider;
+import consulo.language.editor.internal.QuickFixActionRegistrarImpl;
+import consulo.language.editor.rawHighlight.HighlightInfo;
+import consulo.language.editor.rawHighlight.HighlightInfoHolder;
+import consulo.language.editor.rawHighlight.HighlightInfoType;
+import consulo.language.psi.*;
+import consulo.language.psi.util.PsiMatcherImpl;
+import consulo.language.psi.util.PsiTreeUtil;
 import consulo.logging.Logger;
+import consulo.ui.ex.awt.UIUtil;
+import consulo.ui.ex.awt.util.ColorUtil;
+import consulo.util.collection.MostlySingularMultiMap;
+import consulo.util.lang.Comparing;
+import consulo.util.lang.ObjectUtil;
+import consulo.util.lang.StringUtil;
+import consulo.util.lang.ref.Ref;
+import consulo.util.lang.xml.XmlStringUtil;
+import consulo.virtualFileSystem.VirtualFile;
 import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.NonNls;
 
@@ -83,9 +85,9 @@ public class HighlightMethodUtil {
   }
 
   public static HighlightInfo checkMethodWeakerPrivileges(@Nonnull MethodSignatureBackedByPsiMethod methodSignature,
-                                                   @Nonnull List<HierarchicalMethodSignature> superMethodSignatures,
-                                                   boolean includeRealPositionInfo,
-                                                   @Nonnull PsiFile containingFile) {
+                                                          @Nonnull List<HierarchicalMethodSignature> superMethodSignatures,
+                                                          boolean includeRealPositionInfo,
+                                                          @Nonnull PsiFile containingFile) {
     PsiMethod method = methodSignature.getMethod();
     PsiModifierList modifierList = method.getModifierList();
     if (modifierList.hasModifierProperty(PsiModifier.PUBLIC)) {
@@ -143,15 +145,15 @@ public class HighlightMethodUtil {
 
 
   public static HighlightInfo checkMethodIncompatibleReturnType(@Nonnull MethodSignatureBackedByPsiMethod methodSignature,
-                                                         @Nonnull List<HierarchicalMethodSignature> superMethodSignatures,
-                                                         boolean includeRealPositionInfo) {
+                                                                @Nonnull List<HierarchicalMethodSignature> superMethodSignatures,
+                                                                boolean includeRealPositionInfo) {
     return checkMethodIncompatibleReturnType(methodSignature, superMethodSignatures, includeRealPositionInfo, null);
   }
 
   public static HighlightInfo checkMethodIncompatibleReturnType(@Nonnull MethodSignatureBackedByPsiMethod methodSignature,
-                                                         @Nonnull List<HierarchicalMethodSignature> superMethodSignatures,
-                                                         boolean includeRealPositionInfo,
-                                                         @Nullable TextRange textRange) {
+                                                                @Nonnull List<HierarchicalMethodSignature> superMethodSignatures,
+                                                                boolean includeRealPositionInfo,
+                                                                @Nullable TextRange textRange) {
     PsiMethod method = methodSignature.getMethod();
     PsiType returnType = methodSignature.getSubstitutor().substitute(method.getReturnType());
     PsiClass aClass = method.getContainingClass();
@@ -269,9 +271,9 @@ public class HighlightMethodUtil {
   }
 
   public static HighlightInfo checkMethodIncompatibleThrows(MethodSignatureBackedByPsiMethod methodSignature,
-                                                     List<HierarchicalMethodSignature> superMethodSignatures,
-                                                     boolean includeRealPositionInfo,
-                                                     PsiClass analyzedClass) {
+                                                            List<HierarchicalMethodSignature> superMethodSignatures,
+                                                            boolean includeRealPositionInfo,
+                                                            PsiClass analyzedClass) {
     PsiMethod method = methodSignature.getMethod();
     PsiClass aClass = method.getContainingClass();
     if (aClass == null) {
@@ -365,10 +367,10 @@ public class HighlightMethodUtil {
 
   @Nullable
   public static HighlightInfo checkMethodCall(@Nonnull PsiMethodCallExpression methodCall,
-                                       @Nonnull PsiResolveHelper resolveHelper,
-                                       @Nonnull LanguageLevel languageLevel,
-                                       @Nonnull JavaSdkVersion javaSdkVersion,
-                                       @Nonnull PsiFile file) {
+                                              @Nonnull PsiResolveHelper resolveHelper,
+                                              @Nonnull LanguageLevel languageLevel,
+                                              @Nonnull JavaSdkVersion javaSdkVersion,
+                                              @Nonnull PsiFile file) {
     PsiExpressionList list = methodCall.getArgumentList();
     PsiReferenceExpression referenceToMethod = methodCall.getMethodExpression();
     JavaResolveResult[] results = referenceToMethod.multiResolve(true);
@@ -627,14 +629,14 @@ public class HighlightMethodUtil {
 
   @Nullable
   public static HighlightInfo checkAmbiguousMethodCallIdentifier(@Nonnull PsiReferenceExpression referenceToMethod,
-                                                          @Nonnull JavaResolveResult[] resolveResults,
-                                                          @Nonnull PsiExpressionList list,
-                                                          final PsiElement element,
-                                                          @Nonnull JavaResolveResult resolveResult,
-                                                          @Nonnull PsiMethodCallExpression methodCall,
-                                                          @Nonnull PsiResolveHelper resolveHelper,
-                                                          @Nonnull LanguageLevel languageLevel,
-                                                          @Nonnull PsiFile file) {
+                                                                 @Nonnull JavaResolveResult[] resolveResults,
+                                                                 @Nonnull PsiExpressionList list,
+                                                                 final PsiElement element,
+                                                                 @Nonnull JavaResolveResult resolveResult,
+                                                                 @Nonnull PsiMethodCallExpression methodCall,
+                                                                 @Nonnull PsiResolveHelper resolveHelper,
+                                                                 @Nonnull LanguageLevel languageLevel,
+                                                                 @Nonnull PsiFile file) {
     MethodCandidateInfo methodCandidate1 = null;
     MethodCandidateInfo methodCandidate2 = null;
     for (JavaResolveResult result : resolveResults) {
@@ -714,13 +716,13 @@ public class HighlightMethodUtil {
 
   @Nullable
   public static HighlightInfo checkAmbiguousMethodCallArguments(@Nonnull PsiReferenceExpression referenceToMethod,
-                                                         @Nonnull JavaResolveResult[] resolveResults,
-                                                         @Nonnull PsiExpressionList list,
-                                                         final PsiElement element,
-                                                         @Nonnull JavaResolveResult resolveResult,
-                                                         @Nonnull PsiMethodCallExpression methodCall,
-                                                         @Nonnull PsiResolveHelper resolveHelper,
-                                                         @Nonnull PsiElement elementToHighlight) {
+                                                                @Nonnull JavaResolveResult[] resolveResults,
+                                                                @Nonnull PsiExpressionList list,
+                                                                final PsiElement element,
+                                                                @Nonnull JavaResolveResult resolveResult,
+                                                                @Nonnull PsiMethodCallExpression methodCall,
+                                                                @Nonnull PsiResolveHelper resolveHelper,
+                                                                @Nonnull PsiElement elementToHighlight) {
     MethodCandidateInfo methodCandidate1 = null;
     MethodCandidateInfo methodCandidate2 = null;
     for (JavaResolveResult result : resolveResults) {
@@ -935,7 +937,7 @@ public class HighlightMethodUtil {
       return s;
     }
 
-    List<TextRange> wordIndices = StringUtil.getWordIndicesIn(s);
+    List<TextRange> wordIndices = TextRangeUtil.getWordIndicesIn(s);
     if (wordIndices.size() > 2) {
       int firstWordEnd = wordIndices.get(0).getEndOffset();
 
@@ -1561,11 +1563,11 @@ public class HighlightMethodUtil {
 
 
   public static void checkConstructorCall(@Nonnull PsiClassType.ClassResolveResult typeResolveResult,
-                                   @Nonnull PsiConstructorCall constructorCall,
-                                   @Nonnull PsiType type,
-                                   PsiJavaCodeReferenceElement classReference,
-                                   @Nonnull HighlightInfoHolder holder,
-                                   @Nonnull JavaSdkVersion javaSdkVersion) {
+                                          @Nonnull PsiConstructorCall constructorCall,
+                                          @Nonnull PsiType type,
+                                          PsiJavaCodeReferenceElement classReference,
+                                          @Nonnull HighlightInfoHolder holder,
+                                          @Nonnull JavaSdkVersion javaSdkVersion) {
     PsiExpressionList list = constructorCall.getArgumentList();
     if (list == null) {
       return;

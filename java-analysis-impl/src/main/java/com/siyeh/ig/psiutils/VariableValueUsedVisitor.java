@@ -15,11 +15,11 @@
  */
 package com.siyeh.ig.psiutils;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.*;
 import consulo.language.ast.IElementType;
+import consulo.language.psi.PsiElement;
+
+import javax.annotation.Nonnull;
 
 class VariableValueUsedVisitor extends JavaRecursiveElementVisitor {
 
@@ -42,7 +42,7 @@ class VariableValueUsedVisitor extends JavaRecursiveElementVisitor {
 
   @Override
   public void visitAssignmentExpression(
-    @Nonnull PsiAssignmentExpression assignment) {
+      @Nonnull PsiAssignmentExpression assignment) {
     if (read || written) {
       return;
     }
@@ -50,7 +50,7 @@ class VariableValueUsedVisitor extends JavaRecursiveElementVisitor {
     final PsiExpression lhs = assignment.getLExpression();
     if (lhs instanceof PsiReferenceExpression) {
       PsiReferenceExpression referenceExpression =
-        (PsiReferenceExpression)lhs;
+          (PsiReferenceExpression) lhs;
       final PsiElement target = referenceExpression.resolve();
       if (variable.equals(target)) {
         written = true;
@@ -62,14 +62,14 @@ class VariableValueUsedVisitor extends JavaRecursiveElementVisitor {
       return;
     }
     final VariableUsedVisitor visitor =
-      new VariableUsedVisitor(variable);
+        new VariableUsedVisitor(variable);
     rhs.accept(visitor);
     read = visitor.isUsed();
   }
 
   @Override
   public void visitPrefixExpression(
-    @Nonnull PsiPrefixExpression prefixExpression) {
+      @Nonnull PsiPrefixExpression prefixExpression) {
     if (read || written) {
       return;
     }
@@ -84,7 +84,7 @@ class VariableValueUsedVisitor extends JavaRecursiveElementVisitor {
       return;
     }
     final PsiReferenceExpression referenceExpression =
-      (PsiReferenceExpression)operand;
+        (PsiReferenceExpression) operand;
     final PsiElement target = referenceExpression.resolve();
     if (!variable.equals(target)) {
       return;
@@ -94,7 +94,7 @@ class VariableValueUsedVisitor extends JavaRecursiveElementVisitor {
 
   @Override
   public void visitPostfixExpression(
-    @Nonnull PsiPostfixExpression postfixExpression) {
+      @Nonnull PsiPostfixExpression postfixExpression) {
     if (read || written) {
       return;
     }
@@ -109,7 +109,7 @@ class VariableValueUsedVisitor extends JavaRecursiveElementVisitor {
       return;
     }
     final PsiReferenceExpression referenceExpression =
-      (PsiReferenceExpression)operand;
+        (PsiReferenceExpression) operand;
     final PsiElement target = referenceExpression.resolve();
     if (!variable.equals(target)) {
       return;
@@ -128,24 +128,24 @@ class VariableValueUsedVisitor extends JavaRecursiveElementVisitor {
       return;
     }
     final VariableUsedVisitor visitor =
-      new VariableUsedVisitor(variable);
+        new VariableUsedVisitor(variable);
     initalizer.accept(visitor);
     read = visitor.isUsed();
   }
 
   @Override
   public void visitMethodCallExpression(
-    @Nonnull PsiMethodCallExpression call) {
+      @Nonnull PsiMethodCallExpression call) {
     if (read || written) {
       return;
     }
     super.visitMethodCallExpression(call);
     final PsiReferenceExpression methodExpression =
-      call.getMethodExpression();
+        call.getMethodExpression();
     final PsiExpression qualifier =
-      methodExpression.getQualifierExpression();
+        methodExpression.getQualifierExpression();
     final VariableUsedVisitor visitor =
-      new VariableUsedVisitor(variable);
+        new VariableUsedVisitor(variable);
     if (qualifier != null) {
       qualifier.accept(visitor);
       if (visitor.isUsed()) {
@@ -166,20 +166,20 @@ class VariableValueUsedVisitor extends JavaRecursiveElementVisitor {
 
   @Override
   public void visitNewExpression(
-    @Nonnull PsiNewExpression newExpression) {
+      @Nonnull PsiNewExpression newExpression) {
     if (read || written) {
       return;
     }
     super.visitNewExpression(newExpression);
     final PsiExpressionList argumentList =
-      newExpression.getArgumentList();
+        newExpression.getArgumentList();
     if (argumentList == null) {
       return;
     }
     final PsiExpression[] arguments = argumentList.getExpressions();
     for (final PsiExpression argument : arguments) {
       final VariableUsedVisitor visitor =
-        new VariableUsedVisitor(variable);
+          new VariableUsedVisitor(variable);
       argument.accept(visitor);
       if (visitor.isUsed()) {
         read = true;
@@ -190,7 +190,7 @@ class VariableValueUsedVisitor extends JavaRecursiveElementVisitor {
 
   @Override
   public void visitArrayInitializerExpression(
-    PsiArrayInitializerExpression expression) {
+      PsiArrayInitializerExpression expression) {
     if (read || written) {
       return;
     }
@@ -198,7 +198,7 @@ class VariableValueUsedVisitor extends JavaRecursiveElementVisitor {
     final PsiExpression[] arguments = expression.getInitializers();
     for (final PsiExpression argument : arguments) {
       final VariableUsedVisitor visitor =
-        new VariableUsedVisitor(variable);
+          new VariableUsedVisitor(variable);
       argument.accept(visitor);
       if (visitor.isUsed()) {
         read = true;
@@ -209,7 +209,7 @@ class VariableValueUsedVisitor extends JavaRecursiveElementVisitor {
 
   @Override
   public void visitReturnStatement(
-    @Nonnull PsiReturnStatement returnStatement) {
+      @Nonnull PsiReturnStatement returnStatement) {
     if (read || written) {
       return;
     }
@@ -219,7 +219,7 @@ class VariableValueUsedVisitor extends JavaRecursiveElementVisitor {
       return;
     }
     final VariableUsedVisitor visitor =
-      new VariableUsedVisitor(variable);
+        new VariableUsedVisitor(variable);
     returnValue.accept(visitor);
     read = visitor.isUsed();
   }
@@ -234,7 +234,7 @@ class VariableValueUsedVisitor extends JavaRecursiveElementVisitor {
     }
     super.visitClass(aClass);
     final VariableUsedVisitor visitor =
-      new VariableUsedVisitor(variable);
+        new VariableUsedVisitor(variable);
     aClass.accept(visitor);
     read = visitor.isUsed();
   }

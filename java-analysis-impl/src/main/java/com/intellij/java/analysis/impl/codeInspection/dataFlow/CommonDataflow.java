@@ -10,12 +10,15 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaVariable
 import com.intellij.java.language.impl.psi.impl.ConstantExpressionEvaluator;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.document.util.TextRange;
-import com.intellij.psi.*;
-import com.intellij.psi.util.*;
 import com.intellij.java.language.util.JavaPsiConstructorUtil;
-import consulo.util.lang.ThreeState;
 import com.siyeh.ig.psiutils.ExpressionUtils;
+import consulo.application.util.CachedValueProvider;
+import consulo.document.util.TextRange;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiModificationTracker;
+import consulo.language.psi.util.LanguageCachedValueUtil;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.util.lang.ThreeState;
 import one.util.streamex.StreamEx;
 import org.jetbrains.annotations.Contract;
 
@@ -269,7 +272,7 @@ public final class CommonDataflow {
       return null;
     }
     ConcurrentHashMap<PsiElement, DataflowResult> fileMap =
-        CachedValuesManager.getCachedValue(body.getContainingFile(), () ->
+        LanguageCachedValueUtil.getCachedValue(body.getContainingFile(), () ->
             CachedValueProvider.Result.create(new ConcurrentHashMap<>(), PsiModificationTracker.MODIFICATION_COUNT));
     class ManagedCompute implements ForkJoinPool.ManagedBlocker {
       DataflowResult myResult;

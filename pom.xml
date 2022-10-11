@@ -67,7 +67,6 @@
 		<module>java-spellchecker</module>
 		<module>jvm-bytecode-viewer</module>
 		<module>java-intellilang</module>
-		<module>java-impl-testing</module>
 		<module>jam-api</module>
 		<module>jam-impl</module>
 		<module>plugin</module>

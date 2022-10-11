@@ -1,21 +1,21 @@
 // Copyright 2000-2020 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.analysis.impl.codeInsight.daemon.impl;
 
-import consulo.language.editor.Pass;
-import consulo.language.editor.gutter.GutterIconNavigationHandler;
-import consulo.language.editor.gutter.LineMarkerInfo;
 import com.intellij.java.analysis.JavaAnalysisBundle;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.JavaModuleGraphUtil;
 import com.intellij.java.analysis.impl.psi.impl.source.resolve.reference.impl.JavaReflectionReferenceUtil;
 import com.intellij.java.language.psi.*;
-import consulo.navigation.NavigationItem;
-import consulo.codeEditor.markup.GutterIconRenderer;
-import com.intellij.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.util.collection.ContainerUtil;
 import com.siyeh.ig.callMatcher.CallMatcher;
-import consulo.java.psi.impl.icon.JavaPsiImplIconGroup;
+import consulo.codeEditor.markup.GutterIconRenderer;
+import consulo.java.language.impl.icon.JavaPsiImplIconGroup;
+import consulo.language.editor.Pass;
+import consulo.language.editor.gutter.GutterIconNavigationHandler;
+import consulo.language.editor.gutter.LineMarkerInfo;
+import consulo.language.psi.PsiElement;
+import consulo.navigation.NavigationItem;
+import consulo.util.collection.ContainerUtil;
 import one.util.streamex.StreamEx;
 
 import javax.annotation.Nonnull;
@@ -68,7 +68,7 @@ public final class JavaServiceUtil {
                     String interfaceClassName = interfaceClass.getQualifiedName();
                     if (interfaceClassName != null) {
                       LineMarkerInfo<PsiElement> info =
-                          new LineMarkerInfo<>(identifier, identifier.getTextRange(), JavaPsiImplIconGroup.gutterJava9Service(),
+                          new LineMarkerInfo<>(identifier, identifier.getTextRange(), JavaPsiImplIconGroup.gutterJava9service(),
                               Pass.LINE_MARKERS,
                               e -> JavaAnalysisBundle.message("service.provides", interfaceClassName),
                               new ServiceProvidesNavigationHandler(interfaceClassName, implementerClassName),
@@ -108,7 +108,7 @@ public final class JavaServiceUtil {
                 if (usedClass != null && psiClass.equals(usedClass.resolve())) {
                   LineMarkerInfo<PsiElement> info =
                       new LineMarkerInfo<>(identifier, identifier.getTextRange(),
-                          JavaPsiImplIconGroup.gutterJava9Service(),
+                          JavaPsiImplIconGroup.gutterJava9service(),
                           Pass.LINE_MARKERS,
                           e -> JavaAnalysisBundle.message("service.uses", qualifiedName),
                           new ServiceUsesNavigationHandler(qualifiedName),

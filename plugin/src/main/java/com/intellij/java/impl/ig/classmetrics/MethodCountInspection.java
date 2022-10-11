@@ -55,7 +55,7 @@ public class MethodCountInspection extends BaseInspection {
     final JComponent panel = new JPanel(new GridBagLayout());
     final Component label = new JLabel(
       InspectionGadgetsBundle.message("method.count.limit.option"));
-    final JFormattedTextField valueField = prepareNumberEditor("m_limit");
+    final JFormattedTextField valueField = prepareNumberEditor(() -> m_limit, i -> m_limit = i);
 
     final GridBagConstraints constraints = new GridBagConstraints();
     constraints.gridx = 0;

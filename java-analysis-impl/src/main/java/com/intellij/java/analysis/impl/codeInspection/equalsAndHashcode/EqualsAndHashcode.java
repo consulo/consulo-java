@@ -15,32 +15,31 @@
  */
 package com.intellij.java.analysis.impl.codeInspection.equalsAndHashcode;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.java.analysis.codeInspection.BaseJavaBatchLocalInspectionTool;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.MethodSignatureUtil;
+import consulo.application.ApplicationManager;
+import consulo.application.util.CachedValueProvider;
+import consulo.application.util.CachedValuesManager;
+import consulo.application.util.function.Computable;
+import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.inspection.InspectionsBundle;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemsHolder;
-import com.intellij.java.language.psi.*;
-import consulo.application.ApplicationManager;
-import consulo.project.Project;
-import consulo.module.content.ProjectRootManager;
-import consulo.application.util.function.Computable;
-import consulo.util.lang.Pair;
-import com.intellij.psi.*;
+import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.scope.GlobalSearchScope;
-import consulo.application.util.CachedValueProvider;
-import consulo.application.util.CachedValuesManager;
-import com.intellij.java.language.psi.util.MethodSignatureUtil;
-import consulo.java.language.module.util.JavaClassNames;
+import consulo.module.content.ProjectRootManager;
+import consulo.project.Project;
+import consulo.util.lang.Pair;
 import org.jetbrains.annotations.NonNls;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
  * @author max
  */
-public class EqualsAndHashcode extends BaseJavaBatchLocalInspectionTool {
+public abstract class EqualsAndHashcode extends BaseJavaBatchLocalInspectionTool {
   @Override
   @Nonnull
   public PsiElementVisitor buildVisitor(@Nonnull final ProblemsHolder holder, boolean isOnTheFly) {

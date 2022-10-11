@@ -15,24 +15,25 @@
  */
 package com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix;
 
-import consulo.language.editor.FileModificationService;
-import consulo.language.editor.rawHighlight.HighlightInfo;
-import consulo.language.editor.intention.QuickFixAction;
-import consulo.language.editor.intention.IntentionAction;
-import com.intellij.java.language.psi.*;
-import consulo.codeEditor.Editor;
-import consulo.codeEditor.ScrollType;
-import consulo.project.Project;
-import consulo.document.util.TextRange;
-import consulo.document.util.UnfairTextRange;
-import com.intellij.psi.*;
 import com.intellij.java.language.impl.psi.impl.PsiDiamondTypeUtil;
+import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiExpressionTrimRenderer;
-import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
-import consulo.language.util.IncorrectOperationException;
+import consulo.codeEditor.Editor;
+import consulo.codeEditor.ScrollType;
+import consulo.document.util.TextRange;
+import consulo.document.util.UnfairTextRange;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.language.editor.FileModificationService;
+import consulo.language.editor.intention.IntentionAction;
+import consulo.language.editor.intention.QuickFixAction;
+import consulo.language.editor.rawHighlight.HighlightInfo;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
@@ -50,7 +51,7 @@ public class ChangeNewOperatorTypeFix implements IntentionAction {
   @Override
   @Nonnull
   public String getText() {
-    return JavaQuickFixBundle.message("change.new.operator.type.text", new PsiExpressionTrimRenderer.RenderFunction().fun(myExpression), myType.getPresentableText(), myType instanceof PsiArrayType ? "" : "()");
+    return JavaQuickFixBundle.message("change.new.operator.type.text", new PsiExpressionTrimRenderer.RenderFunction().apply(myExpression), myType.getPresentableText(), myType instanceof PsiArrayType ? "" : "()");
   }
 
   @Override

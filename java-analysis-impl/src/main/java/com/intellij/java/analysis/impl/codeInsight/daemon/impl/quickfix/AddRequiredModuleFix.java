@@ -15,103 +15,85 @@
  */
 package com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix;
 
-import javax.annotation.Nonnull;
-
-import org.jetbrains.annotations.Nls;
-
-import javax.annotation.Nullable;
-import consulo.language.editor.inspection.LocalQuickFixAndIntentionActionOnPsiElement;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.codeEditor.Editor;
-import consulo.project.Project;
-import com.intellij.java.language.psi.JavaPsiFacade;
-import com.intellij.java.language.psi.JavaTokenType;
+import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.language.editor.inspection.LocalQuickFixAndIntentionActionOnPsiElement;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
-import com.intellij.java.language.psi.PsiJavaModule;
-import com.intellij.java.language.psi.PsiJavaModuleReferenceElement;
-import com.intellij.java.language.psi.PsiJavaParserFacade;
-import com.intellij.java.language.psi.PsiRequiresStatement;
-import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
+import org.jetbrains.annotations.Nls;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * @author Pavel.Dolgov
  */
-public class AddRequiredModuleFix extends LocalQuickFixAndIntentionActionOnPsiElement
-{
-	private final String myRequiredName;
+public class AddRequiredModuleFix extends LocalQuickFixAndIntentionActionOnPsiElement {
+  private final String myRequiredName;
 
-	public AddRequiredModuleFix(PsiJavaModule module, String requiredName)
-	{
-		super(module);
-		myRequiredName = requiredName;
-	}
+  public AddRequiredModuleFix(PsiJavaModule module, String requiredName) {
+    super(module);
+    myRequiredName = requiredName;
+  }
 
-	@Nls
-	@Nonnull
-	@Override
-	public String getText()
-	{
-		return JavaQuickFixBundle.message("module.info.add.requires.name", myRequiredName);
-	}
+  @Nls
+  @Nonnull
+  @Override
+  public String getText() {
+    return JavaQuickFixBundle.message("module.info.add.requires.name", myRequiredName);
+  }
 
-	@Nls
-	@Nonnull
-	@Override
-	public String getFamilyName()
-	{
-		return JavaQuickFixBundle.message("module.info.add.requires.family.name");
-	}
+  @Nls
+  @Nonnull
+  @Override
+  public String getFamilyName() {
+    return JavaQuickFixBundle.message("module.info.add.requires.family.name");
+  }
 
-	@Override
-	public boolean isAvailable(@Nonnull Project project, @Nonnull PsiFile file, @Nonnull PsiElement startElement, @Nonnull PsiElement endElement)
-	{
-		return PsiUtil.isLanguageLevel9OrHigher(file) && startElement instanceof PsiJavaModule && startElement.getManager().isInProject(startElement) && getLBrace((PsiJavaModule) startElement) !=
-				null;
-	}
+  @Override
+  public boolean isAvailable(@Nonnull Project project, @Nonnull PsiFile file, @Nonnull PsiElement startElement, @Nonnull PsiElement endElement) {
+    return PsiUtil.isLanguageLevel9OrHigher(file) && startElement instanceof PsiJavaModule && startElement.getManager().isInProject(startElement) && getLBrace((PsiJavaModule) startElement) !=
+        null;
+  }
 
-	@Override
-	public void invoke(@Nonnull Project project, @Nonnull PsiFile file, @Nullable Editor editor, @Nonnull PsiElement startElement, @Nonnull PsiElement endElement)
-	{
-		PsiJavaModule module = (PsiJavaModule) startElement;
+  @Override
+  public void invoke(@Nonnull Project project, @Nonnull PsiFile file, @Nullable Editor editor, @Nonnull PsiElement startElement, @Nonnull PsiElement endElement) {
+    PsiJavaModule module = (PsiJavaModule) startElement;
 
-		PsiJavaParserFacade parserFacade = JavaPsiFacade.getInstance(project).getParserFacade();
-		PsiJavaModule tempModule = parserFacade.createModuleFromText("module " + module.getName() + " { requires " + myRequiredName + "; }");
-		Iterable<PsiRequiresStatement> tempModuleRequires = tempModule.getRequires();
-		PsiRequiresStatement requiresStatement = tempModuleRequires.iterator().next();
+    PsiJavaParserFacade parserFacade = JavaPsiFacade.getInstance(project).getParserFacade();
+    PsiJavaModule tempModule = parserFacade.createModuleFromText("module " + module.getName() + " { requires " + myRequiredName + "; }");
+    Iterable<PsiRequiresStatement> tempModuleRequires = tempModule.getRequires();
+    PsiRequiresStatement requiresStatement = tempModuleRequires.iterator().next();
 
-		PsiElement addingPlace = findAddingPlace(module);
-		if(addingPlace != null)
-		{
-			addingPlace.getParent().addAfter(requiresStatement, addingPlace);
-		}
-	}
+    PsiElement addingPlace = findAddingPlace(module);
+    if (addingPlace != null) {
+      addingPlace.getParent().addAfter(requiresStatement, addingPlace);
+    }
+  }
 
-	@Override
-	public boolean startInWriteAction()
-	{
-		return true;
-	}
+  @Override
+  public boolean startInWriteAction() {
+    return true;
+  }
 
-	@Nullable
-	private static PsiElement findAddingPlace(@Nonnull PsiJavaModule module)
-	{
-		PsiElement addingPlace = ContainerUtil.iterateAndGetLastItem(module.getRequires());
-		return addingPlace != null ? addingPlace : getLBrace(module);
-	}
+  @Nullable
+  private static PsiElement findAddingPlace(@Nonnull PsiJavaModule module) {
+    PsiElement addingPlace = ContainerUtil.iterateAndGetLastItem(module.getRequires());
+    return addingPlace != null ? addingPlace : getLBrace(module);
+  }
 
-	@Nullable
-	private static PsiElement getLBrace(@Nonnull PsiJavaModule module)
-	{
-		PsiJavaModuleReferenceElement nameElement = module.getNameIdentifier();
-		for(PsiElement element = nameElement.getNextSibling(); element != null; element = element.getNextSibling())
-		{
-			if(PsiUtil.isJavaToken(element, JavaTokenType.LBRACE))
-			{
-				return element;
-			}
-		}
-		return null; // module-info is incomplete
-	}
+  @Nullable
+  private static PsiElement getLBrace(@Nonnull PsiJavaModule module) {
+    PsiJavaModuleReferenceElement nameElement = module.getNameIdentifier();
+    for (PsiElement element = nameElement.getNextSibling(); element != null; element = element.getNextSibling()) {
+      if (PsiUtil.isJavaToken(element, JavaTokenType.LBRACE)) {
+        return element;
+      }
+    }
+    return null; // module-info is incomplete
+  }
 }

@@ -17,7 +17,7 @@ package com.intellij.java.impl.codeInspection.emptyMethod;
 
 import consulo.language.editor.scope.AnalysisScope;
 import com.intellij.java.language.codeInsight.AnnotationUtil;
-import consulo.ide.impl.idea.codeInsight.daemon.GroupNames;
+import com.intellij.java.analysis.codeInspection.GroupNames;
 import com.intellij.java.analysis.codeInspection.GlobalJavaInspectionContext;
 import com.intellij.java.analysis.codeInspection.GlobalJavaInspectionTool;
 import com.intellij.java.analysis.codeInspection.reference.RefJavaUtil;

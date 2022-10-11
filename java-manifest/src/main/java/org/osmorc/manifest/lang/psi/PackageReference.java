@@ -24,19 +24,20 @@
  */
 package org.osmorc.manifest.lang.psi;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import consulo.language.psi.EmptyResolveMessageProvider;
-import consulo.module.Module;
-import consulo.ide.impl.idea.openapi.module.ModuleUtil;
-import consulo.util.lang.Comparing;
-import consulo.document.util.TextRange;
 import com.intellij.java.language.psi.JavaPsiFacade;
-import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiJavaPackage;
+import consulo.document.util.TextRange;
+import consulo.language.psi.EmptyResolveMessageProvider;
+import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReferenceBase;
 import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.util.ModuleUtilCore;
+import consulo.module.Module;
 import consulo.util.collection.ArrayUtil;
+import consulo.util.lang.Comparing;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * @author Robert F. Beeger (robert@beeger.net)
@@ -49,11 +50,10 @@ public class PackageReference extends PsiReferenceBase<PsiElement> implements Em
     super(set.getElement(), range);
     myReferenceSet = set;
     myIndex = index;
-    Module module = ModuleUtil.findModuleForPsiElement(set.getElement());
+    Module module = ModuleUtilCore.findModuleForPsiElement(set.getElement());
     if (module != null) {
       _moduleWithLibrariesScope = GlobalSearchScope.moduleWithLibrariesScope(module);
-    }
-    else {
+    } else {
       _moduleWithLibrariesScope = GlobalSearchScope.allScope(set.getElement().getProject());
     }
   }
@@ -61,8 +61,8 @@ public class PackageReference extends PsiReferenceBase<PsiElement> implements Em
   @Nullable
   private PsiJavaPackage getPsiPackage() {
     return myIndex == 0
-           ? JavaPsiFacade.getInstance(getElement().getProject()).findPackage("")
-           : myReferenceSet.getReference(myIndex - 1).resolve();
+        ? JavaPsiFacade.getInstance(getElement().getProject()).findPackage("")
+        : myReferenceSet.getReference(myIndex - 1).resolve();
   }
 
   public boolean isSoft() {

@@ -16,35 +16,31 @@
 
 package consulo.java.jam.impl;
 
-import jakarta.inject.Singleton;
-
-import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.jam.model.util.JamCommonUtil;
 import com.intellij.java.language.JavaLanguage;
-import consulo.language.psi.PsiElement;
-import consulo.language.psi.PsiFile;
-import com.intellij.psi.xml.XmlFile;
+import com.intellij.java.language.impl.JavaFileType;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.java.jam.util.JamCommonService;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.xml.psi.xml.XmlFile;
+import jakarta.inject.Singleton;
 
 /**
  * @author VISTALL
  * @since 2018-06-21
  */
 @Singleton
-public class JamCommonServiceImpl implements JamCommonService
-{
-	@RequiredReadAction
-	@Override
-	public boolean isPlainJavaFile(PsiElement element)
-	{
-		return JamCommonUtil.isKindOfJavaFile(element) && ((PsiFile) element).getFileType() == JavaFileType.INSTANCE; // prevent jsp processing
-	}
+public class JamCommonServiceImpl implements JamCommonService {
+  @RequiredReadAction
+  @Override
+  public boolean isPlainJavaFile(PsiElement element) {
+    return JamCommonUtil.isKindOfJavaFile(element) && ((PsiFile) element).getFileType() == JavaFileType.INSTANCE; // prevent jsp processing
+  }
 
-	@RequiredReadAction
-	@Override
-	public boolean isPlainXmlFile(PsiElement element)
-	{
-		return element instanceof XmlFile && element.getLanguage() == JavaLanguage.INSTANCE;
-	}
+  @RequiredReadAction
+  @Override
+  public boolean isPlainXmlFile(PsiElement element) {
+    return element instanceof XmlFile && element.getLanguage() == JavaLanguage.INSTANCE;
+  }
 }

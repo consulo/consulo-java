@@ -15,33 +15,40 @@
  */
 package com.intellij.java.indexing.impl;
 
-import com.intellij.ProjectTopics;
-import com.intellij.java.language.impl.JavaClassFileType;
 import com.intellij.java.indexing.impl.stubs.index.JavaAutoModuleNameIndex;
 import com.intellij.java.indexing.impl.stubs.index.JavaFullClassNameIndex;
 import com.intellij.java.indexing.impl.stubs.index.JavaModuleNameIndex;
 import com.intellij.java.indexing.impl.stubs.index.JavaSourceModuleNameIndex;
+import com.intellij.java.language.impl.JavaClassFileType;
+import com.intellij.java.language.impl.psi.impl.PsiImplUtil;
+import com.intellij.java.language.impl.psi.impl.file.impl.JavaFileManager;
+import com.intellij.java.language.impl.psi.impl.light.LightJavaModule;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiJavaModule;
 import com.intellij.java.language.psi.PsiNameHelper;
+import consulo.disposer.Disposable;
+import consulo.language.impl.internal.psi.PsiManagerEx;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiInvalidElementAccessException;
+import consulo.language.psi.scope.DelegatingGlobalSearchScope;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.logging.Logger;
 import consulo.module.Module;
-import consulo.ide.impl.idea.openapi.module.impl.scopes.ModuleWithDependenciesScope;
+import consulo.module.content.ModuleFileIndex;
+import consulo.module.content.ModuleRootManager;
+import consulo.module.content.ProjectFileIndex;
+import consulo.module.content.ProjectRootManager;
+import consulo.module.content.layer.event.ModuleRootEvent;
+import consulo.module.content.layer.event.ModuleRootListener;
+import consulo.module.content.layer.orderEntry.ModuleExtensionWithSdkOrderEntry;
+import consulo.module.content.scope.ModuleWithDependenciesScope;
 import consulo.project.Project;
-import com.intellij.openapi.roots.*;
+import consulo.util.collection.ContainerUtil;
+import consulo.util.collection.Lists;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.Pair;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.VirtualFileWithId;
-import com.intellij.psi.*;
-import com.intellij.java.language.impl.psi.impl.PsiImplUtil;
-import consulo.language.impl.internal.psi.PsiManagerEx;
-import com.intellij.java.language.impl.psi.impl.file.impl.JavaFileManager;
-import com.intellij.java.language.impl.psi.impl.light.LightJavaModule;
-import consulo.language.psi.scope.DelegatingGlobalSearchScope;
-import consulo.language.psi.scope.GlobalSearchScope;
-import consulo.util.collection.ContainerUtil;
-import consulo.disposer.Disposable;
-import consulo.logging.Logger;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
@@ -64,7 +71,7 @@ public class JavaFileManagerImpl implements JavaFileManager, Disposable {
   @Inject
   public JavaFileManagerImpl(Project project) {
     myManager = PsiManagerEx.getInstanceEx(project);
-    project.getMessageBus().connect().subscribe(ProjectTopics.PROJECT_ROOTS, new ModuleRootAdapter() {
+    project.getMessageBus().connect().subscribe(ModuleRootListener.class, new ModuleRootListener() {
       @Override
       public void rootsChanged(final ModuleRootEvent event) {
         myNontrivialPackagePrefixes = null;
@@ -90,7 +97,7 @@ public class JavaFileManagerImpl implements JavaFileManager, Disposable {
       return new PsiClass[]{result.get(0).getFirst()};
     }
 
-    ContainerUtil.quickSort(result, (o1, o2) -> scope.compare(o2.getSecond(), o1.getSecond()));
+    Lists.quickSort(result, (o1, o2) -> scope.compare(o2.getSecond(), o1.getSecond()));
 
     return result.stream().map(p -> p.getFirst()).toArray(PsiClass[]::new);
   }
@@ -236,7 +243,7 @@ public class JavaFileManagerImpl implements JavaFileManager, Disposable {
             } else {
               list = Collections.singletonList(candidate);  // shadows subsequent modules
               break;
-            }
+            }                                                                                    
           }
         }
 

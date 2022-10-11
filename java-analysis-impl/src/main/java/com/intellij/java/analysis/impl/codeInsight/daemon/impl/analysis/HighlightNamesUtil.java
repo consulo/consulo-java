@@ -15,29 +15,31 @@
  */
 package com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis;
 
-import consulo.ide.impl.idea.application.options.colors.ScopeAttributesUtil;
-import consulo.language.editor.rawHighlight.RainbowHighlighter;
-import consulo.language.editor.rawHighlight.HighlightInfo;
-import consulo.language.editor.rawHighlight.HighlightInfoType;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.JavaHighlightInfoTypes;
-import com.intellij.java.language.psi.*;
-import consulo.language.ast.ASTNode;
 import com.intellij.java.language.JavaLanguage;
+import com.intellij.java.language.impl.psi.impl.source.tree.ElementType;
+import com.intellij.java.language.psi.*;
+import consulo.colorScheme.TextAttributes;
 import consulo.colorScheme.TextAttributesKey;
 import consulo.colorScheme.TextAttributesScheme;
-import consulo.colorScheme.TextAttributes;
-import consulo.util.lang.Pair;
-import consulo.document.util.TextRange;
-import consulo.ide.impl.idea.packageDependencies.DependencyValidationManager;
-import consulo.ide.impl.idea.packageDependencies.DependencyValidationManagerImpl;
-import com.intellij.psi.*;
-import com.intellij.java.language.impl.psi.impl.source.tree.ElementType;
-import consulo.language.impl.ast.TreeUtil;
 import consulo.content.scope.NamedScope;
 import consulo.content.scope.NamedScopesHolder;
 import consulo.content.scope.PackageSet;
+import consulo.document.util.TextRange;
+import consulo.language.ast.ASTNode;
+import consulo.language.editor.packageDependency.DependencyValidationManager;
+import consulo.language.editor.rawHighlight.HighlightInfo;
+import consulo.language.editor.rawHighlight.HighlightInfoType;
+import consulo.language.editor.rawHighlight.RainbowHighlighter;
+import consulo.language.editor.rawHighlight.SeverityRegistrarUtil;
+import consulo.language.editor.scope.ScopeAttributesUtil;
+import consulo.language.impl.ast.TreeUtil;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.SyntheticElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.logging.Logger;
+import consulo.util.lang.Pair;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -101,7 +103,7 @@ public class HighlightNamesUtil {
   }
 
   private static TextAttributes mergeWithScopeAttributes(@Nullable PsiElement element, @Nonnull HighlightInfoType type, @Nonnull TextAttributesScheme colorsScheme) {
-    TextAttributes regularAttributes = HighlightInfo.getAttributesByType(element, type, colorsScheme);
+    TextAttributes regularAttributes = SeverityRegistrarUtil.getAttributesByType(element, type, colorsScheme);
     if (element == null) {
       return regularAttributes;
     }
@@ -245,7 +247,7 @@ public class HighlightNamesUtil {
       return null;
     }
     TextAttributes result = null;
-    DependencyValidationManagerImpl validationManager = (DependencyValidationManagerImpl) DependencyValidationManager.getInstance(file.getProject());
+    DependencyValidationManager validationManager = DependencyValidationManager.getInstance(file.getProject());
     List<Pair<NamedScope, NamedScopesHolder>> scopes = validationManager.getScopeBasedHighlightingCachedScopes();
     for (Pair<NamedScope, NamedScopesHolder> scope : scopes) {
       final NamedScope namedScope = scope.getFirst();
@@ -255,7 +257,7 @@ public class HighlightNamesUtil {
         continue;
       }
       final PackageSet packageSet = namedScope.getValue();
-      if (packageSet != null && packageSet.contains(file, scope.getSecond())) {
+      if (packageSet != null && packageSet.contains(file.getVirtualFile(), file.getProject(), scope.getSecond())) {
         result = TextAttributes.merge(attributes, result);
       }
     }

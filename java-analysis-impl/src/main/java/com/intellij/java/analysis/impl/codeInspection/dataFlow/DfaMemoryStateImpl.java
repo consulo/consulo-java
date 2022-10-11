@@ -2,28 +2,28 @@
 
 package com.intellij.java.analysis.impl.codeInspection.dataFlow;
 
-import com.intellij.java.language.codeInsight.Nullability;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.rangeSet.LongRangeBinOp;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.rangeSet.LongRangeSet;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.types.*;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.*;
+import com.intellij.java.language.codeInsight.Nullability;
 import com.intellij.java.language.psi.*;
-import consulo.application.ApplicationManager;
-import consulo.logging.Logger;
-import consulo.application.progress.ProgressManager;
-import consulo.util.lang.Couple;
-import consulo.util.lang.Pair;
-import consulo.util.lang.StringUtil;
 import com.intellij.java.language.psi.util.PropertyUtilBase;
 import com.intellij.java.language.psi.util.PsiTypesUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
-import consulo.ide.impl.idea.util.ObjectUtils;
+import consulo.application.ApplicationManager;
+import consulo.application.progress.ProgressManager;
+import consulo.logging.Logger;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.collection.Stack;
 import consulo.util.collection.primitive.ints.IntList;
 import consulo.util.collection.primitive.ints.IntLists;
 import consulo.util.collection.primitive.ints.IntMaps;
 import consulo.util.collection.primitive.ints.IntObjectMap;
+import consulo.util.lang.Couple;
+import consulo.util.lang.ObjectUtil;
+import consulo.util.lang.Pair;
+import consulo.util.lang.StringUtil;
 import one.util.streamex.StreamEx;
 
 import javax.annotation.Nonnull;
@@ -536,7 +536,7 @@ public class DfaMemoryStateImpl implements DfaMemoryState {
     }
     for (int valueId : myIdToEqClassesIndices.keys()) {
       DfaValue value = myFactory.getValue(valueId);
-      DfaVariableValue var = ObjectUtils.tryCast(value, DfaVariableValue.class);
+      DfaVariableValue var = ObjectUtil.tryCast(value, DfaVariableValue.class);
       if (var == null || var.getQualifier() != from) {
         continue;
       }
@@ -716,8 +716,8 @@ public class DfaMemoryStateImpl implements DfaMemoryState {
     LongRangeSet appliedRange = isLong ? factValue : factValue.intersect(Objects.requireNonNull(LongRangeSet.fromType(PsiType.INT)));
     DfaVariableValue left = binOp.getLeft();
     DfaValue right = binOp.getRight();
-    DfIntegralType leftDfType = ObjectUtils.tryCast(getDfType(left), DfIntegralType.class);
-    DfIntegralType rightDfType = ObjectUtils.tryCast(getDfType(right), DfIntegralType.class);
+    DfIntegralType leftDfType = ObjectUtil.tryCast(getDfType(left), DfIntegralType.class);
+    DfIntegralType rightDfType = ObjectUtil.tryCast(getDfType(right), DfIntegralType.class);
     if (leftDfType == null || rightDfType == null) {
       return true;
     }
@@ -1382,7 +1382,7 @@ public class DfaMemoryStateImpl implements DfaMemoryState {
       return getDfType(SpecialField.UNBOX.createValue(myFactory, value));
     }
     if (value instanceof DfaTypeValue) {
-      DfReferenceType refType = ObjectUtils.tryCast(value.getDfType(), DfReferenceType.class);
+      DfReferenceType refType = ObjectUtil.tryCast(value.getDfType(), DfReferenceType.class);
       if (refType != null && refType.getSpecialField() == SpecialField.UNBOX) {
         return refType.getSpecialFieldType();
       }
@@ -1638,7 +1638,7 @@ public class DfaMemoryStateImpl implements DfaMemoryState {
       - All DfaControlTransferValues in the stack are the same (otherwise finally blocks may not complete successfully)
       - Top-of-stack value is the same (otherwise we may prematurely merge true/false on TOS right before jump which is very undesired)
      */
-    return StreamEx.of(myStack).<Object>mapLastOrElse(val -> ObjectUtils.tryCast(val, DfaControlTransferValue.class),
+    return StreamEx.of(myStack).<Object>mapLastOrElse(val -> ObjectUtil.tryCast(val, DfaControlTransferValue.class),
         Function.identity())
         .append(isEphemeral()).toImmutableList();
   }
@@ -1766,7 +1766,7 @@ public class DfaMemoryStateImpl implements DfaMemoryState {
         }
         for (int valueId : myIdToEqClassesIndices.keys()) {
           DfaValue value = myFactory.getValue(valueId);
-          DfaVariableValue var = ObjectUtils.tryCast(value, DfaVariableValue.class);
+          DfaVariableValue var = ObjectUtil.tryCast(value, DfaVariableValue.class);
           if (var == null || var.getQualifier() != from) {
             continue;
           }
@@ -1861,7 +1861,7 @@ public class DfaMemoryStateImpl implements DfaMemoryState {
     private
     @Nonnull
     QualifierStatus calculate(@Nonnull DfaValue qualifier) {
-      final DfReferenceType dfType = ObjectUtils.tryCast(getDfType(qualifier), DfReferenceType.class);
+      final DfReferenceType dfType = ObjectUtil.tryCast(getDfType(qualifier), DfReferenceType.class);
       if (dfType == null) {
         return QualifierStatus.SHOULD_FLUSH_ALWAYS;
       }

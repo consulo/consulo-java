@@ -15,37 +15,40 @@
  */
 package com.intellij.java.analysis.impl.codeInspection;
 
+import com.intellij.java.analysis.codeInspection.BaseJavaBatchLocalInspectionTool;
+import com.intellij.java.analysis.codeInspection.GroupNames;
+import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.HighlightControlFlowUtil;
+import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.language.impl.codeInsight.ChangeContextUtil;
-import consulo.ide.impl.idea.codeInsight.daemon.GroupNames;
-import consulo.language.editor.intention.HighPriorityAction;
+import com.intellij.java.language.impl.psi.controlFlow.AnalysisCanceledException;
+import com.intellij.java.language.impl.psi.controlFlow.ControlFlow;
+import com.intellij.java.language.impl.psi.controlFlow.ControlFlowUtil;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
+import com.intellij.java.language.psi.util.InheritanceUtil;
+import com.intellij.java.language.psi.util.PsiTypesUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.RedundantCastUtil;
+import consulo.component.util.text.UniqueNameGenerator;
+import consulo.document.util.TextRange;
+import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.editor.inspection.ProblemHighlightType;
 import consulo.language.editor.inspection.ProblemsHolder;
 import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
-import com.intellij.java.analysis.codeInspection.BaseJavaBatchLocalInspectionTool;
-import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.HighlightControlFlowUtil;
-import com.intellij.java.language.psi.*;
-import com.intellij.java.language.psi.util.InheritanceUtil;
-import com.intellij.java.language.psi.util.PsiTypesUtil;
-import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.java.language.psi.util.RedundantCastUtil;
-import consulo.project.Project;
-import consulo.util.lang.Comparing;
-import consulo.document.util.TextRange;
-import consulo.util.lang.StringUtil;
-import com.intellij.java.language.LanguageLevel;
-import com.intellij.psi.*;
-import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
-import com.intellij.java.language.impl.psi.controlFlow.AnalysisCanceledException;
-import com.intellij.java.language.impl.psi.controlFlow.ControlFlow;
-import com.intellij.java.language.impl.psi.controlFlow.ControlFlowUtil;
-import com.intellij.psi.util.*;
-import consulo.util.collection.ContainerUtil;
-import consulo.component.util.text.UniqueNameGenerator;
-import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.editor.intention.HighPriorityAction;
+import consulo.language.editor.rawHighlight.HighlightDisplayLevel;
+import consulo.language.psi.PsiComment;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiElementVisitor;
+import consulo.language.psi.util.PsiTreeUtil;
 import consulo.logging.Logger;
+import consulo.project.Project;
+import consulo.util.collection.ContainerUtil;
+import consulo.util.lang.Comparing;
+import consulo.util.lang.StringUtil;
 import org.jetbrains.annotations.Nls;
 
 import javax.annotation.Nonnull;
@@ -87,6 +90,12 @@ public class AnonymousCanBeLambdaInspection extends BaseJavaBatchLocalInspection
   @Override
   public String getShortName() {
     return "Convert2Lambda";
+  }
+
+  @Nonnull
+  @Override
+  public HighlightDisplayLevel getDefaultLevel() {
+    return HighlightDisplayLevel.WARNING;
   }
 
   @Nullable

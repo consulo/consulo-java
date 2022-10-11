@@ -2,20 +2,20 @@
 package com.intellij.spellchecker;
 
 import com.intellij.java.language.codeInsight.AnnotationUtil;
-import consulo.language.editor.CodeInsightUtilCore;
 import com.intellij.java.language.psi.*;
-import consulo.language.inject.InjectedLanguageManager;
-import consulo.util.lang.StringUtil;
-import com.intellij.psi.*;
 import com.intellij.java.language.psi.util.PsiLiteralUtil;
-import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.spellchecker.inspections.PlainTextSplitter;
 import com.intellij.spellchecker.tokenizer.EscapeSequenceTokenizer;
 import com.intellij.spellchecker.tokenizer.TokenConsumer;
 import com.siyeh.ig.psiutils.ExpressionUtils;
-import javax.annotation.Nonnull;
+import consulo.language.editor.CodeInsightUtilCore;
+import consulo.language.inject.InjectedLanguageManager;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.util.lang.StringUtil;
 
+import javax.annotation.Nonnull;
 import java.util.Arrays;
 
 /**

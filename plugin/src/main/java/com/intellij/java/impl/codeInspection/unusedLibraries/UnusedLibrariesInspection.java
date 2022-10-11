@@ -20,65 +20,49 @@
  */
 package com.intellij.java.impl.codeInspection.unusedLibraries;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-
-import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NonNls;
-
-import javax.annotation.Nullable;
-import consulo.language.editor.scope.AnalysisScope;
-import consulo.ide.impl.idea.codeInsight.daemon.GroupNames;
-import consulo.language.editor.inspection.CommonProblemDescriptor;
-import consulo.language.editor.inspection.GlobalInspectionContext;
-import consulo.language.editor.inspection.GlobalInspectionTool;
-import consulo.language.editor.inspection.scheme.InspectionManager;
-import consulo.language.editor.inspection.InspectionsBundle;
-import consulo.language.editor.inspection.ProblemDescriptionsProcessor;
-import com.intellij.codeInspection.QuickFix;
-import consulo.language.editor.inspection.scheme.JobDescriptor;
-import consulo.language.editor.inspection.reference.RefManager;
-import consulo.language.editor.inspection.reference.RefModule;
+import com.intellij.java.analysis.codeInspection.GroupNames;
+import com.intellij.java.impl.ig.psiutils.LibraryUtil;
 import consulo.application.ApplicationManager;
-import consulo.logging.Logger;
-import consulo.module.Module;
-import consulo.language.util.ModuleUtilCore;
 import consulo.application.progress.ProgressIndicator;
 import consulo.application.progress.ProgressManager;
-import consulo.application.impl.internal.progress.AbstractProgressIndicatorBase;
-import consulo.project.Project;
-import consulo.module.content.layer.orderEntry.LibraryOrderEntry;
-import consulo.module.content.layer.ModifiableRootModel;
-import consulo.module.content.ModuleRootManager;
-import consulo.module.content.layer.orderEntry.OrderEntry;
 import consulo.content.OrderRootType;
-import consulo.module.content.ProjectFileIndex;
-import consulo.module.content.ProjectRootManager;
+import consulo.content.base.BinariesOrderRootType;
 import consulo.content.library.Library;
-import consulo.ide.impl.idea.openapi.roots.libraries.LibraryUtil;
-import consulo.util.lang.Comparing;
-import consulo.util.lang.StringUtil;
-import consulo.ide.impl.idea.openapi.vfs.VfsUtilCore;
-import consulo.virtualFileSystem.VirtualFile;
-import consulo.ide.impl.idea.packageDependencies.BackwardDependenciesBuilder;
+import consulo.content.scope.NamedScope;
+import consulo.content.scope.PackageSetFactory;
+import consulo.content.scope.ParsingException;
+import consulo.language.editor.inspection.*;
+import consulo.language.editor.inspection.reference.RefManager;
+import consulo.language.editor.inspection.reference.RefModule;
+import consulo.language.editor.inspection.scheme.InspectionManager;
+import consulo.language.editor.inspection.scheme.JobDescriptor;
+import consulo.language.editor.scope.AnalysisScope;
 import consulo.language.psi.PsiCompiledElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiRecursiveElementVisitor;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.scope.GlobalSearchScopesCore;
-import consulo.content.scope.NamedScope;
-import consulo.content.scope.PackageSetFactory;
-import consulo.content.scope.ParsingException;
-import consulo.ide.impl.idea.util.Function;
+import consulo.language.util.ModuleUtilCore;
+import consulo.logging.Logger;
+import consulo.module.Module;
+import consulo.module.content.ModuleRootManager;
+import consulo.module.content.ProjectFileIndex;
+import consulo.module.content.ProjectRootManager;
+import consulo.module.content.layer.ModifiableRootModel;
+import consulo.module.content.layer.orderEntry.LibraryOrderEntry;
+import consulo.module.content.layer.orderEntry.OrderEntry;
+import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
-import consulo.roots.types.BinariesOrderRootType;
+import consulo.util.lang.Comparing;
+import consulo.util.lang.StringUtil;
+import consulo.virtualFileSystem.VirtualFile;
+import org.jetbrains.annotations.Nls;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.*;
+import java.util.function.Function;
 
 public class UnusedLibrariesInspection extends GlobalInspectionTool {
   private static final Logger LOG = Logger.getInstance(UnusedLibrariesInspection.class);

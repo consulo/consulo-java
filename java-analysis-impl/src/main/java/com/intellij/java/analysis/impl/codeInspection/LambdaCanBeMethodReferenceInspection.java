@@ -15,32 +15,36 @@
  */
 package com.intellij.java.analysis.impl.codeInspection;
 
-import consulo.ide.impl.idea.codeInsight.daemon.GroupNames;
+import com.intellij.java.analysis.codeInspection.BaseJavaBatchLocalInspectionTool;
+import com.intellij.java.analysis.codeInspection.GroupNames;
+import com.intellij.java.language.LanguageLevel;
+import com.intellij.java.language.impl.psi.impl.source.resolve.graphInference.FunctionalInterfaceParameterizationUtil;
+import com.intellij.java.language.impl.refactoring.util.RefactoringChangeUtil;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
+import com.intellij.java.language.psi.infos.MethodCandidateInfo;
+import com.intellij.java.language.psi.util.*;
+import com.siyeh.ig.psiutils.ExpressionUtils;
+import consulo.language.ast.IElementType;
+import consulo.language.codeStyle.CodeStyleSettingsManager;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.editor.inspection.ProblemHighlightType;
 import consulo.language.editor.inspection.ProblemsHolder;
-import com.intellij.java.analysis.codeInspection.BaseJavaBatchLocalInspectionTool;
-import com.intellij.java.language.psi.*;
-import com.intellij.java.language.psi.util.*;
+import consulo.language.editor.inspection.scheme.InspectionProjectProfileManager;
+import consulo.language.editor.rawHighlight.HighlightDisplayLevel;
+import consulo.language.psi.PsiComment;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiElementVisitor;
+import consulo.language.psi.SyntaxTraverser;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.logging.Logger;
 import consulo.project.Project;
+import consulo.util.collection.ArrayUtil;
+import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.function.Condition;
 import consulo.util.lang.function.Conditions;
-import com.intellij.java.language.LanguageLevel;
-import consulo.language.editor.inspection.scheme.InspectionProjectProfileManager;
-import com.intellij.psi.*;
-import consulo.language.codeStyle.CodeStyleSettingsManager;
-import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
-import com.intellij.java.language.impl.psi.impl.source.resolve.graphInference.FunctionalInterfaceParameterizationUtil;
-import com.intellij.java.language.psi.infos.MethodCandidateInfo;
-import consulo.language.ast.IElementType;
-import com.intellij.psi.util.*;
-import com.intellij.java.language.impl.refactoring.util.RefactoringChangeUtil;
-import consulo.util.collection.ArrayUtil;
-import consulo.language.util.IncorrectOperationException;
-import consulo.util.collection.ContainerUtil;
-import com.siyeh.ig.psiutils.ExpressionUtils;
-import consulo.logging.Logger;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nls;
 
@@ -55,6 +59,11 @@ import java.util.Map;
 public class LambdaCanBeMethodReferenceInspection extends BaseJavaBatchLocalInspectionTool {
   private static final Logger LOG = Logger.getInstance(LambdaCanBeMethodReferenceInspection.class);
 
+  @Nonnull
+  @Override
+  public HighlightDisplayLevel getDefaultLevel() {
+    return HighlightDisplayLevel.WARNING;
+  }
 
   @Nls
   @Nonnull

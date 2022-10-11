@@ -74,7 +74,7 @@ public class ClassCouplingInspection
   public JComponent createOptionsPanel() {
     final String configurationLabel = getConfigurationLabel();
     final JLabel label = new JLabel(configurationLabel);
-    final JFormattedTextField valueField = prepareNumberEditor("m_limit");
+    final JFormattedTextField valueField = prepareNumberEditor(() -> m_limit, i -> m_limit = i);
 
     final GridBagConstraints constraints = new GridBagConstraints();
     constraints.gridx = 0;

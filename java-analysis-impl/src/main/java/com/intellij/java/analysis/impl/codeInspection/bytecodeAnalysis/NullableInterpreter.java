@@ -22,26 +22,21 @@ import consulo.internal.org.objectweb.asm.tree.analysis.BasicValue;
 
 import static com.intellij.java.analysis.impl.codeInspection.bytecodeAnalysis.AbstractValues.NullValue;
 
-class NullableInterpreter extends NullityInterpreter
-{
-	NullableInterpreter()
-	{
-		super(true, true);
-	}
+class NullableInterpreter extends NullityInterpreter {
+  NullableInterpreter() {
+    super(true, true);
+  }
 
-	@Override
-	public BasicValue newOperation(AbstractInsnNode insn) throws AnalyzerException
-	{
-		if(insn.getOpcode() == ACONST_NULL && taken)
-		{
-			return NullValue;
-		}
-		return super.newOperation(insn);
-	}
+  @Override
+  public BasicValue newOperation(AbstractInsnNode insn) throws AnalyzerException {
+    if (insn.getOpcode() == ACONST_NULL && taken) {
+      return NullValue;
+    }
+    return super.newOperation(insn);
+  }
 
-	@Override
-	PResults.PResult combine(PResults.PResult res1, PResults.PResult res2) throws AnalyzerException
-	{
-		return PResults.join(res1, res2);
-	}
+  @Override
+  PResults.PResult combine(PResults.PResult res1, PResults.PResult res2) throws AnalyzerException {
+    return PResults.join(res1, res2);
+  }
 }

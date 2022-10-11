@@ -24,19 +24,26 @@
  */
 package com.intellij.java.analysis.impl.codeInspection.reference;
 
-import com.intellij.java.language.codeInsight.TestFrameworks;
-import com.intellij.codeInspection.reference.*;
 import com.intellij.java.analysis.codeInspection.reference.*;
+import com.intellij.java.language.codeInsight.TestFrameworks;
 import com.intellij.java.language.psi.*;
-import consulo.language.inject.InjectedLanguageManager;
-import consulo.application.ApplicationManager;
-import consulo.module.Module;
-import consulo.ide.impl.idea.openapi.module.ModuleUtil;
-import com.intellij.psi.*;
 import com.intellij.java.language.psi.util.ClassUtil;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
-import consulo.language.psi.PsiUtilCore;
 import consulo.annotation.access.RequiredReadAction;
+import consulo.application.ApplicationManager;
+import consulo.language.editor.impl.inspection.reference.RefElementImpl;
+import consulo.language.editor.impl.inspection.reference.RefFileImpl;
+import consulo.language.editor.impl.inspection.reference.RefModuleImpl;
+import consulo.language.editor.inspection.reference.RefElement;
+import consulo.language.editor.inspection.reference.RefManager;
+import consulo.language.editor.inspection.reference.RefVisitor;
+import consulo.language.inject.InjectedLanguageManager;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiManager;
+import consulo.language.psi.PsiUtilCore;
+import consulo.language.util.ModuleUtilCore;
+import consulo.module.Module;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -93,7 +100,7 @@ public class RefClassImpl extends RefJavaElementImpl implements RefClass {
           ((RefPackageImpl) getRefJavaManager().getDefaultPackage()).add(this);
         }
       }
-      final Module module = ModuleUtil.findModuleForPsiElement(psiClass);
+      final Module module = ModuleUtilCore.findModuleForPsiElement(psiClass);
       LOG.assertTrue(module != null);
       final RefModuleImpl refModule = ((RefModuleImpl) getRefManager().getRefModule(module));
       LOG.assertTrue(refModule != null);
