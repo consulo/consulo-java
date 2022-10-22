@@ -15,13 +15,14 @@
  */
 package com.intellij.java.compiler.impl.javaCompiler;
 
+import consulo.util.collection.ArrayUtil;
+import consulo.util.io.FileUtil;
+
+import javax.annotation.Nonnull;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-
-import javax.annotation.Nonnull;
-import consulo.ide.impl.idea.openapi.util.io.FileUtil;
-import consulo.util.collection.ArrayUtil;
+import java.nio.file.Files;
 
 /**
  * @author cdr
@@ -65,7 +66,7 @@ public class FileObject
 	{
 		if(myContent == NOT_LOADED)
 		{
-			return FileUtil.loadFileBytes(myFile);
+			return Files.readAllBytes(myFile.toPath());
 		}
 		return myContent;
 	}

@@ -17,43 +17,27 @@ package com.intellij.java.compiler.impl.javaCompiler.javac;
 
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.JavaModuleGraphUtil;
 import com.intellij.java.compiler.OutputParser;
-import consulo.ide.impl.idea.compiler.impl.ModuleChunk;
 import com.intellij.java.compiler.impl.javaCompiler.BackendCompiler;
 import com.intellij.java.compiler.impl.javaCompiler.JavaCompilerConfiguration;
 import com.intellij.java.compiler.impl.javaCompiler.annotationProcessing.AnnotationProcessingConfiguration;
-import consulo.process.cmd.ParametersList;
-import consulo.process.ProcessHandler;
-import consulo.compiler.CompileContext;
-import consulo.compiler.scope.CompileScope;
-import consulo.module.Module;
-import consulo.language.util.ModuleUtilCore;
-import consulo.project.Project;
+import com.intellij.java.indexing.impl.stubs.index.JavaModuleNameIndex;
+import com.intellij.java.language.LanguageLevel;
+import com.intellij.java.language.impl.psi.impl.light.LightJavaModule;
 import com.intellij.java.language.projectRoots.JavaSdk;
 import com.intellij.java.language.projectRoots.JavaSdkVersion;
-import consulo.content.bundle.Sdk;
-import consulo.content.bundle.SdkTypeId;
-import consulo.module.content.layer.orderEntry.DependencyScope;
-import consulo.module.content.layer.orderEntry.ExportableOrderEntry;
-import consulo.module.content.ModuleRootManager;
-import consulo.module.content.layer.OrderEnumerator;
-import consulo.ui.ex.awt.Messages;
-import consulo.ide.impl.idea.openapi.util.io.FileUtil;
-import consulo.util.lang.StringUtil;
-import consulo.ide.impl.idea.openapi.vfs.VfsUtil;
-import consulo.virtualFileSystem.VirtualFile;
-import com.intellij.java.language.vfs.jrt.JrtFileSystem;
-import com.intellij.java.language.LanguageLevel;
-import consulo.language.psi.PsiFile;
 import com.intellij.java.language.psi.PsiJavaFile;
 import com.intellij.java.language.psi.PsiJavaModule;
-import consulo.language.psi.PsiManager;
-import com.intellij.java.indexing.impl.stubs.index.JavaModuleNameIndex;
-import com.intellij.java.language.impl.psi.impl.light.LightJavaModule;
-import consulo.virtualFileSystem.util.PathsList;
+import com.intellij.java.language.vfs.jrt.JrtFileSystem;
 import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.AccessRule;
+import consulo.compiler.CompileContext;
+import consulo.compiler.CompilerPaths;
+import consulo.compiler.ModuleChunk;
 import consulo.compiler.ModuleCompilerPathsManager;
-import consulo.ide.impl.compiler.CompilerPathsImpl;
+import consulo.compiler.scope.CompileScope;
+import consulo.content.bundle.Sdk;
+import consulo.content.bundle.SdkTypeId;
 import consulo.java.compiler.JavaCompilerBundle;
 import consulo.java.compiler.JavaCompilerUtil;
 import consulo.java.compiler.impl.javaCompiler.BackendCompilerMonitor;
@@ -63,9 +47,27 @@ import consulo.java.compiler.impl.javaCompiler.NewBackendCompilerProcessBuilder;
 import consulo.java.compiler.impl.javaCompiler.old.OldBackendCompilerProcessBuilder;
 import consulo.java.language.fileTypes.JModFileType;
 import consulo.java.language.module.extension.JavaModuleExtension;
-import consulo.roots.ContentFolderScopes;
-import consulo.roots.impl.ProductionContentFolderTypeProvider;
-import consulo.roots.impl.TestContentFolderTypeProvider;
+import consulo.language.content.LanguageContentFolderScopes;
+import consulo.language.content.ProductionContentFolderTypeProvider;
+import consulo.language.content.TestContentFolderTypeProvider;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiManager;
+import consulo.language.util.ModuleUtilCore;
+import consulo.module.Module;
+import consulo.module.content.ModuleRootManager;
+import consulo.module.content.layer.OrderEnumerator;
+import consulo.module.content.layer.orderEntry.DependencyScope;
+import consulo.module.content.layer.orderEntry.ExportableOrderEntry;
+import consulo.process.ProcessHandler;
+import consulo.process.cmd.ParametersList;
+import consulo.project.Project;
+import consulo.ui.ex.awt.Messages;
+import consulo.util.io.FileUtil;
+import consulo.util.lang.StringUtil;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.virtualFileSystem.util.PathsList;
+import consulo.virtualFileSystem.util.VirtualFileUtil;
+import jakarta.inject.Inject;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -74,11 +76,13 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.*;
 
+@ExtensionImpl
 public class JavacCompiler implements BackendCompiler
 {
 	private final Project myProject;
 	private boolean myAnnotationProcessorMode = false;
 
+	@Inject
 	public JavacCompiler(Project project)
 	{
 		myProject = project;
@@ -437,7 +441,7 @@ public class JavacCompiler implements BackendCompiler
 				if(url != null)
 				{
 					commandLine.add("--patch-module");
-					commandLine.add(moduleName + "=" + consulo.ide.impl.idea.openapi.vfs.VfsUtil.urlToPath(url));
+					commandLine.add(moduleName + "=" + VirtualFileUtil.urlToPath(url));
 				}
 
 				String joinedModuleNames = String.join(",", moduleNames);
@@ -502,7 +506,7 @@ public class JavacCompiler implements BackendCompiler
 		{
 			commandLine.add("-s");
 			commandLine.add(outputPath.replace('/', File.separatorChar));
-			final String moduleOutputPath = consulo.ide.impl.compiler.CompilerPathsImpl.getModuleOutputPath(chunk.getModules()[0], ProductionContentFolderTypeProvider.getInstance());
+			final String moduleOutputPath = CompilerPaths.getModuleOutputPath(chunk.getModules()[0], ProductionContentFolderTypeProvider.getInstance());
 			if(moduleOutputPath != null)
 			{
 				commandLine.add("-d");
@@ -519,7 +523,7 @@ public class JavacCompiler implements BackendCompiler
 	@Nullable
 	public static String findModuleName(@Nonnull Module module)
 	{
-		VirtualFile[] folders = AccessRule.read(() -> ModuleRootManager.getInstance(module).getContentFolderFiles(ContentFolderScopes.onlyProduction()));
+		VirtualFile[] folders = AccessRule.read(() -> ModuleRootManager.getInstance(module).getContentFolderFiles(LanguageContentFolderScopes.onlyProduction()));
 		assert folders != null;
 		for(VirtualFile folder : folders)
 		{

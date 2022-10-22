@@ -16,47 +16,34 @@
 
 package consulo.java.compiler.bytecodeProcessing;
 
+import com.intellij.compiler.instrumentation.InstrumentationClassFinder;
+import com.intellij.java.compiler.cache.Cache;
+import com.intellij.java.compiler.cache.JavaDependencyCache;
+import com.intellij.java.compiler.impl.javaCompiler.FileObject;
+import com.intellij.java.compiler.impl.javaCompiler.JavaCompiler;
+import consulo.application.Application;
+import consulo.compiler.*;
+import consulo.compiler.scope.CompileScope;
+import consulo.content.ContentFolderTypeProvider;
+import consulo.java.compiler.JavaCompilerUtil;
+import consulo.java.language.module.extension.JavaModuleExtension;
+import consulo.language.content.ProductionContentFolderTypeProvider;
+import consulo.language.content.TestContentFolderTypeProvider;
+import consulo.language.util.ModuleUtilCore;
+import consulo.logging.Logger;
+import consulo.module.Module;
+import consulo.util.collection.Chunk;
+import consulo.util.io.FileUtil;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.virtualFileSystem.util.VirtualFileUtil;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.DataInput;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import com.intellij.java.compiler.cache.Cache;
-import com.intellij.java.compiler.cache.JavaDependencyCache;
-import consulo.compiler.CacheCorruptedException;
-import consulo.ide.impl.idea.compiler.impl.ModuleChunk;
-import com.intellij.java.compiler.impl.javaCompiler.FileObject;
-import com.intellij.java.compiler.impl.javaCompiler.JavaCompiler;
-import com.intellij.compiler.instrumentation.InstrumentationClassFinder;
-import consulo.compiler.ClassInstrumentingCompiler;
-import consulo.compiler.CompileContext;
-import consulo.compiler.scope.CompileScope;
-import consulo.compiler.CompilerMessageCategory;
-import consulo.compiler.TimestampValidityState;
-import consulo.compiler.ValidityState;
-import consulo.ide.impl.compiler.CompileContextEx;
-import consulo.module.Module;
-import consulo.language.util.ModuleUtilCore;
-import consulo.ide.impl.idea.openapi.util.io.FileUtil;
-import consulo.ide.impl.idea.openapi.vfs.VfsUtil;
-import consulo.ide.impl.idea.openapi.vfs.VfsUtilCore;
-import consulo.virtualFileSystem.VirtualFile;
-import consulo.util.collection.Chunk;
-import consulo.util.collection.ContainerUtil;
-import consulo.compiler.ModuleCompilerPathsManager;
-import consulo.java.compiler.JavaCompilerUtil;
-import consulo.java.language.module.extension.JavaModuleExtension;
-import consulo.logging.Logger;
-import consulo.roots.ContentFolderTypeProvider;
-import consulo.roots.impl.ProductionContentFolderTypeProvider;
-import consulo.roots.impl.TestContentFolderTypeProvider;
+import java.util.*;
 
 /**
  * @author VISTALL
@@ -106,7 +93,7 @@ public class JavaBytecodeProcessorCompiler implements ClassInstrumentingCompiler
 	@Override
 	public ProcessingItem[] getProcessingItems(CompileContext compileContext)
 	{
-		List<ProcessingItem> list = ContainerUtil.newLinkedList();
+		List<ProcessingItem> list = new LinkedList<>();
 		Module[] affectedModules = compileContext.getCompileScope().getAffectedModules();
 		for(Module affectedModule : affectedModules)
 		{
@@ -136,7 +123,7 @@ public class JavaBytecodeProcessorCompiler implements ClassInstrumentingCompiler
 			return;
 		}
 
-		String path = VfsUtil.urlToPath(compilerOutputUrl);
+		String path = VirtualFileUtil.urlToPath(compilerOutputUrl);
 		File outputDir = new File(path);
 
 		FileUtil.visitFiles(outputDir, file -> {
@@ -154,7 +141,7 @@ public class JavaBytecodeProcessorCompiler implements ClassInstrumentingCompiler
 	@Override
 	public ProcessingItem[] process(CompileContext compileContext, ProcessingItem[] processingItems)
 	{
-		JavaDependencyCache dependencyCache = ((consulo.ide.impl.compiler.CompileContextEx) compileContext).getDependencyCache().findChild(JavaDependencyCache.class);
+		JavaDependencyCache dependencyCache = ((CompileContextEx) compileContext).getDependencyCache().findChild(JavaDependencyCache.class);
 
 		final Cache cache;
 		try
@@ -166,8 +153,6 @@ public class JavaBytecodeProcessorCompiler implements ClassInstrumentingCompiler
 			compileContext.addMessage(CompilerMessageCategory.ERROR, "Cache corrupted. Please rebuild project", null, -1, -1);
 			return ProcessingItem.EMPTY_ARRAY;
 		}
-
-		JavaBytecodeProcessor composite = JavaBytecodeProcessor.EP_NAME.composite();
 
 		Module[] affectedModules = compileContext.getCompileScope().getAffectedModules();
 		for(Module affectedModule : affectedModules)
@@ -186,11 +171,13 @@ public class JavaBytecodeProcessorCompiler implements ClassInstrumentingCompiler
 				try
 				{
 					FileObject fileObject = temp.myFileObject;
-					byte[] bytes = composite.processClassFile(compileContext, affectedModule, dependencyCache, cache, fileObject.getClassId(), temp.myFile, fileObject::getOrLoadContent,
-							classFinder);
-					if(bytes != null)
+					for (JavaBytecodeProcessor processor : Application.get().getExtensionList(JavaBytecodeProcessor.class))
 					{
-						temp.save(bytes);
+						byte[] bytes = processor.processClassFile(compileContext, affectedModule, dependencyCache, cache, fileObject.getClassId(), temp.myFile, fileObject::getOrLoadContent, classFinder);
+						if (bytes != null)
+						{
+							temp.save(bytes);
+						}
 					}
 				}
 				catch(CacheCorruptedException e)
@@ -226,7 +213,7 @@ public class JavaBytecodeProcessorCompiler implements ClassInstrumentingCompiler
 		{
 			try
 			{
-				File javaFile = VfsUtilCore.virtualToIoFile(file);
+				File javaFile = VirtualFileUtil.virtualToIoFile(file);
 				urls.add(javaFile.getCanonicalFile().toURI().toURL());
 			}
 			catch(Exception e)

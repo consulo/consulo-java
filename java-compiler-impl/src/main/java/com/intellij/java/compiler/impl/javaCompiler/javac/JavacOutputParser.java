@@ -20,12 +20,11 @@ import com.intellij.java.language.impl.JavaFileType;
 import consulo.application.ApplicationManager;
 import consulo.compiler.CompilerBundle;
 import consulo.compiler.CompilerMessageCategory;
-import consulo.ide.impl.idea.openapi.editor.ex.util.EditorUtil;
+import consulo.java.rt.compiler.JavacResourcesReaderConstants;
+import consulo.language.codeStyle.CodeStyleSettingsManager;
 import consulo.project.Project;
 import consulo.virtualFileSystem.LocalFileSystem;
 import consulo.virtualFileSystem.VirtualFileManager;
-import consulo.language.codeStyle.CodeStyleSettingsManager;
-import consulo.java.rt.compiler.JavacResourcesReaderConstants;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nullable;
@@ -129,7 +128,7 @@ public class JavacOutputParser extends OutputParser implements JavacResourcesRea
 
 					List<String> messages = new ArrayList<>();
 					messages.add(message);
-					int colNum;
+					int colNum = 0;
 					String prevLine = null;
 					do
 					{
@@ -140,19 +139,20 @@ public class JavacOutputParser extends OutputParser implements JavacResourcesRea
 						}
 						if(nextLine.trim().equals("^"))
 						{
-							final CharSequence chars = prevLine == null ? line : prevLine;
-							final int offset = Math.max(0, Math.min(chars.length(), nextLine.indexOf('^')));
-							colNum = EditorUtil.calcColumnNumber(null, chars, 0, offset, myTabSize);
-							String messageEnd = callback.getNextLine();
-							while(isMessageEnd(messageEnd))
-							{
-								messages.add(messageEnd.trim());
-								messageEnd = callback.getNextLine();
-							}
-							if(messageEnd != null)
-							{
-								callback.pushBack(messageEnd);
-							}
+							// wtf is that? why use editorColumNumber
+//							final CharSequence chars = prevLine == null ? line : prevLine;
+//							final int offset = Math.max(0, Math.min(chars.length(), nextLine.indexOf('^')));
+//							colNum = EditorUtil.calcColumnNumber(null, chars, 0, offset, myTabSize);
+//							String messageEnd = callback.getNextLine();
+//							while(isMessageEnd(messageEnd))
+//							{
+//								messages.add(messageEnd.trim());
+//								messageEnd = callback.getNextLine();
+//							}
+//							if(messageEnd != null)
+//							{
+//								callback.pushBack(messageEnd);
+//							}
 							break;
 						}
 						if(prevLine != null)

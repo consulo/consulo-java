@@ -16,7 +16,7 @@
 package com.intellij.java.compiler.impl.javaCompiler.javac;
 
 import consulo.compiler.CompilerEncodingService;
-import consulo.ide.impl.idea.compiler.impl.ModuleChunk;
+import consulo.compiler.ModuleChunk;
 import consulo.module.Module;
 import consulo.util.collection.Chunk;
 
@@ -77,7 +77,7 @@ public class JavacSettingsBuilder {
     return true;
   }
 
-  public String getOptionsString(final consulo.ide.impl.idea.compiler.impl.ModuleChunk chunk) {
+  public String getOptionsString(final ModuleChunk chunk) {
     final StringBuilder options = new StringBuilder();
     for (String option : getOptions(chunk)) {
       if (options.length() > 0) {

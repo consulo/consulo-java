@@ -21,34 +21,31 @@
  */
 package com.intellij.java.debugger.impl.ui.breakpoints;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.List;
-
-import javax.swing.JComponent;
-import javax.swing.JPanel;
-import javax.swing.event.DocumentEvent;
-
-import com.intellij.java.language.impl.codeInsight.generation.PsiElementClassMember;
 import com.intellij.java.debugger.DebuggerBundle;
-import consulo.ide.impl.idea.ide.util.MemberChooser;
+import com.intellij.java.language.impl.codeInsight.generation.PsiElementClassMember;
+import com.intellij.java.language.psi.JavaPsiFacade;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiField;
+import com.intellij.java.language.psi.PsiSubstitutor;
+import com.intellij.java.language.psi.util.PsiFormatUtil;
+import com.intellij.java.language.psi.util.PsiFormatUtilBase;
 import com.intellij.java.language.util.TreeClassChooser;
 import com.intellij.java.language.util.TreeClassChooserFactory;
+import consulo.language.psi.PsiDirectory;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiManager;
+import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.project.Project;
 import consulo.ui.ex.awt.DialogWrapper;
 import consulo.ui.ex.awt.TextFieldWithBrowseButton;
-import com.intellij.java.language.psi.JavaPsiFacade;
-import com.intellij.java.language.psi.PsiClass;
-import consulo.language.psi.PsiDirectory;
-import com.intellij.java.language.psi.PsiField;
-import consulo.language.psi.PsiFile;
-import consulo.language.psi.PsiManager;
-import com.intellij.java.language.psi.PsiSubstitutor;
-import consulo.language.psi.scope.GlobalSearchScope;
-import com.intellij.java.language.psi.util.PsiFormatUtil;
-import consulo.ide.impl.psi.util.PsiFormatUtilBase;
 import consulo.ui.ex.awt.event.DocumentAdapter;
 import consulo.util.collection.ContainerUtil;
+
+import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.List;
 
 abstract class AddFieldBreakpointDialog extends DialogWrapper
 {

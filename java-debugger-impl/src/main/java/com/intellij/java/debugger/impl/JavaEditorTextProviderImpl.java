@@ -20,12 +20,12 @@ import com.intellij.java.debugger.engine.evaluation.CodeFragmentKind;
 import com.intellij.java.debugger.engine.evaluation.TextWithImports;
 import com.intellij.java.debugger.impl.engine.evaluation.TextWithImportsImpl;
 import com.intellij.java.language.psi.*;
-import consulo.util.lang.Pair;
 import consulo.document.util.TextRange;
-import com.intellij.psi.*;
+import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
+import consulo.util.lang.Pair;
 
 import javax.annotation.Nullable;
 

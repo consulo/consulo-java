@@ -200,7 +200,7 @@ public class InstancesWindow extends DialogWrapper
 			super(new BorderLayout(0, JBUI.scale(BORDER_LAYOUT_DEFAULT_GAP)));
 
 			Disposer.register(InstancesWindow.this.myDisposable, this);
-			final consulo.ide.impl.idea.xdebugger.impl.frame.XValueMarkers<?, ?> markers = getValueMarkers(session);
+			final XValueMarkers<?, ?> markers = getValueMarkers(session);
 			if(markers != null)
 			{
 				final MyActionListener listener = new MyActionListener(markers);

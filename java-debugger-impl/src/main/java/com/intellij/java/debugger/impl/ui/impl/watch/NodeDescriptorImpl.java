@@ -20,18 +20,18 @@ import com.intellij.java.debugger.engine.DebugProcess;
 import com.intellij.java.debugger.engine.evaluation.EvaluateException;
 import com.intellij.java.debugger.engine.evaluation.EvaluateExceptionUtil;
 import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
-import com.intellij.java.debugger.ui.tree.NodeDescriptor;
 import com.intellij.java.debugger.impl.ui.tree.render.DescriptorLabelListener;
-import consulo.logging.Logger;
-import consulo.util.dataholder.Key;
-import java.util.HashMap;
-import consulo.ide.impl.idea.xdebugger.impl.ui.tree.ValueMarkup;
+import com.intellij.java.debugger.ui.tree.NodeDescriptor;
+import consulo.execution.debug.ui.ValueMarkup;
 import consulo.internal.com.sun.jdi.InconsistentDebugInfoException;
 import consulo.internal.com.sun.jdi.InvalidStackFrameException;
 import consulo.internal.com.sun.jdi.ObjectReference;
-import javax.annotation.Nullable;
+import consulo.logging.Logger;
+import consulo.util.dataholder.Key;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 

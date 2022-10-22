@@ -45,10 +45,12 @@ import com.intellij.java.debugger.impl.jdi.ThreadReferenceProxyImpl;
 import com.intellij.java.debugger.impl.ui.breakpoints.Breakpoint;
 import com.intellij.java.debugger.impl.ui.breakpoints.BreakpointWithHighlighter;
 import com.intellij.java.debugger.impl.ui.breakpoints.LineBreakpoint;
+import consulo.application.Application;
 import consulo.execution.ExecutionResult;
 import consulo.execution.configuration.RunProfileState;
 import consulo.execution.debug.AbstractDebuggerSession;
 import consulo.execution.debug.XDebugSession;
+import consulo.execution.debug.ui.XDebuggerUIConstants;
 import consulo.process.ExecutionException;
 import com.intellij.java.execution.configurations.RemoteConnection;
 import com.intellij.java.execution.configurations.RemoteState;
@@ -76,9 +78,6 @@ import com.intellij.java.execution.unscramble.ThreadState;
 import consulo.util.lang.TimeoutUtil;
 import consulo.ui.ex.awt.UIUtil;
 import consulo.execution.debug.XSourcePosition;
-import consulo.ide.impl.idea.xdebugger.impl.XDebugSessionImpl;
-import consulo.ide.impl.idea.xdebugger.impl.actions.XDebuggerActions;
-import consulo.ide.impl.idea.xdebugger.impl.evaluate.quick.common.ValueLookupManager;
 import consulo.internal.com.sun.jdi.ObjectCollectedException;
 import consulo.internal.com.sun.jdi.ThreadReference;
 import consulo.internal.com.sun.jdi.request.EventRequest;
@@ -276,7 +275,7 @@ public class DebuggerSession implements AbstractDebuggerSession
 		myState = new DebuggerSessionState(State.STOPPED, null);
 		myDebugProcess.addDebugProcessListener(new MyDebugProcessListener(debugProcess));
 		myDebugProcess.addEvaluationListener(new MyEvaluationListener());
-		consulo.ide.impl.idea.xdebugger.impl.evaluate.quick.common.ValueLookupManager.getInstance(getProject()).startListening();
+		ValueLookupManager.getInstance(getProject()).startListening();
 		mySearchScope = environment.getSearchScope();
 		myAlternativeJre = environment.getAlternativeJre();
 		myRunJre = environment.getRunJre();
@@ -600,8 +599,8 @@ public class DebuggerSession implements AbstractDebuggerSession
 					List<Pair<Breakpoint, consulo.internal.com.sun.jdi.event.Event>> descriptors = DebuggerUtilsEx.getEventDescriptors(suspendContext);
 					if(!descriptors.isEmpty())
 					{
-						consulo.ide.impl.idea.xdebugger.impl.XDebugSessionImpl.NOTIFICATION_GROUP.createNotification(DebuggerBundle.message("status.breakpoint.reached.in.thread", thread.name()), DebuggerBundle.message("status" +
-								".breakpoint.reached.in.thread.switch"), NotificationType.INFORMATION, new NotificationListener()
+						XDebuggerUIConstants.NOTIFICATION_GROUP.createNotification(DebuggerBundle.message("status.breakpoint.reached.in.thread", thread.name()), DebuggerBundle.message("status" +
+								".breakpoint.reached.in.thread.switch"), NotificationType.INFO, new NotificationListener()
 						{
 							@Override
 							public void hyperlinkUpdate(@Nonnull Notification notification, @Nonnull HyperlinkEvent event)
@@ -903,7 +902,7 @@ public class DebuggerSession implements AbstractDebuggerSession
 				{
 					final DebuggerStateManager contextManager = getContextManager();
 					contextManager.fireStateChanged(contextManager.getContext(), Event.THREADS_REFRESH);
-				}, 100, ModalityState.NON_MODAL);
+				}, 100, Application.get().getNoneModalityState());
 			}
 		}
 	}

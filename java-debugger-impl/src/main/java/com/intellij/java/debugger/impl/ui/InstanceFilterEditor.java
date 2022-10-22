@@ -16,11 +16,11 @@
 package com.intellij.java.debugger.impl.ui;
 
 import com.intellij.java.debugger.DebuggerBundle;
+import com.intellij.java.debugger.impl.classFilter.ClassFilterEditor;
+import com.intellij.java.debugger.ui.classFilter.ClassFilter;
+import consulo.platform.base.icon.PlatformIconGroup;
 import consulo.project.Project;
 import consulo.ui.ex.awt.Messages;
-import com.intellij.java.debugger.ui.classFilter.ClassFilter;
-import com.intellij.java.debugger.impl.classFilter.ClassFilterEditor;
-import consulo.ide.impl.idea.util.IconUtil;
 import consulo.ui.image.Image;
 
 /**
@@ -54,7 +54,7 @@ public class InstanceFilterEditor extends ClassFilterEditor {
 
   @Override
   protected Image getAddButtonIcon() {
-    return IconUtil.getAddIcon();
+    return PlatformIconGroup.generalAdd();
   }
 
   @Override

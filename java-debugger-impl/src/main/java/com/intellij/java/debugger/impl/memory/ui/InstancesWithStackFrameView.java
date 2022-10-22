@@ -26,7 +26,6 @@ import consulo.ui.ex.action.AnActionEvent;
 import consulo.project.Project;
 import consulo.ui.ex.awt.JBLabel;
 import consulo.ui.ex.awt.JBScrollPane;
-import consulo.ide.impl.idea.ui.components.labels.ActionLink;
 import consulo.execution.debug.XDebugSession;
 import consulo.internal.com.sun.jdi.ObjectReference;
 import consulo.platform.base.icon.PlatformIconGroup;

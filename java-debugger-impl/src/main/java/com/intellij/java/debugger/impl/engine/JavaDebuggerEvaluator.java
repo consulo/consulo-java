@@ -15,33 +15,33 @@
  */
 package com.intellij.java.debugger.impl.engine;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import com.intellij.java.debugger.engine.evaluation.EvaluateException;
-import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
 import com.intellij.java.debugger.engine.evaluation.TextWithImports;
-import com.intellij.java.debugger.impl.engine.evaluation.TextWithImportsImpl;
-import com.intellij.java.debugger.impl.engine.events.DebuggerContextCommandImpl;
 import com.intellij.java.debugger.impl.DebuggerUtilsEx;
 import com.intellij.java.debugger.impl.EditorTextProvider;
+import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
+import com.intellij.java.debugger.impl.engine.evaluation.TextWithImportsImpl;
+import com.intellij.java.debugger.impl.engine.events.DebuggerContextCommandImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.NodeManagerImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.WatchItemDescriptor;
-import consulo.document.Document;
 import consulo.application.dumb.IndexNotReadyException;
-import consulo.execution.debug.XSourcePosition;
-import consulo.project.Project;
-import consulo.util.lang.Pair;
-import consulo.util.lang.ref.Ref;
+import consulo.document.Document;
 import consulo.document.util.TextRange;
-import consulo.language.psi.PsiDocumentManager;
-import consulo.language.psi.PsiElement;
-import consulo.language.psi.PsiFile;
+import consulo.execution.debug.XSourcePosition;
 import consulo.execution.debug.breakpoint.XExpression;
 import consulo.execution.debug.evaluation.EvaluationMode;
 import consulo.execution.debug.evaluation.XDebuggerEvaluator;
-import consulo.ide.impl.idea.xdebugger.impl.breakpoints.XExpressionImpl;
-import consulo.ide.impl.idea.xdebugger.impl.ui.DebuggerUIUtil;
+import consulo.execution.debug.internal.breakpoint.XExpressionImpl;
 import consulo.java.analysis.codeInsight.JavaCodeInsightUtilCore;
+import consulo.language.psi.PsiDocumentManager;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.project.Project;
+import consulo.util.lang.Pair;
+import consulo.util.lang.ref.Ref;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * @author egor

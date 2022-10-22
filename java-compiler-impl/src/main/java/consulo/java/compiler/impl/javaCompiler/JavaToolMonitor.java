@@ -2,18 +2,18 @@ package consulo.java.compiler.impl.javaCompiler;
 
 import com.intellij.java.compiler.impl.javaCompiler.BackendCompilerWrapper;
 import com.intellij.java.compiler.impl.javaCompiler.FileObject;
+import consulo.application.util.concurrent.AppExecutorUtil;
 import consulo.compiler.CacheCorruptedException;
-import consulo.process.event.ProcessAdapter;
-import consulo.process.event.ProcessEvent;
-import consulo.process.ProcessHandler;
 import consulo.compiler.CompileContext;
 import consulo.compiler.CompilerBundle;
 import consulo.compiler.CompilerMessageCategory;
-import consulo.ide.impl.idea.openapi.vfs.VfsUtil;
-import consulo.virtualFileSystem.VirtualFile;
-import consulo.application.util.concurrent.AppExecutorUtil;
 import consulo.java.rt.common.compiler.JavaCompilerInterface;
+import consulo.process.ProcessHandler;
+import consulo.process.event.ProcessAdapter;
+import consulo.process.event.ProcessEvent;
 import consulo.util.dataholder.Key;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.virtualFileSystem.util.VirtualFileUtil;
 import org.apache.thrift.TException;
 import org.apache.thrift.server.TServer;
 import org.apache.thrift.server.TSimpleServer;
@@ -189,7 +189,7 @@ public class JavaToolMonitor implements BackendCompilerMonitor, JavaCompilerInte
 		try
 		{
 			URI uri = new URI(fileUri);
-			VirtualFile fileByURL = VfsUtil.findFileByURL(uri.toURL());
+			VirtualFile fileByURL = VirtualFileUtil.findFileByURL(uri.toURL());
 			if(fileByURL != null)
 			{
 				fileUrl = fileByURL.getUrl();

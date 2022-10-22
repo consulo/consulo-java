@@ -20,27 +20,20 @@
  */
 package com.intellij.java.debugger.impl.classFilter;
 
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.util.ClassFilter;
 import com.intellij.java.language.util.TreeClassChooser;
 import com.intellij.java.language.util.TreeClassChooserFactory;
-import consulo.ui.ex.UIBundle;
-import consulo.ui.ex.action.AnActionEvent;
-import consulo.project.Project;
-import com.intellij.java.language.psi.PsiClass;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.util.PsiTreeUtil;
-import com.intellij.ui.*;
+import consulo.project.Project;
+import consulo.ui.ex.UIBundle;
+import consulo.ui.ex.action.AnActionEvent;
+import consulo.ui.ex.awt.*;
 import consulo.ui.ex.awt.table.JBTable;
-import consulo.ide.impl.idea.util.IconUtil;
-import consulo.util.collection.ContainerUtil;
-import consulo.ui.ex.awt.ComponentWithEmptyText;
-import consulo.ui.ex.awt.ItemRemovable;
-import consulo.ui.ex.awt.StatusText;
-import consulo.ui.ex.awt.UIUtil;
-import consulo.ui.ex.awt.AnActionButton;
-import consulo.ui.ex.awt.AnActionButtonRunnable;
-import consulo.ui.ex.awt.ToolbarDecorator;
+import consulo.ui.ex.awt.util.TableUtil;
 import consulo.ui.image.Image;
+import consulo.util.collection.ContainerUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

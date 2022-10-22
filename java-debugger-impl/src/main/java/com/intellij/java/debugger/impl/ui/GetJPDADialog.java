@@ -21,24 +21,17 @@
  */
 package com.intellij.java.debugger.impl.ui;
 
-import java.awt.BorderLayout;
-import java.awt.Cursor;
-import java.awt.GridLayout;
-import java.awt.event.MouseEvent;
-
-import javax.annotation.Nonnull;
-import javax.swing.Action;
-import javax.swing.BorderFactory;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-
-import org.jetbrains.annotations.NonNls;
 import com.intellij.java.debugger.DebuggerBundle;
-import consulo.ide.impl.idea.ide.BrowserUtil;
+import consulo.platform.Platform;
+import consulo.ui.ex.JBColor;
 import consulo.ui.ex.awt.DialogWrapper;
 import consulo.ui.ex.awt.event.DoubleClickListener;
-import consulo.ui.ex.JBColor;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.MouseEvent;
 
 public class GetJPDADialog extends DialogWrapper {
   private static final @NonNls String JPDA_URL = "http://java.sun.com/products/jpda";
@@ -67,7 +60,7 @@ public class GetJPDADialog extends DialogWrapper {
     new DoubleClickListener() {
       @Override
       protected boolean onDoubleClick(MouseEvent e) {
-        consulo.ide.impl.idea.ide.BrowserUtil.browse(JPDA_URL);
+        Platform.current().openInBrowser(JPDA_URL);
         return true;
       }
     }.installOn(label2);

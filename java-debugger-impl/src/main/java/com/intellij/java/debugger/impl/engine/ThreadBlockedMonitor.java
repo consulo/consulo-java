@@ -24,17 +24,16 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.swing.event.HyperlinkEvent;
 
-import consulo.application.impl.internal.JobScheduler;
 import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.impl.engine.events.DebuggerCommandImpl;
 import com.intellij.java.debugger.engine.jdi.ThreadReferenceProxy;
 import com.intellij.java.debugger.impl.jdi.ThreadReferenceProxyImpl;
 import com.intellij.java.debugger.impl.jdi.VirtualMachineProxyImpl;
+import consulo.execution.debug.ui.XDebuggerUIConstants;
 import consulo.project.ui.notification.Notification;
+import consulo.project.ui.notification.NotificationType;
 import consulo.project.ui.notification.event.NotificationListener;
-import consulo.ui.NotificationType;
 import consulo.disposer.Disposable;
-import consulo.ide.impl.idea.xdebugger.impl.XDebugSessionImpl;
 import consulo.disposer.Disposer;
 import consulo.internal.com.sun.jdi.IncompatibleThreadStateException;
 import consulo.internal.com.sun.jdi.ObjectReference;
@@ -100,7 +99,7 @@ public class ThreadBlockedMonitor
 
 	private static void onThreadBlocked(@Nonnull final ThreadReference blockedThread, @Nonnull final ThreadReference blockingThread, final DebugProcessImpl process)
 	{
-		XDebugSessionImpl.NOTIFICATION_GROUP.createNotification(DebuggerBundle.message("status.thread.blocked.by", blockedThread.name(), blockingThread.name()), DebuggerBundle.message("status" + ""
+		XDebuggerUIConstants.NOTIFICATION_GROUP.createNotification(DebuggerBundle.message("status.thread.blocked.by", blockedThread.name(), blockingThread.name()), DebuggerBundle.message("status" + ""
 				+ ".thread" + ".blocked.by.resume", blockingThread.name()), NotificationType.INFORMATION, new NotificationListener()
 		{
 			@Override

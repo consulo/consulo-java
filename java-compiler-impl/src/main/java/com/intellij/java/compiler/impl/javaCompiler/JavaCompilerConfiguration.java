@@ -2,17 +2,20 @@ package com.intellij.java.compiler.impl.javaCompiler;
 
 import com.intellij.java.compiler.impl.javaCompiler.annotationProcessing.ProcessorConfigProfile;
 import com.intellij.java.compiler.impl.javaCompiler.annotationProcessing.impl.ProcessorConfigProfileImpl;
-import com.intellij.openapi.components.*;
+import consulo.annotation.DeprecationInfo;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.component.persist.PersistentStateComponent;
+import consulo.component.persist.State;
+import consulo.component.persist.Storage;
+import consulo.component.persist.StoragePathMacros;
+import consulo.ide.ServiceManager;
+import consulo.java.language.module.extension.JavaModuleExtension;
+import consulo.language.util.ModuleUtilCore;
 import consulo.module.Module;
 import consulo.module.ModuleManager;
-import consulo.language.util.ModuleUtilCore;
 import consulo.project.Project;
 import consulo.util.lang.Pair;
 import consulo.util.lang.StringUtil;
-import consulo.annotation.DeprecationInfo;
-import consulo.annotation.access.RequiredReadAction;
-import consulo.java.compiler.impl.javaCompiler.BackendCompilerEP;
-import consulo.java.language.module.extension.JavaModuleExtension;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import org.jdom.Element;
@@ -113,11 +116,11 @@ public class JavaCompilerConfiguration implements PersistentStateComponent<Eleme
 	@Nullable
 	public BackendCompiler findCompiler(@Nonnull String className)
 	{
-		for(BackendCompilerEP ep : BackendCompiler.EP_NAME.getExtensionList(myProject))
+		for(BackendCompiler backendCompiler : BackendCompiler.EP_NAME.getExtensionList(myProject))
 		{
-			if(className.equals(ep.getInstance(myProject).getClass().getSimpleName()))
+			if(className.equals(backendCompiler.getClass().getSimpleName()))
 			{
-				return ep.getInstance(myProject);
+				return backendCompiler;
 			}
 		}
 		return null;

@@ -16,33 +16,34 @@
 package com.intellij.java.debugger.impl.ui.breakpoints;
 
 import com.intellij.java.debugger.DebuggerBundle;
-import com.intellij.java.debugger.impl.HelpID;
 import com.intellij.java.debugger.SourcePosition;
-import com.intellij.java.debugger.impl.engine.PositionManagerImpl;
 import com.intellij.java.debugger.impl.DebuggerUtilsEx;
-import consulo.application.AllIcons;
+import com.intellij.java.debugger.impl.HelpID;
+import com.intellij.java.debugger.impl.breakpoints.properties.JavaBreakpointProperties;
+import com.intellij.java.debugger.impl.breakpoints.properties.JavaLineBreakpointProperties;
+import com.intellij.java.debugger.impl.engine.PositionManagerImpl;
 import com.intellij.java.language.psi.PsiLambdaExpression;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.application.AllIcons;
 import consulo.document.Document;
+import consulo.document.util.TextRange;
 import consulo.execution.debug.XDebuggerUtil;
 import consulo.execution.debug.XSourcePosition;
 import consulo.execution.debug.breakpoint.XBreakpoint;
 import consulo.execution.debug.breakpoint.XLineBreakpoint;
 import consulo.execution.debug.breakpoint.ui.XBreakpointGroupingRule;
+import consulo.language.icon.IconDescriptorUpdaters;
+import consulo.language.psi.PsiDocumentManager;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiManager;
 import consulo.project.Project;
-import consulo.document.util.TextRange;
+import consulo.ui.image.Image;
+import consulo.util.collection.SmartList;
 import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.VirtualFile;
-import com.intellij.psi.*;
-import consulo.util.collection.SmartList;
-import consulo.ide.impl.idea.xdebugger.impl.XSourcePositionImpl;
-import consulo.ide.impl.idea.xdebugger.impl.breakpoints.XLineBreakpointImpl;
-import consulo.annotation.access.RequiredReadAction;
-import consulo.language.icon.IconDescriptorUpdaters;
-import consulo.ui.image.Image;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
-import com.intellij.java.debugger.impl.breakpoints.properties.JavaBreakpointProperties;
-import com.intellij.java.debugger.impl.breakpoints.properties.JavaLineBreakpointProperties;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -151,7 +152,7 @@ public class JavaLineBreakpointType extends JavaLineBreakpointTypeBase<JavaLineB
 		for(PsiLambdaExpression lambda : lambdas)   //lambdas
 		{
 			PsiElement firstElem = DebuggerUtilsEx.getFirstElementOnTheLine(lambda, document, position.getLine());
-			XSourcePositionImpl elementPosition = XSourcePositionImpl.createByElement(firstElem);
+			XSourcePosition elementPosition = XDebuggerUtil.getInstance().createPositionByElement(firstElem);
 			if(elementPosition != null)
 			{
 				if(lambda == startMethod)
@@ -326,7 +327,7 @@ public class JavaLineBreakpointType extends JavaLineBreakpointTypeBase<JavaLineB
 		Integer ordinal = getLambdaOrdinal(breakpoint);
 		if(ordinal != null && ordinal > -1)
 		{
-			SourcePosition linePosition = createLineSourcePosition((XLineBreakpointImpl) breakpoint);
+			SourcePosition linePosition = createLineSourcePosition((XLineBreakpoint) breakpoint);
 			if(linePosition != null)
 			{
 				return DebuggerUtilsEx.toXSourcePosition(new PositionManagerImpl.JavaSourcePosition(linePosition, ordinal));
@@ -343,7 +344,7 @@ public class JavaLineBreakpointType extends JavaLineBreakpointTypeBase<JavaLineB
 	}
 
 	@Nullable
-	private static SourcePosition createLineSourcePosition(XLineBreakpointImpl breakpoint)
+	private static SourcePosition createLineSourcePosition(XLineBreakpoint breakpoint)
 	{
 		VirtualFile file = breakpoint.getFile();
 		if(file != null)

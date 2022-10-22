@@ -15,10 +15,6 @@
  */
 package com.intellij.java.debugger.impl;
 
-import consulo.process.ExecutionException;
-import com.intellij.java.language.psi.*;
-import com.intellij.java.language.util.TreeClassChooser;
-import com.intellij.java.language.util.TreeClassChooserFactory;
 import com.intellij.java.debugger.engine.DebugProcess;
 import com.intellij.java.debugger.engine.StackFrameContext;
 import com.intellij.java.debugger.engine.evaluation.CodeFragmentKind;
@@ -34,28 +30,35 @@ import com.intellij.java.debugger.impl.settings.DebuggerSettings;
 import com.intellij.java.debugger.impl.ui.impl.watch.DebuggerTreeNodeExpression;
 import com.intellij.java.debugger.impl.ui.tree.DebuggerTreeNode;
 import com.intellij.java.debugger.impl.ui.tree.render.BatchEvaluator;
-import consulo.dataContext.DataContext;
-import consulo.application.internal.ApplicationManagerEx;
-import consulo.component.ProcessCanceledException;
-import consulo.application.impl.internal.progress.ProgressIndicatorUtils;
-import consulo.project.Project;
-import com.intellij.openapi.util.*;
-import consulo.util.lang.StringUtil;
-import com.intellij.psi.*;
 import com.intellij.java.language.impl.psi.impl.PsiJavaParserFacadeImpl;
-import consulo.language.psi.scope.GlobalSearchScope;
-import consulo.ide.impl.idea.util.net.NetUtils;
-import consulo.util.xml.serializer.SkipDefaultValuesSerializationFilters;
-import consulo.util.xml.serializer.XmlSerializer;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.util.TreeClassChooser;
+import com.intellij.java.language.util.TreeClassChooserFactory;
+import consulo.application.internal.ApplicationManagerEx;
+import consulo.application.util.function.Computable;
+import consulo.application.util.function.ThrowableComputable;
+import consulo.component.ProcessCanceledException;
+import consulo.dataContext.DataContext;
 import consulo.execution.debug.breakpoint.XExpression;
-import consulo.ide.impl.idea.xdebugger.impl.breakpoints.XExpressionState;
 import consulo.internal.com.sun.jdi.InternalException;
 import consulo.internal.com.sun.jdi.ObjectCollectedException;
 import consulo.internal.com.sun.jdi.VMDisconnectedException;
 import consulo.internal.com.sun.jdi.Value;
 import consulo.internal.com.sun.jdi.connect.spi.TransportService;
+import consulo.language.psi.PsiCompiledElement;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.logging.Logger;
+import consulo.process.ExecutionException;
+import consulo.project.Project;
 import consulo.util.dataholder.Key;
+import consulo.util.io.NetUtil;
+import consulo.util.lang.Pair;
+import consulo.util.lang.StringUtil;
+import consulo.util.lang.ref.Ref;
+import consulo.util.xml.serializer.JDOMExternalizerUtil;
+import consulo.util.xml.serializer.SkipDefaultValuesSerializationFilters;
+import consulo.util.xml.serializer.XmlSerializer;
 import jakarta.inject.Singleton;
 import org.jdom.Element;
 
@@ -134,7 +137,7 @@ public class DebuggerUtilsImpl extends DebuggerUtilsEx
 			XExpression expression = TextWithImportsImpl.toXExpression(value);
 			if(expression != null)
 			{
-				XmlSerializer.serializeInto(new consulo.ide.impl.idea.xdebugger.impl.breakpoints.XExpressionState(expression), element, new SkipDefaultValuesSerializationFilters());
+				XmlSerializer.serializeInto(new XExpressionState(expression), element, new SkipDefaultValuesSerializationFilters());
 			}
 		}
 	}
@@ -225,7 +228,7 @@ public class DebuggerUtilsImpl extends DebuggerUtilsEx
 			final int freePort;
 			try
 			{
-				freePort = consulo.ide.impl.idea.util.net.NetUtils.findAvailableSocketPort();
+				freePort = NetUtil.findAvailableSocketPort();
 			}
 			catch(IOException e)
 			{

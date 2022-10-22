@@ -21,28 +21,22 @@
  */
 package com.intellij.java.compiler.cache;
 
-import consulo.compiler.CacheCorruptedException;
-import consulo.compiler.ExitException;
 import com.intellij.java.compiler.classParsing.*;
+import com.intellij.java.language.util.cls.ClsFormatException;
 import com.intellij.java.util.cls.ClsUtil;
 import consulo.application.ApplicationManager;
-import consulo.compiler.CompileContext;
-import consulo.compiler.CompilerManager;
-import consulo.ide.impl.compiler.CompileContextEx;
-import consulo.component.ProcessCanceledException;
-import consulo.project.Project;
 import consulo.application.util.function.Computable;
-import consulo.util.lang.Pair;
-import consulo.util.lang.ref.Ref;
-import consulo.util.lang.Trinity;
-import consulo.virtualFileSystem.VirtualFile;
-import consulo.util.collection.ArrayUtil;
-import consulo.ide.impl.idea.util.Function;
-import com.intellij.java.language.util.cls.ClsFormatException;
-import consulo.compiler.make.DependencyCache;
+import consulo.compiler.*;
+import consulo.component.ProcessCanceledException;
 import consulo.logging.Logger;
+import consulo.project.Project;
+import consulo.util.collection.ArrayUtil;
 import consulo.util.collection.primitive.ints.IntSet;
 import consulo.util.collection.primitive.ints.IntSets;
+import consulo.util.lang.Pair;
+import consulo.util.lang.Trinity;
+import consulo.util.lang.ref.Ref;
+import consulo.virtualFileSystem.VirtualFile;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
@@ -51,6 +45,7 @@ import java.io.File;
 import java.io.IOException;
 import java.rmi.Remote;
 import java.util.*;
+import java.util.function.Function;
 
 public class JavaDependencyCache implements DependencyCache {
   private static final Logger LOG = Logger.getInstance("#com.intellij.compiler.make.DependencyCache");
@@ -641,13 +636,13 @@ public class JavaDependencyCache implements DependencyCache {
   }
 
   @Override
-  public void findDependentFiles(final consulo.ide.impl.compiler.CompileContextEx context,
+  public void findDependentFiles(final CompileContext context,
                                  Ref<CacheCorruptedException> exceptionRef,
                                  Function<Pair<int[], Set<VirtualFile>>, Pair<int[], Set<VirtualFile>>> filter,
                                  final Set<VirtualFile> dependentFiles,
                                  Set<VirtualFile> compiledWithErrors) throws CacheCorruptedException, ExitException {
     final Pair<int[], Set<VirtualFile>> deps = findDependentClasses(context, context.getProject(), compiledWithErrors);
-    final Pair<int[], Set<VirtualFile>> filteredDeps = filter != null ? filter.fun(deps) : deps;
+    final Pair<int[], Set<VirtualFile>> filteredDeps = filter != null ? filter.apply(deps) : deps;
 
     final CacheCorruptedException[] _ex = {null};
     ApplicationManager.getApplication().runReadAction(new Runnable() {

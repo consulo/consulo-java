@@ -16,28 +16,27 @@
 
 package consulo.java.compiler.bytecodeProcessing;
 
-import java.io.File;
-import java.io.IOException;
-
+import com.intellij.compiler.instrumentation.InstrumentationClassFinder;
 import com.intellij.java.compiler.cache.Cache;
 import com.intellij.java.compiler.cache.JavaDependencyCache;
-import com.intellij.compiler.instrumentation.InstrumentationClassFinder;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ExtensionAPI;
+import consulo.application.util.function.ThrowableComputable;
 import consulo.compiler.CacheCorruptedException;
 import consulo.compiler.CompileContext;
 import consulo.module.Module;
-import consulo.application.util.function.ThrowableComputable;
-import consulo.extensions.CompositeExtensionPointName;
 
 import javax.annotation.Nullable;
+import java.io.File;
+import java.io.IOException;
 
 /**
  * @author VISTALL
  * @since 28-Sep-16
  */
+@ExtensionAPI(ComponentScope.APPLICATION)
 public interface JavaBytecodeProcessor
 {
-	CompositeExtensionPointName<JavaBytecodeProcessor> EP_NAME = CompositeExtensionPointName.applicationPoint("consulo.java.bytecodeCompilerProcessor", JavaBytecodeProcessor.class);
-
 	@Nullable
 	byte[] processClassFile(CompileContext compileContext,
 			Module affectedModule,

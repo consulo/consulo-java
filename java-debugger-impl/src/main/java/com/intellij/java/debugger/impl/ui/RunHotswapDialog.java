@@ -40,9 +40,6 @@ import java.util.List;
  * Date: Oct 6, 2003
  * Time: 5:58:17 PM
  */
-
-
-
 public class RunHotswapDialog extends OptionsDialog {
   private final JPanel myPanel;
   private final ElementsChooser<SessionItem> myElementsChooser;

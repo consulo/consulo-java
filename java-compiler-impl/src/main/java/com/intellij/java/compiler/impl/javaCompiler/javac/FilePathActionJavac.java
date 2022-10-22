@@ -15,18 +15,18 @@
  */
 package com.intellij.java.compiler.impl.javaCompiler.javac;
 
-import java.io.File;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import com.intellij.java.compiler.OutputParser;
 import com.intellij.java.compiler.impl.javaCompiler.FileObject;
 import com.intellij.java.language.impl.JavaClassFileType;
 import com.intellij.java.language.impl.JavaFileType;
 import consulo.compiler.CompilerBundle;
 import consulo.logging.Logger;
+import consulo.util.io.FileUtil;
 import consulo.util.lang.Comparing;
-import consulo.ide.impl.idea.openapi.util.io.FileUtil;
+
+import java.io.File;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author Eugene Zhuravlev

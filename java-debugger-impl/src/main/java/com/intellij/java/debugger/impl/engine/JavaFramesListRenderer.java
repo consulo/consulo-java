@@ -15,16 +15,16 @@
  */
 package com.intellij.java.debugger.impl.engine;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.java.debugger.impl.ui.impl.watch.StackFrameDescriptorImpl;
 import consulo.colorScheme.EditorColorsManager;
 import consulo.colorScheme.EditorColorsScheme;
-import consulo.util.lang.Comparing;
+import consulo.execution.debug.ui.ValueMarkup;
+import consulo.internal.com.sun.jdi.Method;
 import consulo.ui.ex.ColoredTextContainer;
 import consulo.ui.ex.SimpleTextAttributes;
-import consulo.ide.impl.idea.xdebugger.impl.ui.tree.ValueMarkup;
-import consulo.internal.com.sun.jdi.Method;
+import consulo.util.lang.Comparing;
+
+import javax.annotation.Nonnull;
 
 // Copied from FramesListRenderer
 class JavaFramesListRenderer /*extends ColoredListCellRenderer*/
@@ -43,7 +43,7 @@ class JavaFramesListRenderer /*extends ColoredListCellRenderer*/
 
 		final boolean shouldHighlightAsRecursive = isOccurrenceOfSelectedFrame(selectedDescriptor, descriptor);
 
-		final consulo.ide.impl.idea.xdebugger.impl.ui.tree.ValueMarkup markup = descriptor.getValueMarkup();
+		final ValueMarkup markup = descriptor.getValueMarkup();
 		if(markup != null)
 		{
 			component.append("[" + markup.getText() + "] ", new SimpleTextAttributes(SimpleTextAttributes.STYLE_BOLD, markup.getColor()));

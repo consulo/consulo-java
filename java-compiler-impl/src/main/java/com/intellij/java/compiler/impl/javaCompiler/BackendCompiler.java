@@ -16,22 +16,24 @@
 package com.intellij.java.compiler.impl.javaCompiler;
 
 import com.intellij.java.compiler.OutputParser;
-import consulo.ide.impl.idea.compiler.impl.ModuleChunk;
-import consulo.process.ProcessHandler;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ExtensionAPI;
 import consulo.compiler.CompileContext;
+import consulo.compiler.ModuleChunk;
 import consulo.compiler.scope.CompileScope;
 import consulo.component.extension.ExtensionPointName;
-import consulo.java.compiler.impl.javaCompiler.BackendCompilerEP;
 import consulo.java.compiler.impl.javaCompiler.BackendCompilerMonitor;
 import consulo.java.compiler.impl.javaCompiler.BackendCompilerProcessBuilder;
+import consulo.process.ProcessHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
 
+@ExtensionAPI(ComponentScope.PROJECT)
 public interface BackendCompiler
 {
-	ExtensionPointName<BackendCompilerEP> EP_NAME = ExtensionPointName.create("consulo.java.backendCompiler");
+	ExtensionPointName<BackendCompiler> EP_NAME = ExtensionPointName.create(BackendCompiler.class);
 
 	@Nonnull
 	String getPresentableName();
@@ -60,5 +62,5 @@ public interface BackendCompiler
 	}
 
 	@Nonnull
-	BackendCompilerProcessBuilder prepareProcess(@Nonnull consulo.ide.impl.idea.compiler.impl.ModuleChunk chunk, @Nonnull String outputDir, @Nonnull CompileContext compileContext) throws IOException;
+	BackendCompilerProcessBuilder prepareProcess(@Nonnull ModuleChunk chunk, @Nonnull String outputDir, @Nonnull CompileContext compileContext) throws IOException;
 }

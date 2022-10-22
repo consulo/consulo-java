@@ -16,18 +16,16 @@
 package com.intellij.java.compiler.options;
 
 import com.intellij.java.compiler.impl.javaCompiler.annotationProcessing.ProcessorConfigProfile;
-import consulo.ui.ex.awt.*;
-import consulo.ui.ex.awt.table.JBTable;
-import consulo.ui.fileChooser.FileChooser;
 import consulo.fileChooser.FileChooserDescriptor;
 import consulo.fileChooser.FileChooserDescriptorFactory;
+import consulo.fileChooser.IdeaFileChooser;
 import consulo.project.Project;
-import consulo.ui.ex.awt.TextFieldWithBrowseButton;
-import consulo.ide.impl.idea.openapi.util.io.FileUtil;
+import consulo.ui.ex.awt.*;
+import consulo.ui.ex.awt.table.JBTable;
+import consulo.ui.ex.awt.util.TableUtil;
+import consulo.util.io.FileUtil;
 import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.VirtualFile;
-import com.intellij.ui.*;
-import consulo.ui.ex.awt.EditableModel;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -42,8 +40,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.File;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 
 /**
  * @author Eugene Zhuravlev
@@ -99,7 +97,7 @@ public class ProcessorProfilePanel extends JPanel {
     myProcessorPathField = new TextFieldWithBrowseButton(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
         final FileChooserDescriptor descriptor = FileChooserDescriptorFactory.createAllButJarContentsDescriptor();
-        final VirtualFile[] files = consulo.ui.fileChooser.FileChooser.chooseFiles(descriptor, myProcessorPathField, myProject, null);
+        final VirtualFile[] files = IdeaFileChooser.chooseFiles(descriptor, myProcessorPathField, myProject, null);
         if (files.length > 0) {
           final StringBuilder builder = new StringBuilder();
           for (VirtualFile file : files) {

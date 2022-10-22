@@ -16,10 +16,10 @@
 package com.intellij.java.debugger.impl.engine;
 
 import com.intellij.java.debugger.DebuggerBundle;
+import com.intellij.java.debugger.engine.evaluation.EvaluationContext;
 import com.intellij.java.debugger.impl.*;
 import com.intellij.java.debugger.impl.actions.DebuggerActions;
 import com.intellij.java.debugger.impl.actions.JvmSmartStepIntoActionHandler;
-import com.intellij.java.debugger.engine.evaluation.EvaluationContext;
 import com.intellij.java.debugger.impl.engine.events.DebuggerCommandImpl;
 import com.intellij.java.debugger.impl.engine.events.SuspendContextCommandImpl;
 import com.intellij.java.debugger.impl.jdi.StackFrameProxyImpl;
@@ -29,44 +29,39 @@ import com.intellij.java.debugger.impl.memory.component.MemoryViewManager;
 import com.intellij.java.debugger.impl.memory.ui.ClassesFilteredView;
 import com.intellij.java.debugger.impl.settings.DebuggerSettings;
 import com.intellij.java.debugger.impl.ui.AlternativeSourceNotificationProvider;
-import consulo.execution.debug.breakpoint.XBreakpoint;
-import consulo.execution.debug.evaluation.XDebuggerEditorsProvider;
-import consulo.execution.debug.step.XSmartStepIntoHandler;
-import consulo.execution.debug.ui.DebuggerContentInfo;
 import com.intellij.java.debugger.impl.ui.breakpoints.Breakpoint;
 import com.intellij.java.debugger.impl.ui.impl.ThreadsPanel;
 import com.intellij.java.debugger.impl.ui.impl.watch.DebuggerTreeNodeImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.MessageDescriptor;
 import com.intellij.java.debugger.impl.ui.impl.watch.NodeManagerImpl;
 import com.intellij.java.debugger.ui.tree.NodeDescriptor;
+import consulo.application.AllIcons;
+import consulo.execution.debug.*;
+import consulo.execution.debug.breakpoint.XBreakpoint;
+import consulo.execution.debug.breakpoint.XBreakpointHandler;
+import consulo.execution.debug.evaluation.XDebuggerEditorsProvider;
+import consulo.execution.debug.event.XDebugSessionListener;
+import consulo.execution.debug.frame.XStackFrame;
+import consulo.execution.debug.frame.XValueMarkerProvider;
+import consulo.execution.debug.step.XSmartStepIntoHandler;
+import consulo.execution.debug.ui.DebuggerContentInfo;
 import consulo.execution.debug.ui.XDebugTabLayouter;
 import consulo.execution.ui.ExecutionConsole;
 import consulo.execution.ui.ExecutionConsoleEx;
 import consulo.execution.ui.layout.PlaceInGrid;
-import consulo.process.ProcessHandler;
 import consulo.execution.ui.layout.RunnerLayoutUi;
-import consulo.application.AllIcons;
-import com.intellij.openapi.actionSystem.*;
+import consulo.fileEditor.EditorNotifications;
+import consulo.internal.com.sun.jdi.event.Event;
+import consulo.process.ProcessHandler;
 import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
+import consulo.ui.ex.action.*;
 import consulo.ui.ex.content.Content;
+import consulo.ui.ex.content.event.ContentManagerAdapter;
 import consulo.ui.ex.content.event.ContentManagerEvent;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.Pair;
 import consulo.virtualFileSystem.VirtualFile;
-import consulo.fileEditor.EditorNotifications;
-import consulo.ui.ex.content.event.ContentManagerAdapter;
-import com.intellij.xdebugger.*;
-import consulo.execution.debug.breakpoint.XBreakpointHandler;
-import consulo.execution.debug.frame.XStackFrame;
-import consulo.execution.debug.frame.XValueMarkerProvider;
-import consulo.ide.impl.idea.xdebugger.impl.XDebugSessionImpl;
-import consulo.ide.impl.idea.xdebugger.impl.XDebuggerUtilImpl;
-import consulo.internal.com.sun.jdi.event.Event;
-import consulo.ui.annotation.RequiredUIAccess;
-import consulo.ui.ex.action.Anchor;
-import consulo.ui.ex.action.Constraints;
-import consulo.ui.ex.action.DefaultActionGroup;
-import consulo.ui.ex.action.ToggleAction;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -176,7 +171,7 @@ public class JavaDebugProcess extends XDebugProcess
 				return new DebuggerTreeNodeImpl(null, new MessageDescriptor(message));
 			}
 		};
-		session.addSessionListener(new XDebugSessionAdapter()
+		session.addSessionListener(new XDebugSessionListener()
 		{
 			@Override
 			public void sessionPaused()
@@ -495,7 +490,7 @@ public class JavaDebugProcess extends XDebugProcess
 		{
 			myAutoModeEnabled = enabled;
 			DebuggerSettings.getInstance().AUTO_VARIABLES_MODE = enabled;
-			XDebuggerUtilImpl.rebuildAllSessionsViews(e.getProject());
+			XDebuggerUtilImpl.rebuildAllSessionsViews(e.getData(Project.KEY));
 		}
 	}
 
@@ -519,7 +514,7 @@ public class JavaDebugProcess extends XDebugProcess
 		{
 			super.update(e);
 			final Presentation presentation = e.getPresentation();
-			DebugProcessImpl process = getCurrentDebugProcess(e.getProject());
+			DebugProcessImpl process = getCurrentDebugProcess(e.getData(Project.KEY));
 			if(process == null || process.canGetMethodReturnValue())
 			{
 				presentation.setEnabled(true);
@@ -543,7 +538,7 @@ public class JavaDebugProcess extends XDebugProcess
 		{
 			myWatchesReturnValues = watch;
 			DebuggerSettings.getInstance().WATCH_RETURN_VALUES = watch;
-			DebugProcessImpl process = getCurrentDebugProcess(e.getProject());
+			DebugProcessImpl process = getCurrentDebugProcess(e.getData(Project.KEY));
 			if(process != null)
 			{
 				process.setWatchMethodReturnValuesEnabled(watch);

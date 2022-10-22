@@ -102,10 +102,8 @@
 		</dependency>
 
 		<dependency>
-			<groupId>consulo</groupId>
-			<artifactId>consulo-compiler-impl</artifactId>
-			<version>${project.version}</version>
-			<scope>provided</scope>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
 			<optional>true</optional>
 		</dependency>
 	</dependencies>

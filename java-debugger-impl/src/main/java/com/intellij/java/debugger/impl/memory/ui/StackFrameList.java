@@ -73,7 +73,7 @@ class StackFrameList extends consulo.ide.impl.idea.xdebugger.impl.frame.XDebugge
 						{
 							StackFrameItem.CapturedStackFrame frame = frameInfo.createFrame(myDebugProcess);
 							frame.setWithSeparator(separator);
-							consulo.ide.impl.idea.xdebugger.impl.ui.DebuggerUIUtil.invokeLater(() -> getModel().addElement(frame));
+							DebuggerUIUtil.invokeLater(() -> getModel().addElement(frame));
 							separator = false;
 						}
 					}
@@ -122,7 +122,7 @@ class StackFrameList extends consulo.ide.impl.idea.xdebugger.impl.frame.XDebugge
 		OpenFileDescriptor descriptor = info.getDescriptor();
 		if(descriptor != null)
 		{
-			FileEditorManagerImpl manager = (FileEditorManagerImpl) FileEditorManager.getInstance(project);
+			FileEditorManager manager = FileEditorManager.getInstance(project);
 			VirtualFile lastFile = myEditorState.myLastOpenedFile;
 			if(myEditorState.myIsNeedToCloseLastOpenedFile && lastFile != null && manager.isFileOpen(lastFile) && !lastFile.equals(descriptor.getFile()))
 			{

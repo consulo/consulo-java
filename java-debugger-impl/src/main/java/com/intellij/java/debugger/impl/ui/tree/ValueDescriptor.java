@@ -15,17 +15,17 @@
  */
 package com.intellij.java.debugger.impl.ui.tree;
 
-import javax.annotation.Nullable;
-
 import com.intellij.java.debugger.DebuggerContext;
 import com.intellij.java.debugger.engine.DebugProcess;
 import com.intellij.java.debugger.engine.evaluation.EvaluateException;
 import com.intellij.java.debugger.ui.tree.NodeDescriptor;
-import consulo.language.psi.PsiElement;
-import consulo.ide.impl.idea.xdebugger.impl.ui.tree.ValueMarkup;
+import consulo.execution.debug.ui.ValueMarkup;
 import consulo.internal.com.sun.jdi.Type;
 import consulo.internal.com.sun.jdi.Value;
+import consulo.language.psi.PsiElement;
 import consulo.ui.image.Image;
+
+import javax.annotation.Nullable;
 
 public interface ValueDescriptor extends NodeDescriptor
 {
@@ -59,5 +59,5 @@ public interface ValueDescriptor extends NodeDescriptor
 	@Nullable
 	ValueMarkup getMarkup(final DebugProcess debugProcess);
 
-	void setMarkup(final DebugProcess debugProcess, @Nullable consulo.ide.impl.idea.xdebugger.impl.ui.tree.ValueMarkup markup);
+	void setMarkup(final DebugProcess debugProcess, @Nullable ValueMarkup markup);
 }

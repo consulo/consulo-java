@@ -21,20 +21,19 @@
  */
 package com.intellij.java.compiler.cache;
 
-import consulo.compiler.CacheCorruptedException;
-import consulo.ide.impl.idea.compiler.make.CacheUtils;
 import com.intellij.java.compiler.classParsing.*;
+import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.util.cls.ClsUtil;
 import consulo.application.ApplicationManager;
-import consulo.project.Project;
 import consulo.application.util.function.Computable;
-import com.intellij.java.language.LanguageLevel;
-import com.intellij.psi.*;
+import consulo.compiler.CacheCorruptedException;
+import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.psi.PsiManager;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.util.IncorrectOperationException;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.logging.Logger;
+import consulo.project.Project;
 import consulo.util.collection.primitive.ints.IntMaps;
 import consulo.util.collection.primitive.ints.IntObjectMap;
 import consulo.util.collection.primitive.ints.IntSet;
@@ -804,7 +803,7 @@ class JavaDependencyProcessor {
                   }
                   return true;
                 }
-                if (!CacheUtils.areArraysContentsEqual(method.getThrownExceptions(), derivedMethod.getThrownExceptions())) {
+                if (!JavaCacheUtils.areArraysContentsEqual(method.getThrownExceptions(), derivedMethod.getThrownExceptions())) {
                   if (myJavaDependencyCache.markClass(subclassQName)) {
                     if (LOG.isDebugEnabled()) {
                       LOG.debug("Mark dependent class " + myJavaDependencyCache.resolve(subclassQName) + "; reason: exception lists of " +

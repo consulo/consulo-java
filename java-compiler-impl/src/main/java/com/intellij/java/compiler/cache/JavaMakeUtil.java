@@ -20,25 +20,21 @@
  */
 package com.intellij.java.compiler.cache;
 
-import consulo.compiler.CacheCorruptedException;
-import org.jetbrains.annotations.NonNls;
-import consulo.internal.org.objectweb.asm.Opcodes;
-import com.intellij.java.compiler.classParsing.AnnotationConstantValue;
-import com.intellij.java.compiler.classParsing.AnnotationNameValuePair;
-import com.intellij.java.compiler.classParsing.ConstantValue;
-import com.intellij.java.compiler.classParsing.ConstantValueArray;
-import com.intellij.java.compiler.classParsing.EnumConstantValue;
-import consulo.ide.impl.idea.compiler.make.MakeUtil;
+import com.intellij.java.compiler.classParsing.*;
+import com.intellij.java.util.cls.ClsUtil;
 import consulo.application.ApplicationManager;
+import consulo.application.util.SystemInfo;
+import consulo.application.util.function.Computable;
+import consulo.compiler.CacheCorruptedException;
+import consulo.compiler.ModuleCompilerPathsManager;
+import consulo.compiler.util.MakeUtil;
+import consulo.internal.org.objectweb.asm.Opcodes;
+import consulo.language.content.ProductionContentFolderTypeProvider;
 import consulo.logging.Logger;
 import consulo.module.Module;
-import consulo.application.util.function.Computable;
-import consulo.application.util.SystemInfo;
 import consulo.util.lang.StringUtil;
-import consulo.ide.impl.idea.openapi.vfs.VfsUtil;
-import com.intellij.java.util.cls.ClsUtil;
-import consulo.compiler.ModuleCompilerPathsManager;
-import consulo.roots.impl.ProductionContentFolderTypeProvider;
+import consulo.virtualFileSystem.util.VirtualFileUtil;
+import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nullable;
 
@@ -311,7 +307,7 @@ public class JavaMakeUtil extends MakeUtil
 				{
 					return null;
 				}
-				return consulo.ide.impl.idea.openapi.vfs.VfsUtil.urlToPath(url);
+				return VirtualFileUtil.urlToPath(url);
 			}
 		});
 	}

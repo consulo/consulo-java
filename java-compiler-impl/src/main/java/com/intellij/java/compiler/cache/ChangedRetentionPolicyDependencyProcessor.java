@@ -15,17 +15,19 @@
  */
 package com.intellij.java.compiler.cache;
 
-import consulo.compiler.CacheCorruptedException;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiJavaFile;
-import consulo.application.ApplicationManager;
-import consulo.component.ProcessCanceledException;
-import consulo.project.Project;
-import com.intellij.psi.*;
-import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.java.util.cls.ClsUtil;
+import consulo.application.ApplicationManager;
+import consulo.compiler.CacheCorruptedException;
+import consulo.component.ProcessCanceledException;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiReference;
+import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.logging.Logger;
+import consulo.project.Project;
 
 import java.util.Collection;
 

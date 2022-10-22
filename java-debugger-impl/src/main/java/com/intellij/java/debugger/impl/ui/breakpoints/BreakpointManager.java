@@ -21,50 +21,43 @@
 package com.intellij.java.debugger.impl.ui.breakpoints;
 
 import com.intellij.java.debugger.DebuggerBundle;
-import com.intellij.java.debugger.impl.DebuggerInvocationUtil;
+import com.intellij.java.debugger.impl.*;
+import com.intellij.java.debugger.impl.breakpoints.properties.JavaExceptionBreakpointProperties;
 import com.intellij.java.debugger.impl.engine.BreakpointStepMethodFilter;
 import com.intellij.java.debugger.impl.engine.DebugProcessImpl;
 import com.intellij.java.debugger.impl.engine.requests.RequestManagerImpl;
-import com.intellij.java.debugger.impl.DebuggerContextImpl;
-import com.intellij.java.debugger.impl.DebuggerContextListener;
-import com.intellij.java.debugger.impl.DebuggerManagerImpl;
-import com.intellij.java.debugger.impl.DebuggerSession;
+import com.intellij.java.language.psi.PsiField;
 import consulo.application.ApplicationManager;
-import consulo.document.Document;
+import consulo.application.util.function.Computable;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.markup.GutterIconRenderer;
 import consulo.codeEditor.markup.RangeHighlighter;
+import consulo.document.Document;
 import consulo.document.FileDocumentManager;
+import consulo.execution.debug.XBreakpointManager;
 import consulo.execution.debug.XDebuggerManager;
 import consulo.execution.debug.XDebuggerUtil;
-import consulo.project.Project;
-import consulo.project.startup.StartupManager;
-import consulo.ide.impl.idea.openapi.ui.MessageType;
-import consulo.util.lang.Comparing;
-import consulo.application.util.function.Computable;
-import consulo.util.xml.serializer.InvalidDataException;
-import consulo.virtualFileSystem.VirtualFile;
-import consulo.virtualFileSystem.VirtualFileManager;
-import com.intellij.java.language.psi.PsiField;
-import consulo.ide.impl.idea.util.Function;
-import consulo.util.collection.ContainerUtil;
 import consulo.execution.debug.XSourcePosition;
-import com.intellij.xdebugger.breakpoints.*;
-import consulo.ide.impl.idea.xdebugger.impl.DebuggerSupport;
-import consulo.ide.impl.idea.xdebugger.impl.XDebugSessionImpl;
-import consulo.ide.impl.idea.xdebugger.impl.XDebuggerSupport;
-import consulo.ide.impl.idea.xdebugger.impl.breakpoints.XBreakpointBase;
-import consulo.ide.impl.idea.xdebugger.impl.breakpoints.XBreakpointManagerImpl;
-import consulo.ide.impl.idea.xdebugger.impl.breakpoints.XDependentBreakpointManager;
-import consulo.ide.impl.idea.xdebugger.impl.breakpoints.XLineBreakpointImpl;
+import consulo.execution.debug.breakpoint.XBreakpoint;
+import consulo.execution.debug.breakpoint.XBreakpointType;
+import consulo.execution.debug.breakpoint.XLineBreakpoint;
+import consulo.execution.debug.breakpoint.XLineBreakpointType;
+import consulo.execution.debug.event.XBreakpointAdapter;
+import consulo.execution.debug.ui.XDebuggerUIConstants;
 import consulo.internal.com.sun.jdi.InternalException;
 import consulo.internal.com.sun.jdi.ThreadReference;
 import consulo.internal.com.sun.jdi.request.*;
 import consulo.logging.Logger;
+import consulo.project.Project;
+import consulo.project.startup.StartupManager;
+import consulo.util.collection.ContainerUtil;
 import consulo.util.dataholder.Key;
+import consulo.util.lang.Comparing;
+import consulo.util.xml.serializer.InvalidDataException;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.virtualFileSystem.VirtualFileManager;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
-import com.intellij.java.debugger.impl.breakpoints.properties.JavaExceptionBreakpointProperties;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -73,6 +66,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 public class BreakpointManager
 {
@@ -130,8 +124,7 @@ public class BreakpointManager
 	{
 		if(breakpoint.isEnabled() && (breakpoint.getType() instanceof JavaMethodBreakpointType || breakpoint.getType() instanceof JavaWildcardMethodBreakpointType))
 		{
-			consulo.ide.impl.idea.xdebugger.impl.XDebugSessionImpl.NOTIFICATION_GROUP.createNotification("Method breakpoints may dramatically slow down debugging", consulo.ide.impl.idea.openapi.ui.MessageType.WARNING).notify(((consulo.ide.impl.idea.xdebugger.impl.breakpoints.XBreakpointBase) breakpoint).getProject
-					());
+			XDebuggerUIConstants.NOTIFICATION_GROUP.createNotification("Method breakpoints may dramatically slow down debugging", consulo.ide.impl.idea.openapi.ui.MessageType.WARNING).notify(((consulo.ide.impl.idea.xdebugger.impl.breakpoints.XBreakpointBase) breakpoint).getProject());
 			return true;
 		}
 		return false;
@@ -651,7 +644,7 @@ public class BreakpointManager
 				return ContainerUtil.mapNotNull(getXBreakpointManager().getAllBreakpoints(), new Function<XBreakpoint<?>, Breakpoint>()
 				{
 					@Override
-					public Breakpoint fun(XBreakpoint<?> xBreakpoint)
+					public Breakpoint apply(XBreakpoint<?> xBreakpoint)
 					{
 						return getJavaBreakpoint(xBreakpoint);
 					}

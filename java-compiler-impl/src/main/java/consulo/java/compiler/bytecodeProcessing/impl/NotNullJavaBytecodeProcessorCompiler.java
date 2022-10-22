@@ -23,6 +23,7 @@ import com.intellij.java.compiler.impl.javaCompiler.JavaCompilerConfiguration;
 import com.intellij.compiler.instrumentation.FailSafeClassReader;
 import com.intellij.compiler.instrumentation.InstrumentationClassFinder;
 import com.intellij.compiler.instrumentation.InstrumenterClassWriter;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.compiler.CacheCorruptedException;
 import com.intellij.compiler.notNullVerification.NotNullVerifyingInstrumenter;
 import consulo.compiler.CompileContext;
@@ -44,6 +45,7 @@ import java.io.IOException;
  * @author VISTALL
  * @since 28-Sep-16
  */
+@ExtensionImpl
 public class NotNullJavaBytecodeProcessorCompiler implements JavaBytecodeProcessor
 {
 	@Nullable

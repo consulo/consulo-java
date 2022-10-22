@@ -1,22 +1,17 @@
 package com.intellij.java.compiler.impl.javaCompiler;
 
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JList;
-import javax.swing.JPanel;
-
 import consulo.configurable.Configurable;
 import consulo.configurable.ConfigurationException;
-import org.jetbrains.annotations.Nls;
-import javax.annotation.Nullable;
 import consulo.java.compiler.JavaCompilerBundle;
 import consulo.project.Project;
 import consulo.ui.ex.awt.LabeledComponent;
+import consulo.ui.ex.awt.ListCellRendererWrapper;
 import consulo.ui.ex.awt.VerticalFlowLayout;
 import consulo.util.lang.Comparing;
-import consulo.ui.ex.awt.ListCellRendererWrapper;
-import consulo.java.compiler.impl.javaCompiler.BackendCompilerEP;
+import org.jetbrains.annotations.Nls;
+
+import javax.annotation.Nullable;
+import javax.swing.*;
 
 public class JavaCompilerConfigurable implements Configurable
 {
@@ -62,9 +57,9 @@ public class JavaCompilerConfigurable implements Configurable
 			}
 		});
 
-		for(BackendCompilerEP ep : BackendCompiler.EP_NAME.getExtensions(myProject))
+		for(BackendCompiler backendCompiler : BackendCompiler.EP_NAME.getExtensionList(myProject))
 		{
-			myComboBox.addItem(ep.getInstance(myProject));
+			myComboBox.addItem(backendCompiler);
 		}
 
 		myComboBox.setSelectedItem(myCompilerConfiguration.getActiveCompiler());

@@ -27,6 +27,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import consulo.ui.ex.awt.DialogWrapper;
 import consulo.ui.ex.awt.Messages;
+import consulo.util.collection.Lists;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
@@ -96,7 +97,7 @@ public class HotSwapUIImpl extends HotSwapUI
 		}
 	}
 
-	private final List<HotSwapVetoableListener> myListeners = ContainerUtil.createLockFreeCopyOnWriteList();
+	private final List<HotSwapVetoableListener> myListeners = Lists.newLockFreeCopyOnWriteList();
 	private boolean myAskBeforeHotswap = true;
 	private final Project myProject;
 	private boolean myPerformHotswapAfterThisCompilation = true;
@@ -256,7 +257,7 @@ public class HotSwapUIImpl extends HotSwapUI
 					final HotSwapProgressImpl progress = new HotSwapProgressImpl(myProject);
 					application.executeOnPooledThread(() -> reloadModifiedClasses(modifiedClasses, progress));
 				}
-			}, ModalityState.NON_MODAL);
+			}, application.getNoneModalityState());
 		});
 	}
 

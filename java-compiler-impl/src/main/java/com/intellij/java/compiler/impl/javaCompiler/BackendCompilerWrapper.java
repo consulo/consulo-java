@@ -15,51 +15,51 @@
  */
 package com.intellij.java.compiler.impl.javaCompiler;
 
-import consulo.compiler.CacheCorruptedException;
-import consulo.compiler.CompilerEncodingService;
 import com.intellij.java.compiler.CompilerException;
 import com.intellij.java.compiler.OutputParser;
 import com.intellij.java.compiler.cache.Cache;
 import com.intellij.java.compiler.cache.JavaDependencyCache;
 import com.intellij.java.compiler.cache.JavaMakeUtil;
-import consulo.ide.impl.idea.compiler.impl.CompileDriver;
-import consulo.ide.impl.idea.compiler.impl.CompilerUtil;
-import consulo.ide.impl.idea.compiler.impl.ModuleChunk;
-import consulo.process.ExecutionException;
-import consulo.process.cmd.GeneralCommandLine;
-import consulo.process.ProcessHandler;
-import consulo.application.Application;
-import consulo.application.ApplicationManager;
-import com.intellij.openapi.compiler.*;
-import consulo.ide.impl.compiler.CompileContextEx;
-import consulo.virtualFileSystem.fileType.FileType;
-import consulo.language.file.FileTypeManager;
-import consulo.module.Module;
-import consulo.project.Project;
-import com.intellij.openapi.roots.*;
-import consulo.util.lang.Comparing;
-import consulo.application.util.function.Computable;
-import consulo.util.lang.Pair;
-import consulo.util.lang.ref.Ref;
-import consulo.ide.impl.idea.openapi.util.io.FileUtil;
-import consulo.util.lang.StringUtil;
-import consulo.virtualFileSystem.LocalFileSystem;
-import consulo.ide.impl.idea.openapi.vfs.VfsUtilCore;
-import consulo.virtualFileSystem.VirtualFile;
-import consulo.virtualFileSystem.util.VirtualFileVisitor;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
-import consulo.language.psi.scope.GlobalSearchScope;
-import consulo.ide.impl.psi.search.GlobalSearchScopes;
-import consulo.util.collection.Chunk;
 import com.intellij.java.language.util.cls.ClsFormatException;
-import consulo.application.util.concurrent.AppExecutorUtil;
 import consulo.application.AccessRule;
-import consulo.ide.impl.compiler.make.CompositeDependencyCache;
+import consulo.application.Application;
+import consulo.application.ApplicationManager;
+import consulo.application.util.AsyncFileService;
+import consulo.application.util.concurrent.AppExecutorUtil;
+import consulo.application.util.function.Computable;
+import consulo.compiler.*;
+import consulo.compiler.util.CompilerUtil;
+import consulo.content.ContentIterator;
 import consulo.java.compiler.impl.javaCompiler.BackendCompilerMonitor;
 import consulo.java.compiler.impl.javaCompiler.BackendCompilerProcessBuilder;
+import consulo.language.file.FileTypeManager;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.scope.GlobalSearchScopesCore;
 import consulo.logging.Logger;
+import consulo.module.Module;
+import consulo.module.content.ModuleFileIndex;
+import consulo.module.content.ModuleRootManager;
+import consulo.module.content.ProjectFileIndex;
+import consulo.module.content.ProjectRootManager;
+import consulo.process.ExecutionException;
+import consulo.process.ProcessHandler;
+import consulo.process.cmd.GeneralCommandLine;
+import consulo.project.Project;
+import consulo.util.collection.Chunk;
 import consulo.util.dataholder.Key;
+import consulo.util.io.FilePermissionCopier;
+import consulo.util.io.FileUtil;
+import consulo.util.lang.Comparing;
+import consulo.util.lang.Pair;
+import consulo.util.lang.StringUtil;
+import consulo.util.lang.ref.Ref;
+import consulo.virtualFileSystem.LocalFileSystem;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.virtualFileSystem.fileType.FileType;
+import consulo.virtualFileSystem.util.VirtualFileUtil;
+import consulo.virtualFileSystem.util.VirtualFileVisitor;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
@@ -104,7 +104,7 @@ public class BackendCompilerWrapper
 								  Chunk<Module> chunk,
 								  @Nonnull final Project project,
 								  @Nonnull List<VirtualFile> filesToCompile,
-								  @Nonnull consulo.ide.impl.compiler.CompileContextEx compileContext,
+								  @Nonnull CompileContextEx compileContext,
 								  @Nonnull BackendCompiler compiler,
 								  TranslatingCompiler.OutputSink sink)
 	{
@@ -154,7 +154,7 @@ public class BackendCompilerWrapper
 				if(file != null)
 				{
 					final File ioFile = new File(file.getPath());
-					FileUtil.asyncDelete(ioFile);
+					getAsyncFileService().asyncDelete(ioFile);
 				}
 			}
 			myModuleToTempDirMap.clear();
@@ -201,7 +201,13 @@ public class BackendCompilerWrapper
 		{
 			return Collections.singletonMap(myChunk.getNodes().iterator().next(), Collections.unmodifiableList(filesToCompile));
 		}
-		return consulo.ide.impl.idea.compiler.impl.CompilerUtil.buildModuleToFilesMap(myCompileContext, filesToCompile);
+		return CompilerUtil.buildModuleToFilesMap(myCompileContext, filesToCompile);
+	}
+
+	@Nonnull
+	private AsyncFileService getAsyncFileService()
+	{
+		return Application.get().getInstance(AsyncFileService.class);
 	}
 
 	private void compileModules(final Map<Module, List<VirtualFile>> moduleToFilesMap, Map<File, FileObject> parsingInfo) throws CompilerException
@@ -247,12 +253,12 @@ public class BackendCompilerWrapper
 		{
 			if(fileToDelete != null)
 			{
-				FileUtil.asyncDelete(fileToDelete);
+				getAsyncFileService().asyncDelete(fileToDelete);
 			}
 		}
 	}
 
-	private void validateEncoding(consulo.ide.impl.idea.compiler.impl.ModuleChunk chunk, String chunkPresentableName)
+	private void validateEncoding(ModuleChunk chunk, String chunkPresentableName)
 	{
 		final CompilerEncodingService es = CompilerEncodingService.getInstance(myProject);
 		Charset charset = null;
@@ -364,7 +370,7 @@ public class BackendCompilerWrapper
 		{ // chunk has several modules
 			final File outputDir = Files.createTempDirectory("compileOutput").toFile();
 			fileToDelete = outputDir;
-			dirs.add(new OutputDir(outputDir.getPath(), consulo.ide.impl.idea.compiler.impl.ModuleChunk.ALL_SOURCES));
+			dirs.add(new OutputDir(outputDir.getPath(), ModuleChunk.ALL_SOURCES));
 		}
 		return fileToDelete;
 	}
@@ -506,11 +512,6 @@ public class BackendCompilerWrapper
 			}
 			finally
 			{
-				if(consulo.ide.impl.idea.compiler.impl.CompileDriver.ourDebugMode)
-				{
-					System.out.println("Compiler exit code is " + exitValue);
-				}
-
 				if(errorParsingThread != null)
 				{
 					errorParsingThread.stopParsing();
@@ -558,7 +559,7 @@ public class BackendCompilerWrapper
 			{
 				threadFuture.get();
 			}
-			catch(InterruptedException | ExecutionException ignored)
+			catch(InterruptedException | java.util.concurrent.ExecutionException ignored)
 			{
 				LOG.info("Thread interrupted", ignored);
 			}
@@ -680,7 +681,7 @@ public class BackendCompilerWrapper
 				}
 			}
 		}
-		return VfsUtilCore.copyFile(this, file, tempDir);
+		return VirtualFileUtil.copyFile(this, file, tempDir);
 	}
 
 	private VirtualFile getTempDir(Module module) throws IOException
@@ -741,7 +742,7 @@ public class BackendCompilerWrapper
 		}
 		finally
 		{
-			consulo.ide.impl.idea.compiler.impl.CompilerUtil.refreshIOFiles(toRefresh);
+			CompilerUtil.refreshIOFiles(toRefresh);
 			for(Iterator<Map.Entry<String, Collection<TranslatingCompiler.OutputItem>>> it = results.entrySet().iterator(); it.hasNext(); )
 			{
 				Map.Entry<String, Collection<TranslatingCompiler.OutputItem>> entry = it.next();
@@ -763,7 +764,7 @@ public class BackendCompilerWrapper
 	{
 		final Ref<CacheCorruptedException> exRef = new Ref<>(null);
 		final ModuleFileIndex fileIndex = ModuleRootManager.getInstance(module).getFileIndex();
-		final GlobalSearchScope srcRootScope = GlobalSearchScope.moduleScope(module).intersectWith(GlobalSearchScopes.directoryScope(myProject,
+		final GlobalSearchScope srcRootScope = GlobalSearchScope.moduleScope(module).intersectWith(GlobalSearchScopesCore.directoryScope(myProject,
 				sourceRoot, true));
 
 		final Collection<FileType> registeredInputTypes = CompilerManager.getInstance(myProject).getRegisteredInputTypes(myTranslatingCompiler);
@@ -799,7 +800,7 @@ public class BackendCompilerWrapper
 		else
 		{
 			// seems to be a root for generated sources
-			VfsUtilCore.visitChildrenRecursively(from, new VirtualFileVisitor()
+			VirtualFileUtil.visitChildrenRecursively(from, new VirtualFileVisitor()
 			{
 				@Override
 				public boolean visitFile(@Nonnull VirtualFile file)
@@ -844,7 +845,7 @@ public class BackendCompilerWrapper
 									   Map<String, Collection<TranslatingCompiler.OutputItem>> results,
 									   final GlobalSearchScope srcRootScope) throws CacheCorruptedException
 	{
-		consulo.ide.impl.compiler.make.CompositeDependencyCache dependencyCache = myCompileContext.getDependencyCache();
+		CompositeDependencyCache dependencyCache = myCompileContext.getDependencyCache();
 		JavaDependencyCache child = dependencyCache.findChild(JavaDependencyCache.class);
 		final Cache newCache = child.getNewClassesCache();
 		final Set<CompiledClass> paths = myFileNameToSourceMap.get(srcFile.getName());
@@ -943,7 +944,7 @@ public class BackendCompilerWrapper
 	protected static String calcPackagePath(VirtualFile srcFile, VirtualFile sourceRoot, String packagePrefix)
 	{
 		final String prefix = packagePrefix != null && packagePrefix.length() > 0 ? packagePrefix.replace('.', '/') + "/" : "";
-		return prefix + VfsUtilCore.getRelativePath(srcFile, sourceRoot, '/');
+		return prefix + VirtualFileUtil.getRelativePath(srcFile, sourceRoot, '/');
 	}
 
 	@Nullable
@@ -994,7 +995,7 @@ public class BackendCompilerWrapper
 		{ // failed to move the file: e.g. because source and destination reside on different mountpoints.
 			try
 			{
-				FileUtil.copy(fromFile, toFile);
+				FileUtil.copy(fromFile, toFile, FilePermissionCopier.BY_NIO2);
 				FileUtil.delete(fromFile);
 				success = true;
 			}

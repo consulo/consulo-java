@@ -15,13 +15,6 @@
  */
 package com.intellij.java.debugger.impl;
 
-import consulo.execution.ExecutionResult;
-import consulo.process.ExecutionException;
-import com.intellij.java.execution.configurations.RemoteConnection;
-import consulo.ide.impl.idea.execution.process.KillableColoredProcessHandler;
-import consulo.process.event.ProcessAdapter;
-import consulo.process.event.ProcessEvent;
-import consulo.process.ProcessHandler;
 import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.DebuggerManager;
 import com.intellij.java.debugger.NameMapper;
@@ -38,31 +31,37 @@ import com.intellij.java.debugger.impl.settings.DebuggerSettings;
 import com.intellij.java.debugger.impl.ui.GetJPDADialog;
 import com.intellij.java.debugger.impl.ui.breakpoints.BreakpointManager;
 import com.intellij.java.debugger.impl.ui.tree.render.BatchEvaluator;
+import com.intellij.java.execution.configurations.RemoteConnection;
+import com.intellij.java.language.impl.projectRoots.ex.JavaSdkUtil;
+import com.intellij.java.language.projectRoots.JavaSdk;
+import com.intellij.java.language.projectRoots.JavaSdkVersion;
+import com.intellij.java.language.psi.PsiClass;
 import consulo.application.ApplicationManager;
+import consulo.application.progress.ProgressManager;
+import consulo.application.util.SystemInfo;
+import consulo.colorScheme.EditorColorsManager;
+import consulo.colorScheme.event.EditorColorsListener;
 import consulo.component.persist.PersistentStateComponent;
 import consulo.component.persist.State;
 import consulo.component.persist.Storage;
 import consulo.component.persist.StoragePathMacros;
-import consulo.colorScheme.EditorColorsManager;
-import consulo.application.progress.ProgressManager;
-import consulo.project.Project;
-import com.intellij.java.language.projectRoots.JavaSdk;
-import com.intellij.java.language.projectRoots.JavaSdkVersion;
-import consulo.process.cmd.JdkUtil;
 import consulo.content.bundle.Sdk;
-import com.intellij.java.language.impl.projectRoots.ex.JavaSdkUtil;
-import consulo.project.startup.StartupManager;
-import consulo.application.util.SystemInfo;
-import consulo.util.xml.serializer.WriteExternalException;
-import consulo.util.lang.StringUtil;
-import consulo.virtualFileSystem.VirtualFile;
-import com.intellij.java.language.psi.PsiClass;
-import consulo.proxy.EventDispatcher;
-import consulo.ide.impl.idea.util.Function;
-import consulo.util.collection.SmartList;
-import consulo.util.collection.ContainerUtil;
+import consulo.execution.ExecutionResult;
 import consulo.java.execution.configurations.OwnJavaParameters;
 import consulo.logging.Logger;
+import consulo.process.ExecutionException;
+import consulo.process.ProcessHandler;
+import consulo.process.event.ProcessAdapter;
+import consulo.process.event.ProcessEvent;
+import consulo.project.Project;
+import consulo.project.startup.StartupManager;
+import consulo.proxy.EventDispatcher;
+import consulo.util.collection.ContainerUtil;
+import consulo.util.collection.Lists;
+import consulo.util.collection.SmartList;
+import consulo.util.lang.StringUtil;
+import consulo.util.xml.serializer.WriteExternalException;
+import consulo.virtualFileSystem.VirtualFile;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import org.jdom.Element;
@@ -73,6 +72,7 @@ import javax.annotation.Nullable;
 import javax.swing.*;
 import java.io.File;
 import java.util.*;
+import java.util.function.Function;
 import java.util.jar.Attributes;
 import java.util.stream.Stream;
 
@@ -84,7 +84,7 @@ public class DebuggerManagerImpl extends DebuggerManagerEx implements Persistent
   private final Project myProject;
   private final HashMap<ProcessHandler, DebuggerSession> mySessions = new HashMap<>();
   private final BreakpointManager myBreakpointManager;
-  private final List<NameMapper> myNameMappers = ContainerUtil.createLockFreeCopyOnWriteList();
+  private final List<NameMapper> myNameMappers = Lists.newLockFreeCopyOnWriteList();
   private final List<Function<DebugProcess, PositionManager>> myCustomPositionManagerFactories = new SmartList<>();
 
   private final EventDispatcher<DebuggerManagerListener> myDispatcher = EventDispatcher.create(DebuggerManagerListener.class);
@@ -158,12 +158,11 @@ public class DebuggerManagerImpl extends DebuggerManagerEx implements Persistent
       return;
     }
 
-    DebuggerManagerListener[] extensions = DebuggerManagerListener.EP_NAME.getExtensions(project);
-    for (DebuggerManagerListener extension : extensions) {
+    for (DebuggerManagerListener extension : DebuggerManagerListener.EP_NAME.getExtensionList(project)) {
       myDispatcher.addListener(extension);
     }
 
-    project.getMessageBus().connect().subscribe(EditorColorsManager.TOPIC, scheme -> getBreakpointManager().updateBreakpointsUI());
+    project.getMessageBus().connect().subscribe(EditorColorsListener.class, scheme -> getBreakpointManager().updateBreakpointsUI());
   }
 
   @Nullable

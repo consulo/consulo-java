@@ -20,49 +20,48 @@
  */
 package com.intellij.java.debugger.impl.engine.evaluation.expression;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import com.intellij.java.language.impl.codeInsight.daemon.JavaErrorBundle;
-import consulo.language.editor.rawHighlight.HighlightInfo;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.HighlightUtil;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.JavaHighlightUtil;
 import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.SourcePosition;
-import com.intellij.java.debugger.impl.engine.ContextUtil;
 import com.intellij.java.debugger.engine.DebuggerUtils;
-import com.intellij.java.debugger.impl.engine.JVMName;
-import com.intellij.java.debugger.impl.engine.JVMNameUtil;
 import com.intellij.java.debugger.engine.evaluation.CodeFragmentFactory;
-import com.intellij.java.debugger.impl.engine.evaluation.CodeFragmentFactoryContextWrapper;
 import com.intellij.java.debugger.engine.evaluation.EvaluateException;
 import com.intellij.java.debugger.engine.evaluation.EvaluateExceptionUtil;
-import com.intellij.java.debugger.impl.engine.evaluation.EvaluateRuntimeException;
-import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
 import com.intellij.java.debugger.engine.evaluation.TextWithImports;
-import com.intellij.java.debugger.impl.DebuggerUtilsEx;
 import com.intellij.java.debugger.engine.evaluation.expression.EvaluatorBuilder;
 import com.intellij.java.debugger.engine.evaluation.expression.ExpressionEvaluator;
 import com.intellij.java.debugger.engine.evaluation.expression.Modifier;
-import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import com.intellij.psi.*;
+import com.intellij.java.debugger.impl.DebuggerUtilsEx;
+import com.intellij.java.debugger.impl.engine.ContextUtil;
+import com.intellij.java.debugger.impl.engine.JVMName;
+import com.intellij.java.debugger.impl.engine.JVMNameUtil;
+import com.intellij.java.debugger.impl.engine.evaluation.CodeFragmentFactoryContextWrapper;
+import com.intellij.java.debugger.impl.engine.evaluation.EvaluateRuntimeException;
+import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
+import com.intellij.java.language.impl.codeInsight.daemon.JavaErrorBundle;
 import com.intellij.java.language.impl.psi.impl.JavaConstantExpressionEvaluator;
-import consulo.language.ast.IElementType;
-import consulo.language.psi.util.PsiTreeUtil;
+import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiTypesUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
-import consulo.util.collection.ArrayUtil;
-import consulo.language.util.IncorrectOperationException;
 import consulo.internal.com.sun.jdi.Value;
 import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.ast.IElementType;
+import consulo.language.editor.rawHighlight.HighlightInfo;
+import consulo.language.psi.PsiCodeFragment;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiErrorElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
+import consulo.project.Project;
+import consulo.util.collection.ArrayUtil;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.*;
 
 public class EvaluatorBuilderImpl implements EvaluatorBuilder
 {

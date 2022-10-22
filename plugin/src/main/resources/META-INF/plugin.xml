@@ -619,10 +619,6 @@
 						interface="com.intellij.java.language.impl.psi.impl.compiled.ClsCustomNavigationPolicy"/>
 		<extensionPoint name="extraExceptionHandler" interface="consulo.java.language.impl.codeInsight.ExtraExceptionHandler"/>
 
-		<extensionPoint name="backendCompiler" beanClass="consulo.java.compiler.impl.javaCompiler.BackendCompilerEP" area="PROJECT">
-			<with attribute="implementationClass" implements="com.intellij.java.compiler.impl.javaCompiler.BackendCompiler"/>
-		</extensionPoint>
-
 		<extensionPoint name="bytecodeCompilerProcessor" interface="consulo.java.compiler.bytecodeProcessing.JavaBytecodeProcessor"/>
 
 		<extensionPoint name="compiler.makeDependencyProcessor" interface="com.intellij.java.compiler.cache.DependencyProcessor"/>

@@ -39,8 +39,6 @@ import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 
 import consulo.component.util.Weighted;
-import consulo.ide.impl.idea.ide.FrameStateListener;
-import consulo.ide.impl.idea.ide.FrameStateManager;
 import consulo.ui.ex.action.AnAction;
 import consulo.ui.ex.action.AnActionEvent;
 import consulo.ui.ex.action.CustomShortcutSet;
@@ -60,7 +58,6 @@ import consulo.execution.debug.setting.XDebuggerSettingsManager;
  */
 public class TipManager implements Disposable, PopupMenuListener
 {
-
 	private volatile boolean myIsDisposed = false;
 	private boolean myPopupShown;
 	private MyAwtPreprocessor myHideCanceller;

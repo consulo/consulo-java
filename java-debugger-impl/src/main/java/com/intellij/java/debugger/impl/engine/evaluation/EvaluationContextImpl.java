@@ -15,19 +15,19 @@
  */
 package com.intellij.java.debugger.impl.engine.evaluation;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
+import com.intellij.java.debugger.engine.evaluation.EvaluateException;
+import com.intellij.java.debugger.engine.evaluation.EvaluationContext;
 import com.intellij.java.debugger.impl.engine.DebugProcessImpl;
 import com.intellij.java.debugger.impl.engine.DebuggerManagerThreadImpl;
 import com.intellij.java.debugger.impl.engine.SuspendContextImpl;
 import com.intellij.java.debugger.impl.jdi.StackFrameProxyImpl;
-import com.intellij.java.debugger.engine.evaluation.EvaluateException;
-import com.intellij.java.debugger.engine.evaluation.EvaluationContext;
-import consulo.project.Project;
-import consulo.ide.impl.idea.openapi.util.NullableLazyValue;
+import consulo.application.util.NullableLazyValue;
 import consulo.internal.com.sun.jdi.ClassLoaderReference;
 import consulo.internal.com.sun.jdi.Value;
+import consulo.project.Project;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public final class EvaluationContextImpl implements EvaluationContext
 {

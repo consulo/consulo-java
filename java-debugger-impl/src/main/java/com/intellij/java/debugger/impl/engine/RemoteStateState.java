@@ -15,17 +15,18 @@
  */
 package com.intellij.java.debugger.impl.engine;
 
-import javax.annotation.Nonnull;
-
-import consulo.execution.DefaultExecutionResult;
-import consulo.execution.ExecutionResult;
-import consulo.process.ExecutionException;
-import consulo.execution.executor.Executor;
 import com.intellij.java.execution.configurations.RemoteConnection;
 import com.intellij.java.execution.configurations.RemoteState;
-import consulo.ide.impl.idea.execution.impl.ConsoleViewImpl;
+import consulo.execution.DefaultExecutionResult;
+import consulo.execution.ExecutionResult;
+import consulo.execution.executor.Executor;
 import consulo.execution.runner.ProgramRunner;
+import consulo.execution.ui.console.ConsoleView;
+import consulo.execution.ui.console.TextConsoleBuilderFactory;
+import consulo.process.ExecutionException;
 import consulo.project.Project;
+
+import javax.annotation.Nonnull;
 
 /**
  * @author lex
@@ -41,7 +42,7 @@ public class RemoteStateState implements RemoteState {
   }
 
   public ExecutionResult execute(final Executor executor, @Nonnull final ProgramRunner runner) throws ExecutionException {
-    ConsoleViewImpl consoleView = new ConsoleViewImpl(myProject, false);
+    ConsoleView consoleView = TextConsoleBuilderFactory.getInstance().createBuilder(myProject).getConsole();
     RemoteDebugProcessHandler process = new RemoteDebugProcessHandler(myProject);
     consoleView.attachToProcess(process);
     return new DefaultExecutionResult(consoleView, process);

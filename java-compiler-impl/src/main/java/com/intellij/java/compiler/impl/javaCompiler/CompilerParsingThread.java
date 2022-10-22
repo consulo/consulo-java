@@ -15,22 +15,20 @@
  */
 package com.intellij.java.compiler.impl.javaCompiler;
 
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
-
-import javax.annotation.Nullable;
-
 import com.intellij.java.compiler.OutputParser;
 import consulo.compiler.CacheCorruptedException;
-import consulo.ide.impl.idea.compiler.impl.CompileDriver;
-import consulo.process.event.ProcessAdapter;
-import consulo.process.event.ProcessEvent;
-import consulo.process.ProcessHandler;
-import consulo.process.ProcessOutputTypes;
 import consulo.compiler.CompileContext;
 import consulo.compiler.CompilerMessageCategory;
 import consulo.logging.Logger;
+import consulo.process.ProcessHandler;
+import consulo.process.ProcessOutputTypes;
+import consulo.process.event.ProcessAdapter;
+import consulo.process.event.ProcessEvent;
 import consulo.util.dataholder.Key;
+
+import javax.annotation.Nullable;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 
 /**
  * @author Eugene Zhuravlev
@@ -155,10 +153,6 @@ public class CompilerParsingThread implements Runnable, OutputParser.Callback
 		{
 			LOG.debug("LIne read: #" + line + "#");
 		}
-		if(CompileDriver.ourDebugMode)
-		{
-			System.out.println("Line read: #" + line + "#");
-		}
 		if(TERMINATION_STRING.equals(line))
 		{
 			myLastReadLine = null;
@@ -193,10 +187,6 @@ public class CompilerParsingThread implements Runnable, OutputParser.Callback
 			}
 			catch(CacheCorruptedException e)
 			{
-				if(CompileDriver.ourDebugMode)
-				{
-					e.printStackTrace();
-				}
 				myError = e;
 				LOG.info(e);
 				killProcess();

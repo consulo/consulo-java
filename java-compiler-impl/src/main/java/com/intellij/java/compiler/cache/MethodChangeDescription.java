@@ -19,9 +19,8 @@ import com.intellij.java.compiler.classParsing.ConstantValue;
 import com.intellij.java.compiler.classParsing.GenericMethodSignature;
 import com.intellij.java.compiler.classParsing.MethodInfo;
 import com.intellij.java.compiler.classParsing.SignatureParsingException;
-import consulo.compiler.CacheCorruptedException;
-import consulo.ide.impl.idea.compiler.make.CacheUtils;
 import com.intellij.java.util.cls.ClsUtil;
+import consulo.compiler.CacheCorruptedException;
 
 import java.util.Arrays;
 
@@ -71,7 +70,7 @@ class MethodChangeDescription extends ChangeDescription {
       }
     }
 
-    throwsListChanged = !CacheUtils.areArraysContentsEqual(oldMethod.getThrownExceptions(), newMethod.getThrownExceptions());
+    throwsListChanged = !JavaCacheUtils.areArraysContentsEqual(oldMethod.getThrownExceptions(), newMethod.getThrownExceptions());
 
     final int oldFlags = oldMethod.getFlags();
     final int newFlags = newMethod.getFlags();

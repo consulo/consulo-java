@@ -15,80 +15,60 @@
  */
 package com.intellij.java.debugger.impl.engine;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.SourcePosition;
-import com.intellij.java.debugger.impl.actions.JavaReferringObjectsValue;
-import com.intellij.java.debugger.impl.actions.JumpToObjectAction;
 import com.intellij.java.debugger.engine.evaluation.EvaluateException;
-import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
-import com.intellij.java.debugger.impl.engine.evaluation.TextWithImportsImpl;
 import com.intellij.java.debugger.engine.evaluation.expression.Modifier;
-import com.intellij.java.debugger.impl.engine.events.DebuggerCommandImpl;
-import com.intellij.java.debugger.impl.engine.events.SuspendContextCommandImpl;
 import com.intellij.java.debugger.impl.DebuggerContextImpl;
 import com.intellij.java.debugger.impl.DebuggerUtilsEx;
+import com.intellij.java.debugger.impl.actions.JavaReferringObjectsValue;
+import com.intellij.java.debugger.impl.actions.JumpToObjectAction;
+import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
+import com.intellij.java.debugger.impl.engine.evaluation.TextWithImportsImpl;
+import com.intellij.java.debugger.impl.engine.events.DebuggerCommandImpl;
+import com.intellij.java.debugger.impl.engine.events.SuspendContextCommandImpl;
 import com.intellij.java.debugger.impl.ui.impl.DebuggerTreeRenderer;
-import com.intellij.java.debugger.impl.ui.impl.watch.DebuggerTreeNodeExpression;
-import com.intellij.java.debugger.impl.ui.impl.watch.MessageDescriptor;
-import com.intellij.java.debugger.impl.ui.impl.watch.NodeDescriptorProvider;
-import com.intellij.java.debugger.impl.ui.impl.watch.NodeManagerImpl;
-import com.intellij.java.debugger.impl.ui.impl.watch.ValueDescriptorImpl;
-import com.intellij.java.debugger.impl.ui.impl.watch.WatchItemDescriptor;
+import com.intellij.java.debugger.impl.ui.impl.watch.*;
 import com.intellij.java.debugger.impl.ui.tree.DebuggerTreeNode;
-import com.intellij.java.debugger.ui.tree.NodeDescriptor;
 import com.intellij.java.debugger.impl.ui.tree.NodeDescriptorFactory;
 import com.intellij.java.debugger.impl.ui.tree.NodeManager;
 import com.intellij.java.debugger.impl.ui.tree.ValueDescriptor;
-import com.intellij.java.debugger.impl.ui.tree.render.ArrayRenderer;
-import com.intellij.java.debugger.impl.ui.tree.render.ChildrenBuilder;
-import com.intellij.java.debugger.impl.ui.tree.render.CompoundNodeRenderer;
-import com.intellij.java.debugger.impl.ui.tree.render.CompoundTypeRenderer;
-import com.intellij.java.debugger.impl.ui.tree.render.DescriptorLabelListener;
-import com.intellij.java.debugger.impl.ui.tree.render.NodeRenderer;
-import com.intellij.java.debugger.impl.ui.tree.render.OnDemandRenderer;
-import com.intellij.java.debugger.impl.ui.tree.render.Renderer;
-import com.intellij.java.debugger.impl.ui.tree.render.ToStringRenderer;
+import com.intellij.java.debugger.impl.ui.tree.render.*;
+import com.intellij.java.debugger.ui.tree.NodeDescriptor;
+import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.application.AllIcons;
 import consulo.application.ApplicationManager;
 import consulo.application.ReadAction;
 import consulo.execution.debug.breakpoint.XExpression;
 import consulo.execution.debug.evaluation.XDebuggerEvaluator;
 import consulo.execution.debug.evaluation.XInstanceEvaluator;
-import consulo.execution.debug.frame.presentation.XRegularValuePresentation;
-import consulo.execution.debug.frame.presentation.XValuePresentation;
-import consulo.project.Project;
-import consulo.util.concurrent.AsyncResult;
-import consulo.util.lang.StringUtil;
-import consulo.language.psi.PsiElement;
-import com.intellij.java.language.psi.util.TypeConversionUtil;
-import consulo.ui.ex.SimpleTextAttributes;
-import consulo.util.lang.ThreeState;
-import com.intellij.xdebugger.frame.*;
-import consulo.execution.debug.frame.presentation.XErrorValuePresentation;
-import consulo.ide.impl.idea.xdebugger.impl.breakpoints.XExpressionImpl;
-import consulo.ide.impl.idea.xdebugger.impl.evaluate.XValueCompactPresentation;
-import consulo.ide.impl.idea.xdebugger.impl.frame.XValueWithInlinePresentation;
-import consulo.ide.impl.idea.xdebugger.impl.ui.XValueTextProvider;
-import consulo.ide.impl.idea.xdebugger.impl.ui.tree.XValueExtendedPresentation;
-import consulo.ide.impl.idea.xdebugger.impl.ui.tree.nodes.XValueNodeImpl;
+import consulo.execution.debug.frame.*;
+import consulo.execution.debug.frame.presentation.*;
+import consulo.execution.debug.internal.breakpoint.XExpressionImpl;
+import consulo.execution.debug.ui.XValueTextProvider;
 import consulo.internal.com.sun.jdi.ArrayReference;
 import consulo.internal.com.sun.jdi.ArrayType;
 import consulo.internal.com.sun.jdi.Value;
 import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.psi.PsiElement;
 import consulo.logging.Logger;
+import consulo.project.Project;
+import consulo.ui.ex.SimpleTextAttributes;
 import consulo.ui.image.Image;
+import consulo.util.concurrent.AsyncResult;
+import consulo.util.lang.StringUtil;
+import consulo.util.lang.ThreeState;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author egor
  */
-public class JavaValue extends XNamedValue implements NodeDescriptorProvider, consulo.ide.impl.idea.xdebugger.impl.ui.XValueTextProvider, consulo.ide.impl.idea.xdebugger.impl.frame.XValueWithInlinePresentation
+public class JavaValue extends XNamedValue implements NodeDescriptorProvider, XValueTextProvider, XValueWithInlinePresentation
 {
 	private static final Logger LOG = Logger.getInstance(JavaValue.class);
 
@@ -303,7 +283,7 @@ public class JavaValue extends XNamedValue implements NodeDescriptorProvider, co
 		return value.substring(0, Math.min(value.length(), XValueNode.MAX_VALUE_LENGTH));
 	}
 
-	private static class JavaValuePresentation extends XValueExtendedPresentation implements consulo.ide.impl.idea.xdebugger.impl.evaluate.XValueCompactPresentation
+	private static class JavaValuePresentation extends XValueExtendedPresentation implements XValueCompactPresentation
 	{
 		private final String myValue;
 		private final String myType;
@@ -326,13 +306,13 @@ public class JavaValue extends XNamedValue implements NodeDescriptorProvider, co
 		}
 
 		@Override
-		public void renderValue(@Nonnull XValueTextRenderer renderer)
+		public void renderValue(@Nonnull XValuePresentation.XValueTextRenderer renderer)
 		{
 			renderValue(renderer, null);
 		}
 
 		@Override
-		public void renderValue(@Nonnull XValueTextRenderer renderer, @Nullable consulo.ide.impl.idea.xdebugger.impl.ui.tree.nodes.XValueNodeImpl node)
+		public void renderValue(@Nonnull XValuePresentation.XValueTextRenderer renderer, @Nullable XValueNode node)
 		{
 			boolean compact = node != null;
 			if(myError != null)
@@ -811,14 +791,14 @@ public class JavaValue extends XNamedValue implements NodeDescriptorProvider, co
 		};
 	}
 
-	public void setRenderer(NodeRenderer nodeRenderer, final XValueNodeImpl node)
+	public void setRenderer(NodeRenderer nodeRenderer, final XValueNode node)
 	{
 		DebuggerManagerThreadImpl.assertIsManagerThread();
 		myValueDescriptor.setRenderer(nodeRenderer);
 		reBuild(node);
 	}
 
-	public void reBuild(final XValueNodeImpl node)
+	public void reBuild(final XValueNode node)
 	{
 		DebuggerManagerThreadImpl.assertIsManagerThread();
 		myChildrenRemaining = -1;

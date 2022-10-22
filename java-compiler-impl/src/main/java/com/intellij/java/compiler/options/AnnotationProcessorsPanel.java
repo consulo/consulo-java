@@ -18,27 +18,23 @@ package com.intellij.java.compiler.options;
 import com.intellij.java.compiler.impl.javaCompiler.annotationProcessing.ProcessorConfigProfile;
 import com.intellij.java.compiler.impl.javaCompiler.annotationProcessing.impl.ProcessorConfigProfileImpl;
 import consulo.application.AllIcons;
-import consulo.ui.ex.action.ActionManager;
-import consulo.ui.ex.action.AnActionEvent;
-import consulo.ui.ex.action.ShortcutSet;
 import consulo.module.Module;
 import consulo.module.ModuleManager;
 import consulo.project.Project;
 import consulo.ui.ex.InputValidatorEx;
+import consulo.ui.ex.RelativePoint;
+import consulo.ui.ex.action.ActionManager;
+import consulo.ui.ex.action.AnActionEvent;
+import consulo.ui.ex.action.ShortcutSet;
 import consulo.ui.ex.awt.*;
 import consulo.ui.ex.awt.tree.ColoredTreeCellRenderer;
+import consulo.ui.ex.awt.tree.EditableTreeModel;
+import consulo.ui.ex.awt.tree.Tree;
 import consulo.ui.ex.awt.tree.TreeUtil;
 import consulo.ui.ex.popup.JBPopup;
 import consulo.ui.ex.popup.JBPopupFactory;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.StringUtil;
-import consulo.ui.ex.awt.IdeBorderFactory;
-import consulo.ui.ex.awt.ToolbarDecorator;
-import consulo.ui.ex.RelativePoint;
-import consulo.ui.ex.awt.JBList;
-import com.intellij.ui.treeStructure.Tree;
-import consulo.ui.ex.awt.tree.EditableTreeModel;
-import consulo.ui.ex.awt.Messages;
 
 import javax.swing.*;
 import javax.swing.event.TreeSelectionEvent;
@@ -48,8 +44,8 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 import java.awt.*;
 import java.awt.event.MouseEvent;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 
 /**
  * @author Konstantin Bulenkov
@@ -87,37 +83,32 @@ public class AnnotationProcessorsPanel extends JPanel {
                 profiles.add(profile);
               }
               profiles.remove(nodeProfile);
-              final JBList list = new JBList(profiles);
-              final JBPopup popup = JBPopupFactory.getInstance().createListPopupBuilder(list)
+              final JBPopup popup = JBPopupFactory.getInstance().createPopupChooserBuilder(profiles)
                 .setTitle("Move to")
-                .setItemChoosenCallback(new Runnable() {
-                  @Override
-                  public void run() {
-                    final Object value = list.getSelectedValue();
-                    if (value instanceof ProcessorConfigProfile) {
-                      final ProcessorConfigProfile chosenProfile = (ProcessorConfigProfile)value;
-                      final Module toSelect = (Module)node.getUserObject();
-                      if (selectedNodes != null) {
-                        for (TreePath selectedNode : selectedNodes) {
-                          final Object node = selectedNode.getLastPathComponent();
-                          if (node instanceof MyModuleNode) {
-                            final Module module = (Module)((MyModuleNode)node).getUserObject();
-                            if (nodeProfile != myDefaultProfile) {
-                              nodeProfile.removeModuleName(module.getName());
-                            }
-                            if (chosenProfile != myDefaultProfile) {
-                              chosenProfile.addModuleName(module.getName());
-                            }
+                .setItemChosenCallback((value) -> {
+                  if (value instanceof ProcessorConfigProfile) {
+                    final ProcessorConfigProfile chosenProfile = (ProcessorConfigProfile)value;
+                    final Module toSelect = (Module)node.getUserObject();
+                    if (selectedNodes != null) {
+                      for (TreePath selectedNode : selectedNodes) {
+                        final Object node1 = selectedNode.getLastPathComponent();
+                        if (node1 instanceof MyModuleNode) {
+                          final Module module = (Module)((MyModuleNode) node1).getUserObject();
+                          if (nodeProfile != myDefaultProfile) {
+                            nodeProfile.removeModuleName(module.getName());
+                          }
+                          if (chosenProfile != myDefaultProfile) {
+                            chosenProfile.addModuleName(module.getName());
                           }
                         }
                       }
+                    }
 
-                      final RootNode root = (RootNode)myTree.getModel().getRoot();
-                      root.sync();
-                      final DefaultMutableTreeNode node = TreeUtil.findNodeWithObject(root, toSelect);
-                      if (node != null) {
-                        TreeUtil.selectNode(myTree, node);
-                      }
+                    final RootNode root = (RootNode)myTree.getModel().getRoot();
+                    root.sync();
+                    final DefaultMutableTreeNode node1 = TreeUtil.findNodeWithObject(root, toSelect);
+                    if (node1 != null) {
+                      TreeUtil.selectNode(myTree, node1);
                     }
                   }
                 })

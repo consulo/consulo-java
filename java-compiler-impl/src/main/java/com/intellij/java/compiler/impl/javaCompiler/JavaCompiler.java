@@ -17,28 +17,26 @@
 package com.intellij.java.compiler.impl.javaCompiler;
 
 import com.intellij.java.compiler.CompilerException;
-import consulo.ide.impl.idea.compiler.impl.CompileDriver;
-import consulo.compiler.CacheCorruptedException;
 import com.intellij.java.language.impl.JavaClassFileType;
 import com.intellij.java.language.impl.JavaFileType;
-import com.intellij.openapi.compiler.*;
-import consulo.ide.impl.compiler.CompileContextEx;
-import consulo.virtualFileSystem.fileType.FileType;
-import consulo.module.Module;
-import consulo.language.util.ModuleUtilCore;
-import consulo.project.Project;
-import consulo.module.content.ProjectFileIndex;
-import consulo.ide.impl.idea.openapi.util.io.FileUtil;
-import consulo.virtualFileSystem.VirtualFile;
-import consulo.util.collection.Chunk;
-import consulo.util.lang.ExceptionUtil;
+import consulo.compiler.*;
+import consulo.compiler.scope.CompileScope;
+import consulo.content.ContentFolderTypeProvider;
 import consulo.java.language.module.extension.JavaModuleExtension;
+import consulo.language.content.ProductionResourceContentFolderTypeProvider;
+import consulo.language.content.TestResourceContentFolderTypeProvider;
+import consulo.language.util.ModuleUtilCore;
 import consulo.logging.Logger;
-import consulo.roots.ContentFolderTypeProvider;
-import consulo.roots.impl.ProductionResourceContentFolderTypeProvider;
-import consulo.roots.impl.TestResourceContentFolderTypeProvider;
+import consulo.module.Module;
+import consulo.module.content.ProjectFileIndex;
+import consulo.project.Project;
+import consulo.util.collection.Chunk;
 import consulo.util.collection.Maps;
 import consulo.util.dataholder.Key;
+import consulo.util.io.FileUtil;
+import consulo.util.lang.ExceptionUtil;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.virtualFileSystem.fileType.FileType;
 import jakarta.inject.Inject;
 
 import javax.annotation.Nonnull;
@@ -106,27 +104,15 @@ public class JavaCompiler implements TranslatingCompiler
 		final BackendCompilerWrapper wrapper = new BackendCompilerWrapper(this, moduleChunk, myProject, filterResourceFiles(context, files), (CompileContextEx) context, backEndCompiler, sink);
 		try
 		{
-			if(CompileDriver.ourDebugMode)
-			{
-				System.out.println("Starting java compiler; with backend compiler: " + backEndCompiler.getClass().getName());
-			}
 			wrapper.compile(parsingInfo);
 		}
 		catch(CompilerException e)
 		{
-			if(CompileDriver.ourDebugMode)
-			{
-				e.printStackTrace();
-			}
 			context.addMessage(CompilerMessageCategory.ERROR, ExceptionUtil.getThrowableText(e), null, -1, -1);
 			LOGGER.info(e);
 		}
 		catch(CacheCorruptedException e)
 		{
-			if(CompileDriver.ourDebugMode)
-			{
-				e.printStackTrace();
-			}
 			LOGGER.info(e);
 			context.requestRebuildNextTime(e.getMessage());
 		}

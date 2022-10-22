@@ -15,26 +15,23 @@
  */
 package com.intellij.java.debugger.impl;
 
-import com.intellij.java.execution.configurations.ConfigurationWithAlternativeJre;
-import consulo.execution.configuration.RunProfile;
 import com.intellij.java.debugger.DebuggerManager;
-import consulo.project.Project;
+import com.intellij.java.execution.configurations.ConfigurationWithAlternativeJre;
+import com.intellij.java.language.impl.psi.NonClasspathClassFinder;
+import com.intellij.java.language.impl.psi.NonClasspathDirectoriesScope;
+import consulo.content.base.BinariesOrderRootType;
+import consulo.content.base.SourcesOrderRootType;
 import consulo.content.bundle.Sdk;
 import consulo.content.bundle.SdkTable;
-import consulo.content.OrderRootType;
-import consulo.virtualFileSystem.VirtualFile;
-import com.intellij.java.language.impl.psi.NonClasspathClassFinder;
+import consulo.execution.configuration.RunProfile;
 import consulo.language.psi.scope.GlobalSearchScope;
-import consulo.ide.impl.psi.search.NonClasspathDirectoriesScope;
-import consulo.util.collection.ContainerUtil;
+import consulo.project.Project;
+import consulo.virtualFileSystem.VirtualFile;
 import jakarta.inject.Inject;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author egor
@@ -62,7 +59,7 @@ public class AlternativeJreClassFinder extends NonClasspathClassFinder {
     if (sessions.isEmpty()) {
       return Collections.emptyList();
     }
-    List<VirtualFile> res = ContainerUtil.newSmartList();
+    List<VirtualFile> res = new ArrayList<>();
     for (DebuggerSession session : sessions) {
       Sdk jre = session.getAlternativeJre();
       if (jre != null) {
@@ -85,12 +82,12 @@ public class AlternativeJreClassFinder extends NonClasspathClassFinder {
 
   @Nonnull
   private static Collection<VirtualFile> getClassRoots(@Nonnull Sdk jre) {
-    return Arrays.asList(jre.getRootProvider().getFiles(OrderRootType.CLASSES));
+    return Arrays.asList(jre.getRootProvider().getFiles(BinariesOrderRootType.getInstance()));
   }
 
   @Nonnull
   public static Collection<VirtualFile> getSourceRoots(@Nonnull Sdk jre) {
-    return Arrays.asList(jre.getRootProvider().getFiles(OrderRootType.SOURCES));
+    return Arrays.asList(jre.getRootProvider().getFiles(SourcesOrderRootType.getInstance()));
   }
 
   @Nonnull

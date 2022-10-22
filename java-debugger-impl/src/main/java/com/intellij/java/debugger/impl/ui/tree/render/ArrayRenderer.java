@@ -61,8 +61,6 @@ import consulo.ui.ex.SimpleTextAttributes;
 import consulo.language.util.IncorrectOperationException;
 import consulo.execution.debug.frame.XCompositeNode;
 import consulo.execution.debug.frame.XValueChildrenList;
-import consulo.ide.impl.idea.xdebugger.impl.ui.tree.XDebuggerTree;
-import consulo.ide.impl.idea.xdebugger.impl.ui.tree.nodes.XValueNodeImpl;
 import consulo.internal.com.sun.jdi.ArrayReference;
 import consulo.internal.com.sun.jdi.ArrayType;
 import consulo.internal.com.sun.jdi.Type;

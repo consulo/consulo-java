@@ -1,23 +1,23 @@
 package consulo.java.compiler.impl.javaCompiler.old;
 
-import consulo.ide.impl.idea.compiler.impl.CompilerUtil;
-import consulo.ide.impl.idea.compiler.impl.ModuleChunk;
 import com.intellij.java.compiler.impl.javaCompiler.javac.JavacCompiler;
 import com.intellij.java.compiler.impl.javaCompiler.javac.JpsJavaCompilerOptions;
-import consulo.process.cmd.GeneralCommandLine;
-import consulo.process.cmd.ParametersList;
-import consulo.compiler.CompileContext;
+import com.intellij.java.language.impl.projectRoots.ex.JavaSdkUtil;
 import com.intellij.java.language.projectRoots.JavaSdk;
 import com.intellij.java.language.projectRoots.JavaSdkVersion;
-import consulo.content.bundle.Sdk;
-import com.intellij.java.language.impl.projectRoots.ex.JavaSdkUtil;
-import consulo.virtualFileSystem.VirtualFile;
 import consulo.annotation.access.RequiredReadAction;
+import consulo.compiler.CompileContext;
+import consulo.compiler.ModuleChunk;
+import consulo.compiler.util.CompilerUtil;
+import consulo.content.bundle.Sdk;
 import consulo.java.compiler.JavaCompilerBundle;
 import consulo.java.compiler.JavaCompilerUtil;
 import consulo.java.compiler.impl.javaCompiler.BackendCompilerProcessBuilder;
 import consulo.java.rt.JavaRtClassNames;
 import consulo.logging.Logger;
+import consulo.process.cmd.GeneralCommandLine;
+import consulo.process.cmd.ParametersList;
+import consulo.virtualFileSystem.VirtualFile;
 
 import javax.annotation.Nonnull;
 import java.io.*;
@@ -123,7 +123,7 @@ public class OldBackendCompilerProcessBuilder extends BackendCompilerProcessBuil
 				{
 					LOG.debug("Adding path for compilation " + path);
 				}
-				parametersList.add(consulo.ide.impl.idea.compiler.impl.CompilerUtil.quotePath(path));
+				parametersList.add(CompilerUtil.quotePath(path));
 			}
 		}
 		else

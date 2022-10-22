@@ -21,15 +21,15 @@
  */
 package com.intellij.java.compiler.classParsing;
 
+import com.intellij.java.compiler.cache.JavaCacheUtils;
 import com.intellij.java.compiler.cache.SymbolTable;
-import consulo.compiler.CacheCorruptedException;
-import consulo.ide.impl.idea.compiler.make.CacheUtils;
-import consulo.util.collection.ArrayUtil;
-import consulo.util.lang.ObjectUtil;
 import com.intellij.java.util.cls.ClsUtil;
+import consulo.compiler.CacheCorruptedException;
 import consulo.logging.Logger;
+import consulo.util.collection.ArrayUtil;
 import consulo.util.collection.primitive.ints.IntSet;
 import consulo.util.collection.primitive.ints.IntSets;
+import consulo.util.lang.ObjectUtil;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
@@ -172,7 +172,7 @@ public class MethodInfo extends MemberInfo
 		{
 			final String descriptor = symbolTable.getSymbol(getDescriptor());
 			final String name = symbolTable.getSymbol(getName());
-			mySignature = CacheUtils.getMethodSignature(name, descriptor);
+			mySignature = JavaCacheUtils.getMethodSignature(name, descriptor);
 		}
 		return mySignature;
 	}

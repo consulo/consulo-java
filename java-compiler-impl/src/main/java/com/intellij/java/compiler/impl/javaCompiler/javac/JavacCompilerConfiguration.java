@@ -15,18 +15,18 @@
  */
 package com.intellij.java.compiler.impl.javaCompiler.javac;
 
-import javax.annotation.Nonnull;
-import jakarta.inject.Inject;
-import jakarta.inject.Singleton;
-
-import consulo.component.macro.PathMacroManager;
 import consulo.component.persist.PersistentStateComponent;
-import consulo.ide.ServiceManager;
 import consulo.component.persist.State;
 import consulo.component.persist.Storage;
 import consulo.component.persist.StoragePathMacros;
+import consulo.ide.ServiceManager;
 import consulo.project.Project;
+import consulo.project.macro.ProjectPathMacroManager;
 import consulo.util.xml.serializer.XmlSerializerUtil;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
+
+import javax.annotation.Nonnull;
 
 @Singleton
 @State(
@@ -55,7 +55,7 @@ public class JavacCompilerConfiguration implements PersistentStateComponent<JpsJ
   public JpsJavaCompilerOptions getState() {
     JpsJavaCompilerOptions state = new JpsJavaCompilerOptions();
     XmlSerializerUtil.copyBean(mySettings, state);
-    state.ADDITIONAL_OPTIONS_STRING = PathMacroManager.getInstance(myProject).collapsePathsRecursively(state.ADDITIONAL_OPTIONS_STRING);
+    state.ADDITIONAL_OPTIONS_STRING = ProjectPathMacroManager.getInstance(myProject).collapsePathsRecursively(state.ADDITIONAL_OPTIONS_STRING);
     return state;
   }
 

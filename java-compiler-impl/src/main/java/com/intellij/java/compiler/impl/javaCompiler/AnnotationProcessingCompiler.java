@@ -21,29 +21,27 @@
  */
 package com.intellij.java.compiler.impl.javaCompiler;
 
-import consulo.application.CommonBundle;
 import com.intellij.java.compiler.CompilerException;
-import consulo.ide.impl.compiler.ModuleCompilerUtil;
-import consulo.ide.impl.idea.compiler.impl.CompileContextExProxy;
 import com.intellij.java.compiler.impl.javaCompiler.javac.JavacCompiler;
-import consulo.compiler.CacheCorruptedException;
 import com.intellij.java.language.impl.JavaClassFileType;
 import com.intellij.java.language.impl.JavaFileType;
 import consulo.application.ApplicationManager;
-import com.intellij.openapi.compiler.*;
-import consulo.ide.impl.compiler.CompileContextEx;
-import consulo.ui.ex.awt.Messages;
-import consulo.virtualFileSystem.LocalFileSystem;
-import consulo.virtualFileSystem.fileType.FileType;
+import consulo.application.CommonBundle;
+import consulo.compiler.*;
+import consulo.compiler.scope.CompileScope;
+import consulo.compiler.util.ModuleCompilerUtil;
+import consulo.java.compiler.impl.javaCompiler.JavaAdditionalOutputDirectoriesProvider;
+import consulo.logging.Logger;
 import consulo.module.Module;
 import consulo.project.Project;
 import consulo.project.ui.view.internal.ProjectSettingsService;
-import consulo.ide.impl.idea.openapi.vfs.VfsUtil;
-import consulo.virtualFileSystem.VirtualFile;
+import consulo.ui.ex.awt.Messages;
 import consulo.util.collection.Chunk;
 import consulo.util.lang.ExceptionUtil;
-import consulo.java.compiler.impl.javaCompiler.JavaAdditionalOutputDirectoriesProvider;
-import consulo.logging.Logger;
+import consulo.virtualFileSystem.LocalFileSystem;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.virtualFileSystem.fileType.FileType;
+import consulo.virtualFileSystem.util.VirtualFileUtil;
 import jakarta.inject.Inject;
 
 import javax.annotation.Nonnull;
@@ -87,7 +85,7 @@ public class AnnotationProcessingCompiler implements TranslatingCompiler
 			return;
 		}
 		final LocalFileSystem lfs = LocalFileSystem.getInstance();
-		final CompileContextEx _context = new consulo.ide.impl.idea.compiler.impl.CompileContextExProxy((CompileContextEx) context)
+		final CompileContextEx _context = new CompileContextExDelegate((CompileContextEx) context)
 		{
 			@Override
 			public VirtualFile getModuleOutputDirectory(Module module)
@@ -177,7 +175,7 @@ public class AnnotationProcessingCompiler implements TranslatingCompiler
 			}
 			final String path = JavaAdditionalOutputDirectoriesProvider.getAnnotationProcessorsGenerationPath(module);
 			final VirtualFile generationDir = path != null ? LocalFileSystem.getInstance().findFileByPath(path) : null;
-			if(generationDir != null && VfsUtil.isAncestor(generationDir, file, false))
+			if(generationDir != null && VirtualFileUtil.isAncestor(generationDir, file, false))
 			{
 				return true;
 			}

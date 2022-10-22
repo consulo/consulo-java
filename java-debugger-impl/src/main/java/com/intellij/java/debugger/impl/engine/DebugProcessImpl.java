@@ -15,16 +15,6 @@
  */
 package com.intellij.java.debugger.impl.engine;
 
-import consulo.application.util.Patches;
-import consulo.execution.CantRunException;
-import consulo.execution.ExecutionResult;
-import consulo.execution.debug.XSourcePosition;
-import consulo.process.ExecutionException;
-import com.intellij.java.execution.configurations.RemoteConnection;
-import com.intellij.execution.process.*;
-import consulo.execution.ExecutionUtil;
-import consulo.project.ui.wm.ToolWindowId;
-import consulo.ui.ex.action.ActionsBundle;
 import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.PositionManager;
 import com.intellij.java.debugger.engine.DebugProcess;
@@ -61,42 +51,52 @@ import com.intellij.java.debugger.impl.ui.tree.render.NodeRenderer;
 import com.intellij.java.debugger.impl.ui.tree.render.PrimitiveRenderer;
 import com.intellij.java.debugger.ui.classFilter.ClassFilter;
 import com.intellij.java.debugger.ui.classFilter.DebuggerClassFilterProvider;
-import consulo.application.ApplicationManager;
-import consulo.application.impl.internal.ApplicationNamesInfo;
-import consulo.project.Project;
+import com.intellij.java.execution.configurations.RemoteConnection;
 import com.intellij.java.language.projectRoots.JavaSdk;
 import com.intellij.openapi.projectRoots.JavaSdkType;
+import consulo.application.ApplicationManager;
+import consulo.application.impl.internal.ApplicationNamesInfo;
+import consulo.application.util.Patches;
+import consulo.application.util.Semaphore;
+import consulo.application.util.SystemInfo;
 import consulo.content.bundle.Sdk;
 import consulo.content.bundle.SdkTable;
-import consulo.ide.impl.idea.openapi.ui.MessageType;
-import consulo.ui.ex.awt.Messages;
-import consulo.ui.ex.awt.util.Alarm;
-import consulo.util.lang.Pair;
-import consulo.application.util.SystemInfo;
-import consulo.util.lang.StringUtil;
-import consulo.language.editor.ui.util.StatusBarUtil;
-import consulo.language.psi.PsiFile;
-import consulo.language.psi.PsiManager;
-import consulo.language.psi.scope.GlobalSearchScope;
-import consulo.ide.impl.idea.util.Consumer;
-import consulo.proxy.EventDispatcher;
-import consulo.util.lang.reflect.ReflectionUtil;
-import consulo.application.util.Semaphore;
-import consulo.util.collection.ContainerUtil;
-import consulo.ui.ex.awt.UIUtil;
-import consulo.execution.debug.XDebugSession;
-import consulo.ide.impl.idea.xdebugger.impl.XDebugSessionImpl;
-import consulo.ide.impl.idea.xdebugger.impl.actions.XDebuggerActions;
 import consulo.disposer.Disposable;
 import consulo.disposer.Disposer;
+import consulo.execution.CantRunException;
+import consulo.execution.ExecutionResult;
+import consulo.execution.ExecutionUtil;
+import consulo.execution.debug.XDebugSession;
+import consulo.execution.debug.XSourcePosition;
 import consulo.internal.com.sun.jdi.*;
 import consulo.internal.com.sun.jdi.connect.*;
 import consulo.internal.com.sun.jdi.request.EventRequest;
 import consulo.internal.com.sun.jdi.request.EventRequestManager;
 import consulo.internal.com.sun.jdi.request.StepRequest;
 import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.editor.ui.util.StatusBarUtil;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiManager;
+import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.logging.Logger;
+import consulo.process.ExecutionException;
+import consulo.process.ProcessHandler;
+import consulo.process.ProcessOutputTypes;
+import consulo.process.event.ProcessAdapter;
+import consulo.process.event.ProcessEvent;
+import consulo.process.event.ProcessListener;
+import consulo.project.Project;
+import consulo.project.ui.wm.ToolWindowId;
+import consulo.proxy.EventDispatcher;
+import consulo.ui.ex.action.ActionsBundle;
+import consulo.ui.ex.awt.Messages;
+import consulo.ui.ex.awt.UIUtil;
+import consulo.ui.ex.awt.util.Alarm;
+import consulo.util.collection.ContainerUtil;
 import consulo.util.dataholder.UserDataHolderBase;
+import consulo.util.lang.Pair;
+import consulo.util.lang.StringUtil;
+import consulo.util.lang.reflect.ReflectionUtil;
 import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.NonNls;
 
@@ -107,6 +107,7 @@ import java.net.UnknownHostException;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public abstract class DebugProcessImpl extends UserDataHolderBase implements DebugProcess {
@@ -395,7 +396,7 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
     if (!activeFilters.isEmpty()) {
       String currentClassName = getCurrentClassName(thread);
       if (currentClassName == null || !DebuggerUtilsEx.isFiltered(currentClassName, activeFilters)) {
-        action.consume(activeFilters);
+        action.accept(activeFilters);
       }
     }
   }
@@ -1753,7 +1754,7 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
       private void doReattach() {
         DebuggerInvocationUtil.swingInvokeLater(myProject, () ->
         {
-          ((consulo.ide.impl.idea.xdebugger.impl.XDebugSessionImpl) getXdebugProcess().getSession()).reset();
+          ((XDebugSession) getXdebugProcess().getSession()).reset();
           myState.set(State.INITIAL);
           myConnection = environment.getRemoteConnection();
           getManagerThread().restartIfNeeded();

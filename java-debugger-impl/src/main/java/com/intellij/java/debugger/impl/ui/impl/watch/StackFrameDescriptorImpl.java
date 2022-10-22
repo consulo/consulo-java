@@ -15,20 +15,15 @@
  */
 package com.intellij.java.debugger.impl.ui.impl.watch;
 
-import java.awt.Color;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import com.intellij.java.debugger.SourcePosition;
-import com.intellij.java.debugger.impl.engine.ContextUtil;
 import com.intellij.java.debugger.engine.DebugProcess;
-import com.intellij.java.debugger.impl.engine.DebugProcessImpl;
-import com.intellij.java.debugger.impl.engine.DebuggerManagerThreadImpl;
 import com.intellij.java.debugger.engine.DebuggerUtils;
 import com.intellij.java.debugger.engine.evaluation.EvaluateException;
-import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
 import com.intellij.java.debugger.impl.DebuggerUtilsEx;
+import com.intellij.java.debugger.impl.engine.ContextUtil;
+import com.intellij.java.debugger.impl.engine.DebugProcessImpl;
+import com.intellij.java.debugger.impl.engine.DebuggerManagerThreadImpl;
+import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
 import com.intellij.java.debugger.impl.jdi.StackFrameProxyImpl;
 import com.intellij.java.debugger.impl.settings.ThreadsViewSettings;
 import com.intellij.java.debugger.impl.ui.tree.StackFrameDescriptor;
@@ -36,21 +31,19 @@ import com.intellij.java.debugger.impl.ui.tree.render.DescriptorLabelListener;
 import consulo.application.AllIcons;
 import consulo.application.ApplicationManager;
 import consulo.execution.debug.XDebugSession;
+import consulo.execution.debug.frame.XValueMarkers;
+import consulo.execution.debug.ui.ValueMarkup;
+import consulo.internal.com.sun.jdi.*;
+import consulo.language.editor.FileColorManager;
+import consulo.language.psi.PsiFile;
 import consulo.module.content.ProjectFileIndex;
 import consulo.module.content.ProjectRootManager;
-import consulo.virtualFileSystem.VirtualFile;
-import consulo.language.psi.PsiFile;
-import consulo.ide.impl.idea.ui.FileColorManager;
-import consulo.ide.impl.idea.xdebugger.impl.XDebugSessionImpl;
-import consulo.ide.impl.idea.xdebugger.impl.frame.XValueMarkers;
-import consulo.ide.impl.idea.xdebugger.impl.ui.tree.ValueMarkup;
-import consulo.internal.com.sun.jdi.AbsentInformationException;
-import consulo.internal.com.sun.jdi.InternalException;
-import consulo.internal.com.sun.jdi.Location;
-import consulo.internal.com.sun.jdi.Method;
-import consulo.internal.com.sun.jdi.ObjectReference;
-import consulo.internal.com.sun.jdi.ReferenceType;
 import consulo.ui.image.Image;
+import consulo.virtualFileSystem.VirtualFile;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.awt.*;
 
 /**
  * Nodes of this type cannot be updated, because StackFrame objects become invalid as soon as VM has been resumed
@@ -183,13 +176,10 @@ public class StackFrameDescriptorImpl extends NodeDescriptorImpl implements Stac
 			if(process instanceof DebugProcessImpl)
 			{
 				XDebugSession session = ((DebugProcessImpl) process).getSession().getXDebugSession();
-				if(session instanceof consulo.ide.impl.idea.xdebugger.impl.XDebugSessionImpl)
+				XValueMarkers<?, ?> markers = session == null ? null : session.getValueMarkers();
+				if (markers != null)
 				{
-					XValueMarkers<?, ?> markers = ((XDebugSessionImpl) session).getValueMarkers();
-					if(markers != null)
-					{
-						return markers.getAllMarkers().get(myThisObject);
-					}
+					return markers.getAllMarkers().get(myThisObject);
 				}
 			}
 		}

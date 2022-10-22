@@ -21,23 +21,30 @@
 package com.intellij.java.compiler.cache;
 
 import com.intellij.java.compiler.classParsing.FieldInfo;
-import consulo.compiler.CacheCorruptedException;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.search.PackageScope;
+import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.compiler.CacheCorruptedException;
 import consulo.compiler.CompileContext;
 import consulo.compiler.ExitException;
 import consulo.compiler.ExitStatus;
-import consulo.logging.Logger;
 import consulo.component.ProcessCanceledException;
+import consulo.content.scope.SearchScope;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiReference;
+import consulo.language.psi.resolve.PsiElementProcessor;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.search.PsiSearchHelper;
+import consulo.language.psi.search.TextOccurenceProcessor;
+import consulo.language.psi.search.UsageSearchContext;
+import consulo.logging.Logger;
 import consulo.project.DumbService;
 import consulo.project.Project;
 import consulo.util.dataholder.Key;
 import consulo.util.lang.ref.Ref;
 import consulo.virtualFileSystem.VirtualFile;
-import com.intellij.psi.*;
-import com.intellij.psi.search.*;
-import com.intellij.java.language.psi.util.PsiUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

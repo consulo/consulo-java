@@ -20,20 +20,20 @@
  */
 package com.intellij.java.compiler.classParsing;
 
-import consulo.compiler.CacheCorruptedException;
 import com.intellij.java.compiler.cache.SymbolTable;
+import com.intellij.java.language.util.cls.ClsFormatException;
 import com.intellij.java.util.cls.BytePointer;
 import com.intellij.java.util.cls.ClsUtil;
+import consulo.compiler.CacheCorruptedException;
 import consulo.compiler.CompilerBundle;
-import consulo.ide.impl.idea.openapi.util.io.FileUtil;
-import consulo.util.collection.ArrayUtil;
-import com.intellij.java.language.util.cls.ClsFormatException;
 import consulo.java.language.module.util.JavaClassNames;
+import consulo.util.collection.ArrayUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -378,7 +378,7 @@ public class ClassFileReader {
   private byte[] getData(){
     if (myData == null) {
       try{
-        myData = FileUtil.loadFileBytes(myFile);
+        myData = Files.readAllBytes(myFile.toPath());
       }
       catch(IOException e){
         myData = ArrayUtil.EMPTY_BYTE_ARRAY;

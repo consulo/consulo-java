@@ -15,21 +15,15 @@
  */
 package com.intellij.java.compiler.cache;
 
-import consulo.compiler.CacheCorruptedException;
-import consulo.ide.impl.idea.compiler.make.CacheUtils;
 import com.intellij.java.compiler.classParsing.*;
-import consulo.application.progress.ProgressManager;
-import consulo.ide.impl.idea.openapi.util.io.FileUtil;
-import consulo.util.collection.ArrayUtil;
 import com.intellij.java.language.util.cls.ClsFormatException;
-import consulo.ide.impl.idea.util.indexing.ValueContainer;
-import consulo.ide.impl.idea.util.indexing.impl.ChangeTrackingValueContainer;
-import consulo.ide.impl.idea.util.indexing.impl.MapIndexStorage;
+import consulo.application.progress.ProgressManager;
+import consulo.compiler.CacheCorruptedException;
+import consulo.index.io.*;
 import consulo.index.io.data.DataExternalizer;
-import consulo.index.io.EnumeratorIntegerDescriptor;
-import consulo.index.io.KeyDescriptor;
-import consulo.index.io.PersistentHashMap;
 import consulo.logging.Logger;
+import consulo.util.collection.ArrayUtil;
+import consulo.util.io.FileUtil;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
@@ -362,7 +356,7 @@ public class Cache {
   public MethodInfo findMethodsBySignature(final int classDeclarationId, final String signature, SymbolTable symbolTable) throws CacheCorruptedException {
     try {
       for (MethodInfo methodInfo : getMethods(classDeclarationId)) {
-        if (signature.equals(CacheUtils.getMethodSignature(symbolTable.getSymbol(methodInfo.getName()), symbolTable.getSymbol(methodInfo.getDescriptor())))) {
+        if (signature.equals(JavaCacheUtils.getMethodSignature(symbolTable.getSymbol(methodInfo.getName()), symbolTable.getSymbol(methodInfo.getDescriptor())))) {
           return methodInfo;
         }
       }

@@ -1,14 +1,15 @@
 package consulo.java.compiler.impl.javaCompiler;
 
-import consulo.ide.impl.idea.compiler.impl.ModuleChunk;
 import com.intellij.java.compiler.impl.javaCompiler.javac.JpsJavaCompilerOptions;
-import consulo.process.ExecutionException;
-import consulo.process.cmd.GeneralCommandLine;
-import consulo.process.ProcessHandler;
-import consulo.process.local.ProcessHandlerFactory;
-import consulo.compiler.CompileContext;
-import consulo.ide.impl.idea.openapi.util.io.FileUtil;
 import consulo.annotation.access.RequiredReadAction;
+import consulo.application.Application;
+import consulo.application.util.AsyncFileService;
+import consulo.compiler.CompileContext;
+import consulo.compiler.ModuleChunk;
+import consulo.process.ExecutionException;
+import consulo.process.ProcessHandler;
+import consulo.process.cmd.GeneralCommandLine;
+import consulo.process.local.ProcessHandlerFactory;
 
 import javax.annotation.Nonnull;
 import java.io.File;
@@ -30,7 +31,7 @@ public abstract class BackendCompilerProcessBuilder
 	protected final JpsJavaCompilerOptions myJavaCompilerOptions;
 	protected final boolean myAnnotationProcessorsEnabled;
 
-	protected BackendCompilerProcessBuilder(consulo.ide.impl.idea.compiler.impl.ModuleChunk moduleChunk,
+	protected BackendCompilerProcessBuilder(ModuleChunk moduleChunk,
                                           String outputPath,
                                           CompileContext compileContext,
                                           JpsJavaCompilerOptions javaCompilerOptions,
@@ -60,6 +61,6 @@ public abstract class BackendCompilerProcessBuilder
 
 	public void clearTempFiles()
 	{
-		FileUtil.asyncDelete(myTempFiles);
+		Application.get().getInstance(AsyncFileService.class).asyncDelete(myTempFiles);
 	}
 }

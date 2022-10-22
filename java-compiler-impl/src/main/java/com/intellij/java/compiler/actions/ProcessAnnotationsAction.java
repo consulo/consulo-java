@@ -15,33 +15,40 @@
  */
 package com.intellij.java.compiler.actions;
 
-import consulo.ide.impl.idea.compiler.actions.CompileActionBase;
-import consulo.ide.impl.idea.compiler.impl.FileSetCompileScope;
-import consulo.compiler.scope.ModuleCompileScope;
-import consulo.ide.impl.idea.compiler.impl.resourceCompiler.ResourceCompiler;
-import consulo.language.editor.PlatformDataKeys;
-import consulo.ui.ex.action.ActionPlaces;
-import consulo.ui.ex.action.ActionsBundle;
 import com.intellij.java.compiler.impl.javaCompiler.AnnotationProcessingCompiler;
 import com.intellij.java.compiler.impl.javaCompiler.JavaCompilerConfiguration;
 import com.intellij.java.compiler.impl.javaCompiler.annotationProcessing.AnnotationProcessingConfiguration;
 import com.intellij.java.language.psi.JavaDirectoryService;
 import com.intellij.java.language.psi.PsiJavaPackage;
-import com.intellij.openapi.actionSystem.*;
+import consulo.compiler.Compiler;
 import consulo.compiler.CompilerBundle;
 import consulo.compiler.CompilerManager;
-import consulo.virtualFileSystem.fileType.FileType;
+import consulo.compiler.action.CompileActionBase;
+import consulo.compiler.resourceCompiler.ResourceCompiler;
+import consulo.compiler.scope.FileSetCompileScope;
+import consulo.compiler.scope.ModuleCompileScope;
+import consulo.dataContext.DataContext;
+import consulo.language.editor.CommonDataKeys;
+import consulo.language.editor.LangDataKeys;
+import consulo.language.editor.PlatformDataKeys;
 import consulo.language.file.FileTypeManager;
+import consulo.language.psi.PsiDirectory;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiManager;
 import consulo.module.Module;
-import consulo.project.Project;
 import consulo.module.content.ProjectFileIndex;
 import consulo.module.content.ProjectRootManager;
-import consulo.util.lang.function.Condition;
-import consulo.util.lang.StringUtil;
-import consulo.virtualFileSystem.VirtualFile;
-import com.intellij.psi.*;
-import consulo.util.collection.ContainerUtil;
+import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
+import consulo.ui.ex.action.ActionPlaces;
+import consulo.ui.ex.action.ActionsBundle;
+import consulo.ui.ex.action.AnActionEvent;
+import consulo.ui.ex.action.Presentation;
+import consulo.util.collection.ContainerUtil;
+import consulo.util.lang.StringUtil;
+import consulo.util.lang.function.Condition;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.virtualFileSystem.fileType.FileType;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -55,12 +62,9 @@ public class ProcessAnnotationsAction extends CompileActionBase {
   @Override
   protected void doAction(DataContext dataContext, Project project) {
     final Module module = dataContext.getData(LangDataKeys.MODULE_CONTEXT);
-    final Condition<com.intellij.openapi.compiler.Compiler> filter = new Condition<com.intellij.openapi.compiler.Compiler>() {
-      @Override
-      public boolean value(com.intellij.openapi.compiler.Compiler compiler) {
-        // EclipseLink CanonicalModelProcessor reads input from output hence adding ResourcesCompiler
-        return compiler instanceof AnnotationProcessingCompiler || compiler instanceof ResourceCompiler;
-      }
+    final Condition<Compiler> filter = compiler -> {
+      // EclipseLink CanonicalModelProcessor reads input from output hence adding ResourcesCompiler
+      return compiler instanceof AnnotationProcessingCompiler || compiler instanceof ResourceCompiler;
     };
     if (module != null) {
       CompilerManager.getInstance(project).make(new ModuleCompileScope(module, false), filter, null);
@@ -105,7 +109,7 @@ public class ProcessAnnotationsAction extends CompileActionBase {
 
     presentation.setVisible(true);
     presentation.setText(createPresentationText(""), true);
-    final consulo.ide.impl.idea.compiler.impl.FileSetCompileScope scope = getCompilableFiles(project, event.getData(PlatformDataKeys.VIRTUAL_FILE_ARRAY));
+    final FileSetCompileScope scope = getCompilableFiles(project, event.getData(PlatformDataKeys.VIRTUAL_FILE_ARRAY));
     if (moduleContext == null && scope == null) {
       presentation.setEnabled(false);
       return;
@@ -200,7 +204,7 @@ public class ProcessAnnotationsAction extends CompileActionBase {
         }
       }
       filesToCompile.add(file);
-      ContainerUtil.addIfNotNull(fileIndex.getModuleForFile(file), affectedModules);
+      ContainerUtil.addIfNotNull(affectedModules, fileIndex.getModuleForFile(file));
     }
     if (filesToCompile.isEmpty()) {
       return null;

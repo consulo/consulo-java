@@ -28,9 +28,6 @@ import com.intellij.java.debugger.impl.ui.tree.actions.ForceOnDemandRenderersAct
 import consulo.execution.debug.frame.XFullValueEvaluator;
 import consulo.util.dataholder.Key;
 import consulo.execution.debug.frame.XValuePlace;
-import consulo.ide.impl.idea.xdebugger.impl.XDebugSessionImpl;
-import consulo.ide.impl.idea.xdebugger.impl.ui.tree.nodes.HeadlessValueEvaluationCallback;
-import consulo.ide.impl.idea.xdebugger.impl.ui.tree.nodes.XValueNodeImpl;
 
 /**
  * @author egor

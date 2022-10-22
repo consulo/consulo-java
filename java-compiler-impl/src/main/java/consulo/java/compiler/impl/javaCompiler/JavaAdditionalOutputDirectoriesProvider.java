@@ -15,21 +15,20 @@
  */
 package consulo.java.compiler.impl.javaCompiler;
 
-import java.util.Arrays;
+import com.intellij.java.compiler.impl.javaCompiler.JavaCompilerConfiguration;
+import com.intellij.java.compiler.impl.javaCompiler.annotationProcessing.AnnotationProcessingConfiguration;
+import consulo.compiler.AdditionalOutputDirectoriesProvider;
+import consulo.compiler.CompilerPaths;
+import consulo.module.Module;
+import consulo.module.content.ModuleRootManager;
+import consulo.project.Project;
+import consulo.util.collection.ArrayUtil;
+import consulo.util.lang.StringUtil;
+import consulo.virtualFileSystem.VirtualFileManager;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import com.intellij.java.compiler.impl.javaCompiler.JavaCompilerConfiguration;
-import com.intellij.java.compiler.impl.javaCompiler.annotationProcessing.AnnotationProcessingConfiguration;
-import consulo.compiler.CompilerPaths;
-import consulo.module.Module;
-import consulo.project.Project;
-import consulo.module.content.ModuleRootManager;
-import consulo.util.lang.StringUtil;
-import consulo.virtualFileSystem.VirtualFileManager;
-import consulo.util.collection.ArrayUtil;
-import consulo.compiler.impl.AdditionalOutputDirectoriesProvider;
-import consulo.ide.impl.compiler.CompilerPathsImpl;
+import java.util.Arrays;
 
 /**
  * @author VISTALL
@@ -74,7 +73,7 @@ public class JavaAdditionalOutputDirectoriesProvider implements AdditionalOutput
     }
 
 
-    final String path = CompilerPathsImpl.getModuleOutputPath(module, false);
+    final String path = CompilerPaths.getModuleOutputPath(module, false);
     if (path == null) {
       return null;
     }
