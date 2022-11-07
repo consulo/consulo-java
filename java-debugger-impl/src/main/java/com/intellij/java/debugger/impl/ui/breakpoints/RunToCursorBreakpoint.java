@@ -15,20 +15,21 @@
  */
 package com.intellij.java.debugger.impl.ui.breakpoints;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import com.intellij.java.debugger.impl.breakpoints.properties.JavaLineBreakpointProperties;
 import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.SourcePosition;
+import com.intellij.java.debugger.impl.breakpoints.properties.JavaLineBreakpointProperties;
 import com.intellij.java.debugger.impl.engine.DebugProcessImpl;
 import consulo.execution.debug.XSourcePosition;
-import consulo.project.Project;
-import consulo.virtualFileSystem.VirtualFile;
+import consulo.execution.debug.breakpoint.XLineBreakpointType;
+import consulo.execution.debug.breakpoint.XLineBreakpointTypeResolver;
+import consulo.internal.com.sun.jdi.event.LocatableEvent;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiManager;
-import consulo.execution.debug.breakpoint.XLineBreakpointType;
-import consulo.internal.com.sun.jdi.event.LocatableEvent;
-import consulo.xdebugger.breakpoints.XLineBreakpointResolverTypeExtension;
+import consulo.project.Project;
+import consulo.virtualFileSystem.VirtualFile;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * @author Eugene Zhuravlev
@@ -166,7 +167,7 @@ public class RunToCursorBreakpoint extends LineBreakpoint<JavaLineBreakpointProp
 			return null;
 		}
 
-		XLineBreakpointType<?> breakpointType = XLineBreakpointResolverTypeExtension.INSTANCE.resolveBreakpointType(myProject, file, line);
+		XLineBreakpointType<?> breakpointType = XLineBreakpointTypeResolver.forFile(myProject, file, line);
 		if(breakpointType instanceof JavaLineBreakpointType)
 		{
 			return (JavaLineBreakpointType) breakpointType;

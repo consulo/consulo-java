@@ -30,7 +30,7 @@ public class ShowInstancesFromClassesViewAction extends ShowInstancesAction
 	@Override
 	protected void perform(AnActionEvent e)
 	{
-		final Project project = e.getProject();
+		Project project = e.getData(Project.KEY);
 		final ReferenceType selectedClass = getSelectedClass(e);
 		if(project != null && selectedClass != null)
 		{

@@ -17,9 +17,9 @@ package org.intellij.plugins.intelliLang.util;
 
 import com.intellij.java.language.impl.ui.JavaReferenceEditorUtil;
 import com.intellij.java.language.psi.*;
-import com.sun.org.apache.xerces.internal.dom.DocumentImpl;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.application.ApplicationManager;
+import consulo.codeEditor.EditorFactory;
 import consulo.document.Document;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.ast.IElementType;
@@ -110,7 +110,7 @@ public class PsiUtilEx {
   @RequiredReadAction
   public static Document createDocument(final String s, final Project project) {
     if (ApplicationManager.getApplication().isUnitTestMode() || project.isDefault()) {
-      return new DocumentImpl(s);
+      return EditorFactory.getInstance().createDocument(s);
     }
     else {
       return JavaReferenceEditorUtil.createTypeDocument(s, project);

@@ -15,41 +15,44 @@
  */
 package org.intellij.plugins.intelliLang.inject.java;
 
+import com.intellij.java.indexing.impl.stubs.index.JavaAnnotationIndex;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.application.util.CachedValue;
+import consulo.application.util.CachedValueProvider;
+import consulo.application.util.CachedValuesManager;
+import consulo.document.util.ProperTextRange;
+import consulo.document.util.TextRange;
+import consulo.ide.impl.idea.util.PatternValuesIndex;
+import consulo.ide.impl.intelliLang.Configuration;
+import consulo.ide.impl.intelliLang.inject.InjectedLanguage;
+import consulo.ide.impl.intelliLang.inject.InjectorUtils;
+import consulo.ide.impl.intelliLang.inject.TemporaryPlacesRegistry;
+import consulo.ide.impl.intelliLang.inject.config.BaseInjection;
+import consulo.ide.impl.intelliLang.inject.config.InjectionPlace;
+import consulo.ide.impl.psi.injection.LanguageInjectionSupport;
+import consulo.ide.impl.psi.injection.impl.ProjectInjectionConfiguration;
 import consulo.language.Language;
-import com.intellij.lang.LanguageParserDefinitions;
+import consulo.language.ast.IElementType;
 import consulo.language.inject.ConcatenationAwareInjector;
 import consulo.language.inject.MultiHostRegistrar;
-import consulo.project.Project;
-import consulo.document.util.ProperTextRange;
-import consulo.util.lang.ref.Ref;
-import consulo.document.util.TextRange;
-import consulo.util.lang.Trinity;
-import consulo.util.lang.StringUtil;
-import consulo.language.pattern.ElementPattern;
-import com.intellij.psi.*;
-import com.intellij.java.indexing.impl.stubs.index.JavaAnnotationIndex;
-import consulo.language.inject.impl.internal.InjectedLanguageUtil;
 import consulo.language.inject.ReferenceInjector;
+import consulo.language.inject.impl.internal.InjectedLanguageUtil;
+import consulo.language.parser.ParserDefinition;
+import consulo.language.pattern.ElementPattern;
+import consulo.language.psi.*;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.scope.LocalSearchScope;
 import consulo.language.psi.search.ReferencesSearch;
-import consulo.language.ast.IElementType;
-import com.intellij.psi.util.*;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.project.Project;
 import consulo.util.collection.ArrayUtil;
-import consulo.ide.impl.idea.util.PatternValuesIndex;
 import consulo.util.collection.ContainerUtil;
-import consulo.annotation.access.RequiredReadAction;
-import consulo.psi.injection.LanguageInjectionSupport;
-import consulo.psi.injection.impl.ProjectInjectionConfiguration;
 import consulo.util.lang.Pair;
-import org.intellij.plugins.intelliLang.Configuration;
-import org.intellij.plugins.intelliLang.inject.InjectedLanguage;
-import org.intellij.plugins.intelliLang.inject.InjectorUtils;
-import org.intellij.plugins.intelliLang.inject.TemporaryPlacesRegistry;
-import org.intellij.plugins.intelliLang.inject.config.BaseInjection;
-import org.intellij.plugins.intelliLang.inject.config.InjectionPlace;
+import consulo.util.lang.StringUtil;
+import consulo.util.lang.Trinity;
+import consulo.util.lang.ref.Ref;
 import org.intellij.plugins.intelliLang.util.AnnotationUtilEx;
 import org.intellij.plugins.intelliLang.util.ContextComputationProcessor;
 import org.intellij.plugins.intelliLang.util.PsiUtilEx;
@@ -612,7 +615,7 @@ public class ConcatenationInjector implements ConcatenationAwareInjector
 
 		private static boolean isReferenceInject(Language language)
 		{
-			return LanguageParserDefinitions.INSTANCE.forLanguage(language) == null && ReferenceInjector.findById(language.getID()) != null;
+			return ParserDefinition.forLanguage(language) == null && ReferenceInjector.findById(language.getID()) != null;
 		}
 
 		protected Pair<PsiLanguageInjectionHost, Language> processInjection(Language language,

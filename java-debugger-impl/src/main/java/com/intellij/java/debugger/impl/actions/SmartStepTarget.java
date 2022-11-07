@@ -16,8 +16,8 @@
 package com.intellij.java.debugger.impl.actions;
 
 import consulo.language.psi.PsiElement;
-import com.intellij.util.Range;
 import consulo.ui.image.Image;
+import consulo.util.lang.Range;
 import consulo.util.lang.StringUtil;
 
 import javax.annotation.Nonnull;

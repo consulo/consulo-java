@@ -15,16 +15,17 @@
  */
 package com.intellij.java.debugger.impl.memory.action.tracking;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import com.intellij.java.debugger.impl.memory.component.InstancesTracker;
 import com.intellij.java.debugger.impl.memory.tracking.TrackingType;
 import com.intellij.java.debugger.impl.memory.ui.ClassesTable;
-import consulo.ui.ex.action.AnActionEvent;
-import consulo.ui.ex.action.ToggleAction;
-import consulo.project.Project;
 import consulo.internal.com.sun.jdi.ArrayType;
 import consulo.internal.com.sun.jdi.ReferenceType;
+import consulo.project.Project;
+import consulo.ui.ex.action.AnActionEvent;
+import consulo.ui.ex.action.ToggleAction;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class TrackInstancesToggleAction extends ToggleAction
 {
@@ -46,7 +47,7 @@ public class TrackInstancesToggleAction extends ToggleAction
 	public boolean isSelected(AnActionEvent e)
 	{
 		ReferenceType selectedClass = getSelectedClass(e);
-		final Project project = e.getProject();
+		final Project project = e.getData(Project.KEY);
 		if(project != null && selectedClass != null && !project.isDisposed())
 		{
 			InstancesTracker tracker = InstancesTracker.getInstance(project);
@@ -60,7 +61,7 @@ public class TrackInstancesToggleAction extends ToggleAction
 	public void setSelected(AnActionEvent e, boolean state)
 	{
 		final ReferenceType selectedClass = getSelectedClass(e);
-		final Project project = e.getProject();
+		final Project project = e.getData(Project.KEY);
 		if(selectedClass != null && project != null && !project.isDisposed())
 		{
 			InstancesTracker tracker = InstancesTracker.getInstance(project);

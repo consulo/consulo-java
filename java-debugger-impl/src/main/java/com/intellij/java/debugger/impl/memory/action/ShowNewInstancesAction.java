@@ -59,7 +59,7 @@ public class ShowNewInstancesAction extends ShowInstancesAction
 	@Override
 	protected void perform(AnActionEvent e)
 	{
-		final Project project = e.getProject();
+		Project project = e.getData(Project.KEY);
 
 		final ReferenceType selectedClass = getSelectedClass(e);
 		final InstancesProvider provider = e.getData(ClassesTable.NEW_INSTANCES_PROVIDER_KEY);

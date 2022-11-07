@@ -19,30 +19,28 @@
  */
 package com.intellij.java.debugger.impl.ui.impl;
 
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.event.KeyEvent;
-
-import javax.swing.KeyStroke;
-
 import com.intellij.java.debugger.impl.DebuggerContextImpl;
 import com.intellij.java.debugger.impl.DebuggerSession;
 import com.intellij.java.debugger.impl.DebuggerStateManager;
 import com.intellij.java.debugger.impl.ui.impl.watch.DebuggerTree;
-import consulo.ui.ex.action.ActionPopupMenu;
-import consulo.ui.ex.action.CustomShortcutSet;
 import consulo.dataContext.DataProvider;
-import consulo.ui.ex.action.Shortcut;
-import consulo.ui.ex.keymap.KeymapManager;
-import consulo.project.Project;
 import consulo.disposer.Disposable;
 import consulo.disposer.Disposer;
-import consulo.util.dataholder.Key;
+import consulo.execution.debug.XDebuggerActions;
+import consulo.internal.com.sun.jdi.VMDisconnectedException;
+import consulo.project.Project;
+import consulo.ui.ex.action.ActionPopupMenu;
+import consulo.ui.ex.action.CustomShortcutSet;
+import consulo.ui.ex.action.Shortcut;
 import consulo.ui.ex.awt.IdeFocusTraversalPolicy;
 import consulo.ui.ex.awt.PopupHandler;
-import consulo.ide.impl.idea.util.SingleAlarm;
-import consulo.ide.impl.idea.xdebugger.impl.actions.XDebuggerActions;
-import consulo.internal.com.sun.jdi.VMDisconnectedException;
+import consulo.ui.ex.awt.util.SingleAlarm;
+import consulo.ui.ex.keymap.KeymapManager;
+import consulo.util.dataholder.Key;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.KeyEvent;
 
 public abstract class DebuggerTreePanel extends UpdatableDebuggerView implements DataProvider, Disposable
 {
@@ -92,7 +90,7 @@ public abstract class DebuggerTreePanel extends UpdatableDebuggerView implements
 		setFocusTraversalPolicy(new IdeFocusTraversalPolicy()
 		{
 			@Override
-			public Component getDefaultComponentImpl(Container focusCycleRoot)
+			public Component getDefaultComponent(Container focusCycleRoot)
 			{
 				return myTree;
 			}

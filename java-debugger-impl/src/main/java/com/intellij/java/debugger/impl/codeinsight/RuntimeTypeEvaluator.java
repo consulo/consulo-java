@@ -16,29 +16,29 @@
 package com.intellij.java.debugger.impl.codeinsight;
 
 import com.intellij.java.debugger.DebuggerBundle;
-import com.intellij.java.debugger.impl.DebuggerInvocationUtil;
-import com.intellij.java.debugger.impl.EvaluatingComputable;
-import com.intellij.java.debugger.impl.engine.ContextUtil;
 import com.intellij.java.debugger.engine.DebuggerUtils;
 import com.intellij.java.debugger.engine.evaluation.EvaluateException;
 import com.intellij.java.debugger.engine.evaluation.EvaluateExceptionUtil;
-import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
-import com.intellij.java.debugger.impl.engine.evaluation.expression.EvaluatorBuilderImpl;
 import com.intellij.java.debugger.engine.evaluation.expression.ExpressionEvaluator;
 import com.intellij.java.debugger.impl.DebuggerContextImpl;
+import com.intellij.java.debugger.impl.DebuggerInvocationUtil;
+import com.intellij.java.debugger.impl.EvaluatingComputable;
+import com.intellij.java.debugger.impl.engine.ContextUtil;
+import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
+import com.intellij.java.debugger.impl.engine.evaluation.expression.EvaluatorBuilderImpl;
 import com.intellij.java.debugger.impl.ui.EditorEvaluationCommand;
 import com.intellij.java.language.psi.*;
 import consulo.application.ReadAction;
+import consulo.application.progress.ProgressIndicator;
 import consulo.codeEditor.Editor;
 import consulo.component.ProcessCanceledException;
-import consulo.application.progress.ProgressIndicator;
-import consulo.project.Project;
-import com.intellij.psi.*;
 import consulo.internal.com.sun.jdi.ClassType;
 import consulo.internal.com.sun.jdi.InterfaceType;
 import consulo.internal.com.sun.jdi.Type;
 import consulo.internal.com.sun.jdi.Value;
 import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.psi.PsiElement;
+import consulo.project.Project;
 
 import javax.annotation.Nullable;
 

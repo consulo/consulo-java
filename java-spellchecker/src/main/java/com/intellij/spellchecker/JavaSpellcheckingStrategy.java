@@ -15,19 +15,21 @@
  */
 package com.intellij.spellchecker;
 
-import javax.annotation.Nonnull;
-
-import consulo.language.editor.rawHighlight.HighlightDisplayKey;
 import com.intellij.java.analysis.codeInspection.BatchSuppressManager;
 import com.intellij.java.analysis.codeInspection.SuppressManager;
-import consulo.language.editor.inspection.SuppressQuickFix;
-import consulo.language.psi.PsiElement;
+import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.PsiLiteralExpression;
 import com.intellij.java.language.psi.PsiMethod;
-import consulo.language.psi.PsiNamedElement;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.spellchecker.tokenizer.SuppressibleSpellcheckingStrategy;
 import com.intellij.spellchecker.tokenizer.Tokenizer;
+import consulo.language.Language;
+import consulo.language.editor.inspection.SuppressQuickFix;
+import consulo.language.editor.rawHighlight.HighlightDisplayKey;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiNamedElement;
+
+import javax.annotation.Nonnull;
 
 /**
  * @author shkate@jetbrains.com
@@ -68,5 +70,11 @@ public class JavaSpellcheckingStrategy extends SuppressibleSpellcheckingStrategy
   @Override
   public SuppressQuickFix[] getSuppressActions(@Nonnull PsiElement element, @Nonnull String name) {
     return BatchSuppressManager.SERVICE.getInstance().createBatchSuppressActions(HighlightDisplayKey.find(name));
+  }
+
+  @Nonnull
+  @Override
+  public Language getLanguage() {
+    return JavaLanguage.INSTANCE;
   }
 }

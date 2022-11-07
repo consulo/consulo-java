@@ -19,32 +19,24 @@
  */
 package com.intellij.java.debugger.impl.jdi;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import consulo.logging.Logger;
-import org.jetbrains.annotations.Contract;
 import com.intellij.java.debugger.engine.DebugProcess;
-import com.intellij.java.debugger.impl.engine.DebugProcessImpl;
-import com.intellij.java.debugger.impl.engine.DebuggerManagerThreadImpl;
 import com.intellij.java.debugger.engine.evaluation.EvaluateException;
 import com.intellij.java.debugger.engine.jdi.VirtualMachineProxy;
-import consulo.util.lang.StringUtil;
-import consulo.util.lang.ThreeState;
-import java.util.HashMap;
+import com.intellij.java.debugger.impl.engine.DebugProcessImpl;
+import com.intellij.java.debugger.impl.engine.DebuggerManagerThreadImpl;
 import consulo.internal.com.sun.jdi.*;
 import consulo.internal.com.sun.jdi.event.EventQueue;
 import consulo.internal.com.sun.jdi.request.EventRequestManager;
+import consulo.logging.Logger;
+import consulo.util.lang.ExceptionUtil;
+import consulo.util.lang.ThreeState;
+import org.jetbrains.annotations.Contract;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.*;
 
 public class VirtualMachineProxyImpl implements JdiTimer, VirtualMachineProxy
 {
@@ -889,7 +881,7 @@ public class VirtualMachineProxyImpl implements JdiTimer, VirtualMachineProxy
 
 	public String getResumeStack()
 	{
-		return StringUtil.getThrowableText(mySuspendLogger);
+		return ExceptionUtil.getThrowableText(mySuspendLogger);
 	}
 
 	public boolean isPausePressed()

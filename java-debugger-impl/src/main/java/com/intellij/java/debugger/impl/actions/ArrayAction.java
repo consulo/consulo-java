@@ -49,7 +49,7 @@ public abstract class ArrayAction extends DebuggerAction {
       return;
     }
 
-    final consulo.ide.impl.idea.xdebugger.impl.ui.tree.nodes.XValueNodeImpl node = consulo.ide.impl.idea.xdebugger.impl.ui.tree.actions.XDebuggerTreeActionBase.getSelectedNode(e.getDataContext());
+    final XValueNodeImpl node = XDebuggerTreeActionBase.getSelectedNode(e.getDataContext());
     if (node == null) {
       return;
     }
@@ -69,7 +69,7 @@ public abstract class ArrayAction extends DebuggerAction {
   }
 
   @Nonnull
-  protected abstract AsyncResult<ArrayRenderer> createNewRenderer(consulo.ide.impl.idea.xdebugger.impl.ui.tree.nodes.XValueNodeImpl node, ArrayRenderer original, @Nonnull DebuggerContextImpl debuggerContext, String title);
+  protected abstract AsyncResult<ArrayRenderer> createNewRenderer(XValueNodeImpl node, ArrayRenderer original, @Nonnull DebuggerContextImpl debuggerContext, String title);
 
   @RequiredUIAccess
   @Override
@@ -103,7 +103,7 @@ public abstract class ArrayAction extends DebuggerAction {
     return null;
   }
 
-  public static void setArrayRenderer(ArrayRenderer newRenderer, @Nonnull consulo.ide.impl.idea.xdebugger.impl.ui.tree.nodes.XValueNodeImpl node, @Nonnull DebuggerContextImpl debuggerContext) {
+  public static void setArrayRenderer(ArrayRenderer newRenderer, @Nonnull XValueNodeImpl node, @Nonnull DebuggerContextImpl debuggerContext) {
     XValue container = node.getValueContainer();
 
     ArrayRenderer renderer = getArrayRenderer(container);

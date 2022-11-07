@@ -15,17 +15,14 @@
  */
 package com.intellij.java.debugger.impl;
 
-import consulo.execution.executor.Executor;
 import com.intellij.java.execution.configurations.RemoteConnection;
+import consulo.execution.action.CloseAction;
 import consulo.execution.configuration.RunProfile;
 import consulo.execution.configuration.RunProfileState;
+import consulo.execution.executor.Executor;
 import consulo.execution.runner.ExecutionEnvironment;
 import consulo.execution.ui.RunContentDescriptor;
-import com.intellij.execution.ui.actions.CloseAction;
 import consulo.ui.ex.action.*;
-import consulo.ui.ex.action.Constraints;
-import consulo.ui.ex.action.DefaultActionGroup;
-import consulo.ui.ex.action.IdeActions;
 import consulo.ui.image.Image;
 
 import javax.annotation.Nonnull;

@@ -15,25 +15,15 @@
  */
 package com.intellij.java.debugger.impl.settings;
 
-import java.awt.BorderLayout;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-
-import javax.swing.Box;
-import javax.swing.ButtonGroup;
-import javax.swing.JCheckBox;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.border.Border;
+import com.intellij.java.debugger.DebuggerBundle;
+import consulo.configurable.IdeaConfigurableUi;
 
 import javax.annotation.Nonnull;
-import com.intellij.java.debugger.DebuggerBundle;
-import com.intellij.openapi.options.ConfigurableUi;
+import javax.swing.*;
+import javax.swing.border.Border;
+import java.awt.*;
 
-class JavaHotSwapConfigurableUi implements ConfigurableUi<DebuggerSettings>
+class JavaHotSwapConfigurableUi implements IdeaConfigurableUi<DebuggerSettings>
 {
 	private JCheckBox myHotswapInBackground;
 	private JCheckBox myCbCompileBeforeHotswap;

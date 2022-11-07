@@ -4,19 +4,22 @@ import com.intellij.java.debugger.impl.ui.breakpoints.JavaFieldBreakpointType;
 import com.intellij.java.debugger.impl.ui.breakpoints.JavaLineBreakpointType;
 import com.intellij.java.debugger.impl.ui.breakpoints.JavaLineBreakpointTypeBase;
 import com.intellij.java.debugger.impl.ui.breakpoints.JavaMethodBreakpointType;
+import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.java.language.psi.*;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.application.util.function.Processor;
 import consulo.document.Document;
 import consulo.document.FileDocumentManager;
 import consulo.execution.debug.XDebuggerUtil;
+import consulo.execution.debug.breakpoint.XLineBreakpointType;
+import consulo.execution.debug.breakpoint.XLineBreakpointTypeResolver;
+import consulo.language.psi.*;
+import consulo.language.psi.util.PsiTreeUtil;
 import consulo.project.Project;
 import consulo.util.lang.ref.Ref;
 import consulo.virtualFileSystem.VirtualFile;
-import com.intellij.psi.*;
-import consulo.language.psi.util.PsiTreeUtil;
-import consulo.application.util.function.Processor;
-import consulo.execution.debug.breakpoint.XLineBreakpointType;
-import consulo.annotation.access.RequiredReadAction;
-import consulo.xdebugger.breakpoints.XLineBreakpointTypeResolver;
+import consulo.virtualFileSystem.fileType.FileType;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -87,5 +90,11 @@ public class JavaLineBreakpointTypeResolver implements XLineBreakpointTypeResolv
       }
     });
     return result.get();
+  }
+
+  @Nonnull
+  @Override
+  public FileType getFileType() {
+    return JavaFileType.INSTANCE;
   }
 }

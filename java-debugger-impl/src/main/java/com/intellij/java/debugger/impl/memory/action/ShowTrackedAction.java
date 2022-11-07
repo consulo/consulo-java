@@ -16,6 +16,7 @@
 package com.intellij.java.debugger.impl.memory.action;
 
 import com.intellij.java.debugger.impl.memory.component.MemoryViewManager;
+import consulo.project.Project;
 import consulo.ui.ex.action.AnActionEvent;
 import consulo.ui.ex.action.ToggleAction;
 
@@ -30,7 +31,8 @@ public class ShowTrackedAction extends ToggleAction
 	@Override
 	public void setSelected(AnActionEvent e, boolean state)
 	{
-		if(e.getProject() != null)
+		Project project = e.getData(Project.KEY);
+		if(project != null)
 		{
 			MemoryViewManager.getInstance().setShowTrackedOnly(state);
 		}

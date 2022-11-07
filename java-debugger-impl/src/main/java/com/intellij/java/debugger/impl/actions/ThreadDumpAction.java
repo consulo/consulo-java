@@ -22,25 +22,25 @@
 package com.intellij.java.debugger.impl.actions;
 
 import com.intellij.java.debugger.DebuggerBundle;
-import com.intellij.java.debugger.impl.DebuggerManagerEx;
-import com.intellij.java.debugger.impl.engine.DebugProcessImpl;
-import com.intellij.java.debugger.impl.engine.events.DebuggerCommandImpl;
 import com.intellij.java.debugger.impl.DebuggerContextImpl;
+import com.intellij.java.debugger.impl.DebuggerManagerEx;
 import com.intellij.java.debugger.impl.DebuggerSession;
 import com.intellij.java.debugger.impl.DebuggerUtilsEx;
+import com.intellij.java.debugger.impl.engine.DebugProcessImpl;
+import com.intellij.java.debugger.impl.engine.events.DebuggerCommandImpl;
 import com.intellij.java.debugger.impl.jdi.VirtualMachineProxyImpl;
+import com.intellij.java.execution.unscramble.ThreadDumpParser;
+import consulo.application.Application;
+import consulo.application.ApplicationManager;
+import consulo.execution.debug.XDebugSession;
+import consulo.execution.unscramble.ThreadState;
+import consulo.internal.com.sun.jdi.*;
+import consulo.language.editor.CommonDataKeys;
+import consulo.project.Project;
 import consulo.ui.ex.action.AnAction;
 import consulo.ui.ex.action.AnActionEvent;
-import consulo.language.editor.CommonDataKeys;
 import consulo.ui.ex.action.Presentation;
-import consulo.application.ApplicationManager;
-import consulo.ui.ModalityState;
-import consulo.project.Project;
-import com.intellij.java.execution.unscramble.ThreadDumpParser;
-import com.intellij.java.execution.unscramble.ThreadState;
 import consulo.util.collection.SmartList;
-import consulo.execution.debug.XDebugSession;
-import consulo.internal.com.sun.jdi.*;
 import consulo.util.collection.primitive.ints.IntMaps;
 import consulo.util.collection.primitive.ints.IntObjectMap;
 
@@ -51,7 +51,6 @@ import java.util.Map;
 
 public class ThreadDumpAction extends AnAction implements AnAction.TransparentUpdate
 {
-
 	public void actionPerformed(AnActionEvent e)
 	{
 		final Project project = e.getData(CommonDataKeys.PROJECT);
@@ -84,7 +83,7 @@ public class ThreadDumpAction extends AnAction implements AnAction.TransparentUp
 									DebuggerUtilsEx.addThreadDump(project, threads, xSession.getUI(), session);
 								}
 							}
-						}, ModalityState.NON_MODAL);
+						}, Application.get().getNoneModalityState());
 					}
 					finally
 					{

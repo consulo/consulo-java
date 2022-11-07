@@ -15,21 +15,21 @@
  */
 package org.intellij.plugins.intelliLang.pattern;
 
-import javax.annotation.Nonnull;
-
-import consulo.language.editor.rawHighlight.HighlightDisplayLevel;
 import com.intellij.java.language.codeInsight.AnnotationUtil;
+import com.intellij.java.language.psi.*;
+import consulo.ide.impl.intelliLang.Configuration;
 import consulo.language.editor.inspection.LocalInspectionTool;
 import consulo.language.editor.inspection.ProblemsHolder;
-import com.intellij.java.language.psi.*;
-import com.intellij.psi.*;
+import consulo.language.editor.rawHighlight.HighlightDisplayLevel;
+import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.util.PsiTreeUtil;
-import org.intellij.plugins.intelliLang.Configuration;
 import org.intellij.plugins.intelliLang.util.PsiUtilEx;
 import org.intellij.plugins.intelliLang.util.RemoveAnnotationFix;
 import org.jetbrains.annotations.NonNls;
 
-public class PatternAnnotationNotApplicable extends LocalInspectionTool {
+import javax.annotation.Nonnull;
+
+public abstract class PatternAnnotationNotApplicable extends LocalInspectionTool {
 
   @Nonnull
   public HighlightDisplayLevel getDefaultLevel() {

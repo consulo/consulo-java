@@ -20,70 +20,66 @@
  */
 package com.intellij.java.debugger.impl.ui.breakpoints;
 
-import java.util.Arrays;
-import java.util.Objects;
-import java.util.function.Function;
+import com.intellij.java.debugger.DebuggerBundle;
+import com.intellij.java.debugger.SourcePosition;
+import com.intellij.java.debugger.engine.DebugProcess;
+import com.intellij.java.debugger.engine.DebugProcessListener;
+import com.intellij.java.debugger.engine.DebuggerUtils;
+import com.intellij.java.debugger.engine.SuspendContext;
+import com.intellij.java.debugger.engine.evaluation.EvaluateException;
+import com.intellij.java.debugger.engine.evaluation.EvaluateExceptionUtil;
+import com.intellij.java.debugger.engine.evaluation.TextWithImports;
+import com.intellij.java.debugger.engine.evaluation.expression.ExpressionEvaluator;
+import com.intellij.java.debugger.impl.*;
+import com.intellij.java.debugger.impl.breakpoints.properties.JavaBreakpointProperties;
+import com.intellij.java.debugger.impl.engine.ContextUtil;
+import com.intellij.java.debugger.impl.engine.DebugProcessImpl;
+import com.intellij.java.debugger.impl.engine.JavaDebugProcess;
+import com.intellij.java.debugger.impl.engine.SuspendContextImpl;
+import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
+import com.intellij.java.debugger.impl.engine.evaluation.TextWithImportsImpl;
+import com.intellij.java.debugger.impl.engine.evaluation.expression.EvaluatorBuilderImpl;
+import com.intellij.java.debugger.impl.engine.evaluation.expression.UnsupportedExpressionException;
+import com.intellij.java.debugger.impl.engine.events.SuspendContextCommandImpl;
+import com.intellij.java.debugger.impl.jdi.StackFrameProxyImpl;
+import com.intellij.java.debugger.impl.jdi.ThreadReferenceProxyImpl;
+import com.intellij.java.debugger.impl.settings.DebuggerSettings;
+import com.intellij.java.debugger.impl.ui.impl.watch.CompilingEvaluatorImpl;
+import com.intellij.java.debugger.requests.ClassPrepareRequestor;
+import com.intellij.java.debugger.requests.Requestor;
+import com.intellij.java.debugger.ui.classFilter.ClassFilter;
+import com.intellij.java.language.psi.PsiClass;
+import consulo.application.ApplicationManager;
+import consulo.application.ReadAction;
+import consulo.execution.debug.XDebuggerUtil;
+import consulo.execution.debug.breakpoint.SuspendPolicy;
+import consulo.execution.debug.breakpoint.XBreakpoint;
+import consulo.execution.debug.breakpoint.XExpression;
+import consulo.execution.debug.breakpoint.XLineBreakpoint;
+import consulo.ide.impl.idea.ui.AppUIUtil;
+import consulo.ide.impl.idea.xdebugger.impl.XDebuggerHistoryManager;
+import consulo.ide.impl.idea.xdebugger.impl.breakpoints.XBreakpointBase;
+import consulo.ide.impl.idea.xdebugger.impl.breakpoints.ui.XBreakpointActionsPanel;
+import consulo.internal.com.sun.jdi.*;
+import consulo.internal.com.sun.jdi.event.LocatableEvent;
+import consulo.internal.com.sun.jdi.request.EventRequest;
+import consulo.language.psi.PsiCodeFragment;
+import consulo.language.psi.PsiElement;
+import consulo.project.Project;
+import consulo.ui.image.Image;
+import consulo.util.dataholder.Key;
+import consulo.util.lang.ObjectUtil;
+import consulo.util.lang.ThreeState;
+import consulo.util.xml.serializer.InvalidDataException;
+import consulo.util.xml.serializer.JDOMExternalizerUtil;
+import org.jdom.Element;
+import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
-import consulo.execution.debug.breakpoint.*;
-import org.jdom.Element;
-import org.jetbrains.annotations.NonNls;
-import com.intellij.java.debugger.impl.breakpoints.properties.JavaBreakpointProperties;
-import com.intellij.java.debugger.DebuggerBundle;
-import com.intellij.java.debugger.impl.DebuggerInvocationUtil;
-import com.intellij.java.debugger.impl.DebuggerManagerEx;
-import com.intellij.java.debugger.impl.EvaluatingComputable;
-import com.intellij.java.debugger.impl.InstanceFilter;
-import com.intellij.java.debugger.SourcePosition;
-import com.intellij.java.debugger.impl.engine.ContextUtil;
-import com.intellij.java.debugger.engine.DebugProcess;
-import com.intellij.java.debugger.impl.engine.DebugProcessImpl;
-import com.intellij.java.debugger.engine.DebugProcessListener;
-import com.intellij.java.debugger.engine.DebuggerUtils;
-import com.intellij.java.debugger.impl.engine.JavaDebugProcess;
-import com.intellij.java.debugger.engine.SuspendContext;
-import com.intellij.java.debugger.impl.engine.SuspendContextImpl;
-import com.intellij.java.debugger.engine.evaluation.EvaluateException;
-import com.intellij.java.debugger.engine.evaluation.EvaluateExceptionUtil;
-import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
-import com.intellij.java.debugger.engine.evaluation.TextWithImports;
-import com.intellij.java.debugger.impl.engine.evaluation.TextWithImportsImpl;
-import com.intellij.java.debugger.impl.engine.evaluation.expression.EvaluatorBuilderImpl;
-import com.intellij.java.debugger.engine.evaluation.expression.ExpressionEvaluator;
-import com.intellij.java.debugger.impl.engine.evaluation.expression.UnsupportedExpressionException;
-import com.intellij.java.debugger.impl.engine.events.SuspendContextCommandImpl;
-import com.intellij.java.debugger.impl.DebuggerUtilsEx;
-import com.intellij.java.debugger.impl.jdi.StackFrameProxyImpl;
-import com.intellij.java.debugger.impl.jdi.ThreadReferenceProxyImpl;
-import com.intellij.java.debugger.requests.ClassPrepareRequestor;
-import com.intellij.java.debugger.requests.Requestor;
-import com.intellij.java.debugger.impl.settings.DebuggerSettings;
-import com.intellij.java.debugger.impl.ui.impl.watch.CompilingEvaluatorImpl;
-import consulo.application.ApplicationManager;
-import consulo.application.ReadAction;
-import consulo.project.Project;
-import consulo.util.xml.serializer.InvalidDataException;
-import consulo.util.xml.serializer.JDOMExternalizerUtil;
-import consulo.util.dataholder.Key;
-import com.intellij.java.language.psi.PsiClass;
-import consulo.language.psi.PsiCodeFragment;
-import consulo.language.psi.PsiElement;
-import com.intellij.java.debugger.ui.classFilter.ClassFilter;
-import consulo.util.lang.ObjectUtil;
-import consulo.util.lang.ThreeState;
-import consulo.execution.debug.breakpoint.XBreakpoint;
-import consulo.execution.debug.breakpoint.XLineBreakpoint;
-import consulo.internal.com.sun.jdi.Location;
-import consulo.internal.com.sun.jdi.ObjectReference;
-import consulo.internal.com.sun.jdi.ReferenceType;
-import consulo.internal.com.sun.jdi.VMDisconnectedException;
-import consulo.internal.com.sun.jdi.Value;
-import consulo.internal.com.sun.jdi.VoidValue;
-import consulo.internal.com.sun.jdi.event.LocatableEvent;
-import consulo.internal.com.sun.jdi.request.EventRequest;
-import consulo.ui.image.Image;
+import java.util.Arrays;
+import java.util.Objects;
+import java.util.function.Function;
 
 public abstract class Breakpoint<P extends JavaBreakpointProperties> implements FilteredRequestor, ClassPrepareRequestor
 {
@@ -590,10 +586,10 @@ public abstract class Breakpoint<P extends JavaBreakpointProperties> implements 
 			String logMessage = JDOMExternalizerUtil.readField(parentNode, LOG_MESSAGE_OPTION_NAME);
 			if(logMessage != null && !logMessage.isEmpty())
 			{
-				consulo.ide.impl.idea.xdebugger.impl.breakpoints.XExpressionImpl expression = consulo.ide.impl.idea.xdebugger.impl.breakpoints.XExpressionImpl.fromText(logMessage);
-				consulo.ide.impl.idea.xdebugger.impl.XDebuggerHistoryManager.getInstance(myProject).addRecentExpression(XBreakpointActionsPanel.LOG_EXPRESSION_HISTORY_ID, expression);
+				XExpression expression = XExpression.fromText(logMessage);
+				XDebuggerHistoryManager.getInstance(myProject).addRecentExpression(XBreakpointActionsPanel.LOG_EXPRESSION_HISTORY_ID, expression);
 				myXBreakpoint.setLogExpressionObject(expression);
-				((consulo.ide.impl.idea.xdebugger.impl.breakpoints.XBreakpointBase) myXBreakpoint).setLogExpressionEnabled(Boolean.valueOf(JDOMExternalizerUtil.readField(parentNode, "LOG_EXPRESSION_ENABLED")));
+				((XBreakpointBase) myXBreakpoint).setLogExpressionEnabled(Boolean.valueOf(JDOMExternalizerUtil.readField(parentNode, "LOG_EXPRESSION_ENABLED")));
 			}
 		}
 		catch(Exception ignored)
@@ -643,7 +639,7 @@ public abstract class Breakpoint<P extends JavaBreakpointProperties> implements 
 
 	protected boolean isLogExpressionEnabled()
 	{
-		if(consulo.ide.impl.idea.xdebugger.impl.XDebuggerUtilImpl.isEmptyExpression(myXBreakpoint.getLogExpressionObject()))
+		if(XDebuggerUtil.getInstance().isEmptyExpression(myXBreakpoint.getLogExpressionObject()))
 		{
 			return false;
 		}
@@ -803,7 +799,7 @@ public abstract class Breakpoint<P extends JavaBreakpointProperties> implements 
 	public boolean isConditionEnabled()
 	{
 		XExpression condition = myXBreakpoint.getConditionExpression();
-		if(consulo.ide.impl.idea.xdebugger.impl.XDebuggerUtilImpl.isEmptyExpression(condition))
+		if(XDebuggerUtil.getInstance().isEmptyExpression(condition))
 		{
 			return false;
 		}

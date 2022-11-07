@@ -15,30 +15,30 @@
  */
 package com.intellij.java.debugger.impl.engine;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.swing.event.HyperlinkEvent;
-
 import com.intellij.java.debugger.DebuggerBundle;
-import com.intellij.java.debugger.impl.engine.events.DebuggerCommandImpl;
 import com.intellij.java.debugger.engine.jdi.ThreadReferenceProxy;
+import com.intellij.java.debugger.impl.engine.events.DebuggerCommandImpl;
 import com.intellij.java.debugger.impl.jdi.ThreadReferenceProxyImpl;
 import com.intellij.java.debugger.impl.jdi.VirtualMachineProxyImpl;
-import consulo.execution.debug.ui.XDebuggerUIConstants;
-import consulo.project.ui.notification.Notification;
-import consulo.project.ui.notification.NotificationType;
-import consulo.project.ui.notification.event.NotificationListener;
+import consulo.application.util.concurrent.AppExecutorUtil;
 import consulo.disposer.Disposable;
 import consulo.disposer.Disposer;
+import consulo.execution.debug.ui.XDebuggerUIConstants;
 import consulo.internal.com.sun.jdi.IncompatibleThreadStateException;
 import consulo.internal.com.sun.jdi.ObjectReference;
 import consulo.internal.com.sun.jdi.ThreadReference;
 import consulo.logging.Logger;
+import consulo.project.ui.notification.Notification;
+import consulo.project.ui.notification.NotificationType;
+import consulo.project.ui.notification.event.NotificationListener;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.swing.event.HyperlinkEvent;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author egor
@@ -66,7 +66,7 @@ public class ThreadBlockedMonitor
 			myWatchedThreads.add(thread);
 			if(myTask == null)
 			{
-				myTask = JobScheduler.getScheduler().scheduleWithFixedDelay(this::checkBlockingThread, 5, 5, TimeUnit.SECONDS);
+				myTask = AppExecutorUtil.getAppScheduledExecutorService().scheduleWithFixedDelay(this::checkBlockingThread, 5, 5, TimeUnit.SECONDS);
 			}
 		}
 	}

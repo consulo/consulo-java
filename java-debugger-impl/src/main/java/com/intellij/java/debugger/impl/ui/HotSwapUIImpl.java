@@ -15,46 +15,30 @@
  */
 package com.intellij.java.debugger.impl.ui;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.atomic.AtomicReference;
-
+import com.intellij.java.debugger.DebuggerBundle;
+import com.intellij.java.debugger.impl.*;
+import com.intellij.java.debugger.impl.settings.DebuggerSettings;
+import consulo.application.Application;
+import consulo.application.ApplicationManager;
+import consulo.application.CommonBundle;
+import consulo.application.progress.ProgressManager;
+import consulo.compiler.CompileContext;
+import consulo.compiler.CompilerManager;
+import consulo.compiler.event.CompilationStatusListener;
+import consulo.component.messagebus.MessageBusConnection;
+import consulo.project.Project;
+import consulo.project.ui.notification.NotificationType;
 import consulo.ui.ex.awt.DialogWrapper;
 import consulo.ui.ex.awt.Messages;
 import consulo.util.collection.Lists;
+import consulo.util.lang.StringUtil;
+import consulo.util.lang.ref.Ref;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
-import consulo.application.CommonBundle;
-import com.intellij.java.debugger.DebuggerBundle;
-import com.intellij.java.debugger.impl.DebuggerManagerEx;
-import com.intellij.java.debugger.impl.DebuggerManagerListener;
-import com.intellij.java.debugger.impl.DebuggerSession;
-import com.intellij.java.debugger.impl.HotSwapFile;
-import com.intellij.java.debugger.impl.HotSwapManager;
-import com.intellij.java.debugger.impl.settings.DebuggerSettings;
-import consulo.ui.NotificationType;
-import consulo.application.Application;
-import consulo.application.ApplicationManager;
-import consulo.ui.ModalityState;
-import consulo.compiler.event.CompilationStatusListener;
-import consulo.compiler.CompileContext;
-import consulo.compiler.CompilerManager;
-import com.intellij.openapi.compiler.CompilerTopics;
-import consulo.application.progress.ProgressManager;
-import consulo.project.Project;
-import consulo.util.lang.ref.Ref;
-import consulo.util.lang.StringUtil;
-import consulo.util.collection.ContainerUtil;
-import consulo.component.messagebus.MessageBusConnection;
-
 import javax.annotation.Nullable;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * User: lex
@@ -77,7 +61,7 @@ public class HotSwapUIImpl extends HotSwapUI
 				Project project = session.getProject();
 
 				myConn = project.getMessageBus().connect();
-				myConn.subscribe(CompilerTopics.COMPILATION_STATUS, new MyCompilationStatusListener(project));
+				myConn.subscribe(CompilationStatusListener.class, new MyCompilationStatusListener(project));
 			}
 		}
 

@@ -20,22 +20,22 @@
  */
 package com.intellij.java.debugger.impl.ui.impl.watch;
 
+import com.intellij.java.debugger.impl.DebuggerContextImpl;
 import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
 import com.intellij.java.debugger.impl.engine.events.DebuggerContextCommandImpl;
-import com.intellij.java.debugger.impl.DebuggerContextImpl;
 import com.intellij.java.debugger.impl.ui.impl.DebuggerTreeRenderer;
 import com.intellij.java.debugger.impl.ui.impl.tree.TreeBuilder;
 import com.intellij.java.debugger.impl.ui.impl.tree.TreeBuilderNode;
 import com.intellij.java.debugger.impl.ui.tree.DebuggerTreeNode;
-import com.intellij.java.debugger.ui.tree.NodeDescriptor;
 import com.intellij.java.debugger.impl.ui.tree.ValueDescriptor;
 import com.intellij.java.debugger.impl.ui.tree.render.DescriptorLabelListener;
 import com.intellij.java.debugger.impl.ui.tree.render.NodeRenderer;
+import com.intellij.java.debugger.ui.tree.NodeDescriptor;
 import consulo.application.ApplicationManager;
+import consulo.execution.debug.ui.ValueMarkup;
+import consulo.ide.impl.idea.xdebugger.impl.ui.DebuggerUIUtil;
 import consulo.project.Project;
 import consulo.ui.ex.SimpleColoredText;
-import consulo.ide.impl.idea.xdebugger.impl.ui.DebuggerUIUtil;
-import consulo.ide.impl.idea.xdebugger.impl.ui.tree.ValueMarkup;
 import consulo.ui.image.Image;
 import consulo.util.dataholder.Key;
 

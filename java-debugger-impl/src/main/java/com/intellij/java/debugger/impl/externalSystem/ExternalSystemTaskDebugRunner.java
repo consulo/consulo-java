@@ -22,6 +22,7 @@ import consulo.execution.configuration.RunProfileState;
 import consulo.execution.debug.DefaultDebugExecutor;
 import consulo.execution.runner.ExecutionEnvironment;
 import consulo.execution.ui.RunContentDescriptor;
+import consulo.externalSystem.service.execution.ExternalSystemRunConfiguration;
 import consulo.externalSystem.util.ExternalSystemConstants;
 import consulo.logging.Logger;
 import consulo.process.ExecutionException;

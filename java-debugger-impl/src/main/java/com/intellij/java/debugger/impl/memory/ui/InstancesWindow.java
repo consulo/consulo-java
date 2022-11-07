@@ -15,78 +15,58 @@
  */
 package com.intellij.java.debugger.impl.memory.ui;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.event.MouseEvent;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.swing.Action;
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JRootPane;
-import javax.swing.SwingConstants;
-import javax.swing.SwingWorker;
-import javax.swing.tree.TreeNode;
-
-import com.intellij.java.debugger.impl.JavaDebuggerEditorsProvider;
 import com.intellij.java.debugger.DebuggerManager;
+import com.intellij.java.debugger.engine.evaluation.EvaluationContext;
+import com.intellij.java.debugger.impl.JavaDebuggerEditorsProvider;
 import com.intellij.java.debugger.impl.engine.DebugProcessImpl;
 import com.intellij.java.debugger.impl.engine.JavaValue;
 import com.intellij.java.debugger.impl.engine.SuspendContextImpl;
-import com.intellij.java.debugger.engine.evaluation.EvaluationContext;
 import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
 import com.intellij.java.debugger.impl.engine.events.DebuggerContextCommandImpl;
 import com.intellij.java.debugger.impl.memory.filtering.FilteringResult;
 import com.intellij.java.debugger.impl.memory.filtering.FilteringTask;
 import com.intellij.java.debugger.impl.memory.filtering.FilteringTaskCallback;
-import com.intellij.java.debugger.impl.memory.utils.AndroidUtil;
-import com.intellij.java.debugger.impl.memory.utils.ErrorsValueGroup;
-import com.intellij.java.debugger.impl.memory.utils.InstanceJavaValue;
-import com.intellij.java.debugger.impl.memory.utils.InstanceValueDescriptor;
-import com.intellij.java.debugger.impl.memory.utils.InstancesProvider;
+import com.intellij.java.debugger.impl.memory.utils.*;
 import com.intellij.java.debugger.impl.ui.impl.watch.DebuggerTreeNodeImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.MessageDescriptor;
 import com.intellij.java.debugger.impl.ui.impl.watch.NodeManagerImpl;
 import com.intellij.java.debugger.ui.tree.NodeDescriptor;
+import consulo.application.ApplicationManager;
 import consulo.application.ui.wm.IdeFocusManager;
+import consulo.dataContext.DataContext;
 import consulo.disposer.Disposable;
+import consulo.disposer.Disposer;
+import consulo.execution.debug.XDebugSession;
 import consulo.execution.debug.breakpoint.XExpression;
 import consulo.execution.debug.event.XDebugSessionListener;
+import consulo.execution.debug.frame.XValue;
+import consulo.execution.debug.frame.XValueChildrenList;
+import consulo.execution.debug.frame.XValueMarkers;
+import consulo.execution.debug.ui.ValueMarkup;
+import consulo.ide.impl.idea.xdebugger.impl.XDebugSessionImpl;
+import consulo.ide.impl.idea.xdebugger.impl.actions.XDebuggerActionBase;
+import consulo.ide.impl.idea.xdebugger.impl.ui.tree.XDebuggerTreeState;
+import consulo.ide.impl.idea.xdebugger.impl.ui.tree.nodes.XValueNodeImpl;
+import consulo.internal.com.sun.jdi.ObjectReference;
+import consulo.logging.Logger;
+import consulo.project.Project;
+import consulo.ui.ex.JBColor;
 import consulo.ui.ex.action.ActionManager;
 import consulo.ui.ex.action.AnAction;
 import consulo.ui.ex.action.AnActionEvent;
-import consulo.dataContext.DataContext;
-import consulo.language.editor.PlatformDataKeys;
 import consulo.ui.ex.action.event.AnActionListener;
-import consulo.application.ApplicationManager;
-import consulo.logging.Logger;
-import consulo.project.Project;
-import consulo.ui.ex.awt.DialogWrapper;
-import consulo.disposer.Disposer;
-import consulo.ui.ex.awt.JBLabel;
+import consulo.ui.ex.awt.*;
 import consulo.ui.ex.awt.event.DoubleClickListener;
-import consulo.ui.ex.JBColor;
-import consulo.ui.ex.awt.JBPanel;
-import consulo.ui.ex.awt.JBDimension;
-import consulo.ui.ex.awt.JBUI;
-import consulo.ui.ex.awt.UIUtil;
 import consulo.ui.ex.awt.update.UiNotifyConnector;
-import consulo.execution.debug.XDebugSession;
-import consulo.execution.debug.frame.XValue;
-import consulo.execution.debug.frame.XValueChildrenList;
-import consulo.ide.impl.idea.xdebugger.impl.XDebugSessionImpl;
-import consulo.ide.impl.idea.xdebugger.impl.actions.XDebuggerActionBase;
-import consulo.ide.impl.idea.xdebugger.impl.frame.XValueMarkers;
-import consulo.ide.impl.idea.xdebugger.impl.ui.XDebuggerExpressionEditor;
-import consulo.ide.impl.idea.xdebugger.impl.ui.tree.ValueMarkup;
-import consulo.ide.impl.idea.xdebugger.impl.ui.tree.XDebuggerTreeState;
-import consulo.ide.impl.idea.xdebugger.impl.ui.tree.actions.XDebuggerTreeActionBase;
-import consulo.ide.impl.idea.xdebugger.impl.ui.tree.nodes.XValueNodeImpl;
-import consulo.internal.com.sun.jdi.ObjectReference;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.swing.*;
+import javax.swing.tree.TreeNode;
+import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class InstancesWindow extends DialogWrapper
 {
@@ -371,7 +351,7 @@ public class InstancesWindow extends DialogWrapper
 			@Override
 			public void beforeActionPerformed(AnAction action, DataContext dataContext, AnActionEvent event)
 			{
-				if(dataContext.getData(PlatformDataKeys.CONTEXT_COMPONENT) == myInstancesTree && (isAddToWatchesAction(action) || isEvaluateExpressionAction(action)))
+				if(dataContext.getData(UIExAWTDataKey.CONTEXT_COMPONENT) == myInstancesTree && (isAddToWatchesAction(action) || isEvaluateExpressionAction(action)))
 				{
 					XValueNodeImpl selectedNode = consulo.ide.impl.idea.xdebugger.impl.ui.tree.actions.XDebuggerTreeActionBase.getSelectedNode(dataContext);
 
@@ -388,7 +368,7 @@ public class InstancesWindow extends DialogWrapper
 						final String expression = valueContainer.getEvaluationExpression();
 						if(expression != null)
 						{
-							myValueMarkers.markValue(valueContainer, new consulo.ide.impl.idea.xdebugger.impl.ui.tree.ValueMarkup(expression.replace("@", ""), new JBColor(0, 0), null));
+							myValueMarkers.markValue(valueContainer, new ValueMarkup(expression.replace("@", ""), new JBColor(0, 0), null));
 						}
 
 						ApplicationManager.getApplication().invokeLater(() -> myInstancesTree.rebuildTree(InstancesTree.RebuildPolicy.ONLY_UPDATE_LABELS));

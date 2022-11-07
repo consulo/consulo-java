@@ -39,7 +39,7 @@ public abstract class ClassesActionBase extends AnAction
 
 	protected boolean isEnabled(AnActionEvent e)
 	{
-		final Project project = e.getProject();
+		final Project project = e.getData(Project.KEY);
 		return project != null && !project.isDisposed();
 	}
 

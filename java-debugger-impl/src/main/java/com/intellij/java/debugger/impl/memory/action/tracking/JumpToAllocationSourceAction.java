@@ -15,11 +15,6 @@
  */
 package com.intellij.java.debugger.impl.memory.action.tracking;
 
-import java.util.List;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import com.intellij.java.debugger.DebuggerManager;
 import com.intellij.java.debugger.impl.engine.DebugProcessImpl;
 import com.intellij.java.debugger.impl.memory.action.DebuggerTreeAction;
@@ -27,11 +22,15 @@ import com.intellij.java.debugger.impl.memory.component.MemoryViewDebugProcessDa
 import com.intellij.java.debugger.impl.memory.ui.StackFramePopup;
 import com.intellij.java.debugger.impl.memory.utils.StackFrameItem;
 import consulo.execution.debug.XDebugSession;
-import consulo.ui.ex.action.AnActionEvent;
-import consulo.project.Project;
 import consulo.execution.debug.XDebuggerManager;
 import consulo.ide.impl.idea.xdebugger.impl.ui.tree.nodes.XValueNodeImpl;
 import consulo.internal.com.sun.jdi.ObjectReference;
+import consulo.project.Project;
+import consulo.ui.ex.action.AnActionEvent;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.List;
 
 public class JumpToAllocationSourceAction extends DebuggerTreeAction
 {
@@ -44,7 +43,7 @@ public class JumpToAllocationSourceAction extends DebuggerTreeAction
 	@Override
 	protected void perform(XValueNodeImpl node, @Nonnull String nodeName, AnActionEvent e)
 	{
-		final Project project = e.getProject();
+		final Project project = e.getData(Project.KEY);
 		final List<StackFrameItem> stack = getStack(e);
 		if(project != null && stack != null)
 		{
@@ -60,7 +59,7 @@ public class JumpToAllocationSourceAction extends DebuggerTreeAction
 	@Nullable
 	private List<StackFrameItem> getStack(AnActionEvent e)
 	{
-		final Project project = e.getProject();
+		final Project project = e.getData(Project.KEY);
 		final XValueNodeImpl selectedNode = getSelectedNode(e.getDataContext());
 		final ObjectReference ref = selectedNode != null ? getObjectReference(selectedNode) : null;
 		if(project == null || ref == null)

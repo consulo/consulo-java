@@ -16,19 +16,33 @@
 package com.intellij.java.debugger.impl;
 
 import com.intellij.java.debugger.engine.evaluation.TextWithImports;
-import consulo.language.extension.LanguageExtension;
-import consulo.util.lang.Pair;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ExtensionAPI;
+import consulo.application.Application;
+import consulo.component.extension.ExtensionPointCacheKey;
 import consulo.document.util.TextRange;
+import consulo.language.Language;
+import consulo.language.extension.ByLanguageValue;
+import consulo.language.extension.LanguageExtension;
+import consulo.language.extension.LanguageOneToOne;
 import consulo.language.psi.PsiElement;
+import consulo.util.lang.Pair;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
  * Provides text in the editor for Evaluate expression action
  * @author Maxim.Medvedev
  */
-public interface EditorTextProvider {
-  LanguageExtension<EditorTextProvider> EP = new LanguageExtension<EditorTextProvider>("consulo.java.debuggerEditorTextProvider");
+@ExtensionAPI(ComponentScope.APPLICATION)
+public interface EditorTextProvider extends LanguageExtension {
+  ExtensionPointCacheKey<EditorTextProvider, ByLanguageValue<EditorTextProvider>> KEY = ExtensionPointCacheKey.create("EditorTextProvider", LanguageOneToOne.build());
+
+  @Nullable
+  static EditorTextProvider forLanguage(@Nonnull Language language) {
+    return Application.get().getExtensionPoint(EditorTextProvider.class).getOrBuildCache(KEY).get(language);
+  }
 
   @Nullable
   TextWithImports getEditorText(PsiElement elementAtCaret);

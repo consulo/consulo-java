@@ -15,21 +15,22 @@
  */
 package org.intellij.plugins.intelliLang.inject.java.validation;
 
+import com.intellij.java.language.psi.*;
+import consulo.ide.impl.intelliLang.Configuration;
 import consulo.language.editor.inspection.LocalInspectionTool;
 import consulo.language.editor.inspection.ProblemsHolder;
-import com.intellij.java.language.psi.*;
-import consulo.util.lang.Pair;
-import com.intellij.psi.*;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.util.PsiTreeUtil;
-import org.intellij.plugins.intelliLang.Configuration;
+import consulo.util.lang.Pair;
 import org.intellij.plugins.intelliLang.pattern.PatternValidator;
 import org.intellij.plugins.intelliLang.util.AnnotateFix;
 import org.intellij.plugins.intelliLang.util.AnnotationUtilEx;
 import org.intellij.plugins.intelliLang.util.PsiUtilEx;
 import org.jetbrains.annotations.NonNls;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ItemEvent;
@@ -37,7 +38,7 @@ import java.awt.event.ItemListener;
 import java.util.Arrays;
 import java.util.Set;
 
-public class LanguageMismatch extends LocalInspectionTool {
+public abstract class LanguageMismatch extends LocalInspectionTool {
   public boolean CHECK_NON_ANNOTATED_REFERENCES = true;
 
   public boolean isEnabledByDefault() {

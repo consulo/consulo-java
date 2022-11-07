@@ -15,29 +15,28 @@
  */
 package org.intellij.plugins.intelliLang.pattern.compiler.impl;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-
-import org.intellij.plugins.intelliLang.Configuration;
-import org.intellij.plugins.intelliLang.pattern.compiler.AnnotationBasedInstrumentingCompiler;
-import org.intellij.plugins.intelliLang.pattern.compiler.Instrumenter;
-import org.intellij.plugins.intelliLang.util.AnnotationUtilEx;
-import consulo.internal.org.objectweb.asm.ClassWriter;
+import com.intellij.java.indexing.search.searches.AnnotatedMembersSearch;
 import com.intellij.java.language.codeInsight.AnnotationUtil;
-import consulo.project.Project;
-import consulo.util.lang.Pair;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiAnnotation;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMember;
-import consulo.language.psi.scope.GlobalSearchScope;
-import com.intellij.java.indexing.search.searches.AnnotatedMembersSearch;
-import consulo.util.collection.ArrayUtil;
 import consulo.application.util.function.Processor;
 import consulo.application.util.query.Query;
+import consulo.ide.impl.intelliLang.Configuration;
+import consulo.internal.org.objectweb.asm.ClassWriter;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.project.Project;
+import consulo.util.collection.ArrayUtil;
+import consulo.util.lang.Pair;
+import org.intellij.plugins.intelliLang.pattern.compiler.AnnotationBasedInstrumentingCompiler;
+import org.intellij.plugins.intelliLang.pattern.compiler.Instrumenter;
+import org.intellij.plugins.intelliLang.util.AnnotationUtilEx;
+
+import javax.annotation.Nonnull;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 public class PatternValidationCompiler extends AnnotationBasedInstrumentingCompiler {
 

@@ -21,10 +21,13 @@ import com.intellij.java.language.psi.*;
 import consulo.document.Document;
 import consulo.document.FileDocumentManager;
 import consulo.document.util.TextRange;
-import consulo.virtualFileSystem.VirtualFile;
-import com.intellij.psi.*;
-import com.intellij.util.Range;
+import consulo.language.psi.PsiCompiledElement;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiElementVisitor;
+import consulo.language.psi.PsiFile;
 import consulo.util.lang.CharArrayUtil;
+import consulo.util.lang.Range;
+import consulo.virtualFileSystem.VirtualFile;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

@@ -26,14 +26,14 @@ public class EnableBackgroundTrackingAction extends ToggleAction
 	@Override
 	public boolean isSelected(AnActionEvent e)
 	{
-		Project project = e.getProject();
+		Project project = e.getData(Project.KEY);
 		return project != null && !project.isDisposed() && InstancesTracker.getInstance(project).isBackgroundTrackingEnabled();
 	}
 
 	@Override
 	public void setSelected(AnActionEvent e, boolean state)
 	{
-		Project project = e.getProject();
+		Project project = e.getData(Project.KEY);
 		if(project != null && !project.isDisposed())
 		{
 			InstancesTracker.getInstance(project).setBackgroundTackingEnabled(state);

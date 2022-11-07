@@ -31,7 +31,7 @@ public class ShowClassesWithDiffAction extends ToggleAction
 	@Override
 	public void setSelected(AnActionEvent e, boolean state)
 	{
-		Project project = e.getProject();
+		Project project = e.getData(Project.KEY);
 		if(project != null)
 		{
 			MemoryViewManager.getInstance().setShowDiffOnly(state);

@@ -15,38 +15,34 @@
  */
 package com.intellij.java.debugger.impl.ui.impl;
 
-import java.awt.BorderLayout;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-
-import consulo.ui.ex.awt.ScrollPaneFactory;
-import consulo.ui.ex.awt.util.Alarm;
-import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
+import com.intellij.java.debugger.impl.*;
 import com.intellij.java.debugger.impl.actions.DebuggerAction;
 import com.intellij.java.debugger.impl.actions.DebuggerActions;
 import com.intellij.java.debugger.impl.engine.DebugProcessImpl;
 import com.intellij.java.debugger.impl.engine.events.DebuggerCommandImpl;
-import com.intellij.java.debugger.impl.DebuggerContextImpl;
-import com.intellij.java.debugger.impl.DebuggerContextListener;
-import com.intellij.java.debugger.impl.DebuggerContextUtil;
-import com.intellij.java.debugger.impl.DebuggerSession;
-import com.intellij.java.debugger.impl.DebuggerStateManager;
 import com.intellij.java.debugger.impl.jdi.StackFrameProxyImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.DebuggerTree;
 import com.intellij.java.debugger.impl.ui.impl.watch.DebuggerTreeNodeImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.NodeDescriptorImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.StackFrameDescriptorImpl;
 import com.intellij.java.debugger.impl.ui.tree.render.DescriptorLabelListener;
+import consulo.application.Application;
 import consulo.disposer.Disposable;
+import consulo.disposer.Disposer;
+import consulo.language.editor.PlatformDataKeys;
+import consulo.project.Project;
 import consulo.ui.ex.action.ActionManager;
 import consulo.ui.ex.action.ActionPopupMenu;
 import consulo.ui.ex.action.DefaultActionGroup;
-import consulo.language.editor.PlatformDataKeys;
-import consulo.ui.ModalityState;
-import consulo.project.Project;
-import consulo.disposer.Disposer;
+import consulo.ui.ex.awt.ScrollPaneFactory;
+import consulo.ui.ex.awt.util.Alarm;
 import consulo.util.dataholder.Key;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
+import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class ThreadsPanel extends DebuggerTreePanel
 {
@@ -168,11 +164,11 @@ public class ThreadsPanel extends DebuggerTreePanel
 				final DebuggerSession session = getContext().getDebuggerSession();
 				if(session != null && session.isAttached() && !session.isPaused() && !myUpdateLabelsAlarm.isDisposed())
 				{
-					myUpdateLabelsAlarm.addRequest(this, LABELS_UPDATE_DELAY_MS, ModalityState.NON_MODAL);
+					myUpdateLabelsAlarm.addRequest(this, LABELS_UPDATE_DELAY_MS, Application.get().getNoneModalityState());
 				}
 			}
 
-		}, LABELS_UPDATE_DELAY_MS, ModalityState.NON_MODAL);
+		}, LABELS_UPDATE_DELAY_MS, Application.get().getNoneModalityState());
 	}
 
 	@Override

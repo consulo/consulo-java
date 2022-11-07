@@ -15,19 +15,19 @@
  */
 package org.intellij.plugins.intelliLang.inject.java;
 
+import com.intellij.java.language.psi.PsiLiteralExpression;
+import consulo.ide.impl.intelliLang.inject.InjectedLanguage;
+import consulo.language.Language;
 import consulo.language.editor.completion.lookup.LookupElement;
 import consulo.language.editor.completion.lookup.LookupElementBuilder;
-import consulo.language.Language;
-import consulo.virtualFileSystem.fileType.FileType;
 import consulo.language.psi.PsiElement;
-import com.intellij.java.language.psi.PsiLiteralExpression;
-import consulo.ide.impl.idea.util.Function;
 import consulo.util.collection.ContainerUtil;
-import org.intellij.plugins.intelliLang.inject.InjectedLanguage;
+import consulo.virtualFileSystem.fileType.FileType;
 import org.intellij.plugins.intelliLang.util.StringLiteralReference;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.function.Function;
 
 /**
  * Provides completion for available Language-IDs in
@@ -52,7 +52,7 @@ final class LanguageReference extends StringLiteralReference {
   public Object[] getVariants() {
     final String[] ids = InjectedLanguage.getAvailableLanguageIDs();
     return ContainerUtil.map2Array(ids, LookupElement.class, new Function<String, LookupElement>() {
-      public LookupElement fun(String s) {
+      public LookupElement apply(String s) {
         final Language l = InjectedLanguage.findLanguageById(s);
         assert l != null;
 

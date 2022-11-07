@@ -15,74 +15,66 @@
  */
 package com.intellij.java.debugger.impl;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
-
-import javax.swing.event.HyperlinkEvent;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.SourcePosition;
-import com.intellij.java.debugger.impl.engine.ContextUtil;
 import com.intellij.java.debugger.engine.DebugProcess;
-import com.intellij.java.debugger.impl.engine.DebugProcessAdapterImpl;
-import com.intellij.java.debugger.impl.engine.DebugProcessImpl;
-import com.intellij.java.debugger.impl.engine.JavaDebugProcess;
-import com.intellij.java.debugger.impl.engine.MethodFilter;
 import com.intellij.java.debugger.engine.StackFrameContext;
-import com.intellij.java.debugger.impl.engine.SuspendContextImpl;
-import com.intellij.java.debugger.impl.engine.SuspendManagerImpl;
 import com.intellij.java.debugger.engine.evaluation.EvaluateException;
+import com.intellij.java.debugger.engine.jdi.StackFrameProxy;
+import com.intellij.java.debugger.impl.engine.*;
 import com.intellij.java.debugger.impl.engine.evaluation.EvaluationListener;
 import com.intellij.java.debugger.impl.engine.events.SuspendContextCommandImpl;
-import com.intellij.java.debugger.engine.jdi.StackFrameProxy;
 import com.intellij.java.debugger.impl.engine.requests.RequestManagerImpl;
 import com.intellij.java.debugger.impl.jdi.StackFrameProxyImpl;
 import com.intellij.java.debugger.impl.jdi.ThreadReferenceProxyImpl;
 import com.intellij.java.debugger.impl.ui.breakpoints.Breakpoint;
 import com.intellij.java.debugger.impl.ui.breakpoints.BreakpointWithHighlighter;
 import com.intellij.java.debugger.impl.ui.breakpoints.LineBreakpoint;
+import com.intellij.java.execution.configurations.RemoteConnection;
+import com.intellij.java.execution.configurations.RemoteState;
+import com.intellij.java.language.psi.PsiElementFinder;
 import consulo.application.Application;
+import consulo.application.ApplicationManager;
+import consulo.content.bundle.Sdk;
+import consulo.disposer.Disposer;
 import consulo.execution.ExecutionResult;
 import consulo.execution.configuration.RunProfileState;
 import consulo.execution.debug.AbstractDebuggerSession;
 import consulo.execution.debug.XDebugSession;
-import consulo.execution.debug.ui.XDebuggerUIConstants;
-import consulo.process.ExecutionException;
-import com.intellij.java.execution.configurations.RemoteConnection;
-import com.intellij.java.execution.configurations.RemoteState;
-import consulo.process.ProcessHandler;
-import consulo.process.ProcessOutputTypes;
-import consulo.project.ui.notification.Notification;
-import consulo.project.ui.notification.event.NotificationListener;
-import consulo.ui.ex.action.ActionsBundle;
-import consulo.ui.NotificationType;
-import consulo.application.ApplicationManager;
-import consulo.ui.ModalityState;
-import consulo.component.extension.Extensions;
-import consulo.project.Project;
-import consulo.content.bundle.Sdk;
-import consulo.ui.ex.awt.Messages;
-import consulo.ui.ex.awt.util.Alarm;
-import consulo.util.lang.Comparing;
-import consulo.disposer.Disposer;
-import consulo.util.lang.Pair;
-import consulo.language.psi.PsiCompiledElement;
-import com.intellij.java.language.psi.PsiElementFinder;
-import consulo.language.psi.PsiFile;
-import consulo.language.psi.scope.GlobalSearchScope;
-import com.intellij.java.execution.unscramble.ThreadState;
-import consulo.util.lang.TimeoutUtil;
-import consulo.ui.ex.awt.UIUtil;
+import consulo.execution.debug.XDebuggerActions;
 import consulo.execution.debug.XSourcePosition;
+import consulo.execution.debug.ui.XDebuggerUIConstants;
+import consulo.execution.unscramble.ThreadState;
+import consulo.ide.impl.idea.xdebugger.impl.evaluate.quick.common.ValueLookupManager;
 import consulo.internal.com.sun.jdi.ObjectCollectedException;
 import consulo.internal.com.sun.jdi.ThreadReference;
 import consulo.internal.com.sun.jdi.request.EventRequest;
 import consulo.internal.com.sun.jdi.request.StepRequest;
+import consulo.language.psi.PsiCompiledElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.logging.Logger;
+import consulo.process.ExecutionException;
+import consulo.process.ProcessHandler;
+import consulo.process.ProcessOutputTypes;
+import consulo.project.Project;
+import consulo.project.ui.notification.Notification;
+import consulo.project.ui.notification.NotificationType;
+import consulo.project.ui.notification.event.NotificationListener;
+import consulo.ui.ex.action.ActionsBundle;
+import consulo.ui.ex.awt.Messages;
+import consulo.ui.ex.awt.UIUtil;
+import consulo.ui.ex.awt.util.Alarm;
+import consulo.util.lang.Comparing;
+import consulo.util.lang.Pair;
+import consulo.util.lang.TimeoutUtil;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.swing.event.HyperlinkEvent;
+import java.util.Collection;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class DebuggerSession implements AbstractDebuggerSession
 {
@@ -163,7 +155,7 @@ public class DebuggerSession implements AbstractDebuggerSession
 	public void setAlternativeJre(Sdk sdk)
 	{
 		myAlternativeJre = sdk;
-		Extensions.findExtension(PsiElementFinder.EP_NAME, getProject(), AlternativeJreClassFinder.class).clearCache();
+		PsiElementFinder.EP_NAME.findExtensionOrFail(getProject(), AlternativeJreClassFinder.class).clearCache();
 	}
 
 	public Sdk getRunJre()
@@ -600,7 +592,7 @@ public class DebuggerSession implements AbstractDebuggerSession
 					if(!descriptors.isEmpty())
 					{
 						XDebuggerUIConstants.NOTIFICATION_GROUP.createNotification(DebuggerBundle.message("status.breakpoint.reached.in.thread", thread.name()), DebuggerBundle.message("status" +
-								".breakpoint.reached.in.thread.switch"), NotificationType.INFO, new NotificationListener()
+								".breakpoint.reached.in.thread.switch"), NotificationType.INFORMATION, new NotificationListener()
 						{
 							@Override
 							public void hyperlinkUpdate(@Nonnull Notification notification, @Nonnull HyperlinkEvent event)

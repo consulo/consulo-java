@@ -15,99 +15,82 @@
  */
 package com.intellij.java.debugger.impl.ui.tree.render;
 
-import java.util.Collections;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import com.intellij.java.debugger.DebuggerBundle;
+import com.intellij.java.debugger.engine.evaluation.EvaluateException;
 import com.intellij.java.debugger.impl.engine.FullValueEvaluatorProvider;
 import com.intellij.java.debugger.impl.engine.JavaValue;
-import com.intellij.java.debugger.engine.evaluation.EvaluateException;
 import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
 import com.intellij.java.debugger.impl.settings.NodeRendererSettings;
 import com.intellij.java.debugger.impl.ui.impl.watch.ValueDescriptorImpl;
 import com.intellij.java.execution.filters.ExceptionFilter;
-import com.intellij.execution.filters.Filter;
-import consulo.execution.ui.console.HyperlinkInfo;
 import consulo.application.ApplicationManager;
-import consulo.logging.Logger;
 import consulo.execution.debug.frame.XFullValueEvaluator;
+import consulo.execution.ui.console.Filter;
+import consulo.execution.ui.console.HyperlinkInfo;
 import consulo.ide.impl.idea.xdebugger.impl.ui.DebuggerUIUtil;
 import consulo.internal.com.sun.jdi.*;
+import consulo.logging.Logger;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Collections;
 
 /**
  * @author egor
  */
-class StackTraceElementObjectRenderer extends ToStringBasedRenderer implements FullValueEvaluatorProvider
-{
-	private static final Logger LOG = Logger.getInstance(StackTraceElementObjectRenderer.class);
+class StackTraceElementObjectRenderer extends ToStringBasedRenderer implements FullValueEvaluatorProvider {
+  private static final Logger LOG = Logger.getInstance(StackTraceElementObjectRenderer.class);
 
-	public StackTraceElementObjectRenderer(final NodeRendererSettings rendererSettings)
-	{
-		super(rendererSettings, "StackTraceElement", null, null);
-		setClassName("java.lang.StackTraceElement");
-		setEnabled(true);
-	}
+  public StackTraceElementObjectRenderer(final NodeRendererSettings rendererSettings) {
+    super(rendererSettings, "StackTraceElement", null, null);
+    setClassName("java.lang.StackTraceElement");
+    setEnabled(true);
+  }
 
-	@Nullable
-	@Override
-	public XFullValueEvaluator getFullValueEvaluator(final EvaluationContextImpl evaluationContext, final ValueDescriptorImpl valueDescriptor)
-	{
-		return new JavaValue.JavaFullValueEvaluator(DebuggerBundle.message("message.node.navigate"), evaluationContext)
-		{
-			@Override
-			public void evaluate(@Nonnull XFullValueEvaluationCallback callback)
-			{
-				Value value = valueDescriptor.getValue();
-				ClassType type = ((ClassType) value.type());
-				Method toString = type.concreteMethodByName("toString", "()Ljava/lang/String;");
-				if(toString != null)
-				{
-					try
-					{
-						Value res = evaluationContext.getDebugProcess().invokeMethod(evaluationContext, (ObjectReference) value, toString, Collections.emptyList());
-						if(res instanceof StringReference)
-						{
-							callback.evaluated("");
-							final String line = ((StringReference) res).value();
-							ApplicationManager.getApplication().runReadAction(new Runnable()
-							{
-								@Override
-								public void run()
-								{
-									ExceptionFilter filter = new ExceptionFilter(evaluationContext.getDebugProcess().getSession().getSearchScope());
-									Filter.Result result = filter.applyFilter(line, line.length());
-									if(result != null)
-									{
-										final HyperlinkInfo info = result.getFirstHyperlinkInfo();
-										if(info != null)
-										{
-											consulo.ide.impl.idea.xdebugger.impl.ui.DebuggerUIUtil.invokeLater(new Runnable()
-											{
-												@Override
-												public void run()
-												{
-													info.navigate(valueDescriptor.getProject());
-												}
-											});
-										}
-									}
-								}
-							});
-						}
-					}
-					catch(EvaluateException e)
-					{
-						LOG.info("Exception while getting stack info", e);
-					}
-				}
-			}
+  @Nullable
+  @Override
+  public XFullValueEvaluator getFullValueEvaluator(final EvaluationContextImpl evaluationContext, final ValueDescriptorImpl valueDescriptor) {
+    return new JavaValue.JavaFullValueEvaluator(DebuggerBundle.message("message.node.navigate"), evaluationContext) {
+      @Override
+      public void evaluate(@Nonnull XFullValueEvaluationCallback callback) {
+        Value value = valueDescriptor.getValue();
+        ClassType type = ((ClassType) value.type());
+        Method toString = type.concreteMethodByName("toString", "()Ljava/lang/String;");
+        if (toString != null) {
+          try {
+            Value res = evaluationContext.getDebugProcess().invokeMethod(evaluationContext, (ObjectReference) value, toString, Collections.emptyList());
+            if (res instanceof StringReference) {
+              callback.evaluated("");
+              final String line = ((StringReference) res).value();
+              ApplicationManager.getApplication().runReadAction(new Runnable() {
+                @Override
+                public void run() {
+                  ExceptionFilter filter = new ExceptionFilter(evaluationContext.getDebugProcess().getSession().getSearchScope());
+                  Filter.Result result = filter.applyFilter(line, line.length());
+                  if (result != null) {
+                    final HyperlinkInfo info = result.getFirstHyperlinkInfo();
+                    if (info != null) {
+                      DebuggerUIUtil.invokeLater(new Runnable() {
+                        @Override
+                        public void run() {
+                          info.navigate(valueDescriptor.getProject());
+                        }
+                      });
+                    }
+                  }
+                }
+              });
+            }
+          } catch (EvaluateException e) {
+            LOG.info("Exception while getting stack info", e);
+          }
+        }
+      }
 
-			@Override
-			public boolean isShowValuePopup()
-			{
-				return false;
-			}
-		};
-	}
+      @Override
+      public boolean isShowValuePopup() {
+        return false;
+      }
+    };
+  }
 }

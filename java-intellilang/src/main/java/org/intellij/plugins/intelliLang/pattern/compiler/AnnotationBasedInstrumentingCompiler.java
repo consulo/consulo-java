@@ -16,48 +16,44 @@
 
 package org.intellij.plugins.intelliLang.pattern.compiler;
 
+import com.intellij.java.compiler.PsiClassWriter;
+import com.intellij.java.language.JavaLanguage;
+import com.intellij.java.language.projectRoots.JavaSdk;
+import com.intellij.java.language.projectRoots.JavaSdkVersion;
+import com.intellij.java.language.psi.JavaPsiFacade;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiJavaFile;
+import consulo.application.ApplicationManager;
+import consulo.application.progress.ProgressIndicator;
+import consulo.application.util.function.Processor;
+import consulo.compiler.*;
+import consulo.compiler.scope.CompileScope;
+import consulo.content.bundle.Sdk;
+import consulo.internal.org.objectweb.asm.ClassReader;
+import consulo.internal.org.objectweb.asm.ClassWriter;
+import consulo.java.language.module.extension.JavaModuleExtension;
+import consulo.language.content.ProductionContentFolderTypeProvider;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.search.PsiSearchHelper;
+import consulo.language.util.ModuleUtilCore;
+import consulo.logging.Logger;
+import consulo.module.Module;
+import consulo.module.content.ProjectFileIndex;
+import consulo.module.content.ProjectRootManager;
+import consulo.project.DumbService;
+import consulo.project.Project;
+import consulo.util.lang.StringUtil;
+import consulo.virtualFileSystem.VirtualFile;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.DataInput;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import consulo.internal.org.objectweb.asm.ClassReader;
-import consulo.internal.org.objectweb.asm.ClassWriter;
-import consulo.java.language.module.extension.JavaModuleExtension;
-import com.intellij.java.compiler.PsiClassWriter;
-import com.intellij.java.language.JavaLanguage;
-import consulo.application.ApplicationManager;
-import consulo.compiler.ClassInstrumentingCompiler;
-import consulo.compiler.CompileContext;
-import consulo.compiler.scope.CompileScope;
-import consulo.compiler.CompilerMessageCategory;
-import consulo.compiler.ValidityState;
-import consulo.logging.Logger;
-import consulo.module.Module;
-import consulo.language.util.ModuleUtilCore;
-import consulo.application.progress.ProgressIndicator;
-import consulo.project.DumbService;
-import consulo.project.Project;
-import com.intellij.java.language.projectRoots.JavaSdk;
-import com.intellij.java.language.projectRoots.JavaSdkVersion;
-import consulo.content.bundle.Sdk;
-import consulo.module.content.ProjectFileIndex;
-import consulo.module.content.ProjectRootManager;
-import consulo.util.lang.StringUtil;
-import consulo.virtualFileSystem.VirtualFile;
-import com.intellij.java.language.psi.JavaPsiFacade;
-import com.intellij.java.language.psi.PsiClass;
-import consulo.language.psi.PsiFile;
-import com.intellij.java.language.psi.PsiJavaFile;
-import consulo.language.psi.scope.GlobalSearchScope;
-import consulo.language.psi.search.PsiSearchHelper;
-import consulo.application.util.function.Processor;
-import consulo.compiler.ModuleCompilerPathsManager;
-import consulo.roots.impl.ProductionContentFolderTypeProvider;
 
 /**
  * Based on NotNullVerifyingCompiler, kindly provided by JetBrains for reference.

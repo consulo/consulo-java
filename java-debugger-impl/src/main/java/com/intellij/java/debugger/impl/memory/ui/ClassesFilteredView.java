@@ -15,7 +15,6 @@
  */
 package com.intellij.java.debugger.impl.memory.ui;
 
-import consulo.application.AllIcons;
 import com.intellij.java.debugger.DebuggerManager;
 import com.intellij.java.debugger.engine.DebugProcess;
 import com.intellij.java.debugger.engine.DebugProcessListener;
@@ -38,29 +37,24 @@ import com.intellij.java.debugger.impl.memory.utils.KeyboardUtils;
 import com.intellij.java.debugger.impl.memory.utils.LowestPriorityCommand;
 import com.intellij.java.debugger.impl.memory.utils.SingleAlarmWithMutableDelay;
 import com.intellij.java.debugger.requests.ClassPrepareRequestor;
-import com.intellij.openapi.actionSystem.*;
-import com.intellij.openapi.actionSystem.impl.ActionButton;
+import consulo.application.AllIcons;
 import consulo.application.ApplicationManager;
-import consulo.application.ui.wm.IdeFocusManager;
-import consulo.execution.debug.XDebugSession;
-import consulo.execution.debug.event.XDebugSessionListener;
-import consulo.project.Project;
-import com.intellij.ui.*;
-import consulo.ui.ex.awt.JBDimension;
-import consulo.ui.ex.awt.BorderLayoutPanel;
-import consulo.execution.debug.XDebuggerManager;
+import consulo.application.ui.wm.ApplicationIdeFocusManager;
 import consulo.disposer.Disposable;
 import consulo.disposer.Disposer;
+import consulo.execution.debug.XDebugSession;
+import consulo.execution.debug.XDebuggerManager;
+import consulo.execution.debug.event.XDebugSessionListener;
+import consulo.ide.impl.idea.openapi.actionSystem.impl.ActionButtonImpl;
 import consulo.internal.com.sun.jdi.ObjectReference;
 import consulo.internal.com.sun.jdi.ReferenceType;
 import consulo.internal.com.sun.jdi.VirtualMachine;
 import consulo.internal.com.sun.jdi.request.ClassPrepareRequest;
 import consulo.logging.Logger;
-import consulo.ui.ex.action.ActionPlaces;
-import consulo.ui.ex.action.DefaultActionGroup;
-import consulo.ui.ex.awt.PopupHandler;
-import consulo.ui.ex.awt.ScrollPaneFactory;
-import consulo.ui.ex.awt.SearchTextField;
+import consulo.project.Project;
+import consulo.ui.ex.action.*;
+import consulo.ui.ex.awt.*;
+import consulo.ui.ex.awt.event.DocumentAdapter;
 import consulo.ui.ex.awt.event.DoubleClickListener;
 
 import javax.annotation.Nonnull;
@@ -220,7 +214,7 @@ public class ClassesFilteredView extends BorderLayoutPanel implements Disposable
           final String text = myFilterTextField.getText();
           final String newText = KeyboardUtils.isBackSpace(keyCode) ? text.substring(0, text.length() - 1) : text + e.getKeyChar();
           myFilterTextField.setText(newText);
-          IdeFocusManager.getInstance(myProject).requestFocus(myFilterTextField, false);
+          ApplicationIdeFocusManager.getInstance().getInstanceForProject(myProject).requestFocus(myFilterTextField, false);
         }
       }
     });
@@ -286,10 +280,10 @@ public class ClassesFilteredView extends BorderLayoutPanel implements Disposable
     final Presentation actionsPresentation = new Presentation("Memory View Settings");
     actionsPresentation.setIcon(AllIcons.General.GearPlain);
 
-    final ActionButton button = new ActionButton(group, actionsPresentation, ActionPlaces.UNKNOWN, new JBDimension(25, 25));
+    final ActionButton button = new ActionButtonImpl(group, actionsPresentation, ActionPlaces.UNKNOWN, new JBDimension(25, 25));
     final BorderLayoutPanel topPanel = new BorderLayoutPanel();
     topPanel.addToCenter(myFilterTextField);
-    topPanel.addToRight(button);
+    topPanel.addToRight(button.getComponent());
     addToTop(topPanel);
     addToCenter(scroll);
   }

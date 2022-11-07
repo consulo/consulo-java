@@ -15,32 +15,32 @@
  */
 package com.intellij.java.debugger.impl;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import com.intellij.java.debugger.impl.engine.DebugProcessImpl;
+import com.intellij.java.debugger.RunConfigurationWithRunnerSettings;
 import com.intellij.java.debugger.engine.DebuggerUtils;
+import com.intellij.java.debugger.impl.engine.DebugProcessImpl;
 import com.intellij.java.debugger.impl.engine.JavaDebugProcess;
 import com.intellij.java.debugger.impl.settings.DebuggerSettings;
 import com.intellij.java.debugger.impl.ui.tree.render.BatchEvaluator;
-import consulo.execution.DefaultExecutionResult;
-import consulo.execution.configuration.*;
-import consulo.execution.debug.DefaultDebugExecutor;
-import consulo.execution.debug.XDebuggerManager;
-import consulo.execution.runner.ExecutionEnvironment;
-import consulo.process.ExecutionException;
-import consulo.execution.ExecutionResult;
-import consulo.execution.executor.Executor;
-import com.intellij.execution.configurations.*;
 import com.intellij.java.execution.configurations.*;
 import com.intellij.java.execution.runners.JavaPatchableProgramRunner;
-import consulo.execution.ui.RunContentDescriptor;
 import consulo.document.FileDocumentManager;
+import consulo.execution.DefaultExecutionResult;
+import consulo.execution.ExecutionResult;
+import consulo.execution.configuration.*;
 import consulo.execution.configuration.ui.SettingsEditor;
-import consulo.util.lang.StringUtil;
+import consulo.execution.debug.DefaultDebugExecutor;
+import consulo.execution.debug.XDebuggerManager;
+import consulo.execution.executor.Executor;
+import consulo.execution.runner.ExecutionEnvironment;
+import consulo.execution.ui.RunContentDescriptor;
 import consulo.ide.impl.idea.xdebugger.impl.XDebugSessionImpl;
 import consulo.java.debugger.impl.GenericDebugRunnerConfiguration;
 import consulo.java.execution.configurations.OwnJavaParameters;
+import consulo.process.ExecutionException;
+import consulo.util.lang.StringUtil;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class GenericDebuggerRunner extends JavaPatchableProgramRunner<GenericDebuggerRunnerSettings>
 {

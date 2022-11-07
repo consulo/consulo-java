@@ -672,7 +672,6 @@
 
 		<java.shortNamesCache implementation="com.intellij.java.indexing.impl.PsiShortNamesCacheImpl"/>
 
-		<debuggerEditorTextProvider language="JAVA" implementationClass="com.intellij.java.debugger.impl.JavaEditorTextProviderImpl"/>
 
 		<constructorBodyGenerator language="JAVA"
 								  implementationClass="com.intellij.java.impl.codeInsight.generation.JavaConstructorBodyWithSuperCallGenerator"/>
@@ -1000,7 +999,6 @@
 
 		<editorNotificationProvider implementation="com.intellij.java.impl.codeInsight.daemon.impl.AttachSourcesNotificationProvider"/>
 		<editorNotificationProvider implementation="com.intellij.java.impl.codeInsight.daemon.impl.SetupJDKNotificationProvider"/>
-		<editorNotificationProvider implementation="com.intellij.java.debugger.impl.ui.AlternativeSourceNotificationProvider"/>
 
 		<programRunner id="defaultRunRunner" implementation="com.intellij.java.execution.impl.DefaultJavaProgramRunner"/>
 		<programRunner implementation="com.intellij.java.execution.impl.jar.JarApplicationDebuggerRunner"/>

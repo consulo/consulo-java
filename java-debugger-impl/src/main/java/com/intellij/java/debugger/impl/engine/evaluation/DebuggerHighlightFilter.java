@@ -15,19 +15,18 @@
  */
 package com.intellij.java.debugger.impl.engine.evaluation;
 
-import javax.annotation.Nonnull;
 import consulo.language.editor.rawHighlight.HighlightInfo;
 import consulo.language.editor.rawHighlight.HighlightInfoFilter;
 import consulo.language.editor.rawHighlight.HighlightInfoType;
 import consulo.language.psi.PsiFile;
 
-public class DebuggerHighlightFilter implements HighlightInfoFilter
-{
-	@Override
-	public boolean accept(@Nonnull HighlightInfo highlightInfo, PsiFile file)
-	{
-		return highlightInfo.type != HighlightInfoType.UNHANDLED_EXCEPTION ||
-				file == null ||
-				!DefaultCodeFragmentFactory.isDebuggerFile(file);
-	}
+import javax.annotation.Nonnull;
+
+public class DebuggerHighlightFilter implements HighlightInfoFilter {
+  @Override
+  public boolean accept(@Nonnull HighlightInfo highlightInfo, PsiFile file) {
+    return highlightInfo.getType() != HighlightInfoType.UNHANDLED_EXCEPTION ||
+        file == null ||
+        !DefaultCodeFragmentFactory.isDebuggerFile(file);
+  }
 }

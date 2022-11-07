@@ -66,6 +66,13 @@
 		</dependency>
 
 		<dependency>
+			<groupId>consulo</groupId>
+			<artifactId>consulo-ide-impl</artifactId>
+			<version>${project.version}</version>
+			<optional>true</optional>
+		</dependency>
+
+		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>com.intellij.regexp</artifactId>
 			<version>${project.version}</version>

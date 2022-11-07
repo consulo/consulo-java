@@ -15,29 +15,18 @@
  */
 package com.intellij.java.debugger.impl.ui.tree.render;
 
-import java.awt.event.MouseEvent;
-import java.util.Collections;
-
-import javax.swing.tree.TreeNode;
-import javax.swing.tree.TreePath;
-
-import consulo.execution.debug.breakpoint.XExpression;
-import consulo.execution.debug.frame.XDebuggerTreeNodeHyperlink;
-import consulo.logging.Logger;
-import org.jdom.Element;
-import org.jetbrains.annotations.NonNls;
 import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.DebuggerContext;
+import com.intellij.java.debugger.engine.evaluation.EvaluateException;
+import com.intellij.java.debugger.engine.evaluation.EvaluationContext;
 import com.intellij.java.debugger.impl.DebuggerManagerEx;
+import com.intellij.java.debugger.impl.DebuggerUtilsEx;
 import com.intellij.java.debugger.impl.actions.ArrayAction;
 import com.intellij.java.debugger.impl.engine.ContextUtil;
 import com.intellij.java.debugger.impl.engine.DebuggerManagerThreadImpl;
 import com.intellij.java.debugger.impl.engine.JavaValue;
-import com.intellij.java.debugger.engine.evaluation.EvaluateException;
-import com.intellij.java.debugger.engine.evaluation.EvaluationContext;
 import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
 import com.intellij.java.debugger.impl.engine.evaluation.TextWithImportsImpl;
-import com.intellij.java.debugger.impl.DebuggerUtilsEx;
 import com.intellij.java.debugger.impl.memory.utils.ErrorsValueGroup;
 import com.intellij.java.debugger.impl.settings.NodeRendererSettings;
 import com.intellij.java.debugger.impl.settings.ViewsGeneralSettings;
@@ -45,26 +34,38 @@ import com.intellij.java.debugger.impl.ui.impl.watch.ArrayElementDescriptorImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.NodeManagerImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.ValueDescriptorImpl;
 import com.intellij.java.debugger.impl.ui.tree.DebuggerTreeNode;
-import com.intellij.java.debugger.ui.tree.NodeDescriptor;
 import com.intellij.java.debugger.impl.ui.tree.NodeDescriptorFactory;
 import com.intellij.java.debugger.impl.ui.tree.ValueDescriptor;
-import consulo.application.AllIcons;
-import consulo.util.xml.serializer.DefaultJDOMExternalizer;
-import consulo.util.xml.serializer.InvalidDataException;
-import consulo.util.xml.serializer.WriteExternalException;
+import com.intellij.java.debugger.ui.tree.NodeDescriptor;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.psi.JavaPsiFacade;
-import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiElementFactory;
 import com.intellij.java.language.psi.PsiExpression;
-import consulo.ui.ex.SimpleTextAttributes;
-import consulo.language.util.IncorrectOperationException;
+import consulo.application.AllIcons;
+import consulo.execution.debug.breakpoint.XExpression;
 import consulo.execution.debug.frame.XCompositeNode;
+import consulo.execution.debug.frame.XDebuggerTreeNodeHyperlink;
 import consulo.execution.debug.frame.XValueChildrenList;
+import consulo.ide.impl.idea.xdebugger.impl.ui.tree.XDebuggerTree;
+import consulo.ide.impl.idea.xdebugger.impl.ui.tree.nodes.XValueNodeImpl;
 import consulo.internal.com.sun.jdi.ArrayReference;
 import consulo.internal.com.sun.jdi.ArrayType;
 import consulo.internal.com.sun.jdi.Type;
 import consulo.internal.com.sun.jdi.Value;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
+import consulo.logging.Logger;
+import consulo.ui.ex.SimpleTextAttributes;
+import consulo.util.xml.serializer.DefaultJDOMExternalizer;
+import consulo.util.xml.serializer.InvalidDataException;
+import consulo.util.xml.serializer.WriteExternalException;
+import org.jdom.Element;
+import org.jetbrains.annotations.NonNls;
+
+import javax.swing.tree.TreeNode;
+import javax.swing.tree.TreePath;
+import java.awt.event.MouseEvent;
+import java.util.Collections;
 
 public class ArrayRenderer extends NodeRendererImpl
 {
@@ -356,7 +357,7 @@ public class ArrayRenderer extends NodeRendererImpl
 					TreeNode parent = ((TreeNode) path.getLastPathComponent()).getParent();
 					if(parent instanceof XValueNodeImpl)
 					{
-						consulo.ide.impl.idea.xdebugger.impl.ui.tree.nodes.XValueNodeImpl valueNode = (consulo.ide.impl.idea.xdebugger.impl.ui.tree.nodes.XValueNodeImpl) parent;
+						XValueNodeImpl valueNode = (XValueNodeImpl) parent;
 						ArrayAction.setArrayRenderer(NodeRendererSettings.getInstance().getArrayRenderer(), valueNode, DebuggerManagerEx.getInstanceEx(tree.getProject()).getContext());
 					}
 				}

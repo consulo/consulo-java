@@ -16,16 +16,18 @@
 package org.intellij.plugins.intelliLang.inject.config;
 
 import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.PsiFormatUtil;
+import consulo.ide.impl.intelliLang.inject.config.BaseInjection;
+import consulo.ide.impl.intelliLang.inject.config.InjectionPlace;
+import consulo.language.pattern.compiler.PatternCompiler;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
-import consulo.util.xml.serializer.InvalidDataException;
-import consulo.util.xml.serializer.JDOMExternalizableStringList;
-import consulo.ide.impl.idea.openapi.util.JDOMExternalizer;
 import consulo.util.lang.Pair;
 import consulo.util.lang.StringUtil;
-import consulo.language.pattern.compiler.PatternCompiler;
-import com.intellij.psi.*;
-import com.intellij.java.language.psi.util.PsiFormatUtil;
-import consulo.language.util.IncorrectOperationException;
+import consulo.util.xml.serializer.InvalidDataException;
+import consulo.util.xml.serializer.JDOMExternalizableStringList;
+import consulo.util.xml.serializer.JDOMExternalizer;
 import org.intellij.plugins.intelliLang.inject.java.JavaLanguageInjectionSupport;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;

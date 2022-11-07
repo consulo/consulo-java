@@ -15,43 +15,28 @@
  */
 package com.intellij.java.debugger.impl.ui.impl;
 
-import java.awt.AWTEvent;
-import java.awt.Component;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.Toolkit;
-import java.awt.event.AWTEventListener;
-import java.awt.event.InputEvent;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionAdapter;
-import java.awt.event.MouseMotionListener;
-
-import javax.swing.JComponent;
-import javax.swing.JPopupMenu;
-import javax.swing.KeyStroke;
-import javax.swing.Popup;
-import javax.swing.PopupFactory;
-import javax.swing.SwingUtilities;
-import javax.swing.event.PopupMenuEvent;
-import javax.swing.event.PopupMenuListener;
-
+import consulo.application.ui.FrameStateManager;
+import consulo.application.ui.event.FrameStateListener;
 import consulo.component.util.Weighted;
+import consulo.disposer.Disposable;
+import consulo.disposer.Disposer;
+import consulo.execution.debug.setting.XDebuggerSettingsManager;
+import consulo.ide.impl.idea.openapi.keymap.KeymapUtil;
+import consulo.ui.ex.IdeGlassPane;
 import consulo.ui.ex.action.AnAction;
 import consulo.ui.ex.action.AnActionEvent;
 import consulo.ui.ex.action.CustomShortcutSet;
+import consulo.ui.ex.awt.UIUtil;
+import consulo.ui.ex.awt.update.UiNotifyConnector;
 import consulo.ui.ex.awt.util.Alarm;
 import consulo.ui.ex.awt.util.IdeGlassPaneUtil;
-import consulo.ui.ex.keymap.util.KeymapUtil;
-import consulo.disposer.Disposable;
-import consulo.disposer.Disposer;
-import consulo.ui.ex.IdeGlassPane;
-import consulo.ui.ex.awt.UIUtil;
 import consulo.ui.ex.update.Activatable;
-import consulo.ui.ex.awt.update.UiNotifyConnector;
-import consulo.execution.debug.setting.XDebuggerSettingsManager;
+
+import javax.swing.*;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
+import java.awt.*;
+import java.awt.event.*;
 
 /**
  * @author lex

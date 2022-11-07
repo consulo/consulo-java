@@ -15,21 +15,16 @@
  */
 package org.intellij.plugins.intelliLang.pattern.compiler.impl;
 
+import consulo.ide.impl.intelliLang.Configuration;
+import consulo.internal.org.objectweb.asm.*;
+import org.intellij.plugins.intelliLang.pattern.compiler.InstrumentationException;
+import org.intellij.plugins.intelliLang.pattern.compiler.Instrumenter;
+import org.jetbrains.annotations.NonNls;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.regex.Pattern;
-
-import org.intellij.plugins.intelliLang.Configuration;
-import org.intellij.plugins.intelliLang.pattern.compiler.InstrumentationException;
-import org.intellij.plugins.intelliLang.pattern.compiler.Instrumenter;
-import org.jetbrains.annotations.NonNls;
-import consulo.internal.org.objectweb.asm.ClassVisitor;
-import consulo.internal.org.objectweb.asm.FieldVisitor;
-import consulo.internal.org.objectweb.asm.Label;
-import consulo.internal.org.objectweb.asm.MethodVisitor;
-import consulo.internal.org.objectweb.asm.Opcodes;
-import consulo.internal.org.objectweb.asm.Type;
 
 public class PatternValidationInstrumenter extends Instrumenter implements Opcodes {
   @NonNls static final String PATTERN_CACHE_NAME = "$_PATTERN_CACHE_$";

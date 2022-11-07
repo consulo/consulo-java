@@ -15,37 +15,25 @@
  */
 package com.intellij.java.debugger.impl.ui;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import consulo.execution.debug.XDebugProcess;
-import consulo.execution.executor.Executor;
-import consulo.execution.ui.RunContentDescriptor;
-import consulo.execution.ui.RunContentManager;
-import consulo.process.ExecutionException;
-import jakarta.inject.Inject;
-import jakarta.inject.Singleton;
-
-import com.intellij.java.debugger.impl.DebugEnvironment;
-import com.intellij.java.debugger.impl.DebugUIEnvironment;
-import com.intellij.java.debugger.impl.DebuggerManagerEx;
-import com.intellij.java.debugger.impl.DefaultDebugUIEnvironment;
+import com.intellij.java.debugger.impl.*;
 import com.intellij.java.debugger.impl.engine.DebugProcessImpl;
 import com.intellij.java.debugger.impl.engine.JavaDebugProcess;
-import com.intellij.java.debugger.impl.DebuggerContextImpl;
-import com.intellij.java.debugger.impl.DebuggerSession;
-import com.intellij.java.debugger.impl.DebuggerStateManager;
 import com.intellij.java.debugger.impl.ui.tree.render.BatchEvaluator;
 import com.intellij.java.execution.configurations.RemoteConnection;
 import consulo.execution.configuration.RunProfileState;
-import consulo.execution.debug.DefaultDebugExecutor;
+import consulo.execution.debug.*;
+import consulo.execution.executor.Executor;
 import consulo.execution.runner.ExecutionEnvironment;
+import consulo.execution.ui.RunContentDescriptor;
 import consulo.execution.ui.event.RunContentWithExecutorListener;
+import consulo.process.ExecutionException;
 import consulo.project.Project;
 import consulo.util.lang.Comparing;
-import consulo.xdebugger.XDebugProcessStarter;
-import consulo.execution.debug.XDebugSession;
-import consulo.execution.debug.XDebuggerManager;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 @Singleton
 public class DebuggerPanelsManager
@@ -61,7 +49,7 @@ public class DebuggerPanelsManager
 			return;
 		}
 
-		myProject.getMessageBus().connect(myProject).subscribe(RunContentManager.TOPIC, new RunContentWithExecutorListener()
+		myProject.getMessageBus().connect(myProject).subscribe(RunContentWithExecutorListener.class, new RunContentWithExecutorListener()
 		{
 			@Override
 			public void contentSelected(@Nullable RunContentDescriptor descriptor, @Nonnull Executor executor)

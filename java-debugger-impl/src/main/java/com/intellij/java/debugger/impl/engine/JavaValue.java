@@ -46,6 +46,7 @@ import consulo.execution.debug.frame.*;
 import consulo.execution.debug.frame.presentation.*;
 import consulo.execution.debug.internal.breakpoint.XExpressionImpl;
 import consulo.execution.debug.ui.XValueTextProvider;
+import consulo.ide.impl.idea.xdebugger.impl.ui.tree.nodes.XValueNodeImpl;
 import consulo.internal.com.sun.jdi.ArrayReference;
 import consulo.internal.com.sun.jdi.ArrayType;
 import consulo.internal.com.sun.jdi.Value;
@@ -325,9 +326,9 @@ public class JavaValue extends XNamedValue implements NodeDescriptorProvider, XV
 			}
 			else
 			{
-				if(compact && node.getValueContainer() instanceof JavaValue)
+				if(compact && ((XValueNodeImpl) node).getValueContainer() instanceof JavaValue)
 				{
-					final JavaValue container = (JavaValue) node.getValueContainer();
+					final JavaValue container = (JavaValue) ((XValueNodeImpl) node).getValueContainer();
 
 					if(container.getDescriptor().isArray())
 					{
@@ -795,10 +796,10 @@ public class JavaValue extends XNamedValue implements NodeDescriptorProvider, XV
 	{
 		DebuggerManagerThreadImpl.assertIsManagerThread();
 		myValueDescriptor.setRenderer(nodeRenderer);
-		reBuild(node);
+		reBuild((XValueNodeImpl) node);
 	}
 
-	public void reBuild(final XValueNode node)
+	public void reBuild(final XValueNodeImpl node)
 	{
 		DebuggerManagerThreadImpl.assertIsManagerThread();
 		myChildrenRemaining = -1;

@@ -15,27 +15,28 @@
  */
 package com.intellij.java.debugger.impl.memory.ui;
 
-import java.util.List;
-
-import javax.annotation.Nonnull;
 import com.intellij.java.debugger.impl.engine.DebugProcessImpl;
 import com.intellij.java.debugger.impl.memory.utils.StackFrameItem;
+import consulo.ide.impl.idea.xdebugger.impl.ui.DebuggerUIUtil;
+import consulo.ui.ex.awt.popup.AWTPopupFactory;
 import consulo.ui.ex.popup.JBPopup;
 import consulo.ui.ex.popup.JBPopupFactory;
-import consulo.ide.impl.idea.xdebugger.impl.ui.DebuggerUIUtil;
 
-public class StackFramePopup
-{
-	public static void show(@Nonnull List<StackFrameItem> stack, DebugProcessImpl debugProcess)
-	{
-		StackFrameList list = new StackFrameList(debugProcess);
-		list.setFrameItems(stack, () -> DebuggerUIUtil.invokeLater(() ->
-		{
-			JBPopup popup = JBPopupFactory.getInstance().createListPopupBuilder(list).setTitle("Select stack frame").setAutoSelectIfEmpty(true).setResizable(false).setItemChoosenCallback(() -> list
-					.navigateToSelectedValue(true)).createPopup();
+import javax.annotation.Nonnull;
+import java.util.List;
 
-			list.setSelectedIndex(1);
-			popup.showInFocusCenter();
-		}));
-	}
+public class StackFramePopup {
+  public static void show(@Nonnull List<StackFrameItem> stack, DebugProcessImpl debugProcess) {
+    StackFrameList list = new StackFrameList(debugProcess);
+    list.setFrameItems(stack, () -> DebuggerUIUtil.invokeLater(() ->
+    {
+      JBPopup popup = ((AWTPopupFactory) JBPopupFactory.getInstance()).createListPopupBuilder(list)
+          .setItemChoosenCallback(() -> list.navigateToSelectedValue(true))
+          .setTitle("Select stack frame").setAutoSelectIfEmpty(true).setResizable(false)
+          .createPopup();
+
+      list.setSelectedIndex(1);
+      popup.showInFocusCenter();
+    }));
+  }
 }

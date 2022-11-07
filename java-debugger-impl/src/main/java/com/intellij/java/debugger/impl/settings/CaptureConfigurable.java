@@ -19,38 +19,34 @@ import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.impl.engine.JVMNameUtil;
 import com.intellij.java.debugger.impl.jdi.DecompiledLocalVariable;
 import com.intellij.java.debugger.impl.ui.JavaDebuggerSupport;
-import consulo.application.AllIcons;
+import com.intellij.java.indexing.search.searches.AnnotatedElementsSearch;
 import com.intellij.java.language.psi.*;
+import consulo.application.AllIcons;
+import consulo.application.dumb.IndexNotReadyException;
+import consulo.configurable.ConfigurationException;
 import consulo.configurable.SearchableConfigurable;
 import consulo.fileChooser.FileChooserDescriptor;
-import consulo.ui.ex.action.AnActionEvent;
-import consulo.ui.ex.action.CustomShortcutSet;
-import consulo.logging.Logger;
-import consulo.ui.ex.action.DumbAwareAction;
-import consulo.ui.ex.awt.*;
-import consulo.ui.fileChooser.FileChooser;
 import consulo.fileChooser.FileChooserFactory;
 import consulo.fileChooser.FileSaverDescriptor;
-import consulo.configurable.ConfigurationException;
-import consulo.application.dumb.IndexNotReadyException;
+import consulo.fileChooser.IdeaFileChooser;
+import consulo.java.debugger.impl.JavaRegistry;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.localize.LocalizeValue;
+import consulo.logging.Logger;
 import consulo.project.Project;
-import consulo.ui.ex.awt.Messages;
+import consulo.ui.ex.action.AnActionEvent;
+import consulo.ui.ex.action.CustomShortcutSet;
+import consulo.ui.ex.action.DumbAwareAction;
+import consulo.ui.ex.awt.*;
+import consulo.ui.ex.awt.table.JBTable;
+import consulo.ui.ex.awt.util.TableUtil;
+import consulo.util.collection.ArrayUtil;
 import consulo.util.jdom.JDOMUtil;
 import consulo.util.lang.StringUtil;
+import consulo.util.xml.serializer.XmlSerializer;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.VirtualFileWrapper;
-import consulo.language.psi.scope.GlobalSearchScope;
-import com.intellij.java.indexing.search.searches.AnnotatedElementsSearch;
-import com.intellij.ui.*;
-import consulo.ui.ex.awt.table.JBTable;
-import consulo.util.collection.ArrayUtil;
-import consulo.ui.ex.awt.ItemRemovable;
-import consulo.ui.ex.awt.JBUI;
-import consulo.ui.ex.awt.BorderLayoutPanel;
-import consulo.util.xml.serializer.XmlSerializer;
 import consulo.virtualFileSystem.archive.ArchiveFileType;
-import consulo.java.debugger.impl.JavaRegistry;
-import consulo.localize.LocalizeValue;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jetbrains.annotations.Debugger;
@@ -223,7 +219,7 @@ public class CaptureConfigurable implements SearchableConfigurable
 				descriptor.setDescription("Please select a file to import.");
 				descriptor.setTitle("Import Capture Points");
 
-				VirtualFile[] files = FileChooser.chooseFiles(descriptor, e.getProject(), null);
+				VirtualFile[] files = IdeaFileChooser.chooseFiles(descriptor, e.getData(Project.KEY), null);
 				if(ArrayUtil.isEmpty(files))
 				{
 					return;
@@ -246,7 +242,7 @@ public class CaptureConfigurable implements SearchableConfigurable
 					catch(Exception ex)
 					{
 						final String msg = ex.getLocalizedMessage();
-						Messages.showErrorDialog(e.getProject(), msg != null && msg.length() > 0 ? msg : ex.toString(), "Export Failed");
+						Messages.showErrorDialog(e.getData(Project.KEY), msg != null && msg.length() > 0 ? msg : ex.toString(), "Export Failed");
 					}
 				}
 			}
@@ -256,7 +252,7 @@ public class CaptureConfigurable implements SearchableConfigurable
 			@Override
 			public void actionPerformed(@Nonnull final AnActionEvent e)
 			{
-				VirtualFileWrapper wrapper = FileChooserFactory.getInstance().createSaveFileDialog(new FileSaverDescriptor("Export Selected Capture Points to File...", "", "xml"), e.getProject())
+				VirtualFileWrapper wrapper = FileChooserFactory.getInstance().createSaveFileDialog(new FileSaverDescriptor("Export Selected Capture Points to File...", "", "xml"), e.getData(Project.KEY))
 						.save(null, null);
 				if(wrapper == null)
 				{
@@ -284,7 +280,7 @@ public class CaptureConfigurable implements SearchableConfigurable
 				catch(Exception ex)
 				{
 					final String msg = ex.getLocalizedMessage();
-					Messages.showErrorDialog(e.getProject(), msg != null && msg.length() > 0 ? msg : ex.toString(), "Export Failed");
+					Messages.showErrorDialog(e.getData(Project.KEY), msg != null && msg.length() > 0 ? msg : ex.toString(), "Export Failed");
 				}
 			}
 

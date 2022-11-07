@@ -16,7 +16,7 @@
 package com.intellij.java.debugger.impl.engine;
 
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.util.Range;
+import consulo.util.lang.Range;
 
 /**
  * @author egor

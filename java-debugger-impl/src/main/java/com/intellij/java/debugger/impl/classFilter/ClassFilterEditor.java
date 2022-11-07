@@ -26,6 +26,7 @@ import com.intellij.java.language.util.TreeClassChooser;
 import com.intellij.java.language.util.TreeClassChooserFactory;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.platform.base.icon.PlatformIconGroup;
 import consulo.project.Project;
 import consulo.ui.ex.UIBundle;
 import consulo.ui.ex.action.AnActionEvent;
@@ -138,11 +139,11 @@ public class ClassFilterEditor extends JPanel implements ComponentWithEmptyText 
   }
 
   protected Image getAddButtonIcon() {
-    return IconUtil.getAddClassIcon();
+    return PlatformIconGroup.toolbardecoratorAddclass();
   }
 
   protected Image getAddPatternButtonIcon() {
-    return IconUtil.getAddPatternIcon();
+    return PlatformIconGroup.toolbardecoratorAddpattern();
   }
 
   protected boolean addPatternButtonVisible() {

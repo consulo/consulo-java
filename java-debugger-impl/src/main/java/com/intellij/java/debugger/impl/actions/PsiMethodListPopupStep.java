@@ -19,7 +19,6 @@ import consulo.language.editor.refactoring.unwrap.ScopeHighlighter;
 import com.intellij.java.debugger.DebuggerBundle;
 import consulo.application.AllIcons;
 import consulo.codeEditor.Editor;
-import com.intellij.openapi.ui.popup.*;
 import com.intellij.java.language.psi.PsiLambdaExpression;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiSubstitutor;

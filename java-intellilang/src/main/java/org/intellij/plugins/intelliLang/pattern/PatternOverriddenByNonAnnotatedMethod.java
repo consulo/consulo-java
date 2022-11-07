@@ -15,24 +15,24 @@
  */
 package org.intellij.plugins.intelliLang.pattern;
 
-import consulo.language.editor.inspection.LocalInspectionTool;
-import consulo.language.editor.inspection.ProblemsHolder;
 import com.intellij.java.language.psi.JavaElementVisitor;
 import com.intellij.java.language.psi.PsiAnnotation;
 import com.intellij.java.language.psi.PsiIdentifier;
 import com.intellij.java.language.psi.PsiMethod;
+import consulo.ide.impl.intelliLang.Configuration;
+import consulo.language.editor.inspection.LocalInspectionTool;
+import consulo.language.editor.inspection.ProblemsHolder;
+import consulo.language.psi.PsiElementVisitor;
 import consulo.util.lang.Pair;
-import com.intellij.psi.*;
-import org.intellij.plugins.intelliLang.Configuration;
 import org.intellij.plugins.intelliLang.util.AnnotateFix;
 import org.intellij.plugins.intelliLang.util.AnnotationUtilEx;
 import org.intellij.plugins.intelliLang.util.PsiUtilEx;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
 
+import javax.annotation.Nonnull;
 import java.util.Set;
 
-public class PatternOverriddenByNonAnnotatedMethod extends LocalInspectionTool {
+public abstract class PatternOverriddenByNonAnnotatedMethod extends LocalInspectionTool {
 
   public boolean isEnabledByDefault() {
     return true;

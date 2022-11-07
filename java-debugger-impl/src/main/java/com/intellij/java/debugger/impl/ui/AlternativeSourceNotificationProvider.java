@@ -15,239 +15,203 @@
  */
 package com.intellij.java.debugger.impl.ui;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
-
-import javax.swing.JList;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import com.intellij.java.debugger.DebuggerBundle;
-import com.intellij.java.debugger.impl.DebuggerManagerEx;
-import com.intellij.java.debugger.impl.engine.JavaStackFrame;
-import com.intellij.java.debugger.impl.engine.events.DebuggerCommandImpl;
 import com.intellij.java.debugger.impl.DebuggerContextImpl;
+import com.intellij.java.debugger.impl.DebuggerManagerEx;
 import com.intellij.java.debugger.impl.DebuggerSession;
 import com.intellij.java.debugger.impl.DebuggerUtilsEx;
+import com.intellij.java.debugger.impl.engine.JavaStackFrame;
+import com.intellij.java.debugger.impl.engine.events.DebuggerCommandImpl;
 import com.intellij.java.debugger.impl.settings.DebuggerSettings;
-import consulo.fileEditor.FileEditorManager;
-import consulo.language.editor.ui.PsiElementModuleRenderer;
-import consulo.fileEditor.FileEditor;
-import consulo.project.DumbService;
-import consulo.project.Project;
-import consulo.ui.ex.awt.ComboBox;
-import consulo.util.dataholder.Key;
-import consulo.util.lang.StringUtil;
-import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
-import consulo.language.psi.PsiFile;
 import com.intellij.java.language.psi.PsiJavaFile;
-import consulo.language.psi.PsiManager;
-import consulo.language.psi.scope.GlobalSearchScope;
-import consulo.ide.impl.idea.ui.EditorNotificationPanel;
-import consulo.fileEditor.EditorNotifications;
-import consulo.ui.ex.awt.JBList;
-import consulo.util.collection.ContainerUtil;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.application.Application;
 import consulo.execution.debug.XDebugSession;
 import consulo.execution.debug.XDebuggerManager;
 import consulo.execution.debug.XSourcePosition;
 import consulo.execution.debug.frame.XStackFrame;
-import consulo.ide.impl.idea.xdebugger.impl.ui.DebuggerUIUtil;
+import consulo.fileEditor.*;
 import consulo.internal.com.sun.jdi.Location;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiManager;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.util.ModuleUtilCore;
+import consulo.localize.LocalizeValue;
+import consulo.module.Module;
+import consulo.module.ModuleManager;
+import consulo.project.DumbService;
+import consulo.project.Project;
+import consulo.ui.ex.popup.BaseListPopupStep;
+import consulo.ui.ex.popup.JBPopupFactory;
+import consulo.ui.ex.popup.PopupStep;
+import consulo.ui.image.Image;
+import consulo.util.collection.ContainerUtil;
+import consulo.util.dataholder.Key;
+import consulo.util.lang.StringUtil;
+import consulo.virtualFileSystem.VirtualFile;
+import jakarta.inject.Inject;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Supplier;
 
 /**
  * @author egor
  */
-public class AlternativeSourceNotificationProvider extends EditorNotifications.Provider<consulo.ide.impl.idea.ui.EditorNotificationPanel>
-{
-	private static final Key<consulo.ide.impl.idea.ui.EditorNotificationPanel> KEY = Key.create("AlternativeSource");
-	private static final Key<Boolean> FILE_PROCESSED_KEY = Key.create("AlternativeSourceCheckDone");
-	private final Project myProject;
+@ExtensionImpl
+public class AlternativeSourceNotificationProvider implements EditorNotificationProvider {
+  private static final Key<Boolean> FILE_PROCESSED_KEY = Key.create("AlternativeSourceCheckDone");
+  private final Project myProject;
 
-	public AlternativeSourceNotificationProvider(Project project)
-	{
-		myProject = project;
-	}
+  @Inject
+  public AlternativeSourceNotificationProvider(Project project) {
+    myProject = project;
+  }
 
-	@Nonnull
-	@Override
-	public Key<EditorNotificationPanel> getKey()
-	{
-		return KEY;
-	}
+  @Nonnull
+  @Override
+  public String getId() {
+    return "java-debugger-alternative-source";
+  }
 
-	@Nullable
-	@Override
-	public consulo.ide.impl.idea.ui.EditorNotificationPanel createNotificationPanel(@Nonnull VirtualFile file, @Nonnull FileEditor fileEditor)
-	{
-		if(!DebuggerSettings.getInstance().SHOW_ALTERNATIVE_SOURCE)
-		{
-			return null;
-		}
-		XDebugSession session = XDebuggerManager.getInstance(myProject).getCurrentSession();
-		if(session == null)
-		{
-			FILE_PROCESSED_KEY.set(file, null);
-			return null;
-		}
+  @RequiredReadAction
+  @Nullable
+  @Override
+  public EditorNotificationBuilder buildNotification(@Nonnull VirtualFile file, @Nonnull FileEditor fileEditor, @Nonnull Supplier<EditorNotificationBuilder> builderFactory) {
+    if (!DebuggerSettings.getInstance().SHOW_ALTERNATIVE_SOURCE) {
+      return null;
+    }
+    XDebugSession session = XDebuggerManager.getInstance(myProject).getCurrentSession();
+    if (session == null) {
+      FILE_PROCESSED_KEY.set(file, null);
+      return null;
+    }
 
-		XSourcePosition position = session.getCurrentPosition();
-		if(position == null || !file.equals(position.getFile()))
-		{
-			FILE_PROCESSED_KEY.set(file, null);
-			return null;
-		}
+    XSourcePosition position = session.getCurrentPosition();
+    if (position == null || !file.equals(position.getFile())) {
+      FILE_PROCESSED_KEY.set(file, null);
+      return null;
+    }
 
-		final PsiFile psiFile = PsiManager.getInstance(myProject).findFile(file);
-		if(psiFile == null)
-		{
-			return null;
-		}
+    final PsiFile psiFile = PsiManager.getInstance(myProject).findFile(file);
+    if (psiFile == null) {
+      return null;
+    }
 
-		if(!(psiFile instanceof PsiJavaFile))
-		{
-			return null;
-		}
+    if (!(psiFile instanceof PsiJavaFile)) {
+      return null;
+    }
 
-		PsiClass[] classes = ((PsiJavaFile) psiFile).getClasses();
-		if(classes.length == 0)
-		{
-			return null;
-		}
+    PsiClass[] classes = ((PsiJavaFile) psiFile).getClasses();
+    if (classes.length == 0) {
+      return null;
+    }
 
-		PsiClass baseClass = classes[0];
-		String name = baseClass.getQualifiedName();
+    PsiClass baseClass = classes[0];
+    String name = baseClass.getQualifiedName();
 
-		if(name == null)
-		{
-			return null;
-		}
+    if (name == null) {
+      return null;
+    }
 
-		if(DumbService.getInstance(myProject).isDumb())
-		{
-			return null;
-		}
+    if (DumbService.getInstance(myProject).isDumb()) {
+      return null;
+    }
 
-		ArrayList<PsiClass> alts = ContainerUtil.newArrayList(JavaPsiFacade.getInstance(myProject).findClasses(name, GlobalSearchScope.allScope(myProject)));
-		ContainerUtil.removeDuplicates(alts);
+    ArrayList<PsiClass> alts = ContainerUtil.newArrayList(JavaPsiFacade.getInstance(myProject).findClasses(name, GlobalSearchScope.allScope(myProject)));
+    ContainerUtil.removeDuplicates(alts);
 
-		FILE_PROCESSED_KEY.set(file, true);
+    FILE_PROCESSED_KEY.set(file, true);
 
-		if(alts.size() > 1)
-		{
-			for(PsiClass cls : alts)
-			{
-				if(cls.equals(baseClass) || cls.getNavigationElement().equals(baseClass))
-				{
-					alts.remove(cls);
-					break;
-				}
-			}
-			alts.add(0, baseClass);
+    if (alts.size() > 1) {
+      for (PsiClass cls : alts) {
+        if (cls.equals(baseClass) || cls.getNavigationElement().equals(baseClass)) {
+          alts.remove(cls);
+          break;
+        }
+      }
+      alts.add(0, baseClass);
 
-			ComboBoxClassElement[] elems = ContainerUtil.map2Array(alts, ComboBoxClassElement.class, psiClass -> new ComboBoxClassElement((PsiClass) psiClass.getNavigationElement()));
+      String locationDeclName = null;
+      XStackFrame frame = session.getCurrentStackFrame();
+      if (frame instanceof JavaStackFrame) {
+        Location location = ((JavaStackFrame) frame).getDescriptor().getLocation();
+        if (location != null) {
+          locationDeclName = location.declaringType().name();
+        }
+      }
 
-			String locationDeclName = null;
-			XStackFrame frame = session.getCurrentStackFrame();
-			if(frame instanceof JavaStackFrame)
-			{
-				Location location = ((JavaStackFrame) frame).getDescriptor().getLocation();
-				if(location != null)
-				{
-					locationDeclName = location.declaringType().name();
-				}
-			}
+      EditorNotificationBuilder builder = builderFactory.get();
+      build(alts, baseClass.getQualifiedName(), myProject, file, locationDeclName, builder);
+      return builder;
+    }
+    return null;
+  }
 
-			return new AlternativeSourceNotificationPanel(elems, baseClass, myProject, file, locationDeclName);
-		}
-		return null;
-	}
+  public static boolean fileProcessed(VirtualFile file) {
+    return FILE_PROCESSED_KEY.get(file) != null;
+  }
 
-	private static class ComboBoxClassElement
-	{
-		private final PsiClass myClass;
-		private String myText;
+  public static void build(List<PsiClass> alternatives, final String aClass, final Project project, final VirtualFile file, String locationDeclName, EditorNotificationBuilder builder) {
+    builder.withText(LocalizeValue.localizeTODO(DebuggerBundle.message("editor.notification.alternative.source", aClass)));
 
-		public ComboBoxClassElement(PsiClass aClass)
-		{
-			myClass = aClass;
-		}
+    builder.withAction(LocalizeValue.localizeTODO("Select Source..."), (e) -> {
+      BaseListPopupStep<PsiClass> classes = new BaseListPopupStep<PsiClass>("Choose class module", alternatives) {
+        @Override
+        public Image getIconFor(PsiClass value) {
+          Module module = ModuleUtilCore.findModuleForPsiElement(value);
+          return ModuleManager.getInstance(project).getModuleIcon(module);
+        }
 
-		private static JList ourDummyList = new JBList(); // to use ModuleRendererFactory
+        @Nonnull
+        @Override
+        public String getTextFor(PsiClass value) {
+          Module module = ModuleUtilCore.findModuleForPsiElement(value);
+          return module == null ? "<unknown>" : module.getName();
+        }
 
-		@Override
-		public String toString()
-		{
-			if(myText == null)
-			{
-				PsiElementModuleRenderer renderer = new PsiElementModuleRenderer();
-				renderer.getListCellRendererComponent(ourDummyList, myClass, 1, false, false);
-				myText = renderer.getText();
-			}
-			return myText;
-		}
-	}
+        @Override
+        public PopupStep onChosen(PsiClass item, boolean finalChoice) {
+          if (finalChoice) {
+            final DebuggerContextImpl context = DebuggerManagerEx.getInstanceEx(project).getContext();
+            final DebuggerSession session = context.getDebuggerSession();
+            final VirtualFile vFile = item.getContainingFile().getVirtualFile();
+            if (session != null && vFile != null) {
+              session.getProcess().getManagerThread().schedule(new DebuggerCommandImpl() {
+                @Override
+                protected void action() throws Exception {
+                  if (!StringUtil.isEmpty(locationDeclName)) {
+                    DebuggerUtilsEx.setAlternativeSourceUrl(locationDeclName, vFile.getUrl(), project);
+                  }
+                  Application.get().invokeLater(() ->
+                  {
+                    FileEditorManager.getInstance(project).closeFile(file);
+                    session.refresh(true);
+                  });
+                }
+              });
+            } else {
+              FileEditorManager.getInstance(project).closeFile(file);
+              item.navigate(true);
+            }
+          }
+          return super.onChosen(item, finalChoice);
+        }
+      };
 
-	public static boolean fileProcessed(VirtualFile file)
-	{
-		return FILE_PROCESSED_KEY.get(file) != null;
-	}
+      JBPopupFactory.getInstance().createListPopup(classes).showBy(e);
+    });
 
-	private static class AlternativeSourceNotificationPanel extends consulo.ide.impl.idea.ui.EditorNotificationPanel
-	{
-		public AlternativeSourceNotificationPanel(ComboBoxClassElement[] alternatives, final PsiClass aClass, final Project project, final VirtualFile file, String locationDeclName)
-		{
-			setText(DebuggerBundle.message("editor.notification.alternative.source", aClass.getQualifiedName()));
-			final ComboBox<ComboBoxClassElement> switcher = new ComboBox<>(alternatives);
-			switcher.addActionListener(new ActionListener()
-			{
-				@Override
-				public void actionPerformed(ActionEvent e)
-				{
-					final DebuggerContextImpl context = DebuggerManagerEx.getInstanceEx(project).getContext();
-					final DebuggerSession session = context.getDebuggerSession();
-					final PsiClass item = ((ComboBoxClassElement) switcher.getSelectedItem()).myClass;
-					final VirtualFile vFile = item.getContainingFile().getVirtualFile();
-					if(session != null && vFile != null)
-					{
-						session.getProcess().getManagerThread().schedule(new DebuggerCommandImpl()
-						{
-							@Override
-							protected void action() throws Exception
-							{
-								if(!StringUtil.isEmpty(locationDeclName))
-								{
-									DebuggerUtilsEx.setAlternativeSourceUrl(locationDeclName, vFile.getUrl(), project);
-								}
-								consulo.ide.impl.idea.xdebugger.impl.ui.DebuggerUIUtil.invokeLater(() ->
-								{
-									FileEditorManager.getInstance(project).closeFile(file);
-									session.refresh(true);
-								});
-							}
-						});
-					}
-					else
-					{
-						FileEditorManager.getInstance(project).closeFile(file);
-						item.navigate(true);
-					}
-				}
-			});
-			myLinksPanel.add(switcher);
-			createActionLabel(DebuggerBundle.message("action.disable.text"), () ->
-			{
-				DebuggerSettings.getInstance().SHOW_ALTERNATIVE_SOURCE = false;
-				FILE_PROCESSED_KEY.set(file, null);
-				FileEditorManager fileEditorManager = FileEditorManager.getInstance(project);
-				FileEditor editor = fileEditorManager.getSelectedEditor(file);
-				if(editor != null)
-				{
-					fileEditorManager.removeTopComponent(editor, this);
-				}
-			});
-		}
-	}
+    builder.withAction(LocalizeValue.localizeTODO(DebuggerBundle.message("action.disable.text")), uiEvent -> {
+      DebuggerSettings.getInstance().SHOW_ALTERNATIVE_SOURCE = false;
+      FILE_PROCESSED_KEY.set(file, null);
+
+      EditorNotifications.getInstance(project).updateNotifications(file);
+    });
+  }
 }

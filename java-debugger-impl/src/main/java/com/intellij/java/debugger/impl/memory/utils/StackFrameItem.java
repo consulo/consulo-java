@@ -211,7 +211,7 @@ public class StackFrameItem {
     return new CapturedStackFrame(debugProcess, this);
   }
 
-  public static class CapturedStackFrame extends XStackFrame implements JVMStackFrameInfoProvider, XDebuggerFramesList.ItemWithSeparatorAbove {
+  public static class CapturedStackFrame extends XStackFrame implements JVMStackFrameInfoProvider, XStackFrameWithSeparatorAbove {
     private final XSourcePosition mySourcePosition;
     private final boolean myIsSynthetic;
     private final boolean myIsInLibraryContent;

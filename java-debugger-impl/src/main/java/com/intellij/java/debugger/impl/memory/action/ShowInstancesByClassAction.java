@@ -15,20 +15,19 @@
  */
 package com.intellij.java.debugger.impl.memory.action;
 
-import java.util.Collections;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-
 import com.intellij.java.debugger.impl.memory.ui.InstancesWindow;
-import consulo.ui.ex.action.AnActionEvent;
-import consulo.project.Project;
-import consulo.util.lang.StringUtil;
 import consulo.execution.debug.XDebugSession;
 import consulo.execution.debug.XDebuggerManager;
 import consulo.ide.impl.idea.xdebugger.impl.ui.tree.nodes.XValueNodeImpl;
 import consulo.internal.com.sun.jdi.ObjectReference;
 import consulo.internal.com.sun.jdi.ReferenceType;
+import consulo.project.Project;
+import consulo.ui.ex.action.AnActionEvent;
+import consulo.util.lang.StringUtil;
+
+import javax.annotation.Nonnull;
+import java.util.Collections;
+import java.util.List;
 
 public class ShowInstancesByClassAction extends DebuggerTreeAction
 {
@@ -49,7 +48,7 @@ public class ShowInstancesByClassAction extends DebuggerTreeAction
 	@Override
 	protected void perform(XValueNodeImpl node, @Nonnull String nodeName, AnActionEvent e)
 	{
-		final Project project = e.getProject();
+		Project project = e.getData(Project.KEY);
 		if(project != null)
 		{
 			final XDebugSession debugSession = XDebuggerManager.getInstance(project).getCurrentSession();

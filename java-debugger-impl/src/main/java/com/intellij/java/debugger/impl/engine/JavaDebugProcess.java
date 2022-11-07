@@ -51,6 +51,7 @@ import consulo.execution.ui.ExecutionConsoleEx;
 import consulo.execution.ui.layout.PlaceInGrid;
 import consulo.execution.ui.layout.RunnerLayoutUi;
 import consulo.fileEditor.EditorNotifications;
+import consulo.ide.impl.idea.xdebugger.impl.XDebugSessionImpl;
 import consulo.internal.com.sun.jdi.event.Event;
 import consulo.process.ProcessHandler;
 import consulo.project.Project;
@@ -490,7 +491,7 @@ public class JavaDebugProcess extends XDebugProcess
 		{
 			myAutoModeEnabled = enabled;
 			DebuggerSettings.getInstance().AUTO_VARIABLES_MODE = enabled;
-			XDebuggerUtilImpl.rebuildAllSessionsViews(e.getData(Project.KEY));
+			XDebuggerUtil.getInstance().rebuildAllSessionsViews(e.getData(Project.KEY));
 		}
 	}
 

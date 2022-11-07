@@ -15,36 +15,28 @@
  */
 package com.intellij.java.debugger.impl.engine;
 
-import java.util.Objects;
-import java.util.stream.Stream;
-
 import com.intellij.java.debugger.DebuggerBundle;
-import com.intellij.java.debugger.impl.DebuggerInvocationUtil;
 import com.intellij.java.debugger.DebuggerManager;
-import com.intellij.java.debugger.impl.DebuggerManagerEx;
 import com.intellij.java.debugger.PositionManagerFactory;
+import com.intellij.java.debugger.impl.DebuggerInvocationUtil;
+import com.intellij.java.debugger.impl.DebuggerManagerEx;
+import com.intellij.java.debugger.impl.DebuggerManagerImpl;
+import com.intellij.java.debugger.impl.DebuggerSession;
 import com.intellij.java.debugger.impl.engine.events.DebuggerCommandImpl;
 import com.intellij.java.debugger.impl.engine.events.SuspendContextCommandImpl;
 import com.intellij.java.debugger.impl.engine.requests.LocatableEventRequestor;
 import com.intellij.java.debugger.impl.engine.requests.MethodReturnValueWatcher;
-import com.intellij.java.debugger.impl.DebuggerManagerImpl;
-import com.intellij.java.debugger.impl.DebuggerSession;
 import com.intellij.java.debugger.impl.jdi.ThreadReferenceProxyImpl;
 import com.intellij.java.debugger.impl.jdi.VirtualMachineProxyImpl;
-import com.intellij.java.debugger.requests.Requestor;
 import com.intellij.java.debugger.impl.settings.DebuggerSettings;
 import com.intellij.java.debugger.impl.ui.breakpoints.Breakpoint;
 import com.intellij.java.debugger.impl.ui.breakpoints.StackCapturingLineBreakpoint;
+import com.intellij.java.debugger.requests.Requestor;
 import com.intellij.java.execution.configurations.RemoteConnection;
+import consulo.application.Application;
 import consulo.application.ApplicationManager;
-import consulo.ui.ModalityState;
-import consulo.logging.Logger;
-import consulo.component.extension.Extensions;
 import consulo.component.ProcessCanceledException;
-import consulo.project.Project;
-import consulo.ide.impl.idea.openapi.ui.MessageType;
-import consulo.ui.ex.awt.Messages;
-import consulo.util.lang.Pair;
+import consulo.component.extension.Extensions;
 import consulo.execution.debug.XDebugSession;
 import consulo.execution.debug.breakpoint.XBreakpoint;
 import consulo.ide.impl.idea.xdebugger.impl.XDebugSessionImpl;
@@ -57,8 +49,15 @@ import consulo.internal.com.sun.jdi.request.EventRequest;
 import consulo.internal.com.sun.jdi.request.EventRequestManager;
 import consulo.internal.com.sun.jdi.request.ThreadDeathRequest;
 import consulo.internal.com.sun.jdi.request.ThreadStartRequest;
+import consulo.logging.Logger;
+import consulo.project.Project;
+import consulo.project.ui.notification.NotificationType;
+import consulo.ui.ex.awt.Messages;
+import consulo.util.lang.Pair;
 
 import javax.annotation.Nullable;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 /**
  * @author lex
@@ -395,7 +394,7 @@ public class DebugProcessEvents extends DebugProcessImpl
 			threadDeathRequest.enable();
 
 			// fill position managers
-			((DebuggerManagerImpl) DebuggerManager.getInstance(getProject())).getCustomPositionManagerFactories().map(factory -> factory.fun(this)).filter(Objects::nonNull).forEach
+			((DebuggerManagerImpl) DebuggerManager.getInstance(getProject())).getCustomPositionManagerFactories().map(factory -> factory.apply(this)).filter(Objects::nonNull).forEach
 					(this::appendPositionManager);
 			Stream.of(Extensions.getExtensions(PositionManagerFactory.EP_NAME, getProject())).map(factory -> factory.createPositionManager(this)).filter(Objects::nonNull).forEach
 					(this::appendPositionManager);
@@ -527,7 +526,7 @@ public class DebugProcessEvents extends DebugProcessImpl
 				if(methodFilter instanceof NamedMethodFilter && !hint.wasStepTargetMethodMatched())
 				{
 					final String message = "Method <b>" + ((NamedMethodFilter) methodFilter).getMethodName() + "()</b> has not been called";
-					XDebugSessionImpl.NOTIFICATION_GROUP.createNotification(message, MessageType.INFO).notify(project);
+					XDebugSessionImpl.NOTIFICATION_GROUP.createNotification(message, NotificationType.INFORMATION).notify(project);
 				}
 				if(hint.wasStepTargetMethodMatched() && hint.isResetIgnoreFilters())
 				{
@@ -581,7 +580,7 @@ public class DebugProcessEvents extends DebugProcessImpl
 						final String displayName = requestor instanceof Breakpoint ? ((Breakpoint) requestor).getDisplayName() : requestor.getClass().getSimpleName();
 						final String message = DebuggerBundle.message("error.evaluating.breakpoint.condition.or.action", displayName, ex.getMessage());
 						considerRequestHit[0] = Messages.showYesNoDialog(getProject(), message, ex.getTitle(), Messages.getQuestionIcon()) == Messages.YES;
-					}, ModalityState.NON_MODAL);
+					}, Application.get().getNoneModalityState());
 					requestHit = considerRequestHit[0];
 					resumePreferred = !requestHit;
 				}
@@ -629,7 +628,7 @@ public class DebugProcessEvents extends DebugProcessImpl
 
 	private void notifySkippedBreakpoints(LocatableEvent event)
 	{
-		XDebugSessionImpl.NOTIFICATION_GROUP.createNotification(DebuggerBundle.message("message.breakpoint.skipped", event.location()), MessageType.INFO).notify(getProject());
+		XDebugSessionImpl.NOTIFICATION_GROUP.createNotification(DebuggerBundle.message("message.breakpoint.skipped", event.location()), NotificationType.INFORMATION).notify(getProject());
 	}
 
 	@Nullable

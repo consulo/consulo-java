@@ -15,23 +15,18 @@
  */
 package com.intellij.java.debugger.impl.settings;
 
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
+import com.intellij.java.debugger.DebuggerBundle;
+import com.intellij.java.debugger.impl.classFilter.ClassFilterEditor;
+import com.intellij.java.debugger.impl.ui.JavaDebuggerSupport;
+import consulo.configurable.IdeaConfigurableUi;
+
+import javax.annotation.Nonnull;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.annotation.Nonnull;
-import javax.swing.JCheckBox;
-import javax.swing.JComponent;
-import javax.swing.JPanel;
-
-import com.intellij.java.debugger.DebuggerBundle;
-import com.intellij.java.debugger.impl.ui.JavaDebuggerSupport;
-import com.intellij.openapi.options.ConfigurableUi;
-import com.intellij.java.debugger.impl.classFilter.ClassFilterEditor;
-
-class DebuggerSteppingConfigurable implements ConfigurableUi<DebuggerSettings>
+class DebuggerSteppingConfigurable implements IdeaConfigurableUi<DebuggerSettings>
 {
 	private JCheckBox myCbStepInfoFiltersEnabled;
 	private JCheckBox myCbSkipSyntheticMethods;

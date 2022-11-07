@@ -38,7 +38,7 @@ public class EditSourceAction extends DebuggerAction
 	@Override
 	public void actionPerformed(AnActionEvent e)
 	{
-		final Project project = e.getProject();
+		final Project project = e.getData(Project.KEY);
 
 		if(project == null)
 		{
@@ -104,7 +104,7 @@ public class EditSourceAction extends DebuggerAction
 	@Override
 	public void update(AnActionEvent e)
 	{
-		final Project project = e.getProject();
+		final Project project = e.getData(Project.KEY);
 
 		final DebuggerContextImpl debuggerContext = getDebuggerContext(e.getDataContext());
 		final DebuggerTreeNodeImpl node = getSelectedNode(e.getDataContext());

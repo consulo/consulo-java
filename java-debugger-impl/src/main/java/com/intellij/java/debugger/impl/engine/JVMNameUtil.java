@@ -15,31 +15,32 @@
  */
 package com.intellij.java.debugger.impl.engine;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.DebuggerManager;
 import com.intellij.java.debugger.SourcePosition;
 import com.intellij.java.debugger.engine.evaluation.EvaluateException;
 import com.intellij.java.debugger.engine.evaluation.EvaluateExceptionUtil;
 import com.intellij.java.language.psi.*;
-import com.intellij.java.language.util.JavaAnonymousClassesHelper;
-import consulo.application.ApplicationManager;
-import consulo.logging.Logger;
-import consulo.component.ProcessCanceledException;
-import consulo.util.lang.Comparing;
-import consulo.application.util.function.Computable;
-import consulo.util.lang.ref.Ref;
-import consulo.util.lang.StringUtil;
-import com.intellij.psi.*;
 import com.intellij.java.language.psi.util.ClassUtil;
-import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
+import com.intellij.java.language.util.JavaAnonymousClassesHelper;
+import consulo.application.ApplicationManager;
+import consulo.application.util.function.Computable;
+import consulo.component.ProcessCanceledException;
 import consulo.internal.com.sun.jdi.ReferenceType;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.logging.Logger;
+import consulo.util.lang.Comparing;
+import consulo.util.lang.StringUtil;
+import consulo.util.lang.ref.Ref;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * User: lex

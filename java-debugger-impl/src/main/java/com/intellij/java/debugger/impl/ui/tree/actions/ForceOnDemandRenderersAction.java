@@ -41,7 +41,7 @@ public class ForceOnDemandRenderersAction extends ToggleAction implements DumbAw
 		XDebugSessionData data = e.getData(XDebugSessionData.DATA_KEY);
 		if(data == null)
 		{
-			Project project = e.getProject();
+			Project project = e.getData(Project.KEY);
 			if(project != null)
 			{
 				XDebugSession session = XDebuggerManager.getInstance(project).getCurrentSession();

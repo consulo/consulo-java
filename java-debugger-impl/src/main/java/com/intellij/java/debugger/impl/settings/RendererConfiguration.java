@@ -15,19 +15,19 @@
  */
 package com.intellij.java.debugger.impl.settings;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
-
-import org.jdom.Element;
-import org.jetbrains.annotations.TestOnly;
 import com.intellij.java.debugger.impl.DebuggerUtilsEx;
 import com.intellij.java.debugger.impl.ui.tree.render.NodeRenderer;
 import consulo.logging.Logger;
 import consulo.util.xml.serializer.JDOMExternalizable;
 import consulo.util.xml.serializer.WriteExternalException;
-import com.intellij.util.containers.InternalIterator;
+import org.jdom.Element;
+import org.jetbrains.annotations.TestOnly;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.function.Predicate;
 
 public class RendererConfiguration implements Cloneable, JDOMExternalizable
 {
@@ -140,11 +140,11 @@ public class RendererConfiguration implements Cloneable, JDOMExternalizable
 		myRepresentationNodes.addAll(renderers);
 	}
 
-	public void iterateRenderers(InternalIterator<NodeRenderer> iterator)
+	public void iterateRenderers(Predicate<NodeRenderer> iterator)
 	{
 		for(final NodeRenderer renderer : myRepresentationNodes)
 		{
-			final boolean shouldContinue = iterator.visit(renderer);
+			final boolean shouldContinue = iterator.test(renderer);
 			if(!shouldContinue)
 			{
 				break;

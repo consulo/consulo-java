@@ -15,31 +15,32 @@
  */
 package com.intellij.java.debugger.impl.ui.impl.watch;
 
-import java.util.Set;
-
-import javax.annotation.Nullable;
-import com.intellij.java.language.impl.codeInsight.ChangeContextUtil;
 import com.intellij.java.debugger.DebuggerBundle;
-import com.intellij.java.debugger.impl.codeinsight.RuntimeTypeEvaluator;
 import com.intellij.java.debugger.engine.evaluation.EvaluateException;
 import com.intellij.java.debugger.engine.evaluation.TextWithImports;
-import com.intellij.java.debugger.impl.engine.evaluation.TextWithImportsImpl;
 import com.intellij.java.debugger.impl.DebuggerContextImpl;
-import com.intellij.java.language.psi.*;
-import consulo.logging.Logger;
-import consulo.project.Project;
-import consulo.application.util.function.Computable;
-import consulo.util.dataholder.Key;
+import com.intellij.java.debugger.impl.codeinsight.RuntimeTypeEvaluator;
+import com.intellij.java.debugger.impl.engine.evaluation.TextWithImportsImpl;
 import com.intellij.java.language.LanguageLevel;
-import com.intellij.psi.*;
-import consulo.language.psi.scope.GlobalSearchScope;
-import consulo.language.psi.util.PsiTreeUtil;
+import com.intellij.java.language.impl.codeInsight.ChangeContextUtil;
+import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.language.util.IncorrectOperationException;
-import consulo.util.collection.SmartHashSet;
+import consulo.application.util.function.Computable;
 import consulo.internal.com.sun.jdi.ObjectReference;
 import consulo.internal.com.sun.jdi.ReferenceType;
 import consulo.internal.com.sun.jdi.Value;
+import consulo.language.psi.PsiDocumentManager;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.logging.Logger;
+import consulo.project.Project;
+import consulo.util.collection.SmartHashSet;
+import consulo.util.dataholder.Key;
+
+import javax.annotation.Nullable;
+import java.util.Set;
 
 /**
  * User: lex

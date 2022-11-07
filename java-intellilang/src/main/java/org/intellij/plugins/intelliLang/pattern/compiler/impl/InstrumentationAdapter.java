@@ -15,18 +15,14 @@
  */
 package org.intellij.plugins.intelliLang.pattern.compiler.impl;
 
+import consulo.ide.impl.intelliLang.Configuration;
+import consulo.internal.org.objectweb.asm.*;
+import org.jetbrains.annotations.NonNls;
+
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
-import org.intellij.plugins.intelliLang.Configuration;
-import org.jetbrains.annotations.NonNls;
-import consulo.internal.org.objectweb.asm.AnnotationVisitor;
-import consulo.internal.org.objectweb.asm.Label;
-import consulo.internal.org.objectweb.asm.MethodVisitor;
-import consulo.internal.org.objectweb.asm.Opcodes;
-import consulo.internal.org.objectweb.asm.Type;
 
 class InstrumentationAdapter extends MethodVisitor implements Opcodes {
   @NonNls

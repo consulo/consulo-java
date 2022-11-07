@@ -19,18 +19,12 @@ import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.impl.ui.tree.render.CompoundNodeRenderer;
 import com.intellij.java.debugger.impl.ui.tree.render.NodeRenderer;
 import consulo.application.AllIcons;
-import consulo.ide.impl.idea.ide.util.ElementsChooser;
+import consulo.configurable.IdeaConfigurableUi;
+import consulo.disposer.Disposable;
 import consulo.ui.ex.action.ActionToolbarPosition;
 import consulo.ui.ex.action.AnActionEvent;
-import com.intellij.openapi.options.ConfigurableUi;
-import consulo.ui.ex.awt.AnActionButtonRunnable;
-import consulo.ui.ex.awt.Splitter;
-import consulo.ui.ex.awt.AnActionButton;
+import consulo.ui.ex.awt.*;
 import consulo.ui.ex.awt.event.DocumentAdapter;
-import consulo.ui.ex.awt.ToolbarDecorator;
-import com.intellij.util.containers.InternalIterator;
-import consulo.ui.ex.awt.JBUI;
-import consulo.disposer.Disposable;
 
 import javax.annotation.Nonnull;
 import javax.swing.*;
@@ -40,8 +34,9 @@ import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
-public final class UserRenderersConfigurable extends JPanel implements ConfigurableUi<NodeRendererSettings>, Disposable
+public final class UserRenderersConfigurable extends JPanel implements IdeaConfigurableUi<NodeRendererSettings>, Disposable
 {
 	private final JPanel myNameFieldPanel;
 	private final JTextField myNameField;
@@ -211,10 +206,10 @@ public final class UserRenderersConfigurable extends JPanel implements Configura
 		myRendererChooser.removeAllElements();
 		final RendererConfiguration rendererConfiguration = settings.getCustomRenderers();
 		final ArrayList<NodeRenderer> elementsToSelect = new ArrayList<NodeRenderer>(1);
-		rendererConfiguration.iterateRenderers(new InternalIterator<NodeRenderer>()
+		rendererConfiguration.iterateRenderers(new Predicate<NodeRenderer>()
 		{
 			@Override
-			public boolean visit(final NodeRenderer renderer)
+			public boolean test(final NodeRenderer renderer)
 			{
 				final NodeRenderer clonedRenderer = (NodeRenderer) renderer.clone();
 				myRendererChooser.addElement(clonedRenderer, clonedRenderer.isEnabled());

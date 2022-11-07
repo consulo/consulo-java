@@ -19,19 +19,24 @@ import com.intellij.java.debugger.engine.DebuggerUtils;
 import com.intellij.java.debugger.engine.evaluation.CodeFragmentKind;
 import com.intellij.java.debugger.engine.evaluation.TextWithImports;
 import com.intellij.java.debugger.impl.engine.evaluation.TextWithImportsImpl;
+import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.document.util.TextRange;
+import consulo.language.Language;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.util.lang.Pair;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
  * @author Maxim.Medvedev
  */
+@ExtensionImpl
 public class JavaEditorTextProviderImpl implements EditorTextProvider {
   private static final Logger LOG = Logger.getInstance(JavaEditorTextProviderImpl.class);
 
@@ -144,5 +149,11 @@ public class JavaEditorTextProviderImpl implements EditorTextProvider {
       }
     }
     return def;
+  }
+
+  @Nonnull
+  @Override
+  public Language getLanguage() {
+    return JavaLanguage.INSTANCE;
   }
 }

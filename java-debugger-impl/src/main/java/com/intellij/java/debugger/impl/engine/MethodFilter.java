@@ -15,14 +15,14 @@
  */
 package com.intellij.java.debugger.impl.engine;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import com.intellij.java.debugger.impl.EvaluatingComputable;
 import com.intellij.java.debugger.engine.evaluation.EvaluateException;
-import com.intellij.util.Range;
+import com.intellij.java.debugger.impl.EvaluatingComputable;
 import consulo.internal.com.sun.jdi.Location;
 import consulo.internal.com.sun.jdi.ObjectReference;
+import consulo.util.lang.Range;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public interface MethodFilter
 {

@@ -15,25 +15,24 @@
  */
 package com.intellij.java.debugger.impl.ui;
 
-import consulo.application.CommonBundle;
 import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.impl.DebuggerSession;
 import com.intellij.java.debugger.impl.settings.DebuggerSettings;
-import consulo.ide.impl.idea.ide.util.ElementsChooser;
+import consulo.application.CommonBundle;
 import consulo.project.Project;
+import consulo.ui.ex.awt.ElementsChooser;
 import consulo.ui.ex.awt.IdeBorderFactory;
-import consulo.ui.ex.awt.internal.laf.MultiLineLabelUI;
-import consulo.ide.impl.idea.util.ui.OptionsDialog;
+import consulo.ui.ex.awt.OptionsDialog;
 import consulo.ui.ex.awt.UIUtil;
+import consulo.ui.ex.awt.internal.laf.MultiLineLabelUI;
 import consulo.ui.ex.awtUnsafe.TargetAWT;
 import consulo.ui.image.Image;
 
 import javax.annotation.Nonnull;
-
 import javax.swing.*;
 import java.awt.*;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 
 /**
  * User: lex

@@ -15,20 +15,20 @@
  */
 package org.intellij.plugins.intelliLang.inject.java.validation;
 
-import javax.annotation.Nonnull;
-
-import consulo.language.editor.rawHighlight.HighlightDisplayLevel;
+import com.intellij.java.language.psi.*;
+import consulo.ide.impl.intelliLang.Configuration;
+import consulo.ide.impl.intelliLang.inject.InjectedLanguage;
+import consulo.language.Language;
 import consulo.language.editor.inspection.LocalInspectionTool;
 import consulo.language.editor.inspection.ProblemHighlightType;
 import consulo.language.editor.inspection.ProblemsHolder;
-import com.intellij.java.language.psi.*;
-import consulo.language.Language;
-import com.intellij.psi.*;
+import consulo.language.editor.rawHighlight.HighlightDisplayLevel;
+import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.util.PsiTreeUtil;
-import org.intellij.plugins.intelliLang.Configuration;
-import org.intellij.plugins.intelliLang.inject.InjectedLanguage;
 import org.intellij.plugins.intelliLang.pattern.PatternValidator;
 import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
 
 public class UnknownLanguageID extends LocalInspectionTool {
 

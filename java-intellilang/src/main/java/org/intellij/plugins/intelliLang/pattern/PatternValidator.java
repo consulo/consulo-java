@@ -15,7 +15,38 @@
  */
 package org.intellij.plugins.intelliLang.pattern;
 
-import java.awt.BorderLayout;
+import com.intellij.java.analysis.refactoring.JavaRefactoringActionHandlerFactory;
+import com.intellij.java.language.psi.*;
+import consulo.application.util.CachedValue;
+import consulo.application.util.CachedValueProvider;
+import consulo.application.util.CachedValuesManager;
+import consulo.dataContext.DataContext;
+import consulo.dataContext.DataManager;
+import consulo.ide.impl.intelliLang.Configuration;
+import consulo.language.editor.inspection.LocalInspectionTool;
+import consulo.language.editor.inspection.LocalQuickFix;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.editor.inspection.ProblemsHolder;
+import consulo.language.editor.refactoring.action.RefactoringActionHandler;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiElementVisitor;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.project.Project;
+import consulo.util.collection.SmartList;
+import consulo.util.concurrent.AsyncResult;
+import consulo.util.dataholder.Key;
+import consulo.util.lang.Comparing;
+import consulo.util.lang.StringUtil;
+import org.intellij.plugins.intelliLang.util.AnnotateFix;
+import org.intellij.plugins.intelliLang.util.AnnotationUtilEx;
+import org.intellij.plugins.intelliLang.util.PsiUtilEx;
+import org.intellij.plugins.intelliLang.util.SubstitutedExpressionEvaluationHelper;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.text.MessageFormat;
@@ -23,44 +54,11 @@ import java.util.List;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.swing.JCheckBox;
-import javax.swing.JComponent;
-import javax.swing.JPanel;
-
-import com.intellij.java.language.psi.*;
-import org.intellij.plugins.intelliLang.Configuration;
-import org.intellij.plugins.intelliLang.util.AnnotateFix;
-import org.intellij.plugins.intelliLang.util.AnnotationUtilEx;
-import org.intellij.plugins.intelliLang.util.PsiUtilEx;
-import org.intellij.plugins.intelliLang.util.SubstitutedExpressionEvaluationHelper;
-import org.jetbrains.annotations.NonNls;
-import consulo.language.editor.inspection.LocalInspectionTool;
-import consulo.language.editor.inspection.LocalQuickFix;
-import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.language.editor.inspection.ProblemsHolder;
-import consulo.dataContext.DataManager;
-import consulo.dataContext.DataContext;
-import consulo.project.Project;
-import consulo.util.concurrent.AsyncResult;
-import consulo.util.lang.Comparing;
-import consulo.util.dataholder.Key;
-import consulo.util.lang.StringUtil;
-import com.intellij.psi.*;
-import consulo.application.util.CachedValue;
-import consulo.application.util.CachedValueProvider;
-import consulo.application.util.CachedValuesManager;
-import consulo.language.psi.util.PsiTreeUtil;
-import com.intellij.java.analysis.refactoring.JavaRefactoringActionHandlerFactory;
-import consulo.language.editor.refactoring.action.RefactoringActionHandler;
-import consulo.util.collection.SmartList;
-
 /**
  * Inspection that validates if string literals, compile-time constants or
  * substituted expressions match the pattern of the context they're used in.
  */
-public class PatternValidator extends LocalInspectionTool
+public abstract class PatternValidator extends LocalInspectionTool
 {
 	private static final Key<CachedValue<Pattern>> COMPLIED_PATTERN = Key.create("COMPILED_PATTERN");
 	public static final String PATTERN_VALIDATION = "Pattern Validation";

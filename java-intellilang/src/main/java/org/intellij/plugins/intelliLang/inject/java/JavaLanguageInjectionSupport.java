@@ -17,44 +17,42 @@
 package org.intellij.plugins.intelliLang.inject.java;
 
 import com.intellij.java.language.codeInsight.AnnotationUtil;
-import consulo.application.AllIcons;
-import com.intellij.java.language.psi.*;
-import consulo.language.Language;
-import consulo.ui.ex.action.AnAction;
-import consulo.ui.ex.action.AnActionEvent;
-import consulo.application.Result;
-import consulo.language.editor.WriteCommandAction;
-import consulo.configurable.Configurable;
-import consulo.project.Project;
-import consulo.ui.ex.awt.DialogBuilder;
-import consulo.ui.ex.awt.DialogWrapper;
-import consulo.language.impl.ast.Factory;
-import consulo.util.lang.Pair;
-import consulo.util.lang.StringUtil;
 import com.intellij.java.language.patterns.PsiJavaPatterns;
-import consulo.language.pattern.compiler.PatternCompiler;
-import com.intellij.psi.*;
+import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
+import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.application.AllIcons;
+import consulo.application.Result;
+import consulo.application.util.function.Processor;
+import consulo.configurable.Configurable;
+import consulo.ide.impl.idea.util.ArrayUtilRt;
+import consulo.ide.impl.idea.util.NullableFunction;
+import consulo.ide.impl.intelliLang.Configuration;
+import consulo.ide.impl.intelliLang.inject.InjectLanguageAction;
+import consulo.ide.impl.intelliLang.inject.InjectorUtils;
+import consulo.ide.impl.intelliLang.inject.config.BaseInjection;
+import consulo.ide.impl.intelliLang.inject.config.InjectionPlace;
+import consulo.ide.impl.intelliLang.inject.config.ui.AbstractInjectionPanel;
+import consulo.ide.impl.psi.injection.AbstractLanguageInjectionSupport;
+import consulo.language.Language;
+import consulo.language.editor.WriteCommandAction;
+import consulo.language.pattern.compiler.PatternCompiler;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiLanguageInjectionHost;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.util.PsiTreeUtil;
-import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.project.Project;
 import consulo.ui.ex.SimpleColoredText;
 import consulo.ui.ex.SimpleTextAttributes;
-import consulo.ide.impl.idea.util.ArrayUtilRt;
-import consulo.ide.impl.idea.util.Consumer;
-import consulo.ide.impl.idea.util.NullableFunction;
-import consulo.application.util.function.Processor;
+import consulo.ui.ex.action.AnAction;
+import consulo.ui.ex.action.AnActionEvent;
+import consulo.ui.ex.awt.DialogBuilder;
+import consulo.ui.ex.awt.DialogWrapper;
 import consulo.util.collection.ContainerUtil;
-import consulo.psi.injection.AbstractLanguageInjectionSupport;
+import consulo.util.lang.Pair;
+import consulo.util.lang.StringUtil;
 import org.intellij.plugins.intelliLang.AdvancedSettingsUI;
-import org.intellij.plugins.intelliLang.Configuration;
-import org.intellij.plugins.intelliLang.inject.EditInjectionSettingsAction;
-import org.intellij.plugins.intelliLang.inject.InjectLanguageAction;
-import org.intellij.plugins.intelliLang.inject.InjectorUtils;
-import org.intellij.plugins.intelliLang.inject.config.BaseInjection;
-import org.intellij.plugins.intelliLang.inject.config.InjectionPlace;
 import org.intellij.plugins.intelliLang.inject.config.MethodParameterInjection;
-import org.intellij.plugins.intelliLang.inject.config.ui.AbstractInjectionPanel;
 import org.intellij.plugins.intelliLang.inject.config.ui.MethodParameterPanel;
 import org.intellij.plugins.intelliLang.inject.config.ui.configurables.MethodParameterInjectionConfigurable;
 import org.intellij.plugins.intelliLang.util.ContextComputationProcessor;
@@ -65,6 +63,8 @@ import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -116,7 +116,7 @@ public class JavaLanguageInjectionSupport extends AbstractLanguageInjectionSuppo
     if (injectionsMap.isEmpty() && annotations.isEmpty()) return false;
     final ArrayList<BaseInjection> originalInjections = new ArrayList<BaseInjection>(injectionsMap.keySet());
     final List<BaseInjection> newInjections = ContainerUtil.mapNotNull(originalInjections, new NullableFunction<BaseInjection, BaseInjection>() {
-      public BaseInjection fun(final BaseInjection injection) {
+      public BaseInjection apply(final BaseInjection injection) {
         final Pair<PsiMethod, Integer> pair = injectionsMap.get(injection);
         final String placeText = getPatternStringForJavaPlace(pair.first, pair.second);
         final BaseInjection newInjection = injection.copy();
@@ -161,7 +161,7 @@ public class JavaLanguageInjectionSupport extends AbstractLanguageInjectionSuppo
     builder.addOkAction();
     builder.addCancelAction();
     builder.setCenterPanel(panel.getComponent());
-    builder.setTitle(EditInjectionSettingsAction.EDIT_INJECTION_TITLE);
+    builder.setTitle("Edit Injections");
     builder.setOkOperation(new Runnable() {
       public void run() {
         panel.apply();
@@ -501,18 +501,18 @@ public class JavaLanguageInjectionSupport extends AbstractLanguageInjectionSuppo
         @Override
         public void actionPerformed(final AnActionEvent e) {
           final BaseInjection injection = showInjectionUI(project, new MethodParameterInjection());
-          if (injection != null) consumer.consume(injection);
+          if (injection != null) consumer.accept(injection);
         }
       }
     };
   }
 
   @Override
-  public AnAction createEditAction(final Project project, final Factory<BaseInjection> producer) {
+  public AnAction createEditAction(final Project project, final Supplier<BaseInjection> producer) {
     return new AnAction() {
       @Override
       public void actionPerformed(final AnActionEvent e) {
-        final BaseInjection originalInjection = producer.create();
+        final BaseInjection originalInjection = producer.get();
         final MethodParameterInjection injection = createFrom(project, originalInjection, null, false);
         if (injection != null) {
           final boolean mergeEnabled = !project.isInitialized() ||

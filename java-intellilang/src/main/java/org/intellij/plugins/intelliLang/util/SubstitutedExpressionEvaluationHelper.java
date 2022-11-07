@@ -15,13 +15,14 @@
  */
 package org.intellij.plugins.intelliLang.util;
 
-import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.DfaPsiUtil;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.DfaUtil;
+import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.language.psi.*;
+import consulo.ide.impl.intelliLang.Configuration;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiRecursiveElementWalkingVisitor;
 import consulo.project.Project;
-import com.intellij.psi.*;
-import org.intellij.plugins.intelliLang.Configuration;
 
 import javax.annotation.Nullable;
 import java.util.Collection;

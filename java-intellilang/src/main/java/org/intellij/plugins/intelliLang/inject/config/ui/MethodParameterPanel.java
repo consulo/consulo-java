@@ -15,35 +15,43 @@
  */
 package org.intellij.plugins.intelliLang.inject.config.ui;
 
-import consulo.application.AllIcons;
 import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.PsiFormatUtil;
 import com.intellij.java.language.util.TreeClassChooser;
 import com.intellij.java.language.util.TreeClassChooserFactory;
-import com.intellij.openapi.actionSystem.*;
+import consulo.application.AllIcons;
 import consulo.application.ApplicationManager;
+import consulo.application.util.function.Computable;
+import consulo.dataContext.DataSink;
+import consulo.dataContext.TypeSafeDataProvider;
 import consulo.document.Document;
 import consulo.document.event.DocumentAdapter;
 import consulo.document.event.DocumentEvent;
-import consulo.project.Project;
-import consulo.application.util.function.Computable;
-import consulo.ui.ex.awt.BooleanTableCellRenderer;
-import consulo.ui.ex.awt.tree.ColoredTreeCellRenderer;
-import consulo.util.lang.function.Condition;
-import com.intellij.psi.*;
-import consulo.language.psi.scope.GlobalSearchScope;
-import com.intellij.java.language.psi.util.PsiFormatUtil;
-import com.intellij.ui.*;
-import consulo.ide.impl.idea.ui.dualView.TreeTableView;
 import consulo.ide.impl.idea.ui.treeStructure.treetable.ListTreeTableModelOnColumns;
-import consulo.ide.impl.idea.ui.treeStructure.treetable.TreeColumnInfo;
-import consulo.ide.impl.idea.util.Function;
-import consulo.util.collection.ContainerUtil;
 import consulo.ide.impl.idea.util.containers.Convertor;
+import consulo.ide.impl.intelliLang.inject.config.ui.AbstractInjectionPanel;
+import consulo.ide.impl.intelliLang.inject.config.ui.AdvancedPanel;
+import consulo.ide.impl.intelliLang.inject.config.ui.LanguagePanel;
+import consulo.language.editor.LangDataKeys;
+import consulo.language.editor.ui.awt.ReferenceEditorWithBrowseButton;
+import consulo.language.psi.PsiDocumentManager;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiNamedElement;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.project.Project;
+import consulo.ui.ex.SimpleTextAttributes;
+import consulo.ui.ex.action.AnAction;
+import consulo.ui.ex.action.AnActionEvent;
+import consulo.ui.ex.action.CustomShortcutSet;
+import consulo.ui.ex.awt.BooleanTableCellRenderer;
 import consulo.ui.ex.awt.ColumnInfo;
+import consulo.ui.ex.awt.speedSearch.TreeTableSpeedSearch;
+import consulo.ui.ex.awt.tree.ColoredTreeCellRenderer;
 import consulo.ui.ex.awt.tree.TreeUtil;
-import consulo.dataContext.DataSink;
-import consulo.dataContext.TypeSafeDataProvider;
+import consulo.util.collection.ContainerUtil;
 import consulo.util.dataholder.Key;
+import consulo.util.lang.function.Condition;
 import org.intellij.plugins.intelliLang.inject.config.MethodParameterInjection;
 import org.intellij.plugins.intelliLang.util.PsiUtilEx;
 
@@ -58,6 +66,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.util.*;
+import java.util.function.Function;
 
 public class MethodParameterPanel extends AbstractInjectionPanel<MethodParameterInjection> {
 
@@ -79,7 +88,7 @@ public class MethodParameterPanel extends AbstractInjectionPanel<MethodParameter
     $$$setupUI$$$();
 
     myClassField = new ReferenceEditorWithBrowseButton(new BrowseClassListener(project), project, new Function<String, Document>() {
-      public Document fun(String s) {
+      public Document apply(String s) {
         final Document document = PsiUtilEx.createDocument(s, project);
         document.addDocumentListener(new DocumentAdapter() {
           @Override
@@ -126,7 +135,7 @@ public class MethodParameterPanel extends AbstractInjectionPanel<MethodParameter
       @Nullable
       public String convert(final TreePath o) {
         final Object userObject = ((DefaultMutableTreeNode)o.getLastPathComponent()).getUserObject();
-        return userObject instanceof PsiNamedElement? ((PsiNamedElement)userObject).getName() : null;
+        return userObject instanceof PsiNamedElement ? ((PsiNamedElement)userObject).getName() : null;
       }
     });
     new AnAction("Toggle") {

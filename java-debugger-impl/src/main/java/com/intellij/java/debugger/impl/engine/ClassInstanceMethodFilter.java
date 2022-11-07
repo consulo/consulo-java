@@ -15,18 +15,18 @@
  */
 package com.intellij.java.debugger.impl.engine;
 
-import javax.annotation.Nonnull;
-
-import com.intellij.java.debugger.impl.DebuggerManagerEx;
 import com.intellij.java.debugger.engine.evaluation.EvaluateException;
+import com.intellij.java.debugger.impl.DebuggerManagerEx;
 import com.intellij.java.debugger.impl.jdi.StackFrameProxyImpl;
 import com.intellij.java.debugger.impl.settings.DebuggerSettings;
 import com.intellij.java.debugger.impl.ui.breakpoints.BreakpointManager;
 import com.intellij.java.debugger.impl.ui.breakpoints.StepIntoBreakpoint;
 import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.util.Range;
 import consulo.internal.com.sun.jdi.ObjectReference;
 import consulo.internal.com.sun.jdi.request.EventRequest;
+import consulo.util.lang.Range;
+
+import javax.annotation.Nonnull;
 
 /**
  * @author egor

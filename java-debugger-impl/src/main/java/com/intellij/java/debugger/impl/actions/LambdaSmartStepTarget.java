@@ -15,11 +15,11 @@
  */
 package com.intellij.java.debugger.impl.actions;
 
-import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiLambdaExpression;
-import com.intellij.util.Range;
+import consulo.language.psi.PsiElement;
 import consulo.platform.base.icon.PlatformIconGroup;
 import consulo.ui.image.Image;
+import consulo.util.lang.Range;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

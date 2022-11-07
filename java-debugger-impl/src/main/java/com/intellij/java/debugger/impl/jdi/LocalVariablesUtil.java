@@ -15,35 +15,30 @@
  */
 package com.intellij.java.debugger.impl.jdi;
 
-import java.lang.reflect.Array;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.*;
-
-import javax.annotation.Nonnull;
-
-import com.intellij.java.language.psi.*;
-import consulo.internal.org.objectweb.asm.MethodVisitor;
-import consulo.internal.org.objectweb.asm.Opcodes;
 import com.intellij.java.debugger.SourcePosition;
-import com.intellij.java.debugger.impl.engine.ContextUtil;
 import com.intellij.java.debugger.engine.DebugProcess;
 import com.intellij.java.debugger.engine.StackFrameContext;
 import com.intellij.java.debugger.engine.evaluation.EvaluateException;
 import com.intellij.java.debugger.impl.DebuggerUtilsEx;
 import com.intellij.java.debugger.impl.SimpleStackFrameContext;
+import com.intellij.java.debugger.impl.engine.ContextUtil;
+import com.intellij.java.language.psi.*;
 import consulo.application.ReadAction;
-import com.intellij.psi.*;
+import consulo.internal.com.sun.jdi.*;
+import consulo.internal.org.objectweb.asm.MethodVisitor;
+import consulo.internal.org.objectweb.asm.Opcodes;
+import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
-import consulo.util.lang.reflect.ReflectionUtil;
-import consulo.util.collection.MultiMap;
-import consulo.internal.com.sun.jdi.InternalException;
-import consulo.internal.com.sun.jdi.Location;
-import consulo.internal.com.sun.jdi.StackFrame;
-import consulo.internal.com.sun.jdi.Value;
-import consulo.internal.com.sun.jdi.VirtualMachine;
 import consulo.logging.Logger;
+import consulo.util.collection.MultiMap;
+import consulo.util.lang.reflect.ReflectionUtil;
+
+import javax.annotation.Nonnull;
+import java.lang.reflect.Array;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.*;
 
 /**
  * From JDI sources:

@@ -15,20 +15,19 @@
  */
 package com.intellij.java.debugger.impl.memory.action;
 
-import java.util.List;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import consulo.navigation.NavigationUtil;
 import com.intellij.java.debugger.engine.DebuggerUtils;
-import consulo.ui.ex.action.AnActionEvent;
-import consulo.project.Project;
 import com.intellij.java.language.psi.PsiClass;
-import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.internal.com.sun.jdi.ArrayType;
 import consulo.internal.com.sun.jdi.ReferenceType;
 import consulo.internal.com.sun.jdi.VirtualMachine;
+import consulo.language.editor.ui.PopupNavigationUtil;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.project.Project;
+import consulo.ui.ex.action.AnActionEvent;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.List;
 
 public class JumpToTypeSourceAction extends ClassesActionBase
 {
@@ -47,7 +46,7 @@ public class JumpToTypeSourceAction extends ClassesActionBase
 		final PsiClass psiClass = getPsiClass(e);
 		if(psiClass != null)
 		{
-			NavigationUtil.activateFileWithPsiElement(psiClass);
+			PopupNavigationUtil.activateFileWithPsiElement(psiClass);
 		}
 	}
 
@@ -55,7 +54,7 @@ public class JumpToTypeSourceAction extends ClassesActionBase
 	private PsiClass getPsiClass(AnActionEvent e)
 	{
 		final ReferenceType selectedClass = getSelectedClass(e);
-		final Project project = e.getProject();
+		final Project project = e.getData(Project.KEY);
 		if(selectedClass == null || project == null)
 		{
 			return null;

@@ -18,14 +18,15 @@ package org.intellij.plugins.intelliLang.inject.java;
 import com.intellij.java.language.psi.PsiAnnotation;
 import com.intellij.java.language.psi.PsiLiteralExpression;
 import com.intellij.java.language.psi.PsiModifierListOwner;
-import consulo.util.lang.Comparing;
+import consulo.ide.impl.intelliLang.Configuration;
 import consulo.language.pattern.PatternCondition;
 import consulo.language.pattern.StandardPatterns;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import consulo.language.util.ProcessingContext;
-import org.intellij.plugins.intelliLang.Configuration;
+import consulo.util.lang.Comparing;
 import org.intellij.plugins.intelliLang.util.AnnotationUtilEx;
 import org.intellij.plugins.intelliLang.util.PsiUtilEx;
+
 import javax.annotation.Nonnull;
 
 import static com.intellij.java.language.patterns.PsiJavaPatterns.literalExpression;
@@ -33,7 +34,7 @@ import static com.intellij.java.language.patterns.PsiJavaPatterns.literalExpress
 /**
  * Provides references to Language-IDs and RegExp enums for completion.
  */
-public final class LanguageReferenceProvider extends PsiReferenceContributor {
+public abstract class LanguageReferenceProvider extends PsiReferenceContributor {
 
   public void registerReferenceProviders(PsiReferenceRegistrar registrar) {
     final Configuration configuration = Configuration.getInstance();

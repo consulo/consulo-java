@@ -15,16 +15,15 @@
  */
 package com.intellij.spellchecker;
 
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.java.language.psi.javadoc.PsiDocTag;
 import com.intellij.spellchecker.inspections.CommentSplitter;
 import com.intellij.spellchecker.tokenizer.TokenConsumer;
 import com.intellij.spellchecker.tokenizer.Tokenizer;
-import consulo.util.collection.ContainerUtil;
+import consulo.language.psi.PsiElement;
+
+import javax.annotation.Nonnull;
+import java.util.Set;
 
 /**
  * Created by IntelliJ IDEA.
@@ -32,7 +31,7 @@ import consulo.util.collection.ContainerUtil;
  * @author shkate@jetbrains.com
  */
 public class DocCommentTokenizer extends Tokenizer<PsiDocComment> {
-  private static final Set<String> excludedTags = ContainerUtil.immutableSet("author", "see", "by", "link");
+  private static final Set<String> excludedTags = Set.of("author", "see", "by", "link");
 
   @Override
   public void tokenize(@Nonnull PsiDocComment comment, TokenConsumer consumer) {

@@ -15,81 +15,72 @@
  */
 package com.intellij.java.debugger.impl.ui.tree.render;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import com.intellij.java.debugger.engine.evaluation.EvaluationContext;
 import com.intellij.java.debugger.impl.engine.DebugProcessImpl;
 import com.intellij.java.debugger.impl.engine.FullValueEvaluatorProvider;
 import com.intellij.java.debugger.impl.engine.JavaValue;
-import com.intellij.java.debugger.engine.evaluation.EvaluationContext;
 import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.ValueDescriptorImpl;
 import com.intellij.java.debugger.impl.ui.tree.ValueDescriptor;
 import com.intellij.java.debugger.impl.ui.tree.actions.ForceOnDemandRenderersAction;
+import consulo.execution.debug.frame.HeadlessValueEvaluationCallback;
 import consulo.execution.debug.frame.XFullValueEvaluator;
-import consulo.util.dataholder.Key;
 import consulo.execution.debug.frame.XValuePlace;
+import consulo.ide.impl.idea.xdebugger.impl.ui.tree.nodes.XValueNodeImpl;
+import consulo.util.dataholder.Key;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * @author egor
  */
-public interface OnDemandRenderer extends FullValueEvaluatorProvider
-{
-	@Nullable
-	@Override
-	default XFullValueEvaluator getFullValueEvaluator(EvaluationContextImpl evaluationContext, ValueDescriptorImpl valueDescriptor)
-	{
-		if(isOnDemand(evaluationContext, valueDescriptor) && !isCalculated(valueDescriptor))
-		{
-			return createFullValueEvaluator(getLinkText());
-		}
-		return null;
-	}
+public interface OnDemandRenderer extends FullValueEvaluatorProvider {
+  @Nullable
+  @Override
+  default XFullValueEvaluator getFullValueEvaluator(EvaluationContextImpl evaluationContext, ValueDescriptorImpl valueDescriptor) {
+    if (isOnDemand(evaluationContext, valueDescriptor) && !isCalculated(valueDescriptor)) {
+      return createFullValueEvaluator(getLinkText());
+    }
+    return null;
+  }
 
-	String getLinkText();
+  String getLinkText();
 
-	default boolean isOnDemand(EvaluationContext evaluationContext, ValueDescriptor valueDescriptor)
-	{
-		return isOnDemandForced(evaluationContext);
-	}
+  default boolean isOnDemand(EvaluationContext evaluationContext, ValueDescriptor valueDescriptor) {
+    return isOnDemandForced(evaluationContext);
+  }
 
-	default boolean isShowValue(ValueDescriptor valueDescriptor, EvaluationContext evaluationContext)
-	{
-		return !isOnDemand(evaluationContext, valueDescriptor) || isCalculated(valueDescriptor);
-	}
+  default boolean isShowValue(ValueDescriptor valueDescriptor, EvaluationContext evaluationContext) {
+    return !isOnDemand(evaluationContext, valueDescriptor) || isCalculated(valueDescriptor);
+  }
 
-	static XFullValueEvaluator createFullValueEvaluator(String text)
-	{
-		return new XFullValueEvaluator(text)
-		{
-			@Override
-			public void startEvaluation(@Nonnull XFullValueEvaluationCallback callback)
-			{
-				if(callback instanceof HeadlessValueEvaluationCallback)
-				{
-					XValueNodeImpl node = ((HeadlessValueEvaluationCallback) callback).getNode();
-					node.clearFullValueEvaluator();
-					setCalculated(((JavaValue) node.getValueContainer()).getDescriptor());
-					node.getValueContainer().computePresentation(node, XValuePlace.TREE);
-				}
-				callback.evaluated("");
-			}
-		}.setShowValuePopup(false);
-	}
+  static XFullValueEvaluator createFullValueEvaluator(String text) {
+    return new XFullValueEvaluator(text) {
+      @Override
+      public void startEvaluation(@Nonnull XFullValueEvaluationCallback callback) {
+        if (callback instanceof HeadlessValueEvaluationCallback) {
+          XValueNodeImpl node = (XValueNodeImpl) ((HeadlessValueEvaluationCallback) callback).getNode();
+          node.clearFullValueEvaluator();
+          setCalculated(((JavaValue) node.getValueContainer()).getDescriptor());
+          node.getValueContainer().computePresentation(node, XValuePlace.TREE);
+        }
+        callback.evaluated("");
+      }
+    }.setShowValuePopup(false);
+  }
 
-	Key<Boolean> ON_DEMAND_CALCULATED = Key.create("ON_DEMAND_CALCULATED");
+  Key<Boolean> ON_DEMAND_CALCULATED = Key.create("ON_DEMAND_CALCULATED");
 
-	static boolean isCalculated(ValueDescriptor descriptor)
-	{
-		return ON_DEMAND_CALCULATED.get(descriptor, false);
-	}
+  static boolean isCalculated(ValueDescriptor descriptor) {
+    return ON_DEMAND_CALCULATED.get(descriptor, false);
+  }
 
-	static void setCalculated(ValueDescriptor descriptor)
-	{
-		ON_DEMAND_CALCULATED.set(descriptor, true);
-	}
+  static void setCalculated(ValueDescriptor descriptor) {
+    ON_DEMAND_CALCULATED.set(descriptor, true);
+  }
 
-	static boolean isOnDemandForced(EvaluationContext evaluationContext)
-	{
-		return ForceOnDemandRenderersAction.isForcedOnDemand((consulo.ide.impl.idea.xdebugger.impl.XDebugSessionImpl) ((DebugProcessImpl) evaluationContext.getDebugProcess()).getXdebugProcess().getSession());
-	}
+  static boolean isOnDemandForced(EvaluationContext evaluationContext) {
+    return ForceOnDemandRenderersAction.isForcedOnDemand((consulo.ide.impl.idea.xdebugger.impl.XDebugSessionImpl) ((DebugProcessImpl) evaluationContext.getDebugProcess()).getXdebugProcess().getSession());
+  }
 }

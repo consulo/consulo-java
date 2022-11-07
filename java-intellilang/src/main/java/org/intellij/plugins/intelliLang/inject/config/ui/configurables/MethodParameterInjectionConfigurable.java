@@ -15,6 +15,7 @@
  */
 package org.intellij.plugins.intelliLang.inject.config.ui.configurables;
 
+import consulo.ide.impl.intelliLang.inject.config.ui.configurables.InjectionConfigurable;
 import consulo.project.Project;
 import org.intellij.plugins.intelliLang.inject.config.MethodParameterInjection;
 import org.intellij.plugins.intelliLang.inject.config.ui.MethodParameterPanel;

@@ -15,14 +15,14 @@
  */
 package com.intellij.java.debugger.impl.actions;
 
-import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiSubstitutor;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
-import consulo.ide.impl.psi.util.PsiFormatUtilBase;
-import com.intellij.util.Range;
+import com.intellij.java.language.psi.util.PsiFormatUtilBase;
 import consulo.language.icon.IconDescriptorUpdaters;
+import consulo.language.psi.PsiElement;
 import consulo.ui.image.Image;
+import consulo.util.lang.Range;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

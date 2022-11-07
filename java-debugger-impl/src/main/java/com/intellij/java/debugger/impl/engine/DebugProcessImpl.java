@@ -53,7 +53,7 @@ import com.intellij.java.debugger.ui.classFilter.ClassFilter;
 import com.intellij.java.debugger.ui.classFilter.DebuggerClassFilterProvider;
 import com.intellij.java.execution.configurations.RemoteConnection;
 import com.intellij.java.language.projectRoots.JavaSdk;
-import com.intellij.openapi.projectRoots.JavaSdkType;
+import com.intellij.java.language.projectRoots.JavaSdkType;
 import consulo.application.ApplicationManager;
 import consulo.application.impl.internal.ApplicationNamesInfo;
 import consulo.application.util.Patches;
@@ -67,7 +67,10 @@ import consulo.execution.CantRunException;
 import consulo.execution.ExecutionResult;
 import consulo.execution.ExecutionUtil;
 import consulo.execution.debug.XDebugSession;
+import consulo.execution.debug.XDebuggerActions;
 import consulo.execution.debug.XSourcePosition;
+import consulo.execution.debug.ui.XDebuggerUIConstants;
+import consulo.ide.impl.idea.xdebugger.impl.XDebugSessionImpl;
 import consulo.internal.com.sun.jdi.*;
 import consulo.internal.com.sun.jdi.connect.*;
 import consulo.internal.com.sun.jdi.request.EventRequest;
@@ -86,6 +89,7 @@ import consulo.process.event.ProcessAdapter;
 import consulo.process.event.ProcessEvent;
 import consulo.process.event.ProcessListener;
 import consulo.project.Project;
+import consulo.project.ui.notification.NotificationType;
 import consulo.project.ui.wm.ToolWindowId;
 import consulo.proxy.EventDispatcher;
 import consulo.ui.ex.action.ActionsBundle;
@@ -93,6 +97,7 @@ import consulo.ui.ex.awt.Messages;
 import consulo.ui.ex.awt.UIUtil;
 import consulo.ui.ex.awt.util.Alarm;
 import consulo.util.collection.ContainerUtil;
+import consulo.util.collection.Lists;
 import consulo.util.dataholder.UserDataHolderBase;
 import consulo.util.lang.Pair;
 import consulo.util.lang.StringUtil;
@@ -129,7 +134,7 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
   protected final EventDispatcher<DebugProcessListener> myDebugProcessDispatcher = EventDispatcher.create(DebugProcessListener.class);
   protected final EventDispatcher<EvaluationListener> myEvaluationDispatcher = EventDispatcher.create(EvaluationListener.class);
 
-  private final List<ProcessListener> myProcessListeners = ContainerUtil.createLockFreeCopyOnWriteList();
+  private final List<ProcessListener> myProcessListeners = Lists.newLockFreeCopyOnWriteList();
 
   enum State {
     INITIAL,
@@ -600,8 +605,8 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
       if ((runjre == null || runjre.getSdkType() instanceof JavaSdkType) && !versionMatch(runjre, version)) {
         SdkTable.getInstance().getSdksOfType(JavaSdk.getInstance()).stream().filter(sdk -> versionMatch(sdk, version)).findFirst().ifPresent(sdk ->
         {
-          consulo.ide.impl.idea.xdebugger.impl.XDebugSessionImpl.NOTIFICATION_GROUP.createNotification(DebuggerBundle.message("message.remote.jre.version.mismatch", version, runjre != null ? runjre.getVersionString() :
-              "unknown", sdk.getName()), MessageType.INFO).notify(myProject);
+          XDebuggerUIConstants.NOTIFICATION_GROUP.createNotification(DebuggerBundle.message("message.remote.jre.version.mismatch", version, runjre != null ? runjre.getVersionString() :
+              "unknown", sdk.getName()), NotificationType.INFORMATION).notify(myProject);
           getSession().setAlternativeJre(sdk);
         });
       }
@@ -1754,7 +1759,7 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
       private void doReattach() {
         DebuggerInvocationUtil.swingInvokeLater(myProject, () ->
         {
-          ((XDebugSession) getXdebugProcess().getSession()).reset();
+          ((XDebugSessionImpl) getXdebugProcess().getSession()).reset();
           myState.set(State.INITIAL);
           myConnection = environment.getRemoteConnection();
           getManagerThread().restartIfNeeded();

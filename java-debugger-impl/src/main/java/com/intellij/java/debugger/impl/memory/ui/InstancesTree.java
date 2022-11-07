@@ -15,32 +15,26 @@
  */
 package com.intellij.java.debugger.impl.memory.ui;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-import javax.swing.tree.TreePath;
-
-import javax.annotation.Nullable;
 import com.intellij.java.debugger.impl.ui.impl.watch.NodeDescriptorProvider;
-import com.intellij.java.debugger.ui.tree.NodeDescriptor;
 import com.intellij.java.debugger.impl.ui.tree.ValueDescriptor;
+import com.intellij.java.debugger.ui.tree.NodeDescriptor;
+import consulo.execution.debug.XDebuggerActions;
 import consulo.execution.debug.evaluation.XDebuggerEditorsProvider;
-import consulo.execution.debug.frame.XValue;
-import consulo.execution.debug.frame.XValueChildrenList;
-import consulo.project.Project;
-import consulo.ui.ex.SimpleTextAttributes;
-import consulo.execution.debug.frame.XCompositeNode;
-import consulo.execution.debug.frame.XValueNode;
-import consulo.execution.debug.frame.XValuePlace;
-import consulo.ide.impl.idea.xdebugger.impl.actions.XDebuggerActions;
-import consulo.ide.impl.idea.xdebugger.impl.frame.XValueMarkers;
+import consulo.execution.debug.frame.*;
 import consulo.execution.debug.ui.XDebuggerUIConstants;
 import consulo.ide.impl.idea.xdebugger.impl.ui.tree.XDebuggerTree;
 import consulo.ide.impl.idea.xdebugger.impl.ui.tree.XDebuggerTreeState;
 import consulo.ide.impl.idea.xdebugger.impl.ui.tree.nodes.XValueNodeImpl;
 import consulo.internal.com.sun.jdi.ObjectReference;
 import consulo.internal.com.sun.jdi.Value;
+import consulo.project.Project;
+import consulo.ui.ex.SimpleTextAttributes;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.swing.tree.TreePath;
+import java.util.ArrayList;
+import java.util.List;
 
 public class InstancesTree extends XDebuggerTree
 {
@@ -50,7 +44,7 @@ public class InstancesTree extends XDebuggerTree
 
 	InstancesTree(@Nonnull Project project, @Nonnull XDebuggerEditorsProvider editorsProvider, @Nullable XValueMarkers<?, ?> valueMarkers, @Nonnull Runnable onRootExpand)
 	{
-		super(project, editorsProvider, null, consulo.ide.impl.idea.xdebugger.impl.actions.XDebuggerActions.INSPECT_TREE_POPUP_GROUP, valueMarkers);
+		super(project, editorsProvider, null, XDebuggerActions.INSPECT_TREE_POPUP_GROUP, valueMarkers);
 		myOnRootExpandAction = onRootExpand;
 		myRoot = new consulo.ide.impl.idea.xdebugger.impl.ui.tree.nodes.XValueNodeImpl(this, null, "root", new MyRootValue());
 

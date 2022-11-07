@@ -21,14 +21,15 @@ import com.intellij.java.debugger.impl.memory.component.MemoryViewDebugProcessDa
 import com.intellij.java.debugger.impl.memory.event.InstancesTrackerListener;
 import com.intellij.java.debugger.impl.memory.tracking.TrackingType;
 import com.intellij.java.debugger.impl.memory.utils.StackFrameItem;
-import consulo.ui.ex.action.AnAction;
-import consulo.ui.ex.action.AnActionEvent;
-import consulo.project.Project;
-import consulo.ui.ex.awt.JBLabel;
-import consulo.ui.ex.awt.JBScrollPane;
 import consulo.execution.debug.XDebugSession;
+import consulo.ide.impl.idea.ui.components.labels.ActionLink;
 import consulo.internal.com.sun.jdi.ObjectReference;
 import consulo.platform.base.icon.PlatformIconGroup;
+import consulo.project.Project;
+import consulo.ui.ex.action.AnAction;
+import consulo.ui.ex.action.AnActionEvent;
+import consulo.ui.ex.awt.JBLabel;
+import consulo.ui.ex.awt.JBScrollPane;
 import consulo.ui.ex.awt.JBSplitter;
 
 import javax.annotation.Nonnull;
@@ -62,12 +63,12 @@ class InstancesWithStackFrameView
 		}
 		else
 		{
-			consulo.ide.impl.idea.ui.components.labels.ActionLink actionLink = new ActionLink("Enable tracking for new instances", PlatformIconGroup.debuggerWatch(), new AnAction()
+			ActionLink actionLink = new ActionLink("Enable tracking for new instances", PlatformIconGroup.debuggerWatch(), new AnAction()
 			{
 				@Override
 				public void actionPerformed(AnActionEvent e)
 				{
-					final Project project = e.getProject();
+					final Project project = e.getData(Project.KEY);
 					if(project != null && !project.isDisposed())
 					{
 						InstancesTracker.getInstance(project).add(className, TrackingType.CREATION);

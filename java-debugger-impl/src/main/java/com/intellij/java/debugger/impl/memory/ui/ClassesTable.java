@@ -21,23 +21,23 @@ import com.intellij.java.debugger.impl.memory.tracking.TrackingType;
 import com.intellij.java.debugger.impl.memory.utils.AbstractTableColumnDescriptor;
 import com.intellij.java.debugger.impl.memory.utils.AbstractTableModelWithColumns;
 import com.intellij.java.debugger.impl.memory.utils.InstancesProvider;
-import consulo.dataContext.DataProvider;
 import consulo.application.ApplicationManager;
-import consulo.document.util.TextRange;
+import consulo.application.util.matcher.MatcherTextRange;
 import consulo.application.util.matcher.MinusculeMatcher;
 import consulo.application.util.matcher.NameUtil;
-import consulo.ui.ex.awt.ColoredTableCellRenderer;
-import consulo.ui.ex.JBColor;
-import consulo.ui.ex.SimpleTextAttributes;
-import consulo.ui.ex.awt.speedSearch.SpeedSearchUtil;
-import consulo.ui.ex.awt.table.JBTable;
-import consulo.util.collection.FList;
-import consulo.ui.ex.awt.JBDimension;
-import consulo.ui.ex.awt.JBUI;
+import consulo.dataContext.DataProvider;
 import consulo.disposer.Disposable;
 import consulo.internal.com.sun.jdi.ObjectReference;
 import consulo.internal.com.sun.jdi.ReferenceType;
 import consulo.platform.base.icon.PlatformIconGroup;
+import consulo.ui.ex.JBColor;
+import consulo.ui.ex.SimpleTextAttributes;
+import consulo.ui.ex.awt.ColoredTableCellRenderer;
+import consulo.ui.ex.awt.JBDimension;
+import consulo.ui.ex.awt.JBUI;
+import consulo.ui.ex.awt.speedSearch.SpeedSearchUtil;
+import consulo.ui.ex.awt.table.JBTable;
+import consulo.util.collection.FList;
 import consulo.util.dataholder.Key;
 import org.jetbrains.annotations.NonNls;
 
@@ -524,7 +524,7 @@ public class ClassesTable extends JBTable implements DataProvider, Disposable
 			append(" ");
 			if(isSelected)
 			{
-				FList<TextRange> textRanges = myMatcher.matchingFragments(presentation);
+				FList<MatcherTextRange> textRanges = myMatcher.matchingFragments(presentation);
 				if(textRanges != null)
 				{
 					SimpleTextAttributes attributes = new SimpleTextAttributes(getBackground(), getForeground(), null, SimpleTextAttributes.STYLE_SEARCH_MATCH);

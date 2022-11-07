@@ -15,35 +15,30 @@
  */
 package com.intellij.java.debugger.impl.memory.ui;
 
-import java.util.List;
-
-import javax.annotation.Nonnull;
-import javax.swing.JList;
-import javax.swing.ListCellRenderer;
-import javax.swing.SwingWorker;
-
-import javax.annotation.Nullable;
-
+import com.intellij.java.debugger.engine.DebuggerUtils;
+import com.intellij.java.language.psi.PsiClass;
+import consulo.application.ApplicationManager;
+import consulo.disposer.Disposable;
 import consulo.execution.debug.breakpoint.XExpression;
 import consulo.execution.debug.evaluation.XDebuggerEditorsProvider;
+import consulo.ide.impl.idea.openapi.editor.ex.util.EditorUtil;
+import consulo.ide.impl.idea.ui.popup.list.ListPopupImpl;
+import consulo.ide.impl.idea.xdebugger.impl.ui.XDebuggerExpressionEditor;
 import consulo.language.editor.completion.lookup.LookupManager;
-import com.intellij.java.debugger.engine.DebuggerUtils;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.project.Project;
+import consulo.ui.ex.SimpleTextAttributes;
 import consulo.ui.ex.action.AnAction;
 import consulo.ui.ex.action.AnActionEvent;
 import consulo.ui.ex.action.CustomShortcutSet;
-import consulo.application.ApplicationManager;
-import consulo.ide.impl.idea.openapi.editor.ex.util.EditorUtil;
-import consulo.project.Project;
 import consulo.ui.ex.awt.ColoredListCellRenderer;
 import consulo.ui.ex.popup.BaseListPopupStep;
 import consulo.ui.ex.popup.PopupStep;
-import com.intellij.java.language.psi.PsiClass;
-import consulo.language.psi.scope.GlobalSearchScope;
-import consulo.ui.ex.SimpleTextAttributes;
-import consulo.ide.impl.idea.ui.popup.list.ListPopupImpl;
-import consulo.ide.impl.idea.xdebugger.impl.breakpoints.XExpressionImpl;
-import consulo.ide.impl.idea.xdebugger.impl.ui.XDebuggerExpressionEditor;
-import consulo.disposer.Disposable;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.swing.*;
+import java.util.List;
 
 class ExpressionEditorWithHistory extends XDebuggerExpressionEditor
 {
@@ -54,7 +49,7 @@ class ExpressionEditorWithHistory extends XDebuggerExpressionEditor
 			final @Nonnull XDebuggerEditorsProvider debuggerEditorsProvider,
 			final @Nullable Disposable parentDisposable)
 	{
-		super(project, debuggerEditorsProvider, HISTORY_ID_PREFIX + className, null, XExpressionImpl.EMPTY_EXPRESSION, false, true, true);
+		super(project, debuggerEditorsProvider, HISTORY_ID_PREFIX + className, null, XExpression.EMPTY_EXPRESSION, false, true, true);
 
 		new AnAction("InstancesWindow.ShowHistory")
 		{

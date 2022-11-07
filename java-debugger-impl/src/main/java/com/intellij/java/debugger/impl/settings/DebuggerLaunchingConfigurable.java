@@ -15,24 +15,17 @@
  */
 package com.intellij.java.debugger.impl.settings;
 
-import java.awt.BorderLayout;
+import com.intellij.java.debugger.DebuggerBundle;
+import consulo.configurable.IdeaConfigurableUi;
+import consulo.ide.impl.idea.ui.components.panels.VerticalBox;
+import consulo.java.debugger.impl.apiAdapters.TransportClassDelegates;
+import consulo.ui.ex.awt.StateRestoringCheckBox;
 
 import javax.annotation.Nonnull;
-import javax.swing.Box;
-import javax.swing.ButtonGroup;
-import javax.swing.JCheckBox;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
+import javax.swing.*;
+import java.awt.*;
 
-import com.intellij.java.debugger.DebuggerBundle;
-import consulo.java.debugger.impl.apiAdapters.TransportClassDelegates;
-import com.intellij.openapi.options.ConfigurableUi;
-import consulo.ui.ex.awt.StateRestoringCheckBox;
-import consulo.ide.impl.idea.ui.components.panels.VerticalBox;
-
-class DebuggerLaunchingConfigurable implements ConfigurableUi<DebuggerSettings>
+class DebuggerLaunchingConfigurable implements IdeaConfigurableUi<DebuggerSettings>
 {
 	private JRadioButton myRbSocket;
 	private JRadioButton myRbShmem;

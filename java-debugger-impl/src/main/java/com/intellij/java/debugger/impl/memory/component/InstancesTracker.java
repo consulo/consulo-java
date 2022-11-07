@@ -17,11 +17,15 @@ package com.intellij.java.debugger.impl.memory.component;
 
 import com.intellij.java.debugger.impl.memory.event.InstancesTrackerListener;
 import com.intellij.java.debugger.impl.memory.tracking.TrackingType;
-import com.intellij.openapi.components.*;
+import consulo.component.persist.PersistentStateComponent;
+import consulo.component.persist.State;
+import consulo.component.persist.Storage;
+import consulo.component.persist.StoragePathMacros;
+import consulo.disposer.Disposable;
+import consulo.ide.ServiceManager;
 import consulo.project.Project;
 import consulo.proxy.EventDispatcher;
 import consulo.util.xml.serializer.annotation.AbstractCollection;
-import consulo.disposer.Disposable;
 import jakarta.inject.Singleton;
 
 import javax.annotation.Nonnull;

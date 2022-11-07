@@ -15,102 +15,86 @@
  */
 package com.intellij.java.debugger.impl.actions;
 
-import java.util.List;
-
-import javax.swing.JComponent;
-import javax.swing.border.EmptyBorder;
-
-import javax.annotation.Nonnull;
 import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.impl.engine.JavaDebugProcess;
 import com.intellij.java.debugger.impl.settings.JavaDebuggerSettings;
 import com.intellij.java.debugger.impl.settings.NodeRendererSettings;
 import consulo.configurable.Configurable;
+import consulo.configurable.ConfigurationException;
+import consulo.disposer.Disposable;
+import consulo.disposer.Disposer;
 import consulo.execution.debug.XDebugSession;
 import consulo.execution.debug.XDebuggerManager;
-import consulo.ui.ex.action.ActionsBundle;
-import consulo.disposer.Disposable;
-import consulo.ui.ex.action.AnActionEvent;
-import consulo.language.editor.CommonDataKeys;
-import consulo.configurable.ConfigurationException;
 import consulo.ide.impl.idea.openapi.options.TabbedConfigurable;
 import consulo.ide.impl.idea.openapi.options.ex.SingleConfigurableEditor;
-import consulo.project.Project;
 import consulo.ide.impl.idea.xdebugger.impl.ui.tree.actions.XDebuggerTreeActionBase;
-import consulo.ide.impl.idea.xdebugger.impl.ui.tree.nodes.XValueNodeImpl;
-import consulo.disposer.Disposer;
+import consulo.language.editor.CommonDataKeys;
+import consulo.project.Project;
+import consulo.ui.ex.action.ActionsBundle;
+import consulo.ui.ex.action.AnActionEvent;
 
-public class CustomizeContextViewAction extends XDebuggerTreeActionBase
-{
-	@Override
-	public void actionPerformed(AnActionEvent e)
-	{
-		perform(null, "", e);
-	}
+import javax.annotation.Nonnull;
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import java.util.List;
 
-	@Override
-	protected void perform(consulo.ide.impl.idea.xdebugger.impl.ui.tree.nodes.XValueNodeImpl node, @Nonnull String nodeName, AnActionEvent e)
-	{
-		final Project project = e.getData(CommonDataKeys.PROJECT);
-		Disposable disposable = Disposable.newDisposable();
-		SingleConfigurableEditor editor = new SingleConfigurableEditor(project, new TabbedConfigurable(disposable)
-		{
-			@Override
-			protected List<Configurable> createConfigurables()
-			{
-				return JavaDebuggerSettings.createDataViewsConfigurable();
-			}
+public class CustomizeContextViewAction extends XDebuggerTreeActionBase {
+  @Override
+  public void actionPerformed(AnActionEvent e) {
+    perform(null, "", e);
+  }
 
-			@Override
-			public void apply() throws ConfigurationException
-			{
-				super.apply();
-				NodeRendererSettings.getInstance().fireRenderersChanged();
-			}
+  @Override
+  protected void perform(consulo.ide.impl.idea.xdebugger.impl.ui.tree.nodes.XValueNodeImpl node, @Nonnull String nodeName, AnActionEvent e) {
+    final Project project = e.getData(CommonDataKeys.PROJECT);
+    Disposable disposable = Disposable.newDisposable();
+    SingleConfigurableEditor editor = new SingleConfigurableEditor(project, new TabbedConfigurable(disposable) {
+      @Override
+      protected List<Configurable> createConfigurables() {
+        return JavaDebuggerSettings.createDataViewsConfigurable();
+      }
 
-			@Override
-			public String getDisplayName()
-			{
-				return DebuggerBundle.message("title.customize.data.views");
-			}
+      @Override
+      public void apply() throws ConfigurationException {
+        super.apply();
+        NodeRendererSettings.getInstance().fireRenderersChanged();
+      }
 
-			@Override
-			public String getHelpTopic()
-			{
-				return "reference.debug.customize.data.view";
-			}
+      @Override
+      public String getDisplayName() {
+        return DebuggerBundle.message("title.customize.data.views");
+      }
 
-			@Override
-			protected void createConfigurableTabs()
-			{
-				for(Configurable configurable : getConfigurables())
-				{
-					JComponent component = configurable.createComponent();
-					assert component != null;
-					component.setBorder(new EmptyBorder(8, 8, 8, 8));
-					myTabbedPane.addTab(configurable.getDisplayName(), component);
-				}
-			}
-		});
-		Disposer.register(editor.getDisposable(), disposable);
-		editor.show();
-	}
+      @Override
+      public String getHelpTopic() {
+        return "reference.debug.customize.data.view";
+      }
 
-	@Override
-	public void update(AnActionEvent e)
-	{
-		e.getPresentation().setText(ActionsBundle.actionText(DebuggerActions.CUSTOMIZE_VIEWS));
+      @Override
+      protected void createConfigurableTabs() {
+        for (Configurable configurable : getConfigurables()) {
+          JComponent component = configurable.createComponent();
+          assert component != null;
+          component.setBorder(new EmptyBorder(8, 8, 8, 8));
+          myTabbedPane.addTab(configurable.getDisplayName(), component);
+        }
+      }
+    });
+    Disposer.register(editor.getDisposable(), disposable);
+    editor.show();
+  }
 
-		Project project = e.getProject();
-		final XDebuggerManager debuggerManager = project == null ? null : XDebuggerManager.getInstance(project);
-		final XDebugSession currentSession = debuggerManager == null ? null : debuggerManager.getCurrentSession();
-		if(currentSession != null)
-		{
-			e.getPresentation().setEnabledAndVisible(currentSession.getDebugProcess() instanceof JavaDebugProcess);
-		}
-		else
-		{
-			e.getPresentation().setEnabledAndVisible(false);
-		}
-	}
+  @Override
+  public void update(AnActionEvent e) {
+    e.getPresentation().setText(ActionsBundle.actionText(DebuggerActions.CUSTOMIZE_VIEWS));
+
+    Project project = e.getData(Project.KEY);
+    final XDebuggerManager debuggerManager = project == null ? null : XDebuggerManager.getInstance(project);
+    final XDebugSession currentSession = debuggerManager == null ? null : debuggerManager.getCurrentSession();
+    if (currentSession != null) {
+      e.getPresentation().setEnabledAndVisible(currentSession.getDebugProcess() instanceof JavaDebugProcess);
+    } else {
+      e.getPresentation().setEnabledAndVisible(false);
+    }
+  }
 }

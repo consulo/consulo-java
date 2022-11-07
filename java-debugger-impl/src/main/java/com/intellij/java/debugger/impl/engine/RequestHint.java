@@ -21,15 +21,10 @@
  */
 package com.intellij.java.debugger.impl.engine;
 
-import javax.annotation.Nonnull;
-
+import com.intellij.java.debugger.SourcePosition;
 import com.intellij.java.debugger.engine.DebugProcess;
 import com.intellij.java.debugger.engine.DebuggerUtils;
 import com.intellij.java.debugger.engine.StackFrameContext;
-import org.intellij.lang.annotations.MagicConstant;
-
-import javax.annotation.Nullable;
-import com.intellij.java.debugger.SourcePosition;
 import com.intellij.java.debugger.engine.evaluation.EvaluateException;
 import com.intellij.java.debugger.engine.jdi.StackFrameProxy;
 import com.intellij.java.debugger.impl.DebuggerUtilsEx;
@@ -37,13 +32,17 @@ import com.intellij.java.debugger.impl.jdi.StackFrameProxyImpl;
 import com.intellij.java.debugger.impl.jdi.ThreadReferenceProxyImpl;
 import com.intellij.java.debugger.impl.settings.DebuggerSettings;
 import consulo.application.ReadAction;
-import consulo.logging.Logger;
-import consulo.language.psi.PsiElement;
-import com.intellij.util.Range;
 import consulo.internal.com.sun.jdi.Location;
 import consulo.internal.com.sun.jdi.Method;
 import consulo.internal.com.sun.jdi.VMDisconnectedException;
 import consulo.internal.com.sun.jdi.request.StepRequest;
+import consulo.language.psi.PsiElement;
+import consulo.logging.Logger;
+import consulo.util.lang.Range;
+import org.intellij.lang.annotations.MagicConstant;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class RequestHint
 {

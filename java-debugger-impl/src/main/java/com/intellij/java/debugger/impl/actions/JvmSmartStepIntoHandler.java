@@ -15,32 +15,26 @@
  */
 package com.intellij.java.debugger.impl.actions;
 
-import java.util.Collections;
-import java.util.List;
+import com.intellij.java.debugger.SourcePosition;
+import com.intellij.java.debugger.impl.DebuggerSession;
+import com.intellij.java.debugger.impl.engine.*;
+import com.intellij.java.language.psi.PsiAnonymousClass;
+import com.intellij.java.language.psi.PsiMethod;
+import consulo.codeEditor.Editor;
+import consulo.component.extension.ExtensionPointName;
+import consulo.execution.debug.XDebuggerActions;
+import consulo.fileEditor.TextEditor;
+import consulo.ide.impl.idea.ui.popup.list.ListPopupImpl;
+import consulo.ide.impl.idea.xdebugger.impl.ui.DebuggerUIUtil;
+import consulo.language.psi.PsiElement;
+import consulo.ui.ex.awt.JBList;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-
-import javax.annotation.Nonnull;
-
-import com.intellij.java.debugger.SourcePosition;
-import com.intellij.java.debugger.impl.engine.AnonymousClassMethodFilter;
-import com.intellij.java.debugger.impl.engine.BasicStepMethodFilter;
-import com.intellij.java.debugger.impl.engine.ClassInstanceMethodFilter;
-import com.intellij.java.debugger.impl.engine.LambdaMethodFilter;
-import com.intellij.java.debugger.impl.engine.MethodFilter;
-import com.intellij.java.debugger.impl.DebuggerSession;
-import consulo.codeEditor.Editor;
-import consulo.component.extension.ExtensionPointName;
-import consulo.fileEditor.TextEditor;
-import com.intellij.java.language.psi.PsiAnonymousClass;
-import consulo.language.psi.PsiElement;
-import com.intellij.java.language.psi.PsiMethod;
-import consulo.ui.ex.awt.JBList;
-import consulo.ide.impl.idea.ui.popup.list.ListPopupImpl;
-import consulo.ide.impl.idea.xdebugger.impl.actions.XDebuggerActions;
-import consulo.ide.impl.idea.xdebugger.impl.ui.DebuggerUIUtil;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * User: Alexander Podkhalyuzin

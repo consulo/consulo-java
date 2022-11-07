@@ -15,40 +15,30 @@
  */
 package com.intellij.java.debugger.impl.ui.tree.render;
 
-import java.awt.Graphics2D;
-import java.awt.GraphicsEnvironment;
-import java.awt.Transparency;
-import java.awt.image.BufferedImage;
-import java.util.Collections;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.swing.Icon;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
-
-import consulo.logging.Logger;
-import org.intellij.images.editor.impl.ImageEditorManagerImpl;
 import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.engine.DebugProcess;
-import com.intellij.java.debugger.impl.engine.FullValueEvaluatorProvider;
 import com.intellij.java.debugger.engine.evaluation.EvaluateException;
 import com.intellij.java.debugger.engine.evaluation.EvaluationContext;
-import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
 import com.intellij.java.debugger.impl.ClassLoadingUtils;
+import com.intellij.java.debugger.impl.engine.FullValueEvaluatorProvider;
+import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
 import com.intellij.java.debugger.impl.settings.NodeRendererSettings;
 import com.intellij.java.debugger.impl.ui.impl.watch.ValueDescriptorImpl;
 import consulo.execution.debug.frame.XFullValueEvaluator;
-import consulo.ui.ex.awtUnsafe.TargetAWT;
-import consulo.internal.com.sun.jdi.ArrayReference;
-import consulo.internal.com.sun.jdi.ByteValue;
-import consulo.internal.com.sun.jdi.ClassType;
-import consulo.internal.com.sun.jdi.Method;
-import consulo.internal.com.sun.jdi.Value;
+import consulo.images.desktop.awt.impl.editor.ImageEditorManagerImpl;
+import consulo.internal.com.sun.jdi.*;
 import consulo.java.rt.JavaRtClassNames;
+import consulo.logging.Logger;
+import consulo.ui.ex.awtUnsafe.TargetAWT;
 import consulo.ui.image.Image;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Created by Egor on 04.10.2014.

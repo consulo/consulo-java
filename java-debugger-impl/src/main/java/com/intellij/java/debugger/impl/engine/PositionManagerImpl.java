@@ -15,54 +15,48 @@
  */
 package com.intellij.java.debugger.impl.engine;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-import java.util.function.Consumer;
-import java.util.stream.Collectors;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import com.intellij.java.debugger.MultiRequestPositionManager;
 import com.intellij.java.debugger.NoDataException;
 import com.intellij.java.debugger.PositionManager;
 import com.intellij.java.debugger.SourcePosition;
+import com.intellij.java.debugger.engine.DebugProcess;
+import com.intellij.java.debugger.engine.DebuggerUtils;
 import com.intellij.java.debugger.engine.evaluation.EvaluateException;
 import com.intellij.java.debugger.impl.AlternativeJreClassFinder;
 import com.intellij.java.debugger.impl.DebuggerUtilsEx;
 import com.intellij.java.debugger.impl.jdi.VirtualMachineProxyImpl;
-import com.intellij.java.debugger.engine.DebugProcess;
-import com.intellij.java.debugger.engine.DebuggerUtils;
 import com.intellij.java.debugger.requests.ClassPrepareRequestor;
+import com.intellij.java.language.impl.psi.impl.compiled.ClsClassImpl;
 import com.intellij.java.language.psi.*;
 import consulo.application.ApplicationManager;
 import consulo.application.ReadAction;
-import consulo.logging.Logger;
-import consulo.document.Document;
-import consulo.project.Project;
 import consulo.content.bundle.Sdk;
-import consulo.util.lang.Pair;
-import consulo.util.lang.ref.Ref;
-import consulo.document.util.TextRange;
-import consulo.util.lang.StringUtil;
-import consulo.virtualFileSystem.VirtualFile;
-import consulo.virtualFileSystem.VirtualFileManager;
-import com.intellij.psi.*;
-import com.intellij.java.language.impl.psi.impl.compiled.ClsClassImpl;
-import consulo.language.psi.search.FilenameIndex;
-import consulo.language.psi.scope.GlobalSearchScope;
-import consulo.language.psi.util.PsiTreeUtil;
+import consulo.document.Document;
 import consulo.document.util.DocumentUtil;
-import consulo.util.collection.ContainerUtil;
-import consulo.ide.impl.idea.util.containers.EmptyIterable;
+import consulo.document.util.TextRange;
 import consulo.internal.com.sun.jdi.AbsentInformationException;
 import consulo.internal.com.sun.jdi.Location;
 import consulo.internal.com.sun.jdi.Method;
 import consulo.internal.com.sun.jdi.ReferenceType;
 import consulo.internal.com.sun.jdi.request.ClassPrepareRequest;
+import consulo.language.psi.*;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.search.FilenameIndex;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.logging.Logger;
+import consulo.project.Project;
+import consulo.util.collection.ContainerUtil;
+import consulo.util.lang.Pair;
+import consulo.util.lang.StringUtil;
+import consulo.util.lang.ref.Ref;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.virtualFileSystem.VirtualFileManager;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.*;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 /**
  * @author lex
@@ -355,7 +349,7 @@ public class PositionManagerImpl implements PositionManager, MultiRequestPositio
 		Document document = PsiDocumentManager.getInstance(file.getProject()).getDocument(file);
 		if(document == null || lineNumber < 0 || lineNumber >= document.getLineCount())
 		{
-			return EmptyIterable.getInstance();
+			return List.of();
 		}
 		final TextRange lineRange = DocumentUtil.getLineTextRange(document, lineNumber);
 		return new Iterable<PsiElement>()

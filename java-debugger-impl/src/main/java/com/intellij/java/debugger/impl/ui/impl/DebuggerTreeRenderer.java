@@ -15,7 +15,6 @@
  */
 package com.intellij.java.debugger.impl.ui.impl;
 
-import consulo.application.AllIcons;
 import com.intellij.java.analysis.impl.ide.highlighter.JavaHighlightingColors;
 import com.intellij.java.debugger.engine.evaluation.EvaluateException;
 import com.intellij.java.debugger.impl.DebuggerContextImpl;
@@ -24,23 +23,25 @@ import com.intellij.java.debugger.impl.ui.impl.watch.*;
 import com.intellij.java.debugger.impl.ui.tree.ValueDescriptor;
 import com.intellij.java.debugger.impl.ui.tree.render.EnumerationChildrenRenderer;
 import com.intellij.java.debugger.ui.tree.NodeDescriptor;
+import consulo.application.AllIcons;
 import consulo.colorScheme.EditorColorsScheme;
 import consulo.colorScheme.TextAttributes;
 import consulo.execution.debug.XDebugSession;
 import consulo.execution.debug.XDebuggerManager;
+import consulo.execution.debug.ui.ValueMarkup;
 import consulo.execution.debug.ui.XDebuggerUIConstants;
-import consulo.ui.ex.SimpleColoredText;
-import consulo.ui.ex.awt.tree.ColoredTreeCellRenderer;
-import consulo.util.lang.StringUtil;
-import com.intellij.ui.*;
 import consulo.ide.impl.idea.xdebugger.impl.XDebugSessionImpl;
-import consulo.ide.impl.idea.xdebugger.impl.ui.DebuggerUIUtil;
-import consulo.ide.impl.idea.xdebugger.impl.ui.XDebugSessionTab;
-import consulo.ide.impl.idea.xdebugger.impl.ui.tree.ValueMarkup;
 import consulo.internal.com.sun.jdi.ObjectReference;
 import consulo.internal.com.sun.jdi.Value;
+import consulo.ui.ex.Gray;
+import consulo.ui.ex.JBColor;
+import consulo.ui.ex.SimpleColoredText;
+import consulo.ui.ex.SimpleTextAttributes;
+import consulo.ui.ex.awt.tree.ColoredTreeCellRenderer;
+import consulo.ui.ex.util.TextAttributesUtil;
 import consulo.ui.image.Image;
 import consulo.ui.image.ImageEffects;
+import consulo.util.lang.StringUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -198,7 +199,7 @@ public class DebuggerTreeRenderer extends ColoredTreeCellRenderer {
     }
 
     if (descriptor instanceof ValueDescriptor) {
-      final consulo.ide.impl.idea.xdebugger.impl.ui.tree.ValueMarkup markup = ((ValueDescriptor) descriptor).getMarkup(debuggerContext.getDebugProcess());
+      final ValueMarkup markup = ((ValueDescriptor) descriptor).getMarkup(debuggerContext.getDebugProcess());
       if (markup != null) {
         descriptorText.append("[" + markup.getText() + "] ", new SimpleTextAttributes(SimpleTextAttributes.STYLE_BOLD, markup.getColor()));
       }
@@ -253,7 +254,7 @@ public class DebuggerTreeRenderer extends ColoredTreeCellRenderer {
             } else if (valueDescriptor.isString()) {
               attributes = colorScheme.getAttributes(JavaHighlightingColors.STRING);
             }
-            valueLabelAttribs = attributes != null ? SimpleTextAttributes.fromTextAttributes(attributes) : DEFAULT_ATTRIBUTES;
+            valueLabelAttribs = attributes != null ? TextAttributesUtil.fromTextAttributes(attributes) : DEFAULT_ATTRIBUTES;
           }
 
           final EvaluateException exception = descriptor.getEvaluateException();
@@ -299,7 +300,7 @@ public class DebuggerTreeRenderer extends ColoredTreeCellRenderer {
           if (escapeAttribs == null) { // lazy init
             TextAttributes fromHighlighter = colorScheme.getAttributes(JavaHighlightingColors.VALID_STRING_ESCAPE);
             if (fromHighlighter != null) {
-              escapeAttribs = SimpleTextAttributes.fromTextAttributes(fromHighlighter);
+              escapeAttribs = TextAttributesUtil.fromTextAttributes(fromHighlighter);
             } else {
               escapeAttribs = DEFAULT_ATTRIBUTES.derive(SimpleTextAttributes.STYLE_BOLD, JBColor.GRAY, null, null);
             }

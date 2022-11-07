@@ -20,45 +20,33 @@
  */
 package com.intellij.java.debugger.impl.ui.impl;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Insets;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.Window;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-
-import javax.annotation.Nullable;
-import javax.swing.JComponent;
-import javax.swing.JScrollPane;
-import javax.swing.JToolTip;
-import javax.swing.JWindow;
-import javax.swing.ScrollPaneConstants;
-import javax.swing.SwingUtilities;
-import javax.swing.border.Border;
-import javax.swing.tree.TreeModel;
-import javax.swing.tree.TreePath;
-
-import org.jetbrains.annotations.NonNls;
 import com.intellij.java.debugger.impl.ui.impl.watch.DebuggerTreeNodeImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.NodeDescriptorImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.ValueDescriptorImpl;
-import consulo.ide.impl.idea.ide.dnd.aware.DnDAwareTree;
 import com.intellij.java.language.impl.JavaFileType;
-import consulo.project.Project;
-import consulo.util.jdom.JDOMUtil;
-import consulo.util.lang.StringUtil;
-import consulo.language.codeStyle.CodeStyleSettingsManager;
-import consulo.ui.ex.awt.util.ScreenUtil;
-import consulo.ui.ex.awt.ScrollPaneFactory;
-import consulo.util.lang.text.StringTokenizer;
-import consulo.ide.impl.idea.util.ui.GeometryUtil;
-import consulo.ui.ex.awt.UIUtil;
-import consulo.ui.ex.awt.tree.TreeUtil;
 import consulo.disposer.Disposable;
 import consulo.disposer.Disposer;
+import consulo.language.codeStyle.CodeStyleSettingsManager;
+import consulo.project.Project;
+import consulo.ui.ex.awt.ScrollPaneFactory;
+import consulo.ui.ex.awt.UIUtil;
+import consulo.ui.ex.awt.dnd.DnDAwareTree;
+import consulo.ui.ex.awt.tree.TreeUtil;
+import consulo.ui.ex.awt.util.GeometryUtil;
+import consulo.ui.ex.awt.util.ScreenUtil;
+import consulo.util.jdom.JDOMUtil;
+import consulo.util.lang.StringUtil;
+import consulo.util.lang.text.StringTokenizer;
+import org.jetbrains.annotations.NonNls;
 
+import javax.annotation.Nullable;
+import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.tree.TreeModel;
+import javax.swing.tree.TreePath;
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class DebuggerTreeBase extends DnDAwareTree implements Disposable
 {

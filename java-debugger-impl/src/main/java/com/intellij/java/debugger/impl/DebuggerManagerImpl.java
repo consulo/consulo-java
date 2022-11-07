@@ -39,7 +39,6 @@ import com.intellij.java.language.psi.PsiClass;
 import consulo.application.ApplicationManager;
 import consulo.application.progress.ProgressManager;
 import consulo.application.util.SystemInfo;
-import consulo.colorScheme.EditorColorsManager;
 import consulo.colorScheme.event.EditorColorsListener;
 import consulo.component.persist.PersistentStateComponent;
 import consulo.component.persist.State;
@@ -47,6 +46,7 @@ import consulo.component.persist.Storage;
 import consulo.component.persist.StoragePathMacros;
 import consulo.content.bundle.Sdk;
 import consulo.execution.ExecutionResult;
+import consulo.ide.impl.idea.execution.process.KillableColoredProcessHandler;
 import consulo.java.execution.configurations.OwnJavaParameters;
 import consulo.logging.Logger;
 import consulo.process.ExecutionException;
@@ -56,7 +56,6 @@ import consulo.process.event.ProcessEvent;
 import consulo.project.Project;
 import consulo.project.startup.StartupManager;
 import consulo.proxy.EventDispatcher;
-import consulo.util.collection.ContainerUtil;
 import consulo.util.collection.Lists;
 import consulo.util.collection.SmartList;
 import consulo.util.lang.StringUtil;
@@ -163,6 +162,8 @@ public class DebuggerManagerImpl extends DebuggerManagerEx implements Persistent
     }
 
     project.getMessageBus().connect().subscribe(EditorColorsListener.class, scheme -> getBreakpointManager().updateBreakpointsUI());
+
+    myBreakpointManager.init();
   }
 
   @Nullable
@@ -179,11 +180,6 @@ public class DebuggerManagerImpl extends DebuggerManagerEx implements Persistent
       final Collection<DebuggerSession> values = mySessions.values();
       return values.isEmpty() ? Collections.emptyList() : new ArrayList<>(values);
     }
-  }
-
-  @Override
-  public void projectOpened() {
-    myBreakpointManager.init();
   }
 
   @Nullable
@@ -338,12 +334,6 @@ public class DebuggerManagerImpl extends DebuggerManagerEx implements Persistent
     return DebuggerManagerThreadImpl.isManagerThread();
   }
 
-  @Override
-  @Nonnull
-  public String getComponentName() {
-    return "DebuggerManager";
-  }
-
   @Nonnull
   @Override
   public BreakpointManager getBreakpointManager() {
@@ -401,30 +391,9 @@ public class DebuggerManagerImpl extends DebuggerManagerEx implements Persistent
   /**
    * for Target JDKs versions 1.2.x - 1.3.0 the Classic VM should be used for debugging
    */
+  @Deprecated
   private static boolean shouldForceClassicVM(Sdk jdk) {
-    if (SystemInfo.isMac) {
-      return false;
-    }
-    if (jdk == null) {
-      return false;
-    }
-
-    String version = JdkUtil.getJdkMainAttribute(jdk, Attributes.Name.IMPLEMENTATION_VERSION);
-    if (version == null || StringUtil.compareVersionNumbers(version, "1.4") >= 0) {
-      return false;
-    }
-
-    if (version.startsWith("1.2") && SystemInfo.isWindows) {
-      return true;
-    }
-    version += ".0";
-    if (version.startsWith("1.3.0") && SystemInfo.isWindows) {
-      return true;
-    }
-    if ((version.startsWith("1.3.1_07") || version.startsWith("1.3.1_08")) && SystemInfo.isWindows) {
-      return false; // fixes bug for these JDKs that it cannot start with -classic option
-    }
-    return DebuggerSettings.getInstance().FORCE_CLASSIC_VM;
+    return false;
   }
 
   @SuppressWarnings({"HardCodedStringLiteral"})
@@ -503,19 +472,15 @@ public class DebuggerManagerImpl extends DebuggerManagerEx implements Persistent
     return new RemoteConnection(useSockets, "127.0.0.1", address, debuggerInServerMode);
   }
 
+  @Deprecated
   private static boolean shouldForceNoJIT(Sdk jdk) {
     if (DebuggerSettings.getInstance().DISABLE_JIT) {
       return true;
     }
-    if (jdk != null) {
-      final String version = JdkUtil.getJdkMainAttribute(jdk, Attributes.Name.IMPLEMENTATION_VERSION);
-      if (version != null && (version.startsWith("1.2") || version.startsWith("1.3"))) {
-        return true;
-      }
-    }
     return false;
   }
 
+  @Deprecated
   private static boolean shouldAddXdebugKey(Sdk jdk) {
     if (jdk == null) {
       return true; // conservative choice
@@ -523,28 +488,16 @@ public class DebuggerManagerImpl extends DebuggerManagerEx implements Persistent
     if (DebuggerSettings.getInstance().DISABLE_JIT) {
       return true;
     }
-
-    //if (ApplicationManager.getApplication().isUnitTestMode()) {
-    // need this in unit tests to avoid false alarms when comparing actual output with expected output
-    //return true;
-    //}
-
-    final String version = JdkUtil.getJdkMainAttribute(jdk, Attributes.Name.IMPLEMENTATION_VERSION);
-    return version == null ||
-        //version.startsWith("1.5") ||
-        version.startsWith("1.4") || version.startsWith("1.3") || version.startsWith("1.2") || version.startsWith("1.1") || version.startsWith("1.0");
+    return false;
   }
 
+  @Deprecated
   private static boolean isJVMTIAvailable(Sdk jdk) {
     if (jdk == null) {
       return false; // conservative choice
     }
 
-    final String version = JdkUtil.getJdkMainAttribute(jdk, Attributes.Name.IMPLEMENTATION_VERSION);
-    if (version == null) {
-      return false;
-    }
-    return !(version.startsWith("1.4") || version.startsWith("1.3") || version.startsWith("1.2") || version.startsWith("1.1") || version.startsWith("1.0"));
+    return true;
   }
 
   public static RemoteConnection createDebugParameters(final OwnJavaParameters parameters, GenericDebuggerRunnerSettings settings, boolean checkValidity) throws ExecutionException {
