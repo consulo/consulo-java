@@ -1,42 +1,40 @@
 package com.intellij.byteCodeViewer;
 
+import com.intellij.java.debugger.impl.engine.JVMNameUtil;
+import com.intellij.java.language.psi.JavaPsiFacade;
+import com.intellij.java.language.psi.PsiClass;
+import consulo.codeEditor.Editor;
+import consulo.compiler.ModuleCompilerPathsManager;
+import consulo.ide.ServiceManager;
+import consulo.ide.impl.idea.codeInsight.documentation.DockablePopupManager;
+import consulo.internal.org.objectweb.asm.ClassReader;
+import consulo.internal.org.objectweb.asm.util.Textifier;
+import consulo.internal.org.objectweb.asm.util.TraceClassVisitor;
+import consulo.language.content.ProductionContentFolderTypeProvider;
+import consulo.language.content.TestContentFolderTypeProvider;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiUtilCore;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.SymbolPresentationUtil;
+import consulo.language.util.ModuleUtilCore;
+import consulo.logging.Logger;
+import consulo.module.Module;
+import consulo.module.content.ProjectRootManager;
+import consulo.project.Project;
+import consulo.ui.ex.content.Content;
+import consulo.util.lang.StringUtil;
+import consulo.virtualFileSystem.VirtualFile;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import consulo.logging.Logger;
-import consulo.ui.ex.content.Content;
-import jakarta.inject.Inject;
-import jakarta.inject.Singleton;
-
-import consulo.internal.org.objectweb.asm.ClassReader;
-import consulo.internal.org.objectweb.asm.util.Textifier;
-import consulo.internal.org.objectweb.asm.util.TraceClassVisitor;
-import consulo.ide.impl.idea.codeInsight.documentation.DockablePopupManager;
-import com.intellij.java.debugger.impl.engine.JVMNameUtil;
-import consulo.ide.ServiceManager;
-import consulo.codeEditor.Editor;
-import consulo.module.Module;
-import consulo.language.util.ModuleUtilCore;
-import consulo.project.Project;
-import consulo.module.content.ProjectRootManager;
-import consulo.ide.impl.idea.openapi.util.io.FileUtil;
-import consulo.util.lang.StringUtil;
-import consulo.virtualFileSystem.VirtualFile;
-import com.intellij.java.language.psi.JavaPsiFacade;
-import com.intellij.java.language.psi.PsiClass;
-import consulo.language.psi.PsiElement;
-import consulo.language.psi.PsiFile;
-import consulo.language.psi.util.SymbolPresentationUtil;
-import consulo.language.psi.util.PsiTreeUtil;
-import consulo.language.psi.PsiUtilCore;
-import consulo.compiler.ModuleCompilerPathsManager;
-import consulo.roots.impl.ProductionContentFolderTypeProvider;
-import consulo.roots.impl.TestContentFolderTypeProvider;
+import java.nio.file.Files;
 
 /**
  * User: anna
@@ -202,7 +200,7 @@ public class ByteCodeViewerManager extends DockablePopupManager<ByteCodeViewerCo
         LOG.info("search in: " + classPath);
         return null;
       }
-      return processClassFile(FileUtil.loadFileBytes(classFile));
+      return processClassFile(Files.readAllBytes(classFile.toPath()));
     }
     catch (Exception e1) {
       LOG.error(e1);

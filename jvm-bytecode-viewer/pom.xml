@@ -61,10 +61,9 @@
 		</dependency>
 		<dependency>
 			<groupId>consulo</groupId>
-			<artifactId>consulo-compiler-impl</artifactId>
-			<version>${project.version}</version>
+			<artifactId>consulo-ide-impl</artifactId>
+			<version>3-SNAPSHOT</version>
 			<scope>provided</scope>
-			<optional>true</optional>
 		</dependency>
 	</dependencies>
 </project>
