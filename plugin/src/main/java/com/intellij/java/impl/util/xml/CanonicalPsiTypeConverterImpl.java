@@ -27,37 +27,38 @@ import consulo.language.psi.ElementManipulators;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
 import consulo.language.psi.resolve.PsiScopeProcessor;
-import consulo.util.collection.ArrayUtil;
 import consulo.language.util.IncorrectOperationException;
-import com.intellij.util.xml.ConvertContext;
-import com.intellij.util.xml.CustomReferenceConverter;
-import com.intellij.util.xml.GenericDomValue;
+import consulo.util.collection.ArrayUtil;
+import consulo.xml.util.xml.ConvertContext;
+import consulo.xml.util.xml.CustomReferenceConverter;
+import consulo.xml.util.xml.GenericDomValue;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
 
 /**
  * @author peter
-*/
+ */
 public class CanonicalPsiTypeConverterImpl extends CanonicalPsiTypeConverter implements CustomReferenceConverter<PsiType> {
 
-  @NonNls static final String[] PRIMITIVES = new String[]{"boolean", "byte",
-    "char", "double", "float", "int", "long", "short"};
-  @NonNls private static final String ARRAY_PREFIX = "[L";
+  @NonNls
+  static final String[] PRIMITIVES = new String[]{"boolean", "byte",
+      "char", "double", "float", "int", "long", "short"};
+  @NonNls
+  private static final String ARRAY_PREFIX = "[L";
   private static final JavaClassReferenceProvider CLASS_REFERENCE_PROVIDER = new JavaClassReferenceProvider();
 
   public PsiType fromString(final String s, final ConvertContext context) {
     if (s == null) return null;
     try {
       return JavaPsiFacade.getInstance(context.getFile().getProject()).getElementFactory().createTypeFromText(s.replace('$', '.'), null);
-    }
-    catch (IncorrectOperationException e) {
+    } catch (IncorrectOperationException e) {
       return null;
     }
   }
 
   public String toString(final PsiType t, final ConvertContext context) {
-    return t == null? null:t.getCanonicalText();
+    return t == null ? null : t.getCanonicalText();
   }
 
   @Nonnull
@@ -101,7 +102,7 @@ public class CanonicalPsiTypeConverterImpl extends CanonicalPsiTypeConverter imp
 
           public void processVariants(final PsiScopeProcessor processor) {
             if (processor instanceof JavaCompletionProcessor) {
-              ((JavaCompletionProcessor)processor).setCompletionElements(getVariants());
+              ((JavaCompletionProcessor) processor).setCompletionElements(getVariants());
             } else {
               super.processVariants(processor);
             }

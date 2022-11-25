@@ -16,7 +16,7 @@
 package com.intellij.java.impl.ig.threading;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import consulo.content.scope.SearchScope;
 import consulo.language.psi.search.ReferencesSearch;
 import com.intellij.java.language.psi.util.PropertyUtil;

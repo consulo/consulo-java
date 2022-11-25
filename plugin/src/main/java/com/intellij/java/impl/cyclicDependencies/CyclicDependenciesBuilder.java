@@ -15,24 +15,26 @@
  */
 package com.intellij.java.impl.cyclicDependencies;
 
-import consulo.language.editor.scope.AnalysisScope;
-import consulo.language.editor.scope.AnalysisScopeBundle;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiJavaFile;
 import com.intellij.java.language.psi.PsiJavaPackage;
-import consulo.component.ProcessCanceledException;
 import consulo.application.progress.ProgressIndicator;
 import consulo.application.progress.ProgressManager;
-import consulo.project.Project;
-import consulo.module.content.ProjectFileIndex;
-import consulo.module.content.ProjectRootManager;
-import consulo.ide.impl.idea.packageDependencies.DependenciesBuilder;
-import consulo.ide.impl.idea.packageDependencies.ForwardDependenciesBuilder;
-import com.intellij.psi.*;
+import consulo.application.util.graph.GraphAlgorithms;
+import consulo.component.ProcessCanceledException;
 import consulo.component.util.graph.CachingSemiGraph;
 import consulo.component.util.graph.Graph;
-import consulo.ide.impl.idea.util.graph.GraphAlgorithms;
 import consulo.component.util.graph.GraphGenerator;
+import consulo.ide.impl.idea.packageDependencies.DependenciesBuilder;
+import consulo.ide.impl.idea.packageDependencies.ForwardDependenciesBuilder;
+import consulo.language.editor.scope.AnalysisScope;
+import consulo.language.editor.scope.AnalysisScopeBundle;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiManager;
+import consulo.language.psi.PsiRecursiveElementVisitor;
+import consulo.module.content.ProjectFileIndex;
+import consulo.module.content.ProjectRootManager;
+import consulo.project.Project;
 
 import java.util.*;
 

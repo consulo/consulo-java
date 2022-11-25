@@ -39,7 +39,7 @@ import consulo.module.Module;
 import consulo.ide.impl.idea.openapi.module.ModuleUtil;
 import consulo.util.lang.ref.Ref;
 import consulo.util.lang.StringUtil;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.search.ReferencesSearch;

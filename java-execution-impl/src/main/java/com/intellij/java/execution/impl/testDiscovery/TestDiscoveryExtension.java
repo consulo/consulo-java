@@ -15,227 +15,192 @@
  */
 package com.intellij.java.execution.impl.testDiscovery;
 
+import com.intellij.java.execution.impl.JavaTestConfigurationBase;
+import com.intellij.java.execution.impl.RunConfigurationExtension;
+import com.intellij.java.execution.impl.testframework.JavaTestLocator;
+import com.intellij.rt.coverage.data.ProjectData;
+import consulo.component.messagebus.MessageBusConnection;
+import consulo.disposer.Disposable;
+import consulo.disposer.Disposer;
+import consulo.execution.configuration.RunConfigurationBase;
+import consulo.execution.configuration.RunnerSettings;
+import consulo.execution.test.sm.runner.SMTRunnerEventsAdapter;
+import consulo.execution.test.sm.runner.SMTRunnerEventsListener;
+import consulo.execution.test.sm.runner.SMTestProxy;
+import consulo.java.execution.configurations.OwnJavaParameters;
+import consulo.logging.Logger;
+import consulo.platform.Platform;
+import consulo.process.ProcessHandler;
+import consulo.project.Project;
+import consulo.project.util.ProjectUtil;
+import consulo.ui.ex.awt.util.Alarm;
+import consulo.util.collection.ArrayUtil;
+import consulo.util.io.ClassPathUtil;
+import consulo.util.io.FileUtil;
+import consulo.util.lang.StringUtil;
+import consulo.util.xml.serializer.InvalidDataException;
+import consulo.util.xml.serializer.WriteExternalException;
+import org.jdom.Element;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+public class TestDiscoveryExtension extends RunConfigurationExtension {
+  public static final boolean TESTDISCOVERY_ENABLED = Boolean.valueOf(Platform.current().jvm().getRuntimeProperty("testDiscovery.enabled"));
 
-import consulo.execution.configuration.RunnerSettings;
-import consulo.platform.Platform;
-import org.jdom.Element;
-import com.intellij.java.execution.impl.JavaTestConfigurationBase;
-import com.intellij.java.execution.impl.RunConfigurationExtension;
-import consulo.execution.configuration.RunConfigurationBase;
-import consulo.process.ProcessHandler;
-import com.intellij.java.execution.impl.testframework.JavaTestLocator;
-import consulo.execution.test.sm.runner.SMTRunnerEventsAdapter;
-import consulo.execution.test.sm.runner.SMTRunnerEventsListener;
-import consulo.execution.test.sm.runner.SMTestProxy;
-import consulo.logging.Logger;
-import consulo.project.Project;
-import com.intellij.openapi.project.ProjectUtil;
-import consulo.disposer.Disposable;
-import consulo.disposer.Disposer;
-import consulo.util.xml.serializer.InvalidDataException;
-import consulo.util.xml.serializer.WriteExternalException;
-import consulo.ide.impl.idea.openapi.util.io.FileUtil;
-import consulo.util.lang.StringUtil;
-import com.intellij.rt.coverage.data.ProjectData;
-import consulo.ui.ex.awt.util.Alarm;
-import consulo.util.collection.ArrayUtil;
-import com.intellij.util.PathUtil;
-import consulo.component.messagebus.MessageBusConnection;
-import consulo.java.execution.configurations.OwnJavaParameters;
+  private static final Logger LOG = Logger.getInstance(TestDiscoveryExtension.class);
 
-public class TestDiscoveryExtension extends RunConfigurationExtension
-{
-	public static final boolean TESTDISCOVERY_ENABLED = Boolean.valueOf(Platform.current().jvm().getRuntimeProperty("testDiscovery.enabled"));
+  @Nonnull
+  @Override
+  public String getSerializationId() {
+    return "testDiscovery";
+  }
 
-	private static final Logger LOG = Logger.getInstance(TestDiscoveryExtension.class);
+  @Override
+  protected void attachToProcess(@Nonnull final RunConfigurationBase configuration, @Nonnull final ProcessHandler handler, @Nullable RunnerSettings runnerSettings) {
+    if (runnerSettings == null && isApplicableFor(configuration)) {
+      final String frameworkPrefix = ((JavaTestConfigurationBase) configuration).getFrameworkPrefix();
+      final String moduleName = ((JavaTestConfigurationBase) configuration).getConfigurationModule().getModuleName();
 
-	@Nonnull
-	@Override
-	public String getSerializationId()
-	{
-		return "testDiscovery";
-	}
+      Disposable disposable = Disposable.newDisposable();
+      final Alarm processTracesAlarm = new Alarm(Alarm.ThreadToUse.POOLED_THREAD, disposable);
+      final MessageBusConnection connection = configuration.getProject().getMessageBus().connect();
+      connection.subscribe(SMTRunnerEventsListener.class, new SMTRunnerEventsAdapter() {
+        private List<String> myCompletedMethodNames = new ArrayList<>();
 
-	@Override
-	protected void attachToProcess(@Nonnull final RunConfigurationBase configuration, @Nonnull final ProcessHandler handler, @Nullable RunnerSettings runnerSettings)
-	{
-		if(runnerSettings == null && isApplicableFor(configuration))
-		{
-			final String frameworkPrefix = ((JavaTestConfigurationBase) configuration).getFrameworkPrefix();
-			final String moduleName = ((JavaTestConfigurationBase) configuration).getConfigurationModule().getModuleName();
+        @Override
+        public void onTestFinished(@Nonnull SMTestProxy test) {
+          final SMTestProxy.SMRootTestProxy root = test.getRoot();
+          if ((root == null || root.getHandler() == handler)) {
+            final String fullTestName = test.getLocationUrl();
+            if (fullTestName != null && fullTestName.startsWith(JavaTestLocator.TEST_PROTOCOL)) {
+              myCompletedMethodNames.add(frameworkPrefix + fullTestName.substring(JavaTestLocator.TEST_PROTOCOL.length() + 3));
+              if (myCompletedMethodNames.size() > 50) {
+                final String[] fullTestNames = ArrayUtil.toStringArray(myCompletedMethodNames);
+                myCompletedMethodNames.clear();
+                processTracesAlarm.addRequest(() -> processAvailableTraces(fullTestNames, getTracesDirectory(configuration), moduleName, frameworkPrefix, TestDiscoveryIndex
+                    .getInstance(configuration.getProject())), 100);
+              }
+            }
+          }
+        }
 
-			Disposable disposable = Disposable.newDisposable();
-			final Alarm processTracesAlarm = new Alarm(Alarm.ThreadToUse.POOLED_THREAD, disposable);
-			final MessageBusConnection connection = configuration.getProject().getMessageBus().connect();
-			connection.subscribe(SMTRunnerEventsListener.TEST_STATUS, new SMTRunnerEventsAdapter()
-			{
-				private List<String> myCompletedMethodNames = new ArrayList<>();
+        @Override
+        public void onTestingFinished(@Nonnull SMTestProxy.SMRootTestProxy testsRoot) {
+          if (testsRoot.getHandler() == handler) {
+            processTracesAlarm.cancelAllRequests();
+            processTracesAlarm.addRequest(() ->
+            {
+              processAvailableTraces(configuration);
+              Disposer.dispose(disposable);
+            }, 0);
+            connection.disconnect();
+          }
+        }
+      });
+    }
+  }
 
-				@Override
-				public void onTestFinished(@Nonnull SMTestProxy test)
-				{
-					final SMTestProxy.SMRootTestProxy root = test.getRoot();
-					if((root == null || root.getHandler() == handler))
-					{
-						final String fullTestName = test.getLocationUrl();
-						if(fullTestName != null && fullTestName.startsWith(JavaTestLocator.TEST_PROTOCOL))
-						{
-							myCompletedMethodNames.add(frameworkPrefix + fullTestName.substring(JavaTestLocator.TEST_PROTOCOL.length() + 3));
-							if(myCompletedMethodNames.size() > 50)
-							{
-								final String[] fullTestNames = ArrayUtil.toStringArray(myCompletedMethodNames);
-								myCompletedMethodNames.clear();
-								processTracesAlarm.addRequest(() -> processAvailableTraces(fullTestNames, getTracesDirectory(configuration), moduleName, frameworkPrefix, TestDiscoveryIndex
-										.getInstance(configuration.getProject())), 100);
-							}
-						}
-					}
-				}
+  @Override
+  public void updateJavaParameters(RunConfigurationBase configuration, OwnJavaParameters params, RunnerSettings runnerSettings) {
+    if (runnerSettings != null || !isApplicableFor(configuration)) {
+      return;
+    }
+    StringBuilder argument = new StringBuilder("-javaagent:");
+    final String agentPath = ClassPathUtil.getJarPathForClass(ProjectData.class);//todo spaces
+    argument.append(agentPath);
+    params.getVMParametersList().add(argument.toString());
+    params.getClassPath().add(agentPath);
+    params.getVMParametersList().addProperty(ProjectData.TRACE_DIR, getTracesDirectory(configuration));
+  }
 
-				@Override
-				public void onTestingFinished(@Nonnull SMTestProxy.SMRootTestProxy testsRoot)
-				{
-					if(testsRoot.getHandler() == handler)
-					{
-						processTracesAlarm.cancelAllRequests();
-						processTracesAlarm.addRequest(() ->
-						{
-							processAvailableTraces(configuration);
-							Disposer.dispose(disposable);
-						}, 0);
-						connection.disconnect();
-					}
-				}
-			});
-		}
-	}
+  @Nonnull
+  private static String getTracesDirectory(RunConfigurationBase configuration) {
+    return baseTestDiscoveryPathForProject(configuration.getProject()) + File.separator + configuration.getUniqueID();
+  }
 
-	@Override
-	public void updateJavaParameters(RunConfigurationBase configuration, OwnJavaParameters params, RunnerSettings runnerSettings)
-	{
-		if(runnerSettings != null || !isApplicableFor(configuration))
-		{
-			return;
-		}
-		StringBuilder argument = new StringBuilder("-javaagent:");
-		final String agentPath = PathUtil.getJarPathForClass(ProjectData.class);//todo spaces
-		argument.append(agentPath);
-		params.getVMParametersList().add(argument.toString());
-		params.getClassPath().add(agentPath);
-		params.getVMParametersList().addProperty(ProjectData.TRACE_DIR, getTracesDirectory(configuration));
-	}
+  @Override
+  public boolean isListenerDisabled(RunConfigurationBase configuration, Object listener, RunnerSettings runnerSettings) {
+    return false;
+    // FIXME [VISTALL] TestDiscoveryListener is not in root classloder
+    //return listener instanceof TestDiscoveryListener && (runnerSettings != null || !isApplicableFor(configuration));
+  }
 
-	@Nonnull
-	private static String getTracesDirectory(RunConfigurationBase configuration)
-	{
-		return baseTestDiscoveryPathForProject(configuration.getProject()) + File.separator + configuration.getUniqueID();
-	}
+  @Override
+  public void readExternal(@Nonnull final RunConfigurationBase runConfiguration, @Nonnull Element element) throws InvalidDataException {
+  }
 
-	@Override
-	public boolean isListenerDisabled(RunConfigurationBase configuration, Object listener, RunnerSettings runnerSettings)
-	{
-		return false;
-		// FIXME [VISTALL] TestDiscoveryListener is not in root classloder
-		//return listener instanceof TestDiscoveryListener && (runnerSettings != null || !isApplicableFor(configuration));
-	}
+  @Override
+  public void writeExternal(@Nonnull RunConfigurationBase runConfiguration, @Nonnull Element element) throws WriteExternalException {
+    throw new WriteExternalException();
+  }
 
-	@Override
-	public void readExternal(@Nonnull final RunConfigurationBase runConfiguration, @Nonnull Element element) throws InvalidDataException
-	{
-	}
+  @Override
+  protected boolean isApplicableFor(@Nonnull final RunConfigurationBase configuration) {
+    return configuration instanceof JavaTestConfigurationBase && TESTDISCOVERY_ENABLED;
+  }
 
-	@Override
-	public void writeExternal(@Nonnull RunConfigurationBase runConfiguration, @Nonnull Element element) throws WriteExternalException
-	{
-		throw new WriteExternalException();
-	}
+  @Nonnull
+  public static Path baseTestDiscoveryPathForProject(Project project) {
+    return ProjectUtil.getProjectCachePath(project, "testDiscovery", true);
+  }
 
-	@Override
-	protected boolean isApplicableFor(@Nonnull final RunConfigurationBase configuration)
-	{
-		return configuration instanceof JavaTestConfigurationBase && TESTDISCOVERY_ENABLED;
-	}
+  private static final Object ourTracesLock = new Object();
 
-	@Nonnull
-	public static Path baseTestDiscoveryPathForProject(Project project)
-	{
-		return ProjectUtil.getProjectCachePath(project, "testDiscovery", true);
-	}
+  private static void processAvailableTraces(RunConfigurationBase configuration) {
+    final String tracesDirectory = getTracesDirectory(configuration);
+    final TestDiscoveryIndex coverageIndex = TestDiscoveryIndex.getInstance(configuration.getProject());
+    synchronized (ourTracesLock) {
+      final File tracesDirectoryFile = new File(tracesDirectory);
+      final File[] testMethodTraces = tracesDirectoryFile.listFiles((dir, name) -> name.endsWith(".tr"));
+      if (testMethodTraces != null) {
+        for (File testMethodTrace : testMethodTraces) {
+          try {
+            coverageIndex.updateFromTestTrace(testMethodTrace, ((JavaTestConfigurationBase) configuration).getConfigurationModule().getModuleName(), ((JavaTestConfigurationBase)
+                configuration).getFrameworkPrefix());
+            FileUtil.delete(testMethodTrace);
+          } catch (IOException e) {
+            LOG.error("Can not load " + testMethodTrace, e);
+          }
+        }
 
-	private static final Object ourTracesLock = new Object();
+        final String[] filesInTracedDirectories = tracesDirectoryFile.list();
+        if (filesInTracedDirectories == null || filesInTracedDirectories.length == 0) {
+          FileUtil.delete(tracesDirectoryFile);
+        }
+      }
+    }
+  }
 
-	private static void processAvailableTraces(RunConfigurationBase configuration)
-	{
-		final String tracesDirectory = getTracesDirectory(configuration);
-		final TestDiscoveryIndex coverageIndex = TestDiscoveryIndex.getInstance(configuration.getProject());
-		synchronized(ourTracesLock)
-		{
-			final File tracesDirectoryFile = new File(tracesDirectory);
-			final File[] testMethodTraces = tracesDirectoryFile.listFiles((dir, name) -> name.endsWith(".tr"));
-			if(testMethodTraces != null)
-			{
-				for(File testMethodTrace : testMethodTraces)
-				{
-					try
-					{
-						coverageIndex.updateFromTestTrace(testMethodTrace, ((JavaTestConfigurationBase) configuration).getConfigurationModule().getModuleName(), ((JavaTestConfigurationBase)
-								configuration).getFrameworkPrefix());
-						FileUtil.delete(testMethodTrace);
-					}
-					catch(IOException e)
-					{
-						LOG.error("Can not load " + testMethodTrace, e);
-					}
-				}
+  @SuppressWarnings("WeakerAccess")
+  // called via reflection from com.intellij.InternalTestDiscoveryListener.flushCurrentTraces()
+  public static void processAvailableTraces(final String[] fullTestNames,
+                                            final String tracesDirectory,
+                                            final String moduleName,
+                                            final String frameworkPrefix,
+                                            final TestDiscoveryIndex discoveryIndex) {
+    synchronized (ourTracesLock) {
+      for (String fullTestName : fullTestNames) {
+        final String className = StringUtil.getPackageName(fullTestName);
+        final String methodName = StringUtil.getShortName(fullTestName);
+        if (!StringUtil.isEmptyOrSpaces(className) && !StringUtil.isEmptyOrSpaces(methodName)) {
+          final File testMethodTrace = new File(tracesDirectory, className + "-" + methodName + ".tr");
+          if (testMethodTrace.exists()) {
+            try {
+              discoveryIndex.updateFromTestTrace(testMethodTrace, moduleName, frameworkPrefix);
+              FileUtil.delete(testMethodTrace);
+            } catch (Throwable e) {
+              LOG.error("Can not load " + testMethodTrace, e);
+            }
+          }
+        }
+      }
+    }
 
-				final String[] filesInTracedDirectories = tracesDirectoryFile.list();
-				if(filesInTracedDirectories == null || filesInTracedDirectories.length == 0)
-				{
-					FileUtil.delete(tracesDirectoryFile);
-				}
-			}
-		}
-	}
-
-	@SuppressWarnings("WeakerAccess")  // called via reflection from com.intellij.InternalTestDiscoveryListener.flushCurrentTraces()
-	public static void processAvailableTraces(final String[] fullTestNames,
-			final String tracesDirectory,
-			final String moduleName,
-			final String frameworkPrefix,
-			final TestDiscoveryIndex discoveryIndex)
-	{
-		synchronized(ourTracesLock)
-		{
-			for(String fullTestName : fullTestNames)
-			{
-				final String className = StringUtil.getPackageName(fullTestName);
-				final String methodName = StringUtil.getShortName(fullTestName);
-				if(!StringUtil.isEmptyOrSpaces(className) && !StringUtil.isEmptyOrSpaces(methodName))
-				{
-					final File testMethodTrace = new File(tracesDirectory, className + "-" + methodName + ".tr");
-					if(testMethodTrace.exists())
-					{
-						try
-						{
-							discoveryIndex.updateFromTestTrace(testMethodTrace, moduleName, frameworkPrefix);
-							FileUtil.delete(testMethodTrace);
-						}
-						catch(Throwable e)
-						{
-							LOG.error("Can not load " + testMethodTrace, e);
-						}
-					}
-				}
-			}
-		}
-
-	}
+  }
 }

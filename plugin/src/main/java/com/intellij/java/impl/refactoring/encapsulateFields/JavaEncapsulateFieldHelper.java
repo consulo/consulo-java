@@ -15,21 +15,23 @@
  */
 package com.intellij.java.impl.refactoring.encapsulateFields;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.java.impl.codeInsight.generation.GenerateMembersUtil;
+import com.intellij.java.impl.refactoring.util.RefactoringUtil;
+import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.*;
-import consulo.logging.Logger;
-import consulo.util.lang.StringUtil;
-import com.intellij.psi.*;
-import consulo.language.ast.IElementType;
 import com.intellij.java.language.psi.util.PropertyUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.java.impl.refactoring.util.RefactoringUtil;
-import consulo.language.util.IncorrectOperationException;
 import com.intellij.java.language.util.VisibilityUtil;
+import consulo.language.Language;
+import consulo.language.ast.IElementType;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiReference;
+import consulo.language.util.IncorrectOperationException;
+import consulo.logging.Logger;
+import consulo.util.lang.StringUtil;
 import org.jetbrains.annotations.NonNls;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
@@ -345,5 +347,11 @@ public class JavaEncapsulateFieldHelper extends EncapsulateFieldHelper {
     catch (IncorrectOperationException e) {
       return null;
     }
+  }
+
+  @Nonnull
+  @Override
+  public Language getLanguage() {
+    return JavaLanguage.INSTANCE;
   }
 }

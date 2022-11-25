@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.codeInsight.intention.impl;
 
+import consulo.codeEditor.EditorPopupHelper;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.intention.PsiElementBaseIntentionAction;
 import com.intellij.java.language.psi.PsiClass;
@@ -28,8 +29,9 @@ import consulo.codeEditor.Editor;
 import consulo.project.Project;
 import consulo.ui.ex.popup.BaseListPopupStep;
 import consulo.ui.ex.popup.JBPopupFactory;
+import consulo.ui.ex.popup.ListPopup;
 import consulo.ui.ex.popup.PopupStep;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
@@ -104,7 +106,9 @@ public class ExpandStaticImportAction extends PsiElementBaseIntentionAction {
               return FINAL_CHOICE;
             }
           };
-        JBPopupFactory.getInstance().createListPopup(step).showInBestPositionFor(editor);
+        ListPopup popup = JBPopupFactory.getInstance().createListPopup(step);
+
+        EditorPopupHelper.getInstance().showPopupInBestPositionFor(editor, popup);
       }
     }
   }

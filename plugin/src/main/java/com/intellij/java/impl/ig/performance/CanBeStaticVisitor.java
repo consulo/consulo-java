@@ -18,7 +18,7 @@ package com.intellij.java.impl.ig.performance;
 import javax.annotation.Nonnull;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 
 class CanBeStaticVisitor extends JavaRecursiveElementVisitor {
   private boolean canBeStatic = true;

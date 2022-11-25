@@ -15,26 +15,26 @@
  */
 package com.intellij.java.impl.ig.modularization;
 
-import consulo.language.editor.scope.AnalysisScope;
-import consulo.language.editor.inspection.CommonProblemDescriptor;
-import consulo.language.editor.inspection.GlobalInspectionContext;
-import consulo.language.editor.inspection.scheme.InspectionManager;
-import consulo.language.editor.inspection.ProblemHighlightType;
-import com.intellij.codeInspection.reference.*;
 import com.intellij.java.analysis.codeInspection.reference.RefClass;
 import com.intellij.java.analysis.codeInspection.reference.RefPackage;
+import com.intellij.java.impl.ig.BaseGlobalInspection;
+import com.intellij.java.impl.ig.dependency.DependencyUtils;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiIdentifier;
 import com.siyeh.InspectionGadgetsBundle;
-import com.intellij.java.impl.ig.BaseGlobalInspection;
-import com.intellij.java.impl.ig.dependency.DependencyUtils;
+import consulo.language.editor.inspection.CommonProblemDescriptor;
+import consulo.language.editor.inspection.GlobalInspectionContext;
+import consulo.language.editor.inspection.ProblemHighlightType;
+import consulo.language.editor.inspection.reference.RefEntity;
+import consulo.language.editor.inspection.scheme.InspectionManager;
+import consulo.language.editor.scope.AnalysisScope;
 import org.jetbrains.annotations.Nls;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import java.util.Set;
 
-public class ClassIndependentOfModuleInspection extends BaseGlobalInspection {
+public abstract class ClassIndependentOfModuleInspection extends BaseGlobalInspection {
 
   @Nls
   @Nonnull

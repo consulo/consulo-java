@@ -15,10 +15,6 @@
  */
 package com.intellij.java.impl.codeInsight.completion;
 
-import consulo.language.editor.completion.lookup.InsertionContext;
-import consulo.language.editor.completion.lookup.LookupElement;
-import consulo.language.editor.completion.lookup.LookupElementPresentation;
-import consulo.application.AllIcons;
 import com.intellij.java.impl.codeInsight.ExpectedTypeInfo;
 import com.intellij.java.impl.codeInsight.lookup.TypedLookupItem;
 import com.intellij.java.language.psi.*;
@@ -26,141 +22,124 @@ import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
+import consulo.application.AllIcons;
+import consulo.language.editor.completion.lookup.InsertionContext;
+import consulo.language.editor.completion.lookup.LookupElement;
+import consulo.language.editor.completion.lookup.LookupElementPresentation;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.util.PsiTreeUtil;
-import consulo.ide.impl.idea.util.Consumer;
-import consulo.util.collection.ContainerUtil;
 
 import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.Set;
+import java.util.function.Consumer;
 
 import static consulo.java.language.module.util.JavaClassNames.*;
 
 /**
  * @author peter
  */
-class CollectConversion
-{
+class CollectConversion {
 
-	static void addCollectConversion(PsiReferenceExpression ref,
-			Collection<ExpectedTypeInfo> expectedTypes,
-			Consumer<LookupElement> consumer)
-	{
-		final PsiExpression qualifier = ref.getQualifierExpression();
-		PsiType component = qualifier == null ? null : PsiUtil.substituteTypeParameter(qualifier.getType(),
-				JAVA_UTIL_STREAM_STREAM, 0, true);
-		if(component == null)
-		{
-			return;
-		}
+  static void addCollectConversion(PsiReferenceExpression ref,
+                                   Collection<ExpectedTypeInfo> expectedTypes,
+                                   Consumer<LookupElement> consumer) {
+    final PsiExpression qualifier = ref.getQualifierExpression();
+    PsiType component = qualifier == null ? null : PsiUtil.substituteTypeParameter(qualifier.getType(),
+        JAVA_UTIL_STREAM_STREAM, 0, true);
+    if (component == null) {
+      return;
+    }
 
-		JavaPsiFacade facade = JavaPsiFacade.getInstance(ref.getProject());
-		GlobalSearchScope scope = ref.getResolveScope();
-		PsiClass list = facade.findClass(JAVA_UTIL_LIST, scope);
-		PsiClass set = facade.findClass(JAVA_UTIL_SET, scope);
-		if(facade.findClass(JAVA_UTIL_STREAM_COLLECTORS, scope) == null || list == null || set == null)
-		{
-			return;
-		}
+    JavaPsiFacade facade = JavaPsiFacade.getInstance(ref.getProject());
+    GlobalSearchScope scope = ref.getResolveScope();
+    PsiClass list = facade.findClass(JAVA_UTIL_LIST, scope);
+    PsiClass set = facade.findClass(JAVA_UTIL_SET, scope);
+    if (facade.findClass(JAVA_UTIL_STREAM_COLLECTORS, scope) == null || list == null || set == null) {
+      return;
+    }
 
-		boolean hasList = false;
-		boolean hasSet = false;
-		for(ExpectedTypeInfo info : expectedTypes)
-		{
-			PsiType type = info.getDefaultType();
-			PsiClass expectedClass = PsiUtil.resolveClassInClassTypeOnly(type);
-			PsiType expectedComponent = PsiUtil.extractIterableTypeParameter(type, true);
-			if(expectedClass == null || expectedComponent == null || !TypeConversionUtil.isAssignable(expectedComponent, component))
+    boolean hasList = false;
+    boolean hasSet = false;
+    for (ExpectedTypeInfo info : expectedTypes) {
+      PsiType type = info.getDefaultType();
+      PsiClass expectedClass = PsiUtil.resolveClassInClassTypeOnly(type);
+      PsiType expectedComponent = PsiUtil.extractIterableTypeParameter(type, true);
+      if (expectedClass == null || expectedComponent == null || !TypeConversionUtil.isAssignable(expectedComponent, component)) {
+        continue;
+      }
 
-			{
-				continue;
-			}
+      if (!hasList && InheritanceUtil.isInheritorOrSelf(list, expectedClass, true)) {
+        hasList = true;
+        consumer.accept(new MyLookupElement("toList", type));
+      }
 
-			if(!hasList && InheritanceUtil.isInheritorOrSelf(list, expectedClass, true))
-			{
-				hasList = true;
-				consumer.consume(new MyLookupElement("toList", type));
-			}
+      if (!hasSet && InheritanceUtil.isInheritorOrSelf(set, expectedClass, true)) {
+        hasSet = true;
+        consumer.accept(new MyLookupElement("toSet", type));
+      }
+    }
+  }
 
-			if(!hasSet && InheritanceUtil.isInheritorOrSelf(set, expectedClass, true))
-			{
-				hasSet = true;
-				consumer.consume(new MyLookupElement("toSet", type));
-			}
+  private static class MyLookupElement extends LookupElement implements TypedLookupItem {
+    private final String myLookupString;
+    private final String myTypeText;
+    private final String myMethodName;
+    @Nonnull
+    private final PsiType myExpectedType;
 
-		}
-	}
+    MyLookupElement(String methodName, @Nonnull PsiType expectedType) {
+      myMethodName = methodName;
+      myExpectedType = expectedType;
+      myLookupString = "collect(Collectors." + myMethodName + "())";
+      myTypeText = myExpectedType.getPresentableText();
+    }
 
-	private static class MyLookupElement extends LookupElement implements TypedLookupItem
-	{
-		private final String myLookupString;
-		private final String myTypeText;
-		private final String myMethodName;
-		@Nonnull
-		private final PsiType myExpectedType;
+    @Nonnull
+    @Override
+    public String getLookupString() {
+      return myLookupString;
+    }
 
-		MyLookupElement(String methodName, @Nonnull PsiType expectedType)
-		{
-			myMethodName = methodName;
-			myExpectedType = expectedType;
-			myLookupString = "collect(Collectors." + myMethodName + "())";
-			myTypeText = myExpectedType.getPresentableText();
-		}
+    @Override
+    public Set<String> getAllLookupStrings() {
+      return Set.of(myLookupString, myMethodName);
+    }
 
-		@Nonnull
-		@Override
-		public String getLookupString()
-		{
-			return myLookupString;
-		}
+    @Override
+    public void renderElement(LookupElementPresentation presentation) {
+      super.renderElement(presentation);
+      presentation.setTypeText(myTypeText);
+      presentation.setIcon(AllIcons.Nodes.Method);
+    }
 
-		@Override
-		public Set<String> getAllLookupStrings()
-		{
-			return ContainerUtil.newHashSet(myLookupString, myMethodName);
-		}
+    @Override
+    public void handleInsert(InsertionContext context) {
+      context.getDocument().replaceString(context.getStartOffset(), context.getTailOffset(), getInsertString());
+      context.commitDocument();
 
-		@Override
-		public void renderElement(LookupElementPresentation presentation)
-		{
-			super.renderElement(presentation);
-			presentation.setTypeText(myTypeText);
-			presentation.setIcon(AllIcons.Nodes.Method);
-		}
+      PsiMethodCallExpression call = PsiTreeUtil.findElementOfClassAtOffset(context.getFile(),
+          context.getStartOffset(), PsiMethodCallExpression.class, false);
+      if (call == null) {
+        return;
+      }
 
-		@Override
-		public void handleInsert(InsertionContext context)
-		{
-			context.getDocument().replaceString(context.getStartOffset(), context.getTailOffset(), getInsertString());
-			context.commitDocument();
+      PsiExpression[] args = call.getArgumentList().getExpressions();
+      if (args.length != 1 || !(args[0] instanceof PsiMethodCallExpression)) {
+        return;
+      }
 
-			PsiMethodCallExpression call = PsiTreeUtil.findElementOfClassAtOffset(context.getFile(),
-					context.getStartOffset(), PsiMethodCallExpression.class, false);
-			if(call == null)
-			{
-				return;
-			}
+      JavaCodeStyleManager.getInstance(context.getProject()).shortenClassReferences(args[0]);
+    }
 
-			PsiExpression[] args = call.getArgumentList().getExpressions();
-			if(args.length != 1 || !(args[0] instanceof PsiMethodCallExpression))
-			{
-				return;
-			}
+    @Nonnull
+    private String getInsertString() {
+      return "collect(" + JAVA_UTIL_STREAM_COLLECTORS + "." + myMethodName + "())";
+    }
 
-			JavaCodeStyleManager.getInstance(context.getProject()).shortenClassReferences(args[0]);
-		}
-
-		@Nonnull
-		private String getInsertString()
-		{
-			return "collect(" + JAVA_UTIL_STREAM_COLLECTORS + "." + myMethodName + "())";
-		}
-
-		@Override
-		public PsiType getType()
-		{
-			return myExpectedType;
-		}
-	}
+    @Override
+    public PsiType getType() {
+      return myExpectedType;
+    }
+  }
 }

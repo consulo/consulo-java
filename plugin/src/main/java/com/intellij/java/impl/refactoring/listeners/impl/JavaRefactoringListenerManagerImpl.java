@@ -15,22 +15,21 @@
  */
 package com.intellij.java.impl.refactoring.listeners.impl;
 
-import java.util.List;
-
-import jakarta.inject.Singleton;
-
-import com.intellij.java.language.psi.PsiClass;
-import com.intellij.java.language.psi.PsiMember;
 import com.intellij.java.impl.refactoring.listeners.JavaRefactoringListenerManager;
 import com.intellij.java.impl.refactoring.listeners.MoveMemberListener;
-import consulo.util.collection.ContainerUtil;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiMember;
+import consulo.util.collection.Lists;
+import jakarta.inject.Singleton;
+
+import java.util.List;
 
 /**
  * @author yole
  */
 @Singleton
 public class JavaRefactoringListenerManagerImpl extends JavaRefactoringListenerManager {
-  private final List<MoveMemberListener> myMoveMemberListeners = ContainerUtil.createLockFreeCopyOnWriteList();
+  private final List<MoveMemberListener> myMoveMemberListeners = Lists.newLockFreeCopyOnWriteList();
 
   public void addMoveMembersListener(MoveMemberListener moveMembersListener) {
     myMoveMemberListeners.add(moveMembersListener);

@@ -15,14 +15,18 @@
  */
 package com.intellij.java.impl.refactoring.actions;
 
-import com.intellij.openapi.actionSystem.*;
-import consulo.application.dumb.DumbAware;
-import consulo.project.Project;
-import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.java.language.psi.PsiClassOwner;
-import consulo.language.psi.PsiFile;
+import consulo.application.dumb.DumbAware;
+import consulo.language.editor.CommonDataKeys;
+import consulo.language.editor.LangDataKeys;
 import consulo.language.editor.refactoring.rename.PsiElementRenameHandler;
+import consulo.language.psi.PsiFile;
+import consulo.project.Project;
 import consulo.ui.ex.action.ActionPlaces;
+import consulo.ui.ex.action.AnAction;
+import consulo.ui.ex.action.AnActionEvent;
+import consulo.ui.ex.action.Presentation;
+import consulo.virtualFileSystem.VirtualFile;
 
 /**
  * @author ven

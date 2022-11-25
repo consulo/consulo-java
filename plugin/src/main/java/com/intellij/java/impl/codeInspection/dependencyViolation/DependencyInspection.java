@@ -15,40 +15,36 @@
  */
 package com.intellij.java.impl.codeInspection.dependencyViolation;
 
-import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
-
-import javax.annotation.Nonnull;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JPanel;
-
-import org.jetbrains.annotations.NonNls;
-
-import javax.annotation.Nullable;
-import consulo.language.editor.scope.AnalysisScope;
-import consulo.language.editor.rawHighlight.HighlightDisplayLevel;
-import consulo.language.editor.inspection.scheme.InspectionManager;
+import com.intellij.java.analysis.impl.codeInspection.ex.BaseLocalInspectionTool;
+import com.intellij.java.language.JavaLanguage;
+import consulo.dataContext.DataManager;
+import consulo.ide.impl.idea.packageDependencies.DependenciesBuilder;
+import consulo.ide.impl.idea.packageDependencies.ForwardDependenciesBuilder;
+import consulo.ide.impl.idea.packageDependencies.ui.DependencyConfigurable;
+import consulo.ide.setting.ShowSettingsUtil;
+import consulo.language.editor.CommonDataKeys;
 import consulo.language.editor.inspection.InspectionsBundle;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.editor.inspection.ProblemHighlightType;
-import com.intellij.java.analysis.impl.codeInspection.ex.BaseLocalInspectionTool;
-import consulo.dataContext.DataManager;
-import com.intellij.java.language.JavaLanguage;
-import consulo.language.editor.CommonDataKeys;
-import consulo.ide.setting.ShowSettingsUtil;
-import consulo.project.Project;
-import consulo.project.ProjectManager;
-import consulo.ide.impl.idea.packageDependencies.DependenciesBuilder;
-import consulo.ide.impl.idea.packageDependencies.DependencyRule;
-import consulo.ide.impl.idea.packageDependencies.DependencyValidationManager;
-import consulo.ide.impl.idea.packageDependencies.ForwardDependenciesBuilder;
-import consulo.ide.impl.idea.packageDependencies.ui.DependencyConfigurable;
+import consulo.language.editor.inspection.scheme.InspectionManager;
+import consulo.language.editor.packageDependency.DependencyRule;
+import consulo.language.editor.packageDependency.DependencyValidationManager;
+import consulo.language.editor.rawHighlight.HighlightDisplayLevel;
+import consulo.language.editor.scope.AnalysisScope;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
+import consulo.project.Project;
+import consulo.project.ProjectManager;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 /**
  * User: anna

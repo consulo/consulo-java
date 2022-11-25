@@ -30,7 +30,7 @@ import consulo.colorScheme.TextAttributes;
 import consulo.project.Project;
 import consulo.ui.ex.popup.BaseListPopupStep;
 import consulo.ui.ex.popup.PopupStep;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import com.intellij.java.language.impl.psi.presentation.java.ClassPresentationUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.ide.impl.idea.ui.popup.list.ListPopupImpl;

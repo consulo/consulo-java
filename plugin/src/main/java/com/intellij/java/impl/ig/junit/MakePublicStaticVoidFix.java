@@ -15,23 +15,23 @@
  */
 package com.intellij.java.impl.ig.junit;
 
-import javax.annotation.Nonnull;
-
-import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.project.Project;
+import com.intellij.java.impl.refactoring.changeSignature.ChangeSignatureProcessor;
+import com.intellij.java.impl.refactoring.changeSignature.ParameterInfoImpl;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.java.language.psi.PsiSubstitutor;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
-import consulo.ide.impl.psi.util.PsiFormatUtilBase;
-import consulo.language.psi.util.PsiTreeUtil;
+import com.intellij.java.language.psi.util.PsiFormatUtilBase;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.java.impl.refactoring.changeSignature.ChangeSignatureProcessor;
-import com.intellij.java.impl.refactoring.changeSignature.ParameterInfoImpl;
-import consulo.usage.UsageInfo;
 import com.intellij.java.language.util.VisibilityUtil;
 import com.siyeh.ig.InspectionGadgetsFix;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.project.Project;
+import consulo.usage.UsageInfo;
+
+import javax.annotation.Nonnull;
 
 /**
  * @author Bas Leijdekkers

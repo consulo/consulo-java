@@ -15,32 +15,30 @@
  */
 package com.intellij.java.execution.impl.jar;
 
-import javax.annotation.Nonnull;
-import consulo.process.ExecutionException;
 import com.intellij.java.execution.impl.application.BaseJavaApplicationCommandLineState;
-import consulo.execution.runner.ExecutionEnvironment;
 import com.intellij.java.execution.impl.util.JavaParametersUtil;
-import consulo.ide.impl.idea.openapi.util.io.FileUtil;
+import consulo.execution.runner.ExecutionEnvironment;
 import consulo.java.execution.configurations.OwnJavaParameters;
+import consulo.process.ExecutionException;
+import consulo.util.io.FileUtil;
+
+import javax.annotation.Nonnull;
 
 /**
  * @author nik
  */
-public class JarApplicationCommandLineState extends BaseJavaApplicationCommandLineState<JarApplicationConfiguration>
-{
-	public JarApplicationCommandLineState(@Nonnull final JarApplicationConfiguration configuration, final ExecutionEnvironment environment)
-	{
-		super(environment, configuration);
-	}
+public class JarApplicationCommandLineState extends BaseJavaApplicationCommandLineState<JarApplicationConfiguration> {
+  public JarApplicationCommandLineState(@Nonnull final JarApplicationConfiguration configuration, final ExecutionEnvironment environment) {
+    super(environment, configuration);
+  }
 
-	@Override
-	protected OwnJavaParameters createJavaParameters() throws ExecutionException
-	{
-		final OwnJavaParameters params = new OwnJavaParameters();
-		final String jreHome = myConfiguration.isAlternativeJrePathEnabled() ? myConfiguration.getAlternativeJrePath() : null;
-		params.setJdk(JavaParametersUtil.createProjectJdk(myConfiguration.getProject(), jreHome));
-		setupJavaParameters(params);
-		params.setJarPath(FileUtil.toSystemDependentName(myConfiguration.getJarPath()));
-		return params;
-	}
+  @Override
+  protected OwnJavaParameters createJavaParameters() throws ExecutionException {
+    final OwnJavaParameters params = new OwnJavaParameters();
+    final String jreHome = myConfiguration.isAlternativeJrePathEnabled() ? myConfiguration.getAlternativeJrePath() : null;
+    params.setJdk(JavaParametersUtil.createProjectJdk(myConfiguration.getProject(), jreHome));
+    setupJavaParameters(params);
+    params.setJarPath(FileUtil.toSystemDependentName(myConfiguration.getJarPath()));
+    return params;
+  }
 }

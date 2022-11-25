@@ -15,18 +15,19 @@
  */
 package com.intellij.java.impl.codeInsight.completion;
 
-import com.intellij.codeInsight.completion.*;
-import consulo.language.editor.completion.AutoCompletionPolicy;
+import consulo.language.editor.completion.*;
 import consulo.language.editor.completion.lookup.LookupElement;
-import com.intellij.lang.xml.XMLLanguage;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
-import consulo.ide.impl.idea.util.Consumer;
+import consulo.xml.codeInsight.completion.XmlCompletionContributor;
+import consulo.xml.lang.xml.XMLLanguage;
+
+import java.util.function.Consumer;
 
 /**
  * @author peter
  */
-public class XmlBasicToClassNameDelegator extends CompletionContributor {
+public abstract class XmlBasicToClassNameDelegator extends CompletionContributor {
 
   @Override
   public void fillCompletionVariants(CompletionParameters parameters, final CompletionResultSet result) {
@@ -48,7 +49,7 @@ public class XmlBasicToClassNameDelegator extends CompletionContributor {
         parameters.isExtendedCompletion()) {
       CompletionService.getCompletionService().getVariantsFromContributors(parameters.delegateToClassName(), null, new Consumer<CompletionResult>() {
         @Override
-        public void consume(final CompletionResult completionResult) {
+        public void accept(final CompletionResult completionResult) {
           LookupElement lookupElement = completionResult.getLookupElement();
           JavaPsiClassReferenceElement classElement = lookupElement.as(JavaPsiClassReferenceElement.CLASS_CONDITION_KEY);
           if (classElement != null) {

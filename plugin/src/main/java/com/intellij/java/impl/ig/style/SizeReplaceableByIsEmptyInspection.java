@@ -15,17 +15,9 @@
  */
 package com.intellij.java.impl.ig.style;
 
-import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.ide.impl.idea.codeInspection.ui.ListTable;
-import consulo.ide.impl.idea.codeInspection.ui.ListWrappingTableModel;
+import com.intellij.java.impl.ig.ui.UiUtils;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import consulo.language.ast.IElementType;
 import com.intellij.java.language.psi.util.InheritanceUtil;
-import consulo.language.psi.util.PsiTreeUtil;
-import consulo.language.util.IncorrectOperationException;
-import consulo.util.collection.OrderedSet;
-import consulo.ui.CheckBox;
 import com.siyeh.HardcodedMethodConstants;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
@@ -33,7 +25,14 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ComparisonUtils;
 import com.siyeh.ig.psiutils.ExpressionUtils;
-import com.intellij.java.impl.ig.ui.UiUtils;
+import consulo.ide.impl.idea.codeInspection.ui.ListTable;
+import consulo.ide.impl.idea.codeInspection.ui.ListWrappingTableModel;
+import consulo.language.ast.IElementType;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+import consulo.util.collection.OrderedSet;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
@@ -66,11 +65,11 @@ public class SizeReplaceableByIsEmptyInspection extends BaseInspection {
   public JComponent createOptionsPanel() {
     final JComponent panel = new JPanel(new BorderLayout());
     final ListTable table =
-      new ListTable(new ListWrappingTableModel(ignoredTypes, InspectionGadgetsBundle.message("ignored.classes.table")));
+        new ListTable(new ListWrappingTableModel(ignoredTypes, InspectionGadgetsBundle.message("ignored.classes.table")));
     JPanel tablePanel =
-      UiUtils.createAddRemoveTreeClassChooserPanel(table, InspectionGadgetsBundle.message("choose.class.type.to.ignore"));
-    final CheckBox checkBox = new CheckBox(InspectionGadgetsBundle.message(
-      "size.replaceable.by.isempty.negation.ignore.option"), this, "ignoreNegations");
+        UiUtils.createAddRemoveTreeClassChooserPanel(table, InspectionGadgetsBundle.message("choose.class.type.to.ignore"));
+    final consulo.language.editor.inspection.ui.CheckBox checkBox = new consulo.language.editor.inspection.ui.CheckBox(InspectionGadgetsBundle.message(
+        "size.replaceable.by.isempty.negation.ignore.option"), this, "ignoreNegations");
     panel.add(tablePanel, BorderLayout.CENTER);
     panel.add(checkBox, BorderLayout.SOUTH);
     return panel;
@@ -83,7 +82,7 @@ public class SizeReplaceableByIsEmptyInspection extends BaseInspection {
   }
 
   private static class SizeReplaceableByIsEmptyFix
-    extends InspectionGadgetsFix {
+      extends InspectionGadgetsFix {
 
     @Nonnull
     public String getName() {
@@ -92,7 +91,7 @@ public class SizeReplaceableByIsEmptyInspection extends BaseInspection {
 
     @Override
     protected void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
-      final PsiBinaryExpression binaryExpression = (PsiBinaryExpression)descriptor.getPsiElement();
+      final PsiBinaryExpression binaryExpression = (PsiBinaryExpression) descriptor.getPsiElement();
       PsiExpression operand = binaryExpression.getLOperand();
       if (!(operand instanceof PsiMethodCallExpression)) {
         operand = binaryExpression.getROperand();
@@ -100,7 +99,7 @@ public class SizeReplaceableByIsEmptyInspection extends BaseInspection {
       if (!(operand instanceof PsiMethodCallExpression)) {
         return;
       }
-      final PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression)operand;
+      final PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) operand;
       final PsiReferenceExpression methodExpression = methodCallExpression.getMethodExpression();
       final PsiExpression qualifierExpression = methodExpression.getQualifierExpression();
       if (qualifierExpression == null) {
@@ -139,8 +138,7 @@ public class SizeReplaceableByIsEmptyInspection extends BaseInspection {
         if (replacementIsEmptyCall != null) {
           registerError(expression, replacementIsEmptyCall);
         }
-      }
-      else if (rhs instanceof PsiMethodCallExpression) {
+      } else if (rhs instanceof PsiMethodCallExpression) {
         final String replacementIsEmptyCall = getReplacementIsEmptyCall(rhs, lhs, true, expression.getOperationTokenType());
         if (replacementIsEmptyCall != null) {
           registerError(expression, replacementIsEmptyCall);
@@ -150,7 +148,7 @@ public class SizeReplaceableByIsEmptyInspection extends BaseInspection {
 
     @Nullable
     private String getReplacementIsEmptyCall(PsiExpression lhs, PsiExpression rhs, boolean flipped, IElementType tokenType) {
-      final PsiMethodCallExpression callExpression = (PsiMethodCallExpression)lhs;
+      final PsiMethodCallExpression callExpression = (PsiMethodCallExpression) lhs;
       final String isEmptyCall = getIsEmptyCall(callExpression);
       if (isEmptyCall == null) {
         return null;
@@ -159,7 +157,7 @@ public class SizeReplaceableByIsEmptyInspection extends BaseInspection {
       if (!(object instanceof Integer)) {
         return null;
       }
-      final Integer integer = (Integer)object;
+      final Integer integer = (Integer) object;
       final int constant = integer.intValue();
       if (constant != 0) {
         return null;
@@ -172,13 +170,11 @@ public class SizeReplaceableByIsEmptyInspection extends BaseInspection {
       }
       if (JavaTokenType.NE.equals(tokenType)) {
         return '!' + isEmptyCall;
-      }
-      else if (flipped) {
+      } else if (flipped) {
         if (JavaTokenType.LT.equals(tokenType)) {
           return '!' + isEmptyCall;
         }
-      }
-      else if (JavaTokenType.GT.equals(tokenType)) {
+      } else if (JavaTokenType.GT.equals(tokenType)) {
         return '!' + isEmptyCall;
       }
       return null;
@@ -189,7 +185,7 @@ public class SizeReplaceableByIsEmptyInspection extends BaseInspection {
       final PsiReferenceExpression methodExpression = callExpression.getMethodExpression();
       final String referenceName = methodExpression.getReferenceName();
       if (!HardcodedMethodConstants.SIZE.equals(referenceName) &&
-        !HardcodedMethodConstants.LENGTH.equals(referenceName)) {
+          !HardcodedMethodConstants.LENGTH.equals(referenceName)) {
         return null;
       }
       final PsiExpressionList argumentList = callExpression.getArgumentList();
@@ -205,7 +201,7 @@ public class SizeReplaceableByIsEmptyInspection extends BaseInspection {
       if (!(type instanceof PsiClassType)) {
         return null;
       }
-      final PsiClassType classType = (PsiClassType)type;
+      final PsiClassType classType = (PsiClassType) type;
       final PsiClass aClass = classType.resolve();
       if (aClass == null) {
         return null;

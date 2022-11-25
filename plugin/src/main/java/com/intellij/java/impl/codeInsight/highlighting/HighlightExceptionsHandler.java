@@ -15,21 +15,21 @@
  */
 package com.intellij.java.impl.codeInsight.highlighting;
 
-import consulo.language.editor.CodeInsightBundle;
-import consulo.language.editor.highlight.usage.HighlightUsagesHandlerBase;
 import com.intellij.java.language.impl.codeInsight.ExceptionUtil;
 import com.intellij.java.language.psi.*;
-import consulo.language.LangBundle;
 import consulo.codeEditor.Editor;
-import consulo.project.Project;
-import consulo.util.lang.function.Condition;
+import consulo.language.LangBundle;
+import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.highlight.usage.HighlightUsagesHandlerBase;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiReference;
-import consulo.ide.impl.idea.util.Consumer;
+import consulo.project.Project;
+import consulo.util.lang.function.Condition;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class HighlightExceptionsHandler extends HighlightUsagesHandlerBase<PsiClass> {
   private final PsiElement myTarget;
@@ -56,7 +56,7 @@ public class HighlightExceptionsHandler extends HighlightUsagesHandlerBase<PsiCl
     new ChooseClassAndDoHighlightRunnable(myClassTypes, myEditor, CodeInsightBundle.message("highlight.exceptions.thrown.chooser.title")) {
       @Override
       protected void selected(PsiClass... classes) {
-        selectionConsumer.consume(Arrays.asList(classes));
+        selectionConsumer.accept(Arrays.asList(classes));
       }
     }.run();
   }

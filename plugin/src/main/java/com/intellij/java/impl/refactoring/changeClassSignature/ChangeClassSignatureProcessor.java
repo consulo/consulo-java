@@ -15,26 +15,28 @@
  */
 package com.intellij.java.impl.refactoring.changeClassSignature;
 
-import consulo.localHistory.LocalHistory;
-import com.intellij.history.LocalHistoryAction;
+import com.intellij.java.impl.refactoring.changeSignature.ChangeSignatureUtil;
 import com.intellij.java.language.psi.*;
-import consulo.logging.Logger;
-import consulo.project.Project;
-import consulo.util.lang.ref.Ref;
-import com.intellij.psi.*;
-import consulo.language.psi.scope.GlobalSearchScope;
-import consulo.language.psi.search.ReferencesSearch;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.language.editor.refactoring.BaseRefactoringProcessor;
-import com.intellij.java.impl.refactoring.changeSignature.ChangeSignatureUtil;
 import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiManager;
+import consulo.language.psi.PsiReference;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.search.ReferencesSearch;
+import consulo.language.util.IncorrectOperationException;
+import consulo.localHistory.LocalHistory;
+import consulo.localHistory.LocalHistoryAction;
+import consulo.logging.Logger;
+import consulo.project.Project;
 import consulo.usage.UsageInfo;
 import consulo.usage.UsageViewDescriptor;
 import consulo.util.collection.ArrayUtil;
-import consulo.language.util.IncorrectOperationException;
 import consulo.util.collection.MultiMap;
-import javax.annotation.Nonnull;
+import consulo.util.lang.ref.Ref;
 
+import javax.annotation.Nonnull;
 import java.util.*;
 
 /**

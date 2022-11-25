@@ -18,7 +18,7 @@ package com.intellij.java.impl.ipp.trivialif;
 import com.intellij.java.language.psi.PsiIfStatement;
 import com.intellij.java.language.psi.PsiJavaToken;
 import com.intellij.java.language.psi.PsiStatement;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import consulo.language.psi.util.PsiTreeUtil;
 import com.siyeh.ig.psiutils.ControlFlowUtils;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;

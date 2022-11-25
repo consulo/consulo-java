@@ -27,7 +27,7 @@ package com.intellij.java.impl.codeInspection.defUse;
 import consulo.language.editor.inspection.LocalQuickFix;
 import com.intellij.java.impl.codeInspection.RemoveInitializerFix;
 
-public class DefUseInspection extends DefUseInspectionBase {
+public abstract class DefUseInspection extends DefUseInspectionBase {
   @Override
   protected LocalQuickFix createRemoveInitializerFix() {
     return new RemoveInitializerFix();

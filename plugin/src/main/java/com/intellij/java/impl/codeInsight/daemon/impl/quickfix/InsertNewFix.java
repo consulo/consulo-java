@@ -19,16 +19,16 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
-import javax.annotation.Nonnull;
-
-import consulo.language.editor.FileModificationService;
 import com.intellij.java.language.psi.*;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
-import consulo.language.editor.intention.IntentionAction;
 import consulo.codeEditor.Editor;
-import consulo.project.Project;
-import com.intellij.psi.*;
+import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.language.editor.FileModificationService;
+import consulo.language.editor.intention.IntentionAction;
+import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+
+import javax.annotation.Nonnull;
 
 public class InsertNewFix implements IntentionAction {
   private final PsiMethodCallExpression myMethodCall;

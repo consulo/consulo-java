@@ -15,22 +15,22 @@
  */
 package com.intellij.java.impl.ig.classlayout;
 
-import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.ide.impl.idea.codeInspection.ui.MultipleCheckboxOptionsPanel;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import com.intellij.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.language.util.IncorrectOperationException;
-import consulo.util.collection.SmartList;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.MethodUtils;
-import javax.annotation.Nonnull;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.editor.inspection.ui.MultipleCheckboxOptionsPanel;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+import consulo.util.collection.SmartList;
 
+import javax.annotation.Nonnull;
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Arrays;

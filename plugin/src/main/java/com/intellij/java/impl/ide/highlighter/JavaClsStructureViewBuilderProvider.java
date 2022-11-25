@@ -15,49 +15,42 @@
  */
 package com.intellij.java.impl.ide.highlighter;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
+import com.intellij.java.language.impl.JavaClassFileType;
 import consulo.fileEditor.structureView.StructureViewBuilder;
 import consulo.fileEditor.structureView.StructureViewBuilderProvider;
-import com.intellij.java.language.impl.JavaClassFileType;
-import com.intellij.lang.LanguageStructureViewBuilder;
 import consulo.language.editor.structureView.PsiStructureViewFactory;
-import consulo.virtualFileSystem.fileType.FileType;
-import consulo.project.Project;
-import consulo.virtualFileSystem.VirtualFile;
 import consulo.language.psi.PsiCompiledFile;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiManager;
+import consulo.project.Project;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.virtualFileSystem.fileType.FileType;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * @author max
  */
-public class JavaClsStructureViewBuilderProvider implements StructureViewBuilderProvider
-{
-	@Override
-	@Nullable
-	public StructureViewBuilder getStructureViewBuilder(@Nonnull FileType fileType, @Nonnull VirtualFile file, @Nonnull Project project)
-	{
-		if(fileType == JavaClassFileType.INSTANCE)
-		{
-			PsiFile psiFile = PsiManager.getInstance(project).findFile(file);
+public class JavaClsStructureViewBuilderProvider implements StructureViewBuilderProvider {
+  @Override
+  @Nullable
+  public StructureViewBuilder getStructureViewBuilder(@Nonnull FileType fileType, @Nonnull VirtualFile file, @Nonnull Project project) {
+    if (fileType == JavaClassFileType.INSTANCE) {
+      PsiFile psiFile = PsiManager.getInstance(project).findFile(file);
 
-			if(psiFile instanceof PsiCompiledFile)
-			{
-				psiFile = ((PsiCompiledFile) psiFile).getDecompiledPsiFile();
-			}
+      if (psiFile instanceof PsiCompiledFile) {
+        psiFile = ((PsiCompiledFile) psiFile).getDecompiledPsiFile();
+      }
 
-			if(psiFile != null)
-			{
-				PsiStructureViewFactory factory = LanguageStructureViewBuilder.INSTANCE.forLanguage(psiFile.getLanguage());
-				if(factory != null)
-				{
-					return factory.getStructureViewBuilder(psiFile);
-				}
-			}
-		}
+      if (psiFile != null) {
+        PsiStructureViewFactory factory = PsiStructureViewFactory.forLanguage(psiFile.getLanguage());
+        if (factory != null) {
+          return factory.getStructureViewBuilder(psiFile);
+        }
+      }
+    }
 
-		return null;
-	}
+    return null;
+  }
 }

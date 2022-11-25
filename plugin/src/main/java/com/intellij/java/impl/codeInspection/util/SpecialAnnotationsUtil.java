@@ -16,27 +16,24 @@
 
 package com.intellij.java.impl.codeInspection.util;
 
-import consulo.language.editor.intention.IntentionAction;
-import consulo.language.editor.inspection.InspectionsBundle;
-import consulo.dataContext.DataManager;
+import com.intellij.java.analysis.impl.codeInspection.util.SpecialAnnotationsUtilBase;
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.util.ClassFilter;
 import com.intellij.java.language.util.TreeClassChooser;
 import com.intellij.java.language.util.TreeClassChooserFactory;
-import com.intellij.java.analysis.impl.codeInspection.util.SpecialAnnotationsUtilBase;
-import consulo.ui.ex.action.AnActionEvent;
-import consulo.language.editor.CommonDataKeys;
 import consulo.codeEditor.Editor;
-import consulo.project.Project;
-import consulo.project.ProjectManager;
-import consulo.ui.ex.awt.*;
-import com.intellij.java.language.psi.PsiClass;
+import consulo.dataContext.DataManager;
+import consulo.ide.impl.idea.util.IconUtil;
+import consulo.language.editor.CommonDataKeys;
+import consulo.language.editor.inspection.InspectionsBundle;
+import consulo.language.editor.intention.IntentionAction;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.scope.GlobalSearchScope;
-import com.intellij.ui.*;
-import consulo.ui.ex.awt.JBList;
-import consulo.ide.impl.idea.util.IconUtil;
 import consulo.language.util.IncorrectOperationException;
-import consulo.ui.ex.awt.Messages;
+import consulo.project.Project;
+import consulo.project.ProjectManager;
+import consulo.ui.ex.action.AnActionEvent;
+import consulo.ui.ex.awt.*;
 
 import javax.annotation.Nonnull;
 import javax.swing.*;

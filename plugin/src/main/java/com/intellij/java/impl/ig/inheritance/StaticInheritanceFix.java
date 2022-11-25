@@ -15,33 +15,34 @@
  */
 package com.intellij.java.impl.ig.inheritance;
 
-import consulo.language.editor.intention.IntentionAction;
 import com.intellij.java.analysis.codeInsight.intention.QuickFixFactory;
-import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
-import consulo.application.ApplicationManager;
-import consulo.ui.ModalityState;
-import consulo.application.Result;
-import consulo.language.editor.WriteCommandAction;
-import consulo.logging.Logger;
-import consulo.application.progress.ProgressIndicator;
-import consulo.application.progress.ProgressManager;
-import consulo.application.progress.Task;
-import consulo.project.Project;
-import com.intellij.psi.*;
-import consulo.language.impl.DebugUtil;
-import consulo.language.psi.search.ReferencesSearch;
 import com.intellij.java.language.psi.util.InheritanceUtil;
-import consulo.language.psi.util.PsiTreeUtil;
-import consulo.ui.ex.awt.internal.GuiUtils;
-import consulo.language.util.IncorrectOperationException;
-import consulo.application.util.query.Query;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ClassUtils;
+import consulo.application.ApplicationManager;
+import consulo.application.Result;
+import consulo.application.impl.internal.IdeaModalityState;
+import consulo.application.progress.ProgressIndicator;
+import consulo.application.progress.ProgressManager;
+import consulo.application.progress.Task;
+import consulo.application.util.query.Query;
+import consulo.language.editor.WriteCommandAction;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.editor.intention.IntentionAction;
+import consulo.language.impl.DebugUtil;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiManager;
+import consulo.language.psi.PsiReference;
+import consulo.language.psi.search.ReferencesSearch;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.logging.Logger;
+import consulo.project.Project;
+import consulo.ui.ex.awt.internal.GuiUtils;
 
 import javax.annotation.Nonnull;
-
 import java.lang.reflect.InvocationTargetException;
 
 /**
@@ -67,7 +68,7 @@ class StaticInheritanceFix extends InspectionGadgetsFix {
       public void run() {
         dodoFix(project, descriptor);
       }
-    }, ModalityState.NON_MODAL, project.getDisposed());
+    }, IdeaModalityState.NON_MODAL, project.getDisposed());
   }
 
   private void dodoFix(final Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {

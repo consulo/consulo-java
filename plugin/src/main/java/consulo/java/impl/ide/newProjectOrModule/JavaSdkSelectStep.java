@@ -18,11 +18,11 @@ package consulo.java.impl.ide.newProjectOrModule;
 
 import com.intellij.java.language.projectRoots.JavaSdk;
 import consulo.content.bundle.SdkTable;
+import consulo.disposer.Disposable;
+import consulo.ide.newModule.ui.UnifiedProjectOrModuleNameStep;
+import consulo.localize.LocalizeValue;
 import consulo.module.ui.BundleBox;
 import consulo.module.ui.BundleBoxBuilder;
-import consulo.disposer.Disposable;
-import consulo.ide.newProject.ui.UnifiedProjectOrModuleNameStep;
-import consulo.localize.LocalizeValue;
 import consulo.ui.ComboBox;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.util.FormBuilder;
@@ -33,42 +33,36 @@ import javax.annotation.Nonnull;
  * @author VISTALL
  * @since 05.06.14
  */
-public class JavaSdkSelectStep extends UnifiedProjectOrModuleNameStep<JavaNewModuleWizardContext>
-{
-	private BundleBox myBundleBox;
+public class JavaSdkSelectStep extends UnifiedProjectOrModuleNameStep<JavaNewModuleWizardContext> {
+  private BundleBox myBundleBox;
 
-	public JavaSdkSelectStep(@Nonnull JavaNewModuleWizardContext context)
-	{
-		super(context);
-	}
+  public JavaSdkSelectStep(@Nonnull JavaNewModuleWizardContext context) {
+    super(context);
+  }
 
-	@RequiredUIAccess
-	@Override
-	protected void extend(@Nonnull FormBuilder builder, @Nonnull Disposable uiDisposable)
-	{
-		super.extend(builder, uiDisposable);
+  @RequiredUIAccess
+  @Override
+  protected void extend(@Nonnull FormBuilder builder, @Nonnull Disposable uiDisposable) {
+    super.extend(builder, uiDisposable);
 
-		BundleBoxBuilder boxBuilder = BundleBoxBuilder.create(uiDisposable);
-		boxBuilder.withSdkTypeFilter(sdkTypeId -> sdkTypeId instanceof JavaSdk);
+    BundleBoxBuilder boxBuilder = BundleBoxBuilder.create(uiDisposable);
+    boxBuilder.withSdkTypeFilter(sdkTypeId -> sdkTypeId instanceof JavaSdk);
 
-		builder.addLabeled(LocalizeValue.localizeTODO("JDK:"), (myBundleBox = boxBuilder.build()).getComponent());
+    builder.addLabeled(LocalizeValue.localizeTODO("JDK:"), (myBundleBox = boxBuilder.build()).getComponent());
 
-		ComboBox<BundleBox.BundleBoxItem> component = myBundleBox.getComponent();
-		if(component.getListModel().getSize() > 0)
-		{
-			component.setValueByIndex(0);
-		}
-	}
+    ComboBox<BundleBox.BundleBoxItem> component = myBundleBox.getComponent();
+    if (component.getListModel().getSize() > 0) {
+      component.setValueByIndex(0);
+    }
+  }
 
-	@Override
-	public void onStepLeave(@Nonnull JavaNewModuleWizardContext context)
-	{
-		super.onStepLeave(context);
+  @Override
+  public void onStepLeave(@Nonnull JavaNewModuleWizardContext context) {
+    super.onStepLeave(context);
 
-		String selectedBundleName = myBundleBox.getSelectedBundleName();
-		if(selectedBundleName != null)
-		{
-			context.setSdk(SdkTable.getInstance().findSdk(selectedBundleName));
-		}
-	}
+    String selectedBundleName = myBundleBox.getSelectedBundleName();
+    if (selectedBundleName != null) {
+      context.setSdk(SdkTable.getInstance().findSdk(selectedBundleName));
+    }
+  }
 }

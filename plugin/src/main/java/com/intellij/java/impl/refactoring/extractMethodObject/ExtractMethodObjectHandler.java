@@ -20,37 +20,37 @@
  */
 package com.intellij.java.impl.refactoring.extractMethodObject;
 
-import javax.annotation.Nonnull;
-
-import consulo.dataContext.DataContext;
+import com.intellij.java.impl.refactoring.HelpID;
+import com.intellij.java.impl.refactoring.extractMethod.ExtractMethodHandler;
+import com.intellij.java.impl.refactoring.extractMethod.PrepareFailedException;
+import com.intellij.java.impl.refactoring.util.duplicates.DuplicatesImpl;
 import consulo.application.ApplicationManager;
-import consulo.undoRedo.CommandProcessor;
 import consulo.codeEditor.Editor;
-import consulo.document.RangeMarker;
 import consulo.codeEditor.ScrollType;
-import consulo.project.Project;
-import com.intellij.openapi.util.Pass;
+import consulo.dataContext.DataContext;
+import consulo.document.RangeMarker;
 import consulo.document.util.TextRange;
+import consulo.language.codeStyle.PostprocessReformattingAspect;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.action.RefactoringActionHandler;
+import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import consulo.language.psi.PsiDocumentManager;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
-import consulo.language.codeStyle.PostprocessReformattingAspect;
-import com.intellij.java.impl.refactoring.HelpID;
-import consulo.language.editor.refactoring.action.RefactoringActionHandler;
-import consulo.language.editor.refactoring.RefactoringBundle;
-import com.intellij.java.impl.refactoring.extractMethod.ExtractMethodHandler;
-import com.intellij.java.impl.refactoring.extractMethod.PrepareFailedException;
-import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
-import com.intellij.java.impl.refactoring.util.duplicates.DuplicatesImpl;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
+import consulo.project.Project;
+import consulo.undoRedo.CommandProcessor;
+
+import javax.annotation.Nonnull;
+import java.util.function.Consumer;
 
 public class ExtractMethodObjectHandler implements RefactoringActionHandler {
   private static final Logger LOG = Logger.getInstance(ExtractMethodObjectHandler.class);
 
   public void invoke(@Nonnull final Project project, final Editor editor, final PsiFile file, final DataContext dataContext) {
-    ExtractMethodHandler.selectAndPass(project, editor, file, new Pass<PsiElement[]>() {
-      public void pass(final PsiElement[] selectedValue) {
+    ExtractMethodHandler.selectAndPass(project, editor, file, new Consumer<PsiElement[]>() {
+      public void accept(final PsiElement[] selectedValue) {
         invokeOnElements(project, editor, file, selectedValue);
       }
     });
@@ -58,7 +58,7 @@ public class ExtractMethodObjectHandler implements RefactoringActionHandler {
 
   private void invokeOnElements(@Nonnull final Project project, @Nonnull final Editor editor, @Nonnull PsiFile file, @Nonnull PsiElement[] elements) {
     if (elements.length == 0) {
-        String message = RefactoringBundle
+      String message = RefactoringBundle
           .getCannotRefactorMessage(RefactoringBundle.message("selected.block.should.represent.a.set.of.statements.or.an.expression"));
       CommonRefactoringUtil.showErrorHint(project, editor, message, ExtractMethodObjectProcessor.REFACTORING_NAME, HelpID.EXTRACT_METHOD_OBJECT);
       return;
@@ -68,23 +68,23 @@ public class ExtractMethodObjectHandler implements RefactoringActionHandler {
     final ExtractMethodObjectProcessor.MyExtractMethodProcessor extractProcessor = processor.getExtractProcessor();
     try {
       if (!extractProcessor.prepare()) return;
-    }
-    catch (PrepareFailedException e) {
+    } catch (PrepareFailedException e) {
       CommonRefactoringUtil.showErrorHint(project, editor, e.getMessage(), ExtractMethodObjectProcessor.REFACTORING_NAME, HelpID.EXTRACT_METHOD_OBJECT);
       ExtractMethodHandler.highlightPrepareError(e, file, editor, project);
       return;
     }
 
-    if (!CommonRefactoringUtil.checkReadOnlyStatus(project, extractProcessor.getTargetClass().getContainingFile())) return;
+    if (!CommonRefactoringUtil.checkReadOnlyStatus(project, extractProcessor.getTargetClass().getContainingFile()))
+      return;
     if (extractProcessor.showDialog()) {
       run(project, editor, processor, extractProcessor);
     }
   }
 
   public static void run(@Nonnull final Project project,
-                  @Nonnull final Editor editor,
-                  @Nonnull final ExtractMethodObjectProcessor processor,
-                  @Nonnull final ExtractMethodObjectProcessor.MyExtractMethodProcessor extractProcessor) {
+                         @Nonnull final Editor editor,
+                         @Nonnull final ExtractMethodObjectProcessor processor,
+                         @Nonnull final ExtractMethodObjectProcessor.MyExtractMethodProcessor extractProcessor) {
     final int offset = editor.getCaretModel().getOffset();
     final RangeMarker marker = editor.getDocument().createRangeMarker(new TextRange(offset, offset));
     CommandProcessor.getInstance().executeCommand(project, new Runnable() {
@@ -100,8 +100,7 @@ public class ExtractMethodObjectHandler implements RefactoringActionHandler {
               });
               processor.run();
               processor.runChangeSignature();
-            }
-            catch (IncorrectOperationException e) {
+            } catch (IncorrectOperationException e) {
               LOG.error(e);
             }
           }

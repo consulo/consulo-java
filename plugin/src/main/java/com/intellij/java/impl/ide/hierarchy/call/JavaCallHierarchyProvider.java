@@ -15,18 +15,20 @@
  */
 package com.intellij.java.impl.ide.hierarchy.call;
 
-import javax.annotation.Nonnull;
-
+import com.intellij.java.language.JavaLanguage;
+import com.intellij.java.language.psi.PsiMethod;
+import consulo.dataContext.DataContext;
 import consulo.ide.impl.idea.ide.hierarchy.CallHierarchyBrowserBase;
+import consulo.language.Language;
+import consulo.language.editor.CommonDataKeys;
+import consulo.language.editor.LangDataKeys;
 import consulo.language.editor.hierarchy.HierarchyBrowser;
 import consulo.language.editor.hierarchy.HierarchyProvider;
-import consulo.language.editor.CommonDataKeys;
-import consulo.dataContext.DataContext;
-import consulo.language.editor.LangDataKeys;
-import consulo.project.Project;
 import consulo.language.psi.PsiElement;
-import com.intellij.java.language.psi.PsiMethod;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.project.Project;
+
+import javax.annotation.Nonnull;
 
 /**
  * @author yole
@@ -50,5 +52,11 @@ public class JavaCallHierarchyProvider implements HierarchyProvider {
   @Override
   public void browserActivated(@Nonnull final HierarchyBrowser hierarchyBrowser) {
     ((CallHierarchyBrowser) hierarchyBrowser).changeView(CallHierarchyBrowserBase.CALLER_TYPE);
+  }
+
+  @Nonnull
+  @Override
+  public Language getLanguage() {
+    return JavaLanguage.INSTANCE;
   }
 }

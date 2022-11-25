@@ -15,26 +15,20 @@
  */
 package com.intellij.java.impl.codeInsight.generation.ui;
 
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.event.MouseEvent;
-
-import javax.swing.DefaultListCellRenderer;
-import javax.swing.DefaultListModel;
-import javax.swing.Icon;
-import javax.swing.JComponent;
-import javax.swing.JList;
-
-import consulo.project.Project;
-import consulo.ui.ex.awt.DialogWrapper;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiSubstitutor;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
-import consulo.ide.impl.psi.util.PsiFormatUtilBase;
-import consulo.ui.ex.awt.event.DoubleClickListener;
-import consulo.ui.ex.awt.JBList;
-import consulo.ui.ex.awtUnsafe.TargetAWT;
+import com.intellij.java.language.psi.util.PsiFormatUtilBase;
 import consulo.language.icon.IconDescriptorUpdaters;
+import consulo.project.Project;
+import consulo.ui.ex.awt.DialogWrapper;
+import consulo.ui.ex.awt.JBList;
+import consulo.ui.ex.awt.event.DoubleClickListener;
+import consulo.ui.ex.awtUnsafe.TargetAWT;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.MouseEvent;
 
 /**
  * @author ven

@@ -15,10 +15,10 @@
  */
 package com.intellij.java.impl.codeInsight.template.impl;
 
-import consulo.ide.impl.idea.codeInsight.template.TemplateLookupSelectionHandler;
-import consulo.language.editor.completion.lookup.LookupElement;
-import consulo.language.psi.PsiFile;
 import consulo.document.Document;
+import consulo.language.editor.completion.lookup.LookupElement;
+import consulo.language.editor.template.TemplateLookupSelectionHandler;
+import consulo.language.psi.PsiFile;
 
 /**
  * @author yole

@@ -15,18 +15,21 @@
  */
 package com.intellij.java.execution.impl.stacktrace;
 
-import consulo.execution.action.Location;
-import consulo.execution.action.PsiLocation;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
-import consulo.navigation.OpenFileDescriptor;
-import consulo.project.Project;
-import com.intellij.openapi.util.text.LineTokenizer;
-import consulo.virtualFileSystem.VirtualFile;
-import com.intellij.psi.*;
+import consulo.application.util.LineTokenizer;
+import consulo.execution.action.Location;
+import consulo.execution.action.PsiLocation;
+import consulo.language.psi.PsiCompiledElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiManager;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.navigation.OpenFileDescriptor;
+import consulo.navigation.OpenFileDescriptorFactory;
+import consulo.project.Project;
+import consulo.virtualFileSystem.VirtualFile;
 import org.jetbrains.annotations.NonNls;
 
 public class StackTraceLine {
@@ -35,7 +38,8 @@ public class StackTraceLine {
   @NonNls
   protected static final String AT_STR = "at";
   protected static final String AT__STR = AT_STR + " ";
-  @NonNls protected static final String INIT_MESSAGE = "<init>";
+  @NonNls
+  protected static final String INIT_MESSAGE = "<init>";
 
   public StackTraceLine(Project project, final String line) {
     myProject = project;
@@ -75,10 +79,10 @@ public class StackTraceLine {
     final int lineNumber;
     try {
       lineNumber = getLineNumber();
-    } catch(NumberFormatException e) {
-      return new OpenFileDescriptor(myProject, file);
+    } catch (NumberFormatException e) {
+      return OpenFileDescriptorFactory.getInstance(myProject).builder(file).build();
     }
-    return new OpenFileDescriptor(myProject, file, lineNumber, 0);
+    return OpenFileDescriptorFactory.getInstance(myProject).builder(file).line(lineNumber).column(0).build();
   }
 
   public OpenFileDescriptor getOpenFileDescriptor(final Project project) {
@@ -100,19 +104,18 @@ public class StackTraceLine {
     final int lineNumber;
     try {
       lineNumber = getLineNumber();
-    } catch(NumberFormatException e) {
+    } catch (NumberFormatException e) {
       return null;
     }
     final int dollarIndex = className.indexOf('$');
     if (dollarIndex != -1) className = className.substring(0, dollarIndex);
     PsiClass psiClass = findClass(project, className, lineNumber);
     if (psiClass == null || (psiClass.getNavigationElement() instanceof PsiCompiledElement)) return null;
-    psiClass = (PsiClass)psiClass.getNavigationElement();
+    psiClass = (PsiClass) psiClass.getNavigationElement();
     final PsiMethod psiMethod = getMethodAtLine(psiClass, methodName, lineNumber);
     if (psiMethod != null) {
       return new MethodLineLocation(project, psiMethod, PsiLocation.fromPsiElement(psiClass), lineNumber);
-    }
-    else {
+    } else {
       return null;
     }
   }
@@ -123,7 +126,7 @@ public class StackTraceLine {
     if (psiManager == null) return null;
     PsiClass psiClass = JavaPsiFacade.getInstance(psiManager.getProject()).findClass(className, GlobalSearchScope.allScope(project));
     if (psiClass == null || (psiClass.getNavigationElement() instanceof PsiCompiledElement)) return null;
-    psiClass = (PsiClass)psiClass.getNavigationElement();
+    psiClass = (PsiClass) psiClass.getNavigationElement();
     final PsiFile psiFile = psiClass.getContainingFile();
     return PsiTreeUtil.getParentOfType(psiFile.findElementAt(offsetOfLine(psiFile, lineNumber)), PsiClass.class, false);
   }

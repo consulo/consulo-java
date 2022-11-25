@@ -15,13 +15,13 @@
  */
 package com.intellij.java.analysis.impl.codeInspection;
 
-import consulo.language.editor.rawHighlight.HighlightDisplayKey;
-import consulo.language.editor.inspection.CustomSuppressableInspectionTool;
-import consulo.language.editor.inspection.LocalInspectionTool;
-import consulo.language.editor.intention.SuppressIntentionAction;
 import com.intellij.java.analysis.codeInspection.AbstractBaseJavaLocalInspectionTool;
 import com.intellij.java.analysis.codeInspection.BaseJavaBatchLocalInspectionTool;
 import com.intellij.java.analysis.codeInspection.SuppressManager;
+import consulo.language.editor.inspection.CustomSuppressableInspectionTool;
+import consulo.language.editor.inspection.LocalInspectionTool;
+import consulo.language.editor.intention.SuppressIntentionAction;
+import consulo.language.editor.rawHighlight.HighlightDisplayKey;
 import consulo.language.psi.PsiElement;
 
 import javax.annotation.Nonnull;
@@ -35,22 +35,18 @@ import javax.annotation.Nonnull;
  *
  * @see GlobalInspectionTool
  */
-public abstract class BaseJavaLocalInspectionTool extends AbstractBaseJavaLocalInspectionTool implements CustomSuppressableInspectionTool
-{
-	@Override
-	public SuppressIntentionAction[] getSuppressActions(final PsiElement element)
-	{
-		return SuppressManager.getInstance().createSuppressActions(HighlightDisplayKey.find(getShortName()));
-	}
+public abstract class BaseJavaLocalInspectionTool extends AbstractBaseJavaLocalInspectionTool implements CustomSuppressableInspectionTool {
+  @Override
+  public SuppressIntentionAction[] getSuppressActions(final PsiElement element) {
+    return SuppressManager.getInstance().createSuppressActions(HighlightDisplayKey.find(getShortName()));
+  }
 
-	@Override
-	public boolean isSuppressedFor(@Nonnull PsiElement element)
-	{
-		return isSuppressedFor(element, this);
-	}
+  @Override
+  public boolean isSuppressedFor(@Nonnull PsiElement element) {
+    return isSuppressedFor(element, this);
+  }
 
-	public static boolean isSuppressedFor(@Nonnull PsiElement element, @Nonnull LocalInspectionTool tool)
-	{
-		return BaseJavaBatchLocalInspectionTool.isSuppressedFor(element, tool);
-	}
+  public static boolean isSuppressedFor(@Nonnull PsiElement element, @Nonnull LocalInspectionTool tool) {
+    return BaseJavaBatchLocalInspectionTool.isSuppressedFor(element, tool);
+  }
 }

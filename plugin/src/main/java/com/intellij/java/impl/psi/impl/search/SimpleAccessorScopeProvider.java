@@ -15,12 +15,12 @@
  */
 package com.intellij.java.impl.psi.impl.search;
 
-import com.intellij.ide.highlighter.XHtmlFileType;
-import com.intellij.ide.highlighter.XmlFileType;
-import consulo.project.Project;
-import com.intellij.psi.impl.search.CustomPropertyScopeProvider;
-import consulo.language.psi.scope.GlobalSearchScope;
+import com.intellij.java.indexing.impl.search.CustomPropertyScopeProvider;
 import consulo.content.scope.SearchScope;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.project.Project;
+import consulo.xml.ide.highlighter.XHtmlFileType;
+import consulo.xml.ide.highlighter.XmlFileType;
 
 public class SimpleAccessorScopeProvider implements CustomPropertyScopeProvider {
   @Override

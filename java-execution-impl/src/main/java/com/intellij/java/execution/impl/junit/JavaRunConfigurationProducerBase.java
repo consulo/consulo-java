@@ -5,13 +5,12 @@ import consulo.execution.RunnerAndConfigurationSettings;
 import consulo.execution.action.ConfigurationContext;
 import consulo.execution.action.ConfigurationFromContext;
 import consulo.execution.action.RunConfigurationProducer;
-import com.intellij.execution.configurations.*;
-import consulo.execution.test.TestSearchScope;
-import consulo.module.Module;
 import consulo.execution.configuration.ConfigurationFactory;
 import consulo.execution.configuration.ConfigurationType;
 import consulo.execution.configuration.ModuleBasedConfiguration;
 import consulo.execution.configuration.RunConfigurationBase;
+import consulo.execution.test.TestSearchScope;
+import consulo.module.Module;
 
 import javax.annotation.Nullable;
 
@@ -31,7 +30,7 @@ public abstract class JavaRunConfigurationProducerBase<T extends ModuleBasedConf
     if (context != null) {
       final RunnerAndConfigurationSettings template = context.getRunManager().getConfigurationTemplate(getConfigurationFactory());
       final Module contextModule = context.getModule();
-      final Module predefinedModule = ((ModuleBasedConfiguration)template.getConfiguration()).getConfigurationModule().getModule();
+      final Module predefinedModule = ((ModuleBasedConfiguration) template.getConfiguration()).getConfigurationModule().getModule();
       if (predefinedModule != null) {
         configuration.setModule(predefinedModule);
         return true;
@@ -68,8 +67,8 @@ public abstract class JavaRunConfigurationProducerBase<T extends ModuleBasedConf
   public ConfigurationFromContext createConfigurationFromContext(ConfigurationContext context) {
     ConfigurationFromContext fromContext = super.createConfigurationFromContext(context);
     if (fromContext != null) {
-      JavaRunConfigurationExtensionManager.getInstance().extendCreatedConfiguration((RunConfigurationBase)fromContext.getConfiguration(),
-                                                                                    context.getLocation());
+      JavaRunConfigurationExtensionManager.getInstance().extendCreatedConfiguration((RunConfigurationBase) fromContext.getConfiguration(),
+          context.getLocation());
     }
     return fromContext;
   }

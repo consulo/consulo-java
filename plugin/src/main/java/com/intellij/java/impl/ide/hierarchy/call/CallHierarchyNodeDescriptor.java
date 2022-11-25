@@ -15,284 +15,239 @@
  */
 package com.intellij.java.impl.ide.hierarchy.call;
 
-import java.awt.Font;
+import com.intellij.java.impl.ide.hierarchy.JavaHierarchyUtil;
+import com.intellij.java.language.impl.psi.presentation.java.ClassPresentationUtil;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiMember;
+import com.intellij.java.language.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiSubstitutor;
+import com.intellij.java.language.psi.util.PsiFormatUtil;
+import com.intellij.java.language.psi.util.PsiFormatUtilBase;
+import consulo.application.AllIcons;
+import consulo.codeEditor.Editor;
+import consulo.codeEditor.EditorColors;
+import consulo.codeEditor.markup.RangeHighlighter;
+import consulo.colorScheme.EditorColorsManager;
+import consulo.colorScheme.TextAttributes;
+import consulo.component.util.Iconable;
+import consulo.document.util.TextRange;
+import consulo.fileEditor.FileEditorManager;
+import consulo.ide.IdeBundle;
+import consulo.ide.impl.idea.ide.hierarchy.HierarchyNodeDescriptor;
+import consulo.ide.impl.idea.openapi.roots.ui.util.CompositeAppearance;
+import consulo.language.editor.highlight.HighlightManager;
+import consulo.language.editor.util.PsiUtilBase;
+import consulo.language.icon.IconDescriptorUpdaters;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiReference;
+import consulo.language.psi.SyntheticElement;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.navigation.Navigatable;
+import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
+import consulo.ui.ex.awtUnsafe.TargetAWT;
+import consulo.ui.image.Image;
+import consulo.ui.image.ImageEffects;
+import consulo.util.lang.Comparing;
+
+import javax.annotation.Nonnull;
+import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Nonnull;
-import javax.swing.Icon;
+public final class CallHierarchyNodeDescriptor extends HierarchyNodeDescriptor implements Navigatable {
+  private int myUsageCount = 1;
+  private final List<PsiReference> myReferences = new ArrayList<PsiReference>();
+  private final boolean myNavigateToReference;
 
-import consulo.language.editor.highlight.HighlightManager;
-import consulo.application.AllIcons;
-import consulo.ide.IdeBundle;
-import consulo.ide.impl.idea.ide.hierarchy.HierarchyNodeDescriptor;
-import com.intellij.java.impl.ide.hierarchy.JavaHierarchyUtil;
-import consulo.codeEditor.Editor;
-import consulo.codeEditor.EditorColors;
-import consulo.colorScheme.EditorColorsManager;
-import consulo.codeEditor.markup.RangeHighlighter;
-import consulo.colorScheme.TextAttributes;
-import consulo.fileEditor.FileEditorManager;
-import consulo.project.Project;
-import consulo.ide.impl.idea.openapi.roots.ui.util.CompositeAppearance;
-import consulo.util.lang.Comparing;
-import consulo.component.util.Iconable;
-import consulo.document.util.TextRange;
-import consulo.navigation.Navigatable;
-import com.intellij.java.language.psi.PsiClass;
-import consulo.language.psi.PsiElement;
-import consulo.language.psi.PsiFile;
-import com.intellij.java.language.psi.PsiMember;
-import com.intellij.java.language.psi.PsiMethod;
-import consulo.language.psi.PsiReference;
-import com.intellij.java.language.psi.PsiSubstitutor;
-import consulo.language.psi.SyntheticElement;
-import com.intellij.java.language.impl.psi.presentation.java.ClassPresentationUtil;
-import com.intellij.java.language.psi.util.PsiFormatUtil;
-import consulo.ide.impl.psi.util.PsiFormatUtilBase;
-import consulo.language.psi.util.PsiTreeUtil;
-import consulo.language.editor.util.PsiUtilBase;
-import consulo.ui.annotation.RequiredUIAccess;
-import consulo.ui.ex.awtUnsafe.TargetAWT;
-import consulo.language.icon.IconDescriptorUpdaters;
-import consulo.ui.image.Image;
-import consulo.ui.image.ImageEffects;
+  public CallHierarchyNodeDescriptor(@Nonnull Project project, final HierarchyNodeDescriptor parentDescriptor, @Nonnull PsiElement element, final boolean isBase, final boolean navigateToReference) {
+    super(project, parentDescriptor, element, isBase);
+    myNavigateToReference = navigateToReference;
+  }
 
-public final class CallHierarchyNodeDescriptor extends HierarchyNodeDescriptor implements Navigatable
-{
-	private int myUsageCount = 1;
-	private final List<PsiReference> myReferences = new ArrayList<PsiReference>();
-	private final boolean myNavigateToReference;
+  /**
+   * @return PsiMethod or PsiClass or JspFile
+   */
+  public final PsiMember getEnclosingElement() {
+    PsiElement element = getPsiElement();
+    return element == null ? null : getEnclosingElement(element);
+  }
 
-	public CallHierarchyNodeDescriptor(@Nonnull Project project, final HierarchyNodeDescriptor parentDescriptor, @Nonnull PsiElement element, final boolean isBase, final boolean navigateToReference)
-	{
-		super(project, parentDescriptor, element, isBase);
-		myNavigateToReference = navigateToReference;
-	}
+  public static PsiMember getEnclosingElement(final PsiElement element) {
+    return PsiTreeUtil.getNonStrictParentOfType(element, PsiMethod.class, PsiClass.class);
+  }
 
-	/**
-	 * @return PsiMethod or PsiClass or JspFile
-	 */
-	public final PsiMember getEnclosingElement()
-	{
-		PsiElement element = getPsiElement();
-		return element == null ? null : getEnclosingElement(element);
-	}
+  public final void incrementUsageCount() {
+    myUsageCount++;
+  }
 
-	public static PsiMember getEnclosingElement(final PsiElement element)
-	{
-		return PsiTreeUtil.getNonStrictParentOfType(element, PsiMethod.class, PsiClass.class);
-	}
+  /**
+   * Element for OpenFileDescriptor
+   */
+  public final PsiElement getTargetElement() {
+    return getPsiElement();
+  }
 
-	public final void incrementUsageCount()
-	{
-		myUsageCount++;
-	}
+  @Override
+  public final boolean isValid() {
+    return getEnclosingElement() != null;
+  }
 
-	/**
-	 * Element for OpenFileDescriptor
-	 */
-	public final PsiElement getTargetElement()
-	{
-		return getPsiElement();
-	}
+  @Override
+  @RequiredUIAccess
+  public final boolean update() {
+    final CompositeAppearance oldText = myHighlightedText;
+    final Icon oldIcon = TargetAWT.to(getIcon());
 
-	@Override
-	public final boolean isValid()
-	{
-		return getEnclosingElement() != null;
-	}
+    int flags = Iconable.ICON_FLAG_VISIBILITY;
+    if (isMarkReadOnly()) {
+      flags |= Iconable.ICON_FLAG_READ_STATUS;
+    }
 
-	@Override
-	@RequiredUIAccess
-	public final boolean update()
-	{
-		final CompositeAppearance oldText = myHighlightedText;
-		final Icon oldIcon = TargetAWT.to(getIcon());
+    boolean changes = super.update();
 
-		int flags = Iconable.ICON_FLAG_VISIBILITY;
-		if(isMarkReadOnly())
-		{
-			flags |= Iconable.ICON_FLAG_READ_STATUS;
-		}
+    final PsiElement enclosingElement = getEnclosingElement();
 
-		boolean changes = super.update();
+    if (enclosingElement == null) {
+      final String invalidPrefix = IdeBundle.message("node.hierarchy.invalid");
+      if (!myHighlightedText.getText().startsWith(invalidPrefix)) {
+        myHighlightedText.getBeginning().addText(invalidPrefix, HierarchyNodeDescriptor.getInvalidPrefixAttributes());
+      }
+      return true;
+    }
 
-		final PsiElement enclosingElement = getEnclosingElement();
+    Image newIcon = IconDescriptorUpdaters.getIcon(enclosingElement, flags);
+    if (changes && myIsBase) {
+      newIcon = ImageEffects.appendRight(AllIcons.Hierarchy.Base, newIcon);
+    }
+    setIcon(newIcon);
 
-		if(enclosingElement == null)
-		{
-			final String invalidPrefix = IdeBundle.message("node.hierarchy.invalid");
-			if(!myHighlightedText.getText().startsWith(invalidPrefix))
-			{
-				myHighlightedText.getBeginning().addText(invalidPrefix, HierarchyNodeDescriptor.getInvalidPrefixAttributes());
-			}
-			return true;
-		}
+    myHighlightedText = new CompositeAppearance();
+    TextAttributes mainTextAttributes = null;
+    if (myColor != null) {
+      mainTextAttributes = new TextAttributes(myColor, null, null, null, Font.PLAIN);
+    }
+    if (enclosingElement instanceof PsiMethod) {
+      if (enclosingElement instanceof SyntheticElement) {
+        PsiFile file = enclosingElement.getContainingFile();
+        myHighlightedText.getEnding().addText(file != null ? file.getName() : IdeBundle.message("node.call.hierarchy.unknown.jsp"), mainTextAttributes);
+      } else {
+        final PsiMethod method = (PsiMethod) enclosingElement;
+        final StringBuilder buffer = new StringBuilder(128);
+        final PsiClass containingClass = method.getContainingClass();
+        if (containingClass != null) {
+          buffer.append(ClassPresentationUtil.getNameForClass(containingClass, false));
+          buffer.append('.');
+        }
+        final String methodText = PsiFormatUtil.formatMethod(method, PsiSubstitutor.EMPTY, PsiFormatUtilBase.SHOW_NAME | PsiFormatUtilBase.SHOW_PARAMETERS, PsiFormatUtilBase.SHOW_TYPE);
+        buffer.append(methodText);
 
-		Image newIcon = IconDescriptorUpdaters.getIcon(enclosingElement, flags);
-		if(changes && myIsBase)
-		{
-			newIcon = ImageEffects.appendRight(AllIcons.Hierarchy.Base, newIcon);
-		}
-		setIcon(newIcon);
+        myHighlightedText.getEnding().addText(buffer.toString(), mainTextAttributes);
+      }
+    } else {
+      myHighlightedText.getEnding().addText(ClassPresentationUtil.getNameForClass((PsiClass) enclosingElement, false), mainTextAttributes);
+    }
 
-		myHighlightedText = new CompositeAppearance();
-		TextAttributes mainTextAttributes = null;
-		if(myColor != null)
-		{
-			mainTextAttributes = new TextAttributes(myColor, null, null, null, Font.PLAIN);
-		}
-		if(enclosingElement instanceof PsiMethod)
-		{
-			if(enclosingElement instanceof SyntheticElement)
-			{
-				PsiFile file = enclosingElement.getContainingFile();
-				myHighlightedText.getEnding().addText(file != null ? file.getName() : IdeBundle.message("node.call.hierarchy.unknown.jsp"), mainTextAttributes);
-			}
-			else
-			{
-				final PsiMethod method = (PsiMethod) enclosingElement;
-				final StringBuilder buffer = new StringBuilder(128);
-				final PsiClass containingClass = method.getContainingClass();
-				if(containingClass != null)
-				{
-					buffer.append(ClassPresentationUtil.getNameForClass(containingClass, false));
-					buffer.append('.');
-				}
-				final String methodText = PsiFormatUtil.formatMethod(method, PsiSubstitutor.EMPTY, PsiFormatUtilBase.SHOW_NAME | PsiFormatUtilBase.SHOW_PARAMETERS, PsiFormatUtilBase.SHOW_TYPE);
-				buffer.append(methodText);
+    if (myUsageCount > 1) {
+      myHighlightedText.getEnding().addText(IdeBundle.message("node.call.hierarchy.N.usages", myUsageCount), HierarchyNodeDescriptor.getUsageCountPrefixAttributes());
+    }
 
-				myHighlightedText.getEnding().addText(buffer.toString(), mainTextAttributes);
-			}
-		}
-		else
-		{
-			myHighlightedText.getEnding().addText(ClassPresentationUtil.getNameForClass((PsiClass) enclosingElement, false), mainTextAttributes);
-		}
+    final PsiClass containingClass = enclosingElement instanceof PsiMethod ? ((PsiMethod) enclosingElement).getContainingClass() : (PsiClass) enclosingElement;
+    if (containingClass != null) {
+      final String packageName = JavaHierarchyUtil.getPackageName(containingClass);
+      myHighlightedText.getEnding().addText("  (" + packageName + ")", HierarchyNodeDescriptor.getPackageNameAttributes());
+    }
 
-		if(myUsageCount > 1)
-		{
-			myHighlightedText.getEnding().addText(IdeBundle.message("node.call.hierarchy.N.usages", myUsageCount), HierarchyNodeDescriptor.getUsageCountPrefixAttributes());
-		}
+    myName = myHighlightedText.getText();
 
-		final PsiClass containingClass = enclosingElement instanceof PsiMethod ? ((PsiMethod) enclosingElement).getContainingClass() : (PsiClass) enclosingElement;
-		if(containingClass != null)
-		{
-			final String packageName = JavaHierarchyUtil.getPackageName(containingClass);
-			myHighlightedText.getEnding().addText("  (" + packageName + ")", HierarchyNodeDescriptor.getPackageNameAttributes());
-		}
+    if (!Comparing.equal(myHighlightedText, oldText) || !Comparing.equal(getIcon(), oldIcon)) {
+      changes = true;
+    }
+    return changes;
+  }
 
-		myName = myHighlightedText.getText();
+  public void addReference(final PsiReference reference) {
+    myReferences.add(reference);
+  }
 
-		if(!Comparing.equal(myHighlightedText, oldText) || !Comparing.equal(getIcon(), oldIcon))
-		{
-			changes = true;
-		}
-		return changes;
-	}
+  public boolean hasReference(PsiReference reference) {
+    return myReferences.contains(reference);
+  }
 
-	public void addReference(final PsiReference reference)
-	{
-		myReferences.add(reference);
-	}
+  @Override
+  public void navigate(boolean requestFocus) {
+    if (!myNavigateToReference) {
+      PsiElement element = getPsiElement();
+      if (element instanceof Navigatable && ((Navigatable) element).canNavigate()) {
+        ((Navigatable) element).navigate(requestFocus);
+      }
+      return;
+    }
 
-	public boolean hasReference(PsiReference reference)
-	{
-		return myReferences.contains(reference);
-	}
+    final PsiReference firstReference = myReferences.get(0);
+    final PsiElement element = firstReference.getElement();
+    if (element == null) {
+      return;
+    }
+    final PsiElement callElement = element.getParent();
+    if (callElement instanceof Navigatable && ((Navigatable) callElement).canNavigate()) {
+      ((Navigatable) callElement).navigate(requestFocus);
+    } else {
+      final PsiFile psiFile = callElement.getContainingFile();
+      if (psiFile == null || psiFile.getVirtualFile() == null) {
+        return;
+      }
+      FileEditorManager.getInstance(myProject).openFile(psiFile.getVirtualFile(), requestFocus);
+    }
 
-	@Override
-	public void navigate(boolean requestFocus)
-	{
-		if(!myNavigateToReference)
-		{
-			PsiElement element = getPsiElement();
-			if(element instanceof Navigatable && ((Navigatable) element).canNavigate())
-			{
-				((Navigatable) element).navigate(requestFocus);
-			}
-			return;
-		}
+    Editor editor = PsiUtilBase.findEditor(callElement);
 
-		final PsiReference firstReference = myReferences.get(0);
-		final PsiElement element = firstReference.getElement();
-		if(element == null)
-		{
-			return;
-		}
-		final PsiElement callElement = element.getParent();
-		if(callElement instanceof Navigatable && ((Navigatable) callElement).canNavigate())
-		{
-			((Navigatable) callElement).navigate(requestFocus);
-		}
-		else
-		{
-			final PsiFile psiFile = callElement.getContainingFile();
-			if(psiFile == null || psiFile.getVirtualFile() == null)
-			{
-				return;
-			}
-			FileEditorManager.getInstance(myProject).openFile(psiFile.getVirtualFile(), requestFocus);
-		}
+    if (editor != null) {
 
-		Editor editor = PsiUtilBase.findEditor(callElement);
+      HighlightManager highlightManager = HighlightManager.getInstance(myProject);
+      EditorColorsManager colorManager = EditorColorsManager.getInstance();
+      TextAttributes attributes = colorManager.getGlobalScheme().getAttributes(EditorColors.SEARCH_RESULT_ATTRIBUTES);
+      ArrayList<RangeHighlighter> highlighters = new ArrayList<RangeHighlighter>();
+      for (PsiReference psiReference : myReferences) {
+        final PsiElement eachElement = psiReference.getElement();
+        if (eachElement != null) {
+          final PsiElement eachMethodCall = eachElement.getParent();
+          if (eachMethodCall != null) {
+            final TextRange textRange = eachMethodCall.getTextRange();
+            highlightManager.addRangeHighlight(editor, textRange.getStartOffset(), textRange.getEndOffset(), attributes, false, highlighters);
+          }
+        }
+      }
+    }
+  }
 
-		if(editor != null)
-		{
+  @Override
+  public boolean canNavigate() {
+    if (!myNavigateToReference) {
+      PsiElement element = getPsiElement();
+      return element instanceof Navigatable && ((Navigatable) element).canNavigate();
+    }
+    if (myReferences.isEmpty()) {
+      return false;
+    }
+    final PsiReference firstReference = myReferences.get(0);
+    final PsiElement callElement = firstReference.getElement().getParent();
+    if (callElement == null || !callElement.isValid()) {
+      return false;
+    }
+    if (!(callElement instanceof Navigatable) || !((Navigatable) callElement).canNavigate()) {
+      final PsiFile psiFile = callElement.getContainingFile();
+      if (psiFile == null) {
+        return false;
+      }
+    }
+    return true;
+  }
 
-			HighlightManager highlightManager = HighlightManager.getInstance(myProject);
-			EditorColorsManager colorManager = EditorColorsManager.getInstance();
-			TextAttributes attributes = colorManager.getGlobalScheme().getAttributes(EditorColors.SEARCH_RESULT_ATTRIBUTES);
-			ArrayList<RangeHighlighter> highlighters = new ArrayList<RangeHighlighter>();
-			for(PsiReference psiReference : myReferences)
-			{
-				final PsiElement eachElement = psiReference.getElement();
-				if(eachElement != null)
-				{
-					final PsiElement eachMethodCall = eachElement.getParent();
-					if(eachMethodCall != null)
-					{
-						final TextRange textRange = eachMethodCall.getTextRange();
-						highlightManager.addRangeHighlight(editor, textRange.getStartOffset(), textRange.getEndOffset(), attributes, false, highlighters);
-					}
-				}
-			}
-		}
-	}
-
-	@Override
-	public boolean canNavigate()
-	{
-		if(!myNavigateToReference)
-		{
-			PsiElement element = getPsiElement();
-			return element instanceof Navigatable && ((Navigatable) element).canNavigate();
-		}
-		if(myReferences.isEmpty())
-		{
-			return false;
-		}
-		final PsiReference firstReference = myReferences.get(0);
-		final PsiElement callElement = firstReference.getElement().getParent();
-		if(callElement == null || !callElement.isValid())
-		{
-			return false;
-		}
-		if(!(callElement instanceof Navigatable) || !((Navigatable) callElement).canNavigate())
-		{
-			final PsiFile psiFile = callElement.getContainingFile();
-			if(psiFile == null)
-			{
-				return false;
-			}
-		}
-		return true;
-	}
-
-	@Override
-	public boolean canNavigateToSource()
-	{
-		return canNavigate();
-	}
+  @Override
+  public boolean canNavigateToSource() {
+    return canNavigate();
+  }
 }

@@ -15,17 +15,16 @@
  */
 package com.intellij.java.impl.ig.finalization;
 
-import consulo.ide.impl.idea.codeInspection.ui.MultipleCheckboxOptionsPanel;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
 import com.siyeh.HardcodedMethodConstants;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.editor.inspection.ui.MultipleCheckboxOptionsPanel;
+import consulo.project.Project;
 
 import javax.annotation.Nonnull;
-
 import javax.swing.*;
 
 public class FinalizeCallsSuperFinalizeInspection extends BaseInspection {

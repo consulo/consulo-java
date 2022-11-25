@@ -6,7 +6,7 @@ import consulo.language.editor.completion.lookup.InsertionContext;
 import com.intellij.java.impl.codeInsight.completion.JavaLookupElementBuilder;
 import consulo.language.editor.completion.lookup.LookupElement;
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import com.intellij.java.language.psi.util.MethodSignatureBackedByPsiMethod;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;

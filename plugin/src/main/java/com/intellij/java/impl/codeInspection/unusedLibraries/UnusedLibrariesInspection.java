@@ -21,16 +21,17 @@
 package com.intellij.java.impl.codeInspection.unusedLibraries;
 
 import com.intellij.java.analysis.codeInspection.GroupNames;
-import com.intellij.java.impl.ig.psiutils.LibraryUtil;
 import consulo.application.ApplicationManager;
+import consulo.application.impl.internal.progress.AbstractProgressIndicatorBase;
 import consulo.application.progress.ProgressIndicator;
 import consulo.application.progress.ProgressManager;
-import consulo.content.OrderRootType;
 import consulo.content.base.BinariesOrderRootType;
 import consulo.content.library.Library;
 import consulo.content.scope.NamedScope;
 import consulo.content.scope.PackageSetFactory;
 import consulo.content.scope.ParsingException;
+import consulo.ide.impl.idea.openapi.vfs.VfsUtilCore;
+import consulo.ide.impl.idea.packageDependencies.BackwardDependenciesBuilder;
 import consulo.language.editor.inspection.*;
 import consulo.language.editor.inspection.reference.RefManager;
 import consulo.language.editor.inspection.reference.RefModule;
@@ -51,6 +52,7 @@ import consulo.module.content.ProjectRootManager;
 import consulo.module.content.layer.ModifiableRootModel;
 import consulo.module.content.layer.orderEntry.LibraryOrderEntry;
 import consulo.module.content.layer.orderEntry.OrderEntry;
+import consulo.module.content.library.util.ModuleContentLibraryUtil;
 import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.Comparing;
@@ -62,9 +64,8 @@ import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
-import java.util.function.Function;
 
-public class UnusedLibrariesInspection extends GlobalInspectionTool {
+public abstract class UnusedLibrariesInspection extends GlobalInspectionTool {
   private static final Logger LOG = Logger.getInstance(UnusedLibrariesInspection.class);
   private final JobDescriptor BACKWARD_ANALYSIS = new JobDescriptor(InspectionsBundle.message("unused.library.backward.analysis.job.description"));
 
@@ -82,7 +83,7 @@ public class UnusedLibrariesInspection extends GlobalInspectionTool {
     final Project project = manager.getProject();
     final ArrayList<VirtualFile> libraryRoots = new ArrayList<VirtualFile>();
     if (scope.getScopeType() == AnalysisScope.PROJECT) {
-      ContainerUtil.addAll(libraryRoots, LibraryUtil.getLibraryRoots(project, false, false));
+      ContainerUtil.addAll(libraryRoots, ModuleContentLibraryUtil.getLibraryRoots(project, false, false));
     }
     else {
       final Set<Module> modules = new HashSet<Module>();
@@ -100,7 +101,7 @@ public class UnusedLibrariesInspection extends GlobalInspectionTool {
           }
         }
       });
-      ContainerUtil.addAll(libraryRoots, LibraryUtil.getLibraryRoots(modules.toArray(new Module[modules.size()]), false, false));
+      ContainerUtil.addAll(libraryRoots, ModuleContentLibraryUtil.getLibraryRoots(modules.toArray(new Module[modules.size()]), false, false));
     }
     if (libraryRoots.isEmpty()) {
       return;
@@ -180,12 +181,7 @@ public class UnusedLibrariesInspection extends GlobalInspectionTool {
       final Set<VirtualFile> files = unusedLibs.get(orderEntry);
       final VirtualFile[] roots = orderEntry.getFiles(BinariesOrderRootType.getInstance());
       if (files.size() < roots.length) {
-        final String unusedLibraryRoots = StringUtil.join(files, new Function<VirtualFile, String>() {
-          @Override
-          public String fun(final VirtualFile file) {
-            return file.getPresentableName();
-          }
-        }, ",");
+        final String unusedLibraryRoots = StringUtil.join(files, file -> file.getPresentableName(), ",");
         String message =
           InspectionsBundle.message("unused.library.roots.problem.descriptor", unusedLibraryRoots, orderEntry.getPresentableName());
         problemProcessor.addProblemElement(refModule,
@@ -265,7 +261,7 @@ public class UnusedLibrariesInspection extends GlobalInspectionTool {
                 if (library != null) {
                   final Library.ModifiableModel modifiableModel = library.getModifiableModel();
                   for (VirtualFile file : myFiles) {
-                    modifiableModel.removeRoot(file.getUrl(), OrderRootType.CLASSES);
+                    modifiableModel.removeRoot(file.getUrl(), BinariesOrderRootType.getInstance());
                   }
                   modifiableModel.commit();
                 }

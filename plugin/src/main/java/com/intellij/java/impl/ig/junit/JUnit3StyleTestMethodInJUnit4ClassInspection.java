@@ -21,7 +21,7 @@ import javax.annotation.Nullable;
 import com.intellij.java.language.psi.*;
 import org.jetbrains.annotations.Nls;
 import com.intellij.java.analysis.impl.codeInspection.AnnotateMethodFix;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;

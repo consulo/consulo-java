@@ -20,7 +20,7 @@ import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
 import com.intellij.java.language.psi.PsiReferenceList;
 import consulo.project.Project;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 

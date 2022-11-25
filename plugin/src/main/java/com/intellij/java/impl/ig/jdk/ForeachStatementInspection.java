@@ -15,24 +15,24 @@
  */
 package com.intellij.java.impl.ig.jdk;
 
-import javax.annotation.Nonnull;
-
-import com.intellij.java.language.psi.*;
-import org.jetbrains.annotations.NonNls;
-import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.project.Project;
-import com.intellij.psi.*;
-import consulo.language.codeStyle.CodeStyleSettingsManager;
-import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.impl.psi.codeStyle.JavaCodeStyleSettings;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.util.InheritanceUtil;
-import consulo.language.util.IncorrectOperationException;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
 import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.codeStyle.CodeStyleSettingsManager;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
 
 public class ForeachStatementInspection extends BaseInspection {
 

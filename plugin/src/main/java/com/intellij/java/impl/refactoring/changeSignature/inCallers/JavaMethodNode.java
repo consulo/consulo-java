@@ -17,7 +17,7 @@ package com.intellij.java.impl.refactoring.changeSignature.inCallers;
 
 import com.intellij.java.language.psi.*;
 import consulo.project.Project;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import com.intellij.java.language.impl.psi.presentation.java.ClassPresentationUtil;
 import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.java.indexing.search.searches.MethodReferencesSearch;

@@ -15,44 +15,49 @@
  */
 package com.intellij.java.impl.codeInspection.unneededThrows;
 
-import consulo.language.editor.scope.AnalysisScope;
-import com.intellij.java.language.impl.codeInsight.ExceptionUtil;
-import consulo.language.editor.FileModificationService;
-import com.intellij.java.analysis.codeInspection.GroupNames;
-import com.intellij.codeInspection.reference.*;
 import com.intellij.java.analysis.codeInspection.GlobalJavaInspectionContext;
 import com.intellij.java.analysis.codeInspection.GlobalJavaInspectionTool;
+import com.intellij.java.analysis.codeInspection.GroupNames;
 import com.intellij.java.analysis.codeInspection.reference.RefJavaVisitor;
 import com.intellij.java.analysis.codeInspection.reference.RefMethod;
-import com.intellij.java.language.psi.*;
-import consulo.logging.Logger;
-import consulo.project.Project;
-import consulo.util.lang.Comparing;
-import consulo.util.lang.Pair;
-import com.intellij.psi.*;
-import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.java.indexing.search.searches.AllOverridingMethodsSearch;
-import consulo.language.psi.util.PsiTreeUtil;
-import consulo.language.util.IncorrectOperationException;
+import com.intellij.java.language.impl.codeInsight.ExceptionUtil;
+import com.intellij.java.language.psi.*;
 import consulo.application.util.function.Processor;
 import consulo.application.util.query.Query;
+import consulo.language.editor.FileModificationService;
+import consulo.language.editor.inspection.*;
+import consulo.language.editor.inspection.reference.RefElement;
+import consulo.language.editor.inspection.reference.RefEntity;
+import consulo.language.editor.inspection.reference.RefManager;
+import consulo.language.editor.inspection.scheme.InspectionManager;
+import consulo.language.editor.scope.AnalysisScope;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiManager;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.logging.Logger;
+import consulo.project.Project;
 import consulo.util.collection.BidirectionalMap;
+import consulo.util.lang.Comparing;
+import consulo.util.lang.Pair;
 import org.jetbrains.annotations.NonNls;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * @author max
  */
-public class RedundantThrows extends GlobalJavaInspectionTool
-{
+public abstract class RedundantThrows extends GlobalJavaInspectionTool {
   private static final Logger LOG = Logger.getInstance(RedundantThrows.class);
   private static final String DISPLAY_NAME = InspectionsBundle.message("inspection.redundant.throws.display.name");
   private final BidirectionalMap<String, QuickFix> myQuickFixes = new BidirectionalMap<String, QuickFix>();
-  @NonNls private static final String SHORT_NAME = "RedundantThrows";
+  @NonNls
+  private static final String SHORT_NAME = "RedundantThrows";
 
   @Override
   @Nullable
@@ -62,7 +67,7 @@ public class RedundantThrows extends GlobalJavaInspectionTool
                                                 GlobalInspectionContext globalContext,
                                                 ProblemDescriptionsProcessor processor) {
     if (refEntity instanceof RefMethod) {
-      final RefMethod refMethod = (RefMethod)refEntity;
+      final RefMethod refMethod = (RefMethod) refEntity;
       if (refMethod.isSyntheticJSP()) return null;
 
       if (refMethod.hasSuperMethods()) return null;
@@ -72,7 +77,7 @@ public class RedundantThrows extends GlobalJavaInspectionTool
       PsiClass[] unThrown = refMethod.getUnThrownExceptions();
       if (unThrown == null) return null;
 
-      PsiMethod psiMethod = (PsiMethod)refMethod.getElement();
+      PsiMethod psiMethod = (PsiMethod) refMethod.getElement();
       PsiClassType[] throwsList = psiMethod.getThrowsList().getReferencedTypes();
       PsiJavaCodeReferenceElement[] throwsRefs = psiMethod.getThrowsList().getReferenceElements();
       ArrayList<ProblemDescriptor> problems = null;
@@ -92,18 +97,16 @@ public class RedundantThrows extends GlobalJavaInspectionTool
 
             if (refMethod.isAbstract() || refMethod.getOwnerClass().isInterface()) {
               problems.add(manager.createProblemDescriptor(throwsRef, InspectionsBundle.message(
-                "inspection.redundant.throws.problem.descriptor", "<code>#ref</code>"), getFix(processor, throwsClassName), ProblemHighlightType.LIKE_UNUSED_SYMBOL,
-                                                           false));
-            }
-            else if (!refMethod.getDerivedMethods().isEmpty()) {
+                  "inspection.redundant.throws.problem.descriptor", "<code>#ref</code>"), getFix(processor, throwsClassName), ProblemHighlightType.LIKE_UNUSED_SYMBOL,
+                  false));
+            } else if (!refMethod.getDerivedMethods().isEmpty()) {
               problems.add(manager.createProblemDescriptor(throwsRef, InspectionsBundle.message(
-                "inspection.redundant.throws.problem.descriptor1", "<code>#ref</code>"), getFix(processor, throwsClassName), ProblemHighlightType.LIKE_UNUSED_SYMBOL,
-                                                           false));
-            }
-            else {
+                  "inspection.redundant.throws.problem.descriptor1", "<code>#ref</code>"), getFix(processor, throwsClassName), ProblemHighlightType.LIKE_UNUSED_SYMBOL,
+                  false));
+            } else {
               problems.add(manager.createProblemDescriptor(throwsRef, InspectionsBundle.message(
-                "inspection.redundant.throws.problem.descriptor2", "<code>#ref</code>"), getFix(processor, throwsClassName), ProblemHighlightType.LIKE_UNUSED_SYMBOL,
-                                                           false));
+                  "inspection.redundant.throws.problem.descriptor2", "<code>#ref</code>"), getFix(processor, throwsClassName), ProblemHighlightType.LIKE_UNUSED_SYMBOL,
+                  false));
             }
           }
         }
@@ -122,7 +125,7 @@ public class RedundantThrows extends GlobalJavaInspectionTool
     PsiClass aClass = psiMethod.getContainingClass();
     if (aClass == null) return false;
     PsiClass remote =
-      JavaPsiFacade.getInstance(aClass.getProject()).findClass("java.rmi.Remote", GlobalSearchScope.allScope(aClass.getProject()));
+        JavaPsiFacade.getInstance(aClass.getProject()).findClass("java.rmi.Remote", GlobalSearchScope.allScope(aClass.getProject()));
     return remote != null && aClass.isInheritor(remote, true);
   }
 
@@ -131,10 +134,12 @@ public class RedundantThrows extends GlobalJavaInspectionTool
   protected boolean queryExternalUsagesRequests(final RefManager manager, final GlobalJavaInspectionContext globalContext,
                                                 final ProblemDescriptionsProcessor processor) {
     manager.iterate(new RefJavaVisitor() {
-      @Override public void visitElement(@Nonnull RefEntity refEntity) {
+      @Override
+      public void visitElement(@Nonnull RefEntity refEntity) {
         if (processor.getDescriptions(refEntity) != null) {
           refEntity.accept(new RefJavaVisitor() {
-            @Override public void visitMethod(@Nonnull final RefMethod refMethod) {
+            @Override
+            public void visitMethod(@Nonnull final RefMethod refMethod) {
               globalContext.enqueueDerivedMethodsProcessor(refMethod, new GlobalJavaInspectionContext.DerivedMethodsProcessor() {
                 @Override
                 public boolean process(PsiMethod derivedMethod) {
@@ -177,7 +182,7 @@ public class RedundantThrows extends GlobalJavaInspectionTool
         myQuickFixes.put(hint, fix);
       }
     }
-    return (LocalQuickFix)fix;
+    return (LocalQuickFix) fix;
   }
 
 
@@ -213,16 +218,15 @@ public class RedundantThrows extends GlobalJavaInspectionTool
     @Override
     public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
       if (myProcessor != null) {
-        RefElement refElement = (RefElement)myProcessor.getElement(descriptor);
+        RefElement refElement = (RefElement) myProcessor.getElement(descriptor);
         if (refElement instanceof RefMethod && refElement.isValid()) {
-          RefMethod refMethod = (RefMethod)refElement;
+          RefMethod refMethod = (RefMethod) refElement;
           final CommonProblemDescriptor[] problems = myProcessor.getDescriptions(refMethod);
           if (problems != null) {
             removeExcessiveThrows(refMethod, null, problems);
           }
         }
-      }
-      else {
+      } else {
         final PsiMethod psiMethod = PsiTreeUtil.getParentOfType(descriptor.getPsiElement(), PsiMethod.class);
         if (psiMethod != null) {
           removeExcessiveThrows(null, psiMethod, new CommonProblemDescriptor[]{descriptor});
@@ -241,19 +245,18 @@ public class RedundantThrows extends GlobalJavaInspectionTool
         @Nullable final PsiMethod psiMethod;
         if (element == null) {
           LOG.assertTrue(refMethod != null);
-          psiMethod = (PsiMethod)refMethod.getElement();
-        }
-        else {
-          psiMethod = (PsiMethod)element;
+          psiMethod = (PsiMethod) refMethod.getElement();
+        } else {
+          psiMethod = (PsiMethod) element;
         }
         if (psiMethod == null) return; //invalid refMethod
         final Project project = psiMethod.getProject();
         final PsiManager psiManager = PsiManager.getInstance(project);
         final List<PsiJavaCodeReferenceElement> refsToDelete = new ArrayList<PsiJavaCodeReferenceElement>();
         for (CommonProblemDescriptor problem : problems) {
-          final PsiElement psiElement = ((ProblemDescriptor)problem).getPsiElement();
+          final PsiElement psiElement = ((ProblemDescriptor) problem).getPsiElement();
           if (psiElement instanceof PsiJavaCodeReferenceElement) {
-            final PsiJavaCodeReferenceElement classRef = (PsiJavaCodeReferenceElement)psiElement;
+            final PsiJavaCodeReferenceElement classRef = (PsiJavaCodeReferenceElement) psiElement;
             final PsiType psiType = JavaPsiFacade.getInstance(psiManager.getProject()).getElementFactory().createType(classRef);
             removeException(refMethod, psiType, refsToDelete, psiMethod);
           } else {
@@ -275,8 +278,7 @@ public class RedundantThrows extends GlobalJavaInspectionTool
         for (final PsiJavaCodeReferenceElement aRefsToDelete : refsToDelete) {
           aRefsToDelete.delete();
         }
-      }
-      catch (IncorrectOperationException e) {
+      } catch (IncorrectOperationException e) {
         LOG.error(e);
       }
     }
@@ -297,11 +299,11 @@ public class RedundantThrows extends GlobalJavaInspectionTool
 
       if (refMethod != null) {
         for (RefMethod refDerived : refMethod.getDerivedMethods()) {
-          removeException(refDerived, exceptionType, refsToDelete, (PsiMethod)refDerived.getElement());
+          removeException(refDerived, exceptionType, refsToDelete, (PsiMethod) refDerived.getElement());
         }
       } else {
-        final Query<Pair<PsiMethod,PsiMethod>> query = AllOverridingMethodsSearch.search(psiMethod.getContainingClass());
-        query.forEach(new Processor<Pair<PsiMethod, PsiMethod>>(){
+        final Query<Pair<PsiMethod, PsiMethod>> query = AllOverridingMethodsSearch.search(psiMethod.getContainingClass());
+        query.forEach(new Processor<Pair<PsiMethod, PsiMethod>>() {
           @Override
           public boolean process(final Pair<PsiMethod, PsiMethod> pair) {
             if (pair.first == psiMethod) {

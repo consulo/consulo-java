@@ -35,11 +35,11 @@ import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiJavaPackage;
 import com.intellij.java.language.util.ClassFilter;
 import consulo.component.extension.Extensions;
+import consulo.platform.base.icon.PlatformIconGroup;
 import consulo.project.Project;
 import consulo.ui.ex.awt.ListCellRendererWrapper;
 import consulo.ui.ex.awt.VerticalFlowLayout;
 import consulo.ui.ex.awt.IdeBorderFactory;
-import consulo.ide.impl.idea.util.IconUtil;
 import consulo.ui.ex.awt.UIUtil;
 import consulo.ui.ex.awtUnsafe.TargetAWT;
 import consulo.logging.Logger;
@@ -114,7 +114,7 @@ public class CoverageConfigurable extends SettingsEditor<RunConfigurationBase> {
 
     @Override
     protected Image getAddPatternButtonIcon() {
-      return IconUtil.getAddPackageIcon();
+      return PlatformIconGroup.toolbardecoratorAddpackage();
     }
   }
 

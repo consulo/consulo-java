@@ -18,10 +18,11 @@ package com.intellij.java.impl.psi.util;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
-import consulo.util.lang.StringUtil;
-import com.intellij.psi.*;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiWhiteSpace;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.util.IncorrectOperationException;
+import consulo.util.lang.StringUtil;
 
 import java.util.List;
 

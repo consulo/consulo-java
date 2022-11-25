@@ -21,7 +21,7 @@ import com.intellij.java.impl.codeInsight.completion.JavaLookupElementBuilder;
 import consulo.language.editor.completion.lookup.LookupElement;
 import com.intellij.java.language.psi.*;
 import consulo.util.lang.function.Condition;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import com.intellij.java.language.psi.util.MethodSignatureBackedByPsiMethod;
 import consulo.util.collection.ArrayUtil;
 import consulo.language.util.IncorrectOperationException;

@@ -15,11 +15,6 @@
  */
 package com.intellij.java.impl.codeInsight.completion;
 
-import com.intellij.codeInsight.completion.*;
-import consulo.language.editor.completion.lookup.LookupElement;
-import consulo.language.editor.completion.lookup.LookupElementBuilder;
-import consulo.ide.impl.idea.codeInspection.ex.GlobalInspectionContextBase;
-import consulo.application.AllIcons;
 import com.intellij.java.impl.codeInsight.generation.*;
 import com.intellij.java.language.impl.codeInsight.generation.GenerationInfo;
 import com.intellij.java.language.impl.codeInsight.generation.OverrideImplementExploreUtil;
@@ -27,22 +22,28 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.infos.CandidateInfo;
 import com.intellij.java.language.psi.util.MethodSignature;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
+import com.intellij.java.language.psi.util.PsiFormatUtilBase;
 import com.intellij.java.language.util.VisibilityUtil;
+import consulo.application.AllIcons;
 import consulo.component.util.Iconable;
-import consulo.language.psi.PsiElement;
-import consulo.ide.impl.psi.util.PsiFormatUtilBase;
-import consulo.language.psi.util.PsiTreeUtil;
-import consulo.util.lang.ObjectUtil;
-import consulo.util.collection.ContainerUtil;
+import consulo.language.editor.completion.CompletionParameters;
+import consulo.language.editor.completion.CompletionResultSet;
+import consulo.language.editor.completion.CompletionType;
+import consulo.language.editor.completion.lookup.InsertHandler;
+import consulo.language.editor.completion.lookup.InsertionContext;
+import consulo.language.editor.completion.lookup.LookupElement;
+import consulo.language.editor.completion.lookup.LookupElementBuilder;
+import consulo.language.editor.impl.internal.completion.CompletionUtil;
+import consulo.language.editor.impl.internal.inspection.GlobalInspectionContextBase;
 import consulo.language.icon.IconDescriptorUpdaters;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.util.PsiTreeUtil;
 import consulo.ui.image.Image;
 import consulo.ui.image.ImageEffects;
 import consulo.util.dataholder.Key;
+import consulo.util.lang.ObjectUtil;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static consulo.language.pattern.PlatformPatterns.psiElement;
 
@@ -73,7 +74,7 @@ public class JavaGenerateMemberCompletionContributor {
   private static void suggestGeneratedMethods(CompletionResultSet result, PsiElement position) {
     PsiClass parent = CompletionUtil.getOriginalElement(ObjectUtil.assertNotNull(PsiTreeUtil.getParentOfType(position, PsiClass.class)));
     if (parent != null) {
-      Set<MethodSignature> addedSignatures = ContainerUtil.newHashSet();
+      Set<MethodSignature> addedSignatures = new HashSet<>();
       addGetterSetterElements(result, parent, addedSignatures);
       addSuperSignatureElements(parent, true, result, addedSignatures);
       addSuperSignatureElements(parent, false, result, addedSignatures);
@@ -87,7 +88,7 @@ public class JavaGenerateMemberCompletionContributor {
         continue;
       }
 
-      List<PsiMethod> prototypes = ContainerUtil.newSmartList();
+      List<PsiMethod> prototypes = new ArrayList<>();
       Collections.addAll(prototypes, GetterSetterPrototypeProvider.generateGetterSetters(field, true));
       Collections.addAll(prototypes, GetterSetterPrototypeProvider.generateGetterSetters(field, false));
       for (final PsiMethod prototype : prototypes) {

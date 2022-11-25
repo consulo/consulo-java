@@ -15,8 +15,6 @@
  */
 package com.intellij.java.impl.codeInsight.completion;
 
-import com.intellij.codeInsight.completion.*;
-import consulo.language.editor.completion.lookup.LookupElement;
 import com.intellij.java.impl.codeInsight.ExpectedTypeInfo;
 import com.intellij.java.impl.codeInsight.ExpectedTypesProvider;
 import com.intellij.java.impl.psi.filters.element.ExcludeDeclaredFilter;
@@ -26,35 +24,41 @@ import com.intellij.java.language.patterns.PsiJavaElementPattern;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.language.LangBundle;
-import consulo.ui.ex.action.IdeActions;
+import consulo.application.util.function.Processor;
+import consulo.application.util.matcher.PrefixMatcher;
 import consulo.codeEditor.Editor;
+import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.LangBundle;
+import consulo.language.editor.completion.*;
+import consulo.language.editor.completion.lookup.InsertHandler;
+import consulo.language.editor.completion.lookup.LookupElement;
+import consulo.language.editor.impl.internal.completion.CompletionUtil;
 import consulo.language.internal.custom.CustomSyntaxTableFileType;
-import consulo.util.lang.function.Condition;
-import consulo.util.lang.StringUtil;
 import consulo.language.pattern.ElementPattern;
+import consulo.language.plain.psi.PsiPlainTextFile;
 import consulo.language.psi.PsiComment;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
-import consulo.language.plain.psi.PsiPlainTextFile;
 import consulo.language.psi.filter.ClassFilter;
 import consulo.language.psi.filter.ElementFilter;
 import consulo.language.psi.filter.TrueFilter;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.util.PsiTreeUtil;
-import consulo.ide.impl.idea.util.Consumer;
-import consulo.util.lang.ObjectUtil;
-import consulo.application.util.function.Processor;
-import consulo.util.collection.SmartList;
+import consulo.ui.ex.action.IdeActions;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.collection.JBIterable;
 import consulo.util.collection.MultiMap;
-import consulo.java.language.module.util.JavaClassNames;
+import consulo.util.collection.SmartList;
+import consulo.util.lang.ObjectUtil;
+import consulo.util.lang.StringUtil;
+import consulo.util.lang.function.Condition;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Consumer;
 
 import static com.intellij.java.impl.codeInsight.completion.JavaClassNameInsertHandler.JAVA_CLASS_INSERT_HANDLER;
 import static com.intellij.java.language.patterns.PsiJavaPatterns.*;
@@ -62,7 +66,7 @@ import static com.intellij.java.language.patterns.PsiJavaPatterns.*;
 /**
  * @author peter
  */
-public class JavaClassNameCompletionContributor extends CompletionContributor {
+public abstract class JavaClassNameCompletionContributor extends CompletionContributor {
   public static final PsiJavaElementPattern.Capture<PsiElement> AFTER_NEW = psiJavaElement().afterLeaf(PsiKeyword.NEW);
   private static final PsiJavaElementPattern.Capture<PsiElement> IN_TYPE_PARAMETER = psiJavaElement().afterLeaf(PsiKeyword.EXTENDS, PsiKeyword.SUPER, "&").withParent(psiElement(PsiReferenceList.class)
       .withParent(PsiTypeParameter.class));
@@ -105,7 +109,7 @@ public class JavaClassNameCompletionContributor extends CompletionContributor {
       {
         JavaPsiClassReferenceElement item = AllClassesGetter.createLookupItem(anno, JAVA_CLASS_INSERT_HANDLER);
         item.addLookupStrings(getClassNameWithContainers(anno));
-        consumer.consume(item);
+        consumer.accept(item);
         return true;
       });
       for (String name : matcher.sortMatching(annoMap.keySet())) {
@@ -127,13 +131,13 @@ public class JavaClassNameCompletionContributor extends CompletionContributor {
         final PsiType type = info.getType();
         final PsiClass psiClass = PsiUtil.resolveClassInType(type);
         if (psiClass != null && psiClass.getName() != null) {
-          consumer.consume(createClassLookupItem(psiClass, inJavaContext));
+          consumer.accept(createClassLookupItem(psiClass, inJavaContext));
         }
         final PsiType defaultType = info.getDefaultType();
         if (!defaultType.equals(type)) {
           final PsiClass defClass = PsiUtil.resolveClassInType(defaultType);
           if (defClass != null && defClass.getName() != null) {
-            consumer.consume(createClassLookupItem(defClass, true));
+            consumer.accept(createClassLookupItem(defClass, true));
           }
         }
       }
@@ -142,7 +146,7 @@ public class JavaClassNameCompletionContributor extends CompletionContributor {
     final boolean pkgContext = JavaCompletionUtil.inSomePackage(insertedElement);
     AllClassesGetter.processJavaClasses(parameters, matcher, filterByScope, new Consumer<PsiClass>() {
       @Override
-      public void consume(PsiClass psiClass) {
+      public void accept(PsiClass psiClass) {
         processClass(psiClass, null, "");
       }
 
@@ -156,13 +160,13 @@ public class JavaClassNameCompletionContributor extends CompletionContributor {
           if (!inJavaContext) {
             JavaPsiClassReferenceElement element = AllClassesGetter.createLookupItem(psiClass, AllClassesGetter.TRY_SHORTENING);
             element.setLookupString(prefix + element.getLookupString());
-            consumer.consume(element);
+            consumer.accept(element);
           } else {
             Condition<PsiClass> condition = eachClass -> filter.isAcceptable(eachClass, insertedElement) && AllClassesGetter.isAcceptableInContext(insertedElement, eachClass,
                 filterByScope, pkgContext);
             for (JavaPsiClassReferenceElement element : createClassLookupItems(psiClass, afterNew, JAVA_CLASS_INSERT_HANDLER, condition)) {
               element.setLookupString(prefix + element.getLookupString());
-              JavaConstructorCallElement.wrap(element, insertedElement).forEach(consumer::consume);
+              JavaConstructorCallElement.wrap(element, insertedElement).forEach(consumer::accept);
             }
           }
         } else {
@@ -171,7 +175,7 @@ public class JavaClassNameCompletionContributor extends CompletionContributor {
             PsiClass[] innerClasses = psiClass.getInnerClasses();
             if (innerClasses.length > 0) {
               if (visited == null) {
-                visited = ContainerUtil.newHashSet();
+                visited = new HashSet<>();
               }
 
               for (PsiClass innerClass : innerClasses) {

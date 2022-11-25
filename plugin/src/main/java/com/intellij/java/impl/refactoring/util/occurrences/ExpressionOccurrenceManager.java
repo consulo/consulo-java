@@ -23,7 +23,7 @@ import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiLiteralExpression;
 import consulo.util.lang.StringUtil;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.impl.refactoring.introduceVariable.IntroduceVariableBase;
 import com.intellij.java.impl.refactoring.util.RefactoringUtil;

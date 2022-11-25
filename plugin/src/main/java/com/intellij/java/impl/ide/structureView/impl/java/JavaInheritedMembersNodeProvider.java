@@ -16,73 +16,59 @@
 package com.intellij.java.impl.ide.structureView.impl.java;
 
 import com.intellij.java.impl.ide.structureView.impl.AddAllMembersProcessor;
+import com.intellij.java.language.psi.*;
 import consulo.fileEditor.structureView.tree.InheritedMembersNodeProvider;
 import consulo.fileEditor.structureView.tree.TreeElement;
-import com.intellij.java.language.psi.*;
-import com.intellij.psi.*;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.resolve.ResolveState;
 import consulo.util.collection.ContainerUtil;
-import javax.annotation.Nonnull;
 
+import javax.annotation.Nonnull;
 import java.util.*;
 
 /**
  * @author Konstantin Bulenkov
  */
-public class JavaInheritedMembersNodeProvider extends InheritedMembersNodeProvider
-{
-	@Nonnull
-	@Override
-	public Collection<TreeElement> provideNodes(@Nonnull TreeElement node)
-	{
-		if(!(node instanceof JavaClassTreeElement))
-		{
-			return Collections.emptyList();
-		}
+public class JavaInheritedMembersNodeProvider extends InheritedMembersNodeProvider {
+  @Nonnull
+  @Override
+  public Collection<TreeElement> provideNodes(@Nonnull TreeElement node) {
+    if (!(node instanceof JavaClassTreeElement)) {
+      return Collections.emptyList();
+    }
 
-		JavaClassTreeElement classNode = (JavaClassTreeElement) node;
-		final PsiClass aClass = classNode.getElement();
-		if(aClass == null)
-		{
-			return Collections.emptyList();
-		}
+    JavaClassTreeElement classNode = (JavaClassTreeElement) node;
+    final PsiClass aClass = classNode.getElement();
+    if (aClass == null) {
+      return Collections.emptyList();
+    }
 
-		Collection<PsiElement> inherited = new LinkedHashSet<>();
-		Collection<PsiElement> ownChildren = JavaClassTreeElement.getOwnChildren(aClass);
+    Collection<PsiElement> inherited = new LinkedHashSet<>();
+    Collection<PsiElement> ownChildren = JavaClassTreeElement.getOwnChildren(aClass);
 
-		aClass.processDeclarations(new AddAllMembersProcessor(inherited, aClass), ResolveState.initial(), null, aClass);
-		inherited.removeAll(ownChildren);
-		if(aClass instanceof PsiAnonymousClass)
-		{
-			final PsiElement element = ((PsiAnonymousClass) aClass).getBaseClassReference().resolve();
-			if(element instanceof PsiClass)
-			{
-				ContainerUtil.addAll(inherited, ((PsiClass) element).getInnerClasses());
-			}
-		}
-		List<TreeElement> array = new ArrayList<>();
-		for(PsiElement child : inherited)
-		{
-			if(!child.isValid())
-			{
-				continue;
-			}
-			if(child instanceof PsiClass)
-			{
-				array.add(new JavaClassTreeElement((PsiClass) child, true));
-			}
-			else if(child instanceof PsiField)
-			{
-				array.add(new PsiFieldTreeElement((PsiField) child, true));
-			}
-			else if(child instanceof PsiMethod)
-			{
-				array.add(new PsiMethodTreeElement((PsiMethod) child, true));
-			}
-			else if(child instanceof PsiClassInitializer)
-			{
-				array.add(new ClassInitializerTreeElement((PsiClassInitializer) child));
-			}
-		}
-		return array;
-	}
+    aClass.processDeclarations(new AddAllMembersProcessor(inherited, aClass), ResolveState.initial(), null, aClass);
+    inherited.removeAll(ownChildren);
+    if (aClass instanceof PsiAnonymousClass) {
+      final PsiElement element = ((PsiAnonymousClass) aClass).getBaseClassReference().resolve();
+      if (element instanceof PsiClass) {
+        ContainerUtil.addAll(inherited, ((PsiClass) element).getInnerClasses());
+      }
+    }
+    List<TreeElement> array = new ArrayList<>();
+    for (PsiElement child : inherited) {
+      if (!child.isValid()) {
+        continue;
+      }
+      if (child instanceof PsiClass) {
+        array.add(new JavaClassTreeElement((PsiClass) child, true));
+      } else if (child instanceof PsiField) {
+        array.add(new PsiFieldTreeElement((PsiField) child, true));
+      } else if (child instanceof PsiMethod) {
+        array.add(new PsiMethodTreeElement((PsiMethod) child, true));
+      } else if (child instanceof PsiClassInitializer) {
+        array.add(new ClassInitializerTreeElement((PsiClassInitializer) child));
+      }
+    }
+    return array;
+  }
 }

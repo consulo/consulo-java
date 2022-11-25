@@ -55,7 +55,7 @@ public class LazyValueBySdk<T> {
       value = myDefaultValue;
     } else if (!Comparing.equal(lastSdk, currentSdk)) {
       myLastSdk = currentSdk;
-      value = myFunc.fun(currentSdk);
+      value = myFunc.apply(currentSdk);
     }
 
     myValue = value;

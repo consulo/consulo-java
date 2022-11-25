@@ -15,10 +15,10 @@
  */
 package com.intellij.java.impl.codeInsight.generation;
 
-import consulo.language.editor.CodeInsightBundle;
-import consulo.ide.impl.idea.codeInsight.generation.ClassMember;
 import com.intellij.java.language.impl.codeInsight.generation.GenerationInfo;
 import com.intellij.java.language.psi.PsiClass;
+import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.generation.ClassMember;
 import consulo.language.util.IncorrectOperationException;
 
 import java.util.ArrayList;

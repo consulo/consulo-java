@@ -15,18 +15,18 @@
  */
 package com.intellij.java.impl.ipp.annotation;
 
-import javax.annotation.Nonnull;
-
+import com.intellij.java.impl.ipp.base.MutablyNamedIntention;
+import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.intellij.java.language.psi.*;
+import com.siyeh.IntentionPowerPackBundle;
 import consulo.codeEditor.CaretModel;
 import consulo.codeEditor.Editor;
 import consulo.fileEditor.FileEditorManager;
-import consulo.project.Project;
-import com.intellij.psi.*;
+import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
-import com.siyeh.IntentionPowerPackBundle;
-import com.intellij.java.impl.ipp.base.MutablyNamedIntention;
-import com.intellij.java.impl.ipp.base.PsiElementPredicate;
+import consulo.project.Project;
+
+import javax.annotation.Nonnull;
 
 public class ExpandToNormalAnnotationIntention extends MutablyNamedIntention {
 

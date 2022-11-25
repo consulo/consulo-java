@@ -15,64 +15,55 @@
  */
 package com.intellij.java.impl.slicer;
 
-import javax.annotation.Nonnull;
-
-import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiSubstitutor;
-import com.intellij.usages.TextChunk;
-import consulo.usage.UsagePresentation;
 import consulo.application.util.function.Processor;
+import consulo.language.psi.PsiElement;
 import consulo.ui.image.Image;
+import consulo.usage.TextChunk;
+import consulo.usage.UsagePresentation;
+
+import javax.annotation.Nonnull;
 
 /**
  * User: cdr
  */
-public class SliceDereferenceUsage extends SliceUsage
-{
-	public SliceDereferenceUsage(@Nonnull PsiElement element, @Nonnull SliceUsage parent, @Nonnull PsiSubstitutor substitutor)
-	{
-		super(element, parent, substitutor, 0, "");
-	}
+public class SliceDereferenceUsage extends SliceUsage {
+  public SliceDereferenceUsage(@Nonnull PsiElement element, @Nonnull SliceUsage parent, @Nonnull PsiSubstitutor substitutor) {
+    super(element, parent, substitutor, 0, "");
+  }
 
-	@Override
-	public void processChildren(@Nonnull Processor<SliceUsage> processor)
-	{
-		// no children
-	}
+  @Override
+  public void processChildren(@Nonnull Processor<SliceUsage> processor) {
+    // no children
+  }
 
-	@Nonnull
-	@Override
-	public UsagePresentation getPresentation()
-	{
-		final UsagePresentation presentation = super.getPresentation();
+  @Nonnull
+  @Override
+  public UsagePresentation getPresentation() {
+    final UsagePresentation presentation = super.getPresentation();
 
-		return new UsagePresentation()
-		{
-			@Override
-			@Nonnull
-			public TextChunk[] getText()
-			{
-				return presentation.getText();
-			}
+    return new UsagePresentation() {
+      @Override
+      @Nonnull
+      public TextChunk[] getText() {
+        return presentation.getText();
+      }
 
-			@Override
-			@Nonnull
-			public String getPlainText()
-			{
-				return presentation.getPlainText();
-			}
+      @Override
+      @Nonnull
+      public String getPlainText() {
+        return presentation.getPlainText();
+      }
 
-			@Override
-			public Image getIcon()
-			{
-				return presentation.getIcon();
-			}
+      @Override
+      public Image getIcon() {
+        return presentation.getIcon();
+      }
 
-			@Override
-			public String getTooltipText()
-			{
-				return "Variable dereferenced";
-			}
-		};
-	}
+      @Override
+      public String getTooltipText() {
+        return "Variable dereferenced";
+      }
+    };
+  }
 }

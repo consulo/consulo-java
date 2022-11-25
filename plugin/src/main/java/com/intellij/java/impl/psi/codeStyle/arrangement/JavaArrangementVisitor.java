@@ -21,22 +21,22 @@ import com.intellij.java.language.psi.util.MethodSignatureBackedByPsiMethod;
 import com.intellij.java.language.psi.util.PropertyUtil;
 import consulo.document.Document;
 import consulo.document.util.TextRange;
-import com.intellij.psi.*;
+import consulo.ide.impl.idea.util.containers.ContainerUtilRt;
 import consulo.language.codeStyle.arrangement.ArrangementSettings;
 import consulo.language.codeStyle.arrangement.ArrangementUtil;
 import consulo.language.codeStyle.arrangement.DefaultArrangementEntry;
 import consulo.language.codeStyle.arrangement.group.ArrangementGroupingRule;
 import consulo.language.codeStyle.arrangement.std.ArrangementSettingsToken;
 import consulo.language.codeStyle.arrangement.std.StdArrangementTokens;
-import consulo.ide.impl.idea.util.Consumer;
-import consulo.util.lang.function.Functions;
+import consulo.language.psi.*;
 import consulo.util.collection.ContainerUtil;
-import consulo.ide.impl.idea.util.containers.ContainerUtilRt;
 import consulo.util.collection.Stack;
+import consulo.util.lang.function.Functions;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.function.Consumer;
 
 import static com.intellij.java.impl.psi.codeStyle.arrangement.ArrangementSectionDetector.ArrangementSectionEntryTemplate;
 import static consulo.language.codeStyle.arrangement.std.StdArrangementTokens.EntryType.*;
@@ -84,10 +84,10 @@ public class JavaArrangementVisitor extends JavaRecursiveElementVisitor {
   private final Document myDocument;
 
   @Nonnull
-  private HashMap<PsiClass, Set<PsiField>> myCachedClassFields = ContainerUtil.newHashMap();
+  private HashMap<PsiClass, Set<PsiField>> myCachedClassFields = new HashMap<>();
 
   @Nonnull
-  private Set<PsiComment> myProcessedSectionsComments = ContainerUtil.newHashSet();
+  private Set<PsiComment> myProcessedSectionsComments = new HashSet<>();
 
   public JavaArrangementVisitor(
       @Nonnull JavaArrangementParseInfo infoHolder,
@@ -102,7 +102,7 @@ public class JavaArrangementVisitor extends JavaRecursiveElementVisitor {
     myMethodBodyProcessor = new MethodBodyProcessor(infoHolder);
     mySectionDetector = new ArrangementSectionDetector(document, settings, new Consumer<ArrangementSectionEntryTemplate>() {
       @Override
-      public void consume(ArrangementSectionEntryTemplate data) {
+      public void accept(ArrangementSectionEntryTemplate data) {
         TextRange range = data.getTextRange();
         JavaSectionArrangementEntry entry = new JavaSectionArrangementEntry(getCurrent(), data.getToken(), range, data.getText(), true);
         registerEntry(data.getElement(), entry);

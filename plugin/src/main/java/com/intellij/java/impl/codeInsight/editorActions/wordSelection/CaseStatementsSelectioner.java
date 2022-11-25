@@ -19,7 +19,7 @@ import com.intellij.java.language.psi.PsiCodeBlock;
 import com.intellij.java.language.psi.PsiJavaToken;
 import com.intellij.java.language.psi.PsiSwitchLabelStatement;
 import com.intellij.java.language.psi.PsiSwitchStatement;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import consulo.document.util.TextRange;
 import consulo.codeEditor.Editor;
 import consulo.document.Document;

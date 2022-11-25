@@ -27,7 +27,7 @@ import consulo.colorScheme.TextAttributes;
 import consulo.project.Project;
 import consulo.document.util.TextRange;
 import consulo.project.ui.wm.WindowManager;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.impl.refactoring.HelpID;

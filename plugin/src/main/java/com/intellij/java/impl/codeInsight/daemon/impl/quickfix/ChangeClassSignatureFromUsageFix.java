@@ -30,7 +30,7 @@ import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.language.editor.intention.BaseIntentionAction;
 import consulo.codeEditor.Editor;
 import consulo.project.Project;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import com.intellij.java.impl.refactoring.changeClassSignature.ChangeClassSignatureDialog;
 import com.intellij.java.impl.refactoring.changeClassSignature.TypeParameterInfo;
 import consulo.language.util.IncorrectOperationException;

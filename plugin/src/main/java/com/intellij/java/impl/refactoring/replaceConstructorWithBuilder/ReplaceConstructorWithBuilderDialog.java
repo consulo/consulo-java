@@ -20,53 +20,38 @@
  */
 package com.intellij.java.impl.refactoring.replaceConstructorWithBuilder;
 
-import java.awt.Dimension;
+import com.intellij.java.impl.refactoring.PackageWrapper;
+import com.intellij.java.impl.refactoring.move.moveClassesOrPackages.DestinationFolderComboBox;
+import com.intellij.java.impl.refactoring.ui.PackageNameReferenceEditorCombo;
+import com.intellij.java.impl.ui.ReferenceEditorComboWithBrowseButton;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.util.TreeClassChooser;
+import com.intellij.java.language.util.TreeClassChooserFactory;
+import consulo.application.ui.wm.ApplicationIdeFocusManager;
+import consulo.configurable.ConfigurationException;
+import consulo.ide.impl.idea.util.ui.Table;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.ui.RefactoringDialog;
+import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.logging.Logger;
+import consulo.project.Project;
+import consulo.ui.ex.awt.*;
+import consulo.ui.ex.awt.event.DocumentAdapter;
+import consulo.ui.ex.awt.util.TableUtil;
+import consulo.util.lang.StringUtil;
+
+import javax.annotation.Nonnull;
+import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableColumnModel;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
-
-import javax.annotation.Nonnull;
-import javax.swing.JComponent;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JScrollPane;
-import javax.swing.JTextField;
-import javax.swing.KeyStroke;
-import javax.swing.ListSelectionModel;
-import javax.swing.event.DocumentEvent;
-import javax.swing.table.AbstractTableModel;
-import javax.swing.table.TableColumnModel;
-
-import com.intellij.java.language.util.TreeClassChooser;
-import com.intellij.java.language.util.TreeClassChooserFactory;
-import consulo.application.ui.wm.IdeFocusManager;
-import consulo.configurable.ConfigurationException;
-import consulo.logging.Logger;
-import consulo.project.Project;
-import consulo.ui.ex.awt.*;
-import consulo.util.lang.StringUtil;
-import com.intellij.java.language.psi.JavaPsiFacade;
-import com.intellij.java.language.psi.PsiClass;
-import com.intellij.java.language.psi.PsiJavaFile;
-import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.java.language.psi.PsiNameHelper;
-import consulo.language.psi.scope.GlobalSearchScope;
-import com.intellij.java.impl.refactoring.PackageWrapper;
-import consulo.language.editor.refactoring.RefactoringBundle;
-import com.intellij.java.impl.refactoring.move.moveClassesOrPackages.DestinationFolderComboBox;
-import com.intellij.java.impl.refactoring.ui.PackageNameReferenceEditorCombo;
-import consulo.language.editor.refactoring.ui.RefactoringDialog;
-import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
-import consulo.ui.ex.awt.BooleanTableCellRenderer;
-import consulo.ui.ex.awt.event.DocumentAdapter;
-import com.intellij.java.impl.ui.ReferenceEditorComboWithBrowseButton;
-import consulo.ui.ex.awt.ScrollPaneFactory;
-import consulo.ui.ex.awt.util.TableUtil;
-import consulo.ui.Table;
-import consulo.ui.ex.awt.UIUtil;
-import consulo.ui.ex.awt.Splitter;
 
 public class ReplaceConstructorWithBuilderDialog extends RefactoringDialog {
   private final PsiMethod[] myConstructors;
@@ -76,7 +61,7 @@ public class ReplaceConstructorWithBuilderDialog extends RefactoringDialog {
 
   private JPanel myWholePanel;
   private JTextField myNewClassName;
-  private ReferenceEditorComboWithBrowseButton  myPackageTextField;
+  private ReferenceEditorComboWithBrowseButton myPackageTextField;
   private ReferenceEditorComboWithBrowseButton myExistentClassTF;
   private ComboboxWithBrowseButton myDestinationCb;
   private JPanel myCreateNewPanel;
@@ -84,7 +69,7 @@ public class ReplaceConstructorWithBuilderDialog extends RefactoringDialog {
   private static final Logger LOG = Logger.getInstance(ReplaceConstructorWithBuilderDialog.class);
   private final LinkedHashMap<String, ParameterData> myParametersMap;
   private MyTableModel myTableModel;
-  private Table myTable;
+  private consulo.ide.impl.idea.util.ui.Table myTable;
   private static final String RECENT_KEYS = "ReplaceConstructorWithBuilder.RECENT_KEYS";
 
 
@@ -120,10 +105,9 @@ public class ReplaceConstructorWithBuilderDialog extends RefactoringDialog {
       if (builderClass != null && !CommonRefactoringUtil.checkReadOnlyStatus(myProject, builderClass)) return;
     }
     invokeRefactoring(new ReplaceConstructorWithBuilderProcessor(getProject(), myConstructors, myParametersMap, className, packageName,
-                                                                 ((DestinationFolderComboBox)myDestinationCb).selectDirectory(new PackageWrapper(myConstructors[0].getManager(), packageName), false),
-                                                                 myCreateBuilderClassRadioButton.isSelected()));
+        ((DestinationFolderComboBox) myDestinationCb).selectDirectory(new PackageWrapper(myConstructors[0].getManager(), packageName), false),
+        myCreateBuilderClassRadioButton.isSelected()));
   }
-
 
 
   protected JComponent createCenterPanel() {
@@ -133,8 +117,8 @@ public class ReplaceConstructorWithBuilderDialog extends RefactoringDialog {
     final ActionListener enableDisableListener = new ActionListener() {
       public void actionPerformed(final ActionEvent e) {
         setEnabled(myCreateBuilderClassRadioButton.isSelected());
-        IdeFocusManager.getInstance(myProject).requestFocus(
-          myCreateBuilderClassRadioButton.isSelected() ? myNewClassName : myExistentClassTF.getChildComponent(), true);
+        ApplicationIdeFocusManager.getInstance().getInstanceForProject(myProject).requestFocus(
+            myCreateBuilderClassRadioButton.isSelected() ? myNewClassName : myExistentClassTF.getChildComponent(), true);
         validateButtons();
       }
     };
@@ -171,17 +155,22 @@ public class ReplaceConstructorWithBuilderDialog extends RefactoringDialog {
   protected void canRun() throws ConfigurationException {
     final PsiNameHelper nameHelper = PsiNameHelper.getInstance(myProject);
     for (ParameterData parameterData : myParametersMap.values()) {
-      if (!nameHelper.isIdentifier(parameterData.getFieldName())) throw new ConfigurationException("\'" + parameterData.getFieldName() + "\' is not a valid field name");
-      if (!nameHelper.isIdentifier(parameterData.getSetterName())) throw new ConfigurationException("\'" + parameterData.getSetterName() + "\' is not a valid setter name");
+      if (!nameHelper.isIdentifier(parameterData.getFieldName()))
+        throw new ConfigurationException("\'" + parameterData.getFieldName() + "\' is not a valid field name");
+      if (!nameHelper.isIdentifier(parameterData.getSetterName()))
+        throw new ConfigurationException("\'" + parameterData.getSetterName() + "\' is not a valid setter name");
     }
     if (myCreateBuilderClassRadioButton.isSelected()) {
       final String className = myNewClassName.getText().trim();
-      if (className.length() == 0 || !nameHelper.isQualifiedName(className)) throw new ConfigurationException("\'" + className + "\' is invalid builder class name");
+      if (className.length() == 0 || !nameHelper.isQualifiedName(className))
+        throw new ConfigurationException("\'" + className + "\' is invalid builder class name");
       final String packageName = myPackageTextField.getText().trim();
-      if (packageName.length() > 0 && !nameHelper.isQualifiedName(packageName)) throw new ConfigurationException("\'" + packageName + "\' is invalid builder package name");
+      if (packageName.length() > 0 && !nameHelper.isQualifiedName(packageName))
+        throw new ConfigurationException("\'" + packageName + "\' is invalid builder package name");
     } else {
       final String qualifiedName = myExistentClassTF.getText().trim();
-      if (qualifiedName.length() == 0 || !nameHelper.isQualifiedName(qualifiedName)) throw new ConfigurationException("\'" + qualifiedName + "\' is invalid builder qualified class name");
+      if (qualifiedName.length() == 0 || !nameHelper.isQualifiedName(qualifiedName))
+        throw new ConfigurationException("\'" + qualifiedName + "\' is invalid builder qualified class name");
     }
   }
 
@@ -195,20 +184,20 @@ public class ReplaceConstructorWithBuilderDialog extends RefactoringDialog {
     columnModel.getColumn(SKIP_SETTER).setCellRenderer(new BooleanTableCellRenderer());
 
     myTable.registerKeyboardAction(
-      new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          final int[] selectedRows = myTable.getSelectedRows();
-          for (final int selectedRow : selectedRows) {
-            final ParameterData parameterData = myTableModel.getParamData(selectedRow);
-            if (parameterData.getDefaultValue() != null) {
-              parameterData.setInsertSetter(!parameterData.isInsertSetter());
+        new ActionListener() {
+          public void actionPerformed(ActionEvent e) {
+            final int[] selectedRows = myTable.getSelectedRows();
+            for (final int selectedRow : selectedRows) {
+              final ParameterData parameterData = myTableModel.getParamData(selectedRow);
+              if (parameterData.getDefaultValue() != null) {
+                parameterData.setInsertSetter(!parameterData.isInsertSetter());
+              }
             }
+            TableUtil.selectRows(myTable, selectedRows);
           }
-          TableUtil.selectRows(myTable, selectedRows);
-        }
-      },
-      KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0),
-      JComponent.WHEN_FOCUSED
+        },
+        KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0),
+        JComponent.WHEN_FOCUSED
     );
 
     myTable.setPreferredScrollableViewportSize(new Dimension(550, myTable.getRowHeight() * 12));
@@ -230,14 +219,15 @@ public class ReplaceConstructorWithBuilderDialog extends RefactoringDialog {
   private static final int SKIP_SETTER = 4;
 
   private void createUIComponents() {
-    final com.intellij.openapi.editor.event.DocumentAdapter adapter = new com.intellij.openapi.editor.event.DocumentAdapter() {
-      public void documentChanged(com.intellij.openapi.editor.event.DocumentEvent e) {
+    final consulo.document.event.DocumentAdapter adapter = new consulo.document.event.DocumentAdapter() {
+      @Override
+      public void documentChanged(consulo.document.event.DocumentEvent e) {
         validateButtons();
       }
     };
 
     myPackageTextField =
-      new PackageNameReferenceEditorCombo(((PsiJavaFile)myConstructors[0].getContainingFile()).getPackageName(), myProject, RECENT_KEYS, RefactoringBundle.message("choose.destination.package"));
+        new PackageNameReferenceEditorCombo(((PsiJavaFile) myConstructors[0].getContainingFile()).getPackageName(), myProject, RECENT_KEYS, RefactoringBundle.message("choose.destination.package"));
     myPackageTextField.getChildComponent().getDocument().addDocumentListener(adapter);
 
     myDestinationCb = new DestinationFolderComboBox() {
@@ -246,12 +236,12 @@ public class ReplaceConstructorWithBuilderDialog extends RefactoringDialog {
         return myPackageTextField.getText().trim();
       }
     };
-    ((DestinationFolderComboBox)myDestinationCb).setData(myProject, myConstructors[0].getContainingFile().getContainingDirectory(), myPackageTextField.getChildComponent());
+    ((DestinationFolderComboBox) myDestinationCb).setData(myProject, myConstructors[0].getContainingFile().getContainingDirectory(), myPackageTextField.getChildComponent());
 
     myExistentClassTF = new ReferenceEditorComboWithBrowseButton(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
         final TreeClassChooser chooser = TreeClassChooserFactory.getInstance(getProject())
-          .createWithInnerClassesScopeChooser("Select Builder Class", GlobalSearchScope.projectScope(myProject), null, null);
+            .createWithInnerClassesScopeChooser("Select Builder Class", GlobalSearchScope.projectScope(myProject), null, null);
         final String classText = myExistentClassTF.getText();
         final PsiClass currentClass = JavaPsiFacade.getInstance(myProject).findClass(classText, GlobalSearchScope.allScope(myProject));
         if (currentClass != null) {
@@ -310,16 +300,16 @@ public class ReplaceConstructorWithBuilderDialog extends RefactoringDialog {
       final ParameterData data = getParamData(rowIndex);
       switch (columnIndex) {
         case FIELD:
-          data.setFieldName((String)aValue);
+          data.setFieldName((String) aValue);
           break;
         case SETTER:
-          data.setSetterName((String)aValue);
+          data.setSetterName((String) aValue);
           break;
         case DEFAULT_VALUE:
-          data.setDefaultValue((String)aValue);
+          data.setDefaultValue((String) aValue);
           break;
         case SKIP_SETTER:
-          data.setInsertSetter(!((Boolean)aValue).booleanValue());
+          data.setInsertSetter(!((Boolean) aValue).booleanValue());
           break;
         default:
           assert false;
@@ -350,7 +340,7 @@ public class ReplaceConstructorWithBuilderDialog extends RefactoringDialog {
         case SKIP_SETTER:
           return "Optional Setter";
       }
-      assert false: "unknown column " + column;
+      assert false : "unknown column " + column;
       return null;
     }
   }

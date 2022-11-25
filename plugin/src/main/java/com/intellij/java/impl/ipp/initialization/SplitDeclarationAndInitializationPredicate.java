@@ -18,7 +18,7 @@ package com.intellij.java.impl.ipp.initialization;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiField;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.intellij.java.impl.ipp.psiutils.ErrorUtil;
 import javax.annotation.Nonnull;

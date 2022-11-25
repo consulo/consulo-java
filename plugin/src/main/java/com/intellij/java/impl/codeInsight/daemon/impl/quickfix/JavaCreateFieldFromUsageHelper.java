@@ -15,7 +15,9 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
+import com.intellij.java.language.JavaLanguage;
 import consulo.ide.impl.idea.codeInsight.CodeInsightUtilBase;
+import consulo.language.Language;
 import consulo.language.editor.template.EmptyExpression;
 import consulo.language.editor.template.Template;
 import consulo.language.editor.impl.internal.template.TemplateBuilderImpl;
@@ -31,7 +33,7 @@ import javax.annotation.Nonnull;
 /**
  * @author Max Medvedev
  */
-public class JavaCreateFieldFromUsageHelper extends CreateFieldFromUsageHelper {
+public class JavaCreateFieldFromUsageHelper implements CreateFieldFromUsageHelper {
 
   @Override
   public Template setupTemplateImpl(PsiField field,
@@ -77,4 +79,9 @@ public class JavaCreateFieldFromUsageHelper extends CreateFieldFromUsageHelper {
     return BaseExpressionToFieldHandler.ConvertToFieldRunnable.appendField(targetClass, field, enclosingContext, null);
   }
 
+  @Nonnull
+  @Override
+  public Language getLanguage() {
+    return JavaLanguage.INSTANCE;
+  }
 }

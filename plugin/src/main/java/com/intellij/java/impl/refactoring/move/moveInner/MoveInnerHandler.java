@@ -15,13 +15,27 @@
  */
 package com.intellij.java.impl.refactoring.move.moveInner;
 
-import javax.annotation.Nonnull;
-
-import consulo.language.extension.LanguageExtension;
 import com.intellij.java.language.psi.PsiClass;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ExtensionAPI;
+import consulo.application.Application;
+import consulo.component.extension.ExtensionPointCacheKey;
+import consulo.language.Language;
+import consulo.language.extension.ByLanguageValue;
+import consulo.language.extension.LanguageExtension;
+import consulo.language.extension.LanguageOneToOne;
 
-public interface MoveInnerHandler {
-  LanguageExtension<MoveInnerHandler> EP_NAME = new LanguageExtension<MoveInnerHandler>("consulo.java.refactoring.moveInnerHandler");
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+@ExtensionAPI(ComponentScope.APPLICATION)
+public interface MoveInnerHandler extends LanguageExtension {
+  ExtensionPointCacheKey<MoveInnerHandler, ByLanguageValue<MoveInnerHandler>> KEY = ExtensionPointCacheKey.create("MoveInnerHandler", LanguageOneToOne.build());
+
+  @Nullable
+  static MoveInnerHandler forLanguage(@Nonnull Language language) {
+    return Application.get().getExtensionPoint(MoveInnerHandler.class).getOrBuildCache(KEY).get(language);
+  }
 
   @Nonnull
   PsiClass copyClass(@Nonnull MoveInnerOptions options);

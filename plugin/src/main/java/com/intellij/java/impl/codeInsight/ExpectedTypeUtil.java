@@ -17,7 +17,7 @@ package com.intellij.java.impl.codeInsight;
 
 import com.intellij.java.language.psi.*;
 import consulo.logging.Logger;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import com.intellij.java.impl.psi.impl.source.resolve.CompletionParameterTypeInferencePolicy;
 import com.intellij.java.language.psi.impl.source.resolve.DefaultParameterTypeInferencePolicy;
 import com.intellij.java.language.psi.util.PsiUtil;

@@ -15,19 +15,19 @@
  */
 package com.intellij.java.impl.ipp.trivialif;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import consulo.util.lang.StringUtil;
-import com.intellij.psi.*;
-import consulo.language.codeStyle.CodeStyleManager;
-import consulo.language.ast.IElementType;
-import com.siyeh.ig.psiutils.ParenthesesUtils;
 import com.intellij.java.impl.ipp.base.Intention;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.intellij.java.impl.ipp.psiutils.ErrorUtil;
+import com.intellij.java.language.psi.*;
+import com.siyeh.ig.psiutils.ParenthesesUtils;
+import consulo.language.ast.IElementType;
+import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.psi.PsiElement;
+import consulo.project.Project;
+import consulo.util.lang.StringUtil;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * @author anna

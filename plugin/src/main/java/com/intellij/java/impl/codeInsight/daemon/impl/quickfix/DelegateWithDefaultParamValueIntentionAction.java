@@ -15,35 +15,34 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
-import java.util.Arrays;
-import java.util.HashSet;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
+import com.intellij.java.impl.codeInsight.template.impl.TextExpression;
+import com.intellij.java.impl.refactoring.util.RefactoringUtil;
+import com.intellij.java.language.JavaLanguage;
+import com.intellij.java.language.psi.*;
+import consulo.application.AllIcons;
+import consulo.application.ApplicationManager;
+import consulo.codeEditor.Editor;
+import consulo.component.util.Iconable;
+import consulo.document.RangeMarker;
+import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.hint.HintManager;
+import consulo.language.editor.impl.internal.template.TemplateBuilderImpl;
 import consulo.language.editor.intention.LowPriorityAction;
 import consulo.language.editor.intention.PsiElementBaseIntentionAction;
 import consulo.language.editor.template.Template;
-import consulo.language.editor.impl.internal.template.TemplateBuilderImpl;
-import com.intellij.java.impl.codeInsight.template.impl.TextExpression;
-import consulo.application.AllIcons;
-import com.intellij.java.language.JavaLanguage;
-import com.intellij.java.language.psi.*;
-import consulo.application.ApplicationManager;
-import consulo.codeEditor.Editor;
-import consulo.document.RangeMarker;
-import consulo.project.Project;
-import consulo.component.util.Iconable;
-import consulo.util.lang.StringUtil;
-import com.intellij.psi.*;
-import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.psi.PsiDocumentManager;
+import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
-import com.intellij.java.impl.refactoring.util.RefactoringUtil;
-import consulo.util.collection.ArrayUtil;
-import consulo.ide.impl.idea.util.Function;
 import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
 import consulo.ui.image.Image;
+import consulo.util.collection.ArrayUtil;
+import consulo.util.lang.StringUtil;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Arrays;
+import java.util.HashSet;
 
 /**
  * User: anna
@@ -113,12 +112,9 @@ public class DelegateWithDefaultParamValueIntentionAction extends PsiElementBase
 
         PsiCodeBlock body = prototype.getBody();
         final String callArgs =
-          "(" + StringUtil.join(method.getParameterList().getParameters(), new Function<PsiParameter, String>() {
-            @Override
-            public String fun(PsiParameter psiParameter) {
-              if (ArrayUtil.find(parameters, psiParameter) > -1) return "IntelliJIDEARulezzz";
-              return psiParameter.getName();
-            }
+          "(" + StringUtil.join(method.getParameterList().getParameters(), psiParameter -> {
+            if (ArrayUtil.find(parameters, psiParameter) > -1) return "IntelliJIDEARulezzz";
+            return psiParameter.getName();
           }, ",") + ");";
         final String methodCall;
         if (method.getReturnType() == null) {

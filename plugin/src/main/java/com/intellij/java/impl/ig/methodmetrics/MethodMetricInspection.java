@@ -16,9 +16,9 @@
 package com.intellij.java.impl.ig.methodmetrics;
 
 import com.siyeh.ig.BaseInspection;
-import consulo.ide.impl.idea.codeInspection.ui.SingleIntegerFieldOptionsPanel;
+import consulo.language.editor.inspection.ui.SingleIntegerFieldOptionsPanel;
 
-import javax.swing.JComponent;
+import javax.swing.*;
 
 public abstract class MethodMetricInspection extends BaseInspection {
 

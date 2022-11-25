@@ -15,17 +15,31 @@
  */
 package com.intellij.java.impl.codeInsight.generation;
 
-import javax.annotation.Nonnull;
-
-import consulo.language.extension.LanguageExtension;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiParameter;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ExtensionAPI;
+import consulo.application.Application;
+import consulo.component.extension.ExtensionPointCacheKey;
+import consulo.language.Language;
+import consulo.language.extension.ByLanguageValue;
+import consulo.language.extension.LanguageExtension;
+import consulo.language.extension.LanguageOneToOne;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
-* @author Max Medvedev
-*/
-public interface ConstructorBodyGenerator {
-  LanguageExtension<ConstructorBodyGenerator> INSTANCE = new LanguageExtension<ConstructorBodyGenerator>("consulo.java.constructorBodyGenerator");
+ * @author Max Medvedev
+ */
+@ExtensionAPI(ComponentScope.APPLICATION)
+public interface ConstructorBodyGenerator extends LanguageExtension {
+  ExtensionPointCacheKey<ConstructorBodyGenerator, ByLanguageValue<ConstructorBodyGenerator>> KEY = ExtensionPointCacheKey.create("ConstructorBodyGenerator", LanguageOneToOne.build());
+
+  @Nullable
+  static ConstructorBodyGenerator forLanguage(@Nonnull Language language) {
+    return Application.get().getExtensionPoint(ConstructorBodyGenerator.class).getOrBuildCache(KEY).get(language);
+  }
 
   void generateFieldInitialization(@Nonnull StringBuilder buffer, @Nonnull PsiField[] fields, @Nonnull PsiParameter[] parameters);
 

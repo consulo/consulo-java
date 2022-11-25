@@ -16,7 +16,7 @@
 package com.intellij.java.impl.util.xml;
 
 import com.intellij.java.language.psi.PsiType;
-import com.intellij.util.xml.Converter;
+import consulo.xml.util.xml.Converter;
 
 /**
  * Converter for {@link PsiType} that uses {@link PsiType#getCanonicalText()}

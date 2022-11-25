@@ -33,7 +33,7 @@ import javax.annotation.Nullable;
 
 import java.util.Set;
 
-public class ClassUnconnectedToPackageInspection extends BaseGlobalInspection {
+public abstract class ClassUnconnectedToPackageInspection extends BaseGlobalInspection {
 
   @Nonnull
   @Override

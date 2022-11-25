@@ -10,7 +10,7 @@ import com.intellij.java.language.psi.*;
 import consulo.application.ApplicationManager;
 import consulo.document.util.TextRange;
 import consulo.util.lang.StringUtil;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import consulo.language.psi.util.PsiTreeUtil;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import one.util.streamex.StreamEx;
@@ -27,7 +27,7 @@ import static com.intellij.java.analysis.impl.codeInspection.dataFlow.StandardMe
 /**
  * @author peter
  */
-public class ContractInspection extends AbstractBaseJavaLocalInspectionTool {
+public abstract class ContractInspection extends AbstractBaseJavaLocalInspectionTool {
   @Override
   @Nonnull
   public PsiElementVisitor buildVisitor(@Nonnull final ProblemsHolder holder, final boolean isOnTheFly) {

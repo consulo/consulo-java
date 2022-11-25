@@ -20,7 +20,7 @@ import com.intellij.java.language.psi.*;
 import consulo.language.BracePair;
 import consulo.language.PairedBraceMatcher;
 import consulo.document.util.TextRange;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import com.intellij.java.language.impl.psi.impl.source.tree.ElementType;
 import consulo.language.ast.IElementType;
 import com.intellij.java.language.psi.tree.java.IJavaElementType;

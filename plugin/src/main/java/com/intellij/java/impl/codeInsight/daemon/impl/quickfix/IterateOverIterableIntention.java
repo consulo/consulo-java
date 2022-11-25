@@ -15,26 +15,29 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
-import consulo.language.editor.intention.IntentionAction;
-import consulo.ide.impl.idea.codeInsight.template.impl.InvokeTemplateAction;
-import consulo.language.editor.impl.internal.template.TemplateImpl;
-import consulo.ide.impl.idea.codeInsight.template.impl.TemplateManagerImpl;
-import consulo.language.editor.template.TemplateSettings;
 import com.intellij.java.language.psi.*;
-import consulo.logging.Logger;
+import com.intellij.java.language.psi.util.InheritanceUtil;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.SelectionModel;
-import consulo.project.Project;
 import consulo.document.util.TextRange;
-import com.intellij.psi.*;
-import com.intellij.java.language.psi.util.InheritanceUtil;
+import consulo.ide.impl.idea.codeInsight.template.impl.InvokeTemplateAction;
+import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.editor.impl.internal.template.TemplateImpl;
+import consulo.language.editor.intention.IntentionAction;
+import consulo.language.editor.template.Template;
+import consulo.language.editor.template.TemplateManager;
+import consulo.language.editor.template.TemplateSettings;
+import consulo.language.psi.PsiComment;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiWhiteSpace;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
-import consulo.java.language.module.util.JavaClassNames;
+import consulo.logging.Logger;
+import consulo.project.Project;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import java.util.HashSet;
 
 /**
@@ -45,7 +48,7 @@ public class IterateOverIterableIntention implements IntentionAction {
 
   @Override
   public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
-    final TemplateImpl template = getTemplate();
+    final Template template = getTemplate();
     if (template != null) {
       int offset = editor.getCaretModel().getOffset();
       int startOffset = offset;
@@ -63,8 +66,8 @@ public class IterateOverIterableIntention implements IntentionAction {
         startOffset = psiStatement.getTextRange().getStartOffset();
       }
       if (!template.isDeactivated() &&
-          (TemplateManagerImpl.isApplicable(file, offset, template) ||
-           (TemplateManagerImpl.isApplicable(file, startOffset, template)))) {
+          (TemplateManager.getInstance(project).isApplicable(file, offset, template) ||
+           (TemplateManager.getInstance(project).isApplicable(file, startOffset, template)))) {
         return getIterableExpression(editor, file) != null;
       }
     }
@@ -72,7 +75,7 @@ public class IterateOverIterableIntention implements IntentionAction {
   }
 
   @Nullable
-  private static TemplateImpl getTemplate() {
+  private static Template getTemplate() {
     return TemplateSettings.getInstance().getTemplate("I", "surround");
   }
 
@@ -126,7 +129,7 @@ public class IterateOverIterableIntention implements IntentionAction {
 
   @Override
   public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
-    final TemplateImpl template = getTemplate();
+    final Template template = getTemplate();
     SelectionModel selectionModel = editor.getSelectionModel();
     if (!selectionModel.hasSelection()) {
       final PsiExpression iterableExpression = getIterableExpression(editor, file);

@@ -19,7 +19,7 @@ import com.intellij.java.language.psi.JavaRecursiveElementWalkingVisitor;
 import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
 import com.intellij.java.language.psi.PsiMember;
 import com.intellij.java.language.psi.PsiReferenceExpression;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import javax.annotation.Nonnull;
 
 import java.util.HashSet;

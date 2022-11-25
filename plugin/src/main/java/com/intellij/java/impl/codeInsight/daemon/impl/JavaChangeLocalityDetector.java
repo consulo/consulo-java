@@ -26,7 +26,7 @@ import com.intellij.java.language.psi.PsiAnonymousClass;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiCodeBlock;
 import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 
 import javax.annotation.Nullable;
 

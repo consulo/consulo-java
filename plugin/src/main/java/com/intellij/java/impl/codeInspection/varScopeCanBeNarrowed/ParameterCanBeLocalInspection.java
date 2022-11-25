@@ -41,7 +41,7 @@ import java.util.*;
 /**
  * @author Danila Ponomarenko
  */
-public class ParameterCanBeLocalInspection extends BaseJavaLocalInspectionTool {
+public abstract class ParameterCanBeLocalInspection extends BaseJavaLocalInspectionTool {
 
   @NonNls
   public static final String SHORT_NAME = "ParameterCanBeLocal";

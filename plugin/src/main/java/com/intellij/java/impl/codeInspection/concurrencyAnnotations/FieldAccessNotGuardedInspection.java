@@ -23,7 +23,7 @@ import com.intellij.java.analysis.impl.codeInspection.BaseJavaLocalInspectionToo
 import consulo.language.editor.inspection.ProblemsHolder;
 import com.intellij.java.analysis.impl.codeInspection.concurrencyAnnotations.JCiPUtil;
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import consulo.language.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.Nls;
 

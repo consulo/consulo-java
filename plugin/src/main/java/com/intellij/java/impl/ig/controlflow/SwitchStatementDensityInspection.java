@@ -15,17 +15,17 @@
  */
 package com.intellij.java.impl.ig.controlflow;
 
+import com.intellij.java.impl.ig.psiutils.SwitchUtils;
 import com.intellij.java.language.psi.*;
-import consulo.ide.impl.idea.codeInspection.ui.SingleIntegerFieldOptionsPanel;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import com.intellij.java.impl.ig.psiutils.SwitchUtils;
-import javax.annotation.Nonnull;
+import consulo.language.editor.inspection.ui.SingleIntegerFieldOptionsPanel;
 
+import javax.annotation.Nonnull;
 import javax.swing.*;
 
-public class SwitchStatementDensityInspection extends BaseInspection {
+public abstract class SwitchStatementDensityInspection extends BaseInspection {
 
   private static final int DEFAULT_DENSITY_LIMIT = 20;
 

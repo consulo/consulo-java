@@ -15,15 +15,16 @@
  */
 package com.intellij.java.impl.refactoring.typeCook;
 
+import com.intellij.java.impl.refactoring.typeCook.deductive.PsiTypeVariableFactory;
 import com.intellij.java.language.impl.psi.Bottom;
 import com.intellij.java.language.impl.psi.PsiTypeVariable;
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.*;
-import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.java.impl.refactoring.typeCook.deductive.PsiTypeVariableFactory;
-import consulo.language.util.IncorrectOperationException;
 import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiManager;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 
 import java.util.HashSet;

@@ -15,14 +15,18 @@
  */
 package com.intellij.java.impl.codeInsight.generation;
 
-import javax.annotation.Nonnull;
-
+import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiParameter;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.Language;
+
+import javax.annotation.Nonnull;
 
 /**
 * @author Max Medvedev
 */
+@ExtensionImpl
 public class JavaConstructorBodyWithSuperCallGenerator implements ConstructorBodyGenerator {
   @Override
   public void generateFieldInitialization(@Nonnull StringBuilder buffer,
@@ -70,5 +74,11 @@ public class JavaConstructorBodyWithSuperCallGenerator implements ConstructorBod
   @Override
   public void finish(StringBuilder buffer) {
     buffer.append('}');
+  }
+
+  @Nonnull
+  @Override
+  public Language getLanguage() {
+    return JavaLanguage.INSTANCE;
   }
 }

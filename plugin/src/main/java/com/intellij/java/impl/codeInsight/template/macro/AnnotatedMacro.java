@@ -16,22 +16,27 @@
 
 package com.intellij.java.impl.codeInsight.template.macro;
 
-import consulo.language.editor.completion.lookup.LookupElement;
-import consulo.language.editor.completion.lookup.LookupElementBuilder;
-import com.intellij.codeInsight.template.*;
 import com.intellij.java.impl.codeInsight.template.JavaCodeContextType;
-import consulo.project.Project;
+import com.intellij.java.indexing.search.searches.AnnotatedMembersSearch;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
-import consulo.language.psi.PsiManager;
 import com.intellij.java.language.psi.PsiMember;
-import consulo.language.psi.scope.GlobalSearchScope;
-import com.intellij.java.indexing.search.searches.AnnotatedMembersSearch;
 import consulo.application.util.query.Query;
+import consulo.language.editor.completion.lookup.LookupElement;
+import consulo.language.editor.completion.lookup.LookupElementBuilder;
+import consulo.language.editor.template.Expression;
+import consulo.language.editor.template.ExpressionContext;
+import consulo.language.editor.template.Result;
+import consulo.language.editor.template.TextResult;
+import consulo.language.editor.template.context.TemplateContextType;
+import consulo.language.editor.template.macro.Macro;
+import consulo.language.psi.PsiManager;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.project.Project;
 import org.jetbrains.annotations.NonNls;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import java.util.LinkedHashSet;
 import java.util.Set;
 

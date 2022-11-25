@@ -15,12 +15,7 @@
  */
 package com.intellij.java.impl.ig.classlayout;
 
-import javax.annotation.Nonnull;
-
-import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import com.intellij.psi.*;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.java.language.psi.javadoc.PsiDocTag;
 import com.intellij.java.language.psi.util.PsiUtil;
@@ -29,6 +24,11 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.project.Project;
+
+import javax.annotation.Nonnull;
 
 public class MissingDeprecatedAnnotationInspection extends BaseInspection {
 

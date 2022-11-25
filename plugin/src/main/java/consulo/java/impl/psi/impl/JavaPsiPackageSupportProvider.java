@@ -15,44 +15,40 @@
  */
 package consulo.java.impl.psi.impl;
 
-import javax.annotation.Nonnull;
-
-import consulo.java.language.module.extension.JavaModuleExtension;
-import consulo.module.Module;
-import consulo.language.psi.PsiManager;
-import com.intellij.java.language.psi.PsiNameHelper;
 import com.intellij.java.language.impl.psi.impl.file.PsiPackageImpl;
+import com.intellij.java.language.psi.PsiNameHelper;
+import consulo.java.language.module.extension.JavaModuleExtension;
+import consulo.language.psi.PsiManager;
+import consulo.language.psi.PsiPackage;
+import consulo.language.psi.PsiPackageManager;
+import consulo.language.psi.PsiPackageSupportProvider;
+import consulo.module.Module;
 import consulo.module.extension.ModuleExtension;
-import consulo.psi.PsiPackage;
-import consulo.psi.PsiPackageManager;
-import consulo.psi.PsiPackageSupportProvider;
+
+import javax.annotation.Nonnull;
 
 /**
  * @author VISTALL
  * @since 8:43/20.05.13
  */
-public class JavaPsiPackageSupportProvider implements PsiPackageSupportProvider
-{
-	@Override
-	public boolean isSupported(@Nonnull ModuleExtension moduleExtension)
-	{
-		return moduleExtension instanceof JavaModuleExtension;
-	}
+public class JavaPsiPackageSupportProvider implements PsiPackageSupportProvider {
+  @Override
+  public boolean isSupported(@Nonnull ModuleExtension moduleExtension) {
+    return moduleExtension instanceof JavaModuleExtension;
+  }
 
-	@Override
-	public boolean isValidPackageName(@Nonnull Module module, @Nonnull String packageName)
-	{
-		return PsiNameHelper.getInstance(module.getProject()).isQualifiedName(packageName);
-	}
+  @Override
+  public boolean isValidPackageName(@Nonnull Module module, @Nonnull String packageName) {
+    return PsiNameHelper.getInstance(module.getProject()).isQualifiedName(packageName);
+  }
 
-	@Nonnull
-	@Override
-	public PsiPackage createPackage(
-			@Nonnull PsiManager psiManager,
-			@Nonnull PsiPackageManager packageManager,
-			@Nonnull Class<? extends ModuleExtension> extensionClass,
-			@Nonnull String packageName)
-	{
-		return new PsiPackageImpl(psiManager, packageManager, extensionClass, packageName);
-	}
+  @Nonnull
+  @Override
+  public PsiPackage createPackage(
+      @Nonnull PsiManager psiManager,
+      @Nonnull PsiPackageManager packageManager,
+      @Nonnull Class<? extends ModuleExtension> extensionClass,
+      @Nonnull String packageName) {
+    return new PsiPackageImpl(psiManager, packageManager, extensionClass, packageName);
+  }
 }

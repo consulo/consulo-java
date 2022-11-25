@@ -15,17 +15,6 @@
  */
 package com.intellij.java.impl.codeInsight.generation;
 
-import consulo.externalService.statistic.FeatureUsageTracker;
-import consulo.fileEditor.FileEditorManager;
-import consulo.language.editor.action.CodeInsightActionHandler;
-import consulo.language.editor.CodeInsightBundle;
-import com.intellij.codeInsight.generation.ImplementMethodsHandler;
-import com.intellij.codeInsight.generation.OverrideMethodsHandler;
-import consulo.ide.impl.idea.featureStatistics.ProductivityFeatureNames;
-import consulo.fileTemplate.FileTemplate;
-import consulo.fileTemplate.FileTemplateManager;
-import consulo.fileTemplate.FileTemplateUtil;
-import consulo.ide.impl.idea.ide.util.MemberChooser;
 import com.intellij.java.analysis.impl.codeInsight.intention.AddAnnotationFix;
 import com.intellij.java.analysis.impl.codeInsight.intention.AddAnnotationPsiFix;
 import com.intellij.java.impl.codeInsight.MethodImplementor;
@@ -39,39 +28,46 @@ import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.infos.CandidateInfo;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.java.language.psi.util.*;
-import consulo.language.file.FileTypeManager;
-import consulo.ui.ex.action.KeyboardShortcut;
-import consulo.ui.ex.action.Shortcut;
 import consulo.application.ApplicationManager;
 import consulo.application.Result;
-import consulo.ui.ex.awt.DialogWrapper;
-import consulo.undoRedo.CommandProcessor;
-import consulo.language.editor.WriteCommandAction;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.ScrollType;
 import consulo.component.extension.Extensions;
-import consulo.navigation.OpenFileDescriptor;
-import consulo.virtualFileSystem.fileType.FileType;
-import consulo.ui.ex.keymap.Keymap;
-import consulo.ui.ex.keymap.KeymapManager;
-import consulo.module.Module;
-import consulo.language.util.ModuleUtilCore;
-import consulo.project.Project;
-import consulo.ui.ex.awt.Messages;
-import consulo.util.lang.StringUtil;
-import consulo.language.psi.PsiDocumentManager;
-import consulo.language.psi.PsiElement;
-import consulo.language.psi.PsiFile;
+import consulo.externalService.statistic.FeatureUsageTracker;
+import consulo.fileEditor.FileEditorManager;
+import consulo.fileTemplate.FileTemplate;
+import consulo.fileTemplate.FileTemplateManager;
+import consulo.fileTemplate.FileTemplateUtil;
+import consulo.ide.impl.idea.featureStatistics.ProductivityFeatureNames;
+import consulo.ide.impl.idea.ide.util.MemberChooser;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.codeStyle.CodeStyleSettingsManager;
 import consulo.language.codeStyle.CommonCodeStyleSettings;
+import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.WriteCommandAction;
+import consulo.language.editor.action.CodeInsightActionHandler;
+import consulo.language.file.FileTypeManager;
+import consulo.language.psi.PsiDocumentManager;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.util.PsiTreeUtil;
-import consulo.ide.impl.idea.util.Consumer;
-import consulo.ide.impl.idea.util.Function;
 import consulo.language.util.IncorrectOperationException;
-import consulo.util.collection.ContainerUtil;
+import consulo.language.util.ModuleUtilCore;
 import consulo.logging.Logger;
+import consulo.module.Module;
+import consulo.navigation.OpenFileDescriptor;
+import consulo.project.Project;
+import consulo.ui.ex.action.KeyboardShortcut;
+import consulo.ui.ex.action.Shortcut;
+import consulo.ui.ex.awt.DialogWrapper;
+import consulo.ui.ex.awt.Messages;
+import consulo.ui.ex.keymap.Keymap;
+import consulo.ui.ex.keymap.KeymapManager;
+import consulo.undoRedo.CommandProcessor;
+import consulo.util.collection.ContainerUtil;
+import consulo.util.lang.StringUtil;
+import consulo.virtualFileSystem.fileType.FileType;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
@@ -79,6 +75,8 @@ import javax.annotation.Nullable;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.util.*;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 public class OverrideImplementUtil extends OverrideImplementExploreUtil {
   private static final Logger LOG = Logger.getInstance(OverrideImplementUtil.class);
@@ -142,7 +140,7 @@ public class OverrideImplementUtil extends OverrideImplementExploreUtil {
     for (final MethodImplementor implementor : getImplementors()) {
       final PsiMethod[] prototypes = implementor.createImplementationPrototypes(aClass, method);
       for (PsiMethod prototype : prototypes) {
-        implementor.createDecorator(aClass, method, toCopyJavaDoc, insertOverrideIfPossible).consume(prototype);
+        implementor.createDecorator(aClass, method, toCopyJavaDoc, insertOverrideIfPossible).accept(prototype);
         results.add(prototype);
       }
     }
@@ -166,7 +164,7 @@ public class OverrideImplementUtil extends OverrideImplementExploreUtil {
         }
       }
       Consumer<PsiMethod> decorator = createDefaultDecorator(aClass, method, toCopyJavaDoc, insertOverrideIfPossible);
-      decorator.consume(result);
+      decorator.accept(result);
       results.add(result);
     }
 
@@ -180,12 +178,7 @@ public class OverrideImplementUtil extends OverrideImplementExploreUtil {
   }
 
   public static Consumer<PsiMethod> createDefaultDecorator(final PsiClass aClass, final PsiMethod method, final boolean toCopyJavaDoc, final boolean insertOverrideIfPossible) {
-    return new Consumer<PsiMethod>() {
-      @Override
-      public void consume(PsiMethod result) {
-        decorateMethod(aClass, method, toCopyJavaDoc, insertOverrideIfPossible, result);
-      }
-    };
+    return result -> decorateMethod(aClass, method, toCopyJavaDoc, insertOverrideIfPossible, result);
   }
 
   private static PsiMethod decorateMethod(PsiClass aClass, PsiMethod method, boolean toCopyJavaDoc, boolean insertOverrideIfPossible, PsiMethod result) {
@@ -293,7 +286,7 @@ public class OverrideImplementUtil extends OverrideImplementExploreUtil {
                                                                               boolean toInsertAtOverride) throws IncorrectOperationException {
     List<CandidateInfo> candidateInfos = ContainerUtil.map2List(candidates, new Function<PsiMethodMember, CandidateInfo>() {
       @Override
-      public CandidateInfo fun(final PsiMethodMember s) {
+      public CandidateInfo apply(final PsiMethodMember s) {
         return new CandidateInfo(s.getElement(), s.getSubstitutor());
       }
     });
@@ -316,7 +309,7 @@ public class OverrideImplementUtil extends OverrideImplementExploreUtil {
   public static List<PsiGenerationInfo<PsiMethod>> convert2GenerationInfos(final Collection<PsiMethod> methods) {
     return ContainerUtil.map2List(methods, new Function<PsiMethod, PsiGenerationInfo<PsiMethod>>() {
       @Override
-      public PsiGenerationInfo<PsiMethod> fun(final PsiMethod s) {
+      public PsiGenerationInfo<PsiMethod> apply(final PsiMethod s) {
         return createGenerationInfo(s);
       }
     });
@@ -529,7 +522,7 @@ public class OverrideImplementUtil extends OverrideImplementExploreUtil {
           ApplicationManager.getApplication().invokeLater(new Runnable() {
             @Override
             public void run() {
-              final CodeInsightActionHandler handler = toImplement ? new OverrideMethodsHandler() : new ImplementMethodsHandler();
+              final CodeInsightActionHandler handler = toImplement ? new JavaOverrideMethodsHandler() : new JavaImplementMethodsHandler();
               handler.invoke(project, editor, aClass.getContainingFile());
             }
           });

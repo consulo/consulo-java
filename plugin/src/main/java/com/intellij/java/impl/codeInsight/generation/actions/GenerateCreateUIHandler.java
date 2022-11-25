@@ -15,19 +15,20 @@
  */
 package com.intellij.java.impl.codeInsight.generation.actions;
 
-import javax.annotation.Nonnull;
-
-import consulo.language.editor.action.CodeInsightActionHandler;
-import com.intellij.java.language.psi.*;
-import consulo.codeEditor.Editor;
-import consulo.project.Project;
 import com.intellij.java.language.LanguageLevel;
-import com.intellij.psi.*;
-import consulo.language.codeStyle.CodeStyleManager;
+import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
-import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.codeEditor.Editor;
+import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.editor.action.CodeInsightActionHandler;
 import consulo.language.editor.util.PsiUtilBase;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.project.Project;
+
+import javax.annotation.Nonnull;
 
 /**
  * @author Konstantin Bulenkov

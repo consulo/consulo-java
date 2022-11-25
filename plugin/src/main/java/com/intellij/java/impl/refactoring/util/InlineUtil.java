@@ -15,27 +15,29 @@
  */
 package com.intellij.java.impl.refactoring.util;
 
-import com.intellij.java.language.impl.codeInsight.ChangeContextUtil;
 import com.intellij.java.language.codeInsight.daemon.impl.analysis.JavaGenericsUtil;
+import com.intellij.java.language.impl.codeInsight.ChangeContextUtil;
 import com.intellij.java.language.impl.psi.PsiDiamondTypeImpl;
 import com.intellij.java.language.impl.refactoring.util.RefactoringChangeUtil;
 import com.intellij.java.language.psi.*;
-import consulo.application.progress.ProgressManager;
-import consulo.util.lang.Comparing;
-import consulo.util.lang.StringUtil;
-import com.intellij.psi.*;
-import consulo.language.psi.search.ReferencesSearch;
-import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.RedundantCastUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
-import consulo.language.editor.refactoring.RefactoringBundle;
-import consulo.ide.impl.idea.util.Function;
-import consulo.language.util.IncorrectOperationException;
+import consulo.application.progress.ProgressManager;
 import consulo.application.util.function.Processor;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiManager;
+import consulo.language.psi.PsiReference;
+import consulo.language.psi.PsiWhiteSpace;
+import consulo.language.psi.search.ReferencesSearch;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
+import consulo.util.lang.Comparing;
+import consulo.util.lang.StringUtil;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
 
+import javax.annotation.Nonnull;
 import java.util.*;
 
 /**
@@ -44,10 +46,11 @@ import java.util.*;
 public class InlineUtil {
   private static final Logger LOG = Logger.getInstance(InlineUtil.class);
 
-  private InlineUtil() {}
+  private InlineUtil() {
+  }
 
   public static PsiExpression inlineVariable(PsiVariable variable, PsiExpression initializer, PsiJavaCodeReferenceElement ref)
-    throws IncorrectOperationException {
+      throws IncorrectOperationException {
     PsiManager manager = initializer.getManager();
 
     PsiClass thisClass = RefactoringChangeUtil.getThisClass(initializer);
@@ -57,33 +60,33 @@ public class InlineUtil {
     initializer = RefactoringUtil.convertInitializerToNormalExpression(initializer, varType);
 
     ChangeContextUtil.encodeContextInfo(initializer, false);
-    PsiExpression expr = (PsiExpression)replaceDiamondWithInferredTypesIfNeeded(initializer, ref);
+    PsiExpression expr = (PsiExpression) replaceDiamondWithInferredTypesIfNeeded(initializer, ref);
     PsiType exprType = expr.getType();
     if (exprType != null && (!varType.equals(exprType) && (varType instanceof PsiPrimitiveType || exprType instanceof PsiPrimitiveType)
-                             || !TypeConversionUtil.isAssignable(varType, exprType)
-                             || insertCastWhenUnchecked && JavaGenericsUtil.isRawToGeneric(varType, exprType))) {
+        || !TypeConversionUtil.isAssignable(varType, exprType)
+        || insertCastWhenUnchecked && JavaGenericsUtil.isRawToGeneric(varType, exprType))) {
       boolean matchedTypes = false;
       //try explicit type arguments
       final PsiElementFactory elementFactory = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory();
-      if (expr instanceof PsiCallExpression && ((PsiCallExpression)expr).getTypeArguments().length == 0) {
-        final JavaResolveResult resolveResult = ((PsiCallExpression)initializer).resolveMethodGenerics();
+      if (expr instanceof PsiCallExpression && ((PsiCallExpression) expr).getTypeArguments().length == 0) {
+        final JavaResolveResult resolveResult = ((PsiCallExpression) initializer).resolveMethodGenerics();
         final PsiElement resolved = resolveResult.getElement();
         if (resolved instanceof PsiMethod) {
-          final PsiTypeParameter[] typeParameters = ((PsiMethod)resolved).getTypeParameters();
+          final PsiTypeParameter[] typeParameters = ((PsiMethod) resolved).getTypeParameters();
           if (typeParameters.length > 0) {
-            final PsiCallExpression copy = (PsiCallExpression)expr.copy();
+            final PsiCallExpression copy = (PsiCallExpression) expr.copy();
             for (final PsiTypeParameter typeParameter : typeParameters) {
               final PsiType substituted = resolveResult.getSubstitutor().substitute(typeParameter);
               if (substituted == null) break;
               copy.getTypeArgumentList().add(elementFactory.createTypeElement(substituted));
             }
             if (varType.equals(copy.getType())) {
-              ((PsiCallExpression)expr).getTypeArgumentList().replace(copy.getTypeArgumentList());
+              ((PsiCallExpression) expr).getTypeArgumentList().replace(copy.getTypeArgumentList());
               if (expr instanceof PsiMethodCallExpression) {
-                final PsiReferenceExpression methodExpression = ((PsiMethodCallExpression)expr).getMethodExpression();
+                final PsiReferenceExpression methodExpression = ((PsiMethodCallExpression) expr).getMethodExpression();
                 final PsiExpression qualifierExpression = methodExpression.getQualifierExpression();
                 if (qualifierExpression == null) {
-                  final PsiMethod method = (PsiMethod)resolved;
+                  final PsiMethod method = (PsiMethod) resolved;
                   final PsiClass containingClass = method.getContainingClass();
                   LOG.assertTrue(containingClass != null);
                   if (method.getModifierList().hasModifierProperty(PsiModifier.STATIC)) {
@@ -100,7 +103,7 @@ public class InlineUtil {
       }
 
       if (!matchedTypes) {
-        if (varType instanceof PsiEllipsisType && ((PsiEllipsisType)varType).getComponentType().equals(exprType)) { //convert vararg to array
+        if (varType instanceof PsiEllipsisType && ((PsiEllipsisType) varType).getComponentType().equals(exprType)) { //convert vararg to array
 
           final PsiExpressionList argumentList = PsiTreeUtil.getParentOfType(expr, PsiExpressionList.class);
           LOG.assertTrue(argumentList != null);
@@ -109,64 +112,59 @@ public class InlineUtil {
           @NonNls final StringBuilder builder = new StringBuilder("new ");
           builder.append(exprType.getCanonicalText());
           builder.append("[]{");
-          builder.append(StringUtil.join(Arrays.asList(arguments), new Function<PsiExpression, String>() {
-            public String fun(final PsiExpression expr) {
-              return expr.getText();
-            }
-          }, ","));
+          builder.append(StringUtil.join(Arrays.asList(arguments), expr1 -> expr1.getText(), ","));
           builder.append('}');
 
           expr.replace(JavaPsiFacade.getInstance(manager.getProject()).getElementFactory().createExpressionFromText(builder.toString(), argumentList));
 
         } else {
           //try cast
-          PsiTypeCastExpression cast = (PsiTypeCastExpression)elementFactory.createExpressionFromText("(t)a", null);
+          PsiTypeCastExpression cast = (PsiTypeCastExpression) elementFactory.createExpressionFromText("(t)a", null);
           PsiTypeElement castTypeElement = cast.getCastType();
           assert castTypeElement != null;
           castTypeElement.replace(variable.getTypeElement());
           final PsiExpression operand = cast.getOperand();
           assert operand != null;
           operand.replace(expr);
-          PsiExpression exprCopy = (PsiExpression)expr.copy();
-          cast = (PsiTypeCastExpression)expr.replace(cast);
+          PsiExpression exprCopy = (PsiExpression) expr.copy();
+          cast = (PsiTypeCastExpression) expr.replace(cast);
           if (!RedundantCastUtil.isCastRedundant(cast)) {
             expr = cast;
-          }
-          else {
+          } else {
             PsiElement toReplace = cast;
             while (toReplace.getParent() instanceof PsiParenthesizedExpression) {
               toReplace = toReplace.getParent();
             }
-            expr = (PsiExpression)toReplace.replace(exprCopy);
+            expr = (PsiExpression) toReplace.replace(exprCopy);
           }
         }
       }
     } else if (exprType instanceof PsiLambdaExpressionType) {
-      expr = surroundWithCast(variable, expr, ((PsiLambdaExpressionType)exprType).getExpression());
+      expr = surroundWithCast(variable, expr, ((PsiLambdaExpressionType) exprType).getExpression());
     } else if (exprType instanceof PsiMethodReferenceType) {
-      expr = surroundWithCast(variable, expr, ((PsiMethodReferenceType)exprType).getExpression());
+      expr = surroundWithCast(variable, expr, ((PsiMethodReferenceType) exprType).getExpression());
     }
 
     ChangeContextUtil.clearContextInfo(initializer);
 
     PsiThisExpression thisAccessExpr = createThisExpression(manager, thisClass, refParent);
 
-    return (PsiExpression)ChangeContextUtil.decodeContextInfo(expr, thisClass, thisAccessExpr);
+    return (PsiExpression) ChangeContextUtil.decodeContextInfo(expr, thisClass, thisAccessExpr);
   }
 
   private static PsiExpression surroundWithCast(PsiVariable variable, PsiExpression expr, PsiExpression expression) {
     final PsiElement parent = expression.getParent();
     if (parent instanceof PsiReferenceExpression || parent instanceof PsiExpressionList) {
-      PsiTypeCastExpression cast = (PsiTypeCastExpression)JavaPsiFacade.getElementFactory(expr.getProject()).createExpressionFromText("(t)a", null);
+      PsiTypeCastExpression cast = (PsiTypeCastExpression) JavaPsiFacade.getElementFactory(expr.getProject()).createExpressionFromText("(t)a", null);
       PsiTypeElement castTypeElement = cast.getCastType();
       assert castTypeElement != null;
       castTypeElement.replace(variable.getTypeElement());
       final PsiExpression operand = cast.getOperand();
       assert operand != null;
       operand.replace(expr);
-      expr = (PsiTypeCastExpression)expr.replace(cast);
-      if (RedundantCastUtil.isCastRedundant((PsiTypeCastExpression)expr)) {
-        expr = (PsiExpression)expr.replace(((PsiTypeCastExpression)expr).getOperand());
+      expr = (PsiTypeCastExpression) expr.replace(cast);
+      if (RedundantCastUtil.isCastRedundant((PsiTypeCastExpression) expr)) {
+        expr = (PsiExpression) expr.replace(((PsiTypeCastExpression) expr).getOperand());
       }
     }
     return expr;
@@ -174,15 +172,9 @@ public class InlineUtil {
 
   private static PsiThisExpression createThisExpression(PsiManager manager, PsiClass thisClass, PsiClass refParent) {
     PsiThisExpression thisAccessExpr = null;
-    if (Comparing.equal(thisClass, refParent))
-
-    {
+    if (Comparing.equal(thisClass, refParent)) {
       thisAccessExpr = RefactoringChangeUtil.createThisExpression(manager, null);
-    }
-
-    else
-
-    {
+    } else {
       if (!(thisClass instanceof PsiAnonymousClass)) {
         thisAccessExpr = RefactoringChangeUtil.createThisExpression(manager, thisClass);
       }
@@ -191,12 +183,12 @@ public class InlineUtil {
   }
 
   public static void tryToInlineArrayCreationForVarargs(final PsiExpression expr) {
-    if (expr instanceof PsiNewExpression && ((PsiNewExpression)expr).getArrayInitializer() != null) {
+    if (expr instanceof PsiNewExpression && ((PsiNewExpression) expr).getArrayInitializer() != null) {
       if (expr.getParent() instanceof PsiExpressionList) {
-        final PsiExpressionList exprList = (PsiExpressionList)expr.getParent();
+        final PsiExpressionList exprList = (PsiExpressionList) expr.getParent();
         if (exprList.getParent() instanceof PsiCall) {
-          if (isSafeToInlineVarargsArgument((PsiCall)exprList.getParent())) {
-            inlineArrayCreationForVarargs(((PsiNewExpression)expr));
+          if (isSafeToInlineVarargsArgument((PsiCall) exprList.getParent())) {
+            inlineArrayCreationForVarargs(((PsiNewExpression) expr));
           }
         }
       }
@@ -204,7 +196,7 @@ public class InlineUtil {
   }
 
   public static void inlineArrayCreationForVarargs(final PsiNewExpression arrayCreation) {
-    PsiExpressionList argumentList = (PsiExpressionList)arrayCreation.getParent();
+    PsiExpressionList argumentList = (PsiExpressionList) arrayCreation.getParent();
     if (argumentList == null) return;
     PsiExpression[] args = argumentList.getExpressions();
     PsiArrayInitializerExpression arrayInitializer = arrayCreation.getArrayInitializer();
@@ -234,8 +226,7 @@ public class InlineUtil {
         argumentList.addRange(initializers[0], lastInitializerSibling);
       }
       args[args.length - 1].delete();
-    }
-    catch (IncorrectOperationException e) {
+    } catch (IncorrectOperationException e) {
       LOG.error(e);
     }
   }
@@ -244,8 +235,8 @@ public class InlineUtil {
     final JavaResolveResult resolveResult = expression.resolveMethodGenerics();
     PsiElement element = resolveResult.getElement();
     final PsiSubstitutor substitutor = resolveResult.getSubstitutor();
-    if (element instanceof PsiMethod && ((PsiMethod)element).isVarArgs()) {
-      PsiMethod method = (PsiMethod)element;
+    if (element instanceof PsiMethod && ((PsiMethod) element).isVarArgs()) {
+      PsiMethod method = (PsiMethod) element;
       PsiParameter[] parameters = method.getParameterList().getParameters();
       PsiExpressionList argumentList = expression.getArgumentList();
       if (argumentList != null) {
@@ -257,8 +248,8 @@ public class InlineUtil {
           LOG.assertTrue(lastParamType instanceof PsiEllipsisType);
           if (lastArg instanceof PsiNewExpression) {
             final PsiType lastArgType = lastArg.getType();
-            if (lastArgType != null && substitutor.substitute(((PsiEllipsisType)lastParamType).toArrayType()).isAssignableFrom(lastArgType)) {
-              PsiArrayInitializerExpression arrayInitializer = ((PsiNewExpression)lastArg).getArrayInitializer();
+            if (lastArgType != null && substitutor.substitute(((PsiEllipsisType) lastParamType).toArrayType()).isAssignableFrom(lastArgType)) {
+              PsiArrayInitializerExpression arrayInitializer = ((PsiNewExpression) lastArg).getArrayInitializer();
               PsiExpression[] initializers = arrayInitializer != null ? arrayInitializer.getInitializers() : PsiExpression.EMPTY_ARRAY;
               if (isSafeToFlatten(expression, method, initializers)) {
                 return true;
@@ -273,7 +264,7 @@ public class InlineUtil {
   }
 
   private static boolean isSafeToFlatten(PsiCall callExpression, PsiMethod oldRefMethod, PsiExpression[] arrayElements) {
-    PsiCall copy = (PsiCall)callExpression.copy();
+    PsiCall copy = (PsiCall) callExpression.copy();
     PsiExpressionList copyArgumentList = copy.getArgumentList();
     LOG.assertTrue(copyArgumentList != null);
     PsiExpression[] args = copyArgumentList.getExpressions();
@@ -283,8 +274,7 @@ public class InlineUtil {
         copyArgumentList.addRange(arrayElements[0], arrayElements[arrayElements.length - 1]);
       }
       return copy.resolveMethod() == oldRefMethod;
-    }
-    catch (IncorrectOperationException e) {
+    } catch (IncorrectOperationException e) {
       return false;
     }
   }
@@ -318,7 +308,7 @@ public class InlineUtil {
       PsiMethod callerMethod = PsiTreeUtil.getParentOfType(callStatement, PsiMethod.class);
       if (callerMethod != null) {
         final PsiStatement[] psiStatements = callerMethod.getBody().getStatements();
-        return psiStatements.length > 0 && callStatement == psiStatements [psiStatements.length-1] ? TailCallType.Simple : TailCallType.None;
+        return psiStatements.length > 0 && callStatement == psiStatements[psiStatements.length - 1] ? TailCallType.Simple : TailCallType.None;
       }
     }
     return TailCallType.None;
@@ -327,21 +317,21 @@ public class InlineUtil {
   public static void substituteTypeParams(PsiElement scope, final PsiSubstitutor substitutor, final PsiElementFactory factory) {
     final Map<PsiElement, PsiElement> replacement = new HashMap<PsiElement, PsiElement>();
     scope.accept(new JavaRecursiveElementVisitor() {
-      @Override public void visitTypeElement(PsiTypeElement typeElement) {
+      @Override
+      public void visitTypeElement(PsiTypeElement typeElement) {
         super.visitTypeElement(typeElement);
         PsiType type = typeElement.getType();
         if (type instanceof PsiClassType) {
-          JavaResolveResult resolveResult = ((PsiClassType)type).resolveGenerics();
+          JavaResolveResult resolveResult = ((PsiClassType) type).resolveGenerics();
           PsiElement resolved = resolveResult.getElement();
           if (resolved instanceof PsiTypeParameter) {
-            PsiType newType = resolveResult.getSubstitutor().putAll(substitutor).substitute((PsiTypeParameter)resolved);
+            PsiType newType = resolveResult.getSubstitutor().putAll(substitutor).substitute((PsiTypeParameter) resolved);
             if (newType == null) {
               newType = PsiType.getJavaLangObject(resolved.getManager(), resolved.getResolveScope());
             }
             try {
               replacement.put(typeElement, factory.createTypeElement(newType));
-            }
-            catch (IncorrectOperationException e) {
+            } catch (IncorrectOperationException e) {
               LOG.error(e);
             }
           }
@@ -357,7 +347,7 @@ public class InlineUtil {
 
   private static PsiElement replaceDiamondWithInferredTypesIfNeeded(PsiExpression initializer, PsiElement ref) {
     if (initializer instanceof PsiNewExpression) {
-      final PsiJavaCodeReferenceElement classReference = ((PsiNewExpression)initializer).getClassOrAnonymousClassReference();
+      final PsiJavaCodeReferenceElement classReference = ((PsiNewExpression) initializer).getClassOrAnonymousClassReference();
       if (classReference != null) {
         final PsiReferenceParameterList parameterList = classReference.getParameterList();
         if (parameterList != null) {
@@ -365,24 +355,19 @@ public class InlineUtil {
           if (typeParameterElements.length == 1) {
             final PsiType type = typeParameterElements[0].getType();
             if (type instanceof PsiDiamondType) {
-              final PsiDiamondType.DiamondInferenceResult inferenceResult = ((PsiDiamondType)type).resolveInferredTypes();
+              final PsiDiamondType.DiamondInferenceResult inferenceResult = ((PsiDiamondType) type).resolveInferredTypes();
               if (inferenceResult.getErrorMessage() == null) {
                 final PsiElement copy = ref.copy();
                 final PsiElement parent = ref.replace(initializer);
-                final PsiDiamondType.DiamondInferenceResult result = PsiDiamondTypeImpl.resolveInferredTypes((PsiNewExpression)initializer, parent);
+                final PsiDiamondType.DiamondInferenceResult result = PsiDiamondTypeImpl.resolveInferredTypes((PsiNewExpression) initializer, parent);
                 ref = parent.replace(copy);
                 if (!result.equals(inferenceResult)) {
                   final String inferredTypeText = StringUtil.join(inferenceResult.getTypes(),
-                                                                  new Function<PsiType, String>() {
-                                                                    @Override
-                                                                    public String fun(PsiType psiType) {
-                                                                      return psiType.getCanonicalText();
-                                                                    }
-                                                                  }, ", ");
-                  final PsiExpressionList argumentList = ((PsiNewExpression)initializer).getArgumentList();
+                      psiType -> psiType.getCanonicalText(), ", ");
+                  final PsiExpressionList argumentList = ((PsiNewExpression) initializer).getArgumentList();
                   if (argumentList != null) {
                     final PsiExpression expression = JavaPsiFacade.getElementFactory(initializer.getProject())
-                      .createExpressionFromText("new " + classReference.getReferenceName() + "<" + inferredTypeText + ">" + argumentList.getText(), initializer);
+                        .createExpressionFromText("new " + classReference.getReferenceName() + "<" + inferredTypeText + ">" + argumentList.getText(), initializer);
                     return ref.replace(expression);
                   }
                 }

@@ -15,42 +15,36 @@
  */
 package com.intellij.java.impl.refactoring.copy;
 
-import java.awt.BorderLayout;
-import java.awt.Font;
-
-import javax.swing.Action;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-
-import consulo.ui.ex.awt.DialogWrapper;
-import consulo.ui.ex.awt.Messages;
-import consulo.ui.util.FormBuilder;
-import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
-import consulo.application.HelpManager;
-import consulo.project.Project;
-import consulo.module.content.ProjectRootManager;
-import com.intellij.openapi.util.Pass;
-import com.intellij.java.language.psi.JavaDirectoryService;
-import com.intellij.java.language.psi.PsiClass;
-import consulo.language.psi.PsiDirectory;
-import com.intellij.java.language.psi.PsiJavaPackage;
-import consulo.language.psi.PsiManager;
-import com.intellij.java.language.psi.PsiNameHelper;
 import com.intellij.java.impl.refactoring.HelpID;
 import com.intellij.java.impl.refactoring.MoveDestination;
 import com.intellij.java.impl.refactoring.PackageWrapper;
-import consulo.language.editor.refactoring.RefactoringBundle;
 import com.intellij.java.impl.refactoring.move.moveClassesOrPackages.DestinationFolderComboBox;
 import com.intellij.java.impl.refactoring.ui.PackageNameReferenceEditorCombo;
 import com.intellij.java.impl.refactoring.util.RefactoringMessageUtil;
-import consulo.language.editor.ui.awt.EditorTextField;
-import consulo.ui.ex.RecentsManager;
 import com.intellij.java.impl.ui.ReferenceEditorComboWithBrowseButton;
-import consulo.usage.UsageViewUtil;
+import com.intellij.java.language.psi.JavaDirectoryService;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiJavaPackage;
+import com.intellij.java.language.psi.PsiNameHelper;
+import consulo.application.HelpManager;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.ui.awt.EditorTextField;
+import consulo.language.psi.PsiDirectory;
+import consulo.language.psi.PsiManager;
 import consulo.language.util.IncorrectOperationException;
+import consulo.module.content.ProjectRootManager;
+import consulo.project.Project;
+import consulo.ui.ex.RecentsManager;
+import consulo.ui.ex.awt.DialogWrapper;
+import consulo.ui.ex.awt.FormBuilder;
+import consulo.ui.ex.awt.Messages;
 import consulo.ui.ex.awt.UIUtil;
+import consulo.usage.UsageViewUtil;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
+import javax.swing.*;
+import java.awt.*;
 
 class CopyClassDialog extends DialogWrapper {
   @NonNls private static final String RECENTS_KEY = "CopyClassDialog.RECENTS_KEY";
@@ -85,12 +79,7 @@ class CopyClassDialog extends DialogWrapper {
     myInformationLabel.setFont(myInformationLabel.getFont().deriveFont(Font.BOLD));
     init();
     myDestinationCB.setData(myProject, defaultTargetDirectory,
-                            new Pass<String>() {
-                              @Override
-                              public void pass(String s) {
-                                setErrorText(s);
-                              }
-                            }, myTfPackage.getChildComponent());
+        s -> setErrorText(s), myTfPackage.getChildComponent());
     myNameField.setText(UsageViewUtil.getShortName(aClass));
     myNameField.selectAll();
   }

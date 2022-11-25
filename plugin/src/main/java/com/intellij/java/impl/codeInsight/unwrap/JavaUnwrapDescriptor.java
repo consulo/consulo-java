@@ -15,8 +15,12 @@
  */
 package com.intellij.java.impl.codeInsight.unwrap;
 
+import com.intellij.java.language.JavaLanguage;
+import consulo.language.Language;
 import consulo.language.editor.refactoring.unwrap.UnwrapDescriptorBase;
 import consulo.language.editor.refactoring.unwrap.Unwrapper;
+
+import javax.annotation.Nonnull;
 
 /**
  * @author Konstantin Bulenkov
@@ -39,5 +43,11 @@ public class JavaUnwrapDescriptor extends UnwrapDescriptorBase {
         new JavaConditionalUnwrapper(),
         new JavaPolyadicExpressionUnwrapper()
     };
+  }
+
+  @Nonnull
+  @Override
+  public Language getLanguage() {
+    return JavaLanguage.INSTANCE;
   }
 }

@@ -18,7 +18,7 @@ package com.intellij.java.impl.ipp.annotation;
 import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.language.psi.*;
 import consulo.project.Project;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.java.indexing.search.searches.OverridingMethodsSearch;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;

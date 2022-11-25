@@ -16,22 +16,24 @@
 package com.intellij.java.impl.ig.jdk;
 
 import com.intellij.java.language.codeInsight.AnnotationUtil;
-import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import com.intellij.psi.*;
-import consulo.language.codeStyle.CodeStyleManager;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
-import consulo.language.psi.search.ReferencesSearch;
-import consulo.application.util.query.Query;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
+import consulo.application.util.query.Query;
+import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiManager;
+import consulo.language.psi.PsiReference;
+import consulo.language.psi.search.ReferencesSearch;
+import consulo.project.Project;
 import org.jetbrains.annotations.NonNls;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import java.util.Collection;
 
 public class VarargParameterInspection extends BaseInspection {

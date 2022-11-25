@@ -19,7 +19,7 @@ import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.java.language.psi.PsiJavaToken;
 import com.intellij.java.language.psi.PsiResourceList;
 import com.intellij.java.language.psi.PsiTryStatement;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import consulo.language.ast.IElementType;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 

@@ -17,7 +17,7 @@ package com.intellij.java.impl.ig.errorhandling;
 
 import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;

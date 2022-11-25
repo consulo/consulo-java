@@ -15,19 +15,33 @@
  */
 package com.intellij.java.impl.lang.refactoring;
 
+import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.PsiNameHelper;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.Language;
 import consulo.language.editor.refactoring.NamesValidator;
 import consulo.project.Project;
+
+import javax.annotation.Nonnull;
 
 /**
  * Default NamesValidator interface implementation. Uses java language keyword set and java language rules for identifier.
  */
+@ExtensionImpl
 public class JavaNamesValidator implements NamesValidator {
+  @Override
   public boolean isKeyword(String name, Project project) {
     return PsiNameHelper.getInstance(project).isKeyword(name);
   }
 
+  @Override
   public boolean isIdentifier(String name, Project project) {
     return PsiNameHelper.getInstance(project).isIdentifier(name);
+  }
+
+  @Nonnull
+  @Override
+  public Language getLanguage() {
+    return JavaLanguage.INSTANCE;
   }
 }

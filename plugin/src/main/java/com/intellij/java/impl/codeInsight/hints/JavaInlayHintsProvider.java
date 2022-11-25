@@ -1,20 +1,20 @@
 package com.intellij.java.impl.codeInsight.hints;
 
-import consulo.ide.impl.idea.codeInsight.dataflow.SetUtil;
-import consulo.ide.impl.idea.codeInsight.hints.InlayInfo;
-import consulo.ide.impl.idea.codeInsight.hints.settings.ParameterNameHintsSettings;
 import com.intellij.java.language.impl.psi.impl.source.tree.java.PsiNewExpressionImpl;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.impl.source.resolve.graphInference.PsiPolyExpressionUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
-import consulo.util.lang.StringUtil;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.ide.impl.idea.codeInsight.dataflow.SetUtil;
+import consulo.ide.impl.idea.codeInsight.hints.settings.ParameterNameHintsSettings;
+import consulo.language.ast.IElementType;
+import consulo.language.editor.inlay.InlayInfo;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.ResolveResult;
-import consulo.language.ast.IElementType;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.collection.JBIterable;
-import consulo.annotation.access.RequiredReadAction;
+import consulo.util.lang.StringUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -165,7 +165,7 @@ public class JavaInlayHintsProvider {
     List<String> all = ContainerUtil.map(args, it -> typeText(it.getParameter()));
     List<String> duplicated = new ArrayList<>(all);
 
-    ContainerUtil.newHashSet(all).forEach(duplicated::remove);
+    new HashSet<>(all).forEach(duplicated::remove);
 
     return ContainerUtil.mapNotNull(ContainerUtil.filter(args, it -> duplicated.contains(typeText(it.getParameter()))), it -> createInlayInfo(it.getArgument(), it.getParameter()));
   }

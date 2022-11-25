@@ -15,10 +15,6 @@
  */
 package com.intellij.java.impl.codeInsight.completion;
 
-import consulo.externalService.statistic.FeatureUsageTracker;
-import consulo.language.editor.completion.lookup.TailType;
-import com.intellij.codeInsight.completion.*;
-import com.intellij.codeInsight.lookup.*;
 import com.intellij.java.impl.codeInsight.ExpectedTypeInfo;
 import com.intellij.java.impl.codeInsight.ExpectedTypesProvider;
 import com.intellij.java.impl.codeInsight.completion.scope.JavaCompletionProcessor;
@@ -41,36 +37,42 @@ import com.intellij.java.language.patterns.PsiNameValuePairPattern;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
-import consulo.language.LangBundle;
-import consulo.ui.ex.action.IdeActions;
-import consulo.document.Document;
+import consulo.application.util.matcher.PrefixMatcher;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.EditorEx;
 import consulo.codeEditor.HighlighterIterator;
-import consulo.project.Project;
-import consulo.util.lang.Comparing;
-import consulo.util.lang.function.Condition;
-import consulo.util.lang.StringUtil;
+import consulo.document.Document;
+import consulo.document.util.DocumentUtil;
+import consulo.externalService.statistic.FeatureUsageTracker;
+import consulo.ide.impl.idea.codeInsight.completion.CodeCompletionFeatures;
+import consulo.ide.impl.idea.codeInsight.completion.LegacyCompletionContributor;
+import consulo.ide.impl.idea.codeInsight.completion.WordCompletionContributor;
+import consulo.language.LangBundle;
+import consulo.language.Language;
+import consulo.language.ast.IElementType;
+import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.editor.completion.*;
+import consulo.language.editor.completion.lookup.*;
+import consulo.language.editor.impl.internal.completion.CompletionUtil;
 import consulo.language.pattern.ElementPattern;
 import consulo.language.pattern.PatternCondition;
-import consulo.language.psi.PsiDocumentManager;
-import consulo.language.psi.PsiElement;
-import consulo.language.psi.PsiFile;
-import consulo.language.psi.PsiReference;
-import consulo.language.codeStyle.CodeStyleManager;
-import com.intellij.psi.filters.*;
+import consulo.language.psi.*;
+import consulo.language.psi.filter.*;
 import consulo.language.psi.util.PsiTreeUtil;
-import consulo.language.psi.PsiUtilCore;
-import consulo.ide.impl.idea.util.Consumer;
-import consulo.document.util.DocumentUtil;
 import consulo.language.util.ProcessingContext;
+import consulo.logging.Logger;
+import consulo.project.Project;
+import consulo.ui.ex.action.IdeActions;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.collection.MultiMap;
-import consulo.logging.Logger;
+import consulo.util.lang.Comparing;
+import consulo.util.lang.StringUtil;
+import consulo.util.lang.function.Condition;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.function.Consumer;
 
 import static com.intellij.java.language.patterns.PsiJavaPatterns.*;
 import static consulo.util.lang.ObjectUtil.assertNotNull;
@@ -287,7 +289,7 @@ public class JavaCompletionContributor extends CompletionContributor {
       SmartCastProvider.addCastVariants(parameters, session.getMatcher(), element ->
       {
         registerClassFromTypeElement(element, session);
-        result.consume(PrioritizedLookupElement.withPriority(element, 1));
+        result.accept(PrioritizedLookupElement.withPriority(element, 1));
       }, quick);
     }
   }
@@ -553,7 +555,7 @@ public class JavaCompletionContributor extends CompletionContributor {
           @Override
           public void handleInsert(InsertionContext context, LookupElement item) {
             final Editor editor = context.getEditor();
-            TailType.EQ.processTail(editor, editor.getCaretModel().getOffset());
+            EqTailType.INSTANCE.processTail(editor, editor.getCaretModel().getOffset());
             context.setAddCompletionChar(false);
 
             context.commitDocument();
@@ -561,7 +563,7 @@ public class JavaCompletionContributor extends CompletionContributor {
             if (paramList != null && paramList.getAttributes().length > 0 && paramList.getAttributes()[0].getName() == null) {
               int valueOffset = paramList.getAttributes()[0].getTextRange().getStartOffset();
               context.getDocument().insertString(valueOffset, PsiAnnotation.DEFAULT_REFERENCED_METHOD_NAME);
-              TailType.EQ.processTail(editor, valueOffset + PsiAnnotation.DEFAULT_REFERENCED_METHOD_NAME.length());
+              EqTailType.INSTANCE.processTail(editor, valueOffset + PsiAnnotation.DEFAULT_REFERENCED_METHOD_NAME.length());
             }
           }
         });
@@ -795,7 +797,7 @@ public class JavaCompletionContributor extends CompletionContributor {
       iterator.advance();
     }
 
-    while (!iterator.atEnd() && ElementType.JAVA_COMMENT_OR_WHITESPACE_BIT_SET.contains(iterator.getTokenType())) {
+    while (!iterator.atEnd() && ElementType.JAVA_COMMENT_OR_WHITESPACE_BIT_SET.contains((IElementType) iterator.getTokenType())) {
       iterator.advance();
     }
 
@@ -808,7 +810,7 @@ public class JavaCompletionContributor extends CompletionContributor {
       return true;
     }
 
-    while (!iterator.atEnd() && ElementType.JAVA_COMMENT_OR_WHITESPACE_BIT_SET.contains(iterator.getTokenType())) {
+    while (!iterator.atEnd() && ElementType.JAVA_COMMENT_OR_WHITESPACE_BIT_SET.contains((IElementType) iterator.getTokenType())) {
       iterator.advance();
     }
 
@@ -817,7 +819,7 @@ public class JavaCompletionContributor extends CompletionContributor {
     }
     iterator.advance();
 
-    while (!iterator.atEnd() && ElementType.JAVA_COMMENT_OR_WHITESPACE_BIT_SET.contains(iterator.getTokenType())) {
+    while (!iterator.atEnd() && ElementType.JAVA_COMMENT_OR_WHITESPACE_BIT_SET.contains((IElementType) iterator.getTokenType())) {
       iterator.advance();
     }
     if (iterator.atEnd()) {
@@ -891,6 +893,12 @@ public class JavaCompletionContributor extends CompletionContributor {
         new JavaMembersGetter(info.getDefaultType(), parameters).addMembers(false, result);
       }
     }
+  }
+
+  @Nonnull
+  @Override
+  public Language getLanguage() {
+    return JavaLanguage.INSTANCE;
   }
 
   static class IndentingDecorator extends LookupElementDecorator<LookupElement> {

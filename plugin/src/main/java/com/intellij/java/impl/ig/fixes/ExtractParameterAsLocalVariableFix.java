@@ -15,21 +15,22 @@
  */
 package com.intellij.java.impl.ig.fixes;
 
-import javax.annotation.Nonnull;
-
-import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import com.intellij.psi.*;
-import consulo.language.codeStyle.CodeStyleManager;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
-import consulo.content.scope.SearchScope;
-import consulo.language.psi.search.ReferencesSearch;
-import consulo.language.ast.IElementType;
-import consulo.language.util.IncorrectOperationException;
-import consulo.application.util.query.Query;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.InspectionGadgetsFix;
+import consulo.application.util.query.Query;
+import consulo.content.scope.SearchScope;
+import consulo.language.ast.IElementType;
+import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiReference;
+import consulo.language.psi.search.ReferencesSearch;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+
+import javax.annotation.Nonnull;
 
 public class ExtractParameterAsLocalVariableFix
   extends InspectionGadgetsFix {

@@ -22,7 +22,7 @@ package com.intellij.java.impl.refactoring.extractclass;
 
 import com.intellij.java.language.psi.*;
 import consulo.util.lang.function.Condition;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 
 public class BackpointerUtil {
   private BackpointerUtil() {

@@ -17,7 +17,7 @@ package com.intellij.java.impl.codeInsight.unwrap;
 
 import consulo.language.editor.CodeInsightBundle;
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import consulo.language.util.IncorrectOperationException;
 
 public class JavaBracesUnwrapper extends JavaUnwrapper {

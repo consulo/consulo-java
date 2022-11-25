@@ -16,10 +16,10 @@
 package com.intellij.java.impl.psi.codeStyle.arrangement;
 
 import consulo.document.util.TextRange;
-import consulo.util.lang.StringUtil;
-import com.intellij.psi.codeStyle.arrangement.*;
-import consulo.language.codeStyle.arrangement.std.ArrangementSettingsToken;
 import consulo.ide.impl.idea.util.containers.ContainerUtilRt;
+import consulo.language.codeStyle.arrangement.*;
+import consulo.language.codeStyle.arrangement.std.ArrangementSettingsToken;
+import consulo.util.lang.StringUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

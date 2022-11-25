@@ -20,24 +20,19 @@
  */
 package com.intellij.java.impl.refactoring.changeSignature;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import com.intellij.java.impl.refactoring.util.CanonicalTypes;
+import com.intellij.java.language.JavaLanguage;
+import com.intellij.java.language.psi.*;
+import consulo.language.Language;
+import consulo.language.psi.PsiManager;
+import consulo.language.util.IncorrectOperationException;
+import consulo.logging.Logger;
+import consulo.util.lang.Comparing;
+import consulo.util.lang.StringUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
-import com.intellij.java.language.psi.*;
-import consulo.language.Language;
-import com.intellij.java.language.JavaLanguage;
-import consulo.util.lang.Comparing;
-import consulo.util.lang.StringUtil;
-import com.intellij.psi.*;
-import com.intellij.java.impl.refactoring.util.CanonicalTypes;
-import consulo.language.util.IncorrectOperationException;
-import consulo.logging.Logger;
+import java.util.*;
 
 public class JavaChangeInfoImpl implements JavaChangeInfo {
   private static final Logger LOG = Logger.getInstance(JavaChangeInfoImpl.class);

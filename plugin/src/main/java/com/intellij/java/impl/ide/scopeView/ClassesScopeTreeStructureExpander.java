@@ -15,9 +15,6 @@
  */
 package com.intellij.java.impl.ide.scopeView;
 
-import consulo.project.ui.view.ProjectView;
-import consulo.ide.impl.idea.ide.scopeView.ScopeTreeStructureExpander;
-import consulo.ide.impl.idea.ide.scopeView.ScopeViewPane;
 import com.intellij.java.impl.ide.projectView.PsiClassChildrenSource;
 import com.intellij.java.impl.ide.scopeView.nodes.ClassNode;
 import com.intellij.java.impl.ide.scopeView.nodes.FieldNode;
@@ -26,16 +23,19 @@ import com.intellij.java.language.impl.JavaClassFileType;
 import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.java.language.psi.*;
 import consulo.document.Document;
-import consulo.project.Project;
-import consulo.ui.ex.awt.tree.TreeUtil;
-import consulo.virtualFileSystem.VirtualFile;
+import consulo.ide.impl.idea.ide.scopeView.ScopeTreeStructureExpander;
+import consulo.ide.impl.idea.ide.scopeView.ScopeViewPane;
 import consulo.ide.impl.idea.packageDependencies.ui.DependencyNodeComparator;
 import consulo.ide.impl.idea.packageDependencies.ui.DirectoryNode;
-import com.intellij.packageDependencies.ui.FileNode;
+import consulo.ide.impl.idea.packageDependencies.ui.FileNode;
 import consulo.ide.impl.idea.packageDependencies.ui.PackageDependenciesNode;
 import consulo.language.psi.PsiDocumentManager;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
+import consulo.project.Project;
+import consulo.project.ui.view.ProjectView;
+import consulo.ui.ex.awt.tree.TreeUtil;
+import consulo.virtualFileSystem.VirtualFile;
 
 import javax.swing.*;
 import javax.swing.event.TreeExpansionEvent;

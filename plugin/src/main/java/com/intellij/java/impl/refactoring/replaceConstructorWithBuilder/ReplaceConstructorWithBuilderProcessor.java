@@ -15,38 +15,39 @@
  */
 package com.intellij.java.impl.refactoring.replaceConstructorWithBuilder;
 
-import com.intellij.java.language.impl.JavaFileType;
-import com.intellij.java.language.impl.codeInsight.PackageUtil;
-import com.intellij.java.language.psi.*;
-import consulo.module.Module;
-import consulo.ide.impl.idea.openapi.module.ModuleUtil;
-import consulo.project.Project;
-import consulo.util.lang.Comparing;
-import consulo.util.lang.ref.Ref;
-import consulo.util.lang.StringUtil;
-import com.intellij.psi.*;
-import consulo.language.codeStyle.CodeStyleManager;
-import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
-import com.intellij.java.language.psi.codeStyle.VariableKind;
-import consulo.language.psi.scope.GlobalSearchScope;
-import consulo.language.psi.search.ReferencesSearch;
-import com.intellij.java.language.psi.util.PropertyUtil;
-import consulo.language.psi.util.PsiTreeUtil;
-import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.java.language.psi.util.TypeConversionUtil;
 import com.intellij.java.impl.refactoring.MoveDestination;
 import com.intellij.java.impl.refactoring.replaceConstructorWithBuilder.usageInfo.ReplaceConstructorWithSettersChainInfo;
 import com.intellij.java.impl.refactoring.util.FixableUsageInfo;
 import com.intellij.java.impl.refactoring.util.FixableUsagesRefactoringProcessor;
 import com.intellij.java.impl.refactoring.util.RefactoringUtil;
+import com.intellij.java.language.impl.JavaFileType;
+import com.intellij.java.language.impl.codeInsight.PackageUtil;
+import com.intellij.java.language.psi.PsiElementFactory;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
+import com.intellij.java.language.psi.codeStyle.VariableKind;
+import com.intellij.java.language.psi.util.PropertyUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.TypeConversionUtil;
+import com.intellij.java.language.util.VisibilityUtil;
+import consulo.ide.impl.idea.openapi.module.ModuleUtil;
+import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.psi.*;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.search.ReferencesSearch;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.module.Module;
+import consulo.project.Project;
 import consulo.usage.UsageInfo;
 import consulo.usage.UsageViewDescriptor;
-import consulo.language.util.IncorrectOperationException;
-import com.intellij.java.language.util.VisibilityUtil;
 import consulo.util.collection.MultiMap;
+import consulo.util.lang.Comparing;
+import consulo.util.lang.StringUtil;
+import consulo.util.lang.ref.Ref;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -91,7 +92,7 @@ public class ReplaceConstructorWithBuilderProcessor extends FixableUsagesRefacto
   protected void findUsages(@Nonnull final List<FixableUsageInfo> usages) {
     final String builderQualifiedName = StringUtil.getQualifiedName(myPackageName, myClassName);
     final PsiClass builderClass =
-      JavaPsiFacade.getInstance(myProject).findClass(builderQualifiedName, GlobalSearchScope.projectScope(myProject));
+        JavaPsiFacade.getInstance(myProject).findClass(builderQualifiedName, GlobalSearchScope.projectScope(myProject));
 
     for (PsiMethod constructor : myConstructors) {
       for (PsiReference reference : ReferencesSearch.search(constructor)) {
@@ -111,7 +112,7 @@ public class ReplaceConstructorWithBuilderProcessor extends FixableUsagesRefacto
     final PsiTypeParameterList typeParameterList = psiClass.getTypeParameterList();
     final String text = "public class " + myClassName + (typeParameterList != null ? typeParameterList.getText() : "") + "{}";
     final PsiFileFactory factory = PsiFileFactory.getInstance(myProject);
-    final PsiJavaFile newFile = (PsiJavaFile)factory.createFileFromText(myClassName + ".java", JavaFileType.INSTANCE, text);
+    final PsiJavaFile newFile = (PsiJavaFile) factory.createFileFromText(myClassName + ".java", JavaFileType.INSTANCE, text);
 
     final PsiFile containingFile = myConstructors[0].getContainingFile();
     final PsiDirectory containingDirectory = containingFile.getContainingDirectory();
@@ -127,10 +128,10 @@ public class ReplaceConstructorWithBuilderProcessor extends FixableUsagesRefacto
     if (directory != null) {
 
       final CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(PsiManager.getInstance(myProject).getProject());
-      final PsiJavaFile reformattedFile = (PsiJavaFile)codeStyleManager.reformat(JavaCodeStyleManager.getInstance(newFile.getProject()).shortenClassReferences(newFile));
+      final PsiJavaFile reformattedFile = (PsiJavaFile) codeStyleManager.reformat(JavaCodeStyleManager.getInstance(newFile.getProject()).shortenClassReferences(newFile));
 
       if (directory.findFile(reformattedFile.getName()) != null) return reformattedFile.getClasses()[0];
-      return ((PsiJavaFile)directory.add(reformattedFile)).getClasses()[0];
+      return ((PsiJavaFile) directory.add(reformattedFile)).getClasses()[0];
     }
     return null;
   }
@@ -140,9 +141,9 @@ public class ReplaceConstructorWithBuilderProcessor extends FixableUsagesRefacto
 
     final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(myProject);
     final PsiClass builderClass = myCreateNewBuilderClass
-                                  ? createBuilderClass()
-                                  : psiFacade.findClass(StringUtil.getQualifiedName(myPackageName, myClassName),
-                                                        GlobalSearchScope.projectScope(myProject));
+        ? createBuilderClass()
+        : psiFacade.findClass(StringUtil.getQualifiedName(myPackageName, myClassName),
+        GlobalSearchScope.projectScope(myProject));
     if (builderClass == null) return;
 
     for (String propertyName : myParametersMap.keySet()) {
@@ -194,10 +195,10 @@ public class ReplaceConstructorWithBuilderProcessor extends FixableUsagesRefacto
     if (field == null) {
       PsiType type = parameterData.getType();
       if (type instanceof PsiEllipsisType) {
-        type = ((PsiEllipsisType)type).toArrayType();
+        type = ((PsiEllipsisType) type).toArrayType();
       }
       field = myElementFactory.createField(parameterData.getFieldName(), type);
-      field = (PsiField)builderClass.add(field);
+      field = (PsiField) builderClass.add(field);
     }
 
     final String defaultValue = parameterData.getDefaultValue();
@@ -206,8 +207,7 @@ public class ReplaceConstructorWithBuilderProcessor extends FixableUsagesRefacto
       if (initializer == null) {
         try {
           field.setInitializer(myElementFactory.createExpressionFromText(defaultValue, field));
-        }
-        catch (IncorrectOperationException e) {
+        } catch (IncorrectOperationException e) {
           //skip invalid default value
         }
       }
@@ -238,20 +238,20 @@ public class ReplaceConstructorWithBuilderProcessor extends FixableUsagesRefacto
       buf.append(myParametersMap.get(pureParamName).getFieldName());
     }
     return myElementFactory.createMethodFromText("public " +
-                                               constructor.getName() +
-                                               " " +
-                                               createMethodName +
-                                               "(){\n return new " +
-                                               constructor.getName() +
-                                               "(" +
-                                               buf.toString() +
-                                               ")" +
-                                               ";\n}", constructor);
+        constructor.getName() +
+        " " +
+        createMethodName +
+        "(){\n return new " +
+        constructor.getName() +
+        "(" +
+        buf.toString() +
+        ")" +
+        ";\n}", constructor);
   }
 
   private PsiMethod getWorkingConstructor() {
     PsiMethod constructor = getMostCommonConstructor();
-    if (constructor == null){
+    if (constructor == null) {
       constructor = myConstructors[0];
       if (constructor.getParameterList().getParametersCount() == 0) {
         constructor = myConstructors[1];
@@ -296,21 +296,21 @@ public class ReplaceConstructorWithBuilderProcessor extends FixableUsagesRefacto
     return "create" + StringUtil.capitalize(myConstructors[0].getName());
   }
 
-  
+
   @Override
   protected boolean preprocessUsages(Ref<UsageInfo[]> refUsages) {
     final MultiMap<PsiElement, String> conflicts = new MultiMap<PsiElement, String>();
     final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(myProject);
     final PsiClass builderClass =
-      psiFacade.findClass(StringUtil.getQualifiedName(myPackageName, myClassName), GlobalSearchScope.projectScope(myProject));
+        psiFacade.findClass(StringUtil.getQualifiedName(myPackageName, myClassName), GlobalSearchScope.projectScope(myProject));
     if (builderClass == null) {
       if (!myCreateNewBuilderClass) {
         conflicts.putValue(null, "Selected class was not found.");
       }
-    } else if (myCreateNewBuilderClass){
+    } else if (myCreateNewBuilderClass) {
       conflicts.putValue(builderClass, "Class with chosen name already exist.");
     }
-    
+
     if (myMoveDestination != null && myCreateNewBuilderClass) {
       myMoveDestination.analyzeModuleConflicts(Collections.<PsiElement>emptyList(), conflicts, refUsages.get());
     }

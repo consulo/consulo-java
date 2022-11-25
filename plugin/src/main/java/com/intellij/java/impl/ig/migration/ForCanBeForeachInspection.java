@@ -15,38 +15,35 @@
  */
 package com.intellij.java.impl.ig.migration;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.swing.JComponent;
-
-import com.intellij.java.language.psi.*;
-import org.jetbrains.annotations.NonNls;
-import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.ide.impl.idea.codeInspection.ui.MultipleCheckboxOptionsPanel;
-import consulo.project.Project;
-import com.intellij.psi.*;
-import consulo.language.codeStyle.CodeStyleSettingsManager;
-import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
+import com.intellij.java.impl.ig.psiutils.StringUtils;
 import com.intellij.java.impl.psi.codeStyle.JavaCodeStyleSettings;
-import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
-import consulo.language.ast.IElementType;
 import com.intellij.java.language.psi.util.InheritanceUtil;
-import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.language.util.IncorrectOperationException;
 import com.siyeh.HardcodedMethodConstants;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.siyeh.ig.psiutils.ClassUtils;
-import com.siyeh.ig.psiutils.ExpressionUtils;
-import com.siyeh.ig.psiutils.ParenthesesUtils;
-import com.intellij.java.impl.ig.psiutils.StringUtils;
-import com.siyeh.ig.psiutils.TypeUtils;
-import com.siyeh.ig.psiutils.VariableAccessUtils;
+import com.siyeh.ig.psiutils.*;
 import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.ast.IElementType;
+import consulo.language.codeStyle.CodeStyleSettingsManager;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.editor.inspection.ui.MultipleCheckboxOptionsPanel;
+import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiWhiteSpace;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.swing.*;
 
 public class ForCanBeForeachInspection extends BaseInspection {
 

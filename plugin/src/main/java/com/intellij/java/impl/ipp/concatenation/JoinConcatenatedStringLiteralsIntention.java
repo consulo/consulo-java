@@ -19,7 +19,7 @@ import com.intellij.java.language.psi.PsiJavaToken;
 import com.intellij.java.language.psi.PsiLiteralExpression;
 import com.intellij.java.language.psi.PsiPolyadicExpression;
 import consulo.util.lang.StringUtil;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import consulo.language.util.IncorrectOperationException;
 import com.intellij.java.impl.ipp.base.Intention;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;

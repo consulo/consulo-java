@@ -22,7 +22,7 @@ import com.intellij.java.language.impl.codeInsight.generation.GenerationInfo;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiTypeElement;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import consulo.language.util.IncorrectOperationException;
 
 public abstract class TemplateGenerationInfo extends GenerationInfoBase implements GenerationInfo {

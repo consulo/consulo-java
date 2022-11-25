@@ -15,23 +15,24 @@
  */
 package com.intellij.java.impl.ig.dataflow;
 
-import consulo.ide.impl.idea.codeInspection.ui.MultipleCheckboxOptionsPanel;
+import com.intellij.java.impl.ig.fixes.InlineVariableFix;
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.*;
-import consulo.language.ast.IElementType;
-import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.fixes.InlineVariableFix;
 import com.siyeh.ig.psiutils.VariableAccessUtils;
-import javax.annotation.Nonnull;
+import consulo.language.ast.IElementType;
+import consulo.language.editor.inspection.ui.MultipleCheckboxOptionsPanel;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiReference;
+import consulo.language.psi.util.PsiTreeUtil;
 
+import javax.annotation.Nonnull;
 import javax.swing.*;
 
-public class UnnecessaryLocalVariableInspection extends BaseInspection {
+public abstract class UnnecessaryLocalVariableInspection extends BaseInspection {
 
   /**
    * @noinspection PublicField

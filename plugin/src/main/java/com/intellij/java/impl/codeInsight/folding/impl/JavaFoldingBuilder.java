@@ -15,60 +15,60 @@
  */
 package com.intellij.java.impl.codeInsight.folding.impl;
 
-import java.awt.Font;
-
-import javax.annotation.Nonnull;
-
 import com.intellij.java.impl.codeInsight.ExpectedTypeInfo;
 import com.intellij.java.impl.codeInsight.ExpectedTypesProvider;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.impl.codeInsight.folding.impl.JavaFoldingBuilderBase;
-import consulo.colorScheme.EditorColorsManager;
-import consulo.colorScheme.EditorFontType;
-import consulo.project.Project;
 import com.intellij.java.language.psi.PsiAnonymousClass;
 import com.intellij.java.language.psi.PsiAssignmentExpression;
-import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiNewExpression;
 import com.intellij.java.language.psi.PsiReferenceExpression;
+import consulo.colorScheme.EditorColorsManager;
+import consulo.colorScheme.EditorFontType;
+import consulo.language.Language;
 import consulo.language.codeStyle.CodeStyleSettings;
 import consulo.language.codeStyle.CodeStyleSettingsManager;
-import com.intellij.util.FontUtil;
+import consulo.language.psi.PsiElement;
+import consulo.project.Project;
+import consulo.ui.ex.awt.FontUtil;
 
-public class JavaFoldingBuilder extends JavaFoldingBuilderBase
-{
-	@Override
-	protected boolean isBelowRightMargin(@Nonnull Project project, int lineLength)
-	{
-		final CodeStyleSettings settings = CodeStyleSettingsManager.getSettings(project);
-		return lineLength <= settings.getRightMargin(JavaLanguage.INSTANCE);
-	}
+import javax.annotation.Nonnull;
+import java.awt.*;
 
-	@Override
-	protected boolean shouldShowExplicitLambdaType(@Nonnull PsiAnonymousClass anonymousClass, @Nonnull PsiNewExpression expression)
-	{
-		PsiElement parent = expression.getParent();
-		if(parent instanceof PsiReferenceExpression || parent instanceof PsiAssignmentExpression)
-		{
-			return true;
-		}
+public class JavaFoldingBuilder extends JavaFoldingBuilderBase {
+  @Override
+  protected boolean isBelowRightMargin(@Nonnull Project project, int lineLength) {
+    final CodeStyleSettings settings = CodeStyleSettingsManager.getSettings(project);
+    return lineLength <= settings.getRightMargin(JavaLanguage.INSTANCE);
+  }
 
-		ExpectedTypeInfo[] types = ExpectedTypesProvider.getExpectedTypes(expression, false);
-		return types.length != 1 || !types[0].getType().equals(anonymousClass.getBaseClassType());
-	}
+  @Override
+  protected boolean shouldShowExplicitLambdaType(@Nonnull PsiAnonymousClass anonymousClass, @Nonnull PsiNewExpression expression) {
+    PsiElement parent = expression.getParent();
+    if (parent instanceof PsiReferenceExpression || parent instanceof PsiAssignmentExpression) {
+      return true;
+    }
 
-	@Override
-	@Nonnull
-	protected String rightArrow()
-	{
-		return getRightArrow();
-	}
+    ExpectedTypeInfo[] types = ExpectedTypesProvider.getExpectedTypes(expression, false);
+    return types.length != 1 || !types[0].getType().equals(anonymousClass.getBaseClassType());
+  }
 
-	@Nonnull
-	public static String getRightArrow()
-	{
-		Font font = EditorColorsManager.getInstance().getGlobalScheme().getFont(EditorFontType.PLAIN);
-		return FontUtil.rightArrow(font);
-	}
+  @Override
+  @Nonnull
+  protected String rightArrow() {
+    return getRightArrow();
+  }
+
+  @Nonnull
+  public static String getRightArrow() {
+    Font font = EditorColorsManager.getInstance().getGlobalScheme().getFont(EditorFontType.PLAIN);
+    return FontUtil.rightArrow(font);
+  }
+
+  @Nonnull
+  @Override
+  public Language getLanguage() {
+    return JavaLanguage.INSTANCE;
+  }
 }
 

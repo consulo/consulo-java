@@ -15,13 +15,13 @@
  */
 package com.intellij.java.impl.codeInsight.template;
 
-import consulo.ide.impl.idea.codeInsight.template.PsiElementResult;
 import com.intellij.java.impl.codeInsight.template.impl.JavaTemplateUtil;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiIdentifier;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiVariable;
 import consulo.document.Document;
+import consulo.language.editor.template.PsiElementResult;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 

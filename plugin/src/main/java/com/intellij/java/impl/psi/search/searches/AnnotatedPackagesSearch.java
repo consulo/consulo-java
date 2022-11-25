@@ -49,6 +49,7 @@ public class AnnotatedPackagesSearch extends ExtensibleQueryFactory<PsiJavaPacka
   }
 
   private AnnotatedPackagesSearch() {
+    super(AnnotatedPackagesSearchExecutor.class);
   }
 
   public static Query<PsiJavaPackage> search(@Nonnull PsiClass annotationClass, @Nonnull SearchScope scope) {

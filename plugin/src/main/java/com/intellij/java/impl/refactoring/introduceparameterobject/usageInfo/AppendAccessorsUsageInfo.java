@@ -20,20 +20,20 @@
  */
 package com.intellij.java.impl.refactoring.introduceparameterobject.usageInfo;
 
-import consulo.logging.Logger;
-import consulo.util.lang.StringUtil;
-import consulo.language.psi.PsiElement;
-import com.intellij.java.language.psi.PsiField;
-import com.intellij.java.language.psi.PsiParameter;
-import com.intellij.java.language.psi.util.PropertyUtil;
 import com.intellij.java.impl.refactoring.RefactorJBundle;
 import com.intellij.java.impl.refactoring.introduceparameterobject.IntroduceParameterObjectProcessor;
 import com.intellij.java.impl.refactoring.util.FixableUsageInfo;
-import consulo.ide.impl.idea.util.Function;
+import com.intellij.java.language.psi.PsiField;
+import com.intellij.java.language.psi.PsiParameter;
+import com.intellij.java.language.psi.util.PropertyUtil;
+import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
+import consulo.logging.Logger;
+import consulo.util.lang.StringUtil;
 
 import java.util.List;
 import java.util.Set;
+import java.util.function.Function;
 
 public class AppendAccessorsUsageInfo extends FixableUsageInfo{
   private final boolean myGenerateAccessors;
@@ -94,7 +94,7 @@ public class AppendAccessorsUsageInfo extends FixableUsageInfo{
       buf.append(paramsNeeding == paramsNeedingGetters ? "Getters" : "Setters");
       buf.append(" for the following fields are required:\n");
       buf.append(StringUtil.join(paramsNeeding, new Function<PsiParameter, String>() {
-        public String fun(PsiParameter psiParameter) {
+        public String apply(PsiParameter psiParameter) {
           final IntroduceParameterObjectProcessor.ParameterChunk chunk =
             IntroduceParameterObjectProcessor.ParameterChunk.getChunkByParameter(psiParameter, parameters);
           if (chunk != null) {

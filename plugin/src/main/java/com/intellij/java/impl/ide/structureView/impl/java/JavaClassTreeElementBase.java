@@ -24,7 +24,7 @@ import consulo.colorScheme.TextAttributesKey;
 import consulo.application.dumb.IndexNotReadyException;
 import consulo.application.util.registry.Registry;
 import consulo.util.lang.StringUtil;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.ui.ex.awt.UIUtil;
 

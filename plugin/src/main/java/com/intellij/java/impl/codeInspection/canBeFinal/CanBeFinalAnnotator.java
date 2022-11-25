@@ -15,7 +15,6 @@
  */
 package com.intellij.java.impl.codeInspection.canBeFinal;
 
-import com.intellij.codeInspection.reference.*;
 import com.intellij.java.analysis.codeInspection.reference.RefClass;
 import com.intellij.java.analysis.codeInspection.reference.RefField;
 import com.intellij.java.analysis.codeInspection.reference.RefMethod;
@@ -25,6 +24,10 @@ import com.intellij.java.analysis.impl.codeInspection.reference.RefMethodImpl;
 import com.intellij.java.impl.codeInspection.reference.RefFieldImpl;
 import com.intellij.java.language.impl.psi.controlFlow.*;
 import com.intellij.java.language.psi.*;
+import consulo.language.editor.impl.inspection.reference.RefElementImpl;
+import consulo.language.editor.inspection.reference.RefElement;
+import consulo.language.editor.inspection.reference.RefGraphAnnotatorEx;
+import consulo.language.editor.inspection.reference.RefManager;
 import consulo.language.psi.PsiElement;
 import consulo.util.collection.ContainerUtil;
 

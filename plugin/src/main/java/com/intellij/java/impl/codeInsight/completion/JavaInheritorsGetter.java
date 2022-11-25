@@ -15,12 +15,6 @@
  */
 package com.intellij.java.impl.codeInsight.completion;
 
-import consulo.language.editor.completion.CompletionParameters;
-import consulo.language.editor.completion.CompletionResultSet;
-import consulo.application.util.matcher.PrefixMatcher;
-import consulo.language.editor.completion.AutoCompletionPolicy;
-import consulo.language.editor.completion.lookup.LookupElement;
-import consulo.language.editor.completion.lookup.LookupElementDecorator;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.HighlightClassUtil;
 import com.intellij.java.impl.codeInsight.CodeInsightUtil;
 import com.intellij.java.impl.codeInsight.ExpectedTypeInfo;
@@ -36,24 +30,35 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiTypesUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
+import consulo.application.util.function.Processor;
+import consulo.application.util.matcher.PrefixMatcher;
+import consulo.ide.impl.psi.statistics.StatisticsInfo;
+import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.editor.completion.AutoCompletionPolicy;
+import consulo.language.editor.completion.CompletionParameters;
+import consulo.language.editor.completion.CompletionProvider;
+import consulo.language.editor.completion.CompletionResultSet;
+import consulo.language.editor.completion.lookup.LookupElement;
+import consulo.language.editor.completion.lookup.LookupElementDecorator;
 import consulo.language.psi.PsiCompiledElement;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.scope.GlobalSearchScope;
-import consulo.ide.impl.psi.statistics.StatisticsInfo;
-import consulo.ide.impl.psi.statistics.StatisticsManager;
 import consulo.language.psi.util.PsiTreeUtil;
-import com.intellij.util.*;
-import consulo.util.collection.ContainerUtil;
-import consulo.language.editor.completion.CompletionProvider;
-import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.util.IncorrectOperationException;
+import consulo.language.util.ProcessingContext;
 import consulo.logging.Logger;
+import consulo.util.collection.ArrayUtil;
+import consulo.util.collection.ContainerUtil;
+import consulo.util.collection.SmartList;
+import consulo.util.lang.ObjectUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import static com.intellij.java.language.patterns.PsiJavaPatterns.psiElement;
@@ -100,10 +105,10 @@ public class JavaInheritorsGetter implements CompletionProvider {
       final LookupElement element = addExpectedType(type, parameters);
       if (element != null) {
         Supplier<PsiClassType> itemType = () -> (PsiClassType) ObjectUtil.assertNotNull(element.as(TypedLookupItem.CLASS_CONDITION_KEY)).getType();
-        JavaConstructorCallElement.wrap(element, (PsiClass) element.getObject(), parameters.getPosition(), itemType).forEach(consumer::consume);
+        JavaConstructorCallElement.wrap(element, (PsiClass) element.getObject(), parameters.getPosition(), itemType).forEach(consumer::accept);
       }
       if (arraysWelcome) {
-        consumer.consume(createNewArrayItem(parameters.getPosition(), type.createArrayType()));
+        consumer.accept(createNewArrayItem(parameters.getPosition(), type.createArrayType()));
       }
     });
   }
@@ -111,12 +116,12 @@ public class JavaInheritorsGetter implements CompletionProvider {
   private static void addArrayTypes(PsiElement identifierCopy, ExpectedTypeInfo[] infos, final Consumer<LookupElement> consumer) {
     for (final PsiType type : ExpectedTypesGetter.extractTypes(infos, true)) {
       if (type instanceof PsiArrayType) {
-        consumer.consume(createNewArrayItem(identifierCopy, type));
+        consumer.accept(createNewArrayItem(identifierCopy, type));
 
         if (shouldAddArrayInitializer(identifierCopy)) {
           PsiTypeLookupItem item = createNewArrayItem(identifierCopy, type);
           item.setAddArrayInitializer();
-          consumer.consume(item);
+          consumer.accept(item);
         }
       }
     }
@@ -240,7 +245,7 @@ public class JavaInheritorsGetter implements CompletionProvider {
 
   private static boolean processMostProbableInheritors(PsiFile contextFile, PsiElement context, Collection<PsiClassType> expectedClassTypes, Consumer<PsiType> consumer) {
     for (final PsiClassType type : expectedClassTypes) {
-      consumer.consume(type);
+      consumer.accept(type);
 
       final PsiClassType.ClassResolveResult baseResult = JavaCompletionUtil.originalize(type).resolveGenerics();
       final PsiClass baseClass = baseResult.getElement();

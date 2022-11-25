@@ -27,7 +27,7 @@ import com.intellij.java.language.psi.PsiMethod;
 import consulo.dataContext.DataContext;
 import consulo.codeEditor.Editor;
 import consulo.project.Project;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.impl.refactoring.HelpID;
 import consulo.language.editor.refactoring.action.RefactoringActionHandler;

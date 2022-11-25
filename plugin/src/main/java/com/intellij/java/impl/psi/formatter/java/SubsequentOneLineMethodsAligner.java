@@ -15,43 +15,37 @@
  */
 package com.intellij.java.impl.psi.formatter.java;
 
-import java.util.List;
+import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
+import consulo.language.ast.ASTNode;
+import consulo.language.ast.IElementType;
+import consulo.language.codeStyle.AlignmentStrategy;
 
 import javax.annotation.Nonnull;
-import consulo.language.codeStyle.AlignmentStrategy;
-import consulo.language.ast.ASTNode;
-import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
-import consulo.language.ast.IElementType;
-import consulo.util.collection.ContainerUtil;
+import java.util.List;
 
-public class SubsequentOneLineMethodsAligner extends ChildAlignmentStrategyProvider
-{
-	private AlignmentStrategy myAlignmentStrategy;
+public class SubsequentOneLineMethodsAligner extends ChildAlignmentStrategyProvider {
+  private AlignmentStrategy myAlignmentStrategy;
 
 
-	public SubsequentOneLineMethodsAligner()
-	{
-		myAlignmentStrategy = newAlignmentStrategy();
-	}
+  public SubsequentOneLineMethodsAligner() {
+    myAlignmentStrategy = newAlignmentStrategy();
+  }
 
-	@Override
-	public AlignmentStrategy getNextChildStrategy(@Nonnull ASTNode child)
-	{
-		IElementType childType = child.getElementType();
+  @Override
+  public AlignmentStrategy getNextChildStrategy(@Nonnull ASTNode child) {
+    IElementType childType = child.getElementType();
 
-		if(childType != JavaElementType.METHOD || child.textContains('\n'))
-		{
-			myAlignmentStrategy = newAlignmentStrategy();
-			return AlignmentStrategy.getNullStrategy();
-		}
+    if (childType != JavaElementType.METHOD || child.textContains('\n')) {
+      myAlignmentStrategy = newAlignmentStrategy();
+      return AlignmentStrategy.getNullStrategy();
+    }
 
-		return myAlignmentStrategy;
-	}
+    return myAlignmentStrategy;
+  }
 
-	private static AlignmentStrategy newAlignmentStrategy()
-	{
-		List<IElementType> types = ContainerUtil.newSmartList(((IElementType) JavaElementType.CODE_BLOCK));
-		return AlignmentStrategy.createAlignmentPerTypeStrategy(types, JavaElementType.METHOD, true);
-	}
+  private static AlignmentStrategy newAlignmentStrategy() {
+    List<IElementType> types = List.of((IElementType) JavaElementType.CODE_BLOCK);
+    return AlignmentStrategy.createAlignmentPerTypeStrategy(types, JavaElementType.METHOD, true);
+  }
 
 }

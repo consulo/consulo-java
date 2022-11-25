@@ -68,7 +68,7 @@ public class MethodCountInspection extends BaseInspection {
     constraints.insets.right = 0;
     panel.add(valueField, constraints);
 
-    final CheckBox gettersSettersCheckBox = new CheckBox(
+    final consulo.language.editor.inspection.ui.CheckBox gettersSettersCheckBox = new consulo.language.editor.inspection.ui.CheckBox(
       InspectionGadgetsBundle.message(
         "method.count.ignore.getters.setters.option"),
       this, "ignoreGettersAndSetters");

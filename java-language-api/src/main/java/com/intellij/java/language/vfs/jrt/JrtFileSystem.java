@@ -8,7 +8,7 @@ import consulo.virtualFileSystem.archive.ArchiveFileSystem;
 
 import javax.annotation.Nonnull;
 
-public abstract class JrtFileSystem implements ArchiveFileSystem, VirtualFilePointerCapableFileSystem {
+public interface JrtFileSystem extends ArchiveFileSystem, VirtualFilePointerCapableFileSystem {
   public static final String PROTOCOL = "jrt";
   public static final String PROTOCOL_PREFIX = PROTOCOL + URLUtil.SCHEME_SEPARATOR;
   public static final String SEPARATOR = URLUtil.JAR_SEPARATOR;

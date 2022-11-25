@@ -16,27 +16,28 @@
 package com.intellij.java.impl.refactoring.inline;
 
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import consulo.project.ui.wm.WindowManager;
-import consulo.util.lang.ref.Ref;
-import com.intellij.psi.*;
-import consulo.language.psi.scope.GlobalSearchScope;
-import consulo.language.psi.search.ReferencesSearch;
-import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.language.editor.refactoring.BaseRefactoringProcessor;
 import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.editor.refactoring.rename.NonCodeUsageInfoFactory;
 import consulo.language.editor.refactoring.util.TextOccurrencesUtil;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiReference;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.search.ReferencesSearch;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.logging.Logger;
+import consulo.project.Project;
+import consulo.project.ui.wm.WindowManager;
 import consulo.usage.UsageInfo;
 import consulo.usage.UsageViewDescriptor;
-import consulo.language.util.IncorrectOperationException;
 import consulo.util.collection.MultiMap;
-import consulo.logging.Logger;
+import consulo.util.lang.ref.Ref;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import java.util.*;
 
 /**

@@ -35,7 +35,7 @@ import consulo.codeEditor.ScrollType;
 import consulo.project.Project;
 import consulo.ui.ex.awt.DialogWrapper;
 import consulo.ui.ex.awt.Messages;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
 import com.intellij.java.language.psi.codeStyle.VariableKind;

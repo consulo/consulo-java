@@ -15,23 +15,23 @@
  */
 package com.intellij.java.impl.ig.numeric;
 
+import com.intellij.java.impl.ig.fixes.ExtractMethodFix;
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.*;
-import consulo.language.ast.IElementType;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.fixes.ExtractMethodFix;
 import com.siyeh.ig.psiutils.TypeUtils;
-import consulo.ide.impl.idea.codeInspection.ui.SingleIntegerFieldOptionsPanel;
-import javax.annotation.Nonnull;
+import consulo.language.ast.IElementType;
+import consulo.language.editor.inspection.ui.SingleIntegerFieldOptionsPanel;
+import consulo.language.psi.PsiElement;
 
+import javax.annotation.Nonnull;
 import javax.swing.*;
 import java.util.HashSet;
 import java.util.Set;
 
-public class OverlyComplexArithmeticExpressionInspection
+public abstract class OverlyComplexArithmeticExpressionInspection
   extends BaseInspection {
 
   private static final int TERM_LIMIT = 6;

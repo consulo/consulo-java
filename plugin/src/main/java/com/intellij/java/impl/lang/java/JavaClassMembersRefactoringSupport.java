@@ -15,12 +15,16 @@
  */
 package com.intellij.java.impl.lang.java;
 
+import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.PsiClass;
+import consulo.language.Language;
 import consulo.language.editor.refactoring.classMember.ClassMembersRefactoringSupport;
 import consulo.language.editor.refactoring.classMember.DependentMembersCollectorBase;
 import consulo.language.editor.refactoring.classMember.MemberInfoBase;
 import com.intellij.java.impl.refactoring.util.classMembers.ClassMembersUtil;
 import com.intellij.java.impl.refactoring.util.classMembers.DependentMembersCollector;
+
+import javax.annotation.Nonnull;
 
 /**
  * @author Dennis.Ushakov
@@ -34,5 +38,11 @@ public class JavaClassMembersRefactoringSupport implements ClassMembersRefactori
   @Override
   public boolean isProperMember(MemberInfoBase member) {
     return ClassMembersUtil.isProperMember(member);
+  }
+
+  @Nonnull
+  @Override
+  public Language getLanguage() {
+    return JavaLanguage.INSTANCE;
   }
 }

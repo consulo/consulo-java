@@ -15,33 +15,29 @@
  */
 package com.intellij.java.impl.ig.errorhandling;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-import javax.swing.JComponent;
-
-import consulo.fileEditor.FileEditorManager;
-import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.ide.impl.idea.codeInspection.ui.MultipleCheckboxOptionsPanel;
+import com.intellij.java.impl.ig.psiutils.ExceptionUtils;
+import com.intellij.java.language.psi.PsiElementFactory;
 import com.intellij.java.language.psi.*;
-import consulo.document.Document;
-import consulo.codeEditor.Editor;
-import consulo.codeEditor.ScrollType;
-import consulo.project.Project;
-import consulo.document.util.TextRange;
-import com.intellij.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
-import consulo.language.util.IncorrectOperationException;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.psiutils.ExceptionUtils;
 import com.siyeh.ig.psiutils.TestUtils;
+import consulo.codeEditor.Editor;
+import consulo.codeEditor.ScrollType;
+import consulo.document.Document;
+import consulo.document.util.TextRange;
+import consulo.fileEditor.FileEditorManager;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.editor.inspection.ui.MultipleCheckboxOptionsPanel;
+import consulo.language.psi.*;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+
+import javax.annotation.Nonnull;
+import javax.swing.*;
+import java.util.*;
 
 public class TooBroadCatchInspection extends BaseInspection {
 

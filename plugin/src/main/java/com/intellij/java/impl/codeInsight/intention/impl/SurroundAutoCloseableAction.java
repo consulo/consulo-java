@@ -15,28 +15,29 @@
  */
 package com.intellij.java.impl.codeInsight.intention.impl;
 
+import com.intellij.java.language.JavaLanguage;
+import com.intellij.java.language.LanguageLevel;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.InheritanceUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.application.util.function.Processor;
+import consulo.codeEditor.Editor;
+import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.intention.PsiElementBaseIntentionAction;
-import com.intellij.java.language.JavaLanguage;
-import com.intellij.java.language.psi.*;
-import consulo.codeEditor.Editor;
-import consulo.project.Project;
-import com.intellij.java.language.LanguageLevel;
-import com.intellij.psi.*;
-import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiReference;
+import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.scope.LocalSearchScope;
-import com.intellij.psi.search.ProjectScope;
 import consulo.language.psi.search.ReferencesSearch;
-import com.intellij.java.language.psi.util.InheritanceUtil;
 import consulo.language.psi.util.PsiTreeUtil;
-import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.language.util.IncorrectOperationException;
-import consulo.application.util.function.Processor;
+import consulo.project.Project;
+import consulo.project.content.scope.ProjectScopes;
 import consulo.util.collection.SmartList;
-import consulo.java.language.module.util.JavaClassNames;
 
 import javax.annotation.Nonnull;
-
 import java.util.List;
 
 public class SurroundAutoCloseableAction extends PsiElementBaseIntentionAction {
@@ -58,7 +59,7 @@ public class SurroundAutoCloseableAction extends PsiElementBaseIntentionAction {
     if (!(type instanceof PsiClassType)) return false;
     final PsiClass aClass = ((PsiClassType)type).resolve();
     final JavaPsiFacade facade = JavaPsiFacade.getInstance(project);
-    final PsiClass autoCloseable = facade.findClass(JavaClassNames.JAVA_LANG_AUTO_CLOSEABLE, ProjectScope.getLibrariesScope(project));
+    final PsiClass autoCloseable = facade.findClass(JavaClassNames.JAVA_LANG_AUTO_CLOSEABLE, (GlobalSearchScope) ProjectScopes.getLibrariesScope(project));
     if (!InheritanceUtil.isInheritorOrSelf(aClass, autoCloseable, true)) return false;
 
     return true;

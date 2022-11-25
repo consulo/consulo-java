@@ -15,19 +15,19 @@
  */
 package com.intellij.java.impl.codeInspection.inheritance;
 
-import javax.annotation.Nonnull;
-
-import consulo.language.editor.FileModificationService;
 import com.intellij.java.analysis.codeInspection.GroupNames;
-import consulo.language.editor.intention.LowPriorityAction;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
+import consulo.language.editor.FileModificationService;
+import consulo.language.editor.WriteCommandAction;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemDescriptor;
-import com.intellij.java.language.psi.*;
-import consulo.language.editor.WriteCommandAction;
+import consulo.language.editor.intention.LowPriorityAction;
+import consulo.language.psi.PsiElement;
 import consulo.project.Project;
-import com.intellij.psi.*;
-import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import org.jetbrains.annotations.TestOnly;
+
+import javax.annotation.Nonnull;
 
 /**
  * @author Dmitry Batkovich <dmitry.batkovich@jetbrains.com>

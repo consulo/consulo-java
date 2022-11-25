@@ -30,7 +30,7 @@ import consulo.project.Project;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.ref.Ref;
 import consulo.document.util.TextRange;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import consulo.util.collection.ArrayUtil;
 import consulo.logging.Logger;
 

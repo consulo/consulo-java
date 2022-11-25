@@ -15,33 +15,32 @@
  */
 package com.intellij.java.impl.codeInsight.template.postfix.templates;
 
-import consulo.language.editor.completion.CompletionInitializationContext;
-import consulo.ide.impl.idea.codeInsight.template.postfix.templates.PostfixLiveTemplate;
-import consulo.language.editor.postfixTemplate.PostfixTemplate;
-import consulo.language.editor.postfixTemplate.PostfixTemplateProvider;
 import com.intellij.java.impl.codeInsight.completion.JavaCompletionContributor;
+import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.JavaTokenType;
 import consulo.application.ApplicationManager;
-import consulo.undoRedo.CommandProcessor;
-import consulo.document.Document;
-import consulo.codeEditor.Editor;
-import consulo.ide.impl.idea.openapi.editor.EditorModificationUtil;
 import consulo.application.util.function.Computable;
-import com.intellij.psi.*;
-import consulo.util.collection.ContainerUtil;
+import consulo.codeEditor.Editor;
+import consulo.document.Document;
+import consulo.ide.impl.idea.codeInsight.template.postfix.templates.PostfixLiveTemplate;
+import consulo.ide.impl.idea.openapi.editor.EditorModificationUtil;
+import consulo.language.Language;
+import consulo.language.editor.completion.CompletionInitializationContext;
+import consulo.language.editor.postfixTemplate.PostfixTemplate;
+import consulo.language.editor.postfixTemplate.PostfixTemplateProvider;
+import consulo.language.psi.*;
+import consulo.undoRedo.CommandProcessor;
 import consulo.util.dataholder.Key;
 
 import javax.annotation.Nonnull;
 import java.util.Set;
 
-
-public class JavaPostfixTemplateProvider implements PostfixTemplateProvider {
+public class JavaPostfixTemplateProvider extends PostfixTemplateProvider {
   public static final Key<SmartPsiElementPointer<PsiElement>> ADDED_SEMICOLON = Key.create("postfix_added_semicolon");
-  private final Set<PostfixTemplate> templates;
 
-
-  public JavaPostfixTemplateProvider() {
-    templates = ContainerUtil.newHashSet(new AssertStatementPostfixTemplate(), new CastExpressionPostfixTemplate(),
+  @Override
+  protected Set<PostfixTemplate> buildTemplates() {
+    return Set.of(new AssertStatementPostfixTemplate(), new CastExpressionPostfixTemplate(),
         new ElseStatementPostfixTemplate(), new ForAscendingPostfixTemplate(), new ForDescendingPostfixTemplate(),
         new ForeachPostfixTemplate(), new FormatPostfixTemplate(), new IfStatementPostfixTemplate(), new InstanceofExpressionPostfixTemplate
             (), new InstanceofExpressionPostfixTemplate("inst"), new IntroduceFieldPostfixTemplate(), new IntroduceVariablePostfixTemplate(),
@@ -50,12 +49,6 @@ public class JavaPostfixTemplateProvider implements PostfixTemplateProvider {
         new ReturnStatementPostfixTemplate(), new SoutPostfixTemplate(), new SwitchStatementPostfixTemplate(),
         new SynchronizedStatementPostfixTemplate(), new ThrowExceptionPostfixTemplate(), new TryStatementPostfixTemplate(),
         new TryWithResourcesPostfixTemplate(), new WhileStatementPostfixTemplate());
-  }
-
-  @Nonnull
-  @Override
-  public Set<PostfixTemplate> getTemplates() {
-    return templates;
   }
 
   @Override
@@ -137,5 +130,11 @@ public class JavaPostfixTemplateProvider implements PostfixTemplateProvider {
 
   private static boolean isSemicolonNeeded(@Nonnull PsiFile file, @Nonnull Editor editor) {
     return JavaCompletionContributor.semicolonNeeded(editor, file, CompletionInitializationContext.calcStartOffset(editor.getCaretModel().getCurrentCaret()));
+  }
+
+  @Nonnull
+  @Override
+  public Language getLanguage() {
+    return JavaLanguage.INSTANCE;
   }
 }

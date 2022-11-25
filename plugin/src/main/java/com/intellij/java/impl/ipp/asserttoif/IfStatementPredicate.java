@@ -16,7 +16,7 @@
 package com.intellij.java.impl.ipp.asserttoif;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import consulo.java.language.module.util.JavaClassNames;
 

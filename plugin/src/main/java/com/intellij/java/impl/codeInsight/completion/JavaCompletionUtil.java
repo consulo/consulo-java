@@ -1,16 +1,6 @@
 // Copyright 2000-2019 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.impl.codeInsight.completion;
 
-import consulo.language.editor.AutoPopupController;
-import consulo.language.editor.CodeInsightSettings;
-import consulo.language.editor.CodeInsightUtilCore;
-import consulo.language.editor.completion.lookup.TailType;
-import com.intellij.codeInsight.completion.*;
-import consulo.language.editor.completion.CamelHumpMatcher;
-import consulo.language.editor.completion.CompletionStyleUtil;
-import consulo.language.editor.completion.lookup.ParenthesesInsertHandler;
-import consulo.codeEditor.action.TabOutScopesTracker;
-import com.intellij.codeInsight.lookup.*;
 import com.intellij.java.analysis.codeInsight.guess.GuessManager;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.LambdaHighlightingUtil;
 import com.intellij.java.analysis.impl.codeInspection.java15api.Java15APIUsageInspection;
@@ -32,35 +22,42 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
 import com.intellij.java.language.psi.util.*;
-import consulo.document.Document;
+import com.siyeh.ig.psiutils.SideEffectChecker;
+import consulo.application.util.matcher.PrefixMatcher;
 import consulo.codeEditor.Editor;
-import consulo.document.RangeMarker;
+import consulo.codeEditor.action.TabOutScopesTracker;
+import consulo.document.Document;
 import consulo.document.FileDocumentManager;
-import consulo.project.Project;
-import consulo.util.lang.function.Condition;
-import consulo.util.lang.function.Conditions;
+import consulo.document.RangeMarker;
 import consulo.ide.impl.idea.openapi.util.NullableLazyKey;
-import consulo.util.lang.ref.Ref;
-import consulo.util.lang.StringUtil;
-import com.intellij.psi.*;
 import consulo.language.codeStyle.CommonCodeStyleSettings;
-import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
-import consulo.language.psi.filter.ElementFilter;
-import consulo.language.impl.psi.FakePsiElement;
 import consulo.language.codeStyle.PostprocessReformattingAspect;
+import consulo.language.editor.AutoPopupController;
+import consulo.language.editor.CodeInsightSettings;
+import consulo.language.editor.CodeInsightUtilCore;
+import consulo.language.editor.completion.*;
+import consulo.language.editor.completion.lookup.*;
+import consulo.language.editor.impl.internal.completion.CompletionUtil;
+import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
+import consulo.language.impl.psi.FakePsiElement;
+import consulo.language.psi.*;
+import consulo.language.psi.filter.ElementFilter;
 import consulo.language.psi.resolve.PsiScopeProcessor;
+import consulo.language.psi.resolve.ResolveState;
 import consulo.language.psi.util.PsiTreeUtil;
-import consulo.language.psi.PsiUtilCore;
 import consulo.language.util.IncorrectOperationException;
-import consulo.ide.impl.idea.util.ObjectUtils;
-import consulo.util.lang.function.PairFunction;
+import consulo.logging.Logger;
+import consulo.project.Project;
+import consulo.ui.style.StandardColors;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.collection.JBIterable;
-import com.siyeh.ig.psiutils.SideEffectChecker;
-import consulo.logging.Logger;
-import consulo.psi.PsiPackage;
-import consulo.ui.style.StandardColors;
 import consulo.util.dataholder.Key;
+import consulo.util.lang.ObjectUtil;
+import consulo.util.lang.StringUtil;
+import consulo.util.lang.function.Condition;
+import consulo.util.lang.function.Conditions;
+import consulo.util.lang.function.PairFunction;
+import consulo.util.lang.ref.Ref;
 import one.util.streamex.StreamEx;
 import org.jetbrains.annotations.Contract;
 
@@ -329,7 +326,7 @@ public class JavaCompletionUtil {
     PsiClass qualifierClass = PsiUtil.resolveClassInClassTypeOnly(plainQualifier);
     final boolean honorExcludes = qualifierClass == null || !isInExcludedPackage(qualifierClass, false);
 
-    Set<PsiType> expectedTypes = ObjectUtils.coalesce(getExpectedTypes(parameters), Collections.emptySet());
+    Set<PsiType> expectedTypes = ObjectUtil.coalesce(getExpectedTypes(parameters), Collections.emptySet());
 
     final Set<PsiMember> mentioned = new HashSet<>();
     for (CompletionElement completionElement : processor.getResults()) {

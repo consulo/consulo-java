@@ -15,22 +15,21 @@
  */
 package com.intellij.java.impl.ipp.adapter;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-
-import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import com.intellij.psi.*;
-import consulo.language.codeStyle.CodeStyleSettingsManager;
-import com.intellij.java.impl.psi.codeStyle.JavaCodeStyleSettings;
-import com.intellij.java.language.psi.javadoc.PsiDocComment;
-import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.language.util.IncorrectOperationException;
-import com.siyeh.IntentionPowerPackBundle;
 import com.intellij.java.impl.ipp.base.MutablyNamedIntention;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
+import com.intellij.java.impl.psi.codeStyle.JavaCodeStyleSettings;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.javadoc.PsiDocComment;
+import com.intellij.java.language.psi.util.PsiUtil;
+import com.siyeh.IntentionPowerPackBundle;
+import consulo.language.codeStyle.CodeStyleSettingsManager;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+
+import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AdapterToListenerIntention extends MutablyNamedIntention {
 

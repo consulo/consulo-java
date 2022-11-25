@@ -15,7 +15,6 @@
  */
 package com.intellij.java.impl.psi.impl.source.javadoc;
 
-import consulo.language.editor.inspection.SuppressionUtil;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.impl.psi.impl.source.javadoc.AuthorDocTagInfo;
 import com.intellij.java.language.impl.psi.impl.source.javadoc.SimpleDocTagInfo;
@@ -26,9 +25,10 @@ import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.javadoc.JavadocManager;
 import com.intellij.java.language.psi.javadoc.JavadocTagInfo;
 import consulo.component.extension.Extensions;
-import consulo.project.Project;
+import consulo.language.editor.inspection.SuppressionUtil;
 import consulo.language.psi.PsiElement;
-import consulo.psi.PsiPackage;
+import consulo.language.psi.PsiPackage;
+import consulo.project.Project;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 

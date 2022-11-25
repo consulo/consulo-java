@@ -15,31 +15,26 @@
  */
 package com.intellij.java.impl.ig.errorhandling;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-import javax.swing.JComponent;
-
-import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.ide.impl.idea.codeInspection.ui.MultipleCheckboxOptionsPanel;
+import com.intellij.java.impl.ig.psiutils.ExceptionUtils;
+import com.intellij.java.impl.ig.psiutils.LibraryUtil;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import com.intellij.psi.*;
-import consulo.language.util.IncorrectOperationException;
-import consulo.util.collection.ContainerUtil;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.psiutils.ExceptionUtils;
-import com.intellij.java.impl.ig.psiutils.LibraryUtil;
 import com.siyeh.ig.psiutils.TestUtils;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.editor.inspection.ui.MultipleCheckboxOptionsPanel;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+import consulo.util.collection.ContainerUtil;
 
-public class TooBroadThrowsInspection extends BaseInspection {
+import javax.annotation.Nonnull;
+import javax.swing.*;
+import java.util.*;
+
+public abstract class TooBroadThrowsInspection extends BaseInspection {
 
   @SuppressWarnings({"PublicField"})
   public boolean onlyWarnOnRootExceptions = false;

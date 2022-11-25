@@ -16,24 +16,25 @@
  */
 package com.intellij.java.impl.codeInsight.generation.surroundWith;
 
-import consulo.language.editor.CodeInsightBundle;
+import com.intellij.java.language.psi.PsiElementFactory;
 import com.intellij.java.language.psi.*;
-import consulo.codeEditor.Editor;
-import consulo.project.Project;
-import consulo.util.lang.Comparing;
-import consulo.document.util.TextRange;
-import com.intellij.psi.*;
-import consulo.language.codeStyle.CodeStyleManager;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
+import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.codeEditor.Editor;
+import consulo.document.util.TextRange;
+import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.refactoring.rename.inplace.VariableInplaceRenamer;
+import consulo.language.psi.*;
 import consulo.language.psi.scope.LocalSearchScope;
 import consulo.language.psi.search.ReferencesSearch;
-import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.language.editor.refactoring.rename.inplace.VariableInplaceRenamer;
 import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+import consulo.util.lang.Comparing;
 import org.jetbrains.annotations.NonNls;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import java.util.Collection;
 
 public class JavaWithRunnableSurrounder extends JavaStatementsSurrounder{

@@ -23,7 +23,7 @@ package com.intellij.java.impl.refactoring.inlineSuperClass.usageInfo;
 import javax.annotation.Nonnull;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.editor.refactoring.RefactoringBundle;
 import com.intellij.java.impl.refactoring.inline.InlineMethodProcessor;

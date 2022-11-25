@@ -15,16 +15,17 @@
  */
 package com.intellij.java.impl.codeInsight.completion;
 
-import com.intellij.codeInsight.completion.*;
 import com.intellij.java.impl.psi.impl.source.resolve.reference.impl.providers.JavaClassReference;
 import com.intellij.java.impl.psi.impl.source.resolve.reference.impl.providers.JavaClassReferenceSet;
 import com.intellij.java.language.psi.PsiJavaPackage;
-import consulo.ui.ex.action.IdeActions;
-import consulo.util.lang.StringUtil;
+import consulo.ide.impl.idea.codeInsight.completion.LegacyCompletionContributor;
+import consulo.language.editor.completion.*;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
-import consulo.language.psi.PsiReference;
 import consulo.language.psi.PsiMultiReference;
+import consulo.language.psi.PsiReference;
+import consulo.ui.ex.action.IdeActions;
+import consulo.util.lang.StringUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -32,7 +33,7 @@ import javax.annotation.Nullable;
 /**
  * @author peter
  */
-public class JavaClassReferenceCompletionContributor extends CompletionContributor {
+public abstract class JavaClassReferenceCompletionContributor extends CompletionContributor {
   @Override
   public void duringCompletion(@Nonnull CompletionInitializationContext context) {
     JavaClassReference reference = findJavaClassReference(context.getFile(), context.getStartOffset());
@@ -57,11 +58,11 @@ public class JavaClassReferenceCompletionContributor extends CompletionContribut
         JavaClassReferenceSet set = reference.getJavaClassReferenceSet();
         int setStart = set.getRangeInElement().getStartOffset() + set.getElement().getTextRange().getStartOffset();
         String fullPrefix = parameters.getPosition().getContainingFile().getText().substring(setStart, parameters.getOffset());
-        reference.processSubclassVariants((PsiJavaPackage)context, extendClassNames, result.withPrefixMatcher(fullPrefix));
+        reference.processSubclassVariants((PsiJavaPackage) context, extendClassNames, result.withPrefixMatcher(fullPrefix));
         return;
       }
       result.addLookupAdvertisement("Press " + getActionShortcut(IdeActions.ACTION_SMART_TYPE_COMPLETION) + " to see inheritors of " +
-                                    StringUtil.join(extendClassNames, ", "));
+          StringUtil.join(extendClassNames, ", "));
     }
 
     if (parameters.getCompletionType() == CompletionType.SMART) {
@@ -70,8 +71,7 @@ public class JavaClassReferenceCompletionContributor extends CompletionContribut
 
     if (parameters.isExtendedCompletion() || parameters.getCompletionType() == CompletionType.CLASS_NAME) {
       JavaClassNameCompletionContributor.addAllClasses(parameters, result);
-    }
-    else {
+    } else {
       LegacyCompletionContributor.completeReference(parameters, result);
     }
     result.stopHere();
@@ -81,12 +81,12 @@ public class JavaClassReferenceCompletionContributor extends CompletionContribut
   public static JavaClassReference findJavaClassReference(final PsiFile file, final int offset) {
     PsiReference reference = file.findReferenceAt(offset);
     if (reference instanceof PsiMultiReference) {
-      for (final PsiReference psiReference : ((PsiMultiReference)reference).getReferences()) {
+      for (final PsiReference psiReference : ((PsiMultiReference) reference).getReferences()) {
         if (psiReference instanceof JavaClassReference) {
-          return (JavaClassReference)psiReference;
+          return (JavaClassReference) psiReference;
         }
       }
     }
-    return reference instanceof JavaClassReference ? (JavaClassReference)reference : null;
+    return reference instanceof JavaClassReference ? (JavaClassReference) reference : null;
   }
 }

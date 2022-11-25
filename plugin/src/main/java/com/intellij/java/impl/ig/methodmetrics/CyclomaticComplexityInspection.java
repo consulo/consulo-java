@@ -20,7 +20,7 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
 import javax.annotation.Nonnull;
 
-public class CyclomaticComplexityInspection extends MethodMetricInspection {
+public abstract class CyclomaticComplexityInspection extends MethodMetricInspection {
 
   @Nonnull
   public String getID() {

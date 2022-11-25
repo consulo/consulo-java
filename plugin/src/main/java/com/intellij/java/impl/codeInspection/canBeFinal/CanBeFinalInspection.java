@@ -24,33 +24,40 @@
  */
 package com.intellij.java.impl.codeInspection.canBeFinal;
 
-import consulo.language.editor.scope.AnalysisScope;
-import consulo.language.editor.FileModificationService;
-import com.intellij.java.analysis.codeInspection.GroupNames;
-import com.intellij.codeInspection.reference.*;
 import com.intellij.java.analysis.codeInspection.GlobalJavaInspectionContext;
 import com.intellij.java.analysis.codeInspection.GlobalJavaInspectionTool;
+import com.intellij.java.analysis.codeInspection.GroupNames;
 import com.intellij.java.analysis.codeInspection.reference.*;
 import com.intellij.java.analysis.impl.codeInspection.canBeFinal.CanBeFinalHandler;
 import com.intellij.java.analysis.impl.codeInspection.reference.RefClassImpl;
 import com.intellij.java.impl.codeInspection.reference.RefFieldImpl;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import com.intellij.psi.*;
-import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.language.editor.FileModificationService;
+import consulo.language.editor.impl.inspection.reference.RefElementImpl;
+import consulo.language.editor.inspection.*;
+import consulo.language.editor.inspection.reference.RefElement;
+import consulo.language.editor.inspection.reference.RefEntity;
+import consulo.language.editor.inspection.reference.RefGraphAnnotator;
+import consulo.language.editor.inspection.reference.RefManager;
+import consulo.language.editor.inspection.scheme.InspectionManager;
+import consulo.language.editor.scope.AnalysisScope;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiReference;
+import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
+import consulo.project.Project;
 import org.jetbrains.annotations.NonNls;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
 
-public class CanBeFinalInspection extends GlobalJavaInspectionTool
+public abstract class CanBeFinalInspection extends GlobalJavaInspectionTool
 {
   private static final Logger LOG = Logger.getInstance(CanBeFinalInspection.class);
 

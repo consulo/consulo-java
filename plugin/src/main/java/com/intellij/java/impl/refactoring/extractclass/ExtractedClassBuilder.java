@@ -15,26 +15,26 @@
  */
 package com.intellij.java.impl.refactoring.extractclass;
 
+import com.intellij.java.impl.refactoring.psi.MethodInheritanceUtils;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import consulo.util.lang.function.Condition;
-import consulo.util.lang.StringUtil;
-import com.intellij.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
-import consulo.language.ast.IElementType;
 import com.intellij.java.language.psi.util.PropertyUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.java.impl.refactoring.psi.MethodInheritanceUtils;
-import consulo.ide.impl.idea.util.Function;
+import consulo.language.ast.IElementType;
+import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
+import consulo.project.Project;
+import consulo.util.lang.StringUtil;
+import consulo.util.lang.function.Condition;
 import org.jetbrains.annotations.NonNls;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Function;
 
 class ExtractedClassBuilder {
   private static final Logger LOGGER = Logger.getInstance("com.siyeh.rpp.extractclass.ExtractedClassBuilder");
@@ -259,7 +259,7 @@ class ExtractedClassBuilder {
   private void outputFieldsAndInitializers(final StringBuffer out) {
     if (hasEnumConstants()) {
       out.append(StringUtil.join(enumConstantFields, new Function<PsiField, String>() {
-        public String fun(PsiField field) {
+        public String apply(PsiField field) {
           final StringBuffer fieldStr = new StringBuffer(field.getName() + "(");
           final PsiExpression initializer = field.getInitializer();
           if (initializer != null) {

@@ -19,7 +19,7 @@ import com.intellij.java.language.codeInsight.NullableNotNullManager;
 import com.intellij.java.analysis.impl.codeInsight.intention.AddAnnotationFix;
 import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;

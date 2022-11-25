@@ -15,108 +15,90 @@
  */
 package com.intellij.java.execution.impl.testDiscovery;
 
-import javax.annotation.Nonnull;
-
-import consulo.execution.test.autotest.AbstractAutoTestManager;
-import consulo.execution.test.autotest.AutoTestWatcher;
-import jakarta.inject.Inject;
-import jakarta.inject.Singleton;
-
-import consulo.disposer.Disposable;
-import consulo.compiler.event.CompilationStatusListener;
 import consulo.compiler.CompileContext;
-import com.intellij.openapi.compiler.CompilerTopics;
-import consulo.ide.ServiceManager;
+import consulo.compiler.event.CompilationStatusListener;
 import consulo.component.persist.State;
 import consulo.component.persist.Storage;
 import consulo.component.persist.StoragePathMacros;
-import consulo.project.Project;
+import consulo.disposer.Disposable;
 import consulo.disposer.Disposer;
+import consulo.execution.test.autotest.AbstractAutoTestManager;
+import consulo.execution.test.autotest.AutoTestWatcher;
+import consulo.ide.ServiceManager;
+import consulo.project.Project;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
+
+import javax.annotation.Nonnull;
 
 @Singleton
 @State(name = "JavaAutoRunManager", storages = {@Storage(StoragePathMacros.WORKSPACE_FILE)})
-public class JavaAutoRunManager extends AbstractAutoTestManager
-{
-	@Nonnull
-	public static JavaAutoRunManager getInstance(Project project)
-	{
-		return ServiceManager.getService(project, JavaAutoRunManager.class);
-	}
+public class JavaAutoRunManager extends AbstractAutoTestManager {
+  @Nonnull
+  public static JavaAutoRunManager getInstance(Project project) {
+    return ServiceManager.getService(project, JavaAutoRunManager.class);
+  }
 
-	@Inject
-	public JavaAutoRunManager(@Nonnull Project project)
-	{
-		super(project);
-	}
+  @Inject
+  public JavaAutoRunManager(@Nonnull Project project) {
+    super(project);
+  }
 
-	@Nonnull
-	@Override
-	protected AutoTestWatcher createWatcher(Project project)
-	{
-		return new AutoTestWatcher()
-		{
-			private boolean myHasErrors = false;
-			private Disposable myEventDisposable;
+  @Nonnull
+  @Override
+  protected AutoTestWatcher createWatcher(Project project) {
+    return new AutoTestWatcher() {
+      private boolean myHasErrors = false;
+      private Disposable myEventDisposable;
 
-			@Override
-			public void activate()
-			{
-				if(myEventDisposable != null)
-				{
-					return;
-				}
+      @Override
+      public void activate() {
+        if (myEventDisposable != null) {
+          return;
+        }
 
-				myEventDisposable = Disposable.newDisposable();
-				Disposer.register(project, myEventDisposable);
-				project.getMessageBus().connect(myEventDisposable).subscribe(CompilerTopics.COMPILATION_STATUS, new CompilationStatusListener()
-				{
-					private boolean myFoundFilesToMake = false;
+        myEventDisposable = Disposable.newDisposable();
+        Disposer.register(project, myEventDisposable);
+        project.getMessageBus().connect(myEventDisposable).subscribe(CompilationStatusListener.class, new CompilationStatusListener() {
+          private boolean myFoundFilesToMake = false;
 
-					@Override
-					public void compilationFinished(boolean aborted, int errors, int warnings, CompileContext compileContext)
-					{
-						if(!myFoundFilesToMake)
-						{
-							return;
-						}
-						if(errors == 0)
-						{
-							restartAllAutoTests(0);
-						}
-						myHasErrors = errors == 0;
-						myFoundFilesToMake = false;
-					}
+          @Override
+          public void compilationFinished(boolean aborted, int errors, int warnings, CompileContext compileContext) {
+            if (!myFoundFilesToMake) {
+              return;
+            }
+            if (errors == 0) {
+              restartAllAutoTests(0);
+            }
+            myHasErrors = errors == 0;
+            myFoundFilesToMake = false;
+          }
 
-					//@Override
-					public void automakeCompilationFinished(int errors, int warnings, CompileContext compileContext)
-					{
-						compilationFinished(false, errors, warnings, compileContext);
-					}
+          //@Override
+          public void automakeCompilationFinished(int errors, int warnings, CompileContext compileContext) {
+            compilationFinished(false, errors, warnings, compileContext);
+          }
 
-					//@Override
-					public void fileGenerated(String outputRoot, String relativePath)
-					{
-						myFoundFilesToMake = true;
-					}
-				});
-			}
+          //@Override
+          public void fileGenerated(String outputRoot, String relativePath) {
+            myFoundFilesToMake = true;
+          }
+        });
+      }
 
-			@Override
-			public void deactivate()
-			{
-				Disposable eventDisposable = myEventDisposable;
-				if(eventDisposable != null)
-				{
-					myEventDisposable = null;
-					Disposer.dispose(eventDisposable);
-				}
-			}
+      @Override
+      public void deactivate() {
+        Disposable eventDisposable = myEventDisposable;
+        if (eventDisposable != null) {
+          myEventDisposable = null;
+          Disposer.dispose(eventDisposable);
+        }
+      }
 
-			@Override
-			public boolean isUpToDate(int modificationStamp)
-			{
-				return !myHasErrors;
-			}
-		};
-	}
+      @Override
+      public boolean isUpToDate(int modificationStamp) {
+        return !myHasErrors;
+      }
+    };
+  }
 }

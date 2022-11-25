@@ -15,34 +15,25 @@
  */
 package com.intellij.java.impl.util.xml.converters;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import consulo.language.editor.CodeInsightBundle;
+import com.intellij.java.language.psi.*;
+import consulo.application.util.function.CommonProcessors;
+import consulo.application.util.function.Processor;
 import consulo.ide.IdeBundle;
+import consulo.language.editor.CodeInsightBundle;
+import consulo.language.psi.PsiElement;
+import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.function.Condition;
 import consulo.util.lang.ref.Ref;
-import com.intellij.java.language.psi.PsiClass;
-import consulo.language.psi.PsiElement;
-import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.java.language.psi.PsiModifier;
-import com.intellij.java.language.psi.PsiParameter;
-import com.intellij.java.language.psi.PsiType;
-import consulo.application.util.function.CommonProcessors;
-import consulo.ide.impl.idea.util.Function;
-import consulo.application.util.function.Processor;
-import consulo.util.collection.ContainerUtil;
-import com.intellij.util.xml.ConvertContext;
-import com.intellij.util.xml.DomElement;
-import com.intellij.util.xml.GenericDomValue;
-import com.intellij.util.xml.ResolvingConverter;
+import consulo.xml.util.xml.ConvertContext;
+import consulo.xml.util.xml.DomElement;
+import consulo.xml.util.xml.GenericDomValue;
+import consulo.xml.util.xml.ResolvingConverter;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.*;
+import java.util.function.Function;
 
 /**
  * @author peter
@@ -101,11 +92,7 @@ public abstract class AbstractMethodResolveConverter<ParentType extends DomEleme
         }
         return true;
       }
-    }, new Function<PsiClass, PsiMethod[]>() {
-      public PsiMethod[] fun(final PsiClass s) {
-        return s.findMethodsByName(stringValue, true);
-      }
-    });
+    }, s -> s.findMethodsByName(stringValue, true));
 
     return result.get();
   }
@@ -114,7 +101,7 @@ public abstract class AbstractMethodResolveConverter<ParentType extends DomEleme
   protected void processMethods(final ConvertContext context, Processor<PsiMethod> processor, Function<PsiClass, PsiMethod[]> methodGetter) {
     for (PsiClass psiClass : getPsiClasses(getParent(context), context)) {
       if (psiClass != null) {
-        for (PsiMethod psiMethod : methodGetter.fun(psiClass)) {
+        for (PsiMethod psiMethod : methodGetter.apply(psiClass)) {
           if (!processor.process(psiMethod)) {
             return;
           }
@@ -128,7 +115,7 @@ public abstract class AbstractMethodResolveConverter<ParentType extends DomEleme
     LinkedHashSet<PsiMethod> methodList = new LinkedHashSet<PsiMethod>();
     Processor<PsiMethod> processor = CommonProcessors.notNullProcessor(new CommonProcessors.CollectProcessor<PsiMethod>(methodList));
     processMethods(context, processor, new Function<PsiClass, PsiMethod[]>() {
-      public PsiMethod[] fun(final PsiClass s) {
+      public PsiMethod[] apply(final PsiClass s) {
         final List<PsiMethod> list = ContainerUtil.findAll(getVariants(s), new Condition<PsiMethod>() {
           public boolean value(final PsiMethod object) {
             return acceptMethod(object, context);
@@ -160,7 +147,7 @@ public abstract class AbstractMethodResolveConverter<ParentType extends DomEleme
   public PsiMethod fromString(final String methodName, final ConvertContext context) {
     final CommonProcessors.FindFirstProcessor<PsiMethod> processor = new CommonProcessors.FindFirstProcessor<PsiMethod>();
     processMethods(context, processor, new Function<PsiClass, PsiMethod[]>() {
-      public PsiMethod[] fun(final PsiClass s) {
+      public PsiMethod[] apply(final PsiClass s) {
         final PsiMethod method = findMethod(s, methodName, getMethodParams(getParent(context)));
         if (method != null && acceptMethod(method, context)) {
           return new PsiMethod[]{method};
@@ -171,7 +158,7 @@ public abstract class AbstractMethodResolveConverter<ParentType extends DomEleme
     if (processor.isFound()) return processor.getFoundValue();
 
     processMethods(context, processor, new Function<PsiClass, PsiMethod[]>() {
-      public PsiMethod[] fun(final PsiClass s) {
+      public PsiMethod[] apply(final PsiClass s) {
         return s.findMethodsByName(methodName, true);
       }
     });

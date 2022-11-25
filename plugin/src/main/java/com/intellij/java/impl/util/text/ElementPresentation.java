@@ -16,11 +16,14 @@
 package com.intellij.java.impl.util.text;
 
 import com.intellij.java.language.psi.*;
-import consulo.virtualFileSystem.VirtualFile;
-import com.intellij.psi.*;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
+import consulo.language.psi.PsiBundle;
+import consulo.language.psi.PsiDirectory;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
-import com.intellij.psi.xml.XmlTag;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.xml.psi.xml.XmlTag;
 
 public abstract class ElementPresentation {
   private final Noun myKind;

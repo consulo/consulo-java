@@ -24,24 +24,28 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
-import consulo.language.editor.FileModificationService;
 import com.intellij.java.language.psi.*;
+import consulo.codeEditor.Editor;
+import consulo.document.util.TextRange;
+import consulo.ide.impl.idea.openapi.editor.ex.util.EditorUtil;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
-import consulo.language.editor.intention.IntentionAction;
+import consulo.language.editor.FileModificationService;
 import consulo.language.editor.completion.lookup.LookupElement;
 import consulo.language.editor.completion.lookup.LookupElementBuilder;
-import com.intellij.codeInsight.template.*;
-import consulo.codeEditor.Editor;
-import consulo.ide.impl.idea.openapi.editor.ex.util.EditorUtil;
-import consulo.project.Project;
-import consulo.document.util.TextRange;
-import com.intellij.psi.*;
-import consulo.language.psi.resolve.BaseScopeProcessor;
-import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.editor.impl.internal.template.TemplateBuilderImpl;
+import consulo.language.editor.intention.IntentionAction;
+import consulo.language.editor.template.*;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiNamedElement;
 import consulo.language.psi.PsiUtilCore;
+import consulo.language.psi.resolve.BaseScopeProcessor;
+import consulo.language.psi.resolve.ResolveState;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.project.Project;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
 
+import javax.annotation.Nonnull;
 import java.util.*;
 
 public class RenameWrongRefFix implements IntentionAction {

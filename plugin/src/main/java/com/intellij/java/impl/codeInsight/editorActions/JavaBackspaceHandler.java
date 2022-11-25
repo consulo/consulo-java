@@ -58,15 +58,15 @@ public class JavaBackspaceHandler extends BackspaceHandlerDelegate {
                                       final IElementType lt,
                                       final IElementType gt, final TokenSet invalidInsideReference) {
     HighlighterIterator iterator = ((EditorEx) editor).getHighlighter().createIterator(offset);
-    while (iterator.getStart() > 0 && !invalidInsideReference.contains(iterator.getTokenType())) {
+    while (iterator.getStart() > 0 && !invalidInsideReference.contains((IElementType) iterator.getTokenType())) {
       iterator.retreat();
     }
 
-    if (invalidInsideReference.contains(iterator.getTokenType())) iterator.advance();
+    if (invalidInsideReference.contains((IElementType) iterator.getTokenType())) iterator.advance();
 
     int balance = 0;
     while (!iterator.atEnd() && balance >= 0) {
-      final IElementType tokenType = iterator.getTokenType();
+      final IElementType tokenType = (IElementType) iterator.getTokenType();
       if (tokenType == lt) {
         balance++;
       } else if (tokenType == gt) {

@@ -15,14 +15,6 @@
  */
 package com.intellij.java.impl.codeInsight.completion;
 
-import consulo.language.editor.completion.lookup.TailType;
-import com.intellij.codeInsight.completion.*;
-import consulo.language.editor.completion.CompletionStyleUtil;
-import consulo.language.editor.completion.lookup.ParenthesesInsertHandler;
-import consulo.language.editor.completion.lookup.LookupElement;
-import consulo.language.editor.completion.lookup.LookupElementBuilder;
-import consulo.language.editor.completion.lookup.LookupElementDecorator;
-import consulo.language.editor.completion.lookup.TailTypeDecorator;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.LambdaHighlightingUtil;
 import com.intellij.java.impl.codeInsight.ExpectedTypeInfo;
 import com.intellij.java.impl.codeInsight.TailTypes;
@@ -31,36 +23,41 @@ import com.intellij.java.impl.psi.filters.TextFilter;
 import com.intellij.java.impl.psi.filters.position.AfterElementFilter;
 import com.intellij.java.impl.psi.filters.position.StartElementFilter;
 import com.intellij.java.language.LanguageLevel;
+import com.intellij.java.language.psi.PsiElementFactory;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.ide.impl.idea.openapi.util.AtomicNotNullLazyValue;
-import consulo.ide.impl.idea.openapi.util.NotNullLazyValue;
+import consulo.application.util.AtomicNotNullLazyValue;
+import consulo.application.util.NotNullLazyValue;
+import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.editor.completion.CompletionParameters;
+import consulo.language.editor.completion.CompletionResultSet;
+import consulo.language.editor.completion.CompletionStyleUtil;
+import consulo.language.editor.completion.lookup.*;
+import consulo.language.editor.impl.internal.completion.CompletionUtil;
 import consulo.language.pattern.ElementPattern;
-import com.intellij.psi.*;
-import com.intellij.psi.filters.*;
 import consulo.language.pattern.FilterPattern;
+import consulo.language.psi.*;
+import consulo.language.psi.filter.*;
 import consulo.language.psi.filter.position.LeftNeighbour;
 import consulo.language.psi.filter.position.ParentElementFilter;
 import consulo.language.psi.filter.position.SuperParentFilter;
-import consulo.language.psi.OuterLanguageElement;
 import consulo.language.psi.util.PsiTreeUtil;
-import consulo.ide.impl.idea.util.Consumer;
-import consulo.util.lang.ObjectUtil;
 import consulo.language.util.ProcessingContext;
 import consulo.util.collection.ContainerUtil;
-import consulo.java.language.module.util.JavaClassNames;
+import consulo.util.lang.ObjectUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Consumer;
 
 import static com.intellij.java.language.patterns.PsiJavaPatterns.*;
-import static consulo.util.lang.function.Conditions.notInstanceOf;
 import static consulo.language.pattern.StandardPatterns.not;
 import static consulo.language.psi.SyntaxTraverser.psiApi;
+import static consulo.util.lang.function.Conditions.notInstanceOf;
 
 public class JavaKeywordCompletion {
   public static final ElementPattern<PsiElement> AFTER_DOT = psiElement().afterLeaf(".");
@@ -100,7 +97,7 @@ public class JavaKeywordCompletion {
       .afterLeaf(psiElement().withText(".").afterLeaf(PsiKeyword.THIS, PsiKeyword.SUPER))), not(psiElement().inside(PsiAnnotation.class)), not(START_SWITCH), not
       (JavaMemberNameCompletionContributor.INSIDE_TYPE_PARAMS_PATTERN));
 
-  static final Set<String> PRIMITIVE_TYPES = ContainerUtil.newLinkedHashSet(PsiKeyword.SHORT, PsiKeyword.BOOLEAN, PsiKeyword.DOUBLE, PsiKeyword.LONG, PsiKeyword.INT, PsiKeyword.FLOAT, PsiKeyword
+  static final Set<String> PRIMITIVE_TYPES = Set.of(PsiKeyword.SHORT, PsiKeyword.BOOLEAN, PsiKeyword.DOUBLE, PsiKeyword.LONG, PsiKeyword.INT, PsiKeyword.FLOAT, PsiKeyword
       .CHAR, PsiKeyword.BYTE);
 
   private static final NotNullLazyValue<ElementFilter> CLASS_BODY = new AtomicNotNullLazyValue<ElementFilter>() {
@@ -310,7 +307,7 @@ public class JavaKeywordCompletion {
 
   static boolean addWildcardExtendsSuper(CompletionResultSet result, PsiElement position) {
     if (JavaMemberNameCompletionContributor.INSIDE_TYPE_PARAMS_PATTERN.accepts(position)) {
-      for (String keyword : ContainerUtil.ar(PsiKeyword.EXTENDS, PsiKeyword.SUPER)) {
+      for (String keyword : List.of(PsiKeyword.EXTENDS, PsiKeyword.SUPER)) {
         if (keyword.startsWith(result.getPrefixMatcher().getPrefix())) {
           result.addElement(new OverrideableSpace(BasicExpressionCompletionContributor.createKeywordLookupItem(position, keyword), TailType.HUMBLE_SPACE_BEFORE_WORD));
         }
@@ -634,9 +631,9 @@ public class JavaKeywordCompletion {
     if (afterNew) {
       PsiElementFactory factory = JavaPsiFacade.getElementFactory(position.getProject());
       for (String primitiveType : PRIMITIVE_TYPES) {
-        result.consume(PsiTypeLookupItem.createLookupItem(factory.createTypeFromText(primitiveType + "[]", null), null));
+        result.accept(PsiTypeLookupItem.createLookupItem(factory.createTypeFromText(primitiveType + "[]", null), null));
       }
-      result.consume(PsiTypeLookupItem.createLookupItem(factory.createTypeFromText("void[]", null), null));
+      result.accept(PsiTypeLookupItem.createLookupItem(factory.createTypeFromText("void[]", null), null));
       return;
     }
 
@@ -650,14 +647,14 @@ public class JavaKeywordCompletion {
         isStatementPosition(position)) {
       for (String primitiveType : PRIMITIVE_TYPES) {
         if (!session.isKeywordAlreadyProcessed(primitiveType)) {
-          result.consume(BasicExpressionCompletionContributor.createKeywordLookupItem(position, primitiveType));
+          result.accept(BasicExpressionCompletionContributor.createKeywordLookupItem(position, primitiveType));
         }
       }
     }
     if (declaration) {
-      result.consume(new OverrideableSpace(BasicExpressionCompletionContributor.createKeywordLookupItem(position, PsiKeyword.VOID), TailType.HUMBLE_SPACE_BEFORE_WORD));
+      result.accept(new OverrideableSpace(BasicExpressionCompletionContributor.createKeywordLookupItem(position, PsiKeyword.VOID), TailType.HUMBLE_SPACE_BEFORE_WORD));
     } else if (typeFragment && ((PsiTypeCodeFragment) position.getContainingFile()).isVoidValid()) {
-      result.consume(BasicExpressionCompletionContributor.createKeywordLookupItem(position, PsiKeyword.VOID));
+      result.accept(BasicExpressionCompletionContributor.createKeywordLookupItem(position, PsiKeyword.VOID));
     }
   }
 

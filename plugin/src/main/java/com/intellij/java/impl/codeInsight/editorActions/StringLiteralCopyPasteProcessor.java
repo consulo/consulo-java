@@ -15,23 +15,23 @@
  */
 package com.intellij.java.impl.codeInsight.editorActions;
 
-import consulo.codeEditor.RawText;
-import consulo.language.editor.action.CopyPastePreProcessor;
 import com.intellij.java.language.psi.JavaTokenType;
-import consulo.language.ast.ASTNode;
-import consulo.document.Document;
+import consulo.application.util.LineTokenizer;
 import consulo.codeEditor.Editor;
+import consulo.codeEditor.RawText;
 import consulo.codeEditor.SelectionModel;
-import consulo.project.Project;
+import consulo.document.Document;
 import consulo.document.util.TextRange;
-import com.intellij.openapi.util.text.LineTokenizer;
-import consulo.util.lang.StringUtil;
+import consulo.language.ast.ASTNode;
+import consulo.language.codeStyle.CodeStyleSettings;
+import consulo.language.codeStyle.CodeStyleSettingsManager;
+import consulo.language.editor.action.CopyPastePreProcessor;
 import consulo.language.psi.PsiDocumentManager;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
-import consulo.language.codeStyle.CodeStyleSettings;
-import consulo.language.codeStyle.CodeStyleSettingsManager;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.project.Project;
+import consulo.util.lang.StringUtil;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;

@@ -19,7 +19,7 @@ import consulo.language.editor.inspection.InspectionsBundle;
 import consulo.language.editor.inspection.ProblemsHolder;
 import com.intellij.java.language.psi.*;
 import consulo.language.pattern.ElementPattern;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 

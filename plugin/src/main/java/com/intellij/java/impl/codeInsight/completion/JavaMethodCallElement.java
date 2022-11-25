@@ -15,18 +15,6 @@
  */
 package com.intellij.java.impl.codeInsight.completion;
 
-import consulo.externalService.statistic.FeatureUsageTracker;
-import consulo.language.editor.AutoPopupController;
-import consulo.ide.impl.idea.codeInsight.completion.CodeCompletionFeatures;
-import consulo.language.editor.completion.ClassConditionKey;
-import consulo.language.editor.completion.lookup.InsertionContext;
-import consulo.language.editor.completion.OffsetKey;
-import com.intellij.codeInsight.lookup.*;
-import com.intellij.codeInsight.template.*;
-import consulo.language.editor.template.ConstantNode;
-import consulo.language.editor.impl.internal.template.TemplateImpl;
-import consulo.ide.impl.idea.codeInsight.template.impl.TemplateManagerImpl;
-import consulo.language.editor.template.TemplateState;
 import com.intellij.java.impl.codeInsight.completion.util.MethodParenthesesHandler;
 import com.intellij.java.impl.codeInsight.lookup.TypedLookupItem;
 import com.intellij.java.impl.codeInsight.lookup.impl.JavaElementLookupRenderer;
@@ -34,20 +22,30 @@ import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
-import consulo.language.editor.WriteCommandAction;
-import consulo.document.Document;
 import consulo.codeEditor.Editor;
+import consulo.disposer.Disposer;
+import consulo.document.Document;
 import consulo.document.event.DocumentAdapter;
 import consulo.document.event.DocumentEvent;
 import consulo.document.util.TextRange;
-import consulo.util.lang.StringUtil;
+import consulo.externalService.statistic.FeatureUsageTracker;
+import consulo.ide.impl.idea.codeInsight.completion.CodeCompletionFeatures;
+import consulo.ide.impl.idea.codeInsight.template.impl.TemplateManagerImpl;
+import consulo.language.editor.AutoPopupController;
+import consulo.language.editor.WriteCommandAction;
+import consulo.language.editor.completion.ClassConditionKey;
+import consulo.language.editor.completion.OffsetKey;
+import consulo.language.editor.completion.lookup.*;
+import consulo.language.editor.impl.internal.template.TemplateImpl;
+import consulo.language.editor.template.*;
+import consulo.language.editor.template.event.TemplateEditingAdapter;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiReference;
 import consulo.language.psi.util.PsiTreeUtil;
-import consulo.util.lang.SystemProperties;
-import consulo.disposer.Disposer;
 import consulo.util.dataholder.Key;
+import consulo.util.lang.StringUtil;
+import consulo.util.lang.SystemProperties;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -268,7 +266,7 @@ public class JavaMethodCallElement extends LookupItem<PsiMethod> implements Type
     context.getDocument().deleteString(caretOffset, argRange.getEndOffset());
     TemplateManager.getInstance(method.getProject()).startTemplate(editor, template);
 
-    TemplateState templateState = TemplateManagerImpl.getTemplateState(editor);
+    TemplateState templateState = TemplateManager.getInstance(method.getProject()).getTemplateState(editor);
     if (templateState == null) {
       return false;
     }
@@ -307,7 +305,7 @@ public class JavaMethodCallElement extends LookupItem<PsiMethod> implements Type
         }
       }
 
-      private void removeUntouchedArguments(TemplateImpl template) {
+      private void removeUntouchedArguments(Template template) {
         int firstUnchangedVar = maxEditedVariable.get() + 1;
         if (firstUnchangedVar >= template.getVariableCount()) {
           return;

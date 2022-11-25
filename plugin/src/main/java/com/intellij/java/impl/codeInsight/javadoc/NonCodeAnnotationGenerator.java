@@ -15,111 +15,94 @@
  */
 package com.intellij.java.impl.codeInsight.javadoc;
 
+import com.intellij.java.language.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiModifierListOwner;
+import com.intellij.java.language.psi.PsiParameter;
+import consulo.language.psi.PsiNamedElement;
+import consulo.util.collection.ContainerUtil;
+import consulo.util.collection.MultiMap;
+
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import javax.annotation.Nonnull;
+public class NonCodeAnnotationGenerator {
+  private final PsiModifierListOwner myOwner;
+  private final StringBuilder myOutput;
 
-import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.java.language.psi.PsiModifierListOwner;
-import consulo.language.psi.PsiNamedElement;
-import com.intellij.java.language.psi.PsiParameter;
-import consulo.util.collection.ContainerUtil;
-import consulo.util.collection.MultiMap;
+  NonCodeAnnotationGenerator(@Nonnull PsiModifierListOwner owner, StringBuilder output) {
+    myOwner = owner;
+    myOutput = output;
+  }
 
-public class NonCodeAnnotationGenerator
-{
-	private final PsiModifierListOwner myOwner;
-	private final StringBuilder myOutput;
+  void explainAnnotations() {
+    MultiMap<PsiModifierListOwner, AnnotationDocGenerator> generators = getSignatureNonCodeAnnotations(myOwner);
+    if (generators.isEmpty()) {
+      return;
+    }
 
-	NonCodeAnnotationGenerator(@Nonnull PsiModifierListOwner owner, StringBuilder output)
-	{
-		myOwner = owner;
-		myOutput = output;
-	}
+    myOutput.append("\n");
+    myOutput.append(getNonCodeHeader(generators.values())).append(":<br>\n");
+    myOutput.append("<ul>\n");
 
-	void explainAnnotations()
-	{
-		MultiMap<PsiModifierListOwner, AnnotationDocGenerator> generators = getSignatureNonCodeAnnotations(myOwner);
-		if(generators.isEmpty())
-		{
-			return;
-		}
+    generators.keySet().forEach(owner ->
+    {
+      myOutput.append("<li>");
+      if (generators.size() > 1) {
+        myOutput.append(getKind(owner)).append(" <code>").append(((PsiNamedElement) owner).getName()).append("</code>: ");
+      }
+      List<AnnotationDocGenerator> annotations = ContainerUtil.newArrayList(generators.get(owner));
+      for (int i = 0; i < annotations.size(); i++) {
+        if (i > 0) {
+          myOutput.append(" ");
+        }
+        annotations.get(i).generateAnnotation(myOutput, AnnotationFormat.JavaDocComplete);
+      }
 
-		myOutput.append("\n");
-		myOutput.append(getNonCodeHeader(generators.values())).append(":<br>\n");
-		myOutput.append("<ul>\n");
+      myOutput.append("</li>\n");
+    });
+    myOutput.append("</ul>\n");
+  }
 
-		generators.keySet().forEach(owner ->
-		{
-			myOutput.append("<li>");
-			if(generators.size() > 1)
-			{
-				myOutput.append(getKind(owner)).append(" <code>").append(((PsiNamedElement) owner).getName()).append("</code>: ");
-			}
-			List<AnnotationDocGenerator> annotations = ContainerUtil.newArrayList(generators.get(owner));
-			for(int i = 0; i < annotations.size(); i++)
-			{
-				if(i > 0)
-				{
-					myOutput.append(" ");
-				}
-				annotations.get(i).generateAnnotation(myOutput, AnnotationFormat.JavaDocComplete);
-			}
+  @Nonnull
+  public static MultiMap<PsiModifierListOwner, AnnotationDocGenerator> getSignatureNonCodeAnnotations(PsiModifierListOwner owner) {
+    MultiMap<PsiModifierListOwner, AnnotationDocGenerator> generators = MultiMap.createLinked();
+    for (PsiModifierListOwner each : getSignatureOwners(owner)) {
+      List<AnnotationDocGenerator> nonCode = ContainerUtil.filter(AnnotationDocGenerator.getAnnotationsToShow(each), a -> a.isExternal() || a.isInferred());
+      if (!nonCode.isEmpty()) {
+        generators.putValues(each, nonCode);
+      }
+    }
+    return generators;
+  }
 
-			myOutput.append("</li>\n");
-		});
-		myOutput.append("</ul>\n");
-	}
+  @Nonnull
+  private static List<PsiModifierListOwner> getSignatureOwners(PsiModifierListOwner owner) {
+    List<PsiModifierListOwner> allOwners = new ArrayList<>();
+    allOwners.add(owner);
+    if (owner instanceof PsiMethod) {
+      Collections.addAll(allOwners, ((PsiMethod) owner).getParameterList().getParameters());
+    }
+    return allOwners;
+  }
 
-	@Nonnull
-	public static MultiMap<PsiModifierListOwner, AnnotationDocGenerator> getSignatureNonCodeAnnotations(PsiModifierListOwner owner)
-	{
-		MultiMap<PsiModifierListOwner, AnnotationDocGenerator> generators = MultiMap.createLinked();
-		for(PsiModifierListOwner each : getSignatureOwners(owner))
-		{
-			List<AnnotationDocGenerator> nonCode = ContainerUtil.filter(AnnotationDocGenerator.getAnnotationsToShow(each), a -> a.isExternal() || a.isInferred());
-			if(!nonCode.isEmpty())
-			{
-				generators.putValues(each, nonCode);
-			}
-		}
-		return generators;
-	}
+  @Nonnull
+  public static String getNonCodeHeader(Collection<? extends AnnotationDocGenerator> values) {
+    boolean hasExternal = values.stream().anyMatch(AnnotationDocGenerator::isExternal);
+    boolean hasInferred = values.stream().anyMatch(AnnotationDocGenerator::isInferred);
 
-	@Nonnull
-	private static List<PsiModifierListOwner> getSignatureOwners(PsiModifierListOwner owner)
-	{
-		List<PsiModifierListOwner> allOwners = new ArrayList<>();
-		allOwners.add(owner);
-		if(owner instanceof PsiMethod)
-		{
-			Collections.addAll(allOwners, ((PsiMethod) owner).getParameterList().getParameters());
-		}
-		return allOwners;
-	}
+    return (hasExternal && hasInferred ? "External and <i>inferred</i>" : hasExternal ? "External" : "<i>Inferred</i>") + " annotations available";
+  }
 
-	@Nonnull
-	public static String getNonCodeHeader(Collection<? extends AnnotationDocGenerator> values)
-	{
-		boolean hasExternal = values.stream().anyMatch(AnnotationDocGenerator::isExternal);
-		boolean hasInferred = values.stream().anyMatch(AnnotationDocGenerator::isInferred);
-
-		return (hasExternal && hasInferred ? "External and <i>inferred</i>" : hasExternal ? "External" : "<i>Inferred</i>") + " annotations available";
-	}
-
-	private static String getKind(PsiModifierListOwner owner)
-	{
-		if(owner instanceof PsiParameter)
-		{
-			return "Parameter";
-		}
-		if(owner instanceof PsiMethod)
-		{
-			return ((PsiMethod) owner).isConstructor() ? "Constructor" : "Method";
-		}
-		return owner.getClass().getName(); // unexpected
-	}
+  private static String getKind(PsiModifierListOwner owner) {
+    if (owner instanceof PsiParameter) {
+      return "Parameter";
+    }
+    if (owner instanceof PsiMethod) {
+      return ((PsiMethod) owner).isConstructor() ? "Constructor" : "Method";
+    }
+    return owner.getClass().getName(); // unexpected
+  }
 }

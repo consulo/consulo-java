@@ -15,40 +15,35 @@
  */
 package com.intellij.java.impl.refactoring.anonymousToInner;
 
-import java.awt.BorderLayout;
-import java.util.Map;
-
-import javax.swing.Action;
-import javax.swing.JCheckBox;
-import javax.swing.JComponent;
-import javax.swing.JPanel;
-
-import javax.annotation.Nonnull;
-
+import com.intellij.java.analysis.impl.refactoring.util.VariableData;
+import com.intellij.java.impl.refactoring.HelpID;
+import com.intellij.java.impl.refactoring.util.ParameterTablePanel;
+import com.intellij.java.impl.refactoring.util.RefactoringMessageUtil;
 import com.intellij.java.language.psi.*;
-import consulo.application.HelpManager;
-import consulo.project.Project;
-import consulo.ui.ex.awt.DialogWrapper;
-import consulo.ui.ex.awt.NonFocusableCheckBox;
-import consulo.ui.util.FormBuilder;
-import consulo.util.lang.StringUtil;
-import com.intellij.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
-import com.intellij.java.impl.refactoring.HelpID;
+import consulo.application.HelpManager;
+import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.editor.refactoring.ui.NameSuggestionsField;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
-import com.intellij.java.impl.refactoring.util.ParameterTablePanel;
-import com.intellij.java.impl.refactoring.util.RefactoringMessageUtil;
-import com.intellij.java.analysis.impl.refactoring.util.VariableData;
-import consulo.ui.ex.awt.IdeBorderFactory;
-import consulo.ide.impl.idea.util.Function;
-import java.util.HashMap;
-
-import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiManager;
 import consulo.logging.Logger;
+import consulo.project.Project;
+import consulo.ui.ex.awt.DialogWrapper;
+import consulo.ui.ex.awt.FormBuilder;
+import consulo.ui.ex.awt.IdeBorderFactory;
+import consulo.ui.ex.awt.NonFocusableCheckBox;
+import consulo.util.lang.StringUtil;
+
+import javax.annotation.Nonnull;
+import javax.swing.*;
+import java.awt.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Function;
 
 class AnonymousToInnerDialog extends DialogWrapper{
   private static final Logger LOG = Logger.getInstance(AnonymousToInnerDialog.class);
@@ -96,7 +91,7 @@ class AnonymousToInnerDialog extends DialogWrapper{
     PsiType[] typeParameters = myAnonClass.getBaseClassReference().getTypeParameters();
     if (typeParameters.length > 0) {
       names = new String[]{StringUtil.join(typeParameters, new Function<PsiType, String>() {
-        public String fun(PsiType psiType) {
+        public String apply(PsiType psiType) {
           PsiType type = psiType;
           if (psiType instanceof PsiClassType) {
             type = TypeConversionUtil.erasure(psiType);
@@ -195,7 +190,7 @@ class AnonymousToInnerDialog extends DialogWrapper{
   protected JComponent createNorthPanel() {
     myNameField = new NameSuggestionsField(myProject);
 
-    FormBuilder formBuilder = FormBuilder.createFormBuilder()
+    FormBuilder formBuilder = consulo.ui.ex.awt.FormBuilder.createFormBuilder()
       .addLabeledComponent(RefactoringBundle.message("anonymousToInner.class.name.label.text"), myNameField);
 
     if(!myShowCanBeStatic) {

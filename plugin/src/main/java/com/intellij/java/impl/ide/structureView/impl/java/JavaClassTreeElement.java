@@ -3,7 +3,7 @@ package com.intellij.java.impl.ide.structureView.impl.java;
 
 import consulo.fileEditor.structureView.StructureViewTreeElement;
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import com.intellij.java.language.impl.psi.impl.PsiImplUtil;
 import consulo.language.impl.psi.LightElement;
 import javax.annotation.Nonnull;

@@ -15,26 +15,32 @@
  */
 package com.intellij.java.impl.testIntegration.createTest;
 
-import consulo.language.editor.CodeInsightBundle;
 import com.intellij.java.impl.codeInsight.CodeInsightUtil;
+import com.intellij.java.impl.refactoring.util.classMembers.MemberInfo;
+import com.intellij.java.impl.testIntegration.TestIntegrationUtils;
+import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.*;
+import com.intellij.java.language.testIntegration.TestFramework;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.ApplicationManager;
+import consulo.application.util.function.Computable;
 import consulo.codeEditor.Editor;
 import consulo.ide.impl.idea.openapi.fileEditor.ex.IdeDocumentHistory;
+import consulo.language.Language;
+import consulo.language.codeStyle.PostprocessReformattingAspect;
+import consulo.language.editor.CodeInsightBundle;
+import consulo.language.psi.PsiDocumentManager;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 import consulo.ui.ex.awt.Messages;
-import consulo.application.util.function.Computable;
-import com.intellij.psi.*;
-import consulo.language.codeStyle.PostprocessReformattingAspect;
-import consulo.language.psi.scope.GlobalSearchScope;
-import com.intellij.java.impl.refactoring.util.classMembers.MemberInfo;
-import com.intellij.java.language.testIntegration.TestFramework;
-import com.intellij.java.impl.testIntegration.TestIntegrationUtils;
-import consulo.language.util.IncorrectOperationException;
-import javax.annotation.Nullable;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Collection;
 
+@ExtensionImpl
 public class JavaTestGenerator implements TestGenerator {
   public JavaTestGenerator() {
   }
@@ -131,5 +137,11 @@ public class JavaTestGenerator implements TestGenerator {
   @Override
   public String toString() {
     return CodeInsightBundle.message("intention.create.test.dialog.java");
+  }
+
+  @Nonnull
+  @Override
+  public Language getLanguage() {
+    return JavaLanguage.INSTANCE;
   }
 }

@@ -15,23 +15,23 @@
  */
 package com.intellij.java.impl.ig.assignment;
 
+import com.intellij.java.impl.ig.fixes.ExtractParameterAsLocalVariableFix;
+import com.intellij.java.impl.ig.psiutils.WellFormednessUtils;
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.*;
-import consulo.language.ast.IElementType;
-import consulo.language.psi.util.PsiTreeUtil;
-import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.fixes.ExtractParameterAsLocalVariableFix;
-import com.intellij.java.impl.ig.psiutils.WellFormednessUtils;
+import consulo.language.ast.IElementType;
+import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.util.PsiTreeUtil;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import javax.swing.*;
 
-public class AssignmentToForLoopParameterInspection
+public abstract class AssignmentToForLoopParameterInspection
   extends BaseInspection {
 
   /**

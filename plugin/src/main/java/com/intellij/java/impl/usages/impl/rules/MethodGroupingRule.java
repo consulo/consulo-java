@@ -15,39 +15,36 @@
  */
 package com.intellij.java.impl.usages.impl.rules;
 
-import javax.annotation.Nonnull;
-
-import consulo.language.inject.InjectedLanguageManager;
-import consulo.language.editor.util.NavigationItemFileStatus;
-import consulo.dataContext.DataSink;
-import consulo.language.editor.LangDataKeys;
-import consulo.dataContext.TypeSafeDataProvider;
-import consulo.logging.Logger;
-import consulo.project.Project;
-import consulo.usage.*;
-import consulo.usage.rule.PsiElementUsage;
-import consulo.usage.rule.UsageGroupingRule;
-import consulo.util.lang.Comparing;
-import consulo.component.util.Iconable;
-import consulo.util.dataholder.Key;
-import consulo.document.util.Segment;
-import consulo.virtualFileSystem.status.FileStatus;
 import com.intellij.java.language.psi.PsiClass;
-import consulo.language.psi.PsiElement;
-import consulo.language.psi.PsiFile;
 import com.intellij.java.language.psi.PsiJavaFile;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiSubstitutor;
+import com.intellij.java.language.psi.util.PsiFormatUtil;
+import com.intellij.java.language.psi.util.PsiFormatUtilBase;
+import consulo.component.util.Iconable;
+import consulo.dataContext.DataSink;
+import consulo.dataContext.TypeSafeDataProvider;
+import consulo.document.util.Segment;
+import consulo.language.editor.LangDataKeys;
+import consulo.language.editor.util.NavigationItemFileStatus;
+import consulo.language.icon.IconDescriptorUpdaters;
+import consulo.language.inject.InjectedLanguageManager;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
 import consulo.language.psi.SmartPointerManager;
 import consulo.language.psi.SmartPsiElementPointer;
-import com.intellij.java.language.psi.util.PsiFormatUtil;
-import consulo.ide.impl.psi.util.PsiFormatUtilBase;
 import consulo.language.psi.util.PsiTreeUtil;
-import consulo.usage.UsageGroup;
-import consulo.usage.UsageView;
-import consulo.usage.UsageViewSettings;
-import consulo.language.icon.IconDescriptorUpdaters;
+import consulo.logging.Logger;
+import consulo.project.Project;
 import consulo.ui.image.Image;
+import consulo.usage.*;
+import consulo.usage.rule.PsiElementUsage;
+import consulo.usage.rule.UsageGroupingRule;
+import consulo.util.dataholder.Key;
+import consulo.util.lang.Comparing;
+import consulo.virtualFileSystem.status.FileStatus;
+
+import javax.annotation.Nonnull;
 
 /**
  * @author max

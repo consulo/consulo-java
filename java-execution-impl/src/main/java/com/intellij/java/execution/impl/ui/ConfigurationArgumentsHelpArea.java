@@ -16,73 +16,66 @@
 package com.intellij.java.execution.impl.ui;
 
 import consulo.execution.ExecutionBundle;
+import consulo.platform.base.icon.PlatformIconGroup;
+import consulo.ui.TextBoxWithExpandAction;
 import consulo.ui.ex.action.ActionManager;
 import consulo.ui.ex.action.ActionPlaces;
 import consulo.ui.ex.action.ActionPopupMenu;
 import consulo.ui.ex.action.DefaultActionGroup;
 import consulo.ui.ex.awt.CopyPasteManager;
 import consulo.ui.ex.awt.FixedSizeButton;
-import consulo.util.lang.StringUtil;
 import consulo.ui.ex.awt.JBLabel;
-import consulo.ide.impl.idea.util.PlatformIcons;
 import consulo.ui.ex.awtUnsafe.TargetAWT;
-import consulo.ui.TextBoxWithExpandAction;
+import consulo.util.lang.StringUtil;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.datatransfer.StringSelection;
 
-public class ConfigurationArgumentsHelpArea extends JPanel
-{
-	private TextBoxWithExpandAction myHelpArea;
-	private JLabel myLabel;
-	private final FixedSizeButton myCopyButton;
+public class ConfigurationArgumentsHelpArea extends JPanel {
+  private TextBoxWithExpandAction myHelpArea;
+  private JLabel myLabel;
+  private final FixedSizeButton myCopyButton;
 
-	public ConfigurationArgumentsHelpArea()
-	{
-		super(new BorderLayout());
+  public ConfigurationArgumentsHelpArea() {
+    super(new BorderLayout());
 
-		myLabel = new JBLabel(ExecutionBundle.message("environment.variables.helper.use.arguments.label"));
-		add(myLabel, BorderLayout.NORTH);
+    myLabel = new JBLabel(ExecutionBundle.message("environment.variables.helper.use.arguments.label"));
+    add(myLabel, BorderLayout.NORTH);
 
-		myHelpArea = TextBoxWithExpandAction.create(null, "Command line", s -> StringUtil.split(s, "\n"), list -> String.join("\n", list));
-		myHelpArea.setEditable(false);
+    myHelpArea = TextBoxWithExpandAction.create(null, "Command line", s -> StringUtil.split(s, "\n"), list -> String.join("\n", list));
+    myHelpArea.setEditable(false);
 
-		add(TargetAWT.to(myHelpArea), BorderLayout.CENTER);
+    add(TargetAWT.to(myHelpArea), BorderLayout.CENTER);
 
-		myCopyButton = new FixedSizeButton();
-		myCopyButton.setIcon(consulo.ide.impl.idea.util.PlatformIcons.COPY_ICON);
-		myCopyButton.addActionListener(e -> {
-			final StringSelection contents = new StringSelection(myHelpArea.getValueOrError().trim());
-			CopyPasteManager.getInstance().setContents(contents);
-		});
-		myCopyButton.setVisible(false);
+    myCopyButton = new FixedSizeButton();
+    myCopyButton.setIcon(TargetAWT.to(PlatformIconGroup.actionsCopy()));
+    myCopyButton.addActionListener(e -> {
+      final StringSelection contents = new StringSelection(myHelpArea.getValueOrError().trim());
+      CopyPasteManager.getInstance().setContents(contents);
+    });
+    myCopyButton.setVisible(false);
 
-		add(myCopyButton, BorderLayout.EAST);
-	}
+    add(myCopyButton, BorderLayout.EAST);
+  }
 
-	public void setToolbarVisible()
-	{
-		myCopyButton.setVisible(true);
-	}
+  public void setToolbarVisible() {
+    myCopyButton.setVisible(true);
+  }
 
-	private static ActionPopupMenu createPopupMenu(DefaultActionGroup group)
-	{
-		return ActionManager.getInstance().createActionPopupMenu(ActionPlaces.UNKNOWN, group);
-	}
+  private static ActionPopupMenu createPopupMenu(DefaultActionGroup group) {
+    return ActionManager.getInstance().createActionPopupMenu(ActionPlaces.UNKNOWN, group);
+  }
 
-	public void updateText(final String text)
-	{
-		myHelpArea.setValue(text);
-	}
+  public void updateText(final String text) {
+    myHelpArea.setValue(text);
+  }
 
-	public void setLabelText(final String text)
-	{
-		myLabel.setText(text);
-	}
+  public void setLabelText(final String text) {
+    myLabel.setText(text);
+  }
 
-	public String getLabelText()
-	{
-		return myLabel.getText();
-	}
+  public String getLabelText() {
+    return myLabel.getText();
+  }
 }

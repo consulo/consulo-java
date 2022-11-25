@@ -21,7 +21,7 @@ import javax.annotation.Nullable;
 import com.intellij.java.language.psi.PsiCodeBlock;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiLocalVariable;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;

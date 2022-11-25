@@ -16,50 +16,44 @@
 
 package consulo.java.impl.ide.projectView.impl;
 
-import consulo.ui.ex.tree.PresentationData;
-import consulo.project.ui.view.tree.ViewSettings;
-import consulo.project.ui.view.tree.PsiDirectoryNode;
-import consulo.project.Project;
-import consulo.util.lang.StringUtil;
-import consulo.language.psi.PsiDirectory;
-import consulo.language.psi.PsiFile;
 import com.intellij.java.language.psi.PsiJavaFile;
 import com.intellij.java.language.psi.PsiJavaModule;
 import consulo.annotation.access.RequiredReadAction;
+import consulo.language.psi.PsiDirectory;
+import consulo.language.psi.PsiFile;
+import consulo.project.Project;
+import consulo.project.ui.view.tree.PsiDirectoryNode;
+import consulo.project.ui.view.tree.ViewSettings;
+import consulo.ui.ex.tree.PresentationData;
+import consulo.util.lang.StringUtil;
 
 /**
  * @author VISTALL
  * @since 10-Jan-17
  */
-public class JavaModuleRootTreeNode extends PsiDirectoryNode
-{
-	public JavaModuleRootTreeNode(Project project, PsiDirectory value, ViewSettings viewSettings)
-	{
-		super(project, value, viewSettings);
-	}
+public class JavaModuleRootTreeNode extends PsiDirectoryNode {
+  public JavaModuleRootTreeNode(Project project, PsiDirectory value, ViewSettings viewSettings) {
+    super(project, value, viewSettings);
+  }
 
-	@Override
-	@RequiredReadAction
-	protected void updateImpl(PresentationData data)
-	{
-		super.updateImpl(data);
+  @Override
+  @RequiredReadAction
+  protected void updateImpl(PresentationData data) {
+    super.updateImpl(data);
 
-		PsiDirectory value = getValue();
-		if(value == null)
-		{
-			return;
-		}
+    PsiDirectory value = getValue();
+    if (value == null) {
+      return;
+    }
 
-		PsiFile file = value.findFile(PsiJavaModule.MODULE_INFO_CLS_FILE);
-		if(file instanceof PsiJavaFile)
-		{
-			String name = "INVALID";
-			PsiJavaModule moduleDeclaration = ((PsiJavaFile) file).getModuleDeclaration();
-			if(moduleDeclaration != null)
-			{
-				name = StringUtil.notNullize(moduleDeclaration.getName(), name);
-			}
-			data.setPresentableText(name);
-		}
-	}
+    PsiFile file = value.findFile(PsiJavaModule.MODULE_INFO_CLS_FILE);
+    if (file instanceof PsiJavaFile) {
+      String name = "INVALID";
+      PsiJavaModule moduleDeclaration = ((PsiJavaFile) file).getModuleDeclaration();
+      if (moduleDeclaration != null) {
+        name = StringUtil.notNullize(moduleDeclaration.getName(), name);
+      }
+      data.setPresentableText(name);
+    }
+  }
 }

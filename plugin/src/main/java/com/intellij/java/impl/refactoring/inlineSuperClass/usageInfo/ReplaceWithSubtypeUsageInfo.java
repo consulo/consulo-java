@@ -20,13 +20,14 @@
  */
 package com.intellij.java.impl.refactoring.inlineSuperClass.usageInfo;
 
-import com.intellij.java.language.psi.*;
-import consulo.util.lang.StringUtil;
-import com.intellij.java.language.psi.util.TypeConversionUtil;
 import com.intellij.java.impl.refactoring.util.FixableUsageInfo;
-import consulo.ide.impl.idea.util.Function;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
+import consulo.util.lang.StringUtil;
+
+import java.util.function.Function;
 
 public class ReplaceWithSubtypeUsageInfo extends FixableUsageInfo {
   public static final Logger LOG = Logger.getInstance(ReplaceWithSubtypeUsageInfo.class);
@@ -42,7 +43,7 @@ public class ReplaceWithSubtypeUsageInfo extends FixableUsageInfo {
     myOriginalType = myTypeElement.getType();
     if (targetClasses.length > 1) {
       myConflict = typeElement.getText() + " can be replaced with any of " + StringUtil.join(targetClasses, new Function<PsiClass, String>() {
-        public String fun(final PsiClass psiClass) {
+        public String apply(final PsiClass psiClass) {
           return psiClass.getQualifiedName();
         }
       }, ", ") ;

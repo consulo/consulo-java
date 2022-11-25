@@ -38,7 +38,7 @@ import consulo.logging.Logger;
 import consulo.codeEditor.Editor;
 import consulo.application.progress.ProgressManager;
 import consulo.project.Project;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.impl.psi.impl.source.javadoc.PsiDocMethodOrFieldRef;
 import com.intellij.java.language.impl.psi.impl.source.tree.java.PsiReferenceExpressionImpl;

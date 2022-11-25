@@ -15,22 +15,23 @@
  */
 package com.intellij.java.impl.ig.errorhandling;
 
-import consulo.language.editor.inspection.ProblemDescriptor;
+import com.intellij.java.impl.ig.psiutils.VariableSearchUtils;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import consulo.util.lang.ref.Ref;
-import com.intellij.psi.*;
-import consulo.language.psi.search.ReferencesSearch;
-import consulo.language.psi.util.PsiTreeUtil;
-import consulo.language.util.IncorrectOperationException;
-import consulo.application.util.function.Processor;
-import consulo.application.util.query.Query;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
-import com.intellij.java.impl.ig.psiutils.VariableSearchUtils;
+import consulo.application.util.function.Processor;
+import consulo.application.util.query.Query;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiReference;
+import consulo.language.psi.search.ReferencesSearch;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+import consulo.util.lang.ref.Ref;
 import org.jetbrains.annotations.Nls;
 
 import javax.annotation.Nonnull;

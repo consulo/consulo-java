@@ -15,586 +15,464 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.swing.JList;
-import javax.swing.ListSelectionModel;
-
+import com.intellij.java.language.impl.codeInsight.PsiClassListCellRenderer;
 import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.PsiUtil;
+import com.intellij.java.language.util.VisibilityUtil;
+import consulo.application.ApplicationManager;
+import consulo.codeEditor.Editor;
+import consulo.codeEditor.EditorPopupHelper;
+import consulo.document.util.TextRange;
 import consulo.fileEditor.FileEditorManager;
-import consulo.logging.Logger;
-import org.jetbrains.annotations.NonNls;
+import consulo.ide.impl.idea.openapi.fileEditor.ex.IdeDocumentHistory;
+import consulo.ide.impl.ui.impl.PopupChooserBuilder;
+import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.intention.BaseIntentionAction;
 import consulo.language.editor.template.Template;
-import consulo.language.editor.template.event.TemplateEditingListener;
 import consulo.language.editor.template.TemplateManager;
-import com.intellij.java.language.impl.codeInsight.PsiClassListCellRenderer;
+import consulo.language.editor.template.event.TemplateEditingListener;
 import consulo.language.editor.ui.PsiElementListCellRenderer;
-import consulo.application.ApplicationManager;
-import consulo.undoRedo.CommandProcessor;
-import consulo.codeEditor.Editor;
-import consulo.navigation.OpenFileDescriptor;
-import consulo.ide.impl.idea.openapi.fileEditor.ex.IdeDocumentHistory;
-import consulo.project.Project;
-import consulo.ide.impl.ui.impl.PopupChooserBuilder;
-import consulo.document.util.TextRange;
-import consulo.virtualFileSystem.VirtualFile;
-import com.intellij.psi.*;
-import consulo.language.psi.util.PsiTreeUtil;
-import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.language.psi.PsiDocumentManager;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiUtilCore;
-import consulo.ui.ex.awt.JBList;
+import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
-import com.intellij.java.language.util.VisibilityUtil;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.logging.Logger;
+import consulo.navigation.OpenFileDescriptor;
+import consulo.navigation.OpenFileDescriptorFactory;
+import consulo.project.Project;
+import consulo.ui.ex.awt.JBList;
+import consulo.ui.ex.popup.JBPopup;
+import consulo.undoRedo.CommandProcessor;
+import consulo.virtualFileSystem.VirtualFile;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.swing.*;
+import java.util.*;
 
 /**
  * @author Mike
  */
-public abstract class CreateFromUsageBaseFix extends BaseIntentionAction
-{
-	private static final Logger LOG = Logger.getInstance(CreateFromUsageBaseFix.class);
+public abstract class CreateFromUsageBaseFix extends BaseIntentionAction {
+  private static final Logger LOG = Logger.getInstance(CreateFromUsageBaseFix.class);
 
-	@Override
-	public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file)
-	{
-		PsiElement element = getElement();
-		if(element == null || isValidElement(element))
-		{
-			return false;
-		}
+  @Override
+  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+    PsiElement element = getElement();
+    if (element == null || isValidElement(element)) {
+      return false;
+    }
 
-		int offset = editor.getCaretModel().getOffset();
-		if(!isAvailableImpl(offset))
-		{
-			return false;
-		}
+    int offset = editor.getCaretModel().getOffset();
+    if (!isAvailableImpl(offset)) {
+      return false;
+    }
 
-		List<PsiClass> targetClasses = getTargetClasses(element);
-		return !targetClasses.isEmpty();
-	}
+    List<PsiClass> targetClasses = getTargetClasses(element);
+    return !targetClasses.isEmpty();
+  }
 
-	protected abstract boolean isAvailableImpl(int offset);
+  protected abstract boolean isAvailableImpl(int offset);
 
-	protected abstract void invokeImpl(PsiClass targetClass);
+  protected abstract void invokeImpl(PsiClass targetClass);
 
-	protected abstract boolean isValidElement(PsiElement result);
+  protected abstract boolean isValidElement(PsiElement result);
 
-	@Override
-	public void invoke(@Nonnull Project project, Editor editor, PsiFile file)
-	{
-		PsiDocumentManager.getInstance(project).commitAllDocuments();
+  @Override
+  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) {
+    PsiDocumentManager.getInstance(project).commitAllDocuments();
 
-		PsiElement element = getElement();
+    PsiElement element = getElement();
 
-		if(LOG.isDebugEnabled())
-		{
-			LOG.debug("CreateFromUsage: element =" + element);
-		}
+    if (LOG.isDebugEnabled()) {
+      LOG.debug("CreateFromUsage: element =" + element);
+    }
 
-		if(element == null)
-		{
-			return;
-		}
+    if (element == null) {
+      return;
+    }
 
-		List<PsiClass> targetClasses = getTargetClasses(element);
-		if(targetClasses.isEmpty())
-		{
-			return;
-		}
+    List<PsiClass> targetClasses = getTargetClasses(element);
+    if (targetClasses.isEmpty()) {
+      return;
+    }
 
-		if(targetClasses.size() == 1)
-		{
-			doInvoke(project, targetClasses.get(0));
-		}
-		else
-		{
-			chooseTargetClass(targetClasses, editor);
-		}
-	}
+    if (targetClasses.size() == 1) {
+      doInvoke(project, targetClasses.get(0));
+    } else {
+      chooseTargetClass(targetClasses, editor);
+    }
+  }
 
-	private void doInvoke(Project project, final PsiClass targetClass)
-	{
-		if(!FileModificationService.getInstance().prepareFileForWrite(targetClass.getContainingFile()))
-		{
-			return;
-		}
+  private void doInvoke(Project project, final PsiClass targetClass) {
+    if (!FileModificationService.getInstance().prepareFileForWrite(targetClass.getContainingFile())) {
+      return;
+    }
 
-		IdeDocumentHistory.getInstance(project).includeCurrentPlaceAsChangePlace();
-		ApplicationManager.getApplication().runWriteAction(new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				invokeImpl(targetClass);
-			}
-		});
-	}
+    IdeDocumentHistory.getInstance(project).includeCurrentPlaceAsChangePlace();
+    ApplicationManager.getApplication().runWriteAction(new Runnable() {
+      @Override
+      public void run() {
+        invokeImpl(targetClass);
+      }
+    });
+  }
 
-	@Nullable
-	protected abstract PsiElement getElement();
+  @Nullable
+  protected abstract PsiElement getElement();
 
-	private void chooseTargetClass(List<PsiClass> classes, final Editor editor)
-	{
-		final Project project = classes.get(0).getProject();
+  private void chooseTargetClass(List<PsiClass> classes, final Editor editor) {
+    final Project project = classes.get(0).getProject();
 
-		final JList list = new JBList(classes);
-		PsiElementListCellRenderer renderer = new PsiClassListCellRenderer();
-		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		list.setCellRenderer(renderer);
-		final PopupChooserBuilder builder = new PopupChooserBuilder(list);
-		renderer.installSpeedSearch(builder);
+    final JList list = new JBList(classes);
+    PsiElementListCellRenderer renderer = new PsiClassListCellRenderer();
+    list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+    list.setCellRenderer(renderer);
+    final PopupChooserBuilder builder = new PopupChooserBuilder(list);
+    renderer.installSpeedSearch(builder);
 
-		Runnable runnable = new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				int index = list.getSelectedIndex();
-				if(index < 0)
-				{
-					return;
-				}
-				final PsiClass aClass = (PsiClass) list.getSelectedValue();
-				CommandProcessor.getInstance().executeCommand(project, new Runnable()
-				{
-					@Override
-					public void run()
-					{
-						doInvoke(project, aClass);
-					}
-				}, getText(), null);
-			}
-		};
+    Runnable runnable = new Runnable() {
+      @Override
+      public void run() {
+        int index = list.getSelectedIndex();
+        if (index < 0) {
+          return;
+        }
+        final PsiClass aClass = (PsiClass) list.getSelectedValue();
+        CommandProcessor.getInstance().executeCommand(project, new Runnable() {
+          @Override
+          public void run() {
+            doInvoke(project, aClass);
+          }
+        }, getText(), null);
+      }
+    };
 
-		builder.
-				setTitle(JavaQuickFixBundle.message("target.class.chooser.title")).
-				setItemChoosenCallback(runnable).
-				createPopup().
-				showInBestPositionFor(editor);
-	}
+    JBPopup popup = builder.
+        setTitle(JavaQuickFixBundle.message("target.class.chooser.title")).
+        setItemChoosenCallback(runnable).
+        createPopup();
 
-	/**
-	 * @return null means unable to open the editor
-	 */
-	@Nullable
-	protected static Editor positionCursor(@Nonnull Project project, @Nonnull PsiFile targetFile, @Nonnull PsiElement element)
-	{
-		TextRange range = element.getTextRange();
-		int textOffset = range.getStartOffset();
-		VirtualFile file = targetFile.getVirtualFile();
-		if(file == null)
-		{
-			file = PsiUtilCore.getVirtualFile(element);
-			if(file == null)
-			{
-				return null;
-			}
-		}
-		OpenFileDescriptor descriptor = new OpenFileDescriptor(project, file, textOffset);
-		return FileEditorManager.getInstance(project).openTextEditor(descriptor, true);
-	}
+    EditorPopupHelper.getInstance().showPopupInBestPositionFor(editor, popup);
+  }
 
-	protected void setupVisibility(PsiClass parentClass, PsiClass targetClass, PsiModifierList list) throws IncorrectOperationException
-	{
-		if(targetClass.isInterface() && list.getFirstChild() != null)
-		{
-			list.deleteChildRange(list.getFirstChild(), list.getLastChild());
-			return;
-		}
-		VisibilityUtil.setVisibility(list, getVisibility(parentClass, targetClass));
-	}
+  /**
+   * @return null means unable to open the editor
+   */
+  @Nullable
+  protected static Editor positionCursor(@Nonnull Project project, @Nonnull PsiFile targetFile, @Nonnull PsiElement element) {
+    TextRange range = element.getTextRange();
+    int textOffset = range.getStartOffset();
+    VirtualFile file = targetFile.getVirtualFile();
+    if (file == null) {
+      file = PsiUtilCore.getVirtualFile(element);
+      if (file == null) {
+        return null;
+      }
+    }
+    OpenFileDescriptor descriptor = OpenFileDescriptorFactory.getInstance(project).builder(file).offset(textOffset).build();
+    return FileEditorManager.getInstance(project).openTextEditor(descriptor, true);
+  }
 
-	@PsiModifier.ModifierConstant
-	protected String getVisibility(PsiClass parentClass, PsiClass targetClass)
-	{
-		if(parentClass != null && (parentClass.equals(targetClass) || PsiTreeUtil.isAncestor(targetClass, parentClass, true)))
-		{
-			return PsiModifier.PRIVATE;
-		}
-		else
-		{
-			return PsiModifier.PUBLIC;
-		}
-	}
+  protected void setupVisibility(PsiClass parentClass, PsiClass targetClass, PsiModifierList list) throws IncorrectOperationException {
+    if (targetClass.isInterface() && list.getFirstChild() != null) {
+      list.deleteChildRange(list.getFirstChild(), list.getLastChild());
+      return;
+    }
+    VisibilityUtil.setVisibility(list, getVisibility(parentClass, targetClass));
+  }
 
-	protected static boolean shouldCreateStaticMember(PsiReferenceExpression ref, PsiClass targetClass)
-	{
+  @PsiModifier.ModifierConstant
+  protected String getVisibility(PsiClass parentClass, PsiClass targetClass) {
+    if (parentClass != null && (parentClass.equals(targetClass) || PsiTreeUtil.isAncestor(targetClass, parentClass, true))) {
+      return PsiModifier.PRIVATE;
+    } else {
+      return PsiModifier.PUBLIC;
+    }
+  }
 
-		PsiExpression qualifierExpression = ref.getQualifierExpression();
-		while(qualifierExpression instanceof PsiParenthesizedExpression)
-		{
-			qualifierExpression = ((PsiParenthesizedExpression) qualifierExpression).getExpression();
-		}
+  protected static boolean shouldCreateStaticMember(PsiReferenceExpression ref, PsiClass targetClass) {
 
-		if(qualifierExpression instanceof PsiReferenceExpression)
-		{
-			PsiReferenceExpression referenceExpression = (PsiReferenceExpression) qualifierExpression;
+    PsiExpression qualifierExpression = ref.getQualifierExpression();
+    while (qualifierExpression instanceof PsiParenthesizedExpression) {
+      qualifierExpression = ((PsiParenthesizedExpression) qualifierExpression).getExpression();
+    }
 
-			PsiElement resolvedElement = referenceExpression.resolve();
+    if (qualifierExpression instanceof PsiReferenceExpression) {
+      PsiReferenceExpression referenceExpression = (PsiReferenceExpression) qualifierExpression;
 
-			return resolvedElement instanceof PsiClass;
-		}
-		else if(qualifierExpression != null)
-		{
-			return false;
-		}
-		else
-		{
-			assert PsiTreeUtil.isAncestor(targetClass, ref, true);
-			PsiModifierListOwner owner = PsiTreeUtil.getParentOfType(ref, PsiModifierListOwner.class);
-			if(owner instanceof PsiMethod && ((PsiMethod) owner).isConstructor())
-			{
-				//usages inside delegating constructor call
-				PsiExpression run = ref;
-				while(true)
-				{
-					if(!(run.getParent() instanceof PsiExpression))
-					{
-						break;
-					}
-					run = (PsiExpression) run.getParent();
-				}
-				if(run.getParent() instanceof PsiExpressionList && run.getParent().getParent() instanceof PsiMethodCallExpression)
-				{
-					@NonNls String calleeText = ((PsiMethodCallExpression) run.getParent().getParent()).getMethodExpression().getText();
-					if(calleeText.equals("this") || calleeText.equals("super"))
-					{
-						return true;
-					}
-				}
-			}
+      PsiElement resolvedElement = referenceExpression.resolve();
 
-			while(owner != null && owner != targetClass)
-			{
-				if(owner.hasModifierProperty(PsiModifier.STATIC))
-				{
-					return true;
-				}
-				owner = PsiTreeUtil.getParentOfType(owner, PsiModifierListOwner.class);
-			}
-		}
+      return resolvedElement instanceof PsiClass;
+    } else if (qualifierExpression != null) {
+      return false;
+    } else {
+      assert PsiTreeUtil.isAncestor(targetClass, ref, true);
+      PsiModifierListOwner owner = PsiTreeUtil.getParentOfType(ref, PsiModifierListOwner.class);
+      if (owner instanceof PsiMethod && ((PsiMethod) owner).isConstructor()) {
+        //usages inside delegating constructor call
+        PsiExpression run = ref;
+        while (true) {
+          if (!(run.getParent() instanceof PsiExpression)) {
+            break;
+          }
+          run = (PsiExpression) run.getParent();
+        }
+        if (run.getParent() instanceof PsiExpressionList && run.getParent().getParent() instanceof PsiMethodCallExpression) {
+          @NonNls String calleeText = ((PsiMethodCallExpression) run.getParent().getParent()).getMethodExpression().getText();
+          if (calleeText.equals("this") || calleeText.equals("super")) {
+            return true;
+          }
+        }
+      }
 
-		return false;
-	}
+      while (owner != null && owner != targetClass) {
+        if (owner.hasModifierProperty(PsiModifier.STATIC)) {
+          return true;
+        }
+        owner = PsiTreeUtil.getParentOfType(owner, PsiModifierListOwner.class);
+      }
+    }
 
-	@Nullable
-	private static PsiExpression getQualifier(PsiElement element)
-	{
-		if(element instanceof PsiNewExpression)
-		{
-			PsiJavaCodeReferenceElement ref = ((PsiNewExpression) element).getClassReference();
-			if(ref instanceof PsiReferenceExpression)
-			{
-				return ((PsiReferenceExpression) ref).getQualifierExpression();
-			}
-		}
-		else if(element instanceof PsiReferenceExpression)
-		{
-			return ((PsiReferenceExpression) element).getQualifierExpression();
-		}
-		else if(element instanceof PsiMethodCallExpression)
-		{
-			return ((PsiMethodCallExpression) element).getMethodExpression().getQualifierExpression();
-		}
+    return false;
+  }
 
-		return null;
-	}
+  @Nullable
+  private static PsiExpression getQualifier(PsiElement element) {
+    if (element instanceof PsiNewExpression) {
+      PsiJavaCodeReferenceElement ref = ((PsiNewExpression) element).getClassReference();
+      if (ref instanceof PsiReferenceExpression) {
+        return ((PsiReferenceExpression) ref).getQualifierExpression();
+      }
+    } else if (element instanceof PsiReferenceExpression) {
+      return ((PsiReferenceExpression) element).getQualifierExpression();
+    } else if (element instanceof PsiMethodCallExpression) {
+      return ((PsiMethodCallExpression) element).getMethodExpression().getQualifierExpression();
+    }
 
-	protected static PsiSubstitutor getTargetSubstitutor(PsiElement element)
-	{
-		if(element instanceof PsiNewExpression)
-		{
-			JavaResolveResult result = ((PsiNewExpression) element).getClassOrAnonymousClassReference().advancedResolve(false);
-			PsiSubstitutor substitutor = result.getSubstitutor();
-			return substitutor == null ? PsiSubstitutor.EMPTY : substitutor;
-		}
+    return null;
+  }
 
-		PsiExpression qualifier = getQualifier(element);
-		if(qualifier != null)
-		{
-			PsiType type = qualifier.getType();
-			if(type instanceof PsiClassType)
-			{
-				return ((PsiClassType) type).resolveGenerics().getSubstitutor();
-			}
-		}
+  protected static PsiSubstitutor getTargetSubstitutor(PsiElement element) {
+    if (element instanceof PsiNewExpression) {
+      JavaResolveResult result = ((PsiNewExpression) element).getClassOrAnonymousClassReference().advancedResolve(false);
+      PsiSubstitutor substitutor = result.getSubstitutor();
+      return substitutor == null ? PsiSubstitutor.EMPTY : substitutor;
+    }
 
-		return PsiSubstitutor.EMPTY;
-	}
+    PsiExpression qualifier = getQualifier(element);
+    if (qualifier != null) {
+      PsiType type = qualifier.getType();
+      if (type instanceof PsiClassType) {
+        return ((PsiClassType) type).resolveGenerics().getSubstitutor();
+      }
+    }
 
-	protected boolean isAllowOuterTargetClass()
-	{
-		return true;
-	}
+    return PsiSubstitutor.EMPTY;
+  }
 
-	//Should return only valid inproject classes
-	@Nonnull
-	protected List<PsiClass> getTargetClasses(PsiElement element)
-	{
-		PsiClass psiClass = null;
-		PsiExpression qualifier = null;
+  protected boolean isAllowOuterTargetClass() {
+    return true;
+  }
 
-		if(element instanceof PsiNameValuePair)
-		{
-			final PsiAnnotation annotation = PsiTreeUtil.getParentOfType(element, PsiAnnotation.class);
-			if(annotation != null)
-			{
-				PsiJavaCodeReferenceElement nameRef = annotation.getNameReferenceElement();
-				if(nameRef == null)
-				{
-					return Collections.emptyList();
-				}
-				else
-				{
-					final PsiElement resolve = nameRef.resolve();
-					if(resolve instanceof PsiClass)
-					{
-						return Collections.singletonList((PsiClass) resolve);
-					}
-					else
-					{
-						return Collections.emptyList();
-					}
-				}
-			}
-		}
-		if(element instanceof PsiNewExpression)
-		{
-			final PsiNewExpression newExpression = (PsiNewExpression) element;
-			PsiJavaCodeReferenceElement ref = newExpression.getClassOrAnonymousClassReference();
-			if(ref != null)
-			{
-				PsiElement refElement = ref.resolve();
-				if(refElement instanceof PsiClass)
-				{
-					psiClass = (PsiClass) refElement;
-				}
-			}
-		}
-		else if(element instanceof PsiReferenceExpression)
-		{
-			qualifier = ((PsiReferenceExpression) element).getQualifierExpression();
-			if(qualifier == null)
-			{
-				final PsiElement parent = element.getParent();
-				if(parent instanceof PsiSwitchLabelStatement)
-				{
-					final PsiSwitchStatement switchStatement = PsiTreeUtil.getParentOfType(parent, PsiSwitchStatement.class);
-					if(switchStatement != null)
-					{
-						final PsiExpression expression = switchStatement.getExpression();
-						if(expression != null)
-						{
-							psiClass = PsiUtil.resolveClassInClassTypeOnly(expression.getType());
-						}
-					}
-				}
-			}
-		}
-		else if(element instanceof PsiMethodCallExpression)
-		{
-			final PsiReferenceExpression methodExpression = ((PsiMethodCallExpression) element).getMethodExpression();
-			qualifier = methodExpression.getQualifierExpression();
-			@NonNls final String referenceName = methodExpression.getReferenceName();
-			if(referenceName == null)
-			{
-				return Collections.emptyList();
-			}
-		}
-		boolean allowOuterClasses = false;
-		if(qualifier != null)
-		{
-			PsiType type = qualifier.getType();
-			if(type instanceof PsiClassType)
-			{
-				psiClass = ((PsiClassType) type).resolve();
-			}
+  //Should return only valid inproject classes
+  @Nonnull
+  protected List<PsiClass> getTargetClasses(PsiElement element) {
+    PsiClass psiClass = null;
+    PsiExpression qualifier = null;
 
-			if(qualifier instanceof PsiJavaCodeReferenceElement)
-			{
-				final PsiElement resolved = ((PsiJavaCodeReferenceElement) qualifier).resolve();
-				if(resolved instanceof PsiClass)
-				{
-					if(psiClass == null)
-					{
-						psiClass = (PsiClass) resolved;
-					}
-				}
-			}
-		}
-		else if(psiClass == null)
-		{
-			psiClass = PsiTreeUtil.getParentOfType(element, PsiClass.class);
-			allowOuterClasses = true;
-		}
+    if (element instanceof PsiNameValuePair) {
+      final PsiAnnotation annotation = PsiTreeUtil.getParentOfType(element, PsiAnnotation.class);
+      if (annotation != null) {
+        PsiJavaCodeReferenceElement nameRef = annotation.getNameReferenceElement();
+        if (nameRef == null) {
+          return Collections.emptyList();
+        } else {
+          final PsiElement resolve = nameRef.resolve();
+          if (resolve instanceof PsiClass) {
+            return Collections.singletonList((PsiClass) resolve);
+          } else {
+            return Collections.emptyList();
+          }
+        }
+      }
+    }
+    if (element instanceof PsiNewExpression) {
+      final PsiNewExpression newExpression = (PsiNewExpression) element;
+      PsiJavaCodeReferenceElement ref = newExpression.getClassOrAnonymousClassReference();
+      if (ref != null) {
+        PsiElement refElement = ref.resolve();
+        if (refElement instanceof PsiClass) {
+          psiClass = (PsiClass) refElement;
+        }
+      }
+    } else if (element instanceof PsiReferenceExpression) {
+      qualifier = ((PsiReferenceExpression) element).getQualifierExpression();
+      if (qualifier == null) {
+        final PsiElement parent = element.getParent();
+        if (parent instanceof PsiSwitchLabelStatement) {
+          final PsiSwitchStatement switchStatement = PsiTreeUtil.getParentOfType(parent, PsiSwitchStatement.class);
+          if (switchStatement != null) {
+            final PsiExpression expression = switchStatement.getExpression();
+            if (expression != null) {
+              psiClass = PsiUtil.resolveClassInClassTypeOnly(expression.getType());
+            }
+          }
+        }
+      }
+    } else if (element instanceof PsiMethodCallExpression) {
+      final PsiReferenceExpression methodExpression = ((PsiMethodCallExpression) element).getMethodExpression();
+      qualifier = methodExpression.getQualifierExpression();
+      @NonNls final String referenceName = methodExpression.getReferenceName();
+      if (referenceName == null) {
+        return Collections.emptyList();
+      }
+    }
+    boolean allowOuterClasses = false;
+    if (qualifier != null) {
+      PsiType type = qualifier.getType();
+      if (type instanceof PsiClassType) {
+        psiClass = ((PsiClassType) type).resolve();
+      }
 
-		if(psiClass instanceof PsiTypeParameter)
-		{
-			PsiClass[] supers = psiClass.getSupers();
-			List<PsiClass> filtered = new ArrayList<PsiClass>();
-			for(PsiClass aSuper : supers)
-			{
-				if(!aSuper.getManager().isInProject(aSuper))
-				{
-					continue;
-				}
-				if(!(aSuper instanceof PsiTypeParameter))
-				{
-					filtered.add(aSuper);
-				}
-			}
-			return filtered;
-		}
-		else
-		{
-			if(psiClass == null || !psiClass.getManager().isInProject(psiClass))
-			{
-				return Collections.emptyList();
-			}
+      if (qualifier instanceof PsiJavaCodeReferenceElement) {
+        final PsiElement resolved = ((PsiJavaCodeReferenceElement) qualifier).resolve();
+        if (resolved instanceof PsiClass) {
+          if (psiClass == null) {
+            psiClass = (PsiClass) resolved;
+          }
+        }
+      }
+    } else if (psiClass == null) {
+      psiClass = PsiTreeUtil.getParentOfType(element, PsiClass.class);
+      allowOuterClasses = true;
+    }
 
-			if(ApplicationManager.getApplication().isUnitTestMode())
-			{
-				return Collections.singletonList(psiClass);
-			}
+    if (psiClass instanceof PsiTypeParameter) {
+      PsiClass[] supers = psiClass.getSupers();
+      List<PsiClass> filtered = new ArrayList<PsiClass>();
+      for (PsiClass aSuper : supers) {
+        if (!aSuper.getManager().isInProject(aSuper)) {
+          continue;
+        }
+        if (!(aSuper instanceof PsiTypeParameter)) {
+          filtered.add(aSuper);
+        }
+      }
+      return filtered;
+    } else {
+      if (psiClass == null || !psiClass.getManager().isInProject(psiClass)) {
+        return Collections.emptyList();
+      }
 
-			if(!allowOuterClasses || !isAllowOuterTargetClass())
-			{
-				final ArrayList<PsiClass> classes = new ArrayList<PsiClass>();
-				collectSupers(psiClass, classes);
-				return classes;
-			}
+      if (ApplicationManager.getApplication().isUnitTestMode()) {
+        return Collections.singletonList(psiClass);
+      }
 
-			List<PsiClass> result = new ArrayList<PsiClass>();
+      if (!allowOuterClasses || !isAllowOuterTargetClass()) {
+        final ArrayList<PsiClass> classes = new ArrayList<PsiClass>();
+        collectSupers(psiClass, classes);
+        return classes;
+      }
 
-			while(psiClass != null)
-			{
-				result.add(psiClass);
-				if(psiClass.hasModifierProperty(PsiModifier.STATIC))
-				{
-					break;
-				}
-				psiClass = PsiTreeUtil.getParentOfType(psiClass, PsiClass.class);
-			}
-			return result;
-		}
-	}
+      List<PsiClass> result = new ArrayList<PsiClass>();
 
-	private void collectSupers(PsiClass psiClass, ArrayList<PsiClass> classes)
-	{
-		classes.add(psiClass);
+      while (psiClass != null) {
+        result.add(psiClass);
+        if (psiClass.hasModifierProperty(PsiModifier.STATIC)) {
+          break;
+        }
+        psiClass = PsiTreeUtil.getParentOfType(psiClass, PsiClass.class);
+      }
+      return result;
+    }
+  }
 
-		final PsiClass[] supers = psiClass.getSupers();
-		for(PsiClass aSuper : supers)
-		{
-			if(classes.contains(aSuper))
-			{
-				continue;
-			}
-			if(canBeTargetClass(aSuper))
-			{
-				collectSupers(aSuper, classes);
-			}
-		}
-	}
+  private void collectSupers(PsiClass psiClass, ArrayList<PsiClass> classes) {
+    classes.add(psiClass);
 
-	protected boolean canBeTargetClass(PsiClass psiClass)
-	{
-		return psiClass.getManager().isInProject(psiClass);
-	}
+    final PsiClass[] supers = psiClass.getSupers();
+    for (PsiClass aSuper : supers) {
+      if (classes.contains(aSuper)) {
+        continue;
+      }
+      if (canBeTargetClass(aSuper)) {
+        collectSupers(aSuper, classes);
+      }
+    }
+  }
 
-	protected static void startTemplate(@Nonnull Editor editor, final Template template, @Nonnull final Project project)
-	{
-		startTemplate(editor, template, project, null);
-	}
+  protected boolean canBeTargetClass(PsiClass psiClass) {
+    return psiClass.getManager().isInProject(psiClass);
+  }
 
-	protected static void startTemplate(@Nonnull final Editor editor, final Template template, @Nonnull final Project project, final TemplateEditingListener listener)
-	{
-		startTemplate(editor, template, project, listener, null);
-	}
+  protected static void startTemplate(@Nonnull Editor editor, final Template template, @Nonnull final Project project) {
+    startTemplate(editor, template, project, null);
+  }
 
-	public static void startTemplate(@Nonnull final Editor editor, final Template template, @Nonnull final Project project, final TemplateEditingListener listener, final String commandName)
-	{
-		Runnable runnable = new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				if(project.isDisposed() || editor.isDisposed())
-				{
-					return;
-				}
-				CommandProcessor.getInstance().executeCommand(project, new Runnable()
-				{
-					@Override
-					public void run()
-					{
-						TemplateManager.getInstance(project).startTemplate(editor, template, listener);
-					}
-				}, commandName, commandName);
-			}
-		};
-		if(ApplicationManager.getApplication().isUnitTestMode())
-		{
-			runnable.run();
-		}
-		else
-		{
-			ApplicationManager.getApplication().invokeLater(runnable);
-		}
-	}
+  protected static void startTemplate(@Nonnull final Editor editor, final Template template, @Nonnull final Project project, final TemplateEditingListener listener) {
+    startTemplate(editor, template, project, listener, null);
+  }
 
-	@Override
-	public boolean startInWriteAction()
-	{
-		return false;
-	}
+  public static void startTemplate(@Nonnull final Editor editor, final Template template, @Nonnull final Project project, final TemplateEditingListener listener, final String commandName) {
+    Runnable runnable = new Runnable() {
+      @Override
+      public void run() {
+        if (project.isDisposed() || editor.isDisposed()) {
+          return;
+        }
+        CommandProcessor.getInstance().executeCommand(project, new Runnable() {
+          @Override
+          public void run() {
+            TemplateManager.getInstance(project).startTemplate(editor, template, listener);
+          }
+        }, commandName, commandName);
+      }
+    };
+    if (ApplicationManager.getApplication().isUnitTestMode()) {
+      runnable.run();
+    } else {
+      ApplicationManager.getApplication().invokeLater(runnable);
+    }
+  }
 
-	public static void setupGenericParameters(PsiClass targetClass, PsiJavaCodeReferenceElement ref)
-	{
-		int numParams = ref.getTypeParameters().length;
-		if(numParams == 0)
-		{
-			return;
-		}
-		final PsiElementFactory factory = JavaPsiFacade.getInstance(ref.getProject()).getElementFactory();
-		final Set<String> typeParamNames = new HashSet<String>();
-		for(PsiType type : ref.getTypeParameters())
-		{
-			final PsiClass psiClass = PsiUtil.resolveClassInType(type);
-			if(psiClass instanceof PsiTypeParameter)
-			{
-				typeParamNames.add(psiClass.getName());
-			}
-		}
-		int idx = 0;
-		for(PsiType type : ref.getTypeParameters())
-		{
-			final PsiClass psiClass = PsiUtil.resolveClassInType(type);
-			if(psiClass instanceof PsiTypeParameter)
-			{
-				targetClass.getTypeParameterList().add(factory.createTypeParameterFromText(psiClass.getName(), null));
-			}
-			else
-			{
-				while(true)
-				{
-					final String paramName = idx > 0 ? "T" + idx : "T";
-					if(!typeParamNames.contains(paramName))
-					{
-						targetClass.getTypeParameterList().add(factory.createTypeParameterFromText(paramName, null));
-						break;
-					}
-					idx++;
-				}
-			}
-		}
-	}
+  @Override
+  public boolean startInWriteAction() {
+    return false;
+  }
+
+  public static void setupGenericParameters(PsiClass targetClass, PsiJavaCodeReferenceElement ref) {
+    int numParams = ref.getTypeParameters().length;
+    if (numParams == 0) {
+      return;
+    }
+    final PsiElementFactory factory = JavaPsiFacade.getInstance(ref.getProject()).getElementFactory();
+    final Set<String> typeParamNames = new HashSet<String>();
+    for (PsiType type : ref.getTypeParameters()) {
+      final PsiClass psiClass = PsiUtil.resolveClassInType(type);
+      if (psiClass instanceof PsiTypeParameter) {
+        typeParamNames.add(psiClass.getName());
+      }
+    }
+    int idx = 0;
+    for (PsiType type : ref.getTypeParameters()) {
+      final PsiClass psiClass = PsiUtil.resolveClassInType(type);
+      if (psiClass instanceof PsiTypeParameter) {
+        targetClass.getTypeParameterList().add(factory.createTypeParameterFromText(psiClass.getName(), null));
+      } else {
+        while (true) {
+          final String paramName = idx > 0 ? "T" + idx : "T";
+          if (!typeParamNames.contains(paramName)) {
+            targetClass.getTypeParameterList().add(factory.createTypeParameterFromText(paramName, null));
+            break;
+          }
+          idx++;
+        }
+      }
+    }
+  }
 }

@@ -25,7 +25,7 @@ import javax.annotation.Nullable;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
 import consulo.project.Project;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import consulo.language.util.IncorrectOperationException;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;

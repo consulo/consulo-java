@@ -15,22 +15,22 @@
  */
 package com.intellij.java.impl.testIntegration.intention;
 
-import consulo.language.editor.CodeInsightBundle;
-import com.intellij.java.language.codeInsight.TestFrameworks;
 import com.intellij.java.impl.codeInsight.intention.impl.BaseMoveInitializerToMethodAction;
+import com.intellij.java.impl.testIntegration.TestIntegrationUtils;
+import com.intellij.java.language.codeInsight.TestFrameworks;
 import com.intellij.java.language.psi.*;
-import consulo.codeEditor.Editor;
-import consulo.component.extension.Extensions;
-import consulo.project.Project;
-import com.intellij.psi.*;
-import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.testIntegration.JavaTestFramework;
 import com.intellij.java.language.testIntegration.TestFramework;
-import com.intellij.java.impl.testIntegration.TestIntegrationUtils;
+import consulo.codeEditor.Editor;
+import consulo.component.extension.Extensions;
+import consulo.language.editor.CodeInsightBundle;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.util.PsiTreeUtil;
 import consulo.logging.Logger;
+import consulo.project.Project;
 
 import javax.annotation.Nonnull;
-
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;

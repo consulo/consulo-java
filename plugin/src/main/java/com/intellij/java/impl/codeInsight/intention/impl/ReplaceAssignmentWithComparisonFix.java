@@ -15,56 +15,50 @@
  */
 package com.intellij.java.impl.codeInsight.intention.impl;
 
-import javax.annotation.Nonnull;
-
-import org.jetbrains.annotations.Nls;
-
-import javax.annotation.Nullable;
-import consulo.language.editor.inspection.LocalQuickFixAndIntentionActionOnPsiElement;
-import consulo.codeEditor.Editor;
-import consulo.project.Project;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiAssignmentExpression;
 import com.intellij.java.language.psi.PsiBinaryExpression;
-import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiExpression;
-import consulo.language.psi.PsiFile;
-import consulo.language.codeStyle.CodeStyleManager;
 import com.siyeh.InspectionGadgetsBundle;
+import consulo.codeEditor.Editor;
+import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.editor.inspection.LocalQuickFixAndIntentionActionOnPsiElement;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.project.Project;
+import org.jetbrains.annotations.Nls;
 
-public class ReplaceAssignmentWithComparisonFix extends LocalQuickFixAndIntentionActionOnPsiElement
-{
-	public ReplaceAssignmentWithComparisonFix(PsiAssignmentExpression expr)
-	{
-		super(expr);
-	}
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-	@Override
-	public void invoke(@Nonnull Project project, @Nonnull PsiFile file, @Nullable Editor editor, @Nonnull PsiElement startElement, @Nonnull PsiElement endElement)
-	{
-		PsiBinaryExpression comparisonExpr = (PsiBinaryExpression) JavaPsiFacade.getElementFactory(project).createExpressionFromText("a==b", startElement);
-		PsiAssignmentExpression assignmentExpression = (PsiAssignmentExpression) startElement;
-		comparisonExpr.getLOperand().replace(assignmentExpression.getLExpression());
-		PsiExpression rOperand = comparisonExpr.getROperand();
-		assert rOperand != null;
-		PsiExpression rExpression = assignmentExpression.getRExpression();
-		assert rExpression != null;
-		rOperand.replace(rExpression);
-		CodeStyleManager.getInstance(project).reformat(assignmentExpression.replace(comparisonExpr));
-	}
+public class ReplaceAssignmentWithComparisonFix extends LocalQuickFixAndIntentionActionOnPsiElement {
+  public ReplaceAssignmentWithComparisonFix(PsiAssignmentExpression expr) {
+    super(expr);
+  }
 
-	@Nonnull
-	@Override
-	public String getText()
-	{
-		return getFamilyName();
-	}
+  @Override
+  public void invoke(@Nonnull Project project, @Nonnull PsiFile file, @Nullable Editor editor, @Nonnull PsiElement startElement, @Nonnull PsiElement endElement) {
+    PsiBinaryExpression comparisonExpr = (PsiBinaryExpression) JavaPsiFacade.getElementFactory(project).createExpressionFromText("a==b", startElement);
+    PsiAssignmentExpression assignmentExpression = (PsiAssignmentExpression) startElement;
+    comparisonExpr.getLOperand().replace(assignmentExpression.getLExpression());
+    PsiExpression rOperand = comparisonExpr.getROperand();
+    assert rOperand != null;
+    PsiExpression rExpression = assignmentExpression.getRExpression();
+    assert rExpression != null;
+    rOperand.replace(rExpression);
+    CodeStyleManager.getInstance(project).reformat(assignmentExpression.replace(comparisonExpr));
+  }
 
-	@Nls
-	@Nonnull
-	@Override
-	public String getFamilyName()
-	{
-		return InspectionGadgetsBundle.message("assignment.used.as.condition.replace.quickfix");
-	}
+  @Nonnull
+  @Override
+  public String getText() {
+    return getFamilyName();
+  }
+
+  @Nls
+  @Nonnull
+  @Override
+  public String getFamilyName() {
+    return InspectionGadgetsBundle.message("assignment.used.as.condition.replace.quickfix");
+  }
 }

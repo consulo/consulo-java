@@ -17,7 +17,7 @@ package com.intellij.java.impl.lang.java;
 
 import com.intellij.java.language.psi.*;
 import consulo.language.navigation.AnonymousElementProvider;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 
 import java.util.ArrayList;
 import java.util.List;

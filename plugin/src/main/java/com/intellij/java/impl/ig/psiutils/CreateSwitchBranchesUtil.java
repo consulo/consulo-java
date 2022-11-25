@@ -1,24 +1,24 @@
 // Copyright 2000-2019 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.impl.ig.psiutils;
 
+import com.intellij.java.language.psi.*;
+import com.siyeh.ig.psiutils.CommentTracker;
+import com.siyeh.ig.psiutils.TypeUtils;
+import consulo.codeEditor.Editor;
+import consulo.document.Document;
 import consulo.fileEditor.FileEditorManager;
+import consulo.language.editor.template.ConstantNode;
 import consulo.language.editor.template.TemplateBuilder;
 import consulo.language.editor.template.TemplateBuilderFactory;
-import consulo.language.editor.template.ConstantNode;
-import com.intellij.java.language.psi.*;
 import consulo.language.inject.InjectedLanguageManager;
-import consulo.document.Document;
-import consulo.codeEditor.Editor;
-import consulo.project.Project;
-import consulo.util.lang.Couple;
 import consulo.language.psi.PsiDocumentManager;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
-import consulo.ide.impl.idea.util.ObjectUtils;
+import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
-import com.siyeh.ig.psiutils.CommentTracker;
-import com.siyeh.ig.psiutils.TypeUtils;
+import consulo.util.lang.Couple;
+import consulo.util.lang.ObjectUtil;
 import one.util.streamex.Joining;
 import one.util.streamex.StreamEx;
 import org.jetbrains.annotations.NonNls;
@@ -87,7 +87,7 @@ public class CreateSwitchBranchesUtil {
     PsiElement bodyElement = body.getFirstBodyElement();
     List<PsiSwitchLabelStatementBase> addedLabels = new ArrayList<>();
     while (bodyElement != null) {
-      PsiSwitchLabelStatementBase label = ObjectUtils.tryCast(bodyElement, PsiSwitchLabelStatementBase.class);
+      PsiSwitchLabelStatementBase label = ObjectUtil.tryCast(bodyElement, PsiSwitchLabelStatementBase.class);
       if (label != null) {
         List<String> constants = caseExtractor.apply(label);
         while (nextLabel != null && constants.contains(nextLabel)) {

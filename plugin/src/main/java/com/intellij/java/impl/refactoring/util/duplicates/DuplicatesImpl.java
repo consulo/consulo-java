@@ -15,37 +15,33 @@
  */
 package com.intellij.java.impl.refactoring.util.duplicates;
 
-import consulo.application.CommonBundle;
-import consulo.language.editor.folding.CodeFoldingManager;
-import consulo.language.editor.highlight.HighlightManager;
-import consulo.find.FindManager;
 import com.intellij.java.analysis.impl.refactoring.util.duplicates.Match;
 import consulo.application.ApplicationManager;
-import consulo.application.impl.internal.ApplicationNamesInfo;
+import consulo.application.CommonBundle;
 import consulo.application.Result;
-import consulo.language.editor.WriteCommandAction;
-import consulo.codeEditor.Editor;
-import consulo.codeEditor.FoldRegion;
-import consulo.codeEditor.LogicalPosition;
-import consulo.codeEditor.ScrollType;
-import consulo.codeEditor.EditorColors;
-import consulo.colorScheme.EditorColorsManager;
+import consulo.application.impl.internal.ApplicationNamesInfo;
+import consulo.codeEditor.*;
 import consulo.codeEditor.markup.RangeHighlighter;
+import consulo.colorScheme.EditorColorsManager;
 import consulo.colorScheme.TextAttributes;
+import consulo.document.util.TextRange;
 import consulo.fileEditor.FileEditorManager;
-import consulo.navigation.OpenFileDescriptor;
+import consulo.find.FindManager;
+import consulo.ide.impl.idea.ui.ReplacePromptDialog;
+import consulo.language.editor.WriteCommandAction;
+import consulo.language.editor.folding.CodeFoldingManager;
+import consulo.language.editor.highlight.HighlightManager;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
+import consulo.language.psi.PsiDocumentManager;
+import consulo.language.psi.PsiFile;
+import consulo.language.util.IncorrectOperationException;
+import consulo.logging.Logger;
+import consulo.navigation.OpenFileDescriptorFactory;
 import consulo.project.Project;
 import consulo.ui.ex.awt.Messages;
 import consulo.util.lang.ref.Ref;
-import consulo.document.util.TextRange;
 import consulo.virtualFileSystem.VirtualFile;
-import consulo.language.psi.PsiDocumentManager;
-import consulo.language.psi.PsiFile;
-import consulo.language.editor.refactoring.RefactoringBundle;
-import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
-import consulo.ide.impl.idea.ui.ReplacePromptDialog;
-import consulo.language.util.IncorrectOperationException;
-import consulo.logging.Logger;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -94,7 +90,7 @@ public class DuplicatesImpl {
       if (!CommonRefactoringUtil.checkReadOnlyStatus(project, file)) {
         return;
       }
-      final Editor editor = FileEditorManager.getInstance(project).openTextEditor(new OpenFileDescriptor(project, virtualFile), false);
+      final Editor editor = FileEditorManager.getInstance(project).openTextEditor(OpenFileDescriptorFactory.getInstance(project).builder(virtualFile).build(), false);
       LOG.assertTrue(editor != null);
       if (!match.getMatchStart().isValid() || !match.getMatchEnd().isValid()) {
         continue;

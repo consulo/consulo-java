@@ -16,14 +16,13 @@
 
 package com.intellij.java.impl.util.descriptors;
 
-import javax.annotation.Nonnull;
-
-import consulo.disposer.Disposable;
 import consulo.component.util.ModificationTracker;
-import consulo.virtualFileSystem.VirtualFile;
+import consulo.disposer.Disposable;
 import consulo.language.psi.PsiFile;
-import com.intellij.psi.xml.XmlFile;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.xml.psi.xml.XmlFile;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**

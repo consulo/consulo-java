@@ -15,18 +15,17 @@
  */
 package com.intellij.java.impl.codeInsight.generation;
 
+import com.intellij.java.language.impl.codeInsight.generation.EncapsulatableClassMember;
+import com.intellij.java.language.psi.PsiClass;
+import consulo.component.extension.ExtensionPointName;
+import consulo.component.extension.Extensions;
+import consulo.ide.impl.idea.util.NotNullFunction;
+import consulo.util.collection.ContainerUtil;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-
-import com.intellij.java.language.impl.codeInsight.generation.EncapsulatableClassMember;
-import consulo.component.extension.ExtensionPointName;
-import consulo.component.extension.Extensions;
-import com.intellij.java.language.psi.PsiClass;
-import consulo.ide.impl.idea.util.Function;
-import consulo.ide.impl.idea.util.NotNullFunction;
-import consulo.util.collection.ContainerUtil;
 
 /**
  * @author peter
@@ -48,11 +47,6 @@ public class GenerateAccessorProviderRegistrar {
   }
 
   protected static List<EncapsulatableClassMember> getEncapsulatableClassMembers(final PsiClass psiClass) {
-    return ContainerUtil.concat(ourProviders, new Function<NotNullFunction<PsiClass, Collection<EncapsulatableClassMember>>, Collection<? extends EncapsulatableClassMember>>() {
-      @Override
-      public Collection<? extends EncapsulatableClassMember> fun(NotNullFunction<PsiClass, Collection<EncapsulatableClassMember>> s) {
-        return s.fun(psiClass);
-      }
-    });
+    return ContainerUtil.concat(ourProviders, s -> s.apply(psiClass));
   }
 }

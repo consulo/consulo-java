@@ -26,7 +26,7 @@ import com.siyeh.ig.psiutils.MethodUtils;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
 
-public class IteratorHasNextCallsIteratorNextInspection
+public abstract class IteratorHasNextCallsIteratorNextInspection
   extends BaseInspection {
 
   @Nonnull

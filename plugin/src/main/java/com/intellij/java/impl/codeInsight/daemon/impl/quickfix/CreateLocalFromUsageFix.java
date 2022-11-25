@@ -15,23 +15,25 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
-import consulo.ide.impl.idea.codeInsight.CodeInsightUtilBase;
-import com.intellij.java.language.psi.*;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
 import com.intellij.java.impl.codeInsight.intention.impl.TypeExpression;
-import consulo.language.editor.template.Template;
-import consulo.language.editor.impl.internal.template.TemplateBuilderImpl;
-import consulo.language.editor.template.event.TemplateEditingAdapter;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.application.ApplicationManager;
 import consulo.codeEditor.Editor;
-import consulo.project.Project;
 import consulo.document.util.TextRange;
-import com.intellij.psi.*;
+import consulo.ide.impl.idea.codeInsight.CodeInsightUtilBase;
+import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.codeStyle.CodeStyleSettingsManager;
+import consulo.language.editor.impl.internal.template.TemplateBuilderImpl;
+import consulo.language.editor.template.Template;
+import consulo.language.editor.template.event.TemplateEditingAdapter;
+import consulo.language.psi.PsiDocumentManager;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
-import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.logging.Logger;
+import consulo.project.Project;
 
 import javax.annotation.Nonnull;
 

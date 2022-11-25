@@ -15,10 +15,6 @@
  */
 package com.intellij.java.impl.codeInsight.completion;
 
-import consulo.language.editor.completion.lookup.TailType;
-import com.intellij.codeInsight.completion.*;
-import consulo.language.editor.completion.lookup.LookupElement;
-import consulo.language.editor.completion.lookup.LookupElementDecorator;
 import com.intellij.java.impl.codeInsight.ExpectedTypeInfo;
 import com.intellij.java.impl.codeInsight.ExpectedTypeInfoImpl;
 import com.intellij.java.impl.codeInsight.ExpectedTypesProvider;
@@ -31,6 +27,13 @@ import com.intellij.java.impl.psi.filters.types.AssignableToFilter;
 import com.intellij.java.impl.psi.util.proximity.ReferenceListWeigher;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.infos.CandidateInfo;
+import consulo.application.util.matcher.PrefixMatcher;
+import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.editor.completion.*;
+import consulo.language.editor.completion.lookup.LookupElement;
+import consulo.language.editor.completion.lookup.LookupElementDecorator;
+import consulo.language.editor.completion.lookup.TailType;
+import consulo.language.editor.impl.internal.completion.CompletionUtil;
 import consulo.language.pattern.ElementPattern;
 import consulo.language.psi.PsiComment;
 import consulo.language.psi.PsiElement;
@@ -38,16 +41,18 @@ import consulo.language.psi.PsiFile;
 import consulo.language.psi.filter.ElementFilter;
 import consulo.language.psi.filter.OrFilter;
 import consulo.language.psi.util.PsiTreeUtil;
-import com.intellij.util.*;
+import consulo.language.util.ProcessingContext;
 import consulo.util.collection.ContainerUtil;
-import consulo.language.editor.completion.CompletionProvider;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.util.collection.HashingStrategy;
 import consulo.util.collection.Sets;
+import consulo.util.collection.SmartList;
+import consulo.util.lang.reflect.ReflectionUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 import static consulo.language.pattern.PlatformPatterns.psiElement;
 import static consulo.language.pattern.StandardPatterns.or;
@@ -55,7 +60,7 @@ import static consulo.language.pattern.StandardPatterns.or;
 /**
  * @author peter
  */
-public class JavaSmartCompletionContributor extends CompletionContributor {
+public abstract class JavaSmartCompletionContributor extends CompletionContributor {
   private static final HashingStrategy<ExpectedTypeInfo> EXPECTED_TYPE_INFO_STRATEGY = new HashingStrategy<ExpectedTypeInfo>() {
     @Override
     public int hashCode(final ExpectedTypeInfo object) {

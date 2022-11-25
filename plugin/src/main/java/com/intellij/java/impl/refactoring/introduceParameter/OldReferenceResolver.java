@@ -15,19 +15,21 @@
  */
 package com.intellij.java.impl.refactoring.introduceParameter;
 
-import com.intellij.java.language.psi.*;
-import consulo.logging.Logger;
-import consulo.project.Project;
-import com.intellij.psi.*;
-import consulo.language.codeStyle.CodeStyleManager;
-import com.intellij.java.language.psi.util.PropertyUtil;
-import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.impl.refactoring.IntroduceParameterRefactoring;
 import com.intellij.java.impl.refactoring.util.RefactoringUtil;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.PropertyUtil;
+import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiManager;
+import consulo.language.psi.PsiNamedElement;
+import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
-import java.util.HashMap;
-import javax.annotation.Nullable;
+import consulo.logging.Logger;
+import consulo.project.Project;
 
+import javax.annotation.Nullable;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 

@@ -24,7 +24,7 @@ import consulo.document.Document;
 import consulo.codeEditor.Editor;
 import consulo.document.util.TextRange;
 import consulo.util.lang.StringUtil;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import consulo.language.codeStyle.CodeStyleSettingsManager;
 import com.intellij.java.language.impl.psi.impl.source.tree.ElementType;
 import consulo.language.impl.ast.TreeUtil;

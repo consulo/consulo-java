@@ -20,17 +20,17 @@ import com.intellij.java.language.util.ClassFilter;
 import com.intellij.java.language.util.TreeClassChooser;
 import com.intellij.java.language.util.TreeClassChooserFactory;
 import consulo.document.Document;
+import consulo.language.editor.ui.awt.ReferenceEditorWithBrowseButton;
+import consulo.language.psi.PsiDocumentManager;
+import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.project.Project;
 import consulo.util.dataholder.Key;
-import com.intellij.psi.*;
-import consulo.language.psi.scope.GlobalSearchScope;
-import consulo.ide.impl.idea.util.Function;
-import consulo.language.editor.ui.awt.ReferenceEditorWithBrowseButton;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.function.Function;
 
 /**
  * @author yole
@@ -48,7 +48,7 @@ public class ClassNameReferenceEditor extends ReferenceEditorWithBrowseButton {
   public ClassNameReferenceEditor(@Nonnull final Project project, @Nullable final PsiClass selectedClass,
                                   @Nullable final GlobalSearchScope resolveScope) {
     super(null, project, new Function<String,Document>() {
-      public Document fun(final String s) {
+      public Document apply(final String s) {
         PsiJavaPackage defaultPackage = JavaPsiFacade.getInstance(project).findPackage("");
         final JavaCodeFragment fragment = JavaCodeFragmentFactory.getInstance(project).createReferenceCodeFragment(s, defaultPackage, true, true);
         fragment.setVisibilityChecker(JavaCodeFragment.VisibilityChecker.EVERYTHING_VISIBLE);

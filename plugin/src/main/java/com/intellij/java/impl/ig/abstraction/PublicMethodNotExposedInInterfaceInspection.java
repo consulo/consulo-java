@@ -15,29 +15,25 @@
  */
 package com.intellij.java.impl.ig.abstraction;
 
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-
-import javax.annotation.Nonnull;
-import javax.swing.JComponent;
-import javax.swing.JPanel;
-
-import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.impl.codeInspection.util.SpecialAnnotationsUtil;
-import consulo.java.language.module.util.JavaClassNames;
+import com.intellij.java.impl.ig.fixes.AddToIgnoreIfAnnotatedByListQuickFix;
+import com.intellij.java.impl.ig.psiutils.LibraryUtil;
+import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.java.language.psi.PsiModifierListOwner;
-import consulo.ui.CheckBox;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.fixes.AddToIgnoreIfAnnotatedByListQuickFix;
-import com.intellij.java.impl.ig.psiutils.LibraryUtil;
 import com.siyeh.ig.psiutils.TestUtils;
 import com.siyeh.ig.ui.ExternalizableStringSet;
+import consulo.java.language.module.util.JavaClassNames;
+
+import javax.annotation.Nonnull;
+import javax.swing.*;
+import java.awt.*;
 
 public class PublicMethodNotExposedInInterfaceInspection
   extends BaseInspection {
@@ -82,7 +78,7 @@ public class PublicMethodNotExposedInInterfaceInspection
     constraints.anchor = GridBagConstraints.CENTER;
     constraints.fill = GridBagConstraints.BOTH;
     panel.add(annotationsListControl, constraints);
-    final CheckBox checkBox = new CheckBox(InspectionGadgetsBundle.message(
+    final consulo.language.editor.inspection.ui.CheckBox checkBox = new consulo.language.editor.inspection.ui.CheckBox(InspectionGadgetsBundle.message(
       "public.method.not.in.interface.option"), this, "onlyWarnIfContainingClassImplementsAnInterface");
     constraints.gridy = 1;
     constraints.weighty = 0.0;

@@ -15,16 +15,20 @@
  */
 package com.intellij.java.impl.refactoring.safeDelete;
 
-import com.intellij.java.language.psi.*;
-import consulo.util.lang.StringUtil;
-import com.intellij.psi.*;
-import com.intellij.java.language.impl.psi.impl.source.javadoc.PsiDocMethodOrFieldRef;
 import com.intellij.java.impl.refactoring.safeDelete.usageInfo.SafeDeleteReferenceJavaDeleteUsageInfo;
-import consulo.usage.UsageInfo;
-import consulo.ide.impl.idea.util.Function;
+import com.intellij.java.language.JavaLanguage;
+import com.intellij.java.language.impl.psi.impl.source.javadoc.PsiDocMethodOrFieldRef;
+import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.Language;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiReference;
 import consulo.language.util.IncorrectOperationException;
+import consulo.usage.UsageInfo;
+import consulo.util.lang.StringUtil;
 import org.jetbrains.annotations.NonNls;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -32,6 +36,7 @@ import java.util.List;
 /**
  * @author Max Medvedev
  */
+@ExtensionImpl
 public class JavaSafeDeleteDelegateImpl implements JavaSafeDeleteDelegate {
   @Override
   public void createUsageInfoForParameter(final PsiReference reference,
@@ -69,12 +74,7 @@ public class JavaSafeDeleteDelegateImpl implements JavaSafeDeleteDelegate {
         newText.append("/** @see #").append(method.getName()).append('(');
         final List<PsiParameter> parameters = new ArrayList<PsiParameter>(Arrays.asList(method.getParameterList().getParameters()));
         parameters.remove(parameter);
-        newText.append(StringUtil.join(parameters, new Function<PsiParameter, String>() {
-          @Override
-          public String fun(PsiParameter psiParameter) {
-            return parameter.getType().getCanonicalText();
-          }
-        }, ","));
+        newText.append(StringUtil.join(parameters, psiParameter -> parameter.getType().getCanonicalText(), ","));
         newText.append(")*/");
         usages.add(new SafeDeleteReferenceJavaDeleteUsageInfo(element, parameter, true) {
           public void deleteElement() throws IncorrectOperationException {
@@ -87,5 +87,11 @@ public class JavaSafeDeleteDelegateImpl implements JavaSafeDeleteDelegate {
         });
       }
     }
+  }
+
+  @Nonnull
+  @Override
+  public Language getLanguage() {
+    return JavaLanguage.INSTANCE;
   }
 }

@@ -17,14 +17,14 @@ package com.intellij.java.impl.util.xml;
 
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.module.Module;
 import consulo.module.content.ProjectFileIndex;
 import consulo.module.content.ProjectRootManager;
 import consulo.virtualFileSystem.VirtualFile;
-import consulo.language.psi.PsiFile;
-import consulo.language.psi.scope.GlobalSearchScope;
-import com.intellij.psi.xml.XmlElement;
-import com.intellij.util.xml.DomElement;
+import consulo.xml.psi.xml.XmlElement;
+import consulo.xml.util.xml.DomElement;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

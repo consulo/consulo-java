@@ -15,47 +15,40 @@
  */
 package com.intellij.java.impl.refactoring.typeMigration.usageInfo;
 
-import javax.annotation.Nonnull;
-
 import consulo.language.psi.PsiElement;
 import consulo.usage.UsageInfo;
+
+import javax.annotation.Nonnull;
 
 /**
  * @author anna
  */
-public class TypeMigrationUsageInfo extends UsageInfo
-{
-	private boolean myExcluded;
-	private TypeMigrationUsageInfo myOwnerRoot;
+public class TypeMigrationUsageInfo extends UsageInfo {
+  private boolean myExcluded;
+  private TypeMigrationUsageInfo myOwnerRoot;
 
-	public TypeMigrationUsageInfo(@Nonnull PsiElement element)
-	{
-		super(element);
-	}
+  public TypeMigrationUsageInfo(@Nonnull PsiElement element) {
+    super(element);
+  }
 
-	public void setExcluded(final boolean excluded)
-	{
-		myExcluded = excluded;
-	}
+  public void setExcluded(final boolean excluded) {
+    myExcluded = excluded;
+  }
 
-	public boolean isExcluded()
-	{
-		return myExcluded;
-	}
+  public boolean isExcluded() {
+    return myExcluded;
+  }
 
-	public TypeMigrationUsageInfo getOwnerRoot()
-	{
-		return myOwnerRoot;
-	}
+  public TypeMigrationUsageInfo getOwnerRoot() {
+    return myOwnerRoot;
+  }
 
-	public void setOwnerRoot(TypeMigrationUsageInfo ownerRoot)
-	{
-		myOwnerRoot = ownerRoot;
-	}
+  public void setOwnerRoot(TypeMigrationUsageInfo ownerRoot) {
+    myOwnerRoot = ownerRoot;
+  }
 
-	@Override
-	public String toString()
-	{
-		return getClass().getSimpleName() + ":" + getElement();
-	}
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + ":" + getElement();
+  }
 }

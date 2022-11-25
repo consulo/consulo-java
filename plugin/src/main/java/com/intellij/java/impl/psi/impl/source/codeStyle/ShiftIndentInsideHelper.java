@@ -17,28 +17,27 @@ package com.intellij.java.impl.psi.impl.source.codeStyle;
 
 import com.intellij.java.language.psi.JavaDocTokenType;
 import com.intellij.java.language.psi.JavaTokenType;
-import consulo.language.impl.ast.ASTFactory;
+import consulo.ide.impl.psi.impl.source.codeStyle.IndentHelperImpl;
 import consulo.language.ast.ASTNode;
-import com.intellij.lang.LanguageParserDefinitions;
-import consulo.language.parser.ParserDefinition;
-import consulo.virtualFileSystem.fileType.FileType;
-import consulo.project.Project;
-import consulo.language.psi.PsiComment;
-import consulo.language.psi.PsiElement;
+import consulo.language.ast.TokenSet;
 import consulo.language.ast.TokenType;
 import consulo.language.codeStyle.CodeStyleSettings;
 import consulo.language.codeStyle.CodeStyleSettingsManager;
-import consulo.language.impl.psi.SourceTreeToPsiMap;
-import consulo.language.impl.internal.psi.IndentHelper;
-import consulo.ide.impl.psi.impl.source.codeStyle.IndentHelperImpl;
-import consulo.language.impl.internal.ast.Factory;
+import consulo.language.impl.ast.ASTFactory;
+import consulo.language.impl.ast.Factory;
 import consulo.language.impl.ast.LeafElement;
 import consulo.language.impl.ast.SharedImplUtil;
+import consulo.language.impl.internal.psi.IndentHelper;
+import consulo.language.impl.psi.SourceTreeToPsiMap;
+import consulo.language.parser.ParserDefinition;
 import consulo.language.psi.OuterLanguageElement;
-import consulo.language.ast.TokenSet;
-import com.intellij.psi.xml.XmlTokenType;
+import consulo.language.psi.PsiComment;
+import consulo.language.psi.PsiElement;
 import consulo.language.util.CharTable;
 import consulo.logging.Logger;
+import consulo.project.Project;
+import consulo.virtualFileSystem.fileType.FileType;
+import consulo.xml.psi.xml.XmlTokenType;
 
 public class ShiftIndentInsideHelper {
   private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.codeStyle.Helper");
@@ -172,7 +171,7 @@ public class ShiftIndentInsideHelper {
   private static boolean isComment(final ASTNode node) {
     final PsiElement psiElement = SourceTreeToPsiMap.treeElementToPsi(node);
     if (psiElement instanceof PsiComment) return true;
-    final ParserDefinition parserDefinition = LanguageParserDefinitions.INSTANCE.forLanguage(psiElement.getLanguage());
+    final ParserDefinition parserDefinition = ParserDefinition.forLanguage(psiElement.getLanguage());
     if (parserDefinition == null) return false;
     final TokenSet commentTokens = parserDefinition.getCommentTokens(psiElement.getLanguageVersion());
     return commentTokens.contains(node.getElementType());

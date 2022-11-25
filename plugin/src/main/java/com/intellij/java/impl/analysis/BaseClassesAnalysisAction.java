@@ -52,14 +52,14 @@ public abstract class BaseClassesAnalysisAction extends BaseAnalysisAction {
         indicator.setIndeterminate(true);
         indicator.setText(AnalysisScopeBundle.message("checking.class.files"));
 
-        final CompilerManager compilerManager = CompilerManager.getInstance(myProject);
+        final CompilerManager compilerManager = CompilerManager.getInstance((Project) getProject());
         final boolean upToDate = compilerManager.isUpToDate(compilerManager.createProjectCompileScope());
 
         ApplicationManager.getApplication().invokeLater(new Runnable() {
           @Override
           public void run() {
             if (!upToDate) {
-              final int i = Messages.showYesNoCancelDialog(getProject(), AnalysisScopeBundle.message("recompile.confirmation.message"),
+              final int i = Messages.showYesNoCancelDialog((Project) getProject(), AnalysisScopeBundle.message("recompile.confirmation.message"),
                   AnalysisScopeBundle.message("project.is.out.of.date"), Messages.getWarningIcon());
 
               if (i == 2) return;

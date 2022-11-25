@@ -15,26 +15,27 @@
  */
 package com.intellij.java.impl.ide.util.gotoByName;
 
-import consulo.ide.navigation.ChooseByNameContributorEx;
-import com.intellij.navigation.GotoClassContributor;
-import consulo.navigation.NavigationItem;
-import consulo.project.Project;
 import com.intellij.java.language.psi.PsiClass;
-import consulo.language.psi.util.SymbolPresentationUtil;
-import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.java.language.psi.search.PsiShortNamesCache;
-import consulo.util.collection.ArrayUtil;
 import consulo.application.util.function.CommonProcessors;
 import consulo.application.util.function.Processor;
-import consulo.language.psi.stub.FileBasedIndex;
+import consulo.content.scope.SearchScope;
+import consulo.ide.navigation.GotoClassOrTypeContributor;
+import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.search.FindSymbolParameters;
+import consulo.language.psi.stub.FileBasedIndex;
 import consulo.language.psi.stub.IdFilter;
+import consulo.language.psi.util.SymbolPresentationUtil;
+import consulo.navigation.NavigationItem;
+import consulo.project.Project;
+import consulo.project.content.scope.ProjectAwareSearchScope;
+import consulo.util.collection.ArrayUtil;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import java.util.ArrayList;
 
-public class DefaultClassNavigationContributor implements ChooseByNameContributorEx, GotoClassContributor {
+public class DefaultClassNavigationContributor implements GotoClassOrTypeContributor {
   @Override
   @Nonnull
   public String[] getNames(Project project, boolean includeNonProjectItems) {
@@ -70,7 +71,7 @@ public class DefaultClassNavigationContributor implements ChooseByNameContributo
   @Override
   public String getQualifiedName(final NavigationItem item) {
     if (item instanceof PsiClass) {
-      return getQualifiedNameForClass((PsiClass)item);
+      return getQualifiedNameForClass((PsiClass) item);
     }
     return null;
   }
@@ -89,14 +90,14 @@ public class DefaultClassNavigationContributor implements ChooseByNameContributo
   }
 
   @Override
-  public void processNames(@Nonnull Processor<String> processor, @Nonnull GlobalSearchScope scope, @Nullable IdFilter filter) {
-    PsiShortNamesCache.getInstance(scope.getProject()).processAllClassNames(processor, scope, filter);
+  public void processNames(@Nonnull Processor<String> processor, @Nonnull SearchScope scope, @Nullable IdFilter filter) {
+    PsiShortNamesCache.getInstance(((ProjectAwareSearchScope) scope).getProject()).processAllClassNames(processor, (GlobalSearchScope) scope, filter);
   }
 
   @Override
   public void processElementsWithName(@Nonnull String name,
                                       @Nonnull Processor<NavigationItem> processor,
                                       @Nonnull FindSymbolParameters parameters) {
-    PsiShortNamesCache.getInstance(parameters.getProject()).processClassesWithName(name, processor, parameters.getSearchScope(), parameters.getIdFilter());
+    PsiShortNamesCache.getInstance(parameters.getProject()).processClassesWithName(name, processor, (GlobalSearchScope) parameters.getSearchScope(), parameters.getIdFilter());
   }
 }

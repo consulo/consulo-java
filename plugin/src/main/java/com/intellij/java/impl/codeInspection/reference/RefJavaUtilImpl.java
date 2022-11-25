@@ -20,8 +20,6 @@
  */
 package com.intellij.java.impl.codeInspection.reference;
 
-import consulo.language.editor.inspection.InspectionsBundle;
-import com.intellij.codeInspection.reference.*;
 import com.intellij.java.analysis.codeInspection.reference.*;
 import com.intellij.java.analysis.impl.codeInspection.reference.RefClassImpl;
 import com.intellij.java.analysis.impl.codeInspection.reference.RefJavaElementImpl;
@@ -30,6 +28,9 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.MethodSignatureUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.util.VisibilityUtil;
+import consulo.language.editor.impl.inspection.reference.RefElementImpl;
+import consulo.language.editor.inspection.InspectionsBundle;
+import consulo.language.editor.inspection.reference.*;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.util.PsiTreeUtil;

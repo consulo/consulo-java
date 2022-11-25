@@ -15,26 +15,23 @@
  */
 package com.intellij.java.impl.ig.classlayout;
 
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-
-import javax.annotation.Nonnull;
-import javax.swing.JComponent;
-import javax.swing.JPanel;
-
-import com.intellij.java.language.psi.*;
-import org.jetbrains.annotations.NonNls;
-import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.impl.codeInspection.util.SpecialAnnotationsUtil;
-import com.intellij.psi.*;
+import com.intellij.java.impl.ig.fixes.AddToIgnoreIfAnnotatedByListQuickFix;
+import com.intellij.java.language.codeInsight.AnnotationUtil;
+import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
-import consulo.ui.CheckBox;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.fixes.AddToIgnoreIfAnnotatedByListQuickFix;
 import com.siyeh.ig.ui.ExternalizableStringSet;
+import consulo.language.editor.inspection.ui.CheckBox;
+import consulo.language.psi.PsiFile;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
+import javax.swing.*;
+import java.awt.*;
 
 public class EmptyClassInspection extends BaseInspection {
 
@@ -59,11 +56,9 @@ public class EmptyClassInspection extends BaseInspection {
     final Object element = infos[0];
     if (element instanceof PsiAnonymousClass) {
       return InspectionGadgetsBundle.message("empty.anonymous.class.problem.descriptor");
-    }
-    else if (element instanceof PsiClass) {
+    } else if (element instanceof PsiClass) {
       return InspectionGadgetsBundle.message("empty.class.problem.descriptor");
-    }
-    else {
+    } else {
       return InspectionGadgetsBundle.message("empty.class.file.without.class.problem.descriptor");
     }
   }
@@ -72,7 +67,7 @@ public class EmptyClassInspection extends BaseInspection {
   public JComponent createOptionsPanel() {
     final JPanel panel = new JPanel(new GridBagLayout());
     final JPanel annotationsListControl = SpecialAnnotationsUtil.createSpecialAnnotationsListControl(
-      ignorableAnnotations, InspectionGadgetsBundle.message("ignore.if.annotated.by"));
+        ignorableAnnotations, InspectionGadgetsBundle.message("ignore.if.annotated.by"));
     final GridBagConstraints constraints = new GridBagConstraints();
     constraints.gridx = 0;
     constraints.gridy = 0;
@@ -85,7 +80,7 @@ public class EmptyClassInspection extends BaseInspection {
     constraints.weighty = 0.0;
     constraints.fill = GridBagConstraints.HORIZONTAL;
     final CheckBox checkBox1 = new CheckBox(InspectionGadgetsBundle.message("empty.class.ignore.parameterization.option"),
-                                                   this, "ignoreClassWithParameterization");
+        this, "ignoreClassWithParameterization");
     panel.add(checkBox1, constraints);
     constraints.gridy++;
     final CheckBox checkBox2 = new CheckBox("Ignore subclasses of java.lang.Throwable", this, "ignoreThrowables");
@@ -100,7 +95,7 @@ public class EmptyClassInspection extends BaseInspection {
     if (!(info instanceof PsiModifierListOwner)) {
       return InspectionGadgetsFix.EMPTY_ARRAY;
     }
-    return AddToIgnoreIfAnnotatedByListQuickFix.build((PsiModifierListOwner)info, ignorableAnnotations);
+    return AddToIgnoreIfAnnotatedByListQuickFix.build((PsiModifierListOwner) info, ignorableAnnotations);
   }
 
   @Override
@@ -115,7 +110,7 @@ public class EmptyClassInspection extends BaseInspection {
       if (!(file instanceof PsiJavaFile)) {
         return;
       }
-      final PsiJavaFile javaFile = (PsiJavaFile)file;
+      final PsiJavaFile javaFile = (PsiJavaFile) file;
       if (javaFile.getClasses().length != 0) {
         return;
       }
@@ -190,7 +185,7 @@ public class EmptyClassInspection extends BaseInspection {
         final PsiReferenceList implementsList = aClass.getImplementsList();
         return hasTypeArguments(extendsList) || hasTypeArguments(implementsList);
       }
-      final PsiAnonymousClass anonymousClass = (PsiAnonymousClass)aClass;
+      final PsiAnonymousClass anonymousClass = (PsiAnonymousClass) aClass;
       final PsiJavaCodeReferenceElement reference = anonymousClass.getBaseClassReference();
       final PsiReferenceParameterList parameterList = reference.getParameterList();
       if (parameterList == null) {

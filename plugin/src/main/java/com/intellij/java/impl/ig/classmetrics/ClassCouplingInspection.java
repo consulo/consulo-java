@@ -16,12 +16,11 @@
 package com.intellij.java.impl.ig.classmetrics;
 
 import com.intellij.java.language.psi.PsiClass;
-import consulo.ui.CheckBox;
-import consulo.ui.ex.awt.UIUtil;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
-import javax.annotation.Nonnull;
+import consulo.ui.ex.awt.UIUtil;
 
+import javax.annotation.Nonnull;
 import javax.swing.*;
 import java.awt.*;
 
@@ -93,11 +92,11 @@ public class ClassCouplingInspection
     constraints.fill = GridBagConstraints.NONE;
     panel.add(valueField, constraints);
 
-    final CheckBox arrayCheckBox = new CheckBox(
+    final consulo.language.editor.inspection.ui.CheckBox arrayCheckBox = new consulo.language.editor.inspection.ui.CheckBox(
       InspectionGadgetsBundle.message(
         "include.java.system.classes.option"), this,
       "m_includeJavaClasses");
-    final CheckBox objectCheckBox = new CheckBox(
+    final consulo.language.editor.inspection.ui.CheckBox objectCheckBox = new consulo.language.editor.inspection.ui.CheckBox(
       InspectionGadgetsBundle.message(
         "include.library.classes.option"), this,
       "m_includeLibraryClasses");

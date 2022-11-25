@@ -19,11 +19,11 @@ import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.util.PropertyUtil;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
-import com.intellij.psi.impl.source.resolve.reference.impl.providers.BasicAttributeValueReference;
-import com.intellij.psi.xml.XmlAttribute;
-import com.intellij.psi.xml.XmlAttributeValue;
-import com.intellij.psi.xml.XmlTag;
 import consulo.language.util.IncorrectOperationException;
+import consulo.xml.psi.impl.source.resolve.reference.impl.providers.BasicAttributeValueReference;
+import consulo.xml.psi.xml.XmlAttribute;
+import consulo.xml.psi.xml.XmlAttributeValue;
+import consulo.xml.psi.xml.XmlTag;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

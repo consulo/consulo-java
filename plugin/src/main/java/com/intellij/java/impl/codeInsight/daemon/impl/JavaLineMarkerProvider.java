@@ -15,47 +15,52 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl;
 
-import consulo.language.editor.Pass;
-import com.intellij.codeInsight.daemon.*;
-import consulo.ide.impl.idea.codeInsight.daemon.impl.LineMarkersPass;
-import consulo.application.util.concurrent.JobLauncher;
-import consulo.application.AllIcons;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.JavaServiceUtil;
 import com.intellij.java.indexing.search.searches.AllOverridingMethodsSearch;
 import com.intellij.java.indexing.search.searches.DirectClassInheritorsSearch;
 import com.intellij.java.indexing.search.searches.FunctionalExpressionSearch;
+import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.impl.psi.impl.FindSuperElementsHelper;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.search.searches.SuperMethodsSearch;
 import com.intellij.java.language.psi.util.MethodSignatureBackedByPsiMethod;
 import com.intellij.java.language.psi.util.PsiExpressionTrimRenderer;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.ui.ex.action.IdeActions;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.application.AllIcons;
 import consulo.application.ApplicationManager;
-import consulo.document.Document;
-import consulo.colorScheme.EditorColorsManager;
-import consulo.codeEditor.markup.GutterIconRenderer;
 import consulo.application.progress.ProgressIndicator;
 import consulo.application.progress.ProgressIndicatorProvider;
 import consulo.application.progress.ProgressManager;
+import consulo.application.util.concurrent.JobLauncher;
 import consulo.application.util.function.Computable;
+import consulo.codeEditor.markup.GutterIconRenderer;
+import consulo.colorScheme.EditorColorsManager;
+import consulo.document.Document;
 import consulo.document.util.TextRange;
-import consulo.util.lang.StringUtil;
+import consulo.java.impl.JavaBundle;
+import consulo.java.language.impl.icon.JavaPsiImplIconGroup;
+import consulo.language.Language;
+import consulo.language.editor.DaemonCodeAnalyzerSettings;
+import consulo.language.editor.Pass;
+import consulo.language.editor.gutter.LineMarkerInfo;
+import consulo.language.editor.gutter.LineMarkerProviderDescriptor;
+import consulo.language.editor.gutter.MergeableLineMarkerInfo;
+import consulo.language.editor.gutter.NavigateAction;
 import consulo.language.psi.PsiDocumentManager;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiNameIdentifierOwner;
-import consulo.ide.impl.idea.util.Function;
+import consulo.ui.ex.action.IdeActions;
+import consulo.ui.image.Image;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.collection.MultiMap;
-import consulo.annotation.access.RequiredReadAction;
-import consulo.java.impl.JavaBundle;
-import consulo.java.psi.impl.icon.JavaPsiImplIconGroup;
-import consulo.ui.image.Image;
+import consulo.util.lang.StringUtil;
 import jakarta.inject.Inject;
 
 import javax.annotation.Nonnull;
 import java.util.*;
+import java.util.function.Function;
 
 public class JavaLineMarkerProvider extends LineMarkerProviderDescriptor {
   public static final Option LAMBDA_OPTION = new Option("java.lambda", JavaBundle.message("title.lambda"), AllIcons.Gutter.ImplementingFunctional) {
@@ -70,7 +75,7 @@ public class JavaLineMarkerProvider extends LineMarkerProviderDescriptor {
   private final Option myOverridingOption = new Option("java.overriding", JavaBundle.message("gutter.overriding.method"), AllIcons.Gutter.OverridingMethod);
   private final Option myImplementingOption = new Option("java.implementing", JavaBundle.message("gutter.implementing.method"), AllIcons.Gutter.ImplementingMethod);
   private final Option mySiblingsOption = new Option("java.sibling.inherited", JavaBundle.message("gutter.sibling.inherited.method"), AllIcons.Gutter.SiblingInheritedMethod);
-  private final Option myServiceOption = new Option("java.service", JavaBundle.message("gutter.service"), JavaPsiImplIconGroup.gutterJava9Service());
+  private final Option myServiceOption = new Option("java.service", JavaBundle.message("gutter.service"), JavaPsiImplIconGroup.gutterJava9service());
 
   protected final DaemonCodeAnalyzerSettings myDaemonSettings;
   protected final EditorColorsManager myColorsManager;
@@ -153,7 +158,7 @@ public class JavaLineMarkerProvider extends LineMarkerProviderDescriptor {
         }
 
         if (drawSeparator) {
-          return LineMarkersPass.createMethodSeparatorLineMarker(element, myColorsManager);
+          return LineMarkerInfo.createMethodSeparatorLineMarker(element, myColorsManager);
         }
       }
     }
@@ -382,6 +387,12 @@ public class JavaLineMarkerProvider extends LineMarkerProviderDescriptor {
         mySiblingsOption,
         myServiceOption
     };
+  }
+
+  @Nonnull
+  @Override
+  public Language getLanguage() {
+    return JavaLanguage.INSTANCE;
   }
 
   private static class ArrowUpLineMarkerInfo extends MergeableLineMarkerInfo<PsiElement> {

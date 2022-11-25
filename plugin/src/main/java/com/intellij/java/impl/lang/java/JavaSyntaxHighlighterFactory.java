@@ -15,22 +15,25 @@
  */
 package com.intellij.java.impl.lang.java;
 
-import javax.annotation.Nonnull;
 import com.intellij.java.impl.ide.highlighter.JavaFileHighlighter;
 import com.intellij.java.language.JavaLanguage;
-import consulo.language.editor.highlight.SyntaxHighlighter;
+import consulo.language.Language;
 import consulo.language.editor.highlight.LanguageVersionableSyntaxHighlighterFactory;
+import consulo.language.editor.highlight.SyntaxHighlighter;
 import consulo.language.version.LanguageVersion;
 
-public class JavaSyntaxHighlighterFactory extends LanguageVersionableSyntaxHighlighterFactory
-{
-  public JavaSyntaxHighlighterFactory() {
-    super(JavaLanguage.INSTANCE);
-  }
+import javax.annotation.Nonnull;
 
+public class JavaSyntaxHighlighterFactory extends LanguageVersionableSyntaxHighlighterFactory {
   @Nonnull
   @Override
   public SyntaxHighlighter getSyntaxHighlighter(@Nonnull LanguageVersion languageVersion) {
     return new JavaFileHighlighter(languageVersion);
+  }
+
+  @Nonnull
+  @Override
+  public Language getLanguage() {
+    return JavaLanguage.INSTANCE;
   }
 }

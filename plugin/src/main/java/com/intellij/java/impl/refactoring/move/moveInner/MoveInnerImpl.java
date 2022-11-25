@@ -27,7 +27,7 @@ import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiJavaPackage;
 import consulo.logging.Logger;
 import consulo.project.Project;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.editor.refactoring.move.MoveCallback;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;

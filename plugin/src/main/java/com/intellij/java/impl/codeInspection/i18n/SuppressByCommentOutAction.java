@@ -27,7 +27,7 @@ import com.intellij.java.language.psi.JavaTokenType;
 import consulo.codeEditor.Editor;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import consulo.language.inject.impl.internal.InjectedLanguageUtil;
 import consulo.language.ast.IElementType;
 import consulo.language.psi.util.PsiTreeUtil;

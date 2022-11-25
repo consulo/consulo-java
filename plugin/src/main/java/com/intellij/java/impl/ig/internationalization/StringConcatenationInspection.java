@@ -15,33 +15,31 @@
  */
 package com.intellij.java.impl.ig.internationalization;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
-import javax.annotation.Nullable;
-import javax.swing.JComponent;
-
-import com.intellij.java.language.psi.*;
-import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
-
-import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.analysis.impl.codeInsight.intention.AddAnnotationFix;
-import consulo.ide.impl.idea.codeInspection.ui.MultipleCheckboxOptionsPanel;
-import com.intellij.psi.*;
-import consulo.language.ast.IElementType;
-import com.intellij.java.language.psi.util.InheritanceUtil;
-import consulo.language.psi.util.PsiTreeUtil;
+import com.intellij.java.impl.ig.DelegatingFix;
+import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.language.impl.refactoring.util.RefactoringChangeUtil;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import com.intellij.java.impl.ig.DelegatingFix;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.MethodUtils;
 import com.siyeh.ig.psiutils.TestUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
+import consulo.language.ast.IElementType;
+import consulo.language.editor.inspection.ui.MultipleCheckboxOptionsPanel;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.util.PsiTreeUtil;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.swing.*;
+import java.util.ArrayList;
+import java.util.Collection;
 
 public class StringConcatenationInspection extends BaseInspection {
 

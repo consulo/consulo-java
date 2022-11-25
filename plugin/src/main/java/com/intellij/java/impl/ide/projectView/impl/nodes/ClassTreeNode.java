@@ -15,25 +15,24 @@
  */
 package com.intellij.java.impl.ide.projectView.impl.nodes;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
-import consulo.ui.ex.tree.PresentationData;
 import com.intellij.java.impl.ide.projectView.PsiClassChildrenSource;
-import consulo.project.ui.view.tree.ViewSettings;
-import consulo.project.ui.view.tree.AbstractTreeNode;
-import consulo.application.dumb.IndexNotReadyException;
-import consulo.project.Project;
 import com.intellij.java.language.psi.PsiClass;
-import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiField;
-import consulo.language.psi.PsiFile;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
-import consulo.ide.impl.psi.util.PsiFormatUtilBase;
+import com.intellij.java.language.psi.util.PsiFormatUtilBase;
+import consulo.application.dumb.IndexNotReadyException;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.project.Project;
+import consulo.project.ui.view.tree.AbstractTreeNode;
+import consulo.project.ui.view.tree.ViewSettings;
+import consulo.ui.ex.tree.PresentationData;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Collection;
 
 public class ClassTreeNode extends BasePsiMemberNode<PsiClass>
 {

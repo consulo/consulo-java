@@ -19,7 +19,7 @@ import consulo.application.AllIcons;
 import com.intellij.java.language.psi.*;
 import consulo.ui.ex.action.AnAction;
 import consulo.ui.ex.action.AnActionEvent;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 

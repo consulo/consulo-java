@@ -19,7 +19,7 @@ import com.intellij.java.language.psi.PsiExpressionList;
 import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
 import com.intellij.java.language.psi.PsiJavaToken;
 import com.intellij.java.language.psi.PsiReferenceExpression;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import consulo.document.util.TextRange;
 import consulo.codeEditor.Editor;
 

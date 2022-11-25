@@ -15,30 +15,29 @@
  */
 package com.intellij.java.impl.refactoring.migration;
 
-import java.util.ArrayList;
-
-import javax.annotation.Nonnull;
-
-import consulo.localHistory.LocalHistory;
-import com.intellij.history.LocalHistoryAction;
+import com.intellij.java.impl.psi.impl.migration.PsiMigrationManager;
+import com.intellij.java.language.psi.PsiMigration;
+import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import consulo.application.ApplicationManager;
 import consulo.application.WriteAction;
-import consulo.project.Project;
-import consulo.ui.ex.awt.Messages;
-import consulo.util.lang.Comparing;
-import consulo.util.lang.ref.Ref;
-import consulo.util.lang.StringUtil;
-import consulo.language.psi.PsiElement;
-import com.intellij.java.language.psi.PsiMigration;
-import consulo.language.psi.SmartPsiElementPointer;
-import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
-import com.intellij.java.impl.psi.impl.migration.PsiMigrationManager;
-import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.content.scope.SearchScope;
 import consulo.language.editor.refactoring.BaseRefactoringProcessor;
 import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.SmartPsiElementPointer;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.localHistory.LocalHistory;
+import consulo.localHistory.LocalHistoryAction;
+import consulo.project.Project;
+import consulo.ui.ex.awt.Messages;
 import consulo.usage.UsageInfo;
 import consulo.usage.UsageViewDescriptor;
+import consulo.util.lang.Comparing;
+import consulo.util.lang.StringUtil;
+import consulo.util.lang.ref.Ref;
+
+import javax.annotation.Nonnull;
+import java.util.ArrayList;
 
 /**
  * @author ven

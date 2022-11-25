@@ -16,7 +16,7 @@
 package com.intellij.java.impl.ig.j2me;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import com.siyeh.ig.psiutils.ControlFlowUtils;
 import javax.annotation.Nonnull;
 

@@ -1,21 +1,23 @@
 package com.intellij.java.impl.codeInspection.unnecessaryModuleDependency;
 
-import consulo.language.editor.scope.AnalysisScope;
 import com.intellij.java.analysis.codeInspection.GroupNames;
+import consulo.language.editor.inspection.*;
 import consulo.language.editor.inspection.reference.RefEntity;
 import consulo.language.editor.inspection.reference.RefGraphAnnotator;
 import consulo.language.editor.inspection.reference.RefManager;
 import consulo.language.editor.inspection.reference.RefModule;
+import consulo.language.editor.inspection.scheme.InspectionManager;
+import consulo.language.editor.scope.AnalysisScope;
 import consulo.module.Module;
-import consulo.project.Project;
+import consulo.module.content.ModuleRootManager;
 import consulo.module.content.layer.ModifiableRootModel;
 import consulo.module.content.layer.orderEntry.ModuleOrderEntry;
-import consulo.module.content.ModuleRootManager;
 import consulo.module.content.layer.orderEntry.OrderEntry;
+import consulo.project.Project;
 import consulo.util.lang.Comparing;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -24,7 +26,7 @@ import java.util.Set;
  * User: anna
  * Date: 09-Jan-2006
  */
-public class UnnecessaryModuleDependencyInspection extends GlobalInspectionTool {
+public abstract class UnnecessaryModuleDependencyInspection extends GlobalInspectionTool {
 
   @Override
   public RefGraphAnnotator getAnnotator(final RefManager refManager) {

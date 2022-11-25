@@ -15,30 +15,35 @@
  */
 package com.intellij.java.impl.codeInspection.sameParameterValue;
 
-import consulo.language.editor.scope.AnalysisScope;
-import com.intellij.java.analysis.codeInspection.GroupNames;
-import com.intellij.codeInspection.reference.*;
 import com.intellij.java.analysis.codeInspection.GlobalJavaInspectionContext;
 import com.intellij.java.analysis.codeInspection.GlobalJavaInspectionTool;
+import com.intellij.java.analysis.codeInspection.GroupNames;
 import com.intellij.java.analysis.codeInspection.reference.RefJavaVisitor;
 import com.intellij.java.analysis.codeInspection.reference.RefMethod;
 import com.intellij.java.analysis.codeInspection.reference.RefParameter;
+import com.intellij.java.impl.refactoring.changeSignature.ChangeSignatureProcessor;
+import com.intellij.java.impl.refactoring.changeSignature.ParameterInfoImpl;
+import com.intellij.java.impl.refactoring.util.InlineUtil;
 import com.intellij.java.language.psi.*;
 import consulo.application.ApplicationManager;
+import consulo.language.editor.inspection.*;
+import consulo.language.editor.inspection.reference.RefElement;
+import consulo.language.editor.inspection.reference.RefEntity;
+import consulo.language.editor.inspection.reference.RefManager;
+import consulo.language.editor.inspection.scheme.InspectionManager;
+import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
+import consulo.language.editor.scope.AnalysisScope;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiReference;
+import consulo.language.psi.search.ReferencesSearch;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.util.lang.Comparing;
-import com.intellij.psi.*;
-import consulo.language.psi.search.ReferencesSearch;
-import consulo.language.psi.util.PsiTreeUtil;
-import com.intellij.java.impl.refactoring.changeSignature.ChangeSignatureProcessor;
-import com.intellij.java.impl.refactoring.changeSignature.ParameterInfoImpl;
-import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
-import com.intellij.java.impl.refactoring.util.InlineUtil;
-import consulo.language.util.IncorrectOperationException;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -46,7 +51,7 @@ import java.util.List;
 /**
  * @author max
  */
-public class SameParameterValueInspection extends GlobalJavaInspectionTool
+public abstract class SameParameterValueInspection extends GlobalJavaInspectionTool
 {
   private static final Logger LOG = Logger.getInstance(SameParameterValueInspection.class);
 

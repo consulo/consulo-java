@@ -15,27 +15,24 @@
  */
 package com.intellij.java.execution.impl.jar;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.java.debugger.impl.GenericDebuggerRunner;
 import consulo.execution.configuration.RunProfile;
 import consulo.execution.debug.DefaultDebugExecutor;
 
+import javax.annotation.Nonnull;
+
 /**
  * @author nik
  */
-public class JarApplicationDebuggerRunner extends GenericDebuggerRunner
-{
-	@Override
-	public boolean canRun(@Nonnull String executorId, @Nonnull RunProfile profile)
-	{
-		return DefaultDebugExecutor.EXECUTOR_ID.equals(executorId) && profile instanceof JarApplicationConfiguration;
-	}
+public class JarApplicationDebuggerRunner extends GenericDebuggerRunner {
+  @Override
+  public boolean canRun(@Nonnull String executorId, @Nonnull RunProfile profile) {
+    return DefaultDebugExecutor.EXECUTOR_ID.equals(executorId) && profile instanceof JarApplicationConfiguration;
+  }
 
-	@Nonnull
-	@Override
-	public String getRunnerId()
-	{
-		return "JarDebug";
-	}
+  @Nonnull
+  @Override
+  public String getRunnerId() {
+    return "JarDebug";
+  }
 }

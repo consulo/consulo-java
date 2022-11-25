@@ -21,7 +21,7 @@ import com.intellij.java.language.codeInsight.AnnotationUtil;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
 import consulo.project.Project;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import com.intellij.java.language.psi.search.PackageScope;
 import consulo.language.psi.search.PsiSearchHelper;
 import consulo.language.psi.search.ReferencesSearch;

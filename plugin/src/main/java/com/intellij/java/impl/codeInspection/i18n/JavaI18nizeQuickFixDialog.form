@@ -24,7 +24,7 @@
         </clientProperties>
         <border type="etched" title-resource-bundle="messages/CodeInsightBundle" title-key="i18n.quickfix.preview.panel.title"/>
         <children>
-          <component id="77d27" class="com.intellij.openapi.ui.ex.MultiLineLabel" binding="myPreviewLabel">
+          <component id="77d27" class="consulo.ide.impl.idea.openapi.ui.ex.MultiLineLabel" binding="myPreviewLabel">
             <constraints>
               <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="8" fill="0" indent="0" use-parent-layout="false">
                 <minimum-size width="75" height="-1"/>

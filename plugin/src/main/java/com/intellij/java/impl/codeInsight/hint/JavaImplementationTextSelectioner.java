@@ -30,7 +30,7 @@ import consulo.logging.Logger;
 
 import javax.annotation.Nonnull;
 
-public class JavaImplementationTextSelectioner implements ImplementationTextSelectioner {
+public abstract class JavaImplementationTextSelectioner implements ImplementationTextSelectioner {
   private static final Logger LOG = Logger.getInstance(JavaImplementationTextSelectioner.class);
 
   @Override

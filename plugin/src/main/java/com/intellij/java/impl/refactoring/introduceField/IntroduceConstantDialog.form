@@ -89,7 +89,7 @@
           <text resource-bundle="messages/RefactoringBundle" key="replace.all.occurences.checkbox"/>
         </properties>
       </component>
-      <component id="65c3b" class="com.intellij.ui.StateRestoringCheckBox" binding="myCbDeleteVariable">
+      <component id="65c3b" class="consulo.ui.ex.awt.StateRestoringCheckBox" binding="myCbDeleteVariable">
         <constraints>
           <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>

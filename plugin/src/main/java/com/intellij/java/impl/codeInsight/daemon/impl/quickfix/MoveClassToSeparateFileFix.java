@@ -22,6 +22,7 @@ import consulo.language.editor.intention.IntentionAction;
 import consulo.logging.Logger;
 import consulo.codeEditor.Editor;
 import consulo.navigation.OpenFileDescriptor;
+import consulo.navigation.OpenFileDescriptorFactory;
 import consulo.project.Project;
 import com.intellij.java.language.psi.JavaDirectoryService;
 import com.intellij.java.language.psi.PsiClass;
@@ -81,7 +82,7 @@ public class MoveClassToSeparateFileFix implements IntentionAction {
       PsiClass newClass = (PsiClass)placeHolder.replace(myClass);
       myClass.delete();
 
-      OpenFileDescriptor descriptor = new OpenFileDescriptor(project, newClass.getContainingFile().getVirtualFile(), newClass.getTextOffset());
+      OpenFileDescriptor descriptor = OpenFileDescriptorFactory.getInstance(project).builder(newClass.getContainingFile().getVirtualFile()).offset(newClass.getTextOffset()).build();
       FileEditorManager.getInstance(project).openTextEditor(descriptor, true);
     }
     catch(IncorrectOperationException e){

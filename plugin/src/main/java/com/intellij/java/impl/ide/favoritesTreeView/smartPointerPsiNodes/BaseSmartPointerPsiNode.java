@@ -15,31 +15,25 @@
  */
 package com.intellij.java.impl.ide.favoritesTreeView.smartPointerPsiNodes;
 
-import consulo.ui.ex.tree.PresentationData;
-import consulo.project.ui.view.tree.ProjectViewNode;
-import consulo.project.ui.view.tree.ProjectViewNodeDecorator;
-import consulo.project.ui.view.tree.ViewSettings;
-import consulo.project.ui.view.tree.AbstractTreeNode;
 import com.intellij.java.language.psi.PsiDocCommentOwner;
-import consulo.navigation.NavigationItem;
-import consulo.language.psi.PsiElementNavigationItem;
 import consulo.codeEditor.CodeInsightColors;
-import consulo.project.Project;
 import consulo.component.util.Iconable;
-import consulo.virtualFileSystem.VirtualFile;
-import com.intellij.psi.*;
-import consulo.language.psi.PsiUtilCore;
 import consulo.language.icon.IconDescriptorUpdaters;
-import consulo.ide.projectView.impl.nodes.PackageElement;
+import consulo.language.psi.*;
 import consulo.logging.Logger;
+import consulo.navigation.NavigationItem;
+import consulo.project.Project;
+import consulo.project.ui.view.tree.*;
+import consulo.ui.ex.tree.PresentationData;
 import consulo.ui.image.Image;
+import consulo.virtualFileSystem.VirtualFile;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public abstract class BaseSmartPointerPsiNode <Type extends SmartPsiElementPointer> extends ProjectViewNode<Type> implements
-                                                                                                                  PsiElementNavigationItem {
+public abstract class BaseSmartPointerPsiNode<Type extends SmartPsiElementPointer> extends ProjectViewNode<Type> implements
+    PsiElementNavigationItem {
   private static final Logger LOG = Logger.getInstance(BaseSmartPointerPsiNode.class);
 
   protected BaseSmartPointerPsiNode(Project project, Type value, ViewSettings viewSettings) {
@@ -68,8 +62,7 @@ public abstract class BaseSmartPointerPsiNode <Type extends SmartPsiElementPoint
     VirtualFile file = getVirtualFileForValue();
     if (file == null) {
       return null;
-    }
-    else {
+    } else {
       return file.isDirectory() ? PsiManager.getInstance(getProject()).findDirectory(file) : PsiManager.getInstance(getProject()).findFile(file);
     }
   }
@@ -106,7 +99,7 @@ public abstract class BaseSmartPointerPsiNode <Type extends SmartPsiElementPoint
       data.setAttributesKey(CodeInsightColors.DEPRECATED_ATTRIBUTES);
     }
     updateImpl(data);
-    for(ProjectViewNodeDecorator decorator: ProjectViewNodeDecorator.EP_NAME.getExtensionList(myProject)) {
+    for (ProjectViewNodeDecorator decorator : ProjectViewNodeDecorator.EP_NAME.getExtensionList(myProject)) {
       decorator.decorate(this, data);
     }
   }
@@ -114,8 +107,8 @@ public abstract class BaseSmartPointerPsiNode <Type extends SmartPsiElementPoint
   private boolean isDeprecated() {
     final PsiElement element = getPsiElement();
     return element instanceof PsiDocCommentOwner
-           && element.isValid()
-           && ((PsiDocCommentOwner)element).isDeprecated();
+        && element.isValid()
+        && ((PsiDocCommentOwner) element).isDeprecated();
   }
 
   @Override
@@ -128,21 +121,21 @@ public abstract class BaseSmartPointerPsiNode <Type extends SmartPsiElementPoint
   @Override
   public void navigate(boolean requestFocus) {
     if (canNavigate()) {
-      ((NavigationItem)getPsiElement()).navigate(requestFocus);
+      ((NavigationItem) getPsiElement()).navigate(requestFocus);
     }
   }
 
   @Override
   public boolean canNavigate() {
-    return getPsiElement() instanceof NavigationItem && ((NavigationItem)getPsiElement()).canNavigate();
+    return getPsiElement() instanceof NavigationItem && ((NavigationItem) getPsiElement()).canNavigate();
   }
 
   @Override
   public boolean canNavigateToSource() {
-    return getPsiElement() instanceof NavigationItem && ((NavigationItem)getPsiElement()).canNavigateToSource();
+    return getPsiElement() instanceof NavigationItem && ((NavigationItem) getPsiElement()).canNavigateToSource();
   }
 
-  protected PsiElement getPsiElement(){
+  protected PsiElement getPsiElement() {
     //noinspection CastToIncompatibleInterface
     return (PsiElement) getValue(); // automatically de-anchorized in AbstractTreeNode.getValue
   }

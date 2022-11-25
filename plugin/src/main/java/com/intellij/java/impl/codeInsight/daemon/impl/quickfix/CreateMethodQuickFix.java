@@ -15,27 +15,27 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
-import java.util.List;
+import com.intellij.java.impl.codeInsight.ExpectedTypeInfo;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
+import com.intellij.java.language.psi.util.PsiFormatUtil;
+import com.intellij.java.language.psi.util.PsiFormatUtilBase;
+import consulo.codeEditor.Editor;
+import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.language.editor.FileModificationService;
+import consulo.language.editor.inspection.LocalQuickFixAndIntentionActionOnPsiElement;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+import consulo.util.collection.ContainerUtil;
+import consulo.util.lang.Pair;
+import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
-import com.intellij.java.language.psi.*;
-import org.jetbrains.annotations.NonNls;
-import com.intellij.java.impl.codeInsight.ExpectedTypeInfo;
-import consulo.language.editor.FileModificationService;
-import consulo.language.editor.inspection.LocalQuickFixAndIntentionActionOnPsiElement;
-import consulo.codeEditor.Editor;
-import consulo.project.Project;
-import consulo.util.lang.Pair;
-import com.intellij.psi.*;
-import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
-import com.intellij.java.language.psi.util.PsiFormatUtil;
-import consulo.ide.impl.psi.util.PsiFormatUtilBase;
-import consulo.ide.impl.idea.util.Function;
-import consulo.language.util.IncorrectOperationException;
-import consulo.util.collection.ContainerUtil;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
+import java.util.List;
+import java.util.function.Function;
 
 public class CreateMethodQuickFix extends LocalQuickFixAndIntentionActionOnPsiElement {
   protected final String mySignature;
@@ -50,14 +50,14 @@ public class CreateMethodQuickFix extends LocalQuickFixAndIntentionActionOnPsiEl
   @Override
   @Nonnull
   public String getText() {
-    PsiClass myTargetClass = (PsiClass)getStartElement();
+    PsiClass myTargetClass = (PsiClass) getStartElement();
     String signature = myTargetClass == null ? "" :
-                       PsiFormatUtil.formatMethod(createMethod(myTargetClass), PsiSubstitutor.EMPTY,
-                                                  PsiFormatUtilBase.SHOW_NAME |
-                                                  PsiFormatUtilBase.SHOW_TYPE |
-                                                  PsiFormatUtilBase.SHOW_PARAMETERS |
-                                                  PsiFormatUtilBase.SHOW_RAW_TYPE,
-                                                  PsiFormatUtilBase.SHOW_TYPE | PsiFormatUtilBase.SHOW_RAW_TYPE, 2);
+        PsiFormatUtil.formatMethod(createMethod(myTargetClass), PsiSubstitutor.EMPTY,
+            PsiFormatUtilBase.SHOW_NAME |
+                PsiFormatUtilBase.SHOW_TYPE |
+                PsiFormatUtilBase.SHOW_PARAMETERS |
+                PsiFormatUtilBase.SHOW_RAW_TYPE,
+            PsiFormatUtilBase.SHOW_TYPE | PsiFormatUtilBase.SHOW_RAW_TYPE, 2);
     return JavaQuickFixBundle.message("create.method.from.usage.text", signature);
   }
 
@@ -73,19 +73,14 @@ public class CreateMethodQuickFix extends LocalQuickFixAndIntentionActionOnPsiEl
                      @Nullable Editor editor,
                      @Nonnull PsiElement startElement,
                      @Nonnull PsiElement endElement) {
-    PsiClass myTargetClass = (PsiClass)startElement;
+    PsiClass myTargetClass = (PsiClass) startElement;
     if (!FileModificationService.getInstance().preparePsiElementForWrite(myTargetClass.getContainingFile())) return;
 
     PsiMethod method = createMethod(myTargetClass);
     List<Pair<PsiExpression, PsiType>> arguments =
-      ContainerUtil.map2List(method.getParameterList().getParameters(), new Function<PsiParameter, Pair<PsiExpression, PsiType>>() {
-        @Override
-        public Pair<PsiExpression, PsiType> fun(PsiParameter psiParameter) {
-          return Pair.create(null, psiParameter.getType());
-        }
-      });
+        ContainerUtil.map2List(method.getParameterList().getParameters(), (Function<PsiParameter, Pair<PsiExpression, PsiType>>) psiParameter -> Pair.create(null, psiParameter.getType()));
 
-    method = (PsiMethod)JavaCodeStyleManager.getInstance(project).shortenClassReferences(myTargetClass.add(method));
+    method = (PsiMethod) JavaCodeStyleManager.getInstance(project).shortenClassReferences(myTargetClass.add(method));
     CreateMethodFromUsageFix.doCreate(myTargetClass, method, arguments, PsiSubstitutor.EMPTY, ExpectedTypeInfo.EMPTY_ARRAY, method);
   }
 
@@ -105,8 +100,7 @@ public class CreateMethodQuickFix extends LocalQuickFixAndIntentionActionOnPsiEl
     try {
       fix.createMethod(targetClass);
       return fix;
-    }
-    catch (IncorrectOperationException e) {
+    } catch (IncorrectOperationException e) {
       return null;
     }
   }

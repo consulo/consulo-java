@@ -16,40 +16,35 @@
 
 package consulo.java.impl.fileEditor.impl;
 
-import javax.annotation.Nullable;
-
-import consulo.fileEditor.EditorTabTitleProvider;
-import consulo.project.Project;
-import consulo.virtualFileSystem.VirtualFile;
-import consulo.language.psi.PsiFile;
 import com.intellij.java.language.psi.PsiJavaFile;
 import com.intellij.java.language.psi.PsiJavaModule;
-import consulo.language.psi.PsiManager;
 import consulo.annotation.access.RequiredReadAction;
+import consulo.fileEditor.EditorTabTitleProvider;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiManager;
+import consulo.project.Project;
+import consulo.virtualFileSystem.VirtualFile;
+
+import javax.annotation.Nullable;
 
 /**
  * @author VISTALL
  * @since 2018-07-15
  */
-public class JavaModuleEditorTabTitleProvider implements EditorTabTitleProvider
-{
-	@Nullable
-	@Override
-	@RequiredReadAction
-	public String getEditorTabTitle(Project project, VirtualFile virtualFile)
-	{
-		if(PsiJavaModule.MODULE_INFO_CLASS.equals(virtualFile.getNameWithoutExtension()))
-		{
-			PsiFile file = PsiManager.getInstance(project).findFile(virtualFile);
-			if(file instanceof PsiJavaFile)
-			{
-				PsiJavaModule moduleDeclaration = ((PsiJavaFile) file).getModuleDeclaration();
-				if(moduleDeclaration != null)
-				{
-					return moduleDeclaration.getName();
-				}
-			}
-		}
-		return null;
-	}
+public class JavaModuleEditorTabTitleProvider implements EditorTabTitleProvider {
+  @Nullable
+  @Override
+  @RequiredReadAction
+  public String getEditorTabTitle(Project project, VirtualFile virtualFile) {
+    if (PsiJavaModule.MODULE_INFO_CLASS.equals(virtualFile.getNameWithoutExtension())) {
+      PsiFile file = PsiManager.getInstance(project).findFile(virtualFile);
+      if (file instanceof PsiJavaFile) {
+        PsiJavaModule moduleDeclaration = ((PsiJavaFile) file).getModuleDeclaration();
+        if (moduleDeclaration != null) {
+          return moduleDeclaration.getName();
+        }
+      }
+    }
+    return null;
+  }
 }

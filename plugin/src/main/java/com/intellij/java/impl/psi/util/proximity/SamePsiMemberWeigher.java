@@ -34,14 +34,14 @@ public class SamePsiMemberWeigher extends ProximityWeigher {
   private static final NotNullLazyKey<Boolean, ProximityLocation> INSIDE_PSI_MEMBER = NotNullLazyKey.create("insidePsiMember", new NotNullFunction<ProximityLocation, Boolean>() {
     @Override
     @Nonnull
-    public Boolean fun(ProximityLocation proximityLocation) {
+    public Boolean apply(ProximityLocation proximityLocation) {
       return PsiTreeUtil.getContextOfType(proximityLocation.getPosition(), PsiMember.class, false) != null;
     }
   });
   private static final NotNullLazyKey<PsiElement, ProximityLocation> PHYSICAL_POSITION = NotNullLazyKey.create("physicalPosition", new NotNullFunction<ProximityLocation, PsiElement>() {
     @Override
     @Nonnull
-    public PsiElement fun(ProximityLocation location) {
+    public PsiElement apply(ProximityLocation location) {
       PsiElement position = location.getPosition();
       assert position != null;
       if (!position.isPhysical()) {

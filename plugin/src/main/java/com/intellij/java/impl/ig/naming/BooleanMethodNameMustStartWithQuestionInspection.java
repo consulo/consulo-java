@@ -15,27 +15,26 @@
  */
 package com.intellij.java.impl.ig.naming;
 
-import consulo.ide.impl.idea.codeInspection.ui.ListTable;
-import consulo.ide.impl.idea.codeInspection.ui.ListWrappingTableModel;
-import consulo.util.xml.serializer.InvalidDataException;
-import consulo.util.xml.serializer.WriteExternalException;
-import consulo.java.language.module.util.JavaClassNames;
+import com.intellij.java.impl.ig.fixes.RenameFix;
+import com.intellij.java.impl.ig.psiutils.LibraryUtil;
+import com.intellij.java.impl.ig.ui.UiUtils;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiType;
-import consulo.ui.CheckBox;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.fixes.RenameFix;
-import com.intellij.java.impl.ig.psiutils.LibraryUtil;
 import com.siyeh.ig.psiutils.MethodUtils;
-import com.intellij.java.impl.ig.ui.UiUtils;
+import consulo.ide.impl.idea.codeInspection.ui.ListTable;
+import consulo.ide.impl.idea.codeInspection.ui.ListWrappingTableModel;
+import consulo.java.language.module.util.JavaClassNames;
+import consulo.util.xml.serializer.InvalidDataException;
+import consulo.util.xml.serializer.WriteExternalException;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
 
+import javax.annotation.Nonnull;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
@@ -55,7 +54,8 @@ public class BooleanMethodNameMustStartWithQuestionInspection extends BaseInspec
   /**
    * @noinspection PublicField
    */
-  @NonNls public String questionString = "is,can,has,should,could,will,shall,check,contains,equals,add,put,remove,startsWith,endsWith";
+  @NonNls
+  public String questionString = "is,can,has,should,could,will,shall,check,contains,equals,add,put,remove,startsWith,endsWith";
 
   List<String> questionList = new ArrayList(32);
 
@@ -91,7 +91,7 @@ public class BooleanMethodNameMustStartWithQuestionInspection extends BaseInspec
   public JComponent createOptionsPanel() {
     final JPanel panel = new JPanel(new GridBagLayout());
     final ListTable table = new ListTable(new ListWrappingTableModel(questionList, InspectionGadgetsBundle
-      .message("boolean.method.name.must.start.with.question.table.column.name")));
+        .message("boolean.method.name.must.start.with.question.table.column.name")));
     final JPanel tablePanel = UiUtils.createAddRemovePanel(table);
 
     final GridBagConstraints constraints = new GridBagConstraints();
@@ -102,19 +102,19 @@ public class BooleanMethodNameMustStartWithQuestionInspection extends BaseInspec
     constraints.fill = GridBagConstraints.BOTH;
     panel.add(tablePanel, constraints);
 
-    final CheckBox checkBox1 =
-      new CheckBox(InspectionGadgetsBundle.message("ignore.methods.with.boolean.return.type.option"), this, "ignoreBooleanMethods");
+    final consulo.language.editor.inspection.ui.CheckBox checkBox1 =
+        new consulo.language.editor.inspection.ui.CheckBox(InspectionGadgetsBundle.message("ignore.methods.with.boolean.return.type.option"), this, "ignoreBooleanMethods");
     constraints.gridy = 1;
     constraints.weighty = 0.0;
     panel.add(checkBox1, constraints);
 
-    final CheckBox checkBox2 =
-      new CheckBox(InspectionGadgetsBundle.message("ignore.boolean.methods.in.an.interface.option"), this, "ignoreInAnnotationInterface");
+    final consulo.language.editor.inspection.ui.CheckBox checkBox2 =
+        new consulo.language.editor.inspection.ui.CheckBox(InspectionGadgetsBundle.message("ignore.boolean.methods.in.an.interface.option"), this, "ignoreInAnnotationInterface");
     constraints.gridy = 2;
     panel.add(checkBox2, constraints);
 
-    final CheckBox checkBox3 =
-      new CheckBox(InspectionGadgetsBundle.message("ignore.methods.overriding.super.method"), this, "onlyWarnOnBaseMethods");
+    final consulo.language.editor.inspection.ui.CheckBox checkBox3 =
+        new consulo.language.editor.inspection.ui.CheckBox(InspectionGadgetsBundle.message("ignore.methods.overriding.super.method"), this, "onlyWarnOnBaseMethods");
     constraints.gridy = 3;
     panel.add(checkBox3, constraints);
     return panel;
@@ -142,8 +142,7 @@ public class BooleanMethodNameMustStartWithQuestionInspection extends BaseInspec
       final PsiType returnType = method.getReturnType();
       if (returnType == null) {
         return;
-      }
-      else if (!returnType.equals(PsiType.BOOLEAN)) {
+      } else if (!returnType.equals(PsiType.BOOLEAN)) {
         if (ignoreBooleanMethods || !returnType.equalsToText(JavaClassNames.JAVA_LANG_BOOLEAN)) {
           return;
         }
@@ -164,8 +163,7 @@ public class BooleanMethodNameMustStartWithQuestionInspection extends BaseInspec
         if (MethodUtils.hasSuper(method)) {
           return;
         }
-      }
-      else if (LibraryUtil.isOverrideOfLibraryMethod(method)) {
+      } else if (LibraryUtil.isOverrideOfLibraryMethod(method)) {
         return;
       }
       registerMethodError(method);

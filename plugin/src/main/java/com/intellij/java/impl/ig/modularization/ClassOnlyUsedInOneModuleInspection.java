@@ -35,7 +35,7 @@ import javax.annotation.Nullable;
 
 import java.util.Set;
 
-public class ClassOnlyUsedInOneModuleInspection extends BaseGlobalInspection {
+public abstract class ClassOnlyUsedInOneModuleInspection extends BaseGlobalInspection {
 
   @Nls
   @Nonnull

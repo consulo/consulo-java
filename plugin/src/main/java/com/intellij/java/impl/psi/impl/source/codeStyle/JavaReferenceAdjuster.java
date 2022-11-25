@@ -15,10 +15,10 @@
  */
 package com.intellij.java.impl.psi.impl.source.codeStyle;
 
-import consulo.language.codeStyle.CodeStyle;
 import com.intellij.java.impl.ig.psiutils.ImportUtils;
 import com.intellij.java.impl.psi.codeStyle.JavaCodeStyleSettings;
 import com.intellij.java.impl.psi.codeStyle.ReferenceAdjuster;
+import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.codeInsight.AnnotationTargetUtil;
 import com.intellij.java.language.impl.psi.impl.PsiImplUtil;
 import com.intellij.java.language.impl.psi.impl.source.PsiJavaCodeReferenceElementImpl;
@@ -26,27 +26,27 @@ import com.intellij.java.language.impl.psi.impl.source.SourceJavaCodeReference;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaDocElementType;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
 import com.intellij.java.language.psi.*;
+import com.siyeh.ig.psiutils.CommentTracker;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.Language;
 import consulo.language.ast.ASTNode;
-import consulo.project.Project;
-import consulo.language.psi.PsiElement;
-import consulo.language.psi.PsiFile;
-import consulo.language.psi.PsiManager;
-import consulo.language.psi.PsiQualifiedReferenceElement;
+import consulo.language.ast.IElementType;
+import consulo.language.codeStyle.CodeStyle;
 import consulo.language.codeStyle.CodeStyleSettings;
-import consulo.language.impl.psi.CodeEditUtil;
 import consulo.language.impl.ast.CompositeElement;
 import consulo.language.impl.ast.TreeElement;
 import consulo.language.impl.ast.TreeUtil;
-import consulo.language.ast.IElementType;
+import consulo.language.impl.psi.CodeEditUtil;
+import consulo.language.psi.*;
 import consulo.language.psi.util.PsiTreeUtil;
-import com.siyeh.ig.psiutils.CommentTracker;
-import consulo.psi.PsiPackage;
+import consulo.project.Project;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
+@ExtensionImpl
 public class JavaReferenceAdjuster implements ReferenceAdjuster {
   @Override
   public ASTNode process(@Nonnull ASTNode element, boolean addImports, boolean incompleteCode, boolean useFqInJavadoc, boolean useFqInCode) {
@@ -338,5 +338,11 @@ public class JavaReferenceAdjuster implements ReferenceAdjuster {
   private static ASTNode replaceReferenceWithFQ(ASTNode reference, PsiClass refClass) {
     ((SourceJavaCodeReference) reference).fullyQualify(refClass);
     return reference;
+  }
+
+  @Nonnull
+  @Override
+  public Language getLanguage() {
+    return JavaLanguage.INSTANCE;
   }
 }

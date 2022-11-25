@@ -15,11 +15,12 @@
  */
 package com.intellij.java.impl.ipp.forloop;
 
-import com.intellij.java.language.psi.*;
-import com.intellij.psi.*;
-import consulo.language.util.IncorrectOperationException;
 import com.intellij.java.impl.ipp.base.Intention;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
+import com.intellij.java.language.psi.*;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
+
 import javax.annotation.Nonnull;
 
 public class ReplaceForLoopWithWhileLoopIntention extends Intention {

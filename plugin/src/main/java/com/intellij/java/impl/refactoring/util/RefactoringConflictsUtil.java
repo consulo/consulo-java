@@ -24,7 +24,7 @@ import consulo.project.Project;
 import consulo.module.content.ModuleRootManager;
 import consulo.module.content.ProjectRootManager;
 import consulo.virtualFileSystem.VirtualFile;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import consulo.language.impl.psi.LightElement;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.scope.PsiSearchScopeUtil;

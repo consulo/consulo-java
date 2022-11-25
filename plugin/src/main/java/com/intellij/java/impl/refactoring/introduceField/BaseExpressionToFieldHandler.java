@@ -24,54 +24,55 @@
  */
 package com.intellij.java.impl.refactoring.introduceField;
 
-import com.intellij.java.language.codeInsight.AnnotationUtil;
-import com.intellij.java.language.impl.codeInsight.ChangeContextUtil;
-import com.intellij.java.language.codeInsight.TestFrameworks;
-import consulo.language.editor.highlight.HighlightManager;
-import consulo.language.editor.completion.lookup.LookupManager;
-import consulo.navigation.NavigationUtil;
-import consulo.ide.util.DirectoryChooserUtil;
-import com.intellij.java.language.impl.codeInsight.PackageUtil;
-import com.intellij.java.language.impl.codeInsight.PsiClassListCellRenderer;
-import com.intellij.java.language.psi.*;
-import consulo.application.ApplicationManager;
-import consulo.application.Result;
-import consulo.language.editor.WriteCommandAction;
-import consulo.codeEditor.Editor;
-import consulo.codeEditor.EditorColors;
-import consulo.colorScheme.EditorColorsManager;
-import consulo.codeEditor.markup.RangeHighlighter;
-import consulo.colorScheme.TextAttributes;
-import consulo.project.Project;
-import consulo.util.lang.Comparing;
-import consulo.util.lang.StringUtil;
-import consulo.project.ui.wm.WindowManager;
-import com.intellij.psi.*;
-import consulo.language.codeStyle.CodeStyleManager;
-import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
-import consulo.language.impl.psi.CodeEditUtil;
-import consulo.language.psi.scope.GlobalSearchScope;
-import consulo.language.psi.resolve.PsiElementProcessor;
-import consulo.language.psi.util.PsiTreeUtil;
-import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.language.editor.util.PsiUtilBase;
 import com.intellij.java.impl.refactoring.IntroduceHandlerBase;
-import consulo.language.editor.refactoring.RefactoringBundle;
-import consulo.language.editor.refactoring.introduce.inplace.AbstractInplaceIntroducer;
 import com.intellij.java.impl.refactoring.introduceVariable.IntroduceVariableBase;
 import com.intellij.java.impl.refactoring.rename.RenameJavaVariableProcessor;
-import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import com.intellij.java.impl.refactoring.util.EnumConstantsUtil;
-import com.intellij.java.language.impl.refactoring.util.RefactoringChangeUtil;
 import com.intellij.java.impl.refactoring.util.RefactoringUtil;
 import com.intellij.java.impl.refactoring.util.occurrences.OccurrenceManager;
-import consulo.language.util.IncorrectOperationException;
+import com.intellij.java.language.codeInsight.AnnotationUtil;
+import com.intellij.java.language.codeInsight.TestFrameworks;
+import com.intellij.java.language.impl.codeInsight.ChangeContextUtil;
+import com.intellij.java.language.impl.codeInsight.PackageUtil;
+import com.intellij.java.language.impl.codeInsight.PsiClassListCellRenderer;
+import com.intellij.java.language.impl.refactoring.util.RefactoringChangeUtil;
+import com.intellij.java.language.psi.PsiElementFactory;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
+import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.util.VisibilityUtil;
+import consulo.application.ApplicationManager;
+import consulo.application.Result;
+import consulo.codeEditor.Editor;
+import consulo.codeEditor.EditorColors;
+import consulo.codeEditor.markup.RangeHighlighter;
+import consulo.colorScheme.EditorColorsManager;
+import consulo.colorScheme.TextAttributes;
+import consulo.ide.util.DirectoryChooserUtil;
+import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.editor.WriteCommandAction;
+import consulo.language.editor.completion.lookup.LookupManager;
+import consulo.language.editor.highlight.HighlightManager;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.introduce.inplace.AbstractInplaceIntroducer;
+import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
+import consulo.language.editor.ui.PopupNavigationUtil;
+import consulo.language.editor.util.PsiUtilBase;
+import consulo.language.impl.psi.CodeEditUtil;
+import consulo.language.psi.*;
+import consulo.language.psi.resolve.PsiElementProcessor;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
+import consulo.project.Project;
+import consulo.project.ui.wm.WindowManager;
+import consulo.util.lang.Comparing;
+import consulo.util.lang.StringUtil;
 import org.jetbrains.annotations.NonNls;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -139,7 +140,7 @@ public abstract class BaseExpressionToFieldHandler extends IntroduceHandlerBase 
           break;
         }
       }
-      NavigationUtil.getPsiElementPopup(classes.toArray(new PsiClass[classes.size()]), new PsiClassListCellRenderer(),
+      PopupNavigationUtil.getPsiElementPopup(classes.toArray(new PsiClass[classes.size()]), new PsiClassListCellRenderer(),
                                         "Choose class to introduce " + (myIsConstant ? "constant" : "field"),
                                         new PsiElementProcessor<PsiClass>() {
                                           @Override

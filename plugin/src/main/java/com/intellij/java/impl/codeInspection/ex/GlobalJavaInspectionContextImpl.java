@@ -20,15 +20,6 @@
  */
 package com.intellij.java.impl.codeInspection.ex;
 
-import consulo.application.CommonBundle;
-import consulo.language.editor.scope.AnalysisScope;
-import consulo.language.editor.inspection.GlobalInspectionContext;
-import consulo.language.editor.inspection.scheme.InspectionManager;
-import consulo.language.editor.inspection.InspectionsBundle;
-import com.intellij.codeInspection.ex.*;
-import consulo.language.editor.inspection.reference.RefElement;
-import consulo.language.editor.inspection.reference.RefManager;
-import consulo.ide.impl.idea.codeInspection.ui.InspectionToolPresentation;
 import com.intellij.java.analysis.codeInspection.GlobalJavaInspectionContext;
 import com.intellij.java.analysis.codeInspection.ex.EntryPointsManager;
 import com.intellij.java.analysis.codeInspection.reference.RefClass;
@@ -47,24 +38,46 @@ import com.intellij.java.language.psi.PsiMember;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import consulo.application.ApplicationManager;
-import consulo.module.Module;
-import consulo.module.ModuleManager;
-import consulo.project.Project;
-import consulo.content.bundle.Sdk;
-import com.intellij.openapi.roots.*;
-import consulo.content.library.Library;
-import consulo.ui.ex.awt.Messages;
+import consulo.application.CommonBundle;
 import consulo.application.util.function.Computable;
-import consulo.virtualFileSystem.VirtualFile;
+import consulo.application.util.function.Processor;
+import consulo.content.base.BinariesOrderRootType;
+import consulo.content.bundle.Sdk;
+import consulo.content.library.Library;
+import consulo.content.scope.SearchScope;
+import consulo.ide.impl.idea.codeInspection.ex.GlobalInspectionContextImpl;
+import consulo.ide.impl.idea.codeInspection.ui.InspectionToolPresentation;
+import consulo.language.editor.impl.internal.inspection.scheme.GlobalInspectionToolWrapper;
+import consulo.language.editor.inspection.GlobalInspectionContext;
+import consulo.language.editor.inspection.InspectionsBundle;
+import consulo.language.editor.inspection.reference.RefElement;
+import consulo.language.editor.inspection.reference.RefManager;
+import consulo.language.editor.inspection.scheme.InspectionManager;
+import consulo.language.editor.inspection.scheme.InspectionToolWrapper;
+import consulo.language.editor.inspection.scheme.JobDescriptor;
+import consulo.language.editor.inspection.scheme.Tools;
+import consulo.language.editor.scope.AnalysisScope;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiReference;
 import consulo.language.psi.SmartPsiElementPointer;
-import com.intellij.psi.search.*;
+import consulo.language.psi.resolve.PsiElementProcessor;
+import consulo.language.psi.resolve.PsiElementProcessorAdapter;
+import consulo.language.psi.resolve.PsiReferenceProcessor;
+import consulo.language.psi.resolve.PsiReferenceProcessorAdapter;
+import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.PsiTreeUtil;
-import consulo.application.util.function.Processor;
 import consulo.logging.Logger;
+import consulo.module.Module;
+import consulo.module.ModuleManager;
+import consulo.module.content.ModuleRootManager;
+import consulo.module.content.layer.orderEntry.LibraryOrderEntry;
+import consulo.module.content.layer.orderEntry.ModuleExtensionWithSdkOrderEntry;
+import consulo.module.content.layer.orderEntry.OrderEntry;
+import consulo.project.Project;
+import consulo.ui.ex.awt.Messages;
+import consulo.virtualFileSystem.VirtualFile;
 
 import javax.annotation.Nonnull;
 import java.util.*;
@@ -159,7 +172,7 @@ public class GlobalJavaInspectionContextImpl extends GlobalJavaInspectionContext
           } else if (entry instanceof LibraryOrderEntry) {
             final LibraryOrderEntry libraryOrderEntry = (LibraryOrderEntry) entry;
             final Library library = libraryOrderEntry.getLibrary();
-            if (library == null || library.getFiles(OrderRootType.CLASSES).length < library.getUrls(OrderRootType.CLASSES).length) {
+            if (library == null || library.getFiles(BinariesOrderRootType.getInstance()).length < library.getUrls(BinariesOrderRootType.getInstance()).length) {
               System.err.println(InspectionsBundle.message("offline.inspections.library.was.not.resolved",
                   libraryOrderEntry.getPresentableName(), module.getName()));
             }

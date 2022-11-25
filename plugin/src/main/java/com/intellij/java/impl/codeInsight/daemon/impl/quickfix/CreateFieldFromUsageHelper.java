@@ -15,60 +15,69 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
-import javax.annotation.Nonnull;
-import consulo.language.editor.template.Template;
-import consulo.language.extension.LanguageExtension;
-import consulo.codeEditor.Editor;
 import com.intellij.java.language.psi.PsiClass;
-import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiSubstitutor;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ExtensionAPI;
+import consulo.application.Application;
+import consulo.codeEditor.Editor;
+import consulo.component.extension.ExtensionPointCacheKey;
+import consulo.language.Language;
+import consulo.language.editor.template.Template;
+import consulo.language.extension.ByLanguageValue;
+import consulo.language.extension.LanguageExtension;
+import consulo.language.extension.LanguageOneToOne;
+import consulo.language.psi.PsiElement;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * @author Max Medvedev
  */
-public abstract class CreateFieldFromUsageHelper
-{
-	private static final LanguageExtension<CreateFieldFromUsageHelper> EP_NAME = new LanguageExtension<>("consulo.java" +
-			".codeInsight.createFieldFromUsageHelper");
+@ExtensionAPI(ComponentScope.APPLICATION)
+public interface CreateFieldFromUsageHelper extends LanguageExtension {
+  ExtensionPointCacheKey<CreateFieldFromUsageHelper, ByLanguageValue<CreateFieldFromUsageHelper>> KEY = ExtensionPointCacheKey.create("CreateFieldFromUsageHelper", LanguageOneToOne.build());
 
-	@Nonnull
-	public static Template setupTemplate(
-			PsiField field,
-			Object expectedTypes,
-			PsiClass targetClass,
-			Editor editor,
-			PsiElement context,
-			boolean createConstantField)
-	{
-		CreateFieldFromUsageHelper helper = EP_NAME.forLanguage(field.getLanguage());
-		if(helper == null)
-		{
-			throw new IllegalArgumentException("CreateFieldFromUsageHelper is not found for language: " + field.getLanguage());
-		}
-		return helper.setupTemplateImpl(field, expectedTypes, targetClass, editor, context, createConstantField,
-				CreateFromUsageBaseFix.getTargetSubstitutor(context));
-	}
+  @Nullable
+  static CreateFieldFromUsageHelper forLanguage(@Nonnull Language language) {
+    return Application.get().getExtensionPoint(CreateFieldFromUsageHelper.class).getOrBuildCache(KEY).get(language);
+  }
 
-	@Nonnull
-	public static PsiField insertField(@Nonnull PsiClass targetClass, @Nonnull PsiField field, @Nonnull PsiElement place)
-	{
-		CreateFieldFromUsageHelper helper = EP_NAME.forLanguage(field.getLanguage());
-		if(helper == null)
-		{
-			throw new IllegalArgumentException("CreateFieldFromUsageHelper is not found for language: " + field.getLanguage());
-		}
-		return helper.insertFieldImpl(targetClass, field, place);
-	}
+  @Nonnull
+  public static Template setupTemplate(
+      PsiField field,
+      Object expectedTypes,
+      PsiClass targetClass,
+      Editor editor,
+      PsiElement context,
+      boolean createConstantField) {
+    CreateFieldFromUsageHelper helper = forLanguage(field.getLanguage());
+    if (helper == null) {
+      throw new IllegalArgumentException("CreateFieldFromUsageHelper is not found for language: " + field.getLanguage());
+    }
+    return helper.setupTemplateImpl(field, expectedTypes, targetClass, editor, context, createConstantField,
+        CreateFromUsageBaseFix.getTargetSubstitutor(context));
+  }
 
-	public abstract PsiField insertFieldImpl(@Nonnull PsiClass targetClass, @Nonnull PsiField field, @Nonnull PsiElement place);
+  @Nonnull
+  public static PsiField insertField(@Nonnull PsiClass targetClass, @Nonnull PsiField field, @Nonnull PsiElement place) {
+    CreateFieldFromUsageHelper helper = forLanguage(field.getLanguage());
+    if (helper == null) {
+      throw new IllegalArgumentException("CreateFieldFromUsageHelper is not found for language: " + field.getLanguage());
+    }
+    return helper.insertFieldImpl(targetClass, field, place);
+  }
 
-	public abstract Template setupTemplateImpl(
-			PsiField field,
-			Object expectedTypes,
-			PsiClass targetClass,
-			Editor editor,
-			PsiElement context,
-			boolean createConstantField,
-			PsiSubstitutor substitutor);
+  public abstract PsiField insertFieldImpl(@Nonnull PsiClass targetClass, @Nonnull PsiField field, @Nonnull PsiElement place);
+
+  public abstract Template setupTemplateImpl(
+      PsiField field,
+      Object expectedTypes,
+      PsiClass targetClass,
+      Editor editor,
+      PsiElement context,
+      boolean createConstantField,
+      PsiSubstitutor substitutor);
 }

@@ -16,16 +16,17 @@
 package com.intellij.java.impl.codeInsight.generation.surroundWith;
 
 import com.intellij.java.impl.codeInsight.CodeInsightUtil;
+import com.intellij.java.impl.refactoring.introduceVariable.IntroduceVariableBase;
+import com.intellij.java.language.JavaLanguage;
+import com.intellij.java.language.psi.PsiExpression;
 import consulo.externalService.statistic.FeatureUsageTracker;
+import consulo.language.Language;
 import consulo.language.editor.surroundWith.SurroundDescriptor;
 import consulo.language.editor.surroundWith.Surrounder;
-import consulo.component.extension.Extensions;
 import consulo.language.psi.PsiElement;
-import com.intellij.java.language.psi.PsiExpression;
 import consulo.language.psi.PsiFile;
-import com.intellij.java.impl.refactoring.introduceVariable.IntroduceVariableBase;
-import javax.annotation.Nonnull;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -65,7 +66,7 @@ public class JavaExpressionSurroundDescriptor implements SurroundDescriptor {
     if (mySurrounders == null) {
       final ArrayList<Surrounder> list = new ArrayList<Surrounder>();
       Collections.addAll(list, SURROUNDERS);
-      Collections.addAll(list, Extensions.getExtensions(JavaExpressionSurrounder.EP_NAME));
+      Collections.addAll(list, JavaExpressionSurrounder.EP_NAME.getExtensions());
       mySurrounders = list.toArray(new Surrounder[list.size()]);
     }
     return mySurrounders;
@@ -74,5 +75,11 @@ public class JavaExpressionSurroundDescriptor implements SurroundDescriptor {
   @Override
   public boolean isExclusive() {
     return false;
+  }
+
+  @Nonnull
+  @Override
+  public Language getLanguage() {
+    return JavaLanguage.INSTANCE;
   }
 }

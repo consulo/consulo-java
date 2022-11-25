@@ -20,37 +20,39 @@
  */
 package com.intellij.java.impl.openapi.roots.ui.configuration.libraryEditor;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.java.language.JavaCoreBundle;
-import consulo.application.AllIcons;
-import consulo.fileChooser.FileChooserDescriptor;
-import consulo.content.bundle.Sdk;
-import consulo.ide.ui.SdkPathEditor;
 import com.intellij.java.language.projectRoots.roots.AnnotationOrderRootType;
+import consulo.application.AllIcons;
+import consulo.content.bundle.Sdk;
+import consulo.fileChooser.FileChooserDescriptor;
 import consulo.ide.ui.OrderRootTypeUIFactory;
+import consulo.ide.ui.SdkPathEditor;
 import consulo.ui.image.Image;
 
-public class AnnotationsOrderRootTypeUIFactory implements OrderRootTypeUIFactory
-{
-	@Nonnull
-	@Override
-	public Image getIcon()
-	{
-		return AllIcons.Modules.Annotation;
-	}
+import javax.annotation.Nonnull;
 
-	@Nonnull
-	@Override
-	public String getNodeText()
-	{
-		return JavaCoreBundle.message("sdk.configure.external.annotations.tab");
-	}
+public class AnnotationsOrderRootTypeUIFactory implements OrderRootTypeUIFactory {
+  @Nonnull
+  @Override
+  public Image getIcon() {
+    return AllIcons.Modules.Annotation;
+  }
 
-	@Nonnull
-	@Override
-	public SdkPathEditor createPathEditor(Sdk sdk)
-	{
-		return new SdkPathEditor(JavaCoreBundle.message("sdk.configure.external.annotations.tab"), AnnotationOrderRootType.getInstance(), new FileChooserDescriptor(false, true, true, false, true, false), sdk);
-	}
+  @Nonnull
+  @Override
+  public String getNodeText() {
+    return JavaCoreBundle.message("sdk.configure.external.annotations.tab");
+  }
+
+  @Nonnull
+  @Override
+  public String getOrderRootTypeId() {
+    return "javaExternalAnnotations";
+  }
+
+  @Nonnull
+  @Override
+  public SdkPathEditor createPathEditor(Sdk sdk) {
+    return new SdkPathEditor(JavaCoreBundle.message("sdk.configure.external.annotations.tab"), AnnotationOrderRootType.getInstance(), new FileChooserDescriptor(false, true, true, false, true, false), sdk);
+  }
 }

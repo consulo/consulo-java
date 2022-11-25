@@ -15,21 +15,20 @@
  */
 package com.intellij.java.impl.ig.logging;
 
-import consulo.ide.impl.idea.codeInspection.ui.ListTable;
-import consulo.ide.impl.idea.codeInspection.ui.ListWrappingTableModel;
+import com.intellij.java.impl.ig.ui.UiUtils;
 import com.intellij.java.language.psi.*;
-import consulo.util.xml.serializer.InvalidDataException;
-import consulo.util.xml.serializer.WriteExternalException;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.ui.CheckBox;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import com.intellij.java.impl.ig.ui.UiUtils;
+import consulo.ide.impl.idea.codeInspection.ui.ListTable;
+import consulo.ide.impl.idea.codeInspection.ui.ListWrappingTableModel;
+import consulo.util.xml.serializer.InvalidDataException;
+import consulo.util.xml.serializer.WriteExternalException;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
 
+import javax.annotation.Nonnull;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
@@ -85,7 +84,7 @@ public class ClassWithoutLoggerInspection extends BaseInspection {
     final JComponent panel = new JPanel(new BorderLayout());
     final ListTable table = new ListTable(new ListWrappingTableModel(loggerNames, InspectionGadgetsBundle.message("logger.class.name")));
     final JPanel tablePanel = UiUtils.createAddRemoveTreeClassChooserPanel(table, InspectionGadgetsBundle.message("choose.logger.class"));
-    final CheckBox checkBox = new CheckBox(InspectionGadgetsBundle.message("super.class.logger.option"), this, "ignoreSuperLoggers");
+    final consulo.language.editor.inspection.ui.CheckBox checkBox = new consulo.language.editor.inspection.ui.CheckBox(InspectionGadgetsBundle.message("super.class.logger.option"), this, "ignoreSuperLoggers");
     panel.add(tablePanel, BorderLayout.CENTER);
     panel.add(checkBox, BorderLayout.SOUTH);
     return panel;

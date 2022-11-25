@@ -15,21 +15,24 @@
  */
 package com.intellij.java.impl.refactoring.introduceField;
 
+import com.intellij.java.impl.refactoring.introduceParameter.AbstractJavaInplaceIntroducer;
+import com.intellij.java.impl.refactoring.ui.TypeSelectorManagerImpl;
+import com.intellij.java.impl.refactoring.util.occurrences.OccurrenceManager;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiVariable;
 import consulo.codeEditor.Editor;
+import consulo.content.scope.SearchScope;
 import consulo.document.RangeMarker;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiWhiteSpace;
+import consulo.language.psi.SmartPointerManager;
+import consulo.language.psi.SmartPsiElementPointer;
+import consulo.language.psi.scope.LocalSearchScope;
+import consulo.language.psi.util.PsiTreeUtil;
 import consulo.project.Project;
 import consulo.virtualFileSystem.VirtualFile;
-import com.intellij.psi.*;
-import consulo.language.psi.scope.LocalSearchScope;
-import consulo.content.scope.SearchScope;
-import consulo.language.psi.util.PsiTreeUtil;
-import com.intellij.java.impl.refactoring.introduceParameter.AbstractJavaInplaceIntroducer;
-import com.intellij.java.impl.refactoring.ui.TypeSelectorManagerImpl;
-import com.intellij.java.impl.refactoring.util.occurrences.OccurrenceManager;
 
 /**
  * User: anna

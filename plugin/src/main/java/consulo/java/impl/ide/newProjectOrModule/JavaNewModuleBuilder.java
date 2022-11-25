@@ -16,20 +16,16 @@
 
 package consulo.java.impl.ide.newProjectOrModule;
 
+import consulo.annotation.access.RequiredReadAction;
 import consulo.application.AllIcons;
 import consulo.content.bundle.Sdk;
+import consulo.ide.newModule.*;
+import consulo.java.language.module.extension.JavaMutableModuleExtension;
+import consulo.language.content.ProductionContentFolderTypeProvider;
+import consulo.localize.LocalizeValue;
 import consulo.module.content.layer.ContentEntry;
 import consulo.module.content.layer.ModifiableRootModel;
-import consulo.annotation.access.RequiredReadAction;
-import consulo.ide.newModule.UnzipNewModuleBuilderProcessor;
-import consulo.ide.newProject.NewModuleBuilder;
-import consulo.ide.newProject.NewModuleBuilderProcessor;
-import consulo.ide.newProject.NewModuleContext;
-import consulo.ide.newProject.node.NewModuleContextGroup;
-import consulo.java.language.module.extension.JavaMutableModuleExtension;
-import consulo.localize.LocalizeValue;
-import consulo.roots.impl.ProductionContentFolderTypeProvider;
-import consulo.ui.wizard.WizardStep;
+import consulo.ui.ex.wizard.WizardStep;
 
 import javax.annotation.Nonnull;
 import java.util.function.Consumer;
@@ -38,79 +34,67 @@ import java.util.function.Consumer;
  * @author VISTALL
  * @since 05.06.14
  */
-public class JavaNewModuleBuilder implements NewModuleBuilder
-{
-	@Override
-	public void setupContext(@Nonnull NewModuleContext context)
-	{
-		NewModuleContextGroup jvmGroup = context.addGroup("jvm", LocalizeValue.localizeTODO("Java Platform"));
+public class JavaNewModuleBuilder implements NewModuleBuilder {
+  @Override
+  public void setupContext(@Nonnull NewModuleContext context) {
+    NewModuleContextGroup jvmGroup = context.addGroup("jvm", LocalizeValue.localizeTODO("Java Platform"));
 
-		NewModuleContextGroup javaGroup = jvmGroup.addGroup("jvm.java", LocalizeValue.localizeTODO("Java"));
+    NewModuleContextGroup javaGroup = jvmGroup.addGroup("jvm.java", LocalizeValue.localizeTODO("Java"));
 
-		javaGroup.add(LocalizeValue.localizeTODO("Empty"), AllIcons.FileTypes.Any_type, new NewModuleBuilderProcessor<JavaNewModuleWizardContext>()
-		{
-			@Nonnull
-			@Override
-			public JavaNewModuleWizardContext createContext(boolean isNewProject)
-			{
-				return new JavaNewModuleWizardContext(isNewProject);
-			}
+    javaGroup.add(LocalizeValue.localizeTODO("Empty"), AllIcons.FileTypes.Any_type, new NewModuleBuilderProcessor<JavaNewModuleWizardContext>() {
+      @Nonnull
+      @Override
+      public JavaNewModuleWizardContext createContext(boolean isNewProject) {
+        return new JavaNewModuleWizardContext(isNewProject);
+      }
 
-			@Override
-			public void buildSteps(@Nonnull Consumer<WizardStep<JavaNewModuleWizardContext>> consumer, @Nonnull JavaNewModuleWizardContext context)
-			{
-				consumer.accept(new JavaSdkSelectStep(context));
-			}
+      @Override
+      public void buildSteps(@Nonnull Consumer<WizardStep<JavaNewModuleWizardContext>> consumer, @Nonnull JavaNewModuleWizardContext context) {
+        consumer.accept(new JavaSdkSelectStep(context));
+      }
 
-			@RequiredReadAction
-			@Override
-			public void process(@Nonnull JavaNewModuleWizardContext context, @Nonnull ContentEntry contentEntry, @Nonnull ModifiableRootModel modifiableRootModel)
-			{
-				setupModule(context, contentEntry, modifiableRootModel);
-			}
-		});
+      @RequiredReadAction
+      @Override
+      public void process(@Nonnull JavaNewModuleWizardContext context, @Nonnull ContentEntry contentEntry, @Nonnull ModifiableRootModel modifiableRootModel) {
+        setupModule(context, contentEntry, modifiableRootModel);
+      }
+    });
 
-		javaGroup.add(LocalizeValue.localizeTODO("Console Application"), AllIcons.RunConfigurations.Application, new UnzipNewModuleBuilderProcessor<JavaNewModuleWizardContext>("/moduleTemplates/#JavaHelloWorld.zip")
-		{
-			@Nonnull
-			@Override
-			public JavaNewModuleWizardContext createContext(boolean isNewProject)
-			{
-				return new JavaNewModuleWizardContext(isNewProject);
-			}
+    javaGroup.add(LocalizeValue.localizeTODO("Console Application"), AllIcons.RunConfigurations.Application, new UnzipNewModuleBuilderProcessor<JavaNewModuleWizardContext>("/moduleTemplates/#JavaHelloWorld.zip") {
+      @Nonnull
+      @Override
+      public JavaNewModuleWizardContext createContext(boolean isNewProject) {
+        return new JavaNewModuleWizardContext(isNewProject);
+      }
 
-			@Override
-			public void buildSteps(@Nonnull Consumer<WizardStep<JavaNewModuleWizardContext>> consumer, @Nonnull JavaNewModuleWizardContext context)
-			{
-				consumer.accept(new JavaSdkSelectStep(context));
-			}
+      @Override
+      public void buildSteps(@Nonnull Consumer<WizardStep<JavaNewModuleWizardContext>> consumer, @Nonnull JavaNewModuleWizardContext context) {
+        consumer.accept(new JavaSdkSelectStep(context));
+      }
 
-			@RequiredReadAction
-			@Override
-			public void process(@Nonnull JavaNewModuleWizardContext context, @Nonnull ContentEntry contentEntry, @Nonnull ModifiableRootModel modifiableRootModel)
-			{
-				unzip(modifiableRootModel);
+      @RequiredReadAction
+      @Override
+      public void process(@Nonnull JavaNewModuleWizardContext context, @Nonnull ContentEntry contentEntry, @Nonnull ModifiableRootModel modifiableRootModel) {
+        unzip(modifiableRootModel);
 
-				setupModule(context, contentEntry, modifiableRootModel);
-			}
-		});
-	}
+        setupModule(context, contentEntry, modifiableRootModel);
+      }
+    });
+  }
 
-	@RequiredReadAction
-	private static void setupModule(@Nonnull JavaNewModuleWizardContext context, @Nonnull ContentEntry contentEntry, @Nonnull ModifiableRootModel modifiableRootModel)
-	{
-		// need get by id - due, extension can be from original Java impl, or from other plugin, like IKVM.NET
-		JavaMutableModuleExtension<?> javaMutableModuleExtension = modifiableRootModel.getExtensionWithoutCheck("java");
-		assert javaMutableModuleExtension != null;
+  @RequiredReadAction
+  private static void setupModule(@Nonnull JavaNewModuleWizardContext context, @Nonnull ContentEntry contentEntry, @Nonnull ModifiableRootModel modifiableRootModel) {
+    // need get by id - due, extension can be from original Java impl, or from other plugin, like IKVM.NET
+    JavaMutableModuleExtension<?> javaMutableModuleExtension = modifiableRootModel.getExtensionWithoutCheck("java");
+    assert javaMutableModuleExtension != null;
 
-		javaMutableModuleExtension.setEnabled(true);
+    javaMutableModuleExtension.setEnabled(true);
 
-		Sdk sdk = context.getSdk();
-		if(sdk != null)
-		{
-			javaMutableModuleExtension.getInheritableSdk().set(null, sdk);
-			modifiableRootModel.addModuleExtensionSdkEntry(javaMutableModuleExtension);
-		}
-		contentEntry.addFolder(contentEntry.getUrl() + "/src", ProductionContentFolderTypeProvider.getInstance());
-	}
+    Sdk sdk = context.getSdk();
+    if (sdk != null) {
+      javaMutableModuleExtension.getInheritableSdk().set(null, sdk);
+      modifiableRootModel.addModuleExtensionSdkEntry(javaMutableModuleExtension);
+    }
+    contentEntry.addFolder(contentEntry.getUrl() + "/src", ProductionContentFolderTypeProvider.getInstance());
+  }
 }

@@ -16,7 +16,7 @@
 package com.intellij.java.impl.ipp.junit;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.ast.IElementType;
 import consulo.language.util.IncorrectOperationException;

@@ -20,10 +20,12 @@
  */
 package com.intellij.java.impl.codeInspection;
 
-import consulo.language.editor.rawHighlight.HighlightDisplayKey;
-import consulo.language.editor.inspection.reference.RefManager;
 import com.intellij.java.analysis.codeInspection.BatchSuppressManager;
 import com.intellij.java.analysis.codeInspection.GlobalJavaInspectionContext;
+import consulo.language.editor.inspection.*;
+import consulo.language.editor.inspection.reference.RefManager;
+import consulo.language.editor.inspection.scheme.InspectionManager;
+import consulo.language.editor.rawHighlight.HighlightDisplayKey;
 import consulo.language.psi.PsiElement;
 
 import javax.annotation.Nonnull;

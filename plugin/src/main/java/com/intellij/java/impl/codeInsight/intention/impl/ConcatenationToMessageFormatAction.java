@@ -15,25 +15,26 @@
  */
 package com.intellij.java.impl.codeInsight.intention.impl;
 
+import com.intellij.java.impl.psi.util.PsiConcatenationUtil;
+import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.codeInsight.AnnotationUtil;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
+import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.codeEditor.Editor;
+import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.intention.IntentionAction;
-import com.intellij.java.language.psi.*;
-import consulo.codeEditor.Editor;
-import consulo.project.Project;
-import com.intellij.java.language.LanguageLevel;
-import com.intellij.psi.*;
-import consulo.language.codeStyle.CodeStyleManager;
-import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
 import consulo.language.psi.scope.GlobalSearchScope;
-import com.intellij.java.impl.psi.util.PsiConcatenationUtil;
 import consulo.language.psi.util.PsiTreeUtil;
-import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import java.util.ArrayList;
 import java.util.List;
 

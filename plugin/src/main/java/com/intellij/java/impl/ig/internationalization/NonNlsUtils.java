@@ -18,7 +18,7 @@ package com.intellij.java.impl.ig.internationalization;
 import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.language.psi.*;
 import consulo.util.dataholder.Key;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import consulo.language.psi.util.PsiTreeUtil;
 import javax.annotation.Nullable;
 

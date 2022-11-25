@@ -1,7 +1,6 @@
 package consulo.java.impl.model.annotations;
 
-import com.intellij.util.xml.GenericValue;
+import consulo.xml.util.xml.GenericValue;
 
-public interface AnnotationGenericValue<T> extends GenericValue<T>
-{
+public interface AnnotationGenericValue<T> extends GenericValue<T> {
 }

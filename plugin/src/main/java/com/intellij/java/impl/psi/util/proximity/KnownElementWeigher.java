@@ -18,16 +18,15 @@ package com.intellij.java.impl.psi.util.proximity;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiMethod;
-import consulo.project.Project;
-import consulo.module.content.ProjectFileIndex;
-import consulo.util.lang.StringUtil;
-import consulo.virtualFileSystem.VirtualFile;
-import consulo.language.psi.PsiElement;
 import consulo.ide.impl.psi.util.ProximityLocation;
-import consulo.language.psi.PsiUtilCore;
 import consulo.ide.impl.psi.util.proximity.ProximityWeigher;
 import consulo.ide.impl.psi.util.proximity.SdkOrLibraryWeigher;
-import consulo.util.collection.ContainerUtil;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiUtilCore;
+import consulo.module.content.ProjectFileIndex;
+import consulo.project.Project;
+import consulo.util.lang.StringUtil;
+import consulo.virtualFileSystem.VirtualFile;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
@@ -40,7 +39,7 @@ import static consulo.java.language.module.util.JavaClassNames.*;
  * @author peter
  */
 public class KnownElementWeigher extends ProximityWeigher {
-  private static final Set<String> POPULAR_JDK_CLASSES = ContainerUtil.newHashSet(JAVA_LANG_STRING, JAVA_LANG_CLASS, System.class.getName(), JAVA_LANG_RUNNABLE, JAVA_LANG_EXCEPTION,
+  private static final Set<String> POPULAR_JDK_CLASSES = Set.of(JAVA_LANG_STRING, JAVA_LANG_CLASS, System.class.getName(), JAVA_LANG_RUNNABLE, JAVA_LANG_EXCEPTION,
       JAVA_LANG_THROWABLE, JAVA_LANG_RUNTIME_EXCEPTION, JAVA_UTIL_ARRAY_LIST, JAVA_UTIL_HASH_MAP, JAVA_UTIL_HASH_SET);
 
   @Override

@@ -33,7 +33,7 @@ import consulo.ui.ex.awt.TextFieldWithBrowseButton;
 import consulo.application.util.function.Computable;
 import consulo.ide.impl.idea.openapi.util.io.FileUtil;
 import consulo.virtualFileSystem.VirtualFile;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import com.intellij.java.impl.refactoring.JavaRefactoringFactory;
 import com.intellij.java.impl.refactoring.JavaRefactoringSettings;
 import com.intellij.java.impl.refactoring.MoveDestination;

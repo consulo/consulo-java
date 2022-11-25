@@ -27,7 +27,7 @@ import com.intellij.java.language.psi.SmartTypePointer;
 import com.intellij.java.language.psi.SmartTypePointerManager;
 import consulo.document.Document;
 import consulo.project.Project;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;

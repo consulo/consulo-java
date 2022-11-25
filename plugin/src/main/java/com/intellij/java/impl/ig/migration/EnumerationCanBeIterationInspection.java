@@ -15,36 +15,37 @@
  */
 package com.intellij.java.impl.ig.migration;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import com.intellij.java.language.psi.*;
-import org.jetbrains.annotations.NonNls;
-import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.project.Project;
-import com.intellij.psi.*;
-import consulo.language.codeStyle.CodeStyleSettingsManager;
-import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
+import com.intellij.java.impl.ig.psiutils.PsiElementOrderComparator;
 import com.intellij.java.impl.psi.codeStyle.JavaCodeStyleSettings;
-import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
-import consulo.language.psi.scope.GlobalSearchScope;
-import consulo.language.psi.search.ReferencesSearch;
 import com.intellij.java.language.psi.util.InheritanceUtil;
-import consulo.language.psi.util.PsiTreeUtil;
-import consulo.language.util.IncorrectOperationException;
-import consulo.application.util.query.Query;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.psiutils.PsiElementOrderComparator;
 import com.siyeh.ig.psiutils.TypeUtils;
+import consulo.application.util.query.Query;
 import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.codeStyle.CodeStyleSettingsManager;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiManager;
+import consulo.language.psi.PsiReference;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.search.ReferencesSearch;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class EnumerationCanBeIterationInspection extends BaseInspection {
 

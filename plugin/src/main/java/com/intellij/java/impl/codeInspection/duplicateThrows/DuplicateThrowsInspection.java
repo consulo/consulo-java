@@ -23,7 +23,7 @@ import consulo.language.editor.inspection.ProblemsHolder;
 import com.intellij.java.analysis.impl.codeInspection.ex.BaseLocalInspectionTool;
 import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 

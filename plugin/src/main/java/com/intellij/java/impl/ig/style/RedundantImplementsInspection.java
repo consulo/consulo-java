@@ -15,22 +15,21 @@
  */
 package com.intellij.java.impl.ig.style;
 
-import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.ide.impl.idea.codeInspection.ui.MultipleCheckboxOptionsPanel;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
 import com.intellij.java.language.psi.PsiReferenceList;
-import consulo.project.Project;
-import com.intellij.psi.*;
-import consulo.language.util.IncorrectOperationException;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.editor.inspection.ui.MultipleCheckboxOptionsPanel;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
 
 import javax.annotation.Nonnull;
-
 import javax.swing.*;
 
 public class RedundantImplementsInspection extends BaseInspection {

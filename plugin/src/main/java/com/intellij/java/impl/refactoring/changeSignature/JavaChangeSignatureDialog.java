@@ -15,9 +15,6 @@
  */
 package com.intellij.java.impl.refactoring.changeSignature;
 
-import consulo.language.editor.completion.CompletionResultSet;
-import consulo.language.editor.completion.lookup.LookupElementBuilder;
-import consulo.application.AllIcons;
 import com.intellij.java.impl.refactoring.changeSignature.inCallers.JavaCallerChooser;
 import com.intellij.java.impl.refactoring.ui.JavaCodeFragmentTableCellEditor;
 import com.intellij.java.impl.refactoring.ui.JavaComboBoxVisibilityPanel;
@@ -29,50 +26,51 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
 import com.intellij.java.language.util.VisibilityUtil;
-import consulo.ui.ex.action.AnActionEvent;
-import consulo.ui.ex.action.CustomShortcutSet;
-import consulo.language.editor.WriteCommandAction;
-import consulo.document.Document;
+import consulo.application.AllIcons;
+import consulo.application.util.function.Computable;
 import consulo.colorScheme.EditorColorsManager;
 import consulo.colorScheme.EditorFontType;
+import consulo.document.Document;
 import consulo.document.event.DocumentAdapter;
 import consulo.document.event.DocumentEvent;
-import consulo.language.file.LanguageFileType;
-import consulo.project.Project;
-import consulo.ui.ex.awt.*;
-import consulo.ui.ex.awt.table.TableView;
-import consulo.ui.ex.awt.util.DialogUtil;
-import consulo.util.lang.Comparing;
-import consulo.application.util.function.Computable;
-import consulo.util.lang.Pair;
-import consulo.util.lang.ref.Ref;
-import consulo.util.lang.StringUtil;
-import consulo.language.psi.PsiCodeFragment;
-import consulo.language.psi.PsiDocumentManager;
-import consulo.language.psi.PsiElement;
-import consulo.language.psi.PsiManager;
-import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
-import consulo.language.editor.refactoring.BaseRefactoringProcessor;
-import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.ide.impl.idea.refactoring.changeSignature.CallerChooserBase;
 import consulo.ide.impl.idea.refactoring.changeSignature.ChangeSignatureDialogBase;
 import consulo.ide.impl.idea.refactoring.changeSignature.MethodDescriptor;
 import consulo.ide.impl.idea.refactoring.changeSignature.ParameterTableModelItemBase;
 import consulo.ide.impl.idea.refactoring.ui.CodeFragmentTableCellRenderer;
 import consulo.ide.impl.idea.refactoring.ui.VisibilityPanelBase;
-import com.intellij.ui.*;
-import consulo.ui.ex.awt.table.JBTable;
-import com.intellij.ui.treeStructure.Tree;
-import consulo.usage.UsageInfo;
-import consulo.ide.impl.idea.util.Consumer;
-import consulo.language.util.IncorrectOperationException;
-import consulo.language.editor.ui.awt.TextFieldCompletionProvider;
-import consulo.ui.ex.awt.UIUtil;
+import consulo.ide.impl.idea.ui.TableColumnAnimator;
 import consulo.ide.impl.idea.util.ui.table.JBListTable;
 import consulo.ide.impl.idea.util.ui.table.JBTableRow;
 import consulo.ide.impl.idea.util.ui.table.JBTableRowEditor;
-import consulo.ui.ex.awt.ValidationInfo;
+import consulo.language.editor.WriteCommandAction;
+import consulo.language.editor.completion.CompletionResultSet;
+import consulo.language.editor.completion.lookup.LookupElementBuilder;
+import consulo.language.editor.refactoring.BaseRefactoringProcessor;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
+import consulo.language.editor.ui.awt.EditorTextField;
+import consulo.language.editor.ui.awt.TextFieldCompletionProvider;
+import consulo.language.file.LanguageFileType;
+import consulo.language.psi.PsiCodeFragment;
+import consulo.language.psi.PsiDocumentManager;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiManager;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+import consulo.ui.ex.action.AnActionEvent;
+import consulo.ui.ex.action.CustomShortcutSet;
+import consulo.ui.ex.awt.*;
+import consulo.ui.ex.awt.table.JBTable;
+import consulo.ui.ex.awt.table.TableView;
+import consulo.ui.ex.awt.tree.Tree;
+import consulo.ui.ex.awt.util.DialogUtil;
 import consulo.ui.image.ImageEffects;
+import consulo.usage.UsageInfo;
+import consulo.util.lang.Comparing;
+import consulo.util.lang.Pair;
+import consulo.util.lang.StringUtil;
+import consulo.util.lang.ref.Ref;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -87,6 +85,7 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Consumer;
 
 import static consulo.language.editor.refactoring.changeSignature.ChangeSignatureHandler.REFACTORING_NAME;
 
@@ -154,7 +153,7 @@ public class JavaChangeSignatureDialog extends ChangeSignatureDialogBase<Paramet
           protected void performRefactoring(UsageInfo[] usages) {
             super.performRefactoring(usages);
             if (callback != null) {
-              callback.consume(getParameters());
+              callback.accept(getParameters());
             }
           }
         };
@@ -232,7 +231,7 @@ public class JavaChangeSignatureDialog extends ChangeSignatureDialogBase<Paramet
         final Ref<JavaCallerChooser> chooser = new Ref<JavaCallerChooser>();
         Consumer<Set<PsiMethod>> callback = new Consumer<Set<PsiMethod>>() {
           @Override
-          public void consume(Set<PsiMethod> psiMethods) {
+          public void accept(Set<PsiMethod> psiMethods) {
             myMethodsToPropagateExceptions = psiMethods;
             myExceptionPropagationTree = chooser.get().getTree();
           }
@@ -369,7 +368,7 @@ public class JavaChangeSignatureDialog extends ChangeSignatureDialogBase<Paramet
         new TextFieldCompletionProvider() {
 
           @Override
-          protected void addCompletionVariants(@Nonnull String text, int offset, @Nonnull String prefix,
+          public void addCompletionVariants(@Nonnull String text, int offset, @Nonnull String prefix,
                                                @Nonnull CompletionResultSet result) {
             final PsiCodeFragment fragment = item.typeCodeFragment;
             if (fragment instanceof PsiTypeCodeFragment) {

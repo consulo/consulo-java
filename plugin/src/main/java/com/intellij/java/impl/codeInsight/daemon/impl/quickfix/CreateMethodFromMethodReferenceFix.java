@@ -15,187 +15,165 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
-import java.util.Collections;
-import java.util.List;
+import com.intellij.java.impl.codeInsight.ExpectedTypeInfo;
+import com.intellij.java.impl.codeInsight.ExpectedTypeInfoImpl;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.language.editor.completion.lookup.TailType;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.SmartPointerManager;
+import consulo.language.psi.SmartPsiElementPointer;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.logging.Logger;
+import consulo.project.Project;
+import consulo.util.collection.ContainerUtil;
+import consulo.util.lang.Pair;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import com.intellij.java.impl.codeInsight.ExpectedTypeInfo;
-import com.intellij.java.impl.codeInsight.ExpectedTypeInfoImpl;
-import consulo.language.editor.completion.lookup.TailType;
-import com.intellij.java.language.psi.*;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
-import consulo.logging.Logger;
-import consulo.project.Project;
-import consulo.util.lang.Pair;
-import com.intellij.psi.*;
-import consulo.language.psi.util.PsiTreeUtil;
-import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.ide.impl.idea.util.Function;
-import consulo.util.collection.ContainerUtil;
+import java.util.Collections;
+import java.util.List;
+import java.util.function.Function;
 
-public class CreateMethodFromMethodReferenceFix extends CreateFromUsageBaseFix
-{
-	private static final Logger LOG = Logger.getInstance(CreateMethodFromMethodReferenceFix.class);
+public class CreateMethodFromMethodReferenceFix extends CreateFromUsageBaseFix {
+  private static final Logger LOG = Logger.getInstance(CreateMethodFromMethodReferenceFix.class);
 
-	private final SmartPsiElementPointer myMethodReferenceExpression;
+  private final SmartPsiElementPointer myMethodReferenceExpression;
 
-	public CreateMethodFromMethodReferenceFix(@Nonnull PsiMethodReferenceExpression methodRef)
-	{
-		myMethodReferenceExpression = SmartPointerManager.getInstance(methodRef.getProject())
-				.createSmartPsiElementPointer(methodRef);
-	}
+  public CreateMethodFromMethodReferenceFix(@Nonnull PsiMethodReferenceExpression methodRef) {
+    myMethodReferenceExpression = SmartPointerManager.getInstance(methodRef.getProject())
+        .createSmartPsiElementPointer(methodRef);
+  }
 
-	@Override
-	protected boolean isAvailableImpl(int offset)
-	{
-		final PsiMethodReferenceExpression call = getMethodReference();
-		if(call == null || !call.isValid())
-		{
-			return false;
-		}
-		final PsiType functionalInterfaceType = call.getFunctionalInterfaceType();
-		if(functionalInterfaceType == null || LambdaUtil.getFunctionalInterfaceMethod(functionalInterfaceType) == null)
-		{
-			return false;
-		}
+  @Override
+  protected boolean isAvailableImpl(int offset) {
+    final PsiMethodReferenceExpression call = getMethodReference();
+    if (call == null || !call.isValid()) {
+      return false;
+    }
+    final PsiType functionalInterfaceType = call.getFunctionalInterfaceType();
+    if (functionalInterfaceType == null || LambdaUtil.getFunctionalInterfaceMethod(functionalInterfaceType) == null) {
+      return false;
+    }
 
-		final String name = call.getReferenceName();
+    final String name = call.getReferenceName();
 
-		if(name == null)
-		{
-			return false;
-		}
-		if(call.isConstructor() && name.equals("new") || PsiNameHelper.getInstance(call.getProject()).isIdentifier
-				(name))
-		{
-			setText(call.isConstructor() ? JavaQuickFixBundle.message("create.constructor.from.new.text") : JavaQuickFixBundle
-					.message("create.method.from.usage.text", name));
-			return true;
-		}
-		return false;
-	}
+    if (name == null) {
+      return false;
+    }
+    if (call.isConstructor() && name.equals("new") || PsiNameHelper.getInstance(call.getProject()).isIdentifier
+        (name)) {
+      setText(call.isConstructor() ? JavaQuickFixBundle.message("create.constructor.from.new.text") : JavaQuickFixBundle
+          .message("create.method.from.usage.text", name));
+      return true;
+    }
+    return false;
+  }
 
-	@Override
-	protected PsiElement getElement()
-	{
-		final PsiMethodReferenceExpression call = getMethodReference();
-		if(call == null || !call.getManager().isInProject(call))
-		{
-			return null;
-		}
-		return call;
-	}
+  @Override
+  protected PsiElement getElement() {
+    final PsiMethodReferenceExpression call = getMethodReference();
+    if (call == null || !call.getManager().isInProject(call)) {
+      return null;
+    }
+    return call;
+  }
 
-	@Override
-	@Nonnull
-	protected List<PsiClass> getTargetClasses(PsiElement element)
-	{
-		List<PsiClass> targets = super.getTargetClasses(element);
-		PsiMethodReferenceExpression call = getMethodReference();
-		if(call == null)
-		{
-			return Collections.emptyList();
-		}
-		return targets;
-	}
+  @Override
+  @Nonnull
+  protected List<PsiClass> getTargetClasses(PsiElement element) {
+    List<PsiClass> targets = super.getTargetClasses(element);
+    PsiMethodReferenceExpression call = getMethodReference();
+    if (call == null) {
+      return Collections.emptyList();
+    }
+    return targets;
+  }
 
-	@Override
-	protected void invokeImpl(final PsiClass targetClass)
-	{
-		if(targetClass == null)
-		{
-			return;
-		}
-		PsiMethodReferenceExpression expression = getMethodReference();
-		if(expression == null)
-		{
-			return;
-		}
+  @Override
+  protected void invokeImpl(final PsiClass targetClass) {
+    if (targetClass == null) {
+      return;
+    }
+    PsiMethodReferenceExpression expression = getMethodReference();
+    if (expression == null) {
+      return;
+    }
 
-		if(isValidElement(expression))
-		{
-			return;
-		}
+    if (isValidElement(expression)) {
+      return;
+    }
 
-		PsiClass parentClass = PsiTreeUtil.getParentOfType(expression, PsiClass.class);
-		PsiMember enclosingContext = PsiTreeUtil.getParentOfType(expression, PsiMethod.class, PsiField.class,
-				PsiClassInitializer.class);
+    PsiClass parentClass = PsiTreeUtil.getParentOfType(expression, PsiClass.class);
+    PsiMember enclosingContext = PsiTreeUtil.getParentOfType(expression, PsiMethod.class, PsiField.class,
+        PsiClassInitializer.class);
 
-		String methodName = expression.getReferenceName();
-		LOG.assertTrue(methodName != null);
+    String methodName = expression.getReferenceName();
+    LOG.assertTrue(methodName != null);
 
 
-		final Project project = targetClass.getProject();
-		JVMElementFactory elementFactory = JVMElementFactories.getFactory(targetClass.getLanguage(), project);
-		if(elementFactory == null)
-		{
-			elementFactory = JavaPsiFacade.getElementFactory(project);
-		}
+    final Project project = targetClass.getProject();
+    JVMElementFactory elementFactory = JVMElementFactories.getFactory(targetClass.getLanguage(), project);
+    if (elementFactory == null) {
+      elementFactory = JavaPsiFacade.getElementFactory(project);
+    }
 
-		PsiMethod method = expression.isConstructor() ? (PsiMethod) targetClass.add(elementFactory.createConstructor()
-		) : CreateMethodFromUsageFix.createMethod(targetClass, parentClass, enclosingContext, methodName);
-		if(method == null)
-		{
-			return;
-		}
+    PsiMethod method = expression.isConstructor() ? (PsiMethod) targetClass.add(elementFactory.createConstructor()
+    ) : CreateMethodFromUsageFix.createMethod(targetClass, parentClass, enclosingContext, methodName);
+    if (method == null) {
+      return;
+    }
 
-		if(!expression.isConstructor())
-		{
-			setupVisibility(parentClass, targetClass, method.getModifierList());
-		}
+    if (!expression.isConstructor()) {
+      setupVisibility(parentClass, targetClass, method.getModifierList());
+    }
 
-		expression = getMethodReference();
-		LOG.assertTrue(expression.isValid());
+    expression = getMethodReference();
+    LOG.assertTrue(expression.isValid());
 
-		if(!expression.isConstructor() && shouldCreateStaticMember(expression, targetClass))
-		{
-			PsiUtil.setModifierProperty(method, PsiModifier.STATIC, true);
-		}
+    if (!expression.isConstructor() && shouldCreateStaticMember(expression, targetClass)) {
+      PsiUtil.setModifierProperty(method, PsiModifier.STATIC, true);
+    }
 
-		final PsiElement context = PsiTreeUtil.getParentOfType(expression, PsiClass.class, PsiMethod.class);
+    final PsiElement context = PsiTreeUtil.getParentOfType(expression, PsiClass.class, PsiMethod.class);
 
-		final PsiType functionalInterfaceType = expression.getFunctionalInterfaceType();
-		final PsiClassType.ClassResolveResult classResolveResult = PsiUtil.resolveGenericsClassInType
-				(functionalInterfaceType);
-		final PsiMethod interfaceMethod = LambdaUtil.getFunctionalInterfaceMethod(classResolveResult);
-		LOG.assertTrue(interfaceMethod != null);
+    final PsiType functionalInterfaceType = expression.getFunctionalInterfaceType();
+    final PsiClassType.ClassResolveResult classResolveResult = PsiUtil.resolveGenericsClassInType
+        (functionalInterfaceType);
+    final PsiMethod interfaceMethod = LambdaUtil.getFunctionalInterfaceMethod(classResolveResult);
+    LOG.assertTrue(interfaceMethod != null);
 
-		final PsiType interfaceReturnType = LambdaUtil.getFunctionalInterfaceReturnType(functionalInterfaceType);
-		LOG.assertTrue(interfaceReturnType != null);
+    final PsiType interfaceReturnType = LambdaUtil.getFunctionalInterfaceReturnType(functionalInterfaceType);
+    LOG.assertTrue(interfaceReturnType != null);
 
-		final PsiSubstitutor substitutor = LambdaUtil.getSubstitutor(interfaceMethod, classResolveResult);
-		final ExpectedTypeInfo[] expectedTypes = {new ExpectedTypeInfoImpl(interfaceReturnType,
-				ExpectedTypeInfo.TYPE_OR_SUBTYPE, interfaceReturnType, TailType.NONE, null,
-				ExpectedTypeInfoImpl.NULL)};
-		CreateMethodFromUsageFix.doCreate(targetClass, method, false, ContainerUtil.map2List(interfaceMethod
-				.getParameterList().getParameters(), new Function<PsiParameter, Pair<PsiExpression, PsiType>>()
-		{
-			@Override
-			public Pair<PsiExpression, PsiType> fun(PsiParameter parameter)
-			{
-				return Pair.create(null, substitutor.substitute(parameter.getType()));
-			}
-		}), PsiSubstitutor.EMPTY, expectedTypes, context);
-	}
+    final PsiSubstitutor substitutor = LambdaUtil.getSubstitutor(interfaceMethod, classResolveResult);
+    final ExpectedTypeInfo[] expectedTypes = {new ExpectedTypeInfoImpl(interfaceReturnType,
+        ExpectedTypeInfo.TYPE_OR_SUBTYPE, interfaceReturnType, TailType.NONE, null,
+        ExpectedTypeInfoImpl.NULL)};
+    CreateMethodFromUsageFix.doCreate(targetClass, method, false, ContainerUtil.map2List(interfaceMethod
+        .getParameterList().getParameters(), new Function<PsiParameter, Pair<PsiExpression, PsiType>>() {
+      @Override
+      public Pair<PsiExpression, PsiType> apply(PsiParameter parameter) {
+        return Pair.create(null, substitutor.substitute(parameter.getType()));
+      }
+    }), PsiSubstitutor.EMPTY, expectedTypes, context);
+  }
 
 
-	@Override
-	protected boolean isValidElement(PsiElement element)
-	{
-		return false;
-	}
+  @Override
+  protected boolean isValidElement(PsiElement element) {
+    return false;
+  }
 
-	@Override
-	@Nonnull
-	public String getFamilyName()
-	{
-		return JavaQuickFixBundle.message("create.method.from.usage.family");
-	}
+  @Override
+  @Nonnull
+  public String getFamilyName() {
+    return JavaQuickFixBundle.message("create.method.from.usage.family");
+  }
 
-	@Nullable
-	protected PsiMethodReferenceExpression getMethodReference()
-	{
-		return (PsiMethodReferenceExpression) myMethodReferenceExpression.getElement();
-	}
+  @Nullable
+  protected PsiMethodReferenceExpression getMethodReference() {
+    return (PsiMethodReferenceExpression) myMethodReferenceExpression.getElement();
+  }
 }

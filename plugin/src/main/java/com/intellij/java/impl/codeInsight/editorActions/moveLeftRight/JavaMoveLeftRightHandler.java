@@ -15,6 +15,8 @@
  */
 package com.intellij.java.impl.codeInsight.editorActions.moveLeftRight;
 
+import com.intellij.java.language.JavaLanguage;
+import consulo.language.Language;
 import consulo.language.editor.moveLeftRight.MoveElementLeftRightHandler;
 import com.intellij.java.language.psi.*;
 import consulo.language.psi.PsiElement;
@@ -43,5 +45,11 @@ public class JavaMoveLeftRightHandler implements MoveElementLeftRightHandler {
       }
     }
     return PsiElement.EMPTY_ARRAY;
+  }
+
+  @Nonnull
+  @Override
+  public Language getLanguage() {
+    return JavaLanguage.INSTANCE;
   }
 }

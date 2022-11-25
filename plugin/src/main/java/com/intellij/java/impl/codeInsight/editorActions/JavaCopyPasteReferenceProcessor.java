@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import com.intellij.java.language.psi.*;
 import consulo.document.RangeMarker;
 import consulo.document.util.TextRange;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 

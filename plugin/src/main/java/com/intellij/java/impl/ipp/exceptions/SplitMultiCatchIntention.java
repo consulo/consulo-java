@@ -15,12 +15,13 @@
  */
 package com.intellij.java.impl.ipp.exceptions;
 
-import com.intellij.java.language.psi.*;
-import com.intellij.psi.*;
-import com.intellij.java.language.impl.psi.impl.PsiImplUtil;
-import consulo.language.util.IncorrectOperationException;
 import com.intellij.java.impl.ipp.base.Intention;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
+import com.intellij.java.language.impl.psi.impl.PsiImplUtil;
+import com.intellij.java.language.psi.*;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
+
 import javax.annotation.Nonnull;
 
 import static com.intellij.java.language.psi.PsiAnnotation.TargetType;

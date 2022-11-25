@@ -25,7 +25,7 @@ import consulo.module.content.ModuleRootManager;
 import consulo.util.lang.function.Condition;
 import consulo.document.util.TextRange;
 import consulo.virtualFileSystem.VirtualFile;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import consulo.language.psi.path.FileReference;
 import consulo.language.psi.path.FileReferenceSet;
 import consulo.language.util.ProcessingContext;
@@ -97,7 +97,7 @@ public class FilePathReferenceProvider extends PsiReferenceProvider {
       }
 
       @Override
-      protected Condition<PsiFileSystemItem> getReferenceCompletionFilter() {
+      public Condition<PsiFileSystemItem> getReferenceCompletionFilter() {
         return new Condition<PsiFileSystemItem>() {
           @Override
           public boolean value(final PsiFileSystemItem element) {

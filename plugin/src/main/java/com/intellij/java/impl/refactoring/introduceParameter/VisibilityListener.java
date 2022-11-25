@@ -1,13 +1,13 @@
 package com.intellij.java.impl.refactoring.introduceParameter;
 
-import consulo.language.editor.completion.lookup.LookupManager;
-import consulo.ide.impl.idea.codeInsight.lookup.impl.LookupImpl;
-import consulo.application.ApplicationManager;
-import consulo.document.Document;
-import consulo.codeEditor.Editor;
 import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.java.language.psi.PsiModifierList;
 import com.intellij.java.language.psi.PsiVariable;
+import consulo.application.ApplicationManager;
+import consulo.codeEditor.Editor;
+import consulo.document.Document;
+import consulo.language.editor.completion.lookup.LookupEx;
+import consulo.language.editor.completion.lookup.LookupManager;
 import consulo.logging.Logger;
 
 /**
@@ -73,7 +73,7 @@ public abstract class VisibilityListener {
       }
     };
 
-    final LookupImpl lookup = (LookupImpl)LookupManager.getActiveLookup(myEditor);
+    final LookupEx lookup = LookupManager.getActiveLookup(myEditor);
     if (lookup != null) {
       lookup.performGuardedChange(runnable);
     } else {

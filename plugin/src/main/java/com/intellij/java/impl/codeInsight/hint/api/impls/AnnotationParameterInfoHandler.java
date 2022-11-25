@@ -15,31 +15,36 @@
  */
 package com.intellij.java.impl.codeInsight.hint.api.impls;
 
-import javax.annotation.Nonnull;
-
-import consulo.language.editor.completion.lookup.LookupElement;
+import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.*;
-import com.intellij.lang.parameterInfo.*;
-import consulo.application.dumb.DumbAware;
-import com.intellij.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.application.dumb.DumbAware;
+import consulo.language.Language;
+import consulo.language.editor.completion.lookup.LookupElement;
+import consulo.language.editor.parameterInfo.*;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiReference;
 import consulo.util.lang.CharArrayUtil;
 import org.jetbrains.annotations.NonNls;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
  * @author Maxim.Mossienko
  */
-public class AnnotationParameterInfoHandler implements ParameterInfoHandler<PsiAnnotationParameterList,PsiAnnotationMethod>, DumbAware {
+public class AnnotationParameterInfoHandler implements ParameterInfoHandler<PsiAnnotationParameterList, PsiAnnotationMethod>, DumbAware {
   @Override
-  public @Nullable Object[] getParametersForLookup(LookupElement item, ParameterInfoContext context) {
+  public
+  @Nullable
+  Object[] getParametersForLookup(LookupElement item, ParameterInfoContext context) {
     return null;
   }
 
   @Override
   public Object[] getParametersForDocumentation(final PsiAnnotationMethod p, final ParameterInfoContext context) {
-    return new Object[] {p};
+    return new Object[]{p};
   }
 
   @Override
@@ -58,7 +63,7 @@ public class AnnotationParameterInfoHandler implements ParameterInfoHandler<PsiA
         final PsiElement resolved = nameReference.resolve();
 
         if (resolved instanceof PsiClass) {
-          final PsiClass aClass = (PsiClass)resolved;
+          final PsiClass aClass = (PsiClass) resolved;
 
           if (aClass.isAnnotationType()) {
             final PsiMethod[] methods = aClass.getMethods();
@@ -129,14 +134,20 @@ public class AnnotationParameterInfoHandler implements ParameterInfoHandler<PsiA
     }
 
     context.setupUIComponentPresentation(buffer.toString(), highlightStartOffset, highlightEndOffset, false, p.isDeprecated(),
-                                         false, context.getDefaultParameterColor());
+        false, context.getDefaultParameterColor());
   }
 
   private static PsiAnnotationMethod findAnnotationMethod(PsiFile file, int offset) {
     PsiNameValuePair pair = ParameterInfoUtils.findParentOfType(file, offset, PsiNameValuePair.class);
     if (pair == null) return null;
     final PsiReference reference = pair.getReference();
-    final PsiElement resolved = reference != null ? reference.resolve():null;
-    return PsiUtil.isAnnotationMethod(resolved) ? (PsiAnnotationMethod)resolved : null;
+    final PsiElement resolved = reference != null ? reference.resolve() : null;
+    return PsiUtil.isAnnotationMethod(resolved) ? (PsiAnnotationMethod) resolved : null;
+  }
+
+  @Nonnull
+  @Override
+  public Language getLanguage() {
+    return JavaLanguage.INSTANCE;
   }
 }

@@ -17,7 +17,7 @@ package com.intellij.java.impl.refactoring.extractclass.usageInfo;
 
 import com.intellij.java.language.psi.*;
 import consulo.logging.Logger;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import com.intellij.java.language.psi.util.PropertyUtil;
 import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.impl.refactoring.psi.MutationUtils;

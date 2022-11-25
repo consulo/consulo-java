@@ -15,30 +15,32 @@
  */
 package com.intellij.java.impl.codeInsight.documentation;
 
-import consulo.language.editor.documentation.DocCommentFixer;
-import consulo.language.editor.inspection.scheme.InspectionManager;
-import consulo.language.editor.inspection.ProblemDescriptor;
-import com.intellij.codeInspection.QuickFix;
 import com.intellij.java.impl.codeInspection.javaDoc.JavaDocLocalInspection;
 import com.intellij.java.impl.codeInspection.javaDoc.JavaDocReferenceInspection;
 import com.intellij.java.impl.javadoc.JavadocNavigationDelegate;
+import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.java.language.psi.javadoc.PsiDocTag;
 import com.intellij.java.language.psi.javadoc.PsiDocTagValue;
 import com.intellij.java.language.psi.javadoc.PsiDocToken;
-import consulo.document.Document;
 import consulo.codeEditor.Editor;
-import consulo.project.Project;
-import consulo.util.lang.Pair;
+import consulo.document.Document;
 import consulo.document.util.TextRange;
-import consulo.util.lang.StringUtil;
+import consulo.ide.impl.idea.util.containers.ContainerUtilRt;
+import consulo.language.Language;
+import consulo.language.editor.documentation.DocCommentFixer;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.editor.inspection.QuickFix;
+import consulo.language.editor.inspection.scheme.InspectionManager;
 import consulo.language.psi.PsiComment;
 import consulo.language.psi.PsiDocumentManager;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
-import consulo.ide.impl.idea.util.containers.ContainerUtilRt;
+import consulo.project.Project;
 import consulo.util.lang.CharArrayUtil;
+import consulo.util.lang.Pair;
+import consulo.util.lang.StringUtil;
 
 import javax.annotation.Nonnull;
 import java.util.*;
@@ -348,5 +350,11 @@ public class JavaDocCommentFixer implements DocCommentFixer {
       editor.getCaretModel().moveToOffset(document.getLineEndOffset(lineToNavigate));
       JavadocNavigationDelegate.navigateToLineEnd(editor, file);
     }
+  }
+
+  @Nonnull
+  @Override
+  public Language getLanguage() {
+    return JavaLanguage.INSTANCE;
   }
 }

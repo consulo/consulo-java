@@ -19,7 +19,7 @@ import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiPolyadicExpression;
 import com.intellij.java.language.psi.PsiType;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import consulo.language.ast.IElementType;
 import consulo.java.language.module.util.JavaClassNames;
 

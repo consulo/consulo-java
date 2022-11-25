@@ -15,22 +15,22 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import consulo.language.editor.FileModificationService;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.HighlightUtil;
-import consulo.undoRedo.util.UndoUtil;
-import consulo.logging.Logger;
-import consulo.codeEditor.Editor;
-import consulo.project.Project;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiClassType;
+import com.intellij.java.language.psi.PsiReferenceList;
+import consulo.codeEditor.Editor;
+import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.language.editor.FileModificationService;
+import consulo.language.editor.util.LanguageUndoUtil;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
-import com.intellij.java.language.psi.PsiReferenceList;
 import consulo.language.util.IncorrectOperationException;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.logging.Logger;
+import consulo.project.Project;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class MoveBoundClassToFrontFix extends ExtendsListFix {
   private static final Logger LOG = Logger.getInstance(MoveBoundClassToFrontFix.class);
@@ -72,7 +72,7 @@ public class MoveBoundClassToFrontFix extends ExtendsListFix {
     catch (IncorrectOperationException e) {
       LOG.error(e);
     }
-    UndoUtil.markPsiFileForUndo(file);
+    LanguageUndoUtil.markPsiFileForUndo(file);
   }
 
   @Override

@@ -15,16 +15,18 @@
  */
 package com.intellij.java.impl.codeInsight.template.macro;
 
-import javax.annotation.Nonnull;
-
-import com.intellij.codeInsight.template.*;
 import com.intellij.java.impl.codeInsight.template.JavaCodeContextType;
 import com.intellij.java.impl.codeInsight.template.PsiTypeResult;
-import consulo.project.Project;
+import com.intellij.java.language.psi.PsiVariable;
+import consulo.language.editor.template.*;
+import consulo.language.editor.template.context.TemplateContextType;
+import consulo.language.editor.template.macro.Macro;
 import consulo.language.psi.PsiDocumentManager;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
-import com.intellij.java.language.psi.PsiVariable;
+import consulo.project.Project;
+
+import javax.annotation.Nonnull;
 
 public class TypeOfVariableMacro extends Macro {
   @Override

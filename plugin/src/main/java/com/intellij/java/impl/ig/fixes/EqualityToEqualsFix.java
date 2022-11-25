@@ -22,7 +22,7 @@ import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.java.language.psi.PsiBinaryExpression;
 import com.intellij.java.language.psi.PsiExpression;
 import consulo.project.Project;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import consulo.language.ast.IElementType;
 import consulo.language.util.IncorrectOperationException;
 import com.siyeh.InspectionGadgetsBundle;

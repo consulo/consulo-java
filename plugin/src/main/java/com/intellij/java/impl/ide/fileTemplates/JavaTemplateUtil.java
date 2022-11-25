@@ -15,12 +15,12 @@
  */
 package com.intellij.java.impl.ide.fileTemplates;
 
-import consulo.fileTemplate.FileTemplate;
 import com.intellij.java.language.psi.JavaDirectoryService;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
+import consulo.fileTemplate.FileTemplate;
 import consulo.language.psi.PsiDirectory;
-import consulo.psi.PsiPackage;
+import consulo.language.psi.PsiPackage;
 
 import javax.annotation.Nonnull;
 import java.util.Properties;

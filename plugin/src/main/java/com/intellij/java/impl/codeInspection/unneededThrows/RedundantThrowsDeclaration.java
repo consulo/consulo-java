@@ -15,18 +15,24 @@
  */
 package com.intellij.java.impl.codeInspection.unneededThrows;
 
+import com.intellij.java.analysis.codeInspection.BaseJavaBatchLocalInspectionTool;
+import com.intellij.java.analysis.codeInspection.GroupNames;
+import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.JavaHighlightUtil;
 import com.intellij.java.impl.codeInspection.DeleteThrowsFix;
 import com.intellij.java.language.impl.codeInsight.ExceptionUtil;
-import com.intellij.java.analysis.codeInspection.GroupNames;
 import com.intellij.java.language.impl.codeInsight.daemon.JavaErrorBundle;
-import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.JavaHighlightUtil;
-import com.intellij.java.analysis.codeInspection.BaseJavaBatchLocalInspectionTool;
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.*;
+import consulo.language.editor.inspection.InspectionsBundle;
+import consulo.language.editor.inspection.LocalQuickFix;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.editor.inspection.ProblemHighlightType;
+import consulo.language.editor.inspection.scheme.InspectionManager;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiManager;
 import org.jetbrains.annotations.NonNls;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -35,7 +41,7 @@ import java.util.Set;
  * @author anna
  * @since 15-Nov-2005
  */
-public class RedundantThrowsDeclaration extends BaseJavaBatchLocalInspectionTool
+public abstract class RedundantThrowsDeclaration extends BaseJavaBatchLocalInspectionTool
 {
   @Override
   @Nonnull

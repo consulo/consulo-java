@@ -15,11 +15,6 @@
  */
 package com.intellij.java.impl.codeInsight.completion;
 
-import com.intellij.codeInsight.completion.*;
-import consulo.language.editor.completion.AutoCompletionPolicy;
-import consulo.language.editor.completion.lookup.LookupElement;
-import consulo.language.editor.completion.lookup.LookupElementBuilder;
-import consulo.application.AllIcons;
 import com.intellij.java.impl.codeInsight.ExpectedTypeInfo;
 import com.intellij.java.impl.codeInsight.generation.GenerateMembersUtil;
 import com.intellij.java.language.impl.psi.impl.source.resolve.JavaResolveUtil;
@@ -29,22 +24,31 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
-import consulo.project.Project;
-import consulo.util.lang.Comparing;
-import consulo.util.lang.StringUtil;
-import consulo.language.psi.PsiElement;
-import consulo.language.codeStyle.CodeStyleManager;
-import consulo.language.psi.util.PsiTreeUtil;
-import consulo.ide.impl.idea.util.Consumer;
-import consulo.util.lang.ObjectUtil;
-import consulo.language.util.ProcessingContext;
-import consulo.util.collection.JBIterable;
 import consulo.annotation.access.RequiredReadAction;
+import consulo.application.AllIcons;
+import consulo.application.util.matcher.PrefixMatcher;
+import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.editor.completion.AutoCompletionPolicy;
+import consulo.language.editor.completion.CompletionParameters;
 import consulo.language.editor.completion.CompletionProvider;
+import consulo.language.editor.completion.CompletionResultSet;
+import consulo.language.editor.completion.lookup.InsertHandler;
+import consulo.language.editor.completion.lookup.LookupElement;
+import consulo.language.editor.completion.lookup.LookupElementBuilder;
+import consulo.language.editor.completion.lookup.PrioritizedLookupElement;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.ProcessingContext;
+import consulo.project.Project;
+import consulo.util.collection.JBIterable;
+import consulo.util.lang.Comparing;
+import consulo.util.lang.ObjectUtil;
+import consulo.util.lang.StringUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.function.Consumer;
 
 /**
  * User: anna
@@ -110,11 +114,11 @@ public class FunctionalExpressionCompletionProvider implements CompletionProvide
             final LookupElementBuilder builder = LookupElementBuilder.create(functionalInterfaceMethod, paramsString + " -> ").withPresentableText(paramsString + " -> {}").withTypeText
                 (functionalInterfaceType.getPresentableText()).withIcon(AllIcons.Nodes.Function);
             LookupElement lambdaElement = builder.withAutoCompletionPolicy(AutoCompletionPolicy.NEVER_AUTOCOMPLETE);
-            result.consume(smart ? lambdaElement : PrioritizedLookupElement.withPriority(lambdaElement, 1));
+            result.accept(smart ? lambdaElement : PrioritizedLookupElement.withPriority(lambdaElement, 1));
           }
 
           addMethodReferenceVariants(smart, addInheritors, parameters, matcher, functionalInterfaceType, functionalInterfaceMethod, params, originalPosition, substitutor, element -> result
-              .consume(smart ? JavaSmartCompletionContributor.decorate(element, Arrays.asList(expectedTypes)) : element));
+              .accept(smart ? JavaSmartCompletionContributor.decorate(element, Arrays.asList(expectedTypes)) : element));
         }
       }
     }
@@ -137,15 +141,15 @@ public class FunctionalExpressionCompletionProvider implements CompletionProvide
 
     if (params.length > 0) {
       for (LookupElement element : collectVariantsByReceiver(!smart, functionalInterfaceType, params, originalPosition, substitutor, expectedReturnType)) {
-        result.consume(element);
+        result.accept(element);
       }
     }
     for (LookupElement element : collectThisVariants(functionalInterfaceType, params, originalPosition, substitutor, expectedReturnType)) {
-      result.consume(element);
+      result.accept(element);
     }
 
     for (LookupElement element : collectStaticVariants(functionalInterfaceType, params, originalPosition, substitutor, expectedReturnType)) {
-      result.consume(element);
+      result.accept(element);
     }
 
     Consumer<PsiType> consumer = eachReturnType ->
@@ -159,20 +163,20 @@ public class FunctionalExpressionCompletionProvider implements CompletionProvide
         PsiMethod[] constructors = psiClass.getConstructors();
         for (PsiMethod psiMethod : constructors) {
           if (areParameterTypesAppropriate(psiMethod, params, substitutor, 0)) {
-            result.consume(createConstructorReferenceLookup(functionalInterfaceType, eachReturnType));
+            result.accept(createConstructorReferenceLookup(functionalInterfaceType, eachReturnType));
           }
         }
         if (constructors.length == 0 && params.length == 0) {
-          result.consume(createConstructorReferenceLookup(functionalInterfaceType, eachReturnType));
+          result.accept(createConstructorReferenceLookup(functionalInterfaceType, eachReturnType));
         }
       } else if (params.length == 1 && PsiType.INT.equals(params[0].getType())) {
-        result.consume(createConstructorReferenceLookup(functionalInterfaceType, eachReturnType));
+        result.accept(createConstructorReferenceLookup(functionalInterfaceType, eachReturnType));
       }
     };
     if (addInheritors && expectedReturnType instanceof PsiClassType) {
       JavaInheritorsGetter.processInheritors(parameters, Collections.singletonList((PsiClassType) expectedReturnType), matcher, consumer);
     } else {
-      consumer.consume(expectedReturnType);
+      consumer.accept(expectedReturnType);
     }
   }
 

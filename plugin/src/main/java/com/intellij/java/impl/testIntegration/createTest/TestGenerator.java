@@ -15,15 +15,32 @@
  */
 package com.intellij.java.impl.testIntegration.createTest;
 
-import consulo.project.Project;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ExtensionAPI;
+import consulo.application.Application;
+import consulo.component.extension.ExtensionPointCacheKey;
+import consulo.language.Language;
+import consulo.language.extension.ByLanguageValue;
+import consulo.language.extension.LanguageExtension;
+import consulo.language.extension.LanguageOneToOne;
 import consulo.language.psi.PsiElement;
+import consulo.project.Project;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
  * @author Maxim.Medvedev
  */
-public interface TestGenerator {
+@ExtensionAPI(ComponentScope.APPLICATION)
+public interface TestGenerator extends LanguageExtension {
+  ExtensionPointCacheKey<TestGenerator, ByLanguageValue<TestGenerator>> KEY = ExtensionPointCacheKey.create("TestGenerator", LanguageOneToOne.build());
+
+  @Nullable
+  static TestGenerator forLanguage(@Nonnull Language language) {
+    return Application.get().getExtensionPoint(TestGenerator.class).getOrBuildCache(KEY).get(language);
+  }
+
   /**
    *
    * @return generated test (i.e. PsiClass)

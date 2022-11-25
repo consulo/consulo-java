@@ -15,31 +15,24 @@
  */
 package com.intellij.java.impl.ig.encapsulation;
 
-import java.awt.BorderLayout;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.swing.JComponent;
-import javax.swing.JPanel;
-
-import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.impl.codeInspection.util.SpecialAnnotationsUtil;
-import com.intellij.java.language.psi.PsiClass;
-import com.intellij.java.language.psi.PsiClassType;
-import com.intellij.java.language.psi.PsiField;
-import com.intellij.java.language.psi.PsiModifier;
-import com.intellij.java.language.psi.PsiType;
-import consulo.ui.CheckBox;
+import com.intellij.java.impl.ig.fixes.AddToIgnoreIfAnnotatedByListQuickFix;
+import com.intellij.java.impl.ig.fixes.EncapsulateVariableFix;
+import com.intellij.java.language.codeInsight.AnnotationUtil;
+import com.intellij.java.language.psi.*;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.fixes.AddToIgnoreIfAnnotatedByListQuickFix;
-import com.intellij.java.impl.ig.fixes.EncapsulateVariableFix;
 import com.siyeh.ig.psiutils.ClassUtils;
 import com.siyeh.ig.ui.ExternalizableStringSet;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.swing.*;
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PublicFieldInspection extends BaseInspection {
 
@@ -69,7 +62,7 @@ public class PublicFieldInspection extends BaseInspection {
     final JPanel annotationsListControl = SpecialAnnotationsUtil.createSpecialAnnotationsListControl(
       ignorableAnnotations, InspectionGadgetsBundle.message("ignore.if.annotated.by"));
     panel.add(annotationsListControl, BorderLayout.CENTER);
-    final CheckBox checkBox = new CheckBox(InspectionGadgetsBundle.message(
+    final consulo.language.editor.inspection.ui.CheckBox checkBox = new consulo.language.editor.inspection.ui.CheckBox(InspectionGadgetsBundle.message(
       "public.field.ignore.enum.type.fields.option"), this, "ignoreEnums");
     panel.add(checkBox, BorderLayout.SOUTH);
     return panel;

@@ -15,22 +15,22 @@
  */
 package com.intellij.java.impl.codeInsight.intention.impl;
 
-import javax.swing.JTree;
-
-import consulo.ide.impl.idea.codeInsight.generation.ClassMember;
-import consulo.ide.impl.idea.codeInsight.generation.MemberChooserObject;
 import com.intellij.java.impl.codeInsight.generation.PsiMethodMember;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiParameter;
-import consulo.ui.ex.awt.SimpleColoredComponent;
+import consulo.language.editor.generation.ClassMember;
+import consulo.language.editor.generation.MemberChooserObject;
+import consulo.language.icon.IconDescriptorUpdaters;
+import consulo.ui.ex.ColoredTextContainer;
 import consulo.ui.ex.SimpleTextAttributes;
 import consulo.ui.ex.awt.speedSearch.SpeedSearchUtil;
-import consulo.language.icon.IconDescriptorUpdaters;
+
+import javax.swing.*;
 
 /**
-* User: anna
-* Date: 8/2/12
-*/
+ * User: anna
+ * Date: 8/2/12
+ */
 public class ParameterClassMember implements ClassMember {
   private PsiParameter myParameter;
 
@@ -40,11 +40,11 @@ public class ParameterClassMember implements ClassMember {
 
   @Override
   public MemberChooserObject getParentNodeDelegate() {
-    return new PsiMethodMember((PsiMethod)myParameter.getDeclarationScope());
+    return new PsiMethodMember((PsiMethod) myParameter.getDeclarationScope());
   }
 
   @Override
-  public void renderTreeNode(SimpleColoredComponent component, JTree tree) {
+  public void renderTreeNode(ColoredTextContainer component, JTree tree) {
     SpeedSearchUtil.appendFragmentsForSpeedSearch(tree, getText(), SimpleTextAttributes.REGULAR_ATTRIBUTES, false, component);
     component.setIcon(IconDescriptorUpdaters.getIcon(myParameter, 0));
   }

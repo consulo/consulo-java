@@ -15,15 +15,16 @@
  */
 package com.intellij.java.execution.impl.ui;
 
-import consulo.application.AllIcons;
 import com.intellij.java.language.projectRoots.JavaSdk;
-import consulo.ide.impl.idea.openapi.roots.ui.configuration.projectRoot.ProjectSdksModel;
+import consulo.annotation.DeprecationInfo;
+import consulo.application.AllIcons;
+import consulo.content.bundle.BundleHolder;
+import consulo.ide.setting.ShowSettingsUtil;
+import consulo.java.execution.JavaExecutionBundle;
+import consulo.module.ui.awt.SdkComboBox;
 import consulo.ui.ex.awt.LabeledComponent;
 import consulo.ui.ex.awt.PanelWithAnchor;
 import consulo.ui.ex.awt.Wrapper;
-import consulo.annotation.DeprecationInfo;
-import consulo.java.execution.JavaExecutionBundle;
-import consulo.roots.ui.configuration.SdkComboBox;
 
 import javax.annotation.Nullable;
 import javax.swing.*;
@@ -33,76 +34,64 @@ import java.util.Objects;
 /**
  * @author nik
  */
-public class JrePathEditor extends Wrapper implements PanelWithAnchor
-{
-	private SdkComboBox mySdkComboBox;
+public class JrePathEditor extends Wrapper implements PanelWithAnchor {
+  private SdkComboBox mySdkComboBox;
 
-	private LabeledComponent<SdkComboBox> myLabeledComponent;
+  private LabeledComponent<SdkComboBox> myLabeledComponent;
 
-	public JrePathEditor(DefaultJreSelector defaultJreSelector)
-	{
-		this();
-	}
+  public JrePathEditor(DefaultJreSelector defaultJreSelector) {
+    this();
+  }
 
-	/**
-	 * This constructor can be used in UI forms
-	 */
-	public JrePathEditor()
-	{
-		ProjectSdksModel model = new ProjectSdksModel();
-		model.reset();
+  /**
+   * This constructor can be used in UI forms
+   */
+  public JrePathEditor() {
+    BundleHolder model = ShowSettingsUtil.getInstance().getSdksModel();
 
-		mySdkComboBox = new SdkComboBox(model, id -> Objects.equals(JavaSdk.getInstance(), id), null, "Auto Select", AllIcons.Actions.FindPlain);
+    mySdkComboBox = new SdkComboBox(model, id -> Objects.equals(JavaSdk.getInstance(), id), null, "Auto Select", AllIcons.Actions.FindPlain);
 
-		myLabeledComponent = LabeledComponent.create(mySdkComboBox, JavaExecutionBundle.message("run.configuration.jre.label"));
+    myLabeledComponent = LabeledComponent.create(mySdkComboBox, JavaExecutionBundle.message("run.configuration.jre.label"));
 
-		setContent(myLabeledComponent);
-	}
+    setContent(myLabeledComponent);
+  }
 
-	@Nullable
-	public String getJrePathOrName()
-	{
-		return mySdkComboBox.getSelectedSdkName();
-	}
+  @Nullable
+  public String getJrePathOrName() {
+    return mySdkComboBox.getSelectedSdkName();
+  }
 
-	public boolean isAlternativeJreSelected()
-	{
-		SdkComboBox.SdkComboBoxItem selectedItem = mySdkComboBox.getSelectedItem();
-		return !(selectedItem instanceof SdkComboBox.NullSdkComboBoxItem);
-	}
+  public boolean isAlternativeJreSelected() {
+    SdkComboBox.SdkComboBoxItem selectedItem = mySdkComboBox.getSelectedItem();
+    return !(selectedItem instanceof SdkComboBox.NullSdkComboBoxItem);
+  }
 
-	@Deprecated
-	public void setDefaultJreSelector(DefaultJreSelector defaultJreSelector)
-	{
-	}
+  @Deprecated
+  public void setDefaultJreSelector(DefaultJreSelector defaultJreSelector) {
+  }
 
-	@Deprecated
-	@DeprecationInfo("Use #setByName()")
-	public void setPathOrName(@Nullable String pathOrName, boolean useAlternativeJre)
-	{
-		setByName(pathOrName);
-	}
+  @Deprecated
+  @DeprecationInfo("Use #setByName()")
+  public void setPathOrName(@Nullable String pathOrName, boolean useAlternativeJre) {
+    setByName(pathOrName);
+  }
 
-	public void setByName(@Nullable String name)
-	{
-		mySdkComboBox.setSelectedSdk(name);
-	}
+  public void setByName(@Nullable String name) {
+    mySdkComboBox.setSelectedSdk(name);
+  }
 
-	@Override
-	public JComponent getAnchor()
-	{
-		return myLabeledComponent.getAnchor();
-	}
+  @Override
+  public JComponent getAnchor() {
+    return myLabeledComponent.getAnchor();
+  }
 
-	@Override
-	public void setAnchor(JComponent anchor)
-	{
-		myLabeledComponent.setAnchor(anchor);
-	}
+  @Override
+  public void setAnchor(JComponent anchor) {
+    myLabeledComponent.setAnchor(anchor);
+  }
 
-	public void addActionListener(ActionListener listener)
-	{
-		mySdkComboBox.addActionListener(listener);
-	}
+  public void addActionListener(ActionListener listener) {
+    mySdkComboBox.addActionListener(listener);
+  }
 }
 

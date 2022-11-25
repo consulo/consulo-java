@@ -15,7 +15,6 @@
  */
 package com.intellij.java.impl.ide.util;
 
-import consulo.ide.impl.idea.ide.util.AbstractTreeClassChooserDialog;
 import com.intellij.java.impl.ide.projectView.impl.nodes.ClassTreeNode;
 import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
 import com.intellij.java.language.psi.PsiClass;
@@ -24,18 +23,22 @@ import com.intellij.java.language.psi.search.PsiShortNamesCache;
 import com.intellij.java.language.util.ClassFilter;
 import com.intellij.java.language.util.TreeClassChooser;
 import consulo.application.ApplicationManager;
-import consulo.project.Project;
 import consulo.application.util.function.Computable;
-import consulo.util.lang.function.Condition;
-import consulo.util.lang.function.Conditions;
-import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.application.util.query.Query;
+import consulo.ide.impl.idea.ide.util.AbstractTreeClassChooserDialog;
+import consulo.language.editor.ui.TreeClassInheritorsProvider;
+import consulo.language.psi.PsiDirectory;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.project.Project;
+import consulo.project.content.scope.ProjectAwareSearchScope;
 import consulo.util.collection.ContainerUtil;
+import consulo.util.lang.function.Conditions;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.swing.tree.DefaultMutableTreeNode;
 import java.util.List;
+import java.util.function.Predicate;
 
 /**
  * @author traff
@@ -84,13 +87,13 @@ public class TreeJavaClassChooserDialog extends AbstractTreeClassChooserDialog<P
   }
 
   @Nullable
-  private static Filter<PsiClass> createFilter(@Nullable final ClassFilter classFilter) {
+  private static Predicate<PsiClass> createFilter(@Nullable final ClassFilter classFilter) {
     if (classFilter == null) {
       return null;
     } else {
-      return new Filter<PsiClass>() {
+      return new Predicate<PsiClass>() {
         @Override
-        public boolean isAccepted(final PsiClass element) {
+        public boolean test(final PsiClass element) {
           return ApplicationManager.getApplication().runReadAction(new Computable<Boolean>() {
             @Override
             public Boolean compute() {
@@ -106,20 +109,25 @@ public class TreeJavaClassChooserDialog extends AbstractTreeClassChooserDialog<P
   protected List<PsiClass> getClassesByName(final String name,
                                             final boolean checkBoxState,
                                             final String pattern,
-                                            final GlobalSearchScope searchScope) {
+                                            final ProjectAwareSearchScope searchScope) {
     final PsiShortNamesCache cache = PsiShortNamesCache.getInstance(getProject());
     PsiClass[] classes =
-        cache.getClassesByName(name, checkBoxState ? searchScope : GlobalSearchScope.projectScope(getProject()).intersectWith(searchScope));
+        cache.getClassesByName(name, checkBoxState ? (GlobalSearchScope) searchScope : (GlobalSearchScope) GlobalSearchScope.projectScope(getProject()).intersectWith(searchScope));
     return ContainerUtil.newArrayList(classes);
   }
 
   @Nonnull
   @Override
-  protected BaseClassInheritorsProvider<PsiClass> getInheritorsProvider(@Nonnull PsiClass baseClass) {
-    return new JavaInheritorsProvider(getProject(), baseClass, getScope());
+  protected TreeClassInheritorsProvider<PsiClass> getInheritorsProvider(@Nonnull PsiClass baseClass) {
+    return new JavaInheritorsProvider(getProject(), baseClass, (GlobalSearchScope) getScope());
   }
 
-  private static class JavaInheritorsProvider extends BaseClassInheritorsProvider<PsiClass> {
+  @Override
+  public void selectDirectory(PsiDirectory directory) {
+    selectElementInTree(directory);
+  }
+
+  private static class JavaInheritorsProvider extends TreeClassInheritorsProvider<PsiClass> {
     private final Project myProject;
 
     public JavaInheritorsProvider(Project project, PsiClass baseClass, GlobalSearchScope scope) {
@@ -129,17 +137,17 @@ public class TreeJavaClassChooserDialog extends AbstractTreeClassChooserDialog<P
 
     @Nonnull
     @Override
-    protected Query<PsiClass> searchForInheritors(PsiClass baseClass, GlobalSearchScope searchScope, boolean checkDeep) {
+    public Query<PsiClass> searchForInheritors(PsiClass baseClass, ProjectAwareSearchScope searchScope, boolean checkDeep) {
       return ClassInheritorsSearch.search(baseClass, searchScope, checkDeep);
     }
 
     @Override
-    protected boolean isInheritor(PsiClass clazz, PsiClass baseClass, boolean checkDeep) {
+    public boolean isInheritor(PsiClass clazz, PsiClass baseClass, boolean checkDeep) {
       return clazz.isInheritor(baseClass, checkDeep);
     }
 
     @Override
-    protected String[] getNames() {
+    public String[] getNames() {
       return PsiShortNamesCache.getInstance(myProject).getAllClassNames();
     }
   }
@@ -148,12 +156,12 @@ public class TreeJavaClassChooserDialog extends AbstractTreeClassChooserDialog<P
     private final PsiClass myBase;
     private final boolean myAcceptsSelf;
     private final boolean myAcceptsInner;
-    private final Condition<? super PsiClass> myAdditionalCondition;
+    private final Predicate<? super PsiClass> myAdditionalCondition;
 
     public InheritanceJavaClassFilterImpl(PsiClass base,
                                           boolean acceptsSelf,
                                           boolean acceptInner,
-                                          Condition<? super PsiClass> additionalCondition) {
+                                          Predicate<? super PsiClass> additionalCondition) {
       myAcceptsSelf = acceptsSelf;
       myAcceptsInner = acceptInner;
       if (additionalCondition == null) {
@@ -165,7 +173,7 @@ public class TreeJavaClassChooserDialog extends AbstractTreeClassChooserDialog<P
 
     public boolean isAccepted(PsiClass aClass) {
       if (!myAcceptsInner && !(aClass.getParent() instanceof PsiJavaFile)) return false;
-      if (!myAdditionalCondition.value(aClass)) return false;
+      if (!myAdditionalCondition.test(aClass)) return false;
       // we've already checked for inheritance
       return myAcceptsSelf || !aClass.getManager().areElementsEquivalent(aClass, myBase);
     }

@@ -27,31 +27,31 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.MethodSignature;
 import com.intellij.java.language.psi.util.MethodSignatureUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
+import consulo.application.util.function.Processor;
 import consulo.codeEditor.Editor;
-import consulo.util.lang.Comparing;
-import com.intellij.openapi.util.Pass;
-import com.intellij.psi.*;
-import consulo.language.psi.scope.GlobalSearchScope;
-import consulo.language.psi.resolve.PsiElementProcessor;
 import consulo.content.scope.SearchScope;
-import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.editor.refactoring.event.RefactoringElementListener;
 import consulo.language.editor.refactoring.rename.PsiElementRenameHandler;
 import consulo.language.editor.refactoring.rename.RenameProcessor;
 import consulo.language.editor.refactoring.rename.UnresolvableCollisionUsageInfo;
-import consulo.usage.MoveRenameUsageInfo;
 import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
-import consulo.usage.UsageInfo;
+import consulo.language.psi.*;
+import consulo.language.psi.resolve.PsiElementProcessor;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
-import consulo.application.util.function.Processor;
-import consulo.util.collection.MultiMap;
 import consulo.logging.Logger;
+import consulo.usage.MoveRenameUsageInfo;
+import consulo.usage.UsageInfo;
+import consulo.util.collection.MultiMap;
+import consulo.util.lang.Comparing;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.function.Consumer;
 
 public class RenameJavaMethodProcessor extends RenameJavaMemberProcessor {
   private static final Logger LOG = Logger.getInstance(RenameJavaMethodProcessor.class);
@@ -316,13 +316,13 @@ public class RenameJavaMethodProcessor extends RenameJavaMemberProcessor {
   @Override
   public void substituteElementToRename(@Nonnull PsiElement element,
                                         @Nonnull final Editor editor,
-                                        @Nonnull final Pass<PsiElement> renameCallback) {
+                                        @Nonnull final Consumer<PsiElement> renameCallback) {
     final PsiMethod psiMethod = (PsiMethod) element;
     if (psiMethod.isConstructor()) {
       final PsiClass containingClass = psiMethod.getContainingClass();
       if (containingClass == null) return;
       if (!Comparing.strEqual(psiMethod.getName(), containingClass.getName())) {
-        renameCallback.pass(psiMethod);
+        renameCallback.accept(psiMethod);
         return;
       }
       super.substituteElementToRename(element, editor, renameCallback);
@@ -331,7 +331,7 @@ public class RenameJavaMethodProcessor extends RenameJavaMemberProcessor {
         @Override
         public boolean execute(@Nonnull PsiMethod method) {
           if (!PsiElementRenameHandler.canRename(method.getProject(), editor, method)) return false;
-          renameCallback.pass(method);
+          renameCallback.accept(method);
           return false;
         }
       }, editor);

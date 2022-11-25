@@ -16,14 +16,15 @@
  */
 package com.intellij.java.impl.codeInsight.generation.surroundWith;
 
-import consulo.language.editor.CodeInsightBundle;
 import com.intellij.java.language.psi.*;
 import consulo.codeEditor.Editor;
-import consulo.project.Project;
 import consulo.document.util.TextRange;
-import com.intellij.psi.*;
 import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.editor.CodeInsightBundle;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiManager;
 import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
 import org.jetbrains.annotations.NonNls;
 
 class JavaWithWhileSurrounder extends JavaStatementsSurrounder{

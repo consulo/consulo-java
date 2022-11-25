@@ -19,24 +19,24 @@
  */
 package com.intellij.java.impl.codeInsight.intention.impl;
 
-import javax.annotation.Nonnull;
-
-import consulo.language.editor.CodeInsightBundle;
-import consulo.language.editor.FileModificationService;
-import consulo.language.editor.intention.PsiElementBaseIntentionAction;
+import com.intellij.java.language.impl.psi.impl.source.tree.java.PsiReferenceExpressionImpl;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.logging.Logger;
 import consulo.codeEditor.Editor;
-import consulo.project.Project;
-import consulo.util.lang.Comparing;
-import consulo.util.dataholder.Key;
-import com.intellij.psi.*;
-import com.intellij.java.language.impl.psi.impl.source.tree.java.PsiReferenceExpressionImpl;
-import com.intellij.psi.util.*;
+import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.FileModificationService;
+import consulo.language.editor.intention.PsiElementBaseIntentionAction;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.logging.Logger;
+import consulo.project.Project;
+import consulo.util.dataholder.Key;
+import consulo.util.lang.Comparing;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class AddSingleMemberStaticImportAction extends PsiElementBaseIntentionAction {

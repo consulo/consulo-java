@@ -16,13 +16,12 @@
 
 package com.intellij.java.impl.psi.impl.beanProperties;
 
-import consulo.application.AllIcons;
-import com.intellij.ide.presentation.Presentation;
 import com.intellij.java.impl.refactoring.rename.BeanPropertyRenameHandler;
 import com.intellij.java.language.psi.PsiMethod;
-import consulo.language.psi.PsiNamedElement;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.util.PropertyUtil;
+import consulo.application.AllIcons;
+import consulo.language.psi.PsiNamedElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.ui.image.Image;
 
@@ -32,7 +31,7 @@ import javax.annotation.Nullable;
 /**
  * Provide {@link BeanPropertyRenameHandler} if necessary.
  */
-@Presentation(icon = "AllIcons.Nodes.Property")
+//@Presentation(icon = "AllIcons.Nodes.Property")
 public class BeanProperty {
 
   private final PsiMethod myMethod;

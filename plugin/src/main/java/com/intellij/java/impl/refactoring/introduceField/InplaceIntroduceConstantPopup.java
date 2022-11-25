@@ -15,23 +15,23 @@
  */
 package com.intellij.java.impl.refactoring.introduceField;
 
+import com.intellij.java.impl.refactoring.JavaRefactoringSettings;
+import com.intellij.java.impl.refactoring.ui.TypeSelectorManagerImpl;
+import com.intellij.java.impl.refactoring.util.occurrences.OccurrenceManager;
 import com.intellij.java.language.psi.*;
-import consulo.application.ApplicationManager;
-import consulo.application.Result;
-import consulo.language.editor.WriteCommandAction;
-import consulo.codeEditor.Editor;
-import consulo.project.Project;
-import consulo.application.util.function.Computable;
-import com.intellij.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.java.impl.refactoring.JavaRefactoringSettings;
+import consulo.application.ApplicationManager;
+import consulo.application.Result;
+import consulo.application.util.function.Computable;
+import consulo.codeEditor.Editor;
+import consulo.language.editor.WriteCommandAction;
 import consulo.language.editor.refactoring.action.RefactoringActionHandler;
-import com.intellij.java.impl.refactoring.ui.TypeSelectorManagerImpl;
-import com.intellij.java.impl.refactoring.util.occurrences.OccurrenceManager;
-import javax.annotation.Nonnull;
+import consulo.language.psi.PsiElement;
+import consulo.project.Project;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.swing.*;
 import java.awt.*;
@@ -45,7 +45,6 @@ import java.awt.event.ItemListener;
 public class InplaceIntroduceConstantPopup extends AbstractInplaceIntroduceFieldPopup {
 
   private final String myInitializerText;
-
 
   private JCheckBox myReplaceAllCb;
 
@@ -61,13 +60,13 @@ public class InplaceIntroduceConstantPopup extends AbstractInplaceIntroduceField
                                        PsiElement anchorElement,
                                        PsiElement anchorElementIfAll, OccurrenceManager occurrenceManager) {
     super(project, editor, expr, localVariable, occurrences, typeSelectorManager, IntroduceConstantHandler.REFACTORING_NAME,
-          parentClass, anchorElement, occurrenceManager, anchorElementIfAll);
+        parentClass, anchorElement, occurrenceManager, anchorElementIfAll);
 
     myInitializerText = getExprText(expr, localVariable);
 
 
     GridBagConstraints gc =
-      new GridBagConstraints(0, 0, 1, 1, 1, 0, GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0);
+        new GridBagConstraints(0, 0, 1, 1, 1, 0, GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0);
     myWholePanel.add(getPreviewComponent(), gc);
 
     gc.gridy = 1;
@@ -83,8 +82,7 @@ public class InplaceIntroduceConstantPopup extends AbstractInplaceIntroduceField
     if (localVariable != null) {
       final PsiExpression initializer = localVariable.getInitializer();
       return initializer != null ? initializer.getText() : exprText;
-    }
-    else {
+    } else {
       return exprText;
     }
   }
@@ -92,8 +90,8 @@ public class InplaceIntroduceConstantPopup extends AbstractInplaceIntroduceField
   private JPanel createRightPanel() {
     final JPanel right = new JPanel(new GridBagLayout());
     final GridBagConstraints rgc =
-      new GridBagConstraints(0, GridBagConstraints.RELATIVE, 1, 1, 1, 0, GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
-                             new Insets(0, 0, 0, 0), 0, 0);
+        new GridBagConstraints(0, GridBagConstraints.RELATIVE, 1, 1, 1, 0, GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
+            new Insets(0, 0, 0, 0), 0, 0);
     myReplaceAllCb = new JCheckBox("Replace all occurrences");
     myReplaceAllCb.setMnemonic('a');
     myReplaceAllCb.setFocusable(false);
@@ -106,12 +104,12 @@ public class InplaceIntroduceConstantPopup extends AbstractInplaceIntroduceField
   private JPanel createLeftPanel() {
     final JPanel left = new JPanel(new GridBagLayout());
     myMoveToAnotherClassCb =
-      new JCheckBox("Move to another class", JavaRefactoringSettings.getInstance().INTRODUCE_CONSTANT_MOVE_TO_ANOTHER_CLASS);
+        new JCheckBox("Move to another class", JavaRefactoringSettings.getInstance().INTRODUCE_CONSTANT_MOVE_TO_ANOTHER_CLASS);
     myMoveToAnotherClassCb.setMnemonic('m');
     myMoveToAnotherClassCb.setFocusable(false);
     left.add(myMoveToAnotherClassCb,
-             new GridBagConstraints(0, 0, 1, 1, 1, 0, GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0),
-                                    0, 0));
+        new GridBagConstraints(0, 0, 1, 1, 1, 0, GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0),
+            0, 0));
     return left;
   }
 
@@ -136,8 +134,8 @@ public class InplaceIntroduceConstantPopup extends AbstractInplaceIntroduceField
       public PsiField compute() {
 
         PsiField field = elementFactory.createFieldFromText(
-          psiType.getCanonicalText() + " " + (getInputName() != null ? getInputName() : names[0]) + " = " + myInitializerText + ";",
-          myParentClass);
+            psiType.getCanonicalText() + " " + (getInputName() != null ? getInputName() : names[0]) + " = " + myInitializerText + ";",
+            myParentClass);
         PsiUtil.setModifierProperty(field, PsiModifier.FINAL, true);
         PsiUtil.setModifierProperty(field, PsiModifier.STATIC, true);
         final String visibility = getSelectedVisibility();
@@ -150,9 +148,9 @@ public class InplaceIntroduceConstantPopup extends AbstractInplaceIntroduceField
              finalAnchorElement != null && finalAnchorElement.getParent() != myParentClass;
              finalAnchorElement = finalAnchorElement.getParent()) {
         }
-        PsiMember anchorMember = finalAnchorElement instanceof PsiMember ? (PsiMember)finalAnchorElement : null;
+        PsiMember anchorMember = finalAnchorElement instanceof PsiMember ? (PsiMember) finalAnchorElement : null;
         field = BaseExpressionToFieldHandler.ConvertToFieldRunnable
-          .appendField(myExpr, BaseExpressionToFieldHandler.InitializationPlace.IN_FIELD_DECLARATION, myParentClass, myParentClass, field, anchorMember);
+            .appendField(myExpr, BaseExpressionToFieldHandler.InitializationPlace.IN_FIELD_DECLARATION, myParentClass, myParentClass, field, anchorMember);
         myFieldRangeStart = myEditor.getDocument().createRangeMarker(field.getTextRange());
         return field;
       }
@@ -162,8 +160,8 @@ public class InplaceIntroduceConstantPopup extends AbstractInplaceIntroduceField
   @Override
   protected String[] suggestNames(PsiType defaultType, String propName) {
     return IntroduceConstantDialog.createNameSuggestionGenerator(propName, myExpr != null && myExpr.isValid() ? myExpr : null, JavaCodeStyleManager.getInstance(myProject), null,
-                                                                 myParentClass)
-      .getSuggestedNameInfo(defaultType).names;
+        myParentClass)
+        .getSuggestedNameInfo(defaultType).names;
   }
 
   @Override
@@ -198,15 +196,13 @@ public class InplaceIntroduceConstantPopup extends AbstractInplaceIntroduceField
           myEditor.putUserData(ACTIVE_INTRODUCE, InplaceIntroduceConstantPopup.this);
           try {
             final IntroduceConstantHandler constantHandler = new IntroduceConstantHandler();
-            final PsiLocalVariable localVariable = (PsiLocalVariable)getLocalVariable();
+            final PsiLocalVariable localVariable = (PsiLocalVariable) getLocalVariable();
             if (localVariable != null) {
               constantHandler.invokeImpl(myProject, localVariable, myEditor);
-            }
-            else {
+            } else {
               constantHandler.invokeImpl(myProject, myExpr, myEditor);
             }
-          }
-          finally {
+          } finally {
             myEditor.putUserData(INTRODUCE_RESTART, false);
             myEditor.putUserData(ACTIVE_INTRODUCE, null);
             releaseResources();
@@ -232,30 +228,29 @@ public class InplaceIntroduceConstantPopup extends AbstractInplaceIntroduceField
   @Override
   protected void performIntroduce() {
     final BaseExpressionToFieldHandler.Settings settings =
-      new BaseExpressionToFieldHandler.Settings(getInputName(),
-                                                getExpr(),
-                                                getOccurrences(),
-                                                isReplaceAllOccurrences(), true,
-                                                true,
-                                                BaseExpressionToFieldHandler.InitializationPlace.IN_FIELD_DECLARATION,
-                                                getSelectedVisibility(), (PsiLocalVariable)getLocalVariable(),
-                                                getType(),
-                                                true,
-                                                myParentClass, false, false);
+        new BaseExpressionToFieldHandler.Settings(getInputName(),
+            getExpr(),
+            getOccurrences(),
+            isReplaceAllOccurrences(), true,
+            true,
+            BaseExpressionToFieldHandler.InitializationPlace.IN_FIELD_DECLARATION,
+            getSelectedVisibility(), (PsiLocalVariable) getLocalVariable(),
+            getType(),
+            true,
+            myParentClass, false, false);
     new WriteCommandAction(myProject, getCommandName(), getCommandName()) {
       @Override
       protected void run(Result result) throws Throwable {
         if (getLocalVariable() != null) {
           final LocalToFieldHandler.IntroduceFieldRunnable fieldRunnable =
-            new LocalToFieldHandler.IntroduceFieldRunnable(false, (PsiLocalVariable)getLocalVariable(), myParentClass, settings, true,
-                                                           myOccurrences);
+              new LocalToFieldHandler.IntroduceFieldRunnable(false, (PsiLocalVariable) getLocalVariable(), myParentClass, settings, true,
+                  myOccurrences);
           fieldRunnable.run();
-        }
-        else {
+        } else {
           final BaseExpressionToFieldHandler.ConvertToFieldRunnable convertToFieldRunnable =
-            new BaseExpressionToFieldHandler.ConvertToFieldRunnable(myExpr, settings, settings.getForcedType(),
-                                                                    myOccurrences, myOccurrenceManager,
-                                                                    getAnchorElementIfAll(), getAnchorElement(), myEditor, myParentClass);
+              new BaseExpressionToFieldHandler.ConvertToFieldRunnable(myExpr, settings, settings.getForcedType(),
+                  myOccurrences, myOccurrenceManager,
+                  getAnchorElementIfAll(), getAnchorElement(), myEditor, myParentClass);
           convertToFieldRunnable.run();
         }
       }

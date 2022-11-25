@@ -15,38 +15,39 @@
  */
 package com.intellij.java.impl.refactoring.typeCook.deductive.builder;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Map;
-
-import com.intellij.java.language.impl.JavaFileType;
-import com.intellij.java.language.impl.psi.PsiTypeVariable;
-import com.intellij.java.language.psi.*;
-import consulo.logging.Logger;
-import consulo.project.Project;
-import com.intellij.psi.*;
-import consulo.language.psi.scope.GlobalSearchScope;
-import consulo.language.psi.search.PsiSearchHelper;
-import consulo.content.scope.SearchScope;
-import com.intellij.java.indexing.search.searches.OverridingMethodsSearch;
-import consulo.language.psi.search.ReferencesSearch;
-import com.intellij.java.language.psi.util.InheritanceUtil;
-import consulo.language.psi.util.PsiTreeUtil;
-import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.java.language.psi.util.TypeConversionUtil;
 import com.intellij.java.impl.refactoring.typeCook.Settings;
 import com.intellij.java.impl.refactoring.typeCook.Util;
 import com.intellij.java.impl.refactoring.typeCook.deductive.PsiTypeVariableFactory;
 import com.intellij.java.impl.refactoring.typeCook.deductive.util.VictimCollector;
-import java.util.HashMap;
+import com.intellij.java.indexing.search.searches.OverridingMethodsSearch;
+import com.intellij.java.language.impl.JavaFileType;
+import com.intellij.java.language.impl.psi.PsiTypeVariable;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.InheritanceUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.TypeConversionUtil;
+import consulo.content.scope.SearchScope;
 import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.impl.psi.PsiAnchor;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiManager;
+import consulo.language.psi.PsiReference;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.search.PsiSearchHelper;
+import consulo.language.psi.search.ReferencesSearch;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.logging.Logger;
+import consulo.project.Project;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 
 /**
- * Created by IntelliJ IDEA.
  * User: db
  * Date: 27.06.2003
  * Time: 22:48:08
- * To change this template use Options | File Templates.
  */
 public class SystemBuilder {
   private static final Logger LOG = Logger.getInstance(SystemBuilder.class);

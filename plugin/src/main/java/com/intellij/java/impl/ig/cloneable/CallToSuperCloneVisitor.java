@@ -16,7 +16,7 @@
 package com.intellij.java.impl.ig.cloneable;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import com.siyeh.HardcodedMethodConstants;
 import javax.annotation.Nonnull;
 

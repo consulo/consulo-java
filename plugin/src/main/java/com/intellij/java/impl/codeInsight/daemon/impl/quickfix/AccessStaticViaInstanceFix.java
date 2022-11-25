@@ -15,26 +15,27 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
-import consulo.language.editor.FileModificationService;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.HighlightMessageUtil;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.HighlightUtil;
-import consulo.language.editor.highlight.HighlightManager;
-import consulo.language.editor.inspection.LocalQuickFixAndIntentionActionOnPsiElement;
 import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.PsiExpressionTrimRenderer;
+import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.application.ApplicationManager;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.EditorColors;
 import consulo.colorScheme.EditorColorsManager;
 import consulo.colorScheme.TextAttributes;
-import consulo.project.Project;
-import com.intellij.psi.*;
-import com.intellij.java.language.psi.util.PsiExpressionTrimRenderer;
-import consulo.language.psi.util.PsiTreeUtil;
-import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.language.psi.PsiUtilCore;
-import consulo.language.util.IncorrectOperationException;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.language.editor.FileModificationService;
+import consulo.language.editor.highlight.HighlightManager;
+import consulo.language.editor.inspection.LocalQuickFixAndIntentionActionOnPsiElement;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiUtilCore;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
+import consulo.project.Project;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

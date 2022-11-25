@@ -15,13 +15,13 @@
  */
 package com.intellij.java.impl.ide.structureView.impl.java;
 
-import consulo.application.AllIcons;
-import consulo.ide.IdeBundle;
-import consulo.project.ui.view.tree.AbstractTreeNode;
-import com.intellij.ide.util.treeView.smartTree.*;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifier;
+import consulo.application.AllIcons;
+import consulo.fileEditor.structureView.tree.*;
+import consulo.ide.IdeBundle;
+import consulo.project.ui.view.tree.AbstractTreeNode;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.dataholder.Key;
 import org.jetbrains.annotations.NonNls;
@@ -33,26 +33,26 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SuperTypesGrouper implements Grouper{
+public class SuperTypesGrouper implements Grouper {
   public static final Key<WeakReference<PsiMethod>> SUPER_METHOD_KEY = Key.create("StructureTreeBuilder.SUPER_METHOD_KEY");
-  @NonNls public static final String ID = "SHOW_INTERFACES";
+  @NonNls
+  public static final String ID = "SHOW_INTERFACES";
 
   @Nonnull
-  public Collection<Group> group(final AbstractTreeNode parent, Collection<TreeElement> children) {
-    if (isParentGrouped(parent)) return Collections.emptyList();
+  public Collection<Group> group(final Object parent, Collection<TreeElement> children) {
+    if (isParentGrouped((AbstractTreeNode) parent)) return Collections.emptyList();
     Map<Group, SuperTypeGroup> groups = new HashMap<Group, SuperTypeGroup>();
 
     for (TreeElement child : children) {
       if (child instanceof PsiMethodTreeElement) {
-        final PsiMethodTreeElement element = (PsiMethodTreeElement)child;
+        final PsiMethodTreeElement element = (PsiMethodTreeElement) child;
 
-        PsiMethod method = ((PsiMethodTreeElement)child).getMethod();
+        PsiMethod method = ((PsiMethodTreeElement) child).getMethod();
         if (element.isInherited()) {
           PsiClass groupClass = method.getContainingClass();
           final SuperTypeGroup group = getOrCreateGroup(groupClass, SuperTypeGroup.OwnershipType.INHERITS, groups);
           group.addMethod(child);
-        }
-        else {
+        } else {
           PsiMethod[] superMethods = method.findSuperMethods();
 
           if (superMethods.length > 0) {
@@ -65,13 +65,13 @@ public class SuperTypesGrouper implements Grouper{
                 break;
               }
             }
-            
+
             PsiMethod superMethod = superMethods[0];
             method.putUserData(SUPER_METHOD_KEY, new WeakReference<PsiMethod>(superMethod));
             PsiClass groupClass = superMethod.getContainingClass();
             boolean overrides = methodOverridesSuper(method, superMethod);
             final SuperTypeGroup.OwnershipType ownershipType =
-              overrides ? SuperTypeGroup.OwnershipType.OVERRIDES : SuperTypeGroup.OwnershipType.IMPLEMENTS;
+                overrides ? SuperTypeGroup.OwnershipType.OVERRIDES : SuperTypeGroup.OwnershipType.IMPLEMENTS;
             SuperTypeGroup group = getOrCreateGroup(groupClass, ownershipType, groups);
             group.addMethod(child);
           }
@@ -83,7 +83,7 @@ public class SuperTypesGrouper implements Grouper{
 
   private static SuperTypeGroup getOrCreateGroup(final PsiClass groupClass, final SuperTypeGroup.OwnershipType ownershipType, final Map<Group, SuperTypeGroup> groups) {
     SuperTypeGroup superTypeGroup =
-      new SuperTypeGroup(groupClass, ownershipType);
+        new SuperTypeGroup(groupClass, ownershipType);
     SuperTypeGroup existing = groups.get(superTypeGroup);
     if (existing == null) {
       groups.put(superTypeGroup, superTypeGroup);
@@ -95,17 +95,16 @@ public class SuperTypesGrouper implements Grouper{
   private static boolean isParentGrouped(AbstractTreeNode parent) {
     while (parent != null) {
       if (parent.getValue() instanceof SuperTypeGroup) return true;
-      parent = parent.getParent();
+      parent = (AbstractTreeNode) parent.getParent();
     }
     return false;
   }
 
   private static boolean methodOverridesSuper(PsiMethod method, PsiMethod superMethod) {
     boolean overrides = false;
-    if (method.hasModifierProperty(PsiModifier.ABSTRACT)){
+    if (method.hasModifierProperty(PsiModifier.ABSTRACT)) {
       overrides = true;
-    }
-    else if (!superMethod.hasModifierProperty(PsiModifier.ABSTRACT)){
+    } else if (!superMethod.hasModifierProperty(PsiModifier.ABSTRACT)) {
       overrides = true;
     }
     return overrides;
@@ -115,7 +114,7 @@ public class SuperTypesGrouper implements Grouper{
   @Nonnull
   public ActionPresentation getPresentation() {
     return new ActionPresentationData(IdeBundle.message("action.structureview.group.methods.by.defining.type"), null,
-                                      AllIcons.General.ImplementingMethod);
+        AllIcons.General.ImplementingMethod);
   }
 
   @Nonnull

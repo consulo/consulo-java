@@ -1,27 +1,31 @@
 // Copyright 2000-2018 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.impl.codeInsight.completion;
 
-import consulo.language.editor.CodeInsightUtilCore;
-import com.intellij.codeInsight.completion.*;
 import com.intellij.java.indexing.impl.search.AllClassesSearchExecutor;
 import com.intellij.java.language.psi.PsiClass;
-import consulo.document.Document;
-import consulo.codeEditor.Editor;
-import consulo.document.RangeMarker;
 import consulo.application.progress.ProgressManager;
-import consulo.project.Project;
-import com.intellij.psi.*;
-import consulo.language.codeStyle.PostprocessReformattingAspect;
-import consulo.language.psi.scope.GlobalSearchScope;
-import consulo.ide.impl.idea.util.Consumer;
-import consulo.language.util.IncorrectOperationException;
 import consulo.application.util.function.Processor;
+import consulo.application.util.matcher.PrefixMatcher;
+import consulo.codeEditor.Editor;
+import consulo.document.Document;
+import consulo.document.RangeMarker;
+import consulo.language.codeStyle.PostprocessReformattingAspect;
+import consulo.language.editor.CodeInsightUtilCore;
+import consulo.language.editor.completion.CompletionParameters;
+import consulo.language.editor.completion.OffsetKey;
+import consulo.language.editor.completion.lookup.InsertHandler;
+import consulo.language.editor.completion.lookup.InsertionContext;
+import consulo.language.psi.*;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
+import consulo.project.Project;
 
 import javax.annotation.Nonnull;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.function.Consumer;
 
 public class AllClassesGetter {
   private static final Logger LOG = Logger.getInstance(AllClassesGetter.class);
@@ -127,7 +131,7 @@ public class AllClassesGetter {
     final GlobalSearchScope scope = filterByScope ? context.getContainingFile().getResolveScope() : GlobalSearchScope.allScope(project);
 
     processJavaClasses(prefixMatcher, project, scope, new LimitedAccessibleClassPreprocessor(parameters, filterByScope, c -> {
-      consumer.consume(c);
+      consumer.accept(c);
       return true;
     }));
   }

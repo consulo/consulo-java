@@ -19,7 +19,7 @@ import consulo.language.editor.CodeInsightBundle;
 import com.intellij.java.language.psi.PsiDoWhileStatement;
 import com.intellij.java.language.psi.PsiLoopStatement;
 import com.intellij.java.language.psi.PsiStatement;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import com.intellij.java.language.impl.psi.impl.source.tree.java.PsiWhileStatementImpl;
 import consulo.language.util.IncorrectOperationException;
 

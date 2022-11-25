@@ -15,20 +15,21 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.TypeConversionUtil;
+import consulo.codeEditor.Editor;
+import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.editor.FileModificationService;
+import consulo.language.editor.intention.IntentionAction;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
-import consulo.language.editor.FileModificationService;
-import com.intellij.java.language.psi.*;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
-import consulo.language.editor.intention.IntentionAction;
-import consulo.codeEditor.Editor;
-import consulo.project.Project;
-import com.intellij.psi.*;
-import consulo.language.codeStyle.CodeStyleManager;
-import com.intellij.java.language.psi.util.TypeConversionUtil;
-import consulo.language.util.IncorrectOperationException;
-import consulo.java.language.module.util.JavaClassNames;
 
 /**
  * @author Danila Ponomarenko

@@ -20,16 +20,16 @@
  */
 package com.intellij.java.impl.analysis;
 
-import consulo.component.extension.Extensions;
-import consulo.project.Project;
+import consulo.content.internal.scope.CustomScopesProviderEx;
+import consulo.content.scope.NamedScope;
 import consulo.ide.impl.psi.search.scope.ProjectProductionScope;
 import consulo.ide.impl.psi.search.scope.TestsScope;
-import consulo.ide.impl.psi.search.scope.packageSet.CustomScopesProviderEx;
-import consulo.content.scope.NamedScope;
-import javax.annotation.Nonnull;
+import consulo.project.Project;
 
+import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * @author Konstantin Bulenkov
@@ -39,7 +39,7 @@ public class PackagesScopesProvider extends CustomScopesProviderEx {
   private final List<NamedScope> myScopes;
 
   public static PackagesScopesProvider getInstance(Project project) {
-    return Extensions.findExtension(CUSTOM_SCOPES_PROVIDER, project, PackagesScopesProvider.class);
+    return CUSTOM_SCOPES_PROVIDER.findExtension(project, PackagesScopesProvider.class);
   }
 
   public PackagesScopesProvider() {
@@ -49,9 +49,10 @@ public class PackagesScopesProvider extends CustomScopesProviderEx {
   }
 
   @Override
-  @Nonnull
-  public List<NamedScope> getCustomScopes() {
-    return myScopes;
+  public void acceptScopes(@Nonnull Consumer<NamedScope> consumer) {
+    for (NamedScope scope : myScopes) {
+      consumer.accept(scope);
+    }
   }
 
   public NamedScope getProjectProductionScope() {

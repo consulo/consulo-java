@@ -17,7 +17,7 @@ package com.intellij.java.impl.refactoring.changeSignature;
 
 import com.intellij.java.language.psi.*;
 import consulo.logging.Logger;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import consulo.usage.UsageInfo;
 
 /**

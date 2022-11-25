@@ -19,7 +19,7 @@ import com.intellij.java.language.psi.*;
 import consulo.application.HelpManager;
 import consulo.configurable.ConfigurationException;
 import consulo.project.Project;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
 import com.intellij.java.language.psi.codeStyle.VariableKind;

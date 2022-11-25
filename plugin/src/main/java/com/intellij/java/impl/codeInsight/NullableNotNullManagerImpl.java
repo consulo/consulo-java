@@ -6,23 +6,28 @@ import com.intellij.java.indexing.impl.stubs.index.JavaAnnotationIndex;
 import com.intellij.java.language.codeInsight.*;
 import com.intellij.java.language.impl.codeInsight.MetaAnnotationUtil;
 import com.intellij.java.language.psi.*;
+import consulo.application.util.CachedValueProvider;
+import consulo.application.util.CachedValuesManager;
 import consulo.component.persist.PersistentStateComponent;
 import consulo.component.persist.State;
 import consulo.component.persist.Storage;
-import consulo.project.Project;
+import consulo.component.util.ModificationTracker;
+import consulo.component.util.SimpleModificationTracker;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiModificationTracker;
+import consulo.language.psi.PsiPackage;
+import consulo.language.psi.PsiUtilCore;
+import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.module.content.ProjectFileIndex;
 import consulo.module.content.ProjectRootManager;
-import com.intellij.openapi.util.*;
-import consulo.util.lang.StringUtil;
-import consulo.virtualFileSystem.VirtualFile;
-import consulo.language.psi.PsiElement;
-import consulo.language.psi.scope.GlobalSearchScope;
-import consulo.application.util.CachedValueProvider;
-import consulo.application.util.CachedValuesManager;
-import consulo.language.psi.PsiModificationTracker;
-import consulo.language.psi.PsiUtilCore;
+import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
-import consulo.psi.PsiPackage;
+import consulo.util.lang.StringUtil;
+import consulo.util.xml.serializer.DefaultJDOMExternalizer;
+import consulo.util.xml.serializer.InvalidDataException;
+import consulo.util.xml.serializer.JDOMExternalizableStringList;
+import consulo.util.xml.serializer.WriteExternalException;
+import consulo.virtualFileSystem.VirtualFile;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import org.jdom.Element;
@@ -149,8 +154,8 @@ public class NullableNotNullManagerImpl extends NullableNotNullManager implement
   private boolean hasDefaultValues() {
     return NOT_NULL.equals(myDefaultNotNull) &&
         NULLABLE.equals(myDefaultNullable) &&
-        new HashSet<>(myNullables).equals(ContainerUtil.newHashSet(DEFAULT_NULLABLES)) &&
-        new HashSet<>(myNotNulls).equals(ContainerUtil.newHashSet(DEFAULT_NOT_NULLS));
+        new HashSet<>(myNullables).equals(Set.of(DEFAULT_NULLABLES)) &&
+        new HashSet<>(myNotNulls).equals(Set.of(DEFAULT_NOT_NULLS));
   }
 
   @Override
@@ -171,8 +176,8 @@ public class NullableNotNullManagerImpl extends NullableNotNullManager implement
   }
 
   private void normalizeDefaults() {
-    myNotNulls.removeAll(ContainerUtil.newHashSet(DEFAULT_NULLABLES));
-    myNullables.removeAll(ContainerUtil.newHashSet(DEFAULT_NOT_NULLS));
+    myNotNulls.removeAll(Set.of(DEFAULT_NULLABLES));
+    myNullables.removeAll(Set.of(DEFAULT_NOT_NULLS));
     myNullables.addAll(ContainerUtil.filter(DEFAULT_NULLABLES, s -> !myNullables.contains(s)));
     myNotNulls.addAll(ContainerUtil.filter(DEFAULT_NOT_NULLS, s -> !myNotNulls.contains(s)));
     myTracker.incModificationCount();

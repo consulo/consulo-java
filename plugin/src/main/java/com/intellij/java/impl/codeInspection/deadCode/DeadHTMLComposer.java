@@ -24,20 +24,22 @@
  */
 package com.intellij.java.impl.codeInspection.deadCode;
 
-import com.intellij.java.impl.codeInspection.HTMLJavaHTMLComposer;
-import consulo.language.editor.inspection.InspectionsBundle;
-import consulo.ide.impl.idea.codeInspection.ex.DescriptorComposer;
-import consulo.ide.impl.idea.codeInspection.ex.HTMLComposerImpl;
-import com.intellij.codeInspection.reference.*;
-import consulo.ide.impl.idea.codeInspection.ui.InspectionToolPresentation;
-import consulo.ide.impl.idea.codeInspection.ui.InspectionTreeNode;
-import consulo.ide.impl.idea.codeInspection.ui.RefElementNode;
 import com.intellij.java.analysis.codeInspection.reference.*;
 import com.intellij.java.analysis.impl.codeInspection.reference.RefClassImpl;
 import com.intellij.java.analysis.impl.codeInspection.reference.RefMethodImpl;
+import com.intellij.java.impl.codeInspection.HTMLJavaHTMLComposer;
+import consulo.ide.impl.idea.codeInspection.ex.DescriptorComposer;
+import consulo.ide.impl.idea.codeInspection.ui.InspectionToolPresentation;
+import consulo.ide.impl.idea.codeInspection.ui.InspectionTreeNode;
+import consulo.ide.impl.idea.codeInspection.ui.RefElementNode;
+import consulo.language.editor.impl.inspection.reference.RefElementImpl;
+import consulo.language.editor.inspection.HTMLComposerImpl;
+import consulo.language.editor.inspection.InspectionsBundle;
+import consulo.language.editor.inspection.reference.RefElement;
+import consulo.language.editor.inspection.reference.RefEntity;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
 
+import javax.annotation.Nonnull;
 import javax.swing.tree.TreeNode;
 import java.util.HashSet;
 import java.util.Iterator;

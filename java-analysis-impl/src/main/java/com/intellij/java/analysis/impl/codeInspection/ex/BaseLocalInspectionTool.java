@@ -16,6 +16,9 @@
 package com.intellij.java.analysis.impl.codeInspection.ex;
 
 import com.intellij.java.analysis.impl.codeInspection.BaseJavaLocalInspectionTool;
+import consulo.language.editor.rawHighlight.HighlightDisplayLevel;
+
+import javax.annotation.Nonnull;
 
 /**
  * User: anna
@@ -25,5 +28,11 @@ public abstract class BaseLocalInspectionTool extends BaseJavaLocalInspectionToo
   @Override
   public boolean isEnabledByDefault() {
     return true;
+  }
+
+  @Nonnull
+  @Override
+  public HighlightDisplayLevel getDefaultLevel() {
+    return HighlightDisplayLevel.WARNING;
   }
 }

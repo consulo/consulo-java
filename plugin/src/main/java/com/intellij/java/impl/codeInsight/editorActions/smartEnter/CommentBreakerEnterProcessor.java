@@ -15,55 +15,46 @@
  */
 package com.intellij.java.impl.codeInsight.editorActions.smartEnter;
 
-import consulo.codeEditor.action.EditorActionManager;
-import consulo.ui.ex.action.IdeActions;
-import consulo.codeEditor.Editor;
-import consulo.ide.impl.idea.openapi.editor.EditorModificationUtil;
-import consulo.codeEditor.action.EditorActionHandler;
-import consulo.codeEditor.EditorEx;
 import com.intellij.java.language.psi.JavaTokenType;
+import consulo.codeEditor.Editor;
+import consulo.codeEditor.EditorEx;
+import consulo.codeEditor.action.EditorActionHandler;
+import consulo.codeEditor.action.EditorActionManager;
+import consulo.ide.impl.idea.openapi.editor.EditorModificationUtil;
 import consulo.language.psi.PsiComment;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.ui.ex.action.IdeActions;
 
 /**
- * Created by IntelliJ IDEA.
  * User: max
  * Date: Sep 8, 2003
  * Time: 2:57:38 PM
- * To change this template use Options | File Templates.
  */
-public class CommentBreakerEnterProcessor implements EnterProcessor
-{
-	@Override
-	public boolean doEnter(Editor editor, PsiElement psiElement, boolean isModified)
-	{
-		if(isModified)
-		{
-			return false;
-		}
-		final PsiElement atCaret = psiElement.getContainingFile().findElementAt(editor.getCaretModel().getOffset());
-		final PsiComment comment = PsiTreeUtil.getParentOfType(atCaret, PsiComment.class, false);
-		if(comment != null)
-		{
-			plainEnter(editor);
-			if(comment.getTokenType() == JavaTokenType.END_OF_LINE_COMMENT)
-			{
-				EditorModificationUtil.insertStringAtCaret(editor, "// ");
-			}
-			return true;
-		}
-		return false;
-	}
+public class CommentBreakerEnterProcessor implements EnterProcessor {
+  @Override
+  public boolean doEnter(Editor editor, PsiElement psiElement, boolean isModified) {
+    if (isModified) {
+      return false;
+    }
+    final PsiElement atCaret = psiElement.getContainingFile().findElementAt(editor.getCaretModel().getOffset());
+    final PsiComment comment = PsiTreeUtil.getParentOfType(atCaret, PsiComment.class, false);
+    if (comment != null) {
+      plainEnter(editor);
+      if (comment.getTokenType() == JavaTokenType.END_OF_LINE_COMMENT) {
+        EditorModificationUtil.insertStringAtCaret(editor, "// ");
+      }
+      return true;
+    }
+    return false;
+  }
 
-	private static void plainEnter(Editor editor)
-	{
-		getEnterHandler().execute(editor, ((EditorEx) editor).getDataContext());
-	}
+  private static void plainEnter(Editor editor) {
+    getEnterHandler().execute(editor, ((EditorEx) editor).getDataContext());
+  }
 
-	private static EditorActionHandler getEnterHandler()
-	{
-		return EditorActionManager.getInstance().getActionHandler(IdeActions.ACTION_EDITOR_START_NEW_LINE);
-	}
+  private static EditorActionHandler getEnterHandler() {
+    return EditorActionManager.getInstance().getActionHandler(IdeActions.ACTION_EDITOR_START_NEW_LINE);
+  }
 
 }

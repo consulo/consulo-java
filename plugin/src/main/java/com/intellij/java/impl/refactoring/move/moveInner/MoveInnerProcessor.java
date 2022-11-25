@@ -15,49 +15,50 @@
  */
 package com.intellij.java.impl.refactoring.move.moveInner;
 
+import com.intellij.java.impl.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesUtil;
+import com.intellij.java.impl.refactoring.util.ConflictsUtil;
 import com.intellij.java.language.impl.codeInsight.ChangeContextUtil;
-import consulo.language.editor.CodeInsightUtilCore;
+import com.intellij.java.language.impl.refactoring.util.RefactoringChangeUtil;
+import com.intellij.java.language.psi.PsiElementFactory;
 import com.intellij.java.language.psi.*;
-import consulo.language.findUsage.DescriptiveNameUtil;
-import consulo.fileEditor.FileEditorManager;
-import consulo.navigation.OpenFileDescriptor;
-import consulo.project.Project;
-import consulo.util.lang.ref.Ref;
-import consulo.util.lang.StringUtil;
-import com.intellij.psi.*;
-import consulo.language.codeStyle.CodeStyleManager;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
-import consulo.language.psi.scope.LocalSearchScope;
-import consulo.language.psi.search.ReferencesSearch;
-import consulo.language.psi.util.PsiTreeUtil;
+import com.intellij.java.language.util.VisibilityUtil;
+import consulo.fileEditor.FileEditorManager;
+import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.editor.CodeInsightUtilCore;
 import consulo.language.editor.refactoring.BaseRefactoringProcessor;
 import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.editor.refactoring.event.RefactoringElementListener;
 import consulo.language.editor.refactoring.move.MoveCallback;
-import com.intellij.java.impl.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesUtil;
 import consulo.language.editor.refactoring.rename.RenameUtil;
-import com.intellij.java.impl.refactoring.util.ConflictsUtil;
-import consulo.usage.NonCodeUsageInfo;
-import com.intellij.java.language.impl.refactoring.util.RefactoringChangeUtil;
 import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
+import consulo.language.findUsage.DescriptiveNameUtil;
+import consulo.language.psi.*;
+import consulo.language.psi.scope.LocalSearchScope;
+import consulo.language.psi.search.ReferencesSearch;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.logging.Logger;
+import consulo.navigation.OpenFileDescriptor;
+import consulo.navigation.OpenFileDescriptorFactory;
+import consulo.project.Project;
+import consulo.usage.NonCodeUsageInfo;
 import consulo.usage.UsageInfo;
 import consulo.usage.UsageViewDescriptor;
-import consulo.ide.impl.idea.util.Function;
-import consulo.language.util.IncorrectOperationException;
-import com.intellij.java.language.util.VisibilityUtil;
-import java.util.HashMap;
 import consulo.util.collection.MultiMap;
-import consulo.logging.Logger;
-import consulo.psi.PsiPackage;
+import consulo.util.lang.StringUtil;
+import consulo.util.lang.ref.Ref;
 import org.jetbrains.annotations.NonNls;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import java.util.*;
+import java.util.function.Function;
 
 /**
  * created at Sep 24, 2001
+ *
  * @author Jeka
  */
 public class MoveInnerProcessor extends BaseRefactoringProcessor {
@@ -115,32 +116,29 @@ public class MoveInnerProcessor extends BaseRefactoringProcessor {
 
     final String newQName;
     if (myTargetContainer instanceof PsiDirectory) {
-      final PsiDirectory targetDirectory = (PsiDirectory)myTargetContainer;
+      final PsiDirectory targetDirectory = (PsiDirectory) myTargetContainer;
       final PsiPackage aPackage = JavaDirectoryService.getInstance().getPackage(targetDirectory);
       LOG.assertTrue(aPackage != null);
       newQName = aPackage.getQualifiedName() + "." + myNewClassName;
-    }
-    else if (myTargetContainer instanceof PsiClass) {
-      final String qName = ((PsiClass)myTargetContainer).getQualifiedName();
+    } else if (myTargetContainer instanceof PsiClass) {
+      final String qName = ((PsiClass) myTargetContainer).getQualifiedName();
       if (qName != null) {
         newQName = qName + "." + myNewClassName;
-      }
-      else {
+      } else {
         newQName = myNewClassName;
       }
-    }
-    else {
+    } else {
       newQName = myNewClassName;
     }
     MoveClassesOrPackagesUtil.findNonCodeUsages(mySearchInComments, mySearchInNonJavaFiles,
-                                                myInnerClass, newQName, usageInfos);
+        myInnerClass, newQName, usageInfos);
     return usageInfos.toArray(new UsageInfo[usageInfos.size()]);
   }
 
   protected void refreshElements(PsiElement[] elements) {
     boolean condition = elements.length == 1 && elements[0] instanceof PsiClass;
     LOG.assertTrue(condition);
-    myInnerClass = (PsiClass)elements[0];
+    myInnerClass = (PsiClass) elements[0];
   }
 
   public boolean isSearchInComments() {
@@ -179,12 +177,11 @@ public class MoveInnerProcessor extends BaseRefactoringProcessor {
       myInnerClass = CodeInsightUtilCore.forcePsiPostprocessAndRestoreElement(myInnerClass);
 
       final MoveInnerOptions moveInnerOptions = new MoveInnerOptions(myInnerClass, myOuterClass, myTargetContainer, myNewClassName);
-      final MoveInnerHandler handler = MoveInnerHandler.EP_NAME.forLanguage(myInnerClass.getLanguage());
+      final MoveInnerHandler handler = MoveInnerHandler.forLanguage(myInnerClass.getLanguage());
       final PsiClass newClass;
       try {
         newClass = handler.copyClass(moveInnerOptions);
-      }
-      catch (IncorrectOperationException e) {
+      } catch (IncorrectOperationException e) {
         RefactoringUIUtil.processIncorrectOperation(myProject, e);
         return;
       }
@@ -193,7 +190,7 @@ public class MoveInnerProcessor extends BaseRefactoringProcessor {
       for (PsiReference ref : ReferencesSearch.search(myInnerClass, new LocalSearchScope(newClass), true)) {
         PsiElement element = ref.getElement();
         if (element.getParent() instanceof PsiJavaCodeReferenceElement) {
-          PsiJavaCodeReferenceElement parentRef = (PsiJavaCodeReferenceElement)element.getParent();
+          PsiJavaCodeReferenceElement parentRef = (PsiJavaCodeReferenceElement) element.getParent();
           PsiElement parentRefElement = parentRef.resolve();
           if (parentRefElement instanceof PsiClass) { // reference to inner class inside our inner
             parentRef.getQualifier().delete();
@@ -225,8 +222,8 @@ public class MoveInnerProcessor extends BaseRefactoringProcessor {
           PsiElement refParent = refElement.getParent();
           if (refParent instanceof PsiNewExpression || refParent instanceof PsiAnonymousClass) {
             PsiNewExpression newExpr = refParent instanceof PsiNewExpression
-                                       ? (PsiNewExpression)refParent
-                                       : (PsiNewExpression)refParent.getParent();
+                ? (PsiNewExpression) refParent
+                : (PsiNewExpression) refParent.getParent();
 
             PsiExpressionList argList = newExpr.getArgumentList();
 
@@ -236,13 +233,11 @@ public class MoveInnerProcessor extends BaseRefactoringProcessor {
                 PsiClass parentClass = RefactoringChangeUtil.getThisClass(newExpr);
                 if (myOuterClass.equals(parentClass)) {
                   thisExpr = RefactoringChangeUtil.createThisExpression(manager, null);
-                }
-                else {
+                } else {
                   thisExpr = RefactoringChangeUtil.createThisExpression(manager, myOuterClass);
                 }
                 argList.addAfter(thisExpr, null);
-              }
-              else {
+              } else {
                 argList.addAfter(newExpr.getQualifier(), null);
                 newExpr.getQualifier().delete();
               }
@@ -261,9 +256,9 @@ public class MoveInnerProcessor extends BaseRefactoringProcessor {
           final PsiStatement[] statements = constructor.getBody().getStatements();
           if (statements.length > 0) {
             if (statements[0] instanceof PsiExpressionStatement) {
-              PsiExpression expression = ((PsiExpressionStatement)statements[0]).getExpression();
+              PsiExpression expression = ((PsiExpressionStatement) statements[0]).getExpression();
               if (expression instanceof PsiMethodCallExpression) {
-                @NonNls String text = ((PsiMethodCallExpression)expression).getMethodExpression().getText();
+                @NonNls String text = ((PsiMethodCallExpression) expression).getMethodExpression().getText();
                 if ("this".equals(text) || "super".equals(text)) {
                   ChangeContextUtil.decodeContextInfo(expression, myOuterClass, paramAccessExpression);
                 }
@@ -274,13 +269,12 @@ public class MoveInnerProcessor extends BaseRefactoringProcessor {
 
         PsiExpression accessExpression = factory.createExpressionFromText(myFieldNameOuterClass, null);
         ChangeContextUtil.decodeContextInfo(newClass, myOuterClass, accessExpression);
-      }
-      else {
+      } else {
         ChangeContextUtil.decodeContextInfo(newClass, null, null);
       }
 
       PsiFile targetFile = newClass.getContainingFile();
-      OpenFileDescriptor descriptor = new OpenFileDescriptor(myProject, targetFile.getVirtualFile(), newClass.getTextOffset());
+      OpenFileDescriptor descriptor = OpenFileDescriptorFactory.getInstance(myProject).builder(targetFile.getVirtualFile()).offset(newClass.getTextOffset()).build();
       FileEditorManager.getInstance(myProject).openTextEditor(descriptor, true);
 
       if (myMoveCallback != null) {
@@ -291,12 +285,11 @@ public class MoveInnerProcessor extends BaseRefactoringProcessor {
       List<NonCodeUsageInfo> nonCodeUsages = new ArrayList<NonCodeUsageInfo>();
       for (UsageInfo usage : usages) {
         if (usage instanceof NonCodeUsageInfo) {
-          nonCodeUsages.add((NonCodeUsageInfo)usage);
+          nonCodeUsages.add((NonCodeUsageInfo) usage);
         }
       }
       myNonCodeUsages = nonCodeUsages.toArray(new NonCodeUsageInfo[nonCodeUsages.size()]);
-    }
-    catch (IncorrectOperationException e) {
+    } catch (IncorrectOperationException e) {
       LOG.error(e);
     }
   }
@@ -306,12 +299,12 @@ public class MoveInnerProcessor extends BaseRefactoringProcessor {
     if (members != null) {
       for (PsiMember member : members) {
         if (!member.hasModifierProperty(PsiModifier.STATIC)) {
-          return (PsiField)myInnerClass.addBefore(field, member);
+          return (PsiField) myInnerClass.addBefore(field, member);
         }
       }
     }
 
-    return (PsiField)myInnerClass.add(field);
+    return (PsiField) myInnerClass.add(field);
   }
 
   protected void performPsiSpoilingRefactoring() {
@@ -322,23 +315,23 @@ public class MoveInnerProcessor extends BaseRefactoringProcessor {
 
   protected boolean preprocessUsages(Ref<UsageInfo[]> refUsages) {
     final MultiMap<PsiElement, String> conflicts = new MultiMap<PsiElement, String>();
-    final HashMap<PsiElement,HashSet<PsiElement>> reported = new HashMap<PsiElement, HashSet<PsiElement>>();
+    final HashMap<PsiElement, HashSet<PsiElement>> reported = new HashMap<PsiElement, HashSet<PsiElement>>();
     class Visitor extends JavaRecursiveElementWalkingVisitor {
 
 
-      @Override public void visitReferenceElement(PsiJavaCodeReferenceElement reference) {
+      @Override
+      public void visitReferenceElement(PsiJavaCodeReferenceElement reference) {
         PsiElement resolved = reference.resolve();
         if (resolved instanceof PsiMember &&
             PsiTreeUtil.isAncestor(myInnerClass, resolved, true) &&
-            becomesInaccessible((PsiMember)resolved)) {
+            becomesInaccessible((PsiMember) resolved)) {
           registerConflict(reference, resolved, reported, conflicts);
         }
       }
 
 
-
-
-      @Override public void visitClass(PsiClass aClass) {
+      @Override
+      public void visitClass(PsiClass aClass) {
         if (aClass == myInnerClass) return;
         super.visitClass(aClass);
       }
@@ -353,7 +346,7 @@ public class MoveInnerProcessor extends BaseRefactoringProcessor {
         final PsiElement resolve = reference.resolve();
         if (resolve instanceof PsiMember) {
           if (PsiTreeUtil.isAncestor(myOuterClass, resolve, true) && !PsiTreeUtil.isAncestor(myInnerClass, resolve, false)) {
-            if (becomesInaccessible((PsiMember)resolve)) {
+            if (becomesInaccessible((PsiMember) resolve)) {
               registerConflict(reference, resolve, reported, conflicts);
             }
           }
@@ -381,14 +374,14 @@ public class MoveInnerProcessor extends BaseRefactoringProcessor {
       } else {
         placesDescription = "<ol><li>" + StringUtil.join(containerSet, new Function<PsiElement, String>() {
           @Override
-          public String fun(PsiElement element) {
+          public String apply(PsiElement element) {
             return RefactoringUIUtil.getDescription(element, true);
           }
         }, "</li><li>") + "</li></ol>";
       }
       String message = RefactoringBundle.message("0.will.become.inaccessible.from.1",
-                                                 placesDescription,
-                                                 RefactoringUIUtil.getDescription(container, true));
+          placesDescription,
+          RefactoringUIUtil.getDescription(container, true));
       conflicts.put(container, Collections.singletonList(message));
     }
   }
@@ -399,7 +392,7 @@ public class MoveInnerProcessor extends BaseRefactoringProcessor {
     if (PsiModifier.PUBLIC.equals(visibilityModifier)) return false;
     final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(myProject);
     if (myTargetContainer instanceof PsiDirectory) {
-      final PsiJavaPackage aPackage = JavaDirectoryService.getInstance().getPackage((PsiDirectory)myTargetContainer);
+      final PsiJavaPackage aPackage = JavaDirectoryService.getInstance().getPackage((PsiDirectory) myTargetContainer);
       assert aPackage != null : myTargetContainer;
       return !psiFacade.isInPackage(myOuterClass, aPackage);
     }
@@ -432,7 +425,7 @@ public class MoveInnerProcessor extends BaseRefactoringProcessor {
     myParameterNameOuterClass = passOuterClass ? parameterName : null;
     if (myParameterNameOuterClass != null) {
       myFieldNameOuterClass =
-        codeStyleManager.variableNameToPropertyName(myParameterNameOuterClass, VariableKind.PARAMETER);
+          codeStyleManager.variableNameToPropertyName(myParameterNameOuterClass, VariableKind.PARAMETER);
       myFieldNameOuterClass = codeStyleManager.propertyNameToVariableName(myFieldNameOuterClass, VariableKind.FIELD);
     }
     mySearchInComments = searchInComments;
@@ -440,7 +433,7 @@ public class MoveInnerProcessor extends BaseRefactoringProcessor {
   }
 
   private void addFieldInitializationToConstructors(PsiClass aClass, PsiField field, String parameterName)
-    throws IncorrectOperationException {
+      throws IncorrectOperationException {
 
     PsiMethod[] constructors = aClass.getConstructors();
     PsiElementFactory factory = JavaPsiFacade.getInstance(myProject).getElementFactory();
@@ -457,9 +450,9 @@ public class MoveInnerProcessor extends BaseRefactoringProcessor {
         if (statements.length > 0) {
           PsiStatement first = statements[0];
           if (first instanceof PsiExpressionStatement) {
-            PsiExpression expression = ((PsiExpressionStatement)first).getExpression();
+            PsiExpression expression = ((PsiExpressionStatement) first).getExpression();
             if (expression instanceof PsiMethodCallExpression) {
-              @NonNls String text = ((PsiMethodCallExpression)expression).getMethodExpression().getText();
+              @NonNls String text = ((PsiMethodCallExpression) expression).getMethodExpression().getText();
               if ("this".equals(text)) {
                 continue;
               }
@@ -468,8 +461,7 @@ public class MoveInnerProcessor extends BaseRefactoringProcessor {
         }
         createAssignmentStatement(constructor, field.getName(), parameterName);
       }
-    }
-    else {
+    } else {
       PsiMethod constructor = factory.createConstructor();
       if (parameterName != null) {
         PsiParameterList parameterList = constructor.getParameterList();
@@ -482,7 +474,7 @@ public class MoveInnerProcessor extends BaseRefactoringProcessor {
   }
 
   private PsiStatement createAssignmentStatement(PsiMethod constructor, String fieldName, String parameterName)
-    throws IncorrectOperationException {
+      throws IncorrectOperationException {
 
     PsiElementFactory factory = JavaPsiFacade.getInstance(myProject).getElementFactory();
     @NonNls String pattern = fieldName + "=a;";
@@ -490,17 +482,17 @@ public class MoveInnerProcessor extends BaseRefactoringProcessor {
       pattern = "this." + pattern;
     }
 
-    PsiExpressionStatement statement = (PsiExpressionStatement)factory.createStatementFromText(pattern, null);
-    statement = (PsiExpressionStatement)CodeStyleManager.getInstance(myProject).reformat(statement);
+    PsiExpressionStatement statement = (PsiExpressionStatement) factory.createStatementFromText(pattern, null);
+    statement = (PsiExpressionStatement) CodeStyleManager.getInstance(myProject).reformat(statement);
 
     PsiCodeBlock body = constructor.getBody();
     assert body != null : constructor;
-    statement = (PsiExpressionStatement)body.addAfter(statement, getAnchorElement(body));
+    statement = (PsiExpressionStatement) body.addAfter(statement, getAnchorElement(body));
 
-    PsiAssignmentExpression assignment = (PsiAssignmentExpression)statement.getExpression();
-    PsiReferenceExpression rExpr = (PsiReferenceExpression)assignment.getRExpression();
+    PsiAssignmentExpression assignment = (PsiAssignmentExpression) statement.getExpression();
+    PsiReferenceExpression rExpr = (PsiReferenceExpression) assignment.getRExpression();
     assert rExpr != null : assignment;
-    PsiIdentifier identifier = (PsiIdentifier)rExpr.getReferenceNameElement();
+    PsiIdentifier identifier = (PsiIdentifier) rExpr.getReferenceNameElement();
     assert identifier != null : assignment;
     identifier.replace(factory.createIdentifier(parameterName));
     return statement;
@@ -513,9 +505,9 @@ public class MoveInnerProcessor extends BaseRefactoringProcessor {
       PsiStatement first = statements[0];
       if (first instanceof PsiExpressionStatement) {
 
-        PsiExpression expression = ((PsiExpressionStatement)first).getExpression();
+        PsiExpression expression = ((PsiExpressionStatement) first).getExpression();
         if (expression instanceof PsiMethodCallExpression) {
-          PsiReferenceExpression methodCall = ((PsiMethodCallExpression)expression).getMethodExpression();
+          PsiReferenceExpression methodCall = ((PsiMethodCallExpression) expression).getMethodExpression();
           @NonNls String text = methodCall.getText();
           if ("super".equals(text)) {
             return first;

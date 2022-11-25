@@ -15,29 +15,33 @@
  */
 package com.intellij.java.impl.codeInspection.unusedReturnValue;
 
-import consulo.language.editor.scope.AnalysisScope;
-import com.intellij.java.analysis.codeInspection.GroupNames;
-import com.intellij.codeInspection.reference.*;
-import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
 import com.intellij.java.analysis.codeInspection.GlobalJavaInspectionContext;
 import com.intellij.java.analysis.codeInspection.GlobalJavaInspectionTool;
+import com.intellij.java.analysis.codeInspection.GroupNames;
 import com.intellij.java.analysis.codeInspection.reference.RefJavaVisitor;
 import com.intellij.java.analysis.codeInspection.reference.RefMethod;
+import com.intellij.java.impl.refactoring.changeSignature.ChangeSignatureProcessor;
+import com.intellij.java.impl.refactoring.changeSignature.ParameterInfoImpl;
+import com.intellij.java.indexing.search.searches.OverridingMethodsSearch;
 import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.PropertyUtil;
+import consulo.language.editor.inspection.*;
+import consulo.language.editor.inspection.reference.RefElement;
+import consulo.language.editor.inspection.reference.RefEntity;
+import consulo.language.editor.inspection.reference.RefManager;
+import consulo.language.editor.inspection.scheme.InspectionManager;
+import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
+import consulo.language.editor.scope.AnalysisScope;
+import consulo.language.psi.PsiReference;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.util.xml.serializer.WriteExternalException;
-import com.intellij.psi.*;
-import com.intellij.java.indexing.search.searches.OverridingMethodsSearch;
-import com.intellij.java.language.psi.util.PropertyUtil;
-import consulo.language.psi.util.PsiTreeUtil;
-import com.intellij.java.impl.refactoring.changeSignature.ChangeSignatureProcessor;
-import com.intellij.java.impl.refactoring.changeSignature.ParameterInfoImpl;
-import consulo.language.util.IncorrectOperationException;
 import org.jdom.Element;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,8 +49,7 @@ import java.util.List;
 /**
  * @author max
  */
-public class UnusedReturnValue extends GlobalJavaInspectionTool
-{
+public abstract class UnusedReturnValue extends GlobalJavaInspectionTool {
   private MakeVoidQuickFix myQuickFix;
 
   public boolean IGNORE_BUILDER_PATTERN = false;
@@ -59,23 +62,23 @@ public class UnusedReturnValue extends GlobalJavaInspectionTool
                                                 GlobalInspectionContext globalContext,
                                                 ProblemDescriptionsProcessor processor) {
     if (refEntity instanceof RefMethod) {
-      final RefMethod refMethod = (RefMethod)refEntity;
+      final RefMethod refMethod = (RefMethod) refEntity;
 
       if (refMethod.isConstructor()) return null;
       if (!refMethod.getSuperMethods().isEmpty()) return null;
       if (refMethod.getInReferences().size() == 0) return null;
 
       if (!refMethod.isReturnValueUsed()) {
-        final PsiMethod psiMethod = (PsiMethod)refMethod.getElement();
+        final PsiMethod psiMethod = (PsiMethod) refMethod.getElement();
         if (IGNORE_BUILDER_PATTERN && PropertyUtil.isSimplePropertySetter(psiMethod)) return null;
 
         final boolean isNative = psiMethod.hasModifierProperty(PsiModifier.NATIVE);
         if (refMethod.isExternalOverride() && !isNative) return null;
         return new ProblemDescriptor[]{manager.createProblemDescriptor(psiMethod.getNavigationElement(),
-                                                                       InspectionsBundle
-                                                                         .message("inspection.unused.return.value.problem.descriptor"),
-                                                                       !isNative ? getFix(processor) : null, ProblemHighlightType.GENERIC_ERROR_OR_WARNING,
-                                                                       false)};
+            InspectionsBundle
+                .message("inspection.unused.return.value.problem.descriptor"),
+            !isNative ? getFix(processor) : null, ProblemHighlightType.GENERIC_ERROR_OR_WARNING,
+            false)};
       }
     }
 
@@ -98,10 +101,12 @@ public class UnusedReturnValue extends GlobalJavaInspectionTool
   protected boolean queryExternalUsagesRequests(final RefManager manager, final GlobalJavaInspectionContext globalContext,
                                                 final ProblemDescriptionsProcessor processor) {
     manager.iterate(new RefJavaVisitor() {
-      @Override public void visitElement(@Nonnull RefEntity refEntity) {
+      @Override
+      public void visitElement(@Nonnull RefEntity refEntity) {
         if (refEntity instanceof RefElement && processor.getDescriptions(refEntity) != null) {
           refEntity.accept(new RefJavaVisitor() {
-            @Override public void visitMethod(@Nonnull final RefMethod refMethod) {
+            @Override
+            public void visitMethod(@Nonnull final RefMethod refMethod) {
               globalContext.enqueueMethodUsagesProcessor(refMethod, new GlobalJavaInspectionContext.UsagesProcessor() {
                 @Override
                 public boolean process(PsiReference psiReference) {
@@ -167,9 +172,9 @@ public class UnusedReturnValue extends GlobalJavaInspectionTool
     public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
       PsiMethod psiMethod = null;
       if (myProcessor != null) {
-        RefElement refElement = (RefElement)myProcessor.getElement(descriptor);
+        RefElement refElement = (RefElement) myProcessor.getElement(descriptor);
         if (refElement.isValid() && refElement instanceof RefMethod) {
-          RefMethod refMethod = (RefMethod)refElement;
+          RefMethod refMethod = (RefMethod) refElement;
           psiMethod = (PsiMethod) refMethod.getElement();
         }
       } else {
@@ -198,10 +203,10 @@ public class UnusedReturnValue extends GlobalJavaInspectionTool
       }
 
       final ChangeSignatureProcessor csp = new ChangeSignatureProcessor(project,
-                                                                  psiMethod,
-                                                                  false, null, psiMethod.getName(),
-                                                                  PsiType.VOID,
-                                                                  infos);
+          psiMethod,
+          false, null, psiMethod.getName(),
+          PsiType.VOID,
+          infos);
 
       csp.run();
     }
@@ -225,14 +230,12 @@ public class UnusedReturnValue extends GlobalJavaInspectionTool
             if (expression instanceof PsiLiteralExpression || expression instanceof PsiThisExpression) {    //avoid side effects
               if (returnStatement == lastStatement) {
                 returnStatement.delete();
-              }
-              else {
+              } else {
                 returnStatement
-                  .replace(JavaPsiFacade.getInstance(method.getProject()).getElementFactory().createStatementFromText("return;", returnStatement));
+                    .replace(JavaPsiFacade.getInstance(method.getProject()).getElementFactory().createStatementFromText("return;", returnStatement));
               }
             }
-          }
-          catch (IncorrectOperationException e) {
+          } catch (IncorrectOperationException e) {
             LOG.error(e);
           }
         }

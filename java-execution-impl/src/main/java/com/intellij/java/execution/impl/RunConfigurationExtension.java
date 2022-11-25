@@ -40,7 +40,7 @@ import javax.annotation.Nullable;
 
 @ExtensionAPI(ComponentScope.APPLICATION)
 public abstract class RunConfigurationExtension extends RunConfigurationExtensionBase<RunConfigurationBase> {
-  public static final ExtensionPointName<RunConfigurationExtension> EP_NAME = new ExtensionPointName<>(RunConfigurationExtension.class);
+  public static final ExtensionPointName<RunConfigurationExtension> EP_NAME = ExtensionPointName.create(RunConfigurationExtension.class);
 
   public abstract <T extends RunConfigurationBase > void updateJavaParameters(final T configuration, final OwnJavaParameters params, RunnerSettings runnerSettings) throws ExecutionException;
 
@@ -63,7 +63,7 @@ public abstract class RunConfigurationExtension extends RunConfigurationExtensio
   public void cleanUserData(RunConfigurationBase runConfigurationBase) {}
 
   public static void cleanExtensionsUserData(RunConfigurationBase runConfigurationBase) {
-    for (RunConfigurationExtension extension : Extensions.getExtensions(EP_NAME)) {
+    for (RunConfigurationExtension extension : EP_NAME.getExtensionList()) {
       extension.cleanUserData(runConfigurationBase);
     }
   }

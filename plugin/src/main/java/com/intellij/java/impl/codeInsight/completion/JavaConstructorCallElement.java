@@ -15,21 +15,21 @@
  */
 package com.intellij.java.impl.codeInsight.completion;
 
+import com.intellij.java.impl.codeInsight.lookup.TypedLookupItem;
+import com.intellij.java.language.impl.psi.impl.source.resolve.JavaResolveUtil;
+import com.intellij.java.language.psi.*;
+import consulo.application.util.CachedValueProvider;
 import consulo.language.editor.completion.lookup.InsertionContext;
 import consulo.language.editor.completion.lookup.LookupElement;
 import consulo.language.editor.completion.lookup.LookupElementDecorator;
 import consulo.language.editor.completion.lookup.LookupElementPresentation;
-import com.intellij.java.impl.codeInsight.lookup.TypedLookupItem;
-import com.intellij.java.language.impl.psi.impl.source.resolve.JavaResolveUtil;
-import com.intellij.java.language.psi.*;
-import consulo.util.lang.StringUtil;
 import consulo.language.psi.PsiElement;
-import consulo.application.util.CachedValueProvider;
-import consulo.application.util.CachedValuesManager;
+import consulo.language.psi.util.LanguageCachedValueUtil;
 import consulo.language.psi.util.PsiTreeUtil;
-import consulo.util.lang.SystemProperties;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.dataholder.Key;
+import consulo.util.lang.StringUtil;
+import consulo.util.lang.SystemProperties;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -134,7 +134,7 @@ public class JavaConstructorCallElement extends LookupElementDecorator<LookupEle
   }
 
   private static boolean isConstructorCallPlace(@Nonnull PsiElement position) {
-    return CachedValuesManager.getCachedValue(position, () ->
+    return LanguageCachedValueUtil.getCachedValue(position, () ->
     {
       boolean result = JavaClassNameCompletionContributor.AFTER_NEW.accepts(position) && !JavaClassNameInsertHandler.isArrayTypeExpected(PsiTreeUtil.getParentOfType(position, PsiNewExpression
           .class));

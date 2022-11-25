@@ -34,6 +34,7 @@ import consulo.fileEditor.FileEditor;
 import consulo.application.progress.ProgressManager;
 import consulo.ui.ex.awt.ColoredListCellRenderer;
 import consulo.ui.ex.awt.JBList;
+import consulo.ui.ex.awt.popup.AWTPopupFactory;
 import consulo.ui.ex.popup.JBPopupFactory;
 import consulo.util.lang.function.Condition;
 import consulo.language.psi.PsiDocumentManager;
@@ -128,15 +129,17 @@ public class InheritorChooser {
       classes.add(0, null);
       final JBList list = new JBList(classes);
       list.setCellRenderer(renderer);
-      JBPopupFactory.getInstance().createListPopupBuilder(list).setTitle("Choose executable classes to run " + (psiMethod != null ? psiMethod.getName() : containingClass.getName())).setMovable
-          (false).setResizable(false).setRequestFocus(true).setItemChoosenCallback(() ->
-      {
-        final Object[] values = list.getSelectedValues();
-        if (values == null) {
-          return;
-        }
-        chooseAndPerform(values, psiMethod, context, performRunnable, classes);
-      }).createPopup().showInBestPositionFor(context.getDataContext());
+      ((AWTPopupFactory) JBPopupFactory.getInstance()).createListPopupBuilder(list)
+          .setItemChoosenCallback(() ->
+          {
+            final Object[] values = list.getSelectedValues();
+            if (values == null) {
+              return;
+            }
+            chooseAndPerform(values, psiMethod, context, performRunnable, classes);
+          })
+          .setTitle("Choose executable classes to run " + (psiMethod != null ? psiMethod.getName() : containingClass.getName()))
+          .setMovable(false).setResizable(false).setRequestFocus(true).createPopup().showInBestPositionFor(context.getDataContext());
       return true;
     }
     return false;

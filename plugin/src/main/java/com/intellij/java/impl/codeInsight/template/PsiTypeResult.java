@@ -15,15 +15,15 @@
  */
 package com.intellij.java.impl.codeInsight.template;
 
-import consulo.ide.impl.idea.codeInsight.template.RecalculatableResult;
 import com.intellij.java.impl.codeInsight.template.impl.JavaTemplateUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.document.Document;
-import consulo.project.Project;
+import consulo.language.editor.template.RecalculatableResult;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
 
 import javax.annotation.Nonnull;
 

@@ -44,7 +44,7 @@ import java.text.ParseException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class PackageNamingConventionInspection extends BaseGlobalInspection {
+public abstract class PackageNamingConventionInspection extends BaseGlobalInspection {
 
   private static final int DEFAULT_MIN_LENGTH = 3;
   private static final int DEFAULT_MAX_LENGTH = 16;

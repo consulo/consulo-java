@@ -21,7 +21,7 @@
 package com.intellij.java.impl.refactoring.inlineSuperClass.usageInfo;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import com.intellij.java.impl.refactoring.util.FixableUsageInfo;
 import com.intellij.java.impl.refactoring.util.InlineUtil;

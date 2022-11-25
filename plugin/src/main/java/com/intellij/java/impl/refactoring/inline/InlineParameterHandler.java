@@ -26,7 +26,7 @@ import consulo.logging.Logger;
 import consulo.codeEditor.Editor;
 import consulo.project.Project;
 import consulo.util.lang.ref.Ref;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import com.intellij.java.analysis.impl.psi.controlFlow.DefUseUtil;
 import com.intellij.java.indexing.search.searches.OverridingMethodsSearch;
 import consulo.language.psi.search.ReferencesSearch;

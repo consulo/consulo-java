@@ -15,17 +15,21 @@
  */
 package com.intellij.java.impl.codeInsight;
 
-import consulo.language.editor.CodeInsightSettings;
-import com.intellij.openapi.components.*;
-import consulo.project.Project;
-import consulo.util.lang.PatternUtil;
 import consulo.application.util.ConcurrentFactoryMap;
+import consulo.component.persist.PersistentStateComponent;
+import consulo.component.persist.State;
+import consulo.component.persist.Storage;
+import consulo.component.persist.StoragePathMacros;
+import consulo.disposer.Disposable;
+import consulo.disposer.Disposer;
+import consulo.ide.ServiceManager;
+import consulo.language.editor.CodeInsightSettings;
+import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
+import consulo.util.lang.PatternUtil;
 import consulo.util.xml.serializer.XmlSerializerUtil;
 import consulo.util.xml.serializer.annotation.AbstractCollection;
 import consulo.util.xml.serializer.annotation.Tag;
-import consulo.disposer.Disposable;
-import consulo.disposer.Disposer;
 import jakarta.inject.Singleton;
 import org.jetbrains.annotations.TestOnly;
 

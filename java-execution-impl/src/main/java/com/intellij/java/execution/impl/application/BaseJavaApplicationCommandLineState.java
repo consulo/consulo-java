@@ -23,10 +23,10 @@ import com.intellij.java.execution.impl.util.JavaParametersUtil;
 import consulo.execution.configuration.RunConfigurationBase;
 import consulo.execution.process.ProcessTerminatedListener;
 import consulo.execution.runner.ExecutionEnvironment;
-import consulo.ide.impl.idea.execution.process.KillableColoredProcessHandler;
 import consulo.java.execution.configurations.OwnJavaParameters;
 import consulo.process.ExecutionException;
-import consulo.process.internal.OSProcessHandler;
+import consulo.process.ProcessHandler;
+import consulo.process.ProcessHandlerBuilder;
 
 import javax.annotation.Nonnull;
 
@@ -51,8 +51,8 @@ public abstract class BaseJavaApplicationCommandLineState<T extends RunConfigura
 
   @Nonnull
   @Override
-  protected OSProcessHandler startProcess() throws ExecutionException {
-    OSProcessHandler handler = new KillableColoredProcessHandler.Silent(createCommandLine());
+  protected ProcessHandler startProcess() throws ExecutionException {
+    ProcessHandler handler = ProcessHandlerBuilder.create(createCommandLine()).killable().colored().silentReader().build();
     ProcessTerminatedListener.attach(handler);
     JavaRunConfigurationExtensionManager.getInstance().attachExtensionsToProcess(getConfiguration(), handler, getRunnerSettings());
     return handler;

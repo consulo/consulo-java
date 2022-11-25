@@ -29,7 +29,7 @@ import javax.annotation.Nullable;
 import java.util.HashSet;
 import java.util.Set;
 
-public class CyclicPackageDependencyInspection extends BaseGlobalInspection {
+public abstract class CyclicPackageDependencyInspection extends BaseGlobalInspection {
 
   @Nonnull
   @Override

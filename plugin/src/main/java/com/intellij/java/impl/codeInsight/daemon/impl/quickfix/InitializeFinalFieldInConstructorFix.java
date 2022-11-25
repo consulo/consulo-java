@@ -15,29 +15,32 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
-import consulo.ide.impl.idea.codeInsight.CodeInsightUtilBase;
-import consulo.language.editor.FileModificationService;
-import com.intellij.java.language.psi.*;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
 import com.intellij.java.impl.codeInsight.generation.PsiMethodMember;
-import consulo.language.editor.intention.IntentionAction;
-import consulo.ide.impl.idea.ide.util.MemberChooser;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.PsiTypesUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.application.ApplicationManager;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.ScrollType;
-import consulo.project.Project;
 import consulo.document.util.TextRange;
-import com.intellij.psi.*;
+import consulo.ide.impl.idea.codeInsight.CodeInsightUtilBase;
+import consulo.ide.impl.idea.ide.util.MemberChooser;
+import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.editor.FileModificationService;
+import consulo.language.editor.intention.IntentionAction;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiManager;
+import consulo.language.psi.PsiReference;
 import consulo.language.psi.scope.LocalSearchScope;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.PsiTreeUtil;
-import com.intellij.java.language.psi.util.PsiTypesUtil;
-import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;

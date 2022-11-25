@@ -19,43 +19,37 @@
  */
 package com.intellij.java.impl.lang.java;
 
+import com.intellij.java.impl.ide.structureView.impl.java.JavaFileTreeModel;
+import com.intellij.java.language.psi.PsiJavaFile;
+import consulo.codeEditor.Editor;
 import consulo.fileEditor.structureView.StructureViewBuilder;
 import consulo.fileEditor.structureView.StructureViewModel;
 import consulo.fileEditor.structureView.TreeBasedStructureViewBuilder;
-import com.intellij.java.impl.ide.structureView.impl.java.JavaFileTreeModel;
 import consulo.language.editor.structureView.PsiStructureViewFactory;
-import consulo.codeEditor.Editor;
 import consulo.language.psi.PsiFile;
-import com.intellij.java.language.psi.PsiJavaFile;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class JavaStructureViewBuilderFactory implements PsiStructureViewFactory
-{
-	@Override
-	@Nullable
-	public StructureViewBuilder getStructureViewBuilder(final PsiFile psiFile)
-	{
-		if(!(psiFile instanceof PsiJavaFile))
-		{
-			return null;
-		}
+public abstract class JavaStructureViewBuilderFactory implements PsiStructureViewFactory {
+  @Override
+  @Nullable
+  public StructureViewBuilder getStructureViewBuilder(final PsiFile psiFile) {
+    if (!(psiFile instanceof PsiJavaFile)) {
+      return null;
+    }
 
-		return new TreeBasedStructureViewBuilder()
-		{
-			@Override
-			@Nonnull
-			public StructureViewModel createStructureViewModel(@Nullable Editor editor)
-			{
-				return new JavaFileTreeModel((PsiJavaFile) psiFile, editor);
-			}
+    return new TreeBasedStructureViewBuilder() {
+      @Override
+      @Nonnull
+      public StructureViewModel createStructureViewModel(@Nullable Editor editor) {
+        return new JavaFileTreeModel((PsiJavaFile) psiFile, editor);
+      }
 
-			@Override
-			public boolean isRootNodeShown()
-			{
-				return false;
-			}
-		};
-	}
+      @Override
+      public boolean isRootNodeShown() {
+        return false;
+      }
+    };
+  }
 }

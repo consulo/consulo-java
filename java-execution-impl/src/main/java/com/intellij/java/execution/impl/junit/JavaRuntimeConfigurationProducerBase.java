@@ -15,23 +15,23 @@
  */
 package com.intellij.java.execution.impl.junit;
 
+import com.intellij.java.language.psi.JavaDirectoryService;
+import com.intellij.java.language.psi.PsiJavaPackage;
+import com.intellij.java.language.psi.PsiMethod;
 import consulo.execution.RunnerAndConfigurationSettings;
 import consulo.execution.action.ConfigurationContext;
 import consulo.execution.action.RuntimeConfigurationProducer;
 import consulo.execution.configuration.ConfigurationType;
 import consulo.execution.configuration.ModuleBasedConfiguration;
 import consulo.execution.test.TestSearchScope;
-import consulo.ide.impl.idea.execution.impl.RunManagerImpl;
-import com.intellij.java.language.psi.JavaDirectoryService;
-import com.intellij.java.language.psi.PsiJavaPackage;
-import com.intellij.java.language.psi.PsiMethod;
+import consulo.language.psi.PsiDirectory;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.module.Module;
-import consulo.project.Project;
 import consulo.module.content.ProjectFileIndex;
 import consulo.module.content.ProjectRootManager;
+import consulo.project.Project;
 import consulo.virtualFileSystem.VirtualFile;
-import com.intellij.psi.*;
-import consulo.language.psi.scope.GlobalSearchScope;
 
 import javax.annotation.Nullable;
 
@@ -89,8 +89,7 @@ public abstract class JavaRuntimeConfigurationProducerBase extends RuntimeConfig
 
   protected boolean setupConfigurationModule(@Nullable ConfigurationContext context, ModuleBasedConfiguration configuration) {
     if (context != null) {
-      final RunnerAndConfigurationSettings template =
-          ((RunManagerImpl) context.getRunManager()).getConfigurationTemplate(getConfigurationFactory());
+      final RunnerAndConfigurationSettings template = context.getRunManager().getConfigurationTemplate(getConfigurationFactory());
       final Module contextModule = context.getModule();
       final Module predefinedModule = ((ModuleBasedConfiguration) template.getConfiguration()).getConfigurationModule().getModule();
       if (predefinedModule != null) {

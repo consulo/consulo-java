@@ -15,34 +15,32 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
-import java.util.LinkedHashSet;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import consulo.language.editor.FileModificationService;
-import consulo.language.editor.intention.QuickFixActionRegistrar;
 import com.intellij.java.impl.codeInsight.intention.impl.RunRefactoringAction;
-import consulo.navigation.NavigationUtil;
-import consulo.language.editor.inspection.LocalQuickFixAndIntentionActionOnPsiElement;
-import com.intellij.java.language.impl.codeInsight.PsiClassListCellRenderer;
-import consulo.codeEditor.Editor;
-import consulo.project.Project;
-import com.intellij.java.language.psi.PsiAnonymousClass;
-import com.intellij.java.language.psi.PsiClass;
-import com.intellij.java.language.psi.PsiClassType;
-import consulo.language.psi.PsiElement;
-import consulo.language.psi.PsiFile;
-import consulo.language.psi.PsiManager;
-import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.java.language.psi.PsiModifier;
-import consulo.language.psi.resolve.PsiElementProcessor;
 import com.intellij.java.impl.refactoring.extractInterface.ExtractInterfaceHandler;
 import com.intellij.java.impl.refactoring.extractSuperclass.ExtractSuperclassHandler;
 import com.intellij.java.impl.refactoring.memberPullUp.JavaPullUpHandler;
 import com.intellij.java.impl.refactoring.memberPullUp.PullUpProcessor;
-import consulo.ide.impl.idea.refactoring.util.DocCommentPolicy;
 import com.intellij.java.impl.refactoring.util.classMembers.MemberInfo;
+import com.intellij.java.language.impl.codeInsight.PsiClassListCellRenderer;
+import com.intellij.java.language.psi.*;
+import consulo.codeEditor.Editor;
+import consulo.codeEditor.EditorPopupHelper;
+import consulo.ide.impl.idea.refactoring.util.DocCommentPolicy;
+import consulo.language.editor.FileModificationService;
+import consulo.language.editor.inspection.LocalQuickFixAndIntentionActionOnPsiElement;
+import consulo.language.editor.intention.QuickFixActionRegistrar;
+import consulo.language.editor.ui.PopupNavigationUtil;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiManager;
+import consulo.language.psi.resolve.PsiElementProcessor;
 import consulo.logging.Logger;
+import consulo.project.Project;
+import consulo.ui.ex.popup.JBPopup;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.LinkedHashSet;
 
 public class PullAsAbstractUpFix extends LocalQuickFixAndIntentionActionOnPsiElement {
   private static final Logger LOG = Logger.getInstance(PullAsAbstractUpFix.class);
@@ -70,7 +68,7 @@ public class PullAsAbstractUpFix extends LocalQuickFixAndIntentionActionOnPsiEle
                              @Nonnull PsiFile file,
                              @Nonnull PsiElement startElement,
                              @Nonnull PsiElement endElement) {
-    return startElement instanceof PsiMethod && startElement.isValid() && ((PsiMethod)startElement).getContainingClass() != null;
+    return startElement instanceof PsiMethod && startElement.isValid() && ((PsiMethod) startElement).getContainingClass() != null;
   }
 
   @Override
@@ -79,7 +77,7 @@ public class PullAsAbstractUpFix extends LocalQuickFixAndIntentionActionOnPsiEle
                      @Nullable Editor editor,
                      @Nonnull PsiElement startElement,
                      @Nonnull PsiElement endElement) {
-    final PsiMethod method = (PsiMethod)startElement;
+    final PsiMethod method = (PsiMethod) startElement;
     if (!FileModificationService.getInstance().prepareFileForWrite(method.getContainingFile())) return;
 
     final PsiClass containingClass = method.getContainingClass();
@@ -87,13 +85,12 @@ public class PullAsAbstractUpFix extends LocalQuickFixAndIntentionActionOnPsiEle
 
     PsiManager manager = containingClass.getManager();
     if (containingClass instanceof PsiAnonymousClass) {
-      final PsiClassType baseClassType = ((PsiAnonymousClass)containingClass).getBaseClassType();
+      final PsiClassType baseClassType = ((PsiAnonymousClass) containingClass).getBaseClassType();
       final PsiClass baseClass = baseClassType.resolve();
       if (baseClass != null && manager.isInProject(baseClass)) {
         pullUp(method, containingClass, baseClass);
       }
-    }
-    else {
+    } else {
       final LinkedHashSet<PsiClass> classesToPullUp = new LinkedHashSet<PsiClass>();
       collectClassesToPullUp(manager, classesToPullUp, containingClass.getExtendsListTypes());
       collectClassesToPullUp(manager, classesToPullUp, containingClass.getImplementsListTypes());
@@ -101,20 +98,20 @@ public class PullAsAbstractUpFix extends LocalQuickFixAndIntentionActionOnPsiEle
       if (classesToPullUp.size() == 0) {
         //check visibility
         new ExtractInterfaceHandler().invoke(project, new PsiElement[]{containingClass}, null);
-      }
-      else if (classesToPullUp.size() == 1) {
+      } else if (classesToPullUp.size() == 1) {
         pullUp(method, containingClass, classesToPullUp.iterator().next());
-      }
-      else if (editor != null) {
-        NavigationUtil.getPsiElementPopup(classesToPullUp.toArray(new PsiClass[classesToPullUp.size()]), new PsiClassListCellRenderer(),
-                                          "Choose super class",
-                                          new PsiElementProcessor<PsiClass>() {
-                                            @Override
-                                            public boolean execute(@Nonnull PsiClass aClass) {
-                                              pullUp(method, containingClass, aClass);
-                                              return false;
-                                            }
-                                          }, classesToPullUp.iterator().next()).showInBestPositionFor(editor);
+      } else if (editor != null) {
+        JBPopup popup = PopupNavigationUtil.getPsiElementPopup(classesToPullUp.toArray(new PsiClass[classesToPullUp.size()]), new PsiClassListCellRenderer(),
+            "Choose super class",
+            new PsiElementProcessor<PsiClass>() {
+              @Override
+              public boolean execute(@Nonnull PsiClass aClass) {
+                pullUp(method, containingClass, aClass);
+                return false;
+              }
+            }, classesToPullUp.iterator().next());
+
+        EditorPopupHelper.getInstance().showPopupInBestPositionFor(editor, popup);
       }
     }
   }
@@ -150,7 +147,7 @@ public class PullAsAbstractUpFix extends LocalQuickFixAndIntentionActionOnPsiEle
     boolean canBePulledUp = true;
     String name = "Pull method \'" + methodWithOverrides.getName() + "\' up";
     if (containingClass instanceof PsiAnonymousClass) {
-      final PsiClassType baseClassType = ((PsiAnonymousClass)containingClass).getBaseClassType();
+      final PsiClassType baseClassType = ((PsiAnonymousClass) containingClass).getBaseClassType();
       final PsiClass baseClass = baseClassType.resolve();
       if (baseClass == null) return;
       if (!manager.isInProject(baseClass)) return;
@@ -168,7 +165,7 @@ public class PullAsAbstractUpFix extends LocalQuickFixAndIntentionActionOnPsiEle
         final PsiClass baseClass = classesToPullUp.iterator().next();
         name = "Pull method \'" + methodWithOverrides.getName() + "\' to \'" + baseClass.getName() + "\'";
         if (!baseClass.hasModifierProperty(PsiModifier.ABSTRACT)) {
-          name+= " and make it abstract";
+          name += " and make it abstract";
         }
       }
       registrar.register(new RunRefactoringAction(new ExtractInterfaceHandler(), "Extract interface"));

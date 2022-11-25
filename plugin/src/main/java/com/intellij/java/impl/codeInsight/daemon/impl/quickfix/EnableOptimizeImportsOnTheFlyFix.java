@@ -15,17 +15,17 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
-import javax.annotation.Nonnull;
-
+import com.intellij.java.language.psi.PsiJavaFile;
+import consulo.codeEditor.Editor;
+import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.language.editor.CodeInsightSettings;
 import consulo.language.editor.DaemonCodeAnalyzer;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.language.editor.intention.IntentionAction;
 import consulo.language.editor.intention.LowPriorityAction;
-import consulo.codeEditor.Editor;
-import consulo.project.Project;
 import consulo.language.psi.PsiFile;
-import com.intellij.java.language.psi.PsiJavaFile;
+import consulo.project.Project;
+
+import javax.annotation.Nonnull;
 
 public class EnableOptimizeImportsOnTheFlyFix implements IntentionAction, LowPriorityAction{
   @Override
@@ -44,7 +44,7 @@ public class EnableOptimizeImportsOnTheFlyFix implements IntentionAction, LowPri
   public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     return file.getManager().isInProject(file)
            && file instanceof PsiJavaFile
-           && !com.intellij.codeInsight.CodeInsightSettings.getInstance().OPTIMIZE_IMPORTS_ON_THE_FLY
+           && !CodeInsightSettings.getInstance().OPTIMIZE_IMPORTS_ON_THE_FLY
       ;
   }
 

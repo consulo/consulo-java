@@ -15,29 +15,29 @@
  */
 package com.intellij.java.impl.codeInsight;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import com.intellij.java.language.impl.codeInsight.generation.GenerationInfo;
 import com.intellij.java.language.codeInsight.MemberImplementorExplorer;
-import consulo.component.extension.ExtensionPointName;
+import com.intellij.java.language.impl.codeInsight.generation.GenerationInfo;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
-import consulo.ide.impl.idea.util.Consumer;
+import consulo.component.extension.ExtensionPointName;
 import consulo.language.util.IncorrectOperationException;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.function.Consumer;
 
 /**
  * @author peter
  */
-public interface MethodImplementor extends MemberImplementorExplorer
-{
-	ExtensionPointName<MethodImplementor> EXTENSION_POINT_NAME = ExtensionPointName.create("consulo.java.methodImplementor");
+public interface MethodImplementor extends MemberImplementorExplorer {
+  ExtensionPointName<MethodImplementor> EXTENSION_POINT_NAME = ExtensionPointName.create("consulo.java.methodImplementor");
 
-	@Nonnull
-	PsiMethod[] createImplementationPrototypes(final PsiClass inClass, PsiMethod method) throws IncorrectOperationException;
+  @Nonnull
+  PsiMethod[] createImplementationPrototypes(final PsiClass inClass, PsiMethod method) throws IncorrectOperationException;
 
-	@Nullable
-	GenerationInfo createGenerationInfo(PsiMethod method, boolean mergeIfExists);
+  @Nullable
+  GenerationInfo createGenerationInfo(PsiMethod method, boolean mergeIfExists);
 
-	@Nonnull
-	Consumer<PsiMethod> createDecorator(PsiClass targetClass, PsiMethod baseMethod, boolean toCopyJavaDoc, boolean insertOverrideIfPossible);
+  @Nonnull
+  Consumer<PsiMethod> createDecorator(PsiClass targetClass, PsiMethod baseMethod, boolean toCopyJavaDoc, boolean insertOverrideIfPossible);
 }

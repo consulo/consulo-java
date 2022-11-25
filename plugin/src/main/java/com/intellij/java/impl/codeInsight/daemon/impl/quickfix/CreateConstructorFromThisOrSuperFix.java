@@ -16,23 +16,25 @@
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
 import com.intellij.java.impl.codeInsight.CodeInsightUtil;
-import consulo.ide.impl.idea.codeInsight.CodeInsightUtilBase;
 import com.intellij.java.language.psi.*;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
-import consulo.language.editor.template.Template;
-import consulo.language.editor.impl.internal.template.TemplateBuilderImpl;
-import consulo.language.editor.template.event.TemplateEditingAdapter;
 import consulo.application.ApplicationManager;
-import consulo.undoRedo.util.UndoUtil;
-import consulo.logging.Logger;
 import consulo.codeEditor.Editor;
 import consulo.document.RangeMarker;
-import consulo.ide.impl.idea.openapi.fileEditor.ex.IdeDocumentHistory;
-import consulo.project.Project;
 import consulo.document.util.TextRange;
-import com.intellij.psi.*;
+import consulo.ide.impl.idea.codeInsight.CodeInsightUtilBase;
+import consulo.ide.impl.idea.openapi.fileEditor.ex.IdeDocumentHistory;
+import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.language.editor.impl.internal.template.TemplateBuilderImpl;
+import consulo.language.editor.template.Template;
+import consulo.language.editor.template.event.TemplateEditingAdapter;
+import consulo.language.editor.util.LanguageUndoUtil;
+import consulo.language.psi.PsiDocumentManager;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.logging.Logger;
+import consulo.project.Project;
 import org.jetbrains.annotations.NonNls;
 
 import java.util.List;
@@ -124,7 +126,7 @@ public abstract class CreateConstructorFromThisOrSuperFix extends CreateFromUsag
                 CreateFromUsageUtils.setupMethodBody(constructor);
                 CreateFromUsageUtils.setupEditor(constructor, editor);
 
-                UndoUtil.markPsiFileForUndo(callSite);
+                LanguageUndoUtil.markPsiFileForUndo(callSite);
               }
               catch (IncorrectOperationException e) {
                 LOG.error(e);

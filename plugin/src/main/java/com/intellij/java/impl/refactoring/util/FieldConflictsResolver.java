@@ -18,7 +18,7 @@ package com.intellij.java.impl.refactoring.util;
 import com.intellij.java.language.impl.refactoring.util.RefactoringChangeUtil;
 import com.intellij.java.language.psi.*;
 import consulo.logging.Logger;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import consulo.language.psi.scope.LocalSearchScope;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.util.IncorrectOperationException;

@@ -20,7 +20,7 @@ import consulo.util.lang.Comparing;
 import consulo.util.lang.Pair;
 import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.VirtualFile;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import com.intellij.java.language.impl.psi.impl.PsiImplUtil;
 import consulo.language.ast.IElementType;
 import com.intellij.java.language.psi.util.InheritanceUtil;

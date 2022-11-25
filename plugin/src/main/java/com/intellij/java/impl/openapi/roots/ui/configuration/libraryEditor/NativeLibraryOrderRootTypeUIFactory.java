@@ -16,35 +16,37 @@
 
 package com.intellij.java.impl.openapi.roots.ui.configuration.libraryEditor;
 
-import javax.annotation.Nonnull;
-
 import consulo.content.bundle.Sdk;
-import consulo.ide.ui.SdkPathEditor;
 import consulo.ide.ui.OrderRootTypeUIFactory;
+import consulo.ide.ui.SdkPathEditor;
 import consulo.java.impl.JavaBundle;
 import consulo.java.language.impl.JavaIcons;
 import consulo.ui.image.Image;
 
-public class NativeLibraryOrderRootTypeUIFactory implements OrderRootTypeUIFactory
-{
-	@Nonnull
-	@Override
-	public Image getIcon()
-	{
-		return JavaIcons.Nodes.NativeLibrariesFolder;
-	}
+import javax.annotation.Nonnull;
 
-	@Nonnull
-	@Override
-	public String getNodeText()
-	{
-		return JavaBundle.message("project.roots.native.library.node.text");
-	}
+public class NativeLibraryOrderRootTypeUIFactory implements OrderRootTypeUIFactory {
+  @Nonnull
+  @Override
+  public Image getIcon() {
+    return JavaIcons.Nodes.NativeLibrariesFolder;
+  }
 
-	@Nonnull
-	@Override
-	public SdkPathEditor createPathEditor(Sdk sdk)
-	{
-		return null;
-	}
+  @Nonnull
+  @Override
+  public String getNodeText() {
+    return JavaBundle.message("project.roots.native.library.node.text");
+  }
+
+  @Nonnull
+  @Override
+  public String getOrderRootTypeId() {
+    return "javaNative";
+  }
+
+  @Nonnull
+  @Override
+  public SdkPathEditor createPathEditor(Sdk sdk) {
+    return null;
+  }
 }

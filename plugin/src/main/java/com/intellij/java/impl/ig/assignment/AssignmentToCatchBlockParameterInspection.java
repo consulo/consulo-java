@@ -15,32 +15,31 @@
  */
 package com.intellij.java.impl.ig.assignment;
 
-import javax.annotation.Nonnull;
-
+import com.intellij.java.impl.ig.fixes.ExtractParameterAsLocalVariableFix;
+import com.intellij.java.impl.ig.psiutils.WellFormednessUtils;
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.*;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.fixes.ExtractParameterAsLocalVariableFix;
-import com.intellij.java.impl.ig.psiutils.WellFormednessUtils;
+import consulo.language.psi.PsiElement;
 
-public class AssignmentToCatchBlockParameterInspection
-  extends BaseInspection {
+import javax.annotation.Nonnull;
+
+public abstract class AssignmentToCatchBlockParameterInspection extends BaseInspection {
 
   @Override
   @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
-      "assignment.to.catch.block.parameter.display.name");
+        "assignment.to.catch.block.parameter.display.name");
   }
 
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
-      "assignment.to.catch.block.parameter.problem.descriptor");
+        "assignment.to.catch.block.parameter.problem.descriptor");
   }
 
   @Override
@@ -54,11 +53,11 @@ public class AssignmentToCatchBlockParameterInspection
   }
 
   private static class AssignmentToCatchBlockParameterVisitor
-    extends BaseInspectionVisitor {
+      extends BaseInspectionVisitor {
 
     @Override
     public void visitAssignmentExpression(
-      @Nonnull PsiAssignmentExpression expression) {
+        @Nonnull PsiAssignmentExpression expression) {
       super.visitAssignmentExpression(expression);
       if (!WellFormednessUtils.isWellFormed(expression)) {
         return;
@@ -68,12 +67,12 @@ public class AssignmentToCatchBlockParameterInspection
         return;
       }
       final PsiReferenceExpression reference =
-        (PsiReferenceExpression)lhs;
+          (PsiReferenceExpression) lhs;
       final PsiElement variable = reference.resolve();
       if (!(variable instanceof PsiParameter)) {
         return;
       }
-      final PsiParameter parameter = (PsiParameter)variable;
+      final PsiParameter parameter = (PsiParameter) variable;
       final PsiElement declarationScope = parameter.getDeclarationScope();
       if (!(declarationScope instanceof PsiCatchSection)) {
         return;

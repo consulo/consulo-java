@@ -15,23 +15,23 @@
  */
 package com.intellij.java.impl.ipp.concatenation;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-
-import com.intellij.java.language.psi.*;
-import org.jetbrains.annotations.NonNls;
-import consulo.project.Project;
-import com.intellij.psi.*;
-import consulo.language.codeStyle.CodeStyleManager;
-import consulo.language.codeStyle.CodeStyleSettingsManager;
-import com.intellij.java.impl.psi.codeStyle.JavaCodeStyleSettings;
-import consulo.language.util.IncorrectOperationException;
 import com.intellij.java.impl.ipp.base.Intention;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.intellij.java.impl.ipp.psiutils.HighlightUtil;
+import com.intellij.java.impl.psi.codeStyle.JavaCodeStyleSettings;
+import com.intellij.java.language.psi.*;
+import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.codeStyle.CodeStyleSettingsManager;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiManager;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class MakeCallChainIntoCallSequenceIntention extends Intention {
 

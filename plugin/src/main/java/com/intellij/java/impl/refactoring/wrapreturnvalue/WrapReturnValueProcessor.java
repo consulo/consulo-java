@@ -15,25 +15,6 @@
  */
 package com.intellij.java.impl.refactoring.wrapreturnvalue;
 
-import com.intellij.java.language.impl.JavaFileType;
-import com.intellij.java.language.impl.codeInsight.PackageUtil;
-import com.intellij.java.language.psi.*;
-import consulo.logging.Logger;
-import consulo.module.Module;
-import consulo.ide.impl.idea.openapi.module.ModuleUtil;
-import consulo.project.Project;
-import consulo.util.lang.Comparing;
-import consulo.util.lang.ref.Ref;
-import consulo.util.lang.StringUtil;
-import com.intellij.psi.*;
-import consulo.language.codeStyle.CodeStyleManager;
-import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
-import consulo.language.psi.scope.GlobalSearchScope;
-import com.intellij.java.indexing.search.searches.OverridingMethodsSearch;
-import consulo.language.psi.search.ReferencesSearch;
-import com.intellij.java.language.psi.util.PropertyUtil;
-import consulo.language.psi.util.PsiTreeUtil;
-import com.intellij.java.language.psi.util.TypeConversionUtil;
 import com.intellij.java.impl.refactoring.MoveDestination;
 import com.intellij.java.impl.refactoring.RefactorJBundle;
 import com.intellij.java.impl.refactoring.psi.TypeParametersVisitor;
@@ -43,19 +24,38 @@ import com.intellij.java.impl.refactoring.wrapreturnvalue.usageInfo.ChangeReturn
 import com.intellij.java.impl.refactoring.wrapreturnvalue.usageInfo.ReturnWrappedValue;
 import com.intellij.java.impl.refactoring.wrapreturnvalue.usageInfo.UnwrapCall;
 import com.intellij.java.impl.refactoring.wrapreturnvalue.usageInfo.WrapReturnValue;
+import com.intellij.java.indexing.search.searches.OverridingMethodsSearch;
+import com.intellij.java.language.impl.JavaFileType;
+import com.intellij.java.language.impl.codeInsight.PackageUtil;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
+import com.intellij.java.language.psi.util.PropertyUtil;
+import com.intellij.java.language.psi.util.TypeConversionUtil;
+import consulo.ide.impl.idea.openapi.module.ModuleUtil;
+import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.psi.*;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.search.ReferencesSearch;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.logging.Logger;
+import consulo.module.Module;
+import consulo.project.Project;
 import consulo.usage.UsageInfo;
 import consulo.usage.UsageViewDescriptor;
-import consulo.ide.impl.idea.util.Function;
-import consulo.language.util.IncorrectOperationException;
 import consulo.util.collection.MultiMap;
+import consulo.util.lang.Comparing;
+import consulo.util.lang.StringUtil;
+import consulo.util.lang.ref.Ref;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Function;
 
 public class WrapReturnValueProcessor extends FixableUsagesRefactoringProcessor {
 
@@ -149,7 +149,7 @@ public class WrapReturnValueProcessor extends FixableUsagesRefactoringProcessor 
     if (!typeParams.isEmpty()) {
       returnTypeBuffer.append('<');
       returnTypeBuffer.append(StringUtil.join(typeParams, new Function<PsiTypeParameter, String>() {
-        public String fun(final PsiTypeParameter typeParameter) {
+        public String apply(final PsiTypeParameter typeParameter) {
           final String paramName = typeParameter.getName();
           LOG.assertTrue(paramName != null);
           return paramName;

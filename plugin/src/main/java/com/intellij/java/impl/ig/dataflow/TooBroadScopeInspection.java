@@ -15,34 +15,37 @@
  */
 package com.intellij.java.impl.ig.dataflow;
 
-import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.ide.impl.idea.codeInspection.ui.MultipleCheckboxOptionsPanel;
+import com.intellij.java.impl.ig.psiutils.HighlightUtils;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import com.intellij.psi.*;
-import consulo.language.codeStyle.CodeStyleManager;
-import consulo.language.psi.search.ReferencesSearch;
-import consulo.language.ast.IElementType;
-import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.language.util.IncorrectOperationException;
-import consulo.application.util.query.Query;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ClassUtils;
 import com.siyeh.ig.psiutils.ExpressionUtils;
-import com.intellij.java.impl.ig.psiutils.HighlightUtils;
 import com.siyeh.ig.psiutils.VariableAccessUtils;
+import consulo.application.util.query.Query;
+import consulo.language.ast.IElementType;
+import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.editor.inspection.ui.MultipleCheckboxOptionsPanel;
+import consulo.language.psi.PsiComment;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiReference;
+import consulo.language.psi.PsiWhiteSpace;
+import consulo.language.psi.search.ReferencesSearch;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
 import org.jetbrains.annotations.NonNls;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
-import javax.swing.JComponent;
+import javax.swing.*;
 import java.util.Collection;
 
-public class TooBroadScopeInspection extends BaseInspection {
+public abstract class TooBroadScopeInspection extends BaseInspection {
 
   /**
    * @noinspection PublicField for externalization

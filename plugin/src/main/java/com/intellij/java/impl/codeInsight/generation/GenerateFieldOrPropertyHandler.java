@@ -16,15 +16,15 @@
 
 package com.intellij.java.impl.codeInsight.generation;
 
-import consulo.ide.impl.idea.codeInsight.generation.ClassMember;
 import com.intellij.java.language.impl.codeInsight.generation.GenerationInfo;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
 import com.intellij.java.language.psi.util.PropertyMemberType;
 import com.intellij.java.language.psi.util.PropertyUtil;
-import consulo.project.Project;
+import consulo.language.editor.generation.ClassMember;
 import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
 
 import javax.annotation.Nonnull;

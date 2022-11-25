@@ -15,41 +15,37 @@
  */
 package com.intellij.java.impl.testIntegration.createTest;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.testIntegration.TestFramework;
+import consulo.codeEditor.Editor;
+import consulo.component.extension.Extensions;
+import consulo.ide.impl.idea.ide.util.PropertiesComponent;
+import consulo.language.content.LanguageContentFolderScopes;
+import consulo.language.content.TestContentFolderTypeProvider;
 import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.intention.PsiElementBaseIntentionAction;
-import consulo.ide.impl.idea.ide.util.PropertiesComponent;
-import consulo.ui.ex.awt.Messages;
-import consulo.undoRedo.CommandProcessor;
-import consulo.codeEditor.Editor;
-import consulo.component.extension.Extensions;
-import consulo.module.Module;
-import consulo.language.util.ModuleUtilCore;
-import consulo.project.Project;
-import consulo.module.content.layer.ContentEntry;
-import consulo.module.content.layer.ContentFolder;
-import consulo.module.content.ModuleRootManager;
-import consulo.module.content.ProjectRootManager;
-import consulo.ui.ex.awt.DialogWrapper;
-import consulo.virtualFileSystem.VirtualFile;
-import com.intellij.java.language.psi.JavaDirectoryService;
-import com.intellij.java.language.psi.PsiAnonymousClass;
-import com.intellij.java.language.psi.PsiClass;
-import com.intellij.java.language.psi.PsiClassOwner;
 import consulo.language.psi.PsiDirectory;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
-import com.intellij.java.language.psi.PsiJavaPackage;
 import consulo.language.psi.util.PsiTreeUtil;
-import com.intellij.java.language.testIntegration.TestFramework;
 import consulo.language.util.IncorrectOperationException;
-import consulo.roots.ContentFolderScopes;
-import consulo.roots.impl.TestContentFolderTypeProvider;
+import consulo.language.util.ModuleUtilCore;
+import consulo.module.Module;
+import consulo.module.content.ModuleRootManager;
+import consulo.module.content.ProjectRootManager;
+import consulo.module.content.layer.ContentEntry;
+import consulo.module.content.layer.ContentFolder;
+import consulo.project.Project;
+import consulo.ui.ex.awt.DialogWrapper;
+import consulo.ui.ex.awt.Messages;
+import consulo.undoRedo.CommandProcessor;
+import consulo.virtualFileSystem.VirtualFile;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.HashSet;
+import java.util.Set;
 
 public class CreateTestAction extends PsiElementBaseIntentionAction {
 
@@ -140,7 +136,7 @@ public class CreateTestAction extends PsiElementBaseIntentionAction {
       @Override
       public void run() {
         TestFramework framework = d.getSelectedTestFrameworkDescriptor();
-        TestGenerator generator = TestGenerators.INSTANCE.forLanguage(framework.getLanguage());
+        TestGenerator generator = TestGenerator.forLanguage(framework.getLanguage());
         generator.generateTest(project, d);
       }
     }, CodeInsightBundle.message("intention.create.test"), this);
@@ -156,7 +152,7 @@ public class CreateTestAction extends PsiElementBaseIntentionAction {
 
     final ContentEntry[] entries = ModuleRootManager.getInstance(srcModule).getContentEntries();
     for (ContentEntry entry : entries) {
-      for (ContentFolder sourceFolder : entry.getFolders(ContentFolderScopes.of(TestContentFolderTypeProvider.getInstance()))) {
+      for (ContentFolder sourceFolder : entry.getFolders(LanguageContentFolderScopes.of(TestContentFolderTypeProvider.getInstance()))) {
         final VirtualFile sourceFolderFile = sourceFolder.getFile();
         if (sourceFolderFile != null) {
           testFolders.add(sourceFolderFile);

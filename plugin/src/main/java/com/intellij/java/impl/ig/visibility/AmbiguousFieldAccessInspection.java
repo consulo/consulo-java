@@ -18,7 +18,7 @@ package com.intellij.java.impl.ig.visibility;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
 import consulo.project.Project;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import com.siyeh.InspectionGadgetsBundle;

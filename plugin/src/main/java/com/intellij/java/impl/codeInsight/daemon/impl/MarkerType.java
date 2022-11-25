@@ -5,12 +5,6 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl;
 
-import consulo.language.editor.CodeInsightBundle;
-import consulo.language.editor.DaemonBundle;
-import consulo.language.editor.gutter.GutterIconNavigationHandler;
-import consulo.language.editor.ui.PsiElementListNavigator;
-import consulo.language.editor.ui.navigation.BackgroundUpdaterTask;
-import consulo.language.editor.ui.PsiElementListCellRenderer;
 import com.intellij.java.impl.ide.util.MethodCellRenderer;
 import com.intellij.java.impl.ide.util.MethodOrFunctionalExpressionCellRenderer;
 import com.intellij.java.impl.ide.util.PsiClassOrFunctionalExpressionListCellRenderer;
@@ -21,21 +15,26 @@ import com.intellij.java.language.impl.codeInsight.PsiClassListCellRenderer;
 import com.intellij.java.language.impl.psi.impl.FindSuperElementsHelper;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.ui.ex.action.IdeActions;
 import consulo.application.ReadAction;
 import consulo.application.progress.ProgressIndicator;
 import consulo.application.progress.ProgressManager;
-import consulo.project.DumbService;
+import consulo.application.util.function.CommonProcessors;
+import consulo.ide.impl.idea.util.NullableFunction;
+import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.DaemonBundle;
+import consulo.language.editor.gutter.GutterIconNavigationHandler;
+import consulo.language.editor.ui.PsiElementListCellRenderer;
+import consulo.language.editor.ui.PsiElementListNavigator;
+import consulo.language.editor.ui.navigation.BackgroundUpdaterTask;
 import consulo.language.psi.NavigatablePsiElement;
 import consulo.language.psi.PsiElement;
-import consulo.language.psi.scope.GlobalSearchScope;
-import consulo.language.psi.resolve.PsiElementProcessor;
-import consulo.ide.impl.psi.search.PsiElementProcessorAdapter;
 import consulo.language.psi.PsiUtilCore;
+import consulo.language.psi.resolve.PsiElementProcessor;
+import consulo.language.psi.resolve.PsiElementProcessorAdapter;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.project.DumbService;
+import consulo.ui.ex.action.IdeActions;
 import consulo.util.collection.ArrayUtil;
-import consulo.application.util.function.CommonProcessors;
-import consulo.ide.impl.idea.util.Function;
-import consulo.ide.impl.idea.util.NullableFunction;
 import consulo.util.collection.ContainerUtil;
 
 import javax.annotation.Nonnull;
@@ -44,6 +43,7 @@ import javax.swing.*;
 import java.awt.event.MouseEvent;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Function;
 
 public class MarkerType {
   private final GutterIconNavigationHandler<PsiElement> handler;

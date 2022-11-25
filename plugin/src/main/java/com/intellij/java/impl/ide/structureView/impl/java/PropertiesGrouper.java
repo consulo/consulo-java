@@ -16,21 +16,21 @@
 package com.intellij.java.impl.ide.structureView.impl.java;
 
 import consulo.application.AllIcons;
+import consulo.fileEditor.structureView.tree.*;
 import consulo.ide.IdeBundle;
-import consulo.project.ui.view.tree.AbstractTreeNode;
-import com.intellij.ide.util.treeView.smartTree.*;
 import consulo.language.psi.PsiElement;
+import consulo.project.ui.view.tree.AbstractTreeNode;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
 import java.util.*;
 
-public class PropertiesGrouper implements Grouper{
+public class PropertiesGrouper implements Grouper {
   @NonNls public static final String ID = "SHOW_PROPERTIES";
 
   @Nonnull
-  public Collection<Group> group(final AbstractTreeNode parent, Collection<TreeElement> children) {
-    if (parent.getValue() instanceof PropertyGroup) return Collections.emptyList();
+  public Collection<Group> group(final Object parent, Collection<TreeElement> children) {
+    if (((AbstractTreeNode) parent).getValue() instanceof PropertyGroup) return Collections.emptyList();
     Map<Group,Group> result = new HashMap<Group, Group>();
     for (TreeElement o : children) {
       if (o instanceof JavaClassTreeElementBase) {

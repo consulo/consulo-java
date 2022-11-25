@@ -15,26 +15,22 @@
  */
 package com.intellij.java.impl.refactoring.inline;
 
-import consulo.language.editor.TargetElementUtil;
-import com.intellij.java.language.JavaLanguage;
-import consulo.codeEditor.Editor;
-import consulo.application.progress.ProgressManager;
-import consulo.project.Project;
-import consulo.util.lang.ref.Ref;
-import consulo.language.psi.PsiCompiledElement;
-import consulo.language.psi.PsiElement;
-import com.intellij.java.language.psi.PsiEnumConstant;
-import com.intellij.java.language.psi.PsiExpression;
-import com.intellij.java.language.psi.PsiField;
-import com.intellij.java.language.psi.PsiModifier;
-import consulo.language.psi.PsiReference;
-import com.intellij.java.language.psi.PsiReferenceExpression;
-import com.intellij.psi.search.ProjectScope;
-import consulo.language.psi.search.ReferencesSearch;
-import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.impl.refactoring.HelpID;
+import com.intellij.java.language.JavaLanguage;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.application.progress.ProgressManager;
+import consulo.codeEditor.Editor;
+import consulo.language.editor.TargetElementUtil;
 import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
+import consulo.language.psi.PsiCompiledElement;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiReference;
+import consulo.language.psi.search.ReferencesSearch;
+import consulo.project.Project;
+import consulo.project.content.scope.ProjectScopes;
+import consulo.util.lang.ref.Ref;
 
 /**
  * @author ven
@@ -62,7 +58,7 @@ public class InlineConstantFieldHandler extends JavaInlineActionHandler {
       return;
     }
 
-    if (ReferencesSearch.search(field, ProjectScope.getProjectScope(project), false).findFirst() == null) {
+    if (ReferencesSearch.search(field, ProjectScopes.getProjectScope(project), false).findFirst() == null) {
       String message = RefactoringBundle.message("field.0.is.never.used", field.getName());
       CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.INLINE_FIELD);
       return;

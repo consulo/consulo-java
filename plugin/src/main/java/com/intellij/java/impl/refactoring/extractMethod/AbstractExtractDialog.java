@@ -20,26 +20,25 @@
  */
 package com.intellij.java.impl.refactoring.extractMethod;
 
+import com.intellij.java.analysis.impl.refactoring.util.VariableData;
 import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.java.language.psi.PsiType;
-import com.intellij.java.analysis.impl.refactoring.util.VariableData;
 
-public interface AbstractExtractDialog
-{
-	String getChosenMethodName();
+public interface AbstractExtractDialog {
+  String getChosenMethodName();
 
-	VariableData[] getChosenParameters();
+  VariableData[] getChosenParameters();
 
-	@PsiModifier.ModifierConstant
-	String getVisibility();
+  @PsiModifier.ModifierConstant
+  String getVisibility();
 
-	boolean isMakeStatic();
+  boolean isMakeStatic();
 
-	boolean isChainedConstructor();
+  boolean isChainedConstructor();
 
-	PsiType getReturnType();
+  PsiType getReturnType();
 
-	void show();
+  void show();
 
-	boolean isOK();
+  boolean isOK();
 }

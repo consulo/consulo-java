@@ -15,51 +15,44 @@
  */
 package com.intellij.java.impl.psi.impl.source.resolve.reference.impl;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiExpressionList;
 import com.intellij.java.language.psi.PsiLiteralExpression;
 import com.intellij.java.language.psi.PsiMethodCallExpression;
-import consulo.language.psi.PsiReference;
 import com.intellij.java.language.psi.PsiReferenceExpression;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiReference;
 import consulo.language.psi.PsiReferenceProvider;
 import consulo.language.util.ProcessingContext;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * @author Konstantin Bulenkov
  */
-abstract class JavaReflectionReferenceProvider extends PsiReferenceProvider
-{
-	@Nonnull
-	@Override
-	public PsiReference[] getReferencesByElement(@Nonnull PsiElement element, @Nonnull ProcessingContext context)
-	{
-		if(element instanceof PsiLiteralExpression)
-		{
-			PsiLiteralExpression literal = (PsiLiteralExpression) element;
-			if(literal.getValue() instanceof String)
-			{
-				PsiElement parent = element.getParent();
-				if(parent instanceof PsiExpressionList)
-				{
-					PsiElement grandParent = parent.getParent();
-					if(grandParent instanceof PsiMethodCallExpression)
-					{
-						PsiReferenceExpression methodReference = ((PsiMethodCallExpression) grandParent).getMethodExpression();
-						PsiReference[] references = getReferencesByMethod(literal, methodReference, context);
-						if(references != null)
-						{
-							return references;
-						}
-					}
-				}
-			}
-		}
-		return PsiReference.EMPTY_ARRAY;
-	}
+abstract class JavaReflectionReferenceProvider extends PsiReferenceProvider {
+  @Nonnull
+  @Override
+  public PsiReference[] getReferencesByElement(@Nonnull PsiElement element, @Nonnull ProcessingContext context) {
+    if (element instanceof PsiLiteralExpression) {
+      PsiLiteralExpression literal = (PsiLiteralExpression) element;
+      if (literal.getValue() instanceof String) {
+        PsiElement parent = element.getParent();
+        if (parent instanceof PsiExpressionList) {
+          PsiElement grandParent = parent.getParent();
+          if (grandParent instanceof PsiMethodCallExpression) {
+            PsiReferenceExpression methodReference = ((PsiMethodCallExpression) grandParent).getMethodExpression();
+            PsiReference[] references = getReferencesByMethod(literal, methodReference, context);
+            if (references != null) {
+              return references;
+            }
+          }
+        }
+      }
+    }
+    return PsiReference.EMPTY_ARRAY;
+  }
 
-	@Nullable
-	protected abstract PsiReference[] getReferencesByMethod(@Nonnull PsiLiteralExpression literalArgument, @Nonnull PsiReferenceExpression methodReference, @Nonnull ProcessingContext context);
+  @Nullable
+  protected abstract PsiReference[] getReferencesByMethod(@Nonnull PsiLiteralExpression literalArgument, @Nonnull PsiReferenceExpression methodReference, @Nonnull ProcessingContext context);
 }

@@ -19,7 +19,7 @@ import com.intellij.java.language.psi.PsiIfStatement;
 import com.intellij.java.language.psi.PsiJavaToken;
 import com.intellij.java.language.psi.PsiKeyword;
 import com.intellij.java.language.psi.PsiStatement;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.intellij.java.impl.ipp.psiutils.ErrorUtil;
 import org.jetbrains.annotations.NonNls;

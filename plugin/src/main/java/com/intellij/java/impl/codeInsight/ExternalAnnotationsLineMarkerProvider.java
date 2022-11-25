@@ -20,6 +20,7 @@ import com.intellij.java.impl.codeInsight.intention.impl.DeannotateIntentionActi
 import com.intellij.java.impl.codeInsight.javadoc.JavaDocInfoGenerator;
 import com.intellij.java.impl.codeInsight.javadoc.NonCodeAnnotationGenerator;
 import com.intellij.java.impl.codeInspection.dataFlow.EditContractIntention;
+import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.PsiLocalVariable;
 import com.intellij.java.language.psi.PsiModifierListOwner;
 import com.intellij.java.language.psi.PsiParameter;
@@ -32,6 +33,7 @@ import consulo.ide.impl.idea.ide.actions.ApplyIntentionAction;
 import consulo.ide.impl.idea.openapi.actionSystem.impl.SimpleDataContext;
 import consulo.java.impl.codeInsight.JavaCodeInsightSettings;
 import consulo.java.language.impl.JavaIcons;
+import consulo.language.Language;
 import consulo.language.editor.Pass;
 import consulo.language.editor.gutter.GutterIconNavigationHandler;
 import consulo.language.editor.gutter.LineMarkerInfo;
@@ -117,6 +119,12 @@ public class ExternalAnnotationsLineMarkerProvider extends LineMarkerProviderDes
   @Override
   public Image getIcon() {
     return JavaIcons.Gutter.ExtAnnotation;
+  }
+
+  @Nonnull
+  @Override
+  public Language getLanguage() {
+    return JavaLanguage.INSTANCE;
   }
 
   private static class MyIconGutterHandler implements GutterIconNavigationHandler<PsiElement> {

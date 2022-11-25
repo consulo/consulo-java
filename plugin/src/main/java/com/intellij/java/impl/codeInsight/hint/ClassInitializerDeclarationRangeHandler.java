@@ -22,7 +22,7 @@ import consulo.language.psi.PsiElement;
 
 import javax.annotation.Nonnull;
 
-public class ClassInitializerDeclarationRangeHandler implements DeclarationRangeHandler {
+public abstract class ClassInitializerDeclarationRangeHandler implements DeclarationRangeHandler {
   @Override
   @Nonnull
   public TextRange getDeclarationRange(@Nonnull final PsiElement container) {

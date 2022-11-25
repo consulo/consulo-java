@@ -15,21 +15,21 @@
  */
 package consulo.java.impl.module.extension;
 
-import consulo.ide.impl.idea.compiler.impl.ModuleChunk;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.projectRoots.JavaSdk;
 import com.intellij.java.language.projectRoots.JavaSdkVersion;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.compiler.CompileContext;
+import consulo.compiler.ModuleChunk;
 import consulo.content.bundle.Sdk;
 import consulo.content.bundle.SdkType;
-import consulo.util.lang.StringUtil;
-import consulo.virtualFileSystem.VirtualFile;
-import consulo.annotation.access.RequiredReadAction;
 import consulo.java.language.module.extension.JavaModuleExtension;
 import consulo.java.language.module.extension.SpecialDirLocation;
+import consulo.module.content.layer.ModuleRootLayer;
+import consulo.module.content.layer.extension.ModuleExtensionWithSdkBase;
 import consulo.module.extension.ModuleInheritableNamedPointer;
-import consulo.module.extension.impl.ModuleExtensionWithSdkImpl;
-import consulo.roots.ModuleRootLayer;
+import consulo.util.lang.StringUtil;
+import consulo.virtualFileSystem.VirtualFile;
 import org.jdom.Element;
 
 import javax.annotation.Nonnull;
@@ -42,7 +42,7 @@ import java.util.Set;
  * @author VISTALL
  * @since 10:02/19.05.13
  */
-public class JavaModuleExtensionImpl extends ModuleExtensionWithSdkImpl<JavaModuleExtensionImpl> implements JavaModuleExtension<JavaModuleExtensionImpl> {
+public class JavaModuleExtensionImpl extends ModuleExtensionWithSdkBase<JavaModuleExtensionImpl> implements JavaModuleExtension<JavaModuleExtensionImpl> {
   private static final String SPECIAL_DIR_LOCATION = "special-dir-location";
   private static final String BYTECODE_VERSION = "bytecode-version";
   private static final String COMPILER_ARGUMENTS = "compiler-arguments";
@@ -114,7 +114,7 @@ public class JavaModuleExtensionImpl extends ModuleExtensionWithSdkImpl<JavaModu
 
   @Nonnull
   @Override
-  public Set<VirtualFile> getCompilationBootClasspath(@Nonnull CompileContext compileContext, @Nonnull consulo.ide.impl.idea.compiler.impl.ModuleChunk moduleChunk) {
+  public Set<VirtualFile> getCompilationBootClasspath(@Nonnull CompileContext compileContext, @Nonnull ModuleChunk moduleChunk) {
     return moduleChunk.getCompilationBootClasspathFiles(JavaSdk.getInstance());
   }
 

@@ -15,18 +15,17 @@
  */
 package com.intellij.java.impl.codeInsight.intention.impl;
 
-import javax.annotation.Nonnull;
-
-import consulo.language.editor.CodeInsightBundle;
-import consulo.language.editor.FileModificationService;
+import com.intellij.java.language.impl.psi.impl.JavaConstantExpressionEvaluator;
 import com.intellij.java.language.psi.*;
 import consulo.codeEditor.Editor;
-import consulo.project.Project;
-import com.intellij.psi.*;
-import com.intellij.java.language.impl.psi.impl.JavaConstantExpressionEvaluator;
+import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.FileModificationService;
+import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**

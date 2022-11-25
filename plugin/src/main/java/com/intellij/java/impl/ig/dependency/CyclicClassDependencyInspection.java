@@ -30,7 +30,7 @@ import javax.annotation.Nullable;
 import java.util.HashSet;
 import java.util.Set;
 
-public class CyclicClassDependencyInspection extends BaseGlobalInspection {
+public abstract class CyclicClassDependencyInspection extends BaseGlobalInspection {
 
   @Nonnull
   @Override

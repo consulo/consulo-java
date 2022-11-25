@@ -15,23 +15,22 @@
  */
 package com.intellij.java.impl.refactoring.typeMigration;
 
-import java.util.Map;
+import com.intellij.java.impl.refactoring.typeMigration.usageInfo.TypeMigrationUsageInfo;
+import com.intellij.java.language.impl.psi.impl.PsiDiamondTypeUtil;
+import com.intellij.java.language.impl.psi.impl.source.tree.ChildRole;
+import com.intellij.java.language.impl.refactoring.util.RefactoringChangeUtil;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
+import consulo.language.impl.ast.CompositeElement;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.logging.Logger;
+import consulo.project.Project;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
-import com.intellij.java.language.psi.*;
-import consulo.logging.Logger;
-import consulo.project.Project;
-import com.intellij.psi.*;
-import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
-import com.intellij.java.language.impl.psi.impl.PsiDiamondTypeUtil;
-import com.intellij.java.language.impl.psi.impl.source.tree.ChildRole;
-import consulo.language.impl.ast.CompositeElement;
-import consulo.language.psi.util.PsiTreeUtil;
-import com.intellij.java.impl.refactoring.typeMigration.usageInfo.TypeMigrationUsageInfo;
-import com.intellij.java.language.impl.refactoring.util.RefactoringChangeUtil;
-import consulo.language.util.IncorrectOperationException;
+import java.util.Map;
 
 /**
  * @author anna

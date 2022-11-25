@@ -15,21 +15,20 @@
  */
 package consulo.java.impl.roots;
 
+import consulo.java.language.module.extension.JavaModuleExtension;
+import consulo.language.content.LanguageContentFolderScopes;
+import consulo.language.util.ModuleUtilCore;
+import consulo.module.Module;
+import consulo.module.content.ModuleRootManager;
+import consulo.versionControlSystem.util.VcsUtil;
+import consulo.virtualFileSystem.VirtualFile;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import consulo.module.Module;
-import consulo.language.util.ModuleUtilCore;
-import consulo.module.content.ModuleRootManager;
-import consulo.virtualFileSystem.VirtualFile;
-import consulo.versionControlSystem.util.VcsUtil;
-import consulo.java.language.module.extension.JavaModuleExtension;
-import consulo.roots.ContentFolderScopes;
 
 /**
  * @author VISTALL
@@ -50,7 +49,7 @@ public class SpecialDirUtil {
         return module.getModuleDirPath() + File.separator + name;
       case SOURCE_DIR:
         ModuleRootManager moduleRootManager = ModuleRootManager.getInstance(module);
-        final VirtualFile[] contentFolders = moduleRootManager.getContentFolderFiles(ContentFolderScopes.all(false));
+        final VirtualFile[] contentFolders = moduleRootManager.getContentFolderFiles(LanguageContentFolderScopes.all(false));
         if(contentFolders.length == 0) {
           return null;
         }
@@ -85,7 +84,7 @@ public class SpecialDirUtil {
         return Collections.singletonList(virtualFile);
       case SOURCE_DIR:
         ModuleRootManager moduleRootManager = ModuleRootManager.getInstance(module);
-        final VirtualFile[] sourceRoots = moduleRootManager.getContentFolderFiles(ContentFolderScopes.all(false));
+        final VirtualFile[] sourceRoots = moduleRootManager.getContentFolderFiles(LanguageContentFolderScopes.all(false));
         if(sourceRoots.length == 0) {
           return Collections.emptyList();
         }

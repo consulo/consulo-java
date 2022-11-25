@@ -23,29 +23,30 @@ import com.intellij.java.language.psi.PsiJavaPackage;
 import com.intellij.java.language.psi.PsiNameHelper;
 import com.intellij.java.language.psi.util.ClassKind;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.project.Project;
-import consulo.util.lang.StringUtil;
-import com.intellij.psi.*;
+import consulo.application.util.CachedValueProvider;
+import consulo.application.util.CachedValuesManager;
+import consulo.application.util.ParameterizedCachedValue;
+import consulo.application.util.ParameterizedCachedValueProvider;
+import consulo.ide.impl.idea.util.NullableFunction;
+import consulo.language.psi.*;
 import consulo.language.psi.path.CustomizableReferenceProvider;
 import consulo.language.psi.resolve.PsiScopeProcessor;
+import consulo.language.psi.resolve.ResolveState;
 import consulo.language.psi.scope.GlobalSearchScope;
-import com.intellij.psi.util.*;
-import consulo.ide.impl.idea.util.NullableFunction;
 import consulo.language.util.ProcessingContext;
+import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
-import consulo.psi.PsiPackage;
 import consulo.util.dataholder.Key;
+import consulo.util.lang.StringUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 
 /**
- * Created by IntelliJ IDEA.
  * User: ik
  * Date: 27.03.2003
  * Time: 17:30:38
- * To change this template use Options | File Templates.
  */
 public class JavaClassReferenceProvider extends GenericReferenceProvider implements CustomizableReferenceProvider {
 
@@ -158,7 +159,7 @@ public class JavaClassReferenceProvider extends GenericReferenceProvider impleme
   private static Collection<PsiPackage> getSubPackages(final PsiJavaPackage defaultPackage) {
     return ContainerUtil.mapNotNull(defaultPackage.getSubPackages(), new NullableFunction<PsiPackage, PsiPackage>() {
       @Override
-      public PsiPackage fun(final PsiPackage psiPackage) {
+      public PsiPackage apply(final PsiPackage psiPackage) {
         final String packageName = psiPackage.getName();
         return PsiNameHelper.getInstance(psiPackage.getProject()).isIdentifier(packageName, PsiUtil.getLanguageLevel(psiPackage)) ? psiPackage : null;
       }

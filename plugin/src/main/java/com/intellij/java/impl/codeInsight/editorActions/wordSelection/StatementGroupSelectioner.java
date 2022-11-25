@@ -16,11 +16,13 @@
 package com.intellij.java.impl.codeInsight.editorActions.wordSelection;
 
 import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.javadoc.PsiDocComment;
+import consulo.application.util.LineTokenizer;
 import consulo.codeEditor.Editor;
 import consulo.document.util.TextRange;
-import com.intellij.openapi.util.text.LineTokenizer;
-import com.intellij.psi.*;
-import com.intellij.java.language.psi.javadoc.PsiDocComment;
+import consulo.language.psi.PsiComment;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiWhiteSpace;
 
 import java.util.ArrayList;
 import java.util.List;

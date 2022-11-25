@@ -20,27 +20,28 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
-import javax.annotation.Nonnull;
-
-import com.intellij.java.language.psi.*;
-import consulo.java.language.module.extension.JavaModuleExtension;
-import org.jetbrains.annotations.NonNls;
-import consulo.language.editor.FileModificationService;
-import consulo.language.editor.intention.IntentionAction;
-import consulo.codeEditor.Editor;
-import consulo.module.Module;
-import consulo.ide.impl.idea.openapi.module.ModuleUtil;
-import consulo.language.util.ModuleUtilCore;
-import consulo.project.Project;
 import com.intellij.java.language.projectRoots.JavaSdk;
 import com.intellij.java.language.projectRoots.JavaSdkVersion;
-import consulo.content.bundle.Sdk;
-import consulo.util.lang.Comparing;
-import com.intellij.psi.*;
+import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
-import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.java.language.psi.util.InheritanceUtil;
+import consulo.codeEditor.Editor;
+import consulo.content.bundle.Sdk;
+import consulo.ide.impl.idea.openapi.module.ModuleUtil;
+import consulo.java.language.module.extension.JavaModuleExtension;
+import consulo.language.editor.FileModificationService;
+import consulo.language.editor.intention.IntentionAction;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.util.IncorrectOperationException;
+import consulo.language.util.ModuleUtilCore;
+import consulo.module.Module;
+import consulo.project.Project;
+import consulo.util.lang.Comparing;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
 
 public class ReplaceAddAllArrayToCollectionFix implements IntentionAction {
   private final PsiMethodCallExpression myMethodCall;

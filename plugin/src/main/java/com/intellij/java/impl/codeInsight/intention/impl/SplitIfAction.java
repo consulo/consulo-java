@@ -15,21 +15,24 @@
  */
 package com.intellij.java.impl.codeInsight.intention.impl;
 
-import javax.annotation.Nonnull;
-
-import consulo.language.editor.CodeInsightBundle;
-import consulo.language.editor.FileModificationService;
-import consulo.language.editor.intention.PsiElementBaseIntentionAction;
+import com.intellij.java.impl.refactoring.util.RefactoringUtil;
 import com.intellij.java.language.psi.*;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.ScrollType;
-import consulo.project.Project;
-import com.intellij.psi.*;
 import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.FileModificationService;
+import consulo.language.editor.intention.PsiElementBaseIntentionAction;
+import consulo.language.psi.PsiComment;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiManager;
+import consulo.language.psi.PsiWhiteSpace;
 import consulo.language.psi.util.PsiTreeUtil;
-import com.intellij.java.impl.refactoring.util.RefactoringUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
+import consulo.project.Project;
+
+import javax.annotation.Nonnull;
 
 /**
  * @author mike

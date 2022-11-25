@@ -17,20 +17,16 @@ package com.intellij.java.impl.psi.util.proximity;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.module.Module;
-import consulo.language.util.ModuleUtilCore;
-import consulo.util.dataholder.NotNullLazyKey;
 import consulo.ide.impl.idea.openapi.util.NullableLazyKey;
-import consulo.util.lang.StringUtil;
-import consulo.language.psi.PsiDirectory;
-import consulo.language.psi.PsiElement;
-import consulo.language.psi.PsiFile;
 import consulo.ide.impl.psi.util.ProximityLocation;
-import consulo.language.psi.util.PsiTreeUtil;
-import consulo.language.psi.PsiUtilCore;
 import consulo.ide.impl.psi.util.proximity.ProximityWeigher;
+import consulo.language.psi.*;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.ModuleUtilCore;
+import consulo.module.Module;
 import consulo.util.collection.ContainerUtil;
-import consulo.psi.PsiPackage;
+import consulo.util.dataholder.NotNullLazyKey;
+import consulo.util.lang.StringUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

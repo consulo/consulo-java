@@ -15,16 +15,19 @@
  */
 package com.intellij.java.impl.ipp.initialization;
 
-import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import com.intellij.psi.*;
-import consulo.language.codeStyle.CodeStyleManager;
-import consulo.language.util.IncorrectOperationException;
-import com.siyeh.IntentionPowerPackBundle;
 import com.intellij.java.impl.ipp.base.Intention;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.intellij.java.impl.ipp.psiutils.HighlightUtil;
+import com.intellij.java.language.psi.*;
+import com.siyeh.IntentionPowerPackBundle;
+import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiManager;
+import consulo.language.psi.PsiParserFacade;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
 import org.jetbrains.annotations.NonNls;
+
 import javax.annotation.Nonnull;
 
 public class SplitDeclarationAndInitializationIntention extends Intention {

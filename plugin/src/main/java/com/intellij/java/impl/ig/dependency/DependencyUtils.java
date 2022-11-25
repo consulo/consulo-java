@@ -15,11 +15,12 @@
  */
 package com.intellij.java.impl.ig.dependency;
 
-import com.intellij.codeInspection.reference.*;
 import com.intellij.java.analysis.codeInspection.reference.RefClass;
 import com.intellij.java.analysis.codeInspection.reference.RefJavaElement;
 import com.intellij.java.analysis.codeInspection.reference.RefJavaUtil;
 import com.intellij.java.analysis.codeInspection.reference.RefPackage;
+import consulo.language.editor.inspection.reference.RefElement;
+import consulo.language.editor.inspection.reference.RefEntity;
 import consulo.util.dataholder.Key;
 
 import java.util.*;
@@ -27,30 +28,30 @@ import java.util.*;
 public class DependencyUtils {
 
   private static final Key<Set<RefClass>> DEPENDENT_CLASSES_KEY =
-    new Key<Set<RefClass>>("DEPENDENT_CLASSES");
+      new Key<Set<RefClass>>("DEPENDENT_CLASSES");
   private static final Key<Set<RefClass>> DEPENDENCY_CLASSES_KEY =
-    new Key<Set<RefClass>>("DEPENDENCY_CLASSES");
+      new Key<Set<RefClass>>("DEPENDENCY_CLASSES");
   private static final Key<Set<RefClass>> TRANSITIVE_DEPENDENT_CLASSES_KEY =
-    new Key<Set<RefClass>>("TRANSITIVE_DEPENDENT_CLASSES");
+      new Key<Set<RefClass>>("TRANSITIVE_DEPENDENT_CLASSES");
   private static final Key<Set<RefClass>> TRANSITIVE_DEPENDENCY_CLASSES_KEY =
-    new Key<Set<RefClass>>("TRANSITIVE_DEPENDENCY_CLASSES");
+      new Key<Set<RefClass>>("TRANSITIVE_DEPENDENCY_CLASSES");
 
   private static final Key<Set<RefPackage>> DEPENDENT_PACKAGES_KEY =
-    new Key<Set<RefPackage>>("DEPENDENT_PACKAGES");
+      new Key<Set<RefPackage>>("DEPENDENT_PACKAGES");
   private static final Key<Set<RefPackage>> DEPENDENCY_PACKAGES_KEY =
-    new Key<Set<RefPackage>>("DEPENDENCY_PACKAGES");
+      new Key<Set<RefPackage>>("DEPENDENCY_PACKAGES");
   private static final Key<Set<RefPackage>> TRANSITIVE_DEPENDENT_PACKAGES_KEY =
-    new Key<Set<RefPackage>>("TRANSITIVE_DEPENDENT_PACKAGES");
+      new Key<Set<RefPackage>>("TRANSITIVE_DEPENDENT_PACKAGES");
   private static final Key<Set<RefPackage>> TRANSITIVE_DEPENDENCY_PACKAGES_KEY =
-    new Key<Set<RefPackage>>("TRANSITIVE_DEPENDENCY_PACKAGES");
+      new Key<Set<RefPackage>>("TRANSITIVE_DEPENDENCY_PACKAGES");
 
   private DependencyUtils() {
   }
 
   public static Set<RefClass> calculateDependenciesForClass(
-    RefClass refClass) {
+      RefClass refClass) {
     final Set<RefClass> dependencies =
-      refClass.getUserData(DEPENDENCY_CLASSES_KEY);
+        refClass.getUserData(DEPENDENCY_CLASSES_KEY);
     if (dependencies != null) {
       return dependencies;
     }
@@ -73,7 +74,7 @@ public class DependencyUtils {
       }
     }
     final Collection<RefClass> typeReferences =
-      element.getOutTypeReferences();
+        element.getOutTypeReferences();
     for (RefElement reference : typeReferences) {
       final RefClass refClass = refUtil.getTopLevelClass(reference);
       if (refClass != null) {
@@ -86,15 +87,15 @@ public class DependencyUtils {
     }
     for (RefEntity child : children) {
       if (child instanceof RefJavaElement) {
-        tabulateDependencyClasses((RefJavaElement)child, dependencies);
+        tabulateDependencyClasses((RefJavaElement) child, dependencies);
       }
     }
   }
 
   public static Set<RefClass> calculateTransitiveDependenciesForClass(
-    RefClass refClass) {
+      RefClass refClass) {
     final Set<RefClass> dependencies =
-      refClass.getUserData(TRANSITIVE_DEPENDENCY_CLASSES_KEY);
+        refClass.getUserData(TRANSITIVE_DEPENDENCY_CLASSES_KEY);
     if (dependencies != null) {
       return dependencies;
     }
@@ -105,7 +106,7 @@ public class DependencyUtils {
   }
 
   private static void tabulateTransitiveDependencyClasses(
-    RefClass refClass, Set<RefClass> newDependencies) {
+      RefClass refClass, Set<RefClass> newDependencies) {
     final LinkedList<RefClass> pendingClasses = new LinkedList<RefClass>();
     final Set<RefClass> processedClasses = new HashSet<RefClass>();
     pendingClasses.addLast(refClass);
@@ -114,7 +115,7 @@ public class DependencyUtils {
       newDependencies.add(classToProcess);
       processedClasses.add(classToProcess);
       final Set<RefClass> dependencies =
-        calculateDependenciesForClass(classToProcess);
+          calculateDependenciesForClass(classToProcess);
       for (RefClass dependency : dependencies) {
         if (!pendingClasses.contains(dependency) &&
             !processedClasses.contains(dependency)) {
@@ -127,7 +128,7 @@ public class DependencyUtils {
 
   public static Set<RefClass> calculateDependentsForClass(RefClass refClass) {
     final Set<RefClass> dependents =
-      refClass.getUserData(DEPENDENT_CLASSES_KEY);
+        refClass.getUserData(DEPENDENT_CLASSES_KEY);
     if (dependents != null) {
       return dependents;
     }
@@ -137,7 +138,7 @@ public class DependencyUtils {
     final RefJavaUtil refUtil = RefJavaUtil.getInstance();
     for (RefElement typeReference : typeReferences) {
       final RefClass referencingClass =
-        refUtil.getTopLevelClass(typeReference);
+          refUtil.getTopLevelClass(typeReference);
       newDependents.add(referencingClass);
     }
     newDependents.remove(refClass);
@@ -162,15 +163,15 @@ public class DependencyUtils {
     }
     for (RefEntity child : children) {
       if (child instanceof RefElement) {
-        tabulateDependentClasses((RefElement)child, dependents);
+        tabulateDependentClasses((RefElement) child, dependents);
       }
     }
   }
 
   public static Set<RefClass> calculateTransitiveDependentsForClass(
-    RefClass refClass) {
+      RefClass refClass) {
     final Set<RefClass> dependents =
-      refClass.getUserData(TRANSITIVE_DEPENDENT_CLASSES_KEY);
+        refClass.getUserData(TRANSITIVE_DEPENDENT_CLASSES_KEY);
     if (dependents != null) {
       return dependents;
     }
@@ -181,7 +182,7 @@ public class DependencyUtils {
   }
 
   private static void tabulateTransitiveDependentClasses(
-    RefClass refClass, Set<RefClass> newDependents) {
+      RefClass refClass, Set<RefClass> newDependents) {
     final LinkedList<RefClass> pendingClasses = new LinkedList<RefClass>();
     final Set<RefClass> processedClasses = new HashSet<RefClass>();
     pendingClasses.addLast(refClass);
@@ -190,7 +191,7 @@ public class DependencyUtils {
       newDependents.add(classToProcess);
       processedClasses.add(classToProcess);
       final Set<RefClass> dependents =
-        calculateDependentsForClass(classToProcess);
+          calculateDependentsForClass(classToProcess);
       for (RefClass dependent : dependents) {
         if (!pendingClasses.contains(dependent) &&
             !processedClasses.contains(dependent)) {
@@ -202,9 +203,9 @@ public class DependencyUtils {
   }
 
   public static Set<RefPackage> calculateDependenciesForPackage(
-    RefPackage refPackage) {
+      RefPackage refPackage) {
     final Set<RefPackage> dependencies =
-      refPackage.getUserData(DEPENDENCY_PACKAGES_KEY);
+        refPackage.getUserData(DEPENDENCY_PACKAGES_KEY);
     if (dependencies != null) {
       return dependencies;
     }
@@ -219,7 +220,7 @@ public class DependencyUtils {
   static void tabulateDependencyPackages(RefEntity entity,
                                          Set<RefPackage> dependencies) {
     if (entity instanceof RefElement) {
-      final RefElement element = (RefElement)entity;
+      final RefElement element = (RefElement) entity;
       final Collection<RefElement> references = element.getOutReferences();
       for (RefElement reference : references) {
         final RefPackage refPackage = RefJavaUtil.getPackage(reference);
@@ -240,9 +241,9 @@ public class DependencyUtils {
   }
 
   public static Set<RefPackage> calculateDependentsForPackage(
-    RefPackage refPackage) {
+      RefPackage refPackage) {
     final Set<RefPackage> dependents =
-      refPackage.getUserData(DEPENDENT_PACKAGES_KEY);
+        refPackage.getUserData(DEPENDENT_PACKAGES_KEY);
     if (dependents != null) {
       return dependents;
     }
@@ -256,7 +257,7 @@ public class DependencyUtils {
   static void tabulateDependentPackages(RefEntity entity,
                                         Set<RefPackage> dependents) {
     if (entity instanceof RefElement) {
-      final RefElement element = (RefElement)entity;
+      final RefElement element = (RefElement) entity;
       final Collection<RefElement> references = element.getOutReferences();
       for (RefElement reference : references) {
         final RefPackage refPackage = RefJavaUtil.getPackage(reference);
@@ -277,9 +278,9 @@ public class DependencyUtils {
   }
 
   public static Set<RefPackage> calculateTransitiveDependentsForPackage(
-    RefPackage refPackage) {
+      RefPackage refPackage) {
     final Set<RefPackage> dependents =
-      refPackage.getUserData(TRANSITIVE_DEPENDENT_PACKAGES_KEY);
+        refPackage.getUserData(TRANSITIVE_DEPENDENT_PACKAGES_KEY);
     if (dependents != null) {
       return dependents;
     }
@@ -290,9 +291,9 @@ public class DependencyUtils {
   }
 
   private static void tabulateTransitiveDependentPackages(
-    RefPackage refPackage, Set<RefPackage> newDependents) {
+      RefPackage refPackage, Set<RefPackage> newDependents) {
     final LinkedList<RefPackage> pendingPackages =
-      new LinkedList<RefPackage>();
+        new LinkedList<RefPackage>();
     final Set<RefPackage> processedPackages = new HashSet<RefPackage>();
     pendingPackages.addLast(refPackage);
     while (!pendingPackages.isEmpty()) {
@@ -300,7 +301,7 @@ public class DependencyUtils {
       newDependents.add(packageToProcess);
       processedPackages.add(packageToProcess);
       final Set<RefPackage> dependents =
-        calculateDependentsForPackage(packageToProcess);
+          calculateDependentsForPackage(packageToProcess);
       for (RefPackage dependent : dependents) {
         if (!pendingPackages.contains(dependent) &&
             !processedPackages.contains(dependent)) {
@@ -312,23 +313,23 @@ public class DependencyUtils {
   }
 
   public static Set<RefPackage> calculateTransitiveDependenciesForPackage(
-    RefPackage refPackage) {
+      RefPackage refPackage) {
     final Set<RefPackage> dependencies =
-      refPackage.getUserData(TRANSITIVE_DEPENDENCY_PACKAGES_KEY);
+        refPackage.getUserData(TRANSITIVE_DEPENDENCY_PACKAGES_KEY);
     if (dependencies != null) {
       return dependencies;
     }
     final Set<RefPackage> newDependencies = new HashSet<RefPackage>();
     tabulateTransitiveDependencyPackages(refPackage, newDependencies);
     refPackage.putUserData(TRANSITIVE_DEPENDENCY_PACKAGES_KEY,
-                           newDependencies);
+        newDependencies);
     return newDependencies;
   }
 
   private static void tabulateTransitiveDependencyPackages(
-    RefPackage refPackage, Set<RefPackage> newDependencies) {
+      RefPackage refPackage, Set<RefPackage> newDependencies) {
     final LinkedList<RefPackage> pendingPackages =
-      new LinkedList<RefPackage>();
+        new LinkedList<RefPackage>();
     final Set<RefPackage> processedPackages = new HashSet<RefPackage>();
     pendingPackages.addLast(refPackage);
     while (!pendingPackages.isEmpty()) {
@@ -336,7 +337,7 @@ public class DependencyUtils {
       newDependencies.add(packageToProcess);
       processedPackages.add(packageToProcess);
       final Set<RefPackage> dependencies =
-        calculateDependenciesForPackage(packageToProcess);
+          calculateDependenciesForPackage(packageToProcess);
       for (RefPackage dependency : dependencies) {
         if (!pendingPackages.contains(dependency) &&
             !processedPackages.contains(dependency)) {

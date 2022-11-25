@@ -19,12 +19,12 @@ package com.intellij.java.impl.util.xml;
 import com.intellij.java.impl.psi.impl.source.resolve.reference.impl.providers.JavaClassReferenceProvider;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.util.ClassKind;
-import consulo.project.Project;
-import consulo.util.lang.StringUtil;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
 import consulo.language.psi.scope.GlobalSearchScope;
-import com.intellij.util.xml.*;
+import consulo.project.Project;
+import consulo.util.lang.StringUtil;
+import consulo.xml.util.xml.*;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

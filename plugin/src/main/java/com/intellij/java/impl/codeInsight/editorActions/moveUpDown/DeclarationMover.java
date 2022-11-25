@@ -15,23 +15,23 @@
  */
 package com.intellij.java.impl.codeInsight.editorActions.moveUpDown;
 
-import consulo.ide.impl.idea.codeInsight.CodeInsightUtilBase;
-import consulo.language.editor.moveUpDown.LineMover;
-import consulo.language.editor.moveUpDown.LineRange;
 import com.intellij.java.language.psi.*;
-import consulo.document.Document;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.LogicalPosition;
-import consulo.util.lang.Pair;
+import consulo.document.Document;
 import consulo.document.util.TextRange;
+import consulo.language.editor.CodeInsightUtilCore;
+import consulo.language.editor.moveUpDown.LineMover;
+import consulo.language.editor.moveUpDown.LineRange;
+import consulo.language.impl.ast.Factory;
+import consulo.language.impl.ast.TreeElement;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiErrorElement;
 import consulo.language.psi.PsiFile;
-import consulo.language.impl.internal.ast.Factory;
-import consulo.language.impl.ast.TreeElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
+import consulo.util.lang.Pair;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -51,7 +51,7 @@ class DeclarationMover extends LineMover {
 
       try {
         PsiElement inserted = myEnumToInsertSemicolonAfter.getParent().addAfter(semicolon.getPsi(), myEnumToInsertSemicolonAfter);
-        inserted = CodeInsightUtilBase.forcePsiPostprocessAndRestoreElement(inserted);
+        inserted = CodeInsightUtilCore.forcePsiPostprocessAndRestoreElement(inserted);
         final LogicalPosition position = editor.offsetToLogicalPosition(inserted.getTextRange().getEndOffset());
 
         info.toMove2 = new LineRange(position.line + 1, position.line + 1);

@@ -15,27 +15,27 @@
  */
 package com.intellij.java.impl.ig.bugs;
 
-import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import com.intellij.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
-import consulo.language.psi.scope.GlobalSearchScope;
-import consulo.language.psi.util.PsiTreeUtil;
-import consulo.language.util.IncorrectOperationException;
+import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.siyeh.InspectionGadgetsBundle;
 import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
+
 import javax.annotation.Nonnull;
-
-import java.util.Set;
 import java.util.HashSet;
+import java.util.Set;
 
-public class ClassNewInstanceInspection extends BaseInspection {
+public abstract class ClassNewInstanceInspection extends BaseInspection {
 
   @Override
   @Nls

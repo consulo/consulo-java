@@ -20,29 +20,26 @@
  */
 package com.intellij.java.impl.profile.codeInspection.ui;
 
-import java.util.function.Consumer;
-
-import javax.annotation.Nonnull;
-
 import consulo.application.ApplicationBundle;
+import consulo.application.ui.setting.AdditionalEditorGeneralSettingProvider;
+import consulo.configurable.SimpleConfigurableByProperties;
 import consulo.language.editor.DaemonCodeAnalyzerSettings;
-import consulo.ide.impl.codeInspection.ui.ErrorPropertiesProvider;
-import consulo.options.SimpleConfigurableByProperties;
 import consulo.ui.CheckBox;
 import consulo.ui.Component;
 import consulo.ui.annotation.RequiredUIAccess;
 
-public class JavaErrorOptionsProvider implements ErrorPropertiesProvider
-{
-	@Override
-	@RequiredUIAccess
-	public void fillProperties(@Nonnull Consumer<Component> consumer, @Nonnull SimpleConfigurableByProperties.PropertyBuilder propertyBuilder)
-	{
-		CheckBox suppressWay = CheckBox.create(ApplicationBundle.message("checkbox.suppress.with.suppresswarnings"));
-		consumer.accept(suppressWay);
-		
-		DaemonCodeAnalyzerSettings settings = DaemonCodeAnalyzerSettings.getInstance();
+import javax.annotation.Nonnull;
+import java.util.function.Consumer;
 
-		propertyBuilder.add(suppressWay, settings::isSuppressWarnings, settings::setSuppressWarnings);
-	}
+public class JavaErrorOptionsProvider implements AdditionalEditorGeneralSettingProvider {
+  @Override
+  @RequiredUIAccess
+  public void fillProperties(@Nonnull SimpleConfigurableByProperties.PropertyBuilder propertyBuilder, @Nonnull Consumer<Component> consumer) {
+    CheckBox suppressWay = CheckBox.create(ApplicationBundle.message("checkbox.suppress.with.suppresswarnings"));
+    consumer.accept(suppressWay);
+
+    DaemonCodeAnalyzerSettings settings = DaemonCodeAnalyzerSettings.getInstance();
+
+    propertyBuilder.add(suppressWay, settings::isSuppressWarnings, settings::setSuppressWarnings);
+  }
 }

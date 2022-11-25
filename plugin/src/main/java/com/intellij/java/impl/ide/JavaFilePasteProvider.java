@@ -15,24 +15,24 @@
  */
 package com.intellij.java.impl.ide;
 
-import consulo.ide.IdeView;
-import consulo.ui.ex.PasteProvider;
 import com.intellij.java.language.JavaLanguage;
+import com.intellij.java.language.psi.PsiElementFactory;
 import com.intellij.java.language.psi.*;
-import consulo.language.editor.CommonDataKeys;
-import consulo.dataContext.DataContext;
-import consulo.language.editor.LangDataKeys;
 import consulo.application.Result;
-import consulo.undoRedo.CommandProcessor;
-import consulo.language.editor.WriteCommandAction;
+import consulo.dataContext.DataContext;
 import consulo.document.Document;
-import consulo.navigation.OpenFileDescriptor;
-import consulo.ui.ex.awt.CopyPasteManager;
-import consulo.project.Project;
 import consulo.document.util.TextRange;
-import com.intellij.psi.*;
+import consulo.ide.IdeView;
 import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.editor.CommonDataKeys;
+import consulo.language.editor.WriteCommandAction;
+import consulo.language.psi.*;
 import consulo.language.util.IncorrectOperationException;
+import consulo.navigation.OpenFileDescriptorFactory;
+import consulo.project.Project;
+import consulo.ui.ex.PasteProvider;
+import consulo.ui.ex.awt.CopyPasteManager;
+import consulo.undoRedo.CommandProcessor;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -45,7 +45,7 @@ import java.awt.datatransfer.Transferable;
 public class JavaFilePasteProvider implements PasteProvider {
   public void performPaste(@Nonnull final DataContext dataContext) {
     final Project project = dataContext.getData(CommonDataKeys.PROJECT);
-    final IdeView ideView = dataContext.getData(LangDataKeys.IDE_VIEW);
+    final IdeView ideView = dataContext.getData(IdeView.KEY);
     if (project == null || ideView == null) return;
     final PsiJavaFile javaFile = createJavaFileFromClipboardContent(project);
     if (javaFile == null) return;
@@ -76,7 +76,7 @@ public class JavaFilePasteProvider implements PasteProvider {
         if (file instanceof PsiJavaFile) {
           updatePackageStatement((PsiJavaFile) file, targetDir);
         }
-        new OpenFileDescriptor(project, file.getVirtualFile()).navigate(true);
+        OpenFileDescriptorFactory.getInstance(project).builder(file.getVirtualFile()).build().navigate(true);
       }
     }.execute();
   }
@@ -115,7 +115,7 @@ public class JavaFilePasteProvider implements PasteProvider {
 
   public boolean isPasteEnabled(@Nonnull final DataContext dataContext) {
     final Project project = dataContext.getData(CommonDataKeys.PROJECT);
-    final IdeView ideView = dataContext.getData(LangDataKeys.IDE_VIEW);
+    final IdeView ideView = dataContext.getData(IdeView.KEY);
     if (project == null || ideView == null || ideView.getDirectories().length == 0) {
       return false;
     }

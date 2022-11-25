@@ -21,7 +21,7 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.impl.ipp.base.MutablyNamedIntention;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.siyeh.IntentionPowerPackBundle;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import consulo.language.util.IncorrectOperationException;
 import consulo.util.lang.StringUtil;
 import org.jetbrains.annotations.NonNls;

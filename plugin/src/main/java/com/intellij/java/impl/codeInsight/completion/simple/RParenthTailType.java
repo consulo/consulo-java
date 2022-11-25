@@ -15,23 +15,27 @@
  */
 package com.intellij.java.impl.codeInsight.completion.simple;
 
-import consulo.language.editor.completion.lookup.TailType;
+import com.intellij.java.language.impl.psi.impl.source.tree.ElementType;
 import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.java.language.psi.PsiLoopStatement;
 import com.intellij.java.language.psi.PsiStatement;
-import consulo.logging.Logger;
-import consulo.document.Document;
+import com.intellij.java.language.psi.tree.java.IJavaElementType;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.EditorEx;
 import consulo.codeEditor.EditorHighlighter;
 import consulo.codeEditor.HighlighterIterator;
+import consulo.document.Document;
 import consulo.document.util.TextRange;
-import com.intellij.psi.*;
-import consulo.language.codeStyle.CommonCodeStyleSettings;
-import com.intellij.java.language.impl.psi.impl.source.tree.ElementType;
 import consulo.language.ast.IElementType;
-import com.intellij.java.language.psi.tree.java.IJavaElementType;
+import consulo.language.ast.TokenType;
+import consulo.language.codeStyle.CommonCodeStyleSettings;
+import consulo.language.editor.codeStyle.EditorCodeStyle;
+import consulo.language.editor.completion.lookup.TailType;
+import consulo.language.psi.PsiDocumentManager;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.logging.Logger;
 import org.jetbrains.annotations.NonNls;
 
 /**
@@ -56,7 +60,7 @@ public abstract class RParenthTailType extends TailType {
 
   @Override
   public int processTail(final Editor editor, int tailOffset) {
-    return addRParenth(editor, tailOffset, isSpaceWithinParentheses(getLocalCodeStyleSettings(editor, tailOffset), editor, tailOffset));
+    return addRParenth(editor, tailOffset, isSpaceWithinParentheses(EditorCodeStyle.getLocalLanguageSettings(editor, tailOffset), editor, tailOffset));
   }
 
   public static int addRParenth(Editor editor, int offset, boolean spaceWithinParens) {
@@ -89,7 +93,7 @@ public abstract class RParenthTailType extends TailType {
 
     int existingRParenthOffset = -1;
     for(HighlighterIterator iterator = highlighter.createIterator(tailOffset); !iterator.atEnd(); iterator.advance()){
-      final IElementType tokenType = iterator.getTokenType();
+      final IElementType tokenType = (IElementType) iterator.getTokenType();
 
       if ((!(tokenType instanceof IJavaElementType) || !ElementType.JAVA_COMMENT_OR_WHITESPACE_BIT_SET.contains(tokenType)) &&
           tokenType != TokenType.WHITE_SPACE) {
@@ -121,7 +125,7 @@ public abstract class RParenthTailType extends TailType {
     HighlighterIterator iterator = highlighter.createIterator(rangeStart);
     int balance = 0;
     while(!iterator.atEnd() && iterator.getStart() < rangeEnd){
-      IElementType tokenType = iterator.getTokenType();
+      IElementType tokenType = (IElementType) iterator.getTokenType();
       if (tokenType == JavaTokenType.LPARENTH){
         balance++;
       }

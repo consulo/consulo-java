@@ -15,23 +15,30 @@
  */
 package com.intellij.java.impl.psi.impl.cache.impl.idCache;
 
+import com.intellij.java.language.LanguageLevel;
+import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.java.language.impl.lexer.JavaLexer;
 import consulo.language.lexer.Lexer;
-import com.intellij.java.language.LanguageLevel;
-import consulo.language.psi.stub.OccurrenceConsumer;
 import consulo.language.psi.stub.LexerBasedIdIndexer;
+import consulo.language.psi.stub.OccurrenceConsumer;
+import consulo.virtualFileSystem.fileType.FileType;
 
-public class JavaIdIndexer extends LexerBasedIdIndexer
-{
-	@Override
-	public Lexer createLexer(final OccurrenceConsumer consumer)
-	{
-		return createIndexingLexer(consumer);
-	}
+import javax.annotation.Nonnull;
 
-	public static Lexer createIndexingLexer(OccurrenceConsumer consumer)
-	{
-		Lexer javaLexer = new JavaLexer(LanguageLevel.JDK_1_3);
-		return new JavaFilterLexer(javaLexer, consumer);
-	}
+public class JavaIdIndexer extends LexerBasedIdIndexer {
+  @Override
+  public Lexer createLexer(final OccurrenceConsumer consumer) {
+    return createIndexingLexer(consumer);
+  }
+
+  public static Lexer createIndexingLexer(OccurrenceConsumer consumer) {
+    Lexer javaLexer = new JavaLexer(LanguageLevel.JDK_1_3);
+    return new JavaFilterLexer(javaLexer, consumer);
+  }
+
+  @Nonnull
+  @Override
+  public FileType getFileType() {
+    return JavaFileType.INSTANCE;
+  }
 }

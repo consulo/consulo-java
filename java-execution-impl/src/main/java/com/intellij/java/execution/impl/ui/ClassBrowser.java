@@ -15,23 +15,23 @@
  */
 package com.intellij.java.execution.impl.ui;
 
-import consulo.execution.ExecutionBundle;
 import com.intellij.java.execution.JavaExecutionUtil;
-import consulo.ide.impl.idea.execution.configuration.BrowseModuleValueActionListener;
 import com.intellij.java.execution.configurations.ConfigurationUtil;
+import com.intellij.java.language.psi.JavaPsiFacade;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiMethod;
+import com.intellij.java.language.psi.util.PsiMethodUtil;
 import com.intellij.java.language.util.ClassFilter;
 import com.intellij.java.language.util.TreeClassChooser;
 import com.intellij.java.language.util.TreeClassChooserFactory;
 import consulo.application.ReadAction;
+import consulo.execution.ExecutionBundle;
+import consulo.execution.ui.awt.BrowseModuleValueActionListener;
+import consulo.language.psi.PsiDirectory;
+import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.module.Module;
 import consulo.project.Project;
-import consulo.ide.impl.idea.openapi.ui.ex.MessagesEx;
-import com.intellij.java.language.psi.JavaPsiFacade;
-import com.intellij.java.language.psi.PsiClass;
-import consulo.language.psi.PsiDirectory;
-import com.intellij.java.language.psi.PsiMethod;
-import consulo.language.psi.scope.GlobalSearchScope;
-import com.intellij.java.language.psi.util.PsiMethodUtil;
+import consulo.ui.ex.awt.MessagesEx;
 
 import javax.annotation.Nullable;
 
@@ -48,8 +48,7 @@ public abstract class ClassBrowser extends BrowseModuleValueActionListener {
     final ClassFilter.ClassFilterWithScope classFilter;
     try {
       classFilter = getFilter();
-    }
-    catch (NoFilterException e) {
+    } catch (NoFilterException e) {
       final MessagesEx.MessageInfo info = e.getMessageInfo();
       info.showNow();
       return null;
@@ -65,7 +64,7 @@ public abstract class ClassBrowser extends BrowseModuleValueActionListener {
 
   protected TreeClassChooser createClassChooser(ClassFilter.ClassFilterWithScope classFilter) {
     return TreeClassChooserFactory.getInstance(getProject())
-      .createWithInnerClassesScopeChooser(myTitle, classFilter.getScope(), classFilter, null);
+        .createWithInnerClassesScopeChooser(myTitle, classFilter.getScope(), classFilter, null);
   }
 
   protected abstract ClassFilter.ClassFilterWithScope getFilter() throws NoFilterException;
@@ -89,7 +88,7 @@ public abstract class ClassBrowser extends BrowseModuleValueActionListener {
     final ClassFilter applicationClass = new ClassFilter() {
       @Override
       public boolean isAccepted(final PsiClass aClass) {
-        return ConfigurationUtil.MAIN_CLASS.value(aClass) && findMainMethod(aClass) != null;
+        return ConfigurationUtil.MAIN_CLASS.test(aClass) && findMainMethod(aClass) != null;
       }
 
       @Nullable
@@ -114,11 +113,11 @@ public abstract class ClassBrowser extends BrowseModuleValueActionListener {
       protected TreeClassChooser createClassChooser(ClassFilter.ClassFilterWithScope classFilter) {
         final Module module = moduleSelector.getModule();
         final GlobalSearchScope scope =
-          module == null ? GlobalSearchScope.allScope(myProject) : GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(module);
+            module == null ? GlobalSearchScope.allScope(myProject) : GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(module);
         final PsiClass appletClass = JavaPsiFacade.getInstance(project).findClass("java.applet.Applet", scope);
         return TreeClassChooserFactory.getInstance(getProject())
-          .createInheritanceClassChooser(title, classFilter.getScope(), appletClass, false, false,
-                                         ConfigurationUtil.PUBLIC_INSTANTIATABLE_CLASS);
+            .createInheritanceClassChooser(title, classFilter.getScope(), appletClass, false, false,
+                ConfigurationUtil.PUBLIC_INSTANTIATABLE_CLASS);
       }
     };
   }
@@ -144,8 +143,7 @@ public abstract class ClassBrowser extends BrowseModuleValueActionListener {
       final GlobalSearchScope scope;
       if (module == null) {
         scope = GlobalSearchScope.allScope(myProject);
-      }
-      else {
+      } else {
         scope = GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(module);
       }
       final ClassFilter filter = createFilter(module);
@@ -179,18 +177,18 @@ public abstract class ClassBrowser extends BrowseModuleValueActionListener {
 
     public static NoFilterException noJUnitInModule(final Module module) {
       return new NoFilterException(new MessagesEx.MessageInfo(
-        module.getProject(),
-        ExecutionBundle.message("junit.not.found.in.module.error.message", module.getName()),
-        ExecutionBundle.message("cannot.browse.test.inheritors.dialog.title")));
+          module.getProject(),
+          ExecutionBundle.message("junit.not.found.in.module.error.message", module.getName()),
+          ExecutionBundle.message("cannot.browse.test.inheritors.dialog.title")));
     }
 
     public static NoFilterException moduleDoesntExist(final ConfigurationModuleSelector moduleSelector) {
       final Project project = moduleSelector.getProject();
       final String moduleName = moduleSelector.getModuleName();
       return new NoFilterException(new MessagesEx.MessageInfo(
-        project,
-        moduleName.isEmpty() ? "No module selected" : ExecutionBundle.message("module.does.not.exists", moduleName, project.getName()),
-        ExecutionBundle.message("cannot.browse.test.inheritors.dialog.title")));
+          project,
+          moduleName.isEmpty() ? "No module selected" : ExecutionBundle.message("module.does.not.exists", moduleName, project.getName()),
+          ExecutionBundle.message("cannot.browse.test.inheritors.dialog.title")));
     }
   }
 }

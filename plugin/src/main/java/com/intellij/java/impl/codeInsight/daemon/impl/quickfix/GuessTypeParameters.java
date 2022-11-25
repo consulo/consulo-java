@@ -18,20 +18,20 @@ package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 import com.intellij.java.impl.codeInsight.ExpectedTypeInfo;
 import com.intellij.java.impl.codeInsight.ExpectedTypesProvider;
 import com.intellij.java.impl.codeInsight.intention.impl.TypeExpression;
-import consulo.language.editor.template.TemplateBuilder;
 import com.intellij.java.language.psi.*;
 import consulo.application.ApplicationManager;
-import consulo.project.Project;
-import com.intellij.psi.*;
+import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.editor.template.TemplateBuilder;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiManager;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
-import consulo.util.collection.ContainerUtil;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.logging.Logger;
+import consulo.project.Project;
+import consulo.util.collection.ContainerUtil;
 
 import javax.annotation.Nullable;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;

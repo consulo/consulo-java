@@ -15,18 +15,19 @@
  */
 package com.intellij.java.impl.refactoring.rename;
 
+import com.intellij.java.language.psi.PsiElementFactory;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
-import com.intellij.psi.*;
+import consulo.application.util.function.Processor;
 import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.editor.refactoring.rename.RenamePsiElementProcessor;
+import consulo.language.psi.*;
 import consulo.language.psi.scope.LocalSearchScope;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.PsiTreeUtil;
-import consulo.language.editor.refactoring.rename.RenamePsiElementProcessor;
-import consulo.usage.UsageInfo;
 import consulo.language.util.IncorrectOperationException;
-import consulo.application.util.function.Processor;
 import consulo.logging.Logger;
+import consulo.usage.UsageInfo;
 
 import java.util.ArrayList;
 import java.util.HashSet;

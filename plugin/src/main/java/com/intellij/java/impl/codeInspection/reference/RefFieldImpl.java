@@ -15,9 +15,6 @@
  */
 package com.intellij.java.impl.codeInspection.reference;
 
-import consulo.ide.impl.idea.codeInspection.reference.RefElementImpl;
-import consulo.language.editor.inspection.reference.RefManager;
-import consulo.language.editor.inspection.reference.RefVisitor;
 import com.intellij.java.analysis.codeInspection.reference.RefClass;
 import com.intellij.java.analysis.codeInspection.reference.RefField;
 import com.intellij.java.analysis.codeInspection.reference.RefJavaUtil;
@@ -30,6 +27,9 @@ import com.intellij.java.language.psi.util.PsiFormatUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.application.ApplicationManager;
 import consulo.application.util.function.Computable;
+import consulo.language.editor.impl.inspection.reference.RefElementImpl;
+import consulo.language.editor.inspection.reference.RefManager;
+import consulo.language.editor.inspection.reference.RefVisitor;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiManager;
 import consulo.language.psi.util.PsiTreeUtil;

@@ -17,7 +17,7 @@ package com.intellij.java.impl.refactoring.memberPushDown;
 
 import com.intellij.java.language.psi.*;
 import consulo.application.progress.ProgressManager;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import consulo.language.psi.search.ReferencesSearch;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import consulo.language.editor.refactoring.RefactoringBundle;

@@ -15,11 +15,6 @@
  */
 package com.intellij.java.impl.codeInsight.completion;
 
-import consulo.language.editor.completion.lookup.TailType;
-import com.intellij.codeInsight.completion.*;
-import com.intellij.codeInsight.lookup.*;
-import consulo.language.editor.inspection.scheme.InspectionProfile;
-import consulo.language.editor.inspection.SuppressionUtil;
 import com.intellij.java.impl.codeInsight.completion.scope.JavaCompletionProcessor;
 import com.intellij.java.impl.codeInsight.editorActions.wordSelection.DocTagSelectioner;
 import com.intellij.java.impl.codeInsight.lookup.LookupItemUtil;
@@ -34,28 +29,36 @@ import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.javadoc.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
-import com.intellij.openapi.editor.*;
-import consulo.project.Project;
-import consulo.util.lang.Comparing;
-import consulo.util.lang.function.Conditions;
-import consulo.util.lang.StringUtil;
+import consulo.application.util.matcher.PrefixMatcher;
+import consulo.codeEditor.CaretModel;
+import consulo.codeEditor.Editor;
+import consulo.codeEditor.ScrollType;
+import consulo.document.Document;
+import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.codeStyle.CodeStyleSettings;
+import consulo.language.codeStyle.CodeStyleSettingsManager;
+import consulo.language.editor.completion.*;
+import consulo.language.editor.completion.lookup.*;
+import consulo.language.editor.impl.internal.completion.CompletionUtil;
+import consulo.language.editor.inspection.SuppressionUtil;
+import consulo.language.editor.inspection.scheme.InspectionProfile;
 import consulo.language.editor.inspection.scheme.InspectionProjectProfileManager;
 import consulo.language.psi.PsiDocumentManager;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiRecursiveElementWalkingVisitor;
 import consulo.language.psi.PsiReference;
-import consulo.language.codeStyle.CodeStyleSettings;
-import consulo.language.codeStyle.CodeStyleSettingsManager;
 import consulo.language.psi.filter.TrueFilter;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.language.util.ProcessingContext;
-import consulo.util.lang.SystemProperties;
+import consulo.logging.Logger;
+import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.CharArrayUtil;
-import consulo.language.editor.completion.CompletionProvider;
-import consulo.java.language.module.util.JavaClassNames;
-import consulo.logging.Logger;
+import consulo.util.lang.Comparing;
+import consulo.util.lang.StringUtil;
+import consulo.util.lang.SystemProperties;
+import consulo.util.lang.function.Conditions;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
@@ -69,7 +72,7 @@ import static consulo.language.pattern.StandardPatterns.string;
  * Date: 05.03.2003
  * Time: 21:40:11
  */
-public class JavaDocCompletionContributor extends CompletionContributor {
+public abstract class JavaDocCompletionContributor extends CompletionContributor {
   private static final Logger LOG = Logger.getInstance(JavaDocCompletionContributor.class);
   private static final
   @NonNls
@@ -211,7 +214,7 @@ public class JavaDocCompletionContributor extends CompletionContributor {
       suggestLinkWrappingVariants(parameters, result.withPrefixMatcher(CompletionUtil.findJavaIdentifierPrefix(parameters)), position);
 
       if (!result.getPrefixMatcher().getPrefix().isEmpty()) {
-        for (String keyword : ContainerUtil.ar("null", "true", "false")) {
+        for (String keyword : Set.of("null", "true", "false")) {
           String tagText = "{@code " + keyword + "}";
           result.addElement(LookupElementBuilder.create(keyword).withPresentableText(tagText).withInsertHandler((context, item) -> context.getDocument().replaceString(context
               .getStartOffset(), context.getTailOffset(), tagText)));
@@ -266,7 +269,7 @@ public class JavaDocCompletionContributor extends CompletionContributor {
   }
 
   private static void suggestSimilarParameterDescriptions(CompletionResultSet result, PsiElement position, final PsiParameter param) {
-    final Set<String> descriptions = ContainerUtil.newHashSet();
+    final Set<String> descriptions = new HashSet<>();
     position.getContainingFile().accept(new PsiRecursiveElementWalkingVisitor() {
       @Override
       public void visitElement(PsiElement element) {

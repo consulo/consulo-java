@@ -15,19 +15,18 @@
  */
 package com.intellij.java.impl.util.xml.converters;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-import jakarta.inject.Singleton;
-
+import com.intellij.java.impl.psi.impl.source.resolve.reference.impl.providers.JavaClassReferenceProvider;
+import com.intellij.java.impl.util.xml.converters.values.ClassArrayConverter;
 import consulo.language.psi.ElementManipulators;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
-import com.intellij.java.impl.psi.impl.source.resolve.reference.impl.providers.JavaClassReferenceProvider;
-import com.intellij.util.xml.ConvertContext;
-import com.intellij.util.xml.GenericDomValue;
-import com.intellij.java.impl.util.xml.converters.values.ClassArrayConverter;
+import consulo.xml.util.xml.ConvertContext;
+import consulo.xml.util.xml.GenericDomValue;
+import jakarta.inject.Singleton;
+
+import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * User: Sergey.Vasiliev

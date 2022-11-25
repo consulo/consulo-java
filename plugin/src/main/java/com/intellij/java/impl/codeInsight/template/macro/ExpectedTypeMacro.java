@@ -15,24 +15,30 @@
  */
 package com.intellij.java.impl.codeInsight.template.macro;
 
-import consulo.language.editor.CodeInsightBundle;
 import com.intellij.java.impl.codeInsight.ExpectedTypeInfo;
 import com.intellij.java.impl.codeInsight.ExpectedTypesProvider;
-import consulo.language.editor.impl.internal.completion.CompletionUtil;
-import consulo.language.editor.completion.lookup.LookupElement;
-import com.intellij.codeInsight.template.*;
 import com.intellij.java.impl.codeInsight.template.JavaCodeContextType;
 import com.intellij.java.impl.codeInsight.template.PsiTypeResult;
 import com.intellij.java.impl.codeInsight.template.impl.JavaTemplateUtil;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiIdentifier;
 import com.intellij.java.language.psi.PsiType;
-import consulo.project.Project;
-import com.intellij.psi.*;
+import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.completion.lookup.LookupElement;
+import consulo.language.editor.impl.internal.completion.CompletionUtil;
+import consulo.language.editor.template.Expression;
+import consulo.language.editor.template.ExpressionContext;
+import consulo.language.editor.template.Result;
+import consulo.language.editor.template.context.TemplateContextType;
+import consulo.language.editor.template.macro.Macro;
 import consulo.language.impl.internal.psi.diff.BlockSupport;
+import consulo.language.psi.PsiDocumentManager;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.project.Project;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import java.util.LinkedHashSet;
 import java.util.Set;
 

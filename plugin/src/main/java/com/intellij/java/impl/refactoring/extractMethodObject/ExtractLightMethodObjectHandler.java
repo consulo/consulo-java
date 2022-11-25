@@ -15,27 +15,28 @@
  */
 package com.intellij.java.impl.refactoring.extractMethodObject;
 
-import com.intellij.java.impl.codeInsight.CodeInsightUtil;
 import com.intellij.java.analysis.impl.refactoring.extractMethod.InputVariables;
 import com.intellij.java.analysis.impl.refactoring.util.VariableData;
+import com.intellij.java.impl.codeInsight.CodeInsightUtil;
+import com.intellij.java.impl.refactoring.extractMethod.AbstractExtractDialog;
+import com.intellij.java.impl.refactoring.extractMethod.PrepareFailedException;
+import com.intellij.java.impl.refactoring.util.RefactoringUtil;
 import com.intellij.java.language.impl.psi.controlFlow.*;
+import com.intellij.java.language.psi.PsiElementFactory;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.util.VisibilityUtil;
-import consulo.project.Project;
 import consulo.document.util.TextRange;
-import consulo.util.lang.StringUtil;
-import com.intellij.psi.*;
 import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.psi.*;
 import consulo.language.psi.util.PsiTreeUtil;
-import com.intellij.java.impl.refactoring.extractMethod.AbstractExtractDialog;
-import com.intellij.java.impl.refactoring.extractMethod.PrepareFailedException;
-import com.intellij.java.impl.refactoring.util.RefactoringUtil;
-import consulo.usage.UsageInfo;
 import consulo.language.util.IncorrectOperationException;
-import consulo.util.collection.ContainerUtil;
 import consulo.logging.Logger;
+import consulo.project.Project;
+import consulo.usage.UsageInfo;
+import consulo.util.collection.ContainerUtil;
+import consulo.util.lang.StringUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

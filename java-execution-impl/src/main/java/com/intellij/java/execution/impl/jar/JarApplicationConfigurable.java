@@ -15,90 +15,80 @@
  */
 package com.intellij.java.execution.impl.jar;
 
-import javax.annotation.Nonnull;
-import javax.swing.JComponent;
-import javax.swing.JPanel;
-
-import javax.annotation.Nullable;
-
-import consulo.execution.configuration.ui.SettingsEditor;
-import consulo.fileChooser.FileChooserDescriptor;
-import consulo.module.ui.awt.ModulesComboBox;
 import com.intellij.java.execution.impl.ui.CommonJavaParametersPanel;
 import com.intellij.java.execution.impl.ui.DefaultJreSelector;
 import com.intellij.java.execution.impl.ui.JrePathEditor;
 import consulo.configurable.ConfigurationException;
+import consulo.execution.configuration.ui.SettingsEditor;
+import consulo.fileChooser.FileChooserDescriptor;
+import consulo.module.ui.awt.ModulesComboBox;
 import consulo.project.Project;
 import consulo.ui.ex.awt.LabeledComponent;
-import consulo.ui.ex.awt.TextFieldWithBrowseButton;
-import consulo.ide.impl.idea.openapi.util.io.FileUtil;
 import consulo.ui.ex.awt.PanelWithAnchor;
+import consulo.ui.ex.awt.TextFieldWithBrowseButton;
 import consulo.ui.ex.awt.UIUtil;
+import consulo.util.io.FileUtil;
 
-public class JarApplicationConfigurable extends SettingsEditor<JarApplicationConfiguration> implements PanelWithAnchor
-{
-	private CommonJavaParametersPanel myCommonProgramParameters;
-	private LabeledComponent<TextFieldWithBrowseButton> myJarPathComponent;
-	private LabeledComponent<ModulesComboBox> myModuleComponent;
-	private JPanel myWholePanel;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.swing.*;
 
-	private JrePathEditor myJrePathEditor;
-	private final Project myProject;
-	private JComponent myAnchor;
+public class JarApplicationConfigurable extends SettingsEditor<JarApplicationConfiguration> implements PanelWithAnchor {
+  private CommonJavaParametersPanel myCommonProgramParameters;
+  private LabeledComponent<TextFieldWithBrowseButton> myJarPathComponent;
+  private LabeledComponent<ModulesComboBox> myModuleComponent;
+  private JPanel myWholePanel;
 
-	public JarApplicationConfigurable(final Project project)
-	{
-		myProject = project;
-		myAnchor = UIUtil.mergeComponentsWithAnchor(myJarPathComponent, myCommonProgramParameters, myJrePathEditor);
-		ModulesComboBox modulesComboBox = myModuleComponent.getComponent();
-		modulesComboBox.allowEmptySelection("<whole project>");
-		modulesComboBox.fillModules(project);
-		myJrePathEditor.setDefaultJreSelector(DefaultJreSelector.fromModuleDependencies(modulesComboBox, true));
-	}
+  private JrePathEditor myJrePathEditor;
+  private final Project myProject;
+  private JComponent myAnchor;
 
-	public void applyEditorTo(@Nonnull final JarApplicationConfiguration configuration) throws ConfigurationException
-	{
-		myCommonProgramParameters.applyTo(configuration);
-		configuration.setAlternativeJrePath(myJrePathEditor.getJrePathOrName());
-		configuration.setAlternativeJrePathEnabled(myJrePathEditor.isAlternativeJreSelected());
-		configuration.setJarPath(FileUtil.toSystemIndependentName(myJarPathComponent.getComponent().getText()));
-		configuration.setModule(myModuleComponent.getComponent().getSelectedModule());
-	}
+  public JarApplicationConfigurable(final Project project) {
+    myProject = project;
+    myAnchor = UIUtil.mergeComponentsWithAnchor(myJarPathComponent, myCommonProgramParameters, myJrePathEditor);
+    ModulesComboBox modulesComboBox = myModuleComponent.getComponent();
+    modulesComboBox.allowEmptySelection("<whole project>");
+    modulesComboBox.fillModules(project);
+    myJrePathEditor.setDefaultJreSelector(DefaultJreSelector.fromModuleDependencies(modulesComboBox, true));
+  }
 
-	public void resetEditorFrom(@Nonnull final JarApplicationConfiguration configuration)
-	{
-		myCommonProgramParameters.reset(configuration);
-		myJarPathComponent.getComponent().setText(FileUtil.toSystemDependentName(configuration.getJarPath()));
-		myJrePathEditor.setPathOrName(configuration.getAlternativeJrePath(), configuration.isAlternativeJrePathEnabled());
-		myModuleComponent.getComponent().setSelectedModule(configuration.getModule());
-	}
+  public void applyEditorTo(@Nonnull final JarApplicationConfiguration configuration) throws ConfigurationException {
+    myCommonProgramParameters.applyTo(configuration);
+    configuration.setAlternativeJrePath(myJrePathEditor.getJrePathOrName());
+    configuration.setAlternativeJrePathEnabled(myJrePathEditor.isAlternativeJreSelected());
+    configuration.setJarPath(FileUtil.toSystemIndependentName(myJarPathComponent.getComponent().getText()));
+    configuration.setModule(myModuleComponent.getComponent().getSelectedModule());
+  }
 
-	@Nonnull
-	public JComponent createEditor()
-	{
-		return myWholePanel;
-	}
+  public void resetEditorFrom(@Nonnull final JarApplicationConfiguration configuration) {
+    myCommonProgramParameters.reset(configuration);
+    myJarPathComponent.getComponent().setText(FileUtil.toSystemDependentName(configuration.getJarPath()));
+    myJrePathEditor.setPathOrName(configuration.getAlternativeJrePath(), configuration.isAlternativeJrePathEnabled());
+    myModuleComponent.getComponent().setSelectedModule(configuration.getModule());
+  }
 
-	private void createUIComponents()
-	{
-		myJarPathComponent = new LabeledComponent<>();
-		TextFieldWithBrowseButton textFieldWithBrowseButton = new TextFieldWithBrowseButton();
-		textFieldWithBrowseButton.addBrowseFolderListener("Choose JAR File", null, myProject, new FileChooserDescriptor(false, false, true, true, false, false));
-		myJarPathComponent.setComponent(textFieldWithBrowseButton);
-	}
+  @Nonnull
+  public JComponent createEditor() {
+    return myWholePanel;
+  }
 
-	@Override
-	public JComponent getAnchor()
-	{
-		return myAnchor;
-	}
+  private void createUIComponents() {
+    myJarPathComponent = new LabeledComponent<>();
+    TextFieldWithBrowseButton textFieldWithBrowseButton = new TextFieldWithBrowseButton();
+    textFieldWithBrowseButton.addBrowseFolderListener("Choose JAR File", null, myProject, new FileChooserDescriptor(false, false, true, true, false, false));
+    myJarPathComponent.setComponent(textFieldWithBrowseButton);
+  }
 
-	@Override
-	public void setAnchor(@Nullable JComponent anchor)
-	{
-		myAnchor = anchor;
-		myCommonProgramParameters.setAnchor(anchor);
-		myJrePathEditor.setAnchor(anchor);
-		myJarPathComponent.setAnchor(anchor);
-	}
+  @Override
+  public JComponent getAnchor() {
+    return myAnchor;
+  }
+
+  @Override
+  public void setAnchor(@Nullable JComponent anchor) {
+    myAnchor = anchor;
+    myCommonProgramParameters.setAnchor(anchor);
+    myJrePathEditor.setAnchor(anchor);
+    myJarPathComponent.setAnchor(anchor);
+  }
 }

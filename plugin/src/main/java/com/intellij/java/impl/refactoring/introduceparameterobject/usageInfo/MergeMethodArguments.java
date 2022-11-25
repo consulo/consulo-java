@@ -15,23 +15,25 @@
  */
 package com.intellij.java.impl.refactoring.introduceparameterobject.usageInfo;
 
-import com.intellij.java.language.psi.*;
-import consulo.application.ApplicationManager;
-import consulo.util.lang.Comparing;
-import consulo.util.lang.StringUtil;
-import com.intellij.psi.*;
-import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
-import com.intellij.java.language.impl.psi.impl.source.PsiImmediateClassType;
-import consulo.language.psi.scope.GlobalSearchScope;
-import com.intellij.java.language.psi.util.TypeConversionUtil;
 import com.intellij.java.impl.refactoring.changeSignature.ChangeSignatureProcessor;
 import com.intellij.java.impl.refactoring.changeSignature.ParameterInfoImpl;
 import com.intellij.java.impl.refactoring.util.FixableUsageInfo;
-import consulo.ide.impl.idea.util.Function;
+import com.intellij.java.language.impl.psi.impl.source.PsiImmediateClassType;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
+import com.intellij.java.language.psi.util.TypeConversionUtil;
+import consulo.application.ApplicationManager;
+import consulo.language.psi.SmartPointerManager;
+import consulo.language.psi.SmartPsiElementPointer;
+import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.util.IncorrectOperationException;
+import consulo.util.lang.Comparing;
+import consulo.util.lang.StringUtil;
 
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 @SuppressWarnings({"MethodWithTooManyParameters"})
 public class MergeMethodArguments extends FixableUsageInfo {
@@ -72,8 +74,7 @@ public class MergeMethodArguments extends FixableUsageInfo {
     final PsiClass psiClass;
     if (myContainingClass != null) {
       psiClass = myContainingClass.findInnerClassByName(className, false);
-    }
-    else {
+    } else {
       psiClass = psiFacade.findClass(StringUtil.getQualifiedName(packageName, className), GlobalSearchScope.allScope(getProject()));
     }
     assert psiClass != null;
@@ -81,13 +82,13 @@ public class MergeMethodArguments extends FixableUsageInfo {
     if (deepestSuperMethod != null) {
       final PsiClass parentClass = deepestSuperMethod.getContainingClass();
       final PsiSubstitutor parentSubstitutor =
-        TypeConversionUtil.getSuperClassSubstitutor(parentClass, method.getContainingClass(), PsiSubstitutor.EMPTY);
+          TypeConversionUtil.getSuperClassSubstitutor(parentClass, method.getContainingClass(), PsiSubstitutor.EMPTY);
       for (int i1 = 0; i1 < psiClass.getTypeParameters().length; i1++) {
         final PsiTypeParameter typeParameter = psiClass.getTypeParameters()[i1];
         for (PsiTypeParameter parameter : parentClass.getTypeParameters()) {
           if (Comparing.strEqual(typeParameter.getName(), parameter.getName())) {
             subst = subst.put(typeParameter, parentSubstitutor.substitute(
-              new PsiImmediateClassType(parameter, PsiSubstitutor.EMPTY)));
+                new PsiImmediateClassType(parameter, PsiSubstitutor.EMPTY)));
             break;
           }
         }
@@ -98,7 +99,7 @@ public class MergeMethodArguments extends FixableUsageInfo {
     parametersInfo.add(new ParameterInfoImpl(-1, parameterName, classType, null) {
       @Override
       public PsiExpression getValue(final PsiCallExpression expr) throws IncorrectOperationException {
-        return (PsiExpression)JavaCodeStyleManager.getInstance(getProject()).shortenClassReferences(psiFacade.getElementFactory().createExpressionFromText(getMergedParam(expr), expr));
+        return (PsiExpression) JavaCodeStyleManager.getInstance(getProject()).shortenClassReferences(psiFacade.getElementFactory().createExpressionFromText(getMergedParam(expr), expr));
       }
     });
     final PsiParameter[] parameters = method.getParameterList().getParameters();
@@ -116,10 +117,10 @@ public class MergeMethodArguments extends FixableUsageInfo {
         if (psiMethod == null) return;
         if (myChangeSignature) {
           final ChangeSignatureProcessor changeSignatureProcessor =
-            new ChangeSignatureProcessor(psiMethod.getProject(), psiMethod,
-                                         myKeepMethodAsDelegate, null, psiMethod.getName(),
-                                         psiMethod.getReturnType(),
-                                         parametersInfo.toArray(new ParameterInfoImpl[parametersInfo.size()]));
+              new ChangeSignatureProcessor(psiMethod.getProject(), psiMethod,
+                  myKeepMethodAsDelegate, null, psiMethod.getName(),
+                  psiMethod.getReturnType(),
+                  parametersInfo.toArray(new ParameterInfoImpl[parametersInfo.size()]));
           changeSignatureProcessor.run();
         }
       }
@@ -151,8 +152,7 @@ public class MergeMethodArguments extends FixableUsageInfo {
       } else {
         qualifiedName = className;
       }
-    }
-    else {
+    } else {
       qualifiedName = StringUtil.getQualifiedName(packageName, className);
     }
     newExpression.append("new ").append(qualifiedName);
@@ -161,15 +161,12 @@ public class MergeMethodArguments extends FixableUsageInfo {
       final PsiSubstitutor substitutor = resolvant.getSubstitutor();
       newExpression.append('<');
       final Map<PsiTypeParameter, PsiType> substitutionMap = substitutor.getSubstitutionMap();
-      newExpression.append(StringUtil.join(typeParams, new Function<PsiTypeParameter, String>() {
-        public String fun(final PsiTypeParameter typeParameter) {
-          final PsiType boundType = substitutionMap.get(typeParameter);
-          if (boundType != null) {
-            return boundType.getCanonicalText();
-          }
-          else {
-            return typeParameter.getName();
-          }
+      newExpression.append(StringUtil.join(typeParams, typeParameter -> {
+        final PsiType boundType = substitutionMap.get(typeParameter);
+        if (boundType != null) {
+          return boundType.getCanonicalText();
+        } else {
+          return typeParameter.getName();
         }
       }, ", "));
       newExpression.append('>');

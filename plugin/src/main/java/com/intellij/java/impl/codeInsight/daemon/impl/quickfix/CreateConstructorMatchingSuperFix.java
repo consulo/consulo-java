@@ -21,7 +21,6 @@ import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
-import consulo.language.util.IncorrectOperationException;
 import consulo.application.ApplicationManager;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.ScrollType;
@@ -30,11 +29,12 @@ import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.intention.BaseIntentionAction;
+import consulo.language.editor.util.LanguageUndoUtil;
 import consulo.language.psi.PsiFile;
+import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.ui.ex.awt.DialogWrapper;
-import consulo.undoRedo.util.UndoUtil;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -135,7 +135,7 @@ public class CreateConstructorMatchingSuperFix extends BaseIntentionAction {
               LOG.assertTrue(targetClassName != null, targetClass);
               derived.setName(targetClassName);
 
-              ConstructorBodyGenerator generator = ConstructorBodyGenerator.INSTANCE.forLanguage(derived.getLanguage());
+              ConstructorBodyGenerator generator = ConstructorBodyGenerator.forLanguage(derived.getLanguage());
               if (generator != null) {
                 StringBuilder buffer = new StringBuilder();
                 generator.start(buffer, derived.getName(), PsiParameter.EMPTY_ARRAY);
@@ -159,7 +159,7 @@ public class CreateConstructorMatchingSuperFix extends BaseIntentionAction {
             LOG.error(e);
           }
 
-          UndoUtil.markPsiFileForUndo(targetClass.getContainingFile());
+          LanguageUndoUtil.markPsiFileForUndo(targetClass.getContainingFile());
         }
       }
     );

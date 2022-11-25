@@ -15,27 +15,21 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import org.jetbrains.annotations.NonNls;
+import com.intellij.java.language.psi.*;
+import consulo.codeEditor.Editor;
+import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.inspection.LocalQuickFixAndIntentionActionOnPsiElement;
-import consulo.undoRedo.util.UndoUtil;
-import consulo.logging.Logger;
-import consulo.codeEditor.Editor;
-import consulo.project.Project;
-import com.intellij.java.language.psi.JavaPsiFacade;
-import com.intellij.java.language.psi.PsiClass;
-import com.intellij.java.language.psi.PsiClassType;
+import consulo.language.editor.util.LanguageUndoUtil;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
-import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
-import com.intellij.java.language.psi.PsiModifier;
-import com.intellij.java.language.psi.PsiReferenceList;
-import com.intellij.java.language.psi.PsiTypeParameter;
 import consulo.language.util.IncorrectOperationException;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.logging.Logger;
+import consulo.project.Project;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class ExtendsListFix extends LocalQuickFixAndIntentionActionOnPsiElement {
   private static final Logger LOG = Logger.getInstance(ExtendsListFix.class);
@@ -115,7 +109,7 @@ public class ExtendsListFix extends LocalQuickFixAndIntentionActionOnPsiElement 
                      @Nonnull PsiElement endElement) {
     final PsiClass myClass = (PsiClass)startElement;
     invokeImpl(myClass);
-    UndoUtil.markPsiFileForUndo(file);
+    LanguageUndoUtil.markPsiFileForUndo(file);
   }
 
   protected void invokeImpl(PsiClass myClass) {

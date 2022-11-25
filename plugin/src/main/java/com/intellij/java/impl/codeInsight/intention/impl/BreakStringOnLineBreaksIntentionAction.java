@@ -25,7 +25,7 @@ import consulo.codeEditor.Editor;
 import consulo.project.Project;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.StringUtil;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import consulo.language.util.IncorrectOperationException;
 import javax.annotation.Nonnull;
 

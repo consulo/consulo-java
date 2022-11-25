@@ -32,7 +32,7 @@ import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.impl.codeInsight.daemon.impl.quickfix.CreateMethodQuickFix;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.project.Project;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import consulo.language.psi.util.PsiTreeUtil;

@@ -15,29 +15,23 @@
  */
 package com.intellij.java.impl.ig.assignment;
 
-import javax.swing.JComponent;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.ide.impl.idea.codeInspection.ui.MultipleCheckboxOptionsPanel;
-import consulo.project.Project;
-import com.intellij.java.language.psi.JavaTokenType;
-import com.intellij.java.language.psi.PsiAssignmentExpression;
-import consulo.language.psi.PsiElement;
-import com.intellij.java.language.psi.PsiExpression;
-import com.intellij.java.language.psi.PsiJavaToken;
-import com.intellij.java.language.psi.PsiPolyadicExpression;
-import com.intellij.java.language.psi.PsiType;
-import com.intellij.java.language.psi.PsiTypeCastExpression;
-import consulo.language.ast.IElementType;
-import consulo.language.util.IncorrectOperationException;
+import com.intellij.java.language.psi.*;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.EquivalenceChecker;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
+import consulo.language.ast.IElementType;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.editor.inspection.ui.MultipleCheckboxOptionsPanel;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.swing.*;
 
 public class ReplaceAssignmentWithOperatorAssignmentInspection extends BaseInspection {
 

@@ -19,28 +19,25 @@
  */
 package com.intellij.java.impl.internal;
 
-import javax.annotation.Nonnull;
-import consulo.ui.ex.action.AnAction;
-import consulo.ui.ex.action.AnActionEvent;
-import consulo.language.editor.CommonDataKeys;
+import com.intellij.java.language.psi.JavaPsiFacade;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiField;
 import consulo.application.progress.ProgressIndicator;
 import consulo.application.progress.ProgressManager;
 import consulo.application.progress.Task;
-import consulo.project.Project;
-import com.intellij.java.language.psi.JavaPsiFacade;
-import com.intellij.java.language.psi.PsiClass;
+import consulo.application.util.function.Processor;
+import consulo.language.editor.CommonDataKeys;
 import consulo.language.psi.PsiElement;
-import com.intellij.java.language.psi.PsiExpression;
-import com.intellij.java.language.psi.PsiField;
 import consulo.language.psi.PsiReference;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.search.ReferencesSearch;
+import consulo.project.Project;
+import consulo.ui.ex.action.AnAction;
+import consulo.ui.ex.action.AnActionEvent;
 import consulo.usage.*;
-import consulo.usage.UsageView;
-import com.intellij.usages.UsageViewManager;
-import consulo.usage.UsageViewPresentation;
-import consulo.application.util.function.Processor;
-import consulo.usage.UsageTarget;
+
+import javax.annotation.Nonnull;
 
 public class StaticIconFieldsAction extends AnAction {
   @Override

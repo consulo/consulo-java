@@ -15,27 +15,27 @@
  */
 package com.intellij.java.impl.ig.inheritance;
 
-import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.ide.impl.idea.codeInspection.ui.MultipleCheckboxOptionsPanel;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import consulo.util.lang.Comparing;
-import com.intellij.psi.*;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
-import consulo.language.util.IncorrectOperationException;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import javax.annotation.Nonnull;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.editor.inspection.ui.MultipleCheckboxOptionsPanel;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+import consulo.util.lang.Comparing;
 
+import javax.annotation.Nonnull;
 import javax.swing.*;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-public class AbstractMethodOverridesAbstractMethodInspection extends BaseInspection {
+public abstract class AbstractMethodOverridesAbstractMethodInspection extends BaseInspection {
 
   @SuppressWarnings("PublicField")
   public boolean ignoreJavaDoc = false;

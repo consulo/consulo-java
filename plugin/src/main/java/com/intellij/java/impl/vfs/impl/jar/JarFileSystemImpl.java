@@ -16,16 +16,21 @@
 package com.intellij.java.impl.vfs.impl.jar;
 
 import com.intellij.java.language.impl.JarArchiveFileType;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.ide.impl.virtualFileSystem.archive.zip.ZipArchiveFile;
 import consulo.virtualFileSystem.archive.ArchiveFile;
-import consulo.vfs.impl.archive.ArchiveFileSystemBase;
-import consulo.vfs.impl.zip.ZipArchiveFile;
+import consulo.virtualFileSystem.archive.ArchiveFileSystemProvider;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
 
-public class JarFileSystemImpl extends ArchiveFileSystemBase {
-  public JarFileSystemImpl() {
-    super(JarArchiveFileType.PROTOCOL);
+@ExtensionImpl
+public class JarFileSystemImpl implements ArchiveFileSystemProvider {
+
+  @Nonnull
+  @Override
+  public String getProtocol() {
+    return JarArchiveFileType.PROTOCOL;
   }
 
   @Nonnull

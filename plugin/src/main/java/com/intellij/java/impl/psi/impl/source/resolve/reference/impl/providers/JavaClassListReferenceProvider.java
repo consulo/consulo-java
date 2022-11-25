@@ -15,18 +15,18 @@
  */
 package com.intellij.java.impl.psi.impl.source.resolve.reference.impl.providers;
 
-import consulo.application.progress.ProgressManager;
-import consulo.project.Project;
-import consulo.ide.impl.idea.openapi.util.NotNullLazyValue;
-import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiJavaPackage;
+import consulo.application.progress.ProgressManager;
+import consulo.application.util.NotNullLazyValue;
+import consulo.language.psi.OuterLanguageElement;
+import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
 import consulo.language.psi.scope.GlobalSearchScope;
-import consulo.language.psi.OuterLanguageElement;
-import com.intellij.psi.xml.XmlTag;
+import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
-import javax.annotation.Nonnull;
+import consulo.xml.psi.xml.XmlTag;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -105,7 +105,7 @@ public class JavaClassListReferenceProvider extends JavaClassReferenceProvider {
         ProgressManager.checkCanceled();
       }
     }
-    return ContainerUtil.toArray(results, new PsiReference[results.size()]);
+    return results.toArray(new PsiReference[results.size()]);
   }
 
   @Override

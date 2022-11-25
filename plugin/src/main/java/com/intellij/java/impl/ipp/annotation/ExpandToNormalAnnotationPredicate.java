@@ -17,7 +17,7 @@ package com.intellij.java.impl.ipp.annotation;
 
 import com.intellij.java.language.psi.PsiAnnotationMemberValue;
 import com.intellij.java.language.psi.PsiNameValuePair;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 
 class ExpandToNormalAnnotationPredicate implements PsiElementPredicate {

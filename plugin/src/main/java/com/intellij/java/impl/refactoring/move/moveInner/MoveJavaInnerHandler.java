@@ -15,12 +15,16 @@
  */
 package com.intellij.java.impl.refactoring.move.moveInner;
 
+import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.*;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.Language;
+import consulo.language.psi.*;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.java.language.psi.util.PsiUtil;
 import javax.annotation.Nonnull;
 
+@ExtensionImpl(id = "java")
 public class MoveJavaInnerHandler implements MoveInnerHandler {
   @Nonnull
   @Override
@@ -75,5 +79,11 @@ public class MoveJavaInnerHandler implements MoveInnerHandler {
       }
     }
     return false;
+  }
+
+  @Nonnull
+  @Override
+  public Language getLanguage() {
+    return JavaLanguage.INSTANCE;
   }
 }

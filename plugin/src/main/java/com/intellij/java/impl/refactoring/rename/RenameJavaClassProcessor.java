@@ -25,7 +25,7 @@ import com.intellij.java.language.psi.util.ClassUtil;
 import consulo.project.Project;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.Pair;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import consulo.language.impl.psi.LightElement;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.scope.LocalSearchScope;

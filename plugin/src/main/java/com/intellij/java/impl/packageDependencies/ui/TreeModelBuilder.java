@@ -15,29 +15,34 @@
  */
 package com.intellij.java.impl.packageDependencies.ui;
 
-import consulo.language.editor.scope.AnalysisScopeBundle;
-import consulo.application.AllIcons;
-import consulo.project.ui.view.tree.ModuleGroup;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiJavaPackage;
-import consulo.module.Module;
-import consulo.module.ModuleManager;
+import consulo.application.AllIcons;
 import consulo.application.progress.ProgressIndicator;
 import consulo.application.progress.ProgressManager;
-import consulo.project.Project;
-import com.intellij.openapi.roots.*;
+import consulo.content.ContentIterator;
 import consulo.ide.impl.idea.openapi.roots.libraries.LibraryUtil;
+import consulo.ide.impl.idea.openapi.vfs.VfsUtilCore;
+import consulo.ide.impl.idea.packageDependencies.ui.*;
+import consulo.language.editor.scope.AnalysisScopeBundle;
+import consulo.language.psi.PsiFile;
+import consulo.logging.Logger;
+import consulo.module.Module;
+import consulo.module.ModuleManager;
+import consulo.module.content.ProjectFileIndex;
+import consulo.module.content.ProjectRootManager;
+import consulo.module.content.layer.orderEntry.LibraryOrderEntry;
+import consulo.module.content.layer.orderEntry.ModuleExtensionWithSdkOrderEntry;
+import consulo.module.content.layer.orderEntry.OrderEntry;
+import consulo.project.Project;
+import consulo.project.ui.view.tree.ModuleGroup;
+import consulo.ui.ex.awt.tree.TreeUtil;
+import consulo.util.dataholder.Key;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.Pair;
 import consulo.util.lang.StringUtil;
-import consulo.ide.impl.idea.openapi.vfs.VfsUtilCore;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.util.VirtualFileVisitor;
-import com.intellij.packageDependencies.ui.*;
-import consulo.language.psi.PsiFile;
-import consulo.ui.ex.awt.tree.TreeUtil;
-import consulo.logging.Logger;
-import consulo.util.dataholder.Key;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

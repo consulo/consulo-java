@@ -15,23 +15,27 @@
  */
 package com.intellij.java.impl.codeInspection.i18n;
 
-import consulo.language.editor.rawHighlight.HighlightDisplayLevel;
-import com.intellij.java.language.codeInsight.AnnotationUtil;
-import consulo.language.editor.CodeInsightBundle;
 import com.intellij.java.analysis.codeInspection.GroupNames;
 import com.intellij.java.analysis.impl.codeInspection.BaseJavaLocalInspectionTool;
+import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.lang.properties.PropertiesReferenceManager;
 import com.intellij.lang.properties.psi.PropertiesFile;
-import consulo.module.Module;
 import consulo.ide.impl.idea.openapi.module.ModuleUtil;
-import consulo.project.Project;
+import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.inspection.LocalQuickFix;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.editor.inspection.ProblemHighlightType;
+import consulo.language.editor.inspection.scheme.InspectionManager;
+import consulo.language.editor.rawHighlight.HighlightDisplayLevel;
+import consulo.language.psi.PsiElement;
+import consulo.module.Module;
 import consulo.module.content.ProjectFileIndex;
 import consulo.module.content.ProjectRootManager;
+import consulo.project.Project;
+import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.ref.Ref;
-import com.intellij.psi.*;
-import consulo.util.collection.ContainerUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

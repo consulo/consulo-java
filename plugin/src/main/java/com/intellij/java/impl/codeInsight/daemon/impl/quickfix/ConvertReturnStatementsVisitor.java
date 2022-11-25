@@ -15,16 +15,16 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
+import com.intellij.java.language.impl.psi.controlFlow.ReturnStatementsVisitor;
 import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.PsiTypesUtil;
 import consulo.application.ApplicationManager;
 import consulo.application.util.function.Computable;
-import com.intellij.psi.*;
-import com.intellij.java.language.impl.psi.controlFlow.ReturnStatementsVisitor;
-import com.intellij.java.language.psi.util.PsiTypesUtil;
+import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import java.util.List;
 
 class ConvertReturnStatementsVisitor implements ReturnStatementsVisitor {

@@ -15,31 +15,29 @@
  */
 package com.intellij.java.impl.ide.actions;
 
-import consulo.ide.impl.idea.codeInsight.CodeInsightUtilBase;
-import consulo.language.editor.QualifiedNameProvider;
+import com.intellij.java.language.psi.PsiElementFactory;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.search.PsiShortNamesCache;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.document.Document;
 import consulo.codeEditor.Editor;
+import consulo.document.Document;
 import consulo.document.RangeMarker;
-import consulo.project.Project;
-import consulo.module.content.ProjectRootManager;
-import consulo.util.lang.StringUtil;
-import consulo.virtualFileSystem.LocalFileSystem;
-import consulo.virtualFileSystem.VirtualFile;
-import com.intellij.psi.*;
+import consulo.ide.impl.idea.codeInsight.CodeInsightUtilBase;
 import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.editor.QualifiedNameProvider;
+import consulo.language.psi.*;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
-import consulo.ide.impl.idea.util.LogicalRoot;
-import com.intellij.util.LogicalRootsManager;
 import consulo.logging.Logger;
+import consulo.module.content.ProjectRootManager;
+import consulo.project.Project;
+import consulo.util.lang.StringUtil;
+import consulo.virtualFileSystem.LocalFileSystem;
+import consulo.virtualFileSystem.VirtualFile;
 
 import javax.annotation.Nullable;
-import java.util.List;
 
 /**
  * @author yole
@@ -105,12 +103,11 @@ public class JavaQualifiedNameProvider implements QualifiedNameProvider {
   }
 
   private static VirtualFile findFile(String fqn, Project project) {
-    List<LogicalRoot> lr = LogicalRootsManager.getLogicalRootsManager(project).getLogicalRoots();
-    for (LogicalRoot root : lr) {
-      VirtualFile vfr = root.getVirtualFile();
-      if (vfr == null) continue;
-      VirtualFile virtualFile = vfr.findFileByRelativePath(fqn);
-      if (virtualFile != null) return virtualFile;
+    for (VirtualFile root : ProjectRootManager.getInstance(project).getContentSourceRoots()) {
+      VirtualFile rel = root.findFileByRelativePath(fqn);
+      if (rel != null) {
+        return rel;
+      }
     }
     for (VirtualFile root : ProjectRootManager.getInstance(project).getContentRoots()) {
       VirtualFile rel = root.findFileByRelativePath(fqn);

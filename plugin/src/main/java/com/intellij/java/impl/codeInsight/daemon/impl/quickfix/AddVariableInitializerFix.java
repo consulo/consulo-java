@@ -15,21 +15,21 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
-import javax.annotation.Nonnull;
-
-import consulo.language.editor.CodeInsightBundle;
-import consulo.ide.impl.idea.codeInsight.CodeInsightUtilBase;
-import consulo.language.editor.FileModificationService;
-import consulo.language.editor.intention.IntentionAction;
 import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.PsiTypesUtil;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.ScrollType;
-import consulo.project.Project;
 import consulo.document.util.TextRange;
-import com.intellij.psi.*;
-import com.intellij.java.language.psi.util.PsiTypesUtil;
+import consulo.ide.impl.idea.codeInsight.CodeInsightUtilBase;
+import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.FileModificationService;
+import consulo.language.editor.intention.IntentionAction;
+import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
+import consulo.project.Project;
+
+import javax.annotation.Nonnull;
 
 public class AddVariableInitializerFix implements IntentionAction {
   private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.daemon.impl.quickfix.AddReturnFix");

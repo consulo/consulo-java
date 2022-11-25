@@ -23,7 +23,7 @@ import com.intellij.java.language.psi.PsiReferenceExpression;
  * User: anna
  * Date: 15-Nov-2005
  */
-public class AccessStaticViaInstance extends AccessStaticViaInstanceBase {
+public abstract class AccessStaticViaInstance extends AccessStaticViaInstanceBase {
   @Override
   protected AccessStaticViaInstanceFix createAccessStaticViaInstanceFix(PsiReferenceExpression expr,
                                                                         boolean onTheFly,

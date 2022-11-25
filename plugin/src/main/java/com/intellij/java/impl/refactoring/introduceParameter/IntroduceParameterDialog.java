@@ -24,20 +24,21 @@
  */
 package com.intellij.java.impl.refactoring.introduceParameter;
 
+import com.intellij.java.impl.refactoring.HelpID;
+import com.intellij.java.impl.refactoring.JavaRefactoringSettings;
 import com.intellij.java.impl.refactoring.ui.NameSuggestionsGenerator;
 import com.intellij.java.impl.refactoring.ui.NameSuggestionsManager;
 import com.intellij.java.impl.refactoring.ui.TypeSelector;
 import com.intellij.java.impl.refactoring.ui.TypeSelectorManager;
 import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.application.HelpManager;
 import consulo.configurable.ConfigurationException;
-import consulo.project.Project;
 import consulo.language.codeStyle.CodeStyleSettingsManager;
-import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.java.impl.refactoring.HelpID;
-import com.intellij.java.impl.refactoring.JavaRefactoringSettings;
 import consulo.language.editor.refactoring.RefactoringBundle;
-import com.intellij.refactoring.ui.*;
+import consulo.language.editor.refactoring.ui.NameSuggestionsField;
+import consulo.language.editor.refactoring.ui.RefactoringDialog;
+import consulo.project.Project;
 import consulo.ui.ex.awt.NonFocusableCheckBox;
 import consulo.usage.UsageInfo;
 import consulo.util.collection.primitive.ints.IntList;

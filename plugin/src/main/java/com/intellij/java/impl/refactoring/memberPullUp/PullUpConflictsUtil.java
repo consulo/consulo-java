@@ -35,7 +35,7 @@ import javax.annotation.Nullable;
 import com.intellij.java.language.psi.*;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.StringUtil;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
 import com.intellij.java.language.psi.util.MethodSignature;
 import com.intellij.java.language.psi.util.MethodSignatureUtil;

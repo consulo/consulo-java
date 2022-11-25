@@ -34,6 +34,7 @@ import consulo.disposer.Disposer;
 import consulo.language.editor.impl.inspection.reference.RefElementImpl;
 import consulo.language.editor.impl.inspection.reference.RefManagerImpl;
 import consulo.language.editor.impl.inspection.reference.RefProjectImpl;
+import consulo.language.editor.inspection.GlobalInspectionContext;
 import consulo.language.editor.inspection.InspectionsBundle;
 import consulo.language.editor.inspection.SuppressionUtil;
 import consulo.language.editor.inspection.reference.RefElement;
@@ -142,7 +143,7 @@ public class RefJavaManagerImpl extends RefJavaManager {
       ("DEAD_CODE_TOOL") {
     @Override
     protected Ref<UnusedDeclarationInspection> compute(PsiFile file, RefManagerImpl refManager) {
-      Tools tools = ((GlobalInspectionContextImpl) refManager.getContext()).getTools().get(UnusedDeclarationInspection.SHORT_NAME);
+      Tools tools = ((GlobalInspectionContext) refManager.getContext()).getTools().get(UnusedDeclarationInspection.SHORT_NAME);
       InspectionToolWrapper toolWrapper = tools == null ? null : tools.getEnabledTool(file);
       InspectionProfileEntry tool = toolWrapper == null ? null : toolWrapper.getTool();
       return Ref.create(tool instanceof UnusedDeclarationInspection ? (UnusedDeclarationInspection) tool : null);

@@ -15,26 +15,26 @@
  */
 package com.intellij.java.impl.codeInspection.testOnly;
 
-import javax.annotation.Nonnull;
-
+import com.intellij.java.analysis.impl.codeInspection.BaseJavaLocalInspectionTool;
 import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.language.codeInsight.TestFrameworks;
-import com.intellij.java.analysis.impl.codeInspection.BaseJavaLocalInspectionTool;
-import consulo.language.editor.inspection.InspectionsBundle;
-import consulo.language.editor.inspection.ProblemHighlightType;
-import consulo.language.editor.inspection.ProblemsHolder;
 import com.intellij.java.language.psi.JavaElementVisitor;
 import com.intellij.java.language.psi.PsiCallExpression;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
+import consulo.language.editor.inspection.InspectionsBundle;
+import consulo.language.editor.inspection.ProblemHighlightType;
+import consulo.language.editor.inspection.ProblemsHolder;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiElementVisitor;
+import consulo.language.psi.util.PsiTreeUtil;
 import consulo.module.content.ProjectRootManager;
 import consulo.virtualFileSystem.VirtualFile;
-import com.intellij.psi.*;
-import consulo.language.psi.util.PsiTreeUtil;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class TestOnlyInspection extends BaseJavaLocalInspectionTool {
+public abstract class TestOnlyInspection extends BaseJavaLocalInspectionTool {
   @Override
   @Nonnull
   public String getDisplayName() {

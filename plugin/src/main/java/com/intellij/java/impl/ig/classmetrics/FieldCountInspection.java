@@ -19,13 +19,12 @@ import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.java.language.psi.PsiType;
-import consulo.ui.CheckBox;
-import consulo.ui.ex.awt.UIUtil;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ClassUtils;
-import javax.annotation.Nonnull;
+import consulo.ui.ex.awt.UIUtil;
 
+import javax.annotation.Nonnull;
 import javax.swing.*;
 import java.awt.*;
 
@@ -78,12 +77,12 @@ public class FieldCountInspection extends ClassMetricInspection {
     final JLabel label = new JLabel(configurationLabel);
     final JFormattedTextField valueField = prepareNumberEditor(() -> m_limit, i -> m_limit = i);
 
-    final CheckBox includeCheckBox =
-      new CheckBox(InspectionGadgetsBundle.message(
+    final consulo.language.editor.inspection.ui.CheckBox includeCheckBox =
+      new consulo.language.editor.inspection.ui.CheckBox(InspectionGadgetsBundle.message(
         "field.count.inspection.include.constant.fields.in.count.checkbox"),
                    this, "m_countConstantFields");
-    final CheckBox considerCheckBox =
-      new CheckBox(InspectionGadgetsBundle.message(
+    final consulo.language.editor.inspection.ui.CheckBox considerCheckBox =
+      new consulo.language.editor.inspection.ui.CheckBox(InspectionGadgetsBundle.message(
         "field.count.inspection.static.final.fields.count.as.constant.checkbox"),
                    this, "m_considerStaticFinalFieldsConstant");
 

@@ -21,7 +21,7 @@ import com.intellij.java.language.psi.PsiLocalVariable;
 import com.intellij.java.language.psi.PsiParameter;
 import com.intellij.java.language.psi.PsiVariable;
 import consulo.project.util.query.QueryExecutorBase;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import consulo.language.psi.scope.LocalSearchScope;
 import consulo.language.psi.resolve.PsiElementProcessor;
 import consulo.content.scope.SearchScope;

@@ -15,28 +15,28 @@
  */
 package com.intellij.java.impl.refactoring.typeCook.deductive.resolver;
 
-import com.intellij.java.language.impl.psi.Bottom;
-import com.intellij.java.language.impl.psi.PsiTypeVariable;
-import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import consulo.util.lang.Pair;
-import com.intellij.psi.*;
-import consulo.language.psi.scope.GlobalSearchScope;
-import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
-import com.intellij.java.language.psi.util.InheritanceUtil;
-import com.intellij.java.language.psi.util.TypeConversionUtil;
 import com.intellij.java.impl.refactoring.typeCook.Util;
 import com.intellij.java.impl.refactoring.typeCook.deductive.PsiExtendedTypeVisitor;
 import com.intellij.java.impl.refactoring.typeCook.deductive.PsiTypeVariableFactory;
 import com.intellij.java.impl.refactoring.typeCook.deductive.builder.Constraint;
 import com.intellij.java.impl.refactoring.typeCook.deductive.builder.ReductionSystem;
 import com.intellij.java.impl.refactoring.typeCook.deductive.builder.Subtype;
-import consulo.language.util.IncorrectOperationException;
+import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
+import com.intellij.java.language.impl.psi.Bottom;
+import com.intellij.java.language.impl.psi.PsiTypeVariable;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.InheritanceUtil;
+import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.psi.PsiManager;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
+import consulo.project.Project;
 import consulo.util.collection.primitive.ints.IntMaps;
 import consulo.util.collection.primitive.ints.IntObjConsumer;
 import consulo.util.collection.primitive.ints.IntObjectMap;
+import consulo.util.lang.Pair;
 
 import java.util.HashSet;
 import java.util.LinkedHashSet;

@@ -16,10 +16,10 @@
 package com.intellij.java.impl.openapi.roots.libraries;
 
 import com.intellij.java.language.impl.JavaClassFileType;
+import consulo.content.base.BinariesOrderRootType;
 import consulo.content.library.Library;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.VirtualFileManager;
-import consulo.roots.types.BinariesOrderRootType;
 import consulo.virtualFileSystem.archive.ArchiveVfsUtil;
 import jakarta.inject.Singleton;
 import org.jetbrains.annotations.NonNls;

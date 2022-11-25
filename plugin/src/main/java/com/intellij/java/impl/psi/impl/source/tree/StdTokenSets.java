@@ -17,7 +17,7 @@ package com.intellij.java.impl.psi.impl.source.tree;
 
 import com.intellij.java.language.impl.psi.impl.source.tree.ElementType;
 import consulo.language.ast.TokenSet;
-import com.intellij.psi.xml.XmlElementType;
+import consulo.xml.psi.xml.XmlElementType;
 
 /**
  * @author mike

@@ -19,15 +19,15 @@ import com.intellij.java.language.psi.PsiArrayInitializerExpression;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiPrimitiveType;
 import com.intellij.java.language.psi.PsiType;
-import consulo.ide.impl.idea.codeInspection.ui.SingleIntegerFieldOptionsPanel;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import javax.annotation.Nonnull;
+import consulo.language.editor.inspection.ui.SingleIntegerFieldOptionsPanel;
 
+import javax.annotation.Nonnull;
 import javax.swing.*;
 
-public class OverlyLargePrimitiveArrayInitializerInspection
+public abstract class OverlyLargePrimitiveArrayInitializerInspection
   extends BaseInspection {
 
   /**

@@ -15,39 +15,36 @@
  */
 package com.intellij.java.impl.refactoring.inline;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-
-import com.intellij.java.language.psi.*;
-import consulo.language.findUsage.DescriptiveNameUtil;
-import consulo.logging.Logger;
-import consulo.project.Project;
-import consulo.util.lang.ref.Ref;
-import com.intellij.psi.*;
+import com.intellij.java.impl.refactoring.util.ConflictsUtil;
+import com.intellij.java.impl.refactoring.util.InlineUtil;
 import com.intellij.java.language.impl.psi.impl.source.javadoc.PsiDocMethodOrFieldRef;
-import consulo.language.psi.scope.GlobalSearchScope;
-import consulo.language.psi.search.ReferencesSearch;
-import consulo.language.psi.util.PsiTreeUtil;
+import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.language.editor.refactoring.BaseRefactoringProcessor;
 import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.editor.refactoring.rename.NonCodeUsageInfoFactory;
-import com.intellij.java.impl.refactoring.util.ConflictsUtil;
-import com.intellij.java.impl.refactoring.util.InlineUtil;
-import consulo.language.editor.refactoring.util.NonCodeSearchDescriptionLocation;
-import consulo.usage.NonCodeUsageInfo;
 import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
+import consulo.language.editor.refactoring.util.NonCodeSearchDescriptionLocation;
 import consulo.language.editor.refactoring.util.TextOccurrencesUtil;
+import consulo.language.findUsage.DescriptiveNameUtil;
+import consulo.language.psi.ElementDescriptionUtil;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiReference;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.search.ReferencesSearch;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.logging.Logger;
+import consulo.project.Project;
+import consulo.usage.NonCodeUsageInfo;
 import consulo.usage.UsageInfo;
 import consulo.usage.UsageInfoFactory;
 import consulo.usage.UsageViewDescriptor;
-import consulo.language.util.IncorrectOperationException;
 import consulo.util.collection.MultiMap;
+import consulo.util.lang.ref.Ref;
+
+import javax.annotation.Nonnull;
+import java.util.*;
 
 /**
  * @author ven

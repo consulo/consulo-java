@@ -20,40 +20,40 @@
  */
 package com.intellij.java.impl.internal;
 
-import consulo.language.editor.action.SelectWordUtil;
 import com.intellij.java.impl.codeInsight.generation.GenerateMembersUtil;
-import com.intellij.java.language.impl.codeInsight.generation.GenerationInfo;
 import com.intellij.java.impl.codeInsight.generation.PsiGenerationInfo;
-import consulo.ide.IdeView;
+import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
 import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.java.language.impl.codeInsight.PackageChooserDialog;
 import com.intellij.java.language.impl.codeInsight.PackageUtil;
+import com.intellij.java.language.impl.codeInsight.generation.GenerationInfo;
+import com.intellij.java.language.psi.PsiElementFactory;
 import com.intellij.java.language.psi.*;
-import consulo.ui.ex.action.AnAction;
-import consulo.ui.ex.action.AnActionEvent;
+import com.intellij.java.language.psi.search.PackageScope;
+import consulo.application.Result;
+import consulo.document.Document;
+import consulo.document.util.TextRange;
+import consulo.ide.IdeView;
 import consulo.language.editor.CommonDataKeys;
 import consulo.language.editor.LangDataKeys;
-import consulo.application.Result;
 import consulo.language.editor.WriteCommandAction;
-import consulo.document.Document;
-import consulo.project.Project;
-import consulo.ui.ex.awt.ValidationInfo;
-import consulo.util.lang.function.Condition;
-import consulo.util.lang.ref.Ref;
-import consulo.document.util.TextRange;
-import consulo.util.lang.StringUtil;
-import com.intellij.psi.*;
-import consulo.language.psi.scope.GlobalSearchScope;
-import com.intellij.java.language.psi.search.PackageScope;
-import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
-import consulo.language.psi.PsiUtilCore;
-import consulo.ui.ex.awt.event.DocumentAdapter;
+import consulo.language.editor.action.SelectWordUtil;
 import consulo.language.editor.ui.awt.EditorTextField;
+import consulo.language.psi.*;
+import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.util.IncorrectOperationException;
-import consulo.util.collection.SmartList;
-import consulo.util.collection.ContainerUtil;
+import consulo.project.Project;
+import consulo.ui.ex.action.AnAction;
+import consulo.ui.ex.action.AnActionEvent;
 import consulo.ui.ex.awt.DialogWrapper;
 import consulo.ui.ex.awt.LabeledComponent;
+import consulo.ui.ex.awt.ValidationInfo;
+import consulo.ui.ex.awt.event.DocumentAdapter;
+import consulo.util.collection.ContainerUtil;
+import consulo.util.collection.SmartList;
+import consulo.util.lang.StringUtil;
+import consulo.util.lang.function.Condition;
+import consulo.util.lang.ref.Ref;
 
 import javax.annotation.Nonnull;
 import javax.swing.*;
@@ -120,8 +120,8 @@ public class GenerateVisitorByHierarchyAction extends AnAction {
         final Document document = PsiDocumentManager.getInstance(project).getDocument(codeFragment);
         final EditorTextField editorTextField = new EditorTextField(document, project, JavaFileType.INSTANCE);
         labeledComponent.setComponent(editorTextField);
-        editorTextField.addDocumentListener(new com.intellij.openapi.editor.event.DocumentAdapter() {
-          public void documentChanged(final com.intellij.openapi.editor.event.DocumentEvent e) {
+        editorTextField.addDocumentListener(new consulo.document.event.DocumentAdapter() {
+          public void documentChanged(final consulo.document.event.DocumentEvent e) {
             parentClassRef.set(null);
             try {
               final PsiType psiType = codeFragment.getType();
@@ -154,7 +154,7 @@ public class GenerateVisitorByHierarchyAction extends AnAction {
       return;
     }
     final String visitorQName = generateEverything(dialog.getSelectedPackage(), parentClassRef.get(), visitorNameRef.get());
-    final IdeView ideView = e.getData(LangDataKeys.IDE_VIEW);
+    final IdeView ideView = e.getData(IdeView.KEY);
     final PsiClass visitorClass = JavaPsiFacade.getInstance(project).findClass(visitorQName, GlobalSearchScope.projectScope(project));
     if (ideView != null && visitorClass != null) {
       ideView.selectElement(visitorClass);

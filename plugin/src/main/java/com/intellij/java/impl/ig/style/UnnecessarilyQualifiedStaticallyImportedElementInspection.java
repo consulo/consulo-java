@@ -15,22 +15,22 @@
  */
 package com.intellij.java.impl.ig.style;
 
-import javax.annotation.Nonnull;
-
-import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.language.editor.inspection.ProblemHighlightType;
+import com.intellij.java.impl.ig.psiutils.ImportUtils;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import com.intellij.psi.*;
 import com.intellij.java.language.psi.infos.CandidateInfo;
-import consulo.language.psi.util.PsiTreeUtil;
-import consulo.language.util.IncorrectOperationException;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.psiutils.ImportUtils;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.editor.inspection.ProblemHighlightType;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
 import org.jetbrains.annotations.Nls;
+
+import javax.annotation.Nonnull;
 
 public class UnnecessarilyQualifiedStaticallyImportedElementInspection extends BaseInspection {
 

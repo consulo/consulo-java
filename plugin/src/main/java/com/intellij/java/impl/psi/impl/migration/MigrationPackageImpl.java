@@ -15,12 +15,12 @@
  */
 package com.intellij.java.impl.psi.impl.migration;
 
-import javax.annotation.Nonnull;
-
-import consulo.java.language.module.extension.JavaModuleExtension;
-import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.java.language.impl.psi.impl.file.PsiPackageImpl;
-import consulo.psi.PsiPackageManager;
+import consulo.java.language.module.extension.JavaModuleExtension;
+import consulo.language.psi.PsiPackageManager;
+import consulo.virtualFileSystem.VirtualFile;
+
+import javax.annotation.Nonnull;
 
 /**
  * @author dsl

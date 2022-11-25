@@ -15,18 +15,18 @@
  */
 package com.intellij.java.impl.ig.controlflow;
 
-import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiIfStatement;
 import com.intellij.java.language.psi.PsiStatement;
-import consulo.ide.impl.idea.codeInspection.ui.SingleIntegerFieldOptionsPanel;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import javax.annotation.Nonnull;
+import consulo.language.editor.inspection.ui.SingleIntegerFieldOptionsPanel;
+import consulo.language.psi.PsiElement;
 
+import javax.annotation.Nonnull;
 import javax.swing.*;
 
-public class IfStatementWithTooManyBranchesInspection
+public abstract class IfStatementWithTooManyBranchesInspection
   extends BaseInspection {
 
   private static final int DEFAULT_BRANCH_LIMIT = 3;

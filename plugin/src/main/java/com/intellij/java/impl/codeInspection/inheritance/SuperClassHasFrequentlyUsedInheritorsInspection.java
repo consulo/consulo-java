@@ -1,15 +1,19 @@
 package com.intellij.java.impl.codeInspection.inheritance;
 
 import com.intellij.java.analysis.codeInspection.GroupNames;
+import com.intellij.java.analysis.impl.codeInspection.BaseJavaLocalInspectionTool;
 import com.intellij.java.impl.codeInspection.inheritance.search.InheritorsStatisticalDataSearch;
 import com.intellij.java.impl.codeInspection.inheritance.search.InheritorsStatisticsSearchResult;
-import com.intellij.java.analysis.impl.codeInspection.BaseJavaLocalInspectionTool;
 import com.intellij.java.language.psi.*;
 import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.editor.inspection.LocalQuickFix;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.editor.inspection.ProblemHighlightType;
+import consulo.language.editor.inspection.scheme.InspectionManager;
 import org.jetbrains.annotations.Nls;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -17,7 +21,7 @@ import java.util.List;
 /**
  * @author Dmitry Batkovich <dmitry.batkovich@jetbrains.com>
  */
-public class SuperClassHasFrequentlyUsedInheritorsInspection extends BaseJavaLocalInspectionTool
+public abstract class SuperClassHasFrequentlyUsedInheritorsInspection extends BaseJavaLocalInspectionTool
 {
   private final static int MIN_PERCENT_RATIO = 5;
   public final static int MAX_QUICK_FIX_COUNTS = 4;

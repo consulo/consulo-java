@@ -38,7 +38,7 @@ import javax.annotation.Nonnull;
  * User: anna
  * Date: 1/28/11
  */
-public class ExplicitTypeCanBeDiamondInspection extends BaseJavaLocalInspectionTool {
+public abstract class ExplicitTypeCanBeDiamondInspection extends BaseJavaLocalInspectionTool {
   public static final Logger LOG = Logger.getInstance(ExplicitTypeCanBeDiamondInspection.class);
 
   @Nls

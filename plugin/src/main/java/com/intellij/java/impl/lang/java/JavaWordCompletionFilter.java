@@ -19,19 +19,29 @@
  */
 package com.intellij.java.impl.lang.java;
 
-import consulo.language.editor.completion.WordCompletionElementFilter;
+import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.JavaDocTokenType;
 import com.intellij.java.language.psi.JavaTokenType;
+import consulo.language.Language;
 import consulo.language.ast.IElementType;
 import consulo.language.ast.TokenSet;
+import consulo.language.editor.completion.WordCompletionElementFilter;
 import consulo.language.version.LanguageVersion;
+
+import javax.annotation.Nonnull;
 
 public class JavaWordCompletionFilter implements WordCompletionElementFilter {
   private static final TokenSet ENABLED_TOKENS = TokenSet.create(JavaTokenType.C_STYLE_COMMENT, JavaTokenType.END_OF_LINE_COMMENT,
-                                                                 JavaDocTokenType.DOC_COMMENT_DATA, JavaTokenType.STRING_LITERAL);
+      JavaDocTokenType.DOC_COMMENT_DATA, JavaTokenType.STRING_LITERAL);
 
   @Override
   public boolean isWordCompletionEnabledIn(final IElementType element, LanguageVersion languageVersion) {
     return ENABLED_TOKENS.contains(element);
+  }
+
+  @Nonnull
+  @Override
+  public Language getLanguage() {
+    return JavaLanguage.INSTANCE;
   }
 }

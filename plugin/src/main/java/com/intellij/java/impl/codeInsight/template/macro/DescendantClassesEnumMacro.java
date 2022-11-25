@@ -15,24 +15,28 @@
  */
 package com.intellij.java.impl.codeInsight.template.macro;
 
-import consulo.language.editor.CodeInsightBundle;
-import consulo.language.editor.completion.lookup.LookupElement;
-import consulo.language.editor.completion.lookup.LookupElementBuilder;
-import com.intellij.codeInsight.template.*;
 import com.intellij.java.impl.codeInsight.template.JavaCodeContextType;
 import com.intellij.java.impl.codeInsight.template.JavaPsiElementResult;
+import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.java.language.psi.PsiModifierList;
-import com.intellij.psi.*;
-import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.completion.lookup.LookupElement;
+import consulo.language.editor.completion.lookup.LookupElementBuilder;
+import consulo.language.editor.template.Expression;
+import consulo.language.editor.template.ExpressionContext;
+import consulo.language.editor.template.Result;
+import consulo.language.editor.template.context.TemplateContextType;
+import consulo.language.editor.template.macro.Macro;
+import consulo.language.psi.PsiManager;
 import consulo.language.psi.resolve.PsiElementProcessor;
-import consulo.ide.impl.psi.search.PsiElementProcessorAdapter;
-import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
+import consulo.language.psi.resolve.PsiElementProcessorAdapter;
+import consulo.language.psi.scope.GlobalSearchScope;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;

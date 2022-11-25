@@ -15,25 +15,28 @@
  */
 package com.intellij.java.impl.codeInsight.intention.impl;
 
-import consulo.language.editor.FileModificationService;
 import com.intellij.java.impl.codeInsight.daemon.impl.quickfix.CreateFromUsageUtils;
-import consulo.language.editor.highlight.HighlightManager;
-import consulo.language.editor.intention.PsiElementBaseIntentionAction;
+import com.intellij.java.language.impl.refactoring.util.RefactoringChangeUtil;
 import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.EditorColors;
 import consulo.colorScheme.EditorColorsManager;
 import consulo.colorScheme.TextAttributes;
+import consulo.language.editor.FileModificationService;
+import consulo.language.editor.highlight.HighlightManager;
+import consulo.language.editor.intention.PsiElementBaseIntentionAction;
+import consulo.language.psi.PsiCompiledElement;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiReference;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 import consulo.util.lang.ref.Ref;
-import com.intellij.psi.*;
-import com.intellij.java.language.psi.javadoc.PsiDocComment;
-import consulo.language.psi.util.PsiTreeUtil;
-import com.intellij.java.language.impl.refactoring.util.RefactoringChangeUtil;
-import consulo.language.util.IncorrectOperationException;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -85,7 +88,7 @@ public abstract class BaseMoveInitializerToMethodAction extends PsiElementBaseIn
     field.getInitializer().delete();
 
     if (!assignments.isEmpty()) {
-      highlightRExpression((PsiAssignmentExpression)assignments.get(0).getExpression(), project, editor);
+      highlightRExpression((PsiAssignmentExpression) assignments.get(0).getExpression(), project, editor);
     }
   }
 
@@ -124,19 +127,19 @@ public abstract class BaseMoveInitializerToMethodAction extends PsiElementBaseIn
   private static PsiExpressionStatement addAssignment(@Nonnull PsiCodeBlock codeBlock, @Nonnull PsiField field) throws IncorrectOperationException {
     final PsiElementFactory factory = JavaPsiFacade.getInstance(codeBlock.getProject()).getElementFactory();
 
-    final PsiExpressionStatement statement = (PsiExpressionStatement)factory.createStatementFromText(field.getName() + " = y;", codeBlock);
+    final PsiExpressionStatement statement = (PsiExpressionStatement) factory.createStatementFromText(field.getName() + " = y;", codeBlock);
 
     PsiExpression initializer = field.getInitializer();
     if (initializer instanceof PsiArrayInitializerExpression) {
-      initializer = arrayInitializerToNewExpression((PsiArrayInitializerExpression)initializer, factory, codeBlock);
+      initializer = arrayInitializerToNewExpression((PsiArrayInitializerExpression) initializer, factory, codeBlock);
     }
 
-    final PsiAssignmentExpression expression = (PsiAssignmentExpression)statement.getExpression();
+    final PsiAssignmentExpression expression = (PsiAssignmentExpression) statement.getExpression();
     expression.getRExpression().replace(initializer);
 
     final PsiElement newStatement = codeBlock.addBefore(statement, findFirstFieldUsage(codeBlock.getStatements(), field));
     replaceWithQualifiedReferences(newStatement, newStatement, factory);
-    return (PsiExpressionStatement)newStatement;
+    return (PsiExpressionStatement) newStatement;
   }
 
   @Nullable
@@ -151,7 +154,7 @@ public abstract class BaseMoveInitializerToMethodAction extends PsiElementBaseIn
 
   private static boolean isSuperOrThisMethodCall(@Nonnull PsiStatement statement) {
     if (statement instanceof PsiExpressionStatement) {
-      final PsiElement expression = ((PsiExpressionStatement)statement).getExpression();
+      final PsiElement expression = ((PsiExpressionStatement) statement).getExpression();
       if (RefactoringChangeUtil.isSuperOrThisMethodCall(expression)) {
         return true;
       }
@@ -163,7 +166,7 @@ public abstract class BaseMoveInitializerToMethodAction extends PsiElementBaseIn
                                                                @Nonnull PsiElementFactory factory,
                                                                @Nonnull PsiElement context) {
     final PsiType type = initializer.getType();
-    final PsiNewExpression newExpression = (PsiNewExpression)factory.createExpressionFromText("new " + type.getCanonicalText() + "{}", context);
+    final PsiNewExpression newExpression = (PsiNewExpression) factory.createExpressionFromText("new " + type.getCanonicalText() + "{}", context);
     newExpression.getArrayInitializer().replace(initializer);
     return newExpression;
   }
@@ -194,7 +197,7 @@ public abstract class BaseMoveInitializerToMethodAction extends PsiElementBaseIn
 
     final PsiElement resolved = reference.resolve();
     if (resolved instanceof PsiVariable && !(resolved instanceof PsiField) && !PsiTreeUtil.isAncestor(root, resolved, false)) {
-      final PsiVariable variable = (PsiVariable)resolved;
+      final PsiVariable variable = (PsiVariable) resolved;
       PsiElement qualifiedExpr = factory.createExpressionFromText("this." + variable.getName(), expression);
       expression.replace(qualifiedExpr);
     }

@@ -1,26 +1,26 @@
 package com.intellij.java.coverage.view;
 
-import consulo.execution.coverage.CoverageSuite;
-import consulo.execution.coverage.CoverageSuitesBundle;
-import com.intellij.coverage.view.*;
-import consulo.project.ui.view.tree.AbstractTreeNode;
 import com.intellij.java.coverage.JavaCoverageAnnotator;
 import com.intellij.java.coverage.JavaCoverageSuite;
 import com.intellij.java.coverage.PackageAnnotator;
 import com.intellij.java.language.psi.*;
 import consulo.application.ApplicationManager;
-import consulo.project.Project;
 import consulo.application.util.function.Computable;
-import consulo.ide.impl.idea.openapi.util.NullableComputable;
-import consulo.virtualFileSystem.VirtualFile;
-import com.intellij.psi.*;
+import consulo.execution.coverage.CoverageSuite;
+import consulo.execution.coverage.CoverageSuitesBundle;
+import consulo.execution.coverage.CoverageViewManager;
+import consulo.execution.coverage.view.*;
+import consulo.language.psi.*;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.project.Project;
+import consulo.project.ui.view.tree.AbstractTreeNode;
 import consulo.ui.ex.awt.ColumnInfo;
-import consulo.psi.PsiPackage;
+import consulo.virtualFileSystem.VirtualFile;
 
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.function.Supplier;
 
 /**
  * User: anna
@@ -277,8 +277,8 @@ public class JavaCoverageViewExtension extends CoverageViewExtension {
 
   @Nullable
   private PackageAnnotator.ClassCoverageInfo getClassCoverageInfo(final PsiClass aClass) {
-    return myAnnotator.getClassCoverageInfo(ApplicationManager.getApplication().runReadAction(new NullableComputable<String>() {
-      public String compute() {
+    return myAnnotator.getClassCoverageInfo(ApplicationManager.getApplication().runReadAction(new Supplier<String>() {
+      public String get() {
         return aClass.getQualifiedName();
       }
     }));

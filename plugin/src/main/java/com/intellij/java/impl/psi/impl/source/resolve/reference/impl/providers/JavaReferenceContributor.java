@@ -1,18 +1,24 @@
 package com.intellij.java.impl.psi.impl.source.resolve.reference.impl.providers;
 
-import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.impl.codeInspection.i18n.JavaI18nUtil;
+import com.intellij.java.language.JavaLanguage;
+import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.language.psi.PsiLiteralExpression;
-import consulo.language.pattern.PlatformPatterns;
-import com.intellij.psi.*;
-import consulo.language.psi.filter.ElementFilter;
+import consulo.language.Language;
 import consulo.language.pattern.FilterPattern;
+import consulo.language.pattern.PlatformPatterns;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiReferenceContributor;
+import consulo.language.psi.PsiReferenceProvider;
+import consulo.language.psi.PsiReferenceRegistrar;
+import consulo.language.psi.filter.ElementFilter;
 
+import javax.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.intellij.patterns.XmlPatterns.xmlAttributeValue;
-import static com.intellij.patterns.XmlPatterns.xmlTag;
+import static consulo.xml.patterns.XmlPatterns.xmlAttributeValue;
+import static consulo.xml.patterns.XmlPatterns.xmlTag;
 
 /**
  * @author peter
@@ -37,5 +43,11 @@ public class JavaReferenceContributor extends PsiReferenceContributor{
         return true;
       }
     })), filePathReferenceProvider);
+  }
+
+  @Nonnull
+  @Override
+  public Language getLanguage() {
+    return JavaLanguage.INSTANCE;
   }
 }

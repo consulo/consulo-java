@@ -15,25 +15,26 @@
  */
 package com.intellij.java.impl.ig.classlayout;
 
-import consulo.language.editor.scope.AnalysisScope;
-import consulo.language.editor.inspection.CommonProblemDescriptor;
-import consulo.language.editor.inspection.GlobalInspectionContext;
-import consulo.language.editor.inspection.scheme.InspectionManager;
-import com.intellij.codeInspection.reference.*;
 import com.intellij.java.analysis.codeInspection.reference.RefClass;
 import com.intellij.java.analysis.codeInspection.reference.RefField;
 import com.intellij.java.analysis.codeInspection.reference.RefJavaUtil;
+import com.intellij.java.impl.ig.BaseGlobalInspection;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiType;
-import com.intellij.java.impl.ig.BaseGlobalInspection;
+import consulo.language.editor.inspection.CommonProblemDescriptor;
+import consulo.language.editor.inspection.GlobalInspectionContext;
+import consulo.language.editor.inspection.reference.RefElement;
+import consulo.language.editor.inspection.reference.RefEntity;
+import consulo.language.editor.inspection.scheme.InspectionManager;
+import consulo.language.editor.scope.AnalysisScope;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-public class StaticFieldCanBeMovedToUseInspection extends BaseGlobalInspection {
+public abstract class StaticFieldCanBeMovedToUseInspection extends BaseGlobalInspection {
 
   @Nonnull
   @Override
@@ -45,13 +46,13 @@ public class StaticFieldCanBeMovedToUseInspection extends BaseGlobalInspection {
 
   @Nullable
   public CommonProblemDescriptor[] checkElement(
-    RefEntity refEntity, AnalysisScope analysisScope,
-    InspectionManager inspectionManager,
-    GlobalInspectionContext globalInspectionContext) {
+      RefEntity refEntity, AnalysisScope analysisScope,
+      InspectionManager inspectionManager,
+      GlobalInspectionContext globalInspectionContext) {
     if (!(refEntity instanceof RefField)) {
       return null;
     }
-    final RefField refField = (RefField)refEntity;
+    final RefField refField = (RefField) refEntity;
     final PsiField field = refField.getElement();
     if (field == null) {
       return null;

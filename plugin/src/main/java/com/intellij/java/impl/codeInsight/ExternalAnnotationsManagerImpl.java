@@ -15,74 +15,83 @@
  */
 package com.intellij.java.impl.codeInsight;
 
-import consulo.application.CommonBundle;
-import com.intellij.ProjectTopics;
-import consulo.fileChooser.FileChooserDescriptor;
-import consulo.fileEditor.FileEditorManager;
-import consulo.language.editor.FileModificationService;
-import consulo.language.editor.highlight.HighlightManager;
-import consulo.ide.impl.idea.diagnostic.LogMessageEx;
-import consulo.application.AllIcons;
-import consulo.dataContext.DataManager;
-import com.intellij.ide.highlighter.XmlFileType;
 import com.intellij.java.impl.psi.codeStyle.JavaCodeStyleSettings;
 import com.intellij.java.language.impl.codeInsight.ReadableExternalAnnotationsManager;
 import com.intellij.java.language.projectRoots.roots.AnnotationOrderRootType;
 import com.intellij.java.language.psi.PsiJavaFile;
 import com.intellij.java.language.psi.PsiModifierListOwner;
 import com.intellij.java.language.psi.PsiNameValuePair;
-import consulo.application.Application;
-import consulo.application.ApplicationManager;
-import consulo.application.Result;
-import consulo.ui.ex.awt.DialogWrapper;
-import consulo.ui.ex.awt.Messages;
-import consulo.undoRedo.CommandProcessor;
-import consulo.language.editor.WriteCommandAction;
-import consulo.undoRedo.BasicUndoableAction;
-import consulo.undoRedo.UndoManager;
-import consulo.undoRedo.util.UndoUtil;
-import consulo.document.Document;
+import consulo.application.*;
+import consulo.application.util.function.Processor;
 import consulo.codeEditor.Editor;
+import consulo.codeEditor.EditorColors;
 import consulo.codeEditor.LogicalPosition;
 import consulo.codeEditor.ScrollType;
-import consulo.codeEditor.EditorColors;
-import consulo.colorScheme.EditorColorsManager;
 import consulo.codeEditor.markup.RangeHighlighter;
+import consulo.colorScheme.EditorColorsManager;
 import consulo.colorScheme.TextAttributes;
-import consulo.ui.fileChooser.FileChooser;
-import consulo.fileChooser.FileChooserDescriptorFactory;
+import consulo.component.messagebus.MessageBus;
+import consulo.component.messagebus.MessageBusConnection;
+import consulo.content.bundle.Sdk;
+import consulo.content.bundle.SdkModificator;
+import consulo.content.library.Library;
+import consulo.dataContext.DataManager;
+import consulo.disposer.Disposer;
+import consulo.document.Document;
 import consulo.document.FileDocumentManager;
+import consulo.document.util.TextRange;
+import consulo.fileChooser.FileChooserDescriptor;
+import consulo.fileChooser.FileChooserDescriptorFactory;
+import consulo.fileChooser.IdeaFileChooser;
+import consulo.fileEditor.FileEditorManager;
+import consulo.ide.impl.idea.diagnostic.LogMessageEx;
+import consulo.ide.impl.idea.openapi.vfs.VfsUtilCore;
+import consulo.ide.impl.idea.util.ui.OptionsMessageDialog;
+import consulo.language.codeStyle.CodeStyleSettingsManager;
+import consulo.language.editor.FileModificationService;
+import consulo.language.editor.WriteCommandAction;
+import consulo.language.editor.highlight.HighlightManager;
+import consulo.language.editor.util.LanguageUndoUtil;
+import consulo.language.impl.internal.psi.PsiModificationTrackerImpl;
+import consulo.language.psi.*;
+import consulo.language.util.IncorrectOperationException;
+import consulo.logging.Logger;
+import consulo.module.content.ProjectRootManager;
+import consulo.module.content.layer.event.ModuleRootAdapter;
+import consulo.module.content.layer.event.ModuleRootEvent;
+import consulo.module.content.layer.event.ModuleRootListener;
+import consulo.module.content.layer.orderEntry.LibraryOrderEntry;
+import consulo.module.content.layer.orderEntry.ModuleExtensionWithSdkOrderEntry;
+import consulo.module.content.layer.orderEntry.ModuleOrderEntry;
+import consulo.module.content.layer.orderEntry.OrderEntry;
 import consulo.project.DumbService;
 import consulo.project.Project;
 import consulo.project.ProjectBundle;
-import consulo.content.bundle.Sdk;
-import consulo.content.bundle.SdkModificator;
-import com.intellij.openapi.roots.*;
-import consulo.content.library.Library;
+import consulo.ui.ex.awt.DialogWrapper;
+import consulo.ui.ex.awt.Messages;
+import consulo.ui.ex.popup.BaseListPopupStep;
 import consulo.ui.ex.popup.JBPopupFactory;
 import consulo.ui.ex.popup.PopupStep;
-import consulo.ui.ex.popup.BaseListPopupStep;
-import consulo.util.lang.Comparing;
-import consulo.document.util.TextRange;
-import consulo.util.lang.StringUtil;
-import com.intellij.openapi.vfs.*;
-import com.intellij.psi.*;
-import consulo.language.codeStyle.CodeStyleSettingsManager;
-import consulo.language.impl.internal.psi.PsiModificationTrackerImpl;
-import com.intellij.psi.xml.XmlDocument;
-import com.intellij.psi.xml.XmlFile;
-import com.intellij.psi.xml.XmlTag;
-import consulo.language.util.IncorrectOperationException;
-import consulo.application.util.function.Processor;
-import consulo.util.collection.SmartList;
-import consulo.util.collection.ContainerUtil;
-import consulo.component.messagebus.MessageBus;
-import consulo.component.messagebus.MessageBusConnection;
-import consulo.ide.impl.idea.util.ui.OptionsMessageDialog;
-import consulo.disposer.Disposer;
-import consulo.logging.Logger;
 import consulo.ui.image.Image;
+import consulo.undoRedo.BasicUndoableAction;
+import consulo.undoRedo.CommandProcessor;
+import consulo.undoRedo.ProjectUndoManager;
+import consulo.util.collection.ContainerUtil;
+import consulo.util.collection.SmartList;
+import consulo.util.lang.Comparing;
+import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.ReadonlyStatusHandler;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.virtualFileSystem.VirtualFileManager;
+import consulo.virtualFileSystem.event.VirtualFileAdapter;
+import consulo.virtualFileSystem.event.VirtualFileCopyEvent;
+import consulo.virtualFileSystem.event.VirtualFileEvent;
+import consulo.virtualFileSystem.event.VirtualFileMoveEvent;
+import consulo.xml.ide.highlighter.XmlFileType;
+import consulo.xml.psi.XmlElementFactory;
+import consulo.xml.psi.xml.XmlDocument;
+import consulo.xml.psi.xml.XmlFile;
+import consulo.xml.psi.xml.XmlTag;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import org.jetbrains.annotations.NonNls;
@@ -112,7 +121,7 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
     super(psiManager);
     myBus = project.getMessageBus();
     final MessageBusConnection connection = myBus.connect(project);
-    connection.subscribe(ProjectTopics.PROJECT_ROOTS, new ModuleRootAdapter() {
+    connection.subscribe(ModuleRootListener.class, new ModuleRootAdapter() {
       @Override
       public void rootsChanged(ModuleRootEvent event) {
         dropCache();
@@ -218,7 +227,7 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
     final FileChooserDescriptor descriptor = FileChooserDescriptorFactory.createSingleFolderDescriptor();
     descriptor.setTitle(ProjectBundle.message("external.annotations.root.chooser.title", entry.getPresentableName()));
     descriptor.setDescription(ProjectBundle.message("external.annotations.root.chooser.description"));
-    final VirtualFile newRoot = consulo.ui.fileChooser.FileChooser.chooseFile(descriptor, project, null);
+    final VirtualFile newRoot = IdeaFileChooser.chooseFile(descriptor, project, null);
     if (newRoot == null) {
       notifyAfterAnnotationChanging(listOwner, annotationFQName, false);
       return false;
@@ -337,7 +346,7 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
           }
         }
 
-        UndoManager.getInstance(project).undoableActionPerformed(new BasicUndoableAction() {
+        ProjectUndoManager.getInstance(project).undoableActionPerformed(new BasicUndoableAction() {
           @Override
           public void undo() {
             dropCache();
@@ -613,7 +622,7 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
     } finally {
       dropCache();
       if (codeUsageFile.getVirtualFile().isInLocalFileSystem()) {
-        UndoUtil.markPsiFileForUndo(codeUsageFile);
+        LanguageUndoUtil.markPsiFileForUndo(codeUsageFile);
       }
     }
   }

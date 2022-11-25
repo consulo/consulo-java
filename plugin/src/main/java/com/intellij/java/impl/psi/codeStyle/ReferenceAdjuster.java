@@ -15,30 +15,37 @@
  */
 package com.intellij.java.impl.psi.codeStyle;
 
-import consulo.language.ast.ASTNode;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ExtensionAPI;
+import consulo.application.Application;
+import consulo.component.extension.ExtensionPointCacheKey;
 import consulo.language.Language;
+import consulo.language.ast.ASTNode;
+import consulo.language.extension.ByLanguageValue;
 import consulo.language.extension.LanguageExtension;
+import consulo.language.extension.LanguageOneToOne;
 import consulo.project.Project;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * @author Max Medvedev
  */
-public interface ReferenceAdjuster {
+@ExtensionAPI(ComponentScope.APPLICATION)
+public interface ReferenceAdjuster extends LanguageExtension {
+  ExtensionPointCacheKey<ReferenceAdjuster, ByLanguageValue<ReferenceAdjuster>> KEY = ExtensionPointCacheKey.create("ReferenceAdjuster", LanguageOneToOne.build());
+
+  @Nullable
+  static ReferenceAdjuster forLanguage(@Nonnull Language language) {
+    return Application.get().getExtensionPoint(ReferenceAdjuster.class).getOrBuildCache(KEY).get(language);
+  }
+
   ASTNode process(ASTNode element, boolean addImports, boolean incompleteCode, boolean useFqInJavadoc, boolean useFqInCode);
+
   ASTNode process(ASTNode element, boolean addImports, boolean incompleteCode, Project project);
 
   void processRange(ASTNode element, int startOffset, int endOffset, boolean useFqInJavadoc, boolean useFqInCode);
+
   void processRange(ASTNode element, int startOffset, int endOffset, Project project);
-
-  class Extension extends LanguageExtension<ReferenceAdjuster> {
-    private static final Extension INSTANCE = new Extension();
-
-    public Extension() {
-      super("consulo.java.codeStyle.referenceAdjuster");
-    }
-
-    public static ReferenceAdjuster getReferenceAdjuster(Language language) {
-      return INSTANCE.forLanguage(language);
-    }
-  }
 }

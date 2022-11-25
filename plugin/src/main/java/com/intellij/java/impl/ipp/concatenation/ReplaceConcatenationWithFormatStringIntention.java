@@ -16,7 +16,7 @@
 package com.intellij.java.impl.ipp.concatenation;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import com.intellij.java.impl.psi.util.PsiConcatenationUtil;
 import consulo.language.util.IncorrectOperationException;
 import com.intellij.java.impl.ipp.base.Intention;

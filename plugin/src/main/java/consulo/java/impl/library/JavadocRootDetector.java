@@ -15,50 +15,42 @@
  */
 package consulo.java.impl.library;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-
 import consulo.application.progress.ProgressIndicator;
-import consulo.content.OrderRootType;
+import consulo.content.base.DocumentationOrderRootType;
 import consulo.content.library.ui.RootDetector;
 import consulo.ide.impl.idea.openapi.vfs.VfsUtilCore;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.util.VirtualFileVisitor;
 
-public class JavadocRootDetector extends RootDetector
-{
-	private JavadocRootDetector()
-	{
-		super(OrderRootType.DOCUMENTATION, false, "JavaDocs");
-	}
+import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
-	@Nonnull
-	@Override
-	public Collection<VirtualFile> detectRoots(@Nonnull VirtualFile rootCandidate, @Nonnull ProgressIndicator progressIndicator)
-	{
-		List<VirtualFile> result = new ArrayList<VirtualFile>();
-		collectJavadocRoots(rootCandidate, result, progressIndicator);
-		return result;
-	}
+public class JavadocRootDetector extends RootDetector {
+  private JavadocRootDetector() {
+    super(DocumentationOrderRootType.getInstance(), false, "JavaDocs");
+  }
 
-	private static void collectJavadocRoots(VirtualFile file, final List<VirtualFile> result, final ProgressIndicator progressIndicator)
-	{
-		VfsUtilCore.visitChildrenRecursively(file, new VirtualFileVisitor()
-		{
-			@Override
-			public boolean visitFile(@Nonnull VirtualFile file)
-			{
-				progressIndicator.checkCanceled();
-				if(file.isDirectory() && file.findChild("allclasses-frame.html") != null && file.findChild("allclasses-noframe.html") != null)
-				{
-					result.add(file);
-					return false;
-				}
-				return true;
-			}
-		});
-	}
+  @Nonnull
+  @Override
+  public Collection<VirtualFile> detectRoots(@Nonnull VirtualFile rootCandidate, @Nonnull ProgressIndicator progressIndicator) {
+    List<VirtualFile> result = new ArrayList<VirtualFile>();
+    collectJavadocRoots(rootCandidate, result, progressIndicator);
+    return result;
+  }
+
+  private static void collectJavadocRoots(VirtualFile file, final List<VirtualFile> result, final ProgressIndicator progressIndicator) {
+    VfsUtilCore.visitChildrenRecursively(file, new VirtualFileVisitor() {
+      @Override
+      public boolean visitFile(@Nonnull VirtualFile file) {
+        progressIndicator.checkCanceled();
+        if (file.isDirectory() && file.findChild("allclasses-frame.html") != null && file.findChild("allclasses-noframe.html") != null) {
+          result.add(file);
+          return false;
+        }
+        return true;
+      }
+    });
+  }
 }

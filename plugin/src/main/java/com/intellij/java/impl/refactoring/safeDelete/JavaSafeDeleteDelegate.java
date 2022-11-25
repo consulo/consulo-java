@@ -15,20 +15,34 @@
  */
 package com.intellij.java.impl.refactoring.safeDelete;
 
-import java.util.List;
-
-import consulo.language.extension.LanguageExtension;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiParameter;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ExtensionAPI;
+import consulo.application.Application;
+import consulo.component.extension.ExtensionPointCacheKey;
+import consulo.language.Language;
+import consulo.language.extension.ByLanguageValue;
+import consulo.language.extension.LanguageExtension;
+import consulo.language.extension.LanguageOneToOne;
 import consulo.language.psi.PsiReference;
 import consulo.usage.UsageInfo;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.List;
 
 /**
  * @author Max Medvedev
  */
-public interface JavaSafeDeleteDelegate {
-  LanguageExtension<JavaSafeDeleteDelegate> EP =
-    new LanguageExtension<JavaSafeDeleteDelegate>("consulo.java.refactoring.safeDelete.JavaSafeDeleteDelegate");
+@ExtensionAPI(ComponentScope.APPLICATION)
+public interface JavaSafeDeleteDelegate extends LanguageExtension {
+  ExtensionPointCacheKey<JavaSafeDeleteDelegate, ByLanguageValue<JavaSafeDeleteDelegate>> KEY = ExtensionPointCacheKey.create("JavaSafeDeleteDelegate", LanguageOneToOne.build());
+
+  @Nullable
+  static JavaSafeDeleteDelegate forLanguage(@Nonnull Language language) {
+    return Application.get().getExtensionPoint(JavaSafeDeleteDelegate.class).getOrBuildCache(KEY).get(language);
+  }
 
   void createUsageInfoForParameter(final PsiReference reference,
                                    final List<UsageInfo> usages,

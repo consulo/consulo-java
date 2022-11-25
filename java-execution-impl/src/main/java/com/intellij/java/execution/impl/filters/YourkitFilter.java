@@ -15,23 +15,29 @@
  */
 package com.intellij.java.execution.impl.filters;
 
-import com.intellij.execution.filters.Filter;
-import consulo.execution.ui.console.HyperlinkInfo;
-import consulo.execution.ui.console.OpenFileHyperlinkInfo;
-import consulo.dataContext.DataManager;
-import consulo.language.psi.util.EditSourceUtil;
-import consulo.language.editor.ui.PsiElementListCellRenderer;
 import com.intellij.java.language.psi.JavaDirectoryService;
 import com.intellij.java.language.psi.PsiJavaPackage;
-import consulo.language.editor.PlatformDataKeys;
-import consulo.codeEditor.Editor;
-import consulo.project.Project;
-import consulo.ide.impl.ui.impl.PopupChooserBuilder;
-import consulo.navigation.Navigatable;
-import com.intellij.psi.*;
 import com.intellij.java.language.psi.search.PsiShortNamesCache;
-import consulo.ui.ex.awt.JBList;
+import consulo.codeEditor.Editor;
+import consulo.codeEditor.EditorPopupHelper;
+import consulo.dataContext.DataManager;
+import consulo.execution.ui.console.Filter;
+import consulo.execution.ui.console.HyperlinkInfo;
+import consulo.execution.ui.console.OpenFileHyperlinkInfo;
+import consulo.language.editor.PlatformDataKeys;
+import consulo.language.editor.ui.PsiElementListCellRenderer;
+import consulo.language.psi.PsiDirectory;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.util.EditSourceUtil;
 import consulo.logging.Logger;
+import consulo.navigation.Navigatable;
+import consulo.project.Project;
+import consulo.ui.ex.awt.JBList;
+import consulo.ui.ex.awt.internal.AWTPopupChooserBuilder;
+import consulo.ui.ex.awt.popup.AWTPopupFactory;
+import consulo.ui.ex.popup.JBPopup;
+import consulo.ui.ex.popup.JBPopupFactory;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -97,7 +103,7 @@ public class YourkitFilter implements Filter {
       final JList list = new JBList(myPsiFiles);
       list.setCellRenderer(renderer);
 
-      final PopupChooserBuilder builder = new PopupChooserBuilder(list);
+      final AWTPopupChooserBuilder builder = ((AWTPopupFactory) JBPopupFactory.getInstance()).createListPopupBuilder(list);
       renderer.installSpeedSearch(builder);
 
       final Runnable runnable = new Runnable() {
@@ -116,10 +122,11 @@ public class YourkitFilter implements Filter {
 
       final Editor editor = DataManager.getInstance().getDataContext().getData(PlatformDataKeys.EDITOR);
 
-      builder.
+      JBPopup popup = builder.setItemChoosenCallback(runnable).
           setTitle("Choose file").
-          setItemChoosenCallback(runnable).
-          createPopup().showInBestPositionFor(editor);
+          createPopup();
+
+      EditorPopupHelper.getInstance().showPopupInBestPositionFor(editor, popup);
     }
   }
 

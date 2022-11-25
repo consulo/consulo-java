@@ -15,26 +15,26 @@
  */
 package com.intellij.java.execution.impl.application;
 
-import consulo.module.ui.awt.ModuleDescriptionsComboBox;
-import consulo.execution.ExecutionBundle;
 import com.intellij.java.execution.CommonJavaRunConfigurationParameters;
 import com.intellij.java.execution.JavaExecutionUtil;
 import com.intellij.java.execution.ShortenCommandLine;
 import com.intellij.java.execution.configurations.ConfigurationUtil;
 import com.intellij.java.execution.impl.ui.*;
 import com.intellij.java.execution.impl.util.JreVersionDetector;
+import com.intellij.java.language.impl.ui.EditorTextFieldWithBrowseButton;
+import com.intellij.java.language.psi.JavaCodeFragment;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.util.PsiMethodUtil;
 import consulo.configurable.ConfigurationException;
+import consulo.execution.ExecutionBundle;
 import consulo.execution.configuration.ui.SettingsEditor;
+import consulo.java.execution.JavaExecutionBundle;
+import consulo.language.psi.PsiElement;
+import consulo.module.ui.awt.ModuleDescriptionsComboBox;
 import consulo.project.Project;
 import consulo.ui.ex.awt.JBCheckBox;
 import consulo.ui.ex.awt.LabeledComponent;
-import com.intellij.java.language.psi.JavaCodeFragment;
-import com.intellij.java.language.psi.PsiClass;
-import consulo.language.psi.PsiElement;
-import com.intellij.java.language.psi.util.PsiMethodUtil;
-import com.intellij.java.language.impl.ui.EditorTextFieldWithBrowseButton;
 import consulo.ui.ex.awt.UIUtil;
-import consulo.java.execution.JavaExecutionBundle;
 
 import javax.annotation.Nonnull;
 import javax.swing.*;
@@ -61,7 +61,7 @@ public class ApplicationConfigurable extends SettingsEditor<ApplicationConfigura
       public Visibility isDeclarationVisible(PsiElement declaration, PsiElement place) {
         if (declaration instanceof PsiClass) {
           final PsiClass aClass = (PsiClass) declaration;
-          if (ConfigurationUtil.MAIN_CLASS.value(aClass) && PsiMethodUtil.findMainMethod(aClass) != null || place.getParent() != null && myModuleSelector.findClass(((PsiClass) declaration)
+          if (ConfigurationUtil.MAIN_CLASS.test(aClass) && PsiMethodUtil.findMainMethod(aClass) != null || place.getParent() != null && myModuleSelector.findClass(((PsiClass) declaration)
               .getQualifiedName()) != null) {
             return Visibility.VISIBLE;
           }

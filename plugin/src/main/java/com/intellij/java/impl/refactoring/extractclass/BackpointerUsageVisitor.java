@@ -21,7 +21,7 @@
 package com.intellij.java.impl.refactoring.extractclass;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 
 import java.util.List;
 

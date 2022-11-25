@@ -15,19 +15,19 @@
  */
 package com.intellij.java.impl.codeInspection.concurrencyAnnotations;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.java.analysis.codeInspection.GroupNames;
 import com.intellij.java.analysis.impl.codeInspection.BaseJavaLocalInspectionTool;
-import consulo.language.editor.inspection.ProblemsHolder;
 import com.intellij.java.analysis.impl.codeInspection.concurrencyAnnotations.JCiPUtil;
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.*;
 import com.intellij.java.language.psi.javadoc.PsiDocTag;
+import consulo.language.editor.inspection.ProblemsHolder;
+import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.Nls;
 
-public class NonFinalGuardInspection extends BaseJavaLocalInspectionTool {
+import javax.annotation.Nonnull;
+
+public abstract class NonFinalGuardInspection extends BaseJavaLocalInspectionTool {
 
   @Override
   @Nonnull

@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.refactoring.extractInterface;
 
-import consulo.application.impl.internal.ApplicationNamesInfo;
+import consulo.application.Application;
 import consulo.project.Project;
 import com.intellij.java.language.psi.PsiClass;
 import consulo.language.psi.PsiElement;
@@ -43,7 +43,7 @@ public class ExtractClassUtil {
                              RefactoringBundle.message("class.has.been.successfully.created", superClassName);
       String message = createdString + "\n" +
                        RefactoringBundle.message("use.super.references.prompt",
-                         ApplicationNamesInfo.getInstance().getProductName(), className, superClassName);
+                           Application.get().getName().get(), className, superClassName);
       YesNoPreviewUsagesDialog dialog = new YesNoPreviewUsagesDialog(
         RefactoringBundle.message("analyze.and.replace.usages"),
         message,

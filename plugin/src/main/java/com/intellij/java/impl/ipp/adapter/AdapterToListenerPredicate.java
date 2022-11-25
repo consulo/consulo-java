@@ -19,7 +19,7 @@ import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
 import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.java.language.psi.PsiReferenceList;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 
 public class AdapterToListenerPredicate implements PsiElementPredicate {

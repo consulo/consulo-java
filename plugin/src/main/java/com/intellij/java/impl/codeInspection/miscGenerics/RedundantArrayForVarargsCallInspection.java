@@ -15,30 +15,34 @@
  */
 package com.intellij.java.impl.codeInspection.miscGenerics;
 
-import com.intellij.java.impl.codeInsight.ExpectedTypeInfo;
-import com.intellij.java.impl.codeInsight.ExpectedTypesProvider;
-import consulo.language.editor.FileModificationService;
 import com.intellij.java.analysis.codeInspection.GroupNames;
 import com.intellij.java.analysis.impl.codeInspection.miscGenerics.GenericsInspectionToolBase;
-import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import com.intellij.psi.*;
-import com.intellij.java.language.psi.util.PsiUtil;
+import com.intellij.java.impl.codeInsight.ExpectedTypeInfo;
+import com.intellij.java.impl.codeInsight.ExpectedTypesProvider;
 import com.intellij.java.impl.refactoring.util.InlineUtil;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.language.editor.FileModificationService;
+import consulo.language.editor.inspection.InspectionsBundle;
+import consulo.language.editor.inspection.LocalQuickFix;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.editor.inspection.ProblemHighlightType;
+import consulo.language.editor.inspection.scheme.InspectionManager;
+import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
+import consulo.project.Project;
 import org.jetbrains.annotations.NonNls;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * @author ven
  */
-public class RedundantArrayForVarargsCallInspection extends GenericsInspectionToolBase
-{
+public abstract class RedundantArrayForVarargsCallInspection extends GenericsInspectionToolBase {
   private static final Logger LOG = Logger.getInstance(RedundantArrayForVarargsCallInspection.class);
   private final LocalQuickFix myQuickFixAction = new MyQuickFix();
 
@@ -69,17 +73,20 @@ public class RedundantArrayForVarargsCallInspection extends GenericsInspectionTo
     if (!PsiUtil.isLanguageLevel5OrHigher(place)) return null;
     final List<ProblemDescriptor> problems = new ArrayList<ProblemDescriptor>();
     place.accept(new JavaRecursiveElementWalkingVisitor() {
-      @Override public void visitCallExpression(PsiCallExpression expression) {
+      @Override
+      public void visitCallExpression(PsiCallExpression expression) {
         super.visitCallExpression(expression);
         checkCall(expression);
       }
 
-      @Override public void visitEnumConstant(PsiEnumConstant enumConstant) {
+      @Override
+      public void visitEnumConstant(PsiEnumConstant enumConstant) {
         super.visitEnumConstant(enumConstant);
         checkCall(enumConstant);
       }
 
-      @Override public void visitClass(PsiClass aClass) {
+      @Override
+      public void visitClass(PsiClass aClass) {
         //do not go inside to prevent multiple signals of the same problem
       }
 
@@ -87,8 +94,8 @@ public class RedundantArrayForVarargsCallInspection extends GenericsInspectionTo
         final JavaResolveResult resolveResult = expression.resolveMethodGenerics();
         PsiElement element = resolveResult.getElement();
         final PsiSubstitutor substitutor = resolveResult.getSubstitutor();
-        if (element instanceof PsiMethod && ((PsiMethod)element).isVarArgs()) {
-          PsiMethod method = (PsiMethod)element;
+        if (element instanceof PsiMethod && ((PsiMethod) element).isVarArgs()) {
+          PsiMethod method = (PsiMethod) element;
           PsiParameter[] parameters = method.getParameterList().getParameters();
           PsiExpressionList argumentList = expression.getArgumentList();
           if (argumentList != null) {
@@ -100,14 +107,14 @@ public class RedundantArrayForVarargsCallInspection extends GenericsInspectionTo
               LOG.assertTrue(lastParamType instanceof PsiEllipsisType);
               if (lastArg instanceof PsiNewExpression &&
                   substitutor.substitute(((PsiEllipsisType) lastParamType).toArrayType()).equals(lastArg.getType())) {
-                PsiExpression[] initializers = getInitializers((PsiNewExpression)lastArg);
+                PsiExpression[] initializers = getInitializers((PsiNewExpression) lastArg);
                 if (initializers != null) {
                   if (isSafeToFlatten(expression, method, initializers)) {
                     final ProblemDescriptor descriptor = manager.createProblemDescriptor(lastArg,
-                                                                                         InspectionsBundle.message("inspection.redundant.array.creation.for.varargs.call.descriptor"),
-                                                                                         myQuickFixAction,
-                                                                                         ProblemHighlightType.GENERIC_ERROR_OR_WARNING,
-                                                                                         isOnTheFly);
+                        InspectionsBundle.message("inspection.redundant.array.creation.for.varargs.call.descriptor"),
+                        myQuickFixAction,
+                        ProblemHighlightType.GENERIC_ERROR_OR_WARNING,
+                        isOnTheFly);
 
                     problems.add(descriptor);
                   }
@@ -124,7 +131,7 @@ public class RedundantArrayForVarargsCallInspection extends GenericsInspectionTo
           // change foo(new Object[]{array}) to foo(array) is not safe
           if (PsiType.NULL.equals(type) || type instanceof PsiArrayType) return false;
         }
-        PsiCall copy = (PsiCall)callExpression.copy();
+        PsiCall copy = (PsiCall) callExpression.copy();
         PsiExpressionList copyArgumentList = copy.getArgumentList();
         LOG.assertTrue(copyArgumentList != null);
         PsiExpression[] args = copyArgumentList.getExpressions();
@@ -136,7 +143,7 @@ public class RedundantArrayForVarargsCallInspection extends GenericsInspectionTo
           final Project project = callExpression.getProject();
           final JavaResolveResult resolveResult;
           if (callExpression instanceof PsiEnumConstant) {
-            final PsiEnumConstant enumConstant = (PsiEnumConstant)callExpression;
+            final PsiEnumConstant enumConstant = (PsiEnumConstant) callExpression;
             final PsiClass containingClass = enumConstant.getContainingClass();
             final JavaPsiFacade facade = JavaPsiFacade.getInstance(project);
             final PsiClassType classType = facade.getElementFactory().createType(containingClass);
@@ -148,7 +155,7 @@ public class RedundantArrayForVarargsCallInspection extends GenericsInspectionTo
               return false;
             }
             final ExpectedTypeInfo[] expectedTypes = ExpectedTypesProvider.getExpectedTypes((PsiCallExpression) callExpression, false);
-            final PsiType expressionType = ((PsiCallExpression)copy).getType();
+            final PsiType expressionType = ((PsiCallExpression) copy).getType();
             for (ExpectedTypeInfo expectedType : expectedTypes) {
               if (!expectedType.getType().isAssignableFrom(expressionType)) {
                 return false;
@@ -156,8 +163,7 @@ public class RedundantArrayForVarargsCallInspection extends GenericsInspectionTo
             }
             return true;
           }
-        }
-        catch (IncorrectOperationException e) {
+        } catch (IncorrectOperationException e) {
           return false;
         }
       }
@@ -176,8 +182,8 @@ public class RedundantArrayForVarargsCallInspection extends GenericsInspectionTo
     if (dims.length > 0) {
       PsiExpression firstDimension = dims[0];
       Object value =
-        JavaPsiFacade.getInstance(newExpression.getProject()).getConstantEvaluationHelper().computeConstantExpression(firstDimension);
-      if (value instanceof Integer && ((Integer)value).intValue() == 0) return PsiExpression.EMPTY_ARRAY;
+          JavaPsiFacade.getInstance(newExpression.getProject()).getConstantEvaluationHelper().computeConstantExpression(firstDimension);
+      if (value instanceof Integer && ((Integer) value).intValue() == 0) return PsiExpression.EMPTY_ARRAY;
     }
 
     return null;

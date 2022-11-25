@@ -313,7 +313,7 @@ public class PsiTypeLookupItem extends LookupItem implements TypedLookupItem {
     int newTail = JavaCompletionUtil.insertClassReference(aClass, file, startOffset, tail);
     if (newTail > context.getDocument().getTextLength() || newTail < 0) {
       LOG.error(LogMessageEx.createEvent("Invalid offset after insertion ", "offset=" + newTail + "\n" + "start=" + startOffset + "\n" + "tail=" + tail + "\n" + "file.length=" + file
-          .getTextLength() + "\n" + "document=" + context.getDocument() + "\n" + DebugUtil.currentStackTrace(), AttachmentFactory.createAttachment(context.getDocument())));
+          .getTextLength() + "\n" + "document=" + context.getDocument() + "\n" + DebugUtil.currentStackTrace(), AttachmentFactory.get().createAttachment(context.getDocument())));
       return;
 
     }

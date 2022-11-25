@@ -15,16 +15,16 @@
  */
 package com.intellij.java.impl.ipp.junit;
 
-import javax.annotation.Nonnull;
-
-import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import com.intellij.psi.*;
-import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
-import consulo.language.util.IncorrectOperationException;
 import com.intellij.java.impl.ipp.base.Intention;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
 import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
 
 public class ConvertJUnit3TestCaseToJUnit4Intention extends Intention {
 

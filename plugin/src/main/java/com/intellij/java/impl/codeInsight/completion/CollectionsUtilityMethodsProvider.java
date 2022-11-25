@@ -15,14 +15,15 @@
  */
 package com.intellij.java.impl.codeInsight.completion;
 
+import com.intellij.java.language.psi.*;
 import consulo.language.editor.completion.AutoCompletionPolicy;
 import consulo.language.editor.completion.lookup.LookupElement;
-import com.intellij.java.language.psi.*;
+import consulo.language.psi.PsiElement;
 import consulo.util.dataholder.Key;
-import com.intellij.psi.*;
-import consulo.ide.impl.idea.util.Consumer;
 import org.jetbrains.annotations.NonNls;
+
 import javax.annotation.Nonnull;
+import java.util.function.Consumer;
 
 import static consulo.java.language.module.util.JavaClassNames.*;
 
@@ -98,7 +99,7 @@ class CollectionsUtilityMethodsProvider {
     item.setAutoCompletionPolicy(AutoCompletionPolicy.NEVER_AUTOCOMPLETE);
     item.setInferenceSubstitutor(SmartCompletionDecorator.calculateMethodReturnTypeSubstitutor(method, expectedType), myElement);
     item.putUserData(COLLECTION_FACTORY, true);
-    myResult.consume(item);
+    myResult.accept(item);
   }
 
   private static boolean isClassType(final PsiType type, final String className) {

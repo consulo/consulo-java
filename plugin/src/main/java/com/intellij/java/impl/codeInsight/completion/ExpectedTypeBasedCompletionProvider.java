@@ -15,17 +15,17 @@
  */
 package com.intellij.java.impl.codeInsight.completion;
 
-import consulo.language.editor.completion.CompletionParameters;
-import consulo.language.editor.completion.CompletionResultSet;
 import com.intellij.java.impl.codeInsight.ExpectedTypeInfo;
 import com.intellij.java.language.psi.PsiLiteralExpression;
+import consulo.language.editor.completion.CompletionParameters;
+import consulo.language.editor.completion.CompletionProvider;
+import consulo.language.editor.completion.CompletionResultSet;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.ProcessingContext;
-import consulo.util.collection.ContainerUtil;
-import consulo.language.editor.completion.CompletionProvider;
 
 import javax.annotation.Nonnull;
 import java.util.Collection;
+import java.util.Set;
 
 /**
  * @author peter
@@ -36,7 +36,7 @@ public abstract class ExpectedTypeBasedCompletionProvider implements CompletionP
     final PsiElement position = params.getPosition();
     if (position.getParent() instanceof PsiLiteralExpression) return;
 
-    addCompletions(params, result, ContainerUtil.newHashSet(JavaSmartCompletionContributor.getExpectedTypes(params)));
+    addCompletions(params, result, Set.of(JavaSmartCompletionContributor.getExpectedTypes(params)));
   }
 
   protected abstract void addCompletions(CompletionParameters params, CompletionResultSet result, Collection<ExpectedTypeInfo> infos);

@@ -20,11 +20,11 @@
  */
 package com.intellij.java.impl.codeInspection.reference;
 
-import consulo.ide.impl.idea.codeInspection.reference.RefFileImpl;
-import consulo.language.editor.inspection.reference.RefManager;
 import com.intellij.java.analysis.codeInspection.reference.RefJavaManager;
 import com.intellij.java.analysis.impl.codeInspection.reference.RefPackageImpl;
 import com.intellij.java.language.psi.PsiJavaFile;
+import consulo.language.editor.impl.inspection.reference.RefFileImpl;
+import consulo.language.editor.inspection.reference.RefManager;
 
 public class RefJavaFileImpl extends RefFileImpl {
   public RefJavaFileImpl(PsiJavaFile elem, RefManager manager) {

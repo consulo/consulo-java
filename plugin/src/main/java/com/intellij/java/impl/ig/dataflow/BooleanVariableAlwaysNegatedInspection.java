@@ -21,7 +21,7 @@ import com.intellij.java.language.psi.*;
 import org.jetbrains.annotations.Nls;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.project.Project;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import consulo.language.ast.IElementType;
 import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;

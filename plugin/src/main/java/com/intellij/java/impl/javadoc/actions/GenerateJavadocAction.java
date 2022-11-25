@@ -15,20 +15,20 @@
  */
 package com.intellij.java.impl.javadoc.actions;
 
-import javax.swing.JComponent;
-import javax.swing.event.DocumentEvent;
-
-import javax.annotation.Nonnull;
-import consulo.language.editor.scope.AnalysisScope;
-import consulo.ide.impl.idea.analysis.BaseAnalysisAction;
-import consulo.ide.impl.idea.analysis.BaseAnalysisActionDialog;
-import com.intellij.java.language.JavadocBundle;
 import com.intellij.java.impl.javadoc.JavadocConfigurable;
 import com.intellij.java.impl.javadoc.JavadocGenerationManager;
+import com.intellij.java.language.JavadocBundle;
+import consulo.ide.impl.idea.analysis.BaseAnalysisAction;
+import consulo.ide.impl.idea.analysis.BaseAnalysisActionDialog;
+import consulo.language.editor.scope.AnalysisScope;
 import consulo.project.Project;
 import consulo.ui.ex.awt.event.DocumentAdapter;
 
-public final class GenerateJavadocAction extends BaseAnalysisAction{
+import javax.annotation.Nonnull;
+import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+
+public final class GenerateJavadocAction extends BaseAnalysisAction {
   private JavadocConfigurable myConfigurable;
 
   public GenerateJavadocAction() {

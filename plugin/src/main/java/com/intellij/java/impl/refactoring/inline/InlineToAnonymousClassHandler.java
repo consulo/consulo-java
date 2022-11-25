@@ -31,7 +31,7 @@ import consulo.project.Project;
 import consulo.util.lang.ref.Ref;
 import consulo.language.pattern.ElementPattern;
 import consulo.language.pattern.PlatformPatterns;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
 import com.intellij.java.indexing.search.searches.FunctionalExpressionSearch;
 import consulo.language.psi.search.ReferencesSearch;

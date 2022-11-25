@@ -19,7 +19,7 @@ import com.intellij.java.impl.codeInsight.CodeInsightServicesUtil;
 import com.intellij.java.language.psi.*;
 import consulo.project.Project;
 import consulo.util.lang.ref.Ref;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import com.intellij.java.indexing.search.searches.MethodReferencesSearch;
 import com.intellij.java.indexing.search.searches.OverridingMethodsSearch;
 import consulo.language.psi.search.ReferencesSearch;

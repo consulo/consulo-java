@@ -16,23 +16,23 @@
 package com.intellij.java.impl.vcsUtil;
 
 import com.intellij.java.language.psi.*;
-import consulo.document.Document;
 import consulo.codeEditor.Editor;
+import consulo.document.Document;
 import consulo.document.FileDocumentManager;
 import consulo.document.util.TextRange;
-import consulo.versionControlSystem.VcsBundle;
-import consulo.versionControlSystem.action.VcsContext;
-import consulo.virtualFileSystem.VirtualFile;
+import consulo.language.editor.TargetElementUtil;
+import consulo.language.editor.TargetElementUtilExtender;
 import consulo.language.psi.PsiCompiledElement;
 import consulo.language.psi.PsiElement;
-import consulo.util.collection.ContainerUtil;
+import consulo.ui.annotation.RequiredUIAccess;
+import consulo.versionControlSystem.VcsBundle;
+import consulo.versionControlSystem.action.VcsContext;
 import consulo.versionControlSystem.history.VcsSelection;
 import consulo.versionControlSystem.history.VcsSelectionProvider;
-import consulo.language.editor.TargetElementUtil;
-import consulo.codeInsight.TargetElementUtilEx;
-import consulo.ui.annotation.RequiredUIAccess;
+import consulo.virtualFileSystem.VirtualFile;
 
 import javax.annotation.Nullable;
+import java.util.Set;
 
 /**
  * @author yole
@@ -43,7 +43,7 @@ public class JavaVcsSelectionProvider implements VcsSelectionProvider {
   public VcsSelection getSelection(final VcsContext context) {
     final Editor editor = context.getEditor();
     if (editor == null) return null;
-    PsiElement psiElement = TargetElementUtil.findTargetElement(editor, ContainerUtil.newHashSet(TargetElementUtilEx.ELEMENT_NAME_ACCEPTED));
+    PsiElement psiElement = TargetElementUtil.findTargetElement(editor, Set.of(TargetElementUtilExtender.ELEMENT_NAME_ACCEPTED));
     if (psiElement == null) {
       return null;
     }

@@ -16,13 +16,17 @@
 package com.intellij.java.impl.testIntegration;
 
 import com.intellij.java.impl.testIntegration.createTest.CreateTestAction;
+import com.intellij.java.language.JavaLanguage;
 import consulo.codeEditor.Editor;
+import consulo.language.Language;
 import consulo.project.Project;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.editor.testIntegration.TestCreator;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
+
+import javax.annotation.Nonnull;
 
 public class JavaTestCreator implements TestCreator {
   private static final Logger LOG = Logger.getInstance(JavaTestCreator.class);
@@ -46,5 +50,11 @@ public class JavaTestCreator implements TestCreator {
     } catch (IncorrectOperationException e) {
       LOG.warn(e);
     }
+  }
+
+  @Nonnull
+  @Override
+  public Language getLanguage() {
+    return JavaLanguage.INSTANCE;
   }
 }

@@ -15,6 +15,8 @@
  */
 package com.intellij.java.impl.codeInsight.generation.surroundWith;
 
+import com.intellij.java.language.JavaLanguage;
+import consulo.language.Language;
 import consulo.language.editor.surroundWith.SurroundDescriptor;
 import consulo.language.editor.surroundWith.Surrounder;
 import consulo.language.psi.PsiElement;
@@ -61,5 +63,11 @@ public class JavaStatementsSurroundDescriptor implements SurroundDescriptor {
     if (statements.length == 0) return PsiElement.EMPTY_ARRAY;
     FeatureUsageTracker.getInstance().triggerFeatureUsed("codeassists.surroundwith.statement");
     return statements;
+  }
+
+  @Nonnull
+  @Override
+  public Language getLanguage() {
+    return JavaLanguage.INSTANCE;
   }
 }

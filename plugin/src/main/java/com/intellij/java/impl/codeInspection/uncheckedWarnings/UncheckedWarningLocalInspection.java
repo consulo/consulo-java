@@ -16,84 +16,66 @@
 
 package com.intellij.java.impl.codeInspection.uncheckedWarnings;
 
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-
-import javax.swing.Box;
-import javax.swing.JCheckBox;
-import javax.swing.JComponent;
-import javax.swing.JPanel;
-
-import javax.annotation.Nonnull;
 import com.intellij.java.impl.codeInsight.daemon.impl.quickfix.GenerifyFileFix;
 import consulo.language.editor.inspection.LocalQuickFix;
-import com.intellij.openapi.util.Pass;
 import consulo.ui.ex.awt.JBUI;
 
-public class UncheckedWarningLocalInspection extends UncheckedWarningLocalInspectionBase
-{
-	@Nonnull
-	@Override
-	protected LocalQuickFix[] createFixes()
-	{
-		return new LocalQuickFix[]{new GenerifyFileFix()};
-	}
+import javax.annotation.Nonnull;
+import javax.swing.*;
+import java.awt.*;
+import java.util.function.Consumer;
 
-	@Override
-	public JComponent createOptionsPanel()
-	{
-		final JPanel panel = new JPanel(new GridBagLayout());
-		final GridBagConstraints gc = new GridBagConstraints(0, GridBagConstraints.RELATIVE, 1, 1, 1, 0, GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL, JBUI.emptyInsets(), 0, 0);
+public abstract class UncheckedWarningLocalInspection extends UncheckedWarningLocalInspectionBase {
+  @Nonnull
+  @Override
+  protected LocalQuickFix[] createFixes() {
+    return new LocalQuickFix[]{new GenerifyFileFix()};
+  }
 
-		panel.add(createSetting("Ignore unchecked assignment", IGNORE_UNCHECKED_ASSIGNMENT, new Pass<JCheckBox>()
-		{
-			@Override
-			public void pass(JCheckBox cb)
-			{
-				IGNORE_UNCHECKED_ASSIGNMENT = cb.isSelected();
-			}
-		}), gc);
+  @Override
+  public JComponent createOptionsPanel() {
+    final JPanel panel = new JPanel(new GridBagLayout());
+    final GridBagConstraints gc = new GridBagConstraints(0, GridBagConstraints.RELATIVE, 1, 1, 1, 0, GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL, JBUI.emptyInsets(), 0, 0);
 
-		panel.add(createSetting("Ignore unchecked generics array creation for vararg parameter", IGNORE_UNCHECKED_GENERICS_ARRAY_CREATION, new Pass<JCheckBox>()
-		{
-			@Override
-			public void pass(JCheckBox cb)
-			{
-				IGNORE_UNCHECKED_GENERICS_ARRAY_CREATION = cb.isSelected();
-			}
-		}), gc);
+    panel.add(createSetting("Ignore unchecked assignment", IGNORE_UNCHECKED_ASSIGNMENT, new Consumer<JCheckBox>() {
+      @Override
+      public void accept(JCheckBox cb) {
+        IGNORE_UNCHECKED_ASSIGNMENT = cb.isSelected();
+      }
+    }), gc);
 
-		panel.add(createSetting("Ignore unchecked call as member of raw type", IGNORE_UNCHECKED_CALL, new Pass<JCheckBox>()
-		{
-			@Override
-			public void pass(JCheckBox cb)
-			{
-				IGNORE_UNCHECKED_CALL = cb.isSelected();
-			}
-		}), gc);
+    panel.add(createSetting("Ignore unchecked generics array creation for vararg parameter", IGNORE_UNCHECKED_GENERICS_ARRAY_CREATION, new Consumer<JCheckBox>() {
+      @Override
+      public void accept(JCheckBox cb) {
+        IGNORE_UNCHECKED_GENERICS_ARRAY_CREATION = cb.isSelected();
+      }
+    }), gc);
 
-		panel.add(createSetting("Ignore unchecked cast", IGNORE_UNCHECKED_CAST, new Pass<JCheckBox>()
-		{
-			@Override
-			public void pass(JCheckBox cb)
-			{
-				IGNORE_UNCHECKED_CAST = cb.isSelected();
-			}
-		}), gc);
+    panel.add(createSetting("Ignore unchecked call as member of raw type", IGNORE_UNCHECKED_CALL, new Consumer<JCheckBox>() {
+      @Override
+      public void accept(JCheckBox cb) {
+        IGNORE_UNCHECKED_CALL = cb.isSelected();
+      }
+    }), gc);
 
-		panel.add(createSetting("Ignore unchecked overriding", IGNORE_UNCHECKED_OVERRIDING, new Pass<JCheckBox>()
-		{
-			@Override
-			public void pass(JCheckBox cb)
-			{
-				IGNORE_UNCHECKED_OVERRIDING = cb.isSelected();
-			}
-		}), gc);
+    panel.add(createSetting("Ignore unchecked cast", IGNORE_UNCHECKED_CAST, new Consumer<JCheckBox>() {
+      @Override
+      public void accept(JCheckBox cb) {
+        IGNORE_UNCHECKED_CAST = cb.isSelected();
+      }
+    }), gc);
 
-		gc.fill = GridBagConstraints.BOTH;
-		gc.weighty = 1;
-		panel.add(Box.createVerticalBox(), gc);
+    panel.add(createSetting("Ignore unchecked overriding", IGNORE_UNCHECKED_OVERRIDING, new Consumer<JCheckBox>() {
+      @Override
+      public void accept(JCheckBox cb) {
+        IGNORE_UNCHECKED_OVERRIDING = cb.isSelected();
+      }
+    }), gc);
 
-		return panel;
-	}
+    gc.fill = GridBagConstraints.BOTH;
+    gc.weighty = 1;
+    panel.add(Box.createVerticalBox(), gc);
+
+    return panel;
+  }
 }

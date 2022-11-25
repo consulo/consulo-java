@@ -26,7 +26,7 @@ import com.siyeh.InspectionGadgetsBundle;
 import consulo.project.Project;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.util.IncorrectOperationException;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import consulo.language.ast.IElementType;
 import org.jetbrains.annotations.Nls;
 

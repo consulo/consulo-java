@@ -23,7 +23,7 @@ import com.intellij.java.language.psi.*;
 import consulo.codeEditor.Editor;
 import consulo.project.Project;
 import consulo.util.lang.Pair;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.language.util.IncorrectOperationException;

@@ -15,24 +15,27 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
-import consulo.ide.impl.idea.codeInsight.CodeInsightUtilBase;
 import com.intellij.java.impl.codeInsight.ExpectedTypeInfo;
 import com.intellij.java.impl.codeInsight.ExpectedTypesProvider;
 import com.intellij.java.language.psi.*;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
-import consulo.language.editor.template.Template;
-import consulo.language.editor.impl.internal.template.TemplateBuilderImpl;
 import consulo.application.ApplicationManager;
 import consulo.application.Result;
-import consulo.undoRedo.CommandProcessor;
-import consulo.language.editor.WriteCommandAction;
 import consulo.codeEditor.Editor;
 import consulo.document.RangeMarker;
-import consulo.project.Project;
-import com.intellij.psi.*;
+import consulo.ide.impl.idea.codeInsight.CodeInsightUtilBase;
+import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.editor.WriteCommandAction;
+import consulo.language.editor.impl.internal.template.TemplateBuilderImpl;
+import consulo.language.editor.template.Template;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.SmartPointerManager;
+import consulo.language.psi.SmartPsiElementPointer;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
-import consulo.java.language.module.util.JavaClassNames;
+import consulo.project.Project;
+import consulo.undoRedo.CommandProcessor;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

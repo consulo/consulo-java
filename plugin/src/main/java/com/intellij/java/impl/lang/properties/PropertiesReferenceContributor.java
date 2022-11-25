@@ -16,11 +16,13 @@
 package com.intellij.java.impl.lang.properties;
 
 import com.intellij.java.impl.psi.impl.source.resolve.reference.impl.providers.JavaClassReferenceProvider;
+import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.language.patterns.PsiJavaPatterns;
 import com.intellij.lang.properties.ResourceBundleReferenceProvider;
 import com.intellij.lang.properties.psi.impl.PropertyValueImpl;
-import com.intellij.psi.*;
+import consulo.language.Language;
+import consulo.language.psi.*;
 import consulo.language.util.ProcessingContext;
 
 import javax.annotation.Nonnull;
@@ -55,5 +57,11 @@ public class PropertiesReferenceContributor extends PsiReferenceContributor {
         return CLASS_REFERENCE_PROVIDER.getReferencesByString(words[0], element, 0);
       }
     });
+  }
+
+  @Nonnull
+  @Override
+  public Language getLanguage() {
+    return JavaLanguage.INSTANCE;
   }
 }

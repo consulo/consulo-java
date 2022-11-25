@@ -15,32 +15,6 @@
  */
 package com.intellij.java.execution.impl;
 
-import consulo.execution.DefaultExecutionResult;
-import consulo.execution.ExecutionBundle;
-import consulo.execution.ExecutionResult;
-import consulo.execution.configuration.ModuleBasedConfiguration;
-import consulo.execution.configuration.RunConfigurationModule;
-import consulo.execution.configuration.RunnerSettings;
-import consulo.execution.configuration.log.OutputFileUtil;
-import com.intellij.execution.*;
-import com.intellij.execution.configurations.*;
-import consulo.execution.runner.ProgramRunner;
-import consulo.execution.test.sm.SMTestRunnerConnectionUtil;
-import consulo.execution.test.sm.runner.SMRunnerConsolePropertiesProvider;
-import consulo.execution.test.sm.ui.SMTestRunnerResultsForm;
-import consulo.ide.impl.idea.execution.filters.ArgumentFileFilter;
-import consulo.execution.internal.ConsoleBuffer;
-import consulo.process.internal.OSProcessHandler;
-import consulo.process.event.ProcessAdapter;
-import consulo.process.event.ProcessEvent;
-import consulo.execution.runner.ExecutionEnvironment;
-import com.intellij.execution.testframework.*;
-import consulo.execution.test.action.AbstractRerunFailedTestsAction;
-import consulo.execution.test.autotest.AbstractAutoTestManager;
-import consulo.execution.test.action.ToggleAutoTestAction;
-import consulo.execution.test.sm.runner.SMTRunnerConsoleProperties;
-import consulo.execution.test.sm.ui.SMTRunnerConsoleView;
-import consulo.execution.test.ui.BaseTestsOutputConsoleView;
 import com.intellij.java.debugger.impl.GenericDebuggerRunnerSettings;
 import com.intellij.java.execution.CommonJavaRunConfigurationParameters;
 import com.intellij.java.execution.JavaTestPatcher;
@@ -51,34 +25,60 @@ import com.intellij.java.execution.configurations.RemoteConnectionCreator;
 import com.intellij.java.execution.impl.testDiscovery.JavaAutoRunManager;
 import com.intellij.java.execution.impl.testframework.SearchForTestsTask;
 import com.intellij.java.execution.impl.util.JavaParametersUtil;
-import consulo.component.macro.PathMacroUtil;
-import consulo.component.extension.Extensions;
-import consulo.module.Module;
-import consulo.language.util.ModuleUtilCore;
-import consulo.project.Project;
-import com.intellij.openapi.projectRoots.JavaSdkType;
-import consulo.content.bundle.Sdk;
 import com.intellij.java.language.impl.projectRoots.ex.JavaSdkUtil;
-import consulo.util.lang.Comparing;
-import consulo.ide.impl.idea.openapi.util.io.FileUtil;
-import consulo.util.lang.StringUtil;
-import consulo.util.io.CharsetToolkit;
+import com.intellij.java.language.projectRoots.JavaSdkType;
 import com.intellij.java.language.psi.JavaPsiFacade;
-import consulo.language.psi.PsiDirectory;
 import com.intellij.java.language.psi.PsiJavaPackage;
-import consulo.language.psi.scope.GlobalSearchScope;
-import consulo.language.psi.scope.GlobalSearchScopesCore;
-import com.intellij.util.PathUtil;
-import consulo.ui.ex.awt.UIUtil;
+import consulo.application.Application;
+import consulo.component.extension.Extensions;
+import consulo.component.macro.PathMacroUtil;
+import consulo.content.bundle.Sdk;
 import consulo.disposer.Disposer;
+import consulo.execution.CantRunException;
+import consulo.execution.DefaultExecutionResult;
+import consulo.execution.ExecutionBundle;
+import consulo.execution.ExecutionResult;
+import consulo.execution.configuration.ModuleBasedConfiguration;
+import consulo.execution.configuration.RunConfigurationModule;
+import consulo.execution.configuration.RunnerSettings;
+import consulo.execution.configuration.log.OutputFileUtil;
 import consulo.execution.executor.Executor;
+import consulo.execution.internal.ConsoleBuffer;
+import consulo.execution.runner.ExecutionEnvironment;
+import consulo.execution.runner.ProgramRunner;
+import consulo.execution.test.*;
+import consulo.execution.test.action.AbstractRerunFailedTestsAction;
+import consulo.execution.test.action.ToggleAutoTestAction;
+import consulo.execution.test.autotest.AbstractAutoTestManager;
+import consulo.execution.test.sm.SMTestRunnerConnectionUtil;
+import consulo.execution.test.sm.runner.SMRunnerConsolePropertiesProvider;
+import consulo.execution.test.sm.runner.SMTRunnerConsoleProperties;
+import consulo.execution.test.sm.ui.SMTRunnerConsoleView;
+import consulo.execution.test.sm.ui.SMTestRunnerResultsForm;
+import consulo.execution.test.ui.BaseTestsOutputConsoleView;
+import consulo.execution.ui.console.ArgumentFileFilter;
 import consulo.java.execution.configurations.OwnJavaParameters;
 import consulo.java.execution.projectRoots.OwnJdkUtil;
 import consulo.java.language.module.extension.JavaModuleExtension;
+import consulo.language.psi.PsiDirectory;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.scope.GlobalSearchScopesCore;
+import consulo.language.util.ModuleUtilCore;
 import consulo.logging.Logger;
+import consulo.module.Module;
 import consulo.process.ExecutionException;
 import consulo.process.cmd.GeneralCommandLine;
 import consulo.process.cmd.ParametersList;
+import consulo.process.event.ProcessAdapter;
+import consulo.process.event.ProcessEvent;
+import consulo.process.internal.OSProcessHandler;
+import consulo.project.Project;
+import consulo.ui.ex.awt.UIUtil;
+import consulo.util.io.CharsetToolkit;
+import consulo.util.io.ClassPathUtil;
+import consulo.util.io.FileUtil;
+import consulo.util.lang.Comparing;
+import consulo.util.lang.StringUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -345,9 +345,9 @@ public abstract class JavaTestFrameworkRunnableState<T extends ModuleBasedConfig
 
   protected abstract void passForkMode(String forkMode, File tempFile, OwnJavaParameters parameters) throws ExecutionException;
 
-  protected void collectListeners(OwnJavaParameters javaParameters, StringBuilder buf, String epName, String delimiter) {
+  protected void collectListeners(OwnJavaParameters javaParameters, StringBuilder buf, Class epName, String delimiter) {
     final T configuration = getConfiguration();
-    final Object[] listeners = Extensions.getExtensions(epName);
+    final Object[] listeners = Application.get().getExtensionPoint(epName).getExtensions();
     for (final Object listener : listeners) {
       boolean enabled = true;
       for (RunConfigurationExtension ext : Extensions.getExtensions(RunConfigurationExtension.EP_NAME)) {
@@ -362,7 +362,7 @@ public abstract class JavaTestFrameworkRunnableState<T extends ModuleBasedConfig
         }
         final Class classListener = listener.getClass();
         buf.append(classListener.getName());
-        javaParameters.getClassPath().add(PathUtil.getJarPathForClass(classListener));
+        javaParameters.getClassPath().add(ClassPathUtil.getJarPathForClass(classListener));
       }
     }
   }

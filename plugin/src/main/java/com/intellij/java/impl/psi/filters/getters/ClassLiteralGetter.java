@@ -17,23 +17,24 @@ package com.intellij.java.impl.psi.filters.getters;
 
 import com.intellij.java.impl.codeInsight.CodeInsightUtil;
 import com.intellij.java.impl.codeInsight.completion.JavaSmartCompletionParameters;
-import consulo.application.util.matcher.PrefixMatcher;
-import consulo.language.editor.completion.AutoCompletionPolicy;
-import consulo.language.editor.completion.lookup.LookupElement;
 import com.intellij.java.language.psi.PsiClassType;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.PsiTypeParameter;
 import com.intellij.java.language.psi.PsiWildcardType;
-import consulo.util.lang.StringUtil;
-import com.intellij.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.ide.impl.idea.util.Consumer;
-import consulo.language.util.IncorrectOperationException;
+import consulo.application.util.matcher.PrefixMatcher;
 import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.editor.completion.AutoCompletionPolicy;
+import consulo.language.editor.completion.lookup.LookupElement;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.util.IncorrectOperationException;
+import consulo.util.lang.StringUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.function.Consumer;
 
 public class ClassLiteralGetter {
 
@@ -73,12 +74,7 @@ public class ClassLiteralGetter {
       return;
     }
 
-    CodeInsightUtil.processSubTypes(classParameter, context, true, matcher, new Consumer<PsiType>() {
-      @Override
-      public void consume(PsiType type) {
-        addClassLiteralLookupElement(type, result, context);
-      }
-    });
+    CodeInsightUtil.processSubTypes(classParameter, context, true, matcher, (Consumer<PsiType>) type -> addClassLiteralLookupElement(type, result, context));
   }
 
   private static void addClassLiteralLookupElement(@Nullable final PsiType type, final Consumer<LookupElement> resultSet, final PsiFile context) {
@@ -87,7 +83,7 @@ public class ClassLiteralGetter {
         !((PsiClassType)type).hasParameters() &&
         !(((PsiClassType)type).resolve() instanceof PsiTypeParameter)) {
       try {
-        resultSet.consume(AutoCompletionPolicy.NEVER_AUTOCOMPLETE.applyPolicy(new ClassLiteralLookupElement((PsiClassType)type, context)));
+        resultSet.accept(AutoCompletionPolicy.NEVER_AUTOCOMPLETE.applyPolicy(new ClassLiteralLookupElement((PsiClassType)type, context)));
       }
       catch (IncorrectOperationException ignored) {
       }

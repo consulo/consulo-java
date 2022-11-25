@@ -34,7 +34,7 @@ import static com.intellij.java.language.patterns.PsiJavaPatterns.psiElement;
 /**
  * @author peter
  */
-public class JavadocCompletionConfidence extends CompletionConfidence {
+public abstract class JavadocCompletionConfidence extends CompletionConfidence {
 
   @Nonnull
   @Override

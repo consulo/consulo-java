@@ -21,7 +21,7 @@ import javax.swing.JComponent;
 
 import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import consulo.util.lang.xml.XmlStringUtil;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;

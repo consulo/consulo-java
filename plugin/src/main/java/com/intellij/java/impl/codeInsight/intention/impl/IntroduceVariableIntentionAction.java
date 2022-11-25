@@ -24,7 +24,7 @@ import com.intellij.java.language.psi.PsiExpressionStatement;
 import com.intellij.java.language.psi.PsiType;
 import consulo.codeEditor.Editor;
 import consulo.project.Project;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.editor.refactoring.action.BaseRefactoringIntentionAction;
 import com.intellij.java.impl.refactoring.introduceVariable.IntroduceVariableHandler;

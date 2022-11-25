@@ -15,29 +15,23 @@
  */
 package com.intellij.java.coverage;
 
-import javax.annotation.Nonnull;
-
-import consulo.execution.configuration.RunConfigurationBase;
-import consulo.execution.configuration.RunProfile;
+import com.intellij.java.execution.impl.DefaultJavaProgramRunner;
+import consulo.execution.configuration.*;
 import consulo.execution.coverage.CoverageEngine;
 import consulo.execution.coverage.CoverageExecutor;
 import consulo.execution.coverage.CoverageRunnerData;
-import consulo.execution.configuration.ConfigurationInfoProvider;
-import consulo.execution.configuration.RunnerSettings;
-import com.intellij.java.execution.impl.DefaultJavaProgramRunner;
-import consulo.execution.configuration.RunConfigurationWithSuppressedDefaultRunAction;
-import consulo.component.extension.Extensions;
+
+import javax.annotation.Nonnull;
 
 public class DefaultJavaCoverageRunner extends DefaultJavaProgramRunner {
   public boolean canRun(@Nonnull final String executorId, @Nonnull final RunProfile profile) {
     try {
       return executorId.equals(CoverageExecutor.EXECUTOR_ID) &&
-             //profile instanceof ModuleBasedConfiguration &&
-             !(profile instanceof RunConfigurationWithSuppressedDefaultRunAction) &&
-             profile instanceof RunConfigurationBase &&
-             Extensions.findExtension(CoverageEngine.EP_NAME, JavaCoverageEngine.class).isApplicableTo((RunConfigurationBase)profile);
-    }
-    catch (Exception e) {
+          //profile instanceof ModuleBasedConfiguration &&
+          !(profile instanceof RunConfigurationWithSuppressedDefaultRunAction) &&
+          profile instanceof RunConfigurationBase &&
+          CoverageEngine.EP_NAME.findExtension(JavaCoverageEngine.class).isApplicableTo((RunConfigurationBase) profile);
+    } catch (Exception e) {
       return false;
     }
   }

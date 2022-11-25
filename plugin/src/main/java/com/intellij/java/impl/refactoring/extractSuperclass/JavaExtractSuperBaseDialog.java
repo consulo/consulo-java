@@ -30,7 +30,6 @@ import consulo.ui.ex.awt.ComponentWithBrowseButton;
 import consulo.ui.ex.awt.JBLabel;
 import consulo.util.lang.Comparing;
 import consulo.application.util.function.Computable;
-import com.intellij.openapi.util.Pass;
 import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.language.psi.PsiDirectory;
@@ -44,6 +43,7 @@ import javax.annotation.Nullable;
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * @author dsl
@@ -82,9 +82,9 @@ public abstract class JavaExtractSuperBaseDialog extends ExtractSuperBaseDialog<
     final JBLabel label = new JBLabel(RefactoringBundle.message("target.destination.folder"));
     panel.add(label, BorderLayout.NORTH);
     label.setLabelFor(myDestinationFolderComboBox);
-    myDestinationFolderComboBox.setData(myProject, myTargetDirectory, new Pass<String>() {
+    myDestinationFolderComboBox.setData(myProject, myTargetDirectory, new Consumer<String>() {
       @Override
-      public void pass(String s) {
+      public void accept(String s) {
       }
     }, ((PackageNameReferenceEditorCombo) myPackageNameField).getChildComponent());
     panel.add(myDestinationFolderComboBox, BorderLayout.CENTER);

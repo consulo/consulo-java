@@ -16,19 +16,20 @@
 package com.intellij.java.impl.refactoring.rename.naming;
 
 import consulo.application.ApplicationManager;
+import consulo.ide.IdeBundle;
+import consulo.ide.impl.idea.ui.components.panels.ValidatingComponent;
+import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.ui.Table;
+import consulo.ui.ex.SimpleTextAttributes;
 import consulo.ui.ex.awt.ColoredTableCellRenderer;
 import consulo.ui.ex.awt.DialogWrapper;
-import com.intellij.ui.*;
-import consulo.ide.impl.idea.ui.components.panels.ValidatingComponent;
-import consulo.language.editor.refactoring.RefactoringBundle;
-import consulo.ide.IdeBundle;
 import consulo.ui.ex.awt.ScrollPaneFactory;
+import consulo.ui.ex.awt.event.DocumentAdapter;
+import consulo.ui.ex.awt.util.TableUtil;
 
 import javax.annotation.Nullable;
-
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.*;
@@ -52,7 +53,7 @@ public class AutomaticUsageRenamingDialog<T> extends DialogWrapper {
   private boolean[] myShouldRename;
   private String[] myNewNames;
   private MyTableModel myTableModel;
-  private Table myTable;
+  private consulo.ide.impl.idea.util.ui.Table myTable;
   private DocumentAdapter myCellEditorListener;
   private ValidatingComponent myValidatingComponent;
 
@@ -192,7 +193,7 @@ public class AutomaticUsageRenamingDialog<T> extends DialogWrapper {
   }
 
   private void setupTable() {
-    myTable = new Table();
+    myTable = new consulo.ide.impl.idea.util.ui.Table();
     myTableModel = new MyTableModel();
     myTable.setModel(myTableModel);
 

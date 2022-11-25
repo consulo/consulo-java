@@ -23,7 +23,7 @@ import com.intellij.java.language.psi.PsiElementFactory;
 import consulo.codeEditor.Editor;
 import consulo.project.Project;
 import consulo.document.util.TextRange;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.util.IncorrectOperationException;
 

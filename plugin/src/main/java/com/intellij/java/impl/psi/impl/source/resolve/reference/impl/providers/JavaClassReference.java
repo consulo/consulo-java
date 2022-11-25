@@ -15,11 +15,6 @@
  */
 package com.intellij.java.impl.psi.impl.source.resolve.reference.impl.providers;
 
-import consulo.language.editor.internal.QuickFixActionRegistrarImpl;
-import consulo.language.editor.completion.lookup.LookupElement;
-import consulo.language.editor.completion.lookup.LookupElementBuilder;
-import consulo.language.editor.inspection.LocalQuickFix;
-import consulo.language.editor.inspection.LocalQuickFixProvider;
 import com.intellij.java.analysis.codeInsight.intention.QuickFixFactory;
 import com.intellij.java.impl.codeInsight.completion.JavaClassNameCompletionContributor;
 import com.intellij.java.impl.codeInsight.completion.JavaLookupElementBuilder;
@@ -38,29 +33,32 @@ import com.intellij.java.language.psi.search.PackageScope;
 import com.intellij.java.language.psi.util.ClassKind;
 import com.intellij.java.language.psi.util.ClassUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.module.Module;
-import consulo.language.util.ModuleUtilCore;
-import consulo.project.Project;
-import consulo.util.lang.function.Condition;
 import consulo.component.util.Iconable;
 import consulo.document.util.TextRange;
-import consulo.util.lang.StringUtil;
-import com.intellij.psi.*;
-import consulo.language.psi.resolve.ResolveCache;
-import consulo.language.psi.CachingReference;
+import consulo.language.editor.completion.lookup.LookupElement;
+import consulo.language.editor.completion.lookup.LookupElementBuilder;
+import consulo.language.editor.inspection.LocalQuickFix;
+import consulo.language.editor.inspection.LocalQuickFixProvider;
+import consulo.language.editor.internal.QuickFixActionRegistrarImpl;
+import consulo.language.icon.IconDescriptorUpdaters;
+import consulo.language.psi.*;
 import consulo.language.psi.path.CustomizableReferenceProvider;
 import consulo.language.psi.resolve.PsiScopeProcessor;
+import consulo.language.psi.resolve.ResolveCache;
+import consulo.language.psi.resolve.ResolveState;
 import consulo.language.psi.scope.GlobalSearchScope;
-import com.intellij.psi.search.ProjectScope;
-import consulo.util.collection.ArrayUtil;
-import consulo.ide.impl.idea.util.Consumer;
 import consulo.language.util.IncorrectOperationException;
-import consulo.util.collection.ContainerUtil;
-import consulo.util.lang.CharArrayUtil;
-import consulo.language.icon.IconDescriptorUpdaters;
+import consulo.language.util.ModuleUtilCore;
 import consulo.logging.Logger;
-import consulo.psi.PsiPackage;
+import consulo.module.Module;
+import consulo.project.Project;
+import consulo.project.content.scope.ProjectScopes;
+import consulo.util.collection.ArrayUtil;
+import consulo.util.collection.ContainerUtil;
 import consulo.util.dataholder.Key;
+import consulo.util.lang.CharArrayUtil;
+import consulo.util.lang.StringUtil;
+import consulo.util.lang.function.Condition;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -68,6 +66,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 /**
  * @author peter
@@ -531,7 +530,7 @@ public class JavaClassReference extends GenericReference implements PsiJavaRefer
     if (scope != null) {
       packageScope = packageScope.intersectWith(scope);
     }
-    final GlobalSearchScope allScope = ProjectScope.getAllScope(context.getProject());
+    final GlobalSearchScope allScope = (GlobalSearchScope) ProjectScopes.getAllScope(context.getProject());
     final boolean instantiatable = JavaClassReferenceProvider.INSTANTIATABLE.getBooleanValue(getOptions());
     final boolean notInterface = JavaClassReferenceProvider.NOT_INTERFACE.getBooleanValue(getOptions());
     final boolean notEnum = JavaClassReferenceProvider.NOT_ENUM.getBooleanValue(getOptions());
@@ -545,13 +544,13 @@ public class JavaClassReference extends GenericReference implements PsiJavaRefer
         // add itself
         if (packageScope.contains(extendClass.getContainingFile().getVirtualFile())) {
           if (isClassAccepted(extendClass, classKind, instantiatable, concrete, notInterface, notEnum)) {
-            result.consume(createSubclassLookupValue(extendClass, extendClassName));
+            result.accept(createSubclassLookupValue(extendClass, extendClassName));
           }
         }
         for (final PsiClass clazz : ClassInheritorsSearch.search(extendClass, packageScope, true)) {
           String qname = clazz.getQualifiedName();
           if (qname != null && isClassAccepted(clazz, classKind, instantiatable, concrete, notInterface, notEnum)) {
-            result.consume(createSubclassLookupValue(clazz, qname));
+            result.accept(createSubclassLookupValue(clazz, qname));
           }
         }
       }

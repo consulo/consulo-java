@@ -15,25 +15,25 @@
  */
 package com.intellij.java.impl.codeInspection.concurrencyAnnotations;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.java.analysis.codeInspection.GroupNames;
 import com.intellij.java.analysis.impl.codeInspection.BaseJavaLocalInspectionTool;
-import consulo.language.editor.inspection.ProblemsHolder;
 import com.intellij.java.analysis.impl.codeInspection.concurrencyAnnotations.JCiPUtil;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import consulo.util.lang.StringUtil;
-import com.intellij.psi.*;
 import com.intellij.java.language.psi.javadoc.PsiDocTag;
+import consulo.language.editor.inspection.ProblemsHolder;
+import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.project.Project;
+import consulo.util.lang.StringUtil;
 import org.jetbrains.annotations.Nls;
+
+import javax.annotation.Nonnull;
 
 /**
  * check locks according to http://www.javaconcurrencyinpractice.com/annotations/doc/net/jcip/annotations/GuardedBy.html
  */
-public class UnknownGuardInspection extends BaseJavaLocalInspectionTool {
+public abstract class UnknownGuardInspection extends BaseJavaLocalInspectionTool {
 
   @Override
   @Nonnull

@@ -18,7 +18,7 @@ package com.intellij.java.impl.codeInsight.generation.surroundWith;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 
 import consulo.project.Project;
 import consulo.codeEditor.Editor;

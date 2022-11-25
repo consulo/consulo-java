@@ -20,26 +20,24 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
-import java.util.Collection;
-
-import javax.annotation.Nonnull;
-
 import com.intellij.java.language.psi.*;
-import org.jetbrains.annotations.NonNls;
-
-import javax.annotation.Nullable;
-import consulo.language.editor.FileModificationService;
-import consulo.language.editor.intention.PsiElementBaseIntentionAction;
-import consulo.codeEditor.Editor;
-import consulo.project.Project;
-import com.intellij.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
-import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
+import consulo.codeEditor.Editor;
 import consulo.ide.impl.idea.util.ArrayUtilRt;
-import consulo.language.util.IncorrectOperationException;
+import consulo.language.editor.FileModificationService;
 import consulo.language.editor.TargetElementUtil;
+import consulo.language.editor.intention.PsiElementBaseIntentionAction;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Collection;
 
 public class SurroundWithArrayFix extends PsiElementBaseIntentionAction {
   private final PsiCall myMethodCall;

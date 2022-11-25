@@ -15,24 +15,24 @@
  */
 package com.intellij.java.impl.psi.filters.getters;
 
-import consulo.language.editor.completion.lookup.TailType;
-import com.intellij.codeInsight.completion.*;
-import consulo.language.editor.completion.lookup.LookupElement;
-import consulo.language.editor.completion.lookup.TailTypeDecorator;
 import com.intellij.java.impl.codeInsight.completion.*;
 import com.intellij.java.impl.codeInsight.lookup.VariableLookupItem;
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.*;
-import consulo.language.ast.IElementType;
-import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.ide.impl.idea.util.Consumer;
+import consulo.language.ast.IElementType;
+import consulo.language.editor.completion.CompletionParameters;
+import consulo.language.editor.completion.lookup.LookupElement;
+import consulo.language.editor.completion.lookup.TailType;
+import consulo.language.editor.completion.lookup.TailTypeDecorator;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.util.PsiTreeUtil;
 import consulo.util.collection.ContainerUtil;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Consumer;
 
 /**
  * @author peter
@@ -68,10 +68,10 @@ public class JavaMembersGetter extends MembersGetter {
     for (PsiClass aClass : classes) {
       processMembers(new Consumer<LookupElement>() {
         @Override
-        public void consume(LookupElement element) {
+        public void accept(LookupElement element) {
           //noinspection SuspiciousMethodCalls
           if (!fields.contains(element.getObject())) {
-            results.consume(TailTypeDecorator.withTail(element, TailType.CASE_COLON));
+            results.accept(TailTypeDecorator.withTail(element, TailType.CASE_COLON));
           }
         }
       }, aClass, true, false);

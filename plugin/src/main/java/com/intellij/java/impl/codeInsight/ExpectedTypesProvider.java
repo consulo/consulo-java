@@ -15,9 +15,9 @@
  */
 package com.intellij.java.impl.codeInsight;
 
-import consulo.language.editor.completion.lookup.TailType;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.LambdaHighlightingUtil;
 import com.intellij.java.impl.psi.impl.source.resolve.CompletionParameterTypeInferencePolicy;
+import com.intellij.java.language.psi.PsiElementFactory;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
@@ -30,20 +30,22 @@ import com.intellij.java.language.psi.search.searches.DeepestSuperMethodsSearch;
 import com.intellij.java.language.psi.util.PropertyUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
-import consulo.ide.ServiceManager;
-import consulo.project.Project;
-import consulo.ide.impl.idea.openapi.util.NullableComputable;
-import com.intellij.psi.*;
-import consulo.language.psi.scope.GlobalSearchScope;
-import consulo.language.ast.IElementType;
-import consulo.language.psi.util.PsiTreeUtil;
-import consulo.util.collection.ArrayUtil;
-import consulo.ide.impl.idea.util.NullableFunction;
 import consulo.application.util.function.Processor;
+import consulo.ide.ServiceManager;
+import consulo.ide.impl.idea.openapi.util.NullableComputable;
+import consulo.ide.impl.idea.util.NullableFunction;
+import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.ast.IElementType;
+import consulo.language.editor.completion.lookup.CommaTailType;
+import consulo.language.editor.completion.lookup.TailType;
+import consulo.language.psi.*;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.logging.Logger;
+import consulo.project.Project;
+import consulo.util.collection.ArrayUtil;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.collection.Stack;
-import consulo.java.language.module.util.JavaClassNames;
-import consulo.logging.Logger;
 import jakarta.inject.Singleton;
 import org.jetbrains.annotations.NonNls;
 
@@ -1083,7 +1085,7 @@ public class ExpectedTypesProvider {
         }
         return getFinalCallParameterTailType(call, returnType, method);
       }
-      return TailType.COMMA;
+      return CommaTailType.INSTANCE;
     }
 
     private static void inferMethodCallArgumentTypes(@Nonnull final PsiExpression argument,
@@ -1158,7 +1160,7 @@ public class ExpectedTypesProvider {
       }
 
       if (className.equals(containingClass.getQualifiedName())) {
-        return function.fun(containingClass);
+        return function.apply(containingClass);
       }
       final PsiType[] type = {null};
       DeepestSuperMethodsSearch.search(method).forEach(new Processor<PsiMethod>() {
@@ -1167,7 +1169,7 @@ public class ExpectedTypesProvider {
           final PsiClass rootClass = psiMethod.getContainingClass();
           assert rootClass != null;
           if (className.equals(rootClass.getQualifiedName())) {
-            type[0] = function.fun(rootClass);
+            type[0] = function.apply(rootClass);
             return false;
           }
           return true;
@@ -1193,7 +1195,7 @@ public class ExpectedTypesProvider {
         final PsiType type = checkMethod(method, JavaClassNames.JAVA_UTIL_COLLECTION,
             new NullableFunction<PsiClass, PsiType>() {
               @Override
-              public PsiType fun(@Nonnull final PsiClass psiClass) {
+              public PsiType apply(@Nonnull final PsiClass psiClass) {
                 return getTypeParameterValue(psiClass, containingClass, substitutor, 0);
               }
             });
@@ -1206,7 +1208,7 @@ public class ExpectedTypesProvider {
         final PsiType type = checkMethod(method, JavaClassNames.JAVA_UTIL_MAP,
             new NullableFunction<PsiClass, PsiType>() {
               @Override
-              public PsiType fun(@Nonnull final PsiClass psiClass) {
+              public PsiType apply(@Nonnull final PsiClass psiClass) {
                 return getTypeParameterValue(psiClass, containingClass, substitutor,
                     name.equals("containsValue") ? 1 : 0);
               }
@@ -1221,7 +1223,7 @@ public class ExpectedTypesProvider {
         final PsiType type = checkMethod(method, JavaClassNames.JAVA_LANG_OBJECT,
             new NullableFunction<PsiClass, PsiType>() {
               @Override
-              public PsiType fun(final PsiClass psiClass) {
+              public PsiType apply(final PsiClass psiClass) {
                 final PsiElement parent = argument.getParent().getParent();
                 if (parent instanceof PsiMethodCallExpression) {
                   final PsiMethodCallExpression expression = (PsiMethodCallExpression) parent;

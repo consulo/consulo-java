@@ -15,12 +15,17 @@
  */
 package com.intellij.java.impl.refactoring.util;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
-import java.util.ArrayList;
+import com.intellij.java.analysis.impl.refactoring.util.VariableData;
+import com.intellij.java.impl.refactoring.ui.TypeSelector;
+import com.intellij.java.impl.refactoring.ui.TypeSelectorManager;
+import com.intellij.java.impl.refactoring.ui.TypeSelectorManagerImpl;
+import com.intellij.java.language.psi.*;
+import consulo.language.psi.PsiElement;
+import consulo.project.Project;
+import consulo.ui.ex.awt.*;
+import consulo.ui.ex.awt.table.JBTable;
+import consulo.ui.ex.awt.util.TableUtil;
+import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nullable;
 import javax.swing.*;
@@ -28,30 +33,11 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableColumn;
-
-import com.intellij.java.analysis.impl.refactoring.util.VariableData;
-import org.jetbrains.annotations.NonNls;
-import consulo.project.Project;
-import com.intellij.java.language.psi.JavaRecursiveElementWalkingVisitor;
-import consulo.language.psi.PsiElement;
-import com.intellij.java.language.psi.PsiExpression;
-import com.intellij.java.language.psi.PsiNameHelper;
-import com.intellij.java.language.psi.PsiReferenceExpression;
-import com.intellij.java.language.psi.PsiType;
-import com.intellij.java.language.psi.PsiVariable;
-import com.intellij.java.impl.refactoring.ui.TypeSelector;
-import com.intellij.java.impl.refactoring.ui.TypeSelectorManager;
-import com.intellij.java.impl.refactoring.ui.TypeSelectorManagerImpl;
-import consulo.ui.ex.awt.BooleanTableCellRenderer;
-import consulo.ui.ex.awt.ListCellRendererWrapper;
-import consulo.ui.ex.awt.util.TableUtil;
-import consulo.ui.ex.awt.ToolbarDecorator;
-import consulo.ide.impl.idea.ui.components.JBComboBoxLabel;
-import consulo.ui.ex.awt.JBComboBoxTableCellEditorComponent;
-import consulo.ui.ex.awt.table.JBTable;
-import consulo.ide.impl.idea.util.Function;
-import consulo.ui.ex.awt.AbstractTableCellEditor;
-import consulo.ui.ex.awt.EditableModel;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.function.Function;
 
 /**
  * @author Konstantin Bulenkov
@@ -150,7 +136,7 @@ public abstract class ParameterTablePanel extends JPanel {
         myEditorComponent.setDefaultValue(getVariableData()[row].type);
         myEditorComponent.setToString(new Function<Object, String>() {
           @Override
-          public String fun(Object o) {
+          public String apply(Object o) {
             return ((PsiType)o).getPresentableText();
           }
         });

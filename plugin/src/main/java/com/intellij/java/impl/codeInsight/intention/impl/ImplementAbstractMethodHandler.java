@@ -24,6 +24,7 @@
  */
 package com.intellij.java.impl.codeInsight.intention.impl;
 
+import consulo.codeEditor.EditorPopupHelper;
 import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.FileModificationService;
 import com.intellij.java.impl.codeInsight.generation.OverrideImplementUtil;
@@ -32,6 +33,7 @@ import consulo.language.editor.ui.PsiElementListCellRenderer;
 import com.intellij.java.language.psi.*;
 import consulo.application.ApplicationManager;
 import consulo.ui.ex.awt.Messages;
+import consulo.ui.ex.popup.JBPopup;
 import consulo.undoRedo.CommandProcessor;
 import consulo.logging.Logger;
 import consulo.codeEditor.Editor;
@@ -39,7 +41,7 @@ import consulo.application.progress.ProgressManager;
 import consulo.project.Project;
 import consulo.ide.impl.ui.impl.PopupChooserBuilder;
 import consulo.application.util.function.Computable;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
 import consulo.language.psi.PsiUtilCore;
 import consulo.ui.ex.awt.JBList;
@@ -131,11 +133,12 @@ public class ImplementAbstractMethodHandler {
     final PopupChooserBuilder builder = new consulo.ide.impl.ui.impl.PopupChooserBuilder(myList);
     elementListCellRenderer.installSpeedSearch(builder);
 
-    builder.
-      setTitle(CodeInsightBundle.message("intention.implement.abstract.method.class.chooser.title")).
-      setItemChoosenCallback(runnable).
-      createPopup().
-      showInBestPositionFor(myEditor);
+    JBPopup popup = builder.
+        setTitle(CodeInsightBundle.message("intention.implement.abstract.method.class.chooser.title")).
+        setItemChoosenCallback(runnable).
+        createPopup();
+
+    EditorPopupHelper.getInstance().showPopupInBestPositionFor(myEditor, popup);
   }
 
   public void implementInClass(final Object[] selection) {

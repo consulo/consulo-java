@@ -19,15 +19,16 @@ import com.intellij.java.language.psi.PsiAnonymousClass;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiSubstitutor;
-import consulo.colorScheme.EditorColorsScheme;
-import com.intellij.psi.*;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
+import consulo.colorScheme.EditorColorsScheme;
+import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
-import consulo.ui.ex.awt.tree.ColoredTreeCellRenderer;
 import consulo.ui.ex.SimpleTextAttributes;
+import consulo.ui.ex.awt.tree.ColoredTreeCellRenderer;
+import consulo.ui.ex.util.TextAttributesUtil;
+import consulo.usage.TextChunk;
 import consulo.usage.UsageTreeColors;
 import consulo.usage.UsageTreeColorsScheme;
-import com.intellij.usages.TextChunk;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -38,7 +39,7 @@ import java.awt.*;
  */
 public class SliceUsageCellRenderer extends ColoredTreeCellRenderer {
   private static final EditorColorsScheme ourColorsScheme = UsageTreeColorsScheme.getInstance().getScheme();
-  public static final SimpleTextAttributes ourInvalidAttributes = SimpleTextAttributes.fromTextAttributes(ourColorsScheme.getAttributes(UsageTreeColors.INVALID_PREFIX));
+  public static final SimpleTextAttributes ourInvalidAttributes = TextAttributesUtil.fromTextAttributes(ourColorsScheme.getAttributes(UsageTreeColors.INVALID_PREFIX));
 
   public SliceUsageCellRenderer() {
     setOpaque(false);
@@ -47,17 +48,16 @@ public class SliceUsageCellRenderer extends ColoredTreeCellRenderer {
   @Override
   public void customizeCellRenderer(JTree tree, Object value, boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus) {
     assert value instanceof DefaultMutableTreeNode;
-    DefaultMutableTreeNode treeNode = (DefaultMutableTreeNode)value;
+    DefaultMutableTreeNode treeNode = (DefaultMutableTreeNode) value;
     Object userObject = treeNode.getUserObject();
     if (userObject == null) return;
     if (userObject instanceof MyColoredTreeCellRenderer) {
-      MyColoredTreeCellRenderer node = (MyColoredTreeCellRenderer)userObject;
+      MyColoredTreeCellRenderer node = (MyColoredTreeCellRenderer) userObject;
       node.customizeCellRenderer(this, tree, value, selected, expanded, leaf, row, hasFocus);
       if (node instanceof SliceNode) {
-        setToolTipText(((SliceNode)node).getPresentation().getTooltip());
+        setToolTipText(((SliceNode) node).getPresentation().getTooltip());
       }
-    }
-    else {
+    } else {
       append(userObject.toString(), SimpleTextAttributes.REGULAR_BOLD_ATTRIBUTES);
     }
   }
@@ -82,17 +82,16 @@ public class SliceUsageCellRenderer extends ColoredTreeCellRenderer {
       aClass = method == null ? PsiTreeUtil.getParentOfType(element, PsiClass.class) : method.getContainingClass();
       if (aClass instanceof PsiAnonymousClass) {
         element = aClass;
-      }
-      else {
+      } else {
         break;
       }
     }
     String location = method != null
-                      ? PsiFormatUtil.formatMethod(method, PsiSubstitutor.EMPTY, PsiFormatUtil.SHOW_NAME |
-                                                                                 PsiFormatUtil.SHOW_PARAMETERS |
-                                                                                 PsiFormatUtil.SHOW_CONTAINING_CLASS,
-                                                   PsiFormatUtil.SHOW_TYPE, 2)
-                      : aClass != null ? PsiFormatUtil.formatClass(aClass, PsiFormatUtil.SHOW_NAME) : null;
+        ? PsiFormatUtil.formatMethod(method, PsiSubstitutor.EMPTY, PsiFormatUtil.SHOW_NAME |
+            PsiFormatUtil.SHOW_PARAMETERS |
+            PsiFormatUtil.SHOW_CONTAINING_CLASS,
+        PsiFormatUtil.SHOW_TYPE, 2)
+        : aClass != null ? PsiFormatUtil.formatClass(aClass, PsiFormatUtil.SHOW_NAME) : null;
     if (location != null) {
       SimpleTextAttributes attributes = SimpleTextAttributes.GRAY_ATTRIBUTES;
       append(" in " + location, attributes);

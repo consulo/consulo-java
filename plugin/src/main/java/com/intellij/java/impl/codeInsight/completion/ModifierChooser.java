@@ -22,7 +22,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import consulo.language.psi.filter.FilterPositionUtil;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import consulo.language.psi.util.PsiTreeUtil;

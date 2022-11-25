@@ -23,7 +23,7 @@ import com.intellij.java.language.psi.*;
 import consulo.logging.Logger;
 import consulo.module.Module;
 import consulo.virtualFileSystem.VirtualFile;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import consulo.language.impl.internal.psi.PsiManagerImpl;
 import com.intellij.java.indexing.impl.stubs.index.JavaAnnotationIndex;
 import consulo.language.psi.scope.GlobalSearchScope;

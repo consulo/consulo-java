@@ -15,13 +15,14 @@
  */
 package com.intellij.java.impl.ide.structureView.impl;
 
+import com.intellij.java.language.impl.psi.impl.PsiImplUtil;
 import com.intellij.java.language.impl.psi.scope.processor.ConflictFilterProcessor;
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.*;
-import com.intellij.java.language.impl.psi.impl.PsiImplUtil;
-import consulo.language.psi.resolve.BaseScopeProcessor;
 import com.intellij.java.language.psi.util.MethodSignature;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.resolve.BaseScopeProcessor;
+import consulo.language.psi.resolve.ResolveState;
 
 import javax.annotation.Nonnull;
 import java.util.Collection;

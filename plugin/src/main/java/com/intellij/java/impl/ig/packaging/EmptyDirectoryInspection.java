@@ -15,32 +15,37 @@
  */
 package com.intellij.java.impl.ig.packaging;
 
-import consulo.language.editor.scope.AnalysisScope;
-import consulo.language.editor.inspection.reference.RefElement;
-import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
+import com.intellij.java.impl.ig.BaseGlobalInspection;
+import com.siyeh.InspectionGadgetsBundle;
 import consulo.application.Application;
 import consulo.application.ApplicationManager;
-import consulo.project.Project;
-import consulo.content.ContentIterator;
-import consulo.module.content.ProjectFileIndex;
-import consulo.module.content.ProjectRootManager;
 import consulo.application.util.function.Computable;
+import consulo.content.ContentIterator;
+import consulo.content.scope.SearchScope;
 import consulo.ide.impl.idea.openapi.vfs.VfsUtilCore;
-import consulo.virtualFileSystem.VirtualFile;
-import consulo.virtualFileSystem.VirtualFileManager;
+import consulo.language.editor.inspection.CommonProblemDescriptor;
+import consulo.language.editor.inspection.GlobalInspectionContext;
+import consulo.language.editor.inspection.ProblemDescriptionsProcessor;
+import consulo.language.editor.inspection.QuickFix;
+import consulo.language.editor.inspection.reference.RefElement;
+import consulo.language.editor.inspection.scheme.InspectionManager;
+import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
+import consulo.language.editor.scope.AnalysisScope;
 import consulo.language.psi.PsiDirectory;
 import consulo.language.psi.PsiManager;
 import consulo.language.psi.scope.GlobalSearchScope;
-import consulo.content.scope.SearchScope;
-import com.siyeh.InspectionGadgetsBundle;
-import com.intellij.java.impl.ig.BaseGlobalInspection;
+import consulo.module.content.ProjectFileIndex;
+import consulo.module.content.ProjectRootManager;
+import consulo.project.Project;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.virtualFileSystem.VirtualFileManager;
 import org.jetbrains.annotations.Nls;
-import javax.annotation.Nonnull;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.swing.*;
 
-public class EmptyDirectoryInspection extends BaseGlobalInspection {
+public abstract class EmptyDirectoryInspection extends BaseGlobalInspection {
 
   @SuppressWarnings("PublicField")
   public boolean onlyReportDirectoriesUnderSourceRoots = false;

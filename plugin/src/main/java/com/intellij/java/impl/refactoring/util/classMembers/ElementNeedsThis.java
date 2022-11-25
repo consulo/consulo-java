@@ -16,7 +16,7 @@
 package com.intellij.java.impl.refactoring.util.classMembers;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 
 /**

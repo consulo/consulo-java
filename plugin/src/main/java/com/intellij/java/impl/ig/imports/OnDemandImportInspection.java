@@ -21,7 +21,7 @@ import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiImportList;
 import com.intellij.java.language.psi.PsiImportStatement;
 import com.intellij.java.language.psi.PsiJavaFile;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;

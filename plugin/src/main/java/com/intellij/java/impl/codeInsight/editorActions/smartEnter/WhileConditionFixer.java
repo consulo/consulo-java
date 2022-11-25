@@ -15,13 +15,13 @@
  */
 package com.intellij.java.impl.codeInsight.editorActions.smartEnter;
 
-import consulo.document.Document;
-import consulo.codeEditor.Editor;
-import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiJavaToken;
 import com.intellij.java.language.psi.PsiStatement;
 import com.intellij.java.language.psi.PsiWhileStatement;
+import consulo.codeEditor.Editor;
+import consulo.document.Document;
+import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 
 /**
@@ -32,43 +32,33 @@ import consulo.language.util.IncorrectOperationException;
  * To change this template use Options | File Templates.
  */
 @SuppressWarnings({"HardCodedStringLiteral"})
-public class WhileConditionFixer implements Fixer
-{
-	@Override
-	public void apply(Editor editor, JavaSmartEnterProcessor processor, PsiElement psiElement) throws IncorrectOperationException
-	{
-		if(psiElement instanceof PsiWhileStatement)
-		{
-			final Document doc = editor.getDocument();
-			final PsiWhileStatement whileStatement = (PsiWhileStatement) psiElement;
-			final PsiJavaToken rParenth = whileStatement.getRParenth();
-			final PsiJavaToken lParenth = whileStatement.getLParenth();
-			final PsiExpression condition = whileStatement.getCondition();
+public class WhileConditionFixer implements Fixer {
+  @Override
+  public void apply(Editor editor, JavaSmartEnterProcessor processor, PsiElement psiElement) throws IncorrectOperationException {
+    if (psiElement instanceof PsiWhileStatement) {
+      final Document doc = editor.getDocument();
+      final PsiWhileStatement whileStatement = (PsiWhileStatement) psiElement;
+      final PsiJavaToken rParenth = whileStatement.getRParenth();
+      final PsiJavaToken lParenth = whileStatement.getLParenth();
+      final PsiExpression condition = whileStatement.getCondition();
 
-			if(condition == null)
-			{
-				if(lParenth == null || rParenth == null)
-				{
-					int stopOffset = doc.getLineEndOffset(doc.getLineNumber(whileStatement.getTextRange().getStartOffset()));
-					final PsiStatement block = whileStatement.getBody();
-					if(block != null)
-					{
-						stopOffset = Math.min(stopOffset, block.getTextRange().getStartOffset());
-					}
-					stopOffset = Math.min(stopOffset, whileStatement.getTextRange().getEndOffset());
+      if (condition == null) {
+        if (lParenth == null || rParenth == null) {
+          int stopOffset = doc.getLineEndOffset(doc.getLineNumber(whileStatement.getTextRange().getStartOffset()));
+          final PsiStatement block = whileStatement.getBody();
+          if (block != null) {
+            stopOffset = Math.min(stopOffset, block.getTextRange().getStartOffset());
+          }
+          stopOffset = Math.min(stopOffset, whileStatement.getTextRange().getEndOffset());
 
-					doc.replaceString(whileStatement.getTextRange().getStartOffset(), stopOffset, "while ()");
-					processor.registerUnresolvedError(whileStatement.getTextRange().getStartOffset() + "while (".length());
-				}
-				else
-				{
-					processor.registerUnresolvedError(lParenth.getTextRange().getEndOffset());
-				}
-			}
-			else if(rParenth == null)
-			{
-				doc.insertString(condition.getTextRange().getEndOffset(), ")");
-			}
-		}
-	}
+          doc.replaceString(whileStatement.getTextRange().getStartOffset(), stopOffset, "while ()");
+          processor.registerUnresolvedError(whileStatement.getTextRange().getStartOffset() + "while (".length());
+        } else {
+          processor.registerUnresolvedError(lParenth.getTextRange().getEndOffset());
+        }
+      } else if (rParenth == null) {
+        doc.insertString(condition.getTextRange().getEndOffset(), ")");
+      }
+    }
+  }
 }

@@ -19,30 +19,31 @@
  */
 package com.intellij.java.impl.codeInspection.i18n;
 
+import com.intellij.java.impl.lang.properties.psi.PropertyCreationHandler;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
+import com.intellij.lang.properties.psi.PropertiesFile;
+import consulo.application.ApplicationManager;
+import consulo.codeEditor.Editor;
+import consulo.codeEditor.SelectionModel;
+import consulo.document.util.TextRange;
+import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemDescriptor;
-import com.intellij.java.language.psi.*;
-import com.intellij.lang.properties.psi.PropertiesFile;
-import com.intellij.java.impl.lang.properties.psi.PropertyCreationHandler;
-import consulo.application.ApplicationManager;
-import consulo.undoRedo.CommandProcessor;
+import consulo.language.editor.util.PsiUtilBase;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
-import consulo.codeEditor.Editor;
-import consulo.codeEditor.SelectionModel;
 import consulo.project.Project;
 import consulo.ui.ex.awt.Messages;
-import consulo.document.util.TextRange;
+import consulo.undoRedo.CommandProcessor;
 import consulo.util.lang.StringUtil;
-import com.intellij.psi.*;
-import consulo.language.codeStyle.CodeStyleManager;
-import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
-import consulo.language.editor.util.PsiUtilBase;
-import consulo.language.util.IncorrectOperationException;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import java.util.Collection;
 
 public class I18nizeQuickFix implements LocalQuickFix, I18nQuickFixHandler {

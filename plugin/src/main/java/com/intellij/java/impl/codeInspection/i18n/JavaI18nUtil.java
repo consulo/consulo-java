@@ -15,26 +15,31 @@
  */
 package com.intellij.java.impl.codeInspection.i18n;
 
-import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.impl.codeInsight.template.macro.MacroUtil;
+import com.intellij.java.impl.lang.properties.psi.PropertyCreationHandler;
+import com.intellij.java.language.codeInsight.AnnotationUtil;
+import com.intellij.java.language.impl.psi.scope.util.PsiScopesUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import com.intellij.lang.properties.IProperty;
 import com.intellij.lang.properties.PropertiesUtil;
 import com.intellij.lang.properties.psi.PropertiesFile;
-import com.intellij.java.impl.lang.properties.psi.PropertyCreationHandler;
 import com.intellij.lang.properties.references.I18nUtil;
+import consulo.application.util.CachedValueProvider;
+import consulo.application.util.CachedValuesManager;
+import consulo.application.util.ParameterizedCachedValue;
+import consulo.application.util.ParameterizedCachedValueProvider;
 import consulo.codeEditor.Editor;
+import consulo.document.util.TextRange;
+import consulo.language.psi.*;
+import consulo.language.psi.resolve.PsiScopeProcessor;
+import consulo.language.psi.resolve.ResolveState;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
+import consulo.util.dataholder.Key;
 import consulo.util.lang.Pair;
 import consulo.util.lang.ref.Ref;
-import consulo.document.util.TextRange;
-import com.intellij.psi.*;
-import consulo.language.psi.resolve.PsiScopeProcessor;
-import com.intellij.java.language.impl.psi.scope.util.PsiScopesUtil;
-import com.intellij.psi.util.*;
-import consulo.language.util.IncorrectOperationException;
-import consulo.util.dataholder.Key;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -64,7 +69,7 @@ public class JavaI18nUtil extends I18nUtil {
       return new TextRange(editor.getSelectionModel().getSelectionStart(), editor.getSelectionModel().getSelectionEnd());
     }
     PsiElement psiElement = psiFile.findElementAt(editor.getCaretModel().getOffset());
-    if (psiElement==null || psiElement instanceof PsiWhiteSpace) return null;
+    if (psiElement == null || psiElement instanceof PsiWhiteSpace) return null;
     return psiElement.getTextRange();
   }
 
@@ -73,7 +78,7 @@ public class JavaI18nUtil extends I18nUtil {
                                           @Nonnull Map<String, Object> annotationAttributeValues) {
     final PsiElement parent = expression.getParent();
     if (parent instanceof PsiVariable) {
-      final PsiAnnotation annotation = AnnotationUtil.findAnnotation((PsiVariable)parent, AnnotationUtil.PROPERTY_KEY);
+      final PsiAnnotation annotation = AnnotationUtil.findAnnotation((PsiVariable) parent, AnnotationUtil.PROPERTY_KEY);
       if (annotation != null) {
         return processAnnotationAttributes(annotationAttributeValues, annotation);
       }
@@ -91,7 +96,7 @@ public class JavaI18nUtil extends I18nUtil {
 
     if (!(parent instanceof PsiExpressionList)) return false;
     int idx = -1;
-    final PsiExpression[] args = ((PsiExpressionList)parent).getExpressions();
+    final PsiExpression[] args = ((PsiExpressionList) parent).getExpressions();
     for (int i = 0; i < args.length; i++) {
       PsiExpression arg = args[i];
       if (PsiTreeUtil.isAncestor(arg, expression, false)) {
@@ -108,7 +113,7 @@ public class JavaI18nUtil extends I18nUtil {
     }
 
     if (grParent instanceof PsiCall) {
-      PsiMethod method = ((PsiCall)grParent).resolveMethod();
+      PsiMethod method = ((PsiCall) grParent).resolveMethod();
       if (method != null && isMethodParameterAnnotatedWith(method, idx, null, annFqn, annotationAttributeValues, nonNlsTargets)) {
         return true;
       }
@@ -119,29 +124,29 @@ public class JavaI18nUtil extends I18nUtil {
 
   private static final Key<ParameterizedCachedValue<PsiExpression, Pair<Project, PsiExpression>>> TOP_LEVEL_EXPRESSION = Key.create("TOP_LEVEL_EXPRESSION");
   private static final ParameterizedCachedValueProvider<PsiExpression, Pair<Project, PsiExpression>> TOP_LEVEL_PROVIDER =
-    new ParameterizedCachedValueProvider<PsiExpression, Pair<Project, PsiExpression>>() {
-      @Override
-      public CachedValueProvider.Result<PsiExpression> compute(Pair<Project, PsiExpression> pair) {
-        PsiExpression param = pair.second;
-        Project project = pair.first;
-        PsiExpression topLevel = getTopLevel(project, param);
-        ParameterizedCachedValue<PsiExpression, Pair<Project, PsiExpression>> cachedValue = param.getUserData(TOP_LEVEL_EXPRESSION);
-        assert cachedValue != null;
-        int i = 0;
-        for (PsiElement element = param; element != topLevel; element = element.getParent(), i++) {
-          if (i % 10 == 0) {   // optimization: store up link to the top level expression in each 10nth element
-            element.putUserData(TOP_LEVEL_EXPRESSION, cachedValue);
+      new ParameterizedCachedValueProvider<PsiExpression, Pair<Project, PsiExpression>>() {
+        @Override
+        public CachedValueProvider.Result<PsiExpression> compute(Pair<Project, PsiExpression> pair) {
+          PsiExpression param = pair.second;
+          Project project = pair.first;
+          PsiExpression topLevel = getTopLevel(project, param);
+          ParameterizedCachedValue<PsiExpression, Pair<Project, PsiExpression>> cachedValue = param.getUserData(TOP_LEVEL_EXPRESSION);
+          assert cachedValue != null;
+          int i = 0;
+          for (PsiElement element = param; element != topLevel; element = element.getParent(), i++) {
+            if (i % 10 == 0) {   // optimization: store up link to the top level expression in each 10nth element
+              element.putUserData(TOP_LEVEL_EXPRESSION, cachedValue);
+            }
           }
+          return CachedValueProvider.Result.create(topLevel, PsiManager.getInstance(project).getModificationTracker());
         }
-        return CachedValueProvider.Result.create(topLevel, PsiManager.getInstance(project).getModificationTracker());
-      }
-    };
+      };
 
   @Nonnull
   public static PsiExpression getToplevelExpression(@Nonnull final Project project, @Nonnull final PsiExpression expression) {
     if (expression instanceof PsiBinaryExpression || expression.getParent() instanceof PsiBinaryExpression) {  //can be large, cache
       return CachedValuesManager.getManager(project).getParameterizedCachedValue(expression, TOP_LEVEL_EXPRESSION, TOP_LEVEL_PROVIDER, true,
-                                                                                 Pair.create(project, expression));
+          Pair.create(project, expression));
     }
     return getTopLevel(project, expression);
   }
@@ -151,9 +156,9 @@ public class JavaI18nUtil extends I18nUtil {
     int i = 0;
     while (expression.getParent() instanceof PsiExpression) {
       i++;
-      final PsiExpression parent = (PsiExpression)expression.getParent();
+      final PsiExpression parent = (PsiExpression) expression.getParent();
       if (parent instanceof PsiConditionalExpression &&
-          ((PsiConditionalExpression)parent).getCondition() == expression) break;
+          ((PsiConditionalExpression) parent).getCondition() == expression) break;
       expression = parent;
       if (expression instanceof PsiAssignmentExpression) break;
       if (i > 10 && expression instanceof PsiBinaryExpression) {
@@ -174,8 +179,7 @@ public class JavaI18nUtil extends I18nUtil {
                                                        @Nullable final Set<PsiModifierListOwner> nonNlsTargets) {
     if (processed != null) {
       if (processed.contains(method)) return false;
-    }
-    else {
+    } else {
       processed = new HashSet<PsiMethod>();
     }
     processed.add(method);
@@ -186,15 +190,13 @@ public class JavaI18nUtil extends I18nUtil {
       if (params.length == 0) {
         return false;
       }
-      PsiParameter lastParam = params [params.length-1];
+      PsiParameter lastParam = params[params.length - 1];
       if (lastParam.isVarArgs()) {
         param = lastParam;
-      }
-      else {
+      } else {
         return false;
       }
-    }
-    else {
+    } else {
       param = params[idx];
     }
     final PsiAnnotation annotation = AnnotationUtil.findAnnotation(param, annFqn);
@@ -207,7 +209,8 @@ public class JavaI18nUtil extends I18nUtil {
 
     final PsiMethod[] superMethods = method.findSuperMethods();
     for (PsiMethod superMethod : superMethods) {
-      if (isMethodParameterAnnotatedWith(superMethod, idx, processed, annFqn, annotationAttributeValues, null)) return true;
+      if (isMethodParameterAnnotatedWith(superMethod, idx, processed, annFqn, annotationAttributeValues, null))
+        return true;
     }
 
     return false;
@@ -238,7 +241,7 @@ public class JavaI18nUtil extends I18nUtil {
       if (!(resourceBundleName instanceof PsiExpression)) {
         return false;
       }
-      PsiExpression expr = (PsiExpression)resourceBundleName;
+      PsiExpression expr = (PsiExpression) resourceBundleName;
       final Object value = JavaPsiFacade.getInstance(expr.getProject()).getConstantEvaluationHelper().computeConstantExpression(expr);
       if (value == null) {
         return false;
@@ -253,8 +256,7 @@ public class JavaI18nUtil extends I18nUtil {
   public static boolean isPropertyRef(final PsiLiteralExpression expression, final String key, final String resourceBundleName) {
     if (resourceBundleName == null) {
       return !PropertiesUtil.findPropertiesByKey(expression.getProject(), key).isEmpty();
-    }
-    else {
+    } else {
       final List<PropertiesFile> propertiesFiles = propertiesFilesByBundleName(resourceBundleName, expression);
       boolean containedInPropertiesFile = false;
       for (PropertiesFile propertiesFile : propertiesFiles) {
@@ -289,7 +291,7 @@ public class JavaI18nUtil extends I18nUtil {
       @Override
       public boolean execute(@Nonnull PsiElement element, ResolveState state) {
         if (element instanceof PsiMethod) {
-          PsiMethod method = (PsiMethod)element;
+          PsiMethod method = (PsiMethod) element;
           PsiType returnType = method.getReturnType();
           if (returnType != null && TypeConversionUtil.isAssignable(type, returnType)
               && method.getParameterList().getParametersCount() == 0) {
@@ -323,21 +325,19 @@ public class JavaI18nUtil extends I18nUtil {
     int maxCount = -1;
     for (PsiReference reference : expression.getReferences()) {
       if (reference instanceof PsiPolyVariantReference) {
-        for (ResolveResult result : ((PsiPolyVariantReference)reference).multiResolve(false)) {
+        for (ResolveResult result : ((PsiPolyVariantReference) reference).multiResolve(false)) {
           if (result.isValidResult() && result.getElement() instanceof IProperty) {
-            String value = ((IProperty)result.getElement()).getValue();
+            String value = ((IProperty) result.getElement()).getValue();
             MessageFormat format;
             try {
               format = new MessageFormat(value);
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
               continue; // ignore syntax error
             }
             try {
               int count = format.getFormatsByArgumentIndex().length;
               maxCount = Math.max(maxCount, count);
-            }
-            catch (IllegalArgumentException ignored) {
+            } catch (IllegalArgumentException ignored) {
             }
           }
         }

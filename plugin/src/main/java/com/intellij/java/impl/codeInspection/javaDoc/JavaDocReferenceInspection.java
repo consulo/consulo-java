@@ -54,7 +54,7 @@ import consulo.ide.impl.ui.impl.PopupChooserBuilder;
 import consulo.util.concurrent.AsyncResult;
 import consulo.document.util.TextRange;
 import consulo.util.lang.StringUtil;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import com.intellij.java.language.psi.javadoc.JavadocManager;
 import com.intellij.java.language.psi.javadoc.JavadocTagInfo;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;

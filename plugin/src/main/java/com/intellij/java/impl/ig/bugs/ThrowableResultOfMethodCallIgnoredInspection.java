@@ -18,7 +18,7 @@ package com.intellij.java.impl.ig.bugs;
 import javax.annotation.Nonnull;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import consulo.language.psi.search.ReferencesSearch;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import consulo.language.psi.util.PsiTreeUtil;

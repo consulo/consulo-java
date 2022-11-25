@@ -15,27 +15,25 @@
  */
 package com.intellij.java.impl.psi.formatter.java;
 
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-
-import consulo.ide.impl.idea.formatting.alignment.AlignmentInColumnsConfig;
-import consulo.ide.impl.idea.formatting.alignment.AlignmentInColumnsHelper;
-import consulo.language.codeStyle.AlignmentStrategy;
-import consulo.language.ast.ASTNode;
-import com.intellij.java.language.psi.JavaTokenType;
-import consulo.language.codeStyle.CommonCodeStyleSettings;
+import com.intellij.java.impl.psi.impl.source.tree.JavaJspElementType;
 import com.intellij.java.language.impl.psi.impl.source.tree.ElementType;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
-import com.intellij.java.impl.psi.impl.source.tree.JavaJspElementType;
+import com.intellij.java.language.psi.JavaTokenType;
+import consulo.ide.impl.idea.formatting.alignment.AlignmentInColumnsConfig;
+import consulo.ide.impl.idea.formatting.alignment.AlignmentInColumnsHelper;
+import consulo.language.ast.ASTNode;
 import consulo.language.ast.IElementType;
 import consulo.language.ast.TokenSet;
-import consulo.util.collection.ContainerUtil;
+import consulo.language.codeStyle.AlignmentStrategy;
+import consulo.language.codeStyle.CommonCodeStyleSettings;
+
+import javax.annotation.Nonnull;
+import java.util.Set;
 
 public class SubsequentFieldAligner extends ChildAlignmentStrategyProvider
 {
 
-	private final static Set<IElementType> TYPES_TO_ALIGN = ContainerUtil.newHashSet(JavaElementType.MODIFIER_LIST, JavaElementType.TYPE, JavaTokenType.IDENTIFIER, JavaTokenType.EQ);
+	private final static Set<IElementType> TYPES_TO_ALIGN = Set.of(JavaElementType.MODIFIER_LIST, JavaElementType.TYPE, JavaTokenType.IDENTIFIER, JavaTokenType.EQ);
 
 	private static final AlignmentInColumnsConfig ALIGNMENT_IN_COLUMNS_CONFIG = new AlignmentInColumnsConfig(TokenSet.create(JavaTokenType.IDENTIFIER), JavaJspElementType.WHITE_SPACE_BIT_SET,
 			ElementType.JAVA_COMMENT_BIT_SET, TokenSet.create(JavaTokenType.EQ), TokenSet.create(JavaElementType.FIELD));

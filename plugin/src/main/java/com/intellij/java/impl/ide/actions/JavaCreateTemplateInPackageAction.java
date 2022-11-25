@@ -15,14 +15,14 @@
  */
 package com.intellij.java.impl.ide.actions;
 
-import consulo.ide.impl.idea.ide.actions.CreateTemplateInPackageAction;
 import com.intellij.java.language.psi.JavaDirectoryService;
 import com.intellij.java.language.psi.PsiJavaPackage;
 import com.intellij.java.language.psi.PsiNameHelper;
-import consulo.util.lang.StringUtil;
+import consulo.ide.action.CreateTemplateInPackageAction;
 import consulo.language.psi.PsiDirectory;
 import consulo.language.psi.PsiElement;
 import consulo.ui.image.Image;
+import consulo.util.lang.StringUtil;
 
 public abstract class JavaCreateTemplateInPackageAction<T extends PsiElement> extends CreateTemplateInPackageAction<T> {
 

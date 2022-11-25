@@ -15,23 +15,23 @@
  */
 package com.intellij.java.impl.util.xml.actions;
 
+import com.intellij.java.language.psi.JavaPsiFacade;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.java.language.util.ClassFilter;
 import com.intellij.java.language.util.TreeClassChooser;
 import com.intellij.java.language.util.TreeClassChooserFactory;
 import consulo.application.ApplicationManager;
-import consulo.language.editor.WriteCommandAction;
 import consulo.codeEditor.Editor;
+import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.editor.WriteCommandAction;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
-import com.intellij.java.language.psi.JavaPsiFacade;
-import com.intellij.java.language.psi.PsiClass;
-import consulo.language.psi.PsiFile;
-import com.intellij.java.language.psi.PsiModifier;
-import consulo.language.psi.scope.GlobalSearchScope;
-import com.intellij.util.xml.DomElement;
-import com.intellij.util.xml.actions.generate.DomTemplateRunner;
-import com.intellij.util.xml.ui.actions.generate.CreateDomElementAction;
-import consulo.java.language.module.util.JavaClassNames;
+import consulo.xml.util.xml.DomElement;
+import consulo.xml.util.xml.actions.generate.DomTemplateRunner;
+import consulo.xml.util.xml.ui.actions.generate.CreateDomElementAction;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;

@@ -15,14 +15,25 @@
  */
 package com.intellij.java.impl.refactoring.memberPullUp;
 
+import com.intellij.java.language.JavaLanguage;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.Language;
+
+import javax.annotation.Nonnull;
+
 /**
  * Created by Max Medvedev on 10/4/13
  */
-public class JavaPullUpHelperFactory implements PullUpHelperFactory
-{
-	@Override
-	public PullUpHelper createPullUpHelper(PullUpData data)
-	{
-		return new JavaPullUpHelper(data);
-	}
+@ExtensionImpl
+public class JavaPullUpHelperFactory implements PullUpHelperFactory {
+  @Override
+  public PullUpHelper createPullUpHelper(PullUpData data) {
+    return new JavaPullUpHelper(data);
+  }
+
+  @Nonnull
+  @Override
+  public Language getLanguage() {
+    return JavaLanguage.INSTANCE;
+  }
 }

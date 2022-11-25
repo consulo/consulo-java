@@ -20,7 +20,7 @@ import consulo.language.psi.stub.IdAndToDoScannerBasedOnFilterLexer;
 import consulo.language.psi.stub.OccurrenceConsumer;
 import consulo.language.psi.stub.todo.LexerBasedTodoIndexer;
 
-public class JavaTodoIndexer extends LexerBasedTodoIndexer implements IdAndToDoScannerBasedOnFilterLexer {
+public abstract class JavaTodoIndexer extends LexerBasedTodoIndexer implements IdAndToDoScannerBasedOnFilterLexer {
   @Override
   public Lexer createLexer(OccurrenceConsumer consumer) {
     return JavaIdIndexer.createIndexingLexer(consumer);

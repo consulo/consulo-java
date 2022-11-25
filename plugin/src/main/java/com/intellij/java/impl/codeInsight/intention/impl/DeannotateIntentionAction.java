@@ -20,26 +20,29 @@
  */
 package com.intellij.java.impl.codeInsight.intention.impl;
 
-import consulo.language.editor.CodeInsightBundle;
 import com.intellij.java.language.codeInsight.ExternalAnnotationsManager;
-import consulo.language.editor.intention.IntentionAction;
 import com.intellij.java.language.psi.*;
 import consulo.application.Result;
-import consulo.language.editor.WriteCommandAction;
-import consulo.undoRedo.util.UndoUtil;
-import consulo.logging.Logger;
 import consulo.codeEditor.Editor;
-import consulo.project.Project;
-import consulo.ui.ex.popup.JBPopupFactory;
-import consulo.ui.ex.popup.PopupStep;
-import consulo.ui.ex.popup.BaseListPopupStep;
-import consulo.virtualFileSystem.VirtualFile;
-import com.intellij.psi.*;
+import consulo.codeEditor.EditorPopupHelper;
+import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.WriteCommandAction;
+import consulo.language.editor.intention.IntentionAction;
+import consulo.language.editor.util.LanguageUndoUtil;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.logging.Logger;
+import consulo.project.Project;
+import consulo.ui.ex.popup.BaseListPopupStep;
+import consulo.ui.ex.popup.JBPopupFactory;
+import consulo.ui.ex.popup.ListPopup;
+import consulo.ui.ex.popup.PopupStep;
+import consulo.virtualFileSystem.VirtualFile;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import java.util.List;
 
 public class DeannotateIntentionAction implements IntentionAction {
@@ -140,7 +143,7 @@ public class DeannotateIntentionAction implements IntentionAction {
       deannotate(externalAnnotations[0], project, file, annotationsManager, listOwner);
       return;
     }
-    JBPopupFactory.getInstance().createListPopup(new BaseListPopupStep<PsiAnnotation>(CodeInsightBundle.message("deannotate.intention.chooser.title"), externalAnnotations) {
+    ListPopup popup = JBPopupFactory.getInstance().createListPopup(new BaseListPopupStep<PsiAnnotation>(CodeInsightBundle.message("deannotate.intention.chooser.title"), externalAnnotations) {
       @Override
       public PopupStep onChosen(final PsiAnnotation selectedValue, final boolean finalChoice) {
         deannotate(selectedValue, project, file, annotationsManager, listOwner);
@@ -154,7 +157,9 @@ public class DeannotateIntentionAction implements IntentionAction {
         LOG.assertTrue(qualifiedName != null);
         return qualifiedName;
       }
-    }).showInBestPositionFor(editor);
+    });
+
+    EditorPopupHelper.getInstance().showPopupInBestPositionFor(editor, popup);
   }
 
   private void deannotate(final PsiAnnotation annotation,
@@ -169,7 +174,7 @@ public class DeannotateIntentionAction implements IntentionAction {
         String qualifiedName = annotation.getQualifiedName();
         LOG.assertTrue(qualifiedName != null);
         if (annotationsManager.deannotate(listOwner, qualifiedName) && virtualFile != null && virtualFile.isInLocalFileSystem()) {
-          UndoUtil.markPsiFileForUndo(file);
+          LanguageUndoUtil.markPsiFileForUndo(file);
         }
       }
     }.execute();

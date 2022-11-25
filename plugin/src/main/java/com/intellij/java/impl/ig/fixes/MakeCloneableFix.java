@@ -15,18 +15,18 @@
  */
 package com.intellij.java.impl.ig.fixes;
 
-import javax.annotation.Nonnull;
-
-import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import com.intellij.psi.*;
-import consulo.language.psi.scope.GlobalSearchScope;
-import consulo.language.util.IncorrectOperationException;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ClassUtils;
 import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+
+import javax.annotation.Nonnull;
 
 public class MakeCloneableFix extends InspectionGadgetsFix {
 
@@ -40,34 +40,32 @@ public class MakeCloneableFix extends InspectionGadgetsFix {
   public String getName() {
     if (isInterface) {
       return InspectionGadgetsBundle.message(
-        "make.interface.cloneable.quickfix");
-    }
-    else {
+          "make.interface.cloneable.quickfix");
+    } else {
       return InspectionGadgetsBundle.message(
-        "make.class.cloneable.quickfix");
+          "make.class.cloneable.quickfix");
     }
   }
 
   @Override
   public void doFix(Project project, ProblemDescriptor descriptor)
-    throws IncorrectOperationException {
+      throws IncorrectOperationException {
     final PsiElement nameElement = descriptor.getPsiElement();
     final PsiClass containingClass =
-      ClassUtils.getContainingClass(nameElement);
+        ClassUtils.getContainingClass(nameElement);
     if (containingClass == null) {
       return;
     }
     final PsiElementFactory elementFactory =
-      JavaPsiFacade.getElementFactory(project);
+        JavaPsiFacade.getElementFactory(project);
     final GlobalSearchScope scope = GlobalSearchScope.allScope(project);
     final PsiJavaCodeReferenceElement ref =
-      elementFactory.createReferenceElementByFQClassName(
-        JavaClassNames.JAVA_LANG_CLONEABLE, scope);
+        elementFactory.createReferenceElementByFQClassName(
+            JavaClassNames.JAVA_LANG_CLONEABLE, scope);
     final PsiReferenceList extendsImplementsList;
     if (containingClass.isInterface()) {
       extendsImplementsList = containingClass.getExtendsList();
-    }
-    else {
+    } else {
       extendsImplementsList = containingClass.getImplementsList();
     }
     if (extendsImplementsList == null) {

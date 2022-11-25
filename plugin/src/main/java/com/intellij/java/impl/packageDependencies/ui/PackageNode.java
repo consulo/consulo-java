@@ -15,16 +15,16 @@
  */
 package com.intellij.java.impl.packageDependencies.ui;
 
-import consulo.application.AllIcons;
 import com.intellij.java.impl.cyclicDependencies.ui.CyclicDependenciesPanel;
 import com.intellij.java.language.psi.PsiJavaFile;
 import com.intellij.java.language.psi.PsiJavaPackage;
-import consulo.util.lang.Comparing;
-import com.intellij.packageDependencies.ui.FileNode;
+import consulo.application.AllIcons;
+import consulo.ide.impl.idea.packageDependencies.ui.FileNode;
 import consulo.ide.impl.idea.packageDependencies.ui.PackageDependenciesNode;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.ui.image.Image;
+import consulo.util.lang.Comparing;
 
 import java.util.Map;
 import java.util.Set;

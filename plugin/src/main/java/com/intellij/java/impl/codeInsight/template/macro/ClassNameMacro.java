@@ -15,14 +15,20 @@
  */
 package com.intellij.java.impl.codeInsight.template.macro;
 
-import consulo.language.editor.CodeInsightBundle;
-import com.intellij.codeInsight.template.*;
 import com.intellij.java.impl.codeInsight.template.JavaCodeContextType;
 import com.intellij.java.language.psi.PsiAnonymousClass;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiJavaFile;
 import com.intellij.java.language.psi.PsiTypeParameter;
-import com.intellij.psi.*;
+import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.template.Expression;
+import consulo.language.editor.template.ExpressionContext;
+import consulo.language.editor.template.Result;
+import consulo.language.editor.template.TextResult;
+import consulo.language.editor.template.context.TemplateContextType;
+import consulo.language.editor.template.macro.Macro;
+import consulo.language.psi.PsiElement;
+
 import javax.annotation.Nonnull;
 
 public class ClassNameMacro extends Macro {

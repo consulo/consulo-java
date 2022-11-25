@@ -15,17 +15,19 @@
  */
 package com.intellij.java.impl.codeInsight.generation.surroundWith;
 
-import consulo.language.editor.CodeInsightBundle;
 import com.intellij.java.language.psi.*;
-import consulo.document.Document;
 import consulo.codeEditor.Editor;
-import consulo.ide.impl.idea.openapi.editor.EditorModificationUtil;
-import consulo.project.Project;
+import consulo.document.Document;
 import consulo.document.util.TextRange;
-import consulo.util.lang.StringUtil;
-import com.intellij.psi.*;
+import consulo.ide.impl.idea.openapi.editor.EditorModificationUtil;
 import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.editor.CodeInsightBundle;
+import consulo.language.psi.PsiDocumentManager;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiManager;
 import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+import consulo.util.lang.StringUtil;
 import org.jetbrains.annotations.NonNls;
 
 class JavaWithTryFinallySurrounder extends JavaStatementsSurrounder{

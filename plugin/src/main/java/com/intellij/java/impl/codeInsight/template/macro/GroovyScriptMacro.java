@@ -18,9 +18,13 @@ package com.intellij.java.impl.codeInsight.template.macro;
 import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.completion.lookup.LookupElement;
 import consulo.language.editor.completion.lookup.LookupElementBuilder;
-import com.intellij.codeInsight.template.*;
-import javax.annotation.Nonnull;
+import consulo.language.editor.template.Expression;
+import consulo.language.editor.template.ExpressionContext;
+import consulo.language.editor.template.Result;
+import consulo.language.editor.template.TextResult;
+import consulo.language.editor.template.macro.Macro;
 
+import javax.annotation.Nonnull;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -64,7 +68,7 @@ public class GroovyScriptMacro extends Macro {
         if (paramResult instanceof ListResult) {
           value = ContainerUtil.map2List(((ListResult)paramResult).getComponents(), new Function<Result, String>() {
             @Override
-            public String fun(Result result) {
+            public String apply(Result result) {
               return result.toString();
             }
           });

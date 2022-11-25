@@ -15,22 +15,22 @@
  */
 package com.intellij.java.impl.codeInsight.generation;
 
-import consulo.language.editor.CodeInsightBundle;
-import consulo.ide.impl.idea.codeInsight.generation.ClassMember;
-import consulo.language.editor.hint.HintManager;
 import com.intellij.java.impl.codeInsight.generation.ui.GenerateEqualsWizard;
 import com.intellij.java.language.impl.codeInsight.generation.GenerationInfo;
 import com.intellij.java.language.impl.codeInsight.generation.PsiElementClassMember;
 import com.intellij.java.language.psi.*;
 import consulo.application.ApplicationManager;
-import consulo.codeEditor.Editor;
-import consulo.project.Project;
-import consulo.ui.ex.awt.Messages;
 import consulo.application.util.function.Computable;
+import consulo.codeEditor.Editor;
+import consulo.java.impl.codeInsight.JavaCodeInsightSettings;
+import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.generation.ClassMember;
+import consulo.language.editor.hint.HintManager;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.util.IncorrectOperationException;
-import consulo.java.impl.codeInsight.JavaCodeInsightSettings;
 import consulo.logging.Logger;
+import consulo.project.Project;
+import consulo.ui.ex.awt.Messages;
 
 import javax.annotation.Nonnull;
 import java.util.List;

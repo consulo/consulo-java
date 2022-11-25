@@ -15,10 +15,6 @@
  */
 package com.intellij.java.impl.codeInsight.completion;
 
-import consulo.language.editor.AutoPopupController;
-import com.intellij.codeInsight.completion.*;
-import consulo.language.editor.completion.lookup.Lookup;
-import consulo.language.editor.completion.lookup.LookupElement;
 import com.intellij.java.impl.codeInsight.ExpectedTypesProvider;
 import com.intellij.java.impl.codeInsight.lookup.PsiTypeLookupItem;
 import com.intellij.java.impl.psi.codeStyle.JavaCodeStyleSettings;
@@ -29,13 +25,21 @@ import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.java.language.psi.javadoc.PsiDocTag;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.codeEditor.Editor;
-import consulo.project.Project;
-import consulo.language.psi.PsiElement;
-import consulo.language.psi.PsiFile;
+import consulo.ide.impl.idea.codeInsight.completion.CodeCompletionHandlerBase;
 import consulo.language.codeStyle.CodeStyleSettings;
 import consulo.language.codeStyle.CodeStyleSettingsManager;
+import consulo.language.editor.AutoPopupController;
+import consulo.language.editor.completion.CompletionType;
+import consulo.language.editor.completion.OffsetKey;
+import consulo.language.editor.completion.lookup.InsertHandler;
+import consulo.language.editor.completion.lookup.InsertionContext;
+import consulo.language.editor.completion.lookup.Lookup;
+import consulo.language.editor.completion.lookup.LookupElement;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
 import consulo.language.psi.filter.FilterPositionUtil;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
 
 import javax.annotation.Nonnull;

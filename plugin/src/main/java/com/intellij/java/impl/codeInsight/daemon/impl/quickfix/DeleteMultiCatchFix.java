@@ -24,7 +24,7 @@ import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.JavaHigh
 import consulo.language.editor.intention.IntentionAction;
 import consulo.codeEditor.Editor;
 import consulo.project.Project;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import consulo.language.ast.IElementType;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;

@@ -16,91 +16,69 @@
 
 package com.intellij.java.impl.psi.impl.source.resolve.reference.impl.providers;
 
+import com.intellij.java.language.psi.JavaPsiFacade;
+import com.intellij.java.language.psi.PsiJavaPackage;
+import consulo.document.util.TextRange;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.ReferenceSetBase;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.util.collection.ContainerUtil;
+import consulo.util.lang.Comparing;
+import consulo.util.lang.function.Condition;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import consulo.util.lang.Comparing;
-import consulo.util.lang.function.Condition;
-import consulo.document.util.TextRange;
-import com.intellij.java.language.psi.JavaPsiFacade;
-import consulo.language.psi.PsiElement;
-import com.intellij.java.language.psi.PsiJavaPackage;
-import consulo.language.psi.ResolveResult;
-import consulo.language.psi.scope.GlobalSearchScope;
-import consulo.ide.impl.psi.util.ReferenceSetBase;
-import consulo.ide.impl.idea.util.NullableFunction;
-import consulo.util.collection.ContainerUtil;
-
 /**
  * @author Dmitry Avdeev
  */
-public class PackageReferenceSet extends ReferenceSetBase<PsiPackageReference>
-{
-	private final GlobalSearchScope mySearchScope;
+public class PackageReferenceSet extends ReferenceSetBase<PsiPackageReference> {
+  private final GlobalSearchScope mySearchScope;
 
-	public PackageReferenceSet(@Nonnull final String str, @Nonnull final PsiElement element, final int startInElement)
-	{
-		this(str, element, startInElement, element.getResolveScope());
-	}
+  public PackageReferenceSet(@Nonnull final String str, @Nonnull final PsiElement element, final int startInElement) {
+    this(str, element, startInElement, element.getResolveScope());
+  }
 
-	public PackageReferenceSet(@Nonnull final String str, @Nonnull final PsiElement element, final int startInElement, @Nonnull GlobalSearchScope scope)
-	{
-		super(str, element, startInElement, DOT_SEPARATOR);
-		mySearchScope = scope;
-	}
+  public PackageReferenceSet(@Nonnull final String str, @Nonnull final PsiElement element, final int startInElement, @Nonnull GlobalSearchScope scope) {
+    super(str, element, startInElement, DOT_SEPARATOR);
+    mySearchScope = scope;
+  }
 
-	@Override
-	@Nonnull
-	protected PsiPackageReference createReference(final TextRange range, final int index)
-	{
-		return new PsiPackageReference(this, range, index);
-	}
+  @Override
+  @Nonnull
+  protected PsiPackageReference createReference(final TextRange range, final int index) {
+    return new PsiPackageReference(this, range, index);
+  }
 
-	public Collection<PsiJavaPackage> resolvePackageName(@Nullable PsiJavaPackage context, final String packageName)
-	{
-		if(context != null)
-		{
-			return ContainerUtil.filter(context.getSubPackages(getResolveScope()), new Condition<PsiJavaPackage>()
-			{
-				@Override
-				public boolean value(PsiJavaPackage aPackage)
-				{
-					return Comparing.equal(aPackage.getName(), packageName);
-				}
-			});
-		}
-		return Collections.emptyList();
-	}
+  public Collection<PsiJavaPackage> resolvePackageName(@Nullable PsiJavaPackage context, final String packageName) {
+    if (context != null) {
+      return ContainerUtil.filter(context.getSubPackages(getResolveScope()), new Condition<PsiJavaPackage>() {
+        @Override
+        public boolean value(PsiJavaPackage aPackage) {
+          return Comparing.equal(aPackage.getName(), packageName);
+        }
+      });
+    }
+    return Collections.emptyList();
+  }
 
-	@Nonnull
-	protected GlobalSearchScope getResolveScope()
-	{
-		return mySearchScope;
-	}
+  @Nonnull
+  protected GlobalSearchScope getResolveScope() {
+    return mySearchScope;
+  }
 
-	public Collection<PsiJavaPackage> resolvePackage()
-	{
-		final PsiPackageReference packageReference = getLastReference();
-		if(packageReference == null)
-		{
-			return Collections.emptyList();
-		}
-		return ContainerUtil.map2List(packageReference.multiResolve(false), new NullableFunction<ResolveResult, PsiJavaPackage>()
-		{
-			@Override
-			public PsiJavaPackage fun(final ResolveResult resolveResult)
-			{
-				return (PsiJavaPackage) resolveResult.getElement();
-			}
-		});
-	}
+  public Collection<PsiJavaPackage> resolvePackage() {
+    final PsiPackageReference packageReference = getLastReference();
+    if (packageReference == null) {
+      return Collections.emptyList();
+    }
+    return ContainerUtil.map2List(packageReference.multiResolve(false), resolveResult -> (PsiJavaPackage) resolveResult.getElement());
+  }
 
-	public Set<PsiJavaPackage> getInitialContext()
-	{
-		return Collections.singleton(JavaPsiFacade.getInstance(getElement().getProject()).findPackage(""));
-	}
+  public Set<PsiJavaPackage> getInitialContext() {
+    return Collections.singleton(JavaPsiFacade.getInstance(getElement().getProject()).findPackage(""));
+  }
 }

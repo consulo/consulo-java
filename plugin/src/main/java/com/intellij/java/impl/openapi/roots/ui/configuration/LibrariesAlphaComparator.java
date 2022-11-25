@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.openapi.roots.ui.configuration;
 
-import consulo.content.OrderRootType;
+import consulo.content.base.BinariesOrderRootType;
 import consulo.content.library.Library;
 import consulo.virtualFileSystem.VirtualFile;
 
@@ -23,7 +23,7 @@ import java.util.Comparator;
 
 /**
  * @author Eugene Zhuravlev
- *         Date: Jan 14, 2004
+ * Date: Jan 14, 2004
  */
 public class LibrariesAlphaComparator implements Comparator<Library> {
   public static LibrariesAlphaComparator INSTANCE = new LibrariesAlphaComparator();
@@ -39,10 +39,10 @@ public class LibrariesAlphaComparator implements Comparator<Library> {
       name2 = null;
     }
     if (name1 == null && name2 == null) {
-      final VirtualFile[] files1 = library1.getFiles(OrderRootType.CLASSES);
-      final VirtualFile[] files2 = library2.getFiles(OrderRootType.CLASSES);
-      name1 = files1.length > 0? files1[0].getName() : null;
-      name2 = files2.length > 0? files2[0].getName() : null;
+      final VirtualFile[] files1 = library1.getFiles(BinariesOrderRootType.getInstance());
+      final VirtualFile[] files2 = library2.getFiles(BinariesOrderRootType.getInstance());
+      name1 = files1.length > 0 ? files1[0].getName() : null;
+      name2 = files2.length > 0 ? files2[0].getName() : null;
     }
     return compareNames(name1, name2);
   }
@@ -50,14 +50,11 @@ public class LibrariesAlphaComparator implements Comparator<Library> {
   public int compareNames(String name1, String name2) {
     if (name1 == null && name2 == null) {
       return 0;
-    }
-    else if (name1 == null) {
+    } else if (name1 == null) {
       return -1;
-    }
-    else if (name2 == null) {
+    } else if (name2 == null) {
       return +1;
-    }
-    else {
+    } else {
       return name1.compareToIgnoreCase(name2);
     }
   }

@@ -17,23 +17,19 @@
 package com.intellij.java.impl.psi.impl.source.resolve.reference.impl.providers;
 
 import consulo.document.util.TextRange;
+import consulo.language.psi.*;
+import consulo.language.psi.path.FileReferenceSet;
+import consulo.language.util.ProcessingContext;
+import consulo.util.collection.ArrayUtil;
 import consulo.util.lang.CharFilter;
 import consulo.util.lang.StringUtil;
-import consulo.language.psi.ElementManipulator;
-import consulo.language.psi.ElementManipulators;
-import consulo.language.psi.PsiElement;
-import consulo.language.psi.PsiReference;
-import com.intellij.psi.impl.source.resolve.reference.PsiReferenceProviderBase;
-import consulo.language.psi.path.FileReferenceSet;
-import consulo.util.collection.ArrayUtil;
-import consulo.language.util.ProcessingContext;
 
 import javax.annotation.Nonnull;
 
 /**
  * @author davdeev
  */
-public class PathListReferenceProvider extends PsiReferenceProviderBase {
+public class PathListReferenceProvider extends PsiReferenceProvider {
 
   @Override
   @Nonnull

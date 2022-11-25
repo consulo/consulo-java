@@ -18,12 +18,12 @@ package com.intellij.java.impl.lang.properties;
 import com.intellij.lang.properties.IProperty;
 import com.intellij.lang.properties.PropertiesBundle;
 import com.intellij.lang.properties.references.PropertyReference;
+import com.intellij.xml.util.XmlUtil;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
-import com.intellij.psi.xml.XmlAttributeValue;
-import com.intellij.psi.xml.XmlTag;
 import consulo.language.util.IncorrectOperationException;
-import com.intellij.xml.util.XmlUtil;
+import consulo.xml.psi.xml.XmlAttributeValue;
+import consulo.xml.psi.xml.XmlTag;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;

@@ -21,7 +21,7 @@ import com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix.ChangeTo
 import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
 import consulo.project.Project;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PsiUtil;

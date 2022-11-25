@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.codeInsight.editorActions.moveUpDown;
 
-import consulo.ide.impl.idea.codeInsight.CodeInsightUtilBase;
+import consulo.language.editor.CodeInsightUtilCore;
 import consulo.language.editor.moveUpDown.LineMover;
 import consulo.language.editor.moveUpDown.LineRange;
 import consulo.language.editor.moveUpDown.StatementUpDownMover;
@@ -32,7 +32,6 @@ import consulo.language.psi.PsiComment;
 import consulo.language.psi.PsiDocumentManager;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
-import consulo.ide.impl.psi.impl.PsiDocumentManagerImpl;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
@@ -66,7 +65,7 @@ class StatementMover extends LineMover {
       final PsiBlockStatement blockStatement = (PsiBlockStatement)factory.createStatementFromText("{}", statementToSurroundWithCodeBlock);
       blockStatement.getCodeBlock().replace(codeBlock);
       PsiBlockStatement newStatement = (PsiBlockStatement)statementToSurroundWithCodeBlock.replace(blockStatement);
-      newStatement = CodeInsightUtilBase.forcePsiPostprocessAndRestoreElement(newStatement);
+      newStatement = CodeInsightUtilCore.forcePsiPostprocessAndRestoreElement(newStatement);
       info.toMove = new LineRange(document.getLineNumber(lineRangeMarker.getStartOffset()), document.getLineNumber(lineRangeMarker.getEndOffset())+1);
       PsiCodeBlock newCodeBlock = newStatement.getCodeBlock();
       if (down) {
@@ -278,7 +277,7 @@ class StatementMover extends LineMover {
     Document document = editor.getDocument();
     if (endOffset > document.getTextLength()) {
       LOG.assertTrue(!PsiDocumentManager.getInstance(file.getProject()).isUncommited(document));
-      LOG.assertTrue(PsiDocumentManagerImpl.checkConsistency(file, document));
+      LOG.assertTrue(PsiDocumentManager.getInstance(file.getProject()).checkConsistency(file, document));
     }
     int endLine;
     if (endOffset == document.getTextLength()) {

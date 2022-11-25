@@ -15,42 +15,34 @@
  */
 package com.intellij.java.impl.psi.formatter.java;
 
-import javax.annotation.Nonnull;
-
-import consulo.language.codeStyle.Alignment;
-import consulo.language.codeStyle.FormattingMode;
-import consulo.language.codeStyle.Indent;
-import consulo.language.codeStyle.Wrap;
-import consulo.language.codeStyle.AlignmentStrategy;
-import consulo.language.ast.ASTNode;
-import consulo.document.util.TextRange;
-import consulo.language.codeStyle.CommonCodeStyleSettings;
 import com.intellij.java.impl.psi.codeStyle.JavaCodeStyleSettings;
+import consulo.document.util.TextRange;
+import consulo.language.ast.ASTNode;
+import consulo.language.codeStyle.*;
+
+import javax.annotation.Nonnull;
 
 /**
  * @author max
  */
-public class PartialWhitespaceBlock extends SimpleJavaBlock
-{
-	private final TextRange myRange;
+public class PartialWhitespaceBlock extends SimpleJavaBlock {
+  private final TextRange myRange;
 
-	public PartialWhitespaceBlock(ASTNode node,
-								  TextRange range,
-								  Wrap wrap,
-								  Alignment alignment,
-								  Indent indent,
-								  CommonCodeStyleSettings settings,
-								  JavaCodeStyleSettings javaSettings,
-								  @Nonnull FormattingMode formattingMode)
-	{
-		super(node, wrap, AlignmentStrategy.wrap(alignment), indent, settings, javaSettings, formattingMode);
-		myRange = range;
-	}
+  public PartialWhitespaceBlock(ASTNode node,
+                                TextRange range,
+                                Wrap wrap,
+                                Alignment alignment,
+                                Indent indent,
+                                CommonCodeStyleSettings settings,
+                                JavaCodeStyleSettings javaSettings,
+                                @Nonnull FormattingMode formattingMode) {
+    super(node, wrap, AlignmentStrategy.wrap(alignment), indent, settings, javaSettings, formattingMode);
+    myRange = range;
+  }
 
-	@Nonnull
-	@Override
-	public TextRange getTextRange()
-	{
-		return myRange;
-	}
+  @Nonnull
+  @Override
+  public TextRange getTextRange() {
+    return myRange;
+  }
 }

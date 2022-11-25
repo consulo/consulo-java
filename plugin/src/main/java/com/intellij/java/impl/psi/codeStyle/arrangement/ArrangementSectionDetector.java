@@ -17,19 +17,18 @@ package com.intellij.java.impl.psi.codeStyle.arrangement;
 
 import consulo.document.Document;
 import consulo.document.util.TextRange;
-import consulo.util.lang.StringUtil;
-import consulo.language.psi.PsiComment;
-import consulo.language.psi.PsiElement;
 import consulo.language.codeStyle.arrangement.ArrangementSettings;
 import consulo.language.codeStyle.arrangement.ArrangementUtil;
 import consulo.language.codeStyle.arrangement.match.ArrangementSectionRule;
 import consulo.language.codeStyle.arrangement.std.ArrangementSettingsToken;
-import consulo.ide.impl.idea.util.Consumer;
-import consulo.util.collection.ContainerUtil;
+import consulo.language.psi.PsiComment;
+import consulo.language.psi.PsiElement;
 import consulo.util.collection.Stack;
+import consulo.util.lang.StringUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.function.Consumer;
 
 import static consulo.language.codeStyle.arrangement.std.StdArrangementTokens.Section.END_SECTION;
 import static consulo.language.codeStyle.arrangement.std.StdArrangementTokens.Section.START_SECTION;
@@ -45,7 +44,7 @@ public class ArrangementSectionDetector {
   private final Document myDocument;
   private final ArrangementSettings mySettings;
   private final Consumer<ArrangementSectionEntryTemplate> mySectionEntryProducer;
-  private final Stack<ArrangementSectionRule> myOpenedSections = ContainerUtil.newStack();
+  private final Stack<ArrangementSectionRule> myOpenedSections = new Stack<>();
 
   public ArrangementSectionDetector(
       @Nullable Document document, @Nonnull ArrangementSettings settings, @Nonnull Consumer<ArrangementSectionEntryTemplate> producer) {
@@ -67,7 +66,7 @@ public class ArrangementSectionDetector {
     final String commentText = comment.getText().trim();
     final ArrangementSectionRule openSectionRule = isSectionStartComment(mySettings, commentText);
     if (openSectionRule != null) {
-      mySectionEntryProducer.consume(new ArrangementSectionEntryTemplate(comment, START_SECTION, sectionTextRange, commentText));
+      mySectionEntryProducer.accept(new ArrangementSectionEntryTemplate(comment, START_SECTION, sectionTextRange, commentText));
       myOpenedSections.push(openSectionRule);
       return true;
     }
@@ -75,7 +74,7 @@ public class ArrangementSectionDetector {
     if (!myOpenedSections.isEmpty()) {
       final ArrangementSectionRule lastSection = myOpenedSections.peek();
       if (lastSection.getEndComment() != null && StringUtil.equals(commentText, lastSection.getEndComment())) {
-        mySectionEntryProducer.consume(new ArrangementSectionEntryTemplate(comment, END_SECTION, sectionTextRange, commentText));
+        mySectionEntryProducer.accept(new ArrangementSectionEntryTemplate(comment, END_SECTION, sectionTextRange, commentText));
         myOpenedSections.pop();
         return true;
       }

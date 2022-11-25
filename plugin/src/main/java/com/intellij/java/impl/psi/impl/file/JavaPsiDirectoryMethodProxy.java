@@ -15,71 +15,58 @@
  */
 package com.intellij.java.impl.psi.impl.file;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.java.language.impl.JavaClassFileType;
-import consulo.language.file.FileTypeManager;
-import consulo.logging.Logger;
-import consulo.virtualFileSystem.fileType.FileType;
 import com.intellij.java.language.psi.JavaDirectoryService;
 import com.intellij.java.language.psi.PsiClass;
+import consulo.language.file.FileTypeManager;
 import consulo.language.psi.PsiDirectory;
+import consulo.language.psi.PsiDirectoryMethodProxy;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
-import consulo.psi.PsiDirectoryMethodProxy;
+import consulo.logging.Logger;
+import consulo.virtualFileSystem.fileType.FileType;
 
-public class JavaPsiDirectoryMethodProxy implements PsiDirectoryMethodProxy
-{
-	private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.file.PsiJavaDirectoryImpl");
+import javax.annotation.Nonnull;
+
+public class JavaPsiDirectoryMethodProxy implements PsiDirectoryMethodProxy {
+  private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.file.PsiJavaDirectoryImpl");
 
 
-	@Override
-	public boolean checkCreateFile(@Nonnull PsiDirectory psiDirectory,  @Nonnull final String name) throws IncorrectOperationException
-	{
-		final FileType type = FileTypeManager.getInstance().getFileTypeByFileName(name);
-		if(type == JavaClassFileType.INSTANCE)
-		{
-			throw new IncorrectOperationException("Cannot create class-file");
-		}
+  @Override
+  public boolean checkCreateFile(@Nonnull PsiDirectory psiDirectory, @Nonnull final String name) throws IncorrectOperationException {
+    final FileType type = FileTypeManager.getInstance().getFileTypeByFileName(name);
+    if (type == JavaClassFileType.INSTANCE) {
+      throw new IncorrectOperationException("Cannot create class-file");
+    }
 
-		return true;
-	}
+    return true;
+  }
 
-	@Override
-	public PsiElement add(@Nonnull PsiDirectory psiDirectory,  @Nonnull final PsiElement element) throws IncorrectOperationException
-	{
-		if(element instanceof PsiClass)
-		{
-			final String name = ((PsiClass) element).getName();
-			if(name != null)
-			{
-				final PsiClass newClass = JavaDirectoryService.getInstance().createClass(psiDirectory, name);
-				return newClass.replace(element);
-			}
-			else
-			{
-				LOG.error("not implemented");
-				return null;
-			}
-		}
+  @Override
+  public PsiElement add(@Nonnull PsiDirectory psiDirectory, @Nonnull final PsiElement element) throws IncorrectOperationException {
+    if (element instanceof PsiClass) {
+      final String name = ((PsiClass) element).getName();
+      if (name != null) {
+        final PsiClass newClass = JavaDirectoryService.getInstance().createClass(psiDirectory, name);
+        return newClass.replace(element);
+      } else {
+        LOG.error("not implemented");
+        return null;
+      }
+    }
 
-		return null;
-	}
+    return null;
+  }
 
-	@Override
-	public boolean checkAdd(@Nonnull PsiDirectory psiDirectory,  @Nonnull final PsiElement element) throws IncorrectOperationException
-	{
-		if(element instanceof PsiClass)
-		{
-			if(((PsiClass) element).getContainingClass() == null)
-			{
-				JavaDirectoryServiceImpl.checkCreateClassOrInterface(psiDirectory, ((PsiClass) element).getName());
-			}
-			else
-			{
-				LOG.error("not implemented");
-			}
-		}
-		return true;
-	}
+  @Override
+  public boolean checkAdd(@Nonnull PsiDirectory psiDirectory, @Nonnull final PsiElement element) throws IncorrectOperationException {
+    if (element instanceof PsiClass) {
+      if (((PsiClass) element).getContainingClass() == null) {
+        JavaDirectoryServiceImpl.checkCreateClassOrInterface(psiDirectory, ((PsiClass) element).getName());
+      } else {
+        LOG.error("not implemented");
+      }
+    }
+    return true;
+  }
 }

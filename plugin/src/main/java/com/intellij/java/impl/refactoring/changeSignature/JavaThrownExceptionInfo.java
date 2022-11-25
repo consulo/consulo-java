@@ -18,7 +18,7 @@ package com.intellij.java.impl.refactoring.changeSignature;
 import com.intellij.java.language.psi.PsiClassType;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiType;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import com.intellij.java.impl.refactoring.util.CanonicalTypes;
 import consulo.language.util.IncorrectOperationException;
 

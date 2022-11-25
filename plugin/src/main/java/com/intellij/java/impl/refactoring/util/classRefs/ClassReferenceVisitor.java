@@ -16,7 +16,7 @@
 package com.intellij.java.impl.refactoring.util.classRefs;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 
 public interface ClassReferenceVisitor {
   class TypeOccurence {

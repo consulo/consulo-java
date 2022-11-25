@@ -15,19 +15,18 @@
  */
 package com.intellij.java.impl.codeInsight.highlighting;
 
-import consulo.externalService.statistic.FeatureUsageTracker;
-import consulo.language.editor.CodeInsightBundle;
-import consulo.ide.impl.idea.codeInsight.highlighting.HighlightUsagesHandler;
-import consulo.language.editor.highlight.usage.HighlightUsagesHandlerBase;
-import consulo.ide.impl.idea.featureStatistics.ProductivityFeatureNames;
 import com.intellij.java.language.impl.psi.controlFlow.*;
 import com.intellij.java.language.psi.*;
 import consulo.codeEditor.Editor;
-import consulo.project.Project;
+import consulo.externalService.statistic.FeatureUsageTracker;
+import consulo.ide.impl.idea.codeInsight.highlighting.HighlightUsagesHandler;
+import consulo.ide.impl.idea.featureStatistics.ProductivityFeatureNames;
+import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.highlight.usage.HighlightUsagesHandlerBase;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
-import consulo.ide.impl.idea.util.Consumer;
+import consulo.project.Project;
 import consulo.util.collection.primitive.ints.IntLists;
 
 import javax.annotation.Nullable;
@@ -35,6 +34,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class HighlightExitPointsHandler extends HighlightUsagesHandlerBase<PsiElement> {
   private final PsiElement myTarget;
@@ -51,7 +51,7 @@ public class HighlightExitPointsHandler extends HighlightUsagesHandlerBase<PsiEl
 
   @Override
   protected void selectTargets(final List<PsiElement> targets, final Consumer<List<PsiElement>> selectionConsumer) {
-    selectionConsumer.consume(targets);
+    selectionConsumer.accept(targets);
   }
 
   @Override

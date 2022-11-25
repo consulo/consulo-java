@@ -22,6 +22,7 @@ import consulo.codeEditor.Editor;
 import consulo.fileEditor.FileEditorManager;
 import consulo.navigation.OpenFileDescriptor;
 import consulo.ide.impl.idea.openapi.fileEditor.ex.IdeDocumentHistory;
+import consulo.navigation.OpenFileDescriptorFactory;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
 import com.intellij.java.language.psi.PsiClass;
@@ -69,8 +70,7 @@ public class CreateClassFromUsageFix extends CreateClassFromUsageBaseFix {
 
           IdeDocumentHistory.getInstance(project).includeCurrentPlaceAsChangePlace();
 
-          OpenFileDescriptor descriptor = new OpenFileDescriptor(refElement.getProject(), aClass.getContainingFile().getVirtualFile(),
-                                                                 aClass.getTextOffset());
+          OpenFileDescriptor descriptor = OpenFileDescriptorFactory.getInstance(refElement.getProject()).builder(aClass.getContainingFile().getVirtualFile()).offset(aClass.getTextOffset()).build();
           FileEditorManager.getInstance(aClass.getProject()).openTextEditor(descriptor, true);
         }
       }

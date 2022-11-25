@@ -22,7 +22,7 @@ import com.intellij.java.language.psi.PsiArrayType;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.PsiVariable;
 import consulo.project.Project;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 
 import java.util.ArrayList;
 

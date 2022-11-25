@@ -26,10 +26,10 @@ import com.siyeh.ig.psiutils.ClassUtils;
 import com.siyeh.ig.psiutils.MethodUtils;
 import consulo.application.util.function.Processor;
 import consulo.application.util.query.Query;
-import consulo.ide.impl.idea.codeInspection.ui.MultipleCheckboxOptionsPanel;
 import consulo.java.analysis.codeInspection.CantBeStaticCondition;
 import consulo.java.analysis.codeInspection.JavaExtensionPoints;
 import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.editor.inspection.ui.MultipleCheckboxOptionsPanel;
 import consulo.language.psi.PsiElement;
 import org.jetbrains.annotations.NonNls;
 

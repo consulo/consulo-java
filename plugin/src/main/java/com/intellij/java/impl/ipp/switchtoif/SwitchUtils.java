@@ -19,7 +19,7 @@ import com.intellij.java.language.psi.*;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nullable;
 import com.intellij.java.language.LanguageLevel;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import consulo.language.ast.IElementType;
 import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;

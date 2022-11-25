@@ -17,7 +17,6 @@ package com.intellij.unscramble;
 
 import com.intellij.JavaTestUtil;
 import consulo.execution.ui.RunContentDescriptor;
-import com.intellij.java.impl.unscramble.UnscrambleDialog;
 import consulo.ide.impl.idea.openapi.util.io.FileUtil;
 import com.intellij.testFramework.fixtures.JavaCodeInsightFixtureTestCase;
 import consulo.ui.image.Image;

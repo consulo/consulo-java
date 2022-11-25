@@ -1,12 +1,12 @@
 package consulo.java.impl.ide;
 
 import com.intellij.java.language.vfs.jrt.JrtFileSystem;
-import consulo.language.psi.PsiDirectory;
-import consulo.language.psi.PsiElement;
 import consulo.annotation.access.RequiredReadAction;
+import consulo.java.language.fileTypes.JModFileType;
 import consulo.language.icon.IconDescriptor;
 import consulo.language.icon.IconDescriptorUpdater;
-import consulo.java.language.fileTypes.JModFileType;
+import consulo.language.psi.PsiDirectory;
+import consulo.language.psi.PsiElement;
 
 import javax.annotation.Nonnull;
 
@@ -14,30 +14,24 @@ import javax.annotation.Nonnull;
  * @author VISTALL
  * @since 09-Jan-17
  */
-public class JavaModuleIconDescriptorUpdater implements IconDescriptorUpdater
-{
-	@RequiredReadAction
-	@Override
-	public void updateIcon(@Nonnull IconDescriptor iconDescriptor, @Nonnull PsiElement psiElement, int i)
-	{
+public class JavaModuleIconDescriptorUpdater implements IconDescriptorUpdater {
+  @RequiredReadAction
+  @Override
+  public void updateIcon(@Nonnull IconDescriptor iconDescriptor, @Nonnull PsiElement psiElement, int i) {
 //		if(psiElement instanceof PsiDirectory && isModuleDirectory((PsiDirectory) psiElement))
-		//		{
-		//			iconDescriptor.setMainIcon(AllIcons.Nodes.Module);
-		//		}
-	}
+    //		{
+    //			iconDescriptor.setMainIcon(AllIcons.Nodes.Module);
+    //		}
+  }
 
-	@RequiredReadAction
-	public static boolean isModuleDirectory(PsiDirectory directory)
-	{
-		String name = directory.getName();
-		if(name.equals("classes"))
-		{
-			return JModFileType.isModuleRoot(directory.getVirtualFile());
-		}
-		else if(directory.getVirtualFile().getFileSystem() instanceof JrtFileSystem)
-		{
-			return JrtFileSystem.isModuleRoot(directory.getVirtualFile());
-		}
-		return false;
-	}
+  @RequiredReadAction
+  public static boolean isModuleDirectory(PsiDirectory directory) {
+    String name = directory.getName();
+    if (name.equals("classes")) {
+      return JModFileType.isModuleRoot(directory.getVirtualFile());
+    } else if (directory.getVirtualFile().getFileSystem() instanceof JrtFileSystem) {
+      return JrtFileSystem.isModuleRoot(directory.getVirtualFile());
+    }
+    return false;
+  }
 }

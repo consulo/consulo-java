@@ -15,16 +15,20 @@
  */
 package com.intellij.java.impl.psi.search.scope.packageSet;
 
+import consulo.content.internal.scope.PatternBasedPackageSet;
+import consulo.content.scope.NamedScopesHolder;
+import consulo.content.scope.PackageSet;
+import consulo.ide.impl.psi.search.scope.packageSet.FilePatternPackageSet;
+import consulo.language.editor.wolfAnalyzer.WolfTheProblemSolver;
+import consulo.module.content.ProjectFileIndex;
+import consulo.module.content.ProjectRootManager;
+import consulo.module.content.layer.orderEntry.LibraryOrderEntry;
+import consulo.module.content.layer.orderEntry.ModuleExtensionWithSdkOrderEntry;
+import consulo.module.content.layer.orderEntry.OrderEntry;
 import consulo.project.Project;
-import com.intellij.openapi.roots.*;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.VirtualFile;
-import consulo.language.editor.wolfAnalyzer.WolfTheProblemSolver;
-import consulo.ide.impl.psi.search.scope.packageSet.FilePatternPackageSet;
-import consulo.content.scope.NamedScopesHolder;
-import consulo.content.scope.PackageSet;
-import consulo.ide.impl.psi.search.scope.packageSet.PatternBasedPackageSet;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
@@ -79,10 +83,9 @@ public class PatternPackageSet extends PatternBasedPackageSet {
   }
 
   @Override
-  public boolean contains(VirtualFile file, NamedScopesHolder holder) {
-    Project project = holder.getProject();
+  public boolean contains(VirtualFile file, Project project, NamedScopesHolder holder) {
     ProjectFileIndex fileIndex = ProjectRootManager.getInstance(project).getFileIndex();
-    return matchesScope(file, holder.getProject(), fileIndex) && (myPattern == null || myPattern.matcher(getPackageName(file, fileIndex)).matches());
+    return matchesScope(file, project, fileIndex) && (myPattern == null || myPattern.matcher(getPackageName(file, fileIndex)).matches());
   }
 
   private boolean matchesScope(VirtualFile file, Project project, ProjectFileIndex fileIndex) {

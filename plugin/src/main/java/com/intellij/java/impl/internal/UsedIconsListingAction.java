@@ -19,37 +19,37 @@
  */
 package com.intellij.java.impl.internal;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import com.intellij.ide.highlighter.XmlFileType;
+import com.intellij.java.impl.psi.search.searches.AnnotationTargetsSearch;
+import com.intellij.java.indexing.search.searches.MethodReferencesSearch;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.*;
-import consulo.ui.ex.action.AnAction;
-import consulo.ui.ex.action.AnActionEvent;
-import consulo.language.editor.CommonDataKeys;
-import consulo.application.Result;
-import consulo.language.editor.WriteCommandAction;
-import consulo.project.Project;
-import consulo.module.content.ProjectFileIndex;
-import consulo.module.content.ProjectRootManager;
-import consulo.virtualFileSystem.VirtualFile;
-import com.intellij.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
+import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.application.Result;
+import consulo.application.util.function.Processor;
+import consulo.language.editor.CommonDataKeys;
+import consulo.language.editor.WriteCommandAction;
+import consulo.language.psi.PsiCompiledElement;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiReference;
 import consulo.language.psi.scope.DelegatingGlobalSearchScope;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.search.PsiSearchHelper;
-import com.intellij.java.impl.psi.search.searches.AnnotationTargetsSearch;
-import com.intellij.java.indexing.search.searches.MethodReferencesSearch;
 import consulo.language.psi.util.PsiTreeUtil;
-import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.psi.xml.XmlAttribute;
-import com.intellij.psi.xml.XmlTag;
-import consulo.application.util.function.Processor;
+import consulo.module.content.ProjectFileIndex;
+import consulo.module.content.ProjectRootManager;
+import consulo.project.Project;
+import consulo.ui.ex.action.AnAction;
+import consulo.ui.ex.action.AnActionEvent;
 import consulo.util.collection.MultiMap;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.xml.ide.highlighter.XmlFileType;
+import consulo.xml.psi.XmlRecursiveElementVisitor;
+import consulo.xml.psi.xml.XmlAttribute;
+import consulo.xml.psi.xml.XmlTag;
+
+import java.util.*;
 
 public class UsedIconsListingAction extends AnAction {
   @Override

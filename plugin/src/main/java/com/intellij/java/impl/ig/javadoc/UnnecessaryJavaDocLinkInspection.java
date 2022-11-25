@@ -24,7 +24,7 @@ import com.intellij.java.language.psi.PsiSubstitutor;
 import com.intellij.java.language.psi.javadoc.*;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import consulo.language.ast.IElementType;
 import com.intellij.java.language.psi.util.MethodSignature;
 import com.intellij.java.language.psi.util.MethodSignatureUtil;

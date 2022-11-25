@@ -16,12 +16,12 @@
 package com.intellij.java.impl.packageDependencies.ui;
 
 import consulo.application.AllIcons;
-import consulo.project.Project;
+import consulo.ide.impl.idea.packageDependencies.ui.PackageDependenciesNode;
+import consulo.java.language.impl.icon.JavaPsiImplIconGroup;
+import consulo.language.psi.PsiFile;
 import consulo.module.content.layer.orderEntry.ModuleExtensionWithSdkOrderEntry;
 import consulo.module.content.layer.orderEntry.OrderEntry;
-import consulo.ide.impl.idea.packageDependencies.ui.PackageDependenciesNode;
-import consulo.language.psi.PsiFile;
-import consulo.java.psi.impl.icon.JavaPsiImplIconGroup;
+import consulo.project.Project;
 import consulo.ui.image.Image;
 
 import java.util.Set;

@@ -15,6 +15,8 @@
  */
 package com.intellij.java.impl.lang.java;
 
+import com.intellij.java.language.JavaLanguage;
+import consulo.language.Language;
 import consulo.language.ast.ASTNode;
 import consulo.language.CodeDocumentationAwareCommenterEx;
 import com.intellij.java.language.psi.JavaDocTokenType;
@@ -24,6 +26,8 @@ import consulo.language.psi.PsiElement;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaDocElementType;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import consulo.language.ast.IElementType;
+
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
@@ -99,5 +103,11 @@ public class JavaCommenter implements CodeDocumentationAwareCommenterEx {
     if (element == null) return false;
     final ASTNode node = element.getNode();
     return node != null && (node.getElementType() == JavaDocTokenType.DOC_COMMENT_DATA || node.getElementType() == JavaDocTokenType.DOC_TAG_VALUE_TOKEN);
+  }
+
+  @Nonnull
+  @Override
+  public Language getLanguage() {
+    return JavaLanguage.INSTANCE;
   }
 }

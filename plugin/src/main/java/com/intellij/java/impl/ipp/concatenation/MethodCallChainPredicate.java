@@ -16,7 +16,7 @@
 package com.intellij.java.impl.ipp.concatenation;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 
 import javax.annotation.Nullable;

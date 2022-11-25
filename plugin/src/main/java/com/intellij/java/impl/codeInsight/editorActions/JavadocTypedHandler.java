@@ -15,18 +15,22 @@
  */
 package com.intellij.java.impl.codeInsight.editorActions;
 
-import consulo.language.editor.action.TypedHandlerDelegate;
 import com.intellij.java.language.impl.psi.impl.source.javadoc.PsiDocParamRef;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaDocElementType;
 import com.intellij.java.language.psi.JavaDocTokenType;
 import com.intellij.java.language.psi.javadoc.PsiDocTag;
 import com.intellij.java.language.psi.javadoc.PsiDocTagValue;
-import consulo.language.ast.ASTNode;
-import consulo.document.Document;
 import consulo.codeEditor.Editor;
-import consulo.project.Project;
-import com.intellij.psi.*;
+import consulo.document.Document;
 import consulo.java.impl.application.options.JavaSmartKeysSettings;
+import consulo.language.ast.ASTNode;
+import consulo.language.editor.action.TypedHandlerDelegate;
+import consulo.language.file.FileViewProvider;
+import consulo.language.psi.PsiDocumentManager;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiWhiteSpace;
+import consulo.project.Project;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

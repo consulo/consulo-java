@@ -17,21 +17,21 @@ package com.intellij.java.impl.psi.impl.source.resolve.reference.impl.providers;
 
 import com.intellij.java.language.psi.JavaDirectoryService;
 import com.intellij.java.language.psi.PsiJavaPackage;
-import consulo.language.ast.ASTNode;
-import consulo.language.Language;
 import consulo.document.util.TextRange;
+import consulo.ide.impl.idea.openapi.vfs.ex.dummy.DummyFileSystem;
+import consulo.language.Language;
+import consulo.language.ast.ASTNode;
+import consulo.language.impl.psi.PsiElementBase;
+import consulo.language.psi.*;
+import consulo.language.psi.resolve.PsiElementProcessor;
+import consulo.language.util.IncorrectOperationException;
+import consulo.util.collection.ArrayUtil;
 import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.VirtualFile;
-import consulo.ide.impl.idea.openapi.vfs.ex.dummy.DummyFileSystem;
-import com.intellij.psi.*;
-import com.intellij.psi.impl.PsiElementBase;
-import consulo.language.psi.resolve.PsiElementProcessor;
-import consulo.util.collection.ArrayUtil;
-import consulo.language.util.IncorrectOperationException;
 import org.jetbrains.annotations.NonNls;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import java.util.ArrayList;
 
 /**

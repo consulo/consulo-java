@@ -269,17 +269,17 @@ public class JavaTypedHandler extends TypedHandlerDelegate {
     if (iterator.getTokenType() != gt) {
       return false;
     }
-    while (!iterator.atEnd() && !invalidInsideReference.contains(iterator.getTokenType())) {
+    while (!iterator.atEnd() && !invalidInsideReference.contains((IElementType) iterator.getTokenType())) {
       iterator.advance();
     }
 
-    if (!iterator.atEnd() && invalidInsideReference.contains(iterator.getTokenType())) {
+    if (!iterator.atEnd() && invalidInsideReference.contains((IElementType) iterator.getTokenType())) {
       iterator.retreat();
     }
 
     int balance = 0;
     while (!iterator.atEnd() && balance >= 0) {
-      final IElementType tokenType = iterator.getTokenType();
+      final IElementType tokenType = (IElementType) iterator.getTokenType();
       if (tokenType == lt) {
         balance--;
       } else if (tokenType == gt) {
@@ -310,17 +310,17 @@ public class JavaTypedHandler extends TypedHandlerDelegate {
 
     int offset = editor.getCaretModel().getOffset();
     HighlighterIterator iterator = ((EditorEx) editor).getHighlighter().createIterator(offset);
-    while (iterator.getStart() > 0 && !invalidInsideReference.contains(iterator.getTokenType())) {
+    while (iterator.getStart() > 0 && !invalidInsideReference.contains((IElementType) iterator.getTokenType())) {
       iterator.retreat();
     }
 
-    if (invalidInsideReference.contains(iterator.getTokenType())) {
+    if (invalidInsideReference.contains((IElementType) iterator.getTokenType())) {
       iterator.advance();
     }
 
     int balance = 0;
     while (!iterator.atEnd() && balance >= 0) {
-      final IElementType tokenType = iterator.getTokenType();
+      final IElementType tokenType = (IElementType) iterator.getTokenType();
       if (tokenType == lt) {
         balance++;
       } else if (tokenType == gt) {
@@ -357,7 +357,7 @@ public class JavaTypedHandler extends TypedHandlerDelegate {
     if (iterator.getStart() > 0) {
       iterator.retreat();
     }
-    final IElementType tokenType = iterator.getTokenType();
+    final IElementType tokenType = (IElementType) iterator.getTokenType();
     if (tokenType == JavaTokenType.DOT) {
       return true;
     }

@@ -15,10 +15,7 @@
  */
 package com.intellij.java.impl.codeInsight.generation;
 
-import consulo.language.editor.CodeInsightBundle;
-import consulo.ide.impl.idea.codeInsight.CodeInsightUtilBase;
-import consulo.ide.impl.idea.codeInsight.generation.ClassMember;
-import consulo.ide.impl.idea.ide.util.MemberChooser;
+import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.impl.codeInsight.generation.OverrideImplementExploreUtil;
 import com.intellij.java.language.impl.codeInsight.generation.PsiElementClassMember;
 import com.intellij.java.language.impl.psi.scope.processor.VariablesProcessor;
@@ -29,19 +26,28 @@ import com.intellij.java.language.psi.util.MethodSignature;
 import com.intellij.java.language.psi.util.PropertyUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
-import consulo.language.editor.action.LanguageCodeInsightActionHandler;
 import consulo.application.ApplicationManager;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.ScrollType;
 import consulo.document.FileDocumentManager;
-import consulo.project.Project;
-import consulo.ui.ex.awt.DialogWrapper;
-import com.intellij.psi.*;
+import consulo.ide.impl.idea.codeInsight.CodeInsightUtilBase;
+import consulo.ide.impl.idea.ide.util.MemberChooser;
+import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.Language;
 import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.action.LanguageCodeInsightActionHandler;
+import consulo.language.editor.generation.ClassMember;
+import consulo.language.psi.PsiDocumentManager;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiManager;
+import consulo.language.psi.resolve.ResolveState;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.logging.Logger;
+import consulo.project.Project;
+import consulo.ui.ex.awt.DialogWrapper;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
@@ -452,5 +458,11 @@ public class GenerateDelegateHandler implements LanguageCodeInsightActionHandler
         }
       }
     }
+  }
+
+  @Nonnull
+  @Override
+  public Language getLanguage() {
+    return JavaLanguage.INSTANCE;
   }
 }

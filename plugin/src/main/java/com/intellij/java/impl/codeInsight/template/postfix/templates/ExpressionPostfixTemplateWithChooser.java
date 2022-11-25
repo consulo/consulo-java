@@ -29,13 +29,13 @@ import consulo.undoRedo.CommandProcessor;
 import consulo.document.Document;
 import consulo.codeEditor.Editor;
 import consulo.util.lang.function.Condition;
-import com.intellij.openapi.util.Pass;
 import consulo.language.psi.PsiElement;
 import consulo.language.editor.refactoring.IntroduceTargetChooser;
 import consulo.util.collection.ContainerUtil;
 
 import javax.annotation.Nonnull;
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * @author ignatov
@@ -67,8 +67,8 @@ public abstract class ExpressionPostfixTemplateWithChooser extends PostfixTempla
     } else {
       IntroduceTargetChooser.showChooser(
           editor, expressions,
-          new Pass<PsiExpression>() {
-            public void pass(@Nonnull final PsiExpression e) {
+          new Consumer<PsiExpression>() {
+            public void accept(@Nonnull final PsiExpression e) {
               ApplicationManager.getApplication().runWriteAction(new Runnable() {
                 @Override
                 public void run() {
@@ -111,7 +111,7 @@ public abstract class ExpressionPostfixTemplateWithChooser extends PostfixTempla
   private static List<PsiExpression> maybeTopmostExpression(@Nonnull PsiElement context) {
     PsiExpression expression = JavaPostfixTemplatesUtils.getTopmostExpression(context);
     PsiType type = expression != null ? expression.getType() : null;
-    if (type == null || PsiType.VOID.equals(type)) return ContainerUtil.emptyList();
+    if (type == null || PsiType.VOID.equals(type)) return List.of();
     return ContainerUtil.createMaybeSingletonList(expression);
   }
 

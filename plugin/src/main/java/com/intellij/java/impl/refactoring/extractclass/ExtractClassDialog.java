@@ -15,35 +15,36 @@
  */
 package com.intellij.java.impl.refactoring.extractclass;
 
+import com.intellij.java.impl.refactoring.HelpID;
+import com.intellij.java.impl.refactoring.PackageWrapper;
+import com.intellij.java.impl.refactoring.RefactorJBundle;
+import com.intellij.java.impl.refactoring.move.moveClassesOrPackages.DestinationFolderComboBox;
 import com.intellij.java.impl.refactoring.ui.JavaVisibilityPanel;
 import com.intellij.java.impl.refactoring.ui.MemberSelectionPanel;
 import com.intellij.java.impl.refactoring.ui.MemberSelectionTable;
 import com.intellij.java.impl.refactoring.ui.PackageNameReferenceEditorCombo;
+import com.intellij.java.impl.refactoring.util.classMembers.MemberInfo;
+import com.intellij.java.impl.ui.ReferenceEditorComboWithBrowseButton;
 import com.intellij.java.language.psi.*;
 import consulo.application.HelpManager;
 import consulo.configurable.ConfigurationException;
-import consulo.project.Project;
-import consulo.module.content.ProjectRootManager;
-import consulo.ui.ex.awt.Messages;
-import com.intellij.psi.*;
-import consulo.language.psi.util.SymbolPresentationUtil;
-import consulo.language.psi.util.PsiTreeUtil;
-import com.intellij.java.impl.refactoring.HelpID;
-import com.intellij.java.impl.refactoring.PackageWrapper;
-import com.intellij.java.impl.refactoring.RefactorJBundle;
 import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.editor.refactoring.classMember.DelegatingMemberInfoModel;
 import consulo.language.editor.refactoring.classMember.MemberInfoBase;
 import consulo.language.editor.refactoring.classMember.MemberInfoChange;
 import consulo.language.editor.refactoring.classMember.MemberInfoChangeListener;
-import com.intellij.java.impl.refactoring.move.moveClassesOrPackages.DestinationFolderComboBox;
-import com.intellij.refactoring.ui.*;
-import com.intellij.java.impl.refactoring.util.classMembers.MemberInfo;
-import consulo.ui.ex.awt.event.DocumentAdapter;
-import com.intellij.java.impl.ui.ReferenceEditorComboWithBrowseButton;
+import consulo.language.editor.refactoring.ui.RefactoringDialog;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiManager;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.SymbolPresentationUtil;
+import consulo.module.content.ProjectRootManager;
+import consulo.project.Project;
 import consulo.ui.ex.awt.JBLabelDecorator;
-import consulo.ui.util.FormBuilder;
+import consulo.ui.ex.awt.Messages;
 import consulo.ui.ex.awt.UIUtil;
+import consulo.ui.ex.awt.event.DocumentAdapter;
+import consulo.ui.util.FormBuilder;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -87,9 +88,9 @@ class ExtractClassDialog extends RefactoringDialog implements MemberInfoChangeLi
     final String text = file instanceof PsiJavaFile ? ((PsiJavaFile)file).getPackageName() : "";
     packageTextField = new PackageNameReferenceEditorCombo(text, myProject, "ExtractClass.RECENTS_KEY",
                                                            RefactorJBundle.message("choose.destination.package.label"));
-    packageTextField.getChildComponent().getDocument().addDocumentListener(new com.intellij.openapi.editor.event.DocumentAdapter() {
+    packageTextField.getChildComponent().getDocument().addDocumentListener(new consulo.document.event.DocumentAdapter() {
       @Override
-      public void documentChanged(com.intellij.openapi.editor.event.DocumentEvent e) {
+      public void documentChanged(consulo.document.event.DocumentEvent e) {
         validateButtons();
       }
     });
@@ -248,7 +249,7 @@ class ExtractClassDialog extends RefactoringDialog implements MemberInfoChangeLi
   }
 
   protected JComponent createNorthPanel() {
-    FormBuilder builder = FormBuilder.createFormBuilder()
+    consulo.ui.ex.awt.FormBuilder builder = consulo.ui.ex.awt.FormBuilder.createFormBuilder()
       .addComponent(
         JBLabelDecorator.createJBLabelDecorator(RefactorJBundle.message("extract.class.from.label", sourceClass.getQualifiedName()))
           .setBold(true))

@@ -15,12 +15,12 @@
  */
 package com.intellij.java.impl.codeInspection.ui;
 
-import consulo.ide.impl.idea.codeInspection.ex.GlobalInspectionContextImpl;
-import consulo.ide.impl.idea.codeInspection.ex.GlobalInspectionToolWrapper;
-import consulo.language.editor.inspection.scheme.InspectionToolWrapper;
-import consulo.ide.impl.idea.codeInspection.ui.InspectionNode;
+import com.intellij.java.impl.codeInspection.deadCode.DummyEntryPointsTool;
 import consulo.application.AllIcons;
-import com.intellij.java.impl.codeInspection.deadCode.DummyEntryPointsEP;
+import consulo.ide.impl.idea.codeInspection.ex.GlobalInspectionContextImpl;
+import consulo.ide.impl.idea.codeInspection.ui.InspectionNode;
+import consulo.language.editor.impl.internal.inspection.scheme.GlobalInspectionToolWrapper;
+import consulo.language.editor.inspection.scheme.InspectionToolWrapper;
 import consulo.ui.image.Image;
 
 import javax.annotation.Nonnull;
@@ -34,7 +34,7 @@ public class EntryPointsNode extends InspectionNode {
   }
 
   private static InspectionToolWrapper createDummyWrapper(@Nonnull GlobalInspectionContextImpl context) {
-    InspectionToolWrapper toolWrapper = new GlobalInspectionToolWrapper(new DummyEntryPointsEP());
+    InspectionToolWrapper toolWrapper = new GlobalInspectionToolWrapper(new DummyEntryPointsTool());
     toolWrapper.initialize(context);
     return toolWrapper;
   }

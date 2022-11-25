@@ -20,26 +20,26 @@ import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiClassOwner;
 import com.intellij.java.language.psi.PsiJavaPackage;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.application.Result;
 import consulo.dataContext.DataContext;
 import consulo.language.editor.LangDataKeys;
-import consulo.application.Result;
 import consulo.language.editor.WriteCommandAction;
-import consulo.module.Module;
-import consulo.project.Project;
+import consulo.language.editor.refactoring.move.MoveCallback;
+import consulo.language.editor.refactoring.move.fileOrDirectory.MoveFilesOrDirectoriesHandler;
+import consulo.language.editor.refactoring.move.fileOrDirectory.MoveFilesOrDirectoriesUtil;
+import consulo.language.editor.util.PsiUtilBase;
 import consulo.language.psi.PsiDirectory;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.scope.GlobalSearchScope;
-import consulo.language.editor.util.PsiUtilBase;
-import consulo.language.editor.refactoring.move.MoveCallback;
-import consulo.language.editor.refactoring.move.fileOrDirectory.MoveFilesOrDirectoriesHandler;
-import consulo.language.editor.refactoring.move.fileOrDirectory.MoveFilesOrDirectoriesUtil;
-import consulo.util.collection.ArrayUtil;
-import consulo.ide.impl.idea.util.Function;
 import consulo.language.util.IncorrectOperationException;
+import consulo.module.Module;
+import consulo.project.Project;
+import consulo.util.collection.ArrayUtil;
 
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.function.Function;
 
 public class JavaMoveFilesOrDirectoriesHandler extends MoveFilesOrDirectoriesHandler {
   @Override
@@ -79,7 +79,7 @@ public class JavaMoveFilesOrDirectoriesHandler extends MoveFilesOrDirectoriesHan
     MoveFilesOrDirectoriesUtil
         .doMove(project, elements, new PsiElement[]{targetContainer}, callback, new Function<PsiElement[], PsiElement[]>() {
           @Override
-          public PsiElement[] fun(final PsiElement[] elements) {
+          public PsiElement[] apply(final PsiElement[] elements) {
             return new WriteCommandAction<PsiElement[]>(project, "Regrouping ...") {
               @Override
               protected void run(Result<PsiElement[]> result) throws Throwable {

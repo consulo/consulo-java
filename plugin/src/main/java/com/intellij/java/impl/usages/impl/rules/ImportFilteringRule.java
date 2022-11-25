@@ -15,21 +15,23 @@
  */
 package com.intellij.java.impl.usages.impl.rules;
 
-import javax.annotation.Nonnull;
-
-import consulo.language.psi.PsiElement;
-import consulo.language.psi.PsiFile;
 import com.intellij.java.language.psi.PsiImportList;
 import com.intellij.java.language.psi.PsiJavaFile;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.usage.Usage;
 import consulo.usage.rule.PsiElementUsage;
+
+import javax.annotation.Nonnull;
 
 /**
  * @author Eugene Zhuravlev
  *         Date: Jan 17, 2005
  */
-public class ImportFilteringRule extends consulo.usage.rule.ImportFilteringRule {
+@ExtensionImpl
+public class ImportFilteringRule implements consulo.usage.rule.ImportFilteringRule {
   public boolean isVisible(@Nonnull Usage usage) {
     if (usage instanceof PsiElementUsage) {
       final PsiElement psiElement = ((PsiElementUsage)usage).getElement();

@@ -17,12 +17,7 @@ package com.intellij.java.impl.codeInsight.completion;
 
 import consulo.language.editor.AutoPopupController;
 import consulo.language.editor.CodeInsightSettings;
-import consulo.language.editor.completion.lookup.TailType;
-import consulo.language.editor.completion.lookup.InsertionContext;
-import consulo.language.editor.completion.lookup.Lookup;
-import consulo.language.editor.completion.lookup.LookupElement;
-import consulo.language.editor.completion.lookup.LookupItem;
-import consulo.language.editor.completion.lookup.TailTypeDecorator;
+import consulo.language.editor.completion.lookup.*;
 import com.intellij.java.impl.codeInsight.ExpectedTypeInfo;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.LanguageLevel;
@@ -127,7 +122,7 @@ public class SmartCompletionDecorator extends TailTypeDecorator<LookupElement> {
 
     super.handleInsert(context);
 
-    if (tailType == TailType.COMMA) {
+    if (tailType == CommaTailType.INSTANCE) {
       AutoPopupController.getInstance(context.getProject()).autoPopupParameterInfo(context.getEditor(), null);
     }
   }

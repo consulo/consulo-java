@@ -19,7 +19,7 @@ import com.intellij.java.language.psi.PsiCatchSection;
 import com.intellij.java.language.psi.PsiCodeBlock;
 import com.intellij.java.language.psi.PsiDisjunctionType;
 import com.intellij.java.language.psi.PsiType;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 
 class MulticatchPredicate implements PsiElementPredicate {

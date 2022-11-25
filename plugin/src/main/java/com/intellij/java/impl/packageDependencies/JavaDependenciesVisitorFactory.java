@@ -25,7 +25,7 @@ import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.ide.impl.idea.packageDependencies.DependenciesBuilder;
 import consulo.ide.impl.idea.packageDependencies.DependenciesVisitorFactory;
-import consulo.ide.impl.idea.packageDependencies.DependencyValidationManager;
+import consulo.language.editor.packageDependency.DependencyValidationManager;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.PsiReference;

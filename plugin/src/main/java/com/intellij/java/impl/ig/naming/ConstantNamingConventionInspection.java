@@ -19,12 +19,13 @@ import com.intellij.java.language.psi.PsiEnumConstant;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.java.language.psi.PsiType;
-import consulo.ui.CheckBox;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.intellij.java.impl.ig.fixes.RenameFix;
 import com.siyeh.ig.psiutils.ClassUtils;
+import consulo.language.editor.inspection.ui.CheckBox;
+
 import javax.annotation.Nonnull;
 
 import javax.swing.JComponent;

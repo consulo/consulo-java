@@ -19,7 +19,7 @@ import com.intellij.java.impl.codeInsight.generation.GenerateMembersUtil;
 import com.intellij.java.language.psi.*;
 import consulo.project.Project;
 import consulo.util.lang.ref.Ref;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import consulo.language.psi.util.SymbolPresentationUtil;
 import consulo.language.psi.search.ReferencesSearch;
 import com.intellij.java.language.psi.util.PropertyUtil;

@@ -15,20 +15,21 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
-import javax.annotation.Nonnull;
-
+import com.intellij.java.impl.psi.codeStyle.JavaCodeStyleSettings;
 import com.intellij.java.language.psi.*;
-import org.jetbrains.annotations.Nls;
-import consulo.language.editor.intention.IntentionAction;
+import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import consulo.codeEditor.Editor;
-import consulo.project.Project;
-import com.intellij.psi.*;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.codeStyle.CodeStyleSettings;
 import consulo.language.codeStyle.CodeStyleSettingsManager;
-import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
-import com.intellij.java.impl.psi.codeStyle.JavaCodeStyleSettings;
+import consulo.language.editor.intention.IntentionAction;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+import org.jetbrains.annotations.Nls;
+
+import javax.annotation.Nonnull;
 
 /**
  * @author Pavel.Dolgov

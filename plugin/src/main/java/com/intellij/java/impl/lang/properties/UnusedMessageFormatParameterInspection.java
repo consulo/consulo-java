@@ -41,7 +41,7 @@ import java.util.Set;
  * User: anna
  * Date: 07-Sep-2005
  */
-public class UnusedMessageFormatParameterInspection extends BaseLocalInspectionTool {
+public abstract class UnusedMessageFormatParameterInspection extends BaseLocalInspectionTool {
   public static final String REGEXP = "regexp";
 
   @Nonnull

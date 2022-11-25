@@ -18,18 +18,17 @@ package com.intellij.java.impl.psi.util;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import consulo.application.Application;
-import consulo.ide.ServiceManager;
-import consulo.project.Project;
-import consulo.util.lang.Pair;
-import consulo.ide.impl.idea.openapi.vfs.VfsUtilCore;
-import consulo.virtualFileSystem.VirtualFile;
-import com.intellij.psi.*;
-import consulo.language.psi.path.FileReference;
-import consulo.util.collection.ContainerUtil;
-import consulo.util.collection.SLRUMap;
-import consulo.ui.ex.awt.JBUI;
 import consulo.disposer.Disposable;
+import consulo.ide.ServiceManager;
+import consulo.ide.impl.idea.openapi.vfs.VfsUtilCore;
+import consulo.language.psi.*;
+import consulo.language.psi.path.FileReference;
+import consulo.project.Project;
+import consulo.ui.ex.awt.JBUI;
 import consulo.ui.image.Image;
+import consulo.util.collection.SLRUMap;
+import consulo.util.lang.Pair;
+import consulo.virtualFileSystem.VirtualFile;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
@@ -46,150 +45,121 @@ import java.util.Locale;
  * @since 15
  */
 @Singleton
-public class ProjectIconsAccessor implements Disposable
-{
-	@Nonnull
-	public static ProjectIconsAccessor getInstance(@Nonnull Project project)
-	{
-		return ServiceManager.getService(project, ProjectIconsAccessor.class);
-	}
+public class ProjectIconsAccessor implements Disposable {
+  @Nonnull
+  public static ProjectIconsAccessor getInstance(@Nonnull Project project) {
+    return ServiceManager.getService(project, ProjectIconsAccessor.class);
+  }
 
-	private static final int ICON_MAX_WEIGHT = 16;
+  private static final int ICON_MAX_WEIGHT = 16;
 
-	private static final int ICON_MAX_HEIGHT = 16;
+  private static final int ICON_MAX_HEIGHT = 16;
 
-	private static final String JAVAX_SWING_ICON = "javax.swing.Icon";
+  private static final String JAVAX_SWING_ICON = "javax.swing.Icon";
 
-	private static final int ICON_MAX_SIZE = 2 * 1024 * 1024; // 2Kb
+  private static final int ICON_MAX_SIZE = 2 * 1024 * 1024; // 2Kb
 
-	private static final List<String> ICON_EXTENSIONS = ContainerUtil.immutableList("png", "ico", "bmp", "gif", "jpg", "svg");
+  private static final List<String> ICON_EXTENSIONS = List.of("png", "ico", "bmp", "gif", "jpg", "svg");
 
-	private final SLRUMap<String, Pair<Long, Image>> myIconsCache = new SLRUMap<>(500, 1000);
+  private final SLRUMap<String, Pair<Long, Image>> myIconsCache = new SLRUMap<>(500, 1000);
 
-	@Inject
-	ProjectIconsAccessor(Project project)
-	{
-	}
+  @Inject
+  ProjectIconsAccessor(Project project) {
+  }
 
-	@Nullable
-	public VirtualFile resolveIconFile(PsiType type, @Nullable PsiExpression initializer)
-	{
-		if(initializer == null || !initializer.isValid() || !isIconClassType(type))
-		{
-			return null;
-		}
+  @Nullable
+  public VirtualFile resolveIconFile(PsiType type, @Nullable PsiExpression initializer) {
+    if (initializer == null || !initializer.isValid() || !isIconClassType(type)) {
+      return null;
+    }
 
-		final List<FileReference> refs = new ArrayList<FileReference>();
-		initializer.accept(new JavaRecursiveElementWalkingVisitor()
-		{
-			@Override
-			public void visitElement(PsiElement element)
-			{
-				if(element instanceof PsiLiteralExpression)
-				{
-					for(PsiReference ref : element.getReferences())
-					{
-						if(ref instanceof FileReference)
-						{
-							refs.add((FileReference) ref);
-						}
-					}
-				}
-				super.visitElement(element);
-			}
-		});
+    final List<FileReference> refs = new ArrayList<FileReference>();
+    initializer.accept(new JavaRecursiveElementWalkingVisitor() {
+      @Override
+      public void visitElement(PsiElement element) {
+        if (element instanceof PsiLiteralExpression) {
+          for (PsiReference ref : element.getReferences()) {
+            if (ref instanceof FileReference) {
+              refs.add((FileReference) ref);
+            }
+          }
+        }
+        super.visitElement(element);
+      }
+    });
 
-		for(FileReference ref : refs)
-		{
-			final PsiFileSystemItem psiFileSystemItem = ref.resolve();
-			VirtualFile file = null;
-			if(psiFileSystemItem == null)
-			{
-				final ResolveResult[] results = ref.multiResolve(false);
-				for(ResolveResult result : results)
-				{
-					final PsiElement element = result.getElement();
-					if(element instanceof PsiBinaryFile)
-					{
-						file = ((PsiFile) element).getVirtualFile();
-						break;
-					}
-				}
-			}
-			else
-			{
-				file = psiFileSystemItem.getVirtualFile();
-			}
+    for (FileReference ref : refs) {
+      final PsiFileSystemItem psiFileSystemItem = ref.resolve();
+      VirtualFile file = null;
+      if (psiFileSystemItem == null) {
+        final ResolveResult[] results = ref.multiResolve(false);
+        for (ResolveResult result : results) {
+          final PsiElement element = result.getElement();
+          if (element instanceof PsiBinaryFile) {
+            file = ((PsiFile) element).getVirtualFile();
+            break;
+          }
+        }
+      } else {
+        file = psiFileSystemItem.getVirtualFile();
+      }
 
-			if(file == null || file.isDirectory() || !isIconFileExtension(file.getExtension()) || file.getLength() > ICON_MAX_SIZE)
-			{
-				continue;
-			}
+      if (file == null || file.isDirectory() || !isIconFileExtension(file.getExtension()) || file.getLength() > ICON_MAX_SIZE) {
+        continue;
+      }
 
-			return file;
-		}
-		return null;
-	}
+      return file;
+    }
+    return null;
+  }
 
-	@Nullable
-	public Image getIcon(@Nonnull VirtualFile file, @Nullable PsiElement element)
-	{
-		final String path = file.getPath();
-		final long stamp = file.getModificationStamp();
-		Pair<Long, Image> iconInfo = myIconsCache.get(path);
-		if(iconInfo == null || iconInfo.getFirst() < stamp)
-		{
-			try
-			{
-				final Image icon = createOrFindBetterIcon(file, isConsuloProject(element));
-				iconInfo = new Pair<>(stamp, hasProperSize(icon) ? icon : null);
-				myIconsCache.put(file.getPath(), iconInfo);
-			}
-			catch(Exception e)
-			{
-				iconInfo = null;
-				myIconsCache.remove(path);
-			}
-		}
-		return iconInfo == null ? null : iconInfo.getSecond();
-	}
+  @Nullable
+  public Image getIcon(@Nonnull VirtualFile file, @Nullable PsiElement element) {
+    final String path = file.getPath();
+    final long stamp = file.getModificationStamp();
+    Pair<Long, Image> iconInfo = myIconsCache.get(path);
+    if (iconInfo == null || iconInfo.getFirst() < stamp) {
+      try {
+        final Image icon = createOrFindBetterIcon(file, isConsuloProject(element));
+        iconInfo = new Pair<>(stamp, hasProperSize(icon) ? icon : null);
+        myIconsCache.put(file.getPath(), iconInfo);
+      } catch (Exception e) {
+        iconInfo = null;
+        myIconsCache.remove(path);
+      }
+    }
+    return iconInfo == null ? null : iconInfo.getSecond();
+  }
 
-	public static boolean isIconClassType(PsiType type)
-	{
-		return InheritanceUtil.isInheritor(type, JAVAX_SWING_ICON) || InheritanceUtil.isInheritor(type, Image.class.getName());
-	}
+  public static boolean isIconClassType(PsiType type) {
+    return InheritanceUtil.isInheritor(type, JAVAX_SWING_ICON) || InheritanceUtil.isInheritor(type, Image.class.getName());
+  }
 
-	private static boolean isIconFileExtension(String extension)
-	{
-		return extension != null && ICON_EXTENSIONS.contains(extension.toLowerCase(Locale.US));
-	}
+  private static boolean isIconFileExtension(String extension) {
+    return extension != null && ICON_EXTENSIONS.contains(extension.toLowerCase(Locale.US));
+  }
 
-	private static boolean hasProperSize(Image icon)
-	{
-		return icon.getHeight() <= JBUI.scale(ICON_MAX_WEIGHT) && icon.getWidth() <= JBUI.scale(ICON_MAX_HEIGHT);
-	}
+  private static boolean hasProperSize(Image icon) {
+    return icon.getHeight() <= JBUI.scale(ICON_MAX_WEIGHT) && icon.getWidth() <= JBUI.scale(ICON_MAX_HEIGHT);
+  }
 
-	private static boolean isConsuloProject(@Nullable PsiElement element)
-	{
-		if(element == null)
-		{
-			return false;
-		}
-		return JavaPsiFacade.getInstance(element.getProject()).findClass(Application.class.getName(), element.getResolveScope()) != null;
-	}
+  private static boolean isConsuloProject(@Nullable PsiElement element) {
+    if (element == null) {
+      return false;
+    }
+    return JavaPsiFacade.getInstance(element.getProject()).findClass(Application.class.getName(), element.getResolveScope()) != null;
+  }
 
-	private static Image createOrFindBetterIcon(VirtualFile file, boolean useIconLoader) throws IOException
-	{
+  private static Image createOrFindBetterIcon(VirtualFile file, boolean useIconLoader) throws IOException {
 //		if(useIconLoader)
 //		{
 //			return IconLoader.findIcon(new File(file.getPath()).toURI().toURL());
 //		}
-		return Image.fromUrl(VfsUtilCore.virtualToIoFile(file).toURI().toURL());
-	}
+    return Image.fromUrl(VfsUtilCore.virtualToIoFile(file).toURI().toURL());
+  }
 
-	@Override
-	public void dispose()
-	{
-		myIconsCache.clear();
-	}
+  @Override
+  public void dispose() {
+    myIconsCache.clear();
+  }
 }

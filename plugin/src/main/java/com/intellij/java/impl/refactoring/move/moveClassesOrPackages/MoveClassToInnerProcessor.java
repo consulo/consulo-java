@@ -35,8 +35,6 @@ import consulo.language.editor.util.PsiUtilBase;
 import consulo.language.editor.refactoring.BaseRefactoringProcessor;
 import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.editor.refactoring.move.MoveCallback;
-import com.intellij.refactoring.move.MoveMultipleElementsViewDescriptor;
-import com.intellij.refactoring.move.moveClassesOrPackages.CommonMoveUtil;
 import consulo.language.editor.refactoring.rename.RenameUtil;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import consulo.usage.MoveRenameUsageInfo;
@@ -44,7 +42,6 @@ import consulo.usage.NonCodeUsageInfo;
 import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
 import consulo.usage.UsageInfo;
 import consulo.usage.UsageViewDescriptor;
-import consulo.ide.impl.idea.util.Function;
 import consulo.language.util.IncorrectOperationException;
 import consulo.application.util.function.Processor;
 import consulo.util.collection.MultiMap;
@@ -53,6 +50,7 @@ import consulo.util.dataholder.Key;
 
 import javax.annotation.Nonnull;
 import java.util.*;
+import java.util.function.Function;
 
 /**
  * @author yole
@@ -232,7 +230,7 @@ public class MoveClassToInnerProcessor extends BaseRefactoringProcessor {
   protected String getCommandName() {
     return RefactoringBundle.message("move.class.to.inner.command.name",
         (myClassesToMove.length > 1 ? "classes " : "class ") + StringUtil.join(myClassesToMove, new Function<PsiClass, String>() {
-          public String fun(PsiClass psiClass) {
+          public String apply(PsiClass psiClass) {
             return psiClass.getName();
           }
         }, ", "),

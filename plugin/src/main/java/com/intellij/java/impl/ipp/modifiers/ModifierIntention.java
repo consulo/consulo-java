@@ -20,7 +20,7 @@ import com.intellij.java.language.psi.*;
 import consulo.application.AccessToken;
 import consulo.application.WriteAction;
 import consulo.ide.impl.idea.openapi.util.io.FileUtil;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import com.intellij.java.language.impl.psi.impl.source.resolve.JavaResolveUtil;
 import com.intellij.java.indexing.search.searches.OverridingMethodsSearch;
 import consulo.language.psi.search.ReferencesSearch;

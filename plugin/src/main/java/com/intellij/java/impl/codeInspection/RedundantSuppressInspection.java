@@ -15,30 +15,32 @@
  */
 package com.intellij.java.impl.codeInspection;
 
-import consulo.language.editor.scope.AnalysisScope;
 import com.intellij.java.analysis.codeInspection.GroupNames;
-import com.intellij.codeInspection.ex.*;
-import consulo.language.editor.inspection.reference.RefElement;
-import consulo.language.editor.inspection.reference.RefEntity;
-import consulo.ide.impl.idea.codeInspection.reference.RefManagerImpl;
-import consulo.language.editor.inspection.reference.RefVisitor;
-import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
 import com.intellij.java.analysis.codeInspection.reference.RefClass;
 import com.intellij.java.analysis.codeInspection.reference.RefJavaVisitor;
 import com.intellij.java.analysis.impl.codeInspection.JavaSuppressionUtil;
 import com.intellij.java.impl.codeInsight.daemon.impl.RemoveSuppressWarningAction;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import consulo.util.xml.serializer.WriteExternalException;
-import consulo.util.lang.StringUtil;
-import consulo.language.editor.inspection.scheme.InspectionProjectProfileManager;
+import consulo.language.editor.impl.inspection.reference.RefManagerImpl;
+import consulo.language.editor.impl.internal.inspection.GlobalInspectionContextBase;
+import consulo.language.editor.impl.internal.inspection.scheme.GlobalInspectionToolWrapper;
+import consulo.language.editor.inspection.*;
+import consulo.language.editor.inspection.reference.RefElement;
+import consulo.language.editor.inspection.reference.RefEntity;
+import consulo.language.editor.inspection.reference.RefVisitor;
+import consulo.language.editor.inspection.scheme.*;
+import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
+import consulo.language.editor.scope.AnalysisScope;
 import consulo.language.psi.PsiComment;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.logging.Logger;
+import consulo.project.Project;
 import consulo.util.collection.BidirectionalMap;
 import consulo.util.collection.ContainerUtil;
-import consulo.logging.Logger;
+import consulo.util.lang.StringUtil;
+import consulo.util.xml.serializer.WriteExternalException;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
 
@@ -50,7 +52,7 @@ import java.util.*;
 /**
  * @author cdr
  */
-public class RedundantSuppressInspection extends GlobalInspectionTool {
+public abstract class RedundantSuppressInspection extends GlobalInspectionTool {
   private BidirectionalMap<String, QuickFix> myQuickFixes = null;
   private static final Logger LOG = Logger.getInstance(RedundantSuppressInspection.class);
 

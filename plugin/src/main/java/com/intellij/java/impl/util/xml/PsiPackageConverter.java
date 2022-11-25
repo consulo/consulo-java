@@ -21,10 +21,10 @@ import com.intellij.java.language.psi.PsiJavaPackage;
 import consulo.language.psi.ElementManipulators;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
-import com.intellij.util.xml.ConvertContext;
-import com.intellij.util.xml.Converter;
-import com.intellij.util.xml.CustomReferenceConverter;
-import com.intellij.util.xml.GenericDomValue;
+import consulo.xml.util.xml.ConvertContext;
+import consulo.xml.util.xml.Converter;
+import consulo.xml.util.xml.CustomReferenceConverter;
+import consulo.xml.util.xml.GenericDomValue;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;

@@ -19,7 +19,7 @@ import com.intellij.java.language.impl.psi.Bottom;
 import com.intellij.java.language.impl.psi.PsiTypeVariable;
 import com.intellij.java.language.psi.*;
 import consulo.logging.Logger;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.language.editor.refactoring.RefactoringBundle;
 import com.intellij.java.impl.refactoring.typeCook.Settings;

@@ -15,40 +15,37 @@
  */
 package com.intellij.java.impl.ig.classlayout;
 
-import java.awt.BorderLayout;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.annotation.Nullable;
-import javax.swing.JComponent;
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
-
-import javax.annotation.Nonnull;
-
-import com.intellij.java.language.codeInsight.AnnotationUtil;
-import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.impl.codeInspection.util.SpecialAnnotationsUtil;
-import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import consulo.ui.ex.awt.Messages;
-import com.intellij.psi.*;
-import consulo.language.codeStyle.CodeStyleManager;
-import consulo.language.psi.scope.GlobalSearchScope;
-import consulo.content.scope.SearchScope;
+import com.intellij.java.impl.ig.fixes.AddToIgnoreIfAnnotatedByListQuickFix;
+import com.intellij.java.impl.ig.psiutils.UtilityClassUtil;
 import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
-import consulo.language.psi.search.ReferencesSearch;
-import consulo.language.util.IncorrectOperationException;
-import consulo.application.util.query.Query;
-import consulo.ui.CheckBox;
+import com.intellij.java.language.codeInsight.AnnotationUtil;
+import com.intellij.java.language.psi.*;
 import com.siyeh.HardcodedMethodConstants;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.fixes.AddToIgnoreIfAnnotatedByListQuickFix;
-import com.intellij.java.impl.ig.psiutils.UtilityClassUtil;
 import com.siyeh.ig.ui.ExternalizableStringSet;
+import consulo.application.util.query.Query;
+import consulo.content.scope.SearchScope;
+import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.editor.inspection.ui.CheckBox;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiReference;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.search.ReferencesSearch;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+import consulo.ui.ex.awt.Messages;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.swing.*;
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UtilityClassWithoutPrivateConstructorInspection extends BaseInspection {
 
@@ -75,10 +72,10 @@ public class UtilityClassWithoutPrivateConstructorInspection extends BaseInspect
   public JComponent createOptionsPanel() {
     final JPanel panel = new JPanel(new BorderLayout());
     final JPanel annotationsPanel = SpecialAnnotationsUtil.createSpecialAnnotationsListControl(
-      ignorableAnnotations, InspectionGadgetsBundle.message("ignore.if.annotated.by"));
+        ignorableAnnotations, InspectionGadgetsBundle.message("ignore.if.annotated.by"));
     panel.add(annotationsPanel, BorderLayout.CENTER);
     final CheckBox checkBox = new CheckBox(InspectionGadgetsBundle.message("utility.class.without.private.constructor.option"),
-                                           this, "ignoreClassesWithOnlyMain");
+        this, "ignoreClassesWithOnlyMain");
     panel.add(checkBox, BorderLayout.SOUTH);
     return panel;
   }
@@ -87,12 +84,11 @@ public class UtilityClassWithoutPrivateConstructorInspection extends BaseInspect
   @Override
   protected InspectionGadgetsFix[] buildFixes(Object... infos) {
     final List<InspectionGadgetsFix> fixes = new ArrayList();
-    final PsiClass aClass = (PsiClass)infos[0];
+    final PsiClass aClass = (PsiClass) infos[0];
     final PsiMethod constructor = getNullArgConstructor(aClass);
     if (constructor == null) {
       fixes.add(new CreateEmptyPrivateConstructor());
-    }
-    else {
+    } else {
       final Query<PsiReference> query = ReferencesSearch.search(constructor, constructor.getUseScope());
       final PsiReference reference = query.findFirst();
       if (reference == null) {
@@ -117,7 +113,7 @@ public class UtilityClassWithoutPrivateConstructorInspection extends BaseInspect
       if (!(parent instanceof PsiClass)) {
         return;
       }
-      final PsiClass aClass = (PsiClass)parent;
+      final PsiClass aClass = (PsiClass) parent;
       final Query<PsiReference> query = ReferencesSearch.search(aClass, aClass.getUseScope());
       for (PsiReference reference : query) {
         if (reference == null) {
@@ -129,8 +125,8 @@ public class UtilityClassWithoutPrivateConstructorInspection extends BaseInspect
           SwingUtilities.invokeLater(new Runnable() {
             public void run() {
               Messages.showInfoMessage(aClass.getProject(),
-                                       "Utility class has instantiations, private constructor will not be created",
-                                       "Can't generate constructor");
+                  "Utility class has instantiations, private constructor will not be created",
+                  "Can't generate constructor");
             }
           });
           return;
@@ -161,7 +157,7 @@ public class UtilityClassWithoutPrivateConstructorInspection extends BaseInspect
       if (!(parent instanceof PsiClass)) {
         return;
       }
-      final PsiClass aClass = (PsiClass)parent;
+      final PsiClass aClass = (PsiClass) parent;
       final PsiMethod[] constructors = aClass.getConstructors();
       for (final PsiMethod constructor : constructors) {
         final PsiParameterList parameterList = constructor.getParameterList();

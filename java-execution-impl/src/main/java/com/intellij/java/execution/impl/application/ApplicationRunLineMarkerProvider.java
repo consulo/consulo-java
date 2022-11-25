@@ -15,43 +15,50 @@
  */
 package com.intellij.java.execution.impl.application;
 
-import javax.annotation.Nullable;
-import consulo.execution.lineMarker.ExecutorAction;
-import consulo.execution.lineMarker.RunLineMarkerContributor;
-import consulo.application.AllIcons;
-import consulo.ui.ex.action.AnAction;
-import consulo.util.lang.StringUtil;
+import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.PsiClass;
-import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiIdentifier;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.util.PsiMethodUtil;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.application.AllIcons;
+import consulo.execution.lineMarker.ExecutorAction;
+import consulo.execution.lineMarker.RunLineMarkerContributor;
+import consulo.language.Language;
+import consulo.language.psi.PsiElement;
+import consulo.ui.ex.action.AnAction;
 import consulo.util.collection.ContainerUtil;
+import consulo.util.lang.StringUtil;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * @author Dmitry Avdeev
  */
-public class ApplicationRunLineMarkerProvider extends RunLineMarkerContributor
-{
-	@Nullable
-	@Override
-	public Info getInfo(final PsiElement e)
-	{
-		if(isIdentifier(e))
-		{
-			PsiElement element = e.getParent();
-			if(element instanceof PsiClass && PsiMethodUtil.findMainInClass((PsiClass) element) != null || element instanceof PsiMethod && "main".equals(((PsiMethod) element).getName()) &&
-					PsiMethodUtil.isMainMethod((PsiMethod) element))
-			{
-				final AnAction[] actions = ExecutorAction.getActions(0);
-				return new Info(AllIcons.RunConfigurations.TestState.Run, element1 -> StringUtil.join(ContainerUtil.mapNotNull(actions, action -> getText(action, element1)), "\n"), actions);
-			}
-		}
-		return null;
-	}
+@ExtensionImpl
+public class ApplicationRunLineMarkerProvider extends RunLineMarkerContributor {
+  @Nullable
+  @Override
+  public Info getInfo(final PsiElement e) {
+    if (isIdentifier(e)) {
+      PsiElement element = e.getParent();
+      if (element instanceof PsiClass && PsiMethodUtil.findMainInClass((PsiClass) element) != null || element instanceof PsiMethod && "main".equals(((PsiMethod) element).getName()) &&
+          PsiMethodUtil.isMainMethod((PsiMethod) element)) {
+        final AnAction[] actions = ExecutorAction.getActions(0);
+        return new Info(AllIcons.RunConfigurations.TestState.Run, element1 -> StringUtil.join(ContainerUtil.mapNotNull(actions, action -> getText(action, element1)), "\n"), actions);
+      }
+    }
+    return null;
+  }
 
-	protected boolean isIdentifier(PsiElement e)
-	{
-		return e instanceof PsiIdentifier;
-	}
+  protected boolean isIdentifier(PsiElement e) {
+    return e instanceof PsiIdentifier;
+  }
+
+  @Nonnull
+  @Override
+  public Language getLanguage() {
+    return JavaLanguage.INSTANCE;
+  }
 }

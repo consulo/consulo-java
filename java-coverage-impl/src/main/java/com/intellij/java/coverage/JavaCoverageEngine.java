@@ -1,10 +1,5 @@
 package com.intellij.java.coverage;
 
-import consulo.execution.coverage.view.CoverageViewExtension;
-import consulo.execution.coverage.CoverageViewManager;
-import consulo.execution.configuration.RunConfigurationBase;
-import consulo.execution.coverage.CoverageEnabledConfiguration;
-import consulo.execution.test.AbstractTestProxy;
 import com.intellij.java.analysis.impl.psi.controlFlow.AllVariablesControlFlowPolicy;
 import com.intellij.java.coverage.view.JavaCoverageViewExtension;
 import com.intellij.java.execution.CommonJavaRunConfigurationParameters;
@@ -13,45 +8,47 @@ import com.intellij.java.language.impl.JavaClassFileType;
 import com.intellij.java.language.impl.psi.controlFlow.*;
 import com.intellij.java.language.impl.psi.impl.source.tree.java.PsiSwitchStatementImpl;
 import com.intellij.java.language.psi.*;
-import consulo.application.ApplicationManager;
-import consulo.compiler.CompileContext;
-import consulo.compiler.CompileStatusNotification;
-import consulo.compiler.CompilerManager;
-import consulo.codeEditor.Editor;
-import consulo.component.extension.Extensions;
-import consulo.module.Module;
-import consulo.ide.impl.idea.openapi.module.ModuleUtil;
-import consulo.project.Project;
-import consulo.module.content.ModuleRootManager;
-import consulo.module.content.ProjectFileIndex;
-import consulo.module.content.ProjectRootManager;
-import consulo.ui.ex.awt.Messages;
-import consulo.application.util.function.Computable;
-import consulo.ide.impl.idea.openapi.util.io.FileUtil;
-import consulo.ide.impl.idea.openapi.util.io.FileUtilRt;
-import consulo.util.lang.StringUtil;
-import consulo.ide.impl.idea.openapi.vfs.VfsUtilCore;
-import consulo.virtualFileSystem.VirtualFile;
-import consulo.language.psi.PsiElement;
-import consulo.language.psi.PsiFile;
-import consulo.language.psi.scope.GlobalSearchScope;
-import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.rt.coverage.data.JumpData;
 import com.intellij.rt.coverage.data.LineData;
 import com.intellij.rt.coverage.data.SwitchData;
+import consulo.application.ApplicationManager;
+import consulo.application.util.function.Computable;
+import consulo.codeEditor.Editor;
+import consulo.compiler.CompileContext;
+import consulo.compiler.CompileStatusNotification;
+import consulo.compiler.CompilerManager;
 import consulo.compiler.ModuleCompilerPathsManager;
+import consulo.component.extension.Extensions;
+import consulo.content.ContentFolderTypeProvider;
+import consulo.execution.configuration.RunConfigurationBase;
 import consulo.execution.coverage.*;
+import consulo.execution.coverage.view.CoverageViewExtension;
+import consulo.execution.test.AbstractTestProxy;
+import consulo.language.content.ProductionContentFolderTypeProvider;
+import consulo.language.content.TestContentFolderTypeProvider;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiPackage;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.ModuleUtilCore;
 import consulo.logging.Logger;
-import consulo.psi.PsiPackage;
-import consulo.roots.ContentFolderScopes;
-import consulo.roots.ContentFolderTypeProvider;
-import consulo.roots.impl.ProductionContentFolderTypeProvider;
-import consulo.roots.impl.TestContentFolderTypeProvider;
+import consulo.module.Module;
+import consulo.module.content.ModuleRootManager;
+import consulo.module.content.ProjectFileIndex;
+import consulo.module.content.ProjectRootManager;
+import consulo.project.Project;
+import consulo.ui.ex.awt.Messages;
+import consulo.util.io.FileUtil;
+import consulo.util.lang.StringUtil;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.virtualFileSystem.util.VirtualFileUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.*;
 
 /**
@@ -143,7 +140,7 @@ public class JavaCoverageEngine extends CoverageEngine {
     final Module module = ApplicationManager.getApplication().runReadAction(new Computable<Module>() {
       @Nullable
       public Module compute() {
-        return ModuleUtil.findModuleForPsiElement(psiFile);
+        return ModuleUtilCore.findModuleForPsiElement(psiFile);
       }
     });
     return module != null;
@@ -218,7 +215,7 @@ public class JavaCoverageEngine extends CoverageEngine {
   }
 
   private static boolean isModuleOutputNeeded(Module module, final ContentFolderTypeProvider rootType) {
-    return ModuleRootManager.getInstance(module).getContentFolderFiles(ContentFolderScopes.of(rootType)).length != 0;
+    return ModuleRootManager.getInstance(module).getContentFolderFiles(it -> it.equals(rootType)).length != 0;
   }
 
   public static boolean isUnderFilteredPackages(final PsiClassOwner javaFile, final List<PsiJavaPackage> packages) {
@@ -241,7 +238,7 @@ public class JavaCoverageEngine extends CoverageEngine {
 
     final byte[] content;
     try {
-      content = FileUtil.loadFileBytes(classFile);
+      content = Files.readAllBytes(classFile.toPath());
     } catch (IOException e) {
       return null;
     }
@@ -324,7 +321,7 @@ public class JavaCoverageEngine extends CoverageEngine {
     final File vDir =
         outputpath == null
             ? null : packageVmName.length() > 0
-            ? new File(outputpath.getPath() + File.separator + packageVmName) : VfsUtilCore.virtualToIoFile(outputpath);
+            ? new File(outputpath.getPath() + File.separator + packageVmName) : VirtualFileUtil.virtualToIoFile(outputpath);
     if (vDir != null && vDir.exists()) {
       Collections.addAll(children, vDir.listFiles());
     }
@@ -333,7 +330,7 @@ public class JavaCoverageEngine extends CoverageEngine {
       final File testDir =
           testOutputpath == null
               ? null : packageVmName.length() > 0
-              ? new File(testOutputpath.getPath() + File.separator + packageVmName) : VfsUtilCore.virtualToIoFile(testOutputpath);
+              ? new File(testOutputpath.getPath() + File.separator + packageVmName) : VirtualFileUtil.virtualToIoFile(testOutputpath);
       if (testDir != null && testDir.exists()) {
         Collections.addAll(children, testDir.listFiles());
       }
@@ -351,7 +348,7 @@ public class JavaCoverageEngine extends CoverageEngine {
         }
       });
       for (File child : children) {
-        if (FileUtilRt.extensionEquals(child.getName(), JavaClassFileType.INSTANCE.getDefaultExtension())) {
+        if (FileUtil.extensionEquals(child.getName(), JavaClassFileType.INSTANCE.getDefaultExtension())) {
           final String childName = FileUtil.getNameWithoutExtension(child);
           if (childName.equals(className) ||  //class or inner
               childName.startsWith(className) && childName.charAt(className.length()) == '$') {

@@ -15,45 +15,38 @@
  */
 package com.intellij.java.impl.refactoring.anonymousToInner;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-
-import com.intellij.java.language.psi.*;
-import consulo.logging.Logger;
-import org.jetbrains.annotations.NonNls;
-
-import javax.annotation.Nullable;
+import com.intellij.java.impl.refactoring.HelpID;
+import com.intellij.java.impl.refactoring.util.classMembers.ElementNeedsThis;
 import com.intellij.java.language.impl.codeInsight.ChangeContextUtil;
-import consulo.dataContext.DataContext;
-import consulo.language.editor.PlatformDataKeys;
+import com.intellij.java.language.impl.psi.impl.PsiDiamondTypeUtil;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.application.ApplicationManager;
-import consulo.undoRedo.CommandProcessor;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.ScrollType;
-import consulo.project.Project;
-import com.intellij.psi.*;
+import consulo.dataContext.DataContext;
+import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.codeStyle.CodeStyleManager;
-import com.intellij.java.language.impl.psi.impl.PsiDiamondTypeUtil;
+import consulo.language.editor.PlatformDataKeys;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.action.RefactoringActionHandler;
+import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiManager;
+import consulo.language.psi.PsiReference;
 import consulo.language.psi.scope.LocalSearchScope;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.PsiTreeUtil;
-import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.java.impl.refactoring.HelpID;
-import consulo.language.editor.refactoring.action.RefactoringActionHandler;
-import consulo.language.editor.refactoring.RefactoringBundle;
-import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
-import com.intellij.java.impl.refactoring.util.classMembers.ElementNeedsThis;
 import consulo.language.util.IncorrectOperationException;
-import consulo.java.language.module.util.JavaClassNames;
+import consulo.logging.Logger;
+import consulo.project.Project;
+import consulo.undoRedo.CommandProcessor;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.*;
 
 public class AnonymousToInnerHandler implements RefactoringActionHandler {
   private static final Logger LOG = Logger.getInstance(AnonymousToInnerHandler.class);

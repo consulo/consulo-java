@@ -16,32 +16,34 @@
 package com.intellij.java.impl.codeInsight.daemon.quickFix;
 
 import com.intellij.java.impl.codeInsight.CodeInsightUtil;
+import com.intellij.java.impl.codeInsight.generation.GenerateFieldOrPropertyHandler;
+import com.intellij.java.impl.codeInsight.generation.GenerateMembersUtil;
+import com.intellij.java.language.impl.codeInsight.generation.GenerationInfo;
 import com.intellij.java.language.psi.PsiAnnotation;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.PsiTypeElement;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
-import consulo.language.editor.template.EmptyExpression;
-import consulo.ide.impl.idea.codeInsight.generation.ClassMember;
-import com.intellij.java.impl.codeInsight.generation.GenerateFieldOrPropertyHandler;
-import com.intellij.java.impl.codeInsight.generation.GenerateMembersUtil;
-import com.intellij.java.language.impl.codeInsight.generation.GenerationInfo;
-import consulo.language.editor.intention.IntentionAction;
-import com.intellij.codeInsight.template.*;
-import consulo.language.editor.inspection.LocalQuickFix;
-import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.application.Result;
-import consulo.language.editor.WriteCommandAction;
-import consulo.logging.Logger;
-import consulo.codeEditor.Editor;
-import consulo.project.Project;
-import com.intellij.psi.*;
 import com.intellij.java.language.psi.util.PropertyMemberType;
 import com.intellij.java.language.psi.util.PropertyUtil;
+import consulo.application.Result;
+import consulo.codeEditor.Editor;
+import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.language.editor.WriteCommandAction;
+import consulo.language.editor.generation.ClassMember;
+import consulo.language.editor.impl.internal.template.TemplateBuilderImpl;
+import consulo.language.editor.inspection.LocalQuickFix;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.editor.intention.IntentionAction;
+import consulo.language.editor.template.*;
+import consulo.language.psi.PsiDocumentManager;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
+import consulo.logging.Logger;
+import consulo.project.Project;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
 /**
@@ -124,7 +126,7 @@ public class CreateFieldOrPropertyFix implements IntentionAction, LocalQuickFix 
       assert scope != null;
       final Expression expression = new EmptyExpression() {
         @Override
-        public com.intellij.codeInsight.template.Result calculateResult(final ExpressionContext context) {
+        public consulo.language.editor.template.Result calculateResult(final ExpressionContext context) {
           return new TextResult(myType.getCanonicalText());
         }
       };

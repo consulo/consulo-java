@@ -15,37 +15,40 @@
  */
 package com.intellij.java.impl.psi.impl.source.resolve.reference.impl;
 
+import com.intellij.java.analysis.impl.psi.impl.source.resolve.reference.impl.JavaReflectionReferenceUtil;
 import com.intellij.java.impl.codeInsight.completion.JavaLookupElementBuilder;
 import com.intellij.java.language.codeInsight.AnnotationUtil;
-import com.intellij.codeInsight.completion.*;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.InheritanceUtil;
+import consulo.document.util.TextRange;
+import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.editor.completion.CompletionContributor;
+import consulo.language.editor.completion.CompletionParameters;
+import consulo.language.editor.completion.CompletionResultSet;
+import consulo.language.editor.completion.CompletionType;
+import consulo.language.editor.completion.lookup.InsertionContext;
 import consulo.language.editor.completion.lookup.LookupElement;
 import consulo.language.editor.completion.lookup.LookupElementBuilder;
-import com.intellij.java.analysis.impl.psi.impl.source.resolve.reference.impl.JavaReflectionReferenceUtil;
-import com.intellij.java.language.psi.*;
-import consulo.document.util.TextRange;
 import consulo.language.pattern.ElementPattern;
 import consulo.language.pattern.PatternCondition;
-import com.intellij.psi.*;
-import com.intellij.java.language.psi.util.InheritanceUtil;
-import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiUtilCore;
+import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.ProcessingContext;
-import consulo.util.collection.ContainerUtil;
-import consulo.java.language.module.util.JavaClassNames;
 
 import javax.annotation.Nonnull;
 import java.util.Set;
 import java.util.function.BiConsumer;
 
-import static com.intellij.java.impl.codeInsight.completion.JavaCompletionContributor.isInJavaContext;
 import static com.intellij.java.analysis.impl.psi.impl.source.resolve.reference.impl.JavaReflectionReferenceUtil.*;
+import static com.intellij.java.impl.codeInsight.completion.JavaCompletionContributor.isInJavaContext;
 import static com.intellij.java.language.patterns.PsiJavaPatterns.*;
 import static consulo.language.pattern.StandardPatterns.or;
 
 /**
  * @author Pavel.Dolgov
  */
-public class JavaReflectionCompletionContributor extends CompletionContributor {
+public abstract class JavaReflectionCompletionContributor extends CompletionContributor {
   private static final String CONSTRUCTOR = "getConstructor";
   private static final String DECLARED_CONSTRUCTOR = "getDeclaredConstructor";
   private static final String ANNOTATION = "getAnnotation";
@@ -54,7 +57,7 @@ public class JavaReflectionCompletionContributor extends CompletionContributor {
   private static final String DECLARED_ANNOTATIONS_BY_TYPE = "getDeclaredAnnotationsByType";
   private static final String ANNOTATED_ELEMENT = "java.lang.reflect.AnnotatedElement";
 
-  private static final Set<String> DECLARED_NAMES = ContainerUtil.immutableSet(DECLARED_CONSTRUCTOR, DECLARED_ANNOTATION, DECLARED_ANNOTATIONS_BY_TYPE);
+  private static final Set<String> DECLARED_NAMES = Set.of(DECLARED_CONSTRUCTOR, DECLARED_ANNOTATION, DECLARED_ANNOTATIONS_BY_TYPE);
   private static final ElementPattern<? extends PsiElement> CONSTRUCTOR_ARGUMENTS = psiElement(PsiExpressionList.class).withParent(psiExpression().methodCall(psiMethod().withName(CONSTRUCTOR,
       DECLARED_CONSTRUCTOR).definedInClass(JavaClassNames.JAVA_LANG_CLASS)));
 
@@ -104,7 +107,7 @@ public class JavaReflectionCompletionContributor extends CompletionContributor {
   }
 
   private static void addAnnotationClasses(@Nonnull PsiClass psiClass, boolean isDeclared, @Nonnull CompletionResultSet result) {
-    Set<PsiAnnotation> declaredAnnotations = isDeclared ? ContainerUtil.set(AnnotationUtil.getAllAnnotations(psiClass, false, null, false)) : null;
+    Set<PsiAnnotation> declaredAnnotations = isDeclared ? Set.of(AnnotationUtil.getAllAnnotations(psiClass, false, null, false)) : null;
 
     PsiAnnotation[] annotations = AnnotationUtil.getAllAnnotations(psiClass, true, null, false);
     for (PsiAnnotation annotation : annotations) {

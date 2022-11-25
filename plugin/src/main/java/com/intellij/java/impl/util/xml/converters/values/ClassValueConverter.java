@@ -16,26 +16,26 @@
 
 package com.intellij.java.impl.util.xml.converters.values;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import org.jetbrains.annotations.NonNls;
-import consulo.ide.ServiceManager;
-import consulo.module.Module;
-import consulo.project.Project;
-import consulo.module.content.ProjectRootManager;
-import consulo.virtualFileSystem.VirtualFile;
+import com.intellij.java.impl.util.xml.DomJavaUtil;
 import com.intellij.java.language.psi.PsiClass;
+import consulo.ide.ServiceManager;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiReference;
 import consulo.language.psi.scope.GlobalSearchScope;
-import com.intellij.psi.search.ProjectScope;
-import com.intellij.util.xml.ConvertContext;
-import com.intellij.util.xml.Converter;
-import com.intellij.util.xml.CustomReferenceConverter;
-import com.intellij.java.impl.util.xml.DomJavaUtil;
-import com.intellij.util.xml.GenericDomValue;
+import consulo.module.Module;
+import consulo.module.content.ProjectRootManager;
+import consulo.project.Project;
+import consulo.project.content.scope.ProjectScopes;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.xml.util.xml.ConvertContext;
+import consulo.xml.util.xml.Converter;
+import consulo.xml.util.xml.CustomReferenceConverter;
+import consulo.xml.util.xml.GenericDomValue;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public abstract class ClassValueConverter extends Converter<PsiClass> implements CustomReferenceConverter {
 
@@ -52,7 +52,7 @@ public abstract class ClassValueConverter extends Converter<PsiClass> implements
   }
 
   public String toString(@Nullable PsiClass psiClass, final ConvertContext context) {
-    return psiClass == null? null : psiClass.getQualifiedName();
+    return psiClass == null ? null : psiClass.getQualifiedName();
   }
 
   @Nonnull
@@ -60,14 +60,14 @@ public abstract class ClassValueConverter extends Converter<PsiClass> implements
 
   public static GlobalSearchScope getScope(Project project, @Nullable Module module, @Nullable PsiFile psiFile) {
     if (module == null || psiFile == null) {
-      return ProjectScope.getAllScope(project);
-     }
-     VirtualFile file = psiFile.getOriginalFile().getVirtualFile();
-     if (file == null) {
-       return ProjectScope.getAllScope(project);
-     }
-     final boolean inTests = ProjectRootManager.getInstance(project).getFileIndex().isInTestSourceContent(file);
+      return (GlobalSearchScope) ProjectScopes.getAllScope(project);
+    }
+    VirtualFile file = psiFile.getOriginalFile().getVirtualFile();
+    if (file == null) {
+      return (GlobalSearchScope) ProjectScopes.getAllScope(project);
+    }
+    final boolean inTests = ProjectRootManager.getInstance(project).getFileIndex().isInTestSourceContent(file);
 
-     return GlobalSearchScope.moduleRuntimeScope(module, inTests);
+    return GlobalSearchScope.moduleRuntimeScope(module, inTests);
   }
 }

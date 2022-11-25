@@ -15,26 +15,23 @@
  */
 package consulo.java.impl.library;
 
-import java.util.Collection;
-
-import javax.annotation.Nonnull;
-import consulo.application.progress.ProgressIndicator;
-import consulo.content.OrderRootType;
-import consulo.content.library.ui.RootDetector;
 import com.intellij.java.impl.openapi.roots.ui.configuration.JavaVfsSourceRootDetectionUtil;
+import consulo.application.progress.ProgressIndicator;
+import consulo.content.base.SourcesOrderRootType;
+import consulo.content.library.ui.RootDetector;
 import consulo.virtualFileSystem.VirtualFile;
 
-public class JavaSourceRootDetector extends RootDetector
-{
-	public JavaSourceRootDetector()
-	{
-		super(OrderRootType.SOURCES, false, "java sources");
-	}
+import javax.annotation.Nonnull;
+import java.util.Collection;
 
-	@Nonnull
-	@Override
-	public Collection<VirtualFile> detectRoots(@Nonnull VirtualFile virtualFile, @Nonnull ProgressIndicator progressIndicator)
-	{
-		return JavaVfsSourceRootDetectionUtil.suggestRoots(virtualFile, progressIndicator);
-	}
+public class JavaSourceRootDetector extends RootDetector {
+  public JavaSourceRootDetector() {
+    super(SourcesOrderRootType.getInstance(), false, "java sources");
+  }
+
+  @Nonnull
+  @Override
+  public Collection<VirtualFile> detectRoots(@Nonnull VirtualFile virtualFile, @Nonnull ProgressIndicator progressIndicator) {
+    return JavaVfsSourceRootDetectionUtil.suggestRoots(virtualFile, progressIndicator);
+  }
 }

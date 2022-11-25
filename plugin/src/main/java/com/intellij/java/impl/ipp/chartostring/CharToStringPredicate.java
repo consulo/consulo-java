@@ -17,7 +17,7 @@ package com.intellij.java.impl.ipp.chartostring;
 
 import com.intellij.java.language.psi.*;
 import consulo.util.lang.StringUtil;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import consulo.language.ast.IElementType;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import consulo.java.language.module.util.JavaClassNames;

@@ -15,72 +15,61 @@
  */
 package com.intellij.java.impl.javadoc;
 
-import javax.annotation.Nonnull;
-
-import consulo.execution.executor.DefaultRunExecutor;
-import consulo.process.ExecutionException;
-import jakarta.inject.Inject;
-import jakarta.inject.Singleton;
-
-import org.jdom.Element;
 import consulo.application.CommonBundle;
-import consulo.language.editor.scope.AnalysisScope;
-import consulo.execution.runner.ExecutionEnvironmentBuilder;
-import consulo.ide.impl.idea.execution.util.ExecutionErrorDialog;
 import consulo.component.persist.PersistentStateComponent;
-import consulo.ide.ServiceManager;
 import consulo.component.persist.State;
 import consulo.component.persist.Storage;
 import consulo.component.persist.StoragePathMacros;
+import consulo.execution.executor.DefaultRunExecutor;
+import consulo.execution.runner.ExecutionEnvironmentBuilder;
+import consulo.ide.ServiceManager;
+import consulo.ide.impl.idea.execution.util.ExecutionErrorDialog;
+import consulo.language.editor.scope.AnalysisScope;
+import consulo.process.ExecutionException;
 import consulo.project.Project;
 import consulo.util.xml.serializer.XmlSerializer;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
+import org.jdom.Element;
+
+import javax.annotation.Nonnull;
 
 @Singleton
 @State(name = "JavadocGenerationManager", storages = @Storage(file = StoragePathMacros.PROJECT_CONFIG_DIR + "/misc.xml"))
-public final class JavadocGenerationManager implements PersistentStateComponent<Element>
-{
-	private final JavadocConfiguration myConfiguration = new JavadocConfiguration();
-	private final Project myProject;
+public final class JavadocGenerationManager implements PersistentStateComponent<Element> {
+  private final JavadocConfiguration myConfiguration = new JavadocConfiguration();
+  private final Project myProject;
 
-	public static JavadocGenerationManager getInstance(@Nonnull Project project)
-	{
-		return ServiceManager.getService(project, JavadocGenerationManager.class);
-	}
+  public static JavadocGenerationManager getInstance(@Nonnull Project project) {
+    return ServiceManager.getService(project, JavadocGenerationManager.class);
+  }
 
-	@Inject
-	JavadocGenerationManager(Project project)
-	{
-		myProject = project;
-	}
+  @Inject
+  JavadocGenerationManager(Project project) {
+    myProject = project;
+  }
 
-	@Override
-	public Element getState()
-	{
-		return XmlSerializer.serialize(myConfiguration, JavadocConfiguration.FILTER);
-	}
+  @Override
+  public Element getState() {
+    return XmlSerializer.serialize(myConfiguration, JavadocConfiguration.FILTER);
+  }
 
-	@Override
-	public void loadState(Element state)
-	{
-		XmlSerializer.deserializeInto(myConfiguration, state);
-	}
+  @Override
+  public void loadState(Element state) {
+    XmlSerializer.deserializeInto(myConfiguration, state);
+  }
 
-	@Nonnull
-	public JavadocConfiguration getConfiguration()
-	{
-		return myConfiguration;
-	}
+  @Nonnull
+  public JavadocConfiguration getConfiguration() {
+    return myConfiguration;
+  }
 
-	public void generateJavadoc(AnalysisScope scope)
-	{
-		try
-		{
-			JavadocGeneratorRunProfile profile = new JavadocGeneratorRunProfile(myProject, scope, myConfiguration);
-			ExecutionEnvironmentBuilder.create(myProject, DefaultRunExecutor.getRunExecutorInstance(), profile).buildAndExecute();
-		}
-		catch(ExecutionException e)
-		{
-			ExecutionErrorDialog.show(e, CommonBundle.getErrorTitle(), myProject);
-		}
-	}
+  public void generateJavadoc(AnalysisScope scope) {
+    try {
+      JavadocGeneratorRunProfile profile = new JavadocGeneratorRunProfile(myProject, scope, myConfiguration);
+      ExecutionEnvironmentBuilder.create(myProject, DefaultRunExecutor.getRunExecutorInstance(), profile).buildAndExecute();
+    } catch (ExecutionException e) {
+      ExecutionErrorDialog.show(e, CommonBundle.getErrorTitle(), myProject);
+    }
+  }
 }

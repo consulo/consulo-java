@@ -21,6 +21,7 @@ import com.intellij.java.language.impl.spi.parsing.SPITokenType;
 import com.intellij.java.language.impl.spi.psi.SPIFile;
 import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.java.language.spi.SPILanguage;
+import consulo.language.Language;
 import consulo.language.ast.ASTNode;
 import consulo.language.parser.ParserDefinition;
 import consulo.language.parser.PsiBuilder;
@@ -50,6 +51,12 @@ public class SPIParserDefinition implements ParserDefinition {
 
   private static final TokenSet WHITE_SPACES = TokenSet.create(TokenType.WHITE_SPACE);
   private static final Logger LOG = Logger.getInstance(SPIParserDefinition.class);
+
+  @Nonnull
+  @Override
+  public Language getLanguage() {
+    return SPILanguage.INSTANCE;
+  }
 
   @Nonnull
   @Override

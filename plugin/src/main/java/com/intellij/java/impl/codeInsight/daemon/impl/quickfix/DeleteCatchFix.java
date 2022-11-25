@@ -27,7 +27,7 @@ import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.JavaHigh
 import consulo.language.editor.intention.IntentionAction;
 import consulo.codeEditor.Editor;
 import consulo.project.Project;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 
 public class DeleteCatchFix implements IntentionAction {
   private final PsiParameter myCatchParameter;

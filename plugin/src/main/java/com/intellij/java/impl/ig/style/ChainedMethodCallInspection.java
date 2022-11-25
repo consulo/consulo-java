@@ -15,20 +15,20 @@
  */
 package com.intellij.java.impl.ig.style;
 
-import consulo.ide.impl.idea.codeInspection.ui.MultipleCheckboxOptionsPanel;
+import com.intellij.java.impl.ig.fixes.IntroduceVariableFix;
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.*;
-import consulo.language.psi.util.PsiTreeUtil;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.fixes.IntroduceVariableFix;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
+import consulo.language.editor.inspection.ui.MultipleCheckboxOptionsPanel;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.util.PsiTreeUtil;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import javax.swing.*;
 
 public class ChainedMethodCallInspection extends BaseInspection {

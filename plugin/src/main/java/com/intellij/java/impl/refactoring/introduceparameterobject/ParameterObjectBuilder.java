@@ -18,7 +18,7 @@ package com.intellij.java.impl.refactoring.introduceparameterobject;
 import com.intellij.java.language.psi.*;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import consulo.language.codeStyle.CodeStyleSettingsManager;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.codeStyle.VariableKind;

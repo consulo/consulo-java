@@ -15,113 +15,88 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl;
 
-import javax.annotation.Nonnull;
-
-import com.intellij.ProjectTopics;
 import com.intellij.java.language.JavaCoreBundle;
-import com.intellij.java.language.impl.JavaClassFileType;
 import com.intellij.java.language.JavaLanguage;
+import com.intellij.java.language.impl.JavaClassFileType;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.fileEditor.EditorNotificationBuilder;
+import consulo.fileEditor.EditorNotificationProvider;
+import consulo.fileEditor.EditorNotifications;
 import consulo.fileEditor.FileEditor;
-import consulo.module.Module;
-import consulo.language.util.ModuleUtilCore;
-import consulo.project.Project;
-import consulo.module.content.layer.event.ModuleRootAdapter;
-import consulo.module.content.layer.event.ModuleRootEvent;
-import consulo.project.ui.view.internal.ProjectSettingsService;
-import consulo.util.dataholder.Key;
-import consulo.virtualFileSystem.VirtualFile;
+import consulo.java.language.module.extension.JavaModuleExtension;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiManager;
-import consulo.ide.impl.idea.ui.EditorNotificationPanel;
-import consulo.fileEditor.EditorNotifications;
-import consulo.annotation.access.RequiredReadAction;
-import consulo.fileEditor.EditorNotificationProvider;
-import consulo.java.language.module.extension.JavaModuleExtension;
-import consulo.module.extension.ModuleExtension;
+import consulo.language.util.ModuleUtilCore;
+import consulo.localize.LocalizeValue;
+import consulo.module.Module;
+import consulo.project.Project;
+import consulo.project.ui.view.internal.ProjectSettingsService;
+import consulo.virtualFileSystem.VirtualFile;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.function.Supplier;
 
 /**
  * @author Danila Ponomarenko
  */
-public class SetupJDKNotificationProvider implements EditorNotificationProvider<EditorNotificationPanel>
-{
-	private static final Key<consulo.ide.impl.idea.ui.EditorNotificationPanel> KEY = Key.create("setup.jdk.notifier");
+public class SetupJDKNotificationProvider implements EditorNotificationProvider {
+  private final Project myProject;
 
-	private final Project myProject;
+  public SetupJDKNotificationProvider(Project project, final EditorNotifications notifications) {
+    myProject = project;
+  }
 
-	public SetupJDKNotificationProvider(Project project, final EditorNotifications notifications)
-	{
-		myProject = project;
-		myProject.getMessageBus().connect().subscribe(ProjectTopics.PROJECT_ROOTS, new ModuleRootAdapter()
-		{
-			@Override
-			public void rootsChanged(ModuleRootEvent event)
-			{
-				notifications.updateAllNotifications();
-			}
-		});
-		myProject.getMessageBus().connect().subscribe(ModuleExtension.CHANGE_TOPIC, (oldExtension, newExtension) -> notifications.updateAllNotifications());
-	}
+  @Nonnull
+  @Override
+  public String getId() {
+    return "java-sdk-notify";
+  }
 
-	@Nonnull
-	@Override
-	public Key<EditorNotificationPanel> getKey()
-	{
-		return KEY;
-	}
+  @RequiredReadAction
+  @Nullable
+  @Override
+  public EditorNotificationBuilder buildNotification(@Nonnull VirtualFile file, @Nonnull FileEditor fileEditor, @Nonnull Supplier<EditorNotificationBuilder> supplier) {
+    if (file.getFileType() == JavaClassFileType.INSTANCE) {
+      return null;
+    }
 
-	@RequiredReadAction
-	@Override
-	public EditorNotificationPanel createNotificationPanel(@Nonnull VirtualFile file, @Nonnull FileEditor fileEditor)
-	{
-		if(file.getFileType() == JavaClassFileType.INSTANCE)
-		{
-			return null;
-		}
+    final PsiFile psiFile = PsiManager.getInstance(myProject).findFile(file);
+    if (psiFile == null) {
+      return null;
+    }
 
-		final PsiFile psiFile = PsiManager.getInstance(myProject).findFile(file);
-		if(psiFile == null)
-		{
-			return null;
-		}
+    if (psiFile.getLanguage() != JavaLanguage.INSTANCE) {
+      return null;
+    }
 
-		if(psiFile.getLanguage() != JavaLanguage.INSTANCE)
-		{
-			return null;
-		}
+    final Module moduleForPsiElement = ModuleUtilCore.findModuleForPsiElement(psiFile);
+    if (moduleForPsiElement == null) {
+      return null;
+    }
+    final JavaModuleExtension extension = ModuleUtilCore.getExtension(moduleForPsiElement, JavaModuleExtension.class);
+    if (extension == null) {
+      return null;
+    }
 
-		final Module moduleForPsiElement = ModuleUtilCore.findModuleForPsiElement(psiFile);
-		if(moduleForPsiElement == null)
-		{
-			return null;
-		}
-		final JavaModuleExtension extension = ModuleUtilCore.getExtension(moduleForPsiElement, JavaModuleExtension.class);
-		if(extension == null)
-		{
-			return null;
-		}
+    if (extension.getInheritableSdk().isNull()) {
+      EditorNotificationBuilder builder = supplier.get();
+      createPanel(myProject, psiFile, builder);
+      return builder;
+    }
+    return null;
+  }
 
-		if(extension.getInheritableSdk().isNull())
-		{
-			return createPanel(myProject, psiFile);
-		}
-		return null;
-	}
+  private static void createPanel(final @Nonnull Project project, final @Nonnull PsiFile file, EditorNotificationBuilder builder) {
+    builder.withText(LocalizeValue.localizeTODO(JavaCoreBundle.message("module.jdk.not.defined")));
+    builder.withAction(LocalizeValue.localizeTODO(JavaCoreBundle.message("module.jdk.setup")), (e) ->
+    {
+      final Module moduleForPsiElement = ModuleUtilCore.findModuleForPsiElement(file);
+      if (moduleForPsiElement == null) {
+        return;
+      }
 
-	@Nonnull
-	private static EditorNotificationPanel createPanel(final @Nonnull Project project, final @Nonnull PsiFile file)
-	{
-		EditorNotificationPanel panel = new consulo.ide.impl.idea.ui.EditorNotificationPanel();
-		panel.setText(JavaCoreBundle.message("module.jdk.not.defined"));
-		panel.createActionLabel(JavaCoreBundle.message("module.jdk.setup"), () ->
-		{
-			final Module moduleForPsiElement = ModuleUtilCore.findModuleForPsiElement(file);
-			if(moduleForPsiElement == null)
-			{
-				return;
-			}
-
-			ProjectSettingsService.getInstance(project).openModuleSettings(moduleForPsiElement);
-		});
-		return panel;
-	}
+      ProjectSettingsService.getInstance(project).openModuleSettings(moduleForPsiElement);
+    });
+  }
 }

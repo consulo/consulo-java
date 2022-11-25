@@ -1,19 +1,19 @@
 // Copyright 2000-2019 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.impl.codeInspection;
 
-import consulo.language.editor.inspection.LocalQuickFix;
-import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.HighlightControlFlowUtil;
 import com.intellij.java.analysis.impl.codeInspection.RemoveRedundantTypeArgumentsUtil;
 import com.intellij.java.impl.ig.psiutils.HighlightUtils;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.project.Project;
-import consulo.util.lang.StringUtil;
-import consulo.language.psi.PsiElement;
-import consulo.ide.impl.idea.util.ObjectUtils;
 import com.siyeh.ig.psiutils.CommentTracker;
 import com.siyeh.ig.psiutils.ExpressionUtils;
+import consulo.language.editor.inspection.LocalQuickFix;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.project.Project;
+import consulo.util.lang.ObjectUtil;
+import consulo.util.lang.StringUtil;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nls;
 
@@ -55,7 +55,7 @@ public class WrapWithMutableCollectionFix implements LocalQuickFix {
     if (initializer == null) {
       return;
     }
-    PsiClassType type = ObjectUtils.tryCast(variable.getType(), PsiClassType.class);
+    PsiClassType type = ObjectUtil.tryCast(variable.getType(), PsiClassType.class);
     if (type == null) {
       return;
     }

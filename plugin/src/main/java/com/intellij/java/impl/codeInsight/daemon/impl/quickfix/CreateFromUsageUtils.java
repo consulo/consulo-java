@@ -27,13 +27,13 @@ import com.intellij.java.impl.psi.statistics.JavaStatisticsManager;
 import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
 import com.intellij.java.language.impl.codeInsight.completion.proc.VariablesProcessor;
 import com.intellij.java.language.impl.psi.scope.util.PsiScopesUtil;
+import com.intellij.java.language.psi.PsiElementFactory;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
 import com.intellij.java.language.psi.search.PsiShortNamesCache;
 import com.intellij.java.language.psi.util.PsiTypesUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.language.util.IncorrectOperationException;
 import consulo.application.ApplicationManager;
 import consulo.application.progress.ProgressManager;
 import consulo.application.util.function.Computable;
@@ -50,6 +50,7 @@ import consulo.ide.impl.psi.util.ProximityLocation;
 import consulo.ide.impl.psi.util.proximity.PsiProximityComparator;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.WeighingComparable;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.completion.lookup.LookupElement;
@@ -58,10 +59,11 @@ import consulo.language.editor.completion.lookup.TailType;
 import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
 import consulo.language.editor.template.*;
 import consulo.language.file.FileTypeManager;
-import consulo.language.psi.PsiElement;
-import consulo.language.psi.PsiManager;
+import consulo.language.psi.*;
+import consulo.language.psi.resolve.ResolveState;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
 import consulo.language.util.ModuleUtilCore;
 import consulo.logging.Logger;
 import consulo.module.Module;
@@ -82,8 +84,7 @@ import java.util.*;
  * @author mike
  */
 public class CreateFromUsageUtils {
-  private static final Logger LOG = Logger.getInstance(
-		  CreateFromUsageUtils.class);
+  private static final Logger LOG = Logger.getInstance(CreateFromUsageUtils.class);
   private static final int MAX_GUESSED_MEMBERS_COUNT = 10;
 
   public static boolean isValidReference(PsiReference reference, boolean unresolvedOnly) {
@@ -902,7 +903,7 @@ public class CreateFromUsageUtils {
           ClassInheritorsSearch.search(containingClass, descendantsSearchScope, true, true, false).forEach(new Processor<PsiClass>() {
             @Override
             public boolean process(PsiClass psiClass) {
-              ContainerUtil.addIfNotNull(getQualifiedName(psiClass), possibleClassNames);
+              ContainerUtil.addIfNotNull(possibleClassNames, getQualifiedName(psiClass));
               return true;
             }
           });
@@ -956,7 +957,7 @@ public class CreateFromUsageUtils {
         });
         for (final PsiClass aClass : classes) {
           final String qname = getQualifiedName(aClass);
-          ContainerUtil.addIfNotNull(qname, possibleClassNames);
+          ContainerUtil.addIfNotNull(possibleClassNames, qname);
         }
       }
       return true;

@@ -5,36 +5,36 @@
 package com.intellij.java.coverage;
 
 import com.intellij.coverage.listeners.CoverageListener;
+import com.intellij.java.debugger.ui.classFilter.ClassFilter;
 import com.intellij.java.execution.CommonJavaRunConfigurationParameters;
-import consulo.execution.action.Location;
 import com.intellij.java.execution.impl.RunConfigurationExtension;
-import consulo.execution.configuration.RunConfigurationBase;
-import consulo.execution.configuration.RunnerSettings;
-import consulo.execution.RuntimeConfigurationException;
-import consulo.execution.configuration.ui.SettingsEditor;
-import consulo.execution.coverage.CoverageEnabledConfiguration;
 import com.intellij.java.execution.impl.junit.RefactoringListeners;
-import consulo.process.ProcessHandler;
-import consulo.project.ui.notification.Notification;
-import consulo.project.ui.notification.Notifications;
-import consulo.ui.NotificationType;
-import consulo.project.Project;
 import com.intellij.java.language.projectRoots.JavaSdk;
 import com.intellij.java.language.projectRoots.JavaSdkVersion;
-import consulo.content.bundle.Sdk;
-import consulo.util.xml.serializer.InvalidDataException;
-import consulo.util.xml.serializer.WriteExternalException;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
-import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiJavaPackage;
-import consulo.language.psi.scope.GlobalSearchScope;
-import consulo.language.editor.refactoring.event.RefactoringElementListener;
-import consulo.ide.impl.idea.refactoring.listeners.RefactoringElementListenerComposite;
-import com.intellij.java.debugger.ui.classFilter.ClassFilter;
-import consulo.util.collection.ArrayUtil;
+import consulo.content.bundle.Sdk;
+import consulo.execution.RuntimeConfigurationException;
+import consulo.execution.action.Location;
+import consulo.execution.configuration.RunConfigurationBase;
+import consulo.execution.configuration.RunnerSettings;
+import consulo.execution.configuration.ui.SettingsEditor;
 import consulo.execution.coverage.*;
 import consulo.java.execution.configurations.OwnJavaParameters;
+import consulo.language.editor.refactoring.event.RefactoringElementListener;
+import consulo.language.editor.refactoring.event.RefactoringElementListenerComposite;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.process.ProcessHandler;
+import consulo.project.Project;
+import consulo.project.ui.notification.Notification;
+import consulo.project.ui.notification.NotificationGroup;
+import consulo.project.ui.notification.NotificationType;
+import consulo.project.ui.notification.Notifications;
+import consulo.util.collection.ArrayUtil;
+import consulo.util.xml.serializer.InvalidDataException;
+import consulo.util.xml.serializer.WriteExternalException;
 import org.jdom.Element;
 
 import javax.annotation.Nonnull;
@@ -81,7 +81,7 @@ public class CoverageJavaRunConfigurationExtension extends RunConfigurationExten
 
       final Sdk jdk = params.getJdk();
       if (jdk != null && JavaSdk.getInstance().isOfVersionOrHigher(jdk, JavaSdkVersion.JDK_1_7) && coverageRunner instanceof JavaCoverageRunner && !((JavaCoverageRunner)coverageRunner).isJdk7Compatible()) {
-        Notifications.Bus.notify(new Notification("Coverage", "Coverage instrumentation is not fully compatible with JDK 7",
+        Notifications.Bus.notify(new Notification(NotificationGroup.balloonGroup("Coverage"), "Coverage instrumentation is not fully compatible with JDK 7",
                                                   coverageRunner.getPresentableName() +
                                                   " coverage instrumentation can lead to java.lang.VerifyError errors with JDK 7. If so, please try IDEA coverage runner.",
                                                   NotificationType.WARNING));

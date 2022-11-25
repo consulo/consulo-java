@@ -15,9 +15,6 @@
  */
 package com.intellij.java.impl.ide.fileTemplates;
 
-import consulo.ide.IdeBundle;
-import consulo.fileTemplate.CreateFromTemplateHandler;
-import consulo.fileTemplate.FileTemplate;
 import com.intellij.java.impl.psi.impl.file.JavaDirectoryServiceImpl;
 import com.intellij.java.language.JavaCoreBundle;
 import com.intellij.java.language.LanguageLevel;
@@ -27,16 +24,19 @@ import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiJavaFile;
 import com.intellij.java.language.psi.PsiPackageStatement;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.virtualFileSystem.fileType.FileType;
-import consulo.ide.impl.idea.openapi.fileTypes.ex.FileTypeManagerEx;
-import consulo.project.Project;
+import consulo.fileTemplate.CreateFromTemplateHandler;
+import consulo.fileTemplate.FileTemplate;
+import consulo.ide.IdeBundle;
+import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.file.FileTypeManager;
 import consulo.language.psi.PsiDirectory;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiFileFactory;
-import consulo.language.codeStyle.CodeStyleManager;
-import consulo.util.collection.ArrayUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+import consulo.util.collection.ArrayUtil;
+import consulo.virtualFileSystem.fileType.FileType;
 
 import javax.annotation.Nonnull;
 import java.util.Map;
@@ -106,7 +106,7 @@ public class JavaCreateFromTemplateHandler implements CreateFromTemplateHandler 
 
   @Override
   public boolean handlesTemplate(@Nonnull FileTemplate template) {
-    FileType fileType = FileTypeManagerEx.getInstanceEx().getFileTypeByExtension(template.getExtension());
+    FileType fileType = FileTypeManager.getInstance().getFileTypeByExtension(template.getExtension());
     return fileType.equals(JavaFileType.INSTANCE) && !ArrayUtil.contains(template.getName(), JavaTemplateUtil.INTERNAL_FILE_TEMPLATES);
   }
 

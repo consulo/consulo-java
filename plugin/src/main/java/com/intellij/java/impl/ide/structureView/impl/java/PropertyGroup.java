@@ -25,7 +25,7 @@ import consulo.navigation.ItemPresentation;
 import consulo.codeEditor.CodeInsightColors;
 import consulo.colorScheme.TextAttributesKey;
 import consulo.project.Project;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import com.intellij.java.language.psi.util.PropertyUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.ui.image.Image;

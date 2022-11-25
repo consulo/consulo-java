@@ -18,7 +18,7 @@ package com.intellij.java.impl.psi.impl.migration;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.*;
 import consulo.util.lang.Pair;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import com.intellij.java.language.impl.psi.impl.InheritanceImplUtil;
 import com.intellij.java.language.impl.psi.impl.PsiClassImplUtil;
 import consulo.language.impl.psi.LightElement;

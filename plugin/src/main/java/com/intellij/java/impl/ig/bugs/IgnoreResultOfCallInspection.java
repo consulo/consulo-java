@@ -15,32 +15,32 @@
  */
 package com.intellij.java.impl.ig.bugs;
 
-import consulo.ide.impl.idea.codeInspection.ui.ListTable;
-import consulo.ide.impl.idea.codeInspection.ui.ListWrappingTableModel;
+import com.intellij.java.impl.ig.psiutils.LibraryUtil;
+import com.intellij.java.impl.ig.ui.UiUtils;
 import com.intellij.java.language.psi.*;
-import consulo.util.xml.serializer.InvalidDataException;
-import consulo.util.xml.serializer.WriteExternalException;
 import com.intellij.java.language.psi.util.InheritanceUtil;
-import consulo.language.psi.PsiUtilCore;
-import consulo.ui.CheckBox;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import com.intellij.java.impl.ig.psiutils.LibraryUtil;
-import com.intellij.java.impl.ig.ui.UiUtils;
+import consulo.ide.impl.idea.codeInspection.ui.ListTable;
+import consulo.ide.impl.idea.codeInspection.ui.ListWrappingTableModel;
+import consulo.language.psi.PsiUtilCore;
+import consulo.ui.CheckBox;
+import consulo.util.xml.serializer.InvalidDataException;
+import consulo.util.xml.serializer.WriteExternalException;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
 
+import javax.annotation.Nonnull;
 import javax.swing.*;
 import java.awt.*;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-public class IgnoreResultOfCallInspection extends BaseInspection {
+public abstract class IgnoreResultOfCallInspection extends BaseInspection {
 
   /**
    * @noinspection PublicField
@@ -108,8 +108,8 @@ public class IgnoreResultOfCallInspection extends BaseInspection {
       Arrays.asList(classNames, methodNamePatterns), InspectionGadgetsBundle.message("result.of.method.call.ignored.class.column.title"),
       InspectionGadgetsBundle.message("result.of.method.call.ignored.method.column.title")));
     final JPanel tablePanel = UiUtils.createAddRemovePanel(table);
-    final CheckBox checkBox =
-      new CheckBox(InspectionGadgetsBundle.message("result.of.method.call.ignored.non.library.option"), this, "m_reportAllNonLibraryCalls");
+    final consulo.language.editor.inspection.ui.CheckBox checkBox =
+      new consulo.language.editor.inspection.ui.CheckBox(InspectionGadgetsBundle.message("result.of.method.call.ignored.non.library.option"), this, "m_reportAllNonLibraryCalls");
     panel.add(tablePanel, BorderLayout.CENTER);
     panel.add(checkBox, BorderLayout.SOUTH);
     return panel;

@@ -15,24 +15,19 @@
  */
 package com.intellij.java.impl.codeInsight;
 
-import consulo.language.editor.completion.lookup.TailType;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.application.util.NullableLazyValue;
+import consulo.application.util.VolatileNullableLazyValue;
 import consulo.ide.impl.idea.openapi.util.NullableComputable;
-import consulo.ide.impl.idea.openapi.util.NullableLazyValue;
-import consulo.ide.impl.idea.openapi.util.VolatileNullableLazyValue;
+import consulo.language.editor.completion.lookup.TailType;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class ExpectedTypeInfoImpl implements ExpectedTypeInfo {
-  public static final NullableComputable<String> NULL = new NullableComputable<String>() {
-    @Override
-    public String compute() {
-      return null;
-    }
-  };
+  public static final NullableComputable<String> NULL = () -> null;
   @Nonnull
   private final PsiType type;
   @Nonnull

@@ -19,6 +19,7 @@ import com.intellij.java.analysis.codeInspection.BaseJavaBatchLocalInspectionToo
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.language.editor.inspection.ProblemsHolder;
 import consulo.language.editor.inspection.scheme.InspectionProfileEntry;
+import consulo.language.editor.rawHighlight.HighlightDisplayLevel;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.PsiFile;
@@ -46,6 +47,12 @@ import java.util.function.IntSupplier;
 
 public abstract class BaseInspection extends BaseJavaBatchLocalInspectionTool {
   private String m_shortName = null;
+
+  @Nonnull
+  @Override
+  public HighlightDisplayLevel getDefaultLevel() {
+    return HighlightDisplayLevel.WARNING;
+  }
 
   @Override
   @Nonnull

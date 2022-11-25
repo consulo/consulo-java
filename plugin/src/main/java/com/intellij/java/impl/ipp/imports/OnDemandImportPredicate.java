@@ -18,7 +18,7 @@ package com.intellij.java.impl.ipp.imports;
 import com.intellij.java.language.psi.PsiImportStatement;
 import com.intellij.java.language.psi.PsiImportStatementBase;
 import com.intellij.java.language.psi.PsiJavaFile;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import javax.annotation.Nonnull;
 

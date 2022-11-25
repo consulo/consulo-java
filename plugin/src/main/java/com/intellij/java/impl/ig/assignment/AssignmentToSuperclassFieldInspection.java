@@ -15,21 +15,21 @@
  */
 package com.intellij.java.impl.ig.assignment;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
-import consulo.language.psi.util.PsiTreeUtil;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.Nls;
+
+import javax.annotation.Nonnull;
 
 /**
  * @author Bas Leijdekkers
  */
-public class AssignmentToSuperclassFieldInspection extends  BaseInspection {
+public abstract class AssignmentToSuperclassFieldInspection extends BaseInspection {
 
   @Nls
   @Nonnull
@@ -41,10 +41,10 @@ public class AssignmentToSuperclassFieldInspection extends  BaseInspection {
   @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
-    final PsiReferenceExpression referenceExpression = (PsiReferenceExpression)infos[0];
-    final PsiClass superclass = (PsiClass)infos[1];
+    final PsiReferenceExpression referenceExpression = (PsiReferenceExpression) infos[0];
+    final PsiClass superclass = (PsiClass) infos[1];
     return InspectionGadgetsBundle.message("assignment.to.superclass.field.problem.descriptor",
-                                           referenceExpression.getReferenceName(), superclass.getName());
+        referenceExpression.getReferenceName(), superclass.getName());
   }
 
   @Override
@@ -83,7 +83,7 @@ public class AssignmentToSuperclassFieldInspection extends  BaseInspection {
       if (method == null || !method.isConstructor()) {
         return;
       }
-      final PsiReferenceExpression referenceExpression = (PsiReferenceExpression)expression;
+      final PsiReferenceExpression referenceExpression = (PsiReferenceExpression) expression;
       final PsiExpression qualifierExpression = referenceExpression.getQualifierExpression();
       if (qualifierExpression != null &&
           !(qualifierExpression instanceof PsiThisExpression) && !(qualifierExpression instanceof PsiSuperExpression)) {
@@ -93,7 +93,7 @@ public class AssignmentToSuperclassFieldInspection extends  BaseInspection {
       if (!(target instanceof PsiField)) {
         return;
       }
-      final PsiField field = (PsiField)target;
+      final PsiField field = (PsiField) target;
       final PsiClass fieldClass = field.getContainingClass();
       if (fieldClass == null) {
         return;

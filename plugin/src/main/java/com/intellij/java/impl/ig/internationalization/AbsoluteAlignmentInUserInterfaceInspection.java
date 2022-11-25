@@ -15,25 +15,25 @@
  */
 package com.intellij.java.impl.ig.internationalization;
 
-import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiReferenceExpression;
-import consulo.project.Project;
-import com.intellij.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
-import consulo.language.util.IncorrectOperationException;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
 import org.jetbrains.annotations.Nls;
-import javax.annotation.Nonnull;
 
+import javax.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.Map;
 
-public class AbsoluteAlignmentInUserInterfaceInspection extends BaseInspection {
+public abstract class AbsoluteAlignmentInUserInterfaceInspection extends BaseInspection {
 
   private static final Map<String, String> gridbagConstants = new HashMap();
   static {

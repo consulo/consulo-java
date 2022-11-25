@@ -15,164 +15,139 @@
  */
 package com.intellij.java.impl.ide.structureView.impl.java;
 
-import java.util.Arrays;
-import java.util.Collection;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import com.intellij.java.language.psi.*;
+import consulo.codeEditor.Editor;
 import consulo.fileEditor.structureView.StructureViewModel;
 import consulo.fileEditor.structureView.StructureViewTreeElement;
-import consulo.language.editor.structureView.TextEditorBasedStructureViewModel;
-import com.intellij.ide.util.treeView.smartTree.Filter;
+import consulo.fileEditor.structureView.tree.Filter;
 import consulo.fileEditor.structureView.tree.Grouper;
 import consulo.fileEditor.structureView.tree.NodeProvider;
 import consulo.fileEditor.structureView.tree.Sorter;
 import consulo.ide.impl.idea.ide.util.treeView.smartTree.TreeStructureUtil;
-import consulo.codeEditor.Editor;
-import com.intellij.java.language.psi.PsiAnonymousClass;
-import com.intellij.java.language.psi.PsiClass;
-import com.intellij.java.language.psi.PsiClassOwner;
+import consulo.language.editor.structureView.TextEditorBasedStructureViewModel;
 import consulo.language.psi.PsiElement;
-import com.intellij.java.language.psi.PsiField;
 import consulo.language.psi.PsiFile;
-import com.intellij.java.language.psi.PsiJavaFile;
-import com.intellij.java.language.psi.PsiLambdaExpression;
-import com.intellij.java.language.psi.PsiMethod;
 import consulo.ui.ex.PlaceHolder;
 
-public class JavaFileTreeModel extends TextEditorBasedStructureViewModel implements StructureViewModel.ElementInfoProvider, PlaceHolder<String>
-{
-	private static final Collection<NodeProvider> NODE_PROVIDERS = Arrays.asList(new JavaInheritedMembersNodeProvider(), new JavaAnonymousClassesNodeProvider(), new JavaLambdaNodeProvider());
-	private String myPlace;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Arrays;
+import java.util.Collection;
 
-	public JavaFileTreeModel(@Nonnull PsiClassOwner file, @Nullable Editor editor)
-	{
-		super(editor, file);
-	}
+public class JavaFileTreeModel extends TextEditorBasedStructureViewModel implements StructureViewModel.ElementInfoProvider, PlaceHolder<String> {
+  private static final Collection<NodeProvider> NODE_PROVIDERS = Arrays.asList(new JavaInheritedMembersNodeProvider(), new JavaAnonymousClassesNodeProvider(), new JavaLambdaNodeProvider());
+  private String myPlace;
 
-	@Override
-	@Nonnull
-	public Filter[] getFilters()
-	{
-		return new Filter[]{
-				new FieldsFilter(),
-				new PublicElementsFilter()
-		};
-	}
+  public JavaFileTreeModel(@Nonnull PsiClassOwner file, @Nullable Editor editor) {
+    super(editor, file);
+  }
 
-	@Nonnull
-	@Override
-	public Collection<NodeProvider> getNodeProviders()
-	{
-		return NODE_PROVIDERS;
-	}
+  @Override
+  @Nonnull
+  public Filter[] getFilters() {
+    return new Filter[]{
+        new FieldsFilter(),
+        new PublicElementsFilter()
+    };
+  }
 
-	@Override
-	@Nonnull
-	public Grouper[] getGroupers()
-	{
-		return new Grouper[]{
-				new SuperTypesGrouper(),
-				new PropertiesGrouper()
-		};
-	}
+  @Nonnull
+  @Override
+  public Collection<NodeProvider> getNodeProviders() {
+    return NODE_PROVIDERS;
+  }
 
-	@Override
-	@Nonnull
-	public StructureViewTreeElement getRoot()
-	{
-		return new JavaFileTreeElement(getPsiFile());
-	}
+  @Override
+  @Nonnull
+  public Grouper[] getGroupers() {
+    return new Grouper[]{
+        new SuperTypesGrouper(),
+        new PropertiesGrouper()
+    };
+  }
 
-	@Override
-	public boolean shouldEnterElement(final Object element)
-	{
-		return element instanceof PsiClass;
-	}
+  @Override
+  @Nonnull
+  public StructureViewTreeElement getRoot() {
+    return new JavaFileTreeElement(getPsiFile());
+  }
 
-	@Override
-	@Nonnull
-	public Sorter[] getSorters()
-	{
-		return new Sorter[]{
-				TreeStructureUtil.isInStructureViewPopup(this) ? KindSorter.POPUP_INSTANCE : KindSorter.INSTANCE,
-				VisibilitySorter.INSTANCE,
-				AnonymousClassesSorter.INSTANCE,
-				Sorter.ALPHA_SORTER
-		};
-	}
+  @Override
+  public boolean shouldEnterElement(final Object element) {
+    return element instanceof PsiClass;
+  }
 
-	@Override
-	protected PsiClassOwner getPsiFile()
-	{
-		return (PsiClassOwner) super.getPsiFile();
-	}
+  @Override
+  @Nonnull
+  public Sorter[] getSorters() {
+    return new Sorter[]{
+        TreeStructureUtil.isInStructureViewPopup(this) ? KindSorter.POPUP_INSTANCE : KindSorter.INSTANCE,
+        VisibilitySorter.INSTANCE,
+        AnonymousClassesSorter.INSTANCE,
+        Sorter.ALPHA_SORTER
+    };
+  }
 
-	@Override
-	public boolean isAlwaysShowsPlus(StructureViewTreeElement element)
-	{
-		Object value = element.getValue();
-		return value instanceof PsiClass || value instanceof PsiFile;
-	}
+  @Override
+  protected PsiClassOwner getPsiFile() {
+    return (PsiClassOwner) super.getPsiFile();
+  }
 
-	@Override
-	public boolean isAlwaysLeaf(StructureViewTreeElement element)
-	{
-		Object value = element.getValue();
-		return value instanceof PsiMethod || value instanceof PsiField;
-	}
+  @Override
+  public boolean isAlwaysShowsPlus(StructureViewTreeElement element) {
+    Object value = element.getValue();
+    return value instanceof PsiClass || value instanceof PsiFile;
+  }
 
-	@Override
-	protected boolean isSuitable(final PsiElement element)
-	{
-		if(super.isSuitable(element))
-		{
-			if(element instanceof PsiMethod)
-			{
-				PsiMethod method = (PsiMethod) element;
-				PsiClass parent = method.getContainingClass();
-				return parent != null && (parent.getQualifiedName() != null || parent instanceof PsiAnonymousClass);
-			}
+  @Override
+  public boolean isAlwaysLeaf(StructureViewTreeElement element) {
+    Object value = element.getValue();
+    return value instanceof PsiMethod || value instanceof PsiField;
+  }
 
-			if(element instanceof PsiField)
-			{
-				PsiField field = (PsiField) element;
-				PsiClass parent = field.getContainingClass();
-				return parent != null && parent.getQualifiedName() != null;
-			}
+  @Override
+  protected boolean isSuitable(final PsiElement element) {
+    if (super.isSuitable(element)) {
+      if (element instanceof PsiMethod) {
+        PsiMethod method = (PsiMethod) element;
+        PsiClass parent = method.getContainingClass();
+        return parent != null && (parent.getQualifiedName() != null || parent instanceof PsiAnonymousClass);
+      }
 
-			if(element instanceof PsiClass)
-			{
-				return ((PsiClass) element).getQualifiedName() != null;
-			}
+      if (element instanceof PsiField) {
+        PsiField field = (PsiField) element;
+        PsiClass parent = field.getContainingClass();
+        return parent != null && parent.getQualifiedName() != null;
+      }
 
-			return element instanceof PsiLambdaExpression;
-		}
-		return false;
-	}
+      if (element instanceof PsiClass) {
+        return ((PsiClass) element).getQualifiedName() != null;
+      }
 
-	@Override
-	@Nonnull
-	protected Class[] getSuitableClasses()
-	{
-		return new Class[]{
-				PsiClass.class,
-				PsiMethod.class,
-				PsiField.class,
-				PsiLambdaExpression.class,
-				PsiJavaFile.class
-		};
-	}
+      return element instanceof PsiLambdaExpression;
+    }
+    return false;
+  }
 
-	@Override
-	public void setPlace(@Nonnull String place)
-	{
-		myPlace = place;
-	}
+  @Override
+  @Nonnull
+  protected Class[] getSuitableClasses() {
+    return new Class[]{
+        PsiClass.class,
+        PsiMethod.class,
+        PsiField.class,
+        PsiLambdaExpression.class,
+        PsiJavaFile.class
+    };
+  }
 
-	@Override
-	public String getPlace()
-	{
-		return myPlace;
-	}
+  @Override
+  public void setPlace(@Nonnull String place) {
+    myPlace = place;
+  }
+
+  @Override
+  public String getPlace() {
+    return myPlace;
+  }
 }

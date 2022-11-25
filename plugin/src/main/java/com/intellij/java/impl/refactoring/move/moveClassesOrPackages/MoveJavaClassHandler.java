@@ -15,21 +15,22 @@
  */
 package com.intellij.java.impl.refactoring.move.moveClassesOrPackages;
 
+import com.intellij.java.language.impl.JavaFileType;
+import com.intellij.java.language.impl.codeInsight.ChangeContextUtil;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.javadoc.PsiDocComment;
+import consulo.language.psi.PsiDirectory;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.logging.Logger;
+import consulo.usage.UsageInfo;
+
+import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
-
-import javax.annotation.Nonnull;
-
-import com.intellij.java.language.impl.codeInsight.ChangeContextUtil;
-import com.intellij.java.language.impl.JavaFileType;
-import com.intellij.java.language.psi.*;
-import consulo.logging.Logger;
-import com.intellij.psi.*;
-import com.intellij.java.language.psi.javadoc.PsiDocComment;
-import consulo.language.psi.util.PsiTreeUtil;
-import consulo.usage.UsageInfo;
-import consulo.language.util.IncorrectOperationException;
 
 /**
  * @author Maxim.Medvedev

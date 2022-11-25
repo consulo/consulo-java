@@ -15,167 +15,147 @@
  */
 package com.intellij.java.impl.codeInsight.javadoc;
 
+import com.intellij.java.impl.lang.java.JavaDocumentationProvider;
+import com.intellij.java.language.psi.JavaPsiFacade;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiMethod;
+import consulo.application.ApplicationManager;
+import consulo.language.editor.documentation.AbstractExternalFilter;
+import consulo.language.editor.documentation.DocumentationManagerProtocol;
+import consulo.language.editor.documentation.PlatformDocumentationUtil;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.project.Project;
+import consulo.util.io.URLUtil;
+import consulo.util.lang.StringUtil;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.function.Supplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import consulo.ide.impl.idea.codeInsight.documentation.AbstractExternalFilter;
-import consulo.ide.impl.idea.codeInsight.documentation.DocumentationManager;
-import consulo.language.editor.documentation.DocumentationManagerProtocol;
-import consulo.ide.impl.idea.codeInsight.documentation.PlatformDocumentationUtil;
-import consulo.ide.impl.idea.ide.BrowserUtil;
-import com.intellij.java.impl.lang.java.JavaDocumentationProvider;
-import consulo.application.ApplicationManager;
-import consulo.project.Project;
-import consulo.ide.impl.idea.openapi.util.NullableComputable;
-import consulo.util.lang.StringUtil;
-import com.intellij.java.language.psi.JavaPsiFacade;
-import com.intellij.java.language.psi.PsiClass;
-import consulo.language.psi.PsiElement;
-import com.intellij.java.language.psi.PsiMethod;
-import consulo.language.psi.scope.GlobalSearchScope;
+import static consulo.language.editor.documentation.DocumentationManagerUtil.createHyperlink;
 
 /**
- * Created by IntelliJ IDEA.
  * User: db
  * Date: May 2, 2003
  * Time: 8:35:34 PM
- * To change this template use Options | File Templates.
  */
+public class JavaDocExternalFilter extends AbstractExternalFilter {
+  private final Project myProject;
 
-public class JavaDocExternalFilter extends AbstractExternalFilter
-{
-	private final Project myProject;
+  private static final ParseSettings ourPackageInfoSettings = new ParseSettings(Pattern.compile
+      ("package\\s+[^\\s]+\\s+description", Pattern.CASE_INSENSITIVE), Pattern.compile("START OF BOTTOM NAVBAR",
+      Pattern.CASE_INSENSITIVE), true, false);
 
-	private static final ParseSettings ourPackageInfoSettings = new ParseSettings(Pattern.compile
-			("package\\s+[^\\s]+\\s+description", Pattern.CASE_INSENSITIVE), Pattern.compile("START OF BOTTOM NAVBAR",
-			Pattern.CASE_INSENSITIVE), true, false);
+  protected static
+  @NonNls
+  final Pattern ourHTMLsuffix = Pattern.compile("[.][hH][tT][mM][lL]?");
+  protected static
+  @NonNls
+  final Pattern ourParentFolderprefix = Pattern.compile("^[.][.]/");
+  protected static
+  @NonNls
+  final Pattern ourAnchorsuffix = Pattern.compile("#(.*)$");
+  protected static
+  @NonNls
+  final Pattern ourHTMLFilesuffix = Pattern.compile("/([^/]*[.][hH][tT][mM][lL]?)$");
+  private static
+  @NonNls
+  final Pattern ourHREFselector = Pattern.compile("<A.*?HREF=\"([^>\"]*)\"", Pattern.CASE_INSENSITIVE | Pattern
+      .DOTALL);
+  private static
+  @NonNls
+  final Pattern ourMethodHeading = Pattern.compile("<H[34]>(.+?)</H[34]>", Pattern.CASE_INSENSITIVE | Pattern
+      .DOTALL);
+  @NonNls
+  protected static final String H2 = "</H2>";
+  @NonNls
+  protected static final String HTML_CLOSE = "</HTML>";
+  @NonNls
+  protected static final String HTML = "<HTML>";
 
-	protected static
-	@NonNls
-	final Pattern ourHTMLsuffix = Pattern.compile("[.][hH][tT][mM][lL]?");
-	protected static
-	@NonNls
-	final Pattern ourParentFolderprefix = Pattern.compile("^[.][.]/");
-	protected static
-	@NonNls
-	final Pattern ourAnchorsuffix = Pattern.compile("#(.*)$");
-	protected static
-	@NonNls
-	final Pattern ourHTMLFilesuffix = Pattern.compile("/([^/]*[.][hH][tT][mM][lL]?)$");
-	private static
-	@NonNls
-	final Pattern ourHREFselector = Pattern.compile("<A.*?HREF=\"([^>\"]*)\"", Pattern.CASE_INSENSITIVE | Pattern
-			.DOTALL);
-	private static
-	@NonNls
-	final Pattern ourMethodHeading = Pattern.compile("<H[34]>(.+?)</H[34]>", Pattern.CASE_INSENSITIVE | Pattern
-			.DOTALL);
-	@NonNls
-	protected static final String H2 = "</H2>";
-	@NonNls
-	protected static final String HTML_CLOSE = "</HTML>";
-	@NonNls
-	protected static final String HTML = "<HTML>";
+  private final RefConvertor[] myReferenceConvertors = new RefConvertor[]{
+      new RefConvertor(ourHREFselector) {
+        @Override
+        protected String convertReference(String root, String href) {
+          if (URLUtil.isAbsoluteURL(href)) {
+            return href;
+          }
 
-	private final RefConvertor[] myReferenceConvertors = new RefConvertor[]{
-			new RefConvertor(ourHREFselector)
-			{
-				@Override
-				protected String convertReference(String root, String href)
-				{
-					if(consulo.ide.impl.idea.ide.BrowserUtil.isAbsoluteURL(href))
-					{
-						return href;
-					}
+          if (StringUtil.startsWithChar(href, '#')) {
+            return root + href;
+          }
 
-					if(StringUtil.startsWithChar(href, '#'))
-					{
-						return root + href;
-					}
+          String nakedRoot = ourHTMLFilesuffix.matcher(root).replaceAll("/");
 
-					String nakedRoot = ourHTMLFilesuffix.matcher(root).replaceAll("/");
+          String stripped = ourHTMLsuffix.matcher(href).replaceAll("");
+          int len = stripped.length();
 
-					String stripped = ourHTMLsuffix.matcher(href).replaceAll("");
-					int len = stripped.length();
+          do {
+            stripped = ourParentFolderprefix.matcher(stripped).replaceAll("");
+          }
+          while (len > (len = stripped.length()));
 
-					do
-					{
-						stripped = ourParentFolderprefix.matcher(stripped).replaceAll("");
-					}
-					while(len > (len = stripped.length()));
+          final String elementRef = stripped.replaceAll("/", ".");
+          final String classRef = ourAnchorsuffix.matcher(elementRef).replaceAll("");
 
-					final String elementRef = stripped.replaceAll("/", ".");
-					final String classRef = ourAnchorsuffix.matcher(elementRef).replaceAll("");
+          return (JavaPsiFacade.getInstance(myProject).findClass(classRef,
+              GlobalSearchScope.allScope(myProject)) != null) ? DocumentationManagerProtocol
+              .PSI_ELEMENT_PROTOCOL + elementRef : doAnnihilate(nakedRoot + href);
+        }
+      }
+  };
 
-					return (JavaPsiFacade.getInstance(myProject).findClass(classRef,
-							GlobalSearchScope.allScope(myProject)) != null) ? DocumentationManagerProtocol
-							.PSI_ELEMENT_PROTOCOL + elementRef : doAnnihilate(nakedRoot + href);
-				}
-			}
-	};
+  public JavaDocExternalFilter(Project project) {
+    myProject = project;
+  }
 
-	public JavaDocExternalFilter(Project project)
-	{
-		myProject = project;
-	}
+  @Override
+  protected RefConvertor[] getRefConverters() {
+    return myReferenceConvertors;
+  }
 
-	@Override
-	protected RefConvertor[] getRefConverters()
-	{
-		return myReferenceConvertors;
-	}
+  @Nullable
+  public static String filterInternalDocInfo(String text) {
+    if (text == null) {
+      return null;
+    }
+    text = PlatformDocumentationUtil.fixupText(text);
+    return text;
+  }
 
-	@Nullable
-	public static String filterInternalDocInfo(String text)
-	{
-		if(text == null)
-		{
-			return null;
-		}
-		text = PlatformDocumentationUtil.fixupText(text);
-		return text;
-	}
+  @Override
+  @Nullable
+  public String getExternalDocInfoForElement(final String docURL, final PsiElement element) throws Exception {
+    String externalDoc = super.getExternalDocInfoForElement(docURL, element);
+    if (externalDoc != null) {
+      if (element instanceof PsiMethod) {
+        final String className = ApplicationManager.getApplication().runReadAction(new
+                                                                                       Supplier<String>() {
+                                                                                         @Override
+                                                                                         @Nullable
+                                                                                         public String get() {
+                                                                                           PsiClass aClass = ((PsiMethod) element).getContainingClass();
+                                                                                           return aClass == null ? null : aClass.getQualifiedName();
+                                                                                         }
+                                                                                       });
+        Matcher matcher = ourMethodHeading.matcher(externalDoc);
+        final StringBuilder buffer = new StringBuilder();
+        createHyperlink(buffer, className, className, false);
+        //noinspection HardCodedStringLiteral
+        return matcher.replaceFirst("<H3>" + buffer.toString() + "</H3>");
+      }
+    }
+    return externalDoc;
+  }
 
-	@Override
-	@Nullable
-	public String getExternalDocInfoForElement(final String docURL, final PsiElement element) throws Exception
-	{
-		String externalDoc = super.getExternalDocInfoForElement(docURL, element);
-		if(externalDoc != null)
-		{
-			if(element instanceof PsiMethod)
-			{
-				final String className = ApplicationManager.getApplication().runReadAction(new
-																								   NullableComputable<String>()
-				{
-					@Override
-					@Nullable
-					public String compute()
-					{
-						PsiClass aClass = ((PsiMethod) element).getContainingClass();
-						return aClass == null ? null : aClass.getQualifiedName();
-					}
-				});
-				Matcher matcher = ourMethodHeading.matcher(externalDoc);
-				final StringBuilder buffer = new StringBuilder();
-				DocumentationManager.createHyperlink(buffer, className, className, false);
-				//noinspection HardCodedStringLiteral
-				return matcher.replaceFirst("<H3>" + buffer.toString() + "</H3>");
-			}
-		}
-		return externalDoc;
-	}
-
-
-	@Nonnull
-	@Override
-	protected ParseSettings getParseSettings(@Nonnull String url)
-	{
-		return url.endsWith(JavaDocumentationProvider.PACKAGE_SUMMARY_FILE) ? ourPackageInfoSettings : super
-				.getParseSettings(url);
-	}
+  @Nonnull
+  @Override
+  protected ParseSettings getParseSettings(@Nonnull String url) {
+    return url.endsWith(JavaDocumentationProvider.PACKAGE_SUMMARY_FILE) ? ourPackageInfoSettings : super
+        .getParseSettings(url);
+  }
 }

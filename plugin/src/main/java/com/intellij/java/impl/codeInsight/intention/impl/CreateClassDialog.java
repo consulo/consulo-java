@@ -15,57 +15,45 @@
  */
 package com.intellij.java.impl.codeInsight.intention.impl;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.FontMetrics;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.event.InputEvent;
-import java.awt.event.KeyEvent;
-
-import javax.swing.Action;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.KeyStroke;
-import javax.swing.event.DocumentEvent;
-
-import consulo.ui.ex.awt.DialogWrapper;
-import consulo.ui.ex.awt.Messages;
-import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import consulo.application.CommonBundle;
-import consulo.language.editor.CodeInsightBundle;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix.ClassKind;
-import com.intellij.java.language.impl.codeInsight.PackageUtil;
-import consulo.ui.ex.action.AnAction;
-import consulo.ui.ex.action.AnActionEvent;
-import consulo.ui.ex.action.CustomShortcutSet;
-import consulo.application.ApplicationManager;
-import consulo.undoRedo.CommandProcessor;
-import consulo.module.Module;
-import consulo.project.Project;
-import consulo.module.content.ProjectRootManager;
-import consulo.application.util.function.Computable;
-import com.intellij.openapi.util.Pass;
-import consulo.util.lang.StringUtil;
-import consulo.language.psi.PsiDirectory;
-import consulo.language.psi.PsiManager;
-import com.intellij.java.language.psi.PsiNameHelper;
 import com.intellij.java.impl.refactoring.MoveDestination;
 import com.intellij.java.impl.refactoring.PackageWrapper;
-import consulo.language.editor.refactoring.RefactoringBundle;
 import com.intellij.java.impl.refactoring.move.moveClassesOrPackages.DestinationFolderComboBox;
 import com.intellij.java.impl.refactoring.ui.PackageNameReferenceEditorCombo;
 import com.intellij.java.impl.refactoring.util.RefactoringMessageUtil;
-import consulo.ui.ex.awt.event.DocumentAdapter;
-import consulo.ui.ex.RecentsManager;
 import com.intellij.java.impl.ui.ReferenceEditorComboWithBrowseButton;
-import consulo.ui.ex.awt.JBLabel;
+import com.intellij.java.language.impl.codeInsight.PackageUtil;
+import com.intellij.java.language.psi.PsiNameHelper;
+import consulo.application.ApplicationManager;
+import consulo.application.CommonBundle;
+import consulo.application.util.function.Computable;
+import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.psi.PsiDirectory;
+import consulo.language.psi.PsiManager;
 import consulo.language.util.IncorrectOperationException;
+import consulo.module.Module;
+import consulo.module.content.ProjectRootManager;
+import consulo.project.Project;
+import consulo.ui.ex.RecentsManager;
+import consulo.ui.ex.action.AnAction;
+import consulo.ui.ex.action.AnActionEvent;
+import consulo.ui.ex.action.CustomShortcutSet;
+import consulo.ui.ex.awt.DialogWrapper;
+import consulo.ui.ex.awt.JBLabel;
+import consulo.ui.ex.awt.Messages;
+import consulo.ui.ex.awt.event.DocumentAdapter;
+import consulo.undoRedo.CommandProcessor;
+import consulo.util.lang.StringUtil;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import java.awt.*;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 
 public class CreateClassDialog extends DialogWrapper {
   private final JLabel myInformationLabel = new JLabel("#");
@@ -121,12 +109,7 @@ public class CreateClassDialog extends DialogWrapper {
     }
 
     myTfClassName.setText(myClassName);
-    myDestinationCB.setData(myProject, getBaseDir(targetPackageName), new Pass<String>() {
-      @Override
-      public void pass(String s) {
-        setErrorText(s);
-      }
-    }, myPackageComponent.getChildComponent());
+    myDestinationCB.setData(myProject, getBaseDir(targetPackageName), s -> setErrorText(s), myPackageComponent.getChildComponent());
   }
 
   protected boolean reportBaseInTestSelectionInSource() {

@@ -15,199 +15,158 @@
  */
 package com.intellij.java.impl.psi.formatter.java;
 
+import com.intellij.java.impl.psi.codeStyle.JavaCodeStyleSettings;
+import com.intellij.java.impl.psi.impl.source.tree.StdTokenSets;
+import com.intellij.java.language.impl.psi.impl.source.tree.JavaDocElementType;
+import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
+import consulo.document.util.TextRange;
+import consulo.language.ast.ASTNode;
+import consulo.language.ast.IElementType;
+import consulo.language.codeStyle.*;
+import consulo.language.psi.PsiFile;
+
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Nonnull;
+public class SimpleJavaBlock extends AbstractJavaBlock {
+  private final Map<IElementType, Wrap> myReservedWrap = new HashMap<>();
+  private int myStartOffset = -1;
+  private int myCurrentOffset;
+  private Indent myCurrentIndent;
+  private ASTNode myCurrentChild;
 
-import consulo.language.codeStyle.Alignment;
-import consulo.language.codeStyle.Block;
-import consulo.language.codeStyle.ChildAttributes;
-import consulo.language.codeStyle.FormattingMode;
-import consulo.language.codeStyle.Indent;
-import consulo.language.codeStyle.Wrap;
-import consulo.language.codeStyle.AlignmentStrategy;
-import consulo.language.ast.ASTNode;
-import consulo.document.util.TextRange;
-import consulo.language.psi.PsiFile;
-import consulo.language.codeStyle.CommonCodeStyleSettings;
-import com.intellij.java.impl.psi.codeStyle.JavaCodeStyleSettings;
-import consulo.language.codeStyle.FormatterUtil;
-import com.intellij.java.language.impl.psi.impl.source.tree.JavaDocElementType;
-import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
-import com.intellij.java.impl.psi.impl.source.tree.StdTokenSets;
-import consulo.language.ast.IElementType;
-import consulo.util.collection.ContainerUtil;
+  public SimpleJavaBlock(ASTNode node,
+                         Wrap wrap,
+                         AlignmentStrategy alignment,
+                         Indent indent,
+                         CommonCodeStyleSettings settings,
+                         JavaCodeStyleSettings javaSettings,
+                         @Nonnull FormattingMode formattingMode) {
+    super(node, wrap, alignment, indent, settings, javaSettings, formattingMode);
+  }
 
-public class SimpleJavaBlock extends AbstractJavaBlock
-{
-	private final Map<IElementType, Wrap> myReservedWrap = ContainerUtil.newHashMap();
-	private int myStartOffset = -1;
-	private int myCurrentOffset;
-	private Indent myCurrentIndent;
-	private ASTNode myCurrentChild;
+  @Override
+  protected List<Block> buildChildren() {
+    myCurrentChild = myNode.getFirstChildNode();
+    myCurrentOffset = myStartOffset;
+    if (myCurrentOffset == -1) {
+      myCurrentOffset = myCurrentChild != null ? myCurrentChild.getTextRange().getStartOffset() : 0;
+    }
 
-	public SimpleJavaBlock(ASTNode node,
-						   Wrap wrap,
-						   AlignmentStrategy alignment,
-						   Indent indent,
-						   CommonCodeStyleSettings settings,
-						   JavaCodeStyleSettings javaSettings,
-						   @Nonnull FormattingMode formattingMode)
-	{
-		super(node, wrap, alignment, indent, settings, javaSettings, formattingMode);
-	}
+    final List<Block> result = new ArrayList<>();
 
-	@Override
-	protected List<Block> buildChildren()
-	{
-		myCurrentChild = myNode.getFirstChildNode();
-		myCurrentOffset = myStartOffset;
-		if(myCurrentOffset == -1)
-		{
-			myCurrentOffset = myCurrentChild != null ? myCurrentChild.getTextRange().getStartOffset() : 0;
-		}
+    myCurrentIndent = null;
+    processHeadCommentsAndWhiteSpaces(result);
 
-		final List<Block> result = new ArrayList<>();
+    calculateReservedAlignments();
 
-		myCurrentIndent = null;
-		processHeadCommentsAndWhiteSpaces(result);
+    Wrap childWrap = createChildWrap();
+    processRemainingChildren(result, childWrap);
 
-		calculateReservedAlignments();
+    return result;
+  }
 
-		Wrap childWrap = createChildWrap();
-		processRemainingChildren(result, childWrap);
+  private void calculateReservedAlignments() {
+    myReservedAlignment = createChildAlignment();
 
-		return result;
-	}
+    IElementType nodeType = myNode.getElementType();
+    if (nodeType == JavaElementType.CONDITIONAL_EXPRESSION && mySettings.ALIGN_MULTILINE_TERNARY_OPERATION) {
+      myReservedAlignment2 = myReservedAlignment != null ? Alignment.createChildAlignment(myReservedAlignment)
+          : Alignment.createAlignment();
+    }
+  }
 
-	private void calculateReservedAlignments()
-	{
-		myReservedAlignment = createChildAlignment();
+  private void processRemainingChildren(List<Block> result, Wrap childWrap) {
+    while (myCurrentChild != null) {
+      if (isNotEmptyNode(myCurrentChild)) {
+        final ASTNode astNode = myCurrentChild;
+        AlignmentStrategy alignmentStrategyToUse = AlignmentStrategy.wrap(chooseAlignment(myReservedAlignment, myReservedAlignment2, myCurrentChild));
 
-		IElementType nodeType = myNode.getElementType();
-		if(nodeType == JavaElementType.CONDITIONAL_EXPRESSION && mySettings.ALIGN_MULTILINE_TERNARY_OPERATION)
-		{
-			myReservedAlignment2 = myReservedAlignment != null ? Alignment.createChildAlignment(myReservedAlignment)
-					: Alignment.createAlignment();
-		}
-	}
+        if (myNode.getElementType() == JavaElementType.FIELD
+            || myNode.getElementType() == JavaElementType.DECLARATION_STATEMENT
+            || myNode.getElementType() == JavaElementType.LOCAL_VARIABLE) {
+          alignmentStrategyToUse = myAlignmentStrategy;
+        }
 
-	private void processRemainingChildren(List<Block> result, Wrap childWrap)
-	{
-		while(myCurrentChild != null)
-		{
-			if(isNotEmptyNode(myCurrentChild))
-			{
-				final ASTNode astNode = myCurrentChild;
-				AlignmentStrategy alignmentStrategyToUse = AlignmentStrategy.wrap(chooseAlignment(myReservedAlignment, myReservedAlignment2, myCurrentChild));
+        myCurrentChild = processChild(result, astNode, alignmentStrategyToUse, childWrap, myCurrentIndent, myCurrentOffset);
+        if (astNode != myCurrentChild && myCurrentChild != null) {
+          myCurrentOffset = myCurrentChild.getTextRange().getStartOffset();
+        }
+        if (myCurrentIndent != null &&
+            !(myNode.getPsi() instanceof PsiFile) &&
+            myCurrentChild != null && myCurrentChild.getElementType() != JavaElementType.MODIFIER_LIST) {
+          myCurrentIndent = Indent.getContinuationIndent(myIndentSettings.USE_RELATIVE_INDENTS);
+        }
+      }
 
-				if(myNode.getElementType() == JavaElementType.FIELD
-						|| myNode.getElementType() == JavaElementType.DECLARATION_STATEMENT
-						|| myNode.getElementType() == JavaElementType.LOCAL_VARIABLE)
-				{
-					alignmentStrategyToUse = myAlignmentStrategy;
-				}
+      if (myCurrentChild != null) {
+        myCurrentOffset += myCurrentChild.getTextLength();
+        myCurrentChild = myCurrentChild.getTreeNext();
+      }
+    }
+  }
 
-				myCurrentChild = processChild(result, astNode, alignmentStrategyToUse, childWrap, myCurrentIndent, myCurrentOffset);
-				if(astNode != myCurrentChild && myCurrentChild != null)
-				{
-					myCurrentOffset = myCurrentChild.getTextRange().getStartOffset();
-				}
-				if(myCurrentIndent != null &&
-						!(myNode.getPsi() instanceof PsiFile) &&
-						myCurrentChild != null && myCurrentChild.getElementType() != JavaElementType.MODIFIER_LIST)
-				{
-					myCurrentIndent = Indent.getContinuationIndent(myIndentSettings.USE_RELATIVE_INDENTS);
-				}
-			}
+  private void processHeadCommentsAndWhiteSpaces(@Nonnull List<Block> result) {
+    while (myCurrentChild != null) {
+      if (StdTokenSets.COMMENT_BIT_SET.contains(myCurrentChild.getElementType()) || myCurrentChild.getElementType() == JavaDocElementType.DOC_COMMENT) {
+        Block commentBlock = createJavaBlock(
+            myCurrentChild,
+            mySettings, myJavaSettings,
+            Indent.getNoneIndent(), null, AlignmentStrategy.getNullStrategy(),
+            getFormattingMode()
+        );
+        result.add(commentBlock);
+        myCurrentIndent = Indent.getNoneIndent();
+      } else if (!FormatterUtil.containsWhiteSpacesOnly(myCurrentChild)) {
+        break;
+      }
 
-			if(myCurrentChild != null)
-			{
-				myCurrentOffset += myCurrentChild.getTextLength();
-				myCurrentChild = myCurrentChild.getTreeNext();
-			}
-		}
-	}
+      myCurrentOffset += myCurrentChild.getTextLength();
+      myCurrentChild = myCurrentChild.getTreeNext();
+    }
+  }
 
-	private void processHeadCommentsAndWhiteSpaces(@Nonnull List<Block> result)
-	{
-		while(myCurrentChild != null)
-		{
-			if(StdTokenSets.COMMENT_BIT_SET.contains(myCurrentChild.getElementType()) || myCurrentChild.getElementType() == JavaDocElementType.DOC_COMMENT)
-			{
-				Block commentBlock = createJavaBlock(
-						myCurrentChild,
-						mySettings, myJavaSettings,
-						Indent.getNoneIndent(), null, AlignmentStrategy.getNullStrategy(),
-						getFormattingMode()
-				);
-				result.add(commentBlock);
-				myCurrentIndent = Indent.getNoneIndent();
-			}
-			else if(!FormatterUtil.containsWhiteSpacesOnly(myCurrentChild))
-			{
-				break;
-			}
+  private static boolean isNotEmptyNode(@Nonnull ASTNode child) {
+    return !FormatterUtil.containsWhiteSpacesOnly(child) && child.getTextLength() > 0;
+  }
 
-			myCurrentOffset += myCurrentChild.getTextLength();
-			myCurrentChild = myCurrentChild.getTreeNext();
-		}
-	}
+  @Override
+  @Nonnull
+  public TextRange getTextRange() {
+    return myStartOffset == -1 ? super.getTextRange() : new TextRange(myStartOffset, myStartOffset + myNode.getTextLength());
+  }
 
-	private static boolean isNotEmptyNode(@Nonnull ASTNode child)
-	{
-		return !FormatterUtil.containsWhiteSpacesOnly(child) && child.getTextLength() > 0;
-	}
+  @Override
+  @Nonnull
+  public ChildAttributes getChildAttributes(final int newChildIndex) {
+    if (myNode.getElementType() == JavaElementType.CONDITIONAL_EXPRESSION && mySettings.ALIGN_MULTILINE_TERNARY_OPERATION) {
+      final Alignment usedAlignment = getUsedAlignment(newChildIndex);
+      if (usedAlignment != null) {
+        return new ChildAttributes(null, usedAlignment);
+      } else {
+        return super.getChildAttributes(newChildIndex);
+      }
+    } else if (myNode.getElementType() == JavaElementType.SWITCH_LABEL_STATEMENT) {
+      return new ChildAttributes(Indent.getNormalIndent(), null);
+    } else {
+      return super.getChildAttributes(newChildIndex);
+    }
+  }
 
-	@Override
-	@Nonnull
-	public TextRange getTextRange()
-	{
-		return myStartOffset == -1 ? super.getTextRange() : new TextRange(myStartOffset, myStartOffset + myNode.getTextLength());
-	}
+  @Override
+  public Wrap getReservedWrap(final IElementType elementType) {
+    return myReservedWrap.get(elementType);
+  }
 
-	@Override
-	@Nonnull
-	public ChildAttributes getChildAttributes(final int newChildIndex)
-	{
-		if(myNode.getElementType() == JavaElementType.CONDITIONAL_EXPRESSION && mySettings.ALIGN_MULTILINE_TERNARY_OPERATION)
-		{
-			final Alignment usedAlignment = getUsedAlignment(newChildIndex);
-			if(usedAlignment != null)
-			{
-				return new ChildAttributes(null, usedAlignment);
-			}
-			else
-			{
-				return super.getChildAttributes(newChildIndex);
-			}
-		}
-		else if(myNode.getElementType() == JavaElementType.SWITCH_LABEL_STATEMENT)
-		{
-			return new ChildAttributes(Indent.getNormalIndent(), null);
-		}
-		else
-		{
-			return super.getChildAttributes(newChildIndex);
-		}
-	}
+  @Override
+  public void setReservedWrap(final Wrap reservedWrap, final IElementType operationType) {
+    myReservedWrap.put(operationType, reservedWrap);
+  }
 
-	@Override
-	public Wrap getReservedWrap(final IElementType elementType)
-	{
-		return myReservedWrap.get(elementType);
-	}
-
-	@Override
-	public void setReservedWrap(final Wrap reservedWrap, final IElementType operationType)
-	{
-		myReservedWrap.put(operationType, reservedWrap);
-	}
-
-	public void setStartOffset(final int startOffset)
-	{
-		myStartOffset = startOffset;
-	}
+  public void setStartOffset(final int startOffset) {
+    myStartOffset = startOffset;
+  }
 }

@@ -25,7 +25,7 @@
 package com.intellij.java.impl.refactoring.introduceParameter;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import com.intellij.java.indexing.search.searches.OverridingMethodsSearch;
 import consulo.language.psi.search.ReferencesSearch;
 import com.intellij.java.language.psi.util.PropertyUtil;

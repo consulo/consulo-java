@@ -15,25 +15,27 @@
  */
 package com.intellij.java.impl.ipp.decls;
 
-import javax.annotation.Nonnull;
-
-import consulo.fileEditor.FileEditorManager;
-import consulo.language.editor.highlight.HighlightManager;
+import com.intellij.java.impl.ipp.base.Intention;
+import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.intellij.java.language.psi.*;
+import com.siyeh.IntentionPowerPackBundle;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.EditorColors;
 import consulo.colorScheme.EditorColorsManager;
 import consulo.colorScheme.EditorColorsScheme;
 import consulo.colorScheme.TextAttributes;
-import consulo.project.Project;
-import consulo.project.ui.wm.StatusBar;
-import com.intellij.psi.*;
+import consulo.fileEditor.FileEditorManager;
+import consulo.language.editor.highlight.HighlightManager;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiManager;
+import consulo.language.psi.PsiReference;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
-import com.siyeh.IntentionPowerPackBundle;
-import com.intellij.java.impl.ipp.base.Intention;
-import com.intellij.java.impl.ipp.base.PsiElementPredicate;
+import consulo.project.Project;
+import consulo.project.ui.wm.StatusBar;
+
+import javax.annotation.Nonnull;
 
 public class MoveDeclarationIntention extends Intention {
 

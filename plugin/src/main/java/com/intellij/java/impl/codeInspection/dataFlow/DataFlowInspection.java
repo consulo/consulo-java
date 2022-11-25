@@ -15,35 +15,37 @@
  */
 package com.intellij.java.impl.codeInspection.dataFlow;
 
-import com.intellij.java.impl.codeInsight.NullableNotNullDialog;
-import com.intellij.java.impl.codeInsight.daemon.impl.quickfix.DeleteSideEffectsAwareFix;
-import com.intellij.java.impl.codeInsight.daemon.impl.quickfix.UnwrapSwitchLabelFix;
-import com.intellij.java.impl.codeInspection.*;
-import com.intellij.java.impl.codeInspection.dataFlow.fix.FindDfaProblemCauseFix;
-import com.intellij.java.impl.codeInspection.nullable.NullableStuffInspection;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix.SimplifyBooleanExpressionFix;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.DataFlowInspectionBase;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.DfaOptionalSupport;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.DfaPsiUtil;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.TrackingRunner;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.fix.SurroundWithRequireNonNullFix;
+import com.intellij.java.impl.codeInsight.NullableNotNullDialog;
+import com.intellij.java.impl.codeInsight.daemon.impl.quickfix.DeleteSideEffectsAwareFix;
+import com.intellij.java.impl.codeInsight.daemon.impl.quickfix.UnwrapSwitchLabelFix;
+import com.intellij.java.impl.codeInspection.*;
+import com.intellij.java.impl.codeInspection.dataFlow.fix.FindDfaProblemCauseFix;
+import com.intellij.java.impl.codeInspection.nullable.NullableStuffInspection;
+import com.intellij.java.impl.ig.fixes.IntroduceVariableFix;
+import com.intellij.java.impl.refactoring.util.RefactoringUtil;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.*;
-import consulo.language.ast.IElementType;
 import com.intellij.java.language.psi.util.PsiPrecedenceUtil;
-import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.java.impl.refactoring.util.RefactoringUtil;
-import consulo.language.util.IncorrectOperationException;
-import consulo.util.collection.SmartList;
-import consulo.util.collection.ContainerUtil;
-import consulo.ui.ex.awt.JBUI;
-import com.intellij.java.impl.ig.fixes.IntroduceVariableFix;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
 import com.siyeh.ig.psiutils.SideEffectChecker;
+import consulo.language.ast.IElementType;
+import consulo.language.editor.inspection.LocalQuickFix;
+import consulo.language.editor.inspection.LocalQuickFixOnPsiElement;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
+import consulo.ui.ex.awt.JBUI;
+import consulo.util.collection.ContainerUtil;
+import consulo.util.collection.SmartList;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -57,7 +59,7 @@ import static consulo.language.editor.inspection.InspectionsBundle.message;
 import static consulo.util.lang.xml.XmlStringUtil.wrapInHtml;
 import static javax.swing.SwingConstants.TOP;
 
-public class DataFlowInspection extends DataFlowInspectionBase {
+public abstract class DataFlowInspection extends DataFlowInspectionBase {
   private static final Logger LOG = Logger.getInstance(DataFlowInspection.class);
 
   @Override

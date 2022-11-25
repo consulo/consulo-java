@@ -15,11 +15,16 @@
  */
 package com.intellij.java.impl.codeInspection.defUse;
 
-import com.intellij.java.analysis.codeInspection.GroupNames;
 import com.intellij.java.analysis.codeInspection.BaseJavaBatchLocalInspectionTool;
-import com.intellij.java.language.psi.*;
-import com.intellij.psi.*;
+import com.intellij.java.analysis.codeInspection.GroupNames;
 import com.intellij.java.analysis.impl.psi.controlFlow.DefUseUtil;
+import com.intellij.java.language.psi.*;
+import consulo.language.editor.inspection.InspectionsBundle;
+import consulo.language.editor.inspection.LocalQuickFix;
+import consulo.language.editor.inspection.ProblemHighlightType;
+import consulo.language.editor.inspection.ProblemsHolder;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiElementVisitor;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
@@ -30,24 +35,26 @@ import java.awt.*;
 import java.util.List;
 import java.util.*;
 
-public class DefUseInspectionBase extends BaseJavaBatchLocalInspectionTool
-{
+public abstract class DefUseInspectionBase extends BaseJavaBatchLocalInspectionTool {
   public boolean REPORT_PREFIX_EXPRESSIONS = false;
   public boolean REPORT_POSTFIX_EXPRESSIONS = true;
   public boolean REPORT_REDUNDANT_INITIALIZER = true;
 
   public static final String DISPLAY_NAME = InspectionsBundle.message("inspection.unused.assignment.display.name");
-  @NonNls public static final String SHORT_NAME = "UnusedAssignment";
+  @NonNls
+  public static final String SHORT_NAME = "UnusedAssignment";
 
   @Override
   @Nonnull
   public PsiElementVisitor buildVisitor(@Nonnull final ProblemsHolder holder, final boolean isOnTheFly) {
     return new JavaElementVisitor() {
-      @Override public void visitMethod(PsiMethod method) {
+      @Override
+      public void visitMethod(PsiMethod method) {
         checkCodeBlock(method.getBody(), holder, isOnTheFly);
       }
 
-      @Override public void visitClassInitializer(PsiClassInitializer initializer) {
+      @Override
+      public void visitClassInitializer(PsiClassInitializer initializer) {
         checkCodeBlock(initializer.getBody(), holder, isOnTheFly);
       }
     };
@@ -82,66 +89,66 @@ public class DefUseInspectionBase extends BaseJavaBatchLocalInspectionTool
           if (!info.isRead()) {
             if (!isOnTheFly) {
               holder.registerProblem(psiVariable.getNameIdentifier(),
-                                     InspectionsBundle.message("inspection.unused.assignment.problem.descriptor1", "<code>#ref</code> #loc"),
-                                     ProblemHighlightType.LIKE_UNUSED_SYMBOL);
+                  InspectionsBundle.message("inspection.unused.assignment.problem.descriptor1", "<code>#ref</code> #loc"),
+                  ProblemHighlightType.LIKE_UNUSED_SYMBOL);
             }
-          }
-          else {
+          } else {
             if (REPORT_REDUNDANT_INITIALIZER) {
               holder.registerProblem(psiVariable.getInitializer(),
-                                     InspectionsBundle.message("inspection.unused.assignment.problem.descriptor2",
-                                                               "<code>" + psiVariable.getName() + "</code>", "<code>#ref</code> #loc"),
-                                     ProblemHighlightType.LIKE_UNUSED_SYMBOL,
-                                     createRemoveInitializerFix());
+                  InspectionsBundle.message("inspection.unused.assignment.problem.descriptor2",
+                      "<code>" + psiVariable.getName() + "</code>", "<code>#ref</code> #loc"),
+                  ProblemHighlightType.LIKE_UNUSED_SYMBOL,
+                  createRemoveInitializerFix());
             }
           }
-        }
-        else if (context instanceof PsiAssignmentExpression) {
-          final PsiAssignmentExpression assignment = (PsiAssignmentExpression)context;
+        } else if (context instanceof PsiAssignmentExpression) {
+          final PsiAssignmentExpression assignment = (PsiAssignmentExpression) context;
           holder.registerProblem(assignment.getLExpression(),
-                                 InspectionsBundle.message("inspection.unused.assignment.problem.descriptor3",
-                                                           assignment.getRExpression().getText(), "<code>#ref</code>" + " #loc"), ProblemHighlightType.LIKE_UNUSED_SYMBOL);
-        }
-        else {
+              InspectionsBundle.message("inspection.unused.assignment.problem.descriptor3",
+                  assignment.getRExpression().getText(), "<code>#ref</code>" + " #loc"), ProblemHighlightType.LIKE_UNUSED_SYMBOL);
+        } else {
           if (context instanceof PsiPrefixExpression && REPORT_PREFIX_EXPRESSIONS ||
               context instanceof PsiPostfixExpression && REPORT_POSTFIX_EXPRESSIONS) {
             holder.registerProblem(context,
-                                   InspectionsBundle.message("inspection.unused.assignment.problem.descriptor4", "<code>#ref</code> #loc"));
+                InspectionsBundle.message("inspection.unused.assignment.problem.descriptor4", "<code>#ref</code> #loc"));
           }
         }
       }
     }
 
     body.accept(new JavaRecursiveElementWalkingVisitor() {
-      @Override public void visitClass(PsiClass aClass) {
+      @Override
+      public void visitClass(PsiClass aClass) {
       }
 
-      @Override public void visitLocalVariable(PsiLocalVariable variable) {
+      @Override
+      public void visitLocalVariable(PsiLocalVariable variable) {
         if (!usedVariables.contains(variable) && variable.getInitializer() == null && !isOnTheFly) {
           holder.registerProblem(variable.getNameIdentifier(),
-                                 InspectionsBundle.message("inspection.unused.assignment.problem.descriptor5", "<code>#ref</code> #loc"),
-                                 ProblemHighlightType.LIKE_UNUSED_SYMBOL);
+              InspectionsBundle.message("inspection.unused.assignment.problem.descriptor5", "<code>#ref</code> #loc"),
+              ProblemHighlightType.LIKE_UNUSED_SYMBOL);
         }
       }
 
-      @Override public void visitAssignmentExpression(PsiAssignmentExpression expression) {
+      @Override
+      public void visitAssignmentExpression(PsiAssignmentExpression expression) {
         PsiExpression lExpression = expression.getLExpression();
         PsiExpression rExpression = expression.getRExpression();
 
         if (lExpression instanceof PsiReferenceExpression && rExpression instanceof PsiReferenceExpression) {
-          PsiReferenceExpression lRef = (PsiReferenceExpression)lExpression;
-          PsiReferenceExpression rRef = (PsiReferenceExpression)rExpression;
+          PsiReferenceExpression lRef = (PsiReferenceExpression) lExpression;
+          PsiReferenceExpression rRef = (PsiReferenceExpression) rExpression;
 
           if (lRef.resolve() != rRef.resolve()) return;
           PsiExpression lQualifier = lRef.getQualifierExpression();
           PsiExpression rQualifier = rRef.getQualifierExpression();
 
           if ((lQualifier == null && rQualifier == null ||
-               lQualifier instanceof PsiThisExpression && rQualifier instanceof PsiThisExpression ||
-               lQualifier instanceof PsiThisExpression && rQualifier == null ||
-               lQualifier == null && rQualifier instanceof PsiThisExpression) && !isOnTheFly) {
+              lQualifier instanceof PsiThisExpression && rQualifier instanceof PsiThisExpression ||
+              lQualifier instanceof PsiThisExpression && rQualifier == null ||
+              lQualifier == null && rQualifier instanceof PsiThisExpression) && !isOnTheFly) {
             holder.registerProblem(expression,
-                                   InspectionsBundle.message("inspection.unused.assignment.problem.descriptor6", "<code>#ref</code>"));
+                InspectionsBundle.message("inspection.unused.assignment.problem.descriptor6", "<code>#ref</code>"));
           }
         }
       }

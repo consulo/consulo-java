@@ -15,10 +15,6 @@
  */
 package com.intellij.java.impl.codeInsight.completion;
 
-import consulo.application.util.matcher.PrefixMatcher;
-import consulo.language.editor.completion.lookup.LookupElement;
-import consulo.language.editor.impl.internal.template.TemplateImpl;
-import consulo.language.editor.template.TemplateSettings;
 import com.intellij.java.analysis.codeInsight.guess.GuessManager;
 import com.intellij.java.impl.codeInsight.lookup.ExpressionLookupItem;
 import com.intellij.java.impl.codeInsight.lookup.KeywordLookupItem;
@@ -28,16 +24,20 @@ import com.intellij.java.impl.psi.filters.getters.ClassLiteralGetter;
 import com.intellij.java.impl.psi.filters.getters.ThisGetter;
 import com.intellij.java.language.impl.psi.scope.util.PsiScopesUtil;
 import com.intellij.java.language.psi.*;
-import consulo.util.lang.StringUtil;
+import consulo.application.util.matcher.PrefixMatcher;
+import consulo.language.editor.completion.lookup.LookupElement;
+import consulo.language.editor.template.Template;
+import consulo.language.editor.template.TemplateSettings;
 import consulo.language.psi.PsiElement;
-import consulo.language.psi.resolve.ResolveState;
 import consulo.language.psi.resolve.BaseScopeProcessor;
+import consulo.language.psi.resolve.ResolveState;
 import consulo.language.psi.util.PsiTreeUtil;
-import consulo.ide.impl.idea.util.Consumer;
 import consulo.util.collection.MultiMap;
+import consulo.util.lang.StringUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.function.Consumer;
 
 /**
  * @author peter
@@ -45,7 +45,7 @@ import javax.annotation.Nullable;
 public class BasicExpressionCompletionContributor {
 
   private static void addKeyword(final Consumer<LookupElement> result, final PsiElement element, final String s) {
-    result.consume(createKeywordLookupItem(element, s));
+    result.accept(createKeywordLookupItem(element, s));
   }
 
   public static LookupElement createKeywordLookupItem(final PsiElement element, final String s) {
@@ -68,11 +68,12 @@ public class BasicExpressionCompletionContributor {
       ClassLiteralGetter.addCompletions(parameters, result, matcher);
 
       final PsiElement position = parameters.getPosition();
+
       final PsiType expectedType = parameters.getExpectedType();
 
-      for (final TemplateImpl template : TemplateSettings.getInstance().getTemplates()) {
+      for (final Template template : TemplateSettings.getInstance().getTemplates()) {
         if (!template.isDeactivated() && template.getTemplateContext().isEnabled(new SmartCompletionContextType())) {
-          result.consume(new SmartCompletionTemplateItem(template, position));
+          result.accept(new SmartCompletionTemplateItem(template, position));
         }
       }
 
@@ -82,7 +83,7 @@ public class BasicExpressionCompletionContributor {
       final PsiElement parent = position.getParent();
       if (parent != null && !(parent.getParent() instanceof PsiSwitchLabelStatement)) {
         for (final PsiExpression expression : ThisGetter.getThisExpressionVariants(position)) {
-          result.consume(new ExpressionLookupItem(expression));
+          result.accept(new ExpressionLookupItem(expression));
         }
       }
 
@@ -128,7 +129,7 @@ public class BasicExpressionCompletionContributor {
       for (PsiType castType : map.get(expression)) {
         PsiType baseType = expression.getType();
         if (expectedType == null || (expectedType.isAssignableFrom(castType) && (baseType == null || !expectedType.isAssignableFrom(baseType)))) {
-          consumer.consume(CastingLookupElementDecorator.createCastingElement(expressionToLookupElement(expression), castType));
+          consumer.accept(CastingLookupElementDecorator.createCastingElement(expressionToLookupElement(expression), castType));
         }
       }
     }

@@ -15,23 +15,24 @@
  */
 package com.intellij.java.impl.codeInspection.accessStaticViaInstance;
 
-import com.intellij.java.language.impl.codeInsight.daemon.JavaErrorBundle;
+import com.intellij.java.analysis.codeInspection.BaseJavaBatchLocalInspectionTool;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.HighlightMessageUtil;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.JavaHighlightUtil;
 import com.intellij.java.impl.codeInsight.daemon.impl.quickfix.RemoveUnusedVariableUtil;
-import com.intellij.java.analysis.codeInspection.BaseJavaBatchLocalInspectionTool;
+import com.intellij.java.language.impl.codeInsight.daemon.JavaErrorBundle;
+import com.intellij.java.language.psi.*;
 import consulo.language.editor.inspection.InspectionsBundle;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemsHolder;
-import com.intellij.java.language.psi.*;
-import com.intellij.psi.*;
-import consulo.psi.PsiPackage;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiElementVisitor;
+import consulo.language.psi.PsiPackage;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 
-public class AccessStaticViaInstanceBase extends BaseJavaBatchLocalInspectionTool {
+public abstract class AccessStaticViaInstanceBase extends BaseJavaBatchLocalInspectionTool {
   @NonNls public static final String ACCESS_STATIC_VIA_INSTANCE = "AccessStaticViaInstance";
 
   @Override

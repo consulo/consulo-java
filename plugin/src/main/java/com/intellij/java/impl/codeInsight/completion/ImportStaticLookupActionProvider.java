@@ -1,12 +1,13 @@
 package com.intellij.java.impl.codeInsight.completion;
 
+import consulo.application.AllIcons;
 import consulo.language.editor.completion.lookup.Lookup;
 import consulo.language.editor.completion.lookup.LookupActionProvider;
 import consulo.language.editor.completion.lookup.LookupElement;
 import consulo.language.editor.completion.lookup.LookupElementAction;
-import consulo.application.AllIcons;
-import consulo.ide.impl.idea.util.Consumer;
 import consulo.ui.image.Image;
+
+import java.util.function.Consumer;
 
 /**
  * @author peter
@@ -21,7 +22,7 @@ public class ImportStaticLookupActionProvider implements LookupActionProvider {
 
     final Image checkIcon = AllIcons.Actions.Checked;
     final Image icon = item.willBeImported() ? checkIcon : Image.empty(checkIcon.getWidth(), checkIcon.getHeight());
-    consumer.consume(new LookupElementAction(icon, "Import statically") {
+    consumer.accept(new LookupElementAction(icon, "Import statically") {
       @Override
       public Result performLookupAction() {
         item.setShouldBeImported(!item.willBeImported());

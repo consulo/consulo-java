@@ -15,6 +15,7 @@
  */
 package consulo.java.impl.spi;
 
+import com.intellij.java.language.JavaLanguage;
 import consulo.language.Language;
 import com.intellij.java.language.spi.SPILanguage;
 import consulo.component.extension.ExtensionPointName;
@@ -64,5 +65,11 @@ public class SPILanguageSubstitutor extends LanguageSubstitutor {
       }
     }
     return null;
+  }
+
+  @Nonnull
+  @Override
+  public Language getLanguage() {
+    return JavaLanguage.INSTANCE;
   }
 }

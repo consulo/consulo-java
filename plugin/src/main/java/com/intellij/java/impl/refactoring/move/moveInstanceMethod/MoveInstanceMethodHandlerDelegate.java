@@ -22,7 +22,7 @@ import com.intellij.java.language.psi.PsiModifier;
 import consulo.dataContext.DataContext;
 import consulo.codeEditor.Editor;
 import consulo.project.Project;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import consulo.language.editor.refactoring.move.MoveCallback;
 import consulo.language.editor.refactoring.move.MoveHandlerDelegate;
 import com.intellij.java.impl.refactoring.move.moveClassesOrPackages.JavaMoveClassesOrPackagesHandler;

@@ -24,7 +24,7 @@
  */
 package com.intellij.java.impl.refactoring.makeStatic;
 
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 
 public class SelfUsageInfo extends InternalUsageInfo {
   SelfUsageInfo(PsiElement element, PsiElement referencedElement) {

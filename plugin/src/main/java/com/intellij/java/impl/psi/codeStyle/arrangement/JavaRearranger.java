@@ -17,17 +17,17 @@ package com.intellij.java.impl.psi.codeStyle.arrangement;
 
 import com.intellij.java.analysis.impl.ide.highlighter.JavaHighlightingColors;
 import com.intellij.java.language.JavaLanguage;
-import consulo.document.Document;
 import consulo.codeEditor.EditorColors;
 import consulo.colorScheme.EditorColorsScheme;
-import consulo.colorScheme.TextAttributesKey;
 import consulo.colorScheme.TextAttributes;
-import consulo.util.lang.Pair;
+import consulo.colorScheme.TextAttributesKey;
+import consulo.document.Document;
 import consulo.document.util.TextRange;
-import consulo.language.psi.PsiElement;
+import consulo.ide.impl.idea.util.containers.ContainerUtilRt;
+import consulo.language.Language;
 import consulo.language.codeStyle.CodeStyleSettings;
 import consulo.language.codeStyle.CommonCodeStyleSettings;
-import com.intellij.psi.codeStyle.arrangement.*;
+import consulo.language.codeStyle.arrangement.*;
 import consulo.language.codeStyle.arrangement.group.ArrangementGroupingRule;
 import consulo.language.codeStyle.arrangement.match.ArrangementEntryMatcher;
 import consulo.language.codeStyle.arrangement.match.StdArrangementEntryMatcher;
@@ -35,9 +35,10 @@ import consulo.language.codeStyle.arrangement.match.StdArrangementMatchRule;
 import consulo.language.codeStyle.arrangement.model.ArrangementAtomMatchCondition;
 import consulo.language.codeStyle.arrangement.model.ArrangementCompositeMatchCondition;
 import consulo.language.codeStyle.arrangement.model.ArrangementMatchCondition;
-import com.intellij.psi.codeStyle.arrangement.std.*;
-import consulo.ide.impl.idea.util.containers.ContainerUtilRt;
+import consulo.language.codeStyle.arrangement.std.*;
+import consulo.language.psi.PsiElement;
 import consulo.ui.color.ColorValue;
+import consulo.util.lang.Pair;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -418,5 +419,11 @@ public class JavaRearranger implements Rearranger<JavaElementArrangementEntry>, 
   @Override
   public Color getBorderColor(@Nonnull EditorColorsScheme scheme, boolean selected) {
     return null;
+  }
+
+  @Nonnull
+  @Override
+  public Language getLanguage() {
+    return JavaLanguage.INSTANCE;
   }
 }

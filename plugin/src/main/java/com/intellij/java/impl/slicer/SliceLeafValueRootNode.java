@@ -15,113 +15,95 @@
  */
 package com.intellij.java.impl.slicer;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
-import javax.swing.JTree;
-
-import javax.annotation.Nonnull;
-import consulo.ui.ex.tree.PresentationData;
-import consulo.project.Project;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
+import consulo.project.Project;
 import consulo.ui.ex.SimpleTextAttributes;
+import consulo.ui.ex.tree.PresentationData;
+import consulo.usage.TextChunk;
 import consulo.usage.Usage;
 import consulo.usage.UsageInfo2UsageAdapter;
 import consulo.usage.UsageViewBundle;
 import consulo.usage.internal.ChunkExtractor;
-import com.intellij.usages.TextChunk;
+
+import javax.annotation.Nonnull;
+import javax.swing.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * @author cdr
  */
-public class SliceLeafValueRootNode extends SliceNode implements MyColoredTreeCellRenderer
-{
-	protected final List<SliceNode> myCachedChildren;
+public class SliceLeafValueRootNode extends SliceNode implements MyColoredTreeCellRenderer {
+  protected final List<SliceNode> myCachedChildren;
 
-	public SliceLeafValueRootNode(@Nonnull Project project,
-			PsiElement leafExpression,
-			SliceNode root,
-			List<SliceNode> children,
-			SliceAnalysisParams params)
-	{
-		super(project, SliceUsage.createRootUsage(leafExpression, params), root.targetEqualUsages);
-		myCachedChildren = children;
-	}
+  public SliceLeafValueRootNode(@Nonnull Project project,
+                                PsiElement leafExpression,
+                                SliceNode root,
+                                List<SliceNode> children,
+                                SliceAnalysisParams params) {
+    super(project, SliceUsage.createRootUsage(leafExpression, params), root.targetEqualUsages);
+    myCachedChildren = children;
+  }
 
-	@Override
-	@Nonnull
-	public Collection<SliceNode> getChildren()
-	{
-		return myCachedChildren;
-	}
+  @Override
+  @Nonnull
+  public Collection<SliceNode> getChildren() {
+    return myCachedChildren;
+  }
 
-	@Override
-	protected void update(PresentationData presentation)
-	{
-	}
+  @Override
+  protected void update(PresentationData presentation) {
+  }
 
-	@Override
-	public String toString()
-	{
-		Usage myLeafExpression = getValue();
-		String text;
-		if(myLeafExpression instanceof UsageInfo2UsageAdapter)
-		{
-			PsiElement element = ((UsageInfo2UsageAdapter) myLeafExpression).getUsageInfo().getElement();
-			text = element == null ? "" : element.getText();
-		}
-		else
-		{
-			text = "Other";
-		}
-		return "Value: " + text;
-	}
+  @Override
+  public String toString() {
+    Usage myLeafExpression = getValue();
+    String text;
+    if (myLeafExpression instanceof UsageInfo2UsageAdapter) {
+      PsiElement element = ((UsageInfo2UsageAdapter) myLeafExpression).getUsageInfo().getElement();
+      text = element == null ? "" : element.getText();
+    } else {
+      text = "Other";
+    }
+    return "Value: " + text;
+  }
 
-	@Override
-	public void customizeCellRenderer(@Nonnull SliceUsageCellRenderer renderer,
-			@Nonnull JTree tree,
-			Object value,
-			boolean selected,
-			boolean expanded,
-			boolean leaf,
-			int row,
-			boolean hasFocus)
-	{
-		Usage usage = getValue();
-		renderer.append("Value: ", SimpleTextAttributes.REGULAR_ATTRIBUTES);
+  @Override
+  public void customizeCellRenderer(@Nonnull SliceUsageCellRenderer renderer,
+                                    @Nonnull JTree tree,
+                                    Object value,
+                                    boolean selected,
+                                    boolean expanded,
+                                    boolean leaf,
+                                    int row,
+                                    boolean hasFocus) {
+    Usage usage = getValue();
+    renderer.append("Value: ", SimpleTextAttributes.REGULAR_ATTRIBUTES);
 
-		if(usage instanceof UsageInfo2UsageAdapter)
-		{
-			PsiElement element = ((UsageInfo2UsageAdapter) usage).getElement();
-			if(element == null)
-			{
-				renderer.append(UsageViewBundle.message("node.invalid") + " ", SliceUsageCellRenderer.ourInvalidAttributes);
-			}
-			else
-			{
-				appendElementText((UsageInfo2UsageAdapter) usage, element, renderer);
-			}
-		}
-		else
-		{
-			renderer.append("Other", SimpleTextAttributes.REGULAR_BOLD_ATTRIBUTES);
-		}
-	}
+    if (usage instanceof UsageInfo2UsageAdapter) {
+      PsiElement element = ((UsageInfo2UsageAdapter) usage).getElement();
+      if (element == null) {
+        renderer.append(UsageViewBundle.message("node.invalid") + " ", SliceUsageCellRenderer.ourInvalidAttributes);
+      } else {
+        appendElementText((UsageInfo2UsageAdapter) usage, element, renderer);
+      }
+    } else {
+      renderer.append("Other", SimpleTextAttributes.REGULAR_BOLD_ATTRIBUTES);
+    }
+  }
 
-	private static void appendElementText(@Nonnull UsageInfo2UsageAdapter usage,
-			@Nonnull final PsiElement element,
-			@Nonnull final SliceUsageCellRenderer renderer)
-	{
-		PsiFile file = element.getContainingFile();
-		List<TextChunk> result = new ArrayList<TextChunk>();
-		ChunkExtractor.getExtractor(element.getContainingFile()).createTextChunks(usage, file.getText(), element.getTextRange().getStartOffset(),
-				element.getTextRange().getEndOffset(), false, result);
+  private static void appendElementText(@Nonnull UsageInfo2UsageAdapter usage,
+                                        @Nonnull final PsiElement element,
+                                        @Nonnull final SliceUsageCellRenderer renderer) {
+    PsiFile file = element.getContainingFile();
+    List<TextChunk> result = new ArrayList<TextChunk>();
+    ChunkExtractor.getExtractor(element.getContainingFile()).createTextChunks(usage, file.getText(), element.getTextRange().getStartOffset(),
+        element.getTextRange().getEndOffset(), false, result);
 
-		for(TextChunk chunk : result)
-		{
-			renderer.append(chunk.getText(), chunk.getSimpleAttributesIgnoreBackground());
-		}
-	}
+    for (TextChunk chunk : result) {
+      renderer.append(chunk.getText(), chunk.getSimpleAttributesIgnoreBackground());
+    }
+  }
 }

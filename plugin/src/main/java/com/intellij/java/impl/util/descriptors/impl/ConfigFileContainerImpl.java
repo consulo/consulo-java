@@ -17,12 +17,16 @@
 package com.intellij.java.impl.util.descriptors.impl;
 
 import com.intellij.java.impl.util.descriptors.*;
-import consulo.project.Project;
-import consulo.util.collection.MultiValuesMap;
-import com.intellij.openapi.vfs.*;
-import consulo.proxy.EventDispatcher;
 import consulo.disposer.Disposable;
 import consulo.disposer.Disposer;
+import consulo.project.Project;
+import consulo.proxy.EventDispatcher;
+import consulo.util.collection.MultiValuesMap;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.virtualFileSystem.VirtualFileManager;
+import consulo.virtualFileSystem.event.VirtualFileAdapter;
+import consulo.virtualFileSystem.event.VirtualFileMoveEvent;
+import consulo.virtualFileSystem.event.VirtualFilePropertyEvent;
 
 import javax.annotation.Nullable;
 import java.util.Collection;

@@ -25,7 +25,7 @@ import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.language.editor.intention.BaseIntentionAction;
 import consulo.codeEditor.Editor;
 import consulo.project.Project;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.java.language.module.util.JavaClassNames;

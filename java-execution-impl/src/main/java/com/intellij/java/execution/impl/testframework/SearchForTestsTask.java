@@ -15,271 +15,180 @@
  */
 package com.intellij.java.execution.impl.testframework;
 
+import consulo.application.ApplicationManager;
+import consulo.application.progress.ProgressIndicator;
+import consulo.application.progress.Task;
+import consulo.component.ProcessCanceledException;
+import consulo.execution.ExecutionBundle;
+import consulo.logging.Logger;
+import consulo.process.ExecutionException;
+import consulo.process.event.ProcessAdapter;
+import consulo.process.event.ProcessEvent;
+import consulo.process.internal.OSProcessHandler;
+import consulo.project.DumbService;
+import consulo.project.Project;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.concurrent.atomic.AtomicBoolean;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+public abstract class SearchForTestsTask extends Task.Backgroundable {
+  private static final Logger LOG = Logger.getInstance(SearchForTestsTask.class);
+  protected Socket mySocket;
+  private ServerSocket myServerSocket;
+  private ProgressIndicator myProcessIndicator;
 
-import consulo.application.impl.internal.progress.SensitiveProgressWrapper;
-import consulo.execution.ExecutionBundle;
-import consulo.process.ExecutionException;
-import consulo.process.internal.OSProcessHandler;
-import consulo.process.event.ProcessAdapter;
-import consulo.process.event.ProcessEvent;
-import consulo.application.ApplicationManager;
-import consulo.component.ProcessCanceledException;
-import consulo.application.progress.ProgressIndicator;
-import consulo.application.progress.ProgressManager;
-import consulo.application.progress.Task;
-import consulo.ide.impl.idea.openapi.progress.impl.BackgroundableProcessIndicator;
-import consulo.application.impl.internal.progress.ProgressIndicatorUtils;
-import consulo.project.DumbService;
-import consulo.project.Project;
-import consulo.logging.Logger;
-import consulo.platform.Platform;
-
-public abstract class SearchForTestsTask extends Task.Backgroundable
-{
-	public static final boolean JUNIT4_SEARCH_4_TESTS_IN_CLASSPATH = Boolean.parseBoolean(Platform.current().jvm().getRuntimeProperty("junit4.search.4.tests.in.classpath", "false"));
-
-	private static final Logger LOG = Logger.getInstance(SearchForTestsTask.class);
-	protected Socket mySocket;
-	private ServerSocket myServerSocket;
-	private ProgressIndicator myProcessIndicator;
-
-	public SearchForTestsTask(@Nullable final Project project, final ServerSocket socket)
-	{
-		super(project, ExecutionBundle.message("searching.test.progress.title"), true);
-		myServerSocket = socket;
-	}
+  public SearchForTestsTask(@Nullable final Project project, final ServerSocket socket) {
+    super(project, ExecutionBundle.message("searching.test.progress.title"), true);
+    myServerSocket = socket;
+  }
 
 
-	protected abstract void search() throws ExecutionException;
+  protected abstract void search() throws ExecutionException;
 
-	protected abstract void onFound() throws ExecutionException;
+  protected abstract void onFound() throws ExecutionException;
 
-	public void ensureFinished()
-	{
-		if(myProcessIndicator != null && !myProcessIndicator.isCanceled())
-		{
-			finish();
-		}
-	}
+  public void ensureFinished() {
+    if (myProcessIndicator != null && !myProcessIndicator.isCanceled()) {
+      finish();
+    }
+  }
 
-	public void startSearch()
-	{
-		if(ApplicationManager.getApplication().isUnitTestMode())
-		{
-			try
-			{
-				search();
-			}
-			catch(Throwable e)
-			{
-				LOG.error(e);
-			}
-			try
-			{
-				onFound();
-			}
-			catch(ExecutionException e)
-			{
-				LOG.error(e);
-			}
-		}
-		else
-		{
-			myProcessIndicator = new BackgroundableProcessIndicator(this);
-			ProgressManager.getInstance().runProcessWithProgressAsynchronously(this, myProcessIndicator);
-		}
-	}
+  public void startSearch() {
+    if (ApplicationManager.getApplication().isUnitTestMode()) {
+      try {
+        search();
+      } catch (Throwable e) {
+        LOG.error(e);
+      }
+      try {
+        onFound();
+      } catch (ExecutionException e) {
+        LOG.error(e);
+      }
+    } else {
+      queue();
+    }
+  }
 
-	public void attachTaskToProcess(final OSProcessHandler handler)
-	{
-		handler.addProcessListener(new ProcessAdapter()
-		{
-			@Override
-			public void processTerminated(@Nonnull final ProcessEvent event)
-			{
-				handler.removeProcessListener(this);
-				ensureFinished();
-			}
+  public void attachTaskToProcess(final OSProcessHandler handler) {
+    handler.addProcessListener(new ProcessAdapter() {
+      @Override
+      public void processTerminated(@Nonnull final ProcessEvent event) {
+        handler.removeProcessListener(this);
+        ensureFinished();
+      }
 
-			@Override
-			public void startNotified(@Nonnull final ProcessEvent event)
-			{
-				startSearch();
-			}
-		});
-	}
+      @Override
+      public void startNotified(@Nonnull final ProcessEvent event) {
+        startSearch();
+      }
+    });
+  }
 
-	@Override
-	public void run(@Nonnull ProgressIndicator indicator)
-	{
-		try
-		{
-			mySocket = myServerSocket.accept();
-			final ExecutionException[] ex = new ExecutionException[1];
-			Runnable runnable = () ->
-			{
-				try
-				{
-					search();
-				}
-				catch(ExecutionException e)
-				{
-					ex[0] = e;
-				}
-			};
-			if(JUNIT4_SEARCH_4_TESTS_IN_CLASSPATH)
-			{
-				runnable.run();
-			}
-			else
-			{
-				//noinspection StatementWithEmptyBody
-				while(!runSmartModeReadActionWithWritePriority(runnable, new SensitiveProgressWrapper(indicator)))
-				{
-					;
-				}
-			}
-			if(ex[0] != null)
-			{
-				logCantRunException(ex[0]);
-			}
-		}
-		catch(ProcessCanceledException e)
-		{
-			throw e;
-		}
-		catch(IOException e)
-		{
-			LOG.info(e);
-		}
-		catch(Throwable e)
-		{
-			LOG.error(e);
-		}
-	}
+  @Override
+  public void run(@Nonnull ProgressIndicator indicator) {
+    try {
+      myProcessIndicator = indicator;
+      mySocket = myServerSocket.accept();
+      final ExecutionException[] ex = new ExecutionException[1];
+      Runnable runnable = () ->
+      {
+        try {
+          search();
+        } catch (ExecutionException e) {
+          ex[0] = e;
+        }
+      };
+      while (!run(runnable, indicator)) {
+        ;
+      }
+      if (ex[0] != null) {
+        logCantRunException(ex[0]);
+      }
+    } catch (ProcessCanceledException e) {
+      throw e;
+    } catch (IOException e) {
+      LOG.info(e);
+    } catch (Throwable e) {
+      LOG.error(e);
+    }
+  }
 
-	/**
-	 * @return true if runnable has been executed with no write action interference and in "smart" mode
-	 */
-	private boolean runSmartModeReadActionWithWritePriority(@Nonnull Runnable runnable, ProgressIndicator indicator)
-	{
-		DumbService dumbService = DumbService.getInstance(myProject);
+  /**
+   * @return true if runnable has been executed with no write action interference and in "smart" mode
+   */
+  private boolean run(@Nonnull Runnable runnable, ProgressIndicator indicator) {
+    DumbService dumbService = DumbService.getInstance((Project) myProject);
 
-		indicator.checkCanceled();
-		dumbService.waitForSmartMode();
+    indicator.checkCanceled();
+    dumbService.waitForSmartMode();
 
-		AtomicBoolean dumb = new AtomicBoolean();
-		boolean success = ProgressIndicatorUtils.runInReadActionWithWriteActionPriority(() ->
-		{
-			if(myProject.isDisposed())
-			{
-				return;
-			}
+    if (myProject.isDisposed()) {
+      return true;
+    }
 
-			if(dumbService.isDumb())
-			{
-				dumb.set(true);
-				return;
-			}
+    if (dumbService.isDumb()) {
+      Thread.onSpinWait();
+      return false;
+    }
 
-			runnable.run();
-		}, indicator);
-		if(dumb.get())
-		{
-			return false;
-		}
-		if(!success)
-		{
-			ProgressIndicatorUtils.yieldToPendingWriteActions();
-		}
-		return success;
-	}
+    runnable.run();
+    return true;
+  }
 
-	protected void logCantRunException(ExecutionException e) throws ExecutionException
-	{
-		throw e;
-	}
+  protected void logCantRunException(ExecutionException e) throws ExecutionException {
+    throw e;
+  }
 
-	@Override
-	public void onCancel()
-	{
-		finish();
-	}
+  @Override
+  public void onCancel() {
+    finish();
+  }
 
-	@Override
-	public void onSuccess()
-	{
-		Runnable runnable = () ->
-		{
-			try
-			{
-				onFound();
-			}
-			catch(ExecutionException e)
-			{
-				LOG.error(e);
-			}
-			finish();
-		};
-		if(JUNIT4_SEARCH_4_TESTS_IN_CLASSPATH)
-		{
-			runnable.run();
-		}
-		else
-		{
-			DumbService.getInstance(getProject()).runWhenSmart(runnable);
-		}
-	}
+  @Override
+  public void onSuccess() {
+    Runnable runnable = () ->
+    {
+      try {
+        onFound();
+      } catch (ExecutionException e) {
+        LOG.error(e);
+      }
+      finish();
+    };
+    DumbService.getInstance((Project) getProject()).runWhenSmart(runnable);
+  }
 
-	public void finish()
-	{
-		DataOutputStream os = null;
-		try
-		{
-			if(mySocket == null || mySocket.isClosed())
-			{
-				return;
-			}
-			os = new DataOutputStream(mySocket.getOutputStream());
-			os.writeBoolean(true);
-		}
-		catch(Throwable e)
-		{
-			LOG.info(e);
-		}
-		finally
-		{
-			try
-			{
-				if(os != null)
-				{
-					os.close();
-				}
-			}
-			catch(Throwable e)
-			{
-				LOG.info(e);
-			}
+  public void finish() {
+    DataOutputStream os = null;
+    try {
+      if (mySocket == null || mySocket.isClosed()) {
+        return;
+      }
+      os = new DataOutputStream(mySocket.getOutputStream());
+      os.writeBoolean(true);
+    } catch (Throwable e) {
+      LOG.info(e);
+    } finally {
+      try {
+        if (os != null) {
+          os.close();
+        }
+      } catch (Throwable e) {
+        LOG.info(e);
+      }
 
-			try
-			{
-				if(!myServerSocket.isClosed())
-				{
-					myServerSocket.close();
-				}
-			}
-			catch(Throwable e)
-			{
-				LOG.info(e);
-			}
-		}
-	}
+      try {
+        if (!myServerSocket.isClosed()) {
+          myServerSocket.close();
+        }
+      } catch (Throwable e) {
+        LOG.info(e);
+      }
+    }
+  }
 }

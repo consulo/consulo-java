@@ -25,7 +25,7 @@ import consulo.application.progress.ProgressIndicator;
 import consulo.application.progress.ProgressManager;
 import consulo.project.Project;
 import consulo.virtualFileSystem.VirtualFile;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.refactoring.RefactoringHelper;
 import consulo.usage.UsageInfo;

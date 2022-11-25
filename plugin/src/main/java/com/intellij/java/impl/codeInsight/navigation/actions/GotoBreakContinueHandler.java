@@ -15,11 +15,11 @@
  */
 package com.intellij.java.impl.codeInsight.navigation.actions;
 
-import consulo.ide.impl.idea.codeInsight.navigation.actions.GotoDeclarationHandlerBase;
 import com.intellij.java.language.psi.*;
 import consulo.codeEditor.Editor;
-import consulo.language.psi.PsiElement;
 import consulo.language.ast.IElementType;
+import consulo.language.editor.navigation.GotoDeclarationHandlerBase;
+import consulo.language.psi.PsiElement;
 import consulo.logging.Logger;
 
 import javax.annotation.Nullable;

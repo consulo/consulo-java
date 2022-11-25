@@ -15,40 +15,28 @@
  */
 package com.intellij.java.impl.ig.initialization;
 
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.swing.JComponent;
-import javax.swing.JPanel;
-
-import org.jdom.Element;
-import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
-import com.intellij.java.language.codeInsight.AnnotationUtil;
-import consulo.language.editor.ImplicitUsageProvider;
 import com.intellij.java.impl.codeInspection.util.SpecialAnnotationsUtil;
-import consulo.component.extension.Extensions;
-import consulo.util.xml.serializer.InvalidDataException;
-import consulo.util.xml.serializer.WriteExternalException;
-import com.intellij.java.language.psi.PsiAnnotation;
-import com.intellij.java.language.psi.PsiClass;
-import com.intellij.java.language.psi.PsiClassInitializer;
-import com.intellij.java.language.psi.PsiCodeBlock;
-import com.intellij.java.language.psi.PsiExpression;
-import com.intellij.java.language.psi.PsiField;
-import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.java.language.psi.PsiModifier;
-import com.intellij.java.language.psi.PsiType;
-import consulo.ui.CheckBox;
+import com.intellij.java.impl.ig.fixes.AddToIgnoreIfAnnotatedByListQuickFix;
+import com.intellij.java.impl.ig.psiutils.UninitializedReadCollector;
+import com.intellij.java.language.codeInsight.AnnotationUtil;
+import com.intellij.java.language.psi.*;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.fixes.AddToIgnoreIfAnnotatedByListQuickFix;
 import com.siyeh.ig.psiutils.ClassUtils;
-import com.intellij.java.impl.ig.psiutils.UninitializedReadCollector;
+import consulo.component.extension.Extensions;
+import consulo.language.editor.ImplicitUsageProvider;
+import consulo.util.xml.serializer.InvalidDataException;
+import consulo.util.xml.serializer.WriteExternalException;
+import org.jdom.Element;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
+import javax.swing.*;
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class InstanceVariableUninitializedUseInspection extends BaseInspection {
 
@@ -104,7 +92,7 @@ public class InstanceVariableUninitializedUseInspection extends BaseInspection {
 
     final JPanel annotationsPanel = SpecialAnnotationsUtil.createSpecialAnnotationsListControl(
       annotationNames, InspectionGadgetsBundle.message("ignore.if.annotated.by"));
-    final CheckBox checkBox = new CheckBox(InspectionGadgetsBundle.message("primitive.fields.ignore.option"), this, "m_ignorePrimitives");
+    final consulo.language.editor.inspection.ui.CheckBox checkBox = new consulo.language.editor.inspection.ui.CheckBox(InspectionGadgetsBundle.message("primitive.fields.ignore.option"), this, "m_ignorePrimitives");
 
     final GridBagConstraints constraints = new GridBagConstraints();
     constraints.gridx = 0;

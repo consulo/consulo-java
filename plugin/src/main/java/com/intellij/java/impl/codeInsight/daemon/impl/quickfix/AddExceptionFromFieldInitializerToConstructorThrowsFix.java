@@ -22,7 +22,7 @@ import com.intellij.java.language.psi.*;
 import consulo.application.ApplicationManager;
 import consulo.codeEditor.Editor;
 import consulo.project.Project;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.java.analysis.impl.JavaQuickFixBundle;

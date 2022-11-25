@@ -16,7 +16,7 @@
 package com.intellij.java.impl.ig.psiutils;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import com.intellij.java.indexing.search.searches.MethodReferencesSearch;
 import consulo.application.util.function.Processor;
 import consulo.application.util.query.Query;

@@ -15,24 +15,24 @@
  */
 package com.intellij.java.impl.ipp.psiutils;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.intellij.java.impl.psi.codeStyle.JavaCodeStyleSettings;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.ClassUtil;
+import com.intellij.java.language.psi.util.InheritanceUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.language.codeStyle.CodeStyleSettingsManager;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiPackage;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.project.Project;
+import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
-import com.intellij.java.language.psi.*;
-import org.jetbrains.annotations.NonNls;
-import consulo.project.Project;
-import com.intellij.psi.*;
-import consulo.language.codeStyle.CodeStyleSettingsManager;
-import com.intellij.java.impl.psi.codeStyle.JavaCodeStyleSettings;
-import consulo.language.psi.scope.GlobalSearchScope;
-import com.intellij.java.language.psi.util.ClassUtil;
-import com.intellij.java.language.psi.util.InheritanceUtil;
-import consulo.language.psi.util.PsiTreeUtil;
-import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.psi.PsiPackage;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ImportUtils {
 

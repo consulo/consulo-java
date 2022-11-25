@@ -15,7 +15,6 @@
  */
 package com.intellij.java.impl.refactoring.safeDelete;
 
-import consulo.ide.impl.find.PsiElement2UsageTargetAdapter;
 import com.intellij.java.impl.codeInsight.daemon.impl.quickfix.RemoveUnusedVariableUtil;
 import com.intellij.java.impl.codeInsight.generation.GetterSetterPrototypeProvider;
 import com.intellij.java.impl.ide.util.SuperMethodWarningUtil;
@@ -23,6 +22,7 @@ import com.intellij.java.impl.refactoring.JavaRefactoringSettings;
 import com.intellij.java.impl.refactoring.safeDelete.usageInfo.*;
 import com.intellij.java.impl.refactoring.util.RefactoringMessageUtil;
 import com.intellij.java.indexing.search.searches.OverridingMethodsSearch;
+import com.intellij.java.language.psi.PsiElementFactory;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
@@ -31,30 +31,28 @@ import com.intellij.java.language.psi.util.MethodSignatureUtil;
 import com.intellij.java.language.psi.util.PropertyUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.application.ApplicationManager;
-import consulo.module.Module;
-import consulo.project.Project;
-import consulo.ui.ex.awt.DialogWrapper;
-import consulo.ui.ex.awt.Messages;
-import consulo.util.lang.function.Condition;
+import consulo.application.util.function.Processor;
 import consulo.document.util.TextRange;
-import com.intellij.psi.*;
-import consulo.language.psi.scope.GlobalSearchScope;
-import consulo.language.psi.search.ReferencesSearch;
-import consulo.language.psi.util.PsiTreeUtil;
+import consulo.ide.impl.find.PsiElement2UsageTargetAdapter;
 import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.editor.refactoring.safeDelete.NonCodeUsageSearchInfo;
 import consulo.language.editor.refactoring.safeDelete.SafeDeleteHandler;
 import consulo.language.editor.refactoring.safeDelete.SafeDeleteProcessor;
 import consulo.language.editor.refactoring.safeDelete.SafeDeleteProcessorDelegateBase;
 import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
-import consulo.usage.UsageInfo;
-import consulo.usage.UsageViewUtil;
-import com.intellij.usages.*;
-import consulo.util.collection.ArrayUtil;
+import consulo.language.psi.*;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.search.ReferencesSearch;
+import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
-import consulo.application.util.function.Processor;
 import consulo.logging.Logger;
-import consulo.psi.PsiPackage;
+import consulo.module.Module;
+import consulo.project.Project;
+import consulo.ui.ex.awt.DialogWrapper;
+import consulo.ui.ex.awt.Messages;
+import consulo.usage.*;
+import consulo.util.collection.ArrayUtil;
+import consulo.util.lang.function.Condition;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -682,7 +680,7 @@ public class JavaSafeDeleteProcessor extends SafeDeleteProcessorDelegateBase {
       public boolean process(final PsiReference reference) {
         PsiElement element = reference.getElement();
         if (element != null) {
-          JavaSafeDeleteDelegate.EP.forLanguage(element.getLanguage()).createUsageInfoForParameter(reference, usages, parameter, method);
+          JavaSafeDeleteDelegate.forLanguage(element.getLanguage()).createUsageInfoForParameter(reference, usages, parameter, method);
         }
         return true;
       }

@@ -15,31 +15,36 @@
  */
 package com.intellij.java.impl.codeInsight.navigation;
 
-import consulo.fileEditor.FileEditorManager;
-import consulo.language.editor.action.CodeInsightActionHandler;
-import consulo.language.editor.CodeInsightBundle;
-import consulo.language.editor.ui.PsiElementListNavigator;
-import consulo.navigation.NavigationUtil;
-import consulo.ide.impl.idea.codeInsight.navigation.actions.GotoSuperAction;
-import consulo.externalService.statistic.FeatureUsageTracker;
 import com.intellij.java.impl.ide.util.MethodCellRenderer;
+import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.impl.psi.impl.FindSuperElementsHelper;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.codeEditor.Editor;
-import consulo.navigation.OpenFileDescriptor;
-import consulo.project.Project;
-import consulo.virtualFileSystem.VirtualFile;
+import consulo.codeEditor.EditorPopupHelper;
+import consulo.externalService.statistic.FeatureUsageTracker;
+import consulo.fileEditor.FileEditorManager;
+import consulo.ide.impl.idea.codeInsight.navigation.actions.GotoSuperAction;
+import consulo.language.Language;
+import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.action.GotoSuperActionHander;
+import consulo.language.editor.ui.PopupNavigationUtil;
+import consulo.language.editor.ui.PsiElementListNavigator;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiNameIdentifierOwner;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.navigation.OpenFileDescriptor;
+import consulo.navigation.OpenFileDescriptorFactory;
+import consulo.project.Project;
+import consulo.ui.ex.popup.JBPopup;
+import consulo.virtualFileSystem.VirtualFile;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class JavaGotoSuperHandler implements CodeInsightActionHandler {
+public class JavaGotoSuperHandler implements GotoSuperActionHander {
   @Override
   public void invoke(@Nonnull final Project project, @Nonnull final Editor editor, @Nonnull final PsiFile file) {
     FeatureUsageTracker.getInstance().triggerFeatureUsed(GotoSuperAction.FEATURE_ID);
@@ -53,7 +58,7 @@ public class JavaGotoSuperHandler implements CodeInsightActionHandler {
       if (containingFile == null) return;
       final VirtualFile virtualFile = containingFile.getVirtualFile();
       if (virtualFile == null) return;
-      OpenFileDescriptor descriptor = new OpenFileDescriptor(project, virtualFile, superElement.getTextOffset());
+      OpenFileDescriptor descriptor = OpenFileDescriptorFactory.getInstance(project).builder(virtualFile).offset(superElement.getTextOffset()).build();
       FileEditorManager.getInstance(project).openTextEditor(descriptor, true);
     } else {
       if (superElements[0] instanceof PsiMethod) {
@@ -63,7 +68,8 @@ public class JavaGotoSuperHandler implements CodeInsightActionHandler {
             CodeInsightBundle.message("goto.super.method.findUsages.title", ((PsiMethod) superElements[0]).getName()),
             new MethodCellRenderer(showMethodNames));
       } else {
-        NavigationUtil.getPsiElementPopup(superElements, CodeInsightBundle.message("goto.super.class.chooser.title")).showInBestPositionFor(editor);
+        JBPopup popup = PopupNavigationUtil.getPsiElementPopup(superElements, CodeInsightBundle.message("goto.super.class.chooser.title"));
+        EditorPopupHelper.getInstance().showPopupInBestPositionFor(editor, popup);
       }
     }
   }
@@ -92,4 +98,14 @@ public class JavaGotoSuperHandler implements CodeInsightActionHandler {
   }
 
 
+  @Override
+  public boolean isValidFor(Editor editor, PsiFile psiFile) {
+    return true;
+  }
+
+  @Nonnull
+  @Override
+  public Language getLanguage() {
+    return JavaLanguage.INSTANCE;
+  }
 }

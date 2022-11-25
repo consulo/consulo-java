@@ -15,34 +15,35 @@
  */
 package com.intellij.java.impl.codeInsight.completion;
 
-import com.intellij.codeInsight.completion.*;
-import consulo.language.editor.completion.lookup.LookupElement;
-import consulo.language.editor.completion.lookup.LookupElementBuilder;
-import consulo.language.editor.completion.lookup.TailTypeDecorator;
-import consulo.application.AllIcons;
 import com.intellij.java.impl.codeInsight.ExpectedTypesProvider;
 import com.intellij.java.impl.codeInsight.lookup.VariableLookupItem;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiSuperMethodUtil;
-import consulo.util.lang.Comparing;
-import consulo.util.lang.Pair;
-import consulo.util.lang.StringUtil;
+import com.siyeh.ig.psiutils.ExpressionUtils;
+import consulo.application.AllIcons;
+import consulo.language.editor.completion.CompletionParameters;
+import consulo.language.editor.completion.CompletionProvider;
+import consulo.language.editor.completion.CompletionResultSet;
+import consulo.language.editor.completion.lookup.*;
+import consulo.language.editor.impl.internal.completion.CompletionUtil;
 import consulo.language.pattern.PsiElementPattern;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiNamedElement;
 import consulo.language.psi.util.PsiTreeUtil;
-import consulo.ide.impl.idea.util.Consumer;
 import consulo.language.util.ProcessingContext;
-import consulo.util.collection.ContainerUtil;
-import com.siyeh.ig.psiutils.ExpressionUtils;
-import consulo.language.editor.completion.CompletionProvider;
 import consulo.ui.image.Image;
 import consulo.ui.image.ImageEffects;
+import consulo.util.lang.Comparing;
+import consulo.util.lang.Pair;
+import consulo.util.lang.StringUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Consumer;
 
 import static consulo.language.pattern.PlatformPatterns.psiElement;
 
@@ -69,7 +70,7 @@ class SameSignatureCallParametersProvider implements CompletionProvider {
         if (container.getParameterList().getParametersCount() > 1 && candidate.first.getParameterList().getParametersCount() > 1) {
           PsiMethod from = getMethodToTakeParametersFrom(container, candidate.first, candidate.second);
           if (from != null) {
-            result.consume(createParametersLookupElement(from, methodCall, candidate.first));
+            result.accept(createParametersLookupElement(from, methodCall, candidate.first));
           }
         }
       }
@@ -103,7 +104,7 @@ class SameSignatureCallParametersProvider implements CompletionProvider {
   }
 
   private static Set<Pair<PsiMethod, PsiSubstitutor>> getCallCandidates(PsiCall expression) {
-    Set<Pair<PsiMethod, PsiSubstitutor>> candidates = ContainerUtil.newLinkedHashSet();
+    Set<Pair<PsiMethod, PsiSubstitutor>> candidates = new LinkedHashSet<>();
     JavaResolveResult[] results;
     if (expression instanceof PsiMethodCallExpression) {
       results = ((PsiMethodCallExpression) expression).getMethodExpression().multiResolve(false);
@@ -137,7 +138,7 @@ class SameSignatureCallParametersProvider implements CompletionProvider {
       return place;
     }
 
-    Map<String, PsiType> requiredNames = ContainerUtil.newHashMap();
+    Map<String, PsiType> requiredNames = new HashMap<>();
     final PsiParameter[] parameters = place.getParameterList().getParameters();
     final PsiParameter[] callParams = invoked.getParameterList().getParameters();
     if (callParams.length > parameters.length) {

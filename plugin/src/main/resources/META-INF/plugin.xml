@@ -684,8 +684,7 @@
 											 id="java"/>
 		<refactoring.moveMemberHandler language="JAVA" implementationClass="com.intellij.java.impl.refactoring.move.moveMembers.MoveJavaMemberHandler"
 									   id="java"/>
-		<refactoring.moveInnerHandler language="JAVA" implementationClass="com.intellij.java.impl.refactoring.move.moveInner.MoveJavaInnerHandler"
-									  id="java"/>
+
 		<refactoring.safeDelete.JavaSafeDeleteDelegate implementationClass="com.intellij.java.impl.refactoring.safeDelete.JavaSafeDeleteDelegateImpl"
 													   language="JAVA"/>
 		<refactoring.pullUpHelperFactory language="JAVA" implementationClass="com.intellij.java.impl.refactoring.memberPullUp.JavaPullUpHelperFactory"/>
@@ -1457,7 +1456,6 @@
 		<codeInsight.parameterInfo language="JAVA" implementationClass="com.intellij.java.impl.codeInsight.hint.api.impls.ReferenceParameterInfoHandler"/>
 		<codeInsight.parameterInfo language="JAVA"
 								   implementationClass="com.intellij.java.impl.codeInsight.hint.api.impls.AnnotationParameterInfoHandler"/>
-		<codeInsight.typeInfo language="JAVA" implementationClass="com.intellij.java.impl.codeInsight.hint.JavaTypeProvider"/>
 
 		<codeInsight.overrideMethod language="JAVA" implementationClass="com.intellij.java.impl.codeInsight.generation.JavaOverrideMethodsHandler"/>
 		<codeInsight.implementMethod language="JAVA" implementationClass="com.intellij.java.impl.codeInsight.generation.JavaImplementMethodsHandler"/>
@@ -1691,7 +1689,6 @@
 		<runConfigurationProducer implementation="com.intellij.java.execution.impl.jar.JarApplicationConfigurationProducer"/>
 
 		<configurationType implementation="com.intellij.java.execution.impl.remote.RemoteConfigurationType"/>
-		<runLineMarkerContributor language="JAVA" implementationClass="com.intellij.java.execution.impl.application.ApplicationRunLineMarkerProvider"/>
 
 		<!--TODO [VISTALL] core depend - we can't override services
 		<applicationService serviceInterface="com.intellij.packageDependencies.DependenciesVisitorFactory"
@@ -1745,7 +1742,6 @@
 		<macro implementation="com.intellij.java.impl.ide.macro.FileFQPackage"/>
 		<macro implementation="com.intellij.java.impl.ide.macro.FilePackageMacro"/>
 		<macro implementation="com.intellij.java.impl.ide.macro.JavaDocPathMacro"/>
-		<macro implementation="com.intellij.java.impl.ide.macro.OutputPathMacro"/>
 
 		<printOption implementation="com.intellij.java.impl.codeEditor.printing.HyperlinksToClassesOption"/>
 
@@ -2004,7 +2000,6 @@
 
 		<textEditorHighlightingPassFactory implementation="com.intellij.java.analysis.impl.codeInsight.daemon.impl.JavaSoftKeywordHighlightingPassFactory"/>
 
-		<virtualFileSystem implementation="com.intellij.java.impl.vfs.impl.jar.JarFileSystemImpl"/>
 		<virtualFileSystem implementation="com.intellij.java.impl.openapi.vfs.impl.jrt.JrtFileSystemImpl"/>
 
 		<applicationService serviceInterface="com.intellij.java.language.impl.codeInsight.generation.OverrideImplementExploreUtil$MemberImplementorExplorersProvider"

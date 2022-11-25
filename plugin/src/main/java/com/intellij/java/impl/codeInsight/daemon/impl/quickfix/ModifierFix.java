@@ -15,32 +15,34 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.intellij.java.indexing.search.searches.OverridingMethodsSearch;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.PsiFormatUtil;
+import com.intellij.java.language.psi.util.PsiFormatUtilBase;
+import com.intellij.java.language.psi.util.PsiUtil;
+import com.intellij.java.language.util.VisibilityUtil;
+import consulo.application.ApplicationManager;
+import consulo.codeEditor.Editor;
+import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.language.editor.FileModificationService;
+import consulo.language.editor.inspection.LocalQuickFixAndIntentionActionOnPsiElement;
+import consulo.language.editor.util.LanguageUndoUtil;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.SmartPointerManager;
+import consulo.language.psi.SmartPsiElementPointer;
+import consulo.language.psi.resolve.PsiElementProcessor;
+import consulo.language.psi.resolve.PsiElementProcessorAdapter;
+import consulo.language.util.IncorrectOperationException;
+import consulo.logging.Logger;
+import consulo.project.Project;
+import consulo.ui.ex.awt.DialogWrapper;
+import consulo.ui.ex.awt.Messages;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
-import consulo.language.editor.FileModificationService;
-import consulo.language.editor.inspection.LocalQuickFixAndIntentionActionOnPsiElement;
-import com.intellij.java.language.psi.*;
-import consulo.application.ApplicationManager;
-import consulo.ui.ex.awt.DialogWrapper;
-import consulo.undoRedo.util.UndoUtil;
-import consulo.logging.Logger;
-import consulo.codeEditor.Editor;
-import consulo.project.Project;
-import consulo.ui.ex.awt.Messages;
-import com.intellij.psi.*;
-import consulo.language.psi.resolve.PsiElementProcessor;
-import consulo.ide.impl.psi.search.PsiElementProcessorAdapter;
-import com.intellij.java.indexing.search.searches.OverridingMethodsSearch;
-import com.intellij.java.language.psi.util.PsiFormatUtil;
-import consulo.ide.impl.psi.util.PsiFormatUtilBase;
-import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.language.util.IncorrectOperationException;
-import com.intellij.java.language.util.VisibilityUtil;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ModifierFix extends LocalQuickFixAndIntentionActionOnPsiElement {
   private static final Logger LOG = Logger.getInstance(ModifierFix.class);
@@ -208,7 +210,7 @@ public class ModifierFix extends LocalQuickFixAndIntentionActionOnPsiElement {
       @Override
       public void run() {
         changeModifierList(modifierList);
-        UndoUtil.markPsiFileForUndo(containingFile);
+        LanguageUndoUtil.markPsiFileForUndo(containingFile);
       }
     });
   }

@@ -15,23 +15,23 @@
  */
 package com.intellij.java.impl.ig.style;
 
-import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import com.intellij.psi.*;
-import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.language.util.IncorrectOperationException;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import consulo.ide.impl.idea.codeInspection.ui.MultipleCheckboxOptionsPanel;
-import javax.annotation.Nonnull;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.editor.inspection.ui.MultipleCheckboxOptionsPanel;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
 
+import javax.annotation.Nonnull;
 import javax.swing.*;
 
-public class UnqualifiedStaticUsageInspection extends BaseInspection {
+public abstract class UnqualifiedStaticUsageInspection extends BaseInspection {
 
   /**
    * @noinspection PublicField

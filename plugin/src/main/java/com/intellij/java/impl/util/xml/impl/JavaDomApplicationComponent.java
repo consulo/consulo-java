@@ -15,51 +15,44 @@
  */
 package com.intellij.java.impl.util.xml.impl;
 
-import jakarta.inject.Inject;
-import jakarta.inject.Singleton;
-
-import com.intellij.java.language.psi.PsiClass;
-import com.intellij.java.language.psi.PsiType;
-import consulo.ide.impl.idea.util.Consumer;
-import com.intellij.java.impl.util.xml.CanonicalPsiTypeConverter;
-import com.intellij.java.impl.util.xml.CanonicalPsiTypeConverterImpl;
-import com.intellij.util.xml.ConverterManager;
-import com.intellij.java.impl.util.xml.JvmPsiTypeConverter;
-import com.intellij.java.impl.util.xml.JvmPsiTypeConverterImpl;
-import com.intellij.java.impl.util.xml.PsiClassConverter;
+import com.intellij.java.impl.util.xml.*;
 import com.intellij.java.impl.util.xml.converters.values.ClassArrayConverter;
 import com.intellij.java.impl.util.xml.converters.values.ClassValueConverter;
-import com.intellij.util.xml.ui.DomUIFactory;
 import com.intellij.java.impl.util.xml.ui.PsiClassControl;
 import com.intellij.java.impl.util.xml.ui.PsiClassTableCellEditor;
 import com.intellij.java.impl.util.xml.ui.PsiTypeControl;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiType;
+import consulo.xml.util.xml.ConverterManager;
+import consulo.xml.util.xml.ui.DomUIFactory;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
+
+import java.util.function.Consumer;
 
 /**
  * @author peter
  */
 @Singleton
-public class JavaDomApplicationComponent implements Consumer<DomUIFactory>
-{
-	@Inject
-	public JavaDomApplicationComponent(ConverterManager converterManager)
-	{
-		converterManager.addConverter(PsiClass.class, new PsiClassConverter());
-		converterManager.addConverter(PsiType.class, new CanonicalPsiTypeConverterImpl());
-		converterManager.registerConverterImplementation(JvmPsiTypeConverter.class, new JvmPsiTypeConverterImpl());
-		converterManager.registerConverterImplementation(CanonicalPsiTypeConverter.class, new CanonicalPsiTypeConverterImpl());
+public class JavaDomApplicationComponent implements Consumer<DomUIFactory> {
+  @Inject
+  public JavaDomApplicationComponent(ConverterManager converterManager) {
+    converterManager.addConverter(PsiClass.class, new PsiClassConverter());
+    converterManager.addConverter(PsiType.class, new CanonicalPsiTypeConverterImpl());
+    converterManager.registerConverterImplementation(JvmPsiTypeConverter.class, new JvmPsiTypeConverterImpl());
+    converterManager.registerConverterImplementation(CanonicalPsiTypeConverter.class, new CanonicalPsiTypeConverterImpl());
 
-		final ClassValueConverter classValueConverter = ClassValueConverter.getClassValueConverter();
-		converterManager.registerConverterImplementation(ClassValueConverter.class, classValueConverter);
-		final ClassArrayConverter classArrayConverter = ClassArrayConverter.getClassArrayConverter();
-		converterManager.registerConverterImplementation(ClassArrayConverter.class, classArrayConverter);
-	}
+    final ClassValueConverter classValueConverter = ClassValueConverter.getClassValueConverter();
+    converterManager.registerConverterImplementation(ClassValueConverter.class, classValueConverter);
+    final ClassArrayConverter classArrayConverter = ClassArrayConverter.getClassArrayConverter();
+    converterManager.registerConverterImplementation(ClassArrayConverter.class, classArrayConverter);
+  }
 
-	@Override
-	public void consume(DomUIFactory factory)
-	{
-		factory.registerCustomControl(PsiClass.class, wrapper -> new PsiClassControl(wrapper, false));
-		factory.registerCustomControl(PsiType.class, wrapper -> new PsiTypeControl(wrapper, false));
+  @Override
+  public void accept(DomUIFactory factory) {
+    factory.registerCustomControl(PsiClass.class, wrapper -> new PsiClassControl(wrapper, false));
+    factory.registerCustomControl(PsiType.class, wrapper -> new PsiTypeControl(wrapper, false));
 
-		factory.registerCustomCellEditor(PsiClass.class, element -> new PsiClassTableCellEditor(element.getManager().getProject(), element.getResolveScope()));
-	}
+    factory.registerCustomCellEditor(PsiClass.class, element -> new PsiClassTableCellEditor(element.getManager().getProject(), element.getResolveScope()));
+  }
 }

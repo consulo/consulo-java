@@ -1,13 +1,6 @@
 // Copyright 2000-2018 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.impl.codeInsight.completion;
 
-import consulo.language.editor.completion.lookup.TailType;
-import com.intellij.codeInsight.completion.*;
-import consulo.language.editor.completion.CompletionStyleUtil;
-import consulo.language.editor.completion.AutoCompletionPolicy;
-import consulo.language.editor.completion.lookup.LookupElement;
-import consulo.language.editor.completion.lookup.LookupElementDecorator;
-import consulo.externalService.statistic.FeatureUsageTracker;
 import com.intellij.java.analysis.codeInsight.guess.GuessManager;
 import com.intellij.java.impl.codeInsight.ExpectedTypeInfo;
 import com.intellij.java.impl.codeInsight.ExpectedTypeInfoImpl;
@@ -18,25 +11,32 @@ import com.intellij.java.language.impl.psi.impl.source.tree.java.PsiEmptyExpress
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.document.Document;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.application.util.matcher.PrefixMatcher;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.ScrollType;
+import consulo.document.Document;
+import consulo.externalService.statistic.FeatureUsageTracker;
+import consulo.language.codeStyle.CommonCodeStyleSettings;
+import consulo.language.codeStyle.PostprocessReformattingAspect;
+import consulo.language.editor.completion.*;
+import consulo.language.editor.completion.lookup.InsertionContext;
+import consulo.language.editor.completion.lookup.LookupElement;
+import consulo.language.editor.completion.lookup.LookupElementDecorator;
+import consulo.language.editor.completion.lookup.TailType;
+import consulo.language.editor.impl.internal.completion.CompletionUtil;
 import consulo.language.pattern.ElementPattern;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiErrorElement;
 import consulo.language.psi.PsiWhiteSpace;
-import consulo.language.codeStyle.CommonCodeStyleSettings;
-import consulo.language.codeStyle.PostprocessReformattingAspect;
 import consulo.language.psi.util.PsiTreeUtil;
-import consulo.ide.impl.idea.util.Consumer;
 import consulo.language.util.ProcessingContext;
 import consulo.util.collection.ContainerUtil;
-import consulo.annotation.access.RequiredReadAction;
-import consulo.language.editor.completion.CompletionProvider;
 
 import javax.annotation.Nonnull;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Consumer;
 
 import static consulo.language.pattern.PlatformPatterns.psiElement;
 
@@ -83,11 +83,11 @@ class SmartCastProvider implements CompletionProvider {
       if (parent instanceof PsiParenthesizedExpression) {
         if (parent.getParent() instanceof PsiReferenceExpression) {
           for (ExpectedTypeInfo info : ExpectedTypesProvider.getExpectedTypes((PsiParenthesizedExpression) parent, false)) {
-            result.consume(PsiTypeLookupItem.createLookupItem(info.getType(), parent));
+            result.accept(PsiTypeLookupItem.createLookupItem(info.getType(), parent));
           }
         }
         for (ExpectedTypeInfo info : getParenthesizedCastExpectationByOperandType(position)) {
-          addHierarchyTypes(parameters, matcher, info, type -> result.consume(PsiTypeLookupItem.createLookupItem(type, parent)), quick);
+          addHierarchyTypes(parameters, matcher, info, type -> result.accept(PsiTypeLookupItem.createLookupItem(type, parent)), quick);
         }
         return;
       }
@@ -112,7 +112,7 @@ class SmartCastProvider implements CompletionProvider {
           }
         }
       }
-      result.consume(createSmartCastElement(parameters, insideCast, type));
+      result.accept(createSmartCastElement(parameters, insideCast, type));
     }
   }
 
@@ -141,14 +141,14 @@ class SmartCastProvider implements CompletionProvider {
     if (info.getKind() == ExpectedTypeInfo.TYPE_OR_SUPERTYPE) {
       InheritanceUtil.processSupers(infoClass, true, superClass -> {
         if (!CommonClassNames.JAVA_LANG_OBJECT.equals(superClass.getQualifiedName())) {
-          result.consume(JavaPsiFacade.getElementFactory(superClass.getProject()).createType(CompletionUtil.getOriginalOrSelf(superClass)));
+          result.accept(JavaPsiFacade.getElementFactory(superClass.getProject()).createType(CompletionUtil.getOriginalOrSelf(superClass)));
         }
         return true;
       });
     } else if (infoType instanceof PsiClassType && !quick) {
       JavaInheritorsGetter.processInheritors(parameters, Collections.singleton((PsiClassType) infoType), matcher, type -> {
         if (!infoType.equals(type)) {
-          result.consume(type);
+          result.accept(type);
         }
       });
     }

@@ -15,32 +15,35 @@
  */
 package com.intellij.java.impl.codeInsight.intention.impl;
 
-import consulo.language.editor.CodeInsightBundle;
-import consulo.language.editor.intention.PsiElementBaseIntentionAction;
+import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.java.language.psi.PsiJavaToken;
 import com.intellij.java.language.psi.PsiLiteralExpression;
-import com.intellij.javaee.ExternalResourceManager;
-import com.intellij.java.language.JavaLanguage;
-import consulo.logging.Logger;
+import com.intellij.java.language.psi.javadoc.PsiDocComment;
+import com.intellij.xml.util.XmlUtil;
 import consulo.codeEditor.Editor;
+import consulo.ide.impl.idea.openapi.vfs.VfsUtil;
+import consulo.language.ast.TokenSet;
+import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.intention.PsiElementBaseIntentionAction;
+import consulo.language.psi.PsiComment;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiManager;
+import consulo.language.psi.resolve.PsiElementProcessor;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.util.lang.Pair;
-import consulo.ide.impl.idea.openapi.vfs.VfsUtil;
 import consulo.virtualFileSystem.VirtualFile;
-import com.intellij.psi.*;
-import com.intellij.java.language.psi.javadoc.PsiDocComment;
-import consulo.language.psi.resolve.PsiElementProcessor;
-import consulo.language.ast.TokenSet;
-import consulo.language.psi.util.PsiTreeUtil;
-import com.intellij.psi.xml.XmlEntityDecl;
-import com.intellij.psi.xml.XmlFile;
-import consulo.language.util.IncorrectOperationException;
-import com.intellij.xml.util.XmlUtil;
+import consulo.xml.javaee.ExternalResourceManager;
+import consulo.xml.psi.xml.XmlEntityDecl;
+import consulo.xml.psi.xml.XmlFile;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;

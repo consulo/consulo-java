@@ -15,46 +15,42 @@
  */
 package com.intellij.java.impl.ig.junit;
 
-import java.awt.BorderLayout;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.regex.PatternSyntaxException;
-
-import javax.annotation.Nonnull;
-import javax.swing.JComponent;
-import javax.swing.JPanel;
-
+import com.intellij.java.impl.ig.ui.UiUtils;
 import com.intellij.java.language.psi.*;
-import org.jdom.Element;
-import org.jetbrains.annotations.NonNls;
-import consulo.ide.impl.idea.codeInspection.ui.ListTable;
-import consulo.ide.impl.idea.codeInspection.ui.ListWrappingTableModel;
-import consulo.util.xml.serializer.InvalidDataException;
-import consulo.util.xml.serializer.WriteExternalException;
-import com.intellij.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
-import consulo.ui.CheckBox;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TestUtils;
-import com.intellij.java.impl.ig.ui.UiUtils;
+import consulo.ide.impl.idea.codeInspection.ui.ListTable;
+import consulo.ide.impl.idea.codeInspection.ui.ListWrappingTableModel;
+import consulo.language.editor.inspection.ui.CheckBox;
+import consulo.language.psi.PsiElement;
+import consulo.util.xml.serializer.InvalidDataException;
+import consulo.util.xml.serializer.WriteExternalException;
+import org.jdom.Element;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
+import javax.swing.*;
+import java.awt.*;
+import java.util.List;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 public class TestMethodWithoutAssertionInspection extends BaseInspection {
 
   /**
    * @noinspection PublicField
    */
-  @NonNls public String assertionMethods =
-    "org.junit.Assert,assert.*|fail.*," +
-    "junit.framework.Assert,assert.*|fail.*," +
-    "org.mockito.Mockito,verify.*," +
-    "org.junit.rules.ExpectedException,expect.*";
+  @NonNls
+  public String assertionMethods =
+      "org.junit.Assert,assert.*|fail.*," +
+          "junit.framework.Assert,assert.*|fail.*," +
+          "org.mockito.Mockito,verify.*," +
+          "org.junit.rules.ExpectedException,expect.*";
 
   private final List<String> methodNamePatterns = new ArrayList();
   private final List<String> classNames = new ArrayList();
@@ -83,18 +79,18 @@ public class TestMethodWithoutAssertionInspection extends BaseInspection {
   @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
-      "test.method.without.assertion.problem.descriptor");
+        "test.method.without.assertion.problem.descriptor");
   }
 
   @Override
   public JComponent createOptionsPanel() {
     final JPanel panel = new JPanel(new BorderLayout());
     final ListTable table = new ListTable(
-      new ListWrappingTableModel(Arrays.asList(classNames, methodNamePatterns), InspectionGadgetsBundle.message("class.name"),
-                                 InspectionGadgetsBundle.message("method.name.pattern")));
+        new ListWrappingTableModel(Arrays.asList(classNames, methodNamePatterns), InspectionGadgetsBundle.message("class.name"),
+            InspectionGadgetsBundle.message("method.name.pattern")));
     final JPanel tablePanel = UiUtils.createAddRemovePanel(table);
     final CheckBox checkBox =
-      new CheckBox(InspectionGadgetsBundle.message("assert.keyword.is.considered.an.assertion"), this, "assertKeywordIsAssertion");
+        new CheckBox(InspectionGadgetsBundle.message("assert.keyword.is.considered.an.assertion"), this, "assertKeywordIsAssertion");
     panel.add(tablePanel, BorderLayout.CENTER);
     panel.add(checkBox, BorderLayout.SOUTH);
     return panel;
@@ -118,7 +114,7 @@ public class TestMethodWithoutAssertionInspection extends BaseInspection {
   }
 
   private class TestMethodWithoutAssertionVisitor
-    extends BaseInspectionVisitor {
+      extends BaseInspectionVisitor {
 
     @Override
     public void visitMethod(@Nonnull PsiMethod method) {
@@ -151,12 +147,12 @@ public class TestMethodWithoutAssertionInspection extends BaseInspection {
       if (!(lastStatement instanceof PsiExpressionStatement)) {
         return false;
       }
-      final PsiExpressionStatement expressionStatement = (PsiExpressionStatement)lastStatement;
+      final PsiExpressionStatement expressionStatement = (PsiExpressionStatement) lastStatement;
       final PsiExpression expression = expressionStatement.getExpression();
       if (!(expression instanceof PsiMethodCallExpression)) {
         return false;
       }
-      final PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression)expression;
+      final PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) expression;
       final PsiReferenceExpression methodExpression = methodCallExpression.getMethodExpression();
       final PsiExpression qualifierExpression = methodExpression.getQualifierExpression();
       if (qualifierExpression != null && !(qualifierExpression instanceof PsiThisExpression)) {
@@ -255,8 +251,7 @@ public class TestMethodWithoutAssertionInspection extends BaseInspection {
     Pattern pattern;
     if (patternCache != null) {
       pattern = patternCache.get(methodNamePattern);
-    }
-    else {
+    } else {
       patternCache = new HashMap(methodNamePatterns.size());
       pattern = null;
     }
@@ -264,11 +259,9 @@ public class TestMethodWithoutAssertionInspection extends BaseInspection {
       try {
         pattern = Pattern.compile(methodNamePattern);
         patternCache.put(methodNamePattern, pattern);
-      }
-      catch (PatternSyntaxException ignore) {
+      } catch (PatternSyntaxException ignore) {
         return false;
-      }
-      catch (NullPointerException ignore) {
+      } catch (NullPointerException ignore) {
         return false;
       }
     }

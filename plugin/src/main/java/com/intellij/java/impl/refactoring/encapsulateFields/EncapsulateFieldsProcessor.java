@@ -16,33 +16,36 @@
  */
 package com.intellij.java.impl.refactoring.encapsulateFields;
 
+import com.intellij.java.impl.refactoring.util.RefactoringUtil;
+import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
 import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
+import com.intellij.java.language.psi.util.PsiFormatUtilBase;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.language.findUsage.DescriptiveNameUtil;
-import consulo.logging.Logger;
-import consulo.project.Project;
-import consulo.util.lang.ref.Ref;
-import com.intellij.psi.*;
-import com.intellij.java.language.psi.javadoc.PsiDocComment;
-import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
-import consulo.language.psi.search.ReferencesSearch;
-import com.intellij.psi.util.*;
+import consulo.ide.impl.idea.refactoring.util.DocCommentPolicy;
 import consulo.language.editor.refactoring.BaseRefactoringProcessor;
 import consulo.language.editor.refactoring.RefactoringBundle;
-import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
-import consulo.ide.impl.idea.refactoring.util.DocCommentPolicy;
 import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
-import com.intellij.java.impl.refactoring.util.RefactoringUtil;
+import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
+import consulo.language.findUsage.DescriptiveNameUtil;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiReference;
+import consulo.language.psi.search.ReferencesSearch;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.logging.Logger;
+import consulo.project.Project;
 import consulo.usage.UsageInfo;
 import consulo.usage.UsageViewDescriptor;
 import consulo.usage.UsageViewUtil;
-import consulo.language.util.IncorrectOperationException;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.collection.MultiMap;
-import javax.annotation.Nonnull;
+import consulo.util.lang.ref.Ref;
 
+import javax.annotation.Nonnull;
 import java.util.*;
 
 public class EncapsulateFieldsProcessor extends BaseRefactoringProcessor {

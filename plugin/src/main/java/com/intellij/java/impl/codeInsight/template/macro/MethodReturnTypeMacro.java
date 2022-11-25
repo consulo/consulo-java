@@ -15,13 +15,17 @@
  */
 package com.intellij.java.impl.codeInsight.template.macro;
 
-import javax.annotation.Nonnull;
-
-import com.intellij.codeInsight.template.*;
 import com.intellij.java.impl.codeInsight.template.JavaCodeContextType;
 import com.intellij.java.impl.codeInsight.template.PsiTypeResult;
-import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiMethod;
+import consulo.language.editor.template.Expression;
+import consulo.language.editor.template.ExpressionContext;
+import consulo.language.editor.template.Result;
+import consulo.language.editor.template.context.TemplateContextType;
+import consulo.language.editor.template.macro.Macro;
+import consulo.language.psi.PsiElement;
+
+import javax.annotation.Nonnull;
 
 /**
  * @author yole

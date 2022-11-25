@@ -22,7 +22,7 @@ import consulo.codeEditor.SelectionModel;
 import consulo.project.Project;
 import consulo.document.util.TextRange;
 import consulo.document.util.UnfairTextRange;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import javax.annotation.Nonnull;
 
 import java.util.ArrayList;

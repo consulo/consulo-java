@@ -35,7 +35,7 @@ import javax.annotation.Nullable;
 
 import java.util.Set;
 
-public class ClassOnlyUsedInOnePackageInspection extends BaseGlobalInspection {
+public abstract class ClassOnlyUsedInOnePackageInspection extends BaseGlobalInspection {
   @Nls
   @Nonnull
   @Override

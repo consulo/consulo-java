@@ -15,13 +15,6 @@
  */
 package com.intellij.java.impl.codeInsight.completion;
 
-import com.intellij.codeInsight.completion.*;
-import consulo.ide.impl.idea.codeInsight.completion.impl.CompletionSorterImpl;
-import consulo.ide.impl.idea.codeInsight.completion.impl.LiftShorterItemsClassifier;
-import consulo.language.editor.completion.lookup.Classifier;
-import consulo.ide.impl.idea.codeInsight.lookup.ClassifierFactory;
-import consulo.language.editor.completion.lookup.LookupElement;
-import consulo.language.editor.completion.lookup.LookupElementWeigher;
 import com.intellij.java.impl.codeInsight.ExpectedTypeInfo;
 import com.intellij.java.impl.codeInsight.ExpectedTypeInfoImpl;
 import com.intellij.java.impl.codeInsight.lookup.PsiTypeLookupItem;
@@ -31,17 +24,24 @@ import com.intellij.java.language.psi.codeStyle.VariableKind;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
-import consulo.module.content.ProjectFileIndex;
-import consulo.module.content.ProjectRootManager;
-import consulo.util.lang.Pair;
-import consulo.virtualFileSystem.VirtualFile;
+import consulo.application.util.matcher.NameUtil;
+import consulo.ide.impl.idea.codeInsight.completion.impl.CompletionSorterImpl;
+import consulo.ide.impl.idea.codeInsight.completion.impl.LiftShorterItemsClassifier;
+import consulo.ide.impl.idea.codeInsight.lookup.ClassifierFactory;
+import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.editor.completion.*;
+import consulo.language.editor.completion.lookup.Classifier;
+import consulo.language.editor.completion.lookup.LookupElement;
+import consulo.language.editor.completion.lookup.LookupElementWeigher;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
-import consulo.application.util.matcher.NameUtil;
 import consulo.language.psi.util.PsiTreeUtil;
-import consulo.util.collection.SmartList;
+import consulo.module.content.ProjectFileIndex;
+import consulo.module.content.ProjectRootManager;
 import consulo.util.collection.ContainerUtil;
-import consulo.java.language.module.util.JavaClassNames;
+import consulo.util.collection.SmartList;
+import consulo.util.lang.Pair;
+import consulo.virtualFileSystem.VirtualFile;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

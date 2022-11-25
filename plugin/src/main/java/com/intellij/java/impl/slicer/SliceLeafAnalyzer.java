@@ -79,7 +79,7 @@ public class SliceLeafAnalyzer {
   };
 
   static SliceNode filterTree(SliceNode oldRoot, NullableFunction<SliceNode, SliceNode> filter, PairProcessor<SliceNode, List<SliceNode>> postProcessor){
-    SliceNode filtered = filter.fun(oldRoot);
+    SliceNode filtered = filter.apply(oldRoot);
     if (filtered == null) return null;
 
     List<SliceNode> childrenFiltered = new ArrayList<SliceNode>();
@@ -120,7 +120,7 @@ public class SliceLeafAnalyzer {
     for (final PsiElement leafExpression : leaves) {
       SliceNode newNode = filterTree(oldRootStart, new NullableFunction<SliceNode, SliceNode>() {
         @Override
-        public SliceNode fun(SliceNode oldNode) {
+        public SliceNode apply(SliceNode oldNode) {
           if (oldNode.getDuplicate() != null) return null;
           if (!node(oldNode, map).contains(leafExpression)) return null;
 
@@ -195,7 +195,7 @@ public class SliceLeafAnalyzer {
 
     @Override
     public SliceNode getNextSibling(@Nonnull SliceNode element) {
-      AbstractTreeNode parent = element.getParent();
+      AbstractTreeNode parent = (AbstractTreeNode) element.getParent();
       if (parent == null) return null;
 
       return element.getNext((List)parent.getChildren());
@@ -203,7 +203,7 @@ public class SliceLeafAnalyzer {
 
     @Override
     public SliceNode getPrevSibling(@Nonnull SliceNode element) {
-      AbstractTreeNode parent = element.getParent();
+      AbstractTreeNode parent = (AbstractTreeNode) element.getParent();
       if (parent == null) return null;
       return element.getPrev((List)parent.getChildren());
     }
@@ -216,7 +216,7 @@ public class SliceLeafAnalyzer {
 
     @Override
     public SliceNode getParent(@Nonnull SliceNode element) {
-      AbstractTreeNode parent = element.getParent();
+      AbstractTreeNode parent = (AbstractTreeNode) element.getParent();
       return parent instanceof SliceNode ? (SliceNode)parent : null;
     }
   }

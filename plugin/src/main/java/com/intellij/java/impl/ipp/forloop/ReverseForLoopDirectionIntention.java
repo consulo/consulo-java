@@ -15,19 +15,19 @@
  */
 package com.intellij.java.impl.ipp.forloop;
 
-import javax.annotation.Nonnull;
-
+import com.intellij.java.impl.ipp.base.Intention;
+import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import com.intellij.psi.*;
-import consulo.language.ast.IElementType;
-import consulo.language.util.IncorrectOperationException;
 import com.siyeh.ig.psiutils.ComparisonUtils;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
 import com.siyeh.ig.psiutils.VariableAccessUtils;
-import com.intellij.java.impl.ipp.base.Intention;
-import com.intellij.java.impl.ipp.base.PsiElementPredicate;
+import consulo.language.ast.IElementType;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+
+import javax.annotation.Nonnull;
 
 public class ReverseForLoopDirectionIntention extends Intention {
 

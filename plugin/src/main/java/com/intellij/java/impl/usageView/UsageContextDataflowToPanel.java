@@ -16,23 +16,20 @@
 
 package com.intellij.java.impl.usageView;
 
-import consulo.language.editor.scope.AnalysisScope;
 import com.intellij.java.impl.slicer.*;
 import com.intellij.java.language.psi.PsiJavaFile;
 import com.intellij.java.language.psi.PsiVariable;
-import consulo.project.Project;
-import consulo.project.ui.wm.ToolWindowId;
-import consulo.ui.ex.toolWindow.ToolWindow;
-import consulo.project.ui.wm.ToolWindowManager;
-import consulo.language.psi.PsiElement;
-import consulo.language.psi.PsiFile;
-import consulo.usage.UsageInfo;
-import consulo.usage.UsageViewBundle;
-import com.intellij.usages.*;
-import consulo.ide.impl.idea.usages.impl.UsageContextPanelBase;
-import consulo.ide.impl.idea.usages.impl.UsageViewImpl;
 import consulo.disposer.Disposable;
 import consulo.disposer.Disposer;
+import consulo.ide.impl.idea.usages.impl.UsageContextPanelBase;
+import consulo.language.editor.scope.AnalysisScope;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.project.Project;
+import consulo.project.ui.wm.ToolWindowId;
+import consulo.project.ui.wm.ToolWindowManager;
+import consulo.ui.ex.toolWindow.ToolWindow;
+import consulo.usage.*;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -45,7 +42,7 @@ public class UsageContextDataflowToPanel extends UsageContextPanelBase {
   private final UsageViewPresentation myPresentation;
   private JComponent myPanel;
 
-  public static class Provider implements UsageContextPanel.Provider {
+  public static class Provider implements UsageContextPanelProvider {
     @Nonnull
     @Override
     public UsageContextPanel create(@Nonnull UsageView usageView) {

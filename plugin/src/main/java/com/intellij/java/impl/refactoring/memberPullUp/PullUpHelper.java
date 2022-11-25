@@ -15,31 +15,27 @@
  */
 package com.intellij.java.impl.refactoring.memberPullUp;
 
-import java.util.LinkedHashSet;
-
-import consulo.language.extension.LanguageExtension;
-import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiMember;
 import com.intellij.java.language.psi.PsiSubstitutor;
 import consulo.language.editor.refactoring.classMember.MemberInfoBase;
+import consulo.language.psi.PsiElement;
+
+import java.util.LinkedHashSet;
 
 /**
  * Created by Max Medvedev on 10/4/13
  */
-public interface PullUpHelper<T extends MemberInfoBase<? extends PsiMember>>
-{
-	LanguageExtension<PullUpHelperFactory> INSTANCE = new LanguageExtension<>("consulo.java.refactoring.pullUpHelperFactory");
+public interface PullUpHelper<T extends MemberInfoBase<? extends PsiMember>> {
+  void encodeContextInfo(T info);
 
-	void encodeContextInfo(T info);
+  void move(T info, PsiSubstitutor substitutor);
 
-	void move(T info, PsiSubstitutor substitutor);
+  void postProcessMember(PsiMember member);
 
-	void postProcessMember(PsiMember member);
+  void setCorrectVisibility(T info);
 
-	void setCorrectVisibility(T info);
+  void moveFieldInitializations(LinkedHashSet<PsiField> movedFields);
 
-	void moveFieldInitializations(LinkedHashSet<PsiField> movedFields);
-
-	void updateUsage(PsiElement element);
+  void updateUsage(PsiElement element);
 }

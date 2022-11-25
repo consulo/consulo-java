@@ -15,51 +15,47 @@
  */
 package com.intellij.java.impl.refactoring.introduceparameterobject;
 
-import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-import javax.swing.ButtonGroup;
-import javax.swing.JCheckBox;
-import javax.swing.JComponent;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JTextField;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-
+import com.intellij.java.analysis.impl.refactoring.util.VariableData;
 import com.intellij.java.impl.ide.util.TreeJavaClassChooserDialog;
-import com.intellij.java.language.psi.*;
-import consulo.application.ui.wm.IdeFocusManager;
-import consulo.configurable.ConfigurationException;
-import consulo.document.Document;
-import consulo.application.HelpManager;
-import consulo.project.Project;
-import consulo.module.content.ProjectRootManager;
-import consulo.ui.ex.awt.ComboboxWithBrowseButton;
-import consulo.util.lang.StringUtil;
-import consulo.virtualFileSystem.VirtualFile;
-import com.intellij.psi.*;
-import consulo.language.psi.scope.GlobalSearchScope;
-import com.intellij.java.language.psi.util.PsiFormatUtil;
 import com.intellij.java.impl.refactoring.HelpID;
 import com.intellij.java.impl.refactoring.MoveDestination;
 import com.intellij.java.impl.refactoring.PackageWrapper;
 import com.intellij.java.impl.refactoring.RefactorJBundle;
-import consulo.language.editor.refactoring.RefactoringBundle;
 import com.intellij.java.impl.refactoring.move.moveClassesOrPackages.DestinationFolderComboBox;
 import com.intellij.java.impl.refactoring.ui.PackageNameReferenceEditorCombo;
-import consulo.language.editor.refactoring.ui.RefactoringDialog;
 import com.intellij.java.impl.refactoring.util.ParameterTablePanel;
-import com.intellij.java.analysis.impl.refactoring.util.VariableData;
-import consulo.ui.ex.awt.event.DocumentAdapter;
-import consulo.ui.ex.RecentsManager;
 import com.intellij.java.impl.ui.ReferenceEditorComboWithBrowseButton;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.PsiFormatUtil;
 import com.intellij.java.language.util.VisibilityUtil;
+import consulo.application.HelpManager;
+import consulo.application.ui.wm.ApplicationIdeFocusManager;
+import consulo.application.ui.wm.IdeFocusManager;
+import consulo.configurable.ConfigurationException;
+import consulo.document.Document;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.ui.RefactoringDialog;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiManager;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.module.content.ProjectRootManager;
+import consulo.project.Project;
+import consulo.ui.ex.RecentsManager;
+import consulo.ui.ex.awt.ComboboxWithBrowseButton;
 import consulo.ui.ex.awt.UIUtil;
+import consulo.ui.ex.awt.event.DocumentAdapter;
+import consulo.util.lang.StringUtil;
+import consulo.virtualFileSystem.VirtualFile;
+
+import javax.annotation.Nonnull;
+import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 @SuppressWarnings({"OverridableMethodCallInConstructor"})
 public class IntroduceParameterObjectDialog extends RefactoringDialog {
@@ -128,7 +124,7 @@ public class IntroduceParameterObjectDialog extends RefactoringDialog {
 
       public void actionPerformed(ActionEvent actionEvent) {
         toggleRadioEnablement();
-        final IdeFocusManager focusManager = IdeFocusManager.getInstance(myProject);
+        final IdeFocusManager focusManager = ApplicationIdeFocusManager.getInstance().getInstanceForProject(myProject);
         if (useExistingClass()) {
           focusManager.requestFocus(existingClassField, true);
         } else if (myCreateInnerClassRadioButton.isSelected()) {
@@ -171,8 +167,7 @@ public class IntroduceParameterObjectDialog extends RefactoringDialog {
       final String existingClassName = getExistingClassName();
       className = StringUtil.getShortName(existingClassName);
       packageName = StringUtil.getPackageName(existingClassName);
-    }
-    else {
+    } else {
       packageName = getPackageName();
       className = getClassName();
     }
@@ -183,13 +178,13 @@ public class IntroduceParameterObjectDialog extends RefactoringDialog {
       }
     }
     final String newVisibility =
-      myEscalateVisibilityCheckBox.isEnabled() && myEscalateVisibilityCheckBox.isSelected() ? VisibilityUtil.ESCALATE_VISIBILITY : null;
-    final MoveDestination moveDestination = ((DestinationFolderComboBox)myDestinationCb)
-      .selectDirectory(new PackageWrapper(PsiManager.getInstance(myProject), packageName), false);
+        myEscalateVisibilityCheckBox.isEnabled() && myEscalateVisibilityCheckBox.isSelected() ? VisibilityUtil.ESCALATE_VISIBILITY : null;
+    final MoveDestination moveDestination = ((DestinationFolderComboBox) myDestinationCb)
+        .selectDirectory(new PackageWrapper(PsiManager.getInstance(myProject), packageName), false);
     invokeRefactoring(new IntroduceParameterObjectProcessor(className, packageName, moveDestination, sourceMethod,
-                                                            parameters.toArray(new VariableData[parameters.size()]),
-                                                            keepMethod, useExistingClass,
-                                                            createInnerClass, newVisibility, myGenerateAccessorsCheckBox.isSelected()));
+        parameters.toArray(new VariableData[parameters.size()]),
+        keepMethod, useExistingClass,
+        createInnerClass, newVisibility, myGenerateAccessorsCheckBox.isSelected()));
   }
 
   @Override
@@ -203,8 +198,10 @@ public class IntroduceParameterObjectDialog extends RefactoringDialog {
     }
     if (myCreateInnerClassRadioButton.isSelected()) {
       final String innerClassName = getInnerClassName().trim();
-      if (!nameHelper.isIdentifier(innerClassName)) throw new ConfigurationException("\'" + innerClassName + "\' is invalid inner class name");
-      if (sourceMethod.getContainingClass().findInnerClassByName(innerClassName, false) != null) throw new ConfigurationException("Inner class with name \'" + innerClassName + "\' already exist");
+      if (!nameHelper.isIdentifier(innerClassName))
+        throw new ConfigurationException("\'" + innerClassName + "\' is invalid inner class name");
+      if (sourceMethod.getContainingClass().findInnerClassByName(innerClassName, false) != null)
+        throw new ConfigurationException("Inner class with name \'" + innerClassName + "\' already exist");
     } else if (!useExistingClass()) {
       final String className = getClassName();
       if (className.length() == 0 || !nameHelper.isIdentifier(className)) {
@@ -215,8 +212,7 @@ public class IntroduceParameterObjectDialog extends RefactoringDialog {
       if (packageName.length() == 0 || !nameHelper.isQualifiedName(packageName)) {
         throw new ConfigurationException("\'" + packageName + "\' is invalid parameter class package name");
       }
-    }
-    else {
+    } else {
       final String className = getExistingClassName();
       if (className.length() == 0 || !nameHelper.isQualifiedName(className)) {
         throw new ConfigurationException("\'" + className + "\' is invalid qualified parameter class name");
@@ -228,7 +224,7 @@ public class IntroduceParameterObjectDialog extends RefactoringDialog {
   }
 
   private String getInnerClassName() {
-    return  myInnerClassNameTextField.getText().trim();
+    return myInnerClassNameTextField.getText().trim();
   }
 
   @Nonnull
@@ -251,7 +247,7 @@ public class IntroduceParameterObjectDialog extends RefactoringDialog {
     final List<PsiParameter> out = new ArrayList<PsiParameter>();
     for (VariableData info : parameterInfo) {
       if (info.passAsParameter) {
-        out.add((PsiParameter)info.variable);
+        out.add((PsiParameter) info.variable);
       }
     }
     return out;
@@ -260,9 +256,11 @@ public class IntroduceParameterObjectDialog extends RefactoringDialog {
   protected JComponent createCenterPanel() {
     sourceMethodTextField.setEditable(false);
     final ParameterTablePanel paramsPanel = new ParameterTablePanel(myProject, parameterInfo, sourceMethod) {
-      protected void updateSignature() {}
+      protected void updateSignature() {
+      }
 
-      protected void doEnterAction() {}
+      protected void doEnterAction() {
+      }
 
       protected void doCancelAction() {
         IntroduceParameterObjectDialog.this.doCancelAction();
@@ -292,10 +290,10 @@ public class IntroduceParameterObjectDialog extends RefactoringDialog {
   private void createUIComponents() {
     final PsiFile file = sourceMethod.getContainingFile();
     packageTextField =
-          new PackageNameReferenceEditorCombo(file instanceof PsiJavaFile ? ((PsiJavaFile)file).getPackageName() : "", myProject, RECENTS_KEY, RefactoringBundle.message("choose.destination.package"));
-        final Document document = packageTextField.getChildComponent().getDocument();
-    final com.intellij.openapi.editor.event.DocumentAdapter adapter = new com.intellij.openapi.editor.event.DocumentAdapter() {
-      public void documentChanged(com.intellij.openapi.editor.event.DocumentEvent e) {
+        new PackageNameReferenceEditorCombo(file instanceof PsiJavaFile ? ((PsiJavaFile) file).getPackageName() : "", myProject, RECENTS_KEY, RefactoringBundle.message("choose.destination.package"));
+    final Document document = packageTextField.getChildComponent().getDocument();
+    final consulo.document.event.DocumentAdapter adapter = new consulo.document.event.DocumentAdapter() {
+      public void documentChanged(consulo.document.event.DocumentEvent e) {
         validateButtons();
       }
     };
@@ -306,7 +304,7 @@ public class IntroduceParameterObjectDialog extends RefactoringDialog {
         final Project project = sourceMethod.getProject();
         final GlobalSearchScope scope = GlobalSearchScope.allScope(project);
         final TreeJavaClassChooserDialog chooser =
-          new TreeJavaClassChooserDialog(RefactorJBundle.message("select.wrapper.class"), project, scope, null, null);
+            new TreeJavaClassChooserDialog(RefactorJBundle.message("select.wrapper.class"), project, scope, null, null);
         final String classText = existingClassField.getText();
         final PsiClass currentClass = JavaPsiFacade.getInstance(project).findClass(classText, GlobalSearchScope.allScope(project));
         if (currentClass != null) {
@@ -322,9 +320,9 @@ public class IntroduceParameterObjectDialog extends RefactoringDialog {
       }
     }, "", myProject, true, EXISTING_KEY);
 
-    existingClassField.getChildComponent().getDocument().addDocumentListener(new com.intellij.openapi.editor.event.DocumentAdapter() {
+    existingClassField.getChildComponent().getDocument().addDocumentListener(new consulo.document.event.DocumentAdapter() {
       @Override
-      public void documentChanged(com.intellij.openapi.editor.event.DocumentEvent e) {
+      public void documentChanged(consulo.document.event.DocumentEvent e) {
         validateButtons();
         enableGenerateAccessors();
       }
@@ -335,14 +333,14 @@ public class IntroduceParameterObjectDialog extends RefactoringDialog {
         return getPackageName();
       }
     };
-    ((DestinationFolderComboBox)myDestinationCb).setData(myProject, sourceMethod.getContainingFile().getContainingDirectory(), packageTextField.getChildComponent());
+    ((DestinationFolderComboBox) myDestinationCb).setData(myProject, sourceMethod.getContainingFile().getContainingDirectory(), packageTextField.getChildComponent());
   }
 
   private void enableGenerateAccessors() {
     boolean existingNotALibraryClass = false;
     if (useExistingClassButton.isSelected()) {
       final PsiClass selectedClass =
-        JavaPsiFacade.getInstance(myProject).findClass(existingClassField.getText(), GlobalSearchScope.projectScope(myProject));
+          JavaPsiFacade.getInstance(myProject).findClass(existingClassField.getText(), GlobalSearchScope.projectScope(myProject));
       if (selectedClass != null) {
         final PsiFile containingFile = selectedClass.getContainingFile();
         if (containingFile != null) {

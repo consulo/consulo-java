@@ -15,21 +15,22 @@
  */
 package com.intellij.java.impl.codeInsight.intention.impl;
 
-import javax.annotation.Nonnull;
-
-import consulo.language.editor.CodeInsightBundle;
 import com.intellij.java.analysis.impl.codeInsight.intention.AddAnnotationFix;
-import consulo.language.editor.intention.IntentionAction;
 import com.intellij.java.language.psi.PsiCodeBlock;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifier;
-import consulo.codeEditor.Editor;
-import consulo.project.Project;
-import consulo.document.util.TextRange;
-import com.intellij.psi.*;
-import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.codeEditor.Editor;
+import consulo.document.util.TextRange;
+import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.intention.IntentionAction;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+
+import javax.annotation.Nonnull;
 
 /**
  * @author ven

@@ -15,21 +15,21 @@
  */
 package com.intellij.java.impl.ig.classlayout;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import consulo.language.editor.inspection.ProblemDescriptor;
-import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import com.intellij.psi.*;
-import consulo.content.scope.SearchScope;
 import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
-import consulo.language.psi.util.PsiTreeUtil;
-import consulo.language.util.IncorrectOperationException;
+import com.intellij.java.language.psi.*;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
+import consulo.content.scope.SearchScope;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiManager;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class ClassMayBeInterfaceInspection extends BaseInspection {
 

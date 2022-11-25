@@ -15,48 +15,45 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
-import consulo.language.editor.hint.QuestionAction;
-import consulo.ui.ex.popup.JBPopupFactory;
-import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import consulo.language.editor.intention.QuickFixActionRegistrar;
 import com.intellij.java.impl.codeInsight.daemon.impl.actions.AddImportAction;
-import consulo.language.editor.intention.IntentionAction;
-import consulo.dataContext.DataManager;
 import com.intellij.java.language.impl.codeInsight.PackageUtil;
-import consulo.language.editor.ui.PsiElementListCellRenderer;
-import consulo.dataContext.DataContext;
-import consulo.language.editor.LangDataKeys;
-import consulo.ide.impl.idea.openapi.actionSystem.impl.SimpleDataContext;
-import consulo.logging.Logger;
+import com.intellij.java.language.psi.JavaPsiFacade;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
+import com.intellij.java.language.psi.PsiJavaFile;
+import com.intellij.java.language.psi.search.PsiShortNamesCache;
 import consulo.codeEditor.Editor;
+import consulo.codeEditor.EditorPopupHelper;
+import consulo.dataContext.DataContext;
+import consulo.dataContext.DataManager;
+import consulo.language.editor.LangDataKeys;
+import consulo.language.editor.hint.QuestionAction;
+import consulo.language.editor.intention.IntentionAction;
+import consulo.language.editor.intention.QuickFixActionRegistrar;
+import consulo.language.editor.refactoring.action.RefactoringActionHandler;
+import consulo.language.editor.refactoring.action.RefactoringActionHandlerFactory;
+import consulo.language.editor.ui.PsiElementListCellRenderer;
+import consulo.language.psi.*;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.util.IncorrectOperationException;
+import consulo.logging.Logger;
 import consulo.module.Module;
-import consulo.project.Project;
 import consulo.module.content.ModuleRootManager;
 import consulo.module.content.ProjectFileIndex;
 import consulo.module.content.ProjectRootManager;
+import consulo.project.Project;
+import consulo.ui.ex.awt.JBList;
+import consulo.ui.ex.awt.popup.AWTPopupFactory;
+import consulo.ui.ex.popup.JBPopup;
+import consulo.ui.ex.popup.JBPopupFactory;
 import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.VirtualFile;
-import com.intellij.java.language.psi.JavaPsiFacade;
-import com.intellij.java.language.psi.PsiClass;
-import consulo.language.psi.PsiDirectory;
-import consulo.language.psi.PsiElement;
-import consulo.language.psi.PsiFile;
-import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
-import com.intellij.java.language.psi.PsiJavaFile;
-import consulo.language.psi.PsiManager;
-import consulo.language.psi.PsiReference;
-import consulo.language.psi.scope.GlobalSearchScope;
-import com.intellij.java.language.psi.search.PsiShortNamesCache;
-import consulo.language.editor.refactoring.action.RefactoringActionHandler;
-import consulo.language.editor.refactoring.action.RefactoringActionHandlerFactory;
-import consulo.ui.ex.awt.JBList;
-import consulo.language.util.IncorrectOperationException;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * @author cdr
@@ -96,7 +93,7 @@ public class MoveClassToModuleFix implements IntentionAction {
     if (myModules.size() == 1) {
       final PsiClass aClass = myModules.keySet().iterator().next();
       return "Move '" + aClass.getQualifiedName() + "' from module '" + myModules.get(aClass).getName() +
-             "' to '" + myCurrentModule.getName() + "'";
+          "' to '" + myCurrentModule.getName() + "'";
     }
     return "Move '" + myReferenceName + "' in '" + myCurrentModule.getName() + "'...";
   }
@@ -116,8 +113,7 @@ public class MoveClassToModuleFix implements IntentionAction {
   public void invoke(@Nonnull final Project project, final Editor editor, final PsiFile file) throws IncorrectOperationException {
     if (myModules.size() == 1) {
       moveClass(project, editor, file, myModules.keySet().iterator().next());
-    }
-    else {
+    } else {
       LOG.assertTrue(editor != null);
       final JBList list = new JBList(myModules.keySet());
       list.setCellRenderer(new PsiElementListCellRenderer<PsiClass>() {
@@ -137,20 +133,18 @@ public class MoveClassToModuleFix implements IntentionAction {
           return 0;
         }
       });
-      JBPopupFactory.getInstance().createListPopupBuilder(list)
-        .setTitle("Choose Class to Move")
-        .setMovable(false)
-        .setResizable(false)
-        .setRequestFocus(true)
-        .setItemChoosenCallback(new Runnable() {
-          @Override
-          public void run() {
-            final Object value = list.getSelectedValue();
-            if (value instanceof PsiClass) {
-              moveClass(project, editor, file, (PsiClass)value);
+      JBPopup popup = ((AWTPopupFactory) JBPopupFactory.getInstance()).createListPopupBuilder(list)
+          .setItemChoosenCallback(new Runnable() {
+            @Override
+            public void run() {
+              final Object value = list.getSelectedValue();
+              if (value instanceof PsiClass) {
+                moveClass(project, editor, file, (PsiClass) value);
+              }
             }
-          }
-        }).createPopup().showInBestPositionFor(editor);
+          }).createPopup();
+
+      EditorPopupHelper.getInstance().showPopupInBestPositionFor(editor, popup);
     }
   }
 
@@ -161,8 +155,8 @@ public class MoveClassToModuleFix implements IntentionAction {
     final String fqName = aClass.getQualifiedName();
     LOG.assertTrue(fqName != null);
     PsiDirectory directory = PackageUtil
-      .findOrCreateDirectoryForPackage(myCurrentModule, StringUtil.getPackageName(fqName), mySourceRoot, true);
-    DataContext context = SimpleDataContext.getSimpleContext(LangDataKeys.TARGET_PSI_ELEMENT, directory, dataContext);
+        .findOrCreateDirectoryForPackage(myCurrentModule, StringUtil.getPackageName(fqName), mySourceRoot, true);
+    DataContext context = DataContext.builder().parent(dataContext).add(LangDataKeys.TARGET_PSI_ELEMENT, directory).build();
 
     moveHandler.invoke(project, new PsiElement[]{aClass}, context);
     PsiReference reference = file.findReferenceAt(editor.getCaretModel().getOffset());

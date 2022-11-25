@@ -20,13 +20,13 @@ import com.intellij.java.language.impl.lexer.JavaLexer;
 import com.intellij.java.language.psi.JavaDocTokenType;
 import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.java.language.psi.PsiJavaFile;
+import consulo.language.ast.IElementType;
+import consulo.language.ast.TokenSet;
 import consulo.language.lexer.Lexer;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.search.IndexPatternBuilder;
-import consulo.language.ast.IElementType;
-import consulo.language.ast.TokenSet;
-import com.intellij.psi.xml.XmlElementType;
-import com.intellij.psi.xml.XmlTokenType;
+import consulo.xml.psi.xml.XmlElementType;
+import consulo.xml.psi.xml.XmlTokenType;
 
 import javax.annotation.Nullable;
 

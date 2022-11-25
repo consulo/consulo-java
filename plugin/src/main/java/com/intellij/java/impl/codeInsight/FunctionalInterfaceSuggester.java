@@ -16,18 +16,18 @@
 package com.intellij.java.impl.codeInsight;
 
 import com.intellij.java.analysis.impl.codeInspection.java15api.Java15APIUsageInspection;
+import com.intellij.java.indexing.search.searches.AnnotatedMembersSearch;
 import com.intellij.java.language.impl.codeInsight.ExceptionUtil;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import com.intellij.psi.*;
-import consulo.language.psi.scope.GlobalSearchScope;
-import com.intellij.java.indexing.search.searches.AnnotatedMembersSearch;
-import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.application.util.function.Processor;
-import javax.annotation.Nonnull;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.project.Project;
 
+import javax.annotation.Nonnull;
 import java.util.*;
 import java.util.function.Function;
 

@@ -15,11 +15,11 @@
  */
 package com.intellij.java.impl.util.xml.converters;
 
-import java.util.List;
-
 import com.intellij.java.language.psi.PsiType;
-import com.intellij.util.xml.DomElement;
-import com.intellij.util.xml.GenericDomValue;
+import consulo.xml.util.xml.DomElement;
+import consulo.xml.util.xml.GenericDomValue;
+
+import java.util.List;
 
 /**
  * @author peter

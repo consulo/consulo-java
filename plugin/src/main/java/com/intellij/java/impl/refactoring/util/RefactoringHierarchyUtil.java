@@ -24,20 +24,19 @@
  */
 package com.intellij.java.impl.refactoring.util;
 
+import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
 import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.InheritanceUtil;
+import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiManager;
+import consulo.language.psi.resolve.PsiElementProcessor;
+import consulo.language.psi.resolve.PsiElementProcessorAdapter;
 import consulo.logging.Logger;
 import consulo.util.lang.Comparing;
-import com.intellij.psi.*;
-import consulo.language.psi.resolve.PsiElementProcessor;
-import consulo.ide.impl.psi.search.PsiElementProcessorAdapter;
-import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
-import com.intellij.java.language.psi.util.InheritanceUtil;
-import java.util.HashSet;
-import consulo.java.language.module.util.JavaClassNames;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import java.util.*;
 
 public class RefactoringHierarchyUtil {
@@ -47,7 +46,8 @@ public class RefactoringHierarchyUtil {
       PsiType.BYTE, PsiType.CHAR, PsiType.SHORT, PsiType.INT, PsiType.LONG, PsiType.FLOAT, PsiType.DOUBLE
   );
 
-  private RefactoringHierarchyUtil() {}
+  private RefactoringHierarchyUtil() {
+  }
 
   public static boolean willBeInTargetClass(PsiElement place,
                                             @Nonnull Set<PsiMember> membersToMove,
@@ -76,8 +76,7 @@ public class RefactoringHierarchyUtil {
       PsiClass base = supers[0].resolve();
       if (base != null) {
         current = base;
-      }
-      else {
+      } else {
         return current;
       }
     }
@@ -92,15 +91,14 @@ public class RefactoringHierarchyUtil {
       PsiClass resolved = superTypes[0].resolve();
       // if we have no superclass but have interfaces, prefer interfaces to class (IDEADEV-20104)
       if (resolved != null && JavaClassNames.JAVA_LANG_OBJECT.equals(resolved.getQualifiedName()) && superTypes.length > 1) {
-        resolved = superTypes [1].resolve();
+        resolved = superTypes[1].resolve();
       }
       if (resolved != null) {
         if (!includeNonProject) {
           if (resolved.getManager().isInProject(resolved)) {
             return resolved;
           }
-        }
-        else {
+        } else {
           return resolved;
         }
       }
@@ -109,7 +107,6 @@ public class RefactoringHierarchyUtil {
   }
 
   /**
-   *
    * @param subClass
    * @param includeNonProject
    * @param sortAlphabetically if false, sorted in DFS order
@@ -150,10 +147,11 @@ public class RefactoringHierarchyUtil {
 
   /**
    * Checks whether given element is below the given superClass in class hierarchy.
+   *
    * @param superClass
-   * @return
    * @param subClass
    * @param member
+   * @return
    */
   public static boolean isMemberBetween(PsiClass superClass, PsiClass subClass, PsiMember member) {
     PsiClass elementClass = null;
@@ -164,9 +162,8 @@ public class RefactoringHierarchyUtil {
     if (elementClass == null) return false;
     if (superClass != null) {
       return !superClass.getManager().areElementsEquivalent(superClass, elementClass) &&
-             elementClass.isInheritor(superClass, true);
-    }
-    else {
+          elementClass.isInheritor(superClass, true);
+    } else {
       return subClass.getManager().areElementsEquivalent(subClass, elementClass);
     }
   }
@@ -174,6 +171,7 @@ public class RefactoringHierarchyUtil {
   public static void processSuperTypes(PsiType type, SuperTypeVisitor visitor) {
     processSuperTypes(type, visitor, new HashSet<PsiType>());
   }
+
   private static void processSuperTypes(PsiType type, SuperTypeVisitor visitor, Set<PsiType> visited) {
     if (visited.contains(type)) return;
     visited.add(type);
@@ -184,8 +182,7 @@ public class RefactoringHierarchyUtil {
           visitor.visitType(PRIMITIVE_TYPES.get(i));
         }
       }
-    }
-    else {
+    } else {
       final PsiType[] superTypes = type.getSuperTypes();
       for (PsiType superType : superTypes) {
         visitor.visitType(superType);
@@ -198,10 +195,10 @@ public class RefactoringHierarchyUtil {
     Set<PsiClass> result = new HashSet<PsiClass>();
     _findImplementingClasses(anInterface, new HashSet<PsiClass>(), result);
     boolean classesRemoved = true;
-    while(classesRemoved) {
+    while (classesRemoved) {
       classesRemoved = false;
       loop1:
-      for (Iterator<PsiClass> iterator = result.iterator(); iterator.hasNext();) {
+      for (Iterator<PsiClass> iterator = result.iterator(); iterator.hasNext(); ) {
         final PsiClass psiClass = iterator.next();
         for (final PsiClass aClass : result) {
           if (psiClass.isInheritor(aClass, true)) {
@@ -222,8 +219,7 @@ public class RefactoringHierarchyUtil {
       public boolean execute(@Nonnull PsiClass aClass) {
         if (!aClass.isInterface()) {
           result.add(aClass);
-        }
-        else if (!visited.contains(aClass)){
+        } else if (!visited.contains(aClass)) {
           _findImplementingClasses(aClass, visited, result);
         }
         return true;

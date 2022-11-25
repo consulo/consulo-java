@@ -20,16 +20,16 @@
  */
 package com.intellij.java.impl.codeInspection.ex;
 
-import consulo.language.editor.inspection.HTMLComposer;
-import consulo.language.editor.inspection.InspectionsBundle;
-import consulo.ide.impl.idea.codeInspection.ex.HTMLComposerImpl;
-import consulo.language.editor.inspection.reference.RefElement;
-import consulo.ide.impl.idea.codeInspection.reference.RefElementImpl;
-import consulo.language.editor.inspection.reference.RefEntity;
-import consulo.language.editor.inspection.reference.RefFile;
 import com.intellij.java.analysis.codeInspection.reference.*;
 import com.intellij.java.impl.codeInspection.HTMLJavaHTMLComposer;
 import com.intellij.java.language.psi.*;
+import consulo.language.editor.impl.inspection.reference.RefElementImpl;
+import consulo.language.editor.inspection.HTMLComposer;
+import consulo.language.editor.inspection.HTMLComposerImpl;
+import consulo.language.editor.inspection.InspectionsBundle;
+import consulo.language.editor.inspection.reference.RefElement;
+import consulo.language.editor.inspection.reference.RefEntity;
+import consulo.language.editor.inspection.reference.RefFile;
 import consulo.language.psi.PsiFile;
 import consulo.util.lang.xml.XmlStringUtil;
 

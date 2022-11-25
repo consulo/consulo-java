@@ -22,7 +22,7 @@ package com.intellij.java.impl.refactoring.move.moveMembers;
 
 import com.intellij.java.language.psi.*;
 import consulo.project.Project;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
 import com.intellij.java.impl.refactoring.HelpID;
 import consulo.language.editor.refactoring.RefactoringBundle;

@@ -15,6 +15,8 @@
  */
 package com.intellij.java.impl.codeInsight.completion;
 
+import com.intellij.java.impl.refactoring.ui.ClassNameReferenceEditor;
+import com.intellij.java.language.psi.PsiClass;
 import consulo.language.editor.completion.CompletionContributor;
 import consulo.language.editor.completion.CompletionParameters;
 import consulo.language.editor.completion.CompletionResult;
@@ -23,16 +25,15 @@ import consulo.language.editor.completion.lookup.LookupElement;
 import consulo.language.editor.completion.lookup.LookupElementDecorator;
 import consulo.language.editor.completion.lookup.LookupElementPresentation;
 import consulo.language.editor.completion.lookup.LookupElementRenderer;
-import com.intellij.java.impl.refactoring.ui.ClassNameReferenceEditor;
-import com.intellij.java.language.psi.PsiClass;
+import consulo.language.util.ModuleUtilCore;
 import consulo.module.Module;
-import consulo.ide.impl.idea.openapi.module.ModuleUtil;
-import consulo.ide.impl.idea.util.Consumer;
+
+import java.util.function.Consumer;
 
 /**
  * @author peter
  */
-public class RefactoringCompletionContributor extends CompletionContributor {
+public abstract class RefactoringCompletionContributor extends CompletionContributor {
   @Override
   public void fillCompletionVariants(CompletionParameters parameters, final CompletionResultSet resultSet) {
     if (parameters.getOriginalFile().getUserData(ClassNameReferenceEditor.CLASS_NAME_REFERENCE_FRAGMENT) == null) {
@@ -41,13 +42,13 @@ public class RefactoringCompletionContributor extends CompletionContributor {
 
     resultSet.runRemainingContributors(parameters, new Consumer<CompletionResult>() {
       @Override
-      public void consume(CompletionResult result) {
+      public void accept(CompletionResult result) {
         LookupElement element = result.getLookupElement();
         Object object = element.getObject();
         if (object instanceof PsiClass) {
-          Module module = ModuleUtil.findModuleForPsiElement((PsiClass) object);
+          Module module = ModuleUtilCore.findModuleForPsiElement((PsiClass) object);
           if (module != null) {
-            resultSet.consume(LookupElementDecorator.withRenderer(element, new AppendModuleName(module)));
+            resultSet.accept(LookupElementDecorator.withRenderer(element, new AppendModuleName(module)));
             return;
           }
         }

@@ -15,21 +15,21 @@
  */
 package com.intellij.java.impl.codeInsight.intention.impl;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.PsiExpressionTrimRenderer;
+import consulo.codeEditor.Editor;
+import consulo.document.util.TextRange;
+import consulo.language.ast.IElementType;
+import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.intention.PsiElementBaseIntentionAction;
-import com.intellij.java.language.psi.*;
-import consulo.codeEditor.Editor;
-import consulo.project.Project;
-import consulo.document.util.TextRange;
-import com.intellij.psi.*;
-import consulo.language.codeStyle.CodeStyleManager;
-import consulo.language.ast.IElementType;
-import com.intellij.java.language.psi.util.PsiExpressionTrimRenderer;
+import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * @author Danila Ponomarenko

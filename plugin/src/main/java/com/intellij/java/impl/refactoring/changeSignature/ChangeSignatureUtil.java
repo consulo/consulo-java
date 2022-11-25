@@ -18,15 +18,15 @@ package com.intellij.java.impl.refactoring.changeSignature;
 import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiType;
-import com.intellij.lang.LanguageRefactoringSupport;
+import consulo.language.editor.refactoring.RefactoringSupportProvider;
+import consulo.language.editor.refactoring.changeSignature.ChangeSignatureHandler;
+import consulo.language.editor.util.PsiUtilBase;
+import consulo.language.impl.ast.Factory;
+import consulo.language.impl.ast.SharedImplUtil;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 import consulo.util.lang.Comparing;
-import consulo.language.psi.PsiElement;
-import consulo.language.impl.internal.ast.Factory;
-import consulo.language.impl.ast.SharedImplUtil;
-import consulo.language.editor.util.PsiUtilBase;
-import consulo.language.editor.refactoring.changeSignature.ChangeSignatureHandler;
-import consulo.language.util.IncorrectOperationException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -102,7 +102,7 @@ public class ChangeSignatureUtil {
   }
 
   public static void invokeChangeSignatureOn(PsiMethod method, Project project) {
-    final ChangeSignatureHandler handler = LanguageRefactoringSupport.INSTANCE.forLanguage(method.getLanguage()).getChangeSignatureHandler();
+    final ChangeSignatureHandler handler = RefactoringSupportProvider.forLanguage(method.getLanguage()).getChangeSignatureHandler();
     handler.invoke(project, new PsiElement[]{method}, null);
   }
 

@@ -15,59 +15,48 @@
  */
 package com.intellij.java.impl.codeInsight.editorActions.smartEnter;
 
-import consulo.document.Document;
-import consulo.codeEditor.Editor;
 import com.intellij.java.language.psi.PsiCatchSection;
 import com.intellij.java.language.psi.PsiCodeBlock;
-import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiJavaToken;
+import consulo.codeEditor.Editor;
+import consulo.document.Document;
+import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 
 /**
- * Created by IntelliJ IDEA.
  * User: max
  * Date: Sep 5, 2003
  * Time: 5:32:01 PM
- * To change this template use Options | File Templates.
  */
 @SuppressWarnings({"HardCodedStringLiteral"})
-public class CatchDeclarationFixer implements Fixer
-{
-	@Override
-	public void apply(Editor editor, JavaSmartEnterProcessor processor, PsiElement psiElement) throws IncorrectOperationException
-	{
-		if(psiElement instanceof PsiCatchSection)
-		{
-			final Document doc = editor.getDocument();
-			final PsiCatchSection catchSection = (PsiCatchSection) psiElement;
+public class CatchDeclarationFixer implements Fixer {
+  @Override
+  public void apply(Editor editor, JavaSmartEnterProcessor processor, PsiElement psiElement) throws IncorrectOperationException {
+    if (psiElement instanceof PsiCatchSection) {
+      final Document doc = editor.getDocument();
+      final PsiCatchSection catchSection = (PsiCatchSection) psiElement;
 
-			final int catchStart = catchSection.getTextRange().getStartOffset();
-			int stopOffset = doc.getLineEndOffset(doc.getLineNumber(catchStart));
+      final int catchStart = catchSection.getTextRange().getStartOffset();
+      int stopOffset = doc.getLineEndOffset(doc.getLineNumber(catchStart));
 
-			final PsiCodeBlock catchBlock = catchSection.getCatchBlock();
-			if(catchBlock != null)
-			{
-				stopOffset = Math.min(stopOffset, catchBlock.getTextRange().getStartOffset());
-			}
-			stopOffset = Math.min(stopOffset, catchSection.getTextRange().getEndOffset());
+      final PsiCodeBlock catchBlock = catchSection.getCatchBlock();
+      if (catchBlock != null) {
+        stopOffset = Math.min(stopOffset, catchBlock.getTextRange().getStartOffset());
+      }
+      stopOffset = Math.min(stopOffset, catchSection.getTextRange().getEndOffset());
 
-			final PsiJavaToken lParenth = catchSection.getLParenth();
-			if(lParenth == null)
-			{
-				doc.replaceString(catchStart, stopOffset, "catch ()");
-				processor.registerUnresolvedError(catchStart + "catch (".length());
-			}
-			else
-			{
-				if(catchSection.getParameter() == null)
-				{
-					processor.registerUnresolvedError(lParenth.getTextRange().getEndOffset());
-				}
-				if(catchSection.getRParenth() == null)
-				{
-					doc.insertString(stopOffset, ")");
-				}
-			}
-		}
-	}
+      final PsiJavaToken lParenth = catchSection.getLParenth();
+      if (lParenth == null) {
+        doc.replaceString(catchStart, stopOffset, "catch ()");
+        processor.registerUnresolvedError(catchStart + "catch (".length());
+      } else {
+        if (catchSection.getParameter() == null) {
+          processor.registerUnresolvedError(lParenth.getTextRange().getEndOffset());
+        }
+        if (catchSection.getRParenth() == null) {
+          doc.insertString(stopOffset, ")");
+        }
+      }
+    }
+  }
 }

@@ -19,7 +19,7 @@ import consulo.ide.impl.idea.ide.hierarchy.HierarchyNodeDescriptor;
 import consulo.ide.impl.idea.ide.hierarchy.HierarchyTreeStructure;
 import com.intellij.java.language.psi.*;
 import consulo.project.Project;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import com.intellij.java.indexing.search.searches.OverridingMethodsSearch;
 import consulo.util.collection.ArrayUtil;
 

@@ -19,7 +19,7 @@ import com.intellij.java.language.psi.PsiLambdaExpression;
 import com.intellij.java.language.psi.PsiParameter;
 import com.intellij.java.language.psi.PsiParameterList;
 import com.intellij.java.language.psi.PsiParenthesizedExpression;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 

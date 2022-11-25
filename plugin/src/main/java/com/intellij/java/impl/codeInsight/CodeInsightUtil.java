@@ -15,10 +15,6 @@
  */
 package com.intellij.java.impl.codeInsight;
 
-import consulo.language.editor.FileModificationService;
-import consulo.language.editor.PsiEquivalenceUtil;
-import consulo.language.editor.impl.internal.completion.CompletionUtil;
-import consulo.application.util.matcher.PrefixMatcher;
 import com.intellij.java.analysis.impl.codeInsight.JavaPsiEquivalenceUtil;
 import com.intellij.java.impl.codeInsight.completion.AllClassesGetter;
 import com.intellij.java.impl.codeInsight.completion.JavaCompletionUtil;
@@ -27,31 +23,36 @@ import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
-import consulo.codeEditor.Editor;
-import consulo.fileEditor.FileEditorManager;
-import consulo.navigation.OpenFileDescriptor;
 import consulo.application.progress.ProgressManager;
-import consulo.project.Project;
+import consulo.application.util.function.Processor;
+import consulo.application.util.matcher.PrefixMatcher;
+import consulo.application.util.query.FilteredQuery;
+import consulo.application.util.query.Query;
+import consulo.codeEditor.Editor;
 import consulo.document.util.TextRange;
+import consulo.fileEditor.FileEditorManager;
+import consulo.ide.impl.psi.util.proximity.PsiProximityComparator;
+import consulo.java.analysis.codeInsight.JavaCodeInsightUtilCore;
+import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.editor.FileModificationService;
+import consulo.language.editor.PsiEquivalenceUtil;
+import consulo.language.editor.impl.internal.completion.CompletionUtil;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiManager;
 import consulo.language.psi.PsiReference;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.util.PsiTreeUtil;
-import consulo.ide.impl.psi.util.proximity.PsiProximityComparator;
-import consulo.ide.impl.idea.util.Consumer;
-import consulo.application.util.query.FilteredQuery;
-import consulo.application.util.function.Processor;
-import consulo.application.util.query.Query;
+import consulo.logging.Logger;
+import consulo.navigation.OpenFileDescriptor;
+import consulo.navigation.OpenFileDescriptorFactory;
+import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.collection.JBTreeTraverser;
-import consulo.java.analysis.codeInsight.JavaCodeInsightUtilCore;
-import consulo.java.language.module.util.JavaClassNames;
-import consulo.logging.Logger;
 
 import javax.annotation.Nonnull;
 import java.util.*;
+import java.util.function.Consumer;
 
 public class CodeInsightUtil extends JavaCodeInsightUtilCore {
   private static final Logger LOG = Logger.getInstance(CodeInsightUtil.class);
@@ -154,7 +155,7 @@ public class CodeInsightUtil extends JavaCodeInsightUtilCore {
     LOG.assertTrue(range != null, "element: " + element + "; valid: " + element.isValid());
     int textOffset = range.getStartOffset();
 
-    OpenFileDescriptor descriptor = new OpenFileDescriptor(project, targetFile.getVirtualFile(), textOffset);
+    OpenFileDescriptor descriptor = OpenFileDescriptorFactory.getInstance(project).builder(targetFile.getVirtualFile()).offset(textOffset).build();
     return FileEditorManager.getInstance(project).openTextEditor(descriptor, true);
   }
 
@@ -204,7 +205,7 @@ public class CodeInsightUtil extends JavaCodeInsightUtilCore {
   }
 
   private static void addContextTypeArguments(PsiElement context, PsiClassType baseType, Processor<PsiClass> inheritorsProcessor) {
-    Set<String> usedNames = ContainerUtil.newHashSet();
+    Set<String> usedNames = new HashSet<>();
     PsiElementFactory factory = JavaPsiFacade.getElementFactory(context.getProject());
     PsiElement each = context;
     while (true) {
@@ -254,7 +255,7 @@ public class CodeInsightUtil extends JavaCodeInsightUtilCore {
         return true;
       }
       if (getRawSubtypes) {
-        result.consume(createType(inheritor, facade.getElementFactory().createRawSubstitutor(inheritor), arrayDim));
+        result.accept(createType(inheritor, facade.getElementFactory().createRawSubstitutor(inheritor), arrayDim));
         return true;
       }
 
@@ -272,7 +273,7 @@ public class CodeInsightUtil extends JavaCodeInsightUtilCore {
             continue;
           }
           if (substitution == null) {
-            result.consume(createType(inheritor, facade.getElementFactory().createRawSubstitutor(inheritor), arrayDim));
+            result.accept(createType(inheritor, facade.getElementFactory().createRawSubstitutor(inheritor), arrayDim));
             return true;
           }
           inheritorSubstitutor = inheritorSubstitutor.put(inheritorParameter, substitution);
@@ -282,7 +283,7 @@ public class CodeInsightUtil extends JavaCodeInsightUtilCore {
 
       PsiType toAdd = createType(inheritor, inheritorSubstitutor, arrayDim);
       if (baseType.isAssignableFrom(toAdd)) {
-        result.consume(toAdd);
+        result.accept(toAdd);
       }
       return true;
     };

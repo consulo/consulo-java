@@ -30,7 +30,7 @@ import org.jetbrains.annotations.TestOnly;
 import com.intellij.java.language.codeInsight.NullableNotNullManager;
 import com.intellij.java.analysis.impl.codeInsight.intention.AddAnnotationFix;
 import consulo.project.Project;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import consulo.language.psi.scope.LocalSearchScope;
 import com.intellij.java.indexing.search.searches.OverridingMethodsSearch;
 import consulo.language.psi.search.ReferencesSearch;

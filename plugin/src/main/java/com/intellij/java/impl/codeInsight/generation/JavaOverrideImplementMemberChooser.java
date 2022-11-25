@@ -15,26 +15,22 @@
  */
 package com.intellij.java.impl.codeInsight.generation;
 
-import consulo.language.editor.CodeInsightBundle;
-import consulo.ide.impl.idea.codeInsight.generation.ClassMember;
-import consulo.application.AllIcons;
-import consulo.ide.impl.idea.ide.util.MemberChooser;
-import consulo.ide.impl.idea.ide.util.PropertiesComponent;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.psi.infos.CandidateInfo;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.openapi.actionSystem.*;
+import consulo.application.AllIcons;
 import consulo.application.ApplicationManager;
+import consulo.application.util.NotNullLazyValue;
+import consulo.ide.impl.idea.ide.util.MemberChooser;
+import consulo.ide.impl.idea.ide.util.PropertiesComponent;
+import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.generation.ClassMember;
+import consulo.language.psi.PsiElement;
+import consulo.project.Project;
+import consulo.ui.ex.action.*;
 import consulo.ui.ex.awt.DialogWrapper;
 import consulo.ui.ex.keymap.KeymapManager;
-import consulo.project.Project;
-import consulo.ide.impl.idea.openapi.util.NotNullLazyValue;
-import consulo.language.psi.PsiElement;
-import consulo.ide.impl.idea.util.Function;
 import consulo.util.collection.ContainerUtil;
-import consulo.ui.ex.action.Constraints;
-import consulo.ui.ex.action.DefaultActionGroup;
-import consulo.ui.ex.action.ToggleAction;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
@@ -45,6 +41,7 @@ import java.awt.event.KeyEvent;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedHashSet;
+import java.util.function.Function;
 
 /**
  * @author Dmitry Batkovich
@@ -187,7 +184,7 @@ public class JavaOverrideImplementMemberChooser extends MemberChooser<PsiMethodM
   private static PsiMethodMember[] convertToMethodMembers(Collection<CandidateInfo> candidates) {
     return ContainerUtil.map2Array(candidates, PsiMethodMember.class, new Function<CandidateInfo, PsiMethodMember>() {
       @Override
-      public PsiMethodMember fun(final CandidateInfo s) {
+      public PsiMethodMember apply(final CandidateInfo s) {
         return new PsiMethodMember(s);
       }
     });

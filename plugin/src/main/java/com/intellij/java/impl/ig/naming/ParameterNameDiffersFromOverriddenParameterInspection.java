@@ -15,22 +15,22 @@
  */
 package com.intellij.java.impl.ig.naming;
 
-import consulo.ide.impl.idea.codeInspection.ui.MultipleCheckboxOptionsPanel;
+import com.intellij.java.impl.ig.fixes.RenameParameterFix;
+import com.intellij.java.impl.ig.psiutils.LibraryUtil;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiParameter;
 import com.intellij.java.language.psi.PsiParameterList;
 import com.intellij.java.language.psi.search.searches.SuperMethodsSearch;
 import com.intellij.java.language.psi.util.MethodSignatureBackedByPsiMethod;
-import consulo.application.util.query.Query;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.fixes.RenameParameterFix;
-import com.intellij.java.impl.ig.psiutils.LibraryUtil;
-import javax.annotation.Nonnull;
+import consulo.application.util.query.Query;
+import consulo.language.editor.inspection.ui.MultipleCheckboxOptionsPanel;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.swing.*;
 

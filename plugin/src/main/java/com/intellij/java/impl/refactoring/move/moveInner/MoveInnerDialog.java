@@ -41,7 +41,7 @@ import consulo.module.content.ProjectRootManager;
 import consulo.util.lang.Comparing;
 import consulo.ide.impl.idea.openapi.util.NullableComputable;
 import consulo.virtualFileSystem.VirtualFile;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
 import com.intellij.java.language.psi.codeStyle.VariableKind;

@@ -15,19 +15,21 @@
  */
 package com.intellij.java.impl.refactoring.extractMethod;
 
-import com.intellij.java.language.psi.*;
-import consulo.logging.Logger;
-import consulo.util.dataholder.Key;
-import com.intellij.psi.*;
-import consulo.content.scope.SearchScope;
 import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.RedundantCastUtil;
+import consulo.application.util.function.Processor;
+import consulo.content.scope.SearchScope;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiManager;
+import consulo.language.psi.PsiReference;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.PsiTreeUtil;
-import com.intellij.java.language.psi.util.RedundantCastUtil;
 import consulo.language.util.IncorrectOperationException;
-import consulo.application.util.function.Processor;
-import java.util.HashMap;
+import consulo.logging.Logger;
+import consulo.util.dataholder.Key;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**

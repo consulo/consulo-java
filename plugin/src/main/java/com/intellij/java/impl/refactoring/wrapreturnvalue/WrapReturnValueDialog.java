@@ -15,54 +15,40 @@
  */
 package com.intellij.java.impl.refactoring.wrapreturnvalue;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.annotation.Nonnull;
-import javax.swing.ButtonGroup;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JTextField;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-
-import consulo.application.HelpManager;
-import consulo.application.ui.wm.IdeFocusManager;
-import consulo.ui.ex.awtUnsafe.TargetAWT;
-import consulo.configurable.ConfigurationException;
-import consulo.language.icon.IconDescriptorUpdaters;
-import com.intellij.java.language.util.TreeClassChooser;
-import com.intellij.java.language.util.TreeClassChooserFactory;
-import consulo.project.Project;
-import consulo.component.util.Iconable;
-import consulo.ui.ex.awt.ListCellRendererWrapper;
-import consulo.util.lang.StringUtil;
-import com.intellij.java.language.psi.JavaPsiFacade;
-import com.intellij.java.language.psi.PsiAnonymousClass;
-import com.intellij.java.language.psi.PsiClass;
-import com.intellij.java.language.psi.PsiField;
-import consulo.language.psi.PsiFile;
-import com.intellij.java.language.psi.PsiJavaFile;
-import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.java.language.psi.PsiNameHelper;
-import com.intellij.java.language.psi.PsiType;
-import consulo.language.psi.scope.GlobalSearchScope;
-import com.intellij.java.language.psi.util.TypeConversionUtil;
 import com.intellij.java.impl.refactoring.HelpID;
 import com.intellij.java.impl.refactoring.PackageWrapper;
 import com.intellij.java.impl.refactoring.RefactorJBundle;
-import consulo.language.editor.refactoring.RefactoringBundle;
 import com.intellij.java.impl.refactoring.move.moveClassesOrPackages.DestinationFolderComboBox;
 import com.intellij.java.impl.refactoring.ui.PackageNameReferenceEditorCombo;
-import consulo.language.editor.refactoring.ui.RefactoringDialog;
-import consulo.ui.ex.awt.ComboboxWithBrowseButton;
-import consulo.ui.ex.awt.event.DocumentAdapter;
 import com.intellij.java.impl.ui.ReferenceEditorComboWithBrowseButton;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.TypeConversionUtil;
+import com.intellij.java.language.util.TreeClassChooser;
+import com.intellij.java.language.util.TreeClassChooserFactory;
+import consulo.application.HelpManager;
+import consulo.application.ui.wm.ApplicationIdeFocusManager;
+import consulo.application.ui.wm.IdeFocusManager;
+import consulo.component.util.Iconable;
+import consulo.configurable.ConfigurationException;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.ui.RefactoringDialog;
+import consulo.language.icon.IconDescriptorUpdaters;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.project.Project;
+import consulo.ui.ex.awt.ComboboxWithBrowseButton;
+import consulo.ui.ex.awt.ListCellRendererWrapper;
 import consulo.ui.ex.awt.UIUtil;
+import consulo.ui.ex.awt.event.DocumentAdapter;
+import consulo.ui.ex.awtUnsafe.TargetAWT;
+import consulo.util.lang.StringUtil;
+
+import javax.annotation.Nonnull;
+import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 @SuppressWarnings({"OverridableMethodCallInConstructor"})
 class WrapReturnValueDialog extends RefactoringDialog {
@@ -226,9 +212,9 @@ class WrapReturnValueDialog extends RefactoringDialog {
         }
       }
     });
-    existingClassField.getChildComponent().getDocument().addDocumentListener(new com.intellij.openapi.editor.event.DocumentAdapter() {
+    existingClassField.getChildComponent().getDocument().addDocumentListener(new consulo.document.event.DocumentAdapter() {
       @Override
-      public void documentChanged(com.intellij.openapi.editor.event.DocumentEvent e) {
+      public void documentChanged(consulo.document.event.DocumentEvent e) {
         final JavaPsiFacade facade = JavaPsiFacade.getInstance(myProject);
         final PsiClass currentClass = facade.findClass(existingClassField.getText(), GlobalSearchScope.allScope(myProject));
         if (currentClass != null) {
@@ -250,7 +236,7 @@ class WrapReturnValueDialog extends RefactoringDialog {
     UIUtil.setEnabled(myExistingClassPanel, useExistingClassButton.isSelected(), true);
     UIUtil.setEnabled(myNewClassPanel, createNewClassButton.isSelected(), true);
     UIUtil.setEnabled(myCreateInnerPanel, myCreateInnerClassButton.isSelected(), true);
-    final IdeFocusManager focusManager = IdeFocusManager.getInstance(myProject);
+    final IdeFocusManager focusManager = ApplicationIdeFocusManager.getInstance().getInstanceForProject(myProject);
     if (useExistingClassButton.isSelected()) {
       focusManager.requestFocus(existingClassField, true);
     }
@@ -273,8 +259,8 @@ class WrapReturnValueDialog extends RefactoringDialog {
   }
 
   private void createUIComponents() {
-    final com.intellij.openapi.editor.event.DocumentAdapter adapter = new com.intellij.openapi.editor.event.DocumentAdapter() {
-      public void documentChanged(com.intellij.openapi.editor.event.DocumentEvent e) {
+    final consulo.document.event.DocumentAdapter adapter = new consulo.document.event.DocumentAdapter() {
+      public void documentChanged(consulo.document.event.DocumentEvent e) {
         validateButtons();
       }
     };

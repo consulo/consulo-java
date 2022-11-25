@@ -39,7 +39,7 @@ public class JavaInheritanceWeigher extends ProximityWeigher {
   private static final NotNullLazyKey<Set<String>, ProximityLocation> PLACE_SUPER_CLASSES = NotNullLazyKey.create("PLACE_SUPER_CLASSES", new NotNullFunction<ProximityLocation, Set<String>>() {
     @Nonnull
     @Override
-    public Set<String> fun(ProximityLocation location) {
+    public Set<String> apply(ProximityLocation location) {
       final HashSet<String> result = new HashSet<>();
       PsiClass contextClass = PsiTreeUtil.getContextOfType(location.getPosition(), PsiClass.class, false);
       Processor<PsiClass> processor = psiClass ->

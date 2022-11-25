@@ -15,34 +15,34 @@
  */
 package com.intellij.java.impl.codeInsight.completion;
 
-import com.intellij.codeInsight.completion.*;
-import consulo.ide.impl.idea.codeInsight.completion.impl.BetterPrefixMatcher;
-import consulo.language.editor.completion.CamelHumpMatcher;
-import consulo.language.editor.completion.AutoCompletionPolicy;
-import consulo.language.editor.completion.lookup.LookupElement;
 import com.intellij.java.impl.codeInsight.ExpectedTypeInfo;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.search.PsiShortNamesCache;
-import consulo.util.lang.StringUtil;
+import consulo.application.util.matcher.PrefixMatcher;
+import consulo.ide.impl.idea.codeInsight.completion.impl.BetterPrefixMatcher;
+import consulo.ide.impl.idea.util.CollectConsumer;
+import consulo.language.editor.completion.*;
+import consulo.language.editor.completion.lookup.LookupElement;
+import consulo.language.editor.impl.internal.completion.CompletionUtil;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiPackage;
 import consulo.language.psi.filter.ElementFilter;
-import consulo.ide.impl.idea.util.CollectConsumer;
-import consulo.ide.impl.idea.util.Consumer;
-import consulo.psi.PsiPackage;
+import consulo.util.lang.StringUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.function.Consumer;
 
 import static com.intellij.java.language.patterns.PsiJavaPatterns.psiElement;
 
 /**
  * @author peter
  */
-public class JavaNoVariantsDelegator extends CompletionContributor {
+public abstract class JavaNoVariantsDelegator extends CompletionContributor {
   @Override
   public void fillCompletionVariants(@Nonnull final CompletionParameters parameters, @Nonnull final CompletionResultSet result) {
     if (JavaModuleCompletion.isModuleFile(parameters.getOriginalFile())) {
@@ -52,8 +52,8 @@ public class JavaNoVariantsDelegator extends CompletionContributor {
     final JavaCompletionSession session = new JavaCompletionSession(result);
     ResultTracker tracker = new ResultTracker(result) {
       @Override
-      public void consume(CompletionResult plainResult) {
-        super.consume(plainResult);
+      public void accept(CompletionResult plainResult) {
+        super.accept(plainResult);
 
         LookupElement element = plainResult.getLookupElement();
         Object o = element.getObject();
@@ -204,7 +204,7 @@ public class JavaNoVariantsDelegator extends CompletionContributor {
     }
 
     @Override
-    public void consume(CompletionResult plainResult) {
+    public void accept(CompletionResult plainResult) {
       myResult.passResult(plainResult);
 
       LookupElement element = plainResult.getLookupElement();

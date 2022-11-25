@@ -15,21 +15,26 @@
  */
 package com.intellij.java.impl.codeInspection.sameReturnValue;
 
-import consulo.language.editor.scope.AnalysisScope;
-import com.intellij.java.analysis.codeInspection.GroupNames;
-import com.intellij.codeInspection.reference.*;
 import com.intellij.java.analysis.codeInspection.GlobalJavaInspectionContext;
 import com.intellij.java.analysis.codeInspection.GlobalJavaInspectionTool;
+import com.intellij.java.analysis.codeInspection.GroupNames;
 import com.intellij.java.analysis.codeInspection.reference.RefJavaVisitor;
 import com.intellij.java.analysis.codeInspection.reference.RefMethod;
 import com.intellij.java.language.psi.PsiMethod;
+import consulo.language.editor.inspection.*;
+import consulo.language.editor.inspection.reference.RefElement;
+import consulo.language.editor.inspection.reference.RefEntity;
+import consulo.language.editor.inspection.reference.RefManager;
+import consulo.language.editor.inspection.scheme.InspectionManager;
+import consulo.language.editor.scope.AnalysisScope;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
  * @author max
  */
-public class SameReturnValueInspection extends GlobalJavaInspectionTool
+public abstract class SameReturnValueInspection extends GlobalJavaInspectionTool
 {
   @Override
   @Nullable

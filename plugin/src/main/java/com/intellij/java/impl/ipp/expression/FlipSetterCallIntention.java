@@ -20,7 +20,7 @@ import com.intellij.java.language.psi.*;
 import consulo.codeEditor.Editor;
 import consulo.fileEditor.FileEditorManager;
 import consulo.project.Project;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import com.intellij.java.language.psi.util.PropertyUtil;
 import consulo.language.util.IncorrectOperationException;
 import com.intellij.java.impl.ipp.base.Intention;

@@ -23,7 +23,7 @@ import consulo.ide.impl.idea.openapi.module.ModuleUtil;
 import consulo.project.Project;
 import consulo.module.content.ProjectRootManager;
 import consulo.virtualFileSystem.VirtualFile;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.java.impl.refactoring.MoveDestination;
 import com.intellij.java.impl.refactoring.PackageWrapper;

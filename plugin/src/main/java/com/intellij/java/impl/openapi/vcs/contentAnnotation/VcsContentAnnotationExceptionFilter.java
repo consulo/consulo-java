@@ -15,8 +15,6 @@
  */
 package com.intellij.java.impl.openapi.vcs.contentAnnotation;
 
-import com.intellij.execution.filters.Filter;
-import consulo.execution.ui.console.FilterMixin;
 import com.intellij.java.execution.filters.ExceptionInfoCache;
 import com.intellij.java.execution.filters.ExceptionWorker;
 import com.intellij.java.language.psi.JavaRecursiveElementVisitor;
@@ -24,35 +22,35 @@ import com.intellij.java.language.psi.PsiCallExpression;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import consulo.application.ApplicationManager;
-import consulo.ide.impl.idea.openapi.diff.DiffColors;
+import consulo.application.util.function.Computable;
 import consulo.codeEditor.DefaultLanguageHighlighterColors;
-import consulo.document.Document;
 import consulo.colorScheme.EditorColorsManager;
 import consulo.colorScheme.EditorColorsScheme;
 import consulo.colorScheme.TextAttributes;
+import consulo.document.Document;
 import consulo.document.FileDocumentManager;
-import consulo.ide.impl.idea.openapi.localVcs.UpToDateLineNumberProvider;
-import consulo.project.Project;
-import consulo.application.util.function.Computable;
 import consulo.document.util.TextRange;
-import consulo.util.lang.Trinity;
-import consulo.virtualFileSystem.status.FileStatus;
-import consulo.versionControlSystem.change.ChangeListManager;
+import consulo.execution.ui.console.Filter;
+import consulo.execution.ui.console.FilterMixin;
+import consulo.ide.impl.idea.openapi.localVcs.UpToDateLineNumberProvider;
 import consulo.ide.impl.idea.openapi.vcs.contentAnnotation.VcsContentAnnotation;
 import consulo.ide.impl.idea.openapi.vcs.contentAnnotation.VcsContentAnnotationImpl;
 import consulo.ide.impl.idea.openapi.vcs.contentAnnotation.VcsContentAnnotationSettings;
-import consulo.versionControlSystem.history.VcsRevisionNumber;
-import consulo.ide.impl.idea.openapi.vcs.impl.UpToDateLineNumberProviderImpl;
-import consulo.virtualFileSystem.VirtualFile;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.scope.GlobalSearchScope;
-import consulo.ide.impl.idea.util.Consumer;
-import consulo.util.collection.SmartList;
 import consulo.logging.Logger;
+import consulo.project.Project;
+import consulo.util.collection.SmartList;
+import consulo.util.lang.Trinity;
+import consulo.versionControlSystem.change.ChangeListManager;
+import consulo.versionControlSystem.history.VcsRevisionNumber;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.virtualFileSystem.status.FileStatus;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.function.Consumer;
 
 /**
  * Created by IntelliJ IDEA.
@@ -148,7 +146,7 @@ public class VcsContentAnnotationExceptionFilter implements Filter, FilterMixin 
           int startFileOffset = worker.getInfo().getThird().getStartOffset();
           int idx = lineText[0].indexOf(':', startFileOffset);
           int endIdx = idx == -1 ? worker.getInfo().getThird().getEndOffset() : idx;
-          consumer.consume(new MyAdditionalHighlight(startOffset + lineStartOffset + startFileOffset + 1, startOffset + lineStartOffset + endIdx));
+          consumer.accept(new MyAdditionalHighlight(startOffset + lineStartOffset + startFileOffset + 1, startOffset + lineStartOffset + endIdx));
 
           if (worker.getPsiClass() != null) {
             // also check method
@@ -167,7 +165,7 @@ public class VcsContentAnnotationExceptionFilter implements Filter, FilterMixin 
                 }
               }
               if (methodChanged) {
-                consumer.consume(new MyAdditionalHighlight(startOffset + lineStartOffset + worker.getInfo().getSecond().getStartOffset(),
+                consumer.accept(new MyAdditionalHighlight(startOffset + lineStartOffset + worker.getInfo().getSecond().getStartOffset(),
                     startOffset + lineStartOffset + worker.getInfo().getSecond().getEndOffset()));
               }
             }

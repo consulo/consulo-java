@@ -19,7 +19,7 @@ import com.intellij.java.language.psi.PsiDiamondType;
 import com.intellij.java.language.psi.PsiReferenceParameterList;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.PsiTypeElement;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 
 class DiamondTypePredicate implements PsiElementPredicate {

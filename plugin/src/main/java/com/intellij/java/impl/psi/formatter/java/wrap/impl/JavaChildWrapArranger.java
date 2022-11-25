@@ -15,30 +15,34 @@
  */
 package com.intellij.java.impl.psi.formatter.java.wrap.impl;
 
-import static com.intellij.java.impl.psi.formatter.java.JavaFormatterUtil.getWrapType;
-import static com.intellij.java.language.impl.psi.impl.PsiImplUtil.isTypeAnnotation;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import consulo.language.codeStyle.Wrap;
-import consulo.language.codeStyle.WrapType;
-import com.intellij.java.language.psi.*;
-import consulo.language.ast.ASTNode;
-import consulo.project.DumbService;
-import com.intellij.psi.*;
-import consulo.language.codeStyle.CommonCodeStyleSettings;
 import com.intellij.java.impl.psi.codeStyle.JavaCodeStyleSettings;
-import consulo.language.codeStyle.FormatterUtil;
 import com.intellij.java.impl.psi.formatter.java.AbstractJavaBlock;
 import com.intellij.java.impl.psi.formatter.java.JavaFormatterUtil;
 import com.intellij.java.impl.psi.formatter.java.wrap.JavaWrapManager;
 import com.intellij.java.impl.psi.formatter.java.wrap.ReservedWrapsProvider;
 import com.intellij.java.language.impl.psi.impl.source.tree.ChildRole;
-import consulo.language.impl.ast.CompositeElement;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
+import com.intellij.java.language.psi.*;
+import consulo.language.ast.ASTNode;
 import consulo.language.ast.IElementType;
+import consulo.language.ast.TokenType;
+import consulo.language.codeStyle.CommonCodeStyleSettings;
+import consulo.language.codeStyle.FormatterUtil;
+import consulo.language.codeStyle.Wrap;
+import consulo.language.codeStyle.WrapType;
+import consulo.language.impl.ast.CompositeElement;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiErrorElement;
+import consulo.language.psi.PsiWhiteSpace;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.project.DumbService;
 import consulo.util.collection.ArrayUtil;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import static com.intellij.java.impl.psi.formatter.java.JavaFormatterUtil.getWrapType;
+import static com.intellij.java.language.impl.psi.impl.PsiImplUtil.isTypeAnnotation;
 
 /**
  * Encapsulates the implementation of

@@ -1,17 +1,17 @@
 // Copyright 2000-2018 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.impl.codeInsight.lookup;
 
+import com.intellij.java.language.psi.PsiJavaCodeReferenceCodeFragment;
+import consulo.application.AllIcons;
 import consulo.language.editor.AutoPopupController;
-import consulo.language.editor.completion.lookup.TailType;
 import consulo.language.editor.completion.lookup.InsertionContext;
 import consulo.language.editor.completion.lookup.LookupElement;
 import consulo.language.editor.completion.lookup.LookupElementPresentation;
-import consulo.application.AllIcons;
-import com.intellij.java.language.psi.PsiJavaCodeReferenceCodeFragment;
-import consulo.util.lang.StringUtil;
+import consulo.language.editor.completion.lookup.TailType;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
-import consulo.psi.PsiPackage;
+import consulo.language.psi.PsiPackage;
+import consulo.util.lang.StringUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

@@ -15,26 +15,33 @@
  */
 package com.intellij.java.impl.refactoring.encapsulateFields;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import consulo.language.Language;
-import consulo.language.extension.LanguageExtension;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiMethod;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ExtensionAPI;
+import consulo.application.Application;
+import consulo.component.extension.ExtensionPointCacheKey;
+import consulo.language.Language;
+import consulo.language.extension.ByLanguageValue;
+import consulo.language.extension.LanguageExtension;
+import consulo.language.extension.LanguageOneToOne;
 import consulo.language.psi.PsiReference;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * @author Max Medvedev
  */
-public abstract class EncapsulateFieldHelper {
-  private static class Extension extends LanguageExtension<EncapsulateFieldHelper> {
+@ExtensionAPI(ComponentScope.APPLICATION)
+public abstract class EncapsulateFieldHelper implements LanguageExtension {
+ private static final ExtensionPointCacheKey<EncapsulateFieldHelper, ByLanguageValue<EncapsulateFieldHelper>> KEY = ExtensionPointCacheKey.create("EncapsulateFieldHelper", LanguageOneToOne.build());
 
-    public Extension() {
-      super("consulo.java.encapsulateFields.helper");
-    }
+  @Nullable
+  public static EncapsulateFieldHelper forLanguage(@Nonnull Language language) {
+    return Application.get().getExtensionPoint(EncapsulateFieldHelper.class).getOrBuildCache(KEY).get(language);
   }
-  private static final Extension INSTANCE = new Extension();
 
   @Nonnull
   public abstract PsiField[] getApplicableFields(@Nonnull PsiClass aClass);
@@ -58,7 +65,8 @@ public abstract class EncapsulateFieldHelper {
                                                         @Nonnull FieldDescriptor fieldDescriptor,
                                                         @Nonnull PsiReference reference);
 
+  @Deprecated
   public static EncapsulateFieldHelper getHelper(Language lang) {
-    return INSTANCE.forLanguage(lang);
+    return forLanguage(lang);
   }
 }

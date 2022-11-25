@@ -15,22 +15,25 @@
  */
 package com.intellij.java.impl.codeInsight.template.macro;
 
-import consulo.language.editor.CodeInsightBundle;
-import consulo.language.editor.completion.lookup.LookupElement;
-import com.intellij.codeInsight.template.*;
 import com.intellij.java.impl.codeInsight.template.JavaCodeContextType;
 import com.intellij.java.impl.codeInsight.template.JavaPsiElementResult;
 import com.intellij.java.impl.codeInsight.template.impl.JavaTemplateUtil;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
 import consulo.document.util.TextRange;
-import com.intellij.psi.*;
+import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.completion.lookup.LookupElement;
+import consulo.language.editor.template.Expression;
+import consulo.language.editor.template.ExpressionContext;
+import consulo.language.editor.template.Result;
+import consulo.language.editor.template.context.TemplateContextType;
+import consulo.language.editor.template.macro.Macro;
+import consulo.language.psi.*;
 import consulo.language.psi.util.PsiTreeUtil;
-import consulo.language.psi.PsiUtilCore;
+import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.Set;

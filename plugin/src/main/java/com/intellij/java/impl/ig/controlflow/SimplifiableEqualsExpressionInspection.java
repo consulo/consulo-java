@@ -21,7 +21,7 @@ import javax.annotation.Nullable;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
 import consulo.project.Project;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import consulo.language.ast.IElementType;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.siyeh.HardcodedMethodConstants;

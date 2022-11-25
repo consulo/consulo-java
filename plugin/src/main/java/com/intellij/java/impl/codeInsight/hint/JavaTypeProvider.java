@@ -15,42 +15,47 @@
  */
 package com.intellij.java.impl.codeInsight.hint;
 
-import java.util.List;
-
-import javax.annotation.Nonnull;
-
-import consulo.language.editor.ExpressionTypeProvider;
-import consulo.util.lang.StringUtil;
-import consulo.language.psi.PsiElement;
+import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiType;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.Language;
+import consulo.language.editor.ExpressionTypeProvider;
+import consulo.language.psi.PsiElement;
 import consulo.language.psi.SyntaxTraverser;
+import consulo.util.lang.StringUtil;
+
+import javax.annotation.Nonnull;
+import java.util.List;
 
 /**
  * @author gregsh
  */
-public class JavaTypeProvider extends ExpressionTypeProvider<PsiExpression>
-{
-	@Nonnull
-	@Override
-	public String getInformationHint(@Nonnull PsiExpression element)
-	{
-		PsiType type = element.getType();
-		String text = type == null ? "<unknown>" : type.getCanonicalText();
-		return StringUtil.escapeXml(text);
-	}
+@ExtensionImpl
+public class JavaTypeProvider extends ExpressionTypeProvider<PsiExpression> {
+  @Nonnull
+  @Override
+  public String getInformationHint(@Nonnull PsiExpression element) {
+    PsiType type = element.getType();
+    String text = type == null ? "<unknown>" : type.getCanonicalText();
+    return StringUtil.escapeXml(text);
+  }
 
-	@Nonnull
-	@Override
-	public String getErrorHint()
-	{
-		return "No expression found";
-	}
+  @Nonnull
+  @Override
+  public String getErrorHint() {
+    return "No expression found";
+  }
 
-	@Nonnull
-	@Override
-	public List<PsiExpression> getExpressionsAt(@Nonnull PsiElement elementAt)
-	{
-		return SyntaxTraverser.psiApi().parents(elementAt).filter(PsiExpression.class).toList();
-	}
+  @Nonnull
+  @Override
+  public List<PsiExpression> getExpressionsAt(@Nonnull PsiElement elementAt) {
+    return SyntaxTraverser.psiApi().parents(elementAt).filter(PsiExpression.class).toList();
+  }
+
+  @Nonnull
+  @Override
+  public Language getLanguage() {
+    return JavaLanguage.INSTANCE;
+  }
 }

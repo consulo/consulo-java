@@ -15,33 +15,36 @@
  */
 package com.intellij.java.impl.refactoring.introduceVariable;
 
-import java.awt.Point;
-
-import javax.annotation.Nullable;
-import javax.swing.DefaultListModel;
-import javax.swing.JList;
-
-import consulo.ide.impl.idea.codeInsight.template.impl.TemplateManagerImpl;
-import consulo.language.editor.template.TemplateState;
-import com.intellij.java.language.psi.*;
-import consulo.application.Result;
-import consulo.language.editor.WriteCommandAction;
-import consulo.codeEditor.Editor;
-import consulo.document.RangeMarker;
-import consulo.codeEditor.VisualPosition;
-import consulo.ui.ex.popup.JBPopupFactory;
-import consulo.util.dataholder.Key;
-import com.intellij.psi.*;
 import com.intellij.java.language.impl.psi.scope.processor.VariablesProcessor;
 import com.intellij.java.language.impl.psi.scope.util.PsiScopesUtil;
-import consulo.language.psi.util.PsiTreeUtil;
+import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
+import consulo.application.Result;
+import consulo.codeEditor.Editor;
+import consulo.codeEditor.VisualPosition;
+import consulo.document.RangeMarker;
+import consulo.language.editor.WriteCommandAction;
 import consulo.language.editor.refactoring.rename.inplace.InplaceRefactoring;
-import consulo.ui.ex.awt.ListCellRendererWrapper;
+import consulo.language.editor.template.TemplateManager;
+import consulo.language.editor.template.TemplateState;
+import consulo.language.icon.IconDescriptorUpdaters;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.SmartPsiElementPointer;
+import consulo.language.psi.resolve.ResolveState;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.project.Project;
 import consulo.ui.ex.RelativePoint;
 import consulo.ui.ex.awt.JBList;
+import consulo.ui.ex.awt.ListCellRendererWrapper;
+import consulo.ui.ex.awt.popup.AWTPopupFactory;
 import consulo.ui.ex.awtUnsafe.TargetAWT;
-import consulo.language.icon.IconDescriptorUpdaters;
+import consulo.ui.ex.popup.JBPopupFactory;
+import consulo.util.dataholder.Key;
+
+import javax.annotation.Nullable;
+import javax.swing.*;
+import java.awt.*;
 
 /**
  * User: anna
@@ -76,8 +79,8 @@ public class ReassignVariableUtil {
           @Override
           public void customize(JList list, Object value, int index, boolean selected, boolean hasFocus) {
             if (value instanceof PsiVariable) {
-              setText(((PsiVariable)value).getName());
-              setIcon(TargetAWT.to(IconDescriptorUpdaters.getIcon(((PsiVariable)value), 0)));
+              setText(((PsiVariable) value).getName());
+              setIcon(TargetAWT.to(IconDescriptorUpdaters.getIcon(((PsiVariable) value), 0)));
             }
           }
         });
@@ -85,14 +88,15 @@ public class ReassignVariableUtil {
 
         final VisualPosition visualPosition = editor.getCaretModel().getVisualPosition();
         final Point point = editor.visualPositionToXY(new VisualPosition(visualPosition.line + 1, visualPosition.column));
-        JBPopupFactory.getInstance().createListPopupBuilder(list)
-          .setTitle("Choose variable to reassign")
-          .setRequestFocus(true)
-          .setItemChoosenCallback(new Runnable() {
-            public void run() {
-              replaceWithAssignment(declaration, (PsiVariable)list.getSelectedValue(), editor);
-            }
-          }).createPopup().show(new RelativePoint(editor.getContentComponent(), point));
+        ((AWTPopupFactory) JBPopupFactory.getInstance()).createListPopupBuilder(list)
+            .setItemChoosenCallback(new Runnable() {
+              public void run() {
+                replaceWithAssignment(declaration, (PsiVariable) list.getSelectedValue(), editor);
+              }
+            })
+            .setTitle("Choose variable to reassign")
+            .setRequestFocus(true)
+            .createPopup().show(new RelativePoint(editor.getContentComponent(), point));
       }
 
       return true;
@@ -105,7 +109,7 @@ public class ReassignVariableUtil {
     if (declaration != null) {
       final PsiElement[] declaredElements = declaration.getDeclaredElements();
       if (declaredElements.length > 0 && declaredElements[0] instanceof PsiVariable) {
-        return ((PsiVariable)declaredElements[0]).getType();
+        return ((PsiVariable) declaredElements[0]).getType();
       }
     }
     return null;
@@ -132,7 +136,7 @@ public class ReassignVariableUtil {
   }
 
   static void replaceWithAssignment(final PsiDeclarationStatement declaration, final PsiVariable variable, final Editor editor) {
-    final PsiVariable var = (PsiVariable)declaration.getDeclaredElements()[0];
+    final PsiVariable var = (PsiVariable) declaration.getDeclaredElements()[0];
     final PsiExpression initializer = var.getInitializer();
     new WriteCommandAction(declaration.getProject()) {
       @Override
@@ -141,7 +145,7 @@ public class ReassignVariableUtil {
         final String chosenVariableName = variable.getName();
         //would generate red code for final variables
         PsiElement newDeclaration = elementFactory.createStatementFromText(chosenVariableName + " = " + initializer.getText() + ";",
-                                                                           declaration);
+            declaration);
         newDeclaration = declaration.replace(newDeclaration);
         final PsiFile containingFile = newDeclaration.getContainingFile();
         final RangeMarker[] occurrenceMarkers = editor.getUserData(OCCURRENCES_KEY);
@@ -156,11 +160,11 @@ public class ReassignVariableUtil {
         }
       }
     }.execute();
-    finishTemplate(editor);
+    finishTemplate(var.getProject(), editor);
   }
 
-  private static void finishTemplate(Editor editor) {
-    final TemplateState templateState = TemplateManagerImpl.getTemplateState(editor);
+  private static void finishTemplate(Project project, Editor editor) {
+    final TemplateState templateState = TemplateManager.getInstance(project).getTemplateState(editor);
     final InplaceRefactoring renamer = editor.getUserData(InplaceRefactoring.INPLACE_RENAMER);
     if (templateState != null && renamer != null) {
       templateState.gotoEnd(true);

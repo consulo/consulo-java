@@ -20,7 +20,7 @@ import javax.annotation.Nullable;
 
 import com.intellij.java.language.psi.*;
 import consulo.document.util.TextRange;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import com.siyeh.IntentionPowerPackBundle;
 import com.intellij.java.impl.ipp.base.MutablyNamedIntention;
 

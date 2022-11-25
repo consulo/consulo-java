@@ -15,50 +15,43 @@
  */
 package com.intellij.java.impl.psi.formatter.java;
 
-import java.util.Set;
+import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
+import com.intellij.java.language.psi.JavaTokenType;
+import consulo.language.ast.ASTNode;
+import consulo.language.ast.IElementType;
+import consulo.language.codeStyle.AlignmentStrategy;
+import consulo.util.lang.StringUtil;
 
 import javax.annotation.Nonnull;
-import consulo.language.codeStyle.AlignmentStrategy;
-import consulo.language.ast.ASTNode;
-import consulo.util.lang.StringUtil;
-import com.intellij.java.language.psi.JavaTokenType;
-import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
-import consulo.language.ast.IElementType;
-import consulo.util.collection.ContainerUtil;
+import java.util.Set;
 
-public class SubsequentVariablesAligner extends ChildAlignmentStrategyProvider
-{
-	private final static Set<IElementType> TYPES_TO_ALIGN = ContainerUtil.newHashSet(JavaTokenType.IDENTIFIER, JavaTokenType.EQ);
+public class SubsequentVariablesAligner extends ChildAlignmentStrategyProvider {
+  private final static Set<IElementType> TYPES_TO_ALIGN = Set.of(JavaTokenType.IDENTIFIER, JavaTokenType.EQ);
 
-	private AlignmentStrategy myAlignmentStrategy;
+  private AlignmentStrategy myAlignmentStrategy;
 
-	public SubsequentVariablesAligner()
-	{
-		updateAlignmentStrategy();
-	}
+  public SubsequentVariablesAligner() {
+    updateAlignmentStrategy();
+  }
 
-	private void updateAlignmentStrategy()
-	{
-		myAlignmentStrategy = AlignmentStrategy.createAlignmentPerTypeStrategy(TYPES_TO_ALIGN, JavaElementType.LOCAL_VARIABLE, true);
-	}
+  private void updateAlignmentStrategy() {
+    myAlignmentStrategy = AlignmentStrategy.createAlignmentPerTypeStrategy(TYPES_TO_ALIGN, JavaElementType.LOCAL_VARIABLE, true);
+  }
 
-	@Override
-	public AlignmentStrategy getNextChildStrategy(@Nonnull ASTNode child)
-	{
-		IElementType childType = child.getElementType();
-		if(childType != JavaElementType.DECLARATION_STATEMENT || StringUtil.countNewLines(child.getChars()) > 0)
-		{
-			updateAlignmentStrategy();
-			return AlignmentStrategy.getNullStrategy();
-		}
+  @Override
+  public AlignmentStrategy getNextChildStrategy(@Nonnull ASTNode child) {
+    IElementType childType = child.getElementType();
+    if (childType != JavaElementType.DECLARATION_STATEMENT || StringUtil.countNewLines(child.getChars()) > 0) {
+      updateAlignmentStrategy();
+      return AlignmentStrategy.getNullStrategy();
+    }
 
-		if(isWhiteSpaceWithBlankLines(child.getTreePrev()))
-		{
-			updateAlignmentStrategy();
-			return myAlignmentStrategy;
-		}
+    if (isWhiteSpaceWithBlankLines(child.getTreePrev())) {
+      updateAlignmentStrategy();
+      return myAlignmentStrategy;
+    }
 
-		return myAlignmentStrategy;
-	}
+    return myAlignmentStrategy;
+  }
 
 }

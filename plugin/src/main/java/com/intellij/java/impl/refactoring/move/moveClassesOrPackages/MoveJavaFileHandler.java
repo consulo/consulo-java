@@ -24,7 +24,7 @@ import com.intellij.java.language.impl.codeInsight.ChangeContextUtil;
 import com.intellij.java.language.psi.*;
 import consulo.logging.Logger;
 import consulo.util.lang.StringUtil;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import consulo.language.editor.refactoring.move.MoveFileHandler;
 import consulo.usage.MoveRenameUsageInfo;
 import consulo.usage.UsageInfo;

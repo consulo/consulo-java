@@ -15,24 +15,23 @@
  */
 package com.intellij.java.impl.javadoc;
 
-import java.util.List;
-
-import javax.annotation.Nonnull;
-
+import consulo.codeEditor.CaretModel;
+import consulo.codeEditor.Editor;
+import consulo.codeEditor.LogicalPosition;
+import consulo.dataContext.DataContext;
+import consulo.document.Document;
 import consulo.language.editor.CodeInsightSettings;
 import consulo.language.editor.CommonDataKeys;
-import consulo.dataContext.DataContext;
+import consulo.language.editor.EditorNavigationDelegate;
 import consulo.language.editor.LangDataKeys;
-import consulo.codeEditor.CaretModel;
-import consulo.document.Document;
-import consulo.codeEditor.Editor;
-import com.intellij.openapi.editor.EditorNavigationDelegateAdapter;
-import consulo.codeEditor.LogicalPosition;
-import consulo.project.Project;
-import consulo.util.lang.Pair;
 import consulo.language.psi.PsiDocumentManager;
 import consulo.language.psi.PsiFile;
+import consulo.project.Project;
 import consulo.util.lang.CharArrayUtil;
+import consulo.util.lang.Pair;
+
+import javax.annotation.Nonnull;
+import java.util.List;
 
 /**
  * Holds javadoc-specific navigation logic.
@@ -40,100 +39,91 @@ import consulo.util.lang.CharArrayUtil;
  * @author Denis Zhdanov
  * @since 5/26/11 5:22 PM
  */
-public class JavadocNavigationDelegate extends EditorNavigationDelegateAdapter
-{
+public class JavadocNavigationDelegate implements EditorNavigationDelegate {
 
-	private static final JavadocHelper ourHelper = JavadocHelper.getInstance();
+  private static final JavadocHelper ourHelper = JavadocHelper.getInstance();
 
-	/**
-	 * Improves navigation in case of incomplete javadoc parameter descriptions.
-	 * <p>
-	 * Example:
-	 * <pre>
-	 *   /**
-	 *    * @param i[caret]
-	 *    * @param secondArgument
-	 *    *&#47;
-	 *    abstract void test(int i, int secondArgument);
-	 * </pre>
-	 * <p>
-	 * We expect the caret to be placed in position of parameter description start then (code style is condifured to
-	 * <b>align</b> parameter descriptions):
-	 * <pre>
-	 *   /**
-	 *    * @param i                 [caret]
-	 *    * @param secondArgument
-	 *    *&#47;
-	 *    abstract void test(int i, int secondArgument);
-	 * </pre>
-	 * <p>
-	 * or this one for non-aligned descriptions:
-	 * <pre>
-	 *   /**
-	 *    * @param i    [caret]
-	 *    * @param secondArgument
-	 *    *&#47;
-	 *    abstract void test(int i, int secondArgument);
-	 * </pre>
-	 *
-	 * @param editor current editor
-	 * @return processing result
-	 */
-	@Nonnull
-	@Override
-	public Result navigateToLineEnd(@Nonnull Editor editor, @Nonnull DataContext dataContext)
-	{
-		if(!CodeInsightSettings.getInstance().SMART_END_ACTION)
-		{
-			return Result.CONTINUE;
-		}
+  /**
+   * Improves navigation in case of incomplete javadoc parameter descriptions.
+   * <p>
+   * Example:
+   * <pre>
+   *   /**
+   *    * @param i[caret]
+   *    * @param secondArgument
+   *    *&#47;
+   *    abstract void test(int i, int secondArgument);
+   * </pre>
+   * <p>
+   * We expect the caret to be placed in position of parameter description start then (code style is condifured to
+   * <b>align</b> parameter descriptions):
+   * <pre>
+   *   /**
+   *    * @param i                 [caret]
+   *    * @param secondArgument
+   *    *&#47;
+   *    abstract void test(int i, int secondArgument);
+   * </pre>
+   * <p>
+   * or this one for non-aligned descriptions:
+   * <pre>
+   *   /**
+   *    * @param i    [caret]
+   *    * @param secondArgument
+   *    *&#47;
+   *    abstract void test(int i, int secondArgument);
+   * </pre>
+   *
+   * @param editor current editor
+   * @return processing result
+   */
+  @Nonnull
+  @Override
+  public Result navigateToLineEnd(@Nonnull Editor editor, @Nonnull DataContext dataContext) {
+    if (!CodeInsightSettings.getInstance().SMART_END_ACTION) {
+      return Result.CONTINUE;
+    }
 
-		final Project project = dataContext.getData(CommonDataKeys.PROJECT);
-		if(project == null)
-		{
-			return Result.CONTINUE;
-		}
+    final Project project = dataContext.getData(CommonDataKeys.PROJECT);
+    if (project == null) {
+      return Result.CONTINUE;
+    }
 
-		final Document document = editor.getDocument();
-		PsiFile psiFile = dataContext.getData(LangDataKeys.PSI_FILE);
-		if(psiFile == null)
-		{
-			psiFile = PsiDocumentManager.getInstance(project).getPsiFile(document);
-		}
-		if(psiFile == null)
-		{
-			return Result.CONTINUE;
-		}
+    final Document document = editor.getDocument();
+    PsiFile psiFile = dataContext.getData(LangDataKeys.PSI_FILE);
+    if (psiFile == null) {
+      psiFile = PsiDocumentManager.getInstance(project).getPsiFile(document);
+    }
+    if (psiFile == null) {
+      return Result.CONTINUE;
+    }
 
-		return navigateToLineEnd(editor, psiFile);
-	}
+    return navigateToLineEnd(editor, psiFile);
+  }
 
-	public static Result navigateToLineEnd(@Nonnull Editor editor, @Nonnull PsiFile psiFile)
-	{
-		final Document document = editor.getDocument();
-		final CaretModel caretModel = editor.getCaretModel();
-		final int offset = caretModel.getOffset();
+  public static Result navigateToLineEnd(@Nonnull Editor editor, @Nonnull PsiFile psiFile) {
+    final Document document = editor.getDocument();
+    final CaretModel caretModel = editor.getCaretModel();
+    final int offset = caretModel.getOffset();
 
-		final CharSequence text = document.getCharsSequence();
-		int line = caretModel.getLogicalPosition().line;
-		final int endLineOffset = document.getLineEndOffset(line);
-		final LogicalPosition endLineLogicalPosition = editor.offsetToLogicalPosition(endLineOffset);
+    final CharSequence text = document.getCharsSequence();
+    int line = caretModel.getLogicalPosition().line;
+    final int endLineOffset = document.getLineEndOffset(line);
+    final LogicalPosition endLineLogicalPosition = editor.offsetToLogicalPosition(endLineOffset);
 
-		// Stop processing if there are non-white space symbols after the current caret position.
-		final int lastNonWsSymbolOffset = CharArrayUtil.shiftBackward(text, endLineOffset, " \t");
-		if(lastNonWsSymbolOffset > offset || caretModel.getLogicalPosition().column > endLineLogicalPosition.column)
-		{
-			return Result.CONTINUE;
-		}
+    // Stop processing if there are non-white space symbols after the current caret position.
+    final int lastNonWsSymbolOffset = CharArrayUtil.shiftBackward(text, endLineOffset, " \t");
+    if (lastNonWsSymbolOffset > offset || caretModel.getLogicalPosition().column > endLineLogicalPosition.column) {
+      return Result.CONTINUE;
+    }
 
-		final Pair<JavadocHelper.JavadocParameterInfo, List<JavadocHelper.JavadocParameterInfo>> pair = ourHelper.parse(psiFile, editor, offset);
-		if(pair.first == null || pair.first.parameterDescriptionStartPosition != null)
-		{
-			return Result.CONTINUE;
-		}
+    final Pair<JavadocHelper.JavadocParameterInfo, List<JavadocHelper.JavadocParameterInfo>> pair = ourHelper.parse(psiFile, editor, offset);
+    if (pair.first == null || pair.first.parameterDescriptionStartPosition != null) {
+      return Result.CONTINUE;
+    }
 
-		final LogicalPosition position = ourHelper.calculateDescriptionStartPosition(psiFile, pair.second, pair.first);
-		ourHelper.navigate(position, editor, psiFile.getProject());
-		return Result.STOP;
-	}
+    final LogicalPosition position = ourHelper.calculateDescriptionStartPosition(psiFile, pair.second, pair.first);
+    ourHelper.navigate(position, editor, psiFile.getProject());
+    return Result.STOP;
+  }
 }

@@ -15,16 +15,21 @@
  */
 package com.intellij.java.impl.codeInsight.template.macro;
 
-import javax.annotation.Nonnull;
-
-import consulo.language.editor.CodeInsightBundle;
-import com.intellij.codeInsight.template.*;
 import com.intellij.java.impl.codeInsight.template.JavaCodeContextType;
-import consulo.language.LangBundle;
 import com.intellij.java.language.psi.PsiClassInitializer;
-import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifier;
+import consulo.language.LangBundle;
+import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.template.Expression;
+import consulo.language.editor.template.ExpressionContext;
+import consulo.language.editor.template.Result;
+import consulo.language.editor.template.TextResult;
+import consulo.language.editor.template.context.TemplateContextType;
+import consulo.language.editor.template.macro.Macro;
+import consulo.language.psi.PsiElement;
+
+import javax.annotation.Nonnull;
 
 public class MethodNameMacro extends Macro {
 

@@ -16,12 +16,7 @@
 package com.intellij.java.impl.codeInsight.completion;
 
 import consulo.language.editor.AutoPopupController;
-import consulo.language.editor.completion.lookup.CharTailType;
-import consulo.language.editor.completion.lookup.TailType;
-import consulo.language.editor.completion.lookup.InsertHandler;
-import consulo.language.editor.completion.lookup.InsertionContext;
-import consulo.language.editor.completion.lookup.LookupElement;
-import consulo.language.editor.completion.lookup.LookupItem;
+import consulo.language.editor.completion.lookup.*;
 import consulo.codeEditor.Editor;
 
 /**
@@ -51,11 +46,11 @@ public class DefaultInsertHandler implements InsertHandler {
       case '.':
         return new CharTailType('.', false);
       case ',':
-        return TailType.COMMA;
+        return CommaTailType.INSTANCE;
       case ';':
         return TailType.SEMICOLON;
       case '=':
-        return TailType.EQ;
+        return EqTailType.INSTANCE;
       case ' ':
         return TailType.SPACE;
       case ':':

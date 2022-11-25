@@ -15,26 +15,22 @@
  */
 package com.intellij.java.impl.codeInsight.editorActions.smartEnter;
 
+import com.intellij.java.language.psi.PsiSwitchLabelStatement;
 import consulo.codeEditor.Editor;
 import consulo.language.psi.PsiElement;
-import com.intellij.java.language.psi.PsiSwitchLabelStatement;
 import consulo.language.util.IncorrectOperationException;
 
 /**
  * @author peter
  */
-public class SwitchLabelColonFixer implements Fixer
-{
-	@Override
-	public void apply(Editor editor, JavaSmartEnterProcessor processor, PsiElement psiElement) throws IncorrectOperationException
-	{
-		if(psiElement instanceof PsiSwitchLabelStatement && !psiElement.getText().endsWith(":"))
-		{
-			PsiSwitchLabelStatement statement = (PsiSwitchLabelStatement) psiElement;
-			if(statement.getCaseValue() != null || statement.isDefaultCase())
-			{
-				editor.getDocument().insertString(psiElement.getTextRange().getEndOffset(), ":");
-			}
-		}
-	}
+public class SwitchLabelColonFixer implements Fixer {
+  @Override
+  public void apply(Editor editor, JavaSmartEnterProcessor processor, PsiElement psiElement) throws IncorrectOperationException {
+    if (psiElement instanceof PsiSwitchLabelStatement && !psiElement.getText().endsWith(":")) {
+      PsiSwitchLabelStatement statement = (PsiSwitchLabelStatement) psiElement;
+      if (statement.getCaseValue() != null || statement.isDefaultCase()) {
+        editor.getDocument().insertString(psiElement.getTextRange().getEndOffset(), ":");
+      }
+    }
+  }
 }

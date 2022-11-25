@@ -15,24 +15,24 @@
  */
 package com.intellij.java.impl.ig.bugs;
 
+import com.intellij.java.analysis.impl.codeInspection.AnnotateMethodFix;
+import com.intellij.java.impl.ig.DelegatingFix;
 import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.language.codeInsight.NullableNotNullManager;
-import com.intellij.java.analysis.impl.codeInspection.AnnotateMethodFix;
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.*;
-import consulo.language.psi.util.PsiTreeUtil;
-import consulo.util.collection.ArrayUtil;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import com.intellij.java.impl.ig.DelegatingFix;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.CollectionUtils;
-import consulo.ide.impl.idea.codeInspection.ui.MultipleCheckboxOptionsPanel;
+import consulo.language.editor.inspection.ui.MultipleCheckboxOptionsPanel;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.util.collection.ArrayUtil;
 import org.intellij.lang.annotations.Pattern;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import javax.swing.*;
 
 public class ReturnNullInspection extends BaseInspection {

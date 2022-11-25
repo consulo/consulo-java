@@ -26,7 +26,7 @@ import consulo.application.util.function.Computable;
 import consulo.document.util.TextRange;
 import consulo.ide.impl.idea.openapi.vfs.VfsUtil;
 import consulo.virtualFileSystem.VirtualFile;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.search.ReferencesSearch;
 import com.intellij.java.impl.refactoring.MoveDestination;

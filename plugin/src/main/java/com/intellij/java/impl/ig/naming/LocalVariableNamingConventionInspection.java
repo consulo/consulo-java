@@ -16,7 +16,7 @@
 package com.intellij.java.impl.ig.naming;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import consulo.ui.CheckBox;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
@@ -160,10 +160,10 @@ public class LocalVariableNamingConventionInspection
   @Override
   public Collection<? extends JComponent> createExtraOptions() {
     return Arrays.asList(
-      new CheckBox(InspectionGadgetsBundle.message(
+      new consulo.language.editor.inspection.ui.CheckBox(InspectionGadgetsBundle.message(
         "local.variable.naming.convention.ignore.option"),
                    this, "m_ignoreForLoopParameters"),
-      new CheckBox(InspectionGadgetsBundle.message(
+      new consulo.language.editor.inspection.ui.CheckBox(InspectionGadgetsBundle.message(
         "local.variable.naming.convention.ignore.catch.option"),
                    this, "m_ignoreCatchParameters"));
   }

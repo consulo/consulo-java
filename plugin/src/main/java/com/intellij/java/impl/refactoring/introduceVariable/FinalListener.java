@@ -9,7 +9,7 @@ import com.intellij.java.language.psi.PsiVariable;
 import consulo.logging.Logger;
 import consulo.document.Document;
 import consulo.codeEditor.Editor;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 
 /**
 * User: anna

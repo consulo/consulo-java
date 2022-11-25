@@ -15,33 +15,32 @@
  */
 package com.intellij.java.impl.ig.dataflow;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-
+import com.intellij.java.impl.ig.psiutils.HighlightUtils;
 import com.intellij.java.language.psi.*;
-import org.jetbrains.annotations.NonNls;
-
-import javax.annotation.Nullable;
-import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.project.Project;
-import consulo.document.util.TextRange;
-import com.intellij.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
-import consulo.language.psi.scope.LocalSearchScope;
-import consulo.content.scope.SearchScope;
-import consulo.language.psi.search.ReferencesSearch;
-import consulo.language.ast.IElementType;
-import consulo.language.psi.util.PsiTreeUtil;
-import consulo.language.util.IncorrectOperationException;
-import consulo.application.util.query.Query;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.psiutils.HighlightUtils;
 import com.siyeh.ig.psiutils.VariableAccessUtils;
+import consulo.application.util.query.Query;
+import consulo.content.scope.SearchScope;
+import consulo.document.util.TextRange;
+import consulo.language.ast.IElementType;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiReference;
+import consulo.language.psi.scope.LocalSearchScope;
+import consulo.language.psi.search.ReferencesSearch;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ReuseOfLocalVariableInspection
   extends BaseInspection {

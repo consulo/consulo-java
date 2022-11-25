@@ -15,23 +15,23 @@
  */
 package com.intellij.java.impl.ig.packaging;
 
-import consulo.language.editor.scope.AnalysisScope;
+import com.intellij.java.analysis.codeInspection.reference.RefClass;
+import com.intellij.java.analysis.codeInspection.reference.RefPackage;
+import com.intellij.java.impl.ig.BaseGlobalInspection;
+import com.siyeh.InspectionGadgetsBundle;
 import consulo.language.editor.inspection.CommonProblemDescriptor;
 import consulo.language.editor.inspection.GlobalInspectionContext;
-import consulo.language.editor.inspection.scheme.InspectionManager;
-import com.intellij.java.analysis.codeInspection.reference.RefClass;
 import consulo.language.editor.inspection.reference.RefEntity;
-import com.intellij.java.analysis.codeInspection.reference.RefPackage;
-import consulo.ide.impl.idea.codeInspection.ui.SingleIntegerFieldOptionsPanel;
-import com.siyeh.InspectionGadgetsBundle;
-import com.intellij.java.impl.ig.BaseGlobalInspection;
-import javax.annotation.Nonnull;
+import consulo.language.editor.inspection.scheme.InspectionManager;
+import consulo.language.editor.inspection.ui.SingleIntegerFieldOptionsPanel;
+import consulo.language.editor.scope.AnalysisScope;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.swing.*;
 import java.util.List;
 
-public class PackageWithTooFewClassesInspection extends BaseGlobalInspection {
+public abstract class PackageWithTooFewClassesInspection extends BaseGlobalInspection {
 
   @SuppressWarnings({"PublicField"})
   public int limit = 3;

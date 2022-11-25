@@ -15,36 +15,30 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import consulo.language.editor.FileModificationService;
-import consulo.language.editor.inspection.LocalQuickFixAndIntentionActionOnPsiElement;
-import consulo.undoRedo.util.UndoUtil;
-import consulo.codeEditor.Editor;
-import consulo.project.Project;
-import consulo.util.lang.Comparing;
-import com.intellij.java.language.psi.JavaPsiFacade;
-import consulo.language.psi.PsiElement;
-import com.intellij.java.language.psi.PsiElementFactory;
-import consulo.language.psi.PsiFile;
-import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.java.language.psi.PsiModifier;
-import com.intellij.java.language.psi.PsiParameter;
-import com.intellij.java.language.psi.PsiType;
+import com.intellij.java.impl.refactoring.changeSignature.ChangeSignatureProcessor;
+import com.intellij.java.impl.refactoring.changeSignature.ParameterInfoImpl;
+import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
-import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
-import com.intellij.java.impl.refactoring.changeSignature.ChangeSignatureProcessor;
-import com.intellij.java.impl.refactoring.changeSignature.ParameterInfoImpl;
-import consulo.language.util.IncorrectOperationException;
+import consulo.codeEditor.Editor;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.language.editor.FileModificationService;
+import consulo.language.editor.inspection.LocalQuickFixAndIntentionActionOnPsiElement;
+import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
+import consulo.language.editor.util.LanguageUndoUtil;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
+import consulo.project.Project;
+import consulo.util.lang.Comparing;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MethodParameterFix extends LocalQuickFixAndIntentionActionOnPsiElement {
   private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.daemon.impl.quickfix.MethodReturnFix");
@@ -116,7 +110,7 @@ public class MethodParameterFix extends LocalQuickFixAndIntentionActionOnPsiElem
       processor.run();
 
 
-      UndoUtil.markPsiFileForUndo(file);
+      LanguageUndoUtil.markPsiFileForUndo(file);
     }
     catch (IncorrectOperationException e) {
       LOG.error(e);

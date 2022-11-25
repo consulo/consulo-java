@@ -3,31 +3,6 @@
  */
 package com.intellij.java.execution.impl.application;
 
-import consulo.execution.ExecutionBundle;
-import consulo.execution.RuntimeConfigurationException;
-import consulo.execution.RuntimeConfigurationWarning;
-import consulo.execution.configuration.ConfigurationFactory;
-import consulo.execution.configuration.ModuleBasedConfiguration;
-import consulo.execution.configuration.RunConfiguration;
-import consulo.execution.configuration.RunProfileState;
-import consulo.execution.configuration.log.ui.LogConfigurationPanel;
-import com.intellij.execution.*;
-import consulo.execution.configuration.ui.SettingsEditor;
-import consulo.execution.configuration.ui.SettingsEditorGroup;
-import consulo.execution.runner.ExecutionEnvironment;
-import consulo.execution.ui.awt.EnvironmentVariablesComponent;
-import com.intellij.execution.configurations.*;
-import consulo.ide.impl.idea.execution.filters.ArgumentFileFilter;
-import consulo.execution.ui.console.TextConsoleBuilderFactory;
-import com.intellij.java.execution.impl.ConfigurationWithCommandLineShortener;
-import com.intellij.java.execution.impl.JavaRunConfigurationExtensionManager;
-import com.intellij.java.execution.impl.RunConfigurationExtension;
-import com.intellij.java.execution.impl.SingleClassConfiguration;
-import com.intellij.java.execution.impl.junit.RefactoringListeners;
-import com.intellij.java.execution.impl.util.JavaParametersUtil;
-import consulo.ide.impl.idea.execution.process.KillableProcessHandler;
-import consulo.process.internal.OSProcessHandler;
-import consulo.ide.impl.idea.execution.util.ProgramParametersUtil;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.JavaModuleGraphUtil;
 import com.intellij.java.debugger.impl.settings.DebuggerSettings;
 import com.intellij.java.execution.CommonJavaRunConfigurationParameters;
@@ -35,24 +10,46 @@ import com.intellij.java.execution.JavaExecutionUtil;
 import com.intellij.java.execution.ShortenCommandLine;
 import com.intellij.java.execution.configurations.JavaCommandLineState;
 import com.intellij.java.execution.configurations.JavaRunConfigurationModule;
-import consulo.module.Module;
-import consulo.project.DumbService;
-import consulo.project.Project;
-import com.intellij.java.language.projectRoots.JavaSdkVersion;
+import com.intellij.java.execution.impl.ConfigurationWithCommandLineShortener;
+import com.intellij.java.execution.impl.JavaRunConfigurationExtensionManager;
+import com.intellij.java.execution.impl.RunConfigurationExtension;
+import com.intellij.java.execution.impl.SingleClassConfiguration;
+import com.intellij.java.execution.impl.junit.RefactoringListeners;
+import com.intellij.java.execution.impl.util.JavaParametersUtil;
 import com.intellij.java.language.impl.projectRoots.ex.JavaSdkUtil;
-import consulo.util.xml.serializer.DefaultJDOMExternalizer;
+import com.intellij.java.language.projectRoots.JavaSdkVersion;
 import com.intellij.java.language.psi.PsiClass;
-import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiJavaModule;
 import com.intellij.java.language.psi.util.PsiMethodUtil;
-import consulo.language.editor.refactoring.event.RefactoringElementListener;
-import consulo.virtualFileSystem.util.PathsList;
+import consulo.execution.ExecutionBundle;
+import consulo.execution.ProgramRunnerUtil;
+import consulo.execution.RuntimeConfigurationException;
+import consulo.execution.RuntimeConfigurationWarning;
+import consulo.execution.configuration.*;
+import consulo.execution.configuration.log.ui.LogConfigurationPanel;
+import consulo.execution.configuration.ui.SettingsEditor;
+import consulo.execution.configuration.ui.SettingsEditorGroup;
 import consulo.execution.executor.Executor;
+import consulo.execution.runner.ExecutionEnvironment;
+import consulo.execution.ui.awt.EnvironmentVariablesComponent;
+import consulo.execution.ui.console.ArgumentFileFilter;
+import consulo.execution.ui.console.TextConsoleBuilderFactory;
+import consulo.execution.util.ProgramParametersUtil;
 import consulo.java.debugger.impl.GenericDebugRunnerConfiguration;
 import consulo.java.execution.configurations.OwnJavaParameters;
 import consulo.java.execution.projectRoots.OwnJdkUtil;
+import consulo.language.editor.refactoring.event.RefactoringElementListener;
+import consulo.language.editor.refactoring.event.RefactoringListenerProvider;
+import consulo.language.psi.PsiElement;
+import consulo.module.Module;
 import consulo.process.ExecutionException;
+import consulo.process.KillableProcess;
+import consulo.process.ProcessHandler;
 import consulo.process.cmd.GeneralCommandLine;
+import consulo.project.DumbService;
+import consulo.project.Project;
+import consulo.util.xml.serializer.DefaultJDOMExternalizer;
+import consulo.virtualFileSystem.util.PathsList;
 import org.jdom.Element;
 
 import javax.annotation.Nonnull;
@@ -335,10 +332,10 @@ public class ApplicationConfiguration extends ModuleBasedConfiguration<JavaRunCo
 
     @Nonnull
     @Override
-    protected OSProcessHandler startProcess() throws ExecutionException {
-      OSProcessHandler processHandler = super.startProcess();
-      if (processHandler instanceof KillableProcessHandler && DebuggerSettings.getInstance().KILL_PROCESS_IMMEDIATELY) {
-        ((KillableProcessHandler) processHandler).setShouldKillProcessSoftly(false);
+    protected ProcessHandler startProcess() throws ExecutionException {
+      ProcessHandler processHandler = super.startProcess();
+      if (processHandler instanceof KillableProcess && DebuggerSettings.getInstance().KILL_PROCESS_IMMEDIATELY) {
+        ((KillableProcess) processHandler).setShouldKillProcessSoftly(false);
       }
       return processHandler;
     }

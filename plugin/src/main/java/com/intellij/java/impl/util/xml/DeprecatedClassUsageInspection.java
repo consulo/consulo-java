@@ -15,28 +15,28 @@
  */
 package com.intellij.java.impl.util.xml;
 
-import javax.annotation.Nonnull;
-
-import org.jetbrains.annotations.Nls;
-import consulo.language.editor.inspection.LocalInspectionToolSession;
-import consulo.language.editor.inspection.ProblemsHolder;
-import com.intellij.codeInspection.XmlSuppressableInspectionTool;
 import com.intellij.java.analysis.impl.codeInspection.deprecation.DeprecationInspection;
 import com.intellij.java.language.psi.PsiDocCommentOwner;
+import consulo.language.editor.inspection.LocalInspectionToolSession;
+import consulo.language.editor.inspection.ProblemsHolder;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.PsiReference;
 import consulo.language.psi.ResolvingHint;
-import com.intellij.psi.XmlElementVisitor;
-import com.intellij.psi.xml.XmlAttribute;
-import com.intellij.psi.xml.XmlAttributeValue;
-import com.intellij.psi.xml.XmlTag;
 import consulo.util.collection.ArrayUtil;
+import consulo.xml.codeInspection.XmlSuppressableInspectionTool;
+import consulo.xml.psi.XmlElementVisitor;
+import consulo.xml.psi.xml.XmlAttribute;
+import consulo.xml.psi.xml.XmlAttributeValue;
+import consulo.xml.psi.xml.XmlTag;
+import org.jetbrains.annotations.Nls;
+
+import javax.annotation.Nonnull;
 
 /**
  * @author Dmitry Avdeev
  */
-public class DeprecatedClassUsageInspection extends XmlSuppressableInspectionTool {
+public abstract class DeprecatedClassUsageInspection extends XmlSuppressableInspectionTool {
 
   @Nonnull
   @Override

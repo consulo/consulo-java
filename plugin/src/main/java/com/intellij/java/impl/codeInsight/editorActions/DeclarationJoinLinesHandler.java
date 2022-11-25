@@ -15,15 +15,16 @@
  */
 package com.intellij.java.impl.codeInsight.editorActions;
 
-import consulo.language.editor.action.JoinLinesHandlerDelegate;
+import com.intellij.java.language.psi.PsiElementFactory;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.document.Document;
-import com.intellij.psi.*;
+import consulo.language.ast.IElementType;
 import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.editor.action.JoinLinesHandlerDelegate;
+import consulo.language.psi.*;
 import consulo.language.psi.scope.LocalSearchScope;
 import consulo.language.psi.search.ReferencesSearch;
-import consulo.language.ast.IElementType;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 

@@ -1,12 +1,11 @@
 package com.intellij.java.impl.codeInsight.hints;
 
-import consulo.ide.impl.idea.codeInsight.hints.InlayInfo;
-import consulo.ide.impl.idea.codeInsight.hints.InlayParameterHintsProvider;
-import consulo.ide.impl.idea.codeInsight.hints.MethodInfo;
 import com.intellij.java.language.psi.PsiCallExpression;
 import com.intellij.java.language.psi.PsiMethod;
+import consulo.language.editor.inlay.InlayInfo;
+import consulo.language.editor.inlay.InlayParameterHintsProvider;
+import consulo.language.editor.inlay.MethodInfo;
 import consulo.language.psi.PsiElement;
-import consulo.util.collection.ContainerUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -17,7 +16,7 @@ import java.util.Set;
 /**
  * from kotlin
  */
-public class JavaInlayParameterHintsProvider implements InlayParameterHintsProvider {
+public abstract class JavaInlayParameterHintsProvider implements InlayParameterHintsProvider {
   private static String[] ourDefaultBlackList = {
       "(begin*, end*)",
       "(start*, end*)",
@@ -54,7 +53,7 @@ public class JavaInlayParameterHintsProvider implements InlayParameterHintsProvi
   @Override
   public List<InlayInfo> getParameterHints(@Nonnull PsiElement element) {
     if (element instanceof PsiCallExpression) {
-      return ContainerUtil.newArrayList(JavaInlayHintsProvider.createHints((PsiCallExpression) element));
+      return List.copyOf(JavaInlayHintsProvider.createHints((PsiCallExpression) element));
     }
     return Collections.emptyList();
   }
@@ -74,6 +73,6 @@ public class JavaInlayParameterHintsProvider implements InlayParameterHintsProvi
   @Nonnull
   @Override
   public Set<String> getDefaultBlackList() {
-    return ContainerUtil.newHashSet(ourDefaultBlackList);
+    return Set.of(ourDefaultBlackList);
   }
 }

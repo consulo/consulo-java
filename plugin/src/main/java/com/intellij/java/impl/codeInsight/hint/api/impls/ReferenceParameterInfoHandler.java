@@ -15,21 +15,22 @@
  */
 package com.intellij.java.impl.codeInsight.hint.api.impls;
 
-import consulo.language.editor.completion.lookup.LookupElement;
+import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.*;
-import com.intellij.lang.parameterInfo.*;
+import consulo.language.Language;
+import consulo.language.editor.completion.lookup.LookupElement;
+import consulo.language.editor.parameterInfo.*;
+import consulo.language.psi.PsiElement;
 import consulo.util.lang.StringUtil;
-import com.intellij.psi.*;
-import consulo.ide.impl.idea.util.Function;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
 
+import javax.annotation.Nonnull;
 import java.util.Arrays;
 
 /**
  * @author Maxim.Mossienko
  */
-public class ReferenceParameterInfoHandler implements ParameterInfoHandler<PsiReferenceParameterList,PsiTypeParameter> {
+public class ReferenceParameterInfoHandler implements ParameterInfoHandler<PsiReferenceParameterList, PsiTypeParameter> {
   @Override
   public Object[] getParametersForLookup(final LookupElement item, final ParameterInfoContext context) {
     return null;
@@ -37,7 +38,7 @@ public class ReferenceParameterInfoHandler implements ParameterInfoHandler<PsiRe
 
   @Override
   public Object[] getParametersForDocumentation(final PsiTypeParameter p, final ParameterInfoContext context) {
-    return new Object[] {p};
+    return new Object[]{p};
   }
 
   @Override
@@ -48,15 +49,15 @@ public class ReferenceParameterInfoHandler implements ParameterInfoHandler<PsiRe
   @Override
   public PsiReferenceParameterList findElementForParameterInfo(final CreateParameterInfoContext context) {
     final PsiReferenceParameterList referenceParameterList =
-      ParameterInfoUtils.findParentOfType(context.getFile(), context.getOffset(), PsiReferenceParameterList.class);
+        ParameterInfoUtils.findParentOfType(context.getFile(), context.getOffset(), PsiReferenceParameterList.class);
 
     if (referenceParameterList != null) {
       if (!(referenceParameterList.getParent() instanceof PsiJavaCodeReferenceElement)) return null;
-      final PsiJavaCodeReferenceElement ref = ((PsiJavaCodeReferenceElement)referenceParameterList.getParent());
+      final PsiJavaCodeReferenceElement ref = ((PsiJavaCodeReferenceElement) referenceParameterList.getParent());
       final PsiElement psiElement = ref.resolve();
       if (!(psiElement instanceof PsiTypeParameterListOwner)) return null;
 
-      final PsiTypeParameter[] typeParams = ((PsiTypeParameterListOwner)psiElement).getTypeParameters();
+      final PsiTypeParameter[] typeParams = ((PsiTypeParameterListOwner) psiElement).getTypeParameters();
       if (typeParams.length == 0) return null;
 
       context.setItemsToShow(typeParams);
@@ -81,7 +82,7 @@ public class ReferenceParameterInfoHandler implements ParameterInfoHandler<PsiRe
     int index = ParameterInfoUtils.getCurrentParameterIndex(o.getNode(), context.getOffset(), JavaTokenType.COMMA);
     context.setCurrentParameter(index);
     final Object[] objectsToView = context.getObjectsToView();
-    context.setHighlightedParameter(index < objectsToView.length && index >= 0 ? (PsiElement)objectsToView[index]:null);
+    context.setHighlightedParameter(index < objectsToView.length && index >= 0 ? (PsiElement) objectsToView[index] : null);
   }
 
   @Override
@@ -106,15 +107,16 @@ public class ReferenceParameterInfoHandler implements ParameterInfoHandler<PsiRe
     int highlightEndOffset = buffer.length();
     buffer.append(" extends ");
     buffer.append(StringUtil.join(
-      Arrays.asList(typeParameter.getSuperTypes()),
-      new Function<PsiClassType, String>() {
-        @Override
-        public String fun(final PsiClassType t) {
-          return t.getPresentableText();
-        }
-      }, ", "));
+        Arrays.asList(typeParameter.getSuperTypes()),
+        t -> t.getPresentableText(), ", "));
 
     context.setupUIComponentPresentation(buffer.toString(), 0, highlightEndOffset, false, false, false,
-                                         context.getDefaultParameterColor());
+        context.getDefaultParameterColor());
+  }
+
+  @Nonnull
+  @Override
+  public Language getLanguage() {
+    return JavaLanguage.INSTANCE;
   }
 }

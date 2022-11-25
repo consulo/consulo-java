@@ -16,35 +16,31 @@
 
 package consulo.java.impl.module.extension;
 
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-
+import consulo.content.ContentFolderTypeProvider;
+import consulo.language.content.ProductionContentFolderTypeProvider;
+import consulo.language.content.ProductionResourceContentFolderTypeProvider;
+import consulo.language.content.TestContentFolderTypeProvider;
+import consulo.language.content.TestResourceContentFolderTypeProvider;
+import consulo.module.content.layer.ContentFolderSupportPatcher;
 import consulo.module.content.layer.ModifiableRootModel;
 import consulo.module.extension.ModuleExtension;
-import consulo.roots.ContentFolderSupportPatcher;
-import consulo.roots.ContentFolderTypeProvider;
-import consulo.roots.impl.ProductionContentFolderTypeProvider;
-import consulo.roots.impl.ProductionResourceContentFolderTypeProvider;
-import consulo.roots.impl.TestContentFolderTypeProvider;
-import consulo.roots.impl.TestResourceContentFolderTypeProvider;
+
+import javax.annotation.Nonnull;
+import java.util.Set;
 
 /**
  * @author VISTALL
  * @since 05.05.14
  */
-public class JavaContentFolderSupportPatcher implements ContentFolderSupportPatcher
-{
-	@Override
-	public void patch(@Nonnull ModifiableRootModel model, @Nonnull Set<ContentFolderTypeProvider> set)
-	{
-		ModuleExtension javaModuleExtension = model.getExtension("java");
-		if(javaModuleExtension != null)
-		{
-			set.add(ProductionContentFolderTypeProvider.getInstance());
-			set.add(ProductionResourceContentFolderTypeProvider.getInstance());
-			set.add(TestContentFolderTypeProvider.getInstance());
-			set.add(TestResourceContentFolderTypeProvider.getInstance());
-		}
-	}
+public class JavaContentFolderSupportPatcher implements ContentFolderSupportPatcher {
+  @Override
+  public void patch(@Nonnull ModifiableRootModel model, @Nonnull Set<ContentFolderTypeProvider> set) {
+    ModuleExtension javaModuleExtension = model.getExtension("java");
+    if (javaModuleExtension != null) {
+      set.add(ProductionContentFolderTypeProvider.getInstance());
+      set.add(ProductionResourceContentFolderTypeProvider.getInstance());
+      set.add(TestContentFolderTypeProvider.getInstance());
+      set.add(TestResourceContentFolderTypeProvider.getInstance());
+    }
+  }
 }

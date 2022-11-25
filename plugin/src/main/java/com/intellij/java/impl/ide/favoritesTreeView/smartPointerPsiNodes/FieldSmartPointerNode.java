@@ -15,18 +15,18 @@
  */
 package com.intellij.java.impl.ide.favoritesTreeView.smartPointerPsiNodes;
 
-import consulo.ui.ex.tree.PresentationData;
-import consulo.project.ui.view.tree.ViewSettings;
-import consulo.project.ui.view.tree.AbstractTreeNode;
-import consulo.project.Project;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiSubstitutor;
+import com.intellij.java.language.psi.util.PsiFormatUtil;
+import com.intellij.java.language.psi.util.PsiFormatUtilBase;
 import consulo.language.psi.SmartPointerManager;
 import consulo.language.psi.SmartPsiElementPointer;
-import com.intellij.java.language.psi.util.PsiFormatUtil;
-import consulo.ide.impl.psi.util.PsiFormatUtilBase;
-import javax.annotation.Nonnull;
+import consulo.project.Project;
+import consulo.project.ui.view.tree.AbstractTreeNode;
+import consulo.project.ui.view.tree.ViewSettings;
+import consulo.ui.ex.tree.PresentationData;
 
+import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.Collections;
 

@@ -15,7 +15,9 @@
  */
 package com.intellij.java.impl.psi.formatter;
 
+import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.JavaDocTokenType;
+import consulo.language.Language;
 import consulo.language.ast.ASTNode;
 import consulo.language.codeStyle.WhiteSpaceFormattingStrategyAdapter;
 
@@ -28,5 +30,11 @@ public class JavadocWhiteSpaceFormattingStrategy extends WhiteSpaceFormattingStr
   @Override
   public boolean containsWhitespacesOnly(@Nonnull final ASTNode node) {
     return node.getElementType() == JavaDocTokenType.DOC_COMMENT_DATA && node.textContains('\n') && node.getText().trim().length() == 0;
+  }
+
+  @Nonnull
+  @Override
+  public Language getLanguage() {
+    return JavaLanguage.INSTANCE;
   }
 }

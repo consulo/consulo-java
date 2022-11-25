@@ -15,26 +15,27 @@
  */
 package com.intellij.java.impl.ig.errorhandling;
 
-import javax.annotation.Nonnull;
-
-import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
-import com.intellij.lang.LanguageDocumentation;
-import consulo.language.editor.documentation.CodeDocumentationProvider;
-import consulo.language.editor.documentation.CompositeDocumentationProvider;
-import consulo.language.editor.documentation.DocumentationProvider;
-import consulo.project.Project;
-import com.intellij.psi.*;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.java.language.psi.javadoc.PsiDocTag;
 import com.intellij.java.language.psi.javadoc.PsiDocTagValue;
 import com.intellij.java.language.psi.util.InheritanceUtil;
-import consulo.language.util.IncorrectOperationException;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
+import consulo.language.editor.documentation.CodeDocumentationProvider;
+import consulo.language.editor.documentation.CompositeDocumentationProvider;
+import consulo.language.editor.documentation.DocumentationProvider;
+import consulo.language.editor.documentation.LanguageDocumentationProvider;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiComment;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
 import org.jetbrains.annotations.Nls;
+
+import javax.annotation.Nonnull;
 
 public class ThrowsRuntimeExceptionInspection extends BaseInspection {
   @Nls
@@ -95,7 +96,7 @@ public class ThrowsRuntimeExceptionInspection extends BaseInspection {
       else {
         final PsiDocComment docComment = factory.createDocCommentFromText("/** */");
         final PsiComment resultComment = (PsiComment)method.addBefore(docComment, method.getModifierList());
-        final DocumentationProvider documentationProvider = LanguageDocumentation.INSTANCE.forLanguage(method.getLanguage());
+        final DocumentationProvider documentationProvider = LanguageDocumentationProvider.forLanguageComposite(method.getLanguage());
         final CodeDocumentationProvider codeDocumentationProvider;
         if (documentationProvider instanceof CodeDocumentationProvider) {
           codeDocumentationProvider = (CodeDocumentationProvider)documentationProvider;

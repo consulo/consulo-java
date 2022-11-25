@@ -15,87 +15,70 @@
  */
 package com.intellij.java.impl.refactoring.typeMigration.ui;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-
-import javax.swing.tree.DefaultMutableTreeNode;
-
-import javax.annotation.Nonnull;
-import consulo.ui.ex.tree.PresentationData;
-import consulo.project.ui.view.tree.AbstractTreeNode;
-import consulo.project.Project;
-import consulo.util.lang.Pair;
-import consulo.language.psi.PsiElement;
-import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.impl.refactoring.typeMigration.TypeMigrationLabeler;
 import com.intellij.java.impl.refactoring.typeMigration.usageInfo.TypeMigrationUsageInfo;
+import com.intellij.java.language.psi.PsiType;
 import consulo.ide.impl.idea.ui.DuplicateNodeRenderer;
+import consulo.language.psi.PsiElement;
+import consulo.project.Project;
+import consulo.project.ui.view.tree.AbstractTreeNode;
+import consulo.ui.ex.tree.PresentationData;
+import consulo.util.lang.Pair;
+
+import javax.annotation.Nonnull;
+import javax.swing.tree.DefaultMutableTreeNode;
+import java.util.*;
 
 /**
  * @author anna
  */
-public class MigrationRootNode extends AbstractTreeNode<TypeMigrationLabeler> implements DuplicateNodeRenderer.DuplicatableNode
-{
-	private final TypeMigrationLabeler myLabeler;
-	private List<MigrationNode> myCachedChildren;
-	private final PsiElement[] myRoots;
-	private final boolean myPreviewUsages;
+public class MigrationRootNode extends AbstractTreeNode<TypeMigrationLabeler> implements DuplicateNodeRenderer.DuplicatableNode {
+  private final TypeMigrationLabeler myLabeler;
+  private List<MigrationNode> myCachedChildren;
+  private final PsiElement[] myRoots;
+  private final boolean myPreviewUsages;
 
-	protected MigrationRootNode(Project project, TypeMigrationLabeler labeler, final PsiElement[] roots, final boolean previewUsages)
-	{
-		super(project, labeler);
-		myLabeler = labeler;
-		myRoots = roots;
-		myPreviewUsages = previewUsages;
-	}
+  protected MigrationRootNode(Project project, TypeMigrationLabeler labeler, final PsiElement[] roots, final boolean previewUsages) {
+    super(project, labeler);
+    myLabeler = labeler;
+    myRoots = roots;
+    myPreviewUsages = previewUsages;
+  }
 
-	@Override
-	@Nonnull
-	public Collection<? extends AbstractTreeNode> getChildren()
-	{
-		if(myCachedChildren == null)
-		{
-			myCachedChildren = new ArrayList<>();
-			if(myPreviewUsages)
-			{
-				for(Pair<TypeMigrationUsageInfo, PsiType> root : myLabeler.getMigrationRoots())
-				{
-					addRoot(root.getFirst(), root.getSecond());
-				}
-			}
-			else
-			{
-				for(PsiElement root : myRoots)
-				{
-					addRoot(new TypeMigrationUsageInfo(root), myLabeler.getMigrationRootTypeFunction().fun(root));
-				}
-			}
-		}
-		return myCachedChildren;
-	}
+  @Override
+  @Nonnull
+  public Collection<? extends AbstractTreeNode> getChildren() {
+    if (myCachedChildren == null) {
+      myCachedChildren = new ArrayList<>();
+      if (myPreviewUsages) {
+        for (Pair<TypeMigrationUsageInfo, PsiType> root : myLabeler.getMigrationRoots()) {
+          addRoot(root.getFirst(), root.getSecond());
+        }
+      } else {
+        for (PsiElement root : myRoots) {
+          addRoot(new TypeMigrationUsageInfo(root), myLabeler.getMigrationRootTypeFunction().apply(root));
+        }
+      }
+    }
+    return myCachedChildren;
+  }
 
-	private void addRoot(TypeMigrationUsageInfo info, PsiType migrationType)
-	{
-		final HashSet<TypeMigrationUsageInfo> parents = new HashSet<>();
-		parents.add(info);
-		final MigrationNode migrationNode = new MigrationNode(getProject(), info, migrationType, myLabeler, parents, new HashMap<>());
+  private void addRoot(TypeMigrationUsageInfo info, PsiType migrationType) {
+    final HashSet<TypeMigrationUsageInfo> parents = new HashSet<>();
+    parents.add(info);
+    final MigrationNode migrationNode = new MigrationNode(getProject(), info, migrationType, myLabeler, parents, new HashMap<>());
 
-		myCachedChildren.add(migrationNode);
-	}
+    myCachedChildren.add(migrationNode);
+  }
 
-	@Override
-	protected void update(final PresentationData presentation)
-	{
+  @Override
+  protected void update(final PresentationData presentation) {
 
-	}
+  }
 
-	@Override
-	public DefaultMutableTreeNode getDuplicate()
-	{
-		return null;
-	}
+  @Override
+  public DefaultMutableTreeNode getDuplicate() {
+    return null;
+  }
 
 }

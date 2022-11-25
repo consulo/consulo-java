@@ -16,7 +16,7 @@
 package com.intellij.java.impl.refactoring.rename;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.*;
+import consulo.language.psi.PsiManager;
 import consulo.language.util.IncorrectOperationException;
 
 /**

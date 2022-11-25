@@ -17,7 +17,7 @@ package com.intellij.java.impl.ipp.types;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import com.intellij.java.language.impl.psi.impl.PsiDiamondTypeUtil;
 import consulo.language.util.IncorrectOperationException;
 import com.intellij.java.impl.ipp.base.Intention;

@@ -20,13 +20,14 @@
  */
 package com.intellij.java.execution.impl.filters;
 
-import consulo.execution.ui.console.ConsoleFilterProviderEx;
-import com.intellij.execution.filters.Filter;
 import com.intellij.java.execution.filters.ExceptionFilters;
-import consulo.project.Project;
-import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.content.scope.SearchScope;
+import consulo.execution.ui.console.ConsoleFilterProviderEx;
+import consulo.execution.ui.console.Filter;
 import consulo.java.language.module.extension.JavaModuleExtension;
+import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.module.extension.ModuleExtensionHelper;
+import consulo.project.Project;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -40,12 +41,12 @@ public class DefaultConsoleFiltersProvider implements ConsoleFilterProviderEx {
 
   @Override
   @Nonnull
-  public Filter[] getDefaultFilters(@Nonnull Project project, @Nonnull GlobalSearchScope scope) {
+  public Filter[] getDefaultFilters(@Nonnull Project project, @Nonnull SearchScope scope) {
     if (!ModuleExtensionHelper.getInstance(project).hasModuleExtension(JavaModuleExtension.class)) {
       return Filter.EMPTY_ARRAY;
     }
 
-    List<Filter> filters = ExceptionFilters.getFilters(scope);
+    List<Filter> filters = ExceptionFilters.getFilters((GlobalSearchScope) scope);
     filters.add(new YourkitFilter(project));
     return filters.toArray(new Filter[filters.size()]);
   }

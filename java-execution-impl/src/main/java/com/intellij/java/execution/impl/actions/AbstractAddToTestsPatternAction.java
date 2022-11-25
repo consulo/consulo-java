@@ -15,21 +15,25 @@
  */
 package com.intellij.java.execution.impl.actions;
 
+import com.intellij.java.execution.impl.JavaTestConfigurationBase;
+import com.intellij.java.execution.impl.testframework.AbstractPatternBasedConfigurationProducer;
 import consulo.execution.RunManager;
 import consulo.execution.configuration.ConfigurationType;
 import consulo.execution.configuration.RunConfiguration;
-import com.intellij.java.execution.impl.JavaTestConfigurationBase;
-import com.intellij.java.execution.impl.testframework.AbstractPatternBasedConfigurationProducer;
-import com.intellij.openapi.actionSystem.*;
-import consulo.project.Project;
-import consulo.ui.ex.popup.JBPopupFactory;
-import consulo.ui.ex.popup.PopupStep;
-import consulo.ui.ex.popup.BaseListPopupStep;
+import consulo.language.editor.CommonDataKeys;
+import consulo.language.editor.LangDataKeys;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.resolve.PsiElementProcessor;
-import consulo.util.collection.ContainerUtil;
+import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
+import consulo.ui.ex.action.AnAction;
+import consulo.ui.ex.action.AnActionEvent;
+import consulo.ui.ex.action.Presentation;
+import consulo.ui.ex.popup.BaseListPopupStep;
+import consulo.ui.ex.popup.JBPopupFactory;
+import consulo.ui.ex.popup.PopupStep;
 import consulo.ui.image.Image;
+import consulo.util.collection.ContainerUtil;
 
 import javax.annotation.Nonnull;
 import java.util.*;

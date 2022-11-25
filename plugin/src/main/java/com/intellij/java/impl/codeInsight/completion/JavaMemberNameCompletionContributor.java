@@ -15,13 +15,6 @@
  */
 package com.intellij.java.impl.codeInsight.completion;
 
-import consulo.externalService.statistic.FeatureUsageTracker;
-import consulo.language.editor.completion.lookup.TailType;
-import com.intellij.codeInsight.completion.*;
-import consulo.language.editor.completion.lookup.ParenthesesInsertHandler;
-import com.intellij.codeInsight.lookup.*;
-import consulo.ide.impl.idea.codeInsight.template.impl.TemplateManagerImpl;
-import consulo.application.AllIcons;
 import com.intellij.java.impl.codeInsight.generation.GenerateMembersUtil;
 import com.intellij.java.impl.refactoring.introduceField.InplaceIntroduceFieldPopup;
 import com.intellij.java.impl.refactoring.introduceVariable.IntroduceVariableBase;
@@ -32,17 +25,23 @@ import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
 import com.intellij.java.language.psi.util.PropertyUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.project.Project;
-import consulo.util.lang.StringUtil;
+import consulo.application.AllIcons;
+import consulo.application.util.matcher.PrefixMatcher;
+import consulo.externalService.statistic.FeatureUsageTracker;
+import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.editor.completion.*;
+import consulo.language.editor.completion.lookup.*;
+import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
+import consulo.language.editor.template.TemplateManager;
 import consulo.language.pattern.ElementPattern;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
-import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
-import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.psi.PsiUtilCore;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.project.Project;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.collection.ContainerUtil;
-import consulo.java.language.module.util.JavaClassNames;
+import consulo.util.lang.StringUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -56,7 +55,7 @@ import static consulo.language.pattern.StandardPatterns.or;
 /**
  * @author peter
  */
-public class JavaMemberNameCompletionContributor extends CompletionContributor {
+public abstract class JavaMemberNameCompletionContributor extends CompletionContributor {
   public static final ElementPattern<PsiElement> INSIDE_TYPE_PARAMS_PATTERN = psiElement().
       afterLeaf(psiElement().withText("?").andOr(psiElement().afterLeaf("<", ","), psiElement().afterSiblingSkipping(psiElement().whitespaceCommentEmptyOrError(), psiElement(PsiAnnotation
           .class))));
@@ -69,7 +68,7 @@ public class JavaMemberNameCompletionContributor extends CompletionContributor {
       return;
     }
 
-    if (parameters.getInvocationCount() == 0 && TemplateManagerImpl.getTemplateState(parameters.getEditor()) != null) {
+    if (parameters.getInvocationCount() == 0 && TemplateManager.getInstance(parameters.getPosition().getProject()).getTemplateState(parameters.getEditor()) != null) {
       return;
     }
 

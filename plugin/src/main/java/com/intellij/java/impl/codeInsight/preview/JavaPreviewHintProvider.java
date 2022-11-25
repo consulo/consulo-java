@@ -15,21 +15,21 @@
  */
 package com.intellij.java.impl.codeInsight.preview;
 
-import consulo.ide.impl.idea.codeInsight.preview.ColorPreviewComponent;
-import consulo.ide.impl.idea.codeInsight.preview.ImagePreviewComponent;
-import consulo.ide.impl.idea.codeInsight.preview.PreviewHintProvider;
 import com.intellij.java.language.patterns.PsiExpressionPattern;
 import com.intellij.java.language.patterns.PsiJavaPatterns;
 import com.intellij.java.language.patterns.PsiMethodPattern;
 import com.intellij.java.language.psi.*;
-import consulo.util.lang.StringUtil;
+import consulo.ide.impl.idea.codeInsight.preview.ColorPreviewComponent;
+import consulo.ide.impl.idea.codeInsight.preview.ImagePreviewComponent;
+import consulo.ide.impl.idea.codeInsight.preview.PreviewHintProvider;
 import consulo.language.pattern.PlatformPatterns;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiReference;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.util.collection.ArrayUtil;
-import com.intellij.util.ColorSampleLookupValue;
+import consulo.util.lang.StringUtil;
+import consulo.xml.util.ColorSampleLookupValue;
 
 import javax.annotation.Nonnull;
 import javax.swing.*;

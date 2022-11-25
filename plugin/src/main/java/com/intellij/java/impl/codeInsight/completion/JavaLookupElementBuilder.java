@@ -15,16 +15,15 @@
  */
 package com.intellij.java.impl.codeInsight.completion;
 
-import javax.annotation.Nonnull;
-
-import consulo.language.editor.completion.lookup.LookupElementBuilder;
 import com.intellij.java.language.psi.*;
-import consulo.language.icon.IconDescriptorUpdaters;
-import consulo.component.util.Iconable;
-import consulo.util.lang.StringUtil;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
-import consulo.ide.impl.psi.util.PsiFormatUtilBase;
+import com.intellij.java.language.psi.util.PsiFormatUtilBase;
+import consulo.component.util.Iconable;
+import consulo.language.editor.completion.lookup.LookupElementBuilder;
+import consulo.language.icon.IconDescriptorUpdaters;
+import consulo.util.lang.StringUtil;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**

@@ -15,12 +15,6 @@
  */
 package com.intellij.java.impl.codeInsight.completion;
 
-import consulo.externalService.statistic.FeatureUsageTracker;
-import consulo.language.editor.impl.internal.completion.CompletionUtil;
-import consulo.language.editor.completion.lookup.InsertionContext;
-import consulo.application.util.matcher.PrefixMatcher;
-import consulo.language.editor.completion.lookup.LookupElement;
-import consulo.application.AllIcons;
 import com.intellij.java.impl.codeInsight.lookup.ExpressionLookupItem;
 import com.intellij.java.impl.psi.filters.ElementExtractorFilter;
 import com.intellij.java.impl.psi.filters.types.AssignableFromFilter;
@@ -32,25 +26,29 @@ import com.intellij.java.language.psi.infos.CandidateInfo;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
-import consulo.project.Project;
+import consulo.application.AllIcons;
+import consulo.application.util.matcher.PrefixMatcher;
 import consulo.component.util.Iconable;
-import consulo.util.lang.StringUtil;
+import consulo.externalService.statistic.FeatureUsageTracker;
+import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.codeStyle.CodeStyleSettingsManager;
+import consulo.language.editor.completion.lookup.InsertionContext;
+import consulo.language.editor.completion.lookup.LookupElement;
+import consulo.language.editor.impl.internal.completion.CompletionUtil;
+import consulo.language.icon.IconDescriptorUpdaters;
 import consulo.language.pattern.ElementPattern;
 import consulo.language.pattern.StandardPatterns;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
-import consulo.language.codeStyle.CodeStyleSettingsManager;
 import consulo.language.psi.filter.AndFilter;
 import consulo.language.psi.filter.ClassFilter;
 import consulo.language.psi.filter.ElementFilter;
 import consulo.language.psi.filter.TrueFilter;
 import consulo.language.psi.util.PsiTreeUtil;
-import consulo.ide.impl.idea.util.Consumer;
 import consulo.language.util.IncorrectOperationException;
-import consulo.util.collection.ContainerUtil;
-import consulo.language.icon.IconDescriptorUpdaters;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.logging.Logger;
+import consulo.project.Project;
+import consulo.util.lang.StringUtil;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
@@ -58,6 +56,7 @@ import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.function.Consumer;
 
 import static com.intellij.java.language.patterns.PsiJavaPatterns.psiElement;
 import static com.intellij.java.language.patterns.PsiJavaPatterns.psiMethod;
@@ -135,7 +134,7 @@ public class ReferenceExpressionCompletionContributor {
     if (reference != null) {
       final ElementFilter filter = getReferenceFilter(element, false);
       for (final LookupElement item : completeFinalReference(element, reference, filter, parameters)) {
-        result.consume(item);
+        result.accept(item);
       }
 
       final boolean secondTime = parameters.getParameters().getInvocationCount() >= 2;
@@ -147,7 +146,7 @@ public class ReferenceExpressionCompletionContributor {
           base.add(access);
           PsiType type = access.getType();
           if (type != null && parameters.getExpectedType().isAssignableFrom(type)) {
-            result.consume(access);
+            result.accept(access);
           }
         }
       }
@@ -220,7 +219,7 @@ public class ReferenceExpressionCompletionContributor {
   @Nonnull
   public static Set<PsiField> findConstantsUsedInSwitch(@Nullable PsiElement position) {
     if (IN_SWITCH_LABEL.accepts(position)) {
-      Set<PsiField> used = ContainerUtil.newLinkedHashSet();
+      Set<PsiField> used = new LinkedHashSet<>();
       PsiSwitchStatement sw = PsiTreeUtil.getParentOfType(position, PsiSwitchStatement.class);
       assert sw != null;
       final PsiCodeBlock body = sw.getBody();
@@ -310,7 +309,7 @@ public class ReferenceExpressionCompletionContributor {
                                               final PsiType expectedType) throws IncorrectOperationException {
     if (itemType instanceof PsiArrayType && expectedType.isAssignableFrom(((PsiArrayType) itemType).getComponentType())) {
       final PsiExpression conversion = createExpression(getQualifierText(qualifier) + prefix + "[0]", element);
-      result.consume(new ExpressionLookupItem(conversion, IconDescriptorUpdaters.getIcon(object, Iconable.ICON_FLAG_VISIBILITY), prefix + "[...]", prefix) {
+      result.accept(new ExpressionLookupItem(conversion, IconDescriptorUpdaters.getIcon(object, Iconable.ICON_FLAG_VISIBILITY), prefix + "[...]", prefix) {
         @Override
         public void handleInsert(InsertionContext context) {
           FeatureUsageTracker.getInstance().triggerFeatureUsed(JavaCompletionFeatures.SECOND_SMART_COMPLETION_ARRAY_MEMBER);
@@ -360,7 +359,7 @@ public class ReferenceExpressionCompletionContributor {
         presentable,
         methodName + "(" + prefix + ")"
     };
-    result.consume(new ExpressionLookupItem(conversion, AllIcons.Nodes.Method, presentable, lookupStrings) {
+    result.accept(new ExpressionLookupItem(conversion, AllIcons.Nodes.Method, presentable, lookupStrings) {
       @Override
       public void handleInsert(InsertionContext context) {
         FeatureUsageTracker.getInstance().triggerFeatureUsed(JavaCompletionFeatures.SECOND_SMART_COMPLETION_ASLIST);
@@ -473,7 +472,7 @@ public class ReferenceExpressionCompletionContributor {
     final ElementFilter filter = getReferenceFilter(place, true);
     for (final LookupElement item : completeFinalReference(place, mockRef, filter, parameters)) {
       if (shouldChain(place, qualifierType, expectedType, item)) {
-        result.consume(new JavaChainLookupElement(qualifierItem, item) {
+        result.accept(new JavaChainLookupElement(qualifierItem, item) {
           @Override
           public void handleInsert(InsertionContext context) {
             FeatureUsageTracker.getInstance().triggerFeatureUsed(JavaCompletionFeatures.SECOND_SMART_COMPLETION_CHAIN);
@@ -579,7 +578,7 @@ public class ReferenceExpressionCompletionContributor {
         prefix + ".toArray(" + getSpace(callSpace) + expressionString + getSpace(callSpace) + ")",
         presentableString
     };
-    result.consume(new ExpressionLookupItem(conversion, AllIcons.Nodes.Method, prefix + ".toArray(" + presentableString + ")", lookupStrings) {
+    result.accept(new ExpressionLookupItem(conversion, AllIcons.Nodes.Method, prefix + ".toArray(" + presentableString + ")", lookupStrings) {
       @Override
       public void handleInsert(InsertionContext context) {
         FeatureUsageTracker.getInstance().triggerFeatureUsed(JavaCompletionFeatures.SECOND_SMART_COMPLETION_TOAR);

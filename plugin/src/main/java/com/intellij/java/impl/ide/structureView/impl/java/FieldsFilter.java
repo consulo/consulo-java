@@ -16,17 +16,18 @@
 package com.intellij.java.impl.ide.structureView.impl.java;
 
 import consulo.application.AllIcons;
-import consulo.ide.IdeBundle;
 import consulo.fileEditor.structureView.tree.ActionPresentation;
 import consulo.fileEditor.structureView.tree.ActionPresentationData;
-import com.intellij.ide.util.treeView.smartTree.Filter;
+import consulo.fileEditor.structureView.tree.Filter;
 import consulo.fileEditor.structureView.tree.TreeElement;
+import consulo.ide.IdeBundle;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
 
-public class FieldsFilter implements Filter{
-  @NonNls public static final String ID = "SHOW_FIELDS";
+public class FieldsFilter implements Filter {
+  @NonNls
+  public static final String ID = "SHOW_FIELDS";
 
   public boolean isVisible(TreeElement treeNode) {
     return !(treeNode instanceof PsiFieldTreeElement);

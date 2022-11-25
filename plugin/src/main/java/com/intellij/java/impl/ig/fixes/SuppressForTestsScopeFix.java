@@ -15,104 +15,89 @@
  */
 package com.intellij.java.impl.ig.fixes;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import consulo.language.editor.rawHighlight.HighlightDisplayLevel;
-import consulo.language.editor.rawHighlight.HighlightDisplayKey;
 import com.intellij.java.analysis.codeInspection.AbstractBaseJavaLocalInspectionTool;
-import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.ide.impl.idea.codeInspection.ex.InspectionProfileImpl;
-import consulo.language.editor.inspection.scheme.InspectionToolWrapper;
-import consulo.undoRedo.BasicUndoableAction;
-import consulo.undoRedo.UndoManager;
-import consulo.project.Project;
-import consulo.virtualFileSystem.VirtualFile;
-import consulo.language.editor.inspection.scheme.InspectionProjectProfileManager;
-import consulo.language.psi.PsiElement;
-import consulo.content.scope.NamedScope;
-import consulo.content.scope.NamedScopesHolder;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.TestUtils;
+import consulo.content.scope.NamedScope;
+import consulo.content.scope.NamedScopesHolder;
+import consulo.language.editor.impl.internal.inspection.scheme.InspectionProfileImpl;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.editor.inspection.scheme.InspectionProjectProfileManager;
+import consulo.language.editor.inspection.scheme.InspectionToolWrapper;
+import consulo.language.editor.rawHighlight.HighlightDisplayKey;
+import consulo.language.editor.rawHighlight.HighlightDisplayLevel;
+import consulo.language.psi.PsiElement;
+import consulo.project.Project;
+import consulo.undoRedo.BasicUndoableAction;
+import consulo.undoRedo.ProjectUndoManager;
+import consulo.virtualFileSystem.VirtualFile;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * @author Bas Leijdekkers
  */
-public class SuppressForTestsScopeFix extends InspectionGadgetsFix
-{
+public class SuppressForTestsScopeFix extends InspectionGadgetsFix {
 
-	private final AbstractBaseJavaLocalInspectionTool myInspection;
+  private final AbstractBaseJavaLocalInspectionTool myInspection;
 
-	private SuppressForTestsScopeFix(AbstractBaseJavaLocalInspectionTool inspection)
-	{
-		myInspection = inspection;
-	}
+  private SuppressForTestsScopeFix(AbstractBaseJavaLocalInspectionTool inspection) {
+    myInspection = inspection;
+  }
 
-	@Nullable
-	public static SuppressForTestsScopeFix build(AbstractBaseJavaLocalInspectionTool inspection, PsiElement context)
-	{
-		if(!TestUtils.isInTestSourceContent(context))
-		{
-			return null;
-		}
-		return new SuppressForTestsScopeFix(inspection);
-	}
+  @Nullable
+  public static SuppressForTestsScopeFix build(AbstractBaseJavaLocalInspectionTool inspection, PsiElement context) {
+    if (!TestUtils.isInTestSourceContent(context)) {
+      return null;
+    }
+    return new SuppressForTestsScopeFix(inspection);
+  }
 
-	@Nonnull
-	@Override
-	public String getFamilyName()
-	{
-		return InspectionGadgetsBundle.message("suppress.for.tests.scope.quickfix");
-	}
+  @Nonnull
+  @Override
+  public String getFamilyName() {
+    return InspectionGadgetsBundle.message("suppress.for.tests.scope.quickfix");
+  }
 
-	@Override
-	public boolean startInWriteAction()
-	{
-		return false;
-	}
+  @Override
+  public boolean startInWriteAction() {
+    return false;
+  }
 
-	@Override
-	protected void doFix(final Project project, ProblemDescriptor descriptor)
-	{
-		addRemoveTestsScope(project, true);
-		final VirtualFile vFile = descriptor.getPsiElement().getContainingFile().getVirtualFile();
-		UndoManager.getInstance(project).undoableActionPerformed(new BasicUndoableAction(vFile)
-		{
-			@Override
-			public void undo()
-			{
-				addRemoveTestsScope(project, false);
-			}
+  @Override
+  protected void doFix(final Project project, ProblemDescriptor descriptor) {
+    addRemoveTestsScope(project, true);
+    final VirtualFile vFile = descriptor.getPsiElement().getContainingFile().getVirtualFile();
+    ProjectUndoManager.getInstance(project).undoableActionPerformed(new BasicUndoableAction(vFile) {
+      @Override
+      public void undo() {
+        addRemoveTestsScope(project, false);
+      }
 
-			@Override
-			public void redo()
-			{
-				addRemoveTestsScope(project, true);
-			}
-		});
-	}
+      @Override
+      public void redo() {
+        addRemoveTestsScope(project, true);
+      }
+    });
+  }
 
-	private void addRemoveTestsScope(Project project, boolean add)
-	{
-		final InspectionProfileImpl profile = (InspectionProfileImpl) InspectionProjectProfileManager.getInstance(project).getInspectionProfile();
-		final String shortName = myInspection.getShortName();
-		final InspectionToolWrapper tool = profile.getInspectionTool(shortName, project);
-		if(tool == null)
-		{
-			return;
-		}
-		if(add)
-		{
-			final NamedScope namedScope = NamedScopesHolder.getScope(project, "Tests");
-			final HighlightDisplayKey key = HighlightDisplayKey.find(shortName);
-			final HighlightDisplayLevel level = profile.getErrorLevel(key, namedScope, project);
-			profile.addScope(tool, namedScope, level, false, project);
-		}
-		else
-		{
-			profile.removeScope(shortName, "Tests", project);
-		}
-		profile.scopesChanged();
-	}
+  private void addRemoveTestsScope(Project project, boolean add) {
+    final InspectionProfileImpl profile = (InspectionProfileImpl) InspectionProjectProfileManager.getInstance(project).getInspectionProfile();
+    final String shortName = myInspection.getShortName();
+    final InspectionToolWrapper tool = profile.getInspectionTool(shortName, project);
+    if (tool == null) {
+      return;
+    }
+    if (add) {
+      final NamedScope namedScope = NamedScopesHolder.getScope(project, "Tests");
+      final HighlightDisplayKey key = HighlightDisplayKey.find(shortName);
+      final HighlightDisplayLevel level = profile.getErrorLevel(key, namedScope, project);
+      profile.addScope(tool, namedScope, level, false, project);
+    } else {
+      profile.removeScope(shortName, "Tests", project);
+    }
+    profile.scopesChanged();
+  }
 }

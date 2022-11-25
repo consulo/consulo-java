@@ -16,16 +16,16 @@
 package com.intellij.java.impl.refactoring.move;
 
 import com.intellij.java.language.psi.*;
-import consulo.logging.Logger;
-import consulo.util.lang.Pair;
-import com.intellij.psi.*;
-import consulo.language.codeStyle.CodeStyleManager;
 import com.intellij.java.language.psi.util.InheritanceUtil;
+import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
-import java.util.HashSet;
-import javax.annotation.Nullable;
+import consulo.logging.Logger;
+import consulo.util.lang.Pair;
 
+import javax.annotation.Nullable;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
@@ -37,19 +37,19 @@ public class MoveInstanceMembersUtil {
   private static final Logger LOG = Logger.getInstance(MoveInstanceMembersUtil.class);
 
   /**
-   * @param member  nonstatic class member to search for class references in
+   * @param member nonstatic class member to search for class references in
    * @return Set<PsiMember> in result map may be null in case no member is needed, but class itself is.
    */
   public static Map<PsiClass, Set<PsiMember>> getThisClassesToMembers(final PsiMember member) {
     Map<PsiClass, Set<PsiMember>> map = new LinkedHashMap<PsiClass, Set<PsiMember>>();
-    getThisClassesToMembers (member, map, member);
+    getThisClassesToMembers(member, map, member);
     return map;
   }
 
   private static void getThisClassesToMembers(final PsiElement scope, final Map<PsiClass, Set<PsiMember>> map, final PsiMember refMember) {
     if (scope instanceof PsiExpression) {
-      final PsiExpression expression = (PsiExpression)scope;
-      if (!(scope instanceof PsiReferenceExpression) || !((PsiReferenceExpression)scope).isReferenceTo(refMember)) {
+      final PsiExpression expression = (PsiExpression) scope;
+      if (!(scope instanceof PsiReferenceExpression) || !((PsiReferenceExpression) scope).isReferenceTo(refMember)) {
         final Pair<PsiMember, PsiClass> pair = getMemberAndClassReferencedByThis(expression);
         if (pair != null) {
           PsiClass refClass = pair.getSecond();
@@ -71,9 +71,9 @@ public class MoveInstanceMembersUtil {
         }
 
         if (expression instanceof PsiThisExpression) {
-          final PsiJavaCodeReferenceElement thisQualifier = ((PsiThisExpression)expression).getQualifier();
-          PsiClass thisClass = thisQualifier == null ? PsiTreeUtil.getParentOfType(expression, PsiClass.class, true) : ((PsiClass)thisQualifier.resolve());
-          if (thisClass != null && !PsiTreeUtil.isAncestor( refMember,thisClass, false)) {
+          final PsiJavaCodeReferenceElement thisQualifier = ((PsiThisExpression) expression).getQualifier();
+          PsiClass thisClass = thisQualifier == null ? PsiTreeUtil.getParentOfType(expression, PsiClass.class, true) : ((PsiClass) thisQualifier.resolve());
+          if (thisClass != null && !PsiTreeUtil.isAncestor(refMember, thisClass, false)) {
             addReferencedMember(map, thisClass, null);
           }
         }
@@ -98,21 +98,21 @@ public class MoveInstanceMembersUtil {
   @Nullable
   private static Pair<PsiMember, PsiClass> getMemberAndClassReferencedByThis(final PsiExpression expression) {
     if (expression instanceof PsiReferenceExpression) {
-      final PsiExpression qualifier = ((PsiReferenceExpression)expression).getQualifierExpression();
+      final PsiExpression qualifier = ((PsiReferenceExpression) expression).getQualifierExpression();
       if (qualifier == null || qualifier instanceof PsiThisExpression) {
-        final PsiElement resolved = ((PsiReferenceExpression)expression).resolve();
-        if (resolved instanceof PsiMember && !((PsiMember)resolved).hasModifierProperty(PsiModifier.STATIC)) {
-          PsiClass referencedClass = getReferencedClass((PsiMember)resolved, qualifier, expression);
-          return new Pair<PsiMember, PsiClass>((PsiMember)resolved, referencedClass);
+        final PsiElement resolved = ((PsiReferenceExpression) expression).resolve();
+        if (resolved instanceof PsiMember && !((PsiMember) resolved).hasModifierProperty(PsiModifier.STATIC)) {
+          PsiClass referencedClass = getReferencedClass((PsiMember) resolved, qualifier, expression);
+          return new Pair<PsiMember, PsiClass>((PsiMember) resolved, referencedClass);
         }
       }
     } else if (expression instanceof PsiNewExpression) {
-      final PsiNewExpression newExpression = (PsiNewExpression)expression;
+      final PsiNewExpression newExpression = (PsiNewExpression) expression;
       final PsiExpression qualifier = newExpression.getQualifier();
       if (qualifier == null || qualifier instanceof PsiThisExpression) {
         PsiJavaCodeReferenceElement classReference = newExpression.getClassOrAnonymousClassReference();
         if (classReference != null) {
-          final PsiClass resolved = (PsiClass)classReference.resolve();
+          final PsiClass resolved = (PsiClass) classReference.resolve();
           if (resolved != null && !resolved.hasModifierProperty(PsiModifier.STATIC)) {
             PsiClass referencedClass = getReferencedClass(resolved, qualifier, expression);
             return new Pair<PsiMember, PsiClass>(resolved, referencedClass);
@@ -129,7 +129,7 @@ public class MoveInstanceMembersUtil {
     if (exprQualifier != null) {
       final PsiType type = exprQualifier.getType();
       if (type instanceof PsiClassType) {
-        return ((PsiClassType)type).resolve();
+        return ((PsiClassType) type).resolve();
       }
       return null;
     } else {
@@ -152,12 +152,11 @@ public class MoveInstanceMembersUtil {
     if (pair != null) return pair.getSecond();
 
     if (expression instanceof PsiThisExpression) {
-      final PsiJavaCodeReferenceElement thisQualifier = ((PsiThisExpression)expression).getQualifier();
+      final PsiJavaCodeReferenceElement thisQualifier = ((PsiThisExpression) expression).getQualifier();
       if (thisQualifier == null) {
         return enclosingClass;
-      }
-      else {
-        return (PsiClass)thisQualifier.resolve();
+      } else {
+        return (PsiClass) thisQualifier.resolve();
       }
     }
     return null;
@@ -165,27 +164,26 @@ public class MoveInstanceMembersUtil {
 
   public static void moveInitializerToConstructor(PsiElementFactory factory, PsiMethod constructor, PsiField field) {
     final PsiExpression initializer = field.getInitializer();
-    PsiExpression initializerCopy = (PsiExpression)initializer.copy();
+    PsiExpression initializerCopy = (PsiExpression) initializer.copy();
     final PsiCodeBlock body = constructor.getBody();
     if (body != null) {
       try {
         String fieldName = field.getName();
-        final PsiReferenceExpression refExpr = (PsiReferenceExpression)factory.createExpressionFromText(fieldName, body);
+        final PsiReferenceExpression refExpr = (PsiReferenceExpression) factory.createExpressionFromText(fieldName, body);
         if (refExpr.resolve() != null) fieldName = "this." + fieldName;
-        PsiExpressionStatement statement = (PsiExpressionStatement)factory.createStatementFromText(fieldName + "= y;", null);
+        PsiExpressionStatement statement = (PsiExpressionStatement) factory.createStatementFromText(fieldName + "= y;", null);
         if (initializerCopy instanceof PsiArrayInitializerExpression) {
           PsiType type = initializer.getType();
           PsiNewExpression newExpression =
-            (PsiNewExpression)factory.createExpressionFromText("new " + type.getCanonicalText() + "{}", body);
+              (PsiNewExpression) factory.createExpressionFromText("new " + type.getCanonicalText() + "{}", body);
           newExpression.getArrayInitializer().replace(initializerCopy);
           initializerCopy = newExpression;
         }
-        ((PsiAssignmentExpression)statement.getExpression()).getRExpression().replace(initializerCopy);
-        statement = (PsiExpressionStatement)CodeStyleManager.getInstance(field.getManager().getProject()).reformat(statement);
+        ((PsiAssignmentExpression) statement.getExpression()).getRExpression().replace(initializerCopy);
+        statement = (PsiExpressionStatement) CodeStyleManager.getInstance(field.getManager().getProject()).reformat(statement);
         body.add(statement);
         initializer.delete();
-      }
-      catch (IncorrectOperationException e) {
+      } catch (IncorrectOperationException e) {
         LOG.error(e);
       }
     }

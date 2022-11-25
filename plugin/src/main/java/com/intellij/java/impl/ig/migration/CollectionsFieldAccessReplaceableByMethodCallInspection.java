@@ -15,84 +15,83 @@
  */
 package com.intellij.java.impl.ig.migration;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import consulo.util.lang.StringUtil;
-import com.intellij.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.language.util.IncorrectOperationException;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ExpectedTypeUtils;
 import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+import consulo.util.lang.StringUtil;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
 
-public class CollectionsFieldAccessReplaceableByMethodCallInspection
-  extends BaseInspection {
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+public abstract class CollectionsFieldAccessReplaceableByMethodCallInspection extends BaseInspection {
 
   @Override
   @Nls
   @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
-      "collections.field.access.replaceable.by.method.call.display.name");
+        "collections.field.access.replaceable.by.method.call.display.name");
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
-      "collections.field.access.replaceable.by.method.call.problem.descriptor",
-      infos[1]);
+        "collections.field.access.replaceable.by.method.call.problem.descriptor",
+        infos[1]);
   }
 
   @Override
   @Nullable
   protected InspectionGadgetsFix buildFix(Object... infos) {
     final PsiReferenceExpression expression =
-      (PsiReferenceExpression)infos[0];
+        (PsiReferenceExpression) infos[0];
     return new CollectionsFieldAccessReplaceableByMethodCallFix(
-      expression.getReferenceName());
+        expression.getReferenceName());
   }
 
   private static class CollectionsFieldAccessReplaceableByMethodCallFix
-    extends InspectionGadgetsFix {
+      extends InspectionGadgetsFix {
 
     private final String replacementText;
 
     private CollectionsFieldAccessReplaceableByMethodCallFix(
-      String referenceName) {
+        String referenceName) {
       replacementText = getCollectionsMethodCallText(referenceName);
     }
 
     @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
-        "collections.field.access.replaceable.by.method.call.quickfix",
-        replacementText);
+          "collections.field.access.replaceable.by.method.call.quickfix",
+          replacementText);
     }
 
     @NonNls
     private static String getCollectionsMethodCallText(
-      PsiReferenceExpression referenceExpression) {
+        PsiReferenceExpression referenceExpression) {
       final String referenceName = referenceExpression.getReferenceName();
       final PsiElement parent = referenceExpression.getParent();
       if (!(parent instanceof PsiExpressionList)) {
         return getUntypedCollectionsMethodCallText(referenceName);
       }
       final PsiType type = ExpectedTypeUtils.findExpectedType(
-        referenceExpression, false);
+          referenceExpression, false);
       if (!(type instanceof PsiClassType)) {
         return getUntypedCollectionsMethodCallText(referenceName);
       }
-      final PsiClassType classType = (PsiClassType)type;
+      final PsiClassType classType = (PsiClassType) type;
       final PsiType[] parameterTypes = classType.getParameters();
       boolean useTypeParameter = false;
       final String[] canonicalTexts = new String[parameterTypes.length];
@@ -101,22 +100,20 @@ public class CollectionsFieldAccessReplaceableByMethodCallInspection
         final PsiType parameterType = parameterTypes[i];
         if (parameterType instanceof PsiWildcardType) {
           final PsiWildcardType wildcardType =
-            (PsiWildcardType)parameterType;
+              (PsiWildcardType) parameterType;
           final PsiType bound = wildcardType.getBound();
           if (bound != null) {
             if (!bound.equalsToText(
-              JavaClassNames.JAVA_LANG_OBJECT)) {
+                JavaClassNames.JAVA_LANG_OBJECT)) {
               useTypeParameter = true;
             }
             canonicalTexts[i] = bound.getCanonicalText();
-          }
-          else {
+          } else {
             canonicalTexts[i] = JavaClassNames.JAVA_LANG_OBJECT;
           }
-        }
-        else {
+        } else {
           if (!parameterType.equalsToText(
-            JavaClassNames.JAVA_LANG_OBJECT)) {
+              JavaClassNames.JAVA_LANG_OBJECT)) {
             useTypeParameter = true;
           }
           canonicalTexts[i] = parameterType.getCanonicalText();
@@ -124,50 +121,46 @@ public class CollectionsFieldAccessReplaceableByMethodCallInspection
       }
       if (useTypeParameter) {
         return "Collections.<" + StringUtil.join(canonicalTexts, ",") +
-               '>' + getCollectionsMethodCallText(referenceName);
-      }
-      else {
+            '>' + getCollectionsMethodCallText(referenceName);
+      } else {
         return getUntypedCollectionsMethodCallText(referenceName);
       }
     }
 
     @NonNls
     private static String getUntypedCollectionsMethodCallText(
-      String referenceName) {
+        String referenceName) {
       return "Collections." + getCollectionsMethodCallText(referenceName);
     }
 
     @NonNls
     private static String getCollectionsMethodCallText(
-      @NonNls String referenceName) {
+        @NonNls String referenceName) {
       if ("EMPTY_LIST".equals(referenceName)) {
         return "emptyList()";
-      }
-      else if ("EMPTY_MAP".equals(referenceName)) {
+      } else if ("EMPTY_MAP".equals(referenceName)) {
         return "emptyMap()";
-      }
-      else if ("EMPTY_SET".equals(referenceName)) {
+      } else if ("EMPTY_SET".equals(referenceName)) {
         return "emptySet()";
-      }
-      else {
+      } else {
         throw new AssertionError("unknown collections field name: " +
-                                 referenceName);
+            referenceName);
       }
     }
 
     @Override
     protected void doFix(Project project, ProblemDescriptor descriptor)
-      throws IncorrectOperationException {
+        throws IncorrectOperationException {
       final PsiElement element = descriptor.getPsiElement();
       if (!(element instanceof PsiReferenceExpression)) {
         return;
       }
       final PsiReferenceExpression referenceExpression =
-        (PsiReferenceExpression)element;
+          (PsiReferenceExpression) element;
       final String newMethodCallText =
-        getCollectionsMethodCallText(referenceExpression);
+          getCollectionsMethodCallText(referenceExpression);
       replaceExpression(referenceExpression,
-                        "java.util." + newMethodCallText);
+          "java.util." + newMethodCallText);
     }
   }
 
@@ -177,11 +170,11 @@ public class CollectionsFieldAccessReplaceableByMethodCallInspection
   }
 
   private static class CollectionsFieldAccessReplaceableByMethodCallVisitor
-    extends BaseInspectionVisitor {
+      extends BaseInspectionVisitor {
 
     @Override
     public void visitReferenceExpression(
-      PsiReferenceExpression expression) {
+        PsiReferenceExpression expression) {
       if (!PsiUtil.isLanguageLevel5OrHigher(expression)) {
         return;
       }
@@ -190,21 +183,18 @@ public class CollectionsFieldAccessReplaceableByMethodCallInspection
       @NonNls final String replacement;
       if ("EMPTY_LIST".equals(name)) {
         replacement = "emptyList()";
-      }
-      else if ("EMPTY_MAP".equals(name)) {
+      } else if ("EMPTY_MAP".equals(name)) {
         replacement = "emptyMap()";
-      }
-      else if ("EMPTY_SET".equals(name)) {
+      } else if ("EMPTY_SET".equals(name)) {
         replacement = "emptySet()";
-      }
-      else {
+      } else {
         return;
       }
       final PsiElement target = expression.resolve();
       if (!(target instanceof PsiField)) {
         return;
       }
-      final PsiField field = (PsiField)target;
+      final PsiField field = (PsiField) target;
       final PsiClass containingClass = field.getContainingClass();
       if (containingClass == null) {
         return;

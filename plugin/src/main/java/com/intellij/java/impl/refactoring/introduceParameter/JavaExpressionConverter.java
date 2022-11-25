@@ -15,16 +15,28 @@
  */
 package com.intellij.java.impl.refactoring.introduceParameter;
 
+import com.intellij.java.language.JavaLanguage;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.Language;
 import consulo.project.Project;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import consulo.language.psi.PsiElement;
 
+import javax.annotation.Nonnull;
+
 /**
  * @author Maxim.Medvedev
  */
-public class JavaExpressionConverter extends ExpressionConverter {
+@ExtensionImpl
+public class JavaExpressionConverter implements ExpressionConverter {
   @Override
-  protected PsiElement convert(PsiElement expression, Project project) {
+  public PsiElement convert(PsiElement expression, Project project) {
     return JavaPsiFacade.getElementFactory(project).createExpressionFromText(expression.getText(), expression);
+  }
+
+  @Nonnull
+  @Override
+  public Language getLanguage() {
+    return JavaLanguage.INSTANCE;
   }
 }

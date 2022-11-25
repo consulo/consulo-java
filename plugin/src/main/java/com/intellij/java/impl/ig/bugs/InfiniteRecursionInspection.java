@@ -15,16 +15,16 @@
  */
 package com.intellij.java.impl.ig.bugs;
 
-import javax.annotation.Nonnull;
-
+import com.intellij.java.impl.ig.psiutils.RecursionUtils;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifier;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import com.intellij.java.impl.ig.psiutils.RecursionUtils;
 
-public class InfiniteRecursionInspection extends BaseInspection {
+import javax.annotation.Nonnull;
+
+public abstract class InfiniteRecursionInspection extends BaseInspection {
 
   @Override
   @Nonnull

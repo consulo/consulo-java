@@ -27,7 +27,7 @@ package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 import com.intellij.java.language.psi.*;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.StringUtil;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import com.intellij.java.language.psi.util.ClassUtil;
 import javax.annotation.Nonnull;
 

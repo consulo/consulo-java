@@ -15,8 +15,6 @@
  */
 package com.intellij.java.impl.refactoring.inline;
 
-import consulo.localHistory.LocalHistory;
-import com.intellij.history.LocalHistoryAction;
 import com.intellij.java.impl.refactoring.introduceParameter.Util;
 import com.intellij.java.impl.refactoring.rename.RenameJavaVariableProcessor;
 import com.intellij.java.impl.refactoring.util.ConflictsUtil;
@@ -27,6 +25,7 @@ import com.intellij.java.language.impl.codeInsight.ChangeContextUtil;
 import com.intellij.java.language.impl.psi.controlFlow.*;
 import com.intellij.java.language.impl.psi.impl.source.javadoc.PsiDocMethodOrFieldRef;
 import com.intellij.java.language.impl.refactoring.util.RefactoringChangeUtil;
+import com.intellij.java.language.psi.PsiElementFactory;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
@@ -34,33 +33,38 @@ import com.intellij.java.language.psi.infos.MethodCandidateInfo;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PsiTypesUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.language.Language;
-import consulo.language.findUsage.DescriptiveNameUtil;
-import consulo.language.editor.refactoring.inline.InlineHandler;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.LogicalPosition;
-import consulo.project.Project;
-import consulo.util.lang.ref.Ref;
-import consulo.util.lang.StringUtil;
-import com.intellij.psi.*;
+import consulo.ide.impl.idea.refactoring.inline.GenericInlineHandler;
+import consulo.language.Language;
 import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.editor.refactoring.BaseRefactoringProcessor;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.inline.InlineHandler;
+import consulo.language.editor.refactoring.rename.NonCodeUsageInfoFactory;
+import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
+import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
+import consulo.language.editor.refactoring.util.NonCodeSearchDescriptionLocation;
+import consulo.language.editor.refactoring.util.TextOccurrencesUtil;
+import consulo.language.findUsage.DescriptiveNameUtil;
 import consulo.language.impl.psi.CodeEditUtil;
+import consulo.language.psi.*;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.scope.LocalSearchScope;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.PsiTreeUtil;
-import consulo.language.editor.refactoring.BaseRefactoringProcessor;
-import consulo.language.editor.refactoring.RefactoringBundle;
-import consulo.ide.impl.idea.refactoring.inline.GenericInlineHandler;
-import consulo.language.editor.refactoring.rename.NonCodeUsageInfoFactory;
-import com.intellij.refactoring.util.*;
+import consulo.language.util.IncorrectOperationException;
+import consulo.localHistory.LocalHistory;
+import consulo.localHistory.LocalHistoryAction;
+import consulo.logging.Logger;
+import consulo.project.Project;
+import consulo.usage.NonCodeUsageInfo;
 import consulo.usage.UsageInfo;
 import consulo.usage.UsageViewDescriptor;
-import consulo.ide.impl.idea.util.Function;
-import consulo.language.util.IncorrectOperationException;
 import consulo.util.collection.MultiMap;
-import consulo.logging.Logger;
 import consulo.util.dataholder.Key;
+import consulo.util.lang.StringUtil;
+import consulo.util.lang.ref.Ref;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
@@ -301,11 +305,7 @@ public class InlineMethodProcessor extends BaseRefactoringProcessor {
             final PsiMethodCallExpression methodCallExpression = PsiTreeUtil.getParentOfType(expression, PsiMethodCallExpression.class);
             LOG.assertTrue(methodCallExpression != null);
             conflicts.putValue(expression, "Inlined method calls " + methodCallExpression.getText() + " which won't be accessed in " +
-                StringUtil.join(targetContainingClasses, new Function<PsiClass, String>() {
-                  public String fun(PsiClass psiClass) {
-                    return RefactoringUIUtil.getDescription(psiClass, false);
-                  }
-                }, ","));
+                StringUtil.join(targetContainingClasses, psiClass -> RefactoringUIUtil.getDescription(psiClass, false), ","));
           }
         }
       }

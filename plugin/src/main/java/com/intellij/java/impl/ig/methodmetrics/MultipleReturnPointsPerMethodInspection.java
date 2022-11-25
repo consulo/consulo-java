@@ -19,19 +19,14 @@ import com.intellij.java.language.psi.PsiCodeBlock;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiStatement;
 import com.intellij.java.language.psi.PsiType;
-import consulo.ui.CheckBox;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ControlFlowUtils;
 import com.siyeh.ig.psiutils.MethodUtils;
-import javax.annotation.Nonnull;
 
-import javax.swing.JComponent;
-import javax.swing.JFormattedTextField;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
+import javax.annotation.Nonnull;
+import javax.swing.*;
+import java.awt.*;
 
 public class MultipleReturnPointsPerMethodInspection
   extends MethodMetricInspection {
@@ -80,12 +75,12 @@ public class MultipleReturnPointsPerMethodInspection
     final JLabel label = new JLabel(InspectionGadgetsBundle.message(
       "return.point.limit.option"));
     final JFormattedTextField termLimitTextField = prepareNumberEditor(() -> m_limit, i -> m_limit = i);
-    final CheckBox ignoreGuardClausesCheckBox =
-      new CheckBox(InspectionGadgetsBundle.message(
+    final consulo.language.editor.inspection.ui.CheckBox ignoreGuardClausesCheckBox =
+      new consulo.language.editor.inspection.ui.CheckBox(InspectionGadgetsBundle.message(
         "ignore.guard.clauses.option"),
                    this, "ignoreGuardClauses");
-    final CheckBox ignoreEqualsMethodCheckBox =
-      new CheckBox(InspectionGadgetsBundle.message(
+    final consulo.language.editor.inspection.ui.CheckBox ignoreEqualsMethodCheckBox =
+      new consulo.language.editor.inspection.ui.CheckBox(InspectionGadgetsBundle.message(
         "ignore.for.equals.methods.option"),
                    this, "ignoreEqualsMethod");
 

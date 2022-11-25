@@ -22,7 +22,7 @@ import com.intellij.java.language.psi.PsiReferenceExpression;
 import consulo.logging.Logger;
 import consulo.document.Document;
 import consulo.project.Project;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import com.intellij.java.impl.refactoring.rename.RenameJavaMemberProcessor;
 import consulo.language.editor.refactoring.ResolveSnapshotProvider;
 import java.util.HashMap;

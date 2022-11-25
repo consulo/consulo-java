@@ -15,21 +15,21 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
-import javax.annotation.Nonnull;
-
-import consulo.language.editor.FileModificationService;
+import com.intellij.java.analysis.impl.psi.util.PsiMatchers;
 import com.intellij.java.language.psi.*;
+import consulo.codeEditor.Editor;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.language.editor.FileModificationService;
 import consulo.language.editor.intention.HighPriorityAction;
 import consulo.language.editor.intention.IntentionAction;
-import consulo.undoRedo.util.UndoUtil;
-import consulo.logging.Logger;
-import consulo.codeEditor.Editor;
-import consulo.project.Project;
-import com.intellij.psi.*;
-import consulo.ide.impl.psi.util.PsiMatcherImpl;
-import com.intellij.java.analysis.impl.psi.util.PsiMatchers;
+import consulo.language.editor.util.LanguageUndoUtil;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.util.PsiMatcherImpl;
 import consulo.language.util.IncorrectOperationException;
+import consulo.logging.Logger;
+import consulo.project.Project;
+
+import javax.annotation.Nonnull;
 
 public class InsertSuperFix implements IntentionAction, HighPriorityAction {
   private static final Logger LOG = Logger.getInstance(InsertSuperFix.class);
@@ -79,7 +79,7 @@ public class InsertSuperFix implements IntentionAction, HighPriorityAction {
                 .dot(PsiMatchers.hasText("("))
                 .getElement();
       editor.getCaretModel().moveToOffset(lBrace.getTextOffset()+1);
-      UndoUtil.markPsiFileForUndo(file);
+      LanguageUndoUtil.markPsiFileForUndo(file);
     }
     catch (IncorrectOperationException e) {
       LOG.error(e);

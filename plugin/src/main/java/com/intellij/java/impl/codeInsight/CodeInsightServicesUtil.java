@@ -16,10 +16,10 @@
 package com.intellij.java.impl.codeInsight;
 
 import com.intellij.java.language.psi.*;
-import consulo.logging.Logger;
-import com.intellij.psi.*;
 import consulo.language.ast.IElementType;
+import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
+import consulo.logging.Logger;
 
 /**
  * @author ven

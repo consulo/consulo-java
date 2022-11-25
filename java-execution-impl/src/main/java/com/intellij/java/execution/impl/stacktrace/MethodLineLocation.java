@@ -18,6 +18,7 @@ package com.intellij.java.execution.impl.stacktrace;
 import consulo.execution.action.Location;
 import com.intellij.java.execution.impl.junit2.info.MethodLocation;
 import consulo.navigation.OpenFileDescriptor;
+import consulo.navigation.OpenFileDescriptorFactory;
 import consulo.project.Project;
 import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.java.language.psi.PsiClass;
@@ -33,6 +34,6 @@ public class MethodLineLocation extends MethodLocation {
 
   public OpenFileDescriptor getOpenFileDescriptor() {
     final VirtualFile virtualFile = getContainingClass().getContainingFile().getVirtualFile();
-    return new OpenFileDescriptor(getProject(), virtualFile, myLineNumber, 0);
+    return OpenFileDescriptorFactory.getInstance(getProject()).builder(virtualFile).line(myLineNumber).build();
   }
 }

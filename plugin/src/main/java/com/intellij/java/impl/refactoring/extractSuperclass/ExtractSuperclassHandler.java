@@ -20,37 +20,36 @@
  */
 package com.intellij.java.impl.refactoring.extractSuperclass;
 
-import java.util.List;
-
-import javax.annotation.Nonnull;
-import javax.swing.SwingUtilities;
-
-import consulo.localHistory.LocalHistory;
-import com.intellij.history.LocalHistoryAction;
+import com.intellij.java.impl.refactoring.HelpID;
+import com.intellij.java.impl.refactoring.extractInterface.ExtractClassUtil;
+import com.intellij.java.impl.refactoring.memberPullUp.PullUpConflictsUtil;
+import com.intellij.java.impl.refactoring.util.classMembers.MemberInfo;
 import com.intellij.java.language.psi.*;
-import consulo.language.findUsage.DescriptiveNameUtil;
-import consulo.dataContext.DataContext;
-import consulo.language.editor.PlatformDataKeys;
 import consulo.application.ApplicationManager;
-import consulo.undoRedo.CommandProcessor;
-import consulo.logging.Logger;
+import consulo.application.progress.ProgressManager;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.ScrollType;
-import consulo.application.progress.ProgressManager;
-import consulo.project.Project;
-import com.intellij.psi.*;
-import com.intellij.java.impl.refactoring.HelpID;
-import consulo.language.editor.refactoring.action.RefactoringActionHandler;
-import consulo.language.editor.refactoring.RefactoringBundle;
-import com.intellij.java.impl.refactoring.extractInterface.ExtractClassUtil;
-import consulo.language.editor.refactoring.ElementsHandler;
-import com.intellij.java.impl.refactoring.memberPullUp.PullUpConflictsUtil;
-import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
+import consulo.dataContext.DataContext;
 import consulo.ide.impl.idea.refactoring.util.DocCommentPolicy;
-import com.intellij.java.impl.refactoring.util.classMembers.MemberInfo;
-import consulo.util.collection.ArrayUtil;
+import consulo.language.editor.PlatformDataKeys;
+import consulo.language.editor.refactoring.ElementsHandler;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.action.RefactoringActionHandler;
+import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
+import consulo.language.findUsage.DescriptiveNameUtil;
+import consulo.language.psi.*;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localHistory.LocalHistory;
+import consulo.localHistory.LocalHistoryAction;
+import consulo.logging.Logger;
+import consulo.project.Project;
+import consulo.undoRedo.CommandProcessor;
+import consulo.util.collection.ArrayUtil;
 import consulo.util.collection.MultiMap;
+
+import javax.annotation.Nonnull;
+import javax.swing.*;
+import java.util.List;
 
 public class ExtractSuperclassHandler implements RefactoringActionHandler, ExtractSuperclassDialog.Callback, ElementsHandler {
   private static final Logger LOG = Logger.getInstance(ExtractSuperclassHandler.class);

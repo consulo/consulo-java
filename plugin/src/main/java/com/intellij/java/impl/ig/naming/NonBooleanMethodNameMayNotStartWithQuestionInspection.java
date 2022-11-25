@@ -17,13 +17,13 @@ package com.intellij.java.impl.ig.naming;
 
 import consulo.ide.impl.idea.codeInspection.ui.ListTable;
 import consulo.ide.impl.idea.codeInspection.ui.ListWrappingTableModel;
+import consulo.language.editor.inspection.ui.CheckBox;
+import consulo.ui.ex.awt.FormBuilder;
 import consulo.util.xml.serializer.InvalidDataException;
 import consulo.util.xml.serializer.WriteExternalException;
 import consulo.java.language.module.util.JavaClassNames;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiType;
-import consulo.ui.CheckBox;
-import consulo.ui.util.FormBuilder;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;

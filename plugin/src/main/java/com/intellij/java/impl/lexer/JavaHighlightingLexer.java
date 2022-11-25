@@ -21,10 +21,10 @@ import com.intellij.java.language.impl.lexer.JavaLexer;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaDocElementType;
 import com.intellij.java.language.psi.JavaDocTokenType;
 import com.intellij.java.language.psi.JavaTokenType;
-import com.intellij.lexer.HtmlHighlightingLexer;
+import consulo.language.ast.IElementType;
 import consulo.language.lexer.LayeredLexer;
 import consulo.language.lexer.StringLiteralLexer;
-import consulo.language.ast.IElementType;
+import consulo.xml.lexer.HtmlHighlightingLexer;
 
 
 /**

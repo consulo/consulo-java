@@ -16,17 +16,17 @@
 
 package com.intellij.java.impl.codeInsight.completion.simple;
 
-import consulo.language.editor.completion.lookup.TailType;
-import com.intellij.codeInsight.editorActions.EnterHandler;
-import consulo.ide.impl.idea.codeInsight.editorActions.enter.EnterAfterUnmatchedBraceHandler;
-import consulo.dataContext.DataManager;
-import consulo.ui.ex.action.IdeActions;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.action.EditorActionManager;
-import consulo.project.Project;
+import consulo.dataContext.DataManager;
+import consulo.ide.impl.idea.codeInsight.editorActions.EnterHandler;
+import consulo.ide.impl.idea.codeInsight.editorActions.enter.EnterAfterUnmatchedBraceHandler;
+import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.editor.completion.lookup.TailType;
 import consulo.language.psi.PsiDocumentManager;
 import consulo.language.psi.PsiFile;
-import consulo.language.codeStyle.CodeStyleManager;
+import consulo.project.Project;
+import consulo.ui.ex.action.IdeActions;
 import consulo.util.lang.CharArrayUtil;
 
 /**
@@ -49,8 +49,10 @@ public class BracesTailType extends TailType {
     tailOffset = reformatBrace(editor, tailOffset, startOffset);
 
     if (EnterAfterUnmatchedBraceHandler.isAfterUnmatchedLBrace(editor, tailOffset, getFileType(editor))) {
-      new EnterHandler(EditorActionManager.getInstance().getActionHandler(IdeActions.ACTION_EDITOR_ENTER))
-        .executeWriteAction(editor, DataManager.getInstance().getDataContext(editor.getContentComponent()));
+      EnterHandler handler = new EnterHandler();
+      handler.init(EditorActionManager.getInstance().getActionHandler(IdeActions.ACTION_EDITOR_ENTER));
+      handler.executeWriteAction(editor, DataManager.getInstance().getDataContext(editor.getContentComponent()));
+
       return editor.getCaretModel().getOffset();
     }
     return tailOffset;

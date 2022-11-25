@@ -18,7 +18,7 @@ package com.intellij.java.impl.ig.resources;
 import javax.annotation.Nonnull;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import consulo.language.ast.IElementType;
 import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;

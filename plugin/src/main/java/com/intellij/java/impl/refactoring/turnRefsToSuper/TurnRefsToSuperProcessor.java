@@ -23,7 +23,7 @@ import consulo.project.Project;
 import consulo.ui.ex.awt.Messages;
 import consulo.util.lang.ref.Ref;
 import com.intellij.java.language.LanguageLevel;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.search.ReferencesSearch;
 import com.intellij.java.language.psi.util.InheritanceUtil;

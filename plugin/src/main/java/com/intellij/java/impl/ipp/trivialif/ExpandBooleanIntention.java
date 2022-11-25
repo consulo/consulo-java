@@ -15,16 +15,16 @@
  */
 package com.intellij.java.impl.ipp.trivialif;
 
-import javax.annotation.Nonnull;
-
-import com.intellij.java.language.psi.*;
-import com.intellij.psi.*;
-import consulo.language.psi.util.PsiTreeUtil;
-import consulo.language.util.IncorrectOperationException;
 import com.intellij.java.impl.ipp.base.Intention;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.intellij.java.impl.ipp.psiutils.ErrorUtil;
+import com.intellij.java.language.psi.*;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
 import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
 
 public class ExpandBooleanIntention extends Intention {
 

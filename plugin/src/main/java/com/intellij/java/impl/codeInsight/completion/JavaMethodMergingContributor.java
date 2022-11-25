@@ -15,10 +15,10 @@
  */
 package com.intellij.java.impl.codeInsight.completion;
 
-import com.intellij.codeInsight.completion.*;
-import consulo.language.editor.completion.lookup.LookupElement;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiType;
+import consulo.language.editor.completion.*;
+import consulo.language.editor.completion.lookup.LookupElement;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -29,7 +29,7 @@ import static consulo.util.lang.ObjectUtil.assertNotNull;
 /**
  * @author peter
  */
-public class JavaMethodMergingContributor extends CompletionContributor {
+public abstract class JavaMethodMergingContributor extends CompletionContributor {
 
   @Override
   public AutoCompletionDecision handleAutoCompletionPossibility(@Nonnull AutoCompletionContext context) {

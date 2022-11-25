@@ -15,24 +15,24 @@
  */
 package com.intellij.java.impl.codeInsight.template.postfix.templates;
 
-import consulo.language.editor.completion.lookup.LookupElement;
-import com.intellij.codeInsight.template.*;
-import consulo.language.editor.postfixTemplate.PostfixTemplate;
-import consulo.language.editor.postfixTemplate.PostfixTemplatesUtils;
 import com.intellij.java.analysis.codeInsight.guess.GuessManager;
 import com.intellij.java.impl.codeInsight.lookup.PsiTypeLookupItem;
 import com.intellij.java.impl.codeInsight.template.PsiTypeResult;
 import com.intellij.java.impl.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils;
 import com.intellij.java.impl.refactoring.introduceField.ElementToWorkOn;
 import com.intellij.java.language.psi.*;
-import consulo.document.Document;
 import consulo.codeEditor.Editor;
-import consulo.document.RangeMarker;
 import consulo.codeEditor.ScrollType;
-import consulo.project.Project;
+import consulo.document.Document;
+import consulo.document.RangeMarker;
 import consulo.document.util.TextRange;
+import consulo.language.editor.completion.lookup.LookupElement;
+import consulo.language.editor.postfixTemplate.PostfixTemplate;
+import consulo.language.editor.postfixTemplate.PostfixTemplatesUtils;
+import consulo.language.editor.template.*;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
 
 import javax.annotation.Nonnull;
 import java.util.LinkedHashSet;

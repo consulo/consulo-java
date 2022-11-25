@@ -16,7 +16,7 @@ import consulo.logging.Logger;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.ScrollType;
 import consulo.project.Project;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.editor.refactoring.action.RefactoringActionHandler;
 import consulo.language.editor.refactoring.RefactoringBundle;

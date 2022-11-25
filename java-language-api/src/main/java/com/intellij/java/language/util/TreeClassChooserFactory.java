@@ -21,7 +21,6 @@ import consulo.language.editor.ui.TreeFileChooser;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.project.Project;
-import consulo.util.lang.function.Condition;
 import consulo.virtualFileSystem.fileType.FileType;
 
 import javax.annotation.Nonnull;
@@ -64,7 +63,7 @@ public abstract class TreeClassChooserFactory {
                                                                  PsiClass base,
                                                                  boolean acceptsSelf,
                                                                  boolean acceptInner,
-                                                                 Condition<? super PsiClass> additionalCondition);
+                                                                 Predicate<? super PsiClass> additionalCondition);
 
   @Nonnull
   public abstract TreeClassChooser createInheritanceClassChooser(String title, GlobalSearchScope scope, PsiClass base, PsiClass initialClass);

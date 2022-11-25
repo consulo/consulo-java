@@ -15,7 +15,7 @@ import consulo.language.editor.intention.IntentionAction;
 import com.intellij.java.language.psi.*;
 import consulo.codeEditor.Editor;
 import consulo.project.Project;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import com.intellij.java.language.psi.impl.source.resolve.DefaultParameterTypeInferencePolicy;
 import consulo.language.psi.search.PsiSearchHelper;
 import com.intellij.java.language.psi.util.PsiUtil;

@@ -15,25 +15,24 @@
  */
 package com.intellij.java.impl.ig.junit;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-
-import com.intellij.java.language.psi.*;
-import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NonNls;
+import com.intellij.java.impl.ig.fixes.RenameFix;
 import com.intellij.java.language.codeInsight.AnnotationUtil;
-import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.project.Project;
-import com.intellij.psi.*;
+import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.fixes.RenameFix;
 import com.siyeh.ig.psiutils.TestUtils;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.project.Project;
+import org.jetbrains.annotations.Nls;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.List;
 
 public class JUnit4AnnotatedMethodInJUnit3TestCaseInspection extends BaseInspection {
 

@@ -19,7 +19,7 @@ import com.intellij.java.language.psi.JavaCodeFragmentFactory;
 import com.intellij.java.language.psi.PsiClassType;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiTypeCodeFragment;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import consulo.language.editor.refactoring.RefactoringBundle;
 import com.intellij.java.impl.refactoring.util.CanonicalTypes;
 import consulo.ui.ex.awt.EditableModel;

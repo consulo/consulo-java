@@ -16,21 +16,22 @@
 
 package com.intellij.java.impl.copyright.psi;
 
+import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiClassOwner;
 import com.intellij.java.language.psi.PsiImportList;
 import com.intellij.java.language.psi.PsiJavaFile;
-import consulo.virtualFileSystem.fileType.FileType;
-import consulo.project.Project;
+import consulo.language.copyright.UpdateCopyrightsProvider;
+import consulo.language.copyright.UpdatePsiFileCopyright;
+import consulo.language.copyright.config.CopyrightFileConfig;
+import consulo.language.copyright.config.CopyrightProfile;
+import consulo.language.copyright.ui.TemplateCommentPanel;
 import consulo.language.psi.PsiComment;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
-import com.maddyhome.idea.copyright.CopyrightProfile;
-import com.maddyhome.idea.copyright.psi.UpdateCopyrightsProvider;
-import com.maddyhome.idea.copyright.psi.UpdatePsiFileCopyright;
-import com.maddyhome.idea.copyright.ui.TemplateCommentPanel;
-import consulo.language.copyright.config.CopyrightFileConfig;
 import consulo.logging.Logger;
+import consulo.project.Project;
+import consulo.virtualFileSystem.fileType.FileType;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -112,6 +113,12 @@ public class UpdateJavaFileCopyright extends UpdatePsiFileCopyright<CopyrightFil
   private static final Logger logger = Logger.getInstance(UpdateJavaFileCopyright.class);
 
   public static class UpdateJavaCopyrightsProvider extends UpdateCopyrightsProvider<CopyrightFileConfig> {
+    @Nonnull
+    @Override
+    public FileType getFileType() {
+      return JavaFileType.INSTANCE;
+    }
+
     @Nonnull
     @Override
     public UpdatePsiFileCopyright<CopyrightFileConfig> createInstance(@Nonnull PsiFile file, @Nonnull CopyrightProfile copyrightProfile) {

@@ -15,40 +15,45 @@
  */
 package com.intellij.java.impl.ig.classlayout;
 
-import consulo.language.editor.scope.AnalysisScope;
-import consulo.language.editor.inspection.reference.RefEntity;
 import com.intellij.java.analysis.codeInspection.reference.RefMethod;
-import com.intellij.java.language.psi.*;
-import consulo.util.dataholder.Key;
-import com.intellij.java.language.psi.util.PsiUtil;
-import com.siyeh.InspectionGadgetsBundle;
 import com.intellij.java.impl.ig.BaseGlobalInspection;
 import com.intellij.java.impl.ig.psiutils.MethodInheritanceUtils;
-import javax.annotation.Nonnull;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.PsiUtil;
+import com.siyeh.InspectionGadgetsBundle;
+import consulo.language.editor.inspection.CommonProblemDescriptor;
+import consulo.language.editor.inspection.GlobalInspectionContext;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.editor.inspection.ProblemHighlightType;
+import consulo.language.editor.inspection.reference.RefEntity;
+import consulo.language.editor.inspection.scheme.InspectionManager;
+import consulo.language.editor.scope.AnalysisScope;
+import consulo.util.dataholder.Key;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-public class MethodReturnAlwaysConstantInspection extends BaseGlobalInspection {
+public abstract class MethodReturnAlwaysConstantInspection extends BaseGlobalInspection {
 
   private static final Key<Boolean> ALWAYS_CONSTANT =
-    Key.create("ALWAYS_CONSTANT");
+      Key.create("ALWAYS_CONSTANT");
 
   @Nonnull
   @Override
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
-      "method.return.always.constant.display.name");
+        "method.return.always.constant.display.name");
   }
 
   public CommonProblemDescriptor[] checkElement(
-    RefEntity refEntity, AnalysisScope scope, InspectionManager manager,
-    GlobalInspectionContext globalContext) {
+      RefEntity refEntity, AnalysisScope scope, InspectionManager manager,
+      GlobalInspectionContext globalContext) {
     if (!(refEntity instanceof RefMethod)) {
       return null;
     }
-    final RefMethod refMethod = (RefMethod)refEntity;
+    final RefMethod refMethod = (RefMethod) refEntity;
     final Boolean alreadyProcessed = refMethod.getUserData(ALWAYS_CONSTANT);
     if (alreadyProcessed != null && alreadyProcessed.booleanValue()) {
       return null;
@@ -56,7 +61,7 @@ public class MethodReturnAlwaysConstantInspection extends BaseGlobalInspection {
     if (!(refMethod.getElement() instanceof PsiMethod)) {
       return null;
     }
-    final PsiMethod method = (PsiMethod)refMethod.getElement();
+    final PsiMethod method = (PsiMethod) refMethod.getElement();
     if (method.getBody() == null) {
       return null;     //we'll catch it on another method
     }
@@ -64,10 +69,10 @@ public class MethodReturnAlwaysConstantInspection extends BaseGlobalInspection {
       return null;
     }
     final Set<RefMethod> siblingMethods =
-      MethodInheritanceUtils.calculateSiblingMethods(refMethod);
+        MethodInheritanceUtils.calculateSiblingMethods(refMethod);
     for (RefMethod siblingMethod : siblingMethods) {
       final PsiMethod siblingPsiMethod =
-        (PsiMethod)siblingMethod.getElement();
+          (PsiMethod) siblingMethod.getElement();
       if (method.getBody() != null &&
           !alwaysReturnsConstant(siblingPsiMethod)) {
         return null;
@@ -76,17 +81,17 @@ public class MethodReturnAlwaysConstantInspection extends BaseGlobalInspection {
     final List<ProblemDescriptor> out = new ArrayList<ProblemDescriptor>();
     for (RefMethod siblingRefMethod : siblingMethods) {
       final PsiMethod siblingMethod =
-        (PsiMethod)siblingRefMethod.getElement();
+          (PsiMethod) siblingRefMethod.getElement();
       final PsiIdentifier identifier = siblingMethod.getNameIdentifier();
       if (identifier == null) {
         continue;
       }
       out.add(manager.createProblemDescriptor(identifier,
-                                              InspectionGadgetsBundle.message(
-                                                "method.return.always.constant.problem.descriptor"), false, null,
-                                              ProblemHighlightType.GENERIC_ERROR_OR_WARNING));
+          InspectionGadgetsBundle.message(
+              "method.return.always.constant.problem.descriptor"), false, null,
+          ProblemHighlightType.GENERIC_ERROR_OR_WARNING));
       siblingRefMethod.putUserData(ALWAYS_CONSTANT,
-                                   Boolean.valueOf(true));
+          Boolean.valueOf(true));
     }
     return out.toArray(new ProblemDescriptor[out.size()]);
   }
@@ -105,7 +110,7 @@ public class MethodReturnAlwaysConstantInspection extends BaseGlobalInspection {
       return false;
     }
     final PsiReturnStatement returnStatement =
-      (PsiReturnStatement)statement;
+        (PsiReturnStatement) statement;
     final PsiExpression value = returnStatement.getReturnValue();
     return value != null && PsiUtil.isConstantExpression(value);
   }

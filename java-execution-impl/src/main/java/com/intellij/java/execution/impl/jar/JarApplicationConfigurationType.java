@@ -3,55 +3,45 @@
  */
 package com.intellij.java.execution.impl.jar;
 
-import javax.annotation.Nonnull;
-
-import consulo.execution.configuration.*;
-import consulo.execution.configuration.RunConfiguration;
 import consulo.application.AllIcons;
-import consulo.project.Project;
-import consulo.ide.impl.idea.openapi.util.io.FileUtil;
-import consulo.util.lang.StringUtil;
-import consulo.execution.configuration.ConfigurationTypeUtil;
+import consulo.execution.configuration.*;
 import consulo.java.execution.JavaExecutionBundle;
 import consulo.java.language.module.extension.JavaModuleExtension;
 import consulo.module.extension.ModuleExtensionHelper;
+import consulo.project.Project;
+import consulo.util.io.FileUtil;
+import consulo.util.lang.StringUtil;
 
-public class JarApplicationConfigurationType extends ConfigurationTypeBase implements ConfigurationType
-{
-	@Nonnull
-	public static JarApplicationConfigurationType getInstance()
-	{
-		return ConfigurationTypeUtil.findConfigurationType(JarApplicationConfigurationType.class);
-	}
+import javax.annotation.Nonnull;
 
-	public JarApplicationConfigurationType()
-	{
-		super("JarApplication", JavaExecutionBundle.message("jar.application.configuration.name"), JavaExecutionBundle.message("jar.application.configuration.description"), AllIcons.FileTypes.Archive);
-		addFactory(new ConfigurationFactoryEx(this)
-		{
-			@Override
-			public void onNewConfigurationCreated(@Nonnull RunConfiguration configuration)
-			{
-				JarApplicationConfiguration jarApplicationConfiguration = (JarApplicationConfiguration) configuration;
-				if(StringUtil.isEmpty(jarApplicationConfiguration.getWorkingDirectory()))
-				{
-					String baseDir = FileUtil.toSystemIndependentName(StringUtil.notNullize(configuration.getProject().getBasePath()));
-					jarApplicationConfiguration.setWorkingDirectory(baseDir);
-				}
-			}
+public class JarApplicationConfigurationType extends ConfigurationTypeBase implements ConfigurationType {
+  @Nonnull
+  public static JarApplicationConfigurationType getInstance() {
+    return ConfigurationTypeUtil.findConfigurationType(JarApplicationConfigurationType.class);
+  }
 
-			@Override
-			@Nonnull
-			public RunConfiguration createTemplateConfiguration(Project project)
-			{
-				return new JarApplicationConfiguration(project, this, "");
-			}
+  public JarApplicationConfigurationType() {
+    super("JarApplication", JavaExecutionBundle.message("jar.application.configuration.name"), JavaExecutionBundle.message("jar.application.configuration.description"), AllIcons.FileTypes.Archive);
+    addFactory(new ConfigurationFactoryEx(this) {
+      @Override
+      public void onNewConfigurationCreated(@Nonnull RunConfiguration configuration) {
+        JarApplicationConfiguration jarApplicationConfiguration = (JarApplicationConfiguration) configuration;
+        if (StringUtil.isEmpty(jarApplicationConfiguration.getWorkingDirectory())) {
+          String baseDir = FileUtil.toSystemIndependentName(StringUtil.notNullize(configuration.getProject().getBasePath()));
+          jarApplicationConfiguration.setWorkingDirectory(baseDir);
+        }
+      }
 
-			@Override
-			public boolean isApplicable(@Nonnull Project project)
-			{
-				return ModuleExtensionHelper.getInstance(project).hasModuleExtension(JavaModuleExtension.class);
-			}
-		});
-	}
+      @Override
+      @Nonnull
+      public RunConfiguration createTemplateConfiguration(Project project) {
+        return new JarApplicationConfiguration(project, this, "");
+      }
+
+      @Override
+      public boolean isApplicable(@Nonnull Project project) {
+        return ModuleExtensionHelper.getInstance(project).hasModuleExtension(JavaModuleExtension.class);
+      }
+    });
+  }
 }

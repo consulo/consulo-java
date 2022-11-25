@@ -49,7 +49,7 @@ public abstract class AbstractExcludeFromRunAction<T extends ModuleBasedConfigur
     final T configuration = (T) e.getData(RunConfiguration.DATA_KEY);
     LOG.assertTrue(configuration != null);
     final GlobalSearchScope searchScope = configuration.getConfigurationModule().getSearchScope();
-    final AbstractTestProxy testProxy = e.getData(AbstractTestProxy.DATA_KEY);
+    final AbstractTestProxy testProxy = e.getData(AbstractTestProxy.KEY);
     LOG.assertTrue(testProxy != null);
     final String qualifiedName = ((PsiClass) testProxy.getLocation(project, searchScope).getPsiElement()).getQualifiedName();
     getPattern(configuration).remove(qualifiedName);
@@ -64,7 +64,7 @@ public abstract class AbstractExcludeFromRunAction<T extends ModuleBasedConfigur
     if (project != null) {
       final RunConfiguration configuration = e.getData(RunConfiguration.DATA_KEY);
       if (isPatternBasedConfiguration(configuration)) {
-        final AbstractTestProxy testProxy = e.getData(AbstractTestProxy.DATA_KEY);
+        final AbstractTestProxy testProxy = e.getData(AbstractTestProxy.KEY);
         if (testProxy != null) {
           final Location location = testProxy.getLocation(project, ((T) configuration).getConfigurationModule().getSearchScope());
           if (location != null) {

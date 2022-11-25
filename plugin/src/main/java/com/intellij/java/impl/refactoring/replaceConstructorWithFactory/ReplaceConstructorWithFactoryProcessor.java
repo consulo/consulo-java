@@ -15,37 +15,42 @@
  */
 package com.intellij.java.impl.refactoring.replaceConstructorWithFactory;
 
+import com.intellij.java.impl.refactoring.util.ConflictsUtil;
 import com.intellij.java.language.psi.*;
-import consulo.language.findUsage.DescriptiveNameUtil;
-import consulo.project.Project;
-import consulo.util.lang.ref.Ref;
-import com.intellij.psi.*;
+import com.intellij.java.language.psi.util.PsiUtil;
+import com.intellij.java.language.util.VisibilityUtil;
 import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.editor.refactoring.BaseRefactoringProcessor;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
+import consulo.language.findUsage.DescriptiveNameUtil;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiManager;
+import consulo.language.psi.PsiReference;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.PsiTreeUtil;
-import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.language.editor.refactoring.BaseRefactoringProcessor;
-import consulo.language.editor.refactoring.RefactoringBundle;
-import com.intellij.java.impl.refactoring.util.ConflictsUtil;
-import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.logging.Logger;
+import consulo.project.Project;
 import consulo.usage.UsageInfo;
 import consulo.usage.UsageViewDescriptor;
-import consulo.language.util.IncorrectOperationException;
-import com.intellij.java.language.util.VisibilityUtil;
 import consulo.util.collection.MultiMap;
-import consulo.logging.Logger;
+import consulo.util.lang.ref.Ref;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
 
-import java.util.*;
+import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
 
 /**
  * @author dsl
  */
 public class ReplaceConstructorWithFactoryProcessor extends BaseRefactoringProcessor {
   private static final Logger LOG = Logger.getInstance(
-		  ReplaceConstructorWithFactoryProcessor.class);
+      ReplaceConstructorWithFactoryProcessor.class);
   private final PsiMethod myConstructor;
   private final String myFactoryName;
   private final PsiElementFactory myFactory;
@@ -82,8 +87,7 @@ public class ReplaceConstructorWithFactoryProcessor extends BaseRefactoringProce
   protected UsageViewDescriptor createUsageViewDescriptor(UsageInfo[] usages) {
     if (myConstructor != null) {
       return new ReplaceConstructorWithFactoryViewDescriptor(myConstructor);
-    }
-    else {
+    } else {
       return new ReplaceConstructorWithFactoryViewDescriptor(myOriginalClass);
     }
   }
@@ -102,14 +106,11 @@ public class ReplaceConstructorWithFactoryProcessor extends BaseRefactoringProce
 
       if (element.getParent() instanceof PsiNewExpression) {
         usages.add(new UsageInfo(element.getParent()));
-      }
-      else if ("super".equals(element.getText()) || "this".equals(element.getText())) {
+      } else if ("super".equals(element.getText()) || "this".equals(element.getText())) {
         myNonNewConstructorUsages.add(element);
-      }
-      else if (element instanceof PsiMethod && ((PsiMethod)element).isConstructor()) {
+      } else if (element instanceof PsiMethod && ((PsiMethod) element).isConstructor()) {
         myNonNewConstructorUsages.add(element);
-      }
-      else if (element instanceof PsiClass) {
+      } else if (element instanceof PsiClass) {
         myNonNewConstructorUsages.add(element);
       }
     }
@@ -137,8 +138,8 @@ public class ReplaceConstructorWithFactoryProcessor extends BaseRefactoringProce
     final PsiClass constructorContainingClass = getConstructorContainingClass();
     if (!helper.isAccessible(constructorContainingClass, myTargetClass, null)) {
       String message = RefactoringBundle.message("class.0.is.not.accessible.from.target.1",
-                                                 RefactoringUIUtil.getDescription(constructorContainingClass, true),
-                                                 RefactoringUIUtil.getDescription(myTargetClass, true));
+          RefactoringUIUtil.getDescription(constructorContainingClass, true),
+          RefactoringUIUtil.getDescription(myTargetClass, true));
       conflicts.putValue(constructorContainingClass, message);
     }
 
@@ -150,8 +151,8 @@ public class ReplaceConstructorWithFactoryProcessor extends BaseRefactoringProce
         reportedContainers.add(container);
         if (!helper.isAccessible(myTargetClass, usage.getElement(), null)) {
           String message = RefactoringBundle.message("target.0.is.not.accessible.from.1",
-                                                     targetClassDescription,
-                                                     RefactoringUIUtil.getDescription(container, true));
+              targetClassDescription,
+              RefactoringUIUtil.getDescription(container, true));
           conflicts.putValue(myTargetClass, message);
         }
       }
@@ -165,8 +166,8 @@ public class ReplaceConstructorWithFactoryProcessor extends BaseRefactoringProce
 
           if (PsiTreeUtil.isAncestor(containingClass, myTargetClass, true)) {
             String message = RefactoringBundle.message("constructor.being.refactored.is.used.in.initializer.of.0",
-                                                       RefactoringUIUtil.getDescription(field, true), RefactoringUIUtil.getDescription(
-              constructorContainingClass, false));
+                RefactoringUIUtil.getDescription(field, true), RefactoringUIUtil.getDescription(
+                    constructorContainingClass, false));
             conflicts.putValue(field, message);
           }
         }
@@ -180,8 +181,7 @@ public class ReplaceConstructorWithFactoryProcessor extends BaseRefactoringProce
   private PsiClass getConstructorContainingClass() {
     if (myConstructor != null) {
       return myConstructor.getContainingClass();
-    }
-    else {
+    } else {
       return myOriginalClass;
     }
   }
@@ -190,10 +190,10 @@ public class ReplaceConstructorWithFactoryProcessor extends BaseRefactoringProce
 
     try {
       PsiReferenceExpression classReferenceExpression =
-        myFactory.createReferenceExpression(myTargetClass);
+          myFactory.createReferenceExpression(myTargetClass);
       PsiReferenceExpression qualifiedMethodReference =
-        (PsiReferenceExpression)myFactory.createExpressionFromText("A." + myFactoryName, null);
-      PsiMethod factoryMethod = (PsiMethod)myTargetClass.add(createFactoryMethod());
+          (PsiReferenceExpression) myFactory.createExpressionFromText("A." + myFactoryName, null);
+      PsiMethod factoryMethod = (PsiMethod) myTargetClass.add(createFactoryMethod());
       if (myConstructor != null) {
         PsiUtil.setModifierProperty(myConstructor, PsiModifier.PRIVATE, true);
         VisibilityUtil.escalateVisibility(myConstructor, factoryMethod);
@@ -205,17 +205,17 @@ public class ReplaceConstructorWithFactoryProcessor extends BaseRefactoringProce
       if (myConstructor == null) {
         PsiMethod constructor = myFactory.createConstructor();
         PsiUtil.setModifierProperty(constructor, PsiModifier.PRIVATE, true);
-        constructor = (PsiMethod)getConstructorContainingClass().add(constructor);
+        constructor = (PsiMethod) getConstructorContainingClass().add(constructor);
         VisibilityUtil.escalateVisibility(constructor, myTargetClass);
       }
 
       for (UsageInfo usage : usages) {
-        PsiNewExpression newExpression = (PsiNewExpression)usage.getElement();
+        PsiNewExpression newExpression = (PsiNewExpression) usage.getElement();
         if (newExpression == null) continue;
 
         VisibilityUtil.escalateVisibility(factoryMethod, newExpression);
         PsiMethodCallExpression factoryCall =
-          (PsiMethodCallExpression)myFactory.createExpressionFromText(myFactoryName + "()", newExpression);
+            (PsiMethodCallExpression) myFactory.createExpressionFromText(myFactoryName + "()", newExpression);
         factoryCall.getArgumentList().replace(newExpression.getArgumentList());
 
         boolean replaceMethodQualifier = false;
@@ -230,16 +230,14 @@ public class ReplaceConstructorWithFactoryProcessor extends BaseRefactoringProce
         if (replaceMethodQualifier) {
           if (newQualifier == null) {
             factoryCall.getMethodExpression().getQualifierExpression().replace(classReferenceExpression);
-          }
-          else {
+          } else {
             factoryCall.getMethodExpression().getQualifierExpression().replace(newQualifier);
           }
         }
 
         newExpression.replace(factoryCall);
       }
-    }
-    catch (IncorrectOperationException e) {
+    } catch (IncorrectOperationException e) {
       LOG.error(e);
     }
   }
@@ -262,8 +260,8 @@ public class ReplaceConstructorWithFactoryProcessor extends BaseRefactoringProce
     }
 
     PsiReturnStatement returnStatement =
-      (PsiReturnStatement)myFactory.createStatementFromText("return new A();", null);
-    PsiNewExpression newExpression = (PsiNewExpression)returnStatement.getReturnValue();
+        (PsiReturnStatement) myFactory.createStatementFromText("return new A();", null);
+    PsiNewExpression newExpression = (PsiNewExpression) returnStatement.getReturnValue();
     PsiJavaCodeReferenceElement classRef = myFactory.createReferenceElementByType(type);
     newExpression.getClassReference().replace(classRef);
     final PsiExpressionList argumentList = newExpression.getArgumentList();
@@ -282,7 +280,7 @@ public class ReplaceConstructorWithFactoryProcessor extends BaseRefactoringProce
       PsiUtil.setModifierProperty(factoryMethod, PsiModifier.STATIC, true);
     }
 
-    return (PsiMethod)CodeStyleManager.getInstance(myProject).reformat(factoryMethod);
+    return (PsiMethod) CodeStyleManager.getInstance(myProject).reformat(factoryMethod);
   }
 
   @PsiModifier.ModifierConstant
@@ -290,8 +288,7 @@ public class ReplaceConstructorWithFactoryProcessor extends BaseRefactoringProce
     final PsiModifierList modifierList;
     if (myConstructor != null) {
       modifierList = myConstructor.getModifierList();
-    }
-    else {
+    } else {
       modifierList = myOriginalClass.getModifierList();
     }
     return VisibilityUtil.getVisibilityModifier(modifierList);
@@ -301,11 +298,10 @@ public class ReplaceConstructorWithFactoryProcessor extends BaseRefactoringProce
   protected String getCommandName() {
     if (myConstructor != null) {
       return RefactoringBundle.message("replace.constructor.0.with.a.factory.method",
-                                       DescriptiveNameUtil.getDescriptiveName(myConstructor));
-    }
-    else {
+          DescriptiveNameUtil.getDescriptiveName(myConstructor));
+    } else {
       return RefactoringBundle.message("replace.default.constructor.of.0.with.a.factory.method",
-                                       DescriptiveNameUtil.getDescriptiveName(myOriginalClass));
+          DescriptiveNameUtil.getDescriptiveName(myOriginalClass));
     }
   }
 

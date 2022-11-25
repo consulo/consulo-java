@@ -19,119 +19,100 @@
  */
 package com.intellij.java.impl.psi.impl.source.codeStyle;
 
-import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
-import consulo.annotation.access.RequiredReadAction;
-import consulo.language.codeStyle.Block;
 import com.intellij.java.language.impl.JavaFileType;
-import consulo.language.ast.ASTNode;
-import consulo.logging.Logger;
-import consulo.project.Project;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.document.util.TextRange;
-import consulo.language.psi.PsiFile;
-import consulo.language.psi.PsiWhiteSpace;
+import consulo.ide.impl.psi.formatter.FormattingDocumentModelImpl;
+import consulo.language.ast.ASTNode;
+import consulo.language.ast.IElementType;
 import consulo.language.ast.TokenType;
+import consulo.language.codeStyle.Block;
 import consulo.language.codeStyle.DocumentBasedFormattingModel;
 import consulo.language.codeStyle.FormatterUtil;
-import consulo.ide.impl.psi.formatter.FormattingDocumentModelImpl;
 import consulo.language.codeStyle.PsiBasedFormattingModel;
 import consulo.language.impl.ast.TreeUtil;
-import consulo.language.ast.IElementType;
-import com.intellij.psi.xml.XmlTokenType;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiWhiteSpace;
+import consulo.logging.Logger;
+import consulo.project.Project;
+import consulo.xml.psi.xml.XmlTokenType;
+import org.jetbrains.annotations.NonNls;
 
-public class PsiBasedFormatterModelWithShiftIndentInside extends PsiBasedFormattingModel
-{
-	private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.codeStyle" +
-			".PsiBasedFormatterModelWithShiftIndentInside");
+import javax.annotation.Nonnull;
 
-	private final Project myProject;
+public class PsiBasedFormatterModelWithShiftIndentInside extends PsiBasedFormattingModel {
+  private static final Logger LOG = Logger.getInstance(PsiBasedFormatterModelWithShiftIndentInside.class);
 
-	public PsiBasedFormatterModelWithShiftIndentInside(final PsiFile file,
-			@Nonnull final Block rootBlock,
-			final FormattingDocumentModelImpl documentModel)
-	{
-		super(file, rootBlock, documentModel);
-		myProject = file.getProject();
-	}
+  private final Project myProject;
 
-	@Override
-	public TextRange shiftIndentInsideRange(ASTNode node, TextRange textRange, int shift)
-	{
-		return shiftIndentInsideWithPsi(node, textRange, shift);
-	}
+  public PsiBasedFormatterModelWithShiftIndentInside(final PsiFile file,
+                                                     @Nonnull final Block rootBlock,
+                                                     final FormattingDocumentModelImpl documentModel) {
+    super(file, rootBlock, documentModel);
+    myProject = file.getProject();
+  }
 
-	@RequiredReadAction
-	private TextRange shiftIndentInsideWithPsi(ASTNode node, final TextRange textRange, final int shift)
-	{
-		if(node != null && node.getTextRange().equals(textRange) && ShiftIndentInsideHelper.mayShiftIndentInside(node))
-		{
-			return new ShiftIndentInsideHelper(JavaFileType.INSTANCE, myProject).shiftIndentInside(node,
-					shift).getTextRange();
-		}
-		else
-		{
-			return textRange;
-		}
+  @Override
+  public TextRange shiftIndentInsideRange(ASTNode node, TextRange textRange, int shift) {
+    return shiftIndentInsideWithPsi(node, textRange, shift);
+  }
 
-	}
+  @RequiredReadAction
+  private TextRange shiftIndentInsideWithPsi(ASTNode node, final TextRange textRange, final int shift) {
+    if (node != null && node.getTextRange().equals(textRange) && ShiftIndentInsideHelper.mayShiftIndentInside(node)) {
+      return new ShiftIndentInsideHelper(JavaFileType.INSTANCE, myProject).shiftIndentInside(node,
+          shift).getTextRange();
+    } else {
+      return textRange;
+    }
 
-	@Override
-	protected String replaceWithPsiInLeaf(final TextRange textRange, String whiteSpace, ASTNode leafElement)
-	{
-		if(!myCanModifyAllWhiteSpaces)
-		{
-			if(leafElement.getElementType() == TokenType.WHITE_SPACE)
-			{
-				return null;
-			}
-			ASTNode prevNode = TreeUtil.prevLeaf(leafElement);
+  }
 
-			if(prevNode != null)
-			{
-				IElementType type = prevNode.getElementType();
-				if(type == TokenType.WHITE_SPACE)
-				{
-					final String text = prevNode.getText();
+  @Override
+  protected String replaceWithPsiInLeaf(final TextRange textRange, String whiteSpace, ASTNode leafElement) {
+    if (!myCanModifyAllWhiteSpaces) {
+      if (leafElement.getElementType() == TokenType.WHITE_SPACE) {
+        return null;
+      }
+      ASTNode prevNode = TreeUtil.prevLeaf(leafElement);
 
-					@NonNls final String cdataStartMarker = "<![CDATA[";
-					final int cdataPos = text.indexOf(cdataStartMarker);
-					if(cdataPos != -1 && whiteSpace.indexOf(cdataStartMarker) == -1)
-					{
-						whiteSpace = DocumentBasedFormattingModel.mergeWsWithCdataMarker(whiteSpace, text, cdataPos);
-						if(whiteSpace == null)
-						{
-							return null;
-						}
-					}
+      if (prevNode != null) {
+        IElementType type = prevNode.getElementType();
+        if (type == TokenType.WHITE_SPACE) {
+          final String text = prevNode.getText();
 
-					prevNode = TreeUtil.prevLeaf(prevNode);
-					type = prevNode != null ? prevNode.getElementType() : null;
-				}
+          @NonNls final String cdataStartMarker = "<![CDATA[";
+          final int cdataPos = text.indexOf(cdataStartMarker);
+          if (cdataPos != -1 && whiteSpace.indexOf(cdataStartMarker) == -1) {
+            whiteSpace = DocumentBasedFormattingModel.mergeWsWithCdataMarker(whiteSpace, text, cdataPos);
+            if (whiteSpace == null) {
+              return null;
+            }
+          }
 
-				@NonNls final String cdataEndMarker = "]]>";
-				if(type == XmlTokenType.XML_CDATA_END && whiteSpace.indexOf(cdataEndMarker) == -1)
-				{
-					final ASTNode at = findElementAt(prevNode.getStartOffset());
+          prevNode = TreeUtil.prevLeaf(prevNode);
+          type = prevNode != null ? prevNode.getElementType() : null;
+        }
 
-					if(at != null && at.getPsi() instanceof PsiWhiteSpace)
-					{
-						final String s = at.getText();
-						final int cdataEndPos = s.indexOf(cdataEndMarker);
-						whiteSpace = DocumentBasedFormattingModel.mergeWsWithCdataMarker(whiteSpace, s, cdataEndPos);
-						leafElement = at;
-					}
-					else
-					{
-						whiteSpace = null;
-					}
-					if(whiteSpace == null)
-					{
-						return null;
-					}
-				}
-			}
-		}
-		FormatterUtil.replaceWhiteSpace(whiteSpace, leafElement, TokenType.WHITE_SPACE, textRange);
-		return whiteSpace;
-	}
+        @NonNls final String cdataEndMarker = "]]>";
+        if (type == XmlTokenType.XML_CDATA_END && whiteSpace.indexOf(cdataEndMarker) == -1) {
+          final ASTNode at = findElementAt(prevNode.getStartOffset());
+
+          if (at != null && at.getPsi() instanceof PsiWhiteSpace) {
+            final String s = at.getText();
+            final int cdataEndPos = s.indexOf(cdataEndMarker);
+            whiteSpace = DocumentBasedFormattingModel.mergeWsWithCdataMarker(whiteSpace, s, cdataEndPos);
+            leafElement = at;
+          } else {
+            whiteSpace = null;
+          }
+          if (whiteSpace == null) {
+            return null;
+          }
+        }
+      }
+    }
+    FormatterUtil.replaceWhiteSpace(whiteSpace, leafElement, TokenType.WHITE_SPACE, textRange);
+    return whiteSpace;
+  }
 }

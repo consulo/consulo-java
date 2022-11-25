@@ -20,44 +20,37 @@
  */
 package com.intellij.java.execution.impl.remote;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import consulo.application.AllIcons;
 import consulo.execution.configuration.ConfigurationFactory;
 import consulo.execution.configuration.ConfigurationTypeBase;
 import consulo.execution.configuration.RunConfiguration;
-import consulo.application.AllIcons;
-import consulo.component.extension.Extensions;
-import consulo.project.Project;
-import consulo.util.collection.ContainerUtil;
 import consulo.java.execution.JavaExecutionBundle;
 import consulo.java.language.module.extension.JavaModuleExtension;
 import consulo.module.extension.ModuleExtensionHelper;
+import consulo.project.Project;
 
-public class RemoteConfigurationType extends ConfigurationTypeBase
-{
-	public RemoteConfigurationType()
-	{
-		super("JavaRemoteConfigurationType", JavaExecutionBundle.message("remote.debug.configuration.display.name"), JavaExecutionBundle.message("remote.debug.configuration.description"), AllIcons
-				.RunConfigurations.Remote);
-		addFactory(new ConfigurationFactory(this)
-		{
-			@Override
-			public RunConfiguration createTemplateConfiguration(Project project)
-			{
-				return new RemoteConfiguration(project, this);
-			}
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-			@Override
-			public boolean isApplicable(@Nonnull Project project)
-			{
-				return ModuleExtensionHelper.getInstance(project).hasModuleExtension(JavaModuleExtension.class);
-			}
-		});
-	}
+public class RemoteConfigurationType extends ConfigurationTypeBase {
+  public RemoteConfigurationType() {
+    super("JavaRemoteConfigurationType", JavaExecutionBundle.message("remote.debug.configuration.display.name"), JavaExecutionBundle.message("remote.debug.configuration.description"), AllIcons
+        .RunConfigurations.Remote);
+    addFactory(new ConfigurationFactory(this) {
+      @Override
+      public RunConfiguration createTemplateConfiguration(Project project) {
+        return new RemoteConfiguration(project, this);
+      }
 
-	@Nullable
-	public static RemoteConfigurationType getInstance()
-	{
-		return ContainerUtil.findInstance(Extensions.getExtensions(CONFIGURATION_TYPE_EP), RemoteConfigurationType.class);
-	}
+      @Override
+      public boolean isApplicable(@Nonnull Project project) {
+        return ModuleExtensionHelper.getInstance(project).hasModuleExtension(JavaModuleExtension.class);
+      }
+    });
+  }
+
+  @Nullable
+  public static RemoteConfigurationType getInstance() {
+    return EP_NAME.findExtensionOrFail(RemoteConfigurationType.class);
+  }
 }

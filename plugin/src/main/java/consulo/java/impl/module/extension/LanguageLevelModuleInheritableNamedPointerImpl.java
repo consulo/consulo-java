@@ -15,56 +15,49 @@
  */
 package consulo.java.impl.module.extension;
 
-import javax.annotation.Nonnull;
-
-import consulo.module.Module;
-import consulo.language.util.ModuleUtilCore;
 import com.intellij.java.language.LanguageLevel;
+import consulo.component.util.pointer.NamedPointer;
 import consulo.java.language.module.extension.JavaModuleExtension;
-import consulo.module.extension.impl.ModuleInheritableNamedPointerImpl;
-import consulo.roots.ModuleRootLayer;
-import consulo.util.pointers.NamedPointer;
+import consulo.language.util.ModuleUtilCore;
+import consulo.module.Module;
+import consulo.module.content.layer.ModuleRootLayer;
+import consulo.module.content.layer.extension.ModuleInheritableNamedPointerImpl;
+
+import javax.annotation.Nonnull;
 
 /**
  * @author VISTALL
  * @since 22:25/15.06.13
  */
-public class LanguageLevelModuleInheritableNamedPointerImpl extends ModuleInheritableNamedPointerImpl<LanguageLevel>
-{
-	private final String myExtensionId;
+public class LanguageLevelModuleInheritableNamedPointerImpl extends ModuleInheritableNamedPointerImpl<LanguageLevel> {
+  private final String myExtensionId;
 
-	public LanguageLevelModuleInheritableNamedPointerImpl(@Nonnull ModuleRootLayer layer, @Nonnull String id)
-	{
-		super(layer, "language-level");
-		myExtensionId = id;
-	}
+  public LanguageLevelModuleInheritableNamedPointerImpl(@Nonnull ModuleRootLayer layer, @Nonnull String id) {
+    super(layer, "language-level");
+    myExtensionId = id;
+  }
 
-	@Override
-	public String getItemNameFromModule(@Nonnull Module module)
-	{
-		final JavaModuleExtension extension = (JavaModuleExtension) ModuleUtilCore.getExtension(module, myExtensionId);
-		if(extension != null)
-		{
-			return extension.getLanguageLevel().getName();
-		}
-		return null;
-	}
+  @Override
+  public String getItemNameFromModule(@Nonnull Module module) {
+    final JavaModuleExtension extension = (JavaModuleExtension) ModuleUtilCore.getExtension(module, myExtensionId);
+    if (extension != null) {
+      return extension.getLanguageLevel().getName();
+    }
+    return null;
+  }
 
-	@Override
-	public LanguageLevel getItemFromModule(@Nonnull Module module)
-	{
-		final JavaModuleExtension extension = (JavaModuleExtension) ModuleUtilCore.getExtension(module, myExtensionId);
-		if(extension != null)
-		{
-			return extension.getLanguageLevel();
-		}
-		return null;
-	}
+  @Override
+  public LanguageLevel getItemFromModule(@Nonnull Module module) {
+    final JavaModuleExtension extension = (JavaModuleExtension) ModuleUtilCore.getExtension(module, myExtensionId);
+    if (extension != null) {
+      return extension.getLanguageLevel();
+    }
+    return null;
+  }
 
-	@Nonnull
-	@Override
-	public NamedPointer<LanguageLevel> getPointer(@Nonnull ModuleRootLayer layer, @Nonnull String name)
-	{
-		return LanguageLevel.valueOf(name);
-	}
+  @Nonnull
+  @Override
+  public NamedPointer<LanguageLevel> getPointer(@Nonnull ModuleRootLayer layer, @Nonnull String name) {
+    return LanguageLevel.valueOf(name);
+  }
 }

@@ -41,7 +41,7 @@ import javax.annotation.Nonnull;
  * User: anna
  * Date: 1/28/11
  */
-public class PossibleHeapPollutionVarargsInspection extends BaseJavaBatchLocalInspectionTool {
+public abstract class PossibleHeapPollutionVarargsInspection extends BaseJavaBatchLocalInspectionTool {
   public static final Logger LOG = Logger.getInstance(PossibleHeapPollutionVarargsInspection.class);
 
   @Nls

@@ -20,23 +20,23 @@
  */
 package com.intellij.java.impl.packageDependencies.ui;
 
-import consulo.ide.IdeBundle;
 import com.intellij.java.impl.ide.util.scopeChooser.GroupByScopeTypeAction;
 import com.intellij.java.impl.psi.search.scope.packageSet.PatternPackageSet;
 import com.intellij.java.language.psi.PsiClassOwner;
 import com.intellij.java.language.psi.PsiNameHelper;
-import consulo.ui.ex.action.AnAction;
-import consulo.project.Project;
-import consulo.module.content.ProjectRootManager;
-import consulo.util.lang.StringUtil;
-import consulo.virtualFileSystem.VirtualFile;
-import com.intellij.packageDependencies.ui.*;
+import consulo.content.scope.PackageSet;
+import consulo.ide.IdeBundle;
+import consulo.ide.impl.idea.packageDependencies.ui.*;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
-import consulo.content.scope.PackageSet;
 import consulo.logging.Logger;
+import consulo.module.content.ProjectRootManager;
 import consulo.platform.base.icon.PlatformIconGroup;
+import consulo.project.Project;
+import consulo.ui.ex.action.AnAction;
 import consulo.ui.image.Image;
+import consulo.util.lang.StringUtil;
+import consulo.virtualFileSystem.VirtualFile;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
@@ -112,7 +112,7 @@ public class PackagePatternProvider extends PatternDialectProvider {
   }
 
   public Image getIcon() {
-    return PlatformIconGroup.nodesCopyOfFolder();
+    return PlatformIconGroup.nodesCopyoffolder();
   }
 
   public TreeModel createTreeModel(final Project project, final Marker marker) {

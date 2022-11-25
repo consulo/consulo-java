@@ -15,24 +15,25 @@
  */
 package com.intellij.java.impl.ig.performance;
 
-import consulo.ide.impl.idea.codeInsight.CodeInsightUtilBase;
-import consulo.language.editor.inspection.ProblemDescriptor;
+import com.intellij.java.impl.ig.psiutils.HighlightUtils;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import com.intellij.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.language.util.IncorrectOperationException;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ClassUtils;
-import com.intellij.java.impl.ig.psiutils.HighlightUtils;
+import consulo.ide.impl.idea.codeInsight.CodeInsightUtilBase;
 import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiNameIdentifierOwner;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
 
+import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -53,14 +54,14 @@ public class DynamicRegexReplaceableByCompiledPatternInspection extends BaseInsp
   @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
-      "dynamic.regex.replaceable.by.compiled.pattern.display.name");
+        "dynamic.regex.replaceable.by.compiled.pattern.display.name");
   }
 
   @Override
   @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
-      "dynamic.regex.replaceable.by.compiled.pattern.problem.descriptor");
+        "dynamic.regex.replaceable.by.compiled.pattern.problem.descriptor");
   }
 
   @Override
@@ -78,12 +79,12 @@ public class DynamicRegexReplaceableByCompiledPatternInspection extends BaseInsp
     @Nonnull
     public String getName() {
       return InspectionGadgetsBundle.message(
-        "dynamic.regex.replaceable.by.compiled.pattern.quickfix");
+          "dynamic.regex.replaceable.by.compiled.pattern.quickfix");
     }
 
     @Override
     protected void doFix(Project project, ProblemDescriptor descriptor)
-      throws IncorrectOperationException {
+        throws IncorrectOperationException {
       final PsiElement element = descriptor.getPsiElement();
       final PsiClass aClass = ClassUtils.getContainingStaticClass(element);
       if (aClass == null) {
@@ -93,16 +94,16 @@ public class DynamicRegexReplaceableByCompiledPatternInspection extends BaseInsp
       if (!(parent instanceof PsiReferenceExpression)) {
         return;
       }
-      final PsiReferenceExpression methodExpression = (PsiReferenceExpression)parent;
+      final PsiReferenceExpression methodExpression = (PsiReferenceExpression) parent;
       final PsiElement grandParent = methodExpression.getParent();
       if (!(grandParent instanceof PsiMethodCallExpression)) {
         return;
       }
-      final PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression)grandParent;
+      final PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) grandParent;
       final PsiExpressionList list = methodCallExpression.getArgumentList();
       final PsiExpression[] expressions = list.getExpressions();
       @NonNls final StringBuilder fieldText =
-        new StringBuilder("private static final java.util.regex.Pattern PATTERN = java.util.regex.Pattern.compile(");
+          new StringBuilder("private static final java.util.regex.Pattern PATTERN = java.util.regex.Pattern.compile(");
       final int expressionsLength = expressions.length;
       if (expressionsLength > 0) {
         fieldText.append(expressions[0].getText());
@@ -118,8 +119,7 @@ public class DynamicRegexReplaceableByCompiledPatternInspection extends BaseInsp
       @NonNls final String qualifierText;
       if (qualifier == null) {
         qualifierText = "this";
-      }
-      else {
+      } else {
         qualifierText = qualifier.getText();
       }
       if ("split".equals(methodName)) {
@@ -131,8 +131,7 @@ public class DynamicRegexReplaceableByCompiledPatternInspection extends BaseInsp
           expressionText.append(expressions[i].getText());
         }
         expressionText.append(')');
-      }
-      else {
+      } else {
         expressionText.append("matcher(");
         expressionText.append(qualifierText);
         expressionText.append(").");
@@ -149,23 +148,23 @@ public class DynamicRegexReplaceableByCompiledPatternInspection extends BaseInsp
       }
 
       final PsiExpression newExpression = factory.createExpressionFromText(expressionText.toString(), element);
-      PsiMethodCallExpression newMethodCallExpression = (PsiMethodCallExpression)methodCallExpression.replace(newExpression);
+      PsiMethodCallExpression newMethodCallExpression = (PsiMethodCallExpression) methodCallExpression.replace(newExpression);
       newMethodCallExpression = CodeInsightUtilBase.forcePsiPostprocessAndRestoreElement(newMethodCallExpression);
       final PsiReferenceExpression reference = getReference(newMethodCallExpression);
-      HighlightUtils.showRenameTemplate(aClass, (PsiNameIdentifierOwner)field, reference);
+      HighlightUtils.showRenameTemplate(aClass, (PsiNameIdentifierOwner) field, reference);
     }
 
     private static PsiReferenceExpression getReference(PsiMethodCallExpression newMethodCallExpression) {
       final PsiReferenceExpression methodExpression = newMethodCallExpression.getMethodExpression();
       final PsiExpression qualifierExpression = methodExpression.getQualifierExpression();
       if (qualifierExpression instanceof PsiMethodCallExpression) {
-        final PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression)qualifierExpression;
+        final PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) qualifierExpression;
         return getReference(methodCallExpression);
       }
       if (!(qualifierExpression instanceof PsiReferenceExpression)) {
         return null;
       }
-      return (PsiReferenceExpression)qualifierExpression;
+      return (PsiReferenceExpression) qualifierExpression;
     }
   }
 

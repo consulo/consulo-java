@@ -15,20 +15,26 @@
  */
 package com.intellij.java.impl.codeInsight.template.macro;
 
-import javax.annotation.Nonnull;
-
-import consulo.language.editor.CodeInsightBundle;
-import com.intellij.codeInsight.template.*;
 import com.intellij.java.impl.codeInsight.template.JavaCodeContextType;
 import com.intellij.java.impl.codeInsight.template.PsiTypeResult;
+import com.intellij.java.impl.refactoring.util.RefactoringUtil;
 import com.intellij.java.language.psi.PsiAssignmentExpression;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.PsiVariable;
-import consulo.project.Project;
-import com.intellij.psi.*;
+import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.template.Expression;
+import consulo.language.editor.template.ExpressionContext;
+import consulo.language.editor.template.Result;
+import consulo.language.editor.template.context.TemplateContextType;
+import consulo.language.editor.template.macro.Macro;
+import consulo.language.psi.PsiDocumentManager;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
-import com.intellij.java.impl.refactoring.util.RefactoringUtil;
+import consulo.project.Project;
+
+import javax.annotation.Nonnull;
 
 
 /**

@@ -16,21 +16,25 @@
 package com.intellij.java.impl.codeInsight.template.macro;
 
 import com.intellij.java.impl.codeInsight.CodeInsightUtil;
-import consulo.application.util.matcher.PrefixMatcher;
-import consulo.language.editor.completion.lookup.LookupElement;
-import com.intellij.codeInsight.template.*;
 import com.intellij.java.impl.codeInsight.template.JavaCodeContextType;
 import com.intellij.java.impl.codeInsight.template.PsiTypeResult;
 import com.intellij.java.impl.codeInsight.template.impl.JavaTemplateUtil;
+import com.intellij.java.language.psi.PsiType;
+import consulo.application.util.matcher.PrefixMatcher;
+import consulo.language.editor.completion.lookup.LookupElement;
+import consulo.language.editor.template.Expression;
+import consulo.language.editor.template.ExpressionContext;
+import consulo.language.editor.template.Result;
+import consulo.language.editor.template.context.TemplateContextType;
+import consulo.language.editor.template.macro.Macro;
 import consulo.language.psi.PsiDocumentManager;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
-import com.intellij.java.language.psi.PsiType;
-import consulo.ide.impl.idea.util.Consumer;
-import javax.annotation.Nonnull;
 
+import javax.annotation.Nonnull;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.function.Consumer;
 
 public class SubtypesMacro extends Macro {
   @Override
@@ -73,7 +77,7 @@ public class SubtypesMacro extends Macro {
       JavaTemplateUtil.addTypeLookupItem(set, type);
       CodeInsightUtil.processSubTypes(type, element, false, PrefixMatcher.ALWAYS_TRUE, new Consumer<PsiType>() {
         @Override
-        public void consume(PsiType psiType) {
+        public void accept(PsiType psiType) {
           JavaTemplateUtil.addTypeLookupItem(set, psiType);
         }
       });

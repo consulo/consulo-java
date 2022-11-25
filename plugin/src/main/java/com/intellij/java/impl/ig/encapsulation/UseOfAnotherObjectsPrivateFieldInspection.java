@@ -15,22 +15,21 @@
  */
 package com.intellij.java.impl.ig.encapsulation;
 
-import consulo.ide.impl.idea.codeInspection.ui.MultipleCheckboxOptionsPanel;
+import com.intellij.java.impl.ig.fixes.EncapsulateVariableFix;
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.*;
-import consulo.language.psi.util.PsiTreeUtil;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.fixes.EncapsulateVariableFix;
 import com.siyeh.ig.psiutils.MethodUtils;
-import javax.annotation.Nonnull;
+import consulo.language.editor.inspection.ui.MultipleCheckboxOptionsPanel;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.util.PsiTreeUtil;
 
+import javax.annotation.Nonnull;
 import javax.swing.*;
 
-public class UseOfAnotherObjectsPrivateFieldInspection
-  extends BaseInspection {
+public abstract class UseOfAnotherObjectsPrivateFieldInspection extends BaseInspection {
 
   @SuppressWarnings({"PublicField"})
   public boolean ignoreSameClass = false;
@@ -47,30 +46,30 @@ public class UseOfAnotherObjectsPrivateFieldInspection
   @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
-      "accessing.non.public.field.of.another.object.display.name");
+        "accessing.non.public.field.of.another.object.display.name");
   }
 
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsBundle.message(
-      "accessing.non.public.field.of.another.object.problem.descriptor");
+        "accessing.non.public.field.of.another.object.problem.descriptor");
   }
 
   @Override
   public JComponent createOptionsPanel() {
     final MultipleCheckboxOptionsPanel panel =
-      new MultipleCheckboxOptionsPanel(this);
+        new MultipleCheckboxOptionsPanel(this);
     panel.addCheckbox(InspectionGadgetsBundle.message(
-      "ignore.accesses.from.the.same.class"), "ignoreSameClass");
+        "ignore.accesses.from.the.same.class"), "ignoreSameClass");
     panel.addCheckbox(InspectionGadgetsBundle.message(
-      "ignore.accesses.from.equals.method"), "ignoreEquals");
+        "ignore.accesses.from.equals.method"), "ignoreEquals");
     return panel;
   }
 
   @Override
   protected InspectionGadgetsFix buildFix(Object... infos) {
-    final PsiField field = (PsiField)infos[0];
+    final PsiField field = (PsiField) infos[0];
     return new EncapsulateVariableFix(field.getName());
   }
 
@@ -80,11 +79,11 @@ public class UseOfAnotherObjectsPrivateFieldInspection
   }
 
   private class UseOfAnotherObjectsPrivateFieldVisitor
-    extends BaseInspectionVisitor {
+      extends BaseInspectionVisitor {
 
     @Override
     public void visitReferenceExpression(
-      @Nonnull PsiReferenceExpression expression) {
+        @Nonnull PsiReferenceExpression expression) {
       super.visitReferenceExpression(expression);
       final PsiExpression qualifier = expression.getQualifierExpression();
       if (qualifier == null || qualifier instanceof PsiThisExpression) {
@@ -92,7 +91,7 @@ public class UseOfAnotherObjectsPrivateFieldInspection
       }
       if (ignoreEquals) {
         final PsiMethod method =
-          PsiTreeUtil.getParentOfType(expression, PsiMethod.class);
+            PsiTreeUtil.getParentOfType(expression, PsiMethod.class);
         if (MethodUtils.isEquals(method)) {
           return;
         }
@@ -101,10 +100,10 @@ public class UseOfAnotherObjectsPrivateFieldInspection
       if (!(referent instanceof PsiField)) {
         return;
       }
-      final PsiField field = (PsiField)referent;
+      final PsiField field = (PsiField) referent;
       if (ignoreSameClass) {
         final PsiClass parent =
-          PsiTreeUtil.getParentOfType(expression, PsiClass.class);
+            PsiTreeUtil.getParentOfType(expression, PsiClass.class);
         final PsiClass containingClass = field.getContainingClass();
         if (parent != null && parent.equals(containingClass)) {
           return;
@@ -118,7 +117,7 @@ public class UseOfAnotherObjectsPrivateFieldInspection
         return;
       }
       final PsiElement fieldNameElement =
-        expression.getReferenceNameElement();
+          expression.getReferenceNameElement();
       if (fieldNameElement == null) {
         return;
       }

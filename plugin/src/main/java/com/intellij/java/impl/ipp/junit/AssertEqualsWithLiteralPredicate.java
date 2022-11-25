@@ -16,7 +16,7 @@
 package com.intellij.java.impl.ipp.junit;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.intellij.java.impl.ipp.psiutils.ErrorUtil;
 import org.jetbrains.annotations.NonNls;

@@ -33,7 +33,7 @@ import consulo.ui.ex.awt.JBList;
 import consulo.ui.ex.awt.Messages;
 import consulo.ide.impl.ui.impl.PopupChooserBuilder;
 import consulo.util.lang.Comparing;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
 import consulo.language.psi.PsiUtilCore;
 import com.intellij.java.language.psi.util.TypeConversionUtil;

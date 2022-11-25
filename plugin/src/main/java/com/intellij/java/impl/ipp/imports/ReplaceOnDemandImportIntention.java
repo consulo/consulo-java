@@ -15,14 +15,15 @@
  */
 package com.intellij.java.impl.ipp.imports;
 
-import com.intellij.java.language.psi.*;
-import com.intellij.psi.*;
-import com.intellij.java.language.psi.util.ClassUtil;
-import consulo.language.util.IncorrectOperationException;
 import com.intellij.java.impl.ipp.base.Intention;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
-import javax.annotation.Nonnull;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.ClassUtil;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiManager;
+import consulo.language.util.IncorrectOperationException;
 
+import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashSet;

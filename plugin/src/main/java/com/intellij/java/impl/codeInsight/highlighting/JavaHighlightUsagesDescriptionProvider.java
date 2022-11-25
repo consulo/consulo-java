@@ -15,14 +15,14 @@
  */
 package com.intellij.java.impl.codeInsight.highlighting;
 
-import consulo.language.editor.highlight.HighlightUsagesDescriptionLocation;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
+import com.intellij.java.language.psi.util.PsiFormatUtilBase;
 import consulo.language.LangBundle;
+import consulo.language.editor.highlight.HighlightUsagesDescriptionLocation;
 import consulo.language.psi.ElementDescriptionLocation;
 import consulo.language.psi.ElementDescriptionProvider;
 import consulo.language.psi.PsiElement;
-import consulo.ide.impl.psi.util.PsiFormatUtilBase;
 
 import javax.annotation.Nonnull;
 

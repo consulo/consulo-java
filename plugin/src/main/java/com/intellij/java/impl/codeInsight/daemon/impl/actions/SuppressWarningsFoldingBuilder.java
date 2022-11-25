@@ -22,21 +22,21 @@ package com.intellij.java.impl.codeInsight.daemon.impl.actions;
 
 import com.intellij.java.language.codeInsight.folding.JavaCodeFoldingSettings;
 import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.document.Document;
 import consulo.language.ast.ASTNode;
 import consulo.language.editor.folding.FoldingBuilderEx;
 import consulo.language.editor.folding.FoldingDescriptor;
-import consulo.document.Document;
+import consulo.language.psi.PsiElement;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.StringUtil;
-import com.intellij.psi.*;
-import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.ide.impl.idea.util.Function;
-import javax.annotation.Nonnull;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
-public class SuppressWarningsFoldingBuilder extends FoldingBuilderEx {
+public abstract class SuppressWarningsFoldingBuilder extends FoldingBuilderEx {
   @Nonnull
   @Override
   public FoldingDescriptor[] buildFoldRegions(@Nonnull PsiElement root, @Nonnull Document document, boolean quick) {
@@ -65,7 +65,7 @@ public class SuppressWarningsFoldingBuilder extends FoldingBuilderEx {
     if (element instanceof PsiAnnotation) {
       return "/" + StringUtil.join(((PsiAnnotation)element).getParameterList().getAttributes(), new Function<PsiNameValuePair, String>() {
         @Override
-        public String fun(PsiNameValuePair value) {
+        public String apply(PsiNameValuePair value) {
           return getMemberValueText(value.getValue());
         }
       }, ", ") + "/";
@@ -78,7 +78,7 @@ public class SuppressWarningsFoldingBuilder extends FoldingBuilderEx {
       final PsiAnnotationMemberValue[] initializers = ((PsiArrayInitializerMemberValue)memberValue).getInitializers();
       return StringUtil.join(initializers, new Function<PsiAnnotationMemberValue, String>() {
         @Override
-        public String fun(PsiAnnotationMemberValue psiAnnotationMemberValue) {
+        public String apply(PsiAnnotationMemberValue psiAnnotationMemberValue) {
           return getMemberValueText(psiAnnotationMemberValue);
         }
       }, ", ");

@@ -16,13 +16,9 @@
 package com.intellij.java.impl.codeInsight.lookup;
 
 import consulo.language.editor.AutoPopupController;
-import consulo.language.editor.completion.lookup.TailType;
+import consulo.language.editor.completion.lookup.*;
 import consulo.ide.impl.idea.codeInsight.completion.CodeCompletionFeatures;
 import consulo.language.editor.impl.internal.completion.CompletionUtil;
-import consulo.language.editor.completion.lookup.InsertionContext;
-import consulo.language.editor.completion.lookup.DefaultLookupItemRenderer;
-import consulo.language.editor.completion.lookup.LookupElementPresentation;
-import consulo.language.editor.completion.lookup.LookupItem;
 import consulo.externalService.statistic.FeatureUsageTracker;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.HighlightControlFlowUtil;
 import com.intellij.java.impl.codeInsight.completion.JavaCompletionUtil;
@@ -228,10 +224,10 @@ public class VariableLookupItem extends LookupItem<PsiVariable> implements Typed
     final char completionChar = context.getCompletionChar();
     if (completionChar == '=') {
       context.setAddCompletionChar(false);
-      TailType.EQ.processTail(context.getEditor(), context.getTailOffset());
+      EqTailType.INSTANCE.processTail(context.getEditor(), context.getTailOffset());
     } else if (completionChar == ',' && getAttribute(LookupItem.TAIL_TYPE_ATTR) != TailType.UNKNOWN) {
       context.setAddCompletionChar(false);
-      TailType.COMMA.processTail(context.getEditor(), context.getTailOffset());
+      CommaTailType.INSTANCE.processTail(context.getEditor(), context.getTailOffset());
       AutoPopupController.getInstance(context.getProject()).autoPopupParameterInfo(context.getEditor(), null);
     } else if (completionChar == ':' && getAttribute(LookupItem.TAIL_TYPE_ATTR) != TailType.UNKNOWN && isTernaryCondition(ref)) {
       context.setAddCompletionChar(false);

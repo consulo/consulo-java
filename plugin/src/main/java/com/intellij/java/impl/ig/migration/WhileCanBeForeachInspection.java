@@ -22,7 +22,7 @@ import com.intellij.java.language.psi.*;
 import org.jetbrains.annotations.NonNls;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.project.Project;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import consulo.language.codeStyle.CodeStyleSettingsManager;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.impl.psi.codeStyle.JavaCodeStyleSettings;

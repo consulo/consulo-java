@@ -36,7 +36,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class DisjointPackageInspection extends BaseGlobalInspection {
+public abstract class DisjointPackageInspection extends BaseGlobalInspection {
 
   @Nonnull
   @Override

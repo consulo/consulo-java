@@ -15,14 +15,16 @@
  */
 package com.intellij.java.impl.codeInsight.template.macro;
 
-import consulo.language.editor.CodeInsightBundle;
-import com.intellij.codeInsight.template.*;
 import com.intellij.java.impl.codeInsight.template.JavaCodeContextType;
-import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiParameter;
-import javax.annotation.Nonnull;
+import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.template.*;
+import consulo.language.editor.template.context.TemplateContextType;
+import consulo.language.editor.template.macro.Macro;
+import consulo.language.psi.PsiElement;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 

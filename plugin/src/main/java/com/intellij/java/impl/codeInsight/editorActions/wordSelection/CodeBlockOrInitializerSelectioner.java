@@ -21,7 +21,7 @@ import com.intellij.java.language.psi.PsiCodeBlock;
 import com.intellij.java.language.psi.PsiJavaToken;
 import consulo.codeEditor.Editor;
 import consulo.document.util.TextRange;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 
 import java.util.ArrayList;
 import java.util.List;

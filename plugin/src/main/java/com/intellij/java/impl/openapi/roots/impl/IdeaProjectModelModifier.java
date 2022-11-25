@@ -21,19 +21,23 @@ import com.intellij.java.impl.openapi.roots.JavaProjectModelModifier;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.impl.projectRoots.ex.JavaSdkUtil;
 import com.intellij.java.language.projectRoots.roots.ExternalLibraryDescriptor;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.application.WriteAction;
-import consulo.module.Module;
-import consulo.project.Project;
-import com.intellij.openapi.roots.*;
-import consulo.ide.impl.idea.openapi.roots.impl.OrderEntryUtil;
+import consulo.content.base.BinariesOrderRootType;
 import consulo.content.library.Library;
 import consulo.content.library.LibraryTablesRegistrar;
+import consulo.ide.impl.idea.openapi.roots.ModuleRootModificationUtil;
+import consulo.ide.impl.idea.openapi.roots.impl.OrderEntryUtil;
 import consulo.ide.impl.idea.openapi.roots.libraries.LibraryUtil;
-import consulo.util.concurrent.AsyncResult;
-import consulo.util.collection.ContainerUtil;
-import consulo.annotation.access.RequiredReadAction;
 import consulo.java.language.module.extension.JavaMutableModuleExtension;
 import consulo.logging.Logger;
+import consulo.module.Module;
+import consulo.module.content.ModuleRootManager;
+import consulo.module.content.layer.ModifiableRootModel;
+import consulo.module.content.layer.orderEntry.DependencyScope;
+import consulo.project.Project;
+import consulo.util.collection.ContainerUtil;
+import consulo.util.concurrent.AsyncResult;
 
 import javax.annotation.Nonnull;
 import java.util.Collection;
@@ -75,7 +79,7 @@ public class IdeaProjectModelModifier extends JavaProjectModelModifier {
           Library library = LibraryUtil.createLibrary(LibraryTablesRegistrar.getInstance().getLibraryTable(myProject), descriptor.getPresentableName());
           Library.ModifiableModel model = library.getModifiableModel();
           for (String url : urls) {
-            model.addRoot(url, OrderRootType.CLASSES);
+            model.addRoot(url, BinariesOrderRootType.getInstance());
           }
           model.commit();
           for (Module module : modules) {

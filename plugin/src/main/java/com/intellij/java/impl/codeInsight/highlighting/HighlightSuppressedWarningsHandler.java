@@ -20,34 +20,36 @@
  */
 package com.intellij.java.impl.codeInsight.highlighting;
 
-import consulo.language.editor.util.CollectHighlightsUtil;
-import consulo.language.editor.rawHighlight.HighlightInfo;
-import consulo.language.editor.impl.highlight.HighlightInfoProcessor;
-import consulo.ide.impl.idea.codeInsight.daemon.impl.LocalInspectionsPass;
-import consulo.language.editor.highlight.usage.HighlightUsagesHandlerBase;
-import consulo.language.editor.inspection.scheme.InspectionManager;
-import consulo.language.editor.inspection.scheme.InspectionProfile;
-import com.intellij.codeInspection.ex.*;
-import consulo.ide.impl.idea.codeInspection.reference.RefManagerImpl;
 import com.intellij.java.language.psi.*;
-import consulo.codeEditor.Editor;
+import consulo.application.impl.internal.progress.ProgressIndicatorBase;
 import consulo.application.progress.ProgressIndicator;
 import consulo.application.progress.ProgressManager;
-import consulo.application.impl.internal.progress.ProgressIndicatorBase;
-import consulo.project.Project;
-import consulo.ui.ex.popup.JBPopupFactory;
-import consulo.ui.ex.popup.PopupStep;
-import consulo.ui.ex.popup.BaseListPopupStep;
-import consulo.language.editor.inspection.scheme.InspectionProjectProfileManager;
+import consulo.codeEditor.Editor;
+import consulo.codeEditor.EditorPopupHelper;
+import consulo.ide.impl.idea.codeInsight.daemon.impl.LocalInspectionsPass;
+import consulo.ide.impl.idea.codeInspection.ex.GlobalInspectionContextImpl;
+import consulo.ide.impl.idea.codeInspection.ex.InspectionManagerEx;
+import consulo.language.editor.highlight.usage.HighlightUsagesHandlerBase;
+import consulo.language.editor.impl.highlight.HighlightInfoProcessor;
+import consulo.language.editor.impl.inspection.reference.RefManagerImpl;
+import consulo.language.editor.impl.internal.inspection.scheme.InspectionProfileImpl;
+import consulo.language.editor.inspection.scheme.*;
+import consulo.language.editor.rawHighlight.HighlightInfo;
+import consulo.language.editor.util.CollectHighlightsUtil;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
-import consulo.ide.impl.idea.util.Consumer;
 import consulo.logging.Logger;
+import consulo.project.Project;
+import consulo.ui.ex.popup.BaseListPopupStep;
+import consulo.ui.ex.popup.JBPopupFactory;
+import consulo.ui.ex.popup.ListPopup;
+import consulo.ui.ex.popup.PopupStep;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class HighlightSuppressedWarningsHandler extends HighlightUsagesHandlerBase<PsiLiteralExpression> {
   private static final Logger LOG = Logger.getInstance(HighlightSuppressedWarningsHandler.class);
@@ -87,12 +89,12 @@ public class HighlightSuppressedWarningsHandler extends HighlightUsagesHandlerBa
   @Override
   protected void selectTargets(List<PsiLiteralExpression> targets, final Consumer<List<PsiLiteralExpression>> selectionConsumer) {
     if (targets.size() == 1) {
-      selectionConsumer.consume(targets);
+      selectionConsumer.accept(targets);
     } else {
-      JBPopupFactory.getInstance().createListPopup(new BaseListPopupStep<PsiLiteralExpression>("Choose Inspections to Highlight Suppressed Problems from", targets) {
+      ListPopup popup = JBPopupFactory.getInstance().createListPopup(new BaseListPopupStep<PsiLiteralExpression>("Choose Inspections to Highlight Suppressed Problems from", targets) {
         @Override
         public PopupStep onChosen(PsiLiteralExpression selectedValue, boolean finalChoice) {
-          selectionConsumer.consume(Collections.singletonList(selectedValue));
+          selectionConsumer.accept(Collections.singletonList(selectedValue));
           return FINAL_CHOICE;
         }
 
@@ -103,7 +105,9 @@ public class HighlightSuppressedWarningsHandler extends HighlightUsagesHandlerBa
           LOG.assertTrue(o instanceof String);
           return (String) o;
         }
-      }).showInBestPositionFor(myEditor);
+      });
+
+      EditorPopupHelper.getInstance().showPopupInBestPositionFor(myEditor, popup);
     }
   }
 
@@ -144,7 +148,7 @@ public class HighlightSuppressedWarningsHandler extends HighlightUsagesHandlerBa
       }
 
       for (HighlightInfo info : pass.getInfos()) {
-        final PsiElement element = CollectHighlightsUtil.findCommonParent(myFile, info.startOffset, info.endOffset);
+        final PsiElement element = CollectHighlightsUtil.findCommonParent(myFile, info.getStartOffset(), info.getEndOffset());
         if (element != null) {
           addOccurrence(element);
         }

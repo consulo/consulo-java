@@ -15,21 +15,19 @@
  */
 package com.intellij.java.impl.codeInsight.lookup;
 
-import consulo.language.editor.completion.lookup.LookupElement;
-import consulo.language.editor.completion.lookup.LookupElementPresentation;
-import consulo.application.AllIcons;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiMethodCallExpression;
 import com.intellij.java.language.psi.PsiReferenceExpression;
 import com.intellij.java.language.psi.PsiType;
-import consulo.language.psi.PsiElement;
-import consulo.util.collection.ContainerUtil;
+import consulo.application.AllIcons;
+import consulo.language.editor.completion.lookup.LookupElement;
+import consulo.language.editor.completion.lookup.LookupElementPresentation;
 import consulo.language.icon.IconDescriptorUpdaters;
+import consulo.language.psi.PsiElement;
 import consulo.ui.image.Image;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Collections;
 import java.util.Set;
 
 /**
@@ -51,7 +49,7 @@ public class ExpressionLookupItem extends LookupElement implements TypedLookupIt
     myPresentableText = presentableText;
     myIcon = icon;
     myLookupString = lookupStrings[0];
-    myAllLookupStrings = Collections.unmodifiableSet(ContainerUtil.newHashSet(lookupStrings));
+    myAllLookupStrings = Set.of(lookupStrings);
   }
 
   @Nullable

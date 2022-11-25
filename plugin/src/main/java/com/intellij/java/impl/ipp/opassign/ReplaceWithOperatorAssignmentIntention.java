@@ -21,7 +21,7 @@ import com.intellij.java.language.psi.PsiAssignmentExpression;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiJavaToken;
 import com.intellij.java.language.psi.PsiPolyadicExpression;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.siyeh.IntentionPowerPackBundle;
 import com.intellij.java.impl.ipp.base.MutablyNamedIntention;

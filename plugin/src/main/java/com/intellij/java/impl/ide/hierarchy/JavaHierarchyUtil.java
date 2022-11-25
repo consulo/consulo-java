@@ -15,14 +15,14 @@
  */
 package com.intellij.java.impl.ide.hierarchy;
 
-import consulo.ide.impl.idea.ide.hierarchy.HierarchyBrowserManager;
-import consulo.ui.ex.tree.AlphaComparator;
-import consulo.ui.ex.tree.NodeDescriptor;
 import com.intellij.java.impl.ide.util.treeView.SourceComparator;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiClassOwner;
-import consulo.project.Project;
+import consulo.ide.impl.idea.ide.hierarchy.HierarchyBrowserManager;
 import consulo.language.psi.PsiFile;
+import consulo.project.Project;
+import consulo.ui.ex.tree.AlphaComparator;
+import consulo.ui.ex.tree.NodeDescriptor;
 
 import javax.annotation.Nullable;
 import java.util.Comparator;

@@ -15,22 +15,22 @@
  */
 package com.intellij.java.impl.ide.util;
 
-import consulo.language.editor.ui.TreeFileChooser;
-import consulo.ide.impl.idea.ide.util.TreeFileChooserDialog;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.util.ClassFilter;
 import com.intellij.java.language.util.TreeClassChooser;
 import com.intellij.java.language.util.TreeClassChooserFactory;
-import consulo.virtualFileSystem.fileType.FileType;
-import consulo.project.Project;
-import consulo.util.lang.function.Condition;
+import consulo.ide.impl.idea.ide.util.TreeFileChooserDialog;
+import consulo.language.editor.ui.TreeFileChooser;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.project.Project;
+import consulo.virtualFileSystem.fileType.FileType;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.function.Predicate;
 
 /**
  * User: anna
@@ -88,7 +88,7 @@ public class TreeClassChooserFactoryImpl extends TreeClassChooserFactory {
                                                         PsiClass base,
                                                         boolean acceptsSelf,
                                                         boolean acceptInner,
-                                                        Condition<? super PsiClass> additionalCondition) {
+                                                        Predicate<? super PsiClass> additionalCondition) {
     ClassFilter classFilter = new TreeJavaClassChooserDialog.InheritanceJavaClassFilterImpl(base, acceptsSelf, acceptInner, additionalCondition);
     return new TreeJavaClassChooserDialog(title, myProject, scope, classFilter, base, null, false);
   }
@@ -111,7 +111,7 @@ public class TreeClassChooserFactoryImpl extends TreeClassChooserFactory {
   public TreeFileChooser createFileChooser(@Nonnull String title,
                                            final PsiFile initialFile,
                                            FileType fileType,
-                                           TreeFileChooser.PsiFileFilter filter) {
+                                           Predicate<PsiFile> filter) {
     return new TreeFileChooserDialog(myProject, title, initialFile, fileType, filter, false, false);
   }
 
@@ -120,7 +120,7 @@ public class TreeClassChooserFactoryImpl extends TreeClassChooserFactory {
   public TreeFileChooser createFileChooser(@Nonnull String title,
                                            @Nullable PsiFile initialFile,
                                            @Nullable FileType fileType,
-                                           @Nullable TreeFileChooser.PsiFileFilter filter,
+                                           @Nullable Predicate<PsiFile> filter,
                                            boolean disableStructureProviders) {
     return new TreeFileChooserDialog(myProject, title, initialFile, fileType, filter, disableStructureProviders, false);
   }
@@ -129,7 +129,7 @@ public class TreeClassChooserFactoryImpl extends TreeClassChooserFactory {
   @Override
   @Nonnull
   public TreeFileChooser createFileChooser(@Nonnull String title, @Nullable PsiFile initialFile, @Nullable FileType fileType,
-                                           @Nullable TreeFileChooser.PsiFileFilter filter,
+                                           @Nullable Predicate<PsiFile> filter,
                                            boolean disableStructureProviders,
                                            boolean showLibraryContents) {
     return new TreeFileChooserDialog(myProject, title, initialFile, fileType, filter, disableStructureProviders, showLibraryContents);

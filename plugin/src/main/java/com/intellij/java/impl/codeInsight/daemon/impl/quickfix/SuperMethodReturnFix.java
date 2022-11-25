@@ -15,23 +15,23 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
-import javax.annotation.Nonnull;
-
-import consulo.language.editor.FileModificationService;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.JavaHighlightUtil;
-import consulo.language.editor.intention.IntentionAction;
-import consulo.application.ApplicationManager;
-import consulo.codeEditor.Editor;
-import consulo.project.Project;
-import consulo.language.psi.PsiFile;
+import com.intellij.java.impl.refactoring.changeSignature.ChangeSignatureProcessor;
+import com.intellij.java.impl.refactoring.changeSignature.ParameterInfoImpl;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiSubstitutor;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
-import consulo.ide.impl.psi.util.PsiFormatUtilBase;
-import com.intellij.java.impl.refactoring.changeSignature.ChangeSignatureProcessor;
-import com.intellij.java.impl.refactoring.changeSignature.ParameterInfoImpl;
+import com.intellij.java.language.psi.util.PsiFormatUtilBase;
+import consulo.application.ApplicationManager;
+import consulo.codeEditor.Editor;
+import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.language.editor.FileModificationService;
+import consulo.language.editor.intention.IntentionAction;
+import consulo.language.psi.PsiFile;
+import consulo.project.Project;
+
+import javax.annotation.Nonnull;
 
 public class SuperMethodReturnFix implements IntentionAction {
 

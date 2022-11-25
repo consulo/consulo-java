@@ -19,18 +19,16 @@ import com.intellij.java.impl.util.xml.JvmPsiTypeConverterImpl;
 import com.intellij.java.language.impl.ui.JavaReferenceEditorUtil;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiType;
-import consulo.document.Document;
-import consulo.project.Project;
-import consulo.language.psi.PsiManager;
 import consulo.language.editor.ui.awt.EditorTextField;
 import consulo.language.editor.ui.awt.ReferenceEditorWithBrowseButton;
-import consulo.ide.impl.idea.util.Function;
+import consulo.language.psi.PsiManager;
 import consulo.language.util.IncorrectOperationException;
-import com.intellij.util.xml.AbstractConvertContext;
-import com.intellij.util.xml.DomElement;
-import com.intellij.util.xml.ui.DomWrapper;
-import com.intellij.util.xml.ui.EditorTextFieldControl;
-import com.intellij.util.xml.ui.PsiTypePanel;
+import consulo.project.Project;
+import consulo.xml.util.xml.AbstractConvertContext;
+import consulo.xml.util.xml.DomElement;
+import consulo.xml.util.xml.ui.DomWrapper;
+import consulo.xml.util.xml.ui.EditorTextFieldControl;
+import consulo.xml.util.xml.ui.PsiTypePanel;
 
 import javax.annotation.Nonnull;
 
@@ -87,11 +85,7 @@ public class PsiTypeControl extends EditorTextFieldControl<PsiTypePanel> {
       boundedComponent = new PsiTypePanel();
     }
     return PsiClassControl.initReferenceEditorWithBrowseButton(boundedComponent,
-        new ReferenceEditorWithBrowseButton(null, project, new Function<String, Document>() {
-          public Document fun(final String s) {
-            return JavaReferenceEditorUtil.createTypeDocument(s, project);
-          }
-        }, ""), this);
+        new ReferenceEditorWithBrowseButton(null, project, s -> JavaReferenceEditorUtil.createTypeDocument(s, project), ""), this);
   }
 
 

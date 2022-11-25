@@ -16,33 +16,24 @@
 
 package com.intellij.java.impl.util.xml.converters;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
+import com.intellij.java.analysis.codeInsight.intention.QuickFixFactory;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.PropertyMemberType;
+import com.intellij.java.language.psi.util.PropertyUtil;
+import consulo.application.presentation.TypePresentationService;
+import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.inspection.LocalQuickFix;
+import consulo.language.editor.intention.IntentionAction;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.project.content.scope.ProjectScopes;
+import consulo.xml.util.xml.*;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import consulo.language.editor.CodeInsightBundle;
-import consulo.language.editor.intention.IntentionAction;
-import com.intellij.java.analysis.codeInsight.intention.QuickFixFactory;
-import consulo.language.editor.inspection.LocalQuickFix;
-import consulo.application.presentation.TypePresentationService;
-import com.intellij.java.language.psi.PsiClass;
-import consulo.language.psi.PsiElement;
-import com.intellij.java.language.psi.PsiField;
-import com.intellij.java.language.psi.PsiMember;
-import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.java.language.psi.PsiModifier;
-import com.intellij.java.language.psi.PsiNameHelper;
-import com.intellij.java.language.psi.PsiType;
-import com.intellij.psi.search.ProjectScope;
-import com.intellij.java.language.psi.util.PropertyMemberType;
-import com.intellij.java.language.psi.util.PropertyUtil;
-import com.intellij.util.xml.ConvertContext;
-import com.intellij.util.xml.DomElement;
-import com.intellij.util.xml.GenericDomValue;
-import com.intellij.util.xml.GenericValue;
-import com.intellij.util.xml.ResolvingConverter;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 
 /**
  * @author Gregory.Shrago
@@ -56,7 +47,7 @@ public abstract class AbstractMemberResolveConverter extends ResolvingConverter<
 
   @Nonnull
   protected PsiType getPsiType(final ConvertContext context) {
-    return PsiType.getJavaLangObject(context.getPsiManager(), ProjectScope.getAllScope(context.getPsiManager().getProject()));
+    return PsiType.getJavaLangObject(context.getPsiManager(), (GlobalSearchScope) ProjectScopes.getAllScope(context.getPsiManager().getProject()));
   }
 
   protected boolean isLookDeep() {

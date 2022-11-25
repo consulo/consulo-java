@@ -15,141 +15,109 @@
  */
 package com.intellij.java.impl.refactoring.migration;
 
-import java.util.ArrayList;
-
-import consulo.application.WriteAction;
-import consulo.logging.Logger;
-import consulo.project.Project;
-import consulo.util.lang.Comparing;
-import consulo.document.util.TextRange;
+import com.intellij.java.impl.psi.impl.source.resolve.reference.impl.providers.JavaClassReference;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
-import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
 import com.intellij.java.language.psi.PsiMigration;
-import consulo.language.psi.PsiReference;
-import consulo.language.psi.SmartPointerManager;
-import consulo.language.psi.SmartPsiElementPointer;
-import com.intellij.java.impl.psi.impl.source.resolve.reference.impl.providers.JavaClassReference;
-import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.application.WriteAction;
 import consulo.content.scope.SearchScope;
+import consulo.document.util.TextRange;
+import consulo.language.psi.*;
+import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.search.ReferencesSearch;
-import consulo.usage.UsageInfo;
 import consulo.language.util.IncorrectOperationException;
-import consulo.psi.PsiPackage;
+import consulo.logging.Logger;
+import consulo.project.Project;
+import consulo.usage.UsageInfo;
+import consulo.util.lang.Comparing;
 
-public class MigrationUtil
-{
-	private static final Logger LOG = Logger.getInstance(MigrationUtil.class);
+import java.util.ArrayList;
 
-	private MigrationUtil()
-	{
-	}
+public class MigrationUtil {
+  private static final Logger LOG = Logger.getInstance(MigrationUtil.class);
 
-	public static UsageInfo[] findPackageUsages(Project project, PsiMigration migration, String qName, SearchScope searchScope)
-	{
-		PsiPackage aPackage = findOrCreatePackage(project, migration, qName);
+  private MigrationUtil() {
+  }
 
-		return findRefs(aPackage, searchScope);
-	}
+  public static UsageInfo[] findPackageUsages(Project project, PsiMigration migration, String qName, SearchScope searchScope) {
+    PsiPackage aPackage = findOrCreatePackage(project, migration, qName);
 
-	private static PsiElement bindNonJavaReference(PsiElement bindTo, PsiElement element, UsageInfo usage)
-	{
-		final TextRange range = usage.getRangeInElement();
-		for(PsiReference reference : element.getReferences())
-		{
-			if(reference instanceof JavaClassReference)
-			{
-				final JavaClassReference classReference = (JavaClassReference) reference;
-				if(classReference.getRangeInElement().equals(range))
-				{
-					return classReference.bindToElement(bindTo);
-				}
-			}
-		}
-		return bindTo;
-	}
+    return findRefs(aPackage, searchScope);
+  }
 
-	public static UsageInfo[] findClassUsages(Project project, PsiMigration migration, String qName, SearchScope searchScope)
-	{
-		PsiClass aClass = findOrCreateClass(project, migration, qName);
+  private static PsiElement bindNonJavaReference(PsiElement bindTo, PsiElement element, UsageInfo usage) {
+    final TextRange range = usage.getRangeInElement();
+    for (PsiReference reference : element.getReferences()) {
+      if (reference instanceof JavaClassReference) {
+        final JavaClassReference classReference = (JavaClassReference) reference;
+        if (classReference.getRangeInElement().equals(range)) {
+          return classReference.bindToElement(bindTo);
+        }
+      }
+    }
+    return bindTo;
+  }
 
-		return findRefs(aClass, searchScope);
-	}
+  public static UsageInfo[] findClassUsages(Project project, PsiMigration migration, String qName, SearchScope searchScope) {
+    PsiClass aClass = findOrCreateClass(project, migration, qName);
 
-	private static UsageInfo[] findRefs(final PsiElement aClass, SearchScope searchScope)
-	{
-		final ArrayList<UsageInfo> results = new ArrayList<>();
-		for(PsiReference usage : ReferencesSearch.search(aClass, searchScope, false))
-		{
-			results.add(new UsageInfo(usage));
-		}
+    return findRefs(aClass, searchScope);
+  }
 
-		return results.toArray(UsageInfo.EMPTY_ARRAY);
-	}
+  private static UsageInfo[] findRefs(final PsiElement aClass, SearchScope searchScope) {
+    final ArrayList<UsageInfo> results = new ArrayList<>();
+    for (PsiReference usage : ReferencesSearch.search(aClass, searchScope, false)) {
+      results.add(new UsageInfo(usage));
+    }
 
-	static void doMigration(PsiElement elementToBind, String newQName, UsageInfo[] usages, ArrayList<SmartPsiElementPointer<PsiElement>> refsToShorten)
-	{
-		try
-		{
-			SmartPointerManager smartPointerManager = SmartPointerManager.getInstance(elementToBind.getProject());
-			// rename all references
-			for(UsageInfo usage : usages)
-			{
-				if(usage instanceof MigrationProcessor.MigrationUsageInfo)
-				{
-					final MigrationProcessor.MigrationUsageInfo usageInfo = (MigrationProcessor.MigrationUsageInfo) usage;
-					if(Comparing.equal(newQName, usageInfo.mapEntry.getNewName()))
-					{
-						PsiElement element = usage.getElement();
-						if(element == null || !element.isValid())
-						{
-							continue;
-						}
-						PsiElement psiElement;
-						if(element instanceof PsiJavaCodeReferenceElement)
-						{
-							psiElement = ((PsiJavaCodeReferenceElement) element).bindToElement(elementToBind);
-						}
-						else
-						{
-							psiElement = bindNonJavaReference(elementToBind, element, usage);
-						}
-						if(psiElement != null)
-						{
-							refsToShorten.add(smartPointerManager.createSmartPsiElementPointer(psiElement));
-						}
-					}
-				}
-			}
-		}
-		catch(IncorrectOperationException e)
-		{
-			// should not happen!
-			LOG.error(e);
-		}
-	}
+    return results.toArray(UsageInfo.EMPTY_ARRAY);
+  }
 
-	static PsiPackage findOrCreatePackage(Project project, final PsiMigration migration, final String qName)
-	{
-		PsiPackage aPackage = JavaPsiFacade.getInstance(project).findPackage(qName);
-		if(aPackage != null)
-		{
-			return aPackage;
-		}
-		else
-		{
-			return WriteAction.compute(() -> migration.createPackage(qName));
-		}
-	}
+  static void doMigration(PsiElement elementToBind, String newQName, UsageInfo[] usages, ArrayList<SmartPsiElementPointer<PsiElement>> refsToShorten) {
+    try {
+      SmartPointerManager smartPointerManager = SmartPointerManager.getInstance(elementToBind.getProject());
+      // rename all references
+      for (UsageInfo usage : usages) {
+        if (usage instanceof MigrationProcessor.MigrationUsageInfo) {
+          final MigrationProcessor.MigrationUsageInfo usageInfo = (MigrationProcessor.MigrationUsageInfo) usage;
+          if (Comparing.equal(newQName, usageInfo.mapEntry.getNewName())) {
+            PsiElement element = usage.getElement();
+            if (element == null || !element.isValid()) {
+              continue;
+            }
+            PsiElement psiElement;
+            if (element instanceof PsiJavaCodeReferenceElement) {
+              psiElement = ((PsiJavaCodeReferenceElement) element).bindToElement(elementToBind);
+            } else {
+              psiElement = bindNonJavaReference(elementToBind, element, usage);
+            }
+            if (psiElement != null) {
+              refsToShorten.add(smartPointerManager.createSmartPsiElementPointer(psiElement));
+            }
+          }
+        }
+      }
+    } catch (IncorrectOperationException e) {
+      // should not happen!
+      LOG.error(e);
+    }
+  }
 
-	static PsiClass findOrCreateClass(Project project, final PsiMigration migration, final String qName)
-	{
-		PsiClass aClass = JavaPsiFacade.getInstance(project).findClass(qName, GlobalSearchScope.allScope(project));
-		if(aClass == null)
-		{
-			aClass = WriteAction.compute(() -> migration.createClass(qName));
-		}
-		return aClass;
-	}
+  static PsiPackage findOrCreatePackage(Project project, final PsiMigration migration, final String qName) {
+    PsiPackage aPackage = JavaPsiFacade.getInstance(project).findPackage(qName);
+    if (aPackage != null) {
+      return aPackage;
+    } else {
+      return WriteAction.compute(() -> migration.createPackage(qName));
+    }
+  }
+
+  static PsiClass findOrCreateClass(Project project, final PsiMigration migration, final String qName) {
+    PsiClass aClass = JavaPsiFacade.getInstance(project).findClass(qName, GlobalSearchScope.allScope(project));
+    if (aClass == null) {
+      aClass = WriteAction.compute(() -> migration.createClass(qName));
+    }
+    return aClass;
+  }
 }

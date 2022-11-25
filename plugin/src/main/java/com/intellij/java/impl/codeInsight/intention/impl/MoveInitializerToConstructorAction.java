@@ -15,77 +15,69 @@
  */
 package com.intellij.java.impl.codeInsight.intention.impl;
 
-import consulo.language.editor.CodeInsightBundle;
-import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.JavaHighlightUtil;
-import consulo.language.editor.intention.IntentionAction;
 import com.intellij.java.analysis.codeInsight.intention.QuickFixFactory;
-import consulo.codeEditor.Editor;
-import consulo.project.Project;
+import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.JavaHighlightUtil;
 import com.intellij.java.language.psi.PsiClass;
-import consulo.language.psi.PsiFile;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifier;
-import javax.annotation.Nonnull;
+import consulo.codeEditor.Editor;
+import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.intention.IntentionAction;
+import consulo.language.psi.PsiFile;
+import consulo.project.Project;
 
+import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.Collection;
 
 /**
  * @author cdr
  */
-public class MoveInitializerToConstructorAction extends BaseMoveInitializerToMethodAction
-{
-	@Override
-	@Nonnull
-	public String getFamilyName()
-	{
-		return getText();
-	}
+public class MoveInitializerToConstructorAction extends BaseMoveInitializerToMethodAction {
+  @Override
+  @Nonnull
+  public String getFamilyName() {
+    return getText();
+  }
 
-	@Override
-	@Nonnull
-	public String getText()
-	{
-		return CodeInsightBundle.message("intention.move.initializer.to.constructor");
-	}
+  @Override
+  @Nonnull
+  public String getText() {
+    return CodeInsightBundle.message("intention.move.initializer.to.constructor");
+  }
 
-	@Nonnull
-	@Override
-	protected Collection<String> getUnsuitableModifiers()
-	{
-		return Arrays.asList(PsiModifier.STATIC);
-	}
+  @Nonnull
+  @Override
+  protected Collection<String> getUnsuitableModifiers() {
+    return Arrays.asList(PsiModifier.STATIC);
+  }
 
-	@Nonnull
-	@Override
-	protected Collection<PsiMethod> getOrCreateMethods(@Nonnull Project project, @Nonnull Editor editor, PsiFile file, @Nonnull PsiClass aClass)
-	{
-		final Collection<PsiMethod> constructors = Arrays.asList(aClass.getConstructors());
-		if(constructors.isEmpty())
-		{
-			return createConstructor(project, editor, file, aClass);
-		}
+  @Nonnull
+  @Override
+  protected Collection<PsiMethod> getOrCreateMethods(@Nonnull Project project, @Nonnull Editor editor, PsiFile file, @Nonnull PsiClass aClass) {
+    final Collection<PsiMethod> constructors = Arrays.asList(aClass.getConstructors());
+    if (constructors.isEmpty()) {
+      return createConstructor(project, editor, file, aClass);
+    }
 
-		return removeChainedConstructors(constructors);
-	}
+    return removeChainedConstructors(constructors);
+  }
 
-	@Nonnull
-	private static Collection<PsiMethod> removeChainedConstructors(@Nonnull Collection<PsiMethod> constructors)
-	{
-		constructors.removeIf(constructor -> !JavaHighlightUtil.getChainedConstructors(constructor).isEmpty());
-		return constructors;
-	}
+  @Nonnull
+  private static Collection<PsiMethod> removeChainedConstructors(@Nonnull Collection<PsiMethod> constructors) {
+    constructors.removeIf(constructor -> !JavaHighlightUtil.getChainedConstructors(constructor).isEmpty());
+    return constructors;
+  }
 
-	@Nonnull
-	private static Collection<PsiMethod> createConstructor(@Nonnull Project project,
-														   @Nonnull Editor editor,
-														   PsiFile file,
-														   @Nonnull PsiClass aClass)
-	{
-		final IntentionAction addDefaultConstructorFix = QuickFixFactory.getInstance().createAddDefaultConstructorFix(aClass);
-		final int offset = editor.getCaretModel().getOffset();
-		addDefaultConstructorFix.invoke(project, editor, file);
-		editor.getCaretModel().moveToOffset(offset); //restore caret
-		return Arrays.asList(aClass.getConstructors());
-	}
+  @Nonnull
+  private static Collection<PsiMethod> createConstructor(@Nonnull Project project,
+                                                         @Nonnull Editor editor,
+                                                         PsiFile file,
+                                                         @Nonnull PsiClass aClass) {
+    final IntentionAction addDefaultConstructorFix = QuickFixFactory.getInstance().createAddDefaultConstructorFix(aClass);
+    final int offset = editor.getCaretModel().getOffset();
+    addDefaultConstructorFix.invoke(project, editor, file);
+    editor.getCaretModel().moveToOffset(offset); //restore caret
+    return Arrays.asList(aClass.getConstructors());
+  }
 }

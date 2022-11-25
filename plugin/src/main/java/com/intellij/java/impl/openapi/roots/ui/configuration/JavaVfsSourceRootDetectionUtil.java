@@ -15,24 +15,23 @@
  */
 package com.intellij.java.impl.openapi.roots.ui.configuration;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.intellij.java.impl.ide.util.projectWizard.importSources.JavaSourceRootDetectionUtil;
+import com.intellij.java.language.impl.JavaFileType;
+import consulo.application.progress.ProgressIndicator;
+import consulo.application.util.SystemInfo;
+import consulo.component.ProcessCanceledException;
+import consulo.ide.impl.idea.openapi.vfs.VfsUtilCore;
+import consulo.language.file.FileTypeManager;
+import consulo.language.impl.internal.psi.LoadTextUtil;
+import consulo.util.lang.StringUtil;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.virtualFileSystem.fileType.FileType;
+import consulo.virtualFileSystem.util.VirtualFileVisitor;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import com.intellij.java.language.impl.JavaFileType;
-import com.intellij.java.impl.ide.util.projectWizard.importSources.JavaSourceRootDetectionUtil;
-import consulo.language.file.FileTypeManager;
-import consulo.language.impl.internal.psi.LoadTextUtil;
-import consulo.virtualFileSystem.fileType.FileType;
-import consulo.component.ProcessCanceledException;
-import consulo.application.progress.ProgressIndicator;
-import consulo.application.util.SystemInfo;
-import consulo.util.lang.StringUtil;
-import consulo.ide.impl.idea.openapi.vfs.VfsUtilCore;
-import consulo.virtualFileSystem.VirtualFile;
-import consulo.virtualFileSystem.util.VirtualFileVisitor;
-import consulo.util.collection.ContainerUtil;
+import java.util.ArrayList;
+import java.util.List;
 
 public class JavaVfsSourceRootDetectionUtil {
   private JavaVfsSourceRootDetectionUtil() {}
@@ -51,7 +50,7 @@ public class JavaVfsSourceRootDetectionUtil {
   @Nonnull
   public static List<VirtualFile> suggestRoots(@Nonnull VirtualFile dir, @Nonnull final ProgressIndicator progressIndicator) {
     if (!dir.isDirectory()) {
-      return ContainerUtil.emptyList();
+      return List.of();
     }
 
     final FileTypeManager typeManager = FileTypeManager.getInstance();

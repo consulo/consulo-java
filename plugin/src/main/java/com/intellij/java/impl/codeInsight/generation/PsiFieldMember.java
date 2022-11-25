@@ -23,7 +23,7 @@ import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiSubstitutor;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
-import consulo.ide.impl.psi.util.PsiFormatUtilBase;
+import com.intellij.java.language.psi.util.PsiFormatUtilBase;
 import consulo.language.util.IncorrectOperationException;
 
 import javax.annotation.Nonnull;

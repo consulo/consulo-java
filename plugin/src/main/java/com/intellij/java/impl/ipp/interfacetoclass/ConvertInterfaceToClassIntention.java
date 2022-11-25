@@ -15,27 +15,27 @@
  */
 package com.intellij.java.impl.ipp.interfacetoclass;
 
-import com.intellij.java.language.psi.*;
-import consulo.application.AccessToken;
-import consulo.application.WriteAction;
-import consulo.project.Project;
-import com.intellij.psi.*;
-import consulo.content.scope.SearchScope;
-import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
-import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.language.editor.refactoring.ui.ConflictsDialog;
-import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
-import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
-import consulo.language.util.IncorrectOperationException;
-import consulo.application.util.function.Processor;
-import consulo.application.util.query.Query;
-import consulo.util.collection.MultiMap;
-import com.siyeh.IntentionPowerPackBundle;
 import com.intellij.java.impl.ipp.base.Intention;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
+import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.PsiUtil;
+import com.siyeh.IntentionPowerPackBundle;
+import consulo.application.AccessToken;
+import consulo.application.WriteAction;
+import consulo.application.util.function.Processor;
+import consulo.application.util.query.Query;
+import consulo.content.scope.SearchScope;
+import consulo.language.editor.refactoring.ui.ConflictsDialog;
+import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
+import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+import consulo.util.collection.MultiMap;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import java.util.Collection;
 
 public class ConvertInterfaceToClassIntention extends Intention {

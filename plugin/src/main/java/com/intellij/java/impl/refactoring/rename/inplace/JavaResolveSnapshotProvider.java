@@ -15,8 +15,12 @@
  */
 package com.intellij.java.impl.refactoring.rename.inplace;
 
-import consulo.language.psi.PsiElement;
+import com.intellij.java.language.JavaLanguage;
+import consulo.language.Language;
 import consulo.language.editor.refactoring.ResolveSnapshotProvider;
+import consulo.language.psi.PsiElement;
+
+import javax.annotation.Nonnull;
 
 /**
  * User: Maxim.Mossienko
@@ -27,5 +31,11 @@ public class JavaResolveSnapshotProvider extends ResolveSnapshotProvider {
   @Override
   public ResolveSnapshot createSnapshot(PsiElement scope) {
     return new JavaResolveSnapshot(scope);
+  }
+
+  @Nonnull
+  @Override
+  public Language getLanguage() {
+    return JavaLanguage.INSTANCE;
   }
 }

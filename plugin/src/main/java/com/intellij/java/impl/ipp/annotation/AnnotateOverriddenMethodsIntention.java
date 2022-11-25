@@ -15,22 +15,23 @@
  */
 package com.intellij.java.impl.ipp.annotation;
 
-import com.intellij.java.language.codeInsight.ExternalAnnotationsManager;
-import consulo.language.editor.FileModificationService;
-import com.intellij.java.language.psi.*;
-import consulo.undoRedo.util.UndoUtil;
-import consulo.project.Project;
-import com.intellij.psi.*;
-import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
-import consulo.language.psi.scope.GlobalSearchScope;
-import com.intellij.java.indexing.search.searches.OverridingMethodsSearch;
-import com.intellij.java.language.psi.util.ClassUtil;
-import consulo.language.util.IncorrectOperationException;
-import com.siyeh.IntentionPowerPackBundle;
 import com.intellij.java.impl.ipp.base.MutablyNamedIntention;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
-import javax.annotation.Nonnull;
+import com.intellij.java.indexing.search.searches.OverridingMethodsSearch;
+import com.intellij.java.language.codeInsight.ExternalAnnotationsManager;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
+import com.intellij.java.language.psi.util.ClassUtil;
+import com.siyeh.IntentionPowerPackBundle;
+import consulo.language.editor.FileModificationService;
+import consulo.language.editor.util.LanguageUndoUtil;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
 
+import javax.annotation.Nonnull;
 import java.util.Collection;
 
 public class AnnotateOverriddenMethodsIntention extends MutablyNamedIntention {
@@ -158,7 +159,7 @@ public class AnnotateOverriddenMethodsIntention extends MutablyNamedIntention {
         JavaCodeStyleManager.getInstance(project);
       codeStyleManager.shortenClassReferences(inserted);
       if (containingFile != fromFile) {
-        UndoUtil.markPsiFileForUndo(fromFile);
+        LanguageUndoUtil.markPsiFileForUndo(fromFile);
       }
     }
   }

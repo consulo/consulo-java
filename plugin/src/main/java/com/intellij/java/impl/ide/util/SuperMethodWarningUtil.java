@@ -15,31 +15,34 @@
  */
 package com.intellij.java.impl.ide.util;
 
-import consulo.language.editor.inspection.InspectionsBundle;
-import consulo.language.findUsage.DescriptiveNameUtil;
-import consulo.application.ApplicationManager;
-import consulo.codeEditor.Editor;
-import consulo.ui.ex.popup.JBPopupFactory;
 import com.intellij.java.language.psi.PsiClass;
-import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifier;
-import consulo.language.psi.util.SymbolPresentationUtil;
-import consulo.language.psi.resolve.PsiElementProcessor;
 import com.intellij.java.language.psi.search.searches.DeepestSuperMethodsSearch;
-import consulo.ui.ex.awt.JBList;
-import consulo.util.collection.ArrayUtil;
+import consulo.application.ApplicationManager;
+import consulo.codeEditor.Editor;
+import consulo.codeEditor.EditorPopupHelper;
+import consulo.language.editor.inspection.InspectionsBundle;
+import consulo.language.findUsage.DescriptiveNameUtil;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.resolve.PsiElementProcessor;
+import consulo.language.psi.util.SymbolPresentationUtil;
 import consulo.ui.ex.awt.DialogWrapper;
+import consulo.ui.ex.awt.JBList;
 import consulo.ui.ex.awt.Messages;
+import consulo.ui.ex.awt.popup.AWTPopupFactory;
+import consulo.ui.ex.popup.JBPopup;
+import consulo.ui.ex.popup.JBPopupFactory;
+import consulo.util.collection.ArrayUtil;
 
 import javax.annotation.Nonnull;
-
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
 public class SuperMethodWarningUtil {
-  private SuperMethodWarningUtil() {}
+  private SuperMethodWarningUtil() {
+  }
 
   @Nonnull
   public static PsiMethod[] checkSuperMethods(final PsiMethod method, String actionString) {
@@ -71,8 +74,8 @@ public class SuperMethodWarningUtil {
     }
 
     SuperMethodWarningDialog dialog =
-      new SuperMethodWarningDialog(method.getProject(), DescriptiveNameUtil.getDescriptiveName(method), actionString, superAbstract,
-                                   parentInterface, aClass.isInterface(), ArrayUtil.toStringArray(superClasses));
+        new SuperMethodWarningDialog(method.getProject(), DescriptiveNameUtil.getDescriptiveName(method), actionString, superAbstract,
+            parentInterface, aClass.isInterface(), ArrayUtil.toStringArray(superClasses));
     dialog.show();
 
     if (dialog.getExitCode() == DialogWrapper.OK_EXIT_CODE) {
@@ -98,11 +101,11 @@ public class SuperMethodWarningUtil {
     PsiClass containingClass = superMethod.getContainingClass();
 
     SuperMethodWarningDialog dialog =
-      new SuperMethodWarningDialog(
-        method.getProject(),
-        DescriptiveNameUtil.getDescriptiveName(method), actionString, containingClass.isInterface() || superMethod.hasModifierProperty(PsiModifier.ABSTRACT),
-        containingClass.isInterface(), aClass.isInterface(), containingClass.getQualifiedName()
-      );
+        new SuperMethodWarningDialog(
+            method.getProject(),
+            DescriptiveNameUtil.getDescriptiveName(method), actionString, containingClass.isInterface() || superMethod.hasModifierProperty(PsiModifier.ABSTRACT),
+            containingClass.isInterface(), aClass.isInterface(), containingClass.getQualifiedName()
+        );
     dialog.show();
 
     if (dialog.getExitCode() == DialogWrapper.OK_EXIT_CODE) return superMethod;
@@ -142,29 +145,30 @@ public class SuperMethodWarningUtil {
     final String renameBase = actionString + " base method";
     final String renameCurrent = actionString + " only current method";
     final JBList list = new JBList(renameBase, renameCurrent);
-    JBPopupFactory.getInstance().createListPopupBuilder(list)
-      .setTitle(method.getName() + (containingClass.isInterface() && !aClass.isInterface() ? " implements" : " overrides") + " method of " +
-                SymbolPresentationUtil.getSymbolPresentableText(containingClass))
-      .setMovable(false)
-      .setResizable(false)
-      .setRequestFocus(true)
-      .setItemChoosenCallback(new Runnable() {
-        public void run() {
-          final Object value = list.getSelectedValue();
-          if (value instanceof String) {
-            processor.execute(methods[value.equals(renameBase) ? 0 : 1]);
+    JBPopup popup = ((AWTPopupFactory) JBPopupFactory.getInstance()).createListPopupBuilder(list)
+        .setItemChoosenCallback(new Runnable() {
+          public void run() {
+            final Object value = list.getSelectedValue();
+            if (value instanceof String) {
+              processor.execute(methods[value.equals(renameBase) ? 0 : 1]);
+            }
           }
-        }
-      }).createPopup().showInBestPositionFor(editor);
+        }).setMovable(false)
+        .setTitle(method.getName() + (containingClass.isInterface() && !aClass.isInterface() ? " implements" : " overrides") + " method of " +
+            SymbolPresentationUtil.getSymbolPresentableText(containingClass))
+        .setResizable(false)
+        .setRequestFocus(true).createPopup();
+
+    EditorPopupHelper.getInstance().showPopupInBestPositionFor(editor, popup);
   }
 
   public static int askWhetherShouldAnnotateBaseMethod(@Nonnull PsiMethod method, @Nonnull PsiMethod superMethod) {
     String implement = !method.hasModifierProperty(PsiModifier.ABSTRACT) && superMethod.hasModifierProperty(PsiModifier.ABSTRACT)
-                       ? InspectionsBundle.message("inspection.annotate.quickfix.implements")
-                       : InspectionsBundle.message("inspection.annotate.quickfix.overrides");
+        ? InspectionsBundle.message("inspection.annotate.quickfix.implements")
+        : InspectionsBundle.message("inspection.annotate.quickfix.overrides");
     String message = InspectionsBundle.message("inspection.annotate.quickfix.overridden.method.messages",
-                                               DescriptiveNameUtil.getDescriptiveName(method), implement,
-                                               DescriptiveNameUtil.getDescriptiveName(superMethod));
+        DescriptiveNameUtil.getDescriptiveName(method), implement,
+        DescriptiveNameUtil.getDescriptiveName(superMethod));
     String title = InspectionsBundle.message("inspection.annotate.quickfix.overridden.method.warning");
     return Messages.showYesNoCancelDialog(method.getProject(), message, title, Messages.getQuestionIcon());
 

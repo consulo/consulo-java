@@ -27,7 +27,7 @@ import consulo.logging.Logger;
 import consulo.codeEditor.Editor;
 import consulo.project.Project;
 import consulo.document.util.TextRange;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import javax.annotation.Nonnull;

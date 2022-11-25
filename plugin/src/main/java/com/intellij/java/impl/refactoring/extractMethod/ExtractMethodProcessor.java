@@ -15,17 +15,6 @@
  */
 package com.intellij.java.impl.refactoring.extractMethod;
 
-import com.intellij.java.impl.codeInsight.CodeInsightUtil;
-import com.intellij.java.impl.refactoring.util.InlineUtil;
-import com.intellij.java.impl.refactoring.util.RefactoringUtil;
-import com.intellij.java.language.impl.codeInsight.ChangeContextUtil;
-import com.intellij.java.language.impl.codeInsight.ExceptionUtil;
-import com.intellij.java.impl.codeInsight.daemon.impl.quickfix.AnonymousTargetClassPreselectionUtil;
-import consulo.language.editor.highlight.HighlightManager;
-import consulo.navigation.NavigationUtil;
-import consulo.dataContext.DataManager;
-import consulo.ide.impl.idea.ide.util.PropertiesComponent;
-import com.intellij.java.language.impl.codeInsight.PsiClassListCellRenderer;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.JavaHighlightUtil;
 import com.intellij.java.analysis.impl.codeInsight.intention.AddAnnotationPsiFix;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.*;
@@ -36,63 +25,82 @@ import com.intellij.java.analysis.impl.refactoring.util.VariableData;
 import com.intellij.java.analysis.impl.refactoring.util.duplicates.DuplicatesFinder;
 import com.intellij.java.analysis.impl.refactoring.util.duplicates.Match;
 import com.intellij.java.analysis.impl.refactoring.util.duplicates.VariableReturnValue;
+import com.intellij.java.impl.codeInsight.CodeInsightUtil;
+import com.intellij.java.impl.codeInsight.daemon.impl.quickfix.AnonymousTargetClassPreselectionUtil;
+import com.intellij.java.impl.psi.impl.source.codeStyle.JavaCodeStyleManagerImpl;
+import com.intellij.java.impl.refactoring.HelpID;
+import com.intellij.java.impl.refactoring.extractMethodObject.ExtractMethodObjectHandler;
+import com.intellij.java.impl.refactoring.introduceField.ElementToWorkOn;
+import com.intellij.java.impl.refactoring.introduceVariable.IntroduceVariableBase;
+import com.intellij.java.impl.refactoring.util.InlineUtil;
+import com.intellij.java.impl.refactoring.util.RefactoringUtil;
+import com.intellij.java.impl.refactoring.util.classMembers.ElementNeedsThis;
+import com.intellij.java.impl.refactoring.util.duplicates.MatchProvider;
+import com.intellij.java.impl.refactoring.util.duplicates.MatchUtil;
 import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.language.codeInsight.Nullability;
 import com.intellij.java.language.codeInsight.NullableNotNullManager;
+import com.intellij.java.language.impl.codeInsight.ChangeContextUtil;
+import com.intellij.java.language.impl.codeInsight.ExceptionUtil;
+import com.intellij.java.language.impl.codeInsight.PsiClassListCellRenderer;
+import com.intellij.java.language.impl.psi.controlFlow.ControlFlowUtil;
+import com.intellij.java.language.impl.psi.scope.processor.VariablesProcessor;
+import com.intellij.java.language.impl.psi.scope.util.PsiScopesUtil;
 import com.intellij.java.language.impl.refactoring.util.RefactoringChangeUtil;
+import com.intellij.java.language.psi.PsiElementFactory;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
 import com.intellij.java.language.psi.util.*;
 import com.intellij.java.language.util.VisibilityUtil;
 import consulo.application.ApplicationManager;
+import consulo.application.progress.ProgressManager;
+import consulo.application.util.function.Processor;
 import consulo.codeEditor.Editor;
+import consulo.codeEditor.EditorColors;
 import consulo.codeEditor.LogicalPosition;
 import consulo.codeEditor.ScrollType;
-import consulo.codeEditor.EditorColors;
 import consulo.colorScheme.EditorColorsManager;
 import consulo.colorScheme.TextAttributes;
-import consulo.application.progress.ProgressManager;
-import consulo.project.Project;
-import consulo.project.ui.wm.WindowManager;
-import consulo.util.lang.Comparing;
-import consulo.util.lang.function.Condition;
-import com.intellij.openapi.util.Pass;
+import consulo.content.scope.SearchScope;
+import consulo.dataContext.DataManager;
 import consulo.document.util.TextRange;
-import consulo.util.lang.StringUtil;
-import consulo.virtualFileSystem.VirtualFile;
-import com.intellij.psi.*;
-import com.intellij.psi.codeStyle.*;
-import com.intellij.java.language.impl.psi.controlFlow.ControlFlowUtil;
-import com.intellij.java.impl.psi.impl.source.codeStyle.JavaCodeStyleManagerImpl;
-import com.intellij.java.language.impl.psi.scope.processor.VariablesProcessor;
-import com.intellij.java.language.impl.psi.scope.util.PsiScopesUtil;
+import consulo.language.ast.IElementType;
+import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.codeStyle.CodeStyleSettingsManager;
+import consulo.language.editor.highlight.HighlightManager;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
+import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
+import consulo.language.editor.refactoring.util.RefactoringMessageDialog;
+import consulo.language.editor.ui.PopupNavigationUtil;
+import consulo.language.psi.*;
+import consulo.language.psi.resolve.PsiElementProcessor;
+import consulo.language.psi.resolve.ResolveState;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.scope.LocalSearchScope;
-import consulo.language.psi.resolve.PsiElementProcessor;
-import consulo.content.scope.SearchScope;
 import consulo.language.psi.search.ReferencesSearch;
-import consulo.language.ast.IElementType;
-import com.intellij.psi.util.*;
-import com.intellij.java.impl.refactoring.HelpID;
-import consulo.language.editor.refactoring.RefactoringBundle;
-import com.intellij.java.impl.refactoring.extractMethodObject.ExtractMethodObjectHandler;
-import com.intellij.java.impl.refactoring.introduceField.ElementToWorkOn;
-import com.intellij.java.impl.refactoring.introduceVariable.IntroduceVariableBase;
-import com.intellij.refactoring.util.*;
-import com.intellij.java.impl.refactoring.util.classMembers.ElementNeedsThis;
-import com.intellij.java.impl.refactoring.util.duplicates.MatchProvider;
-import com.intellij.java.impl.refactoring.util.duplicates.MatchUtil;
-import com.intellij.util.*;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.logging.Logger;
+import consulo.project.Project;
+import consulo.project.ProjectPropertiesComponent;
+import consulo.project.ui.wm.WindowManager;
+import consulo.util.collection.ArrayUtil;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.collection.MultiMap;
-import consulo.logging.Logger;
+import consulo.util.lang.Comparing;
+import consulo.util.lang.StringUtil;
+import consulo.util.lang.function.Condition;
+import consulo.virtualFileSystem.VirtualFile;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.TestOnly;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 import static com.intellij.java.language.codeInsight.AnnotationUtil.CHECK_TYPE;
 
@@ -220,7 +228,7 @@ public class ExtractMethodProcessor implements MatchProvider {
   /**
    * Invoked in atomic action
    */
-  public boolean prepare(@Nullable Pass<ExtractMethodProcessor> pass) throws PrepareFailedException {
+  public boolean prepare(@Nullable Consumer<ExtractMethodProcessor> pass) throws PrepareFailedException {
     myExpression = null;
     if (myElements.length == 1 && myElements[0] instanceof PsiExpression) {
       final PsiExpression expression = (PsiExpression) myElements[0];
@@ -640,12 +648,7 @@ public class ExtractMethodProcessor implements MatchProvider {
         return statement instanceof PsiReturnStatement && ((PsiReturnStatement) statement).getReturnValue() != null;
       }
     });
-    final List<PsiExpression> map = ContainerUtil.map(filter, new Function<PsiStatement, PsiExpression>() {
-      @Override
-      public PsiExpression fun(PsiStatement statement) {
-        return ((PsiReturnStatement) statement).getReturnValue();
-      }
-    });
+    final List<PsiExpression> map = ContainerUtil.map(filter, statement -> ((PsiReturnStatement) statement).getReturnValue());
     return map.toArray(new PsiExpression[map.size()]);
   }
 
@@ -697,7 +700,7 @@ public class ExtractMethodProcessor implements MatchProvider {
           () : myReturnType);
       final List<String> getters = new ArrayList<String>(ContainerUtil.map(initialMethodNames, new Function<String, String>() {
         @Override
-        public String fun(String propertyName) {
+        public String apply(String propertyName) {
           if (!PsiNameHelper.getInstance(myProject).isIdentifier(propertyName)) {
             LOG.info(propertyName + "; " + myExpression);
             return null;
@@ -706,7 +709,7 @@ public class ExtractMethodProcessor implements MatchProvider {
           return PropertyUtil.suggestGetterName(field);
         }
       }));
-      ContainerUtil.addIfNotNull(nameByComment, getters);
+      ContainerUtil.addIfNotNull(getters, nameByComment);
       return ArrayUtil.toStringArray(getters);
     }
     return new String[]{myInitialMethodName};
@@ -1002,7 +1005,7 @@ public class ExtractMethodProcessor implements MatchProvider {
 
     if (myNullability != null &&
         PsiUtil.resolveClassInType(newMethod.getReturnType()) != null &&
-        PropertiesComponent.getInstance(myProject).getBoolean(ExtractMethodDialog.EXTRACT_METHOD_GENERATE_ANNOTATIONS, true)) {
+        ProjectPropertiesComponent.getInstance(myProject).getBoolean(ExtractMethodDialog.EXTRACT_METHOD_GENERATE_ANNOTATIONS, true)) {
       NullableNotNullManager nullManager = NullableNotNullManager.getInstance(myProject);
       switch (myNullability) {
         case NOT_NULL:
@@ -1026,7 +1029,7 @@ public class ExtractMethodProcessor implements MatchProvider {
   }
 
   private void updateAnnotations(PsiModifierListOwner owner, List<String> toRemove, String toAdd, List<String> toKeep) {
-    AddAnnotationPsiFix.removePhysicalAnnotations(owner, ArrayUtilRt.toStringArray(toRemove));
+    AddAnnotationPsiFix.removePhysicalAnnotations(owner, ArrayUtil.toStringArray(toRemove));
     PsiModifierList modifierList = owner.getModifierList();
     if (modifierList != null && !AnnotationUtil.isAnnotated(owner, toKeep, CHECK_TYPE)) {
       PsiAnnotation annotation = AddAnnotationPsiFix.addPhysicalAnnotationIfAbsent(toAdd, PsiNameValuePair.EMPTY_ARRAY, modifierList);
@@ -1441,7 +1444,7 @@ public class ExtractMethodProcessor implements MatchProvider {
     return (PsiMethodCallExpression) JavaCodeStyleManager.getInstance(myProject).shortenClassReferences(expr);
   }
 
-  private boolean chooseTargetClass(PsiElement codeFragment, final Pass<ExtractMethodProcessor> extractPass) throws PrepareFailedException {
+  private boolean chooseTargetClass(PsiElement codeFragment, final Consumer<ExtractMethodProcessor> extractPass) throws PrepareFailedException {
     final List<PsiVariable> inputVariables = myControlFlowWrapper.getInputVariables(codeFragment, myElements, myOutputVariables);
 
     myNeedChangeContext = false;
@@ -1505,7 +1508,7 @@ public class ExtractMethodProcessor implements MatchProvider {
       if (classes.size() > 1) {
         final PsiClass[] psiClasses = classes.keySet().toArray(new PsiClass[classes.size()]);
         final PsiClass preselection = AnonymousTargetClassPreselectionUtil.getPreselection(classes.keySet(), psiClasses[0]);
-        NavigationUtil.getPsiElementPopup(psiClasses, new PsiClassListCellRenderer(), "Choose Destination Class", processor, preselection).showInBestPositionFor(myEditor);
+        PopupNavigationUtil.getPsiElementPopup(psiClasses, new PsiClassListCellRenderer(), "Choose Destination Class", processor, preselection).showInBestPositionFor(myEditor);
         return true;
       }
     }
@@ -1594,11 +1597,11 @@ public class ExtractMethodProcessor implements MatchProvider {
     return variable.getName();
   }
 
-  private static boolean shouldAcceptCurrentTarget(Pass<ExtractMethodProcessor> extractPass, PsiElement target) {
+  private static boolean shouldAcceptCurrentTarget(Consumer<ExtractMethodProcessor> extractPass, PsiElement target) {
     return extractPass == null && !(target instanceof PsiAnonymousClass);
   }
 
-  private boolean applyChosenClassAndExtract(List<PsiVariable> inputVariables, @Nullable Pass<ExtractMethodProcessor> extractPass) throws PrepareFailedException {
+  private boolean applyChosenClassAndExtract(List<PsiVariable> inputVariables, @Nullable Consumer<ExtractMethodProcessor> extractPass) throws PrepareFailedException {
     myStatic = shouldBeStatic();
     final Set<PsiField> fields = new LinkedHashSet<PsiField>();
     if (!PsiUtil.isLocalOrAnonymousClass(myTargetClass) && (myTargetClass.getContainingClass() == null || myTargetClass.hasModifierProperty(PsiModifier.STATIC))) {
@@ -1643,7 +1646,7 @@ public class ExtractMethodProcessor implements MatchProvider {
     checkCanBeChainedConstructor();
 
     if (extractPass != null) {
-      extractPass.pass(this);
+      extractPass.accept(this);
     }
     return true;
   }

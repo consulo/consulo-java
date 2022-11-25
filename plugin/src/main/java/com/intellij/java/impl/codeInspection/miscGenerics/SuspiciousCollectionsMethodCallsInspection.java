@@ -1,19 +1,19 @@
 // Copyright 2000-2017 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.impl.codeInspection.miscGenerics;
 
-import consulo.language.editor.inspection.InspectionsBundle;
-import consulo.language.editor.inspection.ProblemsHolder;
-import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
 import com.intellij.java.analysis.JavaAnalysisBundle;
 import com.intellij.java.analysis.codeInspection.AbstractBaseJavaLocalInspectionTool;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.CommonDataflow;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.TypeConstraint;
 import com.intellij.java.analysis.impl.codeInspection.miscGenerics.SuspiciousMethodCallUtil;
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.*;
 import com.intellij.java.language.psi.util.MethodSignature;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.ide.impl.idea.util.ObjectUtils;
+import consulo.language.editor.inspection.InspectionsBundle;
+import consulo.language.editor.inspection.ProblemsHolder;
+import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
+import consulo.language.psi.PsiElementVisitor;
+import consulo.util.lang.ObjectUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -24,7 +24,7 @@ import java.util.List;
 /**
  * @author ven
  */
-public class SuspiciousCollectionsMethodCallsInspection extends AbstractBaseJavaLocalInspectionTool {
+public abstract class SuspiciousCollectionsMethodCallsInspection extends AbstractBaseJavaLocalInspectionTool {
   public boolean REPORT_CONVERTIBLE_METHOD_CALLS = true;
 
   @Override
@@ -67,7 +67,7 @@ public class SuspiciousCollectionsMethodCallsInspection extends AbstractBaseJava
           final MethodSignature signature = interfaceMethod.getSignature(psiSubstitutor);
           String message = SuspiciousMethodCallUtil.getSuspiciousMethodCallMessage(expression, signature.getParameterTypes()[0], REPORT_CONVERTIBLE_METHOD_CALLS, patternMethods, 0);
           if (message != null) {
-            holder.registerProblem(ObjectUtils.notNull(expression.getReferenceNameElement(), expression), message);
+            holder.registerProblem(ObjectUtil.notNull(expression.getReferenceNameElement(), expression), message);
           }
         }
       }

@@ -18,7 +18,7 @@ package com.intellij.java.impl.ig.methodmetrics;
 import javax.annotation.Nonnull;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 
 class ReturnPointCountVisitor extends JavaRecursiveElementVisitor {
 

@@ -20,12 +20,13 @@
  */
 package com.intellij.java.impl.refactoring.inlineSuperClass.usageInfo;
 
-import com.intellij.java.language.psi.*;
-import consulo.util.lang.StringUtil;
-import com.intellij.java.language.psi.util.TypeConversionUtil;
 import com.intellij.java.impl.refactoring.util.FixableUsageInfo;
-import consulo.ide.impl.idea.util.Function;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.util.lang.StringUtil;
+
+import java.util.function.Function;
 
 public class ReplaceConstructorUsageInfo extends FixableUsageInfo{
   private final PsiType myNewType;
@@ -79,7 +80,7 @@ public class ReplaceConstructorUsageInfo extends FixableUsageInfo{
 
     if (targetClasses.length > 1) {
       final String conflict = "Constructor " + element.getText() + " can be replaced with any of " + StringUtil.join(targetClasses, new Function<PsiClass, String>() {
-        public String fun(final PsiClass psiClass) {
+        public String apply(final PsiClass psiClass) {
           return psiClass.getQualifiedName();
         }
       }, ", ");
@@ -116,7 +117,7 @@ public class ReplaceConstructorUsageInfo extends FixableUsageInfo{
         if (arrayDimensions.length > 0) {
           buf.append("[");
           buf.append(StringUtil.join(arrayDimensions, new Function<PsiExpression, String>() {
-            public String fun(PsiExpression psiExpression) {
+            public String apply(PsiExpression psiExpression) {
               return psiExpression.getText();
             }
           }, "]["));

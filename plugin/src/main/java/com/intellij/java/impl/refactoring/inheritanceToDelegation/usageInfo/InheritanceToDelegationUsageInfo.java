@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.refactoring.inheritanceToDelegation.usageInfo;
 
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import consulo.usage.UsageInfo;
 
 /**

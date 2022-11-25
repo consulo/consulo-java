@@ -65,9 +65,9 @@ class FormatDecode {
   static {
     REPLACEABLE_VALIDATOR_TYPES.put(
       ALL_VALIDATOR.type(),
-      ContainerUtil.set(DATE_VALIDATOR.type(), CHAR_VALIDATOR.type(), INT_VALIDATOR.type(), FLOAT_VALIDATOR.type())
+      Set.of(DATE_VALIDATOR.type(), CHAR_VALIDATOR.type(), INT_VALIDATOR.type(), FLOAT_VALIDATOR.type())
     );
-    REPLACEABLE_VALIDATOR_TYPES.put(CHAR_VALIDATOR.type(), ContainerUtil.set(INT_VALIDATOR.type()));
+    REPLACEABLE_VALIDATOR_TYPES.put(CHAR_VALIDATOR.type(), Set.of(INT_VALIDATOR.type()));
   }
 
   public static Validator[] decode(String formatString, int argumentCount) {

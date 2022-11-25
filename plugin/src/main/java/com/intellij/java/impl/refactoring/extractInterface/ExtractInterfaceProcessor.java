@@ -19,7 +19,7 @@ import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiMethod;
 import consulo.project.Project;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import com.intellij.java.impl.refactoring.extractSuperclass.ExtractSuperBaseProcessor;
 import consulo.ide.impl.idea.refactoring.util.DocCommentPolicy;
 import com.intellij.java.impl.refactoring.util.classMembers.MemberInfo;

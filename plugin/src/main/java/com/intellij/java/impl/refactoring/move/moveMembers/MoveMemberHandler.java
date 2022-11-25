@@ -15,43 +15,55 @@
  */
 package com.intellij.java.impl.refactoring.move.moveMembers;
 
-import java.util.Set;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiMember;
+import com.intellij.java.language.psi.PsiModifierList;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ExtensionAPI;
+import consulo.application.Application;
+import consulo.component.extension.ExtensionPointCacheKey;
+import consulo.language.Language;
+import consulo.language.extension.ByLanguageValue;
+import consulo.language.extension.LanguageExtension;
+import consulo.language.extension.LanguageOneToOne;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiReference;
+import consulo.util.collection.MultiMap;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import consulo.language.extension.LanguageExtension;
-import com.intellij.java.language.psi.PsiClass;
-import consulo.language.psi.PsiElement;
-import com.intellij.java.language.psi.PsiMember;
-import com.intellij.java.language.psi.PsiModifierList;
-import consulo.language.psi.PsiReference;
-import consulo.util.collection.MultiMap;
+import java.util.Set;
 
 /**
  * @author Maxim.Medvedev
  */
-public interface MoveMemberHandler
-{
-	LanguageExtension<MoveMemberHandler> EP_NAME = new LanguageExtension<MoveMemberHandler>("consulo.java.refactoring.moveMemberHandler");
+@ExtensionAPI(ComponentScope.APPLICATION)
+public interface MoveMemberHandler extends LanguageExtension {
+  ExtensionPointCacheKey<MoveMemberHandler, ByLanguageValue<MoveMemberHandler>> KEY = ExtensionPointCacheKey.create("MoveMemberHandler", LanguageOneToOne.build());
 
-	@Nullable
-	MoveMembersProcessor.MoveMembersUsageInfo getUsage(@Nonnull PsiMember member, @Nonnull PsiReference ref, @Nonnull Set<PsiMember> membersToMove,
-			@Nonnull PsiClass targetClass);
+  @Nullable
+  static MoveMemberHandler forLanguage(@Nonnull Language language) {
+    return Application.get().getExtensionPoint(MoveMemberHandler.class).getOrBuildCache(KEY).get(language);
+  }
 
-	void checkConflictsOnUsage(@Nonnull MoveMembersProcessor.MoveMembersUsageInfo usageInfo, @Nullable String newVisibility,
-			@Nullable PsiModifierList modifierListCopy, @Nonnull PsiClass targetClass, @Nonnull Set<PsiMember> membersToMove,
-			@Nonnull MultiMap<PsiElement, String> conflicts);
+  @Nullable
+  MoveMembersProcessor.MoveMembersUsageInfo getUsage(@Nonnull PsiMember member, @Nonnull PsiReference ref, @Nonnull Set<PsiMember> membersToMove,
+                                                     @Nonnull PsiClass targetClass);
 
-	void checkConflictsOnMember(@Nonnull PsiMember member, @Nullable String newVisibility, @Nullable PsiModifierList modifierListCopy,
-			@Nonnull PsiClass targetClass, @Nonnull Set<PsiMember> membersToMove, @Nonnull MultiMap<PsiElement, String> conflicts);
+  void checkConflictsOnUsage(@Nonnull MoveMembersProcessor.MoveMembersUsageInfo usageInfo, @Nullable String newVisibility,
+                             @Nullable PsiModifierList modifierListCopy, @Nonnull PsiClass targetClass, @Nonnull Set<PsiMember> membersToMove,
+                             @Nonnull MultiMap<PsiElement, String> conflicts);
 
-	@Nullable
-	PsiElement getAnchor(@Nonnull PsiMember member, @Nonnull PsiClass targetClass, Set<PsiMember> membersToMove);
+  void checkConflictsOnMember(@Nonnull PsiMember member, @Nullable String newVisibility, @Nullable PsiModifierList modifierListCopy,
+                              @Nonnull PsiClass targetClass, @Nonnull Set<PsiMember> membersToMove, @Nonnull MultiMap<PsiElement, String> conflicts);
 
-	boolean changeExternalUsage(@Nonnull MoveMembersOptions options, @Nonnull MoveMembersProcessor.MoveMembersUsageInfo usage);
+  @Nullable
+  PsiElement getAnchor(@Nonnull PsiMember member, @Nonnull PsiClass targetClass, Set<PsiMember> membersToMove);
 
-	@Nonnull
-	PsiMember doMove(@Nonnull MoveMembersOptions options, @Nonnull PsiMember member, @Nullable PsiElement anchor, @Nonnull PsiClass targetClass);
+  boolean changeExternalUsage(@Nonnull MoveMembersOptions options, @Nonnull MoveMembersProcessor.MoveMembersUsageInfo usage);
 
-	void decodeContextInfo(@Nonnull PsiElement scope);
+  @Nonnull
+  PsiMember doMove(@Nonnull MoveMembersOptions options, @Nonnull PsiMember member, @Nullable PsiElement anchor, @Nonnull PsiClass targetClass);
+
+  void decodeContextInfo(@Nonnull PsiElement scope);
 }

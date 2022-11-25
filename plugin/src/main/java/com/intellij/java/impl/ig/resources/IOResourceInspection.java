@@ -15,23 +15,23 @@
  */
 package com.intellij.java.impl.ig.resources;
 
-import consulo.ide.impl.idea.codeInspection.ui.ListTable;
-import consulo.ide.impl.idea.codeInspection.ui.ListWrappingTableModel;
+import com.intellij.java.impl.ig.ui.UiUtils;
 import com.intellij.java.language.psi.*;
-import consulo.util.xml.serializer.InvalidDataException;
-import consulo.util.xml.serializer.WriteExternalException;
-import com.intellij.psi.*;
-import consulo.language.psi.util.PsiTreeUtil;
-import consulo.ui.CheckBox;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TypeUtils;
-import com.intellij.java.impl.ig.ui.UiUtils;
+import consulo.ide.impl.idea.codeInspection.ui.ListTable;
+import consulo.ide.impl.idea.codeInspection.ui.ListWrappingTableModel;
 import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiReference;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.util.xml.serializer.InvalidDataException;
+import consulo.util.xml.serializer.WriteExternalException;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
 
+import javax.annotation.Nonnull;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
@@ -93,8 +93,8 @@ public class IOResourceInspection extends ResourceInspection {
       new ListTable(new ListWrappingTableModel(ignoredTypes, InspectionGadgetsBundle.message("ignored.io.resource.types")));
     JPanel tablePanel =
       UiUtils.createAddRemoveTreeClassChooserPanel(table, InspectionGadgetsBundle.message("choose.io.resource.type.to.ignore"), IO_TYPES);
-    final CheckBox checkBox =
-      new CheckBox(InspectionGadgetsBundle.message("allow.resource.to.be.opened.inside.a.try.block"), this, "insideTryAllowed");
+    final consulo.language.editor.inspection.ui.CheckBox checkBox =
+      new consulo.language.editor.inspection.ui.CheckBox(InspectionGadgetsBundle.message("allow.resource.to.be.opened.inside.a.try.block"), this, "insideTryAllowed");
     panel.add(tablePanel, BorderLayout.CENTER);
     panel.add(checkBox, BorderLayout.SOUTH);
     return panel;

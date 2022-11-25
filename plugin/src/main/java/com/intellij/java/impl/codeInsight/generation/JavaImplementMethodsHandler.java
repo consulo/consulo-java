@@ -15,20 +15,24 @@
  */
 package com.intellij.java.impl.codeInsight.generation;
 
-import javax.annotation.Nonnull;
-
-import consulo.language.editor.hint.HintManager;
-import consulo.language.editor.action.LanguageCodeInsightActionHandler;
-import consulo.codeEditor.Editor;
-import consulo.project.Project;
+import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.PsiClass;
-import consulo.language.psi.PsiFile;
 import com.intellij.java.language.psi.PsiJavaFile;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.codeEditor.Editor;
+import consulo.language.Language;
+import consulo.language.editor.generation.ImplementMethodHandler;
+import consulo.language.editor.hint.HintManager;
+import consulo.language.psi.PsiFile;
+import consulo.project.Project;
+
+import javax.annotation.Nonnull;
 
 /**
  * @author yole
  */
-public class JavaImplementMethodsHandler implements LanguageCodeInsightActionHandler {
+@ExtensionImpl
+public class JavaImplementMethodsHandler implements ImplementMethodHandler {
   @Override
   public boolean isValidFor(final Editor editor, final PsiFile file) {
     if (!(file instanceof PsiJavaFile)) {
@@ -55,5 +59,11 @@ public class JavaImplementMethodsHandler implements LanguageCodeInsightActionHan
   @Override
   public boolean startInWriteAction() {
     return false;
+  }
+
+  @Nonnull
+  @Override
+  public Language getLanguage() {
+    return JavaLanguage.INSTANCE;
   }
 }

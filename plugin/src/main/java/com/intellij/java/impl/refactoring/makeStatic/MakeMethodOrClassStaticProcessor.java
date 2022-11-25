@@ -24,32 +24,34 @@
  */
 package com.intellij.java.impl.refactoring.makeStatic;
 
-import com.intellij.java.language.psi.*;
-import consulo.language.findUsage.DescriptiveNameUtil;
-import consulo.logging.Logger;
-import consulo.project.Project;
-import consulo.util.lang.ref.Ref;
-import consulo.util.lang.StringUtil;
-import com.intellij.psi.*;
+import com.intellij.java.impl.refactoring.util.ConflictsUtil;
+import com.intellij.java.impl.refactoring.util.RefactoringUtil;
 import com.intellij.java.indexing.search.searches.OverridingMethodsSearch;
-import consulo.language.psi.search.ReferencesSearch;
-import consulo.language.psi.util.PsiTreeUtil;
+import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.language.editor.refactoring.BaseRefactoringProcessor;
 import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.editor.refactoring.ui.ConflictsDialog;
-import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
-import com.intellij.java.impl.refactoring.util.ConflictsUtil;
 import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
-import com.intellij.java.impl.refactoring.util.RefactoringUtil;
+import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
+import consulo.language.findUsage.DescriptiveNameUtil;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiManager;
+import consulo.language.psi.PsiReference;
+import consulo.language.psi.search.ReferencesSearch;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.logging.Logger;
+import consulo.project.Project;
 import consulo.usage.UsageInfo;
 import consulo.usage.UsageViewDescriptor;
 import consulo.usage.UsageViewUtil;
-import consulo.language.util.IncorrectOperationException;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.collection.MultiMap;
-import javax.annotation.Nonnull;
+import consulo.util.lang.StringUtil;
+import consulo.util.lang.ref.Ref;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -85,7 +87,7 @@ public abstract class MakeMethodOrClassStaticProcessor<T extends PsiTypeParamete
           return false;
         }
       }
-      if(!mySettings.isChangeSignature()) {
+      if (!mySettings.isChangeSignature()) {
         refUsages.set(filterInternalUsages(usagesIn));
       }
     }
@@ -115,16 +117,16 @@ public abstract class MakeMethodOrClassStaticProcessor<T extends PsiTypeParamete
     return result.toArray(new UsageInfo[result.size()]);
   }
 
-  protected MultiMap<PsiElement,String> getConflictDescriptions(UsageInfo[] usages) {
+  protected MultiMap<PsiElement, String> getConflictDescriptions(UsageInfo[] usages) {
     MultiMap<PsiElement, String> conflicts = new MultiMap<PsiElement, String>();
     HashSet<PsiElement> processed = new HashSet<PsiElement>();
     String typeString = StringUtil.capitalize(UsageViewUtil.getType(myMember));
     for (UsageInfo usageInfo : usages) {
       if (usageInfo instanceof InternalUsageInfo && !(usageInfo instanceof SelfUsageInfo)) {
-        PsiElement referencedElement = ((InternalUsageInfo)usageInfo).getReferencedElement();
+        PsiElement referencedElement = ((InternalUsageInfo) usageInfo).getReferencedElement();
         if (!mySettings.isMakeClassParameter()) {
           if (referencedElement instanceof PsiModifierListOwner) {
-            if (((PsiModifierListOwner)referencedElement).hasModifierProperty(PsiModifier.STATIC)) {
+            if (((PsiModifierListOwner) referencedElement).hasModifierProperty(PsiModifier.STATIC)) {
               continue;
             }
           }
@@ -132,15 +134,14 @@ public abstract class MakeMethodOrClassStaticProcessor<T extends PsiTypeParamete
           if (processed.contains(referencedElement)) continue;
           processed.add(referencedElement);
           if (referencedElement instanceof PsiField) {
-            PsiField field = (PsiField)referencedElement;
+            PsiField field = (PsiField) referencedElement;
 
             if (mySettings.getNameForField(field) == null) {
               String message = RefactoringBundle.message("0.uses.non.static.1.which.is.not.passed.as.a.parameter", typeString,
-                                                         RefactoringUIUtil.getDescription(field, true));
+                  RefactoringUIUtil.getDescription(field, true));
               conflicts.putValue(field, message);
             }
-          }
-          else {
+          } else {
             String message = RefactoringBundle.message("0.uses.1.which.needs.class.instance", typeString, RefactoringUIUtil.getDescription(referencedElement, true));
             conflicts.putValue(referencedElement, message);
           }
@@ -148,12 +149,11 @@ public abstract class MakeMethodOrClassStaticProcessor<T extends PsiTypeParamete
       }
       if (usageInfo instanceof OverridingMethodUsageInfo) {
         LOG.assertTrue(myMember instanceof PsiMethod);
-        final PsiMethod overridingMethod = ((PsiMethod)usageInfo.getElement());
+        final PsiMethod overridingMethod = ((PsiMethod) usageInfo.getElement());
         String message = RefactoringBundle.message("method.0.is.overridden.by.1", RefactoringUIUtil.getDescription(myMember, false),
-                                                   RefactoringUIUtil.getDescription(overridingMethod, true));
+            RefactoringUIUtil.getDescription(overridingMethod, true));
         conflicts.putValue(overridingMethod, message);
-      }
-      else {
+      } else {
         PsiElement element = usageInfo.getElement();
         PsiElement container = ConflictsUtil.getContainer(element);
         if (processed.contains(container)) continue;
@@ -180,15 +180,15 @@ public abstract class MakeMethodOrClassStaticProcessor<T extends PsiTypeParamete
     if (inaccessible.size() == 1) {
       final PsiField field = inaccessible.get(0);
       conflicts.putValue(field, RefactoringBundle.message("field.0.is.not.accessible",
-                                                          CommonRefactoringUtil.htmlEmphasize(field.getName()),
-                                                          RefactoringUIUtil.getDescription(container, true)));
+          CommonRefactoringUtil.htmlEmphasize(field.getName()),
+          RefactoringUIUtil.getDescription(container, true)));
     } else {
 
       for (int j = 0; j < inaccessible.size(); j++) {
         PsiField field = inaccessible.get(j);
         conflicts.putValue(field, RefactoringBundle.message("field.0.is.not.accessible",
-                                                            CommonRefactoringUtil.htmlEmphasize(field.getName()),
-                                                            RefactoringUIUtil.getDescription(container, true)));
+            CommonRefactoringUtil.htmlEmphasize(field.getName()),
+            RefactoringUIUtil.getDescription(container, true)));
 
 
       }
@@ -207,7 +207,7 @@ public abstract class MakeMethodOrClassStaticProcessor<T extends PsiTypeParamete
 
     if (myMember instanceof PsiMethod) {
       final PsiMethod[] overridingMethods =
-        OverridingMethodsSearch.search((PsiMethod)myMember, myMember.getUseScope(), false).toArray(PsiMethod.EMPTY_ARRAY);
+          OverridingMethodsSearch.search((PsiMethod) myMember, myMember.getUseScope(), false).toArray(PsiMethod.EMPTY_ARRAY);
       for (PsiMethod overridingMethod : overridingMethods) {
         if (overridingMethod != myMember) {
           result.add(new OverridingMethodUsageInfo(overridingMethod));
@@ -225,7 +225,7 @@ public abstract class MakeMethodOrClassStaticProcessor<T extends PsiTypeParamete
       PsiElement element = ref.getElement();
       PsiElement qualifier = null;
       if (element instanceof PsiReferenceExpression) {
-        qualifier = ((PsiReferenceExpression)element).getQualifierExpression();
+        qualifier = ((PsiReferenceExpression) element).getQualifierExpression();
         if (qualifier instanceof PsiThisExpression) qualifier = null;
       }
       if (!PsiTreeUtil.isAncestor(myMember, element, true) || qualifier != null) {
@@ -247,10 +247,10 @@ public abstract class MakeMethodOrClassStaticProcessor<T extends PsiTypeParamete
   protected boolean makeClassParameterFinal(UsageInfo[] usages) {
     for (UsageInfo usage : usages) {
       if (usage instanceof InternalUsageInfo) {
-        final InternalUsageInfo internalUsageInfo = (InternalUsageInfo)usage;
+        final InternalUsageInfo internalUsageInfo = (InternalUsageInfo) usage;
         PsiElement referencedElement = internalUsageInfo.getReferencedElement();
         if (!(referencedElement instanceof PsiField)
-            || mySettings.getNameForField((PsiField)referencedElement) == null) {
+            || mySettings.getNameForField((PsiField) referencedElement) == null) {
           if (internalUsageInfo.isInsideAnonymous()) {
             return true;
           }
@@ -263,7 +263,7 @@ public abstract class MakeMethodOrClassStaticProcessor<T extends PsiTypeParamete
   protected static boolean makeFieldParameterFinal(PsiField field, UsageInfo[] usages) {
     for (UsageInfo usage : usages) {
       if (usage instanceof InternalUsageInfo) {
-        final InternalUsageInfo internalUsageInfo = (InternalUsageInfo)usage;
+        final InternalUsageInfo internalUsageInfo = (InternalUsageInfo) usage;
         PsiElement referencedElement = internalUsageInfo.getReferencedElement();
         if (referencedElement instanceof PsiField && field.equals(referencedElement)) {
           if (internalUsageInfo.isInsideAnonymous()) {
@@ -294,18 +294,15 @@ public abstract class MakeMethodOrClassStaticProcessor<T extends PsiTypeParamete
     try {
       for (UsageInfo usage : usages) {
         if (usage instanceof SelfUsageInfo) {
-          changeSelfUsage((SelfUsageInfo)usage);
-        }
-        else if (usage instanceof InternalUsageInfo) {
-          changeInternalUsage((InternalUsageInfo)usage, factory);
-        }
-        else {
+          changeSelfUsage((SelfUsageInfo) usage);
+        } else if (usage instanceof InternalUsageInfo) {
+          changeInternalUsage((InternalUsageInfo) usage, factory);
+        } else {
           changeExternalUsage(usage, factory);
         }
       }
       changeSelf(factory, usages);
-    }
-    catch (IncorrectOperationException ex) {
+    } catch (IncorrectOperationException ex) {
       LOG.assertTrue(false);
     }
   }

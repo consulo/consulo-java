@@ -16,7 +16,7 @@
 package com.intellij.java.impl.ig.errorhandling;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.siyeh.InspectionGadgetsBundle;

@@ -15,26 +15,26 @@
  */
 package com.intellij.java.impl.codeInsight.generation;
 
-import consulo.ide.impl.idea.codeInsight.generation.ClassMember;
-import consulo.language.editor.hint.HintManager;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.impl.codeInsight.generation.EncapsulatableClassMember;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiEnumConstant;
 import com.intellij.java.language.psi.PsiField;
 import consulo.codeEditor.Editor;
-import consulo.ide.setting.ShowSettingsUtil;
-import consulo.project.Project;
-import consulo.util.lang.function.Condition;
-import consulo.util.lang.StringUtil;
-import consulo.ui.ex.awt.ListCellRendererWrapper;
-import consulo.language.util.IncorrectOperationException;
 import consulo.ide.impl.idea.util.NotNullFunction;
-import consulo.util.collection.ContainerUtil;
-import consulo.ui.ex.awt.UIUtil;
+import consulo.ide.setting.ShowSettingsUtil;
+import consulo.language.editor.generation.ClassMember;
+import consulo.language.editor.hint.HintManager;
+import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
+import consulo.project.Project;
 import consulo.ui.ex.awt.ComboBox;
 import consulo.ui.ex.awt.ComponentWithBrowseButton;
+import consulo.ui.ex.awt.ListCellRendererWrapper;
+import consulo.ui.ex.awt.UIUtil;
+import consulo.util.collection.ContainerUtil;
+import consulo.util.lang.StringUtil;
+import consulo.util.lang.function.Condition;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.java.generate.exception.GenerateCodeException;
 import org.jetbrains.java.generate.template.TemplateResource;
@@ -59,7 +59,7 @@ public abstract class GenerateGetterSetterHandlerBase extends GenerateMembersHan
     GenerateAccessorProviderRegistrar.registerProvider(new NotNullFunction<PsiClass, Collection<EncapsulatableClassMember>>() {
       @Override
       @Nonnull
-      public Collection<EncapsulatableClassMember> fun(PsiClass s) {
+      public Collection<EncapsulatableClassMember> apply(PsiClass s) {
         if (s.getLanguage() != JavaLanguage.INSTANCE) {
           return Collections.emptyList();
         }

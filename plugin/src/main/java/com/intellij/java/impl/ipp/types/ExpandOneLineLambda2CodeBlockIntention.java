@@ -22,7 +22,7 @@ import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiLambdaExpression;
 import com.intellij.java.language.psi.PsiType;
 import consulo.logging.Logger;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import com.intellij.java.impl.ipp.base.Intention;

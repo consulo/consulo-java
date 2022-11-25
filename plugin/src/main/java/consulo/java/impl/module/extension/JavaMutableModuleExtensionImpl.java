@@ -15,20 +15,20 @@
  */
 package consulo.java.impl.module.extension;
 
-import consulo.content.bundle.Sdk;
-import consulo.util.lang.Comparing;
 import com.intellij.java.language.LanguageLevel;
+import consulo.content.bundle.Sdk;
 import consulo.disposer.Disposable;
+import consulo.java.impl.module.extension.ui.JavaModuleExtensionPanel;
 import consulo.java.language.module.extension.JavaMutableModuleExtension;
 import consulo.java.language.module.extension.SpecialDirLocation;
-import consulo.java.impl.module.extension.ui.JavaModuleExtensionPanel;
+import consulo.module.content.layer.ModuleRootLayer;
 import consulo.module.extension.MutableModuleInheritableNamedPointer;
 import consulo.module.extension.swing.SwingMutableModuleExtension;
-import consulo.roots.ModuleRootLayer;
 import consulo.ui.Component;
 import consulo.ui.Label;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.layout.VerticalLayout;
+import consulo.util.lang.Comparing;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -39,95 +39,79 @@ import java.util.List;
  * @author VISTALL
  * @since 12:39/19.05.13
  */
-public class JavaMutableModuleExtensionImpl extends JavaModuleExtensionImpl implements JavaMutableModuleExtension<JavaModuleExtensionImpl>, SwingMutableModuleExtension
-{
-	public JavaMutableModuleExtensionImpl(@Nonnull String id, @Nonnull ModuleRootLayer moduleRootLayer)
-	{
-		super(id, moduleRootLayer);
-	}
+public class JavaMutableModuleExtensionImpl extends JavaModuleExtensionImpl implements JavaMutableModuleExtension<JavaModuleExtensionImpl>, SwingMutableModuleExtension {
+  public JavaMutableModuleExtensionImpl(@Nonnull String id, @Nonnull ModuleRootLayer moduleRootLayer) {
+    super(id, moduleRootLayer);
+  }
 
-	@RequiredUIAccess
-	@Nullable
-	@Override
-	public JComponent createConfigurablePanel(@Nonnull Disposable disposable, @Nonnull Runnable updateOnCheck)
-	{
-		return new JavaModuleExtensionPanel(this, updateOnCheck);
-	}
+  @RequiredUIAccess
+  @Nullable
+  @Override
+  public JComponent createConfigurablePanel(@Nonnull Disposable disposable, @Nonnull Runnable updateOnCheck) {
+    return new JavaModuleExtensionPanel(this, updateOnCheck);
+  }
 
-	@RequiredUIAccess
-	@Nullable
-	@Override
-	public Component createConfigurationComponent(@Nonnull Disposable disposable, @Nonnull Runnable runnable)
-	{
-		return VerticalLayout.create().add(Label.create("Unsupported platform"));
-	}
+  @RequiredUIAccess
+  @Nullable
+  @Override
+  public Component createConfigurationComponent(@Nonnull Disposable disposable, @Nonnull Runnable runnable) {
+    return VerticalLayout.create().add(Label.create("Unsupported platform"));
+  }
 
-	@Override
-	public void setEnabled(boolean val)
-	{
-		myIsEnabled = val;
-	}
+  @Override
+  public void setEnabled(boolean val) {
+    myIsEnabled = val;
+  }
 
-	@Override
-	@Nonnull
-	public MutableModuleInheritableNamedPointer<LanguageLevel> getInheritableLanguageLevel()
-	{
-		return myLanguageLevel;
-	}
+  @Override
+  @Nonnull
+  public MutableModuleInheritableNamedPointer<LanguageLevel> getInheritableLanguageLevel() {
+    return myLanguageLevel;
+  }
 
-	@Override
-	public void setBytecodeVersion(@Nullable String version)
-	{
-		myBytecodeVersion = version;
-	}
+  @Override
+  public void setBytecodeVersion(@Nullable String version) {
+    myBytecodeVersion = version;
+  }
 
-	@Override
-	public void setCompilerArguments(@Nonnull List<String> arguments)
-	{
-		myCompilerArguments.clear();
-		myCompilerArguments.addAll(arguments);
-	}
+  @Override
+  public void setCompilerArguments(@Nonnull List<String> arguments) {
+    myCompilerArguments.clear();
+    myCompilerArguments.addAll(arguments);
+  }
 
-	@Override
-	public void setSpecialDirLocation(@Nonnull SpecialDirLocation specialDirLocation)
-	{
-		mySpecialDirLocation = specialDirLocation;
-	}
+  @Override
+  public void setSpecialDirLocation(@Nonnull SpecialDirLocation specialDirLocation) {
+    mySpecialDirLocation = specialDirLocation;
+  }
 
-	@Override
-	public boolean isModified(@Nonnull JavaModuleExtensionImpl javaModuleExtension)
-	{
-		if(isModifiedImpl(javaModuleExtension))
-		{
-			return true;
-		}
+  @Override
+  public boolean isModified(@Nonnull JavaModuleExtensionImpl javaModuleExtension) {
+    if (isModifiedImpl(javaModuleExtension)) {
+      return true;
+    }
 
-		if(!myLanguageLevel.equals(javaModuleExtension.getInheritableLanguageLevel()))
-		{
-			return true;
-		}
+    if (!myLanguageLevel.equals(javaModuleExtension.getInheritableLanguageLevel())) {
+      return true;
+    }
 
-		if(!Comparing.equal(myBytecodeVersion, javaModuleExtension.getBytecodeVersion()))
-		{
-			return true;
-		}
+    if (!Comparing.equal(myBytecodeVersion, javaModuleExtension.getBytecodeVersion())) {
+      return true;
+    }
 
-		if(!mySpecialDirLocation.equals(javaModuleExtension.getSpecialDirLocation()))
-		{
-			return true;
-		}
+    if (!mySpecialDirLocation.equals(javaModuleExtension.getSpecialDirLocation())) {
+      return true;
+    }
 
-		if(!myCompilerArguments.equals(javaModuleExtension.myCompilerArguments))
-		{
-			return true;
-		}
-		return false;
-	}
+    if (!myCompilerArguments.equals(javaModuleExtension.myCompilerArguments)) {
+      return true;
+    }
+    return false;
+  }
 
-	@Nonnull
-	@Override
-	public MutableModuleInheritableNamedPointer<Sdk> getInheritableSdk()
-	{
-		return (MutableModuleInheritableNamedPointer<Sdk>) super.getInheritableSdk();
-	}
+  @Nonnull
+  @Override
+  public MutableModuleInheritableNamedPointer<Sdk> getInheritableSdk() {
+    return (MutableModuleInheritableNamedPointer<Sdk>) super.getInheritableSdk();
+  }
 }

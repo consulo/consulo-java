@@ -15,31 +15,25 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.intellij.java.impl.codeInsight.generation.OverrideImplementUtil;
+import com.intellij.java.impl.codeInsight.generation.PsiMethodMember;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.TypeConversionUtil;
+import consulo.application.Result;
+import consulo.codeEditor.Editor;
+import consulo.ide.impl.idea.ide.util.MemberChooser;
+import consulo.language.editor.FileModificationService;
+import consulo.language.editor.WriteCommandAction;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
-import consulo.language.editor.FileModificationService;
-import com.intellij.java.impl.codeInsight.generation.OverrideImplementUtil;
-import com.intellij.java.impl.codeInsight.generation.PsiMethodMember;
-import consulo.ide.impl.idea.ide.util.MemberChooser;
-import consulo.application.Result;
-import consulo.language.editor.WriteCommandAction;
-import consulo.codeEditor.Editor;
-import consulo.project.Project;
-import com.intellij.java.language.psi.JavaPsiFacade;
-import com.intellij.java.language.psi.PsiClass;
-import consulo.language.psi.PsiElement;
-import com.intellij.java.language.psi.PsiElementFactory;
-import consulo.language.psi.PsiFile;
-import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
-import com.intellij.java.language.psi.PsiNewExpression;
-import com.intellij.java.language.psi.PsiSubstitutor;
-import com.intellij.java.language.psi.util.TypeConversionUtil;
-import consulo.language.util.IncorrectOperationException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class ImplementAbstractClassMethodsFix extends ImplementMethodsFix {
   public ImplementAbstractClassMethodsFix(PsiElement highlightElement) {
@@ -56,18 +50,16 @@ public class ImplementAbstractClassMethodsFix extends ImplementMethodsFix {
       String startElementText = startElement.getText();
       try {
         PsiNewExpression newExpression =
-          (PsiNewExpression)elementFactory.createExpressionFromText(startElementText + "{}", startElement);
+            (PsiNewExpression) elementFactory.createExpressionFromText(startElementText + "{}", startElement);
         if (newExpression.getAnonymousClass() == null) {
           try {
-            newExpression = (PsiNewExpression)elementFactory.createExpressionFromText(startElementText + "){}", startElement);
-          }
-          catch (IncorrectOperationException e) {
+            newExpression = (PsiNewExpression) elementFactory.createExpressionFromText(startElementText + "){}", startElement);
+          } catch (IncorrectOperationException e) {
             return false;
           }
           if (newExpression.getAnonymousClass() == null) return false;
         }
-      }
-      catch (IncorrectOperationException e) {
+      } catch (IncorrectOperationException e) {
         return false;
       }
       return true;
@@ -83,9 +75,9 @@ public class ImplementAbstractClassMethodsFix extends ImplementMethodsFix {
                      @Nonnull PsiElement endElement) {
     final PsiFile containingFile = startElement.getContainingFile();
     if (editor == null || !FileModificationService.getInstance().prepareFileForWrite(containingFile)) return;
-    PsiJavaCodeReferenceElement classReference = ((PsiNewExpression)startElement).getClassReference();
+    PsiJavaCodeReferenceElement classReference = ((PsiNewExpression) startElement).getClassReference();
     if (classReference == null) return;
-    final PsiClass psiClass = (PsiClass)classReference.resolve();
+    final PsiClass psiClass = (PsiClass) classReference.resolve();
     if (psiClass == null) return;
     final MemberChooser<PsiMethodMember> chooser = chooseMethodsToImplement(editor, startElement, psiClass, false);
     if (chooser == null) return;
@@ -97,8 +89,8 @@ public class ImplementAbstractClassMethodsFix extends ImplementMethodsFix {
       @Override
       protected void run(final Result result) throws Throwable {
         PsiNewExpression newExpression =
-          (PsiNewExpression)JavaPsiFacade.getElementFactory(project).createExpressionFromText(startElement.getText() + "{}", startElement);
-        newExpression = (PsiNewExpression)startElement.replace(newExpression);
+            (PsiNewExpression) JavaPsiFacade.getElementFactory(project).createExpressionFromText(startElement.getText() + "{}", startElement);
+        newExpression = (PsiNewExpression) startElement.replace(newExpression);
         final PsiClass psiClass = newExpression.getAnonymousClass();
         if (psiClass == null) return;
         Map<PsiClass, PsiSubstitutor> subst = new HashMap<PsiClass, PsiSubstitutor>();
@@ -114,7 +106,7 @@ public class ImplementAbstractClassMethodsFix extends ImplementMethodsFix {
           }
         }
         OverrideImplementUtil.overrideOrImplementMethodsInRightPlace(editor, psiClass, selectedElements, chooser.isCopyJavadoc(),
-                                                                     chooser.isInsertOverrideAnnotation());
+            chooser.isInsertOverrideAnnotation());
       }
     }.execute();
   }

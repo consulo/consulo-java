@@ -20,19 +20,19 @@
  */
 package com.intellij.java.impl.refactoring.inlineSuperClass;
 
-import consulo.project.Project;
-import consulo.util.lang.StringUtil;
-import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.impl.refactoring.JavaRefactoringSettings;
-import consulo.language.editor.refactoring.RefactoringBundle;
+import com.intellij.java.language.psi.PsiClass;
 import consulo.ide.impl.idea.refactoring.inline.InlineOptionsDialog;
 import consulo.ide.impl.idea.refactoring.ui.DocCommentPanel;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.project.Project;
 import consulo.ui.ex.awt.IdeBorderFactory;
-import consulo.ide.impl.idea.util.Function;
-import javax.annotation.Nonnull;
+import consulo.util.lang.StringUtil;
 
+import javax.annotation.Nonnull;
 import javax.swing.*;
 import java.awt.*;
+import java.util.function.Function;
 
 public class InlineSuperClassRefactoringDialog extends InlineOptionsDialog {
   private final PsiClass mySuperClass;
@@ -54,7 +54,7 @@ public class InlineSuperClassRefactoringDialog extends InlineOptionsDialog {
 
   protected void doAction() {
     JavaRefactoringSettings settings = JavaRefactoringSettings.getInstance();
-    if(myRbInlineThisOnly.isEnabled() && myRbInlineAll.isEnabled()) {
+    if (myRbInlineThisOnly.isEnabled() && myRbInlineAll.isEnabled()) {
       settings.INLINE_SUPER_CLASS_THIS = isInlineThisOnly();
     }
     invokeRefactoring(new InlineSuperClassRefactoringProcessor(getProject(), isInlineThisOnly() ? myCurrentInheritor : null, mySuperClass, myDocPanel.getPolicy(), myTargetClasses));
@@ -67,20 +67,20 @@ public class InlineSuperClassRefactoringDialog extends InlineOptionsDialog {
 
   protected JComponent createCenterPanel() {
     final JLabel label = new JLabel("<html>Super class \'" +
-                                    mySuperClass.getQualifiedName() +
-                                    "\' inheritors: " +
-                                    (myTargetClasses.length > 1 ? " <br>&nbsp;&nbsp;&nbsp;\'" : "\'") +
-                                    StringUtil.join(myTargetClasses, new Function<PsiClass, String>() {
-                                      public String fun(final PsiClass psiClass) {
-                                        return psiClass.getQualifiedName();
-                                      }
-                                    }, "\',<br>&nbsp;&nbsp;&nbsp;\'") +
-                                    "\'</html>");
+        mySuperClass.getQualifiedName() +
+        "\' inheritors: " +
+        (myTargetClasses.length > 1 ? " <br>&nbsp;&nbsp;&nbsp;\'" : "\'") +
+        StringUtil.join(myTargetClasses, new Function<PsiClass, String>() {
+          public String apply(final PsiClass psiClass) {
+            return psiClass.getQualifiedName();
+          }
+        }, "\',<br>&nbsp;&nbsp;&nbsp;\'") +
+        "\'</html>");
     label.setBorder(IdeBorderFactory.createEmptyBorder(5, 5, 5, 5));
     final JPanel panel = new JPanel(new GridBagLayout());
     final GridBagConstraints gc =
-      new GridBagConstraints(0, GridBagConstraints.RELATIVE, 1, 1, 1, 0, GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
-                             new Insets(0, 0, 0, 0), 0, 0);
+        new GridBagConstraints(0, GridBagConstraints.RELATIVE, 1, 1, 1, 0, GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL,
+            new Insets(0, 0, 0, 0), 0, 0);
     panel.add(myDocPanel, gc);
     panel.add(label, gc);
     gc.weighty = 1;

@@ -18,7 +18,7 @@ package com.intellij.java.impl.codeInsight.unwrap;
 import consulo.language.editor.CodeInsightBundle;
 import com.intellij.java.language.psi.PsiIfStatement;
 import com.intellij.java.language.psi.PsiStatement;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import consulo.language.util.IncorrectOperationException;
 
 import java.util.List;

@@ -15,17 +15,18 @@
  */
 package com.intellij.java.impl.ipp.increment;
 
-import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import com.intellij.psi.*;
-import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
-import consulo.language.psi.scope.LocalSearchScope;
-import consulo.content.scope.SearchScope;
-import consulo.language.psi.util.PsiTreeUtil;
-import consulo.language.util.IncorrectOperationException;
-import com.siyeh.IntentionPowerPackBundle;
 import com.intellij.java.impl.ipp.base.MutablyNamedIntention;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
+import com.siyeh.IntentionPowerPackBundle;
+import consulo.content.scope.SearchScope;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.scope.LocalSearchScope;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 

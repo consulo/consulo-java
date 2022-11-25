@@ -15,40 +15,40 @@
  */
 package com.intellij.java.impl.refactoring.memberPushDown;
 
-import com.intellij.java.language.codeInsight.AnnotationUtil;
-import com.intellij.java.language.impl.codeInsight.ChangeContextUtil;
 import com.intellij.java.impl.codeInsight.intention.impl.CreateClassDialog;
 import com.intellij.java.impl.codeInsight.intention.impl.CreateSubclassAction;
+import com.intellij.java.impl.refactoring.listeners.JavaRefactoringListenerManager;
+import com.intellij.java.impl.refactoring.listeners.impl.JavaRefactoringListenerManagerImpl;
+import com.intellij.java.impl.refactoring.util.RefactoringUtil;
+import com.intellij.java.impl.refactoring.util.classMembers.MemberInfo;
+import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
+import com.intellij.java.language.codeInsight.AnnotationUtil;
+import com.intellij.java.language.impl.codeInsight.ChangeContextUtil;
 import com.intellij.java.language.psi.*;
-import consulo.logging.Logger;
+import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
+import com.intellij.java.language.psi.javadoc.PsiDocComment;
+import com.intellij.java.language.psi.util.MethodSignatureUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.application.progress.ProgressManager;
+import consulo.ide.impl.idea.refactoring.util.DocCommentPolicy;
+import consulo.language.editor.refactoring.BaseRefactoringProcessor;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiReference;
+import consulo.language.psi.search.ReferencesSearch;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.ui.ex.awt.DialogWrapper;
 import consulo.ui.ex.awt.Messages;
-import consulo.util.dataholder.Key;
-import consulo.util.lang.ref.Ref;
-import com.intellij.psi.*;
-import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
-import com.intellij.java.language.psi.javadoc.PsiDocComment;
-import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
-import consulo.language.psi.search.ReferencesSearch;
-import com.intellij.java.language.psi.util.MethodSignatureUtil;
-import consulo.language.psi.util.PsiTreeUtil;
-import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.java.language.psi.util.TypeConversionUtil;
-import consulo.language.editor.refactoring.BaseRefactoringProcessor;
-import consulo.language.editor.refactoring.RefactoringBundle;
-import com.intellij.java.impl.refactoring.listeners.JavaRefactoringListenerManager;
-import com.intellij.java.impl.refactoring.listeners.impl.JavaRefactoringListenerManagerImpl;
-import consulo.ide.impl.idea.refactoring.util.DocCommentPolicy;
-import com.intellij.java.impl.refactoring.util.RefactoringUtil;
-import com.intellij.java.impl.refactoring.util.classMembers.MemberInfo;
 import consulo.usage.UsageInfo;
 import consulo.usage.UsageViewDescriptor;
-import consulo.language.util.IncorrectOperationException;
-import java.util.HashSet;
-import javax.annotation.Nonnull;
+import consulo.util.dataholder.Key;
+import consulo.util.lang.ref.Ref;
 
+import javax.annotation.Nonnull;
 import java.util.*;
 
 public class PushDownProcessor extends BaseRefactoringProcessor {

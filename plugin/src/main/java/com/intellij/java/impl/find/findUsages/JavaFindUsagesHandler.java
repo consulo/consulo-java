@@ -15,11 +15,6 @@
  */
 package com.intellij.java.impl.find.findUsages;
 
-import consulo.application.CommonBundle;
-import consulo.find.FindBundle;
-import consulo.find.ui.AbstractFindUsagesDialog;
-import consulo.find.FindUsagesHandler;
-import consulo.find.FindUsagesOptions;
 import com.intellij.java.analysis.impl.find.findUsages.JavaFindUsagesHelper;
 import com.intellij.java.analysis.impl.psi.impl.search.ThrowSearchUtil;
 import com.intellij.java.impl.ide.util.SuperMethodWarningUtil;
@@ -31,20 +26,25 @@ import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
 import com.intellij.java.language.psi.util.PropertyUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.dataContext.DataContext;
 import consulo.application.ApplicationManager;
-import consulo.ui.ex.awt.Messages;
-import consulo.util.lang.function.Condition;
-import consulo.language.psi.PsiElement;
-import consulo.language.psi.PsiReference;
-import consulo.content.scope.SearchScope;
-import consulo.language.psi.PsiUtilCore;
-import consulo.language.editor.refactoring.util.NonCodeSearchDescriptionLocation;
-import consulo.usage.UsageInfo;
+import consulo.application.CommonBundle;
 import consulo.application.util.function.Processor;
-import consulo.util.collection.ContainerUtil;
+import consulo.content.scope.SearchScope;
+import consulo.dataContext.DataContext;
+import consulo.find.FindBundle;
+import consulo.find.FindUsagesHandler;
+import consulo.find.FindUsagesOptions;
+import consulo.find.ui.AbstractFindUsagesDialog;
+import consulo.language.editor.refactoring.util.NonCodeSearchDescriptionLocation;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiPackage;
+import consulo.language.psi.PsiReference;
+import consulo.language.psi.PsiUtilCore;
 import consulo.logging.Logger;
-import consulo.psi.PsiPackage;
+import consulo.ui.ex.awt.Messages;
+import consulo.usage.UsageInfo;
+import consulo.util.collection.ContainerUtil;
+import consulo.util.lang.function.Condition;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -172,12 +172,12 @@ public class JavaFindUsagesHandler extends FindUsagesHandler {
         Set<PsiMethod> accessors = new HashSet<PsiMethod>();
         boolean isStatic = field.hasModifierProperty(PsiModifier.STATIC);
         PsiMethod getter = PropertyUtil.findPropertyGetterWithType(propertyName, isStatic, field.getType(),
-            ContainerUtil.iterate(containingClass.getMethods()));
+            List.of(containingClass.getMethods()).iterator());
         if (getter != null) {
           accessors.add(getter);
         }
         PsiMethod setter = PropertyUtil.findPropertySetterWithType(propertyName, isStatic, field.getType(),
-            ContainerUtil.iterate(containingClass.getMethods()));
+            List.of(containingClass.getMethods()).iterator());
         if (setter != null) {
           accessors.add(setter);
         }

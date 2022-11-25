@@ -16,12 +16,14 @@
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PropertyUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.language.psi.PsiDirectory;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiPackage;
 import consulo.language.util.IncorrectOperationException;
-import consulo.psi.PsiPackage;
 
 import javax.annotation.Nonnull;
 import java.util.*;

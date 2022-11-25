@@ -16,19 +16,17 @@
 
 package com.intellij.java.execution.impl;
 
-import consulo.execution.ExecutionBundle;
 import com.intellij.java.language.impl.codeInsight.StructureNodeRenderer;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiSubstitutor;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
+import consulo.execution.ExecutionBundle;
+import consulo.ui.ex.SimpleTextAttributes;
 import consulo.ui.ex.awt.*;
 import consulo.ui.ex.awt.event.DoubleClickListener;
 import consulo.ui.ex.awt.tree.TreeUIHelper;
 import consulo.util.lang.function.Condition;
-import com.intellij.ui.*;
-import consulo.ui.ex.awt.JBList;
-import consulo.ui.ex.awt.DialogWrapper;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

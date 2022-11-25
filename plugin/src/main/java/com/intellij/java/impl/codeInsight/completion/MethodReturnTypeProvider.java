@@ -15,27 +15,27 @@
  */
 package com.intellij.java.impl.codeInsight.completion;
 
-import consulo.language.editor.completion.CompletionParameters;
-import consulo.language.editor.completion.CompletionResultSet;
-import consulo.language.editor.completion.lookup.PrioritizedLookupElement;
-import consulo.language.editor.completion.lookup.LookupElement;
 import com.intellij.java.impl.codeInsight.ExpectedTypesProvider;
 import com.intellij.java.impl.codeInsight.lookup.PsiTypeLookupItem;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.editor.completion.CompletionParameters;
+import consulo.language.editor.completion.CompletionProvider;
+import consulo.language.editor.completion.CompletionResultSet;
+import consulo.language.editor.completion.lookup.LookupElement;
+import consulo.language.editor.completion.lookup.PrioritizedLookupElement;
 import consulo.language.pattern.ElementPattern;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
-import consulo.ide.impl.idea.util.Consumer;
 import consulo.language.util.ProcessingContext;
-import consulo.util.collection.ContainerUtil;
-import consulo.annotation.access.RequiredReadAction;
-import consulo.language.editor.completion.CompletionProvider;
-import consulo.java.language.module.util.JavaClassNames;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Consumer;
 
 import static com.intellij.java.language.patterns.PsiJavaPatterns.psiElement;
 
@@ -58,21 +58,21 @@ class MethodReturnTypeProvider implements CompletionProvider {
     assert method != null;
 
     final PsiTypeVisitor<PsiType> eachProcessor = new PsiTypeVisitor<PsiType>() {
-      private Set<PsiType> myProcessed = ContainerUtil.newHashSet();
+      private Set<PsiType> myProcessed = new HashSet<>();
 
       @Nullable
       @Override
       public PsiType visitType(PsiType type) {
         if (myProcessed.add(type)) {
           int priority = type.equalsToText(JavaClassNames.JAVA_LANG_OBJECT) ? 1 : 1000 - myProcessed.size();
-          consumer.consume(PrioritizedLookupElement.withPriority(PsiTypeLookupItem.createLookupItem(type, position), priority));
+          consumer.accept(PrioritizedLookupElement.withPriority(PsiTypeLookupItem.createLookupItem(type, position), priority));
         }
         return type;
       }
     };
     for (PsiType type : getReturnTypeCandidates(method)) {
       eachProcessor.visitType(type);
-      ExpectedTypesProvider.processAllSuperTypes(type, eachProcessor, position.getProject(), ContainerUtil.<PsiType>newHashSet());
+      ExpectedTypesProvider.processAllSuperTypes(type, eachProcessor, position.getProject(), new HashSet<>());
     }
   }
 

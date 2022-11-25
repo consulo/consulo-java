@@ -17,14 +17,13 @@ package com.intellij.java.impl.ig.classmetrics;
 
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
-import consulo.ui.CheckBox;
-import consulo.ui.ex.awt.GridBag;
-import consulo.ui.ex.awt.JBCheckBox;
-import consulo.ui.ex.awt.UIUtil;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
-import javax.annotation.Nonnull;
+import consulo.language.editor.inspection.ui.CheckBox;
+import consulo.ui.ex.awt.GridBag;
+import consulo.ui.ex.awt.UIUtil;
 
+import javax.annotation.Nonnull;
 import javax.swing.*;
 import java.awt.*;
 
@@ -56,7 +55,7 @@ public abstract class ConstructorCountInspection extends ClassMetricInspection {
   public JComponent createOptionsPanel() {
     final JLabel label = new JLabel(getConfigurationLabel());
     final JFormattedTextField valueField = prepareNumberEditor(() -> m_limit, i -> m_limit = i);
-    final JBCheckBox includeCheckBox =
+    final CheckBox includeCheckBox =
       new CheckBox(InspectionGadgetsBundle.message("too.many.constructors.ignore.deprecated.option"), this, "ignoreDeprecatedConstructors");
 
     final GridBag bag = new GridBag();

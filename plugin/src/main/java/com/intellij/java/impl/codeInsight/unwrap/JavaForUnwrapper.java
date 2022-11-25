@@ -20,7 +20,7 @@ import com.intellij.java.language.psi.PsiForStatement;
 import com.intellij.java.language.psi.PsiForeachStatement;
 import com.intellij.java.language.psi.PsiLoopStatement;
 import com.intellij.java.language.psi.PsiStatement;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import consulo.language.util.IncorrectOperationException;
 
 public class JavaForUnwrapper extends JavaUnwrapper {

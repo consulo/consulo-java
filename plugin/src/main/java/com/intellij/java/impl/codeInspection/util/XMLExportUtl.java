@@ -24,18 +24,24 @@
  */
 package com.intellij.java.impl.codeInspection.util;
 
-import consulo.language.editor.inspection.InspectionsBundle;
-import com.intellij.codeInspection.reference.*;
 import com.intellij.java.analysis.codeInspection.reference.*;
 import com.intellij.java.language.psi.*;
-import consulo.logging.Logger;
-import consulo.document.Document;
-import consulo.document.util.TextRange;
-import consulo.virtualFileSystem.VirtualFile;
-import com.intellij.psi.*;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.java.language.psi.javadoc.PsiDocTag;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
+import consulo.document.Document;
+import consulo.document.util.TextRange;
+import consulo.language.editor.impl.inspection.reference.SmartRefElementPointerImpl;
+import consulo.language.editor.inspection.InspectionsBundle;
+import consulo.language.editor.inspection.reference.RefElement;
+import consulo.language.editor.inspection.reference.RefEntity;
+import consulo.language.editor.inspection.reference.RefFile;
+import consulo.language.editor.inspection.reference.RefModule;
+import consulo.language.psi.PsiDocumentManager;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.logging.Logger;
+import consulo.virtualFileSystem.VirtualFile;
 import org.jdom.Element;
 
 @SuppressWarnings({"HardCodedStringLiteral"})

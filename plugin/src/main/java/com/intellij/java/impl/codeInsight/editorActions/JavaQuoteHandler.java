@@ -49,7 +49,7 @@ public class JavaQuoteHandler extends SimpleTokenSetQuoteHandler implements Java
       if (!iterator.atEnd()) {
         iterator.retreat();
 
-        if (!iterator.atEnd() && StringEscapesTokenTypes.STRING_LITERAL_ESCAPES.contains(iterator.getTokenType())) {
+        if (!iterator.atEnd() && StringEscapesTokenTypes.STRING_LITERAL_ESCAPES.contains((IElementType) iterator.getTokenType())) {
           openingQuote = false;
         }
         iterator.advance();
@@ -67,7 +67,7 @@ public class JavaQuoteHandler extends SimpleTokenSetQuoteHandler implements Java
       if (!iterator.atEnd()) {
         iterator.advance();
 
-        if (!iterator.atEnd() && StringEscapesTokenTypes.STRING_LITERAL_ESCAPES.contains(iterator.getTokenType())) {
+        if (!iterator.atEnd() && StringEscapesTokenTypes.STRING_LITERAL_ESCAPES.contains((IElementType) iterator.getTokenType())) {
           closingQuote = false;
         }
         iterator.retreat();

@@ -15,28 +15,25 @@
  */
 package com.intellij.java.impl.psi.impl.source.resolve.reference.impl;
 
-import javax.annotation.Nonnull;
-
 import consulo.language.editor.completion.CompletionConfidence;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.util.lang.ThreeState;
 
+import javax.annotation.Nonnull;
+
 /**
  * @author Konstantin Bulenkov
  */
-public class JavaReflectionCompletionConfidence extends CompletionConfidence
-{
+public abstract class JavaReflectionCompletionConfidence extends CompletionConfidence {
 
-	@Nonnull
-	@Override
-	public ThreeState shouldSkipAutopopup(@Nonnull PsiElement contextElement, @Nonnull PsiFile psiFile, int offset)
-	{
-		final PsiElement literal = contextElement.getParent();
-		if(literal != null && (JavaReflectionReferenceContributor.PATTERN.accepts(literal) || JavaReflectionReferenceContributor.CLASS_PATTERN.accepts(literal)))
-		{
-			return ThreeState.NO;
-		}
-		return super.shouldSkipAutopopup(contextElement, psiFile, offset);
-	}
+  @Nonnull
+  @Override
+  public ThreeState shouldSkipAutopopup(@Nonnull PsiElement contextElement, @Nonnull PsiFile psiFile, int offset) {
+    final PsiElement literal = contextElement.getParent();
+    if (literal != null && (JavaReflectionReferenceContributor.PATTERN.accepts(literal) || JavaReflectionReferenceContributor.CLASS_PATTERN.accepts(literal))) {
+      return ThreeState.NO;
+    }
+    return super.shouldSkipAutopopup(contextElement, psiFile, offset);
+  }
 }

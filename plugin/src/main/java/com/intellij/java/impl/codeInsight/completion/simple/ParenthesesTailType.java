@@ -16,9 +16,10 @@
 
 package com.intellij.java.impl.codeInsight.completion.simple;
 
-import consulo.language.editor.completion.lookup.TailType;
 import consulo.codeEditor.Editor;
 import consulo.language.codeStyle.CommonCodeStyleSettings;
+import consulo.language.editor.codeStyle.EditorCodeStyle;
+import consulo.language.editor.completion.lookup.TailType;
 
 /**
  * @author peter
@@ -31,7 +32,7 @@ public abstract class ParenthesesTailType extends TailType {
 
   @Override
   public int processTail(final Editor editor, int tailOffset) {
-    CommonCodeStyleSettings styleSettings = getLocalCodeStyleSettings(editor, tailOffset);
+    CommonCodeStyleSettings styleSettings = EditorCodeStyle.getLocalLanguageSettings(editor, tailOffset);
     if (isSpaceBeforeParentheses(styleSettings, editor, tailOffset)) {
       tailOffset = insertChar(editor, tailOffset, ' ');
     }

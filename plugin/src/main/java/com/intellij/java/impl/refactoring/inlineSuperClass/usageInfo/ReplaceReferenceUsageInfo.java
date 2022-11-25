@@ -20,16 +20,17 @@
  */
 package com.intellij.java.impl.refactoring.inlineSuperClass.usageInfo;
 
+import com.intellij.java.impl.refactoring.util.FixableUsageInfo;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiElementFactory;
 import com.intellij.java.language.psi.PsiReferenceExpression;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.util.lang.StringUtil;
-import com.intellij.psi.*;
-import com.intellij.java.impl.refactoring.util.FixableUsageInfo;
-import consulo.ide.impl.idea.util.Function;
-import consulo.language.util.IncorrectOperationException;
+
+import java.util.function.Function;
 
 public class ReplaceReferenceUsageInfo extends FixableUsageInfo {
   public static final Logger LOG = Logger.getInstance(ReplaceReferenceUsageInfo.class);
@@ -40,7 +41,7 @@ public class ReplaceReferenceUsageInfo extends FixableUsageInfo {
     super(referenceExpression);
     myTargetClass = targetClasses[0];
     myConflict = targetClasses.length > 1 ? referenceExpression.getText() + "can be replaced with any of " + StringUtil.join(targetClasses, new Function<PsiClass, String>() {
-      public String fun(final PsiClass psiClass) {
+      public String apply(final PsiClass psiClass) {
         return psiClass.getQualifiedName();
       }
     }, ", ") : null;

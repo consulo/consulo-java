@@ -15,15 +15,15 @@
  */
 package com.intellij.java.impl.slicer;
 
+import com.intellij.java.language.psi.PsiSubstitutor;
+import consulo.application.util.function.Processor;
 import consulo.colorScheme.EffectType;
 import consulo.colorScheme.TextAttributes;
 import consulo.language.psi.PsiElement;
-import com.intellij.java.language.psi.PsiSubstitutor;
-import com.intellij.usages.TextChunk;
-import consulo.usage.UsagePresentation;
-import consulo.application.util.function.Processor;
 import consulo.ui.image.Image;
 import consulo.ui.style.StandardColors;
+import consulo.usage.TextChunk;
+import consulo.usage.UsagePresentation;
 
 import javax.annotation.Nonnull;
 import java.awt.*;
@@ -31,53 +31,44 @@ import java.awt.*;
 /**
  * User: cdr
  */
-public class SliceTooComplexDFAUsage extends SliceUsage
-{
-	public SliceTooComplexDFAUsage(@Nonnull PsiElement element, @Nonnull SliceUsage parent, @Nonnull PsiSubstitutor substitutor)
-	{
-		super(element, parent, substitutor, 0, "");
-	}
+public class SliceTooComplexDFAUsage extends SliceUsage {
+  public SliceTooComplexDFAUsage(@Nonnull PsiElement element, @Nonnull SliceUsage parent, @Nonnull PsiSubstitutor substitutor) {
+    super(element, parent, substitutor, 0, "");
+  }
 
-	@Override
-	public void processChildren(@Nonnull Processor<SliceUsage> processor)
-	{
-		// no children
-	}
+  @Override
+  public void processChildren(@Nonnull Processor<SliceUsage> processor) {
+    // no children
+  }
 
-	@Nonnull
-	@Override
-	public UsagePresentation getPresentation()
-	{
-		final UsagePresentation presentation = super.getPresentation();
-		return new UsagePresentation()
-		{
-			@Override
-			@Nonnull
-			public TextChunk[] getText()
-			{
-				return new TextChunk[]{
-						new TextChunk(new TextAttributes(StandardColors.RED, null, null, EffectType.WAVE_UNDERSCORE, Font.PLAIN), getTooltipText())
-				};
-			}
+  @Nonnull
+  @Override
+  public UsagePresentation getPresentation() {
+    final UsagePresentation presentation = super.getPresentation();
+    return new UsagePresentation() {
+      @Override
+      @Nonnull
+      public TextChunk[] getText() {
+        return new TextChunk[]{
+            new TextChunk(new TextAttributes(StandardColors.RED, null, null, EffectType.WAVE_UNDERSCORE, Font.PLAIN), getTooltipText())
+        };
+      }
 
-			@Override
-			@Nonnull
-			public String getPlainText()
-			{
-				return presentation.getPlainText();
-			}
+      @Override
+      @Nonnull
+      public String getPlainText() {
+        return presentation.getPlainText();
+      }
 
-			@Override
-			public Image getIcon()
-			{
-				return presentation.getIcon();
-			}
+      @Override
+      public Image getIcon() {
+        return presentation.getIcon();
+      }
 
-			@Override
-			public String getTooltipText()
-			{
-				return "Too complex to analyze, analysis stopped here";
-			}
-		};
-	}
+      @Override
+      public String getTooltipText() {
+        return "Too complex to analyze, analysis stopped here";
+      }
+    };
+  }
 }

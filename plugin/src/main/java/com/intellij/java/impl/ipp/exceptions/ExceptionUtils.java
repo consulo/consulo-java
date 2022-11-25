@@ -16,8 +16,8 @@
 package com.intellij.java.impl.ipp.exceptions;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.*;
 import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.psi.PsiElement;
 
 import java.util.Collections;
 import java.util.HashSet;

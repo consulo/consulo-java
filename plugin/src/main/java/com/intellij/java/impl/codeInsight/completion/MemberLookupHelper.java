@@ -15,26 +15,19 @@
  */
 package com.intellij.java.impl.codeInsight.completion;
 
-import java.util.Arrays;
-import java.util.List;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.PsiFormatUtil;
+import com.intellij.java.language.psi.util.PsiFormatUtilBase;
+import com.intellij.java.language.psi.util.PsiTypesUtil;
+import com.intellij.java.language.psi.util.TypeConversionUtil;
+import consulo.language.editor.completion.lookup.LookupElementPresentation;
+import consulo.util.collection.ContainerUtil;
+import consulo.util.lang.StringUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import consulo.language.editor.completion.lookup.LookupElementPresentation;
-import consulo.util.lang.StringUtil;
-import com.intellij.java.language.psi.PsiClass;
-import com.intellij.java.language.psi.PsiClassType;
-import com.intellij.java.language.psi.PsiField;
-import com.intellij.java.language.psi.PsiMember;
-import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.java.language.psi.PsiSubstitutor;
-import com.intellij.java.language.psi.PsiType;
-import com.intellij.java.language.psi.PsiWildcardType;
-import com.intellij.java.language.psi.util.PsiFormatUtil;
-import consulo.ide.impl.psi.util.PsiFormatUtilBase;
-import com.intellij.java.language.psi.util.PsiTypesUtil;
-import com.intellij.java.language.psi.util.TypeConversionUtil;
-import consulo.util.collection.ContainerUtil;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author peter

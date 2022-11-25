@@ -24,19 +24,19 @@
  */
 package com.intellij.java.impl.codeInsight.intention.impl;
 
-import consulo.language.editor.CodeInsightBundle;
-import consulo.language.editor.intention.BaseIntentionAction;
 import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
 import com.intellij.java.language.psi.*;
 import consulo.application.ApplicationManager;
 import consulo.codeEditor.Editor;
-import consulo.project.Project;
+import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.intention.BaseIntentionAction;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.resolve.PsiElementProcessor;
-import consulo.ide.impl.psi.search.PsiElementProcessorAdapter;
+import consulo.language.psi.resolve.PsiElementProcessorAdapter;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

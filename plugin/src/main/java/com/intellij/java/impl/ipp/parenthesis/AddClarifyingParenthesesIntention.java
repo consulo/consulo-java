@@ -15,13 +15,15 @@
  */
 package com.intellij.java.impl.ipp.parenthesis;
 
-import com.intellij.java.language.psi.*;
-import consulo.component.ProcessCanceledException;
-import com.intellij.psi.*;
-import consulo.language.ast.IElementType;
-import consulo.language.util.IncorrectOperationException;
 import com.intellij.java.impl.ipp.base.Intention;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
+import com.intellij.java.language.psi.*;
+import consulo.component.ProcessCanceledException;
+import consulo.language.ast.IElementType;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiWhiteSpace;
+import consulo.language.util.IncorrectOperationException;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 

@@ -15,28 +15,23 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
-import java.util.Collections;
-import java.util.List;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.search.PsiShortNamesCache;
+import com.intellij.java.language.psi.util.PsiFormatUtil;
+import com.intellij.java.language.psi.util.PsiFormatUtilBase;
+import com.intellij.java.language.psi.util.PsiUtil;
+import com.intellij.java.language.psi.util.TypeConversionUtil;
+import consulo.codeEditor.Editor;
+import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.SmartPointerManager;
+import consulo.language.psi.SmartPsiElementPointer;
+import consulo.project.Project;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import consulo.codeEditor.Editor;
-import consulo.project.Project;
-import consulo.language.psi.PsiElement;
-import com.intellij.java.language.psi.PsiExpression;
-import com.intellij.java.language.psi.PsiField;
-import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
-import com.intellij.java.language.psi.PsiSubstitutor;
-import com.intellij.java.language.psi.PsiType;
-import com.intellij.java.language.psi.PsiTypeElement;
-import consulo.language.psi.SmartPointerManager;
-import consulo.language.psi.SmartPsiElementPointer;
-import com.intellij.java.language.psi.search.PsiShortNamesCache;
-import com.intellij.java.language.psi.util.PsiFormatUtil;
-import consulo.ide.impl.psi.util.PsiFormatUtilBase;
-import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.java.language.psi.util.TypeConversionUtil;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
+import java.util.Collections;
+import java.util.List;
 
 public class StaticImportConstantFix extends StaticImportMemberFix<PsiField>
 {

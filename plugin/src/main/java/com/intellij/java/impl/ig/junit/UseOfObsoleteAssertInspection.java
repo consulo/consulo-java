@@ -23,7 +23,7 @@ import consulo.module.Module;
 import consulo.ide.impl.idea.openapi.module.ModuleUtil;
 import consulo.project.Project;
 import consulo.util.lang.Comparing;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.util.PsiTreeUtil;
@@ -35,7 +35,7 @@ import com.siyeh.ig.InspectionGadgetsFix;
 
 import javax.annotation.Nullable;
 
-public class UseOfObsoleteAssertInspection extends BaseInspection {
+public abstract class UseOfObsoleteAssertInspection extends BaseInspection {
 
   @Override
   @Nonnull

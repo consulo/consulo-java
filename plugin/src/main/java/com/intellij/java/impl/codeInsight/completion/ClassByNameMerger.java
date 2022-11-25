@@ -20,7 +20,8 @@ import consulo.language.editor.completion.CompletionParameters;
 import consulo.language.editor.completion.CompletionResultSet;
 import consulo.language.editor.completion.lookup.LookupElement;
 import consulo.language.editor.completion.lookup.LookupElementBuilder;
-import consulo.ide.impl.idea.util.Consumer;
+
+import java.util.function.Consumer;
 
 /**
  * @author peter
@@ -37,7 +38,7 @@ public class ClassByNameMerger implements Consumer<LookupElement> {
   }
 
   @Override
-  public void consume(LookupElement element) {
+  public void accept(LookupElement element) {
     if (!myShouldMerge) {
       myResult.addElement(element);
       return;

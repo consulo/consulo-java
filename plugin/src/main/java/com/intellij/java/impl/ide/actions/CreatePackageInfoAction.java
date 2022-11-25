@@ -15,133 +15,112 @@
  */
 package com.intellij.java.impl.ide.actions;
 
-import static com.intellij.java.impl.ide.fileTemplates.JavaTemplateUtil.INTERNAL_PACKAGE_INFO_TEMPLATE_NAME;
-
-import javax.annotation.Nullable;
-
-import consulo.application.CommonBundle;
-import consulo.ide.IdeBundle;
-import consulo.ide.IdeView;
-import consulo.fileTemplate.FileTemplate;
-import consulo.fileTemplate.FileTemplateManager;
-import consulo.fileTemplate.AttributesDefaults;
-import consulo.ide.action.CreateFromTemplateActionBase;
 import com.intellij.java.language.impl.JavaFileType;
-import consulo.ui.ex.action.AnActionEvent;
-import consulo.language.editor.CommonDataKeys;
-import consulo.dataContext.DataContext;
-import consulo.language.editor.LangDataKeys;
-import consulo.application.dumb.DumbAware;
-import consulo.project.Project;
-import consulo.module.content.ProjectFileIndex;
-import consulo.module.content.ProjectRootManager;
-import consulo.ui.ex.awt.Messages;
-import consulo.util.lang.StringUtil;
 import com.intellij.java.language.psi.JavaDirectoryService;
-import consulo.language.psi.PsiDirectory;
 import com.intellij.java.language.psi.PsiJavaPackage;
 import com.intellij.java.language.psi.PsiNameHelper;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.application.CommonBundle;
+import consulo.application.dumb.DumbAware;
+import consulo.dataContext.DataContext;
+import consulo.fileTemplate.AttributesDefaults;
+import consulo.fileTemplate.FileTemplate;
+import consulo.fileTemplate.FileTemplateManager;
+import consulo.ide.IdeBundle;
+import consulo.ide.IdeView;
+import consulo.ide.action.CreateFromTemplateActionBase;
 import consulo.java.impl.JavaBundle;
-import consulo.roots.ContentFolderScopes;
+import consulo.language.content.LanguageContentFolderScopes;
+import consulo.language.editor.CommonDataKeys;
+import consulo.language.psi.PsiDirectory;
+import consulo.module.content.ProjectFileIndex;
+import consulo.module.content.ProjectRootManager;
+import consulo.project.Project;
+import consulo.ui.ex.action.AnActionEvent;
+import consulo.ui.ex.awt.Messages;
+import consulo.util.lang.StringUtil;
+
+import javax.annotation.Nullable;
+
+import static com.intellij.java.impl.ide.fileTemplates.JavaTemplateUtil.INTERNAL_PACKAGE_INFO_TEMPLATE_NAME;
 
 /**
  * @author Bas Leijdekkers
  */
-public class CreatePackageInfoAction extends CreateFromTemplateActionBase implements DumbAware
-{
-	public CreatePackageInfoAction()
-	{
-		super(JavaBundle.message("action.create.new.package-info.title"), JavaBundle.message("action.create.new.package-info.description"), JavaFileType.INSTANCE.getIcon());
-	}
+public class CreatePackageInfoAction extends CreateFromTemplateActionBase implements DumbAware {
+  public CreatePackageInfoAction() {
+    super(JavaBundle.message("action.create.new.package-info.title"), JavaBundle.message("action.create.new.package-info.description"), JavaFileType.INSTANCE.getIcon());
+  }
 
-	@Nullable
-	@Override
-	protected PsiDirectory getTargetDirectory(DataContext dataContext, IdeView view)
-	{
-		final PsiDirectory[] directories = view.getDirectories();
-		for(PsiDirectory directory : directories)
-		{
-			final PsiJavaPackage aPackage = JavaDirectoryService.getInstance().getPackage(directory);
-			if(aPackage == null)
-			{
-				continue;
-			}
-			if(directory.findFile(PsiJavaPackage.PACKAGE_INFO_FILE) != null)
-			{
-				Messages.showErrorDialog(dataContext.getData(CommonDataKeys.PROJECT), JavaBundle.message("error.package.already.contains.package-info", aPackage.getQualifiedName()), IdeBundle
-						.message("title.cannot.create.file"));
-				return null;
-			}
-			else if(directory.findFile("package.html") != null)
-			{
-				if(Messages.showOkCancelDialog(dataContext.getData(CommonDataKeys.PROJECT), JavaBundle.message("error.package.already.contains.package.html", aPackage.getQualifiedName()), JavaBundle
-						.message("error.package.html.found.title"), IdeBundle.message("button.create"), CommonBundle.message("button.cancel"), Messages.getQuestionIcon()) != Messages.OK)
-				{
-					return null;
-				}
-			}
+  @Nullable
+  @Override
+  protected PsiDirectory getTargetDirectory(DataContext dataContext, IdeView view) {
+    final PsiDirectory[] directories = view.getDirectories();
+    for (PsiDirectory directory : directories) {
+      final PsiJavaPackage aPackage = JavaDirectoryService.getInstance().getPackage(directory);
+      if (aPackage == null) {
+        continue;
+      }
+      if (directory.findFile(PsiJavaPackage.PACKAGE_INFO_FILE) != null) {
+        Messages.showErrorDialog(dataContext.getData(CommonDataKeys.PROJECT), JavaBundle.message("error.package.already.contains.package-info", aPackage.getQualifiedName()), IdeBundle
+            .message("title.cannot.create.file"));
+        return null;
+      } else if (directory.findFile("package.html") != null) {
+        if (Messages.showOkCancelDialog(dataContext.getData(CommonDataKeys.PROJECT), JavaBundle.message("error.package.already.contains.package.html", aPackage.getQualifiedName()), JavaBundle
+            .message("error.package.html.found.title"), IdeBundle.message("button.create"), CommonBundle.message("button.cancel"), Messages.getQuestionIcon()) != Messages.OK) {
+          return null;
+        }
+      }
 
-		}
-		return super.getTargetDirectory(dataContext, view);
-	}
+    }
+    return super.getTargetDirectory(dataContext, view);
+  }
 
-	@Override
-	public void update(AnActionEvent e)
-	{
-		if(!e.getPresentation().isVisible())
-		{
-			return;
-		}
+  @Override
+  public void update(AnActionEvent e) {
+    if (!e.getPresentation().isVisible()) {
+      return;
+    }
 
-		e.getPresentation().setEnabledAndVisible(isAvailable(e.getDataContext()));
-	}
+    e.getPresentation().setEnabledAndVisible(isAvailable(e.getDataContext()));
+  }
 
-	private static boolean isAvailable(DataContext dataContext)
-	{
-		final Project project = dataContext.getData(CommonDataKeys.PROJECT);
-		final IdeView view = dataContext.getData(LangDataKeys.IDE_VIEW);
-		if(project == null || view == null)
-		{
-			return false;
-		}
-		final PsiDirectory[] directories = view.getDirectories();
-		if(directories.length == 0)
-		{
-			return false;
-		}
-		final ProjectFileIndex projectFileIndex = ProjectRootManager.getInstance(project).getFileIndex();
-		final JavaDirectoryService directoryService = JavaDirectoryService.getInstance();
-		final PsiNameHelper nameHelper = PsiNameHelper.getInstance(project);
-		for(PsiDirectory directory : directories)
-		{
-			if(projectFileIndex.isUnderContentFolderType(directory.getVirtualFile(), ContentFolderScopes.productionAndTest()) && PsiUtil.isLanguageLevel5OrHigher(directory))
-			{
-				final PsiJavaPackage aPackage = directoryService.getPackage(directory);
-				if(aPackage != null)
-				{
-					final String qualifiedName = aPackage.getQualifiedName();
-					if(StringUtil.isEmpty(qualifiedName) || nameHelper.isQualifiedName(qualifiedName))
-					{
-						return true;
-					}
-				}
-			}
+  private static boolean isAvailable(DataContext dataContext) {
+    final Project project = dataContext.getData(CommonDataKeys.PROJECT);
+    final IdeView view = dataContext.getData(IdeView.KEY);
+    if (project == null || view == null) {
+      return false;
+    }
+    final PsiDirectory[] directories = view.getDirectories();
+    if (directories.length == 0) {
+      return false;
+    }
+    final ProjectFileIndex projectFileIndex = ProjectRootManager.getInstance(project).getFileIndex();
+    final JavaDirectoryService directoryService = JavaDirectoryService.getInstance();
+    final PsiNameHelper nameHelper = PsiNameHelper.getInstance(project);
+    for (PsiDirectory directory : directories) {
+      if (projectFileIndex.isUnderContentFolderType(directory.getVirtualFile(), LanguageContentFolderScopes.productionAndTest()) && PsiUtil.isLanguageLevel5OrHigher(directory)) {
+        final PsiJavaPackage aPackage = directoryService.getPackage(directory);
+        if (aPackage != null) {
+          final String qualifiedName = aPackage.getQualifiedName();
+          if (StringUtil.isEmpty(qualifiedName) || nameHelper.isQualifiedName(qualifiedName)) {
+            return true;
+          }
+        }
+      }
 
-		}
-		return false;
-	}
+    }
+    return false;
+  }
 
-	@Nullable
-	@Override
-	public AttributesDefaults getAttributesDefaults(DataContext dataContext)
-	{
-		return new AttributesDefaults(INTERNAL_PACKAGE_INFO_TEMPLATE_NAME).withFixedName(true);
-	}
+  @Nullable
+  @Override
+  public AttributesDefaults getAttributesDefaults(DataContext dataContext) {
+    return new AttributesDefaults(INTERNAL_PACKAGE_INFO_TEMPLATE_NAME).withFixedName(true);
+  }
 
-	@Override
-	protected FileTemplate getTemplate(Project project, PsiDirectory dir)
-	{
-		return FileTemplateManager.getInstance(project).getInternalTemplate(INTERNAL_PACKAGE_INFO_TEMPLATE_NAME);
-	}
+  @Override
+  protected FileTemplate getTemplate(Project project, PsiDirectory dir) {
+    return FileTemplateManager.getInstance(project).getInternalTemplate(INTERNAL_PACKAGE_INFO_TEMPLATE_NAME);
+  }
 }

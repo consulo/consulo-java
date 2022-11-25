@@ -16,7 +16,7 @@
 package com.intellij.java.impl.ig.performance;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import consulo.language.psi.util.PsiTreeUtil;
 import com.siyeh.ig.psiutils.ClassUtils;

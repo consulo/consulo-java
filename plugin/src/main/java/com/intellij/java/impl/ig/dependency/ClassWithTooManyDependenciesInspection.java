@@ -15,24 +15,24 @@
  */
 package com.intellij.java.impl.ig.dependency;
 
-import consulo.language.editor.scope.AnalysisScope;
+import com.intellij.java.analysis.codeInspection.reference.RefClass;
+import com.intellij.java.analysis.codeInspection.reference.RefJavaVisitor;
+import com.intellij.java.impl.ig.BaseGlobalInspection;
+import com.siyeh.InspectionGadgetsBundle;
 import consulo.language.editor.inspection.CommonProblemDescriptor;
 import consulo.language.editor.inspection.GlobalInspectionContext;
-import consulo.language.editor.inspection.scheme.InspectionManager;
 import consulo.language.editor.inspection.ProblemDescriptionsProcessor;
-import com.intellij.java.analysis.codeInspection.reference.RefClass;
 import consulo.language.editor.inspection.reference.RefFile;
-import com.intellij.java.analysis.codeInspection.reference.RefJavaVisitor;
 import consulo.language.editor.inspection.reference.RefManager;
-import consulo.ide.impl.idea.codeInspection.ui.SingleIntegerFieldOptionsPanel;
-import com.siyeh.InspectionGadgetsBundle;
-import com.intellij.java.impl.ig.BaseGlobalInspection;
-import javax.annotation.Nonnull;
+import consulo.language.editor.inspection.scheme.InspectionManager;
+import consulo.language.editor.inspection.ui.SingleIntegerFieldOptionsPanel;
+import consulo.language.editor.scope.AnalysisScope;
 
+import javax.annotation.Nonnull;
 import javax.swing.*;
 import java.util.Set;
 
-public class ClassWithTooManyDependenciesInspection
+public abstract class ClassWithTooManyDependenciesInspection
   extends BaseGlobalInspection {
 
   @SuppressWarnings({"PublicField"})

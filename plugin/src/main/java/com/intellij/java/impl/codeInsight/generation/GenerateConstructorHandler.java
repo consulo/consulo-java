@@ -15,11 +15,6 @@
  */
 package com.intellij.java.impl.codeInsight.generation;
 
-import consulo.application.CommonBundle;
-import consulo.language.editor.CodeInsightBundle;
-import consulo.language.editor.ImplicitUsageProvider;
-import consulo.ide.impl.idea.codeInsight.generation.ClassMember;
-import consulo.ide.impl.idea.ide.util.MemberChooser;
 import com.intellij.java.language.codeInsight.NullableNotNullManager;
 import com.intellij.java.language.impl.codeInsight.generation.GenerationInfo;
 import com.intellij.java.language.impl.codeInsight.generation.PsiElementClassMember;
@@ -29,18 +24,22 @@ import com.intellij.java.language.psi.codeStyle.VariableKind;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
+import consulo.application.CommonBundle;
 import consulo.component.extension.Extensions;
-import consulo.project.Project;
-import consulo.ui.ex.awt.Messages;
+import consulo.ide.impl.idea.ide.util.MemberChooser;
+import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.ImplicitUsageProvider;
+import consulo.language.editor.generation.ClassMember;
 import consulo.language.psi.PsiCompiledElement;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiManager;
-import consulo.language.codeStyle.CodeStyleManager;
-import consulo.ide.impl.idea.util.Function;
 import consulo.language.util.IncorrectOperationException;
-import consulo.util.collection.ContainerUtil;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.logging.Logger;
+import consulo.project.Project;
+import consulo.ui.ex.awt.Messages;
+import consulo.util.collection.ContainerUtil;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
@@ -108,12 +107,7 @@ public class GenerateConstructorHandler extends GenerateMembersHandlerBase {
           baseConstructors = new PsiMethod[]{array.get(0)};
         } else {
           final PsiSubstitutor substitutor = TypeConversionUtil.getSuperClassSubstitutor(baseClass, aClass, PsiSubstitutor.EMPTY);
-          PsiMethodMember[] constructors = ContainerUtil.map2Array(array, PsiMethodMember.class, new Function<PsiMethod, PsiMethodMember>() {
-            @Override
-            public PsiMethodMember fun(final PsiMethod s) {
-              return new PsiMethodMember(s, substitutor);
-            }
-          });
+          PsiMethodMember[] constructors = ContainerUtil.map2Array(array, PsiMethodMember.class, s -> new PsiMethodMember(s, substitutor));
           MemberChooser<PsiMethodMember> chooser = new MemberChooser<PsiMethodMember>(constructors, false, true, project);
           chooser.setTitle(CodeInsightBundle.message("generate.constructor.super.constructor.chooser.title"));
           chooser.show();
@@ -292,7 +286,7 @@ public class GenerateConstructorHandler extends GenerateMembersHandlerBase {
       fieldParams.add(parm);
     }
 
-    ConstructorBodyGenerator generator = ConstructorBodyGenerator.INSTANCE.forLanguage(aClass.getLanguage());
+    ConstructorBodyGenerator generator = ConstructorBodyGenerator.forLanguage(aClass.getLanguage());
     if (generator != null) {
       @NonNls StringBuilder buffer = new StringBuilder();
       generator.start(buffer, constructor.getName(), PsiParameter.EMPTY_ARRAY);

@@ -1,6 +1,5 @@
 package com.intellij.unscramble;
 
-import com.intellij.java.impl.unscramble.UnscrambleDialog;
 import junit.framework.TestCase;
 import org.jetbrains.annotations.NonNls;
 

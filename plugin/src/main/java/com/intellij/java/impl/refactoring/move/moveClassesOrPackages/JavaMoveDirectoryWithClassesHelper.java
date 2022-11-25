@@ -3,20 +3,19 @@ package com.intellij.java.impl.refactoring.move.moveClassesOrPackages;
 import com.intellij.java.impl.refactoring.util.RefactoringConflictsUtil;
 import com.intellij.java.language.impl.codeInsight.ChangeContextUtil;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
+import consulo.language.editor.refactoring.event.RefactoringElementListener;
 import consulo.language.psi.PsiDirectory;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiReference;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.PsiTreeUtil;
-import consulo.language.editor.refactoring.event.RefactoringElementListener;
-import com.intellij.refactoring.move.moveClassesOrPackages.MoveDirectoryWithClassesHelper;
+import consulo.project.Project;
 import consulo.usage.UsageInfo;
-import consulo.ide.impl.idea.util.Function;
 import consulo.util.collection.MultiMap;
 
 import java.util.*;
+import java.util.function.Function;
 
 public class JavaMoveDirectoryWithClassesHelper extends MoveDirectoryWithClassesHelper {
 

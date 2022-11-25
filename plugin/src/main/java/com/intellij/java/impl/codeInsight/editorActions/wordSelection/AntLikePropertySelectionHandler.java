@@ -15,19 +15,19 @@
  */
 package com.intellij.java.impl.codeInsight.editorActions.wordSelection;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
-import consulo.language.editor.action.ExtendWordSelectionHandler;
-import consulo.language.Language;
 import com.intellij.java.language.JavaLanguage;
-import com.intellij.lang.xml.XMLLanguage;
 import consulo.codeEditor.Editor;
 import consulo.document.util.TextRange;
+import consulo.language.Language;
+import consulo.language.editor.action.ExtendWordSelectionHandler;
 import consulo.language.psi.PsiComment;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.xml.lang.xml.XMLLanguage;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 public class AntLikePropertySelectionHandler implements ExtendWordSelectionHandler {
   @Override

@@ -15,27 +15,29 @@
  */
 package com.intellij.java.impl.refactoring.makeStatic;
 
+import com.intellij.java.impl.refactoring.move.MoveInstanceMembersUtil;
+import com.intellij.java.impl.refactoring.util.RefactoringUtil;
+import com.intellij.java.impl.refactoring.util.javadoc.MethodJavaDocHelper;
+import com.intellij.java.language.impl.refactoring.util.RefactoringChangeUtil;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import com.intellij.psi.*;
-import consulo.language.codeStyle.CodeStyleManager;
-import consulo.language.codeStyle.CodeStyleSettingsManager;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
 import com.intellij.java.language.psi.javadoc.PsiDocTag;
+import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.codeStyle.CodeStyleSettingsManager;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiManager;
+import consulo.language.psi.PsiReference;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.PsiTreeUtil;
-import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.language.editor.refactoring.RefactoringBundle;
-import com.intellij.java.impl.refactoring.move.MoveInstanceMembersUtil;
-import com.intellij.java.language.impl.refactoring.util.RefactoringChangeUtil;
-import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
-import com.intellij.java.impl.refactoring.util.RefactoringUtil;
-import com.intellij.java.impl.refactoring.util.javadoc.MethodJavaDocHelper;
-import consulo.usage.UsageInfo;
 import consulo.language.util.IncorrectOperationException;
-import consulo.util.collection.MultiMap;
 import consulo.logging.Logger;
+import consulo.project.Project;
+import consulo.usage.UsageInfo;
+import consulo.util.collection.MultiMap;
 import org.jetbrains.annotations.NonNls;
 
 import java.util.ArrayList;

@@ -15,12 +15,6 @@
  */
 package com.intellij.java.impl.codeInsight.completion;
 
-import consulo.language.editor.completion.lookup.TailType;
-import com.intellij.codeInsight.completion.*;
-import consulo.language.editor.completion.lookup.LookupElement;
-import consulo.language.editor.completion.lookup.LookupElementBuilder;
-import consulo.language.editor.completion.lookup.TailTypeDecorator;
-import consulo.application.AllIcons;
 import com.intellij.java.impl.codeInsight.completion.JavaKeywordCompletion.OverrideableSpace;
 import com.intellij.java.indexing.impl.stubs.index.JavaAutoModuleNameIndex;
 import com.intellij.java.indexing.impl.stubs.index.JavaModuleNameIndex;
@@ -28,23 +22,26 @@ import com.intellij.java.indexing.impl.stubs.index.JavaSourceModuleNameIndex;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.module.Module;
-import consulo.language.util.ModuleUtilCore;
-import consulo.project.Project;
-import consulo.module.content.ModuleRootManager;
-import consulo.virtualFileSystem.VirtualFile;
-import com.intellij.psi.*;
-import consulo.language.psi.scope.GlobalSearchScope;
-import com.intellij.psi.search.ProjectScope;
-import consulo.language.psi.util.PsiTreeUtil;
-import consulo.ide.impl.idea.util.Consumer;
+import consulo.application.AllIcons;
 import consulo.java.language.impl.JavaIcons;
-import consulo.psi.PsiPackage;
+import consulo.language.editor.completion.CompletionParameters;
+import consulo.language.editor.completion.CompletionResultSet;
+import consulo.language.editor.completion.lookup.*;
+import consulo.language.psi.*;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.ModuleUtilCore;
+import consulo.module.Module;
+import consulo.module.content.ModuleRootManager;
+import consulo.project.Project;
+import consulo.project.content.scope.ProjectScopes;
+import consulo.virtualFileSystem.VirtualFile;
 
 import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 import static com.intellij.java.impl.codeInsight.completion.BasicExpressionCompletionContributor.createKeywordLookupItem;
@@ -86,29 +83,29 @@ class JavaModuleCompletion {
   private static void addFileHeaderKeywords(PsiElement position, Consumer<LookupElement> result) {
     PsiElement prev = PsiTreeUtil.prevVisibleLeaf(position);
     if (prev == null) {
-      result.consume(new OverrideableSpace(createKeywordLookupItem(position, PsiKeyword.MODULE), TailType.HUMBLE_SPACE_BEFORE_WORD));
-      result.consume(new OverrideableSpace(createKeywordLookupItem(position, PsiKeyword.OPEN), TailType.HUMBLE_SPACE_BEFORE_WORD));
+      result.accept(new OverrideableSpace(createKeywordLookupItem(position, PsiKeyword.MODULE), TailType.HUMBLE_SPACE_BEFORE_WORD));
+      result.accept(new OverrideableSpace(createKeywordLookupItem(position, PsiKeyword.OPEN), TailType.HUMBLE_SPACE_BEFORE_WORD));
     } else if (PsiUtil.isJavaToken(prev, JavaTokenType.OPEN_KEYWORD)) {
-      result.consume(new OverrideableSpace(createKeywordLookupItem(position, PsiKeyword.MODULE), TailType.HUMBLE_SPACE_BEFORE_WORD));
+      result.accept(new OverrideableSpace(createKeywordLookupItem(position, PsiKeyword.MODULE), TailType.HUMBLE_SPACE_BEFORE_WORD));
     }
   }
 
   private static void addModuleStatementKeywords(PsiElement position, Consumer<LookupElement> result) {
-    result.consume(new OverrideableSpace(createKeywordLookupItem(position, PsiKeyword.REQUIRES), TailType.HUMBLE_SPACE_BEFORE_WORD));
-    result.consume(new OverrideableSpace(createKeywordLookupItem(position, PsiKeyword.EXPORTS), TailType.HUMBLE_SPACE_BEFORE_WORD));
-    result.consume(new OverrideableSpace(createKeywordLookupItem(position, PsiKeyword.OPENS), TailType.HUMBLE_SPACE_BEFORE_WORD));
-    result.consume(new OverrideableSpace(createKeywordLookupItem(position, PsiKeyword.USES), TailType.HUMBLE_SPACE_BEFORE_WORD));
-    result.consume(new OverrideableSpace(createKeywordLookupItem(position, PsiKeyword.PROVIDES), TailType.HUMBLE_SPACE_BEFORE_WORD));
+    result.accept(new OverrideableSpace(createKeywordLookupItem(position, PsiKeyword.REQUIRES), TailType.HUMBLE_SPACE_BEFORE_WORD));
+    result.accept(new OverrideableSpace(createKeywordLookupItem(position, PsiKeyword.EXPORTS), TailType.HUMBLE_SPACE_BEFORE_WORD));
+    result.accept(new OverrideableSpace(createKeywordLookupItem(position, PsiKeyword.OPENS), TailType.HUMBLE_SPACE_BEFORE_WORD));
+    result.accept(new OverrideableSpace(createKeywordLookupItem(position, PsiKeyword.USES), TailType.HUMBLE_SPACE_BEFORE_WORD));
+    result.accept(new OverrideableSpace(createKeywordLookupItem(position, PsiKeyword.PROVIDES), TailType.HUMBLE_SPACE_BEFORE_WORD));
   }
 
   private static void addProvidesStatementKeywords(PsiElement position, Consumer<LookupElement> result) {
-    result.consume(new OverrideableSpace(createKeywordLookupItem(position, PsiKeyword.WITH), TailType.HUMBLE_SPACE_BEFORE_WORD));
+    result.accept(new OverrideableSpace(createKeywordLookupItem(position, PsiKeyword.WITH), TailType.HUMBLE_SPACE_BEFORE_WORD));
   }
 
   private static void addRequiresStatementKeywords(PsiElement context, PsiElement position, Consumer<LookupElement> result) {
     if (context.getParent() instanceof PsiRequiresStatement) {
-      result.consume(new OverrideableSpace(createKeywordLookupItem(position, PsiKeyword.TRANSITIVE), TailType.HUMBLE_SPACE_BEFORE_WORD));
-      result.consume(new OverrideableSpace(createKeywordLookupItem(position, PsiKeyword.STATIC), TailType.HUMBLE_SPACE_BEFORE_WORD));
+      result.accept(new OverrideableSpace(createKeywordLookupItem(position, PsiKeyword.TRANSITIVE), TailType.HUMBLE_SPACE_BEFORE_WORD));
+      result.accept(new OverrideableSpace(createKeywordLookupItem(position, PsiKeyword.STATIC), TailType.HUMBLE_SPACE_BEFORE_WORD));
     }
   }
 
@@ -123,7 +120,7 @@ class JavaModuleCompletion {
         filter.add(((PsiJavaModule) parent).getName());
 
         JavaModuleNameIndex index = JavaModuleNameIndex.getInstance();
-        GlobalSearchScope scope = ProjectScope.getAllScope(project);
+        GlobalSearchScope scope = (GlobalSearchScope) ProjectScopes.getAllScope(project);
         for (String name : index.getAllKeys(project)) {
           if (index.get(name, project, scope).size() > 0 && filter.add(name)) {
             LookupElement lookup = LookupElementBuilder.create(name).withIcon(JavaIcons.Nodes.JavaModule);
@@ -195,7 +192,7 @@ class JavaModuleCompletion {
   private static void processPackage(PsiPackage pkg, GlobalSearchScope scope, Consumer<LookupElement> result) {
     String packageName = pkg.getQualifiedName();
     if (isQualified(packageName) && !PsiUtil.isPackageEmpty(pkg.getDirectories(scope), packageName)) {
-      result.consume(new OverrideableSpace(lookupElement(pkg), TailType.SEMICOLON));
+      result.accept(new OverrideableSpace(lookupElement(pkg), TailType.SEMICOLON));
     }
     for (PsiPackage subPackage : pkg.getSubPackages(scope)) {
       processPackage(subPackage, scope, result);
@@ -205,7 +202,7 @@ class JavaModuleCompletion {
   private static final Predicate<PsiClass> SERVICE_FILTER = psiClass -> !psiClass.isEnum() && psiClass.hasModifierProperty(PsiModifier.PUBLIC);
 
   private static void processClasses(Project project, GlobalSearchScope scope, CompletionResultSet resultSet, Predicate<PsiClass> filter, TailType tail) {
-    GlobalSearchScope _scope = scope != null ? scope : ProjectScope.getAllScope(project);
+    GlobalSearchScope _scope = scope != null ? scope : (GlobalSearchScope) ProjectScopes.getAllScope(project);
     AllClassesGetter.processJavaClasses(resultSet.getPrefixMatcher(), project, _scope, psiClass ->
     {
       if (isQualified(psiClass.getQualifiedName()) && filter.test(psiClass)) {

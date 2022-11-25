@@ -15,57 +15,54 @@
  */
 package com.intellij.java.impl.codeInsight.javadoc;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import consulo.component.extension.ExtensionPointName;
 import com.intellij.java.language.psi.PsiDocCommentOwner;
 import com.intellij.java.language.psi.PsiMember;
+import consulo.component.extension.ExtensionPointName;
 
-public abstract class DocumentationDelegateProvider
-{
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-	public static final ExtensionPointName<DocumentationDelegateProvider> EP_NAME = ExtensionPointName.create("consulo.java.documentationDelegateProvider");
+public abstract class DocumentationDelegateProvider {
 
-	/**
-	 * <p>
-	 * Computes PsiDocCommentOwner to get documentation from.
-	 * </p>
-	 * <p>
-	 * Suppose there is a {@code Foo#bar()} with doc and {@code Baz#bar()} without doc:
-	 * <pre>
-	 * class Foo {
-	 *   /**
-	 *   * Some javadoc
-	 *   *&#47;
-	 *   void bar() {}
-	 * }
-	 * class Baz {
-	 *   void bar() {}
-	 * }
-	 * </pre>
-	 * If it is needed to display doc from {@code Foo#bar()} when doc for {@code Baz#bar()} is queried
-	 * then this method should return PsiMethod corresponding to {@code Foo#bar()} for PsiMethod corresponding to {@code Baz#bar()}.
-	 * <br>
-	 * The copied documentation will include <i>Description copied from</i> link.
-	 * </p>
-	 *
-	 * @param member method to search delegate for.
-	 * @return delegate PsiDocCommentOwner instance.
-	 */
-	@Nullable
-	public abstract PsiDocCommentOwner computeDocumentationDelegate(@Nonnull PsiMember member);
+  public static final ExtensionPointName<DocumentationDelegateProvider> EP_NAME = ExtensionPointName.create("consulo.java.documentationDelegateProvider");
 
-	@Nullable
-	public static PsiDocCommentOwner findDocumentationDelegate(@Nonnull PsiMember method)
-	{
-		for(DocumentationDelegateProvider delegator : EP_NAME.getExtensions())
-		{
-			PsiDocCommentOwner type = delegator.computeDocumentationDelegate(method);
-			if(type != null)
-			{
-				return type;
-			}
-		}
-		return null;
-	}
+  /**
+   * <p>
+   * Computes PsiDocCommentOwner to get documentation from.
+   * </p>
+   * <p>
+   * Suppose there is a {@code Foo#bar()} with doc and {@code Baz#bar()} without doc:
+   * <pre>
+   * class Foo {
+   *   /**
+   *   * Some javadoc
+   *   *&#47;
+   *   void bar() {}
+   * }
+   * class Baz {
+   *   void bar() {}
+   * }
+   * </pre>
+   * If it is needed to display doc from {@code Foo#bar()} when doc for {@code Baz#bar()} is queried
+   * then this method should return PsiMethod corresponding to {@code Foo#bar()} for PsiMethod corresponding to {@code Baz#bar()}.
+   * <br>
+   * The copied documentation will include <i>Description copied from</i> link.
+   * </p>
+   *
+   * @param member method to search delegate for.
+   * @return delegate PsiDocCommentOwner instance.
+   */
+  @Nullable
+  public abstract PsiDocCommentOwner computeDocumentationDelegate(@Nonnull PsiMember member);
+
+  @Nullable
+  public static PsiDocCommentOwner findDocumentationDelegate(@Nonnull PsiMember method) {
+    for (DocumentationDelegateProvider delegator : EP_NAME.getExtensions()) {
+      PsiDocCommentOwner type = delegator.computeDocumentationDelegate(method);
+      if (type != null) {
+        return type;
+      }
+    }
+    return null;
+  }
 }

@@ -15,29 +15,29 @@
  */
 package com.intellij.java.impl.codeInsight.intention.impl;
 
-import consulo.language.editor.CodeInsightBundle;
-import consulo.language.editor.FileModificationService;
-import consulo.language.editor.intention.HighPriorityAction;
-import consulo.language.editor.intention.BaseIntentionAction;
-import consulo.ide.impl.idea.ide.util.MemberChooser;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
 import consulo.application.ApplicationManager;
 import consulo.codeEditor.Editor;
+import consulo.ide.impl.idea.ide.util.MemberChooser;
 import consulo.ide.impl.idea.openapi.fileEditor.ex.IdeDocumentHistory;
-import consulo.project.Project;
-import consulo.ui.ex.awt.DialogWrapper;
+import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.FileModificationService;
+import consulo.language.editor.intention.BaseIntentionAction;
+import consulo.language.editor.intention.HighPriorityAction;
+import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.SmartPointerManager;
 import consulo.language.psi.SmartPsiElementPointer;
-import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
-import consulo.util.collection.ContainerUtil;
 import consulo.logging.Logger;
+import consulo.project.Project;
+import consulo.ui.ex.awt.DialogWrapper;
+import consulo.util.collection.ContainerUtil;
 import consulo.util.dataholder.Key;
 
 import javax.annotation.Nonnull;

@@ -21,7 +21,7 @@ import com.intellij.java.analysis.codeInspection.GroupNames;
 import consulo.language.editor.inspection.InspectionsBundle;
 import consulo.language.editor.inspection.ProblemsHolder;
 import com.intellij.java.analysis.impl.codeInspection.ex.BaseLocalInspectionTool;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import org.jetbrains.annotations.Nls;
 
 public class JavacQuirksInspection extends BaseLocalInspectionTool {

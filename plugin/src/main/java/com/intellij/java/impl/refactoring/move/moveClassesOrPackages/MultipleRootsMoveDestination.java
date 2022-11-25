@@ -18,7 +18,7 @@ package com.intellij.java.impl.refactoring.move.moveClassesOrPackages;
 import com.intellij.java.language.psi.PsiJavaPackage;
 import consulo.project.Project;
 import consulo.virtualFileSystem.VirtualFile;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import com.intellij.java.impl.refactoring.PackageWrapper;
 import com.intellij.java.impl.refactoring.util.RefactoringUtil;
 import consulo.usage.UsageInfo;

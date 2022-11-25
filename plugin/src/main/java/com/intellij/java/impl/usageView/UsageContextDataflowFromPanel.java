@@ -16,41 +16,36 @@
 
 package com.intellij.java.impl.usageView;
 
-import javax.annotation.Nonnull;
+import consulo.ide.impl.idea.usages.impl.UsageViewImpl;
 import consulo.project.Project;
 import consulo.usage.UsageContextPanel;
 import consulo.usage.UsageView;
 import consulo.usage.UsageViewPresentation;
-import consulo.ide.impl.idea.usages.impl.UsageViewImpl;
 
-public class UsageContextDataflowFromPanel extends UsageContextDataflowToPanel
-{
-	public static class Provider extends UsageContextDataflowToPanel.Provider
-	{
-		@Nonnull
-		@Override
-		public UsageContextPanel create(@Nonnull UsageView usageView)
-		{
-			return new UsageContextDataflowFromPanel(((UsageViewImpl) usageView).getProject(), usageView.getPresentation());
-		}
+import javax.annotation.Nonnull;
 
-		@Nonnull
-		@Override
-		public String getTabTitle()
-		{
-			return "Dataflow from Here";
-		}
-	}
+public class UsageContextDataflowFromPanel extends UsageContextDataflowToPanel {
+  public static class Provider extends UsageContextDataflowToPanel.Provider {
+    @Nonnull
+    @Override
+    public UsageContextPanel create(@Nonnull UsageView usageView) {
+      return new UsageContextDataflowFromPanel(((UsageViewImpl) usageView).getProject(), usageView.getPresentation());
+    }
 
-	public UsageContextDataflowFromPanel(@Nonnull Project project, @Nonnull UsageViewPresentation presentation)
-	{
-		super(project, presentation);
-	}
+    @Nonnull
+    @Override
+    public String getTabTitle() {
+      return "Dataflow from Here";
+    }
+  }
+
+  public UsageContextDataflowFromPanel(@Nonnull Project project, @Nonnull UsageViewPresentation presentation) {
+    super(project, presentation);
+  }
 
 
-	@Override
-	protected boolean isDataflowToThis()
-	{
-		return false;
-	}
+  @Override
+  protected boolean isDataflowToThis() {
+    return false;
+  }
 }

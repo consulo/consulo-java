@@ -20,11 +20,11 @@ import com.intellij.java.language.psi.PsiClassType;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
 import com.intellij.java.language.psi.util.PsiTypesUtil;
-import consulo.util.lang.function.Condition;
-import consulo.language.psi.PsiElement;
 import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
+import consulo.language.psi.PsiElement;
 import consulo.util.collection.ContainerUtil;
-import com.intellij.util.xml.*;
+import consulo.util.lang.function.Condition;
+import consulo.xml.util.xml.*;
 
 import javax.annotation.Nonnull;
 import java.util.Arrays;

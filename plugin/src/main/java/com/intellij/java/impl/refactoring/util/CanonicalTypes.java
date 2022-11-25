@@ -16,18 +16,18 @@
 package com.intellij.java.impl.refactoring.util;
 
 import com.intellij.java.language.psi.*;
-import consulo.logging.Logger;
-import consulo.util.lang.StringUtil;
-import com.intellij.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.ide.impl.idea.util.Function;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiManager;
 import consulo.language.util.IncorrectOperationException;
+import consulo.logging.Logger;
 import consulo.util.collection.ContainerUtil;
-import java.util.HashMap;
+import consulo.util.lang.StringUtil;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
 
+import javax.annotation.Nonnull;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -241,17 +241,13 @@ public class CanonicalTypes {
     @Nonnull
     @Override
     public PsiType getType(final PsiElement context, final PsiManager manager) throws IncorrectOperationException {
-      final List<PsiType> types = ContainerUtil.map(myTypes, new Function<Type, PsiType>() {
-        @Override public PsiType fun(Type type) { return type.getType(context, manager); }
-      });
+      final List<PsiType> types = ContainerUtil.map(myTypes, type -> type.getType(context, manager));
       return new PsiDisjunctionType(types, manager);
     }
 
     @Override
     public String getTypeText() {
-      return StringUtil.join(myTypes, new Function<Type, String>() {
-        @Override public String fun(Type type) { return type.getTypeText(); }
-      }, "|");
+      return StringUtil.join(myTypes, type -> type.getTypeText(), "|");
     }
 
     @Override
@@ -317,9 +313,7 @@ public class CanonicalTypes {
 
     @Override
     public Type visitDisjunctionType(final PsiDisjunctionType disjunctionType) {
-      final List<Type> types = ContainerUtil.map(disjunctionType.getDisjunctions(), new Function<PsiType, Type>() {
-        @Override public Type fun(PsiType type) { return createTypeWrapper(type); }
-      });
+      final List<Type> types = ContainerUtil.map(disjunctionType.getDisjunctions(), type -> createTypeWrapper(type));
       return new DisjunctionType(types);
     }
   }

@@ -21,7 +21,7 @@ import com.intellij.java.language.psi.PsiClassInitializer;
 import com.intellij.java.language.psi.PsiCodeBlock;
 import com.intellij.java.language.psi.PsiModifier;
 import consulo.util.lang.StringUtil;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.java.analysis.codeInsight.JavaCodeInsightBundle;
 import javax.annotation.Nonnull;

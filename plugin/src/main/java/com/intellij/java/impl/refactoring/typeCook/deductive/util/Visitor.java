@@ -18,7 +18,7 @@ package com.intellij.java.impl.refactoring.typeCook.deductive.util;
 import com.intellij.java.language.psi.JavaRecursiveElementWalkingVisitor;
 import com.intellij.java.language.psi.PsiJavaFile;
 import com.intellij.java.language.psi.PsiJavaPackage;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 
 /**
  * @author db

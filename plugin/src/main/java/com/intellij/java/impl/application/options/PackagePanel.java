@@ -18,13 +18,9 @@ package com.intellij.java.impl.application.options;
 import consulo.application.ApplicationBundle;
 import consulo.language.codeStyle.PackageEntry;
 import consulo.language.codeStyle.PackageEntryTable;
-import com.intellij.ui.*;
+import consulo.ui.ex.awt.*;
 import consulo.ui.ex.awt.table.JBTable;
-import consulo.ui.ex.awt.UIUtil;
-import consulo.ui.ex.awt.AnActionButton;
-import consulo.ui.ex.awt.AnActionButtonRunnable;
-import consulo.ui.ex.awt.IdeBorderFactory;
-import consulo.ui.ex.awt.ToolbarDecorator;
+import consulo.ui.ex.awt.util.TableUtil;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;

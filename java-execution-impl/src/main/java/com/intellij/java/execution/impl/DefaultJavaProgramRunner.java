@@ -20,7 +20,6 @@ import com.intellij.java.execution.configurations.JavaCommandLineState;
 import com.intellij.java.execution.runners.JavaPatchableProgramRunner;
 import com.intellij.java.execution.runners.ProcessProxy;
 import com.intellij.java.execution.runners.ProcessProxyFactory;
-import com.intellij.java.execution.unscramble.ThreadDumpConsoleFactory;
 import com.intellij.java.execution.unscramble.ThreadDumpParser;
 import consulo.application.AllIcons;
 import consulo.application.ApplicationManager;
@@ -37,6 +36,7 @@ import consulo.execution.runner.RunContentBuilder;
 import consulo.execution.ui.ExecutionConsole;
 import consulo.execution.ui.RunContentDescriptor;
 import consulo.execution.unscramble.AnalyzeStacktraceUtil;
+import consulo.execution.unscramble.ThreadDumpConsoleFactory;
 import consulo.execution.unscramble.ThreadState;
 import consulo.java.execution.configurations.OwnJavaParameters;
 import consulo.process.ExecutionException;
@@ -199,7 +199,7 @@ public class DefaultJavaProgramRunner extends JavaPatchableProgramRunner {
 
       proxy.sendBreak();
 
-      if (wiseListener != null) {
+      if (wiseListener != null) {                                           
         wiseListener.after();
       }
     }

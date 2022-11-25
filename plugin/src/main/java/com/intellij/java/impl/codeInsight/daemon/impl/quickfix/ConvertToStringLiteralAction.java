@@ -25,7 +25,7 @@ import consulo.language.editor.intention.IntentionAction;
 import consulo.codeEditor.Editor;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.language.util.IncorrectOperationException;
 

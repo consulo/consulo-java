@@ -15,13 +15,18 @@
  */
 package com.intellij.java.impl.codeInsight.template.macro;
 
-import consulo.language.editor.CodeInsightBundle;
-import com.intellij.codeInsight.template.*;
 import com.intellij.java.impl.codeInsight.template.JavaCodeContextType;
 import com.intellij.java.impl.codeInsight.template.PsiTypeResult;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
+import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.template.Expression;
+import consulo.language.editor.template.ExpressionContext;
+import consulo.language.editor.template.Result;
+import consulo.language.editor.template.context.TemplateContextType;
+import consulo.language.editor.template.macro.Macro;
+import consulo.project.Project;
+
 import javax.annotation.Nonnull;
 
 /**

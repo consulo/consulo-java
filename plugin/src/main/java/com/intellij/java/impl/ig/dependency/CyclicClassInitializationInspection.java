@@ -15,48 +15,48 @@
  */
 package com.intellij.java.impl.ig.dependency;
 
-import consulo.language.editor.scope.AnalysisScope;
-import consulo.language.editor.inspection.CommonProblemDescriptor;
-import consulo.language.editor.inspection.GlobalInspectionContext;
-import consulo.language.editor.inspection.scheme.InspectionManager;
 import com.intellij.java.analysis.codeInspection.reference.RefClass;
-import consulo.language.editor.inspection.reference.RefEntity;
+import com.intellij.java.impl.ig.BaseGlobalInspection;
 import com.intellij.java.language.psi.PsiClass;
 import com.siyeh.InspectionGadgetsBundle;
-import com.intellij.java.impl.ig.BaseGlobalInspection;
+import consulo.language.editor.inspection.CommonProblemDescriptor;
+import consulo.language.editor.inspection.GlobalInspectionContext;
+import consulo.language.editor.inspection.reference.RefEntity;
+import consulo.language.editor.inspection.scheme.InspectionManager;
+import consulo.language.editor.scope.AnalysisScope;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import java.util.HashSet;
 import java.util.Set;
 
-public class CyclicClassInitializationInspection extends BaseGlobalInspection {
+public abstract class CyclicClassInitializationInspection extends BaseGlobalInspection {
 
   @Nonnull
   @Override
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
-      "cyclic.class.initialization.display.name");
+        "cyclic.class.initialization.display.name");
   }
 
   @Nullable
   public CommonProblemDescriptor[] checkElement(
-    RefEntity refEntity,
-    AnalysisScope analysisScope,
-    InspectionManager inspectionManager,
-    GlobalInspectionContext globalInspectionContext) {
+      RefEntity refEntity,
+      AnalysisScope analysisScope,
+      InspectionManager inspectionManager,
+      GlobalInspectionContext globalInspectionContext) {
     if (!(refEntity instanceof RefClass)) {
       return null;
     }
-    final RefClass refClass = (RefClass)refEntity;
+    final RefClass refClass = (RefClass) refEntity;
     final PsiClass aClass = refClass.getElement();
     if (aClass.getContainingClass() != null) {
       return null;
     }
     final Set<RefClass> dependencies =
-      InitializationDependencyUtils.calculateTransitiveInitializationDependentsForClass(refClass);
+        InitializationDependencyUtils.calculateTransitiveInitializationDependentsForClass(refClass);
     final Set<RefClass> dependents =
-      InitializationDependencyUtils.calculateTransitiveInitializationDependenciesForClass(refClass);
+        InitializationDependencyUtils.calculateTransitiveInitializationDependenciesForClass(refClass);
     final Set<RefClass> mutualDependents = new HashSet<RefClass>(dependencies);
     mutualDependents.retainAll(dependents);
 
@@ -65,10 +65,10 @@ public class CyclicClassInitializationInspection extends BaseGlobalInspection {
       return null;
     }
     final String errorString = InspectionGadgetsBundle.message(
-      "cyclic.class.initialization.problem.descriptor",
-      refEntity.getName(), numMutualDependents);
+        "cyclic.class.initialization.problem.descriptor",
+        refEntity.getName(), numMutualDependents);
     return new CommonProblemDescriptor[]{
-      inspectionManager.createProblemDescriptor(errorString)
+        inspectionManager.createProblemDescriptor(errorString)
     };
   }
 }

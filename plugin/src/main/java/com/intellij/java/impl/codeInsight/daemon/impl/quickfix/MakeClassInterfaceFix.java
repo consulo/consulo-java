@@ -15,26 +15,21 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
+import com.intellij.java.language.psi.*;
+import consulo.codeEditor.Editor;
+import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.language.ast.IElementType;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.inspection.LocalQuickFixAndIntentionActionOnPsiElement;
-import consulo.undoRedo.util.UndoUtil;
-import consulo.logging.Logger;
-import consulo.codeEditor.Editor;
-import consulo.project.Project;
-import com.intellij.java.language.psi.JavaPsiFacade;
-import com.intellij.java.language.psi.JavaTokenType;
-import com.intellij.java.language.psi.PsiClass;
+import consulo.language.editor.util.LanguageUndoUtil;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
-import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
-import com.intellij.java.language.psi.PsiKeyword;
-import com.intellij.java.language.psi.PsiReferenceList;
-import consulo.language.ast.IElementType;
 import consulo.language.util.IncorrectOperationException;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.logging.Logger;
+import consulo.project.Project;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class MakeClassInterfaceFix extends LocalQuickFixAndIntentionActionOnPsiElement {
   private static final Logger LOG = Logger.getInstance(MakeClassInterfaceFix.class);
@@ -93,7 +88,7 @@ public class MakeClassInterfaceFix extends LocalQuickFixAndIntentionActionOnPsiE
         }
       }
       convertPsiClass(myClass, myMakeInterface);
-      UndoUtil.markPsiFileForUndo(file);
+      LanguageUndoUtil.markPsiFileForUndo(file);
     } catch (IncorrectOperationException e) {
       LOG.error(e);
     }

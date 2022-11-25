@@ -15,18 +15,18 @@
  */
 package com.intellij.java.execution.impl.junit2.info;
 
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiMethod;
 import consulo.execution.action.Location;
 import consulo.execution.action.PsiLocation;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.ModuleUtilCore;
 import consulo.logging.Logger;
 import consulo.module.Module;
-import consulo.ide.impl.idea.openapi.module.ModuleUtil;
 import consulo.project.Project;
-import com.intellij.java.language.psi.PsiClass;
-import consulo.language.psi.PsiElement;
-import com.intellij.java.language.psi.PsiMethod;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import java.util.Iterator;
 
 // Author: dyoma
@@ -62,7 +62,7 @@ public class MethodLocation extends Location<PsiMethod> {
   @Nullable
   @Override
   public Module getModule() {
-    return ModuleUtil.findModuleForPsiElement(myMethod);
+    return ModuleUtilCore.findModuleForPsiElement(myMethod);
   }
 
   public PsiClass getContainingClass() {

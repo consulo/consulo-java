@@ -15,95 +15,82 @@
  */
 package com.intellij.java.impl.codeInspection.deadCode;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.java.analysis.codeInspection.GlobalJavaInspectionContext;
-import consulo.language.editor.inspection.InspectionsBundle;
 import com.intellij.java.analysis.codeInspection.ex.EntryPointsManager;
+import com.intellij.java.analysis.impl.codeInspection.util.RefFilter;
 import consulo.ide.impl.idea.codeInspection.ex.GlobalInspectionContextImpl;
-import consulo.ide.impl.idea.codeInspection.ex.HTMLComposerImpl;
 import consulo.ide.impl.idea.codeInspection.ex.InspectionRVContentProvider;
-import consulo.language.editor.inspection.scheme.InspectionToolWrapper;
 import consulo.ide.impl.idea.codeInspection.ex.QuickFixAction;
-import consulo.language.editor.inspection.reference.RefElement;
-import consulo.language.editor.inspection.reference.RefEntity;
 import consulo.ide.impl.idea.codeInspection.ui.InspectionNode;
 import consulo.ide.impl.idea.codeInspection.ui.InspectionTreeNode;
-import com.intellij.java.analysis.impl.codeInspection.util.RefFilter;
+import consulo.language.editor.inspection.HTMLComposerImpl;
+import consulo.language.editor.inspection.InspectionsBundle;
+import consulo.language.editor.inspection.reference.RefElement;
+import consulo.language.editor.inspection.reference.RefEntity;
+import consulo.language.editor.inspection.scheme.InspectionToolWrapper;
 
-public class DummyEntryPointsPresentation extends UnusedDeclarationPresentation
-{
-	private static final RefEntryPointFilter myFilter = new RefEntryPointFilter();
-	private QuickFixAction[] myQuickFixActions;
+import javax.annotation.Nonnull;
 
-	public DummyEntryPointsPresentation(@Nonnull InspectionToolWrapper toolWrapper,
-			@Nonnull GlobalInspectionContextImpl context)
-	{
-		super(toolWrapper, context);
-	}
+public class DummyEntryPointsPresentation extends UnusedDeclarationPresentation {
+  private static final RefEntryPointFilter myFilter = new RefEntryPointFilter();
+  private QuickFixAction[] myQuickFixActions;
 
-	@Override
-	public RefFilter getFilter()
-	{
-		return myFilter;
-	}
+  public DummyEntryPointsPresentation(@Nonnull InspectionToolWrapper toolWrapper,
+                                      @Nonnull GlobalInspectionContextImpl context) {
+    super(toolWrapper, context);
+  }
 
-	@Override
-	public QuickFixAction[] getQuickFixes(@Nonnull final RefEntity[] refElements)
-	{
-		if(myQuickFixActions == null)
-		{
-			myQuickFixActions = new QuickFixAction[]{new MoveEntriesToSuspicious(getToolWrapper())};
-		}
-		return myQuickFixActions;
-	}
+  @Override
+  public RefFilter getFilter() {
+    return myFilter;
+  }
 
-	@Override
-	protected String getSeverityDelegateName()
-	{
-		return UnusedDeclarationInspection.SHORT_NAME;
-	}
+  @Override
+  public QuickFixAction[] getQuickFixes(@Nonnull final RefEntity[] refElements) {
+    if (myQuickFixActions == null) {
+      myQuickFixActions = new QuickFixAction[]{new MoveEntriesToSuspicious(getToolWrapper())};
+    }
+    return myQuickFixActions;
+  }
 
-	private class MoveEntriesToSuspicious extends QuickFixAction
-	{
-		private MoveEntriesToSuspicious(@Nonnull InspectionToolWrapper toolWrapper)
-		{
-			super(InspectionsBundle.message("inspection.dead.code.remove.from.entry.point.quickfix"), null, null,
-					toolWrapper);
-		}
+  @Override
+  protected String getSeverityDelegateName() {
+    return UnusedDeclarationInspection.SHORT_NAME;
+  }
 
-		@Override
-		protected boolean applyFix(@Nonnull RefEntity[] refElements)
-		{
-			final EntryPointsManager entryPointsManager = getContext().getExtension(GlobalJavaInspectionContext
-					.CONTEXT).getEntryPointsManager(getContext().getRefManager());
-			for(RefEntity refElement : refElements)
-			{
-				if(refElement instanceof RefElement)
-				{
-					entryPointsManager.removeEntryPoint((RefElement) refElement);
-				}
-			}
+  private class MoveEntriesToSuspicious extends QuickFixAction {
+    private MoveEntriesToSuspicious(@Nonnull InspectionToolWrapper toolWrapper) {
+      super(InspectionsBundle.message("inspection.dead.code.remove.from.entry.point.quickfix"), null, null,
+          toolWrapper);
+    }
 
-			return true;
-		}
-	}
+    @Override
+    protected boolean applyFix(@Nonnull RefEntity[] refElements) {
+      final EntryPointsManager entryPointsManager = getContext().getExtension(GlobalJavaInspectionContext
+          .CONTEXT).getEntryPointsManager(getContext().getRefManager());
+      for (RefEntity refElement : refElements) {
+        if (refElement instanceof RefElement) {
+          entryPointsManager.removeEntryPoint((RefElement) refElement);
+        }
+      }
 
-	@Nonnull
-	@Override
-	public InspectionNode createToolNode(@Nonnull GlobalInspectionContextImpl context,
-			@Nonnull InspectionNode node,
-			@Nonnull InspectionRVContentProvider provider,
-			@Nonnull InspectionTreeNode parentNode,
-			boolean showStructure)
-	{
-		return node;
-	}
+      return true;
+    }
+  }
 
-	@Override
-	@Nonnull
-	public HTMLComposerImpl getComposer()
-	{
-		return new DeadHTMLComposer(this);
-	}
+  @Nonnull
+  @Override
+  public InspectionNode createToolNode(@Nonnull GlobalInspectionContextImpl context,
+                                       @Nonnull InspectionNode node,
+                                       @Nonnull InspectionRVContentProvider provider,
+                                       @Nonnull InspectionTreeNode parentNode,
+                                       boolean showStructure) {
+    return node;
+  }
+
+  @Override
+  @Nonnull
+  public HTMLComposerImpl getComposer() {
+    return new DeadHTMLComposer(this);
+  }
 }

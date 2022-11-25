@@ -1,13 +1,12 @@
 package com.intellij.java.impl.codeInsight.completion;
 
-import consulo.language.editor.completion.lookup.LookupItem;
 import com.intellij.java.impl.codeInsight.lookup.TypedLookupItem;
-import consulo.language.editor.template.Template;
-import consulo.language.editor.impl.internal.template.TemplateImpl;
 import com.intellij.java.language.psi.JavaPsiFacade;
-import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiType;
+import consulo.language.editor.completion.lookup.LookupItem;
+import consulo.language.editor.template.Template;
+import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import org.jetbrains.annotations.NonNls;
 
@@ -33,7 +32,7 @@ public class SmartCompletionTemplateItem extends LookupItem<Template> implements
     int segmentsCount = template.getSegmentsCount();
 
     for (int j = segmentsCount - 1; j >= 0; j--) {
-      if (template.getSegmentName(j).equals(TemplateImpl.END)) {
+      if (template.getSegmentName(j).equals(Template.END)) {
         continue;
       }
 

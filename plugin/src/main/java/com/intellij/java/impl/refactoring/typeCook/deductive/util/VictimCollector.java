@@ -16,7 +16,7 @@
 package com.intellij.java.impl.refactoring.typeCook.deductive.util;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 import com.intellij.java.impl.refactoring.typeCook.Settings;
 import com.intellij.java.impl.refactoring.typeCook.Util;
 import consulo.java.language.module.util.JavaClassNames;

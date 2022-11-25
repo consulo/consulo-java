@@ -15,207 +15,157 @@
  */
 package com.intellij.java.impl.codeInsight.generation;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
+import com.intellij.java.language.impl.psi.impl.source.PsiExtensibleClass;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.infos.CandidateInfo;
+import consulo.ui.ex.ColoredTextContainer;
+import consulo.ui.ex.SimpleTextAttributes;
+import consulo.util.lang.StringUtil;
+import org.jetbrains.annotations.TestOnly;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.swing.JTree;
-
-import consulo.ui.ex.awt.SimpleColoredComponent;
-import org.jetbrains.annotations.TestOnly;
-import consulo.util.lang.StringUtil;
-import com.intellij.java.language.psi.PsiArrayType;
-import com.intellij.java.language.psi.PsiClass;
-import com.intellij.java.language.psi.PsiClassType;
-import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.java.language.psi.PsiModifier;
-import com.intellij.java.language.psi.PsiParameter;
-import com.intellij.java.language.psi.PsiParameterList;
-import com.intellij.java.language.psi.PsiPrimitiveType;
-import com.intellij.java.language.psi.PsiType;
-import com.intellij.java.language.impl.psi.impl.source.PsiExtensibleClass;
-import com.intellij.java.language.psi.infos.CandidateInfo;
-import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
-import consulo.ui.ex.SimpleTextAttributes;
-import consulo.util.collection.ContainerUtil;
+import javax.swing.*;
+import java.util.*;
 
 /**
  * @author Dmitry Batkovich <dmitry.batkovich@jetbrains.com>
  */
-public class PsiMethodWithOverridingPercentMember extends PsiMethodMember
-{
+public class PsiMethodWithOverridingPercentMember extends PsiMethodMember {
 
-	private final int myOverridingPercent;
+  private final int myOverridingPercent;
 
-	public PsiMethodWithOverridingPercentMember(final CandidateInfo info, final int overridingPercent)
-	{
-		super(info);
-		myOverridingPercent = overridingPercent;
-	}
+  public PsiMethodWithOverridingPercentMember(final CandidateInfo info, final int overridingPercent) {
+    super(info);
+    myOverridingPercent = overridingPercent;
+  }
 
-	@Override
-	public void renderTreeNode(final SimpleColoredComponent component, final JTree tree)
-	{
-		component.append(myOverridingPercent + "% ", SimpleTextAttributes.GRAY_ATTRIBUTES);
-		super.renderTreeNode(component, tree);
-	}
+  @Override
+  public void renderTreeNode(final ColoredTextContainer component, final JTree tree) {
+    component.append(myOverridingPercent + "% ", SimpleTextAttributes.GRAY_ATTRIBUTES);
+    super.renderTreeNode(component, tree);
+  }
 
-	@TestOnly
-	public int getOverridingPercent()
-	{
-		return myOverridingPercent;
-	}
+  @TestOnly
+  public int getOverridingPercent() {
+    return myOverridingPercent;
+  }
 
-	public static final Comparator<PsiMethodMember> COMPARATOR = new Comparator<PsiMethodMember>()
-	{
-		@Override
-		public int compare(PsiMethodMember e1, PsiMethodMember e2)
-		{
-			if(!(e1 instanceof PsiMethodWithOverridingPercentMember))
-			{
-				if(!(e2 instanceof PsiMethodWithOverridingPercentMember))
-				{
-					return e1.equals(e2) ? 0 : -1;
-				}
-				else
-				{
-					return -1;
-				}
-			}
+  public static final Comparator<PsiMethodMember> COMPARATOR = new Comparator<PsiMethodMember>() {
+    @Override
+    public int compare(PsiMethodMember e1, PsiMethodMember e2) {
+      if (!(e1 instanceof PsiMethodWithOverridingPercentMember)) {
+        if (!(e2 instanceof PsiMethodWithOverridingPercentMember)) {
+          return e1.equals(e2) ? 0 : -1;
+        } else {
+          return -1;
+        }
+      }
 
 
-			if(!(e2 instanceof PsiMethodWithOverridingPercentMember))
-			{
-				return 1;
-			}
-			int sub = ((PsiMethodWithOverridingPercentMember) e2).myOverridingPercent - ((PsiMethodWithOverridingPercentMember) e1).myOverridingPercent;
-			if(sub != 0)
-			{
-				return sub;
-			}
-			return String.CASE_INSENSITIVE_ORDER.compare(e1.getText(), e2.getText());
-		}
-	};
+      if (!(e2 instanceof PsiMethodWithOverridingPercentMember)) {
+        return 1;
+      }
+      int sub = ((PsiMethodWithOverridingPercentMember) e2).myOverridingPercent - ((PsiMethodWithOverridingPercentMember) e1).myOverridingPercent;
+      if (sub != 0) {
+        return sub;
+      }
+      return String.CASE_INSENSITIVE_ORDER.compare(e1.getText(), e2.getText());
+    }
+  };
 
-	@Nonnull
-	public static PsiMethodWithOverridingPercentMember[] calculateOverridingPercents(@Nonnull final Collection<CandidateInfo> candidateInfos)
-	{
-		final List<PsiMethodWithOverridingPercentMember> result = new ArrayList<PsiMethodWithOverridingPercentMember>(candidateInfos.size());
-		final Map<String, Collection<PsiClass>> classShortNames2Inheritors = new HashMap<String, Collection<PsiClass>>();
-		for(final CandidateInfo candidateInfo : candidateInfos)
-		{
-			final PsiMethod method = (PsiMethod) candidateInfo.getElement();
-			if(!method.hasModifierProperty(PsiModifier.FINAL) &&
-					!method.isConstructor() &&
-					!method.isDeprecated() &&
-					!EXCLUDED_JAVA_LANG_OBJECT_METHOD_NAMES.contains(method.getName()))
-			{
-				final PsiClass containingClass = method.getContainingClass();
-				if(containingClass == null)
-				{
-					continue;
-				}
+  @Nonnull
+  public static PsiMethodWithOverridingPercentMember[] calculateOverridingPercents(@Nonnull final Collection<CandidateInfo> candidateInfos) {
+    final List<PsiMethodWithOverridingPercentMember> result = new ArrayList<PsiMethodWithOverridingPercentMember>(candidateInfos.size());
+    final Map<String, Collection<PsiClass>> classShortNames2Inheritors = new HashMap<String, Collection<PsiClass>>();
+    for (final CandidateInfo candidateInfo : candidateInfos) {
+      final PsiMethod method = (PsiMethod) candidateInfo.getElement();
+      if (!method.hasModifierProperty(PsiModifier.FINAL) &&
+          !method.isConstructor() &&
+          !method.isDeprecated() &&
+          !EXCLUDED_JAVA_LANG_OBJECT_METHOD_NAMES.contains(method.getName())) {
+        final PsiClass containingClass = method.getContainingClass();
+        if (containingClass == null) {
+          continue;
+        }
 
-				final String classShortName = containingClass.getName();
+        final String classShortName = containingClass.getName();
 
-				Collection<PsiClass> allInheritors = classShortNames2Inheritors.get(classShortName);
-				if(allInheritors == null)
-				{
-					allInheritors = ClassInheritorsSearch.search(containingClass).findAll();
-					classShortNames2Inheritors.put(classShortName, allInheritors);
-				}
+        Collection<PsiClass> allInheritors = classShortNames2Inheritors.get(classShortName);
+        if (allInheritors == null) {
+          allInheritors = ClassInheritorsSearch.search(containingClass).findAll();
+          classShortNames2Inheritors.put(classShortName, allInheritors);
+        }
 
-				final int allInheritorsCount = allInheritors.size() - 1;
-				if(allInheritorsCount > 0)
-				{
-					final int percent = searchForOverridingCount(method, allInheritors) * 100 / allInheritorsCount;
-					if(percent > 1)
-					{
-						result.add(new PsiMethodWithOverridingPercentMember(candidateInfo, percent));
-					}
-				}
-			}
-		}
-		return result.toArray(new PsiMethodWithOverridingPercentMember[result.size()]);
-	}
+        final int allInheritorsCount = allInheritors.size() - 1;
+        if (allInheritorsCount > 0) {
+          final int percent = searchForOverridingCount(method, allInheritors) * 100 / allInheritorsCount;
+          if (percent > 1) {
+            result.add(new PsiMethodWithOverridingPercentMember(candidateInfo, percent));
+          }
+        }
+      }
+    }
+    return result.toArray(new PsiMethodWithOverridingPercentMember[result.size()]);
+  }
 
-	private static int searchForOverridingCount(final PsiMethod method, final Collection<PsiClass> containingClassInheritors)
-	{
-		int counter = 0;
-		for(final PsiClass inheritor : containingClassInheritors)
-		{
-			if(inheritor instanceof PsiExtensibleClass)
-			{
-				final List<PsiMethod> ownMethods = ((PsiExtensibleClass) inheritor).getOwnMethods();
-				for(PsiMethod ownMethod : ownMethods)
-				{
-					if(maybeSuper(method, ownMethod))
-					{
-						counter++;
-						break;
-					}
-				}
+  private static int searchForOverridingCount(final PsiMethod method, final Collection<PsiClass> containingClassInheritors) {
+    int counter = 0;
+    for (final PsiClass inheritor : containingClassInheritors) {
+      if (inheritor instanceof PsiExtensibleClass) {
+        final List<PsiMethod> ownMethods = ((PsiExtensibleClass) inheritor).getOwnMethods();
+        for (PsiMethod ownMethod : ownMethods) {
+          if (maybeSuper(method, ownMethod)) {
+            counter++;
+            break;
+          }
+        }
 
-			}
-		}
-		return counter;
-	}
+      }
+    }
+    return counter;
+  }
 
-	private static boolean maybeSuper(@Nonnull final PsiMethod superMethod, @Nonnull final PsiMethod method)
-	{
-		if(!superMethod.getName().equals(method.getName()))
-		{
-			return false;
-		}
-		final PsiParameterList superMethodParameterList = superMethod.getParameterList();
-		final PsiParameterList methodParameterList = method.getParameterList();
-		if(superMethodParameterList.getParametersCount() != methodParameterList.getParametersCount())
-		{
-			return false;
-		}
-		final PsiParameter[] superMethodParameters = superMethodParameterList.getParameters();
-		final PsiParameter[] methodParameters = methodParameterList.getParameters();
-		for(int i = 0; i < methodParameters.length; i++)
-		{
-			if(!StringUtil.equals(getTypeShortName(superMethodParameters[i].getType()), getTypeShortName(methodParameters[i].getType())))
-			{
-				return false;
-			}
-		}
-		return true;
-	}
+  private static boolean maybeSuper(@Nonnull final PsiMethod superMethod, @Nonnull final PsiMethod method) {
+    if (!superMethod.getName().equals(method.getName())) {
+      return false;
+    }
+    final PsiParameterList superMethodParameterList = superMethod.getParameterList();
+    final PsiParameterList methodParameterList = method.getParameterList();
+    if (superMethodParameterList.getParametersCount() != methodParameterList.getParametersCount()) {
+      return false;
+    }
+    final PsiParameter[] superMethodParameters = superMethodParameterList.getParameters();
+    final PsiParameter[] methodParameters = methodParameterList.getParameters();
+    for (int i = 0; i < methodParameters.length; i++) {
+      if (!StringUtil.equals(getTypeShortName(superMethodParameters[i].getType()), getTypeShortName(methodParameters[i].getType()))) {
+        return false;
+      }
+    }
+    return true;
+  }
 
-	@Nullable
-	private static String getTypeShortName(@Nonnull final PsiType type)
-	{
-		if(type instanceof PsiPrimitiveType)
-		{
-			return ((PsiPrimitiveType) type).getBoxedTypeName();
-		}
-		if(type instanceof PsiClassType)
-		{
-			return ((PsiClassType) type).getClassName();
-		}
-		if(type instanceof PsiArrayType)
-		{
-			return getTypeShortName(((PsiArrayType) type).getComponentType()) + "[]";
-		}
-		return null;
-	}
+  @Nullable
+  private static String getTypeShortName(@Nonnull final PsiType type) {
+    if (type instanceof PsiPrimitiveType) {
+      return ((PsiPrimitiveType) type).getBoxedTypeName();
+    }
+    if (type instanceof PsiClassType) {
+      return ((PsiClassType) type).getClassName();
+    }
+    if (type instanceof PsiArrayType) {
+      return getTypeShortName(((PsiArrayType) type).getComponentType()) + "[]";
+    }
+    return null;
+  }
 
-	private static final Set<String> EXCLUDED_JAVA_LANG_OBJECT_METHOD_NAMES = ContainerUtil.newHashSet("hashCode", "finalize", "clone", "equals", "toString");
+  private static final Set<String> EXCLUDED_JAVA_LANG_OBJECT_METHOD_NAMES = Set.of("hashCode", "finalize", "clone", "equals", "toString");
 
-	@Override
-	public String toString()
-	{
-		return "PsiMethodWithOverridingPercentMember{" +
-				"myOverridingPercent=" + myOverridingPercent + ", myElement=" + getElement() +
-				'}';
-	}
+  @Override
+  public String toString() {
+    return "PsiMethodWithOverridingPercentMember{" +
+        "myOverridingPercent=" + myOverridingPercent + ", myElement=" + getElement() +
+        '}';
+  }
 }

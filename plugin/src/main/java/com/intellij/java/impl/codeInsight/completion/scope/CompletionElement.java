@@ -16,11 +16,11 @@
 package com.intellij.java.impl.codeInsight.completion.scope;
 
 import com.intellij.java.language.psi.*;
-import consulo.util.lang.Comparing;
-import consulo.util.lang.Pair;
 import com.intellij.java.language.psi.util.MethodSignature;
 import com.intellij.java.language.psi.util.MethodSignatureUtil;
-import consulo.psi.PsiPackage;
+import consulo.language.psi.PsiPackage;
+import consulo.util.lang.Comparing;
+import consulo.util.lang.Pair;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -32,107 +32,88 @@ import javax.annotation.Nullable;
  * Time: 16:17:14
  * To change this template use Options | File Templates.
  */
-public class CompletionElement
-{
-	private final Object myElement;
-	private final PsiSubstitutor mySubstitutor;
-	private final Object myEqualityObject;
-	private final String myQualifierText;
+public class CompletionElement {
+  private final Object myElement;
+  private final PsiSubstitutor mySubstitutor;
+  private final Object myEqualityObject;
+  private final String myQualifierText;
 
-	public CompletionElement(Object element, PsiSubstitutor substitutor)
-	{
-		this(element, substitutor, "");
-	}
+  public CompletionElement(Object element, PsiSubstitutor substitutor) {
+    this(element, substitutor, "");
+  }
 
-	public CompletionElement(Object element, PsiSubstitutor substitutor, @Nonnull String qualifierText)
-	{
-		myElement = element;
-		mySubstitutor = substitutor;
-		myQualifierText = qualifierText;
-		myEqualityObject = getUniqueId();
-	}
+  public CompletionElement(Object element, PsiSubstitutor substitutor, @Nonnull String qualifierText) {
+    myElement = element;
+    mySubstitutor = substitutor;
+    myQualifierText = qualifierText;
+    myEqualityObject = getUniqueId();
+  }
 
-	@Nonnull
-	public String getQualifierText()
-	{
-		return myQualifierText;
-	}
+  @Nonnull
+  public String getQualifierText() {
+    return myQualifierText;
+  }
 
-	public PsiSubstitutor getSubstitutor()
-	{
-		return mySubstitutor;
-	}
+  public PsiSubstitutor getSubstitutor() {
+    return mySubstitutor;
+  }
 
-	public Object getElement()
-	{
-		return myElement;
-	}
+  public Object getElement() {
+    return myElement;
+  }
 
-	@Nullable
-	private Object getUniqueId()
-	{
-		if(myElement instanceof PsiClass)
-		{
-			String qName = ((PsiClass) myElement).getQualifiedName();
-			return qName == null ? ((PsiClass) myElement).getName() : qName;
-		}
-		if(myElement instanceof PsiPackage)
-		{
-			return ((PsiPackage) myElement).getQualifiedName();
-		}
-		if(myElement instanceof PsiMethod)
-		{
-			return Pair.create(((PsiMethod) myElement).getSignature(mySubstitutor), myQualifierText);
-		}
-		if(myElement instanceof PsiVariable)
-		{
-			return "#" + ((PsiVariable) myElement).getName();
-		}
+  @Nullable
+  private Object getUniqueId() {
+    if (myElement instanceof PsiClass) {
+      String qName = ((PsiClass) myElement).getQualifiedName();
+      return qName == null ? ((PsiClass) myElement).getName() : qName;
+    }
+    if (myElement instanceof PsiPackage) {
+      return ((PsiPackage) myElement).getQualifiedName();
+    }
+    if (myElement instanceof PsiMethod) {
+      return Pair.create(((PsiMethod) myElement).getSignature(mySubstitutor), myQualifierText);
+    }
+    if (myElement instanceof PsiVariable) {
+      return "#" + ((PsiVariable) myElement).getName();
+    }
 
-		return null;
-	}
+    return null;
+  }
 
-	@Override
-	public boolean equals(Object obj)
-	{
-		if(obj == this)
-		{
-			return true;
-		}
-		if(!(obj instanceof CompletionElement))
-		{
-			return false;
-		}
+  @Override
+  public boolean equals(Object obj) {
+    if (obj == this) {
+      return true;
+    }
+    if (!(obj instanceof CompletionElement)) {
+      return false;
+    }
 
-		Object thatObj = ((CompletionElement) obj).myEqualityObject;
-		if(myEqualityObject instanceof MethodSignature)
-		{
-			return thatObj instanceof MethodSignature && MethodSignatureUtil.METHOD_PARAMETERS_ERASURE_EQUALITY.equals((MethodSignature) myEqualityObject, (MethodSignature) thatObj);
-		}
-		return Comparing.equal(myEqualityObject, thatObj);
-	}
+    Object thatObj = ((CompletionElement) obj).myEqualityObject;
+    if (myEqualityObject instanceof MethodSignature) {
+      return thatObj instanceof MethodSignature && MethodSignatureUtil.METHOD_PARAMETERS_ERASURE_EQUALITY.equals((MethodSignature) myEqualityObject, (MethodSignature) thatObj);
+    }
+    return Comparing.equal(myEqualityObject, thatObj);
+  }
 
-	@Override
-	public int hashCode()
-	{
-		if(myEqualityObject instanceof MethodSignature)
-		{
-			return MethodSignatureUtil.METHOD_PARAMETERS_ERASURE_EQUALITY.hashCode((MethodSignature) myEqualityObject);
-		}
-		return myEqualityObject != null ? myEqualityObject.hashCode() : 0;
-	}
+  @Override
+  public int hashCode() {
+    if (myEqualityObject instanceof MethodSignature) {
+      return MethodSignatureUtil.METHOD_PARAMETERS_ERASURE_EQUALITY.hashCode((MethodSignature) myEqualityObject);
+    }
+    return myEqualityObject != null ? myEqualityObject.hashCode() : 0;
+  }
 
-	public boolean isMoreSpecificThan(@Nonnull CompletionElement prev)
-	{
-		Object prevElement = prev.getElement();
-		if(!(prevElement instanceof PsiMethod && myElement instanceof PsiMethod))
-		{
-			return false;
-		}
+  public boolean isMoreSpecificThan(@Nonnull CompletionElement prev) {
+    Object prevElement = prev.getElement();
+    if (!(prevElement instanceof PsiMethod && myElement instanceof PsiMethod)) {
+      return false;
+    }
 
-		PsiType prevType = prev.getSubstitutor().substitute(((PsiMethod) prevElement).getReturnType());
-		PsiType candidateType = mySubstitutor.substitute(((PsiMethod) myElement).getReturnType());
-		return prevType != null && candidateType != null && !prevType.equals(candidateType) && prevType.isAssignableFrom(candidateType);
-	}
+    PsiType prevType = prev.getSubstitutor().substitute(((PsiMethod) prevElement).getReturnType());
+    PsiType candidateType = mySubstitutor.substitute(((PsiMethod) myElement).getReturnType());
+    return prevType != null && candidateType != null && !prevType.equals(candidateType) && prevType.isAssignableFrom(candidateType);
+  }
 
 }

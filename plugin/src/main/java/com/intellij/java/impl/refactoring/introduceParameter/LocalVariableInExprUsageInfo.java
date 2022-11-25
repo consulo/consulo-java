@@ -24,7 +24,7 @@
  */
 package com.intellij.java.impl.refactoring.introduceParameter;
 
-import com.intellij.psi.*;
+import consulo.language.psi.*;
 
 class LocalVariableInExprUsageInfo extends InExprUsageInfo {
   LocalVariableInExprUsageInfo(PsiElement elem) {
