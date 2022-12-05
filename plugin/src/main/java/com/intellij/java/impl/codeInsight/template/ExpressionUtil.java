@@ -20,12 +20,12 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
 import consulo.application.ApplicationManager;
+import consulo.language.psi.ReparseRangeUtil;
 import consulo.project.Project;
 import consulo.language.psi.PsiDocumentManager;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
-import consulo.language.impl.internal.psi.diff.BlockSupport;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 
@@ -57,9 +57,8 @@ public class ExpressionUtil {
       ApplicationManager.getApplication().runWriteAction(new Runnable() {
         @Override
         public void run() {
-          BlockSupport blockSupport = BlockSupport.getInstance(project);
           try {
-            blockSupport.reparseRange(fileCopy, offset, offset, "xxx");
+            ReparseRangeUtil.reparseRange(fileCopy, offset, offset, "xxx");
           } catch (IncorrectOperationException e) {
             LOG.error(e);
           }

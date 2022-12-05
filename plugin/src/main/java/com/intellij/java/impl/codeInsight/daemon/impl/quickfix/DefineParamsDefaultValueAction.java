@@ -35,6 +35,8 @@ import consulo.language.editor.impl.internal.template.TemplateBuilderImpl;
 import consulo.language.editor.intention.LowPriorityAction;
 import consulo.language.editor.intention.PsiElementBaseIntentionAction;
 import consulo.language.editor.template.Template;
+import consulo.language.editor.template.TemplateBuilder;
+import consulo.language.editor.template.TemplateBuilderFactory;
 import consulo.language.psi.PsiDocumentManager;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
@@ -164,7 +166,7 @@ public class DefineParamsDefaultValueAction extends PsiElementBaseIntentionActio
   }
 
   public static void startTemplate(@Nonnull Project project, Editor editor, PsiExpression[] argsToBeDelegated, PsiMethod delegateMethod) {
-    TemplateBuilderImpl builder = new TemplateBuilderImpl(delegateMethod);
+    TemplateBuilder builder = TemplateBuilderFactory.getInstance().createTemplateBuilder(delegateMethod);
     RangeMarker rangeMarker = editor.getDocument().createRangeMarker(delegateMethod.getTextRange());
     for (final PsiExpression exprToBeDefault : argsToBeDelegated) {
       builder.replaceElement(exprToBeDefault, new TextExpression(""));

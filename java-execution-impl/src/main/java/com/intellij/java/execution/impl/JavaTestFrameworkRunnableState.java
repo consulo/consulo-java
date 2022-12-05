@@ -67,11 +67,11 @@ import consulo.language.util.ModuleUtilCore;
 import consulo.logging.Logger;
 import consulo.module.Module;
 import consulo.process.ExecutionException;
+import consulo.process.ProcessHandler;
 import consulo.process.cmd.GeneralCommandLine;
 import consulo.process.cmd.ParametersList;
 import consulo.process.event.ProcessAdapter;
 import consulo.process.event.ProcessEvent;
-import consulo.process.internal.OSProcessHandler;
 import consulo.project.Project;
 import consulo.ui.ex.awt.UIUtil;
 import consulo.util.io.CharsetToolkit;
@@ -134,7 +134,7 @@ public abstract class JavaTestFrameworkRunnableState<T extends ModuleBasedConfig
   protected abstract String getForkMode();
 
   @Nonnull
-  protected abstract OSProcessHandler createHandler(Executor executor) throws ExecutionException;
+  protected abstract ProcessHandler createHandler(Executor executor) throws ExecutionException;
 
   public SearchForTestsTask createSearchingForTestsTask() {
     return null;
@@ -171,7 +171,7 @@ public abstract class JavaTestFrameworkRunnableState<T extends ModuleBasedConfig
     final SMTestRunnerResultsForm viewer = ((SMTRunnerConsoleView) consoleView).getResultsViewer();
     Disposer.register(getConfiguration().getProject(), consoleView);
 
-    final OSProcessHandler handler = createHandler(executor);
+    final ProcessHandler handler = createHandler(executor);
 
     for (ArgumentFileFilter filter : myArgumentFileFilters) {
       consoleView.addMessageFilter(filter);

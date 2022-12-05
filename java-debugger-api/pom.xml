@@ -55,7 +55,7 @@
 		<dependency>
 			<groupId>consulo.internal</groupId>
 			<artifactId>jdi</artifactId>
-			<version>2-SNAPSHOT</version>
+			<version>3-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 </project>

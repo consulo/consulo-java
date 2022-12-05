@@ -37,7 +37,6 @@ import com.intellij.java.language.psi.util.PropertyMemberType;
 import consulo.application.ApplicationManager;
 import consulo.codeEditor.Editor;
 import consulo.document.Document;
-import consulo.document.util.DocumentUtil;
 import consulo.document.util.TextRange;
 import consulo.ide.impl.idea.codeInsight.daemon.impl.DaemonListeners;
 import consulo.ide.impl.idea.codeInsight.daemon.impl.quickfix.RenameElementFix;
@@ -46,9 +45,9 @@ import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.ast.IElementType;
 import consulo.language.editor.CodeInsightSettings;
+import consulo.language.editor.DaemonCodeAnalyzer;
 import consulo.language.editor.annotation.HighlightSeverity;
 import consulo.language.editor.impl.intention.RenameFileFix;
-import consulo.language.editor.impl.internal.daemon.DaemonCodeAnalyzerEx;
 import consulo.language.editor.inspection.*;
 import consulo.language.editor.inspection.scheme.InspectionProfile;
 import consulo.language.editor.inspection.scheme.InspectionProjectProfileManager;
@@ -60,14 +59,15 @@ import consulo.language.editor.rawHighlight.HighlightDisplayKey;
 import consulo.language.editor.rawHighlight.HighlightInfo;
 import consulo.language.editor.rawHighlight.HighlightInfoType;
 import consulo.language.psi.*;
+import consulo.language.util.AttachmentFactoryUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
-import consulo.logging.attachment.AttachmentFactory;
 import consulo.module.Module;
 import consulo.project.DumbService;
 import consulo.project.Project;
 import consulo.undoRedo.ProjectUndoManager;
 import consulo.undoRedo.UndoManager;
+import consulo.undoRedo.util.UndoUtil;
 import consulo.util.lang.Comparing;
 import jakarta.inject.Singleton;
 import org.jetbrains.annotations.Nls;
@@ -757,11 +757,11 @@ public class QuickFixFactoryImpl extends QuickFixFactory {
       PsiDocumentManager.getInstance(project).commitAllDocuments();
       String beforeText = file.getText();
       final long oldStamp = document.getModificationStamp();
-      DocumentUtil.writeInRunUndoTransparentAction(runnable);
+      UndoUtil.writeInRunUndoTransparentAction(runnable);
       if (oldStamp != document.getModificationStamp()) {
         String afterText = file.getText();
         if (Comparing.strEqual(beforeText, afterText)) {
-          LOG.error(LogMessageEx.createEvent("Import optimizer  hasn't optimized any imports", file.getViewProvider().getVirtualFile().getPath(), AttachmentFactory.createAttachment(file
+          LOG.error(LogMessageEx.createEvent("Import optimizer  hasn't optimized any imports", file.getViewProvider().getVirtualFile().getPath(), AttachmentFactoryUtil.createAttachment(file
               .getViewProvider().getVirtualFile())));
         }
       }
@@ -824,7 +824,7 @@ public class QuickFixFactoryImpl extends QuickFixFactory {
       return false;
     }
 
-    DaemonCodeAnalyzerEx codeAnalyzer = DaemonCodeAnalyzerEx.getInstanceEx(file.getProject());
+    DaemonCodeAnalyzer codeAnalyzer = DaemonCodeAnalyzer.getInstance(file.getProject());
     // dont optimize out imports in JSP since it can be included in other JSP
     if (!codeAnalyzer.isHighlightingAvailable(file) || !(file instanceof PsiJavaFile) || file instanceof ServerPageFile) {
       return false;
@@ -846,7 +846,7 @@ public class QuickFixFactoryImpl extends QuickFixFactory {
     // ignore unresolved imports errors
     PsiImportList importList = ((PsiJavaFile) file).getImportList();
     final TextRange importsRange = importList == null ? TextRange.EMPTY_RANGE : importList.getTextRange();
-    boolean hasErrorsExceptUnresolvedImports = !DaemonCodeAnalyzerEx.processHighlights(document, file.getProject(), HighlightSeverity.ERROR, 0, document.getTextLength(), error ->
+    boolean hasErrorsExceptUnresolvedImports = !DaemonCodeAnalyzer.processHighlights(document, file.getProject(), HighlightSeverity.ERROR, 0, document.getTextLength(), error ->
     {
       int infoStart = error.getActualStartOffset();
       int infoEnd = error.getActualEndOffset();

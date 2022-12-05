@@ -20,8 +20,8 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import org.jetbrains.java.generate.config.Config;
-import org.jetbrains.java.generate.config.FilterPattern;
+import com.intellij.java.analysis.impl.generate.config.Config;
+import com.intellij.java.analysis.impl.generate.config.FilterPattern;
 import org.jetbrains.java.generate.psi.PsiAdapter;
 import consulo.logging.Logger;
 import com.intellij.java.language.psi.PsiClass;

@@ -15,19 +15,19 @@
  */
 package com.intellij.java.impl.ig.maturity;
 
-import javax.annotation.Nonnull;
-
-import com.intellij.java.analysis.codeInspection.SuppressManager;
-import consulo.language.editor.inspection.SuppressionUtil;
+import com.intellij.java.analysis.codeInspection.BatchSuppressManager;
 import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.java.language.psi.PsiAnnotation;
-import consulo.language.psi.PsiComment;
 import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
-import consulo.language.ast.IElementType;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import consulo.language.ast.IElementType;
+import consulo.language.editor.inspection.SuppressionUtil;
+import consulo.language.psi.PsiComment;
 import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
 
 public class SuppressionAnnotationInspection extends BaseInspection {
 
@@ -74,7 +74,7 @@ public class SuppressionAnnotationInspection extends BaseInspection {
       }
       @NonNls final String text = reference.getText();
       if ("SuppressWarnings".equals(text) ||
-          SuppressManager.SUPPRESS_INSPECTIONS_ANNOTATION_NAME.equals(text)) {
+          BatchSuppressManager.SUPPRESS_INSPECTIONS_ANNOTATION_NAME.equals(text)) {
         registerError(annotation);
       }
     }

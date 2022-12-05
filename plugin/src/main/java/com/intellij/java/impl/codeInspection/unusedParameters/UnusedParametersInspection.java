@@ -53,6 +53,7 @@ import consulo.language.psi.search.PsiSearchHelper;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.project.Project;
+import consulo.ui.ex.awtUnsafe.TargetAWT;
 import consulo.util.lang.Comparing;
 import org.jetbrains.annotations.NonNls;
 
@@ -248,7 +249,7 @@ public abstract class UnusedParametersInspection extends GlobalJavaBatchInspecti
   public JComponent createOptionsPanel() {
     final JPanel panel = new JPanel(new GridBagLayout());
     Project project = ProjectUtil.guessCurrentProject(panel);
-    panel.add(EntryPointsManager.getInstance(project).createConfigureAnnotationsBtn(),
+    panel.add(TargetAWT.to(EntryPointsManager.getInstance(project).createConfigureAnnotationsBtn()),
         new GridBagConstraints(0, 0, 1, 1, 1, 1, GridBagConstraints.NORTHWEST, GridBagConstraints.NONE,
             new Insets(0, 0, 0, 0), 0, 0));
     return panel;

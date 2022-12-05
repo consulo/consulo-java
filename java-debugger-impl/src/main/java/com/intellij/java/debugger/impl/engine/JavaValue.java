@@ -39,12 +39,12 @@ import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.application.AllIcons;
 import consulo.application.ApplicationManager;
 import consulo.application.ReadAction;
+import consulo.execution.debug.XDebuggerUtil;
 import consulo.execution.debug.breakpoint.XExpression;
 import consulo.execution.debug.evaluation.XDebuggerEvaluator;
 import consulo.execution.debug.evaluation.XInstanceEvaluator;
 import consulo.execution.debug.frame.*;
 import consulo.execution.debug.frame.presentation.*;
-import consulo.execution.debug.internal.breakpoint.XExpressionImpl;
 import consulo.execution.debug.ui.XValueTextProvider;
 import consulo.ide.impl.idea.xdebugger.impl.ui.tree.nodes.XValueNodeImpl;
 import consulo.internal.com.sun.jdi.ArrayReference;
@@ -706,7 +706,7 @@ public class JavaValue extends XNamedValue implements NodeDescriptorProvider, XV
 									{
 										imports.add(res.getCustomInfo());
 									}
-									res = new XExpressionImpl(res.getExpression(), res.getLanguage(), StringUtil.join(imports, ","), res.getMode());
+									res = XDebuggerUtil.getInstance().createExpression(res.getExpression(), res.getLanguage(), StringUtil.join(imports, ","), res.getMode());
 								}
 								return res;
 							}

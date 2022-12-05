@@ -80,7 +80,7 @@ public abstract class JavaClassNameCompletionContributor extends CompletionContr
   }
 
   static void addAllClasses(CompletionParameters parameters, final CompletionResultSet _result) {
-    CompletionResultSet result = _result.withPrefixMatcher(CompletionUtil.findReferenceOrAlphanumericPrefix(parameters));
+    CompletionResultSet result = _result.withPrefixMatcher(CompletionUtilCore.findReferenceOrAlphanumericPrefix(parameters));
     addAllClasses(parameters, parameters.getInvocationCount() <= 1, result.getPrefixMatcher(), _result);
   }
 

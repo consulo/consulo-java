@@ -20,15 +20,15 @@ import com.intellij.java.impl.refactoring.move.moveClassesOrPackages.Autocreatin
 import com.intellij.java.impl.refactoring.move.moveClassesOrPackages.MultipleRootsMoveDestination;
 import com.intellij.java.impl.refactoring.move.moveInner.MoveInnerImpl;
 import com.intellij.java.language.psi.*;
-import consulo.project.Project;
-import consulo.virtualFileSystem.VirtualFile;
+import consulo.language.editor.refactoring.RenameRefactoring;
+import consulo.language.editor.refactoring.SafeDeleteRefactoring;
+import consulo.language.editor.refactoring.safeDelete.SafeDeleteRefactoringImpl;
 import consulo.language.psi.PsiDirectory;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiManager;
-import consulo.language.editor.refactoring.RenameRefactoring;
-import consulo.language.editor.refactoring.SafeDeleteRefactoring;
-import consulo.ide.impl.idea.refactoring.openapi.impl.SafeDeleteRefactoringImpl;
 import consulo.logging.Logger;
+import consulo.project.Project;
+import consulo.virtualFileSystem.VirtualFile;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 

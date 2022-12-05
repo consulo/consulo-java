@@ -29,8 +29,8 @@ import consulo.util.lang.Comparing;
 import consulo.util.lang.Couple;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.java.generate.template.TemplateResource;
-import org.jetbrains.java.generate.view.GenerateTemplateConfigurable;
+import com.intellij.java.impl.generate.template.TemplateResource;
+import com.intellij.java.impl.generate.view.GenerateTemplateConfigurable;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

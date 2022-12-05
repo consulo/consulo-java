@@ -54,8 +54,8 @@ import consulo.language.editor.inspection.LocalQuickFixOnPsiElementAsIntentionAd
 import consulo.language.editor.inspection.PriorityActionWrapper;
 import consulo.language.editor.intention.IntentionAction;
 import consulo.language.editor.intention.QuickFixAction;
+import consulo.language.editor.intention.QuickFixActionRegistrar;
 import consulo.language.editor.intention.UnresolvedReferenceQuickFixProvider;
-import consulo.language.editor.internal.QuickFixActionRegistrarImpl;
 import consulo.language.editor.rawHighlight.HighlightInfo;
 import consulo.language.editor.rawHighlight.HighlightInfoType;
 import consulo.language.findUsage.FindUsagesProvider;
@@ -2060,7 +2060,7 @@ public class HighlightUtil extends HighlightUtilBase {
 
     String description = JavaErrorBundle.message("expression.expected");
     HighlightInfo info = HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(expression).descriptionAndTooltip(description).create();
-    UnresolvedReferenceQuickFixProvider.registerReferenceFixes(expression, new QuickFixActionRegistrarImpl(info));
+    UnresolvedReferenceQuickFixProvider.registerReferenceFixes(expression, QuickFixActionRegistrar.create(info));
     return info;
   }
 
@@ -2312,7 +2312,7 @@ public class HighlightUtil extends HighlightUtilBase {
 
         PsiJavaCodeReferenceElement referenceElement = typeElement.getInnermostComponentReferenceElement();
         if (referenceElement != null && info != null) {
-          UnresolvedReferenceQuickFixProvider.registerReferenceFixes(referenceElement, new QuickFixActionRegistrarImpl(info));
+          UnresolvedReferenceQuickFixProvider.registerReferenceFixes(referenceElement, QuickFixActionRegistrar.create(info));
         }
         return info;
       }
@@ -3034,7 +3034,7 @@ public class HighlightUtil extends HighlightUtilBase {
       }
 
       HighlightInfo info = HighlightInfo.newHighlightInfo(HighlightInfoType.WRONG_REF).range(refName).descriptionAndTooltip(description).create();
-      UnresolvedReferenceQuickFixProvider.registerReferenceFixes(ref, new QuickFixActionRegistrarImpl(info));
+      UnresolvedReferenceQuickFixProvider.registerReferenceFixes(ref, QuickFixActionRegistrar.create(info));
       return info;
     }
 
@@ -3048,7 +3048,7 @@ public class HighlightUtil extends HighlightUtilBase {
             QuickFixAction.registerQuickFixAction(info, QUICK_FIX_FACTORY.createRenameWrongRefFix((PsiReferenceExpression) ref));
           }
         }
-        UnresolvedReferenceQuickFixProvider.registerReferenceFixes(ref, new QuickFixActionRegistrarImpl(info));
+        UnresolvedReferenceQuickFixProvider.registerReferenceFixes(ref, QuickFixActionRegistrar.create(info));
         return info;
       }
 

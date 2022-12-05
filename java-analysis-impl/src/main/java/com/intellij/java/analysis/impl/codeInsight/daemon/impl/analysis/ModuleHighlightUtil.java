@@ -32,7 +32,7 @@ import consulo.application.ApplicationManager;
 import consulo.document.util.TextRange;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.language.editor.intention.QuickFixAction;
-import consulo.language.editor.internal.QuickFixActionRegistrarImpl;
+import consulo.language.editor.intention.QuickFixActionRegistrar;
 import consulo.language.editor.rawHighlight.HighlightInfo;
 import consulo.language.editor.rawHighlight.HighlightInfoType;
 import consulo.language.psi.*;
@@ -70,7 +70,7 @@ public class ModuleHighlightUtil {
     }
 
     Project project = fsItem.getProject();
-    ProjectFileIndex index = ProjectFileIndex.SERVICE.getInstance(project);
+    ProjectFileIndex index = ProjectFileIndex.getInstance(project);
     if (index.isInLibraryClasses(file)) {
       VirtualFile classRoot = index.getClassRootForFile(file);
       if (classRoot != null) {
@@ -483,7 +483,7 @@ public class ModuleHighlightUtil {
     } else {
       String message = JavaErrorBundle.message("module.not.on.path", refElement.getReferenceText());
       HighlightInfo info = HighlightInfo.newHighlightInfo(HighlightInfoType.WRONG_REF).range(refElement).descriptionAndTooltip(message).create();
-      factory().registerOrderEntryFixes(new QuickFixActionRegistrarImpl(info), ref);
+      factory().registerOrderEntryFixes(QuickFixActionRegistrar.create(info), ref);
       return info;
     }
   }

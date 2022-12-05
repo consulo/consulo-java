@@ -32,9 +32,9 @@ import consulo.document.Document;
 import consulo.document.RangeMarker;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.WriteCommandAction;
-import consulo.language.editor.impl.internal.template.TemplateBuilderImpl;
 import consulo.language.editor.refactoring.ResolveSnapshotProvider;
 import consulo.language.editor.refactoring.introduce.inplace.InplaceVariableIntroducer;
+import consulo.language.editor.template.TemplateBuilder;
 import consulo.language.psi.*;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.project.Project;
@@ -253,7 +253,7 @@ public class JavaVariableInplaceIntroducer extends InplaceVariableIntroducer<Psi
     return panel;
   }
 
-  protected void addAdditionalVariables(TemplateBuilderImpl builder) {
+  protected void addAdditionalVariables(TemplateBuilder builder) {
     final PsiTypeElement typeElement = getVariable().getTypeElement();
     builder.replaceElement(typeElement, "Variable_Type", AbstractJavaInplaceIntroducer.createExpression(myExpression, typeElement.getText()), true, true);
   }

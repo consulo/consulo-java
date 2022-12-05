@@ -68,7 +68,7 @@ class StaticInheritanceFix extends InspectionGadgetsFix {
       public void run() {
         dodoFix(project, descriptor);
       }
-    }, IdeaModalityState.NON_MODAL, project.getDisposed());
+    }, ApplicationManager.getApplication().getNoneModalityState(), project.getDisposed());
   }
 
   private void dodoFix(final Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {

@@ -40,22 +40,17 @@ import consulo.language.Language;
 import consulo.language.content.FileIndexFacade;
 import consulo.language.file.FileViewProvider;
 import consulo.language.impl.ast.TreeElement;
-import consulo.language.impl.internal.psi.PsiManagerImpl;
 import consulo.language.impl.psi.PsiBinaryFileImpl;
 import consulo.language.impl.psi.PsiFileImpl;
 import consulo.language.impl.psi.SourceTreeToPsiMap;
 import consulo.language.psi.*;
-import consulo.language.psi.internal.PsiFileWithStubSupport;
 import consulo.language.psi.resolve.PsiScopeProcessor;
 import consulo.language.psi.resolve.ResolveState;
-import consulo.language.psi.stub.PsiFileStubImpl;
-import consulo.language.psi.stub.StubTree;
-import consulo.language.psi.stub.StubTreeLoader;
-import consulo.language.psi.stub.internal.StubbedSpine;
+import consulo.language.psi.stub.*;
 import consulo.language.psi.util.LanguageCachedValueUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
-import consulo.project.internal.DefaultProjectFactory;
+import consulo.project.ProjectManager;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.dataholder.Key;
 import consulo.util.lang.BitUtil;
@@ -96,7 +91,7 @@ public class ClsFileImpl extends PsiBinaryFileImpl implements PsiJavaFile, PsiFi
   }
 
   private ClsFileImpl(@Nonnull FileViewProvider viewProvider, boolean forDecompiling) {
-    super((PsiManagerImpl) viewProvider.getManager(), viewProvider);
+    super(viewProvider.getManager(), viewProvider);
     myIsForDecompiling = forDecompiling;
     //noinspection ResultOfMethodCallIgnored
     JavaElementType.CLASS.getIndex();  // initialize Java stubs
@@ -562,7 +557,7 @@ public class ClsFileImpl extends PsiBinaryFileImpl implements PsiJavaFile, PsiFi
 
   @Nonnull
   public static CharSequence decompile(@Nonnull VirtualFile file) {
-    PsiManager manager = PsiManager.getInstance(DefaultProjectFactory.getInstance().getDefaultProject());
+    PsiManager manager = PsiManager.getInstance(ProjectManager.getInstance().getDefaultProject());
     final ClsFileImpl clsFile = new ClsFileImpl(new ClassFileViewProvider(manager, file), true);
     final StringBuilder buffer = new StringBuilder();
     ApplicationManager.getApplication().runReadAction(() -> clsFile.appendMirrorText(buffer));

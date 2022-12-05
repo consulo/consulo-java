@@ -45,6 +45,7 @@ import consulo.application.ApplicationManager;
 import consulo.application.Result;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.EditorColors;
+import consulo.codeEditor.EditorPopupHelper;
 import consulo.codeEditor.markup.RangeHighlighter;
 import consulo.colorScheme.EditorColorsManager;
 import consulo.colorScheme.TextAttributes;
@@ -67,6 +68,7 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.project.ui.wm.WindowManager;
+import consulo.ui.ex.popup.JBPopup;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.StringUtil;
 import org.jetbrains.annotations.NonNls;
@@ -140,16 +142,17 @@ public abstract class BaseExpressionToFieldHandler extends IntroduceHandlerBase 
           break;
         }
       }
-      PopupNavigationUtil.getPsiElementPopup(classes.toArray(new PsiClass[classes.size()]), new PsiClassListCellRenderer(),
-                                        "Choose class to introduce " + (myIsConstant ? "constant" : "field"),
-                                        new PsiElementProcessor<PsiClass>() {
-                                          @Override
-                                          public boolean execute(@Nonnull PsiClass aClass) {
-                                            myParentClass = aClass;
-                                            convertExpressionToField(selectedExpr, editor, file, project, tempType);
-                                            return false;
-                                          }
-                                        }, selection).showInBestPositionFor(editor);
+      JBPopup popup = PopupNavigationUtil.getPsiElementPopup(classes.toArray(new PsiClass[classes.size()]), new PsiClassListCellRenderer(),
+              "Choose class to introduce " + (myIsConstant ? "constant" : "field"),
+              new PsiElementProcessor<PsiClass>() {
+                @Override
+                public boolean execute(@Nonnull PsiClass aClass) {
+                  myParentClass = aClass;
+                  convertExpressionToField(selectedExpr, editor, file, project, tempType);
+                  return false;
+                }
+              }, selection);
+      EditorPopupHelper.getInstance().showPopupInBestPositionFor(editor, popup);
     }
     return true;
   }

@@ -32,7 +32,6 @@ import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.completion.lookup.LookupElement;
 import consulo.language.editor.completion.lookup.LookupElementBuilder;
-import consulo.language.editor.impl.internal.template.TemplateBuilderImpl;
 import consulo.language.editor.intention.IntentionAction;
 import consulo.language.editor.template.*;
 import consulo.language.psi.PsiElement;
@@ -201,7 +200,7 @@ public class RenameWrongRefFix implements IntentionAction {
     LookupElement[] items = collectItems();
     ReferenceNameExpression refExpr = new ReferenceNameExpression(items, myRefExpr.getReferenceName());
 
-    TemplateBuilderImpl builder = new TemplateBuilderImpl(element);
+    TemplateBuilder builder = TemplateBuilderFactory.getInstance().createTemplateBuilder(element);
     for (PsiReferenceExpression expr : refs) {
       if (!expr.equals(myRefExpr)) {
         builder.replaceElement(expr.getReferenceNameElement(), OTHER_VARIABLE_NAME, INPUT_VARIABLE_NAME, false);

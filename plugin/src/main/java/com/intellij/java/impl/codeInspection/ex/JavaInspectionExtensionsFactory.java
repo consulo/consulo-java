@@ -20,7 +20,7 @@
  */
 package com.intellij.java.impl.codeInspection.ex;
 
-import com.intellij.java.analysis.codeInspection.SuppressManager;
+import com.intellij.java.analysis.codeInspection.BatchSuppressManager;
 import com.intellij.java.impl.codeInspection.reference.RefJavaManagerImpl;
 import consulo.language.editor.impl.inspection.reference.RefManagerImpl;
 import consulo.language.editor.inspection.*;
@@ -50,13 +50,13 @@ public class JavaInspectionExtensionsFactory extends InspectionExtensionsFactory
 
   @Override
   public boolean isToCheckMember(final PsiElement element, final String id) {
-    return SuppressManager.getInstance().getElementToolSuppressedIn(element, id) == null;
+    return BatchSuppressManager.getInstance().getElementToolSuppressedIn(element, id) == null;
   }
 
   @Override
   @Nullable
   public String getSuppressedInspectionIdsIn(final PsiElement element) {
-    return SuppressManager.getInstance().getSuppressedInspectionIdsIn(element);
+    return BatchSuppressManager.getInstance().getSuppressedInspectionIdsIn(element);
   }
 
   @Override

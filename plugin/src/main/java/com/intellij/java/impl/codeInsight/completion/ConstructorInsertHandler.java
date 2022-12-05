@@ -22,8 +22,8 @@ import consulo.language.codeStyle.PostprocessReformattingAspect;
 import consulo.language.editor.WriteCommandAction;
 import consulo.language.editor.completion.OffsetKey;
 import consulo.language.editor.completion.lookup.*;
-import consulo.language.editor.impl.internal.template.TemplateBuilderImpl;
 import consulo.language.editor.template.Template;
+import consulo.language.editor.template.TemplateBuilder;
 import consulo.language.editor.template.TemplateBuilderFactory;
 import consulo.language.editor.template.TemplateManager;
 import consulo.language.editor.template.event.TemplateEditingAdapter;
@@ -328,7 +328,7 @@ public class ConstructorInsertHandler implements InsertHandler<LookupElementDeco
       protected void run(@Nonnull Result result) throws Throwable {
         PsiDocumentManager.getInstance(project).doPostponedOperationsAndUnblockDocument(editor.getDocument());
         editor.getCaretModel().moveToOffset(aClass.getTextOffset());
-        final TemplateBuilderImpl templateBuilder = (TemplateBuilderImpl) TemplateBuilderFactory.getInstance().createTemplateBuilder(aClass);
+        final TemplateBuilder templateBuilder =  TemplateBuilderFactory.getInstance().createTemplateBuilder(aClass);
         for (int i = 0; i < parameters.length; i++) {
           PsiTypeElement parameter = parameters[i];
           templateBuilder.replaceElement(parameter, "param" + i, new TypeExpression(project, new PsiType[]{parameter.getType()}), true);

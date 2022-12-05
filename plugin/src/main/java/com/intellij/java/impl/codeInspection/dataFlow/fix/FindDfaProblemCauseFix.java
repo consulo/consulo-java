@@ -1,6 +1,7 @@
 // Copyright 2000-2019 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.impl.codeInspection.dataFlow.fix;
 
+import consulo.codeEditor.EditorPopupHelper;
 import consulo.language.editor.hint.HintManager;
 import consulo.ide.impl.idea.codeInsight.hint.HintManagerImpl;
 import consulo.language.editor.intention.LowPriorityAction;
@@ -182,7 +183,8 @@ public class FindDfaProblemCauseFix implements LocalQuickFix, LowPriorityAction
 				})
 				.setItemChosenCallback(cause -> navigate(editor, file, cause.myCauseItem))
 				.createPopup();
-		popup.showInBestPositionFor(editor);
+
+		EditorPopupHelper.getInstance().showPopupInBestPositionFor(editor, popup);
 	}
 
 	private static void navigate(Editor editor, PsiFile file, TrackingRunner.CauseItem item)

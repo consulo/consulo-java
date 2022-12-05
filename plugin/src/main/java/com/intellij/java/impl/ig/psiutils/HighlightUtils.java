@@ -15,22 +15,8 @@
  */
 package com.intellij.java.impl.ig.psiutils;
 
-import java.util.Collection;
-import java.util.Collections;
-
-import javax.annotation.Nonnull;
-
-import consulo.fileEditor.FileEditorManager;
-import consulo.ide.impl.idea.codeInsight.CodeInsightUtilBase;
-import consulo.language.editor.highlight.HighlightManager;
-import consulo.language.editor.template.Expression;
-import consulo.language.editor.template.Template;
-import consulo.language.editor.impl.internal.template.TemplateBuilderImpl;
-import consulo.language.editor.template.TemplateManager;
-import consulo.language.editor.template.macro.MacroCallNode;
 import com.intellij.java.impl.codeInsight.template.macro.SuggestVariableNameMacro;
-import consulo.find.FindManager;
-import consulo.find.FindModel;
+import com.siyeh.InspectionGadgetsBundle;
 import consulo.application.Application;
 import consulo.application.ApplicationManager;
 import consulo.codeEditor.Editor;
@@ -38,15 +24,25 @@ import consulo.codeEditor.EditorColors;
 import consulo.colorScheme.EditorColorsManager;
 import consulo.colorScheme.EditorColorsScheme;
 import consulo.colorScheme.TextAttributes;
-import consulo.project.Project;
 import consulo.document.util.TextRange;
-import consulo.project.ui.wm.StatusBar;
-import consulo.project.ui.wm.WindowManager;
+import consulo.fileEditor.FileEditorManager;
+import consulo.find.FindManager;
+import consulo.find.FindModel;
+import consulo.ide.impl.idea.codeInsight.CodeInsightUtilBase;
+import consulo.language.editor.highlight.HighlightManager;
+import consulo.language.editor.template.*;
+import consulo.language.editor.template.macro.MacroCallNode;
+import consulo.language.editor.util.PsiUtilBase;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiNameIdentifierOwner;
 import consulo.language.psi.PsiReference;
-import consulo.language.editor.util.PsiUtilBase;
-import com.siyeh.InspectionGadgetsBundle;
+import consulo.project.Project;
+import consulo.project.ui.wm.StatusBar;
+import consulo.project.ui.wm.WindowManager;
+
+import javax.annotation.Nonnull;
+import java.util.Collection;
+import java.util.Collections;
 
 public class HighlightUtils {
 
@@ -120,7 +116,7 @@ public class HighlightUtils {
     if (editor == null) {
       return;
     }
-    final TemplateBuilderImpl builder = new TemplateBuilderImpl(context);
+    final TemplateBuilder builder = TemplateBuilderFactory.getInstance().createTemplateBuilder(context);
     final Expression macroCallNode = new MacroCallNode(
       new SuggestVariableNameMacro());
     final PsiElement identifier = element.getNameIdentifier();

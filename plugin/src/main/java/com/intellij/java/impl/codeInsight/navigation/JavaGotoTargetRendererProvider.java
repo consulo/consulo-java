@@ -15,23 +15,24 @@
  */
 package com.intellij.java.impl.codeInsight.navigation;
 
-import consulo.ide.impl.idea.codeInsight.navigation.GotoTargetHandler;
-import consulo.ide.navigation.GotoTargetRendererProvider;
-import consulo.language.editor.ui.PsiElementListCellRenderer;
 import com.intellij.java.impl.ide.util.MethodCellRenderer;
 import com.intellij.java.language.impl.codeInsight.PsiClassListCellRenderer;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.ide.navigation.GotoTargetRendererProvider;
+import consulo.language.editor.ui.PsiElementListCellRenderer;
 import consulo.language.psi.PsiElement;
 
 /**
  * @author yole
  */
+@ExtensionImpl
 public class JavaGotoTargetRendererProvider implements GotoTargetRendererProvider {
   @Override
-  public PsiElementListCellRenderer getRenderer(final PsiElement element, GotoTargetHandler.GotoData gotoData) {
+  public PsiElementListCellRenderer getRenderer(final PsiElement element, Options options) {
     if (element instanceof PsiMethod) {
-      return new MethodCellRenderer(gotoData.hasDifferentNames());
+      return new MethodCellRenderer(options.hasDifferentNames());
     } else if (element instanceof PsiClass) {
       return new PsiClassListCellRenderer();
     }

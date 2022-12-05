@@ -15,11 +15,6 @@
  */
 package com.intellij.java.impl.codeInsight.lookup;
 
-import consulo.language.editor.AutoPopupController;
-import consulo.language.editor.completion.lookup.*;
-import consulo.ide.impl.idea.codeInsight.completion.CodeCompletionFeatures;
-import consulo.language.editor.impl.internal.completion.CompletionUtil;
-import consulo.externalService.statistic.FeatureUsageTracker;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.HighlightControlFlowUtil;
 import com.intellij.java.impl.codeInsight.completion.JavaCompletionUtil;
 import com.intellij.java.impl.codeInsight.completion.MemberLookupHelper;
@@ -30,18 +25,23 @@ import com.intellij.java.language.impl.psi.impl.source.PsiFieldImpl;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.application.util.RecursionManager;
 import consulo.document.Document;
 import consulo.document.RangeMarker;
-import consulo.application.util.RecursionManager;
-import consulo.util.lang.StringUtil;
+import consulo.externalService.statistic.FeatureUsageTracker;
+import consulo.ide.impl.idea.codeInsight.completion.CodeCompletionFeatures;
+import consulo.language.codeStyle.PostprocessReformattingAspect;
+import consulo.language.editor.AutoPopupController;
+import consulo.language.editor.completion.CompletionUtilCore;
+import consulo.language.editor.completion.lookup.*;
 import consulo.language.psi.PsiDocumentManager;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiReference;
-import consulo.language.codeStyle.PostprocessReformattingAspect;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.ui.color.ColorValue;
 import consulo.ui.image.ImageEffects;
+import consulo.util.lang.StringUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -267,7 +267,7 @@ public class VariableLookupItem extends LookupItem<PsiVariable> implements Typed
     PsiReference reference = context.getFile().findReferenceAt(context.getStartOffset());
     if (reference instanceof PsiReferenceExpression && !((PsiReferenceExpression) reference).isQualified()) {
       final PsiVariable target = JavaPsiFacade.getInstance(context.getProject()).getResolveHelper().resolveReferencedVariable(field.getName(), (PsiElement) reference);
-      return !field.getManager().areElementsEquivalent(target, CompletionUtil.getOriginalOrSelf(field));
+      return !field.getManager().areElementsEquivalent(target, CompletionUtilCore.getOriginalOrSelf(field));
     }
     return false;
   }

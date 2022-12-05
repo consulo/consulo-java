@@ -15,7 +15,6 @@
  */
 package com.intellij.java.impl.ig.psiutils;
 
-import consulo.language.editor.rawHighlight.HighlightInfo;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.HighlightControlFlowUtil;
 import com.intellij.java.language.impl.psi.controlFlow.ControlFlowUtil;
 import com.intellij.java.language.impl.psi.controlFlow.LocalsOrMyInstanceFieldsControlFlowPolicy;
@@ -24,13 +23,14 @@ import com.intellij.java.language.psi.PsiParameter;
 import com.intellij.java.language.psi.PsiReferenceExpression;
 import com.intellij.java.language.psi.PsiVariable;
 import com.intellij.java.language.psi.util.PsiUtil;
+import com.siyeh.ig.psiutils.VariableAccessUtils;
+import consulo.language.editor.rawHighlight.HighlightInfo;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.resolve.PsiElementProcessor;
 import consulo.language.psi.util.PsiTreeUtil;
-import com.siyeh.ig.psiutils.VariableAccessUtils;
-import consulo.internal.java.gnu.trove.THashMap;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 
 public class FinalUtils {
@@ -52,8 +52,8 @@ public class FinalUtils {
     if (scope == null) {
       return false;
     }
-    Map<PsiElement, Collection<ControlFlowUtil.VariableInfo>> finalVarProblems = new THashMap<>();
-    Map<PsiElement, Collection<PsiReferenceExpression>> uninitializedVarProblems = new THashMap<>();
+    Map<PsiElement, Collection<ControlFlowUtil.VariableInfo>> finalVarProblems = new HashMap<>();
+    Map<PsiElement, Collection<PsiReferenceExpression>> uninitializedVarProblems = new HashMap<>();
     PsiElementProcessor<PsiElement> elementDoesNotViolateFinality = e -> {
       if (!(e instanceof PsiReferenceExpression)) {
         return true;

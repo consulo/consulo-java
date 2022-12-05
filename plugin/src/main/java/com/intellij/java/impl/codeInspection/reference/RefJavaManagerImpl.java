@@ -34,7 +34,6 @@ import consulo.disposer.Disposer;
 import consulo.language.editor.impl.inspection.reference.RefElementImpl;
 import consulo.language.editor.impl.inspection.reference.RefManagerImpl;
 import consulo.language.editor.impl.inspection.reference.RefProjectImpl;
-import consulo.language.editor.inspection.GlobalInspectionContext;
 import consulo.language.editor.inspection.InspectionsBundle;
 import consulo.language.editor.inspection.SuppressionUtil;
 import consulo.language.editor.inspection.reference.RefElement;
@@ -51,7 +50,6 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.util.lang.Comparing;
-import consulo.util.lang.function.Condition;
 import consulo.util.lang.function.Conditions;
 import consulo.util.lang.ref.Ref;
 import org.jdom.Element;
@@ -62,6 +60,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 /**
@@ -70,7 +69,7 @@ import java.util.stream.Stream;
  */
 public class RefJavaManagerImpl extends RefJavaManager {
   private static final Logger LOG = Logger.getInstance(RefJavaManagerImpl.class);
-  private static final Condition<PsiElement> PROBLEM_ELEMENT_CONDITION =
+  private static final Predicate<PsiElement> PROBLEM_ELEMENT_CONDITION =
       Conditions.or(Conditions.instanceOf(PsiFile.class, PsiJavaModule.class),
           Conditions.and(Conditions.notInstanceOf(PsiTypeParameter.class), psi -> (psi instanceof PsiField || !(psi instanceof PsiVariable)) && (!(psi instanceof PsiClassInitializer))));
 
@@ -139,11 +138,10 @@ public class RefJavaManagerImpl extends RefJavaManager {
     return getDeadCodeTool(file);
   }
 
-  private static final UserDataCache<Ref<UnusedDeclarationInspection>, PsiFile, RefManagerImpl> DEAD_CODE_TOOL = new UserDataCache<Ref<UnusedDeclarationInspection>, PsiFile, RefManagerImpl>
-      ("DEAD_CODE_TOOL") {
+  private static final UserDataCache<Ref<UnusedDeclarationInspection>, PsiFile, RefManagerImpl> DEAD_CODE_TOOL = new UserDataCache<Ref<UnusedDeclarationInspection>, PsiFile, RefManagerImpl>  ("DEAD_CODE_TOOL") {
     @Override
     protected Ref<UnusedDeclarationInspection> compute(PsiFile file, RefManagerImpl refManager) {
-      Tools tools = ((GlobalInspectionContext) refManager.getContext()).getTools().get(UnusedDeclarationInspection.SHORT_NAME);
+      Tools tools = refManager.getContext().getTools(UnusedDeclarationInspection.SHORT_NAME);
       InspectionToolWrapper toolWrapper = tools == null ? null : tools.getEnabledTool(file);
       InspectionProfileEntry tool = toolWrapper == null ? null : toolWrapper.getTool();
       return Ref.create(tool instanceof UnusedDeclarationInspection ? (UnusedDeclarationInspection) tool : null);

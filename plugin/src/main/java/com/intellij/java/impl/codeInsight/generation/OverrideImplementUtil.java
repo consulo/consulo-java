@@ -56,7 +56,7 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.language.util.ModuleUtilCore;
 import consulo.logging.Logger;
 import consulo.module.Module;
-import consulo.navigation.OpenFileDescriptor;
+import consulo.navigation.OpenFileDescriptorFactory;
 import consulo.project.Project;
 import consulo.ui.ex.action.KeyboardShortcut;
 import consulo.ui.ex.action.Shortcut;
@@ -619,7 +619,7 @@ public class OverrideImplementUtil extends OverrideImplementExploreUtil {
     } finally {
 
       PsiFile psiFile = psiClass.getContainingFile();
-      Editor editor = fileEditorManager.openTextEditor(new OpenFileDescriptor(psiFile.getProject(), psiFile.getVirtualFile()), true);
+      Editor editor = fileEditorManager.openTextEditor(OpenFileDescriptorFactory.getInstance(psiFile.getProject()).builder(psiFile.getVirtualFile()).build(), true);
       if (editor != null && !results.isEmpty()) {
         results.get(0).positionCaret(editor, true);
         editor.getScrollingModel().scrollToCaret(ScrollType.CENTER);

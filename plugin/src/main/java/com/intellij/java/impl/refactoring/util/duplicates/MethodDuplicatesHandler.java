@@ -22,9 +22,8 @@ import com.intellij.java.analysis.impl.refactoring.util.duplicates.ReturnValue;
 import com.intellij.java.analysis.impl.refactoring.util.duplicates.VariableReturnValue;
 import com.intellij.java.impl.refactoring.HelpID;
 import com.intellij.java.language.psi.*;
+import consulo.application.Application;
 import consulo.application.ApplicationManager;
-import consulo.application.impl.internal.ApplicationNamesInfo;
-import consulo.application.impl.internal.IdeaModalityState;
 import consulo.application.progress.ProgressIndicator;
 import consulo.application.progress.ProgressManager;
 import consulo.application.progress.Task;
@@ -219,14 +218,14 @@ public class MethodDuplicatesHandler implements RefactoringActionHandler, Contex
         final Runnable nothingFoundRunnable = new Runnable() {
           @Override
           public void run() {
-            final String message = RefactoringBundle.message("idea.has.not.found.any.code.that.can.be.replaced.with.method.call", ApplicationNamesInfo.getInstance().getProductName());
+            final String message = RefactoringBundle.message("idea.has.not.found.any.code.that.can.be.replaced.with.method.call", Application.get().getName().get());
             Messages.showInfoMessage(project, message, REFACTORING_NAME);
           }
         };
         if (ApplicationManager.getApplication().isUnitTestMode()) {
           nothingFoundRunnable.run();
         } else {
-          ApplicationManager.getApplication().invokeLater(nothingFoundRunnable, IdeaModalityState.NON_MODAL);
+          ApplicationManager.getApplication().invokeLater(nothingFoundRunnable, Application.get().getNoneModalityState());
         }
       }
     } else {
@@ -273,7 +272,7 @@ public class MethodDuplicatesHandler implements RefactoringActionHandler, Contex
         }
       }
     };
-    ApplicationManager.getApplication().invokeLater(replaceRunnable, IdeaModalityState.NON_MODAL);
+    ApplicationManager.getApplication().invokeLater(replaceRunnable, Application.get().getNoneModalityState());
   }
 
   public static List<Match> hasDuplicates(final PsiFile file, final PsiMember member) {

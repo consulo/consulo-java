@@ -27,8 +27,8 @@ import consulo.application.util.matcher.PrefixMatcher;
 import consulo.language.editor.completion.CompletionParameters;
 import consulo.language.editor.completion.CompletionProvider;
 import consulo.language.editor.completion.CompletionResultSet;
+import consulo.language.editor.completion.CompletionUtilCore;
 import consulo.language.editor.completion.lookup.*;
-import consulo.language.editor.impl.internal.completion.CompletionUtil;
 import consulo.language.pattern.ElementPattern;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
@@ -282,7 +282,7 @@ class TypeArgumentCompletionProvider implements CompletionProvider {
       context.getDocument().deleteString(context.getStartOffset(), listEnd);
       for (int i = 0; i < myTypeItems.size(); i++) {
         PsiTypeLookupItem typeItem = myTypeItems.get(i);
-        CompletionUtil.emulateInsertion(context, context.getTailOffset(), typeItem);
+        CompletionUtilCore.emulateInsertion(context, context.getTailOffset(), typeItem);
         if (context.getTailOffset() < 0) {
           LOG.error("tail offset spoiled by " + typeItem);
           return;

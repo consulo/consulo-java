@@ -24,7 +24,6 @@ import consulo.language.editor.completion.lookup.InsertionContext;
 import consulo.language.editor.completion.lookup.LookupElement;
 import consulo.language.editor.completion.lookup.LookupElementDecorator;
 import consulo.language.editor.completion.lookup.TailType;
-import consulo.language.editor.impl.internal.completion.CompletionUtil;
 import consulo.language.pattern.ElementPattern;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiErrorElement;
@@ -141,7 +140,7 @@ class SmartCastProvider implements CompletionProvider {
     if (info.getKind() == ExpectedTypeInfo.TYPE_OR_SUPERTYPE) {
       InheritanceUtil.processSupers(infoClass, true, superClass -> {
         if (!CommonClassNames.JAVA_LANG_OBJECT.equals(superClass.getQualifiedName())) {
-          result.accept(JavaPsiFacade.getElementFactory(superClass.getProject()).createType(CompletionUtil.getOriginalOrSelf(superClass)));
+          result.accept(JavaPsiFacade.getElementFactory(superClass.getProject()).createType(CompletionUtilCore.getOriginalOrSelf(superClass)));
         }
         return true;
       });
@@ -195,7 +194,7 @@ class SmartCastProvider implements CompletionProvider {
         final int oldTail = context.getTailOffset();
         context.setTailOffset(RParenthTailType.addRParenth(editor, oldTail, csSettings.SPACE_WITHIN_CAST_PARENTHESES));
 
-        getDelegate().handleInsert(CompletionUtil.newContext(context, getDelegate(), context.getStartOffset(), oldTail));
+        getDelegate().handleInsert(CompletionUtilCore.newContext(context, getDelegate(), context.getStartOffset(), oldTail));
 
         PostprocessReformattingAspect.getInstance(context.getProject()).doPostponedFormatting();
         if (csSettings.SPACE_AFTER_TYPE_CAST) {

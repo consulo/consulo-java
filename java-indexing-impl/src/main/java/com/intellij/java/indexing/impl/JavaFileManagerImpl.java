@@ -27,9 +27,9 @@ import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiJavaModule;
 import com.intellij.java.language.psi.PsiNameHelper;
 import consulo.disposer.Disposable;
-import consulo.language.impl.internal.psi.PsiManagerEx;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiInvalidElementAccessException;
+import consulo.language.psi.PsiManager;
 import consulo.language.psi.scope.DelegatingGlobalSearchScope;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.logging.Logger;
@@ -64,13 +64,13 @@ import java.util.stream.Stream;
 public class JavaFileManagerImpl implements JavaFileManager, Disposable {
   private static final Logger LOG = Logger.getInstance(JavaFileManagerImpl.class);
 
-  private final PsiManagerEx myManager;
+  private final PsiManager myManager;
   private volatile Set<String> myNontrivialPackagePrefixes;
   private boolean myDisposed;
 
   @Inject
   public JavaFileManagerImpl(Project project) {
-    myManager = PsiManagerEx.getInstanceEx(project);
+    myManager = PsiManager.getInstance(project);
     project.getMessageBus().connect().subscribe(ModuleRootListener.class, new ModuleRootListener() {
       @Override
       public void rootsChanged(final ModuleRootEvent event) {

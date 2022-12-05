@@ -39,7 +39,6 @@ import consulo.language.codeStyle.CodeStyleSettings;
 import consulo.language.codeStyle.CodeStyleSettingsManager;
 import consulo.language.editor.completion.*;
 import consulo.language.editor.completion.lookup.*;
-import consulo.language.editor.impl.internal.completion.CompletionUtil;
 import consulo.language.editor.inspection.SuppressionUtil;
 import consulo.language.editor.inspection.scheme.InspectionProfile;
 import consulo.language.editor.inspection.scheme.InspectionProjectProfileManager;
@@ -211,7 +210,7 @@ public abstract class JavaDocCompletionContributor extends CompletionContributor
         suggestSimilarParameterDescriptions(result, position, param);
       }
 
-      suggestLinkWrappingVariants(parameters, result.withPrefixMatcher(CompletionUtil.findJavaIdentifierPrefix(parameters)), position);
+      suggestLinkWrappingVariants(parameters, result.withPrefixMatcher(CompletionUtilCore.findJavaIdentifierPrefix(parameters)), position);
 
       if (!result.getPrefixMatcher().getPrefix().isEmpty()) {
         for (String keyword : Set.of("null", "true", "false")) {

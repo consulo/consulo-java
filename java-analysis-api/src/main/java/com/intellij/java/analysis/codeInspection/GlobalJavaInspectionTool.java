@@ -53,6 +53,6 @@ public abstract class GlobalJavaInspectionTool extends GlobalInspectionTool impl
 
   @Override                                                           
   public boolean isSuppressedFor(@Nonnull final PsiElement element) {
-    return SuppressManager.getInstance().isSuppressedFor(element, getShortName());
+    return BatchSuppressManager.getInstance().isSuppressedFor(element, getShortName());
   }
 }

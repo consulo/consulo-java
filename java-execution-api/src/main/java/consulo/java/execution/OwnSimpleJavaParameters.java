@@ -15,29 +15,30 @@
  */
 package consulo.java.execution;
 
-import java.nio.charset.Charset;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import com.intellij.java.execution.ShortenCommandLine;
+import consulo.content.bundle.Sdk;
 import consulo.execution.CantRunException;
 import consulo.execution.process.ProcessTerminatedListener;
+import consulo.java.execution.projectRoots.OwnJdkUtil;
+import consulo.logging.Logger;
 import consulo.process.ExecutionException;
-import com.intellij.java.execution.ShortenCommandLine;
+import consulo.process.ProcessHandler;
 import consulo.process.cmd.GeneralCommandLine;
 import consulo.process.cmd.ParametersList;
 import consulo.process.cmd.SimpleProgramParameters;
-import consulo.process.internal.OSProcessHandler;
-import consulo.logging.Logger;
+import consulo.process.local.ProcessHandlerFactory;
 import consulo.project.Project;
-import consulo.content.bundle.Sdk;
 import consulo.util.io.CharsetToolkit;
 import consulo.virtualFileSystem.util.PathsList;
-import consulo.java.execution.projectRoots.OwnJdkUtil;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.nio.charset.Charset;
 
 /**
  * @author Gregory.Shrago
  *
- * Replacement of {@link com.intellij.execution.configurations.SimpleJavaParameters} without dependency to platform code
+ * Replacement of {@link consulo.process.cmd.SimpleJavaParameters} without dependency to platform code
  */
 public class OwnSimpleJavaParameters extends SimpleProgramParameters
 {
@@ -227,9 +228,9 @@ public class OwnSimpleJavaParameters extends SimpleProgramParameters
 	}
 
 	@Nonnull
-	public OSProcessHandler createOSProcessHandler() throws ExecutionException
+	public ProcessHandler createOSProcessHandler() throws ExecutionException
 	{
-		OSProcessHandler processHandler = new OSProcessHandler(toCommandLine());
+		ProcessHandler processHandler = ProcessHandlerFactory.getInstance().createProcessHandler(toCommandLine());
 		ProcessTerminatedListener.attach(processHandler);
 		return processHandler;
 	}

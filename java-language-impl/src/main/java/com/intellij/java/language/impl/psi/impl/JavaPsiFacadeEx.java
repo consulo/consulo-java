@@ -19,16 +19,16 @@
  */
 package com.intellij.java.language.impl.psi.impl;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import org.jetbrains.annotations.TestOnly;
-import consulo.project.Project;
-import consulo.virtualFileSystem.VirtualFileFilter;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
-import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.disposer.Disposable;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.project.Project;
+import consulo.virtualFileSystem.VirtualFileFilter;
+import org.jetbrains.annotations.TestOnly;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public abstract class JavaPsiFacadeEx extends JavaPsiFacade
 {
@@ -44,7 +44,4 @@ public abstract class JavaPsiFacadeEx extends JavaPsiFacade
 	{
 		return findClass(qualifiedName, GlobalSearchScope.allScope(getProject()));
 	}
-
-	@TestOnly
-	public abstract void setAssertOnFileLoadingFilter(@Nonnull VirtualFileFilter filter, @Nonnull Disposable parentDisposable);
 }

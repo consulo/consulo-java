@@ -20,7 +20,7 @@
  */
 package com.intellij.java.impl.analysis;
 
-import consulo.content.internal.scope.CustomScopesProviderEx;
+import consulo.content.internal.scope.CustomScopesProvider;
 import consulo.content.scope.NamedScope;
 import consulo.ide.impl.psi.search.scope.ProjectProductionScope;
 import consulo.ide.impl.psi.search.scope.TestsScope;
@@ -34,7 +34,7 @@ import java.util.function.Consumer;
 /**
  * @author Konstantin Bulenkov
  */
-public class PackagesScopesProvider extends CustomScopesProviderEx {
+public class PackagesScopesProvider implements CustomScopesProvider {
   private final NamedScope myProjectProductionScope;
   private final List<NamedScope> myScopes;
 

@@ -24,7 +24,6 @@ import consulo.index.io.ID;
 import consulo.index.io.KeyDescriptor;
 import consulo.index.io.data.DataExternalizer;
 import consulo.index.io.data.DataInputOutputUtil;
-import consulo.language.impl.internal.psi.stub.FileContentImpl;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.SyntaxTraverser;
@@ -67,7 +66,7 @@ public class JavaFunctionalExpressionIndex extends FileBasedIndexExtension<Strin
           return Collections.emptyMap();
         }
 
-        final PsiFile file = ((FileContentImpl) inputData).getPsiFileForPsiDependentIndex();
+        final PsiFile file = inputData.getPsiFile();
         if (!(file instanceof PsiJavaFile)) {
           return Collections.emptyMap();
         }

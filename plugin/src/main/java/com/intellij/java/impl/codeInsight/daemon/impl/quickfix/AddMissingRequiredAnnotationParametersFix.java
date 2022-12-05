@@ -15,24 +15,25 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
-import consulo.language.editor.template.EmptyExpression;
-import consulo.language.editor.intention.IntentionAction;
-import consulo.language.editor.impl.internal.template.TemplateBuilderImpl;
-import consulo.language.editor.template.TemplateManager;
 import com.intellij.java.language.psi.*;
-import consulo.document.Document;
 import consulo.codeEditor.Editor;
-import consulo.project.Project;
-import consulo.util.lang.Pair;
-import consulo.util.lang.StringUtil;
+import consulo.document.Document;
+import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.language.editor.intention.IntentionAction;
+import consulo.language.editor.template.EmptyExpression;
+import consulo.language.editor.template.TemplateBuilder;
+import consulo.language.editor.template.TemplateBuilderFactory;
+import consulo.language.editor.template.TemplateManager;
 import consulo.language.psi.PsiDocumentManager;
 import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
-import consulo.util.collection.ContainerUtil;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.logging.Logger;
+import consulo.project.Project;
+import consulo.util.collection.ContainerUtil;
 import consulo.util.collection.primitive.objects.ObjectIntMap;
 import consulo.util.collection.primitive.objects.ObjectMaps;
+import consulo.util.lang.Pair;
+import consulo.util.lang.StringUtil;
 
 import javax.annotation.Nonnull;
 import java.util.Collection;
@@ -111,13 +112,13 @@ public class AddMissingRequiredAnnotationParametersFix implements IntentionActio
       newParameters.add(Pair.<String, PsiAnnotationMemberValue>create(misssedParameter, nullValue));
     }
 
-    TemplateBuilderImpl builder = null;
+    TemplateBuilder builder = null;
     for (final Pair<String, PsiAnnotationMemberValue> newParameter : newParameters) {
       final PsiAnnotationMemberValue value = myAnnotation.setDeclaredAttributeValue(newParameter.getFirst(),
           newParameter.getSecond());
       if (myMissedElements.contains(newParameter.getFirst())) {
         if (builder == null) {
-          builder = new TemplateBuilderImpl(myAnnotation.getParameterList());
+          builder = TemplateBuilderFactory.getInstance().createTemplateBuilder(myAnnotation.getParameterList());
         }
         builder.replaceElement(value, new EmptyExpression(), true);
       }

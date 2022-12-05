@@ -68,8 +68,8 @@
 		<dependency>
 			<groupId>consulo</groupId>
 			<artifactId>consulo-ide-impl</artifactId>
-			<version>${project.version}</version>
-			<optional>true</optional>
+			<version>3-SNAPSHOT</version>
+			<scope>provided</scope>
 		</dependency>
 
 		<dependency>

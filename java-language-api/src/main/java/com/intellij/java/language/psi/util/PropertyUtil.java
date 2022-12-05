@@ -33,7 +33,7 @@ import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.beans.Introspector;
+import kava.beans.Introspector;
 import java.util.*;
 
 /**

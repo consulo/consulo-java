@@ -29,6 +29,7 @@ import consulo.component.util.Iconable;
 import consulo.language.editor.completion.CompletionParameters;
 import consulo.language.editor.completion.CompletionResultSet;
 import consulo.language.editor.completion.CompletionType;
+import consulo.language.editor.completion.CompletionUtilCore;
 import consulo.language.editor.completion.lookup.InsertHandler;
 import consulo.language.editor.completion.lookup.InsertionContext;
 import consulo.language.editor.completion.lookup.LookupElement;
@@ -72,7 +73,7 @@ public class JavaGenerateMemberCompletionContributor {
   }
 
   private static void suggestGeneratedMethods(CompletionResultSet result, PsiElement position) {
-    PsiClass parent = CompletionUtil.getOriginalElement(ObjectUtil.assertNotNull(PsiTreeUtil.getParentOfType(position, PsiClass.class)));
+    PsiClass parent = CompletionUtilCore.getOriginalElement(ObjectUtil.assertNotNull(PsiTreeUtil.getParentOfType(position, PsiClass.class)));
     if (parent != null) {
       Set<MethodSignature> addedSignatures = new HashSet<>();
       addGetterSetterElements(result, parent, addedSignatures);

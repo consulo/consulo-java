@@ -15,9 +15,9 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
+import consulo.application.Application;
 import consulo.application.ApplicationManager;
 import consulo.application.CommonBundle;
-import consulo.application.impl.internal.ApplicationNamesInfo;
 import consulo.disposer.Disposer;
 import consulo.fileChooser.FileChooserDescriptorFactory;
 import consulo.ide.impl.idea.openapi.util.io.FileUtil;
@@ -59,7 +59,7 @@ public class LocateLibraryDialog extends DialogWrapper {
     setTitle(JavaQuickFixBundle.message("add.library.title.dialog", presentableName));
 
     myProject = module.getProject();
-    myUseBundledRadioButton.setText(JavaQuickFixBundle.message("add.library.use.bundled.library.radio.button", presentableName, ApplicationNamesInfo.getInstance().getFullProductName()));
+    myUseBundledRadioButton.setText(JavaQuickFixBundle.message("add.library.use.bundled.library.radio.button", presentableName, Application.get().getName()));
     myCopyLibraryFilesRadioButton.setText(JavaQuickFixBundle.message("add.library.copy.files.to.radio.button", presentableName));
     myCopyToDir.setText(new File(new File(module.getModuleDirPath()), "lib").getAbsolutePath());
     myCopyToDir.addBrowseFolderListener(JavaQuickFixBundle.message("add.library.title.choose.folder"), JavaQuickFixBundle.message("add.library.description.choose.folder"), myProject,

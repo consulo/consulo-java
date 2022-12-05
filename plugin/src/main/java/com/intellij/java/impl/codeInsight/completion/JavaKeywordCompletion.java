@@ -33,8 +33,8 @@ import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.completion.CompletionParameters;
 import consulo.language.editor.completion.CompletionResultSet;
 import consulo.language.editor.completion.CompletionStyleUtil;
+import consulo.language.editor.completion.CompletionUtilCore;
 import consulo.language.editor.completion.lookup.*;
-import consulo.language.editor.impl.internal.completion.CompletionUtil;
 import consulo.language.pattern.ElementPattern;
 import consulo.language.pattern.FilterPattern;
 import consulo.language.psi.*;
@@ -358,7 +358,7 @@ public class JavaKeywordCompletion {
     Set<PsiField> used = ReferenceExpressionCompletionContributor.findConstantsUsedInSwitch(switchStatement);
     for (PsiField field : switchType.getAllFields()) {
       String name = field.getName();
-      if (!(field instanceof PsiEnumConstant) || used.contains(CompletionUtil.getOriginalOrSelf(field)) || name == null) {
+      if (!(field instanceof PsiEnumConstant) || used.contains(CompletionUtilCore.getOriginalOrSelf(field)) || name == null) {
         continue;
       }
       String prefix = "case ";

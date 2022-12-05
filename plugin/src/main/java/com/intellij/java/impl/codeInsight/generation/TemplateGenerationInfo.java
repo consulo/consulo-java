@@ -17,11 +17,12 @@ package com.intellij.java.impl.codeInsight.generation;
 
 import consulo.language.editor.template.Expression;
 import consulo.language.editor.template.Template;
-import consulo.language.editor.impl.internal.template.TemplateBuilderImpl;
 import com.intellij.java.language.impl.codeInsight.generation.GenerationInfo;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiTypeElement;
+import consulo.language.editor.template.TemplateBuilder;
+import consulo.language.editor.template.TemplateBuilderFactory;
 import consulo.language.psi.*;
 import consulo.language.util.IncorrectOperationException;
 
@@ -52,7 +53,7 @@ public abstract class TemplateGenerationInfo extends GenerationInfoBase implemen
 
   public Template getTemplate() {
     PsiMethod element = getPsiMember();
-    TemplateBuilderImpl builder = new TemplateBuilderImpl(element);
+    TemplateBuilder builder = TemplateBuilderFactory.getInstance().createTemplateBuilder(element);
     builder.replaceElement(getTemplateElement(element), myExpression);
     return builder.buildTemplate();
   }

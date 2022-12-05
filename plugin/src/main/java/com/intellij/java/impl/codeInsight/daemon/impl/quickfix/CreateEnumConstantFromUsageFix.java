@@ -22,10 +22,11 @@ import consulo.codeEditor.Editor;
 import consulo.document.util.TextRange;
 import consulo.ide.impl.idea.codeInsight.CodeInsightUtilBase;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
-import consulo.language.editor.impl.internal.template.TemplateBuilderImpl;
 import consulo.language.editor.intention.HighPriorityAction;
 import consulo.language.editor.template.EmptyExpression;
 import consulo.language.editor.template.Template;
+import consulo.language.editor.template.TemplateBuilder;
+import consulo.language.editor.template.TemplateBuilderFactory;
 import consulo.language.psi.PsiElement;
 import consulo.logging.Logger;
 import consulo.project.Project;
@@ -68,7 +69,7 @@ public class CreateEnumConstantFromUsageFix extends CreateVarFromUsageFix implem
           }
         }, ",");
         enumConstant = (PsiEnumConstant) enumConstant.replace(elementFactory.createEnumConstantFromText(name + "(" + params + ")", null));
-        final TemplateBuilderImpl builder = new TemplateBuilderImpl(enumConstant);
+        final TemplateBuilder builder = TemplateBuilderFactory.getInstance().createTemplateBuilder(enumConstant);
 
         final PsiExpressionList argumentList = enumConstant.getArgumentList();
         LOG.assertTrue(argumentList != null);

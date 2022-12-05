@@ -15,23 +15,26 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
-import consulo.ide.impl.idea.codeInsight.CodeInsightUtilBase;
-import com.intellij.java.language.psi.*;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
 import com.intellij.java.impl.codeInsight.generation.OverrideImplementUtil;
-import consulo.language.editor.template.Template;
-import consulo.language.editor.impl.internal.template.TemplateBuilderImpl;
-import consulo.language.editor.template.event.TemplateEditingAdapter;
+import com.intellij.java.language.psi.*;
 import consulo.application.ApplicationManager;
-import consulo.logging.Logger;
 import consulo.codeEditor.Editor;
-import consulo.project.Project;
 import consulo.document.util.TextRange;
-import consulo.language.psi.*;
+import consulo.ide.impl.idea.codeInsight.CodeInsightUtilBase;
+import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.language.editor.template.Template;
+import consulo.language.editor.template.TemplateBuilder;
+import consulo.language.editor.template.TemplateBuilderFactory;
+import consulo.language.editor.template.event.TemplateEditingAdapter;
+import consulo.language.psi.PsiDocumentManager;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
-import javax.annotation.Nonnull;
+import consulo.logging.Logger;
+import consulo.project.Project;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
 /**
@@ -61,7 +64,7 @@ public class CreateConstructorFromCallFix extends CreateFromUsageBaseFix {
       PsiMethod constructor = (PsiMethod)targetClass.add(elementFactory.createConstructor());
 
       final PsiFile file = targetClass.getContainingFile();
-      TemplateBuilderImpl templateBuilder = new TemplateBuilderImpl(constructor);
+      TemplateBuilder templateBuilder = TemplateBuilderFactory.getInstance().createTemplateBuilder(constructor);
       CreateFromUsageUtils.setupMethodParameters(constructor, templateBuilder, myConstructorCall.getArgumentList(),
                                                  getTargetSubstitutor(myConstructorCall));
       final PsiMethod superConstructor = CreateClassFromNewFix.setupSuperCall(targetClass, constructor, templateBuilder);

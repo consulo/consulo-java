@@ -23,6 +23,8 @@ import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.javadoc.PsiDocTag;
 import consulo.language.util.IncorrectOperationException;
 
+import javax.annotation.Nonnull;
+
 /**
  * @author Gregory.Shrago
  */
@@ -51,5 +53,11 @@ public class PsiDocTagValueManipulator extends AbstractElementManipulator<PsiDoc
     final PsiElement first = elements[0];
     final PsiElement last = elements[elements.length - 1];
     return new TextRange(first.getStartOffsetInParent(), last.getStartOffsetInParent()+last.getTextLength());
+  }
+
+  @Nonnull
+  @Override
+  public Class<PsiDocTag> getElementClass() {
+    return PsiDocTag.class;
   }
 }

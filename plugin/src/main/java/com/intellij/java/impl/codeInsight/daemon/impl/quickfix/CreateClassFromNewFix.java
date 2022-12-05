@@ -28,6 +28,8 @@ import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.WriteCommandAction;
 import consulo.language.editor.impl.internal.template.TemplateBuilderImpl;
 import consulo.language.editor.template.Template;
+import consulo.language.editor.template.TemplateBuilder;
+import consulo.language.editor.template.TemplateBuilderFactory;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.SmartPointerManager;
@@ -100,7 +102,7 @@ public class CreateClassFromNewFix extends CreateFromUsageBaseFix {
       PsiMethod constructor = elementFactory.createConstructor();
       constructor = (PsiMethod)aClass.add(constructor);
 
-      TemplateBuilderImpl templateBuilder = new TemplateBuilderImpl(aClass);
+      TemplateBuilder templateBuilder = TemplateBuilderFactory.getInstance().createTemplateBuilder(aClass);
       CreateFromUsageUtils.setupMethodParameters(constructor, templateBuilder, argList, getTargetSubstitutor(newExpression));
 
       setupSuperCall(aClass, constructor, templateBuilder);
@@ -143,7 +145,7 @@ public class CreateClassFromNewFix extends CreateFromUsageBaseFix {
   }
 
   @Nullable
-  public static PsiMethod setupSuperCall(PsiClass targetClass, PsiMethod constructor, TemplateBuilderImpl templateBuilder)
+  public static PsiMethod setupSuperCall(PsiClass targetClass, PsiMethod constructor, TemplateBuilder templateBuilder)
     throws IncorrectOperationException {
     PsiElementFactory elementFactory = JavaPsiFacade.getInstance(targetClass.getProject()).getElementFactory();
     PsiMethod supConstructor = null;

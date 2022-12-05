@@ -15,16 +15,21 @@
  */
 package com.intellij.java.debugger.impl.ui.tree.render;
 
-import java.sql.Timestamp;
-
 import com.intellij.java.debugger.DebuggerContext;
 import com.intellij.java.debugger.engine.evaluation.EvaluateException;
 import com.intellij.java.debugger.engine.evaluation.EvaluationContext;
 import com.intellij.java.debugger.impl.ui.tree.DebuggerTreeNode;
-import com.intellij.java.debugger.ui.tree.NodeDescriptor;
 import com.intellij.java.debugger.impl.ui.tree.ValueDescriptor;
+import com.intellij.java.debugger.ui.tree.NodeDescriptor;
 import com.intellij.java.language.psi.PsiExpression;
-import consulo.internal.com.sun.jdi.*;
+import consulo.internal.com.sun.jdi.LongType;
+import consulo.internal.com.sun.jdi.LongValue;
+import consulo.internal.com.sun.jdi.Type;
+import consulo.internal.com.sun.jdi.Value;
+
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 /**
  * @author egor
@@ -41,7 +46,8 @@ public class TimestampRenderer extends NodeRendererImpl
 		}
 		else if(value instanceof LongValue)
 		{
-			return new Timestamp(((LongValue) value).longValue()).toString();
+			long time = ((LongValue) value).longValue();
+			return LocalDateTime.ofInstant(Instant.ofEpochMilli(time), ZoneId.systemDefault()).toString();
 		}
 		return null;
 	}

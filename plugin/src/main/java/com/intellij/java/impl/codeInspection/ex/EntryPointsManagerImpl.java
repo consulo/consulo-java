@@ -32,16 +32,17 @@ import consulo.component.persist.Storage;
 import consulo.component.persist.StoragePathMacros;
 import consulo.ide.impl.idea.openapi.project.ProjectUtil;
 import consulo.language.editor.DaemonCodeAnalyzer;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
+import consulo.ui.Button;
 import consulo.ui.ex.awt.DialogWrapper;
+import consulo.ui.ex.awtUnsafe.TargetAWT;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import org.jdom.Element;
 
 import javax.annotation.Nonnull;
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -84,19 +85,14 @@ public class EntryPointsManagerImpl extends EntryPointsManagerBase implements Pe
   }
 
   @Override
-  public JButton createConfigureAnnotationsBtn() {
+  public Button createConfigureAnnotationsBtn() {
     return createConfigureAnnotationsButton();
   }
 
   @Nonnull
-  public static JButton createConfigureAnnotationsButton() {
-    final JButton configureAnnotations = new JButton("Configure annotations...");
-    configureAnnotations.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        getInstance(ProjectUtil.guessCurrentProject(configureAnnotations)).configureAnnotations();
-      }
-    });
+  public static Button createConfigureAnnotationsButton() {
+    final Button configureAnnotations = Button.create(LocalizeValue.localizeTODO("Configure annotations..."));
+    configureAnnotations.addClickListener(e -> getInstance(ProjectUtil.guessCurrentProject((JComponent) TargetAWT.to(configureAnnotations))).configureAnnotations());
     return configureAnnotations;
   }
 }

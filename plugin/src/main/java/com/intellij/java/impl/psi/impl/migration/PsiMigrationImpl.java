@@ -15,16 +15,16 @@
  */
 package com.intellij.java.impl.psi.impl.migration;
 
-import consulo.application.ApplicationManager;
-import consulo.logging.Logger;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.java.language.psi.PsiMigration;
 import com.intellij.java.language.psi.PsiJavaPackage;
-import consulo.language.impl.internal.psi.PsiManagerImpl;
-import java.util.HashMap;
+import com.intellij.java.language.psi.PsiMigration;
+import consulo.application.ApplicationManager;
+import consulo.language.psi.PsiManager;
+import consulo.logging.Logger;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -35,14 +35,14 @@ public class PsiMigrationImpl implements PsiMigration {
   private static final Logger LOG = Logger.getInstance(PsiMigrationImpl.class);
   private final PsiMigrationManager myMigrationManager;
   private final JavaPsiFacade myFacade;
-  private final PsiManagerImpl myManager;
+  private final PsiManager myManager;
   private final Map<String, MigrationClassImpl> myQNameToClassMap = new HashMap<String, MigrationClassImpl>();
   private final Map<String, List<PsiClass>>  myPackageToClassesMap = new HashMap<String, List<PsiClass>>();
   private final Map<String, MigrationPackageImpl> myQNameToPackageMap = new HashMap<String, MigrationPackageImpl>();
   private final Map<String, List<PsiJavaPackage>>  myPackageToSubpackagesMap = new HashMap<String, List<PsiJavaPackage>>();
   private boolean myIsValid = true;
 
-  public PsiMigrationImpl(PsiMigrationManager migrationManager, JavaPsiFacade facade, PsiManagerImpl manager) {
+  public PsiMigrationImpl(PsiMigrationManager migrationManager, JavaPsiFacade facade, PsiManager manager) {
     myMigrationManager = migrationManager;
     myFacade = facade;
     myManager = manager;
@@ -146,7 +146,7 @@ public class PsiMigrationImpl implements PsiMigration {
     return lastDotIndex >= 0 ? qualifiedName.substring(0, lastDotIndex) : "";
   }
 
-  PsiManagerImpl getManager() {
+  PsiManager getManager() {
     return myManager;
   }
 

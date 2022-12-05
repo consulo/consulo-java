@@ -32,7 +32,6 @@ import consulo.language.ast.ASTNode;
 import consulo.language.ast.ChildRoleBase;
 import consulo.language.ast.IElementType;
 import consulo.language.impl.ast.*;
-import consulo.language.impl.internal.psi.PsiManagerEx;
 import consulo.language.impl.psi.CheckUtil;
 import consulo.language.impl.psi.CodeEditUtil;
 import consulo.language.impl.psi.SourceTreeToPsiMap;

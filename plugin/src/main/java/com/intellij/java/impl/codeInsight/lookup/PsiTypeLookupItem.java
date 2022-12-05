@@ -15,15 +15,6 @@
  */
 package com.intellij.java.impl.codeInsight.lookup;
 
-import consulo.language.editor.completion.ClassConditionKey;
-import consulo.language.editor.impl.internal.completion.CompletionUtil;
-import consulo.language.editor.completion.lookup.InsertHandler;
-import consulo.language.editor.completion.lookup.InsertionContext;
-import consulo.language.editor.completion.lookup.DefaultLookupItemRenderer;
-import consulo.language.editor.completion.lookup.LookupElementPresentation;
-import consulo.language.editor.completion.lookup.LookupItem;
-import consulo.logging.attachment.AttachmentFactory;
-import consulo.ide.impl.idea.diagnostic.LogMessageEx;
 import com.intellij.java.impl.codeInsight.completion.JavaCompletionUtil;
 import com.intellij.java.impl.codeInsight.completion.JavaPsiClassReferenceElement;
 import com.intellij.java.language.impl.psi.impl.source.PsiClassReferenceType;
@@ -32,13 +23,18 @@ import com.intellij.java.language.psi.util.PsiFormatUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.ScrollType;
-import consulo.util.lang.StringUtil;
+import consulo.ide.impl.idea.diagnostic.LogMessageEx;
+import consulo.language.codeStyle.PostprocessReformattingAspect;
+import consulo.language.editor.completion.ClassConditionKey;
+import consulo.language.editor.completion.CompletionUtilCore;
+import consulo.language.editor.completion.lookup.*;
+import consulo.language.impl.DebugUtil;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
-import consulo.language.impl.DebugUtil;
-import consulo.language.codeStyle.PostprocessReformattingAspect;
-import consulo.util.collection.ArrayUtil;
+import consulo.language.util.AttachmentFactoryUtil;
 import consulo.logging.Logger;
+import consulo.util.collection.ArrayUtil;
+import consulo.util.lang.StringUtil;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
@@ -173,8 +169,7 @@ public class PsiTypeLookupItem extends LookupItem implements TypedLookupItem {
       StringBuilder builder = new StringBuilder();
       for (PsiTypeParameter parameter : psiClass.getTypeParameters()) {
         PsiType substitute = substitutor.substitute(parameter);
-        if (substitute == null || (PsiUtil.resolveClassInType(substitute) == parameter && resolveHelper.resolveReferencedClass(parameter.getName(), context) != CompletionUtil
-            .getOriginalOrSelf(parameter))) {
+        if (substitute == null || (PsiUtil.resolveClassInType(substitute) == parameter && resolveHelper.resolveReferencedClass(parameter.getName(), context) != CompletionUtilCore.getOriginalOrSelf(parameter))) {
           return "";
         }
         if (builder.length() > 0) {
@@ -313,7 +308,7 @@ public class PsiTypeLookupItem extends LookupItem implements TypedLookupItem {
     int newTail = JavaCompletionUtil.insertClassReference(aClass, file, startOffset, tail);
     if (newTail > context.getDocument().getTextLength() || newTail < 0) {
       LOG.error(LogMessageEx.createEvent("Invalid offset after insertion ", "offset=" + newTail + "\n" + "start=" + startOffset + "\n" + "tail=" + tail + "\n" + "file.length=" + file
-          .getTextLength() + "\n" + "document=" + context.getDocument() + "\n" + DebugUtil.currentStackTrace(), AttachmentFactory.get().createAttachment(context.getDocument())));
+          .getTextLength() + "\n" + "document=" + context.getDocument() + "\n" + DebugUtil.currentStackTrace(), AttachmentFactoryUtil.createAttachment(context.getDocument())));
       return;
 
     }

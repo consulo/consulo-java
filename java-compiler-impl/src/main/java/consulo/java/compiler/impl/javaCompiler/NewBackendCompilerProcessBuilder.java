@@ -20,10 +20,9 @@ import consulo.java.rt.common.compiler.JavaCompilerInterface;
 import consulo.logging.Logger;
 import consulo.process.ExecutionException;
 import consulo.process.ProcessHandler;
+import consulo.process.ProcessHandlerBuilder;
 import consulo.process.cmd.GeneralCommandLine;
 import consulo.process.cmd.ParametersList;
-import consulo.process.internal.OSProcessHandler;
-import consulo.process.io.BaseOutputReader;
 import consulo.util.io.ClassPathUtil;
 import consulo.util.io.NetUtil;
 import consulo.virtualFileSystem.VirtualFile;
@@ -67,15 +66,7 @@ public class NewBackendCompilerProcessBuilder extends BackendCompilerProcessBuil
 	@Override
 	public ProcessHandler createProcess(GeneralCommandLine commandLine) throws ExecutionException
 	{
-		return new OSProcessHandler(commandLine)
-		{
-			@Nonnull
-			@Override
-			protected BaseOutputReader.Options readerOptions()
-			{
-				return BaseOutputReader.Options.forMostlySilentProcess();
-			}
-		};
+		return ProcessHandlerBuilder.create(commandLine).silentReader().build();
 	}
 
 	public int getPort()

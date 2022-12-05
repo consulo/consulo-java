@@ -32,6 +32,7 @@ import consulo.language.psi.scope.LocalSearchScope;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.navigation.OpenFileDescriptor;
+import consulo.navigation.OpenFileDescriptorFactory;
 import consulo.project.Project;
 import consulo.usage.UsageInfo;
 import consulo.util.lang.Comparing;
@@ -179,7 +180,7 @@ public class MethodReturnTypeFix extends LocalQuickFixAndIntentionActionOnPsiEle
 
     PsiFile containingFile = myMethod.getContainingFile();
     if (containingFile != file) {
-      OpenFileDescriptor descriptor = new OpenFileDescriptor(project, containingFile.getVirtualFile());
+      OpenFileDescriptor descriptor = OpenFileDescriptorFactory.getInstance(project).builder(containingFile.getVirtualFile()).build();
       return FileEditorManager.getInstance(project).openTextEditor(descriptor, true);
     }
     return editor;

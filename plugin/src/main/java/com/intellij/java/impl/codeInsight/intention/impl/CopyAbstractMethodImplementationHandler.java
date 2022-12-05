@@ -15,30 +15,33 @@
  */
 package com.intellij.java.impl.codeInsight.intention.impl;
 
-import com.intellij.java.language.impl.codeInsight.ChangeContextUtil;
-import consulo.language.editor.CodeInsightBundle;
 import com.intellij.java.impl.codeInsight.generation.GenerateMembersUtil;
 import com.intellij.java.impl.codeInsight.generation.OverrideImplementUtil;
 import com.intellij.java.impl.ide.util.MethodCellRenderer;
+import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
+import com.intellij.java.language.impl.codeInsight.ChangeContextUtil;
 import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.application.Result;
-import consulo.language.editor.WriteCommandAction;
+import consulo.application.progress.ProgressManager;
 import consulo.codeEditor.Editor;
+import consulo.codeEditor.EditorPopupHelper;
 import consulo.codeEditor.ScrollType;
 import consulo.fileEditor.FileEditorManager;
-import consulo.navigation.OpenFileDescriptor;
-import consulo.application.progress.ProgressManager;
+import consulo.ide.impl.ui.impl.PopupChooserBuilder;
+import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.WriteCommandAction;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiUtilCore;
+import consulo.language.util.IncorrectOperationException;
+import consulo.logging.Logger;
+import consulo.navigation.OpenFileDescriptorFactory;
 import consulo.project.Project;
 import consulo.ui.ex.awt.JBList;
 import consulo.ui.ex.awt.Messages;
-import consulo.ide.impl.ui.impl.PopupChooserBuilder;
+import consulo.ui.ex.popup.JBPopup;
 import consulo.util.lang.Comparing;
-import consulo.language.psi.*;
-import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
-import consulo.language.psi.PsiUtilCore;
-import com.intellij.java.language.psi.util.TypeConversionUtil;
-import consulo.language.util.IncorrectOperationException;
-import consulo.logging.Logger;
 
 import javax.swing.*;
 import java.util.*;
@@ -99,11 +102,12 @@ public class CopyAbstractMethodImplementationHandler {
           copyImplementation(element);
         }
       };
-      new consulo.ide.impl.ui.impl.PopupChooserBuilder(list)
-        .setTitle(CodeInsightBundle.message("copy.abstract.method.popup.title"))
-        .setItemChoosenCallback(runnable)
-        .createPopup()
-        .showInBestPositionFor(myEditor);
+      JBPopup popup = new PopupChooserBuilder(list)
+              .setTitle(CodeInsightBundle.message("copy.abstract.method.popup.title"))
+              .setItemChoosenCallback(runnable)
+              .createPopup();
+
+      EditorPopupHelper.getInstance().showPopupInBestPositionFor(myEditor, popup);
     }
   }
 
@@ -191,7 +195,7 @@ public class CopyAbstractMethodImplementationHandler {
       PsiMethod target = generatedMethods.get(0);
       PsiFile psiFile = target.getContainingFile();
       FileEditorManager fileEditorManager = FileEditorManager.getInstance(psiFile.getProject());
-      Editor editor = fileEditorManager.openTextEditor(new OpenFileDescriptor(psiFile.getProject(), psiFile.getVirtualFile()), false);
+      Editor editor = fileEditorManager.openTextEditor(OpenFileDescriptorFactory.getInstance(psiFile.getProject()).builder(psiFile.getVirtualFile()).build(), false);
       if (editor != null) {
         GenerateMembersUtil.positionCaret(editor, target, true);
         editor.getScrollingModel().scrollToCaret(ScrollType.CENTER);

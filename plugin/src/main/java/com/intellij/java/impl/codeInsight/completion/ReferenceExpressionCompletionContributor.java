@@ -32,9 +32,9 @@ import consulo.component.util.Iconable;
 import consulo.externalService.statistic.FeatureUsageTracker;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.codeStyle.CodeStyleSettingsManager;
+import consulo.language.editor.completion.CompletionUtilCore;
 import consulo.language.editor.completion.lookup.InsertionContext;
 import consulo.language.editor.completion.lookup.LookupElement;
-import consulo.language.editor.impl.internal.completion.CompletionUtil;
 import consulo.language.icon.IconDescriptorUpdaters;
 import consulo.language.pattern.ElementPattern;
 import consulo.language.pattern.StandardPatterns;
@@ -187,7 +187,7 @@ public class ReferenceExpressionCompletionContributor {
           }
 
           //noinspection SuspiciousMethodCalls
-          if (member instanceof PsiEnumConstant && used.contains(CompletionUtil.getOriginalOrSelf(member))) {
+          if (member instanceof PsiEnumConstant && used.contains(CompletionUtilCore.getOriginalOrSelf(member))) {
             return false;
           }
 
@@ -230,7 +230,7 @@ public class ReferenceExpressionCompletionContributor {
           if (value instanceof PsiReferenceExpression) {
             final PsiElement target = ((PsiReferenceExpression) value).resolve();
             if (target instanceof PsiField) {
-              used.add(CompletionUtil.getOriginalOrSelf((PsiField) target));
+              used.add(CompletionUtilCore.getOriginalOrSelf((PsiField) target));
             }
           }
         }

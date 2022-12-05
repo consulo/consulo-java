@@ -16,15 +16,17 @@
 package com.intellij.java.impl.codeInspection.i18n.folding;
 
 import com.intellij.java.impl.codeInspection.i18n.JavaI18nUtil;
+import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.language.codeInsight.folding.JavaCodeFoldingSettings;
 import com.intellij.java.language.impl.psi.impl.JavaConstantExpressionEvaluator;
 import com.intellij.java.language.psi.*;
 import com.intellij.lang.properties.IProperty;
 import com.intellij.lang.properties.psi.Property;
-import com.intellij.lang.properties.psi.impl.PropertyImpl;
-import com.intellij.lang.properties.psi.impl.PropertyStubImpl;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.document.Document;
+import consulo.language.Language;
 import consulo.language.ast.ASTNode;
 import consulo.language.editor.folding.FoldingBuilderEx;
 import consulo.language.editor.folding.FoldingDescriptor;
@@ -42,12 +44,12 @@ import java.util.*;
 /**
  * @author Konstantin Bulenkov
  */
+@ExtensionImpl
 public class PropertyFoldingBuilder extends FoldingBuilderEx {
   private static final int FOLD_MAX_LENGTH = 50;
-  private static final Key<IProperty> CACHE = Key.create("i18n.property.cache");
-  public static final IProperty NULL = new PropertyImpl(new PropertyStubImpl(null, null),
-      PropertiesElementTypes.PROPERTY);
+  private static final Key<Object> CACHE = Key.create("i18n.property.cache");
 
+  @RequiredReadAction
   @Override
   @Nonnull
   public FoldingDescriptor[] buildFoldRegions(@Nonnull PsiElement element, @Nonnull Document document, boolean quick) {
@@ -160,13 +162,15 @@ public class PropertyFoldingBuilder extends FoldingBuilderEx {
 
   @Nullable
   private static IProperty getI18nProperty(Project project, PsiLiteralExpression literal) {
-    final Property property = (Property) literal.getUserData(CACHE);
-    if (property == NULL) {
+    final Object value = literal.getUserData(CACHE);
+    if (value == ObjectUtil.NULL) {
       return null;
     }
-    if (property != null && isValid(property, literal)) {
+
+    if (value instanceof Property property && isValid(property, literal)) {
       return property;
     }
+
     if (isI18nProperty(project, literal)) {
       final PsiReference[] references = literal.getReferences();
       for (PsiReference reference : references) {
@@ -214,11 +218,13 @@ public class PropertyFoldingBuilder extends FoldingBuilderEx {
     if (!isStringLiteral(expr)) {
       return false;
     }
-    final IProperty property = expr.getUserData(CACHE);
-    if (property == NULL) {
+    
+    final Object value = expr.getUserData(CACHE);
+    if (value == ObjectUtil.NULL) {
       return false;
     }
-    if (property != null) {
+
+    if (value != null) {
       return true;
     }
 
@@ -226,7 +232,7 @@ public class PropertyFoldingBuilder extends FoldingBuilderEx {
     annotationParams.put(AnnotationUtil.PROPERTY_KEY_RESOURCE_BUNDLE_PARAMETER, null);
     final boolean isI18n = JavaI18nUtil.mustBePropertyKey(project, expr, annotationParams);
     if (!isI18n) {
-      expr.putUserData(CACHE, NULL);
+      expr.putUserData(CACHE, ObjectUtil.NULL);
     }
     return isI18n;
   }
@@ -237,5 +243,11 @@ public class PropertyFoldingBuilder extends FoldingBuilderEx {
       return false;
     }
     return text.startsWith("\"") && text.endsWith("\"") && text.length() > 2;
+  }
+
+  @Nonnull
+  @Override
+  public Language getLanguage() {
+    return JavaLanguage.INSTANCE;
   }
 }

@@ -246,7 +246,7 @@ public class CreatePropertyFromUsageFix extends CreateFromUsageBaseFix implement
     accessor.setName(callText);
     PsiUtil.setModifierProperty(accessor, PsiModifier.STATIC, isStatic);
 
-    TemplateBuilderImpl builder = new TemplateBuilderImpl(accessor);
+    TemplateBuilder builder = TemplateBuilderFactory.getInstance().createTemplateBuilder(accessor);
     builder.replaceElement(typeReference, TYPE_VARIABLE, new TypeExpression(project, expectedTypes), true);
     builder.replaceElement(fieldReference, FIELD_VARIABLE, new FieldExpression(field, targetClass, expectedTypes), true);
     builder.setEndVariableAfter(body.getLBrace());

@@ -17,13 +17,13 @@ package com.intellij.java.debugger.impl.settings;
 
 import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.impl.ui.tree.render.ArrayRenderer;
-import consulo.application.impl.internal.ApplicationNamesInfo;
+import consulo.application.Application;
 import consulo.configurable.Configurable;
 import consulo.configurable.ConfigurationException;
 import consulo.configurable.UnnamedConfigurable;
-import consulo.ui.ex.awt.Messages;
-import consulo.ui.ex.awt.JBUI;
 import consulo.ui.annotation.RequiredUIAccess;
+import consulo.ui.ex.awt.JBUI;
+import consulo.ui.ex.awt.Messages;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -99,7 +99,7 @@ public class ArrayRendererConfigurable implements UnnamedConfigurable, Configura
 
 			if(showBigRangeWarning && (newEndIndex - newStartIndex > 10000))
 			{
-				final int answer = Messages.showOkCancelDialog(myPanel.getRootPane(), DebuggerBundle.message("warning.range.too.big", ApplicationNamesInfo.getInstance().getProductName()),
+				final int answer = Messages.showOkCancelDialog(myPanel.getRootPane(), DebuggerBundle.message("warning.range.too.big", Application.get().getName()),
 						DebuggerBundle.message("title.range.too.big"), Messages.getWarningIcon());
 				if(answer != Messages.OK)
 				{

@@ -25,30 +25,35 @@ import com.intellij.java.language.psi.PsiCodeBlock;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiLiteralExpression;
 import consulo.ide.ServiceManager;
-import consulo.language.editor.inspection.InspectionSuppressor;
 import consulo.language.editor.inspection.SuppressQuickFix;
 import consulo.language.editor.intention.SuppressIntentionAction;
 import consulo.language.editor.rawHighlight.HighlightDisplayKey;
+import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 
 import javax.annotation.Nonnull;
 
-public abstract class SuppressManager implements BatchSuppressManager, InspectionSuppressor {
-  public static SuppressManager getInstance() {
-    return ServiceManager.getService(SuppressManager.class);
-  }
+public abstract class SuppressManager
+{
+	public static SuppressManager getInstance()
+	{
+		return ServiceManager.getService(SuppressManager.class);
+	}
 
-  public static boolean isSuppressedInspectionName(PsiLiteralExpression expression) {
-    PsiAnnotation annotation = PsiTreeUtil.getParentOfType(expression, PsiAnnotation.class, true, PsiCodeBlock.class, PsiField.class);
-    return annotation != null && SUPPRESS_INSPECTIONS_ANNOTATION_NAME.equals(annotation.getQualifiedName());
-  }
+	public static boolean isSuppressedInspectionName(PsiLiteralExpression expression)
+	{
+		PsiAnnotation annotation = PsiTreeUtil.getParentOfType(expression, PsiAnnotation.class, true, PsiCodeBlock.class, PsiField.class);
+		return annotation != null && BatchSuppressManager.SUPPRESS_INSPECTIONS_ANNOTATION_NAME.equals(annotation.getQualifiedName());
+	}
 
-  @Nonnull
-  @Override
-  public SuppressQuickFix[] createBatchSuppressActions(@Nonnull HighlightDisplayKey key) {
-    return BatchSuppressManager.SERVICE.getInstance().createBatchSuppressActions(key);
-  }
+	@Nonnull
+	public SuppressQuickFix[] createBatchSuppressActions(@Nonnull HighlightDisplayKey key)
+	{
+		return BatchSuppressManager.getInstance().createBatchSuppressActions(key);
+	}
 
-  @Nonnull
-  public abstract SuppressIntentionAction[] createSuppressActions(@Nonnull HighlightDisplayKey key);
+	@Nonnull
+	public abstract SuppressIntentionAction[] createSuppressActions(@Nonnull HighlightDisplayKey key);
+
+	public abstract boolean isSuppressedFor(@Nonnull PsiElement element, String toolId);
 }

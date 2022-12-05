@@ -20,15 +20,15 @@
   */
 package com.intellij.java.analysis.codeInspection.ex;
 
+import consulo.disposer.Disposable;
+import consulo.ide.ServiceManager;
 import consulo.language.editor.inspection.reference.RefElement;
 import consulo.language.editor.inspection.reference.RefManager;
-import consulo.ide.ServiceManager;
-import consulo.project.Project;
 import consulo.language.psi.PsiElement;
-import consulo.disposer.Disposable;
+import consulo.project.Project;
+import consulo.ui.Button;
 
 import javax.annotation.Nonnull;
-import javax.swing.*;
 
 public abstract class EntryPointsManager implements Disposable {
   public static EntryPointsManager getInstance(Project project) {
@@ -50,7 +50,7 @@ public abstract class EntryPointsManager implements Disposable {
 
   public abstract void configureAnnotations();
 
-  public abstract JButton createConfigureAnnotationsBtn();
+  public abstract Button createConfigureAnnotationsBtn();
 
   public abstract boolean isEntryPoint(@Nonnull PsiElement element);
 }

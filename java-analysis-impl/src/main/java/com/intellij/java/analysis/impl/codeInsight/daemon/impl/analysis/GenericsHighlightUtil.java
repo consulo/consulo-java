@@ -33,7 +33,7 @@ import consulo.document.util.TextRange;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.content.FileIndexFacade;
 import consulo.language.editor.intention.QuickFixAction;
-import consulo.language.editor.internal.QuickFixActionRegistrarImpl;
+import consulo.language.editor.intention.QuickFixActionRegistrar;
 import consulo.language.editor.rawHighlight.HighlightInfo;
 import consulo.language.editor.rawHighlight.HighlightInfoHolder;
 import consulo.language.editor.rawHighlight.HighlightInfoType;
@@ -1013,7 +1013,7 @@ public class GenericsHighlightUtil {
       if (superMethod == null) {
         String description = JavaErrorBundle.message("method.does.not.override.super");
         HighlightInfo highlightInfo = HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(overrideAnnotation).descriptionAndTooltip(description).create();
-        QUICK_FIX_FACTORY.registerPullAsAbstractUpFixes(method, new QuickFixActionRegistrarImpl(highlightInfo));
+        QUICK_FIX_FACTORY.registerPullAsAbstractUpFixes(method, QuickFixActionRegistrar.create(highlightInfo));
         return highlightInfo;
       }
       PsiClass superClass = superMethod.getMethod().getContainingClass();

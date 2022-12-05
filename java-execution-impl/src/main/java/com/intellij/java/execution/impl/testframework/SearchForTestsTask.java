@@ -22,9 +22,9 @@ import consulo.component.ProcessCanceledException;
 import consulo.execution.ExecutionBundle;
 import consulo.logging.Logger;
 import consulo.process.ExecutionException;
+import consulo.process.ProcessHandler;
 import consulo.process.event.ProcessAdapter;
 import consulo.process.event.ProcessEvent;
-import consulo.process.internal.OSProcessHandler;
 import consulo.project.DumbService;
 import consulo.project.Project;
 
@@ -74,7 +74,7 @@ public abstract class SearchForTestsTask extends Task.Backgroundable {
     }
   }
 
-  public void attachTaskToProcess(final OSProcessHandler handler) {
+  public void attachTaskToProcess(final ProcessHandler handler) {
     handler.addProcessListener(new ProcessAdapter() {
       @Override
       public void processTerminated(@Nonnull final ProcessEvent event) {

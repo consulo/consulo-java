@@ -15,15 +15,15 @@
  */
 package com.intellij.java.impl.codeInsight.completion;
 
-import consulo.language.editor.impl.internal.completion.CompletionUtil;
-import consulo.language.editor.ImplicitUsageProvider;
 import com.intellij.java.language.impl.codeInsight.ExpressionUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.infos.CandidateInfo;
+import com.siyeh.ig.psiutils.ExpressionUtils;
+import consulo.language.editor.ImplicitUsageProvider;
+import consulo.language.editor.completion.CompletionUtilCore;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.filter.ElementFilter;
 import consulo.language.psi.util.PsiTreeUtil;
-import com.siyeh.ig.psiutils.ExpressionUtils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -52,7 +52,7 @@ class CheckInitialized implements ElementFilter
 
 	private static boolean isInitializedImplicitly(PsiField field)
 	{
-		field = CompletionUtil.getOriginalOrSelf(field);
+		field = CompletionUtilCore.getOriginalOrSelf(field);
 		for(ImplicitUsageProvider provider : ImplicitUsageProvider.EP_NAME.getExtensions())
 		{
 			if(provider.isImplicitWrite(field))

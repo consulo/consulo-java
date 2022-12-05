@@ -21,13 +21,14 @@ import com.intellij.java.language.impl.psi.scope.ElementClassHint;
 import com.intellij.java.language.impl.psi.scope.NameHint;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.language.impl.ast.TreeElement;
+import consulo.language.impl.psi.DummyHolder;
+import consulo.language.psi.AnyPsiChangeListener;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiManager;
-import consulo.language.psi.resolve.ResolveState;
-import consulo.language.impl.psi.DummyHolder;
-import consulo.language.impl.ast.TreeElement;
 import consulo.language.psi.resolve.PsiScopeProcessor;
+import consulo.language.psi.resolve.ResolveState;
 import consulo.language.util.CharTable;
 
 import javax.annotation.Nonnull;
@@ -80,7 +81,7 @@ public class JavaDummyHolder extends DummyHolder implements PsiImportHolder {
       }
 
       myPseudoImports.put(className, aClass);
-      myManager.beforeChange(false); // to clear resolve caches!
+      getProject().getMessageBus().syncPublisher(AnyPsiChangeListener.class).beforePsiChanged(false);  // to clear resolve caches!
       return true;
     } else {
       return true;

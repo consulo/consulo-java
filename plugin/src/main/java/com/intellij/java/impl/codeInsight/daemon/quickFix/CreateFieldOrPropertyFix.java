@@ -30,7 +30,6 @@ import consulo.codeEditor.Editor;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.language.editor.WriteCommandAction;
 import consulo.language.editor.generation.ClassMember;
-import consulo.language.editor.impl.internal.template.TemplateBuilderImpl;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.editor.intention.IntentionAction;
@@ -130,7 +129,7 @@ public class CreateFieldOrPropertyFix implements IntentionAction, LocalQuickFix 
           return new TextResult(myType.getCanonicalText());
         }
       };
-      final TemplateBuilderImpl builder = new TemplateBuilderImpl(scope);
+      final TemplateBuilder builder = TemplateBuilderFactory.getInstance().createTemplateBuilder(scope);
       boolean first = true;
       @NonNls final String TYPE_NAME_VAR = "TYPE_NAME_VAR";
       for (GenerationInfo prototype : prototypes) {

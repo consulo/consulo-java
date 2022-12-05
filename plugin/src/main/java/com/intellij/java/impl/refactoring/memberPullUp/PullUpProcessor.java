@@ -32,8 +32,8 @@ import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
+import consulo.application.Application;
 import consulo.application.ApplicationManager;
-import consulo.application.impl.internal.IdeaModalityState;
 import consulo.application.progress.ProgressManager;
 import consulo.application.util.query.Query;
 import consulo.ide.impl.idea.refactoring.util.DocCommentPolicy;
@@ -152,7 +152,7 @@ public class PullUpProcessor extends BaseRefactoringProcessor implements PullUpD
       public void run() {
         processMethodsDuplicates();
       }
-    }, IdeaModalityState.NON_MODAL, myProject.getDisposed());
+    }, Application.get().getNoneModalityState(), myProject.getDisposed());
   }
 
   private void processMethodsDuplicates() {

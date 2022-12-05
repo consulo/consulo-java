@@ -23,6 +23,7 @@ import com.intellij.java.impl.codeInspection.unusedSymbol.UnusedSymbolLocalInspe
 import consulo.java.analysis.impl.codeInsight.JavaInspectionsBundle;
 import consulo.ui.ex.awt.JBTabbedPane;
 import consulo.ui.ex.awt.JBUI;
+import consulo.ui.ex.awtUnsafe.TargetAWT;
 import org.jetbrains.annotations.TestOnly;
 
 import javax.swing.*;
@@ -102,7 +103,7 @@ public class UnusedDeclarationInspection extends UnusedDeclarationInspectionBase
       gc.gridy++;
       add(myNonJavaCheckbox, gc);
 
-      JButton configureAnnotations = EntryPointsManagerImpl.createConfigureAnnotationsButton();
+      Component configureAnnotations = TargetAWT.to(EntryPointsManagerImpl.createConfigureAnnotationsButton());
       gc.fill = GridBagConstraints.NONE;
       gc.gridy++;
       gc.insets.top = 10;

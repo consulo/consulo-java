@@ -16,10 +16,10 @@
 package com.intellij.java.impl.refactoring.util.duplicates;
 
 import com.intellij.java.analysis.impl.refactoring.util.duplicates.Match;
+import consulo.application.Application;
 import consulo.application.ApplicationManager;
 import consulo.application.CommonBundle;
 import consulo.application.Result;
-import consulo.application.impl.internal.ApplicationNamesInfo;
 import consulo.codeEditor.*;
 import consulo.codeEditor.markup.RangeHighlighter;
 import consulo.colorScheme.EditorColorsManager;
@@ -216,7 +216,7 @@ public class DuplicatesImpl {
       }
       final int answer = ApplicationManager.getApplication().isUnitTestMode() || hasDuplicates == null ? Messages.YES : Messages.showYesNoDialog(project,
           RefactoringBundle.message("0.has.detected.1.code.fragments.in.this.file.that.can.be.replaced.with.a.call.to.extracted.method",
-              ApplicationNamesInfo.getInstance().getProductName(), duplicates.size()), "Process Duplicates", Messages.getQuestionIcon());
+				  Application.get().getName(), duplicates.size()), "Process Duplicates", Messages.getQuestionIcon());
       if (answer == Messages.YES) {
         PsiDocumentManager.getInstance(project).commitAllDocuments();
         invoke(project, editor, provider, hasDuplicates != null);

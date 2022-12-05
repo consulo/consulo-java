@@ -33,7 +33,6 @@ import consulo.language.editor.completion.*;
 import consulo.language.editor.completion.lookup.LookupElement;
 import consulo.language.editor.completion.lookup.LookupElementDecorator;
 import consulo.language.editor.completion.lookup.TailType;
-import consulo.language.editor.impl.internal.completion.CompletionUtil;
 import consulo.language.pattern.ElementPattern;
 import consulo.language.psi.PsiComment;
 import consulo.language.psi.PsiElement;
@@ -340,6 +339,6 @@ public abstract class JavaSmartCompletionContributor extends CompletionContribut
       // which is needed to insert correct cast
       return;
     }
-    context.setDummyIdentifier(CompletionUtil.DUMMY_IDENTIFIER_TRIMMED);
+    context.setDummyIdentifier(CompletionUtilCore.DUMMY_IDENTIFIER_TRIMMED);
   }
 }

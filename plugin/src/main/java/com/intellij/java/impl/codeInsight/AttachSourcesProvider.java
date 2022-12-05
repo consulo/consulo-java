@@ -15,15 +15,16 @@
  */
 package com.intellij.java.impl.codeInsight;
 
-import java.util.Collection;
-import java.util.List;
+import consulo.component.extension.ExtensionPointName;
+import consulo.language.psi.PsiFile;
+import consulo.module.content.layer.orderEntry.LibraryOrderEntry;
+import consulo.ui.Component;
+import consulo.ui.event.UIEvent;
+import consulo.util.concurrent.AsyncResult;
 
 import javax.annotation.Nonnull;
-
-import consulo.component.extension.ExtensionPointName;
-import consulo.module.content.layer.orderEntry.LibraryOrderEntry;
-import consulo.util.concurrent.ActionCallback;
-import consulo.language.psi.PsiFile;
+import java.util.Collection;
+import java.util.List;
 
 public interface AttachSourcesProvider {
   ExtensionPointName<AttachSourcesProvider> EP_NAME =
@@ -38,7 +39,7 @@ public interface AttachSourcesProvider {
 
     String getBusyText();
 
-    ActionCallback perform(List<LibraryOrderEntry> orderEntriesContainingFile);
+    AsyncResult<Void> perform(@Nonnull List<LibraryOrderEntry> orderEntriesContainingFile, @Nonnull UIEvent<Component> e);
   }
 
   /**

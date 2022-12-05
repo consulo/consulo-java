@@ -15,6 +15,9 @@
  */
 package com.intellij.java.impl.codeInsight.highlighting;
 
+import com.intellij.java.language.JavaLanguage;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.Language;
 import consulo.language.editor.hint.DeclarationRangeUtil;
 import com.intellij.java.language.psi.*;
 import consulo.language.BracePair;
@@ -27,6 +30,7 @@ import com.intellij.java.language.psi.tree.java.IJavaElementType;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+@ExtensionImpl
 public class JavaBraceMatcher implements PairedBraceMatcher {
   private final BracePair[] pairs = new BracePair[] {
       new BracePair(JavaTokenType.LPARENTH, JavaTokenType.RPARENTH, false),
@@ -79,5 +83,11 @@ public class JavaBraceMatcher implements PairedBraceMatcher {
       return range.getStartOffset();
     }
     return openingBraceOffset;
+  }
+
+  @Nonnull
+  @Override
+  public Language getLanguage() {
+    return JavaLanguage.INSTANCE;
   }
 }

@@ -27,7 +27,7 @@ import org.jetbrains.annotations.Nls;
 
 import javax.annotation.Nonnull;
 
-public class InstanceGuardedByStaticInspection extends BaseJavaLocalInspectionTool {
+public abstract class InstanceGuardedByStaticInspection extends BaseJavaLocalInspectionTool {
 
   @Override
   @Nonnull

@@ -23,7 +23,7 @@ import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.language.ast.ASTNode;
 import consulo.language.ast.TokenSet;
 import consulo.language.impl.ast.*;
-import consulo.language.impl.internal.psi.GeneratedMarkerVisitor;
+import consulo.language.impl.psi.CodeEditUtil;
 import consulo.language.psi.PsiComment;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiWhiteSpace;
@@ -186,7 +186,7 @@ public class JavaSharedImplUtil {
         newType1.rawAddChildren(ASTFactory.leaf(JavaTokenType.LBRACKET, "["));
         newType1.rawAddChildren(ASTFactory.leaf(JavaTokenType.RBRACKET, "]"));
         newType = newType1;
-        newType.acceptTree(new GeneratedMarkerVisitor());
+        CodeEditUtil.markGenerated(newType);
       }
       newType.putUserData(CharTable.CHAR_TABLE_KEY, SharedImplUtil.findCharTableByTree(type));
       variableElement.replaceChild(type, newType);

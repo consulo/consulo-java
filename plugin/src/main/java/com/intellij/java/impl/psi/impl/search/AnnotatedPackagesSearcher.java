@@ -19,22 +19,23 @@
  */
 package com.intellij.java.impl.psi.impl.search;
 
+import com.intellij.java.impl.psi.search.searches.AnnotatedPackagesSearch;
+import com.intellij.java.indexing.impl.stubs.index.JavaAnnotationIndex;
 import com.intellij.java.language.psi.*;
+import consulo.application.util.function.Processor;
+import consulo.application.util.query.QueryExecutor;
+import consulo.content.scope.SearchScope;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiManager;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.search.PsiSearchHelper;
+import consulo.language.psi.util.PsiTreeUtil;
 import consulo.logging.Logger;
 import consulo.module.Module;
 import consulo.virtualFileSystem.VirtualFile;
-import consulo.language.psi.*;
-import consulo.language.impl.internal.psi.PsiManagerImpl;
-import com.intellij.java.indexing.impl.stubs.index.JavaAnnotationIndex;
-import consulo.language.psi.scope.GlobalSearchScope;
-import consulo.language.psi.search.PsiSearchHelper;
-import consulo.content.scope.SearchScope;
-import com.intellij.java.impl.psi.search.searches.AnnotatedPackagesSearch;
-import consulo.language.psi.util.PsiTreeUtil;
-import consulo.application.util.function.Processor;
-import consulo.application.util.query.QueryExecutor;
-import javax.annotation.Nonnull;
 
+import javax.annotation.Nonnull;
 import java.util.Collection;
 
 public class AnnotatedPackagesSearcher implements QueryExecutor<PsiJavaPackage, AnnotatedPackagesSearch.Parameters> {
@@ -48,7 +49,7 @@ public class AnnotatedPackagesSearcher implements QueryExecutor<PsiJavaPackage, 
     final String annotationFQN = annClass.getQualifiedName();
     assert annotationFQN != null;
 
-    final PsiManagerImpl psiManager = (PsiManagerImpl)annClass.getManager();
+    final PsiManager psiManager = annClass.getManager();
     final SearchScope useScope = p.getScope();
 
     final String annotationShortName = annClass.getName();

@@ -77,7 +77,7 @@ public abstract class PsiJavaFileBaseImpl extends PsiFileImpl implements PsiJava
 
   protected PsiJavaFileBaseImpl(IElementType elementType, IElementType contentElementType, FileViewProvider viewProvider) {
     super(elementType, contentElementType, viewProvider);
-    myResolveCache = CachedValuesManager.getManager(myManager.getProject()).createCachedValue(new MyCacheBuilder(this), false);
+    myResolveCache = CachedValuesManager.getManager(getManager().getProject()).createCachedValue(new MyCacheBuilder(this), false);
   }
 
   @Override
@@ -235,7 +235,7 @@ public abstract class PsiJavaFileBaseImpl extends PsiFileImpl implements PsiJava
   @Override
   @Nonnull
   public PsiJavaCodeReferenceElement[] getImplicitlyImportedPackageReferences() {
-    return PsiImplUtil.namesToPackageReferences(myManager, IMPLICIT_IMPORTS);
+    return PsiImplUtil.namesToPackageReferences(getManager(), IMPLICIT_IMPORTS);
   }
 
   private static class StaticImportFilteringProcessor implements PsiScopeProcessor {
@@ -343,7 +343,7 @@ public abstract class PsiJavaFileBaseImpl extends PsiFileImpl implements PsiJava
       processor.handleEvent(JavaScopeProcessorEvent.SET_CURRENT_FILE_CONTEXT, null);
 
       // check in current package
-      final PsiPackage aPackage = JavaPsiFacade.getInstance(myManager.getProject()).findPackage(getPackageName());
+      final PsiPackage aPackage = JavaPsiFacade.getInstance(getProject()).findPackage(getPackageName());
       if (aPackage != null) {
         if (!aPackage.processDeclarations(processor, state, null, place)) {
           return false;

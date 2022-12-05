@@ -15,13 +15,16 @@
  */
 package com.intellij.java.impl.ipp.comment;
 
+import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.intellij.java.language.psi.JavaTokenType;
-import consulo.language.psi.*;
-import consulo.language.inject.impl.internal.InjectedLanguageUtil;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import consulo.language.ast.IElementType;
+import consulo.language.inject.InjectedLanguageManager;
+import consulo.language.psi.PsiComment;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiLanguageInjectionHost;
+import consulo.language.psi.PsiWhiteSpace;
 import consulo.language.psi.util.PsiTreeUtil;
-import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 
 class CommentOnLineWithSourcePredicate implements PsiElementPredicate {
 
@@ -38,7 +41,7 @@ class CommentOnLineWithSourcePredicate implements PsiElementPredicate {
     }
 
     final PsiComment comment = (PsiComment)element;
-    if (comment instanceof PsiLanguageInjectionHost && InjectedLanguageUtil.hasInjections((PsiLanguageInjectionHost)comment)) {
+    if (comment instanceof PsiLanguageInjectionHost && InjectedLanguageManager.getInstance(comment.getProject()).getInjectedPsiFiles(comment) != null) {
       return false;
     }
     final IElementType type = comment.getTokenType();

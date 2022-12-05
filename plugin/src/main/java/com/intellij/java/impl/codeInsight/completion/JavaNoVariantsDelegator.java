@@ -23,7 +23,6 @@ import consulo.ide.impl.idea.codeInsight.completion.impl.BetterPrefixMatcher;
 import consulo.ide.impl.idea.util.CollectConsumer;
 import consulo.language.editor.completion.*;
 import consulo.language.editor.completion.lookup.LookupElement;
-import consulo.language.editor.impl.internal.completion.CompletionUtil;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiPackage;
@@ -208,7 +207,7 @@ public abstract class JavaNoVariantsDelegator extends CompletionContributor {
       myResult.passResult(plainResult);
 
       LookupElement element = plainResult.getLookupElement();
-      if (containsOnlyPackages && !(CompletionUtil.getTargetElement(element) instanceof PsiPackage)) {
+      if (containsOnlyPackages && !(CompletionUtilCore.getTargetElement(element) instanceof PsiPackage)) {
         containsOnlyPackages = false;
       }
 

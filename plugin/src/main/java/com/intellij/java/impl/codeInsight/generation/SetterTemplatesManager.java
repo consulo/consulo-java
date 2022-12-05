@@ -20,9 +20,9 @@ import java.io.IOException;
 import javax.annotation.Nonnull;
 import jakarta.inject.Singleton;
 
-import org.jetbrains.java.generate.exception.TemplateResourceException;
-import org.jetbrains.java.generate.template.TemplateResource;
-import org.jetbrains.java.generate.template.TemplatesManager;
+import com.intellij.java.impl.generate.exception.TemplateResourceException;
+import com.intellij.java.impl.generate.template.TemplateResource;
+import com.intellij.java.impl.generate.template.TemplatesManager;
 import consulo.ide.ServiceManager;
 import consulo.component.persist.State;
 import consulo.component.persist.Storage;

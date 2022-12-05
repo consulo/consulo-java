@@ -1,6 +1,5 @@
 package consulo.java.manifest.editor;
 
-import consulo.annotation.component.ExtensionImpl;
 import consulo.disposer.Disposer;
 import consulo.fileEditor.FileEditor;
 import consulo.fileEditor.FileEditorPolicy;
@@ -17,7 +16,7 @@ import javax.annotation.Nonnull;
  * @author VISTALL
  * @since 12:29/03.05.13
  */
-@ExtensionImpl
+//@ExtensionImpl disabled due editor tabs problem
 public class ManifestEditorProvider implements FileEditorProvider {
   public static final String EDITOR_ID = ManifestEditorProvider.class.getName();
 

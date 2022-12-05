@@ -24,7 +24,7 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
 import com.intellij.java.language.util.VisibilityUtil;
 import consulo.application.HelpManager;
-import consulo.application.ui.wm.IdeFocusManager;
+import consulo.application.ui.wm.ApplicationIdeFocusManager;
 import consulo.document.event.DocumentAdapter;
 import consulo.document.event.DocumentEvent;
 import consulo.language.editor.refactoring.ui.ConflictsDialog;
@@ -267,7 +267,7 @@ public class ExtractMethodObjectDialog extends DialogWrapper implements Abstract
     final ActionListener updateSugnatureListener = new ActionListener() {
       public void actionPerformed(final ActionEvent e) {
         updateSignature();
-        IdeFocusManager.getInstance(myProject).requestFocus(myCreateInnerClassRb.isSelected() ? myInnerClassName : myMethodName, false);
+        ApplicationIdeFocusManager.getInstance().getInstanceForProject(myProject).requestFocus(myCreateInnerClassRb.isSelected() ? myInnerClassName : myMethodName, false);
       }
     };
 

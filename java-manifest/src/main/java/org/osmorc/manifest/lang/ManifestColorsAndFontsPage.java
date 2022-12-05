@@ -35,7 +35,6 @@ import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.swing.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -74,11 +73,6 @@ public class ManifestColorsAndFontsPage implements ColorSettingsPage {
   @Nonnull
   public String getDisplayName() {
     return "Manifest & Bnd";
-  }
-
-  @Nullable
-  public Icon getIcon() {
-    return null;
   }
 
   @Nonnull

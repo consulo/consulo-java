@@ -19,7 +19,7 @@ import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.beans.Introspector;
+import kava.beans.Introspector;
 import java.util.*;
 
 public class PropertyUtilBase {
@@ -468,8 +468,8 @@ public class PropertyUtilBase {
   }
 
   /**
-   * Consider using {@link com.intellij.codeInsight.generation.GenerateMembersUtil#generateGetterPrototype(PsiField)} or
-   * {@link com.intellij.codeInsight.generation.GenerateMembersUtil#generateSimpleGetterPrototype(PsiField)}
+   * Consider using {@link GenerateMembersUtil#generateGetterPrototype(PsiField)} or
+   * {@link GenerateMembersUtil#generateSimpleGetterPrototype(PsiField)}
    * to add @Override annotation
    */
   @Nonnull
@@ -493,8 +493,8 @@ public class PropertyUtilBase {
   }
 
   /**
-   * Consider using {@link com.intellij.codeInsight.generation.GenerateMembersUtil#generateSetterPrototype(PsiField)}
-   * or {@link com.intellij.codeInsight.generation.GenerateMembersUtil#generateSimpleSetterPrototype(PsiField)}
+   * Consider using {@link GenerateMembersUtil#generateSetterPrototype(PsiField)}
+   * or {@link GenerateMembersUtil#generateSimpleSetterPrototype(PsiField)}
    * to add @Override annotation
    */
   @Nonnull
@@ -503,8 +503,8 @@ public class PropertyUtilBase {
   }
 
   /**
-   * Consider using {@link com.intellij.codeInsight.generation.GenerateMembersUtil#generateSetterPrototype(PsiField)}
-   * or {@link com.intellij.codeInsight.generation.GenerateMembersUtil#generateSimpleSetterPrototype(PsiField)}
+   * Consider using {@link GenerateMembersUtil#generateSetterPrototype(PsiField)}
+   * or {@link GenerateMembersUtil#generateSimpleSetterPrototype(PsiField)}
    * to add @Override annotation
    */
   @Nonnull
@@ -513,8 +513,8 @@ public class PropertyUtilBase {
   }
 
   /**
-   * Consider using {@link com.intellij.codeInsight.generation.GenerateMembersUtil#generateSetterPrototype(PsiField)}
-   * or {@link com.intellij.codeInsight.generation.GenerateMembersUtil#generateSimpleSetterPrototype(PsiField)}
+   * Consider using {@link GenerateMembersUtil#generateSetterPrototype(PsiField)}
+   * or {@link GenerateMembersUtil#generateSimpleSetterPrototype(PsiField)}
    * to add @Override annotation
    */
   @Nonnull

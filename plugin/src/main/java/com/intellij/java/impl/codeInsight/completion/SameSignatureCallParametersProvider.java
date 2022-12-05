@@ -24,8 +24,8 @@ import consulo.application.AllIcons;
 import consulo.language.editor.completion.CompletionParameters;
 import consulo.language.editor.completion.CompletionProvider;
 import consulo.language.editor.completion.CompletionResultSet;
+import consulo.language.editor.completion.CompletionUtilCore;
 import consulo.language.editor.completion.lookup.*;
-import consulo.language.editor.impl.internal.completion.CompletionUtil;
 import consulo.language.pattern.PsiElementPattern;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiNamedElement;
@@ -92,7 +92,7 @@ class SameSignatureCallParametersProvider implements CompletionProvider {
         @Override
         public void handleInsert(InsertionContext context, LookupElement item) {
           context.commitDocument();
-          for (PsiParameter parameter : CompletionUtil.getOriginalOrSelf(takeParametersFrom).getParameterList().getParameters()) {
+          for (PsiParameter parameter : CompletionUtilCore.getOriginalOrSelf(takeParametersFrom).getParameterList().getParameters()) {
             VariableLookupItem.makeFinalIfNeeded(context, parameter);
           }
         }

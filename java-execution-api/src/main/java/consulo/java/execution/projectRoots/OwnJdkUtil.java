@@ -29,7 +29,7 @@ import consulo.platform.Platform;
 import consulo.process.cmd.GeneralCommandLine;
 import consulo.process.cmd.ParametersList;
 import consulo.process.cmd.ParametersListUtil;
-import consulo.process.internal.OSProcessHandler;
+import consulo.process.local.OSProcessUtil;
 import consulo.project.Project;
 import consulo.project.ProjectPropertiesComponent;
 import consulo.util.dataholder.Key;
@@ -37,7 +37,6 @@ import consulo.util.io.ClassPathUtil;
 import consulo.util.io.FileUtil;
 import consulo.util.lang.StringUtil;
 import consulo.util.nodep.classloader.UrlClassLoader;
-import consulo.util.nodep.io.FileUtilRt;
 import consulo.util.nodep.text.StringUtilRt;
 import consulo.virtualFileSystem.encoding.EncodingManager;
 import consulo.virtualFileSystem.util.PathsList;
@@ -245,20 +244,20 @@ public class OwnJdkUtil {
 
       commandLine.addParameter(commandLineWrapper.getName());
       commandLine.addParameter(classpathFile.getAbsolutePath());
-      OSProcessHandler.deleteFileOnTermination(commandLine, classpathFile);
+      OSProcessUtil.deleteFileOnTermination(commandLine, classpathFile);
 
       if (vmParamsFile != null) {
         commandLine.addParameter("@vm_params");
         commandLine.addParameter(vmParamsFile.getAbsolutePath());
         map.put(vmParamsFile.getAbsolutePath(), Files.readString(vmParamsFile.toPath()));
-        OSProcessHandler.deleteFileOnTermination(commandLine, vmParamsFile);
+        OSProcessUtil.deleteFileOnTermination(commandLine, vmParamsFile);
       }
 
       if (appParamsFile != null) {
         commandLine.addParameter("@app_params");
         commandLine.addParameter(appParamsFile.getAbsolutePath());
         map.put(appParamsFile.getAbsolutePath(), Files.readString(appParamsFile.toPath()));
-        OSProcessHandler.deleteFileOnTermination(commandLine, appParamsFile);
+        OSProcessUtil.deleteFileOnTermination(commandLine, appParamsFile);
       }
     } catch (IOException e) {
       throwUnableToCreateTempFile(e);
@@ -315,7 +314,7 @@ public class OwnJdkUtil {
 
       commandLine.addParameter("@" + argFile.getAbsolutePath());
 
-      OSProcessHandler.deleteFileOnTermination(commandLine, argFile);
+      OSProcessUtil.deleteFileOnTermination(commandLine, argFile);
     } catch (IOException e) {
       throwUnableToCreateTempFile(e);
     }
@@ -420,7 +419,7 @@ public class OwnJdkUtil {
 
       commandLine.putUserData(COMMAND_LINE_CONTENT, Map.of(jarFilePath, manifestText + "Class-Path: " + path.getPathsString()));
 
-      OSProcessHandler.deleteFileOnTermination(commandLine, classpathJarFile);
+      OSProcessUtil.deleteFileOnTermination(commandLine, classpathJarFile);
     } catch (IOException e) {
       throwUnableToCreateTempFile(e);
     }
@@ -432,7 +431,7 @@ public class OwnJdkUtil {
   }
 
   private static void throwUnableToCreateTempFile(IOException cause) throws CantRunException {
-    throw new CantRunException("Failed to a create temporary file in " + FileUtilRt.getTempDirectory(), cause);
+    throw new CantRunException("Failed to a create temporary file in " + FileUtil.getTempDirectory(), cause);
   }
 
 

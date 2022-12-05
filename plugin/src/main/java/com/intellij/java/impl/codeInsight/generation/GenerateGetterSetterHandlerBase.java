@@ -36,10 +36,10 @@ import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.StringUtil;
 import consulo.util.lang.function.Condition;
 import org.jetbrains.annotations.Nls;
-import org.jetbrains.java.generate.exception.GenerateCodeException;
-import org.jetbrains.java.generate.template.TemplateResource;
-import org.jetbrains.java.generate.template.TemplatesManager;
-import org.jetbrains.java.generate.view.TemplatesPanel;
+import com.intellij.java.impl.generate.exception.GenerateCodeException;
+import com.intellij.java.impl.generate.template.TemplateResource;
+import com.intellij.java.impl.generate.template.TemplatesManager;
+import com.intellij.java.impl.generate.view.TemplatesPanel;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

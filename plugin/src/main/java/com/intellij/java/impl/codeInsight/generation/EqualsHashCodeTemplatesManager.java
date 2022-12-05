@@ -24,9 +24,9 @@ import consulo.util.lang.Couple;
 import consulo.util.lang.StringUtil;
 import jakarta.inject.Singleton;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.java.generate.exception.TemplateResourceException;
-import org.jetbrains.java.generate.template.TemplateResource;
-import org.jetbrains.java.generate.template.TemplatesManager;
+import com.intellij.java.impl.generate.exception.TemplateResourceException;
+import com.intellij.java.impl.generate.template.TemplateResource;
+import com.intellij.java.impl.generate.template.TemplatesManager;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;

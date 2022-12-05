@@ -15,27 +15,28 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl;
 
-import consulo.language.editor.FileModificationService;
+import com.intellij.java.analysis.codeInspection.BatchSuppressManager;
 import com.intellij.java.language.psi.*;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
-import consulo.language.editor.inspection.LocalQuickFix;
-import consulo.language.editor.inspection.ProblemDescriptor;
-import com.intellij.java.analysis.codeInspection.SuppressManager;
-import consulo.language.editor.inspection.SuppressionUtil;
-import consulo.project.Project;
-import consulo.util.lang.Comparing;
-import consulo.util.lang.StringUtil;
-import consulo.language.psi.*;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.java.language.psi.javadoc.PsiDocTag;
+import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.language.editor.FileModificationService;
+import consulo.language.editor.inspection.LocalQuickFix;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.editor.inspection.SuppressionUtil;
+import consulo.language.psi.PsiComment;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiRecursiveElementWalkingVisitor;
 import consulo.language.psi.util.PsiTreeUtil;
-import consulo.util.collection.ArrayUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
+import consulo.project.Project;
+import consulo.util.collection.ArrayUtil;
+import consulo.util.lang.Comparing;
+import consulo.util.lang.StringUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -78,7 +79,7 @@ public class RemoveSuppressWarningAction implements LocalQuickFix {
         final PsiIdentifier identifier = (PsiIdentifier)element;
         final PsiDocCommentOwner commentOwner = PsiTreeUtil.getParentOfType(identifier, PsiDocCommentOwner.class);
         if (commentOwner != null) {
-          final PsiElement psiElement = SuppressManager.getInstance().getElementMemberSuppressedIn(commentOwner, myID);
+          final PsiElement psiElement = BatchSuppressManager.getInstance().getElementMemberSuppressedIn(commentOwner, myID);
           if (psiElement instanceof PsiAnnotation) {
             removeFromAnnotation((PsiAnnotation)psiElement);
           } else if (psiElement instanceof PsiDocComment) {

@@ -26,10 +26,11 @@ import consulo.component.util.Iconable;
 import consulo.document.RangeMarker;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.hint.HintManager;
-import consulo.language.editor.impl.internal.template.TemplateBuilderImpl;
 import consulo.language.editor.intention.LowPriorityAction;
 import consulo.language.editor.intention.PsiElementBaseIntentionAction;
 import consulo.language.editor.template.Template;
+import consulo.language.editor.template.TemplateBuilder;
+import consulo.language.editor.template.TemplateBuilderFactory;
 import consulo.language.psi.PsiDocumentManager;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
@@ -108,7 +109,7 @@ public class DelegateWithDefaultParamValueIntentionAction extends PsiElementBase
         
         final PsiMethod prototype = (PsiMethod)method.getContainingClass().addBefore(methodPrototype, method);
         RefactoringUtil.fixJavadocsForParams(prototype, new HashSet<PsiParameter>(Arrays.asList(prototype.getParameterList().getParameters())));
-        TemplateBuilderImpl builder = new TemplateBuilderImpl(prototype);
+        TemplateBuilder builder = TemplateBuilderFactory.getInstance().createTemplateBuilder(prototype);
 
         PsiCodeBlock body = prototype.getBody();
         final String callArgs =

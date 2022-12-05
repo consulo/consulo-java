@@ -27,6 +27,8 @@ import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.codeStyle.CodeStyleSettingsManager;
 import consulo.language.editor.impl.internal.template.TemplateBuilderImpl;
 import consulo.language.editor.template.Template;
+import consulo.language.editor.template.TemplateBuilder;
+import consulo.language.editor.template.TemplateBuilderFactory;
 import consulo.language.editor.template.event.TemplateEditingAdapter;
 import consulo.language.psi.PsiDocumentManager;
 import consulo.language.psi.PsiElement;
@@ -116,7 +118,7 @@ public class CreateLocalFromUsageFix extends CreateVarFromUsageFix {
 
     var = CodeInsightUtilBase.forcePsiPostprocessAndRestoreElement(var);
     if (var == null) return;
-    TemplateBuilderImpl builder = new TemplateBuilderImpl(var);
+    TemplateBuilder builder = TemplateBuilderFactory.getInstance().createTemplateBuilder(var);
     builder.replaceElement(var.getTypeElement(), expression);
     builder.setEndVariableAfter(var.getNameIdentifier());
     Template template = builder.buildTemplate();

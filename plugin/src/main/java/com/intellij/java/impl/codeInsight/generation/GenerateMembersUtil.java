@@ -57,9 +57,9 @@ import consulo.util.lang.Pair;
 import consulo.util.lang.StringUtil;
 import consulo.util.lang.function.Condition;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.java.generate.GenerationUtil;
-import org.jetbrains.java.generate.exception.GenerateCodeException;
-import org.jetbrains.java.generate.template.TemplatesManager;
+import com.intellij.java.impl.generate.GenerationUtil;
+import com.intellij.java.impl.generate.exception.GenerateCodeException;
+import com.intellij.java.impl.generate.template.TemplatesManager;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

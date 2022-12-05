@@ -19,7 +19,7 @@ import com.intellij.java.language.impl.JavaClassFileType;
 import com.intellij.java.language.psi.compiled.ClassFileDecompilers;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiManager;
-import consulo.project.internal.DefaultProjectFactory;
+import consulo.project.ProjectManager;
 import consulo.virtualFileSystem.BinaryFileDecompiler;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.fileType.FileType;
@@ -42,7 +42,7 @@ public class ClassFileDecompiler implements BinaryFileDecompiler {
   public CharSequence decompile(@Nonnull VirtualFile file) {
     ClassFileDecompilers.Decompiler decompiler = ClassFileDecompilers.find(file);
     if (decompiler instanceof ClassFileDecompilers.Full) {
-      PsiManager manager = PsiManager.getInstance(DefaultProjectFactory.getInstance().getDefaultProject());
+      PsiManager manager = PsiManager.getInstance(ProjectManager.getInstance().getDefaultProject());
       return ((ClassFileDecompilers.Full) decompiler).createFileViewProvider(file, manager, true).getContents();
     }
 

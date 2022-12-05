@@ -19,8 +19,8 @@
  */
 package com.intellij.java.impl.codeInspection.i18n;
 
+import com.intellij.java.analysis.codeInspection.BatchSuppressManager;
 import com.intellij.java.analysis.codeInspection.GroupNames;
-import com.intellij.java.analysis.codeInspection.SuppressManager;
 import com.intellij.java.analysis.impl.codeInsight.intention.AddAnnotationFix;
 import com.intellij.java.analysis.impl.codeInspection.ex.BaseLocalInspectionTool;
 import com.intellij.java.impl.refactoring.introduceField.IntroduceConstantHandler;
@@ -522,7 +522,7 @@ public class I18nInspection extends BaseLocalInspectionTool {
 
     @Override public void visitAnnotation(PsiAnnotation annotation) {
       //prevent from @SuppressWarnings
-      if (!SuppressManager.SUPPRESS_INSPECTIONS_ANNOTATION_NAME.equals(annotation.getQualifiedName())){
+      if (!BatchSuppressManager.SUPPRESS_INSPECTIONS_ANNOTATION_NAME.equals(annotation.getQualifiedName())){
         super.visitAnnotation(annotation);
       }
     }

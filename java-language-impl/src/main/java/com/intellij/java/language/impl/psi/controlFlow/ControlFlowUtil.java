@@ -15,7 +15,6 @@ import consulo.logging.Logger;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.collection.SmartList;
 import consulo.util.collection.primitive.ints.*;
-import consulo.util.collection.primitive.ints.impl.list.IntArrayList;
 import consulo.util.lang.ObjectUtil;
 import consulo.util.lang.reflect.ReflectionUtil;
 
@@ -549,7 +548,7 @@ public final class ControlFlowUtil {
             if (variable instanceof PsiLocalVariable || variable instanceof PsiParameter) {
               IntList offsets = writeOffsets.get(variable);
               if (offsets == null) {
-                writeOffsets.put(variable, offsets = new IntArrayList());
+                writeOffsets.put(variable, offsets = IntLists.newArrayList());
               }
               offsets.add(i);
             }

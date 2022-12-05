@@ -24,8 +24,9 @@ import consulo.document.util.TextRange;
 import consulo.ide.impl.idea.codeInsight.CodeInsightUtilBase;
 import consulo.ide.impl.idea.openapi.fileEditor.ex.IdeDocumentHistory;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
-import consulo.language.editor.impl.internal.template.TemplateBuilderImpl;
 import consulo.language.editor.template.Template;
+import consulo.language.editor.template.TemplateBuilder;
+import consulo.language.editor.template.TemplateBuilderFactory;
 import consulo.language.editor.template.event.TemplateEditingAdapter;
 import consulo.language.editor.util.LanguageUndoUtil;
 import consulo.language.psi.PsiDocumentManager;
@@ -89,7 +90,7 @@ public abstract class CreateConstructorFromThisOrSuperFix extends CreateFromUsag
       PsiMethod constructor = elementFactory.createConstructor();
       constructor = (PsiMethod)targetClass.add(constructor);
 
-      final TemplateBuilderImpl templateBuilder = new TemplateBuilderImpl(constructor);
+      final TemplateBuilder templateBuilder = TemplateBuilderFactory.getInstance().createTemplateBuilder(constructor);
       CreateFromUsageUtils.setupMethodParameters(constructor, templateBuilder, myMethodCall.getArgumentList(),
                                                   getTargetSubstitutor(myMethodCall));
 

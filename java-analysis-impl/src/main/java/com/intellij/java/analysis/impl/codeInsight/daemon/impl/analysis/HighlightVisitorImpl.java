@@ -43,8 +43,8 @@ import consulo.colorScheme.TextAttributesScheme;
 import consulo.document.Document;
 import consulo.document.util.TextRange;
 import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.editor.DaemonCodeAnalyzer;
 import consulo.language.editor.Pass;
-import consulo.language.editor.impl.internal.daemon.DaemonCodeAnalyzerEx;
 import consulo.language.editor.inspection.LocalQuickFixAndIntentionActionOnPsiElement;
 import consulo.language.editor.intention.QuickFixAction;
 import consulo.language.editor.rawHighlight.*;
@@ -171,7 +171,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
         if (progress == null) throw new IllegalStateException("Must be run under progress");
         Project project = file.getProject();
         Document document = PsiDocumentManager.getInstance(project).getDocument(file);
-        TextRange dirtyScope = document == null ? null : DaemonCodeAnalyzerEx.getInstanceEx(project).getFileStatusMap().getFileDirtyScope(document, Pass.UPDATE_ALL);
+        TextRange dirtyScope = document == null ? null : DaemonCodeAnalyzer.getInstance(project).getFileStatusMap().getFileDirtyScope(document, Pass.UPDATE_ALL);
         if (dirtyScope == null) dirtyScope = file.getTextRange();
         RefCountHolder refCountHolder = RefCountHolder.get(file, dirtyScope);
         if (refCountHolder == null) {

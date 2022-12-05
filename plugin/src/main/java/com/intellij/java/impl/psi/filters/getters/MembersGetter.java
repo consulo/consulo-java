@@ -26,8 +26,8 @@ import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.application.util.matcher.PrefixMatcher;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.completion.AutoCompletionPolicy;
+import consulo.language.editor.completion.CompletionUtilCore;
 import consulo.language.editor.completion.lookup.LookupElement;
-import consulo.language.editor.impl.internal.completion.CompletionUtil;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.filter.TrueFilter;
 import consulo.language.psi.resolve.ResolveState;
@@ -58,14 +58,14 @@ public abstract class MembersGetter {
 
     PsiClass current = PsiTreeUtil.getContextOfType(place, PsiClass.class);
     while (current != null) {
-      current = CompletionUtil.getOriginalOrSelf(current);
+      current = CompletionUtilCore.getOriginalOrSelf(current);
       myPlaceClasses.add(current);
       current = PsiTreeUtil.getContextOfType(current, PsiClass.class);
     }
 
     PsiMethod eachMethod = PsiTreeUtil.getContextOfType(place, PsiMethod.class);
     while (eachMethod != null) {
-      eachMethod = CompletionUtil.getOriginalOrSelf(eachMethod);
+      eachMethod = CompletionUtilCore.getOriginalOrSelf(eachMethod);
       myPlaceMethods.add(eachMethod);
       eachMethod = PsiTreeUtil.getContextOfType(eachMethod, PsiMethod.class);
     }
@@ -102,7 +102,7 @@ public abstract class MembersGetter {
       if (psiClass == null) {
         return;
       }
-      psiClass = CompletionUtil.getOriginalOrSelf(psiClass);
+      psiClass = CompletionUtilCore.getOriginalOrSelf(psiClass);
       if (mayProcessMembers(psiClass)) {
         final FilterScopeProcessor<PsiElement> declProcessor = new FilterScopeProcessor<>(TrueFilter.INSTANCE);
         psiClass.processDeclarations(declProcessor, ResolveState.initial(), null, myPlace);

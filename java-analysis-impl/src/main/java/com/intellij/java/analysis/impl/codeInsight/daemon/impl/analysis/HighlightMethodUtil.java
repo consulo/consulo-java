@@ -38,8 +38,8 @@ import consulo.language.editor.DaemonBundle;
 import consulo.language.editor.inspection.LocalQuickFixOnPsiElementAsIntentionAdapter;
 import consulo.language.editor.intention.IntentionAction;
 import consulo.language.editor.intention.QuickFixAction;
+import consulo.language.editor.intention.QuickFixActionRegistrar;
 import consulo.language.editor.intention.UnresolvedReferenceQuickFixProvider;
-import consulo.language.editor.internal.QuickFixActionRegistrarImpl;
 import consulo.language.editor.rawHighlight.HighlightInfo;
 import consulo.language.editor.rawHighlight.HighlightInfoHolder;
 import consulo.language.editor.rawHighlight.HighlightInfoType;
@@ -709,7 +709,7 @@ public class HighlightMethodUtil {
     WrapExpressionFix.registerWrapAction(candidates, list.getExpressions(), info);
     registerChangeParameterClassFix(methodCall, list, info);
     if (candidates.length == 0 && info != null) {
-      UnresolvedReferenceQuickFixProvider.registerReferenceFixes(methodCall.getMethodExpression(), new QuickFixActionRegistrarImpl(info));
+      UnresolvedReferenceQuickFixProvider.registerReferenceFixes(methodCall.getMethodExpression(), QuickFixActionRegistrar.create(info));
     }
     return info;
   }

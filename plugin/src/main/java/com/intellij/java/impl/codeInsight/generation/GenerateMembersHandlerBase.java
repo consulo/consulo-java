@@ -49,7 +49,7 @@ import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.StringUtil;
-import org.jetbrains.java.generate.exception.GenerateCodeException;
+import com.intellij.java.impl.generate.exception.GenerateCodeException;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

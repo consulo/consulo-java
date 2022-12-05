@@ -23,9 +23,9 @@ import consulo.application.util.CachedValueProvider;
 import consulo.language.ast.LighterAST;
 import consulo.language.impl.psi.PsiFileImpl;
 import consulo.language.psi.PsiFile;
+import consulo.language.psi.stub.StubbedSpine;
 import consulo.language.psi.stub.gist.GistManager;
 import consulo.language.psi.stub.gist.PsiFileGist;
-import consulo.language.psi.stub.internal.StubbedSpine;
 import consulo.language.psi.util.LanguageCachedValueUtil;
 
 import javax.annotation.Nonnull;

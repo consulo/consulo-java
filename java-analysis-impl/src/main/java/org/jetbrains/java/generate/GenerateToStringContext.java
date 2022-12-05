@@ -18,7 +18,7 @@ package org.jetbrains.java.generate;
 import javax.annotation.Nonnull;
 import jakarta.inject.Singleton;
 
-import org.jetbrains.java.generate.config.Config;
+import com.intellij.java.analysis.impl.generate.config.Config;
 import consulo.component.persist.PersistentStateComponent;
 import consulo.ide.ServiceManager;
 import consulo.component.persist.State;

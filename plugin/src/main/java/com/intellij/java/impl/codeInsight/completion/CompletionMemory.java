@@ -16,17 +16,17 @@
 
 package com.intellij.java.impl.codeInsight.completion;
 
-import consulo.language.editor.impl.internal.completion.CompletionUtil;
 import com.intellij.java.language.psi.*;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.document.Document;
 import consulo.document.RangeMarker;
 import consulo.document.util.Segment;
 import consulo.document.util.TextRange;
+import consulo.language.editor.completion.CompletionUtilCore;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.SmartPointerManager;
 import consulo.language.psi.SmartPsiElementPointer;
 import consulo.util.collection.ContainerUtil;
-import consulo.annotation.access.RequiredReadAction;
 import consulo.util.dataholder.Key;
 
 import javax.annotation.Nullable;
@@ -51,7 +51,7 @@ public class CompletionMemory {
     if (document == null) {
       return;
     }
-    addToMemory(document, createChosenMethodMarker(document, CompletionUtil.getOriginalOrSelf(method), nameRange));
+    addToMemory(document, createChosenMethodMarker(document, CompletionUtilCore.getOriginalOrSelf(method), nameRange));
   }
 
   private static void addToMemory(Document document, RangeMarker marker) {

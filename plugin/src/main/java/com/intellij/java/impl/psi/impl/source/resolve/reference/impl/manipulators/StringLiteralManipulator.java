@@ -23,6 +23,8 @@ import consulo.util.lang.StringUtil;
 import consulo.language.psi.*;
 import consulo.language.util.IncorrectOperationException;
 
+import javax.annotation.Nonnull;
+
 /**
  * @author ven
  */
@@ -48,6 +50,12 @@ public class StringLiteralManipulator extends AbstractElementManipulator<PsiLite
   @Override
   public TextRange getRangeInElement(final PsiLiteralExpression element) {
     return getValueRange(element);
+  }
+
+  @Nonnull
+  @Override
+  public Class<PsiLiteralExpression> getElementClass() {
+    return PsiLiteralExpression.class;
   }
 
   public static TextRange getValueRange(PsiLiteralExpression element) {

@@ -53,7 +53,6 @@ import consulo.language.util.IncorrectOperationException;
  */
 public class JavaWithRuntimeCastSurrounder extends JavaExpressionSurrounder
 {
-
 	@Override
 	public String getTemplateDescription()
 	{

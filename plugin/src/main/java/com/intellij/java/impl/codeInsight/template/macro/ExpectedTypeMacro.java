@@ -24,17 +24,17 @@ import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiIdentifier;
 import com.intellij.java.language.psi.PsiType;
 import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.completion.CompletionUtilCore;
 import consulo.language.editor.completion.lookup.LookupElement;
-import consulo.language.editor.impl.internal.completion.CompletionUtil;
 import consulo.language.editor.template.Expression;
 import consulo.language.editor.template.ExpressionContext;
 import consulo.language.editor.template.Result;
 import consulo.language.editor.template.context.TemplateContextType;
 import consulo.language.editor.template.macro.Macro;
-import consulo.language.impl.internal.psi.diff.BlockSupport;
 import consulo.language.psi.PsiDocumentManager;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
+import consulo.language.psi.ReparseRangeUtil;
 import consulo.project.Project;
 
 import javax.annotation.Nonnull;
@@ -88,8 +88,8 @@ public class ExpectedTypeMacro extends Macro {
     PsiFile file = PsiDocumentManager.getInstance(project).getPsiFile(context.getEditor().getDocument());
     assert file != null;
     final PsiFile fileCopy = (PsiFile)file.copy();
-    BlockSupport.getInstance(project).reparseRange(fileCopy, context.getTemplateStartOffset(), context.getTemplateEndOffset(),
-                                                   CompletionUtil.DUMMY_IDENTIFIER);
+    ReparseRangeUtil.reparseRange(fileCopy, context.getTemplateStartOffset(), context.getTemplateEndOffset(),
+                                                   CompletionUtilCore.DUMMY_IDENTIFIER);
     
     PsiElement element = fileCopy.findElementAt(context.getTemplateStartOffset());
 

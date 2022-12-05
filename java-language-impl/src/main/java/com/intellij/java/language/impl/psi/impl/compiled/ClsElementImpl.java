@@ -23,9 +23,9 @@ import consulo.language.Language;
 import consulo.language.ast.ASTNode;
 import consulo.language.ast.IElementType;
 import consulo.language.impl.ast.TreeElement;
-import consulo.language.impl.internal.psi.pointer.Identikit;
 import consulo.language.impl.psi.PsiElementBase;
 import consulo.language.impl.psi.SourceTreeToPsiMap;
+import consulo.language.impl.psi.pointer.Identikit;
 import consulo.language.psi.*;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
@@ -45,7 +45,7 @@ public abstract class ClsElementImpl extends PsiElementBase implements PsiCompil
 
   private static final Logger LOG = Logger.getInstance(ClsElementImpl.class);
 
-  private volatile Pair<TextRange, Identikit.ByType> myMirror;
+  private volatile Pair<TextRange, Identikit> myMirror;
 
   @Override
   @Nonnull
@@ -156,7 +156,7 @@ public abstract class ClsElementImpl extends PsiElementBase implements PsiCompil
   @Override
   public PsiElement getMirror() {
     PsiFile mirrorFile = ((ClsFileImpl) getContainingFile()).getMirror().getContainingFile();
-    Pair<TextRange, Identikit.ByType> mirror = myMirror;
+    Pair<TextRange, Identikit> mirror = myMirror;
     return mirror == null ? null : mirror.second.findPsiElement(mirrorFile, mirror.first.getStartOffset(), mirror.first.getEndOffset());
   }
 

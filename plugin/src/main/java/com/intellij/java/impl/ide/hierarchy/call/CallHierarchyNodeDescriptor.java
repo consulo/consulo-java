@@ -199,14 +199,14 @@ public final class CallHierarchyNodeDescriptor extends HierarchyNodeDescriptor i
       if (psiFile == null || psiFile.getVirtualFile() == null) {
         return;
       }
-      FileEditorManager.getInstance(myProject).openFile(psiFile.getVirtualFile(), requestFocus);
+      FileEditorManager.getInstance(getProject()).openFile(psiFile.getVirtualFile(), requestFocus);
     }
 
     Editor editor = PsiUtilBase.findEditor(callElement);
 
     if (editor != null) {
 
-      HighlightManager highlightManager = HighlightManager.getInstance(myProject);
+      HighlightManager highlightManager = HighlightManager.getInstance(getProject());
       EditorColorsManager colorManager = EditorColorsManager.getInstance();
       TextAttributes attributes = colorManager.getGlobalScheme().getAttributes(EditorColors.SEARCH_RESULT_ATTRIBUTES);
       ArrayList<RangeHighlighter> highlighters = new ArrayList<RangeHighlighter>();

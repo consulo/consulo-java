@@ -59,7 +59,7 @@ class AddLibraryToDependenciesFix extends AddOrderEntryFix {
 
   @Override
   public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
-    return !project.isDisposed() && !myCurrentModule.isDisposed() && !((LibraryEx) myLibrary).isDisposed();
+    return !project.isDisposed() && !myCurrentModule.isDisposed() && !((Library) myLibrary).isDisposed();
   }
 
   @Override

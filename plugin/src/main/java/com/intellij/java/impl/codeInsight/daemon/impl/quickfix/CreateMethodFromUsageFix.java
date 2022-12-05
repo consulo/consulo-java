@@ -15,39 +15,39 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
+import com.intellij.java.impl.codeInsight.ExpectedTypeInfo;
+import com.intellij.java.language.impl.refactoring.util.RefactoringChangeUtil;
 import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.application.util.function.Processor;
+import consulo.codeEditor.Editor;
+import consulo.document.Document;
+import consulo.document.RangeMarker;
+import consulo.document.util.TextRange;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.language.editor.CodeInsightUtilCore;
-import com.intellij.java.impl.codeInsight.ExpectedTypeInfo;
+import consulo.language.editor.WriteCommandAction;
+import consulo.language.editor.annotation.HighlightSeverity;
 import consulo.language.editor.impl.internal.daemon.DaemonCodeAnalyzerEx;
 import consulo.language.editor.rawHighlight.HighlightInfo;
 import consulo.language.editor.template.Template;
-import consulo.language.editor.impl.internal.template.TemplateBuilderImpl;
+import consulo.language.editor.template.TemplateBuilder;
+import consulo.language.editor.template.TemplateBuilderFactory;
 import consulo.language.editor.template.event.TemplateEditingAdapter;
-import consulo.language.editor.annotation.HighlightSeverity;
-import consulo.language.editor.WriteCommandAction;
-import consulo.logging.Logger;
-import consulo.document.Document;
-import consulo.codeEditor.Editor;
-import consulo.document.RangeMarker;
-import consulo.project.Project;
-import consulo.util.lang.Comparing;
-import consulo.util.lang.Pair;
-import consulo.document.util.TextRange;
 import consulo.language.psi.*;
 import consulo.language.psi.util.PsiTreeUtil;
-import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.java.language.impl.refactoring.util.RefactoringChangeUtil;
 import consulo.language.util.IncorrectOperationException;
-import consulo.application.util.function.Processor;
+import consulo.logging.Logger;
+import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
+import consulo.util.lang.Comparing;
+import consulo.util.lang.Pair;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * @author Mike
@@ -237,7 +237,7 @@ public class CreateMethodFromUsageFix extends CreateFromUsageBaseFix {
     Document document = PsiDocumentManager.getInstance(project).getDocument(targetFile);
     if (document == null) return;
 
-    TemplateBuilderImpl builder = new TemplateBuilderImpl(method);
+    TemplateBuilder builder = TemplateBuilderFactory.getInstance().createTemplateBuilder(method);
 
     CreateFromUsageUtils.setupMethodParameters(method, builder, context, substitutor, arguments);
     final PsiTypeElement returnTypeElement = method.getReturnTypeElement();

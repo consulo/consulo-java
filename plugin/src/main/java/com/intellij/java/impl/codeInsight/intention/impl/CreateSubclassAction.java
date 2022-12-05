@@ -45,9 +45,9 @@ import consulo.document.util.TextRange;
 import consulo.ide.impl.idea.openapi.fileEditor.ex.IdeDocumentHistory;
 import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.WriteCommandAction;
-import consulo.language.editor.impl.internal.template.TemplateBuilderImpl;
 import consulo.language.editor.intention.BaseIntentionAction;
 import consulo.language.editor.template.Template;
+import consulo.language.editor.template.TemplateBuilder;
 import consulo.language.editor.template.TemplateBuilderFactory;
 import consulo.language.editor.template.event.TemplateEditingAdapter;
 import consulo.language.psi.*;
@@ -247,8 +247,8 @@ public class CreateSubclassAction extends BaseIntentionAction {
       }
       if (psiClass.hasTypeParameters() || includeClassName) {
         final Editor editor = CodeInsightUtil.positionCursor(project, targetClass.getContainingFile(), targetClass.getLBrace());
-        final TemplateBuilderImpl templateBuilder = editor != null
-            ? (TemplateBuilderImpl) TemplateBuilderFactory.getInstance().createTemplateBuilder(targetClass) : null;
+        final TemplateBuilder templateBuilder = editor != null
+            ? TemplateBuilderFactory.getInstance().createTemplateBuilder(targetClass) : null;
 
         if (includeClassName && templateBuilder != null) {
           templateBuilder.replaceElement(targetClass.getNameIdentifier(), targetClass.getName());

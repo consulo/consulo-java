@@ -33,7 +33,6 @@ import com.intellij.java.language.psi.PsiType;
 import consulo.application.ApplicationManager;
 import consulo.disposer.Disposable;
 import consulo.execution.debug.breakpoint.XExpression;
-import consulo.execution.debug.internal.breakpoint.XExpressionImpl;
 import consulo.ide.impl.idea.xdebugger.impl.ui.XDebuggerExpressionEditor;
 import consulo.language.editor.ui.awt.ReferenceEditorWithBrowseButton;
 import consulo.language.psi.PsiDocumentManager;
@@ -113,7 +112,7 @@ class CompoundRendererConfigurable extends JPanel
 
 		myLabelEditor = new XDebuggerExpressionEditor(myProject, editorsProvider, "ClassLabelExpression", null, XExpression.EMPTY_EXPRESSION, false, false, true);
 		myChildrenEditor = new XDebuggerExpressionEditor(myProject, editorsProvider, "ClassChildrenExpression", null, XExpression.EMPTY_EXPRESSION, false, false, true);
-		myChildrenExpandedEditor = new XDebuggerExpressionEditor(myProject, editorsProvider, "ClassChildrenExpression", null, XExpressionImpl.EMPTY_EXPRESSION, false, false, true);
+		myChildrenExpandedEditor = new XDebuggerExpressionEditor(myProject, editorsProvider, "ClassChildrenExpression", null, XExpression.EMPTY_EXPRESSION, false, false, true);
 		JComponent myChildrenListEditor = createChildrenListEditor(editorsProvider);
 
 		final ItemListener updateListener = new ItemListener()
@@ -246,7 +245,7 @@ class CompoundRendererConfigurable extends JPanel
 	{
 		final MyTableModel tableModel = new MyTableModel();
 		myTable = new JBTable(tableModel);
-		myListChildrenEditor = new XDebuggerExpressionEditor(myProject, editorsProvider, "NamedChildrenConfigurable", null, XExpressionImpl.EMPTY_EXPRESSION, false, false, false);
+		myListChildrenEditor = new XDebuggerExpressionEditor(myProject, editorsProvider, "NamedChildrenConfigurable", null, XExpression.EMPTY_EXPRESSION, false, false, false);
 		JComponent editorComponent = myListChildrenEditor.getComponent();
 
 		AbstractTableCellEditor editor = new AbstractTableCellEditor()

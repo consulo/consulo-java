@@ -66,7 +66,7 @@
 			<action id="GenerateSetter" class="com.intellij.java.impl.codeInsight.generation.actions.GenerateSetterAction"/>
 			<action id="GenerateGetterAndSetter" class="com.intellij.java.impl.codeInsight.generation.actions.GenerateGetterAndSetterAction"/>
 			<action id="GenerateEquals" class="com.intellij.java.impl.codeInsight.generation.actions.GenerateEqualsAction"/>
-			<action id="Actions.ActionsPlugin.GenerateToString" class="org.jetbrains.java.generate.GenerateToStringAction" text="to_String()" description="Generate toString() method"/>
+			<action id="Actions.ActionsPlugin.GenerateToString" class="com.intellij.java.impl.generate.GenerateToStringAction" text="to_String()" description="Generate toString() method"/>
 			<action id="GenerateCreateUI" class="com.intellij.java.impl.codeInsight.generation.actions.GenerateCreateUIAction"/>
 			<add-to-group group-id="GenerateGroup" anchor="first"/>
 		</group>
@@ -577,7 +577,7 @@
 		</extensionPoint>
 
 		<extensionPoint name="getterSetterProvider" interface="com.intellij.java.impl.codeInsight.generation.GetterSetterPrototypeProvider"/>
-		<extensionPoint name="generation.toStringClassFilter" interface="org.jetbrains.generate.tostring.GenerateToStringClassFilter"/>
+		<extensionPoint name="generation.toStringClassFilter" interface="com.intellij.java.impl.generate.tostring.GenerateToStringClassFilter"/>
 		<extensionPoint name="classTypePointerFactory" interface="com.intellij.java.language.impl.psi.impl.smartPointers.PsiClassReferenceTypePointerFactory"/>
 
 
@@ -726,7 +726,7 @@
 
 		<classTypePointerFactory implementation="com.intellij.java.language.impl.psi.impl.smartPointers.PsiClassReferenceTypePointerFactory"/>
 
-		<generation.toStringClassFilter implementation="org.jetbrains.generate.tostring.GenerateToStringInterfaceFilter" order="last"/>
+		<generation.toStringClassFilter implementation="com.intellij.java.impl.generate.tostring.GenerateToStringInterfaceFilter" order="last"/>
 
 		<projectModelModifier implementation="com.intellij.java.impl.openapi.roots.impl.IdeaProjectModelModifier" order="last"/>
 	</extensions>
@@ -880,8 +880,8 @@
 		<applicationService serviceInterface="com.intellij.java.impl.util.descriptors.ConfigFileFactory"
 							serviceImplementation="com.intellij.java.impl.util.descriptors.impl.ConfigFileFactoryImpl"/>
 
-		<applicationService serviceInterface="org.jetbrains.java.generate.template.toString.ToStringTemplatesManager"
-							serviceImplementation="org.jetbrains.java.generate.template.toString.ToStringTemplatesManager"/>
+		<applicationService serviceInterface="com.intellij.java.impl.generate.template.toString.ToStringTemplatesManager"
+							serviceImplementation="com.intellij.java.impl.generate.template.toString.ToStringTemplatesManager"/>
 		<applicationService serviceInterface="com.intellij.java.impl.codeInsight.generation.EqualsHashCodeTemplatesManager"
 							serviceImplementation="com.intellij.java.impl.codeInsight.generation.EqualsHashCodeTemplatesManager"/>
 		<applicationService serviceInterface="com.intellij.java.impl.codeInsight.generation.GetterTemplatesManager"
@@ -889,7 +889,7 @@
 		<applicationService serviceInterface="com.intellij.java.impl.codeInsight.generation.SetterTemplatesManager"
 							serviceImplementation="com.intellij.java.impl.codeInsight.generation.SetterTemplatesManager"/>
 		<applicationService serviceInterface="org.jetbrains.java.generate.GenerateToStringActionHandler"
-							serviceImplementation="org.jetbrains.java.generate.GenerateToStringActionHandlerImpl"/>
+							serviceImplementation="com.intellij.java.impl.generate.GenerateToStringActionHandlerImpl"/>
 		<applicationService serviceInterface="org.jetbrains.java.generate.GenerateToStringContext"
 							serviceImplementation="org.jetbrains.java.generate.GenerateToStringContext"/>
 
@@ -996,8 +996,6 @@
 
 		<daemon.highlightInfoFilter implementation="com.intellij.java.debugger.impl.engine.evaluation.DebuggerHighlightFilter"/>
 
-		<editorNotificationProvider implementation="com.intellij.java.impl.codeInsight.daemon.impl.AttachSourcesNotificationProvider"/>
-		<editorNotificationProvider implementation="com.intellij.java.impl.codeInsight.daemon.impl.SetupJDKNotificationProvider"/>
 
 		<programRunner id="defaultRunRunner" implementation="com.intellij.java.execution.impl.DefaultJavaProgramRunner"/>
 		<programRunner implementation="com.intellij.java.execution.impl.jar.JarApplicationDebuggerRunner"/>
@@ -1448,8 +1446,6 @@
 
 		<lang.commenter language="JAVA" implementationClass="com.intellij.java.impl.lang.java.JavaCommenter"/>
 
-		<lang.braceMatcher language="JAVA" implementationClass="com.intellij.java.impl.codeInsight.highlighting.JavaBraceMatcher"/>
-
 		<lang.foldingBuilder language="JAVA" implementationClass="com.intellij.java.impl.codeInsight.folding.impl.JavaFoldingBuilder"/>
 
 		<codeInsight.parameterInfo language="JAVA" implementationClass="com.intellij.java.impl.codeInsight.hint.api.impls.MethodParameterInfoHandler"/>
@@ -1754,7 +1750,6 @@
 		<gotoDeclarationHandler implementation="com.intellij.java.impl.codeInsight.navigation.actions.GotoBreakContinueHandler"/>
 		<navbar implementation="com.intellij.java.impl.ide.navigationToolbar.JavaNavBarExtension"/>
 		<typeDeclarationProvider implementation="com.intellij.java.impl.codeInsight.navigation.actions.JavaTypeDeclarationProvider"/>
-		<gotoTargetRendererProvider implementation="com.intellij.java.impl.codeInsight.navigation.JavaGotoTargetRendererProvider"/>
 
 		<renameHandler implementation="com.intellij.java.impl.refactoring.rename.DirectoryAsPackageRenameHandler"/>
 		<renameHandler implementation="com.intellij.java.impl.refactoring.rename.RenameWrongRefHandler"/>
@@ -1980,7 +1975,6 @@
 		<codeInsight.parameterNameHints language="JAVA" implementationClass="com.intellij.java.impl.codeInsight.hints.JavaInlayParameterHintsProvider"/>
 		<codeInsight.lineMarkerProvider language="JAVA" implementationClass="com.intellij.java.impl.codeInsight.ExternalAnnotationsLineMarkerProvider"/>
 		<newModuleBuilder implementation="consulo.java.impl.ide.newProjectOrModule.JavaNewModuleBuilder"/>
-		<lang.inspectionSuppressor language="JAVA" implementationClass="com.intellij.java.impl.codeInspection.SuppressManagerImpl"/>
 
 		<targetElementUtilEx implementation="consulo.java.impl.codeInsight.JavaTargetElementUtilEx"/>
 

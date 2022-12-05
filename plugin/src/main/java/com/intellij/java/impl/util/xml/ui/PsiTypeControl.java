@@ -42,7 +42,7 @@ public class PsiTypeControl extends EditorTextFieldControl<PsiTypePanel> {
   }
 
   @Nonnull
-  protected String getValue() {
+  public String getValue() {
     final String rawValue = super.getValue();
     try {
       final PsiType psiType = JavaPsiFacade.getInstance(getProject()).getElementFactory().createTypeFromText(rawValue, null);
@@ -59,7 +59,7 @@ public class PsiTypeControl extends EditorTextFieldControl<PsiTypePanel> {
     return PsiManager.getInstance(getProject());
   }
 
-  protected void setValue(String value) {
+  public void setValue(String value) {
     final PsiType type = JvmPsiTypeConverterImpl.convertFromString(value, new AbstractConvertContext() {
       @Nonnull
       public DomElement getInvocationElement() {

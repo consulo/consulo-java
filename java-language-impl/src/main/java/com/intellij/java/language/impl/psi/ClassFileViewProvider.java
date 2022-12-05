@@ -24,7 +24,6 @@ import consulo.internal.org.objectweb.asm.Opcodes;
 import consulo.language.Language;
 import consulo.language.content.FileIndexFacade;
 import consulo.language.impl.file.SingleRootFileViewProvider;
-import consulo.language.impl.internal.psi.PsiManagerImpl;
 import consulo.language.impl.psi.PsiBinaryFileImpl;
 import consulo.language.psi.*;
 import consulo.logging.Logger;
@@ -58,7 +57,7 @@ public class ClassFileViewProvider extends SingleRootFileViewProvider {
   protected PsiFile createFile(@Nonnull Project project, @Nonnull VirtualFile file, @Nonnull FileType fileType) {
     FileIndexFacade fileIndex = ServiceManager.getService(project, FileIndexFacade.class);
     if (!fileIndex.isInLibraryClasses(file) && fileIndex.isInSource(file) || fileIndex.isExcludedFile(file)) {
-      return new PsiBinaryFileImpl((PsiManagerImpl) getManager(), this);
+      return new PsiBinaryFileImpl(getManager(), this);
     }
 
     // skip inner, anonymous, missing and corrupted classes

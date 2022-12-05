@@ -15,48 +15,58 @@
  */
 package com.intellij.java.analysis.codeInspection;
 
-import consulo.language.editor.rawHighlight.HighlightDisplayKey;
-import consulo.language.editor.inspection.SuppressQuickFix;
-import consulo.ide.ServiceManager;
 import com.intellij.java.language.psi.PsiDocCommentOwner;
-import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiModifierListOwner;
+import consulo.ide.ServiceManager;
+import consulo.language.editor.inspection.SuppressQuickFix;
+import consulo.language.editor.rawHighlight.HighlightDisplayKey;
+import consulo.language.psi.PsiElement;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Collection;
 
-public interface BatchSuppressManager {
-  String SUPPRESS_INSPECTIONS_ANNOTATION_NAME = "java.lang.SuppressWarnings";
+public interface BatchSuppressManager
+{
+	String SUPPRESS_INSPECTIONS_ANNOTATION_NAME = "java.lang.SuppressWarnings";
 
-  class SERVICE {
-    public static BatchSuppressManager getInstance() {
-      return ServiceManager.getService(BatchSuppressManager.class);
-    }
-  }
-  @Nonnull
-  SuppressQuickFix[] createBatchSuppressActions(@Nonnull HighlightDisplayKey key);
+	public static BatchSuppressManager getInstance()
+	{
+		return ServiceManager.getService(BatchSuppressManager.class);
+	}
 
-  boolean isSuppressedFor(@Nonnull PsiElement element, String toolId);
+	@Deprecated
+	class SERVICE
+	{
+		public static BatchSuppressManager getInstance()
+		{
+			return BatchSuppressManager.getInstance();
+		}
+	}
 
-  PsiElement getElementMemberSuppressedIn(@Nonnull PsiDocCommentOwner owner, String inspectionToolID);
+	@Nonnull
+	SuppressQuickFix[] createBatchSuppressActions(@Nonnull HighlightDisplayKey key);
 
-  @Nullable
-  PsiElement getAnnotationMemberSuppressedIn(@Nonnull PsiModifierListOwner owner, String inspectionToolID);
+	boolean isSuppressedFor(@Nonnull PsiElement element, String toolId);
 
-  @Nullable
-  PsiElement getDocCommentToolSuppressedIn(@Nonnull PsiDocCommentOwner owner, String inspectionToolID);
+	PsiElement getElementMemberSuppressedIn(@Nonnull PsiDocCommentOwner owner, String inspectionToolID);
 
-  @Nonnull
-  Collection<String> getInspectionIdsSuppressedInAnnotation(@Nonnull PsiModifierListOwner owner);
+	@Nullable
+	PsiElement getAnnotationMemberSuppressedIn(@Nonnull PsiModifierListOwner owner, String inspectionToolID);
 
-  @Nullable
-  String getSuppressedInspectionIdsIn(@Nonnull PsiElement element);
+	@Nullable
+	PsiElement getDocCommentToolSuppressedIn(@Nonnull PsiDocCommentOwner owner, String inspectionToolID);
 
-  @Nullable
-  PsiElement getElementToolSuppressedIn(@Nonnull PsiElement place, String toolId);
+	@Nonnull
+	Collection<String> getInspectionIdsSuppressedInAnnotation(@Nonnull PsiModifierListOwner owner);
 
-  boolean canHave15Suppressions(@Nonnull PsiElement file);
+	@Nullable
+	String getSuppressedInspectionIdsIn(@Nonnull PsiElement element);
 
-  boolean alreadyHas14Suppressions(@Nonnull PsiDocCommentOwner commentOwner);
+	@Nullable
+	PsiElement getElementToolSuppressedIn(@Nonnull PsiElement place, String toolId);
+
+	boolean canHave15Suppressions(@Nonnull PsiElement file);
+
+	boolean alreadyHas14Suppressions(@Nonnull PsiDocCommentOwner commentOwner);
 }

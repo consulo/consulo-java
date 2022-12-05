@@ -36,7 +36,7 @@ import consulo.java.analysis.codeInsight.JavaCodeInsightUtilCore;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.PsiEquivalenceUtil;
-import consulo.language.editor.impl.internal.completion.CompletionUtil;
+import consulo.language.editor.completion.CompletionUtilCore;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiManager;
@@ -215,7 +215,7 @@ public class CodeInsightUtil extends JavaCodeInsightUtilCore {
       }
       for (PsiTypeParameter parameter : typed.getTypeParameters()) {
         if (baseType.isAssignableFrom(factory.createType(parameter)) && usedNames.add(parameter.getName())) {
-          inheritorsProcessor.process(CompletionUtil.getOriginalOrSelf(parameter));
+          inheritorsProcessor.process(CompletionUtilCore.getOriginalOrSelf(parameter));
         }
       }
 

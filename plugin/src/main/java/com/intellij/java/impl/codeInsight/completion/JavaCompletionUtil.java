@@ -171,14 +171,14 @@ public class JavaCompletionUtil {
           return classType;
         }
 
-        return new PsiImmediateClassType(CompletionUtil.getOriginalOrSelf(psiClass), originalizeSubstitutor(substitutor));
+        return new PsiImmediateClassType(CompletionUtilCore.getOriginalOrSelf(psiClass), originalizeSubstitutor(substitutor));
       }
 
       private PsiSubstitutor originalizeSubstitutor(final PsiSubstitutor substitutor) {
         PsiSubstitutor originalSubstitutor = PsiSubstitutor.EMPTY;
         for (final Map.Entry<PsiTypeParameter, PsiType> entry : substitutor.getSubstitutionMap().entrySet()) {
           final PsiType value = entry.getValue();
-          originalSubstitutor = originalSubstitutor.put(CompletionUtil.getOriginalOrSelf(entry.getKey()),
+          originalSubstitutor = originalSubstitutor.put(CompletionUtilCore.getOriginalOrSelf(entry.getKey()),
               value == null ? null : mapType(value));
         }
         return originalSubstitutor;
@@ -340,7 +340,7 @@ public class JavaCompletionUtil {
           if (honorExcludes && isInExcludedPackage((PsiMember) o, true)) {
             continue;
           }
-          mentioned.add(CompletionUtil.getOriginalOrSelf((PsiMember) o));
+          mentioned.add(CompletionUtilCore.getOriginalOrSelf((PsiMember) o));
         }
         PsiTypeLookupItem qualifierCast = findQualifierCast(item, castItems, plainQualifier, processor, expectedTypes);
         if (qualifierCast != null) {
@@ -463,7 +463,7 @@ public class JavaCompletionUtil {
             final int exprStart = qualifier.getTextRange().getStartOffset();
             document.insertString(exprStart, prefix + spaceWithin + ")" + spaceAfter);
 
-            CompletionUtil.emulateInsertion(context, exprStart + prefix.length(), castTypeItem);
+            CompletionUtilCore.emulateInsertion(context, exprStart + prefix.length(), castTypeItem);
             PsiDocumentManager.getInstance(file.getProject()).doPostponedOperationsAndUnblockDocument(document);
             context.getEditor().getCaretModel().moveToOffset(context.getTailOffset());
           }
@@ -528,7 +528,7 @@ public class JavaCompletionUtil {
     }
 
     if (object instanceof PsiEnumConstant) {
-      return findConstantsUsedInSwitch(place).contains(CompletionUtil.getOriginalOrSelf((PsiEnumConstant) object));
+      return findConstantsUsedInSwitch(place).contains(CompletionUtilCore.getOriginalOrSelf((PsiEnumConstant) object));
     }
     if (object instanceof PsiClass && ReferenceListWeigher.INSTANCE.getApplicability((PsiClass) object, place) == inapplicable) {
       return true;
@@ -573,7 +573,7 @@ public class JavaCompletionUtil {
 
       if (completion instanceof PsiClass) {
         List<JavaPsiClassReferenceElement> classItems = JavaClassNameCompletionContributor.createClassLookupItems(
-            CompletionUtil.getOriginalOrSelf((PsiClass) completion),
+            CompletionUtilCore.getOriginalOrSelf((PsiClass) completion),
             JavaClassNameCompletionContributor.AFTER_NEW.accepts(reference),
             JavaClassNameInsertHandler.JAVA_CLASS_INSERT_HANDLER,
             Conditions.alwaysTrue());

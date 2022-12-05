@@ -21,6 +21,7 @@ import consulo.document.Document;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.codeStyle.CodeStyleSettingsManager;
 import consulo.language.editor.completion.ClassConditionKey;
+import consulo.language.editor.completion.CompletionUtilCore;
 import consulo.language.editor.completion.OffsetKey;
 import consulo.language.editor.completion.lookup.InsertionContext;
 import consulo.language.editor.completion.lookup.LookupElement;
@@ -119,7 +120,7 @@ public class JavaChainLookupElement extends LookupElementDecorator<LookupElement
     final Document document = context.getEditor().getDocument();
     document.replaceString(context.getStartOffset(), context.getTailOffset(), ";");
     myQualifier.putUserData(CHAIN_QUALIFIER, true);
-    final InsertionContext qualifierContext = CompletionUtil.emulateInsertion(context, context.getStartOffset(), myQualifier);
+    final InsertionContext qualifierContext = CompletionUtilCore.emulateInsertion(context, context.getStartOffset(), myQualifier);
     OffsetKey oldStart = context.trackOffset(context.getStartOffset(), false);
 
     PsiDocumentManager.getInstance(context.getProject()).doPostponedOperationsAndUnblockDocument(document);
@@ -137,7 +138,7 @@ public class JavaChainLookupElement extends LookupElementDecorator<LookupElement
     }
     document.replaceString(context.getTailOffset() - 1, context.getTailOffset(), ".");
 
-    CompletionUtil.emulateInsertion(getDelegate(), context.getTailOffset(), context);
+    CompletionUtilCore.emulateInsertion(getDelegate(), context.getTailOffset(), context);
     context.commitDocument();
 
     int formatStart = context.getOffset(oldStart);

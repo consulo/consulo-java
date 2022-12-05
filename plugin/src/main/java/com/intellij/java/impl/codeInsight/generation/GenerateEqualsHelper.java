@@ -35,7 +35,7 @@ import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.java.generate.GenerationUtil;
+import com.intellij.java.impl.generate.GenerationUtil;
 
 import java.util.*;
 

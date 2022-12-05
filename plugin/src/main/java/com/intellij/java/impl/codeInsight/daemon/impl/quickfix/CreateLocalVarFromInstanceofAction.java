@@ -214,7 +214,7 @@ public class CreateLocalVarFromInstanceofAction extends BaseIntentionAction {
       decl = CodeInsightUtilBase.forcePsiPostprocessAndRestoreElement(decl);
 
       PsiLocalVariable localVariable = (PsiLocalVariable)decl.getDeclaredElements()[0];
-      TemplateBuilderImpl builder = new TemplateBuilderImpl(localVariable);
+      TemplateBuilder builder =TemplateBuilderFactory.getInstance().createTemplateBuilder(localVariable);
       builder.setEndVariableAfter(localVariable.getNameIdentifier());
 
       Template template = generateTemplate(project, localVariable.getInitializer(), localVariable.getType());

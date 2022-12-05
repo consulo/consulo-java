@@ -56,10 +56,7 @@ import com.intellij.java.language.util.VisibilityUtil;
 import consulo.application.ApplicationManager;
 import consulo.application.progress.ProgressManager;
 import consulo.application.util.function.Processor;
-import consulo.codeEditor.Editor;
-import consulo.codeEditor.EditorColors;
-import consulo.codeEditor.LogicalPosition;
-import consulo.codeEditor.ScrollType;
+import consulo.codeEditor.*;
 import consulo.colorScheme.EditorColorsManager;
 import consulo.colorScheme.TextAttributes;
 import consulo.content.scope.SearchScope;
@@ -86,6 +83,7 @@ import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.project.ProjectPropertiesComponent;
 import consulo.project.ui.wm.WindowManager;
+import consulo.ui.ex.popup.JBPopup;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.collection.MultiMap;
@@ -1508,7 +1506,8 @@ public class ExtractMethodProcessor implements MatchProvider {
       if (classes.size() > 1) {
         final PsiClass[] psiClasses = classes.keySet().toArray(new PsiClass[classes.size()]);
         final PsiClass preselection = AnonymousTargetClassPreselectionUtil.getPreselection(classes.keySet(), psiClasses[0]);
-        PopupNavigationUtil.getPsiElementPopup(psiClasses, new PsiClassListCellRenderer(), "Choose Destination Class", processor, preselection).showInBestPositionFor(myEditor);
+        JBPopup popup = PopupNavigationUtil.getPsiElementPopup(psiClasses, new PsiClassListCellRenderer(), "Choose Destination Class", processor, preselection);
+        EditorPopupHelper.getInstance().showPopupInBestPositionFor(myEditor, popup);
         return true;
       }
     }

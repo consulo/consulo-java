@@ -15,19 +15,19 @@
  */
 package com.intellij.java.impl.codeInsight.completion;
 
-import consulo.language.editor.impl.internal.completion.CompletionUtil;
-import consulo.language.editor.completion.lookup.InsertionContext;
-import consulo.language.editor.completion.CompletionStyleUtil;
-import consulo.language.editor.completion.lookup.LookupElement;
-import consulo.language.editor.completion.lookup.LookupElementDecorator;
-import consulo.language.editor.completion.lookup.LookupElementPresentation;
 import com.intellij.java.impl.codeInsight.lookup.PsiTypeLookupItem;
 import com.intellij.java.impl.codeInsight.lookup.TypedLookupItem;
 import com.intellij.java.language.psi.PsiType;
 import consulo.codeEditor.Editor;
-import consulo.language.editor.completion.ClassConditionKey;
-import consulo.language.psi.PsiElement;
 import consulo.language.codeStyle.CommonCodeStyleSettings;
+import consulo.language.editor.completion.ClassConditionKey;
+import consulo.language.editor.completion.CompletionStyleUtil;
+import consulo.language.editor.completion.CompletionUtilCore;
+import consulo.language.editor.completion.lookup.InsertionContext;
+import consulo.language.editor.completion.lookup.LookupElement;
+import consulo.language.editor.completion.lookup.LookupElementDecorator;
+import consulo.language.editor.completion.lookup.LookupElementPresentation;
+import consulo.language.psi.PsiElement;
 
 import javax.annotation.Nullable;
 
@@ -78,9 +78,9 @@ public class CastingLookupElementDecorator extends LookupElementDecorator<Lookup
     String spaceAfter = settings.SPACE_AFTER_TYPE_CAST ? " " : "";
     final Editor editor = context.getEditor();
     editor.getDocument().replaceString(context.getStartOffset(), context.getTailOffset(), "(" + spaceWithin + spaceWithin + ")" + spaceAfter);
-    CompletionUtil.emulateInsertion(context, context.getStartOffset() + 1 + spaceWithin.length(), myCastItem);
+    CompletionUtilCore.emulateInsertion(context, context.getStartOffset() + 1 + spaceWithin.length(), myCastItem);
 
-    CompletionUtil.emulateInsertion(getDelegate(), context.getTailOffset(), context);
+    CompletionUtilCore.emulateInsertion(getDelegate(), context.getTailOffset(), context);
   }
 
   public LookupElement getCastItem() {

@@ -19,9 +19,9 @@ import com.intellij.java.language.JavaCoreBundle;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.impl.JavaClassFileType;
 import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.fileEditor.EditorNotificationBuilder;
 import consulo.fileEditor.EditorNotificationProvider;
-import consulo.fileEditor.EditorNotifications;
 import consulo.fileEditor.FileEditor;
 import consulo.java.language.module.extension.JavaModuleExtension;
 import consulo.language.psi.PsiFile;
@@ -32,6 +32,7 @@ import consulo.module.Module;
 import consulo.project.Project;
 import consulo.project.ui.view.internal.ProjectSettingsService;
 import consulo.virtualFileSystem.VirtualFile;
+import jakarta.inject.Inject;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -40,10 +41,12 @@ import java.util.function.Supplier;
 /**
  * @author Danila Ponomarenko
  */
+@ExtensionImpl
 public class SetupJDKNotificationProvider implements EditorNotificationProvider {
   private final Project myProject;
 
-  public SetupJDKNotificationProvider(Project project, final EditorNotifications notifications) {
+  @Inject
+  public SetupJDKNotificationProvider(Project project) {
     myProject = project;
   }
 
