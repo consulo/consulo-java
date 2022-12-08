@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
+import consulo.ide.setting.ShowSettingsUtil;
 import consulo.language.editor.inspection.IntentionAndQuickFixAction;
 import consulo.ui.ex.action.ActionManager;
 import consulo.ui.ex.action.AnAction;
@@ -23,7 +24,6 @@ import consulo.codeEditor.Editor;
 import consulo.module.Module;
 import consulo.language.util.ModuleUtilCore;
 import consulo.project.Project;
-import consulo.project.ui.view.internal.ProjectSettingsService;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 
@@ -61,7 +61,9 @@ public class ShowModulePropertiesFix extends IntentionAndQuickFixAction {
 
   @Override
   public void applyFix(@Nonnull Project project, PsiFile file, @Nullable Editor editor) {
-    ProjectSettingsService.getInstance(project).showModuleConfigurationDialog(myModuleName, null);
+    ShowSettingsUtil.getInstance().showProjectStructureDialog(project, projectStructureSelector -> {
+      projectStructureSelector.select(myModuleName, null, true);
+    });
   }
 
   @Override

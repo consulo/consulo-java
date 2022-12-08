@@ -21,7 +21,6 @@
 package com.intellij.java.impl.codeInsight.highlighting;
 
 import com.intellij.java.language.psi.*;
-import consulo.application.impl.internal.progress.ProgressIndicatorBase;
 import consulo.application.progress.ProgressIndicator;
 import consulo.application.progress.ProgressManager;
 import consulo.codeEditor.Editor;
@@ -29,10 +28,10 @@ import consulo.codeEditor.EditorPopupHelper;
 import consulo.ide.impl.idea.codeInsight.daemon.impl.LocalInspectionsPass;
 import consulo.ide.impl.idea.codeInspection.ex.GlobalInspectionContextImpl;
 import consulo.ide.impl.idea.codeInspection.ex.InspectionManagerEx;
+import consulo.language.editor.DaemonCodeAnalyzer;
 import consulo.language.editor.highlight.usage.HighlightUsagesHandlerBase;
 import consulo.language.editor.impl.highlight.HighlightInfoProcessor;
 import consulo.language.editor.impl.inspection.reference.RefManagerImpl;
-import consulo.language.editor.impl.internal.inspection.scheme.InspectionProfileImpl;
 import consulo.language.editor.inspection.scheme.*;
 import consulo.language.editor.rawHighlight.HighlightInfo;
 import consulo.language.editor.util.CollectHighlightsUtil;
@@ -125,7 +124,7 @@ public class HighlightSuppressedWarningsHandler extends HighlightUsagesHandlerBa
       if (!(value instanceof String)) {
         continue;
       }
-      InspectionToolWrapper toolWrapperById = ((InspectionProfileImpl) inspectionProfile).getToolById((String) value, target);
+      InspectionToolWrapper toolWrapperById = inspectionProfile.getToolById((String) value, target);
       if (!(toolWrapperById instanceof LocalInspectionToolWrapper)) {
         continue;
       }
@@ -142,7 +141,7 @@ public class HighlightSuppressedWarningsHandler extends HighlightUsagesHandlerBa
         }
       };
       if (indicator == null) {
-        ProgressManager.getInstance().executeProcessUnderProgress(inspect, new ProgressIndicatorBase());
+        ProgressManager.getInstance().executeProcessUnderProgress(inspect, DaemonCodeAnalyzer.getInstance(project).createDaemonProgressIndicator());
       } else {
         inspect.run();
       }

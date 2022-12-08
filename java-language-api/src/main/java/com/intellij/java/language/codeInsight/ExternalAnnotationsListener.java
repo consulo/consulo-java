@@ -16,6 +16,9 @@
 package com.intellij.java.language.codeInsight;
 
 import com.intellij.java.language.psi.PsiModifierListOwner;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.TopicAPI;
+
 import javax.annotation.Nonnull;
 
 import java.util.EventListener;
@@ -24,6 +27,7 @@ import java.util.EventListener;
  * @author Evgeny Gerashchenko
  * @since  27 Aug 2012
  */
+@TopicAPI(ComponentScope.PROJECT)
 public interface ExternalAnnotationsListener extends EventListener {
   /**
    * Invoked at the end of annotateExternally/editExternalAnnotation/deannotate work.

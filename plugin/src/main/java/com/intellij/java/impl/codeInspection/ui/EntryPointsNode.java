@@ -19,7 +19,7 @@ import com.intellij.java.impl.codeInspection.deadCode.DummyEntryPointsTool;
 import consulo.application.AllIcons;
 import consulo.ide.impl.idea.codeInspection.ex.GlobalInspectionContextImpl;
 import consulo.ide.impl.idea.codeInspection.ui.InspectionNode;
-import consulo.language.editor.impl.internal.inspection.scheme.GlobalInspectionToolWrapper;
+import consulo.language.editor.impl.inspection.scheme.GlobalInspectionToolWrapper;
 import consulo.language.editor.inspection.scheme.InspectionToolWrapper;
 import consulo.ui.image.Image;
 

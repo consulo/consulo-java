@@ -15,29 +15,29 @@
  */
 package com.intellij.java.impl.slicer;
 
-import consulo.language.editor.PsiEquivalenceUtil;
-import consulo.ide.impl.idea.concurrency.ConcurrentCollectionFactory;
-import consulo.project.ui.view.tree.AbstractTreeNode;
-import consulo.ui.ex.tree.AbstractTreeStructure;
+import com.intellij.java.language.psi.PsiJavaReference;
 import consulo.application.ApplicationManager;
 import consulo.application.progress.ProgressIndicator;
 import consulo.application.progress.ProgressManager;
 import consulo.application.progress.Task;
-import consulo.ui.ex.awt.Messages;
-import consulo.util.lang.Comparing;
 import consulo.application.util.function.Computable;
-import consulo.util.lang.ref.Ref;
-import consulo.language.psi.PsiElement;
-import com.intellij.java.language.psi.PsiJavaReference;
-import consulo.language.psi.PsiNamedElement;
-import consulo.language.impl.internal.ast.AstBufferUtil;
+import consulo.ide.impl.idea.concurrency.ConcurrentCollectionFactory;
 import consulo.ide.impl.idea.util.NullableFunction;
-import consulo.util.lang.function.PairProcessor;
-import consulo.util.collection.util.WalkingState;
+import consulo.language.editor.PsiEquivalenceUtil;
+import consulo.language.impl.ast.AstBufferUtil;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiNamedElement;
+import consulo.project.ui.view.tree.AbstractTreeNode;
+import consulo.ui.ex.awt.Messages;
+import consulo.ui.ex.tree.AbstractTreeStructure;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.collection.FactoryMap;
 import consulo.util.collection.HashingStrategy;
 import consulo.util.collection.Sets;
+import consulo.util.collection.util.WalkingState;
+import consulo.util.lang.Comparing;
+import consulo.util.lang.function.PairProcessor;
+import consulo.util.lang.ref.Ref;
 
 import javax.annotation.Nonnull;
 import java.util.*;

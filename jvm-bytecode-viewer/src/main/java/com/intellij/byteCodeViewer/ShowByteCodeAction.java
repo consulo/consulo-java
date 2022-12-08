@@ -32,8 +32,8 @@ import consulo.ide.impl.idea.ui.popup.NotLookupOrSearchCondition;
 import consulo.ide.impl.idea.ui.popup.PopupPositionManager;
 import consulo.language.editor.CommonDataKeys;
 import consulo.language.editor.completion.lookup.LookupManager;
+import consulo.language.editor.inject.InjectedEditorManager;
 import consulo.language.editor.util.PsiUtilBase;
-import consulo.language.inject.impl.internal.InjectedLanguageUtil;
 import consulo.language.psi.*;
 import consulo.module.content.ProjectRootManager;
 import consulo.project.Project;
@@ -161,7 +161,7 @@ public class ShowByteCodeAction extends AnAction {
       psiElement = dataContext.getData(CommonDataKeys.PSI_ELEMENT);
     } else {
       final PsiFile file = PsiUtilBase.getPsiFileInEditor(editor, project);
-      final Editor injectedEditor = InjectedLanguageUtil.getEditorForInjectedLanguageNoCommit(editor, file);
+      final Editor injectedEditor = InjectedEditorManager.getInstance(project).getEditorForInjectedLanguageNoCommit(editor, file);
       if (injectedEditor != null) {
         PsiFile psiFile = PsiUtilBase.getPsiFileInEditor(injectedEditor, project);
         psiElement = psiFile != null ? psiFile.findElementAt(injectedEditor.getCaretModel().getOffset()) : null;

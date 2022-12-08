@@ -24,10 +24,8 @@ import com.intellij.java.language.psi.search.PsiShortNamesCache;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.application.ApplicationManager;
-import consulo.application.impl.internal.LaterInvocator;
 import consulo.codeEditor.Editor;
 import consulo.document.util.TextRange;
-import consulo.ide.impl.idea.codeInsight.daemon.impl.DaemonListeners;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.AutoImportHelper;
@@ -46,7 +44,6 @@ import consulo.language.psi.PsiManager;
 import consulo.language.psi.PsiReference;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.project.Project;
-import consulo.ui.ex.awt.internal.ModalityPerProjectEAPDescriptor;
 import consulo.undoRedo.CommandProcessor;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.StringUtil;
@@ -345,10 +342,9 @@ public abstract class ImportClassFixBase<T extends PsiElement, R extends PsiRefe
 
     boolean canImportHere = true;
 
-    boolean isInModlessContext = ModalityPerProjectEAPDescriptor.is() ? !LaterInvocator.isInModalContextForProject(editor.getProject()) : !LaterInvocator.isInModalContext();
+    boolean mayImportSilent = AutoImportHelper.getInstance(project).mayAutoImportNow(psiFile, true);
 
-    if (classes.length == 1 && (canImportHere = canImportHere(allowCaretNearRef, editor, psiFile, classes[0].getName())) && isAddUnambiguousImportsOnTheFlyEnabled(psiFile) && (ApplicationManager
-        .getApplication().isUnitTestMode() || DaemonListeners.canChangeFileSilently(psiFile)) && isInModlessContext && !autoImportWillInsertUnexpectedCharacters(classes[0])) {
+    if (classes.length == 1 && (canImportHere = canImportHere(allowCaretNearRef, editor, psiFile, classes[0].getName())) && isAddUnambiguousImportsOnTheFlyEnabled(psiFile) && mayImportSilent && !autoImportWillInsertUnexpectedCharacters(classes[0])) {
       CommandProcessor.getInstance().runUndoTransparentAction(() -> action.execute());
       return Result.CLASS_AUTO_IMPORTED;
     }

@@ -24,7 +24,7 @@ import consulo.usage.TextChunk;
 import consulo.usage.Usage;
 import consulo.usage.UsageInfo2UsageAdapter;
 import consulo.usage.UsageViewBundle;
-import consulo.usage.internal.ChunkExtractor;
+import consulo.usage.util.ChunkExtractor;
 
 import javax.annotation.Nonnull;
 import javax.swing.*;
@@ -100,7 +100,7 @@ public class SliceLeafValueRootNode extends SliceNode implements MyColoredTreeCe
     PsiFile file = element.getContainingFile();
     List<TextChunk> result = new ArrayList<TextChunk>();
     ChunkExtractor.getExtractor(element.getContainingFile()).createTextChunks(usage, file.getText(), element.getTextRange().getStartOffset(),
-        element.getTextRange().getEndOffset(), false, result);
+                                                                              element.getTextRange().getEndOffset(), false, result);
 
     for (TextChunk chunk : result) {
       renderer.append(chunk.getText(), chunk.getSimpleAttributesIgnoreBackground());

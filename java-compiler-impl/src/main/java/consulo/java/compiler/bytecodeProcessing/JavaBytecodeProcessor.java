@@ -17,8 +17,8 @@
 package consulo.java.compiler.bytecodeProcessing;
 
 import com.intellij.compiler.instrumentation.InstrumentationClassFinder;
-import com.intellij.java.compiler.cache.Cache;
-import com.intellij.java.compiler.cache.JavaDependencyCache;
+import com.intellij.java.compiler.impl.cache.Cache;
+import com.intellij.java.compiler.impl.cache.JavaDependencyCache;
 import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ExtensionAPI;
 import consulo.application.util.function.ThrowableComputable;

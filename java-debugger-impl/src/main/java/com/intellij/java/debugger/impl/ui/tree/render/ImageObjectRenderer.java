@@ -24,8 +24,9 @@ import com.intellij.java.debugger.impl.engine.FullValueEvaluatorProvider;
 import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
 import com.intellij.java.debugger.impl.settings.NodeRendererSettings;
 import com.intellij.java.debugger.impl.ui.impl.watch.ValueDescriptorImpl;
+import consulo.application.Application;
 import consulo.execution.debug.frame.XFullValueEvaluator;
-import consulo.images.desktop.awt.impl.editor.ImageEditorManagerImpl;
+import consulo.images.ui.EmbeddedImageViewFactory;
 import consulo.internal.com.sun.jdi.*;
 import consulo.java.rt.JavaRtClassNames;
 import consulo.logging.Logger;
@@ -75,16 +76,7 @@ class ImageObjectRenderer extends ToStringBasedRenderer implements FullValueEval
 			return new JLabel("No data", SwingConstants.CENTER);
 		}
 
-		Icon icon = TargetAWT.to(uiImage);
-
-		final int w = icon.getIconWidth();
-		final int h = icon.getIconHeight();
-		final BufferedImage image = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration().createCompatibleImage(w, h, Transparency.TRANSLUCENT);
-		final Graphics2D g = image.createGraphics();
-		icon.paintIcon(null, g, 0, 0);
-		g.dispose();
-
-		return ImageEditorManagerImpl.createImageEditorUI(image);
+		return (JComponent) TargetAWT.to(Application.get().getInstance(EmbeddedImageViewFactory.class).createViewer(uiImage));
 	}
 
 	@Nullable

@@ -24,6 +24,7 @@ import com.intellij.java.debugger.impl.DebuggerUtilsEx;
 import com.intellij.java.debugger.impl.DebuggerUtilsImpl;
 import com.intellij.java.debugger.impl.jdi.StackFrameProxyImpl;
 import com.intellij.java.debugger.requests.ClassPrepareRequestor;
+import consulo.application.ReadAction;
 import consulo.execution.debug.frame.XStackFrame;
 import consulo.execution.ui.console.LineNumbersMapping;
 import consulo.virtualFileSystem.fileType.FileType;
@@ -119,7 +120,7 @@ public class CompoundPositionManager extends PositionManagerEx implements MultiR
 			return null;
 		}
 
-		return DebuggerUtilsImpl.runInReadActionWithWriteActionPriorityWithRetries(() -> {
+		return ReadAction.nonBlocking(() -> {
 			SourcePosition res = null;
 			try
 			{
@@ -144,7 +145,7 @@ public class CompoundPositionManager extends PositionManagerEx implements MultiR
 				}
 				return res1;
 			}, null, null, false);
-		});
+		}).executeSynchronously();
 	}
 
 	private static boolean checkCacheEntry(@Nullable SourcePosition position, @Nonnull Location location)

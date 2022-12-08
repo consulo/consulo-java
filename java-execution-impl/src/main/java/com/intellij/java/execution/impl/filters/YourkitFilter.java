@@ -34,7 +34,7 @@ import consulo.logging.Logger;
 import consulo.navigation.Navigatable;
 import consulo.project.Project;
 import consulo.ui.ex.awt.JBList;
-import consulo.ui.ex.awt.internal.AWTPopupChooserBuilder;
+import consulo.ui.ex.awt.popup.AWTPopupChooserBuilder;
 import consulo.ui.ex.awt.popup.AWTPopupFactory;
 import consulo.ui.ex.popup.JBPopup;
 import consulo.ui.ex.popup.JBPopupFactory;

@@ -18,7 +18,6 @@ package com.intellij.java.language.codeInsight;
 import com.intellij.java.language.psi.PsiAnnotation;
 import com.intellij.java.language.psi.PsiModifierListOwner;
 import com.intellij.java.language.psi.PsiNameValuePair;
-import consulo.component.messagebus.Topic;
 import consulo.ide.ServiceManager;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
@@ -26,7 +25,6 @@ import consulo.project.Project;
 import consulo.util.dataholder.NotNullLazyKey;
 
 import javax.annotation.Nonnull;
-
 import javax.annotation.Nullable;
 import java.util.List;
 
@@ -38,7 +36,7 @@ public abstract class ExternalAnnotationsManager
 {
 	public static final String ANNOTATIONS_XML = "annotations.xml";
 
-	public static final Topic<ExternalAnnotationsListener> TOPIC = Topic.create("external annotations", ExternalAnnotationsListener.class);
+	public static final Class<ExternalAnnotationsListener> TOPIC = ExternalAnnotationsListener.class;
 
 	/**
 	 * Describes where to place the new annotation

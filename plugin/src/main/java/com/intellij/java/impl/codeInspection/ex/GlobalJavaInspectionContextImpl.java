@@ -47,7 +47,7 @@ import consulo.content.library.Library;
 import consulo.content.scope.SearchScope;
 import consulo.ide.impl.idea.codeInspection.ex.GlobalInspectionContextImpl;
 import consulo.ide.impl.idea.codeInspection.ui.InspectionToolPresentation;
-import consulo.language.editor.impl.internal.inspection.scheme.GlobalInspectionToolWrapper;
+import consulo.language.editor.impl.inspection.scheme.GlobalInspectionToolWrapper;
 import consulo.language.editor.inspection.GlobalInspectionContext;
 import consulo.language.editor.inspection.InspectionsBundle;
 import consulo.language.editor.inspection.reference.RefElement;

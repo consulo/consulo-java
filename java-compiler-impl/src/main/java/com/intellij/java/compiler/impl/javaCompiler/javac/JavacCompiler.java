@@ -16,7 +16,7 @@
 package com.intellij.java.compiler.impl.javaCompiler.javac;
 
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.JavaModuleGraphUtil;
-import com.intellij.java.compiler.OutputParser;
+import com.intellij.java.compiler.impl.OutputParser;
 import com.intellij.java.compiler.impl.javaCompiler.BackendCompiler;
 import com.intellij.java.compiler.impl.javaCompiler.JavaCompilerConfiguration;
 import com.intellij.java.compiler.impl.javaCompiler.annotationProcessing.AnnotationProcessingConfiguration;

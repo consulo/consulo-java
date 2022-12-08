@@ -22,7 +22,6 @@ import consulo.application.util.SystemInfo;
 import consulo.component.ProcessCanceledException;
 import consulo.ide.impl.idea.openapi.vfs.VfsUtilCore;
 import consulo.language.file.FileTypeManager;
-import consulo.language.impl.internal.psi.LoadTextUtil;
 import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.fileType.FileType;
@@ -91,7 +90,7 @@ public class JavaVfsSourceRootDetectionUtil {
   private static VirtualFile suggestRootForJavaFile(VirtualFile javaFile) {
     if (javaFile.isDirectory()) return null;
 
-    CharSequence chars = LoadTextUtil.loadText(javaFile);
+    CharSequence chars = javaFile.loadText();
 
     String packageName = JavaSourceRootDetectionUtil.getPackageName(chars);
     if (packageName != null){

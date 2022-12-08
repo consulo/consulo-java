@@ -31,7 +31,6 @@ import consulo.ide.impl.idea.openapi.fileEditor.ex.IdeDocumentHistory;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.completion.lookup.LookupElement;
-import consulo.language.editor.impl.internal.template.TemplateBuilderImpl;
 import consulo.language.editor.intention.HighPriorityAction;
 import consulo.language.editor.template.*;
 import consulo.language.editor.template.event.TemplateEditingAdapter;

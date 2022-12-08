@@ -39,7 +39,9 @@ import consulo.language.editor.completion.lookup.LookupElement;
 import consulo.language.editor.completion.lookup.LookupElementBuilder;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.LocalQuickFixProvider;
-import consulo.language.editor.internal.QuickFixActionRegistrarImpl;
+import consulo.language.editor.intention.QuickFixActionRegistrar;
+import consulo.language.editor.rawHighlight.HighlightInfo;
+import consulo.language.editor.rawHighlight.HighlightInfoType;
 import consulo.language.icon.IconDescriptorUpdaters;
 import consulo.language.psi.*;
 import consulo.language.psi.path.CustomizableReferenceProvider;
@@ -485,7 +487,8 @@ public class JavaClassReference extends GenericReference implements PsiJavaRefer
 
   @Nullable
   private List<? extends LocalQuickFix> registerFixes() {
-    final List<LocalQuickFix> list = QuickFixFactory.getInstance().registerOrderEntryFixes(new QuickFixActionRegistrarImpl(null), this);
+    HighlightInfo stub = HighlightInfo.newHighlightInfo(HighlightInfoType.INFORMATION).createUnconditionally();
+    final List<LocalQuickFix> list = QuickFixFactory.getInstance().registerOrderEntryFixes(QuickFixActionRegistrar.create(stub), this);
 
     final String[] extendClasses = getExtendClassNames();
     final String extendClass = extendClasses != null && extendClasses.length > 0 ? extendClasses[0] : null;

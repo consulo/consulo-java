@@ -9,10 +9,10 @@ module consulo.java.language.impl {
 	requires consulo.language.impl;
 
 	requires one.util.streamex;
-	requires asm.tree;
-	requires asm.commons;
-	requires asm.util;
-	requires asm;
+	requires transitive asm.tree;
+	requires transitive asm.commons;
+	requires transitive asm.util;
+	requires transitive asm;
 
 	// TODO remove in future
 	requires java.desktop;

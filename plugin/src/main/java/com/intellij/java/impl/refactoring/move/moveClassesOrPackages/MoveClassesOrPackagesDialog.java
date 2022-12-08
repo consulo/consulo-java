@@ -24,9 +24,9 @@ import com.intellij.java.impl.refactoring.ui.ClassNameReferenceEditor;
 import com.intellij.java.impl.refactoring.ui.PackageNameReferenceEditorCombo;
 import com.intellij.java.impl.ui.ReferenceEditorComboWithBrowseButton;
 import com.intellij.java.language.psi.*;
+import consulo.application.Application;
 import consulo.application.ApplicationManager;
 import consulo.application.HelpManager;
-import consulo.application.impl.internal.IdeaModalityState;
 import consulo.configurable.ConfigurationException;
 import consulo.document.Document;
 import consulo.document.event.DocumentAdapter;
@@ -120,7 +120,7 @@ public class MoveClassesOrPackagesDialog extends RefactoringDialog {
         public void run() {
           myInnerClassChooser.requestFocus();
         }
-      }, IdeaModalityState.stateForComponent(myMainPanel));
+      }, Application.get().getModalityStateForComponent(myMainPanel));
     } else if (initialTargetElement instanceof PsiJavaPackage) {
       myClassPackageChooser.setText(((PsiJavaPackage) initialTargetElement).getQualifiedName());
     }

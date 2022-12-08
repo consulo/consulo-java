@@ -15,8 +15,8 @@
  */
 package com.intellij.java.compiler.impl.javaCompiler.javac;
 
-import com.intellij.java.compiler.OutputParser;
-import com.intellij.java.compiler.ParserAction;
+import com.intellij.java.compiler.impl.OutputParser;
+import com.intellij.java.compiler.impl.ParserAction;
 import javax.annotation.Nullable;
 
 import java.io.File;

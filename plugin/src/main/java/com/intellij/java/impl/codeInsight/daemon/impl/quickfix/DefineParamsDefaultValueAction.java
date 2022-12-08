@@ -31,7 +31,6 @@ import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.generation.ClassMember;
 import consulo.language.editor.hint.HintManager;
-import consulo.language.editor.impl.internal.template.TemplateBuilderImpl;
 import consulo.language.editor.intention.LowPriorityAction;
 import consulo.language.editor.intention.PsiElementBaseIntentionAction;
 import consulo.language.editor.template.Template;

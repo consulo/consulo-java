@@ -15,28 +15,27 @@
  */
 package com.intellij.java.debugger.impl.engine;
 
-import java.util.concurrent.TimeUnit;
-
-import javax.annotation.Nonnull;
-
-import consulo.logging.Logger;
-import org.jetbrains.annotations.TestOnly;
-import com.intellij.java.debugger.impl.engine.events.DebuggerCommandImpl;
-import com.intellij.java.debugger.impl.engine.events.SuspendContextCommandImpl;
 import com.intellij.java.debugger.engine.managerThread.DebuggerCommand;
 import com.intellij.java.debugger.engine.managerThread.DebuggerManagerThread;
 import com.intellij.java.debugger.engine.managerThread.SuspendContextCommand;
 import com.intellij.java.debugger.impl.InvokeAndWaitThread;
-import consulo.disposer.Disposable;
+import com.intellij.java.debugger.impl.engine.events.DebuggerCommandImpl;
+import com.intellij.java.debugger.impl.engine.events.SuspendContextCommandImpl;
 import consulo.application.ApplicationManager;
+import consulo.application.progress.ProgressIndicatorListener;
 import consulo.application.progress.ProgressManager;
-import consulo.ide.impl.idea.openapi.progress.util.ProgressIndicatorListenerAdapter;
+import consulo.application.util.concurrent.AppExecutorUtil;
+import consulo.disposer.Disposable;
+import consulo.disposer.Disposer;
 import consulo.ide.impl.idea.openapi.progress.util.ProgressWindow;
 import consulo.ide.impl.idea.openapi.progress.util.ProgressWindowWithNotification;
-import consulo.project.Project;
-import consulo.application.util.concurrent.AppExecutorUtil;
-import consulo.disposer.Disposer;
 import consulo.internal.com.sun.jdi.VMDisconnectedException;
+import consulo.logging.Logger;
+import consulo.project.Project;
+import org.jetbrains.annotations.TestOnly;
+
+import javax.annotation.Nonnull;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author lex
@@ -200,14 +199,14 @@ public class DebuggerManagerThreadImpl extends InvokeAndWaitThread<DebuggerComma
 
 	public void startProgress(DebuggerCommandImpl command, ProgressWindow progressWindow)
 	{
-		new ProgressIndicatorListenerAdapter()
+		progressWindow.addListener(new ProgressIndicatorListener()
 		{
 			@Override
-			public void cancelled()
+			public void canceled()
 			{
 				command.release();
 			}
-		}.installToProgress(progressWindow);
+		});
 
 		ApplicationManager.getApplication().executeOnPooledThread(() -> ProgressManager.getInstance().runProcess(() -> invokeAndWait(command), progressWindow));
 	}

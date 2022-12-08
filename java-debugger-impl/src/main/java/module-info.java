@@ -9,6 +9,7 @@ module consulo.java.debugger.impl {
 	requires consulo.java.analysis.impl;
 	requires consulo.java.compiler.api;
 	requires consulo.java.rt.common;
+	requires com.intellij.images_image.api;
 
 	// TODO remove in future
 	requires java.desktop;

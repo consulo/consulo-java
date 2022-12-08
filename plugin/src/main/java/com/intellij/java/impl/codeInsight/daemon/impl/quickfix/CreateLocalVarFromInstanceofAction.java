@@ -34,7 +34,6 @@ import consulo.language.editor.FileModificationService;
 import consulo.language.editor.PsiEquivalenceUtil;
 import consulo.language.editor.completion.lookup.LookupElement;
 import consulo.language.editor.completion.lookup.LookupElementBuilder;
-import consulo.language.editor.impl.internal.template.TemplateBuilderImpl;
 import consulo.language.editor.intention.BaseIntentionAction;
 import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
 import consulo.language.editor.template.*;

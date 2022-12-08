@@ -16,7 +16,7 @@
 
 package com.intellij.java.compiler.impl.javaCompiler;
 
-import com.intellij.java.compiler.CompilerException;
+import com.intellij.java.compiler.impl.CompilerException;
 import com.intellij.java.language.impl.JavaClassFileType;
 import com.intellij.java.language.impl.JavaFileType;
 import consulo.compiler.*;

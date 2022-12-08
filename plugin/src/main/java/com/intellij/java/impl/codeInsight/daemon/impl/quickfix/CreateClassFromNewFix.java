@@ -26,7 +26,6 @@ import consulo.ide.impl.idea.codeInsight.CodeInsightUtilBase;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.WriteCommandAction;
-import consulo.language.editor.impl.internal.template.TemplateBuilderImpl;
 import consulo.language.editor.template.Template;
 import consulo.language.editor.template.TemplateBuilder;
 import consulo.language.editor.template.TemplateBuilderFactory;

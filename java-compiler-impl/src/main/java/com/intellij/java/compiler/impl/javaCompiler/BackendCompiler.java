@@ -15,7 +15,7 @@
  */
 package com.intellij.java.compiler.impl.javaCompiler;
 
-import com.intellij.java.compiler.OutputParser;
+import com.intellij.java.compiler.impl.OutputParser;
 import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ExtensionAPI;
 import consulo.compiler.CompileContext;

@@ -4,7 +4,6 @@ package com.intellij.java.impl.openapi.vfs.impl.jrt;
 import com.intellij.java.language.vfs.jrt.JrtFileSystem;
 import consulo.application.Application;
 import consulo.application.ApplicationManager;
-import consulo.application.impl.internal.IdeaModalityState;
 import consulo.ide.impl.idea.openapi.util.io.FileUtil;
 import consulo.ide.impl.idea.openapi.vfs.impl.ArchiveHandler;
 import consulo.ide.impl.idea.openapi.vfs.newvfs.ArchiveFileSystem;
@@ -74,7 +73,7 @@ public class JrtFileSystemImpl extends ArchiveFileSystem implements JrtFileSyste
       JrtHandler handler = new JrtHandler(key);
       ApplicationManager.getApplication().invokeLater(
           () -> LocalFileSystem.getInstance().refreshAndFindFileByPath(key + "/release"),
-          IdeaModalityState.defaultModalityState());
+          Application.get().getDefaultModalityState());
       return handler;
     });
   }

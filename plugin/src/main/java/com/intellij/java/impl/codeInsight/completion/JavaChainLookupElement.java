@@ -27,7 +27,6 @@ import consulo.language.editor.completion.lookup.InsertionContext;
 import consulo.language.editor.completion.lookup.LookupElement;
 import consulo.language.editor.completion.lookup.LookupElementDecorator;
 import consulo.language.editor.completion.lookup.LookupElementPresentation;
-import consulo.language.editor.impl.internal.completion.CompletionUtil;
 import consulo.language.psi.PsiDocumentManager;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;

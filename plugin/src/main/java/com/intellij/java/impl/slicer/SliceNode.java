@@ -16,7 +16,7 @@
 package com.intellij.java.impl.slicer;
 
 import consulo.application.ApplicationManager;
-import consulo.application.impl.internal.progress.ProgressIndicatorBase;
+import consulo.application.progress.EmptyProgressIndicator;
 import consulo.application.progress.ProgressIndicator;
 import consulo.application.progress.ProgressManager;
 import consulo.application.util.function.Computable;
@@ -64,7 +64,7 @@ public class SliceNode extends AbstractTreeNode<SliceUsage> implements Duplicate
   @Nonnull
   public Collection<? extends AbstractTreeNode<?>> getChildren() {
     ProgressIndicator current = ProgressManager.getInstance().getProgressIndicator();
-    ProgressIndicator indicator = current == null ? new ProgressIndicatorBase() : current;
+    ProgressIndicator indicator = current == null ? new EmptyProgressIndicator() : current;
     if (current == null) {
       indicator.start();
     }

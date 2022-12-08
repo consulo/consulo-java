@@ -15,40 +15,32 @@
  */
 package com.intellij.java.impl.application.options.editor;
 
-import java.awt.Component;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.regex.Pattern;
+import com.intellij.java.impl.codeInsight.JavaProjectCodeInsightSettings;
+import consulo.application.ApplicationBundle;
+import consulo.application.ui.wm.IdeFocusManager;
+import consulo.execution.ui.awt.ListTableWithButtons;
+import consulo.ide.impl.idea.openapi.ui.ComboBoxTableRenderer;
+import consulo.language.editor.CodeInsightSettings;
+import consulo.project.Project;
+import consulo.ui.ex.JBColor;
+import consulo.ui.ex.awt.*;
+import consulo.ui.ex.awt.event.DocumentAdapter;
+import consulo.ui.ex.awt.table.ListTableModel;
+import consulo.util.collection.ArrayUtil;
+import consulo.util.collection.ContainerUtil;
 
 import javax.annotation.Nonnull;
-import javax.swing.DefaultCellEditor;
-import javax.swing.JTable;
-import javax.swing.JTextField;
+import javax.annotation.Nullable;
+import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
-
-import javax.annotation.Nullable;
-
-import consulo.application.ui.wm.IdeFocusManager;
-import consulo.language.editor.CodeInsightSettings;
-import com.intellij.java.impl.codeInsight.JavaProjectCodeInsightSettings;
-import consulo.execution.ui.awt.ListTableWithButtons;
-import consulo.application.ApplicationBundle;
-import consulo.project.Project;
-import consulo.ui.ex.awt.ComboBox;
-import consulo.ide.impl.idea.openapi.ui.ComboBoxTableRenderer;
-import consulo.ui.ex.awt.event.DocumentAdapter;
-import consulo.ui.ex.awt.internal.GuiUtils;
-import consulo.ui.ex.JBColor;
-import consulo.ui.ex.awt.ScrollingUtil;
-import consulo.util.collection.ArrayUtil;
-import consulo.util.collection.ContainerUtil;
-import consulo.ui.ex.awt.ColumnInfo;
-import consulo.ui.ex.awt.table.ListTableModel;
-import consulo.ui.ex.awt.UIUtil;
+import java.awt.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.regex.Pattern;
 
 class ExcludeTable extends ListTableWithButtons<ExcludeTable.Item>
 {
@@ -66,7 +58,7 @@ class ExcludeTable extends ListTableWithButtons<ExcludeTable.Item>
 		@Override
 		public TableCellEditor getEditor(Item pair)
 		{
-			final JTextField field = GuiUtils.createUndoableTextField();
+			final JTextField field = new JBTextField();
 			field.getDocument().addDocumentListener(new DocumentAdapter()
 			{
 				@Override

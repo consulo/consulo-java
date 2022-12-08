@@ -37,7 +37,6 @@ import consulo.language.editor.CodeInsightSettings;
 import consulo.language.editor.CodeInsightUtilCore;
 import consulo.language.editor.completion.*;
 import consulo.language.editor.completion.lookup.*;
-import consulo.language.editor.impl.internal.completion.CompletionUtil;
 import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
 import consulo.language.impl.psi.FakePsiElement;
 import consulo.language.psi.*;

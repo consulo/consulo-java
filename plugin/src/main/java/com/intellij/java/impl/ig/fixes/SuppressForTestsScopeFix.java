@@ -21,8 +21,8 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.TestUtils;
 import consulo.content.scope.NamedScope;
 import consulo.content.scope.NamedScopesHolder;
-import consulo.language.editor.impl.internal.inspection.scheme.InspectionProfileImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.editor.inspection.scheme.InspectionProfile;
 import consulo.language.editor.inspection.scheme.InspectionProjectProfileManager;
 import consulo.language.editor.inspection.scheme.InspectionToolWrapper;
 import consulo.language.editor.rawHighlight.HighlightDisplayKey;
@@ -84,7 +84,7 @@ public class SuppressForTestsScopeFix extends InspectionGadgetsFix {
   }
 
   private void addRemoveTestsScope(Project project, boolean add) {
-    final InspectionProfileImpl profile = (InspectionProfileImpl) InspectionProjectProfileManager.getInstance(project).getInspectionProfile();
+    final InspectionProfile profile = InspectionProjectProfileManager.getInstance(project).getInspectionProfile();
     final String shortName = myInspection.getShortName();
     final InspectionToolWrapper tool = profile.getInspectionTool(shortName, project);
     if (tool == null) {

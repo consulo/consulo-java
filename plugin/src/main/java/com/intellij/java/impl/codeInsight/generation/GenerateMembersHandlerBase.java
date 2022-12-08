@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.codeInsight.generation;
 
+import com.intellij.java.impl.generate.exception.GenerateCodeException;
 import com.intellij.java.language.impl.codeInsight.generation.GenerationInfo;
 import com.intellij.java.language.impl.codeInsight.generation.PsiElementClassMember;
 import com.intellij.java.language.psi.PsiClass;
@@ -36,7 +37,7 @@ import consulo.language.editor.WriteCommandAction;
 import consulo.language.editor.action.CodeInsightActionHandler;
 import consulo.language.editor.generation.ClassMember;
 import consulo.language.editor.hint.HintManager;
-import consulo.language.editor.impl.internal.inspection.GlobalInspectionContextBase;
+import consulo.language.editor.impl.inspection.GlobalInspectionContextBase;
 import consulo.language.editor.refactoring.ContextAwareActionHandler;
 import consulo.language.editor.template.Template;
 import consulo.language.editor.template.TemplateManager;
@@ -49,7 +50,6 @@ import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.StringUtil;
-import com.intellij.java.impl.generate.exception.GenerateCodeException;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

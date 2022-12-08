@@ -53,6 +53,7 @@ import consulo.ide.impl.idea.util.ArrayUtilRt;
 import consulo.language.codeStyle.CodeStyleSettingsManager;
 import consulo.language.editor.completion.lookup.LookupManager;
 import consulo.language.editor.highlight.HighlightManager;
+import consulo.language.editor.inject.EditorWindow;
 import consulo.language.editor.refactoring.IntroduceTargetChooser;
 import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.editor.refactoring.RefactoringSupportProvider;
@@ -63,7 +64,6 @@ import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
 import consulo.language.editor.refactoring.unwrap.ScopeHighlighter;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import consulo.language.inject.InjectedLanguageManager;
-import consulo.language.inject.impl.internal.InjectedLanguageUtil;
 import consulo.language.psi.*;
 import consulo.language.psi.resolve.ResolveState;
 import consulo.language.psi.util.PsiTreeUtil;
@@ -72,7 +72,6 @@ import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.project.ui.wm.WindowManager;
 import consulo.undoRedo.CommandProcessor;
-import consulo.util.collection.ContainerUtil;
 import consulo.util.collection.MultiMap;
 import consulo.util.dataholder.Key;
 import consulo.util.lang.StringUtil;
@@ -660,7 +659,7 @@ public abstract class IntroduceVariableBase extends IntroduceHandlerBase {
 
         final Editor topLevelEditor;
         if (!InjectedLanguageManager.getInstance(project).isInjectedFragment(anchorStatement.getContainingFile())) {
-          topLevelEditor = InjectedLanguageUtil.getTopLevelEditor(editor);
+          topLevelEditor = EditorWindow.getTopLevelEditor(editor);
         } else {
           topLevelEditor = editor;
         }

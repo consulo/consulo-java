@@ -34,9 +34,6 @@ import com.intellij.java.language.impl.psi.impl.PsiJavaParserFacadeImpl;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.util.TreeClassChooser;
 import com.intellij.java.language.util.TreeClassChooserFactory;
-import consulo.application.impl.internal.progress.ProgressIndicatorUtils;
-import consulo.application.internal.ApplicationManagerEx;
-import consulo.application.util.function.Computable;
 import consulo.application.util.function.ThrowableComputable;
 import consulo.component.ProcessCanceledException;
 import consulo.dataContext.DataContext;
@@ -57,7 +54,6 @@ import consulo.util.dataholder.Key;
 import consulo.util.io.NetUtil;
 import consulo.util.lang.Pair;
 import consulo.util.lang.StringUtil;
-import consulo.util.lang.ref.Ref;
 import consulo.util.xml.serializer.JDOMExternalizerUtil;
 import consulo.util.xml.serializer.SkipDefaultValuesSerializationFilters;
 import consulo.util.xml.serializer.XmlSerializer;
@@ -301,22 +297,5 @@ public class DebuggerUtilsImpl extends DebuggerUtilsEx
 			}
 		}
 		return defaultValue;
-	}
-
-	public static <T> T runInReadActionWithWriteActionPriorityWithRetries(@Nonnull Computable<T> action)
-	{
-		if(ApplicationManagerEx.getApplicationEx().holdsReadLock())
-		{
-			return action.compute();
-		}
-		Ref<T> res = Ref.create();
-		while(true)
-		{
-			if(ProgressIndicatorUtils.runInReadActionWithWriteActionPriority(() -> res.set(action.compute())))
-			{
-				return res.get();
-			}
-			ProgressIndicatorUtils.yieldToPendingWriteActions();
-		}
 	}
 }

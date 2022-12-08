@@ -15,11 +15,11 @@
  */
 package com.intellij.java.compiler.impl.javaCompiler;
 
-import com.intellij.java.compiler.CompilerException;
-import com.intellij.java.compiler.OutputParser;
-import com.intellij.java.compiler.cache.Cache;
-import com.intellij.java.compiler.cache.JavaDependencyCache;
-import com.intellij.java.compiler.cache.JavaMakeUtil;
+import com.intellij.java.compiler.impl.CompilerException;
+import com.intellij.java.compiler.impl.OutputParser;
+import com.intellij.java.compiler.impl.cache.Cache;
+import com.intellij.java.compiler.impl.cache.JavaDependencyCache;
+import com.intellij.java.compiler.impl.cache.JavaMakeUtil;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.util.cls.ClsFormatException;

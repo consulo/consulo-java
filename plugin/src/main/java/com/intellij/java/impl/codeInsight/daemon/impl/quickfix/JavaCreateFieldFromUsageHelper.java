@@ -22,7 +22,6 @@ import com.intellij.java.language.psi.*;
 import consulo.codeEditor.Editor;
 import consulo.ide.impl.idea.codeInsight.CodeInsightUtilBase;
 import consulo.language.Language;
-import consulo.language.editor.impl.internal.template.TemplateBuilderImpl;
 import consulo.language.editor.template.EmptyExpression;
 import consulo.language.editor.template.Template;
 import consulo.language.editor.template.TemplateBuilder;

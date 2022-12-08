@@ -15,23 +15,25 @@
  */
 package com.intellij.java.impl.codeInspection.i18n;
 
-import javax.annotation.Nonnull;
-
-import consulo.language.editor.FileModificationService;
-import consulo.language.editor.DaemonCodeAnalyzer;
-import consulo.language.editor.inspection.InspectionsBundle;
-import consulo.language.editor.intention.SuppressIntentionAction;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.JavaTokenType;
 import consulo.codeEditor.Editor;
-import consulo.project.Project;
-import consulo.util.lang.StringUtil;
-import consulo.language.psi.*;
-import consulo.language.inject.impl.internal.InjectedLanguageUtil;
 import consulo.language.ast.IElementType;
+import consulo.language.editor.DaemonCodeAnalyzer;
+import consulo.language.editor.FileModificationService;
+import consulo.language.editor.inject.InjectedEditorManager;
+import consulo.language.editor.inspection.InspectionsBundle;
+import consulo.language.editor.intention.SuppressIntentionAction;
+import consulo.language.psi.PsiComment;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+import consulo.util.lang.StringUtil;
+
+import javax.annotation.Nonnull;
 
 /**
  * User: cdr
@@ -48,7 +50,7 @@ class SuppressByCommentOutAction extends SuppressIntentionAction {
     if (!FileModificationService.getInstance().preparePsiElementForWrite(element)) return;
     element = findJavaCodeUpThere(element);
     PsiFile file = element.getContainingFile();
-    editor = InjectedLanguageUtil.openEditorFor(file, project);
+    editor = InjectedEditorManager.getInstance(project).openEditorFor(file);
     int endOffset = element.getTextRange().getEndOffset();
     int line = editor.getDocument().getLineNumber(endOffset);
     int lineEndOffset = editor.getDocument().getLineEndOffset(line);

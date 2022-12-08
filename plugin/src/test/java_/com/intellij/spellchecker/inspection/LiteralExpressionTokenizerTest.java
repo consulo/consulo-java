@@ -23,7 +23,7 @@ import java.util.List;
 import org.junit.Test;
 import consulo.document.util.TextRange;
 import consulo.language.psi.PsiElement;
-import com.intellij.spellchecker.LiteralExpressionTokenizer;
+import consulo.java.impl.spellchecker.LiteralExpressionTokenizer;
 import com.intellij.spellchecker.inspections.Splitter;
 import com.intellij.spellchecker.tokenizer.TokenConsumer;
 

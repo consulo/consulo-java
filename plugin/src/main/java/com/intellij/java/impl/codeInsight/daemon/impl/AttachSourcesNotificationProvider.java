@@ -49,12 +49,12 @@ import consulo.ui.Component;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.event.UIEvent;
 import consulo.ui.ex.awt.Messages;
-import consulo.ui.ex.awt.internal.GuiUtils;
 import consulo.ui.ex.awtUnsafe.TargetAWT;
 import consulo.ui.ex.popup.BaseListPopupStep;
 import consulo.ui.ex.popup.JBPopupFactory;
 import consulo.ui.ex.popup.ListSeparator;
 import consulo.ui.ex.popup.PopupStep;
+import consulo.ui.ex.util.TextWithMnemonic;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.concurrent.AsyncResult;
 import consulo.util.dataholder.Key;
@@ -169,7 +169,8 @@ public class AttachSourcesNotificationProvider implements EditorNotificationProv
 
 				for(final AttachSourcesProvider.AttachSourcesAction action : actions)
 				{
-					builder.withAction(LocalizeValue.localizeTODO(GuiUtils.getTextWithoutMnemonicEscaping(action.getName())), (e) -> {
+					TextWithMnemonic textWithMnemonic = TextWithMnemonic.parse(action.getName());
+					builder.withAction(LocalizeValue.localizeTODO(textWithMnemonic.getText()), (e) -> {
 						List<LibraryOrderEntry> entries = findLibraryEntriesForFile(file);
 						if(!Comparing.equal(libraries, entries))
 						{

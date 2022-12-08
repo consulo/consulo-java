@@ -17,7 +17,6 @@ package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
 import com.intellij.java.impl.openapi.roots.JavaProjectModelModificationService;
 import consulo.codeEditor.Editor;
-import consulo.content.internal.LibraryEx;
 import consulo.content.library.Library;
 import consulo.ide.impl.idea.openapi.roots.libraries.LibraryUtil;
 import consulo.java.analysis.impl.JavaQuickFixBundle;

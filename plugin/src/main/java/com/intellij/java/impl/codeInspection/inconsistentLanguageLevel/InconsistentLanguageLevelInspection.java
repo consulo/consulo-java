@@ -24,6 +24,7 @@ import com.intellij.java.analysis.codeInspection.GroupNames;
 import com.intellij.java.impl.codeInspection.unnecessaryModuleDependency.UnnecessaryModuleDependencyInspection;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.module.EffectiveLanguageLevelUtil;
+import consulo.ide.setting.ShowSettingsUtil;
 import consulo.language.editor.inspection.*;
 import consulo.language.editor.inspection.reference.RefModule;
 import consulo.language.editor.inspection.scheme.InspectionManager;
@@ -38,7 +39,6 @@ import consulo.module.content.layer.orderEntry.ModuleOrderEntry;
 import consulo.module.content.layer.orderEntry.OrderEntry;
 import consulo.project.Project;
 import consulo.project.ProjectBundle;
-import consulo.project.ui.view.internal.ProjectSettingsService;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
 
@@ -138,7 +138,9 @@ public abstract class InconsistentLanguageLevelInspection extends GlobalInspecti
     @Override
     public void applyFix(@Nonnull Project project, @Nonnull CommonProblemDescriptor descriptor) {
       if (!myModule.isDisposed()) {
-        ProjectSettingsService.getInstance(project).showModuleConfigurationDialog(myModule.getName(), ProjectBundle.message("modules.classpath.title"));
+        ShowSettingsUtil.getInstance().showProjectStructureDialog(project, projectStructureSelector -> {
+          projectStructureSelector.select(myModule.getName(), ProjectBundle.message("modules.classpath.title"), true);
+        });
       }
     }
   }

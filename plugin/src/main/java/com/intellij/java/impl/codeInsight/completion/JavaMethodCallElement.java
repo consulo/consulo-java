@@ -30,13 +30,11 @@ import consulo.document.event.DocumentEvent;
 import consulo.document.util.TextRange;
 import consulo.externalService.statistic.FeatureUsageTracker;
 import consulo.ide.impl.idea.codeInsight.completion.CodeCompletionFeatures;
-import consulo.ide.impl.idea.codeInsight.template.impl.TemplateManagerImpl;
 import consulo.language.editor.AutoPopupController;
 import consulo.language.editor.WriteCommandAction;
 import consulo.language.editor.completion.ClassConditionKey;
 import consulo.language.editor.completion.OffsetKey;
 import consulo.language.editor.completion.lookup.*;
-import consulo.language.editor.impl.internal.template.TemplateImpl;
 import consulo.language.editor.template.*;
 import consulo.language.editor.template.event.TemplateEditingAdapter;
 import consulo.language.psi.PsiElement;
@@ -301,7 +299,7 @@ public class JavaMethodCallElement extends LookupItem<PsiMethod> implements Type
       @Override
       public void beforeTemplateFinished(TemplateState state, Template template, boolean brokenOff) {
         if (brokenOff) {
-          removeUntouchedArguments((TemplateImpl) template);
+          removeUntouchedArguments(template);
         }
       }
 

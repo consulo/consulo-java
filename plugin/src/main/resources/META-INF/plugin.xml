@@ -621,7 +621,7 @@
 
 		<extensionPoint name="bytecodeCompilerProcessor" interface="consulo.java.compiler.bytecodeProcessing.JavaBytecodeProcessor"/>
 
-		<extensionPoint name="compiler.makeDependencyProcessor" interface="com.intellij.java.compiler.cache.DependencyProcessor"/>
+		<extensionPoint name="compiler.makeDependencyProcessor" interface="com.intellij.java.compiler.impl.cache.DependencyProcessor"/>
 		<extensionPoint name="runConfigurationExtension" interface="com.intellij.java.execution.impl.RunConfigurationExtension"/>
 		<extensionPoint name="jreProvider" interface="com.intellij.java.execution.impl.ui.JreProvider"/>
 		<extensionPoint name="vetoSPICondition" interface="consulo.util.lang.function.Condition"/>
@@ -748,13 +748,13 @@
 				  order="before java-compiler"/>
 		<compiler implementation="com.intellij.java.compiler.impl.javaCompiler.JavaCompiler" id="java-compiler"/>
 		<compiler implementation="consulo.java.compiler.bytecodeProcessing.JavaBytecodeProcessorCompiler" id="java-bytecode-processor"/>
-		<compiler.dependencyCache implementationClass="com.intellij.java.compiler.cache.JavaDependencyCache"/>
+		<compiler.dependencyCache implementationClass="com.intellij.java.compiler.impl.cache.JavaDependencyCache"/>
 
 		<projectConfigurable id="project.propCompiler.java" bundle="messages.JavaCoreBundle" key="java" parentId="project.propCompiler"
 							 instance="com.intellij.java.compiler.impl.javaCompiler.JavaCompilerConfigurable"/>
 
 		<projectConfigurable bundle="messages.JavaBundle" key="annotation.processor.name" parentId="project.propCompiler.java"
-							 instance="com.intellij.java.compiler.options.AnnotationProcessorsConfigurable"/>
+							 instance="com.intellij.java.compiler.impl.options.AnnotationProcessorsConfigurable"/>
 
 		<projectConfigurable bundle="messages.JavaBundle" key="javac.name" parentId="project.propCompiler.java"
 							 instance="consulo.java.compiler.impl.javaCompiler.ui.JavacConfigurable"/>

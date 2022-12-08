@@ -21,7 +21,7 @@
  */
 package com.intellij.java.compiler.impl.javaCompiler;
 
-import com.intellij.java.compiler.CompilerException;
+import com.intellij.java.compiler.impl.CompilerException;
 import com.intellij.java.compiler.impl.javaCompiler.javac.JavacCompiler;
 import com.intellij.java.language.impl.JavaClassFileType;
 import com.intellij.java.language.impl.JavaFileType;
@@ -30,11 +30,12 @@ import consulo.application.CommonBundle;
 import consulo.compiler.*;
 import consulo.compiler.scope.CompileScope;
 import consulo.compiler.util.ModuleCompilerUtil;
+import consulo.ide.setting.ShowSettingsUtil;
 import consulo.java.compiler.impl.javaCompiler.JavaAdditionalOutputDirectoriesProvider;
 import consulo.logging.Logger;
 import consulo.module.Module;
 import consulo.project.Project;
-import consulo.project.ui.view.internal.ProjectSettingsService;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.Messages;
 import consulo.util.collection.Chunk;
 import consulo.util.lang.ExceptionUtil;
@@ -216,6 +217,7 @@ public class AnnotationProcessingCompiler implements TranslatingCompiler
 		}
 	}
 
+	@RequiredUIAccess
 	private void showCyclesNotSupportedForAnnotationProcessors(Module[] modulesInChunk)
 	{
 		LOGGER.assertTrue(modulesInChunk.length > 0);
@@ -226,9 +228,12 @@ public class AnnotationProcessingCompiler implements TranslatingCompiler
 		showConfigurationDialog(moduleNameToSelect, null);
 	}
 
+	@RequiredUIAccess
 	private void showConfigurationDialog(String moduleNameToSelect, String tabNameToSelect)
 	{
-		ProjectSettingsService.getInstance(myProject).showModuleConfigurationDialog(moduleNameToSelect, tabNameToSelect);
+		ShowSettingsUtil.getInstance().showProjectStructureDialog(myProject, projectStructureSelector -> {
+			projectStructureSelector.select(moduleNameToSelect, tabNameToSelect, true);
+		});
 	}
 
 	private static String getModulesString(Module[] modulesInChunk)

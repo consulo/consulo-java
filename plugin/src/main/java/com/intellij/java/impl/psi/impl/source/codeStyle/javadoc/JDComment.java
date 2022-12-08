@@ -15,17 +15,16 @@
  */
 package com.intellij.java.impl.psi.impl.source.codeStyle.javadoc;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.intellij.java.language.impl.JavaFileType;
+import consulo.language.codeStyle.CodeStyleSettings;
+import consulo.language.codeStyle.CommonCodeStyleSettings;
+import consulo.language.codeStyle.IndentInfo;
+import consulo.util.lang.StringUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
-import consulo.language.codeStyle.internal.IndentInfo;
-import com.intellij.java.language.impl.JavaFileType;
-import consulo.util.lang.StringUtil;
-import consulo.language.codeStyle.CodeStyleSettings;
-import consulo.language.codeStyle.CommonCodeStyleSettings;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Dmitry Skavish

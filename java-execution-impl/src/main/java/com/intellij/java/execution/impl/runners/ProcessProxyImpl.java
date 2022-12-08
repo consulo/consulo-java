@@ -7,8 +7,7 @@ import consulo.container.plugin.PluginManager;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.logging.Logger;
 import consulo.process.ProcessHandler;
-import consulo.process.internal.BaseOSProcessHandler;
-import consulo.process.internal.UnixProcessManager;
+import consulo.process.ProcessHandlerFeature;
 import consulo.util.dataholder.Key;
 import consulo.util.lang.function.ThrowableRunnable;
 
@@ -35,7 +34,7 @@ class ProcessProxyImpl implements ProcessProxy {
 
   private final Object myLock = new Object();
   private AsynchronousSocketChannel myConnection;
-  private int myPid;
+  private ProcessHandlerFeature.POSIX myPosixFeature;
 
   ProcessProxyImpl(String mainClass) throws IOException {
     myGroup = AsynchronousChannelGroup.withFixedThreadPool(1, r -> new Thread(r, "Process Proxy: " + mainClass));
@@ -65,12 +64,10 @@ class ProcessProxyImpl implements ProcessProxy {
     processHandler.putUserData(KEY, this);
     execute(() ->
     {
-      int pid = -1;
-      if (SystemInfo.isUnix && processHandler instanceof BaseOSProcessHandler) {
-        pid = (int) ((BaseOSProcessHandler) processHandler).getProcess().pid();
-      }
+      int pid = (int) processHandler.getId();
+      ProcessHandlerFeature.POSIX posix = processHandler.getFeature(ProcessHandlerFeature.POSIX.class);
       synchronized (myLock) {
-        myPid = pid;
+        myPosixFeature = posix;
       }
     });
   }
@@ -96,13 +93,9 @@ class ProcessProxyImpl implements ProcessProxy {
       return new File(PluginManager.getPluginPath(JavaClassNames.class), "breakgen/breakgen.dll").exists();
     }
 
-    if (SystemInfo.isUnix) {
-      synchronized (myLock) {
-        return myPid > 0;
-      }
+    synchronized (myLock) {
+      return myPosixFeature != null;
     }
-
-    return false;
   }
 
   @Override
@@ -116,12 +109,15 @@ class ProcessProxyImpl implements ProcessProxy {
   public void sendBreak() {
     if (SystemInfo.isWindows) {
       writeLine("BREAK");
-    } else if (SystemInfo.isUnix) {
-      int pid;
+    } else {
+      ProcessHandlerFeature.POSIX posix;
       synchronized (myLock) {
-        pid = myPid;
+        posix = myPosixFeature;
       }
-      UnixProcessManager.sendSignal(pid, 3);  // SIGQUIT
+
+      if (posix != null) {
+        posix.sendSignal(ProcessHandlerFeature.POSIX.SIGQUIT);
+      }
     }
   }
 

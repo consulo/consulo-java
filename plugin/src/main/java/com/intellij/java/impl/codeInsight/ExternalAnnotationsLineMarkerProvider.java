@@ -30,7 +30,6 @@ import consulo.codeEditor.markup.GutterIconRenderer;
 import consulo.dataContext.DataContext;
 import consulo.fileEditor.FileEditorManager;
 import consulo.ide.impl.idea.ide.actions.ApplyIntentionAction;
-import consulo.ide.impl.idea.openapi.actionSystem.impl.SimpleDataContext;
 import consulo.java.impl.codeInsight.JavaCodeInsightSettings;
 import consulo.java.language.impl.JavaIcons;
 import consulo.language.Language;
@@ -39,8 +38,8 @@ import consulo.language.editor.gutter.GutterIconNavigationHandler;
 import consulo.language.editor.gutter.LineMarkerInfo;
 import consulo.language.editor.gutter.LineMarkerProviderDescriptor;
 import consulo.language.editor.intention.IntentionAction;
+import consulo.language.editor.intention.IntentionActionDelegate;
 import consulo.language.editor.intention.IntentionManager;
-import consulo.language.editor.internal.intention.IntentionActionDelegate;
 import consulo.language.psi.*;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
@@ -165,7 +164,7 @@ public class ExternalAnnotationsLineMarkerProvider extends LineMarkerProviderDes
       }
 
       if (group.getChildrenCount() > 0) {
-        final DataContext context = SimpleDataContext.getProjectContext(null);
+        final DataContext context = DataContext.EMPTY_CONTEXT;
         return JBPopupFactory.getInstance().createActionGroupPopup(null, group, context, JBPopupFactory.ActionSelectionAid.SPEEDSEARCH, true);
       }
 

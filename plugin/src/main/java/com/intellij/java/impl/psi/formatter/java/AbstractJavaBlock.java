@@ -33,7 +33,7 @@ import consulo.language.codeStyle.*;
 import consulo.language.impl.ast.CompositeElement;
 import consulo.language.impl.ast.LeafElement;
 import consulo.language.impl.psi.SourceTreeToPsiMap;
-import consulo.language.inject.impl.internal.InjectedLanguageUtil;
+import consulo.language.inject.InjectedLanguageManager;
 import consulo.language.psi.*;
 import consulo.logging.Logger;
 import consulo.util.lang.CharArrayUtil;
@@ -219,7 +219,7 @@ public abstract class AbstractJavaBlock extends AbstractBlock implements JavaBlo
     if (!isBuildIndentsOnly() &&
         child instanceof PsiComment &&
         child instanceof PsiLanguageInjectionHost &&
-        InjectedLanguageUtil.hasInjections((PsiLanguageInjectionHost) child)) {
+        InjectedLanguageManager.getInstance(((PsiComment) child).getProject()).getInjectedPsiFiles((PsiLanguageInjectionHost) child) != null) {
       return new CommentWithInjectionBlock(child, wrap, alignment, indent, settings, javaSettings, formattingMode);
     }
     if (child instanceof LeafElement || childPsi instanceof PsiJavaModuleReferenceElement) {

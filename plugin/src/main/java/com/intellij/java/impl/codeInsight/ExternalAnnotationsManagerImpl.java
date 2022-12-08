@@ -52,7 +52,6 @@ import consulo.language.editor.FileModificationService;
 import consulo.language.editor.WriteCommandAction;
 import consulo.language.editor.highlight.HighlightManager;
 import consulo.language.editor.util.LanguageUndoUtil;
-import consulo.language.impl.internal.psi.PsiModificationTrackerImpl;
 import consulo.language.psi.*;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
@@ -145,12 +144,12 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
 
   private void notifyAfterAnnotationChanging(@Nonnull PsiModifierListOwner owner, @Nonnull String annotationFQName, boolean successful) {
     myBus.syncPublisher(TOPIC).afterExternalAnnotationChanging(owner, annotationFQName, successful);
-    ((PsiModificationTrackerImpl) myPsiManager.getModificationTracker()).incCounter();
+    myPsiManager.getModificationTracker().incCounter();
   }
 
   private void notifyChangedExternally() {
     myBus.syncPublisher(TOPIC).externalAnnotationsChangedExternally();
-    ((PsiModificationTrackerImpl) myPsiManager.getModificationTracker()).incCounter();
+    myPsiManager.getModificationTracker().incCounter();
   }
 
   @Override

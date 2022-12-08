@@ -19,16 +19,15 @@ import com.intellij.java.impl.codeInsight.ExpectedTypeInfo;
 import com.intellij.java.language.impl.refactoring.util.RefactoringChangeUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.application.util.function.Processor;
 import consulo.codeEditor.Editor;
 import consulo.document.Document;
 import consulo.document.RangeMarker;
 import consulo.document.util.TextRange;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.language.editor.CodeInsightUtilCore;
+import consulo.language.editor.DaemonCodeAnalyzer;
 import consulo.language.editor.WriteCommandAction;
 import consulo.language.editor.annotation.HighlightSeverity;
-import consulo.language.editor.impl.internal.daemon.DaemonCodeAnalyzerEx;
 import consulo.language.editor.rawHighlight.HighlightInfo;
 import consulo.language.editor.template.Template;
 import consulo.language.editor.template.TemplateBuilder;
@@ -48,6 +47,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Predicate;
 
 /**
  * @author Mike
@@ -96,12 +96,12 @@ public class CreateMethodFromUsageFix extends CreateFromUsageBaseFix {
 
     PsiExpressionList argumentList = call.getArgumentList();
     final TextRange argRange = argumentList.getTextRange();
-    return !DaemonCodeAnalyzerEx.processHighlights(document, project, HighlightSeverity.ERROR,
-                                                   //strictly inside arg list
-                                                   argRange.getStartOffset() + 1,
-                                                   argRange.getEndOffset() - 1, new Processor<HighlightInfo>() {
+    return !DaemonCodeAnalyzer.processHighlights(document, project, HighlightSeverity.ERROR,
+                                                 //strictly inside arg list
+                                                 argRange.getStartOffset() + 1,
+                                                 argRange.getEndOffset() - 1, new Predicate<HighlightInfo>() {
       @Override
-      public boolean process(HighlightInfo info) {
+      public boolean test(HighlightInfo info) {
         return !(info.getActualStartOffset() > argRange.getStartOffset() && info.getActualEndOffset() < argRange.getEndOffset());
       }
     });

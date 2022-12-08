@@ -21,9 +21,9 @@ import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ClassUtils;
+import consulo.application.Application;
 import consulo.application.ApplicationManager;
 import consulo.application.Result;
-import consulo.application.impl.internal.IdeaModalityState;
 import consulo.application.progress.ProgressIndicator;
 import consulo.application.progress.ProgressManager;
 import consulo.application.progress.Task;
@@ -40,10 +40,8 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.project.Project;
-import consulo.ui.ex.awt.internal.GuiUtils;
 
 import javax.annotation.Nonnull;
-import java.lang.reflect.InvocationTargetException;
 
 /**
  * User: cdr
@@ -134,22 +132,14 @@ class StaticInheritanceFix extends InspectionGadgetsFix {
   }
 
   private static void invokeWriteAction(final Runnable runnable, final PsiFile file) {
-    try {
-      GuiUtils.runOrInvokeAndWait(new Runnable() {
-        public void run() {
-          new WriteCommandAction(file.getProject(), file) {
-            protected void run(Result result) throws Throwable {
-              runnable.run();
-            }
-          }.execute();
-        }
-      });
-    }
-    catch (InvocationTargetException e) {
-      LOG.error(e);
-    }
-    catch (InterruptedException e) {
-      LOG.error(e);
-    }
+    Application.get().invokeAndWait(new Runnable() {
+      public void run() {
+        new WriteCommandAction(file.getProject(), file) {
+          protected void run(Result result) throws Throwable {
+            runnable.run();
+          }
+        }.execute();
+      }
+    });
   }
 }

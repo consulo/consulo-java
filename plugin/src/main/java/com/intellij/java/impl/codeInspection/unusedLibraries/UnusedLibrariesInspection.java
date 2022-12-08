@@ -1,199 +1,210 @@
-/*
- * Copyright 2000-2009 JetBrains s.r.o.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-/*
- * User: anna
- * Date: 18-Apr-2007
- */
+// Copyright 2000-2021 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.impl.codeInspection.unusedLibraries;
 
-import com.intellij.java.analysis.codeInspection.GroupNames;
-import consulo.application.ApplicationManager;
-import consulo.application.impl.internal.progress.AbstractProgressIndicatorBase;
-import consulo.application.progress.ProgressIndicator;
-import consulo.application.progress.ProgressManager;
+import com.intellij.java.analysis.JavaAnalysisBundle;
+import com.intellij.java.impl.codeInspection.AbstractDependencyVisitor;
+import consulo.application.ReadAction;
+import consulo.application.util.graph.GraphAlgorithms;
+import consulo.component.util.graph.Graph;
+import consulo.component.util.graph.GraphGenerator;
+import consulo.component.util.graph.InboundSemiGraph;
 import consulo.content.base.BinariesOrderRootType;
 import consulo.content.library.Library;
-import consulo.content.scope.NamedScope;
-import consulo.content.scope.PackageSetFactory;
-import consulo.content.scope.ParsingException;
 import consulo.ide.impl.idea.openapi.vfs.VfsUtilCore;
-import consulo.ide.impl.idea.packageDependencies.BackwardDependenciesBuilder;
+import consulo.ide.impl.idea.util.containers.ContainerUtil;
 import consulo.language.editor.inspection.*;
+import consulo.language.editor.inspection.reference.RefGraphAnnotator;
 import consulo.language.editor.inspection.reference.RefManager;
 import consulo.language.editor.inspection.reference.RefModule;
 import consulo.language.editor.inspection.scheme.InspectionManager;
-import consulo.language.editor.inspection.scheme.JobDescriptor;
+import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
 import consulo.language.editor.scope.AnalysisScope;
-import consulo.language.psi.PsiCompiledElement;
-import consulo.language.psi.PsiFile;
-import consulo.language.psi.PsiRecursiveElementVisitor;
-import consulo.language.psi.scope.GlobalSearchScope;
-import consulo.language.psi.scope.GlobalSearchScopesCore;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiUtilCore;
 import consulo.language.util.ModuleUtilCore;
 import consulo.logging.Logger;
 import consulo.module.Module;
+import consulo.module.ModuleManager;
 import consulo.module.content.ModuleRootManager;
 import consulo.module.content.ProjectFileIndex;
 import consulo.module.content.ProjectRootManager;
 import consulo.module.content.layer.ModifiableRootModel;
+import consulo.module.content.layer.OrderEnumerator;
+import consulo.module.content.layer.orderEntry.DependencyScope;
 import consulo.module.content.layer.orderEntry.LibraryOrderEntry;
 import consulo.module.content.layer.orderEntry.OrderEntry;
-import consulo.module.content.library.util.ModuleContentLibraryUtil;
 import consulo.project.Project;
-import consulo.util.collection.ContainerUtil;
+import consulo.util.dataholder.Key;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.VirtualFile;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import javax.swing.*;
+import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public abstract class UnusedLibrariesInspection extends GlobalInspectionTool {
   private static final Logger LOG = Logger.getInstance(UnusedLibrariesInspection.class);
-  private final JobDescriptor BACKWARD_ANALYSIS = new JobDescriptor(InspectionsBundle.message("unused.library.backward.analysis.job.description"));
 
-  @Nullable
+  public boolean IGNORE_LIBRARY_PARTS = true;
+
   @Override
-  public JobDescriptor[] getAdditionalJobs() {
-    return new JobDescriptor[]{BACKWARD_ANALYSIS};
+  public @NotNull JComponent createOptionsPanel() {
+    return new SingleCheckboxOptionsPanel(JavaAnalysisBundle.message("don.t.report.unused.jars.inside.used.library"),
+                                          this,
+                                          "IGNORE_LIBRARY_PARTS");
   }
 
   @Override
-  public void runInspection(@Nonnull AnalysisScope scope,
-                            @Nonnull InspectionManager manager,
-                            @Nonnull final GlobalInspectionContext globalContext,
-                            @Nonnull ProblemDescriptionsProcessor problemProcessor) {
-    final Project project = manager.getProject();
-    final ArrayList<VirtualFile> libraryRoots = new ArrayList<VirtualFile>();
-    if (scope.getScopeType() == AnalysisScope.PROJECT) {
-      ContainerUtil.addAll(libraryRoots, ModuleContentLibraryUtil.getLibraryRoots(project, false, false));
-    }
-    else {
-      final Set<Module> modules = new HashSet<Module>();
-      scope.accept(new PsiRecursiveElementVisitor() {
-        @Override
-        public void visitFile(PsiFile file) {
-          if (!(file instanceof PsiCompiledElement)) {
-            final VirtualFile virtualFile = file.getVirtualFile();
-            if (virtualFile != null) {
-              final Module module = ModuleUtilCore.findModuleForFile(virtualFile, project);
-              if (module != null) {
-                modules.add(module);
-              }
-            }
+  public @NotNull RefGraphAnnotator getAnnotator(@NotNull RefManager refManager) {
+    return new UnusedLibraryGraphAnnotator(refManager);
+  }
+
+  @Override
+  public boolean isReadActionNeeded() {
+    return false;
+  }
+
+  @Override
+  public void runInspection(@NotNull AnalysisScope scope,
+                            @NotNull InspectionManager manager,
+                            @NotNull GlobalInspectionContext globalContext,
+                            @NotNull ProblemDescriptionsProcessor problemDescriptionsProcessor) {
+    RefManager refManager = globalContext.getRefManager();
+    for (Module module : ModuleManager.getInstance(globalContext.getProject()).getModules()) {
+      if (scope.containsModule(module)) {
+        RefModule refModule = refManager.getRefModule(module);
+        if (refModule != null) {
+          CommonProblemDescriptor[] descriptors = getDescriptors(manager, refModule, module);
+          if (descriptors != null) {
+            problemDescriptionsProcessor.addProblemElement(refModule, descriptors);
           }
         }
-      });
-      ContainerUtil.addAll(libraryRoots, ModuleContentLibraryUtil.getLibraryRoots(modules.toArray(new Module[modules.size()]), false, false));
-    }
-    if (libraryRoots.isEmpty()) {
-      return;
-    }
-
-    GlobalSearchScope searchScope;
-    try {
-      @NonNls final String libsName = "libs";
-      NamedScope libScope = new NamedScope(libsName, PackageSetFactory.getInstance().compile("lib:*..*"));
-      searchScope = GlobalSearchScopesCore.filterScope(project, libScope);
-    }
-    catch (ParsingException e) {
-      //can't be
-      LOG.error(e);
-      return;
-    }
-    final AnalysisScope analysisScope = new AnalysisScope(searchScope, project);
-    analysisScope.setSearchInLibraries(true);
-    final BackwardDependenciesBuilder builder = new BackwardDependenciesBuilder(project, analysisScope);
-
-    final ProgressIndicator progressIndicator = ProgressManager.getInstance().getProgressIndicator();
-
-    BACKWARD_ANALYSIS.setTotalAmount(builder.getTotalFileCount());
-    ProgressIndicator progress = new AbstractProgressIndicatorBase() {
-      @Override
-      public void setFraction(final double fraction) {
-        super.setFraction(fraction);
-        int nextAmount = (int)(fraction * BACKWARD_ANALYSIS.getTotalAmount());
-        if (nextAmount > BACKWARD_ANALYSIS.getDoneAmount() && nextAmount < BACKWARD_ANALYSIS.getTotalAmount()) {
-          BACKWARD_ANALYSIS.setDoneAmount(nextAmount);
-          globalContext.incrementJobDoneAmount(BACKWARD_ANALYSIS, getText2());
-        }
-      }
-
-      @Override
-      public boolean isCanceled() {
-        return progressIndicator != null && progressIndicator.isCanceled() || super.isCanceled();
-      }
-    };
-    ProgressManager.getInstance().executeProcessUnderProgress(new Runnable() {
-      @Override
-      public void run() {
-        builder.analyze();
-      }
-    }, progress);
-    BACKWARD_ANALYSIS.setDoneAmount(BACKWARD_ANALYSIS.getTotalAmount());
-    final Map<PsiFile, Set<PsiFile>> dependencies = builder.getDependencies();
-    for (PsiFile file : dependencies.keySet()) {
-      final VirtualFile virtualFile = file.getVirtualFile();
-      LOG.assertTrue(virtualFile != null);
-      for (Iterator<VirtualFile> i = libraryRoots.iterator(); i.hasNext();) {
-        if (VfsUtilCore.isAncestor(i.next(), virtualFile, false)) {
-          i.remove();
-        }
-      }
-    }
-    if (libraryRoots.isEmpty()) {
-      return;
-    }
-    ProjectFileIndex projectIndex = ProjectRootManager.getInstance(project).getFileIndex();
-    Map<OrderEntry, Set<VirtualFile>> unusedLibs = new HashMap<OrderEntry, Set<VirtualFile>>();
-    for (VirtualFile libraryRoot : libraryRoots) {
-      final List<OrderEntry> orderEntries = projectIndex.getOrderEntriesForFile(libraryRoot);
-      for (OrderEntry orderEntry : orderEntries) {
-        Set<VirtualFile> files = unusedLibs.get(orderEntry);
-        if (files == null) {
-          files = new HashSet<VirtualFile>();
-          unusedLibs.put(orderEntry, files);
-        }
-        files.add(libraryRoot);
-      }
-    }
-    final RefManager refManager = globalContext.getRefManager();
-    for (OrderEntry orderEntry : unusedLibs.keySet()) {
-      if (!(orderEntry instanceof LibraryOrderEntry)) continue;
-      final RefModule refModule = refManager.getRefModule(orderEntry.getOwnerModule());
-      final Set<VirtualFile> files = unusedLibs.get(orderEntry);
-      final VirtualFile[] roots = orderEntry.getFiles(BinariesOrderRootType.getInstance());
-      if (files.size() < roots.length) {
-        final String unusedLibraryRoots = StringUtil.join(files, file -> file.getPresentableName(), ",");
-        String message =
-          InspectionsBundle.message("unused.library.roots.problem.descriptor", unusedLibraryRoots, orderEntry.getPresentableName());
-        problemProcessor.addProblemElement(refModule,
-                                           manager.createProblemDescriptor(message, new RemoveUnusedLibrary(refModule, orderEntry, files)));
-      }
-      else {
-        String message = InspectionsBundle.message("unused.library.problem.descriptor", orderEntry.getPresentableName());
-        problemProcessor.addProblemElement(refModule,
-                                           manager.createProblemDescriptor(message, new RemoveUnusedLibrary(refModule, orderEntry, null)));
       }
     }
   }
+
+  private CommonProblemDescriptor[] getDescriptors(@NotNull InspectionManager manager,
+                                                   RefModule refModule,
+                                                   Module module) {
+    VirtualFile[] givenRoots =
+      ReadAction.compute(() -> OrderEnumerator.orderEntries(module).withoutSdk()
+                                              .withoutModuleSourceEntries()
+                                              .withoutDepModules()
+                                              .classes()
+                                              .getRoots());
+
+    if (givenRoots.length == 0) return null;
+
+    final ModuleRootManager moduleRootManager = ModuleRootManager.getInstance(module);
+    final Set<VirtualFile> usedRoots = refModule.getUserData(UnusedLibraryGraphAnnotator.USED_LIBRARY_ROOTS);
+
+    if (usedRoots != null) {
+      appendUsedRootDependencies(usedRoots, givenRoots);
+    }
+
+    return ReadAction.compute(() -> {
+      final List<CommonProblemDescriptor> result = new ArrayList<>();
+      for (OrderEntry entry : moduleRootManager.getOrderEntries()) {
+        if (entry instanceof LibraryOrderEntry &&
+          !((LibraryOrderEntry)entry).isExported() &&
+          ((LibraryOrderEntry)entry).getScope() != DependencyScope.RUNTIME) {
+          final Set<VirtualFile> files = ContainerUtil.set(((LibraryOrderEntry)entry).getFiles(BinariesOrderRootType.getInstance()));
+          boolean allRootsUnused = usedRoots == null || !files.removeAll(usedRoots);
+          if (allRootsUnused) {
+            String message = JavaAnalysisBundle.message("unused.library.problem.descriptor", entry.getPresentableName());
+            result.add(manager.createProblemDescriptor(message, module, new RemoveUnusedLibrary(entry.getPresentableName(), null)));
+          }
+          else if (!files.isEmpty() && !IGNORE_LIBRARY_PARTS) {
+            final String unusedLibraryRoots = StringUtil.join(files, file -> file.getPresentableName(), ",");
+            String message =
+              JavaAnalysisBundle.message("unused.library.roots.problem.descriptor", unusedLibraryRoots, entry.getPresentableName());
+            CommonProblemDescriptor descriptor =
+              ((LibraryOrderEntry)entry).isModuleLevel()
+                ? manager.createProblemDescriptor(message, module, new RemoveUnusedLibrary(entry.getPresentableName(), files))
+                : manager.createProblemDescriptor(message);
+            result.add(descriptor);
+          }
+        }
+      }
+
+      return result.isEmpty() ? null : result.toArray(CommonProblemDescriptor.EMPTY_ARRAY);
+    });
+  }
+
+  private static void appendUsedRootDependencies(@NotNull Set<VirtualFile> usedRoots,
+                                                 VirtualFile @NotNull [] givenRoots) {
+    //classes per root
+    Map<VirtualFile, Set<String>> fromClasses = new HashMap<>();
+    //classes uses in root, ignoring self & jdk
+    Map<VirtualFile, Set<String>> toClasses = new HashMap<>();
+    collectClassesPerRoots(givenRoots, fromClasses, toClasses);
+
+    Graph<VirtualFile> graph = GraphGenerator.generate(new InboundSemiGraph<>() {
+      @NotNull
+      @Override
+      public Collection<VirtualFile> getNodes() {
+        return Arrays.asList(givenRoots);
+      }
+
+      @NotNull
+      @Override
+      public Iterator<VirtualFile> getIn(VirtualFile n) {
+        Set<String> classesInCurrentRoot = fromClasses.get(n);
+        return toClasses.entrySet().stream()
+                        .filter(entry -> ContainerUtil.intersects(entry.getValue(), classesInCurrentRoot))
+                        .map(entry -> entry.getKey())
+                        .collect(Collectors.toSet()).iterator();
+      }
+    });
+
+    GraphAlgorithms algorithms = GraphAlgorithms.getInstance();
+    Set<VirtualFile> dependencies = new HashSet<>();
+    for (VirtualFile root : usedRoots) {
+      algorithms.collectOutsRecursively(graph, root, dependencies);
+    }
+    usedRoots.addAll(dependencies);
+  }
+
+  private static void collectClassesPerRoots(VirtualFile[] givenRoots,
+                                             Map<VirtualFile, Set<String>> fromClasses,
+                                             Map<VirtualFile, Set<String>> toClasses) {
+    for (VirtualFile root : givenRoots) {
+      Set<String> fromClassNames = new HashSet<>();
+      Set<String> toClassNames = new HashSet<>();
+
+      VfsUtilCore.iterateChildrenRecursively(root, null, fileOrDir -> {
+        if (!fileOrDir.isDirectory() && fileOrDir.getName().endsWith(".class")) {
+          AbstractDependencyVisitor visitor = new AbstractDependencyVisitor() {
+            @Override
+            protected void addClassName(String name) {
+              if (!name.startsWith("java.") && !name.startsWith("javax.")) { //ignore jdk classes
+                toClassNames.add(name);
+              }
+            }
+          };
+          try {
+            visitor.processStream(fileOrDir.getInputStream());
+            fromClassNames.add(visitor.getCurrentClassName());
+          }
+          catch (IOException e) {
+            LOG.error(e);
+          }
+        }
+        return true;
+      });
+      toClassNames.removeAll(fromClassNames);
+
+      fromClasses.put(root, fromClassNames);
+      toClasses.put(root, toClassNames);
+    }
+  }
+
 
   @Override
   public boolean isEnabledByDefault() {
@@ -202,75 +213,107 @@ public abstract class UnusedLibrariesInspection extends GlobalInspectionTool {
 
   @Override
   @Nls
-  @Nonnull
+  @NotNull
   public String getGroupDisplayName() {
-    return GroupNames.DECLARATION_REDUNDANCY;
-  }
-
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionsBundle.message("unused.library.display.name");
+    return InspectionsBundle.message("group.names.declaration.redundancy");
   }
 
   @Override
   @NonNls
-  @Nonnull
+  @NotNull
   public String getShortName() {
     return "UnusedLibrary";
   }
 
-  private static class RemoveUnusedLibrary implements QuickFix {
-    private final RefModule myRefModule;
-    private final OrderEntry myOrderEntry;
-    private final Set<VirtualFile> myFiles;
+  @Override
+  public @NotNull QuickFix<?> getQuickFix(String hint) {
+    return new RemoveUnusedLibrary(hint, null);
+  }
 
-    public RemoveUnusedLibrary(final RefModule refModule, final OrderEntry orderEntry, final Set<VirtualFile> files) {
-      myRefModule = refModule;
-      myOrderEntry = orderEntry;
+  @Nullable
+  @Override
+  public String getHint(@NotNull QuickFix fix) {
+    if (fix instanceof RemoveUnusedLibrary && ((RemoveUnusedLibrary)fix).myFiles == null) {
+      return ((RemoveUnusedLibrary)fix).myLibraryName;
+    }
+    return null;
+  }
+
+  private static class RemoveUnusedLibrary implements QuickFix<ModuleProblemDescriptor> {
+    private final Set<? extends VirtualFile> myFiles;
+    private final String myLibraryName;
+
+    RemoveUnusedLibrary(String libraryName, final Set<? extends VirtualFile> files) {
+      myLibraryName = libraryName;
       myFiles = files;
     }
 
     @Override
-    @Nonnull
-    public String getName() {
-      return myFiles == null ? InspectionsBundle.message("detach.library.quickfix.name") : InspectionsBundle.message("detach.library.roots.quickfix.name");
-    }
-
-    @Override
-    @Nonnull
+    @NotNull
     public String getFamilyName() {
-      return getName();
+      return myFiles == null ? JavaAnalysisBundle.message("detach.library.quickfix.name") : JavaAnalysisBundle.message(
+        "detach.library.roots.quickfix.name");
     }
 
     @Override
-    public void applyFix(@Nonnull final Project project, @Nonnull final CommonProblemDescriptor descriptor) {
-      final Module module = myRefModule.getModule();
+    public void applyFix(@NotNull final Project project, @NotNull final ModuleProblemDescriptor descriptor) {
+      final Module module = descriptor.getModule();
 
-      ApplicationManager.getApplication().runWriteAction(new Runnable() {
-        @Override
-        public void run() {
-          final ModifiableRootModel model = ModuleRootManager.getInstance(module).getModifiableModel();
-          for (OrderEntry entry : model.getOrderEntries()) {
-            if (entry instanceof LibraryOrderEntry && Comparing.strEqual(entry.getPresentableName(), myOrderEntry.getPresentableName())) {
-              if (myFiles == null) {
-                model.removeOrderEntry(entry);
+      final ModifiableRootModel model = ModuleRootManager.getInstance(module).getModifiableModel();
+      for (OrderEntry entry : model.getOrderEntries()) {
+        if (entry instanceof LibraryOrderEntry && Comparing.strEqual(entry.getPresentableName(), myLibraryName)) {
+          if (myFiles == null) {
+            model.removeOrderEntry(entry);
+          }
+          else {
+            final Library library = ((LibraryOrderEntry)entry).getLibrary();
+            if (library != null) {
+              final Library.ModifiableModel modifiableModel = library.getModifiableModel();
+              for (VirtualFile file : myFiles) {
+                modifiableModel.removeRoot(file.getUrl(), BinariesOrderRootType.getInstance());
               }
-              else {
-                final Library library = ((LibraryOrderEntry)entry).getLibrary();
-                if (library != null) {
-                  final Library.ModifiableModel modifiableModel = library.getModifiableModel();
-                  for (VirtualFile file : myFiles) {
-                    modifiableModel.removeRoot(file.getUrl(), BinariesOrderRootType.getInstance());
-                  }
-                  modifiableModel.commit();
+              modifiableModel.commit();
+            }
+          }
+        }
+      }
+      model.commit();
+    }
+  }
+
+  private static class UnusedLibraryGraphAnnotator extends RefGraphAnnotator {
+    public static final Key<Set<VirtualFile>> USED_LIBRARY_ROOTS = Key.create("inspection.dependencies");
+    private final ProjectFileIndex myFileIndex;
+    private final RefManager myManager;
+
+    UnusedLibraryGraphAnnotator(RefManager manager) {
+      myManager = manager;
+      myFileIndex = ProjectRootManager.getInstance(manager.getProject()).getFileIndex();
+    }
+
+    @Override
+    public void onMarkReferenced(PsiElement what, PsiElement from, boolean referencedFromClassInitializer) {
+      if (what != null && from != null) {
+        final VirtualFile virtualFile = PsiUtilCore.getVirtualFile(what);
+        final VirtualFile containingDir = virtualFile != null ? virtualFile.getParent() : null;
+        if (containingDir != null) {
+          final VirtualFile libraryClassRoot = myFileIndex.getClassRootForFile(containingDir);
+          if (libraryClassRoot != null) {
+            final Module fromModule = ModuleUtilCore.findModuleForPsiElement(from);
+            if (fromModule != null) {
+              final RefModule refModule = myManager.getRefModule(fromModule);
+              if (refModule != null) {
+                Set<VirtualFile> usedRoots = refModule.getUserData(USED_LIBRARY_ROOTS);
+                if (usedRoots == null) {
+                  usedRoots = new HashSet<>();
+                  refModule.putUserData(USED_LIBRARY_ROOTS, usedRoots);
                 }
+                usedRoots.add(libraryClassRoot);
               }
             }
           }
-          model.commit();
         }
-      });
+      }
     }
   }
 }

@@ -23,6 +23,7 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.fileEditor.EditorNotificationBuilder;
 import consulo.fileEditor.EditorNotificationProvider;
 import consulo.fileEditor.FileEditor;
+import consulo.ide.setting.ShowSettingsUtil;
 import consulo.java.language.module.extension.JavaModuleExtension;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiManager;
@@ -30,7 +31,6 @@ import consulo.language.util.ModuleUtilCore;
 import consulo.localize.LocalizeValue;
 import consulo.module.Module;
 import consulo.project.Project;
-import consulo.project.ui.view.internal.ProjectSettingsService;
 import consulo.virtualFileSystem.VirtualFile;
 import jakarta.inject.Inject;
 
@@ -99,7 +99,9 @@ public class SetupJDKNotificationProvider implements EditorNotificationProvider 
         return;
       }
 
-      ProjectSettingsService.getInstance(project).openModuleSettings(moduleForPsiElement);
+      ShowSettingsUtil.getInstance().showProjectStructureDialog(project, projectStructureSelector -> {
+        projectStructureSelector.select(moduleForPsiElement, true);
+      });
     });
   }
 }

@@ -22,7 +22,6 @@ import consulo.codeEditor.SelectionModel;
 import consulo.document.util.TextRange;
 import consulo.ide.impl.idea.codeInsight.template.impl.InvokeTemplateAction;
 import consulo.java.language.module.util.JavaClassNames;
-import consulo.language.editor.impl.internal.template.TemplateImpl;
 import consulo.language.editor.intention.IntentionAction;
 import consulo.language.editor.template.Template;
 import consulo.language.editor.template.TemplateManager;

@@ -15,7 +15,7 @@
  */
 package com.intellij.java.compiler.impl.javaCompiler.javac;
 
-import com.intellij.java.compiler.OutputParser;
+import com.intellij.java.compiler.impl.OutputParser;
 import com.intellij.java.language.impl.JavaFileType;
 import consulo.application.ApplicationManager;
 import consulo.compiler.CompilerBundle;

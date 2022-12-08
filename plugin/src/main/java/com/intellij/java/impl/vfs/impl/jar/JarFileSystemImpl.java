@@ -17,7 +17,6 @@ package com.intellij.java.impl.vfs.impl.jar;
 
 import com.intellij.java.language.impl.JarArchiveFileType;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.ide.impl.virtualFileSystem.archive.zip.ZipArchiveFile;
 import consulo.virtualFileSystem.archive.ArchiveFile;
 import consulo.virtualFileSystem.archive.ArchiveFileSystemProvider;
 
@@ -36,6 +35,6 @@ public class JarFileSystemImpl implements ArchiveFileSystemProvider {
   @Nonnull
   @Override
   public ArchiveFile createArchiveFile(@Nonnull String filePath) throws IOException {
-    return new ZipArchiveFile(filePath);
+    return new JarArchiveFile(filePath);
   }
 }

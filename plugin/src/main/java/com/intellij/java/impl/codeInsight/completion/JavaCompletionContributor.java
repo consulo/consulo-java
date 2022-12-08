@@ -53,7 +53,6 @@ import consulo.language.ast.IElementType;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.completion.*;
 import consulo.language.editor.completion.lookup.*;
-import consulo.language.editor.impl.internal.completion.CompletionUtil;
 import consulo.language.pattern.ElementPattern;
 import consulo.language.pattern.PatternCondition;
 import consulo.language.psi.*;

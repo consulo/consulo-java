@@ -17,7 +17,6 @@ package com.intellij.java.impl.psi.impl.source.codeStyle;
 
 import com.intellij.java.language.psi.JavaDocTokenType;
 import com.intellij.java.language.psi.JavaTokenType;
-import consulo.ide.impl.psi.impl.source.codeStyle.IndentHelperImpl;
 import consulo.language.ast.ASTNode;
 import consulo.language.ast.TokenSet;
 import consulo.language.ast.TokenType;
@@ -27,7 +26,7 @@ import consulo.language.impl.ast.ASTFactory;
 import consulo.language.impl.ast.Factory;
 import consulo.language.impl.ast.LeafElement;
 import consulo.language.impl.ast.SharedImplUtil;
-import consulo.language.impl.internal.psi.IndentHelper;
+import consulo.language.impl.psi.IndentHelper;
 import consulo.language.impl.psi.SourceTreeToPsiMap;
 import consulo.language.parser.ParserDefinition;
 import consulo.language.psi.OuterLanguageElement;
@@ -44,14 +43,14 @@ public class ShiftIndentInsideHelper {
 
   private final CodeStyleSettings mySettings;
   private final FileType myFileType;
-  private final IndentHelper myIndentIndentHelper;
+  private final IndentHelper myIndentHelper;
   private final Project myProject;
 
   public ShiftIndentInsideHelper(FileType fileType, Project project) {
     myProject = project;
     mySettings = CodeStyleSettingsManager.getSettings(project);
     myFileType = fileType;
-    myIndentIndentHelper = IndentHelper.getInstance();
+    myIndentHelper = IndentHelper.getInstance();
   }
 
   private static int getStartOffset(ASTNode root, ASTNode child) {
@@ -78,10 +77,10 @@ public class ShiftIndentInsideHelper {
         }
         if (c == '\n' || c == '\r') continue;
         String space = text.substring(offset + 1, offset1);
-        int indent = IndentHelperImpl.getIndent(myProject, myFileType, space, true);
+        int indent = myIndentHelper.getIndent(myProject, myFileType, space, true);
         int newIndent = indent + indentShift;
         newIndent = Math.max(newIndent, 0);
-        String newSpace = IndentHelperImpl.fillIndent(myProject, myFileType, newIndent);
+        String newSpace = myIndentHelper.fillIndent(myProject, myFileType, newIndent);
 
         ASTNode leaf = element.findLeafElementAt(offset);
         if (!mayShiftIndentInside(leaf)) {
@@ -99,7 +98,7 @@ public class ShiftIndentInsideHelper {
           ) &&
               next != element) {
             if (mySettings.KEEP_FIRST_COLUMN_COMMENT) {
-              int commentIndent = myIndentIndentHelper.getIndent(myProject, myFileType, next, true);
+              int commentIndent = myIndentHelper.getIndent(myProject, myFileType, next, true);
               if (commentIndent == 0) continue;
             }
           } else if (next.getElementType() == XmlTokenType.XML_DATA_CHARACTERS) {
