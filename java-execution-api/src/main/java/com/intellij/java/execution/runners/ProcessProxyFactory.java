@@ -15,23 +15,24 @@
  */
 package com.intellij.java.execution.runners;
 
+import com.intellij.java.execution.configurations.JavaCommandLine;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ServiceAPI;
+import consulo.ide.ServiceManager;
 import consulo.process.ExecutionException;
 import consulo.process.ProcessHandler;
-import com.intellij.java.execution.configurations.JavaCommandLine;
-import consulo.ide.ServiceManager;
 
 import javax.annotation.Nullable;
 
-public abstract class ProcessProxyFactory
-{
-	public static ProcessProxyFactory getInstance()
-	{
-		return ServiceManager.getService(ProcessProxyFactory.class);
-	}
+@ServiceAPI(ComponentScope.APPLICATION)
+public abstract class ProcessProxyFactory {
+  public static ProcessProxyFactory getInstance() {
+    return ServiceManager.getService(ProcessProxyFactory.class);
+  }
 
-	@Nullable
-	public abstract ProcessProxy createCommandLineProxy(JavaCommandLine javaCmdLine) throws ExecutionException;
+  @Nullable
+  public abstract ProcessProxy createCommandLineProxy(JavaCommandLine javaCmdLine) throws ExecutionException;
 
-	@Nullable
-	public abstract ProcessProxy getAttachedProxy(ProcessHandler processHandler);
+  @Nullable
+  public abstract ProcessProxy getAttachedProxy(ProcessHandler processHandler);
 }

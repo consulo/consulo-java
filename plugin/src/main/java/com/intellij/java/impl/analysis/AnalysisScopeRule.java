@@ -20,6 +20,7 @@
  */
 package com.intellij.java.impl.analysis;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.scope.AnalysisScope;
 import consulo.ide.impl.idea.analysis.AnalysisScopeUtil;
 import consulo.dataContext.GetDataRule;
@@ -34,6 +35,7 @@ import consulo.util.dataholder.Key;
 
 import javax.annotation.Nonnull;
 
+@ExtensionImpl
 public class AnalysisScopeRule implements GetDataRule<AnalysisScope> {
   @Nonnull
   @Override

@@ -21,14 +21,9 @@ import com.intellij.java.language.psi.PsiLiteralExpression;
 import com.intellij.java.language.psi.PsiMethodCallExpression;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.FoldRegion;
-import consulo.ide.impl.idea.codeInsight.folding.impl.EditorFoldingInfo;
-import consulo.language.ast.ASTNode;
-import consulo.language.editor.folding.FoldingBuilder;
-import consulo.language.editor.internal.CompositeFoldingBuilder;
 import consulo.language.editor.navigation.GotoDeclarationHandlerBase;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
-import consulo.util.dataholder.Key;
 
 import javax.annotation.Nullable;
 
@@ -36,44 +31,24 @@ import javax.annotation.Nullable;
  * @author Konstantin Bulenkov
  */
 public class I18nMessageGotoDeclarationHandler extends GotoDeclarationHandlerBase {
-  private static final Key<FoldingBuilder> KEY = CompositeFoldingBuilder.FOLDING_BUILDER;
 
   @Override
   public PsiElement getGotoDeclarationTarget(PsiElement element, Editor editor) {
     if (!(element instanceof PsiJavaToken)) return null;
+    FoldRegion region = editor.getFoldingModel().getCollapsedRegionAtOffset(element.getTextRange().getStartOffset());
+    if (region == null) return null;
 
-    int i = 4; //some street magic
-    while (element != null && i > 0) {
-      final ASTNode node = element.getNode();
-      if (node != null && node.getUserData(KEY) != null) {
-        break;
-      }
-      else {
-        i--;
-        element = element.getParent();
-      }
-    }
-
+    PsiElement editableElement = EditPropertyValueAction.getEditableElement(region);
     //case: "literalAnnotatedWithPropertyKey"
-    if (element instanceof PsiLiteralExpression) {
-      return resolve(element);
+    if (editableElement instanceof PsiLiteralExpression) {
+      return resolve(editableElement);
     }
 
     //case: MyBundle.message("literalAnnotatedWithPropertyKey", param1, param2)
-    if (element instanceof PsiMethodCallExpression) {
-      final PsiMethodCallExpression methodCall = (PsiMethodCallExpression)element;
-      FoldRegion foldRegion = null;
-      for (FoldRegion region : editor.getFoldingModel().getAllFoldRegions()) {
-        final PsiElement psiElement = EditorFoldingInfo.get(editor).getPsiElement(region);
-        if (methodCall.equals(psiElement)) {
-          foldRegion = region;
-        }
-      }
-
-      if (foldRegion == null || foldRegion.isExpanded()) return null;
-
+    if (editableElement instanceof PsiMethodCallExpression) {
+      final PsiMethodCallExpression methodCall = (PsiMethodCallExpression)editableElement;
       for (PsiExpression expression : methodCall.getArgumentList().getExpressions()) {
-        if (expression instanceof PsiLiteralExpression && PropertyFoldingBuilder.isI18nProperty(expression.getProject(), (PsiLiteralExpression)expression)) {
+        if (expression instanceof PsiLiteralExpression && PropertyFoldingBuilder.isI18nProperty((PsiLiteralExpression)expression)) {
           return resolve(expression);
         }
       }

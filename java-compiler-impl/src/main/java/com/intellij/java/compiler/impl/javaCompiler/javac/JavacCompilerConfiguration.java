@@ -15,6 +15,9 @@
  */
 package com.intellij.java.compiler.impl.javaCompiler.javac;
 
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ServiceAPI;
+import consulo.annotation.component.ServiceImpl;
 import consulo.component.persist.PersistentStateComponent;
 import consulo.component.persist.State;
 import consulo.component.persist.Storage;
@@ -35,13 +38,15 @@ import javax.annotation.Nonnull;
     @Storage(file = StoragePathMacros.PROJECT_CONFIG_DIR + "/compiler.xml")
   }
 )
+@ServiceAPI(ComponentScope.PROJECT)
+@ServiceImpl
 public class JavacCompilerConfiguration implements PersistentStateComponent<JpsJavaCompilerOptions> {
   @Nonnull
   public static JpsJavaCompilerOptions getInstance(Project project) {
     final JavacCompilerConfiguration service = ServiceManager.getService(project, JavacCompilerConfiguration.class);
     return service.mySettings;
   }
-  
+
   private final JpsJavaCompilerOptions mySettings = new JpsJavaCompilerOptions();
   private final Project myProject;
 
@@ -55,7 +60,8 @@ public class JavacCompilerConfiguration implements PersistentStateComponent<JpsJ
   public JpsJavaCompilerOptions getState() {
     JpsJavaCompilerOptions state = new JpsJavaCompilerOptions();
     XmlSerializerUtil.copyBean(mySettings, state);
-    state.ADDITIONAL_OPTIONS_STRING = ProjectPathMacroManager.getInstance(myProject).collapsePathsRecursively(state.ADDITIONAL_OPTIONS_STRING);
+    state.ADDITIONAL_OPTIONS_STRING =
+      ProjectPathMacroManager.getInstance(myProject).collapsePathsRecursively(state.ADDITIONAL_OPTIONS_STRING);
     return state;
   }
 

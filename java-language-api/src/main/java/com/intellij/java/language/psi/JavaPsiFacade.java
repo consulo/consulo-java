@@ -15,6 +15,8 @@
  */
 package com.intellij.java.language.psi;
 
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ServiceAPI;
 import consulo.ide.ServiceManager;
 import consulo.project.Project;
 import consulo.util.dataholder.NotNullLazyKey;
@@ -30,6 +32,7 @@ import java.util.Collection;
 /**
  * @author max
  */
+@ServiceAPI(ComponentScope.PROJECT)
 public abstract class JavaPsiFacade {
   private static final NotNullLazyKey<JavaPsiFacade, Project> INSTANCE_KEY = ServiceManager.createLazyKey(JavaPsiFacade.class);
 

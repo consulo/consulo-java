@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.ide.fileTemplates;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.fileTemplate.DefaultTemplatePropertiesProvider;
 import consulo.language.psi.PsiDirectory;
 
@@ -23,6 +24,7 @@ import java.util.Properties;
 /**
  * @author yole
  */
+@ExtensionImpl
 public class TemplatePackagePropertyProvider implements DefaultTemplatePropertiesProvider {
   public void fillProperties(final PsiDirectory directory, final Properties props) {
     JavaTemplateUtil.setPackageNameAttribute(props, directory);

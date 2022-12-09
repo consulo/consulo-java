@@ -15,39 +15,41 @@
  */
 package com.intellij.java.impl.refactoring.inline;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
-import javax.annotation.Nullable;
-
-import com.intellij.java.language.psi.*;
-import consulo.annotation.access.RequiredReadAction;
-import consulo.language.editor.TargetElementUtil;
-import com.intellij.java.language.JavaLanguage;
-import consulo.application.ApplicationManager;
-import consulo.codeEditor.Editor;
-import consulo.application.progress.ProgressManager;
-import consulo.project.Project;
-import consulo.util.lang.ref.Ref;
-import consulo.language.pattern.ElementPattern;
-import consulo.language.pattern.PlatformPatterns;
-import consulo.language.psi.*;
+import com.intellij.java.impl.refactoring.util.RefactoringUtil;
 import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
 import com.intellij.java.indexing.search.searches.FunctionalExpressionSearch;
-import consulo.language.psi.search.ReferencesSearch;
-import consulo.language.psi.util.PsiTreeUtil;
+import com.intellij.java.language.JavaLanguage;
+import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.application.ApplicationManager;
+import consulo.application.progress.ProgressManager;
+import consulo.application.util.function.Processor;
+import consulo.codeEditor.Editor;
+import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.editor.TargetElementUtil;
 import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
-import com.intellij.java.impl.refactoring.util.RefactoringUtil;
+import consulo.language.pattern.ElementPattern;
+import consulo.language.pattern.PlatformPatterns;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiReference;
+import consulo.language.psi.search.ReferencesSearch;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.project.Project;
 import consulo.util.collection.ArrayUtil;
-import consulo.application.util.function.Processor;
-import consulo.java.language.module.util.JavaClassNames;
+import consulo.util.lang.ref.Ref;
+
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * @author yole
  */
+@ExtensionImpl
 public class InlineToAnonymousClassHandler extends JavaInlineActionHandler
 {
 	static final ElementPattern ourCatchClausePattern = PlatformPatterns.psiElement(PsiTypeElement.class).withParent(PlatformPatterns.psiElement(PsiParameter.class).withParent(PlatformPatterns

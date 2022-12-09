@@ -1,5 +1,8 @@
 package consulo.java.impl.codeInsight;
 
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ServiceAPI;
+import consulo.annotation.component.ServiceImpl;
 import consulo.component.persist.PersistentStateComponent;
 import consulo.component.persist.State;
 import consulo.component.persist.Storage;
@@ -17,11 +20,13 @@ import javax.annotation.Nullable;
  */
 @Singleton
 @State(
-    name = "JavaCodeInsightSettings",
-    storages = {
-        @Storage(
-            file = StoragePathMacros.APP_CONFIG + "/editor.codeinsight.xml")
-    })
+  name = "JavaCodeInsightSettings",
+  storages = {
+    @Storage(
+      file = StoragePathMacros.APP_CONFIG + "/editor.codeinsight.xml")
+  })
+@ServiceAPI(ComponentScope.APPLICATION)
+@ServiceImpl
 public class JavaCodeInsightSettings implements PersistentStateComponent<JavaCodeInsightSettings> {
   @Nonnull
   public static JavaCodeInsightSettings getInstance() {

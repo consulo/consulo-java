@@ -23,6 +23,7 @@ import com.intellij.java.impl.refactoring.util.InlineUtil;
 import com.intellij.java.language.impl.codeInsight.ExceptionUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.ApplicationManager;
 import consulo.application.util.function.Processor;
 import consulo.application.util.query.Query;
@@ -56,6 +57,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+@ExtensionImpl
 public class InlineLocalHandler extends JavaInlineActionHandler {
   private static final Logger LOG = Logger.getInstance(InlineLocalHandler.class);
 

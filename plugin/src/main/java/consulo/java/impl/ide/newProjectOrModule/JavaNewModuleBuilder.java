@@ -17,6 +17,7 @@
 package consulo.java.impl.ide.newProjectOrModule;
 
 import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.AllIcons;
 import consulo.content.bundle.Sdk;
 import consulo.ide.newModule.*;
@@ -34,6 +35,7 @@ import java.util.function.Consumer;
  * @author VISTALL
  * @since 05.06.14
  */
+@ExtensionImpl
 public class JavaNewModuleBuilder implements NewModuleBuilder {
   @Override
   public void setupContext(@Nonnull NewModuleContext context) {

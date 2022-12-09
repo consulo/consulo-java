@@ -15,36 +15,38 @@
  */
 package com.intellij.java.language.psi.util;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import consulo.ide.ServiceManager;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiSubstitutor;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ServiceAPI;
+import consulo.ide.ServiceManager;
 import consulo.language.psi.scope.GlobalSearchScope;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * @author peter
  */
-public abstract class JavaClassSupers
-{
-	public static JavaClassSupers getInstance()
-	{
-		return ServiceManager.getService(JavaClassSupers.class);
-	}
+@ServiceAPI(ComponentScope.APPLICATION)
+public abstract class JavaClassSupers {
+  public static JavaClassSupers getInstance() {
+    return ServiceManager.getService(JavaClassSupers.class);
+  }
 
-	/**
-	 * Calculates substitutor that binds type parameters in <code>superClass</code> with
-	 * values that they have in <code>derivedClass</code>, given that type parameters in
-	 * <code>derivedClass</code> are bound by <code>derivedSubstitutor</code>.
-	 *
-	 * @return substitutor or <code>null</code>, if <code>derivedClass</code> doesn't inherit <code>superClass</code>
-	 * @see PsiClass#isInheritor(PsiClass, boolean)
-	 * @see InheritanceUtil#isInheritorOrSelf(PsiClass, PsiClass, boolean)
-	 */
-	@Nullable
-	public abstract PsiSubstitutor getSuperClassSubstitutor(@Nonnull PsiClass superClass,
-			@Nonnull PsiClass derivedClass,
-			@Nonnull GlobalSearchScope resolveScope,
-			@Nonnull PsiSubstitutor derivedSubstitutor);
+  /**
+   * Calculates substitutor that binds type parameters in <code>superClass</code> with
+   * values that they have in <code>derivedClass</code>, given that type parameters in
+   * <code>derivedClass</code> are bound by <code>derivedSubstitutor</code>.
+   *
+   * @return substitutor or <code>null</code>, if <code>derivedClass</code> doesn't inherit <code>superClass</code>
+   * @see PsiClass#isInheritor(PsiClass, boolean)
+   * @see InheritanceUtil#isInheritorOrSelf(PsiClass, PsiClass, boolean)
+   */
+  @Nullable
+  public abstract PsiSubstitutor getSuperClassSubstitutor(@Nonnull PsiClass superClass,
+                                                          @Nonnull PsiClass derivedClass,
+                                                          @Nonnull GlobalSearchScope resolveScope,
+                                                          @Nonnull PsiSubstitutor derivedSubstitutor);
 
 }

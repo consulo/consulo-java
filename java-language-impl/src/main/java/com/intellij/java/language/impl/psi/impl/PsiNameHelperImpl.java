@@ -18,6 +18,7 @@ package com.intellij.java.language.impl.psi.impl;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.psi.PsiNameHelper;
 import com.intellij.java.language.impl.lexer.JavaLexer;
+import consulo.annotation.component.ServiceImpl;
 import consulo.util.lang.StringUtil;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
@@ -26,6 +27,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 @Singleton
+@ServiceImpl
 public class PsiNameHelperImpl extends PsiNameHelper {
 
   @Override
@@ -70,6 +72,6 @@ public class PsiNameHelperImpl extends PsiNameHelper {
   }
 
   @Inject
-  private PsiNameHelperImpl() {
+  PsiNameHelperImpl() {
   }
 }

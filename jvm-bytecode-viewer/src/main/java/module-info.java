@@ -2,7 +2,7 @@
  * @author VISTALL
  * @since 06/12/2022
  */
-module consulo.java.jvm.bytecode.viewer {
+open module consulo.java.jvm.bytecode.viewer {
     requires consulo.ide.api;
     requires consulo.java.debugger.impl;
     requires consulo.java.language.impl;

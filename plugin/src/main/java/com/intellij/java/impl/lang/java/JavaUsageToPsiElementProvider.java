@@ -17,6 +17,7 @@ package com.intellij.java.impl.lang.java;
 
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.PsiClass;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiMethod;
@@ -26,6 +27,7 @@ import consulo.usage.UsageToPsiElementProvider;
 /**
  * @author Konstantin Bulenkov
  */
+@ExtensionImpl
 public class JavaUsageToPsiElementProvider extends UsageToPsiElementProvider {
   private static final int MAX_HOPES = 17;
 

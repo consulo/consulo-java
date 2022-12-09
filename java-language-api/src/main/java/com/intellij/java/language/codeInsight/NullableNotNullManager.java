@@ -3,6 +3,8 @@ package com.intellij.java.language.codeInsight;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ServiceAPI;
 import consulo.application.util.CachedValueProvider;
 import consulo.application.util.RecursionManager;
 import consulo.ide.ServiceManager;
@@ -23,6 +25,7 @@ import static com.intellij.java.language.codeInsight.AnnotationUtil.*;
 /**
  * @author anna
  */
+@ServiceAPI(ComponentScope.PROJECT)
 public abstract class NullableNotNullManager {
   protected static final Logger LOG = Logger.getInstance(NullableNotNullManager.class);
   protected final Project myProject;

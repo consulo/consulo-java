@@ -19,30 +19,31 @@
  */
 package com.intellij.java.language.impl.psi.impl.file.impl;
 
-import consulo.ide.ServiceManager;
-import consulo.project.Project;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiJavaModule;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ServiceAPI;
+import consulo.ide.ServiceManager;
 import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.project.Project;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Collection;
 
-public interface JavaFileManager
-{
-	static JavaFileManager getInstance(@Nonnull Project project)
-	{
-		return ServiceManager.getService(project, JavaFileManager.class);
-	}
+@ServiceAPI(ComponentScope.PROJECT)
+public interface JavaFileManager {
+  static JavaFileManager getInstance(@Nonnull Project project) {
+    return ServiceManager.getService(project, JavaFileManager.class);
+  }
 
-	@Nullable
-	PsiClass findClass(@Nonnull String qName, @Nonnull GlobalSearchScope scope);
+  @Nullable
+  PsiClass findClass(@Nonnull String qName, @Nonnull GlobalSearchScope scope);
 
-	PsiClass[] findClasses(@Nonnull String qName, @Nonnull GlobalSearchScope scope);
+  PsiClass[] findClasses(@Nonnull String qName, @Nonnull GlobalSearchScope scope);
 
-	Collection<String> getNonTrivialPackagePrefixes();
+  Collection<String> getNonTrivialPackagePrefixes();
 
-	@Nonnull
-	Collection<PsiJavaModule> findModules(@Nonnull String moduleName, @Nonnull GlobalSearchScope scope);
+  @Nonnull
+  Collection<PsiJavaModule> findModules(@Nonnull String moduleName, @Nonnull GlobalSearchScope scope);
 }

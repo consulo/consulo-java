@@ -20,6 +20,7 @@
  */
 package com.intellij.java.impl.psi.search.scope.packageSet;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.scope.AnalysisScopeBundle;
 import consulo.language.lexer.Lexer;
 import consulo.content.scope.PackageSet;
@@ -27,6 +28,7 @@ import consulo.ide.impl.psi.search.scope.packageSet.PackageSetParserExtension;
 import consulo.content.scope.ParsingException;
 import consulo.ide.impl.psi.search.scope.packageSet.lexer.ScopeTokenTypes;
 
+@ExtensionImpl
 public class PatternPackageSetParserExtension implements PackageSetParserExtension {
 
   @Override

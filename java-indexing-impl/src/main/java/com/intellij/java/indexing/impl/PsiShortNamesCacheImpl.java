@@ -24,7 +24,8 @@ import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiMember;
 import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.java.language.psi.search.PsiShortNamesCache;
+import com.intellij.java.language.psi.search.PsiShortNameProvider;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.progress.ProgressIndicatorProvider;
 import consulo.application.util.function.CommonProcessors;
 import consulo.application.util.function.Processor;
@@ -47,7 +48,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 
-public class PsiShortNamesCacheImpl extends PsiShortNamesCache {
+@ExtensionImpl
+public class PsiShortNamesCacheImpl implements PsiShortNameProvider {
   private final Project myProject;
 
   @Inject

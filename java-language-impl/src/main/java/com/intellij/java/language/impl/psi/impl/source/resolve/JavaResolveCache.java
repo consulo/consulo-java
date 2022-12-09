@@ -11,6 +11,9 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.impl.source.resolve.graphInference.PsiPolyExpressionUtil;
 import com.intellij.java.language.psi.infos.MethodCandidateInfo;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ServiceAPI;
+import consulo.annotation.component.ServiceImpl;
 import consulo.application.util.RecursionGuard;
 import consulo.application.util.RecursionManager;
 import consulo.ide.ServiceManager;
@@ -36,6 +39,8 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 
 @Singleton
+@ServiceAPI(ComponentScope.PROJECT)
+@ServiceImpl
 public class JavaResolveCache {
   private static final Logger LOG = Logger.getInstance(JavaResolveCache.class);
   private static final NotNullLazyKey<JavaResolveCache, Project> INSTANCE_KEY = ServiceManager.createLazyKey(JavaResolveCache.class);
@@ -94,27 +99,34 @@ public class JavaResolveCache {
 
       if (type instanceof PsiClassReferenceType) {
         // convert reference-based class type to the PsiImmediateClassType, since the reference may become invalid
-        PsiClassType.ClassResolveResult result = ((PsiClassReferenceType) type).resolveGenerics();
+        PsiClassType.ClassResolveResult result = ((PsiClassReferenceType)type).resolveGenerics();
         PsiClass psiClass = result.getElement();
         type = psiClass == null
-            ? type // for type with unresolved reference, leave it in the cache
-            // for clients still might be able to retrieve its getCanonicalText() from the reference text
-            : new PsiImmediateClassType(psiClass, result.getSubstitutor(), ((PsiClassReferenceType) type).getLanguageLevel(), type.getAnnotationProvider());
+          ? type // for type with unresolved reference, leave it in the cache
+          // for clients still might be able to retrieve its getCanonicalText() from the reference text
+          : new PsiImmediateClassType(psiClass,
+                                      result.getSubstitutor(),
+                                      ((PsiClassReferenceType)type).getLanguageLevel(),
+                                      type.getAnnotationProvider());
       }
     }
 
     return type == TypeConversionUtil.NULL_TYPE ? null : type;
   }
 
-  private static <T extends PsiExpression> void reportUnstableType(@Nonnull PsiExpression expr, @Nonnull PsiType type, @Nonnull PsiType alreadyCached) {
+  private static <T extends PsiExpression> void reportUnstableType(@Nonnull PsiExpression expr,
+                                                                   @Nonnull PsiType type,
+                                                                   @Nonnull PsiType alreadyCached) {
     PsiFile file = expr.getContainingFile();
     LOG.error("Different types returned for the same PSI " + expr.getTextRange() + " on different threads: "
-            + type + " != " + alreadyCached,
-        AttachmentFactory.get().create(file.getName(), file.getText()));
+                + type + " != " + alreadyCached,
+              AttachmentFactory.get().create(file.getName(), file.getText()));
   }
 
   @Nullable
-  public Object computeConstantValueWithCaching(@Nonnull PsiVariable variable, @Nonnull ConstValueComputer computer, Set<PsiVariable> visitedVars) {
+  public Object computeConstantValueWithCaching(@Nonnull PsiVariable variable,
+                                                @Nonnull ConstValueComputer computer,
+                                                Set<PsiVariable> visitedVars) {
     boolean physical = variable.isPhysical();
 
     AtomicReference<Map<PsiVariable, Object>> ref = physical ? myVarToConstValueMapPhysical : myVarToConstValueMapNonPhysical;

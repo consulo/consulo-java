@@ -16,6 +16,7 @@
 package com.intellij.java.impl.codeInsight.folding.impl;
 
 import com.intellij.java.language.impl.codeInsight.folding.impl.JavaCodeFoldingSettingsBase;
+import consulo.annotation.component.ServiceImpl;
 import jakarta.inject.Singleton;
 
 import consulo.component.persist.PersistentStateComponent;
@@ -24,7 +25,8 @@ import consulo.component.persist.Storage;
 import consulo.util.xml.serializer.XmlSerializerUtil;
 
 @Singleton
-@State(name="JavaCodeFoldingSettings", storages= @Storage("editor.codeinsight.xml"))
+@State(name = "JavaCodeFoldingSettings", storages = @Storage("editor.codeinsight.xml"))
+@ServiceImpl
 public class JavaCodeFoldingSettingsImpl extends JavaCodeFoldingSettingsBase implements PersistentStateComponent<JavaCodeFoldingSettingsImpl> {
   @Override
   public JavaCodeFoldingSettingsImpl getState() {

@@ -18,6 +18,7 @@ package com.intellij.java.impl.refactoring.util;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiJavaPackage;
 import com.intellij.java.language.psi.PsiMember;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.util.lang.StringUtil;
 import consulo.language.psi.ElementDescriptionLocation;
 import consulo.language.psi.ElementDescriptionProvider;
@@ -29,6 +30,7 @@ import javax.annotation.Nonnull;
 /**
  * @author yole
  */
+@ExtensionImpl
 public class JavaNonCodeSearchElementDescriptionProvider implements ElementDescriptionProvider {
   @Override
   public String getElementDescription(@Nonnull final PsiElement element, @Nonnull final ElementDescriptionLocation location) {

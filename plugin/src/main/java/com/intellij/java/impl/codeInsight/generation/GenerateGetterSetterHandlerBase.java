@@ -15,13 +15,13 @@
  */
 package com.intellij.java.impl.codeInsight.generation;
 
-import com.intellij.java.language.JavaLanguage;
+import com.intellij.java.impl.generate.exception.GenerateCodeException;
+import com.intellij.java.impl.generate.template.TemplateResource;
+import com.intellij.java.impl.generate.template.TemplatesManager;
+import com.intellij.java.impl.generate.view.TemplatesPanel;
 import com.intellij.java.language.impl.codeInsight.generation.EncapsulatableClassMember;
 import com.intellij.java.language.psi.PsiClass;
-import com.intellij.java.language.psi.PsiEnumConstant;
-import com.intellij.java.language.psi.PsiField;
 import consulo.codeEditor.Editor;
-import consulo.ide.impl.idea.util.NotNullFunction;
 import consulo.ide.setting.ShowSettingsUtil;
 import consulo.language.editor.generation.ClassMember;
 import consulo.language.editor.hint.HintManager;
@@ -34,12 +34,7 @@ import consulo.ui.ex.awt.ListCellRendererWrapper;
 import consulo.ui.ex.awt.UIUtil;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.StringUtil;
-import consulo.util.lang.function.Condition;
 import org.jetbrains.annotations.Nls;
-import com.intellij.java.impl.generate.exception.GenerateCodeException;
-import com.intellij.java.impl.generate.template.TemplateResource;
-import com.intellij.java.impl.generate.template.TemplatesManager;
-import com.intellij.java.impl.generate.view.TemplatesPanel;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -47,32 +42,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 public abstract class GenerateGetterSetterHandlerBase extends GenerateMembersHandlerBase {
   private static final Logger LOG = Logger.getInstance(GenerateGetterSetterHandlerBase.class);
-
-  static {
-    GenerateAccessorProviderRegistrar.registerProvider(new NotNullFunction<PsiClass, Collection<EncapsulatableClassMember>>() {
-      @Override
-      @Nonnull
-      public Collection<EncapsulatableClassMember> apply(PsiClass s) {
-        if (s.getLanguage() != JavaLanguage.INSTANCE) {
-          return Collections.emptyList();
-        }
-        final List<EncapsulatableClassMember> result = new ArrayList<EncapsulatableClassMember>();
-        for (PsiField field : s.getFields()) {
-          if (!(field instanceof PsiEnumConstant)) {
-            result.add(new PsiFieldMember(field));
-          }
-        }
-        return result;
-      }
-    });
-  }
 
   public GenerateGetterSetterHandlerBase(String chooserTitle) {
     super(chooserTitle);
@@ -169,17 +143,14 @@ public abstract class GenerateGetterSetterHandlerBase extends GenerateMembersHan
     if (list.isEmpty()) {
       return null;
     }
-    final List<EncapsulatableClassMember> members = ContainerUtil.findAll(list, new Condition<EncapsulatableClassMember>() {
-      @Override
-      public boolean value(EncapsulatableClassMember member) {
-        try {
-          return generateMemberPrototypes(aClass, member).length > 0;
-        } catch (GenerateCodeException e) {
-          return true;
-        } catch (IncorrectOperationException e) {
-          LOG.error(e);
-          return false;
-        }
+    final List<EncapsulatableClassMember> members = ContainerUtil.findAll(list, member -> {
+      try {
+        return generateMemberPrototypes(aClass, member).length > 0;
+      } catch (GenerateCodeException e) {
+        return true;
+      } catch (IncorrectOperationException e) {
+        LOG.error(e);
+        return false;
       }
     });
     return members.toArray(new ClassMember[members.size()]);

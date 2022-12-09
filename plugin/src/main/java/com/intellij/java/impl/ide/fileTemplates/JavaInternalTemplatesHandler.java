@@ -15,12 +15,14 @@
  */
 package com.intellij.java.impl.ide.fileTemplates;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.fileTemplate.FileTemplate;
 import consulo.language.psi.PsiDirectory;
 import consulo.util.collection.ArrayUtil;
 
 import javax.annotation.Nonnull;
 
+@ExtensionImpl
 public class JavaInternalTemplatesHandler extends JavaCreateFromTemplateHandler {
   @Override
   public boolean handlesTemplate(@Nonnull FileTemplate template) {

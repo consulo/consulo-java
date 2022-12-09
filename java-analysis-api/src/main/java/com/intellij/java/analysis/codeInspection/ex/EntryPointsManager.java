@@ -20,6 +20,8 @@
   */
 package com.intellij.java.analysis.codeInspection.ex;
 
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ServiceAPI;
 import consulo.disposer.Disposable;
 import consulo.ide.ServiceManager;
 import consulo.language.editor.inspection.reference.RefElement;
@@ -30,6 +32,7 @@ import consulo.ui.Button;
 
 import javax.annotation.Nonnull;
 
+@ServiceAPI(ComponentScope.PROJECT)
 public abstract class EntryPointsManager implements Disposable {
   public static EntryPointsManager getInstance(Project project) {
     return ServiceManager.getService(project, EntryPointsManager.class);

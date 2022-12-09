@@ -17,6 +17,8 @@ package com.intellij.java.language.psi;
 
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ServiceAPI;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.util.lang.StringUtil;
@@ -36,6 +38,7 @@ import static consulo.util.lang.ObjectUtil.notNull;
 /**
  * Service for validating and parsing Java identifiers.
  */
+@ServiceAPI(ComponentScope.PROJECT)
 public abstract class PsiNameHelper {
   @Nonnull
   public static PsiNameHelper getInstance(@Nonnull Project project) {

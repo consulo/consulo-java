@@ -15,10 +15,11 @@
  */
 package com.intellij.java.execution.impl.application;
 
-public class ApplicationConfigurationProducer extends AbstractApplicationConfigurationProducer<ApplicationConfiguration>
-{
-	public ApplicationConfigurationProducer()
-	{
-		super(ApplicationConfigurationType.getInstance());
-	}
+import consulo.annotation.component.ExtensionImpl;
+
+@ExtensionImpl
+public class ApplicationConfigurationProducer extends AbstractApplicationConfigurationProducer<ApplicationConfiguration> {
+  public ApplicationConfigurationProducer() {
+    super(ApplicationConfigurationType.getInstance());
+  }
 }

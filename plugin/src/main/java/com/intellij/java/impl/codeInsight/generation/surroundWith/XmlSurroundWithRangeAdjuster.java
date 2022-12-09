@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.codeInsight.generation.surroundWith;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.document.util.TextRange;
 import consulo.language.Language;
 import consulo.language.editor.surroundWith.SurroundWithRangeAdjuster;
@@ -28,6 +29,7 @@ import consulo.xml.lang.xml.XMLLanguage;
 /**
  * @author yole
  */
+@ExtensionImpl
 public class XmlSurroundWithRangeAdjuster implements SurroundWithRangeAdjuster {
   private static boolean isLanguageWithWSSignificant(Language lang) {
     return lang == HTMLLanguage.INSTANCE ||

@@ -15,6 +15,9 @@
  */
 package com.intellij.java.impl.javadoc;
 
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ServiceAPI;
+import consulo.annotation.component.ServiceImpl;
 import consulo.application.CommonBundle;
 import consulo.component.persist.PersistentStateComponent;
 import consulo.component.persist.State;
@@ -34,6 +37,8 @@ import org.jdom.Element;
 
 import javax.annotation.Nonnull;
 
+@ServiceAPI(ComponentScope.PROJECT)
+@ServiceImpl
 @Singleton
 @State(name = "JavadocGenerationManager", storages = @Storage(file = StoragePathMacros.PROJECT_CONFIG_DIR + "/misc.xml"))
 public final class JavadocGenerationManager implements PersistentStateComponent<Element> {
@@ -68,7 +73,8 @@ public final class JavadocGenerationManager implements PersistentStateComponent<
     try {
       JavadocGeneratorRunProfile profile = new JavadocGeneratorRunProfile(myProject, scope, myConfiguration);
       ExecutionEnvironmentBuilder.create(myProject, DefaultRunExecutor.getRunExecutorInstance(), profile).buildAndExecute();
-    } catch (ExecutionException e) {
+    }
+    catch (ExecutionException e) {
       ExecutionErrorDialog.show(e, CommonBundle.getErrorTitle(), myProject);
     }
   }

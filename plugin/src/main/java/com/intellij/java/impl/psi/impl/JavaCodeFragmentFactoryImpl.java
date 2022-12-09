@@ -15,68 +15,71 @@
  */
 package com.intellij.java.impl.psi.impl;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import com.intellij.java.impl.psi.impl.source.PsiExpressionCodeFragmentImpl;
+import com.intellij.java.impl.psi.impl.source.PsiJavaCodeReferenceCodeFragmentImpl;
+import com.intellij.java.language.impl.psi.impl.source.PsiCodeFragmentImpl;
+import com.intellij.java.language.impl.psi.impl.source.PsiTypeCodeFragmentImpl;
+import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
+import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ServiceImpl;
+import consulo.language.psi.PsiElement;
+import consulo.project.Project;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
-import consulo.project.Project;
-import com.intellij.java.language.psi.JavaCodeFragment;
-import com.intellij.java.language.psi.JavaCodeFragmentFactory;
-import consulo.language.psi.PsiElement;
-import com.intellij.java.language.psi.PsiExpressionCodeFragment;
-import com.intellij.java.language.psi.PsiJavaCodeReferenceCodeFragment;
-import com.intellij.java.language.psi.PsiType;
-import com.intellij.java.language.psi.PsiTypeCodeFragment;
-import com.intellij.java.language.impl.psi.impl.source.PsiCodeFragmentImpl;
-import com.intellij.java.impl.psi.impl.source.PsiExpressionCodeFragmentImpl;
-import com.intellij.java.impl.psi.impl.source.PsiJavaCodeReferenceCodeFragmentImpl;
-import com.intellij.java.language.impl.psi.impl.source.PsiTypeCodeFragmentImpl;
-import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 @Singleton
-public class JavaCodeFragmentFactoryImpl extends JavaCodeFragmentFactory
-{
-	private final Project myProject;
+@ServiceImpl
+public class JavaCodeFragmentFactoryImpl extends JavaCodeFragmentFactory {
+  private final Project myProject;
 
-	@Inject
-	public JavaCodeFragmentFactoryImpl(Project project)
-	{
-		myProject = project;
-	}
+  @Inject
+  public JavaCodeFragmentFactoryImpl(Project project) {
+    myProject = project;
+  }
 
-	@Nonnull
-	@Override
-	public PsiExpressionCodeFragment createExpressionCodeFragment(@Nonnull final String text, @Nullable final PsiElement context, @Nullable final PsiType expectedType, final boolean isPhysical)
-	{
-		return new PsiExpressionCodeFragmentImpl(myProject, isPhysical, "fragment.java", text, expectedType, context);
-	}
+  @Nonnull
+  @Override
+  public PsiExpressionCodeFragment createExpressionCodeFragment(@Nonnull final String text,
+                                                                @Nullable final PsiElement context,
+                                                                @Nullable final PsiType expectedType,
+                                                                final boolean isPhysical) {
+    return new PsiExpressionCodeFragmentImpl(myProject, isPhysical, "fragment.java", text, expectedType, context);
+  }
 
-	@Nonnull
-	@Override
-	public JavaCodeFragment createCodeBlockCodeFragment(@Nonnull final String text, @Nullable final PsiElement context, final boolean isPhysical)
-	{
-		return new PsiCodeFragmentImpl(myProject, JavaElementType.STATEMENTS, isPhysical, "fragment.java", text, context);
-	}
+  @Nonnull
+  @Override
+  public JavaCodeFragment createCodeBlockCodeFragment(@Nonnull final String text,
+                                                      @Nullable final PsiElement context,
+                                                      final boolean isPhysical) {
+    return new PsiCodeFragmentImpl(myProject, JavaElementType.STATEMENTS, isPhysical, "fragment.java", text, context);
+  }
 
-	@Nonnull
-	@Override
-	public PsiTypeCodeFragment createTypeCodeFragment(@Nonnull final String text, @Nullable final PsiElement context, final boolean isPhysical)
-	{
-		return createTypeCodeFragment(text, context, isPhysical, 0);
-	}
+  @Nonnull
+  @Override
+  public PsiTypeCodeFragment createTypeCodeFragment(@Nonnull final String text,
+                                                    @Nullable final PsiElement context,
+                                                    final boolean isPhysical) {
+    return createTypeCodeFragment(text, context, isPhysical, 0);
+  }
 
-	@Nonnull
-	@Override
-	public PsiTypeCodeFragment createTypeCodeFragment(@Nonnull final String text, @Nullable final PsiElement context, final boolean isPhysical, final int flags)
-	{
-		return new PsiTypeCodeFragmentImpl(myProject, isPhysical, "fragment.java", text, flags, context);
-	}
+  @Nonnull
+  @Override
+  public PsiTypeCodeFragment createTypeCodeFragment(@Nonnull final String text,
+                                                    @Nullable final PsiElement context,
+                                                    final boolean isPhysical,
+                                                    final int flags) {
+    return new PsiTypeCodeFragmentImpl(myProject, isPhysical, "fragment.java", text, flags, context);
+  }
 
-	@Nonnull
-	@Override
-	public PsiJavaCodeReferenceCodeFragment createReferenceCodeFragment(@Nonnull final String text, @Nullable final PsiElement context, final boolean isPhysical, final boolean isClassesAccepted)
-	{
-		return new PsiJavaCodeReferenceCodeFragmentImpl(myProject, isPhysical, "fragment.java", text, isClassesAccepted, context);
-	}
+  @Nonnull
+  @Override
+  public PsiJavaCodeReferenceCodeFragment createReferenceCodeFragment(@Nonnull final String text,
+                                                                      @Nullable final PsiElement context,
+                                                                      final boolean isPhysical,
+                                                                      final boolean isClassesAccepted) {
+    return new PsiJavaCodeReferenceCodeFragmentImpl(myProject, isPhysical, "fragment.java", text, isClassesAccepted, context);
+  }
 }

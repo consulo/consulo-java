@@ -22,6 +22,7 @@ import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.java.language.impl.core.CoreJavaDirectoryService;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.annotation.component.ServiceImpl;
 import consulo.fileTemplate.FileTemplate;
 import consulo.fileTemplate.FileTemplateManager;
 import consulo.fileTemplate.FileTemplateUtil;
@@ -49,6 +50,7 @@ import java.util.Properties;
  * @author max
  */
 @Singleton
+@ServiceImpl
 public class JavaDirectoryServiceImpl extends CoreJavaDirectoryService {
   private static final Logger LOG = Logger.getInstance(JavaDirectoryServiceImpl.class);
 

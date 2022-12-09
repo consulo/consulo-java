@@ -18,6 +18,9 @@ package com.intellij.jam;
 import com.intellij.jam.reflect.JamAnnotationMeta;
 import com.intellij.jam.reflect.JamMemberMeta;
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ServiceAPI;
+import consulo.annotation.component.ServiceImpl;
 import consulo.application.util.function.Processor;
 import consulo.ide.ServiceManager;
 import consulo.language.psi.PsiElement;
@@ -44,6 +47,8 @@ import static com.intellij.jam.model.util.JamCommonUtil.getSuperClassList;
  * @author peter
  */
 @Singleton
+@ServiceAPI(ComponentScope.PROJECT)
+@ServiceImpl
 public class JamService {
   public static final SemKey<JamMemberMeta> MEMBER_META_KEY = SemKey.createKey("JamMemberMeta");
   public static final SemKey<JamAnnotationMeta> ANNO_META_KEY = SemKey.createKey("JamAnnotationMeta");
@@ -63,11 +68,11 @@ public class JamService {
   }
 
   public static void processMembers(PsiClass psiClass,
-                                                                 boolean checkClass,
-                                                                 boolean checkMethods,
-                                                                 boolean checkFields,
-                                                                 boolean checkDeep,
-                                                                 Processor<PsiMember> processor) {
+                                    boolean checkClass,
+                                    boolean checkMethods,
+                                    boolean checkFields,
+                                    boolean checkDeep,
+                                    Processor<PsiMember> processor) {
     if (checkClass) {
       if (checkDeep) {
         for (final PsiClass curClass : getSuperClassList(psiClass)) {
@@ -98,7 +103,8 @@ public class JamService {
   }
 
   @Nullable
-  public <T extends JamElement> T getJamElement(@Nonnull PsiElement psi, JamMemberMeta<? extends PsiModifierListOwner, ? extends T>... metas) {
+  public <T extends JamElement> T getJamElement(@Nonnull PsiElement psi,
+                                                JamMemberMeta<? extends PsiModifierListOwner, ? extends T>... metas) {
     for (JamMemberMeta<? extends PsiModifierListOwner, ? extends T> meta : metas) {
       final JamElement element = mySemService.getSemElement(meta.getJamKey(), psi);
       if (element != null) return (T)element;
@@ -125,7 +131,7 @@ public class JamService {
   }
 
   @Nullable
-  public <T extends PsiModifierListOwner> JamMemberMeta<T,?> getMeta(@Nonnull T psi, SemKey<? extends JamMemberMeta<T,?>> key) {
+  public <T extends PsiModifierListOwner> JamMemberMeta<T, ?> getMeta(@Nonnull T psi, SemKey<? extends JamMemberMeta<T, ?>> key) {
     return mySemService.getSemElement(key, psi);
   }
 
@@ -135,19 +141,27 @@ public class JamService {
 
   }
 
-  public <T extends JamElement> List<T> getJamClassElements(final JamMemberMeta<? super PsiClass, T> meta, @NonNls final String anno, final GlobalSearchScope scope) {
+  public <T extends JamElement> List<T> getJamClassElements(final JamMemberMeta<? super PsiClass, T> meta,
+                                                            @NonNls final String anno,
+                                                            final GlobalSearchScope scope) {
     return getJamClassElements(meta.getJamKey(), anno, scope);
   }
 
-  public <T extends JamElement> List<T> getJamMethodElements(final JamMemberMeta<? super PsiMethod, T> meta, @NonNls final String anno, final GlobalSearchScope scope) {
+  public <T extends JamElement> List<T> getJamMethodElements(final JamMemberMeta<? super PsiMethod, T> meta,
+                                                             @NonNls final String anno,
+                                                             final GlobalSearchScope scope) {
     return getJamMethodElements(meta.getJamKey(), anno, scope);
   }
 
-  public <T extends JamElement> List<T> getJamFieldElements(final JamMemberMeta<? super PsiField, T> meta, @NonNls final String anno, final GlobalSearchScope scope) {
+  public <T extends JamElement> List<T> getJamFieldElements(final JamMemberMeta<? super PsiField, T> meta,
+                                                            @NonNls final String anno,
+                                                            final GlobalSearchScope scope) {
     return getJamFieldElements(meta.getJamKey(), anno, scope);
   }
 
-  public <T extends JamElement> List<T> getAnnotatedMembersList(@Nonnull final PsiClass psiClass, final boolean checkClass, final boolean checkMethods,
+  public <T extends JamElement> List<T> getAnnotatedMembersList(@Nonnull final PsiClass psiClass,
+                                                                final boolean checkClass,
+                                                                final boolean checkMethods,
                                                                 final boolean checkFields,
                                                                 final boolean checkDeep,
                                                                 final JamMemberMeta<? extends PsiMember, ? extends T>... metas) {
@@ -196,7 +210,9 @@ public class JamService {
     return result;
   }
 
-  public <T extends JamElement> List<T> getJamParameterElements(final SemKey<T> c, @NonNls final String anno, final GlobalSearchScope scope) {
+  public <T extends JamElement> List<T> getJamParameterElements(final SemKey<T> c,
+                                                                @NonNls final String anno,
+                                                                final GlobalSearchScope scope) {
     final List<T> result = ContainerUtil.newArrayList();
     findAnnotatedElements(PsiParameter.class, anno, myPsiManager, scope, new Processor<PsiParameter>() {
       public boolean process(final PsiParameter psiParameter) {

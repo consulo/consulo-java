@@ -20,143 +20,116 @@
  */
 package com.intellij.java.impl.codeInsight;
 
-import javax.annotation.Nullable;
-
 import com.intellij.java.language.codeInsight.TestFrameworks;
-import jakarta.inject.Inject;
-import jakarta.inject.Singleton;
-
-import consulo.component.extension.Extensions;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.testIntegration.TestFramework;
+import consulo.annotation.component.ServiceImpl;
+import consulo.component.extension.Extensions;
 import consulo.language.util.IncorrectOperationException;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
+
+import javax.annotation.Nullable;
 
 @Singleton
-public class TestFrameworksImpl extends TestFrameworks
-{
-	@Inject
-	private TestFrameworksImpl()
-	{
-	}
+@ServiceImpl
+public class TestFrameworksImpl extends TestFrameworks {
+  @Inject
+  TestFrameworksImpl() {
+  }
 
-	@Override
-	public boolean isTestClass(final PsiClass psiClass)
-	{
-		final TestFramework[] testFrameworks = Extensions.getExtensions(TestFramework.EXTENSION_NAME);
-		for(TestFramework framework : testFrameworks)
-		{
-			if(framework.isTestClass(psiClass))
-			{
-				return true;
-			}
-		}
-		return false;
-	}
+  @Override
+  public boolean isTestClass(final PsiClass psiClass) {
+    final TestFramework[] testFrameworks = Extensions.getExtensions(TestFramework.EXTENSION_NAME);
+    for (TestFramework framework : testFrameworks) {
+      if (framework.isTestClass(psiClass)) {
+        return true;
+      }
+    }
+    return false;
+  }
 
-	@Override
-	public boolean isPotentialTestClass(PsiClass psiClass)
-	{
-		final TestFramework[] testFrameworks = Extensions.getExtensions(TestFramework.EXTENSION_NAME);
-		for(TestFramework framework : testFrameworks)
-		{
-			if(framework.isPotentialTestClass(psiClass))
-			{
-				return true;
-			}
-		}
-		return false;
-	}
+  @Override
+  public boolean isPotentialTestClass(PsiClass psiClass) {
+    final TestFramework[] testFrameworks = Extensions.getExtensions(TestFramework.EXTENSION_NAME);
+    for (TestFramework framework : testFrameworks) {
+      if (framework.isPotentialTestClass(psiClass)) {
+        return true;
+      }
+    }
+    return false;
+  }
 
-	@Override
-	@Nullable
-	public PsiMethod findOrCreateSetUpMethod(final PsiClass psiClass)
-	{
-		final TestFramework[] testFrameworks = Extensions.getExtensions(TestFramework.EXTENSION_NAME);
-		for(TestFramework framework : testFrameworks)
-		{
-			if(framework.isTestClass(psiClass))
-			{
-				try
-				{
-					final PsiMethod setUpMethod = (PsiMethod) framework.findOrCreateSetUpMethod(psiClass);
-					if(setUpMethod != null)
-					{
-						return setUpMethod;
-					}
-				}
-				catch(IncorrectOperationException e)
-				{
-					//skip
-				}
-			}
-		}
-		return null;
-	}
+  @Override
+  @Nullable
+  public PsiMethod findOrCreateSetUpMethod(final PsiClass psiClass) {
+    final TestFramework[] testFrameworks = Extensions.getExtensions(TestFramework.EXTENSION_NAME);
+    for (TestFramework framework : testFrameworks) {
+      if (framework.isTestClass(psiClass)) {
+        try {
+          final PsiMethod setUpMethod = (PsiMethod)framework.findOrCreateSetUpMethod(psiClass);
+          if (setUpMethod != null) {
+            return setUpMethod;
+          }
+        }
+        catch (IncorrectOperationException e) {
+          //skip
+        }
+      }
+    }
+    return null;
+  }
 
-	@Override
-	@Nullable
-	public PsiMethod findSetUpMethod(final PsiClass psiClass)
-	{
-		final TestFramework[] testFrameworks = Extensions.getExtensions(TestFramework.EXTENSION_NAME);
-		for(TestFramework framework : testFrameworks)
-		{
-			if(framework.isTestClass(psiClass))
-			{
-				final PsiMethod setUpMethod = (PsiMethod) framework.findSetUpMethod(psiClass);
-				if(setUpMethod != null)
-				{
-					return setUpMethod;
-				}
-			}
-		}
-		return null;
-	}
+  @Override
+  @Nullable
+  public PsiMethod findSetUpMethod(final PsiClass psiClass) {
+    final TestFramework[] testFrameworks = Extensions.getExtensions(TestFramework.EXTENSION_NAME);
+    for (TestFramework framework : testFrameworks) {
+      if (framework.isTestClass(psiClass)) {
+        final PsiMethod setUpMethod = (PsiMethod)framework.findSetUpMethod(psiClass);
+        if (setUpMethod != null) {
+          return setUpMethod;
+        }
+      }
+    }
+    return null;
+  }
 
-	@Override
-	@Nullable
-	public PsiMethod findTearDownMethod(final PsiClass psiClass)
-	{
-		final TestFramework[] testFrameworks = Extensions.getExtensions(TestFramework.EXTENSION_NAME);
-		for(TestFramework framework : testFrameworks)
-		{
-			if(framework.isTestClass(psiClass))
-			{
-				final PsiMethod setUpMethod = (PsiMethod) framework.findTearDownMethod(psiClass);
-				if(setUpMethod != null)
-				{
-					return setUpMethod;
-				}
-			}
-		}
-		return null;
-	}
+  @Override
+  @Nullable
+  public PsiMethod findTearDownMethod(final PsiClass psiClass) {
+    final TestFramework[] testFrameworks = Extensions.getExtensions(TestFramework.EXTENSION_NAME);
+    for (TestFramework framework : testFrameworks) {
+      if (framework.isTestClass(psiClass)) {
+        final PsiMethod setUpMethod = (PsiMethod)framework.findTearDownMethod(psiClass);
+        if (setUpMethod != null) {
+          return setUpMethod;
+        }
+      }
+    }
+    return null;
+  }
 
-	@Override
-	protected boolean hasConfigMethods(PsiClass psiClass)
-	{
-		final TestFramework[] testFrameworks = Extensions.getExtensions(TestFramework.EXTENSION_NAME);
-		for(TestFramework framework : testFrameworks)
-		{
-			if(framework.findSetUpMethod(psiClass) != null || framework.findTearDownMethod(psiClass) != null)
-			{
-				return true;
-			}
-		}
-		return false;
-	}
+  @Override
+  protected boolean hasConfigMethods(PsiClass psiClass) {
+    final TestFramework[] testFrameworks = Extensions.getExtensions(TestFramework.EXTENSION_NAME);
+    for (TestFramework framework : testFrameworks) {
+      if (framework.findSetUpMethod(psiClass) != null || framework.findTearDownMethod(psiClass) != null) {
+        return true;
+      }
+    }
+    return false;
+  }
 
-	@Override
-	public boolean isTestMethod(PsiMethod method)
-	{
-		final TestFramework[] testFrameworks = Extensions.getExtensions(TestFramework.EXTENSION_NAME);
-		for(TestFramework framework : testFrameworks)
-		{
-			if(framework.isTestMethod(method))
-			{
-				return true;
-			}
-		}
-		return false;
-	}
+  @Override
+  public boolean isTestMethod(PsiMethod method) {
+    final TestFramework[] testFrameworks = Extensions.getExtensions(TestFramework.EXTENSION_NAME);
+    for (TestFramework framework : testFrameworks) {
+      if (framework.isTestMethod(method)) {
+        return true;
+      }
+    }
+    return false;
+  }
 }

@@ -2,6 +2,7 @@
 package com.intellij.java.indexing.impl.stubs.index;
 
 import com.intellij.java.language.impl.psi.impl.light.LightJavaModule;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.index.io.DataIndexer;
 import consulo.index.io.EnumeratorStringDescriptor;
 import consulo.index.io.ID;
@@ -18,6 +19,7 @@ import java.util.Collection;
 
 import static java.util.Collections.singletonMap;
 
+@ExtensionImpl
 public class JavaAutoModuleNameIndex extends ScalarIndexExtension<String> {
   private static final ID<String, Void> NAME = ID.create("java.auto.module.name");
 

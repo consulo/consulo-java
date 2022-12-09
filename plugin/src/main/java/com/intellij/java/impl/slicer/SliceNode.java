@@ -82,11 +82,11 @@ public class SliceNode extends AbstractTreeNode<SliceUsage> implements Duplicate
   }
 
   SliceNode getNext(List parentChildren) {
-    return index == parentChildren.size() - 1 ? null : (SliceNode) parentChildren.get(index + 1);
+    return index == parentChildren.size() - 1 ? null : (SliceNode)parentChildren.get(index + 1);
   }
 
   SliceNode getPrev(List parentChildren) {
-    return index == 0 ? null : (SliceNode) parentChildren.get(index - 1);
+    return index == 0 ? null : (SliceNode)parentChildren.get(index - 1);
   }
 
   @Nonnull
@@ -97,38 +97,38 @@ public class SliceNode extends AbstractTreeNode<SliceUsage> implements Duplicate
     final List<SliceNode> children = new ArrayList<SliceNode>();
     final SliceManager manager = SliceManager.getInstance(getProject());
     manager.runInterruptibly(progress, new Runnable() {
-          @Override
-          public void run() {
-            changed = true;
-            //SwingUtilities.invokeLater(new Runnable() {
-            //  public void run() {
-            //    if (getTreeBuilder().isDisposed()) return;
-            //    DefaultMutableTreeNode node = getTreeBuilder().getNodeForElement(getValue());
-            //    //myTreeBuilder.getUi().queueBackgroundUpdate(node, (NodeDescriptor)node.getUserObject(), new TreeUpdatePass(node));
-            //    if (node == null) node = getTreeBuilder().getRootNode();
-            //    getTreeBuilder().addSubtreeToUpdate(node);
-            //  }
-            //});
-          }
-        }, new Runnable() {
-          @Override
-          public void run() {
-            Processor<SliceUsage> processor = new Processor<SliceUsage>() {
-              @Override
-              public boolean process(SliceUsage sliceUsage) {
-                progress.checkCanceled();
-                SliceNode node = new SliceNode(myProject, sliceUsage, targetEqualUsages);
-                synchronized (children) {
-                  node.index = children.size();
-                  children.add(node);
-                }
-                return true;
-              }
-            };
+                               @Override
+                               public void run() {
+                                 changed = true;
+                                 //SwingUtilities.invokeLater(new Runnable() {
+                                 //  public void run() {
+                                 //    if (getTreeBuilder().isDisposed()) return;
+                                 //    DefaultMutableTreeNode node = getTreeBuilder().getNodeForElement(getValue());
+                                 //    //myTreeBuilder.getUi().queueBackgroundUpdate(node, (NodeDescriptor)node.getUserObject(), new TreeUpdatePass(node));
+                                 //    if (node == null) node = getTreeBuilder().getRootNode();
+                                 //    getTreeBuilder().addSubtreeToUpdate(node);
+                                 //  }
+                                 //});
+                               }
+                             }, new Runnable() {
+                               @Override
+                               public void run() {
+                                 Processor<SliceUsage> processor = new Processor<SliceUsage>() {
+                                   @Override
+                                   public boolean process(SliceUsage sliceUsage) {
+                                     progress.checkCanceled();
+                                     SliceNode node = new SliceNode(myProject, sliceUsage, targetEqualUsages);
+                                     synchronized (children) {
+                                       node.index = children.size();
+                                       children.add(node);
+                                     }
+                                     return true;
+                                   }
+                                 };
 
-            getValue().processChildren(processor);
-          }
-        }
+                                 getValue().processChildren(processor);
+                               }
+                             }
     );
 
     synchronized (children) {
@@ -222,7 +222,8 @@ public class SliceNode extends AbstractTreeNode<SliceUsage> implements Duplicate
       SliceUsage sliceUsage = getValue();
       renderer.customizeCellRendererFor(sliceUsage);
       renderer.setToolTipText(sliceUsage.getPresentation().getTooltipText());
-    } else {
+    }
+    else {
       renderer.append(UsageViewBundle.message("node.invalid") + " ", SliceUsageCellRenderer.ourInvalidAttributes);
     }
   }

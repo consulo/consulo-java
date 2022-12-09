@@ -15,7 +15,8 @@
  */
 package com.intellij.java.language.psi.javadoc;
 
-import consulo.component.extension.ExtensionPointName;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ExtensionAPI;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
 
@@ -24,9 +25,8 @@ import javax.annotation.Nullable;
 /**
  * @author mike
  */
+@ExtensionAPI(ComponentScope.PROJECT)
 public interface JavadocTagInfo {
-  ExtensionPointName<JavadocTagInfo> EP_NAME = ExtensionPointName.create("consulo.java.javadocTagInfo");
-
   String getName();
 
   boolean isInline();

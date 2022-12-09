@@ -16,6 +16,7 @@
 package consulo.java.language.impl.psi;
 
 import com.intellij.java.language.impl.psi.impl.source.tree.CoreJavaASTLeafFactory;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.ast.IElementType;
 import consulo.language.impl.ast.LeafElement;
 import consulo.language.impl.psi.PsiCommentImpl;
@@ -27,6 +28,7 @@ import javax.annotation.Nonnull;
  * @author VISTALL
  * @since 21:13/09.07.13
  */
+@ExtensionImpl
 public class JavaASTLeafFactory extends CoreJavaASTLeafFactory {
   @Override
   @Nonnull

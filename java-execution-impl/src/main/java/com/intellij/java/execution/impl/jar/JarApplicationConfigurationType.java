@@ -3,6 +3,7 @@
  */
 package com.intellij.java.execution.impl.jar;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.AllIcons;
 import consulo.execution.configuration.*;
 import consulo.java.execution.JavaExecutionBundle;
@@ -14,6 +15,7 @@ import consulo.util.lang.StringUtil;
 
 import javax.annotation.Nonnull;
 
+@ExtensionImpl
 public class JarApplicationConfigurationType extends ConfigurationTypeBase implements ConfigurationType {
   @Nonnull
   public static JarApplicationConfigurationType getInstance() {

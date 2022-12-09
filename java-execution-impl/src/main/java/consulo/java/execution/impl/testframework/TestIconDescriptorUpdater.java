@@ -15,35 +15,33 @@
  */
 package consulo.java.execution.impl.testframework;
 
-import javax.annotation.Nonnull;
-import consulo.application.AllIcons;
-import consulo.language.psi.PsiElement;
 import com.intellij.java.language.testIntegration.TestFramework;
 import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.application.AllIcons;
 import consulo.language.icon.IconDescriptor;
 import consulo.language.icon.IconDescriptorUpdater;
+import consulo.language.psi.PsiElement;
+
+import javax.annotation.Nonnull;
 
 /**
  * @author VISTALL
  * @since 1:22/19.07.13
  */
-public class TestIconDescriptorUpdater implements IconDescriptorUpdater
-{
-	@RequiredReadAction
-	@Override
-	public void updateIcon(@Nonnull IconDescriptor iconDescriptor, @Nonnull PsiElement element, int flags)
-	{
-		for(TestFramework framework : TestFramework.EXTENSION_NAME.getExtensions())
-		{
-			if(framework.isIgnoredMethod(element))
-			{
-				iconDescriptor.setMainIcon(AllIcons.RunConfigurations.IgnoredTest);
-			}
+@ExtensionImpl
+public class TestIconDescriptorUpdater implements IconDescriptorUpdater {
+  @RequiredReadAction
+  @Override
+  public void updateIcon(@Nonnull IconDescriptor iconDescriptor, @Nonnull PsiElement element, int flags) {
+    for (TestFramework framework : TestFramework.EXTENSION_NAME.getExtensionList()) {
+      if (framework.isIgnoredMethod(element)) {
+        iconDescriptor.setMainIcon(AllIcons.RunConfigurations.IgnoredTest);
+      }
 
-			if(framework.isTestMethod(element) || framework.isTestClass(element))
-			{
-				iconDescriptor.addLayerIcon(AllIcons.RunConfigurations.TestMark);
-			}
-		}
-	}
+      if (framework.isTestMethod(element) || framework.isTestClass(element)) {
+        iconDescriptor.addLayerIcon(AllIcons.RunConfigurations.TestMark);
+      }
+    }
+  }
 }

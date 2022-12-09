@@ -18,6 +18,7 @@ package com.intellij.java.impl.refactoring.rename;
 
 import com.intellij.java.impl.codeInsight.daemon.impl.quickfix.RenameWrongRefFix;
 import com.intellij.java.language.psi.PsiReferenceExpression;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.CommonDataKeys;
 import consulo.dataContext.DataContext;
 import consulo.language.editor.LangDataKeys;
@@ -33,6 +34,7 @@ import consulo.language.editor.refactoring.rename.RenameHandler;
 
 import javax.annotation.Nonnull;
 
+@ExtensionImpl
 public class RenameWrongRefHandler implements RenameHandler {
   @Override
   public final boolean isAvailableOnDataContext(final DataContext dataContext) {

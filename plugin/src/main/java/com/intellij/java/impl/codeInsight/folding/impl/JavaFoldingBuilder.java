@@ -23,6 +23,7 @@ import com.intellij.java.language.psi.PsiAnonymousClass;
 import com.intellij.java.language.psi.PsiAssignmentExpression;
 import com.intellij.java.language.psi.PsiNewExpression;
 import com.intellij.java.language.psi.PsiReferenceExpression;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.colorScheme.EditorColorsManager;
 import consulo.colorScheme.EditorFontType;
 import consulo.language.Language;
@@ -35,6 +36,7 @@ import consulo.ui.ex.awt.FontUtil;
 import javax.annotation.Nonnull;
 import java.awt.*;
 
+@ExtensionImpl
 public class JavaFoldingBuilder extends JavaFoldingBuilderBase {
   @Override
   protected boolean isBelowRightMargin(@Nonnull Project project, int lineLength) {

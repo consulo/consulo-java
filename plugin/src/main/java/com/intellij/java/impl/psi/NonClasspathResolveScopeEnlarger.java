@@ -5,6 +5,7 @@ import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.java.language.impl.psi.NonClasspathClassFinder;
 import com.intellij.java.language.impl.psi.NonClasspathDirectoriesScope;
 import com.intellij.java.language.psi.PsiElementFinder;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.component.extension.Extensions;
 import consulo.content.scope.SearchScope;
 import consulo.ide.impl.idea.openapi.vfs.VfsUtilCore;
@@ -20,6 +21,7 @@ import java.util.List;
 /**
  * @author peter
  */
+@ExtensionImpl
 public class NonClasspathResolveScopeEnlarger extends ResolveScopeEnlarger {
   @Override
   public SearchScope getAdditionalResolveScope(@Nonnull VirtualFile file, Project project) {
@@ -30,7 +32,7 @@ public class NonClasspathResolveScopeEnlarger extends ResolveScopeEnlarger {
 
     FileType fileType = file.getFileType();
     if (fileType == JavaFileType.INSTANCE || fileType == JavaClassFileType.INSTANCE) {
-      for (PsiElementFinder finder : Extensions.getExtensions(PsiElementFinder.EP_NAME, project)) {
+      for (PsiElementFinder finder : PsiElementFinder.EP_NAME.getExtensionList(project)) {
         if (finder instanceof NonClasspathClassFinder) {
           final List<VirtualFile> roots = ((NonClasspathClassFinder) finder).getClassRoots();
           for (VirtualFile root : roots) {

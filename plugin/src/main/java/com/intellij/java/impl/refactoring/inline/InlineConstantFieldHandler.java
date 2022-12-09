@@ -19,6 +19,7 @@ import com.intellij.java.impl.refactoring.HelpID;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.progress.ProgressManager;
 import consulo.codeEditor.Editor;
 import consulo.language.editor.TargetElementUtil;
@@ -35,6 +36,7 @@ import consulo.util.lang.ref.Ref;
 /**
  * @author ven
  */
+@ExtensionImpl
 public class InlineConstantFieldHandler extends JavaInlineActionHandler {
   private static final String REFACTORING_NAME = RefactoringBundle.message("inline.field.title");
 

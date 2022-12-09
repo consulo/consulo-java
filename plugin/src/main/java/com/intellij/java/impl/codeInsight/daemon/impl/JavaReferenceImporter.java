@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.ReferenceImporter;
 import consulo.language.editor.util.CollectHighlightsUtil;
 import com.intellij.java.impl.codeInsight.daemon.impl.quickfix.ImportClassFix;
@@ -32,6 +33,7 @@ import java.util.List;
 /**
  * @author yole
  */
+@ExtensionImpl
 public class JavaReferenceImporter implements ReferenceImporter {
   @Override
   public boolean autoImportReferenceAtCursor(@Nonnull final Editor editor, @Nonnull final PsiFile file) {

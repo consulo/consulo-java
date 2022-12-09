@@ -2,32 +2,30 @@
 package com.intellij.java.language.impl.psi.impl;
 
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ServiceImpl;
 import jakarta.inject.Singleton;
-import javax.annotation.Nonnull;
 
+import javax.annotation.Nonnull;
 import java.util.Map;
 
 @Singleton
-public class PsiSubstitutorFactoryImpl extends PsiSubstitutorFactory
-{
-	@Nonnull
-	@Override
-	protected PsiSubstitutor createSubstitutor(@Nonnull PsiTypeParameter typeParameter, PsiType mapping)
-	{
-		return new PsiSubstitutorImpl(typeParameter, mapping);
-	}
+@ServiceImpl
+public class PsiSubstitutorFactoryImpl extends PsiSubstitutorFactory {
+  @Nonnull
+  @Override
+  protected PsiSubstitutor createSubstitutor(@Nonnull PsiTypeParameter typeParameter, PsiType mapping) {
+    return new PsiSubstitutorImpl(typeParameter, mapping);
+  }
 
-	@Nonnull
-	@Override
-	protected PsiSubstitutor createSubstitutor(@Nonnull PsiClass aClass, PsiType[] mappings)
-	{
-		return new PsiSubstitutorImpl(aClass, mappings);
-	}
+  @Nonnull
+  @Override
+  protected PsiSubstitutor createSubstitutor(@Nonnull PsiClass aClass, PsiType[] mappings) {
+    return new PsiSubstitutorImpl(aClass, mappings);
+  }
 
-	@Nonnull
-	@Override
-	protected PsiSubstitutor createSubstitutor(@Nonnull Map<? extends PsiTypeParameter, ? extends PsiType> map)
-	{
-		return new PsiSubstitutorImpl(map);
-	}
+  @Nonnull
+  @Override
+  protected PsiSubstitutor createSubstitutor(@Nonnull Map<? extends PsiTypeParameter, ? extends PsiType> map) {
+    return new PsiSubstitutorImpl(map);
+  }
 }

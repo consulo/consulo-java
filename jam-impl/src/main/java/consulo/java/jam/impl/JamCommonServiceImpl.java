@@ -20,6 +20,7 @@ import com.intellij.jam.model.util.JamCommonUtil;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.impl.JavaFileType;
 import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.component.ServiceImpl;
 import consulo.java.jam.util.JamCommonService;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
@@ -31,6 +32,7 @@ import jakarta.inject.Singleton;
  * @since 2018-06-21
  */
 @Singleton
+@ServiceImpl
 public class JamCommonServiceImpl implements JamCommonService {
   @RequiredReadAction
   @Override

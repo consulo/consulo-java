@@ -23,6 +23,7 @@ import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
 import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.java.language.psi.PsiJavaFile;
 import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.ide.impl.psi.impl.source.codeStyle.IndentHelperExtension;
 import consulo.ide.impl.psi.impl.source.codeStyle.IndentHelperImpl;
 import consulo.language.ast.ASTNode;
@@ -32,6 +33,7 @@ import consulo.language.psi.PsiFile;
 
 import javax.annotation.Nonnull;
 
+@ExtensionImpl
 public class JavaIndentHelper implements IndentHelperExtension {
   @RequiredReadAction
   @Override

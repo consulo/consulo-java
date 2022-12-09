@@ -15,6 +15,9 @@
  */
 package com.intellij.java.execution.impl;
 
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ServiceAPI;
+import consulo.annotation.component.ServiceImpl;
 import consulo.execution.RuntimeConfigurationException;
 import consulo.execution.configuration.RunConfigurationBase;
 import consulo.execution.configuration.RunConfigurationExtensionsManager;
@@ -29,6 +32,8 @@ import javax.annotation.Nonnull;
  * Date: 10/4/11
  */
 @Singleton
+@ServiceAPI(ComponentScope.APPLICATION)
+@ServiceImpl
 public class JavaRunConfigurationExtensionManager extends RunConfigurationExtensionsManager<RunConfigurationBase, RunConfigurationExtension> {
   private static final Logger LOG = Logger.getInstance(RunConfigurationExtension.class.getName());
 
@@ -37,8 +42,8 @@ public class JavaRunConfigurationExtensionManager extends RunConfigurationExtens
   }
 
   public static JavaRunConfigurationExtensionManager getInstance() {
-     return ServiceManager.getService(JavaRunConfigurationExtensionManager.class);
-   }
+    return ServiceManager.getService(JavaRunConfigurationExtensionManager.class);
+  }
 
   public static void checkConfigurationIsValid(RunConfigurationBase configuration) throws RuntimeConfigurationException {
     try {

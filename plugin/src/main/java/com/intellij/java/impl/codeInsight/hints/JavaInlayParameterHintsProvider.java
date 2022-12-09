@@ -1,7 +1,10 @@
 package com.intellij.java.impl.codeInsight.hints;
 
+import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.PsiCallExpression;
 import com.intellij.java.language.psi.PsiMethod;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.Language;
 import consulo.language.editor.inlay.InlayInfo;
 import consulo.language.editor.inlay.InlayParameterHintsProvider;
 import consulo.language.editor.inlay.MethodInfo;
@@ -16,7 +19,8 @@ import java.util.Set;
 /**
  * from kotlin
  */
-public abstract class JavaInlayParameterHintsProvider implements InlayParameterHintsProvider {
+@ExtensionImpl
+public class JavaInlayParameterHintsProvider implements InlayParameterHintsProvider {
   private static String[] ourDefaultBlackList = {
       "(begin*, end*)",
       "(start*, end*)",
@@ -74,5 +78,11 @@ public abstract class JavaInlayParameterHintsProvider implements InlayParameterH
   @Override
   public Set<String> getDefaultBlackList() {
     return Set.of(ourDefaultBlackList);
+  }
+
+  @Nonnull
+  @Override
+  public Language getLanguage() {
+    return JavaLanguage.INSTANCE;
   }
 }

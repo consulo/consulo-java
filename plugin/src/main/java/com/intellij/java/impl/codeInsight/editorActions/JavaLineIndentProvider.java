@@ -15,28 +15,30 @@
  */
 package com.intellij.java.impl.codeInsight.editorActions;
 
-import static consulo.language.codeStyle.Indent.Type.CONTINUATION;
-import static consulo.ide.impl.psi.impl.source.codeStyle.lineIndent.JavaLikeLangLineIndentProvider.JavaLikeElement.*;
-
-import java.util.HashMap;
+import com.intellij.java.language.JavaLanguage;
+import com.intellij.java.language.psi.JavaDocTokenType;
+import com.intellij.java.language.psi.JavaTokenType;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.codeEditor.Editor;
+import consulo.ide.impl.psi.impl.source.codeStyle.SemanticEditorPosition;
+import consulo.ide.impl.psi.impl.source.codeStyle.lineIndent.JavaLikeLangLineIndentProvider;
+import consulo.language.Language;
+import consulo.language.ast.IElementType;
+import consulo.language.ast.TokenType;
+import consulo.language.codeStyle.Indent;
+import consulo.project.Project;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import consulo.language.codeStyle.Indent;
-import consulo.language.Language;
-import com.intellij.java.language.JavaLanguage;
-import consulo.codeEditor.Editor;
-import consulo.project.Project;
-import com.intellij.java.language.psi.JavaDocTokenType;
-import com.intellij.java.language.psi.JavaTokenType;
-import consulo.language.ast.TokenType;
-import consulo.ide.impl.psi.impl.source.codeStyle.SemanticEditorPosition;
-import consulo.ide.impl.psi.impl.source.codeStyle.lineIndent.JavaLikeLangLineIndentProvider;
-import consulo.language.ast.IElementType;
+import java.util.HashMap;
+
+import static consulo.ide.impl.psi.impl.source.codeStyle.lineIndent.JavaLikeLangLineIndentProvider.JavaLikeElement.*;
+import static consulo.language.codeStyle.Indent.Type.CONTINUATION;
 
 /**
  * @author Rustam Vishnyakov
  */
+@ExtensionImpl
 public class JavaLineIndentProvider extends JavaLikeLangLineIndentProvider
 {
 	private final static HashMap<IElementType, SemanticEditorPosition.SyntaxElement> SYNTAX_MAP = new HashMap<>();

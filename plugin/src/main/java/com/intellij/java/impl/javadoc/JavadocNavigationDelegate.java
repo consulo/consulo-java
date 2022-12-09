@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.javadoc;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.CaretModel;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.LogicalPosition;
@@ -39,6 +40,7 @@ import java.util.List;
  * @author Denis Zhdanov
  * @since 5/26/11 5:22 PM
  */
+@ExtensionImpl
 public class JavadocNavigationDelegate implements EditorNavigationDelegate {
 
   private static final JavadocHelper ourHelper = JavadocHelper.getInstance();

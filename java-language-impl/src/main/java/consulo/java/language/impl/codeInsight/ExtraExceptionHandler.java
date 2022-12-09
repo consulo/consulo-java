@@ -15,18 +15,21 @@
  */
 package consulo.java.language.impl.codeInsight;
 
-import javax.annotation.Nonnull;
-
-import consulo.component.extension.ExtensionPointName;
 import com.intellij.java.language.psi.PsiClassType;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ExtensionAPI;
+import consulo.component.extension.ExtensionPointName;
 import consulo.language.psi.PsiElement;
+
+import javax.annotation.Nonnull;
 
 /**
  * @author VISTALL
  * @since 23:44/30.03.13
  */
+@ExtensionAPI(ComponentScope.APPLICATION)
 public interface ExtraExceptionHandler {
-  ExtensionPointName<ExtraExceptionHandler> EP_NAME = ExtensionPointName.create("consulo.java.extraExceptionHandler");
+  ExtensionPointName<ExtraExceptionHandler> EP_NAME = ExtensionPointName.create(ExtraExceptionHandler.class);
 
   boolean isHandled(@Nonnull PsiClassType type, @Nonnull PsiElement element);
 }

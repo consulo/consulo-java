@@ -20,6 +20,7 @@ import com.intellij.java.language.impl.psi.impl.source.tree.ChildRole;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.ast.ASTNode;
 import consulo.language.ast.IElementType;
 import consulo.language.ast.TreeCopyHandler;
@@ -39,6 +40,7 @@ import consulo.util.lang.StringUtil;
 
 import java.util.Map;
 
+@ExtensionImpl
 public class JavaTreeCopyHandler implements TreeCopyHandler {
   private static final Logger LOG = Logger.getInstance(JavaTreeCopyHandler.class);
 

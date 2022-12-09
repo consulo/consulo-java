@@ -21,6 +21,7 @@ import com.intellij.java.language.psi.PsiClassType;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.TypeAnnotationProvider;
 import com.intellij.java.language.psi.augment.TypeAnnotationModifier;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.util.collection.ContainerUtil;
 
 import javax.annotation.Nonnull;
@@ -30,6 +31,7 @@ import java.util.List;
 /**
  * @author peter
  */
+@ExtensionImpl
 public class NullityAnnotationModifier extends TypeAnnotationModifier {
   @Nullable
   @Override

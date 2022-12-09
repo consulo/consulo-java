@@ -18,6 +18,7 @@ package com.intellij.java.indexing.impl.search;
 import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.java.language.impl.psi.impl.java.stubs.JavaStubElementTypes;
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.index.io.DataIndexer;
 import consulo.index.io.EnumeratorStringDescriptor;
 import consulo.index.io.ID;
@@ -40,6 +41,7 @@ import java.io.DataOutput;
 import java.io.IOException;
 import java.util.*;
 
+@ExtensionImpl
 public class JavaFunctionalExpressionIndex extends FileBasedIndexExtension<String, Collection<JavaFunctionalExpressionIndex.IndexHolder>> {
   public static final ID<String, Collection<IndexHolder>> JAVA_FUNCTIONAL_EXPRESSION_INDEX_ID = ID.create("java.functional.expression");
   private static final String THIS_REF_NAME = "this";

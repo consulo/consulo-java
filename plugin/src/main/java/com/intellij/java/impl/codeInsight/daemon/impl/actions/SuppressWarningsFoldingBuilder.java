@@ -20,10 +20,13 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.actions;
 
+import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.codeInsight.folding.JavaCodeFoldingSettings;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.document.Document;
+import consulo.language.Language;
 import consulo.language.ast.ASTNode;
 import consulo.language.editor.folding.FoldingBuilderEx;
 import consulo.language.editor.folding.FoldingDescriptor;
@@ -36,7 +39,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
-public abstract class SuppressWarningsFoldingBuilder extends FoldingBuilderEx {
+@ExtensionImpl
+public class SuppressWarningsFoldingBuilder extends FoldingBuilderEx {
   @Nonnull
   @Override
   public FoldingDescriptor[] buildFoldRegions(@Nonnull PsiElement root, @Nonnull Document document, boolean quick) {
@@ -96,5 +100,11 @@ public abstract class SuppressWarningsFoldingBuilder extends FoldingBuilderEx {
   @Override
   public boolean isCollapsedByDefault(@Nonnull ASTNode node) {
     return JavaCodeFoldingSettings.getInstance().isCollapseSuppressWarnings();
+  }
+
+  @Nonnull
+  @Override
+  public Language getLanguage() {
+    return JavaLanguage.INSTANCE;
   }
 }

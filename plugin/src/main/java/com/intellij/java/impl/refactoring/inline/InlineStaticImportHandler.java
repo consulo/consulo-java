@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.refactoring.inline;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.Result;
 import consulo.language.editor.WriteCommandAction;
 import consulo.codeEditor.Editor;
@@ -33,6 +34,7 @@ import static com.intellij.java.language.impl.psi.util.ImportsUtil.replaceAllAnd
  * User: anna
  * Date: 9/1/11
  */
+@ExtensionImpl
 public class InlineStaticImportHandler extends JavaInlineActionHandler {
 
   private static final String REFACTORING_NAME = "Expand static import";

@@ -15,12 +15,5 @@
   -->
 
 <consulo-plugin>
-	<extensions defaultExtensionNs="com.intellij">
-		<applicationService serviceInterface="com.intellij.jam.JamClassGenerator" serviceImplementation="consulo.java.jam.impl.JamClassGeneratorImpl"/>
 
-		<applicationService serviceInterface="consulo.java.jam.util.JamCommonService" serviceImplementation="consulo.java.jam.impl.JamCommonServiceImpl"/>
-
-		<projectService serviceInterface="com.intellij.jam.JamService" serviceImplementation="com.intellij.jam.JamService"/>
-
-	</extensions>
 </consulo-plugin>

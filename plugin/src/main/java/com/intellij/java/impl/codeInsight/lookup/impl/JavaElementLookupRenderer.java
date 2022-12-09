@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.codeInsight.lookup.impl;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.completion.lookup.DefaultLookupItemRenderer;
 import consulo.language.editor.completion.lookup.LookupElement;
 import consulo.language.editor.completion.lookup.LookupElementPresentation;
@@ -34,6 +35,7 @@ import java.util.List;
 /**
  * @author yole
  */
+@ExtensionImpl
 public class JavaElementLookupRenderer implements ElementLookupRenderer {
   @Override
   public boolean handlesItem(final Object element) {

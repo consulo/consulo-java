@@ -17,12 +17,14 @@ package consulo.java.impl.library;
 
 import com.intellij.java.language.codeInsight.ExternalAnnotationsManager;
 import com.intellij.java.language.projectRoots.roots.AnnotationOrderRootType;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.content.library.ui.FileTypeBasedRootFilter;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.xml.ide.highlighter.XmlFileType;
 
+@ExtensionImpl
 public class AnnotationsRootFilter extends FileTypeBasedRootFilter {
-  private AnnotationsRootFilter() {
+  public AnnotationsRootFilter() {
     super(AnnotationOrderRootType.getInstance(), false, XmlFileType.INSTANCE, "java external annotations");
   }
 

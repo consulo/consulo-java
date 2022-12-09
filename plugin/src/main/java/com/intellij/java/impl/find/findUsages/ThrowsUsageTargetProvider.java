@@ -19,6 +19,7 @@
  */
 package com.intellij.java.impl.find.findUsages;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.ide.impl.find.PsiElement2UsageTargetAdapter;
 import com.intellij.java.language.psi.PsiKeyword;
 import com.intellij.java.language.psi.PsiThrowStatement;
@@ -31,6 +32,7 @@ import consulo.language.editor.TargetElementUtil;
 
 import javax.annotation.Nullable;
 
+@ExtensionImpl
 public class ThrowsUsageTargetProvider implements UsageTargetProvider {
   @Override
   @Nullable

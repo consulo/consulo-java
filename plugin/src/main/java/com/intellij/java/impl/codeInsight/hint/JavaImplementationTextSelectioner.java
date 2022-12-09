@@ -20,6 +20,9 @@
  */
 package com.intellij.java.impl.codeInsight.hint;
 
+import com.intellij.java.language.JavaLanguage;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.Language;
 import consulo.language.editor.ImplementationTextSelectioner;
 import com.intellij.java.language.psi.PsiDocCommentOwner;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
@@ -30,7 +33,8 @@ import consulo.logging.Logger;
 
 import javax.annotation.Nonnull;
 
-public abstract class JavaImplementationTextSelectioner implements ImplementationTextSelectioner {
+@ExtensionImpl
+public class JavaImplementationTextSelectioner implements ImplementationTextSelectioner {
   private static final Logger LOG = Logger.getInstance(JavaImplementationTextSelectioner.class);
 
   @Override
@@ -61,5 +65,11 @@ public abstract class JavaImplementationTextSelectioner implements Implementatio
   @Override
   public int getTextEndOffset(@Nonnull PsiElement element) {
     return element.getTextRange().getEndOffset();
+  }
+
+  @Nonnull
+  @Override
+  public Language getLanguage() {
+    return JavaLanguage.INSTANCE;
   }
 }

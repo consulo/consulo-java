@@ -19,17 +19,18 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl;
 
-import javax.annotation.Nonnull;
-
-import consulo.language.editor.ChangeLocalityDetector;
 import com.intellij.java.language.psi.PsiAnonymousClass;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiCodeBlock;
 import com.intellij.java.language.psi.PsiMethod;
-import consulo.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.ChangeLocalityDetector;
+import consulo.language.psi.PsiElement;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+@ExtensionImpl
 public class JavaChangeLocalityDetector implements ChangeLocalityDetector {
   @Override
   @Nullable

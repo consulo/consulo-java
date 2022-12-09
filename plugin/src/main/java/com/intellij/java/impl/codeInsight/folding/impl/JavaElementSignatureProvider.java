@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.codeInsight.folding.impl;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.folding.AbstractElementSignatureProvider;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
@@ -28,6 +29,7 @@ import javax.annotation.Nullable;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 
+@ExtensionImpl
 @SuppressWarnings({"HardCodedStringLiteral"})
 public class JavaElementSignatureProvider extends AbstractElementSignatureProvider {
   private static final Logger LOG = Logger.getInstance(JavaElementSignatureProvider.class);

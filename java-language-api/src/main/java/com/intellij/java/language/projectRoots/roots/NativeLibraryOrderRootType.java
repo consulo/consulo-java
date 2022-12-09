@@ -15,11 +15,13 @@
  */
 package com.intellij.java.language.projectRoots.roots;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.content.OrderRootType;
 
 /**
  * @author nik
  */
+@ExtensionImpl
 public class NativeLibraryOrderRootType extends OrderRootType {
   public static OrderRootType getInstance() {
     return getOrderRootType(NativeLibraryOrderRootType.class);

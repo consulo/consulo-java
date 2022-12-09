@@ -16,6 +16,7 @@
 package com.intellij.java.impl.codeInsight.unwrap;
 
 import com.intellij.java.language.JavaLanguage;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.Language;
 import consulo.language.editor.refactoring.unwrap.UnwrapDescriptorBase;
 import consulo.language.editor.refactoring.unwrap.Unwrapper;
@@ -25,6 +26,7 @@ import javax.annotation.Nonnull;
 /**
  * @author Konstantin Bulenkov
  */
+@ExtensionImpl
 public class JavaUnwrapDescriptor extends UnwrapDescriptorBase {
   @Override
   protected Unwrapper[] createUnwrappers() {

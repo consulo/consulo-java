@@ -19,6 +19,7 @@ import com.intellij.java.debugger.DebuggerManager;
 import com.intellij.java.execution.configurations.ConfigurationWithAlternativeJre;
 import com.intellij.java.language.impl.psi.NonClasspathClassFinder;
 import com.intellij.java.language.impl.psi.NonClasspathDirectoriesScope;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.content.base.BinariesOrderRootType;
 import consulo.content.base.SourcesOrderRootType;
 import consulo.content.bundle.Sdk;
@@ -36,6 +37,7 @@ import java.util.*;
 /**
  * @author egor
  */
+@ExtensionImpl(order = "last")
 public class AlternativeJreClassFinder extends NonClasspathClassFinder {
   @Inject
   public AlternativeJreClassFinder(Project project, DebuggerManager manager) {

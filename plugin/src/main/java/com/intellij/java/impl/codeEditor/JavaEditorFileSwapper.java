@@ -6,6 +6,7 @@ import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiClassOwner;
 import com.intellij.java.language.psi.PsiMember;
 import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.fileEditor.EditorFileSwapper;
 import consulo.fileEditor.FileEditorWithProviderComposite;
 import consulo.fileEditor.TextEditor;
@@ -22,6 +23,7 @@ import consulo.virtualFileSystem.VirtualFile;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+@ExtensionImpl
 public class JavaEditorFileSwapper extends EditorFileSwapper {
   @Override
   @RequiredReadAction

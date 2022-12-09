@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.application.options;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.codeStyle.setting.IndentOptionsEditor;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.impl.JavaFileType;
@@ -28,6 +29,7 @@ import org.jetbrains.annotations.NonNls;
 /**
  * @author yole
  */
+@ExtensionImpl
 public class JavaIndentOptionsProvider implements FileTypeIndentOptionsProvider {
   public CommonCodeStyleSettings.IndentOptions createIndentOptions() {
     return new CommonCodeStyleSettings.IndentOptions();

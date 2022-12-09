@@ -20,6 +20,7 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.search.PsiShortNamesCache;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
 import consulo.document.Document;
 import consulo.document.RangeMarker;
@@ -42,6 +43,7 @@ import javax.annotation.Nullable;
 /**
  * @author yole
  */
+@ExtensionImpl
 public class JavaQualifiedNameProvider implements QualifiedNameProvider {
   private static final Logger LOG = Logger.getInstance(JavaQualifiedNameProvider.class);
 

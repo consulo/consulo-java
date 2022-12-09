@@ -25,6 +25,7 @@ import com.intellij.java.language.psi.PsiLocalVariable;
 import com.intellij.java.language.psi.PsiModifierListOwner;
 import com.intellij.java.language.psi.PsiParameter;
 import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.markup.GutterIconRenderer;
 import consulo.dataContext.DataContext;
@@ -57,6 +58,7 @@ import javax.annotation.Nullable;
 import java.awt.event.MouseEvent;
 import java.util.function.Function;
 
+@ExtensionImpl
 public class ExternalAnnotationsLineMarkerProvider extends LineMarkerProviderDescriptor {
   private static final Function<PsiElement, String> ourTooltipProvider = nameIdentifier ->
   {

@@ -15,71 +15,68 @@
  */
 package com.intellij.java.language.codeInsight;
 
-import consulo.project.Project;
-
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ServiceAPI;
+import consulo.annotation.component.ServiceImpl;
 import consulo.ide.ServiceManager;
+import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
 import jakarta.inject.Singleton;
+
 import java.util.ArrayList;
 import java.util.List;
 
 @Singleton
-public class ConcurrencyAnnotationsManager
-{
-	private static final String[] FRAMEWORKS = {
-			"net.jcip.annotations",
-			"javax.annotation.concurrent",
-			"org.apache.http.annotation",
-			"com.android.annotations.concurrency"
-	};
+@ServiceAPI(ComponentScope.PROJECT)
+@ServiceImpl
+public class ConcurrencyAnnotationsManager {
+  private static final String[] FRAMEWORKS = {
+    "net.jcip.annotations",
+    "javax.annotation.concurrent",
+    "org.apache.http.annotation",
+    "com.android.annotations.concurrency"
+  };
 
-	private static final String IMMUTABLE = "Immutable";
-	private static final String GUARDED_BY = "GuardedBy";
-	private static final String THREAD_SAFE = "ThreadSafe";
-	private static final String NOT_THREAD_SAFE = "NotThreadSafe";
+  private static final String IMMUTABLE = "Immutable";
+  private static final String GUARDED_BY = "GuardedBy";
+  private static final String THREAD_SAFE = "ThreadSafe";
+  private static final String NOT_THREAD_SAFE = "NotThreadSafe";
 
-	private final List<String> myImmutableList = new ArrayList<>();
-	private final List<String> myGuardedByList = new ArrayList<>();
-	private final List<String> myThreadSafeList = new ArrayList<>();
-	private final List<String> myNotThreadSafeList = new ArrayList<>();
+  private final List<String> myImmutableList = new ArrayList<>();
+  private final List<String> myGuardedByList = new ArrayList<>();
+  private final List<String> myThreadSafeList = new ArrayList<>();
+  private final List<String> myNotThreadSafeList = new ArrayList<>();
 
-	public ConcurrencyAnnotationsManager()
-	{
-		fillDefaults(myImmutableList, IMMUTABLE);
-		fillDefaults(myGuardedByList, GUARDED_BY);
-		fillDefaults(myThreadSafeList, THREAD_SAFE);
-		fillDefaults(myNotThreadSafeList, NOT_THREAD_SAFE);
+  public ConcurrencyAnnotationsManager() {
+    fillDefaults(myImmutableList, IMMUTABLE);
+    fillDefaults(myGuardedByList, GUARDED_BY);
+    fillDefaults(myThreadSafeList, THREAD_SAFE);
+    fillDefaults(myNotThreadSafeList, NOT_THREAD_SAFE);
 
-		myImmutableList.add("com.google.auto.value.AutoValue");
-	}
+    myImmutableList.add("com.google.auto.value.AutoValue");
+  }
 
-	private static void fillDefaults(List<? super String> list, final String annoName)
-	{
-		list.addAll(ContainerUtil.map(FRAMEWORKS, framework -> framework + "." + annoName));
-	}
+  private static void fillDefaults(List<? super String> list, final String annoName) {
+    list.addAll(ContainerUtil.map(FRAMEWORKS, framework -> framework + "." + annoName));
+  }
 
-	public static ConcurrencyAnnotationsManager getInstance(Project project)
-	{
-		return ServiceManager.getService(project, ConcurrencyAnnotationsManager.class);
-	}
+  public static ConcurrencyAnnotationsManager getInstance(Project project) {
+    return ServiceManager.getService(project, ConcurrencyAnnotationsManager.class);
+  }
 
-	public List<String> getImmutableAnnotations()
-	{
-		return myImmutableList;
-	}
+  public List<String> getImmutableAnnotations() {
+    return myImmutableList;
+  }
 
-	public List<String> getGuardedByAnnotations()
-	{
-		return myGuardedByList;
-	}
+  public List<String> getGuardedByAnnotations() {
+    return myGuardedByList;
+  }
 
-	public List<String> getThreadSafeList()
-	{
-		return myThreadSafeList;
-	}
+  public List<String> getThreadSafeList() {
+    return myThreadSafeList;
+  }
 
-	public List<String> getNotThreadSafeList()
-	{
-		return myNotThreadSafeList;
-	}
+  public List<String> getNotThreadSafeList() {
+    return myNotThreadSafeList;
+  }
 }

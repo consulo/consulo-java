@@ -15,6 +15,8 @@
  */
 package com.intellij.java.language.psi;
 
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ExtensionAPI;
 import consulo.application.util.function.Processor;
 import consulo.component.extension.ExtensionPointName;
 import consulo.language.psi.PsiDirectory;
@@ -34,8 +36,9 @@ import java.util.Set;
  * Implementations of this interface need to be registered as extensions in order
  * to be picked up by {@link JavaPsiFacade}.
  */
+@ExtensionAPI(ComponentScope.PROJECT)
 public abstract class PsiElementFinder {
-  public static final ExtensionPointName<PsiElementFinder> EP_NAME = ExtensionPointName.create("consulo.java.elementFinder");
+  public static final ExtensionPointName<PsiElementFinder> EP_NAME = ExtensionPointName.create(PsiElementFinder.class);
 
   /**
    * Searches the specified scope within the project for a class with the specified full-qualified

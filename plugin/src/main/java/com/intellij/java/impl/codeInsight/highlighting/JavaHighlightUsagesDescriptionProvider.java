@@ -18,6 +18,7 @@ package com.intellij.java.impl.codeInsight.highlighting;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
 import com.intellij.java.language.psi.util.PsiFormatUtilBase;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.LangBundle;
 import consulo.language.editor.highlight.HighlightUsagesDescriptionLocation;
 import consulo.language.psi.ElementDescriptionLocation;
@@ -29,6 +30,7 @@ import javax.annotation.Nonnull;
 /**
  * @author yole
  */
+@ExtensionImpl
 public class JavaHighlightUsagesDescriptionProvider implements ElementDescriptionProvider {
   @Override
   public String getElementDescription(@Nonnull final PsiElement element, @Nonnull final ElementDescriptionLocation location) {

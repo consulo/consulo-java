@@ -26,6 +26,7 @@ package com.intellij.java.impl.codeInspection.ex;
 
 import com.intellij.java.analysis.impl.codeInspection.ex.EntryPointsManagerBase;
 import com.intellij.java.impl.codeInspection.util.SpecialAnnotationsUtil;
+import consulo.annotation.component.ServiceImpl;
 import consulo.component.persist.PersistentStateComponent;
 import consulo.component.persist.State;
 import consulo.component.persist.Storage;
@@ -48,10 +49,11 @@ import java.util.List;
 
 @Singleton
 @State(
-    name = "JavaEntryPointsManager",
-    storages = {
-        @Storage(file = StoragePathMacros.PROJECT_CONFIG_DIR + "/misc.xml")
-    })
+  name = "JavaEntryPointsManager",
+  storages = {
+    @Storage(file = StoragePathMacros.PROJECT_CONFIG_DIR + "/misc.xml")
+  })
+@ServiceImpl
 public class EntryPointsManagerImpl extends EntryPointsManagerBase implements PersistentStateComponent<Element> {
   @Inject
   public EntryPointsManagerImpl(Project project) {
@@ -62,7 +64,7 @@ public class EntryPointsManagerImpl extends EntryPointsManagerBase implements Pe
   public void configureAnnotations() {
     final List<String> list = new ArrayList<String>(ADDITIONAL_ANNOTATIONS);
     final JPanel listPanel = SpecialAnnotationsUtil.createSpecialAnnotationsListControl(list,
-        "Do not check if annotated by", true);
+                                                                                        "Do not check if annotated by", true);
     new DialogWrapper(myProject) {
       {
         init();
@@ -92,7 +94,7 @@ public class EntryPointsManagerImpl extends EntryPointsManagerBase implements Pe
   @Nonnull
   public static Button createConfigureAnnotationsButton() {
     final Button configureAnnotations = Button.create(LocalizeValue.localizeTODO("Configure annotations..."));
-    configureAnnotations.addClickListener(e -> getInstance(ProjectUtil.guessCurrentProject((JComponent) TargetAWT.to(configureAnnotations))).configureAnnotations());
+    configureAnnotations.addClickListener(e -> getInstance(ProjectUtil.guessCurrentProject((JComponent)TargetAWT.to(configureAnnotations))).configureAnnotations());
     return configureAnnotations;
   }
 }

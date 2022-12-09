@@ -15,6 +15,8 @@
  */
 package com.intellij.java.language.impl.psi.impl.file;
 
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ServiceAPI;
 import consulo.ide.ServiceManager;
 import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.java.language.psi.PsiJavaPackage;
@@ -23,6 +25,7 @@ import consulo.language.psi.scope.GlobalSearchScope;
 /**
  * @author yole
  */
+@ServiceAPI(ComponentScope.APPLICATION)
 public abstract class PsiPackageImplementationHelper {
   public abstract GlobalSearchScope adjustAllScope(PsiJavaPackage psiPackage, GlobalSearchScope globalSearchScope);
 

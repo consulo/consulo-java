@@ -15,31 +15,31 @@
  */
 package com.intellij.java.impl.codeInspection.i18n;
 
-import java.util.Collection;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import com.intellij.java.language.psi.PsiLiteralExpression;
+import com.intellij.lang.properties.psi.PropertiesFile;
+import consulo.application.ApplicationManager;
+import consulo.codeEditor.Editor;
+import consulo.document.util.TextRange;
 import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.FileModificationService;
-import com.intellij.lang.properties.psi.PropertiesFile;
+import consulo.language.editor.LangDataKeys;
 import consulo.language.editor.PlatformDataKeys;
+import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.logging.Logger;
+import consulo.project.Project;
 import consulo.ui.ex.action.ActionPlaces;
 import consulo.ui.ex.action.AnAction;
 import consulo.ui.ex.action.AnActionEvent;
-import consulo.language.editor.LangDataKeys;
-import consulo.application.ApplicationManager;
 import consulo.undoRedo.CommandProcessor;
-import consulo.codeEditor.Editor;
-import consulo.project.Project;
-import consulo.document.util.TextRange;
 import consulo.util.lang.StringUtil;
-import consulo.language.psi.PsiElement;
-import consulo.language.psi.PsiFile;
-import com.intellij.java.language.psi.PsiLiteralExpression;
-import consulo.language.psi.util.PsiTreeUtil;
-import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
-import consulo.language.util.IncorrectOperationException;
-import consulo.logging.Logger;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Collection;
 
 public class I18nizeAction extends AnAction {
   private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.i18n.I18nizeAction");
@@ -76,7 +76,7 @@ public class I18nizeAction extends AnAction {
       return new I18nizeQuickFix();
     }
 
-    for (I18nizeHandlerProvider handlerProvider : I18nizeHandlerProvider.EP_NAME.getExtensions()) {
+    for (I18nizeHandlerProvider handlerProvider : I18nizeHandlerProvider.EP_NAME.getExtensionList()) {
       I18nQuickFixHandler handler = handlerProvider.getHandler(psiFile, editor, range);
       if (handler != null) {
         return handler;

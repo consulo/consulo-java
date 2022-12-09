@@ -18,6 +18,8 @@ package com.intellij.java.language.codeInsight;
 import com.intellij.java.language.psi.PsiAnnotation;
 import com.intellij.java.language.psi.PsiModifierListOwner;
 import com.intellij.java.language.psi.PsiNameValuePair;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ServiceAPI;
 import consulo.ide.ServiceManager;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
@@ -32,85 +34,84 @@ import java.util.List;
  * @authot anna
  * @since 26-Jun-2007
  */
-public abstract class ExternalAnnotationsManager
-{
-	public static final String ANNOTATIONS_XML = "annotations.xml";
+@ServiceAPI(ComponentScope.PROJECT)
+public abstract class ExternalAnnotationsManager {
+  public static final String ANNOTATIONS_XML = "annotations.xml";
 
-	public static final Class<ExternalAnnotationsListener> TOPIC = ExternalAnnotationsListener.class;
+  public static final Class<ExternalAnnotationsListener> TOPIC = ExternalAnnotationsListener.class;
 
-	/**
-	 * Describes where to place the new annotation
-	 */
-	public enum AnnotationPlace
-	{
-		/**
-		 * Annotation must be placed right in the code
-		 */
-		IN_CODE,
-		/**
-		 * Annotation must be placed externally
-		 */
-		EXTERNAL,
-		/**
-		 * User should be asked to decide whether they want to create new annotation root for external annotation.
-		 * {@link ExternalAnnotationsManager#chooseAnnotationsPlace(PsiElement)} asks user automatically, so this result is never returned,
-		 * but it requires EDT thread. On the other hand, {@link ExternalAnnotationsManager#chooseAnnotationsPlaceNoUi(PsiElement)}
-		 * never displays UI but may return this result.
-		 */
-		NEED_ASK_USER,
-		/**
-		 * User actively cancelled the annotation addition, so it should not be added at all.
-		 */
-		NOWHERE
-	}
+  /**
+   * Describes where to place the new annotation
+   */
+  public enum AnnotationPlace {
+    /**
+     * Annotation must be placed right in the code
+     */
+    IN_CODE,
+    /**
+     * Annotation must be placed externally
+     */
+    EXTERNAL,
+    /**
+     * User should be asked to decide whether they want to create new annotation root for external annotation.
+     * {@link ExternalAnnotationsManager#chooseAnnotationsPlace(PsiElement)} asks user automatically, so this result is never returned,
+     * but it requires EDT thread. On the other hand, {@link ExternalAnnotationsManager#chooseAnnotationsPlaceNoUi(PsiElement)}
+     * never displays UI but may return this result.
+     */
+    NEED_ASK_USER,
+    /**
+     * User actively cancelled the annotation addition, so it should not be added at all.
+     */
+    NOWHERE
+  }
 
-	private static final NotNullLazyKey<ExternalAnnotationsManager, Project> INSTANCE_KEY = ServiceManager.createLazyKey(ExternalAnnotationsManager.class);
+  private static final NotNullLazyKey<ExternalAnnotationsManager, Project> INSTANCE_KEY =
+    ServiceManager.createLazyKey(ExternalAnnotationsManager.class);
 
-	public static ExternalAnnotationsManager getInstance(@Nonnull Project project)
-	{
-		return INSTANCE_KEY.getValue(project);
-	}
+  public static ExternalAnnotationsManager getInstance(@Nonnull Project project) {
+    return INSTANCE_KEY.getValue(project);
+  }
 
-	public abstract boolean isExternalAnnotation(@Nonnull PsiAnnotation annotation);
+  public abstract boolean isExternalAnnotation(@Nonnull PsiAnnotation annotation);
 
-	@Nullable
-	public abstract PsiAnnotation findExternalAnnotation(@Nonnull PsiModifierListOwner listOwner, @Nonnull String annotationFQN);
+  @Nullable
+  public abstract PsiAnnotation findExternalAnnotation(@Nonnull PsiModifierListOwner listOwner, @Nonnull String annotationFQN);
 
-	// Method used in Kotlin plugin
-	public abstract boolean isExternalAnnotationWritable(@Nonnull PsiModifierListOwner listOwner, @Nonnull String annotationFQN);
+  // Method used in Kotlin plugin
+  public abstract boolean isExternalAnnotationWritable(@Nonnull PsiModifierListOwner listOwner, @Nonnull String annotationFQN);
 
-	@Nullable
-	public abstract PsiAnnotation[] findExternalAnnotations(@Nonnull PsiModifierListOwner listOwner);
+  @Nullable
+  public abstract PsiAnnotation[] findExternalAnnotations(@Nonnull PsiModifierListOwner listOwner);
 
-	public abstract void annotateExternally(@Nonnull PsiModifierListOwner listOwner,
-											@Nonnull String annotationFQName,
-											@Nonnull PsiFile fromFile,
-											@Nullable PsiNameValuePair[] value) throws CanceledConfigurationException;
+  public abstract void annotateExternally(@Nonnull PsiModifierListOwner listOwner,
+                                          @Nonnull String annotationFQName,
+                                          @Nonnull PsiFile fromFile,
+                                          @Nullable PsiNameValuePair[] value) throws CanceledConfigurationException;
 
-	public abstract boolean deannotate(@Nonnull PsiModifierListOwner listOwner, @Nonnull String annotationFQN);
+  public abstract boolean deannotate(@Nonnull PsiModifierListOwner listOwner, @Nonnull String annotationFQN);
 
-	// Method used in Kotlin plugin when it is necessary to leave external annotation, but modify its arguments
-	public abstract boolean editExternalAnnotation(@Nonnull PsiModifierListOwner listOwner, @Nonnull String annotationFQN, @Nullable PsiNameValuePair[] value);
+  // Method used in Kotlin plugin when it is necessary to leave external annotation, but modify its arguments
+  public abstract boolean editExternalAnnotation(@Nonnull PsiModifierListOwner listOwner,
+                                                 @Nonnull String annotationFQN,
+                                                 @Nullable PsiNameValuePair[] value);
 
-	public abstract AnnotationPlace chooseAnnotationsPlace(@Nonnull PsiElement element);
+  public abstract AnnotationPlace chooseAnnotationsPlace(@Nonnull PsiElement element);
 
-	@Nullable
-	public abstract List<PsiFile> findExternalAnnotationsFiles(@Nonnull PsiModifierListOwner listOwner);
+  @Nullable
+  public abstract List<PsiFile> findExternalAnnotationsFiles(@Nonnull PsiModifierListOwner listOwner);
 
-	/**
-	 * @param element element to add new annotation for
-	 * @return place where the annotation must be added. No UI is displayed, so can be called inside any read-action.
-	 * May return {@link AnnotationPlace#NEED_ASK_USER} if the user confirmation is necessary.
-	 */
-	@Nonnull
-	public abstract AnnotationPlace chooseAnnotationsPlaceNoUi(@Nonnull PsiElement element);
+  /**
+   * @param element element to add new annotation for
+   * @return place where the annotation must be added. No UI is displayed, so can be called inside any read-action.
+   * May return {@link AnnotationPlace#NEED_ASK_USER} if the user confirmation is necessary.
+   */
+  @Nonnull
+  public abstract AnnotationPlace chooseAnnotationsPlaceNoUi(@Nonnull PsiElement element);
 
-	public static class CanceledConfigurationException extends RuntimeException
-	{
-		public static final CanceledConfigurationException INSTANCE = new CanceledConfigurationException();
+  public static class CanceledConfigurationException extends RuntimeException {
+    public static final CanceledConfigurationException INSTANCE = new CanceledConfigurationException();
 
-		private CanceledConfigurationException()
-		{
-		}
-	}
+    private CanceledConfigurationException() {
+    }
+  }
 }

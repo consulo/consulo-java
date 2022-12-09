@@ -15,6 +15,7 @@
  */
 package com.intellij.java.language.projectRoots.roots;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.content.OrderRootType;
 import consulo.module.content.layer.orderEntry.OrderEntry;
 import consulo.module.content.layer.orderEntry.OrderEntryWithTracking;
@@ -31,6 +32,7 @@ import java.util.List;
 /**
  * @author yole
  */
+@ExtensionImpl
 public class AnnotationOrderRootType extends OrderRootType {
   @Nonnull
   public static OrderRootType getInstance() {

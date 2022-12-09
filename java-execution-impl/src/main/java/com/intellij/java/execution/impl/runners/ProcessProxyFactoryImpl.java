@@ -15,82 +15,74 @@
  */
 package com.intellij.java.execution.impl.runners;
 
-import java.io.File;
-
+import com.intellij.java.execution.configurations.JavaCommandLine;
 import com.intellij.java.execution.runners.ProcessProxy;
 import com.intellij.java.execution.runners.ProcessProxyFactory;
-import consulo.container.plugin.PluginManager;
-import consulo.logging.Logger;
-import consulo.process.cmd.ParametersList;
-import jakarta.inject.Singleton;
-
-import consulo.process.ExecutionException;
-import com.intellij.java.execution.configurations.JavaCommandLine;
-import consulo.process.ProcessHandler;
-import com.intellij.java.language.projectRoots.JavaSdkVersion;
 import com.intellij.java.language.impl.projectRoots.ex.JavaSdkUtil;
-import consulo.util.lang.StringUtil;
+import com.intellij.java.language.projectRoots.JavaSdkVersion;
+import consulo.annotation.component.ServiceImpl;
+import consulo.container.plugin.PluginManager;
 import consulo.java.execution.configurations.OwnJavaParameters;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.java.rt.JavaRtClassNames;
 import consulo.java.rt.execution.application.AppMainV2Constants;
+import consulo.logging.Logger;
 import consulo.platform.Platform;
+import consulo.process.ExecutionException;
+import consulo.process.ProcessHandler;
+import consulo.process.cmd.ParametersList;
+import consulo.util.lang.StringUtil;
+import jakarta.inject.Singleton;
+
+import java.io.File;
 
 @Singleton
-public class ProcessProxyFactoryImpl extends ProcessProxyFactory
-{
-	private static final boolean ourMayUseLauncher = !Boolean.valueOf(Platform.current().jvm().getRuntimeProperty("idea.no.launcher"));
+@ServiceImpl
+public class ProcessProxyFactoryImpl extends ProcessProxyFactory {
+  private static final boolean ourMayUseLauncher = !Boolean.valueOf(Platform.current().jvm().getRuntimeProperty("idea.no.launcher"));
 
-	@Override
-	public ProcessProxy createCommandLineProxy(JavaCommandLine javaCmdLine) throws ExecutionException
-	{
-		OwnJavaParameters javaParameters = javaCmdLine.getJavaParameters();
-		String mainClass = javaParameters.getMainClass();
+  @Override
+  public ProcessProxy createCommandLineProxy(JavaCommandLine javaCmdLine) throws ExecutionException {
+    OwnJavaParameters javaParameters = javaCmdLine.getJavaParameters();
+    String mainClass = javaParameters.getMainClass();
 
-		if(ourMayUseLauncher && mainClass != null)
-		{
-			String rtJarPath = JavaSdkUtil.getJavaRtJarPath();
-			boolean runtimeJarFile = new File(rtJarPath).isFile();
+    if (ourMayUseLauncher && mainClass != null) {
+      String rtJarPath = JavaSdkUtil.getJavaRtJarPath();
+      boolean runtimeJarFile = new File(rtJarPath).isFile();
 
-			if(runtimeJarFile || javaParameters.getModuleName() == null)
-			{
-				try
-				{
-					ProcessProxyImpl proxy = new ProcessProxyImpl(StringUtil.getShortName(mainClass));
-					String port = String.valueOf(proxy.getPortNumber());
-					String binPath = new File(PluginManager.getPluginPath(JavaClassNames.class), "breakgen").getPath();
+      if (runtimeJarFile || javaParameters.getModuleName() == null) {
+        try {
+          ProcessProxyImpl proxy = new ProcessProxyImpl(StringUtil.getShortName(mainClass));
+          String port = String.valueOf(proxy.getPortNumber());
+          String binPath = new File(PluginManager.getPluginPath(JavaClassNames.class), "breakgen").getPath();
 
-					if(runtimeJarFile && JavaSdkUtil.isJdkAtLeast(javaParameters.getJdk(), JavaSdkVersion.JDK_1_5))
-					{
-						javaParameters.getVMParametersList().add("-javaagent:" + rtJarPath + '=' + port + ':' + binPath);
-					}
-					else
-					{
-						JavaSdkUtil.addRtJar(javaParameters.getClassPath());
+          if (runtimeJarFile && JavaSdkUtil.isJdkAtLeast(javaParameters.getJdk(), JavaSdkVersion.JDK_1_5)) {
+            javaParameters.getVMParametersList().add("-javaagent:" + rtJarPath + '=' + port + ':' + binPath);
+          }
+          else {
+            JavaSdkUtil.addRtJar(javaParameters.getClassPath());
 
-						ParametersList vmParametersList = javaParameters.getVMParametersList();
-						vmParametersList.defineProperty(AppMainV2Constants.LAUNCHER_PORT_NUMBER, port);
-						vmParametersList.defineProperty(AppMainV2Constants.LAUNCHER_BIN_PATH, binPath);
+            ParametersList vmParametersList = javaParameters.getVMParametersList();
+            vmParametersList.defineProperty(AppMainV2Constants.LAUNCHER_PORT_NUMBER, port);
+            vmParametersList.defineProperty(AppMainV2Constants.LAUNCHER_BIN_PATH, binPath);
 
-						javaParameters.getProgramParametersList().prepend(mainClass);
-						javaParameters.setMainClass(JavaRtClassNames.APP_MAINV2);
-					}
+            javaParameters.getProgramParametersList().prepend(mainClass);
+            javaParameters.setMainClass(JavaRtClassNames.APP_MAINV2);
+          }
 
-					return proxy;
-				}
-				catch(Exception e)
-				{
-					Logger.getInstance(ProcessProxy.class).warn(e);
-				}
-			}
-		}
+          return proxy;
+        }
+        catch (Exception e) {
+          Logger.getInstance(ProcessProxy.class).warn(e);
+        }
+      }
+    }
 
-		return null;
-	}
+    return null;
+  }
 
-	@Override
-	public ProcessProxy getAttachedProxy(ProcessHandler processHandler)
-	{
-		return ProcessProxyImpl.KEY.get(processHandler);
-	}
+  @Override
+  public ProcessProxy getAttachedProxy(ProcessHandler processHandler) {
+    return ProcessProxyImpl.KEY.get(processHandler);
+  }
 }

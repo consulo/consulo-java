@@ -2,6 +2,7 @@
 package com.intellij.java.impl.openapi.vfs.impl.jrt;
 
 import com.intellij.java.language.vfs.jrt.JrtFileSystem;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.Application;
 import consulo.application.ApplicationManager;
 import consulo.ide.impl.idea.openapi.util.io.FileUtil;
@@ -26,6 +27,7 @@ import java.io.File;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+@ExtensionImpl
 public class JrtFileSystemImpl extends ArchiveFileSystem implements JrtFileSystem {
   private final Map<String, ArchiveHandler> myHandlers = Collections.synchronizedMap(Maps.newHashMap(FileUtil.PATH_HASHING_STRATEGY));
   private final AtomicBoolean mySubscribed = new AtomicBoolean(false);

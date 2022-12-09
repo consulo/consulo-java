@@ -15,6 +15,12 @@
  */
 package com.intellij.java.impl.codeInsight.generation;
 
+import com.intellij.java.impl.generate.exception.TemplateResourceException;
+import com.intellij.java.impl.generate.template.TemplateResource;
+import com.intellij.java.impl.generate.template.TemplatesManager;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ServiceAPI;
+import consulo.annotation.component.ServiceImpl;
 import consulo.component.persist.State;
 import consulo.component.persist.Storage;
 import consulo.component.persist.StoragePathMacros;
@@ -24,9 +30,6 @@ import consulo.util.lang.Couple;
 import consulo.util.lang.StringUtil;
 import jakarta.inject.Singleton;
 import org.jetbrains.annotations.NonNls;
-import com.intellij.java.impl.generate.exception.TemplateResourceException;
-import com.intellij.java.impl.generate.template.TemplateResource;
-import com.intellij.java.impl.generate.template.TemplatesManager;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
@@ -37,11 +40,13 @@ import java.util.Set;
 
 @Singleton
 @State(
-    name = "EqualsHashCodeTemplates",
-    storages = {
-        @Storage(
-            file = StoragePathMacros.APP_CONFIG + "/equalsHashCodeTemplates.xml")
-    })
+  name = "EqualsHashCodeTemplates",
+  storages = {
+    @Storage(
+      file = StoragePathMacros.APP_CONFIG + "/equalsHashCodeTemplates.xml")
+  })
+@ServiceAPI(ComponentScope.APPLICATION)
+@ServiceImpl
 public class EqualsHashCodeTemplatesManager extends TemplatesManager {
   @Nonnull
   public static EqualsHashCodeTemplatesManager getInstance() {
@@ -77,22 +82,23 @@ public class EqualsHashCodeTemplatesManager extends TemplatesManager {
   public TemplateResource[] getDefaultTemplates() {
     try {
       return new TemplateResource[]{
-          new TemplateResource(toEqualsName(INTELLI_J_DEFAULT), readFile(DEFAULT_EQUALS), true),
-          new TemplateResource(toHashCodeName(INTELLI_J_DEFAULT), readFile(DEFAULT_HASH_CODE), true),
+        new TemplateResource(toEqualsName(INTELLI_J_DEFAULT), readFile(DEFAULT_EQUALS), true),
+        new TemplateResource(toHashCodeName(INTELLI_J_DEFAULT), readFile(DEFAULT_HASH_CODE), true),
 
-          new TemplateResource(toEqualsName(EQUALS_HASH_CODE_BUILDER_APACHE_COMMONS_LANG), readFile(APACHE_EQUALS), true),
-          new TemplateResource(toHashCodeName(EQUALS_HASH_CODE_BUILDER_APACHE_COMMONS_LANG), readFile(APACHE_HASH_CODE), true),
+        new TemplateResource(toEqualsName(EQUALS_HASH_CODE_BUILDER_APACHE_COMMONS_LANG), readFile(APACHE_EQUALS), true),
+        new TemplateResource(toHashCodeName(EQUALS_HASH_CODE_BUILDER_APACHE_COMMONS_LANG), readFile(APACHE_HASH_CODE), true),
 
-          new TemplateResource(toEqualsName(EQUALS_HASH_CODE_BUILDER_APACHE_COMMONS_LANG_3), readFile(APACHE3_EQUALS), true),
-          new TemplateResource(toHashCodeName(EQUALS_HASH_CODE_BUILDER_APACHE_COMMONS_LANG_3), readFile(APACHE3_HASH_CODE), true),
+        new TemplateResource(toEqualsName(EQUALS_HASH_CODE_BUILDER_APACHE_COMMONS_LANG_3), readFile(APACHE3_EQUALS), true),
+        new TemplateResource(toHashCodeName(EQUALS_HASH_CODE_BUILDER_APACHE_COMMONS_LANG_3), readFile(APACHE3_HASH_CODE), true),
 
-          new TemplateResource(toEqualsName(OBJECTS_EQUAL_AND_HASH_CODE_GUAVA), readFile(GUAVA_EQUALS), true),
-          new TemplateResource(toHashCodeName(OBJECTS_EQUAL_AND_HASH_CODE_GUAVA), readFile(GUAVA_HASH_CODE), true),
+        new TemplateResource(toEqualsName(OBJECTS_EQUAL_AND_HASH_CODE_GUAVA), readFile(GUAVA_EQUALS), true),
+        new TemplateResource(toHashCodeName(OBJECTS_EQUAL_AND_HASH_CODE_GUAVA), readFile(GUAVA_HASH_CODE), true),
 
-          new TemplateResource(toEqualsName(JAVA_UTIL_OBJECTS_EQUALS_AND_HASH_CODE), readFile(OBJECTS_EQUALS), true),
-          new TemplateResource(toHashCodeName(JAVA_UTIL_OBJECTS_EQUALS_AND_HASH_CODE), readFile(OBJECTS_HASH_CODE), true)
+        new TemplateResource(toEqualsName(JAVA_UTIL_OBJECTS_EQUALS_AND_HASH_CODE), readFile(OBJECTS_EQUALS), true),
+        new TemplateResource(toHashCodeName(JAVA_UTIL_OBJECTS_EQUALS_AND_HASH_CODE), readFile(OBJECTS_HASH_CODE), true)
       };
-    } catch (IOException e) {
+    }
+    catch (IOException e) {
       throw new TemplateResourceException("Error loading default templates", e);
     }
   }
@@ -176,7 +182,8 @@ public class EqualsHashCodeTemplatesManager extends TemplatesManager {
       final Couple<TemplateResource> couple = resources.get(baseName);
       if (couple != null) {
         resources.put(baseName, Couple.of(couple.first != null ? couple.first : eq, couple.second != null ? couple.second : hc));
-      } else {
+      }
+      else {
         resources.put(baseName, Couple.of(eq, hc));
       }
     }

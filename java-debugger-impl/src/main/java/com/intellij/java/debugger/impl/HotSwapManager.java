@@ -18,6 +18,9 @@ package com.intellij.java.debugger.impl;
 import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.impl.engine.DebuggerManagerThreadImpl;
 import com.intellij.java.debugger.impl.engine.events.DebuggerCommandImpl;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ServiceAPI;
+import consulo.annotation.component.ServiceImpl;
 import consulo.application.ApplicationManager;
 import consulo.ide.ServiceManager;
 import consulo.project.Project;
@@ -40,6 +43,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Singleton
+@ServiceAPI(ComponentScope.PROJECT)
+@ServiceImpl
 public class HotSwapManager {
   @Nonnull
   public static HotSwapManager getInstance(@Nonnull Project project) {

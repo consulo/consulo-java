@@ -20,12 +20,14 @@
  */
 package com.intellij.java.impl.ide.util.scopeChooser;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.content.scope.ScopeDescriptor;
 import consulo.content.scope.ScopeDescriptorProvider;
 import consulo.project.Project;
 
 import javax.annotation.Nonnull;
 
+@ExtensionImpl
 public class HierarchyScopeDescriptorProvider implements ScopeDescriptorProvider {
   @Nonnull
   public ScopeDescriptor[] getScopeDescriptors(final Project project) {

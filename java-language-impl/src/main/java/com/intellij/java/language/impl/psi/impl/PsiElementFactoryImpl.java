@@ -28,6 +28,7 @@ import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleSettingsFacade;
 import com.intellij.java.language.psi.javadoc.PsiDocTag;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.annotation.component.ServiceImpl;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.java.language.psi.JavaLanguageVersion;
 import consulo.language.Language;
@@ -59,6 +60,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Singleton
+@ServiceImpl
 public class PsiElementFactoryImpl extends PsiJavaParserFacadeImpl implements PsiElementFactory {
   private PsiClass myArrayClass;
   private PsiClass myArrayClass15;

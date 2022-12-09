@@ -15,30 +15,32 @@
  */
 package com.intellij.java.language.psi.augment;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import consulo.component.extension.ExtensionPointName;
 import com.intellij.java.language.psi.PsiClassType;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.TypeAnnotationProvider;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ExtensionAPI;
+import consulo.component.extension.ExtensionPointName;
 
-public abstract class TypeAnnotationModifier
-{
-	public static final ExtensionPointName<TypeAnnotationModifier> EP_NAME = ExtensionPointName.create("consulo.java.typeAnnotationModifier");
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-	/**
-	 * Type annotations are ignored during inference process. When they are present on types which are bounds of the inference variables,
-	 * then the corresponding instantiations of inference variables would contain that type annotations.
-	 * If different bounds contain contradicting type annotations or type annotations on types repeat target type annotations,
-	 * it could be useful to ignore such annotations in the resulted instantiation.
-	 *
-	 * @param inferenceVariableType target type
-	 * @param boundType             bound which annotations should be changed according to present annotations
-	 *                              and annotations on target type
-	 * @return provider based on modified annotations or null if no applicable annotations found
-	 */
-	@Nullable
-	public abstract TypeAnnotationProvider modifyAnnotations(@Nonnull PsiType inferenceVariableType, @Nonnull PsiClassType boundType);
+@ExtensionAPI(ComponentScope.APPLICATION)
+public abstract class TypeAnnotationModifier {
+  public static final ExtensionPointName<TypeAnnotationModifier> EP_NAME = ExtensionPointName.create(TypeAnnotationModifier.class);
+
+  /**
+   * Type annotations are ignored during inference process. When they are present on types which are bounds of the inference variables,
+   * then the corresponding instantiations of inference variables would contain that type annotations.
+   * If different bounds contain contradicting type annotations or type annotations on types repeat target type annotations,
+   * it could be useful to ignore such annotations in the resulted instantiation.
+   *
+   * @param inferenceVariableType target type
+   * @param boundType             bound which annotations should be changed according to present annotations
+   *                              and annotations on target type
+   * @return provider based on modified annotations or null if no applicable annotations found
+   */
+  @Nullable
+  public abstract TypeAnnotationProvider modifyAnnotations(@Nonnull PsiType inferenceVariableType, @Nonnull PsiClassType boundType);
 
 }

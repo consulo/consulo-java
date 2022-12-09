@@ -15,18 +15,21 @@
  */
 package com.intellij.java.impl.codeInsight.problems;
 
+import consulo.annotation.component.ExtensionImpl;
+import consulo.compiler.CompilerManager;
+import consulo.java.impl.util.JavaProjectRootsUtil;
+import consulo.language.editor.wolfAnalyzer.WolfFileProblemFilter;
+import consulo.project.Project;
+import consulo.virtualFileSystem.VirtualFile;
 import jakarta.inject.Inject;
 
-import consulo.compiler.CompilerManager;
-import consulo.project.Project;
-import consulo.util.lang.function.Condition;
-import consulo.virtualFileSystem.VirtualFile;
-import consulo.java.impl.util.JavaProjectRootsUtil;
+import javax.annotation.Nonnull;
 
 /**
-* @author yole
-*/
-public class DefaultProblemFileHighlightFilter implements Condition<VirtualFile> {
+ * @author yole
+ */
+@ExtensionImpl
+public class DefaultProblemFileHighlightFilter implements WolfFileProblemFilter {
   private final Project myProject;
 
   @Inject
@@ -35,7 +38,7 @@ public class DefaultProblemFileHighlightFilter implements Condition<VirtualFile>
   }
 
   @Override
-  public boolean value(final VirtualFile file) {
+  public boolean isToBeHighlighted(@Nonnull VirtualFile file) {
     return JavaProjectRootsUtil.isJavaSourceFile(myProject, file, false)
       && !CompilerManager.getInstance(myProject).isExcludedFromCompilation(file);
   }

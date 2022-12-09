@@ -18,6 +18,7 @@ package com.intellij.java.impl.codeInsight.template.postfix.templates;
 import com.intellij.java.impl.codeInsight.completion.JavaCompletionContributor;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.JavaTokenType;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.ApplicationManager;
 import consulo.application.util.function.Computable;
 import consulo.codeEditor.Editor;
@@ -35,6 +36,7 @@ import consulo.util.dataholder.Key;
 import javax.annotation.Nonnull;
 import java.util.Set;
 
+@ExtensionImpl
 public class JavaPostfixTemplateProvider extends PostfixTemplateProvider {
   public static final Key<SmartPsiElementPointer<PsiElement>> ADDED_SEMICOLON = Key.create("postfix_added_semicolon");
 

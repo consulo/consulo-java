@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.codeInsight.daemon;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.ProblemHighlightFilter;
 import com.intellij.java.language.impl.JavaFileType;
 import consulo.module.content.ProjectRootManager;
@@ -24,7 +25,7 @@ import consulo.java.impl.util.JavaProjectRootsUtil;
 
 import javax.annotation.Nonnull;
 
-
+@ExtensionImpl
 public class JavaProblemHighlightFilter extends ProblemHighlightFilter {
   @Override
   public boolean shouldHighlight(@Nonnull PsiFile psiFile) {

@@ -24,6 +24,7 @@ import com.intellij.java.language.psi.PsiImportStatement;
 import com.intellij.java.language.psi.PsiImportStaticStatement;
 import com.intellij.java.language.psi.PsiJavaFile;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.document.Document;
 import consulo.language.Language;
 import consulo.language.editor.refactoring.ImportOptimizer;
@@ -40,6 +41,7 @@ import javax.annotation.Nonnull;
 /**
  * @author max
  */
+@ExtensionImpl
 public class JavaImportOptimizer implements ImportOptimizer {
   private static final Logger LOG = Logger.getInstance(JavaImportOptimizer.class);
 

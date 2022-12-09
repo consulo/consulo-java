@@ -17,6 +17,7 @@ package consulo.java.impl.psi.impl;
 
 import com.intellij.java.language.impl.psi.impl.file.PsiPackageImpl;
 import com.intellij.java.language.psi.PsiNameHelper;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.java.language.module.extension.JavaModuleExtension;
 import consulo.language.psi.PsiManager;
 import consulo.language.psi.PsiPackage;
@@ -31,6 +32,7 @@ import javax.annotation.Nonnull;
  * @author VISTALL
  * @since 8:43/20.05.13
  */
+@ExtensionImpl
 public class JavaPsiPackageSupportProvider implements PsiPackageSupportProvider {
   @Override
   public boolean isSupported(@Nonnull ModuleExtension moduleExtension) {

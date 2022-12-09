@@ -16,6 +16,7 @@
 package com.intellij.java.impl.vcsUtil;
 
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
 import consulo.document.Document;
 import consulo.document.FileDocumentManager;
@@ -37,6 +38,7 @@ import java.util.Set;
 /**
  * @author yole
  */
+@ExtensionImpl
 public class JavaVcsSelectionProvider implements VcsSelectionProvider {
   @Nullable
   @RequiredUIAccess

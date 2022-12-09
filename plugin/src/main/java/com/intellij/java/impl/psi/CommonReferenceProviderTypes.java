@@ -15,6 +15,8 @@
  */
 package com.intellij.java.impl.psi;
 
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ServiceAPI;
 import consulo.ide.ServiceManager;
 import consulo.project.Project;
 import consulo.language.psi.PsiReferenceProvider;
@@ -23,6 +25,7 @@ import consulo.language.psi.ReferenceProviderType;
 /**
  * @author peter
  */
+@ServiceAPI(ComponentScope.APPLICATION)
 public abstract class CommonReferenceProviderTypes {
 
   /**

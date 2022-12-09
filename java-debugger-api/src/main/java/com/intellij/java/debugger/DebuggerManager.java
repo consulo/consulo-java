@@ -18,6 +18,8 @@ package com.intellij.java.debugger;
 import com.intellij.java.debugger.engine.DebugProcess;
 import com.intellij.java.debugger.engine.DebugProcessListener;
 import com.intellij.java.language.psi.PsiClass;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ServiceAPI;
 import consulo.process.ProcessHandler;
 import consulo.project.Project;
 
@@ -26,6 +28,7 @@ import java.util.function.Function;
 /**
  * @author lex
  */
+@ServiceAPI(value = ComponentScope.PROJECT, lazy = false)
 public abstract class DebuggerManager {
   public static DebuggerManager getInstance(Project project) {
     return project.getComponent(DebuggerManager.class);

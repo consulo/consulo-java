@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.codeInsight.template.macro;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.completion.lookup.LookupElement;
 import consulo.language.editor.template.ExpressionContext;
 import consulo.language.editor.template.TemplateCompletionProcessor;
@@ -27,6 +28,7 @@ import java.util.List;
 /**
  * @author yole
  */
+@ExtensionImpl
 public class JavaTemplateCompletionProcessor implements TemplateCompletionProcessor {
   @Override
   public boolean nextTabOnItemSelected(final ExpressionContext context, final LookupElement item) {

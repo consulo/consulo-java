@@ -26,13 +26,10 @@ import java.util.function.Predicate;
  * @author mike
  */
 public class PsiMethodUtil {
-  public static final Predicate<PsiClass> MAIN_CLASS = new Predicate<PsiClass>() {
-    @Override
-    public boolean test(final PsiClass psiClass) {
-      if (psiClass instanceof PsiAnonymousClass) return false;
-      if (psiClass.isInterface()) return false;
-      return psiClass.getContainingClass() == null || psiClass.hasModifierProperty(PsiModifier.STATIC);
-    }
+  public static final Predicate<PsiClass> MAIN_CLASS = psiClass -> {
+    if (psiClass instanceof PsiAnonymousClass) return false;
+    if (psiClass.isInterface()) return false;
+    return psiClass.getContainingClass() == null || psiClass.hasModifierProperty(PsiModifier.STATIC);
   };
 
   private PsiMethodUtil() {

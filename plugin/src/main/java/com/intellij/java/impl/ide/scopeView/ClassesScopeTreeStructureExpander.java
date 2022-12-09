@@ -22,6 +22,7 @@ import com.intellij.java.impl.ide.scopeView.nodes.MethodNode;
 import com.intellij.java.language.impl.JavaClassFileType;
 import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.document.Document;
 import consulo.ide.impl.idea.ide.scopeView.ScopeTreeStructureExpander;
 import consulo.ide.impl.idea.ide.scopeView.ScopeViewPane;
@@ -36,6 +37,7 @@ import consulo.project.Project;
 import consulo.project.ui.view.ProjectView;
 import consulo.ui.ex.awt.tree.TreeUtil;
 import consulo.virtualFileSystem.VirtualFile;
+import jakarta.inject.Inject;
 
 import javax.swing.*;
 import javax.swing.event.TreeExpansionEvent;
@@ -49,10 +51,12 @@ import java.util.Set;
  * User: anna
  * Date: 30-Jan-2006
  */
+@ExtensionImpl
 public class ClassesScopeTreeStructureExpander implements ScopeTreeStructureExpander {
 
   private final Project myProject;
 
+  @Inject
   public ClassesScopeTreeStructureExpander(final Project project) {
     myProject = project;
   }

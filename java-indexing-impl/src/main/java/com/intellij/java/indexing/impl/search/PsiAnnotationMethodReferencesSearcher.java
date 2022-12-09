@@ -5,20 +5,22 @@ import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiNameValuePair;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.util.ReadActionProcessor;
 import consulo.application.util.function.Processor;
 import consulo.application.util.query.Query;
-import consulo.application.util.query.QueryExecutor;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
 import consulo.language.psi.search.ReferencesSearch;
+import consulo.language.psi.search.ReferencesSearchQueryExecutor;
 
 import javax.annotation.Nonnull;
 
 /**
  * @author max
  */
-public class PsiAnnotationMethodReferencesSearcher implements QueryExecutor<PsiReference, ReferencesSearch.SearchParameters> {
+@ExtensionImpl
+public class PsiAnnotationMethodReferencesSearcher implements ReferencesSearchQueryExecutor {
   @Override
   public boolean execute(@Nonnull final ReferencesSearch.SearchParameters p, @Nonnull final Processor<? super PsiReference> consumer) {
     final PsiElement refElement = p.getElementToSearch();

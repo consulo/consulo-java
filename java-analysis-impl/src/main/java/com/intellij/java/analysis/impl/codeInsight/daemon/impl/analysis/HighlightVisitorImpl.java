@@ -34,6 +34,7 @@ import com.intellij.java.language.psi.infos.MethodCandidateInfo;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.java.language.psi.javadoc.PsiDocTagValue;
 import com.intellij.java.language.psi.util.*;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.ApplicationManager;
 import consulo.application.ApplicationProperties;
 import consulo.application.dumb.IndexNotReadyException;
@@ -64,6 +65,7 @@ import java.util.*;
 
 import static consulo.util.lang.ObjectUtil.notNull;
 
+@ExtensionImpl
 public class HighlightVisitorImpl extends JavaElementVisitor implements HighlightVisitor {
   private final PsiResolveHelper myResolveHelper;
 

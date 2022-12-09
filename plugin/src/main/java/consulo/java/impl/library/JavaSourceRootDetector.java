@@ -16,6 +16,7 @@
 package consulo.java.impl.library;
 
 import com.intellij.java.impl.openapi.roots.ui.configuration.JavaVfsSourceRootDetectionUtil;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.progress.ProgressIndicator;
 import consulo.content.base.SourcesOrderRootType;
 import consulo.content.library.ui.RootDetector;
@@ -24,6 +25,7 @@ import consulo.virtualFileSystem.VirtualFile;
 import javax.annotation.Nonnull;
 import java.util.Collection;
 
+@ExtensionImpl
 public class JavaSourceRootDetector extends RootDetector {
   public JavaSourceRootDetector() {
     super(SourcesOrderRootType.getInstance(), false, "java sources");

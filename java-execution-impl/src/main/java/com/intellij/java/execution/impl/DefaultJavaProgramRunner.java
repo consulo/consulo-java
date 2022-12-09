@@ -21,6 +21,7 @@ import com.intellij.java.execution.runners.JavaPatchableProgramRunner;
 import com.intellij.java.execution.runners.ProcessProxy;
 import com.intellij.java.execution.runners.ProcessProxyFactory;
 import com.intellij.java.execution.unscramble.ThreadDumpParser;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.AllIcons;
 import consulo.application.ApplicationManager;
 import consulo.application.util.DateFormatUtil;
@@ -62,6 +63,7 @@ import java.util.List;
 /**
  * @author spleaner
  */
+@ExtensionImpl(id = "defaultJavaRunRunner")
 public class DefaultJavaProgramRunner extends JavaPatchableProgramRunner {
   private final static String ourWiseThreadDumpProperty = "idea.java.run.wise.thread.dump";
 

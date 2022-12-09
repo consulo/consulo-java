@@ -24,6 +24,7 @@
  */
 package com.intellij.java.impl.codeInsight.completion;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.completion.lookup.CharFilter;
 import consulo.language.editor.completion.lookup.Lookup;
 import consulo.language.editor.completion.lookup.LookupElement;
@@ -35,6 +36,7 @@ import consulo.language.psi.*;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import consulo.language.psi.util.PsiTreeUtil;
 
+@ExtensionImpl(id = "java")
 public class JavaCharFilter extends CharFilter {
 
   private static boolean isWithinLiteral(final Lookup lookup) {

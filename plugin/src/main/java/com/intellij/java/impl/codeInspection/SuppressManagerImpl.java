@@ -22,6 +22,7 @@ package com.intellij.java.impl.codeInspection;
 
 import com.intellij.java.analysis.codeInspection.SuppressManager;
 import com.intellij.java.analysis.impl.codeInspection.JavaSuppressionUtil;
+import consulo.annotation.component.ServiceImpl;
 import consulo.language.editor.inspection.SuppressIntentionActionFromFix;
 import consulo.language.editor.inspection.SuppressQuickFix;
 import consulo.language.editor.intention.SuppressIntentionAction;
@@ -32,6 +33,7 @@ import jakarta.inject.Singleton;
 import javax.annotation.Nonnull;
 
 @Singleton
+@ServiceImpl
 public class SuppressManagerImpl extends SuppressManager {
   @Override
   @Nonnull

@@ -51,7 +51,6 @@ open module consulo.java {
   exports com.intellij.java.impl.codeInsight.editorActions.smartEnter;
   exports com.intellij.java.impl.codeInsight.editorActions.wordSelection;
   exports com.intellij.java.impl.codeInsight.folding.impl;
-  exports com.intellij.java.impl.codeInsight.folding.impl.actions;
   exports com.intellij.java.impl.codeInsight.generation;
   exports com.intellij.java.impl.codeInsight.generation.actions;
   exports com.intellij.java.impl.codeInsight.generation.surroundWith;

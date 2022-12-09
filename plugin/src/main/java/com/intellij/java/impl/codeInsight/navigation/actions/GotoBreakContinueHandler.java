@@ -16,6 +16,7 @@
 package com.intellij.java.impl.codeInsight.navigation.actions;
 
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
 import consulo.language.ast.IElementType;
 import consulo.language.editor.navigation.GotoDeclarationHandlerBase;
@@ -27,6 +28,7 @@ import javax.annotation.Nullable;
 /**
  * @author yole
  */
+@ExtensionImpl
 public class GotoBreakContinueHandler extends GotoDeclarationHandlerBase {
   private static final Logger LOG = Logger.getInstance(GotoBreakContinueHandler.class);
 

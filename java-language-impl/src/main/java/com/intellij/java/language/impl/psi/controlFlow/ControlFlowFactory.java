@@ -1,6 +1,9 @@
 // Copyright 2000-2020 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.language.impl.psi.controlFlow;
 
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ServiceAPI;
+import consulo.annotation.component.ServiceImpl;
 import consulo.disposer.Disposable;
 import consulo.ide.ServiceManager;
 import consulo.language.psi.AnyPsiChangeListener;
@@ -17,6 +20,8 @@ import javax.annotation.Nonnull;
 import java.util.Map;
 
 @Singleton
+@ServiceAPI(ComponentScope.PROJECT)
+@ServiceImpl
 public final class ControlFlowFactory implements Disposable {
   // psiElements hold weakly, controlFlows softly
   private final Map<PsiElement, ConcurrentList<ControlFlowContext>> cachedFlows = Maps.newConcurrentWeakKeySoftValueHashMap();
@@ -79,7 +84,7 @@ public final class ControlFlowFactory implements Disposable {
         return false;
       }
 
-      final ControlFlowContext that = (ControlFlowContext) o;
+      final ControlFlowContext that = (ControlFlowContext)o;
 
       return isFor(that);
     }
@@ -88,7 +93,7 @@ public final class ControlFlowFactory implements Disposable {
     public int hashCode() {
       int result = policy.hashCode();
       result = 31 * result + (options.hashCode());
-      result = 31 * result + (int) (modificationCount ^ (modificationCount >>> 32));
+      result = 31 * result + (int)(modificationCount ^ (modificationCount >>> 32));
       return result;
     }
 
@@ -119,7 +124,9 @@ public final class ControlFlowFactory implements Disposable {
   }
 
   @Nonnull
-  public ControlFlow getControlFlow(@Nonnull PsiElement element, @Nonnull ControlFlowPolicy policy, boolean evaluateConstantIfCondition) throws AnalysisCanceledException {
+  public ControlFlow getControlFlow(@Nonnull PsiElement element,
+                                    @Nonnull ControlFlowPolicy policy,
+                                    boolean evaluateConstantIfCondition) throws AnalysisCanceledException {
     return doGetControlFlow(element, policy, ControlFlowOptions.create(true, evaluateConstantIfCondition, true));
   }
 

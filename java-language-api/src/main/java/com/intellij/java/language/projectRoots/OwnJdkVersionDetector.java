@@ -4,6 +4,8 @@
 package com.intellij.java.language.projectRoots;
 
 import com.intellij.java.language.util.Bitness;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ServiceAPI;
 import consulo.ide.ServiceManager;
 import consulo.application.util.JavaVersion;
 
@@ -13,6 +15,7 @@ import javax.annotation.Nullable;
 /**
  * @author nik
  */
+@ServiceAPI(ComponentScope.APPLICATION)
 public abstract class OwnJdkVersionDetector {
   public static OwnJdkVersionDetector getInstance() {
     return ServiceManager.getService(OwnJdkVersionDetector.class);

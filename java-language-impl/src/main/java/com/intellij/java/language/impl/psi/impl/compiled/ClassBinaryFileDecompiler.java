@@ -16,6 +16,7 @@
 package com.intellij.java.language.impl.psi.impl.compiled;
 
 import com.intellij.java.language.impl.JavaClassFileType;
+import com.intellij.java.language.psi.compiled.ClassFileDecompiler;
 import com.intellij.java.language.psi.compiled.ClassFileDecompilers;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiManager;
@@ -30,7 +31,7 @@ import javax.annotation.Nonnull;
  * @author max
  */
 @ExtensionImpl
-public class ClassFileDecompiler implements BinaryFileDecompiler {
+public class ClassBinaryFileDecompiler implements BinaryFileDecompiler {
   @Nonnull
   @Override
   public FileType getFileType() {
@@ -40,10 +41,10 @@ public class ClassFileDecompiler implements BinaryFileDecompiler {
   @Override
   @Nonnull
   public CharSequence decompile(@Nonnull VirtualFile file) {
-    ClassFileDecompilers.Decompiler decompiler = ClassFileDecompilers.find(file);
-    if (decompiler instanceof ClassFileDecompilers.Full) {
+    com.intellij.java.language.psi.compiled.ClassFileDecompiler decompiler = ClassFileDecompilers.find(file);
+    if (decompiler instanceof ClassFileDecompiler.Full) {
       PsiManager manager = PsiManager.getInstance(ProjectManager.getInstance().getDefaultProject());
-      return ((ClassFileDecompilers.Full) decompiler).createFileViewProvider(file, manager, true).getContents();
+      return ((ClassFileDecompiler.Full) decompiler).createFileViewProvider(file, manager, true).getContents();
     }
 
     return decompileText(file);
@@ -51,9 +52,9 @@ public class ClassFileDecompiler implements BinaryFileDecompiler {
 
   @Nonnull
   public static CharSequence decompileText(@Nonnull VirtualFile file) {
-    ClassFileDecompilers.Decompiler decompiler = ClassFileDecompilers.find(file);
-    if (decompiler instanceof ClassFileDecompilers.Light) {
-      return ((ClassFileDecompilers.Light) decompiler).getText(file);
+    com.intellij.java.language.psi.compiled.ClassFileDecompiler decompiler = ClassFileDecompilers.find(file);
+    if (decompiler instanceof ClassFileDecompiler.Light) {
+      return ((ClassFileDecompiler.Light) decompiler).getText(file);
     }
 
     return ClsFileImpl.decompile(file);

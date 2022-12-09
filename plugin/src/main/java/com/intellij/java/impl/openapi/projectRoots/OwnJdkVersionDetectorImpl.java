@@ -3,6 +3,7 @@ package com.intellij.java.impl.openapi.projectRoots;
 
 import com.intellij.java.language.projectRoots.OwnJdkVersionDetector;
 import com.intellij.java.language.util.Bitness;
+import consulo.annotation.component.ServiceImpl;
 import consulo.application.Application;
 import consulo.application.util.JavaVersion;
 import consulo.application.util.SystemInfo;
@@ -29,6 +30,7 @@ import java.util.jar.Manifest;
  * @author nik
  */
 @Singleton
+@ServiceImpl
 public class OwnJdkVersionDetectorImpl extends OwnJdkVersionDetector {
   private static final Logger LOG = Logger.getInstance(OwnJdkVersionDetectorImpl.class);
 

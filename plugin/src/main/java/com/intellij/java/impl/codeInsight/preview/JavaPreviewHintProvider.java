@@ -19,6 +19,7 @@ import com.intellij.java.language.patterns.PsiExpressionPattern;
 import com.intellij.java.language.patterns.PsiJavaPatterns;
 import com.intellij.java.language.patterns.PsiMethodPattern;
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.ide.impl.idea.codeInsight.preview.ColorPreviewComponent;
 import consulo.ide.impl.idea.codeInsight.preview.ImagePreviewComponent;
 import consulo.ide.impl.idea.codeInsight.preview.PreviewHintProvider;
@@ -38,6 +39,7 @@ import java.awt.*;
 /**
  * @author yole
  */
+@ExtensionImpl
 public class JavaPreviewHintProvider implements PreviewHintProvider {
   private static final PsiMethodPattern DECODE_METHOD = PsiJavaPatterns.psiMethod().definedInClass(Color.class.getName()).withName("decode");
   private static final PsiExpressionPattern.Capture<PsiExpression> DECODE_METHOD_CALL_PARAMETER = PsiJavaPatterns.psiExpression().methodCallParameter(0, DECODE_METHOD);

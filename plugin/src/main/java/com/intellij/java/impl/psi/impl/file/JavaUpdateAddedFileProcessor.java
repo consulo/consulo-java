@@ -18,6 +18,7 @@ package com.intellij.java.impl.psi.impl.file;
 import com.intellij.java.language.psi.JavaDirectoryService;
 import com.intellij.java.language.psi.PsiClassOwner;
 import com.intellij.java.language.psi.PsiJavaPackage;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiDirectory;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.UpdateAddedFileProcessor;
@@ -29,6 +30,7 @@ import consulo.language.util.IncorrectOperationException;
  * Date: Sep 18, 2008
  * Time: 3:33:07 PM
  */
+@ExtensionImpl
 public class JavaUpdateAddedFileProcessor extends UpdateAddedFileProcessor {
   @Override
   public boolean canProcessElement(final PsiFile file) {

@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.application.options;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.codeStyle.ui.setting.CodeStyleAbstractConfigurable;
 import consulo.language.codeStyle.ui.setting.CodeStyleAbstractPanel;
 import com.intellij.java.impl.psi.codeStyle.JavaCodeStyleSettings;
@@ -31,6 +32,7 @@ import javax.annotation.Nullable;
 /**
  * @author Rustam Vishnyakov
  */
+@ExtensionImpl
 public class JavaCodeStyleSettingsProvider extends CodeStyleSettingsProvider {
   @Nonnull
   @Override

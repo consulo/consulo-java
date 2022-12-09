@@ -1,5 +1,6 @@
 package com.intellij.java.impl.javadoc;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.CodeInsightSettings;
 import consulo.language.editor.action.EnterHandlerDelegateAdapter;
 import consulo.dataContext.DataContext;
@@ -22,6 +23,7 @@ import java.util.List;
  * @author Denis Zhdanov
  * @since 5/30/11 2:08 PM
  */
+@ExtensionImpl
 public class EnterInJavadocParamDescriptionHandler extends EnterHandlerDelegateAdapter {
 
   private final JavadocHelper myHelper = JavadocHelper.getInstance();

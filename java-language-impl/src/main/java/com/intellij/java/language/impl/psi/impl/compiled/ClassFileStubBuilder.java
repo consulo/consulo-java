@@ -16,15 +16,16 @@
 package com.intellij.java.language.impl.psi.impl.compiled;
 
 import com.intellij.java.language.impl.JavaClassFileType;
+import com.intellij.java.language.psi.compiled.ClassFileDecompiler;
 import com.intellij.java.language.psi.compiled.ClassFileDecompilers;
 import com.intellij.java.language.util.cls.ClsFormatException;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.application.Application;
 import consulo.language.psi.stub.BinaryFileStubBuilder;
 import consulo.language.psi.stub.FileContent;
 import consulo.language.psi.stub.PsiFileStub;
 import consulo.language.psi.stub.StubElement;
 import consulo.logging.Logger;
-import consulo.util.collection.ContainerUtil;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.fileType.FileType;
 
@@ -32,8 +33,6 @@ import javax.annotation.Nonnull;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-
-import static com.intellij.java.language.psi.compiled.ClassFileDecompilers.Full;
 
 /**
  * @author max
@@ -63,9 +62,9 @@ public class ClassFileStubBuilder implements BinaryFileStubBuilder {
     try {
       try {
         file.setPreloadedContentHint(content);
-        ClassFileDecompilers.Decompiler decompiler = ClassFileDecompilers.find(file);
-        if (decompiler instanceof Full) {
-          return ((Full) decompiler).getStubBuilder().buildFileStub(fileContent);
+        ClassFileDecompiler decompiler = ClassFileDecompilers.find(file);
+        if (decompiler instanceof ClassFileDecompiler.Full) {
+          return ((ClassFileDecompiler.Full) decompiler).getStubBuilder().buildFileStub(fileContent);
         }
       } catch (ClsFormatException e) {
         if (LOG.isDebugEnabled()) {
@@ -101,11 +100,11 @@ public class ClassFileStubBuilder implements BinaryFileStubBuilder {
   public int getStubVersion() {
     int version = STUB_VERSION;
 
-    List<ClassFileDecompilers.Decompiler> decompilers = ContainerUtil.newArrayList(ClassFileDecompilers.EP_NAME.getExtensions());
+    List<ClassFileDecompiler> decompilers = Application.get().getExtensionList(ClassFileDecompiler.class);
     Collections.sort(decompilers, CLASS_NAME_COMPARATOR);
-    for (ClassFileDecompilers.Decompiler decompiler : decompilers) {
-      if (decompiler instanceof Full) {
-        version = version * 31 + ((Full) decompiler).getStubBuilder().getStubVersion() + decompiler.getClass().getName().hashCode();
+    for (ClassFileDecompiler decompiler : decompilers) {
+      if (decompiler instanceof ClassFileDecompiler.Full) {
+        version = version * 31 + ((ClassFileDecompiler.Full) decompiler).getStubBuilder().getStubVersion() + decompiler.getClass().getName().hashCode();
       }
     }
 

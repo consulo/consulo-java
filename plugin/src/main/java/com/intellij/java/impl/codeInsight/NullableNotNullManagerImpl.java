@@ -6,6 +6,7 @@ import com.intellij.java.indexing.impl.stubs.index.JavaAnnotationIndex;
 import com.intellij.java.language.codeInsight.*;
 import com.intellij.java.language.impl.codeInsight.MetaAnnotationUtil;
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ServiceImpl;
 import consulo.application.util.CachedValueProvider;
 import consulo.application.util.CachedValuesManager;
 import consulo.component.persist.PersistentStateComponent;
@@ -41,6 +42,7 @@ import static com.intellij.java.language.codeInsight.AnnotationUtil.NULLABLE;
 
 @Singleton
 @State(name = "NullableNotNullManager", storages = @Storage("misc.xml"))
+@ServiceImpl
 public class NullableNotNullManagerImpl extends NullableNotNullManager implements PersistentStateComponent<Element>, ModificationTracker {
   public static final String TYPE_QUALIFIER_NICKNAME = "javax.annotation.meta.TypeQualifierNickname";
   private static final String INSTRUMENTED_NOT_NULLS_TAG = "instrumentedNotNulls";
@@ -134,7 +136,8 @@ public class NullableNotNullManagerImpl extends NullableNotNullManager implement
     if (!hasDefaultValues()) {
       try {
         DefaultJDOMExternalizer.writeExternal(this, component);
-      } catch (WriteExternalException e) {
+      }
+      catch (WriteExternalException e) {
         LOG.error(e);
       }
     }
@@ -153,9 +156,9 @@ public class NullableNotNullManagerImpl extends NullableNotNullManager implement
 
   private boolean hasDefaultValues() {
     return NOT_NULL.equals(myDefaultNotNull) &&
-        NULLABLE.equals(myDefaultNullable) &&
-        new HashSet<>(myNullables).equals(Set.of(DEFAULT_NULLABLES)) &&
-        new HashSet<>(myNotNulls).equals(Set.of(DEFAULT_NOT_NULLS));
+      NULLABLE.equals(myDefaultNullable) &&
+      new HashSet<>(myNullables).equals(Set.of(DEFAULT_NULLABLES)) &&
+      new HashSet<>(myNotNulls).equals(Set.of(DEFAULT_NOT_NULLS));
   }
 
   @Override
@@ -163,14 +166,16 @@ public class NullableNotNullManagerImpl extends NullableNotNullManager implement
     try {
       DefaultJDOMExternalizer.readExternal(this, state);
       normalizeDefaults();
-    } catch (InvalidDataException e) {
+    }
+    catch (InvalidDataException e) {
       LOG.error(e);
     }
 
     Element instrumented = state.getChild(INSTRUMENTED_NOT_NULLS_TAG);
     if (instrumented == null) {
       myInstrumentedNotNulls = ContainerUtil.newArrayList(NOT_NULL);
-    } else {
+    }
+    else {
       myInstrumentedNotNulls = ContainerUtil.mapNotNull(instrumented.getChildren("option"), o -> o.getAttributeValue("value"));
     }
   }
@@ -193,7 +198,8 @@ public class NullableNotNullManagerImpl extends NullableNotNullManager implement
       GlobalSearchScope scope = GlobalSearchScope.allScope(myProject);
       PsiClass[] nickDeclarations = JavaPsiFacade.getInstance(myProject).findClasses(TYPE_QUALIFIER_NICKNAME, scope);
       for (PsiClass tqNick : nickDeclarations) {
-        result.addAll(ContainerUtil.findAll(MetaAnnotationUtil.getChildren(tqNick, scope), NullableNotNullManagerImpl::isNullabilityNickName));
+        result.addAll(ContainerUtil.findAll(MetaAnnotationUtil.getChildren(tqNick, scope),
+                                            NullableNotNullManagerImpl::isNullabilityNickName));
       }
       if (nickDeclarations.length == 0) {
         result.addAll(getUnresolvedNicknameUsages());
@@ -206,11 +212,14 @@ public class NullableNotNullManagerImpl extends NullableNotNullManager implement
   @Nonnull
   private List<PsiClass> getUnresolvedNicknameUsages() {
     List<PsiClass> result = new ArrayList<>();
-    Collection<PsiAnnotation> annotations = JavaAnnotationIndex.getInstance().get(StringUtil.getShortName(TYPE_QUALIFIER_NICKNAME), myProject, GlobalSearchScope.allScope(myProject));
+    Collection<PsiAnnotation> annotations = JavaAnnotationIndex.getInstance()
+                                                               .get(StringUtil.getShortName(TYPE_QUALIFIER_NICKNAME),
+                                                                    myProject,
+                                                                    GlobalSearchScope.allScope(myProject));
     for (PsiAnnotation annotation : annotations) {
       PsiElement context = annotation.getContext();
       if (context instanceof PsiModifierList && context.getContext() instanceof PsiClass) {
-        PsiClass ownerClass = (PsiClass) context.getContext();
+        PsiClass ownerClass = (PsiClass)context.getContext();
         if (ownerClass.isAnnotationType() && isNullabilityNickName(ownerClass)) {
           result.add(ownerClass);
         }
@@ -220,7 +229,8 @@ public class NullableNotNullManagerImpl extends NullableNotNullManager implement
   }
 
   @Nullable
-  protected NullabilityAnnotationInfo isJsr305Default(@Nonnull PsiAnnotation annotation, @Nonnull PsiAnnotation.TargetType[] placeTargetTypes) {
+  protected NullabilityAnnotationInfo isJsr305Default(@Nonnull PsiAnnotation annotation,
+                                                      @Nonnull PsiAnnotation.TargetType[] placeTargetTypes) {
     PsiClass declaration = resolveAnnotationType(annotation);
     PsiModifierList modList = declaration == null ? null : declaration.getModifierList();
     if (modList == null) {
@@ -277,7 +287,9 @@ public class NullableNotNullManagerImpl extends NullableNotNullManager implement
   }
 
   @Nullable
-  private NullabilityAnnotationInfo checkNullityDefault(@Nonnull PsiAnnotation annotation, @Nonnull PsiAnnotation.TargetType[] placeTargetTypes, boolean superPackage) {
+  private NullabilityAnnotationInfo checkNullityDefault(@Nonnull PsiAnnotation annotation,
+                                                        @Nonnull PsiAnnotation.TargetType[] placeTargetTypes,
+                                                        boolean superPackage) {
     NullabilityAnnotationInfo jsr = superPackage ? null : isJsr305Default(annotation, placeTargetTypes);
     return jsr != null ? jsr : CheckerFrameworkNullityUtil.isCheckerDefault(annotation, placeTargetTypes);
   }
@@ -286,10 +298,10 @@ public class NullableNotNullManagerImpl extends NullableNotNullManager implement
   private static PsiClass resolveAnnotationType(@Nonnull PsiAnnotation annotation) {
     PsiJavaCodeReferenceElement element = annotation.getNameReferenceElement();
     PsiElement declaration = element == null ? null : element.resolve();
-    if (!(declaration instanceof PsiClass) || !((PsiClass) declaration).isAnnotationType()) {
+    if (!(declaration instanceof PsiClass) || !((PsiClass)declaration).isAnnotationType()) {
       return null;
     }
-    return (PsiClass) declaration;
+    return (PsiClass)declaration;
   }
 
   @Nullable
@@ -330,7 +342,7 @@ public class NullableNotNullManagerImpl extends NullableNotNullManager implement
   private static Nullability extractNullityFromWhenValue(@Nonnull PsiAnnotation nonNull) {
     PsiAnnotationMemberValue when = nonNull.findAttributeValue("when");
     if (when instanceof PsiReferenceExpression) {
-      String refName = ((PsiReferenceExpression) when).getReferenceName();
+      String refName = ((PsiReferenceExpression)when).getReferenceName();
       if ("ALWAYS".equals(refName)) {
         return Nullability.NOT_NULL;
       }
@@ -348,23 +360,24 @@ public class NullableNotNullManagerImpl extends NullableNotNullManager implement
 
   @Nonnull
   private List<String> filterNickNames(@Nonnull Nullability nullability) {
-    return ContainerUtil.mapNotNull(getAllNullabilityNickNames(), c -> getNickNamedNullability(c) == nullability ? c.getQualifiedName() : null);
+    return ContainerUtil.mapNotNull(getAllNullabilityNickNames(),
+                                    c -> getNickNamedNullability(c) == nullability ? c.getQualifiedName() : null);
   }
 
   @Nonnull
   @Override
   protected List<String> getNullablesWithNickNames() {
     return CachedValuesManager.getManager(myProject).getCachedValue(myProject, () ->
-        CachedValueProvider.Result.create(ContainerUtil.concat(getNullables(), filterNickNames(Nullability.NULLABLE)),
-            PsiModificationTracker.MODIFICATION_COUNT));
+      CachedValueProvider.Result.create(ContainerUtil.concat(getNullables(), filterNickNames(Nullability.NULLABLE)),
+                                        PsiModificationTracker.MODIFICATION_COUNT));
   }
 
   @Nonnull
   @Override
   protected List<String> getNotNullsWithNickNames() {
     return CachedValuesManager.getManager(myProject).getCachedValue(myProject, () ->
-        CachedValueProvider.Result.create(ContainerUtil.concat(getNotNulls(), filterNickNames(Nullability.NOT_NULL)),
-            PsiModificationTracker.MODIFICATION_COUNT));
+      CachedValueProvider.Result.create(ContainerUtil.concat(getNotNulls(), filterNickNames(Nullability.NOT_NULL)),
+                                        PsiModificationTracker.MODIFICATION_COUNT));
   }
 
   @Nonnull

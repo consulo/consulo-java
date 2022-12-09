@@ -11,10 +11,12 @@ import com.intellij.java.language.impl.psi.impl.source.PsiMethodImpl;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.siyeh.ig.callMatcher.CallMatcher;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.StringUtil;
+import jakarta.inject.Inject;
 import one.util.streamex.EntryStream;
 import one.util.streamex.StreamEx;
 import org.jetbrains.annotations.Contract;
@@ -26,6 +28,7 @@ import java.util.*;
 import static com.intellij.java.analysis.impl.codeInspection.dataFlow.JavaMethodContractUtil.ORG_JETBRAINS_ANNOTATIONS_CONTRACT;
 import static com.intellij.java.language.codeInsight.AnnotationUtil.*;
 
+@ExtensionImpl
 public class DefaultInferredAnnotationProvider implements InferredAnnotationProvider {
   private static final Set<String> JB_INFERRED_ANNOTATIONS =
       Set.of(ORG_JETBRAINS_ANNOTATIONS_CONTRACT, Mutability.UNMODIFIABLE_ANNOTATION,
@@ -43,9 +46,10 @@ public class DefaultInferredAnnotationProvider implements InferredAnnotationProv
   );
   private final NullableNotNullManager myNullabilityManager;
 
-  public DefaultInferredAnnotationProvider(Project project) {
+  @Inject
+  public DefaultInferredAnnotationProvider(Project project, NullableNotNullManager nullabilityManager) {
     myProject = project;
-    myNullabilityManager = NullableNotNullManager.getInstance(project);
+    myNullabilityManager = nullabilityManager;
   }
 
   @Nullable

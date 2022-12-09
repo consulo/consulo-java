@@ -2,6 +2,7 @@ package consulo.java.impl.bundle;
 
 import com.intellij.java.impl.openapi.projectRoots.impl.JavaSdkImpl;
 import com.intellij.java.language.projectRoots.JavaSdk;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.content.bundle.PredefinedBundlesProvider;
 import consulo.content.bundle.Sdk;
 import consulo.content.bundle.SdkModificator;
@@ -13,6 +14,7 @@ import javax.annotation.Nonnull;
  * @author VISTALL
  * @since 11/12/2021
  */
+@ExtensionImpl
 public class JavaHomePredefinedBundleProvider extends PredefinedBundlesProvider {
   private static final String JAVA_HOME = "JAVA_HOME";
 

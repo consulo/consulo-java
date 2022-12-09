@@ -15,6 +15,7 @@
  */
 package com.intellij.java.language.impl.codeInsight.highlighting;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.highlight.ReadWriteAccessDetector;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PropertyUtil;
@@ -25,6 +26,7 @@ import consulo.language.psi.PsiReference;
 /**
  * @author yole
  */
+@ExtensionImpl
 public class JavaReadWriteAccessDetector extends ReadWriteAccessDetector {
   @Override
   public boolean isReadWriteAccessible(final PsiElement element) {

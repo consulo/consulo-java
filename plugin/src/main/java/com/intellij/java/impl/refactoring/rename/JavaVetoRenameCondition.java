@@ -15,22 +15,25 @@
  */
 package com.intellij.java.impl.refactoring.rename;
 
-import consulo.java.impl.util.JavaProjectRootsUtil;
 import com.intellij.java.impl.lang.java.JavaRefactoringSupportProvider;
-import consulo.util.lang.function.Condition;
+import com.intellij.java.language.psi.PsiJavaFile;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.java.impl.util.JavaProjectRootsUtil;
+import consulo.language.editor.refactoring.rename.VetoRenameCondition;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
-import com.intellij.java.language.psi.PsiJavaFile;
 
-public class JavaVetoRenameCondition implements Condition<PsiElement>
-{
-	@Override
-	public boolean value(final PsiElement element)
-	{
-		return JavaRefactoringSupportProvider.isDisableRefactoringForLightElement(element) ||
-				element instanceof PsiJavaFile &&
-				//  !JspPsiUtil.isInJspFile(element) &&
-				!JavaProjectRootsUtil.isOutsideSourceRoot((PsiFile) element) &&
-				((PsiJavaFile) element).getClasses().length > 0;
-	}
+@ExtensionImpl
+public class JavaVetoRenameCondition implements VetoRenameCondition {
+
+  @RequiredReadAction
+  @Override
+  public boolean isVetoed(PsiElement element) {
+    return JavaRefactoringSupportProvider.isDisableRefactoringForLightElement(element) ||
+      element instanceof PsiJavaFile &&
+        //  !JspPsiUtil.isInJspFile(element) &&
+        !JavaProjectRootsUtil.isOutsideSourceRoot((PsiFile)element) &&
+        ((PsiJavaFile)element).getClasses().length > 0;
+  }
 }

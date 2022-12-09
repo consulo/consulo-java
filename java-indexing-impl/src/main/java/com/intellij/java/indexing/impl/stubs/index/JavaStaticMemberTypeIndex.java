@@ -22,6 +22,7 @@ package com.intellij.java.indexing.impl.stubs.index;
 import com.intellij.java.indexing.impl.search.JavaSourceFilterScope;
 import com.intellij.java.language.impl.psi.impl.java.stubs.index.JavaStubIndexKeys;
 import com.intellij.java.language.psi.PsiMember;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.stub.StringStubIndexExtension;
 import consulo.language.psi.stub.StubIndexKey;
 import consulo.project.Project;
@@ -30,6 +31,7 @@ import consulo.project.content.scope.ProjectAwareSearchScope;
 import javax.annotation.Nonnull;
 import java.util.Collection;
 
+@ExtensionImpl
 public class JavaStaticMemberTypeIndex extends StringStubIndexExtension<PsiMember> {
 
   private static final JavaStaticMemberTypeIndex ourInstance = new JavaStaticMemberTypeIndex();

@@ -17,6 +17,7 @@ package com.intellij.java.debugger.impl.externalSystem;
 
 import com.intellij.java.debugger.impl.GenericDebuggerRunner;
 import com.intellij.java.execution.configurations.RemoteConnection;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.execution.configuration.RunProfile;
 import consulo.execution.configuration.RunProfileState;
 import consulo.execution.debug.DefaultDebugExecutor;
@@ -34,6 +35,7 @@ import javax.annotation.Nullable;
  * @author Denis Zhdanov
  * @since 6/7/13 11:18 AM
  */
+@ExtensionImpl
 public class ExternalSystemTaskDebugRunner extends GenericDebuggerRunner {
   private static final Logger LOG = Logger.getInstance(ExternalSystemTaskDebugRunner.class);
 

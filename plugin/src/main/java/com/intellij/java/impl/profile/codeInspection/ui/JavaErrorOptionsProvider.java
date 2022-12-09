@@ -20,6 +20,7 @@
  */
 package com.intellij.java.impl.profile.codeInspection.ui;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.ApplicationBundle;
 import consulo.application.ui.setting.AdditionalEditorGeneralSettingProvider;
 import consulo.configurable.SimpleConfigurableByProperties;
@@ -31,6 +32,7 @@ import consulo.ui.annotation.RequiredUIAccess;
 import javax.annotation.Nonnull;
 import java.util.function.Consumer;
 
+@ExtensionImpl
 public class JavaErrorOptionsProvider implements AdditionalEditorGeneralSettingProvider {
   @Override
   @RequiredUIAccess

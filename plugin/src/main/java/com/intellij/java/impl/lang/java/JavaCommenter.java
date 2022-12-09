@@ -16,6 +16,7 @@
 package com.intellij.java.impl.lang.java;
 
 import com.intellij.java.language.JavaLanguage;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.Language;
 import consulo.language.ast.ASTNode;
 import consulo.language.CodeDocumentationAwareCommenterEx;
@@ -33,6 +34,7 @@ import javax.annotation.Nullable;
 /**
  * @author max
  */
+@ExtensionImpl
 public class JavaCommenter implements CodeDocumentationAwareCommenterEx {
 
   @Override

@@ -18,6 +18,7 @@ package com.intellij.java.impl.usages.impl.rules;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.HighlightControlFlowUtil;
 import com.intellij.java.language.impl.psi.impl.PsiSuperMethodImplUtil;
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.util.lang.Comparing;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
@@ -37,6 +38,7 @@ import java.util.Set;
 /**
  * @author yole
  */
+@ExtensionImpl
 public class JavaUsageTypeProvider implements UsageTypeProviderEx {
   public UsageType getUsageType(final PsiElement element) {
     return getUsageType(element, UsageTarget.EMPTY_ARRAY);

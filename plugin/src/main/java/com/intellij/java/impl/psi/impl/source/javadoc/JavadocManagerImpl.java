@@ -24,7 +24,7 @@ import com.intellij.java.language.psi.PsiJavaModule;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.javadoc.JavadocManager;
 import com.intellij.java.language.psi.javadoc.JavadocTagInfo;
-import consulo.component.extension.Extensions;
+import consulo.annotation.component.ServiceImpl;
 import consulo.language.editor.inspection.SuppressionUtil;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiPackage;
@@ -35,18 +35,20 @@ import jakarta.inject.Singleton;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
  * @author mike
  */
 @Singleton
+@ServiceImpl
 public class JavadocManagerImpl implements JavadocManager {
   private final List<JavadocTagInfo> myInfos;
+  private final Project myProject;
 
   @Inject
   public JavadocManagerImpl(Project project) {
+    myProject = project;
     myInfos = new ArrayList<>();
 
     myInfos.add(new AuthorDocTagInfo());
@@ -77,8 +79,6 @@ public class JavadocManagerImpl implements JavadocManager {
     myInfos.add(new ExceptionTagInfo("exception"));
     myInfos.add(new ExceptionTagInfo("throws"));
     myInfos.add(new ValueDocTagInfo());
-
-    Collections.addAll(myInfos, Extensions.getExtensions(JavadocTagInfo.EP_NAME, project));
   }
 
   @Override
@@ -92,6 +92,11 @@ public class JavadocManagerImpl implements JavadocManager {
       }
     }
 
+    for (JavadocTagInfo info : myProject.getExtensionList(JavadocTagInfo.class)) {
+      if (info.isValidInContext(context)) {
+        result.add(info);
+      }
+    }
     return result.toArray(new JavadocTagInfo[result.size()]);
   }
 
@@ -99,6 +104,12 @@ public class JavadocManagerImpl implements JavadocManager {
   @Nullable
   public JavadocTagInfo getTagInfo(String name) {
     for (JavadocTagInfo info : myInfos) {
+      if (info.getName().equals(name)) {
+        return info;
+      }
+    }
+
+    for (JavadocTagInfo info : myProject.getExtensionList(JavadocTagInfo.class)) {
       if (info.getName().equals(name)) {
         return info;
       }

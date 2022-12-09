@@ -16,10 +16,10 @@
 package com.intellij.java.debugger.impl.settings;
 
 import com.intellij.java.debugger.DebuggerBundle;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.configurable.Configurable;
 import consulo.configurable.IdeaSimpleConfigurable;
 import consulo.configurable.OptionsBundle;
-import consulo.configurable.SimpleConfigurable;
 import consulo.execution.debug.setting.DebuggerSettingsCategory;
 import consulo.execution.debug.setting.XDebuggerSettings;
 import consulo.ide.impl.idea.openapi.util.Getter;
@@ -42,71 +42,71 @@ import static java.util.Collections.singletonList;
  * But we must implement createConfigurable as part of XDebuggerSettings otherwise java general settings will be before xdebugger general setting,
  * because JavaDebuggerSettingsPanelProvider has higher priority than XDebuggerSettingsPanelProviderImpl.
  */
-public class JavaDebuggerSettings extends XDebuggerSettings<Element>
-{
-	@Inject
-	public JavaDebuggerSettings()
-	{
-		super("java");
-	}
+@ExtensionImpl
+public class JavaDebuggerSettings extends XDebuggerSettings<Element> {
+  @Inject
+  public JavaDebuggerSettings() {
+    super("java");
+  }
 
-	@Nonnull
-	@Override
-	public Collection<? extends Configurable> createConfigurables(@Nonnull DebuggerSettingsCategory category)
-	{
-		Getter<DebuggerSettings> settingsGetter = () -> DebuggerSettings.getInstance();
+  @Nonnull
+  @Override
+  public Collection<? extends Configurable> createConfigurables(@Nonnull DebuggerSettingsCategory category) {
+    Getter<DebuggerSettings> settingsGetter = () -> DebuggerSettings.getInstance();
 
-		switch(category)
-		{
-			case GENERAL:
-				return singletonList(IdeaSimpleConfigurable.create("reference.idesettings.debugger.launching",
-						OptionsBundle.message("options.java.display.name"), DebuggerLaunchingConfigurable.class, settingsGetter));
-			case DATA_VIEWS:
-				return createDataViewsConfigurable();
-			case STEPPING:
-				return singletonList(IdeaSimpleConfigurable.create("reference.idesettings.debugger.stepping",
-						OptionsBundle.message("options.java.display.name"), DebuggerSteppingConfigurable.class, settingsGetter));
-			case HOTSWAP:
-				return singletonList(IdeaSimpleConfigurable.create("reference.idesettings.debugger.hotswap", OptionsBundle.message("options.java.display" +
-						".name"), JavaHotSwapConfigurableUi.class, settingsGetter));
-		}
-		return Collections.emptyList();
-	}
+    switch (category) {
+      case GENERAL:
+        return singletonList(IdeaSimpleConfigurable.create("reference.idesettings.debugger.launching",
+                                                           OptionsBundle.message("options.java.display.name"),
+                                                           DebuggerLaunchingConfigurable.class,
+                                                           settingsGetter));
+      case DATA_VIEWS:
+        return createDataViewsConfigurable();
+      case STEPPING:
+        return singletonList(IdeaSimpleConfigurable.create("reference.idesettings.debugger.stepping",
+                                                           OptionsBundle.message("options.java.display.name"),
+                                                           DebuggerSteppingConfigurable.class,
+                                                           settingsGetter));
+      case HOTSWAP:
+        return singletonList(IdeaSimpleConfigurable.create("reference.idesettings.debugger.hotswap",
+                                                           OptionsBundle.message("options.java.display" +
+                                                                                   ".name"),
+                                                           JavaHotSwapConfigurableUi.class,
+                                                           settingsGetter));
+    }
+    return Collections.emptyList();
+  }
 
-	@SuppressWarnings("SpellCheckingInspection")
-	@Nonnull
-	public static List<Configurable> createDataViewsConfigurable()
-	{
-		return Arrays.<Configurable>asList(new DebuggerDataViewsConfigurable(null), IdeaSimpleConfigurable.create("reference.idesettings.debugger" +
-				".typerenderers", DebuggerBundle.message("user.renderers.configurable.display.name"), UserRenderersConfigurable.class,
-				new Getter<NodeRendererSettings>()
-		{
-			@Override
-			public NodeRendererSettings get()
-			{
-				return NodeRendererSettings.getInstance();
-			}
-		}));
-	}
+  @SuppressWarnings("SpellCheckingInspection")
+  @Nonnull
+  public static List<Configurable> createDataViewsConfigurable() {
+    return Arrays.<Configurable>asList(new DebuggerDataViewsConfigurable(null),
+                                       IdeaSimpleConfigurable.create("reference.idesettings.debugger" +
+                                                                       ".typerenderers",
+                                                                     DebuggerBundle.message("user.renderers.configurable.display.name"),
+                                                                     UserRenderersConfigurable.class,
+                                                                     new Getter<NodeRendererSettings>() {
+                                                                       @Override
+                                                                       public NodeRendererSettings get() {
+                                                                         return NodeRendererSettings.getInstance();
+                                                                       }
+                                                                     }));
+  }
 
-	@Override
-	public void generalApplied(@Nonnull DebuggerSettingsCategory category)
-	{
-		if(category == DebuggerSettingsCategory.DATA_VIEWS)
-		{
-			NodeRendererSettings.getInstance().fireRenderersChanged();
-		}
-	}
+  @Override
+  public void generalApplied(@Nonnull DebuggerSettingsCategory category) {
+    if (category == DebuggerSettingsCategory.DATA_VIEWS) {
+      NodeRendererSettings.getInstance().fireRenderersChanged();
+    }
+  }
 
-	@Nullable
-	@Override
-	public Element getState()
-	{
-		return null;
-	}
+  @Nullable
+  @Override
+  public Element getState() {
+    return null;
+  }
 
-	@Override
-	public void loadState(Element state)
-	{
-	}
+  @Override
+  public void loadState(Element state) {
+  }
 }

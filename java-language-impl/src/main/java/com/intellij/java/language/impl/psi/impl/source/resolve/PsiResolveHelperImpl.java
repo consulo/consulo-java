@@ -26,6 +26,7 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.impl.source.resolve.ParameterTypeInferencePolicy;
 import com.intellij.java.language.psi.infos.CandidateInfo;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.annotation.component.ServiceImpl;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiManager;
@@ -39,6 +40,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 @Singleton
+@ServiceImpl
 public class PsiResolveHelperImpl implements PsiResolveHelper {
   private static final Logger LOG = Logger.getInstance(PsiResolveHelperImpl.class);
   private final PsiManager myManager;

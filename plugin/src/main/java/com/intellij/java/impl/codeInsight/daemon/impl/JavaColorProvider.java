@@ -20,6 +20,7 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiTypesUtil;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.access.RequiredWriteAction;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.ElementColorProvider;
 import consulo.language.psi.PsiElement;
 import consulo.ui.color.ColorValue;
@@ -33,6 +34,7 @@ import java.awt.*;
 /**
  * @author Konstantin Bulenkov
  */
+@ExtensionImpl
 public class JavaColorProvider implements ElementColorProvider {
   @RequiredReadAction
   @Override

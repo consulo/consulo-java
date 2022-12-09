@@ -16,6 +16,7 @@
 package com.intellij.java.impl.refactoring.rename.inplace;
 
 import com.intellij.java.language.JavaLanguage;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.Language;
 import consulo.language.editor.refactoring.ResolveSnapshotProvider;
 import consulo.language.psi.PsiElement;
@@ -27,6 +28,7 @@ import javax.annotation.Nonnull;
  * Date: 29.07.2009
  * Time: 14:07:20
  */
+@ExtensionImpl
 public class JavaResolveSnapshotProvider extends ResolveSnapshotProvider {
   @Override
   public ResolveSnapshot createSnapshot(PsiElement scope) {

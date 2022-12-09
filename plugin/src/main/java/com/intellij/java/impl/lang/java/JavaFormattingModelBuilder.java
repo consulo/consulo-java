@@ -24,6 +24,7 @@ import com.intellij.java.impl.psi.formatter.java.AbstractJavaBlock;
 import com.intellij.java.impl.psi.impl.source.codeStyle.PsiBasedFormatterModelWithShiftIndentInside;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.PsiExpression;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.document.util.TextRange;
 import consulo.ide.impl.psi.formatter.FormattingDocumentModelImpl;
 import consulo.language.Language;
@@ -41,6 +42,7 @@ import consulo.logging.Logger;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+@ExtensionImpl
 public class JavaFormattingModelBuilder implements FormattingModelBuilderEx {
   private static final Logger LOG = Logger.getInstance(JavaFormattingModelBuilder.class);
 

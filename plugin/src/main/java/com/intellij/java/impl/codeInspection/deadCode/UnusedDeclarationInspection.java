@@ -20,21 +20,25 @@ import com.intellij.java.analysis.impl.codeInspection.deadCode.UnusedDeclaration
 import com.intellij.java.analysis.impl.codeInspection.unusedSymbol.UnusedSymbolLocalInspectionBase;
 import com.intellij.java.impl.codeInspection.ex.EntryPointsManagerImpl;
 import com.intellij.java.impl.codeInspection.unusedSymbol.UnusedSymbolLocalInspection;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.java.analysis.impl.codeInsight.JavaInspectionsBundle;
 import consulo.ui.ex.awt.JBTabbedPane;
 import consulo.ui.ex.awt.JBUI;
 import consulo.ui.ex.awtUnsafe.TargetAWT;
+import jakarta.inject.Inject;
 import org.jetbrains.annotations.TestOnly;
 
 import javax.swing.*;
 import java.awt.*;
 
+@ExtensionImpl
 public class UnusedDeclarationInspection extends UnusedDeclarationInspectionBase {
   @TestOnly
   public UnusedDeclarationInspection(boolean enabledInEditor) {
     super(enabledInEditor);
   }
 
+  @Inject
   public UnusedDeclarationInspection() {
   }
 

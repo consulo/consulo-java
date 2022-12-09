@@ -18,6 +18,8 @@ package com.intellij.java.language.psi;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.psi.impl.source.resolve.ParameterTypeInferencePolicy;
 import com.intellij.java.language.psi.infos.CandidateInfo;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ServiceAPI;
 import consulo.application.util.RecursionManager;
 import consulo.ide.ServiceManager;
 import consulo.language.psi.PsiElement;
@@ -32,6 +34,7 @@ import javax.annotation.Nullable;
  *
  * @see JavaPsiFacade#getResolveHelper()
  */
+@ServiceAPI(ComponentScope.PROJECT)
 public interface PsiResolveHelper {
   RecursionGuard<PsiExpression> ourGuard = RecursionManager.createGuard("typeArgInference");
   RecursionGuard<PsiElement> ourGraphGuard = RecursionManager.createGuard("graphTypeArgInference");

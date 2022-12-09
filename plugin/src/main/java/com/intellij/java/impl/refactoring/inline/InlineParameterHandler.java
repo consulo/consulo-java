@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.refactoring.inline;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.PsiEquivalenceUtil;
 import com.intellij.java.impl.codeInspection.sameParameterValue.SameParameterValueInspection;
 import com.intellij.java.language.JavaLanguage;
@@ -45,6 +46,7 @@ import java.util.*;
 /**
  * @author yole
  */
+@ExtensionImpl
 public class InlineParameterHandler extends JavaInlineActionHandler {
   private static final Logger LOG = Logger.getInstance(InlineParameterHandler.class);
   public static final String REFACTORING_NAME = RefactoringBundle.message("inline.parameter.refactoring");

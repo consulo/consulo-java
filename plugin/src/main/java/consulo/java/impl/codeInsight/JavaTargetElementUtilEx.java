@@ -3,6 +3,7 @@ package consulo.java.impl.codeInsight;
 import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.ApplicationManager;
 import consulo.application.util.function.Computable;
 import consulo.application.util.function.Processor;
@@ -25,6 +26,7 @@ import java.util.*;
  * @author VISTALL
  * @since 20.04.2015
  */
+@ExtensionImpl
 public class JavaTargetElementUtilEx implements TargetElementUtilExtender {
   private static class PsiElementFindProcessor<T extends PsiElement> implements Processor<T> {
     private final T myElement;

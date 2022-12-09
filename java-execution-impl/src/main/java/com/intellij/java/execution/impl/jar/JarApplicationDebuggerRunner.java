@@ -16,6 +16,7 @@
 package com.intellij.java.execution.impl.jar;
 
 import com.intellij.java.debugger.impl.GenericDebuggerRunner;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.execution.configuration.RunProfile;
 import consulo.execution.debug.DefaultDebugExecutor;
 
@@ -24,6 +25,7 @@ import javax.annotation.Nonnull;
 /**
  * @author nik
  */
+@ExtensionImpl
 public class JarApplicationDebuggerRunner extends GenericDebuggerRunner {
   @Override
   public boolean canRun(@Nonnull String executorId, @Nonnull RunProfile profile) {

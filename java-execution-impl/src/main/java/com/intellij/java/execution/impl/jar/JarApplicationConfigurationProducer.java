@@ -15,6 +15,7 @@
  */
 package com.intellij.java.execution.impl.jar;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.execution.action.ConfigurationContext;
 import consulo.execution.action.Location;
 import consulo.execution.action.RunConfigurationProducer;
@@ -28,6 +29,7 @@ import javax.annotation.Nullable;
 /**
  * @author nik
  */
+@ExtensionImpl
 public class JarApplicationConfigurationProducer extends RunConfigurationProducer<JarApplicationConfiguration> {
   public JarApplicationConfigurationProducer() {
     super(JarApplicationConfigurationType.getInstance());

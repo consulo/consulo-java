@@ -21,6 +21,7 @@ import com.intellij.java.language.projectRoots.roots.AnnotationOrderRootType;
 import com.intellij.java.language.psi.PsiJavaFile;
 import com.intellij.java.language.psi.PsiModifierListOwner;
 import com.intellij.java.language.psi.PsiNameValuePair;
+import consulo.annotation.component.ServiceImpl;
 import consulo.application.*;
 import consulo.application.util.function.Processor;
 import consulo.codeEditor.Editor;
@@ -110,6 +111,7 @@ import java.util.function.Supplier;
  * @since 26-Jun-2007
  */
 @Singleton
+@ServiceImpl
 public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsManager {
   private static final Logger LOG = Logger.getInstance(ExternalAnnotationsManagerImpl.class);
 

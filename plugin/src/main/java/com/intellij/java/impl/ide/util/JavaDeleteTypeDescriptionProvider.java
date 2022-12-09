@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.ide.util;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.ide.IdeBundle;
 import consulo.language.editor.refactoring.util.DeleteTypeDescriptionLocation;
 import com.intellij.java.language.psi.*;
@@ -27,6 +28,7 @@ import javax.annotation.Nonnull;
 /**
  * @author yole
  */
+@ExtensionImpl
 public class JavaDeleteTypeDescriptionProvider implements ElementDescriptionProvider {
   public String getElementDescription(@Nonnull final PsiElement element, @Nonnull final ElementDescriptionLocation location) {
     if (location instanceof DeleteTypeDescriptionLocation && ((DeleteTypeDescriptionLocation) location).isPlural()) {

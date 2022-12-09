@@ -15,29 +15,38 @@
  */
 package com.intellij.java.language.impl.psi;
 
+import com.intellij.java.language.impl.JavaClassFileType;
+import com.intellij.java.language.psi.compiled.ClassFileDecompiler;
 import com.intellij.java.language.psi.compiled.ClassFileDecompilers;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.Language;
-import consulo.virtualFileSystem.VirtualFile;
 import consulo.language.file.FileViewProvider;
-import consulo.language.file.FileViewProviderFactory;
+import consulo.language.file.VirtualFileViewProviderFactory;
 import consulo.language.psi.PsiManager;
+import consulo.virtualFileSystem.VirtualFile;
+import consulo.virtualFileSystem.fileType.FileType;
 
 import javax.annotation.Nonnull;
-
-import static com.intellij.java.language.psi.compiled.ClassFileDecompilers.Full;
 
 /**
  * @author max
  */
-public class ClassFileViewProviderFactory implements FileViewProviderFactory {
+@ExtensionImpl
+public class ClassFileViewProviderFactory implements VirtualFileViewProviderFactory {
   @Nonnull
   @Override
   public FileViewProvider createFileViewProvider(@Nonnull VirtualFile file, Language language, @Nonnull PsiManager manager, boolean eventSystemEnabled) {
-    ClassFileDecompilers.Decompiler decompiler = ClassFileDecompilers.find(file);
-    if (decompiler instanceof Full) {
-      return ((Full) decompiler).createFileViewProvider(file, manager, eventSystemEnabled);
+    ClassFileDecompiler decompiler = ClassFileDecompilers.find(file);
+    if (decompiler instanceof ClassFileDecompiler.Full) {
+      return ((ClassFileDecompiler.Full) decompiler).createFileViewProvider(file, manager, eventSystemEnabled);
     }
 
     return new ClassFileViewProvider(manager, file, eventSystemEnabled);
+  }
+
+  @Nonnull
+  @Override
+  public FileType getFileType() {
+    return JavaClassFileType.INSTANCE;
   }
 }

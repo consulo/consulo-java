@@ -15,27 +15,30 @@
  */
 package com.intellij.java.impl.psi.impl.migration;
 
-import javax.annotation.Nonnull;
+import com.intellij.java.language.psi.JavaPsiFacade;
+import com.intellij.java.language.psi.PsiMigration;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ServiceAPI;
+import consulo.annotation.component.ServiceImpl;
+import consulo.ide.ServiceManager;
+import consulo.language.psi.PsiManager;
+import consulo.logging.Logger;
+import consulo.project.Project;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
-import consulo.ide.ServiceManager;
-import consulo.logging.Logger;
-import consulo.project.Project;
-import com.intellij.java.language.psi.JavaPsiFacade;
-import consulo.language.psi.PsiManager;
-import com.intellij.java.language.psi.PsiMigration;
-import consulo.language.impl.internal.psi.PsiManagerEx;
-import consulo.language.impl.internal.psi.PsiManagerImpl;
+import javax.annotation.Nonnull;
 
 @Singleton
+@ServiceAPI(ComponentScope.PROJECT)
+@ServiceImpl
 public class PsiMigrationManager {
   private static final Logger LOG = Logger.getInstance(PsiMigrationManager.class);
 
   public static PsiMigrationManager getInstance(Project project) {
     return ServiceManager.getService(project, PsiMigrationManager.class);
   }
-  
+
   private final Project myProject;
   private PsiMigrationImpl myCurrentMigration;
 
@@ -66,6 +69,6 @@ public class PsiMigrationManager {
       myCurrentMigration = null;
     }
 
-    ((PsiManagerEx)PsiManager.getInstance(myProject)).beforeChange(true);
+    PsiManager.getInstance(myProject).notifyAnyPsiChangeListener(true, true);
   }
 }

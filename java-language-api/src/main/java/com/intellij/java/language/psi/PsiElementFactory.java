@@ -17,6 +17,8 @@ package com.intellij.java.language.psi;
 
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.psi.javadoc.PsiDocTag;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ServiceAPI;
 import consulo.language.ast.IElementType;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.scope.GlobalSearchScope;
@@ -37,6 +39,7 @@ import java.util.Map;
  *
  * @see JavaPsiFacade#getElementFactory()
  */
+@ServiceAPI(ComponentScope.PROJECT)
 public interface PsiElementFactory extends PsiJavaParserFacade, JVMElementFactory {
   /**
    * @deprecated please use {@link #getInstance(Project)}

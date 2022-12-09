@@ -17,9 +17,10 @@ package com.intellij.java.language.impl.psi.impl;
 
 import com.intellij.java.language.impl.psi.impl.source.resolve.graphInference.InferenceVariable;
 import com.intellij.java.language.psi.*;
-import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.java.language.psi.util.JavaClassSupers;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.annotation.component.ServiceImpl;
+import consulo.language.psi.scope.GlobalSearchScope;
 import jakarta.inject.Singleton;
 
 import javax.annotation.Nonnull;
@@ -32,107 +33,102 @@ import java.util.Set;
  * @author peter
  */
 @Singleton
-public class JavaClassSupersImpl extends JavaClassSupers
-{
-	@Override
-	@Nullable
-	public PsiSubstitutor getSuperClassSubstitutor(@Nonnull PsiClass superClass, @Nonnull PsiClass derivedClass, @Nonnull GlobalSearchScope scope, @Nonnull PsiSubstitutor derivedSubstitutor)
-	{
-		if(InheritanceImplUtil.hasObjectQualifiedName(superClass))
-		{
-			return PsiSubstitutor.EMPTY;
-		}
+@ServiceImpl
+public class JavaClassSupersImpl extends JavaClassSupers {
+  @Override
+  @Nullable
+  public PsiSubstitutor getSuperClassSubstitutor(@Nonnull PsiClass superClass,
+                                                 @Nonnull PsiClass derivedClass,
+                                                 @Nonnull GlobalSearchScope scope,
+                                                 @Nonnull PsiSubstitutor derivedSubstitutor) {
+    if (InheritanceImplUtil.hasObjectQualifiedName(superClass)) {
+      return PsiSubstitutor.EMPTY;
+    }
 
-		return derivedClass instanceof PsiTypeParameter ? processTypeParameter((PsiTypeParameter) derivedClass, scope, superClass, new HashSet<>(),
-				derivedSubstitutor) : getSuperSubstitutorWithCaching(superClass, derivedClass, scope, derivedSubstitutor);
-	}
+    return derivedClass instanceof PsiTypeParameter ? processTypeParameter((PsiTypeParameter)derivedClass,
+                                                                           scope,
+                                                                           superClass,
+                                                                           new HashSet<>(),
+                                                                           derivedSubstitutor) : getSuperSubstitutorWithCaching(superClass,
+                                                                                                                                derivedClass,
+                                                                                                                                scope,
+                                                                                                                                derivedSubstitutor);
+  }
 
-	@Nullable
-	private static PsiSubstitutor getSuperSubstitutorWithCaching(@Nonnull PsiClass superClass,
-			@Nonnull PsiClass derivedClass,
-			@Nonnull GlobalSearchScope resolveScope,
-			@Nonnull PsiSubstitutor derivedSubstitutor)
-	{
-		PsiSubstitutor substitutor = ScopedClassHierarchy.getSuperClassSubstitutor(derivedClass, resolveScope, superClass);
-		if(substitutor == null)
-		{
-			return null;
-		}
-		if(PsiUtil.isRawSubstitutor(derivedClass, derivedSubstitutor))
-		{
-			return createRawSubstitutor(superClass);
-		}
+  @Nullable
+  private static PsiSubstitutor getSuperSubstitutorWithCaching(@Nonnull PsiClass superClass,
+                                                               @Nonnull PsiClass derivedClass,
+                                                               @Nonnull GlobalSearchScope resolveScope,
+                                                               @Nonnull PsiSubstitutor derivedSubstitutor) {
+    PsiSubstitutor substitutor = ScopedClassHierarchy.getSuperClassSubstitutor(derivedClass, resolveScope, superClass);
+    if (substitutor == null) {
+      return null;
+    }
+    if (PsiUtil.isRawSubstitutor(derivedClass, derivedSubstitutor)) {
+      return createRawSubstitutor(superClass);
+    }
 
-		return composeSubstitutors(derivedSubstitutor, substitutor, superClass);
-	}
+    return composeSubstitutors(derivedSubstitutor, substitutor, superClass);
+  }
 
-	@Nonnull
-	static PsiSubstitutor createRawSubstitutor(@Nonnull PsiClass superClass)
-	{
-		return JavaPsiFacade.getElementFactory(superClass.getProject()).createRawSubstitutor(superClass);
-	}
+  @Nonnull
+  static PsiSubstitutor createRawSubstitutor(@Nonnull PsiClass superClass) {
+    return JavaPsiFacade.getElementFactory(superClass.getProject()).createRawSubstitutor(superClass);
+  }
 
-	@Nonnull
-	private static PsiSubstitutor composeSubstitutors(PsiSubstitutor outer, PsiSubstitutor inner, PsiClass onClass)
-	{
-		PsiSubstitutor answer = PsiSubstitutor.EMPTY;
-		Map<PsiTypeParameter, PsiType> outerMap = outer.getSubstitutionMap();
-		Map<PsiTypeParameter, PsiType> innerMap = inner.getSubstitutionMap();
-		for(PsiTypeParameter parameter : PsiUtil.typeParametersIterable(onClass))
-		{
-			if(outerMap.containsKey(parameter) || innerMap.containsKey(parameter))
-			{
-				answer = answer.put(parameter, outer.substitute(inner.substitute(parameter)));
-			}
-		}
-		return answer;
-	}
+  @Nonnull
+  private static PsiSubstitutor composeSubstitutors(PsiSubstitutor outer, PsiSubstitutor inner, PsiClass onClass) {
+    PsiSubstitutor answer = PsiSubstitutor.EMPTY;
+    Map<PsiTypeParameter, PsiType> outerMap = outer.getSubstitutionMap();
+    Map<PsiTypeParameter, PsiType> innerMap = inner.getSubstitutionMap();
+    for (PsiTypeParameter parameter : PsiUtil.typeParametersIterable(onClass)) {
+      if (outerMap.containsKey(parameter) || innerMap.containsKey(parameter)) {
+        answer = answer.put(parameter, outer.substitute(inner.substitute(parameter)));
+      }
+    }
+    return answer;
+  }
 
-	/**
-	 * Some type parameters (e.g. {@link InferenceVariable} change their supers at will,
-	 * so caching the hierarchy is impossible.
-	 */
-	@Nullable
-	private static PsiSubstitutor processTypeParameter(PsiTypeParameter parameter, GlobalSearchScope scope, PsiClass superClass, Set<PsiTypeParameter> visited, PsiSubstitutor derivedSubstitutor)
-	{
-		if(parameter.getManager().areElementsEquivalent(parameter, superClass))
-		{
-			return PsiSubstitutor.EMPTY;
-		}
-		if(!visited.add(parameter))
-		{
-			return null;
-		}
+  /**
+   * Some type parameters (e.g. {@link InferenceVariable} change their supers at will,
+   * so caching the hierarchy is impossible.
+   */
+  @Nullable
+  private static PsiSubstitutor processTypeParameter(PsiTypeParameter parameter,
+                                                     GlobalSearchScope scope,
+                                                     PsiClass superClass,
+                                                     Set<PsiTypeParameter> visited,
+                                                     PsiSubstitutor derivedSubstitutor) {
+    if (parameter.getManager().areElementsEquivalent(parameter, superClass)) {
+      return PsiSubstitutor.EMPTY;
+    }
+    if (!visited.add(parameter)) {
+      return null;
+    }
 
-		for(PsiClassType type : parameter.getExtendsListTypes())
-		{
-			PsiClassType.ClassResolveResult result = type.resolveGenerics();
-			PsiClass psiClass = result.getElement();
-			if(psiClass == null)
-			{
-				continue;
-			}
+    for (PsiClassType type : parameter.getExtendsListTypes()) {
+      PsiClassType.ClassResolveResult result = type.resolveGenerics();
+      PsiClass psiClass = result.getElement();
+      if (psiClass == null) {
+        continue;
+      }
 
-			PsiSubstitutor answer;
-			if(psiClass instanceof PsiTypeParameter)
-			{
-				answer = processTypeParameter((PsiTypeParameter) psiClass, scope, superClass, visited, derivedSubstitutor);
-				if(answer != null)
-				{
-					return answer;
-				}
-			}
-			else
-			{
-				answer = getSuperSubstitutorWithCaching(superClass, psiClass, scope, result.getSubstitutor());
-				if(answer != null)
-				{
-					return composeSubstitutors(derivedSubstitutor, answer, superClass);
-				}
-			}
-		}
+      PsiSubstitutor answer;
+      if (psiClass instanceof PsiTypeParameter) {
+        answer = processTypeParameter((PsiTypeParameter)psiClass, scope, superClass, visited, derivedSubstitutor);
+        if (answer != null) {
+          return answer;
+        }
+      }
+      else {
+        answer = getSuperSubstitutorWithCaching(superClass, psiClass, scope, result.getSubstitutor());
+        if (answer != null) {
+          return composeSubstitutors(derivedSubstitutor, answer, superClass);
+        }
+      }
+    }
 
-		return null;
-	}
+    return null;
+  }
 
 }

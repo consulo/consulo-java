@@ -21,6 +21,7 @@
 package com.intellij.java.execution.impl.filters;
 
 import com.intellij.java.execution.filters.ExceptionFilters;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.content.scope.SearchScope;
 import consulo.execution.ui.console.ConsoleFilterProviderEx;
 import consulo.execution.ui.console.Filter;
@@ -32,6 +33,7 @@ import consulo.project.Project;
 import javax.annotation.Nonnull;
 import java.util.List;
 
+@ExtensionImpl
 public class DefaultConsoleFiltersProvider implements ConsoleFilterProviderEx {
   @Nonnull
   @Override

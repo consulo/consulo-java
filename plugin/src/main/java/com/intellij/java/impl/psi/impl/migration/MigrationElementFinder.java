@@ -15,21 +15,22 @@
  */
 package com.intellij.java.impl.psi.impl.migration;
 
-import java.util.List;
-
-import javax.annotation.Nonnull;
-import jakarta.inject.Inject;
-
-import consulo.application.dumb.DumbAware;
-import consulo.project.Project;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiElementFinder;
 import com.intellij.java.language.psi.PsiJavaPackage;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.application.dumb.DumbAware;
 import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.project.Project;
+import jakarta.inject.Inject;
+
+import javax.annotation.Nonnull;
+import java.util.List;
 
 /**
  * @author yole
  */
+@ExtensionImpl
 public class MigrationElementFinder extends PsiElementFinder implements DumbAware {
   private final Project myProject;
 

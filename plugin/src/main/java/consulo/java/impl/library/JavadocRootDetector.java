@@ -15,6 +15,7 @@
  */
 package consulo.java.impl.library;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.progress.ProgressIndicator;
 import consulo.content.base.DocumentationOrderRootType;
 import consulo.content.library.ui.RootDetector;
@@ -27,8 +28,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+@ExtensionImpl
 public class JavadocRootDetector extends RootDetector {
-  private JavadocRootDetector() {
+  public JavadocRootDetector() {
     super(DocumentationOrderRootType.getInstance(), false, "JavaDocs");
   }
 

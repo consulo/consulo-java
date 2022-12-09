@@ -18,6 +18,7 @@ package com.intellij.java.impl.ide.projectView.impl;
 import com.intellij.java.impl.ide.projectView.impl.nodes.ClassTreeNode;
 import com.intellij.java.language.psi.*;
 import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.dumb.DumbAware;
 import consulo.application.progress.ProgressManager;
 import consulo.java.impl.ide.JavaModuleIconDescriptorUpdater;
@@ -34,6 +35,7 @@ import consulo.project.ui.view.tree.SelectableTreeStructureProvider;
 import consulo.project.ui.view.tree.ViewSettings;
 import consulo.ui.ex.tree.TreeHelper;
 import consulo.virtualFileSystem.VirtualFile;
+import jakarta.inject.Inject;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -41,9 +43,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+@ExtensionImpl(order = "last")
 public class ClassesTreeStructureProvider implements SelectableTreeStructureProvider, DumbAware {
   private final Project myProject;
 
+  @Inject
   public ClassesTreeStructureProvider(Project project) {
     myProject = project;
   }

@@ -24,6 +24,7 @@ import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiJavaFile;
 import com.intellij.java.language.psi.PsiPackageStatement;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.fileTemplate.CreateFromTemplateHandler;
 import consulo.fileTemplate.FileTemplate;
 import consulo.ide.IdeBundle;
@@ -44,6 +45,7 @@ import java.util.Map;
 /**
  * @author yole
  */
+@ExtensionImpl
 public class JavaCreateFromTemplateHandler implements CreateFromTemplateHandler {
   public static PsiClass createClassOrInterface(Project project, PsiDirectory directory, String content, boolean reformat, String extension) throws IncorrectOperationException {
     if (extension == null) {

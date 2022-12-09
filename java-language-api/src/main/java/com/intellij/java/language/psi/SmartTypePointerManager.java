@@ -19,11 +19,14 @@
  */
 package com.intellij.java.language.psi;
 
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ServiceAPI;
 import consulo.ide.ServiceManager;
 import consulo.project.Project;
 
 import javax.annotation.Nonnull;
 
+@ServiceAPI(ComponentScope.PROJECT)
 public abstract class SmartTypePointerManager {
   public static SmartTypePointerManager getInstance(Project project) {
     return ServiceManager.getService(project, SmartTypePointerManager.class);

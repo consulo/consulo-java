@@ -19,6 +19,7 @@ import com.intellij.java.impl.refactoring.move.moveClassesOrPackages.MoveDirecto
 import com.intellij.java.language.psi.JavaDirectoryService;
 import com.intellij.java.language.psi.PsiJavaPackage;
 import com.intellij.java.language.psi.PsiNameHelper;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.ide.impl.idea.refactoring.rename.DirectoryAsPackageRenameHandlerBase;
 import consulo.language.editor.refactoring.BaseRefactoringProcessor;
 import consulo.language.editor.refactoring.RefactoringBundle;
@@ -30,6 +31,7 @@ import consulo.virtualFileSystem.VirtualFile;
 /**
  * @author yole
  */
+@ExtensionImpl
 public class DirectoryAsPackageRenameHandler extends DirectoryAsPackageRenameHandlerBase<PsiJavaPackage> {
 
   @Override

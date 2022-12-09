@@ -16,70 +16,71 @@
 
 package com.intellij.java.language.testIntegration;
 
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ExtensionAPI;
 import consulo.component.extension.ExtensionPointName;
+import consulo.fileTemplate.FileTemplateDescriptor;
 import consulo.language.Language;
 import consulo.language.psi.PsiElement;
-import consulo.fileTemplate.FileTemplateDescriptor;
+import consulo.language.util.IncorrectOperationException;
 import consulo.module.Module;
 import consulo.ui.image.Image;
-import consulo.language.util.IncorrectOperationException;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public interface TestFramework
-{
-	ExtensionPointName<TestFramework> EXTENSION_NAME = ExtensionPointName.create("consulo.java.testFramework");
+@ExtensionAPI(ComponentScope.APPLICATION)
+public interface TestFramework {
+  ExtensionPointName<TestFramework> EXTENSION_NAME = ExtensionPointName.create(TestFramework.class);
 
-	@Nonnull
-	String getName();
+  @Nonnull
+  String getName();
 
-	@Nonnull
-	Image getIcon();
+  @Nonnull
+  Image getIcon();
 
-	boolean isLibraryAttached(@Nonnull Module module);
+  boolean isLibraryAttached(@Nonnull Module module);
 
-	@Nullable
-	String getLibraryPath();
+  @Nullable
+  String getLibraryPath();
 
-	@Nullable
-	String getDefaultSuperClass();
+  @Nullable
+  String getDefaultSuperClass();
 
-	boolean isTestClass(@Nonnull PsiElement clazz);
+  boolean isTestClass(@Nonnull PsiElement clazz);
 
-	boolean isPotentialTestClass(@Nonnull PsiElement clazz);
+  boolean isPotentialTestClass(@Nonnull PsiElement clazz);
 
-	@Nullable
-	PsiElement findSetUpMethod(@Nonnull PsiElement clazz);
+  @Nullable
+  PsiElement findSetUpMethod(@Nonnull PsiElement clazz);
 
-	@Nullable
-	PsiElement findTearDownMethod(@Nonnull PsiElement clazz);
+  @Nullable
+  PsiElement findTearDownMethod(@Nonnull PsiElement clazz);
 
-	@Nullable
-	PsiElement findOrCreateSetUpMethod(@Nonnull PsiElement clazz) throws IncorrectOperationException;
+  @Nullable
+  PsiElement findOrCreateSetUpMethod(@Nonnull PsiElement clazz) throws IncorrectOperationException;
 
-	FileTemplateDescriptor getSetUpMethodFileTemplateDescriptor();
+  FileTemplateDescriptor getSetUpMethodFileTemplateDescriptor();
 
-	FileTemplateDescriptor getTearDownMethodFileTemplateDescriptor();
+  FileTemplateDescriptor getTearDownMethodFileTemplateDescriptor();
 
-	@Nonnull
+  @Nonnull
   FileTemplateDescriptor getTestMethodFileTemplateDescriptor();
 
-	/**
-	 * should be checked for abstract method error
-	 */
-	boolean isIgnoredMethod(PsiElement element);
+  /**
+   * should be checked for abstract method error
+   */
+  boolean isIgnoredMethod(PsiElement element);
 
-	/**
-	 * should be checked for abstract method error
-	 */
-	boolean isTestMethod(PsiElement element);
+  /**
+   * should be checked for abstract method error
+   */
+  boolean isTestMethod(PsiElement element);
 
-	default boolean isTestMethod(PsiElement element, boolean checkAbstract)
-	{
-		return isTestMethod(element);
-	}
+  default boolean isTestMethod(PsiElement element, boolean checkAbstract) {
+    return isTestMethod(element);
+  }
 
-	@Nonnull
-	Language getLanguage();
+  @Nonnull
+  Language getLanguage();
 }

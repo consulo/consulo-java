@@ -16,6 +16,7 @@
 package com.intellij.java.impl.codeInsight.editorActions;
 
 import com.intellij.java.language.psi.JavaTokenType;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.util.LineTokenizer;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.RawText;
@@ -39,6 +40,7 @@ import javax.annotation.Nullable;
 
 import static consulo.util.lang.StringUtil.unescapeStringCharacters;
 
+@ExtensionImpl
 public class StringLiteralCopyPasteProcessor implements CopyPastePreProcessor {
 
   @SuppressWarnings("ForLoopThatDoesntUseLoopVariable")

@@ -15,6 +15,7 @@
  */
 package com.intellij.java.analysis.impl.codeInspection;
 
+import consulo.annotation.component.ServiceImpl;
 import consulo.language.editor.rawHighlight.HighlightDisplayKey;
 import consulo.language.editor.inspection.SuppressQuickFix;
 import com.intellij.java.analysis.codeInspection.BatchSuppressManager;
@@ -29,6 +30,7 @@ import javax.annotation.Nullable;
 import java.util.Collection;
 
 @Singleton
+@ServiceImpl
 public class BatchSuppressManagerImpl implements BatchSuppressManager {
   @Nonnull
   @Override

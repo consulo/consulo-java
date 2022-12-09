@@ -19,12 +19,15 @@
  */
 package com.intellij.java.language.projectRoots;
 
+import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ServiceAPI;
+import consulo.ide.ServiceManager;
+import consulo.language.psi.PsiElement;
+
 import javax.annotation.Nonnull;
 
-import consulo.language.psi.PsiElement;
-import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.ide.ServiceManager;
-
+@ServiceAPI(ComponentScope.APPLICATION)
 public class JavaVersionService {
   public static JavaVersionService getInstance() {
     return ServiceManager.getService(JavaVersionService.class);

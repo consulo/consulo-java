@@ -17,6 +17,7 @@ package com.intellij.java.analysis.impl;
 
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.impl.JavaFileType;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.component.messagebus.MessageBus;
 import consulo.index.io.data.DataInputOutputUtil;
 import consulo.java.language.module.extension.JavaModuleExtension;
@@ -42,15 +43,11 @@ import java.io.IOException;
 /**
  * @author Gregory.Shrago
  */
+@ExtensionImpl
 public class JavaLanguageLevelPusher implements FilePropertyPusher<LanguageLevel> {
 
   public static void pushLanguageLevel(final Project project) {
     PushedFilePropertiesUpdater.getInstance(project).pushAll(new JavaLanguageLevelPusher());
-  }
-
-  @Override
-  public void initExtra(@Nonnull Project project, @Nonnull MessageBus bus, @Nonnull Engine languageLevelUpdater) {
-    // nothing
   }
 
   @Override
@@ -111,7 +108,8 @@ public class JavaLanguageLevelPusher implements FilePropertyPusher<LanguageLevel
         if (oldLevelOrdinal == level.ordinal()) {
           return;
         }
-      } finally {
+      }
+      finally {
         iStream.close();
       }
     }
@@ -132,7 +130,10 @@ public class JavaLanguageLevelPusher implements FilePropertyPusher<LanguageLevel
   }
 
   @Nullable
-  public String getInconsistencyLanguageLevelMessage(@Nonnull String message, @Nonnull PsiElement element, @Nonnull LanguageLevel level, @Nonnull PsiFile file) {
+  public String getInconsistencyLanguageLevelMessage(@Nonnull String message,
+                                                     @Nonnull PsiElement element,
+                                                     @Nonnull LanguageLevel level,
+                                                     @Nonnull PsiFile file) {
     return null;
   }
 }

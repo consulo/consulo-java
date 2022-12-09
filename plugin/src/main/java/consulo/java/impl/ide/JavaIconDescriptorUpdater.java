@@ -22,6 +22,7 @@ import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PsiClassUtil;
 import com.intellij.java.language.psi.util.PsiMethodUtil;
 import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.AllIcons;
 import consulo.component.util.Iconable;
 import consulo.java.impl.util.JavaProjectRootsUtil;
@@ -44,6 +45,7 @@ import javax.annotation.Nonnull;
  * @author VISTALL
  * @since 0:45/19.07.13
  */
+@ExtensionImpl(id = "java")
 public class JavaIconDescriptorUpdater implements IconDescriptorUpdater {
   @RequiredReadAction
   @Override

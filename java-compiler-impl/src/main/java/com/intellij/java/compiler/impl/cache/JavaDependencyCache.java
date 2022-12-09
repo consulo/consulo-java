@@ -68,7 +68,7 @@ public class JavaDependencyCache implements DependencyCache {
   @NonNls
   private static final String SYMBOLTABLE_FILE_NAME = "java-symboltable.dat";
 
-  public JavaDependencyCache(@Nonnull Project project, @Nonnull String cacheDir) {
+  public JavaDependencyCache(@Nonnull String cacheDir) {
     myStoreDirectoryPath = cacheDir + File.separator + ".java-dependency-info";
     mySymbolTableFilePath = myStoreDirectoryPath + "/" + SYMBOLTABLE_FILE_NAME;
   }
@@ -93,7 +93,8 @@ public class JavaDependencyCache implements DependencyCache {
       }
 
       return myCache;
-    } catch (IOException e) {
+    }
+    catch (IOException e) {
       throw new CacheCorruptedException(e);
     }
   }
@@ -104,7 +105,8 @@ public class JavaDependencyCache implements DependencyCache {
         myNewClassesCache = new Cache(myStoreDirectoryPath + "/tmp", 16);
       }
       return myNewClassesCache;
-    } catch (IOException e) {
+    }
+    catch (IOException e) {
       throw new CacheCorruptedException(e);
     }
   }
@@ -273,15 +275,18 @@ public class JavaDependencyCache implements DependencyCache {
         continue;
       }
       if (refInfo instanceof MemberReferenceInfo) {
-        final MemberInfo memberInfo = ((MemberReferenceInfo) refInfo).getMemberInfo();
+        final MemberInfo memberInfo = ((MemberReferenceInfo)refInfo).getMemberInfo();
         if (memberInfo instanceof FieldInfo) {
           cache.addFieldReferencer(declaringClassName, memberInfo.getName(), classQName);
-        } else if (memberInfo instanceof MethodInfo) {
+        }
+        else if (memberInfo instanceof MethodInfo) {
           cache.addMethodReferencer(declaringClassName, memberInfo.getName(), memberInfo.getDescriptor(), classQName);
-        } else {
+        }
+        else {
           LOG.error("Unknown member info class: " + memberInfo.getClass().getName());
         }
-      } else { // reference to class
+      }
+      else { // reference to class
         cache.addClassReferencer(declaringClassName, classQName);
       }
     }
@@ -375,7 +380,8 @@ public class JavaDependencyCache implements DependencyCache {
         ids[i] = getSymbolTable().getId(boundInterfaces[i]);
       }
       return ids;
-    } catch (SignatureParsingException e) {
+    }
+    catch (SignatureParsingException e) {
       return ArrayUtil.EMPTY_INT_ARRAY;
     }
   }
@@ -388,12 +394,13 @@ public class JavaDependencyCache implements DependencyCache {
     }
     final int declaringClassName = refInfo.getClassName();
     final Cache cache = getCache();
-    final MemberInfo memberInfo = ((MemberReferenceInfo) refInfo).getMemberInfo();
+    final MemberInfo memberInfo = ((MemberReferenceInfo)refInfo).getMemberInfo();
     if (memberInfo instanceof FieldInfo) {
       if (cache.findFieldByName(declaringClassName, memberInfo.getName()) != null) {
         return declaringClassName;
       }
-    } else if (memberInfo instanceof MethodInfo) {
+    }
+    else if (memberInfo instanceof MethodInfo) {
       if (cache.findMethod(declaringClassName, memberInfo.getName(), memberInfo.getDescriptor()) != null) {
         return declaringClassName;
       }
@@ -407,14 +414,14 @@ public class JavaDependencyCache implements DependencyCache {
    * @return qualified names of the classes that should be additionally recompiled
    */
   public Pair<int[], Set<VirtualFile>> findDependentClasses(CompileContext context, Project project, Set<VirtualFile> compiledWithErrors)
-      throws CacheCorruptedException, ExitException {
+    throws CacheCorruptedException, ExitException {
 
     markDependencies(context, project, compiledWithErrors);
     return new Pair<int[], Set<VirtualFile>>(myMarkedInfos.toArray(), Collections.unmodifiableSet(myMarkedFiles));
   }
 
   private void markDependencies(CompileContext context, Project project, final Set<VirtualFile> compiledWithErrors)
-      throws CacheCorruptedException, ExitException {
+    throws CacheCorruptedException, ExitException {
     try {
       if (LOG.isDebugEnabled()) {
         LOG.debug("====================Marking dependent files=====================");
@@ -424,7 +431,7 @@ public class JavaDependencyCache implements DependencyCache {
       final SourceFileFinder sourceFileFinder = new SourceFileFinder(project, context);
       final CachingSearcher searcher = new CachingSearcher(project);
       final ChangedRetentionPolicyDependencyProcessor changedRetentionPolicyDependencyProcessor =
-          new ChangedRetentionPolicyDependencyProcessor(project, searcher, this);
+        new ChangedRetentionPolicyDependencyProcessor(project, searcher, this);
       for (final int qName : traverseRoots) {
         if (!getCache().containsClass(qName)) {
           continue;
@@ -432,25 +439,27 @@ public class JavaDependencyCache implements DependencyCache {
         if (getNewClassesCache().containsClass(qName)) { // there is a new class file created
           new JavaDependencyProcessor(project, this, qName).run();
           ArrayList<ChangedConstantsDependencyProcessor.FieldChangeInfo> changed =
-              new ArrayList<ChangedConstantsDependencyProcessor.FieldChangeInfo>();
+            new ArrayList<ChangedConstantsDependencyProcessor.FieldChangeInfo>();
           ArrayList<ChangedConstantsDependencyProcessor.FieldChangeInfo> removed =
-              new ArrayList<ChangedConstantsDependencyProcessor.FieldChangeInfo>();
+            new ArrayList<ChangedConstantsDependencyProcessor.FieldChangeInfo>();
           findModifiedConstants(qName, changed, removed);
           if (!changed.isEmpty() || !removed.isEmpty()) {
             new ChangedConstantsDependencyProcessor(project, searcher, this, qName, context, changed
-                .toArray(new ChangedConstantsDependencyProcessor.FieldChangeInfo[changed.size()]), removed
-                .toArray(new ChangedConstantsDependencyProcessor.FieldChangeInfo[removed.size()]))
-                .run();
+              .toArray(new ChangedConstantsDependencyProcessor.FieldChangeInfo[changed.size()]), removed
+                                                      .toArray(new ChangedConstantsDependencyProcessor.FieldChangeInfo[removed.size()]))
+              .run();
           }
           changedRetentionPolicyDependencyProcessor.checkAnnotationRetentionPolicyChanges(qName);
           for (DependencyProcessor additionalProcessor : DependencyProcessor.EXTENSION_POINT_NAME.getExtensions()) {
             additionalProcessor.processDependencies(context, qName, searcher);
           }
-        } else {
+        }
+        else {
           boolean isSourceDeleted = false;
           if (myClassesWithSourceRemoved.contains(qName)) { // no recompiled class file, check whether the classfile exists
             isSourceDeleted = true;
-          } else if (!new File(getCache().getPath(qName)).exists()) {
+          }
+          else if (!new File(getCache().getPath(qName)).exists()) {
             final String qualifiedName = resolve(qName);
             final String sourceFileName = getCache().getSourceFileName(qName);
             final boolean markAsRemovedSource = ApplicationManager.getApplication().runReadAction(new Computable<Boolean>() {
@@ -473,7 +482,7 @@ public class JavaDependencyCache implements DependencyCache {
               if (markTargetClassInfo(backDependency)) {
                 if (LOG.isDebugEnabled()) {
                   LOG
-                      .debug("Mark dependent class " + backDependency.getClassQualifiedName() + "; reason: no class file found for " + qName);
+                    .debug("Mark dependent class " + backDependency.getClassQualifiedName() + "; reason: no class file found for " + qName);
                 }
               }
             }
@@ -483,7 +492,8 @@ public class JavaDependencyCache implements DependencyCache {
       if (LOG.isDebugEnabled()) {
         LOG.debug("================================================================");
       }
-    } catch (ProcessCanceledException ignored) {
+    }
+    catch (ProcessCanceledException ignored) {
       // deliberately suppressed
     }
   }
@@ -491,7 +501,7 @@ public class JavaDependencyCache implements DependencyCache {
   private void findModifiedConstants(final int qName,
                                      Collection<ChangedConstantsDependencyProcessor.FieldChangeInfo> changedConstants,
                                      Collection<ChangedConstantsDependencyProcessor.FieldChangeInfo> removedConstants)
-      throws CacheCorruptedException {
+    throws CacheCorruptedException {
 
     final Cache cache = getCache();
     for (final FieldInfo field : cache.getFields(qName)) {
@@ -504,7 +514,8 @@ public class JavaDependencyCache implements DependencyCache {
             // if the field was really compile time constant
             removedConstants.add(new ChangedConstantsDependencyProcessor.FieldChangeInfo(field));
           }
-        } else {
+        }
+        else {
           final boolean visibilityRestricted = JavaMakeUtil.isMoreAccessible(oldFlags, newField.getFlags());
           if (!field.getConstantValue().equals(newField.getConstantValue()) || visibilityRestricted) {
             changedConstants.add(new ChangedConstantsDependencyProcessor.FieldChangeInfo(field, visibilityRestricted));
@@ -605,7 +616,8 @@ public class JavaDependencyCache implements DependencyCache {
         myCache.dispose();
         myCache = null;
       }
-    } catch (CacheCorruptedException e) {
+    }
+    catch (CacheCorruptedException e) {
       LOG.info(e);
     }
     try {
@@ -613,7 +625,8 @@ public class JavaDependencyCache implements DependencyCache {
         mySymbolTable.dispose();
         mySymbolTable = null;
       }
-    } catch (CacheCorruptedException e) {
+    }
+    catch (CacheCorruptedException e) {
       LOG.info(e);
     }
   }
@@ -660,7 +673,8 @@ public class JavaDependencyCache implements DependencyCache {
                 LOG.assertTrue(file.isValid());
                 CompilerManagerImpl.addRecompiledPath(file.getPath());
               }       */
-            } else {
+            }
+            else {
               LOG.info("No source file for " + resolve(infoQName) + " found; source file name=" + sourceFileName);
             }
           }
@@ -673,7 +687,8 @@ public class JavaDependencyCache implements DependencyCache {
               }*/
             }
           }
-        } catch (CacheCorruptedException e) {
+        }
+        catch (CacheCorruptedException e) {
           _ex[0] = e;
         }
       }
@@ -704,7 +719,8 @@ public class JavaDependencyCache implements DependencyCache {
           myDeclaringClass = classQName;
           return false;
         }
-      } else {
+      }
+      else {
         final MethodInfo methodId = cache.findMethod(classQName, myMemberName, myMemberDescriptor);
         if (methodId != null) {
           myDeclaringClass = classQName;

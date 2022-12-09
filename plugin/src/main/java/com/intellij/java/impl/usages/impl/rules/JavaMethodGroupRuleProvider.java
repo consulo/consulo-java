@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.usages.impl.rules;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.usage.rule.FileStructureGroupRuleProvider;
 import consulo.usage.rule.UsageGroupingRule;
 import consulo.project.Project;
@@ -22,6 +23,7 @@ import consulo.project.Project;
 /**
  * @author yole
  */
+@ExtensionImpl
 public class JavaMethodGroupRuleProvider implements FileStructureGroupRuleProvider {
   public UsageGroupingRule getUsageGroupingRule(final Project project) {
     return new MethodGroupingRule();

@@ -792,7 +792,7 @@ public class ExceptionUtil {
         return areAllConstructorsThrow(aClass, exceptionType);
       }
     } else {
-      for (ExtraExceptionHandler handler : ExtraExceptionHandler.EP_NAME.getExtensions()) {
+      for (ExtraExceptionHandler handler : ExtraExceptionHandler.EP_NAME.getExtensionList()) {
         if (handler.isHandled(exceptionType, element)) {
           return true;
         }

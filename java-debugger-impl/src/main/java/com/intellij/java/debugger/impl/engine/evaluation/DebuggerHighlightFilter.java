@@ -15,6 +15,7 @@
  */
 package com.intellij.java.debugger.impl.engine.evaluation;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.rawHighlight.HighlightInfo;
 import consulo.language.editor.rawHighlight.HighlightInfoFilter;
 import consulo.language.editor.rawHighlight.HighlightInfoType;
@@ -22,6 +23,7 @@ import consulo.language.psi.PsiFile;
 
 import javax.annotation.Nonnull;
 
+@ExtensionImpl
 public class DebuggerHighlightFilter implements HighlightInfoFilter {
   @Override
   public boolean accept(@Nonnull HighlightInfo highlightInfo, PsiFile file) {

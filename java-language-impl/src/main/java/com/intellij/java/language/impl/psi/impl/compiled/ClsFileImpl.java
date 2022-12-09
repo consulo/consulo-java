@@ -14,6 +14,7 @@ import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
 import com.intellij.java.language.impl.psi.scope.ElementClassHint;
 import com.intellij.java.language.projectRoots.JavaSdkVersion;
 import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.compiled.ClassFileDecompiler;
 import com.intellij.java.language.psi.compiled.ClassFileDecompilers;
 import com.intellij.java.language.psi.stubs.PsiClassHolderFileStub;
 import com.intellij.java.language.psi.util.PsiUtil;
@@ -71,7 +72,10 @@ import java.util.Set;
 public class ClsFileImpl extends PsiBinaryFileImpl implements PsiJavaFile, PsiFileWithStubSupport, PsiFileEx, Queryable, PsiClassOwnerEx, PsiCompiledFile {
   private static final Logger LOG = Logger.getInstance(ClsFileImpl.class);
 
-  private static final String BANNER = "\n" + "  // IntelliJ API Decompiler stub source generated from a class file\n" + "  // Implementation of methods is not available\n" + "\n";
+  private static final String BANNER = "\n" +
+    "  // Consulo API Decompiler stub source generated from a class file\n" +
+    "  // Implementation of methods is not available\n" +
+    "\n";
 
   private static final Key<Document> CLS_DOCUMENT_LINK_KEY = Key.create("cls.document.link");
 
@@ -393,8 +397,8 @@ public class ClsFileImpl extends PsiBinaryFileImpl implements PsiJavaFile, PsiFi
   }
 
   private static Exception wrapException(InvalidMirrorException e, VirtualFile file) {
-    ClassFileDecompilers.Decompiler decompiler = ClassFileDecompilers.find(file);
-    if (decompiler instanceof ClassFileDecompilers.Light) {
+    ClassFileDecompiler decompiler = ClassFileDecompilers.find(file);
+    if (decompiler instanceof ClassFileDecompiler.Light) {
       PluginId pluginId = PluginManager.getPluginId(decompiler.getClass());
       if (pluginId != null) {
         return new PluginException(e, pluginId);

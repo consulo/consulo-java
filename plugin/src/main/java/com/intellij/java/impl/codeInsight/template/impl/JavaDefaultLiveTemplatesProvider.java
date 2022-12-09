@@ -15,12 +15,14 @@
  */
 package com.intellij.java.impl.codeInsight.template.impl;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.template.DefaultLiveTemplatesProvider;
 import org.jetbrains.annotations.NonNls;
 
 /**
  * @author yole
  */
+@ExtensionImpl
 public class JavaDefaultLiveTemplatesProvider implements DefaultLiveTemplatesProvider {
   private static final
   @NonNls
@@ -35,10 +37,5 @@ public class JavaDefaultLiveTemplatesProvider implements DefaultLiveTemplatesPro
   @Override
   public String[] getDefaultLiveTemplateFiles() {
     return DEFAULT_TEMPLATES;
-  }
-
-  @Override
-  public String[] getHiddenLiveTemplateFiles() {
-    return null;
   }
 }

@@ -15,14 +15,26 @@
  */
 package com.intellij.java.impl.psi.impl.cache.impl.idCache;
 
+import com.intellij.java.language.impl.JavaFileType;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.lexer.Lexer;
 import consulo.language.psi.stub.IdAndToDoScannerBasedOnFilterLexer;
 import consulo.language.psi.stub.OccurrenceConsumer;
 import consulo.language.psi.stub.todo.LexerBasedTodoIndexer;
+import consulo.virtualFileSystem.fileType.FileType;
 
-public abstract class JavaTodoIndexer extends LexerBasedTodoIndexer implements IdAndToDoScannerBasedOnFilterLexer {
+import javax.annotation.Nonnull;
+
+@ExtensionImpl
+public class JavaTodoIndexer extends LexerBasedTodoIndexer implements IdAndToDoScannerBasedOnFilterLexer {
   @Override
   public Lexer createLexer(OccurrenceConsumer consumer) {
     return JavaIdIndexer.createIndexingLexer(consumer);
+  }
+
+  @Nonnull
+  @Override
+  public FileType getFileType() {
+    return JavaFileType.INSTANCE;
   }
 }

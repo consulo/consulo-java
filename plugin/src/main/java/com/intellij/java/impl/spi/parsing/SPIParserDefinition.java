@@ -21,6 +21,7 @@ import com.intellij.java.language.impl.spi.parsing.SPITokenType;
 import com.intellij.java.language.impl.spi.psi.SPIFile;
 import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.java.language.spi.SPILanguage;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.Language;
 import consulo.language.ast.ASTNode;
 import consulo.language.parser.ParserDefinition;
@@ -46,6 +47,7 @@ import javax.annotation.Nonnull;
 /**
  * User: anna
  */
+@ExtensionImpl
 public class SPIParserDefinition implements ParserDefinition {
   public static final IFileElementType SPI_FILE_ELEMENT_TYPE = new IFileElementType(SPILanguage.INSTANCE);
 

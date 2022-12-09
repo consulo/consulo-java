@@ -15,20 +15,21 @@
  */
 package com.intellij.java.impl.openapi.projectRoots;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.java.language.impl.projectRoots.JavaSdkVersionUtil;
 import com.intellij.java.language.projectRoots.JavaSdkVersion;
 import com.intellij.java.language.projectRoots.JavaVersionService;
+import consulo.annotation.component.ServiceImpl;
+import consulo.language.psi.PsiElement;
 import jakarta.inject.Singleton;
 
-import consulo.language.psi.PsiElement;
+import javax.annotation.Nonnull;
 
 /**
  * @author anna
  * @since 3/28/12
  */
 @Singleton
+@ServiceImpl
 public class JavaVersionServiceImpl extends JavaVersionService {
   @Override
   public boolean isAtLeast(@Nonnull PsiElement element, @Nonnull JavaSdkVersion version) {

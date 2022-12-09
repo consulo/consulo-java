@@ -32,7 +32,7 @@ public abstract class JavaPatchableProgramRunner<Settings extends RunnerSettings
 
   protected static void runCustomPatchers(OwnJavaParameters javaParameters, Executor executor, RunProfile runProfile) {
     if (runProfile != null) {
-      for (JavaProgramPatcher patcher : JavaProgramPatcher.EP_NAME.getExtensions()) {
+      for (JavaProgramPatcher patcher : JavaProgramPatcher.EP_NAME.getExtensionList()) {
         patcher.patchJavaParameters(executor, runProfile, javaParameters);
       }
     }

@@ -18,6 +18,7 @@ package com.intellij.java.impl.testIntegration;
 import com.intellij.java.language.codeInsight.TestFrameworks;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.search.PsiShortNamesCache;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.module.Module;
 import consulo.module.content.ProjectFileIndex;
 import consulo.module.content.ProjectRootManager;
@@ -36,6 +37,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 
+@ExtensionImpl
 public class JavaTestFinder implements TestFinder {
   public PsiClass findSourceElement(@Nonnull PsiElement element) {
     return TestIntegrationUtils.findOuterClass(element);

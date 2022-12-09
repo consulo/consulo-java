@@ -2,15 +2,15 @@
 package com.intellij.java.impl.psi.impl.source.tree.injected;
 
 import com.intellij.java.language.psi.*;
+import consulo.language.inject.BaseConcatenation2InjectorAdapter;
 import consulo.language.inject.MultiHostInjector;
+import consulo.language.psi.PsiElement;
 import consulo.project.Project;
 import consulo.util.lang.Pair;
-import consulo.language.psi.PsiElement;
-import consulo.language.inject.impl.internal.ConcatenationInjectorManager;
 
 import javax.annotation.Nonnull;
 
-public class JavaConcatenationToInjectorAdapter extends ConcatenationInjectorManager.BaseConcatenation2InjectorAdapter implements MultiHostInjector {
+public class JavaConcatenationToInjectorAdapter extends BaseConcatenation2InjectorAdapter implements MultiHostInjector {
   public JavaConcatenationToInjectorAdapter(@Nonnull Project project) {
     super(project);
   }
@@ -43,5 +43,11 @@ public class JavaConcatenationToInjectorAdapter extends ConcatenationInjectorMan
     }
 
     return Pair.create(anchor, operands);
+  }
+
+  @Nonnull
+  @Override
+  public Class<? extends PsiElement> getElementClass() {
+    return PsiLiteralExpression.class;
   }
 }

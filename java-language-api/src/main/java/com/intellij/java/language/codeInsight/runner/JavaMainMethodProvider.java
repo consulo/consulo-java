@@ -15,21 +15,22 @@
  */
 package com.intellij.java.language.codeInsight.runner;
 
-import consulo.component.extension.ExtensionPointName;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ExtensionAPI;
+import consulo.component.extension.ExtensionPointName;
 
 /**
  * @author ilyas
  */
+@ExtensionAPI(ComponentScope.APPLICATION)
 public interface JavaMainMethodProvider {
-
-  ExtensionPointName<JavaMainMethodProvider> EP_NAME = ExtensionPointName.create("consulo.java.mainMethodProvider");
+  ExtensionPointName<JavaMainMethodProvider> EP_NAME = ExtensionPointName.create(JavaMainMethodProvider.class);
 
   boolean isApplicable(final PsiClass clazz);
 
   boolean hasMainMethod(final PsiClass clazz);
 
   PsiMethod findMainInClass(final PsiClass clazz);
-
 }

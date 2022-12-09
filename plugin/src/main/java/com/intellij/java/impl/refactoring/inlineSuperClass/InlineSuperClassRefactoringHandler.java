@@ -20,22 +20,24 @@
  */
 package com.intellij.java.impl.refactoring.inlineSuperClass;
 
-import java.util.Collection;
-
-import consulo.language.editor.TargetElementUtil;
+import com.intellij.java.impl.refactoring.inline.JavaInlineActionHandler;
+import com.intellij.java.indexing.search.searches.DirectClassInheritorsSearch;
 import com.intellij.java.language.JavaLanguage;
-import consulo.codeEditor.Editor;
-import consulo.project.Project;
 import com.intellij.java.language.psi.PsiAnonymousClass;
 import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiReferenceList;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.codeEditor.Editor;
+import consulo.language.editor.TargetElementUtil;
+import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
-import com.intellij.java.language.psi.PsiReferenceList;
-import com.intellij.java.indexing.search.searches.DirectClassInheritorsSearch;
 import consulo.language.psi.util.PsiTreeUtil;
-import com.intellij.java.impl.refactoring.inline.JavaInlineActionHandler;
-import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
+import consulo.project.Project;
 
+import java.util.Collection;
+
+@ExtensionImpl
 public class InlineSuperClassRefactoringHandler extends JavaInlineActionHandler {
   public static final String REFACTORING_NAME = "Inline Super Class";
 
@@ -52,7 +54,7 @@ public class InlineSuperClassRefactoringHandler extends JavaInlineActionHandler 
   }
 
   public void inlineElement(final Project project, final Editor editor, final PsiElement element) {
-    PsiClass superClass = (PsiClass) element;
+    PsiClass superClass = (PsiClass)element;
     Collection<PsiClass> inheritors = DirectClassInheritorsSearch.search((PsiClass)element).findAll();
     if (!superClass.getManager().isInProject(superClass)) {
       CommonRefactoringUtil.showErrorHint(project, editor, "Cannot inline non-project class", REFACTORING_NAME, null);
@@ -61,7 +63,11 @@ public class InlineSuperClassRefactoringHandler extends JavaInlineActionHandler 
 
     for (PsiClass inheritor : inheritors) {
       if (PsiTreeUtil.isAncestor(superClass, inheritor, false)) {
-        CommonRefactoringUtil.showErrorHint(project, editor, "Cannot inline into the inner class. Move \'" + inheritor.getName() + "\' to upper level", REFACTORING_NAME, null);
+        CommonRefactoringUtil.showErrorHint(project,
+                                            editor,
+                                            "Cannot inline into the inner class. Move \'" + inheritor.getName() + "\' to upper level",
+                                            REFACTORING_NAME,
+                                            null);
         return;
       }
       if (inheritor instanceof PsiAnonymousClass) {

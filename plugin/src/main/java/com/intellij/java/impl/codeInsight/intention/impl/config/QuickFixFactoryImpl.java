@@ -34,6 +34,7 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.ClassKind;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PropertyMemberType;
+import consulo.annotation.component.ServiceImpl;
 import consulo.application.ApplicationManager;
 import consulo.codeEditor.Editor;
 import consulo.document.Document;
@@ -80,12 +81,16 @@ import java.util.*;
  * @author cdr
  */
 @Singleton
+@ServiceImpl
 public class QuickFixFactoryImpl extends QuickFixFactory {
   private static final Logger LOG = Logger.getInstance(QuickFixFactoryImpl.class);
 
   @Nonnull
   @Override
-  public LocalQuickFixAndIntentionActionOnPsiElement createModifierListFix(@Nonnull PsiModifierList modifierList, @Nonnull String modifier, boolean shouldHave, boolean showContainingClass) {
+  public LocalQuickFixAndIntentionActionOnPsiElement createModifierListFix(@Nonnull PsiModifierList modifierList,
+                                                                           @Nonnull String modifier,
+                                                                           boolean shouldHave,
+                                                                           boolean showContainingClass) {
     return new ModifierFix(modifierList, modifier, shouldHave, showContainingClass);
   }
 
@@ -100,7 +105,9 @@ public class QuickFixFactoryImpl extends QuickFixFactory {
 
   @Nonnull
   @Override
-  public LocalQuickFixAndIntentionActionOnPsiElement createMethodReturnFix(@Nonnull PsiMethod method, @Nonnull PsiType toReturn, boolean fixWholeHierarchy) {
+  public LocalQuickFixAndIntentionActionOnPsiElement createMethodReturnFix(@Nonnull PsiMethod method,
+                                                                           @Nonnull PsiType toReturn,
+                                                                           boolean fixWholeHierarchy) {
     return new MethodReturnTypeFix(method, toReturn, fixWholeHierarchy);
   }
 
@@ -112,7 +119,9 @@ public class QuickFixFactoryImpl extends QuickFixFactory {
 
   @Nonnull
   @Override
-  public LocalQuickFixAndIntentionActionOnPsiElement createAddMethodFix(@Nonnull String methodText, @Nonnull PsiClass toClass, @Nonnull String... exceptions) {
+  public LocalQuickFixAndIntentionActionOnPsiElement createAddMethodFix(@Nonnull String methodText,
+                                                                        @Nonnull PsiClass toClass,
+                                                                        @Nonnull String... exceptions) {
     return new AddMethodFix(methodText, toClass, exceptions);
   }
 
@@ -136,7 +145,10 @@ public class QuickFixFactoryImpl extends QuickFixFactory {
 
   @Nonnull
   @Override
-  public LocalQuickFixOnPsiElement createMethodThrowsFix(@Nonnull PsiMethod method, @Nonnull PsiClassType exceptionClass, boolean shouldThrow, boolean showContainingClass) {
+  public LocalQuickFixOnPsiElement createMethodThrowsFix(@Nonnull PsiMethod method,
+                                                         @Nonnull PsiClassType exceptionClass,
+                                                         boolean shouldThrow,
+                                                         boolean showContainingClass) {
     return new MethodThrowsFix(method, exceptionClass, shouldThrow, showContainingClass);
   }
 
@@ -153,7 +165,10 @@ public class QuickFixFactoryImpl extends QuickFixFactory {
 
   @Nonnull
   @Override
-  public LocalQuickFixAndIntentionActionOnPsiElement createMethodParameterTypeFix(@Nonnull PsiMethod method, int index, @Nonnull PsiType newType, boolean fixWholeHierarchy) {
+  public LocalQuickFixAndIntentionActionOnPsiElement createMethodParameterTypeFix(@Nonnull PsiMethod method,
+                                                                                  int index,
+                                                                                  @Nonnull PsiType newType,
+                                                                                  boolean fixWholeHierarchy) {
     return new MethodParameterFix(method, newType, index, fixWholeHierarchy);
   }
 
@@ -171,7 +186,9 @@ public class QuickFixFactoryImpl extends QuickFixFactory {
 
   @Nonnull
   @Override
-  public LocalQuickFixAndIntentionActionOnPsiElement createExtendsListFix(@Nonnull PsiClass aClass, @Nonnull PsiClassType typeToExtendFrom, boolean toAdd) {
+  public LocalQuickFixAndIntentionActionOnPsiElement createExtendsListFix(@Nonnull PsiClass aClass,
+                                                                          @Nonnull PsiClassType typeToExtendFrom,
+                                                                          boolean toAdd) {
     return new ExtendsListFix(aClass, typeToExtendFrom, toAdd);
   }
 
@@ -189,13 +206,19 @@ public class QuickFixFactoryImpl extends QuickFixFactory {
 
   @Override
   @Nullable
-  public IntentionAction createCreateClassOrPackageFix(@Nonnull final PsiElement context, @Nonnull final String qualifiedName, final boolean createClass, final String superClass) {
+  public IntentionAction createCreateClassOrPackageFix(@Nonnull final PsiElement context,
+                                                       @Nonnull final String qualifiedName,
+                                                       final boolean createClass,
+                                                       final String superClass) {
     return CreateClassOrPackageFix.createFix(qualifiedName, context, createClass ? ClassKind.CLASS : null, superClass);
   }
 
   @Override
   @Nullable
-  public IntentionAction createCreateClassOrInterfaceFix(@Nonnull final PsiElement context, @Nonnull final String qualifiedName, final boolean createClass, final String superClass) {
+  public IntentionAction createCreateClassOrInterfaceFix(@Nonnull final PsiElement context,
+                                                         @Nonnull final String qualifiedName,
+                                                         final boolean createClass,
+                                                         final String superClass) {
     return CreateClassOrPackageFix.createFix(qualifiedName, context, createClass ? ClassKind.CLASS : ClassKind.INTERFACE, superClass);
   }
 
@@ -247,7 +270,9 @@ public class QuickFixFactoryImpl extends QuickFixFactory {
 
   @Nonnull
   @Override
-  public IntentionAction createChangeToAppendFix(@Nonnull IElementType sign, @Nonnull PsiType type, @Nonnull PsiAssignmentExpression assignment) {
+  public IntentionAction createChangeToAppendFix(@Nonnull IElementType sign,
+                                                 @Nonnull PsiType type,
+                                                 @Nonnull PsiAssignmentExpression assignment) {
     return new ChangeToAppendFix(sign, type, assignment);
   }
 
@@ -331,7 +356,9 @@ public class QuickFixFactoryImpl extends QuickFixFactory {
 
   @Nonnull
   @Override
-  public IntentionAction createRemoveQualifierFix(@Nonnull PsiExpression qualifier, @Nonnull PsiReferenceExpression expression, @Nonnull PsiClass resolved) {
+  public IntentionAction createRemoveQualifierFix(@Nonnull PsiExpression qualifier,
+                                                  @Nonnull PsiReferenceExpression expression,
+                                                  @Nonnull PsiClass resolved) {
     return new RemoveQualifierFix(qualifier, expression, resolved);
   }
 
@@ -367,7 +394,9 @@ public class QuickFixFactoryImpl extends QuickFixFactory {
 
   @Nonnull
   @Override
-  public IntentionAction createReplaceInaccessibleFieldWithGetterSetterFix(@Nonnull PsiElement element, @Nonnull PsiMethod getter, boolean isSetter) {
+  public IntentionAction createReplaceInaccessibleFieldWithGetterSetterFix(@Nonnull PsiElement element,
+                                                                           @Nonnull PsiMethod getter,
+                                                                           boolean isSetter) {
     return new ReplaceInaccessibleFieldWithGetterSetterFix(element, getter, isSetter);
   }
 
@@ -469,7 +498,12 @@ public class QuickFixFactoryImpl extends QuickFixFactory {
                                                                  @Nonnull PsiElement context,
                                                                  boolean changeAllUsages,
                                                                  int minUsagesNumberToShowDialog) {
-    return new ChangeMethodSignatureFromUsageFix(targetMethod, expressions, substitutor, context, changeAllUsages, minUsagesNumberToShowDialog);
+    return new ChangeMethodSignatureFromUsageFix(targetMethod,
+                                                 expressions,
+                                                 substitutor,
+                                                 context,
+                                                 changeAllUsages,
+                                                 minUsagesNumberToShowDialog);
   }
 
   @Nonnull
@@ -480,7 +514,12 @@ public class QuickFixFactoryImpl extends QuickFixFactory {
                                                                              @Nonnull PsiElement context,
                                                                              boolean changeAllUsages,
                                                                              int minUsagesNumberToShowDialog) {
-    return new ChangeMethodSignatureFromUsageReverseOrderFix(targetMethod, expressions, substitutor, context, changeAllUsages, minUsagesNumberToShowDialog);
+    return new ChangeMethodSignatureFromUsageReverseOrderFix(targetMethod,
+                                                             expressions,
+                                                             substitutor,
+                                                             context,
+                                                             changeAllUsages,
+                                                             minUsagesNumberToShowDialog);
   }
 
   @Nonnull
@@ -599,7 +638,9 @@ public class QuickFixFactoryImpl extends QuickFixFactory {
 
   @Nonnull
   @Override
-  public IntentionAction createReplacePrimitiveWithBoxedTypeAction(@Nonnull PsiTypeElement element, @Nonnull String typeName, @Nonnull String boxedTypeName) {
+  public IntentionAction createReplacePrimitiveWithBoxedTypeAction(@Nonnull PsiTypeElement element,
+                                                                   @Nonnull String typeName,
+                                                                   @Nonnull String boxedTypeName) {
     return new ReplacePrimitiveWithBoxedTypeAction(element, typeName, boxedTypeName);
   }
 
@@ -665,7 +706,8 @@ public class QuickFixFactoryImpl extends QuickFixFactory {
   public void registerFixesForUnusedParameter(@Nonnull PsiParameter parameter, @Nonnull Object highlightInfo) {
     Project myProject = parameter.getProject();
     InspectionProfile profile = InspectionProjectProfileManager.getInstance(myProject).getInspectionProfile();
-    UnusedDeclarationInspectionBase unusedParametersInspection = (UnusedDeclarationInspectionBase) profile.getUnwrappedTool(UnusedSymbolLocalInspectionBase.SHORT_NAME, parameter);
+    UnusedDeclarationInspectionBase unusedParametersInspection =
+      (UnusedDeclarationInspectionBase)profile.getUnwrappedTool(UnusedSymbolLocalInspectionBase.SHORT_NAME, parameter);
     LOG.assertTrue(ApplicationManager.getApplication().isUnitTestMode() || unusedParametersInspection != null);
     List<IntentionAction> options = new ArrayList<>();
     HighlightDisplayKey myUnusedSymbolKey = HighlightDisplayKey.find(UnusedSymbolLocalInspectionBase.SHORT_NAME);
@@ -675,17 +717,28 @@ public class QuickFixFactoryImpl extends QuickFixFactory {
       Collections.addAll(options, SuppressIntentionActionFromFix.convertBatchToSuppressIntentionActions(batchSuppressActions));
     }
     //need suppress from Unused Parameters but settings from Unused Symbol
-    QuickFixAction.registerQuickFixAction((HighlightInfo) highlightInfo, new SafeDeleteFix(parameter), options, HighlightDisplayKey.getDisplayNameByKey(myUnusedSymbolKey));
+    QuickFixAction.registerQuickFixAction((HighlightInfo)highlightInfo,
+                                          new SafeDeleteFix(parameter),
+                                          options,
+                                          HighlightDisplayKey.getDisplayNameByKey(myUnusedSymbolKey));
   }
 
   @Nonnull
   @Override
-  public IntentionAction createAddToDependencyInjectionAnnotationsFix(@Nonnull Project project, @Nonnull String qualifiedName, @Nonnull String element) {
+  public IntentionAction createAddToDependencyInjectionAnnotationsFix(@Nonnull Project project,
+                                                                      @Nonnull String qualifiedName,
+                                                                      @Nonnull String element) {
     final EntryPointsManagerBase entryPointsManager = EntryPointsManagerBase.getInstance(project);
-    return SpecialAnnotationsUtil.createAddToSpecialAnnotationsListIntentionAction(JavaQuickFixBundle.message("fix.unused.symbol.injection.text", element, qualifiedName), JavaQuickFixBundle
-        .message
-            ("fix" +
-                ".unused.symbol.injection.family"), entryPointsManager.ADDITIONAL_ANNOTATIONS, qualifiedName);
+    return SpecialAnnotationsUtil.createAddToSpecialAnnotationsListIntentionAction(JavaQuickFixBundle.message(
+      "fix.unused.symbol.injection.text",
+      element,
+      qualifiedName),
+                                                                                   JavaQuickFixBundle
+                                                                                     .message
+                                                                                       ("fix" +
+                                                                                          ".unused.symbol.injection.family"),
+                                                                                   entryPointsManager.ADDITIONAL_ANNOTATIONS,
+                                                                                   qualifiedName);
   }
 
   @Nonnull
@@ -745,27 +798,31 @@ public class QuickFixFactoryImpl extends QuickFixFactory {
     }
     final long stamp = document.getModificationStamp();
     DumbService.getInstance(file.getProject()).smartInvokeLater(() ->
-    {
-      if (project.isDisposed() || document.getModificationStamp() != stamp) {
-        return;
-      }
-      //no need to optimize imports on the fly during undo/redo
-      final UndoManager undoManager = ProjectUndoManager.getInstance(project);
-      if (undoManager.isUndoInProgress() || undoManager.isRedoInProgress()) {
-        return;
-      }
-      PsiDocumentManager.getInstance(project).commitAllDocuments();
-      String beforeText = file.getText();
-      final long oldStamp = document.getModificationStamp();
-      UndoUtil.writeInRunUndoTransparentAction(runnable);
-      if (oldStamp != document.getModificationStamp()) {
-        String afterText = file.getText();
-        if (Comparing.strEqual(beforeText, afterText)) {
-          LOG.error(LogMessageEx.createEvent("Import optimizer  hasn't optimized any imports", file.getViewProvider().getVirtualFile().getPath(), AttachmentFactoryUtil.createAttachment(file
-              .getViewProvider().getVirtualFile())));
-        }
-      }
-    });
+                                                                {
+                                                                  if (project.isDisposed() || document.getModificationStamp() != stamp) {
+                                                                    return;
+                                                                  }
+                                                                  //no need to optimize imports on the fly during undo/redo
+                                                                  final UndoManager undoManager = ProjectUndoManager.getInstance(project);
+                                                                  if (undoManager.isUndoInProgress() || undoManager.isRedoInProgress()) {
+                                                                    return;
+                                                                  }
+                                                                  PsiDocumentManager.getInstance(project).commitAllDocuments();
+                                                                  String beforeText = file.getText();
+                                                                  final long oldStamp = document.getModificationStamp();
+                                                                  UndoUtil.writeInRunUndoTransparentAction(runnable);
+                                                                  if (oldStamp != document.getModificationStamp()) {
+                                                                    String afterText = file.getText();
+                                                                    if (Comparing.strEqual(beforeText, afterText)) {
+                                                                      LOG.error(LogMessageEx.createEvent(
+                                                                        "Import optimizer  hasn't optimized any imports",
+                                                                        file.getViewProvider().getVirtualFile().getPath(),
+                                                                        AttachmentFactoryUtil.createAttachment(file
+                                                                                                                 .getViewProvider()
+                                                                                                                 .getVirtualFile())));
+                                                                    }
+                                                                  }
+                                                                });
   }
 
   @Nonnull
@@ -778,7 +835,8 @@ public class QuickFixFactoryImpl extends QuickFixFactory {
 
   @Nonnull
   @Override
-  public IntentionAction createSurroundWithQuotesAnnotationParameterValueFix(@Nonnull PsiAnnotationMemberValue value, @Nonnull PsiType expectedType) {
+  public IntentionAction createSurroundWithQuotesAnnotationParameterValueFix(@Nonnull PsiAnnotationMemberValue value,
+                                                                             @Nonnull PsiType expectedType) {
     return new SurroundWithQuotesAnnotationParameterValueFix(value, expectedType);
   }
 
@@ -807,7 +865,7 @@ public class QuickFixFactoryImpl extends QuickFixFactory {
     if (parent instanceof PsiForeachStatement) {
       final PsiType type = expression.getType();
       if (InheritanceUtil.isInheritor(type, JavaClassNames.JAVA_UTIL_ITERATOR)) {
-        return new ReplaceIteratorForEachLoopWithIteratorForLoopFix((PsiForeachStatement) parent);
+        return new ReplaceIteratorForEachLoopWithIteratorForLoopFix((PsiForeachStatement)parent);
       }
     }
     return null;
@@ -844,15 +902,16 @@ public class QuickFixFactoryImpl extends QuickFixFactory {
       return true;
     }
     // ignore unresolved imports errors
-    PsiImportList importList = ((PsiJavaFile) file).getImportList();
+    PsiImportList importList = ((PsiJavaFile)file).getImportList();
     final TextRange importsRange = importList == null ? TextRange.EMPTY_RANGE : importList.getTextRange();
-    boolean hasErrorsExceptUnresolvedImports = !DaemonCodeAnalyzer.processHighlights(document, file.getProject(), HighlightSeverity.ERROR, 0, document.getTextLength(), error ->
-    {
-      int infoStart = error.getActualStartOffset();
-      int infoEnd = error.getActualEndOffset();
+    boolean hasErrorsExceptUnresolvedImports =
+      !DaemonCodeAnalyzer.processHighlights(document, file.getProject(), HighlightSeverity.ERROR, 0, document.getTextLength(), error ->
+      {
+        int infoStart = error.getActualStartOffset();
+        int infoEnd = error.getActualEndOffset();
 
-      return importsRange.containsRange(infoStart, infoEnd) && error.getType().equals(HighlightInfoType.WRONG_REF);
-    });
+        return importsRange.containsRange(infoStart, infoEnd) && error.getType().equals(HighlightInfoType.WRONG_REF);
+      });
 
     return hasErrorsExceptUnresolvedImports;
   }
@@ -871,7 +930,8 @@ public class QuickFixFactoryImpl extends QuickFixFactory {
 
   @Nonnull
   @Override
-  public LocalQuickFixAndIntentionActionOnPsiElement createAccessStaticViaInstanceFix(PsiReferenceExpression methodRef, JavaResolveResult result) {
+  public LocalQuickFixAndIntentionActionOnPsiElement createAccessStaticViaInstanceFix(PsiReferenceExpression methodRef,
+                                                                                      JavaResolveResult result) {
     return new AccessStaticViaInstanceFix(methodRef, result, true);
   }
 

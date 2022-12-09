@@ -22,6 +22,7 @@ package com.intellij.java.indexing.impl.stubs.index;
 import com.intellij.java.indexing.impl.search.JavaSourceFilterScope;
 import com.intellij.java.language.impl.psi.impl.java.stubs.index.JavaStubIndexKeys;
 import com.intellij.java.language.psi.PsiClass;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.stub.FileBasedIndex;
 import consulo.language.psi.stub.StringStubIndexExtension;
 import consulo.language.psi.stub.StubIndex;
@@ -32,6 +33,7 @@ import consulo.project.content.scope.ProjectAwareSearchScope;
 import javax.annotation.Nonnull;
 import java.util.Collection;
 
+@ExtensionImpl
 public class JavaShortClassNameIndex extends StringStubIndexExtension<PsiClass> {
   private static final JavaShortClassNameIndex ourInstance = new JavaShortClassNameIndex();
 

@@ -15,59 +15,52 @@
  */
 package com.intellij.java.impl.codeInspection.deadCode;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import consulo.language.editor.scope.AnalysisScope;
 import consulo.language.editor.inspection.GlobalInspectionContext;
-import consulo.language.editor.inspection.scheme.InspectionManager;
 import consulo.language.editor.inspection.InspectionsBundle;
 import consulo.language.editor.inspection.ProblemDescriptionsProcessor;
+import consulo.language.editor.inspection.scheme.InspectionManager;
 import consulo.language.editor.inspection.scheme.JobDescriptor;
+import consulo.language.editor.scope.AnalysisScope;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * @author max
  */
-public class DummyEntryPointsTool extends UnusedDeclarationInspection
-{
-	public DummyEntryPointsTool()
-	{
-	}
+public class DummyEntryPointsTool extends UnusedDeclarationInspection {
+  public DummyEntryPointsTool() {
+  }
 
-	@Override
-	public void runInspection(@Nonnull AnalysisScope scope,
-			@Nonnull InspectionManager manager,
-			@Nonnull GlobalInspectionContext globalContext,
-			@Nonnull ProblemDescriptionsProcessor problemDescriptionsProcessor)
-	{
-	}
+  @Override
+  public void runInspection(@Nonnull AnalysisScope scope,
+                            @Nonnull InspectionManager manager,
+                            @Nonnull GlobalInspectionContext globalContext,
+                            @Nonnull ProblemDescriptionsProcessor problemDescriptionsProcessor) {
+  }
 
-	@Nullable
-	@Override
-	public JobDescriptor[] getAdditionalJobs()
-	{
-		return JobDescriptor.EMPTY_ARRAY;
-	}
+  @Nullable
+  @Override
+  public JobDescriptor[] getAdditionalJobs() {
+    return JobDescriptor.EMPTY_ARRAY;
+  }
 
-	@Override
-	@Nonnull
-	public String getDisplayName()
-	{
-		return InspectionsBundle.message("inspection.dead.code.entry.points.display.name");
-	}
+  @Override
+  @Nonnull
+  public String getDisplayName() {
+    return InspectionsBundle.message("inspection.dead.code.entry.points.display.name");
+  }
 
-	@Override
-	@Nonnull
-	public String getGroupDisplayName()
-	{
-		return "";
-	}
+  @Override
+  @Nonnull
+  public String getGroupDisplayName() {
+    return "";
+  }
 
-	@Override
-	@Nonnull
-	public String getShortName()
-	{
-		//noinspection InspectionDescriptionNotFoundInspection
-		return "";
-	}
+  @Override
+  @Nonnull
+  public String getShortName() {
+    //noinspection InspectionDescriptionNotFoundInspection
+    return "";
+  }
 }

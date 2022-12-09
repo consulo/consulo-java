@@ -19,6 +19,7 @@ package consulo.java.language.impl.psi.augment;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.augment.PsiAugmentProvider;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import com.intellij.java.language.impl.psi.impl.light.LightMethodBuilder;
 import com.intellij.java.language.impl.psi.impl.source.PsiImmediateClassType;
@@ -34,6 +35,7 @@ import java.util.List;
  * @author VISTALL
  * @since 30.04.2015
  */
+@ExtensionImpl
 public class JavaEnumAugmentProvider extends PsiAugmentProvider {
   public static final Key<Boolean> FLAG = Key.create("enum.method.flags");
   public static final String VALUES_METHOD_NAME = "values";

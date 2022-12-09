@@ -17,6 +17,7 @@ package com.intellij.java.impl.refactoring.util;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.findUsage.DescriptiveNameUtil;
 import consulo.language.psi.ElementDescriptionLocation;
 import consulo.language.psi.ElementDescriptionProvider;
@@ -27,6 +28,7 @@ import consulo.language.editor.refactoring.util.RefactoringDescriptionLocation;
 
 import javax.annotation.Nonnull;
 
+@ExtensionImpl
 public class JavaRefactoringElementDescriptionProvider implements ElementDescriptionProvider {
   public String getElementDescription(@Nonnull final PsiElement element, @Nonnull final ElementDescriptionLocation location) {
     if (!(location instanceof RefactoringDescriptionLocation)) return null;

@@ -15,158 +15,140 @@
  */
 package com.intellij.java.language.testIntegration;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import consulo.execution.configuration.ConfigurationType;
-import consulo.fileTemplate.FileTemplateDescriptor;
-import consulo.language.Language;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.projectRoots.roots.ExternalLibraryDescriptor;
-import consulo.language.psi.PsiFile;
-import consulo.module.content.ProjectRootManager;
-import consulo.util.lang.StringUtil;
 import com.intellij.java.language.psi.JVMElementFactory;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
-import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiMethod;
+import consulo.execution.configuration.ConfigurationType;
+import consulo.fileTemplate.FileTemplate;
+import consulo.fileTemplate.FileTemplateDescriptor;
+import consulo.fileTemplate.FileTemplateManager;
+import consulo.language.Language;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.util.IncorrectOperationException;
-import consulo.fileTemplate.FileTemplate;
-import consulo.fileTemplate.FileTemplateManager;
 import consulo.module.Module;
+import consulo.module.content.ProjectRootManager;
+import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.VirtualFile;
 
-public abstract class JavaTestFramework implements TestFramework
-{
-	@Override
-	public boolean isLibraryAttached(@Nonnull consulo.module.Module module)
-	{
-		GlobalSearchScope scope = GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(module);
-		PsiClass c = JavaPsiFacade.getInstance(module.getProject()).findClass(getMarkerClassFQName(), scope);
-		return c != null;
-	}
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-	@Nullable
-	@Override
-	public String getLibraryPath()
-	{
-		ExternalLibraryDescriptor descriptor = getFrameworkLibraryDescriptor();
-		if(descriptor != null)
-		{
-			return descriptor.getLibraryClassesRoots().get(0);
-		}
-		return null;
-	}
+public abstract class JavaTestFramework implements TestFramework {
+  @Override
+  public boolean isLibraryAttached(@Nonnull consulo.module.Module module) {
+    GlobalSearchScope scope = GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(module);
+    PsiClass c = JavaPsiFacade.getInstance(module.getProject()).findClass(getMarkerClassFQName(), scope);
+    return c != null;
+  }
 
-	public ExternalLibraryDescriptor getFrameworkLibraryDescriptor()
-	{
-		return null;
-	}
+  @Nullable
+  @Override
+  public String getLibraryPath() {
+    ExternalLibraryDescriptor descriptor = getFrameworkLibraryDescriptor();
+    if (descriptor != null) {
+      return descriptor.getLibraryClassesRoots().get(0);
+    }
+    return null;
+  }
 
-	protected abstract String getMarkerClassFQName();
+  public ExternalLibraryDescriptor getFrameworkLibraryDescriptor() {
+    return null;
+  }
 
-	@Override
-	public boolean isTestClass(@Nonnull PsiElement clazz)
-	{
-		return clazz instanceof PsiClass && isTestClass((PsiClass) clazz, false);
-	}
+  protected abstract String getMarkerClassFQName();
 
-	@Override
-	public boolean isPotentialTestClass(@Nonnull PsiElement clazz)
-	{
-		return clazz instanceof PsiClass && isTestClass((PsiClass) clazz, true);
-	}
+  @Override
+  public boolean isTestClass(@Nonnull PsiElement clazz) {
+    return clazz instanceof PsiClass && isTestClass((PsiClass)clazz, false);
+  }
 
-	protected abstract boolean isTestClass(PsiClass clazz, boolean canBePotential);
+  @Override
+  public boolean isPotentialTestClass(@Nonnull PsiElement clazz) {
+    return clazz instanceof PsiClass && isTestClass((PsiClass)clazz, true);
+  }
 
-	protected boolean isUnderTestSources(PsiClass clazz)
-	{
-		PsiFile psiFile = clazz.getContainingFile();
-		VirtualFile vFile = psiFile.getVirtualFile();
-		if(vFile == null)
-		{
-			return false;
-		}
-		return ProjectRootManager.getInstance(clazz.getProject()).getFileIndex().isInTestSourceContent(vFile);
-	}
+  protected abstract boolean isTestClass(PsiClass clazz, boolean canBePotential);
 
-	@Override
-	@Nullable
-	public PsiElement findSetUpMethod(@Nonnull PsiElement clazz)
-	{
-		return clazz instanceof PsiClass ? findSetUpMethod((PsiClass) clazz) : null;
-	}
+  protected boolean isUnderTestSources(PsiClass clazz) {
+    PsiFile psiFile = clazz.getContainingFile();
+    VirtualFile vFile = psiFile.getVirtualFile();
+    if (vFile == null) {
+      return false;
+    }
+    return ProjectRootManager.getInstance(clazz.getProject()).getFileIndex().isInTestSourceContent(vFile);
+  }
 
-	@Nullable
-	protected abstract PsiMethod findSetUpMethod(@Nonnull PsiClass clazz);
+  @Override
+  @Nullable
+  public PsiElement findSetUpMethod(@Nonnull PsiElement clazz) {
+    return clazz instanceof PsiClass ? findSetUpMethod((PsiClass)clazz) : null;
+  }
 
-	@Override
-	@Nullable
-	public PsiElement findTearDownMethod(@Nonnull PsiElement clazz)
-	{
-		return clazz instanceof PsiClass ? findTearDownMethod((PsiClass) clazz) : null;
-	}
+  @Nullable
+  protected abstract PsiMethod findSetUpMethod(@Nonnull PsiClass clazz);
 
-	@Nullable
-	protected abstract PsiMethod findTearDownMethod(@Nonnull PsiClass clazz);
+  @Override
+  @Nullable
+  public PsiElement findTearDownMethod(@Nonnull PsiElement clazz) {
+    return clazz instanceof PsiClass ? findTearDownMethod((PsiClass)clazz) : null;
+  }
 
-	@Override
-	public PsiElement findOrCreateSetUpMethod(@Nonnull PsiElement clazz) throws IncorrectOperationException
-	{
-		return clazz instanceof PsiClass ? findOrCreateSetUpMethod((PsiClass) clazz) : null;
-	}
+  @Nullable
+  protected abstract PsiMethod findTearDownMethod(@Nonnull PsiClass clazz);
 
-	@Override
-	public boolean isIgnoredMethod(PsiElement element)
-	{
-		return false;
-	}
+  @Override
+  public PsiElement findOrCreateSetUpMethod(@Nonnull PsiElement clazz) throws IncorrectOperationException {
+    return clazz instanceof PsiClass ? findOrCreateSetUpMethod((PsiClass)clazz) : null;
+  }
 
-	@Override
-	@Nonnull
-	public Language getLanguage()
-	{
-		return JavaLanguage.INSTANCE;
-	}
+  @Override
+  public boolean isIgnoredMethod(PsiElement element) {
+    return false;
+  }
 
-	@Nullable
-	protected abstract PsiMethod findOrCreateSetUpMethod(PsiClass clazz) throws IncorrectOperationException;
+  @Override
+  @Nonnull
+  public Language getLanguage() {
+    return JavaLanguage.INSTANCE;
+  }
 
-	public boolean isParameterized(PsiClass clazz)
-	{
-		return false;
-	}
+  @Nullable
+  protected abstract PsiMethod findOrCreateSetUpMethod(PsiClass clazz) throws IncorrectOperationException;
 
-	@Nullable
-	public PsiMethod findParametersMethod(PsiClass clazz)
-	{
-		return null;
-	}
+  public boolean isParameterized(PsiClass clazz) {
+    return false;
+  }
 
-	@Nullable
-	public FileTemplateDescriptor getParametersMethodFileTemplateDescriptor()
-	{
-		return null;
-	}
+  @Nullable
+  public PsiMethod findParametersMethod(PsiClass clazz) {
+    return null;
+  }
 
-	public abstract char getMnemonic();
+  @Nullable
+  public FileTemplateDescriptor getParametersMethodFileTemplateDescriptor() {
+    return null;
+  }
 
-	public PsiMethod createSetUpPatternMethod(JVMElementFactory factory)
-	{
-		final FileTemplate template = FileTemplateManager.getDefaultInstance().getCodeTemplate(getSetUpMethodFileTemplateDescriptor().getFileName());
-		final String templateText = StringUtil.replace(StringUtil.replace(template.getText(), "${BODY}\n", ""), "${NAME}", "setUp");
-		return factory.createMethodFromText(templateText, null);
-	}
+  public abstract char getMnemonic();
 
-	public FileTemplateDescriptor getTestClassFileTemplateDescriptor()
-	{
-		return null;
-	}
+  public PsiMethod createSetUpPatternMethod(JVMElementFactory factory) {
+    final FileTemplate template =
+      FileTemplateManager.getDefaultInstance().getCodeTemplate(getSetUpMethodFileTemplateDescriptor().getFileName());
+    final String templateText = StringUtil.replace(StringUtil.replace(template.getText(), "${BODY}\n", ""), "${NAME}", "setUp");
+    return factory.createMethodFromText(templateText, null);
+  }
 
-	public void setupLibrary(Module module)
-	{
-		/*ExternalLibraryDescriptor descriptor = getFrameworkLibraryDescriptor();
+  public FileTemplateDescriptor getTestClassFileTemplateDescriptor() {
+    return null;
+  }
+
+  public void setupLibrary(Module module) {
+    /*ExternalLibraryDescriptor descriptor = getFrameworkLibraryDescriptor();
 		if(descriptor != null)
 		{
 			JavaProjectModelModificationService.getInstance(module.getProject()).addDependency(module, descriptor, DependencyScope.TEST);
@@ -179,39 +161,33 @@ public abstract class JavaTestFramework implements TestFramework
 				OrderEntryFix.addJarsToRoots(Collections.singletonList(path), null, module, null);
 			}
 		}  */
-	}
+  }
 
-	public boolean isSingleConfig()
-	{
-		return false;
-	}
+  public boolean isSingleConfig() {
+    return false;
+  }
 
-	/**
-	 * @return true for junit 3 classes with suite method and for junit 4 tests with @Suite annotation
-	 */
-	public boolean isSuiteClass(PsiClass psiClass)
-	{
-		return false;
-	}
+  /**
+   * @return true for junit 3 classes with suite method and for junit 4 tests with @Suite annotation
+   */
+  public boolean isSuiteClass(PsiClass psiClass) {
+    return false;
+  }
 
-	public boolean isTestMethod(PsiMethod method, PsiClass myClass)
-	{
-		return isTestMethod(method);
-	}
+  public boolean isTestMethod(PsiMethod method, PsiClass myClass) {
+    return isTestMethod(method);
+  }
 
-	public boolean acceptNestedClasses()
-	{
-		return false;
-	}
+  public boolean acceptNestedClasses() {
+    return false;
+  }
 
-	@Override
-	public boolean isTestMethod(PsiElement element)
-	{
-		return isTestMethod(element, true);
-	}
+  @Override
+  public boolean isTestMethod(PsiElement element) {
+    return isTestMethod(element, true);
+  }
 
-	public boolean isMyConfigurationType(ConfigurationType type)
-	{
-		return false;
-	}
+  public boolean isMyConfigurationType(ConfigurationType type) {
+    return false;
+  }
 }

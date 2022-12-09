@@ -16,6 +16,7 @@
 package com.intellij.java.language.impl.psi.impl.source.tree;
 
 import com.intellij.java.language.impl.psi.impl.source.javadoc.PsiDocTagValueImpl;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.impl.ast.CompositeElement;
 import consulo.language.ast.IElementType;
 import consulo.java.language.impl.psi.CoreJavaASTCompositeFactory;
@@ -25,6 +26,7 @@ import javax.annotation.Nonnull;
 /**
  * @author max
  */
+@ExtensionImpl
 public class JavaASTCompositeFactory extends CoreJavaASTCompositeFactory {
   @Override
   @Nonnull

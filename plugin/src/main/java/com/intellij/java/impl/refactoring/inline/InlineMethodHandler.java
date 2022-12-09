@@ -21,6 +21,7 @@ import com.intellij.java.impl.refactoring.util.InlineUtil;
 import com.intellij.java.impl.refactoring.util.RefactoringUtil;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
 import consulo.project.Project;
 import consulo.virtualFileSystem.ReadonlyStatusHandler;
@@ -31,11 +32,9 @@ import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import consulo.language.editor.TargetElementUtil;
 
-class InlineMethodHandler extends JavaInlineActionHandler {
+@ExtensionImpl
+public class InlineMethodHandler extends JavaInlineActionHandler {
   private static final String REFACTORING_NAME = RefactoringBundle.message("inline.method.title");
-
-  private InlineMethodHandler() {
-  }
 
   public boolean canInlineElement(PsiElement element) {
     return element instanceof PsiMethod && element.getNavigationElement() instanceof PsiMethod && element.getLanguage() == JavaLanguage.INSTANCE;

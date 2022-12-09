@@ -18,6 +18,7 @@ package com.intellij.java.impl.psi.impl.cache.impl.idCache;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.java.language.impl.lexer.JavaLexer;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.lexer.Lexer;
 import consulo.language.psi.stub.LexerBasedIdIndexer;
 import consulo.language.psi.stub.OccurrenceConsumer;
@@ -25,6 +26,7 @@ import consulo.virtualFileSystem.fileType.FileType;
 
 import javax.annotation.Nonnull;
 
+@ExtensionImpl
 public class JavaIdIndexer extends LexerBasedIdIndexer {
   @Override
   public Lexer createLexer(final OccurrenceConsumer consumer) {

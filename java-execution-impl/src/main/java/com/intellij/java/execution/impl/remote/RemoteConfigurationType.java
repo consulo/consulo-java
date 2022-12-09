@@ -20,6 +20,7 @@
  */
 package com.intellij.java.execution.impl.remote;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.AllIcons;
 import consulo.execution.configuration.ConfigurationFactory;
 import consulo.execution.configuration.ConfigurationTypeBase;
@@ -32,6 +33,7 @@ import consulo.project.Project;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+@ExtensionImpl
 public class RemoteConfigurationType extends ConfigurationTypeBase {
   public RemoteConfigurationType() {
     super("JavaRemoteConfigurationType", JavaExecutionBundle.message("remote.debug.configuration.display.name"), JavaExecutionBundle.message("remote.debug.configuration.description"), AllIcons

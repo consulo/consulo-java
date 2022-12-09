@@ -17,6 +17,7 @@ package consulo.java.compiler.impl.javaCompiler;
 
 import com.intellij.java.compiler.impl.javaCompiler.JavaCompilerConfiguration;
 import com.intellij.java.compiler.impl.javaCompiler.annotationProcessing.AnnotationProcessingConfiguration;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.compiler.AdditionalOutputDirectoriesProvider;
 import consulo.compiler.CompilerPaths;
 import consulo.module.Module;
@@ -34,8 +35,8 @@ import java.util.Arrays;
  * @author VISTALL
  * @since 20:24/12.06.13
  */
-public class JavaAdditionalOutputDirectoriesProvider implements AdditionalOutputDirectoriesProvider
-{
+@ExtensionImpl
+public class JavaAdditionalOutputDirectoriesProvider implements AdditionalOutputDirectoriesProvider {
 
   @Nonnull
   @Override
@@ -47,7 +48,7 @@ public class JavaAdditionalOutputDirectoriesProvider implements AdditionalOutput
 
     final String path = getAnnotationProcessorsGenerationPath(module);
     if (path != null) {
-      return new String[] {path};
+      return new String[]{path};
     }
     else {
       return ArrayUtil.EMPTY_STRING_ARRAY;
@@ -68,8 +69,8 @@ public class JavaAdditionalOutputDirectoriesProvider implements AdditionalOutput
         Arrays.sort(roots, CompilerPaths.URLS_COMPARATOR);
       }
       return StringUtil.isEmpty(sourceDirName)
-             ? VirtualFileManager.extractPath(roots[0])
-             : VirtualFileManager.extractPath(roots[0]) + "/" + sourceDirName;
+        ? VirtualFileManager.extractPath(roots[0])
+        : VirtualFileManager.extractPath(roots[0]) + "/" + sourceDirName;
     }
 
 

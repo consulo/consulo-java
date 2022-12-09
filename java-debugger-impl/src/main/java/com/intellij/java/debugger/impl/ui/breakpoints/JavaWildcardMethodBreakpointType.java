@@ -15,107 +15,96 @@
  */
 package com.intellij.java.debugger.impl.ui.breakpoints;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.swing.JComponent;
-
-import com.intellij.java.debugger.impl.breakpoints.properties.JavaMethodBreakpointProperties;
 import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.impl.HelpID;
+import com.intellij.java.debugger.impl.breakpoints.properties.JavaMethodBreakpointProperties;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.AllIcons;
 import consulo.application.ApplicationManager;
-import consulo.execution.debug.breakpoint.XBreakpoint;
-import consulo.project.Project;
 import consulo.application.util.function.Computable;
 import consulo.execution.debug.XDebuggerManager;
+import consulo.execution.debug.breakpoint.XBreakpoint;
 import consulo.execution.debug.breakpoint.ui.XBreakpointCustomPropertiesPanel;
+import consulo.project.Project;
 import consulo.ui.image.Image;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.swing.*;
 
 /**
  * @author Egor
  */
-public class JavaWildcardMethodBreakpointType extends JavaBreakpointTypeBase<JavaMethodBreakpointProperties> implements JavaBreakpointType
-{
-	public JavaWildcardMethodBreakpointType()
-	{
-		super("java-wildcard-method", DebuggerBundle.message("method.breakpoints.tab.title"));
-	}
+@ExtensionImpl
+public class JavaWildcardMethodBreakpointType extends JavaBreakpointTypeBase<JavaMethodBreakpointProperties> implements JavaBreakpointType {
+  public JavaWildcardMethodBreakpointType() {
+    super("java-wildcard-method", DebuggerBundle.message("method.breakpoints.tab.title"));
+  }
 
-	@Nonnull
-	@Override
-	public Image getEnabledIcon()
-	{
-		return AllIcons.Debugger.Db_method_breakpoint;
-	}
+  @Nonnull
+  @Override
+  public Image getEnabledIcon() {
+    return AllIcons.Debugger.Db_method_breakpoint;
+  }
 
-	@Nonnull
-	@Override
-	public Image getDisabledIcon()
-	{
-		return AllIcons.Debugger.Db_disabled_method_breakpoint;
-	}
+  @Nonnull
+  @Override
+  public Image getDisabledIcon() {
+    return AllIcons.Debugger.Db_disabled_method_breakpoint;
+  }
 
-	//@Override
-	protected String getHelpID()
-	{
-		return HelpID.METHOD_BREAKPOINTS;
-	}
+  //@Override
+  protected String getHelpID() {
+    return HelpID.METHOD_BREAKPOINTS;
+  }
 
-	//@Override
-	public String getDisplayName()
-	{
-		return DebuggerBundle.message("method.breakpoints.tab.title");
-	}
+  //@Override
+  public String getDisplayName() {
+    return DebuggerBundle.message("method.breakpoints.tab.title");
+  }
 
-	@Override
-	public String getDisplayText(XBreakpoint<JavaMethodBreakpointProperties> breakpoint)
-	{
-		return JavaMethodBreakpointType.getText(breakpoint);
-	}
+  @Override
+  public String getDisplayText(XBreakpoint<JavaMethodBreakpointProperties> breakpoint) {
+    return JavaMethodBreakpointType.getText(breakpoint);
+  }
 
-	@Nullable
-	@Override
-	public XBreakpointCustomPropertiesPanel<XBreakpoint<JavaMethodBreakpointProperties>> createCustomPropertiesPanel()
-	{
-		return new MethodBreakpointPropertiesPanel();
-	}
+  @Nullable
+  @Override
+  public XBreakpointCustomPropertiesPanel<XBreakpoint<JavaMethodBreakpointProperties>> createCustomPropertiesPanel() {
+    return new MethodBreakpointPropertiesPanel();
+  }
 
-	//@Override
-	//public Key<MethodBreakpoint> getBreakpointCategory() {
-	//  return MethodBreakpoint.CATEGORY;
-	//}
+  //@Override
+  //public Key<MethodBreakpoint> getBreakpointCategory() {
+  //  return MethodBreakpoint.CATEGORY;
+  //}
 
-	@Nullable
-	@Override
-	public JavaMethodBreakpointProperties createProperties()
-	{
-		return new JavaMethodBreakpointProperties();
-	}
+  @Nullable
+  @Override
+  public JavaMethodBreakpointProperties createProperties() {
+    return new JavaMethodBreakpointProperties();
+  }
 
-	@Nullable
-	@Override
-	public XBreakpoint<JavaMethodBreakpointProperties> addBreakpoint(final Project project, JComponent parentComponent)
-	{
-		final AddWildcardBreakpointDialog dialog = new AddWildcardBreakpointDialog(project);
-		dialog.show();
-		if(!dialog.isOK())
-		{
-			return null;
-		}
-		return ApplicationManager.getApplication().runWriteAction(new Computable<XBreakpoint<JavaMethodBreakpointProperties>>()
-		{
-			@Override
-			public XBreakpoint<JavaMethodBreakpointProperties> compute()
-			{
-				return XDebuggerManager.getInstance(project).getBreakpointManager().addBreakpoint(JavaWildcardMethodBreakpointType.this,
-						new JavaMethodBreakpointProperties(dialog.getClassPattern(), dialog.getMethodName()));
-			}
-		});
-	}
+  @Nullable
+  @Override
+  public XBreakpoint<JavaMethodBreakpointProperties> addBreakpoint(final Project project, JComponent parentComponent) {
+    final AddWildcardBreakpointDialog dialog = new AddWildcardBreakpointDialog(project);
+    dialog.show();
+    if (!dialog.isOK()) {
+      return null;
+    }
+    return ApplicationManager.getApplication().runWriteAction(new Computable<XBreakpoint<JavaMethodBreakpointProperties>>() {
+      @Override
+      public XBreakpoint<JavaMethodBreakpointProperties> compute() {
+        return XDebuggerManager.getInstance(project).getBreakpointManager().addBreakpoint(JavaWildcardMethodBreakpointType.this,
+                                                                                          new JavaMethodBreakpointProperties(dialog.getClassPattern(),
+                                                                                                                             dialog.getMethodName()));
+      }
+    });
+  }
 
-	@Override
-	public Breakpoint createJavaBreakpoint(Project project, XBreakpoint breakpoint)
-	{
-		return new WildcardMethodBreakpoint(project, breakpoint);
-	}
+  @Override
+  public Breakpoint createJavaBreakpoint(Project project, XBreakpoint breakpoint) {
+    return new WildcardMethodBreakpoint(project, breakpoint);
+  }
 }

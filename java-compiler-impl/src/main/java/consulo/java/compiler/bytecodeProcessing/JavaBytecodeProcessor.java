@@ -35,15 +35,14 @@ import java.io.IOException;
  * @since 28-Sep-16
  */
 @ExtensionAPI(ComponentScope.APPLICATION)
-public interface JavaBytecodeProcessor
-{
-	@Nullable
-	byte[] processClassFile(CompileContext compileContext,
-			Module affectedModule,
-			JavaDependencyCache dependencyCache,
-			Cache newClassesCache,
-			int classId,
-			File file,
-			ThrowableComputable<byte[], IOException> bytesCompitable,
-			InstrumentationClassFinder classFinder) throws IOException, CacheCorruptedException;
+public interface JavaBytecodeProcessor {
+  @Nullable
+  byte[] processClassFile(CompileContext compileContext,
+                          Module affectedModule,
+                          JavaDependencyCache dependencyCache,
+                          Cache newClassesCache,
+                          int classId,
+                          File file,
+                          ThrowableComputable<byte[], IOException> bytesCompitable,
+                          InstrumentationClassFinder classFinder) throws IOException, CacheCorruptedException;
 }

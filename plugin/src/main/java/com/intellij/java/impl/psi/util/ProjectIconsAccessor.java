@@ -17,6 +17,9 @@ package com.intellij.java.impl.psi.util;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ServiceAPI;
+import consulo.annotation.component.ServiceImpl;
 import consulo.application.Application;
 import consulo.disposer.Disposable;
 import consulo.ide.ServiceManager;
@@ -45,6 +48,8 @@ import java.util.Locale;
  * @since 15
  */
 @Singleton
+@ServiceAPI(ComponentScope.PROJECT)
+@ServiceImpl
 public class ProjectIconsAccessor implements Disposable {
   @Nonnull
   public static ProjectIconsAccessor getInstance(@Nonnull Project project) {
@@ -80,7 +85,7 @@ public class ProjectIconsAccessor implements Disposable {
         if (element instanceof PsiLiteralExpression) {
           for (PsiReference ref : element.getReferences()) {
             if (ref instanceof FileReference) {
-              refs.add((FileReference) ref);
+              refs.add((FileReference)ref);
             }
           }
         }
@@ -96,11 +101,12 @@ public class ProjectIconsAccessor implements Disposable {
         for (ResolveResult result : results) {
           final PsiElement element = result.getElement();
           if (element instanceof PsiBinaryFile) {
-            file = ((PsiFile) element).getVirtualFile();
+            file = ((PsiFile)element).getVirtualFile();
             break;
           }
         }
-      } else {
+      }
+      else {
         file = psiFileSystemItem.getVirtualFile();
       }
 
@@ -123,7 +129,8 @@ public class ProjectIconsAccessor implements Disposable {
         final Image icon = createOrFindBetterIcon(file, isConsuloProject(element));
         iconInfo = new Pair<>(stamp, hasProperSize(icon) ? icon : null);
         myIconsCache.put(file.getPath(), iconInfo);
-      } catch (Exception e) {
+      }
+      catch (Exception e) {
         iconInfo = null;
         myIconsCache.remove(path);
       }

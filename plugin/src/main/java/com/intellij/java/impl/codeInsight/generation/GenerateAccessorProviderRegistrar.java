@@ -17,36 +17,17 @@ package com.intellij.java.impl.codeInsight.generation;
 
 import com.intellij.java.language.impl.codeInsight.generation.EncapsulatableClassMember;
 import com.intellij.java.language.psi.PsiClass;
-import consulo.component.extension.ExtensionPointName;
-import consulo.component.extension.Extensions;
-import consulo.ide.impl.idea.util.NotNullFunction;
+import consulo.application.Application;
 import consulo.util.collection.ContainerUtil;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 
 /**
  * @author peter
  */
 public class GenerateAccessorProviderRegistrar {
-
-  public final static ExtensionPointName<NotNullFunction<PsiClass, Collection<EncapsulatableClassMember>>> EP_NAME = ExtensionPointName.create("consulo.java.generateAccessorProvider");
-
-  private static final List<NotNullFunction<PsiClass, Collection<EncapsulatableClassMember>>> ourProviders = new ArrayList<NotNullFunction<PsiClass, Collection<EncapsulatableClassMember>>>();
-
-  static {
-    ourProviders.addAll(Arrays.asList(Extensions.getExtensions(EP_NAME)));
-  }
-
-  /** @see #EP_NAME */
-  @Deprecated
-  public static void registerProvider(NotNullFunction<PsiClass, Collection<EncapsulatableClassMember>> function) {
-    ourProviders.add(function);
-  }
-
   protected static List<EncapsulatableClassMember> getEncapsulatableClassMembers(final PsiClass psiClass) {
-    return ContainerUtil.concat(ourProviders, s -> s.apply(psiClass));
+    return ContainerUtil.concat(Application.get().getExtensionList(GenerateAccessorProvider.class),
+                                s -> s.getEncapsulatableClassMembers(psiClass));
   }
 }

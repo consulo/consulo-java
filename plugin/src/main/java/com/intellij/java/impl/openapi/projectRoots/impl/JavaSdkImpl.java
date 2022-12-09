@@ -20,6 +20,7 @@ import com.intellij.java.language.projectRoots.JavaSdkVersion;
 import com.intellij.java.language.projectRoots.OwnJdkVersionDetector;
 import com.intellij.java.language.projectRoots.roots.AnnotationOrderRootType;
 import com.intellij.java.language.vfs.jrt.JrtFileSystem;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.util.SystemInfo;
 import consulo.container.plugin.PluginManager;
 import consulo.content.OrderRootType;
@@ -67,6 +68,7 @@ import java.util.regex.Pattern;
  * @author Eugene Zhuravlev
  * @since Sep 17, 2004
  */
+@ExtensionImpl
 public class JavaSdkImpl extends JavaSdk {
   private static final Logger LOG = Logger.getInstance(JavaSdkImpl.class);
   // do not use javaw.exe for Windows because of issues with encoding

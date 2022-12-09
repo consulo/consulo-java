@@ -15,82 +15,69 @@
  */
 package com.intellij.java.language.impl.psi.impl.smartPointers;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import consulo.logging.Logger;
-import consulo.project.Project;
-import com.intellij.java.language.psi.ClassTypePointerFactory;
-import com.intellij.java.language.psi.JavaPsiFacade;
-import com.intellij.java.language.psi.PsiClassType;
-import com.intellij.java.language.psi.PsiElementFactory;
-import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
+import com.intellij.java.language.impl.psi.impl.source.PsiClassReferenceType;
+import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.SmartPointerManager;
 import consulo.language.psi.SmartPsiElementPointer;
-import com.intellij.java.language.psi.SmartTypePointer;
-import com.intellij.java.language.impl.psi.impl.source.PsiClassReferenceType;
 import consulo.language.util.IncorrectOperationException;
+import consulo.logging.Logger;
+import consulo.project.Project;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Created by Max Medvedev on 10/25/13
  */
-public class PsiClassReferenceTypePointerFactory implements ClassTypePointerFactory
-{
-	private static final Logger LOG = Logger.getInstance(PsiClassReferenceTypePointerFactory.class);
+@ExtensionImpl
+public class PsiClassReferenceTypePointerFactory implements ClassTypePointerFactory {
+  private static final Logger LOG = Logger.getInstance(PsiClassReferenceTypePointerFactory.class);
 
-	@Nullable
-	@Override
-	public SmartTypePointer createClassTypePointer(@Nonnull PsiClassType classType, @Nonnull Project project)
-	{
-		if(classType instanceof PsiClassReferenceType)
-		{
-			return new ClassReferenceTypePointer((PsiClassReferenceType) classType, project);
-		}
+  @Nullable
+  @Override
+  public SmartTypePointer createClassTypePointer(@Nonnull PsiClassType classType, @Nonnull Project project) {
+    if (classType instanceof PsiClassReferenceType) {
+      return new ClassReferenceTypePointer((PsiClassReferenceType)classType, project);
+    }
 
-		return null;
-	}
+    return null;
+  }
 
-	private static class ClassReferenceTypePointer extends TypePointerBase<PsiClassReferenceType>
-	{
-		private final SmartPsiElementPointer mySmartPsiElementPointer;
-		private final String myReferenceText;
-		private final Project myProject;
+  private static class ClassReferenceTypePointer extends TypePointerBase<PsiClassReferenceType> {
+    private final SmartPsiElementPointer mySmartPsiElementPointer;
+    private final String myReferenceText;
+    private final Project myProject;
 
-		ClassReferenceTypePointer(@Nonnull PsiClassReferenceType type, Project project)
-		{
-			super(type);
-			myProject = project;
+    ClassReferenceTypePointer(@Nonnull PsiClassReferenceType type, Project project) {
+      super(type);
+      myProject = project;
 
-			final PsiJavaCodeReferenceElement reference = type.getReference();
-			mySmartPsiElementPointer = SmartPointerManager.getInstance(myProject).createSmartPsiElementPointer
-					(reference);
-			myReferenceText = reference.getText();
-		}
+      final PsiJavaCodeReferenceElement reference = type.getReference();
+      mySmartPsiElementPointer = SmartPointerManager.getInstance(myProject).createSmartPsiElementPointer
+        (reference);
+      myReferenceText = reference.getText();
+    }
 
-		@Override
-		protected PsiClassReferenceType calcType()
-		{
-			PsiClassReferenceType myType = null;
-			final PsiJavaCodeReferenceElement referenceElement = (PsiJavaCodeReferenceElement)
-					mySmartPsiElementPointer.getElement();
-			final PsiElementFactory factory = JavaPsiFacade.getInstance(myProject).getElementFactory();
-			if(referenceElement != null)
-			{
-				myType = (PsiClassReferenceType) factory.createType(referenceElement);
-			}
-			else
-			{
-				try
-				{
-					myType = (PsiClassReferenceType) factory.createTypeFromText(myReferenceText, null);
-				}
-				catch(IncorrectOperationException e)
-				{
-					LOG.error(e);
-				}
-			}
-			return myType;
-		}
-	}
+    @Override
+    protected PsiClassReferenceType calcType() {
+      PsiClassReferenceType myType = null;
+      final PsiJavaCodeReferenceElement referenceElement = (PsiJavaCodeReferenceElement)
+        mySmartPsiElementPointer.getElement();
+      final PsiElementFactory factory = JavaPsiFacade.getInstance(myProject).getElementFactory();
+      if (referenceElement != null) {
+        myType = (PsiClassReferenceType)factory.createType(referenceElement);
+      }
+      else {
+        try {
+          myType = (PsiClassReferenceType)factory.createTypeFromText(myReferenceText, null);
+        }
+        catch (IncorrectOperationException e) {
+          LOG.error(e);
+        }
+      }
+      return myType;
+    }
+  }
 
 }

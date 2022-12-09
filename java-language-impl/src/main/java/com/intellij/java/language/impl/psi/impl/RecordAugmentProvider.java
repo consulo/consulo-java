@@ -10,6 +10,7 @@ import com.intellij.java.language.impl.psi.util.AccessModifier;
 import com.intellij.java.language.impl.psi.util.JavaPsiRecordUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.augment.PsiAugmentProvider;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiCompiledElement;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
@@ -21,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+@ExtensionImpl
 public class RecordAugmentProvider extends PsiAugmentProvider {
   @Override
   protected
@@ -29,7 +31,7 @@ public class RecordAugmentProvider extends PsiAugmentProvider {
                                                  @Nonnull Class<Psi> type,
                                                  @Nullable String nameHint) {
     if (element instanceof PsiExtensibleClass) {
-      PsiExtensibleClass aClass = (PsiExtensibleClass) element;
+      PsiExtensibleClass aClass = (PsiExtensibleClass)element;
       if (!aClass.isRecord()) {
         return Collections.emptyList();
       }
@@ -64,12 +66,12 @@ public class RecordAugmentProvider extends PsiAugmentProvider {
       }
       LightMethod method = new LightRecordMethod(aClass.getManager(), recordMethod, aClass, component);
       //noinspection unchecked
-      methods.add((Psi) method);
+      methods.add((Psi)method);
     }
     PsiMethod constructor = getCanonicalConstructor(aClass, ownMethods, header);
     if (constructor != null) {
       //noinspection unchecked
-      methods.add((Psi) constructor);
+      methods.add((Psi)constructor);
     }
     return methods;
   }
@@ -89,8 +91,8 @@ public class RecordAugmentProvider extends PsiAugmentProvider {
     }
     PsiElementFactory factory = JavaPsiFacade.getElementFactory(recordHeader.getProject());
     String sb = className + recordHeader.getText() + "{"
-        + StringUtil.join(recordHeader.getRecordComponents(), c -> "this." + c.getName() + "=" + c.getName() + ";", "\n")
-        + "}";
+      + StringUtil.join(recordHeader.getRecordComponents(), c -> "this." + c.getName() + "=" + c.getName() + ";", "\n")
+      + "}";
     PsiMethod nonPhysical = factory.createMethodFromText(sb, recordHeader.getContainingClass());
     PsiModifierList classModifierList = aClass.getModifierList();
     AccessModifier modifier = classModifierList == null ? AccessModifier.PUBLIC : AccessModifier.fromModifierList(classModifierList);
@@ -124,7 +126,7 @@ public class RecordAugmentProvider extends PsiAugmentProvider {
       }
       LightRecordField field = new LightRecordField(aClass.getManager(), recordField, aClass, component);
       //noinspection unchecked
-      fields.add((Psi) field);
+      fields.add((Psi)field);
     }
     return fields;
   }
@@ -141,7 +143,8 @@ public class RecordAugmentProvider extends PsiAugmentProvider {
     }
     try {
       return factory.createFieldFromText("private final " + typeText + " " + name + ";", component.getContainingClass());
-    } catch (IncorrectOperationException e) {
+    }
+    catch (IncorrectOperationException e) {
       // typeText could be unparseable, like '@int'
       return null;
     }
@@ -162,7 +165,8 @@ public class RecordAugmentProvider extends PsiAugmentProvider {
     }
     try {
       return factory.createMethodFromText("public " + typeText + " " + name + "(){ return " + name + "; }", component.getContainingClass());
-    } catch (IncorrectOperationException e) {
+    }
+    catch (IncorrectOperationException e) {
       // typeText could be unparseable, like '@int'
       return null;
     }

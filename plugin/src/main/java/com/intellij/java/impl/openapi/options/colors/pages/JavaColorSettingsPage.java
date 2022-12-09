@@ -18,6 +18,7 @@ package com.intellij.java.impl.openapi.options.colors.pages;
 import com.intellij.java.analysis.impl.ide.highlighter.JavaHighlightingColors;
 import com.intellij.java.impl.ide.highlighter.JavaFileHighlighter;
 import com.intellij.java.language.LanguageLevel;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.CodeInsightColors;
 import consulo.colorScheme.TextAttributesKey;
 import consulo.colorScheme.setting.AttributesDescriptor;
@@ -32,6 +33,7 @@ import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
 import java.util.Map;
 
+@ExtensionImpl
 public class JavaColorSettingsPage implements ColorSettingsPage {
   private static final AttributesDescriptor[] ourDescriptors = {
       new AttributesDescriptor(OptionsBundle.message("options.java.attribute.descriptor.keyword"), JavaHighlightingColors.KEYWORD),

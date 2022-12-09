@@ -17,6 +17,7 @@ package com.intellij.java.impl.testIntegration;
 
 import com.intellij.java.impl.testIntegration.createTest.CreateTestAction;
 import com.intellij.java.language.JavaLanguage;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
 import consulo.language.Language;
 import consulo.project.Project;
@@ -28,9 +29,9 @@ import consulo.logging.Logger;
 
 import javax.annotation.Nonnull;
 
+@ExtensionImpl
 public class JavaTestCreator implements TestCreator {
   private static final Logger LOG = Logger.getInstance(JavaTestCreator.class);
-
 
   @Override
   public boolean isAvailable(Project project, Editor editor, PsiFile file) {

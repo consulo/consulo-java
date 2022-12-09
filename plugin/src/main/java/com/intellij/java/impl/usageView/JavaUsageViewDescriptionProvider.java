@@ -17,6 +17,7 @@ package com.intellij.java.impl.usageView;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.LangBundle;
 import consulo.language.psi.ElementDescriptionLocation;
 import consulo.language.psi.ElementDescriptionProvider;
@@ -30,6 +31,7 @@ import javax.annotation.Nonnull;
 /**
  * @author yole
  */
+@ExtensionImpl
 public class JavaUsageViewDescriptionProvider implements ElementDescriptionProvider {
   public String getElementDescription(@Nonnull final PsiElement element, @Nonnull final ElementDescriptionLocation location) {
     if (location instanceof UsageViewShortNameLocation) {

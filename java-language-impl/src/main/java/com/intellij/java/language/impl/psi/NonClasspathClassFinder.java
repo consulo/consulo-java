@@ -23,7 +23,6 @@ import com.intellij.java.language.psi.PsiJavaPackage;
 import consulo.application.util.LowMemoryWatcher;
 import consulo.application.util.function.CommonProcessors;
 import consulo.application.util.function.Processor;
-import consulo.component.extension.Extensions;
 import consulo.component.messagebus.MessageBusConnection;
 import consulo.java.language.module.extension.JavaModuleExtension;
 import consulo.language.psi.PsiDirectory;
@@ -212,7 +211,7 @@ public abstract class NonClasspathClassFinder extends PsiElementFinder {
   @Nonnull
   public static GlobalSearchScope addNonClasspathScope(@Nonnull Project project, @Nonnull GlobalSearchScope base) {
     GlobalSearchScope scope = base;
-    for (PsiElementFinder finder : Extensions.getExtensions(EP_NAME, project)) {
+    for (PsiElementFinder finder : project.getExtensionList(PsiElementFinder.class)) {
       if (finder instanceof NonClasspathClassFinder) {
         scope = scope.uniteWith(NonClasspathDirectoriesScope.compose(((NonClasspathClassFinder) finder).getClassRoots()));
       }

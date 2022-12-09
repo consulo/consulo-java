@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.codeInsight.template.impl;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.template.Template;
 import consulo.language.editor.template.TemplateOptionalProcessor;
@@ -29,6 +30,7 @@ import consulo.language.editor.util.PsiUtilBase;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 
+@ExtensionImpl
 public class ShortenFQNamesProcessor implements TemplateOptionalProcessor {
   private static final Logger LOG = Logger.getInstance(ShortenFQNamesProcessor.class);
 

@@ -28,6 +28,7 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.MethodSignatureUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.util.VisibilityUtil;
+import consulo.annotation.component.ServiceImpl;
 import consulo.language.editor.impl.inspection.reference.RefElementImpl;
 import consulo.language.editor.inspection.InspectionsBundle;
 import consulo.language.editor.inspection.reference.*;
@@ -39,6 +40,7 @@ import jakarta.inject.Singleton;
 import javax.annotation.Nullable;
 
 @Singleton
+@ServiceImpl
 public class RefJavaUtilImpl extends RefJavaUtil {
 
   @Override

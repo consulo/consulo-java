@@ -2,6 +2,7 @@ package consulo.java.jam.impl;
 
 import com.intellij.jam.JamClassGenerator;
 import com.intellij.jam.annotations.JamPsiConnector;
+import consulo.annotation.component.ServiceImpl;
 import consulo.language.psi.PsiElementRef;
 import consulo.proxy.advanced.AdvancedProxyBuilder;
 import jakarta.inject.Singleton;
@@ -15,6 +16,7 @@ import java.util.function.Function;
  * @since 14-Jan-17
  */
 @Singleton
+@ServiceImpl
 public class JamClassGeneratorImpl extends JamClassGenerator {
   private static class InvocationHandlerImpl<R> implements InvocationHandler {
     private Class<R> myClass;

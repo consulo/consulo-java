@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.analysis;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.HighlightErrorFilter;
 import consulo.language.psi.PsiErrorElement;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
@@ -24,6 +25,7 @@ import javax.annotation.Nonnull;
 /**
  * @author yole
  */
+@ExtensionImpl
 public class JavadocErrorFilter extends HighlightErrorFilter {
 
   @Override

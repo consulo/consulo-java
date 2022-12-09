@@ -18,6 +18,7 @@ package com.intellij.java.analysis.impl.codeInsight.daemon.impl;
 
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.psi.PsiJavaFile;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
 import consulo.language.editor.impl.highlight.TextEditorHighlightingPass;
 import consulo.language.editor.impl.highlight.TextEditorHighlightingPassFactory;
@@ -30,6 +31,7 @@ import javax.annotation.Nullable;
  * @author VISTALL
  * @since 09-Jan-17
  */
+@ExtensionImpl
 public class JavaSoftKeywordHighlightingPassFactory implements TextEditorHighlightingPassFactory {
   @Override
   public void register(@Nonnull Registrar registrar) {

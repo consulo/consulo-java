@@ -18,6 +18,8 @@ package com.intellij.java.language.codeInsight;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.testIntegration.TestFramework;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ServiceAPI;
 import consulo.application.util.CachedValueProvider;
 import consulo.ide.ServiceManager;
 import consulo.language.psi.PsiModificationTracker;
@@ -31,6 +33,7 @@ import java.util.Set;
 /**
  * @author yole
  */
+@ServiceAPI(ComponentScope.APPLICATION)
 public abstract class TestFrameworks {
   public static TestFrameworks getInstance() {
     return ServiceManager.getService(TestFrameworks.class);

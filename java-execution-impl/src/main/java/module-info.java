@@ -2,7 +2,7 @@
  * @author VISTALL
  * @since 06/12/2022
  */
-module consulo.java.execution.impl {
+open module consulo.java.execution.impl {
     requires consulo.util.nodep;
     requires consulo.java.language.impl;
     requires consulo.java.execution.api;

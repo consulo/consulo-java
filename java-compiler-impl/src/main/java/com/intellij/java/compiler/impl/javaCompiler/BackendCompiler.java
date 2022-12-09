@@ -31,36 +31,33 @@ import javax.annotation.Nullable;
 import java.io.IOException;
 
 @ExtensionAPI(ComponentScope.PROJECT)
-public interface BackendCompiler
-{
-	ExtensionPointName<BackendCompiler> EP_NAME = ExtensionPointName.create(BackendCompiler.class);
+public interface BackendCompiler {
+  ExtensionPointName<BackendCompiler> EP_NAME = ExtensionPointName.create(BackendCompiler.class);
 
-	@Nonnull
-	String getPresentableName();
+  @Nonnull
+  String getPresentableName();
 
-	@Nullable
-	default OutputParser createErrorParser(BackendCompilerProcessBuilder processBuilder, @Nonnull String outputDir, ProcessHandler process)
-	{
-		return null;
-	}
+  @Nullable
+  default OutputParser createErrorParser(BackendCompilerProcessBuilder processBuilder, @Nonnull String outputDir, ProcessHandler process) {
+    return null;
+  }
 
-	@Nullable
-	default OutputParser createOutputParser(BackendCompilerProcessBuilder processBuilder, @Nonnull String outputDir)
-	{
-		return null;
-	}
+  @Nullable
+  default OutputParser createOutputParser(BackendCompilerProcessBuilder processBuilder, @Nonnull String outputDir) {
+    return null;
+  }
 
-	@Nullable
-	default BackendCompilerMonitor createMonitor(BackendCompilerProcessBuilder processBuilder)
-	{
-		return null;
-	}
+  @Nullable
+  default BackendCompilerMonitor createMonitor(BackendCompilerProcessBuilder processBuilder) {
+    return null;
+  }
 
-	default boolean checkCompiler(final CompileScope scope)
-	{
-		return true;
-	}
+  default boolean checkCompiler(final CompileScope scope) {
+    return true;
+  }
 
-	@Nonnull
-	BackendCompilerProcessBuilder prepareProcess(@Nonnull ModuleChunk chunk, @Nonnull String outputDir, @Nonnull CompileContext compileContext) throws IOException;
+  @Nonnull
+  BackendCompilerProcessBuilder prepareProcess(@Nonnull ModuleChunk chunk,
+                                               @Nonnull String outputDir,
+                                               @Nonnull CompileContext compileContext) throws IOException;
 }

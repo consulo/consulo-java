@@ -4,6 +4,7 @@ package com.intellij.java.indexing.impl.stubs.index;
 import com.intellij.java.indexing.impl.search.JavaSourceFilterScope;
 import com.intellij.java.language.impl.psi.impl.java.stubs.index.JavaStubIndexKeys;
 import com.intellij.java.language.psi.PsiJavaModule;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.stub.StringStubIndexExtension;
 import consulo.language.psi.stub.StubIndex;
@@ -25,6 +26,7 @@ import java.util.jar.Manifest;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@ExtensionImpl
 public class JavaModuleNameIndex extends StringStubIndexExtension<PsiJavaModule> {
   private static final JavaModuleNameIndex ourInstance = new JavaModuleNameIndex();
 

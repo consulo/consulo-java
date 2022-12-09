@@ -15,18 +15,20 @@
  */
 package com.intellij.java.impl.application.options;
 
-import javax.annotation.Nonnull;
-
+import com.intellij.java.language.JavaLanguage;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.ApplicationBundle;
 import consulo.configurable.Configurable;
 import consulo.language.Language;
-import com.intellij.java.language.JavaLanguage;
 import consulo.language.codeStyle.CodeStyleSettings;
 import consulo.language.codeStyle.setting.CodeStyleSettingsProvider;
+
+import javax.annotation.Nonnull;
 
 /**
  * @author yole
  */
+@ExtensionImpl
 public class GenerationSettingsProvider extends CodeStyleSettingsProvider {
   @Override
   @Nonnull

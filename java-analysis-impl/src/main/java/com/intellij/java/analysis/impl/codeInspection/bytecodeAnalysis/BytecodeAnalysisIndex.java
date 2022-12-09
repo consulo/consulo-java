@@ -2,6 +2,7 @@
 package com.intellij.java.analysis.impl.codeInspection.bytecodeAnalysis;
 
 import com.intellij.java.language.impl.JavaClassFileType;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.component.ProcessCanceledException;
 import consulo.index.io.DataIndexer;
 import consulo.index.io.DifferentSerializableBytesImplyNonEqualityPolicy;
@@ -29,6 +30,7 @@ import static com.intellij.java.analysis.impl.codeInspection.bytecodeAnalysis.Pr
 /**
  * @author lambdamix
  */
+@ExtensionImpl
 public class BytecodeAnalysisIndex extends ScalarIndexExtension<HMember> {
   static final ID<HMember, Void> NAME = ID.create("bytecodeAnalysis");
 

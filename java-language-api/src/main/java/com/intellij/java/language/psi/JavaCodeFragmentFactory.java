@@ -15,6 +15,8 @@
  */
 package com.intellij.java.language.psi;
 
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ServiceAPI;
 import consulo.ide.ServiceManager;
 import consulo.language.psi.PsiElement;
 import consulo.project.Project;
@@ -23,6 +25,7 @@ import org.intellij.lang.annotations.MagicConstant;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+@ServiceAPI(ComponentScope.PROJECT)
 public abstract class JavaCodeFragmentFactory {
   public static JavaCodeFragmentFactory getInstance(Project project) {
     return ServiceManager.getService(project, JavaCodeFragmentFactory.class);

@@ -23,6 +23,7 @@ import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.ApplicationBundle;
 import consulo.configurable.Configurable;
 import consulo.language.Language;
@@ -49,6 +50,7 @@ import static com.intellij.java.impl.application.options.JavaDocFormattingPanel.
 /**
  * @author rvishnyakov
  */
+@ExtensionImpl
 public class JavaLanguageCodeStyleSettingsProvider extends LanguageCodeStyleSettingsProvider {
   @Nonnull
   @Override

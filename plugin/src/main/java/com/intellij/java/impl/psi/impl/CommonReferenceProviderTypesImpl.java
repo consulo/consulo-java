@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.psi.impl;
 
+import consulo.annotation.component.ServiceImpl;
 import jakarta.inject.Singleton;
 
 import com.intellij.java.impl.psi.CommonReferenceProviderTypes;
@@ -25,6 +26,7 @@ import com.intellij.java.impl.psi.impl.source.resolve.reference.impl.providers.J
  * @author Dmitry Avdeev
  */
 @Singleton
+@ServiceImpl
 public class CommonReferenceProviderTypesImpl extends CommonReferenceProviderTypes {
 
   private final JavaClassReferenceProvider myProvider;

@@ -19,6 +19,7 @@ import com.intellij.java.language.JavaCoreBundle;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiJavaFile;
 import com.intellij.java.language.psi.util.PsiMethodUtil;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.AllIcons;
 import consulo.execution.configuration.ConfigurationFactory;
 import consulo.execution.configuration.ConfigurationType;
@@ -34,6 +35,7 @@ import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+@ExtensionImpl
 public class ApplicationConfigurationType implements ConfigurationType {
   private final ConfigurationFactory myFactory;
 

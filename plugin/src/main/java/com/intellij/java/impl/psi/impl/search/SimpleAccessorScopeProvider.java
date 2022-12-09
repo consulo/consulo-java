@@ -16,12 +16,14 @@
 package com.intellij.java.impl.psi.impl.search;
 
 import com.intellij.java.indexing.impl.search.CustomPropertyScopeProvider;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.content.scope.SearchScope;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.project.Project;
 import consulo.xml.ide.highlighter.XHtmlFileType;
 import consulo.xml.ide.highlighter.XmlFileType;
 
+@ExtensionImpl
 public class SimpleAccessorScopeProvider implements CustomPropertyScopeProvider {
   @Override
   public SearchScope getScope(final Project project) {

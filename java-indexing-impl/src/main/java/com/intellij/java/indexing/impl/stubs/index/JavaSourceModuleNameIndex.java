@@ -3,6 +3,7 @@ package com.intellij.java.indexing.impl.stubs.index;
 
 import com.intellij.java.language.impl.JavaClassFileType;
 import com.intellij.java.language.psi.PsiJavaModule;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.index.io.DataIndexer;
 import consulo.index.io.EnumeratorStringDescriptor;
 import consulo.index.io.ID;
@@ -28,6 +29,7 @@ import java.util.jar.Manifest;
 import static java.util.Collections.emptyMap;
 import static java.util.Collections.singletonMap;
 
+@ExtensionImpl
 public class JavaSourceModuleNameIndex extends ScalarIndexExtension<String> {
   private static final ID<String, Void> NAME = ID.create("java.source.module.name");
 

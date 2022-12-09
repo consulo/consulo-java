@@ -26,6 +26,7 @@ import com.intellij.java.language.psi.codeStyle.VariableKind;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
+import consulo.annotation.component.ServiceImpl;
 import consulo.application.util.function.Processor;
 import consulo.application.util.matcher.NameUtil;
 import consulo.java.language.module.util.JavaClassNames;
@@ -61,6 +62,7 @@ import java.util.*;
  * @author max
  */
 @Singleton
+@ServiceImpl
 public class JavaCodeStyleManagerImpl extends JavaCodeStyleManager {
   private static final Logger LOG = Logger.getInstance(JavaCodeStyleManagerImpl.class);
 

@@ -95,7 +95,8 @@ public class SuppressForTestsScopeFix extends InspectionGadgetsFix {
       final HighlightDisplayKey key = HighlightDisplayKey.find(shortName);
       final HighlightDisplayLevel level = profile.getErrorLevel(key, namedScope, project);
       profile.addScope(tool, namedScope, level, false, project);
-    } else {
+    }
+    else {
       profile.removeScope(shortName, "Tests", project);
     }
     profile.scopesChanged();

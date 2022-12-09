@@ -80,10 +80,6 @@
 			<add-to-group group-id="NewGroup1" anchor="first"/>
 		</action>
 
-		<action id="CollapseBlock" class="com.intellij.java.impl.codeInsight.folding.impl.actions.CollapseBlockAction">
-			<add-to-group group-id="FoldingGroup" anchor="after" relative-to-action="CollapseSelection"/>
-		</action>
-
 		<action id="InferNullity" class="com.intellij.java.impl.codeInspection.inferNullity.InferNullityAnnotationsAction">
 			<add-to-group group-id="InspectCodeGroup" anchor="after" relative-to-action="RunInspection"/>
 		</action>
@@ -533,8 +529,6 @@
 		<extensionPoint name="expressionSurrounder"
 						interface="com.intellij.java.impl.codeInsight.generation.surroundWith.JavaExpressionSurrounder"/>
 
-		<extensionPoint name="mainMethodProvider" interface="com.intellij.java.language.codeInsight.runner.JavaMainMethodProvider"/>
-		<extensionPoint name="psi.classFileDecompiler" interface="com.intellij.java.language.psi.compiled.ClassFileDecompilers$Decompiler"/>
 
 		<extensionPoint name="debuggerClassFilterProvider" interface="com.intellij.java.debugger.ui.classFilter.DebuggerClassFilterProvider"/>
 		<extensionPoint name="topLevelClassProvider" interface="com.intellij.java.debugger.engine.TopLevelParentClassProvider"/>
@@ -578,7 +572,6 @@
 
 		<extensionPoint name="getterSetterProvider" interface="com.intellij.java.impl.codeInsight.generation.GetterSetterPrototypeProvider"/>
 		<extensionPoint name="generation.toStringClassFilter" interface="com.intellij.java.impl.generate.tostring.GenerateToStringClassFilter"/>
-		<extensionPoint name="classTypePointerFactory" interface="com.intellij.java.language.impl.psi.impl.smartPointers.PsiClassReferenceTypePointerFactory"/>
 
 
 		<extensionPoint name="refactoring.safeDelete.JavaSafeDeleteDelegate" beanClass="com.intellij.lang.LanguageExtensionPoint">
@@ -670,7 +663,6 @@
 		<codeInsight.containerProvider implementation="com.intellij.java.language.impl.codeInsight.JavaContainerProvider" id="JAVA"/>
 
 
-		<java.shortNamesCache implementation="com.intellij.java.indexing.impl.PsiShortNamesCacheImpl"/>
 
 
 		<constructorBodyGenerator language="JAVA"
@@ -706,25 +698,11 @@
 
 		<debugger.simplePropertyGetterProvider implementation="com.intellij.java.debugger.impl.engine.JavaSimpleGetterProvider"/>
 
-		<elementFinder implementation="com.intellij.java.impl.psi.impl.migration.MigrationElementFinder"/>
-		<elementFinder implementation="com.intellij.java.debugger.impl.AlternativeJreClassFinder" order="last"/>
-
-		<backendCompiler implementationClass="com.intellij.java.compiler.impl.javaCompiler.javac.JavacCompiler"/>
-
-		<bytecodeCompilerProcessor implementation="consulo.java.compiler.bytecodeProcessing.impl.NotNullJavaBytecodeProcessorCompiler"/>
-
 		<debugger.nodeRenderer implementation="com.intellij.java.debugger.impl.ui.tree.render.ColorObjectRenderer"/>
 		<debugger.nodeRenderer implementation="com.intellij.java.debugger.impl.ui.tree.render.BinaryRenderer"/>
 		<debugger.nodeRenderer implementation="com.intellij.java.debugger.impl.ui.tree.render.TimestampRenderer"/>
 		<debugger.nodeRenderer implementation="com.intellij.java.debugger.impl.ui.tree.render.FileObjectRenderer"/>
 		<debugger.nodeRenderer implementation="com.intellij.java.debugger.impl.ui.tree.render.StackTraceElementObjectRenderer"/>
-
-		<augmentProvider implementation="consulo.java.language.impl.psi.augment.JavaEnumAugmentProvider"/>
-		<augmentProvider implementation="com.intellij.java.language.impl.psi.impl.RecordAugmentProvider"/>
-
-		<typeAnnotationModifier implementation="com.intellij.java.analysis.impl.codeInsight.NullityAnnotationModifier"/>
-
-		<classTypePointerFactory implementation="com.intellij.java.language.impl.psi.impl.smartPointers.PsiClassReferenceTypePointerFactory"/>
 
 		<generation.toStringClassFilter implementation="com.intellij.java.impl.generate.tostring.GenerateToStringInterfaceFilter" order="last"/>
 
@@ -732,23 +710,10 @@
 	</extensions>
 
 	<extensions defaultExtensionNs="com.intellij">
-		<projectService serviceInterface="com.intellij.java.compiler.impl.javaCompiler.JavaCompilerConfiguration"
-						serviceImplementation="com.intellij.java.compiler.impl.javaCompiler.JavaCompilerConfiguration"/>
 
-		<projectService serviceInterface="com.intellij.java.language.psi.JavaPsiFacade"
-						serviceImplementation="com.intellij.java.language.impl.psi.impl.JavaPsiFacadeImpl"/>
 
-		<projectService serviceInterface="com.intellij.java.compiler.impl.javaCompiler.javac.JavacCompilerConfiguration"
-						serviceImplementation="com.intellij.java.compiler.impl.javaCompiler.javac.JavacCompilerConfiguration"/>
-
-		<projectService serviceImplementation="com.intellij.java.debugger.impl.HotSwapManager"/>
 		<projectService serviceInterface="com.intellij.java.debugger.impl.ui.HotSwapUI" serviceImplementation="com.intellij.java.debugger.impl.ui.HotSwapUIImpl"/>
 
-		<compiler implementation="com.intellij.java.compiler.impl.javaCompiler.AnnotationProcessingCompiler" id="java-annotation-processor"
-				  order="before java-compiler"/>
-		<compiler implementation="com.intellij.java.compiler.impl.javaCompiler.JavaCompiler" id="java-compiler"/>
-		<compiler implementation="consulo.java.compiler.bytecodeProcessing.JavaBytecodeProcessorCompiler" id="java-bytecode-processor"/>
-		<compiler.dependencyCache implementationClass="com.intellij.java.compiler.impl.cache.JavaDependencyCache"/>
 
 		<projectConfigurable id="project.propCompiler.java" bundle="messages.JavaCoreBundle" key="java" parentId="project.propCompiler"
 							 instance="com.intellij.java.compiler.impl.javaCompiler.JavaCompilerConfigurable"/>
@@ -759,14 +724,8 @@
 		<projectConfigurable bundle="messages.JavaBundle" key="javac.name" parentId="project.propCompiler.java"
 							 instance="consulo.java.compiler.impl.javaCompiler.ui.JavacConfigurable"/>
 
-		<lang.syntaxHighlighterFactory key="JAVA" implementationClass="com.intellij.java.impl.lang.java.JavaSyntaxHighlighterFactory"/>
 
 
-		<codeInsight.unresolvedReferenceQuickFixProvider
-				implementation="com.intellij.java.impl.codeInsight.daemon.impl.quickfix.DefaultQuickFixProvider"/>
-
-
-		<errorPropertiesProvider implementation="com.intellij.java.impl.profile.codeInspection.ui.JavaErrorOptionsProvider"/>
 		<projectConfigurable
 				id="editor.preferences.import.java"
 				parentId="editor.preferences.import"
@@ -778,8 +737,6 @@
 				displayName="Java"
 				instance="consulo.java.impl.application.options.JavaCodeFoldingConfigurable"/>
 
-		<referencesSearch implementation="com.intellij.java.indexing.impl.search.PsiAnnotationMethodReferencesSearcher"/>
-		<referencesSearch implementation="com.intellij.java.indexing.impl.search.ConstructorReferencesSearcher"/>
 		<referencesSearch implementation="com.intellij.java.indexing.impl.search.SimpleAccessorReferenceSearcher"/>
 		<referencesSearch implementation="com.intellij.java.impl.psi.impl.search.VariableInIncompleteCodeSearcher"/>
 		<referencesSearch implementation="com.intellij.java.indexing.impl.search.SPIReferencesSearcher"/>
@@ -787,8 +744,6 @@
 		<definitionsScopedSearch implementation="com.intellij.java.indexing.impl.MethodImplementationsSearch"/>
 		<definitionsScopedSearch implementation="com.intellij.java.indexing.impl.ClassImplementationsSearch"/>
 
-		<fileTypeFactory implementation="com.intellij.java.impl.openapi.fileTypes.impl.JavaFileTypeFactory"/>
-		<fileTypeFactory implementation="consulo.java.language.impl.spi.SPIFileTypeFactory"/>
 
 		<lookup.actionProvider implementation="com.intellij.java.impl.codeInsight.completion.ImportStaticLookupActionProvider" id="importStatic"/>
 		<lookup.actionProvider implementation="com.intellij.java.impl.codeInsight.completion.ExcludeFromCompletionLookupActionProvider"
@@ -843,7 +798,6 @@
 		<completion.contributor language="JAVA" implementationClass="com.intellij.java.impl.psi.impl.source.resolve.reference.impl.JavaMethodHandleCompletionContributor" id="javaMethodHandle"
 								order="last, before javaLegacy"/>
 
-		<lookup.charFilter implementation="com.intellij.java.impl.codeInsight.completion.JavaCharFilter" id="java"/>
 
 		<lang.elementManipulator forClass="com.intellij.java.language.psi.PsiLiteralExpression"
 								 implementationClass="com.intellij.java.impl.psi.impl.source.resolve.reference.impl.manipulators.StringLiteralManipulator"/>
@@ -859,31 +813,19 @@
 		<applicationService serviceInterface="com.intellij.java.impl.util.xml.converters.values.ClassArrayConverter"
 							serviceImplementation="com.intellij.java.impl.util.xml.converters.ClassArrayConverterImpl"/>
 
-		<applicationService serviceInterface="com.intellij.java.language.psi.util.JavaClassSupers"
-							serviceImplementation="com.intellij.java.language.impl.psi.impl.JavaClassSupersImpl"/>
+
 
 		<applicationService serviceInterface="com.intellij.java.debugger.engine.DebuggerUtils"
 							serviceImplementation="com.intellij.java.debugger.impl.DebuggerUtilsImpl"/>
 
-		<applicationService serviceInterface="com.intellij.java.analysis.codeInspection.reference.RefJavaUtil"
-							serviceImplementation="com.intellij.java.impl.codeInspection.reference.RefJavaUtilImpl"/>
 
-		<applicationService serviceInterface="com.intellij.java.language.psi.PsiSubstitutorFactory"
-							serviceImplementation="com.intellij.java.language.impl.psi.impl.PsiSubstitutorFactoryImpl"/>
-
-		<applicationService serviceInterface="com.intellij.java.analysis.codeInsight.intention.QuickFixFactory"
-							serviceImplementation="com.intellij.java.impl.codeInsight.intention.impl.config.QuickFixFactoryImpl"/>
-
-		<applicationService serviceInterface="com.intellij.java.language.codeInsight.TestFrameworks"
-							serviceImplementation="com.intellij.java.impl.codeInsight.TestFrameworksImpl"/>
 
 		<applicationService serviceInterface="com.intellij.java.impl.util.descriptors.ConfigFileFactory"
 							serviceImplementation="com.intellij.java.impl.util.descriptors.impl.ConfigFileFactoryImpl"/>
 
 		<applicationService serviceInterface="com.intellij.java.impl.generate.template.toString.ToStringTemplatesManager"
 							serviceImplementation="com.intellij.java.impl.generate.template.toString.ToStringTemplatesManager"/>
-		<applicationService serviceInterface="com.intellij.java.impl.codeInsight.generation.EqualsHashCodeTemplatesManager"
-							serviceImplementation="com.intellij.java.impl.codeInsight.generation.EqualsHashCodeTemplatesManager"/>
+
 		<applicationService serviceInterface="com.intellij.java.impl.codeInsight.generation.GetterTemplatesManager"
 							serviceImplementation="com.intellij.java.impl.codeInsight.generation.GetterTemplatesManager"/>
 		<applicationService serviceInterface="com.intellij.java.impl.codeInsight.generation.SetterTemplatesManager"
@@ -897,31 +839,19 @@
 							serviceImplementation="com.intellij.java.debugger.impl.settings.NodeRendererSettings"/>
 		<applicationService serviceInterface="com.intellij.java.debugger.impl.settings.ViewsGeneralSettings"
 							serviceImplementation="com.intellij.java.debugger.impl.settings.ViewsGeneralSettings"/>
-		<applicationService serviceInterface="com.intellij.java.debugger.impl.settings.DebuggerSettings"
-							serviceImplementation="com.intellij.java.debugger.impl.settings.DebuggerSettings"/>
+
 		<applicationService serviceInterface="com.intellij.java.debugger.impl.settings.ThreadsViewSettings"
 							serviceImplementation="com.intellij.java.debugger.impl.settings.ThreadsViewSettings"/>
-		<applicationService serviceImplementation="consulo.java.impl.codeInsight.JavaCodeInsightSettings"/>
 
 		<projectService serviceInterface="com.intellij.java.language.util.TreeClassChooserFactory"
 						serviceImplementation="com.intellij.java.impl.ide.util.TreeClassChooserFactoryImpl"/>
 		<projectService serviceInterface="com.intellij.java.analysis.codeInsight.guess.GuessManager"
 						serviceImplementation="com.intellij.java.analysis.impl.codeInsight.guess.impl.GuessManagerImpl"/>
-		<projectService serviceInterface="com.intellij.java.language.impl.psi.impl.source.resolve.JavaResolveCache"
-						serviceImplementation="com.intellij.java.language.impl.psi.impl.source.resolve.JavaResolveCache"/>
-		<projectService serviceInterface="com.intellij.java.language.psi.PsiElementFactory"
-						serviceImplementation="com.intellij.java.language.impl.psi.impl.PsiElementFactoryImpl"/>
-		<projectService serviceInterface="com.intellij.java.language.psi.javadoc.JavadocManager"
-						serviceImplementation="com.intellij.java.impl.psi.impl.source.javadoc.JavadocManagerImpl"/>
-		<projectService serviceInterface="com.intellij.java.language.impl.psi.impl.JavaPsiImplementationHelper"
-						serviceImplementation="com.intellij.java.impl.psi.impl.JavaPsiImplementationHelperImpl"/>
+
+
 		<projectService serviceInterface="com.intellij.java.language.psi.codeStyle.JavaCodeStyleSettingsFacade"
 						serviceImplementation="com.intellij.java.impl.psi.codeStyle.JavaCodeStyleSettingsFacadeImpl"/>
-		<projectService serviceInterface="com.intellij.java.impl.psi.impl.migration.PsiMigrationManager"
-						serviceImplementation="com.intellij.java.impl.psi.impl.migration.PsiMigrationManager"/>
-		<projectService serviceInterface="com.intellij.java.language.psi.PsiResolveHelper"
-						serviceImplementation="com.intellij.java.language.impl.psi.impl.source.resolve.PsiResolveHelperImpl"/>
-		<projectService serviceImplementation="com.intellij.java.impl.psi.util.ProjectIconsAccessor"/>
+
 
 		<projectService serviceInterface="com.intellij.java.language.psi.JavaCodeFragmentFactory"
 						serviceImplementation="com.intellij.java.impl.psi.impl.JavaCodeFragmentFactoryImpl"/>
@@ -929,13 +859,8 @@
 		<projectService serviceInterface="com.intellij.java.language.impl.codeInsight.javadoc.JavaDocCodeStyle"
 						serviceImplementation="com.intellij.java.impl.codeInsight.javadoc.JavaDocCodeStyleImpl"/>
 
-		<projectService serviceImplementation="com.intellij.java.impl.codeInsight.JavaProjectCodeInsightSettings"/>
 
-		<applicationService serviceInterface="com.intellij.java.language.psi.JavaDirectoryService"
-							serviceImplementation="com.intellij.java.impl.psi.impl.file.JavaDirectoryServiceImpl"/>
 
-		<applicationService serviceInterface="com.intellij.java.language.projectRoots.JavaVersionService"
-							serviceImplementation="com.intellij.java.impl.openapi.projectRoots.JavaVersionServiceImpl"/>
 
 		<applicationService serviceInterface="com.intellij.java.analysis.refactoring.JavaRefactoringActionHandlerFactory"
 							serviceImplementation="com.intellij.java.impl.refactoring.openapi.impl.JavaRefactoringActionHandlerFactoryImpl"/>
@@ -951,56 +876,19 @@
 		<projectService serviceInterface="com.intellij.java.impl.refactoring.JavaRefactoringFactory"
 						serviceImplementation="com.intellij.java.impl.refactoring.openapi.impl.JavaRefactoringFactoryImpl"/>
 
-		<applicationService serviceInterface="com.intellij.java.language.codeInsight.folding.JavaCodeFoldingSettings"
-							serviceImplementation="com.intellij.java.impl.codeInsight.folding.impl.JavaCodeFoldingSettingsImpl"/>
 
 		<multiHostInjector
 				forClass="com.intellij.java.language.psi.PsiLiteralExpression"
 				implementationClass="com.intellij.java.impl.psi.impl.source.tree.injected.JavaConcatenationToInjectorAdapter"
 				order="last"/>
 
-		<projectService serviceInterface="com.intellij.java.language.psi.SmartTypePointerManager"
-						serviceImplementation="com.intellij.java.language.impl.psi.impl.smartPointers.SmartTypePointerManagerImpl"/>
-		<projectService serviceInterface="com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager"
-						serviceImplementation="com.intellij.java.impl.psi.impl.source.codeStyle.JavaCodeStyleManagerImpl"/>
-		<projectService serviceInterface="com.intellij.java.impl.codeInsight.ExpectedTypesProvider"
-						serviceImplementation="com.intellij.java.impl.codeInsight.ExpectedTypesProvider"/>
-
-		<projectService serviceInterface="com.intellij.java.language.impl.psi.controlFlow.ControlFlowFactory"
-						serviceImplementation="com.intellij.java.language.impl.psi.controlFlow.ControlFlowFactory"/>
-
-		<applicationService serviceInterface="com.intellij.java.impl.psi.CommonReferenceProviderTypes"
-							serviceImplementation="com.intellij.java.impl.psi.impl.CommonReferenceProviderTypesImpl"/>
 
 		<projectService serviceInterface="com.intellij.java.impl.slicer.SliceToolwindowSettings"
 						serviceImplementation="com.intellij.java.impl.slicer.SliceToolwindowSettings"/>
 		<projectService serviceInterface="com.intellij.java.impl.slicer.SliceManager"
 						serviceImplementation="com.intellij.java.impl.slicer.SliceManager"/>
 
-		<projectService serviceInterface="com.intellij.java.analysis.codeInspection.ex.EntryPointsManager"
-						serviceImplementation="com.intellij.java.impl.codeInspection.ex.EntryPointsManagerImpl"/>
 
-		<projectService serviceInterface="com.intellij.java.language.codeInsight.NullableNotNullManager"
-						serviceImplementation="com.intellij.java.impl.codeInsight.NullableNotNullManagerImpl"/>
-
-		<projectService serviceInterface="com.intellij.java.language.psi.search.PsiShortNamesCache"
-						serviceImplementation="com.intellij.java.indexing.impl.CompositeShortNamesCache"/>
-
-		<projectService serviceImplementation="com.intellij.java.impl.javadoc.JavadocGenerationManager"/>
-
-		<highlightVisitor implementation="com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.HighlightVisitorImpl"/>
-
-		<lang.foldingBuilder language="JAVA" implementationClass="com.intellij.java.impl.codeInsight.daemon.impl.actions.SuppressWarningsFoldingBuilder"/>
-
-		<programRunner implementation="com.intellij.java.debugger.impl.externalSystem.ExternalSystemTaskDebugRunner"/>
-
-		<daemon.highlightInfoFilter implementation="com.intellij.java.debugger.impl.engine.evaluation.DebuggerHighlightFilter"/>
-
-
-		<programRunner id="defaultRunRunner" implementation="com.intellij.java.execution.impl.DefaultJavaProgramRunner"/>
-		<programRunner implementation="com.intellij.java.execution.impl.jar.JarApplicationDebuggerRunner"/>
-
-		<editorTabTitleProvider implementation="consulo.java.impl.fileEditor.impl.JavaModuleEditorTabTitleProvider" order="first"/>
 
 		<globalInspection groupPath="Java" language="JAVA" shortName="unused" displayName="Unused declaration" groupBundle="messages.InspectionsBundle"
 						  groupKey="group.names.declaration.redundancy" enabledByDefault="true" level="WARNING"
@@ -1418,10 +1306,8 @@
 		<lang.refactoringSupport.classMembersRefactoringSupport language="JAVA"
 																implementationClass="com.intellij.java.impl.lang.java.JavaClassMembersRefactoringSupport"/>
 
-		<lang.formatter language="JAVA" implementationClass="com.intellij.java.impl.lang.java.JavaFormattingModelBuilder"/>
 		<lang.whiteSpaceFormattingStrategy language="JAVA"
 										   implementationClass="com.intellij.java.impl.psi.formatter.JavadocWhiteSpaceFormattingStrategy"/>
-		<lineIndentProvider implementation="com.intellij.java.impl.codeInsight.editorActions.JavaLineIndentProvider"/>
 
 		<lang.rearranger language="JAVA" implementationClass="com.intellij.java.impl.psi.codeStyle.arrangement.JavaRearranger"/>
 
@@ -1429,24 +1315,16 @@
 		<documentationProvider implementation="com.intellij.java.impl.lang.java.FileDocumentationProvider" order="last"/>
 		<lang.documentationFixer language="JAVA" implementationClass="com.intellij.java.impl.codeInsight.documentation.JavaDocCommentFixer"/>
 
-		<lang.importOptimizer language="JAVA" implementationClass="com.intellij.java.impl.lang.java.JavaImportOptimizer"/>
 
 		<lang.surroundDescriptor language="JAVA"
 								 implementationClass="com.intellij.java.impl.codeInsight.generation.surroundWith.JavaExpressionSurroundDescriptor"/>
 		<lang.surroundDescriptor language="JAVA"
 								 implementationClass="com.intellij.java.impl.codeInsight.generation.surroundWith.JavaStatementsSurroundDescriptor"/>
 
-		<lang.unwrapDescriptor language="JAVA" implementationClass="com.intellij.java.impl.codeInsight.unwrap.JavaUnwrapDescriptor"/>
 
-		<lang.namesValidator language="JAVA" implementationClass="com.intellij.java.impl.lang.refactoring.JavaNamesValidator"/>
 
-		<lang.findUsagesProvider language="JAVA" implementationClass="com.intellij.java.impl.lang.java.JavaFindUsagesProvider"/>
-		<usageToPsiElementProvider implementation="com.intellij.java.impl.lang.java.JavaUsageToPsiElementProvider"/>
-		<anonymousElementProvider implementation="com.intellij.java.impl.lang.java.JavaAnonymousClassesProvider"/>
 
-		<lang.commenter language="JAVA" implementationClass="com.intellij.java.impl.lang.java.JavaCommenter"/>
 
-		<lang.foldingBuilder language="JAVA" implementationClass="com.intellij.java.impl.codeInsight.folding.impl.JavaFoldingBuilder"/>
 
 		<codeInsight.parameterInfo language="JAVA" implementationClass="com.intellij.java.impl.codeInsight.hint.api.impls.MethodParameterInfoHandler"/>
 		<codeInsight.parameterInfo language="JAVA" implementationClass="com.intellij.java.impl.codeInsight.hint.api.impls.ReferenceParameterInfoHandler"/>
@@ -1461,7 +1339,6 @@
 		<codeInsight.lineMarkerProvider language="JAVA" implementationClass="com.intellij.java.impl.codeInsight.daemon.impl.IconLineMarkerProvider"/>
 		<codeInsight.lineMarkerProvider language="JAVA"
 										implementationClass="com.intellij.java.impl.codeInsight.daemon.impl.RecursiveCallLineMarkerProvider"/>
-		<colorProvider implementation="com.intellij.java.impl.codeInsight.daemon.impl.JavaColorProvider"/>
 
 		<annotator language="JAVA" implementationClass="com.intellij.java.impl.codeInsight.daemon.impl.JavaDocAnnotator"/>
 		<statementUpDownMover implementation="com.intellij.codeInsight.editorActions.moveUpDown.StatementMover" id="statement"
@@ -1470,22 +1347,14 @@
 							  order="before xml"/>
 		<moveLeftRightHandler language="JAVA" implementationClass="com.intellij.java.impl.codeInsight.editorActions.moveLeftRight.JavaMoveLeftRightHandler"/>
 
-		<fileType.fileViewProviderFactory filetype="CLASS" implementationClass="com.intellij.java.language.impl.psi.ClassFileViewProviderFactory"/>
 
-		<editorFileSwapper implementation="com.intellij.java.impl.codeEditor.JavaEditorFileSwapper"/>
 
 		<lang.psiStructureViewFactory language="JAVA" implementationClass="com.intellij.java.impl.lang.java.JavaStructureViewBuilderFactory"/>
 
-		<lang.ast.leafFactory implementation="consulo.java.language.impl.psi.JavaASTLeafFactory"/>
-		<lang.ast.compositeFactory implementation="com.intellij.java.language.impl.psi.impl.source.tree.JavaASTCompositeFactory"/>
 
 		<lang.smartEnterProcessor language="JAVA"
 								  implementationClass="com.intellij.java.impl.codeInsight.editorActions.smartEnter.JavaSmartEnterProcessor"/>
 
-		<codeStyleSettingsProvider implementation="com.intellij.java.impl.application.options.JavaCodeStyleSettingsProvider"/>
-		<codeStyleSettingsProvider implementation="com.intellij.java.impl.application.options.GenerationSettingsProvider"/>
-
-		<langCodeStyleSettingsProvider implementation="com.intellij.java.impl.ide.JavaLanguageCodeStyleSettingsProvider"/>
 
 
 		<stacktrace.fold substring="at java.awt.EventDispatchThread.pumpEventsForFilter("/>
@@ -1579,13 +1448,9 @@
 
 		<structureViewBuilder key="CLASS" factoryClass="com.intellij.java.impl.ide.highlighter.JavaClsStructureViewBuilderProvider"/>
 
-		<getDataRule implementation="com.intellij.java.impl.analysis.AnalysisScopeRule"/>
 
-		<vcsSelectionProvider implementation="com.intellij.java.impl.vcsUtil.JavaVcsSelectionProvider"/>
 
-		<smartPointerAnchorProvider implementation="com.intellij.java.impl.psi.impl.smartPointers.JavaAnchorProvider"/>
 
-		<elementSignatureProvider implementation="com.intellij.java.impl.codeInsight.folding.impl.JavaElementSignatureProvider"/>
 
 		<preFormatProcessor implementation="com.intellij.java.impl.psi.impl.source.codeStyle.FormatCommentsProcessor"/>
 		<preFormatProcessor implementation="com.intellij.java.impl.psi.impl.source.codeStyle.FieldInColumnsPreFormatProcessor"/>
@@ -1622,16 +1487,10 @@
 		<liveTemplateMacro implementation="com.intellij.java.impl.codeInsight.template.macro.SubtypesMacro"/>
 		<liveTemplateMacro implementation="com.intellij.java.impl.codeInsight.template.macro.TypeOfVariableMacro"/>
 
-		<liveTemplateMacro implementation="com.intellij.java.impl.codeInsight.template.macro.GroovyScriptMacro"/>
-
-		<copyPastePreProcessor implementation="com.intellij.java.impl.codeInsight.editorActions.StringLiteralCopyPasteProcessor"/>
-		<copyPastePostProcessor implementation="com.intellij.java.impl.codeInsight.editorActions.JavaCopyPasteReferenceProcessor"/>
 
 
-		<applicationService serviceInterface="com.intellij.java.analysis.codeInspection.SuppressManager"
-							serviceImplementation="com.intellij.java.impl.codeInspection.SuppressManagerImpl"/>
-		<applicationService serviceInterface="com.intellij.java.analysis.codeInspection.BatchSuppressManager"
-							serviceImplementation="com.intellij.java.analysis.impl.codeInspection.BatchSuppressManagerImpl"/>
+
+
 
 		<declarationRangeHandler key="com.intellij.java.language.psi.PsiMethod"
 								 implementationClass="com.intellij.java.impl.codeInsight.hint.MethodDeclarationRangeHandler"/>
@@ -1640,9 +1499,7 @@
 		<declarationRangeHandler key="com.intellij.java.language.psi.PsiClassInitializer"
 								 implementationClass="com.intellij.java.impl.codeInsight.hint.ClassInitializerDeclarationRangeHandler"/>
 
-		<backspaceHandlerDelegate implementation="com.intellij.java.impl.codeInsight.editorActions.JavaBackspaceHandler"/>
 
-		<usageTargetProvider implementation="com.intellij.java.impl.find.findUsages.ThrowsUsageTargetProvider"/>
 
 		<liveTemplateContext implementation="com.intellij.java.impl.codeInsight.template.JavaCodeContextType$Generic"/>
 		<liveTemplateContext implementation="com.intellij.java.impl.codeInsight.template.JavaCodeContextType$Statement"/>
@@ -1660,31 +1517,15 @@
 
 
 		<patternDialectProvider implementation="com.intellij.java.impl.packageDependencies.ui.PackagePatternProvider" id="package" order="before file"/>
-		<scopeDescriptorProvider implementation="com.intellij.java.impl.ide.util.scopeChooser.HierarchyScopeDescriptorProvider"/>
 
 		<patterns.patternClass className="com.intellij.java.language.patterns.PsiJavaPatterns" alias="java"/>
 
 
-		<highlightErrorFilter implementation="com.intellij.java.impl.codeInsight.daemon.impl.analysis.JavadocErrorFilter"/>
-		<daemon.changeLocalityDetector implementation="com.intellij.java.impl.codeInsight.daemon.impl.JavaChangeLocalityDetector"/>
 
-		<liveTemplateOptionalProcessor implementation="com.intellij.java.impl.codeInsight.template.impl.ShortenToStaticImportProcessor"/>
-		<liveTemplateOptionalProcessor implementation="com.intellij.java.impl.codeInsight.template.impl.ShortenFQNamesProcessor"/>
 
-		<createFromTemplateHandler implementation="com.intellij.java.impl.ide.fileTemplates.JavaInternalTemplatesHandler"/>
-		<createFromTemplateHandler implementation="com.intellij.java.impl.ide.fileTemplates.JavaCreateFromTemplateHandler"/>
 
-		<defaultTemplatePropertiesProvider implementation="com.intellij.java.impl.ide.fileTemplates.TemplatePackagePropertyProvider"/>
-		<favoriteNodeProvider implementation="com.intellij.java.impl.ide.favoritesTreeView.PsiClassFavoriteNodeProvider"/>
-		<favoriteNodeProvider implementation="com.intellij.java.impl.ide.favoritesTreeView.PsiFieldFavoriteNodeProvider"/>
-		<favoriteNodeProvider implementation="com.intellij.java.impl.ide.favoritesTreeView.PsiMethodFavoriteNodeProvider"/>
-		<favoriteNodeProvider implementation="com.intellij.java.impl.ide.favoritesTreeView.PsiPackageFavoriteNodeProvider"/>
-		<favoriteNodeProvider implementation="consulo.ide.impl.idea.ide.favoritesTreeView.UsageFavoriteNodeProvider"/>
-		<configurationType implementation="com.intellij.java.execution.impl.jar.JarApplicationConfigurationType"/>
 
-		<runConfigurationProducer implementation="com.intellij.java.execution.impl.jar.JarApplicationConfigurationProducer"/>
 
-		<configurationType implementation="com.intellij.java.execution.impl.remote.RemoteConfigurationType"/>
 
 		<!--TODO [VISTALL] core depend - we can't override services
 		<applicationService serviceInterface="com.intellij.packageDependencies.DependenciesVisitorFactory"
@@ -1698,7 +1539,6 @@
 		<internalFileTemplate name="package-info"/>
 		<internalFileTemplate name="module-info"/>
 
-		<saveFileAsTemplateHandler implementation="com.intellij.java.impl.ide.fileTemplates.SaveJavaAsTemplateHandler"/>
 
 		<refactoring.copyHandler implementation="com.intellij.java.impl.refactoring.copy.CopyClassesHandler" order="before copyJavaFilesOrPackages"/>
 		<refactoring.copyHandler implementation="consulo.language.editor.refactoring.copy.CopyFilesOrDirectoriesHandler" id="copyJavaFilesOrPackages"/>
@@ -1722,15 +1562,8 @@
 		<refactoring.changeSignatureUsageProcessor implementation="com.intellij.java.impl.refactoring.changeSignature.JavaChangeSignatureUsageProcessor"
 												   id="javaProcessor"/>
 
-		<refactoring.helper implementation="com.intellij.java.impl.refactoring.OptimizeImportsRefactoringHelper"/>
 
 
-		<elementDescriptionProvider implementation="com.intellij.java.impl.refactoring.util.JavaRefactoringElementDescriptionProvider"/>
-		<elementDescriptionProvider implementation="com.intellij.java.impl.refactoring.util.JavaNonCodeSearchElementDescriptionProvider"/>
-
-		<colorSettingsPage implementation="com.intellij.java.impl.openapi.options.colors.pages.JavaColorSettingsPage"/>
-
-		<scopeParserExtension implementation="com.intellij.java.impl.psi.search.scope.packageSet.PatternPackageSetParserExtension"/>
 
 		<macro implementation="com.intellij.java.impl.ide.macro.ClasspathEntryMacro"/>
 		<macro implementation="com.intellij.java.impl.ide.macro.ClasspathMacro"/>
@@ -1741,21 +1574,6 @@
 
 		<printOption implementation="com.intellij.java.impl.codeEditor.printing.HyperlinksToClassesOption"/>
 
-		<indexPatternBuilder implementation="com.intellij.java.impl.psi.impl.search.JavaIndexPatternBuilder"/>
-		<gotoClassContributor implementation="com.intellij.java.impl.ide.util.gotoByName.DefaultClassNavigationContributor"/>
-		<gotoSymbolContributor implementation="com.intellij.java.impl.ide.util.gotoByName.DefaultSymbolNavigationContributor"/>
-		<scopeTreeExpander implementation="com.intellij.java.impl.ide.scopeView.ClassesScopeTreeStructureExpander"/>
-		<lang.implementationTextSelectioner language="JAVA"
-											implementationClass="com.intellij.java.impl.codeInsight.hint.JavaImplementationTextSelectioner"/>
-		<gotoDeclarationHandler implementation="com.intellij.java.impl.codeInsight.navigation.actions.GotoBreakContinueHandler"/>
-		<navbar implementation="com.intellij.java.impl.ide.navigationToolbar.JavaNavBarExtension"/>
-		<typeDeclarationProvider implementation="com.intellij.java.impl.codeInsight.navigation.actions.JavaTypeDeclarationProvider"/>
-
-		<renameHandler implementation="com.intellij.java.impl.refactoring.rename.DirectoryAsPackageRenameHandler"/>
-		<renameHandler implementation="com.intellij.java.impl.refactoring.rename.RenameWrongRefHandler"/>
-		<rename.inplace.resolveSnapshotProvider language="JAVA"
-												implementationClass="com.intellij.java.impl.refactoring.rename.inplace.JavaResolveSnapshotProvider"/>
-		<updateAddedFileProcessor implementation="com.intellij.java.impl.psi.impl.file.JavaUpdateAddedFileProcessor"/>
 
 		<findUsagesHandlerFactory implementation="com.intellij.java.impl.find.findUsages.JavaFindUsagesHandlerFactory" id="java"
 								  order="last, before default"/>
@@ -1776,211 +1594,63 @@
 		<automaticRenamerFactory implementation="com.intellij.java.impl.refactoring.rename.naming.AutomaticTestRenamerFactory"/>
 		<automaticRenamerFactory implementation="com.intellij.java.impl.refactoring.rename.naming.ConstructorParameterOnFieldRenameRenamerFactory"/>
 
-		<nameSuggestionProvider implementation="com.intellij.java.impl.refactoring.rename.JavaNameSuggestionProvider" id="java"/>
 
-		<vetoRenameCondition implementation="com.intellij.java.impl.refactoring.rename.JavaVetoRenameCondition"/>
 
-		<readWriteAccessDetector implementation="com.intellij.java.language.impl.codeInsight.highlighting.JavaReadWriteAccessDetector" id="java"/>
-		<elementDescriptionProvider implementation="com.intellij.java.impl.codeInsight.highlighting.JavaHighlightUsagesDescriptionProvider"/>
 
-		<elementDescriptionProvider implementation="com.intellij.java.impl.usageView.JavaUsageViewDescriptionProvider"/>
 
-		<elementDescriptionProvider implementation="com.intellij.java.impl.ide.util.JavaDeleteTypeDescriptionProvider"/>
-
-		<fileTypeIndentOptionsProvider implementation="com.intellij.java.impl.application.options.JavaIndentOptionsProvider"/>
-
-		<referenceImporter implementation="com.intellij.java.impl.codeInsight.daemon.impl.JavaReferenceImporter"/>
-
-		<elementLookupRenderer implementation="com.intellij.java.impl.codeInsight.lookup.impl.JavaElementLookupRenderer"/>
-
-		<qualifiedNameProvider implementation="com.intellij.java.impl.ide.actions.JavaQualifiedNameProvider"/>
-
-		<fileStructureGroupRuleProvider implementation="com.intellij.java.impl.usages.impl.rules.JavaClassGroupRuleProvider"/>
-		<fileStructureGroupRuleProvider implementation="com.intellij.java.impl.usages.impl.rules.JavaMethodGroupRuleProvider"/>
-		<fileStructureGroupRuleProvider implementation="com.intellij.java.impl.usages.impl.rules.NonJavaFileGroupRuleProvider"/>
-
-		<usageTypeProvider implementation="com.intellij.java.impl.usages.impl.rules.JavaUsageTypeProvider"/>
 		<usageContextPanelProvider implementation="com.intellij.java.impl.usageView.UsageContextDataflowToPanel$Provider"/>
 		<usageContextPanelProvider implementation="com.intellij.java.impl.usageView.UsageContextDataflowFromPanel$Provider"/>
-		<importFilteringRule implementation="com.intellij.java.impl.usages.impl.rules.ImportFilteringRule"/>
-
-		<treeStructureProvider implementation="com.intellij.java.impl.ide.projectView.impl.ClassesTreeStructureProvider" order="last"/>
-
-		<defaultLiveTemplatesProvider implementation="com.intellij.java.impl.codeInsight.template.impl.JavaDefaultLiveTemplatesProvider"/>
-
-		<codeInsight.surroundWithRangeAdjuster implementation="com.intellij.java.impl.codeInsight.generation.surroundWith.XmlSurroundWithRangeAdjuster"/>
 
 
-		<stubIndex implementation="com.intellij.java.indexing.impl.stubs.index.JavaAnnotationIndex"/>
-		<stubIndex implementation="com.intellij.java.indexing.impl.stubs.index.JavaAnonymousClassBaseRefOccurenceIndex"/>
-		<stubIndex implementation="com.intellij.java.indexing.impl.stubs.index.JavaFieldNameIndex"/>
-		<stubIndex implementation="com.intellij.java.indexing.impl.stubs.index.JavaFullClassNameIndex"/>
-		<stubIndex implementation="com.intellij.java.indexing.impl.stubs.index.JavaMethodNameIndex"/>
-		<stubIndex implementation="com.intellij.java.indexing.impl.stubs.index.JavaStaticMemberNameIndex"/>
-		<stubIndex implementation="com.intellij.java.indexing.impl.stubs.index.JavaStaticMemberTypeIndex"/>
-		<stubIndex implementation="com.intellij.java.indexing.impl.stubs.index.JavaShortClassNameIndex"/>
-		<stubIndex implementation="com.intellij.java.indexing.impl.stubs.index.JavaSuperClassNameOccurenceIndex"/>
-		<stubIndex implementation="com.intellij.java.indexing.impl.stubs.index.JavaMethodParameterTypesIndex"/>
-		<stubIndex implementation="com.intellij.java.indexing.impl.stubs.index.JavaModuleNameIndex"/>
 
-		<fileBasedIndex implementation="com.intellij.java.analysis.impl.codeInspection.bytecodeAnalysis.BytecodeAnalysisIndex"/>
-		<fileBasedIndex implementation="com.intellij.java.analysis.impl.psi.impl.search.JavaNullMethodArgumentIndex"/>
 
-		<stubElementTypeHolder class="com.intellij.java.language.impl.psi.impl.java.stubs.JavaStubElementTypes"/>
-
-		<methodNavigationOffsetProvider implementation="com.intellij.java.impl.codeInsight.navigation.JavaMethodNavigationOffsetProvider"/>
-
-		<editorNavigation implementation="com.intellij.java.impl.javadoc.JavadocNavigationDelegate"/>
-		<enterHandlerDelegate implementation="com.intellij.java.impl.javadoc.EnterInJavadocParamDescriptionHandler"/>
-
-		<filePasteProvider implementation="com.intellij.java.impl.ide.JavaFilePasteProvider"/>
-
-		<testFinder implementation="com.intellij.java.impl.testIntegration.JavaTestFinder"/>
-		<testCreator language="JAVA" implementationClass="com.intellij.java.impl.testIntegration.JavaTestCreator"/>
 
 		<callHierarchyProvider language="JAVA" implementationClass="com.intellij.java.impl.ide.hierarchy.call.JavaCallHierarchyProvider"/>
 		<methodHierarchyProvider language="JAVA" implementationClass="com.intellij.java.impl.ide.hierarchy.method.JavaMethodHierarchyProvider"/>
 		<typeHierarchyProvider language="JAVA" implementationClass="com.intellij.java.impl.ide.hierarchy.type.JavaTypeHierarchyProvider"/>
 
 
-		<templateCompletionProcessor implementation="com.intellij.java.impl.codeInsight.template.macro.JavaTemplateCompletionProcessor"/>
 
 		<extendWordSelectionHandler implementation="com.intellij.java.impl.codeInsight.editorActions.wordSelection.JavaWordSelectioner"/>
 		<basicWordSelectionFilter implementation="com.intellij.java.impl.codeInsight.editorActions.wordSelection.JavaBasicWordSelectionFilter"/>
 
-		<iconDescriptorUpdater implementation="consulo.java.impl.ide.JavaIconDescriptorUpdater" id="java"/>
-		<iconDescriptorUpdater implementation="consulo.java.impl.ide.JavaModuleIconDescriptorUpdater" id="javaModule" order="after directory"/>
-		<iconDescriptorUpdater implementation="consulo.java.execution.impl.testframework.TestIconDescriptorUpdater"/>
 
-		<idIndexer filetype="JAVA" implementationClass="com.intellij.java.impl.psi.impl.cache.impl.idCache.JavaIdIndexer"/>
-		<todoIndexer filetype="JAVA" implementationClass="com.intellij.java.impl.psi.impl.cache.impl.idCache.JavaTodoIndexer"/>
 
-		<problemFileHighlightFilter implementation="com.intellij.java.impl.codeInsight.problems.DefaultProblemFileHighlightFilter"/>
 
-		<problemHighlightFilter implementation="com.intellij.java.impl.codeInsight.daemon.JavaProblemHighlightFilter"/>
 
-		<inlineActionHandler implementation="com.intellij.java.impl.refactoring.inline.InlineParameterHandler"/>
-		<inlineActionHandler implementation="com.intellij.java.impl.refactoring.inline.InlineToAnonymousClassHandler"/>
-		<inlineActionHandler implementation="com.intellij.java.impl.refactoring.inlineSuperClass.InlineSuperClassRefactoringHandler"/>
-		<inlineActionHandler implementation="com.intellij.refactoring.inline.InlineMethodHandler"/>
-		<inlineActionHandler implementation="com.intellij.java.impl.refactoring.inline.InlineLocalHandler"/>
-		<inlineActionHandler implementation="com.intellij.java.impl.refactoring.inline.InlineConstantFieldHandler"/>
-		<inlineActionHandler implementation="com.intellij.java.impl.refactoring.inline.InlineStaticImportHandler"/>
-
-		<previewHintProvider implementation="com.intellij.java.impl.codeInsight.preview.JavaPreviewHintProvider"/>
-		<filePropertyPusher implementation="com.intellij.java.analysis.impl.JavaLanguageLevelPusher"/>
-
-		<psiViewerExtension implementation="com.intellij.java.impl.internal.psiView.PsiViewerMethodExtension"/>
-		<psiViewerExtension implementation="com.intellij.java.impl.internal.psiView.PsiViewerCodeFragmentExtension"/>
-		<psiViewerExtension implementation="com.intellij.java.impl.internal.psiView.PsiViewerExpressionExtension"/>
-
-		<resolveScopeEnlarger implementation="com.intellij.java.impl.psi.NonClasspathResolveScopeEnlarger"/>
-
-		<xdebugger.settings implementation="com.intellij.java.debugger.impl.settings.JavaDebuggerSettings"/>
-
-		<xdebugger.breakpointType implementation="com.intellij.java.debugger.impl.ui.breakpoints.JavaMethodBreakpointType"/>
-		<xdebugger.breakpointType implementation="com.intellij.java.debugger.impl.ui.breakpoints.JavaWildcardMethodBreakpointType"/>
-		<xdebugger.breakpointType implementation="com.intellij.java.debugger.impl.ui.breakpoints.JavaFieldBreakpointType"/>
-		<xdebugger.breakpointType implementation="com.intellij.java.debugger.impl.ui.breakpoints.JavaExceptionBreakpointType"/>
-		<xdebugger.breakpointType implementation="com.intellij.java.debugger.impl.ui.breakpoints.JavaLineBreakpointType"/>
 
 		<programRunner id="defaultDebugRunner" implementation="com.intellij.java.debugger.impl.GenericDebuggerRunner" order="last"/>
 
 
 
-
-		<treeCopyHandler implementation="com.intellij.java.impl.psi.impl.source.tree.JavaTreeCopyHandler"/>
-		<treeGenerator implementation="com.intellij.java.impl.psi.impl.source.tree.JavaTreeGenerator"/>
-
-		<applicationService serviceImplementation="com.intellij.java.execution.impl.JavaRunConfigurationExtensionManager"/>
-
-
 		<psi.referenceContributor language="JAVA"
 								  implementation="com.intellij.java.impl.psi.impl.source.resolve.reference.impl.JavaReflectionReferenceContributor"/>
 
-		<writingAccessProvider implementation="com.intellij.java.impl.refactoring.util.ClsElementWritingAccessProvider"/>
 
-		<projectService serviceInterface="com.intellij.java.language.codeInsight.ExternalAnnotationsManager"
-						serviceImplementation="com.intellij.java.impl.codeInsight.ExternalAnnotationsManagerImpl"/>
 
-		<projectService serviceInterface="com.intellij.java.language.codeInsight.InferredAnnotationsManager"
-						serviceImplementation="com.intellij.java.impl.codeInsight.InferredAnnotationsManagerImpl"/>
 
-		<projectService serviceInterface="com.intellij.java.analysis.impl.codeInspection.bytecodeAnalysis.ProjectBytecodeAnalysis"
-						serviceImplementation="com.intellij.java.analysis.impl.codeInspection.bytecodeAnalysis.ProjectBytecodeAnalysis"/>
-
-		<projectService serviceInterface="com.intellij.java.language.psi.PsiNameHelper"
-						serviceImplementation="com.intellij.java.language.impl.psi.impl.PsiNameHelperImpl"/>
-
-		<projectService serviceInterface="com.intellij.java.language.impl.psi.impl.file.impl.JavaFileManager"
-						serviceImplementation="com.intellij.java.indexing.impl.JavaFileManagerImpl"/>
 
 		<projectService serviceInterface="com.intellij.java.execution.impl.testDiscovery.JavaAutoRunManager"
 						serviceImplementation="com.intellij.java.execution.impl.testDiscovery.JavaAutoRunManager"/>
 
-		<applicationService serviceInterface="com.intellij.java.language.impl.psi.impl.file.PsiPackageImplementationHelper"
-							serviceImplementation="com.intellij.java.impl.psi.impl.file.PsiPackageImplementationHelperImpl"/>
-		<sdkType implementation="com.intellij.java.impl.openapi.projectRoots.impl.JavaSdkImpl"/>
-		<predefinedBundlesProvider implementation="consulo.java.impl.bundle.JavaHomePredefinedBundleProvider"/>
-		<applicationService serviceInterface="com.intellij.java.language.projectRoots.OwnJdkVersionDetector"
-							serviceImplementation="com.intellij.java.impl.openapi.projectRoots.OwnJdkVersionDetectorImpl"/>
-
-		<consoleFilterProvider implementation="com.intellij.java.execution.impl.filters.DefaultConsoleFiltersProvider"/>
-
-		<configurationType implementation="com.intellij.java.execution.impl.application.ApplicationConfigurationType"/>
-		<runConfigurationProducer implementation="com.intellij.java.execution.impl.application.ApplicationConfigurationProducer"/>
-
-		<psi.packageSupportProvider implementation="consulo.java.impl.psi.impl.JavaPsiPackageSupportProvider"/>
-		<customPropertyScopeProvider implementation="com.intellij.java.impl.psi.impl.search.SimpleAccessorScopeProvider"/>
-
-		<compiler.additionalOutputDirectoriesProvider
-				implementation="consulo.java.compiler.impl.javaCompiler.JavaAdditionalOutputDirectoriesProvider"/>
-
 		<applicationService serviceInterface="com.intellij.java.impl.openapi.roots.libraries.LibrariesHelper"
 							serviceImplementation="com.intellij.java.impl.openapi.roots.libraries.LibrariesHelperImpl"/>
 
-		<applicationService serviceInterface="com.intellij.java.execution.runners.ProcessProxyFactory"
-							serviceImplementation="com.intellij.java.execution.impl.runners.ProcessProxyFactoryImpl"/>
 
 		<!--Java SPI-->
 		<codeInsight.gotoSuper language="JAVA-SPI" implementationClass="com.intellij.java.impl.spi.SPIGotoSuperHandler"/>
-		<lang.parserDefinition language="JAVA-SPI" implementationClass="com.intellij.java.impl.spi.parsing.SPIParserDefinition"/>
 		<annotator language="JAVA-SPI" implementationClass="com.intellij.java.impl.spi.SPIAnnotator"/>
 		<lang.substitutor language="TEXT" implementationClass="consulo.java.impl.spi.SPILanguageSubstitutor"/>
 
 		<packaging.elementType implementation="com.intellij.java.compiler.artifact.impl.elements.JarArchiveElementType" order="after zip-archive-element"/>
-		<moduleExtensionProvider key="java"
-								 icon="consulo.java.psi.impl.JavaPsiImplIconGroup@java"
-								 name="Java"
-								 immutableClass="consulo.java.impl.module.extension.JavaModuleExtensionImpl"
-								 mutableClass="consulo.java.impl.module.extension.JavaMutableModuleExtensionImpl"/>
-		<orderRootType implementation="com.intellij.java.language.projectRoots.roots.AnnotationOrderRootType"/>
+
 		<orderRootTypeEditor key="javaExternalAnnotations"
 							 implementationClass="com.intellij.java.impl.openapi.roots.ui.configuration.libraryEditor.AnnotationsOrderRootTypeUIFactory"/>
-		<contentFolderSupportPatcher implementation="consulo.java.impl.module.extension.JavaContentFolderSupportPatcher"/>
 		<pathMacroExpendableProtocol protocol="jar"/>
 
-		<psi.directoryMethodProxy implementation="com.intellij.java.impl.psi.impl.file.JavaPsiDirectoryMethodProxy"/>
 
-		<defaultLibraryRootDetector implementation="consulo.java.impl.library.AnnotationsRootFilter"/>
-		<defaultLibraryRootDetector implementation="consulo.java.impl.library.JavaClassesRootFilter"/>
-		<defaultLibraryRootDetector implementation="consulo.java.impl.library.JavadocRootDetector"/>
-		<defaultLibraryRootDetector implementation="consulo.java.impl.library.JavaJarRootFilter"/>
-		<defaultLibraryRootDetector implementation="consulo.java.impl.library.JavaSourceDirectoryRootFilter"/>
-		<defaultLibraryRootDetector implementation="consulo.java.impl.library.JavaSourceRootDetector"/>
 
-		<codeInsight.template.postfixTemplateProvider language="JAVA"
-													  implementationClass="com.intellij.java.impl.codeInsight.template.postfix.templates.JavaPostfixTemplateProvider"/>
 
-		<codeInsight.parameterNameHints language="JAVA" implementationClass="com.intellij.java.impl.codeInsight.hints.JavaInlayParameterHintsProvider"/>
-		<codeInsight.lineMarkerProvider language="JAVA" implementationClass="com.intellij.java.impl.codeInsight.ExternalAnnotationsLineMarkerProvider"/>
-		<newModuleBuilder implementation="consulo.java.impl.ide.newProjectOrModule.JavaNewModuleBuilder"/>
-
-		<targetElementUtilEx implementation="consulo.java.impl.codeInsight.JavaTargetElementUtilEx"/>
-
-		<fileBasedIndex implementation="com.intellij.java.indexing.impl.search.JavaFunctionalExpressionIndex"/>
-		<fileBasedIndex implementation="com.intellij.java.indexing.impl.stubs.index.JavaAutoModuleNameIndex"/>
-		<fileBasedIndex implementation="com.intellij.java.indexing.impl.stubs.index.JavaSourceModuleNameIndex"/>
 
 		<xdebugger.lineBreakpointTypeResolver filetype="CLASS" implementationClass="consulo.java.debugger.impl.JavaLineBreakpointTypeResolver"/>
 		<xdebugger.lineBreakpointTypeResolver filetype="JAVA" implementationClass="consulo.java.debugger.impl.JavaLineBreakpointTypeResolver"/>
@@ -1988,13 +1658,9 @@
 		<projectService serviceInterface="com.intellij.java.impl.openapi.roots.JavaProjectModelModificationService"
 						serviceImplementation="com.intellij.java.impl.openapi.roots.impl.JavaProjectModelModificationServiceImpl"/>
 
-		<orderRootType implementation="com.intellij.java.language.projectRoots.roots.NativeLibraryOrderRootType"/>
 		<orderRootTypeEditor key="javaNative"
 							 implementationClass="com.intellij.java.impl.openapi.roots.ui.configuration.libraryEditor.NativeLibraryOrderRootTypeUIFactory"/>
 
-		<textEditorHighlightingPassFactory implementation="com.intellij.java.analysis.impl.codeInsight.daemon.impl.JavaSoftKeywordHighlightingPassFactory"/>
-
-		<virtualFileSystem implementation="com.intellij.java.impl.openapi.vfs.impl.jrt.JrtFileSystemImpl"/>
 
 		<applicationService serviceInterface="com.intellij.java.language.impl.codeInsight.generation.OverrideImplementExploreUtil$MemberImplementorExplorersProvider"
 							serviceImplementation="com.intellij.java.impl.codeInsight.generation.MemberImplementorExplorersProviderImpl"/>
@@ -2004,12 +1670,9 @@
 
 		<projectService serviceImplementation="com.intellij.java.debugger.impl.ui.DebuggerPanelsManager" lazy="false"/>
 		<projectService serviceImplementation="com.intellij.java.execution.impl.testDiscovery.TestDiscoveryIndex" lazy="false"/>
-		<projectService serviceInterface="com.intellij.java.debugger.DebuggerManager" serviceImplementation="com.intellij.java.debugger.impl.DebuggerManagerImpl" lazy="false"/>
 		<projectService serviceInterface="com.intellij.java.impl.pom.java.PomJavaAspect" serviceImplementation="com.intellij.java.impl.pom.java.impl.PomJavaAspectImpl" lazy="false"/>
 
-		<codeStyleIndentHelperExtension implementation="com.intellij.java.impl.psi.impl.source.codeStyle.JavaIndentHelper"/>
 
-		<projectService serviceImplementation="com.intellij.java.language.codeInsight.ConcurrencyAnnotationsManager"/>
 	</extensions>
 
 	<extensions defaultExtensionNs="com.intellij.copyright">
@@ -2021,6 +1684,5 @@
 	<extensions defaultExtensionNs="com.intellij.xml.dom">
 		<uiControlsProvider implementation="com.intellij.java.impl.util.xml.impl.JavaDomApplicationComponent"/>
 
-		<customAnnotationChecker implementation="com.intellij.java.impl.util.xml.impl.ExtendsClassChecker"/>
 	</extensions>
 </consulo-plugin>

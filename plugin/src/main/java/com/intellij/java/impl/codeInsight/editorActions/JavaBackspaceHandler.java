@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.codeInsight.editorActions;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.action.BackspaceHandlerDelegate;
 import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.java.language.psi.PsiJavaFile;
@@ -26,6 +27,7 @@ import consulo.language.psi.PsiFile;
 import consulo.language.ast.IElementType;
 import consulo.language.ast.TokenSet;
 
+@ExtensionImpl
 public class JavaBackspaceHandler extends BackspaceHandlerDelegate {
   private boolean myToDeleteGt;
 

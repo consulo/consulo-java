@@ -20,6 +20,7 @@
  */
 package com.intellij.java.impl.ide.favoritesTreeView;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.ide.impl.idea.ide.favoritesTreeView.FavoriteNodeProvider;
 import consulo.project.ui.view.tree.ViewSettings;
 import consulo.project.ui.view.tree.AbstractTreeNode;
@@ -46,6 +47,7 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collection;
 
+@ExtensionImpl
 public class PsiClassFavoriteNodeProvider extends FavoriteNodeProvider {
   @Override
   public Collection<AbstractTreeNode> getFavoriteNodes(final DataContext context, final ViewSettings viewSettings) {

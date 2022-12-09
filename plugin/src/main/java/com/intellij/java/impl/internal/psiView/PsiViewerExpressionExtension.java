@@ -15,9 +15,9 @@
  */
 package com.intellij.java.impl.internal.psiView;
 
-import consulo.project.Project;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
-import consulo.ide.impl.idea.util.PlatformIcons;
+import consulo.project.Project;
 
 import javax.swing.*;
 
@@ -25,6 +25,7 @@ import javax.swing.*;
  * @author yole
  * @author Konstantin Bulenkov
  */
+@ExtensionImpl
 public class PsiViewerExpressionExtension extends JavaPsiViewerExtension {
   public String getName() {
     return "Java Expression";

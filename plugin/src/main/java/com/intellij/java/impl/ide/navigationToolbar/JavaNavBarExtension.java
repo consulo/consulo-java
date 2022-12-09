@@ -1,7 +1,6 @@
 // Copyright 2000-2020 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.impl.ide.navigationToolbar;
 
-import com.google.common.collect.ImmutableList;
 import com.intellij.java.impl.ide.structureView.impl.java.JavaAnonymousClassesNodeProvider;
 import com.intellij.java.impl.ide.structureView.impl.java.JavaLambdaNodeProvider;
 import com.intellij.java.language.JavaLanguage;
@@ -9,6 +8,7 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
 import com.intellij.java.language.vfs.jrt.JrtFileSystem;
 import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.ui.UISettings;
 import consulo.fileEditor.structureView.tree.NodeProvider;
 import consulo.ide.navigationToolbar.StructureAwareNavBarModelExtension;
@@ -29,8 +29,9 @@ import static com.intellij.java.language.psi.util.PsiFormatUtilBase.*;
 /**
  * @author anna
  */
+@ExtensionImpl
 public class JavaNavBarExtension extends StructureAwareNavBarModelExtension {
-  private final List<NodeProvider<?>> myNodeProviders = ImmutableList.of(new JavaLambdaNodeProvider(), new JavaAnonymousClassesNodeProvider());
+  private final List<NodeProvider<?>> myNodeProviders = List.of(new JavaLambdaNodeProvider(), new JavaAnonymousClassesNodeProvider());
 
   @Nullable
   @Override

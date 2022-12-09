@@ -15,6 +15,9 @@
  */
 package com.intellij.java.impl.codeInsight;
 
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ServiceAPI;
+import consulo.annotation.component.ServiceImpl;
 import consulo.application.util.ConcurrentFactoryMap;
 import consulo.component.persist.PersistentStateComponent;
 import consulo.component.persist.State;
@@ -35,6 +38,7 @@ import org.jetbrains.annotations.TestOnly;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ConcurrentMap;
@@ -45,13 +49,15 @@ import java.util.regex.Pattern;
  * @author peter
  */
 @Singleton
+@ServiceAPI(ComponentScope.PROJECT)
+@ServiceImpl
 @State(name = "JavaProjectCodeInsightSettings", storages = @Storage(file = StoragePathMacros.PROJECT_CONFIG_DIR + "/codeInsightSettings.xml"))
 public class JavaProjectCodeInsightSettings implements PersistentStateComponent<JavaProjectCodeInsightSettings> {
   private static final ConcurrentMap<String, Pattern> ourPatterns = ConcurrentFactoryMap.createWeakMap(PatternUtil::fromMask);
 
   @Tag("excluded-names")
   @AbstractCollection(surroundWithTag = false, elementTag = "name", elementValueAttribute = "")
-  public List<String> excludedNames = ContainerUtil.newArrayList();
+  public List<String> excludedNames = new ArrayList<>();
 
   public static JavaProjectCodeInsightSettings getSettings(@Nonnull Project project) {
     return ServiceManager.getService(project, JavaProjectCodeInsightSettings.class);

@@ -18,6 +18,8 @@ package com.intellij.java.analysis.codeInsight.intention;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PropertyMemberType;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ServiceAPI;
 import consulo.ide.ServiceManager;
 import consulo.language.ast.IElementType;
 import consulo.language.editor.inspection.LocalQuickFix;
@@ -41,6 +43,7 @@ import java.util.Set;
 /**
  * @author cdr
  */
+@ServiceAPI(ComponentScope.APPLICATION)
 public abstract class QuickFixFactory {
   public static QuickFixFactory getInstance() {
     return ServiceManager.getService(QuickFixFactory.class);

@@ -20,6 +20,7 @@ import com.intellij.java.language.impl.lexer.JavaLexer;
 import com.intellij.java.language.psi.JavaDocTokenType;
 import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.java.language.psi.PsiJavaFile;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.ast.IElementType;
 import consulo.language.ast.TokenSet;
 import consulo.language.lexer.Lexer;
@@ -33,6 +34,7 @@ import javax.annotation.Nullable;
 /**
  * @author yole
  */
+@ExtensionImpl
 public class JavaIndexPatternBuilder implements IndexPatternBuilder {
   public static final TokenSet XML_DATA_CHARS = TokenSet.create(XmlTokenType.XML_DATA_CHARACTERS);
   public static final TokenSet XML_COMMENT_BIT_SET = TokenSet.create(XmlElementType.XML_COMMENT_CHARACTERS);

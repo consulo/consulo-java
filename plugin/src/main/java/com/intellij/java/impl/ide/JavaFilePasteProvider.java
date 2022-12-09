@@ -18,6 +18,7 @@ package com.intellij.java.impl.ide;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.PsiElementFactory;
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.Result;
 import consulo.dataContext.DataContext;
 import consulo.document.Document;
@@ -25,12 +26,12 @@ import consulo.document.util.TextRange;
 import consulo.ide.IdeView;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.CommonDataKeys;
+import consulo.language.editor.FilePasteProvider;
 import consulo.language.editor.WriteCommandAction;
 import consulo.language.psi.*;
 import consulo.language.util.IncorrectOperationException;
 import consulo.navigation.OpenFileDescriptorFactory;
 import consulo.project.Project;
-import consulo.ui.ex.PasteProvider;
 import consulo.ui.ex.awt.CopyPasteManager;
 import consulo.undoRedo.CommandProcessor;
 
@@ -42,7 +43,8 @@ import java.awt.datatransfer.Transferable;
 /**
  * @author yole
  */
-public class JavaFilePasteProvider implements PasteProvider {
+@ExtensionImpl
+public class JavaFilePasteProvider implements FilePasteProvider {
   public void performPaste(@Nonnull final DataContext dataContext) {
     final Project project = dataContext.getData(CommonDataKeys.PROJECT);
     final IdeView ideView = dataContext.getData(IdeView.KEY);

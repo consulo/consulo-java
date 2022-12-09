@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.codeInsight.template.impl;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.template.Template;
 import consulo.language.editor.template.TemplateOptionalProcessor;
@@ -43,6 +44,7 @@ import static java.util.Arrays.asList;
  * @author Denis Zhdanov
  * @since 4/27/11 3:07 PM
  */
+@ExtensionImpl
 public class ShortenToStaticImportProcessor implements TemplateOptionalProcessor {
 
   private static final List<StaticImporter> IMPORTERS = asList(new SingleMemberStaticImporter(), new OnDemandStaticImporter());

@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.ide.fileTemplates;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiFile;
 import com.intellij.java.language.psi.PsiJavaFile;
 import com.intellij.java.language.psi.PsiClass;
@@ -26,6 +27,7 @@ import javax.annotation.Nullable;
 /**
  * @author yole
  */
+@ExtensionImpl
 public class SaveJavaAsTemplateHandler implements SaveFileAsTemplateHandler {
   @Nullable
   public String getTemplateText(final PsiFile psiFile, String fileText, String nameWithoutExtension) {

@@ -20,6 +20,7 @@ import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
 import com.intellij.java.language.psi.PsiJavaFile;
 import com.intellij.java.language.psi.PsiJavaPackage;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.ApplicationManager;
 import consulo.application.progress.ProgressIndicator;
 import consulo.application.progress.ProgressManager;
@@ -36,6 +37,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+@ExtensionImpl
 public class OptimizeImportsRefactoringHelper implements RefactoringHelper<Set<PsiJavaFile>> {
   private static final Logger LOG = Logger.getInstance(OptimizeImportsRefactoringHelper.class);
 

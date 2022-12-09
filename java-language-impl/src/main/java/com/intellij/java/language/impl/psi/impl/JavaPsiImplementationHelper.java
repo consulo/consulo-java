@@ -15,49 +15,45 @@
  */
 package com.intellij.java.language.impl.psi.impl;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import consulo.language.ast.ASTNode;
+import com.intellij.java.language.LanguageLevel;
+import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ServiceAPI;
 import consulo.ide.ServiceManager;
+import consulo.language.ast.ASTNode;
+import consulo.language.psi.PsiElement;
 import consulo.project.Project;
 import consulo.virtualFileSystem.VirtualFile;
-import com.intellij.java.language.LanguageLevel;
-import com.intellij.java.language.psi.PsiCatchSection;
-import com.intellij.java.language.psi.PsiClass;
-import consulo.language.psi.PsiElement;
-import com.intellij.java.language.psi.PsiImportList;
-import com.intellij.java.language.psi.PsiImportStatementBase;
-import com.intellij.java.language.psi.PsiJavaFile;
-import com.intellij.java.language.psi.PsiMember;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * @author yole
  */
-public abstract class JavaPsiImplementationHelper
-{
-	public static JavaPsiImplementationHelper getInstance(Project project)
-	{
-		return ServiceManager.getService(project, JavaPsiImplementationHelper.class);
-	}
+@ServiceAPI(ComponentScope.PROJECT)
+public abstract class JavaPsiImplementationHelper {
+  public static JavaPsiImplementationHelper getInstance(Project project) {
+    return ServiceManager.getService(project, JavaPsiImplementationHelper.class);
+  }
 
-	public abstract PsiClass getOriginalClass(PsiClass psiClass);
+  public abstract PsiClass getOriginalClass(PsiClass psiClass);
 
-	public abstract PsiElement getClsFileNavigationElement(PsiJavaFile clsFile);
+  public abstract PsiElement getClsFileNavigationElement(PsiJavaFile clsFile);
 
-	/**
-	 * For files under a library source root, returns the language level configured for the corresponding classes root.
-	 *
-	 * @param virtualFile virtual file for which language level is requested.
-	 * @return language level for classes root or null if file is not under a library source root or no matching classes root is found.
-	 */
-	@Nullable
-	public abstract LanguageLevel getClassesLanguageLevel(VirtualFile virtualFile);
+  /**
+   * For files under a library source root, returns the language level configured for the corresponding classes root.
+   *
+   * @param virtualFile virtual file for which language level is requested.
+   * @return language level for classes root or null if file is not under a library source root or no matching classes root is found.
+   */
+  @Nullable
+  public abstract LanguageLevel getClassesLanguageLevel(VirtualFile virtualFile);
 
-	public abstract ASTNode getDefaultImportAnchor(PsiImportList list, PsiImportStatementBase statement);
+  public abstract ASTNode getDefaultImportAnchor(PsiImportList list, PsiImportStatementBase statement);
 
-	@Nullable
-	public abstract PsiElement getDefaultMemberAnchor(@Nonnull PsiClass psiClass, @Nonnull PsiMember firstPsi);
+  @Nullable
+  public abstract PsiElement getDefaultMemberAnchor(@Nonnull PsiClass psiClass, @Nonnull PsiMember firstPsi);
 
-	public abstract void setupCatchBlock(String exceptionName, PsiElement context, PsiCatchSection element);
+  public abstract void setupCatchBlock(String exceptionName, PsiElement context, PsiCatchSection element);
 }

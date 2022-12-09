@@ -21,6 +21,7 @@ import com.intellij.java.impl.util.xml.ExtendClass;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiReference;
 import consulo.language.psi.PsiReferenceProvider;
 import consulo.language.psi.scope.GlobalSearchScope;
@@ -45,6 +46,7 @@ import java.util.List;
 /**
  * @author peter
  */
+@ExtensionImpl
 public class ExtendsClassChecker extends DomCustomAnnotationChecker<ExtendClass> {
   private static final GenericValueReferenceProvider ourProvider = new GenericValueReferenceProvider();
 

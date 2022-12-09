@@ -16,6 +16,7 @@
 package com.intellij.java.impl.lang.java;
 
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.navigation.AnonymousElementProvider;
 import consulo.language.psi.*;
 
@@ -25,6 +26,7 @@ import java.util.List;
 /**
  * @author Konstantin Bulenkov
  */
+@ExtensionImpl
 public class JavaAnonymousClassesProvider implements AnonymousElementProvider {
   @Override
   public PsiElement[] getAnonymousElements(PsiElement parent) {

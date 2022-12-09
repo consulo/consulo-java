@@ -19,6 +19,7 @@ import com.intellij.java.language.impl.psi.impl.PsiSuperMethodImplUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.search.PsiShortNamesCache;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.progress.ProgressManager;
 import consulo.application.util.function.Processor;
 import consulo.content.scope.SearchScope;
@@ -39,6 +40,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+@ExtensionImpl
 public class DefaultSymbolNavigationContributor implements GotoSymbolContributor {
   private static final Logger LOGGER = Logger.getInstance(DefaultSymbolNavigationContributor.class);
 

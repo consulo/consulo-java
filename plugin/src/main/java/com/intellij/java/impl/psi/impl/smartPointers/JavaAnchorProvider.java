@@ -17,6 +17,7 @@ package com.intellij.java.impl.psi.impl.smartPointers;
 
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiNameIdentifierOwner;
 import consulo.language.psi.SmartPointerAnchorProvider;
@@ -27,6 +28,7 @@ import javax.annotation.Nullable;
 /**
  * @author Dennis.Ushakov
  */
+@ExtensionImpl
 public class JavaAnchorProvider implements SmartPointerAnchorProvider {
   @Override
   public PsiElement getAnchor(@Nonnull PsiElement element) {

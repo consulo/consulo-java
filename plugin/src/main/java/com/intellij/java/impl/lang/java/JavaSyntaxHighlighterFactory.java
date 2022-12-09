@@ -17,6 +17,7 @@ package com.intellij.java.impl.lang.java;
 
 import com.intellij.java.impl.ide.highlighter.JavaFileHighlighter;
 import com.intellij.java.language.JavaLanguage;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.Language;
 import consulo.language.editor.highlight.LanguageVersionableSyntaxHighlighterFactory;
 import consulo.language.editor.highlight.SyntaxHighlighter;
@@ -24,6 +25,7 @@ import consulo.language.version.LanguageVersion;
 
 import javax.annotation.Nonnull;
 
+@ExtensionImpl
 public class JavaSyntaxHighlighterFactory extends LanguageVersionableSyntaxHighlighterFactory {
   @Nonnull
   @Override

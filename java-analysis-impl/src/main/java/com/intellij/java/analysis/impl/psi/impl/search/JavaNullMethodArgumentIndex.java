@@ -21,6 +21,7 @@ import com.intellij.java.language.impl.psi.impl.source.JavaLightTreeUtil;
 import com.intellij.java.language.impl.psi.impl.source.tree.ElementType;
 import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.java.language.psi.PsiKeyword;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.ApplicationManager;
 import consulo.application.util.StringSearcher;
 import consulo.index.io.DataIndexer;
@@ -46,6 +47,7 @@ import java.util.*;
 
 import static com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType.*;
 
+@ExtensionImpl
 public class JavaNullMethodArgumentIndex extends ScalarIndexExtension<JavaNullMethodArgumentIndex.MethodCallData> {
   private static final Logger LOG = Logger.getInstance(JavaNullMethodArgumentIndex.class);
 

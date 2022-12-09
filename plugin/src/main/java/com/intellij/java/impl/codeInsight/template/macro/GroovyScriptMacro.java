@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.codeInsight.template.macro;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.completion.lookup.LookupElement;
 import consulo.language.editor.completion.lookup.LookupElementBuilder;
@@ -31,6 +32,7 @@ import java.util.Set;
 /**
  * @author Maxim.Mossienko
  */
+@ExtensionImpl
 public class GroovyScriptMacro extends Macro {
   @Override
   public String getName() {

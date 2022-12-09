@@ -18,15 +18,16 @@ package com.intellij.java.language.psi.search;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiMethod;
-import consulo.component.extension.ExtensionPointName;
-import consulo.language.psi.PsiFile;
-import consulo.util.collection.ArrayUtil;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ServiceAPI;
 import consulo.application.util.function.Processor;
-import consulo.util.collection.ContainerUtil;
-import consulo.language.psi.stub.IdFilter;
 import consulo.ide.ServiceManager;
+import consulo.language.psi.PsiFile;
 import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.stub.IdFilter;
 import consulo.project.Project;
+import consulo.util.collection.ArrayUtil;
+import consulo.util.collection.ContainerUtil;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
@@ -37,6 +38,7 @@ import java.util.HashSet;
  * Allows to retrieve files and Java classes, methods and fields in a project by
  * non-qualified names.
  */
+@ServiceAPI(ComponentScope.PROJECT)
 public abstract class PsiShortNamesCache {
   /**
    * Return the composite short names cache, uniting all short name cache instances registered via extensions.
@@ -48,8 +50,6 @@ public abstract class PsiShortNamesCache {
   public static PsiShortNamesCache getInstance(Project project) {
     return ServiceManager.getService(project, PsiShortNamesCache.class);
   }
-
-  public static final ExtensionPointName<PsiShortNamesCache> EP_NAME = ExtensionPointName.create("consulo.java.java.shortNamesCache");
 
   /**
    * Returns the list of files with the specified name.

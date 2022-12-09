@@ -26,6 +26,7 @@ import com.intellij.java.language.impl.psi.impl.light.LightJavaModule;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiJavaModule;
 import com.intellij.java.language.psi.PsiNameHelper;
+import consulo.annotation.component.ServiceImpl;
 import consulo.disposer.Disposable;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiInvalidElementAccessException;
@@ -61,6 +62,7 @@ import java.util.stream.Stream;
  * @author dmitry lomov
  */
 @Singleton
+@ServiceImpl
 public class JavaFileManagerImpl implements JavaFileManager, Disposable {
   private static final Logger LOG = Logger.getInstance(JavaFileManagerImpl.class);
 

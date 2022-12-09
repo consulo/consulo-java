@@ -17,6 +17,7 @@ package com.intellij.java.impl.ide.util.gotoByName;
 
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.search.PsiShortNamesCache;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.util.function.CommonProcessors;
 import consulo.application.util.function.Processor;
 import consulo.content.scope.SearchScope;
@@ -35,6 +36,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 
+@ExtensionImpl
 public class DefaultClassNavigationContributor implements GotoClassOrTypeContributor {
   @Override
   @Nonnull

@@ -19,6 +19,7 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
 import com.intellij.java.language.psi.util.PropertyUtil;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.util.lang.StringUtil;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiNamedElement;
@@ -33,6 +34,7 @@ import consulo.util.collection.ContainerUtil;
 import javax.annotation.Nullable;
 import java.util.*;
 
+@ExtensionImpl(id = "java")
 public class JavaNameSuggestionProvider implements NameSuggestionProvider {
   @Nullable
   public SuggestedNameInfo getSuggestedNames(final PsiElement element, final PsiElement nameSuggestionContext, Set<String> result) {

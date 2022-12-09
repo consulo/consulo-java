@@ -19,6 +19,7 @@ import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.impl.psi.impl.source.PsiImmediateClassType;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.annotation.component.ServiceImpl;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiManager;
 import consulo.language.psi.SmartPointerManager;
@@ -37,6 +38,7 @@ import java.util.stream.Stream;
  * @author max
  */
 @Singleton
+@ServiceImpl
 public class SmartTypePointerManagerImpl extends SmartTypePointerManager {
   private static final SmartTypePointer NULL_POINTER = new SmartTypePointer() {
     @Override

@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.codeInsight.navigation.actions;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.action.TypeDeclarationProvider;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
@@ -30,6 +31,7 @@ import javax.annotation.Nullable;
 /**
  * @author yole
  */
+@ExtensionImpl
 public class JavaTypeDeclarationProvider extends TypeDeclarationProvider {
   @RequiredReadAction
   @Nullable

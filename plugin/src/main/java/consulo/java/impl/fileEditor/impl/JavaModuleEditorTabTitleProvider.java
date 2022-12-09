@@ -19,6 +19,7 @@ package consulo.java.impl.fileEditor.impl;
 import com.intellij.java.language.psi.PsiJavaFile;
 import com.intellij.java.language.psi.PsiJavaModule;
 import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.fileEditor.EditorTabTitleProvider;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiManager;
@@ -31,6 +32,7 @@ import javax.annotation.Nullable;
  * @author VISTALL
  * @since 2018-07-15
  */
+@ExtensionImpl
 public class JavaModuleEditorTabTitleProvider implements EditorTabTitleProvider {
   @Nullable
   @Override

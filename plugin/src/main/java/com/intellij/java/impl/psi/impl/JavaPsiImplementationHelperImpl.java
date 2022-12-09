@@ -25,6 +25,7 @@ import com.intellij.java.language.impl.psi.impl.compiled.ClsClassImpl;
 import com.intellij.java.language.impl.psi.impl.compiled.ClsElementImpl;
 import com.intellij.java.language.psi.PsiElementFactory;
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ServiceImpl;
 import consulo.component.ProcessCanceledException;
 import consulo.content.base.BinariesOrderRootType;
 import consulo.content.base.SourcesOrderRootType;
@@ -66,6 +67,7 @@ import java.util.Set;
  * @author yole
  */
 @Singleton
+@ServiceImpl
 public class JavaPsiImplementationHelperImpl extends JavaPsiImplementationHelper {
   private static final Logger LOG = Logger.getInstance(JavaPsiImplementationHelperImpl.class);
 
@@ -80,7 +82,7 @@ public class JavaPsiImplementationHelperImpl extends JavaPsiImplementationHelper
   public PsiClass getOriginalClass(PsiClass psiClass) {
     PsiCompiledElement cls = psiClass.getUserData(ClsElementImpl.COMPILED_ELEMENT);
     if (cls != null && cls.isValid()) {
-      return (PsiClass) cls;
+      return (PsiClass)cls;
     }
 
     if (DumbService.isDumb(myProject)) {
@@ -127,7 +129,7 @@ public class JavaPsiImplementationHelperImpl extends JavaPsiImplementationHelper
       return clsFile;
     }
 
-    String sourceFileName = ((ClsClassImpl) classes[0]).getSourceFileName();
+    String sourceFileName = ((ClsClassImpl)classes[0]).getSourceFileName();
     String packageName = clsFile.getPackageName();
     String relativePath = packageName.isEmpty() ? sourceFileName : packageName.replace('.', '/') + '/' + sourceFileName;
 
@@ -192,7 +194,7 @@ public class JavaPsiImplementationHelperImpl extends JavaPsiImplementationHelper
       if (JavaClassFileType.INSTANCE.equals(child.getFileType())) {
         final PsiFile psiFile = PsiManager.getInstance(myProject).findFile(child);
         if (psiFile instanceof PsiJavaFile) {
-          return (PsiJavaFile) psiFile;
+          return (PsiJavaFile)psiFile;
         }
       }
     }
@@ -259,7 +261,8 @@ public class JavaPsiImplementationHelperImpl extends JavaPsiImplementationHelper
 
   @Override
   public void setupCatchBlock(String exceptionName, PsiElement context, PsiCatchSection catchSection) {
-    final FileTemplate catchBodyTemplate = FileTemplateManager.getInstance(catchSection.getProject()).getCodeTemplate(JavaTemplateUtil.TEMPLATE_CATCH_BODY);
+    final FileTemplate catchBodyTemplate =
+      FileTemplateManager.getInstance(catchSection.getProject()).getCodeTemplate(JavaTemplateUtil.TEMPLATE_CATCH_BODY);
     LOG.assertTrue(catchBodyTemplate != null);
 
     final Properties props = new Properties();
@@ -273,10 +276,13 @@ public class JavaPsiImplementationHelperImpl extends JavaPsiImplementationHelper
 
     final PsiCodeBlock codeBlockFromText;
     try {
-      codeBlockFromText = PsiElementFactory.getInstance(myProject).createCodeBlockFromText("{\n" + catchBodyTemplate.getText(props) + "\n}", null);
-    } catch (ProcessCanceledException ce) {
+      codeBlockFromText =
+        PsiElementFactory.getInstance(myProject).createCodeBlockFromText("{\n" + catchBodyTemplate.getText(props) + "\n}", null);
+    }
+    catch (ProcessCanceledException ce) {
       throw ce;
-    } catch (Throwable e) {
+    }
+    catch (Throwable e) {
       throw new IncorrectOperationException("Incorrect file template", e);
     }
     catchSection.getCatchBlock().replace(codeBlockFromText);

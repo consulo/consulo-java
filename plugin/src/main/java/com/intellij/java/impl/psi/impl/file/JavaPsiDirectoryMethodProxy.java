@@ -18,6 +18,7 @@ package com.intellij.java.impl.psi.impl.file;
 import com.intellij.java.language.impl.JavaClassFileType;
 import com.intellij.java.language.psi.JavaDirectoryService;
 import com.intellij.java.language.psi.PsiClass;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.file.FileTypeManager;
 import consulo.language.psi.PsiDirectory;
 import consulo.language.psi.PsiDirectoryMethodProxy;
@@ -28,8 +29,9 @@ import consulo.virtualFileSystem.fileType.FileType;
 
 import javax.annotation.Nonnull;
 
+@ExtensionImpl
 public class JavaPsiDirectoryMethodProxy implements PsiDirectoryMethodProxy {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.file.PsiJavaDirectoryImpl");
+  private static final Logger LOG = Logger.getInstance(JavaPsiDirectoryMethodProxy.class);
 
 
   @Override

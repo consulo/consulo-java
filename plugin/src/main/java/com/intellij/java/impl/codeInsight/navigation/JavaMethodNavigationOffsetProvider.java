@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.codeInsight.navigation;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.moveUpDown.MethodNavigationOffsetProvider;
 import consulo.language.editor.moveUpDown.MethodUpDownUtil;
 import com.intellij.java.language.psi.*;
@@ -27,6 +28,7 @@ import java.util.ArrayList;
 /**
  * @author yole
  */
+@ExtensionImpl
 public class JavaMethodNavigationOffsetProvider implements MethodNavigationOffsetProvider {
   @Override
   @Nullable
