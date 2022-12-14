@@ -16,12 +16,16 @@
 package com.intellij.java.impl.codeInsight.completion;
 
 import com.intellij.java.impl.codeInsight.ExpectedTypeInfo;
+import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.PsiKeyword;
 import com.intellij.java.language.psi.PsiPrimitiveType;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.Language;
 import consulo.language.editor.completion.*;
 import consulo.language.editor.completion.lookup.LookupElement;
 import consulo.util.lang.StringUtil;
 
+import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 
@@ -32,7 +36,8 @@ import static consulo.language.pattern.StandardPatterns.not;
 /**
  * @author peter
  */
-public abstract class NullSmartCompletionContributor extends CompletionContributor {
+@ExtensionImpl(id = "smartNull", order = "last, before javaSmart")
+public class NullSmartCompletionContributor extends CompletionContributor {
   public NullSmartCompletionContributor() {
     extend(CompletionType.SMART, and(JavaSmartCompletionContributor.INSIDE_EXPRESSION, not(psiElement().afterLeaf("."))), new ExpectedTypeBasedCompletionProvider() {
       @Override
@@ -59,4 +64,9 @@ public abstract class NullSmartCompletionContributor extends CompletionContribut
     });
   }
 
+  @Nonnull
+  @Override
+  public Language getLanguage() {
+    return JavaLanguage.INSTANCE;
+  }
 }

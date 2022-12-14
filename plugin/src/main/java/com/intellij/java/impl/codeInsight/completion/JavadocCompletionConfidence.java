@@ -15,6 +15,9 @@
  */
 package com.intellij.java.impl.codeInsight.completion;
 
+import com.intellij.java.language.JavaLanguage;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.Language;
 import consulo.language.editor.completion.CompletionConfidence;
 import com.intellij.java.language.psi.JavaDocTokenType;
 import com.intellij.java.language.psi.PsiJavaReference;
@@ -34,7 +37,8 @@ import static com.intellij.java.language.patterns.PsiJavaPatterns.psiElement;
 /**
  * @author peter
  */
-public abstract class JavadocCompletionConfidence extends CompletionConfidence {
+@ExtensionImpl(id = "javadoc", order = "before javaComments")
+public class JavadocCompletionConfidence extends CompletionConfidence {
 
   @Nonnull
   @Override
@@ -66,4 +70,9 @@ public abstract class JavadocCompletionConfidence extends CompletionConfidence {
     return reference instanceof PsiJavaReference ? (PsiJavaReference) reference : null;
   }
 
+  @Nonnull
+  @Override
+  public Language getLanguage() {
+    return JavaLanguage.INSTANCE;
+  }
 }

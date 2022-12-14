@@ -1,5 +1,6 @@
 package com.intellij.java.impl.codeInsight.completion;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.AllIcons;
 import consulo.language.editor.completion.lookup.Lookup;
 import consulo.language.editor.completion.lookup.LookupActionProvider;
@@ -12,6 +13,7 @@ import java.util.function.Consumer;
 /**
  * @author peter
  */
+@ExtensionImpl(id = "importStatic")
 public class ImportStaticLookupActionProvider implements LookupActionProvider {
   @Override
   public void fillActions(final LookupElement element, Lookup lookup, Consumer<LookupElementAction> consumer) {

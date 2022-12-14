@@ -2,6 +2,7 @@ package com.intellij.java.impl.codeInsight.javadoc;
 
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.impl.codeInsight.javadoc.JavaDocCodeStyle;
+import consulo.annotation.component.ServiceImpl;
 import consulo.language.codeStyle.CodeStyleSettingsManager;
 import consulo.language.codeStyle.CommonCodeStyleSettings;
 import consulo.project.Project;
@@ -9,6 +10,7 @@ import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
 @Singleton
+@ServiceImpl
 public class JavaDocCodeStyleImpl extends JavaDocCodeStyle {
   private final Project myProject;
 

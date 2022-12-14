@@ -19,93 +19,82 @@ import com.intellij.java.debugger.DebuggerContext;
 import com.intellij.java.debugger.engine.evaluation.EvaluateException;
 import com.intellij.java.debugger.engine.evaluation.EvaluationContext;
 import com.intellij.java.debugger.impl.ui.tree.DebuggerTreeNode;
-import com.intellij.java.debugger.ui.tree.NodeDescriptor;
 import com.intellij.java.debugger.impl.ui.tree.ValueDescriptor;
-import consulo.logging.Logger;
+import com.intellij.java.debugger.ui.tree.NodeDescriptor;
 import com.intellij.java.language.psi.PsiExpression;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.internal.com.sun.jdi.*;
+import consulo.logging.Logger;
 
 /**
  * @author egor
  */
-public class BinaryRenderer extends NodeRendererImpl
-{
-	private static final Logger LOG = Logger.getInstance(BinaryRenderer.class);
+@ExtensionImpl
+public class BinaryRenderer extends NodeRendererImpl {
+  private static final Logger LOG = Logger.getInstance(BinaryRenderer.class);
 
-	@Override
-	public String calcLabel(ValueDescriptor valueDescriptor, EvaluationContext evaluationContext, DescriptorLabelListener listener) throws EvaluateException
-	{
-		Value value = valueDescriptor.getValue();
-		StringBuilder buf = new StringBuilder();
+  @Override
+  public String calcLabel(ValueDescriptor valueDescriptor,
+                          EvaluationContext evaluationContext,
+                          DescriptorLabelListener listener) throws EvaluateException {
+    Value value = valueDescriptor.getValue();
+    StringBuilder buf = new StringBuilder();
 
-		if(value == null)
-		{
-			return "null";
-		}
-		else
-		{
-			String prefix = "0b";
-			buf.append(prefix);
-			if(value instanceof LongValue)
-			{
-				buf.append(Long.toBinaryString(((LongValue) value).longValue()));
-			}
-			else if(value instanceof PrimitiveValue)
-			{
-				buf.append(Integer.toBinaryString(((PrimitiveValue) value).intValue()));
-			}
-			else
-			{
-				LOG.assertTrue(false);
-			}
-			// group by 8
-			for(int i = prefix.length() + 8; i < buf.length(); i += 9)
-			{
-				buf.insert(i, '_');
-			}
-			return buf.toString();
-		}
-	}
+    if (value == null) {
+      return "null";
+    }
+    else {
+      String prefix = "0b";
+      buf.append(prefix);
+      if (value instanceof LongValue) {
+        buf.append(Long.toBinaryString(((LongValue)value).longValue()));
+      }
+      else if (value instanceof PrimitiveValue) {
+        buf.append(Integer.toBinaryString(((PrimitiveValue)value).intValue()));
+      }
+      else {
+        LOG.assertTrue(false);
+      }
+      // group by 8
+      for (int i = prefix.length() + 8; i < buf.length(); i += 9) {
+        buf.insert(i, '_');
+      }
+      return buf.toString();
+    }
+  }
 
-	@Override
-	public void buildChildren(Value value, ChildrenBuilder builder, EvaluationContext evaluationContext)
-	{
-	}
+  @Override
+  public void buildChildren(Value value, ChildrenBuilder builder, EvaluationContext evaluationContext) {
+  }
 
-	@Override
-	public PsiExpression getChildValueExpression(DebuggerTreeNode node, DebuggerContext context) throws EvaluateException
-	{
-		return null;
-	}
+  @Override
+  public PsiExpression getChildValueExpression(DebuggerTreeNode node, DebuggerContext context) throws EvaluateException {
+    return null;
+  }
 
-	@Override
-	public boolean isExpandable(Value value, EvaluationContext evaluationContext, NodeDescriptor parentDescriptor)
-	{
-		return false;
-	}
+  @Override
+  public boolean isExpandable(Value value, EvaluationContext evaluationContext, NodeDescriptor parentDescriptor) {
+    return false;
+  }
 
-	@Override
-	public String getName()
-	{
-		return "Binary";
-	}
+  @Override
+  public String getName() {
+    return "Binary";
+  }
 
-	@Override
-	public String getUniqueId()
-	{
-		return "BinaryRenderer";
-	}
+  @Override
+  public String getUniqueId() {
+    return "BinaryRenderer";
+  }
 
-	@Override
-	public boolean isApplicable(Type t)
-	{
-		if(t == null)
-		{
-			return false;
-		}
-		return t instanceof ByteType ||
-				t instanceof ShortType ||
-				t instanceof IntegerType ||
-				t instanceof LongType;
-	}
+  @Override
+  public boolean isApplicable(Type t) {
+    if (t == null) {
+      return false;
+    }
+    return t instanceof ByteType ||
+      t instanceof ShortType ||
+      t instanceof IntegerType ||
+      t instanceof LongType;
+  }
 }

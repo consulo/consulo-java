@@ -16,6 +16,7 @@
 package com.intellij.java.impl.codeInsight.editorActions.moveUpDown;
 
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.LogicalPosition;
 import consulo.document.Document;
@@ -38,8 +39,9 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-class DeclarationMover extends LineMover {
-  private static final Logger LOG = Logger.getInstance("#com.intellij.openapi.editor.actions.moveUpDown.DeclarationMover");
+@ExtensionImpl(id = "javaDeclaration", order = "before xml")
+public class DeclarationMover extends LineMover {
+  private static final Logger LOG = Logger.getInstance(DeclarationMover.class);
   private PsiEnumConstant myEnumToInsertSemicolonAfter;
 
   @Override

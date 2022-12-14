@@ -29,6 +29,7 @@ import consulo.ide.impl.ui.impl.PopupChooserBuilder;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.intention.BaseIntentionAction;
+import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.editor.template.Template;
 import consulo.language.editor.template.TemplateManager;
 import consulo.language.editor.template.event.TemplateEditingListener;
@@ -57,7 +58,7 @@ import java.util.*;
 /**
  * @author Mike
  */
-public abstract class CreateFromUsageBaseFix extends BaseIntentionAction {
+public abstract class CreateFromUsageBaseFix extends BaseIntentionAction implements SyntheticIntentionAction {
   private static final Logger LOG = Logger.getInstance(CreateFromUsageBaseFix.class);
 
   @Override
@@ -103,7 +104,8 @@ public abstract class CreateFromUsageBaseFix extends BaseIntentionAction {
 
     if (targetClasses.size() == 1) {
       doInvoke(project, targetClasses.get(0));
-    } else {
+    }
+    else {
       chooseTargetClass(targetClasses, editor);
     }
   }
@@ -142,7 +144,7 @@ public abstract class CreateFromUsageBaseFix extends BaseIntentionAction {
         if (index < 0) {
           return;
         }
-        final PsiClass aClass = (PsiClass) list.getSelectedValue();
+        final PsiClass aClass = (PsiClass)list.getSelectedValue();
         CommandProcessor.getInstance().executeCommand(project, new Runnable() {
           @Override
           public void run() {
@@ -153,9 +155,9 @@ public abstract class CreateFromUsageBaseFix extends BaseIntentionAction {
     };
 
     JBPopup popup = builder.
-        setTitle(JavaQuickFixBundle.message("target.class.chooser.title")).
-        setItemChoosenCallback(runnable).
-        createPopup();
+                             setTitle(JavaQuickFixBundle.message("target.class.chooser.title")).
+                             setItemChoosenCallback(runnable).
+                             createPopup();
 
     EditorPopupHelper.getInstance().showPopupInBestPositionFor(editor, popup);
   }
@@ -190,7 +192,8 @@ public abstract class CreateFromUsageBaseFix extends BaseIntentionAction {
   protected String getVisibility(PsiClass parentClass, PsiClass targetClass) {
     if (parentClass != null && (parentClass.equals(targetClass) || PsiTreeUtil.isAncestor(targetClass, parentClass, true))) {
       return PsiModifier.PRIVATE;
-    } else {
+    }
+    else {
       return PsiModifier.PUBLIC;
     }
   }
@@ -199,31 +202,33 @@ public abstract class CreateFromUsageBaseFix extends BaseIntentionAction {
 
     PsiExpression qualifierExpression = ref.getQualifierExpression();
     while (qualifierExpression instanceof PsiParenthesizedExpression) {
-      qualifierExpression = ((PsiParenthesizedExpression) qualifierExpression).getExpression();
+      qualifierExpression = ((PsiParenthesizedExpression)qualifierExpression).getExpression();
     }
 
     if (qualifierExpression instanceof PsiReferenceExpression) {
-      PsiReferenceExpression referenceExpression = (PsiReferenceExpression) qualifierExpression;
+      PsiReferenceExpression referenceExpression = (PsiReferenceExpression)qualifierExpression;
 
       PsiElement resolvedElement = referenceExpression.resolve();
 
       return resolvedElement instanceof PsiClass;
-    } else if (qualifierExpression != null) {
+    }
+    else if (qualifierExpression != null) {
       return false;
-    } else {
+    }
+    else {
       assert PsiTreeUtil.isAncestor(targetClass, ref, true);
       PsiModifierListOwner owner = PsiTreeUtil.getParentOfType(ref, PsiModifierListOwner.class);
-      if (owner instanceof PsiMethod && ((PsiMethod) owner).isConstructor()) {
+      if (owner instanceof PsiMethod && ((PsiMethod)owner).isConstructor()) {
         //usages inside delegating constructor call
         PsiExpression run = ref;
         while (true) {
           if (!(run.getParent() instanceof PsiExpression)) {
             break;
           }
-          run = (PsiExpression) run.getParent();
+          run = (PsiExpression)run.getParent();
         }
         if (run.getParent() instanceof PsiExpressionList && run.getParent().getParent() instanceof PsiMethodCallExpression) {
-          @NonNls String calleeText = ((PsiMethodCallExpression) run.getParent().getParent()).getMethodExpression().getText();
+          @NonNls String calleeText = ((PsiMethodCallExpression)run.getParent().getParent()).getMethodExpression().getText();
           if (calleeText.equals("this") || calleeText.equals("super")) {
             return true;
           }
@@ -244,14 +249,16 @@ public abstract class CreateFromUsageBaseFix extends BaseIntentionAction {
   @Nullable
   private static PsiExpression getQualifier(PsiElement element) {
     if (element instanceof PsiNewExpression) {
-      PsiJavaCodeReferenceElement ref = ((PsiNewExpression) element).getClassReference();
+      PsiJavaCodeReferenceElement ref = ((PsiNewExpression)element).getClassReference();
       if (ref instanceof PsiReferenceExpression) {
-        return ((PsiReferenceExpression) ref).getQualifierExpression();
+        return ((PsiReferenceExpression)ref).getQualifierExpression();
       }
-    } else if (element instanceof PsiReferenceExpression) {
-      return ((PsiReferenceExpression) element).getQualifierExpression();
-    } else if (element instanceof PsiMethodCallExpression) {
-      return ((PsiMethodCallExpression) element).getMethodExpression().getQualifierExpression();
+    }
+    else if (element instanceof PsiReferenceExpression) {
+      return ((PsiReferenceExpression)element).getQualifierExpression();
+    }
+    else if (element instanceof PsiMethodCallExpression) {
+      return ((PsiMethodCallExpression)element).getMethodExpression().getQualifierExpression();
     }
 
     return null;
@@ -259,7 +266,7 @@ public abstract class CreateFromUsageBaseFix extends BaseIntentionAction {
 
   protected static PsiSubstitutor getTargetSubstitutor(PsiElement element) {
     if (element instanceof PsiNewExpression) {
-      JavaResolveResult result = ((PsiNewExpression) element).getClassOrAnonymousClassReference().advancedResolve(false);
+      JavaResolveResult result = ((PsiNewExpression)element).getClassOrAnonymousClassReference().advancedResolve(false);
       PsiSubstitutor substitutor = result.getSubstitutor();
       return substitutor == null ? PsiSubstitutor.EMPTY : substitutor;
     }
@@ -268,7 +275,7 @@ public abstract class CreateFromUsageBaseFix extends BaseIntentionAction {
     if (qualifier != null) {
       PsiType type = qualifier.getType();
       if (type instanceof PsiClassType) {
-        return ((PsiClassType) type).resolveGenerics().getSubstitutor();
+        return ((PsiClassType)type).resolveGenerics().getSubstitutor();
       }
     }
 
@@ -291,27 +298,30 @@ public abstract class CreateFromUsageBaseFix extends BaseIntentionAction {
         PsiJavaCodeReferenceElement nameRef = annotation.getNameReferenceElement();
         if (nameRef == null) {
           return Collections.emptyList();
-        } else {
+        }
+        else {
           final PsiElement resolve = nameRef.resolve();
           if (resolve instanceof PsiClass) {
-            return Collections.singletonList((PsiClass) resolve);
-          } else {
+            return Collections.singletonList((PsiClass)resolve);
+          }
+          else {
             return Collections.emptyList();
           }
         }
       }
     }
     if (element instanceof PsiNewExpression) {
-      final PsiNewExpression newExpression = (PsiNewExpression) element;
+      final PsiNewExpression newExpression = (PsiNewExpression)element;
       PsiJavaCodeReferenceElement ref = newExpression.getClassOrAnonymousClassReference();
       if (ref != null) {
         PsiElement refElement = ref.resolve();
         if (refElement instanceof PsiClass) {
-          psiClass = (PsiClass) refElement;
+          psiClass = (PsiClass)refElement;
         }
       }
-    } else if (element instanceof PsiReferenceExpression) {
-      qualifier = ((PsiReferenceExpression) element).getQualifierExpression();
+    }
+    else if (element instanceof PsiReferenceExpression) {
+      qualifier = ((PsiReferenceExpression)element).getQualifierExpression();
       if (qualifier == null) {
         final PsiElement parent = element.getParent();
         if (parent instanceof PsiSwitchLabelStatement) {
@@ -324,8 +334,9 @@ public abstract class CreateFromUsageBaseFix extends BaseIntentionAction {
           }
         }
       }
-    } else if (element instanceof PsiMethodCallExpression) {
-      final PsiReferenceExpression methodExpression = ((PsiMethodCallExpression) element).getMethodExpression();
+    }
+    else if (element instanceof PsiMethodCallExpression) {
+      final PsiReferenceExpression methodExpression = ((PsiMethodCallExpression)element).getMethodExpression();
       qualifier = methodExpression.getQualifierExpression();
       @NonNls final String referenceName = methodExpression.getReferenceName();
       if (referenceName == null) {
@@ -336,18 +347,19 @@ public abstract class CreateFromUsageBaseFix extends BaseIntentionAction {
     if (qualifier != null) {
       PsiType type = qualifier.getType();
       if (type instanceof PsiClassType) {
-        psiClass = ((PsiClassType) type).resolve();
+        psiClass = ((PsiClassType)type).resolve();
       }
 
       if (qualifier instanceof PsiJavaCodeReferenceElement) {
-        final PsiElement resolved = ((PsiJavaCodeReferenceElement) qualifier).resolve();
+        final PsiElement resolved = ((PsiJavaCodeReferenceElement)qualifier).resolve();
         if (resolved instanceof PsiClass) {
           if (psiClass == null) {
-            psiClass = (PsiClass) resolved;
+            psiClass = (PsiClass)resolved;
           }
         }
       }
-    } else if (psiClass == null) {
+    }
+    else if (psiClass == null) {
       psiClass = PsiTreeUtil.getParentOfType(element, PsiClass.class);
       allowOuterClasses = true;
     }
@@ -364,7 +376,8 @@ public abstract class CreateFromUsageBaseFix extends BaseIntentionAction {
         }
       }
       return filtered;
-    } else {
+    }
+    else {
       if (psiClass == null || !psiClass.getManager().isInProject(psiClass)) {
         return Collections.emptyList();
       }
@@ -414,11 +427,18 @@ public abstract class CreateFromUsageBaseFix extends BaseIntentionAction {
     startTemplate(editor, template, project, null);
   }
 
-  protected static void startTemplate(@Nonnull final Editor editor, final Template template, @Nonnull final Project project, final TemplateEditingListener listener) {
+  protected static void startTemplate(@Nonnull final Editor editor,
+                                      final Template template,
+                                      @Nonnull final Project project,
+                                      final TemplateEditingListener listener) {
     startTemplate(editor, template, project, listener, null);
   }
 
-  public static void startTemplate(@Nonnull final Editor editor, final Template template, @Nonnull final Project project, final TemplateEditingListener listener, final String commandName) {
+  public static void startTemplate(@Nonnull final Editor editor,
+                                   final Template template,
+                                   @Nonnull final Project project,
+                                   final TemplateEditingListener listener,
+                                   final String commandName) {
     Runnable runnable = new Runnable() {
       @Override
       public void run() {
@@ -435,7 +455,8 @@ public abstract class CreateFromUsageBaseFix extends BaseIntentionAction {
     };
     if (ApplicationManager.getApplication().isUnitTestMode()) {
       runnable.run();
-    } else {
+    }
+    else {
       ApplicationManager.getApplication().invokeLater(runnable);
     }
   }
@@ -463,7 +484,8 @@ public abstract class CreateFromUsageBaseFix extends BaseIntentionAction {
       final PsiClass psiClass = PsiUtil.resolveClassInType(type);
       if (psiClass instanceof PsiTypeParameter) {
         targetClass.getTypeParameterList().add(factory.createTypeParameterFromText(psiClass.getName(), null));
-      } else {
+      }
+      else {
         while (true) {
           final String paramName = idx > 0 ? "T" + idx : "T";
           if (!typeParamNames.contains(paramName)) {

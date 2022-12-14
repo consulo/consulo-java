@@ -15,6 +15,8 @@
  */
 package org.jetbrains.java.generate;
 
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ServiceAPI;
 import consulo.project.Project;
 import com.intellij.java.language.psi.PsiClass;
 
@@ -23,6 +25,7 @@ import com.intellij.java.language.psi.PsiClass;
  * <p/>
  * This handler is the entry point to execute the action from different situations.
  */
+@ServiceAPI(ComponentScope.APPLICATION)
 public interface GenerateToStringActionHandler {
 
   /**

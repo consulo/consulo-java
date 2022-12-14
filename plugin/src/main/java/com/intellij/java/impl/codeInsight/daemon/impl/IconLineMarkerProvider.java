@@ -16,12 +16,15 @@
 package com.intellij.java.impl.codeInsight.daemon.impl;
 
 import com.intellij.java.impl.psi.util.ProjectIconsAccessor;
+import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.AllIcons;
 import consulo.codeEditor.markup.GutterIconRenderer;
 import consulo.fileEditor.FileEditorManager;
+import consulo.language.Language;
 import consulo.language.editor.Pass;
 import consulo.language.editor.gutter.GutterIconNavigationHandler;
 import consulo.language.editor.gutter.LineMarkerInfo;
@@ -45,7 +48,8 @@ import javax.annotation.Nullable;
  *
  * @author Konstantin Bulenkov
  */
-public abstract class IconLineMarkerProvider extends LineMarkerProviderDescriptor {
+@ExtensionImpl
+public class IconLineMarkerProvider extends LineMarkerProviderDescriptor {
   @RequiredReadAction
   @Override
   public LineMarkerInfo getLineMarkerInfo(@Nonnull PsiElement element) {
@@ -139,5 +143,11 @@ public abstract class IconLineMarkerProvider extends LineMarkerProviderDescripto
   @Override
   public String getName() {
     return "Icon preview";
+  }
+
+  @Nonnull
+  @Override
+  public Language getLanguage() {
+    return JavaLanguage.INSTANCE;
   }
 }

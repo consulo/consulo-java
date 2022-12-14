@@ -17,12 +17,14 @@ package com.intellij.java.indexing.impl.search;
 
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.util.PropertyUtil;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.util.function.Processor;
 import consulo.content.scope.SearchScope;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.search.ReferencesSearch;
+import consulo.language.psi.search.ReferencesSearchQueryExecutor;
 import consulo.language.psi.search.SearchRequestCollector;
 import consulo.language.psi.search.UsageSearchContext;
 import consulo.project.util.query.QueryExecutorBase;
@@ -33,7 +35,8 @@ import javax.annotation.Nonnull;
 /**
  * @author ven
  */
-public class SimpleAccessorReferenceSearcher extends QueryExecutorBase<PsiReference, ReferencesSearch.SearchParameters> {
+@ExtensionImpl
+public class SimpleAccessorReferenceSearcher extends QueryExecutorBase<PsiReference, ReferencesSearch.SearchParameters> implements ReferencesSearchQueryExecutor {
 
   public SimpleAccessorReferenceSearcher() {
     super(true);
@@ -44,7 +47,7 @@ public class SimpleAccessorReferenceSearcher extends QueryExecutorBase<PsiRefere
     PsiElement refElement = queryParameters.getElementToSearch();
     if (!(refElement instanceof PsiMethod)) return;
 
-    addPropertyAccessUsages((PsiMethod) refElement, queryParameters.getEffectiveSearchScope(), queryParameters.getOptimizer());
+    addPropertyAccessUsages((PsiMethod)refElement, queryParameters.getEffectiveSearchScope(), queryParameters.getOptimizer());
   }
 
   static void addPropertyAccessUsages(PsiMethod method, SearchScope scope, SearchRequestCollector collector) {

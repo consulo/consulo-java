@@ -21,6 +21,7 @@ import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.language.patterns.PsiJavaPatterns;
 import com.intellij.lang.properties.ResourceBundleReferenceProvider;
 import com.intellij.lang.properties.psi.impl.PropertyValueImpl;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.Language;
 import consulo.language.psi.*;
 import consulo.language.util.ProcessingContext;
@@ -33,6 +34,7 @@ import static com.intellij.java.language.patterns.PsiJavaPatterns.psiNameValuePa
 /**
  * @author peter
  */
+@ExtensionImpl
 public class PropertiesReferenceContributor extends PsiReferenceContributor {
 
   private static final JavaClassReferenceProvider CLASS_REFERENCE_PROVIDER = new JavaClassReferenceProvider() {

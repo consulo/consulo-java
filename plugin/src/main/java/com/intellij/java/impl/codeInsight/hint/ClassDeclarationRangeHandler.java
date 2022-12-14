@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.codeInsight.hint;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.hint.DeclarationRangeHandler;
 import com.intellij.java.language.psi.*;
 import consulo.document.util.TextRange;
@@ -22,7 +23,14 @@ import consulo.language.psi.PsiElement;
 
 import javax.annotation.Nonnull;
 
-public abstract class ClassDeclarationRangeHandler implements DeclarationRangeHandler {
+@ExtensionImpl
+public class ClassDeclarationRangeHandler implements DeclarationRangeHandler {
+  @Nonnull
+  @Override
+  public Class getElementClass() {
+    return PsiClass.class;
+  }
+
   @Override
   @Nonnull
   public TextRange getDeclarationRange(@Nonnull final PsiElement container) {

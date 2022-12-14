@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.codeInsight.template.macro;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.template.Expression;
 import consulo.language.editor.template.ExpressionContext;
@@ -28,6 +29,7 @@ import java.util.List;
 /**
  * @author Konstantin Bulenkov
  */
+@ExtensionImpl
 public class SuggestFirstVariableNameMacro extends VariableOfTypeMacro {
   @Override
   public String getName() {

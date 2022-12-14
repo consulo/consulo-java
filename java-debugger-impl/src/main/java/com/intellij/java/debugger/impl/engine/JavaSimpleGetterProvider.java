@@ -15,77 +15,63 @@
  */
 package com.intellij.java.debugger.impl.engine;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.java.debugger.engine.SimplePropertyGetterProvider;
-import consulo.util.lang.Comparing;
-import com.intellij.java.language.psi.PsiCodeBlock;
+import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
-import com.intellij.java.language.psi.PsiExpression;
-import com.intellij.java.language.psi.PsiField;
-import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.java.language.psi.PsiReferenceExpression;
-import com.intellij.java.language.psi.PsiReturnStatement;
-import com.intellij.java.language.psi.PsiStatement;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.util.lang.Comparing;
+
+import javax.annotation.Nonnull;
 
 /**
  * @author Nikolay.Tropin
  */
-public class JavaSimpleGetterProvider implements SimplePropertyGetterProvider
-{
-	@Override
-	public boolean isInsideSimpleGetter(@Nonnull PsiElement element)
-	{
-		PsiMethod method = PsiTreeUtil.getParentOfType(element, PsiMethod.class);
-		if(method == null)
-		{
-			return false;
-		}
+@ExtensionImpl
+public class JavaSimpleGetterProvider implements SimplePropertyGetterProvider {
+  @Override
+  public boolean isInsideSimpleGetter(@Nonnull PsiElement element) {
+    PsiMethod method = PsiTreeUtil.getParentOfType(element, PsiMethod.class);
+    if (method == null) {
+      return false;
+    }
 
-		final PsiCodeBlock body = method.getBody();
-		if(body == null)
-		{
-			return false;
-		}
+    final PsiCodeBlock body = method.getBody();
+    if (body == null) {
+      return false;
+    }
 
-		final PsiStatement[] statements = body.getStatements();
-		if(statements.length != 1)
-		{
-			return false;
-		}
+    final PsiStatement[] statements = body.getStatements();
+    if (statements.length != 1) {
+      return false;
+    }
 
-		final PsiStatement statement = statements[0];
-		if(!(statement instanceof PsiReturnStatement))
-		{
-			return false;
-		}
+    final PsiStatement statement = statements[0];
+    if (!(statement instanceof PsiReturnStatement)) {
+      return false;
+    }
 
-		final PsiExpression value = ((PsiReturnStatement) statement).getReturnValue();
-		if(!(value instanceof PsiReferenceExpression))
-		{
-			return false;
-		}
+    final PsiExpression value = ((PsiReturnStatement)statement).getReturnValue();
+    if (!(value instanceof PsiReferenceExpression)) {
+      return false;
+    }
 
-		final PsiReferenceExpression reference = (PsiReferenceExpression) value;
-		final PsiExpression qualifier = reference.getQualifierExpression();
-		//noinspection HardCodedStringLiteral
-		if(qualifier != null && !"this".equals(qualifier.getText()))
-		{
-			return false;
-		}
+    final PsiReferenceExpression reference = (PsiReferenceExpression)value;
+    final PsiExpression qualifier = reference.getQualifierExpression();
+    //noinspection HardCodedStringLiteral
+    if (qualifier != null && !"this".equals(qualifier.getText())) {
+      return false;
+    }
 
-		final PsiElement referent = reference.resolve();
-		if(referent == null)
-		{
-			return false;
-		}
+    final PsiElement referent = reference.resolve();
+    if (referent == null) {
+      return false;
+    }
 
-		if(!(referent instanceof PsiField))
-		{
-			return false;
-		}
+    if (!(referent instanceof PsiField)) {
+      return false;
+    }
 
-		return Comparing.equal(((PsiField) referent).getContainingClass(), method.getContainingClass());
-	}
+    return Comparing.equal(((PsiField)referent).getContainingClass(), method.getContainingClass());
+  }
 }

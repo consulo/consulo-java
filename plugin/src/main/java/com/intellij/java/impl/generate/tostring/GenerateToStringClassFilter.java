@@ -15,16 +15,18 @@
  */
 package com.intellij.java.impl.generate.tostring;
 
-import consulo.component.extension.ExtensionPointName;
 import com.intellij.java.language.psi.PsiClass;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ExtensionAPI;
+import consulo.component.extension.ExtensionPointName;
 
 /**
  * Nikolay.Tropin
  * 2014-12-01
  */
-public interface GenerateToStringClassFilter
-{
-	ExtensionPointName<GenerateToStringClassFilter> EP_NAME = ExtensionPointName.create("consulo.java.generation.toStringClassFilter");
+@ExtensionAPI(ComponentScope.APPLICATION)
+public interface GenerateToStringClassFilter {
+  ExtensionPointName<GenerateToStringClassFilter> EP_NAME = ExtensionPointName.create(GenerateToStringClassFilter.class);
 
-	boolean canGenerateToString(PsiClass psiClass);
+  boolean canGenerateToString(PsiClass psiClass);
 }

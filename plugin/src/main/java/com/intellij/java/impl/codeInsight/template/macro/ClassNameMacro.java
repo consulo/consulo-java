@@ -20,6 +20,7 @@ import com.intellij.java.language.psi.PsiAnonymousClass;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiJavaFile;
 import com.intellij.java.language.psi.PsiTypeParameter;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.template.Expression;
 import consulo.language.editor.template.ExpressionContext;
@@ -31,6 +32,7 @@ import consulo.language.psi.PsiElement;
 
 import javax.annotation.Nonnull;
 
+@ExtensionImpl
 public class ClassNameMacro extends Macro {
 
   @Override

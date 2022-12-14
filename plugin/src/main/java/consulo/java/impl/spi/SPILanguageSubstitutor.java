@@ -16,6 +16,8 @@
 package consulo.java.impl.spi;
 
 import com.intellij.java.language.JavaLanguage;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.application.Application;
 import consulo.language.Language;
 import com.intellij.java.language.spi.SPILanguage;
 import consulo.component.extension.ExtensionPointName;
@@ -35,10 +37,8 @@ import java.util.List;
  * @author VISTALL
  * @since 19:49/05.07.13
  */
+@ExtensionImpl
 public class SPILanguageSubstitutor extends LanguageSubstitutor {
-  private static final ExtensionPointName<Condition<VirtualFile>> VETO_EP_NAME =
-    ExtensionPointName.create("consulo.java.vetoSPICondition");
-
   @Nullable
   @Override
   public Language getLanguage(@Nonnull VirtualFile file, @Nonnull Project project) {
@@ -56,8 +56,8 @@ public class SPILanguageSubstitutor extends LanguageSubstitutor {
           return null;
         }
 
-        for (Condition<VirtualFile> condition : VETO_EP_NAME.getExtensionList()) {
-          if (condition.value(file)) {
+        for (VetoSPICondition condition : Application.get().getExtensionList(VetoSPICondition.class)) {
+          if (condition.isVetoed(file)) {
             return null;
           }
         }

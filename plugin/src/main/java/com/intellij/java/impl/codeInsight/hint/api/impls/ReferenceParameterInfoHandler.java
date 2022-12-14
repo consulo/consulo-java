@@ -17,6 +17,7 @@ package com.intellij.java.impl.codeInsight.hint.api.impls;
 
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.Language;
 import consulo.language.editor.completion.lookup.LookupElement;
 import consulo.language.editor.parameterInfo.*;
@@ -30,6 +31,7 @@ import java.util.Arrays;
 /**
  * @author Maxim.Mossienko
  */
+@ExtensionImpl
 public class ReferenceParameterInfoHandler implements ParameterInfoHandler<PsiReferenceParameterList, PsiTypeParameter> {
   @Override
   public Object[] getParametersForLookup(final LookupElement item, final ParameterInfoContext context) {

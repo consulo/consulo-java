@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.codeInsight.editorActions;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.action.JoinLinesHandlerDelegate;
 import com.intellij.java.language.psi.*;
 import consulo.document.Document;
@@ -27,6 +28,7 @@ import consulo.language.codeStyle.CommonCodeStyleSettings;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 
+@ExtensionImpl
 public class BlockJoinLinesHandler implements JoinLinesHandlerDelegate {
   private static final Logger LOG = Logger.getInstance(BlockJoinLinesHandler.class);
 

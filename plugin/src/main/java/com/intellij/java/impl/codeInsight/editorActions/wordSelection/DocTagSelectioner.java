@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.codeInsight.editorActions.wordSelection;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.ide.impl.idea.codeInsight.editorActions.wordSelection.WordSelectioner;
 import com.intellij.java.language.psi.JavaDocTokenType;
 import com.intellij.java.language.psi.javadoc.PsiDocTag;
@@ -29,6 +30,7 @@ import consulo.annotation.access.RequiredReadAction;
 
 import java.util.List;
 
+@ExtensionImpl
 public class DocTagSelectioner extends WordSelectioner {
   @Override
   public boolean canSelect(PsiElement e) {

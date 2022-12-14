@@ -16,6 +16,7 @@
 package com.intellij.java.impl.codeInsight.generation.surroundWith;
 
 import com.intellij.java.language.JavaLanguage;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.Language;
 import consulo.language.editor.surroundWith.SurroundDescriptor;
 import consulo.language.editor.surroundWith.Surrounder;
@@ -28,6 +29,7 @@ import javax.annotation.Nonnull;
 /**
  * @author ven
  */
+@ExtensionImpl
 public class JavaStatementsSurroundDescriptor implements SurroundDescriptor {
   private static final Surrounder[] SURROUNDERS = {
     new JavaWithIfSurrounder(),

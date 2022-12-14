@@ -24,11 +24,13 @@ import com.intellij.java.language.patterns.PsiJavaElementPattern;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.util.function.Processor;
 import consulo.application.util.matcher.PrefixMatcher;
 import consulo.codeEditor.Editor;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.LangBundle;
+import consulo.language.Language;
 import consulo.language.custom.CustomSyntaxTableFileType;
 import consulo.language.editor.completion.*;
 import consulo.language.editor.completion.lookup.InsertHandler;
@@ -65,7 +67,8 @@ import static com.intellij.java.language.patterns.PsiJavaPatterns.*;
 /**
  * @author peter
  */
-public abstract class JavaClassNameCompletionContributor extends CompletionContributor {
+@ExtensionImpl(id = "javaClassName", order = "last, before default")
+public class JavaClassNameCompletionContributor extends CompletionContributor {
   public static final PsiJavaElementPattern.Capture<PsiElement> AFTER_NEW = psiJavaElement().afterLeaf(PsiKeyword.NEW);
   private static final PsiJavaElementPattern.Capture<PsiElement> IN_TYPE_PARAMETER = psiJavaElement().afterLeaf(PsiKeyword.EXTENDS, PsiKeyword.SUPER, "&").withParent(psiElement(PsiReferenceList.class)
       .withParent(PsiTypeParameter.class));
@@ -279,5 +282,11 @@ public abstract class JavaClassNameCompletionContributor extends CompletionContr
 
   private static boolean shouldShowSecondSmartCompletionHint(final CompletionParameters parameters) {
     return parameters.getCompletionType() == CompletionType.BASIC && parameters.getInvocationCount() == 2 && parameters.getOriginalFile().getLanguage().isKindOf(JavaLanguage.INSTANCE);
+  }
+
+  @Nonnull
+  @Override
+  public Language getLanguage() {
+    return JavaLanguage.INSTANCE;
   }
 }

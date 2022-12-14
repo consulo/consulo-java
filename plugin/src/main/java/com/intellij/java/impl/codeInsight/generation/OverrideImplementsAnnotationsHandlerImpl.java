@@ -22,6 +22,7 @@ package com.intellij.java.impl.codeInsight.generation;
 
 import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.language.codeInsight.NullableNotNullManager;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.project.Project;
 import consulo.util.lang.Comparing;
 import consulo.util.collection.ArrayUtil;
@@ -30,6 +31,7 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collection;
 
+@ExtensionImpl
 public class OverrideImplementsAnnotationsHandlerImpl implements OverrideImplementsAnnotationsHandler {
   @Override
   public String[] getAnnotations(Project project) {

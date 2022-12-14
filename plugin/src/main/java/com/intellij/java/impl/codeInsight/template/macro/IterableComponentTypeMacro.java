@@ -19,6 +19,7 @@ import com.intellij.java.impl.codeInsight.template.JavaCodeContextType;
 import com.intellij.java.impl.codeInsight.template.PsiTypeResult;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.template.Expression;
 import consulo.language.editor.template.ExpressionContext;
@@ -32,6 +33,7 @@ import javax.annotation.Nonnull;
 /**
  * @author ven
  */
+@ExtensionImpl
 public class IterableComponentTypeMacro extends Macro {
   @Override
   public String getName() {

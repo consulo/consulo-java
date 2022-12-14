@@ -18,6 +18,7 @@ package com.intellij.java.impl.codeInsight.generation;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiJavaFile;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
 import consulo.language.Language;
 import consulo.language.editor.generation.OverrideMethodHandler;
@@ -30,6 +31,7 @@ import javax.annotation.Nonnull;
 /**
  * @author yole
  */
+@ExtensionImpl
 public class JavaOverrideMethodsHandler implements OverrideMethodHandler {
   @Override
   public boolean isValidFor(final Editor editor, final PsiFile file) {

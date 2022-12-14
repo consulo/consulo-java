@@ -16,16 +16,16 @@
 package com.intellij.java.impl.generate.tostring;
 
 import com.intellij.java.language.psi.PsiClass;
+import consulo.annotation.component.ExtensionImpl;
 
 /**
  * Nikolay.Tropin
  * 2014-12-01
  */
-public class GenerateToStringInterfaceFilter implements GenerateToStringClassFilter
-{
-	@Override
-	public boolean canGenerateToString(PsiClass psiClass)
-	{
-		return !psiClass.isInterface();
-	}
+@ExtensionImpl
+public class GenerateToStringInterfaceFilter implements GenerateToStringClassFilter {
+  @Override
+  public boolean canGenerateToString(PsiClass psiClass) {
+    return !psiClass.isInterface();
+  }
 }

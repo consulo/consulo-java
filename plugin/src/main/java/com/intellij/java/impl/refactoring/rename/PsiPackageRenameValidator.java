@@ -17,6 +17,7 @@ package com.intellij.java.impl.refactoring.rename;
 
 import com.intellij.java.language.psi.PsiJavaPackage;
 import com.intellij.java.language.psi.PsiNameHelper;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.file.FileTypeManager;
 import consulo.project.Project;
 import consulo.language.pattern.ElementPattern;
@@ -31,6 +32,7 @@ import javax.annotation.Nullable;
  * User: anna
  * Date: 3/14/11
  */
+@ExtensionImpl
 public class PsiPackageRenameValidator implements RenameInputValidatorEx {
   @Nullable
   @Override

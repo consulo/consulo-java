@@ -16,6 +16,7 @@
 package com.intellij.java.impl.codeInsight.editorActions.wordSelection;
 
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
 import consulo.document.util.TextRange;
 import consulo.language.psi.*;
@@ -29,6 +30,7 @@ import java.util.List;
 /**
  * @author Danila Ponomarenko
  */
+@ExtensionImpl
 public class VarargsSelectioner extends BasicSelectioner {
   @Override
   public boolean canSelect(PsiElement e) {

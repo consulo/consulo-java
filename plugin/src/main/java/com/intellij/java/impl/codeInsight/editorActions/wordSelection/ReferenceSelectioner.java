@@ -19,6 +19,7 @@ import com.intellij.java.language.psi.PsiExpressionList;
 import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
 import com.intellij.java.language.psi.PsiJavaToken;
 import com.intellij.java.language.psi.PsiReferenceExpression;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.*;
 import consulo.document.util.TextRange;
 import consulo.codeEditor.Editor;
@@ -26,6 +27,7 @@ import consulo.codeEditor.Editor;
 import java.util.List;
 import java.util.ArrayList;
 
+@ExtensionImpl
 public class ReferenceSelectioner extends BasicSelectioner {
   @Override
   public boolean canSelect(PsiElement e) {

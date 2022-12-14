@@ -15,41 +15,38 @@
  */
 package com.intellij.java.impl.openapi.roots.impl;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.externalService.statistic.AbstractApplicationUsagesCollector;
 import consulo.externalService.statistic.UsageDescriptor;
+import consulo.java.language.module.extension.JavaModuleExtension;
 import consulo.module.Module;
 import consulo.module.ModuleManager;
-import consulo.project.Project;
 import consulo.module.content.ModuleRootManager;
+import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
-import java.util.HashSet;
-import consulo.java.language.module.extension.JavaModuleExtension;
 
 import javax.annotation.Nonnull;
+import java.util.HashSet;
 import java.util.Set;
 
-public class LanguageLevelUsagesCollector extends AbstractApplicationUsagesCollector
-{
-	@Nonnull
-	@Override
-	public String getGroupId()
-	{
-		return "consulo.java:language.level";
-	}
+@ExtensionImpl
+public class LanguageLevelUsagesCollector extends AbstractApplicationUsagesCollector {
+  @Nonnull
+  @Override
+  public String getGroupId() {
+    return "consulo.java:language.level";
+  }
 
-	@Override
-	@Nonnull
-	public Set<UsageDescriptor> getProjectUsages(@Nonnull Project project)
-	{
-		final Set<String> languageLevels = new HashSet<String>();
-		for(Module module : ModuleManager.getInstance(project).getModules())
-		{
-			JavaModuleExtension extension = ModuleRootManager.getInstance(module).getExtension(JavaModuleExtension.class);
-			if(extension != null)
-			{
-				languageLevels.add(extension.getLanguageLevel().toString());
-			}
-		}
-		return ContainerUtil.map2Set(languageLevels, languageLevel -> new UsageDescriptor(languageLevel, 1));
-	}
+  @Override
+  @Nonnull
+  public Set<UsageDescriptor> getProjectUsages(@Nonnull Project project) {
+    final Set<String> languageLevels = new HashSet<String>();
+    for (Module module : ModuleManager.getInstance(project).getModules()) {
+      JavaModuleExtension extension = ModuleRootManager.getInstance(module).getExtension(JavaModuleExtension.class);
+      if (extension != null) {
+        languageLevels.add(extension.getLanguageLevel().toString());
+      }
+    }
+    return ContainerUtil.map2Set(languageLevels, languageLevel -> new UsageDescriptor(languageLevel, 1));
+  }
 }

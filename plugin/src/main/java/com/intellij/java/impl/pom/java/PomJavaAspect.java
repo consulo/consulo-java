@@ -15,10 +15,13 @@
  */
 package com.intellij.java.impl.pom.java;
 
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ServiceAPI;
 import consulo.project.Project;
 import consulo.language.pom.PomModel;
 import consulo.language.pom.PomModelAspect;
 
+@ServiceAPI(value = ComponentScope.PROJECT, lazy = false)
 public abstract class PomJavaAspect implements PomModelAspect {
   public static PomJavaAspect getInstance(Project project) {
     return project.getComponent(PomJavaAspect.class);

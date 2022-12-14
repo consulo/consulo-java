@@ -8,6 +8,7 @@ import com.intellij.rt.coverage.data.ClassData;
 import com.intellij.rt.coverage.data.LineCoverage;
 import com.intellij.rt.coverage.data.LineData;
 import com.intellij.rt.coverage.data.ProjectData;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.compiler.ModuleCompilerPathsManager;
 import consulo.container.plugin.PluginManager;
 import consulo.execution.coverage.BaseCoverageSuite;
@@ -33,6 +34,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Collection;
 
+@ExtensionImpl
 public class JaCoCoCoverageRunner extends JavaCoverageRunner {
   @Override
   public ProjectData loadCoverageData(@Nonnull File sessionDataFile, @Nullable CoverageSuite baseCoverageSuite) {

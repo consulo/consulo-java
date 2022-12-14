@@ -21,10 +21,12 @@
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
 import com.intellij.java.analysis.impl.codeInsight.quickfix.ChangeVariableTypeQuickFixProvider;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.intention.IntentionAction;
 import com.intellij.java.language.psi.PsiVariable;
 import com.intellij.java.language.psi.PsiType;
 
+@ExtensionImpl
 public class VariableTypeQuickFixProvider implements ChangeVariableTypeQuickFixProvider{
   @Override
   public IntentionAction[] getFixes(PsiVariable variable, PsiType toReturn) {

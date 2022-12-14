@@ -1,5 +1,8 @@
 package consulo.java.impl.application.options;
 
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ServiceAPI;
+import consulo.annotation.component.ServiceImpl;
 import consulo.component.persist.PersistentStateComponent;
 import consulo.component.persist.State;
 import consulo.component.persist.Storage;
@@ -20,11 +23,13 @@ import javax.annotation.Nonnull;
  */
 @Singleton
 @State(
-    name = "JavaSmartKeysSettings",
-    storages = {
-        @Storage(
-            file = StoragePathMacros.APP_CONFIG + "/editor.codeinsight.xml")
-    })
+  name = "JavaSmartKeysSettings",
+  storages = {
+    @Storage(
+      file = StoragePathMacros.APP_CONFIG + "/editor.codeinsight.xml")
+  })
+@ServiceAPI(ComponentScope.APPLICATION)
+@ServiceImpl
 public class JavaSmartKeysSettings implements PersistentStateComponent<Element> {
   private static final Logger LOGGER = Logger.getInstance(JavaSmartKeysSettings.class);
 
@@ -39,8 +44,9 @@ public class JavaSmartKeysSettings implements PersistentStateComponent<Element> 
   public void loadState(final Element state) {
     try {
       XmlSerializer.deserializeInto(this, state);
-    } catch (XmlSerializationException e) {
-      JavaSmartKeysSettings.LOGGER.info(e);
+    }
+    catch (XmlSerializationException e) {
+      LOGGER.info(e);
     }
   }
 
@@ -54,8 +60,9 @@ public class JavaSmartKeysSettings implements PersistentStateComponent<Element> 
   public void writeExternal(final Element element) {
     try {
       XmlSerializer.serializeInto(this, element, new SkipDefaultValuesSerializationFilters());
-    } catch (XmlSerializationException e) {
-      JavaSmartKeysSettings.LOGGER.info(e);
+    }
+    catch (XmlSerializationException e) {
+      LOGGER.info(e);
     }
   }
 }

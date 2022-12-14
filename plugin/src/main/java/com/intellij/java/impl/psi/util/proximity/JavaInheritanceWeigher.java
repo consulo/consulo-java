@@ -17,6 +17,7 @@ package com.intellij.java.impl.psi.util.proximity;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.util.dataholder.NotNullLazyKey;
 import consulo.language.psi.PsiElement;
 import consulo.ide.impl.psi.util.ProximityLocation;
@@ -35,6 +36,7 @@ import java.util.Set;
 /**
  * @author peter
  */
+@ExtensionImpl(id = "javaInheritance", order = "after explicitlyImported, before sameLogicalRoot")
 public class JavaInheritanceWeigher extends ProximityWeigher {
   private static final NotNullLazyKey<Set<String>, ProximityLocation> PLACE_SUPER_CLASSES = NotNullLazyKey.create("PLACE_SUPER_CLASSES", new NotNullFunction<ProximityLocation, Set<String>>() {
     @Nonnull

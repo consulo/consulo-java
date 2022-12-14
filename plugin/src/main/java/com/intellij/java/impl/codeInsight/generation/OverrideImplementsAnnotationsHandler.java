@@ -20,15 +20,19 @@
  */
 package com.intellij.java.impl.codeInsight.generation;
 
-import javax.annotation.Nonnull;
-
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ExtensionAPI;
 import consulo.component.extension.ExtensionPointName;
 import consulo.project.Project;
 
+import javax.annotation.Nonnull;
+
+@ExtensionAPI(ComponentScope.APPLICATION)
 public interface OverrideImplementsAnnotationsHandler {
-  ExtensionPointName<OverrideImplementsAnnotationsHandler> EP_NAME = ExtensionPointName.create("consulo.java.overrideImplementsAnnotationsHandler");
+  ExtensionPointName<OverrideImplementsAnnotationsHandler> EP_NAME = ExtensionPointName.create(OverrideImplementsAnnotationsHandler.class);
 
   String[] getAnnotations(Project project);
+
   @Nonnull
-  String [] annotationsToRemove(Project project, @Nonnull String fqName);
+  String[] annotationsToRemove(Project project, @Nonnull String fqName);
 }

@@ -16,19 +16,19 @@
 
 package com.intellij.java.impl.util.descriptors.impl;
 
-import consulo.ide.IdeBundle;
+import com.intellij.java.impl.util.descriptors.*;
+import consulo.annotation.component.ServiceImpl;
+import consulo.application.ApplicationManager;
 import consulo.fileTemplate.FileTemplate;
 import consulo.fileTemplate.FileTemplateManager;
-import com.intellij.java.impl.util.descriptors.*;
-import consulo.application.ApplicationManager;
-import consulo.project.Project;
-import consulo.ui.ex.awt.Messages;
+import consulo.ide.IdeBundle;
 import consulo.ide.impl.idea.openapi.util.io.FileUtil;
-import consulo.virtualFileSystem.LocalFileSystem;
-import consulo.ide.impl.idea.openapi.vfs.VfsUtil;
-import consulo.virtualFileSystem.VirtualFile;
 import consulo.ide.impl.idea.util.FileContentUtil;
 import consulo.logging.Logger;
+import consulo.project.Project;
+import consulo.ui.ex.awt.Messages;
+import consulo.virtualFileSystem.LocalFileSystem;
+import consulo.virtualFileSystem.VirtualFile;
 import jakarta.inject.Singleton;
 
 import javax.annotation.Nullable;
@@ -39,6 +39,7 @@ import java.io.IOException;
  * @author nik
  */
 @Singleton
+@ServiceImpl
 public class ConfigFileFactoryImpl extends ConfigFileFactory {
   private static final Logger LOG = Logger.getInstance(ConfigFileFactoryImpl.class);
 

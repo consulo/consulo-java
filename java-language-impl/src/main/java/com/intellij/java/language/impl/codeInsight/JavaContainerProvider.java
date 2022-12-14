@@ -15,6 +15,7 @@
  */
 package com.intellij.java.language.impl.codeInsight;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.search.ContainerProvider;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMember;
@@ -26,6 +27,7 @@ import javax.annotation.Nonnull;
 /**
  * @author Max Medvedev
  */
+@ExtensionImpl(id = "java")
 public class JavaContainerProvider implements ContainerProvider {
   @Override
   public PsiElement getContainer(@Nonnull PsiElement item) {

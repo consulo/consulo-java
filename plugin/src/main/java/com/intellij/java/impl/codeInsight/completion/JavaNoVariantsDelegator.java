@@ -16,11 +16,14 @@
 package com.intellij.java.impl.codeInsight.completion;
 
 import com.intellij.java.impl.codeInsight.ExpectedTypeInfo;
+import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.search.PsiShortNamesCache;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.util.matcher.PrefixMatcher;
 import consulo.ide.impl.idea.codeInsight.completion.impl.BetterPrefixMatcher;
 import consulo.ide.impl.idea.util.CollectConsumer;
+import consulo.language.Language;
 import consulo.language.editor.completion.*;
 import consulo.language.editor.completion.lookup.LookupElement;
 import consulo.language.psi.PsiElement;
@@ -41,7 +44,8 @@ import static com.intellij.java.language.patterns.PsiJavaPatterns.psiElement;
 /**
  * @author peter
  */
-public abstract class JavaNoVariantsDelegator extends CompletionContributor {
+@ExtensionImpl(id = "javaBasic2ClassName", order = "before javaMemberName, before javaLegacy, after liveTemplates")
+public class JavaNoVariantsDelegator extends CompletionContributor {
   @Override
   public void fillCompletionVariants(@Nonnull final CompletionParameters parameters, @Nonnull final CompletionResultSet result) {
     if (JavaModuleCompletion.isModuleFile(parameters.getOriginalFile())) {
@@ -190,6 +194,12 @@ public abstract class JavaNoVariantsDelegator extends CompletionContributor {
 
       result.addElement(element);
     });
+  }
+
+  @Nonnull
+  @Override
+  public Language getLanguage() {
+    return JavaLanguage.INSTANCE;
   }
 
   public static class ResultTracker implements Consumer<CompletionResult> {

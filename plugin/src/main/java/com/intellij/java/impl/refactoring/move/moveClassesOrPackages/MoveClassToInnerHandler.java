@@ -15,26 +15,27 @@
  */
 package com.intellij.java.impl.refactoring.move.moveClassesOrPackages;
 
-import java.util.List;
-import java.util.Map;
+import com.intellij.java.language.psi.PsiClass;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ExtensionAPI;
+import consulo.component.extension.ExtensionPointName;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.project.Project;
+import consulo.usage.NonCodeUsageInfo;
+import consulo.usage.UsageInfo;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
-import consulo.component.extension.ExtensionPointName;
-import consulo.project.Project;
-import com.intellij.java.language.psi.PsiClass;
-import consulo.language.psi.PsiElement;
-import consulo.language.psi.PsiFile;
-import consulo.usage.NonCodeUsageInfo;
-import consulo.usage.UsageInfo;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author Max Medvedev
  */
+@ExtensionAPI(ComponentScope.APPLICATION)
 public interface MoveClassToInnerHandler {
-  ExtensionPointName<MoveClassToInnerHandler> EP_NAME =
-		  new ExtensionPointName<MoveClassToInnerHandler>("consulo.java.refactoring.moveClassToInnerHandler");
+  ExtensionPointName<MoveClassToInnerHandler> EP_NAME = ExtensionPointName.create(MoveClassToInnerHandler.class);
 
   @Nullable
   PsiClass moveClass(@Nonnull PsiClass aClass, @Nonnull PsiClass targetClass);

@@ -18,7 +18,9 @@ package com.intellij.java.impl.codeInsight.completion;
 import com.intellij.java.impl.psi.impl.source.resolve.reference.impl.providers.JavaClassReference;
 import com.intellij.java.impl.psi.impl.source.resolve.reference.impl.providers.JavaClassReferenceSet;
 import com.intellij.java.language.psi.PsiJavaPackage;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.ide.impl.idea.codeInsight.completion.LegacyCompletionContributor;
+import consulo.language.Language;
 import consulo.language.editor.completion.*;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
@@ -33,7 +35,8 @@ import javax.annotation.Nullable;
 /**
  * @author peter
  */
-public abstract class JavaClassReferenceCompletionContributor extends CompletionContributor {
+@ExtensionImpl(id = "javaClassReference", order = "before legacy")
+public class JavaClassReferenceCompletionContributor extends CompletionContributor {
   @Override
   public void duringCompletion(@Nonnull CompletionInitializationContext context) {
     JavaClassReference reference = findJavaClassReference(context.getFile(), context.getStartOffset());
@@ -88,5 +91,11 @@ public abstract class JavaClassReferenceCompletionContributor extends Completion
       }
     }
     return reference instanceof JavaClassReference ? (JavaClassReference) reference : null;
+  }
+
+  @Nonnull
+  @Override
+  public Language getLanguage() {
+    return Language.ANY;
   }
 }

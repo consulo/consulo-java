@@ -19,6 +19,7 @@ import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiJavaToken;
 import com.intellij.java.language.psi.PsiLiteralExpression;
 import com.intellij.java.language.psi.PsiMethodCallExpression;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.FoldRegion;
 import consulo.language.editor.navigation.GotoDeclarationHandlerBase;
@@ -30,6 +31,7 @@ import javax.annotation.Nullable;
 /**
  * @author Konstantin Bulenkov
  */
+@ExtensionImpl(order = "first")
 public class I18nMessageGotoDeclarationHandler extends GotoDeclarationHandlerBase {
 
   @Override

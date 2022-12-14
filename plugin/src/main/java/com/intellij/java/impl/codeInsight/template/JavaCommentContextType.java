@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.codeInsight.template;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.template.context.TemplateContextType;
 import com.intellij.java.language.JavaLanguage;
 import consulo.language.psi.PsiComment;
@@ -29,9 +30,10 @@ import javax.annotation.Nonnull;
 /**
  * @author yole
  */
+@ExtensionImpl
 public class JavaCommentContextType extends TemplateContextType {
   public JavaCommentContextType() {
-    super("JAVA_COMMENT", "Comment", JavaCodeContextType.Generic.class);
+    super("JAVA_COMMENT", "Comment", JavaGenericContextType.class);
   }
 
   @Override

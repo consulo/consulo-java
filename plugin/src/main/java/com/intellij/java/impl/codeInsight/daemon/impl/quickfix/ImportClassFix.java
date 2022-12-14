@@ -25,6 +25,7 @@
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
 import com.intellij.java.language.psi.*;
+import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.StringUtil;
 import consulo.language.psi.*;
@@ -33,7 +34,7 @@ import javax.annotation.Nonnull;
 
 import java.util.List;
 
-public class ImportClassFix extends ImportClassFixBase<PsiJavaCodeReferenceElement, PsiJavaCodeReferenceElement> {
+public class ImportClassFix extends ImportClassFixBase<PsiJavaCodeReferenceElement, PsiJavaCodeReferenceElement> implements SyntheticIntentionAction {
   public ImportClassFix(@Nonnull PsiJavaCodeReferenceElement element) {
     super(element, element);
   }

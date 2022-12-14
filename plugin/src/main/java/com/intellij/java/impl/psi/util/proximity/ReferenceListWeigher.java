@@ -19,6 +19,7 @@ import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
 import com.intellij.java.language.psi.PsiReferenceList;
 import com.intellij.java.language.psi.util.InheritanceUtil;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.module.content.ProjectFileIndex;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.language.pattern.ElementPattern;
@@ -36,6 +37,7 @@ import static com.intellij.java.impl.psi.util.proximity.ReferenceListWeigher.Ref
 /**
  * @author peter
  */
+@ExtensionImpl(id = "referenceList", order = "before samePsiMember")
 public class ReferenceListWeigher extends ProximityWeigher {
   public static final ReferenceListWeigher INSTANCE = new ReferenceListWeigher();
 

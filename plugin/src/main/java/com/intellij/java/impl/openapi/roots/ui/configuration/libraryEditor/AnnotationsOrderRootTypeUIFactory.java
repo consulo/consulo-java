@@ -22,6 +22,7 @@ package com.intellij.java.impl.openapi.roots.ui.configuration.libraryEditor;
 
 import com.intellij.java.language.JavaCoreBundle;
 import com.intellij.java.language.projectRoots.roots.AnnotationOrderRootType;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.AllIcons;
 import consulo.content.bundle.Sdk;
 import consulo.fileChooser.FileChooserDescriptor;
@@ -31,6 +32,7 @@ import consulo.ui.image.Image;
 
 import javax.annotation.Nonnull;
 
+@ExtensionImpl
 public class AnnotationsOrderRootTypeUIFactory implements OrderRootTypeUIFactory {
   @Nonnull
   @Override

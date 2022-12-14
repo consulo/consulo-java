@@ -30,6 +30,7 @@ import com.intellij.java.language.psi.javadoc.PsiDocTag;
 import com.intellij.java.language.psi.util.MethodSignatureUtil;
 import com.intellij.java.language.psi.util.PropertyUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.ApplicationManager;
 import consulo.application.util.function.Processor;
 import consulo.document.util.TextRange;
@@ -57,6 +58,7 @@ import consulo.util.lang.function.Condition;
 import javax.annotation.Nullable;
 import java.util.*;
 
+@ExtensionImpl(id = "javaProcessor")
 public class JavaSafeDeleteProcessor extends SafeDeleteProcessorDelegateBase {
   private static final Logger LOG = Logger.getInstance(JavaSafeDeleteProcessor.class);
 

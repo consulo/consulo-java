@@ -19,6 +19,7 @@ import com.intellij.java.impl.refactoring.MoveDestination;
 import com.intellij.java.impl.refactoring.move.moveClassesOrPackages.MoveDirectoryWithClassesProcessor;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.ApplicationManager;
 import consulo.externalService.statistic.FeatureUsageTracker;
 import consulo.ide.impl.idea.codeInsight.actions.OptimizeImportsProcessor;
@@ -48,6 +49,7 @@ import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.*;
 
+@ExtensionImpl(order = "before copyFilesOrDirectories")
 public class CopyClassesHandler extends CopyHandlerDelegateBase {
   private static final Logger LOG = Logger.getInstance(CopyClassesHandler.class);
 

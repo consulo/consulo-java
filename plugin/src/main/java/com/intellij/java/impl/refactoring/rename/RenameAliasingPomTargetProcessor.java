@@ -17,6 +17,7 @@ package com.intellij.java.impl.refactoring.rename;
 
 import com.intellij.java.language.psi.targets.AliasingPsiTarget;
 import com.intellij.java.language.psi.targets.AliasingPsiTargetMapper;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.component.extension.Extensions;
 import consulo.language.editor.refactoring.rename.RenamePsiElementProcessor;
 import consulo.language.pom.PomService;
@@ -27,7 +28,8 @@ import consulo.language.psi.PsiElement;
 import javax.annotation.Nonnull;
 import java.util.Map;
 
-public abstract class RenameAliasingPomTargetProcessor extends RenamePsiElementProcessor {
+@ExtensionImpl
+public class RenameAliasingPomTargetProcessor extends RenamePsiElementProcessor {
 
   @Override
   public boolean canProcessElement(@Nonnull PsiElement element) {

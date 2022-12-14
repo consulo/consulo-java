@@ -2,7 +2,8 @@ package consulo.java.compiler.impl.javaCompiler.ui;
 
 import com.intellij.java.compiler.impl.javaCompiler.javac.JavacCompilerConfiguration;
 import com.intellij.java.compiler.impl.javaCompiler.javac.JpsJavaCompilerOptions;
-import consulo.configurable.Configurable;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.configurable.ProjectConfigurable;
 import consulo.configurable.SimpleConfigurableByProperties;
 import consulo.disposer.Disposable;
 import consulo.localize.LocalizeValue;
@@ -14,54 +15,76 @@ import consulo.ui.TextBoxWithExpandAction;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.layout.VerticalLayout;
 import consulo.ui.util.LabeledBuilder;
+import jakarta.inject.Inject;
 import jakarta.inject.Provider;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * @author VISTALL
  * @since 01/12/2021
  */
-public class JavacConfigurable extends SimpleConfigurableByProperties implements Configurable
-{
-	private final Provider<JavacCompilerConfiguration> myJavacCompilerConfigurationProvider;
+@ExtensionImpl
+public class JavacConfigurable extends SimpleConfigurableByProperties implements ProjectConfigurable {
+  private final Provider<JavacCompilerConfiguration> myJavacCompilerConfigurationProvider;
 
-	public JavacConfigurable(Provider<JavacCompilerConfiguration> javacCompilerConfigurationProvider)
-	{
-		myJavacCompilerConfigurationProvider = javacCompilerConfigurationProvider;
-	}
+  @Inject
+  public JavacConfigurable(Provider<JavacCompilerConfiguration> javacCompilerConfigurationProvider) {
+    myJavacCompilerConfigurationProvider = javacCompilerConfigurationProvider;
+  }
 
-	@RequiredUIAccess
-	@Nonnull
-	@Override
-	protected Component createLayout(@Nonnull PropertyBuilder propertyBuilder, @Nonnull Disposable disposable)
-	{
-		JavacCompilerConfiguration configuration = myJavacCompilerConfigurationProvider.get();
+  @Nullable
+  @Override
+  public String getParentId() {
+    return "project.propCompiler.java";
+  }
 
-		JpsJavaCompilerOptions state = configuration.getState();
+  @Nonnull
+  @Override
+  public String getId() {
+    return "project.propCompiler.java.java";
+  }
 
-		VerticalLayout verticalLayout = VerticalLayout.create();
+  @Nonnull
+  @Override
+  public String getDisplayName() {
+    return "Javac";
+  }
 
-		CheckBox generateDebugInfo = CheckBox.create(LocalizeValue.localizeTODO("Generate debugging info"));
-		verticalLayout.add(generateDebugInfo);
-		propertyBuilder.add(generateDebugInfo, () -> state.DEBUGGING_INFO, (v) -> state.DEBUGGING_INFO = v);
+  @RequiredUIAccess
+  @Nonnull
+  @Override
+  protected Component createLayout(@Nonnull PropertyBuilder propertyBuilder, @Nonnull Disposable disposable) {
+    JavacCompilerConfiguration configuration = myJavacCompilerConfigurationProvider.get();
 
-		CheckBox reportDeprecated = CheckBox.create(LocalizeValue.localizeTODO("Report use of deprecated features"));
-		verticalLayout.add(reportDeprecated);
-		propertyBuilder.add(reportDeprecated, () -> state.DEPRECATION, (v) -> state.DEPRECATION = v);
+    JpsJavaCompilerOptions state = configuration.getState();
 
-		CheckBox generateNoWarning = CheckBox.create(LocalizeValue.localizeTODO("Generate no warnings"));
-		verticalLayout.add(generateNoWarning);
-		propertyBuilder.add(generateNoWarning, () -> state.GENERATE_NO_WARNINGS, (v) -> state.GENERATE_NO_WARNINGS = v);
+    VerticalLayout verticalLayout = VerticalLayout.create();
 
-		TextBoxWithExpandAction additionalArguments = TextBoxWithExpandAction.create(null, "Edit Arguments", ParametersListUtil.DEFAULT_LINE_PARSER, ParametersListUtil.DEFAULT_LINE_JOINER);
-		propertyBuilder.add(additionalArguments, () -> state.ADDITIONAL_OPTIONS_STRING, (v) -> state.ADDITIONAL_OPTIONS_STRING = v);
+    CheckBox generateDebugInfo = CheckBox.create(LocalizeValue.localizeTODO("Generate debugging info"));
+    verticalLayout.add(generateDebugInfo);
+    propertyBuilder.add(generateDebugInfo, () -> state.DEBUGGING_INFO, (v) -> state.DEBUGGING_INFO = v);
 
-		verticalLayout.add(LabeledBuilder.filled(LocalizeValue.localizeTODO("Additional command line parameters:"), additionalArguments));
+    CheckBox reportDeprecated = CheckBox.create(LocalizeValue.localizeTODO("Report use of deprecated features"));
+    verticalLayout.add(reportDeprecated);
+    propertyBuilder.add(reportDeprecated, () -> state.DEPRECATION, (v) -> state.DEPRECATION = v);
 
-		IntBox memoryTextBox = IntBox.create();
-		verticalLayout.add(LabeledBuilder.sided(LocalizeValue.localizeTODO("Maximum heap size (MB):"), memoryTextBox));
-		propertyBuilder.add(memoryTextBox, () -> state.MAXIMUM_HEAP_SIZE, (v) -> state.MAXIMUM_HEAP_SIZE = v);
-		return verticalLayout;
-	}
+    CheckBox generateNoWarning = CheckBox.create(LocalizeValue.localizeTODO("Generate no warnings"));
+    verticalLayout.add(generateNoWarning);
+    propertyBuilder.add(generateNoWarning, () -> state.GENERATE_NO_WARNINGS, (v) -> state.GENERATE_NO_WARNINGS = v);
+
+    TextBoxWithExpandAction additionalArguments = TextBoxWithExpandAction.create(null,
+                                                                                 "Edit Arguments",
+                                                                                 ParametersListUtil.DEFAULT_LINE_PARSER,
+                                                                                 ParametersListUtil.DEFAULT_LINE_JOINER);
+    propertyBuilder.add(additionalArguments, () -> state.ADDITIONAL_OPTIONS_STRING, (v) -> state.ADDITIONAL_OPTIONS_STRING = v);
+
+    verticalLayout.add(LabeledBuilder.filled(LocalizeValue.localizeTODO("Additional command line parameters:"), additionalArguments));
+
+    IntBox memoryTextBox = IntBox.create();
+    verticalLayout.add(LabeledBuilder.sided(LocalizeValue.localizeTODO("Maximum heap size (MB):"), memoryTextBox));
+    propertyBuilder.add(memoryTextBox, () -> state.MAXIMUM_HEAP_SIZE, (v) -> state.MAXIMUM_HEAP_SIZE = v);
+    return verticalLayout;
+  }
 }

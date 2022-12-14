@@ -18,6 +18,7 @@ package com.intellij.java.impl.psi.util.proximity;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiMethod;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.ide.impl.psi.util.ProximityLocation;
 import consulo.ide.impl.psi.util.proximity.ProximityWeigher;
 import consulo.ide.impl.psi.util.proximity.SdkOrLibraryWeigher;
@@ -38,6 +39,7 @@ import static consulo.java.language.module.util.JavaClassNames.*;
 /**
  * @author peter
  */
+@ExtensionImpl(id = "knownElement", order = "after sameModule, before sdkOrLibrary")
 public class KnownElementWeigher extends ProximityWeigher {
   private static final Set<String> POPULAR_JDK_CLASSES = Set.of(JAVA_LANG_STRING, JAVA_LANG_CLASS, System.class.getName(), JAVA_LANG_RUNNABLE, JAVA_LANG_EXCEPTION,
       JAVA_LANG_THROWABLE, JAVA_LANG_RUNTIME_EXCEPTION, JAVA_UTIL_ARRAY_LIST, JAVA_UTIL_HASH_MAP, JAVA_UTIL_HASH_SET);

@@ -2,15 +2,19 @@
 package com.intellij.java.impl.psi.impl.source.tree.injected;
 
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.inject.BaseConcatenation2InjectorAdapter;
 import consulo.language.inject.MultiHostInjector;
 import consulo.language.psi.PsiElement;
 import consulo.project.Project;
 import consulo.util.lang.Pair;
+import jakarta.inject.Inject;
 
 import javax.annotation.Nonnull;
 
+@ExtensionImpl(order = "last")
 public class JavaConcatenationToInjectorAdapter extends BaseConcatenation2InjectorAdapter implements MultiHostInjector {
+  @Inject
   public JavaConcatenationToInjectorAdapter(@Nonnull Project project) {
     super(project);
   }
@@ -19,11 +23,11 @@ public class JavaConcatenationToInjectorAdapter extends BaseConcatenation2Inject
   public Pair<PsiElement, PsiElement[]> computeAnchorAndOperands(@Nonnull PsiElement context) {
     PsiElement element = context;
     PsiElement parent = context.getParent();
-    while (parent instanceof PsiPolyadicExpression && ((PsiPolyadicExpression) parent).getOperationTokenType() == JavaTokenType.PLUS
-        || parent instanceof PsiAssignmentExpression && ((PsiAssignmentExpression) parent).getOperationTokenType() == JavaTokenType.PLUSEQ
-        || parent instanceof PsiConditionalExpression && ((PsiConditionalExpression) parent).getCondition() != element
-        || parent instanceof PsiTypeCastExpression
-        || parent instanceof PsiParenthesizedExpression) {
+    while (parent instanceof PsiPolyadicExpression && ((PsiPolyadicExpression)parent).getOperationTokenType() == JavaTokenType.PLUS
+      || parent instanceof PsiAssignmentExpression && ((PsiAssignmentExpression)parent).getOperationTokenType() == JavaTokenType.PLUSEQ
+      || parent instanceof PsiConditionalExpression && ((PsiConditionalExpression)parent).getCondition() != element
+      || parent instanceof PsiTypeCastExpression
+      || parent instanceof PsiParenthesizedExpression) {
       element = parent;
       parent = parent.getParent();
     }
@@ -31,13 +35,15 @@ public class JavaConcatenationToInjectorAdapter extends BaseConcatenation2Inject
     PsiElement[] operands;
     PsiElement anchor;
     if (element instanceof PsiPolyadicExpression) {
-      operands = ((PsiPolyadicExpression) element).getOperands();
+      operands = ((PsiPolyadicExpression)element).getOperands();
       anchor = element;
-    } else if (element instanceof PsiAssignmentExpression) {
-      PsiExpression rExpression = ((PsiAssignmentExpression) element).getRExpression();
+    }
+    else if (element instanceof PsiAssignmentExpression) {
+      PsiExpression rExpression = ((PsiAssignmentExpression)element).getRExpression();
       operands = new PsiElement[]{rExpression == null ? element : rExpression};
       anchor = element;
-    } else {
+    }
+    else {
       operands = new PsiElement[]{context};
       anchor = context;
     }

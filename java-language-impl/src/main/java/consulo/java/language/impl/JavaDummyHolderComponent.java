@@ -16,20 +16,22 @@
 
 package consulo.java.language.impl;
 
-import jakarta.inject.Singleton;
-
-import consulo.language.impl.psi.DummyHolderFactory;
 import com.intellij.java.language.impl.psi.impl.source.JavaDummyHolderFactory;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ServiceAPI;
+import consulo.annotation.component.ServiceImpl;
+import consulo.language.impl.psi.DummyHolderFactory;
+import jakarta.inject.Singleton;
 
 /**
  * @author VISTALL
  * @since 27-Feb-17
  */
 @Singleton
-public class JavaDummyHolderComponent
-{
-	public JavaDummyHolderComponent()
-	{
-		DummyHolderFactory.setFactory(new JavaDummyHolderFactory());
-	}
+@ServiceAPI(value = ComponentScope.APPLICATION, lazy = false)
+@ServiceImpl
+public class JavaDummyHolderComponent {
+  public JavaDummyHolderComponent() {
+    DummyHolderFactory.setFactory(new JavaDummyHolderFactory());
+  }
 }

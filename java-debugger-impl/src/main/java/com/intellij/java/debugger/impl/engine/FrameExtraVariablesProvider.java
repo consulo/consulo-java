@@ -15,21 +15,23 @@
  */
 package com.intellij.java.debugger.impl.engine;
 
-import java.util.Set;
-
 import com.intellij.java.debugger.SourcePosition;
 import com.intellij.java.debugger.engine.evaluation.EvaluationContext;
 import com.intellij.java.debugger.engine.evaluation.TextWithImports;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ExtensionAPI;
 import consulo.component.extension.ExtensionPointName;
+
+import java.util.Set;
 
 /**
  * @author Nikolay.Tropin
  */
-public interface FrameExtraVariablesProvider
-{
-	ExtensionPointName<FrameExtraVariablesProvider> EP_NAME = ExtensionPointName.create("consulo.java.debugger.frameExtraVarsProvider");
+@ExtensionAPI(ComponentScope.APPLICATION)
+public interface FrameExtraVariablesProvider {
+  ExtensionPointName<FrameExtraVariablesProvider> EP_NAME = ExtensionPointName.create(FrameExtraVariablesProvider.class);
 
-	boolean isAvailable(SourcePosition sourcePosition, EvaluationContext evalContext);
+  boolean isAvailable(SourcePosition sourcePosition, EvaluationContext evalContext);
 
-	Set<TextWithImports> collectVariables(SourcePosition sourcePosition, EvaluationContext evalContext, Set<String> alreadyCollected);
+  Set<TextWithImports> collectVariables(SourcePosition sourcePosition, EvaluationContext evalContext, Set<String> alreadyCollected);
 }

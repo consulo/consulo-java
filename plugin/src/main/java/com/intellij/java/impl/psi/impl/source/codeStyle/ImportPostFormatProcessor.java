@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.psi.impl.source.codeStyle;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.document.util.TextRange;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
@@ -23,6 +24,7 @@ import consulo.ide.impl.psi.impl.source.codeStyle.PostFormatProcessor;
 
 import javax.annotation.Nonnull;
 
+@ExtensionImpl
 public class ImportPostFormatProcessor implements PostFormatProcessor {
   @Override
   public PsiElement processElement(@Nonnull PsiElement source, @Nonnull CodeStyleSettings settings) {

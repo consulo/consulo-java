@@ -15,17 +15,23 @@
  */
 package com.intellij.java.impl.spi;
 
-import com.intellij.java.impl.codeInsight.navigation.JavaGotoSuperHandler;
+import com.intellij.java.impl.codeInsight.navigation.BaseJavaGotoSuperHandler;
+import com.intellij.java.impl.spi.psi.SPIClassProviderReferenceElement;
 import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.spi.SPILanguage;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.Language;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiNameIdentifierOwner;
 import consulo.language.psi.util.PsiTreeUtil;
-import com.intellij.java.impl.spi.psi.SPIClassProviderReferenceElement;
+
+import javax.annotation.Nonnull;
 
 /**
  * User: anna
  */
-public class SPIGotoSuperHandler extends JavaGotoSuperHandler {
+@ExtensionImpl
+public class SPIGotoSuperHandler extends BaseJavaGotoSuperHandler {
   @Override
   protected PsiNameIdentifierOwner getElement(PsiFile file, int offset) {
     final SPIClassProviderReferenceElement
@@ -35,5 +41,11 @@ public class SPIGotoSuperHandler extends JavaGotoSuperHandler {
     }
 
     return null;
+  }
+
+  @Nonnull
+  @Override
+  public Language getLanguage() {
+    return SPILanguage.INSTANCE;
   }
 }

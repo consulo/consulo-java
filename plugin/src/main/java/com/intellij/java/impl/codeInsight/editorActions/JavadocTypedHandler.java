@@ -20,6 +20,7 @@ import com.intellij.java.language.impl.psi.impl.source.tree.JavaDocElementType;
 import com.intellij.java.language.psi.JavaDocTokenType;
 import com.intellij.java.language.psi.javadoc.PsiDocTag;
 import com.intellij.java.language.psi.javadoc.PsiDocTagValue;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
 import consulo.document.Document;
 import consulo.java.impl.application.options.JavaSmartKeysSettings;
@@ -41,6 +42,7 @@ import javax.annotation.Nullable;
  * @author Denis Zhdanov
  * @since 2/2/11 11:17 AM
  */
+@ExtensionImpl(id = "javadoc")
 public class JavadocTypedHandler extends TypedHandlerDelegate {
 
   private static final char START_TAG_SYMBOL = '<';

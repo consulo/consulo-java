@@ -15,38 +15,40 @@
  */
 package com.intellij.java.impl.refactoring.move.moveClassesOrPackages;
 
-import java.util.Collection;
+import com.intellij.java.language.psi.PsiClass;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ExtensionAPI;
+import consulo.component.extension.ExtensionPointName;
+import consulo.language.psi.PsiDirectory;
+import consulo.language.util.IncorrectOperationException;
+import consulo.usage.UsageInfo;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import consulo.component.extension.ExtensionPointName;
-import com.intellij.java.language.psi.PsiClass;
-import consulo.language.psi.PsiDirectory;
-import consulo.usage.UsageInfo;
-import consulo.language.util.IncorrectOperationException;
+import java.util.Collection;
 
 /**
  * @author Maxim.Medvedev
  */
-public interface MoveClassHandler
-{
-	ExtensionPointName<MoveClassHandler> EP_NAME = new ExtensionPointName<MoveClassHandler>("consulo.java.refactoring.moveClassHandler");
+@ExtensionAPI(ComponentScope.APPLICATION)
+public interface MoveClassHandler {
+	ExtensionPointName<MoveClassHandler> EP_NAME = ExtensionPointName.create(MoveClassHandler.class);
 
-	void prepareMove(@Nonnull PsiClass aClass);
+  void prepareMove(@Nonnull PsiClass aClass);
 
-	void finishMoveClass(@Nonnull PsiClass aClass);
+  void finishMoveClass(@Nonnull PsiClass aClass);
 
-	/**
-	 * @return null if it cannot move aClass
-	 */
-	@Nullable
-	PsiClass doMoveClass(@Nonnull PsiClass aClass, @Nonnull PsiDirectory moveDestination) throws IncorrectOperationException;
+  /**
+   * @return null if it cannot move aClass
+   */
+  @Nullable
+  PsiClass doMoveClass(@Nonnull PsiClass aClass, @Nonnull PsiDirectory moveDestination) throws IncorrectOperationException;
 
-	/**
-	 * @param clazz psiClass
-	 * @return null, if this instance of FileNameForPsiProvider cannot provide name for clazz
-	 */
-	String getName(PsiClass clazz);
+  /**
+   * @param clazz psiClass
+   * @return null, if this instance of FileNameForPsiProvider cannot provide name for clazz
+   */
+  String getName(PsiClass clazz);
 
-	void preprocessUsages(Collection<UsageInfo> results);
+  void preprocessUsages(Collection<UsageInfo> results);
 }

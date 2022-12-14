@@ -15,31 +15,32 @@
  */
 package com.intellij.java.language.psi.codeStyle;
 
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ServiceAPI;
 import consulo.ide.ServiceManager;
 import consulo.project.Project;
 
 /**
  * @author yole
  */
-public abstract class JavaCodeStyleSettingsFacade
-{
-	public abstract int getNamesCountToUseImportOnDemand();
+@ServiceAPI(ComponentScope.PROJECT)
+public abstract class JavaCodeStyleSettingsFacade {
+  public abstract int getNamesCountToUseImportOnDemand();
 
-	public abstract boolean isToImportInDemand(String qualifiedName);
+  public abstract boolean isToImportInDemand(String qualifiedName);
 
-	public abstract boolean useFQClassNames();
+  public abstract boolean useFQClassNames();
 
-	public abstract boolean isJavaDocLeadingAsterisksEnabled();
+  public abstract boolean isJavaDocLeadingAsterisksEnabled();
 
-	public abstract int getIndentSize();
+  public abstract int getIndentSize();
 
-	public abstract boolean isGenerateFinalParameters();
+  public abstract boolean isGenerateFinalParameters();
 
-	public abstract boolean isGenerateFinalLocals();
+  public abstract boolean isGenerateFinalLocals();
 
 
-	public static JavaCodeStyleSettingsFacade getInstance(Project project)
-	{
-		return ServiceManager.getService(project, JavaCodeStyleSettingsFacade.class);
-	}
+  public static JavaCodeStyleSettingsFacade getInstance(Project project) {
+    return ServiceManager.getService(project, JavaCodeStyleSettingsFacade.class);
+  }
 }

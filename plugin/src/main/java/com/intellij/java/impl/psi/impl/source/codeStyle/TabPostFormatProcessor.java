@@ -16,6 +16,7 @@
 package com.intellij.java.impl.psi.impl.source.codeStyle;
 
 import com.intellij.java.language.JavaLanguage;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.ast.ASTNode;
 import consulo.language.Language;
 import consulo.document.Document;
@@ -44,6 +45,7 @@ import javax.annotation.Nullable;
  * @author Denis Zhdanov
  * @since 8/1/12 2:38 PM
  */
+@ExtensionImpl
 public class TabPostFormatProcessor implements PostFormatProcessor {
 
   @Override

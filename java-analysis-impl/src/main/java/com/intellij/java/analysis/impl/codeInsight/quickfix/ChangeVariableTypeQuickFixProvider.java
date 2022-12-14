@@ -20,13 +20,16 @@
  */
 package com.intellij.java.analysis.impl.codeInsight.quickfix;
 
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ExtensionAPI;
 import consulo.language.editor.intention.IntentionAction;
 import consulo.component.extension.ExtensionPointName;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.PsiVariable;
 
+@ExtensionAPI(ComponentScope.APPLICATION)
 public interface ChangeVariableTypeQuickFixProvider {
-  ExtensionPointName<ChangeVariableTypeQuickFixProvider> EP_NAME = ExtensionPointName.create("consulo.java.codeInsight.changeVariableTypeQuickFixProvider");
+  ExtensionPointName<ChangeVariableTypeQuickFixProvider> EP_NAME = ExtensionPointName.create(ChangeVariableTypeQuickFixProvider.class);
 
   IntentionAction[] getFixes(PsiVariable variable, PsiType toReturn);
 }

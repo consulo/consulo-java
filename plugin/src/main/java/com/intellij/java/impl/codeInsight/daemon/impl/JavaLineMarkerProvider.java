@@ -27,6 +27,7 @@ import com.intellij.java.language.psi.util.MethodSignatureBackedByPsiMethod;
 import com.intellij.java.language.psi.util.PsiExpressionTrimRenderer;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.AllIcons;
 import consulo.application.ApplicationManager;
 import consulo.application.progress.ProgressIndicator;
@@ -62,6 +63,7 @@ import javax.annotation.Nonnull;
 import java.util.*;
 import java.util.function.Function;
 
+@ExtensionImpl
 public class JavaLineMarkerProvider extends LineMarkerProviderDescriptor {
   public static final Option LAMBDA_OPTION = new Option("java.lambda", JavaBundle.message("title.lambda"), AllIcons.Gutter.ImplementingFunctional) {
     @Override

@@ -18,12 +18,14 @@ package com.intellij.java.impl.refactoring.safeDelete;
 import com.intellij.java.language.psi.PsiImportStatement;
 import com.intellij.java.language.psi.PsiImportStatementBase;
 import com.intellij.java.language.psi.PsiJavaFile;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.*;
 import consulo.language.psi.util.PsiTreeUtil;
 
 /**
  * @author Max Medvedev
  */
+@ExtensionImpl
 public class JavaImportSearcher extends ImportSearcher {
   @Override
   public PsiElement findImport(PsiElement element, boolean onlyNonStatic) {

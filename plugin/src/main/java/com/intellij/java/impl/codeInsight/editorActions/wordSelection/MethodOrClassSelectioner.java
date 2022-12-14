@@ -15,30 +15,23 @@
  */
 package com.intellij.java.impl.codeInsight.editorActions.wordSelection;
 
+import com.intellij.java.language.JavaLanguage;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.javadoc.PsiDocComment;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.codeEditor.Editor;
+import consulo.document.util.TextRange;
+import consulo.language.psi.PsiComment;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiWhiteSpace;
+import consulo.util.collection.ContainerUtil;
+
+import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import javax.annotation.Nonnull;
-
-import com.intellij.java.language.JavaLanguage;
-import consulo.codeEditor.Editor;
-import consulo.document.util.TextRange;
-import com.intellij.java.language.psi.PsiClass;
-import consulo.language.psi.PsiComment;
-import consulo.language.psi.PsiElement;
-import com.intellij.java.language.psi.PsiIdentifier;
-import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.java.language.psi.PsiTypeParameter;
-import com.intellij.java.language.psi.PsiTypeParameterList;
-import consulo.language.psi.PsiWhiteSpace;
-import com.intellij.java.language.psi.javadoc.PsiDocComment;
-import consulo.util.collection.ContainerUtil;
-
-/**
- *
- */
-
+@ExtensionImpl
 public class MethodOrClassSelectioner extends BasicSelectioner {
   @Override
   public boolean canSelect(PsiElement e) {

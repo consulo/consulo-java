@@ -17,6 +17,7 @@ package com.intellij.java.impl.psi.formatter;
 
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.JavaDocTokenType;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.Language;
 import consulo.language.ast.ASTNode;
 import consulo.language.codeStyle.WhiteSpaceFormattingStrategyAdapter;
@@ -26,6 +27,7 @@ import javax.annotation.Nonnull;
 /**
  * @author max
  */
+@ExtensionImpl
 public class JavadocWhiteSpaceFormattingStrategy extends WhiteSpaceFormattingStrategyAdapter {
   @Override
   public boolean containsWhitespacesOnly(@Nonnull final ASTNode node) {

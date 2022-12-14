@@ -16,6 +16,7 @@
 package com.intellij.java.impl.codeInsight.editorActions.moveLeftRight;
 
 import com.intellij.java.language.JavaLanguage;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.Language;
 import consulo.language.editor.moveLeftRight.MoveElementLeftRightHandler;
 import com.intellij.java.language.psi.*;
@@ -25,6 +26,7 @@ import consulo.annotation.access.RequiredReadAction;
 
 import javax.annotation.Nonnull;
 
+@ExtensionImpl
 public class JavaMoveLeftRightHandler implements MoveElementLeftRightHandler {
   @RequiredReadAction
   @Nonnull

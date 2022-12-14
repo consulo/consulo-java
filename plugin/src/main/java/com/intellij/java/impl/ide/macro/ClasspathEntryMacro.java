@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.ide.macro;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.ide.IdeBundle;
 import consulo.language.editor.PlatformDataKeys;
 import consulo.pathMacro.Macro;
@@ -27,6 +28,7 @@ import consulo.virtualFileSystem.VirtualFile;
 /**
  * @author Eugene Belyaev
  */
+@ExtensionImpl
 public final class ClasspathEntryMacro extends Macro {
   public String getName() {
     return "ClasspathEntry";

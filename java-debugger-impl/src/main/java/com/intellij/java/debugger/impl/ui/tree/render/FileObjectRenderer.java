@@ -16,16 +16,18 @@
 package com.intellij.java.debugger.impl.ui.tree.render;
 
 import com.intellij.java.debugger.impl.settings.NodeRendererSettings;
+import consulo.annotation.component.ExtensionImpl;
+import jakarta.inject.Inject;
 
 /**
  * @author egor
  */
-public class FileObjectRenderer extends ToStringBasedRenderer
-{
-	public FileObjectRenderer(final NodeRendererSettings rendererSettings)
-	{
-		super(rendererSettings, "File", null, NodeRendererSettings.createExpressionChildrenRenderer("listFiles()", null));
-		setClassName("java.io.File");
-		setEnabled(true);
-	}
+@ExtensionImpl
+public class FileObjectRenderer extends ToStringBasedRenderer {
+  @Inject
+  public FileObjectRenderer(final NodeRendererSettings rendererSettings) {
+    super(rendererSettings, "File", null, NodeRendererSettings.createExpressionChildrenRenderer("listFiles()", null));
+    setClassName("java.io.File");
+    setEnabled(true);
+  }
 }

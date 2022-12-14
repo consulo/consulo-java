@@ -15,6 +15,7 @@
  */
 package com.intellij.java.compiler.artifact.impl.elements;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.AllIcons;
 import consulo.compiler.CompilerBundle;
 import consulo.compiler.artifact.Artifact;
@@ -35,6 +36,7 @@ import javax.annotation.Nullable;
 /**
  * @author nik
  */
+@ExtensionImpl(order = "after zip-archive-element")
 public class JarArchiveElementType extends CompositePackagingElementType<JarArchivePackagingElement> {
   @Nonnull
   public static JarArchiveElementType getInstance() {

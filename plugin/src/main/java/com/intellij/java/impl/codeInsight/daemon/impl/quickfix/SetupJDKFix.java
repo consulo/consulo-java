@@ -15,24 +15,25 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
-import javax.annotation.Nonnull;
-
+import consulo.application.ApplicationManager;
+import consulo.codeEditor.Editor;
+import consulo.content.bundle.Sdk;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.language.editor.intention.HighPriorityAction;
 import consulo.language.editor.intention.IntentionAction;
-import consulo.application.ApplicationManager;
-import consulo.codeEditor.Editor;
-import consulo.module.Module;
-import consulo.language.util.ModuleUtilCore;
-import consulo.project.Project;
-import consulo.content.bundle.Sdk;
+import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.psi.PsiFile;
+import consulo.language.util.ModuleUtilCore;
+import consulo.module.Module;
+import consulo.project.Project;
+
+import javax.annotation.Nonnull;
 
 /**
  * @author mike
  *         Date: Aug 20, 2002
  */
-public class SetupJDKFix implements IntentionAction, HighPriorityAction {
+public class SetupJDKFix implements IntentionAction, HighPriorityAction, SyntheticIntentionAction {
   private static final SetupJDKFix ourInstance = new SetupJDKFix();
 
   public static SetupJDKFix getInstance() {

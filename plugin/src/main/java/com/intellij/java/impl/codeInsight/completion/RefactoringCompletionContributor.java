@@ -16,7 +16,10 @@
 package com.intellij.java.impl.codeInsight.completion;
 
 import com.intellij.java.impl.refactoring.ui.ClassNameReferenceEditor;
+import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.PsiClass;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.Language;
 import consulo.language.editor.completion.CompletionContributor;
 import consulo.language.editor.completion.CompletionParameters;
 import consulo.language.editor.completion.CompletionResult;
@@ -28,12 +31,14 @@ import consulo.language.editor.completion.lookup.LookupElementRenderer;
 import consulo.language.util.ModuleUtilCore;
 import consulo.module.Module;
 
+import javax.annotation.Nonnull;
 import java.util.function.Consumer;
 
 /**
  * @author peter
  */
-public abstract class RefactoringCompletionContributor extends CompletionContributor {
+@ExtensionImpl(id = "javaRefactoring", order = "before javaBasic2ClassName")
+public class RefactoringCompletionContributor extends CompletionContributor {
   @Override
   public void fillCompletionVariants(CompletionParameters parameters, final CompletionResultSet resultSet) {
     if (parameters.getOriginalFile().getUserData(ClassNameReferenceEditor.CLASS_NAME_REFERENCE_FRAGMENT) == null) {
@@ -55,6 +60,12 @@ public abstract class RefactoringCompletionContributor extends CompletionContrib
         resultSet.passResult(result);
       }
     });
+  }
+
+  @Nonnull
+  @Override
+  public Language getLanguage() {
+    return JavaLanguage.INSTANCE;
   }
 
   private static class AppendModuleName extends LookupElementRenderer<LookupElementDecorator<LookupElement>> {

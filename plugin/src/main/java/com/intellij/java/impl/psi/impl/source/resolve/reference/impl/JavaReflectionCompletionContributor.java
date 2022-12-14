@@ -17,11 +17,14 @@ package com.intellij.java.impl.psi.impl.source.resolve.reference.impl;
 
 import com.intellij.java.analysis.impl.psi.impl.source.resolve.reference.impl.JavaReflectionReferenceUtil;
 import com.intellij.java.impl.codeInsight.completion.JavaLookupElementBuilder;
+import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.document.util.TextRange;
 import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.Language;
 import consulo.language.editor.completion.CompletionContributor;
 import consulo.language.editor.completion.CompletionParameters;
 import consulo.language.editor.completion.CompletionResultSet;
@@ -48,7 +51,8 @@ import static consulo.language.pattern.StandardPatterns.or;
 /**
  * @author Pavel.Dolgov
  */
-public abstract class JavaReflectionCompletionContributor extends CompletionContributor {
+@ExtensionImpl(id = "javaReflection", order = "last, before javaLegacy")
+public class JavaReflectionCompletionContributor extends CompletionContributor {
   private static final String CONSTRUCTOR = "getConstructor";
   private static final String DECLARED_CONSTRUCTOR = "getDeclaredConstructor";
   private static final String ANNOTATION = "getAnnotation";
@@ -171,6 +175,12 @@ public abstract class JavaReflectionCompletionContributor extends CompletionCont
       context.commitDocument();
       shortenArgumentsClassReferences(context);
     }
+  }
+
+  @Nonnull
+  @Override
+  public Language getLanguage() {
+    return JavaLanguage.INSTANCE;
   }
 
   private static class MethodDefinedInInterfacePatternCondition extends PatternCondition<PsiMethod> {

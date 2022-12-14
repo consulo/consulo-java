@@ -16,11 +16,14 @@
 package com.intellij.java.impl.psi.impl.source.resolve.reference.impl;
 
 import com.intellij.java.impl.psi.impl.source.resolve.reference.impl.providers.JavaClassReferenceProvider;
+import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.patterns.PsiJavaElementPattern;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiLiteral;
 import com.intellij.java.language.psi.PsiLiteralExpression;
 import com.intellij.java.language.psi.PsiReferenceExpression;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.Language;
 import consulo.language.pattern.ElementPattern;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
@@ -40,7 +43,8 @@ import static consulo.language.pattern.StandardPatterns.or;
 /**
  * @author Konstantin Bulenkov
  */
-public abstract class JavaReflectionReferenceContributor extends PsiReferenceContributor {
+@ExtensionImpl
+public class JavaReflectionReferenceContributor extends PsiReferenceContributor {
   public static final PsiJavaElementPattern.Capture<PsiLiteral> PATTERN = psiLiteral().methodCallParameter(psiMethod().withName(GET_FIELD, GET_DECLARED_FIELD, GET_METHOD, GET_DECLARED_METHOD)
       .definedInClass(JAVA_LANG_CLASS));
 
@@ -76,5 +80,11 @@ public abstract class JavaReflectionReferenceContributor extends PsiReferenceCon
     });
 
     registrar.registerReferenceProvider(METHOD_HANDLE_PATTERN, new JavaLangInvokeHandleReference.JavaLangInvokeHandleReferenceProvider());
+  }
+
+  @Nonnull
+  @Override
+  public Language getLanguage() {
+    return JavaLanguage.INSTANCE;
   }
 }

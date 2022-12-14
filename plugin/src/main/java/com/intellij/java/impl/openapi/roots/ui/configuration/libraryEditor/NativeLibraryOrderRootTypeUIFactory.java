@@ -16,7 +16,10 @@
 
 package com.intellij.java.impl.openapi.roots.ui.configuration.libraryEditor;
 
+import com.intellij.java.language.projectRoots.roots.NativeLibraryOrderRootType;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.content.bundle.Sdk;
+import consulo.fileChooser.FileChooserDescriptor;
 import consulo.ide.ui.OrderRootTypeUIFactory;
 import consulo.ide.ui.SdkPathEditor;
 import consulo.java.impl.JavaBundle;
@@ -25,6 +28,7 @@ import consulo.ui.image.Image;
 
 import javax.annotation.Nonnull;
 
+@ExtensionImpl
 public class NativeLibraryOrderRootTypeUIFactory implements OrderRootTypeUIFactory {
   @Nonnull
   @Override
@@ -47,6 +51,9 @@ public class NativeLibraryOrderRootTypeUIFactory implements OrderRootTypeUIFacto
   @Nonnull
   @Override
   public SdkPathEditor createPathEditor(Sdk sdk) {
-    return null;
+    return new SdkPathEditor(getNodeText(),
+                             NativeLibraryOrderRootType.getInstance(),
+                             new FileChooserDescriptor(true, false, true, false, true, false),
+                             sdk);
   }
 }

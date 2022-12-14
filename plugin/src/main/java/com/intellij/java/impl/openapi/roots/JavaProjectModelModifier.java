@@ -17,6 +17,8 @@ package com.intellij.java.impl.openapi.roots;
 
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.projectRoots.roots.ExternalLibraryDescriptor;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ExtensionAPI;
 import consulo.component.extension.ExtensionPointName;
 import consulo.module.Module;
 import consulo.module.content.layer.orderEntry.DependencyScope;
@@ -35,8 +37,9 @@ import java.util.Collection;
  * @author nik
  * @see JavaProjectModelModificationService
  */
+@ExtensionAPI(ComponentScope.PROJECT)
 public abstract class JavaProjectModelModifier {
-  public static final ExtensionPointName<JavaProjectModelModifier> EP_NAME = ExtensionPointName.create("consulo.java.projectModelModifier");
+  public static final ExtensionPointName<JavaProjectModelModifier> EP_NAME = ExtensionPointName.create(JavaProjectModelModifier.class);
 
   /**
    * Implementation of this method should add dependency from module {@code from} to module {@code to} with scope {@code scope} accordingly

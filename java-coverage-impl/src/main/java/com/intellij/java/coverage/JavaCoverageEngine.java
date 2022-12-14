@@ -11,6 +11,7 @@ import com.intellij.java.language.psi.*;
 import com.intellij.rt.coverage.data.JumpData;
 import com.intellij.rt.coverage.data.LineData;
 import com.intellij.rt.coverage.data.SwitchData;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.ApplicationManager;
 import consulo.application.util.function.Computable;
 import consulo.codeEditor.Editor;
@@ -54,6 +55,7 @@ import java.util.*;
 /**
  * @author Roman.Chernyatchik
  */
+@ExtensionImpl(order = "last")
 public class JavaCoverageEngine extends CoverageEngine {
   private static final Logger LOG = Logger.getInstance(JavaCoverageEngine.class);
 
@@ -62,7 +64,7 @@ public class JavaCoverageEngine extends CoverageEngine {
     if (conf instanceof CommonJavaRunConfigurationParameters) {
       return true;
     }
-    for (JavaCoverageEngineExtension extension : Extensions.getExtensions(JavaCoverageEngineExtension.EP_NAME)) {
+    for (JavaCoverageEngineExtension extension : JavaCoverageEngineExtension.EP_NAME.getExtensionList()) {
       if (extension.isApplicableTo(conf)) {
         return true;
       }

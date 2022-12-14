@@ -16,6 +16,7 @@
 package com.intellij.java.impl.codeInsight.template.macro;
 
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.template.Expression;
@@ -37,6 +38,7 @@ import java.util.List;
 /**
  * @author ven
  */
+@ExtensionImpl
 public class IterableVariableMacro extends VariableTypeMacroBase {
   private static final Logger LOG = Logger.getInstance(IterableVariableMacro.class);
 

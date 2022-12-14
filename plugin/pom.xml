@@ -76,14 +76,14 @@
 								<artifact>${project.groupId}:consulo.java-jdk.annotations:${project.version}</artifact>
 								<path>jdk-annotations.jar</path>
 							</copy>
-							<!--TODO problem with starting i<copy>
+							<copy>
 								<artifact>${project.groupId}:consulo.java-java.rt.shaded:${project.version}</artifact>
 								<path>java-rt-shaded.jar</path>
-							</copy>-->
-							<!--<copy>-->
-								<!--<artifact>${project.groupId}:consulo.java-java.rt:${project.version}</artifact>-->
-								<!--<path>java-rt.jar</path>-->
-							<!--</copy>-->
+							</copy>
+							<copy>
+								<artifact>${project.groupId}:consulo.java-java.rt:${project.version}</artifact>
+								<path>java-rt.jar</path>
+							</copy>
 							<copy>
 								<artifact>consulo.internal:java.coverage.agent:2.0</artifact>
 								<path>coverage/consulo/agent.jar</path>
@@ -111,15 +111,12 @@
 			<scope>provided</scope>
 		</dependency>
 
-		<!--just for correct working packaging
-		TODO
-		-->
-		<!--<dependency>-->
-			<!--<groupId>${project.groupId}</groupId>-->
-			<!--<artifactId>consulo.java-java.rt.shaded</artifactId>-->
-			<!--<version>${project.version}</version>-->
-			<!--<scope>runtime</scope>-->
-		<!--</dependency>-->
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>consulo.java-java.rt.shaded</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
 
 		<dependency>
 			<groupId>${project.groupId}</groupId>

@@ -17,6 +17,7 @@ package com.intellij.java.impl.psi.util.proximity;
 
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMember;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.util.dataholder.NotNullLazyKey;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
@@ -30,6 +31,7 @@ import javax.annotation.Nonnull;
 /**
  * @author peter
  */
+@ExtensionImpl(id = "samePsiMember", order = "before explicitlyImported")
 public class SamePsiMemberWeigher extends ProximityWeigher {
   private static final NotNullLazyKey<Boolean, ProximityLocation> INSIDE_PSI_MEMBER = NotNullLazyKey.create("insidePsiMember", new NotNullFunction<ProximityLocation, Boolean>() {
     @Override

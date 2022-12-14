@@ -17,6 +17,7 @@ package com.intellij.java.impl.psi.codeStyle.arrangement;
 
 import com.intellij.java.analysis.impl.ide.highlighter.JavaHighlightingColors;
 import com.intellij.java.language.JavaLanguage;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.EditorColors;
 import consulo.colorScheme.EditorColorsScheme;
 import consulo.colorScheme.TextAttributes;
@@ -56,6 +57,7 @@ import static consulo.language.codeStyle.arrangement.std.StdArrangementTokens.Or
  * @author Denis Zhdanov
  * @since 7/20/12 2:31 PM
  */
+@ExtensionImpl
 public class JavaRearranger implements Rearranger<JavaElementArrangementEntry>, ArrangementSectionRuleAwareSettings,
     ArrangementStandardSettingsAware, ArrangementColorsAware {
 

@@ -16,6 +16,7 @@
 package com.intellij.java.impl.ide.highlighter;
 
 import com.intellij.java.language.impl.JavaClassFileType;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.fileEditor.structureView.StructureViewBuilder;
 import consulo.fileEditor.structureView.StructureViewBuilderProvider;
 import consulo.language.editor.structureView.PsiStructureViewFactory;
@@ -32,6 +33,7 @@ import javax.annotation.Nullable;
 /**
  * @author max
  */
+@ExtensionImpl
 public class JavaClsStructureViewBuilderProvider implements StructureViewBuilderProvider {
   @Override
   @Nullable

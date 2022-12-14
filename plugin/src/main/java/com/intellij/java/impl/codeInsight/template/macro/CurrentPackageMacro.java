@@ -17,6 +17,7 @@ package com.intellij.java.impl.codeInsight.template.macro;
 
 import com.intellij.java.impl.codeInsight.template.JavaCodeContextType;
 import com.intellij.java.language.psi.PsiJavaFile;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.template.Expression;
 import consulo.language.editor.template.ExpressionContext;
@@ -37,7 +38,8 @@ import javax.annotation.Nonnull;
  * Time: 8:36:42 PM
  * To change this template use Options | File Templates.
  */
-class CurrentPackageMacro extends Macro {
+@ExtensionImpl
+public class CurrentPackageMacro extends Macro {
   @Override
   public String getName() {
     return "currentPackage";

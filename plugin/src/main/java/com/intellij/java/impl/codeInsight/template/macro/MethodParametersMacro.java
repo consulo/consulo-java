@@ -18,6 +18,7 @@ package com.intellij.java.impl.codeInsight.template.macro;
 import com.intellij.java.impl.codeInsight.template.JavaCodeContextType;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiParameter;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.template.*;
 import consulo.language.editor.template.context.TemplateContextType;
@@ -28,6 +29,7 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
+@ExtensionImpl
 public class MethodParametersMacro extends Macro {
 
   @Override

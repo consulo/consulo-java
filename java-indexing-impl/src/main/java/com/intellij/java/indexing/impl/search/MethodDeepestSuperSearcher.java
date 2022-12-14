@@ -16,10 +16,11 @@
 package com.intellij.java.indexing.impl.search;
 
 import com.intellij.java.language.psi.PsiMethod;
+import com.intellij.java.language.psi.search.searches.DeepestSuperMethodsSearchExecutor;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.ApplicationManager;
 import consulo.application.util.function.Computable;
 import consulo.application.util.function.Processor;
-import consulo.application.util.query.QueryExecutor;
 
 import javax.annotation.Nonnull;
 import java.util.HashSet;
@@ -28,7 +29,8 @@ import java.util.Set;
 /**
  * @author peter
  */
-public class MethodDeepestSuperSearcher implements QueryExecutor<PsiMethod, PsiMethod> {
+@ExtensionImpl
+public class MethodDeepestSuperSearcher implements DeepestSuperMethodsSearchExecutor {
   @Override
   public boolean execute(@Nonnull PsiMethod method, @Nonnull Processor<? super PsiMethod> consumer) {
     return processDeepestSuperMethods(method, consumer);

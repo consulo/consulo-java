@@ -20,6 +20,7 @@ import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiClassOwner;
 import com.intellij.java.language.psi.PsiJavaPackage;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.Result;
 import consulo.dataContext.DataContext;
 import consulo.language.editor.LangDataKeys;
@@ -41,6 +42,7 @@ import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.Function;
 
+@ExtensionImpl(id = "moveJavaFileOrDir")
 public class JavaMoveFilesOrDirectoriesHandler extends MoveFilesOrDirectoriesHandler {
   @Override
   public boolean canMove(PsiElement[] elements, PsiElement targetContainer) {

@@ -3,6 +3,7 @@ package com.intellij.java.impl.refactoring.move.moveClassesOrPackages;
 import com.intellij.java.impl.refactoring.util.RefactoringConflictsUtil;
 import com.intellij.java.language.impl.codeInsight.ChangeContextUtil;
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.refactoring.event.RefactoringElementListener;
 import consulo.language.psi.PsiDirectory;
 import consulo.language.psi.PsiElement;
@@ -17,6 +18,7 @@ import consulo.util.collection.MultiMap;
 import java.util.*;
 import java.util.function.Function;
 
+@ExtensionImpl
 public class JavaMoveDirectoryWithClassesHelper extends MoveDirectoryWithClassesHelper {
 
   @Override

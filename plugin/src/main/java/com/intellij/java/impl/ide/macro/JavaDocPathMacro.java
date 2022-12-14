@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.ide.macro;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.ide.IdeBundle;
 import consulo.pathMacro.Macro;
 import com.intellij.java.impl.javadoc.JavadocConfiguration;
@@ -25,6 +26,7 @@ import consulo.project.Project;
 
 import java.io.File;
 
+@ExtensionImpl
 public final class JavaDocPathMacro extends Macro {
   public String getName() {
     return "JavaDocPath";

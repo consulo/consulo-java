@@ -15,6 +15,9 @@
  */
 package com.intellij.java.debugger.ui.tree;
 
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ExtensionAPI;
+import consulo.application.Application;
 import consulo.component.extension.ExtensionPointName;
 
 import javax.annotation.Nonnull;
@@ -22,23 +25,18 @@ import javax.annotation.Nonnull;
 /**
  * @author Nikolay.Tropin
  */
-public abstract class NodeDescriptorNameAdjuster
-{
-	public static ExtensionPointName<NodeDescriptorNameAdjuster> EP_NAME = ExtensionPointName.create("consulo.java.debugger.nodeNameAdjuster");
+@ExtensionAPI(ComponentScope.APPLICATION)
+public abstract class NodeDescriptorNameAdjuster {
+  public abstract boolean isApplicable(@Nonnull NodeDescriptor descriptor);
 
-	public abstract boolean isApplicable(@Nonnull NodeDescriptor descriptor);
+  public abstract String fixName(String name, @Nonnull NodeDescriptor descriptor);
 
-	public abstract String fixName(String name, @Nonnull NodeDescriptor descriptor);
-
-	public static NodeDescriptorNameAdjuster findFor(@Nonnull NodeDescriptor descriptor)
-	{
-		for(NodeDescriptorNameAdjuster adjuster : EP_NAME.getExtensions())
-		{
-			if(adjuster.isApplicable(descriptor))
-			{
-				return adjuster;
-			}
-		}
-		return null;
-	}
+  public static NodeDescriptorNameAdjuster findFor(@Nonnull NodeDescriptor descriptor) {
+    for (NodeDescriptorNameAdjuster adjuster : Application.get().getExtensionList(NodeDescriptorNameAdjuster.class)) {
+      if (adjuster.isApplicable(descriptor)) {
+        return adjuster;
+      }
+    }
+    return null;
+  }
 }

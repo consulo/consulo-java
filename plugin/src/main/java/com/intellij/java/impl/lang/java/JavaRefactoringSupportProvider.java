@@ -30,6 +30,7 @@ import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.impl.psi.impl.light.LightMethodBuilder;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.content.scope.SearchScope;
 import consulo.language.Language;
 import consulo.language.editor.refactoring.RefactoringSupportProvider;
@@ -47,6 +48,7 @@ import javax.annotation.Nullable;
 /**
  * @author ven
  */
+@ExtensionImpl
 public class JavaRefactoringSupportProvider extends RefactoringSupportProvider {
   @Override
   public boolean isSafeDeleteAvailable(PsiElement element) {

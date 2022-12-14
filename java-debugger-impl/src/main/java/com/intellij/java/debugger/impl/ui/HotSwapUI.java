@@ -16,29 +16,30 @@
 
 package com.intellij.java.debugger.impl.ui;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.java.debugger.impl.DebuggerSession;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ServiceAPI;
 import consulo.ide.ServiceManager;
 import consulo.project.Project;
+
+import javax.annotation.Nonnull;
 
 /**
  * @author nik
  */
-public abstract class HotSwapUI
-{
-	@Nonnull
-	public static HotSwapUI getInstance(@Nonnull Project project)
-	{
-		return ServiceManager.getService(project, HotSwapUI.class);
-	}
+@ServiceAPI(ComponentScope.PROJECT)
+public abstract class HotSwapUI {
+  @Nonnull
+  public static HotSwapUI getInstance(@Nonnull Project project) {
+    return ServiceManager.getService(project, HotSwapUI.class);
+  }
 
-	public abstract void reloadChangedClasses(DebuggerSession session, boolean compileBeforeHotswap);
+  public abstract void reloadChangedClasses(DebuggerSession session, boolean compileBeforeHotswap);
 
-	public abstract void dontPerformHotswapAfterThisCompilation();
+  public abstract void dontPerformHotswapAfterThisCompilation();
 
 
-	public abstract void addListener(HotSwapVetoableListener listener);
+  public abstract void addListener(HotSwapVetoableListener listener);
 
-	public abstract void removeListener(HotSwapVetoableListener listener);
+  public abstract void removeListener(HotSwapVetoableListener listener);
 }

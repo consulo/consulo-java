@@ -17,13 +17,16 @@ package com.intellij.java.compiler.impl.options;
 
 import com.intellij.java.compiler.impl.javaCompiler.JavaCompilerConfiguration;
 import com.intellij.java.compiler.impl.javaCompiler.annotationProcessing.ProcessorConfigProfile;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.configurable.Configurable;
 import consulo.configurable.ConfigurationException;
+import consulo.configurable.ProjectConfigurable;
 import consulo.configurable.SearchableConfigurable;
 import consulo.project.Project;
+import jakarta.inject.Inject;
 
 import javax.annotation.Nonnull;
-
+import javax.annotation.Nullable;
 import javax.swing.*;
 import java.util.HashMap;
 import java.util.List;
@@ -31,19 +34,22 @@ import java.util.Map;
 
 /**
  * @author Eugene Zhuravlev
- *         Date: Oct 5, 2009
+ * Date: Oct 5, 2009
  */
-public class AnnotationProcessorsConfigurable implements SearchableConfigurable, Configurable.NoScroll {
+@ExtensionImpl
+public class AnnotationProcessorsConfigurable implements ProjectConfigurable, SearchableConfigurable, Configurable.NoScroll {
 
   private final Project myProject;
   private AnnotationProcessorsPanel myMainPanel;
   private JavaCompilerConfiguration myCompilerConfiguration;
 
-  public AnnotationProcessorsConfigurable(final Project project) {
+  @Inject
+  public AnnotationProcessorsConfigurable(final Project project, JavaCompilerConfiguration javaCompilerConfiguration) {
     myProject = project;
-    myCompilerConfiguration = JavaCompilerConfiguration.getInstance(project);
+    myCompilerConfiguration = javaCompilerConfiguration;
   }
 
+  @Nonnull
   @Override
   public String getDisplayName() {
     return "Annotation Processors";
@@ -57,12 +63,13 @@ public class AnnotationProcessorsConfigurable implements SearchableConfigurable,
   @Override
   @Nonnull
   public String getId() {
-    return getHelpTopic();
+    return "project.propCompiler.java.annotation.processors";
   }
 
+  @Nullable
   @Override
-  public Runnable enableSearch(String option) {
-    return null;
+  public String getParentId() {
+    return "project.propCompiler.java";
   }
 
   @Override
@@ -105,9 +112,4 @@ public class AnnotationProcessorsConfigurable implements SearchableConfigurable,
   public void reset() {
     myMainPanel.initProfiles(myCompilerConfiguration.getDefaultProcessorProfile(), myCompilerConfiguration.getModuleProcessorProfiles());
   }
-
-  @Override
-  public void disposeUIResources() {
-  }
-
 }

@@ -19,6 +19,7 @@ import com.intellij.java.language.psi.PsiCodeBlock;
 import com.intellij.java.language.psi.PsiJavaToken;
 import com.intellij.java.language.psi.PsiSwitchLabelStatement;
 import com.intellij.java.language.psi.PsiSwitchStatement;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.*;
 import consulo.document.util.TextRange;
 import consulo.codeEditor.Editor;
@@ -27,6 +28,7 @@ import consulo.document.Document;
 import java.util.List;
 import java.util.ArrayList;
 
+@ExtensionImpl
 public class CaseStatementsSelectioner extends BasicSelectioner {
     @Override
     public boolean canSelect(PsiElement e) {

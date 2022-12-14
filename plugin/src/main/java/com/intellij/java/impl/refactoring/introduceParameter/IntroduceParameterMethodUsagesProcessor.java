@@ -15,6 +15,8 @@
  */
 package com.intellij.java.impl.refactoring.introduceParameter;
 
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ExtensionAPI;
 import consulo.component.extension.ExtensionPointName;
 import consulo.language.psi.PsiElement;
 import consulo.usage.UsageInfo;
@@ -25,9 +27,10 @@ import consulo.util.collection.MultiMap;
  * @author Maxim.Medvedev
  *         Date: Apr 17, 2009 5:16:10 PM
  */
+@ExtensionAPI(ComponentScope.APPLICATION)
 public interface IntroduceParameterMethodUsagesProcessor {
   ExtensionPointName<IntroduceParameterMethodUsagesProcessor> EP_NAME =
-    new ExtensionPointName<IntroduceParameterMethodUsagesProcessor>("consulo.java.refactoring.introduceParameterMethodUsagesProcessor");
+    ExtensionPointName.create(IntroduceParameterMethodUsagesProcessor.class);
 
   boolean isMethodUsage(UsageInfo usage);
 

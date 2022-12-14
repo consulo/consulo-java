@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.codeInsight.editorActions.wordSelection;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.ide.impl.idea.codeInsight.editorActions.wordSelection.LineCommentSelectioner;
 import com.intellij.java.language.psi.JavaDocTokenType;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
@@ -26,6 +27,7 @@ import consulo.util.lang.CharArrayUtil;
 
 import java.util.List;
 
+@ExtensionImpl
 public class DocCommentSelectioner extends LineCommentSelectioner {
   @Override
   public boolean canSelect(PsiElement e) {

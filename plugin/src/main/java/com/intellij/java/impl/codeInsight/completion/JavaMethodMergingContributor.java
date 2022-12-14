@@ -17,6 +17,8 @@ package com.intellij.java.impl.codeInsight.completion;
 
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiType;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.Language;
 import consulo.language.editor.completion.*;
 import consulo.language.editor.completion.lookup.LookupElement;
 
@@ -29,7 +31,8 @@ import static consulo.util.lang.ObjectUtil.assertNotNull;
 /**
  * @author peter
  */
-public abstract class JavaMethodMergingContributor extends CompletionContributor {
+@ExtensionImpl(id = "methodMerger", order = "before javaLegacy, before default")
+public class JavaMethodMergingContributor extends CompletionContributor {
 
   @Override
   public AutoCompletionDecision handleAutoCompletionPossibility(@Nonnull AutoCompletionContext context) {
@@ -89,5 +92,11 @@ public abstract class JavaMethodMergingContributor extends CompletionContributor
   private static PsiMethod getItemMethod(LookupElement item) {
     Object o = item.getPsiElement();
     return o instanceof PsiMethod ? (PsiMethod) o : null;
+  }
+
+  @Nonnull
+  @Override
+  public Language getLanguage() {
+    return Language.ANY;
   }
 }

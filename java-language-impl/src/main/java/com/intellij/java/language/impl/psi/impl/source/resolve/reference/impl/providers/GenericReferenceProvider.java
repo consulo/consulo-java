@@ -21,11 +21,9 @@ import consulo.language.psi.resolve.PsiScopeProcessor;
 import com.intellij.java.language.impl.psi.scope.util.PsiScopesUtil;
 
 /**
- * Created by IntelliJ IDEA.
  * User: ik
  * Date: 27.03.2003
  * Time: 17:23:43
- * To change this template use Options | File Templates.
  */
 public abstract class GenericReferenceProvider extends PsiReferenceProvider {
   private boolean mySoft = false;

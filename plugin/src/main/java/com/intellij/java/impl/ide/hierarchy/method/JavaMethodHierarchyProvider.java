@@ -20,6 +20,7 @@ import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.java.language.psi.PsiJavaToken;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifier;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
 import consulo.dataContext.DataContext;
 import consulo.ide.impl.idea.ide.hierarchy.MethodHierarchyBrowserBase;
@@ -28,7 +29,7 @@ import consulo.language.editor.CommonDataKeys;
 import consulo.language.editor.LangDataKeys;
 import consulo.language.editor.PlatformDataKeys;
 import consulo.language.editor.hierarchy.HierarchyBrowser;
-import consulo.language.editor.hierarchy.HierarchyProvider;
+import consulo.language.editor.hierarchy.MethodHierarchyProvider;
 import consulo.language.psi.PsiDocumentManager;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
@@ -42,7 +43,8 @@ import javax.annotation.Nullable;
 /**
  * @author yole
  */
-public class JavaMethodHierarchyProvider implements HierarchyProvider {
+@ExtensionImpl
+public class JavaMethodHierarchyProvider implements MethodHierarchyProvider {
   public PsiElement getTarget(@Nonnull final DataContext dataContext) {
     final PsiMethod method = getMethodImpl(dataContext);
     if (method != null && method.getContainingClass() != null && !method.hasModifierProperty(PsiModifier.PRIVATE) && !method.hasModifierProperty(PsiModifier.STATIC)) {

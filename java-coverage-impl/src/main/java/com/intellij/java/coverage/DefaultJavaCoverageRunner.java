@@ -16,6 +16,7 @@
 package com.intellij.java.coverage;
 
 import com.intellij.java.execution.impl.DefaultJavaProgramRunner;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.execution.configuration.*;
 import consulo.execution.coverage.CoverageEngine;
 import consulo.execution.coverage.CoverageExecutor;
@@ -23,6 +24,7 @@ import consulo.execution.coverage.CoverageRunnerData;
 
 import javax.annotation.Nonnull;
 
+@ExtensionImpl(id = "DefaultJavaCoverageRunner")
 public class DefaultJavaCoverageRunner extends DefaultJavaProgramRunner {
   public boolean canRun(@Nonnull final String executorId, @Nonnull final RunProfile profile) {
     try {

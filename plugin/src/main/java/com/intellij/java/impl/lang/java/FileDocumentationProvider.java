@@ -17,7 +17,8 @@ package com.intellij.java.impl.lang.java;
 
 import com.intellij.java.impl.codeInsight.javadoc.JavaDocExternalFilter;
 import com.intellij.java.impl.codeInsight.javadoc.JavaDocInfoGenerator;
-import consulo.language.editor.documentation.AbstractDocumentationProvider;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.documentation.UnrestrictedDocumentationProvider;
 import consulo.language.psi.PsiElement;
 
 import javax.annotation.Nullable;
@@ -25,7 +26,8 @@ import javax.annotation.Nullable;
 /**
  * @author spleaner
  */
-public class FileDocumentationProvider extends AbstractDocumentationProvider {
+@ExtensionImpl(order = "last")
+public class FileDocumentationProvider implements UnrestrictedDocumentationProvider {
 
   @Override
   public String generateDoc(PsiElement element, @Nullable PsiElement originalElement) {

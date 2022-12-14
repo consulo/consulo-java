@@ -16,26 +16,25 @@
 package com.intellij.java.debugger.impl.engine;
 
 import com.intellij.java.debugger.SourcePosition;
-import com.intellij.java.debugger.impl.DebuggerUtilsEx;
 import com.intellij.java.debugger.engine.SourcePositionHighlighter;
+import com.intellij.java.debugger.impl.DebuggerUtilsEx;
+import com.intellij.java.language.psi.PsiLambdaExpression;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.dumb.DumbAware;
 import consulo.document.util.TextRange;
 import consulo.language.psi.PsiElement;
-import com.intellij.java.language.psi.PsiLambdaExpression;
 
 /**
  * @author Nikolay.Tropin
  */
-public class JavaSourcePositionHighlighter extends SourcePositionHighlighter implements DumbAware
-{
-	@Override
-	public TextRange getHighlightRange(SourcePosition sourcePosition)
-	{
-		PsiElement method = DebuggerUtilsEx.getContainingMethod(sourcePosition);
-		if(method instanceof PsiLambdaExpression)
-		{
-			return method.getTextRange();
-		}
-		return null;
-	}
+@ExtensionImpl
+public class JavaSourcePositionHighlighter extends SourcePositionHighlighter implements DumbAware {
+  @Override
+  public TextRange getHighlightRange(SourcePosition sourcePosition) {
+    PsiElement method = DebuggerUtilsEx.getContainingMethod(sourcePosition);
+    if (method instanceof PsiLambdaExpression) {
+      return method.getTextRange();
+    }
+    return null;
+  }
 }

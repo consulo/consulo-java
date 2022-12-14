@@ -18,6 +18,7 @@ package com.intellij.java.impl.refactoring.move.moveClassesOrPackages;
 import com.intellij.java.language.impl.codeInsight.ChangeContextUtil;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.language.psi.*;
@@ -35,6 +36,7 @@ import java.util.*;
 /**
  * @author Max Medvedev
  */
+@ExtensionImpl(id = "java")
 public class JavaMoveClassToInnerHandler implements MoveClassToInnerHandler {
   private static final Logger LOG = Logger.getInstance(JavaMoveClassToInnerHandler.class);
 

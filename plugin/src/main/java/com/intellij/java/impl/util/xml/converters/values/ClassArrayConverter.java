@@ -16,9 +16,15 @@
 
 package com.intellij.java.impl.util.xml.converters.values;
 
+import com.intellij.java.language.psi.PsiClass;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ServiceAPI;
 import consulo.ide.ServiceManager;
+import consulo.xml.util.xml.Converter;
+import consulo.xml.util.xml.CustomReferenceConverter;
 
-public abstract class ClassArrayConverter extends ClassValueConverter {
+@ServiceAPI(ComponentScope.APPLICATION)
+public abstract class ClassArrayConverter extends Converter<PsiClass> implements CustomReferenceConverter {
 
    public static ClassArrayConverter getClassArrayConverter() {
     return ServiceManager.getService(ClassArrayConverter.class);

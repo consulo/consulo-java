@@ -15,7 +15,5 @@
   -->
 
 <consulo-plugin>
-	<extensions defaultExtensionNs="com.intellij">
 
-	</extensions>
 </consulo-plugin>

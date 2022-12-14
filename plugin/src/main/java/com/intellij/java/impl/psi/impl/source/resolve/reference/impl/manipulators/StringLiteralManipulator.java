@@ -18,6 +18,7 @@ package com.intellij.java.impl.psi.impl.source.resolve.reference.impl.manipulato
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiLiteralExpression;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.document.util.TextRange;
 import consulo.util.lang.StringUtil;
 import consulo.language.psi.*;
@@ -28,6 +29,7 @@ import javax.annotation.Nonnull;
 /**
  * @author ven
  */
+@ExtensionImpl
 public class StringLiteralManipulator extends AbstractElementManipulator<PsiLiteralExpression> {
   @Override
   public PsiLiteralExpression handleContentChange(PsiLiteralExpression expr, TextRange range, String newContent) throws IncorrectOperationException {

@@ -1,11 +1,5 @@
 <consulo-plugin>
   <extensions defaultExtensionNs="com.intellij">
-    <referenceProviderType key="Properties File Key Provider"
-                           implementationClass="com.intellij.java.impl.lang.properties.PropertiesReferenceProvider"/>
-    <psi.referenceContributor implementation="com.intellij.java.impl.psi.impl.source.resolve.reference.impl.providers.JavaReferenceContributor"/>
-    <psi.referenceContributor implementation="com.intellij.java.impl.lang.properties.PropertiesReferenceContributor"/>
-    <lang.foldingBuilder language="JAVA" implementationClass="com.intellij.java.impl.codeInspection.i18n.folding.PropertyFoldingBuilder" />
-    <gotoDeclarationHandler implementation="com.intellij.java.impl.codeInspection.i18n.folding.I18nMessageGotoDeclarationHandler" order="FIRST"/>
 
     <localInspection shortName="HardCodedStringLiteral" bundle="messages.CodeInsightBundle" key="inspection.i18n.display.name"
                      groupBundle="messages.InspectionsBundle" groupKey="group.names.internationalization.issues" enabledByDefault="false" level="WARNING"

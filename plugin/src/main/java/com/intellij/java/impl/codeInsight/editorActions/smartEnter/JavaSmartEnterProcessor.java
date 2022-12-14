@@ -18,6 +18,7 @@ package com.intellij.java.impl.codeInsight.editorActions.smartEnter;
 import com.intellij.java.impl.codeInsight.CodeInsightUtil;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.EditorEx;
 import consulo.codeEditor.action.EditorActionHandler;
@@ -54,6 +55,7 @@ import static com.intellij.java.language.patterns.PsiJavaPatterns.psiElement;
 /**
  * @author spleaner
  */
+@ExtensionImpl
 public class JavaSmartEnterProcessor extends SmartEnterProcessor {
   private static final Logger LOG = Logger.getInstance(JavaSmartEnterProcessor.class);
 

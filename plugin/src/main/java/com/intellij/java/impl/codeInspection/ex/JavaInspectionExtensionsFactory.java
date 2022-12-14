@@ -22,6 +22,7 @@ package com.intellij.java.impl.codeInspection.ex;
 
 import com.intellij.java.analysis.codeInspection.BatchSuppressManager;
 import com.intellij.java.impl.codeInspection.reference.RefJavaManagerImpl;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.impl.inspection.reference.RefManagerImpl;
 import consulo.language.editor.inspection.*;
 import consulo.language.editor.inspection.reference.RefManager;
@@ -31,6 +32,7 @@ import consulo.project.Project;
 
 import javax.annotation.Nullable;
 
+@ExtensionImpl
 public class JavaInspectionExtensionsFactory extends InspectionExtensionsFactory {
 
   @Override

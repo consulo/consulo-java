@@ -16,15 +16,16 @@
 package com.intellij.java.indexing.impl.search;
 
 import com.intellij.java.language.psi.*;
-import consulo.application.ApplicationManager;
-import consulo.logging.Logger;
-import consulo.application.util.function.Computable;
 import com.intellij.java.language.psi.search.searches.SuperMethodsSearch;
+import com.intellij.java.language.psi.search.searches.SuperMethodsSearchExecutor;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.MethodSignatureBackedByPsiMethod;
 import com.intellij.java.language.psi.util.MethodSignatureUtil;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.application.ApplicationManager;
+import consulo.application.util.function.Computable;
 import consulo.application.util.function.Processor;
-import consulo.application.util.query.QueryExecutor;
+import consulo.logging.Logger;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -32,7 +33,8 @@ import java.util.List;
 /**
  * @author ven
  */
-public class MethodSuperSearcher implements QueryExecutor<MethodSignatureBackedByPsiMethod, SuperMethodsSearch.SearchParameters>
+@ExtensionImpl
+public class MethodSuperSearcher implements SuperMethodsSearchExecutor
 {
 	private static final Logger LOG = Logger.getInstance(MethodSuperSearcher.class);
 

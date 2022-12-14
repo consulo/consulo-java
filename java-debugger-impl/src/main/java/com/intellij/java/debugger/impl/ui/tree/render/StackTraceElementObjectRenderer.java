@@ -23,6 +23,7 @@ import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
 import com.intellij.java.debugger.impl.settings.NodeRendererSettings;
 import com.intellij.java.debugger.impl.ui.impl.watch.ValueDescriptorImpl;
 import com.intellij.java.execution.filters.ExceptionFilter;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.ApplicationManager;
 import consulo.execution.debug.frame.XFullValueEvaluator;
 import consulo.execution.ui.console.Filter;
@@ -30,6 +31,7 @@ import consulo.execution.ui.console.HyperlinkInfo;
 import consulo.ide.impl.idea.xdebugger.impl.ui.DebuggerUIUtil;
 import consulo.internal.com.sun.jdi.*;
 import consulo.logging.Logger;
+import jakarta.inject.Inject;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -38,9 +40,11 @@ import java.util.Collections;
 /**
  * @author egor
  */
+@ExtensionImpl
 class StackTraceElementObjectRenderer extends ToStringBasedRenderer implements FullValueEvaluatorProvider {
   private static final Logger LOG = Logger.getInstance(StackTraceElementObjectRenderer.class);
 
+  @Inject
   public StackTraceElementObjectRenderer(final NodeRendererSettings rendererSettings) {
     super(rendererSettings, "StackTraceElement", null, null);
     setClassName("java.lang.StackTraceElement");
@@ -49,19 +53,21 @@ class StackTraceElementObjectRenderer extends ToStringBasedRenderer implements F
 
   @Nullable
   @Override
-  public XFullValueEvaluator getFullValueEvaluator(final EvaluationContextImpl evaluationContext, final ValueDescriptorImpl valueDescriptor) {
+  public XFullValueEvaluator getFullValueEvaluator(final EvaluationContextImpl evaluationContext,
+                                                   final ValueDescriptorImpl valueDescriptor) {
     return new JavaValue.JavaFullValueEvaluator(DebuggerBundle.message("message.node.navigate"), evaluationContext) {
       @Override
       public void evaluate(@Nonnull XFullValueEvaluationCallback callback) {
         Value value = valueDescriptor.getValue();
-        ClassType type = ((ClassType) value.type());
+        ClassType type = ((ClassType)value.type());
         Method toString = type.concreteMethodByName("toString", "()Ljava/lang/String;");
         if (toString != null) {
           try {
-            Value res = evaluationContext.getDebugProcess().invokeMethod(evaluationContext, (ObjectReference) value, toString, Collections.emptyList());
+            Value res = evaluationContext.getDebugProcess()
+                                         .invokeMethod(evaluationContext, (ObjectReference)value, toString, Collections.emptyList());
             if (res instanceof StringReference) {
               callback.evaluated("");
-              final String line = ((StringReference) res).value();
+              final String line = ((StringReference)res).value();
               ApplicationManager.getApplication().runReadAction(new Runnable() {
                 @Override
                 public void run() {
@@ -81,7 +87,8 @@ class StackTraceElementObjectRenderer extends ToStringBasedRenderer implements F
                 }
               });
             }
-          } catch (EvaluateException e) {
+          }
+          catch (EvaluateException e) {
             LOG.info("Exception while getting stack info", e);
           }
         }

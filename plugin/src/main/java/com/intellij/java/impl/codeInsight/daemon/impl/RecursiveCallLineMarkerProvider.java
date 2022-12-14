@@ -18,6 +18,7 @@ package com.intellij.java.impl.codeInsight.daemon.impl;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.*;
 import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.AllIcons;
 import consulo.application.progress.ProgressManager;
 import consulo.codeEditor.markup.GutterIconRenderer;
@@ -42,6 +43,7 @@ import java.util.Set;
 /**
  * @author Danila Ponomarenko
  */
+@ExtensionImpl
 public class RecursiveCallLineMarkerProvider extends LineMarkerProviderDescriptor {
   @RequiredReadAction
   @Override

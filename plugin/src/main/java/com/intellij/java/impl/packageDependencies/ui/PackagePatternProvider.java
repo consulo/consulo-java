@@ -24,6 +24,7 @@ import com.intellij.java.impl.ide.util.scopeChooser.GroupByScopeTypeAction;
 import com.intellij.java.impl.psi.search.scope.packageSet.PatternPackageSet;
 import com.intellij.java.language.psi.PsiClassOwner;
 import com.intellij.java.language.psi.PsiNameHelper;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.content.scope.PackageSet;
 import consulo.ide.IdeBundle;
 import consulo.ide.impl.idea.packageDependencies.ui.*;
@@ -43,6 +44,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Set;
 
+@ExtensionImpl(id = "package", order = "before file")
 public class PackagePatternProvider extends PatternDialectProvider {
   @NonNls
   public static final String PACKAGES = "package";

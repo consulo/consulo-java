@@ -15,21 +15,26 @@
  */
 package com.intellij.java.impl.slicer;
 
-import javax.annotation.Nonnull;
-import jakarta.inject.Singleton;
-
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ServiceAPI;
+import consulo.annotation.component.ServiceImpl;
 import consulo.component.persist.PersistentStateComponent;
-import consulo.ide.ServiceManager;
 import consulo.component.persist.State;
 import consulo.component.persist.Storage;
 import consulo.component.persist.StoragePathMacros;
+import consulo.ide.ServiceManager;
 import consulo.project.Project;
+import jakarta.inject.Singleton;
+
+import javax.annotation.Nonnull;
 
 @Singleton
 @State(
-    name = "SliceToolwindowSettings",
-    storages = {@Storage( file = StoragePathMacros.WORKSPACE_FILE)}
+  name = "SliceToolwindowSettings",
+  storages = {@Storage(file = StoragePathMacros.WORKSPACE_FILE)}
 )
+@ServiceAPI(ComponentScope.PROJECT)
+@ServiceImpl
 public class SliceToolwindowSettings implements PersistentStateComponent<SliceToolwindowSettings> {
   private boolean isPreview;
   private boolean isAutoScroll;
@@ -37,6 +42,7 @@ public class SliceToolwindowSettings implements PersistentStateComponent<SliceTo
   public static SliceToolwindowSettings getInstance(@Nonnull Project project) {
     return ServiceManager.getService(project, SliceToolwindowSettings.class);
   }
+
   public boolean isPreview() {
     return isPreview;
   }

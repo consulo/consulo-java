@@ -35,6 +35,7 @@ import com.intellij.java.language.psi.util.PsiTypesUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import com.intellij.java.language.util.VisibilityUtil;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.ApplicationManager;
 import consulo.ide.impl.idea.refactoring.changeSignature.DefaultValueChooser;
 import consulo.java.impl.refactoring.changeSignature.ChangeSignatureUsageProcessorEx;
@@ -71,6 +72,7 @@ import java.util.*;
 /**
  * @author Maxim.Medvedev
  */
+@ExtensionImpl(id = "javaProcessor")
 public class JavaChangeSignatureUsageProcessor implements ChangeSignatureUsageProcessorEx {
   private static final Logger LOG = Logger.getInstance(JavaChangeSignatureUsageProcessor.class);
 

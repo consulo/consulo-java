@@ -15,39 +15,46 @@
  */
 package com.intellij.java.debugger.impl.engine;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import com.intellij.java.debugger.SourcePosition;
 import com.intellij.java.debugger.impl.DebuggerContextImpl;
 import com.intellij.java.debugger.ui.tree.NodeDescriptor;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ExtensionAPI;
 import consulo.component.extension.ExtensionPointName;
 import consulo.project.Project;
 
-public abstract class SourcePositionProvider
-{
-	public static final ExtensionPointName<SourcePositionProvider> EP_NAME = ExtensionPointName.create("consulo.java.debugger.sourcePositionProvider");
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-	@Nullable
-	public static SourcePosition getSourcePosition(@Nonnull NodeDescriptor descriptor, @Nonnull Project project, @Nonnull DebuggerContextImpl context)
-	{
-		return getSourcePosition(descriptor, project, context, false);
-	}
+@ExtensionAPI(ComponentScope.APPLICATION)
+public abstract class SourcePositionProvider {
+  public static final ExtensionPointName<SourcePositionProvider> EP_NAME =
+    ExtensionPointName.create(SourcePositionProvider.class);
 
-	@Nullable
-	public static SourcePosition getSourcePosition(@Nonnull NodeDescriptor descriptor, @Nonnull Project project, @Nonnull DebuggerContextImpl context, boolean nearest)
-	{
-		for(SourcePositionProvider provider : EP_NAME.getExtensions())
-		{
-			SourcePosition sourcePosition = provider.computeSourcePosition(descriptor, project, context, nearest);
-			if(sourcePosition != null)
-			{
-				return sourcePosition;
-			}
-		}
-		return null;
-	}
+  @Nullable
+  public static SourcePosition getSourcePosition(@Nonnull NodeDescriptor descriptor,
+                                                 @Nonnull Project project,
+                                                 @Nonnull DebuggerContextImpl context) {
+    return getSourcePosition(descriptor, project, context, false);
+  }
 
-	@Nullable
-	protected abstract SourcePosition computeSourcePosition(@Nonnull NodeDescriptor descriptor, @Nonnull Project project, @Nonnull DebuggerContextImpl context, boolean nearest);
+  @Nullable
+  public static SourcePosition getSourcePosition(@Nonnull NodeDescriptor descriptor,
+                                                 @Nonnull Project project,
+                                                 @Nonnull DebuggerContextImpl context,
+                                                 boolean nearest) {
+    for (SourcePositionProvider provider : EP_NAME.getExtensions()) {
+      SourcePosition sourcePosition = provider.computeSourcePosition(descriptor, project, context, nearest);
+      if (sourcePosition != null) {
+        return sourcePosition;
+      }
+    }
+    return null;
+  }
+
+  @Nullable
+  protected abstract SourcePosition computeSourcePosition(@Nonnull NodeDescriptor descriptor,
+                                                          @Nonnull Project project,
+                                                          @Nonnull DebuggerContextImpl context,
+                                                          boolean nearest);
 }

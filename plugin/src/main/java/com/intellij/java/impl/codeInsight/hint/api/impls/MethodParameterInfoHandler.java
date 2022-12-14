@@ -31,6 +31,7 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.infos.CandidateInfo;
 import com.intellij.java.language.psi.infos.MethodCandidateInfo;
 import com.intellij.java.language.psi.util.MethodSignatureUtil;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.dumb.DumbAware;
 import consulo.language.Language;
 import consulo.language.ast.IElementType;
@@ -49,6 +50,7 @@ import java.util.*;
 /**
  * @author Maxim.Mossienko
  */
+@ExtensionImpl
 public class MethodParameterInfoHandler implements ParameterInfoHandlerWithTabActionSupport<PsiExpressionList, Object, PsiExpression>, DumbAware {
   private static final Set<Class<?>> ourArgumentListAllowedParentClassesSet = Set.of(PsiMethodCallExpression.class, PsiNewExpression.class, PsiAnonymousClass.class, PsiEnumConstant.class);
 

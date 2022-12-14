@@ -4,6 +4,7 @@
 package com.intellij.codeInsight.template
 
 import com.intellij.java.impl.codeInsight.template.JavaCodeContextType
+import com.intellij.java.impl.codeInsight.template.JavaDeclarationContextType
 import com.intellij.java.impl.codeInsight.template.JavaStringContextType
 
 /**
@@ -351,7 +352,7 @@ class Foo {
 
   public void testOtherContext() throws IOException {
     configureFromFileText("a.java", "class Foo { <caret>xxx }");
-    assertInstanceOf(assertOneElement(TemplateManagerImpl.getApplicableContextTypes(myFixture.getFile(), getEditor().getCaretModel().getOffset())), JavaCodeContextType.Declaration.class);
+    assertInstanceOf(assertOneElement(TemplateManagerImpl.getApplicableContextTypes(myFixture.getFile(), getEditor().getCaretModel().getOffset())), JavaDeclarationContextType.class);
 
     configureFromFileText("a.txt", "class Foo { <caret>xxx }");
     assertInstanceOf(assertOneElement(TemplateManagerImpl.getApplicableContextTypes(myFixture.getFile(), getEditor().getCaretModel().getOffset())), EverywhereContextType.class);

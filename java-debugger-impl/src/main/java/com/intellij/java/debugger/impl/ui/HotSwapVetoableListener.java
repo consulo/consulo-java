@@ -22,7 +22,5 @@ import consulo.compiler.CompileContext;
  * @author nik
  */
 public interface HotSwapVetoableListener {
-
   boolean shouldHotSwap(CompileContext finishedCompilationContext);
-
 }

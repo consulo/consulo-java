@@ -20,6 +20,7 @@ import com.intellij.java.language.psi.PsiDeclarationStatement;
 import com.intellij.java.language.psi.PsiIdentifier;
 import com.intellij.java.language.psi.PsiLocalVariable;
 import com.intellij.java.language.psi.PsiVariable;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.template.Expression;
 import consulo.language.editor.template.ExpressionContext;
@@ -35,6 +36,7 @@ import consulo.project.Project;
 
 import javax.annotation.Nonnull;
 
+@ExtensionImpl
 public class SuggestIndexNameMacro extends Macro {
   @Override
   public String getName() {

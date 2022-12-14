@@ -19,6 +19,7 @@ import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.java.language.impl.codeInsight.ChangeContextUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiDirectory;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
@@ -35,6 +36,7 @@ import java.util.Set;
 /**
  * @author Maxim.Medvedev
  */
+@ExtensionImpl(id = "java")
 public class MoveJavaClassHandler implements MoveClassHandler {
   private static final Logger LOG = Logger.getInstance(MoveJavaClassHandler.class);
 

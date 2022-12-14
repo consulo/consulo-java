@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.ide.macro;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.ide.IdeBundle;
 import consulo.pathMacro.Macro;
 import consulo.language.editor.CommonDataKeys;
@@ -22,6 +23,7 @@ import consulo.dataContext.DataContext;
 import consulo.project.Project;
 import consulo.module.content.layer.OrderEnumerator;
 
+@ExtensionImpl
 public final class ClasspathMacro extends Macro {
   public String getName() {
     return "Classpath";

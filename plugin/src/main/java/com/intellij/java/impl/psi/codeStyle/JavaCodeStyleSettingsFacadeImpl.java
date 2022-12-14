@@ -17,6 +17,7 @@ package com.intellij.java.impl.psi.codeStyle;
 
 import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleSettingsFacade;
+import consulo.annotation.component.ServiceImpl;
 import consulo.language.codeStyle.CodeStyleSettingsManager;
 import consulo.language.codeStyle.ProjectCodeStyleSettingsManager;
 import jakarta.inject.Inject;
@@ -26,6 +27,7 @@ import jakarta.inject.Singleton;
  * @author yole
  */
 @Singleton
+@ServiceImpl
 public class JavaCodeStyleSettingsFacadeImpl extends JavaCodeStyleSettingsFacade {
   private final CodeStyleSettingsManager myManager;
 

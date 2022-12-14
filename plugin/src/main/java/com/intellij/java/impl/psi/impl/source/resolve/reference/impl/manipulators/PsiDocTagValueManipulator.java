@@ -16,6 +16,7 @@
 
 package com.intellij.java.impl.psi.impl.source.resolve.reference.impl.manipulators;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.document.util.TextRange;
 import consulo.language.psi.AbstractElementManipulator;
 import com.intellij.java.language.psi.JavaPsiFacade;
@@ -28,6 +29,7 @@ import javax.annotation.Nonnull;
 /**
  * @author Gregory.Shrago
  */
+@ExtensionImpl
 public class PsiDocTagValueManipulator extends AbstractElementManipulator<PsiDocTag> {
 
   @Override

@@ -17,6 +17,7 @@ package com.intellij.java.impl.refactoring.rename.naming;
 
 import com.intellij.java.impl.refactoring.JavaRefactoringSettings;
 import com.intellij.java.language.psi.PsiClass;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.editor.refactoring.rename.AutomaticRenamer;
@@ -28,6 +29,7 @@ import java.util.Collection;
 /**
  * @author yole
  */
+@ExtensionImpl
 public class AutomaticInheritorRenamerFactory implements AutomaticRenamerFactory {
   public boolean isApplicable(final PsiElement element) {
     return element instanceof PsiClass;

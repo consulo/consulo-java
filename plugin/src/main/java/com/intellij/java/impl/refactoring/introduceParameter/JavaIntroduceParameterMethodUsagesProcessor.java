@@ -27,6 +27,7 @@ import com.intellij.java.language.psi.impl.source.resolve.DefaultParameterTypeIn
 import com.intellij.java.language.psi.javadoc.PsiDocTag;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.util.VisibilityUtil;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.Language;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.psi.PsiElement;
@@ -45,9 +46,10 @@ import javax.annotation.Nullable;
 /**
  * @author Maxim.Medvedev
  */
+@ExtensionImpl
 public class JavaIntroduceParameterMethodUsagesProcessor implements IntroduceParameterMethodUsagesProcessor {
   private static final Logger LOG =
-      Logger.getInstance(JavaIntroduceParameterMethodUsagesProcessor.class);
+    Logger.getInstance(JavaIntroduceParameterMethodUsagesProcessor.class);
   private static final JavaLanguage myLanguage = Language.findInstance(JavaLanguage.class);
 
   private static boolean isJavaUsage(UsageInfo usage) {
@@ -59,7 +61,9 @@ public class JavaIntroduceParameterMethodUsagesProcessor implements IntroducePar
     return RefactoringUtil.isMethodUsage(usage.getElement()) && isJavaUsage(usage);
   }
 
-  public boolean processChangeMethodUsage(IntroduceParameterData data, UsageInfo usage, UsageInfo[] usages) throws IncorrectOperationException {
+  public boolean processChangeMethodUsage(IntroduceParameterData data,
+                                          UsageInfo usage,
+                                          UsageInfo[] usages) throws IncorrectOperationException {
     if (!isMethodUsage(usage)) {
       return true;
     }
@@ -75,11 +79,13 @@ public class JavaIntroduceParameterMethodUsagesProcessor implements IntroducePar
     final PsiMethod methodToSearchFor = data.getMethodToSearchFor();
     if (!methodToSearchFor.isVarArgs()) {
       anchor = getLast(oldArgs);
-    } else {
+    }
+    else {
       final PsiParameter[] parameters = methodToSearchFor.getParameterList().getParameters();
       if (parameters.length > oldArgs.length) {
         anchor = getLast(oldArgs);
-      } else {
+      }
+      else {
         LOG.assertTrue(parameters.length > 0);
         final int lastNonVararg = parameters.length - 2;
         anchor = lastNonVararg >= 0 ? oldArgs[lastNonVararg] : null;
@@ -90,25 +96,26 @@ public class JavaIntroduceParameterMethodUsagesProcessor implements IntroducePar
     PsiMethod method = PsiTreeUtil.getParentOfType(argList, PsiMethod.class);
     if (method != null && IntroduceParameterUtil.isMethodInUsages(data, method, usages)) {
       argList
-          .addAfter(JavaPsiFacade.getElementFactory(data.getProject()).createExpressionFromText(data.getParameterName(), argList), anchor);
-    } else {
+        .addAfter(JavaPsiFacade.getElementFactory(data.getProject()).createExpressionFromText(data.getParameterName(), argList), anchor);
+    }
+    else {
       PsiElement initializer =
-          ExpressionConverter.getExpression(data.getParameterInitializer().getExpression(), JavaLanguage.INSTANCE, data.getProject());
+        ExpressionConverter.getExpression(data.getParameterInitializer().getExpression(), JavaLanguage.INSTANCE, data.getProject());
       assert initializer instanceof PsiExpression;
       if (initializer instanceof PsiNewExpression) {
-        if (!PsiDiamondTypeUtil.canChangeContextForDiamond((PsiNewExpression) initializer, ((PsiNewExpression) initializer).getType())) {
-          initializer = PsiDiamondTypeUtil.expandTopLevelDiamondsInside((PsiNewExpression) initializer);
+        if (!PsiDiamondTypeUtil.canChangeContextForDiamond((PsiNewExpression)initializer, ((PsiNewExpression)initializer).getType())) {
+          initializer = PsiDiamondTypeUtil.expandTopLevelDiamondsInside((PsiNewExpression)initializer);
         }
       }
       substituteTypeParametersInInitializer(initializer, callExpression, argList, methodToSearchFor);
       ChangeContextUtil.encodeContextInfo(initializer, true);
-      PsiExpression newArg = (PsiExpression) argList.addAfter(initializer, anchor);
+      PsiExpression newArg = (PsiExpression)argList.addAfter(initializer, anchor);
       ChangeContextUtil.decodeContextInfo(newArg, null, null);
       ChangeContextUtil.clearContextInfo(initializer);
 
       // here comes some postprocessing...
       new OldReferenceResolver(callExpression, newArg, data.getMethodToReplaceIn(), data.getReplaceFieldsWithGetters(), initializer)
-          .resolve();
+        .resolve();
     }
 
 
@@ -124,11 +131,14 @@ public class JavaIntroduceParameterMethodUsagesProcessor implements IntroducePar
                                                             PsiMethod method) {
     final Project project = method.getProject();
     final PsiSubstitutor psiSubstitutor = JavaPsiFacade.getInstance(project).getResolveHelper()
-        .inferTypeArguments(method.getTypeParameters(), method.getParameterList().getParameters(),
-            argList.getExpressions(), PsiSubstitutor.EMPTY, callExpression,
-            DefaultParameterTypeInferencePolicy.INSTANCE);
+                                                       .inferTypeArguments(method.getTypeParameters(),
+                                                                           method.getParameterList().getParameters(),
+                                                                           argList.getExpressions(),
+                                                                           PsiSubstitutor.EMPTY,
+                                                                           callExpression,
+                                                                           DefaultParameterTypeInferencePolicy.INSTANCE);
     RefactoringUtil.replaceMovedMemberTypeParameters(initializer, PsiUtil.typeParametersIterable(method), psiSubstitutor,
-        JavaPsiFacade.getElementFactory(project));
+                                                     JavaPsiFacade.getElementFactory(project));
   }
 
   private static void removeParametersFromCall(@Nonnull final PsiExpressionList argList, IntList parametersToRemove) {
@@ -141,7 +151,8 @@ public class JavaIntroduceParameterMethodUsagesProcessor implements IntroducePar
         if (paramNum < exprs.length) {
           exprs[paramNum].delete();
         }
-      } catch (IncorrectOperationException e) {
+      }
+      catch (IncorrectOperationException e) {
         LOG.error(e);
       }
     });
@@ -152,7 +163,8 @@ public class JavaIntroduceParameterMethodUsagesProcessor implements IntroducePar
     PsiExpression anchor;
     if (oldArgs.length > 0) {
       anchor = oldArgs[oldArgs.length - 1];
-    } else {
+    }
+    else {
       anchor = null;
     }
     return anchor;
@@ -172,23 +184,27 @@ public class JavaIntroduceParameterMethodUsagesProcessor implements IntroducePar
       if (argList != null) {
         final int actualParamLength = argList.getExpressions().length;
         if ((method.isVarArgs() && actualParamLength + 1 < parametersCount) ||
-            (!method.isVarArgs() && actualParamLength < parametersCount)) {
-          conflicts.putValue(call, "Incomplete call(" + call.getText() + "): " + parametersCount + " parameters expected but only " + actualParamLength + " found");
+          (!method.isVarArgs() && actualParamLength < parametersCount)) {
+          conflicts.putValue(call,
+                             "Incomplete call(" + call.getText() + "): " + parametersCount + " parameters expected but only " + actualParamLength + " found");
         }
         data.getParametersToRemove().forEach(paramNum -> {
           if (paramNum >= actualParamLength) {
-            conflicts.putValue(call, "Incomplete call(" + call.getText() + "): expected to delete the " + paramNum + " parameter but only " + actualParamLength + " parameters found");
+            conflicts.putValue(call,
+                               "Incomplete call(" + call.getText() + "): expected to delete the " + paramNum + " parameter but only " + actualParamLength + " parameters found");
           }
         });
       }
     }
   }
 
-  public boolean processChangeMethodSignature(IntroduceParameterData data, UsageInfo usage, UsageInfo[] usages) throws IncorrectOperationException {
+  public boolean processChangeMethodSignature(IntroduceParameterData data,
+                                              UsageInfo usage,
+                                              UsageInfo[] usages) throws IncorrectOperationException {
     if (!(usage.getElement() instanceof PsiMethod) || !isJavaUsage(usage)) {
       return true;
     }
-    PsiMethod method = (PsiMethod) usage.getElement();
+    PsiMethod method = (PsiMethod)usage.getElement();
 
     final FieldConflictsResolver fieldConflictsResolver = new FieldConflictsResolver(data.getParameterName(), method.getBody());
     final MethodJavaDocHelper javaDocHelper = new MethodJavaDocHelper(method);
@@ -211,13 +227,14 @@ public class JavaIntroduceParameterMethodUsagesProcessor implements IntroducePar
           tag.delete();
         }
         param.delete();
-      } catch (IncorrectOperationException e) {
+      }
+      catch (IncorrectOperationException e) {
         LOG.error(e);
       }
     });
 
     final PsiParameter anchorParameter = getAnchorParameter(method);
-    parameter = (PsiParameter) parameterList.addAfter(parameter, anchorParameter);
+    parameter = (PsiParameter)parameterList.addAfter(parameter, anchorParameter);
     JavaCodeStyleManager.getInstance(data.getProject()).shortenClassReferences(parameter);
     final PsiDocTag tagForAnchorParameter = javaDocHelper.getTagForParameter(anchorParameter);
     javaDocHelper.addParameterAfter(data.getParameterName(), tagForAnchorParameter);
@@ -235,7 +252,8 @@ public class JavaIntroduceParameterMethodUsagesProcessor implements IntroducePar
     final int length = parameters.length;
     if (!methodToReplaceIn.isVarArgs()) {
       anchorParameter = length > 0 ? parameters[length - 1] : null;
-    } else {
+    }
+    else {
       LOG.assertTrue(length > 0);
       LOG.assertTrue(parameters[length - 1].isVarArgs());
       anchorParameter = length > 1 ? parameters[length - 2] : null;
@@ -247,15 +265,16 @@ public class JavaIntroduceParameterMethodUsagesProcessor implements IntroducePar
     if (!(usage.getElement() instanceof PsiClass) || !isJavaUsage(usage)) {
       return true;
     }
-    PsiClass aClass = (PsiClass) usage.getElement();
+    PsiClass aClass = (PsiClass)usage.getElement();
     if (!(aClass instanceof PsiAnonymousClass)) {
       final PsiElementFactory factory = JavaPsiFacade.getInstance(data.getProject()).getElementFactory();
       PsiMethod constructor = factory.createMethodFromText(aClass.getName() + "(){}", aClass);
-      constructor = (PsiMethod) CodeStyleManager.getInstance(data.getProject()).reformat(constructor);
-      constructor = (PsiMethod) aClass.add(constructor);
+      constructor = (PsiMethod)CodeStyleManager.getInstance(data.getProject()).reformat(constructor);
+      constructor = (PsiMethod)aClass.add(constructor);
       PsiUtil.setModifierProperty(constructor, VisibilityUtil.getVisibilityModifier(aClass.getModifierList()), true);
       processAddSuperCall(data, new UsageInfo(constructor), usages);
-    } else {
+    }
+    else {
       return true;
     }
     return false;
@@ -265,23 +284,26 @@ public class JavaIntroduceParameterMethodUsagesProcessor implements IntroducePar
     if (!(usage.getElement() instanceof PsiMethod) || !isJavaUsage(usage)) {
       return true;
     }
-    PsiMethod constructor = (PsiMethod) usage.getElement();
+    PsiMethod constructor = (PsiMethod)usage.getElement();
 
     if (!constructor.isConstructor()) {
       return true;
     }
 
     final PsiElementFactory factory = JavaPsiFacade.getInstance(data.getProject()).getElementFactory();
-    PsiExpressionStatement superCall = (PsiExpressionStatement) factory.createStatementFromText("super();", constructor);
-    superCall = (PsiExpressionStatement) CodeStyleManager.getInstance(data.getProject()).reformat(superCall);
+    PsiExpressionStatement superCall = (PsiExpressionStatement)factory.createStatementFromText("super();", constructor);
+    superCall = (PsiExpressionStatement)CodeStyleManager.getInstance(data.getProject()).reformat(superCall);
     PsiCodeBlock body = constructor.getBody();
     final PsiStatement[] statements = body.getStatements();
     if (statements.length > 0) {
-      superCall = (PsiExpressionStatement) body.addBefore(superCall, statements[0]);
-    } else {
-      superCall = (PsiExpressionStatement) body.add(superCall);
+      superCall = (PsiExpressionStatement)body.addBefore(superCall, statements[0]);
     }
-    processChangeMethodUsage(data, new ExternalUsageInfo(((PsiMethodCallExpression) superCall.getExpression()).getMethodExpression()), usages);
+    else {
+      superCall = (PsiExpressionStatement)body.add(superCall);
+    }
+    processChangeMethodUsage(data,
+                             new ExternalUsageInfo(((PsiMethodCallExpression)superCall.getExpression()).getMethodExpression()),
+                             usages);
     return false;
   }
 }

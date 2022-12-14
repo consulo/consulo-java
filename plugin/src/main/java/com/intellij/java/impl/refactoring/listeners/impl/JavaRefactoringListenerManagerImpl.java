@@ -19,6 +19,7 @@ import com.intellij.java.impl.refactoring.listeners.JavaRefactoringListenerManag
 import com.intellij.java.impl.refactoring.listeners.MoveMemberListener;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMember;
+import consulo.annotation.component.ServiceImpl;
 import consulo.util.collection.Lists;
 import jakarta.inject.Singleton;
 
@@ -28,6 +29,7 @@ import java.util.List;
  * @author yole
  */
 @Singleton
+@ServiceImpl
 public class JavaRefactoringListenerManagerImpl extends JavaRefactoringListenerManager {
   private final List<MoveMemberListener> myMoveMemberListeners = Lists.newLockFreeCopyOnWriteList();
 

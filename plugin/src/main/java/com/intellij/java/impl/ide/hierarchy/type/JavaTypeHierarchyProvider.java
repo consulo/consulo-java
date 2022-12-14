@@ -20,13 +20,14 @@ import com.intellij.java.language.psi.PsiAnonymousClass;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiClassOwner;
 import com.intellij.java.language.psi.PsiSyntheticClass;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
 import consulo.dataContext.DataContext;
 import consulo.ide.impl.idea.ide.hierarchy.TypeHierarchyBrowserBase;
 import consulo.language.Language;
 import consulo.language.editor.*;
 import consulo.language.editor.hierarchy.HierarchyBrowser;
-import consulo.language.editor.hierarchy.HierarchyProvider;
+import consulo.language.editor.hierarchy.TypeHierarchyProvider;
 import consulo.language.psi.PsiDocumentManager;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
@@ -39,7 +40,8 @@ import java.util.Set;
 /**
  * @author yole
  */
-public class JavaTypeHierarchyProvider implements HierarchyProvider {
+@ExtensionImpl
+public class JavaTypeHierarchyProvider implements TypeHierarchyProvider {
   @Override
   @RequiredUIAccess
   public PsiElement getTarget(@Nonnull final DataContext dataContext) {

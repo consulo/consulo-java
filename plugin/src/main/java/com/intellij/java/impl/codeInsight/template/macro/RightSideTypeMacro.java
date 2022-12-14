@@ -22,6 +22,7 @@ import com.intellij.java.language.psi.PsiAssignmentExpression;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.PsiVariable;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.template.Expression;
 import consulo.language.editor.template.ExpressionContext;
@@ -40,6 +41,7 @@ import javax.annotation.Nonnull;
 /**
  * @author ven
  */
+@ExtensionImpl
 public class RightSideTypeMacro extends Macro {
   @Override
   public String getName() {

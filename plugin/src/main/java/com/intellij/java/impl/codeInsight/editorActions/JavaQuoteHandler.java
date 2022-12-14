@@ -15,28 +15,33 @@
  */
 package com.intellij.java.impl.codeInsight.editorActions;
 
-import consulo.language.editor.action.JavaLikeQuoteHandler;
-import consulo.language.editor.action.SimpleTokenSetQuoteHandler;
+import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.java.language.impl.psi.impl.source.tree.ElementType;
 import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.java.language.psi.PsiLiteralExpression;
 import com.intellij.java.language.psi.PsiReferenceExpression;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.HighlighterIterator;
-import consulo.language.psi.PsiElement;
-import consulo.language.ast.StringEscapesTokenTypes;
 import consulo.language.ast.IElementType;
+import consulo.language.ast.StringEscapesTokenTypes;
 import consulo.language.ast.TokenSet;
+import consulo.language.editor.action.FileQuoteHandler;
+import consulo.language.editor.action.JavaLikeQuoteHandler;
+import consulo.language.editor.action.SimpleTokenSetQuoteHandler;
+import consulo.language.psi.PsiElement;
+import consulo.virtualFileSystem.fileType.FileType;
 
 import javax.annotation.Nonnull;
 
 /**
  * @author peter
  */
-public class JavaQuoteHandler extends SimpleTokenSetQuoteHandler implements JavaLikeQuoteHandler {
+@ExtensionImpl
+public class JavaQuoteHandler extends SimpleTokenSetQuoteHandler implements JavaLikeQuoteHandler, FileQuoteHandler {
   private final TokenSet concatenatableStrings;
 
   public JavaQuoteHandler() {
-    super(new IElementType[]{JavaTokenType.STRING_LITERAL, JavaTokenType.CHARACTER_LITERAL});
+    super(JavaTokenType.STRING_LITERAL, JavaTokenType.CHARACTER_LITERAL);
     concatenatableStrings = TokenSet.create(JavaTokenType.STRING_LITERAL);
   }
 
@@ -111,5 +116,11 @@ public class JavaQuoteHandler extends SimpleTokenSetQuoteHandler implements Java
         || tokenType == JavaTokenType.RBRACE
         || tokenType == JavaTokenType.STRING_LITERAL
         || tokenType == JavaTokenType.CHARACTER_LITERAL;
+  }
+
+  @Nonnull
+  @Override
+  public FileType getFileType() {
+    return JavaFileType.INSTANCE;
   }
 }

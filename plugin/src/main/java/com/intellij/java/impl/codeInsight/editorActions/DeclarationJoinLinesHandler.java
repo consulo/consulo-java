@@ -18,6 +18,7 @@ package com.intellij.java.impl.codeInsight.editorActions;
 import com.intellij.java.language.psi.PsiElementFactory;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.document.Document;
 import consulo.language.ast.IElementType;
 import consulo.language.codeStyle.CodeStyleManager;
@@ -28,6 +29,7 @@ import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 
+@ExtensionImpl
 public class DeclarationJoinLinesHandler implements JoinLinesHandlerDelegate {
   private static final Logger LOG = Logger.getInstance(DeclarationJoinLinesHandler.class);
 

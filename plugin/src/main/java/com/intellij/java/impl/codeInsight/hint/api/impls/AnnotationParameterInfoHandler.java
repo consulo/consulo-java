@@ -18,6 +18,7 @@ package com.intellij.java.impl.codeInsight.hint.api.impls;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.dumb.DumbAware;
 import consulo.language.Language;
 import consulo.language.editor.completion.lookup.LookupElement;
@@ -34,6 +35,7 @@ import javax.annotation.Nullable;
 /**
  * @author Maxim.Mossienko
  */
+@ExtensionImpl
 public class AnnotationParameterInfoHandler implements ParameterInfoHandler<PsiAnnotationParameterList, PsiAnnotationMethod>, DumbAware {
   @Override
   public

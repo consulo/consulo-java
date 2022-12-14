@@ -19,6 +19,7 @@ import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.util.ClassFilter;
 import com.intellij.java.language.util.TreeClassChooser;
 import com.intellij.java.language.util.TreeClassChooserFactory;
+import consulo.annotation.component.ServiceImpl;
 import consulo.ide.impl.idea.ide.util.TreeFileChooserDialog;
 import consulo.language.editor.ui.TreeFileChooser;
 import consulo.language.psi.PsiFile;
@@ -37,6 +38,7 @@ import java.util.function.Predicate;
  * Date: Jan 25, 2005
  */
 @Singleton
+@ServiceImpl
 public class TreeClassChooserFactoryImpl extends TreeClassChooserFactory {
   private final Project myProject;
 

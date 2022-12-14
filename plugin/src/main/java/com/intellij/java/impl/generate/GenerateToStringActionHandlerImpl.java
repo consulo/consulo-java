@@ -21,6 +21,7 @@ import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiMember;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.annotation.component.ServiceImpl;
 import consulo.application.ApplicationManager;
 import consulo.codeEditor.Editor;
 import consulo.configurable.Configurable;
@@ -64,6 +65,7 @@ import java.util.List;
  * The action-handler that does the code generation.
  */
 @Singleton
+@ServiceImpl
 public class GenerateToStringActionHandlerImpl implements GenerateToStringActionHandler, CodeInsightActionHandler {
   private static final Logger logger = Logger.getInstance("#GenerateToStringActionHandlerImpl");
 
@@ -180,7 +182,7 @@ public class GenerateToStringActionHandlerImpl implements GenerateToStringAction
     }
 
     //exclude interfaces, non-java classes etc
-    for (GenerateToStringClassFilter filter : GenerateToStringClassFilter.EP_NAME.getExtensions()) {
+    for (GenerateToStringClassFilter filter : GenerateToStringClassFilter.EP_NAME.getExtensionList()) {
       if (!filter.canGenerateToString(clazz)) {
         return null;
       }

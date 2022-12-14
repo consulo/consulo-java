@@ -18,6 +18,7 @@ package com.intellij.java.impl.codeInsight.completion;
 import com.intellij.java.impl.codeInsight.generation.GenerateMembersUtil;
 import com.intellij.java.impl.refactoring.introduceField.InplaceIntroduceFieldPopup;
 import com.intellij.java.impl.refactoring.introduceVariable.IntroduceVariableBase;
+import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.patterns.PsiJavaPatterns;
 import com.intellij.java.language.psi.*;
@@ -25,10 +26,13 @@ import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
 import com.intellij.java.language.psi.util.PropertyUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.annotation.component.ExtensionAPI;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.AllIcons;
 import consulo.application.util.matcher.PrefixMatcher;
 import consulo.externalService.statistic.FeatureUsageTracker;
 import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.Language;
 import consulo.language.editor.completion.*;
 import consulo.language.editor.completion.lookup.*;
 import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
@@ -55,7 +59,8 @@ import static consulo.language.pattern.StandardPatterns.or;
 /**
  * @author peter
  */
-public abstract class JavaMemberNameCompletionContributor extends CompletionContributor {
+@ExtensionImpl(id = "javaMemberName", order = "before javaOverride")
+public class JavaMemberNameCompletionContributor extends CompletionContributor {
   public static final ElementPattern<PsiElement> INSIDE_TYPE_PARAMS_PATTERN = psiElement().
       afterLeaf(psiElement().withText("?").andOr(psiElement().afterLeaf("<", ","), psiElement().afterSiblingSkipping(psiElement().whitespaceCommentEmptyOrError(), psiElement(PsiAnnotation
           .class))));
@@ -448,5 +453,11 @@ public abstract class JavaMemberNameCompletionContributor extends CompletionCont
         callback.nameChosen(item.getLookupString());
       }
     });
+  }
+
+  @Nonnull
+  @Override
+  public Language getLanguage() {
+    return JavaLanguage.INSTANCE;
   }
 }

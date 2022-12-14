@@ -22,6 +22,7 @@ package com.intellij.java.impl.refactoring.move.moveClassesOrPackages;
 
 import com.intellij.java.language.impl.codeInsight.ChangeContextUtil;
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.logging.Logger;
 import consulo.util.lang.StringUtil;
 import consulo.language.psi.*;
@@ -36,6 +37,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+@ExtensionImpl(id = "java")
 public class MoveJavaFileHandler extends MoveFileHandler {
   private static final Logger LOG = Logger.getInstance(MoveJavaFileHandler.class);
 

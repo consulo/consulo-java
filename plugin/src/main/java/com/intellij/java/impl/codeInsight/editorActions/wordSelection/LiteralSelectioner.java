@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.codeInsight.editorActions.wordSelection;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.action.SelectWordUtil;
 import consulo.language.lexer.StringLiteralLexer;
 import consulo.codeEditor.Editor;
@@ -25,6 +26,7 @@ import com.intellij.java.language.psi.PsiLiteralExpression;
 
 import java.util.List;
 
+@ExtensionImpl
 public class LiteralSelectioner extends BasicSelectioner {
   @Override
   public boolean canSelect(PsiElement e) {

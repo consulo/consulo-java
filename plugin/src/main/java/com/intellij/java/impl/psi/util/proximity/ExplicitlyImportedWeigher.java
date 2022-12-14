@@ -17,6 +17,7 @@ package com.intellij.java.impl.psi.util.proximity;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.ide.impl.idea.openapi.util.NullableLazyKey;
 import consulo.ide.impl.psi.util.ProximityLocation;
 import consulo.ide.impl.psi.util.proximity.ProximityWeigher;
@@ -36,6 +37,7 @@ import java.util.List;
 /**
  * @author peter
  */
+@ExtensionImpl(id = "explicitlyImported", order = "before openedInEditor")
 public class ExplicitlyImportedWeigher extends ProximityWeigher {
   private static final NullableLazyKey<PsiPackage, ProximityLocation> PLACE_PACKAGE = NullableLazyKey.create("placePackage", location ->
   {

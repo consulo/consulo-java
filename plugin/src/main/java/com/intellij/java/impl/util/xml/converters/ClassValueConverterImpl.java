@@ -17,6 +17,7 @@ package com.intellij.java.impl.util.xml.converters;
 
 import com.intellij.java.impl.psi.impl.source.resolve.reference.impl.providers.JavaClassReferenceProvider;
 import com.intellij.java.impl.util.xml.converters.values.ClassValueConverter;
+import consulo.annotation.component.ServiceImpl;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
 import consulo.xml.util.xml.ConvertContext;
@@ -29,6 +30,7 @@ import javax.annotation.Nonnull;
  * User: Sergey.Vasiliev
  */
 @Singleton
+@ServiceImpl
 public class ClassValueConverterImpl extends ClassValueConverter {
   private static final JavaClassReferenceProvider REFERENCE_PROVIDER = new JavaClassReferenceProvider();
 

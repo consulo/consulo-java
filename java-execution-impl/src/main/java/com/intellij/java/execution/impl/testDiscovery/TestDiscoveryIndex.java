@@ -15,6 +15,9 @@
  */
 package com.intellij.java.execution.impl.testDiscovery;
 
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ServiceAPI;
+import consulo.annotation.component.ServiceImpl;
 import consulo.application.ApplicationManager;
 import consulo.disposer.Disposable;
 import consulo.index.io.data.DataInputOutputUtil;
@@ -42,6 +45,8 @@ import java.util.*;
  * @author Maxim.Mossienko on 7/9/2015.
  */
 @Singleton
+@ServiceAPI(value = ComponentScope.PROJECT, lazy = false)
+@ServiceImpl
 public class TestDiscoveryIndex implements Disposable {
   static final Logger LOG = Logger.getInstance(TestDiscoveryIndex.class);
 
@@ -64,9 +69,10 @@ public class TestDiscoveryIndex implements Disposable {
 
     if (Files.exists(basePath)) {
       StartupManager.getInstance(project).registerPostStartupActivity(() -> ApplicationManager.getApplication().executeOnPooledThread(() ->
-      {
-        myLocalTestRunDataController.getHolder(); // proactively init with maybe io costly compact
-      }));
+                                                                                                                                      {
+                                                                                                                                        myLocalTestRunDataController
+                                                                                                                                          .getHolder(); // proactively init with maybe io costly compact
+                                                                                                                                      }));
     }
 
     //{
@@ -76,29 +82,38 @@ public class TestDiscoveryIndex implements Disposable {
 
   public boolean hasTestTrace(@Nonnull String testName) throws IOException {
     Boolean result = myLocalTestRunDataController.withTestDataHolder(localHolder ->
-    {          // todo: remote run data
-      final int testNameId = localHolder.myTestNameEnumerator.tryEnumerate(testName);
-      if (testNameId == 0) {
-        return myRemoteTestRunDataController.withTestDataHolder(remoteHolder ->
-        {
-          final int testNameId1 = remoteHolder.myTestNameEnumerator.tryEnumerate(testName);
-          return testNameId1 != 0 && remoteHolder.myTestNameToUsedClassesAndMethodMap.get(testNameId1) != null;
-        }) != null;
-      }
-      return localHolder.myTestNameToUsedClassesAndMethodMap.get(testNameId) != null;
-    });
+                                                                     {          // todo: remote run data
+                                                                       final int testNameId =
+                                                                         localHolder.myTestNameEnumerator.tryEnumerate(testName);
+                                                                       if (testNameId == 0) {
+                                                                         return myRemoteTestRunDataController.withTestDataHolder(
+                                                                           remoteHolder ->
+                                                                           {
+                                                                             final int testNameId1 =
+                                                                               remoteHolder.myTestNameEnumerator.tryEnumerate(testName);
+                                                                             return testNameId1 != 0 && remoteHolder.myTestNameToUsedClassesAndMethodMap
+                                                                               .get(testNameId1) != null;
+                                                                           }) != null;
+                                                                       }
+                                                                       return localHolder.myTestNameToUsedClassesAndMethodMap.get(testNameId) != null;
+                                                                     });
     return result == Boolean.TRUE;
   }
 
   public void removeTestTrace(@Nonnull String testName) throws IOException {
     myLocalTestRunDataController.withTestDataHolder(localHolder ->
-    {
-      final int testNameId = localHolder.myTestNameEnumerator.tryEnumerate(testName);  // todo remove remote data isn't possible
-      if (testNameId != 0) {
-        localHolder.doUpdateFromDiff(testNameId, null, localHolder.myTestNameToUsedClassesAndMethodMap.get(testNameId), null);
-      }
-      return null;
-    });
+                                                    {
+                                                      final int testNameId =
+                                                        localHolder.myTestNameEnumerator.tryEnumerate(testName);  // todo remove remote data isn't possible
+                                                      if (testNameId != 0) {
+                                                        localHolder.doUpdateFromDiff(testNameId,
+                                                                                     null,
+                                                                                     localHolder.myTestNameToUsedClassesAndMethodMap.get(
+                                                                                       testNameId),
+                                                                                     null);
+                                                      }
+                                                      return null;
+                                                    });
   }
 
   public void setRemoteTestRunDataPath(@Nonnull Path path) {
@@ -113,17 +128,23 @@ public class TestDiscoveryIndex implements Disposable {
     return myLocalTestRunDataController.withTestDataHolder(new ThrowableFunction<TestInfoHolder, Collection<String>, IOException>() {
       @Override
       public Collection<String> apply(TestInfoHolder localHolder) throws IOException {
-        IntList remoteList = myRemoteTestRunDataController.withTestDataHolder(remoteHolder -> remoteHolder.myMethodQNameToTestNames.get(TestInfoHolder.createKey(remoteHolder
-            .myClassEnumerator.enumerate(classFQName), remoteHolder.myMethodEnumerator.enumerate(methodName))));
+        IntList remoteList =
+          myRemoteTestRunDataController.withTestDataHolder(remoteHolder -> remoteHolder.myMethodQNameToTestNames.get(TestInfoHolder.createKey(
+            remoteHolder
+              .myClassEnumerator.enumerate(classFQName),
+            remoteHolder.myMethodEnumerator.enumerate(methodName))));
 
-        final IntList localList = localHolder.myMethodQNameToTestNames.get(TestInfoHolder.createKey(localHolder.myClassEnumerator.enumerate(classFQName), localHolder.myMethodEnumerator
-            .enumerate(methodName)));
+        final IntList localList =
+          localHolder.myMethodQNameToTestNames.get(TestInfoHolder.createKey(localHolder.myClassEnumerator.enumerate(classFQName),
+                                                                            localHolder.myMethodEnumerator
+                                                                              .enumerate(methodName)));
 
         if (remoteList == null) {
           return testIdsToTestNames(localList, localHolder);
         }
 
-        Collection<String> testsFromRemote = myRemoteTestRunDataController.withTestDataHolder(remoteHolder -> testIdsToTestNames(remoteList, remoteHolder));
+        Collection<String> testsFromRemote =
+          myRemoteTestRunDataController.withTestDataHolder(remoteHolder -> testIdsToTestNames(remoteList, remoteHolder));
 
         if (localList == null) {
           return testsFromRemote;
@@ -160,7 +181,9 @@ public class TestDiscoveryIndex implements Disposable {
   }
 
 
-  public Collection<String> getTestModulesByMethodName(@Nonnull String classFQName, @Nonnull String methodName, String prefix) throws IOException {
+  public Collection<String> getTestModulesByMethodName(@Nonnull String classFQName,
+                                                       @Nonnull String methodName,
+                                                       String prefix) throws IOException {
     return myLocalTestRunDataController.withTestDataHolder(new ThrowableFunction<TestInfoHolder, Collection<String>, IOException>() {
       @Override
       public Collection<String> apply(TestInfoHolder localHolder) throws IOException {
@@ -175,8 +198,9 @@ public class TestDiscoveryIndex implements Disposable {
 
       private List<String> getTestModules(TestInfoHolder holder) throws IOException {
         // todo merging with remote
-        final IntList list = holder.myTestNameToNearestModule.get(TestInfoHolder.createKey(holder.myClassEnumerator.enumerate(classFQName), holder.myMethodEnumerator.enumerate
-            (methodName)));
+        final IntList list = holder.myTestNameToNearestModule.get(TestInfoHolder.createKey(holder.myClassEnumerator.enumerate(classFQName),
+                                                                                           holder.myMethodEnumerator.enumerate
+                                                                                             (methodName)));
         if (list == null) {
           return Collections.emptyList();
         }
@@ -246,7 +270,7 @@ public class TestDiscoveryIndex implements Disposable {
 
       myHolder = null;
       if (throwable instanceof IOException) {
-        throw (IOException) throwable;
+        throw (IOException)throwable;
       }
     }
 
@@ -258,10 +282,12 @@ public class TestDiscoveryIndex implements Disposable {
         }
         try {
           return action.apply(holder);
-        } catch (Throwable throwable) {
+        }
+        catch (Throwable throwable) {
           if (!myReadOnly) {
             thingsWentWrongLetsReinitialize(holder, throwable);
-          } else {
+          }
+          else {
             LOG.error(throwable);
           }
         }
@@ -285,7 +311,9 @@ public class TestDiscoveryIndex implements Disposable {
     }
   }
 
-  public void updateFromTestTrace(@Nonnull File file, @Nullable final String moduleName, @Nonnull final String frameworkPrefix) throws IOException {
+  public void updateFromTestTrace(@Nonnull File file,
+                                  @Nullable final String moduleName,
+                                  @Nonnull final String frameworkPrefix) throws IOException {
     int fileNameDotIndex = file.getName().lastIndexOf('.');
     final String testName = fileNameDotIndex != -1 ? file.getName().substring(0, fileNameDotIndex) : file.getName();
     doUpdateFromTestTrace(file, testName, moduleName != null ? frameworkPrefix + moduleName : null);
@@ -293,36 +321,64 @@ public class TestDiscoveryIndex implements Disposable {
 
   private void doUpdateFromTestTrace(File file, final String testName, @Nullable final String moduleName) throws IOException {
     myLocalTestRunDataController.withTestDataHolder(localHolder ->
-    {
-      final int testNameId = localHolder.myTestNameEnumerator.enumerate(testName);
-      IntObjectMap<IntList> classData = loadClassAndMethodsMap(file, localHolder);
-      IntObjectMap<IntList> previousClassData = localHolder.myTestNameToUsedClassesAndMethodMap.get(testNameId);
-      if (previousClassData == null) {
-        previousClassData = myRemoteTestRunDataController.withTestDataHolder(remoteDataHolder ->
-        {
-          IntObjectMap<IntList> remoteClassData = remoteDataHolder.myTestNameToUsedClassesAndMethodMap.get(testNameId);
-          if (remoteClassData == null) {
-            return null;
-          }
-          IntObjectMap<IntList> result = IntMaps.newIntObjectHashMap(remoteClassData.size());
-          for (IntObjectMap.IntObjectEntry<IntList> entry : remoteClassData.entrySet()) {
-            int remoteClassKey = entry.getKey();
-            IntList remoteClassMethodIds = entry.getValue();
+                                                    {
+                                                      final int testNameId = localHolder.myTestNameEnumerator.enumerate(testName);
+                                                      IntObjectMap<IntList> classData = loadClassAndMethodsMap(file, localHolder);
+                                                      IntObjectMap<IntList> previousClassData =
+                                                        localHolder.myTestNameToUsedClassesAndMethodMap.get(testNameId);
+                                                      if (previousClassData == null) {
+                                                        previousClassData =
+                                                          myRemoteTestRunDataController.withTestDataHolder(remoteDataHolder ->
+                                                                                                           {
+                                                                                                             IntObjectMap<IntList>
+                                                                                                               remoteClassData =
+                                                                                                               remoteDataHolder.myTestNameToUsedClassesAndMethodMap
+                                                                                                                 .get(testNameId);
+                                                                                                             if (remoteClassData == null) {
+                                                                                                               return null;
+                                                                                                             }
+                                                                                                             IntObjectMap<IntList> result =
+                                                                                                               IntMaps.newIntObjectHashMap(
+                                                                                                                 remoteClassData.size());
+                                                                                                             for (IntObjectMap.IntObjectEntry<IntList> entry : remoteClassData
+                                                                                                               .entrySet()) {
+                                                                                                               int remoteClassKey =
+                                                                                                                 entry.getKey();
+                                                                                                               IntList
+                                                                                                                 remoteClassMethodIds =
+                                                                                                                 entry.getValue();
 
-            int localClassKey = localHolder.myClassEnumeratorCache.enumerate(remoteDataHolder.myClassEnumeratorCache.valueOf(remoteClassKey));
-            IntList localClassIds = IntLists.newArrayList(remoteClassMethodIds.size());
-            for (int methodId : remoteClassMethodIds.toArray()) {
-              localClassIds.add(localHolder.myMethodEnumeratorCache.enumerate(remoteDataHolder.myMethodEnumeratorCache.valueOf(methodId)));
-            }
-            result.put(localClassKey, localClassIds);
-          }
-          return result;
-        });
-      }
+                                                                                                               int localClassKey =
+                                                                                                                 localHolder.myClassEnumeratorCache
+                                                                                                                   .enumerate(
+                                                                                                                     remoteDataHolder.myClassEnumeratorCache
+                                                                                                                       .valueOf(
+                                                                                                                         remoteClassKey));
+                                                                                                               IntList localClassIds =
+                                                                                                                 IntLists.newArrayList(
+                                                                                                                   remoteClassMethodIds.size());
+                                                                                                               for (int methodId : remoteClassMethodIds
+                                                                                                                 .toArray()) {
+                                                                                                                 localClassIds.add(
+                                                                                                                   localHolder.myMethodEnumeratorCache
+                                                                                                                     .enumerate(
+                                                                                                                       remoteDataHolder.myMethodEnumeratorCache
+                                                                                                                         .valueOf(methodId)));
+                                                                                                               }
+                                                                                                               result.put(localClassKey,
+                                                                                                                          localClassIds);
+                                                                                                             }
+                                                                                                             return result;
+                                                                                                           });
+                                                      }
 
-      localHolder.doUpdateFromDiff(testNameId, classData, previousClassData, moduleName != null ? localHolder.myModuleNameEnumerator.enumerate(moduleName) : null);
-      return null;
-    });
+                                                      localHolder.doUpdateFromDiff(testNameId,
+                                                                                   classData,
+                                                                                   previousClassData,
+                                                                                   moduleName != null ? localHolder.myModuleNameEnumerator.enumerate(
+                                                                                     moduleName) : null);
+                                                      return null;
+                                                    });
   }
 
   @Nonnull
@@ -347,7 +403,8 @@ public class TestDiscoveryIndex implements Disposable {
         classData.put(classId, methodsList);
       }
       return classData;
-    } finally {
+    }
+    finally {
       inputStream.close();
     }
   }

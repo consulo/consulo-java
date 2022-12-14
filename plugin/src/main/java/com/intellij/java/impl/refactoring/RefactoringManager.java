@@ -15,6 +15,9 @@
  */
 package com.intellij.java.impl.refactoring;
 
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ServiceAPI;
+import consulo.annotation.component.ServiceImpl;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
@@ -23,6 +26,8 @@ import consulo.project.Project;
 import com.intellij.java.impl.refactoring.migration.MigrationManager;
 
 @Singleton
+@ServiceAPI(ComponentScope.PROJECT)
+@ServiceImpl
 public class RefactoringManager {
   private final MigrationManager myMigrateManager;
 

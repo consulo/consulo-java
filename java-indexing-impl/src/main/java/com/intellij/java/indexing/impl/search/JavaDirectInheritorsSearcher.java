@@ -19,13 +19,14 @@ import com.intellij.java.indexing.impl.stubs.index.JavaAnonymousClassBaseRefOccu
 import com.intellij.java.indexing.impl.stubs.index.JavaSuperClassNameOccurenceIndex;
 import com.intellij.java.indexing.search.searches.AllClassesSearch;
 import com.intellij.java.indexing.search.searches.DirectClassInheritorsSearch;
+import com.intellij.java.indexing.search.searches.DirectClassInheritorsSearchExecutor;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.ApplicationManager;
 import consulo.application.progress.ProgressManager;
 import consulo.application.util.function.Computable;
 import consulo.application.util.function.Processor;
-import consulo.application.util.query.QueryExecutor;
 import consulo.content.scope.SearchScope;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.PsiElement;
@@ -44,7 +45,8 @@ import java.util.*;
 /**
  * @author max
  */
-public class JavaDirectInheritorsSearcher implements QueryExecutor<PsiClass, DirectClassInheritorsSearch.SearchParameters> {
+@ExtensionImpl
+public class JavaDirectInheritorsSearcher implements DirectClassInheritorsSearchExecutor {
   @Override
   public boolean execute(@Nonnull final DirectClassInheritorsSearch.SearchParameters p, @Nonnull final Processor<? super PsiClass> consumer) {
     final PsiClass aClass = p.getClassToProcess();

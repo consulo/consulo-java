@@ -17,13 +17,14 @@ package com.intellij.java.impl.ide.hierarchy.call;
 
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.PsiMethod;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.dataContext.DataContext;
 import consulo.ide.impl.idea.ide.hierarchy.CallHierarchyBrowserBase;
 import consulo.language.Language;
 import consulo.language.editor.CommonDataKeys;
 import consulo.language.editor.LangDataKeys;
+import consulo.language.editor.hierarchy.CallHierarchyProvider;
 import consulo.language.editor.hierarchy.HierarchyBrowser;
-import consulo.language.editor.hierarchy.HierarchyProvider;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.project.Project;
@@ -33,7 +34,8 @@ import javax.annotation.Nonnull;
 /**
  * @author yole
  */
-public class JavaCallHierarchyProvider implements HierarchyProvider {
+@ExtensionImpl
+public class JavaCallHierarchyProvider implements CallHierarchyProvider {
   @Override
   public PsiElement getTarget(@Nonnull final DataContext dataContext) {
     final Project project = dataContext.getData(CommonDataKeys.PROJECT);

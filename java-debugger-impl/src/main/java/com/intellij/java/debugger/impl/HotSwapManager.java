@@ -22,15 +22,14 @@ import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ServiceAPI;
 import consulo.annotation.component.ServiceImpl;
 import consulo.application.ApplicationManager;
-import consulo.ide.ServiceManager;
-import consulo.project.Project;
-import consulo.module.content.layer.OrderEnumerator;
-import consulo.application.util.function.Computable;
-import consulo.util.lang.Pair;
 import consulo.application.util.SystemInfo;
+import consulo.application.util.function.Computable;
+import consulo.ide.ServiceManager;
 import consulo.ide.impl.idea.openapi.util.io.FileUtil;
+import consulo.module.content.layer.OrderEnumerator;
+import consulo.project.Project;
+import consulo.util.lang.Pair;
 import consulo.util.lang.StringUtil;
-import consulo.ide.impl.idea.openapi.vfs.VfsUtil;
 import consulo.virtualFileSystem.VirtualFile;
 import jakarta.inject.Singleton;
 
@@ -51,20 +50,6 @@ public class HotSwapManager {
     return ServiceManager.getService(project, HotSwapManager.class);
   }
 
-  public static class Listener implements DebuggerManagerListener {
-    @Override
-    public void sessionCreated(DebuggerSession session) {
-      HotSwapManager manager = HotSwapManager.getInstance(session.getProject());
-      manager.myTimeStamps.put(session, System.currentTimeMillis());
-    }
-
-    @Override
-    public void sessionRemoved(DebuggerSession session) {
-      HotSwapManager manager = HotSwapManager.getInstance(session.getProject());
-      manager.myTimeStamps.remove(session);
-    }
-  }
-
   private final Map<DebuggerSession, Long> myTimeStamps = new HashMap<>();
   private static final String CLASS_EXTENSION = ".class";
 
@@ -77,14 +62,19 @@ public class HotSwapManager {
     myTimeStamps.put(session, tStamp);
   }
 
+  Map<DebuggerSession, Long> getTimeStamps() {
+    return myTimeStamps;
+  }
+
   private Map<String, HotSwapFile> scanForModifiedClasses(final DebuggerSession session, final HotSwapProgress progress) {
     DebuggerManagerThreadImpl.assertIsManagerThread();
 
     final long timeStamp = getTimeStamp(session);
     final Map<String, HotSwapFile> modifiedClasses = new HashMap<>();
 
-    List<File> outputRoots = ApplicationManager.getApplication().runReadAction((Computable<List<File>>) () -> {
-      final List<VirtualFile> allDirs = OrderEnumerator.orderEntries(session.getProject()).withoutSdk().withoutLibraries().getPathsList().getRootDirs();
+    List<File> outputRoots = ApplicationManager.getApplication().runReadAction((Computable<List<File>>)() -> {
+      final List<VirtualFile> allDirs =
+        OrderEnumerator.orderEntries(session.getProject()).withoutSdk().withoutLibraries().getPathsList().getRootDirs();
       return allDirs.stream().map(consulo.ide.impl.idea.openapi.vfs.VfsUtil::virtualToIoFile).collect(Collectors.toList());
     });
 
@@ -112,9 +102,10 @@ public class HotSwapManager {
           return false;
         }
       }
-    } else { // not a dir
+    }
+    else { // not a dir
       if (SystemInfo.isFileSystemCaseSensitive ? StringUtil.endsWith(path, CLASS_EXTENSION) : StringUtil.endsWithIgnoreCase(path,
-          CLASS_EXTENSION)) {
+                                                                                                                            CLASS_EXTENSION)) {
         if (file.lastModified() > timeStamp) {
           progress.setText(DebuggerBundle.message("progress.hotswap.scanning.path", path));
           //noinspection HardCodedStringLiteral
@@ -143,7 +134,7 @@ public class HotSwapManager {
       final File root = new File(entry.getKey());
       for (String relativePath : entry.getValue()) {
         if (SystemInfo.isFileSystemCaseSensitive ? StringUtil.endsWith(relativePath, CLASS_EXTENSION) : StringUtil.endsWithIgnoreCase
-            (relativePath, CLASS_EXTENSION)) {
+          (relativePath, CLASS_EXTENSION)) {
           final String qualifiedName = relativePath.substring(0, relativePath.length() - CLASS_EXTENSION.length()).replace('/', '.');
           final HotSwapFile hotswapFile = new HotSwapFile(new File(root, relativePath));
           final long fileStamp = hotswapFile.file.lastModified();
@@ -180,7 +171,7 @@ public class HotSwapManager {
           protected void action() throws Exception {
             swapProgress.setDebuggerSession(debuggerSession);
             final Map<String, HotSwapFile> sessionClasses = getInstance(swapProgress.getProject()).scanForModifiedClasses
-                (debuggerSession, swapProgress);
+              (debuggerSession, swapProgress);
             if (!sessionClasses.isEmpty()) {
               modifiedClasses.put(debuggerSession, sessionClasses);
             }
@@ -207,7 +198,7 @@ public class HotSwapManager {
         protected void action() throws Exception {
           reloadClassesProgress.setDebuggerSession(debuggerSession);
           getInstance(reloadClassesProgress.getProject()).reloadClasses(debuggerSession, modifiedClasses.get(debuggerSession),
-              reloadClassesProgress);
+                                                                        reloadClassesProgress);
         }
       });
     }

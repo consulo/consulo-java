@@ -17,6 +17,8 @@ package com.intellij.java.impl.openapi.roots;
 
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.projectRoots.roots.ExternalLibraryDescriptor;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ServiceAPI;
 import consulo.ide.ServiceManager;
 import consulo.module.Module;
 import consulo.project.Project;
@@ -37,6 +39,7 @@ import java.util.Collections;
  * @author nik
  * @see JavaProjectModelModifier
  */
+@ServiceAPI(ComponentScope.PROJECT)
 public abstract class JavaProjectModelModificationService {
   public static JavaProjectModelModificationService getInstance(@Nonnull Project project) {
     return ServiceManager.getService(project, JavaProjectModelModificationService.class);

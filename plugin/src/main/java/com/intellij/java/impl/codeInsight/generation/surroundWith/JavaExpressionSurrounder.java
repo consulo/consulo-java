@@ -17,20 +17,23 @@
 
 package com.intellij.java.impl.codeInsight.generation.surroundWith;
 
-import javax.annotation.Nonnull;
-
-import consulo.language.editor.surroundWith.Surrounder;
+import com.intellij.java.language.psi.PsiExpression;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ExtensionAPI;
 import consulo.codeEditor.Editor;
 import consulo.component.extension.ExtensionPointName;
-import consulo.project.Project;
 import consulo.document.util.TextRange;
+import consulo.language.editor.surroundWith.Surrounder;
 import consulo.language.psi.PsiElement;
-import com.intellij.java.language.psi.PsiExpression;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
+import consulo.project.Project;
 
+import javax.annotation.Nonnull;
+
+@ExtensionAPI(ComponentScope.APPLICATION)
 public abstract class JavaExpressionSurrounder implements Surrounder {
-  public static ExtensionPointName<JavaExpressionSurrounder> EP_NAME = ExtensionPointName.create("consulo.java.expressionSurrounder");
+  public static ExtensionPointName<JavaExpressionSurrounder> EP_NAME = ExtensionPointName.create(JavaExpressionSurrounder.class);
   
   private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.generation.surroundWith.SurroundExpressionHandler");
 

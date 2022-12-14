@@ -20,6 +20,7 @@ import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.util.VisibilityUtil;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
 import consulo.document.util.TextRange;
 import consulo.ide.impl.idea.refactoring.changeSignature.inplace.LanguageChangeSignatureDetector;
@@ -35,6 +36,7 @@ import consulo.virtualFileSystem.fileType.FileType;
 import javax.annotation.Nonnull;
 import java.util.List;
 
+@ExtensionImpl
 public class JavaChangeSignatureDetector implements LanguageChangeSignatureDetector<DetectedJavaChangeInfo> {
   private static final Logger LOG = Logger.getInstance(JavaChangeSignatureDetector.class);
 

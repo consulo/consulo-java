@@ -15,6 +15,8 @@
  */
 package com.intellij.java.impl.openapi.roots.libraries;
 
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ServiceAPI;
 import consulo.ide.ServiceManager;
 import consulo.content.library.Library;
 import consulo.virtualFileSystem.VirtualFile;
@@ -26,6 +28,7 @@ import java.util.List;
 /**
  * author: lesya
  */
+@ServiceAPI(ComponentScope.APPLICATION)
 public abstract class LibrariesHelper {
   public static LibrariesHelper getInstance() {
     return ServiceManager.getService(LibrariesHelper.class);

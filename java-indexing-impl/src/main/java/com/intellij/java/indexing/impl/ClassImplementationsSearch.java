@@ -18,17 +18,19 @@ package com.intellij.java.indexing.impl;
 import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
 import com.intellij.java.indexing.search.searches.FunctionalExpressionSearch;
 import com.intellij.java.language.psi.PsiClass;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.util.function.Processor;
-import consulo.application.util.query.QueryExecutor;
 import consulo.content.scope.SearchScope;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.resolve.PsiElementProcessor;
 import consulo.language.psi.resolve.PsiElementProcessorAdapter;
 import consulo.language.psi.search.DefinitionsScopedSearch;
+import consulo.language.psi.search.DefinitionsScopedSearchExecutor;
 
 import javax.annotation.Nonnull;
 
-public class ClassImplementationsSearch implements QueryExecutor<PsiElement, DefinitionsScopedSearch.SearchParameters> {
+@ExtensionImpl
+public class ClassImplementationsSearch implements DefinitionsScopedSearchExecutor {
   @Override
   public boolean execute(@Nonnull DefinitionsScopedSearch.SearchParameters queryParameters, @Nonnull Processor<? super PsiElement> consumer) {
     final PsiElement sourceElement = queryParameters.getElement();

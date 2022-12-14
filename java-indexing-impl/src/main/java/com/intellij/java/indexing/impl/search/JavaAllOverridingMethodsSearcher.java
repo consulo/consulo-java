@@ -16,16 +16,17 @@
 package com.intellij.java.indexing.impl.search;
 
 import com.intellij.java.indexing.search.searches.AllOverridingMethodsSearch;
+import com.intellij.java.indexing.search.searches.AllOverridingMethodsSearchExecutor;
 import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.MethodSignature;
 import com.intellij.java.language.psi.util.MethodSignatureUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.ApplicationManager;
 import consulo.application.util.function.Computable;
 import consulo.application.util.function.Processor;
-import consulo.application.util.query.QueryExecutor;
 import consulo.content.scope.SearchScope;
 import consulo.util.collection.MultiMap;
 import consulo.util.lang.Pair;
@@ -35,23 +36,26 @@ import javax.annotation.Nonnull;
 /**
  * @author ven
  */
-public class JavaAllOverridingMethodsSearcher implements QueryExecutor<Pair<PsiMethod, PsiMethod>, AllOverridingMethodsSearch.SearchParameters> {
+@ExtensionImpl
+public class JavaAllOverridingMethodsSearcher implements AllOverridingMethodsSearchExecutor {
   @Override
-  public boolean execute(@Nonnull final AllOverridingMethodsSearch.SearchParameters p, @Nonnull final Processor<? super Pair<PsiMethod, PsiMethod>> consumer) {
+  public boolean execute(@Nonnull final AllOverridingMethodsSearch.SearchParameters p,
+                         @Nonnull final Processor<? super Pair<PsiMethod, PsiMethod>> consumer) {
     final PsiClass psiClass = p.getPsiClass();
 
-    final MultiMap<String, PsiMethod> methods = ApplicationManager.getApplication().runReadAction(new Computable<MultiMap<String, PsiMethod>>() {
-      @Override
-      public MultiMap<String, PsiMethod> compute() {
-        final MultiMap<String, PsiMethod> methods = MultiMap.create();
-        for (PsiMethod method : psiClass.getMethods()) {
-          if (PsiUtil.canBeOverriden(method)) {
-            methods.putValue(method.getName(), method);
+    final MultiMap<String, PsiMethod> methods =
+      ApplicationManager.getApplication().runReadAction(new Computable<MultiMap<String, PsiMethod>>() {
+        @Override
+        public MultiMap<String, PsiMethod> compute() {
+          final MultiMap<String, PsiMethod> methods = MultiMap.create();
+          for (PsiMethod method : psiClass.getMethods()) {
+            if (PsiUtil.canBeOverriden(method)) {
+              methods.putValue(method.getName(), method);
+            }
           }
+          return methods;
         }
-        return methods;
-      }
-    });
+      });
 
 
     final SearchScope scope = p.getScope();
@@ -67,7 +71,8 @@ public class JavaAllOverridingMethodsSearcher implements QueryExecutor<Pair<PsiM
           }
 
           for (PsiMethod method : methods.get(name)) {
-            if (method.hasModifierProperty(PsiModifier.PACKAGE_LOCAL) && !JavaPsiFacade.getInstance(inheritor.getProject()).arePackagesTheSame(psiClass, inheritor)) {
+            if (method.hasModifierProperty(PsiModifier.PACKAGE_LOCAL) && !JavaPsiFacade.getInstance(inheritor.getProject())
+                                                                                       .arePackagesTheSame(psiClass, inheritor)) {
               continue;
             }
 

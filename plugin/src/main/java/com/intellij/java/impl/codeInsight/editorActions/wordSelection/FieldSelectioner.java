@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.codeInsight.editorActions.wordSelection;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.ide.impl.idea.codeInsight.editorActions.wordSelection.WordSelectioner;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.PsiField;
@@ -26,6 +27,7 @@ import consulo.language.psi.PsiElement;
 
 import java.util.List;
 
+@ExtensionImpl
 public class FieldSelectioner extends WordSelectioner {
   @Override
   public boolean canSelect(PsiElement e) {

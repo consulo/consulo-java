@@ -24,6 +24,7 @@ import com.intellij.java.impl.refactoring.JavaRefactoringSettings;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.java.language.psi.PsiParameter;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.editor.refactoring.rename.AutomaticRenamer;
@@ -32,6 +33,7 @@ import consulo.usage.UsageInfo;
 
 import java.util.Collection;
 
+@ExtensionImpl
 public class AutomaticParametersRenamerFactory implements AutomaticRenamerFactory {
   public boolean isApplicable(PsiElement element) {
     if (element instanceof PsiParameter) {

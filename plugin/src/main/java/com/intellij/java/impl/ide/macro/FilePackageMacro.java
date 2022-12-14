@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.ide.macro;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.ide.IdeBundle;
 import consulo.pathMacro.Macro;
 import com.intellij.java.language.psi.JavaDirectoryService;
@@ -26,6 +27,7 @@ import consulo.language.psi.PsiFile;
 
 import javax.annotation.Nullable;
 
+@ExtensionImpl
 public final class FilePackageMacro extends Macro {
   public String getName() {
     return "FilePackage";

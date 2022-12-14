@@ -21,15 +21,11 @@
                      groupName="Pattern Validation" enabledByDefault="true" level="WARNING"
                      implementationClass="consulo.java.impl.intelliLang.pattern.PatternOverriddenByNonAnnotatedMethod"/>
 
-    <concatenationAwareInjector implementation="consulo.java.impl.intelliLang.ConcatenationInjector"/>
 
-    <psi.referenceContributor implementation="consulo.java.impl.intelliLang.LanguageReferenceProvider"/>
 
-    <daemon.highlightInfoFilter implementation="org.intellij.plugins.intelliLang.inject.CustomErrorElementFilter"/>
   </extensions>
 
   <extensions defaultExtensionNs="com.intellij">
-    <injectionLanguageSupport implementation="consulo.java.impl.intelliLang.JavaLanguageInjectionSupport"/>
     <injectionConfig config="resources/javaInjections.xml"/>
     <injectionConfig config="resources/xmlInjections-java.xml"/>
   </extensions>

@@ -38,12 +38,4 @@
 		<manifest.headerParser key="Web-ContextPath" implementationClass="consulo.java.manifest.lang.headerparser.impl.SimpleHeaderParser"/>
 		<manifest.headerParser key="Web-DispatcherServletUrlPatterns" implementationClass="consulo.java.manifest.lang.headerparser.impl.SimpleHeaderParser"/>
 	</extensions>
-
-	<extensions defaultExtensionNs="com.intellij">
-		<localInspection shortName="MissingFinalNewlineInspection" displayName="Missing Final New Line" groupName="Manifest" enabledByDefault="true" level="ERROR"
-						 implementationClass="org.osmorc.manifest.codeInspection.MissingFinalNewlineInspection"/>
-
-		<annotator language="MANIFEST" implementationClass="org.osmorc.manifest.lang.headerparser.HeaderAnnotator"/>
-		<annotator language="MANIFEST" implementationClass="org.osmorc.manifest.lang.ManifestHighlightingAnnotator"/>
-	</extensions>
 </consulo-plugin>

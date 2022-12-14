@@ -16,7 +16,7 @@
 package com.intellij.java.impl.codeInspection.i18n;
 
 import consulo.annotation.component.ComponentScope;
-import consulo.annotation.component.ServiceAPI;
+import consulo.annotation.component.ExtensionAPI;
 import consulo.codeEditor.Editor;
 import consulo.component.extension.ExtensionPointName;
 import consulo.document.util.TextRange;
@@ -28,12 +28,11 @@ import javax.annotation.Nullable;
 /**
  * @author sergey.evdokimov
  */
-@ServiceAPI(ComponentScope.APPLICATION)
+@ExtensionAPI(ComponentScope.APPLICATION)
 public abstract class I18nizeHandlerProvider {
 
   public static final ExtensionPointName<I18nizeHandlerProvider> EP_NAME = ExtensionPointName.create(I18nizeHandlerProvider.class);
 
   @Nullable
   public abstract I18nQuickFixHandler getHandler(@Nonnull final PsiFile psiFile, @Nonnull final Editor editor, @Nonnull TextRange range);
-
 }

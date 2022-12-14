@@ -21,6 +21,7 @@ import com.intellij.java.language.psi.JavaDirectoryService;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiJavaPackage;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.project.Project;
 import consulo.language.psi.PsiDirectory;
 import consulo.language.psi.PsiElement;
@@ -42,6 +43,7 @@ import java.util.Map;
 /**
  * @author yole
  */
+@ExtensionImpl
 public class RenamePsiPackageProcessor extends RenamePsiElementProcessor {
   private final Logger LOG = Logger.getInstance(RenamePsiPackageProcessor.class);
 

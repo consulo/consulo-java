@@ -23,6 +23,7 @@ import com.intellij.java.impl.codeInsight.template.impl.JavaTemplateUtil;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.PsiWildcardType;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.document.util.TextRange;
 import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.completion.lookup.LookupElement;
@@ -38,6 +39,7 @@ import javax.annotation.Nullable;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+@ExtensionImpl
 public class GuessElementTypeMacro extends Macro {
   @Override
   public String getName() {

@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.refactoring.move.moveInner;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.externalService.statistic.FeatureUsageTracker;
 import consulo.dataContext.DataContext;
 import consulo.codeEditor.Editor;
@@ -29,6 +30,7 @@ import com.intellij.java.impl.refactoring.move.moveClassesOrPackages.JavaMoveCla
 
 import javax.annotation.Nullable;
 
+@ExtensionImpl
 public class MoveInnerToUpperHandler extends MoveHandlerDelegate {
   public boolean canMove(final PsiElement[] elements, @Nullable final PsiElement targetContainer) {
     if (elements.length != 1) return false;

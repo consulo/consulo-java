@@ -15,15 +15,19 @@
  */
 package com.intellij.java.debugger;
 
-import javax.annotation.Nullable;
 import com.intellij.java.debugger.engine.DebugProcess;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ExtensionAPI;
 import consulo.component.extension.ExtensionPointName;
+
+import javax.annotation.Nullable;
 
 /**
  * @author yole
  */
+@ExtensionAPI(ComponentScope.PROJECT)
 public abstract class PositionManagerFactory {
-  public static final ExtensionPointName<PositionManagerFactory> EP_NAME = ExtensionPointName.create("consulo.java.debugger.positionManagerFactory");
+  public static final ExtensionPointName<PositionManagerFactory> EP_NAME = ExtensionPointName.create(PositionManagerFactory.class);
 
   @Nullable
   public abstract PositionManager createPositionManager(DebugProcess process);

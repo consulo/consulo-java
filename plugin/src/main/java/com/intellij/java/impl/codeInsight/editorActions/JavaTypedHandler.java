@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.codeInsight.editorActions;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.AutoPopupController;
 import consulo.language.editor.CodeInsightSettings;
 import consulo.ide.impl.idea.codeInsight.editorActions.TypedHandler;
@@ -51,6 +52,7 @@ import javax.annotation.Nullable;
 /**
  * @author yole
  */
+@ExtensionImpl(id = "java")
 public class JavaTypedHandler extends TypedHandlerDelegate {
   static final TokenSet INVALID_INSIDE_REFERENCE = TokenSet.create(JavaTokenType.SEMICOLON, JavaTokenType.LBRACE,
       JavaTokenType.RBRACE);

@@ -16,29 +16,27 @@
 package com.intellij.java.debugger.impl.ui;
 
 import com.intellij.java.debugger.DebuggerBundle;
-import com.intellij.java.debugger.impl.*;
+import com.intellij.java.debugger.impl.DebuggerSession;
+import com.intellij.java.debugger.impl.HotSwapFile;
+import com.intellij.java.debugger.impl.HotSwapManager;
 import com.intellij.java.debugger.impl.settings.DebuggerSettings;
+import consulo.annotation.component.ServiceImpl;
 import consulo.application.Application;
 import consulo.application.ApplicationManager;
 import consulo.application.CommonBundle;
 import consulo.application.progress.ProgressManager;
-import consulo.compiler.CompileContext;
 import consulo.compiler.CompilerManager;
-import consulo.compiler.event.CompilationStatusListener;
-import consulo.component.messagebus.MessageBusConnection;
 import consulo.project.Project;
 import consulo.project.ui.notification.NotificationType;
 import consulo.ui.ex.awt.DialogWrapper;
 import consulo.ui.ex.awt.Messages;
 import consulo.util.collection.Lists;
-import consulo.util.lang.StringUtil;
 import consulo.util.lang.ref.Ref;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
 import javax.annotation.Nullable;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * User: lex
@@ -46,321 +44,185 @@ import java.util.concurrent.atomic.AtomicReference;
  * Time: 6:00:55 PM
  */
 @Singleton
-public class HotSwapUIImpl extends HotSwapUI
-{
-	public static class Listener implements DebuggerManagerListener
-	{
-		private MessageBusConnection myConn = null;
-		private int mySessionCount = 0;
+@ServiceImpl
+public class HotSwapUIImpl extends HotSwapUI {
 
-		@Override
-		public void sessionAttached(DebuggerSession session)
-		{
-			if(mySessionCount++ == 0)
-			{
-				Project project = session.getProject();
+  protected final List<HotSwapVetoableListener> myListeners = Lists.newLockFreeCopyOnWriteList();
+  private boolean myAskBeforeHotswap = true;
+  private final Project myProject;
+  protected boolean myPerformHotswapAfterThisCompilation = true;
 
-				myConn = project.getMessageBus().connect();
-				myConn.subscribe(CompilationStatusListener.class, new MyCompilationStatusListener(project));
-			}
-		}
+  @Inject
+  public HotSwapUIImpl(final Project project) {
+    myProject = project;
+  }
 
-		@Override
-		public void sessionDetached(DebuggerSession session)
-		{
-			mySessionCount = Math.max(0, mySessionCount - 1);
-			if(mySessionCount == 0)
-			{
-				final MessageBusConnection conn = myConn;
-				if(conn != null)
-				{
-					conn.disconnect();
-					myConn = null;
-				}
-			}
-		}
-	}
+  @Override
+  public void addListener(HotSwapVetoableListener listener) {
+    myListeners.add(listener);
+  }
 
-	private final List<HotSwapVetoableListener> myListeners = Lists.newLockFreeCopyOnWriteList();
-	private boolean myAskBeforeHotswap = true;
-	private final Project myProject;
-	private boolean myPerformHotswapAfterThisCompilation = true;
+  @Override
+  public void removeListener(HotSwapVetoableListener listener) {
+    myListeners.remove(listener);
+  }
 
-	@Inject
-	public HotSwapUIImpl(final Project project)
-	{
-		myProject = project;
-	}
+  private boolean shouldDisplayHangWarning(DebuggerSettings settings, List<DebuggerSession> sessions) {
+    if (!settings.HOTSWAP_HANG_WARNING_ENABLED) {
+      return false;
+    }
+    // todo: return false if yourkit agent is inactive
+    for (DebuggerSession session : sessions) {
+      if (session.isPaused()) {
+        return true;
+      }
+    }
+    return false;
+  }
 
-	@Override
-	public void addListener(HotSwapVetoableListener listener)
-	{
-		myListeners.add(listener);
-	}
+  protected void hotSwapSessions(final List<DebuggerSession> sessions, @Nullable final Map<String, List<String>> generatedPaths) {
+    final boolean shouldAskBeforeHotswap = myAskBeforeHotswap;
+    myAskBeforeHotswap = true;
 
-	@Override
-	public void removeListener(HotSwapVetoableListener listener)
-	{
-		myListeners.remove(listener);
-	}
+    final DebuggerSettings settings = DebuggerSettings.getInstance();
+    final String runHotswap = settings.RUN_HOTSWAP_AFTER_COMPILE;
+    final boolean shouldDisplayHangWarning = shouldDisplayHangWarning(settings, sessions);
 
-	private boolean shouldDisplayHangWarning(DebuggerSettings settings, List<DebuggerSession> sessions)
-	{
-		if(!settings.HOTSWAP_HANG_WARNING_ENABLED)
-		{
-			return false;
-		}
-		// todo: return false if yourkit agent is inactive
-		for(DebuggerSession session : sessions)
-		{
-			if(session.isPaused())
-			{
-				return true;
-			}
-		}
-		return false;
-	}
+    if (shouldAskBeforeHotswap && DebuggerSettings.RUN_HOTSWAP_NEVER.equals(runHotswap)) {
+      return;
+    }
 
-	private void hotSwapSessions(final List<DebuggerSession> sessions, @Nullable final Map<String, List<String>> generatedPaths)
-	{
-		final boolean shouldAskBeforeHotswap = myAskBeforeHotswap;
-		myAskBeforeHotswap = true;
+    final boolean shouldPerformScan = true;
 
-		final DebuggerSettings settings = DebuggerSettings.getInstance();
-		final String runHotswap = settings.RUN_HOTSWAP_AFTER_COMPILE;
-		final boolean shouldDisplayHangWarning = shouldDisplayHangWarning(settings, sessions);
+    final HotSwapProgressImpl findClassesProgress;
+    if (shouldPerformScan) {
+      findClassesProgress = new HotSwapProgressImpl(myProject);
+    }
+    else {
+      boolean createProgress = false;
+      for (DebuggerSession session : sessions) {
+        if (session.isModifiedClassesScanRequired()) {
+          createProgress = true;
+          break;
+        }
+      }
+      findClassesProgress = createProgress ? new HotSwapProgressImpl(myProject) : null;
+    }
 
-		if(shouldAskBeforeHotswap && DebuggerSettings.RUN_HOTSWAP_NEVER.equals(runHotswap))
-		{
-			return;
-		}
+    ApplicationManager.getApplication().executeOnPooledThread(() -> {
+      final Map<DebuggerSession, Map<String, HotSwapFile>> modifiedClasses;
+      if (shouldPerformScan) {
+        modifiedClasses = scanForModifiedClassesWithProgress(sessions, findClassesProgress);
+      }
+      else {
+        final List<DebuggerSession> toScan = new ArrayList<>();
+        final List<DebuggerSession> toUseGenerated = new ArrayList<>();
+        for (DebuggerSession session : sessions) {
+          (session.isModifiedClassesScanRequired() ? toScan : toUseGenerated).add(session);
+          session.setModifiedClassesScanRequired(false);
+        }
+        modifiedClasses = new HashMap<>();
+        if (!toUseGenerated.isEmpty()) {
+          modifiedClasses.putAll(HotSwapManager.findModifiedClasses(toUseGenerated, generatedPaths));
+        }
+        if (!toScan.isEmpty()) {
+          modifiedClasses.putAll(scanForModifiedClassesWithProgress(toScan, findClassesProgress));
+        }
+      }
 
-		final boolean shouldPerformScan = true;
+      final Application application = ApplicationManager.getApplication();
+      if (modifiedClasses.isEmpty()) {
+        final String message = DebuggerBundle.message("status.hotswap.uptodate");
+        HotSwapProgressImpl.NOTIFICATION_GROUP.createNotification(message, NotificationType.INFORMATION).notify(myProject);
+        return;
+      }
 
-		final HotSwapProgressImpl findClassesProgress;
-		if(shouldPerformScan)
-		{
-			findClassesProgress = new HotSwapProgressImpl(myProject);
-		}
-		else
-		{
-			boolean createProgress = false;
-			for(DebuggerSession session : sessions)
-			{
-				if(session.isModifiedClassesScanRequired())
-				{
-					createProgress = true;
-					break;
-				}
-			}
-			findClassesProgress = createProgress ? new HotSwapProgressImpl(myProject) : null;
-		}
+      application.invokeLater(() -> {
+        if (shouldAskBeforeHotswap && !DebuggerSettings.RUN_HOTSWAP_ALWAYS.equals(runHotswap)) {
+          final RunHotswapDialog dialog = new RunHotswapDialog(myProject, sessions, shouldDisplayHangWarning);
+          dialog.show();
+          if (!dialog.isOK()) {
+            for (DebuggerSession session : modifiedClasses.keySet()) {
+              session.setModifiedClassesScanRequired(true);
+            }
+            return;
+          }
+          final Set<DebuggerSession> toReload = new HashSet<>(dialog.getSessionsToReload());
+          for (DebuggerSession session : modifiedClasses.keySet()) {
+            if (!toReload.contains(session)) {
+              session.setModifiedClassesScanRequired(true);
+            }
+          }
+          modifiedClasses.keySet().retainAll(toReload);
+        }
+        else {
+          if (shouldDisplayHangWarning) {
+            final int answer = Messages.showCheckboxMessageDialog(DebuggerBundle.message("hotswap.dialog.hang.warning"), DebuggerBundle
+              .message("hotswap.dialog.title"), new String[]{
+              "Perform &Reload Classes",
+              "&Skip Reload Classes"
+            }, CommonBundle.message("dialog.options.do.not.show"), false, 1, 1, Messages.getWarningIcon(), (exitCode, cb) -> {
+              settings.HOTSWAP_HANG_WARNING_ENABLED = !cb.isSelected();
+              return exitCode == DialogWrapper.OK_EXIT_CODE ? exitCode : DialogWrapper.CANCEL_EXIT_CODE;
+            });
+            if (answer == DialogWrapper.CANCEL_EXIT_CODE) {
+              for (DebuggerSession session : modifiedClasses.keySet()) {
+                session.setModifiedClassesScanRequired(true);
+              }
+              return;
+            }
+          }
+        }
 
-		ApplicationManager.getApplication().executeOnPooledThread(() -> {
-			final Map<DebuggerSession, Map<String, HotSwapFile>> modifiedClasses;
-			if(shouldPerformScan)
-			{
-				modifiedClasses = scanForModifiedClassesWithProgress(sessions, findClassesProgress);
-			}
-			else
-			{
-				final List<DebuggerSession> toScan = new ArrayList<>();
-				final List<DebuggerSession> toUseGenerated = new ArrayList<>();
-				for(DebuggerSession session : sessions)
-				{
-					(session.isModifiedClassesScanRequired() ? toScan : toUseGenerated).add(session);
-					session.setModifiedClassesScanRequired(false);
-				}
-				modifiedClasses = new HashMap<>();
-				if(!toUseGenerated.isEmpty())
-				{
-					modifiedClasses.putAll(HotSwapManager.findModifiedClasses(toUseGenerated, generatedPaths));
-				}
-				if(!toScan.isEmpty())
-				{
-					modifiedClasses.putAll(scanForModifiedClassesWithProgress(toScan, findClassesProgress));
-				}
-			}
+        if (!modifiedClasses.isEmpty()) {
+          final HotSwapProgressImpl progress = new HotSwapProgressImpl(myProject);
+          application.executeOnPooledThread(() -> reloadModifiedClasses(modifiedClasses, progress));
+        }
+      }, application.getNoneModalityState());
+    });
+  }
 
-			final Application application = ApplicationManager.getApplication();
-			if(modifiedClasses.isEmpty())
-			{
-				final String message = DebuggerBundle.message("status.hotswap.uptodate");
-				HotSwapProgressImpl.NOTIFICATION_GROUP.createNotification(message, NotificationType.INFORMATION).notify(myProject);
-				return;
-			}
+  private static Map<DebuggerSession, Map<String, HotSwapFile>> scanForModifiedClassesWithProgress(final List<DebuggerSession> sessions,
+                                                                                                   final HotSwapProgressImpl progress) {
+    final Ref<Map<DebuggerSession, Map<String, HotSwapFile>>> result = Ref.create(null);
+    ProgressManager.getInstance().runProcess(() -> {
+      try {
+        result.set(HotSwapManager.scanForModifiedClasses(sessions, progress));
+      }
+      finally {
+        progress.finished();
+      }
+    }, progress.getProgressIndicator());
+    return result.get();
+  }
 
-			application.invokeLater(() -> {
-				if(shouldAskBeforeHotswap && !DebuggerSettings.RUN_HOTSWAP_ALWAYS.equals(runHotswap))
-				{
-					final RunHotswapDialog dialog = new RunHotswapDialog(myProject, sessions, shouldDisplayHangWarning);
-					dialog.show();
-					if(!dialog.isOK())
-					{
-						for(DebuggerSession session : modifiedClasses.keySet())
-						{
-							session.setModifiedClassesScanRequired(true);
-						}
-						return;
-					}
-					final Set<DebuggerSession> toReload = new HashSet<>(dialog.getSessionsToReload());
-					for(DebuggerSession session : modifiedClasses.keySet())
-					{
-						if(!toReload.contains(session))
-						{
-							session.setModifiedClassesScanRequired(true);
-						}
-					}
-					modifiedClasses.keySet().retainAll(toReload);
-				}
-				else
-				{
-					if(shouldDisplayHangWarning)
-					{
-						final int answer = Messages.showCheckboxMessageDialog(DebuggerBundle.message("hotswap.dialog.hang.warning"), DebuggerBundle
-								.message("hotswap.dialog.title"), new String[]{
-								"Perform &Reload Classes",
-								"&Skip Reload Classes"
-						}, CommonBundle.message("dialog.options.do.not.show"), false, 1, 1, Messages.getWarningIcon(), (exitCode, cb) -> {
-							settings.HOTSWAP_HANG_WARNING_ENABLED = !cb.isSelected();
-							return exitCode == DialogWrapper.OK_EXIT_CODE ? exitCode : DialogWrapper.CANCEL_EXIT_CODE;
-						});
-						if(answer == DialogWrapper.CANCEL_EXIT_CODE)
-						{
-							for(DebuggerSession session : modifiedClasses.keySet())
-							{
-								session.setModifiedClassesScanRequired(true);
-							}
-							return;
-						}
-					}
-				}
+  private static void reloadModifiedClasses(final Map<DebuggerSession, Map<String, HotSwapFile>> modifiedClasses,
+                                            final HotSwapProgressImpl progress) {
+    ProgressManager.getInstance().runProcess(() -> {
+      HotSwapManager.reloadModifiedClasses(modifiedClasses, progress);
+      progress.finished();
+    }, progress.getProgressIndicator());
+  }
 
-				if(!modifiedClasses.isEmpty())
-				{
-					final HotSwapProgressImpl progress = new HotSwapProgressImpl(myProject);
-					application.executeOnPooledThread(() -> reloadModifiedClasses(modifiedClasses, progress));
-				}
-			}, application.getNoneModalityState());
-		});
-	}
+  @Override
+  public void reloadChangedClasses(final DebuggerSession session, boolean compileBeforeHotswap) {
+    dontAskHotswapAfterThisCompilation();
+    if (compileBeforeHotswap) {
+      CompilerManager.getInstance(session.getProject()).make(null);
+    }
+    else {
+      if (session.isAttached()) {
+        hotSwapSessions(Collections.singletonList(session), null);
+      }
+    }
+  }
 
-	private static Map<DebuggerSession, Map<String, HotSwapFile>> scanForModifiedClassesWithProgress(final List<DebuggerSession> sessions,
-			final HotSwapProgressImpl progress)
-	{
-		final Ref<Map<DebuggerSession, Map<String, HotSwapFile>>> result = Ref.create(null);
-		ProgressManager.getInstance().runProcess(() -> {
-			try
-			{
-				result.set(HotSwapManager.scanForModifiedClasses(sessions, progress));
-			}
-			finally
-			{
-				progress.finished();
-			}
-		}, progress.getProgressIndicator());
-		return result.get();
-	}
+  @Override
+  public void dontPerformHotswapAfterThisCompilation() {
+    myPerformHotswapAfterThisCompilation = false;
+  }
 
-	private static void reloadModifiedClasses(final Map<DebuggerSession, Map<String, HotSwapFile>> modifiedClasses,
-			final HotSwapProgressImpl progress)
-	{
-		ProgressManager.getInstance().runProcess(() -> {
-			HotSwapManager.reloadModifiedClasses(modifiedClasses, progress);
-			progress.finished();
-		}, progress.getProgressIndicator());
-	}
-
-	@Override
-	public void reloadChangedClasses(final DebuggerSession session, boolean compileBeforeHotswap)
-	{
-		dontAskHotswapAfterThisCompilation();
-		if(compileBeforeHotswap)
-		{
-			CompilerManager.getInstance(session.getProject()).make(null);
-		}
-		else
-		{
-			if(session.isAttached())
-			{
-				hotSwapSessions(Collections.singletonList(session), null);
-			}
-		}
-	}
-
-	@Override
-	public void dontPerformHotswapAfterThisCompilation()
-	{
-		myPerformHotswapAfterThisCompilation = false;
-	}
-
-	public void dontAskHotswapAfterThisCompilation()
-	{
-		myAskBeforeHotswap = false;
-	}
-
-	private static class MyCompilationStatusListener implements CompilationStatusListener
-	{
-		private final AtomicReference<Map<String, List<String>>> myGeneratedPaths = new AtomicReference<>(new HashMap<>());
-		private Project myProject;
-
-		public MyCompilationStatusListener(Project project)
-		{
-			myProject = project;
-		}
-
-		public void fileGenerated(String outputRoot, String relativePath)
-		{
-			if(StringUtil.endsWith(relativePath, ".class"))
-			{
-				// collect only classes
-				final Map<String, List<String>> map = myGeneratedPaths.get();
-				List<String> paths = map.get(outputRoot);
-				if(paths == null)
-				{
-					paths = new ArrayList<>();
-					map.put(outputRoot, paths);
-				}
-				paths.add(relativePath);
-			}
-		}
-
-		@Override
-		public void compilationFinished(boolean aborted, int errors, int warnings, CompileContext compileContext)
-		{
-			final Map<String, List<String>> generated = myGeneratedPaths.getAndSet(new HashMap<>());
-			if(myProject.isDisposed())
-			{
-				return;
-			}
-
-			HotSwapUIImpl hotSwapUI = (HotSwapUIImpl) HotSwapUI.getInstance(myProject);
-
-			if(errors == 0 && !aborted && hotSwapUI.myPerformHotswapAfterThisCompilation)
-			{
-				for(HotSwapVetoableListener listener : hotSwapUI.myListeners)
-				{
-					if(!listener.shouldHotSwap(compileContext))
-					{
-						return;
-					}
-				}
-
-				final List<DebuggerSession> sessions = new ArrayList<>();
-				Collection<DebuggerSession> debuggerSessions = DebuggerManagerEx.getInstanceEx(myProject).getSessions();
-				for(final DebuggerSession debuggerSession : debuggerSessions)
-				{
-					if(debuggerSession.isAttached() && debuggerSession.getProcess().canRedefineClasses())
-					{
-						sessions.add(debuggerSession);
-					}
-				}
-				if(!sessions.isEmpty())
-				{
-					hotSwapUI.hotSwapSessions(sessions, generated);
-				}
-			}
-			hotSwapUI.myPerformHotswapAfterThisCompilation = true;
-		}
-	}
+  public void dontAskHotswapAfterThisCompilation() {
+    myAskBeforeHotswap = false;
+  }
 }

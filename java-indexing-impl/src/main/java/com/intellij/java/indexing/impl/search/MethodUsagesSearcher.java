@@ -16,8 +16,10 @@
 package com.intellij.java.indexing.impl.search;
 
 import com.intellij.java.indexing.search.searches.MethodReferencesSearch;
+import com.intellij.java.indexing.search.searches.MethodReferencesSearchExecutor;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.ApplicationManager;
 import consulo.application.util.function.Computable;
 import consulo.application.util.function.Processor;
@@ -38,7 +40,8 @@ import javax.annotation.Nonnull;
 /**
  * @author max
  */
-public class MethodUsagesSearcher extends QueryExecutorBase<PsiReference, MethodReferencesSearch.SearchParameters> {
+@ExtensionImpl
+public class MethodUsagesSearcher extends QueryExecutorBase<PsiReference, MethodReferencesSearch.SearchParameters> implements MethodReferencesSearchExecutor {
   @Override
   public void processQuery(@Nonnull final MethodReferencesSearch.SearchParameters p, @Nonnull final Processor<? super PsiReference> consumer) {
     final PsiMethod method = p.getMethod();

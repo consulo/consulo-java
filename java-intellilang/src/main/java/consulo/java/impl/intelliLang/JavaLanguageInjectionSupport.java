@@ -21,6 +21,7 @@ import com.intellij.java.language.patterns.PsiJavaPatterns;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.AllIcons;
 import consulo.application.Result;
 import consulo.application.util.function.Processor;
@@ -73,6 +74,7 @@ import static consulo.java.impl.intelliLang.config.MethodParameterInjection.*;
 /**
  * @author Gregory.Shrago
  */
+@ExtensionImpl
 public class JavaLanguageInjectionSupport extends AbstractLanguageInjectionSupport {
   @NonNls public static final String JAVA_SUPPORT_ID = "java";
 

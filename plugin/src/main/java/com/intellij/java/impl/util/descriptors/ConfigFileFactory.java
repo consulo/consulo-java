@@ -16,6 +16,8 @@
 
 package com.intellij.java.impl.util.descriptors;
 
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ServiceAPI;
 import consulo.ide.ServiceManager;
 import consulo.project.Project;
 import consulo.virtualFileSystem.VirtualFile;
@@ -25,6 +27,7 @@ import javax.annotation.Nullable;
 /**
  * @author nik
  */
+@ServiceAPI(ComponentScope.APPLICATION)
 public abstract class ConfigFileFactory {
 
   public static ConfigFileFactory getInstance() {

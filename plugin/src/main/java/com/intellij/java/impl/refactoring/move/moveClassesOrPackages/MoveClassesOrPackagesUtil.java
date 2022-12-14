@@ -15,34 +15,30 @@
  */
 package com.intellij.java.impl.refactoring.move.moveClassesOrPackages;
 
-import consulo.ide.util.DirectoryChooserUtil;
-import com.intellij.java.language.psi.*;
 import com.intellij.java.impl.lang.java.JavaFindUsagesProvider;
+import com.intellij.java.impl.refactoring.MoveDestination;
+import com.intellij.java.impl.refactoring.PackageWrapper;
+import com.intellij.java.impl.refactoring.util.RefactoringUtil;
+import com.intellij.java.language.psi.*;
 import consulo.application.ApplicationManager;
-import consulo.project.Project;
-import consulo.module.content.ProjectFileIndex;
-import consulo.module.content.ProjectRootManager;
 import consulo.application.util.function.Computable;
 import consulo.document.util.TextRange;
-import consulo.ide.impl.idea.openapi.vfs.VfsUtil;
-import consulo.virtualFileSystem.VirtualFile;
+import consulo.ide.util.DirectoryChooserUtil;
+import consulo.language.editor.refactoring.move.fileOrDirectory.MoveFilesOrDirectoriesUtil;
+import consulo.language.editor.refactoring.util.TextOccurrencesUtil;
 import consulo.language.psi.*;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.search.ReferencesSearch;
-import com.intellij.java.impl.refactoring.MoveDestination;
-import com.intellij.java.impl.refactoring.PackageWrapper;
-import consulo.language.editor.refactoring.move.fileOrDirectory.MoveFilesOrDirectoriesUtil;
-import consulo.usage.MoveRenameUsageInfo;
-import com.intellij.java.impl.refactoring.util.RefactoringUtil;
-import consulo.language.editor.refactoring.util.TextOccurrencesUtil;
-import consulo.usage.UsageInfo;
 import consulo.language.util.IncorrectOperationException;
-import java.util.HashMap;
-
 import consulo.logging.Logger;
+import consulo.module.content.ProjectFileIndex;
+import consulo.module.content.ProjectRootManager;
+import consulo.project.Project;
+import consulo.usage.MoveRenameUsageInfo;
+import consulo.usage.UsageInfo;
+import consulo.virtualFileSystem.VirtualFile;
 
 import javax.annotation.Nullable;
-
 import java.io.File;
 import java.util.*;
 
@@ -76,7 +72,7 @@ public class MoveClassesOrPackagesUtil {
   }
 
   private static void preprocessUsages(ArrayList<UsageInfo> results) {
-    for (MoveClassHandler handler : MoveClassHandler.EP_NAME.getExtensions()) {
+    for (MoveClassHandler handler : MoveClassHandler.EP_NAME.getExtensionList()) {
       handler.preprocessUsages(results);
     }
   }
@@ -201,13 +197,13 @@ public class MoveClassesOrPackagesUtil {
   }
 
   public static void prepareMoveClass(PsiClass aClass) {
-    for (MoveClassHandler handler : MoveClassHandler.EP_NAME.getExtensions()) {
+    for (MoveClassHandler handler : MoveClassHandler.EP_NAME.getExtensionList()) {
       handler.prepareMove(aClass);
     }
   }
 
   public static void finishMoveClass(PsiClass aClass) {
-    for (MoveClassHandler handler : MoveClassHandler.EP_NAME.getExtensions()) {
+    for (MoveClassHandler handler : MoveClassHandler.EP_NAME.getExtensionList()) {
       handler.finishMoveClass(aClass);
     }
   }
@@ -221,7 +217,7 @@ public class MoveClassesOrPackagesUtil {
   public static PsiClass doMoveClass(PsiClass aClass, PsiDirectory moveDestination, boolean moveAllClassesInFile) throws IncorrectOperationException {
     PsiClass newClass;
     if (!moveAllClassesInFile) {
-      for (MoveClassHandler handler : MoveClassHandler.EP_NAME.getExtensions()) {
+      for (MoveClassHandler handler : MoveClassHandler.EP_NAME.getExtensionList()) {
         newClass = handler.doMoveClass(aClass, moveDestination);
         if (newClass != null) return newClass;
       }

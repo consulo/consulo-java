@@ -15,34 +15,33 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-
-import org.jetbrains.annotations.NonNls;
-import consulo.language.editor.FileModificationService;
-import consulo.language.editor.highlight.HighlightManager;
-import consulo.language.editor.intention.IntentionAction;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiField;
+import com.intellij.java.language.psi.PsiVariable;
+import com.intellij.java.language.psi.util.PsiExpressionTrimRenderer;
+import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.application.ApplicationManager;
-import consulo.logging.Logger;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.EditorColors;
 import consulo.colorScheme.EditorColorsManager;
 import consulo.colorScheme.TextAttributes;
-import consulo.project.Project;
+import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.language.editor.FileModificationService;
+import consulo.language.editor.highlight.HighlightManager;
+import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.psi.PsiElement;
-import com.intellij.java.language.psi.PsiExpression;
-import com.intellij.java.language.psi.PsiField;
 import consulo.language.psi.PsiFile;
-import com.intellij.java.language.psi.PsiVariable;
-import com.intellij.java.language.psi.util.PsiExpressionTrimRenderer;
-import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.language.psi.PsiUtilCore;
 import consulo.language.util.IncorrectOperationException;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.logging.Logger;
+import consulo.project.Project;
+import org.jetbrains.annotations.NonNls;
 
-public class RemoveUnusedVariableFix implements IntentionAction {
+import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.List;
+
+public class RemoveUnusedVariableFix implements SyntheticIntentionAction {
   private static final Logger LOG = Logger.getInstance(RemoveUnusedVariableFix.class);
   private final PsiVariable myVariable;
 

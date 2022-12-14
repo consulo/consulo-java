@@ -15,6 +15,9 @@
  */
 package com.intellij.java.impl.psi.impl.source.resolve.reference.impl;
 
+import com.intellij.java.language.JavaLanguage;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.Language;
 import consulo.language.editor.completion.CompletionConfidence;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
@@ -25,7 +28,8 @@ import javax.annotation.Nonnull;
 /**
  * @author Konstantin Bulenkov
  */
-public abstract class JavaReflectionCompletionConfidence extends CompletionConfidence {
+@ExtensionImpl(id = "javaReflection")
+public class JavaReflectionCompletionConfidence extends CompletionConfidence {
 
   @Nonnull
   @Override
@@ -35,5 +39,11 @@ public abstract class JavaReflectionCompletionConfidence extends CompletionConfi
       return ThreeState.NO;
     }
     return super.shouldSkipAutopopup(contextElement, psiFile, offset);
+  }
+
+  @Nonnull
+  @Override
+  public Language getLanguage() {
+    return JavaLanguage.INSTANCE;
   }
 }

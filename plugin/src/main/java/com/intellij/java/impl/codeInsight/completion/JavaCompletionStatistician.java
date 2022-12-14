@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.codeInsight.completion;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.completion.CompletionLocation;
 import consulo.ide.impl.idea.codeInsight.completion.CompletionStatistician;
 import consulo.language.editor.completion.lookup.LookupElement;
@@ -32,6 +33,7 @@ import java.util.List;
 /**
  * @author peter
  */
+@ExtensionImpl
 public class JavaCompletionStatistician extends CompletionStatistician {
   @Override
   public consulo.ide.impl.psi.statistics.StatisticsInfo serialize(final LookupElement element, final CompletionLocation location) {

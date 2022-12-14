@@ -19,12 +19,14 @@ import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.java.language.psi.PsiCodeBlock;
 import com.intellij.java.language.psi.PsiJavaToken;
 import com.intellij.java.language.psi.PsiKeyword;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.*;
 import consulo.document.util.TextRange;
 import consulo.codeEditor.Editor;
 
 import java.util.List;
 
+@ExtensionImpl
 public class JavaTokenSelectioner extends BasicSelectioner {
   @Override
   public boolean canSelect(PsiElement e) {

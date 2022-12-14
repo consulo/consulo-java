@@ -14,6 +14,7 @@ import com.intellij.java.language.projectRoots.JavaSdkVersion;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiJavaPackage;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.content.bundle.Sdk;
 import consulo.execution.RuntimeConfigurationException;
 import consulo.execution.action.Location;
@@ -45,6 +46,7 @@ import java.util.List;
 /**
  * Registers "Coverage" tab in Java run configurations
  */
+@ExtensionImpl
 public class CoverageJavaRunConfigurationExtension extends RunConfigurationExtension {
   public void attachToProcess(@Nonnull final RunConfigurationBase configuration, @Nonnull ProcessHandler handler, RunnerSettings runnerSettings) {
     CoverageDataManager.getInstance(configuration.getProject()).attachToProcess(handler, configuration, runnerSettings);

@@ -1,6 +1,8 @@
 package com.intellij.java.coverage;
 
 import com.intellij.java.language.psi.PsiClass;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ExtensionAPI;
 import consulo.component.extension.ExtensionPointName;
 import consulo.execution.configuration.RunConfigurationBase;
 import consulo.execution.coverage.CoverageSuitesBundle;
@@ -16,9 +18,10 @@ import java.util.Set;
  * User: anna
  * Date: 2/14/11
  */
+@ExtensionAPI(ComponentScope.APPLICATION)
 public abstract class JavaCoverageEngineExtension {
   public static final ExtensionPointName<JavaCoverageEngineExtension> EP_NAME =
-      ExtensionPointName.create("consulo.java.coverageEngineExtension");
+    ExtensionPointName.create(JavaCoverageEngineExtension.class);
 
   public abstract boolean isApplicableTo(@Nullable RunConfigurationBase conf);
 
@@ -26,8 +29,11 @@ public abstract class JavaCoverageEngineExtension {
     return false;
   }
 
-  public boolean collectOutputFiles(@Nonnull final PsiFile srcFile, @Nullable final VirtualFile output, @Nullable final VirtualFile testoutput,
-                                    @Nonnull final CoverageSuitesBundle suite, @Nonnull final Set<File> classFiles) {
+  public boolean collectOutputFiles(@Nonnull final PsiFile srcFile,
+                                    @Nullable final VirtualFile output,
+                                    @Nullable final VirtualFile testoutput,
+                                    @Nonnull final CoverageSuitesBundle suite,
+                                    @Nonnull final Set<File> classFiles) {
     return false;
   }
 }

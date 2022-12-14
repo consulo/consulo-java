@@ -17,6 +17,7 @@ package com.intellij.java.impl.codeInsight.editorActions.wordSelection;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.util.LineTokenizer;
 import consulo.codeEditor.Editor;
 import consulo.document.util.TextRange;
@@ -27,6 +28,7 @@ import consulo.language.psi.PsiWhiteSpace;
 import java.util.ArrayList;
 import java.util.List;
 
+@ExtensionImpl
 public class StatementGroupSelectioner extends BasicSelectioner {
   @Override
   public boolean canSelect(PsiElement e) {

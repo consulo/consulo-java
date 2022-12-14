@@ -18,6 +18,7 @@ package com.intellij.java.impl.codeInsight.template.macro;
 import com.intellij.java.impl.codeInsight.template.ExpressionUtil;
 import com.intellij.java.impl.codeInsight.template.JavaCodeContextType;
 import com.intellij.java.language.psi.PsiVariable;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.completion.lookup.LookupElement;
 import consulo.language.editor.completion.lookup.LookupItem;
@@ -37,6 +38,7 @@ import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.LinkedList;
 
+@ExtensionImpl
 public class SuggestVariableNameMacro extends Macro {
 
   @Override

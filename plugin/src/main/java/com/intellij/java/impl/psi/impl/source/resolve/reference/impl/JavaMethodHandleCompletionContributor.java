@@ -17,10 +17,13 @@ package com.intellij.java.impl.psi.impl.source.resolve.reference.impl;
 
 import com.intellij.java.analysis.impl.psi.impl.source.resolve.reference.impl.JavaReflectionReferenceUtil;
 import com.intellij.java.impl.codeInsight.lookup.ExpressionLookupItem;
+import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.patterns.PsiJavaElementPattern;
 import com.intellij.java.language.patterns.PsiMethodPattern;
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.AllIcons;
+import consulo.language.Language;
 import consulo.language.editor.completion.CompletionContributor;
 import consulo.language.editor.completion.CompletionParameters;
 import consulo.language.editor.completion.CompletionResultSet;
@@ -49,7 +52,8 @@ import static consulo.language.pattern.StandardPatterns.or;
 /**
  * @author Pavel.Dolgov
  */
-public abstract class JavaMethodHandleCompletionContributor extends CompletionContributor {
+@ExtensionImpl(id = "javaMethodHandle", order = "last, before javaLegacy")
+public class JavaMethodHandleCompletionContributor extends CompletionContributor {
 
   // MethodHandle for constructors and methods
   private static final Set<String> METHOD_HANDLE_FACTORY_NAMES = Set.of(FIND_CONSTRUCTOR, FIND_VIRTUAL, FIND_STATIC, FIND_SPECIAL);
@@ -191,5 +195,11 @@ public abstract class JavaMethodHandleCompletionContributor extends CompletionCo
       }
     };
     return PrioritizedLookupElement.withPriority(element, 1);
+  }
+
+  @Nonnull
+  @Override
+  public Language getLanguage() {
+    return JavaLanguage.INSTANCE;
   }
 }

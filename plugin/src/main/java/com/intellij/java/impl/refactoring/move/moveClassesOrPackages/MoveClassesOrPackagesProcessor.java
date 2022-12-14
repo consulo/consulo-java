@@ -457,7 +457,7 @@ public class MoveClassesOrPackagesProcessor extends BaseRefactoringProcessor {
           if (allClasses.containsKey(psiClass)) {
             continue;
           }
-          for (MoveAllClassesInFileHandler fileHandler : Extensions.getExtensions(MoveAllClassesInFileHandler.EP_NAME)) {
+          for (MoveAllClassesInFileHandler fileHandler : MoveAllClassesInFileHandler.EP_NAME.getExtensionList()) {
             fileHandler.processMoveAllClassesInFile(allClasses, psiClass, myElementsToMove);
           }
         }

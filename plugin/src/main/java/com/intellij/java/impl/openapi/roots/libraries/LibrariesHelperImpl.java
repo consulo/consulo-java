@@ -16,6 +16,7 @@
 package com.intellij.java.impl.openapi.roots.libraries;
 
 import com.intellij.java.language.impl.JavaClassFileType;
+import consulo.annotation.component.ServiceImpl;
 import consulo.content.base.BinariesOrderRootType;
 import consulo.content.library.Library;
 import consulo.virtualFileSystem.VirtualFile;
@@ -32,6 +33,7 @@ import java.util.List;
  * @author lesya
  */
 @Singleton
+@ServiceImpl
 public class LibrariesHelperImpl extends LibrariesHelper {
   @Override
   public VirtualFile findJarByClass(Library library, @NonNls String fqn) {

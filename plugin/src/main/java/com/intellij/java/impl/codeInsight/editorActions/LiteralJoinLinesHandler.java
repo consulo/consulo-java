@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.codeInsight.editorActions;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.action.JoinLinesHandlerDelegate;
 import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.java.language.psi.PsiJavaToken;
@@ -22,6 +23,7 @@ import consulo.document.Document;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 
+@ExtensionImpl
 public class LiteralJoinLinesHandler implements JoinLinesHandlerDelegate {
   @Override
   public int tryJoinLines(final Document doc, final PsiFile psiFile, final int offsetNear, final int end) {

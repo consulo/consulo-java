@@ -18,6 +18,7 @@ package com.intellij.java.impl.codeInsight.template.macro;
 import com.intellij.java.impl.codeInsight.template.JavaCodeContextType;
 import com.intellij.java.impl.codeInsight.template.PsiTypeResult;
 import com.intellij.java.language.psi.PsiVariable;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.template.*;
 import consulo.language.editor.template.context.TemplateContextType;
 import consulo.language.editor.template.macro.Macro;
@@ -28,6 +29,7 @@ import consulo.project.Project;
 
 import javax.annotation.Nonnull;
 
+@ExtensionImpl
 public class TypeOfVariableMacro extends Macro {
   @Override
   public String getName() {

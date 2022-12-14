@@ -8,16 +8,14 @@ import com.intellij.java.language.psi.util.MethodSignature;
 import com.intellij.java.language.psi.util.MethodSignatureBackedByPsiMethod;
 import com.intellij.java.language.psi.util.MethodSignatureUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.ide.ServiceManager;
+import consulo.application.Application;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.PsiUtilCore;
 import consulo.logging.Logger;
 import consulo.util.lang.StringUtil;
-import consulo.util.lang.lazy.LazyValue;
 
 import javax.annotation.Nonnull;
 import java.util.*;
-import java.util.function.Supplier;
 
 public class OverrideImplementExploreUtil {
   private static final Logger LOG = Logger.getInstance(OverrideImplementExploreUtil.class);
@@ -119,12 +117,6 @@ public class OverrideImplementExploreUtil {
     }
   }
 
-  public interface MemberImplementorExplorersProvider {
-    MemberImplementorExplorer[] getExplorers();
-  }
-
-  private static final Supplier<MemberImplementorExplorersProvider> ourExplorersProvider = LazyValue.notNull(() -> ServiceManager.getService(MemberImplementorExplorersProvider.class));
-
   public static void collectMethodsToImplement(PsiClass aClass,
                                                Map<MethodSignature, PsiMethod> abstracts,
                                                Map<MethodSignature, PsiMethod> finals,
@@ -144,15 +136,15 @@ public class OverrideImplementExploreUtil {
       }
     }
 
-    MemberImplementorExplorersProvider explorersProvider = ourExplorersProvider.get();
-    if (explorersProvider != null) {
-      for (final MemberImplementorExplorer implementor : explorersProvider.getExplorers()) {
-        for (final PsiMethod method : implementor.getMethodsToImplement(aClass)) {
-          MethodSignature signature = MethodSignatureUtil.createMethodSignature(method.getName(), method.getParameterList(), method.getTypeParameterList(), PsiSubstitutor.EMPTY,
-              method.isConstructor());
-          CandidateInfo info = new CandidateInfo(method, PsiSubstitutor.EMPTY);
-          result.put(signature, info);
-        }
+    for (final MemberImplementorExplorer implementor : Application.get().getExtensionList(MemberImplementorExplorer.class)) {
+      for (final PsiMethod method : implementor.getMethodsToImplement(aClass)) {
+        MethodSignature signature = MethodSignatureUtil.createMethodSignature(method.getName(),
+                                                                              method.getParameterList(),
+                                                                              method.getTypeParameterList(),
+                                                                              PsiSubstitutor.EMPTY,
+                                                                              method.isConstructor());
+        CandidateInfo info = new CandidateInfo(method, PsiSubstitutor.EMPTY);
+        result.put(signature, info);
       }
     }
   }

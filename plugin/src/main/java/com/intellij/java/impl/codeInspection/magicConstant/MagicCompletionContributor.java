@@ -20,9 +20,12 @@ import com.intellij.java.impl.codeInsight.completion.JavaKeywordCompletion;
 import com.intellij.java.impl.codeInsight.completion.JavaSmartCompletionContributor;
 import com.intellij.java.impl.codeInsight.lookup.LookupItemUtil;
 import com.intellij.java.impl.codeInsight.lookup.VariableLookupItem;
+import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.Language;
 import consulo.language.editor.completion.*;
 import consulo.language.editor.completion.lookup.LookupElement;
 import consulo.language.editor.completion.lookup.LookupElementBuilder;
@@ -48,7 +51,8 @@ import java.util.function.Consumer;
 
 import static consulo.language.pattern.PlatformPatterns.psiElement;
 
-public abstract class MagicCompletionContributor extends CompletionContributor {
+@ExtensionImpl(id = "magicCompletion", order = "after javaBasic2ClassName")
+public class MagicCompletionContributor extends CompletionContributor {
   private static final ElementPattern<PsiElement> IN_METHOD_CALL_ARGUMENT = psiElement().withParent(psiElement(PsiReferenceExpression.class).inside(psiElement(PsiExpressionList.class).withParent
       (PsiCall.class)));
   private static final ElementPattern<PsiElement> IN_BINARY_COMPARISON = psiElement().withParent(psiElement(PsiReferenceExpression.class).inside(psiElement(PsiPolyadicExpression.class)));
@@ -255,6 +259,12 @@ public abstract class MagicCompletionContributor extends CompletionContributor {
       element = JavaSmartCompletionContributor.decorate(element, types);
     }
     return element;
+  }
+
+  @Nonnull
+  @Override
+  public Language getLanguage() {
+    return JavaLanguage.INSTANCE;
   }
 }
 

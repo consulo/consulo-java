@@ -19,6 +19,7 @@ import com.intellij.java.impl.codeInsight.CodeInsightUtil;
 import com.intellij.java.impl.refactoring.introduceVariable.IntroduceVariableBase;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.PsiExpression;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.externalService.statistic.FeatureUsageTracker;
 import consulo.language.Language;
 import consulo.language.editor.surroundWith.SurroundDescriptor;
@@ -33,6 +34,7 @@ import java.util.Collections;
 /**
  * @author ven
  */
+@ExtensionImpl
 public class JavaExpressionSurroundDescriptor implements SurroundDescriptor {
   private Surrounder[] mySurrounders = null;
 

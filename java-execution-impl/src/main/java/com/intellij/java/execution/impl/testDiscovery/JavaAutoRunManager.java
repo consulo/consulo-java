@@ -15,6 +15,9 @@
  */
 package com.intellij.java.execution.impl.testDiscovery;
 
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ServiceAPI;
+import consulo.annotation.component.ServiceImpl;
 import consulo.compiler.CompileContext;
 import consulo.compiler.event.CompilationStatusListener;
 import consulo.component.persist.State;
@@ -33,6 +36,8 @@ import javax.annotation.Nonnull;
 
 @Singleton
 @State(name = "JavaAutoRunManager", storages = {@Storage(StoragePathMacros.WORKSPACE_FILE)})
+@ServiceAPI(ComponentScope.PROJECT)
+@ServiceImpl
 public class JavaAutoRunManager extends AbstractAutoTestManager {
   @Nonnull
   public static JavaAutoRunManager getInstance(Project project) {

@@ -43,6 +43,7 @@ public abstract class CommonReferenceProviderTypes {
   public static final ReferenceProviderType PROPERTIES_FILE_KEY_PROVIDER = new ReferenceProviderType("Properties File Key Provider");
   public static final ReferenceProviderType URI_PROVIDER = new ReferenceProviderType("Uri references provider");
   public static final ReferenceProviderType SCHEMA_PROVIDER = new ReferenceProviderType("Schema references provider");
+  public static final ReferenceProviderType CLASS_REFERENCE_PROVIDER = new ReferenceProviderType("Class Reference Provider");
 
   public abstract PsiReferenceProvider getClassReferenceProvider();
 }

@@ -2,6 +2,7 @@ package com.intellij.java.coverage;
 
 import com.intellij.rt.coverage.data.ProjectData;
 import com.intellij.rt.coverage.util.ProjectDataLoader;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.container.plugin.PluginManager;
 import consulo.execution.coverage.CoverageSuite;
 import consulo.java.execution.configurations.OwnJavaParameters;
@@ -16,6 +17,7 @@ import java.io.IOException;
  * User: anna
  * Date: 20-May-2008
  */
+@ExtensionImpl
 public class IDEACoverageRunner extends JavaCoverageRunner {
   private static final Logger LOG = Logger.getInstance(IDEACoverageRunner.class);
 

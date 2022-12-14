@@ -16,23 +16,25 @@
 package com.intellij.java.impl.codeInsight.editorActions.wordSelection;
 
 import com.intellij.java.language.psi.*;
-import consulo.util.lang.function.Condition;
-import consulo.language.psi.*;
 import com.intellij.java.language.psi.javadoc.PsiDocTag;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.action.WordSelectionerFilter;
+import consulo.language.psi.PsiElement;
 
 /**
  * @author yole
  */
-public class JavaBasicWordSelectionFilter implements Condition<PsiElement> {
+@ExtensionImpl
+public class JavaBasicWordSelectionFilter implements WordSelectionerFilter {
   @Override
-  public boolean value(final PsiElement e) {
+  public boolean canSelect(PsiElement e) {
     return !(e instanceof PsiCodeBlock) &&
-           !(e instanceof PsiArrayInitializerExpression) &&
-           !(e instanceof PsiParameterList) &&
-           !(e instanceof PsiExpressionList) &&
-           !(e instanceof PsiBlockStatement) &&
-           !(e instanceof PsiJavaCodeReferenceElement) &&
-           !(e instanceof PsiJavaToken) &&
-           !(e instanceof PsiDocTag);
+      !(e instanceof PsiArrayInitializerExpression) &&
+      !(e instanceof PsiParameterList) &&
+      !(e instanceof PsiExpressionList) &&
+      !(e instanceof PsiBlockStatement) &&
+      !(e instanceof PsiJavaCodeReferenceElement) &&
+      !(e instanceof PsiJavaToken) &&
+      !(e instanceof PsiDocTag);
   }
 }

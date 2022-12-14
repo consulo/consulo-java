@@ -1,6 +1,7 @@
 // Copyright 2000-2018 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.impl.psi.impl.source.codeStyle;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.codeStyle.CodeStyle;
 import com.intellij.java.impl.psi.codeStyle.JavaCodeStyleSettings;
 import com.intellij.java.impl.psi.impl.source.codeStyle.javadoc.CommentFormatter;
@@ -20,6 +21,7 @@ import consulo.ide.impl.psi.impl.source.codeStyle.PreFormatProcessor;
 
 import javax.annotation.Nonnull;
 
+@ExtensionImpl
 public class FormatCommentsProcessor implements PreFormatProcessor {
   @Nonnull
   @Override

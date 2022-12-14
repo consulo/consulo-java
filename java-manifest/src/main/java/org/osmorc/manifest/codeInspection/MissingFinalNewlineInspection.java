@@ -25,6 +25,8 @@
 
 package org.osmorc.manifest.codeInspection;
 
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.Language;
 import consulo.language.editor.inspection.LocalInspectionTool;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemDescriptor;
@@ -36,21 +38,30 @@ import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.project.Project;
 import org.jetbrains.annotations.Nls;
+import org.osmorc.manifest.lang.ManifestLanguage;
 import org.osmorc.manifest.lang.ManifestTokenType;
 import org.osmorc.manifest.lang.psi.Header;
 import org.osmorc.manifest.lang.psi.ManifestFile;
 import org.osmorc.manifest.lang.psi.Section;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * @author Robert F. Beeger (robert@beeger.net)
  */
+@ExtensionImpl
 public class MissingFinalNewlineInspection extends LocalInspectionTool {
   @Nls
   @Nonnull
   public String getGroupDisplayName() {
-    return "Manifest";
+    return "General";
+  }
+
+  @Nullable
+  @Override
+  public Language getLanguage() {
+    return ManifestLanguage.INSTANCE;
   }
 
   @Nls

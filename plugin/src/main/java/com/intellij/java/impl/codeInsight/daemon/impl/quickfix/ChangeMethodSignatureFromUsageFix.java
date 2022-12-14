@@ -30,7 +30,7 @@ import consulo.ide.impl.idea.find.impl.FindManagerImpl;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.java.impl.codeInsight.JavaTargetElementUtilEx;
 import consulo.language.editor.FileModificationService;
-import consulo.language.editor.intention.IntentionAction;
+import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
 import consulo.language.editor.util.LanguageUndoUtil;
@@ -40,7 +40,6 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.undoRedo.CommandProcessor;
-import consulo.undoRedo.util.UndoUtil;
 import consulo.usage.UsageInfo;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.lang.StringUtil;
@@ -51,7 +50,7 @@ import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.Consumer;
 
-public class ChangeMethodSignatureFromUsageFix implements IntentionAction/*, HighPriorityAction*/ {
+public class ChangeMethodSignatureFromUsageFix implements SyntheticIntentionAction {
   final PsiMethod myTargetMethod;
   final PsiExpression[] myExpressions;
   final PsiSubstitutor mySubstitutor;

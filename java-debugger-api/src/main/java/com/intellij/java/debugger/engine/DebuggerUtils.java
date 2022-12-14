@@ -25,6 +25,8 @@ import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.ClassUtil;
 import com.intellij.java.language.psi.util.InheritanceUtil;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ServiceAPI;
 import consulo.application.Application;
 import consulo.application.ApplicationManager;
 import consulo.application.dumb.IndexNotReadyException;
@@ -53,6 +55,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 
+@ServiceAPI(ComponentScope.APPLICATION)
 public abstract class DebuggerUtils {
   private static final Logger LOG = Logger.getInstance(DebuggerUtils.class);
   private static final Key<Method> TO_STRING_METHOD_KEY = new Key<Method>("CachedToStringMethod");
@@ -493,7 +496,7 @@ public abstract class DebuggerUtils {
   }
 
   public static boolean isInsideSimpleGetter(@Nonnull PsiElement contextElement) {
-    for (SimplePropertyGetterProvider provider : SimplePropertyGetterProvider.EP_NAME.getExtensions()) {
+    for (SimplePropertyGetterProvider provider : SimplePropertyGetterProvider.EP_NAME.getExtensionList()) {
       if (provider.isInsideSimpleGetter(contextElement)) {
         return true;
       }

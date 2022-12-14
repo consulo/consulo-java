@@ -1,7 +1,8 @@
 package com.intellij.java.impl.refactoring.move.moveClassesOrPackages;
 
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ExtensionAPI;
 import consulo.component.extension.ExtensionPointName;
-import consulo.component.extension.Extensions;
 import consulo.document.util.ProperTextRange;
 import consulo.language.editor.refactoring.event.RefactoringElementListener;
 import consulo.language.editor.refactoring.move.MoveFileHandler;
@@ -23,9 +24,10 @@ import java.util.function.Function;
 /**
  * @author ksafonov
  */
+@ExtensionAPI(ComponentScope.APPLICATION)
 public abstract class MoveDirectoryWithClassesHelper {
   private static final ExtensionPointName<MoveDirectoryWithClassesHelper> EP_NAME =
-      ExtensionPointName.create("com.intellij.refactoring.moveDirectoryWithClassesHelper");
+    ExtensionPointName.create(MoveDirectoryWithClassesHelper.class);
 
   public abstract void findUsages(Collection<PsiFile> filesToMove, PsiDirectory[] directoriesToMove, Collection<UsageInfo> result,
                                   boolean searchInComments, boolean searchInNonJavaFiles, Project project);
@@ -49,8 +51,8 @@ public abstract class MoveDirectoryWithClassesHelper {
                                MultiMap<PsiElement, String> conflicts) {
   }
 
-  public static MoveDirectoryWithClassesHelper[] findAll() {
-    return Extensions.getExtensions(EP_NAME);
+  public static List<MoveDirectoryWithClassesHelper> findAll() {
+    return EP_NAME.getExtensionList();
   }
 
 
@@ -81,9 +83,9 @@ public abstract class MoveDirectoryWithClassesHelper {
         if (usage instanceof MyUsageInfo) {
           PsiReference reference = usage.getReference();
           if (reference != null) {
-            PsiFileSystemItem file = ((MyUsageInfo) usage).myFile;
+            PsiFileSystemItem file = ((MyUsageInfo)usage).myFile;
             if (file instanceof PsiDirectory) {
-              file = newDirMapper.apply((PsiDirectory) file);
+              file = newDirMapper.apply((PsiDirectory)file);
             }
             reference.bindToElement(file);
           }
@@ -135,7 +137,8 @@ public abstract class MoveDirectoryWithClassesHelper {
         PsiElement element = getElement();
         if (element == null) {
           return null;
-        } else {
+        }
+        else {
           final ProperTextRange rangeInElement = getRangeInElement();
           return rangeInElement != null ? element.findReferenceAt(rangeInElement.getStartOffset()) : element.getReference();
         }

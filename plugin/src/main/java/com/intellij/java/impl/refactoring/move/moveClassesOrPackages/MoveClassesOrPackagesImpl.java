@@ -130,7 +130,7 @@ public class MoveClassesOrPackagesImpl {
         }
 
         String name = null;
-        for (MoveClassHandler nameProvider : MoveClassHandler.EP_NAME.getExtensions()) {
+        for (MoveClassHandler nameProvider : MoveClassHandler.EP_NAME.getExtensionList()) {
           name = nameProvider.getName(aClass);
           if (name != null) break;
         }

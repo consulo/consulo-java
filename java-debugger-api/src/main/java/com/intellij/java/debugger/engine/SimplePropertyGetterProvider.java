@@ -15,13 +15,17 @@
  */
 package com.intellij.java.debugger.engine;
 
-import javax.annotation.Nonnull;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ExtensionAPI;
 import consulo.component.extension.ExtensionPointName;
 import consulo.language.psi.PsiElement;
 
-public interface SimplePropertyGetterProvider
-{
-	ExtensionPointName<SimplePropertyGetterProvider> EP_NAME = ExtensionPointName.create("consulo.java.debugger.simplePropertyGetterProvider");
+import javax.annotation.Nonnull;
 
-	boolean isInsideSimpleGetter(@Nonnull PsiElement element);
+@ExtensionAPI(ComponentScope.APPLICATION)
+public interface SimplePropertyGetterProvider {
+  ExtensionPointName<SimplePropertyGetterProvider> EP_NAME =
+    ExtensionPointName.create(SimplePropertyGetterProvider.class);
+
+  boolean isInsideSimpleGetter(@Nonnull PsiElement element);
 }

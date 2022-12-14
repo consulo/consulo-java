@@ -19,6 +19,7 @@ import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.java.language.psi.PsiArrayInitializerExpression;
 import com.intellij.java.language.psi.PsiCodeBlock;
 import com.intellij.java.language.psi.PsiJavaToken;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
 import consulo.document.util.TextRange;
 import consulo.language.psi.*;
@@ -26,6 +27,7 @@ import consulo.language.psi.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@ExtensionImpl
 public class CodeBlockOrInitializerSelectioner extends BasicSelectioner {
   @Override
   public boolean canSelect(PsiElement e) {

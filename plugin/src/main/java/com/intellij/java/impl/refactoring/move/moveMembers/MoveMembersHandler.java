@@ -16,6 +16,7 @@
 package com.intellij.java.impl.refactoring.move.moveMembers;
 
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.dataContext.DataContext;
 import consulo.codeEditor.Editor;
 import consulo.project.Project;
@@ -24,6 +25,7 @@ import consulo.language.editor.refactoring.move.MoveCallback;
 import consulo.language.editor.refactoring.move.MoveHandlerDelegate;
 import javax.annotation.Nullable;
 
+@ExtensionImpl
 public class MoveMembersHandler extends MoveHandlerDelegate {
   public boolean canMove(final PsiElement[] elements, @Nullable final PsiElement targetContainer) {
     for(PsiElement element: elements) {

@@ -39,7 +39,6 @@ import java.util.Map;
 import java.util.TreeMap;
 
 public class HyperlinksToClassesOption extends PrintOption {
-  private JCheckBox myCbGenerateHyperlinksToClasses;
   private boolean isGenerateHyperlinksToClasses = false;
 
   @Nullable
@@ -81,6 +80,8 @@ public class HyperlinksToClassesOption extends PrintOption {
   }
 
   private class HyperlinksToClassesConfigurable implements UnnamedConfigurable {
+    private JCheckBox myCbGenerateHyperlinksToClasses;
+
     public JComponent createComponent() {
       myCbGenerateHyperlinksToClasses = new JCheckBox(CodeEditorBundle.message("export.to.html.generate.hyperlinks.checkbox"), isGenerateHyperlinksToClasses);
       return myCbGenerateHyperlinksToClasses;

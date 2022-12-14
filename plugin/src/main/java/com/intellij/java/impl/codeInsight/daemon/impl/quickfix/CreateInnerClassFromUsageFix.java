@@ -22,6 +22,7 @@ import consulo.application.ApplicationManager;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.EditorPopupHelper;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.editor.ui.PsiElementListCellRenderer;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
@@ -44,7 +45,7 @@ import static com.intellij.java.impl.codeInsight.daemon.impl.quickfix.CreateClas
 /**
  * @author ven
  */
-public class CreateInnerClassFromUsageFix extends CreateClassFromUsageBaseFix {
+public class CreateInnerClassFromUsageFix extends CreateClassFromUsageBaseFix implements SyntheticIntentionAction {
 
   public CreateInnerClassFromUsageFix(final PsiJavaCodeReferenceElement refElement, final CreateClassKind kind) {
     super(kind, refElement);

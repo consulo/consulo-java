@@ -1,6 +1,7 @@
 package com.intellij.java.coverage;
 
 import com.intellij.java.language.psi.PsiClass;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.execution.coverage.CoverageAnnotator;
 import consulo.execution.coverage.CoverageDataManager;
 import consulo.execution.coverage.CoverageSuitesBundle;
@@ -21,6 +22,7 @@ import javax.annotation.Nullable;
 /**
  * @author yole
  */
+@ExtensionImpl
 public class CoverageProjectViewClassNodeDecorator extends AbstractCoverageProjectViewNodeDecorator {
   @Inject
   public CoverageProjectViewClassNodeDecorator(final CoverageDataManager coverageDataManager) {

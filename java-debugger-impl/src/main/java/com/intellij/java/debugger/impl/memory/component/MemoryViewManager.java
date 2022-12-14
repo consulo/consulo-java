@@ -15,99 +15,88 @@
  */
 package com.intellij.java.debugger.impl.memory.component;
 
-import javax.annotation.Nonnull;
-import jakarta.inject.Singleton;
-
 import com.intellij.java.debugger.impl.memory.event.MemoryViewManagerListener;
-import consulo.disposer.Disposable;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ServiceAPI;
+import consulo.annotation.component.ServiceImpl;
 import consulo.component.persist.PersistentStateComponent;
-import consulo.ide.ServiceManager;
 import consulo.component.persist.State;
 import consulo.component.persist.Storage;
+import consulo.disposer.Disposable;
+import consulo.ide.ServiceManager;
 import consulo.proxy.EventDispatcher;
+import jakarta.inject.Singleton;
+
+import javax.annotation.Nonnull;
 
 @Singleton
 @State(name = "MemoryViewSettings", storages = @Storage("memory.view.xml"))
-public class MemoryViewManager implements PersistentStateComponent<MemoryViewManagerState>
-{
-	public static final String MEMORY_VIEW_CONTENT = "MemoryView";
+@ServiceAPI(ComponentScope.APPLICATION)
+@ServiceImpl
+public class MemoryViewManager implements PersistentStateComponent<MemoryViewManagerState> {
+  public static final String MEMORY_VIEW_CONTENT = "MemoryView";
 
-	private final EventDispatcher<MemoryViewManagerListener> myDispatcher = EventDispatcher.create(MemoryViewManagerListener.class);
-	private MemoryViewManagerState myState = new MemoryViewManagerState();
+  private final EventDispatcher<MemoryViewManagerListener> myDispatcher = EventDispatcher.create(MemoryViewManagerListener.class);
+  private MemoryViewManagerState myState = new MemoryViewManagerState();
 
-	public static MemoryViewManager getInstance()
-	{
-		return ServiceManager.getService(MemoryViewManager.class);
-	}
+  public static MemoryViewManager getInstance() {
+    return ServiceManager.getService(MemoryViewManager.class);
+  }
 
-	@Nonnull
-	@Override
-	public MemoryViewManagerState getState()
-	{
-		return new MemoryViewManagerState(myState);
-	}
+  @Nonnull
+  @Override
+  public MemoryViewManagerState getState() {
+    return new MemoryViewManagerState(myState);
+  }
 
-	@Override
-	public void loadState(MemoryViewManagerState state)
-	{
-		if(state == null)
-		{
-			state = new MemoryViewManagerState();
-		}
+  @Override
+  public void loadState(MemoryViewManagerState state) {
+    if (state == null) {
+      state = new MemoryViewManagerState();
+    }
 
-		myState = state;
-		fireStateChanged();
-	}
+    myState = state;
+    fireStateChanged();
+  }
 
-	public void setShowDiffOnly(boolean value)
-	{
-		if(myState.isShowWithDiffOnly != value)
-		{
-			myState.isShowWithDiffOnly = value;
-			fireStateChanged();
-		}
-	}
+  public void setShowDiffOnly(boolean value) {
+    if (myState.isShowWithDiffOnly != value) {
+      myState.isShowWithDiffOnly = value;
+      fireStateChanged();
+    }
+  }
 
-	public void setShowWithInstancesOnly(boolean value)
-	{
-		if(myState.isShowWithInstancesOnly != value)
-		{
-			myState.isShowWithInstancesOnly = value;
-			fireStateChanged();
-		}
-	}
+  public void setShowWithInstancesOnly(boolean value) {
+    if (myState.isShowWithInstancesOnly != value) {
+      myState.isShowWithInstancesOnly = value;
+      fireStateChanged();
+    }
+  }
 
-	public void setShowTrackedOnly(boolean value)
-	{
-		if(myState.isShowTrackedOnly != value)
-		{
-			myState.isShowTrackedOnly = value;
-			fireStateChanged();
-		}
-	}
+  public void setShowTrackedOnly(boolean value) {
+    if (myState.isShowTrackedOnly != value) {
+      myState.isShowTrackedOnly = value;
+      fireStateChanged();
+    }
+  }
 
-	public boolean isNeedShowDiffOnly()
-	{
-		return myState.isShowWithDiffOnly;
-	}
+  public boolean isNeedShowDiffOnly() {
+    return myState.isShowWithDiffOnly;
+  }
 
-	public boolean isNeedShowInstancesOnly()
-	{
-		return myState.isShowWithInstancesOnly;
-	}
+  public boolean isNeedShowInstancesOnly() {
+    return myState.isShowWithInstancesOnly;
+  }
 
-	public boolean isNeedShowTrackedOnly()
-	{
-		return myState.isShowTrackedOnly;
-	}
+  public boolean isNeedShowTrackedOnly() {
+    return myState.isShowTrackedOnly;
+  }
 
-	public void addMemoryViewManagerListener(MemoryViewManagerListener listener, @Nonnull Disposable parentDisposable)
-	{
-		myDispatcher.addListener(listener, parentDisposable);
-	}
+  public void addMemoryViewManagerListener(MemoryViewManagerListener listener, @Nonnull Disposable parentDisposable) {
+    myDispatcher.addListener(listener, parentDisposable);
+  }
 
-	private void fireStateChanged()
-	{
-		myDispatcher.getMulticaster().stateChanged(new MemoryViewManagerState(myState));
-	}
+  private void fireStateChanged() {
+    myDispatcher.getMulticaster().stateChanged(new MemoryViewManagerState(myState));
+  }
 }

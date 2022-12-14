@@ -22,6 +22,7 @@ import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
 import com.intellij.java.language.impl.codeInsight.ChangeContextUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.ClassUtil;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.project.Project;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.Pair;
@@ -55,6 +56,7 @@ import java.util.regex.Pattern;
 /**
  * @author yole
  */
+@ExtensionImpl
 public class RenameJavaClassProcessor extends RenamePsiElementProcessor {
   private static final Logger LOG = Logger.getInstance(RenameJavaClassProcessor.class);
 

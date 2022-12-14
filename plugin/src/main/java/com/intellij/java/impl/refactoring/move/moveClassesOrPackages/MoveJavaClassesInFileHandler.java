@@ -2,6 +2,7 @@ package com.intellij.java.impl.refactoring.move.moveClassesOrPackages;
 
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiClassOwner;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import com.intellij.java.language.impl.psi.impl.light.LightClass;
 import consulo.util.collection.ArrayUtil;
@@ -9,6 +10,7 @@ import javax.annotation.Nonnull;
 
 import java.util.Map;
 
+@ExtensionImpl(id = "java")
 public class MoveJavaClassesInFileHandler extends MoveAllClassesInFileHandler {
 
   @Override

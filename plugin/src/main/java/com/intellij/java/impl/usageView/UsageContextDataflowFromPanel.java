@@ -25,19 +25,6 @@ import consulo.usage.UsageViewPresentation;
 import javax.annotation.Nonnull;
 
 public class UsageContextDataflowFromPanel extends UsageContextDataflowToPanel {
-  public static class Provider extends UsageContextDataflowToPanel.Provider {
-    @Nonnull
-    @Override
-    public UsageContextPanel create(@Nonnull UsageView usageView) {
-      return new UsageContextDataflowFromPanel(((UsageViewImpl) usageView).getProject(), usageView.getPresentation());
-    }
-
-    @Nonnull
-    @Override
-    public String getTabTitle() {
-      return "Dataflow from Here";
-    }
-  }
 
   public UsageContextDataflowFromPanel(@Nonnull Project project, @Nonnull UsageViewPresentation presentation) {
     super(project, presentation);

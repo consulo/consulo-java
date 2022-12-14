@@ -17,6 +17,7 @@ package com.intellij.java.impl.lang.java;
 
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.PsiClass;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.Language;
 import consulo.language.editor.refactoring.classMember.ClassMembersRefactoringSupport;
 import consulo.language.editor.refactoring.classMember.DependentMembersCollectorBase;
@@ -29,6 +30,7 @@ import javax.annotation.Nonnull;
 /**
  * @author Dennis.Ushakov
  */
+@ExtensionImpl
 public class JavaClassMembersRefactoringSupport implements ClassMembersRefactoringSupport {
   @Override
   public DependentMembersCollectorBase createDependentMembersCollector(Object clazz, Object superClass) {

@@ -17,14 +17,18 @@ package com.intellij.java.impl.codeInsight.javadoc;
 
 import com.intellij.java.language.psi.PsiDocCommentOwner;
 import com.intellij.java.language.psi.PsiMember;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ExtensionAPI;
 import consulo.component.extension.ExtensionPointName;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+@ExtensionAPI(ComponentScope.APPLICATION)
 public abstract class DocumentationDelegateProvider {
 
-  public static final ExtensionPointName<DocumentationDelegateProvider> EP_NAME = ExtensionPointName.create("consulo.java.documentationDelegateProvider");
+  public static final ExtensionPointName<DocumentationDelegateProvider> EP_NAME =
+    ExtensionPointName.create(DocumentationDelegateProvider.class);
 
   /**
    * <p>
@@ -57,7 +61,7 @@ public abstract class DocumentationDelegateProvider {
 
   @Nullable
   public static PsiDocCommentOwner findDocumentationDelegate(@Nonnull PsiMember method) {
-    for (DocumentationDelegateProvider delegator : EP_NAME.getExtensions()) {
+    for (DocumentationDelegateProvider delegator : EP_NAME.getExtensionList()) {
       PsiDocCommentOwner type = delegator.computeDocumentationDelegate(method);
       if (type != null) {
         return type;

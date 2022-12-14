@@ -20,10 +20,11 @@
 package com.intellij.java.impl.psi.impl.search;
 
 import com.intellij.java.impl.psi.search.searches.AnnotatedPackagesSearch;
+import com.intellij.java.impl.psi.search.searches.AnnotatedPackagesSearchExecutor;
 import com.intellij.java.indexing.impl.stubs.index.JavaAnnotationIndex;
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.util.function.Processor;
-import consulo.application.util.query.QueryExecutor;
 import consulo.content.scope.SearchScope;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
@@ -38,7 +39,8 @@ import consulo.virtualFileSystem.VirtualFile;
 import javax.annotation.Nonnull;
 import java.util.Collection;
 
-public class AnnotatedPackagesSearcher implements QueryExecutor<PsiJavaPackage, AnnotatedPackagesSearch.Parameters> {
+@ExtensionImpl
+public class AnnotatedPackagesSearcher implements AnnotatedPackagesSearchExecutor {
   private static final Logger LOG = Logger.getInstance(AnnotatedPackagesSearcher.class);
 
   @Override

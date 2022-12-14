@@ -19,6 +19,7 @@ import com.intellij.java.impl.psi.impl.source.tree.JavaJspElementType;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.impl.psi.impl.source.tree.ElementType;
 import com.intellij.java.language.psi.PsiField;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.ast.ASTNode;
 import consulo.project.Project;
 import consulo.document.util.TextRange;
@@ -49,6 +50,7 @@ import javax.annotation.Nonnull;
  * @author Denis Zhdanov
  * @since 5/9/12 4:54 PM
  */
+@ExtensionImpl
 public class FieldInColumnsPreFormatProcessor implements PreFormatProcessor {
 
   @Nonnull

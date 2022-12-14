@@ -15,26 +15,30 @@
  */
 package com.intellij.java.debugger.impl.settings;
 
-import jakarta.inject.Singleton;
-
-import org.jdom.Element;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ServiceAPI;
+import consulo.annotation.component.ServiceImpl;
 import consulo.component.persist.PersistentStateComponent;
-import consulo.ide.ServiceManager;
 import consulo.component.persist.State;
 import consulo.component.persist.Storage;
 import consulo.component.persist.StoragePathMacros;
+import consulo.ide.ServiceManager;
 import consulo.util.xml.serializer.DefaultJDOMExternalizer;
 import consulo.util.xml.serializer.InvalidDataException;
 import consulo.util.xml.serializer.WriteExternalException;
+import jakarta.inject.Singleton;
+import org.jdom.Element;
 
 @Singleton
 @State(
-  name="ViewsSettings",
-  storages= {
+  name = "ViewsSettings",
+  storages = {
     @Storage(
       file = StoragePathMacros.APP_CONFIG + "/debugger.frameview.xml"
     )}
 )
+@ServiceAPI(ComponentScope.APPLICATION)
+@ServiceImpl
 public class ViewsGeneralSettings implements PersistentStateComponent<Element> {
   public boolean SHOW_OBJECTID = true;
   public boolean HIDE_NULL_ARRAY_ELEMENTS = true;
@@ -65,11 +69,11 @@ public class ViewsGeneralSettings implements PersistentStateComponent<Element> {
   }
 
   public boolean equals(Object object) {
-    if(!(object instanceof ViewsGeneralSettings)) return false;
-    ViewsGeneralSettings generalSettings = ((ViewsGeneralSettings) object);
+    if (!(object instanceof ViewsGeneralSettings)) return false;
+    ViewsGeneralSettings generalSettings = ((ViewsGeneralSettings)object);
     return SHOW_OBJECTID == generalSettings.SHOW_OBJECTID &&
-           HIDE_NULL_ARRAY_ELEMENTS == generalSettings.HIDE_NULL_ARRAY_ELEMENTS &&
-           AUTOSCROLL_TO_NEW_LOCALS == generalSettings.AUTOSCROLL_TO_NEW_LOCALS;
+      HIDE_NULL_ARRAY_ELEMENTS == generalSettings.HIDE_NULL_ARRAY_ELEMENTS &&
+      AUTOSCROLL_TO_NEW_LOCALS == generalSettings.AUTOSCROLL_TO_NEW_LOCALS;
   }
 
 }

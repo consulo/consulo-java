@@ -18,6 +18,8 @@ package com.intellij.java.impl.util.xml.converters.values;
 
 import com.intellij.java.impl.util.xml.DomJavaUtil;
 import com.intellij.java.language.psi.PsiClass;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ServiceAPI;
 import consulo.ide.ServiceManager;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
@@ -37,6 +39,7 @@ import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+@ServiceAPI(ComponentScope.APPLICATION)
 public abstract class ClassValueConverter extends Converter<PsiClass> implements CustomReferenceConverter {
 
   public static ClassValueConverter getClassValueConverter() {

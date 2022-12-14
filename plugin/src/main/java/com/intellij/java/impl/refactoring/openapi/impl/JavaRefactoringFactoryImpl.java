@@ -20,6 +20,7 @@ import com.intellij.java.impl.refactoring.move.moveClassesOrPackages.Autocreatin
 import com.intellij.java.impl.refactoring.move.moveClassesOrPackages.MultipleRootsMoveDestination;
 import com.intellij.java.impl.refactoring.move.moveInner.MoveInnerImpl;
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ServiceImpl;
 import consulo.language.editor.refactoring.RenameRefactoring;
 import consulo.language.editor.refactoring.SafeDeleteRefactoring;
 import consulo.language.editor.refactoring.safeDelete.SafeDeleteRefactoringImpl;
@@ -38,6 +39,7 @@ import javax.annotation.Nonnull;
  * @author dsl
  */
 @Singleton
+@ServiceImpl
 public class JavaRefactoringFactoryImpl extends JavaRefactoringFactory {
   private static final Logger LOG = Logger.getInstance(JavaRefactoringFactoryImpl.class);
   private final Project myProject;

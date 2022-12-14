@@ -23,6 +23,7 @@ import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.spellchecker.tokenizer.SuppressibleSpellcheckingStrategy;
 import com.intellij.spellchecker.tokenizer.Tokenizer;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.Language;
 import consulo.language.editor.inspection.SuppressQuickFix;
 import consulo.language.editor.rawHighlight.HighlightDisplayKey;
@@ -34,6 +35,7 @@ import javax.annotation.Nonnull;
 /**
  * @author shkate@jetbrains.com
  */
+@ExtensionImpl
 public class JavaSpellcheckingStrategy extends SuppressibleSpellcheckingStrategy {
   private final MethodNameTokenizerJava myMethodNameTokenizer = new MethodNameTokenizerJava();
   private final DocCommentTokenizer myDocCommentTokenizer = new DocCommentTokenizer();

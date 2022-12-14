@@ -4,6 +4,7 @@ import com.intellij.java.impl.codeInspection.i18n.JavaI18nUtil;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.language.psi.PsiLiteralExpression;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.Language;
 import consulo.language.pattern.FilterPattern;
 import consulo.language.pattern.PlatformPatterns;
@@ -23,7 +24,8 @@ import static consulo.xml.patterns.XmlPatterns.xmlTag;
 /**
  * @author peter
  */
-public class JavaReferenceContributor extends PsiReferenceContributor{
+@ExtensionImpl
+public class JavaReferenceContributor extends PsiReferenceContributor {
   public void registerReferenceProviders(final PsiReferenceRegistrar registrar) {
 
     final JavaClassListReferenceProvider classListProvider = new JavaClassListReferenceProvider();

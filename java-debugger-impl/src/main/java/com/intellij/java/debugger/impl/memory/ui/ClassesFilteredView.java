@@ -110,7 +110,9 @@ public class ClassesFilteredView extends BorderLayoutPanel implements Disposable
    */
   private volatile boolean myIsActive;
 
-  public ClassesFilteredView(@Nonnull XDebugSession debugSession, @Nonnull DebugProcessImpl debugProcess, @Nonnull InstancesTracker tracker) {
+  public ClassesFilteredView(@Nonnull XDebugSession debugSession,
+                             @Nonnull DebugProcessImpl debugProcess,
+                             @Nonnull InstancesTracker tracker) {
     myProject = debugSession.getProject();
 
     final DebuggerManagerThreadImpl managerThread = debugProcess.getManagerThread();
@@ -160,23 +162,27 @@ public class ClassesFilteredView extends BorderLayoutPanel implements Disposable
             final boolean activated = myIsTrackersActivated.get();
             final VirtualMachineProxyImpl proxy = debugProcess.getVirtualMachineProxy();
             tracker.getTrackedClasses().forEach((className, type) ->
-            {
-              List<ReferenceType> classes = proxy.classesByName(className);
-              if (classes.isEmpty()) {
-                trackWhenPrepared(className, debugSession, debugProcess, type);
-              } else {
-                for (ReferenceType ref : classes) {
-                  trackClass(debugSession, ref, type, activated);
-                }
-              }
-            });
+                                                {
+                                                  List<ReferenceType> classes = proxy.classesByName(className);
+                                                  if (classes.isEmpty()) {
+                                                    trackWhenPrepared(className, debugSession, debugProcess, type);
+                                                  }
+                                                  else {
+                                                    for (ReferenceType ref : classes) {
+                                                      trackClass(debugSession, ref, type, activated);
+                                                    }
+                                                  }
+                                                });
 
             tracker.addTrackerListener(instancesTrackerListener);
           }
         });
       }
 
-      private void trackWhenPrepared(@Nonnull String className, @Nonnull XDebugSession session, @Nonnull DebugProcessImpl process, @Nonnull TrackingType type) {
+      private void trackWhenPrepared(@Nonnull String className,
+                                     @Nonnull XDebugSession session,
+                                     @Nonnull DebugProcessImpl process,
+                                     @Nonnull TrackingType type) {
         final ClassPrepareRequestor request = new ClassPrepareRequestor() {
           @Override
           public void processClassPrepare(DebugProcess debuggerProcess, ReferenceType referenceType) {
@@ -188,7 +194,8 @@ public class ClassesFilteredView extends BorderLayoutPanel implements Disposable
         final ClassPrepareRequest classPrepareRequest = process.getRequestsManager().createClassPrepareRequest(request, className);
         if (classPrepareRequest != null) {
           classPrepareRequest.enable();
-        } else {
+        }
+        else {
           LOG.warn("Cannot create a 'class prepare' request. Class " + className + " not tracked.");
         }
       }
@@ -196,7 +203,11 @@ public class ClassesFilteredView extends BorderLayoutPanel implements Disposable
 
     final MemoryViewManagerState memoryViewManagerState = MemoryViewManager.getInstance().getState();
 
-    myTable = new ClassesTable(tracker, this, memoryViewManagerState.isShowWithDiffOnly, memoryViewManagerState.isShowWithInstancesOnly, memoryViewManagerState.isShowTrackedOnly);
+    myTable = new ClassesTable(tracker,
+                               this,
+                               memoryViewManagerState.isShowWithDiffOnly,
+                               memoryViewManagerState.isShowWithInstancesOnly,
+                               memoryViewManagerState.isShowTrackedOnly);
     myTable.getEmptyText().setText(EMPTY_TABLE_CONTENT_WHEN_RUNNING);
     Disposer.register(this, myTable);
 
@@ -210,7 +221,8 @@ public class ClassesFilteredView extends BorderLayoutPanel implements Disposable
         final int keyCode = e.getKeyCode();
         if (KeyboardUtils.isEnterKey(keyCode)) {
           handleClassSelection(myTable.getSelectedClass());
-        } else if (KeyboardUtils.isCharacter(keyCode) || KeyboardUtils.isBackSpace(keyCode)) {
+        }
+        else if (KeyboardUtils.isCharacter(keyCode) || KeyboardUtils.isBackSpace(keyCode)) {
           final String text = myFilterTextField.getText();
           final String newText = KeyboardUtils.isBackSpace(keyCode) ? text.substring(0, text.length() - 1) : text + e.getKeyChar();
           myFilterTextField.setText(newText);
@@ -257,12 +269,14 @@ public class ClassesFilteredView extends BorderLayoutPanel implements Disposable
     debugSession.addSessionListener(myDebugSessionListener, this);
 
     mySingleAlarm = new SingleAlarmWithMutableDelay(suspendContext ->
-    {
-      ApplicationManager.getApplication().invokeLater(() -> myTable.setBusy(true));
-      suspendContext.getDebugProcess().getManagerThread().schedule(new MyUpdateClassesCommand(suspendContext));
-    }, this);
+                                                    {
+                                                      ApplicationManager.getApplication().invokeLater(() -> myTable.setBusy(true));
+                                                      suspendContext.getDebugProcess()
+                                                                    .getManagerThread()
+                                                                    .schedule(new MyUpdateClassesCommand(suspendContext));
+                                                    }, this);
 
-    mySingleAlarm.setDelay((int) TimeUnit.MILLISECONDS.toMillis(500));
+    mySingleAlarm.setDelay((int)TimeUnit.MILLISECONDS.toMillis(500));
 
     myTable.addMouseListener(new PopupHandler() {
       @Override
@@ -275,7 +289,7 @@ public class ClassesFilteredView extends BorderLayoutPanel implements Disposable
     });
 
     final JScrollPane scroll = ScrollPaneFactory.createScrollPane(myTable, SideBorder.TOP);
-    final DefaultActionGroup group = (DefaultActionGroup) ActionManager.getInstance().getAction("MemoryView.SettingsPopupActionGroup");
+    final DefaultActionGroup group = (DefaultActionGroup)ActionManager.getInstance().getAction("MemoryView.SettingsPopupActionGroup");
     group.setPopup(true);
     final Presentation actionsPresentation = new Presentation("Memory View Settings");
     actionsPresentation.setIcon(AllIcons.General.GearPlain);
@@ -293,7 +307,10 @@ public class ClassesFilteredView extends BorderLayoutPanel implements Disposable
     return myConstructorTrackedClasses.getOrDefault(ref, null);
   }
 
-  private void trackClass(@Nonnull XDebugSession session, @Nonnull ReferenceType ref, @Nonnull TrackingType type, boolean isTrackerEnabled) {
+  private void trackClass(@Nonnull XDebugSession session,
+                          @Nonnull ReferenceType ref,
+                          @Nonnull TrackingType type,
+                          boolean isTrackerEnabled) {
     LOG.assertTrue(DebuggerManager.getInstance(myProject).isDebuggerManagerThread());
     if (type == TrackingType.CREATION) {
       final ConstructorInstancesTracker old = myConstructorTrackedClasses.getOrDefault(ref, null);
@@ -305,7 +322,8 @@ public class ClassesFilteredView extends BorderLayoutPanel implements Disposable
       tracker.setBackgroundMode(!myIsActive);
       if (isTrackerEnabled) {
         tracker.enable();
-      } else {
+      }
+      else {
         tracker.disable();
       }
 
@@ -330,23 +348,27 @@ public class ClassesFilteredView extends BorderLayoutPanel implements Disposable
 
   private void updateClassesAndCounts() {
     ApplicationManager.getApplication().invokeLater(() ->
-    {
-      final XDebugSession debugSession = XDebuggerManager.getInstance(myProject).getCurrentSession();
-      if (debugSession != null) {
-        final DebugProcess debugProcess = DebuggerManager.getInstance(myProject).getDebugProcess(debugSession.getDebugProcess().getProcessHandler());
-        if (debugProcess != null && debugProcess.isAttached() && debugProcess instanceof DebugProcessImpl) {
-          final DebugProcessImpl process = (DebugProcessImpl) debugProcess;
-          final SuspendContextImpl context = process.getDebuggerContext().getSuspendContext();
-          if (context != null) {
-            mySingleAlarm.cancelAndRequest(context);
-          }
-        }
-      }
-    }, x -> myProject.isDisposed());
+                                                    {
+                                                      final XDebugSession debugSession =
+                                                        XDebuggerManager.getInstance(myProject).getCurrentSession();
+                                                      if (debugSession != null) {
+                                                        final DebugProcess debugProcess = DebuggerManager.getInstance(myProject)
+                                                                                                         .getDebugProcess(debugSession.getDebugProcess()
+                                                                                                                                      .getProcessHandler());
+                                                        if (debugProcess != null && debugProcess.isAttached() && debugProcess instanceof DebugProcessImpl) {
+                                                          final DebugProcessImpl process = (DebugProcessImpl)debugProcess;
+                                                          final SuspendContextImpl context =
+                                                            process.getDebuggerContext().getSuspendContext();
+                                                          if (context != null) {
+                                                            mySingleAlarm.cancelAndRequest(context);
+                                                          }
+                                                        }
+                                                      }
+                                                    }, myProject::isDisposed);
   }
 
   private static ActionPopupMenu createContextMenu() {
-    final ActionGroup group = (ActionGroup) ActionManager.getInstance().getAction("MemoryView.ClassesPopupActionGroup");
+    final ActionGroup group = (ActionGroup)ActionManager.getInstance().getAction("MemoryView.ClassesPopupActionGroup");
     return ActionManager.getInstance().createActionPopupMenu("MemoryView.ClassesPopupActionGroup", group);
   }
 
@@ -367,7 +389,8 @@ public class ClassesFilteredView extends BorderLayoutPanel implements Disposable
       protected void action() throws Exception {
         if (active) {
           doActivate();
-        } else {
+        }
+        else {
           doPause();
         }
       }
@@ -414,7 +437,8 @@ public class ClassesFilteredView extends BorderLayoutPanel implements Disposable
         if (vm.canGetInstanceInfo()) {
           final Map<ReferenceType, Long> counts = getInstancesCounts(classes, vm);
           ApplicationManager.getApplication().invokeLater(() -> myTable.updateContent(counts));
-        } else {
+        }
+        else {
           ApplicationManager.getApplication().invokeLater(() -> myTable.updateClassesOnly(classes));
         }
       }
@@ -427,7 +451,8 @@ public class ClassesFilteredView extends BorderLayoutPanel implements Disposable
       if (!myIsTrackersActivated.get()) {
         myConstructorTrackedClasses.values().forEach(ConstructorInstancesTracker::enable);
         myIsTrackersActivated.set(true);
-      } else {
+      }
+      else {
         commitAllTrackers();
       }
     }
@@ -449,7 +474,7 @@ public class ClassesFilteredView extends BorderLayoutPanel implements Disposable
           result.put(batch.get(i), counts[i]);
         }
 
-        final int waitTime = (int) Math.min(DELAY_BEFORE_INSTANCES_QUERY_COEFFICIENT * delay, MAX_DELAY_MILLIS);
+        final int waitTime = (int)Math.min(DELAY_BEFORE_INSTANCES_QUERY_COEFFICIENT * delay, MAX_DELAY_MILLIS);
         mySingleAlarm.setDelay(waitTime);
         LOG.debug(String.format("Instances query time = %d ms. Count of classes = %d", delay, batch.size()));
       }
@@ -484,7 +509,8 @@ public class ClassesFilteredView extends BorderLayoutPanel implements Disposable
       final TrackerForNewInstances strategy = ref == null ? null : getStrategy(ref);
       XDebugSession debugSession = XDebuggerManager.getInstance(myProject).getCurrentSession();
       if (strategy != null && debugSession != null) {
-        final DebugProcess debugProcess = DebuggerManager.getInstance(myProject).getDebugProcess(debugSession.getDebugProcess().getProcessHandler());
+        final DebugProcess debugProcess =
+          DebuggerManager.getInstance(myProject).getDebugProcess(debugSession.getDebugProcess().getProcessHandler());
         final MemoryViewDebugProcessData data = debugProcess.getUserData(MemoryViewDebugProcessData.KEY);
         if (data != null) {
           final List<ObjectReference> newInstances = strategy.getNewInstances();
@@ -492,7 +518,8 @@ public class ClassesFilteredView extends BorderLayoutPanel implements Disposable
           final InstancesWindow instancesWindow = new InstancesWindow(debugSession, limit -> newInstances, ref.name());
           Disposer.register(instancesWindow.getDisposable(), () -> data.getTrackedStacks().unpinStacks(ref));
           instancesWindow.show();
-        } else {
+        }
+        else {
           LOG.warn("MemoryViewDebugProcessData not found in debug session user data");
         }
       }
@@ -520,7 +547,8 @@ public class ClassesFilteredView extends BorderLayoutPanel implements Disposable
     public void mouseMoved(MouseEvent e) {
       if (isShowNewInstancesEvent(e)) {
         myTable.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-      } else {
+      }
+      else {
         myTable.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
       }
     }
@@ -535,7 +563,7 @@ public class ClassesFilteredView extends BorderLayoutPanel implements Disposable
 
     final int modelRow = myTable.convertRowIndexToModel(row);
 
-    final ReferenceType ref = (ReferenceType) myTable.getModel().getValueAt(modelRow, CLASSNAME_COLUMN_INDEX);
+    final ReferenceType ref = (ReferenceType)myTable.getModel().getValueAt(modelRow, CLASSNAME_COLUMN_INDEX);
     final ConstructorInstancesTracker tracker = myConstructorTrackedClasses.getOrDefault(ref, null);
 
     return tracker != null && tracker.isReady() && tracker.getCount() > 0;
@@ -553,10 +581,10 @@ public class ClassesFilteredView extends BorderLayoutPanel implements Disposable
       if (myIsActive) {
         myConstructorTrackedClasses.values().forEach(ConstructorInstancesTracker::obsolete);
         ApplicationManager.getApplication().invokeLater(() ->
-        {
-          myTable.getEmptyText().setText(EMPTY_TABLE_CONTENT_WHEN_RUNNING);
-          myTable.hideContent();
-        });
+                                                        {
+                                                          myTable.getEmptyText().setText(EMPTY_TABLE_CONTENT_WHEN_RUNNING);
+                                                          myTable.hideContent();
+                                                        });
 
         mySingleAlarm.cancelAllRequests();
       }
@@ -568,10 +596,10 @@ public class ClassesFilteredView extends BorderLayoutPanel implements Disposable
       myConstructorTrackedClasses.clear();
       mySingleAlarm.cancelAllRequests();
       ApplicationManager.getApplication().invokeLater(() ->
-      {
-        myTable.getEmptyText().setText(EMPTY_TABLE_CONTENT_WHEN_STOPPED);
-        myTable.clean();
-      });
+                                                      {
+                                                        myTable.getEmptyText().setText(EMPTY_TABLE_CONTENT_WHEN_STOPPED);
+                                                        myTable.clean();
+                                                      });
     }
 
     @Override

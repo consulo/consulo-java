@@ -16,6 +16,8 @@
 package com.intellij.java.language.util;
 
 import com.intellij.java.language.psi.PsiClass;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ServiceAPI;
 import consulo.ide.ServiceManager;
 import consulo.language.editor.ui.TreeFileChooser;
 import consulo.language.psi.PsiFile;
@@ -31,6 +33,7 @@ import java.util.function.Predicate;
  * User: anna
  * Date: Jan 25, 2005
  */
+@ServiceAPI(ComponentScope.PROJECT)
 public abstract class TreeClassChooserFactory {
   @Nonnull
   public static TreeClassChooserFactory getInstance(@Nonnull Project project) {

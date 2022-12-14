@@ -21,6 +21,7 @@ import com.intellij.java.impl.codeInsight.template.PsiTypeResult;
 import com.intellij.java.language.psi.PsiArrayType;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiType;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.completion.lookup.LookupElement;
 import consulo.language.editor.template.Expression;
@@ -34,6 +35,7 @@ import consulo.util.collection.ContainerUtil;
 import javax.annotation.Nonnull;
 import java.util.List;
 
+@ExtensionImpl
 public class ComponentTypeOfMacro extends Macro {
   @Override
   public String getName() {

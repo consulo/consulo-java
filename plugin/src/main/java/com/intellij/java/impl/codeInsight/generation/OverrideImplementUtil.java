@@ -28,6 +28,7 @@ import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.infos.CandidateInfo;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.java.language.psi.util.*;
+import consulo.application.Application;
 import consulo.application.ApplicationManager;
 import consulo.application.Result;
 import consulo.codeEditor.Editor;
@@ -84,8 +85,8 @@ public class OverrideImplementUtil extends OverrideImplementExploreUtil {
   private OverrideImplementUtil() {
   }
 
-  protected static MethodImplementor[] getImplementors() {
-    return Extensions.getExtensions(MethodImplementor.EXTENSION_POINT_NAME);
+  protected static List<MethodImplementor> getImplementors() {
+    return Application.get().getExtensionList(MethodImplementor.class);
   }
 
   /**

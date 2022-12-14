@@ -15,18 +15,21 @@
  */
 package com.intellij.java.impl.refactoring.move.moveClassesOrPackages;
 
-import java.util.Map;
-
-import javax.annotation.Nonnull;
-
-import consulo.component.extension.ExtensionPointName;
 import com.intellij.java.language.psi.PsiClass;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ExtensionAPI;
+import consulo.component.extension.ExtensionPointName;
 import consulo.language.psi.PsiElement;
 
-public abstract class MoveAllClassesInFileHandler
-{
-	public static ExtensionPointName<MoveAllClassesInFileHandler> EP_NAME =
-			new ExtensionPointName<MoveAllClassesInFileHandler>("consulo.java.refactoring.moveAllClassesInFileHandler");
+import javax.annotation.Nonnull;
+import java.util.Map;
 
-	public abstract void processMoveAllClassesInFile(@Nonnull Map<PsiClass, Boolean> allClasses, PsiClass psiClass, PsiElement... elementsToMove);
+@ExtensionAPI(ComponentScope.APPLICATION)
+public abstract class MoveAllClassesInFileHandler {
+  public static ExtensionPointName<MoveAllClassesInFileHandler> EP_NAME =
+    ExtensionPointName.create(MoveAllClassesInFileHandler.class);
+
+  public abstract void processMoveAllClassesInFile(@Nonnull Map<PsiClass, Boolean> allClasses,
+                                                   PsiClass psiClass,
+                                                   PsiElement... elementsToMove);
 }

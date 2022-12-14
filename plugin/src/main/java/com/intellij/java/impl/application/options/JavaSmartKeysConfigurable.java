@@ -15,36 +15,42 @@
  */
 package com.intellij.java.impl.application.options;
 
-import consulo.configurable.BeanConfigurable;
-import org.jetbrains.annotations.Nls;
-import javax.annotation.Nullable;
 import com.intellij.java.language.JavadocBundle;
-import consulo.configurable.Configurable;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.configurable.BeanConfigurable;
+import consulo.configurable.ProjectConfigurable;
 import consulo.java.impl.application.options.JavaSmartKeysSettings;
+import org.jetbrains.annotations.Nls;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * @author Denis Zhdanov
  * @since 2/2/11 12:32 PM
  */
-public class JavaSmartKeysConfigurable extends BeanConfigurable<JavaSmartKeysSettings> implements Configurable
-{
-	public JavaSmartKeysConfigurable()
-	{
-		super(JavaSmartKeysSettings.getInstance());
-		checkBox("JAVADOC_GENERATE_CLOSING_TAG", JavadocBundle.message("javadoc.generate.closing.tag"));
-	}
+@ExtensionImpl
+public class JavaSmartKeysConfigurable extends BeanConfigurable<JavaSmartKeysSettings> implements ProjectConfigurable {
+  public JavaSmartKeysConfigurable() {
+    super(JavaSmartKeysSettings.getInstance());
+    checkBox("JAVADOC_GENERATE_CLOSING_TAG", JavadocBundle.message("javadoc.generate.closing.tag"));
+  }
 
-	@Nls
-	@Override
-	public String getDisplayName()
-	{
-		return null;
-	}
+  @Nonnull
+  @Override
+  public String getId() {
+    return "editor.preferences.smartKeys.java";
+  }
 
-	@Nullable
-	@Override
-	public String getHelpTopic()
-	{
-		return null;
-	}
+  @Nullable
+  @Override
+  public String getParentId() {
+    return "editor.preferences.smartKeys";
+  }
+
+  @Nls
+  @Override
+  public String getDisplayName() {
+    return "Java";
+  }
 }

@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.codeInsight.template;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.template.context.TemplateContextType;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.JavaTokenType;
@@ -28,9 +29,10 @@ import javax.annotation.Nonnull;
 /**
  * @author yole
  */
+@ExtensionImpl
 public class JavaStringContextType extends TemplateContextType {
   public JavaStringContextType() {
-    super("JAVA_STRING", "String", JavaCodeContextType.Generic.class);
+    super("JAVA_STRING", "String", JavaGenericContextType.class);
   }
 
   @Override

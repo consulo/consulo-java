@@ -26,6 +26,7 @@ import com.intellij.java.language.psi.util.MethodSignature;
 import com.intellij.java.language.psi.util.PropertyUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.ApplicationManager;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.ScrollType;
@@ -36,8 +37,8 @@ import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.Language;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.CodeInsightBundle;
-import consulo.language.editor.action.LanguageCodeInsightActionHandler;
 import consulo.language.editor.generation.ClassMember;
+import consulo.language.editor.generation.DelegateMethodHandler;
 import consulo.language.psi.PsiDocumentManager;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
@@ -57,7 +58,8 @@ import java.util.*;
 /**
  * @author mike
  */
-public class GenerateDelegateHandler implements LanguageCodeInsightActionHandler {
+@ExtensionImpl
+public class GenerateDelegateHandler implements DelegateMethodHandler {
   private static final Logger LOG = Logger.getInstance(GenerateDelegateHandler.class);
   private boolean myToCopyJavaDoc = false;
 

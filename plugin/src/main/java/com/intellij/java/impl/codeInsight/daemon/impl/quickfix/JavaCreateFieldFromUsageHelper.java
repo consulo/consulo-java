@@ -19,6 +19,7 @@ import com.intellij.java.impl.codeInsight.ExpectedTypeInfo;
 import com.intellij.java.impl.refactoring.introduceField.BaseExpressionToFieldHandler;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
 import consulo.ide.impl.idea.codeInsight.CodeInsightUtilBase;
 import consulo.language.Language;
@@ -34,6 +35,7 @@ import javax.annotation.Nonnull;
 /**
  * @author Max Medvedev
  */
+@ExtensionImpl
 public class JavaCreateFieldFromUsageHelper implements CreateFieldFromUsageHelper {
 
   @Override

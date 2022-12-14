@@ -18,23 +18,22 @@ package com.intellij.java.impl.util.xml.impl;
 import com.intellij.java.impl.util.xml.*;
 import com.intellij.java.impl.util.xml.converters.values.ClassArrayConverter;
 import com.intellij.java.impl.util.xml.converters.values.ClassValueConverter;
-import com.intellij.java.impl.util.xml.ui.PsiClassControl;
-import com.intellij.java.impl.util.xml.ui.PsiClassTableCellEditor;
-import com.intellij.java.impl.util.xml.ui.PsiTypeControl;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiType;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ServiceAPI;
+import consulo.annotation.component.ServiceImpl;
 import consulo.xml.util.xml.ConverterManager;
-import consulo.xml.util.xml.ui.DomUIFactory;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
-
-import java.util.function.Consumer;
 
 /**
  * @author peter
  */
 @Singleton
-public class JavaDomApplicationComponent implements Consumer<DomUIFactory> {
+@ServiceAPI(value = ComponentScope.APPLICATION, lazy = false)
+@ServiceImpl
+public class JavaDomApplicationComponent {
   @Inject
   public JavaDomApplicationComponent(ConverterManager converterManager) {
     converterManager.addConverter(PsiClass.class, new PsiClassConverter());
@@ -46,13 +45,5 @@ public class JavaDomApplicationComponent implements Consumer<DomUIFactory> {
     converterManager.registerConverterImplementation(ClassValueConverter.class, classValueConverter);
     final ClassArrayConverter classArrayConverter = ClassArrayConverter.getClassArrayConverter();
     converterManager.registerConverterImplementation(ClassArrayConverter.class, classArrayConverter);
-  }
-
-  @Override
-  public void accept(DomUIFactory factory) {
-    factory.registerCustomControl(PsiClass.class, wrapper -> new PsiClassControl(wrapper, false));
-    factory.registerCustomControl(PsiType.class, wrapper -> new PsiTypeControl(wrapper, false));
-
-    factory.registerCustomCellEditor(PsiClass.class, element -> new PsiClassTableCellEditor(element.getManager().getProject(), element.getResolveScope()));
   }
 }

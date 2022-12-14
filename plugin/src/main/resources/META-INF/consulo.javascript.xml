@@ -1,4 +1,3 @@
 <consulo-plugin>
-	<extensions defaultExtensionNs="consulo.javascript">
-	</extensions>
+
 </consulo-plugin>

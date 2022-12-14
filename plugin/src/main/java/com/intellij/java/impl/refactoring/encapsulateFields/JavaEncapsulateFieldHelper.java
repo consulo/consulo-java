@@ -22,6 +22,7 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PropertyUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.util.VisibilityUtil;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.Language;
 import consulo.language.ast.IElementType;
 import consulo.language.psi.PsiElement;
@@ -37,6 +38,7 @@ import javax.annotation.Nullable;
 /**
  * @author Max Medvedev
  */
+@ExtensionImpl
 public class JavaEncapsulateFieldHelper extends EncapsulateFieldHelper {
   private static final Logger LOG = Logger.getInstance(JavaEncapsulateFieldHelper.class);
 

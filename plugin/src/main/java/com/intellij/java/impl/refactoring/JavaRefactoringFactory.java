@@ -16,11 +16,13 @@
 package com.intellij.java.impl.refactoring;
 
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ServiceAPI;
 import consulo.ide.ServiceManager;
+import consulo.language.editor.refactoring.RenameRefactoring;
+import consulo.language.psi.PsiElement;
 import consulo.project.Project;
 import consulo.virtualFileSystem.VirtualFile;
-import consulo.language.psi.PsiElement;
-import consulo.language.editor.refactoring.RefactoringFactory;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -28,7 +30,8 @@ import javax.annotation.Nullable;
 /**
  * @author dsl
  */
-public abstract class JavaRefactoringFactory extends RefactoringFactory {
+@ServiceAPI(ComponentScope.PROJECT)
+public abstract class JavaRefactoringFactory {
   public static JavaRefactoringFactory getInstance(Project project) {
     return ServiceManager.getService(project, JavaRefactoringFactory.class);
   }
@@ -114,4 +117,7 @@ public abstract class JavaRefactoringFactory extends RefactoringFactory {
                                                                                     PsiExpression expressionToSearchFor,
                                                                                     boolean declareFinal,
                                                                                     final boolean replaceAllOccurences);
+
+  public abstract RenameRefactoring createRename(PsiElement element, String newName, boolean searchInComments, boolean
+    searchInNonJavaFiles);
 }

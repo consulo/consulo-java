@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.codeInsight.completion;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.completion.CompletionLocation;
 import consulo.language.editor.completion.CompletionPreselectSkipper;
 import consulo.language.editor.completion.CompletionType;
@@ -31,6 +32,7 @@ import consulo.java.language.module.util.JavaClassNames;
 /**
  * @author peter
  */
+@ExtensionImpl(id = "skipAbstract")
 public class AbstractExpectedTypeSkipper extends CompletionPreselectSkipper {
 
   private enum Result {

@@ -20,20 +20,25 @@ import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
 import com.intellij.java.language.psi.PsiLocalVariable;
 import com.intellij.java.language.psi.PsiParameter;
 import com.intellij.java.language.psi.PsiVariable;
-import consulo.project.util.query.QueryExecutorBase;
-import consulo.language.psi.*;
-import consulo.language.psi.scope.LocalSearchScope;
-import consulo.language.psi.resolve.PsiElementProcessor;
-import consulo.content.scope.SearchScope;
-import consulo.language.psi.search.ReferencesSearch;
-import consulo.language.psi.util.PsiTreeUtil;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.util.function.Processor;
+import consulo.content.scope.SearchScope;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiReference;
+import consulo.language.psi.resolve.PsiElementProcessor;
+import consulo.language.psi.scope.LocalSearchScope;
+import consulo.language.psi.search.ReferencesSearch;
+import consulo.language.psi.search.ReferencesSearchQueryExecutor;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.project.util.query.QueryExecutorBase;
+
 import javax.annotation.Nonnull;
 
 /**
  * Looks for references to local variable or method parameter in invalid (incomplete) code.
  */
-public class VariableInIncompleteCodeSearcher extends QueryExecutorBase<PsiReference, ReferencesSearch.SearchParameters> {
+@ExtensionImpl
+public class VariableInIncompleteCodeSearcher extends QueryExecutorBase<PsiReference, ReferencesSearch.SearchParameters> implements ReferencesSearchQueryExecutor {
   public VariableInIncompleteCodeSearcher() {
     super(true);
   }
@@ -58,7 +63,7 @@ public class VariableInIncompleteCodeSearcher extends QueryExecutorBase<PsiRefer
         if (element instanceof PsiJavaCodeReferenceElement) {
           final PsiJavaCodeReferenceElement ref = (PsiJavaCodeReferenceElement)element;
           if (!ref.isQualified() && name.equals(ref.getText()) &&
-              ref.resolve() == null && ref.advancedResolve(true).getElement() == refElement) {
+            ref.resolve() == null && ref.advancedResolve(true).getElement() == refElement) {
             consumer.process(ref);
           }
         }

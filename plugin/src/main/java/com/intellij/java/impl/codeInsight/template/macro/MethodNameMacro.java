@@ -19,6 +19,7 @@ import com.intellij.java.impl.codeInsight.template.JavaCodeContextType;
 import com.intellij.java.language.psi.PsiClassInitializer;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifier;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.LangBundle;
 import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.template.Expression;
@@ -31,6 +32,7 @@ import consulo.language.psi.PsiElement;
 
 import javax.annotation.Nonnull;
 
+@ExtensionImpl
 public class MethodNameMacro extends Macro {
 
   @Override

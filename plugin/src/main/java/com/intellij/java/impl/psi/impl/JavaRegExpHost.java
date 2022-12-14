@@ -17,7 +17,9 @@ package com.intellij.java.impl.psi.impl;
 
 import com.intellij.java.language.projectRoots.JavaSdk;
 import com.intellij.java.language.projectRoots.JavaSdkVersion;
+import com.intellij.java.language.psi.PsiLiteralExpression;
 import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.component.util.UnicodeCharacterRegistry;
 import consulo.content.bundle.Sdk;
 import consulo.java.language.module.extension.JavaModuleExtension;
@@ -38,7 +40,8 @@ import java.util.Objects;
 /**
  * @author yole
  */
-public abstract class JavaRegExpHost implements RegExpLanguageHost {
+@ExtensionImpl
+public class JavaRegExpHost implements RegExpLanguageHost {
   private final DefaultRegExpPropertiesProvider myPropertiesProvider;
 
   private final String[][] myPropertyNames = {
@@ -297,6 +300,12 @@ public abstract class JavaRegExpHost implements RegExpLanguageHost {
       default:
         return false;
     }
+  }
+
+  @Nonnull
+  @Override
+  public Class getHostClass() {
+    return PsiLiteralExpression.class;
   }
 
   @Override

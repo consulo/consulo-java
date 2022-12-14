@@ -112,39 +112,4 @@ public class UpdateJavaFileCopyright extends UpdatePsiFileCopyright<CopyrightFil
 
   private static final Logger logger = Logger.getInstance(UpdateJavaFileCopyright.class);
 
-  public static class UpdateJavaCopyrightsProvider extends UpdateCopyrightsProvider<CopyrightFileConfig> {
-    @Nonnull
-    @Override
-    public FileType getFileType() {
-      return JavaFileType.INSTANCE;
-    }
-
-    @Nonnull
-    @Override
-    public UpdatePsiFileCopyright<CopyrightFileConfig> createInstance(@Nonnull PsiFile file, @Nonnull CopyrightProfile copyrightProfile) {
-      return new UpdateJavaFileCopyright(file, copyrightProfile);
-    }
-
-    @Nonnull
-    @Override
-    public CopyrightFileConfig createDefaultOptions() {
-      return new CopyrightFileConfig();
-    }
-
-    @Nonnull
-    @Override
-    public TemplateCommentPanel createConfigurable(@Nonnull Project project, @Nonnull TemplateCommentPanel parentPane,
-                                                   @Nonnull FileType fileType) {
-      return new TemplateCommentPanel(fileType, parentPane, project) {
-        @Override
-        public void addAdditionalComponents(@Nonnull JPanel additionalPanel) {
-          addLocationInFile(new String[]{
-              "Before Package",
-              "Before Imports",
-              "Before Class"
-          });
-        }
-      };
-    }
-  }
 }

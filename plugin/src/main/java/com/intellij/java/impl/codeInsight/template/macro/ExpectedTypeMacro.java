@@ -23,6 +23,7 @@ import com.intellij.java.impl.codeInsight.template.impl.JavaTemplateUtil;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiIdentifier;
 import com.intellij.java.language.psi.PsiType;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.completion.CompletionUtilCore;
 import consulo.language.editor.completion.lookup.LookupElement;
@@ -42,6 +43,7 @@ import javax.annotation.Nullable;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+@ExtensionImpl
 public class ExpectedTypeMacro extends Macro {
 
   @Override

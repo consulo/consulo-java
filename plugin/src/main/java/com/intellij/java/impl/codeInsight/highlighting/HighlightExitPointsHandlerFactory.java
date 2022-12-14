@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.codeInsight.highlighting;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.highlight.usage.HighlightUsagesHandlerBase;
 import consulo.language.editor.highlight.usage.HighlightUsagesHandlerFactory;
 import com.intellij.java.language.psi.PsiKeyword;
@@ -26,6 +27,7 @@ import consulo.language.editor.TargetElementUtil;
 /**
  * @author yole
  */
+@ExtensionImpl
 public class HighlightExitPointsHandlerFactory implements HighlightUsagesHandlerFactory {
   @Override
   public HighlightUsagesHandlerBase createHighlightUsagesHandler(final Editor editor, final PsiFile file) {

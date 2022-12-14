@@ -15,12 +15,15 @@
  */
 package com.intellij.java.impl.refactoring.listeners;
 
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ServiceAPI;
 import consulo.project.Project;
 import consulo.ide.ServiceManager;
 
 /**
  * @author yole
  */
+@ServiceAPI(ComponentScope.PROJECT)
 public abstract class JavaRefactoringListenerManager {
   /**
    * Registers a listener for moving member by pull up, push down and extract super class/interface refactorings.

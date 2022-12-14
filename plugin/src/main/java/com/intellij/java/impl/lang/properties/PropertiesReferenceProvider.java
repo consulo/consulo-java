@@ -16,6 +16,7 @@
 package com.intellij.java.impl.lang.properties;
 
 import com.intellij.java.impl.codeInspection.i18n.JavaI18nUtil;
+import com.intellij.java.impl.psi.CommonReferenceProviderTypes;
 import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiExpression;
@@ -23,15 +24,14 @@ import com.intellij.java.language.psi.PsiLiteralExpression;
 import com.intellij.lang.properties.IProperty;
 import com.intellij.lang.properties.references.PropertyReference;
 import com.intellij.xml.util.XmlUtil;
-import consulo.language.psi.OuterLanguageElement;
-import consulo.language.psi.PsiElement;
-import consulo.language.psi.PsiReference;
-import consulo.language.psi.PsiReferenceProvider;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.psi.*;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.ProcessingContext;
 import consulo.xml.psi.xml.XmlAttribute;
 import consulo.xml.psi.xml.XmlAttributeValue;
 import consulo.xml.psi.xml.XmlTag;
+import jakarta.inject.Inject;
 
 import javax.annotation.Nonnull;
 import java.util.Arrays;
@@ -41,16 +41,23 @@ import java.util.Map;
 /**
  * @author cdr
  */
-public class PropertiesReferenceProvider extends PsiReferenceProvider {
-
+@ExtensionImpl
+public class PropertiesReferenceProvider extends PsiReferenceProviderByType {
   private final boolean myDefaultSoft;
 
+  @Inject
   public PropertiesReferenceProvider() {
     this(false);
   }
 
   public PropertiesReferenceProvider(final boolean defaultSoft) {
     myDefaultSoft = defaultSoft;
+  }
+
+  @Nonnull
+  @Override
+  public ReferenceProviderType getReferenceProviderType() {
+    return CommonReferenceProviderTypes.PROPERTIES_FILE_KEY_PROVIDER;
   }
 
   @Override

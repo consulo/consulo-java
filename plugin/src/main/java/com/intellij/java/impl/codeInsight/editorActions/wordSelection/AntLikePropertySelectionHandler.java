@@ -16,6 +16,7 @@
 package com.intellij.java.impl.codeInsight.editorActions.wordSelection;
 
 import com.intellij.java.language.JavaLanguage;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
 import consulo.document.util.TextRange;
 import consulo.language.Language;
@@ -29,6 +30,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+@ExtensionImpl
 public class AntLikePropertySelectionHandler implements ExtendWordSelectionHandler {
   @Override
   public boolean canSelect(PsiElement e) {

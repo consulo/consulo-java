@@ -16,6 +16,7 @@
 package com.intellij.java.impl.refactoring.rename.naming;
 
 import com.intellij.java.language.psi.PsiField;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import consulo.language.editor.refactoring.rename.AutomaticRenamer;
 import consulo.language.editor.refactoring.rename.AutomaticRenamerFactory;
@@ -24,6 +25,7 @@ import consulo.usage.UsageInfo;
 import javax.annotation.Nullable;
 import java.util.Collection;
 
+@ExtensionImpl
 public class ConstructorParameterOnFieldRenameRenamerFactory implements AutomaticRenamerFactory {
   public boolean isApplicable(final PsiElement element) {
     return element instanceof PsiField;

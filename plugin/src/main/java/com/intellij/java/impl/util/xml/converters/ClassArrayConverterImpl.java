@@ -16,15 +16,24 @@
 package com.intellij.java.impl.util.xml.converters;
 
 import com.intellij.java.impl.psi.impl.source.resolve.reference.impl.providers.JavaClassReferenceProvider;
+import com.intellij.java.impl.util.xml.DomJavaUtil;
 import com.intellij.java.impl.util.xml.converters.values.ClassArrayConverter;
+import com.intellij.java.impl.util.xml.converters.values.ClassValueConverter;
+import com.intellij.java.language.psi.PsiClass;
+import consulo.annotation.component.ServiceImpl;
 import consulo.language.psi.ElementManipulators;
 import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiReference;
+import consulo.module.Module;
+import consulo.project.Project;
 import consulo.xml.util.xml.ConvertContext;
 import consulo.xml.util.xml.GenericDomValue;
 import jakarta.inject.Singleton;
+import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +41,7 @@ import java.util.List;
  * User: Sergey.Vasiliev
  */
 @Singleton
+@ServiceImpl
 public class ClassArrayConverterImpl extends ClassArrayConverter {
   private static final JavaClassReferenceProvider REFERENCE_PROVIDER = new JavaClassReferenceProvider();
 
@@ -72,8 +82,20 @@ public class ClassArrayConverterImpl extends ClassArrayConverter {
   private static void createReference(final PsiElement element, final String s, final int offset, List<PsiReference> list) {
     final PsiReference[] references = REFERENCE_PROVIDER.getReferencesByString(s, element, offset);
     //noinspection ManualArrayToCollectionCopy
-    for (PsiReference ref: references) {
+    for (PsiReference ref : references) {
       list.add(ref);
     }
+  }
+
+  public PsiClass fromString(@Nullable @NonNls String s, final ConvertContext context) {
+    if (s == null) return null;
+    final Module module = context.getModule();
+    final PsiFile psiFile = context.getFile();
+    final Project project = psiFile.getProject();
+    return DomJavaUtil.findClass(s, context.getFile(), context.getModule(), ClassValueConverter.getScope(project, module, psiFile));
+  }
+
+  public String toString(@Nullable PsiClass psiClass, final ConvertContext context) {
+    return psiClass == null ? null : psiClass.getQualifiedName();
   }
 }

@@ -15,10 +15,13 @@
  */
 package consulo.java.impl.intelliLang;
 
+import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.PsiAnnotation;
 import com.intellij.java.language.psi.PsiLiteralExpression;
 import com.intellij.java.language.psi.PsiModifierListOwner;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.ide.impl.intelliLang.Configuration;
+import consulo.language.Language;
 import consulo.language.pattern.PatternCondition;
 import consulo.language.pattern.StandardPatterns;
 import consulo.language.psi.*;
@@ -34,7 +37,8 @@ import static com.intellij.java.language.patterns.PsiJavaPatterns.literalExpress
 /**
  * Provides references to Language-IDs and RegExp enums for completion.
  */
-public abstract class LanguageReferenceProvider extends PsiReferenceContributor {
+@ExtensionImpl
+public class LanguageReferenceProvider extends PsiReferenceContributor {
 
   public void registerReferenceProviders(PsiReferenceRegistrar registrar) {
     final Configuration configuration = Configuration.getInstance();
@@ -82,4 +86,9 @@ public abstract class LanguageReferenceProvider extends PsiReferenceContributor 
     });
   }
 
+  @Nonnull
+  @Override
+  public Language getLanguage() {
+    return JavaLanguage.INSTANCE;
+  }
 }

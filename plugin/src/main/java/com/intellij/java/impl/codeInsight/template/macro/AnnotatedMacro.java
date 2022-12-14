@@ -21,6 +21,7 @@ import com.intellij.java.indexing.search.searches.AnnotatedMembersSearch;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMember;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.util.query.Query;
 import consulo.language.editor.completion.lookup.LookupElement;
 import consulo.language.editor.completion.lookup.LookupElementBuilder;
@@ -43,7 +44,8 @@ import java.util.Set;
 /**
  * @author Maxim.Mossienko
  */
-public class AnnotatedMacro extends Macro {
+@ExtensionImpl
+public class  AnnotatedMacro extends Macro {
 
   @Override
   @NonNls

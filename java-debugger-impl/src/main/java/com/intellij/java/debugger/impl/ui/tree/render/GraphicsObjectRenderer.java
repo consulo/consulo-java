@@ -15,81 +15,69 @@
  */
 package com.intellij.java.debugger.impl.ui.tree.render;
 
-import javax.annotation.Nullable;
-
 import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.engine.DebuggerUtils;
 import com.intellij.java.debugger.impl.engine.FullValueEvaluatorProvider;
 import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
 import com.intellij.java.debugger.impl.settings.NodeRendererSettings;
 import com.intellij.java.debugger.impl.ui.impl.watch.ValueDescriptorImpl;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.execution.debug.frame.XFullValueEvaluator;
-import consulo.internal.com.sun.jdi.ClassType;
-import consulo.internal.com.sun.jdi.Field;
-import consulo.internal.com.sun.jdi.ObjectReference;
-import consulo.internal.com.sun.jdi.ReferenceType;
-import consulo.internal.com.sun.jdi.Type;
-import consulo.internal.com.sun.jdi.Value;
+import consulo.internal.com.sun.jdi.*;
 import consulo.ui.image.Image;
+import jakarta.inject.Inject;
+
+import javax.annotation.Nullable;
 
 /**
  * @author egor
  */
-public class GraphicsObjectRenderer extends ToStringBasedRenderer implements FullValueEvaluatorProvider
-{
-	public GraphicsObjectRenderer(final NodeRendererSettings rendererSettings)
-	{
-		super(rendererSettings, "Graphics", null, null);
-		setClassName("sun.java2d.SunGraphics2D");
-		setEnabled(true);
-	}
+@ExtensionImpl
+public class GraphicsObjectRenderer extends ToStringBasedRenderer implements FullValueEvaluatorProvider {
+  @Inject
+  public GraphicsObjectRenderer(final NodeRendererSettings rendererSettings) {
+    super(rendererSettings, "Graphics", null, null);
+    setClassName("sun.java2d.SunGraphics2D");
+    setEnabled(true);
+  }
 
-	@Nullable
-	@Override
-	public XFullValueEvaluator getFullValueEvaluator(final EvaluationContextImpl evaluationContext, final ValueDescriptorImpl valueDescriptor)
-	{
-		try
-		{
-			ObjectReference value = (ObjectReference) valueDescriptor.getValue();
-			Field surfaceField = ((ClassType) value.type()).fieldByName("surfaceData");
-			if(surfaceField == null)
-			{
-				return null;
-			}
-			ObjectReference surfaceDataValue = (ObjectReference) value.getValue(surfaceField);
-			if(surfaceDataValue == null)
-			{
-				return null;
-			}
+  @Nullable
+  @Override
+  public XFullValueEvaluator getFullValueEvaluator(final EvaluationContextImpl evaluationContext,
+                                                   final ValueDescriptorImpl valueDescriptor) {
+    try {
+      ObjectReference value = (ObjectReference)valueDescriptor.getValue();
+      Field surfaceField = ((ClassType)value.type()).fieldByName("surfaceData");
+      if (surfaceField == null) {
+        return null;
+      }
+      ObjectReference surfaceDataValue = (ObjectReference)value.getValue(surfaceField);
+      if (surfaceDataValue == null) {
+        return null;
+      }
 
-			Field imgField = ((ReferenceType) surfaceDataValue.type()).fieldByName("bufImg"); // BufImgSurfaceData
-			if(imgField == null)
-			{
-				imgField = ((ReferenceType) surfaceDataValue.type()).fieldByName("offscreenImage"); // CGLSurfaceData
-			}
-			if(imgField == null)
-			{
-				return null;
-			}
+      Field imgField = ((ReferenceType)surfaceDataValue.type()).fieldByName("bufImg"); // BufImgSurfaceData
+      if (imgField == null) {
+        imgField = ((ReferenceType)surfaceDataValue.type()).fieldByName("offscreenImage"); // CGLSurfaceData
+      }
+      if (imgField == null) {
+        return null;
+      }
 
-			final Value bufImgValue = surfaceDataValue.getValue(imgField);
-			Type type = bufImgValue.type();
-			if(!(type instanceof ReferenceType) || !DebuggerUtils.instanceOf(type, "java.awt.Image"))
-			{
-				return null;
-			}
-			return new ImageObjectRenderer.IconPopupEvaluator(DebuggerBundle.message("message.node.show.image"), evaluationContext)
-			{
-				@Override
-				protected Image getData()
-				{
-					return ImageObjectRenderer.getIcon(getEvaluationContext(), bufImgValue, "imageToBytes");
-				}
-			};
-		}
-		catch(Exception ignored)
-		{
-		}
-		return null;
-	}
+      final Value bufImgValue = surfaceDataValue.getValue(imgField);
+      Type type = bufImgValue.type();
+      if (!(type instanceof ReferenceType) || !DebuggerUtils.instanceOf(type, "java.awt.Image")) {
+        return null;
+      }
+      return new ImageObjectRenderer.IconPopupEvaluator(DebuggerBundle.message("message.node.show.image"), evaluationContext) {
+        @Override
+        protected Image getData() {
+          return ImageObjectRenderer.getIcon(getEvaluationContext(), bufImgValue, "imageToBytes");
+        }
+      };
+    }
+    catch (Exception ignored) {
+    }
+    return null;
+  }
 }

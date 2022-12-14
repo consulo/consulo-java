@@ -22,6 +22,7 @@ import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.impl.projectRoots.ex.JavaSdkUtil;
 import com.intellij.java.language.projectRoots.roots.ExternalLibraryDescriptor;
 import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.WriteAction;
 import consulo.content.base.BinariesOrderRootType;
 import consulo.content.library.Library;
@@ -38,6 +39,7 @@ import consulo.module.content.layer.orderEntry.DependencyScope;
 import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.concurrent.AsyncResult;
+import jakarta.inject.Inject;
 
 import javax.annotation.Nonnull;
 import java.util.Collection;
@@ -47,10 +49,12 @@ import java.util.List;
 /**
  * @author nik
  */
+@ExtensionImpl
 public class IdeaProjectModelModifier extends JavaProjectModelModifier {
   private static final Logger LOG = Logger.getInstance(IdeaProjectModelModifier.class);
   private final Project myProject;
 
+  @Inject
   public IdeaProjectModelModifier(Project project) {
     myProject = project;
   }

@@ -15,6 +15,8 @@
  */
 package com.intellij.java.impl.codeInsight.completion;
 
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.Language;
 import consulo.language.editor.completion.*;
 import consulo.language.editor.completion.lookup.LookupElement;
 import consulo.language.psi.PsiElement;
@@ -22,12 +24,14 @@ import consulo.language.psi.PsiFile;
 import consulo.xml.codeInsight.completion.XmlCompletionContributor;
 import consulo.xml.lang.xml.XMLLanguage;
 
+import javax.annotation.Nonnull;
 import java.util.function.Consumer;
 
 /**
  * @author peter
  */
-public abstract class XmlBasicToClassNameDelegator extends CompletionContributor {
+@ExtensionImpl(id = "basic2ClassName", order = "after xml")
+public class XmlBasicToClassNameDelegator extends CompletionContributor {
 
   @Override
   public void fillCompletionVariants(CompletionParameters parameters, final CompletionResultSet result) {
@@ -62,4 +66,9 @@ public abstract class XmlBasicToClassNameDelegator extends CompletionContributor
     }
   }
 
+  @Nonnull
+  @Override
+  public Language getLanguage() {
+    return XMLLanguage.INSTANCE;
+  }
 }

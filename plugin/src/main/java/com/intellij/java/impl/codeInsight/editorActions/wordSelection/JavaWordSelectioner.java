@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.codeInsight.editorActions.wordSelection;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.action.AbstractWordSelectioner;
 import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.java.language.psi.PsiJavaToken;
@@ -30,6 +31,7 @@ import java.util.List;
 /**
  * @author peter
  */
+@ExtensionImpl
 public class JavaWordSelectioner extends AbstractWordSelectioner {
   @Override
   public boolean canSelect(PsiElement e) {

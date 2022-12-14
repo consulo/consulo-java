@@ -37,6 +37,7 @@ import com.intellij.java.language.patterns.PsiNameValuePairPattern;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.util.matcher.PrefixMatcher;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.EditorEx;
@@ -79,6 +80,7 @@ import static consulo.util.lang.ObjectUtil.assertNotNull;
 /**
  * @author peter
  */
+@ExtensionImpl(id = "javaLegacy", order = "last, before legacy, before default, before javaClassName")
 public class JavaCompletionContributor extends CompletionContributor {
   private static final Logger LOG = Logger.getInstance(JavaCompletionContributor.class);
 

@@ -16,38 +16,38 @@
  */
 package com.intellij.java.analysis.codeInsight.guess;
 
-import consulo.ide.ServiceManager;
-import consulo.project.Project;
-import consulo.document.util.TextRange;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiType;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ServiceAPI;
+import consulo.document.util.TextRange;
+import consulo.ide.ServiceManager;
+import consulo.project.Project;
 import consulo.util.collection.MultiMap;
-import javax.annotation.Nonnull;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
-public abstract class GuessManager
-{
-	public static GuessManager getInstance(Project project)
-	{
-		return ServiceManager.getService(project, GuessManager.class);
-	}
+@ServiceAPI(ComponentScope.PROJECT)
+public abstract class GuessManager {
+  public static GuessManager getInstance(Project project) {
+    return ServiceManager.getService(project, GuessManager.class);
+  }
 
-	@Nonnull
-	public abstract PsiType[] guessContainerElementType(PsiExpression containerExpr, TextRange rangeToIgnore);
+  @Nonnull
+  public abstract PsiType[] guessContainerElementType(PsiExpression containerExpr, TextRange rangeToIgnore);
 
-	@Nonnull
-	public abstract PsiType[] guessTypeToCast(PsiExpression expr);
+  @Nonnull
+  public abstract PsiType[] guessTypeToCast(PsiExpression expr);
 
-	@Nonnull
-	public abstract MultiMap<PsiExpression, PsiType> getControlFlowExpressionTypes(@Nonnull PsiExpression forPlace, boolean honorAssignments);
+  @Nonnull
+  public abstract MultiMap<PsiExpression, PsiType> getControlFlowExpressionTypes(@Nonnull PsiExpression forPlace, boolean honorAssignments);
 
-	@Nonnull
-	public List<PsiType> getControlFlowExpressionTypeConjuncts(@Nonnull PsiExpression expr)
-	{
-		return getControlFlowExpressionTypeConjuncts(expr, true);
-	}
+  @Nonnull
+  public List<PsiType> getControlFlowExpressionTypeConjuncts(@Nonnull PsiExpression expr) {
+    return getControlFlowExpressionTypeConjuncts(expr, true);
+  }
 
-	@Nonnull
-	public abstract List<PsiType> getControlFlowExpressionTypeConjuncts(@Nonnull PsiExpression expr, boolean honorAssignments);
+  @Nonnull
+  public abstract List<PsiType> getControlFlowExpressionTypeConjuncts(@Nonnull PsiExpression expr, boolean honorAssignments);
 }

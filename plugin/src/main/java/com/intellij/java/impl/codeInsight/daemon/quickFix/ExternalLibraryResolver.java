@@ -15,48 +15,49 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.quickFix;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import com.intellij.java.language.projectRoots.roots.ExternalLibraryDescriptor;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ExtensionAPI;
 import consulo.component.extension.ExtensionPointName;
 import consulo.module.Module;
-import com.intellij.java.language.projectRoots.roots.ExternalLibraryDescriptor;
 import consulo.util.lang.ThreeState;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * @author nik
  */
-public abstract class ExternalLibraryResolver
-{
-	public static final ExtensionPointName<ExternalLibraryResolver> EP_NAME = ExtensionPointName.create("consulo.java.codeInsight.externalLibraryResolver");
+@ExtensionAPI(ComponentScope.APPLICATION)
+public abstract class ExternalLibraryResolver {
+  public static final ExtensionPointName<ExternalLibraryResolver> EP_NAME =
+    ExtensionPointName.create(ExternalLibraryResolver.class);
 
-	@Nullable
-	public abstract ExternalClassResolveResult resolveClass(@Nonnull String shortClassName, @Nonnull ThreeState isAnnotation, @Nonnull Module contextModule);
+  @Nullable
+  public abstract ExternalClassResolveResult resolveClass(@Nonnull String shortClassName,
+                                                          @Nonnull ThreeState isAnnotation,
+                                                          @Nonnull Module contextModule);
 
-	@Nullable
-	public ExternalLibraryDescriptor resolvePackage(@Nonnull String packageName)
-	{
-		return null;
-	}
+  @Nullable
+  public ExternalLibraryDescriptor resolvePackage(@Nonnull String packageName) {
+    return null;
+  }
 
-	public static class ExternalClassResolveResult
-	{
-		private final String myQualifiedClassName;
-		private final ExternalLibraryDescriptor myLibrary;
+  public static class ExternalClassResolveResult {
+    private final String myQualifiedClassName;
+    private final ExternalLibraryDescriptor myLibrary;
 
-		public ExternalClassResolveResult(String qualifiedClassName, ExternalLibraryDescriptor library)
-		{
-			myQualifiedClassName = qualifiedClassName;
-			myLibrary = library;
-		}
+    public ExternalClassResolveResult(String qualifiedClassName, ExternalLibraryDescriptor library) {
+      myQualifiedClassName = qualifiedClassName;
+      myLibrary = library;
+    }
 
-		public String getQualifiedClassName()
-		{
-			return myQualifiedClassName;
-		}
+    public String getQualifiedClassName() {
+      return myQualifiedClassName;
+    }
 
-		public ExternalLibraryDescriptor getLibrary()
-		{
-			return myLibrary;
-		}
-	}
+    public ExternalLibraryDescriptor getLibrary() {
+      return myLibrary;
+    }
+  }
 }

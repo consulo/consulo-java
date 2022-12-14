@@ -15,7 +15,5 @@
   -->
 
 <consulo-plugin>
-	<extensions defaultExtensionNs="com.intellij.spellchecker">
-		<support language="JAVA" implementationClass="consulo.java.impl.spellchecker.JavaSpellcheckingStrategy"/>
-	</extensions>
+
 </consulo-plugin>

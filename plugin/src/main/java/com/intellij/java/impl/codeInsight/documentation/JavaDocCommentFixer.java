@@ -24,6 +24,7 @@ import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.java.language.psi.javadoc.PsiDocTag;
 import com.intellij.java.language.psi.javadoc.PsiDocTagValue;
 import com.intellij.java.language.psi.javadoc.PsiDocToken;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
 import consulo.document.Document;
 import consulo.document.util.TextRange;
@@ -49,6 +50,7 @@ import java.util.*;
  * @author Denis Zhdanov
  * @since 9/20/12 8:44 PM
  */
+@ExtensionImpl
 public class JavaDocCommentFixer implements DocCommentFixer {
 
   @Nonnull

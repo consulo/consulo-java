@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.refactoring.move.moveClassesOrPackages;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.CommonBundle;
 import com.intellij.java.impl.psi.impl.file.JavaDirectoryServiceImpl;
 import com.intellij.java.impl.refactoring.JavaRefactoringSettings;
@@ -53,6 +54,7 @@ import java.awt.*;
 import java.util.Arrays;
 import java.util.HashSet;
 
+@ExtensionImpl(order = "before moveJavaFileOrDir")
 public class JavaMoveClassesOrPackagesHandler extends MoveHandlerDelegate {
   private static final Logger LOG = Logger.getInstance(JavaMoveClassesOrPackagesHandler.class);
   private static final JavaVetoRenameCondition VETO_RENAME_CONDITION = new JavaVetoRenameCondition();

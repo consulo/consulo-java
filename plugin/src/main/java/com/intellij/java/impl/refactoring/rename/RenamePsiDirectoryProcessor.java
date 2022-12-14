@@ -20,6 +20,7 @@ import com.intellij.java.impl.refactoring.JavaRefactoringSettings;
 import com.intellij.java.language.psi.JavaDirectoryService;
 import com.intellij.java.language.psi.PsiJavaPackage;
 import com.intellij.java.language.psi.PsiPackageStatement;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
 import consulo.project.Project;
 import consulo.language.psi.PsiDirectory;
@@ -45,6 +46,7 @@ import java.util.Collections;
 /**
  * @author yole
  */
+@ExtensionImpl
 public class RenamePsiDirectoryProcessor extends RenamePsiElementProcessor {
   public boolean canProcessElement(@Nonnull final PsiElement element) {
     return element instanceof PsiDirectory;

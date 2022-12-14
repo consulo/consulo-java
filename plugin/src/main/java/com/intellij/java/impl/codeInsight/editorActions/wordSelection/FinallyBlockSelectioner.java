@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.codeInsight.editorActions.wordSelection;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiKeyword;
 import com.intellij.java.language.psi.PsiTryStatement;
@@ -25,6 +26,7 @@ import consulo.codeEditor.Editor;
 import java.util.List;
 import java.util.ArrayList;
 
+@ExtensionImpl
 public class FinallyBlockSelectioner extends BasicSelectioner {
   @Override
   public boolean canSelect(PsiElement e) {

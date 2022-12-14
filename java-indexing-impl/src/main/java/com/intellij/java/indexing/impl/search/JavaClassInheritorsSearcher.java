@@ -17,10 +17,12 @@ package com.intellij.java.indexing.impl.search;
 
 import com.intellij.java.indexing.search.searches.AllClassesSearch;
 import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
+import com.intellij.java.indexing.search.searches.ClassInheritorsSearchExecutor;
 import com.intellij.java.indexing.search.searches.DirectClassInheritorsSearch;
 import com.intellij.java.language.psi.PsiAnonymousClass;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiModifier;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.ApplicationManager;
 import consulo.application.progress.ProgressIndicator;
 import consulo.application.progress.ProgressIndicatorProvider;
@@ -45,7 +47,8 @@ import javax.annotation.Nonnull;
 import java.util.HashSet;
 import java.util.Set;
 
-public class JavaClassInheritorsSearcher extends QueryExecutorBase<PsiClass, ClassInheritorsSearch.SearchParameters> {
+@ExtensionImpl
+public class JavaClassInheritorsSearcher extends QueryExecutorBase<PsiClass, ClassInheritorsSearch.SearchParameters> implements ClassInheritorsSearchExecutor {
   private static final Logger LOG = Logger.getInstance(JavaClassInheritorsSearcher.class);
 
   @Override

@@ -20,6 +20,7 @@ import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.application.ApplicationManager;
 import consulo.codeEditor.Editor;
 import consulo.fileEditor.FileEditorManager;
+import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.navigation.OpenFileDescriptor;
 import consulo.ide.impl.idea.openapi.fileEditor.ex.IdeDocumentHistory;
 import consulo.navigation.OpenFileDescriptorFactory;
@@ -35,7 +36,7 @@ import javax.annotation.Nonnull;
 /**
  * @author Mike
  */
-public class CreateClassFromUsageFix extends CreateClassFromUsageBaseFix {
+public class CreateClassFromUsageFix extends CreateClassFromUsageBaseFix implements SyntheticIntentionAction {
 
   public CreateClassFromUsageFix(PsiJavaCodeReferenceElement refElement, CreateClassKind kind) {
     super(kind, refElement);

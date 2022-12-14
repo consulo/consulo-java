@@ -29,12 +29,14 @@ import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.javadoc.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.util.matcher.PrefixMatcher;
 import consulo.codeEditor.CaretModel;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.ScrollType;
 import consulo.document.Document;
 import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.Language;
 import consulo.language.codeStyle.CodeStyleSettings;
 import consulo.language.codeStyle.CodeStyleSettingsManager;
 import consulo.language.editor.completion.*;
@@ -71,7 +73,8 @@ import static consulo.language.pattern.StandardPatterns.string;
  * Date: 05.03.2003
  * Time: 21:40:11
  */
-public abstract class JavaDocCompletionContributor extends CompletionContributor {
+@ExtensionImpl(id = "javadoc", order = "last, before javaLegacy")
+public class JavaDocCompletionContributor extends CompletionContributor {
   private static final Logger LOG = Logger.getInstance(JavaDocCompletionContributor.class);
   private static final
   @NonNls
@@ -292,6 +295,12 @@ public abstract class JavaDocCompletionContributor extends CompletionContributor
     for (String description : descriptions) {
       result.addElement(PrioritizedLookupElement.withPriority(LookupElementBuilder.create(description).withInsertHandler(PARAM_DESCRIPTION_INSERT_HANDLER), 1));
     }
+  }
+
+  @Nonnull
+  @Override
+  public Language getLanguage() {
+    return JavaLanguage.INSTANCE;
   }
 
   private static class TagChooser implements CompletionProvider {

@@ -15,15 +15,19 @@
  */
 package com.intellij.java.impl.refactoring.safeDelete;
 
-import javax.annotation.Nullable;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ExtensionAPI;
 import consulo.component.extension.ExtensionPointName;
 import consulo.language.psi.PsiElement;
+
+import javax.annotation.Nullable;
 
 /**
  * @author Max Medvedev
  */
+@ExtensionAPI(ComponentScope.APPLICATION)
 public abstract class ImportSearcher {
-  private static final ExtensionPointName<ImportSearcher> EP_NAME = ExtensionPointName.create("consulo.java.safeDelete.importSearcher");
+  private static final ExtensionPointName<ImportSearcher> EP_NAME = ExtensionPointName.create(ImportSearcher.class);
 
   /**
    * @return found import or null

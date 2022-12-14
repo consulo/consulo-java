@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.refactoring.openapi.impl;
 
+import consulo.annotation.component.ServiceImpl;
 import jakarta.inject.Singleton;
 
 import com.intellij.java.analysis.refactoring.JavaRefactoringActionHandlerFactory;
@@ -43,6 +44,7 @@ import com.intellij.java.impl.refactoring.typeCook.TypeCookHandler;
 import com.intellij.java.impl.refactoring.util.duplicates.MethodDuplicatesHandler;
 
 @Singleton
+@ServiceImpl
 public class JavaRefactoringActionHandlerFactoryImpl extends JavaRefactoringActionHandlerFactory {
   public RefactoringActionHandler createAnonymousToInnerHandler() {
     return new AnonymousToInnerHandler();

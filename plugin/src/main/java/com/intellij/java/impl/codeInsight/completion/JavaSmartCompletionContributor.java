@@ -25,10 +25,13 @@ import com.intellij.java.impl.psi.filters.getters.JavaMembersGetter;
 import com.intellij.java.impl.psi.filters.types.AssignableFromFilter;
 import com.intellij.java.impl.psi.filters.types.AssignableToFilter;
 import com.intellij.java.impl.psi.util.proximity.ReferenceListWeigher;
+import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.infos.CandidateInfo;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.util.matcher.PrefixMatcher;
 import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.Language;
 import consulo.language.editor.completion.*;
 import consulo.language.editor.completion.lookup.LookupElement;
 import consulo.language.editor.completion.lookup.LookupElementDecorator;
@@ -59,7 +62,8 @@ import static consulo.language.pattern.StandardPatterns.or;
 /**
  * @author peter
  */
-public abstract class JavaSmartCompletionContributor extends CompletionContributor {
+@ExtensionImpl(id = "javaSmart", order = "last, before default")
+public class JavaSmartCompletionContributor extends CompletionContributor {
   private static final HashingStrategy<ExpectedTypeInfo> EXPECTED_TYPE_INFO_STRATEGY = new HashingStrategy<ExpectedTypeInfo>() {
     @Override
     public int hashCode(final ExpectedTypeInfo object) {
@@ -340,5 +344,11 @@ public abstract class JavaSmartCompletionContributor extends CompletionContribut
       return;
     }
     context.setDummyIdentifier(CompletionUtilCore.DUMMY_IDENTIFIER_TRIMMED);
+  }
+
+  @Nonnull
+  @Override
+  public Language getLanguage() {
+    return JavaLanguage.INSTANCE;
   }
 }

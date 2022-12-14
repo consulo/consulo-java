@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.codeInsight.editorActions.moveUpDown;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.CodeInsightUtilCore;
 import consulo.language.editor.moveUpDown.LineMover;
 import consulo.language.editor.moveUpDown.LineRange;
@@ -38,7 +39,8 @@ import consulo.logging.Logger;
 
 import javax.annotation.Nonnull;
 
-class StatementMover extends LineMover {
+@ExtensionImpl(id = "javaStatement", order = "before javaDeclaration")
+public class StatementMover extends LineMover {
   private static final Logger LOG = Logger.getInstance("#com.intellij.openapi.editor.actions.moveUpDown.StatementMover");
 
   private PsiElement statementToSurroundWithCodeBlock;

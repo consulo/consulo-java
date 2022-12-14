@@ -16,36 +16,38 @@
 package com.intellij.java.debugger.engine;
 
 import com.intellij.java.debugger.SourcePosition;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ExtensionAPI;
 import consulo.component.extension.ExtensionPointName;
-import consulo.project.DumbService;
 import consulo.document.util.TextRange;
+import consulo.project.DumbService;
 
 import javax.annotation.Nullable;
 
 /**
- * During indexing, only extensions that implement {@link com.intellij.openapi.project.DumbAware} are called.
+ * During indexing, only extensions that implement {@link DumbAware} are called.
  * See also {@link DumbService}.
  *
  * @author Nikolay.Tropin
  */
-public abstract class SourcePositionHighlighter
-{
-	public static final ExtensionPointName<SourcePositionHighlighter> EP_NAME = ExtensionPointName.create("consulo.java.debugger.sourcePositionHighlighter");
+@ExtensionAPI(ComponentScope.APPLICATION)
+public abstract class SourcePositionHighlighter {
+  public static final ExtensionPointName<SourcePositionHighlighter> EP_NAME =
+    ExtensionPointName.create(SourcePositionHighlighter.class);
 
-	public abstract TextRange getHighlightRange(SourcePosition sourcePosition);
+  @RequiredReadAction
+  public abstract TextRange getHighlightRange(SourcePosition sourcePosition);
 
-	@Nullable
-	public static TextRange getHighlightRangeFor(SourcePosition sourcePosition)
-	{
-		DumbService dumbService = DumbService.getInstance(sourcePosition.getFile().getProject());
-		for(SourcePositionHighlighter provider : dumbService.filterByDumbAwareness(EP_NAME.getExtensions()))
-		{
-			TextRange range = provider.getHighlightRange(sourcePosition);
-			if(range != null)
-			{
-				return range;
-			}
-		}
-		return null;
-	}
+  @Nullable
+  public static TextRange getHighlightRangeFor(SourcePosition sourcePosition) {
+    DumbService dumbService = DumbService.getInstance(sourcePosition.getFile().getProject());
+    for (SourcePositionHighlighter provider : dumbService.filterByDumbAwareness(EP_NAME.getExtensionList())) {
+      TextRange range = provider.getHighlightRange(sourcePosition);
+      if (range != null) {
+        return range;
+      }
+    }
+    return null;
+  }
 }

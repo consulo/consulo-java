@@ -18,6 +18,7 @@ package com.intellij.java.impl.codeInsight.completion;
 import com.intellij.java.impl.codeInsight.daemon.impl.actions.AddImportAction;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.completion.lookup.Lookup;
 import consulo.language.editor.completion.lookup.LookupActionProvider;
 import consulo.language.editor.completion.lookup.LookupElement;
@@ -30,6 +31,7 @@ import java.util.function.Consumer;
 /**
  * @author peter
  */
+@ExtensionImpl(id = "excludeFromCompletion", order = "last")
 public class ExcludeFromCompletionLookupActionProvider implements LookupActionProvider {
   @Override
   public void fillActions(LookupElement element, Lookup lookup, Consumer<LookupElementAction> consumer) {

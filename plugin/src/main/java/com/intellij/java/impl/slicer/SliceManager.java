@@ -16,6 +16,9 @@
 package com.intellij.java.impl.slicer;
 
 import com.intellij.java.language.psi.PsiReferenceExpression;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ServiceAPI;
+import consulo.annotation.component.ServiceImpl;
 import consulo.application.progress.ProgressIndicator;
 import consulo.application.progress.ProgressManager;
 import consulo.component.ProcessCanceledException;
@@ -51,6 +54,8 @@ import java.util.regex.Pattern;
 
 @Singleton
 @State(name = "SliceManager", storages = {@Storage(file = StoragePathMacros.WORKSPACE_FILE)})
+@ServiceAPI(ComponentScope.PROJECT)
+@ServiceImpl
 public class SliceManager implements PersistentStateComponent<SliceManager.StoredSettingsBean> {
   private final Project myProject;
   private ContentManager myBackContentManager;
@@ -69,7 +74,7 @@ public class SliceManager implements PersistentStateComponent<SliceManager.Store
   }
 
   @Inject
-  public SliceManager(@Nonnull Project project, PsiManager psiManager) {
+  public SliceManager(@Nonnull Project project) {
     myProject = project;
   }
 
@@ -113,7 +118,8 @@ public class SliceManager implements PersistentStateComponent<SliceManager.Store
   private ContentManager getContentManager(boolean dataFlowToThis) {
     if (dataFlowToThis) {
       if (myBackContentManager == null) {
-        ToolWindow backToolWindow = ToolWindowManager.getInstance(myProject).registerToolWindow(BACK_TOOLWINDOW_ID, true, ToolWindowAnchor.BOTTOM, myProject);
+        ToolWindow backToolWindow =
+          ToolWindowManager.getInstance(myProject).registerToolWindow(BACK_TOOLWINDOW_ID, true, ToolWindowAnchor.BOTTOM, myProject);
         myBackContentManager = backToolWindow.getContentManager();
         new ContentManagerWatcher(backToolWindow, myBackContentManager);
       }
@@ -121,7 +127,8 @@ public class SliceManager implements PersistentStateComponent<SliceManager.Store
     }
 
     if (myForthContentManager == null) {
-      ToolWindow forthToolWindow = ToolWindowManager.getInstance(myProject).registerToolWindow(FORTH_TOOLWINDOW_ID, true, ToolWindowAnchor.BOTTOM, myProject);
+      ToolWindow forthToolWindow =
+        ToolWindowManager.getInstance(myProject).registerToolWindow(FORTH_TOOLWINDOW_ID, true, ToolWindowAnchor.BOTTOM, myProject);
       myForthContentManager = forthToolWindow.getContentManager();
       new ContentManagerWatcher(forthToolWindow, myForthContentManager);
     }
@@ -142,11 +149,15 @@ public class SliceManager implements PersistentStateComponent<SliceManager.Store
     createToolWindow(dataFlowToThis, rootNode, false, getElementDescription(null, element, null));
   }
 
-  public void createToolWindow(boolean dataFlowToThis, @Nonnull SliceRootNode rootNode, boolean splitByLeafExpressions, @Nonnull String displayName) {
+  public void createToolWindow(boolean dataFlowToThis,
+                               @Nonnull SliceRootNode rootNode,
+                               boolean splitByLeafExpressions,
+                               @Nonnull String displayName) {
     final SliceToolwindowSettings sliceToolwindowSettings = SliceToolwindowSettings.getInstance(myProject);
     final ContentManager contentManager = getContentManager(dataFlowToThis);
     final Content[] myContent = new Content[1];
-    ToolWindow toolWindow = ToolWindowManager.getInstance(myProject).getToolWindow(dataFlowToThis ? BACK_TOOLWINDOW_ID : FORTH_TOOLWINDOW_ID);
+    ToolWindow toolWindow =
+      ToolWindowManager.getInstance(myProject).getToolWindow(dataFlowToThis ? BACK_TOOLWINDOW_ID : FORTH_TOOLWINDOW_ID);
     final SlicePanel slicePanel = new SlicePanel(myProject, dataFlowToThis, rootNode, splitByLeafExpressions, toolWindow) {
       @Override
       protected void close() {
@@ -185,14 +196,17 @@ public class SliceManager implements PersistentStateComponent<SliceManager.Store
   public static String getElementDescription(String prefix, PsiElement element, String suffix) {
     PsiElement elementToSlice = element;
     if (element instanceof PsiReferenceExpression) {
-      elementToSlice = ((PsiReferenceExpression) element).resolve();
+      elementToSlice = ((PsiReferenceExpression)element).resolve();
     }
     if (elementToSlice == null) {
       elementToSlice = element;
     }
     String desc = ElementDescriptionUtil.getElementDescription(elementToSlice, RefactoringDescriptionLocation.WITHOUT_PARENT);
-    return "<html><head>" + UIUtil.getCssFontDeclaration(getLabelFont()) + "</head><body>" + (prefix == null ? "" : prefix) + StringUtil.first(desc, 100, true) + (suffix == null ? "" : suffix) +
-        "</body></html>";
+    return "<html><head>" + UIUtil.getCssFontDeclaration(getLabelFont()) + "</head><body>" + (prefix == null ? "" : prefix) + StringUtil.first(
+      desc,
+      100,
+      true) + (suffix == null ? "" : suffix) +
+      "</body></html>";
   }
 
   // copy from com.intellij.openapi.wm.impl.content.BaseLabel since desktop libraries is not exported
@@ -201,17 +215,21 @@ public class SliceManager implements PersistentStateComponent<SliceManager.Store
     return f.deriveFont(f.getStyle(), Math.max(11, f.getSize() - 2));
   }
 
-  public void runInterruptibly(@Nonnull ProgressIndicator progress, @Nonnull Runnable onCancel, @Nonnull Runnable runnable) throws ProcessCanceledException {
+  public void runInterruptibly(@Nonnull ProgressIndicator progress,
+                               @Nonnull Runnable onCancel,
+                               @Nonnull Runnable runnable) throws ProcessCanceledException {
     Disposable disposable = addPsiListener(progress);
     try {
       progress.checkCanceled();
       ProgressManager.getInstance().executeProcessUnderProgress(runnable, progress);
-    } catch (ProcessCanceledException e) {
+    }
+    catch (ProcessCanceledException e) {
       progress.cancel();
       //reschedule for later
       onCancel.run();
       throw e;
-    } finally {
+    }
+    finally {
       Disposer.dispose(disposable);
     }
   }
