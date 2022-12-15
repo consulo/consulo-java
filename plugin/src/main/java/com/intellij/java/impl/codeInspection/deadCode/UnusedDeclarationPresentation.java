@@ -72,7 +72,7 @@ import java.util.*;
 
 public class UnusedDeclarationPresentation extends DefaultInspectionToolPresentation {
   private final Map<String, Set<RefEntity>> myPackageContents = Collections.synchronizedMap(new HashMap<String,
-      Set<RefEntity>>());
+    Set<RefEntity>>());
 
   private Map<String, Set<RefEntity>> myOldPackageContents = null;
 
@@ -85,15 +85,15 @@ public class UnusedDeclarationPresentation extends DefaultInspectionToolPresenta
   private static final String COMMENT = "comment";
   @NonNls
   private static final String[] HINTS = {
-      COMMENT,
-      DELETE
+    COMMENT,
+    DELETE
   };
 
   public UnusedDeclarationPresentation(@Nonnull InspectionToolWrapper toolWrapper,
                                        @Nonnull GlobalInspectionContextImpl context) {
     super(toolWrapper, context);
     myQuickFixActions = createQuickFixes(toolWrapper);
-    ((EntryPointsManagerBase) getEntryPointsManager()).setAddNonJavaEntries(getTool().ADD_NONJAVA_TO_ENTRIES);
+    ((EntryPointsManagerBase)getEntryPointsManager()).setAddNonJavaEntries(getTool().ADD_NONJAVA_TO_ENTRIES);
   }
 
   public RefFilter getFilter() {
@@ -105,7 +105,7 @@ public class UnusedDeclarationPresentation extends DefaultInspectionToolPresenta
 
   private static class WeakUnreferencedFilter extends UnreferencedFilter {
     private WeakUnreferencedFilter(@Nonnull UnusedDeclarationInspectionBase tool,
-                                   @Nonnull GlobalInspectionContextImpl context) {
+                                   @Nonnull GlobalInspectionContext context) {
       super(tool, context);
     }
 
@@ -115,7 +115,7 @@ public class UnusedDeclarationPresentation extends DefaultInspectionToolPresenta
       if (problemCount > -1) {
         return problemCount;
       }
-      if (!((RefElementImpl) refElement).hasSuspiciousCallers() || ((RefJavaElementImpl) refElement).isSuspiciousRecursive()) {
+      if (!((RefElementImpl)refElement).hasSuspiciousCallers() || ((RefJavaElementImpl)refElement).isSuspiciousRecursive()) {
         return 1;
       }
       return 0;
@@ -124,7 +124,7 @@ public class UnusedDeclarationPresentation extends DefaultInspectionToolPresenta
 
   @Nonnull
   private UnusedDeclarationInspectionBase getTool() {
-    return (UnusedDeclarationInspectionBase) getToolWrapper().getTool();
+    return (UnusedDeclarationInspectionBase)getToolWrapper().getTool();
   }
 
 
@@ -143,19 +143,19 @@ public class UnusedDeclarationPresentation extends DefaultInspectionToolPresenta
       return;
     }
     final RefFilter filter = getFilter();
-    if (!getIgnoredRefElements().contains(refEntity) && filter.accepts((RefJavaElement) refEntity)) {
+    if (!getIgnoredRefElements().contains(refEntity) && filter.accepts((RefJavaElement)refEntity)) {
       refEntity = getRefManager().getRefinedElement(refEntity);
       Element element = refEntity.getRefManager().export(refEntity, parentNode, -1);
       if (element == null) {
         return;
       }
       @NonNls Element problemClassElement = new Element(InspectionsBundle.message("inspection.export.results" +
-          ".problem.element.tag"));
+                                                                                    ".problem.element.tag"));
 
-      final RefElement refElement = (RefElement) refEntity;
+      final RefElement refElement = (RefElement)refEntity;
       final HighlightSeverity severity = getSeverity(refElement);
       final String attributeKey = getTextAttributeKey(refElement.getRefManager().getProject(), severity,
-          ProblemHighlightType.LIKE_UNUSED_SYMBOL);
+                                                      ProblemHighlightType.LIKE_UNUSED_SYMBOL);
       problemClassElement.setAttribute("severity", severity.myName);
       problemClassElement.setAttribute("attribute_key", attributeKey);
 
@@ -173,9 +173,9 @@ public class UnusedDeclarationPresentation extends DefaultInspectionToolPresenta
 
 
       Element descriptionElement = new Element(InspectionsBundle.message("inspection.export.results.description" +
-          ".tag"));
+                                                                           ".tag"));
       StringBuffer buf = new StringBuffer();
-      DeadHTMLComposer.appendProblemSynopsis((RefElement) refEntity, buf);
+      DeadHTMLComposer.appendProblemSynopsis((RefElement)refEntity, buf);
       descriptionElement.addContent(buf.toString());
       element.addContent(descriptionElement);
     }
@@ -191,19 +191,19 @@ public class UnusedDeclarationPresentation extends DefaultInspectionToolPresenta
   @Nonnull
   private QuickFixAction[] createQuickFixes(@Nonnull InspectionToolWrapper toolWrapper) {
     return new QuickFixAction[]{
-        new PermanentDeleteAction(toolWrapper),
-        new CommentOutBin(toolWrapper),
-        new MoveToEntries(toolWrapper)
+      new PermanentDeleteAction(toolWrapper),
+      new CommentOutBin(toolWrapper),
+      new MoveToEntries(toolWrapper)
     };
   }
 
   private static final String DELETE_QUICK_FIX = InspectionsBundle.message("inspection.dead.code.safe.delete" +
-      ".quickfix");
+                                                                             ".quickfix");
 
   class PermanentDeleteAction extends QuickFixAction {
     PermanentDeleteAction(@Nonnull InspectionToolWrapper toolWrapper) {
       super(DELETE_QUICK_FIX, AllIcons.Actions.Cancel, KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0),
-          toolWrapper);
+            toolWrapper);
     }
 
     @Override
@@ -213,12 +213,12 @@ public class UnusedDeclarationPresentation extends DefaultInspectionToolPresenta
       }
       final ArrayList<PsiElement> psiElements = new ArrayList<PsiElement>();
       for (RefEntity refElement : refElements) {
-        PsiElement psiElement = refElement instanceof RefElement ? ((RefElement) refElement).getElement() :
-            null;
+        PsiElement psiElement = refElement instanceof RefElement ? ((RefElement)refElement).getElement() :
+          null;
         if (psiElement == null) {
           continue;
         }
-        if (getFilter().getElementProblemCount((RefJavaElement) refElement) == 0) {
+        if (getFilter().getElementProblemCount((RefJavaElement)refElement) == 0) {
           continue;
         }
         psiElements.add(psiElement);
@@ -246,13 +246,13 @@ public class UnusedDeclarationPresentation extends DefaultInspectionToolPresenta
 
   private EntryPointsManager getEntryPointsManager() {
     return getContext().getExtension(GlobalJavaInspectionContext.CONTEXT).getEntryPointsManager(getContext()
-        .getRefManager());
+                                                                                                  .getRefManager());
   }
 
   class MoveToEntries extends QuickFixAction {
     MoveToEntries(@Nonnull InspectionToolWrapper toolWrapper) {
       super(InspectionsBundle.message("inspection.dead.code.entry.point.quickfix"), null,
-          KeyStroke.getKeyStroke(KeyEvent.VK_INSERT, 0), toolWrapper);
+            KeyStroke.getKeyStroke(KeyEvent.VK_INSERT, 0), toolWrapper);
     }
 
     @Override
@@ -260,7 +260,7 @@ public class UnusedDeclarationPresentation extends DefaultInspectionToolPresenta
       final EntryPointsManager entryPointsManager = getEntryPointsManager();
       for (RefEntity refElement : refElements) {
         if (refElement instanceof RefElement) {
-          entryPointsManager.addEntryPoint((RefElement) refElement, true);
+          entryPointsManager.addEntryPoint((RefElement)refElement, true);
         }
       }
 
@@ -270,8 +270,11 @@ public class UnusedDeclarationPresentation extends DefaultInspectionToolPresenta
 
   class CommentOutBin extends QuickFixAction {
     CommentOutBin(@Nonnull InspectionToolWrapper toolWrapper) {
-      super(COMMENT_OUT_QUICK_FIX, null, KeyStroke.getKeyStroke(KeyEvent.VK_SLASH,
-          SystemInfo.isMac ? InputEvent.META_MASK : InputEvent.CTRL_MASK), toolWrapper);
+      super(COMMENT_OUT_QUICK_FIX,
+            null,
+            KeyStroke.getKeyStroke(KeyEvent.VK_SLASH,
+                                   SystemInfo.isMac ? InputEvent.META_MASK : InputEvent.CTRL_MASK),
+            toolWrapper);
     }
 
     @Override
@@ -281,16 +284,16 @@ public class UnusedDeclarationPresentation extends DefaultInspectionToolPresenta
       }
       List<RefElement> deletedRefs = new ArrayList<RefElement>(1);
       for (RefEntity refElement : refElements) {
-        PsiElement psiElement = refElement instanceof RefElement ? ((RefElement) refElement).getElement() :
-            null;
+        PsiElement psiElement = refElement instanceof RefElement ? ((RefElement)refElement).getElement() :
+          null;
         if (psiElement == null) {
           continue;
         }
-        if (getFilter().getElementProblemCount((RefJavaElement) refElement) == 0) {
+        if (getFilter().getElementProblemCount((RefJavaElement)refElement) == 0) {
           continue;
         }
         commentOutDead(psiElement);
-        refElement.getRefManager().removeRefElement((RefElement) refElement, deletedRefs);
+        refElement.getRefManager().removeRefElement((RefElement)refElement, deletedRefs);
       }
 
       EntryPointsManager entryPointsManager = getEntryPointsManager();
@@ -303,7 +306,7 @@ public class UnusedDeclarationPresentation extends DefaultInspectionToolPresenta
   }
 
   private static final String COMMENT_OUT_QUICK_FIX = InspectionsBundle.message("inspection.dead.code.comment" +
-      ".quickfix");
+                                                                                  ".quickfix");
 
   private static class CommentOutFix implements IntentionAction {
     private final PsiElement myElement;
@@ -354,7 +357,7 @@ public class UnusedDeclarationPresentation extends DefaultInspectionToolPresenta
         int startOffset = textRange.getStartOffset();
         CharSequence chars = doc.getCharsSequence();
         while (CharArrayUtil.regionMatches(chars, startOffset, InspectionsBundle.message("inspection.dead.code" +
-            ".comment"))) {
+                                                                                           ".comment"))) {
           int line = doc.getLineNumber(startOffset) + 1;
           if (line < doc.getLineCount()) {
             startOffset = doc.getLineStartOffset(line);
@@ -369,16 +372,17 @@ public class UnusedDeclarationPresentation extends DefaultInspectionToolPresenta
 
         if (line1 == line2) {
           doc.insertString(startOffset, InspectionsBundle.message("inspection.dead.code.date.comment",
-              date));
-        } else {
+                                                                  date));
+        }
+        else {
           for (int i = line1; i <= line2; i++) {
             doc.insertString(doc.getLineStartOffset(i), "//");
           }
 
           doc.insertString(doc.getLineStartOffset(Math.min(line2 + 1, doc.getLineCount() - 1)),
-              InspectionsBundle.message("inspection.dead.code.stop.comment", date));
+                           InspectionsBundle.message("inspection.dead.code.stop.comment", date));
           doc.insertString(doc.getLineStartOffset(line1), InspectionsBundle.message("inspection.dead.code" +
-              ".start.comment", date));
+                                                                                      ".start.comment", date));
         }
       }
     }
@@ -401,16 +405,18 @@ public class UnusedDeclarationPresentation extends DefaultInspectionToolPresenta
 
   @Override
   public void updateContent() {
-    getTool().checkForReachables(getContext());
+    final GlobalInspectionContextImpl context = (GlobalInspectionContextImpl)getContext();
+
+    getTool().checkForReachables(context);
     myPackageContents.clear();
-    getContext().getRefManager().iterate(new RefJavaVisitor() {
+    context.getRefManager().iterate(new RefJavaVisitor() {
       @Override
       public void visitElement(@Nonnull RefEntity refEntity) {
         if (!(refEntity instanceof RefJavaElement)) {
           return;//dead code doesn't work with refModule | refPackage
         }
-        RefJavaElement refElement = (RefJavaElement) refEntity;
-        if (!(getContext().getUIOptions().FILTER_RESOLVED_ITEMS && getIgnoredRefElements().contains(refElement)
+        RefJavaElement refElement = (RefJavaElement)refEntity;
+        if (!(context.getUIOptions().FILTER_RESOLVED_ITEMS && getIgnoredRefElements().contains(refElement)
         ) && refElement.isValid() && getFilter().accepts(refElement)) {
           String packageName = RefJavaUtil.getInstance().getPackageName(refEntity);
           Set<RefEntity> content = myPackageContents.get(packageName);
@@ -426,10 +432,10 @@ public class UnusedDeclarationPresentation extends DefaultInspectionToolPresenta
 
   @Override
   public boolean hasReportedProblems() {
-    final GlobalInspectionContextImpl context = getContext();
+    final GlobalInspectionContextImpl context = (GlobalInspectionContextImpl)getContext();
     if (!isDisposed() && context.getUIOptions().SHOW_ONLY_DIFF) {
       return containsOnlyDiff(myPackageContents) || myOldPackageContents != null && containsOnlyDiff
-          (myOldPackageContents);
+        (myOldPackageContents);
     }
     if (!myPackageContents.isEmpty()) {
       return true;
@@ -509,7 +515,7 @@ public class UnusedDeclarationPresentation extends DefaultInspectionToolPresenta
   @Nonnull
   @Override
   public FileStatus getElementStatus(final RefEntity element) {
-    final GlobalInspectionContextImpl context = getContext();
+    final GlobalInspectionContextImpl context = (GlobalInspectionContextImpl)getContext();
     if (!isDisposed() && context.getUIOptions().SHOW_DIFF_WITH_PREVIOUS_RUN) {
       if (myOldPackageContents != null) {
         final boolean old = RefUtil.contains(element, collectRefElements(myOldPackageContents));
@@ -540,10 +546,10 @@ public class UnusedDeclarationPresentation extends DefaultInspectionToolPresenta
   public IntentionAction findQuickFixes(@Nonnull final CommonProblemDescriptor descriptor, final String hint) {
     if (descriptor instanceof ProblemDescriptor) {
       if (DELETE.equals(hint)) {
-        return new PermanentDeleteFix(((ProblemDescriptor) descriptor).getPsiElement());
+        return new PermanentDeleteFix(((ProblemDescriptor)descriptor).getPsiElement());
       }
       if (COMMENT.equals(hint)) {
-        return new CommentOutFix(((ProblemDescriptor) descriptor).getPsiElement());
+        return new CommentOutFix(((ProblemDescriptor)descriptor).getPsiElement());
       }
     }
     return null;
@@ -580,7 +586,9 @@ public class UnusedDeclarationPresentation extends DefaultInspectionToolPresenta
         ApplicationManager.getApplication().invokeLater(new Runnable() {
           @Override
           public void run() {
-            SafeDeleteHandler.invoke(myElement.getProject(), new PsiElement[]{PsiTreeUtil.getParentOfType(myElement, PsiModifierListOwner.class)}, false);
+            SafeDeleteHandler.invoke(myElement.getProject(),
+                                     new PsiElement[]{PsiTreeUtil.getParentOfType(myElement, PsiModifierListOwner.class)},
+                                     false);
           }
         });
       }
