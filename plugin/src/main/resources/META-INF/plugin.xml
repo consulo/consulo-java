@@ -837,7 +837,6 @@
 		<patterns.patternClass className="com.intellij.java.language.patterns.PsiJavaPatterns" alias="java"/>
 
 
-		<printOption implementation="com.intellij.java.impl.codeEditor.printing.HyperlinksToClassesOption"/>
 
 
 		<referenceProviderType key="Class Reference Provider"

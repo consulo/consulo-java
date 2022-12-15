@@ -20,17 +20,18 @@
  */
 package com.intellij.java.impl.codeEditor.printing;
 
-import consulo.configurable.ConfigurationException;
-import consulo.configurable.UnnamedConfigurable;
-import consulo.ide.impl.idea.codeEditor.printing.CodeEditorBundle;
-import consulo.ide.impl.idea.codeEditor.printing.PrintOption;
 import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
-import consulo.virtualFileSystem.fileType.FileType;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.configurable.ConfigurationException;
+import consulo.configurable.UnnamedConfigurable;
+import consulo.ide.impl.idea.codeEditor.printing.CodeEditorBundle;
+import consulo.language.editor.action.PrintOption;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiReference;
+import consulo.virtualFileSystem.fileType.FileType;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -38,6 +39,7 @@ import javax.swing.*;
 import java.util.Map;
 import java.util.TreeMap;
 
+@ExtensionImpl
 public class HyperlinksToClassesOption extends PrintOption {
   private boolean isGenerateHyperlinksToClasses = false;
 
