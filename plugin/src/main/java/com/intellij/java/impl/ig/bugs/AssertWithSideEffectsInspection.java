@@ -19,13 +19,15 @@ import com.intellij.java.language.psi.*;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.ast.IElementType;
 import consulo.language.psi.PsiElement;
 import org.jetbrains.annotations.Nls;
 
 import javax.annotation.Nonnull;
 
-public abstract class AssertWithSideEffectsInspection extends BaseInspection {
+@ExtensionImpl
+public class AssertWithSideEffectsInspection extends BaseInspection {
 
   @Override
   @Nls

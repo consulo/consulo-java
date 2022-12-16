@@ -36,6 +36,7 @@ import com.intellij.java.impl.refactoring.changeSignature.ChangeSignatureProcess
 import com.intellij.java.impl.refactoring.changeSignature.ParameterInfoImpl;
 import com.intellij.java.indexing.search.searches.OverridingMethodsSearch;
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.ide.impl.idea.openapi.project.ProjectUtil;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.inspection.*;
@@ -65,7 +66,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public abstract class UnusedParametersInspection extends GlobalJavaBatchInspectionTool {
+@ExtensionImpl
+public class UnusedParametersInspection extends GlobalJavaBatchInspectionTool {
   @NonNls
   public static final String SHORT_NAME = "UnusedParameters";
 

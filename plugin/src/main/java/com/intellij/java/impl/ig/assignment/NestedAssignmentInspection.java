@@ -16,6 +16,7 @@
 package com.intellij.java.impl.ig.assignment;
 
 import com.intellij.java.language.psi.PsiAssignmentExpression;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiExpressionListStatement;
 import com.intellij.java.language.psi.PsiExpressionStatement;
@@ -24,6 +25,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import javax.annotation.Nonnull;
 
+@ExtensionImpl
 public class NestedAssignmentInspection extends BaseInspection {
 
   @Nonnull

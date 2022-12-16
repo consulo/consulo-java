@@ -22,6 +22,7 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiExpressionTrimRenderer;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.RedundantCastUtil;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.InspectionsBundle;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemDescriptor;
@@ -44,6 +45,7 @@ import java.util.List;
 /**
  * @author max
  */
+@ExtensionImpl
 public class RedundantCastInspection extends GenericsInspectionToolBase {
   private final LocalQuickFix myQuickFixAction;
   private static final String DISPLAY_NAME = InspectionsBundle.message("inspection.redundant.cast.display.name");
@@ -55,6 +57,11 @@ public class RedundantCastInspection extends GenericsInspectionToolBase {
 
   public RedundantCastInspection() {
     myQuickFixAction = new AcceptSuggested();
+  }
+
+  @Override
+  public boolean isEnabledByDefault() {
+    return true;
   }
 
   @Nonnull

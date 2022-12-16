@@ -24,6 +24,7 @@ import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiReferenceExpression;
 import com.intellij.java.language.psi.util.ConstantEvaluationOverflowException;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemHighlightType;
 import consulo.language.editor.inspection.ProblemsHolder;
 import consulo.language.psi.PsiElement;
@@ -37,7 +38,8 @@ import javax.annotation.Nonnull;
 /**
  * User: cdr
  */
-public abstract class NumericOverflowInspection extends BaseJavaBatchLocalInspectionTool {
+@ExtensionImpl
+public class NumericOverflowInspection extends BaseJavaBatchLocalInspectionTool {
   private static final Key<String> HAS_OVERFLOW_IN_CHILD = Key.create("HAS_OVERFLOW_IN_CHILD");
 
   @Nls
@@ -45,6 +47,11 @@ public abstract class NumericOverflowInspection extends BaseJavaBatchLocalInspec
   @Override
   public String getGroupDisplayName() {
     return GroupNames.NUMERIC_GROUP_NAME;
+  }
+
+  @Override
+  public boolean isEnabledByDefault() {
+    return true;
   }
 
   @Nls

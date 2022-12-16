@@ -16,6 +16,7 @@
 package com.intellij.java.impl.codeInspection;
 
 import com.intellij.java.analysis.codeInspection.GroupNames;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.editor.inspection.ProblemsHolder;
@@ -41,7 +42,8 @@ import javax.annotation.Nonnull;
  * User: anna
  * Date: 1/28/11
  */
-public abstract class PossibleHeapPollutionVarargsInspection extends BaseJavaBatchLocalInspectionTool {
+@ExtensionImpl
+public class PossibleHeapPollutionVarargsInspection extends BaseJavaBatchLocalInspectionTool {
   public static final Logger LOG = Logger.getInstance(PossibleHeapPollutionVarargsInspection.class);
 
   @Nls

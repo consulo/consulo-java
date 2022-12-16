@@ -25,6 +25,7 @@ import com.intellij.java.impl.refactoring.changeSignature.ParameterInfoImpl;
 import com.intellij.java.indexing.search.searches.OverridingMethodsSearch;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PropertyUtil;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.*;
 import consulo.language.editor.inspection.reference.RefElement;
 import consulo.language.editor.inspection.reference.RefEntity;
@@ -49,7 +50,8 @@ import java.util.List;
 /**
  * @author max
  */
-public abstract class UnusedReturnValue extends GlobalJavaInspectionTool {
+@ExtensionImpl
+public class UnusedReturnValue extends GlobalJavaInspectionTool {
   private MakeVoidQuickFix myQuickFix;
 
   public boolean IGNORE_BUILDER_PATTERN = false;

@@ -22,13 +22,15 @@ import com.intellij.java.language.psi.JavaElementVisitor;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiModifier;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemsHolder;
 import consulo.language.psi.PsiElementVisitor;
 import org.jetbrains.annotations.Nls;
 
 import javax.annotation.Nonnull;
 
-public abstract class NonFinalFieldInImmutableInspection extends BaseJavaLocalInspectionTool {
+@ExtensionImpl
+public class NonFinalFieldInImmutableInspection extends BaseJavaLocalInspectionTool {
 
   @Override
   @Nonnull

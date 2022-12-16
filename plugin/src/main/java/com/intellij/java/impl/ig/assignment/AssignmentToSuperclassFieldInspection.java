@@ -20,6 +20,7 @@ import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.Nls;
@@ -29,7 +30,8 @@ import javax.annotation.Nonnull;
 /**
  * @author Bas Leijdekkers
  */
-public abstract class AssignmentToSuperclassFieldInspection extends BaseInspection {
+@ExtensionImpl
+public class AssignmentToSuperclassFieldInspection extends BaseInspection {
 
   @Nls
   @Nonnull

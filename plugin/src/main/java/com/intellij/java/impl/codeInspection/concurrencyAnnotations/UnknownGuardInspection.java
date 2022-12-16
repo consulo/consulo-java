@@ -20,6 +20,7 @@ import com.intellij.java.analysis.impl.codeInspection.BaseJavaLocalInspectionToo
 import com.intellij.java.analysis.impl.codeInspection.concurrencyAnnotations.JCiPUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.javadoc.PsiDocTag;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemsHolder;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.scope.GlobalSearchScope;
@@ -33,7 +34,8 @@ import javax.annotation.Nonnull;
 /**
  * check locks according to http://www.javaconcurrencyinpractice.com/annotations/doc/net/jcip/annotations/GuardedBy.html
  */
-public abstract class UnknownGuardInspection extends BaseJavaLocalInspectionTool {
+@ExtensionImpl
+public class UnknownGuardInspection extends BaseJavaLocalInspectionTool {
 
   @Override
   @Nonnull

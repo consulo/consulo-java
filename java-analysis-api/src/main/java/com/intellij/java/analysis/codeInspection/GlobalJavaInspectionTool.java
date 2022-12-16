@@ -20,6 +20,8 @@
  */
 package com.intellij.java.analysis.codeInspection;
 
+import com.intellij.java.language.JavaLanguage;
+import consulo.language.Language;
 import consulo.language.editor.inspection.CustomSuppressableInspectionTool;
 import consulo.language.editor.inspection.GlobalInspectionContext;
 import consulo.language.editor.inspection.GlobalInspectionTool;
@@ -28,6 +30,7 @@ import consulo.language.editor.inspection.reference.RefManager;
 import consulo.language.editor.inspection.scheme.InspectionManager;
 import consulo.language.editor.intention.SuppressIntentionAction;
 import consulo.language.editor.rawHighlight.HighlightDisplayKey;
+import consulo.language.editor.rawHighlight.HighlightDisplayLevel;
 import consulo.language.psi.PsiElement;
 
 import javax.annotation.Nonnull;
@@ -54,5 +57,22 @@ public abstract class GlobalJavaInspectionTool extends GlobalInspectionTool impl
   @Override                                                           
   public boolean isSuppressedFor(@Nonnull final PsiElement element) {
     return BatchSuppressManager.getInstance().isSuppressedFor(element, getShortName());
+  }
+
+  @Nonnull
+  @Override
+  public HighlightDisplayLevel getDefaultLevel() {
+    return HighlightDisplayLevel.WARNING;
+  }
+
+  @Override
+  public boolean isEnabledByDefault() {
+    return true;
+  }
+
+  @Nullable
+  @Override
+  public Language getLanguage() {
+    return JavaLanguage.INSTANCE;
   }
 }

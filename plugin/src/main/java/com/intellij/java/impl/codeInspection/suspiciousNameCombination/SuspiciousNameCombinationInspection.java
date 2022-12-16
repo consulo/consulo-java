@@ -18,6 +18,7 @@ package com.intellij.java.impl.codeInspection.suspiciousNameCombination;
 
 import com.intellij.java.analysis.codeInspection.GroupNames;
 import com.intellij.java.language.impl.codeInsight.daemon.JavaErrorBundle;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.InspectionsBundle;
 import consulo.language.editor.inspection.ProblemsHolder;
 import com.intellij.java.analysis.impl.codeInspection.ex.BaseLocalInspectionTool;
@@ -45,6 +46,7 @@ import java.util.Map;
 /**
  * @author yole
  */
+@ExtensionImpl
 public class SuspiciousNameCombinationInspection extends BaseLocalInspectionTool {
   private final List<String> myNameGroups = new ArrayList<String>();
   private final Map<String, String> myWordToGroupMap = new HashMap<String, String>();
@@ -67,6 +69,11 @@ public class SuspiciousNameCombinationInspection extends BaseLocalInspectionTool
     for(String word: words) {
       myWordToGroupMap.put(word.trim().toLowerCase(), group);
     }
+  }
+
+  @Override
+  public boolean isEnabledByDefault() {
+    return true;
   }
 
   @Override

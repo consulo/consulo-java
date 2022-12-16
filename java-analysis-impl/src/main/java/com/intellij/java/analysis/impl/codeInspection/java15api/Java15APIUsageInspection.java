@@ -13,6 +13,7 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.InspectionsBundle;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemsHolder;
@@ -47,6 +48,7 @@ import java.util.*;
 /**
  * @author max
  */
+@ExtensionImpl
 public class Java15APIUsageInspection extends AbstractBaseJavaLocalInspectionTool {
   public static final String SHORT_NAME = "Since15";
 
@@ -87,6 +89,11 @@ public class Java15APIUsageInspection extends AbstractBaseJavaLocalInspectionToo
   }
 
   LanguageLevel myEffectiveLanguageLevel;
+
+  @Override
+  public boolean isEnabledByDefault() {
+    return true;
+  }
 
   @Override
   public JComponent createOptionsPanel() {

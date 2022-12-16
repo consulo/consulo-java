@@ -15,8 +15,7 @@
  */
 package com.intellij.java.impl.ig.bugs;
 
-import javax.annotation.Nonnull;
-
+import com.intellij.java.impl.ig.psiutils.UtilityClassUtil;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiClassType;
 import com.intellij.java.language.psi.PsiNewExpression;
@@ -24,8 +23,11 @@ import com.intellij.java.language.psi.PsiType;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import com.intellij.java.impl.ig.psiutils.UtilityClassUtil;
+import consulo.annotation.component.ExtensionImpl;
 
+import javax.annotation.Nonnull;
+
+@ExtensionImpl
 public class InstantiationOfUtilityClassInspection extends BaseInspection {
 
   @Nonnull

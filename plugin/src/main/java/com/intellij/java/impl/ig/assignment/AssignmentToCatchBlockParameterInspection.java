@@ -22,11 +22,13 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 
 import javax.annotation.Nonnull;
 
-public abstract class AssignmentToCatchBlockParameterInspection extends BaseInspection {
+@ExtensionImpl
+public class AssignmentToCatchBlockParameterInspection extends BaseInspection {
 
   @Override
   @Nonnull

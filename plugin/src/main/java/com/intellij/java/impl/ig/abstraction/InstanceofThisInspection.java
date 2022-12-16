@@ -15,15 +15,17 @@
  */
 package com.intellij.java.impl.ig.abstraction;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.java.language.psi.*;
-import consulo.language.psi.*;
-import consulo.language.psi.util.PsiTreeUtil;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.util.PsiTreeUtil;
 
+import javax.annotation.Nonnull;
+
+@ExtensionImpl
 public class InstanceofThisInspection extends BaseInspection {
 
   @Nonnull

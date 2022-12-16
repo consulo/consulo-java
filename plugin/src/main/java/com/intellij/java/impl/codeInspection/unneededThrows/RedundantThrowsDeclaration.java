@@ -22,6 +22,7 @@ import com.intellij.java.impl.codeInspection.DeleteThrowsFix;
 import com.intellij.java.language.impl.codeInsight.ExceptionUtil;
 import com.intellij.java.language.impl.codeInsight.daemon.JavaErrorBundle;
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.InspectionsBundle;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemDescriptor;
@@ -41,7 +42,8 @@ import java.util.Set;
  * @author anna
  * @since 15-Nov-2005
  */
-public abstract class RedundantThrowsDeclaration extends BaseJavaBatchLocalInspectionTool
+@ExtensionImpl
+public class RedundantThrowsDeclaration extends BaseJavaBatchLocalInspectionTool
 {
   @Override
   @Nonnull

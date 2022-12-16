@@ -29,7 +29,7 @@ import consulo.application.CommonBundle;
 public class InspectionGadgetsBundle {
   private static Reference<ResourceBundle> ourBundle;
 
-  @NonNls private static final String BUNDLE = "com.siyeh.InspectionGadgetsBundle";
+  private static final String BUNDLE = "com.siyeh.InspectionGadgetsBundle";
 
   private InspectionGadgetsBundle() {
   }

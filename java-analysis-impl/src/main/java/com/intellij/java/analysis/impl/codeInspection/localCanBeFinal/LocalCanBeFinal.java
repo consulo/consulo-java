@@ -20,6 +20,7 @@ import com.intellij.java.analysis.codeInspection.GroupNames;
 import com.intellij.java.language.impl.psi.controlFlow.*;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.inspection.InspectionsBundle;
 import consulo.language.editor.inspection.LocalQuickFix;
@@ -48,6 +49,7 @@ import java.util.List;
 /**
  * @author max
  */
+@ExtensionImpl
 public class LocalCanBeFinal extends BaseJavaBatchLocalInspectionTool {
   private static final Logger LOG = Logger.getInstance(LocalCanBeFinal.class);
 

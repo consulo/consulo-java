@@ -16,6 +16,7 @@
 package com.intellij.java.impl.codeInspection.varScopeCanBeNarrowed;
 
 import com.intellij.java.analysis.codeInspection.GroupNames;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.scheme.InspectionManager;
 import consulo.language.editor.inspection.InspectionsBundle;
 import consulo.language.editor.inspection.ProblemDescriptor;
@@ -41,7 +42,8 @@ import java.util.*;
 /**
  * @author Danila Ponomarenko
  */
-public abstract class ParameterCanBeLocalInspection extends BaseJavaLocalInspectionTool {
+@ExtensionImpl
+public class ParameterCanBeLocalInspection extends BaseJavaLocalInspectionTool {
 
   @NonNls
   public static final String SHORT_NAME = "ParameterCanBeLocal";
@@ -50,6 +52,11 @@ public abstract class ParameterCanBeLocalInspection extends BaseJavaLocalInspect
   @Nonnull
   public String getGroupDisplayName() {
     return GroupNames.CLASS_LAYOUT_GROUP_NAME;
+  }
+
+  @Override
+  public boolean isEnabledByDefault() {
+    return true;
   }
 
   @Override

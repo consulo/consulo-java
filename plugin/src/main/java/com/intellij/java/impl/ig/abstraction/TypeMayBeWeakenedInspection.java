@@ -23,6 +23,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.MethodUtils;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.util.query.Query;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.inspection.ProblemDescriptor;
@@ -37,7 +38,8 @@ import javax.annotation.Nullable;
 import javax.swing.*;
 import java.util.*;
 
-public abstract class TypeMayBeWeakenedInspection extends BaseInspection {
+@ExtensionImpl
+public class TypeMayBeWeakenedInspection extends BaseInspection {
 
   @SuppressWarnings({"PublicField"})
   public boolean useRighthandTypeAsWeakestTypeInAssignments = true;

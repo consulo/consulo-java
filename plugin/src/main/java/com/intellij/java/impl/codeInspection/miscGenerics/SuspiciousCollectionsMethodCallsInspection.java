@@ -9,6 +9,7 @@ import com.intellij.java.analysis.impl.codeInspection.miscGenerics.SuspiciousMet
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.MethodSignature;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.InspectionsBundle;
 import consulo.language.editor.inspection.ProblemsHolder;
 import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
@@ -24,8 +25,15 @@ import java.util.List;
 /**
  * @author ven
  */
-public abstract class SuspiciousCollectionsMethodCallsInspection extends AbstractBaseJavaLocalInspectionTool {
+@ExtensionImpl
+public class SuspiciousCollectionsMethodCallsInspection extends AbstractBaseJavaLocalInspectionTool {
   public boolean REPORT_CONVERTIBLE_METHOD_CALLS = true;
+
+  @Nonnull
+  @Override
+  public String getDisplayName() {
+    return InspectionsBundle.message("inspection.suspicious.collections.method.calls.display.name");
+  }
 
   @Override
   public boolean isEnabledByDefault() {

@@ -32,6 +32,7 @@ import com.intellij.java.analysis.codeInspection.reference.*;
 import com.intellij.java.analysis.impl.codeInspection.reference.RefClassImpl;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.IdentifierUtil;
 import consulo.language.editor.inspection.*;
@@ -60,7 +61,8 @@ import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.util.List;
 
-public abstract class VisibilityInspection extends GlobalJavaInspectionTool {
+@ExtensionImpl
+public class VisibilityInspection extends GlobalJavaInspectionTool {
   private static final Logger LOG = Logger.getInstance(VisibilityInspection.class);
   public boolean SUGGEST_PACKAGE_LOCAL_FOR_MEMBERS = true;
   public boolean SUGGEST_PACKAGE_LOCAL_FOR_TOP_CLASSES = true;

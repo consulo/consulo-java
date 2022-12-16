@@ -15,13 +15,10 @@
  */
 package com.intellij.java.impl.ig.bitwise;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.java.language.psi.PsiBinaryExpression;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiType;
-import consulo.language.ast.IElementType;
 import com.intellij.java.language.psi.util.ConstantExpressionUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.siyeh.InspectionGadgetsBundle;
@@ -29,7 +26,12 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ComparisonUtils;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.ast.IElementType;
 
+import javax.annotation.Nonnull;
+
+@ExtensionImpl
 public class IncompatibleMaskInspection extends BaseInspection {
 
   @Override

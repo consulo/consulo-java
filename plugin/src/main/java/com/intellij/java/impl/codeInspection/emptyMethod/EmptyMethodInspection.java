@@ -26,10 +26,12 @@ import com.intellij.java.impl.codeInspection.util.SpecialAnnotationsUtil;
 import com.intellij.java.indexing.search.searches.AllOverridingMethodsSearch;
 import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.language.psi.*;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.application.Application;
 import consulo.application.ApplicationManager;
 import consulo.application.util.function.Processor;
 import consulo.application.util.query.Query;
-import consulo.component.extension.ExtensionPointName;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.language.editor.inspection.*;
 import consulo.language.editor.inspection.reference.RefElement;
@@ -47,7 +49,6 @@ import consulo.project.Project;
 import consulo.util.collection.BidirectionalMap;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.Pair;
-import consulo.util.lang.function.Condition;
 import consulo.util.xml.serializer.JDOMExternalizableStringList;
 import consulo.util.xml.serializer.WriteExternalException;
 import org.jdom.Element;
@@ -64,9 +65,8 @@ import java.util.List;
 /**
  * @author max
  */
-public abstract class EmptyMethodInspection extends GlobalJavaInspectionTool {
-  private static final ExtensionPointName<Condition<RefMethod>> EP_NAME = ExtensionPointName.create("consulo.java.canBeEmpty");
-
+@ExtensionImpl
+public class EmptyMethodInspection extends GlobalJavaInspectionTool {
   private static final String DISPLAY_NAME = InspectionsBundle.message("inspection.empty.method.display.name");
   @NonNls
   private static final String SHORT_NAME = "EmptyMethod";
@@ -168,6 +168,7 @@ public abstract class EmptyMethodInspection extends GlobalJavaInspectionTool {
     return null;
   }
 
+  @RequiredReadAction
   private boolean isBodyEmpty(final RefMethod refMethod) {
     if (!refMethod.isBodyEmpty()) {
       return false;
@@ -179,8 +180,8 @@ public abstract class EmptyMethodInspection extends GlobalJavaInspectionTool {
     if (AnnotationUtil.isAnnotated(owner, EXCLUDE_ANNOS)) {
       return false;
     }
-    for (final Condition<RefMethod> extension : EP_NAME.getExtensions()) {
-      if (extension.value(refMethod)) {
+    for (ImplicitMethodBodyProvider provider : Application.get().getExtensionPoint(ImplicitMethodBodyProvider.class)) {
+      if (provider.hasImplicitMethodBody(refMethod)) {
         return false;
       }
     }

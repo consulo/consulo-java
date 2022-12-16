@@ -29,6 +29,7 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.java.language.psi.javadoc.PsiDocTag;
 import com.intellij.java.language.psi.util.*;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.ApplicationManager;
 import consulo.application.util.CachedValueProvider;
 import consulo.application.util.function.Processor;
@@ -63,7 +64,8 @@ import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.Function;
 
-public abstract class MagicConstantInspection extends BaseJavaLocalInspectionTool {
+@ExtensionImpl
+public class MagicConstantInspection extends BaseJavaLocalInspectionTool {
   public static final Key<Boolean> NO_ANNOTATIONS_FOUND = Key.create("REPORTED_NO_ANNOTATIONS_FOUND");
 
   @Nls

@@ -21,6 +21,7 @@ import com.intellij.java.analysis.codeInspection.GroupNames;
 import com.intellij.java.analysis.codeInspection.reference.RefJavaVisitor;
 import com.intellij.java.analysis.codeInspection.reference.RefMethod;
 import com.intellij.java.language.psi.PsiMethod;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.*;
 import consulo.language.editor.inspection.reference.RefElement;
 import consulo.language.editor.inspection.reference.RefEntity;
@@ -34,11 +35,14 @@ import javax.annotation.Nullable;
 /**
  * @author max
  */
-public abstract class SameReturnValueInspection extends GlobalJavaInspectionTool
-{
+@ExtensionImpl
+public class SameReturnValueInspection extends GlobalJavaInspectionTool {
   @Override
   @Nullable
-  public CommonProblemDescriptor[] checkElement(RefEntity refEntity, AnalysisScope scope, InspectionManager manager, GlobalInspectionContext globalContext,
+  public CommonProblemDescriptor[] checkElement(RefEntity refEntity,
+                                                AnalysisScope scope,
+                                                InspectionManager manager,
+                                                GlobalInspectionContext globalContext,
                                                 ProblemDescriptionsProcessor processor) {
     if (refEntity instanceof RefMethod) {
       final RefMethod refMethod = (RefMethod)refEntity;
@@ -51,13 +55,19 @@ public abstract class SameReturnValueInspection extends GlobalJavaInspectionTool
         final String message;
         if (refMethod.getDerivedMethods().isEmpty()) {
           message = InspectionsBundle.message("inspection.same.return.value.problem.descriptor", "<code>" + returnValue + "</code>");
-        } else if (refMethod.hasBody()) {
+        }
+        else if (refMethod.hasBody()) {
           message = InspectionsBundle.message("inspection.same.return.value.problem.descriptor1", "<code>" + returnValue + "</code>");
-        } else {
+        }
+        else {
           message = InspectionsBundle.message("inspection.same.return.value.problem.descriptor2", "<code>" + returnValue + "</code>");
         }
 
-        return new ProblemDescriptor[] {manager.createProblemDescriptor(refMethod.getElement().getNavigationElement(), message, false, null, ProblemHighlightType.GENERIC_ERROR_OR_WARNING)};
+        return new ProblemDescriptor[]{manager.createProblemDescriptor(refMethod.getElement().getNavigationElement(),
+                                                                       message,
+                                                                       false,
+                                                                       null,
+                                                                       ProblemHighlightType.GENERIC_ERROR_OR_WARNING)};
       }
     }
 
@@ -69,10 +79,12 @@ public abstract class SameReturnValueInspection extends GlobalJavaInspectionTool
   protected boolean queryExternalUsagesRequests(final RefManager manager, final GlobalJavaInspectionContext globalContext,
                                                 final ProblemDescriptionsProcessor processor) {
     manager.iterate(new RefJavaVisitor() {
-      @Override public void visitElement(@Nonnull RefEntity refEntity) {
+      @Override
+      public void visitElement(@Nonnull RefEntity refEntity) {
         if (refEntity instanceof RefElement && processor.getDescriptions(refEntity) != null) {
           refEntity.accept(new RefJavaVisitor() {
-            @Override public void visitMethod(@Nonnull final RefMethod refMethod) {
+            @Override
+            public void visitMethod(@Nonnull final RefMethod refMethod) {
               globalContext.enqueueDerivedMethodsProcessor(refMethod, new GlobalJavaInspectionContext.DerivedMethodsProcessor() {
                 @Override
                 public boolean process(PsiMethod derivedMethod) {

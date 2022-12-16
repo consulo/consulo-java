@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.ig.abstraction;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
 import com.intellij.java.language.psi.PsiLocalVariable;
 import consulo.language.psi.PsiNamedElement;
@@ -26,6 +27,7 @@ import javax.annotation.Nonnull;
 
 import javax.swing.JComponent;
 
+@ExtensionImpl
 public class LocalVariableOfConcreteClassInspection
   extends BaseInspection {
 

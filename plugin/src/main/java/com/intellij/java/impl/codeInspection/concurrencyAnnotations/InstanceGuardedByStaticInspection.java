@@ -16,6 +16,7 @@
 package com.intellij.java.impl.codeInspection.concurrencyAnnotations;
 
 import com.intellij.java.analysis.codeInspection.GroupNames;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemsHolder;
 import com.intellij.java.analysis.impl.codeInspection.BaseJavaLocalInspectionTool;
 import com.intellij.java.analysis.impl.codeInspection.concurrencyAnnotations.JCiPUtil;
@@ -27,7 +28,8 @@ import org.jetbrains.annotations.Nls;
 
 import javax.annotation.Nonnull;
 
-public abstract class InstanceGuardedByStaticInspection extends BaseJavaLocalInspectionTool {
+@ExtensionImpl
+public class InstanceGuardedByStaticInspection extends BaseJavaLocalInspectionTool {
 
   @Override
   @Nonnull

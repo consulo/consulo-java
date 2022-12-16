@@ -36,7 +36,9 @@ import com.intellij.java.language.psi.util.PsiUtil;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
 import com.siyeh.ig.psiutils.SideEffectChecker;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.ast.IElementType;
+import consulo.language.editor.inspection.InspectionsBundle;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.LocalQuickFixOnPsiElement;
 import consulo.language.psi.PsiElement;
@@ -59,7 +61,8 @@ import static consulo.language.editor.inspection.InspectionsBundle.message;
 import static consulo.util.lang.xml.XmlStringUtil.wrapInHtml;
 import static javax.swing.SwingConstants.TOP;
 
-public abstract class DataFlowInspection extends DataFlowInspectionBase {
+@ExtensionImpl
+public class DataFlowInspection extends DataFlowInspectionBase {
   private static final Logger LOG = Logger.getInstance(DataFlowInspection.class);
 
   @Override
@@ -70,6 +73,17 @@ public abstract class DataFlowInspection extends DataFlowInspectionBase {
       return LocalQuickFix.EMPTY_ARRAY;
     }
     return new LocalQuickFix[]{toRemove ? new RemoveAssignmentFix() : createSimplifyToAssignmentFix()};
+  }
+
+  @Nonnull
+  @Override
+  public String getDisplayName() {
+    return InspectionsBundle.message("inspection.data.flow.display.name");
+  }
+
+  @Override
+  public boolean isEnabledByDefault() {
+    return true;
   }
 
   @Override

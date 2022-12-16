@@ -24,10 +24,17 @@
  */
 package com.intellij.java.impl.codeInspection.defUse;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.LocalQuickFix;
 import com.intellij.java.impl.codeInspection.RemoveInitializerFix;
 
-public abstract class DefUseInspection extends DefUseInspectionBase {
+@ExtensionImpl
+public class DefUseInspection extends DefUseInspectionBase {
+  @Override
+  public boolean isEnabledByDefault() {
+    return true;
+  }
+
   @Override
   protected LocalQuickFix createRemoveInitializerFix() {
     return new RemoveInitializerFix();

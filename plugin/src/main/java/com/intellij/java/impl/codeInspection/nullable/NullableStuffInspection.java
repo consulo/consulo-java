@@ -20,6 +20,7 @@ import com.intellij.java.analysis.impl.psi.impl.search.JavaNullMethodArgumentUti
 import com.intellij.java.impl.codeInsight.NullableNotNullDialog;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiParameter;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.ReadAction;
 import consulo.application.util.function.Processor;
 import consulo.ide.impl.find.PsiElement2UsageTargetAdapter;
@@ -41,10 +42,16 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public abstract class NullableStuffInspection extends NullableStuffInspectionBase {
+@ExtensionImpl
+public class NullableStuffInspection extends NullableStuffInspectionBase {
   @Override
   protected LocalQuickFix createNavigateToNullParameterUsagesFix(PsiParameter parameter) {
     return new NavigateToNullLiteralArguments(parameter);
+  }
+
+  @Override
+  public boolean isEnabledByDefault() {
+    return true;
   }
 
   @Override

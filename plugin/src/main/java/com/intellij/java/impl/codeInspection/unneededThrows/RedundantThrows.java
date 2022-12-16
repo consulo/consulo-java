@@ -23,6 +23,7 @@ import com.intellij.java.analysis.codeInspection.reference.RefMethod;
 import com.intellij.java.indexing.search.searches.AllOverridingMethodsSearch;
 import com.intellij.java.language.impl.codeInsight.ExceptionUtil;
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.util.function.Processor;
 import consulo.application.util.query.Query;
 import consulo.language.editor.FileModificationService;
@@ -52,7 +53,8 @@ import java.util.List;
 /**
  * @author max
  */
-public abstract class RedundantThrows extends GlobalJavaInspectionTool {
+@ExtensionImpl
+public class RedundantThrows extends GlobalJavaInspectionTool {
   private static final Logger LOG = Logger.getInstance(RedundantThrows.class);
   private static final String DISPLAY_NAME = InspectionsBundle.message("inspection.redundant.throws.display.name");
   private final BidirectionalMap<String, QuickFix> myQuickFixes = new BidirectionalMap<String, QuickFix>();

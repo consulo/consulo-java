@@ -16,6 +16,7 @@
 package com.intellij.java.impl.codeInspection.defaultFileTemplateUsage;
 
 import com.intellij.java.analysis.impl.codeInspection.BaseJavaLocalInspectionTool;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.fileTemplate.FileTemplate;
 import consulo.fileTemplate.FileTemplateManager;
 import consulo.ide.impl.idea.ide.fileTemplates.impl.FileTemplateConfigurable;
@@ -35,7 +36,8 @@ import javax.annotation.Nullable;
 /**
  * @author cdr
  */
-public abstract class DefaultFileTemplateUsageInspection extends BaseJavaLocalInspectionTool {
+@ExtensionImpl
+public class DefaultFileTemplateUsageInspection extends BaseJavaLocalInspectionTool {
   // Fields are left for the compatibility
   @Deprecated
   public boolean CHECK_FILE_HEADER = true;

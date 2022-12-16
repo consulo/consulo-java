@@ -17,6 +17,7 @@ package com.intellij.java.impl.codeInspection.duplicateThrows;
 
 import com.intellij.java.analysis.codeInspection.GroupNames;
 import com.intellij.java.impl.codeInspection.DeleteThrowsFix;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.InspectionsBundle;
 import consulo.language.editor.inspection.ProblemHighlightType;
 import consulo.language.editor.inspection.ProblemsHolder;
@@ -29,6 +30,7 @@ import javax.annotation.Nullable;
 
 import javax.swing.*;
 
+@ExtensionImpl
 public class DuplicateThrowsInspection extends BaseLocalInspectionTool {
 
   @SuppressWarnings("PublicField")
@@ -38,6 +40,11 @@ public class DuplicateThrowsInspection extends BaseLocalInspectionTool {
   @Nonnull
   public String getDisplayName() {
     return InspectionsBundle.message("inspection.duplicate.throws.display.name");
+  }
+
+  @Override
+  public boolean isEnabledByDefault() {
+    return true;
   }
 
   @Override

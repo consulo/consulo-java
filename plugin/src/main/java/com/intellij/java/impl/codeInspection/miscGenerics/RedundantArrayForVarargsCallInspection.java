@@ -22,6 +22,7 @@ import com.intellij.java.impl.codeInsight.ExpectedTypesProvider;
 import com.intellij.java.impl.refactoring.util.InlineUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.inspection.InspectionsBundle;
 import consulo.language.editor.inspection.LocalQuickFix;
@@ -42,7 +43,8 @@ import java.util.List;
 /**
  * @author ven
  */
-public abstract class RedundantArrayForVarargsCallInspection extends GenericsInspectionToolBase {
+@ExtensionImpl
+public class RedundantArrayForVarargsCallInspection extends GenericsInspectionToolBase {
   private static final Logger LOG = Logger.getInstance(RedundantArrayForVarargsCallInspection.class);
   private final LocalQuickFix myQuickFixAction = new MyQuickFix();
 
@@ -187,6 +189,11 @@ public abstract class RedundantArrayForVarargsCallInspection extends GenericsIns
     }
 
     return null;
+  }
+
+  @Override
+  public boolean isEnabledByDefault() {
+    return true;
   }
 
   @Override

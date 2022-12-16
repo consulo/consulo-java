@@ -17,6 +17,7 @@
 package com.intellij.java.impl.codeInspection.uncheckedWarnings;
 
 import com.intellij.java.impl.codeInsight.daemon.impl.quickfix.GenerifyFileFix;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.ui.ex.awt.JBUI;
 
@@ -25,11 +26,17 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.function.Consumer;
 
-public abstract class UncheckedWarningLocalInspection extends UncheckedWarningLocalInspectionBase {
+@ExtensionImpl
+public class UncheckedWarningLocalInspection extends UncheckedWarningLocalInspectionBase {
   @Nonnull
   @Override
   protected LocalQuickFix[] createFixes() {
     return new LocalQuickFix[]{new GenerifyFileFix()};
+  }
+
+  @Override
+  public boolean isEnabledByDefault() {
+    return true;
   }
 
   @Override

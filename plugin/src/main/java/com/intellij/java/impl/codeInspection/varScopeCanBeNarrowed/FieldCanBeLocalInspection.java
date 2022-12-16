@@ -16,6 +16,7 @@
 package com.intellij.java.impl.codeInspection.varScopeCanBeNarrowed;
 
 import com.intellij.java.analysis.codeInspection.GroupNames;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.ImplicitUsageProvider;
 import consulo.language.editor.inspection.InspectionsBundle;
 import consulo.language.editor.inspection.ProblemDescriptor;
@@ -59,10 +60,21 @@ import java.util.*;
 /**
  * @author ven
  */
+@ExtensionImpl
 public class FieldCanBeLocalInspection extends BaseLocalInspectionTool {
   @NonNls
   public static final String SHORT_NAME = "FieldCanBeLocal";
   public final JDOMExternalizableStringList EXCLUDE_ANNOS = new JDOMExternalizableStringList();
+
+  @Override
+  public boolean runForWholeFile() {
+    return true;
+  }
+
+  @Override
+  public boolean isEnabledByDefault() {
+    return true;
+  }
 
   @Override
   @Nonnull

@@ -25,6 +25,7 @@ import com.intellij.java.impl.refactoring.changeSignature.ChangeSignatureProcess
 import com.intellij.java.impl.refactoring.changeSignature.ParameterInfoImpl;
 import com.intellij.java.impl.refactoring.util.InlineUtil;
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.ApplicationManager;
 import consulo.language.editor.inspection.*;
 import consulo.language.editor.inspection.reference.RefElement;
@@ -51,7 +52,8 @@ import java.util.List;
 /**
  * @author max
  */
-public abstract class SameParameterValueInspection extends GlobalJavaInspectionTool
+@ExtensionImpl
+public class SameParameterValueInspection extends GlobalJavaInspectionTool
 {
   private static final Logger LOG = Logger.getInstance(SameParameterValueInspection.class);
 

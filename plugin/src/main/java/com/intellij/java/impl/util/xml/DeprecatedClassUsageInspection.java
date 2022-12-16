@@ -17,14 +17,18 @@ package com.intellij.java.impl.util.xml;
 
 import com.intellij.java.analysis.impl.codeInspection.deprecation.DeprecationInspection;
 import com.intellij.java.language.psi.PsiDocCommentOwner;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.Language;
 import consulo.language.editor.inspection.LocalInspectionToolSession;
 import consulo.language.editor.inspection.ProblemsHolder;
+import consulo.language.editor.rawHighlight.HighlightDisplayLevel;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.PsiReference;
 import consulo.language.psi.ResolvingHint;
 import consulo.util.collection.ArrayUtil;
 import consulo.xml.codeInspection.XmlSuppressableInspectionTool;
+import consulo.xml.lang.xml.XMLLanguage;
 import consulo.xml.psi.XmlElementVisitor;
 import consulo.xml.psi.xml.XmlAttribute;
 import consulo.xml.psi.xml.XmlAttributeValue;
@@ -32,11 +36,25 @@ import consulo.xml.psi.xml.XmlTag;
 import org.jetbrains.annotations.Nls;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * @author Dmitry Avdeev
  */
-public abstract class DeprecatedClassUsageInspection extends XmlSuppressableInspectionTool {
+@ExtensionImpl
+public class DeprecatedClassUsageInspection extends XmlSuppressableInspectionTool {
+
+  @Nullable
+  @Override
+  public Language getLanguage() {
+    return XMLLanguage.INSTANCE;
+  }
+
+  @Nonnull
+  @Override
+  public HighlightDisplayLevel getDefaultLevel() {
+    return HighlightDisplayLevel.WARNING;
+  }
 
   @Nonnull
   @Override
@@ -81,7 +99,7 @@ public abstract class DeprecatedClassUsageInspection extends XmlSuppressableInsp
   @Nonnull
   @Override
   public String getGroupDisplayName() {
-    return "XML";
+    return "Java";
   }
 
   @Nls

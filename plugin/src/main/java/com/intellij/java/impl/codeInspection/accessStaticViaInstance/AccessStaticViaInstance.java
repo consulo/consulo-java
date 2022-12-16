@@ -18,16 +18,23 @@ package com.intellij.java.impl.codeInspection.accessStaticViaInstance;
 import com.intellij.java.impl.codeInsight.daemon.impl.quickfix.AccessStaticViaInstanceFix;
 import com.intellij.java.language.psi.JavaResolveResult;
 import com.intellij.java.language.psi.PsiReferenceExpression;
+import consulo.annotation.component.ExtensionImpl;
 
 /**
  * User: anna
  * Date: 15-Nov-2005
  */
-public abstract class AccessStaticViaInstance extends AccessStaticViaInstanceBase {
+@ExtensionImpl
+public class AccessStaticViaInstance extends AccessStaticViaInstanceBase {
   @Override
   protected AccessStaticViaInstanceFix createAccessStaticViaInstanceFix(PsiReferenceExpression expr,
                                                                         boolean onTheFly,
                                                                         JavaResolveResult result) {
     return new AccessStaticViaInstanceFix(expr, result, onTheFly);
+  }
+
+  @Override
+  public boolean isEnabledByDefault() {
+    return true;
   }
 }

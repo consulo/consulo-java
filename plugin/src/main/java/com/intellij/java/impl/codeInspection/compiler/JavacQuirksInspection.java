@@ -15,15 +15,17 @@
  */
 package com.intellij.java.impl.codeInspection.compiler;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.java.analysis.codeInspection.GroupNames;
+import com.intellij.java.analysis.impl.codeInspection.ex.BaseLocalInspectionTool;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.InspectionsBundle;
 import consulo.language.editor.inspection.ProblemsHolder;
-import com.intellij.java.analysis.impl.codeInspection.ex.BaseLocalInspectionTool;
-import consulo.language.psi.*;
+import consulo.language.psi.PsiElementVisitor;
 import org.jetbrains.annotations.Nls;
 
+import javax.annotation.Nonnull;
+
+@ExtensionImpl
 public class JavacQuirksInspection extends BaseLocalInspectionTool {
   @Nls @Nonnull
   @Override

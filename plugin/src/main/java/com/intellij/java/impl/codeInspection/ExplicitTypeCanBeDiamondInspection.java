@@ -16,6 +16,7 @@
 package com.intellij.java.impl.codeInspection;
 
 import com.intellij.java.analysis.codeInspection.GroupNames;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.intention.HighPriorityAction;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemDescriptor;
@@ -38,7 +39,8 @@ import javax.annotation.Nonnull;
  * User: anna
  * Date: 1/28/11
  */
-public abstract class ExplicitTypeCanBeDiamondInspection extends BaseJavaLocalInspectionTool {
+@ExtensionImpl
+public class ExplicitTypeCanBeDiamondInspection extends BaseJavaLocalInspectionTool {
   public static final Logger LOG = Logger.getInstance(ExplicitTypeCanBeDiamondInspection.class);
 
   @Nls

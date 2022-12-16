@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.ig.assignment;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
 import consulo.project.Project;
@@ -27,6 +28,7 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.intellij.java.impl.ig.psiutils.WellFormednessUtils;
 import javax.annotation.Nonnull;
 
+@ExtensionImpl
 public class AssignmentUsedAsConditionInspection extends BaseInspection {
 
   @Nonnull

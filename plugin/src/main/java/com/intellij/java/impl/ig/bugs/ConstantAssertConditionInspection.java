@@ -15,18 +15,20 @@
  */
 package com.intellij.java.impl.ig.bugs;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.java.language.psi.PsiAssertStatement;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import com.siyeh.ig.psiutils.ParenthesesUtils;
 import com.siyeh.ig.psiutils.BoolUtils;
+import com.siyeh.ig.psiutils.ParenthesesUtils;
+import consulo.annotation.component.ExtensionImpl;
 import org.jetbrains.annotations.Nls;
 
+import javax.annotation.Nonnull;
+
+@ExtensionImpl
 public class ConstantAssertConditionInspection extends BaseInspection {
 
   @Override

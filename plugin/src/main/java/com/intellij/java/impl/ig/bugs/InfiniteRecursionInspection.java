@@ -21,10 +21,12 @@ import com.intellij.java.language.psi.PsiModifier;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import consulo.annotation.component.ExtensionImpl;
 
 import javax.annotation.Nonnull;
 
-public abstract class InfiniteRecursionInspection extends BaseInspection {
+@ExtensionImpl
+public class InfiniteRecursionInspection extends BaseInspection {
 
   @Override
   @Nonnull

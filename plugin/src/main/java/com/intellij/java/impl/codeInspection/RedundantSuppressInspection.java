@@ -20,7 +20,10 @@ import com.intellij.java.analysis.codeInspection.reference.RefClass;
 import com.intellij.java.analysis.codeInspection.reference.RefJavaVisitor;
 import com.intellij.java.analysis.impl.codeInspection.JavaSuppressionUtil;
 import com.intellij.java.impl.codeInsight.daemon.impl.RemoveSuppressWarningAction;
+import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.Language;
 import consulo.language.editor.impl.inspection.GlobalInspectionContextBase;
 import consulo.language.editor.impl.inspection.reference.RefManagerImpl;
 import consulo.language.editor.impl.inspection.scheme.GlobalInspectionToolWrapper;
@@ -30,6 +33,7 @@ import consulo.language.editor.inspection.reference.RefEntity;
 import consulo.language.editor.inspection.reference.RefVisitor;
 import consulo.language.editor.inspection.scheme.*;
 import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
+import consulo.language.editor.rawHighlight.HighlightDisplayLevel;
 import consulo.language.editor.scope.AnalysisScope;
 import consulo.language.psi.PsiComment;
 import consulo.language.psi.PsiElement;
@@ -52,11 +56,29 @@ import java.util.*;
 /**
  * @author cdr
  */
-public abstract class RedundantSuppressInspection extends GlobalInspectionTool {
+@ExtensionImpl
+public class RedundantSuppressInspection extends GlobalInspectionTool {
   private BidirectionalMap<String, QuickFix> myQuickFixes = null;
   private static final Logger LOG = Logger.getInstance(RedundantSuppressInspection.class);
 
   public boolean IGNORE_ALL = false;
+
+  @Nonnull
+  @Override
+  public HighlightDisplayLevel getDefaultLevel() {
+    return HighlightDisplayLevel.WARNING;
+  }
+
+  @Override
+  public boolean isEnabledByDefault() {
+    return false;
+  }
+
+  @Nullable
+  @Override
+  public Language getLanguage() {
+    return JavaLanguage.INSTANCE;
+  }
 
   @Override
   @Nonnull
@@ -346,10 +368,5 @@ public abstract class RedundantSuppressInspection extends GlobalInspectionTool {
       }
     }
     return null;
-  }
-
-  @Override
-  public boolean isEnabledByDefault() {
-    return false;
   }
 }

@@ -18,6 +18,7 @@ package com.intellij.java.analysis.impl.codeInspection.equalsAndHashcode;
 import com.intellij.java.analysis.codeInspection.BaseJavaBatchLocalInspectionTool;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.MethodSignatureUtil;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.ApplicationManager;
 import consulo.application.util.CachedValueProvider;
 import consulo.application.util.CachedValuesManager;
@@ -39,7 +40,8 @@ import javax.annotation.Nullable;
 /**
  * @author max
  */
-public abstract class EqualsAndHashcode extends BaseJavaBatchLocalInspectionTool {
+@ExtensionImpl
+public class EqualsAndHashcode extends BaseJavaBatchLocalInspectionTool {
   @Override
   @Nonnull
   public PsiElementVisitor buildVisitor(@Nonnull final ProblemsHolder holder, boolean isOnTheFly) {

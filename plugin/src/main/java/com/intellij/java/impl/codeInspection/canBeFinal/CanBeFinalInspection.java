@@ -33,6 +33,7 @@ import com.intellij.java.analysis.impl.codeInspection.reference.RefClassImpl;
 import com.intellij.java.impl.codeInspection.reference.RefFieldImpl;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.impl.inspection.reference.RefElementImpl;
 import consulo.language.editor.inspection.*;
@@ -57,16 +58,18 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
 
-public abstract class CanBeFinalInspection extends GlobalJavaInspectionTool
-{
+@ExtensionImpl
+public class CanBeFinalInspection extends GlobalJavaInspectionTool {
   private static final Logger LOG = Logger.getInstance(CanBeFinalInspection.class);
 
   public boolean REPORT_CLASSES = false;
   public boolean REPORT_METHODS = false;
   public boolean REPORT_FIELDS = true;
   public static final String DISPLAY_NAME = InspectionsBundle.message("inspection.can.be.final.display.name");
-  @NonNls public static final String SHORT_NAME = "CanBeFinal";
-  @NonNls private static final String QUICK_FIX_NAME = InspectionsBundle.message("inspection.can.be.final.accept.quickfix");
+  @NonNls
+  public static final String SHORT_NAME = "CanBeFinal";
+  @NonNls
+  private static final String QUICK_FIX_NAME = InspectionsBundle.message("inspection.can.be.final.accept.quickfix");
 
   private class OptionsPanel extends JPanel {
     private final JCheckBox myReportClassesCheckbox;
@@ -184,7 +187,7 @@ public abstract class CanBeFinalInspection extends GlobalJavaInspectionTool
       if (psiIdentifier != null) {
         return new ProblemDescriptor[]{manager.createProblemDescriptor(psiIdentifier, InspectionsBundle.message(
           "inspection.export.results.can.be.final.description"), new AcceptSuggested(globalContext.getRefManager()),
-                                                                 ProblemHighlightType.GENERIC_ERROR_OR_WARNING, false)};
+                                                                       ProblemHighlightType.GENERIC_ERROR_OR_WARNING, false)};
       }
     }
     return null;
@@ -198,12 +201,14 @@ public abstract class CanBeFinalInspection extends GlobalJavaInspectionTool
     }
 
     manager.iterate(new RefJavaVisitor() {
-      @Override public void visitElement(@Nonnull RefEntity refEntity) {
+      @Override
+      public void visitElement(@Nonnull RefEntity refEntity) {
         if (problemsProcessor.getDescriptions(refEntity) == null) return;
         refEntity.accept(new RefJavaVisitor() {
-          @Override public void visitMethod(@Nonnull final RefMethod refMethod) {
+          @Override
+          public void visitMethod(@Nonnull final RefMethod refMethod) {
             if (!refMethod.isStatic() && !PsiModifier.PRIVATE.equals(refMethod.getAccessModifier()) &&
-                !(refMethod instanceof RefImplicitConstructor)) {
+              !(refMethod instanceof RefImplicitConstructor)) {
               globalContext.enqueueDerivedMethodsProcessor(refMethod, new GlobalJavaInspectionContext.DerivedMethodsProcessor() {
                 @Override
                 public boolean process(PsiMethod derivedMethod) {
@@ -215,7 +220,8 @@ public abstract class CanBeFinalInspection extends GlobalJavaInspectionTool
             }
           }
 
-          @Override public void visitClass(@Nonnull final RefClass refClass) {
+          @Override
+          public void visitClass(@Nonnull final RefClass refClass) {
             if (!refClass.isAnonymous()) {
               globalContext.enqueueDerivedClassesProcessor(refClass, new GlobalJavaInspectionContext.DerivedClassesProcessor() {
                 @Override
@@ -228,7 +234,8 @@ public abstract class CanBeFinalInspection extends GlobalJavaInspectionTool
             }
           }
 
-          @Override public void visitField(@Nonnull final RefField refField) {
+          @Override
+          public void visitField(@Nonnull final RefField refField) {
             globalContext.enqueueFieldUsagesProcessor(refField, new GlobalJavaInspectionContext.UsagesProcessor() {
               @Override
               public boolean process(PsiReference psiReference) {

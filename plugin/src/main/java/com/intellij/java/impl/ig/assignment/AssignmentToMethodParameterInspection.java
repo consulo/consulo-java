@@ -16,6 +16,7 @@
 package com.intellij.java.impl.ig.assignment;
 
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.*;
 import consulo.language.ast.IElementType;
 import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
@@ -30,6 +31,7 @@ import javax.annotation.Nullable;
 
 import javax.swing.*;
 
+@ExtensionImpl
 public class AssignmentToMethodParameterInspection
   extends BaseInspection {
 

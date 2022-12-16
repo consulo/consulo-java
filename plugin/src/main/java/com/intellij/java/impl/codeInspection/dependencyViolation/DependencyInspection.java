@@ -17,6 +17,7 @@ package com.intellij.java.impl.codeInspection.dependencyViolation;
 
 import com.intellij.java.analysis.impl.codeInspection.ex.BaseLocalInspectionTool;
 import com.intellij.java.language.JavaLanguage;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.dataContext.DataManager;
 import consulo.ide.impl.idea.packageDependencies.DependenciesBuilder;
 import consulo.ide.impl.idea.packageDependencies.ForwardDependenciesBuilder;
@@ -50,11 +51,17 @@ import java.util.ArrayList;
  * User: anna
  * Date: Feb 6, 2005
  */
+@ExtensionImpl
 public class DependencyInspection extends BaseLocalInspectionTool {
 
   public static final String GROUP_DISPLAY_NAME = "";
   public static final String DISPLAY_NAME = InspectionsBundle.message("illegal.package.dependencies");
   @NonNls public static final String SHORT_NAME = "Dependency";
+
+  @Override
+  public boolean isEnabledByDefault() {
+    return true;
+  }
 
   @Override
   @Nonnull

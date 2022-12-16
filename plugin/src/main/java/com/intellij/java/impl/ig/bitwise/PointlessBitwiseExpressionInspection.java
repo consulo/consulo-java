@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.ig.bitwise;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
 import com.intellij.java.language.psi.*;
@@ -35,6 +36,7 @@ import javax.swing.*;
 import java.util.HashSet;
 import java.util.Set;
 
+@ExtensionImpl
 public class PointlessBitwiseExpressionInspection extends BaseInspection {
 
   /**

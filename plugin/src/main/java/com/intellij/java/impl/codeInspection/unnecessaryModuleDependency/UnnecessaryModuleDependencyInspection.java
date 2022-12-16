@@ -1,12 +1,16 @@
 package com.intellij.java.impl.codeInspection.unnecessaryModuleDependency;
 
 import com.intellij.java.analysis.codeInspection.GroupNames;
+import com.intellij.java.language.JavaLanguage;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.Language;
 import consulo.language.editor.inspection.*;
 import consulo.language.editor.inspection.reference.RefEntity;
 import consulo.language.editor.inspection.reference.RefGraphAnnotator;
 import consulo.language.editor.inspection.reference.RefManager;
 import consulo.language.editor.inspection.reference.RefModule;
 import consulo.language.editor.inspection.scheme.InspectionManager;
+import consulo.language.editor.rawHighlight.HighlightDisplayLevel;
 import consulo.language.editor.scope.AnalysisScope;
 import consulo.module.Module;
 import consulo.module.content.ModuleRootManager;
@@ -18,6 +22,7 @@ import consulo.util.lang.Comparing;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -26,7 +31,25 @@ import java.util.Set;
  * User: anna
  * Date: 09-Jan-2006
  */
-public abstract class UnnecessaryModuleDependencyInspection extends GlobalInspectionTool {
+@ExtensionImpl
+public class UnnecessaryModuleDependencyInspection extends GlobalInspectionTool {
+
+  @Nonnull
+  @Override
+  public HighlightDisplayLevel getDefaultLevel() {
+    return HighlightDisplayLevel.WARNING;
+  }
+
+  @Override
+  public boolean isEnabledByDefault() {
+    return true;
+  }
+
+  @Nullable
+  @Override
+  public Language getLanguage() {
+    return JavaLanguage.INSTANCE;
+  }
 
   @Override
   public RefGraphAnnotator getAnnotator(final RefManager refManager) {
@@ -34,8 +57,11 @@ public abstract class UnnecessaryModuleDependencyInspection extends GlobalInspec
   }
 
   @Override
-  public CommonProblemDescriptor[] checkElement(RefEntity refEntity, AnalysisScope scope, InspectionManager manager, final GlobalInspectionContext globalContext) {
-    if (refEntity instanceof RefModule){
+  public CommonProblemDescriptor[] checkElement(RefEntity refEntity,
+                                                AnalysisScope scope,
+                                                InspectionManager manager,
+                                                final GlobalInspectionContext globalContext) {
+    if (refEntity instanceof RefModule) {
       final RefModule refModule = (RefModule)refEntity;
       final Module module = refModule.getModule();
       final Module[] declaredDependencies = ModuleRootManager.getInstance(module).getDependencies();
@@ -43,12 +69,13 @@ public abstract class UnnecessaryModuleDependencyInspection extends GlobalInspec
       final Set<Module> modules = refModule.getUserData(UnnecessaryModuleDependencyAnnotator.DEPENDENCIES);
       for (final Module dependency : declaredDependencies) {
         if (modules == null || !modules.contains(dependency)) {
-         final CommonProblemDescriptor problemDescriptor;
+          final CommonProblemDescriptor problemDescriptor;
           if (scope.containsModule(dependency)) { //external references are rejected -> annotator doesn't provide any information on them -> false positives
             problemDescriptor = manager.createProblemDescriptor(
               InspectionsBundle.message("unnecessary.module.dependency.problem.descriptor", module.getName(), dependency.getName()),
               new RemoveModuleDependencyFix(module, dependency));
-          } else {
+          }
+          else {
             String message = InspectionsBundle
               .message("suspected.module.dependency.problem.descriptor", module.getName(), dependency.getName(), scope.getDisplayName(),
                        dependency.getName());

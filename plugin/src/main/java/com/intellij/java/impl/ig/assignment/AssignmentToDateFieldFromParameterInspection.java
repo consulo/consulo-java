@@ -20,6 +20,7 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TypeUtils;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.ast.IElementType;
 import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
@@ -31,8 +32,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.swing.*;
 
-public abstract class AssignmentToDateFieldFromParameterInspection
-    extends BaseInspection {
+@ExtensionImpl
+public class AssignmentToDateFieldFromParameterInspection extends BaseInspection {
 
   /**
    * @noinspection PublicField
@@ -43,26 +44,26 @@ public abstract class AssignmentToDateFieldFromParameterInspection
   @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message(
-        "assignment.to.date.calendar.field.from.parameter.display.name");
+      "assignment.to.date.calendar.field.from.parameter.display.name");
   }
 
   @Override
   @Nonnull
   public String buildErrorString(Object... infos) {
-    final String type = (String) infos[0];
-    final PsiExpression rhs = (PsiExpression) infos[1];
+    final String type = (String)infos[0];
+    final PsiExpression rhs = (PsiExpression)infos[1];
     return InspectionGadgetsBundle.message(
-        "assignment.to.date.calendar.field.from.parameter.problem.descriptor",
-        type, rhs.getText());
+      "assignment.to.date.calendar.field.from.parameter.problem.descriptor",
+      type, rhs.getText());
   }
 
   @Override
   @Nullable
   public JComponent createOptionsPanel() {
     return new SingleCheckboxOptionsPanel(
-        InspectionGadgetsBundle.message(
-            "assignment.collection.array.field.option"), this,
-        "ignorePrivateMethods");
+      InspectionGadgetsBundle.message(
+        "assignment.collection.array.field.option"), this,
+      "ignorePrivateMethods");
   }
 
   @Override
@@ -71,11 +72,11 @@ public abstract class AssignmentToDateFieldFromParameterInspection
   }
 
   private class AssignmentToDateFieldFromParameterVisitor
-      extends BaseInspectionVisitor {
+    extends BaseInspectionVisitor {
 
     @Override
     public void visitAssignmentExpression(
-        @Nonnull PsiAssignmentExpression expression) {
+      @Nonnull PsiAssignmentExpression expression) {
       super.visitAssignmentExpression(expression);
       final IElementType tokenType = expression.getOperationTokenType();
       if (!JavaTokenType.EQ.equals(tokenType)) {
@@ -86,8 +87,8 @@ public abstract class AssignmentToDateFieldFromParameterInspection
         return;
       }
       final String type = TypeUtils.expressionHasTypeOrSubtype(lhs,
-          JavaClassNames.JAVA_UTIL_DATE,
-          JavaClassNames.JAVA_UTIL_CALENDAR);
+                                                               JavaClassNames.JAVA_UTIL_DATE,
+                                                               JavaClassNames.JAVA_UTIL_CALENDAR);
       if (type == null) {
         return;
       }
@@ -95,11 +96,11 @@ public abstract class AssignmentToDateFieldFromParameterInspection
       if (!(rhs instanceof PsiReferenceExpression)) {
         return;
       }
-      final PsiElement lhsReferent = ((PsiReference) lhs).resolve();
+      final PsiElement lhsReferent = ((PsiReference)lhs).resolve();
       if (!(lhsReferent instanceof PsiField)) {
         return;
       }
-      final PsiElement rhsReferent = ((PsiReference) rhs).resolve();
+      final PsiElement rhsReferent = ((PsiReference)rhs).resolve();
       if (!(rhsReferent instanceof PsiParameter)) {
         return;
       }
@@ -108,11 +109,11 @@ public abstract class AssignmentToDateFieldFromParameterInspection
       }
       if (ignorePrivateMethods) {
         final PsiMethod containingMethod =
-            PsiTreeUtil.getParentOfType(expression,
-                PsiMethod.class);
+          PsiTreeUtil.getParentOfType(expression,
+                                      PsiMethod.class);
         if (containingMethod == null ||
-            containingMethod.hasModifierProperty(
-                PsiModifier.PRIVATE)) {
+          containingMethod.hasModifierProperty(
+            PsiModifier.PRIVATE)) {
           return;
         }
       }

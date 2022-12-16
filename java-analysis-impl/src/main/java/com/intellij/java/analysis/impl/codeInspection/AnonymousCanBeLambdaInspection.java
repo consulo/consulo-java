@@ -30,6 +30,7 @@ import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PsiTypesUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.RedundantCastUtil;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.component.util.text.UniqueNameGenerator;
 import consulo.document.util.TextRange;
 import consulo.java.language.module.util.JavaClassNames;
@@ -62,6 +63,7 @@ import java.util.function.UnaryOperator;
 /**
  * User: anna
  */
+@ExtensionImpl
 public class AnonymousCanBeLambdaInspection extends BaseJavaBatchLocalInspectionTool {
   public static final Logger LOG = Logger.getInstance(AnonymousCanBeLambdaInspection.class);
 

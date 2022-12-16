@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.ig.bugs;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.java.language.module.util.JavaClassNames;
 import com.intellij.java.language.psi.PsiMethod;
 import com.siyeh.HardcodedMethodConstants;
@@ -26,7 +27,8 @@ import com.siyeh.ig.psiutils.MethodUtils;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
 
-public abstract class IteratorHasNextCallsIteratorNextInspection
+@ExtensionImpl
+public class IteratorHasNextCallsIteratorNextInspection
   extends BaseInspection {
 
   @Nonnull

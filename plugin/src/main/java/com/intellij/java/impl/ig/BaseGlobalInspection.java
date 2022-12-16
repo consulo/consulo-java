@@ -16,11 +16,14 @@
 package com.intellij.java.impl.ig;
 
 import com.intellij.java.analysis.codeInspection.GlobalJavaInspectionTool;
+import com.intellij.java.language.JavaLanguage;
 import com.siyeh.ig.GroupDisplayNameUtil;
+import consulo.language.Language;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public abstract class BaseGlobalInspection extends GlobalJavaInspectionTool {
 
@@ -48,6 +51,12 @@ public abstract class BaseGlobalInspection extends GlobalJavaInspectionTool {
   @Nonnull
   public final String getGroupDisplayName() {
     return GroupDisplayNameUtil.getGroupDisplayName(getClass());
+  }
+
+  @Nullable
+  @Override
+  public Language getLanguage() {
+    return JavaLanguage.INSTANCE;
   }
 
   @Override

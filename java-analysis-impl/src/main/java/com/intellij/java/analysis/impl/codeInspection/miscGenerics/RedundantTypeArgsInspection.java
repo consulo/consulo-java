@@ -19,6 +19,7 @@ import com.intellij.java.analysis.codeInspection.GroupNames;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.impl.source.resolve.DefaultParameterTypeInferencePolicy;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.InspectionsBundle;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemDescriptor;
@@ -36,7 +37,8 @@ import java.util.List;
 /**
  * @author ven
  */
-public abstract class RedundantTypeArgsInspection extends GenericsInspectionToolBase {
+@ExtensionImpl
+public class RedundantTypeArgsInspection extends GenericsInspectionToolBase {
   private static final Logger LOG = Logger.getInstance(RedundantTypeArgsInspection.class);
 
   public RedundantTypeArgsInspection() {
@@ -44,6 +46,11 @@ public abstract class RedundantTypeArgsInspection extends GenericsInspectionTool
   }
 
   private final LocalQuickFix myQuickFixAction;
+
+  @Override
+  public boolean isEnabledByDefault() {
+    return true;
+  }
 
   @Override
   @Nonnull

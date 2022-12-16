@@ -23,6 +23,7 @@ import com.intellij.java.analysis.codeInspection.reference.RefMethod;
 import com.intellij.java.impl.ig.BaseGlobalInspection;
 import com.intellij.java.impl.ig.fixes.RefactoringInspectionGadgetsFix;
 import com.intellij.java.indexing.search.searches.MethodReferencesSearch;
+import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.siyeh.InspectionGadgetsBundle;
@@ -32,17 +33,20 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ClassUtils;
 import com.siyeh.ig.psiutils.DeclarationSearchUtils;
 import com.siyeh.ig.psiutils.TestUtils;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.progress.ProgressManager;
 import consulo.application.util.function.Processor;
 import consulo.application.util.query.Query;
 import consulo.dataContext.DataContext;
 import consulo.ide.impl.idea.openapi.actionSystem.impl.SimpleDataContext;
+import consulo.language.Language;
 import consulo.language.editor.LangDataKeys;
 import consulo.language.editor.inspection.*;
 import consulo.language.editor.inspection.reference.RefElement;
 import consulo.language.editor.inspection.reference.RefEntity;
 import consulo.language.editor.inspection.scheme.InspectionManager;
 import consulo.language.editor.inspection.ui.MultipleCheckboxOptionsPanel;
+import consulo.language.editor.rawHighlight.HighlightDisplayLevel;
 import consulo.language.editor.refactoring.action.RefactoringActionHandler;
 import consulo.language.editor.refactoring.action.RefactoringActionHandlerFactory;
 import consulo.language.editor.scope.AnalysisScope;
@@ -56,7 +60,8 @@ import javax.annotation.Nullable;
 import javax.swing.*;
 import java.util.concurrent.atomic.AtomicReference;
 
-public abstract class StaticMethodOnlyUsedInOneClassInspection extends BaseGlobalInspection {
+@ExtensionImpl
+public class StaticMethodOnlyUsedInOneClassInspection extends BaseGlobalInspection {
 
   @SuppressWarnings("PublicField")
   public boolean ignoreTestClasses = false;
@@ -73,6 +78,12 @@ public abstract class StaticMethodOnlyUsedInOneClassInspection extends BaseGloba
   @Nonnull
   public String getDisplayName() {
     return InspectionGadgetsBundle.message("static.method.only.used.in.one.class.display.name");
+  }
+
+  @Nonnull
+  @Override
+  public HighlightDisplayLevel getDefaultLevel() {
+    return HighlightDisplayLevel.WARNING;
   }
 
   @Nullable

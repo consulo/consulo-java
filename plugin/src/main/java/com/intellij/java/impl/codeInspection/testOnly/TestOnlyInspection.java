@@ -22,6 +22,7 @@ import com.intellij.java.language.psi.JavaElementVisitor;
 import com.intellij.java.language.psi.PsiCallExpression;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.InspectionsBundle;
 import consulo.language.editor.inspection.ProblemHighlightType;
 import consulo.language.editor.inspection.ProblemsHolder;
@@ -34,7 +35,8 @@ import consulo.virtualFileSystem.VirtualFile;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public abstract class TestOnlyInspection extends BaseJavaLocalInspectionTool {
+@ExtensionImpl
+public class TestOnlyInspection extends BaseJavaLocalInspectionTool {
   @Override
   @Nonnull
   public String getDisplayName() {

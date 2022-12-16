@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.ig.abstraction;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiModifier;
@@ -26,6 +27,7 @@ import javax.annotation.Nonnull;
 
 import javax.swing.JComponent;
 
+@ExtensionImpl
 public class StaticVariableOfConcreteClassInspection extends BaseInspection {
 
   @SuppressWarnings("PublicField")

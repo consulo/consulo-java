@@ -22,6 +22,7 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.ast.IElementType;
 import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
 import consulo.language.psi.PsiElement;
@@ -31,7 +32,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.swing.*;
 
-public abstract class AssignmentToForLoopParameterInspection
+@ExtensionImpl
+public class AssignmentToForLoopParameterInspection
   extends BaseInspection {
 
   /**

@@ -16,6 +16,7 @@
 package com.intellij.java.impl.ig.assignment;
 
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.*;
 import consulo.language.ast.IElementType;
 import consulo.language.psi.util.PsiTreeUtil;
@@ -29,6 +30,7 @@ import javax.annotation.Nullable;
 
 import javax.swing.*;
 
+@ExtensionImpl
 public class AssignmentToCollectionFieldFromParameterInspection
   extends BaseInspection {
 

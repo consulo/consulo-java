@@ -24,6 +24,7 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.infos.MethodCandidateInfo;
 import com.intellij.java.language.psi.util.MethodSignatureBackedByPsiMethod;
 import consulo.annotation.DeprecationInfo;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.document.util.TextRange;
 import consulo.language.editor.DeprecationUtil;
 import consulo.language.editor.inspection.ProblemHighlightType;
@@ -42,7 +43,8 @@ import java.util.List;
 /**
  * @author max
  */
-public abstract class DeprecationInspection extends BaseJavaBatchLocalInspectionTool {
+@ExtensionImpl
+public class DeprecationInspection extends BaseJavaBatchLocalInspectionTool {
   @NonNls
   public static final String SHORT_NAME = DeprecationUtil.DEPRECATION_SHORT_NAME;
   @NonNls
@@ -66,12 +68,6 @@ public abstract class DeprecationInspection extends BaseJavaBatchLocalInspection
   @Nonnull
   public String getDisplayName() {
     return DISPLAY_NAME;
-  }
-
-  @Override
-  @Nonnull
-  public String getGroupDisplayName() {
-    return "";
   }
 
   @Override
