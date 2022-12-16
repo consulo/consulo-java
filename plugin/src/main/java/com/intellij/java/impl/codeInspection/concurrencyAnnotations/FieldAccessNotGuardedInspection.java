@@ -19,6 +19,7 @@ import com.intellij.java.analysis.codeInspection.GroupNames;
 import com.intellij.java.analysis.impl.codeInspection.BaseJavaLocalInspectionTool;
 import com.intellij.java.analysis.impl.codeInspection.concurrencyAnnotations.JCiPUtil;
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemsHolder;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
@@ -28,7 +29,8 @@ import org.jetbrains.annotations.Nls;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public abstract class FieldAccessNotGuardedInspection extends BaseJavaLocalInspectionTool {
+@ExtensionImpl
+public class FieldAccessNotGuardedInspection extends BaseJavaLocalInspectionTool {
 
   @Override
   @Nonnull

@@ -5,6 +5,7 @@ import com.intellij.java.analysis.impl.codeInspection.BaseJavaLocalInspectionToo
 import com.intellij.java.impl.codeInspection.inheritance.search.InheritorsStatisticalDataSearch;
 import com.intellij.java.impl.codeInspection.inheritance.search.InheritorsStatisticsSearchResult;
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemDescriptor;
@@ -21,8 +22,8 @@ import java.util.List;
 /**
  * @author Dmitry Batkovich <dmitry.batkovich@jetbrains.com>
  */
-public abstract class SuperClassHasFrequentlyUsedInheritorsInspection extends BaseJavaLocalInspectionTool
-{
+@ExtensionImpl
+public class SuperClassHasFrequentlyUsedInheritorsInspection extends BaseJavaLocalInspectionTool {
   private final static int MIN_PERCENT_RATIO = 5;
   public final static int MAX_QUICK_FIX_COUNTS = 4;
 

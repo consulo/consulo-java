@@ -15,13 +15,11 @@
  */
 package com.intellij.java.impl.codeInsight;
 
-import com.intellij.java.language.codeInsight.MemberImplementorExplorer;
 import com.intellij.java.language.impl.codeInsight.generation.GenerationInfo;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ExtensionAPI;
-import consulo.component.extension.ExtensionPointName;
 import consulo.language.util.IncorrectOperationException;
 
 import javax.annotation.Nonnull;
@@ -32,8 +30,9 @@ import java.util.function.Consumer;
  * @author peter
  */
 @ExtensionAPI(ComponentScope.APPLICATION)
-public interface MethodImplementor extends MemberImplementorExplorer {
-  ExtensionPointName<MethodImplementor> EXTENSION_POINT_NAME = ExtensionPointName.create(MethodImplementor.class);
+public interface MethodImplementor {
+  @Nonnull
+  PsiMethod[] getMethodsToImplement(PsiClass aClass);
 
   @Nonnull
   PsiMethod[] createImplementationPrototypes(final PsiClass inClass, PsiMethod method) throws IncorrectOperationException;

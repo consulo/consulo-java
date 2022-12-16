@@ -18,6 +18,7 @@ package org.jetbrains.java.generate.inspection;
 import com.intellij.java.language.codeInsight.TestFrameworks;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.inspection.ProblemHighlightType;
 import consulo.language.editor.inspection.ProblemsHolder;
@@ -40,7 +41,8 @@ import java.awt.*;
  * This inspection will use filter information from the GenerateToString plugin settings to exclude certain fields (eg. constants etc.).
  * Warns if the class has fields to be dumped and does not have a toString method.
  */
-public abstract class ClassHasNoToStringMethodInspection extends AbstractToStringInspection {
+@ExtensionImpl
+public class ClassHasNoToStringMethodInspection extends AbstractToStringInspection {
   /**
    * User options for classes to exclude. Must be a regexp pattern
    */

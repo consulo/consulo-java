@@ -17,6 +17,7 @@ package org.jetbrains.java.generate.inspection;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PropertyUtil;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemHighlightType;
 import consulo.language.editor.inspection.ProblemsHolder;
 import consulo.language.psi.PsiElement;
@@ -36,7 +37,8 @@ import java.util.Set;
  * to exclude certain fields (eg. constants etc.). Will only warn if the
  * class has a toString() method.
  */
-public abstract class FieldNotUsedInToStringInspection extends AbstractToStringInspection {
+@ExtensionImpl
+public class FieldNotUsedInToStringInspection extends AbstractToStringInspection {
 
   @Nonnull
   public String getDisplayName() {

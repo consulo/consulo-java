@@ -12,6 +12,7 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.javadoc.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PropertyUtil;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.ScrollType;
 import consulo.component.extension.ExtensionPointName;
@@ -57,6 +58,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.*;
 
+@ExtensionImpl
 public class JavaDocLocalInspection extends BaseLocalInspectionTool {
   private static final String REQUIRED_JAVADOC_IS_ABSENT = InspectionsBundle.message("inspection.javadoc.problem.descriptor");
 

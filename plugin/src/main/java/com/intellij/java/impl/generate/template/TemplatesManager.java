@@ -19,26 +19,26 @@
  */
 package com.intellij.java.impl.generate.template;
 
+import com.intellij.java.impl.generate.element.FieldElement;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiType;
 import consulo.component.persist.PersistentStateComponent;
-import consulo.ide.impl.idea.openapi.util.io.FileUtil;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.dataholder.Key;
-import consulo.util.io.CharsetToolkit;
+import consulo.util.io.FileUtil;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.StringUtil;
-import com.intellij.java.impl.generate.element.FieldElement;
 
 import javax.annotation.Nonnull;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.Method;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.function.Function;
 
@@ -59,7 +59,7 @@ public abstract class TemplatesManager implements PersistentStateComponent<Templ
    */
   protected static String readFile(String resource, Class<? extends TemplatesManager> templatesManagerClass) throws IOException {
     BufferedInputStream in = new BufferedInputStream(templatesManagerClass.getResourceAsStream(resource));
-    return StringUtil.convertLineSeparators(FileUtil.loadTextAndClose(new InputStreamReader(in, CharsetToolkit.UTF8_CHARSET)));
+    return StringUtil.convertLineSeparators(FileUtil.loadTextAndClose(new InputStreamReader(in, StandardCharsets.UTF_8)));
   }
 
   @Override

@@ -15,36 +15,41 @@
  */
 package com.intellij.java.impl.ig.migration;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import com.intellij.java.language.psi.*;
-import org.jetbrains.annotations.NonNls;
-import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.project.Project;
-import consulo.language.psi.*;
-import consulo.language.codeStyle.CodeStyleSettingsManager;
-import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
+import com.intellij.java.impl.ig.psiutils.StringUtils;
 import com.intellij.java.impl.psi.codeStyle.JavaCodeStyleSettings;
-import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
-import consulo.language.psi.search.ReferencesSearch;
 import com.intellij.java.language.psi.util.InheritanceUtil;
-import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
-import consulo.util.collection.ArrayUtil;
-import consulo.application.util.query.Query;
 import com.siyeh.HardcodedMethodConstants;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
-import com.intellij.java.impl.ig.psiutils.StringUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
 import com.siyeh.ig.psiutils.VariableAccessUtils;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.application.util.query.Query;
 import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.codeStyle.CodeStyleSettingsManager;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
+import consulo.language.psi.PsiComment;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiReference;
+import consulo.language.psi.PsiWhiteSpace;
+import consulo.language.psi.search.ReferencesSearch;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.project.Project;
+import consulo.util.collection.ArrayUtil;
+import org.jetbrains.annotations.NonNls;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+@ExtensionImpl
 public class WhileCanBeForeachInspection extends BaseInspection {
 
   @Override

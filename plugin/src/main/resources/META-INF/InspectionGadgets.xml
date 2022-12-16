@@ -1,12 +1,7 @@
 <consulo-plugin>
 	<extensions defaultExtensionNs="com.intellij">
-		<localInspection language="JAVA" groupPath="Java" shortName="ClassHasNoToStringMethod" displayName="Class does not override 'toString()' method"
-						 groupName="toString() issues" enabledByDefault="false" level="WARNING"
-						 implementationClass="org.jetbrains.java.generate.inspection.ClassHasNoToStringMethodInspection"/>
-		<localInspection language="JAVA" groupPath="Java" shortName="FieldNotUsedInToString" displayName="Field not used in 'toString()' method"
-						 groupName="toString() issues"
-						 enabledByDefault="false" level="WARNING" runForWholeFile="true"
-						 implementationClass="org.jetbrains.java.generate.inspection.FieldNotUsedInToStringInspection"/>
+
+
 		<!--group.names.abstraction.issues-->
 		<localInspection language="JAVA" groupPath="Java" shortName="CastToConcreteClass" bundle="com.siyeh.InspectionGadgetsBundle" key="cast.to.concrete.class.display.name"
 						 groupBundle="messages.InspectionsBundle" groupKey="group.names.abstraction.issues" enabledByDefault="false"
@@ -1252,10 +1247,7 @@
 		<localInspection language="JAVA" groupPath="Java" shortName="UnnecessaryUnboxing" bundle="com.siyeh.InspectionGadgetsBundle" key="unnecessary.unboxing.display.name"
 						 groupBundle="messages.InspectionsBundle" groupKey="group.names.language.level.specific.issues.and.migration.aids"
 						 enabledByDefault="true" level="WARNING" implementationClass="com.intellij.java.impl.ig.migration.UnnecessaryUnboxingInspection"/>
-		<localInspection language="JAVA" groupPath="Java" suppressId="WhileLoopReplaceableByForEach" shortName="WhileCanBeForeach" bundle="com.siyeh.InspectionGadgetsBundle"
-						 key="while.can.be.foreach.display.name" groupBundle="messages.InspectionsBundle"
-						 groupKey="group.names.language.level.specific.issues.and.migration.aids" enabledByDefault="true" level="WARNING"
-						 implementationClass="com.intellij.java.impl.ig.migration.WhileCanBeForeachInspection"/>
+
 
 		<!--group.names.java.language.level.issues-->
 		<localInspection language="JAVA" groupPath="Java" shortName="AnnotationClass" bundle="com.siyeh.InspectionGadgetsBundle" key="annotation.class.display.name"

@@ -15,14 +15,17 @@
  */
 package com.intellij.java.analysis.codeInspection;
 
+import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.JavaElementVisitor;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiMethod;
+import consulo.language.Language;
 import consulo.language.editor.inspection.LocalInspectionTool;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.editor.inspection.ProblemsHolder;
 import consulo.language.editor.inspection.scheme.InspectionManager;
+import consulo.language.editor.rawHighlight.HighlightDisplayLevel;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.PsiFile;
@@ -123,5 +126,28 @@ public abstract class AbstractBaseJavaLocalInspectionTool extends LocalInspectio
   @Override
   public PsiNamedElement getProblemElement(final PsiElement psiElement) {
     return PsiTreeUtil.getNonStrictParentOfType(psiElement, PsiFile.class, PsiClass.class, PsiMethod.class, PsiField.class);
+  }
+
+  @Override
+  public boolean isEnabledByDefault() {
+    return false;
+  }
+
+  @Nullable
+  @Override
+  public Language getLanguage() {
+    return JavaLanguage.INSTANCE;
+  }
+
+  @Nonnull
+  @Override
+  public String getGroupDisplayName() {
+    return "General";
+  }
+
+  @Nonnull
+  @Override
+  public HighlightDisplayLevel getDefaultLevel() {
+    return HighlightDisplayLevel.WARNING;
   }
 }

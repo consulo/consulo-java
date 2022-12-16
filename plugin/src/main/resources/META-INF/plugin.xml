@@ -483,9 +483,7 @@
 						 key="inspection.local.can.be.final.display.name"
 						 groupName="Code style issues" enabledByDefault="false" level="WARNING"
 						 implementationClass="com.intellij.java.analysis.impl.codeInspection.localCanBeFinal.LocalCanBeFinal"/>
-		<localInspection language="JAVA" groupPath="Java" shortName="JavaDoc" bundle="messages.InspectionsBundle" key="inspection.javadoc.display.name"
-						 groupKey="group.names.javadoc.issues" enabledByDefault="true" level="WARNING"
-						 implementationClass="com.intellij.java.impl.codeInspection.javaDoc.JavaDocLocalInspection"/>
+
 		<localInspection language="JAVA" groupPath="Java" shortName="JavadocReference" bundle="messages.InspectionsBundle"
 						 key="inspection.javadoc.ref.display.name"
 						 groupKey="group.names.javadoc.issues" enabledByDefault="true" level="ERROR"
@@ -520,11 +518,7 @@
 						 key="inspection.test.only.problems.display.name"
 						 groupName="General" enabledByDefault="false" level="WARNING"
 						 implementationClass="com.intellij.java.impl.codeInspection.testOnly.TestOnlyInspection"/>
-		<localInspection language="JAVA" groupPath="Java" shortName="WrongPackageStatement" bundle="messages.InspectionsBundle" key="wrong.package.statement"
-						 groupName="General"
-						 enabledByDefault="true" level="ERROR"
-						 implementationClass="com.intellij.java.impl.codeInspection.wrongPackageStatement.WrongPackageStatementInspection"/>
-		<localInspection language="JAVA" groupPath="Java" shortName="SillyAssignment" bundle="messages.InspectionsBundle"
+	<localInspection language="JAVA" groupPath="Java" shortName="SillyAssignment" bundle="messages.InspectionsBundle"
 						 key="inspection.variable.assigned.to.itself.display.name" groupName="General"
 						 enabledByDefault="true" level="WARNING"
 						 implementationClass="com.intellij.java.impl.codeInspection.sillyAssignment.SillyAssignmentInspection"/>
@@ -567,10 +561,6 @@
 						 key="inspection.duplicate.throws.display.name"
 						 groupName="Declaration redundancy" enabledByDefault="true" level="WARNING"
 						 implementationClass="com.intellij.java.impl.codeInspection.duplicateThrows.DuplicateThrowsInspection"/>
-		<localInspection language="JAVA" groupPath="Java" shortName="FieldAccessNotGuarded" displayName="Unguarded field access"
-						 groupName="Concurrency annotation issues"
-						 enabledByDefault="false" level="WARNING"
-						 implementationClass="com.intellij.java.impl.codeInspection.concurrencyAnnotations.FieldAccessNotGuardedInspection"/>
 		<localInspection language="JAVA" groupPath="Java" shortName="InstanceGuardedByStatic" displayName="Instance member guarded by static field"
 						 groupName="Concurrency annotation issues" enabledByDefault="false" level="WARNING"
 						 implementationClass="com.intellij.java.impl.codeInspection.concurrencyAnnotations.InstanceGuardedByStaticInspection"/>

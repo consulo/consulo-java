@@ -15,44 +15,36 @@
  */
 package com.intellij.java.impl.codeInspection.wrongPackageStatement;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.intellij.java.analysis.impl.codeInspection.BaseJavaLocalInspectionTool;
+import com.intellij.java.impl.codeInspection.MoveToPackageFix;
+import com.intellij.java.language.impl.codeInsight.daemon.JavaErrorBundle;
+import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.inspection.InspectionsBundle;
+import consulo.language.editor.inspection.LocalQuickFix;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.editor.inspection.ProblemHighlightType;
+import consulo.language.editor.inspection.scheme.InspectionManager;
+import consulo.language.editor.rawHighlight.HighlightDisplayLevel;
+import consulo.language.psi.PsiDirectory;
+import consulo.language.psi.PsiFile;
+import consulo.util.lang.Comparing;
+import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
-import org.jetbrains.annotations.NonNls;
-import consulo.language.editor.rawHighlight.HighlightDisplayLevel;
-import com.intellij.java.language.impl.codeInsight.daemon.JavaErrorBundle;
-import com.intellij.java.analysis.impl.codeInspection.BaseJavaLocalInspectionTool;
-import consulo.language.editor.inspection.scheme.InspectionManager;
-import consulo.language.editor.inspection.InspectionsBundle;
-import consulo.language.editor.inspection.LocalQuickFix;
-import com.intellij.java.impl.codeInspection.MoveToPackageFix;
-import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.language.editor.inspection.ProblemHighlightType;
-import consulo.application.ApplicationManager;
-import consulo.util.lang.Comparing;
-import com.intellij.java.language.psi.JavaDirectoryService;
-import com.intellij.java.language.psi.PsiClass;
-import consulo.language.psi.PsiDirectory;
-import consulo.language.psi.PsiFile;
-import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
-import com.intellij.java.language.psi.PsiJavaFile;
-import com.intellij.java.language.psi.PsiJavaPackage;
-import com.intellij.java.language.psi.PsiPackageStatement;
-import com.intellij.java.language.psi.PsiSyntheticClass;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * User: anna
  * Date: 14-Nov-2005
  */
+@ExtensionImpl
 public class WrongPackageStatementInspection extends BaseJavaLocalInspectionTool {
   @Override
   @Nullable
   public ProblemDescriptor[] checkFile(@Nonnull PsiFile file, @Nonnull InspectionManager manager, boolean isOnTheFly) {
-    // does not work in tests since CodeInsightTestCase copies file into temporary location
-    if (ApplicationManager.getApplication().isUnitTestMode()) return null;
     if (file instanceof PsiJavaFile) {
       PsiJavaFile javaFile = (PsiJavaFile)file;
 
@@ -99,12 +91,6 @@ public class WrongPackageStatementInspection extends BaseJavaLocalInspectionTool
       }
     }
     return null;
-  }
-
-  @Override
-  @Nonnull
-  public String getGroupDisplayName() {
-    return "";
   }
 
   @Override

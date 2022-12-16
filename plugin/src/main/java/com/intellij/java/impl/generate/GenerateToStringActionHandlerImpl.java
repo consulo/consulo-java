@@ -38,6 +38,7 @@ import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.logging.Logger;
 import consulo.project.Project;
+import consulo.ui.ex.awt.ColoredListCellRenderer;
 import consulo.ui.ex.awt.ComboBox;
 import consulo.ui.ex.awt.DialogWrapper;
 import jakarta.inject.Singleton;
@@ -192,7 +193,7 @@ public class GenerateToStringActionHandlerImpl implements GenerateToStringAction
 
   public static class MemberChooserHeaderPanel extends JPanel {
     private MemberChooser<PsiElementClassMember> chooser;
-    private final JComboBox comboBox;
+    private final ComboBox<TemplateResource> comboBox;
 
     public void setChooser(MemberChooser chooser) {
       this.chooser = chooser;
@@ -207,7 +208,18 @@ public class GenerateToStringActionHandlerImpl implements GenerateToStringAction
       final JButton settingsButton = new JButton("Settings");
       settingsButton.setMnemonic(KeyEvent.VK_S);
 
-      comboBox = new ComboBox(all);
+      comboBox = new ComboBox<>(all);
+      comboBox.setRenderer(new ColoredListCellRenderer<TemplateResource>() {
+
+        @Override
+        protected void customizeCellRenderer(@Nonnull JList<? extends TemplateResource> jList,
+                                             TemplateResource templateResource,
+                                             int i,
+                                             boolean b,
+                                             boolean b1) {
+          append(templateResource.getName());
+        }
+      });
       settingsButton.addActionListener(new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {

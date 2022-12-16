@@ -53,16 +53,16 @@ public class EqualsHashCodeTemplatesManager extends TemplatesManager {
     return ServiceManager.getService(EqualsHashCodeTemplatesManager.class);
   }
 
-  private static final String DEFAULT_EQUALS = "/com/intellij/codeInsight/generation/defaultEquals.vm";
-  private static final String DEFAULT_HASH_CODE = "/com/intellij/codeInsight/generation/defaultHashCode.vm";
-  private static final String APACHE3_EQUALS = "/com/intellij/codeInsight/generation/apacheEqualsBuilder3.vm";
-  private static final String APACHE3_HASH_CODE = "/com/intellij/codeInsight/generation/apacheHashCodeBuilder3.vm";
-  private static final String APACHE_EQUALS = "/com/intellij/codeInsight/generation/apacheEqualsBuilder.vm";
-  private static final String APACHE_HASH_CODE = "/com/intellij/codeInsight/generation/apacheHashCodeBuilder.vm";
-  private static final String GUAVA_EQUALS = "/com/intellij/codeInsight/generation/guavaEquals.vm";
-  private static final String GUAVA_HASH_CODE = "/com/intellij/codeInsight/generation/guavaHashCode.vm";
-  private static final String OBJECTS_EQUALS = "/com/intellij/codeInsight/generation/objectsEquals.vm";
-  private static final String OBJECTS_HASH_CODE = "/com/intellij/codeInsight/generation/objectsHashCode.vm";
+  private static final String DEFAULT_EQUALS = "/com/intellij/java/impl/codeInsight/generation/defaultEquals.vm";
+  private static final String DEFAULT_HASH_CODE = "/com/intellij/java/impl/codeInsight/generation/defaultHashCode.vm";
+  private static final String APACHE3_EQUALS = "/com/intellij/java/impl/codeInsight/generation/apacheEqualsBuilder3.vm";
+  private static final String APACHE3_HASH_CODE = "/com/intellij/java/impl/codeInsight/generation/apacheHashCodeBuilder3.vm";
+  private static final String APACHE_EQUALS = "/com/intellij/java/impl/codeInsight/generation/apacheEqualsBuilder.vm";
+  private static final String APACHE_HASH_CODE = "/com/intellij/java/impl/codeInsight/generation/apacheHashCodeBuilder.vm";
+  private static final String GUAVA_EQUALS = "/com/intellij/java/impl/codeInsight/generation/guavaEquals.vm";
+  private static final String GUAVA_HASH_CODE = "/com/intellij/java/impl/codeInsight/generation/guavaHashCode.vm";
+  private static final String OBJECTS_EQUALS = "/com/intellij/java/impl/codeInsight/generation/objectsEquals.vm";
+  private static final String OBJECTS_HASH_CODE = "/com/intellij/java/impl/codeInsight/generation/objectsHashCode.vm";
 
   private static final String EQUALS_SUFFIX = "equals";
   private static final String HASH_CODE_SUFFIX = "hashCode";

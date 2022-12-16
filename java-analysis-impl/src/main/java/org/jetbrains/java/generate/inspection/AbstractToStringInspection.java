@@ -15,20 +15,40 @@
  */
 package org.jetbrains.java.generate.inspection;
 
-import javax.annotation.Nonnull;
+import com.intellij.java.language.JavaLanguage;
+import consulo.language.Language;
 import consulo.language.editor.inspection.LocalInspectionTool;
+import consulo.language.editor.rawHighlight.HighlightDisplayLevel;
 import consulo.logging.Logger;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Base class for inspection support.
  */
-public abstract class AbstractToStringInspection extends LocalInspectionTool
-{
-	protected static final Logger log = Logger.getInstance("#org.jetbrains.generate.tostring.inspection.AbstractToStringInspection");
+public abstract class AbstractToStringInspection extends LocalInspectionTool {
+  protected static final Logger log = Logger.getInstance(AbstractToStringInspection.class);
 
-	@Nonnull
-	public String getGroupDisplayName()
-	{
-		return "toString() issues";
-	}
+  @Nonnull
+  public String getGroupDisplayName() {
+    return "toString() issues";
+  }
+
+  @Nullable
+  @Override
+  public Language getLanguage() {
+    return JavaLanguage.INSTANCE;
+  }
+
+  @Nonnull
+  @Override
+  public HighlightDisplayLevel getDefaultLevel() {
+    return HighlightDisplayLevel.WARNING;
+  }
+
+  @Override
+  public boolean isEnabledByDefault() {
+    return false;
+  }
 }

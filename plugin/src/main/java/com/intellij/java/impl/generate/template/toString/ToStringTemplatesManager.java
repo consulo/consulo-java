@@ -40,14 +40,14 @@ import java.io.IOException;
 @ServiceImpl
 public class ToStringTemplatesManager extends TemplatesManager {
   private static final String DEFAULT_CONCAT = "DefaultConcatMember.vm";
-  private static final String DEFAULT_CONCAT_GROOVY = "/org/jetbrains/java/generate/template/toString/DefaultConcatMemberGroovy.vm";
-  private static final String DEFAULT_CONCAT_SUPER = "/org/jetbrains/java/generate/template/toString/DefaultConcatMemberSuper.vm";
-  private static final String DEFAULT_BUFFER = "/org/jetbrains/java/generate/template/toString/DefaultBuffer.vm";
-  private static final String DEFAULT_BUILDER = "/org/jetbrains/java/generate/template/toString/DefaultBuilder.vm";
-  private static final String DEFAULT_TOSTRINGBUILDER = "/org/jetbrains/java/generate/template/toString/DefaultToStringBuilder.vm";
-  private static final String DEFAULT_TOSTRINGBUILDER3 = "/org/jetbrains/java/generate/template/toString/DefaultToStringBuilder3.vm";
-  private static final String DEFAULT_GUAVA = "/org/jetbrains/java/generate/template/toString/DefaultGuava.vm";
-  private static final String DEFAULT_GUAVA_18 = "/org/jetbrains/java/generate/template/toString/DefaultGuava18.vm";
+  private static final String DEFAULT_CONCAT_GROOVY = "DefaultConcatMemberGroovy.vm";
+  private static final String DEFAULT_CONCAT_SUPER = "DefaultConcatMemberSuper.vm";
+  private static final String DEFAULT_BUFFER = "DefaultBuffer.vm";
+  private static final String DEFAULT_BUILDER = "DefaultBuilder.vm";
+  private static final String DEFAULT_TOSTRINGBUILDER = "DefaultToStringBuilder.vm";
+  private static final String DEFAULT_TOSTRINGBUILDER3 = "DefaultToStringBuilder3.vm";
+  private static final String DEFAULT_GUAVA = "DefaultGuava.vm";
+  private static final String DEFAULT_GUAVA_18 = "DefaultGuava18.vm";
 
   public static TemplatesManager getInstance() {
     return ServiceManager.getService(ToStringTemplatesManager.class);

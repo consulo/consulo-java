@@ -16,128 +16,115 @@
 
 package com.intellij.java.impl.codeInspection.unusedSymbol;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.annotation.Nullable;
-import javax.swing.JCheckBox;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-
 import com.intellij.java.analysis.impl.codeInspection.unusedSymbol.UnusedSymbolLocalInspectionBase;
 import com.intellij.java.impl.codeInspection.deadCode.UnusedDeclarationInspection;
 import com.intellij.java.language.psi.PsiModifier;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.ui.ex.awt.UIUtil;
 
-public class UnusedSymbolLocalInspection extends UnusedSymbolLocalInspectionBase
-{
+import javax.annotation.Nullable;
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-	/**
-	 * use {@link UnusedDeclarationInspection} instead
-	 */
-	@Deprecated
-	public UnusedSymbolLocalInspection()
-	{
-	}
+public class UnusedSymbolLocalInspection extends UnusedSymbolLocalInspectionBase {
+  /**
+   * use {@link UnusedDeclarationInspection} instead
+   */
+  @Deprecated
+  public UnusedSymbolLocalInspection() {
+  }
 
-	public class OptionsPanel
-	{
-		private JCheckBox myCheckLocalVariablesCheckBox;
-		private JCheckBox myCheckClassesCheckBox;
-		private JCheckBox myCheckFieldsCheckBox;
-		private JCheckBox myCheckMethodsCheckBox;
-		private JCheckBox myCheckParametersCheckBox;
-		private JCheckBox myAccessors;
-		private JPanel myPanel;
-		private JLabel myClassVisibilityCb;
-		private JLabel myFieldVisibilityCb;
-		private JLabel myMethodVisibilityCb;
-		private JLabel myMethodParameterVisibilityCb;
-		private JCheckBox myInnerClassesCheckBox;
-		private JLabel myInnerClassVisibilityCb;
+  public class OptionsPanel {
+    private JCheckBox myCheckLocalVariablesCheckBox;
+    private JCheckBox myCheckClassesCheckBox;
+    private JCheckBox myCheckFieldsCheckBox;
+    private JCheckBox myCheckMethodsCheckBox;
+    private JCheckBox myCheckParametersCheckBox;
+    private JCheckBox myAccessors;
+    private JPanel myPanel;
+    private JLabel myClassVisibilityCb;
+    private JLabel myFieldVisibilityCb;
+    private JLabel myMethodVisibilityCb;
+    private JLabel myMethodParameterVisibilityCb;
+    private JCheckBox myInnerClassesCheckBox;
+    private JLabel myInnerClassVisibilityCb;
 
-		public OptionsPanel()
-		{
-			myCheckLocalVariablesCheckBox.setSelected(LOCAL_VARIABLE);
-			myCheckClassesCheckBox.setSelected(CLASS);
-			myCheckFieldsCheckBox.setSelected(FIELD);
-			myCheckMethodsCheckBox.setSelected(METHOD);
-			myInnerClassesCheckBox.setSelected(INNER_CLASS);
-			myCheckParametersCheckBox.setSelected(PARAMETER);
-			myAccessors.setSelected(!isIgnoreAccessors());
-			updateEnableState();
+    public OptionsPanel() {
+      myCheckLocalVariablesCheckBox.setSelected(LOCAL_VARIABLE);
+      myCheckClassesCheckBox.setSelected(CLASS);
+      myCheckFieldsCheckBox.setSelected(FIELD);
+      myCheckMethodsCheckBox.setSelected(METHOD);
+      myInnerClassesCheckBox.setSelected(INNER_CLASS);
+      myCheckParametersCheckBox.setSelected(PARAMETER);
+      myAccessors.setSelected(!isIgnoreAccessors());
+      updateEnableState();
 
-			final ActionListener listener = new ActionListener()
-			{
-				@Override
-				public void actionPerformed(ActionEvent e)
-				{
-					LOCAL_VARIABLE = myCheckLocalVariablesCheckBox.isSelected();
-					CLASS = myCheckClassesCheckBox.isSelected();
-					INNER_CLASS = myInnerClassesCheckBox.isSelected();
-					FIELD = myCheckFieldsCheckBox.isSelected();
-					METHOD = myCheckMethodsCheckBox.isSelected();
-					setIgnoreAccessors(!myAccessors.isSelected());
-					PARAMETER = myCheckParametersCheckBox.isSelected();
+      final ActionListener listener = new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+          LOCAL_VARIABLE = myCheckLocalVariablesCheckBox.isSelected();
+          CLASS = myCheckClassesCheckBox.isSelected();
+          INNER_CLASS = myInnerClassesCheckBox.isSelected();
+          FIELD = myCheckFieldsCheckBox.isSelected();
+          METHOD = myCheckMethodsCheckBox.isSelected();
+          setIgnoreAccessors(!myAccessors.isSelected());
+          PARAMETER = myCheckParametersCheckBox.isSelected();
 
-					updateEnableState();
-				}
-			};
-			myCheckLocalVariablesCheckBox.addActionListener(listener);
-			myCheckFieldsCheckBox.addActionListener(listener);
-			myCheckMethodsCheckBox.addActionListener(listener);
-			myCheckClassesCheckBox.addActionListener(listener);
-			myCheckParametersCheckBox.addActionListener(listener);
-			myInnerClassesCheckBox.addActionListener(listener);
-			myAccessors.addActionListener(listener);
-		}
+          updateEnableState();
+        }
+      };
+      myCheckLocalVariablesCheckBox.addActionListener(listener);
+      myCheckFieldsCheckBox.addActionListener(listener);
+      myCheckMethodsCheckBox.addActionListener(listener);
+      myCheckClassesCheckBox.addActionListener(listener);
+      myCheckParametersCheckBox.addActionListener(listener);
+      myInnerClassesCheckBox.addActionListener(listener);
+      myAccessors.addActionListener(listener);
+    }
 
-		private void updateEnableState()
-		{
-			UIUtil.setEnabled(myClassVisibilityCb, CLASS, true);
-			UIUtil.setEnabled(myInnerClassVisibilityCb, INNER_CLASS, true);
-			UIUtil.setEnabled(myFieldVisibilityCb, FIELD, true);
-			UIUtil.setEnabled(myMethodVisibilityCb, METHOD, true);
-			UIUtil.setEnabled(myMethodParameterVisibilityCb, PARAMETER, true);
-			myAccessors.setEnabled(METHOD);
-		}
+    private void updateEnableState() {
+      UIUtil.setEnabled(myClassVisibilityCb, CLASS, true);
+      UIUtil.setEnabled(myInnerClassVisibilityCb, INNER_CLASS, true);
+      UIUtil.setEnabled(myFieldVisibilityCb, FIELD, true);
+      UIUtil.setEnabled(myMethodVisibilityCb, METHOD, true);
+      UIUtil.setEnabled(myMethodParameterVisibilityCb, PARAMETER, true);
+      myAccessors.setEnabled(METHOD);
+    }
 
-		public JComponent getPanel()
-		{
-			return myPanel;
-		}
+    public JComponent getPanel() {
+      return myPanel;
+    }
 
-		private void createUIComponents()
-		{
-			myClassVisibilityCb = new VisibilityModifierChooser(() -> CLASS, myClassVisibility, modifier -> setClassVisibility(modifier), new String[]{
-					PsiModifier.PACKAGE_LOCAL,
-					PsiModifier.PUBLIC
-			});
+    private void createUIComponents() {
+      myClassVisibilityCb =
+        new VisibilityModifierChooser(() -> CLASS, myClassVisibility, modifier -> setClassVisibility(modifier), new String[]{
+          PsiModifier.PACKAGE_LOCAL,
+          PsiModifier.PUBLIC
+        });
 
-			myInnerClassVisibilityCb = new VisibilityModifierChooser(() -> INNER_CLASS, myInnerClassVisibility, modifier -> setInnerClassVisibility(modifier));
+      myInnerClassVisibilityCb =
+        new VisibilityModifierChooser(() -> INNER_CLASS, myInnerClassVisibility, modifier -> setInnerClassVisibility(modifier));
 
-			myFieldVisibilityCb = new VisibilityModifierChooser(() -> FIELD, myFieldVisibility, modifier -> setFieldVisibility(modifier));
+      myFieldVisibilityCb = new VisibilityModifierChooser(() -> FIELD, myFieldVisibility, modifier -> setFieldVisibility(modifier));
 
-			myMethodVisibilityCb = new VisibilityModifierChooser(() -> METHOD, myMethodVisibility, modifier -> setMethodVisibility(modifier));
+      myMethodVisibilityCb = new VisibilityModifierChooser(() -> METHOD, myMethodVisibility, modifier -> setMethodVisibility(modifier));
 
-			myMethodParameterVisibilityCb = new VisibilityModifierChooser(() -> PARAMETER, myParameterVisibility, modifier -> setParameterVisibility(modifier));
+      myMethodParameterVisibilityCb =
+        new VisibilityModifierChooser(() -> PARAMETER, myParameterVisibility, modifier -> setParameterVisibility(modifier));
 
-			myAccessors = new JCheckBox()
-			{
-				@Override
-				public void setEnabled(boolean b)
-				{
-					super.setEnabled(b && METHOD);
-				}
-			};
-		}
-	}
+      myAccessors = new JCheckBox() {
+        @Override
+        public void setEnabled(boolean b) {
+          super.setEnabled(b && METHOD);
+        }
+      };
+    }
+  }
 
-	@Override
-	@Nullable
-	public JComponent createOptionsPanel()
-	{
-		return new OptionsPanel().getPanel();
-	}
+  @Override
+  @Nullable
+  public JComponent createOptionsPanel() {
+    return new OptionsPanel().getPanel();
+  }
 }

@@ -34,6 +34,7 @@ import com.intellij.java.analysis.impl.codeInspection.reference.RefClassImpl;
 import com.intellij.java.analysis.impl.codeInspection.reference.RefJavaElementImpl;
 import com.intellij.java.analysis.impl.codeInspection.unusedSymbol.UnusedSymbolLocalInspectionBase;
 import com.intellij.java.analysis.impl.codeInspection.util.RefFilter;
+import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.java.language.impl.codeInsight.daemon.impl.analysis.HighlightUtilBase;
 import com.intellij.java.language.impl.psi.impl.PsiClassImplUtil;
@@ -44,6 +45,7 @@ import consulo.application.progress.ProgressManager;
 import consulo.component.extension.Extensions;
 import consulo.java.analysis.codeInspection.JavaExtensionPoints;
 import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.Language;
 import consulo.language.editor.ImplicitUsageProvider;
 import consulo.language.editor.impl.inspection.reference.RefElementImpl;
 import consulo.language.editor.inspection.GlobalInspectionContext;
@@ -172,6 +174,12 @@ public abstract class UnusedDeclarationInspectionBase extends GlobalInspectionTo
   @Nonnull
   public String getShortName() {
     return SHORT_NAME;
+  }
+
+  @Nullable
+  @Override
+  public Language getLanguage() {
+    return JavaLanguage.INSTANCE;
   }
 
   @Override
