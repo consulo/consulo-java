@@ -1,8 +1,8 @@
 package consulo.java.manifest.editor.completionProviders;
 
+import consulo.java.manifest.internal.header.ManifestHeaderParserRegistratorImpl;
 import consulo.language.editor.completion.CompletionParameters;
 import consulo.language.editor.ui.awt.TextFieldWithAutoCompletionListProvider;
-import consulo.java.manifest.lang.headerparser.HeaderParserEP;
 import consulo.ui.image.Image;
 import org.osmorc.manifest.lang.ManifestFileType;
 
@@ -24,14 +24,10 @@ public class HeaderKeyCompletionProvider extends TextFieldWithAutoCompletionList
   @Nonnull
   @Override
   public Collection<String> getItems(String prefix, boolean cached, CompletionParameters parameters) {
-    List<HeaderParserEP> extensions = HeaderParserEP.EP_NAME.getExtensionList();
-    List<String> list = new ArrayList<>(extensions.size() - 1);
-    for (HeaderParserEP ep : extensions) {
-      if (ep.key.isEmpty()) {
-        continue;
-      }
-      list.add(ep.key);
-    }
+    ManifestHeaderParserRegistratorImpl registrator = ManifestHeaderParserRegistratorImpl.get();
+
+    List<String> list = new ArrayList<>(registrator.getParsers().size());
+    list.addAll(registrator.getParsers().keySet());
     return list;
   }
 
