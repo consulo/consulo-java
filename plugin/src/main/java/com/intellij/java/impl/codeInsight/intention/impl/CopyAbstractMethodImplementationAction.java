@@ -15,15 +15,20 @@
  */
 package com.intellij.java.impl.codeInsight.intention.impl;
 
-import consulo.language.editor.CodeInsightBundle;
-import consulo.codeEditor.Editor;
-import consulo.project.Project;
 import com.intellij.java.language.psi.PsiMethod;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.codeEditor.Editor;
+import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.intention.IntentionMetaData;
+import consulo.project.Project;
+
 import javax.annotation.Nonnull;
 
 /**
  * @author yole
  */
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.CopyAbstractMethodImplementationAction", categories = {"Java", "Declaration"}, fileExtensions = "java")
 public class CopyAbstractMethodImplementationAction extends ImplementAbstractMethodAction {
   @Override
   @Nonnull

@@ -9,7 +9,7 @@ import java.util.Collections;
 import org.jetbrains.annotations.NonNls;
 import com.intellij.java.impl.codeInspection.i18n.I18nQuickFixHandler;
 import com.intellij.java.impl.codeInspection.i18n.I18nizeAction;
-import com.intellij.java.impl.codeInspection.i18n.JavaI18nUtil;
+import consulo.java.analysis.impl.util.JavaI18nUtil;
 import consulo.dataContext.DataManager;
 import com.intellij.lang.properties.psi.PropertiesFile;
 import consulo.ui.ex.action.AnActionEvent;

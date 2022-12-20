@@ -18,7 +18,7 @@ package com.intellij.java.impl.ipp.concatenation;
 import com.intellij.java.impl.ipp.base.Intention;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.intellij.java.impl.ipp.psiutils.ConcatenationUtils;
-import com.intellij.java.impl.psi.util.PsiConcatenationUtil;
+import com.intellij.java.language.psi.util.PsiConcatenationUtil;
 import com.intellij.java.language.psi.*;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.intention.IntentionMetaData;

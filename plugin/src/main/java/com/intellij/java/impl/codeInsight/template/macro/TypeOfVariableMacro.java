@@ -16,7 +16,8 @@
 package com.intellij.java.impl.codeInsight.template.macro;
 
 import com.intellij.java.impl.codeInsight.template.JavaCodeContextType;
-import com.intellij.java.impl.codeInsight.template.PsiTypeResult;
+import com.intellij.java.language.impl.codeInsight.template.macro.PsiTypeResult;
+import com.intellij.java.language.impl.codeInsight.template.macro.MacroUtil;
 import com.intellij.java.language.psi.PsiVariable;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.template.*;

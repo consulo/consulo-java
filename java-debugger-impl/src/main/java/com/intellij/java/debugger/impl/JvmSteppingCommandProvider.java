@@ -18,36 +18,39 @@ package com.intellij.java.debugger.impl;
 import com.intellij.java.debugger.impl.engine.DebugProcessImpl;
 import com.intellij.java.debugger.impl.engine.MethodFilter;
 import com.intellij.java.debugger.impl.engine.SuspendContextImpl;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ExtensionAPI;
 import consulo.component.extension.ExtensionPointName;
 
 /**
  * @author egor
  */
-public abstract class JvmSteppingCommandProvider
-{
-	public static final ExtensionPointName<JvmSteppingCommandProvider> EP_NAME = ExtensionPointName.create("consulo.java.debugger.jvmSteppingCommandProvider");
+@ExtensionAPI(ComponentScope.APPLICATION)
+public abstract class JvmSteppingCommandProvider {
+  public static final ExtensionPointName<JvmSteppingCommandProvider> EP_NAME =
+    ExtensionPointName.create(JvmSteppingCommandProvider.class);
 
-	/**
-	 * @return null if can not handle
-	 */
-	public DebugProcessImpl.ResumeCommand getStepIntoCommand(SuspendContextImpl suspendContext, boolean ignoreFilters, final MethodFilter smartStepFilter, int stepSize)
-	{
-		return null;
-	}
+  /**
+   * @return null if can not handle
+   */
+  public DebugProcessImpl.ResumeCommand getStepIntoCommand(SuspendContextImpl suspendContext,
+                                                           boolean ignoreFilters,
+                                                           final MethodFilter smartStepFilter,
+                                                           int stepSize) {
+    return null;
+  }
 
-	/**
-	 * @return null if can not handle
-	 */
-	public DebugProcessImpl.ResumeCommand getStepOutCommand(SuspendContextImpl suspendContext, int stepSize)
-	{
-		return null;
-	}
+  /**
+   * @return null if can not handle
+   */
+  public DebugProcessImpl.ResumeCommand getStepOutCommand(SuspendContextImpl suspendContext, int stepSize) {
+    return null;
+  }
 
-	/**
-	 * @return null if can not handle
-	 */
-	public DebugProcessImpl.ResumeCommand getStepOverCommand(SuspendContextImpl suspendContext, boolean ignoreBreakpoints, int stepSize)
-	{
-		return null;
-	}
+  /**
+   * @return null if can not handle
+   */
+  public DebugProcessImpl.ResumeCommand getStepOverCommand(SuspendContextImpl suspendContext, boolean ignoreBreakpoints, int stepSize) {
+    return null;
+  }
 }

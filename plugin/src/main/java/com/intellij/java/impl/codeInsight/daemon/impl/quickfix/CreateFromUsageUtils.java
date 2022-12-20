@@ -22,7 +22,7 @@ import com.intellij.java.impl.codeInsight.generation.OverrideImplementUtil;
 import com.intellij.java.impl.codeInsight.generation.PsiGenerationInfo;
 import com.intellij.java.impl.codeInsight.intention.impl.CreateClassDialog;
 import com.intellij.java.impl.codeInsight.template.ExpressionUtil;
-import com.intellij.java.impl.ide.fileTemplates.JavaTemplateUtil;
+import com.intellij.java.language.impl.codeInsight.template.JavaTemplateUtil;
 import com.intellij.java.impl.psi.statistics.JavaStatisticsManager;
 import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
 import com.intellij.java.language.impl.codeInsight.completion.proc.VariablesProcessor;

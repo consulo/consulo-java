@@ -17,9 +17,11 @@ package com.intellij.java.impl.codeInsight.intention.impl;
 
 import com.intellij.java.language.impl.psi.impl.JavaConstantExpressionEvaluator;
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
 import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.FileModificationService;
+import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
@@ -31,6 +33,8 @@ import javax.annotation.Nullable;
 /**
  * @author Danila Ponomarenko
  */
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.ConvertColorRepresentationIntentionAction", categories = {"Java", "Declaration"}, fileExtensions = "java")
 public class ConvertColorRepresentationIntentionAction extends BaseColorIntentionAction {
 
   @Override

@@ -36,6 +36,7 @@ import com.intellij.java.language.psi.PsiElementFactory;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.ApplicationManager;
 import consulo.application.Result;
 import consulo.codeEditor.CaretModel;
@@ -46,6 +47,7 @@ import consulo.ide.impl.idea.openapi.fileEditor.ex.IdeDocumentHistory;
 import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.WriteCommandAction;
 import consulo.language.editor.intention.BaseIntentionAction;
+import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.editor.template.Template;
 import consulo.language.editor.template.TemplateBuilder;
 import consulo.language.editor.template.TemplateBuilderFactory;
@@ -64,6 +66,8 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.CreateSubclassAction", categories = {"Java", "Declaration"}, fileExtensions = "java")
 public class CreateSubclassAction extends BaseIntentionAction {
   private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.intention.impl.ImplementAbstractClassAction");
   private String myText = CodeInsightBundle.message("intention.implement.abstract.class.default.text");

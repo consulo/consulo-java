@@ -17,6 +17,7 @@ package com.intellij.java.impl.testIntegration.createTest;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.testIntegration.TestFramework;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
 import consulo.component.extension.Extensions;
 import consulo.ide.impl.idea.ide.util.PropertiesComponent;
@@ -24,6 +25,7 @@ import consulo.language.content.LanguageContentFolderScopes;
 import consulo.language.content.TestContentFolderTypeProvider;
 import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.FileModificationService;
+import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.editor.intention.PsiElementBaseIntentionAction;
 import consulo.language.psi.PsiDirectory;
 import consulo.language.psi.PsiElement;
@@ -47,6 +49,8 @@ import javax.annotation.Nullable;
 import java.util.HashSet;
 import java.util.Set;
 
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.CreateTestAction", categories = {"Java", "Declaration"}, fileExtensions = "java")
 public class CreateTestAction extends PsiElementBaseIntentionAction {
 
   private static final String CREATE_TEST_IN_THE_SAME_ROOT = "create.test.in.the.same.root";

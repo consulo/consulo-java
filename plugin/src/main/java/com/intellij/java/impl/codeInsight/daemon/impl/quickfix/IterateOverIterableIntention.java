@@ -17,12 +17,14 @@ package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.SelectionModel;
 import consulo.document.util.TextRange;
 import consulo.ide.impl.idea.codeInsight.template.impl.InvokeTemplateAction;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.intention.IntentionAction;
+import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.editor.template.Template;
 import consulo.language.editor.template.TemplateManager;
 import consulo.language.editor.template.TemplateSettings;
@@ -42,6 +44,8 @@ import java.util.HashSet;
 /**
  * User: anna
  */
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.IterateOverIterableIntention", categories = {"Java", "Control Flow"}, fileExtensions = "java")
 public class IterateOverIterableIntention implements IntentionAction {
   private static final Logger LOG = Logger.getInstance(IterateOverIterableIntention.class);
 

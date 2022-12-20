@@ -16,8 +16,9 @@
 package com.intellij.java.impl.codeInsight.template.macro;
 
 import com.intellij.java.impl.codeInsight.template.JavaCodeContextType;
+import com.intellij.java.impl.codeInsight.template.JavaEditorTemplateUtilImpl;
 import com.intellij.java.impl.codeInsight.template.JavaPsiElementResult;
-import com.intellij.java.impl.codeInsight.template.impl.JavaTemplateUtil;
+import com.intellij.java.language.impl.codeInsight.template.macro.MacroUtil;
 import com.intellij.java.language.psi.*;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.document.util.TextRange;
@@ -71,7 +72,7 @@ public class VariableOfTypeMacro extends Macro {
     if (vars == null || vars.length < 2) return null;
     final Set<LookupElement> set = new LinkedHashSet<LookupElement>();
     for (PsiElement var : vars) {
-      JavaTemplateUtil.addElementLookupItem(set, var);
+      JavaEditorTemplateUtilImpl.addElementLookupItem(set, var);
     }
     return set.toArray(new LookupElement[set.size()]);
   }

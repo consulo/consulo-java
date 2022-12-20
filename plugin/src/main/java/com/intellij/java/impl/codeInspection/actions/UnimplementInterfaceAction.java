@@ -15,32 +15,27 @@
  */
 package com.intellij.java.impl.codeInspection.actions;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.MethodSignatureUtil;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.codeEditor.Editor;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.TargetElementUtil;
 import consulo.language.editor.intention.IntentionAction;
-import consulo.codeEditor.Editor;
-import consulo.project.Project;
-import com.intellij.java.language.psi.PsiClass;
+import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
-import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
-import com.intellij.java.language.psi.PsiJavaFile;
-import com.intellij.java.language.psi.PsiMethod;
 import consulo.language.psi.PsiReference;
-import com.intellij.java.language.psi.PsiReferenceList;
-import com.intellij.java.language.psi.util.MethodSignatureUtil;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
-import java.util.HashMap;
+import consulo.project.Project;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.*;
+
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.UnimplementInterfaceAction", categories = {"Java", "Declaration"}, fileExtensions = "java")
 public class UnimplementInterfaceAction implements IntentionAction {
   private String myName = "Interface";
 

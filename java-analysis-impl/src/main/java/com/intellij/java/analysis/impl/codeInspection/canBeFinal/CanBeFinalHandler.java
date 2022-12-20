@@ -15,21 +15,23 @@
  */
 package com.intellij.java.analysis.impl.codeInspection.canBeFinal;
 
-import consulo.component.extension.ExtensionPointName;
-import consulo.component.extension.Extensions;
 import com.intellij.java.language.psi.PsiMember;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ExtensionAPI;
+import consulo.component.extension.ExtensionPointName;
 
 /**
  * User: anna
  * Date: 1/31/12
  */
+@ExtensionAPI(ComponentScope.APPLICATION)
 public abstract class CanBeFinalHandler {
-  public static final ExtensionPointName<CanBeFinalHandler> EP_NAME = ExtensionPointName.create("consulo.java.canBeFinal");
+  public static final ExtensionPointName<CanBeFinalHandler> EP_NAME = ExtensionPointName.create(CanBeFinalHandler.class);
 
   public abstract boolean canBeFinal(PsiMember member);
 
   public static boolean allowToBeFinal(PsiMember member) {
-    for (CanBeFinalHandler handler : Extensions.getExtensions(EP_NAME)) {
+    for (CanBeFinalHandler handler : EP_NAME.getExtensionList()) {
       if (!handler.canBeFinal(member)) return false;
     }
     return true;

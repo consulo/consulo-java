@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.psi.impl;
 
-import com.intellij.java.impl.ide.fileTemplates.JavaTemplateUtil;
+import com.intellij.java.language.impl.codeInsight.template.JavaTemplateUtil;
 import com.intellij.java.impl.psi.impl.source.codeStyle.ImportHelper;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.LanguageLevel;

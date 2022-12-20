@@ -19,6 +19,7 @@ import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.ApplicationManager;
 import consulo.codeEditor.Editor;
 import consulo.ide.impl.idea.ide.util.MemberChooser;
@@ -27,6 +28,7 @@ import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.intention.BaseIntentionAction;
 import consulo.language.editor.intention.HighPriorityAction;
+import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
@@ -47,6 +49,8 @@ import java.util.*;
 /**
  * @author Danila Ponomarenko
  */
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.BindFieldsFromParametersAction", categories = {"Java", "Declaration"}, fileExtensions = "java")
 public class BindFieldsFromParametersAction extends BaseIntentionAction implements HighPriorityAction {
   private static final Logger LOG = Logger.getInstance(CreateFieldFromParameterAction.class);
   private static final Key<Map<SmartPsiElementPointer<PsiParameter>, Boolean>> PARAMS = Key.create("FIELDS_FROM_PARAMS");

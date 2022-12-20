@@ -15,6 +15,8 @@
  */
 package com.intellij.java.compiler.impl.cache;
 
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ExtensionAPI;
 import consulo.compiler.CacheCorruptedException;
 import consulo.compiler.CompileContext;
 import consulo.component.extension.ExtensionPointName;
@@ -23,9 +25,10 @@ import consulo.component.extension.ExtensionPointName;
  * @author Eugene Zhuravlev
  *         Date: Aug 19, 2008
  */
+@ExtensionAPI(ComponentScope.APPLICATION)
 public interface DependencyProcessor {
   ExtensionPointName<DependencyProcessor> EXTENSION_POINT_NAME =
-    ExtensionPointName.create("consulo.java.compiler.makeDependencyProcessor");
+    ExtensionPointName.create(DependencyProcessor.class);
 
   void processDependencies(CompileContext context, int classQualifiedName, CachingSearcher searcher) throws CacheCorruptedException;
 }

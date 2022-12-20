@@ -16,20 +16,22 @@
 package com.intellij.java.debugger.impl.engine;
 
 import com.intellij.java.debugger.engine.SuspendContext;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ExtensionAPI;
 import consulo.component.extension.ExtensionPointName;
 import consulo.internal.com.sun.jdi.request.StepRequest;
 
 /**
  * @author Nikolay.Tropin
  */
-public interface ExtraSteppingFilter
-{
-	ExtensionPointName<ExtraSteppingFilter> EP_NAME = ExtensionPointName.create("consulo.java.debugger.extraSteppingFilter");
+@ExtensionAPI(ComponentScope.APPLICATION)
+public interface ExtraSteppingFilter {
+  ExtensionPointName<ExtraSteppingFilter> EP_NAME = ExtensionPointName.create(ExtraSteppingFilter.class);
 
-	boolean isApplicable(SuspendContext context);
+  boolean isApplicable(SuspendContext context);
 
-	/**
-	 * @return Step request depth as defined in {@link StepRequest}
-	 */
-	int getStepRequestDepth(SuspendContext context);
+  /**
+   * @return Step request depth as defined in {@link StepRequest}
+   */
+  int getStepRequestDepth(SuspendContext context);
 }

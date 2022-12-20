@@ -15,17 +15,19 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
-import consulo.language.editor.FileModificationService;
-import consulo.language.editor.intention.PsiElementBaseIntentionAction;
 import com.intellij.java.language.impl.psi.controlFlow.*;
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
-import consulo.project.Project;
+import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.language.editor.FileModificationService;
+import consulo.language.editor.intention.IntentionMetaData;
+import consulo.language.editor.intention.PsiElementBaseIntentionAction;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.logging.Logger;
+import consulo.project.Project;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -33,6 +35,8 @@ import javax.annotation.Nullable;
 /**
  * @author ven
  */
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.RemoveRedundantElseAction", categories = {"Java", "Control Flow"}, fileExtensions = "java")
 public class RemoveRedundantElseAction extends PsiElementBaseIntentionAction {
   private static final Logger LOG = Logger.getInstance(RemoveRedundantElseAction.class);
 

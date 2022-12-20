@@ -15,21 +15,26 @@
  */
 package com.intellij.java.impl.codeInsight.intention.impl;
 
+import com.intellij.java.impl.refactoring.encapsulateFields.EncapsulateFieldsHandler;
+import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.codeEditor.Editor;
+import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.intention.IntentionMetaData;
+import consulo.language.editor.refactoring.action.BaseRefactoringIntentionAction;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.SyntheticElement;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
-import consulo.language.editor.CodeInsightBundle;
-import com.intellij.java.language.psi.*;
-import consulo.codeEditor.Editor;
-import consulo.project.Project;
-import consulo.language.psi.*;
-import consulo.language.editor.refactoring.action.BaseRefactoringIntentionAction;
-import com.intellij.java.impl.refactoring.encapsulateFields.EncapsulateFieldsHandler;
-import consulo.language.util.IncorrectOperationException;
 
 /**
  * @author Danila Ponomarenko
  */
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.EncapsulateFieldAction", categories = {"Java", "Refactorings"}, fileExtensions = "java")
 public class EncapsulateFieldAction extends BaseRefactoringIntentionAction {
 
   @Nonnull

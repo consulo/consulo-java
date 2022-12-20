@@ -15,41 +15,38 @@
  */
 package com.intellij.java.impl.codeInspection.actions;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import com.intellij.java.language.psi.*;
-import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
+import com.intellij.java.indexing.search.searches.DirectClassInheritorsSearch;
 import com.intellij.java.language.impl.codeInsight.ChangeContextUtil;
-import consulo.language.editor.FileModificationService;
-import consulo.language.editor.TargetElementUtil;
-import consulo.language.editor.intention.BaseIntentionAction;
-import consulo.application.ApplicationManager;
-import consulo.application.Result;
-import consulo.language.editor.WriteCommandAction;
-import consulo.logging.Logger;
-import consulo.codeEditor.Editor;
-import consulo.application.progress.ProgressManager;
-import consulo.project.Project;
-import consulo.language.psi.*;
-import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.impl.psi.impl.source.javadoc.PsiDocMethodOrFieldRef;
 import com.intellij.java.language.impl.psi.impl.source.tree.java.PsiReferenceExpressionImpl;
-import consulo.language.psi.scope.GlobalSearchScope;
-import com.intellij.java.indexing.search.searches.DirectClassInheritorsSearch;
-import consulo.language.psi.search.ReferencesSearch;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.util.InheritanceUtil;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.application.ApplicationManager;
+import consulo.application.Result;
+import consulo.application.progress.ProgressManager;
+import consulo.codeEditor.Editor;
+import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.editor.FileModificationService;
+import consulo.language.editor.TargetElementUtil;
+import consulo.language.editor.WriteCommandAction;
+import consulo.language.editor.intention.BaseIntentionAction;
+import consulo.language.editor.intention.IntentionMetaData;
+import consulo.language.psi.*;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
-import consulo.java.language.module.util.JavaClassNames;
+import consulo.logging.Logger;
+import consulo.project.Project;
+import org.jetbrains.annotations.NonNls;
 
+import javax.annotation.Nonnull;
+import java.util.*;
+
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.ReplaceImplementsWithStaticImportAction", categories = {"Java", "Declaration"}, fileExtensions = "java")
 public class ReplaceImplementsWithStaticImportAction extends BaseIntentionAction {
   private static final Logger LOG = Logger.getInstance(ReplaceImplementsWithStaticImportAction.class);
   @NonNls private static final String FIND_CONSTANT_FIELD_USAGES = "Find constant field usages...";

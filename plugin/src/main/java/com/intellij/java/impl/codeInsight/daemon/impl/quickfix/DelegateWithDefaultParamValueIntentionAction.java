@@ -19,6 +19,7 @@ import com.intellij.java.impl.codeInsight.template.impl.TextExpression;
 import com.intellij.java.impl.refactoring.util.RefactoringUtil;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.AllIcons;
 import consulo.application.ApplicationManager;
 import consulo.codeEditor.Editor;
@@ -26,6 +27,7 @@ import consulo.component.util.Iconable;
 import consulo.document.RangeMarker;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.hint.HintManager;
+import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.editor.intention.LowPriorityAction;
 import consulo.language.editor.intention.PsiElementBaseIntentionAction;
 import consulo.language.editor.template.Template;
@@ -48,6 +50,8 @@ import java.util.HashSet;
 /**
  * User: anna
  */
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.DelegateWithDefaultParamValueIntentionAction", categories = {"Java", "Declaration"}, fileExtensions = "java")
 public class DelegateWithDefaultParamValueIntentionAction extends PsiElementBaseIntentionAction implements Iconable, LowPriorityAction {
   @Override
   public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {

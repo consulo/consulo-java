@@ -23,13 +23,17 @@
 package com.intellij.java.impl.codeInsight.intention.impl;
 
 import com.intellij.java.language.codeInsight.NullableNotNullManager;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.intention.IntentionMetaData;
 import consulo.project.Project;
-import consulo.util.lang.Pair;
 import consulo.util.collection.ArrayUtil;
-import javax.annotation.Nonnull;
+import consulo.util.lang.Pair;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.AddNullableAnnotationIntention", categories = {"Java", "Control Flow"}, fileExtensions = "java")
 public class AddNullableAnnotationIntention extends AddAnnotationIntention {
   @Nonnull
   @Override

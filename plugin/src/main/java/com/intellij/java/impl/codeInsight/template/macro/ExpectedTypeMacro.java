@@ -18,8 +18,8 @@ package com.intellij.java.impl.codeInsight.template.macro;
 import com.intellij.java.impl.codeInsight.ExpectedTypeInfo;
 import com.intellij.java.impl.codeInsight.ExpectedTypesProvider;
 import com.intellij.java.impl.codeInsight.template.JavaCodeContextType;
-import com.intellij.java.impl.codeInsight.template.PsiTypeResult;
-import com.intellij.java.impl.codeInsight.template.impl.JavaTemplateUtil;
+import com.intellij.java.impl.codeInsight.template.JavaEditorTemplateUtilImpl;
+import com.intellij.java.language.impl.codeInsight.template.macro.PsiTypeResult;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiIdentifier;
 import com.intellij.java.language.psi.PsiType;
@@ -75,7 +75,7 @@ public class ExpectedTypeMacro extends Macro {
     if (types == null || types.length < 2) return null;
     Set<LookupElement> set = new LinkedHashSet<LookupElement>();
     for (PsiType type : types) {
-      JavaTemplateUtil.addTypeLookupItem(set, type);
+      JavaEditorTemplateUtilImpl.addTypeLookupItem(set, type);
     }
     return set.toArray(new LookupElement[set.size()]);
   }

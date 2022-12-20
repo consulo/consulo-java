@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.codeInsight.template.macro;
 
+import com.intellij.java.language.impl.codeInsight.template.macro.MacroUtil;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.template.Expression;

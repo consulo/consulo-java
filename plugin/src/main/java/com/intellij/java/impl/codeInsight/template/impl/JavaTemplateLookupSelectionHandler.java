@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.codeInsight.template.impl;
 
+import com.intellij.java.language.impl.codeInsight.template.JavaTemplateUtilImpl;
 import consulo.document.Document;
 import consulo.language.editor.completion.lookup.LookupElement;
 import consulo.language.editor.template.TemplateLookupSelectionHandler;
@@ -27,6 +28,6 @@ public class JavaTemplateLookupSelectionHandler implements TemplateLookupSelecti
   @Override
   public void itemSelected(final LookupElement item,
                            final PsiFile psiFile, final Document document, final int segmentStart, final int segmentEnd) {
-    JavaTemplateUtil.updateTypeBindings(item.getObject(), psiFile, document, segmentStart, segmentEnd);
+    JavaTemplateUtilImpl.updateTypeBindings(item.getObject(), psiFile, document, segmentStart, segmentEnd);
   }
 }

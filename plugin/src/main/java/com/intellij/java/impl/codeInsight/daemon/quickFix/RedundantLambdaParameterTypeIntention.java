@@ -19,7 +19,9 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.impl.source.resolve.DefaultParameterTypeInferencePolicy;
 import com.intellij.java.language.psi.infos.MethodCandidateInfo;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
+import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.editor.intention.PsiElementBaseIntentionAction;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
@@ -33,6 +35,8 @@ import javax.annotation.Nonnull;
 /**
  * User: anna
  */
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.RedundantLambdaParameterTypeIntention", categories = {"Java", "Declaration"}, fileExtensions = "java")
 public class RedundantLambdaParameterTypeIntention extends PsiElementBaseIntentionAction {
   public static final Logger LOG = Logger.getInstance(RedundantLambdaParameterTypeIntention.class);
 

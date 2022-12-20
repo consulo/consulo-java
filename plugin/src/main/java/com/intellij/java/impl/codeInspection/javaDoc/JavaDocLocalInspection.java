@@ -13,6 +13,7 @@ import com.intellij.java.language.psi.javadoc.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PropertyUtil;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.application.Application;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.ScrollType;
 import consulo.component.extension.ExtensionPointName;
@@ -78,7 +79,6 @@ public class JavaDocLocalInspection extends BaseLocalInspectionTool {
   }
 
   private static final String IGNORE_ACCESSORS_ATTR_NAME = "IGNORE_ACCESSORS";
-  private static final ExtensionPointName<Condition<PsiMember>> JAVADOC_NOT_NESSARY_EP_NAME = ExtensionPointName.create("consulo.java.javaDocNotNecessary");
 
   public static class Options implements JDOMExternalizable {
     @NonNls public String ACCESS_JAVADOC_REQUIRED_FOR = NONE;
@@ -573,8 +573,8 @@ public class JavaDocLocalInspection extends BaseLocalInspectionTool {
     if (docComment == null) {
       if (required) {
         if (superMethods.length > 0) return null;
-        for (Condition<PsiMember> addin : JAVADOC_NOT_NESSARY_EP_NAME.getExtensionList()) {
-          if (addin.value(psiMethod)) return null;
+        for (JavaDocNotNecessaryFilter addin : Application.get().getExtensionList(JavaDocNotNecessaryFilter.class)) {
+          if (addin.isJavaDocNotNecessary(psiMethod)) return null;
         }
         if (superMethods.length == 0) {
           final PsiIdentifier nameIdentifier = psiMethod.getNameIdentifier();

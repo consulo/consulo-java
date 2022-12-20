@@ -21,9 +21,11 @@ import com.intellij.java.language.codeInsight.TestFrameworks;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.testIntegration.JavaTestFramework;
 import com.intellij.java.language.testIntegration.TestFramework;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
 import consulo.component.extension.Extensions;
 import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
@@ -38,6 +40,8 @@ import java.util.Collections;
 /**
  * @author cdr
  */
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.MoveInitializerToSetUpMethodAction", categories = {"Java", "Declaration"}, fileExtensions = "java")
 public class MoveInitializerToSetUpMethodAction extends BaseMoveInitializerToMethodAction {
   private static final Logger LOG = Logger.getInstance(MoveInitializerToSetUpMethodAction.class);
 

@@ -15,9 +15,14 @@
  */
 package com.intellij.java.impl.codeInsight.intention.impl;
 
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.intention.IntentionMetaData;
+
 /**
  * @author spleaner
  */
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.ConvertRelativePathToAbsoluteIntentionAction", categories = {"Java", "Other"}, fileExtensions = "java")
 public class ConvertRelativePathToAbsoluteIntentionAction extends ConvertAbsolutePathToRelativeIntentionAction {
 
   @Override

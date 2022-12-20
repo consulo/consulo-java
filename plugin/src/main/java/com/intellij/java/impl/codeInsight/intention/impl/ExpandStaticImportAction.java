@@ -15,33 +15,37 @@
  */
 package com.intellij.java.impl.codeInsight.intention.impl;
 
-import consulo.codeEditor.EditorPopupHelper;
-import consulo.language.editor.FileModificationService;
-import consulo.language.editor.intention.PsiElementBaseIntentionAction;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiIdentifier;
 import com.intellij.java.language.psi.PsiImportStaticStatement;
 import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
+import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.ApplicationManager;
 import consulo.application.Result;
-import consulo.language.editor.WriteCommandAction;
 import consulo.codeEditor.Editor;
+import consulo.codeEditor.EditorPopupHelper;
+import consulo.language.editor.FileModificationService;
+import consulo.language.editor.WriteCommandAction;
+import consulo.language.editor.intention.IntentionMetaData;
+import consulo.language.editor.intention.PsiElementBaseIntentionAction;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.util.IncorrectOperationException;
+import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.ui.ex.popup.BaseListPopupStep;
 import consulo.ui.ex.popup.JBPopupFactory;
 import consulo.ui.ex.popup.ListPopup;
 import consulo.ui.ex.popup.PopupStep;
-import consulo.language.psi.*;
-import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.language.util.IncorrectOperationException;
-import consulo.logging.Logger;
 
 import javax.annotation.Nonnull;
-
 import java.util.List;
 
 import static com.intellij.java.language.impl.psi.util.ImportsUtil.*;
 
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.ExpandStaticImportAction", categories = {"Java", "Imports"}, fileExtensions = "java")
 public class ExpandStaticImportAction extends PsiElementBaseIntentionAction {
   private static final Logger LOG = Logger.getInstance(ExpandStaticImportAction.class);
   private static final String REPLACE_THIS_OCCURRENCE = "Replace this occurrence and keep the method";

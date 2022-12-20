@@ -19,20 +19,26 @@
  */
 package com.intellij.java.impl.codeInsight.intention.impl;
 
-import consulo.language.editor.FileModificationService;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix.SimplifyBooleanExpressionFix;
-import consulo.language.editor.intention.IntentionAction;
 import com.intellij.java.language.psi.PsiConditionalExpression;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiType;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
-import consulo.project.Project;
-import consulo.language.psi.*;
+import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.language.editor.FileModificationService;
+import consulo.language.editor.intention.IntentionAction;
+import consulo.language.editor.intention.IntentionMetaData;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
-import javax.annotation.Nonnull;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.project.Project;
 
+import javax.annotation.Nonnull;
+
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.SimplifyBooleanExpressionAction", categories = {"Java", "Boolean"}, fileExtensions = "java")
 public class SimplifyBooleanExpressionAction implements IntentionAction{
   @Override
   @Nonnull

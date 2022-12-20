@@ -21,6 +21,7 @@ import com.intellij.java.impl.refactoring.util.RefactoringUtil;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.AllIcons;
 import consulo.application.ApplicationManager;
 import consulo.codeEditor.Editor;
@@ -31,6 +32,7 @@ import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.generation.ClassMember;
 import consulo.language.editor.hint.HintManager;
+import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.editor.intention.LowPriorityAction;
 import consulo.language.editor.intention.PsiElementBaseIntentionAction;
 import consulo.language.editor.template.Template;
@@ -53,6 +55,8 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.DefineParamsDefaultValueAction", categories = {"Java", "Declaration"}, fileExtensions = "java")
 public class DefineParamsDefaultValueAction extends PsiElementBaseIntentionAction implements Iconable, LowPriorityAction {
   private static final Logger LOG = Logger.getInstance(DefineParamsDefaultValueAction.class);
 

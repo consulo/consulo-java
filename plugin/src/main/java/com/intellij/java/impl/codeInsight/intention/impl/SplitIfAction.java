@@ -17,11 +17,13 @@ package com.intellij.java.impl.codeInsight.intention.impl;
 
 import com.intellij.java.impl.refactoring.util.RefactoringUtil;
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.ScrollType;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.FileModificationService;
+import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.editor.intention.PsiElementBaseIntentionAction;
 import consulo.language.psi.PsiComment;
 import consulo.language.psi.PsiElement;
@@ -37,6 +39,8 @@ import javax.annotation.Nonnull;
 /**
  * @author mike
  */
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.SplitIfAction", categories = {"Java", "Control Flow"}, fileExtensions = "java")
 public class SplitIfAction extends PsiElementBaseIntentionAction {
   private static final Logger LOG = Logger.getInstance(SplitIfAction.class);
 

@@ -20,9 +20,11 @@ import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.JavaHigh
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifier;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
 import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.intention.IntentionAction;
+import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiFile;
 import consulo.project.Project;
 
@@ -33,6 +35,8 @@ import java.util.Collection;
 /**
  * @author cdr
  */
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.MoveInitializerToConstructorAction", categories = {"Java", "Declaration"}, fileExtensions = "java")
 public class MoveInitializerToConstructorAction extends BaseMoveInitializerToMethodAction {
   @Override
   @Nonnull

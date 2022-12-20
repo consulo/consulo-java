@@ -20,11 +20,13 @@ import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.util.function.Processor;
 import consulo.codeEditor.Editor;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.editor.intention.PsiElementBaseIntentionAction;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
@@ -40,6 +42,8 @@ import consulo.util.collection.SmartList;
 import javax.annotation.Nonnull;
 import java.util.List;
 
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.SurroundAutoCloseableAction", categories = {"Java", "Declaration"}, fileExtensions = "java")
 public class SurroundAutoCloseableAction extends PsiElementBaseIntentionAction {
   @Override
   public boolean isAvailable(@Nonnull final Project project, final Editor editor, @Nonnull final PsiElement element) {

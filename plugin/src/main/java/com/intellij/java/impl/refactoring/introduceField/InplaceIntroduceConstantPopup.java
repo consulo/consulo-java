@@ -59,8 +59,8 @@ public class InplaceIntroduceConstantPopup extends AbstractInplaceIntroduceField
                                        TypeSelectorManagerImpl typeSelectorManager,
                                        PsiElement anchorElement,
                                        PsiElement anchorElementIfAll, OccurrenceManager occurrenceManager) {
-    super(project, editor, expr, localVariable, occurrences, typeSelectorManager, IntroduceConstantHandler.REFACTORING_NAME,
-        parentClass, anchorElement, occurrenceManager, anchorElementIfAll);
+    super(project, editor, expr, localVariable, occurrences, typeSelectorManager, IntroduceConstantHandlerImpl.REFACTORING_NAME,
+          parentClass, anchorElement, occurrenceManager, anchorElementIfAll);
 
     myInitializerText = getExprText(expr, localVariable);
 
@@ -195,7 +195,7 @@ public class InplaceIntroduceConstantPopup extends AbstractInplaceIntroduceField
         public void run() {
           myEditor.putUserData(ACTIVE_INTRODUCE, InplaceIntroduceConstantPopup.this);
           try {
-            final IntroduceConstantHandler constantHandler = new IntroduceConstantHandler();
+            final IntroduceConstantHandlerImpl constantHandler = new IntroduceConstantHandlerImpl();
             final PsiLocalVariable localVariable = (PsiLocalVariable) getLocalVariable();
             if (localVariable != null) {
               constantHandler.invokeImpl(myProject, localVariable, myEditor);
@@ -222,7 +222,7 @@ public class InplaceIntroduceConstantPopup extends AbstractInplaceIntroduceField
 
   @Override
   protected boolean startsOnTheSameElement(RefactoringActionHandler handler, PsiElement element) {
-    return super.startsOnTheSameElement(handler, element) && handler instanceof IntroduceConstantHandler;
+    return super.startsOnTheSameElement(handler, element) && handler instanceof IntroduceConstantHandlerImpl;
   }
 
   @Override

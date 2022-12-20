@@ -1,6 +1,6 @@
 package com.intellij.java.impl.psi.impl.source.resolve.reference.impl.providers;
 
-import com.intellij.java.impl.codeInspection.i18n.JavaI18nUtil;
+import consulo.java.analysis.impl.util.JavaI18nUtil;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.language.psi.PsiLiteralExpression;

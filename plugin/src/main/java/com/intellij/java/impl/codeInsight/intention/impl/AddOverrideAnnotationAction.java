@@ -20,10 +20,12 @@ import com.intellij.java.language.psi.PsiCodeBlock;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
 import consulo.document.util.TextRange;
 import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.intention.IntentionAction;
+import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
@@ -35,6 +37,8 @@ import javax.annotation.Nonnull;
 /**
  * @author ven
  */
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.AddOverrideAnnotationAction", categories = {"Java", "Declaration"}, fileExtensions = "java")
 public class AddOverrideAnnotationAction implements IntentionAction {
   private static final String JAVA_LANG_OVERRIDE = "java.lang.Override";
 

@@ -15,24 +15,26 @@
  */
 package com.intellij.java.impl.codeInsight.intention.impl;
 
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.codeEditor.Editor;
+import consulo.codeEditor.EditorColors;
+import consulo.colorScheme.EditorColorsManager;
+import consulo.colorScheme.TextAttributes;
 import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.PsiEquivalenceUtil;
 import consulo.language.editor.highlight.HighlightManager;
 import consulo.language.editor.intention.BaseIntentionAction;
-import com.intellij.java.language.psi.*;
-import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.codeEditor.Editor;
-import consulo.codeEditor.EditorColors;
-import consulo.colorScheme.EditorColorsManager;
-import consulo.colorScheme.TextAttributes;
-import consulo.project.Project;
-import consulo.util.lang.ref.Ref;
+import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiCompiledElement;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+import consulo.util.lang.ref.Ref;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -42,6 +44,8 @@ import java.util.List;
 /**
  * @author cdr
  */
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.MoveFieldAssignmentToInitializerAction", categories = {"Java", "Declaration"}, fileExtensions = "java")
 public class MoveFieldAssignmentToInitializerAction extends BaseIntentionAction {
   @Override
   @Nonnull

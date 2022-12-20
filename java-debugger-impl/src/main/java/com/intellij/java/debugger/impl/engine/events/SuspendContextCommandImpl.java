@@ -15,115 +15,96 @@
  */
 package com.intellij.java.debugger.impl.engine.events;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import com.intellij.java.debugger.engine.managerThread.SuspendContextCommand;
 import com.intellij.java.debugger.impl.engine.DebuggerManagerThreadImpl;
 import com.intellij.java.debugger.impl.engine.SuspendContextImpl;
-import com.intellij.java.debugger.engine.managerThread.SuspendContextCommand;
 import consulo.logging.Logger;
 import consulo.util.collection.Stack;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Performs contextAction when evaluation is available in suspend context
  */
-public abstract class SuspendContextCommandImpl extends DebuggerCommandImpl
-{
-	private static final Logger LOG = Logger.getInstance(SuspendContextCommand.class);
+public abstract class SuspendContextCommandImpl extends DebuggerCommandImpl {
+  private static final Logger LOG = Logger.getInstance(SuspendContextCommand.class);
 
-	private final SuspendContextImpl mySuspendContext;
+  private final SuspendContextImpl mySuspendContext;
 
-	protected SuspendContextCommandImpl(@Nullable SuspendContextImpl suspendContext)
-	{
-		mySuspendContext = suspendContext;
-	}
+  protected SuspendContextCommandImpl(@Nullable SuspendContextImpl suspendContext) {
+    mySuspendContext = suspendContext;
+  }
 
-	/**
-	 * @deprecated override {@link #contextAction(SuspendContextImpl)}
-	 */
-	@Deprecated
-	public void contextAction() throws Exception
-	{
-		throw new AbstractMethodError();
-	}
+  /**
+   * @deprecated override {@link #contextAction(SuspendContextImpl)}
+   */
+  @Deprecated
+  public void contextAction() throws Exception {
+    throw new AbstractMethodError();
+  }
 
-	public void contextAction(@Nonnull SuspendContextImpl suspendContext) throws Exception
-	{
-		//noinspection deprecation
-		contextAction();
-	}
+  public void contextAction(@Nonnull SuspendContextImpl suspendContext) throws Exception {
+    //noinspection deprecation
+    contextAction();
+  }
 
-	@Override
-	public final void action() throws Exception
-	{
-		if(LOG.isDebugEnabled())
-		{
-			LOG.debug("trying " + this);
-		}
+  @Override
+  public final void action() throws Exception {
+    if (LOG.isDebugEnabled()) {
+      LOG.debug("trying " + this);
+    }
 
-		final SuspendContextImpl suspendContext = getSuspendContext();
-		if(suspendContext == null)
-		{
-			if(LOG.isDebugEnabled())
-			{
-				LOG.debug("skip processing - context is null " + this);
-			}
-			notifyCancelled();
-			return;
-		}
+    final SuspendContextImpl suspendContext = getSuspendContext();
+    if (suspendContext == null) {
+      if (LOG.isDebugEnabled()) {
+        LOG.debug("skip processing - context is null " + this);
+      }
+      notifyCancelled();
+      return;
+    }
 
-		if(suspendContext.myInProgress)
-		{
-			suspendContext.postponeCommand(this);
-		}
-		else
-		{
-			try
-			{
-				if(!suspendContext.isResumed())
-				{
-					suspendContext.myInProgress = true;
-					contextAction(suspendContext);
-				}
-				else
-				{
-					notifyCancelled();
-				}
-			}
-			finally
-			{
-				suspendContext.myInProgress = false;
-				if(suspendContext.isResumed())
-				{
-					for(SuspendContextCommandImpl postponed = suspendContext.pollPostponedCommand(); postponed != null; postponed = suspendContext.pollPostponedCommand())
-					{
-						postponed.notifyCancelled();
-					}
-				}
-				else
-				{
-					SuspendContextCommandImpl postponed = suspendContext.pollPostponedCommand();
-					if(postponed != null)
-					{
-						final Stack<SuspendContextCommandImpl> stack = new Stack<>();
-						while(postponed != null)
-						{
-							stack.push(postponed);
-							postponed = suspendContext.pollPostponedCommand();
-						}
-						final DebuggerManagerThreadImpl managerThread = suspendContext.getDebugProcess().getManagerThread();
-						while(!stack.isEmpty())
-						{
-							managerThread.pushBack(stack.pop());
-						}
-					}
-				}
-			}
-		}
-	}
+    if (suspendContext.myInProgress) {
+      suspendContext.postponeCommand(this);
+    }
+    else {
+      try {
+        if (!suspendContext.isResumed()) {
+          suspendContext.myInProgress = true;
+          contextAction(suspendContext);
+        }
+        else {
+          notifyCancelled();
+        }
+      }
+      finally {
+        suspendContext.myInProgress = false;
+        if (suspendContext.isResumed()) {
+          for (SuspendContextCommandImpl postponed = suspendContext.pollPostponedCommand(); postponed != null;
+               postponed = suspendContext.pollPostponedCommand()) {
+            postponed.notifyCancelled();
+          }
+        }
+        else {
+          SuspendContextCommandImpl postponed = suspendContext.pollPostponedCommand();
+          if (postponed != null) {
+            final Stack<SuspendContextCommandImpl> stack = new Stack<>();
+            while (postponed != null) {
+              stack.push(postponed);
+              postponed = suspendContext.pollPostponedCommand();
+            }
+            final DebuggerManagerThreadImpl managerThread = suspendContext.getDebugProcess().getManagerThread();
+            while (!stack.isEmpty()) {
+              managerThread.pushBack(stack.pop());
+            }
+          }
+        }
+      }
+    }
+  }
 
-	@Nullable
-	public SuspendContextImpl getSuspendContext()
-	{
-		return mySuspendContext;
-	}
+  @Nullable
+  public SuspendContextImpl getSuspendContext() {
+    return mySuspendContext;
+  }
 }

@@ -20,7 +20,7 @@ import com.intellij.java.impl.refactoring.extractInterface.ExtractInterfaceHandl
 import com.intellij.java.impl.refactoring.extractMethod.ExtractMethodHandler;
 import com.intellij.java.impl.refactoring.extractSuperclass.ExtractSuperclassHandler;
 import com.intellij.java.impl.refactoring.extractclass.ExtractClassHandler;
-import com.intellij.java.impl.refactoring.introduceField.IntroduceConstantHandler;
+import com.intellij.java.impl.refactoring.introduceField.IntroduceConstantHandlerImpl;
 import com.intellij.java.impl.refactoring.introduceField.IntroduceFieldHandler;
 import com.intellij.java.impl.refactoring.introduceParameter.IntroduceParameterHandler;
 import com.intellij.java.impl.refactoring.introduceVariable.IntroduceVariableHandler;
@@ -59,7 +59,7 @@ public class JavaRefactoringSupportProvider extends RefactoringSupportProvider {
 
   @Override
   public RefactoringActionHandler getIntroduceConstantHandler() {
-    return new IntroduceConstantHandler();
+    return new IntroduceConstantHandlerImpl();
   }
 
   @Override

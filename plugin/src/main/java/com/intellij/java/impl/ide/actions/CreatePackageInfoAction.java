@@ -42,7 +42,7 @@ import consulo.util.lang.StringUtil;
 
 import javax.annotation.Nullable;
 
-import static com.intellij.java.impl.ide.fileTemplates.JavaTemplateUtil.INTERNAL_PACKAGE_INFO_TEMPLATE_NAME;
+import static com.intellij.java.language.impl.codeInsight.template.JavaTemplateUtil.INTERNAL_PACKAGE_INFO_TEMPLATE_NAME;
 
 /**
  * @author Bas Leijdekkers

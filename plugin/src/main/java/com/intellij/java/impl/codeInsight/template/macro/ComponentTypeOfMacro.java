@@ -17,7 +17,8 @@ package com.intellij.java.impl.codeInsight.template.macro;
 
 import com.intellij.java.impl.codeInsight.lookup.PsiTypeLookupItem;
 import com.intellij.java.impl.codeInsight.template.JavaCodeContextType;
-import com.intellij.java.impl.codeInsight.template.PsiTypeResult;
+import com.intellij.java.language.impl.codeInsight.template.macro.PsiTypeResult;
+import com.intellij.java.language.impl.codeInsight.template.macro.MacroUtil;
 import com.intellij.java.language.psi.PsiArrayType;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiType;

@@ -22,12 +22,16 @@
  */
 package com.intellij.java.impl.codeInsight.intention.impl;
 
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.intention.IntentionMetaData;
+import consulo.project.Project;
+import consulo.util.collection.ArrayUtil;
+import consulo.util.lang.Pair;
+
 import javax.annotation.Nonnull;
 
-import consulo.project.Project;
-import consulo.util.lang.Pair;
-import consulo.util.collection.ArrayUtil;
-
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.AddDeprecationAnnotationIntention", categories = {"Java", "Control Flow"}, fileExtensions = "java")
 public class AddDeprecationAnnotationIntention extends AddAnnotationIntention {
   @Nonnull
   @Override

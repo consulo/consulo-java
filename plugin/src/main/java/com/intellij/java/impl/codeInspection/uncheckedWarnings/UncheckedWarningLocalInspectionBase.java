@@ -27,7 +27,6 @@ import com.intellij.java.language.projectRoots.JavaSdkVersion;
 import com.intellij.java.language.projectRoots.JavaVersionService;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.*;
-import consulo.component.extension.Extensions;
 import consulo.language.editor.inspection.InspectionsBundle;
 import consulo.language.editor.inspection.LocalInspectionToolSession;
 import consulo.language.editor.inspection.LocalQuickFix;
@@ -78,7 +77,7 @@ public abstract class UncheckedWarningLocalInspectionBase extends BaseJavaBatchL
     LOG.assertTrue(parameter.isValid());
     final List<LocalQuickFix> result = new ArrayList<>();
     if (itemType != null) {
-      for (ChangeVariableTypeQuickFixProvider fixProvider : Extensions.getExtensions(ChangeVariableTypeQuickFixProvider.EP_NAME)) {
+      for (ChangeVariableTypeQuickFixProvider fixProvider : ChangeVariableTypeQuickFixProvider.EP_NAME.getExtensionList()) {
         for (IntentionAction action : fixProvider.getFixes(parameter, itemType)) {
           if (action instanceof LocalQuickFix) {
             result.add((LocalQuickFix) action);

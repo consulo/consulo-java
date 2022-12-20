@@ -17,7 +17,7 @@
 package com.intellij.java.impl.ide.actions;
 
 import com.intellij.java.impl.ide.fileTemplates.JavaCreateFromTemplateHandler;
-import com.intellij.java.impl.ide.fileTemplates.JavaTemplateUtil;
+import com.intellij.java.language.impl.codeInsight.template.JavaTemplateUtil;
 import com.intellij.java.language.JavaCoreBundle;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.impl.JavaFileType;

@@ -15,12 +15,13 @@
  */
 package com.intellij.java.impl.psi.impl;
 
+import com.intellij.java.impl.psi.impl.source.resolve.reference.impl.providers.JavaClassReferenceProvider;
+import com.intellij.java.language.impl.psi.CommonReferenceProviderTypes;
+import com.intellij.java.language.impl.psi.JavaClassPsiReferenceProvider;
 import consulo.annotation.component.ServiceImpl;
 import jakarta.inject.Singleton;
 
-import com.intellij.java.impl.psi.CommonReferenceProviderTypes;
-import consulo.language.psi.PsiReferenceProvider;
-import com.intellij.java.impl.psi.impl.source.resolve.reference.impl.providers.JavaClassReferenceProvider;
+import javax.annotation.Nonnull;
 
 /**
  * @author Dmitry Avdeev
@@ -30,13 +31,27 @@ import com.intellij.java.impl.psi.impl.source.resolve.reference.impl.providers.J
 public class CommonReferenceProviderTypesImpl extends CommonReferenceProviderTypes {
 
   private final JavaClassReferenceProvider myProvider;
+  private final JavaClassReferenceProvider mySoftProvider;
 
   public CommonReferenceProviderTypesImpl() {
     myProvider = new JavaClassReferenceProvider();
+    mySoftProvider = new JavaClassReferenceProvider() {
+      @Override
+      public boolean isSoft() {
+        return true;
+      }
+    };
   }
 
+  @Nonnull
   @Override
-  public PsiReferenceProvider getClassReferenceProvider() {
+  public JavaClassPsiReferenceProvider getClassReferenceProvider() {
     return myProvider;
+  }
+
+  @Nonnull
+  @Override
+  public JavaClassPsiReferenceProvider getSoftClassReferenceProvider() {
+    return mySoftProvider;
   }
 }

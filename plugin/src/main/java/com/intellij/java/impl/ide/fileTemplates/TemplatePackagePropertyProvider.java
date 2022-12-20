@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.ide.fileTemplates;
 
+import com.intellij.java.language.impl.codeInsight.template.JavaTemplateUtil;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.fileTemplate.DefaultTemplatePropertiesProvider;
 import consulo.language.psi.PsiDirectory;

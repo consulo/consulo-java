@@ -16,15 +16,16 @@
 package com.intellij.java.debugger.engine.evaluation;
 
 import com.intellij.java.debugger.engine.evaluation.expression.EvaluatorBuilder;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ExtensionAPI;
 import consulo.component.extension.ExtensionPointName;
 import consulo.language.file.LanguageFileType;
 import consulo.project.Project;
 import com.intellij.java.language.psi.JavaCodeFragment;
 import consulo.language.psi.PsiElement;
 
+@ExtensionAPI(ComponentScope.APPLICATION)
 public abstract class CodeFragmentFactory {
-  public static final ExtensionPointName<CodeFragmentFactory> EXTENSION_POINT_NAME = ExtensionPointName.create("consulo.java.debugger.codeFragmentFactory");
-
   public abstract JavaCodeFragment createCodeFragment(TextWithImports item, PsiElement context, Project project);
 
   public abstract JavaCodeFragment createPresentationCodeFragment(TextWithImports item, PsiElement context, Project project);

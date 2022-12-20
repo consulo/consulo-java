@@ -18,8 +18,8 @@ package com.intellij.java.impl.codeInspection.duplicateStringLiteral;
 import com.intellij.java.analysis.codeInspection.GroupNames;
 import com.intellij.java.analysis.codeInspection.SuppressManager;
 import com.intellij.java.analysis.impl.codeInspection.ex.BaseLocalInspectionTool;
-import com.intellij.java.impl.codeInspection.i18n.JavaI18nUtil;
-import com.intellij.java.impl.refactoring.introduceField.IntroduceConstantHandler;
+import consulo.java.analysis.impl.util.JavaI18nUtil;
+import com.intellij.java.impl.refactoring.introduceField.IntroduceConstantHandlerImpl;
 import com.intellij.java.impl.refactoring.util.occurrences.BaseOccurrenceManager;
 import com.intellij.java.impl.refactoring.util.occurrences.OccurrenceFilter;
 import com.intellij.java.impl.refactoring.util.occurrences.OccurrenceManager;
@@ -376,7 +376,7 @@ public class DuplicateStringLiteralInspection extends BaseLocalInspectionTool {
             }
           }
           final PsiExpression[] expressionArray = expressions.toArray(new PsiExpression[expressions.size()]);
-          final IntroduceConstantHandler handler = new IntroduceConstantHandler() {
+          final IntroduceConstantHandlerImpl handler = new IntroduceConstantHandlerImpl() {
             @Override
             protected OccurrenceManager createOccurrenceManager(PsiExpression selectedExpr,
                                                                 PsiClass parentClass) {

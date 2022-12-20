@@ -22,12 +22,14 @@ package com.intellij.java.impl.codeInsight.intention.impl;
 
 import com.intellij.java.language.codeInsight.ExternalAnnotationsManager;
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.Result;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.EditorPopupHelper;
 import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.WriteCommandAction;
 import consulo.language.editor.intention.IntentionAction;
+import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.editor.util.LanguageUndoUtil;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
@@ -45,6 +47,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.DeannotateIntentionAction", categories = {"Java", "Control Flow"}, fileExtensions = "java")
 public class DeannotateIntentionAction implements IntentionAction {
   private static final Logger LOG = Logger.getInstance(DeannotateIntentionAction.class);
   private String myAnnotationName = null;

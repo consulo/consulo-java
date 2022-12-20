@@ -15,12 +15,15 @@
  */
 package com.intellij.java.impl.codeInspection.visibility;
 
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ExtensionAPI;
 import consulo.language.editor.inspection.ProblemDescriptionsProcessor;
 import consulo.language.editor.inspection.reference.RefManager;
 import consulo.component.extension.ExtensionPointName;
 
+@ExtensionAPI(ComponentScope.APPLICATION)
 public interface VisibilityExtension {
-  ExtensionPointName<VisibilityExtension> EP_NAME = ExtensionPointName.create("consulo.java.visibility");
+  ExtensionPointName<VisibilityExtension> EP_NAME = ExtensionPointName.create(VisibilityExtension.class);
 
   void fillIgnoreList(RefManager refManager, ProblemDescriptionsProcessor processor);
 }

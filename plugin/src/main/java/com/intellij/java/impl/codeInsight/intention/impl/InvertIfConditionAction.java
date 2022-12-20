@@ -24,27 +24,31 @@
  */
 package com.intellij.java.impl.codeInsight.intention.impl;
 
-import consulo.language.editor.CodeInsightBundle;
 import com.intellij.java.impl.codeInsight.CodeInsightServicesUtil;
-import consulo.language.editor.FileModificationService;
-import consulo.language.editor.intention.PsiElementBaseIntentionAction;
 import com.intellij.java.language.impl.psi.controlFlow.*;
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
-import consulo.project.Project;
 import consulo.document.util.TextRange;
+import consulo.ide.impl.idea.util.ArrayUtilRt;
+import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.FileModificationService;
+import consulo.language.editor.intention.IntentionMetaData;
+import consulo.language.editor.intention.PsiElementBaseIntentionAction;
 import consulo.language.psi.PsiComment;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiWhiteSpace;
-import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.psi.util.PsiTreeUtil;
-import consulo.ide.impl.idea.util.ArrayUtilRt;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
+import consulo.project.Project;
 
 import javax.annotation.Nonnull;
 import java.util.List;
 
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.InvertIfConditionAction", categories = {"Java", "Control Flow"}, fileExtensions = "java")
 public class InvertIfConditionAction extends PsiElementBaseIntentionAction {
   private static final Logger LOG = Logger.getInstance(InvertIfConditionAction.class);
 

@@ -15,19 +15,24 @@
  */
 package com.intellij.java.impl.codeInsight.intention.impl;
 
-import javax.annotation.Nonnull;
-
+import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.codeEditor.Editor;
+import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.PsiEquivalenceUtil;
+import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.editor.intention.PsiElementBaseIntentionAction;
-import com.intellij.java.language.psi.*;
-import consulo.codeEditor.Editor;
-import consulo.project.Project;
-import consulo.language.psi.*;
-import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.psi.PsiCompiledElement;
+import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
 
+import javax.annotation.Nonnull;
+
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.PushConditionInCallAction", categories = {"Java", "Declaration"}, fileExtensions = "java")
 public class PushConditionInCallAction extends PsiElementBaseIntentionAction {
   @Override
   @Nonnull

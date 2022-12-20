@@ -1,0 +1,6 @@
+<consulo-plugin-requires>
+    <plugins>
+        <plugin>com.intellij.properties</plugin>
+        <plugin>com.intellij.xml</plugin>
+    </plugins>
+</consulo-plugin-requires>

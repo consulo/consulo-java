@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.codeInsight.template;
 
-import com.intellij.java.impl.codeInsight.template.impl.JavaTemplateUtil;
+import com.intellij.java.language.impl.codeInsight.template.JavaTemplateUtilImpl;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiIdentifier;
 import com.intellij.java.language.psi.PsiMethod;
@@ -51,6 +51,6 @@ public class JavaPsiElementResult extends PsiElementResult {
 
   @Override
   public void handleFocused(final PsiFile psiFile, final Document document, final int segmentStart, final int segmentEnd) {
-    JavaTemplateUtil.updateTypeBindings(getElement(), psiFile, document, segmentStart, segmentEnd);
+    JavaTemplateUtilImpl.updateTypeBindings(getElement(), psiFile, document, segmentStart, segmentEnd);
   }
 }

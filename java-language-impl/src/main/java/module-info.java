@@ -77,5 +77,7 @@ open module consulo.java.language.impl {
   exports consulo.java.language.impl.psi.augment;
   exports consulo.java.language.impl.psi.stub;
   exports consulo.java.language.impl.spi;
+  exports com.intellij.java.language.impl.codeInsight.template.macro;
+  exports com.intellij.java.language.impl.codeInsight.template;
   exports consulo.java.language.impl.util;
 }

@@ -17,10 +17,12 @@ package com.intellij.java.impl.codeInsight.intention.impl;
 
 import com.intellij.java.impl.codeInsight.CodeInsightUtil;
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.progress.ProgressIndicatorProvider;
 import consulo.codeEditor.Editor;
 import consulo.document.util.TextRange;
 import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.editor.intention.PsiElementBaseIntentionAction;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
@@ -34,6 +36,8 @@ import javax.annotation.Nullable;
 /**
  * @author Danila Ponomarenko
  */
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.ReplaceCastWithVariableAction", categories = {"Java", "Other"}, fileExtensions = "java")
 public class ReplaceCastWithVariableAction extends PsiElementBaseIntentionAction {
   private String myReplaceVariableName = "";
 

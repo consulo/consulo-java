@@ -1,0 +1,5 @@
+<consulo-plugin-requires>
+    <plugins>
+        <plugin>com.intellij.images</plugin>
+    </plugins>
+</consulo-plugin-requires>

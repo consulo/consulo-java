@@ -22,10 +22,12 @@ import com.intellij.java.language.psi.PsiJavaToken;
 import com.intellij.java.language.psi.PsiLiteralExpression;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.xml.util.XmlUtil;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
 import consulo.ide.impl.idea.openapi.vfs.VfsUtil;
 import consulo.language.ast.TokenSet;
 import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.editor.intention.PsiElementBaseIntentionAction;
 import consulo.language.psi.PsiComment;
 import consulo.language.psi.PsiElement;
@@ -51,6 +53,8 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.ConvertToBasicLatinAction", categories = {"Java", "I18N"}, fileExtensions = "java")
 public class ConvertToBasicLatinAction extends PsiElementBaseIntentionAction {
   private static final Logger LOG = Logger.getInstance(ConvertToBasicLatinAction.class);
 

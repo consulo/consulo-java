@@ -19,9 +19,9 @@ import consulo.language.editor.completion.lookup.LookupElement;
 import com.intellij.java.impl.codeInsight.lookup.PsiTypeLookupItem;
 import consulo.language.editor.template.Expression;
 import consulo.language.editor.template.ExpressionContext;
-import com.intellij.java.impl.codeInsight.template.PsiTypeResult;
+import com.intellij.java.language.impl.codeInsight.template.macro.PsiTypeResult;
 import consulo.language.editor.template.Result;
-import com.intellij.java.impl.codeInsight.template.impl.JavaTemplateUtil;
+import com.intellij.java.language.impl.codeInsight.template.JavaTemplateUtilImpl;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.SmartTypePointer;
 import com.intellij.java.language.psi.SmartTypePointerManager;
@@ -57,7 +57,7 @@ public class TypeExpression extends Expression {
         if (myItems.size() <= 1) {
           super.handleRecalc(psiFile, document, segmentStart, segmentEnd);
         } else {
-          JavaTemplateUtil.updateTypeBindings(getType(), psiFile, document, segmentStart, segmentEnd, true);
+          JavaTemplateUtilImpl.updateTypeBindings(getType(), psiFile, document, segmentStart, segmentEnd, true);
         }
       }
 

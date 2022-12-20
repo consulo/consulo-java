@@ -10,9 +10,9 @@ import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.java.language.psi.PsiType;
 import consulo.codeEditor.Editor;
 import consulo.project.Project;
-import com.intellij.java.impl.refactoring.introduceField.IntroduceConstantHandler;
+import com.intellij.java.impl.refactoring.introduceField.IntroduceConstantHandlerImpl;
 
-public class MockIntroduceConstantHandler extends IntroduceConstantHandler{
+public class MockIntroduceConstantHandler extends IntroduceConstantHandlerImpl {
   private final PsiClass myTargetClass;
 
   public MockIntroduceConstantHandler(final PsiClass targetClass) {

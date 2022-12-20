@@ -17,8 +17,8 @@ package com.intellij.java.impl.codeInsight.template.macro;
 
 import com.intellij.java.impl.codeInsight.CodeInsightUtil;
 import com.intellij.java.impl.codeInsight.template.JavaCodeContextType;
-import com.intellij.java.impl.codeInsight.template.PsiTypeResult;
-import com.intellij.java.impl.codeInsight.template.impl.JavaTemplateUtil;
+import com.intellij.java.impl.codeInsight.template.JavaEditorTemplateUtilImpl;
+import com.intellij.java.language.impl.codeInsight.template.macro.PsiTypeResult;
 import com.intellij.java.language.psi.PsiType;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.application.util.matcher.PrefixMatcher;
@@ -76,11 +76,11 @@ public class SubtypesMacro extends Macro {
       final PsiElement element = file.findElementAt(context.getStartOffset());
 
       final Set<LookupElement> set = new LinkedHashSet<LookupElement>();
-      JavaTemplateUtil.addTypeLookupItem(set, type);
+      JavaEditorTemplateUtilImpl.addTypeLookupItem(set, type);
       CodeInsightUtil.processSubTypes(type, element, false, PrefixMatcher.ALWAYS_TRUE, new Consumer<PsiType>() {
         @Override
         public void accept(PsiType psiType) {
-          JavaTemplateUtil.addTypeLookupItem(set, psiType);
+          JavaEditorTemplateUtilImpl.addTypeLookupItem(set, psiType);
         }
       });
       return set.toArray(new LookupElement[set.size()]);

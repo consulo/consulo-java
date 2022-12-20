@@ -19,6 +19,7 @@ import com.intellij.java.impl.psi.impl.file.JavaDirectoryServiceImpl;
 import com.intellij.java.language.JavaCoreBundle;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.impl.JavaFileType;
+import com.intellij.java.language.impl.codeInsight.template.JavaTemplateUtil;
 import com.intellij.java.language.psi.JavaDirectoryService;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiJavaFile;

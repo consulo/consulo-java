@@ -23,7 +23,7 @@ import com.intellij.openapi.util.Pass;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiLocalVariable;
 import consulo.language.editor.refactoring.introduce.inplace.AbstractInplaceIntroducer;
-import com.intellij.java.impl.refactoring.introduceField.IntroduceConstantHandler;
+import com.intellij.java.impl.refactoring.introduceField.IntroduceConstantHandlerImpl;
 
 /**
  * User: anna
@@ -132,7 +132,7 @@ public abstract class InplaceIntroduceConstantTest extends AbstractJavaInplaceIn
     return new MyIntroduceConstantHandler();
   }
 
-  public static class MyIntroduceConstantHandler extends IntroduceConstantHandler implements MyIntroduceHandler {
+  public static class MyIntroduceConstantHandler extends IntroduceConstantHandlerImpl implements MyIntroduceHandler {
     @Override
     public boolean invokeImpl(Project project, @Nonnull PsiExpression selectedExpr, Editor editor) {
       return super.invokeImpl(project, selectedExpr, editor);

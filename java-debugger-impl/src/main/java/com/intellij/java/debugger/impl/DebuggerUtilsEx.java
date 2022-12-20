@@ -113,9 +113,9 @@ public abstract class DebuggerUtilsEx extends DebuggerUtils {
    */
   public static List<CodeFragmentFactory> getCodeFragmentFactories(@Nullable PsiElement context) {
     final DefaultCodeFragmentFactory defaultFactory = DefaultCodeFragmentFactory.getInstance();
-    final CodeFragmentFactory[] providers = ApplicationManager.getApplication().getExtensions(CodeFragmentFactory.EXTENSION_POINT_NAME);
-    final List<CodeFragmentFactory> suitableFactories = new ArrayList<>(providers.length);
-    if (providers.length > 0) {
+    final List<CodeFragmentFactory> providers = ApplicationManager.getApplication().getExtensionList(CodeFragmentFactory.class);
+    final List<CodeFragmentFactory> suitableFactories = new ArrayList<>(providers.size());
+    if (providers.size() > 0) {
       for (CodeFragmentFactory factory : providers) {
         if (factory != defaultFactory && factory.isContextAccepted(context)) {
           suitableFactories.add(factory);
@@ -512,7 +512,7 @@ public abstract class DebuggerUtilsEx extends DebuggerUtils {
         fileType = file != null ? file.getFileType() : null;
       }
     }
-    for (CodeFragmentFactory factory : ApplicationManager.getApplication().getExtensions(CodeFragmentFactory.EXTENSION_POINT_NAME)) {
+    for (CodeFragmentFactory factory : ApplicationManager.getApplication().getExtensionList(CodeFragmentFactory.class)) {
       if (factory != defaultFactory && (fileType == null || factory.getFileType().equals(fileType)) && factory.isContextAccepted(context)) {
         return factory;
       }

@@ -15,30 +15,34 @@
  */
 package com.intellij.java.impl.codeInsight.intention.impl;
 
-import consulo.language.editor.CodeInsightBundle;
-import consulo.language.editor.FileModificationService;
-import consulo.language.editor.intention.BaseIntentionAction;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.ScrollType;
 import consulo.ide.impl.idea.openapi.fileEditor.ex.IdeDocumentHistory;
-import consulo.project.Project;
-import consulo.util.lang.Comparing;
+import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.FileModificationService;
+import consulo.language.editor.intention.BaseIntentionAction;
+import consulo.language.editor.intention.IntentionMetaData;
+import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
-import consulo.language.codeStyle.CodeStyleManager;
-import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
+import consulo.project.Project;
+import consulo.util.lang.Comparing;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.AssignFieldFromParameterAction", categories = {"Java", "Declaration"}, fileExtensions = "java")
 public class AssignFieldFromParameterAction extends BaseIntentionAction {
   private static final Logger LOG = Logger.getInstance(AssignFieldFromParameterAction.class);
 

@@ -15,17 +15,19 @@
  */
 package com.intellij.java.impl.codeInsight.intention.impl;
 
-import com.intellij.java.impl.psi.util.PsiConcatenationUtil;
+import com.intellij.java.language.psi.util.PsiConcatenationUtil;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.intention.IntentionAction;
+import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.scope.GlobalSearchScope;
@@ -41,6 +43,8 @@ import java.util.List;
 /**
  * @author ven
  */
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.ConcatenationToMessageFormatAction", categories = {"Java", "I18N"}, fileExtensions = "java")
 public class ConcatenationToMessageFormatAction implements IntentionAction {
   @Override
   @Nonnull

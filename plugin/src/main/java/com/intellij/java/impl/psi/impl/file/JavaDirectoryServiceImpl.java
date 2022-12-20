@@ -16,7 +16,7 @@
 
 package com.intellij.java.impl.psi.impl.file;
 
-import com.intellij.java.impl.ide.fileTemplates.JavaTemplateUtil;
+import com.intellij.java.language.impl.codeInsight.template.JavaTemplateUtil;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.java.language.impl.core.CoreJavaDirectoryService;

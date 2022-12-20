@@ -15,11 +15,8 @@
  */
 package com.intellij.java.impl.refactoring.openapi.impl;
 
-import consulo.annotation.component.ServiceImpl;
-import jakarta.inject.Singleton;
-
+import com.intellij.java.analysis.refactoring.IntroduceConstantHandler;
 import com.intellij.java.analysis.refactoring.JavaRefactoringActionHandlerFactory;
-import consulo.language.editor.refactoring.action.RefactoringActionHandler;
 import com.intellij.java.impl.refactoring.anonymousToInner.AnonymousToInnerHandler;
 import com.intellij.java.impl.refactoring.changeSignature.JavaChangeSignatureHandler;
 import com.intellij.java.impl.refactoring.convertToInstanceMethod.ConvertToInstanceMethodHandler;
@@ -28,8 +25,7 @@ import com.intellij.java.impl.refactoring.extractInterface.ExtractInterfaceHandl
 import com.intellij.java.impl.refactoring.extractMethod.ExtractMethodHandler;
 import com.intellij.java.impl.refactoring.extractSuperclass.ExtractSuperclassHandler;
 import com.intellij.java.impl.refactoring.inheritanceToDelegation.InheritanceToDelegationHandler;
-import consulo.ide.impl.idea.refactoring.inline.InlineRefactoringActionHandler;
-import com.intellij.java.impl.refactoring.introduceField.IntroduceConstantHandler;
+import com.intellij.java.impl.refactoring.introduceField.IntroduceConstantHandlerImpl;
 import com.intellij.java.impl.refactoring.introduceField.IntroduceFieldHandler;
 import com.intellij.java.impl.refactoring.introduceParameter.IntroduceParameterHandler;
 import com.intellij.java.impl.refactoring.introduceVariable.IntroduceVariableHandler;
@@ -42,6 +38,10 @@ import com.intellij.java.impl.refactoring.tempWithQuery.TempWithQueryHandler;
 import com.intellij.java.impl.refactoring.turnRefsToSuper.TurnRefsToSuperHandler;
 import com.intellij.java.impl.refactoring.typeCook.TypeCookHandler;
 import com.intellij.java.impl.refactoring.util.duplicates.MethodDuplicatesHandler;
+import consulo.annotation.component.ServiceImpl;
+import consulo.ide.impl.idea.refactoring.inline.InlineRefactoringActionHandler;
+import consulo.language.editor.refactoring.action.RefactoringActionHandler;
+import jakarta.inject.Singleton;
 
 @Singleton
 @ServiceImpl
@@ -126,8 +126,8 @@ public class JavaRefactoringActionHandlerFactoryImpl extends JavaRefactoringActi
     return new IntroduceVariableHandler();
   }
 
-  public RefactoringActionHandler createIntroduceConstantHandler() {
-    return new IntroduceConstantHandler();
+  public IntroduceConstantHandler createIntroduceConstantHandler() {
+    return new IntroduceConstantHandlerImpl();
   }
 
   public RefactoringActionHandler createInvertBooleanHandler() {

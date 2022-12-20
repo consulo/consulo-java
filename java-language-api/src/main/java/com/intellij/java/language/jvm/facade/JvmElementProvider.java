@@ -15,17 +15,19 @@
  */
 package com.intellij.java.language.jvm.facade;
 
-import java.util.List;
-
-import javax.annotation.Nonnull;
 import com.intellij.java.language.jvm.JvmClass;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ExtensionAPI;
 import consulo.component.extension.ExtensionPointName;
 import consulo.language.psi.scope.GlobalSearchScope;
 
-public interface JvmElementProvider
-{
-	ExtensionPointName<JvmElementProvider> EP_NAME = ExtensionPointName.create("consulo.java.jvm.elementProvider");
+import javax.annotation.Nonnull;
+import java.util.List;
 
-	@Nonnull
-	List<? extends JvmClass> getClasses(@Nonnull String qualifiedName, @Nonnull GlobalSearchScope scope);
+@ExtensionAPI(ComponentScope.PROJECT)
+public interface JvmElementProvider {
+  ExtensionPointName<JvmElementProvider> EP_NAME = ExtensionPointName.create(JvmElementProvider.class);
+
+  @Nonnull
+  List<? extends JvmClass> getClasses(@Nonnull String qualifiedName, @Nonnull GlobalSearchScope scope);
 }

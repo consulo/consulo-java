@@ -17,7 +17,6 @@ open module consulo.java {
   requires transitive consulo.java.compiler.impl;
 
   requires com.intellij.xml;
-  requires com.intellij.properties;
   requires com.intellij.regexp;
 
   // TODO remove in future
@@ -91,7 +90,6 @@ open module consulo.java {
   exports com.intellij.java.impl.codeInspection.emptyMethod;
   exports com.intellij.java.impl.codeInspection.ex;
   exports com.intellij.java.impl.codeInspection.i18n;
-  exports com.intellij.java.impl.codeInspection.i18n.folding;
   exports com.intellij.java.impl.codeInspection.inconsistentLanguageLevel;
   exports com.intellij.java.impl.codeInspection.inferNullity;
   exports com.intellij.java.impl.codeInspection.inheritance;
@@ -236,8 +234,6 @@ open module consulo.java {
   exports com.intellij.java.impl.javadoc;
   exports com.intellij.java.impl.javadoc.actions;
   exports com.intellij.java.impl.lang.java;
-  exports com.intellij.java.impl.lang.properties;
-  exports com.intellij.java.impl.lang.properties.psi;
   exports com.intellij.java.impl.lang.refactoring;
   exports com.intellij.java.impl.lexer;
   exports com.intellij.java.impl.openapi.fileTypes.impl;

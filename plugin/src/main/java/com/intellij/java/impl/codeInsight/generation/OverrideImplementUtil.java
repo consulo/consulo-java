@@ -18,7 +18,7 @@ package com.intellij.java.impl.codeInsight.generation;
 import com.intellij.java.analysis.impl.codeInsight.intention.AddAnnotationFix;
 import com.intellij.java.analysis.impl.codeInsight.intention.AddAnnotationPsiFix;
 import com.intellij.java.impl.codeInsight.MethodImplementor;
-import com.intellij.java.impl.ide.fileTemplates.JavaTemplateUtil;
+import com.intellij.java.language.impl.codeInsight.template.JavaTemplateUtil;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.language.impl.codeInsight.generation.GenerationInfo;

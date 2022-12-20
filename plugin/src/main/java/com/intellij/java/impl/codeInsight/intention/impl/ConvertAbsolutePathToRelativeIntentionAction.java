@@ -15,10 +15,11 @@
  */
 package com.intellij.java.impl.codeInsight.intention.impl;
 
+import consulo.annotation.component.ExtensionImpl;
+import consulo.codeEditor.Editor;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.intention.BaseIntentionAction;
-import consulo.codeEditor.Editor;
-import consulo.project.Project;
+import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiReference;
@@ -26,12 +27,15 @@ import consulo.language.psi.PsiWhiteSpace;
 import consulo.language.psi.path.FileReference;
 import consulo.language.psi.path.FileReferenceSet;
 import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
 
 import javax.annotation.Nonnull;
 
 /**
  * @author spleaner
  */
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.ConvertAbsolutePathToRelativeIntentionAction", categories = {"Java", "Other"}, fileExtensions = "java")
 public class ConvertAbsolutePathToRelativeIntentionAction extends BaseIntentionAction {
 
   protected boolean isConvertToRelative() {

@@ -15,20 +15,25 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.codeEditor.Editor;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.language.editor.intention.IntentionAction;
-import consulo.codeEditor.Editor;
+import consulo.language.editor.intention.IntentionMetaData;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
-import consulo.language.psi.*;
-import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.language.util.IncorrectOperationException;
 
+import javax.annotation.Nonnull;
+
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.ConvertToStringLiteralAction", categories = {"Java", "Strings"}, fileExtensions = "java")
 public class ConvertToStringLiteralAction implements IntentionAction {
   @Nonnull
   @Override

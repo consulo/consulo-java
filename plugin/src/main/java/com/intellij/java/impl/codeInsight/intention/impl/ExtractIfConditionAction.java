@@ -17,11 +17,13 @@ package com.intellij.java.impl.codeInsight.intention.impl;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiExpressionTrimRenderer;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
 import consulo.document.util.TextRange;
 import consulo.language.ast.IElementType;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.editor.intention.PsiElementBaseIntentionAction;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
@@ -34,6 +36,8 @@ import javax.annotation.Nullable;
 /**
  * @author Danila Ponomarenko
  */
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.ExtractIfConditionAction", categories = {"Java", "Control Flow"}, fileExtensions = "java")
 public class ExtractIfConditionAction extends PsiElementBaseIntentionAction {
   @Override
   public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {

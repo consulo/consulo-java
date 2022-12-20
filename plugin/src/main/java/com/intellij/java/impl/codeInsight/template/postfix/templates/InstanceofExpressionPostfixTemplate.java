@@ -17,7 +17,7 @@ package com.intellij.java.impl.codeInsight.template.postfix.templates;
 
 import com.intellij.java.analysis.codeInsight.guess.GuessManager;
 import com.intellij.java.impl.codeInsight.lookup.PsiTypeLookupItem;
-import com.intellij.java.impl.codeInsight.template.PsiTypeResult;
+import com.intellij.java.language.impl.codeInsight.template.macro.PsiTypeResult;
 import com.intellij.java.impl.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils;
 import com.intellij.java.impl.refactoring.introduceField.ElementToWorkOn;
 import com.intellij.java.language.psi.*;

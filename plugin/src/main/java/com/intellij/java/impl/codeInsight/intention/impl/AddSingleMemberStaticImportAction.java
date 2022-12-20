@@ -23,9 +23,11 @@ import com.intellij.java.language.impl.psi.impl.source.tree.java.PsiReferenceExp
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
 import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.FileModificationService;
+import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.editor.intention.PsiElementBaseIntentionAction;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
@@ -39,6 +41,8 @@ import consulo.util.lang.Comparing;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.AddSingleMemberStaticImportAction", categories = {"Java", "Imports"}, fileExtensions = "java")
 public class AddSingleMemberStaticImportAction extends PsiElementBaseIntentionAction {
   private static final Logger LOG = Logger.getInstance(AddSingleMemberStaticImportAction.class);
   private static final Key<PsiElement> TEMP_REFERENT_USER_DATA = new Key<PsiElement>("TEMP_REFERENT_USER_DATA");

@@ -16,16 +16,20 @@
 package com.intellij.java.impl.codeInsight.intention.impl;
 
 import com.intellij.java.language.JavaLanguage;
-import consulo.project.Project;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiParameter;
 import com.intellij.java.language.psi.PsiType;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.project.Project;
 
 /**
  * @author Max Medvedev
  */
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.CreateFieldFromParameterAction", categories = {"Java", "Declaration"}, fileExtensions = "java")
 public class CreateFieldFromParameterAction extends CreateFieldFromParameterActionBase {
 
   @Override

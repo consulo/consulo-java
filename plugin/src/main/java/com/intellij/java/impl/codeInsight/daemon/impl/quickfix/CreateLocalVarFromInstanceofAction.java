@@ -21,6 +21,7 @@ import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.ApplicationManager;
 import consulo.codeEditor.CaretModel;
 import consulo.codeEditor.Editor;
@@ -35,6 +36,7 @@ import consulo.language.editor.PsiEquivalenceUtil;
 import consulo.language.editor.completion.lookup.LookupElement;
 import consulo.language.editor.completion.lookup.LookupElementBuilder;
 import consulo.language.editor.intention.BaseIntentionAction;
+import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
 import consulo.language.editor.template.*;
 import consulo.language.editor.template.event.TemplateEditingAdapter;
@@ -57,6 +59,8 @@ import java.util.Set;
 /**
  * @author cdr
  */
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.CreateLocalVarFromInstanceofAction", categories = {"Java", "Declaration"}, fileExtensions = "java")
 public class CreateLocalVarFromInstanceofAction extends BaseIntentionAction {
   private static final Logger LOG = Logger.getInstance(CreateLocalVarFromInstanceofAction.class);
 

@@ -17,6 +17,8 @@ package com.intellij.java.impl.codeInsight.template.macro;
 
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.PsiVariable;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ExtensionAPI;
 import consulo.component.extension.ExtensionPointName;
 import consulo.language.psi.PsiElement;
 
@@ -26,9 +28,10 @@ import javax.annotation.Nullable;
 /**
  * @author Max Medvedev
  */
+@ExtensionAPI(ComponentScope.APPLICATION)
 public abstract class VariableTypeCalculator {
   public static final ExtensionPointName<VariableTypeCalculator> EP_NAME =
-      ExtensionPointName.create("consulo.java.variableTypeCalculator");
+      ExtensionPointName.create(VariableTypeCalculator.class);
 
   @Nullable
   public abstract PsiType inferVarTypeAt(@Nonnull PsiVariable var, @Nonnull PsiElement place);

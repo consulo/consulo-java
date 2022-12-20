@@ -19,6 +19,7 @@ import com.intellij.java.analysis.codeInsight.intention.QuickFixFactory;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.IncreaseLanguageLevelFix;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix.WrapLongWithMathToIntExactFix;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix.*;
+import com.intellij.java.analysis.impl.codeInsight.quickfix.SetupJDKFix;
 import com.intellij.java.analysis.impl.codeInspection.deadCode.UnusedDeclarationInspectionBase;
 import com.intellij.java.analysis.impl.codeInspection.ex.EntryPointsManagerBase;
 import com.intellij.java.analysis.impl.codeInspection.unusedSymbol.UnusedSymbolLocalInspectionBase;

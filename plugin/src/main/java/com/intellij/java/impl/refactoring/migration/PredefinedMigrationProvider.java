@@ -15,23 +15,25 @@
  */
 package com.intellij.java.impl.refactoring.migration;
 
-import java.net.URL;
-
-import javax.annotation.Nonnull;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ExtensionAPI;
 import consulo.component.extension.ExtensionPointName;
 
-public interface PredefinedMigrationProvider
-{
-	ExtensionPointName<PredefinedMigrationProvider> EP_NAME = ExtensionPointName.create("consulo.java.predefinedMigrationMapProvider");
+import javax.annotation.Nonnull;
+import java.net.URL;
 
-	/**
-	 * URL should point to the file with serialized migration map.
-	 * <p>
-	 * The simplest way to prepare such map:
-	 * 1. Refactor|Migrate...
-	 * 2. Create new migration map with all settings needed
-	 * 3. Copy map's file from config/migration to the plugin's resources
-	 */
-	@Nonnull
-	URL getMigrationMap();
+@ExtensionAPI(ComponentScope.APPLICATION)
+public interface PredefinedMigrationProvider {
+  ExtensionPointName<PredefinedMigrationProvider> EP_NAME = ExtensionPointName.create(PredefinedMigrationProvider.class);
+
+  /**
+   * URL should point to the file with serialized migration map.
+   * <p>
+   * The simplest way to prepare such map:
+   * 1. Refactor|Migrate...
+   * 2. Create new migration map with all settings needed
+   * 3. Copy map's file from config/migration to the plugin's resources
+   */
+  @Nonnull
+  URL getMigrationMap();
 }

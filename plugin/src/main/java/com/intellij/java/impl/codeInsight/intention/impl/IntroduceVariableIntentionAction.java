@@ -15,24 +15,29 @@
  */
 package com.intellij.java.impl.codeInsight.intention.impl;
 
-import javax.annotation.Nonnull;
-
-import consulo.language.editor.CodeInsightBundle;
+import com.intellij.java.impl.refactoring.introduceVariable.IntroduceVariableHandler;
 import com.intellij.java.language.psi.PsiAssignmentExpression;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiExpressionStatement;
 import com.intellij.java.language.psi.PsiType;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
-import consulo.project.Project;
-import consulo.language.psi.*;
-import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.editor.refactoring.action.BaseRefactoringIntentionAction;
-import com.intellij.java.impl.refactoring.introduceVariable.IntroduceVariableHandler;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.SyntheticElement;
+import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+
+import javax.annotation.Nonnull;
 
 /**
  * @author Danila Ponomarenko
  */
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.IntroduceVariableIntentionAction", categories = {"Java", "Refactorings"}, fileExtensions = "java")
 public class IntroduceVariableIntentionAction extends BaseRefactoringIntentionAction {
   @Nonnull
   @Override

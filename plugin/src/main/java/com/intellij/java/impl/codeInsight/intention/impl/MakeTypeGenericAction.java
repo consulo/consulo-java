@@ -15,22 +15,26 @@
  */
 package com.intellij.java.impl.codeInsight.intention.impl;
 
-import javax.annotation.Nonnull;
-
-import consulo.language.editor.CodeInsightBundle;
-import consulo.language.editor.intention.PsiElementBaseIntentionAction;
 import com.intellij.java.language.psi.*;
-import consulo.codeEditor.Editor;
-import consulo.project.Project;
-import consulo.util.lang.Pair;
-import consulo.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.codeEditor.Editor;
+import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.intention.IntentionMetaData;
+import consulo.language.editor.intention.PsiElementBaseIntentionAction;
+import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+import consulo.util.lang.Pair;
+
+import javax.annotation.Nonnull;
 
 /**
  *  @author dsl
  */
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.MakeTypeGenericAction", categories = {"Java", "Declaration"}, fileExtensions = "java")
 public class MakeTypeGenericAction extends PsiElementBaseIntentionAction {
   private String variableName;
   private String newTypeName;

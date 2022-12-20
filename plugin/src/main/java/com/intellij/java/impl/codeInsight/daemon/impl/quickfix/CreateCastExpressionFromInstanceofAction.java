@@ -16,11 +16,13 @@
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
 import consulo.ide.impl.idea.codeInsight.CodeInsightUtilBase;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.FileModificationService;
+import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
@@ -32,6 +34,8 @@ import javax.annotation.Nullable;
 /**
  * @author cdr
  */
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.CreateCastExpressionFromInstanceofAction", categories = {"Java", "Declaration"}, fileExtensions = "java")
 public class CreateCastExpressionFromInstanceofAction extends CreateLocalVarFromInstanceofAction {
   @Override
   public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {

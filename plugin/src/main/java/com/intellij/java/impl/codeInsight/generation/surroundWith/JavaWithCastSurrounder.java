@@ -25,7 +25,7 @@ import consulo.language.editor.completion.lookup.LookupElement;
 import com.intellij.java.impl.codeInsight.lookup.PsiTypeLookupItem;
 import consulo.language.editor.template.Expression;
 import consulo.language.editor.template.ExpressionContext;
-import com.intellij.java.impl.codeInsight.template.PsiTypeResult;
+import com.intellij.java.language.impl.codeInsight.template.macro.PsiTypeResult;
 import consulo.language.editor.template.Result;
 import consulo.language.editor.template.Template;
 import consulo.language.editor.template.TemplateManager;

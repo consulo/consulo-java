@@ -1,13 +1,12 @@
 // Copyright 2000-2018 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.impl.ig.fixes;
 
-import com.intellij.java.impl.ide.fileTemplates.JavaTemplateUtil;
+import com.intellij.java.language.impl.codeInsight.template.JavaTemplateUtil;
 import com.intellij.java.impl.ig.psiutils.CreateSwitchBranchesUtil;
 import com.intellij.java.impl.ig.psiutils.SwitchUtils;
 import com.intellij.java.language.psi.*;
 import com.siyeh.ig.psiutils.ControlFlowUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
-import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
 import consulo.fileTemplate.FileTemplate;
 import consulo.fileTemplate.FileTemplateManager;

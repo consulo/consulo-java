@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.psi.impl.source.resolve.reference.impl.providers;
 
-import com.intellij.java.language.impl.psi.impl.source.resolve.reference.impl.providers.GenericReferenceProvider;
+import com.intellij.java.language.impl.psi.JavaClassPsiReferenceProvider;
 import com.intellij.java.language.impl.psi.scope.ElementClassHint;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
@@ -48,7 +48,7 @@ import java.util.*;
  * Date: 27.03.2003
  * Time: 17:30:38
  */
-public class JavaClassReferenceProvider extends GenericReferenceProvider implements CustomizableReferenceProvider {
+public class JavaClassReferenceProvider extends JavaClassPsiReferenceProvider implements CustomizableReferenceProvider {
 
   public static final CustomizationKey<Boolean> RESOLVE_QUALIFIED_CLASS_NAME = new CustomizationKey<Boolean>(PsiBundle.message("qualified.resolve.class.reference.provider.option"));
   public static final CustomizationKey<String[]> EXTEND_CLASS_NAMES = new CustomizationKey<String[]>("EXTEND_CLASS_NAMES");

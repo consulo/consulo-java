@@ -201,7 +201,7 @@ public abstract class JavaRefactoringActionHandlerFactory {
    * accepts either 1 <code>PsiExpression</code>, that will be an initialzier for introduced constant,
    * or 1 <code>PsiLocalVariable</code>, that will be replaced with introduced constant.
    */
-  public abstract RefactoringActionHandler createIntroduceConstantHandler();
+  public abstract IntroduceConstantHandler createIntroduceConstantHandler();
 
   /**
    * Creates handler for Invert Boolean refactoring.<p>

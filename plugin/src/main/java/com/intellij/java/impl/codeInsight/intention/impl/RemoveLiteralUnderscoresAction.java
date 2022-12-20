@@ -15,21 +15,25 @@
  */
 package com.intellij.java.impl.codeInsight.intention.impl;
 
-import javax.annotation.Nonnull;
-
-import consulo.language.editor.CodeInsightBundle;
-import consulo.language.editor.intention.PsiElementBaseIntentionAction;
+import com.intellij.java.language.impl.util.text.LiteralFormatUtil;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiLiteralExpression;
 import com.intellij.java.language.psi.PsiType;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
-import consulo.project.Project;
-import consulo.language.psi.*;
+import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.intention.IntentionMetaData;
+import consulo.language.editor.intention.PsiElementBaseIntentionAction;
+import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
-import com.intellij.java.language.impl.util.text.LiteralFormatUtil;
+import consulo.project.Project;
 
+import javax.annotation.Nonnull;
+
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.RemoveLiteralUnderscoresAction", categories = {"Java", "Numbers"}, fileExtensions = "java")
 public class RemoveLiteralUnderscoresAction extends PsiElementBaseIntentionAction {
   @Override
   public boolean isAvailable(@Nonnull final Project project, final Editor editor, @Nonnull final PsiElement element) {

@@ -15,35 +15,44 @@
  */
 package com.intellij.java.impl.refactoring.typeMigration.rules;
 
-import javax.annotation.Nullable;
-import consulo.component.extension.ExtensionPointName;
-import consulo.util.lang.Pair;
+import com.intellij.java.impl.refactoring.typeMigration.TypeConversionDescriptorBase;
+import com.intellij.java.impl.refactoring.typeMigration.TypeMigrationLabeler;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiMember;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiType;
-import com.intellij.java.impl.refactoring.typeMigration.TypeConversionDescriptorBase;
-import com.intellij.java.impl.refactoring.typeMigration.TypeMigrationLabeler;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ExtensionAPI;
+import consulo.component.extension.ExtensionPointName;
+import consulo.util.lang.Pair;
+
+import javax.annotation.Nullable;
 
 /**
  * @author anna
  */
-public abstract class TypeConversionRule
-{
-	public static final ExtensionPointName<TypeConversionRule> EP_NAME = ExtensionPointName.create("consulo.java.conversion.rule");
+@ExtensionAPI(ComponentScope.APPLICATION)
+public abstract class TypeConversionRule {
+  public static final ExtensionPointName<TypeConversionRule> EP_NAME = ExtensionPointName.create(TypeConversionRule.class);
 
-	@Nullable
-	public abstract TypeConversionDescriptorBase findConversion(final PsiType from, final PsiType to, final PsiMember member, final PsiExpression context, final TypeMigrationLabeler labeler);
+  @Nullable
+  public abstract TypeConversionDescriptorBase findConversion(final PsiType from,
+                                                              final PsiType to,
+                                                              final PsiMember member,
+                                                              final PsiExpression context,
+                                                              final TypeMigrationLabeler labeler);
 
 
-	@Nullable
-	public Pair<PsiType, PsiType> bindTypeParameters(PsiType from, PsiType to, final PsiMethod method, final PsiExpression context, final TypeMigrationLabeler labeler)
-	{
-		return null;
-	}
+  @Nullable
+  public Pair<PsiType, PsiType> bindTypeParameters(PsiType from,
+                                                   PsiType to,
+                                                   final PsiMethod method,
+                                                   final PsiExpression context,
+                                                   final TypeMigrationLabeler labeler) {
+    return null;
+  }
 
-	public boolean shouldConvertNullInitializer(PsiType from, PsiType to, PsiExpression context)
-	{
-		return false;
-	}
+  public boolean shouldConvertNullInitializer(PsiType from, PsiType to, PsiExpression context) {
+    return false;
+  }
 }

@@ -45,7 +45,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 
-import static com.intellij.java.impl.ide.fileTemplates.JavaTemplateUtil.INTERNAL_MODULE_INFO_TEMPLATE_NAME;
+import static com.intellij.java.language.impl.codeInsight.template.JavaTemplateUtil.INTERNAL_MODULE_INFO_TEMPLATE_NAME;
 import static com.intellij.java.language.psi.PsiJavaModule.MODULE_INFO_CLASS;
 import static com.intellij.java.language.psi.PsiJavaModule.MODULE_INFO_FILE;
 
