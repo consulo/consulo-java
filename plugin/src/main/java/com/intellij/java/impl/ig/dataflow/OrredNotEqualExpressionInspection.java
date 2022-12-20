@@ -18,6 +18,7 @@ package com.intellij.java.impl.ig.dataflow;
 import javax.annotation.Nonnull;
 
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.util.lang.Pair;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
@@ -32,6 +33,7 @@ import org.jetbrains.annotations.Nls;
 
 import javax.annotation.Nullable;
 
+@ExtensionImpl
 public class OrredNotEqualExpressionInspection extends BaseInspection {
 
   @Override

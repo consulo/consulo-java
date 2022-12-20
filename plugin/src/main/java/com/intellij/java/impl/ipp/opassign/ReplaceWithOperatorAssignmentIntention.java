@@ -15,18 +15,22 @@
  */
 package com.intellij.java.impl.ipp.opassign;
 
-import javax.annotation.Nonnull;
-
+import com.intellij.java.impl.ipp.base.MutablyNamedIntention;
+import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.intellij.java.language.psi.PsiAssignmentExpression;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiJavaToken;
 import com.intellij.java.language.psi.PsiPolyadicExpression;
-import consulo.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.siyeh.IntentionPowerPackBundle;
-import com.intellij.java.impl.ipp.base.MutablyNamedIntention;
-import com.intellij.java.impl.ipp.base.PsiElementPredicate;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.intention.IntentionMetaData;
+import consulo.language.psi.PsiElement;
 
+import javax.annotation.Nonnull;
+
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.ReplaceWithOperatorAssignmentIntention", fileExtensions = "java", categories = {"Java", "Other"})
 public class ReplaceWithOperatorAssignmentIntention extends MutablyNamedIntention {
 
   public String getTextForElement(PsiElement element) {

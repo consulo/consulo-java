@@ -16,6 +16,7 @@
 package com.intellij.java.impl.ig.errorhandling;
 
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
@@ -27,6 +28,7 @@ import consulo.java.language.module.util.JavaClassNames;
 
 import javax.annotation.Nonnull;
 
+@ExtensionImpl
 public class ErrorRethrownInspection extends BaseInspection {
 
   @Override

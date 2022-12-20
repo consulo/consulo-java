@@ -19,6 +19,8 @@ import javax.annotation.Nonnull;
 import javax.swing.JComponent;
 
 import javax.annotation.Nullable;
+
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.ImplicitUsageProvider;
 import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
 import consulo.component.extension.Extensions;
@@ -40,6 +42,7 @@ import com.siyeh.ig.psiutils.ClassUtils;
 import com.intellij.java.impl.ig.psiutils.InitializationUtils;
 import com.siyeh.ig.psiutils.TestUtils;
 
+@ExtensionImpl
 public class InstanceVariableInitializationInspection extends BaseInspection {
 
   /**

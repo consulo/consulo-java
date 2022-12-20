@@ -18,6 +18,7 @@ package com.intellij.java.impl.ig.classlayout;
 
 import javax.annotation.Nonnull;
 
+import consulo.annotation.component.ExtensionImpl;
 import org.jetbrains.annotations.Nls;
 
 import javax.annotation.Nullable;
@@ -44,6 +45,7 @@ import com.intellij.java.impl.ig.psiutils.SerializationUtils;
 /**
  * @author Bas Leijdekkers
  */
+@ExtensionImpl
 public class PublicConstructorInspection extends BaseInspection
 {
 

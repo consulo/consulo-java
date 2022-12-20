@@ -16,14 +16,19 @@
 package com.intellij.java.impl.ipp.switchtoif;
 
 import com.intellij.java.impl.codeInsight.daemon.impl.quickfix.ConvertSwitchToIfIntention;
-import com.intellij.java.language.psi.PsiJavaToken;
-import com.intellij.java.language.psi.PsiSwitchStatement;
-import consulo.language.psi.*;
-import consulo.language.util.IncorrectOperationException;
 import com.intellij.java.impl.ipp.base.Intention;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
+import com.intellij.java.language.psi.PsiJavaToken;
+import com.intellij.java.language.psi.PsiSwitchStatement;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.intention.IntentionMetaData;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
+
 import javax.annotation.Nonnull;
 
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.ReplaceSwitchWithIfIntention", fileExtensions = "java", categories = {"Java", "Control Flow"})
 public class ReplaceSwitchWithIfIntention extends Intention {
   @Override
   @Nonnull

@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.ig.errorhandling;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.ide.impl.idea.codeInspection.ui.ListTable;
 import consulo.ide.impl.idea.codeInspection.ui.ListWrappingTableModel;
 import consulo.util.lang.StringUtil;
@@ -33,6 +34,7 @@ import javax.annotation.Nonnull;
 import javax.swing.*;
 import java.util.List;
 
+@ExtensionImpl
 public class BadExceptionCaughtInspection extends BaseInspection {
 
   /**

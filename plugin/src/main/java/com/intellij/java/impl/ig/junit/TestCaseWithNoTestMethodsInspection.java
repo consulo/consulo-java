@@ -19,6 +19,8 @@ import javax.swing.JComponent;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
@@ -30,6 +32,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TestUtils;
 
+@ExtensionImpl
 public class TestCaseWithNoTestMethodsInspection extends BaseInspection {
 
   @SuppressWarnings({"PublicField"})

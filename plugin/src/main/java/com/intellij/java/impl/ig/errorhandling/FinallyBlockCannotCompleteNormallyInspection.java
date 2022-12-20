@@ -18,6 +18,7 @@ package com.intellij.java.impl.ig.errorhandling;
 import javax.annotation.Nonnull;
 
 import com.intellij.java.language.psi.PsiCodeBlock;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiKeyword;
 import com.intellij.java.language.psi.PsiTryStatement;
@@ -26,6 +27,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ControlFlowUtils;
 
+@ExtensionImpl
 public class FinallyBlockCannotCompleteNormallyInspection
   extends BaseInspection {
 

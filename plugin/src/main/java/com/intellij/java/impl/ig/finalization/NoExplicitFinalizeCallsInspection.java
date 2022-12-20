@@ -18,6 +18,7 @@ package com.intellij.java.impl.ig.finalization;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiMethodCallExpression;
 import com.intellij.java.language.psi.PsiType;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.util.PsiTreeUtil;
 import com.siyeh.HardcodedMethodConstants;
 import com.siyeh.InspectionGadgetsBundle;
@@ -27,6 +28,7 @@ import com.siyeh.ig.psiutils.MethodCallUtils;
 import com.siyeh.ig.psiutils.MethodUtils;
 import javax.annotation.Nonnull;
 
+@ExtensionImpl
 public class NoExplicitFinalizeCallsInspection extends BaseInspection {
 
   @Nonnull

@@ -16,25 +16,29 @@
 
 package com.intellij.java.impl.ipp.expression;
 
-import com.intellij.java.language.psi.*;
-import consulo.codeEditor.Editor;
-import consulo.fileEditor.FileEditorManager;
-import consulo.project.Project;
-import consulo.language.psi.*;
-import com.intellij.java.language.psi.util.PropertyUtil;
-import consulo.language.util.IncorrectOperationException;
 import com.intellij.java.impl.ipp.base.Intention;
 import com.intellij.java.impl.ipp.base.PsiElementEditorPredicate;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.intellij.java.impl.ipp.psiutils.PsiSelectionSearcher;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.PropertyUtil;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.codeEditor.Editor;
+import consulo.fileEditor.FileEditorManager;
+import consulo.language.editor.intention.IntentionMetaData;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import java.util.List;
 
 /**
  * @author Konstantin Bulenkov
  */
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.FlipSetterCallIntention", fileExtensions = "java", categories = {"Java", "Other"})
 public class FlipSetterCallIntention extends Intention {
 
   protected void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {

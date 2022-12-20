@@ -16,6 +16,7 @@
 package com.intellij.java.impl.ig.numeric;
 
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.*;
 import consulo.language.ast.IElementType;
 import com.siyeh.InspectionGadgetsBundle;
@@ -29,6 +30,7 @@ import javax.annotation.Nonnull;
 import java.util.HashSet;
 import java.util.Set;
 
+@ExtensionImpl
 public class IntegerDivisionInFloatingPointContextInspection
   extends BaseInspection {
 

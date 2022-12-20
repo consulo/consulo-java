@@ -18,12 +18,14 @@ package com.intellij.java.impl.ig.numeric;
 import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.java.language.psi.PsiJavaToken;
 import com.intellij.java.language.psi.PsiPrefixExpression;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.ast.IElementType;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import javax.annotation.Nonnull;
 
+@ExtensionImpl
 public class UnaryPlusInspection extends BaseInspection {
 
   @Nonnull

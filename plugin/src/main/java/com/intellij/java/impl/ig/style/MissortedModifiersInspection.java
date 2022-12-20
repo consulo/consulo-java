@@ -20,6 +20,7 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.ast.IElementType;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
@@ -34,6 +35,7 @@ import javax.annotation.Nonnull;
 import javax.swing.*;
 import java.util.*;
 
+@ExtensionImpl
 public class MissortedModifiersInspection extends BaseInspection {
 
   /**

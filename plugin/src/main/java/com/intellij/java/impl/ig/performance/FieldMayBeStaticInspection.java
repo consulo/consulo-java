@@ -24,8 +24,11 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.intellij.java.impl.ig.fixes.ChangeModifierFix;
 import com.siyeh.ig.psiutils.ClassUtils;
 import com.siyeh.ig.psiutils.SideEffectChecker;
+import consulo.annotation.component.ExtensionImpl;
+
 import javax.annotation.Nonnull;
 
+@ExtensionImpl
 public class FieldMayBeStaticInspection extends BaseInspection {
 
   @Nonnull

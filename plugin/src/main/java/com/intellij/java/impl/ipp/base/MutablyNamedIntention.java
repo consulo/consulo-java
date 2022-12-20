@@ -15,14 +15,14 @@
  */
 package com.intellij.java.impl.ipp.base;
 
+import com.siyeh.IntentionPowerPackBundle;
+import consulo.codeEditor.Editor;
+import consulo.language.psi.PsiElement;
+import consulo.project.Project;
+
 import javax.annotation.Nonnull;
 
-import consulo.codeEditor.Editor;
-import consulo.project.Project;
-import consulo.language.psi.PsiElement;
-
 public abstract class MutablyNamedIntention extends Intention {
-
   private String m_text = null;
 
   protected abstract String getTextForElement(PsiElement element);
@@ -30,12 +30,16 @@ public abstract class MutablyNamedIntention extends Intention {
   @Override
   @Nonnull
   public final String getText() {
-    return m_text == null ? "" : m_text;
+    return m_text == null ? getNeutralText() : m_text;
+  }
+
+  private String getNeutralText() {
+    //noinspection UnresolvedPropertyKey
+    return IntentionPowerPackBundle.defaultableMessage(getPrefix() + ".family.name");
   }
 
   @Override
-  public final boolean isAvailable(@Nonnull Project project, Editor editor,
-                                   @Nonnull PsiElement node) {
+  public final boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement node) {
     final PsiElement element = findMatchingElement(node, editor);
     if (element == null) {
       return false;

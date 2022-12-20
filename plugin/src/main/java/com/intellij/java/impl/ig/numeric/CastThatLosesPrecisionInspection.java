@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.ig.numeric;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
 import com.intellij.java.language.psi.*;
 import consulo.language.psi.util.PsiTreeUtil;
@@ -30,6 +31,7 @@ import javax.swing.*;
 import java.util.HashMap;
 import java.util.Map;
 
+@ExtensionImpl
 public class CastThatLosesPrecisionInspection extends BaseInspection {
 
   /**

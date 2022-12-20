@@ -22,7 +22,9 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ControlFlowUtils;
+import consulo.annotation.component.ExtensionImpl;
 
+@ExtensionImpl
 public class LoopStatementsThatDontLoopInspection extends BaseInspection {
 
   @Nonnull

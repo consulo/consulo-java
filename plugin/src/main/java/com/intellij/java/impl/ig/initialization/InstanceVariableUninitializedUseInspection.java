@@ -25,6 +25,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ClassUtils;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.component.extension.Extensions;
 import consulo.language.editor.ImplicitUsageProvider;
 import consulo.util.xml.serializer.InvalidDataException;
@@ -38,6 +39,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@ExtensionImpl
 public class InstanceVariableUninitializedUseInspection extends BaseInspection {
 
   /**

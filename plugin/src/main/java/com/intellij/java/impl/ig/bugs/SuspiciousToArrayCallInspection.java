@@ -18,6 +18,7 @@ package com.intellij.java.impl.ig.bugs;
 import javax.annotation.Nonnull;
 
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.siyeh.InspectionGadgetsBundle;
@@ -26,6 +27,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import consulo.java.language.module.util.JavaClassNames;
 import org.jetbrains.annotations.NonNls;
 
+@ExtensionImpl
 public class SuspiciousToArrayCallInspection extends BaseInspection {
 
   @Override

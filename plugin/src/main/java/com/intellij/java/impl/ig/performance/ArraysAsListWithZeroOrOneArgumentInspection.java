@@ -18,6 +18,7 @@ package com.intellij.java.impl.ig.performance;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
 import consulo.project.Project;
@@ -32,6 +33,7 @@ import org.jetbrains.annotations.Nls;
 /**
  * @author Bas Leijdekkers
  */
+@ExtensionImpl
 public class ArraysAsListWithZeroOrOneArgumentInspection extends BaseInspection {
 
   @Nls

@@ -17,6 +17,7 @@ package com.intellij.java.impl.ig.controlflow;
 
 import javax.annotation.Nonnull;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiSwitchStatement;
@@ -25,6 +26,7 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 
+@ExtensionImpl
 public class NestedSwitchStatementInspection extends BaseInspection {
 
   @Nonnull

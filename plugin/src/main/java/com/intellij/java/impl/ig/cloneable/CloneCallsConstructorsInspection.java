@@ -18,12 +18,14 @@ package com.intellij.java.impl.ig.cloneable;
 import javax.annotation.Nonnull;
 
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.util.PsiTreeUtil;
 import com.siyeh.HardcodedMethodConstants;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 
+@ExtensionImpl
 public class CloneCallsConstructorsInspection extends BaseInspection {
 
   @Nonnull

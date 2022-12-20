@@ -15,19 +15,24 @@
  */
 package com.intellij.java.impl.ipp.trivialif;
 
-import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
-import consulo.language.psi.PsiElement;
+import com.intellij.java.impl.ipp.base.Intention;
+import com.intellij.java.impl.ipp.base.PsiElementPredicate;
+import com.intellij.java.impl.ipp.psiutils.ConditionalUtils;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiIfStatement;
 import com.intellij.java.language.psi.PsiJavaToken;
 import com.intellij.java.language.psi.PsiStatement;
-import consulo.language.util.IncorrectOperationException;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
-import com.intellij.java.impl.ipp.base.Intention;
-import com.intellij.java.impl.ipp.base.PsiElementPredicate;
-import com.intellij.java.impl.ipp.psiutils.ConditionalUtils;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.intention.IntentionMetaData;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
+import org.jetbrains.annotations.NonNls;
 
+import javax.annotation.Nonnull;
+
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.MergeIfAndIntention", fileExtensions = "java", categories = {"Java", "Boolean"})
 public class MergeIfAndIntention extends Intention {
 
   @Nonnull

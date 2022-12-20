@@ -19,6 +19,7 @@ import com.intellij.java.language.psi.PsiCodeBlock;
 import com.intellij.java.language.psi.PsiLocalVariable;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.PsiVariable;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.*;
 import consulo.language.psi.util.PsiTreeUtil;
 import com.siyeh.InspectionGadgetsBundle;
@@ -32,6 +33,7 @@ import javax.annotation.Nonnull;
 
 import javax.swing.*;
 
+@ExtensionImpl
 public class StringReplaceableByStringBufferInspection extends BaseInspection {
 
   @SuppressWarnings({"PublicField"})

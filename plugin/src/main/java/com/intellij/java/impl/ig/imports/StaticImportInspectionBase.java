@@ -25,6 +25,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.CommentTracker;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
@@ -36,6 +37,7 @@ import consulo.project.Project;
 import javax.annotation.Nonnull;
 import java.util.*;
 
+@ExtensionImpl
 public class StaticImportInspectionBase extends BaseInspection {
   @SuppressWarnings({"PublicField"})
   public boolean ignoreSingleFieldImports = false;

@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.ig.security;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
@@ -30,6 +31,7 @@ import javax.annotation.Nullable;
 
 import javax.swing.*;
 
+@ExtensionImpl
 public class DeserializableClassInSecureContextInspection extends BaseInspection {
 
   @SuppressWarnings("PublicField")

@@ -18,6 +18,8 @@ package com.intellij.java.impl.ipp.exceptions;
 import com.intellij.java.impl.ipp.base.Intention;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
@@ -26,6 +28,8 @@ import consulo.project.Project;
 import javax.annotation.Nonnull;
 import java.util.List;
 
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.ConvertCatchToThrowsIntention", fileExtensions = "java", categories = {"Java", "Other"})
 public class ConvertCatchToThrowsIntention extends Intention {
 
   @Override

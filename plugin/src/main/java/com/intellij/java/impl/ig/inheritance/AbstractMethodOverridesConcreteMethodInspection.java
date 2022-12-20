@@ -17,6 +17,7 @@ package com.intellij.java.impl.ig.inheritance;
 
 import javax.annotation.Nonnull;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.java.language.module.util.JavaClassNames;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
@@ -25,6 +26,7 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 
+@ExtensionImpl
 public class AbstractMethodOverridesConcreteMethodInspection
   extends BaseInspection {
 

@@ -24,6 +24,7 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.documentation.CodeDocumentationProvider;
 import consulo.language.editor.documentation.CompositeDocumentationProvider;
 import consulo.language.editor.documentation.DocumentationProvider;
@@ -37,6 +38,7 @@ import org.jetbrains.annotations.Nls;
 
 import javax.annotation.Nonnull;
 
+@ExtensionImpl
 public class ThrowsRuntimeExceptionInspection extends BaseInspection {
   @Nls
   @Nonnull

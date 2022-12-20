@@ -22,10 +22,13 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.intellij.java.impl.ig.fixes.RenameFix;
 import com.siyeh.ig.psiutils.ClassUtils;
+import consulo.annotation.component.ExtensionImpl;
+
 import javax.annotation.Nonnull;
 
 import java.util.StringTokenizer;
 
+@ExtensionImpl
 public class ClassNamePrefixedWithPackageNameInspection
   extends BaseInspection {
 

@@ -20,6 +20,7 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TypeUtils;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.util.function.Processor;
 import consulo.application.util.query.Query;
 import consulo.java.language.module.util.JavaClassNames;
@@ -36,6 +37,7 @@ import javax.swing.*;
 import java.util.HashSet;
 import java.util.Set;
 
+@ExtensionImpl
 public class ExceptionFromCatchWhichDoesntWrapInspection extends BaseInspection {
 
   @SuppressWarnings("PublicField")

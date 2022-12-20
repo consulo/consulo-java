@@ -21,11 +21,14 @@ import com.intellij.java.language.psi.PsiModifier;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import consulo.annotation.component.ExtensionImpl;
+
 import javax.annotation.Nonnull;
 
 import java.util.HashSet;
 import java.util.Set;
 
+@ExtensionImpl
 public class AbstractClassWithoutAbstractMethodsInspection
   extends BaseInspection {
 

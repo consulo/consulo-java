@@ -15,33 +15,26 @@
  */
 package com.intellij.java.impl.ipp.base;
 
-import javax.annotation.Nonnull;
-
-import consulo.virtualFileSystem.ReadonlyStatusHandler;
-import org.jetbrains.annotations.NonNls;
-
-import javax.annotation.Nullable;
-import consulo.language.editor.intention.BaseElementAtCaretIntentionAction;
 import com.intellij.java.language.JavaLanguage;
-import consulo.codeEditor.Editor;
-import consulo.project.Project;
-import consulo.virtualFileSystem.VirtualFile;
-import com.intellij.java.language.psi.JavaPsiFacade;
-import com.intellij.java.language.psi.PsiBinaryExpression;
-import consulo.language.psi.PsiElement;
-import com.intellij.java.language.psi.PsiElementFactory;
-import com.intellij.java.language.psi.PsiExpression;
-import consulo.language.psi.PsiFile;
-import com.intellij.java.language.psi.PsiParenthesizedExpression;
-import com.intellij.java.language.psi.PsiReturnStatement;
-import com.intellij.java.language.psi.PsiStatement;
-import consulo.language.codeStyle.CodeStyleManager;
+import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
-import consulo.language.psi.PsiUtilCore;
 import com.siyeh.IntentionPowerPackBundle;
+import com.siyeh.ig.psiutils.BoolUtils;
 import com.siyeh.ig.psiutils.ComparisonUtils;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
-import com.siyeh.ig.psiutils.BoolUtils;
+import consulo.codeEditor.Editor;
+import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.editor.intention.BaseElementAtCaretIntentionAction;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiUtilCore;
+import consulo.project.Project;
+import consulo.virtualFileSystem.ReadonlyStatusHandler;
+import consulo.virtualFileSystem.VirtualFile;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public abstract class Intention extends BaseElementAtCaretIntentionAction {
 
@@ -213,7 +206,7 @@ public abstract class Intention extends BaseElementAtCaretIntentionAction {
     return !operationStatus.hasReadonlyFiles();
   }
 
-  private String getPrefix() {
+  protected String getPrefix() {
     final Class<? extends Intention> aClass = getClass();
     final String name = aClass.getSimpleName();
     final StringBuilder buffer = new StringBuilder(name.length() + 10);

@@ -17,6 +17,7 @@ package com.intellij.java.impl.ig.cloneable;
 
 import javax.annotation.Nonnull;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
@@ -34,6 +35,7 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.CloneUtils;
 import com.siyeh.ig.psiutils.MethodUtils;
 
+@ExtensionImpl
 public class CloneDeclaresCloneNotSupportedInspection extends BaseInspection {
 
   @Override

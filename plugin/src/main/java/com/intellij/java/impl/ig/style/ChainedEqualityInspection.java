@@ -17,6 +17,7 @@ package com.intellij.java.impl.ig.style;
 
 import javax.annotation.Nonnull;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiPolyadicExpression;
@@ -25,6 +26,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ComparisonUtils;
 
+@ExtensionImpl
 public class ChainedEqualityInspection extends BaseInspection {
 
   @Nonnull

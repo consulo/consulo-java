@@ -20,6 +20,7 @@ import com.intellij.java.language.psi.*;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TypeUtils;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.ide.impl.idea.codeInspection.ui.ListTable;
 import consulo.ide.impl.idea.codeInspection.ui.ListWrappingTableModel;
 import consulo.java.language.module.util.JavaClassNames;
@@ -37,6 +38,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@ExtensionImpl
 public class IOResourceInspection extends ResourceInspection {
 
   private static final String[] IO_TYPES = {

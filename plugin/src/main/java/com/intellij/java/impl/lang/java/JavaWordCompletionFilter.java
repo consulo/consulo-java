@@ -22,6 +22,7 @@ package com.intellij.java.impl.lang.java;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.JavaDocTokenType;
 import com.intellij.java.language.psi.JavaTokenType;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.Language;
 import consulo.language.ast.IElementType;
 import consulo.language.ast.TokenSet;
@@ -30,6 +31,7 @@ import consulo.language.version.LanguageVersion;
 
 import javax.annotation.Nonnull;
 
+@ExtensionImpl
 public class JavaWordCompletionFilter implements WordCompletionElementFilter {
   private static final TokenSet ENABLED_TOKENS = TokenSet.create(JavaTokenType.C_STYLE_COMMENT, JavaTokenType.END_OF_LINE_COMMENT,
       JavaDocTokenType.DOC_COMMENT_DATA, JavaTokenType.STRING_LITERAL);

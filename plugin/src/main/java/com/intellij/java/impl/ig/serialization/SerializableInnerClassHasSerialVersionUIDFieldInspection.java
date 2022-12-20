@@ -21,7 +21,9 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.intellij.java.impl.ig.fixes.AddSerialVersionUIDFix;
+import consulo.annotation.component.ExtensionImpl;
 
+@ExtensionImpl
 public class SerializableInnerClassHasSerialVersionUIDFieldInspection
   extends SerializableInspection {
 

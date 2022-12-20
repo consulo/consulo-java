@@ -19,11 +19,15 @@ import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiForeachStatement;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.PsiTypeCastExpression;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.intention.IntentionMetaData;
 
 /**
  * User: anna
  * Date: 8/1/12
  */
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.ReplaceForEachLoopWithOptimizedIndexedForLoopIntention", fileExtensions = "java", categories = {"Java", "Control Flow"})
 public class ReplaceForEachLoopWithOptimizedIndexedForLoopIntention extends ReplaceForEachLoopWithIndexedForLoopIntention {
   @Override
   protected void createForLoopDeclaration(PsiForeachStatement statement,

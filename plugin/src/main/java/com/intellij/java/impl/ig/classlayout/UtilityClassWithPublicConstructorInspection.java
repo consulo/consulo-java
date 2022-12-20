@@ -17,6 +17,7 @@ package com.intellij.java.impl.ig.classlayout;
 
 import javax.annotation.Nonnull;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
@@ -31,6 +32,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.intellij.java.impl.ig.psiutils.UtilityClassUtil;
 
+@ExtensionImpl
 public class UtilityClassWithPublicConstructorInspection
   extends BaseInspection {
 

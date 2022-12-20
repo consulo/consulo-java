@@ -15,13 +15,18 @@
  */
 package com.intellij.java.impl.ipp.chartostring;
 
-import consulo.language.psi.PsiElement;
-import com.intellij.java.language.psi.PsiLiteralExpression;
-import consulo.language.util.IncorrectOperationException;
 import com.intellij.java.impl.ipp.base.Intention;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
+import com.intellij.java.language.psi.PsiLiteralExpression;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.intention.IntentionMetaData;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
+
 import javax.annotation.Nonnull;
 
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.StringToCharIntention", fileExtensions = "java", categories = {"Java", "Strings"})
 public class StringToCharIntention extends Intention {
 
   @Override

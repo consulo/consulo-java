@@ -16,6 +16,7 @@
 package com.intellij.java.impl.ig.performance;
 
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
@@ -28,6 +29,7 @@ import com.siyeh.ig.psiutils.CollectionUtils;
 import com.siyeh.ig.psiutils.ConstructionUtils;
 import consulo.java.language.module.util.JavaClassNames;
 
+@ExtensionImpl
 public class ToArrayCallWithZeroLengthArrayArgumentInspectionBase extends BaseInspection
 {
 	@Override

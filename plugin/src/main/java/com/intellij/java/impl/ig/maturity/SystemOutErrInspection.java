@@ -16,6 +16,7 @@
 package com.intellij.java.impl.ig.maturity;
 
 import com.intellij.java.language.psi.PsiClass;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiReferenceExpression;
@@ -25,6 +26,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import javax.annotation.Nonnull;
 
+@ExtensionImpl
 public class SystemOutErrInspection extends BaseInspection {
 
   @Nonnull

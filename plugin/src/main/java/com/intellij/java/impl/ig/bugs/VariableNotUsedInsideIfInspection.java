@@ -18,6 +18,7 @@ package com.intellij.java.impl.ig.bugs;
 import javax.annotation.Nonnull;
 
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.*;
 import consulo.language.ast.IElementType;
 import com.siyeh.InspectionGadgetsBundle;
@@ -27,6 +28,7 @@ import com.siyeh.ig.psiutils.ParenthesesUtils;
 import com.siyeh.ig.psiutils.VariableAccessUtils;
 import org.jetbrains.annotations.Nls;
 
+@ExtensionImpl
 public class VariableNotUsedInsideIfInspection extends BaseInspection {
 
   @Override

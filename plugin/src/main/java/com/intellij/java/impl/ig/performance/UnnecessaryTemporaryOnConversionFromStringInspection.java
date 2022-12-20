@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.ig.performance;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
 import consulo.project.Project;
@@ -33,6 +34,7 @@ import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
+@ExtensionImpl
 public class UnnecessaryTemporaryOnConversionFromStringInspection
   extends BaseInspection {
 

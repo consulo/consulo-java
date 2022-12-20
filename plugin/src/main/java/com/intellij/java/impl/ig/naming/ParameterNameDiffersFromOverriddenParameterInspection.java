@@ -27,6 +27,7 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.util.query.Query;
 import consulo.language.editor.inspection.ui.MultipleCheckboxOptionsPanel;
 
@@ -34,6 +35,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.swing.*;
 
+@ExtensionImpl
 public class ParameterNameDiffersFromOverriddenParameterInspection
   extends BaseInspection {
 

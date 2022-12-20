@@ -25,7 +25,9 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.intellij.java.impl.ig.fixes.DeleteImportFix;
 import com.intellij.java.impl.ig.psiutils.ImportUtils;
+import consulo.annotation.component.ExtensionImpl;
 
+@ExtensionImpl
 public class JavaLangImportInspection extends BaseInspection {
 
   @Override

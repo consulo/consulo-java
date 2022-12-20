@@ -22,7 +22,9 @@ import com.intellij.java.language.psi.PsiParameterList;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.intellij.java.impl.ig.psiutils.LibraryUtil;
+import consulo.annotation.component.ExtensionImpl;
 
+@ExtensionImpl
 public class ParametersPerMethodInspection extends MethodMetricInspection {
 
   @Nonnull

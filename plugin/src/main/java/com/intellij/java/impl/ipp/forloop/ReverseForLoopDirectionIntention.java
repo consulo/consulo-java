@@ -22,13 +22,17 @@ import com.siyeh.ig.psiutils.ComparisonUtils;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
 import com.siyeh.ig.psiutils.VariableAccessUtils;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.ast.IElementType;
+import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 
 import javax.annotation.Nonnull;
 
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.ReverseForLoopDirectionIntention", fileExtensions = "java", categories = {"Java", "Control Flow"})
 public class ReverseForLoopDirectionIntention extends Intention {
 
   @Nonnull

@@ -18,6 +18,7 @@ package com.intellij.java.impl.ig.junit;
 import javax.annotation.Nonnull;
 
 import com.intellij.java.language.psi.PsiClass;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifier;
@@ -30,6 +31,7 @@ import com.intellij.java.impl.ig.fixes.RenameFix;
 import com.intellij.java.impl.ig.naming.ConventionInspection;
 import com.siyeh.ig.psiutils.TestUtils;
 
+@ExtensionImpl
 public class JUnitTestClassNamingConventionInspection
   extends ConventionInspection {
 

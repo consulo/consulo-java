@@ -16,6 +16,7 @@
 package com.intellij.java.impl.ig.controlflow;
 
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
@@ -25,6 +26,7 @@ import javax.annotation.Nullable;
 
 import javax.swing.*;
 
+@ExtensionImpl
 public class EnumSwitchStatementWhichMissesCasesInspection
   extends BaseInspection {
 

@@ -23,6 +23,7 @@ import javax.annotation.Nonnull;
 
 import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.java.language.psi.PsiBinaryExpression;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiParenthesizedExpression;
@@ -33,6 +34,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.EquivalenceChecker;
 
+@ExtensionImpl
 public class DuplicateBooleanBranchInspection extends BaseInspection {
 
   @Nonnull

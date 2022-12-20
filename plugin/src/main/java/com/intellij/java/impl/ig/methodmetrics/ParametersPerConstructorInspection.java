@@ -18,6 +18,7 @@ package com.intellij.java.impl.ig.methodmetrics;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.java.language.psi.PsiParameterList;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.ui.ex.awt.ListCellRendererWrapper;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
@@ -28,6 +29,7 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+@ExtensionImpl
 public class ParametersPerConstructorInspection extends MethodMetricInspection {
 
   private enum Scope {

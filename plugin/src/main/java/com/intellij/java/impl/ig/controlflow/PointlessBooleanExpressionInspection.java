@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.ig.controlflow;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
 import com.intellij.java.language.psi.*;
@@ -41,6 +42,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+@ExtensionImpl
 public class PointlessBooleanExpressionInspection extends BaseInspection {
 
   private static final Set<IElementType> booleanTokens = new HashSet<IElementType>();

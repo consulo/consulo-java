@@ -18,12 +18,14 @@ package com.intellij.java.impl.ig.j2me;
 import javax.annotation.Nonnull;
 
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.*;
 import com.siyeh.HardcodedMethodConstants;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 
+@ExtensionImpl
 public class ArrayLengthInLoopConditionInspection extends BaseInspection {
 
   @Nonnull

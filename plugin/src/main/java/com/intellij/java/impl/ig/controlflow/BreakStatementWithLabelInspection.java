@@ -20,8 +20,11 @@ import com.intellij.java.language.psi.PsiIdentifier;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import consulo.annotation.component.ExtensionImpl;
+
 import javax.annotation.Nonnull;
 
+@ExtensionImpl
 public class BreakStatementWithLabelInspection extends BaseInspection {
 
   @Nonnull

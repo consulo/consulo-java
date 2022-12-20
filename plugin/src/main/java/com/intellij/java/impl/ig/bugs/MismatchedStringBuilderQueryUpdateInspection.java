@@ -16,6 +16,7 @@
 package com.intellij.java.impl.ig.bugs;
 
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.*;
 import consulo.language.ast.IElementType;
 import consulo.language.psi.util.PsiTreeUtil;
@@ -34,6 +35,7 @@ import javax.annotation.Nonnull;
 import java.util.HashSet;
 import java.util.Set;
 
+@ExtensionImpl
 public class MismatchedStringBuilderQueryUpdateInspection extends BaseInspection {
 
   @NonNls

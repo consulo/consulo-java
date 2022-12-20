@@ -22,8 +22,10 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TypeUtils;
+import consulo.annotation.component.ExtensionImpl;
 import org.jetbrains.annotations.NonNls;
 
+@ExtensionImpl
 public class SystemGetenvInspection extends BaseInspection {
 
   @Nonnull

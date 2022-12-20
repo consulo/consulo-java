@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.ig.bugs;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
 import consulo.project.Project;
@@ -29,6 +30,7 @@ import com.intellij.java.impl.ig.psiutils.FormatUtils;
 import org.jetbrains.annotations.Nls;
 import javax.annotation.Nonnull;
 
+@ExtensionImpl
 public class StringConcatenationInFormatCallInspection extends BaseInspection {
 
   @Nls

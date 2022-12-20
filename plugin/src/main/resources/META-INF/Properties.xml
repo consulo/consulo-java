@@ -1,26 +1,5 @@
 <consulo-plugin>
-  <extensions defaultExtensionNs="com.intellij">
 
-    <localInspection shortName="HardCodedStringLiteral" bundle="messages.CodeInsightBundle" key="inspection.i18n.display.name"
-                     groupBundle="messages.InspectionsBundle" groupKey="group.names.internationalization.issues" enabledByDefault="false" level="WARNING"
-                     implementationClass="com.intellij.java.impl.codeInspection.i18n.I18nInspection"/>
-    <localInspection language="JAVA" shortName="UnresolvedPropertyKey" bundle="messages.CodeInsightBundle"
-                     key="inspection.unresolved.property.key.reference.name" groupPath="Java"
-                     groupBundle="messages.InspectionsBundle" groupKey="group.names.properties.files" enabledByDefault="true"
-                     level="ERROR" implementationClass="com.intellij.java.impl.codeInspection.i18n.InvalidPropertyKeyInspection"/>
-    <globalInspection shortName="InconsistentResourceBundle" bundle="messages.InspectionsBundle"
-                      key="inconsistent.resource.bundle.display.name" groupBundle="messages.PropertiesBundle"
-                      groupKey="properties.files.inspection.group.display.name" enabledByDefault="true" level="ERROR"
-                      implementationClass="com.intellij.java.impl.codeInspection.i18n.InconsistentResourceBundleInspection"/>
-    <localInspection language="Properties" shortName="UnusedMessageFormatParameter" bundle="messages.PropertiesBundle"
-                     key="unused.message.format.parameter.display.name" groupKey="properties.files.inspection.group.display.name"
-                     enabledByDefault="true" level="WARNING"
-                     implementationClass="com.intellij.java.impl.lang.properties.UnusedMessageFormatParameterInspection"/>
-    <localInspection language="JAVA" groupPath="Java" shortName="DuplicateStringLiteralInspection" bundle="messages.InspectionsBundle"
-                     key="inspection.duplicates.display.name" groupName="Internationalization issues" enabledByDefault="false"
-                     level="WARNING"
-                     implementationClass="com.intellij.java.impl.codeInspection.duplicateStringLiteral.DuplicateStringLiteralInspection"/>
-  </extensions>
   <actions>
     <action id="I18nize" class="com.intellij.java.impl.codeInspection.i18n.I18nizeAction">
       <add-to-group group-id="RefactoringMenu" anchor="last" />

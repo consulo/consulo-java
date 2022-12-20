@@ -16,20 +16,20 @@
 
 package com.intellij.java.analysis.impl.codeInsight.intention;
 
-import consulo.language.editor.intention.IntentionAction;
-import consulo.codeEditor.Editor;
-import consulo.project.Project;
-import consulo.language.psi.PsiFile;
 import com.intellij.java.language.psi.PsiModifierListOwner;
 import com.intellij.java.language.psi.PsiNameValuePair;
+import consulo.codeEditor.Editor;
+import consulo.language.editor.intention.SyntheticIntentionAction;
+import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
 
 import javax.annotation.Nonnull;
 
 /**
  * @author ven
  */
-public class AddAnnotationFix extends AddAnnotationPsiFix implements IntentionAction
+public class AddAnnotationFix extends AddAnnotationPsiFix implements SyntheticIntentionAction
 {
   public AddAnnotationFix(@Nonnull String fqn, @Nonnull PsiModifierListOwner modifierListOwner, @Nonnull String... annotationsToRemove) {
     this(fqn, modifierListOwner, PsiNameValuePair.EMPTY_ARRAY, annotationsToRemove);

@@ -17,6 +17,7 @@ package com.intellij.java.impl.ig.javadoc;
 
 import javax.annotation.Nonnull;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
@@ -36,6 +37,7 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
 
+@ExtensionImpl
 public class UnnecessaryInheritDocInspection extends BaseInspection {
 
   @Nls

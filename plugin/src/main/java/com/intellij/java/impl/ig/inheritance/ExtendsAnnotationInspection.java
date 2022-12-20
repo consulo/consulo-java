@@ -18,6 +18,7 @@ package com.intellij.java.impl.ig.inheritance;
 import javax.annotation.Nonnull;
 
 import com.intellij.java.language.psi.PsiClass;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
 import com.intellij.java.language.psi.PsiReferenceList;
@@ -26,6 +27,7 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 
+@ExtensionImpl
 public class ExtendsAnnotationInspection extends BaseInspection {
 
   @Nonnull

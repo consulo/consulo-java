@@ -26,11 +26,13 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.intellij.java.impl.ig.fixes.MakeClassFinalFix;
 import com.intellij.java.impl.ig.psiutils.UtilityClassUtil;
+import consulo.annotation.component.ExtensionImpl;
 import org.jetbrains.annotations.Nls;
 
 /**
  * @author Bas Leijdekkers
  */
+@ExtensionImpl
 public class NonFinalUtilityClassInspection extends BaseInspection {
 
   @Nls

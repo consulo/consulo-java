@@ -18,6 +18,7 @@ package com.intellij.java.impl.ig.threading;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiModifier;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
 import com.siyeh.InspectionGadgetsBundle;
@@ -31,6 +32,7 @@ import javax.annotation.Nullable;
 import javax.swing.*;
 import java.util.Set;
 
+@ExtensionImpl
 public class FieldAccessedSynchronizedAndUnsynchronizedInspection
   extends BaseInspection {
 

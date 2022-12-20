@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.ig.style;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.editor.inspection.ProblemHighlightType;
 import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
@@ -35,6 +36,7 @@ import javax.annotation.Nullable;
 
 import javax.swing.*;
 
+@ExtensionImpl
 public class UnnecessaryThisInspection extends BaseInspection {
 
   @SuppressWarnings("PublicField")

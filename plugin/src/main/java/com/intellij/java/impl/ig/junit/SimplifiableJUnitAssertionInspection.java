@@ -17,6 +17,7 @@ package com.intellij.java.impl.ig.junit;
 
 import javax.annotation.Nonnull;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.impl.ig.psiutils.ImportUtils;
 import com.intellij.java.language.psi.*;
@@ -31,6 +32,7 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.*;
 import org.jetbrains.annotations.NonNls;
 
+@ExtensionImpl
 public class SimplifiableJUnitAssertionInspection extends BaseInspection {
 
   @Override

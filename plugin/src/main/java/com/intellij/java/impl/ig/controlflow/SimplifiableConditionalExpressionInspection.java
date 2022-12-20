@@ -17,6 +17,7 @@ package com.intellij.java.impl.ig.controlflow;
 
 import javax.annotation.Nonnull;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.project.Project;
 import com.intellij.java.language.psi.PsiConditionalExpression;
@@ -31,6 +32,7 @@ import com.siyeh.ig.psiutils.BoolUtils;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
 import org.jetbrains.annotations.NonNls;
 
+@ExtensionImpl
 public class SimplifiableConditionalExpressionInspection
   extends BaseInspection {
 

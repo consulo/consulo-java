@@ -21,7 +21,9 @@ import com.intellij.java.language.psi.PsiClass;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import consulo.annotation.component.ExtensionImpl;
 
+@ExtensionImpl
 public class AnnotationClassInspection extends BaseInspection {
 
   @Nonnull

@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.ig.logging;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.ide.impl.idea.codeInspection.ui.ListTable;
 import consulo.ide.impl.idea.codeInspection.ui.ListWrappingTableModel;
@@ -41,6 +42,7 @@ import java.util.Arrays;
 import java.util.List;
 
 
+@ExtensionImpl
 public class LoggerInitializedWithForeignClassInspection extends BaseInspection {
 
   @NonNls private static final String DEFAULT_LOGGER_CLASS_NAMES =

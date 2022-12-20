@@ -18,6 +18,7 @@ package com.intellij.java.impl.ig.controlflow;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
 import consulo.project.Project;
@@ -34,6 +35,7 @@ import com.siyeh.ig.psiutils.ParenthesesUtils;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
 
+@ExtensionImpl
 public class SimplifiableEqualsExpressionInspection extends BaseInspection {
   @Nls
   @Nonnull

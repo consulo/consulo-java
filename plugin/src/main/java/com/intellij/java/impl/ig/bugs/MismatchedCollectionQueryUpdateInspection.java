@@ -30,6 +30,7 @@ import com.siyeh.ig.psiutils.ConstructionUtils;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.SideEffectChecker;
 import com.siyeh.ig.ui.ExternalizableStringSet;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.ide.impl.idea.codeInspection.ui.ListTable;
 import consulo.ide.impl.idea.codeInspection.ui.ListWrappingTableModel;
 import consulo.language.ast.IElementType;
@@ -51,6 +52,7 @@ import java.util.stream.Collectors;
 
 import static com.siyeh.ig.psiutils.ClassUtils.isImmutable;
 
+@ExtensionImpl
 public class MismatchedCollectionQueryUpdateInspection
     extends BaseInspection {
 

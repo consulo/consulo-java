@@ -24,8 +24,11 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.intellij.java.impl.ig.fixes.ChangeModifierFix;
 import com.intellij.java.impl.ig.psiutils.SerializationUtils;
+import consulo.annotation.component.ExtensionImpl;
+
 import javax.annotation.Nonnull;
 
+@ExtensionImpl
 public class ReadResolveAndWriteReplaceProtectedInspection
   extends BaseInspection {
 

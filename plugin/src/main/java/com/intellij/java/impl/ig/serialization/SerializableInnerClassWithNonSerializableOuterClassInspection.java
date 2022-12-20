@@ -19,7 +19,9 @@ import javax.annotation.Nonnull;
 
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
+import consulo.annotation.component.ExtensionImpl;
 
+@ExtensionImpl
 public class SerializableInnerClassWithNonSerializableOuterClassInspection
   extends SerializableInspection {
 

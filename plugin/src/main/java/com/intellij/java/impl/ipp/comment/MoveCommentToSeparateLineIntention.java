@@ -15,17 +15,24 @@
  */
 package com.intellij.java.impl.ipp.comment;
 
-import javax.annotation.Nonnull;
-
-import com.intellij.java.language.psi.JavaPsiFacade;
-import com.intellij.java.language.psi.PsiElementFactory;
-import consulo.language.psi.*;
-import consulo.language.codeStyle.CodeStyleManager;
-import consulo.language.psi.util.PsiTreeUtil;
-import consulo.language.util.IncorrectOperationException;
 import com.intellij.java.impl.ipp.base.Intention;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
+import com.intellij.java.language.psi.JavaPsiFacade;
+import com.intellij.java.language.psi.PsiElementFactory;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.editor.intention.IntentionMetaData;
+import consulo.language.psi.PsiComment;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiManager;
+import consulo.language.psi.PsiWhiteSpace;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
 
+import javax.annotation.Nonnull;
+
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.MoveCommentToSeparateLineIntention", fileExtensions = "java", categories = {"Java", "Comments"})
 public class MoveCommentToSeparateLineIntention extends Intention {
 
   @Nonnull

@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.ig.numeric;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
 import com.intellij.java.language.psi.*;
 import consulo.language.psi.*;
@@ -32,6 +33,7 @@ import javax.swing.*;
 import java.util.HashSet;
 import java.util.Set;
 
+@ExtensionImpl
 public class IntegerMultiplicationImplicitCastToLongInspection extends
                                                                BaseInspection {
 

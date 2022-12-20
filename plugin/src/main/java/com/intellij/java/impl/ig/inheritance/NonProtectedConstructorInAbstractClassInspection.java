@@ -18,6 +18,7 @@ package com.intellij.java.impl.ig.inheritance;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifier;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
@@ -28,6 +29,7 @@ import javax.annotation.Nonnull;
 
 import javax.swing.*;
 
+@ExtensionImpl
 public class NonProtectedConstructorInAbstractClassInspection
   extends BaseInspection {
 

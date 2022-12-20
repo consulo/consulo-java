@@ -15,18 +15,22 @@
  */
 package com.intellij.java.impl.ipp.concatenation;
 
-import com.intellij.java.language.psi.*;
-import consulo.language.psi.*;
-import com.intellij.java.impl.psi.util.PsiConcatenationUtil;
-import consulo.language.util.IncorrectOperationException;
 import com.intellij.java.impl.ipp.base.Intention;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.intellij.java.impl.ipp.psiutils.ConcatenationUtils;
-import javax.annotation.Nonnull;
+import com.intellij.java.impl.psi.util.PsiConcatenationUtil;
+import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.intention.IntentionMetaData;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.ReplaceConcatenationWithFormatStringIntention", fileExtensions = "java", categories = {"Java", "Strings"})
 public class ReplaceConcatenationWithFormatStringIntention extends Intention {
 
   @Override

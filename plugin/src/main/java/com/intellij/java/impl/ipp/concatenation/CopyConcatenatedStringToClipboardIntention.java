@@ -15,23 +15,26 @@
  */
 package com.intellij.java.impl.ipp.concatenation;
 
-import java.awt.datatransfer.StringSelection;
-
-import javax.annotation.Nonnull;
-
-import consulo.ui.ex.awt.CopyPasteManager;
+import com.intellij.java.impl.ipp.base.Intention;
+import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.intellij.java.language.psi.JavaTokenType;
-import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiPolyadicExpression;
 import com.intellij.java.language.psi.PsiType;
-import consulo.language.psi.PsiWhiteSpace;
-import consulo.language.ast.IElementType;
-import consulo.language.util.IncorrectOperationException;
 import com.siyeh.ig.psiutils.ExpressionUtils;
-import com.intellij.java.impl.ipp.base.Intention;
-import com.intellij.java.impl.ipp.base.PsiElementPredicate;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.ast.IElementType;
+import consulo.language.editor.intention.IntentionMetaData;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiWhiteSpace;
+import consulo.language.util.IncorrectOperationException;
+import consulo.ui.ex.awt.CopyPasteManager;
 
+import javax.annotation.Nonnull;
+import java.awt.datatransfer.StringSelection;
+
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.SwapMethodCallArgumentsIntention", fileExtensions = "java", categories = {"Java", "Strings"})
 public class CopyConcatenatedStringToClipboardIntention extends Intention {
 
   @Override

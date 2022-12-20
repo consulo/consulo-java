@@ -24,7 +24,9 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.intellij.java.impl.ig.fixes.EncapsulateVariableFix;
+import consulo.annotation.component.ExtensionImpl;
 
+@ExtensionImpl
 public class PackageVisibleFieldInspection extends BaseInspection {
 
   @Override

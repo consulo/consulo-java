@@ -21,11 +21,13 @@ import com.intellij.java.language.psi.*;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import consulo.annotation.component.ExtensionImpl;
 import org.jetbrains.annotations.Nls;
 
 /**
  * @author Bas Leijdekkers
  */
+@ExtensionImpl
 public class SuspiciousArrayCastInspection extends BaseInspection {
 
   @Nls

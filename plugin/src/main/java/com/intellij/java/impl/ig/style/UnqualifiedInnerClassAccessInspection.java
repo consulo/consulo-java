@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.ig.style;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
 import com.intellij.java.language.psi.*;
@@ -35,6 +36,7 @@ import javax.annotation.Nonnull;
 import javax.swing.*;
 import java.util.*;
 
+@ExtensionImpl
 public class UnqualifiedInnerClassAccessInspection extends BaseInspection {
 
   @SuppressWarnings({"PublicField"})

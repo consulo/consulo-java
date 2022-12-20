@@ -18,6 +18,7 @@ package com.intellij.java.impl.ig.classlayout;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import com.intellij.java.language.psi.PsiClass;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import com.intellij.java.language.psi.PsiJavaFile;
@@ -28,6 +29,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.intellij.java.impl.ig.fixes.RenameFix;
 
+@ExtensionImpl
 public class ClassNameDiffersFromFileNameInspection extends BaseInspection
 {
 

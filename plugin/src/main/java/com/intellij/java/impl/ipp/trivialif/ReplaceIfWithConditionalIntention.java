@@ -15,19 +15,23 @@
  */
 package com.intellij.java.impl.ipp.trivialif;
 
-import javax.annotation.Nonnull;
-
-import com.intellij.java.language.psi.*;
-import consulo.language.psi.*;
-import com.intellij.java.language.impl.psi.impl.PsiDiamondTypeUtil;
-import consulo.language.psi.util.PsiTreeUtil;
-import consulo.language.util.IncorrectOperationException;
-import com.siyeh.ig.psiutils.ParenthesesUtils;
 import com.intellij.java.impl.ipp.base.Intention;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.intellij.java.impl.ipp.psiutils.ConditionalUtils;
 import com.intellij.java.impl.ipp.psiutils.EquivalenceChecker;
+import com.intellij.java.language.impl.psi.impl.PsiDiamondTypeUtil;
+import com.intellij.java.language.psi.*;
+import com.siyeh.ig.psiutils.ParenthesesUtils;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.intention.IntentionMetaData;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
 
+import javax.annotation.Nonnull;
+
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.ReplaceIfWithConditionalIntention", fileExtensions = "java", categories = {"Java", "Boolean"})
 public class ReplaceIfWithConditionalIntention extends Intention {
 
   @Override

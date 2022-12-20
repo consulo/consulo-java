@@ -15,19 +15,23 @@
  */
 package com.intellij.java.impl.ipp.junit;
 
-import javax.annotation.Nonnull;
-
-import com.intellij.java.language.codeInsight.AnnotationUtil;
-import com.intellij.java.language.psi.*;
-import consulo.language.psi.*;
-import consulo.language.psi.util.PsiTreeUtil;
-import com.siyeh.IntentionPowerPackBundle;
 import com.intellij.java.impl.ipp.base.MutablyNamedIntention;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
-import com.siyeh.ig.psiutils.BoolUtils;
 import com.intellij.java.impl.ipp.psiutils.ImportUtils;
+import com.intellij.java.language.codeInsight.AnnotationUtil;
+import com.intellij.java.language.psi.*;
+import com.siyeh.IntentionPowerPackBundle;
+import com.siyeh.ig.psiutils.BoolUtils;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.intention.IntentionMetaData;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NonNls;
 
+import javax.annotation.Nonnull;
+
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.FlipAssertLiteralIntention", fileExtensions = "java", categories = {"Java", "JUnit"})
 public class FlipAssertLiteralIntention extends MutablyNamedIntention {
 
   @Override

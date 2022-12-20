@@ -24,7 +24,9 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ControlFlowUtils;
 import com.intellij.java.impl.ig.psiutils.InitializationUtils;
 import com.intellij.java.impl.ig.psiutils.SerializationUtils;
+import consulo.annotation.component.ExtensionImpl;
 
+@ExtensionImpl
 public class ReadObjectInitializationInspection extends BaseInspection {
 
   @Nonnull

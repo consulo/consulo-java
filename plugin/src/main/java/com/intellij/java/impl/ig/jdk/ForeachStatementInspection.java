@@ -24,6 +24,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.codeStyle.CodeStyleSettingsManager;
 import consulo.language.editor.inspection.ProblemDescriptor;
@@ -34,6 +35,7 @@ import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
 
+@ExtensionImpl
 public class ForeachStatementInspection extends BaseInspection {
 
   @Nonnull

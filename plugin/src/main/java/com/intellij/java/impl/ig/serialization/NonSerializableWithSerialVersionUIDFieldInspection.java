@@ -17,6 +17,7 @@ package com.intellij.java.impl.ig.serialization;
 
 import javax.annotation.Nonnull;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.project.Project;
 import com.intellij.java.language.psi.PsiClass;
@@ -32,6 +33,7 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.intellij.java.impl.ig.fixes.MakeSerializableFix;
 import com.intellij.java.impl.ig.psiutils.SerializationUtils;
 
+@ExtensionImpl
 public class NonSerializableWithSerialVersionUIDFieldInspection
   extends BaseInspection {
 

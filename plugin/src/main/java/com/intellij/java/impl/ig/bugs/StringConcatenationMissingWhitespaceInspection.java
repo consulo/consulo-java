@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.ig.bugs;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
 import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.java.language.psi.PsiExpression;
@@ -35,6 +36,7 @@ import javax.swing.*;
 /**
  * @author Bas Leijdekkers
  */
+@ExtensionImpl
 public class StringConcatenationMissingWhitespaceInspection extends BaseInspection {
 
   @SuppressWarnings("PublicField")

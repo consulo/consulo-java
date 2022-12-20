@@ -23,6 +23,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ClassUtils;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.ide.impl.idea.codeInsight.CodeInsightUtilBase;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.inspection.ProblemDescriptor;
@@ -37,6 +38,7 @@ import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.HashSet;
 
+@ExtensionImpl
 public class DynamicRegexReplaceableByCompiledPatternInspection extends BaseInspection {
 
   @NonNls

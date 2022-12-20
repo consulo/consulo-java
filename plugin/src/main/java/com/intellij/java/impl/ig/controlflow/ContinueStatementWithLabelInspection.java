@@ -22,7 +22,9 @@ import com.intellij.java.language.psi.PsiIdentifier;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import consulo.annotation.component.ExtensionImpl;
 
+@ExtensionImpl
 public class ContinueStatementWithLabelInspection extends BaseInspection {
 
   @Nonnull

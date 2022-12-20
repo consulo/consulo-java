@@ -25,7 +25,9 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.intellij.java.impl.ig.fixes.IntroduceConstantFix;
 import com.siyeh.ig.psiutils.ExpressionUtils;
+import consulo.annotation.component.ExtensionImpl;
 
+@ExtensionImpl
 public class MagicCharacterInspection extends BaseInspection {
 
   @Override

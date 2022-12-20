@@ -22,6 +22,7 @@ import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.ast.IElementType;
 import consulo.language.editor.inspection.SuppressionUtil;
 import consulo.language.psi.PsiComment;
@@ -29,6 +30,7 @@ import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
 
+@ExtensionImpl
 public class SuppressionAnnotationInspection extends BaseInspection {
 
   @Nonnull

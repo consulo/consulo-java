@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.ig.style;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
 import consulo.project.Project;
@@ -30,6 +31,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+@ExtensionImpl
 public class UnnecessaryInterfaceModifierInspection extends BaseInspection {
 
   private static final Set<String> INTERFACE_REDUNDANT_MODIFIERS =

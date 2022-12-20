@@ -18,6 +18,7 @@ package com.intellij.java.impl.ig.controlflow;
 import javax.swing.JComponent;
 
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
@@ -35,6 +36,7 @@ import com.siyeh.ig.psiutils.ControlFlowUtils;
 import com.siyeh.ig.psiutils.EquivalenceChecker;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
 
+@ExtensionImpl
 public class IfMayBeConditionalInspection extends BaseInspection {
 
   @SuppressWarnings("PublicField")

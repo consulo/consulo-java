@@ -17,11 +17,13 @@ package com.intellij.java.impl.ig.maturity;
 
 import javax.annotation.Nonnull;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiComment;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 
+@ExtensionImpl
 public class TodoCommentInspection extends BaseInspection {
 
   @Nonnull

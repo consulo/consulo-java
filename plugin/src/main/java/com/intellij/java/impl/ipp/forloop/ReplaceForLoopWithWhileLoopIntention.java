@@ -18,11 +18,15 @@ package com.intellij.java.impl.ipp.forloop;
 import com.intellij.java.impl.ipp.base.Intention;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 
 import javax.annotation.Nonnull;
 
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.ReplaceForLoopWithWhileLoopIntention", fileExtensions = "java", categories = {"Java", "Control Flow"})
 public class ReplaceForLoopWithWhileLoopIntention extends Intention {
 
   @Override

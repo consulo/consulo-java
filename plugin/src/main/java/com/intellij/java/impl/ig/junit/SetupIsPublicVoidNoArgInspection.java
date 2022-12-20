@@ -22,8 +22,10 @@ import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import consulo.annotation.component.ExtensionImpl;
 import org.jetbrains.annotations.NonNls;
 
+@ExtensionImpl
 public class SetupIsPublicVoidNoArgInspection extends BaseInspection {
 
   @Override

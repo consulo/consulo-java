@@ -20,6 +20,7 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.editor.inspection.ui.MultipleCheckboxOptionsPanel;
@@ -31,6 +32,7 @@ import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
 import javax.swing.*;
 
+@ExtensionImpl
 public class SynchronizedMethodInspection extends BaseInspection {
 
   /**

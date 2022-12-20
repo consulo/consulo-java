@@ -15,19 +15,23 @@
  */
 package com.intellij.java.impl.ipp.types;
 
-import javax.annotation.Nonnull;
-
+import com.intellij.java.impl.ipp.base.Intention;
+import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiLambdaExpression;
 import com.intellij.java.language.psi.PsiType;
-import consulo.logging.Logger;
-import consulo.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.intention.IntentionMetaData;
+import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
-import com.intellij.java.impl.ipp.base.Intention;
-import com.intellij.java.impl.ipp.base.PsiElementPredicate;
+import consulo.logging.Logger;
 
+import javax.annotation.Nonnull;
+
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.ExpandOneLineLambda2CodeBlockIntention", fileExtensions = "java", categories = {"Java", "Declaration"})
 public class ExpandOneLineLambda2CodeBlockIntention extends Intention {
   private static final Logger LOG = Logger.getInstance(ExpandOneLineLambda2CodeBlockIntention.class);
   @Nonnull

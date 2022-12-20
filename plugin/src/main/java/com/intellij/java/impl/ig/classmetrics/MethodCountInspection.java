@@ -18,6 +18,7 @@ package com.intellij.java.impl.ig.classmetrics;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.util.PropertyUtil;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.ui.CheckBox;
 import consulo.ui.ex.awt.UIUtil;
 import com.siyeh.InspectionGadgetsBundle;
@@ -28,6 +29,7 @@ import javax.annotation.Nonnull;
 import javax.swing.*;
 import java.awt.*;
 
+@ExtensionImpl
 public class MethodCountInspection extends BaseInspection {
 
   private static final int DEFAULT_METHOD_COUNT_LIMIT = 20;

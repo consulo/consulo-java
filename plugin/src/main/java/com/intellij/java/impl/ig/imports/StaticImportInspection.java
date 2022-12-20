@@ -22,6 +22,7 @@ import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiImportStaticStatement;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.InspectionGadgetsFix;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.collection.SmartList;
 
@@ -30,6 +31,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
+@ExtensionImpl
 public class StaticImportInspection extends StaticImportInspectionBase {
 
   @Nonnull

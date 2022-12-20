@@ -23,6 +23,7 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.swing.JComponent;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
 import com.intellij.java.language.psi.*;
@@ -46,6 +47,7 @@ import com.intellij.java.impl.ig.psiutils.ImportUtils;
 /**
  * com.siyeh.ipp.fqnames.ReplaceFullyQualifiedNameWithImportIntention
  */
+@ExtensionImpl
 public class UnnecessaryFullyQualifiedNameInspection extends BaseInspection {
 
   @SuppressWarnings("PublicField")

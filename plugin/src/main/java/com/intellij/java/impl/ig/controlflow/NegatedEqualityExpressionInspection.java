@@ -17,6 +17,7 @@ package com.intellij.java.impl.ig.controlflow;
 
 import javax.annotation.Nonnull;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.java.language.psi.PsiBinaryExpression;
@@ -35,6 +36,7 @@ import com.siyeh.ig.psiutils.ParenthesesUtils;
 /**
  * @author Bas Leijdekkers
  */
+@ExtensionImpl
 public class NegatedEqualityExpressionInspection extends BaseInspection {
 
   @Override

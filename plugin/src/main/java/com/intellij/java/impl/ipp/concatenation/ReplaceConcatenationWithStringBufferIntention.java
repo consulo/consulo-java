@@ -22,13 +22,17 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.siyeh.IntentionPowerPackBundle;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
 
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.ReplaceConcatenationWithStringBufferIntention", fileExtensions = "java", categories = {"Java", "Strings"})
 public class ReplaceConcatenationWithStringBufferIntention extends MutablyNamedIntention {
 
   @Override

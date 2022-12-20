@@ -25,6 +25,7 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ComparisonUtils;
 import com.siyeh.ig.psiutils.MethodUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.progress.ProgressManager;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.inspection.ui.MultipleCheckboxOptionsPanel;
@@ -38,6 +39,7 @@ import javax.annotation.Nullable;
 import javax.swing.*;
 import java.util.Collection;
 
+@ExtensionImpl
 public class ObjectEqualityInspection extends BaseInspection {
 
   /**

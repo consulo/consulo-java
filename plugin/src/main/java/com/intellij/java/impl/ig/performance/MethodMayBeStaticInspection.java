@@ -24,6 +24,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ClassUtils;
 import com.siyeh.ig.psiutils.MethodUtils;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.util.function.Processor;
 import consulo.application.util.query.Query;
 import consulo.java.analysis.codeInspection.CantBeStaticCondition;
@@ -36,6 +37,7 @@ import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
 import javax.swing.*;
 
+@ExtensionImpl
 public class MethodMayBeStaticInspection extends BaseInspection {
   /**
    * @noinspection PublicField

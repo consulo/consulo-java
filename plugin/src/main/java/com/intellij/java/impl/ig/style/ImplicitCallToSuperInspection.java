@@ -21,6 +21,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ExpressionUtils;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.inspection.ProblemDescriptor;
@@ -32,6 +33,7 @@ import consulo.project.Project;
 import javax.annotation.Nonnull;
 import javax.swing.*;
 
+@ExtensionImpl
 public class ImplicitCallToSuperInspection extends BaseInspection {
 
   @SuppressWarnings("PublicField")

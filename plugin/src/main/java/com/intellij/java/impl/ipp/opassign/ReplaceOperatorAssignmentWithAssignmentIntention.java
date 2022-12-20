@@ -15,24 +15,23 @@
  */
 package com.intellij.java.impl.ipp.opassign;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.annotation.Nonnull;
-import com.intellij.java.language.psi.JavaTokenType;
-import com.intellij.java.language.psi.PsiAssignmentExpression;
-import consulo.language.psi.PsiElement;
-import com.intellij.java.language.psi.PsiExpression;
-import com.intellij.java.language.psi.PsiJavaToken;
-import com.intellij.java.language.psi.PsiPolyadicExpression;
-import com.intellij.java.language.psi.PsiType;
-import consulo.language.ast.IElementType;
+import com.intellij.java.impl.ipp.base.MutablyNamedIntention;
+import com.intellij.java.impl.ipp.base.PsiElementPredicate;
+import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import com.siyeh.IntentionPowerPackBundle;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
-import com.intellij.java.impl.ipp.base.MutablyNamedIntention;
-import com.intellij.java.impl.ipp.base.PsiElementPredicate;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.ast.IElementType;
+import consulo.language.editor.intention.IntentionMetaData;
+import consulo.language.psi.PsiElement;
 
+import javax.annotation.Nonnull;
+import java.util.HashMap;
+import java.util.Map;
+
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.ReplaceOperatorAssignmentWithAssignmentIntention", fileExtensions = "java", categories = {"Java", "Other"})
 public class ReplaceOperatorAssignmentWithAssignmentIntention extends MutablyNamedIntention {
 
   private static final Map<IElementType, IElementType> tokenMap = new HashMap<IElementType, IElementType>();

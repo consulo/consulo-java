@@ -15,17 +15,23 @@
  */
 package com.intellij.java.impl.ipp.trivialif;
 
-import com.intellij.java.language.psi.*;
-import consulo.language.psi.*;
-import consulo.language.psi.util.PsiTreeUtil;
-import consulo.language.util.IncorrectOperationException;
 import com.intellij.java.impl.ipp.base.Intention;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
-import com.siyeh.ig.psiutils.BoolUtils;
 import com.intellij.java.impl.ipp.psiutils.ConditionalUtils;
-import javax.annotation.Nonnull;
+import com.intellij.java.language.psi.*;
+import com.siyeh.ig.psiutils.BoolUtils;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.intention.IntentionMetaData;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiWhiteSpace;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
 import org.jetbrains.annotations.NonNls;
 
+import javax.annotation.Nonnull;
+
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.SimplifyIfElseIntention", fileExtensions = "java", categories = {"Java", "Boolean"})
 public class SimplifyIfElseIntention extends Intention {
 
   @Nonnull

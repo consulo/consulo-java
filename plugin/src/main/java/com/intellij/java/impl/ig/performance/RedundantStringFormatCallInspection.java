@@ -18,6 +18,7 @@ package com.intellij.java.impl.ig.performance;
 import javax.annotation.Nonnull;
 
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.*;
 import consulo.project.Project;
 import consulo.language.editor.inspection.ProblemDescriptor;
@@ -31,6 +32,7 @@ import consulo.java.language.module.util.JavaClassNames;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
 
+@ExtensionImpl
 public class RedundantStringFormatCallInspection extends BaseInspection {
 
   @Override

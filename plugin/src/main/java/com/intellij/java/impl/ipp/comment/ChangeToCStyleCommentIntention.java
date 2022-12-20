@@ -15,21 +15,27 @@
  */
 package com.intellij.java.impl.ipp.comment;
 
+import com.intellij.java.impl.ipp.base.Intention;
+import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.java.language.psi.PsiElementFactory;
-import consulo.util.lang.StringUtil;
-import consulo.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.ast.IElementType;
+import consulo.language.editor.intention.IntentionMetaData;
+import consulo.language.psi.PsiComment;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiWhiteSpace;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
-import com.intellij.java.impl.ipp.base.Intention;
-import com.intellij.java.impl.ipp.base.PsiElementPredicate;
-import javax.annotation.Nonnull;
+import consulo.util.lang.StringUtil;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.ChangeToCStyleCommentIntention", fileExtensions = "java", categories = {"Java", "Comments"})
 public class ChangeToCStyleCommentIntention extends Intention {
 
   private static final Class<PsiWhiteSpace>[] WHITESPACE_CLASS =

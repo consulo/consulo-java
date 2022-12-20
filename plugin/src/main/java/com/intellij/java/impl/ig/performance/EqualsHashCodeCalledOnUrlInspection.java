@@ -24,8 +24,11 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.MethodUtils;
+import consulo.annotation.component.ExtensionImpl;
+
 import javax.annotation.Nonnull;
 
+@ExtensionImpl
 public class EqualsHashCodeCalledOnUrlInspection extends BaseInspection {
 
   @Override

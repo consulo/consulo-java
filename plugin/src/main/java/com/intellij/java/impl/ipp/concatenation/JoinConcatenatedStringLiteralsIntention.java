@@ -15,19 +15,24 @@
  */
 package com.intellij.java.impl.ipp.concatenation;
 
+import com.intellij.java.impl.ipp.base.Intention;
+import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.intellij.java.language.psi.PsiJavaToken;
 import com.intellij.java.language.psi.PsiLiteralExpression;
 import com.intellij.java.language.psi.PsiPolyadicExpression;
-import consulo.util.lang.StringUtil;
-import consulo.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.intention.IntentionMetaData;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiWhiteSpace;
 import consulo.language.util.IncorrectOperationException;
-import com.intellij.java.impl.ipp.base.Intention;
-import com.intellij.java.impl.ipp.base.PsiElementPredicate;
-import javax.annotation.Nonnull;
+import consulo.util.lang.StringUtil;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.JoinConcatenatedStringLiteralsIntention", fileExtensions = "java", categories = {"Java", "Strings"})
 public class JoinConcatenatedStringLiteralsIntention extends Intention {
 
   @Override

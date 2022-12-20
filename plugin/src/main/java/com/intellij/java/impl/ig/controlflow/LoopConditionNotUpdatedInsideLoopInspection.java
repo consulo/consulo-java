@@ -16,6 +16,7 @@
 package com.intellij.java.impl.ig.controlflow;
 
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.*;
 import consulo.language.ast.IElementType;
 import com.intellij.java.language.psi.util.PsiUtil;
@@ -33,6 +34,7 @@ import javax.annotation.Nullable;
 import javax.swing.*;
 import java.util.List;
 
+@ExtensionImpl
 public class LoopConditionNotUpdatedInsideLoopInspection
   extends BaseInspection {
 

@@ -23,7 +23,9 @@ import com.intellij.java.language.psi.PsiSynchronizedStatement;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import consulo.annotation.component.ExtensionImpl;
 
+@ExtensionImpl
 public class EmptySynchronizedStatementInspection extends BaseInspection {
 
   @Nonnull

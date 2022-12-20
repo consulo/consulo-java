@@ -17,6 +17,7 @@ package com.intellij.java.impl.ig.controlflow;
 
 import javax.annotation.Nonnull;
 
+import consulo.annotation.component.ExtensionImpl;
 import org.jetbrains.annotations.NonNls;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.project.Project;
@@ -41,6 +42,7 @@ import com.siyeh.ig.psiutils.BoolUtils;
 import com.siyeh.ig.psiutils.ControlFlowUtils;
 import com.siyeh.ig.psiutils.EquivalenceChecker;
 
+@ExtensionImpl
 public class TrivialIfInspection extends BaseInspection {
 
   @Override

@@ -29,6 +29,7 @@ import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.MethodUtils;
 import com.siyeh.ig.psiutils.TestUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.ast.IElementType;
 import consulo.language.editor.inspection.ui.MultipleCheckboxOptionsPanel;
 import consulo.language.psi.PsiElement;
@@ -41,6 +42,7 @@ import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Collection;
 
+@ExtensionImpl
 public class StringConcatenationInspection extends BaseInspection {
 
   @SuppressWarnings({"PublicField"})

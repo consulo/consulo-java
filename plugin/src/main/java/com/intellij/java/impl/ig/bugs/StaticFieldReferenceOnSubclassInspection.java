@@ -17,6 +17,7 @@ package com.intellij.java.impl.ig.bugs;
 
 import javax.annotation.Nonnull;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
 import consulo.project.Project;
@@ -28,6 +29,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ClassUtils;
 
+@ExtensionImpl
 public class StaticFieldReferenceOnSubclassInspection
   extends BaseInspection {
 

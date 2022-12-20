@@ -24,8 +24,10 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.intellij.java.impl.ig.fixes.AddSerialVersionUIDFix;
 import com.intellij.java.impl.ig.psiutils.SerializationUtils;
+import consulo.annotation.component.ExtensionImpl;
 import org.intellij.lang.annotations.Pattern;
 
+@ExtensionImpl
 public class SerializableHasSerialVersionUIDFieldInspection extends SerializableInspection {
 
   @Pattern("[a-zA-Z_0-9.-]+")

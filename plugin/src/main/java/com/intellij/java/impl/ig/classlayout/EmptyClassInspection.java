@@ -25,6 +25,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.ui.ExternalizableStringSet;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ui.CheckBox;
 import consulo.language.psi.PsiFile;
 import org.jetbrains.annotations.NonNls;
@@ -33,6 +34,7 @@ import javax.annotation.Nonnull;
 import javax.swing.*;
 import java.awt.*;
 
+@ExtensionImpl
 public class EmptyClassInspection extends BaseInspection {
 
   @SuppressWarnings({"PublicField"})

@@ -21,6 +21,7 @@ import com.intellij.java.language.psi.PsiImportList;
 import com.intellij.java.language.psi.PsiImportStatement;
 import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
 import com.intellij.java.language.psi.PsiJavaFile;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.*;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
@@ -28,6 +29,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.intellij.java.impl.ig.fixes.DeleteImportFix;
 
+@ExtensionImpl
 public class SamePackageImportInspection extends BaseInspection {
 
   @Override

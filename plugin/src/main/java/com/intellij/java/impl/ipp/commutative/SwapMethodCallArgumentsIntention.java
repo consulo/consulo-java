@@ -15,17 +15,21 @@
  */
 package com.intellij.java.impl.ipp.commutative;
 
-import javax.annotation.Nonnull;
-
-import com.intellij.java.language.psi.*;
 import com.intellij.java.impl.ipp.base.MutablyNamedIntention;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
+import com.intellij.java.language.psi.*;
 import com.siyeh.IntentionPowerPackBundle;
-import consulo.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.intention.IntentionMetaData;
+import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.util.lang.StringUtil;
 import org.jetbrains.annotations.NonNls;
 
+import javax.annotation.Nonnull;
+
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.SwapMethodCallArgumentsIntention", fileExtensions = "java", categories = {"Java", "Other"})
 public class SwapMethodCallArgumentsIntention extends MutablyNamedIntention {
 
   @Nonnull

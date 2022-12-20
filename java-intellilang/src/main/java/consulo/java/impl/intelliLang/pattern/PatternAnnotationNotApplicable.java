@@ -15,9 +15,12 @@
  */
 package consulo.java.impl.intelliLang.pattern;
 
+import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.ide.impl.intelliLang.Configuration;
+import consulo.language.Language;
 import consulo.language.editor.inspection.LocalInspectionTool;
 import consulo.language.editor.inspection.ProblemsHolder;
 import consulo.language.editor.rawHighlight.HighlightDisplayLevel;
@@ -28,8 +31,16 @@ import consulo.java.impl.intelliLang.util.RemoveAnnotationFix;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-public abstract class PatternAnnotationNotApplicable extends LocalInspectionTool {
+@ExtensionImpl
+public class PatternAnnotationNotApplicable extends LocalInspectionTool {
+
+  @Nullable
+  @Override
+  public Language getLanguage() {
+    return JavaLanguage.INSTANCE;
+  }
 
   @Nonnull
   public HighlightDisplayLevel getDefaultLevel() {

@@ -26,7 +26,9 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.intellij.java.impl.ig.fixes.RenameFix;
 import com.intellij.java.impl.ig.psiutils.LibraryUtil;
 import com.siyeh.ig.psiutils.MethodUtils;
+import consulo.annotation.component.ExtensionImpl;
 
+@ExtensionImpl
 public class InstanceMethodNamingConventionInspection extends ConventionInspection {
 
   private static final int DEFAULT_MIN_LENGTH = 4;

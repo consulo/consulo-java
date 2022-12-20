@@ -15,21 +15,25 @@
  */
 package com.intellij.java.impl.ipp.expression;
 
-import javax.annotation.Nonnull;
-
-import consulo.codeEditor.CaretModel;
-import consulo.codeEditor.Editor;
-import consulo.language.psi.PsiElement;
-import com.intellij.java.language.psi.PsiExpression;
-import com.intellij.java.language.psi.PsiJavaToken;
-import com.intellij.java.language.psi.PsiPolyadicExpression;
-import consulo.language.ast.IElementType;
-import com.siyeh.IntentionPowerPackBundle;
-import com.siyeh.ig.psiutils.ParenthesesUtils;
 import com.intellij.java.impl.ipp.base.MutablyNamedIntention;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.intellij.java.impl.ipp.psiutils.ConcatenationUtils;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiJavaToken;
+import com.intellij.java.language.psi.PsiPolyadicExpression;
+import com.siyeh.IntentionPowerPackBundle;
+import com.siyeh.ig.psiutils.ParenthesesUtils;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.codeEditor.CaretModel;
+import consulo.codeEditor.Editor;
+import consulo.language.ast.IElementType;
+import consulo.language.editor.intention.IntentionMetaData;
+import consulo.language.psi.PsiElement;
 
+import javax.annotation.Nonnull;
+
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.FlipExpressionIntention", fileExtensions = "java", categories = {"Java", "Other"})
 public class FlipExpressionIntention extends MutablyNamedIntention {
 
   @Override

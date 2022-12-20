@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.ig.style;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.editor.inspection.ProblemHighlightType;
 import com.intellij.java.language.psi.*;
@@ -30,6 +31,7 @@ import org.jetbrains.annotations.Nls;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+@ExtensionImpl
 public class UnnecessarySuperQualifierInspection extends BaseInspection {
 
   @Override

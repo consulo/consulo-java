@@ -16,6 +16,7 @@
 package com.intellij.java.impl.ig.naming;
 
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.*;
 import consulo.ui.CheckBox;
 import com.siyeh.InspectionGadgetsBundle;
@@ -28,6 +29,7 @@ import javax.swing.JComponent;
 import java.util.Arrays;
 import java.util.Collection;
 
+@ExtensionImpl
 public class LocalVariableNamingConventionInspection
   extends ConventionInspection {
 

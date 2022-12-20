@@ -18,11 +18,13 @@ package com.intellij.java.impl.ig.methodmetrics;
 import com.intellij.java.language.psi.PsiMethod;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
+import consulo.annotation.component.ExtensionImpl;
 
 import javax.annotation.Nonnull;
 import javax.swing.*;
 import java.awt.*;
 
+@ExtensionImpl
 public class MethodCouplingInspection extends MethodMetricInspection {
 
   /**

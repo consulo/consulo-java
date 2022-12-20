@@ -15,14 +15,18 @@
  */
 package com.intellij.java.impl.ipp.decls;
 
-import javax.annotation.Nonnull;
-
-import consulo.language.psi.PsiElement;
-import com.intellij.java.language.psi.PsiVariable;
-import consulo.language.util.IncorrectOperationException;
 import com.intellij.java.impl.ipp.base.Intention;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
+import com.intellij.java.language.psi.PsiVariable;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.intention.IntentionMetaData;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
 
+import javax.annotation.Nonnull;
+
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.SimplifyVariableIntention", fileExtensions = "java", categories = {"Java", "Declaration"})
 public class SimplifyVariableIntention extends Intention {
 
   @Nonnull

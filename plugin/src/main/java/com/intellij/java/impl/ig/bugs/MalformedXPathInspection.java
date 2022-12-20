@@ -22,6 +22,7 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ExpressionUtils;
+import consulo.annotation.component.ExtensionImpl;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
 
@@ -31,6 +32,7 @@ import javax.xml.xpath.XPathFactory;
 import java.util.HashSet;
 import java.util.Set;
 
+@ExtensionImpl
 public class MalformedXPathInspection extends BaseInspection {
 
   /**

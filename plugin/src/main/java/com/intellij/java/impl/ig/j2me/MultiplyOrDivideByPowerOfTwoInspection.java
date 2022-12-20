@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.ig.j2me;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
 import com.intellij.java.language.psi.*;
@@ -34,6 +35,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.swing.*;
 
+@ExtensionImpl
 public class MultiplyOrDivideByPowerOfTwoInspection
   extends BaseInspection {
 

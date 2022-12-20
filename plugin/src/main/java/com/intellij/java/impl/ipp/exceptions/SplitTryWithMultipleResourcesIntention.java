@@ -15,19 +15,23 @@
  */
 package com.intellij.java.impl.ipp.exceptions;
 
-import com.intellij.java.language.psi.*;
-import consulo.language.psi.*;
-import consulo.language.util.IncorrectOperationException;
 import com.intellij.java.impl.ipp.base.Intention;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
+import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.intention.IntentionMetaData;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
 /**
  * @author Bas Leijdekkers
  */
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.SplitTryWithMultipleResourcesIntention", fileExtensions = "java", categories = {"Java", "Other"})
 public class SplitTryWithMultipleResourcesIntention extends Intention {
 
   @Nonnull

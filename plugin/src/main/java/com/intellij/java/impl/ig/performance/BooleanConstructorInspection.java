@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.ig.performance;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
 import consulo.project.Project;
@@ -31,6 +32,7 @@ import consulo.java.language.module.util.JavaClassNames;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
 
+@ExtensionImpl
 public class BooleanConstructorInspection extends BaseInspection {
 
   @Override

@@ -19,6 +19,8 @@ import javax.swing.JComponent;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.CleanupLocalInspectionTool;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
@@ -37,6 +39,7 @@ import com.siyeh.ig.PsiReplacementUtil;
 import com.siyeh.ig.psiutils.EquivalenceChecker;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
 
+@ExtensionImpl
 public class ConditionalExpressionWithIdenticalBranchesInspection extends BaseInspection implements CleanupLocalInspectionTool
 {
 	public boolean myReportOnlyExactlyIdentical;

@@ -21,6 +21,7 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.ast.IElementType;
 import consulo.language.psi.PsiElement;
 import consulo.ui.CheckBox;
@@ -32,6 +33,7 @@ import java.text.NumberFormat;
 import java.util.HashSet;
 import java.util.Set;
 
+@ExtensionImpl
 public class OverlyComplexBooleanExpressionInspection extends BaseInspection {
 
   private static final Set<IElementType> s_booleanOperators = new HashSet<IElementType>(5);

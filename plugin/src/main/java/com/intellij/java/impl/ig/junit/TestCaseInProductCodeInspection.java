@@ -17,7 +17,9 @@ package com.intellij.java.impl.ig.junit;
 
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.intellij.java.impl.ig.fixes.MoveClassFix;
+import consulo.annotation.component.ExtensionImpl;
 
+@ExtensionImpl
 public class TestCaseInProductCodeInspection extends TestCaseInProductCodeInspectionBase
 {
 	@Override

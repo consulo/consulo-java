@@ -24,7 +24,9 @@ import com.intellij.java.language.psi.PsiTypeParameter;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.intellij.java.impl.ig.psiutils.SerializationUtils;
+import consulo.annotation.component.ExtensionImpl;
 
+@ExtensionImpl
 public class SerializableHasSerializationMethodsInspection
   extends SerializableInspection {
 

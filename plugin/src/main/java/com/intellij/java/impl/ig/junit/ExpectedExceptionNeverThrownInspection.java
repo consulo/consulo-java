@@ -22,12 +22,14 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.intellij.java.impl.ig.psiutils.ExceptionUtils;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.java.language.module.util.JavaClassNames;
 import org.jetbrains.annotations.Nls;
 import javax.annotation.Nonnull;
 
 import java.util.Set;
 
+@ExtensionImpl
 public class ExpectedExceptionNeverThrownInspection
   extends BaseInspection {
   @Nls

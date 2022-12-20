@@ -15,16 +15,20 @@
  */
 package com.intellij.java.impl.ipp.braces;
 
-import javax.annotation.Nonnull;
-
-import com.intellij.java.language.psi.PsiArrayInitializerExpression;
-import consulo.language.psi.PsiElement;
-import com.intellij.java.language.psi.PsiType;
-import consulo.language.util.IncorrectOperationException;
-import com.siyeh.IntentionPowerPackBundle;
 import com.intellij.java.impl.ipp.base.MutablyNamedIntention;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
+import com.intellij.java.language.psi.PsiArrayInitializerExpression;
+import com.intellij.java.language.psi.PsiType;
+import com.siyeh.IntentionPowerPackBundle;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.intention.IntentionMetaData;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
 
+import javax.annotation.Nonnull;
+
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.AddArrayCreationExpressionIntention", fileExtensions = "java", categories = {"Java", "Declaration"})
 public class AddArrayCreationExpressionIntention extends MutablyNamedIntention {
 
   @Override

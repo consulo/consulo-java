@@ -17,6 +17,7 @@ package com.intellij.java.impl.ig.junit;
 
 import javax.annotation.Nonnull;
 
+import consulo.annotation.component.ExtensionImpl;
 import org.jetbrains.annotations.Nls;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.project.Project;
@@ -38,6 +39,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.TestUtils;
 
+@ExtensionImpl
 public class MultipleExceptionsDeclaredOnTestMethodInspection
   extends BaseInspection {
 

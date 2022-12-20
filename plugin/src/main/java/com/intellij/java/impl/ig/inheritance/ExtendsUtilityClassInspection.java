@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.ig.inheritance;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiModifier;
@@ -27,6 +28,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.swing.*;
 
+@ExtensionImpl
 public class ExtendsUtilityClassInspection extends BaseInspection {
 
   @SuppressWarnings("PublicField")

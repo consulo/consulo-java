@@ -17,6 +17,7 @@ package com.intellij.java.impl.ig.junit;
 
 import javax.annotation.Nonnull;
 
+import consulo.annotation.component.ExtensionImpl;
 import org.jetbrains.annotations.NonNls;
 import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.language.psi.PsiClass;
@@ -30,6 +31,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TestUtils;
 
+@ExtensionImpl
 public class TestMethodIsPublicVoidNoArgInspection extends BaseInspection {
 
   @Override

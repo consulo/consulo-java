@@ -24,9 +24,11 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.intellij.java.impl.ig.fixes.ChangeModifierFix;
+import consulo.annotation.component.ExtensionImpl;
 
 import javax.annotation.Nullable;
 
+@ExtensionImpl
 public class ClassInitializerInspection extends BaseInspection {
 
   @Nonnull

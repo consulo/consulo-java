@@ -25,8 +25,10 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.intellij.java.impl.ig.psiutils.SynchronizationUtil;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.java.language.module.util.JavaClassNames;
 
+@ExtensionImpl
 public class CallToNativeMethodWhileLockedInspection
   extends BaseInspection {
 

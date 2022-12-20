@@ -17,6 +17,7 @@ package com.intellij.java.impl.ig.naming;
 
 import javax.annotation.Nonnull;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.project.Project;
 import com.intellij.java.language.psi.PsiClass;
@@ -30,6 +31,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.intellij.java.impl.ig.fixes.RenameFix;
 
+@ExtensionImpl
 public class MethodNameSameAsClassNameInspection extends BaseInspection {
 
   @Override

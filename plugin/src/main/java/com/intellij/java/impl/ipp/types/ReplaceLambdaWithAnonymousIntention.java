@@ -26,7 +26,9 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.util.PsiTypesUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
+import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
@@ -37,6 +39,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.ReplaceLambdaWithAnonymousIntention", fileExtensions = "java", categories = {"Java", "Declaration"})
 public class ReplaceLambdaWithAnonymousIntention extends Intention {
   private static final Logger LOG = Logger.getInstance(ReplaceLambdaWithAnonymousIntention.class);
 

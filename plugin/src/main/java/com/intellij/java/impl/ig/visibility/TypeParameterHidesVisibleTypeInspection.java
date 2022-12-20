@@ -16,6 +16,7 @@
 package com.intellij.java.impl.ig.visibility;
 
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.*;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
@@ -24,6 +25,7 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.intellij.java.impl.ig.fixes.RenameFix;
 import javax.annotation.Nonnull;
 
+@ExtensionImpl
 public class TypeParameterHidesVisibleTypeInspection extends BaseInspection {
 
   @Nonnull

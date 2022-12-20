@@ -19,11 +19,11 @@
 	<version>SNAPHOT</version>
 	<category>Custom Languages</category>
 	<vendor>Jetbrains and others</vendor>
-	<depends optional="true" config-file="com.intellij.regexp.xml">com.intellij.regexp</depends>
-	<depends optional="true" config-file="com.intellij.images.xml">com.intellij.images</depends>
-	<depends optional="true" config-file="Spellchecker.xml">com.intellij.spellchecker</depends>
+	<depends optional="true">com.intellij.regexp</depends>
+	<depends optional="true">com.intellij.images</depends>
+	<depends optional="true">com.intellij.spellchecker</depends>
 	<depends optional="true" config-file="Properties.xml">com.intellij.properties</depends>
-	<depends optional="true" config-file="consulo.javascript.xml">consulo.javascript</depends>
+	<depends optional="true">consulo.javascript</depends>
 	<depends>com.intellij.xml</depends>
 	<resource-bundle>messages.JavaBundle</resource-bundle>
 
@@ -41,12 +41,6 @@
 
 	<import path="/META-INF/JvmByteCodeViewer.xml"/>
 	<import path="/META-INF/Coverage.xml"/>
-	<import path="/META-INF/InspectionGadgets.xml"/>
-	<import path="/META-INF/IntentionPowerPack.xml"/>
-	<import path="/META-INF/Manifest.xml"/>
-	<import path="/META-INF/Guava.xml"/>
-	<import path="/META-INF/Jam.xml"/>
-	<import path="/META-INF/Injecting.xml"/>
 
 	<actions>
 		<group id="NewJavaSpecialFile">
@@ -424,18 +418,6 @@
 						  groupKey="group.names.declaration.redundancy" enabledByDefault="true" level="WARNING"
 						  implementationClass="com.intellij.java.impl.codeInspection.deadCode.UnusedDeclarationInspection"
 						  presentation="com.intellij.java.impl.codeInspection.deadCode.UnusedDeclarationPresentation"/>
-
-
-		<specialTool shortName="UnusedLibrary" bundle="messages.InspectionsBundle" key="unused.library.display.name"
-					 groupPath="Java" groupName="Declaration redundancy" enabledByDefault="false" level="WARNING"
-					 implementationClass="com.intellij.java.impl.codeInspection.unusedLibraries.UnusedLibrariesInspection"/>
-
-
-		<specialTool shortName="InconsistentLanguageLevel" displayName="Inconsistent language level settings"
-					 groupPath="Java" groupName="Modularization issues" enabledByDefault="false" level="WARNING"
-					 implementationClass="com.intellij.java.impl.codeInspection.inconsistentLanguageLevel.InconsistentLanguageLevelInspection"/>
-
-
 
 
 		<intentionAction>

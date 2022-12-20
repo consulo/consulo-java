@@ -20,8 +20,11 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ControlFlowUtils;
+import consulo.annotation.component.ExtensionImpl;
+
 import javax.annotation.Nonnull;
 
+@ExtensionImpl
 public class ThrowFromFinallyBlockInspection extends BaseInspection {
 
   @Nonnull

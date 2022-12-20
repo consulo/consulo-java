@@ -22,8 +22,10 @@ import com.siyeh.HardcodedMethodConstants;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import consulo.annotation.component.ExtensionImpl;
 import org.jetbrains.annotations.NonNls;
 
+@ExtensionImpl
 public class UnconditionalWaitInspection extends BaseInspection {
 
   @Nonnull

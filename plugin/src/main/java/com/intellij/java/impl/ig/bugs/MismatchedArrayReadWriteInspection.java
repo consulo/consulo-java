@@ -16,6 +16,7 @@
 package com.intellij.java.impl.ig.bugs;
 
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.*;
 import consulo.language.ast.IElementType;
 import consulo.language.psi.util.PsiTreeUtil;
@@ -27,6 +28,7 @@ import com.siyeh.ig.psiutils.VariableAccessUtils;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
 
+@ExtensionImpl
 public class MismatchedArrayReadWriteInspection extends BaseInspection {
 
   @Override

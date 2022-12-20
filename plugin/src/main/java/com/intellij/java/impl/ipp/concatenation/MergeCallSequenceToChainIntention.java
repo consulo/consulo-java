@@ -15,18 +15,22 @@
  */
 package com.intellij.java.impl.ipp.concatenation;
 
-import javax.annotation.Nonnull;
-
-import com.intellij.java.language.psi.*;
-import consulo.language.psi.*;
-import consulo.language.psi.util.PsiTreeUtil;
-import consulo.language.util.IncorrectOperationException;
 import com.intellij.java.impl.ipp.base.Intention;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
+import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.intention.IntentionMetaData;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
+
+import javax.annotation.Nonnull;
 
 /**
  * @author Bas Leijdekkers
  */
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.MergeCallSequenceToChainIntention", fileExtensions = "java", categories = {"Java", "Strings"})
 public class MergeCallSequenceToChainIntention extends Intention {
 
   @Nonnull

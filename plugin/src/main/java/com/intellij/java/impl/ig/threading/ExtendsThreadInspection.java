@@ -25,9 +25,11 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.intellij.java.impl.ig.fixes.ReplaceInheritanceWithDelegationFix;
+import consulo.annotation.component.ExtensionImpl;
 
 import java.lang.Object;
 
+@ExtensionImpl
 public class ExtendsThreadInspection extends BaseInspection {
 
   @Override

@@ -15,22 +15,33 @@
  */
 package consulo.java.impl.intelliLang.validation;
 
+import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.ide.impl.intelliLang.Configuration;
+import consulo.java.impl.intelliLang.pattern.PatternValidator;
+import consulo.java.impl.intelliLang.util.PsiUtilEx;
+import consulo.java.impl.intelliLang.util.RemoveAnnotationFix;
+import consulo.language.Language;
 import consulo.language.editor.inspection.LocalInspectionTool;
 import consulo.language.editor.inspection.ProblemsHolder;
 import consulo.language.editor.rawHighlight.HighlightDisplayLevel;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.util.PsiTreeUtil;
-import consulo.java.impl.intelliLang.pattern.PatternValidator;
-import consulo.java.impl.intelliLang.util.PsiUtilEx;
-import consulo.java.impl.intelliLang.util.RemoveAnnotationFix;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
+@ExtensionImpl
 public class InjectionNotApplicable extends LocalInspectionTool {
+
+  @Nullable
+  @Override
+  public Language getLanguage() {
+    return JavaLanguage.INSTANCE;
+  }
 
   @Nonnull
   public HighlightDisplayLevel getDefaultLevel() {
@@ -54,7 +65,8 @@ public class InjectionNotApplicable extends LocalInspectionTool {
   @Nonnull
   public PsiElementVisitor buildVisitor(@Nonnull final ProblemsHolder holder, boolean isOnTheFly) {
     return new JavaElementVisitor() {
-      final String annotationName = Configuration.getProjectInstance(holder.getProject()).getAdvancedConfiguration().getLanguageAnnotationClass();
+      final String annotationName =
+        Configuration.getProjectInstance(holder.getProject()).getAdvancedConfiguration().getLanguageAnnotationClass();
 
       @Override
       public void visitAnnotation(PsiAnnotation annotation) {

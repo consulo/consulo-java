@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.ig.naming;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.ide.impl.idea.codeInspection.ui.ListTable;
 import consulo.ide.impl.idea.codeInspection.ui.ListWrappingTableModel;
 import consulo.util.xml.serializer.InvalidDataException;
@@ -38,6 +39,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+@ExtensionImpl
 public class QuestionableNameInspection extends BaseInspection {
 
   /**

@@ -19,15 +19,22 @@ import com.intellij.java.impl.ipp.base.MutablyNamedIntention;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.intellij.java.language.psi.*;
 import com.siyeh.IntentionPowerPackBundle;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.CaretModel;
 import consulo.codeEditor.Editor;
 import consulo.fileEditor.FileEditorManager;
+import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 
 import javax.annotation.Nonnull;
 
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.ExpandToNormalAnnotationIntention", fileExtensions = "java", categories = {
+		"Java",
+		"Annotations"
+})
 public class ExpandToNormalAnnotationIntention extends MutablyNamedIntention {
 
   @Override

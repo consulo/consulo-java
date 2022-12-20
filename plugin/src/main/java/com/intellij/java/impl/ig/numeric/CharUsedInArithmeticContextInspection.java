@@ -16,6 +16,7 @@
 
 package com.intellij.java.impl.ig.numeric;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
 import consulo.project.Project;
@@ -36,6 +37,7 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
+@ExtensionImpl
 public class CharUsedInArithmeticContextInspection extends BaseInspection {
 
   @Override

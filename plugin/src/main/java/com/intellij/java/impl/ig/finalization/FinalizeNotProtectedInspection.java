@@ -17,6 +17,7 @@ package com.intellij.java.impl.ig.finalization;
 
 import javax.annotation.Nonnull;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifier;
@@ -31,6 +32,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 
+@ExtensionImpl
 public class FinalizeNotProtectedInspection extends BaseInspection {
 
   @Nonnull

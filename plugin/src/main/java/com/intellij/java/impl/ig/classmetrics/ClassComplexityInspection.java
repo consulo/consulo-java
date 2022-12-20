@@ -22,7 +22,9 @@ import com.intellij.java.language.psi.PsiClassInitializer;
 import com.intellij.java.language.psi.PsiMethod;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
+import consulo.annotation.component.ExtensionImpl;
 
+@ExtensionImpl
 public class ClassComplexityInspection
   extends ClassMetricInspection {
 

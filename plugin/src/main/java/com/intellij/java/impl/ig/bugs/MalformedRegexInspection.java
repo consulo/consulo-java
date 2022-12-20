@@ -26,11 +26,14 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.MethodCallUtils;
+import consulo.annotation.component.ExtensionImpl;
+
 import javax.annotation.Nonnull;
 
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
+@ExtensionImpl
 public class MalformedRegexInspection extends BaseInspection {
 
   @Override

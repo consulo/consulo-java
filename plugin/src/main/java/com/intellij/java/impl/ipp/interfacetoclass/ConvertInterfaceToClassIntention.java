@@ -21,11 +21,13 @@ import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.siyeh.IntentionPowerPackBundle;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.AccessToken;
 import consulo.application.WriteAction;
 import consulo.application.util.function.Processor;
 import consulo.application.util.query.Query;
 import consulo.content.scope.SearchScope;
+import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.editor.refactoring.ui.ConflictsDialog;
 import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
@@ -38,6 +40,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Collection;
 
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.ConvertInterfaceToClassIntention", fileExtensions = "java", categories = {"Java", "Declaration"})
 public class ConvertInterfaceToClassIntention extends Intention {
 
   private static void changeInterfaceToClass(PsiClass anInterface) throws IncorrectOperationException {

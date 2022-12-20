@@ -17,6 +17,7 @@ package com.intellij.java.impl.ig.serialization;
 
 import javax.annotation.Nonnull;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
 import consulo.project.Project;
@@ -29,6 +30,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.intellij.java.impl.ig.psiutils.SerializationUtils;
 
+@ExtensionImpl
 public class SerialVersionUIDNotStaticFinalInspection extends BaseInspection {
 
   @Override

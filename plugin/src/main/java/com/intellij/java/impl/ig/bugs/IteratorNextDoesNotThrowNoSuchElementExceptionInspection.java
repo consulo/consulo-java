@@ -16,6 +16,7 @@
 package com.intellij.java.impl.ig.bugs;
 
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.*;
 import com.siyeh.HardcodedMethodConstants;
 import com.siyeh.InspectionGadgetsBundle;
@@ -30,6 +31,7 @@ import javax.annotation.Nonnull;
 
 import java.util.Set;
 
+@ExtensionImpl
 public class IteratorNextDoesNotThrowNoSuchElementExceptionInspection
   extends BaseInspection {
 

@@ -15,20 +15,24 @@
  */
 package com.intellij.java.impl.ipp.commutative;
 
-import javax.annotation.Nonnull;
-
-import org.jetbrains.annotations.NonNls;
-import consulo.language.psi.PsiElement;
+import com.intellij.java.impl.ipp.base.MutablyNamedIntention;
+import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiExpressionList;
 import com.intellij.java.language.psi.PsiMethodCallExpression;
 import com.intellij.java.language.psi.PsiReferenceExpression;
-import consulo.language.util.IncorrectOperationException;
 import com.siyeh.IntentionPowerPackBundle;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
-import com.intellij.java.impl.ipp.base.MutablyNamedIntention;
-import com.intellij.java.impl.ipp.base.PsiElementPredicate;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.intention.IntentionMetaData;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
+import org.jetbrains.annotations.NonNls;
 
+import javax.annotation.Nonnull;
+
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.FlipCommutativeMethodCallIntention", fileExtensions = "java", categories = {"Java", "Other"})
 public class FlipCommutativeMethodCallIntention extends MutablyNamedIntention {
 
   protected String getTextForElement(PsiElement element) {

@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.ig.performance;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
 import com.intellij.java.language.psi.*;
 import consulo.language.psi.*;
@@ -31,6 +32,7 @@ import javax.annotation.Nonnull;
 
 import javax.swing.JComponent;
 
+@ExtensionImpl
 public class StringConcatenationInLoopsInspection extends BaseInspection {
 
   @SuppressWarnings("PublicField")

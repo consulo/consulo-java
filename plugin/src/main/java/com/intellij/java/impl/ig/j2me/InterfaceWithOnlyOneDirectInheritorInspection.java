@@ -22,7 +22,9 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.intellij.java.impl.ig.psiutils.InheritanceUtil;
+import consulo.annotation.component.ExtensionImpl;
 
+@ExtensionImpl
 public class InterfaceWithOnlyOneDirectInheritorInspection extends BaseInspection {
 
   @Nonnull

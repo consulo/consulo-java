@@ -19,6 +19,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
 import org.jetbrains.annotations.Nls;
 import com.intellij.java.analysis.impl.codeInspection.AnnotateMethodFix;
 import consulo.language.psi.*;
@@ -32,6 +33,7 @@ import com.siyeh.ig.psiutils.TestUtils;
 /**
  * @author Bas Leijdekkers
  */
+@ExtensionImpl
 public class JUnit3StyleTestMethodInJUnit4ClassInspection extends BaseInspection {
 
   @Nls

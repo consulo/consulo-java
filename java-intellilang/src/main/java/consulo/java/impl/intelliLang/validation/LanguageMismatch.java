@@ -15,18 +15,22 @@
  */
 package consulo.java.impl.intelliLang.validation;
 
+import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.ide.impl.intelliLang.Configuration;
-import consulo.language.editor.inspection.LocalInspectionTool;
-import consulo.language.editor.inspection.ProblemsHolder;
-import consulo.language.psi.PsiElement;
-import consulo.language.psi.PsiElementVisitor;
-import consulo.language.psi.util.PsiTreeUtil;
-import consulo.util.lang.Pair;
 import consulo.java.impl.intelliLang.pattern.PatternValidator;
 import consulo.java.impl.intelliLang.util.AnnotateFix;
 import consulo.java.impl.intelliLang.util.AnnotationUtilEx;
 import consulo.java.impl.intelliLang.util.PsiUtilEx;
+import consulo.language.Language;
+import consulo.language.editor.inspection.LocalInspectionTool;
+import consulo.language.editor.inspection.ProblemsHolder;
+import consulo.language.editor.rawHighlight.HighlightDisplayLevel;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiElementVisitor;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.util.lang.Pair;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
@@ -38,8 +42,21 @@ import java.awt.event.ItemListener;
 import java.util.Arrays;
 import java.util.Set;
 
-public abstract class LanguageMismatch extends LocalInspectionTool {
+@ExtensionImpl
+public class LanguageMismatch extends LocalInspectionTool {
   public boolean CHECK_NON_ANNOTATED_REFERENCES = true;
+
+  @Nullable
+  @Override
+  public Language getLanguage() {
+    return JavaLanguage.INSTANCE;
+  }
+
+  @Nonnull
+  @Override
+  public HighlightDisplayLevel getDefaultLevel() {
+    return HighlightDisplayLevel.WARNING;
+  }
 
   public boolean isEnabledByDefault() {
     return true;

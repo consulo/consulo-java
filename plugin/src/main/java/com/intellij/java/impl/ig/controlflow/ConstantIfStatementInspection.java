@@ -17,6 +17,7 @@ package com.intellij.java.impl.ig.controlflow;
 
 import javax.annotation.Nonnull;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
 import consulo.project.Project;
@@ -31,6 +32,7 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.BoolUtils;
 import com.intellij.java.impl.ig.psiutils.VariableSearchUtils;
 
+@ExtensionImpl
 public class ConstantIfStatementInspection extends BaseInspection {
 
   @Override

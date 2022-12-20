@@ -29,7 +29,9 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.intellij.java.impl.ig.fixes.AddToIgnoreIfAnnotatedByListQuickFix;
 import com.intellij.java.impl.ig.psiutils.UtilityClassUtil;
 import com.siyeh.ig.ui.ExternalizableStringSet;
+import consulo.annotation.component.ExtensionImpl;
 
+@ExtensionImpl
 public class UtilityClassInspection extends BaseInspection {
 
   @SuppressWarnings({"PublicField"})

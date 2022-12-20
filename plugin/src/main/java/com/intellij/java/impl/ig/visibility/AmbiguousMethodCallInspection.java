@@ -21,6 +21,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ClassUtils;
 import com.siyeh.InspectionGadgetsBundle;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.*;
 import consulo.project.Project;
 import consulo.language.editor.inspection.ProblemDescriptor;
@@ -28,6 +29,7 @@ import consulo.language.util.IncorrectOperationException;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+@ExtensionImpl
 public class AmbiguousMethodCallInspection extends BaseInspection {
 
   @Nonnull

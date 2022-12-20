@@ -15,17 +15,21 @@
  */
 package com.intellij.java.impl.ipp.conditional;
 
-import javax.annotation.Nonnull;
-
-import com.intellij.java.language.psi.PsiConditionalExpression;
-import consulo.language.psi.PsiElement;
-import com.intellij.java.language.psi.PsiExpression;
-import consulo.language.util.IncorrectOperationException;
 import com.intellij.java.impl.ipp.base.Intention;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
+import com.intellij.java.language.psi.PsiConditionalExpression;
+import com.intellij.java.language.psi.PsiExpression;
 import com.siyeh.ig.psiutils.BoolUtils;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.intention.IntentionMetaData;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
 import org.jetbrains.annotations.NonNls;
 
+import javax.annotation.Nonnull;
+
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.RemoveConditionalIntention", fileExtensions = "java", categories = {"Java", "Conditional Operator"})
 public class RemoveConditionalIntention extends Intention {
 
   @Nonnull

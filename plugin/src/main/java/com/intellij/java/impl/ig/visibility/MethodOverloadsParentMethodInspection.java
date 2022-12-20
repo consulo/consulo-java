@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.ig.visibility;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
 import com.intellij.java.language.psi.*;
 import com.siyeh.InspectionGadgetsBundle;
@@ -30,6 +31,7 @@ import javax.swing.*;
 import java.util.HashSet;
 import java.util.Set;
 
+@ExtensionImpl
 public class MethodOverloadsParentMethodInspection extends BaseInspection {
 
   @SuppressWarnings("PublicField")

@@ -15,17 +15,23 @@
  */
 package com.intellij.java.impl.ipp.comment;
 
-import javax.annotation.Nonnull;
-
-import com.intellij.java.language.psi.JavaPsiFacade;
-import com.intellij.java.language.psi.PsiElementFactory;
-import consulo.project.Project;
-import consulo.language.psi.*;
-import consulo.language.codeStyle.CodeStyleManager;
-import consulo.language.util.IncorrectOperationException;
 import com.intellij.java.impl.ipp.base.Intention;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
+import com.intellij.java.language.psi.JavaPsiFacade;
+import com.intellij.java.language.psi.PsiElementFactory;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.editor.intention.IntentionMetaData;
+import consulo.language.psi.PsiComment;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiParserFacade;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
 
+import javax.annotation.Nonnull;
+
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.ChangeToEndOfLineCommentIntention", fileExtensions = "java", categories = {"Java", "Comments"})
 public class ChangeToEndOfLineCommentIntention extends Intention {
 
   @Nonnull

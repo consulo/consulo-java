@@ -15,15 +15,19 @@
  */
 package com.intellij.java.impl.ipp.integer;
 
-import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
-import javax.annotation.Nonnull;
+import com.intellij.java.language.psi.PsiType;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.intention.IntentionMetaData;
 
+import javax.annotation.Nonnull;
 import java.math.BigDecimal;
 
 /**
  * @author Konstantin Bulenkov
  */
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.ConvertToPlainIntention", fileExtensions = "java", categories = {"Java", "Numbers"})
 public class ConvertToPlainIntention extends ConvertNumberIntentionBase {
   @Override
   protected String convertValue(final Number value, final PsiType type, final boolean negated) {

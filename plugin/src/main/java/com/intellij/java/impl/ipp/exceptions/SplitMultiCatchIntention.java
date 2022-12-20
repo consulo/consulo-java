@@ -19,6 +19,8 @@ import com.intellij.java.impl.ipp.base.Intention;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.intellij.java.language.impl.psi.impl.PsiImplUtil;
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 
@@ -26,6 +28,8 @@ import javax.annotation.Nonnull;
 
 import static com.intellij.java.language.psi.PsiAnnotation.TargetType;
 
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.SplitMultiCatchIntention", fileExtensions = "java", categories = {"Java", "Other"})
 public class SplitMultiCatchIntention extends Intention {
 
   @Nonnull

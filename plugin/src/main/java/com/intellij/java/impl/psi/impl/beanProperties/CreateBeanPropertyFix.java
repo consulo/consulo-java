@@ -26,6 +26,7 @@ import consulo.language.editor.WriteCommandAction;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.editor.intention.IntentionAction;
+import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.psi.PsiCompiledElement;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
@@ -41,7 +42,8 @@ import javax.annotation.Nullable;
 /**
  * @author Dmitry Avdeev
  */
-public abstract class CreateBeanPropertyFix implements LocalQuickFix, IntentionAction {
+public abstract class CreateBeanPropertyFix implements LocalQuickFix, SyntheticIntentionAction
+{
 
   private final static Logger LOG = Logger.getInstance(CreateBeanPropertyFix.class);
   private static final CreateBeanPropertyFix[] NO_FIXES = new CreateBeanPropertyFix[0];

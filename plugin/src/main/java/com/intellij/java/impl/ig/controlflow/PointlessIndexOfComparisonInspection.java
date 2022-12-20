@@ -18,6 +18,7 @@ package com.intellij.java.impl.ig.controlflow;
 import javax.annotation.Nonnull;
 
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.ast.IElementType;
 import com.siyeh.HardcodedMethodConstants;
 import com.siyeh.InspectionGadgetsBundle;
@@ -26,6 +27,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ComparisonUtils;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 
+@ExtensionImpl
 public class PointlessIndexOfComparisonInspection extends BaseInspection {
 
   @Override

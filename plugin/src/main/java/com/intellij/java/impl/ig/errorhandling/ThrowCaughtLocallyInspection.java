@@ -16,6 +16,7 @@
 package com.intellij.java.impl.ig.errorhandling;
 
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.*;
 import consulo.language.psi.util.PsiTreeUtil;
 import com.siyeh.InspectionGadgetsBundle;
@@ -28,6 +29,7 @@ import javax.annotation.Nullable;
 
 import javax.swing.*;
 
+@ExtensionImpl
 public class ThrowCaughtLocallyInspection extends BaseInspection {
 
   /**

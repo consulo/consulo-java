@@ -20,8 +20,10 @@ import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.intellij.java.impl.ipp.psiutils.ErrorUtil;
 import com.intellij.java.language.psi.*;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.ast.IElementType;
 import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
@@ -33,6 +35,8 @@ import javax.annotation.Nullable;
  * @author anna
  * Date: 2/2/12
  */
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.ConvertToNestedIfIntention", fileExtensions = "java", categories = {"Java", "Boolean"})
 public class ConvertToNestedIfIntention extends Intention {
 
   @Override

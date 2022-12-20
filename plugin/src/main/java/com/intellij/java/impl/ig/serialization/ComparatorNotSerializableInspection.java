@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.ig.serialization;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.java.language.module.util.JavaClassNames;
 import com.intellij.java.language.psi.PsiAnonymousClass;
 import com.intellij.java.language.psi.PsiClass;
@@ -29,6 +30,7 @@ import com.intellij.java.impl.ig.psiutils.SerializationUtils;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+@ExtensionImpl
 public class ComparatorNotSerializableInspection extends BaseInspection {
 
   @Override

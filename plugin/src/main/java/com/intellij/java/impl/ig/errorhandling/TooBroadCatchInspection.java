@@ -24,6 +24,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.TestUtils;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.ScrollType;
 import consulo.document.Document;
@@ -39,6 +40,7 @@ import javax.annotation.Nonnull;
 import javax.swing.*;
 import java.util.*;
 
+@ExtensionImpl
 public class TooBroadCatchInspection extends BaseInspection {
 
   @SuppressWarnings({"PublicField"})

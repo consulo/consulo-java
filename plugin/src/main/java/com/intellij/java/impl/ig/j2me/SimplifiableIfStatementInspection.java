@@ -18,6 +18,7 @@ package com.intellij.java.impl.ig.j2me;
 import javax.annotation.Nonnull;
 
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nullable;
@@ -38,6 +39,7 @@ import com.siyeh.ig.psiutils.ControlFlowUtils;
 import com.siyeh.ig.psiutils.EquivalenceChecker;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
 
+@ExtensionImpl
 public class SimplifiableIfStatementInspection extends BaseInspection {
 
   @Override

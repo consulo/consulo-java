@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.ig.controlflow;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
 import consulo.project.Project;
@@ -42,6 +43,7 @@ import javax.annotation.Nullable;
  * @author Etienne Studer
  * @author Hamlet D'Arcy
  */
+@ExtensionImpl
 public class PointlessNullCheckInspection extends BaseInspection {
   @Nls
   @Nonnull

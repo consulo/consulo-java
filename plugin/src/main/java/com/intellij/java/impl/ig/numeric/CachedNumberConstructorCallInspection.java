@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.ig.numeric;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
 import consulo.project.Project;
@@ -32,6 +33,7 @@ import javax.annotation.Nonnull;
 import java.util.HashSet;
 import java.util.Set;
 
+@ExtensionImpl
 public class CachedNumberConstructorCallInspection
   extends BaseInspection {
 

@@ -24,6 +24,7 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 
 import com.intellij.java.language.codeInsight.TestFrameworks;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.ide.impl.idea.codeInspection.ui.ListTable;
 import consulo.ide.impl.idea.codeInspection.ui.ListWrappingTableModel;
 import consulo.util.lang.StringUtil;
@@ -41,6 +42,7 @@ import com.siyeh.ig.psiutils.TestUtils;
 import com.siyeh.ig.ui.ExternalizableStringSet;
 import com.intellij.java.impl.ig.ui.UiUtils;
 
+@ExtensionImpl
 public class BadExceptionDeclaredInspection extends BaseInspection {
 
   /**

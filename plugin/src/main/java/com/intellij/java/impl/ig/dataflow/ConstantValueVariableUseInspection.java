@@ -17,6 +17,7 @@ package com.intellij.java.impl.ig.dataflow;
 
 import javax.annotation.Nonnull;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
 import consulo.project.Project;
@@ -32,6 +33,7 @@ import com.siyeh.ig.psiutils.ExpressionUtils;
 
 import javax.annotation.Nullable;
 
+@ExtensionImpl
 public class ConstantValueVariableUseInspection extends BaseInspection {
 
   @Override

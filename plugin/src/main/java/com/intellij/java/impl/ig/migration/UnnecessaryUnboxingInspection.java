@@ -23,6 +23,7 @@ import javax.annotation.Nullable;
 import javax.swing.JComponent;
 
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
 import org.jetbrains.annotations.NonNls;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
@@ -41,6 +42,7 @@ import com.siyeh.ig.psiutils.MethodCallUtils;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
 import consulo.java.language.module.util.JavaClassNames;
 
+@ExtensionImpl
 public class UnnecessaryUnboxingInspection extends BaseInspection
 {
 

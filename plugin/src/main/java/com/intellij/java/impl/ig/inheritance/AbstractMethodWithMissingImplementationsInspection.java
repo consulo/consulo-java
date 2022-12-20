@@ -16,6 +16,7 @@
 package com.intellij.java.impl.ig.inheritance;
 
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.progress.ProgressManager;
 import consulo.util.lang.Pair;
 import consulo.language.psi.*;
@@ -33,6 +34,7 @@ import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.List;
 
+@ExtensionImpl
 public class AbstractMethodWithMissingImplementationsInspection
   extends BaseInspection {
 

@@ -15,7 +15,9 @@
  */
 package consulo.java.impl.intelliLang.validation;
 
+import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.ide.impl.intelliLang.Configuration;
 import consulo.ide.impl.intelliLang.inject.InjectedLanguage;
 import consulo.language.Language;
@@ -29,7 +31,9 @@ import consulo.java.impl.intelliLang.pattern.PatternValidator;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
+@ExtensionImpl
 public class UnknownLanguageID extends LocalInspectionTool {
 
   @Nonnull
@@ -44,6 +48,12 @@ public class UnknownLanguageID extends LocalInspectionTool {
   @Nonnull
   public String getGroupDisplayName() {
     return PatternValidator.LANGUAGE_INJECTION;
+  }
+
+  @Nullable
+  @Override
+  public Language getLanguage() {
+    return JavaLanguage.INSTANCE;
   }
 
   @Nonnull

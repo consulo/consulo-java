@@ -15,18 +15,23 @@
  */
 package com.intellij.java.impl.ipp.junit;
 
-import com.intellij.java.language.psi.*;
-import consulo.language.psi.*;
-import consulo.language.psi.util.PsiTreeUtil;
-import consulo.language.ast.IElementType;
-import consulo.language.util.IncorrectOperationException;
-import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.impl.ipp.base.Intention;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
+import com.intellij.java.language.codeInsight.AnnotationUtil;
+import com.intellij.java.language.psi.*;
 import com.siyeh.ig.psiutils.BoolUtils;
-import javax.annotation.Nonnull;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.ast.IElementType;
+import consulo.language.editor.intention.IntentionMetaData;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
 import org.jetbrains.annotations.NonNls;
 
+import javax.annotation.Nonnull;
+
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.CreateAssertIntention", fileExtensions = "java", categories = {"Java", "JUnit"})
 public class CreateAssertIntention extends Intention {
 
   @Nonnull

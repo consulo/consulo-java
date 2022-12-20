@@ -18,6 +18,8 @@ package com.intellij.java.impl.ipp.exceptions;
 import com.intellij.java.impl.ipp.base.Intention;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 
@@ -27,6 +29,8 @@ import java.util.List;
 /**
  * @author Bas Leijdekkers
  */
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.MergeNestedTryStatementsIntention", fileExtensions = "java", categories = {"Java", "Other"})
 public class MergeNestedTryStatementsIntention extends Intention {
 
   @Nonnull

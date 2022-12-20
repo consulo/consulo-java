@@ -15,10 +15,12 @@
  */
 package com.intellij.java.impl.ipp.integer;
 
-import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
-import javax.annotation.Nonnull;
+import com.intellij.java.language.psi.PsiType;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.intention.IntentionMetaData;
 
+import javax.annotation.Nonnull;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Locale;
@@ -26,6 +28,8 @@ import java.util.Locale;
 /**
  * @author Konstantin Bulenkov
  */
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.ConvertToScientificNotationIntention", fileExtensions = "java", categories = {"Java", "Numbers"})
 public class ConvertToScientificNotationIntention extends ConvertNumberIntentionBase {
   private static final DecimalFormat FORMAT = new DecimalFormat("0.0#############E00", new DecimalFormatSymbols(Locale.US));
 

@@ -7,6 +7,7 @@ import com.intellij.java.impl.ig.psiutils.SwitchUtils;
 import com.intellij.java.language.psi.*;
 import com.siyeh.ig.psiutils.ControlFlowUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
 import consulo.fileTemplate.FileTemplate;
 import consulo.fileTemplate.FileTemplateManager;

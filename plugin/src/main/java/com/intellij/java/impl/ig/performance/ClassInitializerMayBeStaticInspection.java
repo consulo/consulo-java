@@ -26,6 +26,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ClassUtils;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.java.analysis.codeInspection.CantBeStaticCondition;
 import consulo.java.analysis.codeInspection.JavaExtensionPoints;
 import consulo.language.psi.PsiElement;
@@ -36,6 +37,7 @@ import javax.annotation.Nonnull;
 /**
  * @author max
  */
+@ExtensionImpl
 public class ClassInitializerMayBeStaticInspection extends BaseInspection {
   @Override
   public boolean isEnabledByDefault() {

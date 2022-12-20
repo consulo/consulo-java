@@ -18,6 +18,7 @@ package com.intellij.java.impl.ig.classlayout;
 import com.intellij.java.language.psi.PsiAnonymousClass;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiTypeParameter;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
@@ -28,6 +29,7 @@ import javax.annotation.Nonnull;
 
 import javax.swing.*;
 
+@ExtensionImpl
 public class InnerClassOnInterfaceInspection extends BaseInspection {
 
   /**

@@ -18,6 +18,7 @@ package com.intellij.java.impl.ig.internationalization;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.java.language.module.util.JavaClassNames;
 import com.intellij.java.language.psi.PsiBinaryExpression;
 import com.intellij.java.language.psi.PsiExpression;
@@ -28,6 +29,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ComparisonUtils;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 
+@ExtensionImpl
 public class CharacterComparisonInspection extends BaseInspection {
 
   @Override

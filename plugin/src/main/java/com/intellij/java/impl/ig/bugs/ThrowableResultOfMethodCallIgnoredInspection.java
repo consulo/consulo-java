@@ -18,6 +18,7 @@ package com.intellij.java.impl.ig.bugs;
 import javax.annotation.Nonnull;
 
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.*;
 import consulo.language.psi.search.ReferencesSearch;
 import com.intellij.java.language.psi.util.InheritanceUtil;
@@ -29,6 +30,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TypeUtils;
 import consulo.java.language.module.util.JavaClassNames;
 
+@ExtensionImpl
 public class ThrowableResultOfMethodCallIgnoredInspection
   extends BaseInspection {
 

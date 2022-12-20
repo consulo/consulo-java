@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.ig.naming;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiIdentifier;
@@ -29,6 +30,7 @@ import javax.annotation.Nonnull;
 
 import javax.swing.*;
 
+@ExtensionImpl
 public class MethodNamesDifferOnlyByCaseInspection extends BaseInspection {
 
   @SuppressWarnings("PublicField")

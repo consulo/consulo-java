@@ -17,6 +17,7 @@ package com.intellij.java.impl.ig.naming;
 
 import javax.annotation.Nonnull;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.java.language.module.util.JavaClassNames;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiTypeParameter;
@@ -28,6 +29,7 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.intellij.java.impl.ig.fixes.RenameFix;
 import org.jetbrains.annotations.NonNls;
 
+@ExtensionImpl
 public class ExceptionNameDoesntEndWithExceptionInspection
   extends BaseInspection {
 

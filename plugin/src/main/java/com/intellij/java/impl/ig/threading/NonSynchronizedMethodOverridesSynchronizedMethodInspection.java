@@ -23,7 +23,9 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.intellij.java.impl.ig.fixes.ChangeModifierFix;
 import com.intellij.java.language.psi.PsiModifier;
+import consulo.annotation.component.ExtensionImpl;
 
+@ExtensionImpl
 public class NonSynchronizedMethodOverridesSynchronizedMethodInspection
   extends BaseInspection {
 

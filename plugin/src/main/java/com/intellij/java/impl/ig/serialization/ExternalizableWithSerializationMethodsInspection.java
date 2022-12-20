@@ -22,7 +22,9 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.intellij.java.impl.ig.psiutils.SerializationUtils;
+import consulo.annotation.component.ExtensionImpl;
 
+@ExtensionImpl
 public class ExternalizableWithSerializationMethodsInspection
   extends BaseInspection {
 

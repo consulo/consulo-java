@@ -18,11 +18,13 @@ package com.intellij.java.impl.ig.controlflow;
 import javax.annotation.Nonnull;
 
 import com.intellij.java.language.psi.PsiConditionalExpression;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.util.PsiTreeUtil;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 
+@ExtensionImpl
 public class NestedConditionalExpressionInspection
   extends BaseInspection {
 

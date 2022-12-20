@@ -18,6 +18,7 @@ package com.intellij.java.impl.ig.inheritance;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import com.intellij.java.language.codeInsight.AnnotationUtil;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
 import consulo.project.Project;
@@ -37,6 +38,7 @@ import com.siyeh.ig.psiutils.MethodCallUtils;
 import com.siyeh.ig.psiutils.MethodUtils;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
 
+@ExtensionImpl
 public class RedundantMethodOverrideInspection extends BaseInspection
 {
 

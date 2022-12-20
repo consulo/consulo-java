@@ -15,17 +15,22 @@
  */
 package com.intellij.java.impl.ipp.equality;
 
-import javax.annotation.Nonnull;
-import consulo.language.psi.PsiElement;
+import com.intellij.java.impl.ipp.base.Intention;
+import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiExpressionList;
 import com.intellij.java.language.psi.PsiMethodCallExpression;
 import com.intellij.java.language.psi.PsiReferenceExpression;
-import consulo.language.util.IncorrectOperationException;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
-import com.intellij.java.impl.ipp.base.Intention;
-import com.intellij.java.impl.ipp.base.PsiElementPredicate;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.intention.IntentionMetaData;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
 
+import javax.annotation.Nonnull;
+
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.ReplaceEqualsWithEqualityIntention", fileExtensions = "java", categories = {"Java", "Boolean"})
 public class ReplaceEqualsWithEqualityIntention extends Intention {
 
   @Nonnull

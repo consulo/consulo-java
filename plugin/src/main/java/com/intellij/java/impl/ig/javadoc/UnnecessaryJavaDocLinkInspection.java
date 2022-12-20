@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.ig.javadoc;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
 import com.intellij.java.language.psi.JavaDocTokenType;
@@ -41,6 +42,7 @@ import javax.annotation.Nonnull;
 
 import javax.swing.*;
 
+@ExtensionImpl
 public class UnnecessaryJavaDocLinkInspection extends BaseInspection {
 
   private static final int THIS_METHOD = 1;

@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.ig.errorhandling;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.java.language.module.util.JavaClassNames;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiField;
@@ -28,6 +29,7 @@ import com.intellij.java.impl.ig.fixes.MakeFieldFinalFix;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+@ExtensionImpl
 public class NonFinalFieldOfExceptionInspection extends BaseInspection {
 
   @Override

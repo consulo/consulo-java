@@ -23,11 +23,13 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ControlFlowUtils;
 import com.siyeh.ig.psiutils.MethodUtils;
+import consulo.annotation.component.ExtensionImpl;
 
 import javax.annotation.Nonnull;
 import javax.swing.*;
 import java.awt.*;
 
+@ExtensionImpl
 public class MultipleReturnPointsPerMethodInspection
   extends MethodMetricInspection {
 

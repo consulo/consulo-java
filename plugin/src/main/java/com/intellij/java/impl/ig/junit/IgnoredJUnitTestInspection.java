@@ -16,6 +16,7 @@
 package com.intellij.java.impl.ig.junit;
 
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.*;
 import consulo.language.psi.util.PsiTreeUtil;
 import com.siyeh.InspectionGadgetsBundle;
@@ -25,6 +26,7 @@ import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
 
+@ExtensionImpl
 public class IgnoredJUnitTestInspection extends BaseInspection {
   @Nls
   @Nonnull

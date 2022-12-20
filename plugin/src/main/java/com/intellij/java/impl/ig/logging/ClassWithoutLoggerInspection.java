@@ -21,6 +21,7 @@ import com.intellij.java.language.psi.util.PsiUtil;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.ide.impl.idea.codeInspection.ui.ListTable;
 import consulo.ide.impl.idea.codeInspection.ui.ListWrappingTableModel;
 import consulo.util.xml.serializer.InvalidDataException;
@@ -34,6 +35,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@ExtensionImpl
 public class ClassWithoutLoggerInspection extends BaseInspection {
 
   /**

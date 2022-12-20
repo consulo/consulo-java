@@ -23,6 +23,7 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.editor.inspection.ui.MultipleCheckboxOptionsPanel;
 import consulo.language.psi.PsiElement;
@@ -32,6 +33,7 @@ import org.jetbrains.annotations.Nls;
 import javax.annotation.Nonnull;
 import javax.swing.*;
 
+@ExtensionImpl
 public class MethodCanBeVariableArityMethodInspection extends BaseInspection {
 
   @SuppressWarnings({"PublicField"})

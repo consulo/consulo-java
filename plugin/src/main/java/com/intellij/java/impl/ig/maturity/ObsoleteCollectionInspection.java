@@ -16,6 +16,7 @@
 package com.intellij.java.impl.ig.maturity;
 
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.*;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.search.ReferencesSearch;
@@ -32,6 +33,7 @@ import javax.annotation.Nullable;
 
 import javax.swing.*;
 
+@ExtensionImpl
 public class ObsoleteCollectionInspection extends BaseInspection {
 
   @SuppressWarnings({"PublicField"})

@@ -30,7 +30,9 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.intellij.java.impl.ig.fixes.AddToIgnoreIfAnnotatedByListQuickFix;
 import com.intellij.java.impl.ig.psiutils.SerializationUtils;
 import com.siyeh.ig.ui.ExternalizableStringSet;
+import consulo.annotation.component.ExtensionImpl;
 
+@ExtensionImpl
 public class NonSerializableFieldInSerializableClassInspection extends SerializableInspection {
 
   @SuppressWarnings({"PublicField"})

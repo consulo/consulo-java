@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.ig.jdk;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
 import com.intellij.java.language.JavaLanguage;
@@ -39,6 +40,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+@ExtensionImpl
 public class AutoBoxingInspection extends BaseInspection {
 
   @SuppressWarnings({"PublicField"})

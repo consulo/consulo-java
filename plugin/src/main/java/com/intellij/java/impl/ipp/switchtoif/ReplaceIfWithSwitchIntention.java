@@ -20,8 +20,10 @@ import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.intellij.java.impl.ipp.psiutils.EquivalenceChecker;
 import com.intellij.java.language.psi.*;
 import com.siyeh.ig.psiutils.ControlFlowUtils;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.ast.IElementType;
+import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiComment;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiWhiteSpace;
@@ -33,6 +35,8 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.ReplaceIfWithSwitchIntention", fileExtensions = "java", categories = {"Java", "Control Flow"})
 public class ReplaceIfWithSwitchIntention extends Intention {
 
   @Override

@@ -17,6 +17,7 @@ package com.intellij.java.impl.ig.style;
 
 import javax.annotation.Nonnull;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
 import consulo.project.Project;
@@ -31,6 +32,7 @@ import com.siyeh.ig.psiutils.ParenthesesUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
 import org.jetbrains.annotations.NonNls;
 
+@ExtensionImpl
 public class LiteralAsArgToStringEqualsInspection
   extends BaseInspection {
 

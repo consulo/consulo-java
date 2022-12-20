@@ -19,6 +19,7 @@ import javax.annotation.Nonnull;
 import javax.swing.JComponent;
 
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nullable;
@@ -43,6 +44,7 @@ import com.siyeh.ig.psiutils.MethodCallUtils;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
 
+@ExtensionImpl
 public class UnnecessaryBoxingInspection extends BaseInspection
 {
 

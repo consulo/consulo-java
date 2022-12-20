@@ -16,6 +16,7 @@
 package com.intellij.java.impl.ig.performance;
 
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.*;
 import consulo.language.psi.util.PsiTreeUtil;
 import com.siyeh.InspectionGadgetsBundle;
@@ -29,6 +30,7 @@ import javax.annotation.Nullable;
 import java.util.HashSet;
 import java.util.Set;
 
+@ExtensionImpl
 public class CollectionContainsUrlInspection extends BaseInspection {
 
   @Override

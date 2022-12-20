@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.ig.memory;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.java.language.module.util.JavaClassNames;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiType;
@@ -24,6 +25,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 
 import javax.annotation.Nonnull;
 
+@ExtensionImpl
 public class StringBufferFieldInspection extends BaseInspection {
 
   @Override

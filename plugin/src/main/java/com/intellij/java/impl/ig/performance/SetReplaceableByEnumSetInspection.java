@@ -23,10 +23,12 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TypeUtils;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.java.language.module.util.JavaClassNames;
 
 import javax.annotation.Nonnull;
 
+@ExtensionImpl
 public class SetReplaceableByEnumSetInspection extends BaseInspection {
 
   @Override

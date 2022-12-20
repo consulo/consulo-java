@@ -25,6 +25,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.BoolUtils;
 import com.siyeh.ig.psiutils.ExpressionUtils;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.ast.IElementType;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.editor.inspection.ui.MultipleCheckboxOptionsPanel;
@@ -37,6 +38,7 @@ import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
 import javax.swing.*;
 
+@ExtensionImpl
 public class NegatedIfElseInspection extends BaseInspection {
 
   @SuppressWarnings("PublicField") public boolean m_ignoreNegatedNullComparison = true;

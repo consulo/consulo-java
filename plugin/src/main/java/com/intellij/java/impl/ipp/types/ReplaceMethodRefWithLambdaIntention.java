@@ -27,10 +27,12 @@ import com.intellij.java.language.psi.util.MethodSignature;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.RedundantCastUtil;
 import com.siyeh.ig.psiutils.SideEffectChecker;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.Application;
 import consulo.application.ApplicationManager;
 import consulo.codeEditor.Editor;
 import consulo.component.util.text.UniqueNameGenerator;
+import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
@@ -44,6 +46,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.ReplaceMethodRefWithLambdaIntention", fileExtensions = "java", categories = {"Java", "Declaration"})
 public class ReplaceMethodRefWithLambdaIntention extends Intention {
   private static final Logger LOG = Logger.getInstance(ReplaceMethodRefWithLambdaIntention.class);
 

@@ -16,6 +16,7 @@
 package com.intellij.java.impl.ig.logging;
 
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import consulo.language.psi.util.PsiTreeUtil;
@@ -27,6 +28,7 @@ import javax.annotation.Nullable;
 
 import java.util.*;
 
+@ExtensionImpl
 public class LoggingConditionDisagreesWithLogStatementInspection extends BaseInspection {
 
   private static final Set<String> loggingLevels = new HashSet(Arrays.asList(

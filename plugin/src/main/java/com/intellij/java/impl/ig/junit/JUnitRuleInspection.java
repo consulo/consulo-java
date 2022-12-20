@@ -24,6 +24,7 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.editor.inspection.ui.MultipleCheckboxOptionsPanel;
 import consulo.language.psi.PsiElement;
@@ -39,6 +40,7 @@ import javax.swing.*;
  * User: anna
  * Date: 4/12/13
  */
+@ExtensionImpl
 public class JUnitRuleInspection extends BaseInspection {
   public static final String RULE_FQN = "org.junit.Rule";
   public static final String CLASS_RULE_FQN = "org.junit.ClassRule";

@@ -16,6 +16,7 @@
 package com.intellij.java.impl.ig.style;
 
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.*;
 import consulo.language.psi.util.PsiTreeUtil;
 import com.siyeh.InspectionGadgetsBundle;
@@ -32,6 +33,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
 
+@ExtensionImpl
 public class UnnecessaryFinalOnLocalVariableOrParameterInspection
   extends BaseInspection {
 

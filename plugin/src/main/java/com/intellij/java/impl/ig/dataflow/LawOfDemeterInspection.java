@@ -16,6 +16,7 @@
 package com.intellij.java.impl.ig.dataflow;
 
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.util.dataholder.Key;
 import consulo.language.psi.*;
 import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
@@ -28,6 +29,7 @@ import javax.annotation.Nullable;
 
 import javax.swing.*;
 
+@ExtensionImpl
 public class LawOfDemeterInspection extends BaseInspection {
 
   @SuppressWarnings({"PublicField"})

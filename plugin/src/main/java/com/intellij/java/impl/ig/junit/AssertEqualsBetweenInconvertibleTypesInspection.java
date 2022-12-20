@@ -18,6 +18,7 @@ package com.intellij.java.impl.ig.junit;
 import javax.annotation.Nonnull;
 
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.util.lang.StringUtil;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
@@ -28,6 +29,7 @@ import com.siyeh.ig.psiutils.TypeUtils;
 import consulo.java.language.module.util.JavaClassNames;
 import org.jetbrains.annotations.NonNls;
 
+@ExtensionImpl
 public class AssertEqualsBetweenInconvertibleTypesInspection extends BaseInspection {
 
   @Override

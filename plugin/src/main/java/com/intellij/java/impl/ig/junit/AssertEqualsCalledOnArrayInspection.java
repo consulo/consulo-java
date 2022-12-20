@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.ig.junit;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
 import consulo.project.Project;
@@ -30,6 +31,7 @@ import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
 
+@ExtensionImpl
 public class AssertEqualsCalledOnArrayInspection extends BaseInspection {
   @Nls
   @Nonnull

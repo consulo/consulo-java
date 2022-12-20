@@ -23,6 +23,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.VariableAccessUtils;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.util.query.Query;
 import consulo.content.scope.SearchScope;
 import consulo.document.util.TextRange;
@@ -42,6 +43,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
+@ExtensionImpl
 public class ReuseOfLocalVariableInspection
   extends BaseInspection {
 

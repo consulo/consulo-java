@@ -21,7 +21,9 @@ import com.intellij.java.impl.psi.codeStyle.JavaCodeStyleSettings;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.codeStyle.CodeStyleSettingsManager;
+import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
@@ -32,6 +34,8 @@ import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.ReplaceForEachLoopWithIndexedForLoopIntention", fileExtensions = "java", categories = {"Java", "Control Flow"})
 public class ReplaceForEachLoopWithIndexedForLoopIntention extends Intention {
 
   @Override

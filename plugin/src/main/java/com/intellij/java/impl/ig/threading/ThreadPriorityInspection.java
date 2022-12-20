@@ -16,6 +16,7 @@
 package com.intellij.java.impl.ig.threading;
 
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.*;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
@@ -23,6 +24,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
 
+@ExtensionImpl
 public class ThreadPriorityInspection extends BaseInspection {
 
   @Nonnull

@@ -18,8 +18,10 @@ package com.intellij.java.impl.ipp.parenthesis;
 import com.intellij.java.impl.ipp.base.Intention;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.component.ProcessCanceledException;
 import consulo.language.ast.IElementType;
+import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiWhiteSpace;
 import consulo.language.util.IncorrectOperationException;
@@ -27,6 +29,8 @@ import consulo.language.util.IncorrectOperationException;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.AddClarifyingParenthesesIntention", fileExtensions = "java", categories = {"Java", "Other"})
 public class AddClarifyingParenthesesIntention extends Intention {
 
   @Override

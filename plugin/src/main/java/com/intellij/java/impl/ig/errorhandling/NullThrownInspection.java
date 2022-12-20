@@ -21,6 +21,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
@@ -29,6 +30,7 @@ import org.jetbrains.annotations.Nls;
 
 import javax.annotation.Nonnull;
 
+@ExtensionImpl
 public class NullThrownInspection extends BaseInspection {
 
   @Nls

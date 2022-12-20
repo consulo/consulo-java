@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.ig.finalization;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
 import com.intellij.java.language.psi.*;
 import consulo.project.Project;
@@ -26,6 +27,7 @@ import javax.annotation.Nonnull;
 
 import javax.swing.*;
 
+@ExtensionImpl
 public class FinalizeInspection extends BaseInspection {
 
   @SuppressWarnings("PublicField")

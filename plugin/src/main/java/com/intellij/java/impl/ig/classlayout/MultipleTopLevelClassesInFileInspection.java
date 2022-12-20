@@ -16,6 +16,7 @@
 package com.intellij.java.impl.ig.classlayout;
 
 import com.intellij.java.language.psi.PsiClass;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiJavaFile;
 import com.siyeh.InspectionGadgetsBundle;
@@ -25,6 +26,7 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.intellij.java.impl.ig.fixes.MoveClassFix;
 import javax.annotation.Nonnull;
 
+@ExtensionImpl
 public class MultipleTopLevelClassesInFileInspection extends BaseInspection {
 
   @Nonnull

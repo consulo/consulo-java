@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.ig.naming;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
 import com.intellij.java.language.psi.*;
 import consulo.language.psi.*;
@@ -32,6 +33,7 @@ import javax.swing.JComponent;
 import java.util.HashMap;
 import java.util.Map;
 
+@ExtensionImpl
 public class StandardVariableNamesInspection extends BaseInspection {
 
   @NonNls static final Map<String, String> s_expectedTypes =

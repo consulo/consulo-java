@@ -15,14 +15,18 @@
  */
 package com.intellij.java.impl.ipp.braces;
 
-import javax.annotation.Nonnull;
-
+import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.intellij.java.language.psi.PsiBlockStatement;
 import com.intellij.java.language.psi.PsiStatement;
-import consulo.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.intention.IntentionMetaData;
+import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
-import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 
+import javax.annotation.Nonnull;
+
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.AddBracesIntention", fileExtensions = "java", categories = {"Java", "Declaration"})
 public class AddBracesIntention extends BaseBracesIntention {
 
   @Nonnull

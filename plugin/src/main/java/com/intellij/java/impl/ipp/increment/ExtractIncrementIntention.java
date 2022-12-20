@@ -20,7 +20,9 @@ import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.siyeh.IntentionPowerPackBundle;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.content.scope.SearchScope;
+import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.scope.LocalSearchScope;
 import consulo.language.psi.util.PsiTreeUtil;
@@ -30,6 +32,8 @@ import consulo.project.Project;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.ExtractIncrementIntention", fileExtensions = "java", categories = {"Java", "Other"})
 public class ExtractIncrementIntention extends MutablyNamedIntention {
 
   @Override
@@ -84,7 +88,7 @@ public class ExtractIncrementIntention extends MutablyNamedIntention {
     final String newStatementText = element.getText() + ';';
     final String operandText = operand.getText();
     if (parent instanceof PsiIfStatement ||
-        parent instanceof PsiLoopStatement) {
+      parent instanceof PsiLoopStatement) {
       // need to add braces because
       // in/decrement is inside braceless control statement body
       final StringBuilder text = new StringBuilder();
@@ -130,7 +134,7 @@ public class ExtractIncrementIntention extends MutablyNamedIntention {
           returnValue, element, operandText);
         final String declarationStatementText =
           type.getCanonicalText() + ' ' + variableName +
-          '=' + newReturnValueText + ';';
+            '=' + newReturnValueText + ';';
         final PsiStatement declarationStatement =
           factory.createStatementFromText(declarationStatementText,
                                           returnStatement);
@@ -170,7 +174,7 @@ public class ExtractIncrementIntention extends MutablyNamedIntention {
           exception, element, operandText);
         final String declarationStatementText =
           type.getCanonicalText() + ' ' + variableName +
-          '=' + newReturnValueText + ';';
+            '=' + newReturnValueText + ';';
         final PsiStatement declarationStatement =
           factory.createStatementFromText(declarationStatementText,
                                           returnStatement);

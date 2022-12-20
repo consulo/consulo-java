@@ -16,6 +16,7 @@
 package com.intellij.java.impl.ig.threading;
 
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.util.lang.StringUtil;
 import consulo.language.psi.*;
 import consulo.language.psi.util.PsiTreeUtil;
@@ -32,6 +33,7 @@ import javax.annotation.Nullable;
 import javax.swing.JComponent;
 import java.util.List;
 
+@ExtensionImpl
 public class AccessToNonThreadSafeStaticFieldFromInstanceInspection
   extends BaseInspection {
 

@@ -16,18 +16,20 @@
 package com.intellij.java.impl.ipp.fqnames;
 
 import com.intellij.java.impl.ig.style.UnnecessaryFullyQualifiedNameInspection;
-import com.intellij.java.language.psi.*;
-import consulo.logging.Logger;
-import consulo.language.psi.*;
-import consulo.language.psi.util.PsiTreeUtil;
-import consulo.language.util.IncorrectOperationException;
-import com.siyeh.IntentionPowerPackBundle;
 import com.intellij.java.impl.ipp.base.Intention;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.intellij.java.impl.ipp.psiutils.HighlightUtil;
 import com.intellij.java.impl.ipp.psiutils.ImportUtils;
-import javax.annotation.Nonnull;
+import com.intellij.java.language.psi.*;
+import com.siyeh.IntentionPowerPackBundle;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.intention.IntentionMetaData;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.util.IncorrectOperationException;
+import consulo.logging.Logger;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -36,6 +38,9 @@ import java.util.List;
 /**
  * @see UnnecessaryFullyQualifiedNameInspection
  */
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.ReplaceFullyQualifiedNameWithImportIntention", fileExtensions = "java", categories = {"Java",
+  "Declaration"})
 public class ReplaceFullyQualifiedNameWithImportIntention extends Intention {
 
   @Override

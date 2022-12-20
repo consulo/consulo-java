@@ -16,6 +16,7 @@
 package com.intellij.java.impl.ig.threading;
 
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.*;
 import consulo.language.psi.util.PsiTreeUtil;
 import com.siyeh.InspectionGadgetsBundle;
@@ -30,6 +31,7 @@ import javax.swing.*;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+@ExtensionImpl
 public class AccessToStaticFieldLockedOnInstanceInspection extends BaseInspection {
 
   @SuppressWarnings("PublicField") public Set<String> ignoredClasses = new LinkedHashSet<>();

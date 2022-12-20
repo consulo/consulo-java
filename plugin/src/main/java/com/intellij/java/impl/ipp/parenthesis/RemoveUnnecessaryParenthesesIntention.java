@@ -15,19 +15,19 @@
  */
 package com.intellij.java.impl.ipp.parenthesis;
 
-import javax.annotation.Nonnull;
-
-import com.intellij.java.language.psi.JavaPsiFacade;
-import consulo.language.psi.PsiElement;
-import com.intellij.java.language.psi.PsiElementFactory;
-import com.intellij.java.language.psi.PsiExpression;
-import com.intellij.java.language.psi.PsiLambdaExpression;
-import com.intellij.java.language.psi.PsiParameterList;
-import consulo.language.util.IncorrectOperationException;
-import com.siyeh.ig.psiutils.ParenthesesUtils;
 import com.intellij.java.impl.ipp.base.Intention;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
+import com.intellij.java.language.psi.*;
+import com.siyeh.ig.psiutils.ParenthesesUtils;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.intention.IntentionMetaData;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
 
+import javax.annotation.Nonnull;
+
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.RemoveUnnecessaryParenthesesIntention", fileExtensions = "java", categories = {"Java", "Other"})
 public class RemoveUnnecessaryParenthesesIntention extends Intention {
 
   @Override

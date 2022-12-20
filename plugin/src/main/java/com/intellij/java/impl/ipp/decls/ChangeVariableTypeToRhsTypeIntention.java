@@ -24,6 +24,8 @@ import com.intellij.java.impl.ipp.base.MutablyNamedIntention;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.intellij.java.language.psi.*;
 import com.siyeh.IntentionPowerPackBundle;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 
@@ -32,6 +34,8 @@ import javax.annotation.Nonnull;
 /**
  * @author Bas Leijdekkers
  */
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.ChangeVariableTypeToRhsTypeIntention", fileExtensions = "java", categories = {"Java", "Declaration"})
 public class ChangeVariableTypeToRhsTypeIntention extends MutablyNamedIntention {
 
   @Nonnull

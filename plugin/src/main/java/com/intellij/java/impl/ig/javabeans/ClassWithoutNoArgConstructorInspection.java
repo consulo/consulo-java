@@ -22,11 +22,13 @@ import com.intellij.java.language.psi.PsiTypeParameter;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
 import javax.annotation.Nonnull;
 
 import javax.swing.*;
 
+@ExtensionImpl
 public class ClassWithoutNoArgConstructorInspection extends BaseInspection {
 
   /**

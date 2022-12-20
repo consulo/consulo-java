@@ -23,7 +23,9 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.util.ClassUtil;
 import com.siyeh.IntentionPowerPackBundle;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.FileModificationService;
+import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.editor.util.LanguageUndoUtil;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
@@ -34,6 +36,8 @@ import consulo.project.Project;
 import javax.annotation.Nonnull;
 import java.util.Collection;
 
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.AnnotateOverriddenMethodsIntention", fileExtensions = "java", categories = {"Java", "Annotations"})
 public class AnnotateOverriddenMethodsIntention extends MutablyNamedIntention {
   @Nonnull
   @Override

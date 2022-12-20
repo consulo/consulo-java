@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.ig.portability;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
 import com.intellij.java.impl.ig.portability.mediatype.*;
 import com.intellij.java.language.psi.PsiLiteralExpression;
@@ -37,6 +38,7 @@ import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@ExtensionImpl
 public class HardcodedFileSeparatorsInspection extends BaseInspection {
 
   private static final char BACKSLASH = '\\';

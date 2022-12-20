@@ -17,6 +17,7 @@ package com.intellij.java.impl.ig.visibility;
 
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiField;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
 import com.siyeh.HardcodedMethodConstants;
 import com.siyeh.InspectionGadgetsBundle;
@@ -31,6 +32,7 @@ import javax.swing.*;
 import java.util.HashSet;
 import java.util.Set;
 
+@ExtensionImpl
 public class FieldHidesSuperclassFieldInspection extends BaseInspection {
 
   /**

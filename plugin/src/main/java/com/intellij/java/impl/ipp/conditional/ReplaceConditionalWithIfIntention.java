@@ -21,9 +21,11 @@ import com.intellij.java.impl.refactoring.util.RefactoringUtil;
 import com.intellij.java.language.psi.*;
 import com.siyeh.ig.PsiReplacementUtil;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.ide.impl.idea.util.ArrayUtilRt;
 import consulo.language.ast.IElementType;
 import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiComment;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiManager;
@@ -35,6 +37,8 @@ import consulo.project.Project;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.ReplaceConditionalWithIfIntention", fileExtensions = "java", categories = {"Java", "Conditional Operator"})
 public class ReplaceConditionalWithIfIntention extends Intention {
   private static final Logger LOG = Logger.getInstance(ReplaceConditionalWithIfIntention.class);
 

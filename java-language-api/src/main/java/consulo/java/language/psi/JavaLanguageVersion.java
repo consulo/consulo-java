@@ -26,6 +26,7 @@ import javax.annotation.Nonnull;
  * @author VISTALL
  * @since 09-Dec-16.
  */
+@SuppressWarnings("ExtensionImplIsNotAnnotatedInspection")
 public class JavaLanguageVersion extends LanguageVersion {
   private LanguageLevel myLanguageLevel;
 

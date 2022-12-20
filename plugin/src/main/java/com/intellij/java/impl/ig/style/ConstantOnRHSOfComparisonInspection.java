@@ -17,6 +17,7 @@ package com.intellij.java.impl.ig.style;
 
 import javax.annotation.Nonnull;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.project.Project;
 import com.intellij.java.language.psi.PsiBinaryExpression;
@@ -30,6 +31,7 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ComparisonUtils;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 
+@ExtensionImpl
 public class ConstantOnRHSOfComparisonInspection extends BaseInspection {
 
   @Override

@@ -18,13 +18,18 @@ package com.intellij.java.impl.ipp.whileloop;
 import com.intellij.java.impl.ipp.base.Intention;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiManager;
 import consulo.language.util.IncorrectOperationException;
 
 import javax.annotation.Nonnull;
 
+@ExtensionImpl
+
+@IntentionMetaData(ignoreId = "java.ExtractWhileLoopConditionToIfStatementIntention", fileExtensions = "java", categories = {"Java", "Control Flow"})
 public class ExtractWhileLoopConditionToIfStatementIntention extends Intention {
 
   @Nonnull

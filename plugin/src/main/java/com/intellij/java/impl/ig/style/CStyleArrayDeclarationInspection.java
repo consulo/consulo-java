@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.ig.style;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.project.Project;
 import consulo.language.psi.PsiElement;
@@ -28,6 +29,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import javax.annotation.Nonnull;
 
+@ExtensionImpl
 public class CStyleArrayDeclarationInspection extends BaseInspection {
 
   @Nonnull

@@ -25,6 +25,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ComparisonUtils;
 import com.siyeh.ig.psiutils.ExpressionUtils;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.ide.impl.idea.codeInspection.ui.ListTable;
 import consulo.ide.impl.idea.codeInspection.ui.ListWrappingTableModel;
 import consulo.language.ast.IElementType;
@@ -40,6 +41,7 @@ import javax.annotation.Nullable;
 import javax.swing.*;
 import java.awt.*;
 
+@ExtensionImpl
 public class SizeReplaceableByIsEmptyInspection extends BaseInspection {
 
   @SuppressWarnings({"PublicField"})

@@ -26,6 +26,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ClassUtils;
 import com.siyeh.ig.ui.ExternalizableStringSet;
+import consulo.annotation.component.ExtensionImpl;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -34,6 +35,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@ExtensionImpl
 public class PublicFieldInspection extends BaseInspection {
 
   @SuppressWarnings({"PublicField"})

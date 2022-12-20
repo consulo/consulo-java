@@ -18,6 +18,7 @@ package com.intellij.java.impl.ig.serialization;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import consulo.annotation.component.ExtensionImpl;
 import org.jetbrains.annotations.Nls;
 import com.intellij.java.impl.codeInsight.daemon.impl.quickfix.AddDefaultConstructorFix;
 import consulo.language.editor.inspection.ProblemDescriptor;
@@ -40,6 +41,7 @@ import com.siyeh.ig.psiutils.ClassUtils;
 /**
  * @author Bas Leijdekkers
  */
+@ExtensionImpl
 public class ExternalizableWithoutPublicNoArgConstructorInspection extends BaseInspection {
 
   @Nls

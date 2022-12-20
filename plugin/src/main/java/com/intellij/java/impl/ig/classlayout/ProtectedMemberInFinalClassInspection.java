@@ -17,6 +17,7 @@ package com.intellij.java.impl.ig.classlayout;
 
 import javax.annotation.Nonnull;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
 import consulo.application.AccessToken;
@@ -43,6 +44,7 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.intellij.java.impl.ig.fixes.RemoveModifierFix;
 import com.siyeh.ig.psiutils.MethodUtils;
 
+@ExtensionImpl
 public class ProtectedMemberInFinalClassInspection extends BaseInspection {
 
   @Override

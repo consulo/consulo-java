@@ -18,6 +18,7 @@ package com.intellij.java.impl.ig.bugs;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
 import consulo.project.Project;
@@ -31,6 +32,7 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import consulo.java.language.module.util.JavaClassNames;
 import org.jetbrains.annotations.Nls;
 
+@ExtensionImpl
 public class NewStringBufferWithCharArgumentInspection extends BaseInspection {
 
   @Override

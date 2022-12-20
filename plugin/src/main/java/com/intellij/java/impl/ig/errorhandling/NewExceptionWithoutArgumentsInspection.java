@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.ig.errorhandling;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
 import com.intellij.java.language.psi.*;
 import consulo.language.psi.*;
@@ -28,6 +29,7 @@ import javax.annotation.Nonnull;
 
 import javax.swing.*;
 
+@ExtensionImpl
 public class NewExceptionWithoutArgumentsInspection extends BaseInspection {
 
   @SuppressWarnings("PublicField")

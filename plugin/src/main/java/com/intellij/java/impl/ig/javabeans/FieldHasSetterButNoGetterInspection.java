@@ -23,8 +23,11 @@ import com.intellij.java.language.psi.util.PropertyUtil;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
+import consulo.annotation.component.ExtensionImpl;
+
 import javax.annotation.Nonnull;
 
+@ExtensionImpl
 public class FieldHasSetterButNoGetterInspection extends BaseInspection {
 
   @Override

@@ -19,6 +19,7 @@ import com.intellij.java.impl.ipp.base.Intention;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.intellij.java.language.psi.*;
 import com.siyeh.IntentionPowerPackBundle;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.EditorColors;
 import consulo.colorScheme.EditorColorsManager;
@@ -26,6 +27,7 @@ import consulo.colorScheme.EditorColorsScheme;
 import consulo.colorScheme.TextAttributes;
 import consulo.fileEditor.FileEditorManager;
 import consulo.language.editor.highlight.HighlightManager;
+import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiManager;
 import consulo.language.psi.PsiReference;
@@ -37,6 +39,8 @@ import consulo.project.ui.wm.StatusBar;
 
 import javax.annotation.Nonnull;
 
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.MoveDeclarationIntention", fileExtensions = "java", categories = {"Java", "Declaration"})
 public class MoveDeclarationIntention extends Intention {
 
   @Nonnull

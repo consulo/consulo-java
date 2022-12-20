@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.ig.performance;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
 import consulo.project.Project;
@@ -31,6 +32,7 @@ import javax.annotation.Nonnull;
 
 import java.util.Collection;
 
+@ExtensionImpl
 public class InnerClassMayBeStaticInspection extends BaseInspection {
 
   @Override

@@ -15,11 +15,15 @@
  */
 package com.intellij.java.impl.ipp.integer;
 
+import com.intellij.java.impl.ipp.base.PsiElementPredicate;
+import com.intellij.java.language.psi.PsiType;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.intention.IntentionMetaData;
+
 import javax.annotation.Nonnull;
 
-import com.intellij.java.language.psi.PsiType;
-import com.intellij.java.impl.ipp.base.PsiElementPredicate;
-
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.ConvertIntegerToDecimalIntention", fileExtensions = "java", categories = {"Java", "Numbers"})
 public class ConvertIntegerToDecimalIntention extends ConvertNumberIntentionBase {
   @Override
   @Nonnull

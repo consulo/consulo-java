@@ -15,14 +15,18 @@
  */
 package com.intellij.java.impl.ipp.types;
 
-import javax.annotation.Nonnull;
-
-import consulo.language.psi.*;
-import com.intellij.java.language.impl.psi.impl.PsiDiamondTypeUtil;
-import consulo.language.util.IncorrectOperationException;
 import com.intellij.java.impl.ipp.base.Intention;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
+import com.intellij.java.language.impl.psi.impl.PsiDiamondTypeUtil;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.intention.IntentionMetaData;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
 
+import javax.annotation.Nonnull;
+
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.ReplaceDiamondWithExplicitTypeArgumentsIntention", fileExtensions = "java", categories = {"Java", "Declaration"})
 public class ReplaceDiamondWithExplicitTypeArgumentsIntention extends Intention {
 
   @Nonnull

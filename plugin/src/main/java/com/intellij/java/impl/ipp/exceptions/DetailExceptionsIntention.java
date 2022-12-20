@@ -15,16 +15,20 @@
  */
 package com.intellij.java.impl.ipp.exceptions;
 
-import com.intellij.java.language.psi.*;
-import consulo.language.psi.*;
-import consulo.language.util.IncorrectOperationException;
 import com.intellij.java.impl.ipp.base.Intention;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
-import javax.annotation.Nonnull;
+import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.intention.IntentionMetaData;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
 import org.jetbrains.annotations.NonNls;
 
+import javax.annotation.Nonnull;
 import java.util.*;
 
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.DetailExceptionsIntention", fileExtensions = "java", categories = {"Java", "Other"})
 public class DetailExceptionsIntention extends Intention {
 
   @Override

@@ -18,12 +18,14 @@ package com.intellij.java.impl.ig.classmetrics;
 import com.intellij.java.language.psi.PsiClass;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.ui.ex.awt.UIUtil;
 
 import javax.annotation.Nonnull;
 import javax.swing.*;
 import java.awt.*;
 
+@ExtensionImpl
 public class ClassCouplingInspection
   extends ClassMetricInspection {
 

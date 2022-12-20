@@ -20,7 +20,9 @@ import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.intellij.java.impl.ipp.psiutils.HighlightUtil;
 import com.intellij.java.language.psi.*;
 import com.siyeh.IntentionPowerPackBundle;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiManager;
 import consulo.language.psi.PsiParserFacade;
@@ -30,6 +32,8 @@ import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
 
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.SplitDeclarationAndInitializationIntention", fileExtensions = "java", categories = {"Java", "Declaration"})
 public class SplitDeclarationAndInitializationIntention extends Intention {
 
   @Override
@@ -55,7 +59,7 @@ public class SplitDeclarationAndInitializationIntention extends Intention {
       }
       else {
         initializerText = "new " + type.getCanonicalText() +
-                          initializer.getText();
+          initializer.getText();
       }
     }
     else {

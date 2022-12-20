@@ -22,12 +22,14 @@ import com.intellij.java.language.psi.PsiType;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ClassUtils;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.ui.ex.awt.UIUtil;
 
 import javax.annotation.Nonnull;
 import javax.swing.*;
 import java.awt.*;
 
+@ExtensionImpl
 public class FieldCountInspection extends ClassMetricInspection {
 
   private static final int FIELD_COUNT_LIMIT = 10;

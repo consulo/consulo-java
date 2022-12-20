@@ -20,6 +20,7 @@ import com.intellij.java.language.psi.PsiExpressionList;
 import com.intellij.java.language.psi.PsiMethodCallExpression;
 import com.intellij.java.language.psi.PsiReferenceExpression;
 import com.intellij.java.language.psi.util.InheritanceUtil;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.ide.impl.idea.util.containers.ContainerUtilRt;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
@@ -31,6 +32,7 @@ import javax.annotation.Nonnull;
 
 import java.util.Set;
 
+@ExtensionImpl
 public class PlaceholderCountMatchesArgumentCountInspection extends BaseInspection {
 
   @NonNls

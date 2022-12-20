@@ -23,7 +23,9 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.TypeUtils;
+import consulo.annotation.component.ExtensionImpl;
 
+@ExtensionImpl
 public class SynchronizeOnLockInspection extends BaseInspection {
 
   @Override

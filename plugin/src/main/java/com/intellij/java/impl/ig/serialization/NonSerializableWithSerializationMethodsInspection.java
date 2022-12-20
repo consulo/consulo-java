@@ -25,7 +25,9 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.intellij.java.impl.ig.fixes.MakeSerializableFix;
 import com.intellij.java.impl.ig.psiutils.SerializationUtils;
+import consulo.annotation.component.ExtensionImpl;
 
+@ExtensionImpl
 public class NonSerializableWithSerializationMethodsInspection
   extends BaseInspection {
 

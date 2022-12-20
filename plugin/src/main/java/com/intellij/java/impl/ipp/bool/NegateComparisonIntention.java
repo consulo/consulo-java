@@ -15,17 +15,25 @@
  */
 package com.intellij.java.impl.ipp.bool;
 
-import javax.annotation.Nonnull;
-import com.intellij.java.language.psi.PsiBinaryExpression;
-import consulo.language.psi.PsiElement;
-import com.intellij.java.language.psi.PsiExpression;
-import com.intellij.java.language.psi.PsiJavaToken;
-import consulo.language.util.IncorrectOperationException;
-import com.siyeh.IntentionPowerPackBundle;
-import com.siyeh.ig.psiutils.ComparisonUtils;
 import com.intellij.java.impl.ipp.base.MutablyNamedIntention;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
+import com.intellij.java.language.psi.PsiBinaryExpression;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiJavaToken;
+import com.siyeh.IntentionPowerPackBundle;
+import com.siyeh.ig.psiutils.ComparisonUtils;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.intention.IntentionMetaData;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
 
+import javax.annotation.Nonnull;
+
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.NegateComparisonIntention", fileExtensions = "java", categories = {
+		"Java",
+		"Boolean"
+})
 public class NegateComparisonIntention extends MutablyNamedIntention {
 
   public String getTextForElement(PsiElement element) {

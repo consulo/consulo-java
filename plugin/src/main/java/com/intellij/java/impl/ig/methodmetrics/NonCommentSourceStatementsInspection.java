@@ -20,7 +20,9 @@ import javax.annotation.Nonnull;
 import com.intellij.java.language.psi.PsiMethod;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspectionVisitor;
+import consulo.annotation.component.ExtensionImpl;
 
+@ExtensionImpl
 public class NonCommentSourceStatementsInspection
   extends MethodMetricInspection {
 

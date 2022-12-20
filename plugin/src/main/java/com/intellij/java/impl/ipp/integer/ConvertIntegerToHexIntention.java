@@ -15,10 +15,15 @@
  */
 package com.intellij.java.impl.ipp.integer;
 
-import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
+import com.intellij.java.language.psi.PsiType;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.intention.IntentionMetaData;
+
 import javax.annotation.Nonnull;
 
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.ConvertIntegerToHexIntention", fileExtensions = "java", categories = {"Java", "Numbers"})
 public class ConvertIntegerToHexIntention extends ConvertNumberIntentionBase {
   @Override
   @Nonnull

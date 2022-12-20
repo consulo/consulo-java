@@ -15,20 +15,27 @@
  */
 package com.intellij.java.impl.ipp.bool;
 
-import javax.annotation.Nonnull;
-
+import com.intellij.java.impl.ipp.base.MutablyNamedIntention;
+import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.intellij.java.language.psi.PsiBinaryExpression;
-import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiJavaToken;
-import consulo.language.ast.IElementType;
-import consulo.language.util.IncorrectOperationException;
 import com.siyeh.IntentionPowerPackBundle;
 import com.siyeh.ig.PsiReplacementUtil;
 import com.siyeh.ig.psiutils.ComparisonUtils;
-import com.intellij.java.impl.ipp.base.MutablyNamedIntention;
-import com.intellij.java.impl.ipp.base.PsiElementPredicate;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.ast.IElementType;
+import consulo.language.editor.intention.IntentionMetaData;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
 
+import javax.annotation.Nonnull;
+
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.FlipComparisonIntention", fileExtensions = "java", categories = {
+		"Java",
+		"Boolean"
+})
 public class FlipComparisonIntention extends MutablyNamedIntention
 {
 

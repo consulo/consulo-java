@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.ig.migration;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
 import consulo.project.Project;
@@ -40,6 +41,7 @@ import java.util.List;
 /**
  * @author yole, Bas Leijdekkers
  */
+@ExtensionImpl
 public class TryWithIdenticalCatchesInspection extends BaseInspection {
 
   @Override

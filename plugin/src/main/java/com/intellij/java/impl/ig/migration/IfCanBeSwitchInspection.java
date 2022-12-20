@@ -25,6 +25,7 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ControlFlowUtils;
 import com.siyeh.ig.psiutils.EquivalenceChecker;
 import com.siyeh.ig.psiutils.ParenthesesUtils;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.ast.IElementType;
 import consulo.language.editor.inspection.ProblemDescriptor;
@@ -50,6 +51,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+@ExtensionImpl
 public class IfCanBeSwitchInspection extends BaseInspection {
 
   @SuppressWarnings({"PublicField"})

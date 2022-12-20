@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.ig.naming;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.ide.impl.idea.codeInspection.ui.ListTable;
 import consulo.ide.impl.idea.codeInspection.ui.ListWrappingTableModel;
 import consulo.language.editor.inspection.ui.CheckBox;
@@ -41,6 +42,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@ExtensionImpl
 public class NonBooleanMethodNameMayNotStartWithQuestionInspection extends BaseInspection {
 
   /**

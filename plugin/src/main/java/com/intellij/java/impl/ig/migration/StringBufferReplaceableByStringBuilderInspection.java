@@ -23,6 +23,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.TypeUtils;
 import com.siyeh.ig.psiutils.VariableAccessUtils;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
@@ -37,6 +38,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+@ExtensionImpl
 public class StringBufferReplaceableByStringBuilderInspection extends BaseInspection {
 
   @Override

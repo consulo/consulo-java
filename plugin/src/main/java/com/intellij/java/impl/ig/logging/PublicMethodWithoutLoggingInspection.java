@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.ig.logging;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.ide.impl.idea.codeInspection.ui.ListTable;
 import consulo.ide.impl.idea.codeInspection.ui.ListWrappingTableModel;
 import com.intellij.java.language.psi.*;
@@ -33,6 +34,7 @@ import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@ExtensionImpl
 public class PublicMethodWithoutLoggingInspection extends BaseInspection {
 
   @SuppressWarnings("PublicField")

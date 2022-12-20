@@ -19,6 +19,8 @@ import com.intellij.java.impl.ipp.base.MutablyNamedIntention;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.intellij.java.language.psi.*;
 import com.siyeh.IntentionPowerPackBundle;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 
@@ -27,6 +29,8 @@ import javax.annotation.Nullable;
 import java.util.HashSet;
 import java.util.Set;
 
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.ObscureThrownExceptionsIntention", fileExtensions = "java", categories = {"Java", "Other"})
 public class ObscureThrownExceptionsIntention extends MutablyNamedIntention {
 
   @Nonnull

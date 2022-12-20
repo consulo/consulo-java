@@ -15,21 +15,21 @@
  */
 package com.intellij.java.impl.ipp.shift;
 
-import javax.annotation.Nonnull;
-import com.intellij.java.language.psi.JavaTokenType;
-import com.intellij.java.language.psi.PsiAssignmentExpression;
-import com.intellij.java.language.psi.PsiBinaryExpression;
-import consulo.language.psi.PsiElement;
-import com.intellij.java.language.psi.PsiExpression;
-import com.intellij.java.language.psi.PsiJavaToken;
-import com.intellij.java.language.psi.PsiParenthesizedExpression;
-import consulo.language.ast.IElementType;
-import consulo.language.util.IncorrectOperationException;
-import com.siyeh.IntentionPowerPackBundle;
-import com.siyeh.ig.psiutils.ParenthesesUtils;
 import com.intellij.java.impl.ipp.base.MutablyNamedIntention;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
+import com.intellij.java.language.psi.*;
+import com.siyeh.IntentionPowerPackBundle;
+import com.siyeh.ig.psiutils.ParenthesesUtils;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.ast.IElementType;
+import consulo.language.editor.intention.IntentionMetaData;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
 
+import javax.annotation.Nonnull;
+
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.ReplaceMultiplyWithShiftIntention", fileExtensions = "java", categories = {"Java", "Shift Operation"})
 public class ReplaceMultiplyWithShiftIntention extends MutablyNamedIntention {
 
   protected String getTextForElement(PsiElement element) {

@@ -22,11 +22,14 @@ import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
+import consulo.annotation.component.ExtensionImpl;
+
 import javax.annotation.Nonnull;
 
 import java.util.HashSet;
 import java.util.Set;
 
+@ExtensionImpl
 public class StaticInheritanceInspection extends BaseInspection {
 
   @Nonnull

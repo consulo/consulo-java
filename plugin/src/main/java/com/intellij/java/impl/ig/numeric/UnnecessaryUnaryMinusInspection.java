@@ -18,6 +18,7 @@ package com.intellij.java.impl.ig.numeric;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.*;
 import consulo.project.Project;
@@ -30,6 +31,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import org.jetbrains.annotations.NonNls;
 
+@ExtensionImpl
 public class UnnecessaryUnaryMinusInspection extends BaseInspection {
 
   @Nonnull

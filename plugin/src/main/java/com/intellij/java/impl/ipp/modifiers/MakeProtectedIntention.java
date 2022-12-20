@@ -16,10 +16,14 @@
 package com.intellij.java.impl.ipp.modifiers;
 
 import com.intellij.java.language.psi.PsiModifier;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.intention.IntentionMetaData;
 
 /**
  * @author Bas Leijdekkers
  */
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.MakeProtectedIntention", fileExtensions = "java", categories = {"Java", "Modifiers"})
 public class MakeProtectedIntention extends ModifierIntention {
 
   @Override

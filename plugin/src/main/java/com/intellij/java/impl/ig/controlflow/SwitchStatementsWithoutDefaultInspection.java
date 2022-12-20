@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.ig.controlflow;
 
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
 import com.intellij.java.language.psi.*;
 import com.siyeh.InspectionGadgetsBundle;
@@ -24,6 +25,7 @@ import javax.annotation.Nonnull;
 
 import javax.swing.*;
 
+@ExtensionImpl
 public class SwitchStatementsWithoutDefaultInspection extends BaseInspection {
 
   @SuppressWarnings("PublicField")
