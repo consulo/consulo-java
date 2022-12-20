@@ -26,6 +26,7 @@ import consulo.module.Module;
 import consulo.ui.ex.awt.*;
 import consulo.util.io.FileUtil;
 import consulo.util.lang.ObjectUtil;
+import consulo.util.lang.lazy.LazyValue;
 import consulo.util.lang.ref.SoftReference;
 import consulo.util.xml.serializer.InvalidDataException;
 import consulo.util.xml.serializer.WriteExternalException;
@@ -44,6 +45,7 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.*;
+import java.util.function.Supplier;
 
 /**
  * @author max
@@ -55,7 +57,7 @@ public class Java15APIUsageInspection extends AbstractBaseJavaLocalInspectionToo
   private static final String EFFECTIVE_LL = "effectiveLL";
 
   private static final Map<LanguageLevel, Reference<Set<String>>> ourForbiddenAPI = new EnumMap<>(LanguageLevel.class);
-  private static final Set<String> ourIgnored16ClassesAPI = loadForbiddenApi("ignore16List.txt");
+  private static final Supplier<Set<String>> ourIgnored16ClassesAPI = LazyValue.notNull(() -> loadForbiddenApi("ignore16List.txt"));
   private static final Map<LanguageLevel, String> ourPresentableShortMessage = new EnumMap<>(LanguageLevel.class);
 
   private static final LanguageLevel ourHighestKnownLanguage = LanguageLevel.JDK_19;
@@ -368,7 +370,7 @@ public class Java15APIUsageInspection extends AbstractBaseJavaLocalInspectionToo
 
     private boolean isIgnored(PsiClass psiClass) {
       final String qualifiedName = psiClass.getQualifiedName();
-      return qualifiedName != null && ourIgnored16ClassesAPI.contains(qualifiedName);
+      return qualifiedName != null && ourIgnored16ClassesAPI.get().contains(qualifiedName);
     }
 
     @Override
