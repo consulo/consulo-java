@@ -22,7 +22,7 @@
 	<depends optional="true">com.intellij.regexp</depends>
 	<depends optional="true">com.intellij.images</depends>
 	<depends optional="true">com.intellij.spellchecker</depends>
-	<depends optional="true" config-file="Properties.xml">com.intellij.properties</depends>
+	<depends optional="true">com.intellij.properties</depends>
 	<depends optional="true">consulo.javascript</depends>
 	<depends>com.intellij.xml</depends>
 	<resource-bundle>messages.JavaBundle</resource-bundle>
@@ -39,8 +39,6 @@
 		<permission type="PROCESS_CREATE"/>
 	</permissions>
 
-	<import path="/META-INF/JvmByteCodeViewer.xml"/>
-	<import path="/META-INF/Coverage.xml"/>
 
 	<actions>
 		<group id="NewJavaSpecialFile">

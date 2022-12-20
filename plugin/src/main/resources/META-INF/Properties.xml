@@ -1,8 +1,0 @@
-<consulo-plugin>
-
-  <actions>
-    <action id="I18nize" class="com.intellij.java.impl.codeInspection.i18n.I18nizeAction">
-      <add-to-group group-id="RefactoringMenu" anchor="last" />
-    </action>
-  </actions>
-</consulo-plugin>

@@ -16,6 +16,10 @@
 package com.intellij.byteCodeViewer;
 
 import com.intellij.java.language.psi.PsiClassOwner;
+import consulo.annotation.component.ActionImpl;
+import consulo.annotation.component.ActionParentRef;
+import consulo.annotation.component.ActionRef;
+import consulo.annotation.component.ActionRefAnchor;
 import consulo.application.AllIcons;
 import consulo.application.ApplicationManager;
 import consulo.application.progress.ProgressIndicator;
@@ -51,7 +55,13 @@ import javax.annotation.Nullable;
  * @author anna
  * @since 5/4/12
  */
+@ActionImpl(id = "ByteCodeViewer", parents = @ActionParentRef(value = @ActionRef(id = "QuickActions"), anchor = ActionRefAnchor.AFTER,
+  relatedToAction = @ActionRef(id = "QuickJavaDoc")))
 public class ShowByteCodeAction extends AnAction {
+  public ShowByteCodeAction() {
+    super("Show Byte Code");
+  }
+
   @Override
   public void update(AnActionEvent e) {
     e.getPresentation().setEnabled(false);
@@ -96,10 +106,14 @@ public class ShowByteCodeAction extends AnAction {
 
       @Override
       public void run(@Nonnull ProgressIndicator indicator) {
-        if (ProjectRootManager.getInstance(project).getFileIndex().isInContent(virtualFile) && TranslatingCompilerFilesMonitor.getInstance().isMarkedForCompilation(project, virtualFile)) {
+        if (ProjectRootManager.getInstance(project).getFileIndex().isInContent(virtualFile) && TranslatingCompilerFilesMonitor.getInstance()
+                                                                                                                              .isMarkedForCompilation(
+                                                                                                                                project,
+                                                                                                                                virtualFile)) {
           myErrorMessage = "Unable to show byte code for '" + psiElementTitle + "'. Class file does not exist or is out-of-date.";
           myErrorTitle = "Class File Out-Of-Date";
-        } else {
+        }
+        else {
           myByteCode = ApplicationManager.getApplication().runReadAction(new Computable<String>() {
             @Override
             public String compute() {
@@ -127,7 +141,8 @@ public class ShowByteCodeAction extends AnAction {
         final ByteCodeViewerManager codeViewerManager = ByteCodeViewerManager.getInstance(project);
         if (codeViewerManager.hasActiveDockedDocWindow()) {
           codeViewerManager.doUpdateComponent(targetElement, myByteCode);
-        } else {
+        }
+        else {
           if (myByteCode == null) {
             Messages.showErrorDialog(project, "Unable to parse class file for '" + psiElementTitle + "'.", "Byte Code not Found");
             return;
@@ -143,9 +158,19 @@ public class ShowByteCodeAction extends AnAction {
             }
           };
 
-          final JBPopup popup = JBPopupFactory.getInstance().createComponentPopupBuilder(component, null).setRequestFocusCondition(project, NotLookupOrSearchCondition.INSTANCE).setProject
-              (project).setDimensionServiceKey(project, DocumentationManager.JAVADOC_LOCATION_AND_SIZE, false).setResizable(true).setMovable(true).setRequestFocus(LookupManager
-              .getActiveLookup(editor) == null).setTitle(psiElementTitle + " Bytecode").setCouldPin(pinCallback).createPopup();
+          final JBPopup popup = JBPopupFactory.getInstance()
+                                              .createComponentPopupBuilder(component, null)
+                                              .setRequestFocusCondition(project, NotLookupOrSearchCondition.INSTANCE)
+                                              .setProject
+                                                (project)
+                                              .setDimensionServiceKey(project, DocumentationManager.JAVADOC_LOCATION_AND_SIZE, false)
+                                              .setResizable(true)
+                                              .setMovable(true)
+                                              .setRequestFocus(LookupManager
+                                                                 .getActiveLookup(editor) == null)
+                                              .setTitle(psiElementTitle + " Bytecode")
+                                              .setCouldPin(pinCallback)
+                                              .createPopup();
           Disposer.register(popup, component);
 
           PopupPositionManager.positionPopupInBestPosition(popup, editor, dataContext);
@@ -159,7 +184,8 @@ public class ShowByteCodeAction extends AnAction {
     PsiElement psiElement = null;
     if (editor == null) {
       psiElement = dataContext.getData(CommonDataKeys.PSI_ELEMENT);
-    } else {
+    }
+    else {
       final PsiFile file = PsiUtilBase.getPsiFileInEditor(editor, project);
       final Editor injectedEditor = InjectedEditorManager.getInstance(project).getEditorForInjectedLanguageNoCommit(editor, file);
       if (injectedEditor != null) {
