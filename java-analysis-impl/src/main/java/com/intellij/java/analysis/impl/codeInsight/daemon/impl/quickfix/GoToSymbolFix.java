@@ -16,7 +16,7 @@
 package com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix;
 
 import consulo.codeEditor.Editor;
-import consulo.language.editor.intention.IntentionAction;
+import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.psi.NavigatablePsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.SmartPointerManager;
@@ -27,7 +27,7 @@ import org.jetbrains.annotations.Nls;
 
 import javax.annotation.Nonnull;
 
-public class GoToSymbolFix implements IntentionAction {
+public class GoToSymbolFix implements SyntheticIntentionAction {
   private final SmartPsiElementPointer<NavigatablePsiElement> myPointer;
   private final String myMessage;
 

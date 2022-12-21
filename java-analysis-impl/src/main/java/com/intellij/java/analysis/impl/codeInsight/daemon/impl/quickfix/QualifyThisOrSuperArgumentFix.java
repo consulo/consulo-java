@@ -26,7 +26,7 @@ package com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiExpression;
 import consulo.codeEditor.Editor;
-import consulo.language.editor.intention.IntentionAction;
+import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiManager;
 import consulo.language.util.IncorrectOperationException;
@@ -35,7 +35,7 @@ import consulo.project.Project;
 
 import javax.annotation.Nonnull;
 
-public abstract class QualifyThisOrSuperArgumentFix implements IntentionAction {
+public abstract class QualifyThisOrSuperArgumentFix implements SyntheticIntentionAction {
   protected static final Logger LOG = Logger.getInstance(QualifyThisOrSuperArgumentFix.class);
   protected final PsiExpression myExpression;
   protected final PsiClass myPsiClass;

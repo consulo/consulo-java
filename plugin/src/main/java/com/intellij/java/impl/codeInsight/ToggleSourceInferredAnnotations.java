@@ -15,26 +15,30 @@
  */
 package com.intellij.java.impl.codeInsight;
 
-import static com.intellij.java.impl.codeInsight.ExternalAnnotationsLineMarkerProvider.getAnnotationOwner;
+import com.intellij.java.impl.codeInsight.javadoc.AnnotationDocGenerator;
+import com.intellij.java.language.psi.PsiModifierListOwner;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.codeEditor.Editor;
+import consulo.java.impl.codeInsight.JavaCodeInsightSettings;
+import consulo.language.editor.DaemonCodeAnalyzer;
+import consulo.language.editor.intention.BaseIntentionAction;
+import consulo.language.editor.intention.IntentionMetaData;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+import consulo.util.collection.ContainerUtil;
+import org.jetbrains.annotations.Nls;
 
 import javax.annotation.Nonnull;
 
-import org.jetbrains.annotations.Nls;
-import consulo.language.editor.DaemonCodeAnalyzer;
-import consulo.language.editor.intention.BaseIntentionAction;
-import com.intellij.java.impl.codeInsight.javadoc.AnnotationDocGenerator;
-import consulo.codeEditor.Editor;
-import consulo.project.Project;
-import consulo.language.psi.PsiElement;
-import consulo.language.psi.PsiFile;
-import com.intellij.java.language.psi.PsiModifierListOwner;
-import consulo.language.util.IncorrectOperationException;
-import consulo.util.collection.ContainerUtil;
-import consulo.java.impl.codeInsight.JavaCodeInsightSettings;
+import static com.intellij.java.impl.codeInsight.ExternalAnnotationsLineMarkerProvider.getAnnotationOwner;
 
 /**
  * @author peter
  */
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.ToggleSourceInferredAnnotations", fileExtensions = "java", categories = {"Java", "Annotations"})
 public class ToggleSourceInferredAnnotations extends BaseIntentionAction
 {
 

@@ -18,7 +18,7 @@ package com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix;
 import com.intellij.java.language.psi.PsiExpression;
 import consulo.codeEditor.Editor;
 import consulo.language.editor.FileModificationService;
-import consulo.language.editor.intention.IntentionAction;
+import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
@@ -27,7 +27,7 @@ import org.jetbrains.annotations.Nls;
 
 import javax.annotation.Nonnull;
 
-public class ReplaceAssignmentFromVoidWithStatementIntentionAction implements IntentionAction {
+public class ReplaceAssignmentFromVoidWithStatementIntentionAction implements SyntheticIntentionAction {
   private final PsiElement myParent;
   private final PsiExpression myLExpr;
 

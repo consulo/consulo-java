@@ -15,25 +15,25 @@
  */
 package com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix;
 
-import javax.annotation.Nonnull;
-
-import consulo.java.analysis.impl.JavaQuickFixBundle;
-import consulo.language.editor.FileModificationService;
-import consulo.language.editor.intention.IntentionAction;
-import consulo.logging.Logger;
-import consulo.codeEditor.Editor;
-import consulo.project.Project;
 import com.intellij.java.language.psi.PsiEllipsisType;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiExpressionList;
-import consulo.language.psi.PsiFile;
 import com.intellij.java.language.psi.PsiType;
+import consulo.codeEditor.Editor;
+import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.language.editor.FileModificationService;
+import consulo.language.editor.intention.SyntheticIntentionAction;
+import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
+import consulo.logging.Logger;
+import consulo.project.Project;
+
+import javax.annotation.Nonnull;
 
 /**
  * @author ven
  */
-public abstract class MethodArgumentFix implements IntentionAction {
+public abstract class MethodArgumentFix implements SyntheticIntentionAction {
   private static final Logger LOG = Logger.getInstance(MethodArgumentFix.class);
 
   protected final PsiExpressionList myArgList;

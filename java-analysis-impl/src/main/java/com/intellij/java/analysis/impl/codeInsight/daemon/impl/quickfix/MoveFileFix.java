@@ -16,7 +16,7 @@
 package com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix;
 
 import consulo.codeEditor.Editor;
-import consulo.language.editor.intention.IntentionAction;
+import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
@@ -26,7 +26,7 @@ import org.jetbrains.annotations.Nls;
 import javax.annotation.Nonnull;
 import java.io.IOException;
 
-public class MoveFileFix implements IntentionAction {
+public class MoveFileFix implements SyntheticIntentionAction {
   private final VirtualFile myFile;
   private final VirtualFile myTarget;
   private final String myMessage;

@@ -23,6 +23,7 @@ package com.intellij.java.impl.refactoring.rename.naming;
 import com.intellij.java.impl.refactoring.JavaRefactoringSettings;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import consulo.language.editor.refactoring.rename.AutomaticRenamer;
 import consulo.language.editor.refactoring.rename.AutomaticRenamerFactory;
@@ -31,6 +32,7 @@ import consulo.java.impl.refactoring.JavaRefactoringBundle;
 
 import java.util.Collection;
 
+@ExtensionImpl
 public class AutomaticOverloadsRenamerFactory implements AutomaticRenamerFactory {
   @Override
   public boolean isApplicable(PsiElement element) {

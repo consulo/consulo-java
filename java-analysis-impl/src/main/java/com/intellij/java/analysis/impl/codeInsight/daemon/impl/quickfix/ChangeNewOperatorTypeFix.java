@@ -26,8 +26,8 @@ import consulo.document.util.TextRange;
 import consulo.document.util.UnfairTextRange;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.language.editor.FileModificationService;
-import consulo.language.editor.intention.IntentionAction;
 import consulo.language.editor.intention.QuickFixAction;
+import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.editor.rawHighlight.HighlightInfo;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
@@ -39,7 +39,7 @@ import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class ChangeNewOperatorTypeFix implements IntentionAction {
+public class ChangeNewOperatorTypeFix implements SyntheticIntentionAction {
   private final PsiType myType;
   private final PsiNewExpression myExpression;
 

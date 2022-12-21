@@ -24,21 +24,23 @@ import com.intellij.lang.properties.references.I18nizeQuickFixDialog;
 import com.intellij.lang.properties.references.I18nizeQuickFixModel;
 import consulo.application.AccessToken;
 import consulo.application.ApplicationManager;
+import consulo.language.editor.intention.SyntheticIntentionAction;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.util.lang.Pair;
 import consulo.util.lang.StringUtil;
-import consulo.language.psi.*;
-import consulo.language.util.IncorrectOperationException;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import java.util.List;
 
 /**
  * @author Maxim.Mossienko
  */
-public class JavaCreatePropertyFix extends CreatePropertyFix {
+public class JavaCreatePropertyFix extends CreatePropertyFix implements SyntheticIntentionAction {
   private static final Logger LOG = Logger.getInstance(JavaCreatePropertyFix.class);
 
   public JavaCreatePropertyFix() {}

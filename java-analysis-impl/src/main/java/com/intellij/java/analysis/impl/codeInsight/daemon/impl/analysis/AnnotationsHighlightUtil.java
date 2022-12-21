@@ -30,6 +30,7 @@ import consulo.codeEditor.Editor;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.intention.IntentionAction;
 import consulo.language.editor.intention.QuickFixAction;
+import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.editor.rawHighlight.HighlightInfo;
 import consulo.language.editor.rawHighlight.HighlightInfoType;
 import consulo.language.pattern.ElementPattern;
@@ -843,7 +844,7 @@ public class AnnotationsHighlightUtil {
     }
   }
 
-  private static class DeleteAnnotationAction implements IntentionAction {
+  private static class DeleteAnnotationAction implements SyntheticIntentionAction {
     private final PsiAnnotation myAnnotation;
 
     private DeleteAnnotationAction(PsiAnnotation annotation) {

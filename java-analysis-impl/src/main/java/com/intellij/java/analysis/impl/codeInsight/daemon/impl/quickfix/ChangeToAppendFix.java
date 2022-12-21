@@ -23,7 +23,7 @@ import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.ast.IElementType;
 import consulo.language.editor.FileModificationService;
-import consulo.language.editor.intention.IntentionAction;
+import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiManager;
 import consulo.language.util.IncorrectOperationException;
@@ -36,7 +36,7 @@ import javax.annotation.Nullable;
 /**
  * @author Bas Leijdekkers
  */
-public class ChangeToAppendFix implements IntentionAction {
+public class ChangeToAppendFix implements SyntheticIntentionAction {
 
   private final IElementType myTokenType;
   private final PsiType myLhsType;

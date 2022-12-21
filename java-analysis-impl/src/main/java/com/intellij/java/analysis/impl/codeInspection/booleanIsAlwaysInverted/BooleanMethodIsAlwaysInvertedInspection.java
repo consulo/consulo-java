@@ -7,6 +7,7 @@ import com.intellij.java.analysis.codeInspection.reference.RefJavaVisitor;
 import com.intellij.java.analysis.codeInspection.reference.RefMethod;
 import com.intellij.java.analysis.refactoring.JavaRefactoringActionHandlerFactory;
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.application.ApplicationManager;
 import consulo.dataContext.DataManager;
 import consulo.language.ast.IElementType;
@@ -16,6 +17,7 @@ import consulo.language.editor.inspection.reference.RefEntity;
 import consulo.language.editor.inspection.reference.RefGraphAnnotator;
 import consulo.language.editor.inspection.reference.RefManager;
 import consulo.language.editor.inspection.scheme.InspectionManager;
+import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.editor.rawHighlight.HighlightDisplayLevel;
 import consulo.language.editor.refactoring.action.RefactoringActionHandler;
 import consulo.language.editor.scope.AnalysisScope;
@@ -34,6 +36,8 @@ import java.util.Collection;
  * User: anna
  * Date: 06-Jan-2006
  */
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.BooleanMethodIsAlwaysInvertedInspection", fileExtensions = "java", categories = {"Java", "Boolean"})
 public class BooleanMethodIsAlwaysInvertedInspection extends GlobalJavaInspectionTool {
   private static final Key<Boolean> ALWAYS_INVERTED = Key.create("ALWAYS_INVERTED_METHOD");
 

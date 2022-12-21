@@ -19,7 +19,7 @@ import com.intellij.java.language.psi.*;
 import consulo.codeEditor.Editor;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.FileModificationService;
-import consulo.language.editor.intention.IntentionAction;
+import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
@@ -30,7 +30,7 @@ import consulo.util.lang.StringUtil;
 import javax.annotation.Nonnull;
 import java.util.List;
 
-public class DeleteRepeatedInterfaceFix implements IntentionAction {
+public class DeleteRepeatedInterfaceFix implements SyntheticIntentionAction {
   private final PsiTypeElement myConjunct;
   private final List<PsiTypeElement> myConjList;
 

@@ -19,6 +19,7 @@ import com.intellij.java.execution.impl.JavaTestConfigurationBase;
 import com.intellij.java.execution.impl.RunConfigurationExtension;
 import com.intellij.java.execution.impl.testframework.JavaTestLocator;
 import com.intellij.rt.coverage.data.ProjectData;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.component.messagebus.MessageBusConnection;
 import consulo.disposer.Disposable;
 import consulo.disposer.Disposer;
@@ -50,6 +51,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
+@ExtensionImpl
 public class TestDiscoveryExtension extends RunConfigurationExtension {
   public static final boolean TESTDISCOVERY_ENABLED = Boolean.valueOf(Platform.current().jvm().getRuntimeProperty("testDiscovery.enabled"));
 

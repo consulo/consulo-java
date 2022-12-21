@@ -30,8 +30,8 @@ import consulo.codeEditor.Editor;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.intention.HighPriorityAction;
-import consulo.language.editor.intention.IntentionAction;
 import consulo.language.editor.intention.QuickFixAction;
+import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.editor.rawHighlight.HighlightInfo;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
@@ -43,7 +43,7 @@ import consulo.util.lang.StringUtil;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class ChangeTypeArgumentsFix implements IntentionAction, HighPriorityAction {
+public class ChangeTypeArgumentsFix implements SyntheticIntentionAction, HighPriorityAction {
   private final PsiMethod myTargetMethod;
   private final PsiClass myPsiClass;
   private final PsiExpression[] myExpressions;

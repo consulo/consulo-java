@@ -19,8 +19,8 @@ import com.intellij.java.language.psi.*;
 import consulo.codeEditor.Editor;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.language.editor.FileModificationService;
-import consulo.language.editor.intention.IntentionAction;
 import consulo.language.editor.intention.QuickFixAction;
+import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.editor.rawHighlight.HighlightInfo;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
@@ -37,7 +37,7 @@ import java.util.Set;
 /**
  * @author ven
  */
-public class WrapExpressionFix implements IntentionAction {
+public class WrapExpressionFix implements SyntheticIntentionAction {
 
   private final PsiExpression myExpression;
   private final PsiClassType myExpectedType;

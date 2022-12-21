@@ -32,6 +32,7 @@ import consulo.project.Project;
 
 import javax.annotation.Nullable;
 
+@SuppressWarnings("ExtensionImplIsNotAnnotatedInspection")
 public class DefaultResourceBundleManager extends ResourceBundleManager {
   public DefaultResourceBundleManager(final Project project) {
     super(project);

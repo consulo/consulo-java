@@ -25,12 +25,14 @@ package com.intellij.java.impl.codeInsight.intention.impl;
 import com.intellij.java.language.patterns.PsiJavaPatterns;
 import com.intellij.java.language.patterns.PsiMethodPattern;
 import com.intellij.java.language.psi.*;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
 import consulo.ide.impl.idea.ui.ColorChooser;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.WriteCommandAction;
+import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiManager;
 import consulo.language.psi.util.PsiTreeUtil;
@@ -47,6 +49,8 @@ import java.awt.*;
  * @author spleaner
  * @author Konstantin Bulenkov
  */
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "id.ColorChooserIntentionAction", fileExtensions = "java", categories = {"Java", "Other"})
 public class ColorChooserIntentionAction extends BaseColorIntentionAction {
   private static final PsiMethodPattern DECODE_METHOD = PsiJavaPatterns.psiMethod().definedInClass(JAVA_AWT_COLOR).withName("decode");
 

@@ -20,8 +20,8 @@ import com.intellij.java.language.psi.impl.source.resolve.DefaultParameterTypeIn
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.codeEditor.Editor;
-import consulo.language.editor.intention.IntentionAction;
 import consulo.language.editor.intention.QuickFixAction;
+import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.editor.rawHighlight.HighlightInfo;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
@@ -37,7 +37,7 @@ import javax.annotation.Nullable;
  * User: anna
  * Date: 2/17/12
  */
-public class AddTypeArgumentsConditionalFix implements IntentionAction {
+public class AddTypeArgumentsConditionalFix implements SyntheticIntentionAction {
   private static final Logger LOG = Logger.getInstance(AddTypeArgumentsConditionalFix.class);
 
   private final PsiSubstitutor mySubstitutor;

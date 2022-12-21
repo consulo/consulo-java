@@ -18,6 +18,7 @@ package com.intellij.java.impl.codeInspection.duplicateStringLiteral;
 import com.intellij.java.analysis.codeInspection.GroupNames;
 import com.intellij.java.analysis.codeInspection.SuppressManager;
 import com.intellij.java.analysis.impl.codeInspection.ex.BaseLocalInspectionTool;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.java.analysis.impl.util.JavaI18nUtil;
 import com.intellij.java.impl.refactoring.introduceField.IntroduceConstantHandlerImpl;
 import com.intellij.java.impl.refactoring.util.occurrences.BaseOccurrenceManager;
@@ -60,6 +61,7 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.function.IntPredicate;
 
+@ExtensionImpl
 public class DuplicateStringLiteralInspection extends BaseLocalInspectionTool {
   private static final Logger LOG = Logger.getInstance(DuplicateStringLiteralInspection.class);
   @SuppressWarnings({"WeakerAccess"})

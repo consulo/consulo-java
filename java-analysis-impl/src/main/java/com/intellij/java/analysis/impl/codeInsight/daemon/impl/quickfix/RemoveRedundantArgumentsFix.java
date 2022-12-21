@@ -22,8 +22,8 @@ import consulo.codeEditor.Editor;
 import consulo.document.util.TextRange;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.language.editor.FileModificationService;
-import consulo.language.editor.intention.IntentionAction;
 import consulo.language.editor.intention.QuickFixAction;
+import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.editor.rawHighlight.HighlightInfo;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
@@ -37,7 +37,7 @@ import java.util.Arrays;
 /**
  * @author Danila Ponomarenko
  */
-public class RemoveRedundantArgumentsFix implements IntentionAction {
+public class RemoveRedundantArgumentsFix implements SyntheticIntentionAction {
   private final PsiMethod myTargetMethod;
   private final PsiExpression[] myArguments;
   private final PsiSubstitutor mySubstitutor;

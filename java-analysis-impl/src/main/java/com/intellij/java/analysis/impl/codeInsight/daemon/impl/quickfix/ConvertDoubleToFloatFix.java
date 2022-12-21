@@ -19,8 +19,8 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.codeEditor.Editor;
 import consulo.document.util.TextRange;
-import consulo.language.editor.intention.IntentionAction;
 import consulo.language.editor.intention.QuickFixAction;
+import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.editor.rawHighlight.HighlightInfo;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
@@ -35,7 +35,7 @@ import javax.annotation.Nullable;
  * User: anna
  * Date: 2/10/12
  */
-public class ConvertDoubleToFloatFix implements IntentionAction {
+public class ConvertDoubleToFloatFix implements SyntheticIntentionAction {
   private final PsiExpression myExpression;
 
   public ConvertDoubleToFloatFix(PsiExpression expression) {

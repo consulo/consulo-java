@@ -22,7 +22,7 @@ import com.intellij.java.language.psi.PsiTypeElement;
 import consulo.codeEditor.Editor;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.FileModificationService;
-import consulo.language.editor.intention.IntentionAction;
+import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
@@ -38,7 +38,7 @@ import java.util.List;
  * User: anna
  * Date: 10/31/13
  */
-public class FlipIntersectionSidesFix implements IntentionAction {
+public class FlipIntersectionSidesFix implements SyntheticIntentionAction {
   private static final Logger LOG = Logger.getInstance(FlipIntersectionSidesFix.class);
   private final String myClassName;
   private final List<PsiTypeElement> myConjuncts;

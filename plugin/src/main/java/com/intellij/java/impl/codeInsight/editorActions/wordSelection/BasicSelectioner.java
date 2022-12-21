@@ -24,7 +24,7 @@ import consulo.language.psi.PsiWhiteSpace;
 import consulo.xml.psi.xml.XmlElement;
 import consulo.xml.psi.xml.XmlToken;
 
-public class BasicSelectioner extends ExtendWordSelectionHandlerBase {
+public abstract class BasicSelectioner extends ExtendWordSelectionHandlerBase {
 
   @Override
   public boolean canSelect(PsiElement e) {

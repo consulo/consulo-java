@@ -5,8 +5,10 @@ import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.analysis.impl.codeInsight.DefaultInferredAnnotationProvider;
 import com.intellij.java.language.codeInsight.ExternalAnnotationsManager;
 import com.intellij.java.impl.codeInsight.ExternalAnnotationsManagerImpl;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.DaemonCodeAnalyzer;
 import com.intellij.java.analysis.impl.codeInsight.intention.AddAnnotationPsiFix;
+import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.editor.intention.LowPriorityAction;
 import consulo.language.editor.intention.BaseIntentionAction;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.JavaMethodContractUtil;
@@ -38,6 +40,8 @@ import java.util.Collections;
 /**
  * @author peter
  */
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "id.EditContractIntention", fileExtensions = "java", categories = {"Java", "Annotations"})
 public class EditContractIntention extends BaseIntentionAction implements LowPriorityAction
 {
 	private static final String ourPrompt = "<html>Please specify the contract text<p>" +

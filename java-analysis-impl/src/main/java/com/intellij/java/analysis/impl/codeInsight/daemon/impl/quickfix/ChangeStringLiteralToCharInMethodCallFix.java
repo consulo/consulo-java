@@ -21,8 +21,8 @@ import com.intellij.java.language.psi.infos.MethodCandidateInfo;
 import consulo.codeEditor.Editor;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.language.editor.FileModificationService;
-import consulo.language.editor.intention.IntentionAction;
 import consulo.language.editor.intention.QuickFixAction;
+import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.editor.rawHighlight.HighlightInfo;
 import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
@@ -35,7 +35,7 @@ import javax.annotation.Nullable;
 import java.util.HashSet;
 import java.util.Set;
 
-public class ChangeStringLiteralToCharInMethodCallFix implements IntentionAction {
+public class ChangeStringLiteralToCharInMethodCallFix implements SyntheticIntentionAction {
   private final PsiLiteralExpression myLiteral;
   private final PsiCall myCall;
 

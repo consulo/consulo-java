@@ -20,7 +20,7 @@ import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiReferenceExpression;
 import com.intellij.java.language.psi.PsiThisExpression;
 import consulo.codeEditor.Editor;
-import consulo.language.editor.intention.IntentionAction;
+import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiManager;
@@ -32,7 +32,7 @@ import javax.annotation.Nonnull;
 /**
 * User: anna
 */
-class QualifyWithThisFix implements IntentionAction {
+class QualifyWithThisFix implements SyntheticIntentionAction {
   private final PsiClass myContainingClass;
   private final PsiElement myExpression;
 

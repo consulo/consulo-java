@@ -24,7 +24,7 @@ import consulo.content.bundle.Sdk;
 import consulo.java.language.module.extension.JavaModuleExtension;
 import consulo.java.language.module.extension.JavaMutableModuleExtension;
 import consulo.language.editor.CodeInsightBundle;
-import consulo.language.editor.intention.IntentionAction;
+import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
 import consulo.language.util.ModuleUtilCore;
@@ -41,7 +41,7 @@ import javax.annotation.Nullable;
 /**
  * @author cdr
  */
-public class IncreaseLanguageLevelFix implements IntentionAction {
+public class IncreaseLanguageLevelFix implements SyntheticIntentionAction {
   private static final Logger LOG = Logger.getInstance(IncreaseLanguageLevelFix.class);
 
   private final LanguageLevel myLevel;

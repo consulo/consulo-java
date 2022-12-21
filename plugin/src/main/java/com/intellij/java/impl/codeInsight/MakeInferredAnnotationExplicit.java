@@ -15,8 +15,6 @@
  */
 package com.intellij.java.impl.codeInsight;
 
-import consulo.language.editor.FileModificationService;
-import consulo.language.editor.intention.BaseIntentionAction;
 import com.intellij.java.impl.codeInspection.inferNullity.InferNullityAnnotationsAction;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.LanguageLevel;
@@ -26,20 +24,24 @@ import com.intellij.java.language.codeInsight.NullableNotNullManager;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.language.editor.WriteCommandAction;
+import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
-import consulo.module.Module;
+import consulo.language.editor.FileModificationService;
+import consulo.language.editor.WriteCommandAction;
+import consulo.language.editor.intention.BaseIntentionAction;
+import consulo.language.editor.intention.IntentionMetaData;
+import consulo.language.psi.PsiCompiledElement;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiUtilCore;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.util.IncorrectOperationException;
 import consulo.language.util.ModuleUtilCore;
+import consulo.module.Module;
 import consulo.project.DumbService;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.VirtualFile;
-import consulo.language.psi.PsiCompiledElement;
-import consulo.language.psi.PsiElement;
-import consulo.language.psi.PsiFile;
-import consulo.language.psi.scope.GlobalSearchScope;
-import consulo.language.psi.PsiUtilCore;
-import consulo.language.util.IncorrectOperationException;
 import org.jetbrains.annotations.Nls;
 
 import javax.annotation.Nonnull;
@@ -48,6 +50,8 @@ import java.util.Collections;
 /**
  * @author peter
  */
+@ExtensionImpl
+@IntentionMetaData(ignoreId = "java.MakeInferredAnnotationExplicit", fileExtensions = "java", categories = {"Java", "Annotations"})
 public class MakeInferredAnnotationExplicit extends BaseIntentionAction {
 
   @Nls
