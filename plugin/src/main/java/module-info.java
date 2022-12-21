@@ -89,7 +89,6 @@ open module consulo.java {
   exports com.intellij.java.impl.codeInspection.duplicateThrows;
   exports com.intellij.java.impl.codeInspection.emptyMethod;
   exports com.intellij.java.impl.codeInspection.ex;
-  exports com.intellij.java.impl.codeInspection.i18n;
   exports com.intellij.java.impl.codeInspection.inconsistentLanguageLevel;
   exports com.intellij.java.impl.codeInspection.inferNullity;
   exports com.intellij.java.impl.codeInspection.inheritance;
