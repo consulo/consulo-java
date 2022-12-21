@@ -44,6 +44,8 @@ public class CreateMethodFromMethodReferenceFix extends CreateFromUsageBaseFix {
   public CreateMethodFromMethodReferenceFix(@Nonnull PsiMethodReferenceExpression methodRef) {
     myMethodReferenceExpression = SmartPointerManager.getInstance(methodRef.getProject())
         .createSmartPsiElementPointer(methodRef);
+
+    setText(JavaQuickFixBundle.message("create.method.from.usage.family"));
   }
 
   @Override
@@ -164,12 +166,6 @@ public class CreateMethodFromMethodReferenceFix extends CreateFromUsageBaseFix {
   @Override
   protected boolean isValidElement(PsiElement element) {
     return false;
-  }
-
-  @Override
-  @Nonnull
-  public String getFamilyName() {
-    return JavaQuickFixBundle.message("create.method.from.usage.family");
   }
 
   @Nullable

@@ -53,10 +53,7 @@ import consulo.language.editor.impl.intention.RenameFileFix;
 import consulo.language.editor.inspection.*;
 import consulo.language.editor.inspection.scheme.InspectionProfile;
 import consulo.language.editor.inspection.scheme.InspectionProjectProfileManager;
-import consulo.language.editor.intention.IntentionAction;
-import consulo.language.editor.intention.IntentionManager;
-import consulo.language.editor.intention.QuickFixAction;
-import consulo.language.editor.intention.QuickFixActionRegistrar;
+import consulo.language.editor.intention.*;
 import consulo.language.editor.rawHighlight.HighlightDisplayKey;
 import consulo.language.editor.rawHighlight.HighlightInfo;
 import consulo.language.editor.rawHighlight.HighlightInfoType;
@@ -673,17 +670,11 @@ public class QuickFixFactoryImpl extends QuickFixFactory {
   public IntentionAction createOptimizeImportsFix(final boolean onTheFly) {
     final OptimizeImportsFix fix = new OptimizeImportsFix();
 
-    return new IntentionAction() {
+    return new SyntheticIntentionAction() {
       @Nonnull
       @Override
       public String getText() {
         return fix.getText();
-      }
-
-      @Nonnull
-      @Override
-      public String getFamilyName() {
-        return fix.getFamilyName();
       }
 
       @Override
@@ -736,8 +727,7 @@ public class QuickFixFactoryImpl extends QuickFixFactory {
       qualifiedName),
                                                                                    JavaQuickFixBundle
                                                                                      .message
-                                                                                       ("fix" +
-                                                                                          ".unused.symbol.injection.family"),
+                                                                                       ("fix.unused.symbol.injection.family"),
                                                                                    entryPointsManager.ADDITIONAL_ANNOTATIONS,
                                                                                    qualifiedName);
   }

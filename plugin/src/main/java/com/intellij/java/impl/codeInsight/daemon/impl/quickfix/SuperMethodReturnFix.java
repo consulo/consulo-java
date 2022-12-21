@@ -28,12 +28,13 @@ import consulo.codeEditor.Editor;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.intention.IntentionAction;
+import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.psi.PsiFile;
 import consulo.project.Project;
 
 import javax.annotation.Nonnull;
 
-public class SuperMethodReturnFix implements IntentionAction {
+public class SuperMethodReturnFix implements SyntheticIntentionAction {
 
   private final PsiType mySuperMethodType;
   private final PsiMethod mySuperMethod;
@@ -54,12 +55,6 @@ public class SuperMethodReturnFix implements IntentionAction {
     return JavaQuickFixBundle.message("fix.super.method.return.type.text",
                                   name,
                                   JavaHighlightUtil.formatType(mySuperMethodType));
-  }
-
-  @Override
-  @Nonnull
-  public String getFamilyName() {
-    return JavaQuickFixBundle.message("fix.super.method.return.type.family");
   }
 
   @Override

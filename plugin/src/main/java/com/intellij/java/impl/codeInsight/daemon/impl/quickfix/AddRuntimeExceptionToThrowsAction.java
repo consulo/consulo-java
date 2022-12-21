@@ -102,11 +102,4 @@ public class AddRuntimeExceptionToThrowsAction implements IntentionAction {
     int offset = editor.getCaretModel().getOffset();
     return file.findElementAt(offset);
   }
-
-
-  @Override
-  @Nonnull
-  public String getFamilyName() {
-    return JavaQuickFixBundle.message("add.runtime.exception.to.throws.family");
-  }
 }

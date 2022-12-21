@@ -42,14 +42,8 @@ public class RedundantLambdaParameterTypeIntention extends PsiElementBaseIntenti
 
   @Nonnull
   @Override
-  public String getFamilyName() {
-    return "Remove redundant types";
-  }
-
-  @Nonnull
-  @Override
   public String getText() {
-    return getFamilyName();
+    return "Remove redundant types";
   }
 
   @Override

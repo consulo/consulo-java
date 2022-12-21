@@ -22,27 +22,25 @@
  */
 package com.intellij.java.impl.codeInsight.intention.impl;
 
-import consulo.language.editor.CodeInsightBundle;
-import consulo.language.editor.intention.BaseIntentionAction;
 import com.intellij.java.analysis.impl.codeInsight.intention.AddAnnotationFix;
 import com.intellij.java.analysis.impl.codeInsight.intention.AddAnnotationPsiFix;
 import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.codeEditor.Editor;
+import consulo.language.codeStyle.CodeStyleSettingsManager;
+import consulo.language.editor.CodeInsightBundle;
+import consulo.language.editor.intention.BaseIntentionAction;
+import consulo.language.psi.PsiFile;
+import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 import consulo.util.lang.Pair;
-import consulo.language.psi.PsiFile;
-import consulo.language.codeStyle.CodeStyleSettingsManager;
-import consulo.language.util.IncorrectOperationException;
 
 import javax.annotation.Nonnull;
 
 public abstract class AddAnnotationIntention extends BaseIntentionAction {
-  @Nonnull
-  @Override
-  public String getFamilyName() {
-    return CodeInsightBundle.message("intention.add.annotation.family");
+  public AddAnnotationIntention() {
+    setText(CodeInsightBundle.message("intention.add.annotation.family"));
   }
 
   @Nonnull
@@ -67,7 +65,7 @@ public abstract class AddAnnotationIntention extends BaseIntentionAction {
     }
 
     if (owner instanceof PsiMethod) {
-      PsiType returnType = ((PsiMethod) owner).getReturnType();
+      PsiType returnType = ((PsiMethod)owner).getReturnType();
 
       return returnType != null && !(returnType instanceof PsiPrimitiveType);
     }

@@ -19,6 +19,7 @@ import javax.annotation.Nonnull;
 
 import consulo.application.AllIcons;
 import consulo.codeEditor.Editor;
+import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.project.Project;
 import consulo.language.psi.PsiElement;
 import consulo.language.editor.refactoring.action.BaseRefactoringIntentionAction;
@@ -30,7 +31,7 @@ import consulo.ui.image.Image;
  * User: anna
  * Date: 9/5/11
  */
-public class RunRefactoringAction extends BaseRefactoringIntentionAction {
+public class RunRefactoringAction extends BaseRefactoringIntentionAction implements SyntheticIntentionAction {
   private final RefactoringActionHandler myHandler;
   private final String myCommandName;
 
@@ -43,12 +44,6 @@ public class RunRefactoringAction extends BaseRefactoringIntentionAction {
   @Override
   public String getText() {
     return myCommandName;
-  }
-
-  @Nonnull
-  @Override
-  public final String getFamilyName() {
-    return getText();
   }
 
   @Override

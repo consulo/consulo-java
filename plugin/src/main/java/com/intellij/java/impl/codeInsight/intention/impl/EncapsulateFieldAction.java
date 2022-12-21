@@ -43,12 +43,6 @@ public class EncapsulateFieldAction extends BaseRefactoringIntentionAction {
     return CodeInsightBundle.message("intention.encapsulate.field.text");
   }
 
-  @Nonnull
-  @Override
-  public final String getFamilyName() {
-    return getText();
-  }
-
   @Override
   public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
     if (element instanceof SyntheticElement){

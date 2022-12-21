@@ -23,6 +23,7 @@ import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.intention.IntentionAction;
+import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
@@ -34,7 +35,7 @@ import javax.annotation.Nullable;
 /**
  * @author Danila Ponomarenko
  */
-public class ReplaceWithListAccessFix implements IntentionAction {
+public class ReplaceWithListAccessFix implements SyntheticIntentionAction {
   private final PsiArrayAccessExpression myArrayAccessExpression;
 
   public ReplaceWithListAccessFix(PsiArrayAccessExpression arrayAccessExpression) {
@@ -45,12 +46,6 @@ public class ReplaceWithListAccessFix implements IntentionAction {
   @Override
   public String getText() {
     return JavaQuickFixBundle.message("replace.with.list.access.text");
-  }
-
-  @Nonnull
-  @Override
-  public String getFamilyName() {
-    return getText();
   }
 
   @Override

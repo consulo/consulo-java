@@ -19,6 +19,7 @@ import consulo.language.editor.FileModificationService;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.language.editor.intention.IntentionAction;
 import consulo.codeEditor.Editor;
+import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.project.Project;
 import com.intellij.java.language.psi.PsiCodeBlock;
 import consulo.language.psi.PsiFile;
@@ -29,7 +30,7 @@ import javax.annotation.Nonnull;
 /**
  * @author ven
  */
-public class DeleteMethodBodyFix implements IntentionAction {
+public class DeleteMethodBodyFix implements SyntheticIntentionAction {
   private final PsiMethod myMethod;
 
   public DeleteMethodBodyFix(PsiMethod method) {
@@ -40,12 +41,6 @@ public class DeleteMethodBodyFix implements IntentionAction {
   @Nonnull
   public String getText() {
     return JavaQuickFixBundle.message("delete.body.text");
-  }
-
-  @Override
-  @Nonnull
-  public String getFamilyName() {
-    return JavaQuickFixBundle.message("delete.body.family");
   }
 
   @Override

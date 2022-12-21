@@ -41,6 +41,10 @@ import javax.annotation.Nullable;
 public class ReplaceCastWithVariableAction extends PsiElementBaseIntentionAction {
   private String myReplaceVariableName = "";
 
+  public ReplaceCastWithVariableAction() {
+    setText(CodeInsightBundle.message("intention.replace.cast.with.var.family"));
+  }
+
   @Override
   public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
     final PsiTypeCastExpression typeCastExpression = PsiTreeUtil.getParentOfType(element, PsiTypeCastExpression.class);
@@ -173,11 +177,5 @@ public class ReplaceCastWithVariableAction extends PsiElementBaseIntentionAction
     }
 
     return null;
-  }
-
-  @Nonnull
-  @Override
-  public String getFamilyName() {
-    return CodeInsightBundle.message("intention.replace.cast.with.var.family");
   }
 }

@@ -41,13 +41,10 @@ public class MakeTypeGenericAction extends PsiElementBaseIntentionAction {
 
   @Override
   @Nonnull
-  public String getFamilyName() {
-    return CodeInsightBundle.message("intention.make.type.generic.family");
-  }
-
-  @Override
-  @Nonnull
   public String getText() {
+    if (variableName == null || newTypeName == null) {
+      return CodeInsightBundle.message("intention.make.type.generic.family");
+    }
     return CodeInsightBundle.message("intention.make.type.generic.text", variableName, newTypeName);
   }
 

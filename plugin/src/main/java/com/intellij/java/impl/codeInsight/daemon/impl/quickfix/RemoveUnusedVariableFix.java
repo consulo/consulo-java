@@ -57,12 +57,6 @@ public class RemoveUnusedVariableFix implements SyntheticIntentionAction {
   }
 
   @Override
-  @Nonnull
-  public String getFamilyName() {
-    return JavaQuickFixBundle.message("remove.unused.variable.family");
-  }
-
-  @Override
   public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     return
       myVariable != null

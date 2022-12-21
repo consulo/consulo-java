@@ -4,6 +4,7 @@ package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 import com.intellij.java.language.psi.*;
 import consulo.codeEditor.Editor;
 import consulo.language.editor.intention.BaseIntentionAction;
+import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiWhiteSpace;
@@ -17,18 +18,11 @@ import org.jetbrains.annotations.Nls;
 import javax.annotation.Nonnull;
 import java.util.Objects;
 
-public class WrapSwitchRuleStatementsIntoBlockFix extends BaseIntentionAction {
+public class WrapSwitchRuleStatementsIntoBlockFix extends BaseIntentionAction implements SyntheticIntentionAction {
   private final PsiSwitchLabeledRuleStatement myRuleStatement;
 
   public WrapSwitchRuleStatementsIntoBlockFix(PsiSwitchLabeledRuleStatement ruleStatement) {
     myRuleStatement = ruleStatement;
-  }
-
-  @Nls(capitalization = Nls.Capitalization.Sentence)
-  @Nonnull
-  @Override
-  public String getFamilyName() {
-    return "Create block";
   }
 
   @Override
@@ -44,7 +38,7 @@ public class WrapSwitchRuleStatementsIntoBlockFix extends BaseIntentionAction {
     }
     PsiStatement sibling = PsiTreeUtil.getNextSiblingOfType(myRuleStatement, PsiStatement.class);
     if (sibling == null || sibling instanceof PsiSwitchLabelStatementBase) {
-      setText(getFamilyName());
+      setText("Create block");
     } else {
       setText("Wrap with block");
     }

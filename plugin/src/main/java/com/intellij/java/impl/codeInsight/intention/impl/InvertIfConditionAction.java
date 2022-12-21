@@ -78,12 +78,6 @@ public class InvertIfConditionAction extends PsiElementBaseIntentionAction {
   @Override
   @Nonnull
   public String getText() {
-    return getFamilyName();
-  }
-
-  @Override
-  @Nonnull
-  public String getFamilyName() {
     return CodeInsightBundle.message("intention.invert.if.condition");
   }
 

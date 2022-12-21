@@ -29,6 +29,7 @@ import consulo.ide.impl.idea.util.ArrayUtilRt;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.TargetElementUtil;
 import consulo.language.editor.intention.PsiElementBaseIntentionAction;
+import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
@@ -39,7 +40,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Collection;
 
-public class SurroundWithArrayFix extends PsiElementBaseIntentionAction {
+public class SurroundWithArrayFix extends PsiElementBaseIntentionAction implements SyntheticIntentionAction {
   private final PsiCall myMethodCall;
   @Nullable private final PsiExpression myExpression;
 
@@ -52,12 +53,6 @@ public class SurroundWithArrayFix extends PsiElementBaseIntentionAction {
   @Nonnull
   public String getText() {
     return "Surround with array initialization";
-  }
-
-  @Override
-  @Nonnull
-  public String getFamilyName() {
-    return getText();
   }
 
   @Override

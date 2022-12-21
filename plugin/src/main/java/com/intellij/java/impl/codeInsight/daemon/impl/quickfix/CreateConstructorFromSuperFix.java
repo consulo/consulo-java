@@ -32,6 +32,7 @@ public class CreateConstructorFromSuperFix extends CreateConstructorFromThisOrSu
 
   public CreateConstructorFromSuperFix(PsiMethodCallExpression methodCall) {
     super(methodCall);
+    setText(JavaQuickFixBundle.message("create.constructor.from.super.call.family"));
   }
 
   @Override
@@ -56,11 +57,5 @@ public class CreateConstructorFromSuperFix extends CreateConstructorFromThisOrSu
       return Collections.singletonList(aClass);
     }
     return Collections.emptyList();
-  }
-
-  @Override
-  @Nonnull
-  public String getFamilyName() {
-    return JavaQuickFixBundle.message("create.constructor.from.super.call.family");
   }
 }

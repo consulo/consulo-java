@@ -284,12 +284,6 @@ public class CreateClassFromNewFix extends CreateFromUsageBaseFix {
   }
 
   @Override
-  @Nonnull
-  public String getFamilyName() {
-    return JavaQuickFixBundle.message("create.class.from.new.family");
-  }
-
-  @Override
   protected boolean canBeTargetClass(PsiClass psiClass) {
     return false;
   }

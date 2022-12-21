@@ -32,6 +32,7 @@ import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.completion.lookup.LookupElement;
 import consulo.language.editor.intention.HighPriorityAction;
+import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.editor.template.*;
 import consulo.language.editor.template.event.TemplateEditingAdapter;
 import consulo.language.psi.*;
@@ -50,7 +51,7 @@ import java.util.Set;
 /**
  * @author ven
  */
-public class CreatePropertyFromUsageFix extends CreateFromUsageBaseFix implements HighPriorityAction {
+public class CreatePropertyFromUsageFix extends CreateFromUsageBaseFix implements HighPriorityAction, SyntheticIntentionAction {
   private static final Logger LOG = Logger.getInstance(CreatePropertyFromUsageFix.class);
   @NonNls private static final String FIELD_VARIABLE = "FIELD_NAME_VARIABLE";
   @NonNls private static final String TYPE_VARIABLE = "FIELD_TYPE_VARIABLE";
@@ -60,15 +61,10 @@ public class CreatePropertyFromUsageFix extends CreateFromUsageBaseFix implement
 
   public CreatePropertyFromUsageFix(PsiMethodCallExpression methodCall) {
     myMethodCall = methodCall;
+    setText(JavaQuickFixBundle.message("create.property.from.usage.family"));
   }
 
   protected final PsiMethodCallExpression myMethodCall;
-
-  @Override
-  @Nonnull
-  public String getFamilyName() {
-    return JavaQuickFixBundle.message("create.property.from.usage.family");
-  }
 
   @Override
   protected PsiElement getElement() {

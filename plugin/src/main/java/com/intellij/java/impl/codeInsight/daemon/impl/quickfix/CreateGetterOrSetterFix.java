@@ -39,127 +39,97 @@ import java.util.List;
 /**
  * @author ven
  */
-public class CreateGetterOrSetterFix implements SyntheticIntentionAction, LowPriorityAction
-{
-	private final boolean myCreateGetter;
-	private final boolean myCreateSetter;
-	private final PsiField myField;
-	private final String myPropertyName;
+public class CreateGetterOrSetterFix implements SyntheticIntentionAction, LowPriorityAction {
+  private final boolean myCreateGetter;
+  private final boolean myCreateSetter;
+  private final PsiField myField;
+  private final String myPropertyName;
 
-	public CreateGetterOrSetterFix(boolean createGetter, boolean createSetter, @Nonnull PsiField field)
-	{
-		myCreateGetter = createGetter;
-		myCreateSetter = createSetter;
-		myField = field;
-		myPropertyName = PropertyUtil.suggestPropertyName(field);
-	}
+  public CreateGetterOrSetterFix(boolean createGetter, boolean createSetter, @Nonnull PsiField field) {
+    myCreateGetter = createGetter;
+    myCreateSetter = createSetter;
+    myField = field;
+    myPropertyName = PropertyUtil.suggestPropertyName(field);
+  }
 
-	@Override
-	@Nonnull
-	public String getText()
-	{
-		@NonNls final String what;
-		if(myCreateGetter && myCreateSetter)
-		{
-			what = "create.getter.and.setter.for.field";
-		}
-		else if(myCreateGetter)
-		{
-			what = "create.getter.for.field";
-		}
-		else if(myCreateSetter)
-		{
-			what = "create.setter.for.field";
-		}
-		else
-		{
-			what = "";
-			assert false;
-		}
-		return JavaQuickFixBundle.message(what, myField.getName());
-	}
+  @Override
+  @Nonnull
+  public String getText() {
+    @NonNls final String what;
+    if (myCreateGetter && myCreateSetter) {
+      what = "create.getter.and.setter.for.field";
+    }
+    else if (myCreateGetter) {
+      what = "create.getter.for.field";
+    }
+    else if (myCreateSetter) {
+      what = "create.setter.for.field";
+    }
+    else {
+      what = "";
+      assert false;
+    }
+    return JavaQuickFixBundle.message(what, myField.getName());
+  }
 
-	@Override
-	@Nonnull
-	public String getFamilyName()
-	{
-		return JavaQuickFixBundle.message("create.accessor.for.unused.field.family");
-	}
+  @Override
+  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+    if (!myField.isValid()) {
+      return false;
+    }
 
-	@Override
-	public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file)
-	{
-		if(!myField.isValid())
-		{
-			return false;
-		}
+    final PsiClass aClass = myField.getContainingClass();
+    if (aClass == null) {
+      return false;
+    }
 
-		final PsiClass aClass = myField.getContainingClass();
-		if(aClass == null)
-		{
-			return false;
-		}
+    if (myCreateGetter) {
+      if (isStaticFinal(myField) || PropertyUtil.findPropertyGetter(aClass, myPropertyName, isStatic(myField), false) != null) {
+        return false;
+      }
+    }
 
-		if(myCreateGetter)
-		{
-			if(isStaticFinal(myField) || PropertyUtil.findPropertyGetter(aClass, myPropertyName, isStatic(myField), false) != null)
-			{
-				return false;
-			}
-		}
+    if (myCreateSetter) {
+      if (isFinal(myField) || PropertyUtil.findPropertySetter(aClass, myPropertyName, isStatic(myField), false) != null) {
+        return false;
+      }
+    }
 
-		if(myCreateSetter)
-		{
-			if(isFinal(myField) || PropertyUtil.findPropertySetter(aClass, myPropertyName, isStatic(myField), false) != null)
-			{
-				return false;
-			}
-		}
+    return true;
+  }
 
-		return true;
-	}
+  private static boolean isFinal(@Nonnull PsiField field) {
+    return field.hasModifierProperty(PsiModifier.FINAL);
+  }
 
-	private static boolean isFinal(@Nonnull PsiField field)
-	{
-		return field.hasModifierProperty(PsiModifier.FINAL);
-	}
+  private static boolean isStatic(@Nonnull PsiField field) {
+    return field.hasModifierProperty(PsiModifier.STATIC);
+  }
 
-	private static boolean isStatic(@Nonnull PsiField field)
-	{
-		return field.hasModifierProperty(PsiModifier.STATIC);
-	}
+  private static boolean isStaticFinal(@Nonnull PsiField field) {
+    return isStatic(field) && isFinal(field);
+  }
 
-	private static boolean isStaticFinal(@Nonnull PsiField field)
-	{
-		return isStatic(field) && isFinal(field);
-	}
+  @Override
+  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+    if (!FileModificationService.getInstance().preparePsiElementForWrite(myField)) {
+      return;
+    }
+    PsiClass aClass = myField.getContainingClass();
+    final List<PsiMethod> methods = new ArrayList<PsiMethod>();
+    if (myCreateGetter) {
+      Collections.addAll(methods, GetterSetterPrototypeProvider.generateGetterSetters(myField, true));
+    }
+    if (myCreateSetter) {
+      Collections.addAll(methods, GetterSetterPrototypeProvider.generateGetterSetters(myField, false));
+    }
+    for (PsiMethod method : methods) {
+      aClass.add(method);
+    }
+  }
 
-	@Override
-	public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException
-	{
-		if(!FileModificationService.getInstance().preparePsiElementForWrite(myField))
-		{
-			return;
-		}
-		PsiClass aClass = myField.getContainingClass();
-		final List<PsiMethod> methods = new ArrayList<PsiMethod>();
-		if(myCreateGetter)
-		{
-			Collections.addAll(methods, GetterSetterPrototypeProvider.generateGetterSetters(myField, true));
-		}
-		if(myCreateSetter)
-		{
-			Collections.addAll(methods, GetterSetterPrototypeProvider.generateGetterSetters(myField, false));
-		}
-		for(PsiMethod method : methods)
-		{
-			aClass.add(method);
-		}
-	}
-
-	@Override
-	public boolean startInWriteAction()
-	{
-		return true;
-	}
+  @Override
+  public boolean startInWriteAction() {
+    return true;
+  }
 }

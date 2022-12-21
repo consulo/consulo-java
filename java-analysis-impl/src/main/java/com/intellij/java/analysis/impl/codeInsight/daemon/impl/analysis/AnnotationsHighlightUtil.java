@@ -857,12 +857,6 @@ public class AnnotationsHighlightUtil {
       return "Remove";
     }
 
-    @Nonnull
-    @Override
-    public String getFamilyName() {
-      return getText();
-    }
-
     @Override
     public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
       return true;

@@ -19,6 +19,7 @@ import consulo.fileEditor.FileEditorManager;
 import consulo.language.editor.FileModificationService;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.language.editor.intention.IntentionAction;
+import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.logging.Logger;
 import consulo.codeEditor.Editor;
 import consulo.navigation.OpenFileDescriptor;
@@ -34,7 +35,7 @@ import consulo.language.util.IncorrectOperationException;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class MoveClassToSeparateFileFix implements IntentionAction {
+public class MoveClassToSeparateFileFix implements SyntheticIntentionAction {
   private static final Logger LOG = Logger.getInstance(MoveClassToSeparateFileFix.class);
 
   private final PsiClass myClass;
@@ -47,12 +48,6 @@ public class MoveClassToSeparateFileFix implements IntentionAction {
   @Nonnull
   public String getText() {
     return JavaQuickFixBundle.message("move.class.to.separate.file.text", myClass.getName());
-  }
-
-  @Override
-  @Nonnull
-  public String getFamilyName() {
-    return JavaQuickFixBundle.message("move.class.to.separate.file.family");
   }
 
   @Override

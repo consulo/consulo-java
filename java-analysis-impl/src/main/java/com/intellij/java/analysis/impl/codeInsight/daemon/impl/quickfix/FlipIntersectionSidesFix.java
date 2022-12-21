@@ -62,12 +62,6 @@ public class FlipIntersectionSidesFix implements SyntheticIntentionAction {
     return "Move '" + myClassName + "' to the beginning";
   }
 
-  @Nonnull
-  @Override
-  public String getFamilyName() {
-    return "Move to front";
-  }
-
   @Override
   public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     for (PsiTypeElement typeElement : myConjuncts) {

@@ -62,13 +62,6 @@ public class PermuteArgumentsFix implements SyntheticIntentionAction {
     return JavaQuickFixBundle.message("permute.arguments");
   }
 
-
-  @Override
-  @Nonnull
-  public String getFamilyName() {
-    return getText();
-  }
-
   @Override
   public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     return !project.isDisposed() && myCall.isValid() && myCall.getManager().isInProject(myCall);

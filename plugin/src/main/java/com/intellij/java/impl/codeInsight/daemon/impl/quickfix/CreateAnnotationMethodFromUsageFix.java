@@ -150,12 +150,6 @@ public class CreateAnnotationMethodFromUsageFix extends CreateFromUsageBaseFix {
     return reference != null && reference.resolve() != null;
   }
 
-  @Override
-  @Nonnull
-  public String getFamilyName() {
-    return JavaQuickFixBundle.message("create.method.from.usage.family");
-  }
-
   @Nullable
   protected PsiNameValuePair getNameValuePair() {
     return myNameValuePair.getElement();

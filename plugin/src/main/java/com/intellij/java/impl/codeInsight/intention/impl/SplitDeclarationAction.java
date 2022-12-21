@@ -42,10 +42,8 @@ import javax.annotation.Nonnull;
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.SplitDeclarationAction", categories = {"Java", "Declaration"}, fileExtensions = "java")
 public class SplitDeclarationAction extends PsiElementBaseIntentionAction {
-  @Override
-  @Nonnull
-  public String getFamilyName() {
-    return CodeInsightBundle.message("intention.split.declaration.family");
+  public SplitDeclarationAction() {
+    setText(CodeInsightBundle.message("intention.split.declaration.family"));
   }
 
   @Override

@@ -24,6 +24,7 @@ import consulo.ide.impl.idea.codeInsight.CodeInsightUtilBase;
 import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.intention.IntentionAction;
+import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
@@ -31,7 +32,7 @@ import consulo.project.Project;
 
 import javax.annotation.Nonnull;
 
-public class AddVariableInitializerFix implements IntentionAction {
+public class AddVariableInitializerFix implements SyntheticIntentionAction {
   private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.daemon.impl.quickfix.AddReturnFix");
   private final PsiVariable myVariable;
 
@@ -43,12 +44,6 @@ public class AddVariableInitializerFix implements IntentionAction {
   @Nonnull
   public String getText() {
     return CodeInsightBundle.message("quickfix.add.variable.text", myVariable.getName());
-  }
-
-  @Override
-  @Nonnull
-  public String getFamilyName() {
-    return CodeInsightBundle.message("quickfix.add.variable.family.name");
   }
 
   @Override

@@ -20,13 +20,14 @@ import javax.annotation.Nonnull;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.intention.IntentionAction;
 import consulo.codeEditor.Editor;
+import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.project.Project;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import consulo.language.psi.PsiFile;
 import com.intellij.java.language.psi.PsiMethod;
 import consulo.language.util.IncorrectOperationException;
 
-public class RemoveParameterListFix implements IntentionAction {
+public class RemoveParameterListFix implements SyntheticIntentionAction {
 
   private final PsiMethod myMethod;
 
@@ -38,12 +39,6 @@ public class RemoveParameterListFix implements IntentionAction {
   @Nonnull
   public String getText() {
     return "Remove parameter list";
-  }
-
-  @Override
-  @Nonnull
-  public String getFamilyName() {
-    return getText();
   }
 
   @Override

@@ -46,12 +46,6 @@ public class UnimplementInterfaceAction implements IntentionAction {
   }
 
   @Override
-  @Nonnull
-  public String getFamilyName() {
-    return "Unimplement Interface/Class";
-  }
-
-  @Override
   public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     if (!(file instanceof PsiJavaFile)) return false;
     final PsiReference psiReference = TargetElementUtil.findReference(editor);

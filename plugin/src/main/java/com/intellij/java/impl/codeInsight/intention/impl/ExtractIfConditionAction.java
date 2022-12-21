@@ -39,6 +39,10 @@ import javax.annotation.Nullable;
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.ExtractIfConditionAction", categories = {"Java", "Control Flow"}, fileExtensions = "java")
 public class ExtractIfConditionAction extends PsiElementBaseIntentionAction {
+  public ExtractIfConditionAction() {
+    setText(CodeInsightBundle.message("intention.extract.if.condition.family"));
+  }
+
   @Override
   public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
     final PsiIfStatement ifStatement = PsiTreeUtil.getParentOfType(element, PsiIfStatement.class);
@@ -250,11 +254,5 @@ public class ExtractIfConditionAction extends PsiElementBaseIntentionAction {
       }
     }
     return null;
-  }
-
-  @Nonnull
-  @Override
-  public String getFamilyName() {
-    return CodeInsightBundle.message("intention.extract.if.condition.family");
   }
 }

@@ -47,12 +47,6 @@ public class MoveInitializerToSetUpMethodAction extends BaseMoveInitializerToMet
 
   @Override
   @Nonnull
-  public String getFamilyName() {
-    return getText();
-  }
-
-  @Override
-  @Nonnull
   public String getText() {
     return CodeInsightBundle.message("intention.move.initializer.to.set.up");
   }

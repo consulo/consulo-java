@@ -79,11 +79,4 @@ public abstract class MethodArgumentFix implements SyntheticIntentionAction {
       LOG.error(e);
     }
   }
-
-
-  @Override
-  @Nonnull
-  public String getFamilyName() {
-    return JavaQuickFixBundle.message("fix.argument.family");
-  }
 }

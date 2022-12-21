@@ -19,6 +19,7 @@ import consulo.language.editor.FileModificationService;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.language.editor.intention.IntentionAction;
 import consulo.codeEditor.Editor;
+import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.project.Project;
 import com.intellij.java.language.psi.PsiClass;
 import consulo.language.psi.PsiFile;
@@ -28,13 +29,11 @@ import consulo.language.util.IncorrectOperationException;
 import javax.annotation.Nonnull;
 
 /**
- * Created by IntelliJ IDEA.
  * User: cdr
  * Date: Nov 29, 2002
  * Time: 3:02:17 PM
- * To change this template use Options | File Templates.
  */
-public class RemoveNewQualifierFix implements IntentionAction {
+public class RemoveNewQualifierFix implements SyntheticIntentionAction {
   private final PsiNewExpression expression;
   private final PsiClass aClass;
 
@@ -46,12 +45,6 @@ public class RemoveNewQualifierFix implements IntentionAction {
   @Override
   @Nonnull
   public String getText() {
-    return JavaQuickFixBundle.message("remove.qualifier.fix");
-  }
-
-  @Override
-  @Nonnull
-  public String getFamilyName() {
     return JavaQuickFixBundle.message("remove.qualifier.fix");
   }
 

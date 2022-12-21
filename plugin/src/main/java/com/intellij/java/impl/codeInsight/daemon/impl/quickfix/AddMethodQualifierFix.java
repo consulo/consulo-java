@@ -24,6 +24,7 @@ import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.WriteCommandAction;
 import consulo.language.editor.intention.IntentionAction;
+import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.icon.IconDescriptorUpdaters;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
@@ -43,7 +44,7 @@ import java.util.List;
 /**
  * @author Dmitry Batkovich
  */
-public class AddMethodQualifierFix implements IntentionAction {
+public class AddMethodQualifierFix implements SyntheticIntentionAction {
   private final SmartPsiElementPointer<PsiMethodCallExpression> myMethodCall;
   private List<PsiVariable> myCandidates = null;
 
@@ -57,19 +58,13 @@ public class AddMethodQualifierFix implements IntentionAction {
   public String getText() {
     final List<PsiVariable> candidates = getOrFindCandidates();
     if (candidates.isEmpty()) {
-      return getFamilyName();
+      return JavaQuickFixBundle.message("add.method.qualifier.fix.family");
     }
     String text = JavaQuickFixBundle.message("add.method.qualifier.fix.text", candidates.size() > 1 ? "" : candidates.get(0).getName());
     if (candidates.size() > 1) {
       text += "...";
     }
     return text;
-  }
-
-  @Nonnull
-  @Override
-  public String getFamilyName() {
-    return JavaQuickFixBundle.message("add.method.qualifier.fix.family");
   }
 
   @Override
@@ -107,7 +102,7 @@ public class AddMethodQualifierFix implements IntentionAction {
       if (!(type instanceof PsiClassType)) {
         continue;
       }
-      final PsiClass resolvedClass = ((PsiClassType) type).resolve();
+      final PsiClass resolvedClass = ((PsiClassType)type).resolve();
       if (resolvedClass == null) {
         continue;
       }
@@ -132,37 +127,39 @@ public class AddMethodQualifierFix implements IntentionAction {
     List<PsiVariable> candidates = getOrFindCandidates();
     if (candidates.size() == 1) {
       qualify(candidates.get(0), editor);
-    } else {
+    }
+    else {
       chooseAndQualify(editor);
     }
   }
 
   private void chooseAndQualify(final Editor editor) {
-    final BaseListPopupStep<PsiVariable> step = new BaseListPopupStep<PsiVariable>(JavaQuickFixBundle.message("add.qualifier"), myCandidates) {
-      @Override
-      public PopupStep onChosen(final PsiVariable selectedValue, final boolean finalChoice) {
-        if (selectedValue != null && finalChoice) {
-          WriteCommandAction.runWriteCommandAction(selectedValue.getProject(), new Runnable() {
-            @Override
-            public void run() {
-              qualify(selectedValue, editor);
-            }
-          });
+    final BaseListPopupStep<PsiVariable> step =
+      new BaseListPopupStep<PsiVariable>(JavaQuickFixBundle.message("add.qualifier"), myCandidates) {
+        @Override
+        public PopupStep onChosen(final PsiVariable selectedValue, final boolean finalChoice) {
+          if (selectedValue != null && finalChoice) {
+            WriteCommandAction.runWriteCommandAction(selectedValue.getProject(), new Runnable() {
+              @Override
+              public void run() {
+                qualify(selectedValue, editor);
+              }
+            });
+          }
+          return FINAL_CHOICE;
         }
-        return FINAL_CHOICE;
-      }
 
-      @Nonnull
-      @Override
-      public String getTextFor(final PsiVariable value) {
-        return value.getName();
-      }
+        @Nonnull
+        @Override
+        public String getTextFor(final PsiVariable value) {
+          return value.getName();
+        }
 
-      @Override
-      public Image getIconFor(final PsiVariable aValue) {
-        return IconDescriptorUpdaters.getIcon(aValue, 0);
-      }
-    };
+        @Override
+        public Image getIconFor(final PsiVariable aValue) {
+          return IconDescriptorUpdaters.getIcon(aValue, 0);
+        }
+      };
 
     final ListPopupImpl popup = new ListPopupImpl(step);
     popup.showInBestPositionFor(editor);
@@ -173,7 +170,9 @@ public class AddMethodQualifierFix implements IntentionAction {
     final String qualifierPresentableText = qualifier.getName();
     final PsiMethodCallExpression oldExpression = myMethodCall.getElement();
     final PsiElementFactory elementFactory = JavaPsiFacade.getElementFactory(qualifier.getProject());
-    final PsiExpression expression = elementFactory.createExpressionFromText(qualifierPresentableText + "." + oldExpression.getMethodExpression().getReferenceName() + "()", null);
+    final PsiExpression expression =
+      elementFactory.createExpressionFromText(qualifierPresentableText + "." + oldExpression.getMethodExpression()
+                                                                                            .getReferenceName() + "()", null);
     final PsiElement replacedExpression = oldExpression.replace(expression);
     editor.getCaretModel().moveToOffset(replacedExpression.getTextOffset() + replacedExpression.getTextLength());
   }

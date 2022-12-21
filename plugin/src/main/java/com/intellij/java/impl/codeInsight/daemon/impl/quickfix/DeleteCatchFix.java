@@ -26,10 +26,11 @@ import consulo.java.analysis.impl.JavaQuickFixBundle;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.JavaHighlightUtil;
 import consulo.language.editor.intention.IntentionAction;
 import consulo.codeEditor.Editor;
+import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.project.Project;
 import consulo.language.psi.*;
 
-public class DeleteCatchFix implements IntentionAction {
+public class DeleteCatchFix implements SyntheticIntentionAction {
   private final PsiParameter myCatchParameter;
 
   public DeleteCatchFix(@Nonnull PsiParameter myCatchParameter) {
@@ -40,12 +41,6 @@ public class DeleteCatchFix implements IntentionAction {
   @Nonnull
   public String getText() {
     return JavaQuickFixBundle.message("delete.catch.text", JavaHighlightUtil.formatType(myCatchParameter.getType()));
-  }
-
-  @Override
-  @Nonnull
-  public String getFamilyName() {
-    return JavaQuickFixBundle.message("delete.catch.family");
   }
 
   @Override

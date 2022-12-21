@@ -37,6 +37,7 @@ public class CreateFieldFromUsageFix extends CreateVarFromUsageFix {
 
   public CreateFieldFromUsageFix(PsiReferenceExpression referenceElement) {
     super(referenceElement);
+    setText(JavaQuickFixBundle.message("create.field.from.usage.family"));
   }
 
   @Override
@@ -142,11 +143,5 @@ public class CreateFieldFromUsageFix extends CreateVarFromUsageFix {
     }
 
     return false;
-  }
-
-  @Override
-  @Nonnull
-  public String getFamilyName() {
-    return JavaQuickFixBundle.message("create.field.from.usage.family");
   }
 }

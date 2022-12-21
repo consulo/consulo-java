@@ -21,6 +21,7 @@ import consulo.codeEditor.Editor;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.language.editor.intention.HighPriorityAction;
 import consulo.language.editor.intention.IntentionAction;
+import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.editor.util.LanguageUndoUtil;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
@@ -29,7 +30,7 @@ import consulo.project.Project;
 
 import javax.annotation.Nonnull;
 
-public class InsertConstructorCallFix implements IntentionAction, HighPriorityAction {
+public class InsertConstructorCallFix implements SyntheticIntentionAction, HighPriorityAction {
   protected final PsiMethod myConstructor;
   private final String myCall;
 
@@ -42,12 +43,6 @@ public class InsertConstructorCallFix implements IntentionAction, HighPriorityAc
   @Nonnull
   public String getText() {
     return JavaQuickFixBundle.message("insert.super.constructor.call.text", myCall);
-  }
-
-  @Override
-  @Nonnull
-  public String getFamilyName() {
-    return JavaQuickFixBundle.message("insert.super.constructor.call.family");
   }
 
   @Override

@@ -15,88 +15,68 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
-import javax.annotation.Nonnull;
-
-import org.jetbrains.annotations.Nls;
-import consulo.language.editor.intention.IntentionAction;
+import com.intellij.java.language.psi.*;
+import com.siyeh.ig.psiutils.ParenthesesUtils;
 import consulo.codeEditor.Editor;
-import consulo.project.Project;
+import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.java.language.module.util.JavaClassNames;
-import com.intellij.java.language.psi.JavaPsiFacade;
-import com.intellij.java.language.psi.PsiArrayType;
-import com.intellij.java.language.psi.PsiClassType;
-import com.intellij.java.language.psi.PsiElementFactory;
-import com.intellij.java.language.psi.PsiExpression;
+import consulo.language.editor.intention.IntentionAction;
+import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiManager;
-import com.intellij.java.language.psi.PsiType;
 import consulo.language.util.IncorrectOperationException;
-import com.siyeh.ig.psiutils.ParenthesesUtils;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.project.Project;
+import org.jetbrains.annotations.Nls;
+
+import javax.annotation.Nonnull;
 
 /**
  * @author Pavel.Dolgov
  */
-public class ConvertCollectionToArrayFix implements IntentionAction
-{
-	private final PsiExpression myCollectionExpression;
-	private final String myNewArrayText;
+public class ConvertCollectionToArrayFix implements SyntheticIntentionAction {
+  private final PsiExpression myCollectionExpression;
+  private final String myNewArrayText;
 
-	public ConvertCollectionToArrayFix(@Nonnull PsiExpression collectionExpression, @Nonnull PsiArrayType arrayType)
-	{
-		myCollectionExpression = collectionExpression;
+  public ConvertCollectionToArrayFix(@Nonnull PsiExpression collectionExpression, @Nonnull PsiArrayType arrayType) {
+    myCollectionExpression = collectionExpression;
 
-		PsiType componentType = arrayType.getComponentType();
-		myNewArrayText = componentType.equalsToText(JavaClassNames.JAVA_LANG_OBJECT) ? "" : "new " + getArrayTypeText(componentType);
-	}
+    PsiType componentType = arrayType.getComponentType();
+    myNewArrayText = componentType.equalsToText(JavaClassNames.JAVA_LANG_OBJECT) ? "" : "new " + getArrayTypeText(componentType);
+  }
 
-	@Nls
-	@Nonnull
-	@Override
-	public String getText()
-	{
-		return JavaQuickFixBundle.message("collection.to.array.text", myNewArrayText);
-	}
+  @Nls
+  @Nonnull
+  @Override
+  public String getText() {
+    return JavaQuickFixBundle.message("collection.to.array.text", myNewArrayText);
+  }
 
-	@Nls
-	@Nonnull
-	@Override
-	public String getFamilyName()
-	{
-		return JavaQuickFixBundle.message("collection.to.array.family.name");
-	}
+  @Override
+  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+    return myCollectionExpression.isValid() && PsiManager.getInstance(project).isInProject(myCollectionExpression);
+  }
 
-	@Override
-	public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file)
-	{
-		return myCollectionExpression.isValid() && PsiManager.getInstance(project).isInProject(myCollectionExpression);
-	}
+  @Override
+  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+    PsiElementFactory factory = JavaPsiFacade.getInstance(project).getElementFactory();
+    String replacement =
+      ParenthesesUtils.getText(myCollectionExpression, ParenthesesUtils.POSTFIX_PRECEDENCE) + ".toArray(" + myNewArrayText + ")";
+    myCollectionExpression.replace(factory.createExpressionFromText(replacement, myCollectionExpression));
+  }
 
-	@Override
-	public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException
-	{
-		PsiElementFactory factory = JavaPsiFacade.getInstance(project).getElementFactory();
-		String replacement = ParenthesesUtils.getText(myCollectionExpression, ParenthesesUtils.POSTFIX_PRECEDENCE) + ".toArray(" + myNewArrayText + ")";
-		myCollectionExpression.replace(factory.createExpressionFromText(replacement, myCollectionExpression));
-	}
+  @Override
+  public boolean startInWriteAction() {
+    return true;
+  }
 
-	@Override
-	public boolean startInWriteAction()
-	{
-		return true;
-	}
-
-	@Nonnull
-	private static String getArrayTypeText(PsiType componentType)
-	{
-		if(componentType instanceof PsiArrayType)
-		{
-			return getArrayTypeText(((PsiArrayType) componentType).getComponentType()) + "[]";
-		}
-		if(componentType instanceof PsiClassType)
-		{
-			return ((PsiClassType) componentType).rawType().getCanonicalText() + "[0]";
-		}
-		return componentType.getCanonicalText() + "[0]";
-	}
+  @Nonnull
+  private static String getArrayTypeText(PsiType componentType) {
+    if (componentType instanceof PsiArrayType) {
+      return getArrayTypeText(((PsiArrayType)componentType).getComponentType()) + "[]";
+    }
+    if (componentType instanceof PsiClassType) {
+      return ((PsiClassType)componentType).rawType().getCanonicalText() + "[0]";
+    }
+    return componentType.getCanonicalText() + "[0]";
+  }
 }

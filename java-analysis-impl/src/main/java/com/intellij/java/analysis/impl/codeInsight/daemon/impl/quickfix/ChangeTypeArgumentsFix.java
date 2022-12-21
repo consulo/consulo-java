@@ -71,12 +71,6 @@ public class ChangeTypeArgumentsFix implements SyntheticIntentionAction, HighPri
   }
 
   @Override
-  @Nonnull
-  public String getFamilyName() {
-    return "Change type arguments";
-  }
-
-  @Override
   public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     final PsiTypeParameter[] typeParameters = myPsiClass.getTypeParameters();
     if (typeParameters.length > 0) {

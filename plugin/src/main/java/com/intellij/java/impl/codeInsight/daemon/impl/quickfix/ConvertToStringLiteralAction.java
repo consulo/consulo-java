@@ -41,12 +41,6 @@ public class ConvertToStringLiteralAction implements IntentionAction {
     return JavaQuickFixBundle.message("convert.to.string.text");
   }
 
-  @Nonnull
-  @Override
-  public String getFamilyName() {
-    return JavaQuickFixBundle.message("convert.to.string.family");
-  }
-
   @Override
   public boolean isAvailable(@Nonnull final Project project, final Editor editor, final PsiFile file) {
     final PsiElement element = file.findElementAt(editor.getCaretModel().getOffset());

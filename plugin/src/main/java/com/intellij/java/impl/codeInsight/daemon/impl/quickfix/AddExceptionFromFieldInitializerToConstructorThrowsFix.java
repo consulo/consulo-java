@@ -16,18 +16,21 @@
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
 import com.intellij.java.language.impl.codeInsight.ExceptionUtil;
-import consulo.language.editor.FileModificationService;
-import consulo.language.editor.intention.BaseIntentionAction;
 import com.intellij.java.language.psi.*;
 import consulo.application.ApplicationManager;
 import consulo.codeEditor.Editor;
-import consulo.project.Project;
-import consulo.language.psi.*;
+import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.language.editor.FileModificationService;
+import consulo.language.editor.intention.BaseIntentionAction;
+import consulo.language.editor.intention.SyntheticIntentionAction;
+import consulo.language.psi.NavigatablePsiElement;
+import consulo.language.psi.PsiDocumentManager;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.logging.Logger;
-import org.jetbrains.annotations.Nls;
+import consulo.project.Project;
 
 import javax.annotation.Nonnull;
 import java.util.HashSet;
@@ -37,103 +40,80 @@ import java.util.Set;
 /**
  * @author Dmitry Batkovich
  */
-public class AddExceptionFromFieldInitializerToConstructorThrowsFix extends BaseIntentionAction
-{
-	private final static Logger LOG = Logger.getInstance(AddExceptionFromFieldInitializerToConstructorThrowsFix.class);
+public class AddExceptionFromFieldInitializerToConstructorThrowsFix extends BaseIntentionAction implements SyntheticIntentionAction {
+  private final static Logger LOG = Logger.getInstance(AddExceptionFromFieldInitializerToConstructorThrowsFix.class);
 
-	private final PsiElement myWrongElement;
+  private final PsiElement myWrongElement;
 
-	public AddExceptionFromFieldInitializerToConstructorThrowsFix(PsiElement element)
-	{
-		myWrongElement = element;
-	}
+  public AddExceptionFromFieldInitializerToConstructorThrowsFix(PsiElement element) {
+    myWrongElement = element;
+  }
 
-	@Override
-	public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file)
-	{
-		if(!myWrongElement.isValid())
-		{
-			return false;
-		}
-		final NavigatablePsiElement maybeField = PsiTreeUtil.getParentOfType(myWrongElement, PsiMethod.class, PsiFunctionalExpression.class, PsiField.class);
-		if(!(maybeField instanceof PsiField))
-		{
-			return false;
-		}
-		final PsiField field = (PsiField) maybeField;
-		if(field.hasModifierProperty(PsiModifier.STATIC))
-		{
-			return false;
-		}
-		final PsiClass containingClass = field.getContainingClass();
-		if((containingClass == null ||
-				containingClass instanceof PsiAnonymousClass ||
-				containingClass.isInterface() ||
-				!containingClass.isWritable()))
-		{
-			return false;
-		}
-		final List<PsiClassType> exceptions = ExceptionUtil.getUnhandledExceptions(field);
-		if(exceptions.isEmpty())
-		{
-			return false;
-		}
-		final PsiMethod[] existedConstructors = containingClass.getConstructors();
-		setText(JavaQuickFixBundle.message("add.exception.from.field.initializer.to.constructor.throws.text", existedConstructors.length));
-		return true;
-	}
+  @Override
+  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+    if (!myWrongElement.isValid()) {
+      return false;
+    }
+    final NavigatablePsiElement maybeField =
+      PsiTreeUtil.getParentOfType(myWrongElement, PsiMethod.class, PsiFunctionalExpression.class, PsiField.class);
+    if (!(maybeField instanceof PsiField)) {
+      return false;
+    }
+    final PsiField field = (PsiField)maybeField;
+    if (field.hasModifierProperty(PsiModifier.STATIC)) {
+      return false;
+    }
+    final PsiClass containingClass = field.getContainingClass();
+    if ((containingClass == null ||
+      containingClass instanceof PsiAnonymousClass ||
+      containingClass.isInterface() ||
+      !containingClass.isWritable())) {
+      return false;
+    }
+    final List<PsiClassType> exceptions = ExceptionUtil.getUnhandledExceptions(field);
+    if (exceptions.isEmpty()) {
+      return false;
+    }
+    final PsiMethod[] existedConstructors = containingClass.getConstructors();
+    setText(JavaQuickFixBundle.message("add.exception.from.field.initializer.to.constructor.throws.text", existedConstructors.length));
+    return true;
+  }
 
-	@Override
-	public void invoke(@Nonnull final Project project, final Editor editor, final PsiFile file) throws IncorrectOperationException
-	{
-		if(!FileModificationService.getInstance().prepareFileForWrite(file))
-		{
-			return;
-		}
-		PsiDocumentManager.getInstance(project).commitAllDocuments();
+  @Override
+  public void invoke(@Nonnull final Project project, final Editor editor, final PsiFile file) throws IncorrectOperationException {
+    if (!FileModificationService.getInstance().prepareFileForWrite(file)) {
+      return;
+    }
+    PsiDocumentManager.getInstance(project).commitAllDocuments();
 
-		final NavigatablePsiElement field = PsiTreeUtil.getParentOfType(myWrongElement, PsiMethod.class, PsiFunctionalExpression.class, PsiField.class);
-		if(field instanceof PsiField)
-		{
-			final PsiClass aClass = ((PsiField) field).getContainingClass();
-			if(aClass != null)
-			{
-				PsiMethod[] constructors = aClass.getConstructors();
-				if(constructors.length == 0)
-				{
-					final AddDefaultConstructorFix defaultConstructorFix = new AddDefaultConstructorFix(aClass);
-					ApplicationManager.getApplication().runWriteAction(new Runnable()
-					{
-						@Override
-						public void run()
-						{
-							defaultConstructorFix.invoke(project, null, file);
-						}
-					});
-					constructors = aClass.getConstructors();
-					LOG.assertTrue(constructors.length != 0);
-				}
+    final NavigatablePsiElement field =
+      PsiTreeUtil.getParentOfType(myWrongElement, PsiMethod.class, PsiFunctionalExpression.class, PsiField.class);
+    if (field instanceof PsiField) {
+      final PsiClass aClass = ((PsiField)field).getContainingClass();
+      if (aClass != null) {
+        PsiMethod[] constructors = aClass.getConstructors();
+        if (constructors.length == 0) {
+          final AddDefaultConstructorFix defaultConstructorFix = new AddDefaultConstructorFix(aClass);
+          ApplicationManager.getApplication().runWriteAction(new Runnable() {
+            @Override
+            public void run() {
+              defaultConstructorFix.invoke(project, null, file);
+            }
+          });
+          constructors = aClass.getConstructors();
+          LOG.assertTrue(constructors.length != 0);
+        }
 
-				Set<PsiClassType> unhandledExceptions = new HashSet<PsiClassType>(ExceptionUtil.getUnhandledExceptions(field));
-				for(PsiMethod constructor : constructors)
-				{
-					AddExceptionToThrowsFix.addExceptionsToThrowsList(project, constructor, unhandledExceptions);
-				}
-			}
-		}
-	}
+        Set<PsiClassType> unhandledExceptions = new HashSet<PsiClassType>(ExceptionUtil.getUnhandledExceptions(field));
+        for (PsiMethod constructor : constructors) {
+          AddExceptionToThrowsFix.addExceptionsToThrowsList(project, constructor, unhandledExceptions);
+        }
+      }
+    }
+  }
 
-	@Nls
-	@Nonnull
-	@Override
-	public String getFamilyName()
-	{
-		return JavaQuickFixBundle.message("add.exception.from.field.initializer.to.constructor.throws.family.text");
-	}
-
-	@Override
-	public boolean startInWriteAction()
-	{
-		return false;
-	}
+  @Override
+  public boolean startInWriteAction() {
+    return false;
+  }
 }

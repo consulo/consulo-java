@@ -20,7 +20,7 @@ import consulo.codeEditor.Editor;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.FileModificationService;
-import consulo.language.editor.intention.IntentionAction;
+import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiManager;
@@ -33,7 +33,7 @@ import javax.annotation.Nonnull;
 /**
  * @author ven
  */
-public class AddNewArrayExpressionFix implements IntentionAction {
+public class AddNewArrayExpressionFix implements SyntheticIntentionAction {
   private final PsiArrayInitializerExpression myInitializer;
 
   public AddNewArrayExpressionFix(PsiArrayInitializerExpression initializer) {
@@ -45,12 +45,6 @@ public class AddNewArrayExpressionFix implements IntentionAction {
   public String getText() {
     PsiType type = getType();
     return JavaQuickFixBundle.message("add.new.array.text", type.getPresentableText());
-  }
-
-  @Override
-  @Nonnull
-  public String getFamilyName() {
-    return JavaQuickFixBundle.message("add.new.array.family");
   }
 
   @Override

@@ -36,6 +36,9 @@ import javax.annotation.Nullable;
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.ConvertColorRepresentationIntentionAction", categories = {"Java", "Declaration"}, fileExtensions = "java")
 public class ConvertColorRepresentationIntentionAction extends BaseColorIntentionAction {
+  public ConvertColorRepresentationIntentionAction() {
+    setText(CodeInsightBundle.message("intention.convert.color.representation.family"));
+  }
 
   @Override
   public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
@@ -222,11 +225,5 @@ public class ConvertColorRepresentationIntentionAction extends BaseColorIntentio
   @Nullable
   private static Object compute(@Nonnull PsiExpression expr) {
     return JavaConstantExpressionEvaluator.computeConstantExpression(expr, true);
-  }
-
-  @Nonnull
-  @Override
-  public String getFamilyName() {
-    return CodeInsightBundle.message("intention.convert.color.representation.family");
   }
 }

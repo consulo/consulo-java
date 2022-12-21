@@ -65,12 +65,6 @@ public class ConvertAbsolutePathToRelativeIntentionAction extends BaseIntentionA
   }
 
   @Override
-  @Nonnull
-  public String getFamilyName() {
-    return "Convert " + (isConvertToRelative() ? "absolute" : "relative") + " path to " + (isConvertToRelative() ? "relative" : "absolute");
-  }
-
-  @Override
   public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     if (!FileModificationService.getInstance().prepareFileForWrite(file)) {
       return;
@@ -89,7 +83,7 @@ public class ConvertAbsolutePathToRelativeIntentionAction extends BaseIntentionA
   @Nonnull
   @Override
   public String getText() {
-    return "Convert path to " + (isConvertToRelative() ? "relative" : "absolute");
+    return "Convert " + (isConvertToRelative() ? "absolute" : "relative") + " path to " + (isConvertToRelative() ? "relative" : "absolute");
   }
 
   @Override

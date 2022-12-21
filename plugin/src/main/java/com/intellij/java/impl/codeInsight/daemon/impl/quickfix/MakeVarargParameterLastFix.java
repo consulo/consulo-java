@@ -21,6 +21,7 @@ import consulo.language.editor.FileModificationService;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.language.editor.intention.IntentionAction;
 import consulo.codeEditor.Editor;
+import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.project.Project;
 import consulo.language.psi.PsiFile;
 import com.intellij.java.language.psi.PsiParameter;
@@ -29,7 +30,7 @@ import consulo.language.util.IncorrectOperationException;
 /**
  * @author ven
  */
-public class MakeVarargParameterLastFix implements IntentionAction {
+public class MakeVarargParameterLastFix implements SyntheticIntentionAction {
   public MakeVarargParameterLastFix(PsiParameter parameter) {
     myParameter = parameter;
   }
@@ -40,12 +41,6 @@ public class MakeVarargParameterLastFix implements IntentionAction {
   @Nonnull
   public String getText() {
     return JavaQuickFixBundle.message("make.vararg.parameter.last.text", myParameter.getName());
-  }
-
-  @Override
-  @Nonnull
-  public String getFamilyName() {
-    return JavaQuickFixBundle.message("make.vararg.parameter.last.family");
   }
 
   @Override

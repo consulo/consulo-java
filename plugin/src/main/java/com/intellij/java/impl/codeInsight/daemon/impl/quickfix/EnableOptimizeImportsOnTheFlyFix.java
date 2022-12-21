@@ -22,22 +22,17 @@ import consulo.language.editor.CodeInsightSettings;
 import consulo.language.editor.DaemonCodeAnalyzer;
 import consulo.language.editor.intention.IntentionAction;
 import consulo.language.editor.intention.LowPriorityAction;
+import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.psi.PsiFile;
 import consulo.project.Project;
 
 import javax.annotation.Nonnull;
 
-public class EnableOptimizeImportsOnTheFlyFix implements IntentionAction, LowPriorityAction{
+public class EnableOptimizeImportsOnTheFlyFix implements SyntheticIntentionAction, LowPriorityAction{
   @Override
   @Nonnull
   public String getText() {
     return JavaQuickFixBundle.message("enable.optimize.imports.on.the.fly");
-  }
-
-  @Override
-  @Nonnull
-  public String getFamilyName() {
-    return getText();
   }
 
   @Override

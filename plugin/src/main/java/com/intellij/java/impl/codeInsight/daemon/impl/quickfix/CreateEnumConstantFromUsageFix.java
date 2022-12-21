@@ -32,7 +32,6 @@ import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
 
-import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.function.Function;
 
@@ -41,6 +40,7 @@ public class CreateEnumConstantFromUsageFix extends CreateVarFromUsageFix implem
 
   public CreateEnumConstantFromUsageFix(final PsiReferenceExpression referenceElement) {
     super(referenceElement);
+    setText(JavaQuickFixBundle.message("create.constant.from.usage.family"));
   }
 
   @Override
@@ -104,11 +104,5 @@ public class CreateEnumConstantFromUsageFix extends CreateVarFromUsageFix implem
       if (ExpectedTypeUtil.matches(enumType, typeInfo)) return true;
     }
     return false;
-  }
-
-  @Override
-  @Nonnull
-  public String getFamilyName() {
-    return JavaQuickFixBundle.message("create.constant.from.usage.family");
   }
 }

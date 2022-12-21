@@ -43,12 +43,6 @@ public class SimplifyBooleanExpressionAction implements IntentionAction{
   @Override
   @Nonnull
   public String getText() {
-    return getFamilyName();
-  }
-
-  @Override
-  @Nonnull
-  public String getFamilyName() {
     return JavaQuickFixBundle.message("simplify.boolean.expression.family");
   }
 

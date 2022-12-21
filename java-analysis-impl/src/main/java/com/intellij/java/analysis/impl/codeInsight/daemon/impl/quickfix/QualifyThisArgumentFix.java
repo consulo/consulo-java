@@ -62,12 +62,6 @@ public class QualifyThisArgumentFix extends PsiElementBaseIntentionAction {
     return true;
   }
 
-  @Nonnull
-  @Override
-  public String getFamilyName() {
-    return "Qualify this";
-  }
-
   @Override
   public void invoke(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) throws IncorrectOperationException {
     myExpression.replace(RefactoringChangeUtil.createThisExpression(PsiManager.getInstance(project), myPsiClass));

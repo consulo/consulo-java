@@ -55,12 +55,6 @@ public class ChangeNewOperatorTypeFix implements SyntheticIntentionAction {
   }
 
   @Override
-  @Nonnull
-  public String getFamilyName() {
-    return JavaQuickFixBundle.message("change.new.operator.type.family");
-  }
-
-  @Override
   public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     return myType.isValid()
         && myExpression.isValid()

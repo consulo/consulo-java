@@ -60,15 +60,13 @@ import java.util.List;
 public class DefineParamsDefaultValueAction extends PsiElementBaseIntentionAction implements Iconable, LowPriorityAction {
   private static final Logger LOG = Logger.getInstance(DefineParamsDefaultValueAction.class);
 
+  public DefineParamsDefaultValueAction() {
+    setText("Generate overloaded method with default parameter values");
+  }
+
   @Override
   public boolean startInWriteAction() {
     return false;
-  }
-
-  @Nonnull
-  @Override
-  public String getFamilyName() {
-    return "Generate overloaded method with default parameter values";
   }
 
   @Override

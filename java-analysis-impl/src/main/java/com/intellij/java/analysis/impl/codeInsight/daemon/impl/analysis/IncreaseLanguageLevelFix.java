@@ -56,12 +56,6 @@ public class IncreaseLanguageLevelFix implements SyntheticIntentionAction {
     return CodeInsightBundle.message("set.language.level.to.0", myLevel.getDescription());
   }
 
-  @Override
-  @Nonnull
-  public String getFamilyName() {
-    return CodeInsightBundle.message("set.language.level");
-  }
-
   private static boolean isJdkSupportsLevel(@Nullable final Sdk jdk, final LanguageLevel level) {
     if (jdk == null) {
       return true;

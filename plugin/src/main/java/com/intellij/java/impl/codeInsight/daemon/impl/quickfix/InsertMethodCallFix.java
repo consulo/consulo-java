@@ -15,68 +15,51 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
-import javax.annotation.Nonnull;
-
-import org.jetbrains.annotations.Nls;
+import com.intellij.java.language.psi.*;
+import consulo.codeEditor.Editor;
+import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.language.editor.intention.IntentionAction;
 import consulo.language.editor.intention.LowPriorityAction;
-import consulo.codeEditor.Editor;
-import consulo.project.Project;
-import com.intellij.java.language.psi.JavaPsiFacade;
-import com.intellij.java.language.psi.PsiElementFactory;
-import com.intellij.java.language.psi.PsiExpression;
+import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiManager;
-import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.java.language.psi.PsiMethodCallExpression;
 import consulo.language.util.IncorrectOperationException;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.project.Project;
+import org.jetbrains.annotations.Nls;
 
-public class InsertMethodCallFix implements IntentionAction, LowPriorityAction
-{
-	private final PsiMethodCallExpression myCall;
-	private final String myMethodName;
+import javax.annotation.Nonnull;
 
-	public InsertMethodCallFix(PsiMethodCallExpression call, PsiMethod method)
-	{
-		myCall = call;
-		myMethodName = method.getName();
-	}
+public class InsertMethodCallFix implements SyntheticIntentionAction, LowPriorityAction {
+  private final PsiMethodCallExpression myCall;
+  private final String myMethodName;
 
-	@Nls
-	@Nonnull
-	@Override
-	public String getText()
-	{
-		return JavaQuickFixBundle.message("insert.sam.method.call.fix.name", myMethodName);
-	}
+  public InsertMethodCallFix(PsiMethodCallExpression call, PsiMethod method) {
+    myCall = call;
+    myMethodName = method.getName();
+  }
 
-	@Nls
-	@Nonnull
-	@Override
-	public String getFamilyName()
-	{
-		return JavaQuickFixBundle.message("insert.sam.method.call.fix.family.name");
-	}
+  @Nls
+  @Nonnull
+  @Override
+  public String getText() {
+    return JavaQuickFixBundle.message("insert.sam.method.call.fix.name", myMethodName);
+  }
 
-	@Override
-	public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file)
-	{
-		return myCall.isValid() && PsiManager.getInstance(project).isInProject(myCall);
-	}
+  @Override
+  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+    return myCall.isValid() && PsiManager.getInstance(project).isInProject(myCall);
+  }
 
-	@Override
-	public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException
-	{
-		PsiExpression methodExpression = myCall.getMethodExpression();
-		PsiElementFactory factory = JavaPsiFacade.getInstance(project).getElementFactory();
-		String replacement = methodExpression.getText() + "." + myMethodName;
-		methodExpression.replace(factory.createExpressionFromText(replacement, methodExpression));
-	}
+  @Override
+  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+    PsiExpression methodExpression = myCall.getMethodExpression();
+    PsiElementFactory factory = JavaPsiFacade.getInstance(project).getElementFactory();
+    String replacement = methodExpression.getText() + "." + myMethodName;
+    methodExpression.replace(factory.createExpressionFromText(replacement, methodExpression));
+  }
 
-	@Override
-	public boolean startInWriteAction()
-	{
-		return true;
-	}
+  @Override
+  public boolean startInWriteAction() {
+    return true;
+  }
 }

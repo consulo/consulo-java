@@ -20,7 +20,7 @@ import com.intellij.java.language.psi.util.PsiTypesUtil;
 import consulo.codeEditor.Editor;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.language.editor.FileModificationService;
-import consulo.language.editor.intention.IntentionAction;
+import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
@@ -32,7 +32,7 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AddReturnFix implements IntentionAction {
+public class AddReturnFix implements SyntheticIntentionAction {
   private static final Logger LOG = Logger.getInstance(AddReturnFix.class);
   private final PsiMethod myMethod;
 
@@ -43,12 +43,6 @@ public class AddReturnFix implements IntentionAction {
   @Override
   @Nonnull
   public String getText() {
-    return JavaQuickFixBundle.message("add.return.statement.family");
-  }
-
-  @Override
-  @Nonnull
-  public String getFamilyName() {
     return JavaQuickFixBundle.message("add.return.statement.text");
   }
 

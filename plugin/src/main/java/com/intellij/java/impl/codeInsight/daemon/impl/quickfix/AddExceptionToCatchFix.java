@@ -28,6 +28,7 @@ import consulo.ide.impl.idea.openapi.fileEditor.ex.IdeDocumentHistory;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.intention.BaseIntentionAction;
+import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.psi.PsiDocumentManager;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
@@ -45,8 +46,12 @@ import java.util.List;
 /**
  * @author mike
  */
-public class AddExceptionToCatchFix extends BaseIntentionAction {
+public class AddExceptionToCatchFix extends BaseIntentionAction implements SyntheticIntentionAction {
   private static final Logger LOG = Logger.getInstance(AddExceptionToCatchFix.class);
+
+  public AddExceptionToCatchFix() {
+    setText(JavaQuickFixBundle.message("add.catch.clause.family"));
+  }
 
   @Override
   public void invoke(@Nonnull Project project, Editor editor, PsiFile file) {
@@ -187,11 +192,5 @@ public class AddExceptionToCatchFix extends BaseIntentionAction {
     }
 
     return null;
-  }
-
-  @Override
-  @Nonnull
-  public String getFamilyName() {
-    return JavaQuickFixBundle.message("add.catch.clause.family");
   }
 }

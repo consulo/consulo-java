@@ -58,12 +58,6 @@ public class ReplaceImplementsWithStaticImportAction extends BaseIntentionAction
   }
 
   @Override
-  @Nonnull
-  public String getFamilyName() {
-    return getText();
-  }
-
-  @Override
   public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     if (!(file instanceof PsiJavaFile)) return false;
 

@@ -49,6 +49,7 @@ import consulo.language.editor.inspection.reference.RefEntity;
 import consulo.language.editor.inspection.reference.RefUtil;
 import consulo.language.editor.inspection.scheme.InspectionToolWrapper;
 import consulo.language.editor.intention.IntentionAction;
+import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.editor.refactoring.safeDelete.SafeDeleteHandler;
 import consulo.language.psi.PsiDocumentManager;
 import consulo.language.psi.PsiElement;
@@ -308,7 +309,7 @@ public class UnusedDeclarationPresentation extends DefaultInspectionToolPresenta
   private static final String COMMENT_OUT_QUICK_FIX = InspectionsBundle.message("inspection.dead.code.comment" +
                                                                                   ".quickfix");
 
-  private static class CommentOutFix implements IntentionAction {
+  private static class CommentOutFix implements SyntheticIntentionAction {
     private final PsiElement myElement;
 
     private CommentOutFix(final PsiElement element) {
@@ -319,12 +320,6 @@ public class UnusedDeclarationPresentation extends DefaultInspectionToolPresenta
     @Nonnull
     public String getText() {
       return COMMENT_OUT_QUICK_FIX;
-    }
-
-    @Override
-    @Nonnull
-    public String getFamilyName() {
-      return getText();
     }
 
     @Override
@@ -556,7 +551,7 @@ public class UnusedDeclarationPresentation extends DefaultInspectionToolPresenta
   }
 
 
-  private static class PermanentDeleteFix implements IntentionAction {
+  private static class PermanentDeleteFix implements SyntheticIntentionAction {
     private final PsiElement myElement;
 
     private PermanentDeleteFix(final PsiElement element) {
@@ -567,12 +562,6 @@ public class UnusedDeclarationPresentation extends DefaultInspectionToolPresenta
     @Nonnull
     public String getText() {
       return DELETE_QUICK_FIX;
-    }
-
-    @Override
-    @Nonnull
-    public String getFamilyName() {
-      return getText();
     }
 
     @Override

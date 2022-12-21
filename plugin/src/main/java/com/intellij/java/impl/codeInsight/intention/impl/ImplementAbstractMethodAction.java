@@ -46,10 +46,8 @@ import javax.annotation.Nullable;
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.ImplementAbstractMethodAction", categories = {"Java", "Declaration"}, fileExtensions = "java")
 public class ImplementAbstractMethodAction extends BaseIntentionAction {
-  @Override
-  @Nonnull
-  public String getFamilyName() {
-    return CodeInsightBundle.message("intention.implement.abstract.method.family");
+  public ImplementAbstractMethodAction() {
+    setText(CodeInsightBundle.message("intention.implement.abstract.method.family"));
   }
 
   @Override
@@ -71,10 +69,11 @@ public class ImplementAbstractMethodAction extends BaseIntentionAction {
       if (containingClass.isEnum()) {
         for (PsiField field : containingClass.getFields()) {
           if (field instanceof PsiEnumConstant) {
-            final PsiEnumConstantInitializer initializingClass = ((PsiEnumConstant) field).getInitializingClass();
+            final PsiEnumConstantInitializer initializingClass = ((PsiEnumConstant)field).getInitializingClass();
             if (initializingClass == null) {
               processor.myHasMissingImplementations = true;
-            } else {
+            }
+            else {
               if (!processor.execute(initializingClass)) {
                 break;
               }
@@ -83,7 +82,7 @@ public class ImplementAbstractMethodAction extends BaseIntentionAction {
         }
       }
       ClassInheritorsSearch.search(containingClass, false).forEach(new PsiElementProcessorAdapter<PsiClass>(
-          processor));
+        processor));
       return isAvailable(processor);
     }
 
@@ -102,9 +101,9 @@ public class ImplementAbstractMethodAction extends BaseIntentionAction {
 
   protected String getIntentionName(final PsiMethod method) {
     return method.hasModifierProperty(PsiModifier.ABSTRACT) ?
-        CodeInsightBundle.message("intention.implement.abstract.method.text", method.getName()) :
-        CodeInsightBundle.message("intention.override.method.text", method.getName())
-        ;
+      CodeInsightBundle.message("intention.implement.abstract.method.text", method.getName()) :
+      CodeInsightBundle.message("intention.override.method.text", method.getName())
+      ;
   }
 
   static class MyElementProcessor implements PsiElementProcessor {
@@ -127,12 +126,13 @@ public class ImplementAbstractMethodAction extends BaseIntentionAction {
     @Override
     public boolean execute(@Nonnull PsiElement element) {
       if (element instanceof PsiClass) {
-        PsiClass aClass = (PsiClass) element;
+        PsiClass aClass = (PsiClass)element;
         if (aClass.isInterface()) return true;
         final PsiMethod existingImplementation = findExistingImplementation(aClass, myMethod);
         if (existingImplementation != null && !existingImplementation.hasModifierProperty(PsiModifier.ABSTRACT)) {
           myHasExistingImplementations = true;
-        } else if (existingImplementation == null) {
+        }
+        else if (existingImplementation == null) {
           myHasMissingImplementations = true;
         }
         if (myHasMissingImplementations && myHasExistingImplementations) return false;

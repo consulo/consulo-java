@@ -22,7 +22,7 @@ import consulo.codeEditor.Editor;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.codeStyle.CodeStyleSettings;
 import consulo.language.codeStyle.CodeStyleSettingsManager;
-import consulo.language.editor.intention.IntentionAction;
+import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
@@ -34,120 +34,97 @@ import javax.annotation.Nonnull;
 /**
  * @author Pavel.Dolgov
  */
-public class ReplaceIteratorForEachLoopWithIteratorForLoopFix implements IntentionAction
-{
-	private final PsiForeachStatement myStatement;
+public class ReplaceIteratorForEachLoopWithIteratorForLoopFix implements SyntheticIntentionAction {
+  private final PsiForeachStatement myStatement;
 
-	public ReplaceIteratorForEachLoopWithIteratorForLoopFix(@Nonnull PsiForeachStatement statement)
-	{
-		myStatement = statement;
-	}
+  public ReplaceIteratorForEachLoopWithIteratorForLoopFix(@Nonnull PsiForeachStatement statement) {
+    myStatement = statement;
+  }
 
-	@Nls
-	@Nonnull
-	@Override
-	public String getText()
-	{
-		return getFamilyName();
-	}
+  @Nls
+  @Nonnull
+  @Override
+  public String getText() {
+    return "Replace 'for each' loop with iterator 'for' loop";
+  }
 
-	@Nls
-	@Nonnull
-	@Override
-	public String getFamilyName()
-	{
-		return "Replace 'for each' loop with iterator 'for' loop";
-	}
+  @Override
+  public boolean startInWriteAction() {
+    return true;
+  }
 
-	@Override
-	public boolean startInWriteAction()
-	{
-		return true;
-	}
+  @Override
+  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+    return myStatement.isValid() && myStatement.getManager().isInProject(myStatement);
+  }
 
-	@Override
-	public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file)
-	{
-		return myStatement.isValid() && myStatement.getManager().isInProject(myStatement);
-	}
+  @Override
+  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+    final PsiExpression iteratedValue = myStatement.getIteratedValue();
+    if (iteratedValue == null) {
+      return;
+    }
+    final PsiType iteratedValueType = iteratedValue.getType();
+    if (iteratedValueType == null) {
+      return;
+    }
+    final PsiParameter iterationParameter = myStatement.getIterationParameter();
+    final String iterationParameterName = iterationParameter.getName();
+    if (iterationParameterName == null) {
+      return;
+    }
+    final PsiStatement forEachBody = myStatement.getBody();
 
-	@Override
-	public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException
-	{
-		final PsiExpression iteratedValue = myStatement.getIteratedValue();
-		if(iteratedValue == null)
-		{
-			return;
-		}
-		final PsiType iteratedValueType = iteratedValue.getType();
-		if(iteratedValueType == null)
-		{
-			return;
-		}
-		final PsiParameter iterationParameter = myStatement.getIterationParameter();
-		final String iterationParameterName = iterationParameter.getName();
-		if(iterationParameterName == null)
-		{
-			return;
-		}
-		final PsiStatement forEachBody = myStatement.getBody();
+    final PsiElementFactory elementFactory = JavaPsiFacade.getInstance(project).getElementFactory();
+    final JavaCodeStyleManager javaStyleManager = JavaCodeStyleManager.getInstance(project);
+    final String name = javaStyleManager.suggestUniqueVariableName("it", myStatement, true);
+    PsiForStatement newForLoop =
+      (PsiForStatement)elementFactory.createStatementFromText("for (Iterator " + name + " = initializer; " + name + ".hasNext();) { Object next = " + name + ".next();" +
+                                                                " }", myStatement);
 
-		final PsiElementFactory elementFactory = JavaPsiFacade.getInstance(project).getElementFactory();
-		final JavaCodeStyleManager javaStyleManager = JavaCodeStyleManager.getInstance(project);
-		final String name = javaStyleManager.suggestUniqueVariableName("it", myStatement, true);
-		PsiForStatement newForLoop = (PsiForStatement) elementFactory.createStatementFromText("for (Iterator " + name + " = initializer; " + name + ".hasNext();) { Object next = " + name + ".next();" +
-				" }", myStatement);
+    final PsiDeclarationStatement newDeclaration = (PsiDeclarationStatement)newForLoop.getInitialization();
+    if (newDeclaration == null) {
+      return;
+    }
+    final PsiLocalVariable newIteratorVariable = (PsiLocalVariable)newDeclaration.getDeclaredElements()[0];
+    final PsiTypeElement newIteratorTypeElement = elementFactory.createTypeElement(iteratedValueType);
+    newIteratorVariable.getTypeElement().replace(newIteratorTypeElement);
+    newIteratorVariable.setInitializer(iteratedValue);
 
-		final PsiDeclarationStatement newDeclaration = (PsiDeclarationStatement) newForLoop.getInitialization();
-		if(newDeclaration == null)
-		{
-			return;
-		}
-		final PsiLocalVariable newIteratorVariable = (PsiLocalVariable) newDeclaration.getDeclaredElements()[0];
-		final PsiTypeElement newIteratorTypeElement = elementFactory.createTypeElement(iteratedValueType);
-		newIteratorVariable.getTypeElement().replace(newIteratorTypeElement);
-		newIteratorVariable.setInitializer(iteratedValue);
+    final PsiBlockStatement newBody = (PsiBlockStatement)newForLoop.getBody();
+    if (newBody == null) {
+      return;
+    }
+    final PsiCodeBlock newBodyBlock = newBody.getCodeBlock();
 
-		final PsiBlockStatement newBody = (PsiBlockStatement) newForLoop.getBody();
-		if(newBody == null)
-		{
-			return;
-		}
-		final PsiCodeBlock newBodyBlock = newBody.getCodeBlock();
+    final PsiDeclarationStatement newFirstStatement = (PsiDeclarationStatement)newBodyBlock.getStatements()[0];
+    final PsiLocalVariable newItemVariable = (PsiLocalVariable)newFirstStatement.getDeclaredElements()[0];
+    final PsiTypeElement newItemTypeElement = elementFactory.createTypeElement(iterationParameter.getType());
+    newItemVariable.getTypeElement().replace(newItemTypeElement);
+    newItemVariable.setName(iterationParameterName);
+    final CodeStyleSettings codeStyleSettings = CodeStyleSettingsManager.getSettings(project);
+    if (codeStyleSettings.getCustomSettings(JavaCodeStyleSettings.class).GENERATE_FINAL_LOCALS) {
+      final PsiModifierList modifierList = newItemVariable.getModifierList();
+      if (modifierList != null) {
+        modifierList.setModifierProperty(PsiModifier.FINAL, true);
+      }
+    }
+    final CodeStyleManager styleManager = CodeStyleManager.getInstance(project);
+    newForLoop = (PsiForStatement)javaStyleManager.shortenClassReferences(newForLoop);
+    newForLoop = (PsiForStatement)styleManager.reformat(newForLoop);
 
-		final PsiDeclarationStatement newFirstStatement = (PsiDeclarationStatement) newBodyBlock.getStatements()[0];
-		final PsiLocalVariable newItemVariable = (PsiLocalVariable) newFirstStatement.getDeclaredElements()[0];
-		final PsiTypeElement newItemTypeElement = elementFactory.createTypeElement(iterationParameter.getType());
-		newItemVariable.getTypeElement().replace(newItemTypeElement);
-		newItemVariable.setName(iterationParameterName);
-		final CodeStyleSettings codeStyleSettings = CodeStyleSettingsManager.getSettings(project);
-		if(codeStyleSettings.getCustomSettings(JavaCodeStyleSettings.class).GENERATE_FINAL_LOCALS)
-		{
-			final PsiModifierList modifierList = newItemVariable.getModifierList();
-			if(modifierList != null)
-			{
-				modifierList.setModifierProperty(PsiModifier.FINAL, true);
-			}
-		}
-		final CodeStyleManager styleManager = CodeStyleManager.getInstance(project);
-		newForLoop = (PsiForStatement) javaStyleManager.shortenClassReferences(newForLoop);
-		newForLoop = (PsiForStatement) styleManager.reformat(newForLoop);
+    if (forEachBody instanceof PsiBlockStatement) {
+      final PsiCodeBlock bodyCodeBlock = ((PsiBlockStatement)forEachBody).getCodeBlock();
+      final PsiElement firstBodyElement = bodyCodeBlock.getFirstBodyElement();
+      final PsiElement lastBodyElement = bodyCodeBlock.getLastBodyElement();
+      if (firstBodyElement != null && lastBodyElement != null) {
+        newBodyBlock.addRangeAfter(firstBodyElement, lastBodyElement, newFirstStatement);
+      }
+    }
+    else if (forEachBody != null && !(forEachBody instanceof PsiEmptyStatement)) {
+      newBodyBlock.addAfter(forEachBody, newFirstStatement);
+    }
 
-		if(forEachBody instanceof PsiBlockStatement)
-		{
-			final PsiCodeBlock bodyCodeBlock = ((PsiBlockStatement) forEachBody).getCodeBlock();
-			final PsiElement firstBodyElement = bodyCodeBlock.getFirstBodyElement();
-			final PsiElement lastBodyElement = bodyCodeBlock.getLastBodyElement();
-			if(firstBodyElement != null && lastBodyElement != null)
-			{
-				newBodyBlock.addRangeAfter(firstBodyElement, lastBodyElement, newFirstStatement);
-			}
-		}
-		else if(forEachBody != null && !(forEachBody instanceof PsiEmptyStatement))
-		{
-			newBodyBlock.addAfter(forEachBody, newFirstStatement);
-		}
-
-		myStatement.replace(newForLoop);
-	}
+    myStatement.replace(newForLoop);
+  }
 }

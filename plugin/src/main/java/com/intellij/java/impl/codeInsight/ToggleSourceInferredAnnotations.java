@@ -28,7 +28,6 @@ import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
-import org.jetbrains.annotations.Nls;
 
 import javax.annotation.Nonnull;
 
@@ -39,45 +38,36 @@ import static com.intellij.java.impl.codeInsight.ExternalAnnotationsLineMarkerPr
  */
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.ToggleSourceInferredAnnotations", fileExtensions = "java", categories = {"Java", "Annotations"})
-public class ToggleSourceInferredAnnotations extends BaseIntentionAction
-{
+public class ToggleSourceInferredAnnotations extends BaseIntentionAction {
+  public ToggleSourceInferredAnnotations() {
+    setText("Show/Hide Annotations Inferred from Source Code");
+  }
 
-	@Nls
-	@Nonnull
-	@Override
-	public String getFamilyName()
-	{
-		return "Show/Hide Annotations Inferred from Source Code";
-	}
+  @Override
+  public boolean isAvailable(@Nonnull final Project project, Editor editor, PsiFile file) {
+    final PsiElement leaf = file.findElementAt(editor.getCaretModel().getOffset());
+    final PsiModifierListOwner owner = getAnnotationOwner(leaf);
+    if (owner != null) {
+      boolean hasSrcInferredAnnotation =
+        ContainerUtil.exists(AnnotationDocGenerator.getAnnotationsToShow(owner), AnnotationDocGenerator::isInferredFromSource);
+      if (hasSrcInferredAnnotation) {
+        setText((JavaCodeInsightSettings.getInstance().SHOW_SOURCE_INFERRED_ANNOTATIONS ? "Hide" : "Show") + " annotations inferred from source code");
+        return true;
+      }
+    }
 
-	@Override
-	public boolean isAvailable(@Nonnull final Project project, Editor editor, PsiFile file)
-	{
-		final PsiElement leaf = file.findElementAt(editor.getCaretModel().getOffset());
-		final PsiModifierListOwner owner = getAnnotationOwner(leaf);
-		if(owner != null)
-		{
-			boolean hasSrcInferredAnnotation = ContainerUtil.exists(AnnotationDocGenerator.getAnnotationsToShow(owner), AnnotationDocGenerator::isInferredFromSource);
-			if(hasSrcInferredAnnotation)
-			{
-				setText((JavaCodeInsightSettings.getInstance().SHOW_SOURCE_INFERRED_ANNOTATIONS ? "Hide" : "Show") + " annotations inferred from source code");
-				return true;
-			}
-		}
+    return false;
+  }
 
-		return false;
-	}
+  @Override
+  public void invoke(@Nonnull final Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+    JavaCodeInsightSettings.getInstance().SHOW_SOURCE_INFERRED_ANNOTATIONS =
+      !JavaCodeInsightSettings.getInstance().SHOW_SOURCE_INFERRED_ANNOTATIONS;
+    DaemonCodeAnalyzer.getInstance(project).restart(file);
+  }
 
-	@Override
-	public void invoke(@Nonnull final Project project, Editor editor, PsiFile file) throws IncorrectOperationException
-	{
-		JavaCodeInsightSettings.getInstance().SHOW_SOURCE_INFERRED_ANNOTATIONS = !JavaCodeInsightSettings.getInstance().SHOW_SOURCE_INFERRED_ANNOTATIONS;
-		DaemonCodeAnalyzer.getInstance(project).restart(file);
-	}
-
-	@Override
-	public boolean startInWriteAction()
-	{
-		return false;
-	}
+  @Override
+  public boolean startInWriteAction() {
+    return false;
+  }
 }

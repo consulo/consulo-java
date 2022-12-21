@@ -46,7 +46,7 @@ import consulo.document.util.TextRange;
 import consulo.ide.impl.idea.openapi.fileEditor.ex.IdeDocumentHistory;
 import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.WriteCommandAction;
-import consulo.language.editor.intention.BaseIntentionAction;
+import consulo.language.editor.intention.IntentionAction;
 import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.editor.template.Template;
 import consulo.language.editor.template.TemplateBuilder;
@@ -68,9 +68,9 @@ import java.util.List;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.CreateSubclassAction", categories = {"Java", "Declaration"}, fileExtensions = "java")
-public class CreateSubclassAction extends BaseIntentionAction {
+public class CreateSubclassAction implements IntentionAction {
   private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.intention.impl.ImplementAbstractClassAction");
-  private String myText = CodeInsightBundle.message("intention.implement.abstract.class.default.text");
+  private String myText = CodeInsightBundle.message("intention.implement.abstract.class.family");
   @NonNls
   private static final String IMPL_SUFFIX = "Impl";
 
@@ -78,12 +78,6 @@ public class CreateSubclassAction extends BaseIntentionAction {
   @Nonnull
   public String getText() {
     return myText;
-  }
-
-  @Override
-  @Nonnull
-  public String getFamilyName() {
-    return CodeInsightBundle.message("intention.implement.abstract.class.family");
   }
 
   @Override

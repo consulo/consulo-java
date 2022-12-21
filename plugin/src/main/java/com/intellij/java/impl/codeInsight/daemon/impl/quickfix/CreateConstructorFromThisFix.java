@@ -19,14 +19,14 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
-import consulo.java.analysis.impl.JavaQuickFixBundle;
 import com.intellij.java.language.psi.PsiClass;
-import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiMethodCallExpression;
 import com.intellij.java.language.psi.PsiTypeParameter;
+import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
-import javax.annotation.Nonnull;
 
+import javax.annotation.Nonnull;
 import java.util.Collections;
 import java.util.List;
 
@@ -34,6 +34,8 @@ public class CreateConstructorFromThisFix extends CreateConstructorFromThisOrSup
 
   public CreateConstructorFromThisFix(PsiMethodCallExpression methodCall) {
     super(methodCall);
+
+    setText(JavaQuickFixBundle.message("create.constructor.from.this.call.family"));
   }
 
   @Override
@@ -54,11 +56,5 @@ public class CreateConstructorFromThisFix extends CreateConstructorFromThisOrSup
     else {
       return Collections.emptyList();
     }
-  }
-
-  @Override
-  @Nonnull
-  public String getFamilyName() {
-    return JavaQuickFixBundle.message("create.constructor.from.this.call.family");
   }
 }

@@ -58,12 +58,6 @@ public class AddTypeArgumentsConditionalFix implements SyntheticIntentionAction 
     return "Add explicit type arguments";
   }
 
-  @Nonnull
-  @Override
-  public String getFamilyName() {
-    return getText();
-  }
-
   @Override
   public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     if (mySubstitutor.isValid() && myExpression.isValid() && myMethod.isValid()) {

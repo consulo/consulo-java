@@ -43,12 +43,6 @@ public class MakeMethodConstructorFix implements IntentionAction {
   }
 
   @Override
-  @Nonnull
-  public String getFamilyName() {
-    return getText();
-  }
-
-  @Override
   public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     return myMethod.isValid() && myMethod.getReturnTypeElement() != null && myMethod.getManager().isInProject(myMethod);
   }

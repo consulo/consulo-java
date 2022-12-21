@@ -46,6 +46,10 @@ import javax.annotation.Nullable;
 public class AssignFieldFromParameterAction extends BaseIntentionAction {
   private static final Logger LOG = Logger.getInstance(AssignFieldFromParameterAction.class);
 
+  public AssignFieldFromParameterAction() {
+    setText(CodeInsightBundle.message("intention.assign.field.from.parameter.family"));
+  }
+
   @Override
   public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     final PsiParameter myParameter = FieldFromParameterUtils.findParameterAtCursor(file, editor);
@@ -60,12 +64,6 @@ public class AssignFieldFromParameterAction extends BaseIntentionAction {
     setText(CodeInsightBundle.message("intention.assign.field.from.parameter.text", field.getName()));
 
     return true;
-  }
-
-  @Override
-  @Nonnull
-  public String getFamilyName() {
-    return CodeInsightBundle.message("intention.assign.field.from.parameter.family");
   }
 
   @Override

@@ -147,10 +147,4 @@ public class IterateOverIterableIntention implements IntentionAction {
   public boolean startInWriteAction() {
     return false;
   }
-
-  @Nonnull
-  @Override
-  public String getFamilyName() {
-    return getText();
-  }
 }

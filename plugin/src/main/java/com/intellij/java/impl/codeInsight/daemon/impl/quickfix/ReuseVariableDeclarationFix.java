@@ -45,12 +45,6 @@ public class ReuseVariableDeclarationFix implements SyntheticIntentionAction {
 
   @Override
   @Nonnull
-  public String getFamilyName() {
-    return JavaQuickFixBundle.message("reuse.variable.declaration.family");
-  }
-
-  @Override
-  @Nonnull
   public String getText() {
     return JavaQuickFixBundle.message("reuse.variable.declaration.text", myVariable.getName());
   }

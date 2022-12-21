@@ -15,28 +15,28 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import com.intellij.java.impl.codeInsight.ExpectedTypeInfo;
 import com.intellij.java.impl.codeInsight.ExpectedTypesProvider;
 import com.intellij.java.language.psi.*;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
-import consulo.language.editor.intention.BaseIntentionAction;
+import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.codeEditor.Editor;
-import consulo.project.Project;
+import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.editor.intention.BaseIntentionAction;
+import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.psi.*;
 import consulo.language.psi.scope.GlobalSearchScope;
-import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.java.language.module.util.JavaClassNames;
 import consulo.logging.Logger;
+import consulo.project.Project;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * @author ven
  */
-public abstract class CreateClassFromUsageBaseFix extends BaseIntentionAction {
+public abstract class CreateClassFromUsageBaseFix extends BaseIntentionAction implements SyntheticIntentionAction {
   protected static final Logger LOG = Logger.getInstance(
-		  CreateClassFromUsageBaseFix.class);
+    CreateClassFromUsageBaseFix.class);
   protected CreateClassKind myKind;
   private final SmartPsiElementPointer<PsiJavaCodeReferenceElement> myRefElement;
 
@@ -59,16 +59,16 @@ public abstract class CreateClassFromUsageBaseFix extends BaseIntentionAction {
     if (parent instanceof PsiTypeElement) {
       if (parent.getParent() instanceof PsiReferenceParameterList) return true;
 
-      while (parent.getParent() instanceof PsiTypeElement){
+      while (parent.getParent() instanceof PsiTypeElement) {
         parent = parent.getParent();
         if (parent.getParent() instanceof PsiReferenceParameterList) return true;
       }
       if (parent.getParent() instanceof PsiCodeFragment ||
-          parent.getParent() instanceof PsiVariable ||
-          parent.getParent() instanceof PsiMethod ||
-          parent.getParent() instanceof PsiClassObjectAccessExpression ||
-          parent.getParent() instanceof PsiTypeCastExpression ||
-          (parent.getParent() instanceof PsiInstanceOfExpression && ((PsiInstanceOfExpression)parent.getParent()).getCheckType() == parent)) {
+        parent.getParent() instanceof PsiVariable ||
+        parent.getParent() instanceof PsiMethod ||
+        parent.getParent() instanceof PsiClassObjectAccessExpression ||
+        parent.getParent() instanceof PsiTypeCastExpression ||
+        (parent.getParent() instanceof PsiInstanceOfExpression && ((PsiInstanceOfExpression)parent.getParent()).getCheckType() == parent)) {
         return true;
       }
     }
@@ -108,8 +108,8 @@ public abstract class CreateClassFromUsageBaseFix extends BaseIntentionAction {
   public boolean isAvailable(@Nonnull final Project project, final Editor editor, final PsiFile file) {
     final PsiJavaCodeReferenceElement element = getRefElement();
     if (element == null ||
-        !element.getManager().isInProject(element) ||
-        CreateFromUsageUtils.isValidReference(element, true)) return false;
+      !element.getManager().isInProject(element) ||
+      CreateFromUsageUtils.isValidReference(element, true)) return false;
     final String refName = element.getReferenceName();
     if (refName == null || !checkClassName(refName)) return false;
     PsiElement nameElement = element.getReferenceNameElement();
@@ -132,12 +132,6 @@ public abstract class CreateClassFromUsageBaseFix extends BaseIntentionAction {
     return false;
   }
 
-  @Override
-  @Nonnull
-  public String getFamilyName() {
-    return JavaQuickFixBundle.message("create.class.from.usage.family");
-  }
-
   @Nullable
   protected PsiJavaCodeReferenceElement getRefElement() {
     return myRefElement.getElement();
@@ -153,7 +147,8 @@ public abstract class CreateClassFromUsageBaseFix extends BaseIntentionAction {
       if (method.getThrowsList() == parent) {
         superClassName = "java.lang.Exception";
       }
-    } else if (ggParent instanceof PsiClassObjectAccessExpression) {
+    }
+    else if (ggParent instanceof PsiClassObjectAccessExpression) {
       final ExpectedTypeInfo[] expectedTypes = ExpectedTypesProvider.getExpectedTypes((PsiExpression)ggParent, false);
       if (expectedTypes.length == 1) {
         final PsiClassType.ClassResolveResult classResolveResult = PsiUtil.resolveGenericsClassInType(expectedTypes[0].getType());
@@ -168,7 +163,8 @@ public abstract class CreateClassFromUsageBaseFix extends BaseIntentionAction {
           if (aClass != null) return aClass.getQualifiedName();
         }
       }
-    } else if (ggParent instanceof PsiExpressionList && parent instanceof PsiExpression && myKind == CreateClassKind.ENUM) {
+    }
+    else if (ggParent instanceof PsiExpressionList && parent instanceof PsiExpression && myKind == CreateClassKind.ENUM) {
       final ExpectedTypeInfo[] expectedTypes = ExpectedTypesProvider.getExpectedTypes((PsiExpression)parent, false);
       if (expectedTypes.length == 1) {
         final PsiClassType.ClassResolveResult classResolveResult = PsiUtil.resolveGenericsClassInType(expectedTypes[0].getType());

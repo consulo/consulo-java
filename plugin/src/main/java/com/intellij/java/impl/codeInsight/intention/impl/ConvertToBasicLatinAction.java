@@ -74,14 +74,8 @@ public class ConvertToBasicLatinAction extends PsiElementBaseIntentionAction {
 
   @Nonnull
   @Override
-  public String getFamilyName() {
-    return CodeInsightBundle.message("intention.convert.to.basic.latin");
-  }
-
-  @Nonnull
-  @Override
   public String getText() {
-    return getFamilyName();
+    return CodeInsightBundle.message("intention.convert.to.basic.latin");
   }
 
   @Override

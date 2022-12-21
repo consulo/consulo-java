@@ -175,10 +175,4 @@ public class DelegateWithDefaultParamValueIntentionAction extends PsiElementBase
   public String getText() {
     return "Generate delegated method with default parameter value";
   }
-
-  @Nonnull
-  @Override
-  public String getFamilyName() {
-    return getText();
-  }
 }

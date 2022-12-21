@@ -48,12 +48,6 @@ public class ConvertDoubleToFloatFix implements SyntheticIntentionAction {
     return "Convert '" + myExpression.getText() + "' to float";
   }
 
-  @Nonnull
-  @Override
-  public String getFamilyName() {
-    return getText();
-  }
-
   @Override
   public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     if (myExpression.isValid()) {

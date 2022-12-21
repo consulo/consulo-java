@@ -37,6 +37,10 @@ import javax.annotation.Nullable;
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.CreateCastExpressionFromInstanceofAction", categories = {"Java", "Declaration"}, fileExtensions = "java")
 public class CreateCastExpressionFromInstanceofAction extends CreateLocalVarFromInstanceofAction {
+  public CreateCastExpressionFromInstanceofAction() {
+    setText(CodeInsightBundle.message("cast.expression"));
+  }
+
   @Override
   public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     boolean available = super.isAvailable(project, editor, file);
@@ -81,11 +85,5 @@ public class CreateCastExpressionFromInstanceofAction extends CreateLocalVarFrom
     else {
       return insertAtAnchor(instanceOfExpression, statement);
     }
-  }
-
-  @Override
-  @Nonnull
-  public String getFamilyName() {
-    return CodeInsightBundle.message("cast.expression");
   }
 }

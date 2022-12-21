@@ -42,7 +42,6 @@ import consulo.project.DumbService;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.VirtualFile;
-import org.jetbrains.annotations.Nls;
 
 import javax.annotation.Nonnull;
 import java.util.Collections;
@@ -54,19 +53,17 @@ import java.util.Collections;
 @IntentionMetaData(ignoreId = "java.MakeInferredAnnotationExplicit", fileExtensions = "java", categories = {"Java", "Annotations"})
 public class MakeInferredAnnotationExplicit extends BaseIntentionAction {
 
-  @Nls
-  @Nonnull
-  @Override
-  public String getFamilyName() {
-    return "Make Inferred Annotations Explicit";
+  public MakeInferredAnnotationExplicit() {
+    setText("Make Inferred Annotations Explicit");
   }
 
   @Override
   public boolean isAvailable(@Nonnull final Project project, Editor editor, PsiFile file) {
     final PsiElement leaf = file.findElementAt(editor.getCaretModel().getOffset());
     final PsiModifierListOwner owner = ExternalAnnotationsLineMarkerProvider.getAnnotationOwner(leaf);
-    if (owner != null && owner.getLanguage().isKindOf(JavaLanguage.INSTANCE) && isWritable(owner) && ModuleUtilCore.findModuleForPsiElement(file) != null && PsiUtil.getLanguageLevel(file)
-        .isAtLeast(LanguageLevel.JDK_1_5)) {
+    if (owner != null && owner.getLanguage().isKindOf(JavaLanguage.INSTANCE) && isWritable(owner) && ModuleUtilCore.findModuleForPsiElement(
+      file) != null && PsiUtil.getLanguageLevel(file)
+                              .isAtLeast(LanguageLevel.JDK_1_5)) {
       final PsiAnnotation[] annotations = InferredAnnotationsManager.getInstance(project).findInferredAnnotations(owner);
       if (annotations.length > 0) {
         final String annos = StringUtil.join(annotations, annotation ->
@@ -112,12 +109,22 @@ public class MakeInferredAnnotationExplicit extends BaseIntentionAction {
       final PsiAnnotation toInsert = correctAnnotation(inferred);
       final String qname = toInsert.getQualifiedName();
       assert qname != null;
-      if (facade.findClass(qname, file.getResolveScope()) == null && !InferNullityAnnotationsAction.addAnnotationsDependency(project, Collections.singleton(module), qname, getFamilyName())) {
+      if (facade.findClass(qname, file.getResolveScope()) == null && !InferNullityAnnotationsAction.addAnnotationsDependency(project,
+                                                                                                                             Collections.singleton(
+                                                                                                                               module),
+                                                                                                                             qname,
+                                                                                                                             getText())) {
         return;
       }
 
-      WriteCommandAction.runWriteCommandAction(project, () -> DumbService.getInstance(project).withAlternativeResolveEnabled(() -> JavaCodeStyleManager.getInstance(project)
-          .shortenClassReferences(modifierList.addAfter(toInsert, null))));
+      WriteCommandAction.runWriteCommandAction(project,
+                                               () -> DumbService.getInstance(project)
+                                                                .withAlternativeResolveEnabled(() -> JavaCodeStyleManager.getInstance(
+                                                                  project)
+                                                                                                                         .shortenClassReferences(
+                                                                                                                           modifierList.addAfter(
+                                                                                                                             toInsert,
+                                                                                                                             null))));
     }
 
 

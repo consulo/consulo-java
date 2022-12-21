@@ -94,12 +94,6 @@ class SuppressByCommentOutAction extends SuppressIntentionAction implements Synt
     return null;
   }
 
-  @Override
-  @Nonnull
-  public String getFamilyName() {
-    return InspectionsBundle.message("suppress.inspection.family");
-  }
-
   @Nonnull
   @Override
   public String getText() {

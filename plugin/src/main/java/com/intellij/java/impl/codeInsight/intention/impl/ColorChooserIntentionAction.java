@@ -74,12 +74,6 @@ public class ColorChooserIntentionAction extends BaseColorIntentionAction {
   }
 
   @Override
-  @Nonnull
-  public String getFamilyName() {
-    return getText();
-  }
-
-  @Override
   public void invoke(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) throws IncorrectOperationException {
     if (!FileModificationService.getInstance().preparePsiElementForWrite(element)) {
       return;

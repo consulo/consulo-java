@@ -29,6 +29,7 @@ import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.intention.BaseIntentionAction;
+import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.editor.util.LanguageUndoUtil;
 import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
@@ -44,19 +45,14 @@ import java.util.List;
 /**
  * @author ven
  */
-public class CreateConstructorMatchingSuperFix extends BaseIntentionAction {
+public class CreateConstructorMatchingSuperFix extends BaseIntentionAction implements SyntheticIntentionAction {
   private static final Logger LOG = Logger.getInstance(CreateConstructorMatchingSuperFix.class);
 
   private final PsiClass myClass;
 
   public CreateConstructorMatchingSuperFix(PsiClass aClass) {
     myClass = aClass;
-  }
-
-  @Override
-  @Nonnull
-  public String getFamilyName() {
-    return JavaQuickFixBundle.message("create.constructor.matching.super");
+    setText(JavaQuickFixBundle.message("create.constructor.matching.super"));
   }
 
   @Override
@@ -95,7 +91,7 @@ public class CreateConstructorMatchingSuperFix extends BaseIntentionAction {
       }
     }
 
-    LOG.assertTrue(constructors.length >=1); // Otherwise we won't have been messing with all this stuff
+    LOG.assertTrue(constructors.length >= 1); // Otherwise we won't have been messing with all this stuff
     boolean isCopyJavadoc = true;
     if (constructors.length > 1 && !ApplicationManager.getApplication().isUnitTestMode()) {
       MemberChooser<PsiMethodMember> chooser = new MemberChooser<PsiMethodMember>(constructors, false, true, project);
@@ -108,7 +104,7 @@ public class CreateConstructorMatchingSuperFix extends BaseIntentionAction {
 
     final PsiMethodMember[] constructors1 = constructors;
     final boolean isCopyJavadoc1 = isCopyJavadoc;
-    ApplicationManager.getApplication().runWriteAction (
+    ApplicationManager.getApplication().runWriteAction(
       new Runnable() {
         @Override
         public void run() {

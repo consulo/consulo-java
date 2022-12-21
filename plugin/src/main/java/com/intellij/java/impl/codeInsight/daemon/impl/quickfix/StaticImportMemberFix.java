@@ -28,7 +28,7 @@ import consulo.language.editor.FileModificationService;
 import consulo.language.editor.hint.HintManager;
 import consulo.language.editor.hint.QuestionAction;
 import consulo.language.editor.intention.HintAction;
-import consulo.language.editor.intention.IntentionAction;
+import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.project.Project;
@@ -37,7 +37,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public abstract class StaticImportMemberFix<T extends PsiMember> implements IntentionAction, HintAction {
+public abstract class StaticImportMemberFix<T extends PsiMember> implements SyntheticIntentionAction, HintAction {
   private List<T> candidates;
 
   @Nonnull
@@ -56,12 +56,6 @@ public abstract class StaticImportMemberFix<T extends PsiMember> implements Inte
       text += "...";
     }
     return text;
-  }
-
-  @Override
-  @Nonnull
-  public String getFamilyName() {
-    return getText();
   }
 
   @Override

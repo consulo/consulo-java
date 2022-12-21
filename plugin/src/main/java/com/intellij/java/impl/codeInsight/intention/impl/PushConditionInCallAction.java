@@ -34,10 +34,8 @@ import javax.annotation.Nonnull;
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.PushConditionInCallAction", categories = {"Java", "Declaration"}, fileExtensions = "java")
 public class PushConditionInCallAction extends PsiElementBaseIntentionAction {
-  @Override
-  @Nonnull
-  public String getFamilyName() {
-    return "Push condition inside call";
+  public PushConditionInCallAction() {
+    setText("Push condition inside call");
   }
 
   @Override

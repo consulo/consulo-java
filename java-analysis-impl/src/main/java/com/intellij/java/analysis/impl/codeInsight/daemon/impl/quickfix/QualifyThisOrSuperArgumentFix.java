@@ -74,12 +74,6 @@ public abstract class QualifyThisOrSuperArgumentFix implements SyntheticIntentio
     return true;
   }
 
-  @Nonnull
-  @Override
-  public String getFamilyName() {
-    return "Qualify " + getQualifierText();
-  }
-
   @Override
   public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     myExpression.replace(getQualifier(PsiManager.getInstance(project)));

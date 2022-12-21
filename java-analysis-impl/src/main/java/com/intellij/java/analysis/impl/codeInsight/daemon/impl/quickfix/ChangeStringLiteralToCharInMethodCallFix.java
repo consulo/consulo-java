@@ -54,12 +54,6 @@ public class ChangeStringLiteralToCharInMethodCallFix implements SyntheticIntent
   }
 
   @Override
-  @Nonnull
-  public String getFamilyName() {
-    return JavaQuickFixBundle.message("fix.single.character.string.to.char.literal.family");
-  }
-
-  @Override
   public boolean isAvailable(@Nonnull final Project project, final Editor editor, final PsiFile file) {
     return myCall.isValid() && myLiteral.isValid() && myCall.getManager().isInProject(myCall);
   }

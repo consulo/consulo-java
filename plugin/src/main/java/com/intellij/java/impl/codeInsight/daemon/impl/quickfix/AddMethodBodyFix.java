@@ -21,6 +21,7 @@ import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.intention.IntentionAction;
 import consulo.codeEditor.Editor;
+import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.project.Project;
 import consulo.language.psi.PsiFile;
 import com.intellij.java.language.psi.PsiMethod;
@@ -29,7 +30,7 @@ import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 
-public class AddMethodBodyFix implements IntentionAction {
+public class AddMethodBodyFix implements SyntheticIntentionAction {
   private static final Logger LOG = Logger.getInstance(AddMethodBodyFix.class);
 
   private final PsiMethod myMethod;
@@ -42,12 +43,6 @@ public class AddMethodBodyFix implements IntentionAction {
   @Nonnull
   public String getText() {
     return JavaQuickFixBundle.message("add.method.body.text");
-  }
-
-  @Override
-  @Nonnull
-  public String getFamilyName() {
-    return getText();
   }
 
   @Override

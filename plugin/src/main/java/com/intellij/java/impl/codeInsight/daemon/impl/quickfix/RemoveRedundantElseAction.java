@@ -47,12 +47,6 @@ public class RemoveRedundantElseAction extends PsiElementBaseIntentionAction {
   }
 
   @Override
-  @Nonnull
-  public String getFamilyName() {
-    return JavaQuickFixBundle.message("remove.redundant.else.fix");
-  }
-
-  @Override
   public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
     if (element instanceof PsiKeyword &&
         element.getParent() instanceof PsiIfStatement &&

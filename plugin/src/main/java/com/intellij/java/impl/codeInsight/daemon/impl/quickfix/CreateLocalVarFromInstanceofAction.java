@@ -64,6 +64,10 @@ import java.util.Set;
 public class CreateLocalVarFromInstanceofAction extends BaseIntentionAction {
   private static final Logger LOG = Logger.getInstance(CreateLocalVarFromInstanceofAction.class);
 
+  public CreateLocalVarFromInstanceofAction() {
+    setText(JavaQuickFixBundle.message("create.local.from.instanceof.usage.family"));
+  }
+
   @Override
   public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     PsiInstanceOfExpression instanceOfExpression = getInstanceOfExpressionAtCaret(editor, file);
@@ -443,11 +447,5 @@ public class CreateLocalVarFromInstanceofAction extends BaseIntentionAction {
     template.addVariable("", expr, expr, true);
 
     return template;
-  }
-
-  @Override
-  @Nonnull
-  public String getFamilyName() {
-    return JavaQuickFixBundle.message("create.local.from.instanceof.usage.family");
   }
 }

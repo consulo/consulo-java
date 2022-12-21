@@ -25,6 +25,7 @@ import consulo.codeEditor.Editor;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.intention.IntentionAction;
+import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiManager;
@@ -40,7 +41,7 @@ import java.util.HashMap;
 /**
  * @author ven
  */
-public class BringVariableIntoScopeFix implements IntentionAction {
+public class BringVariableIntoScopeFix implements SyntheticIntentionAction {
   private static final Logger LOG = Logger.getInstance(BringVariableIntoScopeFix.class);
   private final PsiReferenceExpression myUnresolvedReference;
   private PsiLocalVariable myOutOfScopeVariable;
@@ -57,12 +58,6 @@ public class BringVariableIntoScopeFix implements IntentionAction {
     String varText = variable == null ? "" : PsiFormatUtil.formatVariable(variable, PsiFormatUtilBase.SHOW_NAME |
                                                                                     PsiFormatUtilBase.SHOW_TYPE, PsiSubstitutor.EMPTY);
     return JavaQuickFixBundle.message("bring.variable.to.scope.text", varText);
-  }
-
-  @Override
-  @Nonnull
-  public String getFamilyName() {
-    return JavaQuickFixBundle.message("bring.variable.to.scope.family");
   }
 
   @Override

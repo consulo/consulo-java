@@ -57,6 +57,10 @@ public class BindFieldsFromParametersAction extends BaseIntentionAction implemen
 
   private static final Object LOCK = new Object();
 
+  public BindFieldsFromParametersAction() {
+    setText(CodeInsightBundle.message("intention.bind.fields.from.parameters.family"));
+  }
+
   @Override
   public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     PsiParameter psiParameter = FieldFromParameterUtils.findParameterAtCursor(file, editor);
@@ -90,13 +94,14 @@ public class BindFieldsFromParametersAction extends BaseIntentionAction implemen
       if (elementAt instanceof PsiIdentifier) {
         final PsiElement parent = elementAt.getParent();
         if (parent instanceof PsiMethod) {
-          return (PsiMethod) parent;
+          return (PsiMethod)parent;
         }
       }
-    } else {
+    }
+    else {
       final PsiElement declarationScope = parameter.getDeclarationScope();
       if (declarationScope instanceof PsiMethod) {
-        return (PsiMethod) declarationScope;
+        return (PsiMethod)declarationScope;
       }
     }
 
@@ -118,7 +123,7 @@ public class BindFieldsFromParametersAction extends BaseIntentionAction implemen
     final PsiType type = FieldFromParameterUtils.getSubstitutedType(psiParameter);
     final PsiClass targetClass = PsiTreeUtil.getParentOfType(psiParameter, PsiClass.class);
     return FieldFromParameterUtils.isAvailable(psiParameter, type, targetClass) &&
-        psiParameter.getLanguage().isKindOf(JavaLanguage.INSTANCE);
+      psiParameter.getLanguage().isKindOf(JavaLanguage.INSTANCE);
   }
 
   @Nonnull
@@ -150,12 +155,6 @@ public class BindFieldsFromParametersAction extends BaseIntentionAction implemen
   }
 
   @Override
-  @Nonnull
-  public String getFamilyName() {
-    return CodeInsightBundle.message("intention.bind.fields.from.parameters.family");
-  }
-
-  @Override
   public void invoke(@Nonnull Project project, Editor editor, PsiFile file) {
     invoke(project, editor, file, !ApplicationManager.getApplication().isUnitTestMode());
   }
@@ -163,7 +162,10 @@ public class BindFieldsFromParametersAction extends BaseIntentionAction implemen
   private static void invoke(final Project project, Editor editor, PsiFile file, boolean isInteractive) {
     PsiParameter myParameter = FieldFromParameterUtils.findParameterAtCursor(file, editor);
     if (!FileModificationService.getInstance().prepareFileForWrite(file)) return;
-    final PsiMethod method = myParameter != null ? (PsiMethod) myParameter.getDeclarationScope() : PsiTreeUtil.getParentOfType(file.findElementAt(editor.getCaretModel().getOffset()), PsiMethod.class);
+    final PsiMethod method =
+      myParameter != null ? (PsiMethod)myParameter.getDeclarationScope() : PsiTreeUtil.getParentOfType(file.findElementAt(editor.getCaretModel()
+                                                                                                                                .getOffset()),
+                                                                                                       PsiMethod.class);
     LOG.assertTrue(method != null);
 
     final HashSet<String> usedNames = new HashSet<String>();
@@ -211,7 +213,7 @@ public class BindFieldsFromParametersAction extends BaseIntentionAction implemen
       @Override
       public int compare(ParameterClassMember o1, ParameterClassMember o2) {
         return parameterList.getParameterIndex(o1.getParameter()) -
-            parameterList.getParameterIndex(o2.getParameter());
+          parameterList.getParameterIndex(o2.getParameter());
       }
     });
     return members;
@@ -265,7 +267,7 @@ public class BindFieldsFromParametersAction extends BaseIntentionAction implemen
     String propertyName = styleManager.variableNameToPropertyName(parameterName, VariableKind.PARAMETER);
 
     final PsiClass targetClass = PsiTreeUtil.getParentOfType(myParameter, PsiClass.class);
-    final PsiMethod method = (PsiMethod) myParameter.getDeclarationScope();
+    final PsiMethod method = (PsiMethod)myParameter.getDeclarationScope();
 
     final boolean isMethodStatic = method.hasModifierProperty(PsiModifier.STATIC);
 
@@ -284,22 +286,23 @@ public class BindFieldsFromParametersAction extends BaseIntentionAction implemen
       }
     }
     final String fieldName = usedNames.add(name) ? name
-        : JavaCodeStyleManager.getInstance(project).suggestUniqueVariableName(name, myParameter, true);
+      : JavaCodeStyleManager.getInstance(project).suggestUniqueVariableName(name, myParameter, true);
 
     ApplicationManager.getApplication().runWriteAction(new Runnable() {
       @Override
       public void run() {
         try {
           FieldFromParameterUtils.createFieldAndAddAssignment(
-              project,
-              targetClass,
-              method,
-              myParameter,
-              type,
-              fieldName,
-              isMethodStatic,
-              isFinal);
-        } catch (IncorrectOperationException e) {
+            project,
+            targetClass,
+            method,
+            myParameter,
+            type,
+            fieldName,
+            isMethodStatic,
+            isFinal);
+        }
+        catch (IncorrectOperationException e) {
           LOG.error(e);
         }
       }

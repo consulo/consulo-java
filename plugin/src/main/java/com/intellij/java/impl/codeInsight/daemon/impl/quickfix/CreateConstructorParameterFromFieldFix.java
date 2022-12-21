@@ -34,6 +34,7 @@ import consulo.ide.impl.idea.ide.util.MemberChooser;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.intention.IntentionAction;
+import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
 import consulo.language.psi.*;
 import consulo.language.psi.scope.LocalSearchScope;
@@ -51,7 +52,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 
-public class CreateConstructorParameterFromFieldFix implements IntentionAction {
+public class CreateConstructorParameterFromFieldFix implements SyntheticIntentionAction {
   private static final Key<Map<SmartPsiElementPointer<PsiField>, Boolean>> FIELDS = Key.create("CONSTRUCTOR_PARAMS");
 
   private final SmartPsiElementPointer<PsiField> myField;
@@ -72,12 +73,6 @@ public class CreateConstructorParameterFromFieldFix implements IntentionAction {
       return "Add constructor parameters";
     }
     return JavaQuickFixBundle.message("add.constructor.parameter.name");
-  }
-
-  @Override
-  @Nonnull
-  public String getFamilyName() {
-    return getText();
   }
 
   @Override

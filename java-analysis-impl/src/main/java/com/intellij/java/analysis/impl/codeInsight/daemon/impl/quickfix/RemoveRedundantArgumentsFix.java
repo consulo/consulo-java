@@ -56,12 +56,6 @@ public class RemoveRedundantArgumentsFix implements SyntheticIntentionAction {
     return JavaQuickFixBundle.message("remove.redundant.arguments.text", JavaHighlightUtil.formatMethod(myTargetMethod));
   }
 
-  @Nonnull
-  @Override
-  public String getFamilyName() {
-    return JavaQuickFixBundle.message("remove.redundant.arguments.family");
-  }
-
   @Override
   public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     if (!myTargetMethod.isValid() || myTargetMethod.getContainingClass() == null) return false;

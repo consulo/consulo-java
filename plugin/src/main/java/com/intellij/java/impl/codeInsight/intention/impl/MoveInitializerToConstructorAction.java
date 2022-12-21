@@ -40,12 +40,6 @@ import java.util.Collection;
 public class MoveInitializerToConstructorAction extends BaseMoveInitializerToMethodAction {
   @Override
   @Nonnull
-  public String getFamilyName() {
-    return getText();
-  }
-
-  @Override
-  @Nonnull
   public String getText() {
     return CodeInsightBundle.message("intention.move.initializer.to.constructor");
   }

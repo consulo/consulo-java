@@ -19,10 +19,8 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
-import javax.annotation.Nonnull;
-
-import consulo.java.analysis.impl.JavaQuickFixBundle;
 import com.intellij.java.language.psi.PsiReferenceExpression;
+import consulo.java.analysis.impl.JavaQuickFixBundle;
 
 public class CreateConstantFieldFromUsageFix extends CreateFieldFromUsageFix {
   @Override
@@ -39,16 +37,11 @@ public class CreateConstantFieldFromUsageFix extends CreateFieldFromUsageFix {
 
   public CreateConstantFieldFromUsageFix(PsiReferenceExpression referenceElement) {
     super(referenceElement);
+    setText(JavaQuickFixBundle.message("create.constant.from.usage.family"));
   }
 
   @Override
   protected String getText(String varName) {
     return JavaQuickFixBundle.message("create.constant.from.usage.text", varName);
-  }
-
-  @Override
-  @Nonnull
-  public String getFamilyName() {
-    return JavaQuickFixBundle.message("create.constant.from.usage.family");
   }
 }

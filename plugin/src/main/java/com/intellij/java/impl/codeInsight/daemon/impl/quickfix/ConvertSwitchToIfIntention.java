@@ -16,6 +16,7 @@ import com.siyeh.ig.psiutils.ParenthesesUtils;
 import consulo.codeEditor.Editor;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.language.editor.intention.IntentionAction;
+import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiWhiteSpace;
@@ -32,7 +33,7 @@ import javax.annotation.Nonnull;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class ConvertSwitchToIfIntention implements IntentionAction {
+public class ConvertSwitchToIfIntention implements SyntheticIntentionAction {
   private final PsiSwitchStatement mySwitchStatement;
 
   public ConvertSwitchToIfIntention(@Nonnull PsiSwitchStatement switchStatement) {
@@ -43,12 +44,6 @@ public class ConvertSwitchToIfIntention implements IntentionAction {
   @Override
   public String getText() {
     return JavaQuickFixBundle.message("fix.replace.x.with.y", PsiKeyword.SWITCH, PsiKeyword.IF);
-  }
-
-  @Nonnull
-  @Override
-  public String getFamilyName() {
-    return getText();
   }
 
   @Override

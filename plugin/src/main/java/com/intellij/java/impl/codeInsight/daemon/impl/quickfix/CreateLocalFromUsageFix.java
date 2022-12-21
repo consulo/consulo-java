@@ -36,8 +36,6 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.logging.Logger;
 import consulo.project.Project;
 
-import javax.annotation.Nonnull;
-
 /**
  * @author Mike
  */
@@ -57,10 +55,10 @@ public class CreateLocalFromUsageFix extends CreateVarFromUsageFix {
   @Override
   protected boolean isAvailableImpl(int offset) {
     if (!super.isAvailableImpl(offset)) return false;
-    if(myReferenceExpression.isQualified()) return false;
+    if (myReferenceExpression.isQualified()) return false;
     PsiElement scope = PsiTreeUtil.getParentOfType(myReferenceExpression, PsiModifierListOwner.class);
     return scope instanceof PsiMethod || scope instanceof PsiClassInitializer ||
-           scope instanceof PsiLocalVariable || scope instanceof PsiAnonymousClass;
+      scope instanceof PsiLocalVariable || scope instanceof PsiAnonymousClass;
   }
 
   @Override
@@ -83,7 +81,7 @@ public class CreateLocalFromUsageFix extends CreateVarFromUsageFix {
     PsiExpression[] expressions = CreateFromUsageUtils.collectExpressions(myReferenceExpression, PsiMember.class, PsiFile.class);
     PsiStatement anchor = getAnchor(expressions);
     if (anchor instanceof PsiExpressionStatement &&
-        ((PsiExpressionStatement)anchor).getExpression() instanceof PsiAssignmentExpression) {
+      ((PsiExpressionStatement)anchor).getExpression() instanceof PsiAssignmentExpression) {
       PsiAssignmentExpression assignment = (PsiAssignmentExpression)((PsiExpressionStatement)anchor).getExpression();
       if (assignment.getLExpression().textMatches(myReferenceExpression)) {
         initializer = assignment.getRExpression();
@@ -160,18 +158,11 @@ public class CreateLocalFromUsageFix extends CreateVarFromUsageFix {
     }
 
     final PsiCodeBlock block = PsiTreeUtil.getParentOfType(parent, PsiCodeBlock.class, false);
-    LOG.assertTrue(block != null && block.getStatements().length > 0, "block: " + block +"; parent: " + parent);
+    LOG.assertTrue(block != null && block.getStatements().length > 0, "block: " + block + "; parent: " + parent);
     PsiStatement[] statements = block.getStatements();
     for (int i = 1; i < statements.length; i++) {
-      if (statements[i].getTextRange().getStartOffset() > minOffset) return statements[i-1];
+      if (statements[i].getTextRange().getStartOffset() > minOffset) return statements[i - 1];
     }
     return statements[statements.length - 1];
   }
-
-  @Override
-  @Nonnull
-  public String getFamilyName() {
-    return JavaQuickFixBundle.message("create.local.from.usage.family");
-  }
-
 }

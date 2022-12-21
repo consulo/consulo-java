@@ -45,12 +45,6 @@ public class IntroduceVariableIntentionAction extends BaseRefactoringIntentionAc
     return CodeInsightBundle.message("intention.introduce.variable.text");
   }
 
-  @Nonnull
-  @Override
-  public String getFamilyName() {
-    return getText();
-  }
-
   @Override
   public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
     if (element instanceof SyntheticElement){

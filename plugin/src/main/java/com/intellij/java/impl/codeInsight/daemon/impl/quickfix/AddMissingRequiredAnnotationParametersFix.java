@@ -20,6 +20,7 @@ import consulo.codeEditor.Editor;
 import consulo.document.Document;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.language.editor.intention.IntentionAction;
+import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.editor.template.EmptyExpression;
 import consulo.language.editor.template.TemplateBuilder;
 import consulo.language.editor.template.TemplateBuilderFactory;
@@ -43,7 +44,7 @@ import java.util.TreeSet;
 /**
  * @author Dmitry Batkovich
  */
-public class AddMissingRequiredAnnotationParametersFix implements IntentionAction {
+public class AddMissingRequiredAnnotationParametersFix implements SyntheticIntentionAction {
   private static final Logger LOG = Logger.getInstance(AddMissingRequiredAnnotationParametersFix.class);
 
   private final PsiAnnotation myAnnotation;
@@ -67,12 +68,6 @@ public class AddMissingRequiredAnnotationParametersFix implements IntentionActio
     return myMissedElements.size() == 1 ? JavaQuickFixBundle.message("add.missing.annotation.single.parameter.fix",
         ContainerUtil.getFirstItem(myMissedElements)) : JavaQuickFixBundle.message("add.missing.annotation" +
         ".parameters.fix", StringUtil.join(myMissedElements, ", "));
-  }
-
-  @Nonnull
-  @Override
-  public String getFamilyName() {
-    return JavaQuickFixBundle.message("annotations.fix");
   }
 
   @Override

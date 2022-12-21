@@ -47,10 +47,8 @@ public class AddSingleMemberStaticImportAction extends PsiElementBaseIntentionAc
   private static final Logger LOG = Logger.getInstance(AddSingleMemberStaticImportAction.class);
   private static final Key<PsiElement> TEMP_REFERENT_USER_DATA = new Key<PsiElement>("TEMP_REFERENT_USER_DATA");
 
-  @Override
-  @Nonnull
-  public String getFamilyName() {
-    return CodeInsightBundle.message("intention.add.single.member.static.import.family");
+  public AddSingleMemberStaticImportAction() {
+    setText(CodeInsightBundle.message("intention.add.single.member.static.import.family"));
   }
 
   /**

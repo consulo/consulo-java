@@ -51,10 +51,8 @@ public class ExpandStaticImportAction extends PsiElementBaseIntentionAction {
   private static final String REPLACE_THIS_OCCURRENCE = "Replace this occurrence and keep the method";
   private static final String REPLACE_ALL_AND_DELETE_IMPORT = "Replace all and delete the import";
 
-  @Override
-  @Nonnull
-  public String getFamilyName() {
-    return "Expand Static Import";
+  public ExpandStaticImportAction() {
+    setText("Expand Static Import");
   }
 
   @Override

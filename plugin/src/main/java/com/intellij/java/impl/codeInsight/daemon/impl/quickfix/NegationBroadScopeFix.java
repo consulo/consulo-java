@@ -21,6 +21,7 @@ import consulo.codeEditor.Editor;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.intention.IntentionAction;
+import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
@@ -33,7 +34,7 @@ import javax.annotation.Nonnull;
  * if (!a == b) ...  =>  if (!(a == b)) ...
  */
 
-public class NegationBroadScopeFix implements IntentionAction {
+public class NegationBroadScopeFix implements SyntheticIntentionAction {
   private final PsiPrefixExpression myPrefixExpression;
 
   public NegationBroadScopeFix(PsiPrefixExpression prefixExpression) {
@@ -63,12 +64,6 @@ public class NegationBroadScopeFix implements IntentionAction {
 
     text += rop;
     return JavaQuickFixBundle.message("negation.broader.scope.text", text);
-  }
-
-  @Override
-  @Nonnull
-  public String getFamilyName() {
-    return JavaQuickFixBundle.message("negation.broader.scope.family");
   }
 
   @Override

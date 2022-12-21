@@ -45,12 +45,6 @@ public class DeleteRepeatedInterfaceFix implements SyntheticIntentionAction {
     return "Delete repeated '" + myConjunct.getText() + "'";
   }
 
-  @Nonnull
-  @Override
-  public String getFamilyName() {
-    return "Delete repeated interface";
-  }
-
   @Override
   public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     for (PsiTypeElement element : myConjList) {

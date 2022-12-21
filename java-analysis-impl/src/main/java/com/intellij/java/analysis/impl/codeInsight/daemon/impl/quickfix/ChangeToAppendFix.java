@@ -57,12 +57,6 @@ public class ChangeToAppendFix implements SyntheticIntentionAction {
                                                         new StringBuilder(myAssignmentExpression.getLExpression().getText())));
   }
 
-  @Nonnull
-  @Override
-  public String getFamilyName() {
-    return JavaQuickFixBundle.message("change.to.append.family");
-  }
-
   @Override
   public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     return JavaTokenType.PLUSEQ == myTokenType &&

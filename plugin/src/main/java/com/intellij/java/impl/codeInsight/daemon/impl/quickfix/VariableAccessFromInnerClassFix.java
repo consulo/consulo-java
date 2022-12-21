@@ -25,6 +25,7 @@ import consulo.codeEditor.Editor;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.intention.IntentionAction;
+import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.editor.rawHighlight.HighlightInfo;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
@@ -41,7 +42,7 @@ import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
 import java.util.*;
 
-public class VariableAccessFromInnerClassFix implements IntentionAction {
+public class VariableAccessFromInnerClassFix implements SyntheticIntentionAction {
   private static final Logger LOG = Logger.getInstance(VariableAccessFromInnerClassFix.class);
   private final PsiVariable myVariable;
   private final PsiElement myContext;
@@ -79,12 +80,6 @@ public class VariableAccessFromInnerClassFix implements IntentionAction {
     Collection<PsiVariable> vars = getVariablesToFix();
     String varNames = vars.size() == 1 ? "'"+myVariable.getName()+"'" : "variables";
     return JavaQuickFixBundle.message(message, varNames);
-  }
-
-  @Override
-  @Nonnull
-  public String getFamilyName() {
-    return JavaQuickFixBundle.message("make.final.family");
   }
 
   @Override

@@ -29,6 +29,7 @@ import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.intention.IntentionAction;
+import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiManager;
@@ -46,7 +47,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class InitializeFinalFieldInConstructorFix implements IntentionAction {
+public class InitializeFinalFieldInConstructorFix implements SyntheticIntentionAction {
   private final PsiField myField;
 
   public InitializeFinalFieldInConstructorFix(@Nonnull PsiField field) {
@@ -57,12 +58,6 @@ public class InitializeFinalFieldInConstructorFix implements IntentionAction {
   @Override
   public String getText() {
     return JavaQuickFixBundle.message("initialize.final.field.in.constructor.name");
-  }
-
-  @Nonnull
-  @Override
-  public String getFamilyName() {
-    return getText();
   }
 
   @Override

@@ -27,6 +27,7 @@ import consulo.ide.impl.idea.util.IconUtil;
 import consulo.language.editor.CommonDataKeys;
 import consulo.language.editor.inspection.InspectionsBundle;
 import consulo.language.editor.intention.IntentionAction;
+import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.util.IncorrectOperationException;
@@ -139,20 +140,13 @@ public class SpecialAnnotationsUtil {
                                                                                  final String family,
                                                                                  final List<String> targetList,
                                                                                  final String qualifiedName) {
-    return new IntentionAction() {
+    return new SyntheticIntentionAction() {
       @Override
       @Nonnull
       public String getText() {
         return text;
       }
 
-      @Override
-      @Nonnull
-      public String getFamilyName() {
-        return family;
-      }
-
-      @Override
       public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
         return true;
       }

@@ -44,13 +44,6 @@ public class MoveFileFix implements SyntheticIntentionAction {
     return myMessage;
   }
 
-  @Nls
-  @Nonnull
-  @Override
-  public String getFamilyName() {
-    return getText();
-  }
-
   @Override
   public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     return true;

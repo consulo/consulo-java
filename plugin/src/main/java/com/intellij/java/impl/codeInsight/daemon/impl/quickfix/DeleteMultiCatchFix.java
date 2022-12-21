@@ -15,24 +15,24 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
-import consulo.language.editor.FileModificationService;
+import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.JavaHighlightUtil;
 import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.java.language.psi.PsiJavaToken;
 import com.intellij.java.language.psi.PsiTypeElement;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
-import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.JavaHighlightUtil;
-import consulo.language.editor.intention.IntentionAction;
 import consulo.codeEditor.Editor;
-import consulo.project.Project;
-import consulo.language.psi.*;
+import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.language.ast.IElementType;
+import consulo.language.editor.FileModificationService;
+import consulo.language.editor.intention.SyntheticIntentionAction;
+import consulo.language.psi.*;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
-import javax.annotation.Nonnull;
+import consulo.project.Project;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
-public class DeleteMultiCatchFix implements IntentionAction {
+public class DeleteMultiCatchFix implements SyntheticIntentionAction {
   private final PsiTypeElement myTypeElement;
 
   public DeleteMultiCatchFix(@Nonnull PsiTypeElement typeElement) {
@@ -43,12 +43,6 @@ public class DeleteMultiCatchFix implements IntentionAction {
   @Override
   public String getText() {
     return JavaQuickFixBundle.message("delete.catch.text", JavaHighlightUtil.formatType(myTypeElement.getType()));
-  }
-
-  @Nonnull
-  @Override
-  public String getFamilyName() {
-    return JavaQuickFixBundle.message("delete.catch.family");
   }
 
   @Override

@@ -359,11 +359,6 @@ public class CreateMethodFromUsageFix extends CreateFromUsageBaseFix {
     return CreateFromUsageUtils.isValidMethodReference(referenceExpression, callExpression);
   }
 
-  @Override
-  @Nonnull
-  public String getFamilyName() {
-    return JavaQuickFixBundle.message("create.method.from.usage.family");
-  }
 
   @Nullable
   protected PsiMethodCallExpression getMethodCall() {

@@ -49,12 +49,6 @@ public class AddOverrideAnnotationAction implements IntentionAction {
   }
 
   @Override
-  @Nonnull
-  public String getFamilyName() {
-    return CodeInsightBundle.message("intention.add.override.annotation.family");
-  }
-
-  @Override
   public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     if (!PsiUtil.isLanguageLevel5OrHigher(file)) return false;
     if (!file.getManager().isInProject(file)) return false;

@@ -22,6 +22,7 @@ import consulo.codeEditor.Editor;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.intention.IntentionAction;
+import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
@@ -29,7 +30,7 @@ import consulo.project.Project;
 
 import javax.annotation.Nonnull;
 
-public class GeneralizeCatchFix implements IntentionAction {
+public class GeneralizeCatchFix implements SyntheticIntentionAction {
   private final PsiElement myElement;
   private final PsiClassType myUnhandledException;
   private PsiTryStatement myTryStatement;
@@ -46,12 +47,6 @@ public class GeneralizeCatchFix implements IntentionAction {
     return JavaQuickFixBundle.message("generalize.catch.text",
                                   JavaHighlightUtil.formatType(myCatchParameter == null ? null : myCatchParameter.getType()),
                                   JavaHighlightUtil.formatType(myUnhandledException));
-  }
-
-  @Override
-  @Nonnull
-  public String getFamilyName() {
-    return JavaQuickFixBundle.message("generalize.catch.family");
   }
 
   @Override

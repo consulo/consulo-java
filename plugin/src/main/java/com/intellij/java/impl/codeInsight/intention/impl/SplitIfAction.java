@@ -44,6 +44,10 @@ import javax.annotation.Nonnull;
 public class SplitIfAction extends PsiElementBaseIntentionAction {
   private static final Logger LOG = Logger.getInstance(SplitIfAction.class);
 
+  public SplitIfAction() {
+    setText(CodeInsightBundle.message("intention.split.if.family"));
+  }
+
   @Override
   public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
     if (!(element instanceof PsiJavaToken)) {
@@ -72,12 +76,6 @@ public class SplitIfAction extends PsiElementBaseIntentionAction {
     setText(CodeInsightBundle.message("intention.split.if.text"));
 
     return true;
-  }
-
-  @Override
-  @Nonnull
-  public String getFamilyName() {
-    return CodeInsightBundle.message("intention.split.if.family");
   }
 
   @Override

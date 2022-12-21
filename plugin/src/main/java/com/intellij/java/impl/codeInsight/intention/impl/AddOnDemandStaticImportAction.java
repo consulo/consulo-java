@@ -50,10 +50,8 @@ import java.util.PrimitiveIterator;
 public class AddOnDemandStaticImportAction extends PsiElementBaseIntentionAction {
   private static final Logger LOG = Logger.getInstance(AddOnDemandStaticImportAction.class);
 
-  @Override
-  @Nonnull
-  public String getFamilyName() {
-    return CodeInsightBundle.message("intention.add.on.demand.static.import.family");
+  public AddOnDemandStaticImportAction() {
+    setText(CodeInsightBundle.message("intention.add.on.demand.static.import.family"));
   }
 
   /**

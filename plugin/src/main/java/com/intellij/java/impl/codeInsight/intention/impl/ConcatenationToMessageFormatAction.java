@@ -48,12 +48,6 @@ import java.util.List;
 public class ConcatenationToMessageFormatAction implements IntentionAction {
   @Override
   @Nonnull
-  public String getFamilyName() {
-    return CodeInsightBundle.message("intention.replace.concatenation.with.formatted.output.family");
-  }
-
-  @Override
-  @Nonnull
   public String getText() {
     return CodeInsightBundle.message("intention.replace.concatenation.with.formatted.output.text");
   }

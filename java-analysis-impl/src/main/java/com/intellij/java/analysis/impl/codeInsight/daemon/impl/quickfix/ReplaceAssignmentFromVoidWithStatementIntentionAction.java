@@ -40,13 +40,6 @@ public class ReplaceAssignmentFromVoidWithStatementIntentionAction implements Sy
   @Nonnull
   @Override
   public String getText() {
-    return getFamilyName();
-  }
-
-  @Nls
-  @Nonnull
-  @Override
-  public String getFamilyName() {
     return "Remove left side of assignment";
   }
 

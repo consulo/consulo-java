@@ -98,12 +98,6 @@ public class WrapExpressionFix implements SyntheticIntentionAction {
   }
 
   @Override
-  @Nonnull
-  public String getFamilyName() {
-    return JavaQuickFixBundle.message("wrap.expression.using.static.accessor.family");
-  }
-
-  @Override
   public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     return myExpression.isValid()
         && myExpression.getManager().isInProject(myExpression)

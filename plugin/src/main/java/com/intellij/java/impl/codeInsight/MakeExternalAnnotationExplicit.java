@@ -38,7 +38,6 @@ import consulo.project.DumbService;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.VirtualFile;
-import org.jetbrains.annotations.Nls;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -49,11 +48,8 @@ import java.util.List;
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.MakeExternalAnnotationExplicit", fileExtensions = "java", categories = {"Java", "Annotations"})
 public class MakeExternalAnnotationExplicit extends BaseIntentionAction {
-  @Nls
-  @Nonnull
-  @Override
-  public String getFamilyName() {
-    return "Make External Annotations Explicit";
+  public MakeExternalAnnotationExplicit() {
+    setText("Make External Annotations Explicit");
   }
 
   @Override

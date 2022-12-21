@@ -21,6 +21,7 @@ import consulo.language.editor.FileModificationService;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.JavaHighlightUtil;
 import consulo.language.editor.intention.IntentionAction;
+import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.logging.Logger;
 import consulo.codeEditor.Editor;
 import consulo.project.Project;
@@ -30,7 +31,7 @@ import com.intellij.java.language.psi.PsiTryStatement;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.language.util.IncorrectOperationException;
 
-public class MoveCatchUpFix implements IntentionAction {
+public class MoveCatchUpFix implements SyntheticIntentionAction {
   private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.daemon.impl.quickfix.DeleteCatchFix");
 
   private final PsiCatchSection myCatchSection;
@@ -47,12 +48,6 @@ public class MoveCatchUpFix implements IntentionAction {
     return JavaQuickFixBundle.message("move.catch.up.text",
                                   JavaHighlightUtil.formatType(myCatchSection.getCatchType()),
                                   JavaHighlightUtil.formatType(myMoveBeforeSection.getCatchType()));
-  }
-
-  @Override
-  @Nonnull
-  public String getFamilyName() {
-    return JavaQuickFixBundle.message("move.catch.up.family");
   }
 
   @Override

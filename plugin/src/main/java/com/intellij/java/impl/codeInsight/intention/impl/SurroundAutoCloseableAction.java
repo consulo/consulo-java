@@ -172,13 +172,7 @@ public class SurroundAutoCloseableAction extends PsiElementBaseIntentionAction {
 
   @Nonnull
   @Override
-  public String getFamilyName() {
-    return CodeInsightBundle.message("intention.surround.resource.with.ARM.block");
-  }
-
-  @Nonnull
-  @Override
   public String getText() {
-    return getFamilyName();
+    return CodeInsightBundle.message("intention.surround.resource.with.ARM.block");
   }
 }

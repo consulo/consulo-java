@@ -63,12 +63,6 @@ public class RemoveLiteralUnderscoresAction extends PsiElementBaseIntentionActio
 
   @Nonnull
   @Override
-  public String getFamilyName() {
-    return CodeInsightBundle.message("intention.underscores.in.literals.family");
-  }
-
-  @Nonnull
-  @Override
   public String getText() {
     return CodeInsightBundle.message("intention.remove.literal.underscores");
   }

@@ -31,6 +31,7 @@ import consulo.ide.impl.idea.openapi.module.ModuleUtil;
 import consulo.java.language.module.extension.JavaModuleExtension;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.intention.IntentionAction;
+import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.scope.GlobalSearchScope;
@@ -43,7 +44,7 @@ import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
 
-public class ReplaceAddAllArrayToCollectionFix implements IntentionAction {
+public class ReplaceAddAllArrayToCollectionFix implements SyntheticIntentionAction {
   private final PsiMethodCallExpression myMethodCall;
 
   public ReplaceAddAllArrayToCollectionFix(final PsiMethodCallExpression methodCall) {
@@ -54,12 +55,6 @@ public class ReplaceAddAllArrayToCollectionFix implements IntentionAction {
   @Nonnull
   public String getText() {
     return "Replace " + myMethodCall.getText() + " with " + getCollectionsMethodCall();
-  }
-
-  @Override
-  @Nonnull
-  public String getFamilyName() {
-    return getText();
   }
 
   @Override

@@ -30,6 +30,7 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.codeEditor.Editor;
+import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.project.Project;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
@@ -42,7 +43,7 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DeferFinalAssignmentFix implements IntentionAction {
+public class DeferFinalAssignmentFix implements SyntheticIntentionAction {
   private static final Logger LOG = Logger.getInstance(DeferFinalAssignmentFix.class);
 
   private final PsiVariable variable;
@@ -51,12 +52,6 @@ public class DeferFinalAssignmentFix implements IntentionAction {
   public DeferFinalAssignmentFix(PsiVariable variable, PsiReferenceExpression expression) {
     this.variable = variable;
     this.expression = expression;
-  }
-
-  @Override
-  @Nonnull
-  public String getFamilyName() {
-    return JavaQuickFixBundle.message("defer.final.assignment.with.temp.family");
   }
 
   @Override

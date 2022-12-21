@@ -37,6 +37,7 @@ import consulo.language.editor.inspection.reference.RefEntity;
 import consulo.language.editor.inspection.reference.RefManager;
 import consulo.language.editor.inspection.reference.SmartRefElementPointer;
 import consulo.language.editor.intention.IntentionAction;
+import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiManager;
@@ -388,7 +389,7 @@ public abstract class EntryPointsManagerBase extends EntryPointsManager implemen
     return AnnotationUtil.isAnnotated(owner, ADDITIONAL_ANNOTATIONS) || AnnotationUtil.isAnnotated(owner, getAdditionalAnnotations());
   }
 
-  public class AddImplicitlyWriteAnnotation implements IntentionAction {
+  public class AddImplicitlyWriteAnnotation implements SyntheticIntentionAction {
     private final String myQualifiedName;
 
     public AddImplicitlyWriteAnnotation(String qualifiedName) {
@@ -399,12 +400,6 @@ public abstract class EntryPointsManagerBase extends EntryPointsManager implemen
     @Nonnull
     public String getText() {
       return JavaQuickFixBundle.message("fix.unused.symbol.injection.text", "fields", myQualifiedName);
-    }
-
-    @Override
-    @Nonnull
-    public String getFamilyName() {
-      return JavaQuickFixBundle.message("fix.unused.symbol.injection.family");
     }
 
     @Override

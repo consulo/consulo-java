@@ -24,13 +24,14 @@ import consulo.codeEditor.Editor;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.intention.IntentionAction;
+import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 
 import javax.annotation.Nonnull;
 
-public class InsertNewFix implements IntentionAction {
+public class InsertNewFix implements SyntheticIntentionAction {
   private final PsiMethodCallExpression myMethodCall;
   private final PsiClass myClass;
 
@@ -43,12 +44,6 @@ public class InsertNewFix implements IntentionAction {
   @Nonnull
   public String getText() {
     return JavaQuickFixBundle.message("insert.new.fix");
-  }
-
-  @Override
-  @Nonnull
-  public String getFamilyName() {
-    return getText();
   }
 
   @Override

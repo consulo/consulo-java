@@ -70,12 +70,6 @@ public class InsertLiteralUnderscoresAction extends PsiElementBaseIntentionActio
 
   @Nonnull
   @Override
-  public String getFamilyName() {
-    return CodeInsightBundle.message("intention.underscores.in.literals.family");
-  }
-
-  @Nonnull
-  @Override
   public String getText() {
     return CodeInsightBundle.message("intention.insert.literal.underscores");
   }

@@ -136,12 +136,6 @@ public class ChangeMethodSignatureFromUsageFix implements SyntheticIntentionActi
   }
 
   @Override
-  @Nonnull
-  public String getFamilyName() {
-    return JavaQuickFixBundle.message("change.method.signature.from.usage.family");
-  }
-
-  @Override
   public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     if (!myTargetMethod.isValid() || myTargetMethod.getContainingClass() == null) {
       return false;

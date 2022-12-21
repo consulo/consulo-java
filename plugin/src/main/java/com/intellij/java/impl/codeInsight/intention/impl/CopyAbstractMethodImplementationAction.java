@@ -22,18 +22,14 @@ import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.intention.IntentionMetaData;
 import consulo.project.Project;
 
-import javax.annotation.Nonnull;
-
 /**
  * @author yole
  */
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.CopyAbstractMethodImplementationAction", categories = {"Java", "Declaration"}, fileExtensions = "java")
 public class CopyAbstractMethodImplementationAction extends ImplementAbstractMethodAction {
-  @Override
-  @Nonnull
-  public String getFamilyName() {
-    return "Copy Abstract Method Implementation";
+  public CopyAbstractMethodImplementationAction() {
+    setText("Copy Abstract Method Implementation");
   }
 
   @Override

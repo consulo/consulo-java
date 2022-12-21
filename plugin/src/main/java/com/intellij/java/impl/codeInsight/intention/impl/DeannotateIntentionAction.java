@@ -60,12 +60,6 @@ public class DeannotateIntentionAction implements IntentionAction {
   }
 
   @Override
-  @Nonnull
-  public String getFamilyName() {
-    return CodeInsightBundle.message("deannotate.intention.action.text");
-  }
-
-  @Override
   public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     PsiModifierListOwner listOwner = getContainer(editor, file);
     if (listOwner != null) {

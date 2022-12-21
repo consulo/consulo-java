@@ -21,6 +21,7 @@ import consulo.language.editor.FileModificationService;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.language.editor.intention.IntentionAction;
 import consulo.codeEditor.Editor;
+import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.project.Project;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiExpression;
@@ -31,7 +32,7 @@ import consulo.language.util.IncorrectOperationException;
 /**
  * @author cdr
  */
-public class RemoveQualifierFix implements IntentionAction {
+public class RemoveQualifierFix implements SyntheticIntentionAction {
   private final PsiExpression myQualifier;
   private final PsiReferenceExpression myExpression;
   private final PsiClass myResolved;
@@ -46,12 +47,6 @@ public class RemoveQualifierFix implements IntentionAction {
   @Nonnull
   public String getText() {
     return JavaQuickFixBundle.message("remove.qualifier.action.text");
-  }
-
-  @Override
-  @Nonnull
-  public String getFamilyName() {
-    return getText();
   }
 
   @Override

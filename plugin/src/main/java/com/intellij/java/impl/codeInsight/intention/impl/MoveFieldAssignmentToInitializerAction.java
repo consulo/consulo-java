@@ -49,12 +49,6 @@ import java.util.List;
 public class MoveFieldAssignmentToInitializerAction extends BaseIntentionAction {
   @Override
   @Nonnull
-  public String getFamilyName() {
-    return getText();
-  }
-
-  @Override
-  @Nonnull
   public String getText() {
     return CodeInsightBundle.message("intention.move.field.assignment.to.declaration");
   }

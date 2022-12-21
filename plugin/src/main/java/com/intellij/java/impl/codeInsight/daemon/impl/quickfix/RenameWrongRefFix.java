@@ -69,12 +69,6 @@ public class RenameWrongRefFix implements SyntheticIntentionAction {
   }
 
   @Override
-  @Nonnull
-  public String getFamilyName() {
-    return JavaQuickFixBundle.message("rename.wrong.reference.family");
-  }
-
-  @Override
   public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     if (!myRefExpr.isValid() || !myRefExpr.getManager().isInProject(myRefExpr)) return false;
     int offset = editor.getCaretModel().getOffset();

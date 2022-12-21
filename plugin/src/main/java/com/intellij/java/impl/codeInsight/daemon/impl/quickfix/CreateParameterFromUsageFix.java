@@ -15,27 +15,26 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
-import com.intellij.java.language.psi.*;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
 import com.intellij.java.impl.ide.util.SuperMethodWarningUtil;
-import consulo.application.Application;
-import consulo.application.ApplicationManager;
-import consulo.application.Result;
-import consulo.language.editor.WriteCommandAction;
-import consulo.project.Project;
-import consulo.util.lang.Comparing;
-import consulo.language.psi.*;
-import consulo.language.psi.util.PsiTreeUtil;
-import com.intellij.java.language.psi.util.PsiTypesUtil;
-import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.language.editor.refactoring.RefactoringBundle;
 import com.intellij.java.impl.refactoring.changeSignature.ChangeSignatureProcessor;
 import com.intellij.java.impl.refactoring.changeSignature.JavaChangeSignatureDialog;
 import com.intellij.java.impl.refactoring.changeSignature.ParameterInfoImpl;
 import com.intellij.java.impl.refactoring.introduceParameter.IntroduceParameterHandler;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.PsiTypesUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.application.Application;
+import consulo.application.ApplicationManager;
+import consulo.application.Result;
+import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.language.editor.WriteCommandAction;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.util.PsiTreeUtil;
 import consulo.logging.Logger;
-
-import javax.annotation.Nonnull;
+import consulo.project.Project;
+import consulo.util.lang.Comparing;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -49,6 +48,7 @@ public class CreateParameterFromUsageFix extends CreateVarFromUsageFix {
 
   public CreateParameterFromUsageFix(PsiReferenceExpression referenceElement) {
     super(referenceElement);
+    setText(JavaQuickFixBundle.message("create.parameter.from.usage.family"));
   }
 
   @Override
@@ -151,11 +151,4 @@ public class CreateParameterFromUsageFix extends CreateVarFromUsageFix {
   protected boolean isAllowOuterTargetClass() {
     return false;
   }
-
-  @Override
-  @Nonnull
-  public String getFamilyName() {
-    return JavaQuickFixBundle.message("create.parameter.from.usage.family");
-  }
-
 }

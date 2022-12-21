@@ -22,6 +22,7 @@ import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.language.editor.FileModificationService;
 import consulo.language.editor.intention.HighPriorityAction;
 import consulo.language.editor.intention.IntentionAction;
+import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.editor.util.LanguageUndoUtil;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiMatcherImpl;
@@ -31,7 +32,7 @@ import consulo.project.Project;
 
 import javax.annotation.Nonnull;
 
-public class InsertSuperFix implements IntentionAction, HighPriorityAction {
+public class InsertSuperFix implements SyntheticIntentionAction, HighPriorityAction {
   private static final Logger LOG = Logger.getInstance(InsertSuperFix.class);
 
   private final PsiMethod myConstructor;
@@ -44,12 +45,6 @@ public class InsertSuperFix implements IntentionAction, HighPriorityAction {
   @Nonnull
   public String getText() {
     return JavaQuickFixBundle.message("insert.super.constructor.call.text");
-  }
-
-  @Override
-  @Nonnull
-  public String getFamilyName() {
-    return JavaQuickFixBundle.message("insert.super.constructor.call.family");
   }
 
   @Override

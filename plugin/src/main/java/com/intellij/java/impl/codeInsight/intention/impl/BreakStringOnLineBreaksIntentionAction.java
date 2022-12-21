@@ -109,10 +109,4 @@ public class BreakStringOnLineBreaksIntentionAction extends PsiElementBaseIntent
   public String getText() {
     return CodeInsightBundle.message("intention.break.string.on.line.breaks.text");
   }
-
-  @Nonnull
-  @Override
-  public String getFamilyName() {
-    return getText();
-  }
 }

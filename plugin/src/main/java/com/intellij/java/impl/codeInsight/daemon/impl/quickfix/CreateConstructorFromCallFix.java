@@ -190,10 +190,4 @@ public class CreateConstructorFromCallFix extends CreateFromUsageBaseFix {
 
     return null;
   }
-
-  @Override
-  @Nonnull
-  public String getFamilyName() {
-    return JavaQuickFixBundle.message("create.constructor.from.new.family");
-  }
 }

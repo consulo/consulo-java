@@ -15,30 +15,24 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-
-import com.intellij.java.language.psi.*;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
-import consulo.language.editor.intention.BaseIntentionAction;
-import consulo.codeEditor.Editor;
-import consulo.project.Project;
-import consulo.language.psi.*;
 import com.intellij.java.impl.refactoring.changeClassSignature.ChangeClassSignatureDialog;
 import com.intellij.java.impl.refactoring.changeClassSignature.TypeParameterInfo;
+import com.intellij.java.language.psi.*;
+import consulo.codeEditor.Editor;
+import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.language.editor.intention.BaseIntentionAction;
+import consulo.language.editor.intention.SyntheticIntentionAction;
+import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
+import consulo.project.Project;
+
+import javax.annotation.Nonnull;
+import java.util.*;
 
 /**
  * @author Danila Ponomarenko
  */
-public class ChangeClassSignatureFromUsageFix extends BaseIntentionAction {
+public class ChangeClassSignatureFromUsageFix extends BaseIntentionAction implements SyntheticIntentionAction {
   private final PsiClass myClass;
   private final PsiReferenceParameterList myParameterList;
 
@@ -46,12 +40,7 @@ public class ChangeClassSignatureFromUsageFix extends BaseIntentionAction {
                                           @Nonnull PsiReferenceParameterList parameterList) {
     myClass = aClass;
     myParameterList = parameterList;
-  }
-
-  @Nonnull
-  @Override
-  public String getFamilyName() {
-    return JavaQuickFixBundle.message("change.class.signature.family");
+    setText(JavaQuickFixBundle.message("change.class.signature.family"));
   }
 
   @Override
@@ -112,7 +101,8 @@ public class ChangeClassSignatureFromUsageFix extends BaseIntentionAction {
       }
 
       final PsiClassType type = (PsiClassType)typeElement.getType();
-      result.put(new TypeParameterInfo(suggester.suggest(type), type), factory.createTypeCodeFragment(type.getClassName(), typeElement, true));
+      result.put(new TypeParameterInfo(suggester.suggest(type), type),
+                 factory.createTypeCodeFragment(type.getClassName(), typeElement, true));
     }
     return result;
   }

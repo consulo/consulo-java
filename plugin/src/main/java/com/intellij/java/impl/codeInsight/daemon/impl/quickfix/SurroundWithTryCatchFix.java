@@ -23,6 +23,7 @@ import consulo.language.editor.intention.IntentionAction;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.LogicalPosition;
 import consulo.codeEditor.ScrollType;
+import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.project.Project;
 import consulo.document.util.TextRange;
 import consulo.language.psi.*;
@@ -37,7 +38,7 @@ import javax.annotation.Nonnull;
  * @author mike
  * Date: Aug 19, 2002
  */
-public class SurroundWithTryCatchFix implements IntentionAction {
+public class SurroundWithTryCatchFix implements SyntheticIntentionAction {
   private static final Logger LOG = Logger.getInstance(SurroundWithTryCatchFix.class);
 
   private PsiStatement myStatement = null;
@@ -55,12 +56,6 @@ public class SurroundWithTryCatchFix implements IntentionAction {
   @Override
   @Nonnull
   public String getText() {
-    return JavaQuickFixBundle.message("surround.with.try.catch.fix");
-  }
-
-  @Override
-  @Nonnull
-  public String getFamilyName() {
     return JavaQuickFixBundle.message("surround.with.try.catch.fix");
   }
 

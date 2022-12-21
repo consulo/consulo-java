@@ -41,6 +41,10 @@ import java.util.List;
 public abstract class CreateFieldFromParameterActionBase extends BaseIntentionAction {
   private static final Logger LOG = Logger.getInstance(CreateFieldFromParameterActionBase.class);
 
+  protected CreateFieldFromParameterActionBase() {
+    setText(CodeInsightBundle.message("intention.create.field.from.parameter.family"));
+  }
+
   @Override
   public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
     final PsiParameter parameter = FieldFromParameterUtils.findParameterAtCursor(file, editor);
@@ -54,11 +58,6 @@ public abstract class CreateFieldFromParameterActionBase extends BaseIntentionAc
 
   protected abstract boolean isAvailable(PsiParameter parameter);
 
-  @Override
-  @Nonnull
-  public String getFamilyName() {
-    return CodeInsightBundle.message("intention.create.field.from.parameter.family");
-  }
 
   @Override
   public void invoke(@Nonnull Project project, Editor editor, PsiFile file) {

@@ -28,8 +28,8 @@ import consulo.dataContext.DataContext;
 import consulo.dataContext.DataManager;
 import consulo.language.editor.LangDataKeys;
 import consulo.language.editor.hint.QuestionAction;
-import consulo.language.editor.intention.IntentionAction;
 import consulo.language.editor.intention.QuickFixActionRegistrar;
+import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.editor.refactoring.action.RefactoringActionHandler;
 import consulo.language.editor.refactoring.action.RefactoringActionHandlerFactory;
 import consulo.language.editor.ui.PsiElementListCellRenderer;
@@ -58,7 +58,7 @@ import java.util.Map;
 /**
  * @author cdr
  */
-public class MoveClassToModuleFix implements IntentionAction {
+public class MoveClassToModuleFix implements SyntheticIntentionAction {
   private final Map<PsiClass, Module> myModules = new LinkedHashMap<PsiClass, Module>();
   private final String myReferenceName;
   private final Module myCurrentModule;
@@ -93,15 +93,9 @@ public class MoveClassToModuleFix implements IntentionAction {
     if (myModules.size() == 1) {
       final PsiClass aClass = myModules.keySet().iterator().next();
       return "Move '" + aClass.getQualifiedName() + "' from module '" + myModules.get(aClass).getName() +
-          "' to '" + myCurrentModule.getName() + "'";
+        "' to '" + myCurrentModule.getName() + "'";
     }
     return "Move '" + myReferenceName + "' in '" + myCurrentModule.getName() + "'...";
-  }
-
-  @Override
-  @Nonnull
-  public String getFamilyName() {
-    return "move it";
   }
 
   @Override
@@ -113,7 +107,8 @@ public class MoveClassToModuleFix implements IntentionAction {
   public void invoke(@Nonnull final Project project, final Editor editor, final PsiFile file) throws IncorrectOperationException {
     if (myModules.size() == 1) {
       moveClass(project, editor, file, myModules.keySet().iterator().next());
-    } else {
+    }
+    else {
       LOG.assertTrue(editor != null);
       final JBList list = new JBList(myModules.keySet());
       list.setCellRenderer(new PsiElementListCellRenderer<PsiClass>() {
@@ -133,16 +128,16 @@ public class MoveClassToModuleFix implements IntentionAction {
           return 0;
         }
       });
-      JBPopup popup = ((AWTPopupFactory) JBPopupFactory.getInstance()).createListPopupBuilder(list)
-          .setItemChoosenCallback(new Runnable() {
-            @Override
-            public void run() {
-              final Object value = list.getSelectedValue();
-              if (value instanceof PsiClass) {
-                moveClass(project, editor, file, (PsiClass) value);
-              }
-            }
-          }).createPopup();
+      JBPopup popup = ((AWTPopupFactory)JBPopupFactory.getInstance()).createListPopupBuilder(list)
+                                                                     .setItemChoosenCallback(new Runnable() {
+                                                                       @Override
+                                                                       public void run() {
+                                                                         final Object value = list.getSelectedValue();
+                                                                         if (value instanceof PsiClass) {
+                                                                           moveClass(project, editor, file, (PsiClass)value);
+                                                                         }
+                                                                       }
+                                                                     }).createPopup();
 
       EditorPopupHelper.getInstance().showPopupInBestPositionFor(editor, popup);
     }
@@ -155,7 +150,7 @@ public class MoveClassToModuleFix implements IntentionAction {
     final String fqName = aClass.getQualifiedName();
     LOG.assertTrue(fqName != null);
     PsiDirectory directory = PackageUtil
-        .findOrCreateDirectoryForPackage(myCurrentModule, StringUtil.getPackageName(fqName), mySourceRoot, true);
+      .findOrCreateDirectoryForPackage(myCurrentModule, StringUtil.getPackageName(fqName), mySourceRoot, true);
     DataContext context = DataContext.builder().parent(dataContext).add(LangDataKeys.TARGET_PSI_ELEMENT, directory).build();
 
     moveHandler.invoke(project, new PsiElement[]{aClass}, context);
