@@ -211,6 +211,11 @@
 		</dependency>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
+			<artifactId>consulo.java-java.regexp.impl</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>consulo.java-java.intelliLang</artifactId>
 			<version>${project.version}</version>
 		</dependency>
@@ -324,12 +329,6 @@
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>com.intellij.xml</artifactId>
-			<version>${project.version}</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>com.intellij.regexp</artifactId>
 			<version>${project.version}</version>
 			<scope>provided</scope>
 		</dependency>

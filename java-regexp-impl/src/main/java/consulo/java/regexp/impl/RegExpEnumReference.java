@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package consulo.java.impl.intelliLang;
+package consulo.java.regexp.impl;
 
 import consulo.language.editor.completion.lookup.LookupElementBuilder;
 import consulo.application.AllIcons;

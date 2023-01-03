@@ -17,7 +17,6 @@ open module consulo.java {
   requires transitive consulo.java.compiler.impl;
 
   requires com.intellij.xml;
-  requires com.intellij.regexp;
 
   // TODO remove in future
   requires consulo.ide.impl;

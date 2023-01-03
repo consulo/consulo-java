@@ -66,6 +66,7 @@
 		<module>java-manifest</module>
 		<module>java-coverage-impl/coverage_rt</module>
 		<module>java-spellchecker</module>
+		<module>java-regexp-impl</module>
 		<module>java-properties-impl</module>
 		<module>jvm-bytecode-viewer</module>
 		<module>java-intellilang</module>

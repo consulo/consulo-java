@@ -16,19 +16,16 @@
 package consulo.java.impl.intelliLang;
 
 import com.intellij.java.language.JavaLanguage;
-import com.intellij.java.language.psi.PsiAnnotation;
 import com.intellij.java.language.psi.PsiLiteralExpression;
-import com.intellij.java.language.psi.PsiModifierListOwner;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.ide.impl.intelliLang.Configuration;
+import consulo.java.impl.intelliLang.util.PsiUtilEx;
 import consulo.language.Language;
 import consulo.language.pattern.PatternCondition;
 import consulo.language.pattern.StandardPatterns;
 import consulo.language.psi.*;
 import consulo.language.util.ProcessingContext;
 import consulo.util.lang.Comparing;
-import consulo.java.impl.intelliLang.util.AnnotationUtilEx;
-import consulo.java.impl.intelliLang.util.PsiUtilEx;
 
 import javax.annotation.Nonnull;
 
@@ -60,30 +57,6 @@ public class LanguageReferenceProvider extends PsiReferenceContributor {
           return new PsiReference[]{new LanguageReference((PsiLiteralExpression)element)};
         }
       });
-    registrar.registerReferenceProvider(literalExpression().with(new PatternCondition<PsiLiteralExpression>("isStringLiteral") {
-      @Override
-      public boolean accepts(@Nonnull final PsiLiteralExpression expression, final ProcessingContext context) {
-        return PsiUtilEx.isStringOrCharacterLiteral(expression);
-      }
-    }), new PsiReferenceProvider() {
-      @Nonnull
-      @Override
-      public PsiReference[] getReferencesByElement(@Nonnull PsiElement psiElement, @Nonnull ProcessingContext context) {
-        final PsiLiteralExpression expression = (PsiLiteralExpression)psiElement;
-        final PsiModifierListOwner owner =
-          AnnotationUtilEx.getAnnotatedElementFor(expression, AnnotationUtilEx.LookupType.PREFER_DECLARATION);
-        if (owner != null && PsiUtilEx.isLanguageAnnotationTarget(owner)) {
-          final PsiAnnotation[] annotations = AnnotationUtilEx.getAnnotationFrom(owner, configuration.getAdvancedConfiguration().getPatternAnnotationPair(), true);
-          if (annotations.length > 0) {
-            final String pattern = AnnotationUtilEx.calcAnnotationValue(annotations, "value");
-            if (pattern != null) {
-              return new PsiReference[]{new RegExpEnumReference(expression, pattern)};
-            }
-          }
-        }
-        return PsiReference.EMPTY_ARRAY;
-      }
-    });
   }
 
   @Nonnull

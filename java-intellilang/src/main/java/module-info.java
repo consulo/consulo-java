@@ -10,8 +10,8 @@ module consulo.java.intelliLang {
     requires consulo.java.compiler.impl;
     requires consulo.java.analysis.impl;
 
-    requires com.intellij.regexp;
-
     // TODO drop in future
     requires java.desktop;
+
+    exports consulo.java.impl.intelliLang.util to consulo.java.regexp.impl;
 }
