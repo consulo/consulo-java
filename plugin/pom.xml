@@ -58,7 +58,6 @@
 				<version>3-SNAPSHOT</version>
 				<extensions>true</extensions>
 				<configuration>
-					<repositoryChannel>valhalla</repositoryChannel>
 					<dependencies>
 						<dependency>com.intellij.spellchecker</dependency>
 						<dependency>com.intellij.regexp</dependency>
