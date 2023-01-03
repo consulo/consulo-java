@@ -74,13 +74,6 @@
 		</dependency>
 
 		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>com.intellij.images</artifactId>
-			<version>${project.version}</version>
-			<scope>provided</scope>
-		</dependency>
-
-		<dependency>
 			<groupId>consulo</groupId>
 			<artifactId>consulo-ide-impl</artifactId>
 			<version>3-SNAPSHOT</version>
