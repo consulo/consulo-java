@@ -6,60 +6,125 @@
  */
 package consulo.java.rt.common.compiler;
 
+import org.apache.thrift.AsyncProcessFunction;
+import org.apache.thrift.EncodingUtils;
+import org.apache.thrift.ProcessFunction;
+import org.apache.thrift.TApplicationException;
+import org.apache.thrift.TBase;
+import org.apache.thrift.TBaseAsyncProcessor;
+import org.apache.thrift.TBaseHelper;
+import org.apache.thrift.TBaseProcessor;
+import org.apache.thrift.TException;
+import org.apache.thrift.TFieldIdEnum;
+import org.apache.thrift.TFieldRequirementType;
+import org.apache.thrift.TProcessor;
+import org.apache.thrift.TSerializable;
+import org.apache.thrift.TServiceClient;
+import org.apache.thrift.TServiceClientFactory;
+import org.apache.thrift.annotation.Nullable;
+import org.apache.thrift.async.AsyncMethodCallback;
+import org.apache.thrift.async.TAsyncClient;
+import org.apache.thrift.async.TAsyncClientFactory;
+import org.apache.thrift.async.TAsyncClientManager;
+import org.apache.thrift.async.TAsyncMethodCall;
+import org.apache.thrift.meta_data.FieldMetaData;
+import org.apache.thrift.meta_data.FieldValueMetaData;
+import org.apache.thrift.protocol.TCompactProtocol;
+import org.apache.thrift.protocol.TField;
+import org.apache.thrift.protocol.TMessage;
+import org.apache.thrift.protocol.TMessageType;
+import org.apache.thrift.protocol.TProtocol;
+import org.apache.thrift.protocol.TProtocolFactory;
+import org.apache.thrift.protocol.TProtocolUtil;
+import org.apache.thrift.protocol.TStruct;
+import org.apache.thrift.protocol.TTupleProtocol;
+import org.apache.thrift.protocol.TType;
+import org.apache.thrift.scheme.IScheme;
+import org.apache.thrift.scheme.SchemeFactory;
+import org.apache.thrift.scheme.StandardScheme;
+import org.apache.thrift.scheme.TupleScheme;
+import org.apache.thrift.server.AbstractNonblockingServer;
+import org.apache.thrift.transport.TIOStreamTransport;
+import org.apache.thrift.transport.TMemoryInputTransport;
+import org.apache.thrift.transport.TNonblockingTransport;
+import org.apache.thrift.transport.TTransportException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.lang.Boolean;
+import java.lang.ClassNotFoundException;
+import java.lang.Exception;
+import java.lang.IllegalArgumentException;
+import java.lang.IllegalStateException;
+import java.lang.Long;
+import java.lang.Object;
+import java.lang.String;
+import java.lang.StringBuilder;
+import java.util.BitSet;
+import java.util.Collections;
+import java.util.EnumMap;
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.Map;
+
 @SuppressWarnings({"cast", "rawtypes", "serial", "unchecked", "unused"})
 public class JavaCompilerInterface {
 
   public interface Iface {
 
-    public void logInfo(java.lang.String message, java.lang.String fileUri, long lineNumber, long columnNumber) throws org.apache.thrift.TException;
+    public void logInfo(String message, String fileUri, long lineNumber, long columnNumber) throws TException;
 
-    public void logError(java.lang.String message, java.lang.String fileUri, long lineNumber, long columnNumber) throws org.apache.thrift.TException;
+    public void logError(String message, String fileUri, long lineNumber, long columnNumber) throws TException;
 
-    public void logWarning(java.lang.String message, java.lang.String fileUri, long lineNumber, long columnNumber) throws org.apache.thrift.TException;
+    public void logWarning(String message, String fileUri, long lineNumber, long columnNumber) throws TException;
 
-    public void fileWrote(java.lang.String filePath) throws org.apache.thrift.TException;
+    public void fileWrote(String filePath) throws TException;
 
   }
 
   public interface AsyncIface {
 
-    public void logInfo(java.lang.String message, java.lang.String fileUri, long lineNumber, long columnNumber, org.apache.thrift.async.AsyncMethodCallback<Void> resultHandler) throws org.apache.thrift.TException;
+    public void logInfo(String message, String fileUri, long lineNumber, long columnNumber, AsyncMethodCallback<Void> resultHandler) throws TException;
 
-    public void logError(java.lang.String message, java.lang.String fileUri, long lineNumber, long columnNumber, org.apache.thrift.async.AsyncMethodCallback<Void> resultHandler) throws org.apache.thrift.TException;
+    public void logError(String message, String fileUri, long lineNumber, long columnNumber, AsyncMethodCallback<Void> resultHandler) throws TException;
 
-    public void logWarning(java.lang.String message, java.lang.String fileUri, long lineNumber, long columnNumber, org.apache.thrift.async.AsyncMethodCallback<Void> resultHandler) throws org.apache.thrift.TException;
+    public void logWarning(String message, String fileUri, long lineNumber, long columnNumber, AsyncMethodCallback<Void> resultHandler) throws TException;
 
-    public void fileWrote(java.lang.String filePath, org.apache.thrift.async.AsyncMethodCallback<Void> resultHandler) throws org.apache.thrift.TException;
+    public void fileWrote(String filePath, AsyncMethodCallback<Void> resultHandler) throws TException;
 
   }
 
-  public static class Client extends org.apache.thrift.TServiceClient implements Iface {
-    public static class Factory implements org.apache.thrift.TServiceClientFactory<Client> {
+  public static class Client extends TServiceClient implements Iface {
+    public static class Factory implements TServiceClientFactory<Client> {
       public Factory() {}
-      public Client getClient(org.apache.thrift.protocol.TProtocol prot) {
+      public Client getClient(TProtocol prot) {
         return new Client(prot);
       }
-      public Client getClient(org.apache.thrift.protocol.TProtocol iprot, org.apache.thrift.protocol.TProtocol oprot) {
+      public Client getClient(TProtocol iprot, TProtocol oprot) {
         return new Client(iprot, oprot);
       }
     }
 
-    public Client(org.apache.thrift.protocol.TProtocol prot)
+    public Client(TProtocol prot)
     {
       super(prot, prot);
     }
 
-    public Client(org.apache.thrift.protocol.TProtocol iprot, org.apache.thrift.protocol.TProtocol oprot) {
+    public Client(TProtocol iprot, TProtocol oprot) {
       super(iprot, oprot);
     }
 
-    public void logInfo(java.lang.String message, java.lang.String fileUri, long lineNumber, long columnNumber) throws org.apache.thrift.TException
+    public void logInfo(String message, String fileUri, long lineNumber, long columnNumber) throws TException
     {
       send_logInfo(message, fileUri, lineNumber, columnNumber);
       recv_logInfo();
     }
 
-    public void send_logInfo(java.lang.String message, java.lang.String fileUri, long lineNumber, long columnNumber) throws org.apache.thrift.TException
+    public void send_logInfo(String message, String fileUri, long lineNumber, long columnNumber) throws TException
     {
       logInfo_args args = new logInfo_args();
       args.setMessage(message);
@@ -69,20 +134,20 @@ public class JavaCompilerInterface {
       sendBase("logInfo", args);
     }
 
-    public void recv_logInfo() throws org.apache.thrift.TException
+    public void recv_logInfo() throws TException
     {
       logInfo_result result = new logInfo_result();
       receiveBase(result, "logInfo");
       return;
     }
 
-    public void logError(java.lang.String message, java.lang.String fileUri, long lineNumber, long columnNumber) throws org.apache.thrift.TException
+    public void logError(String message, String fileUri, long lineNumber, long columnNumber) throws TException
     {
       send_logError(message, fileUri, lineNumber, columnNumber);
       recv_logError();
     }
 
-    public void send_logError(java.lang.String message, java.lang.String fileUri, long lineNumber, long columnNumber) throws org.apache.thrift.TException
+    public void send_logError(String message, String fileUri, long lineNumber, long columnNumber) throws TException
     {
       logError_args args = new logError_args();
       args.setMessage(message);
@@ -92,20 +157,20 @@ public class JavaCompilerInterface {
       sendBase("logError", args);
     }
 
-    public void recv_logError() throws org.apache.thrift.TException
+    public void recv_logError() throws TException
     {
       logError_result result = new logError_result();
       receiveBase(result, "logError");
       return;
     }
 
-    public void logWarning(java.lang.String message, java.lang.String fileUri, long lineNumber, long columnNumber) throws org.apache.thrift.TException
+    public void logWarning(String message, String fileUri, long lineNumber, long columnNumber) throws TException
     {
       send_logWarning(message, fileUri, lineNumber, columnNumber);
       recv_logWarning();
     }
 
-    public void send_logWarning(java.lang.String message, java.lang.String fileUri, long lineNumber, long columnNumber) throws org.apache.thrift.TException
+    public void send_logWarning(String message, String fileUri, long lineNumber, long columnNumber) throws TException
     {
       logWarning_args args = new logWarning_args();
       args.setMessage(message);
@@ -115,27 +180,27 @@ public class JavaCompilerInterface {
       sendBase("logWarning", args);
     }
 
-    public void recv_logWarning() throws org.apache.thrift.TException
+    public void recv_logWarning() throws TException
     {
       logWarning_result result = new logWarning_result();
       receiveBase(result, "logWarning");
       return;
     }
 
-    public void fileWrote(java.lang.String filePath) throws org.apache.thrift.TException
+    public void fileWrote(String filePath) throws TException
     {
       send_fileWrote(filePath);
       recv_fileWrote();
     }
 
-    public void send_fileWrote(java.lang.String filePath) throws org.apache.thrift.TException
+    public void send_fileWrote(String filePath) throws TException
     {
       fileWrote_args args = new fileWrote_args();
       args.setFilePath(filePath);
       sendBase("fileWrote", args);
     }
 
-    public void recv_fileWrote() throws org.apache.thrift.TException
+    public void recv_fileWrote() throws TException
     {
       fileWrote_result result = new fileWrote_result();
       receiveBase(result, "fileWrote");
@@ -143,36 +208,36 @@ public class JavaCompilerInterface {
     }
 
   }
-  public static class AsyncClient extends org.apache.thrift.async.TAsyncClient implements AsyncIface {
-    public static class Factory implements org.apache.thrift.async.TAsyncClientFactory<AsyncClient> {
-      private org.apache.thrift.async.TAsyncClientManager clientManager;
-      private org.apache.thrift.protocol.TProtocolFactory protocolFactory;
-      public Factory(org.apache.thrift.async.TAsyncClientManager clientManager, org.apache.thrift.protocol.TProtocolFactory protocolFactory) {
+  public static class AsyncClient extends TAsyncClient implements AsyncIface {
+    public static class Factory implements TAsyncClientFactory<AsyncClient> {
+      private TAsyncClientManager clientManager;
+      private TProtocolFactory protocolFactory;
+      public Factory(TAsyncClientManager clientManager, TProtocolFactory protocolFactory) {
         this.clientManager = clientManager;
         this.protocolFactory = protocolFactory;
       }
-      public AsyncClient getAsyncClient(org.apache.thrift.transport.TNonblockingTransport transport) {
+      public AsyncClient getAsyncClient(TNonblockingTransport transport) {
         return new AsyncClient(protocolFactory, clientManager, transport);
       }
     }
 
-    public AsyncClient(org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.async.TAsyncClientManager clientManager, org.apache.thrift.transport.TNonblockingTransport transport) {
+    public AsyncClient(TProtocolFactory protocolFactory, TAsyncClientManager clientManager, TNonblockingTransport transport) {
       super(protocolFactory, clientManager, transport);
     }
 
-    public void logInfo(java.lang.String message, java.lang.String fileUri, long lineNumber, long columnNumber, org.apache.thrift.async.AsyncMethodCallback<Void> resultHandler) throws org.apache.thrift.TException {
+    public void logInfo(String message, String fileUri, long lineNumber, long columnNumber, AsyncMethodCallback<Void> resultHandler) throws TException {
       checkReady();
       logInfo_call method_call = new logInfo_call(message, fileUri, lineNumber, columnNumber, resultHandler, this, ___protocolFactory, ___transport);
       this.___currentMethod = method_call;
       ___manager.call(method_call);
     }
 
-    public static class logInfo_call extends org.apache.thrift.async.TAsyncMethodCall<Void> {
-      private java.lang.String message;
-      private java.lang.String fileUri;
+    public static class logInfo_call extends TAsyncMethodCall<Void> {
+      private String message;
+      private String fileUri;
       private long lineNumber;
       private long columnNumber;
-      public logInfo_call(java.lang.String message, java.lang.String fileUri, long lineNumber, long columnNumber, org.apache.thrift.async.AsyncMethodCallback<Void> resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
+      public logInfo_call(String message, String fileUri, long lineNumber, long columnNumber, AsyncMethodCallback<Void> resultHandler, TAsyncClient client, TProtocolFactory protocolFactory, TNonblockingTransport transport) throws TException {
         super(client, protocolFactory, transport, resultHandler, false);
         this.message = message;
         this.fileUri = fileUri;
@@ -180,8 +245,8 @@ public class JavaCompilerInterface {
         this.columnNumber = columnNumber;
       }
 
-      public void write_args(org.apache.thrift.protocol.TProtocol prot) throws org.apache.thrift.TException {
-        prot.writeMessageBegin(new org.apache.thrift.protocol.TMessage("logInfo", org.apache.thrift.protocol.TMessageType.CALL, 0));
+      public void write_args(TProtocol prot) throws TException {
+        prot.writeMessageBegin(new TMessage("logInfo", TMessageType.CALL, 0));
         logInfo_args args = new logInfo_args();
         args.setMessage(message);
         args.setFileUri(fileUri);
@@ -191,29 +256,29 @@ public class JavaCompilerInterface {
         prot.writeMessageEnd();
       }
 
-      public Void getResult() throws org.apache.thrift.TException {
-        if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
-          throw new java.lang.IllegalStateException("Method call not finished!");
+      public Void getResult() throws TException {
+        if (getState() != TAsyncMethodCall.State.RESPONSE_READ) {
+          throw new IllegalStateException("Method call not finished!");
         }
-        org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(getFrameBuffer().array());
-        org.apache.thrift.protocol.TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
+        TMemoryInputTransport memoryTransport = new TMemoryInputTransport(getFrameBuffer().array());
+        TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
         return null;
       }
     }
 
-    public void logError(java.lang.String message, java.lang.String fileUri, long lineNumber, long columnNumber, org.apache.thrift.async.AsyncMethodCallback<Void> resultHandler) throws org.apache.thrift.TException {
+    public void logError(String message, String fileUri, long lineNumber, long columnNumber, AsyncMethodCallback<Void> resultHandler) throws TException {
       checkReady();
       logError_call method_call = new logError_call(message, fileUri, lineNumber, columnNumber, resultHandler, this, ___protocolFactory, ___transport);
       this.___currentMethod = method_call;
       ___manager.call(method_call);
     }
 
-    public static class logError_call extends org.apache.thrift.async.TAsyncMethodCall<Void> {
-      private java.lang.String message;
-      private java.lang.String fileUri;
+    public static class logError_call extends TAsyncMethodCall<Void> {
+      private String message;
+      private String fileUri;
       private long lineNumber;
       private long columnNumber;
-      public logError_call(java.lang.String message, java.lang.String fileUri, long lineNumber, long columnNumber, org.apache.thrift.async.AsyncMethodCallback<Void> resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
+      public logError_call(String message, String fileUri, long lineNumber, long columnNumber, AsyncMethodCallback<Void> resultHandler, TAsyncClient client, TProtocolFactory protocolFactory, TNonblockingTransport transport) throws TException {
         super(client, protocolFactory, transport, resultHandler, false);
         this.message = message;
         this.fileUri = fileUri;
@@ -221,8 +286,8 @@ public class JavaCompilerInterface {
         this.columnNumber = columnNumber;
       }
 
-      public void write_args(org.apache.thrift.protocol.TProtocol prot) throws org.apache.thrift.TException {
-        prot.writeMessageBegin(new org.apache.thrift.protocol.TMessage("logError", org.apache.thrift.protocol.TMessageType.CALL, 0));
+      public void write_args(TProtocol prot) throws TException {
+        prot.writeMessageBegin(new TMessage("logError", TMessageType.CALL, 0));
         logError_args args = new logError_args();
         args.setMessage(message);
         args.setFileUri(fileUri);
@@ -232,29 +297,29 @@ public class JavaCompilerInterface {
         prot.writeMessageEnd();
       }
 
-      public Void getResult() throws org.apache.thrift.TException {
-        if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
-          throw new java.lang.IllegalStateException("Method call not finished!");
+      public Void getResult() throws TException {
+        if (getState() != TAsyncMethodCall.State.RESPONSE_READ) {
+          throw new IllegalStateException("Method call not finished!");
         }
-        org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(getFrameBuffer().array());
-        org.apache.thrift.protocol.TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
+        TMemoryInputTransport memoryTransport = new TMemoryInputTransport(getFrameBuffer().array());
+        TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
         return null;
       }
     }
 
-    public void logWarning(java.lang.String message, java.lang.String fileUri, long lineNumber, long columnNumber, org.apache.thrift.async.AsyncMethodCallback<Void> resultHandler) throws org.apache.thrift.TException {
+    public void logWarning(String message, String fileUri, long lineNumber, long columnNumber, AsyncMethodCallback<Void> resultHandler) throws TException {
       checkReady();
       logWarning_call method_call = new logWarning_call(message, fileUri, lineNumber, columnNumber, resultHandler, this, ___protocolFactory, ___transport);
       this.___currentMethod = method_call;
       ___manager.call(method_call);
     }
 
-    public static class logWarning_call extends org.apache.thrift.async.TAsyncMethodCall<Void> {
-      private java.lang.String message;
-      private java.lang.String fileUri;
+    public static class logWarning_call extends TAsyncMethodCall<Void> {
+      private String message;
+      private String fileUri;
       private long lineNumber;
       private long columnNumber;
-      public logWarning_call(java.lang.String message, java.lang.String fileUri, long lineNumber, long columnNumber, org.apache.thrift.async.AsyncMethodCallback<Void> resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
+      public logWarning_call(String message, String fileUri, long lineNumber, long columnNumber, AsyncMethodCallback<Void> resultHandler, TAsyncClient client, TProtocolFactory protocolFactory, TNonblockingTransport transport) throws TException {
         super(client, protocolFactory, transport, resultHandler, false);
         this.message = message;
         this.fileUri = fileUri;
@@ -262,8 +327,8 @@ public class JavaCompilerInterface {
         this.columnNumber = columnNumber;
       }
 
-      public void write_args(org.apache.thrift.protocol.TProtocol prot) throws org.apache.thrift.TException {
-        prot.writeMessageBegin(new org.apache.thrift.protocol.TMessage("logWarning", org.apache.thrift.protocol.TMessageType.CALL, 0));
+      public void write_args(TProtocol prot) throws TException {
+        prot.writeMessageBegin(new TMessage("logWarning", TMessageType.CALL, 0));
         logWarning_args args = new logWarning_args();
         args.setMessage(message);
         args.setFileUri(fileUri);
@@ -273,61 +338,61 @@ public class JavaCompilerInterface {
         prot.writeMessageEnd();
       }
 
-      public Void getResult() throws org.apache.thrift.TException {
-        if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
-          throw new java.lang.IllegalStateException("Method call not finished!");
+      public Void getResult() throws TException {
+        if (getState() != TAsyncMethodCall.State.RESPONSE_READ) {
+          throw new IllegalStateException("Method call not finished!");
         }
-        org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(getFrameBuffer().array());
-        org.apache.thrift.protocol.TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
+        TMemoryInputTransport memoryTransport = new TMemoryInputTransport(getFrameBuffer().array());
+        TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
         return null;
       }
     }
 
-    public void fileWrote(java.lang.String filePath, org.apache.thrift.async.AsyncMethodCallback<Void> resultHandler) throws org.apache.thrift.TException {
+    public void fileWrote(String filePath, AsyncMethodCallback<Void> resultHandler) throws TException {
       checkReady();
       fileWrote_call method_call = new fileWrote_call(filePath, resultHandler, this, ___protocolFactory, ___transport);
       this.___currentMethod = method_call;
       ___manager.call(method_call);
     }
 
-    public static class fileWrote_call extends org.apache.thrift.async.TAsyncMethodCall<Void> {
-      private java.lang.String filePath;
-      public fileWrote_call(java.lang.String filePath, org.apache.thrift.async.AsyncMethodCallback<Void> resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
+    public static class fileWrote_call extends TAsyncMethodCall<Void> {
+      private String filePath;
+      public fileWrote_call(String filePath, AsyncMethodCallback<Void> resultHandler, TAsyncClient client, TProtocolFactory protocolFactory, TNonblockingTransport transport) throws TException {
         super(client, protocolFactory, transport, resultHandler, false);
         this.filePath = filePath;
       }
 
-      public void write_args(org.apache.thrift.protocol.TProtocol prot) throws org.apache.thrift.TException {
-        prot.writeMessageBegin(new org.apache.thrift.protocol.TMessage("fileWrote", org.apache.thrift.protocol.TMessageType.CALL, 0));
+      public void write_args(TProtocol prot) throws TException {
+        prot.writeMessageBegin(new TMessage("fileWrote", TMessageType.CALL, 0));
         fileWrote_args args = new fileWrote_args();
         args.setFilePath(filePath);
         args.write(prot);
         prot.writeMessageEnd();
       }
 
-      public Void getResult() throws org.apache.thrift.TException {
-        if (getState() != org.apache.thrift.async.TAsyncMethodCall.State.RESPONSE_READ) {
-          throw new java.lang.IllegalStateException("Method call not finished!");
+      public Void getResult() throws TException {
+        if (getState() != TAsyncMethodCall.State.RESPONSE_READ) {
+          throw new IllegalStateException("Method call not finished!");
         }
-        org.apache.thrift.transport.TMemoryInputTransport memoryTransport = new org.apache.thrift.transport.TMemoryInputTransport(getFrameBuffer().array());
-        org.apache.thrift.protocol.TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
+        TMemoryInputTransport memoryTransport = new TMemoryInputTransport(getFrameBuffer().array());
+        TProtocol prot = client.getProtocolFactory().getProtocol(memoryTransport);
         return null;
       }
     }
 
   }
 
-  public static class Processor<I extends Iface> extends org.apache.thrift.TBaseProcessor<I> implements org.apache.thrift.TProcessor {
-    private static final org.slf4j.Logger _LOGGER = org.slf4j.LoggerFactory.getLogger(Processor.class.getName());
+  public static class Processor<I extends Iface> extends TBaseProcessor<I> implements TProcessor {
+    private static final Logger _LOGGER = LoggerFactory.getLogger(Processor.class.getName());
     public Processor(I iface) {
-      super(iface, getProcessMap(new java.util.HashMap<java.lang.String, org.apache.thrift.ProcessFunction<I, ? extends org.apache.thrift.TBase>>()));
+      super(iface, getProcessMap(new HashMap<String, ProcessFunction<I, ? extends TBase>>()));
     }
 
-    protected Processor(I iface, java.util.Map<java.lang.String, org.apache.thrift.ProcessFunction<I, ? extends org.apache.thrift.TBase>> processMap) {
+    protected Processor(I iface, Map<String, ProcessFunction<I, ? extends TBase>> processMap) {
       super(iface, getProcessMap(processMap));
     }
 
-    private static <I extends Iface> java.util.Map<java.lang.String,  org.apache.thrift.ProcessFunction<I, ? extends org.apache.thrift.TBase>> getProcessMap(java.util.Map<java.lang.String, org.apache.thrift.ProcessFunction<I, ? extends  org.apache.thrift.TBase>> processMap) {
+    private static <I extends Iface> Map<String,  ProcessFunction<I, ? extends TBase>> getProcessMap(Map<String, ProcessFunction<I, ? extends  TBase>> processMap) {
       processMap.put("logInfo", new logInfo());
       processMap.put("logError", new logError());
       processMap.put("logWarning", new logWarning());
@@ -335,7 +400,7 @@ public class JavaCompilerInterface {
       return processMap;
     }
 
-    public static class logInfo<I extends Iface> extends org.apache.thrift.ProcessFunction<I, logInfo_args> {
+    public static class logInfo<I extends Iface> extends ProcessFunction<I, logInfo_args> {
       public logInfo() {
         super("logInfo");
       }
@@ -353,14 +418,14 @@ public class JavaCompilerInterface {
         return false;
       }
 
-      public logInfo_result getResult(I iface, logInfo_args args) throws org.apache.thrift.TException {
+      public logInfo_result getResult(I iface, logInfo_args args) throws TException {
         logInfo_result result = new logInfo_result();
         iface.logInfo(args.message, args.fileUri, args.lineNumber, args.columnNumber);
         return result;
       }
     }
 
-    public static class logError<I extends Iface> extends org.apache.thrift.ProcessFunction<I, logError_args> {
+    public static class logError<I extends Iface> extends ProcessFunction<I, logError_args> {
       public logError() {
         super("logError");
       }
@@ -378,14 +443,14 @@ public class JavaCompilerInterface {
         return false;
       }
 
-      public logError_result getResult(I iface, logError_args args) throws org.apache.thrift.TException {
+      public logError_result getResult(I iface, logError_args args) throws TException {
         logError_result result = new logError_result();
         iface.logError(args.message, args.fileUri, args.lineNumber, args.columnNumber);
         return result;
       }
     }
 
-    public static class logWarning<I extends Iface> extends org.apache.thrift.ProcessFunction<I, logWarning_args> {
+    public static class logWarning<I extends Iface> extends ProcessFunction<I, logWarning_args> {
       public logWarning() {
         super("logWarning");
       }
@@ -403,14 +468,14 @@ public class JavaCompilerInterface {
         return false;
       }
 
-      public logWarning_result getResult(I iface, logWarning_args args) throws org.apache.thrift.TException {
+      public logWarning_result getResult(I iface, logWarning_args args) throws TException {
         logWarning_result result = new logWarning_result();
         iface.logWarning(args.message, args.fileUri, args.lineNumber, args.columnNumber);
         return result;
       }
     }
 
-    public static class fileWrote<I extends Iface> extends org.apache.thrift.ProcessFunction<I, fileWrote_args> {
+    public static class fileWrote<I extends Iface> extends ProcessFunction<I, fileWrote_args> {
       public fileWrote() {
         super("fileWrote");
       }
@@ -428,7 +493,7 @@ public class JavaCompilerInterface {
         return false;
       }
 
-      public fileWrote_result getResult(I iface, fileWrote_args args) throws org.apache.thrift.TException {
+      public fileWrote_result getResult(I iface, fileWrote_args args) throws TException {
         fileWrote_result result = new fileWrote_result();
         iface.fileWrote(args.filePath);
         return result;
@@ -437,17 +502,17 @@ public class JavaCompilerInterface {
 
   }
 
-  public static class AsyncProcessor<I extends AsyncIface> extends org.apache.thrift.TBaseAsyncProcessor<I> {
-    private static final org.slf4j.Logger _LOGGER = org.slf4j.LoggerFactory.getLogger(AsyncProcessor.class.getName());
+  public static class AsyncProcessor<I extends AsyncIface> extends TBaseAsyncProcessor<I> {
+    private static final Logger _LOGGER = LoggerFactory.getLogger(AsyncProcessor.class.getName());
     public AsyncProcessor(I iface) {
-      super(iface, getProcessMap(new java.util.HashMap<java.lang.String, org.apache.thrift.AsyncProcessFunction<I, ? extends org.apache.thrift.TBase, ?>>()));
+      super(iface, getProcessMap(new HashMap<String, AsyncProcessFunction<I, ? extends TBase, ?>>()));
     }
 
-    protected AsyncProcessor(I iface, java.util.Map<java.lang.String,  org.apache.thrift.AsyncProcessFunction<I, ? extends  org.apache.thrift.TBase, ?>> processMap) {
+    protected AsyncProcessor(I iface, Map<String,  AsyncProcessFunction<I, ? extends  TBase, ?>> processMap) {
       super(iface, getProcessMap(processMap));
     }
 
-    private static <I extends AsyncIface> java.util.Map<java.lang.String,  org.apache.thrift.AsyncProcessFunction<I, ? extends  org.apache.thrift.TBase,?>> getProcessMap(java.util.Map<java.lang.String,  org.apache.thrift.AsyncProcessFunction<I, ? extends  org.apache.thrift.TBase, ?>> processMap) {
+    private static <I extends AsyncIface> Map<String,  AsyncProcessFunction<I, ? extends  TBase,?>> getProcessMap(Map<String,  AsyncProcessFunction<I, ? extends  TBase, ?>> processMap) {
       processMap.put("logInfo", new logInfo());
       processMap.put("logError", new logError());
       processMap.put("logWarning", new logWarning());
@@ -455,7 +520,7 @@ public class JavaCompilerInterface {
       return processMap;
     }
 
-    public static class logInfo<I extends AsyncIface> extends org.apache.thrift.AsyncProcessFunction<I, logInfo_args, Void> {
+    public static class logInfo<I extends AsyncIface> extends AsyncProcessFunction<I, logInfo_args, Void> {
       public logInfo() {
         super("logInfo");
       }
@@ -464,41 +529,41 @@ public class JavaCompilerInterface {
         return new logInfo_args();
       }
 
-      public org.apache.thrift.async.AsyncMethodCallback<Void> getResultHandler(final org.apache.thrift.server.AbstractNonblockingServer.AsyncFrameBuffer fb, final int seqid) {
-        final org.apache.thrift.AsyncProcessFunction fcall = this;
-        return new org.apache.thrift.async.AsyncMethodCallback<Void>() { 
+      public AsyncMethodCallback<Void> getResultHandler(final AbstractNonblockingServer.AsyncFrameBuffer fb, final int seqid) {
+        final AsyncProcessFunction fcall = this;
+        return new AsyncMethodCallback<Void>() {
           public void onComplete(Void o) {
             logInfo_result result = new logInfo_result();
             try {
-              fcall.sendResponse(fb, result, org.apache.thrift.protocol.TMessageType.REPLY,seqid);
-            } catch (org.apache.thrift.transport.TTransportException e) {
+              fcall.sendResponse(fb, result, TMessageType.REPLY,seqid);
+            } catch (TTransportException e) {
               _LOGGER.error("TTransportException writing to internal frame buffer", e);
               fb.close();
-            } catch (java.lang.Exception e) {
+            } catch (Exception e) {
               _LOGGER.error("Exception writing to internal frame buffer", e);
               onError(e);
             }
           }
-          public void onError(java.lang.Exception e) {
-            byte msgType = org.apache.thrift.protocol.TMessageType.REPLY;
-            org.apache.thrift.TSerializable msg;
+          public void onError(Exception e) {
+            byte msgType = TMessageType.REPLY;
+            TSerializable msg;
             logInfo_result result = new logInfo_result();
-            if (e instanceof org.apache.thrift.transport.TTransportException) {
+            if (e instanceof TTransportException) {
               _LOGGER.error("TTransportException inside handler", e);
               fb.close();
               return;
-            } else if (e instanceof org.apache.thrift.TApplicationException) {
+            } else if (e instanceof TApplicationException) {
               _LOGGER.error("TApplicationException inside handler", e);
-              msgType = org.apache.thrift.protocol.TMessageType.EXCEPTION;
-              msg = (org.apache.thrift.TApplicationException)e;
+              msgType = TMessageType.EXCEPTION;
+              msg = (TApplicationException)e;
             } else {
               _LOGGER.error("Exception inside handler", e);
-              msgType = org.apache.thrift.protocol.TMessageType.EXCEPTION;
-              msg = new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.INTERNAL_ERROR, e.getMessage());
+              msgType = TMessageType.EXCEPTION;
+              msg = new TApplicationException(TApplicationException.INTERNAL_ERROR, e.getMessage());
             }
             try {
               fcall.sendResponse(fb,msg,msgType,seqid);
-            } catch (java.lang.Exception ex) {
+            } catch (Exception ex) {
               _LOGGER.error("Exception writing to internal frame buffer", ex);
               fb.close();
             }
@@ -510,12 +575,12 @@ public class JavaCompilerInterface {
         return false;
       }
 
-      public void start(I iface, logInfo_args args, org.apache.thrift.async.AsyncMethodCallback<Void> resultHandler) throws org.apache.thrift.TException {
+      public void start(I iface, logInfo_args args, AsyncMethodCallback<Void> resultHandler) throws TException {
         iface.logInfo(args.message, args.fileUri, args.lineNumber, args.columnNumber,resultHandler);
       }
     }
 
-    public static class logError<I extends AsyncIface> extends org.apache.thrift.AsyncProcessFunction<I, logError_args, Void> {
+    public static class logError<I extends AsyncIface> extends AsyncProcessFunction<I, logError_args, Void> {
       public logError() {
         super("logError");
       }
@@ -524,41 +589,41 @@ public class JavaCompilerInterface {
         return new logError_args();
       }
 
-      public org.apache.thrift.async.AsyncMethodCallback<Void> getResultHandler(final org.apache.thrift.server.AbstractNonblockingServer.AsyncFrameBuffer fb, final int seqid) {
-        final org.apache.thrift.AsyncProcessFunction fcall = this;
-        return new org.apache.thrift.async.AsyncMethodCallback<Void>() { 
+      public AsyncMethodCallback<Void> getResultHandler(final AbstractNonblockingServer.AsyncFrameBuffer fb, final int seqid) {
+        final AsyncProcessFunction fcall = this;
+        return new AsyncMethodCallback<Void>() {
           public void onComplete(Void o) {
             logError_result result = new logError_result();
             try {
-              fcall.sendResponse(fb, result, org.apache.thrift.protocol.TMessageType.REPLY,seqid);
-            } catch (org.apache.thrift.transport.TTransportException e) {
+              fcall.sendResponse(fb, result, TMessageType.REPLY,seqid);
+            } catch (TTransportException e) {
               _LOGGER.error("TTransportException writing to internal frame buffer", e);
               fb.close();
-            } catch (java.lang.Exception e) {
+            } catch (Exception e) {
               _LOGGER.error("Exception writing to internal frame buffer", e);
               onError(e);
             }
           }
-          public void onError(java.lang.Exception e) {
-            byte msgType = org.apache.thrift.protocol.TMessageType.REPLY;
-            org.apache.thrift.TSerializable msg;
+          public void onError(Exception e) {
+            byte msgType = TMessageType.REPLY;
+            TSerializable msg;
             logError_result result = new logError_result();
-            if (e instanceof org.apache.thrift.transport.TTransportException) {
+            if (e instanceof TTransportException) {
               _LOGGER.error("TTransportException inside handler", e);
               fb.close();
               return;
-            } else if (e instanceof org.apache.thrift.TApplicationException) {
+            } else if (e instanceof TApplicationException) {
               _LOGGER.error("TApplicationException inside handler", e);
-              msgType = org.apache.thrift.protocol.TMessageType.EXCEPTION;
-              msg = (org.apache.thrift.TApplicationException)e;
+              msgType = TMessageType.EXCEPTION;
+              msg = (TApplicationException)e;
             } else {
               _LOGGER.error("Exception inside handler", e);
-              msgType = org.apache.thrift.protocol.TMessageType.EXCEPTION;
-              msg = new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.INTERNAL_ERROR, e.getMessage());
+              msgType = TMessageType.EXCEPTION;
+              msg = new TApplicationException(TApplicationException.INTERNAL_ERROR, e.getMessage());
             }
             try {
               fcall.sendResponse(fb,msg,msgType,seqid);
-            } catch (java.lang.Exception ex) {
+            } catch (Exception ex) {
               _LOGGER.error("Exception writing to internal frame buffer", ex);
               fb.close();
             }
@@ -570,12 +635,12 @@ public class JavaCompilerInterface {
         return false;
       }
 
-      public void start(I iface, logError_args args, org.apache.thrift.async.AsyncMethodCallback<Void> resultHandler) throws org.apache.thrift.TException {
+      public void start(I iface, logError_args args, AsyncMethodCallback<Void> resultHandler) throws TException {
         iface.logError(args.message, args.fileUri, args.lineNumber, args.columnNumber,resultHandler);
       }
     }
 
-    public static class logWarning<I extends AsyncIface> extends org.apache.thrift.AsyncProcessFunction<I, logWarning_args, Void> {
+    public static class logWarning<I extends AsyncIface> extends AsyncProcessFunction<I, logWarning_args, Void> {
       public logWarning() {
         super("logWarning");
       }
@@ -584,41 +649,41 @@ public class JavaCompilerInterface {
         return new logWarning_args();
       }
 
-      public org.apache.thrift.async.AsyncMethodCallback<Void> getResultHandler(final org.apache.thrift.server.AbstractNonblockingServer.AsyncFrameBuffer fb, final int seqid) {
-        final org.apache.thrift.AsyncProcessFunction fcall = this;
-        return new org.apache.thrift.async.AsyncMethodCallback<Void>() { 
+      public AsyncMethodCallback<Void> getResultHandler(final AbstractNonblockingServer.AsyncFrameBuffer fb, final int seqid) {
+        final AsyncProcessFunction fcall = this;
+        return new AsyncMethodCallback<Void>() {
           public void onComplete(Void o) {
             logWarning_result result = new logWarning_result();
             try {
-              fcall.sendResponse(fb, result, org.apache.thrift.protocol.TMessageType.REPLY,seqid);
-            } catch (org.apache.thrift.transport.TTransportException e) {
+              fcall.sendResponse(fb, result, TMessageType.REPLY,seqid);
+            } catch (TTransportException e) {
               _LOGGER.error("TTransportException writing to internal frame buffer", e);
               fb.close();
-            } catch (java.lang.Exception e) {
+            } catch (Exception e) {
               _LOGGER.error("Exception writing to internal frame buffer", e);
               onError(e);
             }
           }
-          public void onError(java.lang.Exception e) {
-            byte msgType = org.apache.thrift.protocol.TMessageType.REPLY;
-            org.apache.thrift.TSerializable msg;
+          public void onError(Exception e) {
+            byte msgType = TMessageType.REPLY;
+            TSerializable msg;
             logWarning_result result = new logWarning_result();
-            if (e instanceof org.apache.thrift.transport.TTransportException) {
+            if (e instanceof TTransportException) {
               _LOGGER.error("TTransportException inside handler", e);
               fb.close();
               return;
-            } else if (e instanceof org.apache.thrift.TApplicationException) {
+            } else if (e instanceof TApplicationException) {
               _LOGGER.error("TApplicationException inside handler", e);
-              msgType = org.apache.thrift.protocol.TMessageType.EXCEPTION;
-              msg = (org.apache.thrift.TApplicationException)e;
+              msgType = TMessageType.EXCEPTION;
+              msg = (TApplicationException)e;
             } else {
               _LOGGER.error("Exception inside handler", e);
-              msgType = org.apache.thrift.protocol.TMessageType.EXCEPTION;
-              msg = new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.INTERNAL_ERROR, e.getMessage());
+              msgType = TMessageType.EXCEPTION;
+              msg = new TApplicationException(TApplicationException.INTERNAL_ERROR, e.getMessage());
             }
             try {
               fcall.sendResponse(fb,msg,msgType,seqid);
-            } catch (java.lang.Exception ex) {
+            } catch (Exception ex) {
               _LOGGER.error("Exception writing to internal frame buffer", ex);
               fb.close();
             }
@@ -630,12 +695,12 @@ public class JavaCompilerInterface {
         return false;
       }
 
-      public void start(I iface, logWarning_args args, org.apache.thrift.async.AsyncMethodCallback<Void> resultHandler) throws org.apache.thrift.TException {
+      public void start(I iface, logWarning_args args, AsyncMethodCallback<Void> resultHandler) throws TException {
         iface.logWarning(args.message, args.fileUri, args.lineNumber, args.columnNumber,resultHandler);
       }
     }
 
-    public static class fileWrote<I extends AsyncIface> extends org.apache.thrift.AsyncProcessFunction<I, fileWrote_args, Void> {
+    public static class fileWrote<I extends AsyncIface> extends AsyncProcessFunction<I, fileWrote_args, Void> {
       public fileWrote() {
         super("fileWrote");
       }
@@ -644,41 +709,41 @@ public class JavaCompilerInterface {
         return new fileWrote_args();
       }
 
-      public org.apache.thrift.async.AsyncMethodCallback<Void> getResultHandler(final org.apache.thrift.server.AbstractNonblockingServer.AsyncFrameBuffer fb, final int seqid) {
-        final org.apache.thrift.AsyncProcessFunction fcall = this;
-        return new org.apache.thrift.async.AsyncMethodCallback<Void>() { 
+      public AsyncMethodCallback<Void> getResultHandler(final AbstractNonblockingServer.AsyncFrameBuffer fb, final int seqid) {
+        final AsyncProcessFunction fcall = this;
+        return new AsyncMethodCallback<Void>() {
           public void onComplete(Void o) {
             fileWrote_result result = new fileWrote_result();
             try {
-              fcall.sendResponse(fb, result, org.apache.thrift.protocol.TMessageType.REPLY,seqid);
-            } catch (org.apache.thrift.transport.TTransportException e) {
+              fcall.sendResponse(fb, result, TMessageType.REPLY,seqid);
+            } catch (TTransportException e) {
               _LOGGER.error("TTransportException writing to internal frame buffer", e);
               fb.close();
-            } catch (java.lang.Exception e) {
+            } catch (Exception e) {
               _LOGGER.error("Exception writing to internal frame buffer", e);
               onError(e);
             }
           }
-          public void onError(java.lang.Exception e) {
-            byte msgType = org.apache.thrift.protocol.TMessageType.REPLY;
-            org.apache.thrift.TSerializable msg;
+          public void onError(Exception e) {
+            byte msgType = TMessageType.REPLY;
+            TSerializable msg;
             fileWrote_result result = new fileWrote_result();
-            if (e instanceof org.apache.thrift.transport.TTransportException) {
+            if (e instanceof TTransportException) {
               _LOGGER.error("TTransportException inside handler", e);
               fb.close();
               return;
-            } else if (e instanceof org.apache.thrift.TApplicationException) {
+            } else if (e instanceof TApplicationException) {
               _LOGGER.error("TApplicationException inside handler", e);
-              msgType = org.apache.thrift.protocol.TMessageType.EXCEPTION;
-              msg = (org.apache.thrift.TApplicationException)e;
+              msgType = TMessageType.EXCEPTION;
+              msg = (TApplicationException)e;
             } else {
               _LOGGER.error("Exception inside handler", e);
-              msgType = org.apache.thrift.protocol.TMessageType.EXCEPTION;
-              msg = new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.INTERNAL_ERROR, e.getMessage());
+              msgType = TMessageType.EXCEPTION;
+              msg = new TApplicationException(TApplicationException.INTERNAL_ERROR, e.getMessage());
             }
             try {
               fcall.sendResponse(fb,msg,msgType,seqid);
-            } catch (java.lang.Exception ex) {
+            } catch (Exception ex) {
               _LOGGER.error("Exception writing to internal frame buffer", ex);
               fb.close();
             }
@@ -690,40 +755,40 @@ public class JavaCompilerInterface {
         return false;
       }
 
-      public void start(I iface, fileWrote_args args, org.apache.thrift.async.AsyncMethodCallback<Void> resultHandler) throws org.apache.thrift.TException {
+      public void start(I iface, fileWrote_args args, AsyncMethodCallback<Void> resultHandler) throws TException {
         iface.fileWrote(args.filePath,resultHandler);
       }
     }
 
   }
 
-  public static class logInfo_args implements org.apache.thrift.TBase<logInfo_args, logInfo_args._Fields>, java.io.Serializable, Cloneable, Comparable<logInfo_args>   {
-    private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("logInfo_args");
+  public static class logInfo_args implements TBase<logInfo_args, logInfo_args._Fields>, Serializable, Cloneable, Comparable<logInfo_args>   {
+    private static final TStruct STRUCT_DESC = new TStruct("logInfo_args");
 
-    private static final org.apache.thrift.protocol.TField MESSAGE_FIELD_DESC = new org.apache.thrift.protocol.TField("message", org.apache.thrift.protocol.TType.STRING, (short)1);
-    private static final org.apache.thrift.protocol.TField FILE_URI_FIELD_DESC = new org.apache.thrift.protocol.TField("fileUri", org.apache.thrift.protocol.TType.STRING, (short)2);
-    private static final org.apache.thrift.protocol.TField LINE_NUMBER_FIELD_DESC = new org.apache.thrift.protocol.TField("lineNumber", org.apache.thrift.protocol.TType.I64, (short)3);
-    private static final org.apache.thrift.protocol.TField COLUMN_NUMBER_FIELD_DESC = new org.apache.thrift.protocol.TField("columnNumber", org.apache.thrift.protocol.TType.I64, (short)4);
+    private static final TField MESSAGE_FIELD_DESC = new TField("message", TType.STRING, (short)1);
+    private static final TField FILE_URI_FIELD_DESC = new TField("fileUri", TType.STRING, (short)2);
+    private static final TField LINE_NUMBER_FIELD_DESC = new TField("lineNumber", TType.I64, (short)3);
+    private static final TField COLUMN_NUMBER_FIELD_DESC = new TField("columnNumber", TType.I64, (short)4);
 
-    private static final org.apache.thrift.scheme.SchemeFactory STANDARD_SCHEME_FACTORY = new logInfo_argsStandardSchemeFactory();
-    private static final org.apache.thrift.scheme.SchemeFactory TUPLE_SCHEME_FACTORY = new logInfo_argsTupleSchemeFactory();
+    private static final SchemeFactory STANDARD_SCHEME_FACTORY = new logInfo_argsStandardSchemeFactory();
+    private static final SchemeFactory TUPLE_SCHEME_FACTORY = new logInfo_argsTupleSchemeFactory();
 
-    public @org.apache.thrift.annotation.Nullable java.lang.String message; // required
-    public @org.apache.thrift.annotation.Nullable java.lang.String fileUri; // required
+    public @Nullable String message; // required
+    public @Nullable String fileUri; // required
     public long lineNumber; // required
     public long columnNumber; // required
 
     /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
-    public enum _Fields implements org.apache.thrift.TFieldIdEnum {
+    public enum _Fields implements TFieldIdEnum {
       MESSAGE((short)1, "message"),
       FILE_URI((short)2, "fileUri"),
       LINE_NUMBER((short)3, "lineNumber"),
       COLUMN_NUMBER((short)4, "columnNumber");
 
-      private static final java.util.Map<java.lang.String, _Fields> byName = new java.util.HashMap<java.lang.String, _Fields>();
+      private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
       static {
-        for (_Fields field : java.util.EnumSet.allOf(_Fields.class)) {
+        for (_Fields field : EnumSet.allOf(_Fields.class)) {
           byName.put(field.getFieldName(), field);
         }
       }
@@ -731,7 +796,7 @@ public class JavaCompilerInterface {
       /**
        * Find the _Fields constant that matches fieldId, or null if its not found.
        */
-      @org.apache.thrift.annotation.Nullable
+      @Nullable
       public static _Fields findByThriftId(int fieldId) {
         switch(fieldId) {
           case 1: // MESSAGE
@@ -753,22 +818,22 @@ public class JavaCompilerInterface {
        */
       public static _Fields findByThriftIdOrThrow(int fieldId) {
         _Fields fields = findByThriftId(fieldId);
-        if (fields == null) throw new java.lang.IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+        if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
         return fields;
       }
 
       /**
        * Find the _Fields constant that matches name, or null if its not found.
        */
-      @org.apache.thrift.annotation.Nullable
-      public static _Fields findByName(java.lang.String name) {
+      @Nullable
+      public static _Fields findByName(String name) {
         return byName.get(name);
       }
 
       private final short _thriftId;
-      private final java.lang.String _fieldName;
+      private final String _fieldName;
 
-      _Fields(short thriftId, java.lang.String fieldName) {
+      _Fields(short thriftId, String fieldName) {
         _thriftId = thriftId;
         _fieldName = fieldName;
       }
@@ -777,7 +842,7 @@ public class JavaCompilerInterface {
         return _thriftId;
       }
 
-      public java.lang.String getFieldName() {
+      public String getFieldName() {
         return _fieldName;
       }
     }
@@ -786,27 +851,27 @@ public class JavaCompilerInterface {
     private static final int __LINENUMBER_ISSET_ID = 0;
     private static final int __COLUMNNUMBER_ISSET_ID = 1;
     private byte __isset_bitfield = 0;
-    public static final java.util.Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
+    public static final Map<_Fields, FieldMetaData> metaDataMap;
     static {
-      java.util.Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new java.util.EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
-      tmpMap.put(_Fields.MESSAGE, new org.apache.thrift.meta_data.FieldMetaData("message", org.apache.thrift.TFieldRequirementType.DEFAULT, 
-          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
-      tmpMap.put(_Fields.FILE_URI, new org.apache.thrift.meta_data.FieldMetaData("fileUri", org.apache.thrift.TFieldRequirementType.DEFAULT, 
-          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
-      tmpMap.put(_Fields.LINE_NUMBER, new org.apache.thrift.meta_data.FieldMetaData("lineNumber", org.apache.thrift.TFieldRequirementType.DEFAULT, 
-          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I64)));
-      tmpMap.put(_Fields.COLUMN_NUMBER, new org.apache.thrift.meta_data.FieldMetaData("columnNumber", org.apache.thrift.TFieldRequirementType.DEFAULT, 
-          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I64)));
-      metaDataMap = java.util.Collections.unmodifiableMap(tmpMap);
-      org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(logInfo_args.class, metaDataMap);
+      Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+      tmpMap.put(_Fields.MESSAGE, new FieldMetaData("message", TFieldRequirementType.DEFAULT,
+          new FieldValueMetaData(TType.STRING)));
+      tmpMap.put(_Fields.FILE_URI, new FieldMetaData("fileUri", TFieldRequirementType.DEFAULT,
+          new FieldValueMetaData(TType.STRING)));
+      tmpMap.put(_Fields.LINE_NUMBER, new FieldMetaData("lineNumber", TFieldRequirementType.DEFAULT,
+          new FieldValueMetaData(TType.I64)));
+      tmpMap.put(_Fields.COLUMN_NUMBER, new FieldMetaData("columnNumber", TFieldRequirementType.DEFAULT,
+          new FieldValueMetaData(TType.I64)));
+      metaDataMap = Collections.unmodifiableMap(tmpMap);
+      FieldMetaData.addStructMetaDataMap(logInfo_args.class, metaDataMap);
     }
 
     public logInfo_args() {
     }
 
     public logInfo_args(
-      java.lang.String message,
-      java.lang.String fileUri,
+      String message,
+      String fileUri,
       long lineNumber,
       long columnNumber)
     {
@@ -848,12 +913,12 @@ public class JavaCompilerInterface {
       this.columnNumber = 0;
     }
 
-    @org.apache.thrift.annotation.Nullable
-    public java.lang.String getMessage() {
+    @Nullable
+    public String getMessage() {
       return this.message;
     }
 
-    public logInfo_args setMessage(@org.apache.thrift.annotation.Nullable java.lang.String message) {
+    public logInfo_args setMessage(@Nullable String message) {
       this.message = message;
       return this;
     }
@@ -873,12 +938,12 @@ public class JavaCompilerInterface {
       }
     }
 
-    @org.apache.thrift.annotation.Nullable
-    public java.lang.String getFileUri() {
+    @Nullable
+    public String getFileUri() {
       return this.fileUri;
     }
 
-    public logInfo_args setFileUri(@org.apache.thrift.annotation.Nullable java.lang.String fileUri) {
+    public logInfo_args setFileUri(@Nullable String fileUri) {
       this.fileUri = fileUri;
       return this;
     }
@@ -909,16 +974,16 @@ public class JavaCompilerInterface {
     }
 
     public void unsetLineNumber() {
-      __isset_bitfield = org.apache.thrift.EncodingUtils.clearBit(__isset_bitfield, __LINENUMBER_ISSET_ID);
+      __isset_bitfield = EncodingUtils.clearBit(__isset_bitfield, __LINENUMBER_ISSET_ID);
     }
 
     /** Returns true if field lineNumber is set (has been assigned a value) and false otherwise */
     public boolean isSetLineNumber() {
-      return org.apache.thrift.EncodingUtils.testBit(__isset_bitfield, __LINENUMBER_ISSET_ID);
+      return EncodingUtils.testBit(__isset_bitfield, __LINENUMBER_ISSET_ID);
     }
 
     public void setLineNumberIsSet(boolean value) {
-      __isset_bitfield = org.apache.thrift.EncodingUtils.setBit(__isset_bitfield, __LINENUMBER_ISSET_ID, value);
+      __isset_bitfield = EncodingUtils.setBit(__isset_bitfield, __LINENUMBER_ISSET_ID, value);
     }
 
     public long getColumnNumber() {
@@ -932,25 +997,25 @@ public class JavaCompilerInterface {
     }
 
     public void unsetColumnNumber() {
-      __isset_bitfield = org.apache.thrift.EncodingUtils.clearBit(__isset_bitfield, __COLUMNNUMBER_ISSET_ID);
+      __isset_bitfield = EncodingUtils.clearBit(__isset_bitfield, __COLUMNNUMBER_ISSET_ID);
     }
 
     /** Returns true if field columnNumber is set (has been assigned a value) and false otherwise */
     public boolean isSetColumnNumber() {
-      return org.apache.thrift.EncodingUtils.testBit(__isset_bitfield, __COLUMNNUMBER_ISSET_ID);
+      return EncodingUtils.testBit(__isset_bitfield, __COLUMNNUMBER_ISSET_ID);
     }
 
     public void setColumnNumberIsSet(boolean value) {
-      __isset_bitfield = org.apache.thrift.EncodingUtils.setBit(__isset_bitfield, __COLUMNNUMBER_ISSET_ID, value);
+      __isset_bitfield = EncodingUtils.setBit(__isset_bitfield, __COLUMNNUMBER_ISSET_ID, value);
     }
 
-    public void setFieldValue(_Fields field, @org.apache.thrift.annotation.Nullable java.lang.Object value) {
+    public void setFieldValue(_Fields field, @Nullable Object value) {
       switch (field) {
       case MESSAGE:
         if (value == null) {
           unsetMessage();
         } else {
-          setMessage((java.lang.String)value);
+          setMessage((String)value);
         }
         break;
 
@@ -958,7 +1023,7 @@ public class JavaCompilerInterface {
         if (value == null) {
           unsetFileUri();
         } else {
-          setFileUri((java.lang.String)value);
+          setFileUri((String)value);
         }
         break;
 
@@ -966,7 +1031,7 @@ public class JavaCompilerInterface {
         if (value == null) {
           unsetLineNumber();
         } else {
-          setLineNumber((java.lang.Long)value);
+          setLineNumber((Long)value);
         }
         break;
 
@@ -974,15 +1039,15 @@ public class JavaCompilerInterface {
         if (value == null) {
           unsetColumnNumber();
         } else {
-          setColumnNumber((java.lang.Long)value);
+          setColumnNumber((Long)value);
         }
         break;
 
       }
     }
 
-    @org.apache.thrift.annotation.Nullable
-    public java.lang.Object getFieldValue(_Fields field) {
+    @Nullable
+    public Object getFieldValue(_Fields field) {
       switch (field) {
       case MESSAGE:
         return getMessage();
@@ -997,13 +1062,13 @@ public class JavaCompilerInterface {
         return getColumnNumber();
 
       }
-      throw new java.lang.IllegalStateException();
+      throw new IllegalStateException();
     }
 
     /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise */
     public boolean isSet(_Fields field) {
       if (field == null) {
-        throw new java.lang.IllegalArgumentException();
+        throw new IllegalArgumentException();
       }
 
       switch (field) {
@@ -1016,11 +1081,11 @@ public class JavaCompilerInterface {
       case COLUMN_NUMBER:
         return isSetColumnNumber();
       }
-      throw new java.lang.IllegalStateException();
+      throw new IllegalStateException();
     }
 
     @Override
-    public boolean equals(java.lang.Object that) {
+    public boolean equals(Object that) {
       if (that instanceof logInfo_args)
         return this.equals((logInfo_args)that);
       return false;
@@ -1083,9 +1148,9 @@ public class JavaCompilerInterface {
       if (isSetFileUri())
         hashCode = hashCode * 8191 + fileUri.hashCode();
 
-      hashCode = hashCode * 8191 + org.apache.thrift.TBaseHelper.hashCode(lineNumber);
+      hashCode = hashCode * 8191 + TBaseHelper.hashCode(lineNumber);
 
-      hashCode = hashCode * 8191 + org.apache.thrift.TBaseHelper.hashCode(columnNumber);
+      hashCode = hashCode * 8191 + TBaseHelper.hashCode(columnNumber);
 
       return hashCode;
     }
@@ -1098,42 +1163,42 @@ public class JavaCompilerInterface {
 
       int lastComparison = 0;
 
-      lastComparison = java.lang.Boolean.compare(isSetMessage(), other.isSetMessage());
+      lastComparison = Boolean.compare(isSetMessage(), other.isSetMessage());
       if (lastComparison != 0) {
         return lastComparison;
       }
       if (isSetMessage()) {
-        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.message, other.message);
+        lastComparison = TBaseHelper.compareTo(this.message, other.message);
         if (lastComparison != 0) {
           return lastComparison;
         }
       }
-      lastComparison = java.lang.Boolean.compare(isSetFileUri(), other.isSetFileUri());
+      lastComparison = Boolean.compare(isSetFileUri(), other.isSetFileUri());
       if (lastComparison != 0) {
         return lastComparison;
       }
       if (isSetFileUri()) {
-        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.fileUri, other.fileUri);
+        lastComparison = TBaseHelper.compareTo(this.fileUri, other.fileUri);
         if (lastComparison != 0) {
           return lastComparison;
         }
       }
-      lastComparison = java.lang.Boolean.compare(isSetLineNumber(), other.isSetLineNumber());
+      lastComparison = Boolean.compare(isSetLineNumber(), other.isSetLineNumber());
       if (lastComparison != 0) {
         return lastComparison;
       }
       if (isSetLineNumber()) {
-        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.lineNumber, other.lineNumber);
+        lastComparison = TBaseHelper.compareTo(this.lineNumber, other.lineNumber);
         if (lastComparison != 0) {
           return lastComparison;
         }
       }
-      lastComparison = java.lang.Boolean.compare(isSetColumnNumber(), other.isSetColumnNumber());
+      lastComparison = Boolean.compare(isSetColumnNumber(), other.isSetColumnNumber());
       if (lastComparison != 0) {
         return lastComparison;
       }
       if (isSetColumnNumber()) {
-        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.columnNumber, other.columnNumber);
+        lastComparison = TBaseHelper.compareTo(this.columnNumber, other.columnNumber);
         if (lastComparison != 0) {
           return lastComparison;
         }
@@ -1141,22 +1206,22 @@ public class JavaCompilerInterface {
       return 0;
     }
 
-    @org.apache.thrift.annotation.Nullable
+    @Nullable
     public _Fields fieldForId(int fieldId) {
       return _Fields.findByThriftId(fieldId);
     }
 
-    public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
+    public void read(TProtocol iprot) throws TException {
       scheme(iprot).read(iprot, this);
     }
 
-    public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
+    public void write(TProtocol oprot) throws TException {
       scheme(oprot).write(oprot, this);
     }
 
     @Override
-    public java.lang.String toString() {
-      java.lang.StringBuilder sb = new java.lang.StringBuilder("logInfo_args(");
+    public String toString() {
+      StringBuilder sb = new StringBuilder("logInfo_args(");
       boolean first = true;
 
       sb.append("message:");
@@ -1186,81 +1251,81 @@ public class JavaCompilerInterface {
       return sb.toString();
     }
 
-    public void validate() throws org.apache.thrift.TException {
+    public void validate() throws TException {
       // check for required fields
       // check for sub-struct validity
     }
 
-    private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
+    private void writeObject(ObjectOutputStream out) throws IOException {
       try {
-        write(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(out)));
-      } catch (org.apache.thrift.TException te) {
-        throw new java.io.IOException(te);
+        write(new TCompactProtocol(new TIOStreamTransport(out)));
+      } catch (TException te) {
+        throw new IOException(te);
       }
     }
 
-    private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, java.lang.ClassNotFoundException {
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
       try {
         // it doesn't seem like you should have to do this, but java serialization is wacky, and doesn't call the default constructor.
         __isset_bitfield = 0;
-        read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
-      } catch (org.apache.thrift.TException te) {
-        throw new java.io.IOException(te);
+        read(new TCompactProtocol(new TIOStreamTransport(in)));
+      } catch (TException te) {
+        throw new IOException(te);
       }
     }
 
-    private static class logInfo_argsStandardSchemeFactory implements org.apache.thrift.scheme.SchemeFactory {
+    private static class logInfo_argsStandardSchemeFactory implements SchemeFactory {
       public logInfo_argsStandardScheme getScheme() {
         return new logInfo_argsStandardScheme();
       }
     }
 
-    private static class logInfo_argsStandardScheme extends org.apache.thrift.scheme.StandardScheme<logInfo_args> {
+    private static class logInfo_argsStandardScheme extends StandardScheme<logInfo_args> {
 
-      public void read(org.apache.thrift.protocol.TProtocol iprot, logInfo_args struct) throws org.apache.thrift.TException {
-        org.apache.thrift.protocol.TField schemeField;
+      public void read(TProtocol iprot, logInfo_args struct) throws TException {
+        TField schemeField;
         iprot.readStructBegin();
         while (true)
         {
           schemeField = iprot.readFieldBegin();
-          if (schemeField.type == org.apache.thrift.protocol.TType.STOP) { 
+          if (schemeField.type == TType.STOP) {
             break;
           }
           switch (schemeField.id) {
             case 1: // MESSAGE
-              if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
+              if (schemeField.type == TType.STRING) {
                 struct.message = iprot.readString();
                 struct.setMessageIsSet(true);
               } else { 
-                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+                TProtocolUtil.skip(iprot, schemeField.type);
               }
               break;
             case 2: // FILE_URI
-              if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
+              if (schemeField.type == TType.STRING) {
                 struct.fileUri = iprot.readString();
                 struct.setFileUriIsSet(true);
               } else { 
-                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+                TProtocolUtil.skip(iprot, schemeField.type);
               }
               break;
             case 3: // LINE_NUMBER
-              if (schemeField.type == org.apache.thrift.protocol.TType.I64) {
+              if (schemeField.type == TType.I64) {
                 struct.lineNumber = iprot.readI64();
                 struct.setLineNumberIsSet(true);
               } else { 
-                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+                TProtocolUtil.skip(iprot, schemeField.type);
               }
               break;
             case 4: // COLUMN_NUMBER
-              if (schemeField.type == org.apache.thrift.protocol.TType.I64) {
+              if (schemeField.type == TType.I64) {
                 struct.columnNumber = iprot.readI64();
                 struct.setColumnNumberIsSet(true);
               } else { 
-                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+                TProtocolUtil.skip(iprot, schemeField.type);
               }
               break;
             default:
-              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+              TProtocolUtil.skip(iprot, schemeField.type);
           }
           iprot.readFieldEnd();
         }
@@ -1270,7 +1335,7 @@ public class JavaCompilerInterface {
         struct.validate();
       }
 
-      public void write(org.apache.thrift.protocol.TProtocol oprot, logInfo_args struct) throws org.apache.thrift.TException {
+      public void write(TProtocol oprot, logInfo_args struct) throws TException {
         struct.validate();
 
         oprot.writeStructBegin(STRUCT_DESC);
@@ -1296,18 +1361,18 @@ public class JavaCompilerInterface {
 
     }
 
-    private static class logInfo_argsTupleSchemeFactory implements org.apache.thrift.scheme.SchemeFactory {
+    private static class logInfo_argsTupleSchemeFactory implements SchemeFactory {
       public logInfo_argsTupleScheme getScheme() {
         return new logInfo_argsTupleScheme();
       }
     }
 
-    private static class logInfo_argsTupleScheme extends org.apache.thrift.scheme.TupleScheme<logInfo_args> {
+    private static class logInfo_argsTupleScheme extends TupleScheme<logInfo_args> {
 
       @Override
-      public void write(org.apache.thrift.protocol.TProtocol prot, logInfo_args struct) throws org.apache.thrift.TException {
-        org.apache.thrift.protocol.TTupleProtocol oprot = (org.apache.thrift.protocol.TTupleProtocol) prot;
-        java.util.BitSet optionals = new java.util.BitSet();
+      public void write(TProtocol prot, logInfo_args struct) throws TException {
+        TTupleProtocol oprot = (TTupleProtocol) prot;
+        BitSet optionals = new BitSet();
         if (struct.isSetMessage()) {
           optionals.set(0);
         }
@@ -1336,9 +1401,9 @@ public class JavaCompilerInterface {
       }
 
       @Override
-      public void read(org.apache.thrift.protocol.TProtocol prot, logInfo_args struct) throws org.apache.thrift.TException {
-        org.apache.thrift.protocol.TTupleProtocol iprot = (org.apache.thrift.protocol.TTupleProtocol) prot;
-        java.util.BitSet incoming = iprot.readBitSet(4);
+      public void read(TProtocol prot, logInfo_args struct) throws TException {
+        TTupleProtocol iprot = (TTupleProtocol) prot;
+        BitSet incoming = iprot.readBitSet(4);
         if (incoming.get(0)) {
           struct.message = iprot.readString();
           struct.setMessageIsSet(true);
@@ -1358,27 +1423,27 @@ public class JavaCompilerInterface {
       }
     }
 
-    private static <S extends org.apache.thrift.scheme.IScheme> S scheme(org.apache.thrift.protocol.TProtocol proto) {
-      return (org.apache.thrift.scheme.StandardScheme.class.equals(proto.getScheme()) ? STANDARD_SCHEME_FACTORY : TUPLE_SCHEME_FACTORY).getScheme();
+    private static <S extends IScheme> S scheme(TProtocol proto) {
+      return (StandardScheme.class.equals(proto.getScheme()) ? STANDARD_SCHEME_FACTORY : TUPLE_SCHEME_FACTORY).getScheme();
     }
   }
 
-  public static class logInfo_result implements org.apache.thrift.TBase<logInfo_result, logInfo_result._Fields>, java.io.Serializable, Cloneable, Comparable<logInfo_result>   {
-    private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("logInfo_result");
+  public static class logInfo_result implements TBase<logInfo_result, logInfo_result._Fields>, Serializable, Cloneable, Comparable<logInfo_result>   {
+    private static final TStruct STRUCT_DESC = new TStruct("logInfo_result");
 
 
-    private static final org.apache.thrift.scheme.SchemeFactory STANDARD_SCHEME_FACTORY = new logInfo_resultStandardSchemeFactory();
-    private static final org.apache.thrift.scheme.SchemeFactory TUPLE_SCHEME_FACTORY = new logInfo_resultTupleSchemeFactory();
+    private static final SchemeFactory STANDARD_SCHEME_FACTORY = new logInfo_resultStandardSchemeFactory();
+    private static final SchemeFactory TUPLE_SCHEME_FACTORY = new logInfo_resultTupleSchemeFactory();
 
 
     /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
-    public enum _Fields implements org.apache.thrift.TFieldIdEnum {
+    public enum _Fields implements TFieldIdEnum {
 ;
 
-      private static final java.util.Map<java.lang.String, _Fields> byName = new java.util.HashMap<java.lang.String, _Fields>();
+      private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
       static {
-        for (_Fields field : java.util.EnumSet.allOf(_Fields.class)) {
+        for (_Fields field : EnumSet.allOf(_Fields.class)) {
           byName.put(field.getFieldName(), field);
         }
       }
@@ -1386,7 +1451,7 @@ public class JavaCompilerInterface {
       /**
        * Find the _Fields constant that matches fieldId, or null if its not found.
        */
-      @org.apache.thrift.annotation.Nullable
+      @Nullable
       public static _Fields findByThriftId(int fieldId) {
         switch(fieldId) {
           default:
@@ -1400,22 +1465,22 @@ public class JavaCompilerInterface {
        */
       public static _Fields findByThriftIdOrThrow(int fieldId) {
         _Fields fields = findByThriftId(fieldId);
-        if (fields == null) throw new java.lang.IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+        if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
         return fields;
       }
 
       /**
        * Find the _Fields constant that matches name, or null if its not found.
        */
-      @org.apache.thrift.annotation.Nullable
-      public static _Fields findByName(java.lang.String name) {
+      @Nullable
+      public static _Fields findByName(String name) {
         return byName.get(name);
       }
 
       private final short _thriftId;
-      private final java.lang.String _fieldName;
+      private final String _fieldName;
 
-      _Fields(short thriftId, java.lang.String fieldName) {
+      _Fields(short thriftId, String fieldName) {
         _thriftId = thriftId;
         _fieldName = fieldName;
       }
@@ -1424,15 +1489,15 @@ public class JavaCompilerInterface {
         return _thriftId;
       }
 
-      public java.lang.String getFieldName() {
+      public String getFieldName() {
         return _fieldName;
       }
     }
-    public static final java.util.Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
+    public static final Map<_Fields, FieldMetaData> metaDataMap;
     static {
-      java.util.Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new java.util.EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
-      metaDataMap = java.util.Collections.unmodifiableMap(tmpMap);
-      org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(logInfo_result.class, metaDataMap);
+      Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+      metaDataMap = Collections.unmodifiableMap(tmpMap);
+      FieldMetaData.addStructMetaDataMap(logInfo_result.class, metaDataMap);
     }
 
     public logInfo_result() {
@@ -1452,31 +1517,31 @@ public class JavaCompilerInterface {
     public void clear() {
     }
 
-    public void setFieldValue(_Fields field, @org.apache.thrift.annotation.Nullable java.lang.Object value) {
+    public void setFieldValue(_Fields field, @Nullable Object value) {
       switch (field) {
       }
     }
 
-    @org.apache.thrift.annotation.Nullable
-    public java.lang.Object getFieldValue(_Fields field) {
+    @Nullable
+    public Object getFieldValue(_Fields field) {
       switch (field) {
       }
-      throw new java.lang.IllegalStateException();
+      throw new IllegalStateException();
     }
 
     /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise */
     public boolean isSet(_Fields field) {
       if (field == null) {
-        throw new java.lang.IllegalArgumentException();
+        throw new IllegalArgumentException();
       }
 
       switch (field) {
       }
-      throw new java.lang.IllegalStateException();
+      throw new IllegalStateException();
     }
 
     @Override
-    public boolean equals(java.lang.Object that) {
+    public boolean equals(Object that) {
       if (that instanceof logInfo_result)
         return this.equals((logInfo_result)that);
       return false;
@@ -1509,69 +1574,69 @@ public class JavaCompilerInterface {
       return 0;
     }
 
-    @org.apache.thrift.annotation.Nullable
+    @Nullable
     public _Fields fieldForId(int fieldId) {
       return _Fields.findByThriftId(fieldId);
     }
 
-    public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
+    public void read(TProtocol iprot) throws TException {
       scheme(iprot).read(iprot, this);
     }
 
-    public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
+    public void write(TProtocol oprot) throws TException {
       scheme(oprot).write(oprot, this);
       }
 
     @Override
-    public java.lang.String toString() {
-      java.lang.StringBuilder sb = new java.lang.StringBuilder("logInfo_result(");
+    public String toString() {
+      StringBuilder sb = new StringBuilder("logInfo_result(");
       boolean first = true;
 
       sb.append(")");
       return sb.toString();
     }
 
-    public void validate() throws org.apache.thrift.TException {
+    public void validate() throws TException {
       // check for required fields
       // check for sub-struct validity
     }
 
-    private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
+    private void writeObject(ObjectOutputStream out) throws IOException {
       try {
-        write(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(out)));
-      } catch (org.apache.thrift.TException te) {
-        throw new java.io.IOException(te);
+        write(new TCompactProtocol(new TIOStreamTransport(out)));
+      } catch (TException te) {
+        throw new IOException(te);
       }
     }
 
-    private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, java.lang.ClassNotFoundException {
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
       try {
-        read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
-      } catch (org.apache.thrift.TException te) {
-        throw new java.io.IOException(te);
+        read(new TCompactProtocol(new TIOStreamTransport(in)));
+      } catch (TException te) {
+        throw new IOException(te);
       }
     }
 
-    private static class logInfo_resultStandardSchemeFactory implements org.apache.thrift.scheme.SchemeFactory {
+    private static class logInfo_resultStandardSchemeFactory implements SchemeFactory {
       public logInfo_resultStandardScheme getScheme() {
         return new logInfo_resultStandardScheme();
       }
     }
 
-    private static class logInfo_resultStandardScheme extends org.apache.thrift.scheme.StandardScheme<logInfo_result> {
+    private static class logInfo_resultStandardScheme extends StandardScheme<logInfo_result> {
 
-      public void read(org.apache.thrift.protocol.TProtocol iprot, logInfo_result struct) throws org.apache.thrift.TException {
-        org.apache.thrift.protocol.TField schemeField;
+      public void read(TProtocol iprot, logInfo_result struct) throws TException {
+        TField schemeField;
         iprot.readStructBegin();
         while (true)
         {
           schemeField = iprot.readFieldBegin();
-          if (schemeField.type == org.apache.thrift.protocol.TType.STOP) { 
+          if (schemeField.type == TType.STOP) {
             break;
           }
           switch (schemeField.id) {
             default:
-              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+              TProtocolUtil.skip(iprot, schemeField.type);
           }
           iprot.readFieldEnd();
         }
@@ -1581,7 +1646,7 @@ public class JavaCompilerInterface {
         struct.validate();
       }
 
-      public void write(org.apache.thrift.protocol.TProtocol oprot, logInfo_result struct) throws org.apache.thrift.TException {
+      public void write(TProtocol oprot, logInfo_result struct) throws TException {
         struct.validate();
 
         oprot.writeStructBegin(STRUCT_DESC);
@@ -1591,57 +1656,57 @@ public class JavaCompilerInterface {
 
     }
 
-    private static class logInfo_resultTupleSchemeFactory implements org.apache.thrift.scheme.SchemeFactory {
+    private static class logInfo_resultTupleSchemeFactory implements SchemeFactory {
       public logInfo_resultTupleScheme getScheme() {
         return new logInfo_resultTupleScheme();
       }
     }
 
-    private static class logInfo_resultTupleScheme extends org.apache.thrift.scheme.TupleScheme<logInfo_result> {
+    private static class logInfo_resultTupleScheme extends TupleScheme<logInfo_result> {
 
       @Override
-      public void write(org.apache.thrift.protocol.TProtocol prot, logInfo_result struct) throws org.apache.thrift.TException {
-        org.apache.thrift.protocol.TTupleProtocol oprot = (org.apache.thrift.protocol.TTupleProtocol) prot;
+      public void write(TProtocol prot, logInfo_result struct) throws TException {
+        TTupleProtocol oprot = (TTupleProtocol) prot;
       }
 
       @Override
-      public void read(org.apache.thrift.protocol.TProtocol prot, logInfo_result struct) throws org.apache.thrift.TException {
-        org.apache.thrift.protocol.TTupleProtocol iprot = (org.apache.thrift.protocol.TTupleProtocol) prot;
+      public void read(TProtocol prot, logInfo_result struct) throws TException {
+        TTupleProtocol iprot = (TTupleProtocol) prot;
       }
     }
 
-    private static <S extends org.apache.thrift.scheme.IScheme> S scheme(org.apache.thrift.protocol.TProtocol proto) {
-      return (org.apache.thrift.scheme.StandardScheme.class.equals(proto.getScheme()) ? STANDARD_SCHEME_FACTORY : TUPLE_SCHEME_FACTORY).getScheme();
+    private static <S extends IScheme> S scheme(TProtocol proto) {
+      return (StandardScheme.class.equals(proto.getScheme()) ? STANDARD_SCHEME_FACTORY : TUPLE_SCHEME_FACTORY).getScheme();
     }
   }
 
-  public static class logError_args implements org.apache.thrift.TBase<logError_args, logError_args._Fields>, java.io.Serializable, Cloneable, Comparable<logError_args>   {
-    private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("logError_args");
+  public static class logError_args implements TBase<logError_args, logError_args._Fields>, Serializable, Cloneable, Comparable<logError_args>   {
+    private static final TStruct STRUCT_DESC = new TStruct("logError_args");
 
-    private static final org.apache.thrift.protocol.TField MESSAGE_FIELD_DESC = new org.apache.thrift.protocol.TField("message", org.apache.thrift.protocol.TType.STRING, (short)1);
-    private static final org.apache.thrift.protocol.TField FILE_URI_FIELD_DESC = new org.apache.thrift.protocol.TField("fileUri", org.apache.thrift.protocol.TType.STRING, (short)2);
-    private static final org.apache.thrift.protocol.TField LINE_NUMBER_FIELD_DESC = new org.apache.thrift.protocol.TField("lineNumber", org.apache.thrift.protocol.TType.I64, (short)3);
-    private static final org.apache.thrift.protocol.TField COLUMN_NUMBER_FIELD_DESC = new org.apache.thrift.protocol.TField("columnNumber", org.apache.thrift.protocol.TType.I64, (short)4);
+    private static final TField MESSAGE_FIELD_DESC = new TField("message", TType.STRING, (short)1);
+    private static final TField FILE_URI_FIELD_DESC = new TField("fileUri", TType.STRING, (short)2);
+    private static final TField LINE_NUMBER_FIELD_DESC = new TField("lineNumber", TType.I64, (short)3);
+    private static final TField COLUMN_NUMBER_FIELD_DESC = new TField("columnNumber", TType.I64, (short)4);
 
-    private static final org.apache.thrift.scheme.SchemeFactory STANDARD_SCHEME_FACTORY = new logError_argsStandardSchemeFactory();
-    private static final org.apache.thrift.scheme.SchemeFactory TUPLE_SCHEME_FACTORY = new logError_argsTupleSchemeFactory();
+    private static final SchemeFactory STANDARD_SCHEME_FACTORY = new logError_argsStandardSchemeFactory();
+    private static final SchemeFactory TUPLE_SCHEME_FACTORY = new logError_argsTupleSchemeFactory();
 
-    public @org.apache.thrift.annotation.Nullable java.lang.String message; // required
-    public @org.apache.thrift.annotation.Nullable java.lang.String fileUri; // required
+    public @Nullable String message; // required
+    public @Nullable String fileUri; // required
     public long lineNumber; // required
     public long columnNumber; // required
 
     /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
-    public enum _Fields implements org.apache.thrift.TFieldIdEnum {
+    public enum _Fields implements TFieldIdEnum {
       MESSAGE((short)1, "message"),
       FILE_URI((short)2, "fileUri"),
       LINE_NUMBER((short)3, "lineNumber"),
       COLUMN_NUMBER((short)4, "columnNumber");
 
-      private static final java.util.Map<java.lang.String, _Fields> byName = new java.util.HashMap<java.lang.String, _Fields>();
+      private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
       static {
-        for (_Fields field : java.util.EnumSet.allOf(_Fields.class)) {
+        for (_Fields field : EnumSet.allOf(_Fields.class)) {
           byName.put(field.getFieldName(), field);
         }
       }
@@ -1649,7 +1714,7 @@ public class JavaCompilerInterface {
       /**
        * Find the _Fields constant that matches fieldId, or null if its not found.
        */
-      @org.apache.thrift.annotation.Nullable
+      @Nullable
       public static _Fields findByThriftId(int fieldId) {
         switch(fieldId) {
           case 1: // MESSAGE
@@ -1671,22 +1736,22 @@ public class JavaCompilerInterface {
        */
       public static _Fields findByThriftIdOrThrow(int fieldId) {
         _Fields fields = findByThriftId(fieldId);
-        if (fields == null) throw new java.lang.IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+        if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
         return fields;
       }
 
       /**
        * Find the _Fields constant that matches name, or null if its not found.
        */
-      @org.apache.thrift.annotation.Nullable
-      public static _Fields findByName(java.lang.String name) {
+      @Nullable
+      public static _Fields findByName(String name) {
         return byName.get(name);
       }
 
       private final short _thriftId;
-      private final java.lang.String _fieldName;
+      private final String _fieldName;
 
-      _Fields(short thriftId, java.lang.String fieldName) {
+      _Fields(short thriftId, String fieldName) {
         _thriftId = thriftId;
         _fieldName = fieldName;
       }
@@ -1695,7 +1760,7 @@ public class JavaCompilerInterface {
         return _thriftId;
       }
 
-      public java.lang.String getFieldName() {
+      public String getFieldName() {
         return _fieldName;
       }
     }
@@ -1704,27 +1769,27 @@ public class JavaCompilerInterface {
     private static final int __LINENUMBER_ISSET_ID = 0;
     private static final int __COLUMNNUMBER_ISSET_ID = 1;
     private byte __isset_bitfield = 0;
-    public static final java.util.Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
+    public static final Map<_Fields, FieldMetaData> metaDataMap;
     static {
-      java.util.Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new java.util.EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
-      tmpMap.put(_Fields.MESSAGE, new org.apache.thrift.meta_data.FieldMetaData("message", org.apache.thrift.TFieldRequirementType.DEFAULT, 
-          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
-      tmpMap.put(_Fields.FILE_URI, new org.apache.thrift.meta_data.FieldMetaData("fileUri", org.apache.thrift.TFieldRequirementType.DEFAULT, 
-          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
-      tmpMap.put(_Fields.LINE_NUMBER, new org.apache.thrift.meta_data.FieldMetaData("lineNumber", org.apache.thrift.TFieldRequirementType.DEFAULT, 
-          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I64)));
-      tmpMap.put(_Fields.COLUMN_NUMBER, new org.apache.thrift.meta_data.FieldMetaData("columnNumber", org.apache.thrift.TFieldRequirementType.DEFAULT, 
-          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I64)));
-      metaDataMap = java.util.Collections.unmodifiableMap(tmpMap);
-      org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(logError_args.class, metaDataMap);
+      Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+      tmpMap.put(_Fields.MESSAGE, new FieldMetaData("message", TFieldRequirementType.DEFAULT,
+          new FieldValueMetaData(TType.STRING)));
+      tmpMap.put(_Fields.FILE_URI, new FieldMetaData("fileUri", TFieldRequirementType.DEFAULT,
+          new FieldValueMetaData(TType.STRING)));
+      tmpMap.put(_Fields.LINE_NUMBER, new FieldMetaData("lineNumber", TFieldRequirementType.DEFAULT,
+          new FieldValueMetaData(TType.I64)));
+      tmpMap.put(_Fields.COLUMN_NUMBER, new FieldMetaData("columnNumber", TFieldRequirementType.DEFAULT,
+          new FieldValueMetaData(TType.I64)));
+      metaDataMap = Collections.unmodifiableMap(tmpMap);
+      FieldMetaData.addStructMetaDataMap(logError_args.class, metaDataMap);
     }
 
     public logError_args() {
     }
 
     public logError_args(
-      java.lang.String message,
-      java.lang.String fileUri,
+      String message,
+      String fileUri,
       long lineNumber,
       long columnNumber)
     {
@@ -1766,12 +1831,12 @@ public class JavaCompilerInterface {
       this.columnNumber = 0;
     }
 
-    @org.apache.thrift.annotation.Nullable
-    public java.lang.String getMessage() {
+    @Nullable
+    public String getMessage() {
       return this.message;
     }
 
-    public logError_args setMessage(@org.apache.thrift.annotation.Nullable java.lang.String message) {
+    public logError_args setMessage(@Nullable String message) {
       this.message = message;
       return this;
     }
@@ -1791,12 +1856,12 @@ public class JavaCompilerInterface {
       }
     }
 
-    @org.apache.thrift.annotation.Nullable
-    public java.lang.String getFileUri() {
+    @Nullable
+    public String getFileUri() {
       return this.fileUri;
     }
 
-    public logError_args setFileUri(@org.apache.thrift.annotation.Nullable java.lang.String fileUri) {
+    public logError_args setFileUri(@Nullable String fileUri) {
       this.fileUri = fileUri;
       return this;
     }
@@ -1827,16 +1892,16 @@ public class JavaCompilerInterface {
     }
 
     public void unsetLineNumber() {
-      __isset_bitfield = org.apache.thrift.EncodingUtils.clearBit(__isset_bitfield, __LINENUMBER_ISSET_ID);
+      __isset_bitfield = EncodingUtils.clearBit(__isset_bitfield, __LINENUMBER_ISSET_ID);
     }
 
     /** Returns true if field lineNumber is set (has been assigned a value) and false otherwise */
     public boolean isSetLineNumber() {
-      return org.apache.thrift.EncodingUtils.testBit(__isset_bitfield, __LINENUMBER_ISSET_ID);
+      return EncodingUtils.testBit(__isset_bitfield, __LINENUMBER_ISSET_ID);
     }
 
     public void setLineNumberIsSet(boolean value) {
-      __isset_bitfield = org.apache.thrift.EncodingUtils.setBit(__isset_bitfield, __LINENUMBER_ISSET_ID, value);
+      __isset_bitfield = EncodingUtils.setBit(__isset_bitfield, __LINENUMBER_ISSET_ID, value);
     }
 
     public long getColumnNumber() {
@@ -1850,25 +1915,25 @@ public class JavaCompilerInterface {
     }
 
     public void unsetColumnNumber() {
-      __isset_bitfield = org.apache.thrift.EncodingUtils.clearBit(__isset_bitfield, __COLUMNNUMBER_ISSET_ID);
+      __isset_bitfield = EncodingUtils.clearBit(__isset_bitfield, __COLUMNNUMBER_ISSET_ID);
     }
 
     /** Returns true if field columnNumber is set (has been assigned a value) and false otherwise */
     public boolean isSetColumnNumber() {
-      return org.apache.thrift.EncodingUtils.testBit(__isset_bitfield, __COLUMNNUMBER_ISSET_ID);
+      return EncodingUtils.testBit(__isset_bitfield, __COLUMNNUMBER_ISSET_ID);
     }
 
     public void setColumnNumberIsSet(boolean value) {
-      __isset_bitfield = org.apache.thrift.EncodingUtils.setBit(__isset_bitfield, __COLUMNNUMBER_ISSET_ID, value);
+      __isset_bitfield = EncodingUtils.setBit(__isset_bitfield, __COLUMNNUMBER_ISSET_ID, value);
     }
 
-    public void setFieldValue(_Fields field, @org.apache.thrift.annotation.Nullable java.lang.Object value) {
+    public void setFieldValue(_Fields field, @Nullable Object value) {
       switch (field) {
       case MESSAGE:
         if (value == null) {
           unsetMessage();
         } else {
-          setMessage((java.lang.String)value);
+          setMessage((String)value);
         }
         break;
 
@@ -1876,7 +1941,7 @@ public class JavaCompilerInterface {
         if (value == null) {
           unsetFileUri();
         } else {
-          setFileUri((java.lang.String)value);
+          setFileUri((String)value);
         }
         break;
 
@@ -1884,7 +1949,7 @@ public class JavaCompilerInterface {
         if (value == null) {
           unsetLineNumber();
         } else {
-          setLineNumber((java.lang.Long)value);
+          setLineNumber((Long)value);
         }
         break;
 
@@ -1892,15 +1957,15 @@ public class JavaCompilerInterface {
         if (value == null) {
           unsetColumnNumber();
         } else {
-          setColumnNumber((java.lang.Long)value);
+          setColumnNumber((Long)value);
         }
         break;
 
       }
     }
 
-    @org.apache.thrift.annotation.Nullable
-    public java.lang.Object getFieldValue(_Fields field) {
+    @Nullable
+    public Object getFieldValue(_Fields field) {
       switch (field) {
       case MESSAGE:
         return getMessage();
@@ -1915,13 +1980,13 @@ public class JavaCompilerInterface {
         return getColumnNumber();
 
       }
-      throw new java.lang.IllegalStateException();
+      throw new IllegalStateException();
     }
 
     /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise */
     public boolean isSet(_Fields field) {
       if (field == null) {
-        throw new java.lang.IllegalArgumentException();
+        throw new IllegalArgumentException();
       }
 
       switch (field) {
@@ -1934,11 +1999,11 @@ public class JavaCompilerInterface {
       case COLUMN_NUMBER:
         return isSetColumnNumber();
       }
-      throw new java.lang.IllegalStateException();
+      throw new IllegalStateException();
     }
 
     @Override
-    public boolean equals(java.lang.Object that) {
+    public boolean equals(Object that) {
       if (that instanceof logError_args)
         return this.equals((logError_args)that);
       return false;
@@ -2001,9 +2066,9 @@ public class JavaCompilerInterface {
       if (isSetFileUri())
         hashCode = hashCode * 8191 + fileUri.hashCode();
 
-      hashCode = hashCode * 8191 + org.apache.thrift.TBaseHelper.hashCode(lineNumber);
+      hashCode = hashCode * 8191 + TBaseHelper.hashCode(lineNumber);
 
-      hashCode = hashCode * 8191 + org.apache.thrift.TBaseHelper.hashCode(columnNumber);
+      hashCode = hashCode * 8191 + TBaseHelper.hashCode(columnNumber);
 
       return hashCode;
     }
@@ -2016,42 +2081,42 @@ public class JavaCompilerInterface {
 
       int lastComparison = 0;
 
-      lastComparison = java.lang.Boolean.compare(isSetMessage(), other.isSetMessage());
+      lastComparison = Boolean.compare(isSetMessage(), other.isSetMessage());
       if (lastComparison != 0) {
         return lastComparison;
       }
       if (isSetMessage()) {
-        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.message, other.message);
+        lastComparison = TBaseHelper.compareTo(this.message, other.message);
         if (lastComparison != 0) {
           return lastComparison;
         }
       }
-      lastComparison = java.lang.Boolean.compare(isSetFileUri(), other.isSetFileUri());
+      lastComparison = Boolean.compare(isSetFileUri(), other.isSetFileUri());
       if (lastComparison != 0) {
         return lastComparison;
       }
       if (isSetFileUri()) {
-        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.fileUri, other.fileUri);
+        lastComparison = TBaseHelper.compareTo(this.fileUri, other.fileUri);
         if (lastComparison != 0) {
           return lastComparison;
         }
       }
-      lastComparison = java.lang.Boolean.compare(isSetLineNumber(), other.isSetLineNumber());
+      lastComparison = Boolean.compare(isSetLineNumber(), other.isSetLineNumber());
       if (lastComparison != 0) {
         return lastComparison;
       }
       if (isSetLineNumber()) {
-        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.lineNumber, other.lineNumber);
+        lastComparison = TBaseHelper.compareTo(this.lineNumber, other.lineNumber);
         if (lastComparison != 0) {
           return lastComparison;
         }
       }
-      lastComparison = java.lang.Boolean.compare(isSetColumnNumber(), other.isSetColumnNumber());
+      lastComparison = Boolean.compare(isSetColumnNumber(), other.isSetColumnNumber());
       if (lastComparison != 0) {
         return lastComparison;
       }
       if (isSetColumnNumber()) {
-        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.columnNumber, other.columnNumber);
+        lastComparison = TBaseHelper.compareTo(this.columnNumber, other.columnNumber);
         if (lastComparison != 0) {
           return lastComparison;
         }
@@ -2059,22 +2124,22 @@ public class JavaCompilerInterface {
       return 0;
     }
 
-    @org.apache.thrift.annotation.Nullable
+    @Nullable
     public _Fields fieldForId(int fieldId) {
       return _Fields.findByThriftId(fieldId);
     }
 
-    public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
+    public void read(TProtocol iprot) throws TException {
       scheme(iprot).read(iprot, this);
     }
 
-    public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
+    public void write(TProtocol oprot) throws TException {
       scheme(oprot).write(oprot, this);
     }
 
     @Override
-    public java.lang.String toString() {
-      java.lang.StringBuilder sb = new java.lang.StringBuilder("logError_args(");
+    public String toString() {
+      StringBuilder sb = new StringBuilder("logError_args(");
       boolean first = true;
 
       sb.append("message:");
@@ -2104,81 +2169,81 @@ public class JavaCompilerInterface {
       return sb.toString();
     }
 
-    public void validate() throws org.apache.thrift.TException {
+    public void validate() throws TException {
       // check for required fields
       // check for sub-struct validity
     }
 
-    private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
+    private void writeObject(ObjectOutputStream out) throws IOException {
       try {
-        write(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(out)));
-      } catch (org.apache.thrift.TException te) {
-        throw new java.io.IOException(te);
+        write(new TCompactProtocol(new TIOStreamTransport(out)));
+      } catch (TException te) {
+        throw new IOException(te);
       }
     }
 
-    private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, java.lang.ClassNotFoundException {
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
       try {
         // it doesn't seem like you should have to do this, but java serialization is wacky, and doesn't call the default constructor.
         __isset_bitfield = 0;
-        read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
-      } catch (org.apache.thrift.TException te) {
-        throw new java.io.IOException(te);
+        read(new TCompactProtocol(new TIOStreamTransport(in)));
+      } catch (TException te) {
+        throw new IOException(te);
       }
     }
 
-    private static class logError_argsStandardSchemeFactory implements org.apache.thrift.scheme.SchemeFactory {
+    private static class logError_argsStandardSchemeFactory implements SchemeFactory {
       public logError_argsStandardScheme getScheme() {
         return new logError_argsStandardScheme();
       }
     }
 
-    private static class logError_argsStandardScheme extends org.apache.thrift.scheme.StandardScheme<logError_args> {
+    private static class logError_argsStandardScheme extends StandardScheme<logError_args> {
 
-      public void read(org.apache.thrift.protocol.TProtocol iprot, logError_args struct) throws org.apache.thrift.TException {
-        org.apache.thrift.protocol.TField schemeField;
+      public void read(TProtocol iprot, logError_args struct) throws TException {
+        TField schemeField;
         iprot.readStructBegin();
         while (true)
         {
           schemeField = iprot.readFieldBegin();
-          if (schemeField.type == org.apache.thrift.protocol.TType.STOP) { 
+          if (schemeField.type == TType.STOP) {
             break;
           }
           switch (schemeField.id) {
             case 1: // MESSAGE
-              if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
+              if (schemeField.type == TType.STRING) {
                 struct.message = iprot.readString();
                 struct.setMessageIsSet(true);
               } else { 
-                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+                TProtocolUtil.skip(iprot, schemeField.type);
               }
               break;
             case 2: // FILE_URI
-              if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
+              if (schemeField.type == TType.STRING) {
                 struct.fileUri = iprot.readString();
                 struct.setFileUriIsSet(true);
               } else { 
-                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+                TProtocolUtil.skip(iprot, schemeField.type);
               }
               break;
             case 3: // LINE_NUMBER
-              if (schemeField.type == org.apache.thrift.protocol.TType.I64) {
+              if (schemeField.type == TType.I64) {
                 struct.lineNumber = iprot.readI64();
                 struct.setLineNumberIsSet(true);
               } else { 
-                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+                TProtocolUtil.skip(iprot, schemeField.type);
               }
               break;
             case 4: // COLUMN_NUMBER
-              if (schemeField.type == org.apache.thrift.protocol.TType.I64) {
+              if (schemeField.type == TType.I64) {
                 struct.columnNumber = iprot.readI64();
                 struct.setColumnNumberIsSet(true);
               } else { 
-                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+                TProtocolUtil.skip(iprot, schemeField.type);
               }
               break;
             default:
-              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+              TProtocolUtil.skip(iprot, schemeField.type);
           }
           iprot.readFieldEnd();
         }
@@ -2188,7 +2253,7 @@ public class JavaCompilerInterface {
         struct.validate();
       }
 
-      public void write(org.apache.thrift.protocol.TProtocol oprot, logError_args struct) throws org.apache.thrift.TException {
+      public void write(TProtocol oprot, logError_args struct) throws TException {
         struct.validate();
 
         oprot.writeStructBegin(STRUCT_DESC);
@@ -2214,18 +2279,18 @@ public class JavaCompilerInterface {
 
     }
 
-    private static class logError_argsTupleSchemeFactory implements org.apache.thrift.scheme.SchemeFactory {
+    private static class logError_argsTupleSchemeFactory implements SchemeFactory {
       public logError_argsTupleScheme getScheme() {
         return new logError_argsTupleScheme();
       }
     }
 
-    private static class logError_argsTupleScheme extends org.apache.thrift.scheme.TupleScheme<logError_args> {
+    private static class logError_argsTupleScheme extends TupleScheme<logError_args> {
 
       @Override
-      public void write(org.apache.thrift.protocol.TProtocol prot, logError_args struct) throws org.apache.thrift.TException {
-        org.apache.thrift.protocol.TTupleProtocol oprot = (org.apache.thrift.protocol.TTupleProtocol) prot;
-        java.util.BitSet optionals = new java.util.BitSet();
+      public void write(TProtocol prot, logError_args struct) throws TException {
+        TTupleProtocol oprot = (TTupleProtocol) prot;
+        BitSet optionals = new BitSet();
         if (struct.isSetMessage()) {
           optionals.set(0);
         }
@@ -2254,9 +2319,9 @@ public class JavaCompilerInterface {
       }
 
       @Override
-      public void read(org.apache.thrift.protocol.TProtocol prot, logError_args struct) throws org.apache.thrift.TException {
-        org.apache.thrift.protocol.TTupleProtocol iprot = (org.apache.thrift.protocol.TTupleProtocol) prot;
-        java.util.BitSet incoming = iprot.readBitSet(4);
+      public void read(TProtocol prot, logError_args struct) throws TException {
+        TTupleProtocol iprot = (TTupleProtocol) prot;
+        BitSet incoming = iprot.readBitSet(4);
         if (incoming.get(0)) {
           struct.message = iprot.readString();
           struct.setMessageIsSet(true);
@@ -2276,27 +2341,27 @@ public class JavaCompilerInterface {
       }
     }
 
-    private static <S extends org.apache.thrift.scheme.IScheme> S scheme(org.apache.thrift.protocol.TProtocol proto) {
-      return (org.apache.thrift.scheme.StandardScheme.class.equals(proto.getScheme()) ? STANDARD_SCHEME_FACTORY : TUPLE_SCHEME_FACTORY).getScheme();
+    private static <S extends IScheme> S scheme(TProtocol proto) {
+      return (StandardScheme.class.equals(proto.getScheme()) ? STANDARD_SCHEME_FACTORY : TUPLE_SCHEME_FACTORY).getScheme();
     }
   }
 
-  public static class logError_result implements org.apache.thrift.TBase<logError_result, logError_result._Fields>, java.io.Serializable, Cloneable, Comparable<logError_result>   {
-    private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("logError_result");
+  public static class logError_result implements TBase<logError_result, logError_result._Fields>, Serializable, Cloneable, Comparable<logError_result>   {
+    private static final TStruct STRUCT_DESC = new TStruct("logError_result");
 
 
-    private static final org.apache.thrift.scheme.SchemeFactory STANDARD_SCHEME_FACTORY = new logError_resultStandardSchemeFactory();
-    private static final org.apache.thrift.scheme.SchemeFactory TUPLE_SCHEME_FACTORY = new logError_resultTupleSchemeFactory();
+    private static final SchemeFactory STANDARD_SCHEME_FACTORY = new logError_resultStandardSchemeFactory();
+    private static final SchemeFactory TUPLE_SCHEME_FACTORY = new logError_resultTupleSchemeFactory();
 
 
     /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
-    public enum _Fields implements org.apache.thrift.TFieldIdEnum {
+    public enum _Fields implements TFieldIdEnum {
 ;
 
-      private static final java.util.Map<java.lang.String, _Fields> byName = new java.util.HashMap<java.lang.String, _Fields>();
+      private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
       static {
-        for (_Fields field : java.util.EnumSet.allOf(_Fields.class)) {
+        for (_Fields field : EnumSet.allOf(_Fields.class)) {
           byName.put(field.getFieldName(), field);
         }
       }
@@ -2304,7 +2369,7 @@ public class JavaCompilerInterface {
       /**
        * Find the _Fields constant that matches fieldId, or null if its not found.
        */
-      @org.apache.thrift.annotation.Nullable
+      @Nullable
       public static _Fields findByThriftId(int fieldId) {
         switch(fieldId) {
           default:
@@ -2318,22 +2383,22 @@ public class JavaCompilerInterface {
        */
       public static _Fields findByThriftIdOrThrow(int fieldId) {
         _Fields fields = findByThriftId(fieldId);
-        if (fields == null) throw new java.lang.IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+        if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
         return fields;
       }
 
       /**
        * Find the _Fields constant that matches name, or null if its not found.
        */
-      @org.apache.thrift.annotation.Nullable
-      public static _Fields findByName(java.lang.String name) {
+      @Nullable
+      public static _Fields findByName(String name) {
         return byName.get(name);
       }
 
       private final short _thriftId;
-      private final java.lang.String _fieldName;
+      private final String _fieldName;
 
-      _Fields(short thriftId, java.lang.String fieldName) {
+      _Fields(short thriftId, String fieldName) {
         _thriftId = thriftId;
         _fieldName = fieldName;
       }
@@ -2342,15 +2407,15 @@ public class JavaCompilerInterface {
         return _thriftId;
       }
 
-      public java.lang.String getFieldName() {
+      public String getFieldName() {
         return _fieldName;
       }
     }
-    public static final java.util.Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
+    public static final Map<_Fields, FieldMetaData> metaDataMap;
     static {
-      java.util.Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new java.util.EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
-      metaDataMap = java.util.Collections.unmodifiableMap(tmpMap);
-      org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(logError_result.class, metaDataMap);
+      Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+      metaDataMap = Collections.unmodifiableMap(tmpMap);
+      FieldMetaData.addStructMetaDataMap(logError_result.class, metaDataMap);
     }
 
     public logError_result() {
@@ -2370,31 +2435,31 @@ public class JavaCompilerInterface {
     public void clear() {
     }
 
-    public void setFieldValue(_Fields field, @org.apache.thrift.annotation.Nullable java.lang.Object value) {
+    public void setFieldValue(_Fields field, @Nullable Object value) {
       switch (field) {
       }
     }
 
-    @org.apache.thrift.annotation.Nullable
-    public java.lang.Object getFieldValue(_Fields field) {
+    @Nullable
+    public Object getFieldValue(_Fields field) {
       switch (field) {
       }
-      throw new java.lang.IllegalStateException();
+      throw new IllegalStateException();
     }
 
     /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise */
     public boolean isSet(_Fields field) {
       if (field == null) {
-        throw new java.lang.IllegalArgumentException();
+        throw new IllegalArgumentException();
       }
 
       switch (field) {
       }
-      throw new java.lang.IllegalStateException();
+      throw new IllegalStateException();
     }
 
     @Override
-    public boolean equals(java.lang.Object that) {
+    public boolean equals(Object that) {
       if (that instanceof logError_result)
         return this.equals((logError_result)that);
       return false;
@@ -2427,69 +2492,69 @@ public class JavaCompilerInterface {
       return 0;
     }
 
-    @org.apache.thrift.annotation.Nullable
+    @Nullable
     public _Fields fieldForId(int fieldId) {
       return _Fields.findByThriftId(fieldId);
     }
 
-    public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
+    public void read(TProtocol iprot) throws TException {
       scheme(iprot).read(iprot, this);
     }
 
-    public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
+    public void write(TProtocol oprot) throws TException {
       scheme(oprot).write(oprot, this);
       }
 
     @Override
-    public java.lang.String toString() {
-      java.lang.StringBuilder sb = new java.lang.StringBuilder("logError_result(");
+    public String toString() {
+      StringBuilder sb = new StringBuilder("logError_result(");
       boolean first = true;
 
       sb.append(")");
       return sb.toString();
     }
 
-    public void validate() throws org.apache.thrift.TException {
+    public void validate() throws TException {
       // check for required fields
       // check for sub-struct validity
     }
 
-    private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
+    private void writeObject(ObjectOutputStream out) throws IOException {
       try {
-        write(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(out)));
-      } catch (org.apache.thrift.TException te) {
-        throw new java.io.IOException(te);
+        write(new TCompactProtocol(new TIOStreamTransport(out)));
+      } catch (TException te) {
+        throw new IOException(te);
       }
     }
 
-    private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, java.lang.ClassNotFoundException {
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
       try {
-        read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
-      } catch (org.apache.thrift.TException te) {
-        throw new java.io.IOException(te);
+        read(new TCompactProtocol(new TIOStreamTransport(in)));
+      } catch (TException te) {
+        throw new IOException(te);
       }
     }
 
-    private static class logError_resultStandardSchemeFactory implements org.apache.thrift.scheme.SchemeFactory {
+    private static class logError_resultStandardSchemeFactory implements SchemeFactory {
       public logError_resultStandardScheme getScheme() {
         return new logError_resultStandardScheme();
       }
     }
 
-    private static class logError_resultStandardScheme extends org.apache.thrift.scheme.StandardScheme<logError_result> {
+    private static class logError_resultStandardScheme extends StandardScheme<logError_result> {
 
-      public void read(org.apache.thrift.protocol.TProtocol iprot, logError_result struct) throws org.apache.thrift.TException {
-        org.apache.thrift.protocol.TField schemeField;
+      public void read(TProtocol iprot, logError_result struct) throws TException {
+        TField schemeField;
         iprot.readStructBegin();
         while (true)
         {
           schemeField = iprot.readFieldBegin();
-          if (schemeField.type == org.apache.thrift.protocol.TType.STOP) { 
+          if (schemeField.type == TType.STOP) {
             break;
           }
           switch (schemeField.id) {
             default:
-              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+              TProtocolUtil.skip(iprot, schemeField.type);
           }
           iprot.readFieldEnd();
         }
@@ -2499,7 +2564,7 @@ public class JavaCompilerInterface {
         struct.validate();
       }
 
-      public void write(org.apache.thrift.protocol.TProtocol oprot, logError_result struct) throws org.apache.thrift.TException {
+      public void write(TProtocol oprot, logError_result struct) throws TException {
         struct.validate();
 
         oprot.writeStructBegin(STRUCT_DESC);
@@ -2509,57 +2574,57 @@ public class JavaCompilerInterface {
 
     }
 
-    private static class logError_resultTupleSchemeFactory implements org.apache.thrift.scheme.SchemeFactory {
+    private static class logError_resultTupleSchemeFactory implements SchemeFactory {
       public logError_resultTupleScheme getScheme() {
         return new logError_resultTupleScheme();
       }
     }
 
-    private static class logError_resultTupleScheme extends org.apache.thrift.scheme.TupleScheme<logError_result> {
+    private static class logError_resultTupleScheme extends TupleScheme<logError_result> {
 
       @Override
-      public void write(org.apache.thrift.protocol.TProtocol prot, logError_result struct) throws org.apache.thrift.TException {
-        org.apache.thrift.protocol.TTupleProtocol oprot = (org.apache.thrift.protocol.TTupleProtocol) prot;
+      public void write(TProtocol prot, logError_result struct) throws TException {
+        TTupleProtocol oprot = (TTupleProtocol) prot;
       }
 
       @Override
-      public void read(org.apache.thrift.protocol.TProtocol prot, logError_result struct) throws org.apache.thrift.TException {
-        org.apache.thrift.protocol.TTupleProtocol iprot = (org.apache.thrift.protocol.TTupleProtocol) prot;
+      public void read(TProtocol prot, logError_result struct) throws TException {
+        TTupleProtocol iprot = (TTupleProtocol) prot;
       }
     }
 
-    private static <S extends org.apache.thrift.scheme.IScheme> S scheme(org.apache.thrift.protocol.TProtocol proto) {
-      return (org.apache.thrift.scheme.StandardScheme.class.equals(proto.getScheme()) ? STANDARD_SCHEME_FACTORY : TUPLE_SCHEME_FACTORY).getScheme();
+    private static <S extends IScheme> S scheme(TProtocol proto) {
+      return (StandardScheme.class.equals(proto.getScheme()) ? STANDARD_SCHEME_FACTORY : TUPLE_SCHEME_FACTORY).getScheme();
     }
   }
 
-  public static class logWarning_args implements org.apache.thrift.TBase<logWarning_args, logWarning_args._Fields>, java.io.Serializable, Cloneable, Comparable<logWarning_args>   {
-    private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("logWarning_args");
+  public static class logWarning_args implements TBase<logWarning_args, logWarning_args._Fields>, Serializable, Cloneable, Comparable<logWarning_args>   {
+    private static final TStruct STRUCT_DESC = new TStruct("logWarning_args");
 
-    private static final org.apache.thrift.protocol.TField MESSAGE_FIELD_DESC = new org.apache.thrift.protocol.TField("message", org.apache.thrift.protocol.TType.STRING, (short)1);
-    private static final org.apache.thrift.protocol.TField FILE_URI_FIELD_DESC = new org.apache.thrift.protocol.TField("fileUri", org.apache.thrift.protocol.TType.STRING, (short)2);
-    private static final org.apache.thrift.protocol.TField LINE_NUMBER_FIELD_DESC = new org.apache.thrift.protocol.TField("lineNumber", org.apache.thrift.protocol.TType.I64, (short)3);
-    private static final org.apache.thrift.protocol.TField COLUMN_NUMBER_FIELD_DESC = new org.apache.thrift.protocol.TField("columnNumber", org.apache.thrift.protocol.TType.I64, (short)4);
+    private static final TField MESSAGE_FIELD_DESC = new TField("message", TType.STRING, (short)1);
+    private static final TField FILE_URI_FIELD_DESC = new TField("fileUri", TType.STRING, (short)2);
+    private static final TField LINE_NUMBER_FIELD_DESC = new TField("lineNumber", TType.I64, (short)3);
+    private static final TField COLUMN_NUMBER_FIELD_DESC = new TField("columnNumber", TType.I64, (short)4);
 
-    private static final org.apache.thrift.scheme.SchemeFactory STANDARD_SCHEME_FACTORY = new logWarning_argsStandardSchemeFactory();
-    private static final org.apache.thrift.scheme.SchemeFactory TUPLE_SCHEME_FACTORY = new logWarning_argsTupleSchemeFactory();
+    private static final SchemeFactory STANDARD_SCHEME_FACTORY = new logWarning_argsStandardSchemeFactory();
+    private static final SchemeFactory TUPLE_SCHEME_FACTORY = new logWarning_argsTupleSchemeFactory();
 
-    public @org.apache.thrift.annotation.Nullable java.lang.String message; // required
-    public @org.apache.thrift.annotation.Nullable java.lang.String fileUri; // required
+    public @Nullable String message; // required
+    public @Nullable String fileUri; // required
     public long lineNumber; // required
     public long columnNumber; // required
 
     /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
-    public enum _Fields implements org.apache.thrift.TFieldIdEnum {
+    public enum _Fields implements TFieldIdEnum {
       MESSAGE((short)1, "message"),
       FILE_URI((short)2, "fileUri"),
       LINE_NUMBER((short)3, "lineNumber"),
       COLUMN_NUMBER((short)4, "columnNumber");
 
-      private static final java.util.Map<java.lang.String, _Fields> byName = new java.util.HashMap<java.lang.String, _Fields>();
+      private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
       static {
-        for (_Fields field : java.util.EnumSet.allOf(_Fields.class)) {
+        for (_Fields field : EnumSet.allOf(_Fields.class)) {
           byName.put(field.getFieldName(), field);
         }
       }
@@ -2567,7 +2632,7 @@ public class JavaCompilerInterface {
       /**
        * Find the _Fields constant that matches fieldId, or null if its not found.
        */
-      @org.apache.thrift.annotation.Nullable
+      @Nullable
       public static _Fields findByThriftId(int fieldId) {
         switch(fieldId) {
           case 1: // MESSAGE
@@ -2589,22 +2654,22 @@ public class JavaCompilerInterface {
        */
       public static _Fields findByThriftIdOrThrow(int fieldId) {
         _Fields fields = findByThriftId(fieldId);
-        if (fields == null) throw new java.lang.IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+        if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
         return fields;
       }
 
       /**
        * Find the _Fields constant that matches name, or null if its not found.
        */
-      @org.apache.thrift.annotation.Nullable
-      public static _Fields findByName(java.lang.String name) {
+      @Nullable
+      public static _Fields findByName(String name) {
         return byName.get(name);
       }
 
       private final short _thriftId;
-      private final java.lang.String _fieldName;
+      private final String _fieldName;
 
-      _Fields(short thriftId, java.lang.String fieldName) {
+      _Fields(short thriftId, String fieldName) {
         _thriftId = thriftId;
         _fieldName = fieldName;
       }
@@ -2613,7 +2678,7 @@ public class JavaCompilerInterface {
         return _thriftId;
       }
 
-      public java.lang.String getFieldName() {
+      public String getFieldName() {
         return _fieldName;
       }
     }
@@ -2622,27 +2687,27 @@ public class JavaCompilerInterface {
     private static final int __LINENUMBER_ISSET_ID = 0;
     private static final int __COLUMNNUMBER_ISSET_ID = 1;
     private byte __isset_bitfield = 0;
-    public static final java.util.Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
+    public static final Map<_Fields, FieldMetaData> metaDataMap;
     static {
-      java.util.Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new java.util.EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
-      tmpMap.put(_Fields.MESSAGE, new org.apache.thrift.meta_data.FieldMetaData("message", org.apache.thrift.TFieldRequirementType.DEFAULT, 
-          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
-      tmpMap.put(_Fields.FILE_URI, new org.apache.thrift.meta_data.FieldMetaData("fileUri", org.apache.thrift.TFieldRequirementType.DEFAULT, 
-          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
-      tmpMap.put(_Fields.LINE_NUMBER, new org.apache.thrift.meta_data.FieldMetaData("lineNumber", org.apache.thrift.TFieldRequirementType.DEFAULT, 
-          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I64)));
-      tmpMap.put(_Fields.COLUMN_NUMBER, new org.apache.thrift.meta_data.FieldMetaData("columnNumber", org.apache.thrift.TFieldRequirementType.DEFAULT, 
-          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I64)));
-      metaDataMap = java.util.Collections.unmodifiableMap(tmpMap);
-      org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(logWarning_args.class, metaDataMap);
+      Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+      tmpMap.put(_Fields.MESSAGE, new FieldMetaData("message", TFieldRequirementType.DEFAULT,
+          new FieldValueMetaData(TType.STRING)));
+      tmpMap.put(_Fields.FILE_URI, new FieldMetaData("fileUri", TFieldRequirementType.DEFAULT,
+          new FieldValueMetaData(TType.STRING)));
+      tmpMap.put(_Fields.LINE_NUMBER, new FieldMetaData("lineNumber", TFieldRequirementType.DEFAULT,
+          new FieldValueMetaData(TType.I64)));
+      tmpMap.put(_Fields.COLUMN_NUMBER, new FieldMetaData("columnNumber", TFieldRequirementType.DEFAULT,
+          new FieldValueMetaData(TType.I64)));
+      metaDataMap = Collections.unmodifiableMap(tmpMap);
+      FieldMetaData.addStructMetaDataMap(logWarning_args.class, metaDataMap);
     }
 
     public logWarning_args() {
     }
 
     public logWarning_args(
-      java.lang.String message,
-      java.lang.String fileUri,
+      String message,
+      String fileUri,
       long lineNumber,
       long columnNumber)
     {
@@ -2684,12 +2749,12 @@ public class JavaCompilerInterface {
       this.columnNumber = 0;
     }
 
-    @org.apache.thrift.annotation.Nullable
-    public java.lang.String getMessage() {
+    @Nullable
+    public String getMessage() {
       return this.message;
     }
 
-    public logWarning_args setMessage(@org.apache.thrift.annotation.Nullable java.lang.String message) {
+    public logWarning_args setMessage(@Nullable String message) {
       this.message = message;
       return this;
     }
@@ -2709,12 +2774,12 @@ public class JavaCompilerInterface {
       }
     }
 
-    @org.apache.thrift.annotation.Nullable
-    public java.lang.String getFileUri() {
+    @Nullable
+    public String getFileUri() {
       return this.fileUri;
     }
 
-    public logWarning_args setFileUri(@org.apache.thrift.annotation.Nullable java.lang.String fileUri) {
+    public logWarning_args setFileUri(@Nullable String fileUri) {
       this.fileUri = fileUri;
       return this;
     }
@@ -2745,16 +2810,16 @@ public class JavaCompilerInterface {
     }
 
     public void unsetLineNumber() {
-      __isset_bitfield = org.apache.thrift.EncodingUtils.clearBit(__isset_bitfield, __LINENUMBER_ISSET_ID);
+      __isset_bitfield = EncodingUtils.clearBit(__isset_bitfield, __LINENUMBER_ISSET_ID);
     }
 
     /** Returns true if field lineNumber is set (has been assigned a value) and false otherwise */
     public boolean isSetLineNumber() {
-      return org.apache.thrift.EncodingUtils.testBit(__isset_bitfield, __LINENUMBER_ISSET_ID);
+      return EncodingUtils.testBit(__isset_bitfield, __LINENUMBER_ISSET_ID);
     }
 
     public void setLineNumberIsSet(boolean value) {
-      __isset_bitfield = org.apache.thrift.EncodingUtils.setBit(__isset_bitfield, __LINENUMBER_ISSET_ID, value);
+      __isset_bitfield = EncodingUtils.setBit(__isset_bitfield, __LINENUMBER_ISSET_ID, value);
     }
 
     public long getColumnNumber() {
@@ -2768,25 +2833,25 @@ public class JavaCompilerInterface {
     }
 
     public void unsetColumnNumber() {
-      __isset_bitfield = org.apache.thrift.EncodingUtils.clearBit(__isset_bitfield, __COLUMNNUMBER_ISSET_ID);
+      __isset_bitfield = EncodingUtils.clearBit(__isset_bitfield, __COLUMNNUMBER_ISSET_ID);
     }
 
     /** Returns true if field columnNumber is set (has been assigned a value) and false otherwise */
     public boolean isSetColumnNumber() {
-      return org.apache.thrift.EncodingUtils.testBit(__isset_bitfield, __COLUMNNUMBER_ISSET_ID);
+      return EncodingUtils.testBit(__isset_bitfield, __COLUMNNUMBER_ISSET_ID);
     }
 
     public void setColumnNumberIsSet(boolean value) {
-      __isset_bitfield = org.apache.thrift.EncodingUtils.setBit(__isset_bitfield, __COLUMNNUMBER_ISSET_ID, value);
+      __isset_bitfield = EncodingUtils.setBit(__isset_bitfield, __COLUMNNUMBER_ISSET_ID, value);
     }
 
-    public void setFieldValue(_Fields field, @org.apache.thrift.annotation.Nullable java.lang.Object value) {
+    public void setFieldValue(_Fields field, @Nullable Object value) {
       switch (field) {
       case MESSAGE:
         if (value == null) {
           unsetMessage();
         } else {
-          setMessage((java.lang.String)value);
+          setMessage((String)value);
         }
         break;
 
@@ -2794,7 +2859,7 @@ public class JavaCompilerInterface {
         if (value == null) {
           unsetFileUri();
         } else {
-          setFileUri((java.lang.String)value);
+          setFileUri((String)value);
         }
         break;
 
@@ -2802,7 +2867,7 @@ public class JavaCompilerInterface {
         if (value == null) {
           unsetLineNumber();
         } else {
-          setLineNumber((java.lang.Long)value);
+          setLineNumber((Long)value);
         }
         break;
 
@@ -2810,15 +2875,15 @@ public class JavaCompilerInterface {
         if (value == null) {
           unsetColumnNumber();
         } else {
-          setColumnNumber((java.lang.Long)value);
+          setColumnNumber((Long)value);
         }
         break;
 
       }
     }
 
-    @org.apache.thrift.annotation.Nullable
-    public java.lang.Object getFieldValue(_Fields field) {
+    @Nullable
+    public Object getFieldValue(_Fields field) {
       switch (field) {
       case MESSAGE:
         return getMessage();
@@ -2833,13 +2898,13 @@ public class JavaCompilerInterface {
         return getColumnNumber();
 
       }
-      throw new java.lang.IllegalStateException();
+      throw new IllegalStateException();
     }
 
     /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise */
     public boolean isSet(_Fields field) {
       if (field == null) {
-        throw new java.lang.IllegalArgumentException();
+        throw new IllegalArgumentException();
       }
 
       switch (field) {
@@ -2852,11 +2917,11 @@ public class JavaCompilerInterface {
       case COLUMN_NUMBER:
         return isSetColumnNumber();
       }
-      throw new java.lang.IllegalStateException();
+      throw new IllegalStateException();
     }
 
     @Override
-    public boolean equals(java.lang.Object that) {
+    public boolean equals(Object that) {
       if (that instanceof logWarning_args)
         return this.equals((logWarning_args)that);
       return false;
@@ -2919,9 +2984,9 @@ public class JavaCompilerInterface {
       if (isSetFileUri())
         hashCode = hashCode * 8191 + fileUri.hashCode();
 
-      hashCode = hashCode * 8191 + org.apache.thrift.TBaseHelper.hashCode(lineNumber);
+      hashCode = hashCode * 8191 + TBaseHelper.hashCode(lineNumber);
 
-      hashCode = hashCode * 8191 + org.apache.thrift.TBaseHelper.hashCode(columnNumber);
+      hashCode = hashCode * 8191 + TBaseHelper.hashCode(columnNumber);
 
       return hashCode;
     }
@@ -2934,42 +2999,42 @@ public class JavaCompilerInterface {
 
       int lastComparison = 0;
 
-      lastComparison = java.lang.Boolean.compare(isSetMessage(), other.isSetMessage());
+      lastComparison = Boolean.compare(isSetMessage(), other.isSetMessage());
       if (lastComparison != 0) {
         return lastComparison;
       }
       if (isSetMessage()) {
-        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.message, other.message);
+        lastComparison = TBaseHelper.compareTo(this.message, other.message);
         if (lastComparison != 0) {
           return lastComparison;
         }
       }
-      lastComparison = java.lang.Boolean.compare(isSetFileUri(), other.isSetFileUri());
+      lastComparison = Boolean.compare(isSetFileUri(), other.isSetFileUri());
       if (lastComparison != 0) {
         return lastComparison;
       }
       if (isSetFileUri()) {
-        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.fileUri, other.fileUri);
+        lastComparison = TBaseHelper.compareTo(this.fileUri, other.fileUri);
         if (lastComparison != 0) {
           return lastComparison;
         }
       }
-      lastComparison = java.lang.Boolean.compare(isSetLineNumber(), other.isSetLineNumber());
+      lastComparison = Boolean.compare(isSetLineNumber(), other.isSetLineNumber());
       if (lastComparison != 0) {
         return lastComparison;
       }
       if (isSetLineNumber()) {
-        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.lineNumber, other.lineNumber);
+        lastComparison = TBaseHelper.compareTo(this.lineNumber, other.lineNumber);
         if (lastComparison != 0) {
           return lastComparison;
         }
       }
-      lastComparison = java.lang.Boolean.compare(isSetColumnNumber(), other.isSetColumnNumber());
+      lastComparison = Boolean.compare(isSetColumnNumber(), other.isSetColumnNumber());
       if (lastComparison != 0) {
         return lastComparison;
       }
       if (isSetColumnNumber()) {
-        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.columnNumber, other.columnNumber);
+        lastComparison = TBaseHelper.compareTo(this.columnNumber, other.columnNumber);
         if (lastComparison != 0) {
           return lastComparison;
         }
@@ -2977,22 +3042,22 @@ public class JavaCompilerInterface {
       return 0;
     }
 
-    @org.apache.thrift.annotation.Nullable
+    @Nullable
     public _Fields fieldForId(int fieldId) {
       return _Fields.findByThriftId(fieldId);
     }
 
-    public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
+    public void read(TProtocol iprot) throws TException {
       scheme(iprot).read(iprot, this);
     }
 
-    public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
+    public void write(TProtocol oprot) throws TException {
       scheme(oprot).write(oprot, this);
     }
 
     @Override
-    public java.lang.String toString() {
-      java.lang.StringBuilder sb = new java.lang.StringBuilder("logWarning_args(");
+    public String toString() {
+      StringBuilder sb = new StringBuilder("logWarning_args(");
       boolean first = true;
 
       sb.append("message:");
@@ -3022,81 +3087,81 @@ public class JavaCompilerInterface {
       return sb.toString();
     }
 
-    public void validate() throws org.apache.thrift.TException {
+    public void validate() throws TException {
       // check for required fields
       // check for sub-struct validity
     }
 
-    private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
+    private void writeObject(ObjectOutputStream out) throws IOException {
       try {
-        write(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(out)));
-      } catch (org.apache.thrift.TException te) {
-        throw new java.io.IOException(te);
+        write(new TCompactProtocol(new TIOStreamTransport(out)));
+      } catch (TException te) {
+        throw new IOException(te);
       }
     }
 
-    private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, java.lang.ClassNotFoundException {
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
       try {
         // it doesn't seem like you should have to do this, but java serialization is wacky, and doesn't call the default constructor.
         __isset_bitfield = 0;
-        read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
-      } catch (org.apache.thrift.TException te) {
-        throw new java.io.IOException(te);
+        read(new TCompactProtocol(new TIOStreamTransport(in)));
+      } catch (TException te) {
+        throw new IOException(te);
       }
     }
 
-    private static class logWarning_argsStandardSchemeFactory implements org.apache.thrift.scheme.SchemeFactory {
+    private static class logWarning_argsStandardSchemeFactory implements SchemeFactory {
       public logWarning_argsStandardScheme getScheme() {
         return new logWarning_argsStandardScheme();
       }
     }
 
-    private static class logWarning_argsStandardScheme extends org.apache.thrift.scheme.StandardScheme<logWarning_args> {
+    private static class logWarning_argsStandardScheme extends StandardScheme<logWarning_args> {
 
-      public void read(org.apache.thrift.protocol.TProtocol iprot, logWarning_args struct) throws org.apache.thrift.TException {
-        org.apache.thrift.protocol.TField schemeField;
+      public void read(TProtocol iprot, logWarning_args struct) throws TException {
+        TField schemeField;
         iprot.readStructBegin();
         while (true)
         {
           schemeField = iprot.readFieldBegin();
-          if (schemeField.type == org.apache.thrift.protocol.TType.STOP) { 
+          if (schemeField.type == TType.STOP) {
             break;
           }
           switch (schemeField.id) {
             case 1: // MESSAGE
-              if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
+              if (schemeField.type == TType.STRING) {
                 struct.message = iprot.readString();
                 struct.setMessageIsSet(true);
               } else { 
-                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+                TProtocolUtil.skip(iprot, schemeField.type);
               }
               break;
             case 2: // FILE_URI
-              if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
+              if (schemeField.type == TType.STRING) {
                 struct.fileUri = iprot.readString();
                 struct.setFileUriIsSet(true);
               } else { 
-                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+                TProtocolUtil.skip(iprot, schemeField.type);
               }
               break;
             case 3: // LINE_NUMBER
-              if (schemeField.type == org.apache.thrift.protocol.TType.I64) {
+              if (schemeField.type == TType.I64) {
                 struct.lineNumber = iprot.readI64();
                 struct.setLineNumberIsSet(true);
               } else { 
-                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+                TProtocolUtil.skip(iprot, schemeField.type);
               }
               break;
             case 4: // COLUMN_NUMBER
-              if (schemeField.type == org.apache.thrift.protocol.TType.I64) {
+              if (schemeField.type == TType.I64) {
                 struct.columnNumber = iprot.readI64();
                 struct.setColumnNumberIsSet(true);
               } else { 
-                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+                TProtocolUtil.skip(iprot, schemeField.type);
               }
               break;
             default:
-              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+              TProtocolUtil.skip(iprot, schemeField.type);
           }
           iprot.readFieldEnd();
         }
@@ -3106,7 +3171,7 @@ public class JavaCompilerInterface {
         struct.validate();
       }
 
-      public void write(org.apache.thrift.protocol.TProtocol oprot, logWarning_args struct) throws org.apache.thrift.TException {
+      public void write(TProtocol oprot, logWarning_args struct) throws TException {
         struct.validate();
 
         oprot.writeStructBegin(STRUCT_DESC);
@@ -3132,18 +3197,18 @@ public class JavaCompilerInterface {
 
     }
 
-    private static class logWarning_argsTupleSchemeFactory implements org.apache.thrift.scheme.SchemeFactory {
+    private static class logWarning_argsTupleSchemeFactory implements SchemeFactory {
       public logWarning_argsTupleScheme getScheme() {
         return new logWarning_argsTupleScheme();
       }
     }
 
-    private static class logWarning_argsTupleScheme extends org.apache.thrift.scheme.TupleScheme<logWarning_args> {
+    private static class logWarning_argsTupleScheme extends TupleScheme<logWarning_args> {
 
       @Override
-      public void write(org.apache.thrift.protocol.TProtocol prot, logWarning_args struct) throws org.apache.thrift.TException {
-        org.apache.thrift.protocol.TTupleProtocol oprot = (org.apache.thrift.protocol.TTupleProtocol) prot;
-        java.util.BitSet optionals = new java.util.BitSet();
+      public void write(TProtocol prot, logWarning_args struct) throws TException {
+        TTupleProtocol oprot = (TTupleProtocol) prot;
+        BitSet optionals = new BitSet();
         if (struct.isSetMessage()) {
           optionals.set(0);
         }
@@ -3172,9 +3237,9 @@ public class JavaCompilerInterface {
       }
 
       @Override
-      public void read(org.apache.thrift.protocol.TProtocol prot, logWarning_args struct) throws org.apache.thrift.TException {
-        org.apache.thrift.protocol.TTupleProtocol iprot = (org.apache.thrift.protocol.TTupleProtocol) prot;
-        java.util.BitSet incoming = iprot.readBitSet(4);
+      public void read(TProtocol prot, logWarning_args struct) throws TException {
+        TTupleProtocol iprot = (TTupleProtocol) prot;
+        BitSet incoming = iprot.readBitSet(4);
         if (incoming.get(0)) {
           struct.message = iprot.readString();
           struct.setMessageIsSet(true);
@@ -3194,27 +3259,27 @@ public class JavaCompilerInterface {
       }
     }
 
-    private static <S extends org.apache.thrift.scheme.IScheme> S scheme(org.apache.thrift.protocol.TProtocol proto) {
-      return (org.apache.thrift.scheme.StandardScheme.class.equals(proto.getScheme()) ? STANDARD_SCHEME_FACTORY : TUPLE_SCHEME_FACTORY).getScheme();
+    private static <S extends IScheme> S scheme(TProtocol proto) {
+      return (StandardScheme.class.equals(proto.getScheme()) ? STANDARD_SCHEME_FACTORY : TUPLE_SCHEME_FACTORY).getScheme();
     }
   }
 
-  public static class logWarning_result implements org.apache.thrift.TBase<logWarning_result, logWarning_result._Fields>, java.io.Serializable, Cloneable, Comparable<logWarning_result>   {
-    private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("logWarning_result");
+  public static class logWarning_result implements TBase<logWarning_result, logWarning_result._Fields>, Serializable, Cloneable, Comparable<logWarning_result>   {
+    private static final TStruct STRUCT_DESC = new TStruct("logWarning_result");
 
 
-    private static final org.apache.thrift.scheme.SchemeFactory STANDARD_SCHEME_FACTORY = new logWarning_resultStandardSchemeFactory();
-    private static final org.apache.thrift.scheme.SchemeFactory TUPLE_SCHEME_FACTORY = new logWarning_resultTupleSchemeFactory();
+    private static final SchemeFactory STANDARD_SCHEME_FACTORY = new logWarning_resultStandardSchemeFactory();
+    private static final SchemeFactory TUPLE_SCHEME_FACTORY = new logWarning_resultTupleSchemeFactory();
 
 
     /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
-    public enum _Fields implements org.apache.thrift.TFieldIdEnum {
+    public enum _Fields implements TFieldIdEnum {
 ;
 
-      private static final java.util.Map<java.lang.String, _Fields> byName = new java.util.HashMap<java.lang.String, _Fields>();
+      private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
       static {
-        for (_Fields field : java.util.EnumSet.allOf(_Fields.class)) {
+        for (_Fields field : EnumSet.allOf(_Fields.class)) {
           byName.put(field.getFieldName(), field);
         }
       }
@@ -3222,7 +3287,7 @@ public class JavaCompilerInterface {
       /**
        * Find the _Fields constant that matches fieldId, or null if its not found.
        */
-      @org.apache.thrift.annotation.Nullable
+      @Nullable
       public static _Fields findByThriftId(int fieldId) {
         switch(fieldId) {
           default:
@@ -3236,22 +3301,22 @@ public class JavaCompilerInterface {
        */
       public static _Fields findByThriftIdOrThrow(int fieldId) {
         _Fields fields = findByThriftId(fieldId);
-        if (fields == null) throw new java.lang.IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+        if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
         return fields;
       }
 
       /**
        * Find the _Fields constant that matches name, or null if its not found.
        */
-      @org.apache.thrift.annotation.Nullable
-      public static _Fields findByName(java.lang.String name) {
+      @Nullable
+      public static _Fields findByName(String name) {
         return byName.get(name);
       }
 
       private final short _thriftId;
-      private final java.lang.String _fieldName;
+      private final String _fieldName;
 
-      _Fields(short thriftId, java.lang.String fieldName) {
+      _Fields(short thriftId, String fieldName) {
         _thriftId = thriftId;
         _fieldName = fieldName;
       }
@@ -3260,15 +3325,15 @@ public class JavaCompilerInterface {
         return _thriftId;
       }
 
-      public java.lang.String getFieldName() {
+      public String getFieldName() {
         return _fieldName;
       }
     }
-    public static final java.util.Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
+    public static final Map<_Fields, FieldMetaData> metaDataMap;
     static {
-      java.util.Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new java.util.EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
-      metaDataMap = java.util.Collections.unmodifiableMap(tmpMap);
-      org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(logWarning_result.class, metaDataMap);
+      Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+      metaDataMap = Collections.unmodifiableMap(tmpMap);
+      FieldMetaData.addStructMetaDataMap(logWarning_result.class, metaDataMap);
     }
 
     public logWarning_result() {
@@ -3288,31 +3353,31 @@ public class JavaCompilerInterface {
     public void clear() {
     }
 
-    public void setFieldValue(_Fields field, @org.apache.thrift.annotation.Nullable java.lang.Object value) {
+    public void setFieldValue(_Fields field, @Nullable Object value) {
       switch (field) {
       }
     }
 
-    @org.apache.thrift.annotation.Nullable
-    public java.lang.Object getFieldValue(_Fields field) {
+    @Nullable
+    public Object getFieldValue(_Fields field) {
       switch (field) {
       }
-      throw new java.lang.IllegalStateException();
+      throw new IllegalStateException();
     }
 
     /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise */
     public boolean isSet(_Fields field) {
       if (field == null) {
-        throw new java.lang.IllegalArgumentException();
+        throw new IllegalArgumentException();
       }
 
       switch (field) {
       }
-      throw new java.lang.IllegalStateException();
+      throw new IllegalStateException();
     }
 
     @Override
-    public boolean equals(java.lang.Object that) {
+    public boolean equals(Object that) {
       if (that instanceof logWarning_result)
         return this.equals((logWarning_result)that);
       return false;
@@ -3345,69 +3410,69 @@ public class JavaCompilerInterface {
       return 0;
     }
 
-    @org.apache.thrift.annotation.Nullable
+    @Nullable
     public _Fields fieldForId(int fieldId) {
       return _Fields.findByThriftId(fieldId);
     }
 
-    public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
+    public void read(TProtocol iprot) throws TException {
       scheme(iprot).read(iprot, this);
     }
 
-    public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
+    public void write(TProtocol oprot) throws TException {
       scheme(oprot).write(oprot, this);
       }
 
     @Override
-    public java.lang.String toString() {
-      java.lang.StringBuilder sb = new java.lang.StringBuilder("logWarning_result(");
+    public String toString() {
+      StringBuilder sb = new StringBuilder("logWarning_result(");
       boolean first = true;
 
       sb.append(")");
       return sb.toString();
     }
 
-    public void validate() throws org.apache.thrift.TException {
+    public void validate() throws TException {
       // check for required fields
       // check for sub-struct validity
     }
 
-    private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
+    private void writeObject(ObjectOutputStream out) throws IOException {
       try {
-        write(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(out)));
-      } catch (org.apache.thrift.TException te) {
-        throw new java.io.IOException(te);
+        write(new TCompactProtocol(new TIOStreamTransport(out)));
+      } catch (TException te) {
+        throw new IOException(te);
       }
     }
 
-    private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, java.lang.ClassNotFoundException {
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
       try {
-        read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
-      } catch (org.apache.thrift.TException te) {
-        throw new java.io.IOException(te);
+        read(new TCompactProtocol(new TIOStreamTransport(in)));
+      } catch (TException te) {
+        throw new IOException(te);
       }
     }
 
-    private static class logWarning_resultStandardSchemeFactory implements org.apache.thrift.scheme.SchemeFactory {
+    private static class logWarning_resultStandardSchemeFactory implements SchemeFactory {
       public logWarning_resultStandardScheme getScheme() {
         return new logWarning_resultStandardScheme();
       }
     }
 
-    private static class logWarning_resultStandardScheme extends org.apache.thrift.scheme.StandardScheme<logWarning_result> {
+    private static class logWarning_resultStandardScheme extends StandardScheme<logWarning_result> {
 
-      public void read(org.apache.thrift.protocol.TProtocol iprot, logWarning_result struct) throws org.apache.thrift.TException {
-        org.apache.thrift.protocol.TField schemeField;
+      public void read(TProtocol iprot, logWarning_result struct) throws TException {
+        TField schemeField;
         iprot.readStructBegin();
         while (true)
         {
           schemeField = iprot.readFieldBegin();
-          if (schemeField.type == org.apache.thrift.protocol.TType.STOP) { 
+          if (schemeField.type == TType.STOP) {
             break;
           }
           switch (schemeField.id) {
             default:
-              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+              TProtocolUtil.skip(iprot, schemeField.type);
           }
           iprot.readFieldEnd();
         }
@@ -3417,7 +3482,7 @@ public class JavaCompilerInterface {
         struct.validate();
       }
 
-      public void write(org.apache.thrift.protocol.TProtocol oprot, logWarning_result struct) throws org.apache.thrift.TException {
+      public void write(TProtocol oprot, logWarning_result struct) throws TException {
         struct.validate();
 
         oprot.writeStructBegin(STRUCT_DESC);
@@ -3427,48 +3492,48 @@ public class JavaCompilerInterface {
 
     }
 
-    private static class logWarning_resultTupleSchemeFactory implements org.apache.thrift.scheme.SchemeFactory {
+    private static class logWarning_resultTupleSchemeFactory implements SchemeFactory {
       public logWarning_resultTupleScheme getScheme() {
         return new logWarning_resultTupleScheme();
       }
     }
 
-    private static class logWarning_resultTupleScheme extends org.apache.thrift.scheme.TupleScheme<logWarning_result> {
+    private static class logWarning_resultTupleScheme extends TupleScheme<logWarning_result> {
 
       @Override
-      public void write(org.apache.thrift.protocol.TProtocol prot, logWarning_result struct) throws org.apache.thrift.TException {
-        org.apache.thrift.protocol.TTupleProtocol oprot = (org.apache.thrift.protocol.TTupleProtocol) prot;
+      public void write(TProtocol prot, logWarning_result struct) throws TException {
+        TTupleProtocol oprot = (TTupleProtocol) prot;
       }
 
       @Override
-      public void read(org.apache.thrift.protocol.TProtocol prot, logWarning_result struct) throws org.apache.thrift.TException {
-        org.apache.thrift.protocol.TTupleProtocol iprot = (org.apache.thrift.protocol.TTupleProtocol) prot;
+      public void read(TProtocol prot, logWarning_result struct) throws TException {
+        TTupleProtocol iprot = (TTupleProtocol) prot;
       }
     }
 
-    private static <S extends org.apache.thrift.scheme.IScheme> S scheme(org.apache.thrift.protocol.TProtocol proto) {
-      return (org.apache.thrift.scheme.StandardScheme.class.equals(proto.getScheme()) ? STANDARD_SCHEME_FACTORY : TUPLE_SCHEME_FACTORY).getScheme();
+    private static <S extends IScheme> S scheme(TProtocol proto) {
+      return (StandardScheme.class.equals(proto.getScheme()) ? STANDARD_SCHEME_FACTORY : TUPLE_SCHEME_FACTORY).getScheme();
     }
   }
 
-  public static class fileWrote_args implements org.apache.thrift.TBase<fileWrote_args, fileWrote_args._Fields>, java.io.Serializable, Cloneable, Comparable<fileWrote_args>   {
-    private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("fileWrote_args");
+  public static class fileWrote_args implements TBase<fileWrote_args, fileWrote_args._Fields>, Serializable, Cloneable, Comparable<fileWrote_args>   {
+    private static final TStruct STRUCT_DESC = new TStruct("fileWrote_args");
 
-    private static final org.apache.thrift.protocol.TField FILE_PATH_FIELD_DESC = new org.apache.thrift.protocol.TField("filePath", org.apache.thrift.protocol.TType.STRING, (short)1);
+    private static final TField FILE_PATH_FIELD_DESC = new TField("filePath", TType.STRING, (short)1);
 
-    private static final org.apache.thrift.scheme.SchemeFactory STANDARD_SCHEME_FACTORY = new fileWrote_argsStandardSchemeFactory();
-    private static final org.apache.thrift.scheme.SchemeFactory TUPLE_SCHEME_FACTORY = new fileWrote_argsTupleSchemeFactory();
+    private static final SchemeFactory STANDARD_SCHEME_FACTORY = new fileWrote_argsStandardSchemeFactory();
+    private static final SchemeFactory TUPLE_SCHEME_FACTORY = new fileWrote_argsTupleSchemeFactory();
 
-    public @org.apache.thrift.annotation.Nullable java.lang.String filePath; // required
+    public @Nullable String filePath; // required
 
     /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
-    public enum _Fields implements org.apache.thrift.TFieldIdEnum {
+    public enum _Fields implements TFieldIdEnum {
       FILE_PATH((short)1, "filePath");
 
-      private static final java.util.Map<java.lang.String, _Fields> byName = new java.util.HashMap<java.lang.String, _Fields>();
+      private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
       static {
-        for (_Fields field : java.util.EnumSet.allOf(_Fields.class)) {
+        for (_Fields field : EnumSet.allOf(_Fields.class)) {
           byName.put(field.getFieldName(), field);
         }
       }
@@ -3476,7 +3541,7 @@ public class JavaCompilerInterface {
       /**
        * Find the _Fields constant that matches fieldId, or null if its not found.
        */
-      @org.apache.thrift.annotation.Nullable
+      @Nullable
       public static _Fields findByThriftId(int fieldId) {
         switch(fieldId) {
           case 1: // FILE_PATH
@@ -3492,22 +3557,22 @@ public class JavaCompilerInterface {
        */
       public static _Fields findByThriftIdOrThrow(int fieldId) {
         _Fields fields = findByThriftId(fieldId);
-        if (fields == null) throw new java.lang.IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+        if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
         return fields;
       }
 
       /**
        * Find the _Fields constant that matches name, or null if its not found.
        */
-      @org.apache.thrift.annotation.Nullable
-      public static _Fields findByName(java.lang.String name) {
+      @Nullable
+      public static _Fields findByName(String name) {
         return byName.get(name);
       }
 
       private final short _thriftId;
-      private final java.lang.String _fieldName;
+      private final String _fieldName;
 
-      _Fields(short thriftId, java.lang.String fieldName) {
+      _Fields(short thriftId, String fieldName) {
         _thriftId = thriftId;
         _fieldName = fieldName;
       }
@@ -3516,26 +3581,26 @@ public class JavaCompilerInterface {
         return _thriftId;
       }
 
-      public java.lang.String getFieldName() {
+      public String getFieldName() {
         return _fieldName;
       }
     }
 
     // isset id assignments
-    public static final java.util.Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
+    public static final Map<_Fields, FieldMetaData> metaDataMap;
     static {
-      java.util.Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new java.util.EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
-      tmpMap.put(_Fields.FILE_PATH, new org.apache.thrift.meta_data.FieldMetaData("filePath", org.apache.thrift.TFieldRequirementType.DEFAULT, 
-          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING)));
-      metaDataMap = java.util.Collections.unmodifiableMap(tmpMap);
-      org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(fileWrote_args.class, metaDataMap);
+      Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+      tmpMap.put(_Fields.FILE_PATH, new FieldMetaData("filePath", TFieldRequirementType.DEFAULT,
+          new FieldValueMetaData(TType.STRING)));
+      metaDataMap = Collections.unmodifiableMap(tmpMap);
+      FieldMetaData.addStructMetaDataMap(fileWrote_args.class, metaDataMap);
     }
 
     public fileWrote_args() {
     }
 
     public fileWrote_args(
-      java.lang.String filePath)
+      String filePath)
     {
       this();
       this.filePath = filePath;
@@ -3559,12 +3624,12 @@ public class JavaCompilerInterface {
       this.filePath = null;
     }
 
-    @org.apache.thrift.annotation.Nullable
-    public java.lang.String getFilePath() {
+    @Nullable
+    public String getFilePath() {
       return this.filePath;
     }
 
-    public fileWrote_args setFilePath(@org.apache.thrift.annotation.Nullable java.lang.String filePath) {
+    public fileWrote_args setFilePath(@Nullable String filePath) {
       this.filePath = filePath;
       return this;
     }
@@ -3584,44 +3649,44 @@ public class JavaCompilerInterface {
       }
     }
 
-    public void setFieldValue(_Fields field, @org.apache.thrift.annotation.Nullable java.lang.Object value) {
+    public void setFieldValue(_Fields field, @Nullable Object value) {
       switch (field) {
       case FILE_PATH:
         if (value == null) {
           unsetFilePath();
         } else {
-          setFilePath((java.lang.String)value);
+          setFilePath((String)value);
         }
         break;
 
       }
     }
 
-    @org.apache.thrift.annotation.Nullable
-    public java.lang.Object getFieldValue(_Fields field) {
+    @Nullable
+    public Object getFieldValue(_Fields field) {
       switch (field) {
       case FILE_PATH:
         return getFilePath();
 
       }
-      throw new java.lang.IllegalStateException();
+      throw new IllegalStateException();
     }
 
     /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise */
     public boolean isSet(_Fields field) {
       if (field == null) {
-        throw new java.lang.IllegalArgumentException();
+        throw new IllegalArgumentException();
       }
 
       switch (field) {
       case FILE_PATH:
         return isSetFilePath();
       }
-      throw new java.lang.IllegalStateException();
+      throw new IllegalStateException();
     }
 
     @Override
-    public boolean equals(java.lang.Object that) {
+    public boolean equals(Object that) {
       if (that instanceof fileWrote_args)
         return this.equals((fileWrote_args)that);
       return false;
@@ -3664,12 +3729,12 @@ public class JavaCompilerInterface {
 
       int lastComparison = 0;
 
-      lastComparison = java.lang.Boolean.compare(isSetFilePath(), other.isSetFilePath());
+      lastComparison = Boolean.compare(isSetFilePath(), other.isSetFilePath());
       if (lastComparison != 0) {
         return lastComparison;
       }
       if (isSetFilePath()) {
-        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.filePath, other.filePath);
+        lastComparison = TBaseHelper.compareTo(this.filePath, other.filePath);
         if (lastComparison != 0) {
           return lastComparison;
         }
@@ -3677,22 +3742,22 @@ public class JavaCompilerInterface {
       return 0;
     }
 
-    @org.apache.thrift.annotation.Nullable
+    @Nullable
     public _Fields fieldForId(int fieldId) {
       return _Fields.findByThriftId(fieldId);
     }
 
-    public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
+    public void read(TProtocol iprot) throws TException {
       scheme(iprot).read(iprot, this);
     }
 
-    public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
+    public void write(TProtocol oprot) throws TException {
       scheme(oprot).write(oprot, this);
     }
 
     @Override
-    public java.lang.String toString() {
-      java.lang.StringBuilder sb = new java.lang.StringBuilder("fileWrote_args(");
+    public String toString() {
+      StringBuilder sb = new StringBuilder("fileWrote_args(");
       boolean first = true;
 
       sb.append("filePath:");
@@ -3706,55 +3771,55 @@ public class JavaCompilerInterface {
       return sb.toString();
     }
 
-    public void validate() throws org.apache.thrift.TException {
+    public void validate() throws TException {
       // check for required fields
       // check for sub-struct validity
     }
 
-    private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
+    private void writeObject(ObjectOutputStream out) throws IOException {
       try {
-        write(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(out)));
-      } catch (org.apache.thrift.TException te) {
-        throw new java.io.IOException(te);
+        write(new TCompactProtocol(new TIOStreamTransport(out)));
+      } catch (TException te) {
+        throw new IOException(te);
       }
     }
 
-    private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, java.lang.ClassNotFoundException {
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
       try {
-        read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
-      } catch (org.apache.thrift.TException te) {
-        throw new java.io.IOException(te);
+        read(new TCompactProtocol(new TIOStreamTransport(in)));
+      } catch (TException te) {
+        throw new IOException(te);
       }
     }
 
-    private static class fileWrote_argsStandardSchemeFactory implements org.apache.thrift.scheme.SchemeFactory {
+    private static class fileWrote_argsStandardSchemeFactory implements SchemeFactory {
       public fileWrote_argsStandardScheme getScheme() {
         return new fileWrote_argsStandardScheme();
       }
     }
 
-    private static class fileWrote_argsStandardScheme extends org.apache.thrift.scheme.StandardScheme<fileWrote_args> {
+    private static class fileWrote_argsStandardScheme extends StandardScheme<fileWrote_args> {
 
-      public void read(org.apache.thrift.protocol.TProtocol iprot, fileWrote_args struct) throws org.apache.thrift.TException {
-        org.apache.thrift.protocol.TField schemeField;
+      public void read(TProtocol iprot, fileWrote_args struct) throws TException {
+        TField schemeField;
         iprot.readStructBegin();
         while (true)
         {
           schemeField = iprot.readFieldBegin();
-          if (schemeField.type == org.apache.thrift.protocol.TType.STOP) { 
+          if (schemeField.type == TType.STOP) {
             break;
           }
           switch (schemeField.id) {
             case 1: // FILE_PATH
-              if (schemeField.type == org.apache.thrift.protocol.TType.STRING) {
+              if (schemeField.type == TType.STRING) {
                 struct.filePath = iprot.readString();
                 struct.setFilePathIsSet(true);
               } else { 
-                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+                TProtocolUtil.skip(iprot, schemeField.type);
               }
               break;
             default:
-              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+              TProtocolUtil.skip(iprot, schemeField.type);
           }
           iprot.readFieldEnd();
         }
@@ -3764,7 +3829,7 @@ public class JavaCompilerInterface {
         struct.validate();
       }
 
-      public void write(org.apache.thrift.protocol.TProtocol oprot, fileWrote_args struct) throws org.apache.thrift.TException {
+      public void write(TProtocol oprot, fileWrote_args struct) throws TException {
         struct.validate();
 
         oprot.writeStructBegin(STRUCT_DESC);
@@ -3779,18 +3844,18 @@ public class JavaCompilerInterface {
 
     }
 
-    private static class fileWrote_argsTupleSchemeFactory implements org.apache.thrift.scheme.SchemeFactory {
+    private static class fileWrote_argsTupleSchemeFactory implements SchemeFactory {
       public fileWrote_argsTupleScheme getScheme() {
         return new fileWrote_argsTupleScheme();
       }
     }
 
-    private static class fileWrote_argsTupleScheme extends org.apache.thrift.scheme.TupleScheme<fileWrote_args> {
+    private static class fileWrote_argsTupleScheme extends TupleScheme<fileWrote_args> {
 
       @Override
-      public void write(org.apache.thrift.protocol.TProtocol prot, fileWrote_args struct) throws org.apache.thrift.TException {
-        org.apache.thrift.protocol.TTupleProtocol oprot = (org.apache.thrift.protocol.TTupleProtocol) prot;
-        java.util.BitSet optionals = new java.util.BitSet();
+      public void write(TProtocol prot, fileWrote_args struct) throws TException {
+        TTupleProtocol oprot = (TTupleProtocol) prot;
+        BitSet optionals = new BitSet();
         if (struct.isSetFilePath()) {
           optionals.set(0);
         }
@@ -3801,9 +3866,9 @@ public class JavaCompilerInterface {
       }
 
       @Override
-      public void read(org.apache.thrift.protocol.TProtocol prot, fileWrote_args struct) throws org.apache.thrift.TException {
-        org.apache.thrift.protocol.TTupleProtocol iprot = (org.apache.thrift.protocol.TTupleProtocol) prot;
-        java.util.BitSet incoming = iprot.readBitSet(1);
+      public void read(TProtocol prot, fileWrote_args struct) throws TException {
+        TTupleProtocol iprot = (TTupleProtocol) prot;
+        BitSet incoming = iprot.readBitSet(1);
         if (incoming.get(0)) {
           struct.filePath = iprot.readString();
           struct.setFilePathIsSet(true);
@@ -3811,27 +3876,27 @@ public class JavaCompilerInterface {
       }
     }
 
-    private static <S extends org.apache.thrift.scheme.IScheme> S scheme(org.apache.thrift.protocol.TProtocol proto) {
-      return (org.apache.thrift.scheme.StandardScheme.class.equals(proto.getScheme()) ? STANDARD_SCHEME_FACTORY : TUPLE_SCHEME_FACTORY).getScheme();
+    private static <S extends IScheme> S scheme(TProtocol proto) {
+      return (StandardScheme.class.equals(proto.getScheme()) ? STANDARD_SCHEME_FACTORY : TUPLE_SCHEME_FACTORY).getScheme();
     }
   }
 
-  public static class fileWrote_result implements org.apache.thrift.TBase<fileWrote_result, fileWrote_result._Fields>, java.io.Serializable, Cloneable, Comparable<fileWrote_result>   {
-    private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("fileWrote_result");
+  public static class fileWrote_result implements TBase<fileWrote_result, fileWrote_result._Fields>, Serializable, Cloneable, Comparable<fileWrote_result>   {
+    private static final TStruct STRUCT_DESC = new TStruct("fileWrote_result");
 
 
-    private static final org.apache.thrift.scheme.SchemeFactory STANDARD_SCHEME_FACTORY = new fileWrote_resultStandardSchemeFactory();
-    private static final org.apache.thrift.scheme.SchemeFactory TUPLE_SCHEME_FACTORY = new fileWrote_resultTupleSchemeFactory();
+    private static final SchemeFactory STANDARD_SCHEME_FACTORY = new fileWrote_resultStandardSchemeFactory();
+    private static final SchemeFactory TUPLE_SCHEME_FACTORY = new fileWrote_resultTupleSchemeFactory();
 
 
     /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
-    public enum _Fields implements org.apache.thrift.TFieldIdEnum {
+    public enum _Fields implements TFieldIdEnum {
 ;
 
-      private static final java.util.Map<java.lang.String, _Fields> byName = new java.util.HashMap<java.lang.String, _Fields>();
+      private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
       static {
-        for (_Fields field : java.util.EnumSet.allOf(_Fields.class)) {
+        for (_Fields field : EnumSet.allOf(_Fields.class)) {
           byName.put(field.getFieldName(), field);
         }
       }
@@ -3839,7 +3904,7 @@ public class JavaCompilerInterface {
       /**
        * Find the _Fields constant that matches fieldId, or null if its not found.
        */
-      @org.apache.thrift.annotation.Nullable
+      @Nullable
       public static _Fields findByThriftId(int fieldId) {
         switch(fieldId) {
           default:
@@ -3853,22 +3918,22 @@ public class JavaCompilerInterface {
        */
       public static _Fields findByThriftIdOrThrow(int fieldId) {
         _Fields fields = findByThriftId(fieldId);
-        if (fields == null) throw new java.lang.IllegalArgumentException("Field " + fieldId + " doesn't exist!");
+        if (fields == null) throw new IllegalArgumentException("Field " + fieldId + " doesn't exist!");
         return fields;
       }
 
       /**
        * Find the _Fields constant that matches name, or null if its not found.
        */
-      @org.apache.thrift.annotation.Nullable
-      public static _Fields findByName(java.lang.String name) {
+      @Nullable
+      public static _Fields findByName(String name) {
         return byName.get(name);
       }
 
       private final short _thriftId;
-      private final java.lang.String _fieldName;
+      private final String _fieldName;
 
-      _Fields(short thriftId, java.lang.String fieldName) {
+      _Fields(short thriftId, String fieldName) {
         _thriftId = thriftId;
         _fieldName = fieldName;
       }
@@ -3877,15 +3942,15 @@ public class JavaCompilerInterface {
         return _thriftId;
       }
 
-      public java.lang.String getFieldName() {
+      public String getFieldName() {
         return _fieldName;
       }
     }
-    public static final java.util.Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
+    public static final Map<_Fields, FieldMetaData> metaDataMap;
     static {
-      java.util.Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new java.util.EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
-      metaDataMap = java.util.Collections.unmodifiableMap(tmpMap);
-      org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(fileWrote_result.class, metaDataMap);
+      Map<_Fields, FieldMetaData> tmpMap = new EnumMap<_Fields, FieldMetaData>(_Fields.class);
+      metaDataMap = Collections.unmodifiableMap(tmpMap);
+      FieldMetaData.addStructMetaDataMap(fileWrote_result.class, metaDataMap);
     }
 
     public fileWrote_result() {
@@ -3905,31 +3970,31 @@ public class JavaCompilerInterface {
     public void clear() {
     }
 
-    public void setFieldValue(_Fields field, @org.apache.thrift.annotation.Nullable java.lang.Object value) {
+    public void setFieldValue(_Fields field, @Nullable Object value) {
       switch (field) {
       }
     }
 
-    @org.apache.thrift.annotation.Nullable
-    public java.lang.Object getFieldValue(_Fields field) {
+    @Nullable
+    public Object getFieldValue(_Fields field) {
       switch (field) {
       }
-      throw new java.lang.IllegalStateException();
+      throw new IllegalStateException();
     }
 
     /** Returns true if field corresponding to fieldID is set (has been assigned a value) and false otherwise */
     public boolean isSet(_Fields field) {
       if (field == null) {
-        throw new java.lang.IllegalArgumentException();
+        throw new IllegalArgumentException();
       }
 
       switch (field) {
       }
-      throw new java.lang.IllegalStateException();
+      throw new IllegalStateException();
     }
 
     @Override
-    public boolean equals(java.lang.Object that) {
+    public boolean equals(Object that) {
       if (that instanceof fileWrote_result)
         return this.equals((fileWrote_result)that);
       return false;
@@ -3962,69 +4027,69 @@ public class JavaCompilerInterface {
       return 0;
     }
 
-    @org.apache.thrift.annotation.Nullable
+    @Nullable
     public _Fields fieldForId(int fieldId) {
       return _Fields.findByThriftId(fieldId);
     }
 
-    public void read(org.apache.thrift.protocol.TProtocol iprot) throws org.apache.thrift.TException {
+    public void read(TProtocol iprot) throws TException {
       scheme(iprot).read(iprot, this);
     }
 
-    public void write(org.apache.thrift.protocol.TProtocol oprot) throws org.apache.thrift.TException {
+    public void write(TProtocol oprot) throws TException {
       scheme(oprot).write(oprot, this);
       }
 
     @Override
-    public java.lang.String toString() {
-      java.lang.StringBuilder sb = new java.lang.StringBuilder("fileWrote_result(");
+    public String toString() {
+      StringBuilder sb = new StringBuilder("fileWrote_result(");
       boolean first = true;
 
       sb.append(")");
       return sb.toString();
     }
 
-    public void validate() throws org.apache.thrift.TException {
+    public void validate() throws TException {
       // check for required fields
       // check for sub-struct validity
     }
 
-    private void writeObject(java.io.ObjectOutputStream out) throws java.io.IOException {
+    private void writeObject(ObjectOutputStream out) throws IOException {
       try {
-        write(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(out)));
-      } catch (org.apache.thrift.TException te) {
-        throw new java.io.IOException(te);
+        write(new TCompactProtocol(new TIOStreamTransport(out)));
+      } catch (TException te) {
+        throw new IOException(te);
       }
     }
 
-    private void readObject(java.io.ObjectInputStream in) throws java.io.IOException, java.lang.ClassNotFoundException {
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
       try {
-        read(new org.apache.thrift.protocol.TCompactProtocol(new org.apache.thrift.transport.TIOStreamTransport(in)));
-      } catch (org.apache.thrift.TException te) {
-        throw new java.io.IOException(te);
+        read(new TCompactProtocol(new TIOStreamTransport(in)));
+      } catch (TException te) {
+        throw new IOException(te);
       }
     }
 
-    private static class fileWrote_resultStandardSchemeFactory implements org.apache.thrift.scheme.SchemeFactory {
+    private static class fileWrote_resultStandardSchemeFactory implements SchemeFactory {
       public fileWrote_resultStandardScheme getScheme() {
         return new fileWrote_resultStandardScheme();
       }
     }
 
-    private static class fileWrote_resultStandardScheme extends org.apache.thrift.scheme.StandardScheme<fileWrote_result> {
+    private static class fileWrote_resultStandardScheme extends StandardScheme<fileWrote_result> {
 
-      public void read(org.apache.thrift.protocol.TProtocol iprot, fileWrote_result struct) throws org.apache.thrift.TException {
-        org.apache.thrift.protocol.TField schemeField;
+      public void read(TProtocol iprot, fileWrote_result struct) throws TException {
+        TField schemeField;
         iprot.readStructBegin();
         while (true)
         {
           schemeField = iprot.readFieldBegin();
-          if (schemeField.type == org.apache.thrift.protocol.TType.STOP) { 
+          if (schemeField.type == TType.STOP) {
             break;
           }
           switch (schemeField.id) {
             default:
-              org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
+              TProtocolUtil.skip(iprot, schemeField.type);
           }
           iprot.readFieldEnd();
         }
@@ -4034,7 +4099,7 @@ public class JavaCompilerInterface {
         struct.validate();
       }
 
-      public void write(org.apache.thrift.protocol.TProtocol oprot, fileWrote_result struct) throws org.apache.thrift.TException {
+      public void write(TProtocol oprot, fileWrote_result struct) throws TException {
         struct.validate();
 
         oprot.writeStructBegin(STRUCT_DESC);
@@ -4044,27 +4109,27 @@ public class JavaCompilerInterface {
 
     }
 
-    private static class fileWrote_resultTupleSchemeFactory implements org.apache.thrift.scheme.SchemeFactory {
+    private static class fileWrote_resultTupleSchemeFactory implements SchemeFactory {
       public fileWrote_resultTupleScheme getScheme() {
         return new fileWrote_resultTupleScheme();
       }
     }
 
-    private static class fileWrote_resultTupleScheme extends org.apache.thrift.scheme.TupleScheme<fileWrote_result> {
+    private static class fileWrote_resultTupleScheme extends TupleScheme<fileWrote_result> {
 
       @Override
-      public void write(org.apache.thrift.protocol.TProtocol prot, fileWrote_result struct) throws org.apache.thrift.TException {
-        org.apache.thrift.protocol.TTupleProtocol oprot = (org.apache.thrift.protocol.TTupleProtocol) prot;
+      public void write(TProtocol prot, fileWrote_result struct) throws TException {
+        TTupleProtocol oprot = (TTupleProtocol) prot;
       }
 
       @Override
-      public void read(org.apache.thrift.protocol.TProtocol prot, fileWrote_result struct) throws org.apache.thrift.TException {
-        org.apache.thrift.protocol.TTupleProtocol iprot = (org.apache.thrift.protocol.TTupleProtocol) prot;
+      public void read(TProtocol prot, fileWrote_result struct) throws TException {
+        TTupleProtocol iprot = (TTupleProtocol) prot;
       }
     }
 
-    private static <S extends org.apache.thrift.scheme.IScheme> S scheme(org.apache.thrift.protocol.TProtocol proto) {
-      return (org.apache.thrift.scheme.StandardScheme.class.equals(proto.getScheme()) ? STANDARD_SCHEME_FACTORY : TUPLE_SCHEME_FACTORY).getScheme();
+    private static <S extends IScheme> S scheme(TProtocol proto) {
+      return (StandardScheme.class.equals(proto.getScheme()) ? STANDARD_SCHEME_FACTORY : TUPLE_SCHEME_FACTORY).getScheme();
     }
   }
 

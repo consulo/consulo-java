@@ -1,5 +1,7 @@
 package com.siyeh.igtest.internationalization.character_comparison;
 
+import org.jetbrains.annotations.NonNls;
+
 public class CharacterComparison
 {
     public CharacterComparison()
@@ -29,7 +31,7 @@ public class CharacterComparison
         }
         if (c == d) return;
         if (c < ) return;
-        @org.jetbrains.annotations.NonNls char a = 'a';
+        @NonNls char a = 'a';
         if (c < a) return;
     }
 

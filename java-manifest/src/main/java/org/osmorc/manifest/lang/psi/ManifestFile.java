@@ -25,7 +25,7 @@
 
 package org.osmorc.manifest.lang.psi;
 
-import com.intellij.psi.PsiFile;
+import consulo.language.psi.PsiFile;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -50,7 +50,7 @@ public interface ManifestFile extends PsiFile {
    * @param name the name
    * @return the header or null if no such header exists.
    */
-  @javax.annotation.Nullable
+  @Nullable
   Header getHeaderByName(@Nonnull String name);
 
   @Nullable

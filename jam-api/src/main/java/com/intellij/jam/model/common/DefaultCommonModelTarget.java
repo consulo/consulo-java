@@ -16,13 +16,13 @@
 
 package com.intellij.jam.model.common;
 
-import javax.annotation.Nonnull;
+import consulo.language.impl.psi.DelegatePsiTarget;
+import consulo.language.pom.PomRenameableTarget;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
+import consulo.xml.util.xml.ElementPresentationManager;
 
-import com.intellij.pom.PomRenameableTarget;
-import com.intellij.psi.DelegatePsiTarget;
-import com.intellij.psi.PsiElement;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.xml.ElementPresentationManager;
+import javax.annotation.Nonnull;
 
 /**
  * @author Gregory.Shrago

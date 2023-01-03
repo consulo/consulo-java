@@ -18,11 +18,9 @@ package com.intellij.testFramework;
 import java.util.Arrays;
 import java.util.Comparator;
 
-import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.vfs.impl.VirtualFilePointerManagerImpl;
-import com.intellij.openapi.vfs.pointers.VirtualFilePointerManager;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.impl.JavaPsiFacadeEx;
+import consulo.content.bundle.Sdk;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.impl.psi.impl.JavaPsiFacadeEx;
 
 /**
  * @author mike

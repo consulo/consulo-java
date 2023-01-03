@@ -17,14 +17,14 @@ package com.intellij.jam.reflect;
 
 import com.intellij.jam.JamConverter;
 import com.intellij.jam.JamStringAttributeElement;
-import com.intellij.openapi.util.Factory;
-import com.intellij.psi.PsiAnnotation;
-import com.intellij.psi.PsiAnnotationMemberValue;
-import com.intellij.psi.PsiElementRef;
-import com.intellij.util.NullableFunction;
-import javax.annotation.Nonnull;
+import com.intellij.java.language.psi.PsiAnnotation;
+import com.intellij.java.language.psi.PsiAnnotationMemberValue;
+import consulo.language.psi.PsiElementRef;
 
+import javax.annotation.Nonnull;
 import java.util.List;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * @author peter
@@ -68,8 +68,8 @@ public abstract class JamStringAttributeMeta<T, JamType> extends JamAttributeMet
 
     @Nonnull
     public List<JamStringAttributeElement<T>> getJam(PsiElementRef<PsiAnnotation> anno) {
-      return getCollectionJam(anno, new NullableFunction<PsiAnnotationMemberValue, JamStringAttributeElement<T>>() {
-        public JamStringAttributeElement<T> fun(PsiAnnotationMemberValue psiAnnotationMemberValue) {
+      return getCollectionJam(anno, new Function<PsiAnnotationMemberValue, JamStringAttributeElement<T>>() {
+        public JamStringAttributeElement<T> apply(PsiAnnotationMemberValue psiAnnotationMemberValue) {
           return new JamStringAttributeElement<T>(psiAnnotationMemberValue, myConverter);
         }
       });
@@ -87,12 +87,12 @@ public abstract class JamStringAttributeMeta<T, JamType> extends JamAttributeMet
     }
 
     @Nonnull
-    public JamStringAttributeElement<T> getJam(PsiElementRef<PsiAnnotation> anno, @Nonnull final Factory<T> defaultValue) {
+    public JamStringAttributeElement<T> getJam(PsiElementRef<PsiAnnotation> anno, @Nonnull final Supplier<T> defaultValue) {
       return new JamStringAttributeElement<T>(anno, getAttributeLink().getAttributeName(), myConverter) {
         @Override
         public T getValue() {
           final T value = super.getValue();
-          return value == null ? defaultValue.create() : value;
+          return value == null ? defaultValue.get() : value;
         }
       };
     }

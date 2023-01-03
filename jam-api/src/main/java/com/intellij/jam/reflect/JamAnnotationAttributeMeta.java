@@ -17,30 +17,30 @@ package com.intellij.jam.reflect;
 
 import com.intellij.jam.JamElement;
 import com.intellij.jam.JamService;
-import com.intellij.patterns.ElementPattern;
-import com.intellij.patterns.PsiAnnotationPattern;
-import com.intellij.patterns.PsiNameValuePairPattern;
-import com.intellij.pom.PomTarget;
-import com.intellij.psi.PsiAnnotation;
-import com.intellij.psi.PsiAnnotationMemberValue;
-import com.intellij.psi.PsiArrayInitializerMemberValue;
-import com.intellij.psi.PsiElementRef;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.semantic.SemKey;
-import com.intellij.semantic.SemRegistrar;
-import com.intellij.semantic.SemService;
-import com.intellij.util.Consumer;
-import com.intellij.util.NullableFunction;
-import com.intellij.util.ObjectUtil;
-import com.intellij.util.PairConsumer;
-import com.intellij.util.containers.ContainerUtil;
+import com.intellij.java.language.patterns.PsiAnnotationPattern;
+import com.intellij.java.language.patterns.PsiNameValuePairPattern;
+import com.intellij.java.language.psi.PsiAnnotation;
+import com.intellij.java.language.psi.PsiAnnotationMemberValue;
+import com.intellij.java.language.psi.PsiArrayInitializerMemberValue;
+import consulo.language.pattern.ElementPattern;
+import consulo.language.pom.PomTarget;
+import consulo.language.psi.PsiElementRef;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.sem.SemKey;
+import consulo.language.sem.SemRegistrar;
+import consulo.language.sem.SemService;
+import consulo.util.collection.ContainerUtil;
+import consulo.util.lang.ObjectUtil;
+import consulo.util.lang.function.PairConsumer;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
-import static com.intellij.patterns.PsiJavaPatterns.*;
+import static com.intellij.java.language.patterns.PsiJavaPatterns.*;
 
 /**
  * @author peter
@@ -65,11 +65,7 @@ public abstract class JamAnnotationAttributeMeta<T extends JamElement, JamType> 
 
   public List<PomTarget> getAssociatedTargets(@Nonnull T element) {
     final ArrayList<PomTarget> list = ContainerUtil.newArrayList();
-    final Consumer<PomTarget> targetConsumer = new Consumer<PomTarget>() {
-      public void consume(PomTarget target) {
-        list.add(target);
-      }
-    };
+    final Consumer<PomTarget> targetConsumer = target -> list.add(target);
     for (final PairConsumer<T, Consumer<PomTarget>> function : myPomTargetProducers) {
       function.consume(element, targetConsumer);
     }
@@ -136,8 +132,8 @@ public abstract class JamAnnotationAttributeMeta<T extends JamElement, JamType> 
 
     @Nonnull
     public List<T> getJam(final PsiElementRef<PsiAnnotation> anno) {
-      return getCollectionJam(anno, new NullableFunction<PsiAnnotationMemberValue, T>() {
-        public T fun(PsiAnnotationMemberValue psiAnnotationMemberValue) {
+      return getCollectionJam(anno, new Function<PsiAnnotationMemberValue, T>() {
+        public T apply(PsiAnnotationMemberValue psiAnnotationMemberValue) {
           return getJam(psiAnnotationMemberValue);
         }
       });
@@ -175,14 +171,14 @@ public abstract class JamAnnotationAttributeMeta<T extends JamElement, JamType> 
 
   }
 
-  protected class JamCreator implements NullableFunction<PsiAnnotation, T> {
+  protected class JamCreator implements Function<PsiAnnotation, T> {
     private final JamAnnotationMeta myParentMeta;
 
     private JamCreator(JamAnnotationMeta parentMeta) {
       myParentMeta = parentMeta;
     }
 
-    public T fun(PsiAnnotation annotation) {
+    public T apply(PsiAnnotation annotation) {
       final PsiAnnotation parentAnno = PsiTreeUtil.getParentOfType(annotation, PsiAnnotation.class, true);
       assert parentAnno != null;
       final JamAnnotationMeta annotationMeta = SemService.getSemService(parentAnno.getProject()).getSemElement(myParentMeta.getMetaKey(), parentAnno);

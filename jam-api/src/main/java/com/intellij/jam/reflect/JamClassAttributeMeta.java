@@ -16,15 +16,15 @@
 package com.intellij.jam.reflect;
 
 import com.intellij.jam.JamClassAttributeElement;
-import com.intellij.openapi.util.Factory;
-import com.intellij.psi.PsiAnnotation;
-import com.intellij.psi.PsiAnnotationMemberValue;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiElementRef;
-import com.intellij.util.NullableFunction;
-import javax.annotation.Nonnull;
+import com.intellij.java.language.psi.PsiAnnotation;
+import com.intellij.java.language.psi.PsiAnnotationMemberValue;
+import com.intellij.java.language.psi.PsiClass;
+import consulo.language.psi.PsiElementRef;
 
+import javax.annotation.Nonnull;
 import java.util.List;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * @author peter
@@ -42,8 +42,8 @@ public abstract class JamClassAttributeMeta<JamType> extends JamAttributeMeta<Ja
 
     @Nonnull
     public List<JamClassAttributeElement> getJam(PsiElementRef<PsiAnnotation> anno) {
-      return getCollectionJam(anno, new NullableFunction<PsiAnnotationMemberValue, JamClassAttributeElement>() {
-        public JamClassAttributeElement fun(PsiAnnotationMemberValue psiAnnotationMemberValue) {
+      return getCollectionJam(anno, new Function<PsiAnnotationMemberValue, JamClassAttributeElement>() {
+        public JamClassAttributeElement apply(PsiAnnotationMemberValue psiAnnotationMemberValue) {
           return new JamClassAttributeElement(psiAnnotationMemberValue);
         }
       });
@@ -62,12 +62,12 @@ public abstract class JamClassAttributeMeta<JamType> extends JamAttributeMeta<Ja
     }
 
     @Nonnull
-    public JamClassAttributeElement getJam(PsiElementRef<PsiAnnotation> anno, final Factory<PsiClass> defaultValue) {
+    public JamClassAttributeElement getJam(PsiElementRef<PsiAnnotation> anno, final Supplier<PsiClass> defaultValue) {
       return new JamClassAttributeElement(anno, getAttributeLink().getAttributeName()) {
         @Override
         public PsiClass getValue() {
           final PsiClass psiClass = super.getValue();
-          return psiClass == null ? defaultValue.create() : psiClass;
+          return psiClass == null ? defaultValue.get() : psiClass;
         }
       };
     }

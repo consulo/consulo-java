@@ -2,7 +2,6 @@ package org.jetbrains.manifest;
 
 import com.intellij.testFramework.ParsingTestCase;
 import org.osmorc.manifest.lang.ManifestParserDefinition;
-import consulo.java.manifest.lang.headerparser.HeaderParserEP;
 import org.osmorc.manifest.lang.headerparser.impl.GenericComplexHeaderParser;
 
 /**

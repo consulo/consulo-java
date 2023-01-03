@@ -15,30 +15,31 @@
  */
 package com.intellij.jam.reflect;
 
-import static com.intellij.patterns.PsiJavaPatterns.psiAnnotation;
+import com.intellij.jam.JamService;
+import com.intellij.java.language.patterns.PsiAnnotationPattern;
+import com.intellij.java.language.patterns.PsiJavaPatterns;
+import com.intellij.java.language.psi.PsiAnnotation;
+import com.intellij.java.language.psi.PsiModifierListOwner;
+import com.intellij.java.language.psi.PsiPackageStatement;
+import com.intellij.java.language.psi.ref.AnnotationChildLink;
+import consulo.language.pattern.ElementPattern;
+import consulo.language.pattern.PatternCondition;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiElementRef;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.sem.SemElement;
+import consulo.language.sem.SemKey;
+import consulo.language.sem.SemRegistrar;
+import consulo.language.sem.SemService;
+import consulo.language.util.ProcessingContext;
+import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.jetbrains.annotations.NonNls;
-import com.intellij.jam.JamService;
-import com.intellij.patterns.ElementPattern;
-import com.intellij.patterns.PatternCondition;
-import com.intellij.patterns.PsiAnnotationPattern;
-import com.intellij.patterns.PsiJavaPatterns;
-import com.intellij.psi.PsiAnnotation;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiElementRef;
-import com.intellij.psi.PsiModifierListOwner;
-import com.intellij.psi.PsiPackageStatement;
-import com.intellij.psi.ref.AnnotationChildLink;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.semantic.SemElement;
-import com.intellij.semantic.SemKey;
-import com.intellij.semantic.SemRegistrar;
-import com.intellij.semantic.SemService;
-import com.intellij.util.NullableFunction;
-import com.intellij.util.ProcessingContext;
+import java.util.function.Function;
+
+import static com.intellij.java.language.patterns.PsiJavaPatterns.psiAnnotation;
 
 /**
  * @author peter
@@ -116,8 +117,8 @@ public class JamAnnotationMeta extends JamAnnotationArchetype implements SemElem
           return parentPattern.accepts(psiPackageStatement.getPackageReference().resolve(), context);
         }
       }) : parentPattern);
-    registrar.registerSemElementProvider(myMetaKey, annoPattern, new NullableFunction<PsiAnnotation, JamAnnotationMeta>() {
-      public JamAnnotationMeta fun(PsiAnnotation annotation) {
+    registrar.registerSemElementProvider(myMetaKey, annoPattern, new Function<PsiAnnotation, JamAnnotationMeta>() {
+      public JamAnnotationMeta apply(PsiAnnotation annotation) {
         final PsiElement parent = annotation.getParent().getParent();
         final T element = (isPackage && parent instanceof PsiPackageStatement? (T)((PsiPackageStatement)parent).getPackageReference().resolve() : (T)parent);
         if (SemService.getSemService(element.getProject()).getSemElement(parentMeta.getMetaKey(), element) == parentMeta) {
@@ -131,8 +132,8 @@ public class JamAnnotationMeta extends JamAnnotationArchetype implements SemElem
   }
 
   public void registerNestedSem(SemRegistrar registrar, ElementPattern<PsiAnnotation> annoPattern, final JamAnnotationMeta parentMeta) {
-    registrar.registerSemElementProvider(myMetaKey, annoPattern, new NullableFunction<PsiAnnotation, JamAnnotationMeta>() {
-      public JamAnnotationMeta fun(PsiAnnotation annotation) {
+    registrar.registerSemElementProvider(myMetaKey, annoPattern, new Function<PsiAnnotation, JamAnnotationMeta>() {
+      public JamAnnotationMeta apply(PsiAnnotation annotation) {
         final PsiAnnotation parentAnno = PsiTreeUtil.getParentOfType(annotation, PsiAnnotation.class, true);
         assert parentAnno != null;
         if (SemService.getSemService(annotation.getProject()).getSemElement(parentMeta.getMetaKey(), parentAnno) == parentMeta) {

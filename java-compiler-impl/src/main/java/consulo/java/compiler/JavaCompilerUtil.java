@@ -15,23 +15,22 @@
  */
 package consulo.java.compiler;
 
-import com.intellij.compiler.impl.ModuleChunk;
-import com.intellij.compiler.impl.javaCompiler.JavaCompilerConfiguration;
-import com.intellij.execution.configurations.ParametersList;
-import com.intellij.openapi.compiler.CompileContext;
-import com.intellij.openapi.compiler.CompilerBundle;
-import com.intellij.openapi.module.EffectiveLanguageLevelUtil;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleUtilCore;
-import com.intellij.openapi.projectRoots.JavaSdkVersion;
-import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.CharsetToolkit;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.pom.java.LanguageLevel;
-import com.intellij.util.lang.JavaVersion;
+import com.intellij.java.compiler.impl.javaCompiler.JavaCompilerConfiguration;
+import com.intellij.java.language.LanguageLevel;
+import com.intellij.java.language.module.EffectiveLanguageLevelUtil;
+import com.intellij.java.language.projectRoots.JavaSdkVersion;
 import consulo.annotation.access.RequiredReadAction;
-import consulo.java.module.extension.JavaModuleExtension;
+import consulo.compiler.CompileContext;
+import consulo.compiler.CompilerBundle;
+import consulo.compiler.ModuleChunk;
+import consulo.content.bundle.Sdk;
+import consulo.java.language.module.extension.JavaModuleExtension;
+import consulo.language.util.ModuleUtilCore;
+import consulo.module.Module;
+import consulo.process.cmd.ParametersList;
+import consulo.util.io.CharsetToolkit;
+import consulo.util.lang.StringUtil;
+import consulo.virtualFileSystem.VirtualFile;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;

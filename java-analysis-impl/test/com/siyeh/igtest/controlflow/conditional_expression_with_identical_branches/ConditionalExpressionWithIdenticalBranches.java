@@ -1,5 +1,7 @@
 package com.siyeh.igtest.controlflow.conditional_expression_with_identical_branches;
 
+import java.lang.String;
+
 class ConditionalExpressionWithIdenticalBranches {
 
   int one(boolean b) {
@@ -11,6 +13,6 @@ class ConditionalExpressionWithIdenticalBranches {
   }
 
   Class<String> three(boolean b) {
-    return b ? java.lang.String.class : String.class;
+    return b ? String.class : String.class;
   }
 }

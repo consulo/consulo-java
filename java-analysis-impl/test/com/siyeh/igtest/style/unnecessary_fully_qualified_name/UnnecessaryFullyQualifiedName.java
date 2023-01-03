@@ -1,7 +1,12 @@
 package com.siyeh.igtest.style.unnecessary_fully_qualified_name;
 
+import java.awt.List;
 import java.io.PrintStream;
+import java.lang.System;
+import java.util.List;
+import java.util.Map;
 import java.util.Properties;
+import java.util.StringTokenizer;
 
 /**
  * {@link java.lang.String}
@@ -10,12 +15,12 @@ public class UnnecessaryFullyQualifiedName
 {
     private String m_string1;
     private java.lang.String m_string;
-    private java.util.StringTokenizer m_map;
-    private java.util.List m_list;
-    private java.util.Map.Entry m_mapEntry;
-    private java.awt.List m_awtList;
-    PrintStream stream = java.lang.System.out;
-    Properties props = java.lang.System.getProperties();
+    private StringTokenizer m_map;
+    private List m_list;
+    private Map.Entry m_mapEntry;
+    private List m_awtList;
+    PrintStream stream = System.out;
+    Properties props = System.getProperties();
 
     public UnnecessaryFullyQualifiedNameInspection(java.lang.String s) {}
 
@@ -38,5 +43,5 @@ enum SomeEnum {
 
     public abstract void perform();
 
-    private java.   util.   List spaces;
+    private List spaces;
 }

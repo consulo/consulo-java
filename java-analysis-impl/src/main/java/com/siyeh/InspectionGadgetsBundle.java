@@ -21,7 +21,7 @@ import java.util.ResourceBundle;
 
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.PropertyKey;
-import com.intellij.CommonBundle;
+import consulo.application.CommonBundle;
 
 /**
  * @author max
@@ -29,7 +29,7 @@ import com.intellij.CommonBundle;
 public class InspectionGadgetsBundle {
   private static Reference<ResourceBundle> ourBundle;
 
-  @NonNls private static final String BUNDLE = "com.siyeh.InspectionGadgetsBundle";
+  private static final String BUNDLE = "com.siyeh.InspectionGadgetsBundle";
 
   private InspectionGadgetsBundle() {
   }

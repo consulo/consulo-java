@@ -2,6 +2,8 @@ package com.siyeh.igtest.bugs.mismatched_collection_query_update;
 
 import java.util.*;
 import java.io.FileInputStream;
+import java.util.concurrent.BlockingDeque;
+import java.util.concurrent.LinkedBlockingDeque;
 
 public class MismatchedCollectionQueryUpdate {
     private Set foo = new HashSet();
@@ -97,8 +99,8 @@ public class MismatchedCollectionQueryUpdate {
     }
 
     class C {
-        private final java.util.concurrent.BlockingDeque deque =
-        new java.util.concurrent.LinkedBlockingDeque();
+        private final BlockingDeque deque =
+        new LinkedBlockingDeque();
 
         {
             try {

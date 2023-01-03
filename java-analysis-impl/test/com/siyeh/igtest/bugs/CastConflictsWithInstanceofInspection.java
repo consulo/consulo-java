@@ -1,8 +1,8 @@
 package com.siyeh.igtest.bugs;
 
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiReferenceExpression;
-import com.intellij.psi.PsiStatement;
+import consulo.language.psi.PsiElement;
+import com.intellij.java.language.psi.PsiReferenceExpression;
+import com.intellij.java.language.psi.PsiStatement;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;

@@ -21,11 +21,12 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-import com.intellij.psi.JavaTokenType;
-import com.intellij.psi.PsiExpression;
-import com.intellij.psi.PsiPolyadicExpression;
-import com.intellij.psi.tree.IElementType;
+import com.intellij.java.language.psi.JavaTokenType;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiPolyadicExpression;
+import consulo.language.ast.IElementType;
 
 public class ComparisonUtils {
 
@@ -65,7 +66,7 @@ public class ComparisonUtils {
     s_invertedComparisons.put(JavaTokenType.LE, ">");
   }
 
-  public static boolean isComparison(@javax.annotation.Nullable PsiExpression expression) {
+  public static boolean isComparison(@Nullable PsiExpression expression) {
     if (!(expression instanceof PsiPolyadicExpression)) {
       return false;
     }

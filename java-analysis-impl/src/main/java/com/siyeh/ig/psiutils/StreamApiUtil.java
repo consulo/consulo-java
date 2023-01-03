@@ -15,99 +15,81 @@
  */
 package com.siyeh.ig.psiutils;
 
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.InheritanceUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.java.language.module.util.JavaClassNames;
 import org.jetbrains.annotations.Contract;
-import com.intellij.psi.*;
-import com.intellij.psi.util.PsiUtil;
-import consulo.java.module.util.JavaClassNames;
 
 /**
  * @author Tagir Valeev
  */
-public class StreamApiUtil
-{
-	@Contract("null -> null")
-	public static PsiType getStreamElementType(PsiType type)
-	{
-		return getStreamElementType(type, true);
-	}
+public class StreamApiUtil {
+  @Contract("null -> null")
+  public static PsiType getStreamElementType(PsiType type) {
+    return getStreamElementType(type, true);
+  }
 
-	@Contract("null, _ -> null")
-	public static PsiType getStreamElementType(PsiType type, boolean variableType)
-	{
-		if(!(type instanceof PsiClassType))
-		{
-			return null;
-		}
-		PsiClass aClass = ((PsiClassType) type).resolve();
-		if(com.intellij.psi.util.InheritanceUtil.isInheritor(aClass, false, JavaClassNames.JAVA_UTIL_STREAM_INT_STREAM))
-		{
-			return PsiType.INT;
-		}
-		if(com.intellij.psi.util.InheritanceUtil.isInheritor(aClass, false, JavaClassNames.JAVA_UTIL_STREAM_LONG_STREAM))
-		{
-			return PsiType.LONG;
-		}
-		if(com.intellij.psi.util.InheritanceUtil.isInheritor(aClass, false, JavaClassNames.JAVA_UTIL_STREAM_DOUBLE_STREAM))
-		{
-			return PsiType.DOUBLE;
-		}
-		if(!com.intellij.psi.util.InheritanceUtil.isInheritor(aClass, false, JavaClassNames.JAVA_UTIL_STREAM_STREAM))
-		{
-			return null;
-		}
-		PsiType streamType = PsiUtil.substituteTypeParameter(type, JavaClassNames.JAVA_UTIL_STREAM_STREAM, 0, false);
-		if(variableType)
-		{
-			if(streamType instanceof PsiIntersectionType)
-			{
-				return null;
-			}
-			streamType = GenericsUtil.getVariableTypeByExpressionType(streamType);
-		}
-		return streamType;
-	}
+  @Contract("null, _ -> null")
+  public static PsiType getStreamElementType(PsiType type, boolean variableType) {
+    if (!(type instanceof PsiClassType)) {
+      return null;
+    }
+    PsiClass aClass = ((PsiClassType) type).resolve();
+    if (InheritanceUtil.isInheritor(aClass, false, JavaClassNames.JAVA_UTIL_STREAM_INT_STREAM)) {
+      return PsiType.INT;
+    }
+    if (InheritanceUtil.isInheritor(aClass, false, JavaClassNames.JAVA_UTIL_STREAM_LONG_STREAM)) {
+      return PsiType.LONG;
+    }
+    if (InheritanceUtil.isInheritor(aClass, false, JavaClassNames.JAVA_UTIL_STREAM_DOUBLE_STREAM)) {
+      return PsiType.DOUBLE;
+    }
+    if (!InheritanceUtil.isInheritor(aClass, false, JavaClassNames.JAVA_UTIL_STREAM_STREAM)) {
+      return null;
+    }
+    PsiType streamType = PsiUtil.substituteTypeParameter(type, JavaClassNames.JAVA_UTIL_STREAM_STREAM, 0, false);
+    if (variableType) {
+      if (streamType instanceof PsiIntersectionType) {
+        return null;
+      }
+      streamType = GenericsUtil.getVariableTypeByExpressionType(streamType);
+    }
+    return streamType;
+  }
 
-	public static boolean isNullOrEmptyStream(PsiExpression expression)
-	{
-		if(ExpressionUtils.isNullLiteral(expression))
-		{
-			return true;
-		}
-		if(!(expression instanceof PsiMethodCallExpression))
-		{
-			return false;
-		}
-		PsiMethodCallExpression call = (PsiMethodCallExpression) expression;
-		String name = call.getMethodExpression().getReferenceName();
-		if((!"empty".equals(name) && !"of".equals(name)) || !(call.getArgumentList().getExpressions().length == 0))
-		{
-			return false;
-		}
-		PsiMethod method = call.resolveMethod();
-		if(method == null || !method.hasModifierProperty(PsiModifier.STATIC))
-		{
-			return false;
-		}
-		PsiClass aClass = method.getContainingClass();
-		if(aClass == null)
-		{
-			return false;
-		}
-		String qualifiedName = aClass.getQualifiedName();
-		return qualifiedName != null && qualifiedName.startsWith("java.util.stream.");
-	}
+  public static boolean isNullOrEmptyStream(PsiExpression expression) {
+    if (ExpressionUtils.isNullLiteral(expression)) {
+      return true;
+    }
+    if (!(expression instanceof PsiMethodCallExpression)) {
+      return false;
+    }
+    PsiMethodCallExpression call = (PsiMethodCallExpression) expression;
+    String name = call.getMethodExpression().getReferenceName();
+    if ((!"empty".equals(name) && !"of".equals(name)) || !(call.getArgumentList().getExpressions().length == 0)) {
+      return false;
+    }
+    PsiMethod method = call.resolveMethod();
+    if (method == null || !method.hasModifierProperty(PsiModifier.STATIC)) {
+      return false;
+    }
+    PsiClass aClass = method.getContainingClass();
+    if (aClass == null) {
+      return false;
+    }
+    String qualifiedName = aClass.getQualifiedName();
+    return qualifiedName != null && qualifiedName.startsWith("java.util.stream.");
+  }
 
-	@Contract("null -> false")
-	public static boolean isSupportedStreamElement(PsiType type)
-	{
-		if(type == null)
-		{
-			return false;
-		}
-		if(type instanceof PsiPrimitiveType)
-		{
-			return type.equals(PsiType.INT) || type.equals(PsiType.LONG) || type.equals(PsiType.DOUBLE);
-		}
-		return true;
-	}
+  @Contract("null -> false")
+  public static boolean isSupportedStreamElement(PsiType type) {
+    if (type == null) {
+      return false;
+    }
+    if (type instanceof PsiPrimitiveType) {
+      return type.equals(PsiType.INT) || type.equals(PsiType.LONG) || type.equals(PsiType.DOUBLE);
+    }
+    return true;
+  }
 }

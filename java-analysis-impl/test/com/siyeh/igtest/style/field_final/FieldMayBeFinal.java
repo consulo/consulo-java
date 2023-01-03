@@ -1,5 +1,7 @@
 package com.siyeh.igtest.style.field_final;
-import java.awt.*; import java.awt.event.KeyEvent;import java.io.File;import java.io.IOException; import java.util.*;
+import java.awt.*; import java.awt.event.KeyEvent;import java.io.File;import java.io.IOException;
+import java.net.InetAddress;
+import java.util.*;
 public class FieldMayBeFinal {
 
     private static String string;
@@ -101,7 +103,7 @@ public class FieldMayBeFinal {
         private static String hostName;
         static {
             try {
-                hostName = java.net.InetAddress.getLocalHost().getHostName();
+                hostName = InetAddress.getLocalHost().getHostName();
             } catch (Exception ignored) {
                 hostName = "localhost";
             }
@@ -112,7 +114,7 @@ public class FieldMayBeFinal {
         private static String hostName;
         static {
             try {
-                hostName = java.net.InetAddress.getLocalHost().getHostName();
+                hostName = InetAddress.getLocalHost().getHostName();
             } catch (Exception ignored) {
                 throw new RuntimeException();
             }

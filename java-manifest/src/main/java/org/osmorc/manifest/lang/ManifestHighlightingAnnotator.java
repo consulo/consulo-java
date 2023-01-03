@@ -25,10 +25,10 @@
 
 package org.osmorc.manifest.lang;
 
-import com.intellij.lang.annotation.AnnotationHolder;
-import com.intellij.lang.annotation.Annotator;
-import com.intellij.openapi.editor.colors.TextAttributesKey;
-import com.intellij.psi.PsiElement;
+import consulo.language.editor.annotation.AnnotationHolder;
+import consulo.language.editor.annotation.Annotator;
+import consulo.colorScheme.TextAttributesKey;
+import consulo.language.psi.PsiElement;
 import org.osmorc.manifest.lang.psi.*;
 
 /**

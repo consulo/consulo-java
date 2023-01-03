@@ -16,11 +16,11 @@
 
 package com.intellij.jam.view.tree;
 
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiDocumentManager;
-import com.intellij.ui.treeStructure.SimpleNode;
-import com.intellij.ui.treeStructure.SimpleTreeStructure;
+import consulo.application.ApplicationManager;
+import consulo.project.Project;
+import consulo.language.psi.PsiDocumentManager;
+import consulo.ui.ex.awt.tree.SimpleNode;
+import consulo.ui.ex.awt.tree.SimpleTreeStructure;
 
 public class JamTreeStructure extends SimpleTreeStructure {
   private final SimpleNode myRootDescriptor;

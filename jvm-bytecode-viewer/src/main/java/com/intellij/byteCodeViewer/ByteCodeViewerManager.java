@@ -1,55 +1,58 @@
 package com.intellij.byteCodeViewer;
 
+import com.intellij.java.debugger.impl.engine.JVMNameUtil;
+import com.intellij.java.language.psi.JavaPsiFacade;
+import com.intellij.java.language.psi.PsiClass;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ServiceAPI;
+import consulo.annotation.component.ServiceImpl;
+import consulo.codeEditor.Editor;
+import consulo.compiler.ModuleCompilerPathsManager;
+import consulo.ide.ServiceManager;
+import consulo.ide.impl.idea.codeInsight.documentation.DockablePopupManager;
+import consulo.internal.org.objectweb.asm.ClassReader;
+import consulo.internal.org.objectweb.asm.util.Textifier;
+import consulo.internal.org.objectweb.asm.util.TraceClassVisitor;
+import consulo.language.content.ProductionContentFolderTypeProvider;
+import consulo.language.content.TestContentFolderTypeProvider;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiUtilCore;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.psi.util.SymbolPresentationUtil;
+import consulo.language.util.ModuleUtilCore;
+import consulo.logging.Logger;
+import consulo.module.Module;
+import consulo.module.content.ProjectRootManager;
+import consulo.project.Project;
+import consulo.ui.ex.content.Content;
+import consulo.util.lang.StringUtil;
+import consulo.virtualFileSystem.VirtualFile;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import consulo.logging.Logger;
-import jakarta.inject.Inject;
-import jakarta.inject.Singleton;
-
-import consulo.internal.org.objectweb.asm.ClassReader;
-import consulo.internal.org.objectweb.asm.util.Textifier;
-import consulo.internal.org.objectweb.asm.util.TraceClassVisitor;
-import com.intellij.codeInsight.documentation.DockablePopupManager;
-import com.intellij.debugger.engine.JVMNameUtil;
-import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleUtilCore;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.ProjectRootManager;
-import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.JavaPsiFacade;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.presentation.java.SymbolPresentationUtil;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.PsiUtilCore;
-import com.intellij.ui.content.Content;
-import consulo.compiler.ModuleCompilerPathsManager;
-import consulo.roots.impl.ProductionContentFolderTypeProvider;
-import consulo.roots.impl.TestContentFolderTypeProvider;
+import java.nio.file.Files;
 
 /**
  * User: anna
  * Date: 5/7/12
  */
 @Singleton
+@ServiceAPI(ComponentScope.PROJECT)
+@ServiceImpl
 public class ByteCodeViewerManager extends DockablePopupManager<ByteCodeViewerComponent> {
   private static final Logger LOG = Logger.getInstance(ByteCodeViewerManager.class);
 
   public static final String TOOLWINDOW_ID = "Byte Code Viewer";
   private static final String SHOW_BYTECODE_IN_TOOL_WINDOW = "BYTE_CODE_TOOL_WINDOW";
   private static final String BYTECODE_AUTO_UPDATE_ENABLED = "BYTE_CODE_AUTO_UPDATE_ENABLED";
-  
+
   public static ByteCodeViewerManager getInstance(Project project) {
     return ServiceManager.getService(project, ByteCodeViewerManager.class);
   }
@@ -94,7 +97,7 @@ public class ByteCodeViewerManager extends DockablePopupManager<ByteCodeViewerCo
     return new ByteCodeViewerComponent(myProject, createActions());
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   protected String getTitle(PsiElement element) {
     PsiClass aClass = getContainingClass(element);
     if (aClass == null) return null;
@@ -111,7 +114,8 @@ public class ByteCodeViewerManager extends DockablePopupManager<ByteCodeViewerCo
                              final String byteCode) {
     if (!StringUtil.isEmpty(byteCode)) {
       component.setText(byteCode, element);
-    } else {
+    }
+    else {
       PsiClass containingClass = getContainingClass(element);
       PsiFile containingFile = element.getContainingFile();
       component.setText("No bytecode found for " + SymbolPresentationUtil.getSymbolPresentableText(containingClass != null ? containingClass : containingFile));
@@ -127,7 +131,7 @@ public class ByteCodeViewerManager extends DockablePopupManager<ByteCodeViewerCo
     }
   }
 
-  
+
   @Override
   protected void doUpdateComponent(Editor editor, PsiFile psiFile) {
     final Content content = myToolWindow.getContentManager().getSelectedContent();
@@ -161,7 +165,7 @@ public class ByteCodeViewerManager extends DockablePopupManager<ByteCodeViewerCo
     if (classVMName == null) return null;
 
     Module module = ModuleUtilCore.findModuleForPsiElement(psiElement);
-    if (module == null){
+    if (module == null) {
       final Project project = containingClass.getProject();
       final PsiClass aClass = JavaPsiFacade.getInstance(project).findClass(classVMName, psiElement.getResolveScope());
       if (aClass != null) {
@@ -189,7 +193,8 @@ public class ByteCodeViewerManager extends DockablePopupManager<ByteCodeViewerCo
         final VirtualFile pathForTests = compilerPathsManager.getCompilerOutput(TestContentFolderTypeProvider.getInstance());
         if (pathForTests == null) return null;
         classPath = pathForTests.getPath();
-      } else {
+      }
+      else {
         final VirtualFile compilerOutputPath = compilerPathsManager.getCompilerOutput(ProductionContentFolderTypeProvider.getInstance());
         if (compilerOutputPath == null) return null;
         classPath = compilerOutputPath.getPath();
@@ -202,7 +207,7 @@ public class ByteCodeViewerManager extends DockablePopupManager<ByteCodeViewerCo
         LOG.info("search in: " + classPath);
         return null;
       }
-      return processClassFile(FileUtil.loadFileBytes(classFile));
+      return processClassFile(Files.readAllBytes(classFile.toPath()));
     }
     catch (Exception e1) {
       LOG.error(e1);

@@ -26,7 +26,7 @@ package org.osmorc.manifest.lang.valueparser.impl;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.lang.annotation.AnnotationHolder;
+import consulo.language.editor.annotation.AnnotationHolder;
 
 import javax.annotation.Nullable;
 import org.osmorc.manifest.lang.psi.HeaderValuePart;
@@ -52,7 +52,7 @@ public abstract class AbstractValueParserImpl<T> implements ValueParser<T> {
     return parseValue(null, valueText, start, null);
   }
 
-  protected abstract T parseValue(@javax.annotation.Nullable HeaderValuePart headerValuePart,
+  protected abstract T parseValue(@Nullable HeaderValuePart headerValuePart,
                                   String text,
                                   int start,
                                   @Nullable AnnotationHolder annotationHolder);

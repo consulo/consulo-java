@@ -1,32 +1,31 @@
 package consulo.java.compiler.impl.javaCompiler;
 
-import com.intellij.compiler.impl.CompilerUtil;
-import com.intellij.compiler.impl.ModuleChunk;
-import com.intellij.compiler.impl.javaCompiler.javac.JavacCompiler;
-import com.intellij.compiler.impl.javaCompiler.javac.JavacSettingsBuilder;
-import com.intellij.compiler.impl.javaCompiler.javac.JpsJavaCompilerOptions;
-import com.intellij.execution.CantRunException;
-import com.intellij.execution.ExecutionException;
-import com.intellij.execution.configurations.GeneralCommandLine;
-import com.intellij.execution.configurations.ParametersList;
-import com.intellij.execution.process.OSProcessHandler;
-import com.intellij.execution.process.ProcessHandler;
-import com.intellij.openapi.compiler.CompileContext;
-import com.intellij.openapi.projectRoots.JavaSdk;
-import com.intellij.openapi.projectRoots.JavaSdkVersion;
-import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.projectRoots.ex.JavaSdkUtil;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.util.PathUtil;
-import com.intellij.util.io.BaseOutputReader;
+import com.intellij.java.compiler.impl.javaCompiler.javac.JavacCompiler;
+import com.intellij.java.compiler.impl.javaCompiler.javac.JavacSettingsBuilder;
+import com.intellij.java.compiler.impl.javaCompiler.javac.JpsJavaCompilerOptions;
+import com.intellij.java.language.impl.projectRoots.ex.JavaSdkUtil;
+import com.intellij.java.language.projectRoots.JavaSdk;
+import com.intellij.java.language.projectRoots.JavaSdkVersion;
 import consulo.annotation.access.RequiredReadAction;
+import consulo.compiler.CompileContext;
+import consulo.compiler.ModuleChunk;
+import consulo.compiler.util.CompilerUtil;
+import consulo.content.bundle.Sdk;
+import consulo.execution.CantRunException;
 import consulo.java.compiler.JavaCompilerBundle;
 import consulo.java.compiler.JavaCompilerUtil;
 import consulo.java.execution.OwnSimpleJavaParameters;
 import consulo.java.rt.JavaRtClassNames;
 import consulo.java.rt.common.compiler.JavaCompilerInterface;
 import consulo.logging.Logger;
-import consulo.net.util.NetUtil;
+import consulo.process.ExecutionException;
+import consulo.process.ProcessHandler;
+import consulo.process.ProcessHandlerBuilder;
+import consulo.process.cmd.GeneralCommandLine;
+import consulo.process.cmd.ParametersList;
+import consulo.util.io.ClassPathUtil;
+import consulo.util.io.NetUtil;
+import consulo.virtualFileSystem.VirtualFile;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.thrift.TServiceClient;
 
@@ -45,10 +44,10 @@ public class NewBackendCompilerProcessBuilder extends BackendCompilerProcessBuil
 	private int myPort;
 
 	public NewBackendCompilerProcessBuilder(ModuleChunk moduleChunk,
-											String outputPath,
-											CompileContext compileContext,
-											JpsJavaCompilerOptions javaCompilerOptions,
-											boolean annotationProcessorsEnabled)
+                                          String outputPath,
+                                          CompileContext compileContext,
+                                          JpsJavaCompilerOptions javaCompilerOptions,
+                                          boolean annotationProcessorsEnabled)
 	{
 		super(moduleChunk, outputPath, compileContext, javaCompilerOptions, annotationProcessorsEnabled);
 
@@ -67,15 +66,7 @@ public class NewBackendCompilerProcessBuilder extends BackendCompilerProcessBuil
 	@Override
 	public ProcessHandler createProcess(GeneralCommandLine commandLine) throws ExecutionException
 	{
-		return new OSProcessHandler(commandLine)
-		{
-			@Nonnull
-			@Override
-			protected BaseOutputReader.Options readerOptions()
-			{
-				return BaseOutputReader.Options.forMostlySilentProcess();
-			}
-		};
+		return ProcessHandlerBuilder.create(commandLine).silentReader().build();
 	}
 
 	public int getPort()
@@ -121,13 +112,13 @@ public class NewBackendCompilerProcessBuilder extends BackendCompilerProcessBuil
 		// rt jar
 		javaParameters.getClassPath().add(JavaSdkUtil.getJavaRtJarNotShadedPath());
 		// thrift
-		javaParameters.getClassPath().add(PathUtil.getJarPathForClass(TServiceClient.class));
+		javaParameters.getClassPath().add(ClassPathUtil.getJarPathForClass(TServiceClient.class));
 		// rt common jar
-		javaParameters.getClassPath().add(PathUtil.getJarPathForClass(JavaCompilerInterface.class));
+		javaParameters.getClassPath().add(ClassPathUtil.getJarPathForClass(JavaCompilerInterface.class));
 		// commons lang 3
-		javaParameters.getClassPath().add(PathUtil.getJarPathForClass(StringUtils.class));
+		javaParameters.getClassPath().add(ClassPathUtil.getJarPathForClass(StringUtils.class));
 		// slf4j
-		javaParameters.getClassPath().add(PathUtil.getJarPathForClass(org.slf4j.Logger.class));
+		javaParameters.getClassPath().add(ClassPathUtil.getJarPathForClass(org.slf4j.Logger.class));
 
 		if(!version.isAtLeast(JavaSdkVersion.JDK_1_9))
 		{

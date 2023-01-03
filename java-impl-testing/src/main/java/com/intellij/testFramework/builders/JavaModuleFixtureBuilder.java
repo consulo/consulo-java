@@ -16,8 +16,8 @@
 
 package com.intellij.testFramework.builders;
 
-import com.intellij.openapi.roots.OrderRootType;
-import com.intellij.pom.java.LanguageLevel;
+import consulo.content.OrderRootType;
+import com.intellij.java.language.LanguageLevel;
 import com.intellij.testFramework.fixtures.ModuleFixture;
 import org.jetbrains.annotations.NonNls;
 

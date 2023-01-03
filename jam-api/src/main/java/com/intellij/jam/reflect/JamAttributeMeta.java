@@ -15,24 +15,19 @@
  */
 package com.intellij.jam.reflect;
 
+import com.intellij.jam.JamConverter;
+import com.intellij.jam.JamElement;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.ref.AnnotationAttributeChildLink;
+import consulo.language.psi.PsiElementRef;
+import consulo.util.collection.ContainerUtil;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import javax.annotation.Nonnull;
-
-import org.jetbrains.annotations.NonNls;
-import com.intellij.jam.JamConverter;
-import com.intellij.jam.JamElement;
-import com.intellij.psi.JavaPsiFacade;
-import com.intellij.psi.PsiAnnotation;
-import com.intellij.psi.PsiAnnotationMemberValue;
-import com.intellij.psi.PsiArrayInitializerMemberValue;
-import com.intellij.psi.PsiElementFactory;
-import com.intellij.psi.PsiElementRef;
-import com.intellij.psi.ref.AnnotationAttributeChildLink;
-import com.intellij.util.NullableFunction;
-import com.intellij.util.containers.ContainerUtil;
+import java.util.function.Function;
 
 /**
  * @author peter
@@ -70,7 +65,7 @@ public abstract class JamAttributeMeta<JamType> {
   }
 
   @Nonnull
-  protected <T> List<T> getCollectionJam(PsiElementRef<PsiAnnotation> annoRef, NullableFunction<PsiAnnotationMemberValue, T> producer) {
+  protected <T> List<T> getCollectionJam(PsiElementRef<PsiAnnotation> annoRef, Function<PsiAnnotationMemberValue, T> producer) {
     final PsiAnnotationMemberValue attr = getAttributeLink().findLinkedChild(annoRef.getPsiElement());
     if (attr == null) {
       return Collections.emptyList();
@@ -79,10 +74,10 @@ public abstract class JamAttributeMeta<JamType> {
     final ArrayList<T> result = new ArrayList<T>();
     if (attr instanceof PsiArrayInitializerMemberValue) {
       for (PsiAnnotationMemberValue value : ((PsiArrayInitializerMemberValue)attr).getInitializers()) {
-        ContainerUtil.addIfNotNull(producer.fun(value), result);
+        ContainerUtil.addIfNotNull(result, producer.apply(value));
       }
     } else {
-      ContainerUtil.addIfNotNull(producer.fun(attr), result);
+      ContainerUtil.addIfNotNull(result, producer.apply(attr));
     }
     return result;
   }

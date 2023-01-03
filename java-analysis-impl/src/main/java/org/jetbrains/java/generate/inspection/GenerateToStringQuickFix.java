@@ -15,56 +15,49 @@
  */
 package org.jetbrains.java.generate.inspection;
 
-import javax.annotation.Nonnull;
-
+import com.intellij.java.language.psi.PsiClass;
+import consulo.ide.ServiceManager;
+import consulo.language.editor.inspection.LocalQuickFix;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.project.Project;
 import org.jetbrains.java.generate.GenerateToStringActionHandler;
-import com.intellij.codeInspection.LocalQuickFix;
-import com.intellij.codeInspection.ProblemDescriptor;
-import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.util.PsiTreeUtil;
+
+import javax.annotation.Nonnull;
 
 /**
  * Quick fix to run Generate toString() to fix any code inspection problems.
  */
-public class GenerateToStringQuickFix implements LocalQuickFix
-{
+public class GenerateToStringQuickFix implements LocalQuickFix {
 
-	public static final GenerateToStringQuickFix INSTANCE = new GenerateToStringQuickFix();
+  public static final GenerateToStringQuickFix INSTANCE = new GenerateToStringQuickFix();
 
-	private GenerateToStringQuickFix()
-	{
-	}
+  private GenerateToStringQuickFix() {
+  }
 
-	public static GenerateToStringQuickFix getInstance()
-	{
-		return INSTANCE;
-	}
+  public static GenerateToStringQuickFix getInstance() {
+    return INSTANCE;
+  }
 
-	@Override
-	@Nonnull
-	public String getName()
-	{
-		return "Generate toString()";
-	}
+  @Override
+  @Nonnull
+  public String getName() {
+    return "Generate toString()";
+  }
 
-	@Override
-	@Nonnull
-	public String getFamilyName()
-	{
-		return "Generate";
-	}
+  @Override
+  @Nonnull
+  public String getFamilyName() {
+    return "Generate";
+  }
 
-	@Override
-	public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor desc)
-	{
-		final PsiClass clazz = PsiTreeUtil.getParentOfType(desc.getPsiElement(), PsiClass.class);
-		if(clazz == null)
-		{
-			return; // no class to fix
-		}
-		GenerateToStringActionHandler handler = ServiceManager.getService(GenerateToStringActionHandler.class);
-		handler.executeActionQuickFix(project, clazz);
-	}
+  @Override
+  public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor desc) {
+    final PsiClass clazz = PsiTreeUtil.getParentOfType(desc.getPsiElement(), PsiClass.class);
+    if (clazz == null) {
+      return; // no class to fix
+    }
+    GenerateToStringActionHandler handler = ServiceManager.getService(GenerateToStringActionHandler.class);
+    handler.executeActionQuickFix(project, clazz);
+  }
 }

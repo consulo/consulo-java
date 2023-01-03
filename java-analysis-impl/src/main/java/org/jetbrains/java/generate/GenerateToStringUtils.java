@@ -20,14 +20,15 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import org.jetbrains.java.generate.config.FilterPattern;
+import com.intellij.java.analysis.impl.generate.config.Config;
+import com.intellij.java.analysis.impl.generate.config.FilterPattern;
 import org.jetbrains.java.generate.psi.PsiAdapter;
 import consulo.logging.Logger;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiField;
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiModifier;
-import com.intellij.psi.PsiType;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiField;
+import com.intellij.java.language.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiModifier;
+import com.intellij.java.language.psi.PsiType;
 
 /**
  * Utility methods for GenerationToStringAction and the inspections.
@@ -42,7 +43,7 @@ public class GenerateToStringUtils
 	}
 
 	/**
-	 * Filters the list of fields from the class with the given parameters from the {@link org.jetbrains.java.generate.config.Config config} settings.
+	 * Filters the list of fields from the class with the given parameters from the {@link Config config} settings.
 	 *
 	 * @param clazz   the class to filter it's fields
 	 * @param pattern the filter pattern to filter out unwanted fields

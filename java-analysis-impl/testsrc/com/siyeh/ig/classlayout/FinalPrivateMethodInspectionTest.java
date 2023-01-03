@@ -15,8 +15,8 @@
  */
 package com.siyeh.ig.classlayout;
 
-import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.pom.java.LanguageLevel;
+import consulo.content.bundle.Sdk;
+import com.intellij.java.language.LanguageLevel;
 import com.intellij.testFramework.IdeaTestUtil;
 import com.siyeh.ig.IGInspectionTestCase;
 

@@ -1,0 +1,411 @@
+<!--
+  ~ Copyright 2013 Consulo.org
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<consulo-plugin url="https://github.com/consulo/consulo-java">
+	<id>consulo.java</id>
+	<name>Java</name>
+	<version>SNAPHOT</version>
+	<category>Custom Languages</category>
+	<vendor>Jetbrains and others</vendor>
+	<depends optional="true">com.intellij.regexp</depends>
+	<depends optional="true">com.intellij.images</depends>
+	<depends optional="true">com.intellij.spellchecker</depends>
+	<depends optional="true">com.intellij.properties</depends>
+	<depends optional="true">consulo.javascript</depends>
+	<depends>com.intellij.xml</depends>
+	<resource-bundle>messages.JavaBundle</resource-bundle>
+
+	<tags>
+		<tag>custom.language</tag>
+		<tag>software.framework</tag>
+	</tags>
+
+	<permissions>
+		<permission type="SOCKET_BIND"/>
+		<permission type="SOCKET_CONNECT"/>
+		<permission type="GET_ENV"/>
+		<permission type="PROCESS_CREATE"/>
+	</permissions>
+
+	<actions>
+		<group id="NewJavaSpecialFile">
+			<action id="NewPackageInfo" class="com.intellij.java.impl.ide.actions.CreatePackageInfoAction" require-module-extensions="java"/>
+			<action id="NewModuleInfo" class="com.intellij.java.impl.ide.actions.CreateModuleInfoAction" require-module-extensions="java"/>
+			<add-to-group group-id="NewGroup" anchor="after" relative-to-action="NewDir"/>
+		</group>
+
+		<group id="JavaGenerateGroup1">
+			<action id="GenerateTestMethod" class="com.intellij.java.impl.testIntegration.GenerateTestMethodAction"/>
+			<action id="GenerateSetUpMethod" class="com.intellij.java.impl.testIntegration.GenerateSetUpMethodAction"/>
+			<action id="GenerateTearDownMethod" class="com.intellij.java.impl.testIntegration.GenerateTearDownMethodAction"/>
+			<action id="GenerateDataMethod" class="com.intellij.java.impl.testIntegration.GenerateDataMethodAction"/>
+			<separator/>
+			<action id="GenerateConstructor" class="com.intellij.java.impl.codeInsight.generation.actions.GenerateConstructorAction"/>
+			<action id="GenerateGetter" class="com.intellij.java.impl.codeInsight.generation.actions.GenerateGetterAction"/>
+			<action id="GenerateSetter" class="com.intellij.java.impl.codeInsight.generation.actions.GenerateSetterAction"/>
+			<action id="GenerateGetterAndSetter" class="com.intellij.java.impl.codeInsight.generation.actions.GenerateGetterAndSetterAction"/>
+			<action id="GenerateEquals" class="com.intellij.java.impl.codeInsight.generation.actions.GenerateEqualsAction"/>
+			<action id="Actions.ActionsPlugin.GenerateToString" class="com.intellij.java.impl.generate.GenerateToStringAction" text="to_String()" description="Generate toString() method"/>
+			<action id="GenerateCreateUI" class="com.intellij.java.impl.codeInsight.generation.actions.GenerateCreateUIAction"/>
+			<add-to-group group-id="GenerateGroup" anchor="first"/>
+		</group>
+
+		<group id="JavaGenerateGroup2">
+			<action id="GenerateSuperMethodCall" class="com.intellij.java.impl.codeInsight.generation.actions.GenerateSuperMethodCallAction"/>
+			<add-to-group group-id="GenerateGroup" anchor="last"/>
+		</group>
+
+		<action id="JavaNewClass" class="com.intellij.java.impl.ide.actions.CreateClassAction">
+			<add-to-group group-id="NewGroup1" anchor="first"/>
+		</action>
+
+		<action id="InferNullity" class="com.intellij.java.impl.codeInspection.inferNullity.InferNullityAnnotationsAction">
+			<add-to-group group-id="InspectCodeGroup" anchor="after" relative-to-action="RunInspection"/>
+		</action>
+
+		<group id="AnalyzeJavaMenu">
+			<action id="ShowPackageCycles" class="com.intellij.java.impl.cyclicDependencies.actions.CyclicDependenciesAction"/>
+			<separator/>
+			<action id="SliceBackward" class="com.intellij.java.impl.slicer.SliceBackwardAction"/>
+			<action id="SliceForward" class="com.intellij.java.impl.slicer.SliceForwardAction"/>
+			<add-to-group group-id="AnalyzeMenu" anchor="last"/>
+		</group>
+
+		<group id="RefactoringMenu1">
+			<action id="ChangeTypeSignature"
+					class="com.intellij.java.impl.refactoring.typeMigration.actions.ChangeTypeSignatureAction"
+					text="T_ype Migration..."
+					description="Change type of the return type of the method, field, parameter, variable or class type arguments and correct all references"/>
+			<action id="MakeStatic" class="com.intellij.java.impl.refactoring.actions.MakeStaticAction"/>
+			<action id="ConvertToInstanceMethod" class="com.intellij.java.impl.refactoring.actions.ConvertToInstanceMethodAction"/>
+			<add-to-group group-id="RefactoringMenu" anchor="after" relative-to-action="ChangeSignature"/>
+		</group>
+
+		<group id="RefactoringMenu2">
+			<action id="MethodDuplicates" class="com.intellij.java.impl.refactoring.actions.MethodDuplicatesAction"/>
+
+			<action id="InvertBoolean" class="com.intellij.java.impl.refactoring.actions.InvertBooleanAction"/>
+			<add-to-group group-id="RefactoringMenu" anchor="after" relative-to-action="Inline"/>
+		</group>
+
+		<action id="ReplaceMethodWithMethodObject" class="com.intellij.java.impl.refactoring.actions.ReplaceMethodWithMethodObjectAction">
+			<add-to-group group-id="IntroduceActionsGroup" anchor="after" relative-to-action="ExtractMethod"/>
+		</action>
+
+		<action id="IntroduceParameterObject" class="com.intellij.java.impl.refactoring.actions.IntroduceParameterObjectAction">
+			<add-to-group group-id="IntroduceActionsGroup" anchor="after" relative-to-action="IntroduceParameter"/>
+		</action>
+
+		<action id="RenameFile" class="com.intellij.java.impl.refactoring.actions.RenameFileAction">
+			<add-to-group group-id="RefactoringMenu" anchor="after" relative-to-action="RenameElement"/>
+			<add-to-group group-id="EditorTabPopupMenuEx" anchor="after" relative-to-action="AddAllToFavorites"/>
+		</action>
+
+		<group id="RefactoringMenu4" require-module-extensions="java" can-use-project-as-default="true">
+			<action id="TurnRefsToSuper" class="com.intellij.java.impl.refactoring.actions.TurnRefsToSuperAction"/>
+			<action id="InheritanceToDelegation" class="com.intellij.java.impl.refactoring.actions.InheritanceToDelegationAction"/>
+			<action id="RemoveMiddleman" class="com.intellij.java.impl.refactoring.actions.RemoveMiddlemanAction"/>
+			<action id="WrapReturnValue" class="com.intellij.java.impl.refactoring.wrapreturnvalue.WrapReturnValueAction"/>
+			<separator/>
+			<action id="AnonymousToInner" class="com.intellij.java.impl.refactoring.actions.AnonymousToInnerAction"/>
+			<action id="EncapsulateFields" class="com.intellij.java.impl.refactoring.actions.EncapsulateFieldsAction"/>
+			<action id="ReplaceTempWithQuery" class="com.intellij.java.impl.refactoring.actions.TempWithQueryAction"/>
+			<action id="ReplaceConstructorWithFactory" class="com.intellij.java.impl.refactoring.actions.ReplaceConstructorWithFactoryAction"/>
+			<action id="ReplaceConstructorWithBuilder" class="com.intellij.java.impl.refactoring.actions.ReplaceConstructorWithBuilderAction"/>
+			<separator/>
+			<action id="Generify" class="com.intellij.java.impl.refactoring.actions.TypeCookAction"/>
+			<action id="Migrate" class="com.intellij.java.impl.refactoring.actions.MigrateAction"/>
+			<separator/>
+
+			<add-to-group group-id="RefactoringMenu" anchor="after" relative-to-action="MemberPushDown"/>
+		</group>
+
+		<action id="Hotswap" class="com.intellij.java.debugger.impl.actions.HotSwapAction">
+			<add-to-group group-id="DebugMainMenu" anchor="before" relative-to-action="StepOver"/>
+		</action>
+
+		<action id="Debugger.PopFrame" class="com.intellij.java.debugger.impl.actions.PopFrameAction" icon="consulo.platform.base.PlatformIconGroup@actions.popframe">
+			<add-to-group group-id="DebugMainMenu" anchor="after" relative-to-action="ForceRunToCursor"/>
+		</action>
+
+		<group id="ToggleBreakpointAction">
+			<action id="ToggleMethodBreakpoint" class="com.intellij.java.debugger.impl.actions.ToggleMethodBreakpointAction"/>
+			<action id="ToggleFieldBreakpoint" class="com.intellij.java.debugger.impl.actions.ToggleFieldBreakpointAction"/>
+			<!--Moved to XDebugger <action id="ToggleBreakpointEnabled" class="com.intellij.debugger.actions.ToggleBreakpointEnabledAction"/>-->
+			<add-to-group group-id="DebugMainMenu" anchor="after" relative-to-action="ToggleLineBreakpoint"/>
+		</group>
+
+		<action id="ExportThreads" class="com.intellij.java.debugger.impl.actions.ExportThreadsAction" icon="consulo.platform.base.PlatformIconGroup@actions.export">
+			<add-to-group group-id="RunMenu" anchor="last"/>
+		</action>
+		<action id="DumpThreads" class="com.intellij.java.debugger.impl.actions.ThreadDumpAction" text="Take a thread dump" icon="consulo.platform.base.PlatformIconGroup@actions.dump">
+			<add-to-group group-id="RunMenu" anchor="last"/>
+		</action>
+
+		<action id="GenerateJavadoc" class="com.intellij.java.impl.javadoc.actions.GenerateJavadocAction" can-use-project-as-default="true" require-module-extensions="java">
+			<add-to-group group-id="ToolsBasicGroup" anchor="after" relative-to-action="SaveFileAsTemplate"/>
+		</action>
+
+		<!--<action id="DebugListen" internal="true" class="com.intellij.debugger.actions.ThrowDebugExceptionAction">
+		  <add-to-group group-id="Internal.Errors"/>
+		</action> -->
+
+		<action id="GenerateVisitorByHierarchy" internal="true" class="com.intellij.java.impl.internal.GenerateVisitorByHierarchyAction"
+				text="Generate Hierarchy Visitor">
+			<add-to-group group-id="Internal"/>
+		</action>
+
+		<action id="UsedIconsListing" internal="true" class="com.intellij.java.impl.internal.UsedIconsListingAction"
+				text="List Used Icons">
+			<add-to-group group-id="Internal"/>
+		</action>
+
+		<action id="StaticIconFields" internal="true" class="com.intellij.java.impl.internal.StaticIconFieldsAction"
+				text="List Static Field Initializers">
+			<add-to-group group-id="Internal"/>
+		</action>
+
+		<group id="JavaDebuggerActions">
+			<action id="Debugger.CustomizeContextView" class="com.intellij.java.debugger.impl.actions.CustomizeContextViewAction">
+				<add-to-group group-id="XDebugger.Variables.Tree.Popup" anchor="last"/>
+				<add-to-group group-id="XDebugger.Watches.Tree.Popup" anchor="last"/>
+			</action>
+			<action id="Debugger.CustomizeThreadsView" class="com.intellij.java.debugger.impl.actions.CustomizeThreadsViewAction">
+				<add-to-group group-id="XDebugger.Frames.Tree.Popup" anchor="last"/>
+			</action>
+			<action id="Debugger.EditFrameSource" class="com.intellij.java.debugger.impl.actions.EditFrameSourceAction"/>
+			<action id="Debugger.EditNodeSource" class="com.intellij.java.debugger.impl.actions.EditSourceAction"/>
+			<action id="Debugger.EditTypeSource" class="com.intellij.java.debugger.impl.actions.JumpToObjectAction"/>
+			<reference ref="Debugger.PopFrame"/>
+			<action id="Debugger.ViewAsGroup" class="com.intellij.java.debugger.impl.actions.ViewAsGroup">
+				<add-to-group group-id="XDebugger.ValueGroup" anchor="last"/>
+			</action>
+			<action id="Debugger.AdjustArrayRange" class="com.intellij.java.debugger.impl.actions.ArrayAction$AdjustArrayRangeAction">
+				<add-to-group group-id="XDebugger.ValueGroup" anchor="last"/>
+			</action>
+			<!--<action id="Debugger.SetValue" class="com.intellij.debugger.actions.SetValueAction"/>-->
+			<!--<action id="Debugger.ShowAsHex" class="com.intellij.debugger.actions.ShowAsHexAction" text="Show as Hex"/>-->
+			<action id="Debugger.ResumeThread" class="com.intellij.java.debugger.impl.actions.ResumeThreadAction"/>
+			<action id="Debugger.FreezeThread" class="com.intellij.java.debugger.impl.actions.FreezeThreadAction"/>
+			<action id="Debugger.InterruptThread" class="com.intellij.java.debugger.impl.actions.InterruptThreadAction"/>
+			<action id="Debugger.CreateRenderer" class="com.intellij.java.debugger.impl.actions.CreateRendererAction" text="Create..."/>
+			<action id="Debugger.AutoRenderer" class="com.intellij.java.debugger.impl.actions.AutoRendererAction"/>
+			<action id="Debugger.MuteRenderers" class="com.intellij.java.debugger.impl.ui.tree.actions.ForceOnDemandRenderersAction" text="Mute Renderers">
+				<add-to-group group-id="XDebugger.ValueGroup" anchor="last"/>
+			</action>
+
+			<add-to-group group-id="DebuggerActions" anchor="first"/>
+		</group>
+
+		<group id="Debugger.Representation">
+			<reference ref="Debugger.CreateRenderer"/>
+			<separator/>
+			<reference ref="Debugger.AutoRenderer"/>
+		</group>
+
+		<group id="EditorPopupMenuDebugJava">
+			<separator/>
+			<reference ref="ToggleFieldBreakpoint"/>
+			<separator/>
+			<add-to-group group-id="EditorPopupMenuDebug" anchor="last"/>
+		</group>
+
+		<group id="JavaCompileGroup">
+			<reference ref="ToggleMethodBreakpoint"/>
+			<reference ref="ToggleFieldBreakpoint"/>
+			<separator/>
+			<add-to-group group-id="ProjectViewCompileGroup" anchor="first"/>
+			<add-to-group group-id="StructureViewCompileGroup" anchor="first"/>
+		</group>
+
+		<action id="TypeHierarchy.BaseOnThisType" class="com.intellij.java.impl.ide.hierarchy.type.TypeHierarchyBrowser$BaseOnThisTypeAction">
+			<add-to-group group-id="TypeHierarchyPopupMenu" anchor="first"/>
+		</action>
+
+		<group id="JavaMethodHierarchyPopupMenu">
+			<action id="MethodHierarchy.ImplementMethodAction" class="com.intellij.java.impl.ide.hierarchy.method.ImplementMethodAction"
+					use-shortcut-of="ImplementMethods"/>
+			<action id="MethodHierarchy.OverrideMethodAction" class="com.intellij.java.impl.ide.hierarchy.method.OverrideMethodAction"
+					use-shortcut-of="OverrideMethods"/>
+			<separator/>
+			<add-to-group group-id="MethodHierarchyPopupMenu" anchor="first"/>
+		</group>
+
+		<action id="MethodHierarchy.BaseOnThisType" class="com.intellij.java.impl.ide.hierarchy.method.MethodHierarchyBrowser$BaseOnThisMethodAction">
+			<add-to-group group-id="MethodHierarchyPopupMenu" anchor="first"/>
+		</action>
+
+		<action id="CallHierarchy.BaseOnThisType" class="com.intellij.java.impl.ide.hierarchy.call.CallHierarchyBrowser$BaseOnThisMethodAction">
+			<add-to-group group-id="CallHierarchyPopupMenu" anchor="first"/>
+		</action>
+
+
+		<group id="MemoryView.SettingsPopupActionGroup">
+			<action class="com.intellij.java.debugger.impl.memory.action.ShowClassesWithInstanceAction"
+					id="MemoryView.ShowOnlyWithInstances"
+					text="Show With Instances Only"/>
+
+			<action class="com.intellij.java.debugger.impl.memory.action.ShowClassesWithDiffAction"
+					id="MemoryView.ShowOnlyWithDiff"
+					text="Show Non-Zero Diff Only"/>
+
+			<action class="com.intellij.java.debugger.impl.memory.action.ShowTrackedAction"
+					id="MemoryView.ShowOnlyTracked"
+					text="Show Tracked Classes Only"/>
+
+			<separator/>
+
+			<action class="com.intellij.java.debugger.impl.memory.action.EnableBackgroundTrackingAction"
+					id="MemoryView.EnableTrackingWithClosedWindow"
+					text="Enable Tracking With Hidden Memory View"/>
+		</group>
+
+		<group id="MemoryView.ClassesPopupActionGroup">
+			<action class="com.intellij.java.debugger.impl.memory.action.ShowInstancesFromClassesViewAction"
+					id="MemoryView.ShowInstances"
+					text="Show Instances"/>
+
+			<action class="com.intellij.java.debugger.impl.memory.action.ShowNewInstancesAction"
+					id="MemoryView.ShowNewInstances"
+					text="Show New Instances"/>
+
+			<action class="com.intellij.java.debugger.impl.memory.action.JumpToTypeSourceAction"
+					id="MemoryView.JumpToTypeSource"
+					text="Jump To Type Source"/>
+			<separator/>
+
+			<action class="com.intellij.java.debugger.impl.memory.action.tracking.TrackInstancesToggleAction"
+					id="MemoryView.TrackingAction.NewInstancesTracking"
+					text="Track New Instances"/>
+		</group>
+
+		<action class="com.intellij.java.debugger.impl.memory.action.ShowInstancesByClassAction"
+				id="MemoryView.ShowInstancesFromDebuggerTree"
+				text="Show Instances">
+			<add-to-group group-id="XDebugger.ValueGroup" anchor="after"
+						  relative-to-action="Debugger.ShowReferring"/>
+		</action>
+
+		<action class="com.intellij.java.debugger.impl.memory.action.tracking.JumpToAllocationSourceAction"
+				id="MemoryView.ShowAllocationStackTrace"
+				text="Jump To Allocation Position">
+			<add-to-group group-id="XDebugger.ValueGroup" anchor="after"
+						  relative-to-action="XDebugger.JumpToTypeSource"/>
+		</action>
+
+		<group id="Debugger.FramePanelPopup">
+			<reference ref="Debugger.AdjustArrayRange"/>
+			<reference ref="XDebugger.Inspect"/>
+			<reference ref="Debugger.MarkObject"/>
+			<!--<reference ref="Debugger.SetValue"/> -->
+			<reference ref="Debugger.EditNodeSource"/>
+			<reference ref="Debugger.EditTypeSource"/>
+			<separator/>
+			<reference ref="Debugger.ViewAsGroup"/>
+			<separator/>
+			<reference ref="Debugger.AddToWatch"/>
+			<separator/>
+			<reference ref="ToggleFieldBreakpoint"/>
+			<separator/>
+			<!--<reference ref="Debugger.CopyValue"/> -->
+			<!--<reference ref="Debugger.ViewText"/>-->
+			<!--<reference ref="Debugger.CompareValueWithClipboard"/>-->
+			<reference ref="Debugger.CustomizeContextView"/>
+		</group>
+
+		<group id="Debugger.EvaluationDialogPopup">
+			<reference ref="Debugger.AdjustArrayRange"/>
+			<reference ref="XDebugger.Inspect"/>
+			<reference ref="Debugger.MarkObject"/>
+			<!--<reference ref="Debugger.SetValue"/> -->
+			<reference ref="Debugger.EditNodeSource"/>
+			<reference ref="Debugger.EditTypeSource"/>
+			<separator/>
+			<!--<reference ref="Debugger.ShowAsHex"/>-->
+			<reference ref="Debugger.ViewAsGroup"/>
+			<separator/>
+			<reference ref="Debugger.AddToWatch"/>
+			<separator/>
+			<reference ref="ToggleFieldBreakpoint"/>
+			<separator/>
+			<!--<reference ref="Debugger.CopyValue"/> -->
+			<!--<reference ref="Debugger.ViewText"/>-->
+			<!--<reference ref="Debugger.CompareValueWithClipboard"/> -->
+			<reference ref="Debugger.CustomizeContextView"/>
+		</group>
+
+		<group id="Debugger.InspectPanelPopup">
+			<reference ref="Debugger.AdjustArrayRange"/>
+			<reference ref="XDebugger.Inspect"/>
+			<reference ref="Debugger.MarkObject"/>
+			<!--<reference ref="Debugger.SetValue"/> -->
+			<reference ref="Debugger.EditNodeSource"/>
+			<reference ref="Debugger.EditTypeSource"/>
+			<separator/>
+			<reference ref="Debugger.AddToWatch"/>
+			<separator/>
+			<!--<reference ref="Debugger.ShowAsHex"/>-->
+			<reference ref="Debugger.ViewAsGroup"/>
+			<separator/>
+			<reference ref="ToggleFieldBreakpoint"/>
+			<separator/>
+			<!--<reference ref="Debugger.CopyValue"/> -->
+			<!--<reference ref="Debugger.ViewText"/>-->
+			<!--<reference ref="Debugger.CompareValueWithClipboard"/>-->
+			<reference ref="Debugger.CustomizeContextView"/>
+		</group>
+
+		<group id="Debugger.ThreadsPanelPopup">
+			<!--<reference ref="Debugger.ResumeThread"/>-->
+			<!--<reference ref="Debugger.FreezeThread"/>-->
+			<reference ref="Debugger.InterruptThread"/>
+			<!--<reference ref="Debugger.ShowFrame"/>-->
+			<reference ref="Debugger.PopFrame"/>
+			<!--<reference ref="Debugger.EditFrameSource"/>-->
+			<!--<reference ref="Debugger.EditTypeSource"/>-->
+			<!--<reference ref="EditSource"/>-->
+			<separator/>
+			<reference ref="ExportThreads"/>
+			<separator/>
+			<reference ref="Debugger.CustomizeThreadsView"/>
+		</group>
+
+		<group id="Debugger.WatchesPanelPopup">
+			<!--<reference ref="Debugger.NewWatch"/>-->
+			<!--<reference ref="Debugger.EditWatch"/>-->
+			<!--<reference ref="Debugger.RemoveWatch"/>-->
+			<!--<reference ref="Debugger.RemoveAllWatches"/>-->
+			<separator/>
+			<reference ref="Debugger.AdjustArrayRange"/>
+			<!--<reference ref="Debugger.Inspect"/>-->
+			<reference ref="Debugger.MarkObject"/>
+			<!--<reference ref="Debugger.SetValue"/>-->
+			<reference ref="Debugger.EditNodeSource"/>
+			<reference ref="Debugger.EditTypeSource"/>
+			<separator/>
+			<!--<reference ref="Debugger.ShowAsHex"/>-->
+			<reference ref="Debugger.ViewAsGroup"/>
+			<separator/>
+			<reference ref="Debugger.AddToWatch"/>
+			<separator/>
+			<reference ref="ToggleFieldBreakpoint"/>
+			<separator/>
+			<!--<reference ref="Debugger.CopyValue"/>-->
+			<!--<reference ref="Debugger.ViewText"/>-->
+			<!--<reference ref="Debugger.CompareValueWithClipboard"/>-->
+			<reference ref="Debugger.CustomizeContextView"/>
+		</group>
+	</actions>
+</consulo-plugin>

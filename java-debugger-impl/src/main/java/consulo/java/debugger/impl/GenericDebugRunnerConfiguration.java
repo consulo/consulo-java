@@ -16,13 +16,14 @@
 
 package consulo.java.debugger.impl;
 
-import com.intellij.execution.configurations.ModuleRunProfile;
+import consulo.execution.configuration.ModuleRunProfile;
+import com.intellij.java.debugger.impl.GenericDebuggerRunner;
 
 /**
  * @author VISTALL
  * @since 10.01.15
  *
- * Marker for {@link com.intellij.debugger.impl.GenericDebuggerRunner}
+ * Marker for {@link GenericDebuggerRunner}
  */
 public interface GenericDebugRunnerConfiguration extends ModuleRunProfile
 {

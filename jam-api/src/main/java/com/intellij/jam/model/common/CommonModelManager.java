@@ -15,12 +15,13 @@
  */
 package com.intellij.jam.model.common;
 
+import com.intellij.jam.view.DeleteHandler;
 import com.intellij.jam.view.JamDeleteHandler;
 import com.intellij.jam.view.JamUserResponse;
-import com.intellij.openapi.components.ServiceManager;
-import com.intellij.util.xml.DomElement;
-import javax.annotation.Nullable;
+import consulo.ide.ServiceManager;
+import consulo.xml.util.xml.DomElement;
 
+import javax.annotation.Nullable;
 import java.util.Collection;
 
 /**
@@ -35,7 +36,7 @@ public abstract class CommonModelManager {
 
   /**
    * @deprecated
-   * @see com.intellij.jam.view.DeleteHandler
+   * @see DeleteHandler
    */
   public abstract void registerDeleteHandler(JamDeleteHandler handler);
 

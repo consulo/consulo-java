@@ -16,25 +16,24 @@
 
 package com.intellij.jam.view.tree;
 
-import com.intellij.ide.DataManager;
-import com.intellij.ide.DeleteProvider;
-import com.intellij.ide.util.treeView.NodeDescriptor;
-import com.intellij.ide.util.treeView.ValidateableNode;
+import consulo.dataContext.DataManager;
+import consulo.language.editor.PlatformDataKeys;
+import consulo.ui.ex.DeleteProvider;
+import consulo.ui.ex.awt.tree.SimpleTree;
+import consulo.ui.ex.tree.NodeDescriptor;
+import consulo.ui.ex.awt.tree.ValidateableNode;
 import com.intellij.jam.JamMessages;
-import com.intellij.openapi.actionSystem.DataProvider;
-import com.intellij.openapi.actionSystem.PlatformDataKeys;
-import com.intellij.openapi.project.Project;
+import consulo.dataContext.DataProvider;
+import consulo.project.Project;
 import consulo.ui.color.ColorValue;
 import consulo.util.dataholder.Key;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.ui.treeStructure.SimpleNode;
-import com.intellij.ui.treeStructure.SimpleTree;
-import com.intellij.util.OpenSourceUtil;
+import consulo.util.lang.StringUtil;
+import consulo.ui.ex.awt.tree.SimpleNode;
+import consulo.ui.ex.OpenSourceUtil;
 import consulo.ui.image.Image;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import java.awt.*;
 import java.awt.event.InputEvent;
 
 /**

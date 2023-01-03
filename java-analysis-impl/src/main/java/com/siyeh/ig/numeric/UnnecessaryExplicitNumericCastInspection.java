@@ -15,18 +15,7 @@
  */
 package com.siyeh.ig.numeric;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-
-import org.jetbrains.annotations.Nls;
-import com.intellij.codeInspection.ProblemDescriptor;
-import com.intellij.codeInspection.ProblemHighlightType;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.*;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.java.language.psi.*;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
@@ -34,8 +23,19 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.ClassUtils;
 import com.siyeh.ig.psiutils.ExpectedTypeUtils;
 import com.siyeh.ig.psiutils.ExpressionUtils;
+import consulo.language.ast.IElementType;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.editor.inspection.ProblemHighlightType;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.project.Project;
+import org.jetbrains.annotations.Nls;
 
-public class UnnecessaryExplicitNumericCastInspection extends BaseInspection {
+import javax.annotation.Nonnull;
+import java.util.HashSet;
+import java.util.Set;
+
+public abstract class UnnecessaryExplicitNumericCastInspection extends BaseInspection {
 
   private static final Set<IElementType> binaryPromotionOperators = new HashSet();
 
@@ -66,7 +66,7 @@ public class UnnecessaryExplicitNumericCastInspection extends BaseInspection {
   @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
-    final PsiExpression expression = (PsiExpression)infos[0];
+    final PsiExpression expression = (PsiExpression) infos[0];
     return InspectionGadgetsBundle.message("unnecessary.explicit.numeric.cast.problem.descriptor", expression.getText());
   }
 
@@ -90,15 +90,14 @@ public class UnnecessaryExplicitNumericCastInspection extends BaseInspection {
       if (!(parent instanceof PsiTypeCastExpression)) {
         return;
       }
-      final PsiTypeCastExpression typeCastExpression = (PsiTypeCastExpression)parent;
+      final PsiTypeCastExpression typeCastExpression = (PsiTypeCastExpression) parent;
       if (isPrimitiveNumericCastNecessary(typeCastExpression)) {
         return;
       }
       final PsiExpression operand = typeCastExpression.getOperand();
       if (operand == null) {
         typeCastExpression.delete();
-      }
-      else {
+      } else {
         typeCastExpression.replace(operand);
       }
     }
@@ -151,7 +150,7 @@ public class UnnecessaryExplicitNumericCastInspection extends BaseInspection {
       parent = parent.getParent();
     }
     if (parent instanceof PsiPolyadicExpression) {
-      final PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression)parent;
+      final PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression) parent;
       final IElementType tokenType = polyadicExpression.getOperationTokenType();
       if (binaryPromotionOperators.contains(tokenType)) {
         if (PsiType.INT.equals(castType)) {
@@ -168,8 +167,7 @@ public class UnnecessaryExplicitNumericCastInspection extends BaseInspection {
             }
           }
         }
-      }
-      else if (JavaTokenType.GTGT.equals(tokenType) || JavaTokenType.GTGTGT.equals(tokenType) || JavaTokenType.LTLT.equals(tokenType)) {
+      } else if (JavaTokenType.GTGT.equals(tokenType) || JavaTokenType.GTGTGT.equals(tokenType) || JavaTokenType.LTLT.equals(tokenType)) {
         final PsiExpression firstOperand = polyadicExpression.getOperands()[0];
         if (!PsiTreeUtil.isAncestor(firstOperand, expression, false)) {
           return false;
@@ -177,24 +175,21 @@ public class UnnecessaryExplicitNumericCastInspection extends BaseInspection {
         return PsiType.LONG.equals(castType) || !isLegalWideningConversion(operand, PsiType.INT);
       }
       return true;
-    }
-    else if (parent instanceof PsiAssignmentExpression) {
-      final PsiAssignmentExpression assignmentExpression = (PsiAssignmentExpression)parent;
+    } else if (parent instanceof PsiAssignmentExpression) {
+      final PsiAssignmentExpression assignmentExpression = (PsiAssignmentExpression) parent;
       final PsiType lhsType = assignmentExpression.getType();
       return !castType.equals(lhsType) || !isLegalAssignmentConversion(operand, lhsType);
-    }
-    else if (parent instanceof PsiVariable) {
-      final PsiVariable variable = (PsiVariable)parent;
+    } else if (parent instanceof PsiVariable) {
+      final PsiVariable variable = (PsiVariable) parent;
       final PsiType lhsType = variable.getType();
       return !castType.equals(lhsType) || !isLegalAssignmentConversion(operand, lhsType);
-    }
-    else if (parent instanceof PsiExpressionList) {
-      final PsiExpressionList expressionList = (PsiExpressionList)parent;
+    } else if (parent instanceof PsiExpressionList) {
+      final PsiExpressionList expressionList = (PsiExpressionList) parent;
       final PsiElement grandParent = expressionList.getParent();
       if (!(grandParent instanceof PsiCallExpression)) {
         return true;
       }
-      final PsiCallExpression callExpression = (PsiCallExpression)grandParent;
+      final PsiCallExpression callExpression = (PsiCallExpression) grandParent;
       final PsiMethod targetMethod = callExpression.resolveMethod();
       if (targetMethod == null) {
         return true;
@@ -212,14 +207,12 @@ public class UnnecessaryExplicitNumericCastInspection extends BaseInspection {
         for (PsiExpression argument : arguments) {
           if (comma) {
             newMethodCallText.append(',');
-          }
-          else {
+          } else {
             comma = true;
           }
           if (PsiTreeUtil.isAncestor(argument, expression, false)) {
             newMethodCallText.append(operand.getText());
-          }
-          else {
+          } else {
             newMethodCallText.append(argument.getText());
           }
         }
@@ -229,7 +222,7 @@ public class UnnecessaryExplicitNumericCastInspection extends BaseInspection {
       final JavaPsiFacade javaPsiFacade = JavaPsiFacade.getInstance(project);
       final PsiElementFactory factory = javaPsiFacade.getElementFactory();
       final PsiCallExpression newMethodCall = (PsiCallExpression)
-        factory.createExpressionFromText(newMethodCallText.toString(), expression);
+          factory.createExpressionFromText(newMethodCallText.toString(), expression);
       if (targetMethod != newMethodCall.resolveMethod()) {
         return true;
       }
@@ -249,8 +242,7 @@ public class UnnecessaryExplicitNumericCastInspection extends BaseInspection {
           PsiType.BYTE.equals(operandType)) {
         return true;
       }
-    }
-    else if (PsiType.FLOAT.equals(requiredType)) {
+    } else if (PsiType.FLOAT.equals(requiredType)) {
       if (PsiType.LONG.equals(operandType) ||
           PsiType.INT.equals(operandType) ||
           PsiType.CHAR.equals(operandType) ||
@@ -258,16 +250,14 @@ public class UnnecessaryExplicitNumericCastInspection extends BaseInspection {
           PsiType.BYTE.equals(operandType)) {
         return true;
       }
-    }
-    else if (PsiType.LONG.equals(requiredType)) {
+    } else if (PsiType.LONG.equals(requiredType)) {
       if (PsiType.INT.equals(operandType) ||
           PsiType.CHAR.equals(operandType) ||
           PsiType.SHORT.equals(operandType) ||
           PsiType.BYTE.equals(operandType)) {
         return true;
       }
-    }
-    else if (PsiType.INT.equals(requiredType)) {
+    } else if (PsiType.INT.equals(requiredType)) {
       if (PsiType.CHAR.equals(operandType) ||
           PsiType.SHORT.equals(operandType) ||
           PsiType.BYTE.equals(operandType)) {
@@ -282,40 +272,37 @@ public class UnnecessaryExplicitNumericCastInspection extends BaseInspection {
     final PsiType operandType = expression.getType();
     if (isLegalWideningConversion(expression, assignmentType)) {
       return true;
-    }
-    else if (PsiType.SHORT.equals(assignmentType)) {
+    } else if (PsiType.SHORT.equals(assignmentType)) {
       if (PsiType.INT.equals(operandType)) {
         final Object constant = ExpressionUtils.computeConstantExpression(expression);
         if (!(constant instanceof Integer)) {
           return false;
         }
-        final int i = ((Integer)constant).intValue();
+        final int i = ((Integer) constant).intValue();
         if (i >= Short.MIN_VALUE && i <= Short.MAX_VALUE) {
           // narrowing
           return true;
         }
       }
-    }
-    else if (PsiType.CHAR.equals(assignmentType)) {
+    } else if (PsiType.CHAR.equals(assignmentType)) {
       if (PsiType.INT.equals(operandType)) {
         final Object constant = ExpressionUtils.computeConstantExpression(expression);
         if (!(constant instanceof Integer)) {
           return false;
         }
-        final int i = ((Integer)constant).intValue();
+        final int i = ((Integer) constant).intValue();
         if (i >= Character.MIN_VALUE && i <= Character.MAX_VALUE) {
           // narrowing
           return true;
         }
       }
-    }
-    else if (PsiType.BYTE.equals(assignmentType)) {
+    } else if (PsiType.BYTE.equals(assignmentType)) {
       if (PsiType.INT.equals(operandType)) {
         final Object constant = ExpressionUtils.computeConstantExpression(expression);
         if (!(constant instanceof Integer)) {
           return false;
         }
-        final int i = ((Integer)constant).intValue();
+        final int i = ((Integer) constant).intValue();
         if (i >= Byte.MIN_VALUE && i <= Byte.MAX_VALUE) {
           // narrowing
           return true;

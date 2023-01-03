@@ -1,23 +1,23 @@
 package consulo.java.compiler.impl.javaCompiler.old;
 
-import com.intellij.compiler.impl.CompilerUtil;
-import com.intellij.compiler.impl.ModuleChunk;
-import com.intellij.compiler.impl.javaCompiler.javac.JavacCompiler;
-import com.intellij.compiler.impl.javaCompiler.javac.JpsJavaCompilerOptions;
-import com.intellij.execution.configurations.GeneralCommandLine;
-import com.intellij.execution.configurations.ParametersList;
-import com.intellij.openapi.compiler.CompileContext;
-import com.intellij.openapi.projectRoots.JavaSdk;
-import com.intellij.openapi.projectRoots.JavaSdkVersion;
-import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.projectRoots.ex.JavaSdkUtil;
-import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.java.compiler.impl.javaCompiler.javac.JavacCompiler;
+import com.intellij.java.compiler.impl.javaCompiler.javac.JpsJavaCompilerOptions;
+import com.intellij.java.language.impl.projectRoots.ex.JavaSdkUtil;
+import com.intellij.java.language.projectRoots.JavaSdk;
+import com.intellij.java.language.projectRoots.JavaSdkVersion;
 import consulo.annotation.access.RequiredReadAction;
+import consulo.compiler.CompileContext;
+import consulo.compiler.ModuleChunk;
+import consulo.compiler.util.CompilerUtil;
+import consulo.content.bundle.Sdk;
 import consulo.java.compiler.JavaCompilerBundle;
 import consulo.java.compiler.JavaCompilerUtil;
 import consulo.java.compiler.impl.javaCompiler.BackendCompilerProcessBuilder;
 import consulo.java.rt.JavaRtClassNames;
 import consulo.logging.Logger;
+import consulo.process.cmd.GeneralCommandLine;
+import consulo.process.cmd.ParametersList;
+import consulo.virtualFileSystem.VirtualFile;
 
 import javax.annotation.Nonnull;
 import java.io.*;
@@ -53,10 +53,10 @@ public class OldBackendCompilerProcessBuilder extends BackendCompilerProcessBuil
 	@Nonnull
 	@RequiredReadAction
 	private GeneralCommandLine createStartupCommand(ModuleChunk chunk,
-													String outputPath,
-													CompileContext compileContext,
-													JpsJavaCompilerOptions javacOptions,
-													boolean annotationProcessorsEnabled) throws IOException
+                                                  String outputPath,
+                                                  CompileContext compileContext,
+                                                  JpsJavaCompilerOptions javacOptions,
+                                                  boolean annotationProcessorsEnabled) throws IOException
 	{
 		final Sdk jdk = JavacCompiler.getJdkForStartupCommand(chunk);
 		final String versionString = jdk.getVersionString();

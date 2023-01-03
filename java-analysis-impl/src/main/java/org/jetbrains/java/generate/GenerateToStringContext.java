@@ -15,57 +15,56 @@
  */
 package org.jetbrains.java.generate;
 
-import javax.annotation.Nonnull;
+import com.intellij.java.analysis.impl.generate.config.Config;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ServiceAPI;
+import consulo.annotation.component.ServiceImpl;
+import consulo.component.persist.PersistentStateComponent;
+import consulo.component.persist.State;
+import consulo.component.persist.Storage;
+import consulo.component.persist.StoragePathMacros;
+import consulo.ide.ServiceManager;
 import jakarta.inject.Singleton;
 
-import org.jetbrains.java.generate.config.Config;
-import com.intellij.openapi.components.PersistentStateComponent;
-import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.components.State;
-import com.intellij.openapi.components.Storage;
-import com.intellij.openapi.components.StoragePathMacros;
+import javax.annotation.Nonnull;
 
 /**
  * Application context for this plugin.
  */
 @Singleton
 @State(
-		name = "ToStringSettings",
-		storages = {
-				@Storage(
-						file = StoragePathMacros.APP_CONFIG + "/other.xml"
-				)
-		}
+  name = "ToStringSettings",
+  storages = {
+    @Storage(
+      file = StoragePathMacros.APP_CONFIG + "/other.xml"
+    )
+  }
 )
-public class GenerateToStringContext implements PersistentStateComponent<Config>
-{
-	@Nonnull
-	public static GenerateToStringContext getInstance()
-	{
-		return ServiceManager.getService(GenerateToStringContext.class);
-	}
+@ServiceAPI(ComponentScope.APPLICATION)
+@ServiceImpl
+public class GenerateToStringContext implements PersistentStateComponent<Config> {
+  @Nonnull
+  public static GenerateToStringContext getInstance() {
+    return ServiceManager.getService(GenerateToStringContext.class);
+  }
 
-	private Config config = new Config();
+  private Config config = new Config();
 
-	public static Config getConfig()
-	{
-		return getInstance().config;
-	}
+  public static Config getConfig() {
+    return getInstance().config;
+  }
 
-	public static void setConfig(Config newConfig)
-	{
-		getInstance().config = newConfig;
-	}
+  public static void setConfig(Config newConfig) {
+    getInstance().config = newConfig;
+  }
 
-	@Override
-	public Config getState()
-	{
-		return config;
-	}
+  @Override
+  public Config getState() {
+    return config;
+  }
 
-	@Override
-	public void loadState(Config state)
-	{
-		config = state;
-	}
+  @Override
+  public void loadState(Config state) {
+    config = state;
+  }
 }

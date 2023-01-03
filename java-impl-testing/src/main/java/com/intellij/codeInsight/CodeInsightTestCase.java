@@ -25,62 +25,62 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import consulo.fileEditor.FileEditorManager;
+import consulo.fileEditor.TextEditor;
+import consulo.language.editor.PlatformDataKeys;
 import consulo.logging.Logger;
+import consulo.ui.ex.action.IdeActions;
+import consulo.virtualFileSystem.LocalFileSystem;
 import org.jetbrains.annotations.NonNls;
 import org.junit.Assert;
-import com.intellij.codeInsight.highlighting.HighlightUsagesHandler;
-import com.intellij.ide.DataManager;
-import com.intellij.injected.editor.EditorWindow;
-import com.intellij.openapi.actionSystem.ActionManager;
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.actionSystem.IdeActions;
-import com.intellij.openapi.actionSystem.PlatformDataKeys;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.application.Result;
-import com.intellij.openapi.command.CommandProcessor;
-import com.intellij.openapi.command.WriteCommandAction;
-import com.intellij.openapi.command.undo.UndoManager;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.EditorFactory;
-import com.intellij.openapi.editor.LogicalPosition;
-import com.intellij.openapi.editor.RangeMarker;
-import com.intellij.openapi.editor.actionSystem.EditorActionHandler;
-import com.intellij.openapi.editor.actionSystem.EditorActionManager;
-import com.intellij.openapi.editor.actionSystem.TypedAction;
-import com.intellij.openapi.editor.impl.DesktopEditorImpl;
-import com.intellij.openapi.editor.impl.DocumentImpl;
-import com.intellij.openapi.fileEditor.FileEditorManager;
-import com.intellij.openapi.fileEditor.OpenFileDescriptor;
-import com.intellij.openapi.fileEditor.TextEditor;
-import com.intellij.openapi.fileTypes.FileType;
-import com.intellij.openapi.fileTypes.FileTypeManager;
-import com.intellij.openapi.roots.ContentEntry;
-import com.intellij.openapi.roots.ModifiableRootModel;
-import com.intellij.openapi.roots.ModuleRootManager;
+import consulo.ide.impl.idea.codeInsight.highlighting.HighlightUsagesHandler;
+import consulo.dataContext.DataManager;
+import consulo.language.editor.inject.EditorWindow;
+import consulo.ui.ex.action.ActionManager;
+import consulo.ui.ex.action.AnAction;
+import consulo.ui.ex.action.AnActionEvent;
+import consulo.dataContext.DataContext;
+import consulo.application.ApplicationManager;
+import consulo.application.Result;
+import consulo.undoRedo.CommandProcessor;
+import consulo.language.editor.WriteCommandAction;
+import consulo.undoRedo.UndoManager;
+import consulo.document.Document;
+import consulo.codeEditor.Editor;
+import consulo.codeEditor.EditorFactory;
+import consulo.codeEditor.LogicalPosition;
+import consulo.document.RangeMarker;
+import consulo.codeEditor.action.EditorActionHandler;
+import consulo.codeEditor.action.EditorActionManager;
+import consulo.codeEditor.action.TypedAction;
+import consulo.ide.impl.idea.openapi.editor.impl.DesktopEditorImpl;
+import consulo.document.impl.DocumentImpl;
+import consulo.navigation.OpenFileDescriptor;
+import consulo.virtualFileSystem.fileType.FileType;
+import consulo.language.file.FileTypeManager;
+import consulo.module.content.layer.ContentEntry;
+import consulo.module.content.layer.ModifiableRootModel;
+import consulo.module.content.ModuleRootManager;
 import consulo.util.dataholder.Key;
-import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.LocalFileSystem;
-import com.intellij.openapi.vfs.VfsUtil;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiDocumentManager;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiJavaPackage;
-import com.intellij.psi.impl.source.PostprocessReformattingAspect;
+import consulo.ide.impl.idea.openapi.util.io.FileUtil;
+import consulo.util.lang.StringUtil;
+import consulo.ide.impl.idea.openapi.vfs.VfsUtil;
+import consulo.virtualFileSystem.VirtualFile;
+import com.intellij.java.language.psi.PsiClass;
+import consulo.language.psi.PsiDocumentManager;
+import consulo.language.psi.PsiFile;
+import com.intellij.java.language.psi.PsiJavaPackage;
+import consulo.language.codeStyle.PostprocessReformattingAspect;
 import com.intellij.psi.search.ProjectScope;
 import com.intellij.testFramework.PlatformTestCase;
 import com.intellij.testFramework.PsiTestCase;
 import com.intellij.testFramework.PsiTestData;
 import com.intellij.testFramework.PsiTestUtil;
 import com.intellij.testFramework.VfsTestUtil;
-import com.intellij.util.ArrayUtil;
-import com.intellij.util.Function;
-import com.intellij.util.containers.ContainerUtil;
-import consulo.fileEditor.impl.text.TextEditorProvider;
+import consulo.util.collection.ArrayUtil;
+import consulo.ide.impl.idea.util.Function;
+import consulo.util.collection.ContainerUtil;
+import consulo.fileEditor.text.TextEditorProvider;
 import consulo.roots.impl.ProductionContentFolderTypeProvider;
 import consulo.roots.impl.TestContentFolderTypeProvider;
 
@@ -137,7 +137,7 @@ public abstract class CodeInsightTestCase extends PsiTestCase
 		configureByFile(filePath, null);
 	}
 
-	protected VirtualFile configureByFiles(@javax.annotation.Nullable String projectRoot, String... files) throws Exception
+	protected VirtualFile configureByFiles(@Nullable String projectRoot, String... files) throws Exception
 	{
 		final VirtualFile[] vFiles = new VirtualFile[files.length];
 		for(int i = 0; i < files.length; i++)
@@ -191,7 +191,7 @@ public abstract class CodeInsightTestCase extends PsiTestCase
 		}
 		final VirtualFile vFile = LocalFileSystem.getInstance().refreshAndFindFileByIoFile(tempFile);
 		assert vFile != null;
-		VfsUtil.saveText(vFile, text);
+		consulo.ide.impl.idea.openapi.vfs.VfsUtil.saveText(vFile, text);
 
 		final VirtualFile vdir = LocalFileSystem.getInstance().refreshAndFindFileByIoFile(dir);
 
@@ -255,7 +255,7 @@ public abstract class CodeInsightTestCase extends PsiTestCase
 		PsiDocumentManager.getInstance(getProject()).commitAllDocuments();
 	}
 
-	protected VirtualFile configureByFiles(@javax.annotation.Nullable final File rawProjectRoot, final VirtualFile... vFiles) throws IOException
+	protected VirtualFile configureByFiles(@Nullable final File rawProjectRoot, final VirtualFile... vFiles) throws IOException
 	{
 		myFile = null;
 		myEditor = null;
@@ -421,7 +421,7 @@ public abstract class CodeInsightTestCase extends PsiTestCase
 	private EditorInfo copyContent(final VirtualFile from, final VirtualFile to, final List<OutputStream> streamsToClose) throws IOException
 	{
 		byte[] content = from.getFileType().isBinary() ? from.contentsToByteArray() : null;
-		final String fileText = from.getFileType().isBinary() ? null : StringUtil.convertLineSeparators(VfsUtil.loadText(from));
+		final String fileText = from.getFileType().isBinary() ? null : StringUtil.convertLineSeparators(consulo.ide.impl.idea.openapi.vfs.VfsUtil.loadText(from));
 
 		EditorInfo editorInfo = fileText != null ? new EditorInfo(fileText) : null;
 		String newFileText = fileText != null ? editorInfo.getNewFileText() : null;
@@ -475,7 +475,7 @@ public abstract class CodeInsightTestCase extends PsiTestCase
 	{
 		if(newFileText != null)
 		{
-			VfsUtil.saveText(newVFile, newFileText);
+			consulo.ide.impl.idea.openapi.vfs.VfsUtil.saveText(newVFile, newFileText);
 		}
 		else
 		{

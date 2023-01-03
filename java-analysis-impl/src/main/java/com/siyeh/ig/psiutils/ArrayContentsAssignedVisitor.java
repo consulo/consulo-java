@@ -15,10 +15,12 @@
  */
 package com.siyeh.ig.psiutils;
 
-import javax.annotation.Nonnull;
+import com.intellij.java.language.psi.*;
+import consulo.language.ast.IElementType;
+import consulo.language.psi.PsiElement;
 
-import com.intellij.psi.*;
-import com.intellij.psi.tree.IElementType;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 class ArrayContentsAssignedVisitor extends JavaRecursiveElementVisitor {
 
@@ -108,7 +110,7 @@ class ArrayContentsAssignedVisitor extends JavaRecursiveElementVisitor {
     }
   }
 
-  @javax.annotation.Nullable
+  @Nullable
   private static PsiExpression getDeepArrayExpression(
     PsiExpression expression) {
     if (!(expression instanceof PsiArrayAccessExpression)) {

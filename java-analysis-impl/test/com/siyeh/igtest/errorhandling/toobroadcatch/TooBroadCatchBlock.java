@@ -1,5 +1,6 @@
 package com.siyeh.igtest.errorhandling.toobroadcatch;
 
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.EOFException;
 import java.io.IOException;
@@ -59,7 +60,7 @@ public class TooBroadCatchBlock{
 
   void test() {
     try {
-      try (java.io.FileInputStream in = new java.io.FileInputStream("asdf")) {}
+      try (FileInputStream in = new FileInputStream("asdf")) {}
     } catch (IOException e) {}
   }
 }

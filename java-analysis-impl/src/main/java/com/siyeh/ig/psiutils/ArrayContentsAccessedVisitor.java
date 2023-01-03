@@ -15,11 +15,12 @@
  */
 package com.siyeh.ig.psiutils;
 
-import javax.annotation.Nonnull;
-
-import org.jetbrains.annotations.NonNls;
-import com.intellij.psi.*;
+import com.intellij.java.language.psi.*;
 import com.siyeh.HardcodedMethodConstants;
+import consulo.language.psi.PsiElement;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
 
 class ArrayContentsAccessedVisitor extends JavaRecursiveElementVisitor {
 

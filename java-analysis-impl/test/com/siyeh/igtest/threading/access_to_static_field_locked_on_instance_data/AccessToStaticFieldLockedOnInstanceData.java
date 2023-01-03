@@ -1,12 +1,13 @@
 package com.siyeh.igtest.threading.access_to_static_field_locked_on_instance_data;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 public class AccessToStaticFieldLockedOnInstanceData {
     private static int foo;
-    private static final List LIST = new java.util.ArrayList(); // pretend this is immutable
+    private static final List LIST = new ArrayList(); // pretend this is immutable
 
     public static synchronized void test1()
     {

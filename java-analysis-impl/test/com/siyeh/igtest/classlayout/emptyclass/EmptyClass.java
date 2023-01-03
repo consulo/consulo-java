@@ -1,11 +1,15 @@
 package com.siyeh.igtest.classlayout.emptyclass;
 
+import java.lang.Exception;
+import java.util.ArrayList;
+import java.util.List;
+
 public class EmptyClass {
     {
-      final java.util.ArrayList<String> stringList = new java.util.ArrayList<String>() {};
+      final ArrayList<String> stringList = new ArrayList<String>() {};
       System.out.println("");
     }
 }
-class MyList extends java.util.ArrayList<String> {}
-class MyException extends java.lang.Exception {}
-abstract class ReportMe implements java.util.List {}
+class MyList extends ArrayList<String> {}
+class MyException extends Exception {}
+abstract class ReportMe implements List {}

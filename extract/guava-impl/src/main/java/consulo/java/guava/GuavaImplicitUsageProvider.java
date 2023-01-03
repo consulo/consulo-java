@@ -16,32 +16,31 @@
 
 package consulo.java.guava;
 
-import com.intellij.codeInsight.AnnotationUtil;
-import com.intellij.codeInsight.daemon.ImplicitUsageProvider;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiMethod;
+import com.intellij.java.language.codeInsight.AnnotationUtil;
+import com.intellij.java.language.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiModifierListOwner;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.ImplicitUsageProvider;
+import consulo.language.psi.PsiElement;
 
 /**
  * @author VISTALL
  * @since 24-Feb-17
  */
-public class GuavaImplicitUsageProvider implements ImplicitUsageProvider
-{
-	@Override
-	public boolean isImplicitUsage(PsiElement psiElement)
-	{
-		return psiElement instanceof PsiMethod && AnnotationUtil.isAnnotated((com.intellij.psi.PsiModifierListOwner) psiElement, GuavaLibrary.Subscribe, false);
-	}
+@ExtensionImpl
+public class GuavaImplicitUsageProvider implements ImplicitUsageProvider {
+  @Override
+  public boolean isImplicitUsage(PsiElement psiElement) {
+    return psiElement instanceof PsiMethod && AnnotationUtil.isAnnotated((PsiModifierListOwner) psiElement, GuavaLibrary.Subscribe, 0);
+  }
 
-	@Override
-	public boolean isImplicitRead(PsiElement psiElement)
-	{
-		return false;
-	}
+  @Override
+  public boolean isImplicitRead(PsiElement psiElement) {
+    return false;
+  }
 
-	@Override
-	public boolean isImplicitWrite(PsiElement psiElement)
-	{
-		return false;
-	}
+  @Override
+  public boolean isImplicitWrite(PsiElement psiElement) {
+    return false;
+  }
 }

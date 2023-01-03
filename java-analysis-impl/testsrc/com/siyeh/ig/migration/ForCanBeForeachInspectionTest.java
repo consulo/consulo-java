@@ -1,7 +1,7 @@
 package com.siyeh.ig.migration;
 
 import com.siyeh.ig.IGInspectionTestCase;
-import com.intellij.codeInspection.ex.LocalInspectionToolWrapper;
+import consulo.language.editor.inspection.scheme.LocalInspectionToolWrapper;
 
 public class ForCanBeForeachInspectionTest extends IGInspectionTestCase {
 

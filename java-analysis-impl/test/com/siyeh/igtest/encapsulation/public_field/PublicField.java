@@ -1,9 +1,11 @@
 package com.siyeh.igtest.encapsulation.public_field;
 
+import javax.annotation.Nullable;
+
 public class PublicField {
   public final X y = X.Y;
   public String s = "";
-  @javax.annotation.Nullable
+  @Nullable
   public String t = "";
   public static final String LEGAL = "legal";
 

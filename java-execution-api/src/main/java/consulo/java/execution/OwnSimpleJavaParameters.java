@@ -15,29 +15,30 @@
  */
 package consulo.java.execution;
 
-import java.nio.charset.Charset;
+import com.intellij.java.execution.ShortenCommandLine;
+import consulo.content.bundle.Sdk;
+import consulo.execution.CantRunException;
+import consulo.execution.process.ProcessTerminatedListener;
+import consulo.java.execution.projectRoots.OwnJdkUtil;
+import consulo.logging.Logger;
+import consulo.process.ExecutionException;
+import consulo.process.ProcessHandler;
+import consulo.process.cmd.GeneralCommandLine;
+import consulo.process.cmd.ParametersList;
+import consulo.process.cmd.SimpleProgramParameters;
+import consulo.process.local.ProcessHandlerFactory;
+import consulo.project.Project;
+import consulo.util.io.CharsetToolkit;
+import consulo.virtualFileSystem.util.PathsList;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import com.intellij.execution.CantRunException;
-import com.intellij.execution.ExecutionException;
-import com.intellij.execution.ShortenCommandLine;
-import com.intellij.execution.configurations.GeneralCommandLine;
-import com.intellij.execution.configurations.ParametersList;
-import com.intellij.execution.configurations.SimpleProgramParameters;
-import com.intellij.execution.process.OSProcessHandler;
-import com.intellij.execution.process.ProcessTerminatedListener;
-import consulo.logging.Logger;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.openapi.vfs.CharsetToolkit;
-import com.intellij.util.PathsList;
-import consulo.java.projectRoots.OwnJdkUtil;
+import java.nio.charset.Charset;
 
 /**
  * @author Gregory.Shrago
  *
- * Replacement of {@link com.intellij.execution.configurations.SimpleJavaParameters} without dependency to platform code
+ * Replacement of {@link consulo.process.cmd.SimpleJavaParameters} without dependency to platform code
  */
 public class OwnSimpleJavaParameters extends SimpleProgramParameters
 {
@@ -58,7 +59,7 @@ public class OwnSimpleJavaParameters extends SimpleProgramParameters
 	private boolean myClasspathFile = true;
 	private String myJarPath;
 
-	@javax.annotation.Nullable
+	@Nullable
 	public Sdk getJdk()
 	{
 		return myJdk;
@@ -104,13 +105,13 @@ public class OwnSimpleJavaParameters extends SimpleProgramParameters
 		return myVmParameters;
 	}
 
-	@javax.annotation.Nullable
+	@Nullable
 	public Charset getCharset()
 	{
 		return myCharset;
 	}
 
-	public void setCharset(@javax.annotation.Nullable Charset charset)
+	public void setCharset(@Nullable Charset charset)
 	{
 		myCharset = charset;
 	}
@@ -125,7 +126,7 @@ public class OwnSimpleJavaParameters extends SimpleProgramParameters
 		myUseDynamicClasspath = useDynamicClasspath && (myArgFile || myUseClasspathJar || myClasspathFile);
 	}
 
-	public void setUseDynamicClasspath(@javax.annotation.Nullable Project project)
+	public void setUseDynamicClasspath(@Nullable Project project)
 	{
 		setUseDynamicClasspath(OwnJdkUtil.useDynamicClasspath(project));
 	}
@@ -227,9 +228,9 @@ public class OwnSimpleJavaParameters extends SimpleProgramParameters
 	}
 
 	@Nonnull
-	public OSProcessHandler createOSProcessHandler() throws ExecutionException
+	public ProcessHandler createOSProcessHandler() throws ExecutionException
 	{
-		OSProcessHandler processHandler = new OSProcessHandler(toCommandLine());
+		ProcessHandler processHandler = ProcessHandlerFactory.getInstance().createProcessHandler(toCommandLine());
 		ProcessTerminatedListener.attach(processHandler);
 		return processHandler;
 	}

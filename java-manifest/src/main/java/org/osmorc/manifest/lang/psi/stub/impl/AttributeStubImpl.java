@@ -25,7 +25,7 @@
 
 package org.osmorc.manifest.lang.psi.stub.impl;
 
-import com.intellij.psi.stubs.StubElement;
+import consulo.language.psi.stub.StubElement;
 import org.osmorc.manifest.lang.psi.ManifestStubElementTypes;
 import org.osmorc.manifest.lang.psi.stub.AttributeStub;
 

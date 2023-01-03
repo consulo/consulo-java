@@ -24,26 +24,35 @@
  */
 package org.osmorc.manifest.lang;
 
-import javax.annotation.Nonnull;
-
+import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.Language;
+import consulo.language.ast.ASTNode;
+import consulo.language.ast.IElementType;
+import consulo.language.ast.IFileElementType;
+import consulo.language.file.FileViewProvider;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.version.LanguageVersionableParserDefinition;
 import org.osmorc.manifest.lang.psi.Header;
 import org.osmorc.manifest.lang.psi.ManifestStubElementTypes;
 import org.osmorc.manifest.lang.psi.elementtype.AbstractManifestStubElementType;
 import org.osmorc.manifest.lang.psi.impl.ManifestFileImpl;
-import com.intellij.lang.ASTNode;
-import com.intellij.psi.FileViewProvider;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.tree.IFileElementType;
-import com.intellij.psi.util.PsiUtil;
-import consulo.lang.LanguageVersionableParserDefinition;
+
+import javax.annotation.Nonnull;
 
 /**
  * @author Robert F. Beeger (robert@beeger.net)
  */
+@ExtensionImpl
 public class ManifestParserDefinition extends LanguageVersionableParserDefinition
 {
+  @Nonnull
+  @Override
+  public Language getLanguage() {
+    return ManifestLanguage.INSTANCE;
+  }
+
   @Nonnull
   @Override
   public IFileElementType getFileNodeType() {

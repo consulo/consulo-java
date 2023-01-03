@@ -16,7 +16,7 @@
 package com.siyeh;
 
 import org.jetbrains.annotations.NonNls;
-import com.intellij.codeInsight.daemon.impl.analysis.HighlightUtilBase;
+import com.intellij.java.language.impl.codeInsight.daemon.impl.analysis.HighlightUtilBase;
 
 /**
  * User: anna

@@ -1,10 +1,12 @@
 package consulo.java.manifest.lang.headerparser;
 
-import javax.annotation.Nonnull;
+import consulo.java.manifest.internal.header.ManifestHeaderParserRegistratorImpl;
+import consulo.language.psi.PsiElement;
 import org.osmorc.manifest.lang.headerparser.HeaderParser;
 import org.osmorc.manifest.lang.psi.Header;
 import org.osmorc.manifest.lang.psi.HeaderValuePart;
-import com.intellij.psi.PsiElement;
+
+import javax.annotation.Nonnull;
 
 /**
  * @author VISTALL
@@ -18,13 +20,12 @@ public class HeaderUtil {
   }
 
   public static HeaderParser getHeaderParser(String headerName) {
-    for(HeaderParserEP ep : HeaderParserEP.EP_NAME.getExtensions()) {
-      if(ep.key.equals(headerName)) {
-        return ep.getParserInstance();
-      }
+    ManifestHeaderParserRegistratorImpl registrator = ManifestHeaderParserRegistratorImpl.get();
+    HeaderParser parser = registrator.getParsers().get(headerName);
+    if (parser != null) {
+      return parser;
     }
-
-    return getHeaderParser("");
+    return registrator.getDefaultParser();
   }
 
   private static Header findHeader(PsiElement element) {

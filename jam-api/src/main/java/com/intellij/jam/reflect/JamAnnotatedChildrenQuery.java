@@ -16,9 +16,9 @@
 package com.intellij.jam.reflect;
 
 import com.intellij.jam.JamElement;
-import com.intellij.psi.PsiMember;
-import com.intellij.psi.PsiModifierListOwner;
-import com.intellij.util.containers.ContainerUtil;
+import com.intellij.java.language.psi.PsiMember;
+import com.intellij.java.language.psi.PsiModifierListOwner;
+import consulo.util.collection.ContainerUtil;
 import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -57,7 +57,7 @@ public abstract class JamAnnotatedChildrenQuery<Jam extends JamElement> extends 
       if (isAnnotated(child, myAnnoName)) {
         final JamMemberMeta meta = getMemberMeta(child);
         if (meta != null) {
-          ContainerUtil.addIfNotNull((Jam)meta.getJamElement(child), list);
+          ContainerUtil.addIfNotNull(list, (Jam)meta.getJamElement(child));
         }
       }
     }

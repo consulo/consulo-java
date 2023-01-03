@@ -15,12 +15,12 @@
  */
 package com.siyeh.ig.ui;
 
-import com.intellij.openapi.util.InvalidDataException;
-import com.intellij.openapi.util.JDOMExternalizable;
-import com.intellij.openapi.util.WriteExternalException;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.util.ArrayUtil;
-import com.intellij.util.containers.OrderedSet;
+import consulo.util.collection.ArrayUtil;
+import consulo.util.collection.OrderedSet;
+import consulo.util.lang.StringUtil;
+import consulo.util.xml.serializer.InvalidDataException;
+import consulo.util.xml.serializer.JDOMExternalizable;
+import consulo.util.xml.serializer.WriteExternalException;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
 
@@ -31,30 +31,27 @@ import java.util.List;
  * from DefaultJDOMExternalizer.
  * <p>
  * The constructor of this class takes parameters. This means an instance of this class
- * cannot be constructed by {@link com.intellij.openapi.util.DefaultJDOMExternalizer}.
+ * cannot be constructed by {@link DefaultJDOMExternalizer}.
  * If instances of this class are assigned to a final field, DefaultJDOMExternalizer will
  * omit the construction of a new instance and prevent the problem.
  */
 @SuppressWarnings({"HardCodedStringLiteral"})
-public class ExternalizableStringSet extends OrderedSet<String> implements JDOMExternalizable
-{
-	private static final String ITEM = "item";
-	private static final String VALUE = "value";
+public class ExternalizableStringSet extends OrderedSet<String> implements JDOMExternalizable {
+  private static final String ITEM = "item";
+  private static final String VALUE = "value";
 
-	private final String[] defaultValues;
+  private final String[] defaultValues;
 
-	/**
-	 * note: declare ExternalizableStringSet fields as <b>final</b>!<br>
-	 * note: reference to defaultValues is retained by this set!
-	 */
-	public ExternalizableStringSet(@NonNls String... defaultValues)
-	{
-		this.defaultValues = defaultValues.length == 0 ? ArrayUtil.EMPTY_STRING_ARRAY : defaultValues;
-		for(String defaultValue : defaultValues)
-		{
-			add(defaultValue);
-		}
-	}
+  /**
+   * note: declare ExternalizableStringSet fields as <b>final</b>!<br>
+   * note: reference to defaultValues is retained by this set!
+   */
+  public ExternalizableStringSet(@NonNls String... defaultValues) {
+    this.defaultValues = defaultValues.length == 0 ? ArrayUtil.EMPTY_STRING_ARRAY : defaultValues;
+    for (String defaultValue : defaultValues) {
+      add(defaultValue);
+    }
+  }
 
   /*
   private ExternalizableStringSet() {
@@ -62,52 +59,41 @@ public class ExternalizableStringSet extends OrderedSet<String> implements JDOME
     }
     */
 
-	public boolean hasDefaultValues()
-	{
-		if(size() != defaultValues.length)
-		{
-			return false;
-		}
-		for(String defaultValue : defaultValues)
-		{
-			if(!contains(defaultValue))
-			{
-				return false;
-			}
-		}
-		return true;
-	}
+  public boolean hasDefaultValues() {
+    if (size() != defaultValues.length) {
+      return false;
+    }
+    for (String defaultValue : defaultValues) {
+      if (!contains(defaultValue)) {
+        return false;
+      }
+    }
+    return true;
+  }
 
-	@Override
-	public void readExternal(Element element) throws InvalidDataException
-	{
-		boolean dataFound = false;
-		for(Element item : (List<Element>) element.getChildren(ITEM))
-		{
-			if(!dataFound)
-			{
-				clear();
-				dataFound = true;
-			}
-			add(StringUtil.unescapeXml(item.getAttributeValue(VALUE)));
-		}
-	}
+  @Override
+  public void readExternal(Element element) throws InvalidDataException {
+    boolean dataFound = false;
+    for (Element item : (List<Element>) element.getChildren(ITEM)) {
+      if (!dataFound) {
+        clear();
+        dataFound = true;
+      }
+      add(StringUtil.unescapeXml(item.getAttributeValue(VALUE)));
+    }
+  }
 
-	@Override
-	public void writeExternal(Element element) throws WriteExternalException
-	{
-		if(hasDefaultValues())
-		{
-			return;
-		}
-		for(String value : this)
-		{
-			if(value != null)
-			{
-				final Element item = new Element(ITEM);
-				item.setAttribute(VALUE, StringUtil.escapeXml(value));
-				element.addContent(item);
-			}
-		}
-	}
+  @Override
+  public void writeExternal(Element element) throws WriteExternalException {
+    if (hasDefaultValues()) {
+      return;
+    }
+    for (String value : this) {
+      if (value != null) {
+        final Element item = new Element(ITEM);
+        item.setAttribute(VALUE, StringUtil.escapeXml(value));
+        element.addContent(item);
+      }
+    }
+  }
 }

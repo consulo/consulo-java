@@ -16,24 +16,25 @@
 
 package consulo.java.jam.util;
 
-import com.intellij.openapi.components.ServiceManager;
-import com.intellij.psi.PsiElement;
 import consulo.annotation.access.RequiredReadAction;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ServiceAPI;
+import consulo.ide.ServiceManager;
+import consulo.language.psi.PsiElement;
 
 /**
  * @author VISTALL
  * @since 2018-06-21
  */
-public interface JamCommonService
-{
-	static JamCommonService getInstance()
-	{
-		return ServiceManager.getService(JamCommonService.class);
-	}
+@ServiceAPI(ComponentScope.APPLICATION)
+public interface JamCommonService {
+  static JamCommonService getInstance() {
+    return ServiceManager.getService(JamCommonService.class);
+  }
 
-	@RequiredReadAction
-	boolean isPlainJavaFile(PsiElement psiElement);
+  @RequiredReadAction
+  boolean isPlainJavaFile(PsiElement psiElement);
 
-	@RequiredReadAction
-	boolean isPlainXmlFile(PsiElement psiElement);
+  @RequiredReadAction
+  boolean isPlainXmlFile(PsiElement psiElement);
 }

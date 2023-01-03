@@ -15,15 +15,20 @@
  */
 package com.intellij.jam.model.common;
 
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleUtil;
-import com.intellij.psi.*;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.util.xml.DomElement;
-import com.intellij.util.xml.DomManager;
-import com.intellij.util.xml.DomUtil;
-import com.intellij.util.xml.DomTarget;
-import com.intellij.pom.references.PomService;
+import com.intellij.java.language.psi.JavaPsiFacade;
+import com.intellij.java.language.psi.PsiClass;
+import consulo.language.pom.PomService;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiManager;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.util.ModuleUtilCore;
+import consulo.module.Module;
+import consulo.xml.util.xml.DomElement;
+import consulo.xml.util.xml.DomManager;
+import consulo.xml.util.xml.DomTarget;
+import consulo.xml.util.xml.DomUtil;
+
 import javax.annotation.Nullable;
 
 /**
@@ -66,7 +71,7 @@ public abstract class BaseImpl implements CommonDomModelElement {
     final DomElement root = DomUtil.getRoot(this);
     if (equals(root)) {
       final PsiElement element = getIdentifyingPsiElement();
-      return element == null ? null : ModuleUtil.findModuleForPsiElement(element);
+      return element == null ? null : ModuleUtilCore.findModuleForPsiElement(element);
     }
     else {
       return root.getModule();

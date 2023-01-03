@@ -1,14 +1,15 @@
 package consulo.java.compiler.impl.javaCompiler;
 
-import com.intellij.compiler.impl.ModuleChunk;
-import com.intellij.compiler.impl.javaCompiler.javac.JpsJavaCompilerOptions;
-import com.intellij.execution.ExecutionException;
-import com.intellij.execution.configurations.GeneralCommandLine;
-import com.intellij.execution.process.ProcessHandler;
-import com.intellij.execution.process.ProcessHandlerFactory;
-import com.intellij.openapi.compiler.CompileContext;
-import com.intellij.openapi.util.io.FileUtil;
+import com.intellij.java.compiler.impl.javaCompiler.javac.JpsJavaCompilerOptions;
 import consulo.annotation.access.RequiredReadAction;
+import consulo.application.Application;
+import consulo.application.util.AsyncFileService;
+import consulo.compiler.CompileContext;
+import consulo.compiler.ModuleChunk;
+import consulo.process.ExecutionException;
+import consulo.process.ProcessHandler;
+import consulo.process.cmd.GeneralCommandLine;
+import consulo.process.local.ProcessHandlerFactory;
 
 import javax.annotation.Nonnull;
 import java.io.File;
@@ -31,10 +32,10 @@ public abstract class BackendCompilerProcessBuilder
 	protected final boolean myAnnotationProcessorsEnabled;
 
 	protected BackendCompilerProcessBuilder(ModuleChunk moduleChunk,
-											String outputPath,
-											CompileContext compileContext,
-											JpsJavaCompilerOptions javaCompilerOptions,
-											boolean annotationProcessorsEnabled)
+                                          String outputPath,
+                                          CompileContext compileContext,
+                                          JpsJavaCompilerOptions javaCompilerOptions,
+                                          boolean annotationProcessorsEnabled)
 	{
 		myModuleChunk = moduleChunk;
 		myOutputPath = outputPath;
@@ -60,6 +61,6 @@ public abstract class BackendCompilerProcessBuilder
 
 	public void clearTempFiles()
 	{
-		FileUtil.asyncDelete(myTempFiles);
+		Application.get().getInstance(AsyncFileService.class).asyncDelete(myTempFiles);
 	}
 }

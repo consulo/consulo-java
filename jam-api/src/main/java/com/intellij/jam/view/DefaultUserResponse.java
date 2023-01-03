@@ -18,10 +18,10 @@ package com.intellij.jam.view;
 import com.intellij.jam.JamMessages;
 import com.intellij.jam.model.common.CommonModelElement;
 import com.intellij.jam.view.ui.SelectElementsToDeleteDialog;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.Messages;
-import com.intellij.psi.PsiElement;
-import com.intellij.util.IncorrectOperationException;
+import consulo.project.Project;
+import consulo.ui.ex.awt.Messages;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
 import consulo.ui.image.Image;
 
 import java.util.ArrayList;

@@ -1,22 +1,23 @@
 package consulo.java.manifest.editor;
 
-import javax.annotation.Nonnull;
-
+import consulo.disposer.Disposer;
+import consulo.fileEditor.FileEditor;
+import consulo.fileEditor.FileEditorPolicy;
+import consulo.fileEditor.FileEditorProvider;
+import consulo.fileEditor.FileEditorState;
+import consulo.project.Project;
+import consulo.virtualFileSystem.VirtualFile;
 import org.jdom.Element;
 import org.osmorc.manifest.lang.ManifestFileType;
-import com.intellij.openapi.fileEditor.FileEditor;
-import com.intellij.openapi.fileEditor.FileEditorPolicy;
-import com.intellij.openapi.fileEditor.FileEditorProvider;
-import com.intellij.openapi.fileEditor.FileEditorState;
-import com.intellij.openapi.project.Project;
-import consulo.disposer.Disposer;
-import com.intellij.openapi.vfs.VirtualFile;
+
+import javax.annotation.Nonnull;
 
 /**
  * @author VISTALL
  * @since 12:29/03.05.13
  */
-public class ManifestEditorProvider implements FileEditorProvider {
+//@ExtensionImpl disabled due editor tabs problem
+public abstract class ManifestEditorProvider implements FileEditorProvider {
   public static final String EDITOR_ID = ManifestEditorProvider.class.getName();
 
   @Override

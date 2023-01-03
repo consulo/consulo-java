@@ -1,9 +1,11 @@
 package com.siyeh.igtest.bugs;
 
+import java.lang.Object;
+
 public class PrimitiveArrayArgumentToVariableArgMethod {
 
-    static void bar(java.lang.Object... objects) {
-        for (java.lang.Object object : objects) {
+    static void bar(Object... objects) {
+        for (Object object : objects) {
             System.out.println("object: " + object);
         }
     }

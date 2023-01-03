@@ -25,7 +25,7 @@
 package org.osmorc.manifest.lang;
 
 import org.osmorc.manifest.lang.psi.ManifestStubElementTypes;
-import com.intellij.psi.tree.IElementType;
+import consulo.language.ast.IElementType;
 
 
 /**

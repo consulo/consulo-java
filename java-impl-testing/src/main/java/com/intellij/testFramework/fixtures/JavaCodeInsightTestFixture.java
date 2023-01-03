@@ -18,9 +18,9 @@ package com.intellij.testFramework.fixtures;
 import javax.annotation.Nonnull;
 
 import org.jetbrains.annotations.NonNls;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiJavaPackage;
-import com.intellij.psi.impl.JavaPsiFacadeEx;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiJavaPackage;
+import com.intellij.java.language.impl.psi.impl.JavaPsiFacadeEx;
 
 /**
  * @author yole

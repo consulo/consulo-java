@@ -27,14 +27,14 @@ package org.osmorc.manifest.lang;
 import javax.annotation.Nonnull;
 
 import org.osmorc.manifest.lang.headerparser.HeaderParser;
-import com.intellij.lang.ASTNode;
-import com.intellij.lang.PsiBuilder;
-import com.intellij.lang.PsiParser;
-import com.intellij.psi.TokenType;
-import com.intellij.psi.tree.IElementType;
+import consulo.language.ast.ASTNode;
+import consulo.language.parser.PsiBuilder;
+import consulo.language.parser.PsiParser;
+import consulo.language.ast.TokenType;
+import consulo.language.ast.IElementType;
 import consulo.application.ApplicationProperties;
 import consulo.java.manifest.lang.headerparser.HeaderUtil;
-import consulo.lang.LanguageVersion;
+import consulo.language.version.LanguageVersion;
 
 /**
  * @author Robert F. Beeger (robert@beeger.net)

@@ -17,13 +17,13 @@ package com.intellij.jam;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.openapi.util.TextRange;
-import com.intellij.pom.PomRenameableTarget;
-import com.intellij.pom.PsiDeclaredTarget;
-import com.intellij.psi.DelegatePsiTarget;
-import com.intellij.psi.ElementManipulators;
-import com.intellij.psi.PsiLiteral;
-import com.intellij.util.ObjectUtil;
+import consulo.document.util.TextRange;
+import consulo.language.pom.PomRenameableTarget;
+import consulo.language.pom.PsiDeclaredTarget;
+import consulo.language.impl.psi.DelegatePsiTarget;
+import consulo.language.psi.ElementManipulators;
+import com.intellij.java.language.psi.PsiLiteral;
+import consulo.util.lang.ObjectUtil;
 
 import javax.annotation.Nullable;
 

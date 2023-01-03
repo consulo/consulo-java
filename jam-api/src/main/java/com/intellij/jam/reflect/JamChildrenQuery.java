@@ -15,26 +15,28 @@
  */
 package com.intellij.jam.reflect;
 
-import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.jam.JamElement;
+import com.intellij.java.language.codeInsight.AnnotationUtil;
+import com.intellij.java.language.patterns.PsiJavaPatterns;
+import com.intellij.java.language.psi.*;
+import consulo.application.util.CachedValue;
+import consulo.application.util.CachedValueProvider;
+import consulo.application.util.CachedValuesManager;
+import consulo.language.pattern.ElementPattern;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiElementRef;
+import consulo.language.psi.PsiModificationTracker;
+import consulo.language.sem.SemRegistrar;
+import consulo.util.collection.ContainerUtil;
 import consulo.util.dataholder.Key;
-import com.intellij.psi.*;
-import com.intellij.psi.util.CachedValue;
-import com.intellij.psi.util.CachedValueProvider;
-import com.intellij.psi.util.CachedValuesManager;
-import com.intellij.psi.util.PsiModificationTracker;
-import com.intellij.util.Function;
-import com.intellij.util.containers.ContainerUtil;
-import com.intellij.semantic.SemRegistrar;
-import com.intellij.patterns.ElementPattern;
-import com.intellij.patterns.PsiJavaPatterns;
 import org.jetbrains.annotations.NonNls;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Function;
 
 /**
  * @author peter
@@ -173,7 +175,7 @@ public abstract class JamChildrenQuery<Jam extends JamElement> {
 
     public List<Jam> findChildren(@Nonnull final PsiMember parent) {
       return ContainerUtil.concat(myComponents, new Function<JamChildrenQuery<? extends Jam>, Collection<? extends Jam>>() {
-        public Collection<? extends Jam> fun(JamChildrenQuery<? extends Jam> jamChildrenQuery) {
+        public Collection<? extends Jam> apply(JamChildrenQuery<? extends Jam> jamChildrenQuery) {
           return jamChildrenQuery.findChildren(parent);
         }
       });

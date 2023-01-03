@@ -15,14 +15,10 @@
  */
 package com.siyeh.ig.psiutils;
 
-import javax.annotation.Nonnull;
+import com.intellij.java.language.psi.*;
+import consulo.language.psi.PsiElement;
 
-import com.intellij.psi.JavaRecursiveElementVisitor;
-import com.intellij.psi.PsiAssignmentExpression;
-import com.intellij.psi.PsiDeclarationStatement;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiExpression;
-import com.intellij.psi.PsiVariable;
+import javax.annotation.Nonnull;
 
 class VariableAssignedFromVisitor extends JavaRecursiveElementVisitor {
 
@@ -45,7 +41,7 @@ class VariableAssignedFromVisitor extends JavaRecursiveElementVisitor {
 
   @Override
   public void visitAssignmentExpression(
-    @Nonnull PsiAssignmentExpression assignment) {
+      @Nonnull PsiAssignmentExpression assignment) {
     if (assignedFrom) {
       return;
     }
@@ -58,7 +54,7 @@ class VariableAssignedFromVisitor extends JavaRecursiveElementVisitor {
 
   @Override
   public void visitDeclarationStatement(
-    @Nonnull PsiDeclarationStatement statement) {
+      @Nonnull PsiDeclarationStatement statement) {
     if (assignedFrom) {
       return;
     }
@@ -67,12 +63,12 @@ class VariableAssignedFromVisitor extends JavaRecursiveElementVisitor {
     for (PsiElement declaredElement : declaredElements) {
       if (declaredElement instanceof PsiVariable) {
         final PsiVariable declaredVariable =
-          (PsiVariable)declaredElement;
+            (PsiVariable) declaredElement;
         final PsiExpression initializer =
-          declaredVariable.getInitializer();
+            declaredVariable.getInitializer();
         if (initializer != null &&
             VariableAccessUtils.mayEvaluateToVariable(initializer,
-                                                      variable)) {
+                variable)) {
           assignedFrom = true;
           return;
         }

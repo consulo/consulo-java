@@ -15,10 +15,13 @@
  */
 package org.jetbrains.java.generate.inspection;
 
-import com.intellij.codeInspection.ProblemHighlightType;
-import com.intellij.codeInspection.ProblemsHolder;
-import com.intellij.psi.*;
-import com.intellij.psi.util.PropertyUtil;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.PropertyUtil;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.inspection.ProblemHighlightType;
+import consulo.language.editor.inspection.ProblemsHolder;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiElementVisitor;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.java.generate.GenerateToStringContext;
 import org.jetbrains.java.generate.GenerateToStringUtils;
@@ -34,6 +37,7 @@ import java.util.Set;
  * to exclude certain fields (eg. constants etc.). Will only warn if the
  * class has a toString() method.
  */
+@ExtensionImpl
 public class FieldNotUsedInToStringInspection extends AbstractToStringInspection {
 
   @Nonnull
@@ -94,8 +98,7 @@ public class FieldNotUsedInToStringInspection extends AbstractToStringInspection
       final PsiMethod[] methods;
       if (GenerateToStringContext.getConfig().isEnableMethods()) {
         methods = GenerateToStringUtils.filterAvailableMethods(aClass, GenerateToStringContext.getConfig().getFilterPattern());
-      }
-      else {
+      } else {
         methods = PsiMethod.EMPTY_ARRAY;
       }
       final FieldUsedVisitor visitor = new FieldUsedVisitor(fields, methods);
@@ -103,13 +106,13 @@ public class FieldNotUsedInToStringInspection extends AbstractToStringInspection
       for (PsiField field : visitor.getUnusedFields()) {
         final String fieldName = field.getName();
         myHolder.registerProblem(field.getNameIdentifier(), "Field '" + fieldName + "' is not used in 'toString()' method",
-                                 ProblemHighlightType.GENERIC_ERROR_OR_WARNING, GenerateToStringQuickFix.getInstance());
+            ProblemHighlightType.GENERIC_ERROR_OR_WARNING, GenerateToStringQuickFix.getInstance());
       }
       for (PsiMethod unusedMethod : visitor.getUnusedMethods()) {
         final PsiIdentifier identifier = unusedMethod.getNameIdentifier();
         final PsiElement target = identifier == null ? unusedMethod : identifier;
         myHolder.registerProblem(target, "Method '" + unusedMethod.getName() + "' is not used in 'toString()' method",
-                                 ProblemHighlightType.GENERIC_ERROR_OR_WARNING, GenerateToStringQuickFix.getInstance());
+            ProblemHighlightType.GENERIC_ERROR_OR_WARNING, GenerateToStringQuickFix.getInstance());
       }
     }
   }
@@ -132,16 +135,14 @@ public class FieldNotUsedInToStringInspection extends AbstractToStringInspection
       super.visitReferenceExpression(expression);
       final PsiElement target = expression.resolve();
       if (target instanceof PsiField) {
-        final PsiField field = (PsiField)target;
+        final PsiField field = (PsiField) target;
         myUnusedFields.remove(field);
-      }
-      else if (target instanceof PsiMethod) {
-        final PsiMethod method = (PsiMethod)target;
+      } else if (target instanceof PsiMethod) {
+        final PsiMethod method = (PsiMethod) target;
         if (usesReflection(method)) {
           myUnusedFields.clear();
           myUnusedMethods.clear();
-        }
-        else {
+        } else {
           myUnusedMethods.remove(method);
           final PsiField field = PropertyUtil.findPropertyFieldByMember(method);
           myUnusedFields.remove(field);
@@ -158,10 +159,9 @@ public class FieldNotUsedInToStringInspection extends AbstractToStringInspection
       @NonNls final String qualifiedName = containingClass.getQualifiedName();
       if ("getDeclaredFields".equals(name)) {
         return "java.lang.Class".equals(qualifiedName);
-      }
-      else if ("toString".equals(name)) {
+      } else if ("toString".equals(name)) {
         return "org.apache.commons.lang.builder.ReflectionToStringBuilder".equals(qualifiedName) ||
-               "java.util.Objects".equals(qualifiedName);
+            "java.util.Objects".equals(qualifiedName);
       }
       return false;
     }

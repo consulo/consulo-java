@@ -15,68 +15,60 @@
  */
 package com.siyeh.ig.fixes;
 
-import com.intellij.codeInspection.ProblemDescriptor;
-import com.intellij.openapi.project.Project;
-import com.intellij.psi.*;
-import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.java.language.psi.*;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.CommentTracker;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.project.Project;
 import org.jetbrains.annotations.NonNls;
+
 import javax.annotation.Nonnull;
 
-public class DeleteUnnecessaryStatementFix extends InspectionGadgetsFix
-{
+public class DeleteUnnecessaryStatementFix extends InspectionGadgetsFix {
 
-	private final String name;
+  private final String name;
 
-	public DeleteUnnecessaryStatementFix(@NonNls String name)
-	{
-		this.name = name;
-	}
+  public DeleteUnnecessaryStatementFix(@NonNls String name) {
+    this.name = name;
+  }
 
-	@Override
-	@Nonnull
-	public String getName()
-	{
-		return InspectionGadgetsBundle.message(
-				"smth.unnecessary.remove.quickfix", name);
-	}
+  @Override
+  @Nonnull
+  public String getName() {
+    return InspectionGadgetsBundle.message(
+        "smth.unnecessary.remove.quickfix", name);
+  }
 
-	@Nonnull
-	@Override
-	public String getFamilyName()
-	{
-		return "Remove redundant statement";
-	}
+  @Nonnull
+  @Override
+  public String getFamilyName() {
+    return "Remove redundant statement";
+  }
 
-	@Override
-	protected void doFix(Project project, ProblemDescriptor descriptor)
-	{
-		final PsiElement keywordElement = descriptor.getPsiElement();
-		final PsiStatement statement = PsiTreeUtil.getParentOfType(keywordElement, PsiStatement.class);
-		if(statement == null)
-		{
-			return;
-		}
-		deleteUnnecessaryStatement(statement);
-	}
+  @Override
+  protected void doFix(Project project, ProblemDescriptor descriptor) {
+    final PsiElement keywordElement = descriptor.getPsiElement();
+    final PsiStatement statement = PsiTreeUtil.getParentOfType(keywordElement, PsiStatement.class);
+    if (statement == null) {
+      return;
+    }
+    deleteUnnecessaryStatement(statement);
+  }
 
-	public static void deleteUnnecessaryStatement(PsiStatement statement)
-	{
-		CommentTracker ct = new CommentTracker();
-		final PsiElement parent = statement.getParent();
-		if(parent instanceof PsiIfStatement ||
-				parent instanceof PsiWhileStatement ||
-				parent instanceof PsiDoWhileStatement ||
-				parent instanceof PsiForeachStatement ||
-				parent instanceof PsiForStatement)
-		{
-			ct.replaceAndRestoreComments(statement, "{}");
-		}
-		else
-		{
-			ct.deleteAndRestoreComments(statement);
-		}
-	}
+  public static void deleteUnnecessaryStatement(PsiStatement statement) {
+    CommentTracker ct = new CommentTracker();
+    final PsiElement parent = statement.getParent();
+    if (parent instanceof PsiIfStatement ||
+        parent instanceof PsiWhileStatement ||
+        parent instanceof PsiDoWhileStatement ||
+        parent instanceof PsiForeachStatement ||
+        parent instanceof PsiForStatement) {
+      ct.replaceAndRestoreComments(statement, "{}");
+    } else {
+      ct.deleteAndRestoreComments(statement);
+    }
+  }
 }

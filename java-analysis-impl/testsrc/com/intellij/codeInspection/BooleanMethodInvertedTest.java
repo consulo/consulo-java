@@ -1,7 +1,7 @@
 package com.intellij.codeInspection;
 
 import com.siyeh.ig.IGInspectionTestCase;
-import com.intellij.codeInspection.booleanIsAlwaysInverted.BooleanMethodIsAlwaysInvertedInspection;
+import com.intellij.java.analysis.impl.codeInspection.booleanIsAlwaysInverted.BooleanMethodIsAlwaysInvertedInspection;
 
 /**
  * User: anna

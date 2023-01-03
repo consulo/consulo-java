@@ -25,8 +25,8 @@
 
 package org.osmorc.manifest.lang.psi;
 
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.StubBasedPsiElement;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.StubBasedPsiElement;
 import org.osmorc.manifest.lang.psi.stub.SectionStub;
 
 /**

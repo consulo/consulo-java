@@ -15,28 +15,28 @@
  */
 package consulo.java.compiler.impl.javaCompiler;
 
-import java.util.Arrays;
+import com.intellij.java.compiler.impl.javaCompiler.JavaCompilerConfiguration;
+import com.intellij.java.compiler.impl.javaCompiler.annotationProcessing.AnnotationProcessingConfiguration;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.compiler.AdditionalOutputDirectoriesProvider;
+import consulo.compiler.CompilerPaths;
+import consulo.module.Module;
+import consulo.module.content.ModuleRootManager;
+import consulo.project.Project;
+import consulo.util.collection.ArrayUtil;
+import consulo.util.lang.StringUtil;
+import consulo.virtualFileSystem.VirtualFileManager;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import com.intellij.compiler.impl.javaCompiler.JavaCompilerConfiguration;
-import com.intellij.compiler.impl.javaCompiler.annotationProcessing.AnnotationProcessingConfiguration;
-import com.intellij.openapi.compiler.CompilerPaths;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.ModuleRootManager;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.openapi.vfs.VirtualFileManager;
-import com.intellij.util.ArrayUtil;
-import consulo.compiler.impl.AdditionalOutputDirectoriesProvider;
-import consulo.compiler.roots.CompilerPathsImpl;
+import java.util.Arrays;
 
 /**
  * @author VISTALL
  * @since 20:24/12.06.13
  */
-public class JavaAdditionalOutputDirectoriesProvider implements AdditionalOutputDirectoriesProvider
-{
+@ExtensionImpl
+public class JavaAdditionalOutputDirectoriesProvider implements AdditionalOutputDirectoriesProvider {
 
   @Nonnull
   @Override
@@ -48,7 +48,7 @@ public class JavaAdditionalOutputDirectoriesProvider implements AdditionalOutput
 
     final String path = getAnnotationProcessorsGenerationPath(module);
     if (path != null) {
-      return new String[] {path};
+      return new String[]{path};
     }
     else {
       return ArrayUtil.EMPTY_STRING_ARRAY;
@@ -69,12 +69,12 @@ public class JavaAdditionalOutputDirectoriesProvider implements AdditionalOutput
         Arrays.sort(roots, CompilerPaths.URLS_COMPARATOR);
       }
       return StringUtil.isEmpty(sourceDirName)
-             ? VirtualFileManager.extractPath(roots[0])
-             : VirtualFileManager.extractPath(roots[0]) + "/" + sourceDirName;
+        ? VirtualFileManager.extractPath(roots[0])
+        : VirtualFileManager.extractPath(roots[0]) + "/" + sourceDirName;
     }
 
 
-    final String path = CompilerPathsImpl.getModuleOutputPath(module, false);
+    final String path = CompilerPaths.getModuleOutputPath(module, false);
     if (path == null) {
       return null;
     }

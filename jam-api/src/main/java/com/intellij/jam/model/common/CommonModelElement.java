@@ -16,16 +16,15 @@
 
 package com.intellij.jam.model.common;
 
-import javax.annotation.Nonnull;
-
 import com.intellij.jam.JamElement;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleUtil;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiManager;
-import com.intellij.psi.xml.XmlTag;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiManager;
+import consulo.language.util.ModuleUtilCore;
+import consulo.module.Module;
+import consulo.xml.psi.xml.XmlTag;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public interface CommonModelElement {
@@ -62,7 +61,7 @@ public interface CommonModelElement {
     }
 
     public Module getModule() {
-      return ModuleUtil.findModuleForPsiElement(getPsiElement());
+      return ModuleUtilCore.findModuleForPsiElement(getPsiElement());
     }
 
     public PsiElement getIdentifyingPsiElement() {

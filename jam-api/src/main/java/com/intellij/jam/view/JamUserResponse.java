@@ -16,10 +16,10 @@
 package com.intellij.jam.view;
 
 import com.intellij.jam.model.common.CommonModelElement;
-import com.intellij.openapi.ui.DialogWrapper;
-import com.intellij.openapi.ui.Messages;
-import com.intellij.psi.PsiElement;
-import com.intellij.util.IncorrectOperationException;
+import consulo.ui.ex.awt.DialogWrapper;
+import consulo.ui.ex.awt.Messages;
+import consulo.language.psi.PsiElement;
+import consulo.language.util.IncorrectOperationException;
 import consulo.ui.image.Image;
 
 import java.util.Collection;

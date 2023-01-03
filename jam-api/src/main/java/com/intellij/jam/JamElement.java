@@ -15,7 +15,7 @@
  */
 package com.intellij.jam;
 
-import com.intellij.semantic.SemElement;
+import consulo.language.sem.SemElement;
 
 /**
  * @author peter

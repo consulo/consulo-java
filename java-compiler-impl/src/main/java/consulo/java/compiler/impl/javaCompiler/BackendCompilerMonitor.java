@@ -1,6 +1,6 @@
 package consulo.java.compiler.impl.javaCompiler;
 
-import com.intellij.execution.process.ProcessHandler;
+import consulo.process.ProcessHandler;
 import consulo.disposer.Disposable;
 
 /**

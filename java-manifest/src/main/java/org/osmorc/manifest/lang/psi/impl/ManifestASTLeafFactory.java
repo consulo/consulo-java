@@ -25,29 +25,29 @@
 
 package org.osmorc.manifest.lang.psi.impl;
 
+import consulo.annotation.component.ExtensionImpl;
+import consulo.language.ast.IElementType;
+import consulo.language.impl.ast.ASTLeafFactory;
+import consulo.language.impl.ast.LeafElement;
+import consulo.language.version.LanguageVersion;
+import org.osmorc.manifest.lang.ManifestTokenType;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import org.osmorc.manifest.lang.ManifestTokenType;
-import com.intellij.psi.impl.source.tree.LeafElement;
-import com.intellij.psi.tree.IElementType;
-import consulo.lang.LanguageVersion;
-import consulo.psi.tree.ASTLeafFactory;
 
 /**
  * @author Robert F. Beeger (robert@beeger.net)
  */
-public class ManifestASTLeafFactory implements ASTLeafFactory
-{
-	@Nonnull
-	@Override
-	public LeafElement createLeaf(@Nonnull IElementType type, @Nonnull LanguageVersion languageVersion, @Nonnull CharSequence text)
-	{
-		return new ManifestTokenImpl((ManifestTokenType) type, text);
-	}
+@ExtensionImpl
+public class ManifestASTLeafFactory implements ASTLeafFactory {
+  @Nonnull
+  @Override
+  public LeafElement createLeaf(@Nonnull IElementType type, @Nonnull LanguageVersion languageVersion, @Nonnull CharSequence text) {
+    return new ManifestTokenImpl((ManifestTokenType) type, text);
+  }
 
-	@Override
-	public boolean apply(@Nullable IElementType elementType)
-	{
-		return elementType instanceof ManifestTokenType;
-	}
+  @Override
+  public boolean test(@Nullable IElementType elementType) {
+    return elementType instanceof ManifestTokenType;
+  }
 }

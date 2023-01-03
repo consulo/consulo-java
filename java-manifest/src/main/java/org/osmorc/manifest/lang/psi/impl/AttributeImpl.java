@@ -27,8 +27,8 @@ package org.osmorc.manifest.lang.psi.impl;
 
 import javax.annotation.Nonnull;
 
-import com.intellij.lang.ASTNode;
-import com.intellij.psi.stubs.IStubElementType;
+import consulo.language.ast.ASTNode;
+import consulo.language.psi.stub.IStubElementType;
 import org.osmorc.manifest.lang.psi.Attribute;
 import org.osmorc.manifest.lang.psi.stub.AssignmentExpressionStub;
 

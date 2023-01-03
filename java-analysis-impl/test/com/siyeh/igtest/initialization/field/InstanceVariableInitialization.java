@@ -2,6 +2,9 @@ package com.siyeh.igtest.initialization.field;
 
 import junit.framework.TestCase;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+
 public class InstanceVariableInitialization extends TestCase { // needs junit.jar for testcase to work
 
     private String javaHome;
@@ -81,8 +84,8 @@ class A {
 class B {
   private int i;
 
-  B() throws java.io.FileNotFoundException {
-    try (java.io.FileInputStream in = new java.io.FileInputStream("asdf" + (i = 3) + "asdf")) {
+  B() throws FileNotFoundException {
+    try (FileInputStream in = new FileInputStream("asdf" + (i = 3) + "asdf")) {
 
     }
   }
