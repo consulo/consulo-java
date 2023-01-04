@@ -2,7 +2,7 @@
  * @author VISTALL
  * @since 07/12/2022
  */
-module consulo.java.intelliLang {
+open module consulo.java.intelliLang {
     // TODO drop in future
     requires consulo.ide.impl;
 
