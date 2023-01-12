@@ -15,57 +15,51 @@
  */
 package com.intellij.java.impl.refactoring.typeMigration.ui;
 
+import consulo.project.Project;
+import consulo.project.ui.view.tree.AbstractTreeStructureBase;
+import consulo.project.ui.view.tree.TreeStructureProvider;
+
+import javax.annotation.Nonnull;
 import java.util.Collections;
 import java.util.List;
-
-import consulo.project.ui.view.tree.TreeStructureProvider;
-import consulo.ide.impl.idea.ide.util.treeView.AbstractTreeStructureBase;
-import consulo.project.Project;
 
 /**
  * @author anna
  */
-public class TypeMigrationTreeStructure extends AbstractTreeStructureBase
-{
-	private MigrationRootNode myRoot;
+public class TypeMigrationTreeStructure extends AbstractTreeStructureBase {
+  private MigrationRootNode myRoot;
 
-	public TypeMigrationTreeStructure(final Project project)
-	{
-		super(project);
-	}
+  public TypeMigrationTreeStructure(final Project project) {
+    super(project);
+  }
 
-	public void setRoots(final MigrationRootNode root)
-	{
-		myRoot = root;
-	}
+  public void setRoots(final MigrationRootNode root) {
+    myRoot = root;
+  }
 
+  @Override
+  public List<TreeStructureProvider> getProviders() {
+    return Collections.emptyList();
+  }
+
+  @Nonnull
 	@Override
-	public List<TreeStructureProvider> getProviders()
-	{
-		return Collections.emptyList();
-	}
+  public Object getRootElement() {
+    return myRoot;
+  }
 
-	@Override
-	public Object getRootElement()
-	{
-		return myRoot;
-	}
+  @Override
+  public void commit() {
 
-	@Override
-	public void commit()
-	{
+  }
 
-	}
+  @Override
+  public boolean hasSomethingToCommit() {
+    return false;
+  }
 
-	@Override
-	public boolean hasSomethingToCommit()
-	{
-		return false;
-	}
-
-	@Override
-	public boolean isToBuildChildrenInBackground(final Object element)
-	{
-		return true;
-	}
+  @Override
+  public boolean isToBuildChildrenInBackground(final Object element) {
+    return true;
+  }
 }

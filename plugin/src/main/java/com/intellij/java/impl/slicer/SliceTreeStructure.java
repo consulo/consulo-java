@@ -15,11 +15,11 @@
  */
 package com.intellij.java.impl.slicer;
 
-import consulo.project.ui.view.tree.TreeStructureProvider;
-import consulo.ide.impl.idea.ide.util.treeView.AbstractTreeStructureBase;
 import consulo.project.Project;
-import javax.annotation.Nonnull;
+import consulo.project.ui.view.tree.AbstractTreeStructureBase;
+import consulo.project.ui.view.tree.TreeStructureProvider;
 
+import javax.annotation.Nonnull;
 import java.util.Collections;
 import java.util.List;
 
