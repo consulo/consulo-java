@@ -31,7 +31,6 @@ import consulo.codeEditor.Editor;
 import consulo.dataContext.DataContext;
 import consulo.disposer.Disposer;
 import consulo.ide.impl.compiler.TranslatingCompilerFilesMonitor;
-import consulo.ide.impl.idea.codeInsight.documentation.DocumentationManager;
 import consulo.ide.impl.idea.ui.popup.NotLookupOrSearchCondition;
 import consulo.ide.impl.idea.ui.popup.PopupPositionManager;
 import consulo.language.editor.CommonDataKeys;
@@ -163,7 +162,7 @@ public class ShowByteCodeAction extends AnAction {
                                               .setRequestFocusCondition(project, NotLookupOrSearchCondition.INSTANCE)
                                               .setProject
                                                 (project)
-                                              .setDimensionServiceKey(project, DocumentationManager.JAVADOC_LOCATION_AND_SIZE, false)
+                                              .setDimensionServiceKey(project, "ByteCodeViewer", false)
                                               .setResizable(true)
                                               .setMovable(true)
                                               .setRequestFocus(LookupManager
