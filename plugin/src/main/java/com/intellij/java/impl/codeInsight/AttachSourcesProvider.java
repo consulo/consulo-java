@@ -15,6 +15,8 @@
  */
 package com.intellij.java.impl.codeInsight;
 
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ExtensionAPI;
 import consulo.component.extension.ExtensionPointName;
 import consulo.language.psi.PsiFile;
 import consulo.module.content.layer.orderEntry.LibraryOrderEntry;
@@ -26,11 +28,8 @@ import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.List;
 
+@ExtensionAPI(ComponentScope.PROJECT)
 public interface AttachSourcesProvider {
-  ExtensionPointName<AttachSourcesProvider> EP_NAME =
-    new ExtensionPointName<AttachSourcesProvider>("consulo.java.attachSourcesProvider");
-
-
   @Nonnull
   Collection<AttachSourcesAction> getActions(List<LibraryOrderEntry> orderEntries, PsiFile psiFile);
 

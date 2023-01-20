@@ -131,7 +131,7 @@ public class AttachSourcesNotificationProvider implements EditorNotificationProv
 
 				PsiFile clsFile = PsiManager.getInstance(myProject).findFile(file);
 				boolean hasNonLightAction = false;
-				for(AttachSourcesProvider each : AttachSourcesProvider.EP_NAME.getExtensionList())
+				for(AttachSourcesProvider each : myProject.getExtensionList(AttachSourcesProvider.class))
 				{
 					for(AttachSourcesProvider.AttachSourcesAction action : each.getActions(libraries, clsFile))
 					{
