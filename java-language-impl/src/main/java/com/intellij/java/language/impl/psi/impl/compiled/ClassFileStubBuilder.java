@@ -28,8 +28,10 @@ import consulo.language.psi.stub.StubElement;
 import consulo.logging.Logger;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.fileType.FileType;
+import jakarta.inject.Inject;
 
 import javax.annotation.Nonnull;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -42,6 +44,13 @@ public class ClassFileStubBuilder implements BinaryFileStubBuilder {
   private static final Logger LOG = Logger.getInstance(ClassFileStubBuilder.class);
 
   public static final int STUB_VERSION = 20;
+
+  private final Application myApplication;
+
+  @Inject
+  public ClassFileStubBuilder(Application application) {
+    myApplication = application;
+  }
 
   @Nonnull
   @Override
@@ -62,7 +71,7 @@ public class ClassFileStubBuilder implements BinaryFileStubBuilder {
     try {
       try {
         file.setPreloadedContentHint(content);
-        ClassFileDecompiler decompiler = ClassFileDecompilers.find(file);
+        ClassFileDecompiler decompiler = ClassFileDecompilers.find(myApplication, file);
         if (decompiler instanceof ClassFileDecompiler.Full) {
           return ((ClassFileDecompiler.Full) decompiler).getStubBuilder().buildFileStub(fileContent);
         }
@@ -100,7 +109,7 @@ public class ClassFileStubBuilder implements BinaryFileStubBuilder {
   public int getStubVersion() {
     int version = STUB_VERSION;
 
-    List<ClassFileDecompiler> decompilers = Application.get().getExtensionList(ClassFileDecompiler.class);
+    List<ClassFileDecompiler> decompilers = new ArrayList<>(myApplication.getExtensionList(ClassFileDecompiler.class));
     Collections.sort(decompilers, CLASS_NAME_COMPARATOR);
     for (ClassFileDecompiler decompiler : decompilers) {
       if (decompiler instanceof ClassFileDecompiler.Full) {

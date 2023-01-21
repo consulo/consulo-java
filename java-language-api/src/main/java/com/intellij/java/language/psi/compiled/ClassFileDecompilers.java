@@ -31,8 +31,14 @@ public class ClassFileDecompilers {
   }
 
   @Nullable
+  @Deprecated
   public static ClassFileDecompiler find(@Nonnull VirtualFile file) {
-    for (ClassFileDecompiler decompiler : Application.get().getExtensionList(ClassFileDecompiler.class)) {
+    return find(Application.get(), file);
+  }
+
+  @Nullable
+  public static ClassFileDecompiler find(@Nonnull Application application, @Nonnull VirtualFile file) {
+    for (ClassFileDecompiler decompiler : application.getExtensionList(ClassFileDecompiler.class)) {
       if ((decompiler instanceof ClassFileDecompiler.Light || decompiler instanceof ClassFileDecompiler.Full) && decompiler.accepts(file)) {
         return decompiler;
       }
