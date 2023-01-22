@@ -17,10 +17,16 @@ package com.intellij.java.impl.application.options;
 
 import com.intellij.java.language.JavadocBundle;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.configurable.BeanConfigurable;
 import consulo.configurable.ProjectConfigurable;
+import consulo.configurable.SimpleConfigurableByProperties;
+import consulo.disposer.Disposable;
 import consulo.java.impl.application.options.JavaSmartKeysSettings;
-import org.jetbrains.annotations.Nls;
+import consulo.ui.CheckBox;
+import consulo.ui.Component;
+import consulo.ui.annotation.RequiredUIAccess;
+import consulo.ui.layout.VerticalLayout;
+import jakarta.inject.Inject;
+import jakarta.inject.Provider;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -30,10 +36,29 @@ import javax.annotation.Nullable;
  * @since 2/2/11 12:32 PM
  */
 @ExtensionImpl
-public class JavaSmartKeysConfigurable extends BeanConfigurable<JavaSmartKeysSettings> implements ProjectConfigurable {
-  public JavaSmartKeysConfigurable() {
-    super(JavaSmartKeysSettings.getInstance());
-    checkBox("JAVADOC_GENERATE_CLOSING_TAG", JavadocBundle.message("javadoc.generate.closing.tag"));
+public class JavaSmartKeysConfigurable extends SimpleConfigurableByProperties implements ProjectConfigurable {
+  private final Provider<JavaSmartKeysSettings> myJavaSmartKeysSettingsProvider;
+
+  @Inject
+  public JavaSmartKeysConfigurable(Provider<JavaSmartKeysSettings> javaSmartKeysSettingsProvider) {
+    myJavaSmartKeysSettingsProvider = javaSmartKeysSettingsProvider;
+  }
+
+  @RequiredUIAccess
+  @Nonnull
+  @Override
+  protected Component createLayout(@Nonnull PropertyBuilder propertyBuilder,
+                                   @Nonnull Disposable disposable) {
+    JavaSmartKeysSettings javaSmartKeysSettings = myJavaSmartKeysSettingsProvider.get();
+
+    VerticalLayout root = VerticalLayout.create();
+
+    CheckBox autoInsertCloseTagJavadoc = CheckBox.create(JavadocBundle.message("javadoc.generate.closing.tag"));
+    propertyBuilder.add(autoInsertCloseTagJavadoc,
+                        javaSmartKeysSettings::isJavadocGenerateClosingTag,
+                        javaSmartKeysSettings::setJavadocGenerateClosingTag);
+    root.add(autoInsertCloseTagJavadoc);
+    return root;
   }
 
   @Nonnull
@@ -48,7 +73,7 @@ public class JavaSmartKeysConfigurable extends BeanConfigurable<JavaSmartKeysSet
     return "editor.preferences.smartKeys";
   }
 
-  @Nls
+  @Nonnull
   @Override
   public String getDisplayName() {
     return "Java";

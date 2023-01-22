@@ -40,6 +40,14 @@ public class JavaSmartKeysSettings implements PersistentStateComponent<Element> 
 
   public boolean JAVADOC_GENERATE_CLOSING_TAG = true;
 
+  public void setJavadocGenerateClosingTag(boolean value) {
+    JAVADOC_GENERATE_CLOSING_TAG = value;
+  }
+
+  public boolean isJavadocGenerateClosingTag() {
+    return JAVADOC_GENERATE_CLOSING_TAG;
+  }
+
   @Override
   public void loadState(final Element state) {
     try {
