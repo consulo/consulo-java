@@ -43,7 +43,7 @@ import consulo.util.lang.StringUtil;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-@ExtensionImpl(id = "defaultJavaDebugRunner", order = "last")
+@ExtensionImpl(id = "defaultJavaDebugRunner")
 public class GenericDebuggerRunner extends JavaPatchableProgramRunner<GenericDebuggerRunnerSettings> {
   @Override
   public boolean canRun(@Nonnull final String executorId, @Nonnull final RunProfile profile) {
