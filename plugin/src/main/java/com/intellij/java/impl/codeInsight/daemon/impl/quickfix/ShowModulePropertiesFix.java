@@ -17,6 +17,7 @@ package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
 import consulo.ide.setting.ShowSettingsUtil;
 import consulo.language.editor.inspection.IntentionAndQuickFixAction;
+import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.ui.ex.action.ActionManager;
 import consulo.ui.ex.action.AnAction;
 import consulo.ui.ex.action.IdeActions;
@@ -30,7 +31,7 @@ import consulo.language.psi.PsiFile;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class ShowModulePropertiesFix extends IntentionAndQuickFixAction {
+public class ShowModulePropertiesFix extends IntentionAndQuickFixAction implements SyntheticIntentionAction {
   private final String myModuleName;
 
   public ShowModulePropertiesFix(@Nonnull PsiElement context) {
