@@ -31,7 +31,7 @@ import javax.annotation.Nullable;
 /**
  * @author Konstantin Bulenkov
  */
-@ExtensionImpl(order = "first")
+@ExtensionImpl
 public class I18nMessageGotoDeclarationHandler extends GotoDeclarationHandlerBase {
 
   @Override

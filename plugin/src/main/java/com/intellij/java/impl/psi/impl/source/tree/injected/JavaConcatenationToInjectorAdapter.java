@@ -12,7 +12,7 @@ import jakarta.inject.Inject;
 
 import javax.annotation.Nonnull;
 
-@ExtensionImpl(order = "last")
+@ExtensionImpl
 public class JavaConcatenationToInjectorAdapter extends BaseConcatenation2InjectorAdapter implements MultiHostInjector {
   @Inject
   public JavaConcatenationToInjectorAdapter(@Nonnull Project project) {

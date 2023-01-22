@@ -26,7 +26,7 @@ import javax.annotation.Nullable;
 /**
  * @author spleaner
  */
-@ExtensionImpl(order = "last")
+@ExtensionImpl
 public class FileDocumentationProvider implements UnrestrictedDocumentationProvider {
 
   @Override
