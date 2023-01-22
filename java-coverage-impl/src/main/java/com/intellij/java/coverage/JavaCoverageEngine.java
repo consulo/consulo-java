@@ -55,7 +55,7 @@ import java.util.*;
 /**
  * @author Roman.Chernyatchik
  */
-@ExtensionImpl(order = "last")
+@ExtensionImpl
 public class JavaCoverageEngine extends CoverageEngine {
   private static final Logger LOG = Logger.getInstance(JavaCoverageEngine.class);
 
