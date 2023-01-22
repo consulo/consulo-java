@@ -23,6 +23,7 @@ open module consulo.java {
 
   // TODO remove in future
   requires java.desktop;
+  requires forms.rt;
 
   requires one.util.streamex;
 
