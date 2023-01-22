@@ -35,6 +35,7 @@ public class DefaultManifestHeaderParserContributor implements ManifestHeaderPar
     registrator.register("Magic", new SimpleHeaderParser());
     registrator.register("Name", new SimpleHeaderParser());
     registrator.register("Manifest-Version", new SimpleHeaderParser());
+    registrator.register("Main-Class", new GenericComplexHeaderParser());
 
     // TODO [VISTALL] this is list of futures - that need replace to other plugins
 
