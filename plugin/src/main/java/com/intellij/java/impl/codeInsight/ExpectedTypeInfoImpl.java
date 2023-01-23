@@ -18,16 +18,15 @@ package com.intellij.java.impl.codeInsight;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.application.util.NullableLazyValue;
-import consulo.application.util.VolatileNullableLazyValue;
-import consulo.ide.impl.idea.openapi.util.NullableComputable;
 import consulo.language.editor.completion.lookup.TailType;
+import consulo.util.lang.lazy.LazyValue;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.function.Supplier;
 
 public class ExpectedTypeInfoImpl implements ExpectedTypeInfo {
-  public static final NullableComputable<String> NULL = () -> null;
+  public static final Supplier<String> NULL = () -> null;
   @Nonnull
   private final PsiType type;
   @Nonnull
@@ -37,9 +36,7 @@ public class ExpectedTypeInfoImpl implements ExpectedTypeInfo {
   private final TailType myTailType;
   private final PsiMethod myCalledMethod;
   @Nonnull
-  private final NullableComputable<String> expectedNameComputable;
-  @Nonnull
-  private final NullableLazyValue<String> expectedNameLazyValue;
+  private final Supplier<String> expectedNameLazyValue;
 
   @Override
   public int getKind() {
@@ -57,21 +54,14 @@ public class ExpectedTypeInfoImpl implements ExpectedTypeInfo {
                               @Nonnull PsiType defaultType,
                               @Nonnull TailType myTailType,
                               PsiMethod calledMethod,
-                              @Nonnull NullableComputable<String> expectedName) {
+                              @Nonnull Supplier<String> expectedName) {
     this.type = type;
     this.kind = kind;
 
     this.myTailType = myTailType;
     this.defaultType = defaultType;
     myCalledMethod = calledMethod;
-    this.expectedNameComputable = expectedName;
-    expectedNameLazyValue = new VolatileNullableLazyValue<String>() {
-      @Nullable
-      @Override
-      protected String compute() {
-        return expectedNameComputable.compute();
-      }
-    };
+    expectedNameLazyValue = LazyValue.nullable(expectedName);
 
     PsiUtil.ensureValidType(type);
     PsiUtil.ensureValidType(defaultType);
@@ -79,7 +69,7 @@ public class ExpectedTypeInfoImpl implements ExpectedTypeInfo {
 
   @Nullable
   public String getExpectedName() {
-    return expectedNameLazyValue.getValue();
+    return expectedNameLazyValue.get();
   }
 
   @Override

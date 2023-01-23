@@ -55,6 +55,7 @@ import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.function.Supplier;
 
 /**
  * @author ven
@@ -127,7 +128,7 @@ public class ExpectedTypesProvider {
                                                      PsiType defaultType,
                                                      @Nonnull TailType tailType,
                                                      PsiMethod calledMethod,
-                                                     NullableComputable<String> expectedName) {
+                                                     Supplier<String> expectedName) {
     return new ExpectedTypeInfoImpl(type, kind, defaultType, tailType, calledMethod, expectedName);
   }
 
@@ -467,14 +468,9 @@ public class ExpectedTypesProvider {
 
     private void visitMethodReturnType(final PsiMethod scopeMethod, PsiType type, boolean tailTypeSemicolon) {
       if (type != null) {
-        NullableComputable<String> expectedName;
+        Supplier<String> expectedName;
         if (PropertyUtil.isSimplePropertyAccessor(scopeMethod)) {
-          expectedName = new NullableComputable<String>() {
-            @Override
-            public String compute() {
-              return PropertyUtil.getPropertyName(scopeMethod);
-            }
-          };
+          expectedName = () -> PropertyUtil.getPropertyName(scopeMethod);
         }
         else {
           expectedName = ExpectedTypeInfoImpl.NULL;
@@ -597,7 +593,7 @@ public class ExpectedTypesProvider {
         PsiType type = lExpr.getType();
         if (type != null) {
           TailType tailType = getAssignmentRValueTailType(assignment);
-          NullableComputable<String> expectedName = ExpectedTypeInfoImpl.NULL;
+          Supplier<String> expectedName = ExpectedTypeInfoImpl.NULL;
           if (lExpr instanceof PsiReferenceExpression) {
             PsiElement refElement = ((PsiReferenceExpression)lExpr).resolve();
             if (refElement instanceof PsiVariable) {
@@ -801,7 +797,7 @@ public class ExpectedTypesProvider {
         return null;
       }
 
-      NullableComputable<String> expectedName = ExpectedTypeInfoImpl.NULL;
+      Supplier<String> expectedName = ExpectedTypeInfoImpl.NULL;
       if (anotherExpr instanceof PsiReferenceExpression) {
         PsiElement refElement = ((PsiReferenceExpression)anotherExpr).resolve();
         if (refElement instanceof PsiVariable) {
@@ -1165,7 +1161,7 @@ public class ExpectedTypesProvider {
       TailType tailType = getMethodArgumentTailType(argument, index, method, substitutor, parameters);
       PsiType defaultType = getDefaultType(method, substitutor, parameterType, argument, args, index);
 
-      NullableComputable<String> propertyName = getPropertyName(parameter);
+      Supplier<String> propertyName = getPropertyName(parameter);
       ExpectedTypeInfoImpl info = createInfoImpl(parameterType, ExpectedTypeInfo.TYPE_OR_SUBTYPE, defaultType,
                                                  tailType, method, propertyName);
       array.add(info);
@@ -1347,19 +1343,15 @@ public class ExpectedTypesProvider {
       return parameterType;
     }
 
-    @Nullable
-    private static NullableComputable<String> getPropertyName(@Nonnull final PsiVariable variable) {
-      return new NullableComputable<String>() {
-        @Override
-        public String compute() {
-          final String name = variable.getName();
-          if (name == null) {
-            return null;
-          }
-          JavaCodeStyleManager codeStyleManager = JavaCodeStyleManager.getInstance(variable.getProject());
-          VariableKind variableKind = codeStyleManager.getVariableKind(variable);
-          return codeStyleManager.variableNameToPropertyName(name, variableKind);
+    private static Supplier<String> getPropertyName(@Nonnull final PsiVariable variable) {
+      return () -> {
+        final String name = variable.getName();
+        if (name == null) {
+          return null;
         }
+        JavaCodeStyleManager codeStyleManager = JavaCodeStyleManager.getInstance(variable.getProject());
+        VariableKind variableKind = codeStyleManager.getVariableKind(variable);
+        return codeStyleManager.variableNameToPropertyName(name, variableKind);
       };
     }
 
