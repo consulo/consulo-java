@@ -15,5 +15,5 @@ open module consulo.java.properties.impl {
   requires consulo.ide.impl;
 
   exports consulo.java.properties.impl.i18n;
-=  exports consulo.java.properties.impl.psi;
+  exports consulo.java.properties.impl.psi;
 }
