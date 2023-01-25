@@ -13,4 +13,7 @@ open module consulo.java.properties.impl {
   requires java.desktop;
   // TODO remove in future
   requires consulo.ide.impl;
+
+  exports consulo.java.properties.impl.i18n;
+=  exports consulo.java.properties.impl.psi;
 }
