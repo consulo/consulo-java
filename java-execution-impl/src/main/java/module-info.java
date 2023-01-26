@@ -13,6 +13,7 @@ open module consulo.java.execution.impl {
 
     // TODO remove this dep in future
     requires java.desktop;
+    requires consulo.ide.impl;
  
     exports com.intellij.java.execution.impl;
     exports com.intellij.java.execution.impl.actions;
