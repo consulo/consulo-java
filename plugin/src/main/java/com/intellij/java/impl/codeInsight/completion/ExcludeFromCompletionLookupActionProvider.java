@@ -31,7 +31,7 @@ import java.util.function.Consumer;
 /**
  * @author peter
  */
-@ExtensionImpl(id = "excludeFromCompletion", order = "last")
+@ExtensionImpl(id = "javaExcludeFromCompletion", order = "after importStatic")
 public class ExcludeFromCompletionLookupActionProvider implements LookupActionProvider {
   @Override
   public void fillActions(LookupElement element, Lookup lookup, Consumer<LookupElementAction> consumer) {
