@@ -424,7 +424,7 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
   private static List<ClassFilter> getActiveFilters() {
     DebuggerSettings settings = DebuggerSettings.getInstance();
     List<ClassFilter> classFilters = new ArrayList<>();
-    for (DebuggerClassFilterProvider provider : DebuggerClassFilterProvider.EP_NAME.getExtensions()) {
+    for (DebuggerClassFilterProvider provider : DebuggerClassFilterProvider.EP_NAME.getExtensionList()) {
       classFilters.addAll(provider.getFilters());
     }
     if (settings.TRACING_FILTERS_ENABLED) {

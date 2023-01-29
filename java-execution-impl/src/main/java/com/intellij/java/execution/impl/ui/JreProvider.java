@@ -15,23 +15,26 @@
  */
 package com.intellij.java.execution.impl.ui;
 
-import consulo.component.extension.ExtensionPointName;
 import consulo.annotation.DeprecationInfo;
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ExtensionAPI;
+import consulo.component.extension.ExtensionPointName;
 
 import javax.annotation.Nonnull;
 
 /**
  * Extension point for providing custom jre to be shown at run configuration control.
- * 
+ *
  * @author Denis Zhdanov
  * @since 5/9/13 10:04 PM
  */
 @Deprecated
 @DeprecationInfo("Unused")
+@ExtensionAPI(ComponentScope.APPLICATION)
 public interface JreProvider {
 
-  ExtensionPointName<JreProvider> EP_NAME = new ExtensionPointName<JreProvider>("consulo.java.jreProvider");
-  
+  ExtensionPointName<JreProvider> EP_NAME = ExtensionPointName.create(JreProvider.class);
+
   @Nonnull
   String getJrePath();
 }

@@ -15,16 +15,19 @@
  */
 package com.intellij.java.debugger.ui.classFilter;
 
-import java.util.List;
-
+import consulo.annotation.component.ComponentScope;
+import consulo.annotation.component.ExtensionAPI;
 import consulo.component.extension.ExtensionPointName;
+
+import java.util.List;
 
 /**
  * @author Eugene Zhuravlev
  *         Date: Oct 22, 2008
  */
+@ExtensionAPI(ComponentScope.APPLICATION)
 public interface DebuggerClassFilterProvider {
-  ExtensionPointName<DebuggerClassFilterProvider> EP_NAME = new ExtensionPointName<DebuggerClassFilterProvider>("consulo.java.debuggerClassFilterProvider");
+  ExtensionPointName<DebuggerClassFilterProvider> EP_NAME = ExtensionPointName.create(DebuggerClassFilterProvider.class);
 
   List<ClassFilter> getFilters();
 }
