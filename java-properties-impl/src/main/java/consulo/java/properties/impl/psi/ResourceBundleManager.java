@@ -69,8 +69,7 @@ public abstract class ResourceBundleManager {
   @Nullable
   public static ResourceBundleManager getManager(PsiFile context) throws ResourceBundleNotFoundException {
     final Project project = context.getProject();
-    final ResourceBundleManager[] managers = project.getExtensions(RESOURCE_BUNDLE_MANAGER);
-    for (ResourceBundleManager manager : managers) {
+    for (ResourceBundleManager manager : RESOURCE_BUNDLE_MANAGER.getExtensionList()) {
       if (manager.isActive(context)) {
         return manager;
       }
