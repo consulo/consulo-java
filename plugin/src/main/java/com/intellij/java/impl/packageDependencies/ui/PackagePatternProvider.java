@@ -131,7 +131,7 @@ public class PackagePatternProvider extends PatternDialectProvider {
   }
 
   @Nonnull
-  public String getShortName() {
+  public String getId() {
     return PACKAGES;
   }
 
