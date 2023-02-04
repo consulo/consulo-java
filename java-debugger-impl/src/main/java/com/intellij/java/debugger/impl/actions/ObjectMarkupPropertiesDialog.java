@@ -16,11 +16,11 @@
 package com.intellij.java.debugger.impl.actions;
 
 import consulo.ide.impl.idea.ide.util.PropertiesComponent;
-import consulo.ide.impl.idea.openapi.ui.ex.MultiLineLabel;
 import consulo.ide.impl.idea.xdebugger.impl.ui.tree.ValueMarkerPresentationDialogBase;
+import consulo.ui.ex.awt.MultiLineLabel;
 import org.jetbrains.annotations.NonNls;
-import javax.annotation.Nonnull;
 
+import javax.annotation.Nonnull;
 import javax.swing.*;
 import java.awt.*;
 
@@ -28,7 +28,7 @@ import java.awt.*;
  * @author Eugene Zhuravlev
  *         Date: Feb 4, 2007
  */
-public class ObjectMarkupPropertiesDialog extends consulo.ide.impl.idea.xdebugger.impl.ui.tree.ValueMarkerPresentationDialogBase {
+public class ObjectMarkupPropertiesDialog extends ValueMarkerPresentationDialogBase {
   @NonNls private static final String MARK_ALL_REFERENCED_VALUES_KEY = "debugger.mark.all.referenced.values";
   private JCheckBox myCbMarkAdditionalFields;
   private final boolean mySuggestAdditionalMarkup;

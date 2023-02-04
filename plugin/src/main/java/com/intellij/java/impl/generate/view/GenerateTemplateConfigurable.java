@@ -19,136 +19,120 @@
  */
 package com.intellij.java.impl.generate.view;
 
-import java.awt.BorderLayout;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.swing.JComponent;
-import javax.swing.JPanel;
-
-import javax.annotation.Nonnull;
-
-import consulo.configurable.ConfigurationException;
-import consulo.configurable.UnnamedConfigurable;
 import com.intellij.java.impl.generate.element.ClassElement;
 import com.intellij.java.impl.generate.element.FieldElement;
 import com.intellij.java.impl.generate.element.GenerationHelper;
 import com.intellij.java.impl.generate.template.TemplateResource;
 import com.intellij.java.impl.generate.template.TemplatesManager;
+import com.intellij.java.language.psi.PsiType;
 import consulo.application.Result;
-import consulo.language.editor.WriteCommandAction;
-import consulo.document.Document;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.EditorFactory;
-import consulo.virtualFileSystem.fileType.FileType;
+import consulo.configurable.ConfigurationException;
+import consulo.configurable.UnnamedConfigurable;
+import consulo.document.Document;
+import consulo.language.editor.WriteCommandAction;
 import consulo.language.file.FileTypeManager;
 import consulo.language.plain.PlainTextFileType;
-import consulo.project.Project;
-import consulo.ide.impl.idea.openapi.ui.ex.MultiLineLabel;
-import consulo.util.lang.Comparing;
-import consulo.util.lang.StringUtil;
 import consulo.language.psi.PsiDocumentManager;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiFileFactory;
-import com.intellij.java.language.psi.PsiType;
-import consulo.util.lang.LocalTimeCounter;
+import consulo.project.Project;
 import consulo.ui.ex.awt.JBUI;
+import consulo.ui.ex.awt.MultiLineLabel;
+import consulo.util.lang.Comparing;
+import consulo.util.lang.LocalTimeCounter;
+import consulo.util.lang.StringUtil;
+import consulo.virtualFileSystem.fileType.FileType;
 
-public class GenerateTemplateConfigurable implements UnnamedConfigurable
-{
-	private final TemplateResource template;
-	private final Editor myEditor;
-	private final List<String> myAvailableImplicits = new ArrayList<String>();
+import javax.annotation.Nonnull;
+import javax.swing.*;
+import java.awt.*;
+import java.util.List;
+import java.util.*;
 
-	public GenerateTemplateConfigurable(TemplateResource template, Map<String, PsiType> contextMap, Project project)
-	{
-		this(template, contextMap, project, true);
-	}
+public class GenerateTemplateConfigurable implements UnnamedConfigurable {
+  private final TemplateResource template;
+  private final Editor myEditor;
+  private final List<String> myAvailableImplicits = new ArrayList<String>();
 
-	public GenerateTemplateConfigurable(TemplateResource template, Map<String, PsiType> contextMap, Project project, boolean multipleFields)
-	{
-		this.template = template;
-		final EditorFactory factory = EditorFactory.getInstance();
-		Document doc = factory.createDocument(template.getTemplate());
-		final FileType ftl = FileTypeManager.getInstance().findFileTypeByName("VTL");
-		if(project != null && ftl != null)
-		{
-			final PsiFile file = PsiFileFactory.getInstance(project).createFileFromText(template.getFileName(), ftl, template.getTemplate(), LocalTimeCounter.currentTime(), true);
-			if(!template.isDefault())
-			{
-				final HashMap<String, PsiType> map = new LinkedHashMap<String, PsiType>();
-				map.put("java_version", PsiType.INT);
-				map.put("class", TemplatesManager.createElementType(project, ClassElement.class));
-				if(multipleFields)
-				{
-					map.put("fields", TemplatesManager.createFieldListElementType(project));
-				}
-				else
-				{
-					map.put("field", TemplatesManager.createElementType(project, FieldElement.class));
-				}
-				map.put("helper", TemplatesManager.createElementType(project, GenerationHelper.class));
-				map.put("settings", PsiType.NULL);
-				map.putAll(contextMap);
-				myAvailableImplicits.addAll(map.keySet());
-				file.getViewProvider().putUserData(TemplatesManager.TEMPLATE_IMPLICITS, map);
-			}
-			final Document document = PsiDocumentManager.getInstance(project).getDocument(file);
-			if(document != null)
-			{
-				doc = document;
-			}
-		}
-		myEditor = factory.createEditor(doc, project, ftl != null ? ftl : PlainTextFileType.INSTANCE, template.isDefault());
-	}
+  public GenerateTemplateConfigurable(TemplateResource template, Map<String, PsiType> contextMap, Project project) {
+    this(template, contextMap, project, true);
+  }
 
-	@Override
-	public JComponent createComponent()
-	{
-		final JComponent component = myEditor.getComponent();
-		if(myAvailableImplicits.isEmpty())
-		{
-			return component;
-		}
-		final JPanel panel = new JPanel(new BorderLayout());
-		panel.add(component, BorderLayout.CENTER);
-		MultiLineLabel label = new MultiLineLabel("<html>Available implicit variables:\n" + StringUtil.join(myAvailableImplicits, ", ") + "</html>");
-		label.setPreferredSize(JBUI.size(250, 30));
-		panel.add(label, BorderLayout.SOUTH);
-		return panel;
-	}
+  public GenerateTemplateConfigurable(TemplateResource template, Map<String, PsiType> contextMap, Project project, boolean multipleFields) {
+    this.template = template;
+    final EditorFactory factory = EditorFactory.getInstance();
+    Document doc = factory.createDocument(template.getTemplate());
+    final FileType ftl = FileTypeManager.getInstance().findFileTypeByName("VTL");
+    if (project != null && ftl != null) {
+      final PsiFile file = PsiFileFactory.getInstance(project)
+                                         .createFileFromText(template.getFileName(),
+                                                             ftl,
+                                                             template.getTemplate(),
+                                                             LocalTimeCounter.currentTime(),
+                                                             true);
+      if (!template.isDefault()) {
+        final HashMap<String, PsiType> map = new LinkedHashMap<String, PsiType>();
+        map.put("java_version", PsiType.INT);
+        map.put("class", TemplatesManager.createElementType(project, ClassElement.class));
+        if (multipleFields) {
+          map.put("fields", TemplatesManager.createFieldListElementType(project));
+        }
+        else {
+          map.put("field", TemplatesManager.createElementType(project, FieldElement.class));
+        }
+        map.put("helper", TemplatesManager.createElementType(project, GenerationHelper.class));
+        map.put("settings", PsiType.NULL);
+        map.putAll(contextMap);
+        myAvailableImplicits.addAll(map.keySet());
+        file.getViewProvider().putUserData(TemplatesManager.TEMPLATE_IMPLICITS, map);
+      }
+      final Document document = PsiDocumentManager.getInstance(project).getDocument(file);
+      if (document != null) {
+        doc = document;
+      }
+    }
+    myEditor = factory.createEditor(doc, project, ftl != null ? ftl : PlainTextFileType.INSTANCE, template.isDefault());
+  }
 
-	@Override
-	public boolean isModified()
-	{
-		return !Comparing.equal(myEditor.getDocument().getText(), template.getTemplate());
-	}
+  @Override
+  public JComponent createComponent() {
+    final JComponent component = myEditor.getComponent();
+    if (myAvailableImplicits.isEmpty()) {
+      return component;
+    }
+    final JPanel panel = new JPanel(new BorderLayout());
+    panel.add(component, BorderLayout.CENTER);
+    MultiLineLabel label =
+      new MultiLineLabel("<html>Available implicit variables:\n" + StringUtil.join(myAvailableImplicits, ", ") + "</html>");
+    label.setPreferredSize(JBUI.size(250, 30));
+    panel.add(label, BorderLayout.SOUTH);
+    return panel;
+  }
 
-	@Override
-	public void apply() throws ConfigurationException
-	{
-		template.setTemplate(myEditor.getDocument().getText());
-	}
+  @Override
+  public boolean isModified() {
+    return !Comparing.equal(myEditor.getDocument().getText(), template.getTemplate());
+  }
 
-	@Override
-	public void reset()
-	{
-		new WriteCommandAction(null)
-		{
-			@Override
-			protected void run(@Nonnull Result result) throws Throwable
-			{
-				myEditor.getDocument().setText(template.getTemplate());
-			}
-		}.execute();
-	}
+  @Override
+  public void apply() throws ConfigurationException {
+    template.setTemplate(myEditor.getDocument().getText());
+  }
 
-	@Override
-	public void disposeUIResources()
-	{
-		EditorFactory.getInstance().releaseEditor(myEditor);
-	}
+  @Override
+  public void reset() {
+    new WriteCommandAction(null) {
+      @Override
+      protected void run(@Nonnull Result result) throws Throwable {
+        myEditor.getDocument().setText(template.getTemplate());
+      }
+    }.execute();
+  }
+
+  @Override
+  public void disposeUIResources() {
+    EditorFactory.getInstance().releaseEditor(myEditor);
+  }
 }
