@@ -15,4 +15,8 @@ module consulo.java.coverage.impl {
 
     // TODO remove in future
     requires java.desktop;
+   
+    exports com.intellij.java.coverage;
+    exports com.intellij.java.coverage.info;
+    exports com.intellij.java.coverage.view;
 }
