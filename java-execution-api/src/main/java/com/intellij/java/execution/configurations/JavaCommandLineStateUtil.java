@@ -26,6 +26,7 @@ import javax.annotation.Nonnull;
 /**
  * @author spleaner
  */
+@Deprecated
 public class JavaCommandLineStateUtil {
   private JavaCommandLineStateUtil() {
   }

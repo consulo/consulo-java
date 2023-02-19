@@ -21,7 +21,6 @@ import com.intellij.java.execution.impl.JavaRunConfigurationExtensionManager;
 import com.intellij.java.execution.impl.RunConfigurationExtension;
 import com.intellij.java.execution.impl.util.JavaParametersUtil;
 import consulo.execution.configuration.RunConfigurationBase;
-import consulo.execution.process.ProcessTerminatedListener;
 import consulo.execution.runner.ExecutionEnvironment;
 import consulo.java.execution.configurations.OwnJavaParameters;
 import consulo.process.ExecutionException;
@@ -49,13 +48,14 @@ public abstract class BaseJavaApplicationCommandLineState<T extends RunConfigura
     }
   }
 
-  @Nonnull
   @Override
-  protected ProcessHandler startProcess() throws ExecutionException {
-    ProcessHandler handler = ProcessHandlerBuilder.create(createCommandLine()).killable().colored().silentReader().build();
-    ProcessTerminatedListener.attach(handler);
+  protected void setupProcessHandler(@Nonnull ProcessHandler handler) {
     JavaRunConfigurationExtensionManager.getInstance().attachExtensionsToProcess(getConfiguration(), handler, getRunnerSettings());
-    return handler;
+  }
+
+  @Override
+  protected void buildProcessHandler(@Nonnull ProcessHandlerBuilder builder) throws ExecutionException {
+    builder.colored().killable().silentReader();
   }
 
   @Override

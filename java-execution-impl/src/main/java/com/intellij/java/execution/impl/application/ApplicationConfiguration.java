@@ -43,8 +43,7 @@ import consulo.language.editor.refactoring.event.RefactoringListenerProvider;
 import consulo.language.psi.PsiElement;
 import consulo.module.Module;
 import consulo.process.ExecutionException;
-import consulo.process.KillableProcess;
-import consulo.process.ProcessHandler;
+import consulo.process.ProcessHandlerBuilder;
 import consulo.process.cmd.GeneralCommandLine;
 import consulo.project.DumbService;
 import consulo.project.Project;
@@ -330,14 +329,13 @@ public class ApplicationConfiguration extends ModuleBasedConfiguration<JavaRunCo
       return line;
     }
 
-    @Nonnull
     @Override
-    protected ProcessHandler startProcess() throws ExecutionException {
-      ProcessHandler processHandler = super.startProcess();
-      if (processHandler instanceof KillableProcess && DebuggerSettings.getInstance().KILL_PROCESS_IMMEDIATELY) {
-        ((KillableProcess) processHandler).setShouldKillProcessSoftly(false);
+    protected void buildProcessHandler(@Nonnull ProcessHandlerBuilder builder) throws ExecutionException {
+      super.buildProcessHandler(builder);
+
+      if (DebuggerSettings.getInstance().KILL_PROCESS_IMMEDIATELY) {
+        builder.shouldKillProcessSoftly(false);
       }
-      return processHandler;
     }
 
     private static void setupModulePath(OwnJavaParameters params, JavaRunConfigurationModule module) {

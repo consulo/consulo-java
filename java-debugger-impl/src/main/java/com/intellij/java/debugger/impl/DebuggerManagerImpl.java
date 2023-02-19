@@ -47,10 +47,10 @@ import consulo.component.persist.Storage;
 import consulo.component.persist.StoragePathMacros;
 import consulo.content.bundle.Sdk;
 import consulo.execution.ExecutionResult;
-import consulo.ide.impl.idea.execution.process.KillableColoredProcessHandler;
 import consulo.java.execution.configurations.OwnJavaParameters;
 import consulo.logging.Logger;
 import consulo.process.ExecutionException;
+import consulo.process.KillableProcessHandler;
 import consulo.process.ProcessHandler;
 import consulo.process.event.ProcessAdapter;
 import consulo.process.event.ProcessEvent;
@@ -73,7 +73,6 @@ import javax.swing.*;
 import java.io.File;
 import java.util.*;
 import java.util.function.Function;
-import java.util.jar.Attributes;
 import java.util.stream.Stream;
 
 @Singleton
@@ -251,9 +250,9 @@ public class DebuggerManagerImpl extends DebuggerManagerEx implements Persistent
           final DebugProcessImpl debugProcess = getDebugProcess(processHandler);
           if (debugProcess != null) {
             // if current thread is a "debugger manager thread", stop will execute synchronously
-            // it is KillableColoredProcessHandler responsibility to terminate VM
-            debugProcess.stop(willBeDestroyed && !(processHandler instanceof KillableColoredProcessHandler && ((KillableColoredProcessHandler)processHandler)
-              .shouldKillProcessSoftly()));
+            // it is KillableProcessHandler responsibility to terminate VM
+            debugProcess.stop(willBeDestroyed && !(processHandler instanceof KillableProcessHandler && ((KillableProcessHandler)processHandler)
+              .canKillProcess()));
 
             // wait at most 10 seconds: the problem is that debugProcess.stop() can hang if there are troubles in the debuggee
             // if processWillTerminate() is called from AWT thread debugProcess.waitFor() will block it and the whole app will hang

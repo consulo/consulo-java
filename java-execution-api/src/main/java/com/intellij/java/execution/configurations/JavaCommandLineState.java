@@ -16,10 +16,12 @@
 package com.intellij.java.execution.configurations;
 
 import consulo.execution.configuration.CommandLineState;
+import consulo.execution.process.ProcessTerminatedListener;
 import consulo.execution.runner.ExecutionEnvironment;
 import consulo.java.execution.configurations.OwnJavaParameters;
 import consulo.process.ExecutionException;
 import consulo.process.ProcessHandler;
+import consulo.process.ProcessHandlerBuilder;
 import consulo.process.cmd.GeneralCommandLine;
 
 import javax.annotation.Nonnull;
@@ -43,10 +45,25 @@ public abstract class JavaCommandLineState extends CommandLineState implements J
     myParams = null;
   }
 
+  protected void buildProcessHandler(@Nonnull ProcessHandlerBuilder builder) throws ExecutionException {
+    if (ansiColoringEnabled()) {
+      builder.colored();
+    }
+  }
+
+  protected void setupProcessHandler(@Nonnull ProcessHandler handler) {
+    ProcessTerminatedListener.attach(handler);
+  }
+
   @Override
   @Nonnull
-  protected ProcessHandler startProcess() throws ExecutionException {
-    return JavaCommandLineStateUtil.startProcess(createCommandLine(), ansiColoringEnabled());
+  protected final ProcessHandler startProcess() throws ExecutionException {
+    ProcessHandlerBuilder builder = ProcessHandlerBuilder.create(createCommandLine());
+    buildProcessHandler(builder);
+
+    ProcessHandler handler = builder.build();
+    setupProcessHandler(handler);
+    return handler;
   }
 
   protected boolean ansiColoringEnabled() {
