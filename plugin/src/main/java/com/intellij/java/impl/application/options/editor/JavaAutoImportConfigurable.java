@@ -19,6 +19,7 @@ package com.intellij.java.impl.application.options.editor;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.application.ApplicationBundle;
 import consulo.configurable.ProjectConfigurable;
+import consulo.disposer.Disposable;
 import consulo.language.editor.CodeInsightSettings;
 import consulo.language.editor.DaemonCodeAnalyzer;
 import consulo.language.editor.DaemonCodeAnalyzerSettings;
@@ -139,7 +140,7 @@ public class JavaAutoImportConfigurable implements ProjectConfigurable {
 
   @RequiredUIAccess
   @Override
-  public JComponent createComponent() {
+  public JComponent createComponent(Disposable disposable) {
     return myWholePanel;
   }
 

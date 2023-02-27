@@ -8,7 +8,7 @@
     <properties/>
     <border type="none"/>
     <children>
-      <component id="73391" clcom.intellij.java.execution.impl.ui.CommonJavaParametersPanelPanel" binding="myCommonProgramParameters">
+      <component id="73391" class="com.intellij.java.execution.impl.ui.CommonJavaParametersPanel" binding="myCommonProgramParameters">
         <constraints>
           <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -19,13 +19,13 @@
           <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
         </constraints>
       </vspacer>
-      <component id="a09fc" clcom.intellij.execution.impl.ui.JrePathEditorditor" binding="myJrePathEditor">
+      <component id="a09fc" class="com.intellij.java.execution.impl.ui.JrePathEditor" binding="myJrePathEditor">
         <constraints>
           <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties/>
       </component>
-      <component id="cab16" class="com.intellij.openapi.ui.LabeledComponent" binding="myJarPathComponent" custom-create="true">
+      <component id="cab16" class="consulo.ui.ex.awt.LabeledComponent" binding="myJarPathComponent" custom-create="true">
         <constraints>
           <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -34,7 +34,7 @@
           <text value="Path to &amp;JAR"/>
         </properties>
       </component>
-      <component id="6fe96" class="com.intellij.openapi.ui.LabeledComponent" binding="myModuleComponent">
+      <component id="6fe96" class="consulo.ui.ex.awt.LabeledComponent" binding="myModuleComponent">
         <constraints>
           <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>

@@ -8,6 +8,7 @@ module consulo.java.compiler.artifact.impl {
 
     // TODO remove in future
     requires java.desktop;
+    requires forms.rt;
 
     exports com.intellij.java.compiler.artifact.impl;
     exports com.intellij.java.compiler.artifact.impl.artifacts;

@@ -147,7 +147,7 @@
           <visible value="true"/>
         </properties>
       </component>
-      <component id="4362c" clcom.intellij.execution.impl.ui.ConfigurationArgumentsHelpAreapArea" binding="myJDK13HelpArea">
+      <component id="4362c" class="com.intellij.java.execution.impl.ui.ConfigurationArgumentsHelpArea" binding="myJDK13HelpArea">
         <constraints>
           <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="9" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -166,7 +166,7 @@
           <visible value="true"/>
         </properties>
       </component>
-      <component id="2e3bcom.intellij.execution.impl.ui.ConfigurationArgumentsHelpAreatsHelpArea" binding="myJDK14HelpArea">
+      <component id="2e3b" class="com.intellij.java.execution.impl.ui.ConfigurationArgumentsHelpArea" binding="myJDK14HelpArea">
         <constraints>
           <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="9" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>

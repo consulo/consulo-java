@@ -116,7 +116,7 @@
               <text value="&amp;Builder class name (fully qualified)"/>
             </properties>
           </component>
-          <component id="5c6dcom.intellij.java.impl.ui.ReferenceEditorComboWithBrowseButtonowseButton" binding="myExistentClassTF" custom-create="true">
+          <component id="5c6d" class="com.intellij.java.impl.ui.ReferenceEditorComboWithBrowseButton" binding="myExistentClassTF" custom-create="true">
             <constraints>
               <grid row="1" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="7" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
               <gridbag weightx="0.0" weighty="0.0"/>
