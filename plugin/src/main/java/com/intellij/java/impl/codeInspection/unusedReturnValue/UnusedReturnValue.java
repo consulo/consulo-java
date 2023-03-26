@@ -26,12 +26,13 @@ import com.intellij.java.indexing.search.searches.OverridingMethodsSearch;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PropertyUtil;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
+import consulo.java.deadCodeNotWorking.OldStyleInspection;
 import consulo.language.editor.inspection.*;
 import consulo.language.editor.inspection.reference.RefElement;
 import consulo.language.editor.inspection.reference.RefEntity;
 import consulo.language.editor.inspection.reference.RefManager;
 import consulo.language.editor.inspection.scheme.InspectionManager;
-import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
 import consulo.language.editor.scope.AnalysisScope;
 import consulo.language.psi.PsiReference;
 import consulo.language.psi.util.PsiTreeUtil;
@@ -51,197 +52,255 @@ import java.util.List;
  * @author max
  */
 @ExtensionImpl
-public class UnusedReturnValue extends GlobalJavaInspectionTool {
-  private MakeVoidQuickFix myQuickFix;
+public class UnusedReturnValue extends GlobalJavaInspectionTool implements OldStyleInspection
+{
+	private MakeVoidQuickFix myQuickFix;
 
-  public boolean IGNORE_BUILDER_PATTERN = false;
+	public boolean IGNORE_BUILDER_PATTERN = false;
 
-  @Override
-  @Nullable
-  public CommonProblemDescriptor[] checkElement(RefEntity refEntity,
-                                                AnalysisScope scope,
-                                                InspectionManager manager,
-                                                GlobalInspectionContext globalContext,
-                                                ProblemDescriptionsProcessor processor) {
-    if (refEntity instanceof RefMethod) {
-      final RefMethod refMethod = (RefMethod) refEntity;
+	@Override
+	@Nullable
+	public CommonProblemDescriptor[] checkElement(RefEntity refEntity,
+												  AnalysisScope scope,
+												  InspectionManager manager,
+												  GlobalInspectionContext globalContext,
+												  ProblemDescriptionsProcessor processor,
+												  Object state)
+	{
+		if(refEntity instanceof RefMethod)
+		{
+			final RefMethod refMethod = (RefMethod) refEntity;
 
-      if (refMethod.isConstructor()) return null;
-      if (!refMethod.getSuperMethods().isEmpty()) return null;
-      if (refMethod.getInReferences().size() == 0) return null;
+			if(refMethod.isConstructor())
+			{
+				return null;
+			}
+			if(!refMethod.getSuperMethods().isEmpty())
+			{
+				return null;
+			}
+			if(refMethod.getInReferences().size() == 0)
+			{
+				return null;
+			}
 
-      if (!refMethod.isReturnValueUsed()) {
-        final PsiMethod psiMethod = (PsiMethod) refMethod.getElement();
-        if (IGNORE_BUILDER_PATTERN && PropertyUtil.isSimplePropertySetter(psiMethod)) return null;
+			if(!refMethod.isReturnValueUsed())
+			{
+				final PsiMethod psiMethod = (PsiMethod) refMethod.getElement();
+				if(IGNORE_BUILDER_PATTERN && PropertyUtil.isSimplePropertySetter(psiMethod))
+				{
+					return null;
+				}
 
-        final boolean isNative = psiMethod.hasModifierProperty(PsiModifier.NATIVE);
-        if (refMethod.isExternalOverride() && !isNative) return null;
-        return new ProblemDescriptor[]{manager.createProblemDescriptor(psiMethod.getNavigationElement(),
-            InspectionsBundle
-                .message("inspection.unused.return.value.problem.descriptor"),
-            !isNative ? getFix(processor) : null, ProblemHighlightType.GENERIC_ERROR_OR_WARNING,
-            false)};
-      }
-    }
+				final boolean isNative = psiMethod.hasModifierProperty(PsiModifier.NATIVE);
+				if(refMethod.isExternalOverride() && !isNative)
+				{
+					return null;
+				}
+				return new ProblemDescriptor[]{
+						manager.createProblemDescriptor(psiMethod.getNavigationElement(),
+								InspectionsBundle
+										.message("inspection.unused.return.value.problem.descriptor"),
+								!isNative ? getFix(processor) : null, ProblemHighlightType.GENERIC_ERROR_OR_WARNING,
+								false)
+				};
+			}
+		}
 
-    return null;
-  }
+		return null;
+	}
 
-  @Override
-  public void writeSettings(@Nonnull Element node) throws WriteExternalException {
-    if (IGNORE_BUILDER_PATTERN) {
-      super.writeSettings(node);
-    }
-  }
+	@Override
+	public JComponent createOptionsPanel()
+	{
+		return new SingleCheckboxOptionsPanel("Ignore simple setters", this, "IGNORE_BUILDER_PATTERN");
+	}
 
-  @Override
-  public JComponent createOptionsPanel() {
-    return new SingleCheckboxOptionsPanel("Ignore simple setters", this, "IGNORE_BUILDER_PATTERN");
-  }
+	@Override
+	protected boolean queryExternalUsagesRequests(
+			final RefManager manager, final GlobalJavaInspectionContext globalContext,
+			final ProblemDescriptionsProcessor processor, Object state)
+	{
+		manager.iterate(new RefJavaVisitor()
+		{
+			@Override
+			public void visitElement(@Nonnull RefEntity refEntity)
+			{
+				if(refEntity instanceof RefElement && processor.getDescriptions(refEntity) != null)
+				{
+					refEntity.accept(new RefJavaVisitor()
+					{
+						@Override
+						public void visitMethod(@Nonnull final RefMethod refMethod)
+						{
+							globalContext.enqueueMethodUsagesProcessor(refMethod, new GlobalJavaInspectionContext.UsagesProcessor()
+							{
+								@Override
+								public boolean process(PsiReference psiReference)
+								{
+									processor.ignoreElement(refMethod);
+									return false;
+								}
+							});
+						}
+					});
+				}
+			}
+		});
 
-  @Override
-  protected boolean queryExternalUsagesRequests(final RefManager manager, final GlobalJavaInspectionContext globalContext,
-                                                final ProblemDescriptionsProcessor processor) {
-    manager.iterate(new RefJavaVisitor() {
-      @Override
-      public void visitElement(@Nonnull RefEntity refEntity) {
-        if (refEntity instanceof RefElement && processor.getDescriptions(refEntity) != null) {
-          refEntity.accept(new RefJavaVisitor() {
-            @Override
-            public void visitMethod(@Nonnull final RefMethod refMethod) {
-              globalContext.enqueueMethodUsagesProcessor(refMethod, new GlobalJavaInspectionContext.UsagesProcessor() {
-                @Override
-                public boolean process(PsiReference psiReference) {
-                  processor.ignoreElement(refMethod);
-                  return false;
-                }
-              });
-            }
-          });
-        }
-      }
-    });
+		return false;
+	}
 
-    return false;
-  }
+	@Override
+	@Nonnull
+	public String getDisplayName()
+	{
+		return InspectionsBundle.message("inspection.unused.return.value.display.name");
+	}
 
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return InspectionsBundle.message("inspection.unused.return.value.display.name");
-  }
+	@Override
+	@Nonnull
+	public String getGroupDisplayName()
+	{
+		return GroupNames.DECLARATION_REDUNDANCY;
+	}
 
-  @Override
-  @Nonnull
-  public String getGroupDisplayName() {
-    return GroupNames.DECLARATION_REDUNDANCY;
-  }
+	@Override
+	@Nonnull
+	public String getShortName()
+	{
+		return "UnusedReturnValue";
+	}
 
-  @Override
-  @Nonnull
-  public String getShortName() {
-    return "UnusedReturnValue";
-  }
+	private LocalQuickFix getFix(final ProblemDescriptionsProcessor processor)
+	{
+		if(myQuickFix == null)
+		{
+			myQuickFix = new MakeVoidQuickFix(processor);
+		}
+		return myQuickFix;
+	}
 
-  private LocalQuickFix getFix(final ProblemDescriptionsProcessor processor) {
-    if (myQuickFix == null) {
-      myQuickFix = new MakeVoidQuickFix(processor);
-    }
-    return myQuickFix;
-  }
+	@Override
+	@Nullable
+	public QuickFix getQuickFix(String hint)
+	{
+		return getFix(null);
+	}
 
-  @Override
-  @Nullable
-  public QuickFix getQuickFix(String hint) {
-    return getFix(null);
-  }
+	private static class MakeVoidQuickFix implements LocalQuickFix
+	{
+		private final ProblemDescriptionsProcessor myProcessor;
+		private static final Logger LOG = Logger.getInstance(MakeVoidQuickFix.class);
 
-  private static class MakeVoidQuickFix implements LocalQuickFix {
-    private final ProblemDescriptionsProcessor myProcessor;
-    private static final Logger LOG = Logger.getInstance(MakeVoidQuickFix.class);
+		public MakeVoidQuickFix(final ProblemDescriptionsProcessor processor)
+		{
+			myProcessor = processor;
+		}
 
-    public MakeVoidQuickFix(final ProblemDescriptionsProcessor processor) {
-      myProcessor = processor;
-    }
+		@Override
+		@Nonnull
+		public String getName()
+		{
+			return InspectionsBundle.message("inspection.unused.return.value.make.void.quickfix");
+		}
 
-    @Override
-    @Nonnull
-    public String getName() {
-      return InspectionsBundle.message("inspection.unused.return.value.make.void.quickfix");
-    }
+		@Override
+		public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor)
+		{
+			PsiMethod psiMethod = null;
+			if(myProcessor != null)
+			{
+				RefElement refElement = (RefElement) myProcessor.getElement(descriptor);
+				if(refElement.isValid() && refElement instanceof RefMethod)
+				{
+					RefMethod refMethod = (RefMethod) refElement;
+					psiMethod = (PsiMethod) refMethod.getElement();
+				}
+			}
+			else
+			{
+				psiMethod = PsiTreeUtil.getParentOfType(descriptor.getPsiElement(), PsiMethod.class);
+			}
+			if(psiMethod == null)
+			{
+				return;
+			}
+			makeMethodHierarchyVoid(project, psiMethod);
+		}
 
-    @Override
-    public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
-      PsiMethod psiMethod = null;
-      if (myProcessor != null) {
-        RefElement refElement = (RefElement) myProcessor.getElement(descriptor);
-        if (refElement.isValid() && refElement instanceof RefMethod) {
-          RefMethod refMethod = (RefMethod) refElement;
-          psiMethod = (PsiMethod) refMethod.getElement();
-        }
-      } else {
-        psiMethod = PsiTreeUtil.getParentOfType(descriptor.getPsiElement(), PsiMethod.class);
-      }
-      if (psiMethod == null) return;
-      makeMethodHierarchyVoid(project, psiMethod);
-    }
+		@Override
+		@Nonnull
+		public String getFamilyName()
+		{
+			return getName();
+		}
 
-    @Override
-    @Nonnull
-    public String getFamilyName() {
-      return getName();
-    }
+		private static void makeMethodHierarchyVoid(Project project, @Nonnull PsiMethod psiMethod)
+		{
+			replaceReturnStatements(psiMethod);
+			for(final PsiMethod oMethod : OverridingMethodsSearch.search(psiMethod))
+			{
+				replaceReturnStatements(oMethod);
+			}
+			final PsiParameter[] params = psiMethod.getParameterList().getParameters();
+			final ParameterInfoImpl[] infos = new ParameterInfoImpl[params.length];
+			for(int i = 0; i < params.length; i++)
+			{
+				PsiParameter param = params[i];
+				infos[i] = new ParameterInfoImpl(i, param.getName(), param.getType());
+			}
 
-    private static void makeMethodHierarchyVoid(Project project, @Nonnull PsiMethod psiMethod) {
-      replaceReturnStatements(psiMethod);
-      for (final PsiMethod oMethod : OverridingMethodsSearch.search(psiMethod)) {
-        replaceReturnStatements(oMethod);
-      }
-      final PsiParameter[] params = psiMethod.getParameterList().getParameters();
-      final ParameterInfoImpl[] infos = new ParameterInfoImpl[params.length];
-      for (int i = 0; i < params.length; i++) {
-        PsiParameter param = params[i];
-        infos[i] = new ParameterInfoImpl(i, param.getName(), param.getType());
-      }
+			final ChangeSignatureProcessor csp = new ChangeSignatureProcessor(project,
+					psiMethod,
+					false, null, psiMethod.getName(),
+					PsiType.VOID,
+					infos);
 
-      final ChangeSignatureProcessor csp = new ChangeSignatureProcessor(project,
-          psiMethod,
-          false, null, psiMethod.getName(),
-          PsiType.VOID,
-          infos);
+			csp.run();
+		}
 
-      csp.run();
-    }
-
-    private static void replaceReturnStatements(@Nonnull final PsiMethod method) {
-      final PsiCodeBlock body = method.getBody();
-      if (body != null) {
-        final List<PsiReturnStatement> returnStatements = new ArrayList<PsiReturnStatement>();
-        body.accept(new JavaRecursiveElementWalkingVisitor() {
-          @Override
-          public void visitReturnStatement(final PsiReturnStatement statement) {
-            super.visitReturnStatement(statement);
-            returnStatements.add(statement);
-          }
-        });
-        final PsiStatement[] psiStatements = body.getStatements();
-        final PsiStatement lastStatement = psiStatements[psiStatements.length - 1];
-        for (PsiReturnStatement returnStatement : returnStatements) {
-          try {
-            final PsiExpression expression = returnStatement.getReturnValue();
-            if (expression instanceof PsiLiteralExpression || expression instanceof PsiThisExpression) {    //avoid side effects
-              if (returnStatement == lastStatement) {
-                returnStatement.delete();
-              } else {
-                returnStatement
-                    .replace(JavaPsiFacade.getInstance(method.getProject()).getElementFactory().createStatementFromText("return;", returnStatement));
-              }
-            }
-          } catch (IncorrectOperationException e) {
-            LOG.error(e);
-          }
-        }
-      }
-    }
-  }
+		private static void replaceReturnStatements(@Nonnull final PsiMethod method)
+		{
+			final PsiCodeBlock body = method.getBody();
+			if(body != null)
+			{
+				final List<PsiReturnStatement> returnStatements = new ArrayList<PsiReturnStatement>();
+				body.accept(new JavaRecursiveElementWalkingVisitor()
+				{
+					@Override
+					public void visitReturnStatement(final PsiReturnStatement statement)
+					{
+						super.visitReturnStatement(statement);
+						returnStatements.add(statement);
+					}
+				});
+				final PsiStatement[] psiStatements = body.getStatements();
+				final PsiStatement lastStatement = psiStatements[psiStatements.length - 1];
+				for(PsiReturnStatement returnStatement : returnStatements)
+				{
+					try
+					{
+						final PsiExpression expression = returnStatement.getReturnValue();
+						if(expression instanceof PsiLiteralExpression || expression instanceof PsiThisExpression)
+						{    //avoid side effects
+							if(returnStatement == lastStatement)
+							{
+								returnStatement.delete();
+							}
+							else
+							{
+								returnStatement
+										.replace(JavaPsiFacade.getInstance(method.getProject()).getElementFactory().createStatementFromText("return;", returnStatement));
+							}
+						}
+					}
+					catch(IncorrectOperationException e)
+					{
+						LOG.error(e);
+					}
+				}
+			}
+		}
+	}
 }

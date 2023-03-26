@@ -65,7 +65,6 @@ import java.util.*;
 
 import static consulo.util.lang.ObjectUtil.notNull;
 
-@ExtensionImpl
 public class HighlightVisitorImpl extends JavaElementVisitor implements HighlightVisitor {
   private final PsiResolveHelper myResolveHelper;
 
@@ -133,19 +132,6 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
       myDuplicateMethods.put(aClass, signatures);
     }
     return signatures;
-  }
-
-  @Nonnull
-  @Override
-  @SuppressWarnings("MethodDoesntCallSuperMethod")
-  public HighlightVisitorImpl clone() {
-    return new HighlightVisitorImpl(myResolveHelper);
-  }
-
-  @Override
-  public boolean suitableForFile(@Nonnull PsiFile file) {
-    // both PsiJavaFile and PsiCodeFragment must match
-    return file instanceof PsiImportHolder && !InjectedLanguageManager.getInstance(file.getProject()).isInjectedFragment(file);
   }
 
   @Override

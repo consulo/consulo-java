@@ -29,7 +29,7 @@ import consulo.language.editor.inspection.ProblemDescriptionsProcessor;
 import consulo.language.editor.inspection.QuickFix;
 import consulo.language.editor.inspection.reference.RefElement;
 import consulo.language.editor.inspection.scheme.InspectionManager;
-import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
+import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import consulo.language.editor.scope.AnalysisScope;
 import consulo.language.psi.PsiDirectory;
 import consulo.language.psi.PsiManager;
@@ -67,7 +67,7 @@ public abstract class EmptyDirectoryInspection extends BaseGlobalInspection {
   @Override
   public void runInspection(final AnalysisScope scope, final InspectionManager manager,
     final GlobalInspectionContext context,
-    final ProblemDescriptionsProcessor processor) {
+    final ProblemDescriptionsProcessor processor, Object state) {
     final Project project = context.getProject();
     final ProjectFileIndex index = ProjectRootManager.getInstance(project).getFileIndex();
     final SearchScope searchScope = scope.toSearchScope();

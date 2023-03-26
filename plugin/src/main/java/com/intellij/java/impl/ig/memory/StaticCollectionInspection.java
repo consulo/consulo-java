@@ -19,7 +19,7 @@ import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.java.language.psi.PsiType;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
+import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;

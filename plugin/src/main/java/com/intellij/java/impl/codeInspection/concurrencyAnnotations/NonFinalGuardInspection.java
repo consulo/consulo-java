@@ -21,6 +21,7 @@ import com.intellij.java.analysis.impl.codeInspection.concurrencyAnnotations.JCi
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.javadoc.PsiDocTag;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.inspection.LocalInspectionToolSession;
 import consulo.language.editor.inspection.ProblemsHolder;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.util.PsiTreeUtil;
@@ -53,7 +54,10 @@ public class NonFinalGuardInspection extends BaseJavaLocalInspectionTool {
 
   @Override
   @Nonnull
-  public PsiElementVisitor buildVisitor(@Nonnull ProblemsHolder holder, boolean isOnTheFly) {
+  public PsiElementVisitor buildVisitorImpl(@Nonnull ProblemsHolder holder,
+                                            boolean isOnTheFly,
+                                            LocalInspectionToolSession session,
+                                            Object state) {
     return new Visitor(holder);
   }
 

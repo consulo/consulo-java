@@ -19,6 +19,7 @@ import com.intellij.java.analysis.codeInspection.GroupNames;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.ImplicitUsageProvider;
 import consulo.language.editor.inspection.InspectionsBundle;
+import consulo.language.editor.inspection.LocalInspectionToolSession;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.editor.inspection.ProblemsHolder;
 import com.intellij.java.impl.codeInspection.util.SpecialAnnotationsUtil;
@@ -114,7 +115,10 @@ public class FieldCanBeLocalInspection extends BaseLocalInspectionTool {
 
   @Nonnull
   @Override
-  public PsiElementVisitor buildVisitor(@Nonnull final ProblemsHolder holder, final boolean isOnTheFly) {
+  public PsiElementVisitor buildVisitorImpl(@Nonnull final ProblemsHolder holder,
+                                            final boolean isOnTheFly,
+                                            LocalInspectionToolSession session,
+                                            Object state) {
     return new JavaElementVisitor() {
       @Override
       public void visitJavaFile(PsiJavaFile file) {

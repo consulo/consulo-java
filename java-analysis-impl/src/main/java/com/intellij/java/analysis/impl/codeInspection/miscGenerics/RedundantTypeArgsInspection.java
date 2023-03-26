@@ -72,16 +72,16 @@ public class RedundantTypeArgsInspection extends GenericsInspectionToolBase {
 
 
   @Override
-  public ProblemDescriptor[] checkMethod(@Nonnull PsiMethod psiMethod, @Nonnull InspectionManager manager, boolean isOnTheFly) {
+  public ProblemDescriptor[] checkMethod(@Nonnull PsiMethod psiMethod, @Nonnull InspectionManager manager, boolean isOnTheFly, Object state) {
     final PsiCodeBlock body = psiMethod.getBody();
     if (body != null) {
-      return getDescriptions(body, manager, isOnTheFly);
+      return getDescriptions(body, manager, isOnTheFly, state);
     }
     return null;
   }
 
   @Override
-  public ProblemDescriptor[] getDescriptions(PsiElement place, final InspectionManager inspectionManager, boolean isOnTheFly) {
+  public ProblemDescriptor[] getDescriptions(PsiElement place, final InspectionManager inspectionManager, boolean isOnTheFly, Object state) {
     final List<ProblemDescriptor> problems = new ArrayList<ProblemDescriptor>();
     place.accept(new JavaRecursiveElementWalkingVisitor() {
       @Override

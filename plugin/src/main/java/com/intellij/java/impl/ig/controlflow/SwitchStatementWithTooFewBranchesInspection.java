@@ -24,7 +24,7 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.psiutils.CommentTracker;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.language.editor.inspection.ui.SingleIntegerFieldOptionsPanel;
+import consulo.deadCodeNotWorking.impl.SingleIntegerFieldOptionsPanel;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.project.Project;
 import org.jetbrains.annotations.Nls;

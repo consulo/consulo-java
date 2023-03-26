@@ -17,8 +17,8 @@ package com.siyeh.ig;
 
 import com.intellij.java.analysis.codeInspection.BaseJavaBatchLocalInspectionTool;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.language.editor.inspection.LocalInspectionToolSession;
 import consulo.language.editor.inspection.ProblemsHolder;
-import consulo.language.editor.inspection.scheme.InspectionProfileEntry;
 import consulo.language.editor.rawHighlight.HighlightDisplayLevel;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
@@ -26,19 +26,13 @@ import consulo.language.psi.PsiFile;
 import consulo.ui.ex.awt.UIUtil;
 import consulo.ui.ex.awt.event.DocumentAdapter;
 import consulo.util.lang.StringUtil;
-import consulo.util.lang.reflect.ReflectionUtil;
-import consulo.util.xml.serializer.DefaultJDOMExternalizer;
-import consulo.util.xml.serializer.WriteExternalException;
-import org.jdom.Element;
 import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.text.Document;
-import java.lang.reflect.Field;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.List;
@@ -46,26 +40,10 @@ import java.util.function.IntConsumer;
 import java.util.function.IntSupplier;
 
 public abstract class BaseInspection extends BaseJavaBatchLocalInspectionTool {
-  private String m_shortName = null;
-
   @Nonnull
   @Override
   public HighlightDisplayLevel getDefaultLevel() {
     return HighlightDisplayLevel.WARNING;
-  }
-
-  @Override
-  @Nonnull
-  public String getShortName() {
-    if (m_shortName == null) {
-      final Class<? extends BaseInspection> aClass = getClass();
-      final String name = aClass.getSimpleName();
-      m_shortName = InspectionProfileEntry.getShortName(name);
-      if (m_shortName.equals(name)) {
-        throw new AssertionError("class name must end with 'Inspection' to correctly calculate the short name: " + name);
-      }
-    }
-    return m_shortName;
   }
 
   @Nls
@@ -97,35 +75,14 @@ public abstract class BaseInspection extends BaseJavaBatchLocalInspectionTool {
     return InspectionGadgetsFix.EMPTY_ARRAY;
   }
 
-  protected void writeBooleanOption(@Nonnull Element node, @Nonnull @NonNls String property, boolean defaultValueToIgnore) {
-    final Boolean value = ReflectionUtil.getField(this.getClass(), this, boolean.class, property);
-    assert value != null;
-    if (defaultValueToIgnore == value.booleanValue()) {
-      return;
-    }
-    node.addContent(new Element("option").setAttribute("name", property).setAttribute("value", value.toString()));
-  }
-
-  protected void defaultWriteSettings(@Nonnull Element node, final String... excludedProperties) throws WriteExternalException {
-    DefaultJDOMExternalizer.writeExternal(this, node, new DefaultJDOMExternalizer.JDOMFilter() {
-      @Override
-      public boolean isAccept(@Nonnull Field field) {
-        final String name = field.getName();
-        for (String property : excludedProperties) {
-          if (name.equals(property)) {
-            return false;
-          }
-        }
-        return true;
-      }
-    });
-  }
-
   public abstract BaseInspectionVisitor buildVisitor();
 
   @Override
   @Nonnull
-  public final PsiElementVisitor buildVisitor(@Nonnull ProblemsHolder holder, boolean isOnTheFly) {
+  public final PsiElementVisitor buildVisitorImpl(@Nonnull ProblemsHolder holder,
+                                                  boolean isOnTheFly,
+                                                  LocalInspectionToolSession session,
+                                                  Object state) {
     final PsiFile file = holder.getFile();
     assert file.isPhysical();
     if (!shouldInspect(file)) {

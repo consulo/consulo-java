@@ -20,10 +20,9 @@ import com.intellij.java.language.psi.JavaElementVisitor;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiMethod;
+import consulo.java.deadCodeNotWorking.OldStyleInspection;
 import consulo.language.Language;
-import consulo.language.editor.inspection.LocalInspectionTool;
-import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.language.editor.inspection.ProblemsHolder;
+import consulo.language.editor.inspection.*;
 import consulo.language.editor.inspection.scheme.InspectionManager;
 import consulo.language.editor.rawHighlight.HighlightDisplayLevel;
 import consulo.language.psi.PsiElement;
@@ -35,17 +34,18 @@ import consulo.language.psi.util.PsiTreeUtil;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public abstract class AbstractBaseJavaLocalInspectionTool extends LocalInspectionTool {
+public abstract class AbstractBaseJavaLocalInspectionTool<State> extends LocalInspectionTool implements OldStyleInspection {
   /**
    * Override this to report problems at method level.
    *
    * @param method     to check.
    * @param manager    InspectionManager to ask for ProblemDescriptors from.
    * @param isOnTheFly true if called during on the fly editor highlighting. Called from Inspect Code action otherwise.
+   * @param state
    * @return <code>null</code> if no problems found or not applicable at method level.
    */
   @Nullable
-  public ProblemDescriptor[] checkMethod(@Nonnull PsiMethod method, @Nonnull InspectionManager manager, boolean isOnTheFly) {
+  public ProblemDescriptor[] checkMethod(@Nonnull PsiMethod method, @Nonnull InspectionManager manager, boolean isOnTheFly, State state) {
     return null;
   }
 
@@ -55,10 +55,11 @@ public abstract class AbstractBaseJavaLocalInspectionTool extends LocalInspectio
    * @param aClass     to check.
    * @param manager    InspectionManager to ask for ProblemDescriptors from.
    * @param isOnTheFly true if called during on the fly editor highlighting. Called from Inspect Code action otherwise.
+   * @param state
    * @return <code>null</code> if no problems found or not applicable at class level.
    */
   @Nullable
-  public ProblemDescriptor[] checkClass(@Nonnull PsiClass aClass, @Nonnull InspectionManager manager, boolean isOnTheFly) {
+  public ProblemDescriptor[] checkClass(@Nonnull PsiClass aClass, @Nonnull InspectionManager manager, boolean isOnTheFly, State state) {
     return null;
   }
 
@@ -68,10 +69,17 @@ public abstract class AbstractBaseJavaLocalInspectionTool extends LocalInspectio
    * @param field      to check.
    * @param manager    InspectionManager to ask for ProblemDescriptors from.
    * @param isOnTheFly true if called during on the fly editor highlighting. Called from Inspect Code action otherwise.
+   * @param state
    * @return <code>null</code> if no problems found or not applicable at field level.
    */
   @Nullable
-  public ProblemDescriptor[] checkField(@Nonnull PsiField field, @Nonnull InspectionManager manager, boolean isOnTheFly) {
+  public ProblemDescriptor[] checkField(@Nonnull PsiField field, @Nonnull InspectionManager manager, boolean isOnTheFly, State state) {
+    return null;
+  }
+
+  @Override
+  @Nullable
+  public final ProblemDescriptor[] checkFile(@Nonnull PsiFile file, @Nonnull InspectionManager manager, boolean isOnTheFly) {
     return null;
   }
 
@@ -83,34 +91,52 @@ public abstract class AbstractBaseJavaLocalInspectionTool extends LocalInspectio
    * @param isOnTheFly true if called during on the fly editor highlighting. Called from Inspect Code action otherwise.
    * @return <code>null</code> if no problems found or not applicable at file level.
    */
-  @Override
   @Nullable
-  public ProblemDescriptor[] checkFile(@Nonnull PsiFile file, @Nonnull InspectionManager manager, boolean isOnTheFly) {
+  public ProblemDescriptor[] checkFile(@Nonnull PsiFile file, @Nonnull InspectionManager manager, boolean isOnTheFly, State state) {
     return null;
   }
 
-  @Override
   @Nonnull
-  public PsiElementVisitor buildVisitor(@Nonnull final ProblemsHolder holder, final boolean isOnTheFly) {
+  @Override
+  @SuppressWarnings("unchecked")
+  public InspectionToolState<? extends State> createStateProvider() {
+    return (InspectionToolState<? extends State>)super.createStateProvider();
+  }
+
+  @Nonnull
+  @Override
+  @SuppressWarnings("unchecked")
+  public final PsiElementVisitor buildVisitor(@Nonnull ProblemsHolder holder,
+                                        boolean isOnTheFly,
+                                        @Nonnull LocalInspectionToolSession session,
+                                        @Nonnull Object state) {
+    return buildVisitorImpl(holder, isOnTheFly, session, (State)state);
+  }
+
+  @Nonnull
+  public PsiElementVisitor buildVisitorImpl(@Nonnull final ProblemsHolder holder,
+                                            final boolean isOnTheFly,
+                                            LocalInspectionToolSession session,
+                                            State state) {
     return new JavaElementVisitor() {
       @Override
       public void visitMethod(PsiMethod method) {
-        addDescriptors(checkMethod(method, holder.getManager(), isOnTheFly));
+        addDescriptors(checkMethod(method, holder.getManager(), isOnTheFly, state));
       }
 
       @Override
       public void visitClass(PsiClass aClass) {
-        addDescriptors(checkClass(aClass, holder.getManager(), isOnTheFly));
+        addDescriptors(checkClass(aClass, holder.getManager(), isOnTheFly, state));
       }
 
       @Override
       public void visitField(PsiField field) {
-        addDescriptors(checkField(field, holder.getManager(), isOnTheFly));
+        addDescriptors(checkField(field, holder.getManager(), isOnTheFly, state));
       }
 
       @Override
       public void visitFile(PsiFile file) {
-        addDescriptors(checkFile(file, holder.getManager(), isOnTheFly));
+        addDescriptors(checkFile(file, holder.getManager(), isOnTheFly, state));
       }
 
       private void addDescriptors(final ProblemDescriptor[] descriptors) {

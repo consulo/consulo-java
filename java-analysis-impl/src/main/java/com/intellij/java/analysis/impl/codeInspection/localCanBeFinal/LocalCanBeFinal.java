@@ -71,13 +71,13 @@ public class LocalCanBeFinal extends BaseJavaBatchLocalInspectionTool {
   }
 
   @Override
-  public ProblemDescriptor[] checkMethod(@Nonnull PsiMethod method, @Nonnull InspectionManager manager, boolean isOnTheFly) {
+  public ProblemDescriptor[] checkMethod(@Nonnull PsiMethod method, @Nonnull InspectionManager manager, boolean isOnTheFly, Object state) {
     List<ProblemDescriptor> list = checkCodeBlock(method.getBody(), manager, isOnTheFly);
     return list == null ? null : list.toArray(new ProblemDescriptor[list.size()]);
   }
 
   @Override
-  public ProblemDescriptor[] checkClass(@Nonnull PsiClass aClass, @Nonnull InspectionManager manager, boolean isOnTheFly) {
+  public ProblemDescriptor[] checkClass(@Nonnull PsiClass aClass, @Nonnull InspectionManager manager, boolean isOnTheFly, Object state) {
     List<ProblemDescriptor> allProblems = null;
     final PsiClassInitializer[] initializers = aClass.getInitializers();
     for (PsiClassInitializer initializer : initializers) {

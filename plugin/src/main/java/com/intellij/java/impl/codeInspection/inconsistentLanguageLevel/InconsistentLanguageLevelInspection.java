@@ -46,102 +46,127 @@ import javax.annotation.Nonnull;
 import java.util.HashSet;
 import java.util.Set;
 
-public abstract class InconsistentLanguageLevelInspection extends GlobalInspectionTool {
-  private static final Logger LOGGER = Logger.getInstance(InconsistentLanguageLevelInspection.class);
+public abstract class InconsistentLanguageLevelInspection extends GlobalInspectionTool
+{
+	private static final Logger LOGGER = Logger.getInstance(InconsistentLanguageLevelInspection.class);
 
-  @Override
-  public boolean isGraphNeeded() {
-    return false;
-  }
+	@Override
+	public boolean isGraphNeeded()
+	{
+		return false;
+	}
 
-  @Override
-  public void runInspection(@Nonnull AnalysisScope scope, @Nonnull InspectionManager manager, @Nonnull GlobalInspectionContext globalContext, @Nonnull ProblemDescriptionsProcessor problemProcessor) {
-    final Set<Module> modules = new HashSet<Module>();
-    scope.accept(new PsiElementVisitor() {
-      @Override
-      public void visitElement(PsiElement element) {
-        final Module module = ModuleUtilCore.findModuleForPsiElement(element);
-        if (module != null) {
-          modules.add(module);
-        }
-      }
-    });
+	@Override
+	public void runInspection(@Nonnull AnalysisScope scope,
+							  @Nonnull InspectionManager manager,
+							  @Nonnull GlobalInspectionContext globalContext,
+							  @Nonnull ProblemDescriptionsProcessor problemProcessor,
+							  Object state)
+	{
+		final Set<Module> modules = new HashSet<Module>();
+		scope.accept(new PsiElementVisitor()
+		{
+			@Override
+			public void visitElement(PsiElement element)
+			{
+				final Module module = ModuleUtilCore.findModuleForPsiElement(element);
+				if(module != null)
+				{
+					modules.add(module);
+				}
+			}
+		});
 
 
-    for (Module module : modules) {
-      LanguageLevel languageLevel = EffectiveLanguageLevelUtil.getEffectiveLanguageLevel(module);
+		for(Module module : modules)
+		{
+			LanguageLevel languageLevel = EffectiveLanguageLevelUtil.getEffectiveLanguageLevel(module);
 
-      final RefModule refModule = globalContext.getRefManager().getRefModule(module);
-      for (OrderEntry entry : ModuleRootManager.getInstance(module).getOrderEntries()) {
-        if (!(entry instanceof ModuleOrderEntry)) {
-          continue;
-        }
-        final Module dependantModule = ((ModuleOrderEntry) entry).getModule();
-        if (dependantModule == null) {
-          continue;
-        }
-        LanguageLevel dependantLanguageLevel = EffectiveLanguageLevelUtil.getEffectiveLanguageLevel(dependantModule);
-        if (languageLevel.compareTo(dependantLanguageLevel) < 0) {
-          final CommonProblemDescriptor problemDescriptor = manager.createProblemDescriptor("Inconsistent language level settings: module " + module.getName() + " with language level " +
-              languageLevel + " depends on module " + dependantModule.getName() + " with language level " + dependantLanguageLevel, new UnnecessaryModuleDependencyInspection
-              .RemoveModuleDependencyFix(module, dependantModule), new OpenModuleSettingsFix(module));
-          problemProcessor.addProblemElement(refModule, problemDescriptor);
-        }
-      }
-    }
-  }
+			final RefModule refModule = globalContext.getRefManager().getRefModule(module);
+			for(OrderEntry entry : ModuleRootManager.getInstance(module).getOrderEntries())
+			{
+				if(!(entry instanceof ModuleOrderEntry))
+				{
+					continue;
+				}
+				final Module dependantModule = ((ModuleOrderEntry) entry).getModule();
+				if(dependantModule == null)
+				{
+					continue;
+				}
+				LanguageLevel dependantLanguageLevel = EffectiveLanguageLevelUtil.getEffectiveLanguageLevel(dependantModule);
+				if(languageLevel.compareTo(dependantLanguageLevel) < 0)
+				{
+					final CommonProblemDescriptor problemDescriptor = manager.createProblemDescriptor("Inconsistent language level settings: module " + module.getName() + " with language level " +
+							languageLevel + " depends on module " + dependantModule.getName() + " with language level " + dependantLanguageLevel, new UnnecessaryModuleDependencyInspection
+							.RemoveModuleDependencyFix(module, dependantModule), new OpenModuleSettingsFix(module));
+					problemProcessor.addProblemElement(refModule, problemDescriptor);
+				}
+			}
+		}
+	}
 
-  @Override
-  public boolean isEnabledByDefault() {
-    return false;
-  }
+	@Override
+	public boolean isEnabledByDefault()
+	{
+		return false;
+	}
 
-  @Override
-  @Nls
-  @Nonnull
-  public String getGroupDisplayName() {
-    return GroupNames.MODULARIZATION_GROUP_NAME;
-  }
+	@Override
+	@Nls
+	@Nonnull
+	public String getGroupDisplayName()
+	{
+		return GroupNames.MODULARIZATION_GROUP_NAME;
+	}
 
-  @Override
-  @Nonnull
-  public String getDisplayName() {
-    return "Inconsistent language level settings";
-  }
+	@Override
+	@Nonnull
+	public String getDisplayName()
+	{
+		return "Inconsistent language level settings";
+	}
 
-  @Override
-  @NonNls
-  @Nonnull
-  public String getShortName() {
-    return "InconsistentLanguageLevel";
-  }
+	@Override
+	@NonNls
+	@Nonnull
+	public String getShortName()
+	{
+		return "InconsistentLanguageLevel";
+	}
 
-  private static class OpenModuleSettingsFix implements QuickFix {
-    private final Module myModule;
+	private static class OpenModuleSettingsFix implements QuickFix
+	{
+		private final Module myModule;
 
-    private OpenModuleSettingsFix(Module module) {
-      myModule = module;
-    }
+		private OpenModuleSettingsFix(Module module)
+		{
+			myModule = module;
+		}
 
-    @Override
-    @Nonnull
-    public String getName() {
-      return "Open module " + myModule.getName() + " settings";
-    }
+		@Override
+		@Nonnull
+		public String getName()
+		{
+			return "Open module " + myModule.getName() + " settings";
+		}
 
-    @Override
-    @Nonnull
-    public String getFamilyName() {
-      return getName();
-    }
+		@Override
+		@Nonnull
+		public String getFamilyName()
+		{
+			return getName();
+		}
 
-    @Override
-    public void applyFix(@Nonnull Project project, @Nonnull CommonProblemDescriptor descriptor) {
-      if (!myModule.isDisposed()) {
-        ShowSettingsUtil.getInstance().showProjectStructureDialog(project, projectStructureSelector -> {
-          projectStructureSelector.select(myModule.getName(), ProjectBundle.message("modules.classpath.title"), true);
-        });
-      }
-    }
-  }
+		@Override
+		public void applyFix(@Nonnull Project project, @Nonnull CommonProblemDescriptor descriptor)
+		{
+			if(!myModule.isDisposed())
+			{
+				ShowSettingsUtil.getInstance().showProjectStructureDialog(project, projectStructureSelector -> {
+					projectStructureSelector.select(myModule.getName(), ProjectBundle.message("modules.classpath.title"), true);
+				});
+			}
+		}
+	}
 }

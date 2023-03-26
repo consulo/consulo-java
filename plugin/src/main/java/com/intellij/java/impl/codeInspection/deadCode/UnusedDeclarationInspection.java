@@ -15,7 +15,6 @@
  */
 package com.intellij.java.impl.codeInspection.deadCode;
 
-import com.intellij.java.analysis.codeInspection.ex.EntryPoint;
 import com.intellij.java.analysis.impl.codeInspection.deadCode.UnusedDeclarationInspectionBase;
 import com.intellij.java.analysis.impl.codeInspection.unusedSymbol.UnusedSymbolLocalInspectionBase;
 import com.intellij.java.impl.codeInspection.ex.EntryPointsManagerImpl;
@@ -25,20 +24,12 @@ import consulo.java.analysis.impl.codeInsight.JavaInspectionsBundle;
 import consulo.ui.ex.awt.JBTabbedPane;
 import consulo.ui.ex.awt.JBUI;
 import consulo.ui.ex.awtUnsafe.TargetAWT;
-import jakarta.inject.Inject;
-import org.jetbrains.annotations.TestOnly;
 
 import javax.swing.*;
 import java.awt.*;
 
 @ExtensionImpl
 public class UnusedDeclarationInspection extends UnusedDeclarationInspectionBase {
-  @TestOnly
-  public UnusedDeclarationInspection(boolean enabledInEditor) {
-    super(enabledInEditor);
-  }
-
-  @Inject
   public UnusedDeclarationInspection() {
   }
 
@@ -52,7 +43,7 @@ public class UnusedDeclarationInspection extends UnusedDeclarationInspectionBase
   public JComponent createOptionsPanel() {
     JTabbedPane tabs = new JBTabbedPane(SwingConstants.TOP);
     tabs.add("Entry points", new OptionsPanel());
-    tabs.add("On the fly editor settings", myLocalInspectionBase.createOptionsPanel());
+    tabs.add("On the fly editor settings", (Component) myLocalInspectionBase.createOptionsPanel());
     return tabs;
   }
 
@@ -90,15 +81,16 @@ public class UnusedDeclarationInspection extends UnusedDeclarationInspectionBase
       gc.gridy++;
       add(myServletToEntries, gc);
 
-      for (final EntryPoint extension : myExtensions) {
-        if (extension.showUI()) {
-          final JCheckBox extCheckbox = new JCheckBox(extension.getDisplayName());
-          extCheckbox.setSelected(extension.isSelected());
-          extCheckbox.addActionListener(e -> extension.setSelected(extCheckbox.isSelected()));
-          gc.gridy++;
-          add(extCheckbox, gc);
-        }
-      }
+      // TODO
+//      for (final EntryPoint extension : myExtensions) {
+//        if (extension.showUI()) {
+//          final JCheckBox extCheckbox = new JCheckBox(extension.getDisplayName());
+//          extCheckbox.setSelected(extension.isSelected());
+//          extCheckbox.addActionListener(e -> extension.setSelected(extCheckbox.isSelected()));
+//          gc.gridy++;
+//          add(extCheckbox, gc);
+//        }
+//      }
 
       myNonJavaCheckbox = new JCheckBox(JavaInspectionsBundle.message("inspection.dead.code.option.external"));
       myNonJavaCheckbox.setSelected(ADD_NONJAVA_TO_ENTRIES);

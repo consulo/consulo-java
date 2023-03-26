@@ -22,7 +22,7 @@ import com.intellij.java.language.psi.PsiType;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import consulo.language.editor.inspection.ui.SingleIntegerFieldOptionsPanel;
+import consulo.deadCodeNotWorking.impl.SingleIntegerFieldOptionsPanel;
 
 import javax.annotation.Nonnull;
 import javax.swing.*;

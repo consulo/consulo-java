@@ -20,20 +20,15 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.java.language.module.util.JavaClassNames;
+import consulo.language.editor.inspection.LocalInspectionToolSession;
 import consulo.language.editor.inspection.ProblemHighlightType;
 import consulo.language.editor.inspection.ProblemsHolder;
-import consulo.language.editor.inspection.ui.CheckBox;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.util.lang.StringUtil;
 import org.jetbrains.java.generate.GenerateToStringContext;
 import org.jetbrains.java.generate.GenerateToStringUtils;
 
 import javax.annotation.Nonnull;
-import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.text.Document;
-import java.awt.*;
 
 /**
  * Inspection to check if the current class overrides the toString() method.
@@ -43,31 +38,6 @@ import java.awt.*;
  */
 @ExtensionImpl
 public class ClassHasNoToStringMethodInspection extends AbstractToStringInspection {
-  /**
-   * User options for classes to exclude. Must be a regexp pattern
-   */
-  public String excludeClassNames = "";  // must be public for JDOMSerialization
-  /**
-   * User options for excluded exception classes
-   */
-  public boolean excludeException = true; // must be public for JDOMSerialization
-  /**
-   * User options for excluded deprecated classes
-   */
-  public boolean excludeDeprecated = true; // must be public for JDOMSerialization
-  /**
-   * User options for excluded enum classes
-   */
-  public boolean excludeEnum = false; // must be public for JDOMSerialization
-  /**
-   * User options for excluded abstract classes
-   */
-  public boolean excludeAbstract = false; // must be public for JDOMSerialization
-
-  public boolean excludeTestCode = false;
-
-  public boolean excludeInnerClasses = false;
-
   @Override
   @Nonnull
   public String getDisplayName() {
@@ -82,7 +52,11 @@ public class ClassHasNoToStringMethodInspection extends AbstractToStringInspecti
 
   @Nonnull
   @Override
-  public PsiElementVisitor buildVisitor(@Nonnull final ProblemsHolder holder, boolean isOnTheFly) {
+  public PsiElementVisitor buildVisitor(@Nonnull final ProblemsHolder holder,
+                                        boolean isOnTheFly,
+                                        LocalInspectionToolSession session,
+                                        Object state) {
+    ClassHasNoToStringMethodInspectionState inspectionState = (ClassHasNoToStringMethodInspectionState)state;
     return new JavaElementVisitor() {
       @Override
       public void visitClass(PsiClass clazz) {
@@ -96,29 +70,29 @@ public class ClassHasNoToStringMethodInspection extends AbstractToStringInspecti
           return;
         }
 
-        if (excludeException && InheritanceUtil.isInheritor(clazz, JavaClassNames.JAVA_LANG_THROWABLE)) {
+        if (inspectionState.excludeException && InheritanceUtil.isInheritor(clazz, JavaClassNames.JAVA_LANG_THROWABLE)) {
           return;
         }
-        if (excludeDeprecated && clazz.isDeprecated()) {
+        if (inspectionState.excludeDeprecated && clazz.isDeprecated()) {
           return;
         }
-        if (excludeEnum && clazz.isEnum()) {
+        if (inspectionState.excludeEnum && clazz.isEnum()) {
           return;
         }
-        if (excludeAbstract && clazz.hasModifierProperty(PsiModifier.ABSTRACT)) {
+        if (inspectionState.excludeAbstract && clazz.hasModifierProperty(PsiModifier.ABSTRACT)) {
           return;
         }
-        if (excludeTestCode && TestFrameworks.getInstance().isTestClass(clazz)) {
+        if (inspectionState.excludeTestCode && TestFrameworks.getInstance().isTestClass(clazz)) {
           return;
         }
-        if (excludeInnerClasses && clazz.getContainingClass() != null) {
+        if (inspectionState.excludeInnerClasses && clazz.getContainingClass() != null) {
           return;
         }
 
         // if it is an excluded class - then skip
-        if (StringUtil.isNotEmpty(excludeClassNames)) {
+        if (StringUtil.isNotEmpty(inspectionState.excludeClassNames)) {
           String name = clazz.getName();
-          if (name != null && name.matches(excludeClassNames)) {
+          if (name != null && name.matches(inspectionState.excludeClassNames)) {
             return;
           }
         }
@@ -163,86 +137,8 @@ public class ClassHasNoToStringMethodInspection extends AbstractToStringInspecti
           }
         }
         holder.registerProblem(nameIdentifier, "Class '" + clazz.getName() + "' does not override 'toString()' method",
-            ProblemHighlightType.GENERIC_ERROR_OR_WARNING, GenerateToStringQuickFix.getInstance());
+                               ProblemHighlightType.GENERIC_ERROR_OR_WARNING, GenerateToStringQuickFix.getInstance());
       }
     };
-  }
-
-  /**
-   * Creates the options panel in the settings for user changeable options.
-   *
-   * @return the options panel
-   */
-  @Override
-  public JComponent createOptionsPanel() {
-    JPanel panel = new JPanel(new GridBagLayout());
-    GridBagConstraints constraints = new GridBagConstraints();
-
-    constraints.gridx = 0;
-    constraints.gridy = 0;
-    constraints.weightx = 0.0;
-    constraints.anchor = GridBagConstraints.WEST;
-    constraints.fill = GridBagConstraints.NONE;
-    panel.add(new JLabel("Exclude classes (reg exp):"), constraints);
-
-    final JTextField excludeClassNamesField = new JTextField(excludeClassNames, 40);
-    excludeClassNamesField.setMinimumSize(new Dimension(140, 20));
-    Document document = excludeClassNamesField.getDocument();
-    document.addDocumentListener(new DocumentListener() {
-      @Override
-      public void changedUpdate(DocumentEvent e) {
-        textChanged();
-      }
-
-      @Override
-      public void insertUpdate(DocumentEvent e) {
-        textChanged();
-      }
-
-      @Override
-      public void removeUpdate(DocumentEvent e) {
-        textChanged();
-      }
-
-      private void textChanged() {
-        excludeClassNames = excludeClassNamesField.getText();
-      }
-    });
-    constraints.gridx = 1;
-    constraints.gridy = 0;
-    constraints.weightx = 1.0;
-    constraints.anchor = GridBagConstraints.NORTHWEST;
-    constraints.fill = GridBagConstraints.NONE;
-    panel.add(excludeClassNamesField, constraints);
-
-    final CheckBox excludeExceptionCheckBox = new CheckBox("Ignore exception classes", this, "excludeException");
-    constraints.gridx = 0;
-    constraints.gridy = 1;
-    constraints.gridwidth = 2;
-    constraints.fill = GridBagConstraints.HORIZONTAL;
-    panel.add(excludeExceptionCheckBox, constraints);
-
-    final CheckBox excludeDeprecatedCheckBox = new CheckBox("Ignore deprecated classes", this, "excludeDeprecated");
-    constraints.gridy = 2;
-    panel.add(excludeDeprecatedCheckBox, constraints);
-
-    final CheckBox excludeEnumCheckBox = new CheckBox("Ignore enum classes", this, "excludeEnum");
-    constraints.gridy = 3;
-    panel.add(excludeEnumCheckBox, constraints);
-
-    final CheckBox excludeAbstractCheckBox = new CheckBox("Ignore abstract classes", this, "excludeAbstract");
-    constraints.gridy = 4;
-    panel.add(excludeAbstractCheckBox, constraints);
-
-    final CheckBox excludeInTestCodeCheckBox = new CheckBox("Ignore test classes", this, "excludeTestCode");
-    constraints.gridy = 5;
-    panel.add(excludeInTestCodeCheckBox, constraints);
-
-    final CheckBox excludeInnerClasses = new CheckBox("Ignore inner classes", this, "excludeInnerClasses");
-    constraints.gridy = 6;
-    constraints.weighty = 1.0;
-    panel.add(excludeInnerClasses, constraints);
-
-    return panel;
   }
 }

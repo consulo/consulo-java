@@ -70,7 +70,7 @@ public class SizeReplaceableByIsEmptyInspection extends BaseInspection {
         new ListTable(new ListWrappingTableModel(ignoredTypes, InspectionGadgetsBundle.message("ignored.classes.table")));
     JPanel tablePanel =
         UiUtils.createAddRemoveTreeClassChooserPanel(table, InspectionGadgetsBundle.message("choose.class.type.to.ignore"));
-    final consulo.language.editor.inspection.ui.CheckBox checkBox = new consulo.language.editor.inspection.ui.CheckBox(InspectionGadgetsBundle.message(
+    final consulo.deadCodeNotWorking.impl.CheckBox checkBox = new consulo.deadCodeNotWorking.impl.CheckBox(InspectionGadgetsBundle.message(
         "size.replaceable.by.isempty.negation.ignore.option"), this, "ignoreNegations");
     panel.add(tablePanel, BorderLayout.CENTER);
     panel.add(checkBox, BorderLayout.SOUTH);

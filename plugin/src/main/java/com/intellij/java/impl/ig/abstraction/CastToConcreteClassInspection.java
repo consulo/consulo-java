@@ -22,7 +22,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.MethodUtils;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.java.language.module.util.JavaClassNames;
-import consulo.language.editor.inspection.ui.MultipleCheckboxOptionsPanel;
+import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
 import consulo.language.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NonNls;
 

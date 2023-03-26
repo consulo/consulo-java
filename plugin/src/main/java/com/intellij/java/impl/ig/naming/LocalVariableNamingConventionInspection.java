@@ -162,10 +162,10 @@ public class LocalVariableNamingConventionInspection
   @Override
   public Collection<? extends JComponent> createExtraOptions() {
     return Arrays.asList(
-      new consulo.language.editor.inspection.ui.CheckBox(InspectionGadgetsBundle.message(
+      new consulo.deadCodeNotWorking.impl.CheckBox(InspectionGadgetsBundle.message(
         "local.variable.naming.convention.ignore.option"),
                    this, "m_ignoreForLoopParameters"),
-      new consulo.language.editor.inspection.ui.CheckBox(InspectionGadgetsBundle.message(
+      new consulo.deadCodeNotWorking.impl.CheckBox(InspectionGadgetsBundle.message(
         "local.variable.naming.convention.ignore.catch.option"),
                    this, "m_ignoreCatchParameters"));
   }

@@ -41,10 +41,10 @@ import java.util.List;
  * Date: 14-Nov-2005
  */
 @ExtensionImpl
-public class WrongPackageStatementInspection extends BaseJavaLocalInspectionTool {
+public class WrongPackageStatementInspection extends BaseJavaLocalInspectionTool<Object> {
   @Override
   @Nullable
-  public ProblemDescriptor[] checkFile(@Nonnull PsiFile file, @Nonnull InspectionManager manager, boolean isOnTheFly) {
+  public ProblemDescriptor[] checkFile(@Nonnull PsiFile file, @Nonnull InspectionManager manager, boolean isOnTheFly, Object state) {
     if (file instanceof PsiJavaFile) {
       PsiJavaFile javaFile = (PsiJavaFile)file;
 

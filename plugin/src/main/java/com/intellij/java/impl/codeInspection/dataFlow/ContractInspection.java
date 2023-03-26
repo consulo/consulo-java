@@ -2,6 +2,7 @@
 package com.intellij.java.impl.codeInspection.dataFlow;
 
 import com.intellij.java.language.codeInsight.AnnotationUtil;
+import consulo.language.editor.inspection.LocalInspectionToolSession;
 import consulo.language.editor.inspection.ProblemsHolder;
 import com.intellij.java.analysis.codeInspection.AbstractBaseJavaLocalInspectionTool;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.*;
@@ -30,7 +31,10 @@ import static com.intellij.java.analysis.impl.codeInspection.dataFlow.StandardMe
 public abstract class ContractInspection extends AbstractBaseJavaLocalInspectionTool {
   @Override
   @Nonnull
-  public PsiElementVisitor buildVisitor(@Nonnull final ProblemsHolder holder, final boolean isOnTheFly) {
+  public PsiElementVisitor buildVisitorImpl(@Nonnull final ProblemsHolder holder,
+                                            final boolean isOnTheFly,
+                                            LocalInspectionToolSession session,
+                                            Object state) {
     return new JavaElementVisitor() {
 
       @Override

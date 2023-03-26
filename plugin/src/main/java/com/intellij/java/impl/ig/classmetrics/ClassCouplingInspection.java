@@ -94,11 +94,11 @@ public class ClassCouplingInspection
     constraints.fill = GridBagConstraints.NONE;
     panel.add(valueField, constraints);
 
-    final consulo.language.editor.inspection.ui.CheckBox arrayCheckBox = new consulo.language.editor.inspection.ui.CheckBox(
+    final consulo.deadCodeNotWorking.impl.CheckBox arrayCheckBox = new consulo.deadCodeNotWorking.impl.CheckBox(
       InspectionGadgetsBundle.message(
         "include.java.system.classes.option"), this,
       "m_includeJavaClasses");
-    final consulo.language.editor.inspection.ui.CheckBox objectCheckBox = new consulo.language.editor.inspection.ui.CheckBox(
+    final consulo.deadCodeNotWorking.impl.CheckBox objectCheckBox = new consulo.deadCodeNotWorking.impl.CheckBox(
       InspectionGadgetsBundle.message(
         "include.library.classes.option"), this,
       "m_includeLibraryClasses");

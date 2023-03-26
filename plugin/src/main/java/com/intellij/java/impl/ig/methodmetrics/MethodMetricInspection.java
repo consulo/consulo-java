@@ -16,7 +16,7 @@
 package com.intellij.java.impl.ig.methodmetrics;
 
 import com.siyeh.ig.BaseInspection;
-import consulo.language.editor.inspection.ui.SingleIntegerFieldOptionsPanel;
+import consulo.deadCodeNotWorking.impl.SingleIntegerFieldOptionsPanel;
 
 import javax.swing.*;
 

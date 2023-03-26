@@ -64,11 +64,11 @@ public class StaticImportInspection extends StaticImportInspectionBase {
 
     constraints.gridy = 1;
     constraints.weighty = 0.0;
-    final consulo.language.editor.inspection.ui.CheckBox checkBox1 = new consulo.language.editor.inspection.ui.CheckBox(InspectionGadgetsBundle.message("ignore.single.field.static.imports.option"), this, "ignoreSingleFieldImports");
+    final consulo.deadCodeNotWorking.impl.CheckBox checkBox1 = new consulo.deadCodeNotWorking.impl.CheckBox(InspectionGadgetsBundle.message("ignore.single.field.static.imports.option"), this, "ignoreSingleFieldImports");
     panel.add(checkBox1, constraints);
 
     constraints.gridy = 2;
-    final consulo.language.editor.inspection.ui.CheckBox checkBox2 = new consulo.language.editor.inspection.ui.CheckBox(InspectionGadgetsBundle.message("ignore.single.method.static.imports.option"), this, "ignoreSingeMethodImports");
+    final consulo.deadCodeNotWorking.impl.CheckBox checkBox2 = new consulo.deadCodeNotWorking.impl.CheckBox(InspectionGadgetsBundle.message("ignore.single.method.static.imports.option"), this, "ignoreSingeMethodImports");
     panel.add(checkBox2, constraints);
 
     return panel;

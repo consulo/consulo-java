@@ -16,7 +16,7 @@
 package com.intellij.java.impl.ig.security;
 
 import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
+import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiTypeParameter;

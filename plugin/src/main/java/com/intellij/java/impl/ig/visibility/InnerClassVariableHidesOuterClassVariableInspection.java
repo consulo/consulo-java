@@ -26,7 +26,7 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.intellij.java.impl.ig.fixes.RenameFix;
 import com.siyeh.ig.psiutils.ClassUtils;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
+import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import javax.annotation.Nonnull;
 
 import javax.swing.*;

@@ -16,7 +16,6 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.application.Application;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.ScrollType;
-import consulo.component.extension.ExtensionPointName;
 import consulo.fileEditor.FileEditorManager;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.language.ast.ASTNode;
@@ -426,7 +425,7 @@ public class JavaDocLocalInspection extends BaseLocalInspectionTool {
   }
   @Override
   @Nullable
-  public ProblemDescriptor[] checkClass(@Nonnull PsiClass psiClass, @Nonnull InspectionManager manager, boolean isOnTheFly) {
+  public ProblemDescriptor[] checkClass(@Nonnull PsiClass psiClass, @Nonnull InspectionManager manager, boolean isOnTheFly, Object state) {
     if (psiClass instanceof PsiAnonymousClass) return null;
    // if (psiClass instanceof JspClass) return null;
     if (psiClass instanceof PsiTypeParameter) return null;
@@ -530,7 +529,7 @@ public class JavaDocLocalInspection extends BaseLocalInspectionTool {
 
   @Override
   @Nullable
-  public ProblemDescriptor[] checkField(@Nonnull PsiField psiField, @Nonnull InspectionManager manager, boolean isOnTheFly) {
+  public ProblemDescriptor[] checkField(@Nonnull PsiField psiField, @Nonnull InspectionManager manager, boolean isOnTheFly, Object state) {
     if (IGNORE_DEPRECATED && (psiField.isDeprecated() || psiField.getContainingClass().isDeprecated())) {
       return null;
     }
@@ -559,7 +558,7 @@ public class JavaDocLocalInspection extends BaseLocalInspectionTool {
 
   @Override
   @Nullable
-  public ProblemDescriptor[] checkMethod(@Nonnull PsiMethod psiMethod, @Nonnull InspectionManager manager, boolean isOnTheFly) {
+  public ProblemDescriptor[] checkMethod(@Nonnull PsiMethod psiMethod, @Nonnull InspectionManager manager, boolean isOnTheFly, Object state) {
     //if (psiMethod instanceof JspHolderMethod) return null;
     if (IGNORE_DEPRECATED && (psiMethod.isDeprecated() || psiMethod.getContainingClass().isDeprecated())) {
       return null;

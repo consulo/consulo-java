@@ -66,7 +66,7 @@ public class RedundantThrowsDeclaration extends BaseJavaBatchLocalInspectionTool
 
   @Override
   @Nullable
-  public ProblemDescriptor[] checkFile(@Nonnull PsiFile file, @Nonnull final InspectionManager manager, final boolean isOnTheFly) {
+  public ProblemDescriptor[] checkFile(@Nonnull PsiFile file, @Nonnull final InspectionManager manager, final boolean isOnTheFly, Object state) {
     final Set<ProblemDescriptor> problems = new HashSet<ProblemDescriptor>();
     file.accept(new JavaRecursiveElementWalkingVisitor() {
       @Override public void visitReferenceElement(PsiJavaCodeReferenceElement reference) {

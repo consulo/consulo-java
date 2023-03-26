@@ -15,77 +15,88 @@
  */
 package com.intellij.java.impl.ig.packaging;
 
-import consulo.language.editor.scope.AnalysisScope;
-import consulo.language.editor.inspection.CommonProblemDescriptor;
-import consulo.language.editor.inspection.GlobalInspectionContext;
-import consulo.language.editor.inspection.scheme.InspectionManager;
-import consulo.language.editor.inspection.ProblemHighlightType;
 import com.intellij.java.analysis.codeInspection.reference.RefClass;
-import consulo.language.editor.inspection.reference.RefEntity;
 import com.intellij.java.analysis.codeInspection.reference.RefPackage;
+import com.intellij.java.impl.ig.BaseGlobalInspection;
+import com.intellij.java.impl.ig.dependency.DependencyUtils;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiIdentifier;
 import com.siyeh.InspectionGadgetsBundle;
-import com.intellij.java.impl.ig.BaseGlobalInspection;
-import com.intellij.java.impl.ig.dependency.DependencyUtils;
+import consulo.language.editor.inspection.CommonProblemDescriptor;
+import consulo.language.editor.inspection.GlobalInspectionContext;
+import consulo.language.editor.inspection.ProblemHighlightType;
+import consulo.language.editor.inspection.reference.RefEntity;
+import consulo.language.editor.inspection.scheme.InspectionManager;
+import consulo.language.editor.scope.AnalysisScope;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import java.util.Set;
 
-public abstract class ClassUnconnectedToPackageInspection extends BaseGlobalInspection {
+public abstract class ClassUnconnectedToPackageInspection extends BaseGlobalInspection
+{
+	@Nonnull
+	@Override
+	public String getDisplayName()
+	{
+		return InspectionGadgetsBundle.message(
+				"class.unconnected.to.package.display.name");
+	}
 
-  @Nonnull
-  @Override
-  public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "class.unconnected.to.package.display.name");
-  }
+	@Override
+	@Nullable
+	public CommonProblemDescriptor[] checkElement(
+			RefEntity refEntity,
+			AnalysisScope analysisScope,
+			InspectionManager manager,
+			GlobalInspectionContext globalInspectionContext,
+			Object state)
+	{
+		if(!(refEntity instanceof RefClass))
+		{
+			return null;
+		}
+		final RefClass refClass = (RefClass) refEntity;
+		final RefEntity owner = refClass.getOwner();
+		if(!(owner instanceof RefPackage))
+		{
+			return null;
+		}
 
-  @Override
-  @Nullable
-  public CommonProblemDescriptor[] checkElement(
-    RefEntity refEntity,
-    AnalysisScope analysisScope,
-    InspectionManager manager,
-    GlobalInspectionContext globalInspectionContext) {
-    if (!(refEntity instanceof RefClass)) {
-      return null;
-    }
-    final RefClass refClass = (RefClass)refEntity;
-    final RefEntity owner = refClass.getOwner();
-    if (!(owner instanceof RefPackage)) {
-      return null;
-    }
+		final Set<RefClass> dependencies =
+				DependencyUtils.calculateDependenciesForClass(refClass);
+		for(RefClass dependency : dependencies)
+		{
+			if(inSamePackage(refClass, dependency))
+			{
+				return null;
+			}
+		}
+		final Set<RefClass> dependents =
+				DependencyUtils.calculateDependentsForClass(refClass);
+		for(RefClass dependent : dependents)
+		{
+			if(inSamePackage(refClass, dependent))
+			{
+				return null;
+			}
+		}
+		final PsiClass aClass = refClass.getElement();
+		final PsiIdentifier identifier = aClass.getNameIdentifier();
+		if(identifier == null)
+		{
+			return null;
+		}
+		return new CommonProblemDescriptor[]{
+				manager.createProblemDescriptor(identifier,
+						InspectionGadgetsBundle.message(
+								"class.unconnected.to.package.problem.descriptor"),
+						true, ProblemHighlightType.GENERIC_ERROR_OR_WARNING, false)
+		};
+	}
 
-    final Set<RefClass> dependencies =
-      DependencyUtils.calculateDependenciesForClass(refClass);
-    for (RefClass dependency : dependencies) {
-      if (inSamePackage(refClass, dependency)) {
-        return null;
-      }
-    }
-    final Set<RefClass> dependents =
-      DependencyUtils.calculateDependentsForClass(refClass);
-    for (RefClass dependent : dependents) {
-      if (inSamePackage(refClass, dependent)) {
-        return null;
-      }
-    }
-    final PsiClass aClass = refClass.getElement();
-    final PsiIdentifier identifier = aClass.getNameIdentifier();
-    if (identifier == null) {
-      return null;
-    }
-    return new CommonProblemDescriptor[]{
-      manager.createProblemDescriptor(identifier,
-                                      InspectionGadgetsBundle.message(
-                                        "class.unconnected.to.package.problem.descriptor"),
-                                      true, ProblemHighlightType.GENERIC_ERROR_OR_WARNING, false)
-    };
-  }
-
-  private static boolean inSamePackage(RefClass class1, RefClass class2) {
-    return class1.getOwner() == class2.getOwner();
-  }
+	private static boolean inSamePackage(RefClass class1, RefClass class2)
+	{
+		return class1.getOwner() == class2.getOwner();
+	}
 }

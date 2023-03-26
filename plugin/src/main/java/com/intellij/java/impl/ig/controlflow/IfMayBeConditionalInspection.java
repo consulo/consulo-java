@@ -24,7 +24,7 @@ import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
+import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import consulo.project.Project;
 import consulo.language.psi.*;
 import consulo.language.util.IncorrectOperationException;

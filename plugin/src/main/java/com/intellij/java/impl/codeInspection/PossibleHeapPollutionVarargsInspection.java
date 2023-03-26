@@ -17,6 +17,7 @@ package com.intellij.java.impl.codeInspection;
 
 import com.intellij.java.analysis.codeInspection.GroupNames;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.inspection.LocalInspectionToolSession;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.editor.inspection.ProblemsHolder;
@@ -79,7 +80,10 @@ public class PossibleHeapPollutionVarargsInspection extends BaseJavaBatchLocalIn
 
   @Nonnull
   @Override
-  public PsiElementVisitor buildVisitor(@Nonnull final ProblemsHolder holder, boolean isOnTheFly) {
+  public PsiElementVisitor buildVisitorImpl(@Nonnull final ProblemsHolder holder,
+                                            boolean isOnTheFly,
+                                            LocalInspectionToolSession session,
+                                            Object state) {
     return new HeapPollutionVisitor() {
       @Override
       protected void registerProblem(PsiMethod method, PsiIdentifier nameIdentifier) {

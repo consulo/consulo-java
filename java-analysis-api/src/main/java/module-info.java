@@ -15,4 +15,6 @@ module consulo.java.analysis.api {
 	exports com.intellij.java.analysis.refactoring;
 	exports consulo.java.analysis.codeInsight;
 	exports consulo.java.analysis.codeInspection;
+
+	exports consulo.java.deadCodeNotWorking;
 }

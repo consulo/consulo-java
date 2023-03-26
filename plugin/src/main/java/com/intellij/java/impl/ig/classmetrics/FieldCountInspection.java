@@ -79,12 +79,12 @@ public class FieldCountInspection extends ClassMetricInspection {
     final JLabel label = new JLabel(configurationLabel);
     final JFormattedTextField valueField = prepareNumberEditor(() -> m_limit, i -> m_limit = i);
 
-    final consulo.language.editor.inspection.ui.CheckBox includeCheckBox =
-      new consulo.language.editor.inspection.ui.CheckBox(InspectionGadgetsBundle.message(
+    final consulo.deadCodeNotWorking.impl.CheckBox includeCheckBox =
+      new consulo.deadCodeNotWorking.impl.CheckBox(InspectionGadgetsBundle.message(
         "field.count.inspection.include.constant.fields.in.count.checkbox"),
                    this, "m_countConstantFields");
-    final consulo.language.editor.inspection.ui.CheckBox considerCheckBox =
-      new consulo.language.editor.inspection.ui.CheckBox(InspectionGadgetsBundle.message(
+    final consulo.deadCodeNotWorking.impl.CheckBox considerCheckBox =
+      new consulo.deadCodeNotWorking.impl.CheckBox(InspectionGadgetsBundle.message(
         "field.count.inspection.static.final.fields.count.as.constant.checkbox"),
                    this, "m_considerStaticFinalFieldsConstant");
 

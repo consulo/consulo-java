@@ -15,7 +15,7 @@
  */
 package com.intellij.java.analysis.impl.codeInspection.ex;
 
-import com.intellij.java.analysis.codeInspection.ex.EntryPoint;
+import com.intellij.java.analysis.codeInspection.ex.EntryPointProvider;
 import com.intellij.java.analysis.codeInspection.ex.EntryPointsManager;
 import com.intellij.java.analysis.codeInspection.reference.RefClass;
 import com.intellij.java.analysis.codeInspection.reference.RefJavaManager;
@@ -23,12 +23,12 @@ import com.intellij.java.analysis.codeInspection.reference.RefMethod;
 import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.language.psi.PsiDocCommentOwner;
 import com.intellij.java.language.psi.PsiModifierListOwner;
+import consulo.application.Application;
 import consulo.application.ApplicationManager;
 import consulo.codeEditor.Editor;
 import consulo.component.persist.PersistentStateComponent;
 import consulo.disposer.Disposer;
 import consulo.ide.ServiceManager;
-import consulo.java.analysis.codeInspection.JavaExtensionPoints;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.language.editor.impl.inspection.reference.RefElementImpl;
 import consulo.language.editor.impl.inspection.reference.SmartRefElementPointerImpl;
@@ -36,7 +36,6 @@ import consulo.language.editor.inspection.reference.RefElement;
 import consulo.language.editor.inspection.reference.RefEntity;
 import consulo.language.editor.inspection.reference.RefManager;
 import consulo.language.editor.inspection.reference.SmartRefElementPointer;
-import consulo.language.editor.intention.IntentionAction;
 import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
@@ -65,9 +64,9 @@ public abstract class EntryPointsManagerBase extends EntryPointsManager implemen
   public Collection<String> getAdditionalAnnotations() {
     List<String> annos = ADDITIONAL_ANNOS;
     if (annos == null) {
-      annos = new ArrayList<String>();
+      annos = new ArrayList<>();
       Collections.addAll(annos, STANDARD_ANNOS);
-      for (EntryPoint extension : JavaExtensionPoints.DEAD_CODE_EP_NAME.getExtensions()) {
+      for (EntryPointProvider<?> extension : Application.get().getExtensionList(EntryPointProvider.class)) {
         final String[] ignoredAnnotations = extension.getIgnoreAnnotations();
         if (ignoredAnnotations != null) {
           ContainerUtil.addAll(annos, ignoredAnnotations);

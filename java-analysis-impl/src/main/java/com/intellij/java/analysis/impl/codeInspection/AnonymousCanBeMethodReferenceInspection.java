@@ -22,11 +22,7 @@ import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.util.RedundantCastUtil;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.document.util.TextRange;
-import consulo.language.editor.inspection.LocalQuickFix;
-import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.language.editor.inspection.ProblemHighlightType;
-import consulo.language.editor.inspection.ProblemsHolder;
-import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
+import consulo.language.editor.inspection.*;
 import consulo.language.editor.rawHighlight.HighlightDisplayLevel;
 import consulo.language.psi.PsiComment;
 import consulo.language.psi.PsiElement;
@@ -38,8 +34,6 @@ import consulo.util.collection.ContainerUtil;
 import org.jetbrains.annotations.Nls;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.swing.*;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -47,10 +41,9 @@ import java.util.Collections;
  * User: anna
  */
 @ExtensionImpl
-public class AnonymousCanBeMethodReferenceInspection extends BaseJavaBatchLocalInspectionTool {
+public class AnonymousCanBeMethodReferenceInspection extends BaseJavaBatchLocalInspectionTool<AnonymousCanBeMethodReferenceInspectionState> {
   private static final Logger LOG = Logger.getInstance(AnonymousCanBeMethodReferenceInspection.class);
 
-  public boolean reportNotAnnotatedInterfaces = true;
 
   @Nonnull
   @Override
@@ -83,20 +76,23 @@ public class AnonymousCanBeMethodReferenceInspection extends BaseJavaBatchLocalI
     return "Anonymous2MethodRef";
   }
 
-  @Nullable
+  @Nonnull
   @Override
-  public JComponent createOptionsPanel() {
-    return new SingleCheckboxOptionsPanel("Report when interface is not annotated with @FunctionalInterface", this, "reportNotAnnotatedInterfaces");
+  public InspectionToolState<? extends AnonymousCanBeMethodReferenceInspectionState> createStateProvider() {
+    return new AnonymousCanBeMethodReferenceInspectionState();
   }
 
   @Nonnull
   @Override
-  public PsiElementVisitor buildVisitor(@Nonnull final ProblemsHolder holder, boolean isOnTheFly) {
+  public PsiElementVisitor buildVisitorImpl(@Nonnull final ProblemsHolder holder,
+                                            boolean isOnTheFly,
+                                            LocalInspectionToolSession session,
+                                            AnonymousCanBeMethodReferenceInspectionState state) {
     return new JavaElementVisitor() {
       @Override
       public void visitAnonymousClass(PsiAnonymousClass aClass) {
         super.visitAnonymousClass(aClass);
-        if (AnonymousCanBeLambdaInspection.canBeConvertedToLambda(aClass, true, reportNotAnnotatedInterfaces, Collections.emptySet())) {
+        if (AnonymousCanBeLambdaInspection.canBeConvertedToLambda(aClass, true, state.reportNotAnnotatedInterfaces, Collections.emptySet())) {
           final PsiMethod method = aClass.getMethods()[0];
           final PsiCodeBlock body = method.getBody();
           PsiExpression lambdaBodyCandidate = LambdaCanBeMethodReferenceInspection.extractMethodReferenceCandidateExpression(body, false);

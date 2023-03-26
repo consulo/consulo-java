@@ -26,19 +26,12 @@ import com.intellij.java.language.impl.psi.controlFlow.ControlFlow;
 import com.intellij.java.language.impl.psi.controlFlow.ControlFlowUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
-import com.intellij.java.language.psi.util.InheritanceUtil;
-import com.intellij.java.language.psi.util.PsiTypesUtil;
-import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.java.language.psi.util.RedundantCastUtil;
+import com.intellij.java.language.psi.util.*;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.component.util.text.UniqueNameGenerator;
 import consulo.document.util.TextRange;
 import consulo.java.language.module.util.JavaClassNames;
-import consulo.language.editor.inspection.LocalQuickFix;
-import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.language.editor.inspection.ProblemHighlightType;
-import consulo.language.editor.inspection.ProblemsHolder;
-import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
+import consulo.language.editor.inspection.*;
 import consulo.language.editor.intention.HighPriorityAction;
 import consulo.language.editor.rawHighlight.HighlightDisplayLevel;
 import consulo.language.psi.PsiComment;
@@ -53,8 +46,6 @@ import consulo.util.lang.StringUtil;
 import org.jetbrains.annotations.Nls;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.swing.*;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.*;
@@ -64,10 +55,8 @@ import java.util.function.UnaryOperator;
  * User: anna
  */
 @ExtensionImpl
-public class AnonymousCanBeLambdaInspection extends BaseJavaBatchLocalInspectionTool {
+public class AnonymousCanBeLambdaInspection extends BaseJavaBatchLocalInspectionTool<AnonymousCanBeLambdaInspectionState> {
   public static final Logger LOG = Logger.getInstance(AnonymousCanBeLambdaInspection.class);
-
-  public boolean reportNotAnnotatedInterfaces = true;
 
   @Nls
   @Nonnull
@@ -100,15 +89,18 @@ public class AnonymousCanBeLambdaInspection extends BaseJavaBatchLocalInspection
     return HighlightDisplayLevel.WARNING;
   }
 
-  @Nullable
+  @Nonnull
   @Override
-  public JComponent createOptionsPanel() {
-    return new SingleCheckboxOptionsPanel("Report when interface is not annotated with @FunctionalInterface", this, "reportNotAnnotatedInterfaces");
+  public AnonymousCanBeLambdaInspectionState createStateProvider() {
+    return new AnonymousCanBeLambdaInspectionState();
   }
 
   @Nonnull
   @Override
-  public PsiElementVisitor buildVisitor(@Nonnull final ProblemsHolder holder, boolean isOnTheFly) {
+  public PsiElementVisitor buildVisitorImpl(@Nonnull final ProblemsHolder holder,
+                                            boolean isOnTheFly,
+                                            LocalInspectionToolSession session,
+                                            AnonymousCanBeLambdaInspectionState state) {
     return new JavaElementVisitor() {
       @Override
       public void visitAnonymousClass(final PsiAnonymousClass aClass) {
@@ -117,12 +109,12 @@ public class AnonymousCanBeLambdaInspection extends BaseJavaBatchLocalInspection
         final PsiElement lambdaContext = parent != null ? parent.getParent() : null;
         if (lambdaContext != null &&
             (LambdaUtil.isValidLambdaContext(lambdaContext) || !(lambdaContext instanceof PsiExpressionStatement)) &&
-            canBeConvertedToLambda(aClass, false, isOnTheFly || reportNotAnnotatedInterfaces, Collections.emptySet())) {
+            canBeConvertedToLambda(aClass, false, isOnTheFly || state.reportNotAnnotatedInterfaces, Collections.emptySet())) {
           final PsiElement lBrace = aClass.getLBrace();
           LOG.assertTrue(lBrace != null);
           final TextRange rangeInElement = new TextRange(0, aClass.getStartOffsetInParent() + lBrace.getStartOffsetInParent());
           ProblemHighlightType problemHighlightType = ProblemHighlightType.LIKE_UNUSED_SYMBOL;
-          if (isOnTheFly && !reportNotAnnotatedInterfaces) {
+          if (isOnTheFly && !state.reportNotAnnotatedInterfaces) {
             final PsiClass baseClass = aClass.getBaseClassType().resolve();
             LOG.assertTrue(baseClass != null);
             if (!AnnotationUtil.isAnnotated(baseClass, JavaClassNames.JAVA_LANG_FUNCTIONAL_INTERFACE, false, false)) {

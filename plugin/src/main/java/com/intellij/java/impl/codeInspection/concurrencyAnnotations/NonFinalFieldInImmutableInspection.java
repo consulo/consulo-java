@@ -23,6 +23,7 @@ import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiModifier;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.inspection.LocalInspectionToolSession;
 import consulo.language.editor.inspection.ProblemsHolder;
 import consulo.language.psi.PsiElementVisitor;
 import org.jetbrains.annotations.Nls;
@@ -54,7 +55,10 @@ public class NonFinalFieldInImmutableInspection extends BaseJavaLocalInspectionT
 
   @Override
   @Nonnull
-  public PsiElementVisitor buildVisitor(@Nonnull final ProblemsHolder holder, boolean isOnTheFly) {
+  public PsiElementVisitor buildVisitorImpl(@Nonnull final ProblemsHolder holder,
+                                            boolean isOnTheFly,
+                                            LocalInspectionToolSession session,
+                                            Object state) {
     return new JavaElementVisitor() {
       @Override
       public void visitField(PsiField field) {

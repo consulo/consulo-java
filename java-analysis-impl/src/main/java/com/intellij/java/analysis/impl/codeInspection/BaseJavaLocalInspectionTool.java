@@ -19,6 +19,7 @@ import com.intellij.java.analysis.codeInspection.AbstractBaseJavaLocalInspection
 import com.intellij.java.analysis.codeInspection.BaseJavaBatchLocalInspectionTool;
 import com.intellij.java.analysis.codeInspection.SuppressManager;
 import consulo.language.editor.inspection.CustomSuppressableInspectionTool;
+import consulo.language.editor.inspection.GlobalInspectionTool;
 import consulo.language.editor.inspection.LocalInspectionTool;
 import consulo.language.editor.intention.SuppressIntentionAction;
 import consulo.language.editor.rawHighlight.HighlightDisplayKey;
@@ -28,14 +29,13 @@ import javax.annotation.Nonnull;
 
 /**
  * Implement this abstract class in order to provide new inspection tool functionality. The major API limitation here is
- * subclasses should be stateless. Thus <code>check&lt;XXX&gt;</code> methods will be called in no particular order and
- * instances of this class provided by {@link InspectionToolProvider#getInspectionClasses()} will be created on demand.
+ * subclasses should be stateless.
  * The other important thing is problem anchors (PsiElements) reported by <code>check&lt;XXX&gt;</code> methods should
  * lie under corresponding first parameter of one method.
  *
  * @see GlobalInspectionTool
  */
-public abstract class BaseJavaLocalInspectionTool extends AbstractBaseJavaLocalInspectionTool implements CustomSuppressableInspectionTool {
+public abstract class BaseJavaLocalInspectionTool<State> extends AbstractBaseJavaLocalInspectionTool<State> implements CustomSuppressableInspectionTool {
   @Override
   public SuppressIntentionAction[] getSuppressActions(final PsiElement element) {
     return SuppressManager.getInstance().createSuppressActions(HighlightDisplayKey.find(getShortName()));

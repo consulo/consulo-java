@@ -25,6 +25,7 @@ import consulo.application.util.CachedValuesManager;
 import consulo.application.util.function.Computable;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.editor.inspection.InspectionsBundle;
+import consulo.language.editor.inspection.LocalInspectionToolSession;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemsHolder;
 import consulo.language.psi.PsiElementVisitor;
@@ -44,7 +45,10 @@ import javax.annotation.Nullable;
 public class EqualsAndHashcode extends BaseJavaBatchLocalInspectionTool {
   @Override
   @Nonnull
-  public PsiElementVisitor buildVisitor(@Nonnull final ProblemsHolder holder, boolean isOnTheFly) {
+  public PsiElementVisitor buildVisitorImpl(@Nonnull final ProblemsHolder holder,
+                                            boolean isOnTheFly,
+                                            LocalInspectionToolSession session,
+                                            Object state) {
     final Project project = holder.getProject();
     Pair<PsiMethod, PsiMethod> pair = CachedValuesManager.getManager(project).getCachedValue(project, new CachedValueProvider<Pair<PsiMethod, PsiMethod>>() {
       @Override

@@ -24,7 +24,7 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.application.util.function.Processor;
 import consulo.application.util.query.Query;
 import consulo.java.language.module.util.JavaClassNames;
-import consulo.language.editor.inspection.ui.MultipleCheckboxOptionsPanel;
+import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
 import consulo.language.psi.search.ReferencesSearch;

@@ -71,7 +71,7 @@ public class RedundantArrayForVarargsCallInspection extends GenericsInspectionTo
   }
 
   @Override
-  public ProblemDescriptor[] getDescriptions(PsiElement place, final InspectionManager manager, final boolean isOnTheFly) {
+  public ProblemDescriptor[] getDescriptions(PsiElement place, final InspectionManager manager, final boolean isOnTheFly, Object state) {
     if (!PsiUtil.isLanguageLevel5OrHigher(place)) return null;
     final List<ProblemDescriptor> problems = new ArrayList<ProblemDescriptor>();
     place.accept(new JavaRecursiveElementWalkingVisitor() {

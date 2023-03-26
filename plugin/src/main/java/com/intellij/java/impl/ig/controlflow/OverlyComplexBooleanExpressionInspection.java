@@ -72,8 +72,8 @@ public class OverlyComplexBooleanExpressionInspection extends BaseInspection {
   @Override
   public JComponent createOptionsPanel() {
     final JPanel panel = new JPanel(new GridBagLayout());
-    final consulo.language.editor.inspection.ui.CheckBox ignoreConjunctionsDisjunctionsCheckBox =
-      new consulo.language.editor.inspection.ui.CheckBox(InspectionGadgetsBundle.message("overly.complex.boolean.expression.ignore.option"),
+    final consulo.deadCodeNotWorking.impl.CheckBox ignoreConjunctionsDisjunctionsCheckBox =
+      new consulo.deadCodeNotWorking.impl.CheckBox(InspectionGadgetsBundle.message("overly.complex.boolean.expression.ignore.option"),
                    this, "m_ignorePureConjunctionsDisjunctions");
     final NumberFormat formatter = NumberFormat.getIntegerInstance();
     formatter.setParseIntegerOnly(true);

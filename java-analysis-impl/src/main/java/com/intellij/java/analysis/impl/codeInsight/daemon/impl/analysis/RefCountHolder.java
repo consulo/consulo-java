@@ -3,6 +3,7 @@ package com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis;
 
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.GlobalUsageHelper;
 import com.intellij.java.analysis.impl.codeInspection.deadCode.UnusedDeclarationInspectionBase;
+import com.intellij.java.analysis.impl.codeInspection.deadCode.UnusedDeclarationInspectionState;
 import com.intellij.java.analysis.impl.psi.util.PsiMatchers;
 import com.intellij.java.language.psi.*;
 import consulo.annotation.access.RequiredReadAction;
@@ -78,7 +79,9 @@ final class RefCountHolder {
   }
 
   @Nonnull
-  GlobalUsageHelper getGlobalUsageHelper(@Nonnull PsiFile file, @Nullable UnusedDeclarationInspectionBase deadCodeInspection) {
+  GlobalUsageHelper getGlobalUsageHelper(@Nonnull PsiFile file,
+                                         @Nullable UnusedDeclarationInspectionBase deadCodeInspection,
+                                         UnusedDeclarationInspectionState deadCodeState) {
     FileViewProvider viewProvider = file.getViewProvider();
     Project project = file.getProject();
 
@@ -90,7 +93,7 @@ final class RefCountHolder {
     if (isDeadCodeEnabled && !inLibrary) {
       return new GlobalUsageHelperBase() {
         final Map<PsiMember, Boolean> myEntryPointCache = FactoryMap.create((PsiMember member) -> {
-          if (deadCodeInspection.isEntryPoint(member)) return true;
+          if (deadCodeInspection.isEntryPoint(member, deadCodeState)) return true;
           if (member instanceof PsiClass) {
             return !JBTreeTraverser
                 .<PsiMember>from(m -> m instanceof PsiClass

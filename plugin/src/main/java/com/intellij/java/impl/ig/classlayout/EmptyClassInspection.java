@@ -26,7 +26,7 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.ig.ui.ExternalizableStringSet;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.ui.CheckBox;
+import consulo.deadCodeNotWorking.impl.CheckBox;
 import consulo.language.psi.PsiFile;
 import org.jetbrains.annotations.NonNls;
 

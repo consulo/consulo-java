@@ -50,7 +50,7 @@ public class SuperClassHasFrequentlyUsedInheritorsInspection extends BaseJavaLoc
   @Override
   public ProblemDescriptor[] checkClass(@Nonnull final PsiClass aClass,
                                         @Nonnull final InspectionManager manager,
-                                        final boolean isOnTheFly) {
+                                        final boolean isOnTheFly, Object state) {
     if (aClass.isInterface() ||
         aClass instanceof PsiTypeParameter ||
         aClass.getMethods().length != 0 ||

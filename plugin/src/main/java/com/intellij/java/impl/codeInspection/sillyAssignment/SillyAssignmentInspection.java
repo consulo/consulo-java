@@ -20,6 +20,7 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.InspectionsBundle;
+import consulo.language.editor.inspection.LocalInspectionToolSession;
 import consulo.language.editor.inspection.ProblemHighlightType;
 import consulo.language.editor.inspection.ProblemsHolder;
 import consulo.language.psi.PsiElement;
@@ -58,7 +59,10 @@ public class SillyAssignmentInspection extends BaseJavaLocalInspectionTool {
 
   @Override
   @Nonnull
-  public PsiElementVisitor buildVisitor(@Nonnull final ProblemsHolder holder, boolean isOnTheFly) {
+  public PsiElementVisitor buildVisitorImpl(@Nonnull final ProblemsHolder holder,
+                                            boolean isOnTheFly,
+                                            LocalInspectionToolSession session,
+                                            Object state) {
     return new JavaElementVisitor() {
 
       @Override public void visitAssignmentExpression(PsiAssignmentExpression expression) {

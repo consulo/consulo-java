@@ -28,6 +28,7 @@ import javax.annotation.Nullable;
 /**
  * @author max
  */
+@SuppressWarnings("ExtensionImplIsNotAnnotatedInspection")
 public class DummyEntryPointsTool extends UnusedDeclarationInspection {
   public DummyEntryPointsTool() {
   }
@@ -36,7 +37,8 @@ public class DummyEntryPointsTool extends UnusedDeclarationInspection {
   public void runInspection(@Nonnull AnalysisScope scope,
                             @Nonnull InspectionManager manager,
                             @Nonnull GlobalInspectionContext globalContext,
-                            @Nonnull ProblemDescriptionsProcessor problemDescriptionsProcessor) {
+                            @Nonnull ProblemDescriptionsProcessor problemDescriptionsProcessor,
+                            Object state) {
   }
 
   @Nullable

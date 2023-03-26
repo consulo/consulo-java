@@ -30,19 +30,19 @@ import java.util.List;
 /**
  * @author ven
  */
-public abstract class GenericsInspectionToolBase extends BaseJavaBatchLocalInspectionTool {
+public abstract class GenericsInspectionToolBase<State> extends BaseJavaBatchLocalInspectionTool<State> {
   @Override
   public boolean isEnabledByDefault() {
     return true;
   }
 
   @Override
-  public ProblemDescriptor[] checkClass(@Nonnull PsiClass aClass, @Nonnull InspectionManager manager, boolean isOnTheFly) {
+  public ProblemDescriptor[] checkClass(@Nonnull PsiClass aClass, @Nonnull InspectionManager manager, boolean isOnTheFly, State state) {
     final PsiClassInitializer[] initializers = aClass.getInitializers();
     if (initializers.length == 0) return null;
     List<ProblemDescriptor> descriptors = new ArrayList<ProblemDescriptor>();
     for (PsiClassInitializer initializer : initializers) {
-      final ProblemDescriptor[] localDescriptions = getDescriptions(initializer, manager, isOnTheFly);
+      final ProblemDescriptor[] localDescriptions = getDescriptions(initializer, manager, isOnTheFly, state);
       if (localDescriptions != null) {
         ContainerUtil.addAll(descriptors, localDescriptions);
       }
@@ -52,26 +52,26 @@ public abstract class GenericsInspectionToolBase extends BaseJavaBatchLocalInspe
   }
 
   @Override
-  public ProblemDescriptor[] checkField(@Nonnull PsiField field, @Nonnull InspectionManager manager, boolean isOnTheFly) {
+  public ProblemDescriptor[] checkField(@Nonnull PsiField field, @Nonnull InspectionManager manager, boolean isOnTheFly, State state) {
     final PsiExpression initializer = field.getInitializer();
     if (initializer != null) {
-      return getDescriptions(initializer, manager, isOnTheFly);
+      return getDescriptions(initializer, manager, isOnTheFly, state);
     }
     if (field instanceof PsiEnumConstant) {
-      return getDescriptions(field, manager, isOnTheFly);
+      return getDescriptions(field, manager, isOnTheFly, state);
     }
     return null;
   }
 
   @Override
-  public ProblemDescriptor[] checkMethod(@Nonnull PsiMethod psiMethod, @Nonnull InspectionManager manager, boolean isOnTheFly) {
+  public ProblemDescriptor[] checkMethod(@Nonnull PsiMethod psiMethod, @Nonnull InspectionManager manager, boolean isOnTheFly, State state) {
     final PsiCodeBlock body = psiMethod.getBody();
     if (body != null) {
-      return getDescriptions(body, manager, isOnTheFly);
+      return getDescriptions(body, manager, isOnTheFly, state);
     }
     return null;
   }
 
   @Nullable
-  public abstract ProblemDescriptor[] getDescriptions(PsiElement place, InspectionManager manager, boolean isOnTheFly);
+  public abstract ProblemDescriptor[] getDescriptions(PsiElement place, InspectionManager manager, boolean isOnTheFly, State state);
 }

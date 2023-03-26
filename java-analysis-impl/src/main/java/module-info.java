@@ -72,6 +72,7 @@ open module consulo.java.analysis.impl {
   exports com.intellij.java.analysis.impl.refactoring.extractMethod;
   exports com.intellij.java.analysis.impl.refactoring.util;
   exports com.intellij.java.analysis.impl.refactoring.util.duplicates;
+  exports consulo.java.analysis.impl.localize;
   exports com.siyeh;
   exports com.siyeh.ig;
   exports com.siyeh.ig.bugs;

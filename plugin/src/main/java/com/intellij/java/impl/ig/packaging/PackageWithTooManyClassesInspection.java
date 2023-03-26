@@ -19,11 +19,11 @@ import com.intellij.java.analysis.codeInspection.reference.RefClass;
 import com.intellij.java.analysis.codeInspection.reference.RefPackage;
 import com.intellij.java.impl.ig.BaseGlobalInspection;
 import com.siyeh.InspectionGadgetsBundle;
+import consulo.deadCodeNotWorking.impl.SingleIntegerFieldOptionsPanel;
 import consulo.language.editor.inspection.CommonProblemDescriptor;
 import consulo.language.editor.inspection.GlobalInspectionContext;
 import consulo.language.editor.inspection.reference.RefEntity;
 import consulo.language.editor.inspection.scheme.InspectionManager;
-import consulo.language.editor.inspection.ui.SingleIntegerFieldOptionsPanel;
 import consulo.language.editor.scope.AnalysisScope;
 
 import javax.annotation.Nonnull;
@@ -31,55 +31,65 @@ import javax.annotation.Nullable;
 import javax.swing.*;
 import java.util.List;
 
-public abstract class PackageWithTooManyClassesInspection extends BaseGlobalInspection {
+public abstract class PackageWithTooManyClassesInspection extends BaseGlobalInspection
+{
 
-  @SuppressWarnings({"PublicField"})
-  public int limit = 10;
+	@SuppressWarnings({"PublicField"})
+	public int limit = 10;
 
-  @Nonnull
-  @Override
-  public String getDisplayName() {
-    return InspectionGadgetsBundle.message(
-      "package.with.too.many.classes.display.name");
-  }
+	@Nonnull
+	@Override
+	public String getDisplayName()
+	{
+		return InspectionGadgetsBundle.message(
+				"package.with.too.many.classes.display.name");
+	}
 
-  @Override
-  @Nullable
-  public CommonProblemDescriptor[] checkElement(
-    RefEntity refEntity,
-    AnalysisScope analysisScope,
-    InspectionManager inspectionManager,
-    GlobalInspectionContext globalInspectionContext) {
-    if (!(refEntity instanceof RefPackage)) {
-      return null;
-    }
-    final List<RefEntity> children = refEntity.getChildren();
-    if (children == null) {
-      return null;
-    }
-    int numClasses = 0;
-    for (RefEntity child : children) {
-      if (child instanceof RefClass) {
-        numClasses++;
-      }
-    }
-    if (numClasses <= limit) {
-      return null;
-    }
-    final String errorString = InspectionGadgetsBundle.message(
-      "package.with.too.many.classes.problem.descriptor",
-      refEntity.getQualifiedName(), Integer.valueOf(numClasses),
-      Integer.valueOf(limit));
-    return new CommonProblemDescriptor[]{
-      inspectionManager.createProblemDescriptor(errorString)
-    };
-  }
+	@Override
+	@Nullable
+	public CommonProblemDescriptor[] checkElement(
+			RefEntity refEntity,
+			AnalysisScope analysisScope,
+			InspectionManager inspectionManager,
+			GlobalInspectionContext globalInspectionContext,
+			Object state)
+	{
+		if(!(refEntity instanceof RefPackage))
+		{
+			return null;
+		}
+		final List<RefEntity> children = refEntity.getChildren();
+		if(children == null)
+		{
+			return null;
+		}
+		int numClasses = 0;
+		for(RefEntity child : children)
+		{
+			if(child instanceof RefClass)
+			{
+				numClasses++;
+			}
+		}
+		if(numClasses <= limit)
+		{
+			return null;
+		}
+		final String errorString = InspectionGadgetsBundle.message(
+				"package.with.too.many.classes.problem.descriptor",
+				refEntity.getQualifiedName(), Integer.valueOf(numClasses),
+				Integer.valueOf(limit));
+		return new CommonProblemDescriptor[]{
+				inspectionManager.createProblemDescriptor(errorString)
+		};
+	}
 
-  @Override
-  public JComponent createOptionsPanel() {
-    return new SingleIntegerFieldOptionsPanel(
-      InspectionGadgetsBundle.message(
-        "package.with.too.many.classes.max.option"),
-      this, "limit");
-  }
+	@Override
+	public JComponent createOptionsPanel()
+	{
+		return new SingleIntegerFieldOptionsPanel(
+				InspectionGadgetsBundle.message(
+						"package.with.too.many.classes.max.option"),
+				this, "limit");
+	}
 }

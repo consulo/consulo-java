@@ -23,16 +23,18 @@ import com.intellij.java.impl.codeInsight.daemon.impl.RemoveSuppressWarningActio
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.*;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
+import consulo.java.deadCodeNotWorking.OldStyleInspection;
 import consulo.language.Language;
 import consulo.language.editor.impl.inspection.GlobalInspectionContextBase;
 import consulo.language.editor.impl.inspection.reference.RefManagerImpl;
 import consulo.language.editor.impl.inspection.scheme.GlobalInspectionToolWrapper;
+import consulo.language.editor.impl.inspection.scheme.LocalInspectionToolWrapper;
 import consulo.language.editor.inspection.*;
 import consulo.language.editor.inspection.reference.RefElement;
 import consulo.language.editor.inspection.reference.RefEntity;
 import consulo.language.editor.inspection.reference.RefVisitor;
 import consulo.language.editor.inspection.scheme.*;
-import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
 import consulo.language.editor.rawHighlight.HighlightDisplayLevel;
 import consulo.language.editor.scope.AnalysisScope;
 import consulo.language.psi.PsiComment;
@@ -44,8 +46,6 @@ import consulo.project.Project;
 import consulo.util.collection.BidirectionalMap;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.StringUtil;
-import consulo.util.xml.serializer.WriteExternalException;
-import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
@@ -57,7 +57,7 @@ import java.util.*;
  * @author cdr
  */
 @ExtensionImpl
-public class RedundantSuppressInspection extends GlobalInspectionTool {
+public class RedundantSuppressInspection extends GlobalInspectionTool implements OldStyleInspection {
   private BidirectionalMap<String, QuickFix> myQuickFixes = null;
   private static final Logger LOG = Logger.getInstance(RedundantSuppressInspection.class);
 
@@ -105,22 +105,16 @@ public class RedundantSuppressInspection extends GlobalInspectionTool {
   }
 
   @Override
-  public void writeSettings(@Nonnull Element node) throws WriteExternalException {
-    if (IGNORE_ALL) {
-      super.writeSettings(node);
-    }
-  }
-
-  @Override
   public void runInspection(@Nonnull final AnalysisScope scope,
                             @Nonnull final InspectionManager manager,
                             @Nonnull final GlobalInspectionContext globalContext,
-                            @Nonnull final ProblemDescriptionsProcessor problemDescriptionsProcessor) {
+                            @Nonnull final ProblemDescriptionsProcessor problemDescriptionsProcessor,
+                            @Nonnull Object state) {
     globalContext.getRefManager().iterate(new RefJavaVisitor() {
       @Override
       public void visitClass(@Nonnull RefClass refClass) {
         if (!globalContext.shouldCheck(refClass, RedundantSuppressInspection.this)) return;
-        CommonProblemDescriptor[] descriptors = checkElement(refClass, manager, globalContext.getProject());
+        CommonProblemDescriptor[] descriptors = checkElement(refClass, manager, globalContext.getProject(), state);
         if (descriptors != null) {
           for (CommonProblemDescriptor descriptor : descriptors) {
             if (descriptor instanceof ProblemDescriptor) {
@@ -140,13 +134,13 @@ public class RedundantSuppressInspection extends GlobalInspectionTool {
   }
 
   @Nullable
-  private CommonProblemDescriptor[] checkElement(@Nonnull RefClass refEntity, @Nonnull InspectionManager manager, @Nonnull Project project) {
+  private CommonProblemDescriptor[] checkElement(@Nonnull RefClass refEntity, @Nonnull InspectionManager manager, @Nonnull Project project, Object state) {
     final PsiClass psiClass = refEntity.getElement();
     if (psiClass == null) return null;
-    return checkElement(psiClass, manager, project);
+    return checkElement(psiClass, manager, project, state);
   }
 
-  public CommonProblemDescriptor[] checkElement(@Nonnull final PsiElement psiElement, @Nonnull final InspectionManager manager, @Nonnull Project project) {
+  public CommonProblemDescriptor[] checkElement(@Nonnull final PsiElement psiElement, @Nonnull final InspectionManager manager, @Nonnull Project project, Object state) {
     final Map<PsiElement, Collection<String>> suppressedScopes = new HashMap<PsiElement, Collection<String>>();
     psiElement.accept(new JavaRecursiveElementWalkingVisitor() {
       @Override
@@ -238,7 +232,7 @@ public class RedundantSuppressInspection extends GlobalInspectionTool {
         if (toolWrapper instanceof LocalInspectionToolWrapper) {
           LocalInspectionToolWrapper local = (LocalInspectionToolWrapper) toolWrapper;
           if (local.isUnfair()) continue; //cant't work with passes other than LocalInspectionPass
-          List<ProblemDescriptor> results = local.getTool().processFile(file, manager);
+          List<ProblemDescriptor> results = local.getTool().processFile(file, manager, state);
           descriptors = new ArrayList<CommonProblemDescriptor>(results);
         } else if (toolWrapper instanceof GlobalInspectionToolWrapper) {
           final GlobalInspectionToolWrapper global = (GlobalInspectionToolWrapper) toolWrapper;

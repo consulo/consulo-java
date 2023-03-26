@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.ig.logging;
 
-import com.intellij.java.impl.ig.ui.TextField;
+import consulo.deadCodeNotWorking.impl.TextField;
 import com.intellij.java.impl.ig.ui.UiUtils;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
@@ -29,7 +29,7 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.ide.impl.idea.codeInspection.ui.ListTable;
 import consulo.ide.impl.idea.codeInspection.ui.ListWrappingTableModel;
 import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.language.editor.inspection.ui.CheckBox;
+import consulo.deadCodeNotWorking.impl.CheckBox;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.project.Project;

@@ -17,11 +17,8 @@ package com.intellij.java.impl.codeInspection;
 
 import com.intellij.java.analysis.codeInspection.GroupNames;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.inspection.*;
 import consulo.language.editor.intention.HighPriorityAction;
-import consulo.language.editor.inspection.LocalQuickFix;
-import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.language.editor.inspection.ProblemHighlightType;
-import consulo.language.editor.inspection.ProblemsHolder;
 import com.intellij.java.analysis.impl.codeInspection.BaseJavaLocalInspectionTool;
 import com.intellij.java.language.impl.psi.impl.PsiDiamondTypeUtil;
 import com.intellij.java.language.psi.JavaElementVisitor;
@@ -70,7 +67,10 @@ public class ExplicitTypeCanBeDiamondInspection extends BaseJavaLocalInspectionT
 
   @Nonnull
   @Override
-  public PsiElementVisitor buildVisitor(@Nonnull final ProblemsHolder holder, boolean isOnTheFly) {
+  public PsiElementVisitor buildVisitorImpl(@Nonnull final ProblemsHolder holder,
+                                            boolean isOnTheFly,
+                                            LocalInspectionToolSession session,
+                                            Object state) {
     return new JavaElementVisitor() {
       @Override
       public void visitNewExpression(PsiNewExpression expression) {

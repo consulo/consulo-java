@@ -94,7 +94,7 @@ public class InstanceVariableUninitializedUseInspection extends BaseInspection {
 
     final JPanel annotationsPanel = SpecialAnnotationsUtil.createSpecialAnnotationsListControl(
       annotationNames, InspectionGadgetsBundle.message("ignore.if.annotated.by"));
-    final consulo.language.editor.inspection.ui.CheckBox checkBox = new consulo.language.editor.inspection.ui.CheckBox(InspectionGadgetsBundle.message("primitive.fields.ignore.option"), this, "m_ignorePrimitives");
+    final consulo.deadCodeNotWorking.impl.CheckBox checkBox = new consulo.deadCodeNotWorking.impl.CheckBox(InspectionGadgetsBundle.message("primitive.fields.ignore.option"), this, "m_ignorePrimitives");
 
     final GridBagConstraints constraints = new GridBagConstraints();
     constraints.gridx = 0;

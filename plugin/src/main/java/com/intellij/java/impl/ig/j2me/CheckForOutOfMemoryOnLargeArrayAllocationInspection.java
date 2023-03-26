@@ -20,7 +20,7 @@ import com.intellij.java.language.psi.util.ConstantExpressionUtil;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
-import consulo.language.editor.inspection.ui.SingleIntegerFieldOptionsPanel;
+import consulo.deadCodeNotWorking.impl.SingleIntegerFieldOptionsPanel;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 

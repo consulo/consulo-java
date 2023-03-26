@@ -40,11 +40,13 @@ public abstract class GlobalJavaInspectionTool extends GlobalInspectionTool impl
   @Override
   public boolean queryExternalUsagesRequests(final InspectionManager manager,
                                              final GlobalInspectionContext globalContext,
-                                             final ProblemDescriptionsProcessor problemDescriptionsProcessor) {
-    return queryExternalUsagesRequests(globalContext.getRefManager(), globalContext.getExtension(GlobalJavaInspectionContext.CONTEXT), problemDescriptionsProcessor);
+                                             final ProblemDescriptionsProcessor problemDescriptionsProcessor,
+                                             Object state) {
+    return queryExternalUsagesRequests(globalContext.getRefManager(), globalContext.getExtension(GlobalJavaInspectionContext.CONTEXT), problemDescriptionsProcessor,
+            state);
   }
 
-  protected boolean queryExternalUsagesRequests(RefManager manager, GlobalJavaInspectionContext globalContext, ProblemDescriptionsProcessor processor) {
+  protected boolean queryExternalUsagesRequests(RefManager manager, GlobalJavaInspectionContext globalContext, ProblemDescriptionsProcessor processor, Object state) {
     return false;
   }
 

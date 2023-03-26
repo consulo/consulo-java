@@ -58,6 +58,7 @@
 				<version>3-SNAPSHOT</version>
 				<extensions>true</extensions>
 				<configuration>
+					<repositoryChannel>nightly</repositoryChannel>
 					<dependencies>
 						<dependency>com.intellij.spellchecker</dependency>
 						<dependency>com.intellij.regexp</dependency>
@@ -92,6 +93,7 @@
 				</configuration>
 				<executions>
 					<execution>
+						<id>package</id>
 						<phase>package</phase>
 						<goals>
 							<goal>workspace</goal>

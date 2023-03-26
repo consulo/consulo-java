@@ -81,13 +81,13 @@ public class InvalidPropertyKeyInspection extends BaseJavaLocalInspectionTool {
 
   @Override
   @Nullable
-  public ProblemDescriptor[] checkMethod(@Nonnull PsiMethod method, @Nonnull InspectionManager manager, boolean isOnTheFly) {
+  public ProblemDescriptor[] checkMethod(@Nonnull PsiMethod method, @Nonnull InspectionManager manager, boolean isOnTheFly, Object state) {
     return checkElement(method, manager, isOnTheFly);
   }
 
   @Override
   @Nullable
-  public ProblemDescriptor[] checkClass(@Nonnull PsiClass aClass, @Nonnull InspectionManager manager, boolean isOnTheFly) {
+  public ProblemDescriptor[] checkClass(@Nonnull PsiClass aClass, @Nonnull InspectionManager manager, boolean isOnTheFly, Object state) {
     final PsiClassInitializer[] initializers = aClass.getInitializers();
     List<ProblemDescriptor> result = new ArrayList<ProblemDescriptor>();
     for (PsiClassInitializer initializer : initializers) {
@@ -102,7 +102,7 @@ public class InvalidPropertyKeyInspection extends BaseJavaLocalInspectionTool {
 
   @Override
   @Nullable
-  public ProblemDescriptor[] checkField(@Nonnull PsiField field, @Nonnull InspectionManager manager, boolean isOnTheFly) {
+  public ProblemDescriptor[] checkField(@Nonnull PsiField field, @Nonnull InspectionManager manager, boolean isOnTheFly, Object state) {
     List<ProblemDescriptor> result = new ArrayList<ProblemDescriptor>();
     appendProblems(manager, isOnTheFly, result, field.getInitializer());
     appendProblems(manager, isOnTheFly, result, field.getModifierList());

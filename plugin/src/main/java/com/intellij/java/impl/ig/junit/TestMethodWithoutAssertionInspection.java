@@ -25,7 +25,7 @@ import com.siyeh.ig.psiutils.TestUtils;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.ide.impl.idea.codeInspection.ui.ListTable;
 import consulo.ide.impl.idea.codeInspection.ui.ListWrappingTableModel;
-import consulo.language.editor.inspection.ui.CheckBox;
+import consulo.deadCodeNotWorking.impl.CheckBox;
 import consulo.language.psi.PsiElement;
 import consulo.util.xml.serializer.InvalidDataException;
 import consulo.util.xml.serializer.WriteExternalException;

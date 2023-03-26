@@ -22,7 +22,7 @@ import javax.annotation.Nullable;
 
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.ImplicitUsageProvider;
-import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
+import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import consulo.component.extension.Extensions;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiClassInitializer;

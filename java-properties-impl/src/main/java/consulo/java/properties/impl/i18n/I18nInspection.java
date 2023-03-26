@@ -379,7 +379,7 @@ public class I18nInspection extends BaseLocalInspectionTool {
 
   @Override
   @Nullable
-  public ProblemDescriptor[] checkMethod(@Nonnull PsiMethod method, @Nonnull InspectionManager manager, boolean isOnTheFly) {
+  public ProblemDescriptor[] checkMethod(@Nonnull PsiMethod method, @Nonnull InspectionManager manager, boolean isOnTheFly, Object state) {
     PsiClass containingClass = method.getContainingClass();
     if (containingClass == null || isClassNonNls(containingClass)) {
       return null;
@@ -393,7 +393,7 @@ public class I18nInspection extends BaseLocalInspectionTool {
 
   @Override
   @Nullable
-  public ProblemDescriptor[] checkClass(@Nonnull PsiClass aClass, @Nonnull InspectionManager manager, boolean isOnTheFly) {
+  public ProblemDescriptor[] checkClass(@Nonnull PsiClass aClass, @Nonnull InspectionManager manager, boolean isOnTheFly, Object state) {
     if (isClassNonNls(aClass)) {
       return null;
     }
@@ -411,7 +411,7 @@ public class I18nInspection extends BaseLocalInspectionTool {
 
   @Override
   @Nullable
-  public ProblemDescriptor[] checkField(@Nonnull PsiField field, @Nonnull InspectionManager manager, boolean isOnTheFly) {
+  public ProblemDescriptor[] checkField(@Nonnull PsiField field, @Nonnull InspectionManager manager, boolean isOnTheFly, Object state) {
     PsiClass containingClass = field.getContainingClass();
     if (containingClass == null || isClassNonNls(containingClass)) {
       return null;

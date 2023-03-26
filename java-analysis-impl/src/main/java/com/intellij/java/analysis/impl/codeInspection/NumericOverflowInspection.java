@@ -25,6 +25,7 @@ import com.intellij.java.language.psi.PsiReferenceExpression;
 import com.intellij.java.language.psi.util.ConstantEvaluationOverflowException;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.language.editor.inspection.LocalInspectionToolSession;
 import consulo.language.editor.inspection.ProblemHighlightType;
 import consulo.language.editor.inspection.ProblemsHolder;
 import consulo.language.psi.PsiElement;
@@ -69,7 +70,10 @@ public class NumericOverflowInspection extends BaseJavaBatchLocalInspectionTool 
 
   @Nonnull
   @Override
-  public PsiElementVisitor buildVisitor(@Nonnull final ProblemsHolder holder, boolean isOnTheFly) {
+  public PsiElementVisitor buildVisitorImpl(@Nonnull final ProblemsHolder holder,
+                                            boolean isOnTheFly,
+                                            LocalInspectionToolSession session,
+                                            Object state) {
     return new JavaElementVisitor() {
       @Override
       public void visitReferenceExpression(PsiReferenceExpression expression) {

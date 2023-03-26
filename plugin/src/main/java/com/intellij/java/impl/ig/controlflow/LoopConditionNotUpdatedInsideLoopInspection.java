@@ -21,7 +21,7 @@ import consulo.language.psi.*;
 import consulo.language.ast.IElementType;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.util.collection.SmartList;
-import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
+import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import com.siyeh.InspectionGadgetsBundle;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;

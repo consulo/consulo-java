@@ -40,6 +40,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.project.Project;
 import consulo.util.lang.CharArrayUtil;
+import consulo.util.lang.ObjectUtil;
 import consulo.util.lang.Pair;
 import consulo.util.lang.StringUtil;
 
@@ -107,14 +108,14 @@ public class JavaDocCommentFixer implements DocCommentFixer {
     ProblemDescriptor[] referenceProblems = null;
     ProblemDescriptor[] otherProblems = null;
     if (owner instanceof PsiClass) {
-      referenceProblems = referenceInspection.checkClass(((PsiClass) owner), inspectionManager, false);
-      otherProblems = localInspection.checkClass(((PsiClass) owner), inspectionManager, false);
+      referenceProblems = referenceInspection.checkClass(((PsiClass) owner), inspectionManager, false, ObjectUtil.NULL);
+      otherProblems = localInspection.checkClass(((PsiClass) owner), inspectionManager, false, ObjectUtil.NULL);
     } else if (owner instanceof PsiField) {
-      referenceProblems = referenceInspection.checkField(((PsiField) owner), inspectionManager, false);
-      otherProblems = localInspection.checkField(((PsiField) owner), inspectionManager, false);
+      referenceProblems = referenceInspection.checkField(((PsiField) owner), inspectionManager, false, ObjectUtil.NULL);
+      otherProblems = localInspection.checkField(((PsiField) owner), inspectionManager, false, ObjectUtil.NULL);
     } else if (owner instanceof PsiMethod) {
-      referenceProblems = referenceInspection.checkMethod((PsiMethod) owner, inspectionManager, false);
-      otherProblems = localInspection.checkMethod((PsiMethod) owner, inspectionManager, false);
+      referenceProblems = referenceInspection.checkMethod((PsiMethod) owner, inspectionManager, false, ObjectUtil.NULL);
+      otherProblems = localInspection.checkMethod((PsiMethod) owner, inspectionManager, false, ObjectUtil.NULL);
     }
 
     if (referenceProblems != null) {

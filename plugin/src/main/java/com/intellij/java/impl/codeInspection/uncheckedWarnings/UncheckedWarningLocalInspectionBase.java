@@ -133,10 +133,10 @@ public abstract class UncheckedWarningLocalInspectionBase extends BaseJavaBatchL
 
   @Nonnull
   @Override
-  public PsiElementVisitor buildVisitor(@Nonnull final ProblemsHolder holder, boolean isOnTheFly, @Nonnull LocalInspectionToolSession session) {
+  public PsiElementVisitor buildVisitorImpl(@Nonnull final ProblemsHolder holder, boolean isOnTheFly, @Nonnull LocalInspectionToolSession session, Object state) {
     LanguageLevel languageLevel = PsiUtil.getLanguageLevel(session.getFile());
     if (!languageLevel.isAtLeast(LanguageLevel.JDK_1_5)) {
-      return super.buildVisitor(holder, isOnTheFly, session);
+      return super.buildVisitorImpl(holder, isOnTheFly, session, state);
     }
 
     return new UncheckedWarningsVisitor(isOnTheFly, languageLevel) {

@@ -32,7 +32,7 @@ import consulo.application.util.query.Query;
 import consulo.content.scope.SearchScope;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.language.editor.inspection.ui.CheckBox;
+import consulo.deadCodeNotWorking.impl.CheckBox;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
 import consulo.language.psi.scope.GlobalSearchScope;

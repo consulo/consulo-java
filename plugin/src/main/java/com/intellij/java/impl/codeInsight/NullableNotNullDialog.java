@@ -5,11 +5,13 @@ import consulo.language.editor.inspection.InspectionsBundle;
 import consulo.dataContext.DataManager;
 import com.intellij.java.language.codeInsight.NullableNotNullManager;
 import consulo.language.editor.CommonDataKeys;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.project.ProjectManager;
 import consulo.ui.ex.awt.DialogWrapper;
 import consulo.ui.ex.awt.Splitter;
 import consulo.ui.ex.awt.JBUI;
+import consulo.ui.ex.awtUnsafe.TargetAWT;
 
 import javax.annotation.Nonnull;
 
@@ -54,10 +56,18 @@ public class NullableNotNullDialog extends DialogWrapper
 		setTitle("Nullable/NotNull Configuration");
 	}
 
-	public static JButton createConfigureAnnotationsButton(Component context)
+	public static JButton createConfigureAnnotationsJButton(Component context)
 	{
 		final JButton button = new JButton(InspectionsBundle.message("configure.annotations.option"));
 		button.addActionListener(createActionListener(context));
+		return button;
+	}
+
+	@Nonnull
+	public static consulo.ui.Button createConfigureAnnotationsButton()
+	{
+		consulo.ui.Button button = consulo.ui.Button.create(LocalizeValue.localizeTODO("Configure annotations"));
+		button.addClickListener(clickEvent -> showDialog(TargetAWT.to(clickEvent.getComponent()), false));
 		return button;
 	}
 

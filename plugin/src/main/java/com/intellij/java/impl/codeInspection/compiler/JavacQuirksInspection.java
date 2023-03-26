@@ -19,6 +19,7 @@ import com.intellij.java.analysis.codeInspection.GroupNames;
 import com.intellij.java.analysis.impl.codeInspection.ex.BaseLocalInspectionTool;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.InspectionsBundle;
+import consulo.language.editor.inspection.LocalInspectionToolSession;
 import consulo.language.editor.inspection.ProblemsHolder;
 import consulo.language.psi.PsiElementVisitor;
 import org.jetbrains.annotations.Nls;
@@ -47,7 +48,10 @@ public class JavacQuirksInspection extends BaseLocalInspectionTool {
 
   @Nonnull
   @Override
-  public PsiElementVisitor buildVisitor(@Nonnull final ProblemsHolder holder, final boolean isOnTheFly) {
+  public PsiElementVisitor buildVisitorImpl(@Nonnull final ProblemsHolder holder,
+                                            final boolean isOnTheFly,
+                                            LocalInspectionToolSession session,
+                                            Object state) {
     return new JavacQuirksInspectionVisitor(holder);
   }
 }

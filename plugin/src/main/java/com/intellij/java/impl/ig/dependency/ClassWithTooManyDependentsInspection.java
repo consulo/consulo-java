@@ -24,7 +24,7 @@ import consulo.language.editor.inspection.CommonProblemDescriptor;
 import consulo.language.editor.inspection.GlobalInspectionContext;
 import consulo.language.editor.inspection.reference.RefEntity;
 import consulo.language.editor.inspection.scheme.InspectionManager;
-import consulo.language.editor.inspection.ui.SingleIntegerFieldOptionsPanel;
+import consulo.deadCodeNotWorking.impl.SingleIntegerFieldOptionsPanel;
 import consulo.language.editor.scope.AnalysisScope;
 
 import javax.annotation.Nonnull;

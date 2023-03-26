@@ -20,6 +20,7 @@ import com.intellij.java.analysis.codeInspection.GroupNames;
 import com.intellij.java.language.impl.codeInsight.daemon.JavaErrorBundle;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.InspectionsBundle;
+import consulo.language.editor.inspection.LocalInspectionToolSession;
 import consulo.language.editor.inspection.ProblemsHolder;
 import com.intellij.java.analysis.impl.codeInspection.ex.BaseLocalInspectionTool;
 import com.intellij.java.language.psi.*;
@@ -97,7 +98,10 @@ public class SuspiciousNameCombinationInspection extends BaseLocalInspectionTool
 
   @Override
   @Nonnull
-  public PsiElementVisitor buildVisitor(@Nonnull ProblemsHolder holder, boolean isOnTheFly) {
+  public PsiElementVisitor buildVisitorImpl(@Nonnull ProblemsHolder holder,
+                                            boolean isOnTheFly,
+                                            LocalInspectionToolSession session,
+                                            Object state) {
     return new MyVisitor(holder);
   }
 

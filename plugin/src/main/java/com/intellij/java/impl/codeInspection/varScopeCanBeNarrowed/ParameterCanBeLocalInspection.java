@@ -72,7 +72,7 @@ public class ParameterCanBeLocalInspection extends BaseJavaLocalInspectionTool {
   }
 
   @Override
-  public ProblemDescriptor[] checkMethod(@Nonnull PsiMethod method, @Nonnull InspectionManager manager, boolean isOnTheFly) {
+  public ProblemDescriptor[] checkMethod(@Nonnull PsiMethod method, @Nonnull InspectionManager manager, boolean isOnTheFly, Object state) {
     final Collection<PsiParameter> parameters = filterFinal(method.getParameterList().getParameters());
     final PsiCodeBlock body = method.getBody();
     if (body == null || parameters.isEmpty() || isOverrides(method)) {

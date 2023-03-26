@@ -73,7 +73,10 @@ public class DuplicateStringLiteralInspection extends BaseLocalInspectionTool {
 
   @Override
   @Nonnull
-  public PsiElementVisitor buildVisitor(@Nonnull final ProblemsHolder holder, final boolean isOnTheFly) {
+  public PsiElementVisitor buildVisitorImpl(@Nonnull final ProblemsHolder holder,
+                                            final boolean isOnTheFly,
+                                            LocalInspectionToolSession session,
+                                            Object state) {
     return new JavaElementVisitor() {
       @Override
       public void visitReferenceExpression(final PsiReferenceExpression expression) {

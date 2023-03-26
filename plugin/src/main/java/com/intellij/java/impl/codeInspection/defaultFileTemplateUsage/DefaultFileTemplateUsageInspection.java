@@ -49,7 +49,7 @@ public class DefaultFileTemplateUsageInspection extends BaseJavaLocalInspectionT
   @Override
   @Nonnull
   public String getGroupDisplayName() {
-    return GENERAL_GROUP_NAME;
+    return "General";
   }
 
   @Override
@@ -67,7 +67,7 @@ public class DefaultFileTemplateUsageInspection extends BaseJavaLocalInspectionT
 
   @Override
   @Nullable
-  public ProblemDescriptor[] checkFile(@Nonnull PsiFile file, @Nonnull InspectionManager manager, boolean isOnTheFly) {
+  public ProblemDescriptor[] checkFile(@Nonnull PsiFile file, @Nonnull InspectionManager manager, boolean isOnTheFly, Object state) {
     ProblemDescriptor descriptor = FileHeaderChecker.checkFileHeader(file, manager, isOnTheFly);
     return descriptor == null ? null : new ProblemDescriptor[]{descriptor};
   }

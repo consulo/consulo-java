@@ -90,7 +90,7 @@ public class MagicConstantInspection extends BaseJavaLocalInspectionTool {
 
   @Nonnull
   @Override
-  public PsiElementVisitor buildVisitor(@Nonnull final ProblemsHolder holder, boolean isOnTheFly, @Nonnull LocalInspectionToolSession session) {
+  public PsiElementVisitor buildVisitorImpl(@Nonnull final ProblemsHolder holder, boolean isOnTheFly, @Nonnull LocalInspectionToolSession session, Object state) {
     return new JavaElementVisitor() {
       @Override
       public void visitJavaFile(PsiJavaFile file) {

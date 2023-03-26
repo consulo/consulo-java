@@ -18,49 +18,33 @@ package com.intellij.java.impl.ig;
 import com.intellij.java.analysis.codeInspection.GlobalJavaInspectionTool;
 import com.intellij.java.language.JavaLanguage;
 import com.siyeh.ig.GroupDisplayNameUtil;
+import consulo.java.deadCodeNotWorking.OldStyleInspection;
 import consulo.language.Language;
 import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public abstract class BaseGlobalInspection extends GlobalJavaInspectionTool {
+public abstract class BaseGlobalInspection extends GlobalJavaInspectionTool implements OldStyleInspection
+{
+	@Override
+	@Nls
+	@Nonnull
+	public final String getGroupDisplayName()
+	{
+		return GroupDisplayNameUtil.getGroupDisplayName(getClass());
+	}
 
-  private String shortName = null;
-  @NonNls
-  private static final String INSPECTION = "Inspection";
+	@Nullable
+	@Override
+	public Language getLanguage()
+	{
+		return JavaLanguage.INSTANCE;
+	}
 
-  @Override
-  @Nonnull
-  public String getShortName() {
-    if (shortName == null) {
-      final Class<? extends BaseGlobalInspection> aClass = getClass();
-      final String name = aClass.getName();
-      assert name.endsWith(INSPECTION) :
-          "class name must end with 'Inspection' to correctly" +
-              " calculate the short name: " + name;
-      shortName = name.substring(name.lastIndexOf((int) '.') + 1,
-          name.length() - INSPECTION.length());
-    }
-    return shortName;
-  }
-
-  @Override
-  @Nls
-  @Nonnull
-  public final String getGroupDisplayName() {
-    return GroupDisplayNameUtil.getGroupDisplayName(getClass());
-  }
-
-  @Nullable
-  @Override
-  public Language getLanguage() {
-    return JavaLanguage.INSTANCE;
-  }
-
-  @Override
-  public boolean isEnabledByDefault() {
-    return false;
-  }
+	@Override
+	public boolean isEnabledByDefault()
+	{
+		return false;
+	}
 }

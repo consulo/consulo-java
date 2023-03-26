@@ -17,7 +17,7 @@ package com.intellij.java.impl.ig.j2me;
 
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.language.editor.inspection.ui.SingleCheckboxOptionsPanel;
+import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import com.intellij.java.language.psi.*;
 import consulo.project.Project;
 import consulo.language.psi.*;

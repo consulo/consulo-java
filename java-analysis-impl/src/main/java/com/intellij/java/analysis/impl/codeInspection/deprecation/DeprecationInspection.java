@@ -27,41 +27,44 @@ import consulo.annotation.DeprecationInfo;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.document.util.TextRange;
 import consulo.language.editor.DeprecationUtil;
+import consulo.language.editor.inspection.InspectionToolState;
+import consulo.language.editor.inspection.LocalInspectionToolSession;
 import consulo.language.editor.inspection.ProblemHighlightType;
 import consulo.language.editor.inspection.ProblemsHolder;
-import consulo.language.editor.inspection.ui.MultipleCheckboxOptionsPanel;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.util.PsiTreeUtil;
-import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.swing.*;
 import java.util.List;
 
 /**
  * @author max
  */
 @ExtensionImpl
-public class DeprecationInspection extends BaseJavaBatchLocalInspectionTool {
-  @NonNls
+public class DeprecationInspection extends BaseJavaBatchLocalInspectionTool<DeprecationInspectionState> {
   public static final String SHORT_NAME = DeprecationUtil.DEPRECATION_SHORT_NAME;
-  @NonNls
   public static final String ID = DeprecationUtil.DEPRECATION_ID;
   public static final String DISPLAY_NAME = DeprecationUtil.DEPRECATION_DISPLAY_NAME;
-  public static final String IGNORE_METHODS_OF_DEPRECATED_NAME = "IGNORE_METHODS_OF_DEPRECATED";
-
-  public boolean IGNORE_INSIDE_DEPRECATED = false;
-  public boolean IGNORE_ABSTRACT_DEPRECATED_OVERRIDES = true;
-  public boolean IGNORE_IMPORT_STATEMENTS = true;
-  public boolean IGNORE_METHODS_OF_DEPRECATED = true;
 
   @Override
   @Nonnull
-  public PsiElementVisitor buildVisitor(@Nonnull final ProblemsHolder holder, boolean isOnTheFly) {
-    return new DeprecationElementVisitor(holder, IGNORE_INSIDE_DEPRECATED, IGNORE_ABSTRACT_DEPRECATED_OVERRIDES, IGNORE_IMPORT_STATEMENTS,
-        IGNORE_METHODS_OF_DEPRECATED);
+  public PsiElementVisitor buildVisitorImpl(@Nonnull final ProblemsHolder holder,
+                                            boolean isOnTheFly,
+                                            LocalInspectionToolSession session,
+                                            DeprecationInspectionState state) {
+    return new DeprecationElementVisitor(holder,
+                                         state.IGNORE_INSIDE_DEPRECATED,
+                                         state.IGNORE_ABSTRACT_DEPRECATED_OVERRIDES,
+                                         state.IGNORE_IMPORT_STATEMENTS,
+                                         state.IGNORE_METHODS_OF_DEPRECATED);
+  }
+
+  @Nonnull
+  @Override
+  public InspectionToolState<? extends DeprecationInspectionState> createStateProvider() {
+    return new DeprecationInspectionState();
   }
 
   @Override
@@ -78,7 +81,6 @@ public class DeprecationInspection extends BaseJavaBatchLocalInspectionTool {
 
   @Override
   @Nonnull
-  @NonNls
   public String getID() {
     return ID;
   }
@@ -86,18 +88,6 @@ public class DeprecationInspection extends BaseJavaBatchLocalInspectionTool {
   @Override
   public boolean isEnabledByDefault() {
     return true;
-  }
-
-  @Override
-  public JComponent createOptionsPanel() {
-    final MultipleCheckboxOptionsPanel panel = new MultipleCheckboxOptionsPanel(this);
-    panel.addCheckbox("Ignore inside deprecated members", "IGNORE_INSIDE_DEPRECATED");
-    panel.addCheckbox("Ignore inside non-static imports", "IGNORE_IMPORT_STATEMENTS");
-    panel.addCheckbox("<html>Ignore overrides of deprecated abstract methods from non-deprecated supers</html>",
-        "IGNORE_ABSTRACT_DEPRECATED_OVERRIDES");
-    panel.addCheckbox("Ignore members of deprecated classes", IGNORE_METHODS_OF_DEPRECATED_NAME);
-    return panel;
-
   }
 
   private static class DeprecationElementVisitor extends JavaElementVisitor {

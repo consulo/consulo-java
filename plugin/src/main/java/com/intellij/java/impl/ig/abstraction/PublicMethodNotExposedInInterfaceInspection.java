@@ -80,7 +80,7 @@ public class PublicMethodNotExposedInInterfaceInspection
     constraints.anchor = GridBagConstraints.CENTER;
     constraints.fill = GridBagConstraints.BOTH;
     panel.add(annotationsListControl, constraints);
-    final consulo.language.editor.inspection.ui.CheckBox checkBox = new consulo.language.editor.inspection.ui.CheckBox(InspectionGadgetsBundle.message(
+    final consulo.deadCodeNotWorking.impl.CheckBox checkBox = new consulo.deadCodeNotWorking.impl.CheckBox(InspectionGadgetsBundle.message(
       "public.method.not.in.interface.option"), this, "onlyWarnIfContainingClassImplementsAnInterface");
     constraints.gridy = 1;
     constraints.weighty = 0.0;

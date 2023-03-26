@@ -77,12 +77,12 @@ public class MultipleReturnPointsPerMethodInspection
     final JLabel label = new JLabel(InspectionGadgetsBundle.message(
       "return.point.limit.option"));
     final JFormattedTextField termLimitTextField = prepareNumberEditor(() -> m_limit, i -> m_limit = i);
-    final consulo.language.editor.inspection.ui.CheckBox ignoreGuardClausesCheckBox =
-      new consulo.language.editor.inspection.ui.CheckBox(InspectionGadgetsBundle.message(
+    final consulo.deadCodeNotWorking.impl.CheckBox ignoreGuardClausesCheckBox =
+      new consulo.deadCodeNotWorking.impl.CheckBox(InspectionGadgetsBundle.message(
         "ignore.guard.clauses.option"),
                    this, "ignoreGuardClauses");
-    final consulo.language.editor.inspection.ui.CheckBox ignoreEqualsMethodCheckBox =
-      new consulo.language.editor.inspection.ui.CheckBox(InspectionGadgetsBundle.message(
+    final consulo.deadCodeNotWorking.impl.CheckBox ignoreEqualsMethodCheckBox =
+      new consulo.deadCodeNotWorking.impl.CheckBox(InspectionGadgetsBundle.message(
         "ignore.for.equals.methods.option"),
                    this, "ignoreEqualsMethod");
 

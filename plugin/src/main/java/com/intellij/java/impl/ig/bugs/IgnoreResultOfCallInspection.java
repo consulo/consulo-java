@@ -109,8 +109,8 @@ public class IgnoreResultOfCallInspection extends BaseInspection {
       Arrays.asList(classNames, methodNamePatterns), InspectionGadgetsBundle.message("result.of.method.call.ignored.class.column.title"),
       InspectionGadgetsBundle.message("result.of.method.call.ignored.method.column.title")));
     final JPanel tablePanel = UiUtils.createAddRemovePanel(table);
-    final consulo.language.editor.inspection.ui.CheckBox checkBox =
-      new consulo.language.editor.inspection.ui.CheckBox(InspectionGadgetsBundle.message("result.of.method.call.ignored.non.library.option"), this, "m_reportAllNonLibraryCalls");
+    final consulo.deadCodeNotWorking.impl.CheckBox checkBox =
+      new consulo.deadCodeNotWorking.impl.CheckBox(InspectionGadgetsBundle.message("result.of.method.call.ignored.non.library.option"), this, "m_reportAllNonLibraryCalls");
     panel.add(tablePanel, BorderLayout.CENTER);
     panel.add(checkBox, BorderLayout.SOUTH);
     return panel;

@@ -64,7 +64,7 @@ public class PublicFieldInspection extends BaseInspection {
     final JPanel annotationsListControl = SpecialAnnotationsUtil.createSpecialAnnotationsListControl(
       ignorableAnnotations, InspectionGadgetsBundle.message("ignore.if.annotated.by"));
     panel.add(annotationsListControl, BorderLayout.CENTER);
-    final consulo.language.editor.inspection.ui.CheckBox checkBox = new consulo.language.editor.inspection.ui.CheckBox(InspectionGadgetsBundle.message(
+    final consulo.deadCodeNotWorking.impl.CheckBox checkBox = new consulo.deadCodeNotWorking.impl.CheckBox(InspectionGadgetsBundle.message(
       "public.field.ignore.enum.type.fields.option"), this, "ignoreEnums");
     panel.add(checkBox, BorderLayout.SOUTH);
     return panel;

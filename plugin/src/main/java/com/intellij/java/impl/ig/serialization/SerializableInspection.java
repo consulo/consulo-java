@@ -51,7 +51,7 @@ public abstract class SerializableInspection extends BaseInspection {
       superClassList, InspectionGadgetsBundle.message("ignore.classes.in.hierarchy.column.name"),
       InspectionGadgetsBundle.message("choose.super.class.to.ignore"));
     UiUtils.setComponentSize(chooserList, 7, 25);
-    final consulo.language.editor.inspection.ui.CheckBox checkBox = new consulo.language.editor.inspection.ui.CheckBox(InspectionGadgetsBundle.message(
+    final consulo.deadCodeNotWorking.impl.CheckBox checkBox = new consulo.deadCodeNotWorking.impl.CheckBox(InspectionGadgetsBundle.message(
       "ignore.anonymous.inner.classes"), this, "ignoreAnonymousInnerClasses");
 
     final GridBagConstraints constraints = new GridBagConstraints();

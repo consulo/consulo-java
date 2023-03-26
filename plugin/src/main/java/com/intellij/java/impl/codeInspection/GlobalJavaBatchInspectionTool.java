@@ -34,43 +34,52 @@ import consulo.language.psi.PsiElement;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public abstract class GlobalJavaBatchInspectionTool extends GlobalInspectionTool implements BatchSuppressableTool {
-  @Override
-  public boolean queryExternalUsagesRequests(@Nonnull final InspectionManager manager,
-                                             @Nonnull final GlobalInspectionContext globalContext,
-                                             @Nonnull final ProblemDescriptionsProcessor problemDescriptionsProcessor) {
-    return queryExternalUsagesRequests(globalContext.getRefManager(), globalContext.getExtension(GlobalJavaInspectionContext.CONTEXT), problemDescriptionsProcessor);
-  }
+public abstract class GlobalJavaBatchInspectionTool extends GlobalInspectionTool implements BatchSuppressableTool
+{
+	@Override
+	public boolean queryExternalUsagesRequests(@Nonnull final InspectionManager manager,
+											   @Nonnull final GlobalInspectionContext globalContext,
+											   @Nonnull final ProblemDescriptionsProcessor problemDescriptionsProcessor,
+											   Object state)
+	{
+		return queryExternalUsagesRequests(globalContext.getRefManager(), globalContext.getExtension(GlobalJavaInspectionContext.CONTEXT), problemDescriptionsProcessor);
+	}
 
-  protected boolean queryExternalUsagesRequests(@Nonnull RefManager manager, @Nonnull GlobalJavaInspectionContext globalContext, @Nonnull ProblemDescriptionsProcessor processor) {
-    return false;
-  }
+	protected boolean queryExternalUsagesRequests(@Nonnull RefManager manager, @Nonnull GlobalJavaInspectionContext globalContext, @Nonnull ProblemDescriptionsProcessor processor)
+	{
+		return false;
+	}
 
-  @Nonnull
-  @Override
-  public SuppressQuickFix[] getBatchSuppressActions(@Nullable PsiElement element) {
-    return BatchSuppressManager.getInstance().createBatchSuppressActions(HighlightDisplayKey.find(getShortName()));
-  }
+	@Nonnull
+	@Override
+	public SuppressQuickFix[] getBatchSuppressActions(@Nullable PsiElement element)
+	{
+		return BatchSuppressManager.getInstance().createBatchSuppressActions(HighlightDisplayKey.find(getShortName()));
+	}
 
-  @Override
-  public boolean isSuppressedFor(@Nonnull final PsiElement element) {
-    return BatchSuppressManager.getInstance().isSuppressedFor(element, getShortName());
-  }
+	@Override
+	public boolean isSuppressedFor(@Nonnull final PsiElement element)
+	{
+		return BatchSuppressManager.getInstance().isSuppressedFor(element, getShortName());
+	}
 
-  @Nonnull
-  @Override
-  public HighlightDisplayLevel getDefaultLevel() {
-    return HighlightDisplayLevel.WARNING;
-  }
+	@Nonnull
+	@Override
+	public HighlightDisplayLevel getDefaultLevel()
+	{
+		return HighlightDisplayLevel.WARNING;
+	}
 
-  @Override
-  public boolean isEnabledByDefault() {
-    return true;
-  }
+	@Override
+	public boolean isEnabledByDefault()
+	{
+		return true;
+	}
 
-  @Nullable
-  @Override
-  public Language getLanguage() {
-    return JavaLanguage.INSTANCE;
-  }
+	@Nullable
+	@Override
+	public Language getLanguage()
+	{
+		return JavaLanguage.INSTANCE;
+	}
 }

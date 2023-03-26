@@ -28,6 +28,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 @ExtensionAPI(ComponentScope.APPLICATION)
+@Deprecated
 public abstract class EntryPoint implements JDOMExternalizable, Cloneable {
   private static final Logger LOG = Logger.getInstance(EntryPoint.class);
 

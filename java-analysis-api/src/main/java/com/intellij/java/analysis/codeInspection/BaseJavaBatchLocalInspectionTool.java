@@ -24,11 +24,11 @@ import consulo.language.psi.PsiElement;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public abstract class BaseJavaBatchLocalInspectionTool extends AbstractBaseJavaLocalInspectionTool implements BatchSuppressableTool {
+public abstract class BaseJavaBatchLocalInspectionTool<State> extends AbstractBaseJavaLocalInspectionTool<State> implements BatchSuppressableTool {
   @Nonnull
   @Override
   public SuppressQuickFix[] getBatchSuppressActions(@Nullable PsiElement element) {
-    return BatchSuppressManager.SERVICE.getInstance().createBatchSuppressActions(HighlightDisplayKey.find(getShortName()));
+    return BatchSuppressManager.getInstance().createBatchSuppressActions(HighlightDisplayKey.find(getShortName()));
   }
 
   @Override
@@ -37,7 +37,7 @@ public abstract class BaseJavaBatchLocalInspectionTool extends AbstractBaseJavaL
   }
 
   public static boolean isSuppressedFor(@Nonnull PsiElement element, @Nonnull LocalInspectionTool tool) {
-    BatchSuppressManager manager = BatchSuppressManager.SERVICE.getInstance();
+    BatchSuppressManager manager = BatchSuppressManager.getInstance();
     String alternativeId;
     String toolId = tool.getID();
     return manager.isSuppressedFor(element, toolId) ||

@@ -23,22 +23,14 @@ import com.intellij.java.language.psi.util.PsiExpressionTrimRenderer;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.RedundantCastUtil;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.inspection.InspectionsBundle;
-import consulo.language.editor.inspection.LocalQuickFix;
-import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.language.editor.inspection.ProblemHighlightType;
+import consulo.language.editor.inspection.*;
 import consulo.language.editor.inspection.scheme.InspectionManager;
-import consulo.language.editor.inspection.ui.MultipleCheckboxOptionsPanel;
 import consulo.language.editor.rawHighlight.HighlightDisplayLevel;
 import consulo.language.psi.PsiElement;
 import consulo.project.Project;
-import consulo.util.xml.serializer.WriteExternalException;
-import org.jdom.Element;
-import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,17 +38,19 @@ import java.util.List;
  * @author max
  */
 @ExtensionImpl
-public class RedundantCastInspection extends GenericsInspectionToolBase {
-  private final LocalQuickFix myQuickFixAction;
-  private static final String DISPLAY_NAME = InspectionsBundle.message("inspection.redundant.cast.display.name");
-  @NonNls
+public class RedundantCastInspection extends GenericsInspectionToolBase<RedundantCastInspectionState> {
   private static final String SHORT_NAME = "RedundantCast";
 
-  public boolean IGNORE_SUSPICIOUS_METHOD_CALLS;
-
+  private final LocalQuickFix myQuickFixAction;
 
   public RedundantCastInspection() {
     myQuickFixAction = new AcceptSuggested();
+  }
+
+  @Nonnull
+  @Override
+  public InspectionToolState<? extends RedundantCastInspectionState> createStateProvider() {
+    return new RedundantCastInspectionState();
   }
 
   @Override
@@ -72,14 +66,17 @@ public class RedundantCastInspection extends GenericsInspectionToolBase {
 
   @Override
   @Nullable
-  public ProblemDescriptor[] getDescriptions(@Nonnull PsiElement where, @Nonnull InspectionManager manager, boolean isOnTheFly) {
+  public ProblemDescriptor[] getDescriptions(@Nonnull PsiElement where,
+                                             @Nonnull InspectionManager manager,
+                                             boolean isOnTheFly,
+                                             RedundantCastInspectionState state) {
     List<PsiTypeCastExpression> redundantCasts = RedundantCastUtil.getRedundantCastsInside(where);
     if (redundantCasts.isEmpty()) {
       return null;
     }
     List<ProblemDescriptor> descriptions = new ArrayList<>(redundantCasts.size());
     for (PsiTypeCastExpression redundantCast : redundantCasts) {
-      ProblemDescriptor descriptor = createDescription(redundantCast, manager, isOnTheFly);
+      ProblemDescriptor descriptor = createDescription(redundantCast, manager, isOnTheFly, state);
       if (descriptor != null) {
         descriptions.add(descriptor);
       }
@@ -91,26 +88,18 @@ public class RedundantCastInspection extends GenericsInspectionToolBase {
   }
 
   @Override
-  public ProblemDescriptor[] checkField(@Nonnull PsiField field, @Nonnull InspectionManager manager, boolean isOnTheFly) {
-    return getDescriptions(field, manager, isOnTheFly);
-  }
-
-  @Override
-  public void writeSettings(@Nonnull Element node) throws WriteExternalException {
-    if (IGNORE_SUSPICIOUS_METHOD_CALLS) {
-      super.writeSettings(node);
-    }
-  }
-
-  @Override
-  public JComponent createOptionsPanel() {
-    final MultipleCheckboxOptionsPanel optionsPanel = new MultipleCheckboxOptionsPanel(this);
-    optionsPanel.addCheckbox("Ignore casts in suspicious collections method calls", "IGNORE_SUSPICIOUS_METHOD_CALLS");
-    return optionsPanel;
+  public ProblemDescriptor[] checkField(@Nonnull PsiField field,
+                                        @Nonnull InspectionManager manager,
+                                        boolean isOnTheFly,
+                                        RedundantCastInspectionState state) {
+    return getDescriptions(field, manager, isOnTheFly, state);
   }
 
   @Nullable
-  private ProblemDescriptor createDescription(@Nonnull PsiTypeCastExpression cast, @Nonnull InspectionManager manager, boolean onTheFly) {
+  private ProblemDescriptor createDescription(@Nonnull PsiTypeCastExpression cast,
+                                              @Nonnull InspectionManager manager,
+                                              boolean onTheFly,
+                                              RedundantCastInspectionState state) {
     PsiExpression operand = cast.getOperand();
     PsiTypeElement castType = cast.getCastType();
     if (operand == null || castType == null) {
@@ -119,9 +108,9 @@ public class RedundantCastInspection extends GenericsInspectionToolBase {
     PsiElement parent = PsiUtil.skipParenthesizedExprUp(cast.getParent());
     if (parent instanceof PsiExpressionList) {
       final PsiElement gParent = parent.getParent();
-      if (gParent instanceof PsiMethodCallExpression && IGNORE_SUSPICIOUS_METHOD_CALLS) {
+      if (gParent instanceof PsiMethodCallExpression && state.IGNORE_SUSPICIOUS_METHOD_CALLS) {
         final String message = SuspiciousMethodCallUtil
-            .getSuspiciousMethodCallMessage((PsiMethodCallExpression) gParent, operand, operand.getType(), true, new ArrayList<>(), 0);
+          .getSuspiciousMethodCallMessage((PsiMethodCallExpression)gParent, operand, operand.getType(), true, new ArrayList<>(), 0);
         if (message != null) {
           return null;
         }
@@ -129,7 +118,7 @@ public class RedundantCastInspection extends GenericsInspectionToolBase {
     }
 
     String message = InspectionsBundle.message("inspection.redundant.cast.problem.descriptor",
-        "<code>" + PsiExpressionTrimRenderer.render(operand) + "</code>", "<code>#ref</code> #loc");
+                                               "<code>" + PsiExpressionTrimRenderer.render(operand) + "</code>", "<code>#ref</code> #loc");
     return manager.createProblemDescriptor(castType, message, myQuickFixAction, ProblemHighlightType.LIKE_UNUSED_SYMBOL, onTheFly);
   }
 
@@ -144,7 +133,7 @@ public class RedundantCastInspection extends GenericsInspectionToolBase {
     @Override
     public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
       PsiElement castTypeElement = descriptor.getPsiElement();
-      PsiTypeCastExpression cast = castTypeElement == null ? null : (PsiTypeCastExpression) castTypeElement.getParent();
+      PsiTypeCastExpression cast = castTypeElement == null ? null : (PsiTypeCastExpression)castTypeElement.getParent();
       if (cast != null) {
         RemoveRedundantCastUtil.removeCast(cast);
       }
@@ -154,7 +143,7 @@ public class RedundantCastInspection extends GenericsInspectionToolBase {
   @Override
   @Nonnull
   public String getDisplayName() {
-    return DISPLAY_NAME;
+    return InspectionsBundle.message("inspection.redundant.cast.display.name");
   }
 
   @Override

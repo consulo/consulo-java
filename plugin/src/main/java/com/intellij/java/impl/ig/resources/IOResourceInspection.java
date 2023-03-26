@@ -95,8 +95,8 @@ public class IOResourceInspection extends ResourceInspection {
       new ListTable(new ListWrappingTableModel(ignoredTypes, InspectionGadgetsBundle.message("ignored.io.resource.types")));
     JPanel tablePanel =
       UiUtils.createAddRemoveTreeClassChooserPanel(table, InspectionGadgetsBundle.message("choose.io.resource.type.to.ignore"), IO_TYPES);
-    final consulo.language.editor.inspection.ui.CheckBox checkBox =
-      new consulo.language.editor.inspection.ui.CheckBox(InspectionGadgetsBundle.message("allow.resource.to.be.opened.inside.a.try.block"), this, "insideTryAllowed");
+    final consulo.deadCodeNotWorking.impl.CheckBox checkBox =
+      new consulo.deadCodeNotWorking.impl.CheckBox(InspectionGadgetsBundle.message("allow.resource.to.be.opened.inside.a.try.block"), this, "insideTryAllowed");
     panel.add(tablePanel, BorderLayout.CENTER);
     panel.add(checkBox, BorderLayout.SOUTH);
     return panel;
