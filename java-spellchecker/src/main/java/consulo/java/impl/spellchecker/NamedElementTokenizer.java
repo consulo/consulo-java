@@ -17,10 +17,10 @@ package consulo.java.impl.spellchecker;
 
 import com.intellij.java.language.psi.PsiIdentifier;
 import com.intellij.java.language.psi.PsiTypeElement;
-import com.intellij.spellchecker.tokenizer.TokenConsumer;
-import com.intellij.spellchecker.tokenizer.Tokenizer;
 import consulo.language.psi.PsiNamedElement;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.spellcheker.tokenizer.TokenConsumer;
+import consulo.language.spellcheker.tokenizer.Tokenizer;
 
 import javax.annotation.Nonnull;
 

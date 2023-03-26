@@ -16,9 +16,9 @@
 package consulo.java.impl.spellchecker;
 
 import com.intellij.java.language.psi.PsiIdentifier;
-import com.intellij.spellchecker.inspections.IdentifierSplitter;
-import com.intellij.spellchecker.tokenizer.TokenConsumer;
-import com.intellij.spellchecker.tokenizer.Tokenizer;
+import consulo.language.spellcheker.tokenizer.TokenConsumer;
+import consulo.language.spellcheker.tokenizer.Tokenizer;
+import consulo.language.spellcheker.tokenizer.splitter.IdentifierTokenSplitter;
 
 import javax.annotation.Nonnull;
 
@@ -28,6 +28,6 @@ import javax.annotation.Nonnull;
 public class PsiIdentifierTokenizer extends Tokenizer<PsiIdentifier> {
   @Override
   public void tokenize(@Nonnull PsiIdentifier element, TokenConsumer consumer) {
-    consumer.consumeToken(element, true, IdentifierSplitter.getInstance());
+    consumer.consumeToken(element, true, IdentifierTokenSplitter.getInstance());
   }
 }

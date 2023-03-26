@@ -1,5 +1,0 @@
-<consulo-plugin-requires>
-    <plugins>
-        <plugin>com.intellij.spellchecker</plugin>
-    </plugins>
-</consulo-plugin-requires>

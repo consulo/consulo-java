@@ -21,14 +21,14 @@ import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.PsiLiteralExpression;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
-import com.intellij.spellchecker.tokenizer.SuppressibleSpellcheckingStrategy;
-import com.intellij.spellchecker.tokenizer.Tokenizer;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.Language;
 import consulo.language.editor.inspection.SuppressQuickFix;
 import consulo.language.editor.rawHighlight.HighlightDisplayKey;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiNamedElement;
+import consulo.language.spellchecker.editor.inspection.SuppressibleSpellcheckingStrategy;
+import consulo.language.spellcheker.tokenizer.Tokenizer;
 
 import javax.annotation.Nonnull;
 
@@ -71,7 +71,7 @@ public class JavaSpellcheckingStrategy extends SuppressibleSpellcheckingStrategy
 
   @Override
   public SuppressQuickFix[] getSuppressActions(@Nonnull PsiElement element, @Nonnull String name) {
-    return BatchSuppressManager.SERVICE.getInstance().createBatchSuppressActions(HighlightDisplayKey.find(name));
+    return BatchSuppressManager.getInstance().createBatchSuppressActions(HighlightDisplayKey.find(name));
   }
 
   @Nonnull

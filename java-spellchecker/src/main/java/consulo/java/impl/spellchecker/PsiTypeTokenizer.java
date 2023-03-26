@@ -15,20 +15,20 @@
  */
 package consulo.java.impl.spellchecker;
 
-import consulo.module.content.ProjectFileIndex;
-import consulo.module.content.ProjectRootManager;
-import consulo.document.util.TextRange;
-import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiDisjunctionType;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.PsiTypeElement;
-import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import com.intellij.spellchecker.inspections.IdentifierSplitter;
-import com.intellij.spellchecker.tokenizer.TokenConsumer;
-import com.intellij.spellchecker.tokenizer.Tokenizer;
 import consulo.annotation.access.RequiredReadAction;
+import consulo.document.util.TextRange;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.language.spellcheker.tokenizer.TokenConsumer;
+import consulo.language.spellcheker.tokenizer.Tokenizer;
+import consulo.language.spellcheker.tokenizer.splitter.IdentifierTokenSplitter;
+import consulo.module.content.ProjectFileIndex;
+import consulo.module.content.ProjectRootManager;
+import consulo.virtualFileSystem.VirtualFile;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -74,7 +74,7 @@ public class PsiTypeTokenizer extends Tokenizer<PsiTypeElement>
 			final String elementText = element.getText();
 			if(elementText.contains(name))
 			{
-				consumer.consumeToken(element, elementText, true, 0, getRangeToCheck(elementText, name), IdentifierSplitter.getInstance());
+				consumer.consumeToken(element, elementText, true, 0, getRangeToCheck(elementText, name), IdentifierTokenSplitter.getInstance());
 			}
 		}
 	}

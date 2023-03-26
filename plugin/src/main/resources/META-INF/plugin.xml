@@ -21,7 +21,6 @@
 	<vendor>Jetbrains and others</vendor>
 	<depends optional="true">com.intellij.regexp</depends>
 	<depends optional="true">com.intellij.images</depends>
-	<depends optional="true">com.intellij.spellchecker</depends>
 	<depends optional="true">com.intellij.properties</depends>
 	<depends optional="true">consulo.javascript</depends>
 	<depends>com.intellij.xml</depends>

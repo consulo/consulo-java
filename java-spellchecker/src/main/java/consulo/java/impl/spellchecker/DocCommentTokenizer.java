@@ -17,10 +17,10 @@ package consulo.java.impl.spellchecker;
 
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.java.language.psi.javadoc.PsiDocTag;
-import com.intellij.spellchecker.inspections.CommentSplitter;
-import com.intellij.spellchecker.tokenizer.TokenConsumer;
-import com.intellij.spellchecker.tokenizer.Tokenizer;
 import consulo.language.psi.PsiElement;
+import consulo.language.spellcheker.tokenizer.TokenConsumer;
+import consulo.language.spellcheker.tokenizer.Tokenizer;
+import consulo.language.spellcheker.tokenizer.splitter.CommentTokenSplitter;
 
 import javax.annotation.Nonnull;
 import java.util.Set;
@@ -30,12 +30,13 @@ import java.util.Set;
  *
  * @author shkate@jetbrains.com
  */
-public class DocCommentTokenizer extends Tokenizer<PsiDocComment> {
+public class DocCommentTokenizer extends Tokenizer<PsiDocComment>
+{
   private static final Set<String> excludedTags = Set.of("author", "see", "by", "link");
 
   @Override
   public void tokenize(@Nonnull PsiDocComment comment, TokenConsumer consumer) {
-    final CommentSplitter splitter = CommentSplitter.getInstance();
+    final CommentTokenSplitter splitter = CommentTokenSplitter.getInstance();
 
     for (PsiElement el : comment.getChildren()) {
       if (el instanceof PsiDocTag) {

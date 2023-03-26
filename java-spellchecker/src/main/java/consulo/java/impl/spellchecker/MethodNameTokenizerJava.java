@@ -16,7 +16,7 @@
 package consulo.java.impl.spellchecker;
 
 import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.spellchecker.tokenizer.TokenConsumer;
+import consulo.language.spellcheker.tokenizer.TokenConsumer;
 import consulo.module.content.ProjectRootManager;
 import consulo.virtualFileSystem.VirtualFile;
 
