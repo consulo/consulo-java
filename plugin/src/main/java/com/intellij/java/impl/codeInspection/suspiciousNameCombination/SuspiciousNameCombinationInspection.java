@@ -17,25 +17,27 @@
 package com.intellij.java.impl.codeInspection.suspiciousNameCombination;
 
 import com.intellij.java.analysis.codeInspection.GroupNames;
+import com.intellij.java.analysis.impl.codeInspection.ex.BaseLocalInspectionTool;
 import com.intellij.java.language.impl.codeInsight.daemon.JavaErrorBundle;
+import com.intellij.java.language.psi.*;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.application.util.matcher.NameUtil;
 import consulo.language.editor.inspection.InspectionsBundle;
 import consulo.language.editor.inspection.LocalInspectionToolSession;
 import consulo.language.editor.inspection.ProblemsHolder;
-import com.intellij.java.analysis.impl.codeInspection.ex.BaseLocalInspectionTool;
-import com.intellij.java.language.psi.*;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiElementVisitor;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.ui.ex.awt.AddEditDeleteListPanel;
 import consulo.ui.ex.awt.Messages;
+import consulo.util.lang.StringUtil;
 import consulo.util.xml.serializer.InvalidDataException;
 import consulo.util.xml.serializer.WriteExternalException;
-import consulo.util.lang.StringUtil;
-import consulo.language.psi.*;
-import consulo.application.util.matcher.NameUtil;
-import consulo.language.psi.util.PsiTreeUtil;
 import org.jdom.Element;
 import org.jetbrains.annotations.NonNls;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import javax.swing.*;
 import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
@@ -216,7 +218,7 @@ public class SuspiciousNameCombinationInspection extends BaseLocalInspectionTool
     }
   }
 
-  private class MyOptionsPanel extends consulo.ide.impl.idea.ui.AddEditDeleteListPanel<String> {
+  private class MyOptionsPanel extends AddEditDeleteListPanel<String> {
 
     public MyOptionsPanel() {
       super(InspectionsBundle.message("suspicious.name.combination.options.title"), myNameGroups);
