@@ -34,6 +34,7 @@ import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.editor.intention.IntentionAction;
 import consulo.language.editor.intention.QuickFixActionRegistrar;
+import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.editor.packageDependency.DependencyValidationManager;
 import consulo.language.psi.*;
 import consulo.language.psi.scope.GlobalSearchScope;
@@ -54,6 +55,7 @@ import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.ThreeState;
 import consulo.virtualFileSystem.LocalFileSystem;
 import consulo.virtualFileSystem.VirtualFile;
+import consulo.virtualFileSystem.util.VirtualFileUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -65,7 +67,7 @@ import java.util.stream.Stream;
 /**
  * @author cdr
  */
-public abstract class OrderEntryFix implements IntentionAction, LocalQuickFix {
+public abstract class OrderEntryFix implements SyntheticIntentionAction, LocalQuickFix {
   protected OrderEntryFix() {
   }
 
@@ -288,6 +290,6 @@ public abstract class OrderEntryFix implements IntentionAction, LocalQuickFix {
   private static String refreshAndConvertToUrl(String jarPath) {
     final File libraryRoot = new File(jarPath);
     LocalFileSystem.getInstance().refreshAndFindFileByIoFile(libraryRoot);
-    return consulo.ide.impl.idea.openapi.vfs.VfsUtil.getUrlForLibraryRoot(libraryRoot);
+    return VirtualFileUtil.getUrlForLibraryRoot(libraryRoot);
   }
 }
