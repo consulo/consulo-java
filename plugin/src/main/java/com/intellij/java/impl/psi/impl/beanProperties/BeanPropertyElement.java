@@ -15,24 +15,24 @@
  */
 package com.intellij.java.impl.psi.impl.beanProperties;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import org.jetbrains.annotations.NonNls;
-import consulo.application.AllIcons;
-import consulo.ide.IdeBundle;
-import consulo.document.util.TextRange;
-import consulo.language.psi.PsiElement;
-import consulo.language.psi.PsiManager;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiType;
+import com.intellij.java.language.psi.util.PropertyUtil;
+import consulo.application.AllIcons;
+import consulo.document.util.TextRange;
+import consulo.ide.IdeBundle;
 import consulo.language.impl.psi.FakePsiElement;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiManager;
 import consulo.language.psi.meta.PsiMetaData;
 import consulo.language.psi.meta.PsiMetaOwner;
 import consulo.language.psi.meta.PsiPresentableMetaData;
-import com.intellij.java.language.psi.util.PropertyUtil;
-import consulo.util.collection.ArrayUtil;
 import consulo.ui.image.Image;
+import consulo.util.collection.ArrayUtil;
+import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * @author peter
@@ -117,7 +117,7 @@ public class BeanPropertyElement extends FakePsiElement implements PsiMetaOwner,
 
   @Override
   public TextRange getTextRange() {
-    return TextRange.from(0, 0);
+    return TextRange.EMPTY_RANGE;
   }
 
   @Override

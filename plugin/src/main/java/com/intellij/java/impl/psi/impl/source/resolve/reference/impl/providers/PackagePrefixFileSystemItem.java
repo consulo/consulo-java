@@ -88,8 +88,9 @@ class PackagePrefixFileSystemItem extends PsiElementBase implements PsiFileSyste
   }
 
   @Override
+  @Nonnull
   public TextRange getTextRange() {
-    return null;
+    return TextRange.EMPTY_RANGE;
   }
 
   @Override

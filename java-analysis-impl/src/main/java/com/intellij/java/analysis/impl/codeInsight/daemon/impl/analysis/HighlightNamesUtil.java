@@ -298,17 +298,14 @@ public class HighlightNamesUtil {
     if (endElement == null) {
       endElement = aClass.getNameIdentifier();
     }
-    TextRange endTextRange = endElement == null ? null : endElement.getTextRange();
-    int end = endTextRange == null ? start : endTextRange.getEndOffset();
-    if(end < start) {
-      LOG.error("Invalid endRange for " + psiElement + ", class: " + aClass.getClass());
-    }
+    TextRange endTextRange = endElement == null ? TextRange.EMPTY_RANGE : endElement.getTextRange();
+    int end = endTextRange == TextRange.EMPTY_RANGE ? start : endTextRange.getEndOffset();
     return new TextRange(start, end);
   }
 
   private static int stripAnnotationsFromModifierList(@Nonnull PsiElement element) {
     TextRange textRange = element.getTextRange();
-    if (textRange == null) {
+    if (textRange == TextRange.EMPTY_RANGE) {
       return 0;
     }
     PsiAnnotation lastAnnotation = null;
