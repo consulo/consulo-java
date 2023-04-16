@@ -300,6 +300,9 @@ public class HighlightNamesUtil {
     }
     TextRange endTextRange = endElement == null ? null : endElement.getTextRange();
     int end = endTextRange == null ? start : endTextRange.getEndOffset();
+    if(end < start) {
+      LOG.error("Invalid endRange for " + psiElement + ", class: " + aClass.getClass());
+    }
     return new TextRange(start, end);
   }
 
