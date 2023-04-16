@@ -76,7 +76,7 @@
                 </constraints>
                 <properties>
                   <labelFor value="c2c7f"/>
-                  <text resource-bundle="messages/RefactoringBundle" key="target.destination.folder"/>
+                  <text resource-bundle="consulo/language/editor/refactoring/RefactoringBundle" key="target.destination.folder"/>
                 </properties>
               </component>
               <component id="c2c7f" class="consulo.ui.ex.awt.ComboboxWithBrowseButton" binding="myDestinationCb" custom-create="true">
