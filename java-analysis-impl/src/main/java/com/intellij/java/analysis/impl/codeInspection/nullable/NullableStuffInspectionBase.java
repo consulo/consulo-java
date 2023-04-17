@@ -912,10 +912,8 @@ public abstract class NullableStuffInspectionBase extends AbstractBaseJavaLocalI
             PsiElement psiElement = annotation;
             if (annotation != null && !annotation.isPhysical()) {
               psiElement = identifier;
-              if (psiElement == null) {
-                continue;
-              }
             }
+            if (psiElement == null) continue;
             holder.registerProblem(psiElement, InspectionsBundle.message("nullable.stuff.problems.overridden.methods.are.not.annotated"),
                 ProblemHighlightType.GENERIC_ERROR_OR_WARNING,
                 fix);
