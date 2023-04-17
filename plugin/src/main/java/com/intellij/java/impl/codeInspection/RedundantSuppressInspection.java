@@ -338,7 +338,6 @@ public class RedundantSuppressInspection extends GlobalInspectionTool implements
   protected InspectionToolWrapper[] getInspectionTools(PsiElement psiElement, @Nonnull InspectionManager manager) {
     ModifiableModel model = InspectionProjectProfileManager.getInstance(manager.getProject()).getInspectionProfile().getModifiableModel();
     InspectionProfileWrapper profile = new InspectionProfileWrapper((InspectionProfile) model);
-    profile.init(manager.getProject());
 
     return profile.getInspectionTools(psiElement);
   }
