@@ -777,8 +777,8 @@ public class QuickFixFactoryImpl extends QuickFixFactory {
 
   @Nullable
   @Override
-  public List<LocalQuickFix> registerOrderEntryFixes(@Nonnull QuickFixActionRegistrar registrar, @Nonnull PsiReference reference) {
-    return OrderEntryFix.registerFixes(registrar, reference);
+  public List<LocalQuickFix> registerOrderEntryFixes(@Nonnull PsiReference reference) {
+    return OrderEntryFix.registerFixes(reference);
   }
 
   private static void invokeOnTheFlyImportOptimizer(@Nonnull final Runnable runnable, @Nonnull final PsiFile file) {

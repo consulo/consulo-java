@@ -32,7 +32,6 @@ import consulo.application.ApplicationManager;
 import consulo.document.util.TextRange;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.language.editor.intention.QuickFixAction;
-import consulo.language.editor.intention.QuickFixActionRegistrar;
 import consulo.language.editor.rawHighlight.HighlightInfo;
 import consulo.language.editor.rawHighlight.HighlightInfoType;
 import consulo.language.psi.*;
@@ -483,7 +482,7 @@ public class ModuleHighlightUtil {
     } else {
       String message = JavaErrorBundle.message("module.not.on.path", refElement.getReferenceText());
       HighlightInfo info = HighlightInfo.newHighlightInfo(HighlightInfoType.WRONG_REF).range(refElement).descriptionAndTooltip(message).create();
-      factory().registerOrderEntryFixes(QuickFixActionRegistrar.create(info), ref);
+      factory().registerOrderEntryFixes(ref);
       return info;
     }
   }

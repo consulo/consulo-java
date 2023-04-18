@@ -23,6 +23,7 @@ import com.intellij.java.language.psi.codeStyle.VariableKind;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.document.util.TextRange;
+import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.intention.IntentionAction;
 import consulo.language.editor.intention.PriorityIntentionActionWrapper;
 import consulo.language.editor.intention.QuickFixActionRegistrar;
@@ -34,6 +35,7 @@ import consulo.util.lang.StringUtil;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.EnumMap;
+import java.util.List;
 import java.util.Map;
 
 @ExtensionImpl
@@ -41,7 +43,10 @@ public class DefaultQuickFixProvider extends UnresolvedReferenceQuickFixProvider
   @Override
   public void registerFixes(@Nonnull PsiJavaCodeReferenceElement ref, @Nonnull QuickFixActionRegistrar registrar) {
     if (PsiUtil.isModuleFile(ref.getContainingFile())) {
-      OrderEntryFix.registerFixes(registrar, ref);
+      List<LocalQuickFix> fixes = OrderEntryFix.registerFixes(ref);
+      if (fixes != null) {
+        fixes.forEach(fix -> registrar.register((IntentionAction)fix));
+      }
       return;
     }
 
@@ -49,9 +54,12 @@ public class DefaultQuickFixProvider extends UnresolvedReferenceQuickFixProvider
     registrar.register(new StaticImportConstantFix(ref));
     registrar.register(QuickFixFactory.getInstance().createSetupJDKFix());
 
-    OrderEntryFix.registerFixes(registrar, ref);
+    List<LocalQuickFix> fixes = OrderEntryFix.registerFixes(ref);
+    if (fixes != null) {
+      fixes.forEach(fix -> registrar.register((IntentionAction)fix));
+    }
 
-    MoveClassToModuleFix.registerFixes(registrar, ref);
+    MoveClassToModuleFix.registerFixes(registrar::register, ref);
 
     if (ref instanceof PsiReferenceExpression) {
       TextRange fixRange = HighlightMethodUtil.getFixRange(ref);

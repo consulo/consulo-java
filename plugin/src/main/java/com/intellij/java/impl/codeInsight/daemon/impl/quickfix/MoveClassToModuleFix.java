@@ -28,7 +28,7 @@ import consulo.dataContext.DataContext;
 import consulo.dataContext.DataManager;
 import consulo.language.editor.LangDataKeys;
 import consulo.language.editor.hint.QuestionAction;
-import consulo.language.editor.intention.QuickFixActionRegistrar;
+import consulo.language.editor.intention.IntentionAction;
 import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.editor.refactoring.action.RefactoringActionHandler;
 import consulo.language.editor.refactoring.action.RefactoringActionHandlerFactory;
@@ -54,6 +54,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.function.Consumer;
 
 /**
  * @author cdr
@@ -167,7 +168,7 @@ public class MoveClassToModuleFix implements SyntheticIntentionAction {
     return false;
   }
 
-  public static void registerFixes(QuickFixActionRegistrar registrar, final PsiJavaCodeReferenceElement reference) {
+  public static void registerFixes(Consumer<IntentionAction> consumer, final PsiJavaCodeReferenceElement reference) {
     final PsiElement psiElement = reference.getElement();
     @NonNls final String referenceName = reference.getRangeInElement().substring(psiElement.getText());
     Project project = psiElement.getProject();
@@ -192,6 +193,6 @@ public class MoveClassToModuleFix implements SyntheticIntentionAction {
     final PsiDirectory sourceRoot = PsiManager.getInstance(project).findDirectory(vsourceRoot);
     if (sourceRoot == null) return;
 
-    registrar.register(new MoveClassToModuleFix(referenceName, currentModule, sourceRoot, psiElement));
+    consumer.accept(new MoveClassToModuleFix(referenceName, currentModule, sourceRoot, psiElement));
   }
 }

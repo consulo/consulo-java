@@ -39,9 +39,6 @@ import consulo.language.editor.completion.lookup.LookupElement;
 import consulo.language.editor.completion.lookup.LookupElementBuilder;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.LocalQuickFixProvider;
-import consulo.language.editor.intention.QuickFixActionRegistrar;
-import consulo.language.editor.rawHighlight.HighlightInfo;
-import consulo.language.editor.rawHighlight.HighlightInfoType;
 import consulo.language.icon.IconDescriptorUpdaters;
 import consulo.language.psi.*;
 import consulo.language.psi.path.CustomizableReferenceProvider;
@@ -487,8 +484,7 @@ public class JavaClassReference extends GenericReference implements PsiJavaRefer
 
   @Nullable
   private List<? extends LocalQuickFix> registerFixes() {
-    HighlightInfo stub = HighlightInfo.newHighlightInfo(HighlightInfoType.INFORMATION).createUnconditionally();
-    final List<LocalQuickFix> list = QuickFixFactory.getInstance().registerOrderEntryFixes(QuickFixActionRegistrar.create(stub), this);
+    final List<LocalQuickFix> orderFixes = QuickFixFactory.getInstance().registerOrderEntryFixes(this);
 
     final String[] extendClasses = getExtendClassNames();
     final String extendClass = extendClasses != null && extendClasses.length > 0 ? extendClasses[0] : null;
@@ -515,16 +511,16 @@ public class JavaClassReference extends GenericReference implements PsiJavaRefer
     final String qualifiedName = range.substring(getElement().getText());
     final CreateClassOrPackageFix action = CreateClassOrPackageFix.createFix(qualifiedName, getScope(getJavaContextFile()), getElement(), contextPackage, kind, extendClass, templateName);
     if (action != null) {
-      if (list == null) {
+      if (orderFixes == null) {
         return Collections.singletonList(action);
       } else {
-        final ArrayList<LocalQuickFix> fixes = new ArrayList<LocalQuickFix>(list.size() + 1);
-        fixes.addAll(list);
+        final ArrayList<LocalQuickFix> fixes = new ArrayList<>(orderFixes.size() + 1);
+        fixes.addAll(fixes);
         fixes.add(action);
         return fixes;
       }
     }
-    return list;
+    return orderFixes;
   }
 
   public void processSubclassVariants(@Nonnull PsiJavaPackage context, @Nonnull String[] extendClasses, Consumer<LookupElement> result) {

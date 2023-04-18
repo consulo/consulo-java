@@ -368,7 +368,7 @@ public abstract class QuickFixFactory {
   public abstract IntentionAction createSafeDeleteFix(@Nonnull PsiElement element);
 
   @Nullable
-  public abstract List<LocalQuickFix> registerOrderEntryFixes(@Nonnull QuickFixActionRegistrar registrar, @Nonnull PsiReference reference);
+  public abstract List<LocalQuickFix> registerOrderEntryFixes(@Nonnull PsiReference reference);
 
   @Nonnull
   public abstract IntentionAction createAddMissingRequiredAnnotationParametersFix(@Nonnull PsiAnnotation annotation,

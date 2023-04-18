@@ -32,8 +32,6 @@ import consulo.content.base.BinariesOrderRootType;
 import consulo.content.library.Library;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.language.editor.intention.IntentionAction;
-import consulo.language.editor.intention.QuickFixActionRegistrar;
 import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.editor.packageDependency.DependencyValidationManager;
 import consulo.language.psi.*;
@@ -88,7 +86,7 @@ public abstract class OrderEntryFix implements SyntheticIntentionAction, LocalQu
   }
 
   @Nullable
-  public static List<LocalQuickFix> registerFixes(@Nonnull QuickFixActionRegistrar registrar, @Nonnull PsiReference reference) {
+  public static List<LocalQuickFix> registerFixes(@Nonnull PsiReference reference) {
     PsiElement psiElement = reference.getElement();
     String shortReferenceName = reference.getRangeInElement().substring(psiElement.getText());
 
@@ -111,14 +109,13 @@ public abstract class OrderEntryFix implements SyntheticIntentionAction, LocalQu
     if (reference instanceof PsiJavaModuleReferenceImpl) {
       List<LocalQuickFix> result = new ArrayList<>();
       createModuleFixes((PsiJavaModuleReferenceImpl) reference, currentModule, refVFile, result);
-      result.forEach(fix -> registrar.register((IntentionAction) fix));
       return result;
     }
 
     List<LocalQuickFix> result = new ArrayList<>();
     JavaPsiFacade facade = JavaPsiFacade.getInstance(psiElement.getProject());
 
-    registerExternalFixes(registrar, reference, psiElement, shortReferenceName, facade, currentModule, result);
+    registerExternalFixes(reference, psiElement, shortReferenceName, facade, currentModule, result);
     if (!result.isEmpty()) {
       return result;
     }
@@ -130,7 +127,6 @@ public abstract class OrderEntryFix implements SyntheticIntentionAction, LocalQu
     }
 
     OrderEntryFix moduleDependencyFix = new AddModuleDependencyFix(currentModule, refVFile, allowedDependencies, reference);
-    registrar.register(moduleDependencyFix);
     result.add(moduleDependencyFix);
 
     Set<Object> librariesToAdd = new HashSet<>();
@@ -170,7 +166,6 @@ public abstract class OrderEntryFix implements SyntheticIntentionAction, LocalQu
           }
 
           OrderEntryFix platformFix = new AddLibraryToDependenciesFix(currentModule, library, reference, aClass.getQualifiedName());
-          registrar.register(platformFix);
           result.add(platformFix);
         }
       }
@@ -194,8 +189,7 @@ public abstract class OrderEntryFix implements SyntheticIntentionAction, LocalQu
         .forEach(l -> result.add(new AddLibraryToDependenciesFix(currentModule, l, reference, null)));
   }
 
-  private static void registerExternalFixes(@Nonnull QuickFixActionRegistrar registrar,
-                                            @Nonnull PsiReference reference,
+  private static void registerExternalFixes(@Nonnull PsiReference reference,
                                             PsiElement psiElement,
                                             String shortReferenceName,
                                             JavaPsiFacade facade,
@@ -214,7 +208,6 @@ public abstract class OrderEntryFix implements SyntheticIntentionAction, LocalQu
         }
       }
       if (fix != null) {
-        registrar.register(fix);
         result.add(fix);
       }
     }
