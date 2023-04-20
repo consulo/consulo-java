@@ -15,24 +15,24 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
-import javax.annotation.Nonnull;
-
-import consulo.language.editor.FileModificationService;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
-import consulo.language.editor.intention.IntentionAction;
-import consulo.language.editor.inspection.LocalQuickFix;
-import consulo.language.editor.inspection.ProblemDescriptor;
+import com.intellij.java.impl.refactoring.actions.TypeCookAction;
 import consulo.application.Result;
-import consulo.language.editor.WriteCommandAction;
 import consulo.codeEditor.Editor;
 import consulo.fileEditor.FileEditorManager;
-import consulo.project.Project;
+import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.language.editor.FileModificationService;
+import consulo.language.editor.WriteCommandAction;
+import consulo.language.editor.inspection.LocalQuickFix;
+import consulo.language.editor.inspection.ProblemDescriptor;
+import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiManager;
-import com.intellij.java.impl.refactoring.actions.TypeCookAction;
+import consulo.project.Project;
 
-public class GenerifyFileFix implements IntentionAction, LocalQuickFix {
+import javax.annotation.Nonnull;
+
+public class GenerifyFileFix implements SyntheticIntentionAction, LocalQuickFix {
   private String myFileName;
 
   @Override
