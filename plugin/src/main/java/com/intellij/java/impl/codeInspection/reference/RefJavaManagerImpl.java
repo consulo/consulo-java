@@ -138,7 +138,7 @@ public class RefJavaManagerImpl extends RefJavaManager
 	public boolean isEntryPoint(final RefElement element)
 	{
 		Pair<UnusedDeclarationInspection, UnusedDeclarationInspectionState> pair = getDeadCodeTool(element);
-		if(pair == null)
+		if(pair == null || pair.getFirst() == null)
 		{
 			return false;
 		}
