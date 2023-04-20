@@ -18,11 +18,9 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class ManifestHeaderParserRegistratorImpl implements ManifestHeaderParserRegistrator {
   private static final ExtensionPointCacheKey<ManifestHeaderParserContributor, ManifestHeaderParserRegistratorImpl> KEY =
-    ExtensionPointCacheKey.create("ManifestHeaderParserRegistratorImpl", contributors -> {
+    ExtensionPointCacheKey.create("ManifestHeaderParserRegistratorImpl", walker -> {
       ManifestHeaderParserRegistratorImpl impl = new ManifestHeaderParserRegistratorImpl();
-      for (ManifestHeaderParserContributor contributor : contributors) {
-        contributor.contribute(impl);
-      }
+      walker.walk(contributor -> contributor.contribute(impl));
       return impl;
     });
 
