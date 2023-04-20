@@ -33,11 +33,8 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Created by IntelliJ IDEA.
- * User: ik
- * Date: 05.06.2003
- * Time: 20:27:59
- * To change this template use Options | File Templates.
+ * @author ik
+ * @since 20:27:59 05.06.2003
  */
 public class JavaClassListReferenceProvider extends JavaClassReferenceProvider {
 
