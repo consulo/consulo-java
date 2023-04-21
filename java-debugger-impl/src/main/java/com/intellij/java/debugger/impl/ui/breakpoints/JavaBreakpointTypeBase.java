@@ -15,23 +15,22 @@
  */
 package com.intellij.java.debugger.impl.ui.breakpoints;
 
-import javax.annotation.Nonnull;
-
-import consulo.execution.debug.XSourcePosition;
-import consulo.execution.debug.breakpoint.ui.XBreakpointCustomPropertiesPanel;
-import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NonNls;
-
-import javax.annotation.Nullable;
 import com.intellij.java.debugger.impl.JavaDebuggerEditorsProvider;
 import com.intellij.java.debugger.impl.breakpoints.JavaBreakpointFiltersPanel;
 import com.intellij.java.debugger.impl.breakpoints.properties.JavaBreakpointProperties;
-import consulo.project.Project;
 import com.intellij.java.language.psi.PsiClass;
+import consulo.application.ReadAction;
 import consulo.execution.debug.XDebuggerUtil;
+import consulo.execution.debug.XSourcePosition;
 import consulo.execution.debug.breakpoint.XBreakpoint;
 import consulo.execution.debug.breakpoint.XBreakpointType;
+import consulo.execution.debug.breakpoint.ui.XBreakpointCustomPropertiesPanel;
 import consulo.execution.debug.evaluation.XDebuggerEditorsProvider;
+import consulo.project.Project;
+import org.jetbrains.annotations.Nls;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Base class for non-line java breakpoint
@@ -40,7 +39,7 @@ import consulo.execution.debug.evaluation.XDebuggerEditorsProvider;
  */
 public abstract class JavaBreakpointTypeBase<T extends JavaBreakpointProperties> extends XBreakpointType<XBreakpoint<T>, T>
 {
-	protected JavaBreakpointTypeBase(@NonNls @Nonnull String id, @Nls @Nonnull String title)
+	protected JavaBreakpointTypeBase(@Nonnull String id, @Nls @Nonnull String title)
 	{
 		super(id, title, true);
 	}
@@ -75,7 +74,7 @@ public abstract class JavaBreakpointTypeBase<T extends JavaBreakpointProperties>
 			PsiClass aClass = javaBreakpoint.getPsiClass();
 			if(aClass != null && aClass.getContainingFile() != null)
 			{
-				return XDebuggerUtil.getInstance().createPositionByOffset(aClass.getContainingFile().getVirtualFile(), aClass.getTextOffset());
+				return ReadAction.compute(() -> XDebuggerUtil.getInstance().createPositionByElement(aClass));
 			}
 		}
 		return null;
