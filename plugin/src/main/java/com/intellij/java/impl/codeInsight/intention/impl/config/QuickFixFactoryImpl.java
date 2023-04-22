@@ -40,12 +40,12 @@ import consulo.application.ApplicationManager;
 import consulo.codeEditor.Editor;
 import consulo.document.Document;
 import consulo.document.util.TextRange;
-import consulo.ide.impl.idea.codeInsight.daemon.impl.DaemonListeners;
 import consulo.ide.impl.idea.codeInsight.daemon.impl.quickfix.RenameElementFix;
 import consulo.ide.impl.idea.diagnostic.LogMessageEx;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.java.language.module.util.JavaClassNames;
 import consulo.language.ast.IElementType;
+import consulo.language.editor.AutoImportHelper;
 import consulo.language.editor.CodeInsightSettings;
 import consulo.language.editor.DaemonCodeAnalyzer;
 import consulo.language.editor.annotation.HighlightSeverity;
@@ -873,7 +873,8 @@ public class QuickFixFactoryImpl extends QuickFixFactory {
       return false;
     }
 
-    DaemonCodeAnalyzer codeAnalyzer = DaemonCodeAnalyzer.getInstance(file.getProject());
+    Project project = file.getProject();
+    DaemonCodeAnalyzer codeAnalyzer = DaemonCodeAnalyzer.getInstance(project);
     // dont optimize out imports in JSP since it can be included in other JSP
     if (!codeAnalyzer.isHighlightingAvailable(file) || !(file instanceof PsiJavaFile) || file instanceof ServerPageFile) {
       return false;
@@ -884,7 +885,7 @@ public class QuickFixFactoryImpl extends QuickFixFactory {
     }
     boolean errors = containsErrorsPreventingOptimize(file);
 
-    return !errors && DaemonListeners.canChangeFileSilently(file);
+    return !errors && AutoImportHelper.getInstance(project).canChangeFileSilently(file);
   }
 
   private static boolean containsErrorsPreventingOptimize(@Nonnull PsiFile file) {
