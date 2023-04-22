@@ -2060,7 +2060,7 @@ public class HighlightUtil extends HighlightUtilBase {
 
     String description = JavaErrorBundle.message("expression.expected");
     HighlightInfo info = HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(expression).descriptionAndTooltip(description).create();
-    UnresolvedReferenceQuickFixProvider.registerReferenceFixes(expression, QuickFixActionRegistrar.create(info));
+    if(info != null) UnresolvedReferenceQuickFixProvider.registerReferenceFixes(expression, QuickFixActionRegistrar.create(info));
     return info;
   }
 
@@ -3048,7 +3048,7 @@ public class HighlightUtil extends HighlightUtilBase {
             QuickFixAction.registerQuickFixAction(info, QUICK_FIX_FACTORY.createRenameWrongRefFix((PsiReferenceExpression) ref));
           }
         }
-        UnresolvedReferenceQuickFixProvider.registerReferenceFixes(ref, QuickFixActionRegistrar.create(info));
+        if(info != null) UnresolvedReferenceQuickFixProvider.registerReferenceFixes(ref, QuickFixActionRegistrar.create(info));
         return info;
       }
 

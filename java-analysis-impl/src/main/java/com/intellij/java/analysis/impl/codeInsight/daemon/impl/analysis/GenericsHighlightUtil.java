@@ -1013,7 +1013,9 @@ public class GenericsHighlightUtil {
       if (superMethod == null) {
         String description = JavaErrorBundle.message("method.does.not.override.super");
         HighlightInfo highlightInfo = HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(overrideAnnotation).descriptionAndTooltip(description).create();
-        QUICK_FIX_FACTORY.registerPullAsAbstractUpFixes(method, QuickFixActionRegistrar.create(highlightInfo));
+        if(highlightInfo != null) {
+            QUICK_FIX_FACTORY.registerPullAsAbstractUpFixes(method, QuickFixActionRegistrar.create(highlightInfo));
+        }
         return highlightInfo;
       }
       PsiClass superClass = superMethod.getMethod().getContainingClass();
