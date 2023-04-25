@@ -1,9 +1,10 @@
 // Copyright 2000-2020 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis;
 
+import com.intellij.java.analysis.impl.psi.impl.search.JavaModuleFinderImpl;
 import com.intellij.java.indexing.impl.stubs.index.JavaModuleNameIndex;
 import com.intellij.java.language.JavaLanguage;
-import com.intellij.java.language.impl.psi.impl.light.LightJavaModule;
+import com.intellij.java.language.impl.psi.impl.light.AutomaticJavaModule;
 import com.intellij.java.language.psi.*;
 import consulo.application.util.CachedValueProvider.Result;
 import consulo.application.util.CachedValuesManager;
@@ -28,7 +29,6 @@ import consulo.util.collection.MultiMap;
 import consulo.util.lang.ObjectUtil;
 import consulo.util.lang.Trinity;
 import consulo.virtualFileSystem.VirtualFile;
-import consulo.virtualFileSystem.archive.ArchiveFileSystem;
 import consulo.virtualFileSystem.fileType.FileTypeRegistry;
 
 import javax.annotation.Nonnull;
@@ -61,27 +61,7 @@ public final class JavaModuleGraphUtil {
     if (file == null) {
       return null;
     }
-
-    ProjectFileIndex index = ProjectFileIndex.getInstance(project);
-    return index.isInLibrary(file)
-        ? findDescriptorInLibrary(project, index, file)
-        : findDescriptorByModule(index.getModuleForFile(file), index.isInTestSourceContent(file));
-  }
-
-  private static PsiJavaModule findDescriptorInLibrary(Project project, ProjectFileIndex index, VirtualFile file) {
-    VirtualFile root = index.getClassRootForFile(file);
-    if (root != null) {
-      VirtualFile descriptorFile = JavaModuleNameIndex.descriptorFile(root);
-      if (descriptorFile != null) {
-        PsiFile psiFile = PsiManager.getInstance(project).findFile(descriptorFile);
-        if (psiFile instanceof PsiJavaFile) {
-          return ((PsiJavaFile) psiFile).getModuleDeclaration();
-        }
-      } else if (root.getFileSystem() instanceof ArchiveFileSystem && "jar".equalsIgnoreCase(root.getExtension())) {
-        return LightJavaModule.findModule(PsiManager.getInstance(project), root);
-      }
-    }
-    return null;
+    return JavaPsiFacade.getInstance(project).findModule(file);
   }
 
   @Nullable
@@ -100,9 +80,9 @@ public final class JavaModuleGraphUtil {
             root -> root.findFileByRelativePath(JarFile.MANIFEST_NAME));
         if (files.size() == 1) {
           VirtualFile manifest = files.get(0);
-          String name = LightJavaModule.claimedModuleName(manifest);
+          String name = AutomaticJavaModule.claimedModuleName(manifest);
           if (name != null) {
-            return LightJavaModule.findModule(PsiManager.getInstance(module.getProject()), manifest.getParent().getParent());
+            return AutomaticJavaModule.findModule(PsiManager.getInstance(module.getProject()), manifest.getParent().getParent());
           }
         }
       }
@@ -237,7 +217,7 @@ public final class JavaModuleGraphUtil {
   }
 
   private static void visit(PsiJavaModule module, MultiMap<PsiJavaModule, PsiJavaModule> relations, Set<String> transitiveEdges) {
-    if (!(module instanceof LightJavaModule) && !relations.containsKey(module)) {
+    if (!(module instanceof AutomaticJavaModule) && !relations.containsKey(module)) {
       relations.putValues(module, Collections.emptyList());
       boolean explicitJavaBase = false;
       for (PsiRequiresStatement statement : module.getRequires()) {
@@ -422,9 +402,9 @@ public final class JavaModuleGraphUtil {
       if (!isJvmLanguageFile(file)) {
         return false;
       }
-      ProjectFileIndex index = ProjectFileIndex.SERVICE.getInstance(project);
+      ProjectFileIndex index = ProjectFileIndex.getInstance(project);
       if (index.isInLibrary(file)) {
-        return myIncludeLibraries && myModule.equals(findDescriptorInLibrary(project, index, file));
+        return myIncludeLibraries && myModule.equals(JavaModuleFinderImpl.findDescriptorInLibrary(project, index, file));
       }
       Module module = index.getModuleForFile(file);
       return myModule.equals(findDescriptorByModule(module, myIsInTests));

@@ -17,7 +17,7 @@ package com.intellij.java.language.impl.psi.impl;
 
 import com.intellij.java.language.codeInsight.AnnotationTargetUtil;
 import com.intellij.java.language.impl.psi.impl.light.LightClassReference;
-import com.intellij.java.language.impl.psi.impl.light.LightJavaModule;
+import com.intellij.java.language.impl.psi.impl.light.AutomaticJavaModule;
 import com.intellij.java.language.impl.psi.impl.source.PsiClassReferenceType;
 import com.intellij.java.language.impl.psi.impl.source.PsiImmediateClassType;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaDocElementType;
@@ -851,8 +851,8 @@ public class PsiImplUtil {
   }
 
   public static VirtualFile getModuleVirtualFile(@Nonnull PsiJavaModule module) {
-    if (module instanceof LightJavaModule) {
-      return ((LightJavaModule) module).getRootVirtualFile();
+    if (module instanceof AutomaticJavaModule) {
+      return ((AutomaticJavaModule) module).getRootVirtualFile();
     } else {
       return module.getContainingFile().getVirtualFile();
     }

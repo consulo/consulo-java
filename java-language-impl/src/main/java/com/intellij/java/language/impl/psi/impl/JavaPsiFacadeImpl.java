@@ -32,10 +32,12 @@ import consulo.util.collection.ContainerUtil;
 import consulo.util.collection.SmartList;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.StringUtil;
+import consulo.virtualFileSystem.VirtualFile;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.*;
 
 /**
@@ -44,25 +46,34 @@ import java.util.*;
 @Singleton
 @ServiceImpl
 public class JavaPsiFacadeImpl extends JavaPsiFacadeEx {
-  private PsiElementFinder[] myElementFinders; //benign data race
   private final PsiConstantEvaluationHelper myConstantEvaluationHelper;
 
   private final Project myProject;
   private final PsiPackageManager myPackageManager;
+  private final PsiResolveHelper myPsiResolveHelper;
+  private final PsiElementFactory myPsiElementFactory;
+  private final PsiNameHelper myPsiNameHelper;
 
-  private final Map<GlobalSearchScope, Map<String, Collection<PsiJavaModule>>> myModuleCache =
+  private final Map<GlobalSearchScope, Map<String, Collection<PsiJavaModule>>> myModulesByScopeCache =
     ContainerUtil.createConcurrentSoftKeySoftValueMap();
 
+  private final Map<VirtualFile, PsiJavaModule> myModuleScopeByFile = ContainerUtil.createConcurrentWeakKeyWeakValueMap();
+
   @Inject
-  public JavaPsiFacadeImpl(Project project, PsiPackageManager psiManager) {
+  public JavaPsiFacadeImpl(Project project,
+                           PsiResolveHelper psiResolveHelper,
+                           PsiPackageManager psiManager,
+                           PsiElementFactory psiElementFactory, PsiNameHelper psiNameHelper) {
     myProject = project;
     myPackageManager = psiManager;
+    myPsiResolveHelper = psiResolveHelper;
+    myPsiElementFactory = psiElementFactory;
+    myPsiNameHelper = psiNameHelper;
     myConstantEvaluationHelper = new PsiConstantEvaluationHelperImpl();
 
     project.getMessageBus().connect().subscribe(PsiModificationTrackerListener.class, () -> {
-      // todo myClassCache.clear();
-      // todo myPackageCache.clear();
-      myModuleCache.clear();
+      myModulesByScopeCache.clear();
+      myModuleScopeByFile.clear();
     });
 
     JavaElementType.ANNOTATION.getIndex(); // Initialize stubs.
@@ -149,6 +160,24 @@ public class JavaPsiFacadeImpl extends JavaPsiFacadeEx {
     return (PsiJavaPackage)myPackageManager.findPackage(qualifiedName, JavaModuleExtension.class);
   }
 
+  @Nullable
+  @Override
+  public PsiJavaModule findModule(@Nonnull VirtualFile file) {
+    PsiJavaModule psiJavaModule = myModuleScopeByFile.get(file);
+    if (psiJavaModule != null) {
+      return psiJavaModule;
+    }
+
+    for (PsiElementFinder finder : filteredFinders()) {
+      PsiJavaModule module = finder.findModule(file);
+      if (module != null) {
+        myModuleScopeByFile.put(file, module);
+        return module;
+      }
+    }
+    return null;
+  }
+
   @Override
   @Nonnull
   public PsiJavaPackage[] getSubPackages(@Nonnull PsiJavaPackage psiPackage, @Nonnull GlobalSearchScope scope) {
@@ -180,13 +209,13 @@ public class JavaPsiFacadeImpl extends JavaPsiFacadeEx {
   @Override
   @Nonnull
   public PsiResolveHelper getResolveHelper() {
-    return PsiResolveHelper.SERVICE.getInstance(myProject);
+    return myPsiResolveHelper;
   }
 
   @Override
   @Nonnull
   public PsiNameHelper getNameHelper() {
-    return PsiNameHelper.getInstance(myProject);
+    return myPsiNameHelper;
   }
 
   @Nonnull
@@ -306,7 +335,7 @@ public class JavaPsiFacadeImpl extends JavaPsiFacadeEx {
   @Override
   @Nonnull
   public PsiElementFactory getElementFactory() {
-    return PsiElementFactory.getInstance(myProject);
+    return myPsiElementFactory;
   }
 
   @Override
@@ -318,7 +347,7 @@ public class JavaPsiFacadeImpl extends JavaPsiFacadeEx {
   @Nonnull
   @Override
   public Collection<PsiJavaModule> findModules(@Nonnull String moduleName, @Nonnull GlobalSearchScope scope) {
-    return myModuleCache
+    return myModulesByScopeCache
       .computeIfAbsent(scope, k -> ContainerUtil.createConcurrentWeakValueMap())
       .computeIfAbsent(moduleName, k -> JavaFileManager.getInstance(myProject).findModules(k, scope));
   }

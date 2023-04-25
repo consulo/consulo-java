@@ -22,7 +22,7 @@ import com.intellij.java.indexing.impl.stubs.index.JavaSourceModuleNameIndex;
 import com.intellij.java.language.impl.JavaClassFileType;
 import com.intellij.java.language.impl.psi.impl.PsiImplUtil;
 import com.intellij.java.language.impl.psi.impl.file.impl.JavaFileManager;
-import com.intellij.java.language.impl.psi.impl.light.LightJavaModule;
+import com.intellij.java.language.impl.psi.impl.light.AutomaticJavaModule;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiJavaModule;
 import com.intellij.java.language.psi.PsiNameHelper;
@@ -208,11 +208,11 @@ public class JavaFileManagerImpl implements JavaFileManager, Disposable {
     List<PsiJavaModule> results = new ArrayList<>(JavaModuleNameIndex.getInstance().get(moduleName, myManager.getProject(), excludingScope));
 
     for (VirtualFile manifest : JavaSourceModuleNameIndex.getFilesByKey(moduleName, excludingScope)) {
-      ContainerUtil.addIfNotNull(results, LightJavaModule.findModule(myManager, manifest.getParent().getParent()));
+      ContainerUtil.addIfNotNull(results, AutomaticJavaModule.findModule(myManager, manifest.getParent().getParent()));
     }
 
     for (VirtualFile root : JavaAutoModuleNameIndex.getFilesByKey(moduleName, excludingScope)) {
-      ContainerUtil.addIfNotNull(results, LightJavaModule.findModule(myManager, root));
+      ContainerUtil.addIfNotNull(results, AutomaticJavaModule.findModule(myManager, root));
     }
 
     return upgradeModules(sortModules(results, scope), moduleName, scope);

@@ -22,7 +22,7 @@ import com.intellij.java.compiler.impl.javaCompiler.JavaCompilerConfiguration;
 import com.intellij.java.compiler.impl.javaCompiler.annotationProcessing.AnnotationProcessingConfiguration;
 import com.intellij.java.indexing.impl.stubs.index.JavaModuleNameIndex;
 import com.intellij.java.language.LanguageLevel;
-import com.intellij.java.language.impl.psi.impl.light.LightJavaModule;
+import com.intellij.java.language.impl.psi.impl.light.AutomaticJavaModule;
 import com.intellij.java.language.projectRoots.JavaSdk;
 import com.intellij.java.language.projectRoots.JavaSdkVersion;
 import com.intellij.java.language.psi.PsiJavaFile;
@@ -405,7 +405,7 @@ public class JavacCompiler implements BackendCompiler {
           String psiJavaModule = virtualFile == null ? null : findModuleName(module.getProject(), virtualFile);
 
           if (psiJavaModule == null) {
-            psiJavaModule = LightJavaModule.moduleName(testLib);
+            psiJavaModule = AutomaticJavaModule.moduleName(testLib);
           }
 
           moduleNames.add(psiJavaModule);

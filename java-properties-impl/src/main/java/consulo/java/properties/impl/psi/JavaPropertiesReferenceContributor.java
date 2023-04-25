@@ -17,15 +17,11 @@ package consulo.java.properties.impl.psi;
 
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.codeInsight.AnnotationUtil;
-import com.intellij.java.language.impl.psi.CommonReferenceProviderTypes;
-import com.intellij.java.language.impl.psi.JavaClassPsiReferenceProvider;
-import com.intellij.java.language.patterns.PsiJavaPatterns;
 import com.intellij.lang.properties.ResourceBundleReferenceProvider;
-import com.intellij.lang.properties.psi.impl.PropertyValueImpl;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.Language;
-import consulo.language.psi.*;
-import consulo.language.util.ProcessingContext;
+import consulo.language.psi.PsiReferenceContributor;
+import consulo.language.psi.PsiReferenceRegistrar;
 
 import javax.annotation.Nonnull;
 
@@ -36,24 +32,12 @@ import static com.intellij.java.language.patterns.PsiJavaPatterns.psiNameValuePa
  * @author peter
  */
 @ExtensionImpl
-public class PropertiesReferenceContributor extends PsiReferenceContributor {
+public class JavaPropertiesReferenceContributor extends PsiReferenceContributor {
   public void registerReferenceProviders(final PsiReferenceRegistrar registrar) {
     registrar.registerReferenceProvider(literalExpression(), new PropertiesReferenceProvider(true));
     registrar.registerReferenceProvider(literalExpression().withParent(
       psiNameValuePair().withName(AnnotationUtil.PROPERTY_KEY_RESOURCE_BUNDLE_PARAMETER)),
                                         new ResourceBundleReferenceProvider());
-
-    registrar.registerReferenceProvider(PsiJavaPatterns.psiElement(PropertyValueImpl.class), new PsiReferenceProvider() {
-      @Nonnull
-      @Override
-      public PsiReference[] getReferencesByElement(@Nonnull PsiElement element, @Nonnull ProcessingContext context) {
-        String text = element.getText();
-        String[] words = text.split("\\s");
-        if (words.length != 1) return PsiReference.EMPTY_ARRAY;
-        JavaClassPsiReferenceProvider provider = CommonReferenceProviderTypes.getInstance().getSoftClassReferenceProvider();
-        return provider.getReferencesByString(words[0], element, 0);
-      }
-    });
   }
 
   @Nonnull

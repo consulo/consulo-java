@@ -23,13 +23,11 @@ import consulo.language.psi.PsiDirectory;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.collection.SmartList;
+import consulo.virtualFileSystem.VirtualFile;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Allows to extend the mechanism of locating classes and packages by full-qualified name.
@@ -75,6 +73,19 @@ public abstract class PsiElementFinder {
   @Nullable
   public PsiJavaPackage findPackage(@Nonnull String qualifiedName) {
     return null;
+  }
+
+  /**
+   * Search java module for file. Can be automatic module or explicit declaration from java file
+   */
+  @Nullable
+  public PsiJavaModule findModule(@Nonnull VirtualFile file) {
+    return null;
+  }
+
+  @Nonnull
+  public Collection<PsiJavaModule> findModules(@Nonnull String moduleName, @Nonnull GlobalSearchScope scope) {
+    return List.of();
   }
 
   /**

@@ -1,7 +1,7 @@
 // Copyright 2000-2018 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.indexing.impl.stubs.index;
 
-import com.intellij.java.language.impl.psi.impl.light.LightJavaModule;
+import com.intellij.java.language.impl.psi.impl.light.AutomaticJavaModule;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.index.io.DataIndexer;
 import consulo.index.io.EnumeratorStringDescriptor;
@@ -26,7 +26,7 @@ public class JavaAutoModuleNameIndex extends ScalarIndexExtension<String> {
   private final FileBasedIndex.InputFilter myFilter =
       (project, file) -> file.isDirectory() && file.getParent() == null && "jar".equalsIgnoreCase(file.getExtension()) && JavaModuleNameIndex.descriptorFile(file) == null;
 
-  private final DataIndexer<String, Void, FileContent> myIndexer = data -> singletonMap(LightJavaModule.moduleName(data.getFile()), null);
+  private final DataIndexer<String, Void, FileContent> myIndexer = data -> singletonMap(AutomaticJavaModule.moduleName(data.getFile()), null);
 
   @Nonnull
   @Override

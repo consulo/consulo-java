@@ -21,7 +21,7 @@ import com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix.GoToSymb
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix.MergeModuleStatementsFix;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix.MoveFileFix;
 import com.intellij.java.language.impl.codeInsight.daemon.JavaErrorBundle;
-import com.intellij.java.language.impl.psi.impl.light.LightJavaModule;
+import com.intellij.java.language.impl.psi.impl.light.AutomaticJavaModule;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.PsiPackageAccessibilityStatement.Role;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
@@ -83,7 +83,7 @@ public class ModuleHighlightUtil {
             return ((PsiJavaFile) psiFile).getModuleDeclaration();
           }
         } else if (classRoot.getFileSystem() instanceof ArchiveFileSystem && "jar".equalsIgnoreCase(classRoot.getExtension())) {
-          return LightJavaModule.getModule(PsiManager.getInstance(project), classRoot);
+          return AutomaticJavaModule.getModule(PsiManager.getInstance(project), classRoot);
         }
       }
     } else {
@@ -441,7 +441,7 @@ public class ModuleHighlightUtil {
 
       String refModuleName = refModule.getName();
       String requiredName = targetModule.getName();
-      if (!(targetModule instanceof LightJavaModule || JavaModuleGraphUtil.exports(targetModule, packageName, refModule))) {
+      if (!(targetModule instanceof AutomaticJavaModule || JavaModuleGraphUtil.exports(targetModule, packageName, refModule))) {
         String message = JavaErrorBundle.message("module.package.not.exported", requiredName, packageName, refModuleName);
         return HighlightInfo.newHighlightInfo(HighlightInfoType.WRONG_REF).range(ref).descriptionAndTooltip(message).create();
       }

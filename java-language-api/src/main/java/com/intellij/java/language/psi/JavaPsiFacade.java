@@ -15,14 +15,15 @@
  */
 package com.intellij.java.language.psi;
 
+import consulo.annotation.DeprecationInfo;
 import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ServiceAPI;
 import consulo.ide.ServiceManager;
-import consulo.project.Project;
-import consulo.util.dataholder.NotNullLazyKey;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.scope.GlobalSearchScope;
-import consulo.annotation.DeprecationInfo;
+import consulo.project.Project;
+import consulo.util.dataholder.NotNullLazyKey;
+import consulo.virtualFileSystem.VirtualFile;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
@@ -53,7 +54,7 @@ public abstract class JavaPsiFacade {
    * @return the PSI class, or null if no class with such name is found.
    */
   @Nullable
-  public abstract PsiClass findClass(@NonNls @Nonnull String qualifiedName, @Nonnull GlobalSearchScope scope);
+  public abstract PsiClass findClass(@Nonnull String qualifiedName, @Nonnull GlobalSearchScope scope);
 
   /**
    * Searches the specified scope within the project for classes with the specified full-qualified
@@ -74,7 +75,13 @@ public abstract class JavaPsiFacade {
    * @return the PSI package, or null if no package with such name is found.
    */
   @Nullable
-  public abstract PsiJavaPackage findPackage(@NonNls @Nonnull String qualifiedName);
+  public abstract PsiJavaPackage findPackage(@Nonnull String qualifiedName);
+
+  /**
+   * Search java module for file. Can be automatic module or explicit declaration from java file
+   */
+  @Nullable
+  public abstract PsiJavaModule findModule(@Nonnull VirtualFile file);
 
   @Nonnull
   public abstract PsiJavaPackage[] getSubPackages(@Nonnull PsiJavaPackage psiPackage, @Nonnull GlobalSearchScope scope);
@@ -106,6 +113,8 @@ public abstract class JavaPsiFacade {
    * @return the resolve helper instance.
    */
   @Nonnull
+  @Deprecated
+  @DeprecationInfo(value = "Use PsiResolveHelper#getInstance(Project)")
   public abstract PsiResolveHelper getResolveHelper();
 
   /**
@@ -116,7 +125,7 @@ public abstract class JavaPsiFacade {
    */
   @Nonnull
   @Deprecated
-  @DeprecationInfo(value = "Use PsiNameHelper#getInstance(Project)", until = "2.0")
+  @DeprecationInfo(value = "Use PsiNameHelper#getInstance(Project)")
   public abstract PsiNameHelper getNameHelper();
 
   /**

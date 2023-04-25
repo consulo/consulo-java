@@ -28,9 +28,9 @@ import java.util.*;
 * @author VISTALL
 * @since 09/12/2022
 */
-@ExtensionImpl(order = "first")
+@ExtensionImpl(id = "default", order = "first")
 public class DefaultPsiElementFinderImpl extends PsiElementFinder implements DumbAware {
-  private Project myProject;
+  private final Project myProject;
 
   @Inject
   public DefaultPsiElementFinderImpl(Project project) {
