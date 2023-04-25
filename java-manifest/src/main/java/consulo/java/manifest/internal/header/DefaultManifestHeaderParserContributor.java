@@ -1,5 +1,6 @@
 package consulo.java.manifest.internal.header;
 
+import com.intellij.java.language.psi.PsiJavaModule;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.java.manifest.lang.headerparser.impl.SimpleHeaderParser;
 import org.osmorc.manifest.lang.headerparser.ManifestHeaderParserContributor;
@@ -34,6 +35,7 @@ public class DefaultManifestHeaderParserContributor implements ManifestHeaderPar
     registrator.register("SHA-Digest", new SimpleHeaderParser());
     registrator.register("Magic", new SimpleHeaderParser());
     registrator.register("Name", new SimpleHeaderParser());
+    registrator.register(PsiJavaModule.AUTO_MODULE_NAME, new SimpleHeaderParser());
     registrator.register("Manifest-Version", new SimpleHeaderParser());
     registrator.register("Main-Class", new GenericComplexHeaderParser());
 
