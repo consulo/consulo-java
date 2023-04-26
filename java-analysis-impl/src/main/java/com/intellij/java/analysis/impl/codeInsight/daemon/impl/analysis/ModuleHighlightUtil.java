@@ -48,7 +48,6 @@ import consulo.util.lang.ObjectUtil;
 import consulo.util.lang.StringUtil;
 import consulo.util.lang.Trinity;
 import consulo.virtualFileSystem.VirtualFile;
-import consulo.virtualFileSystem.archive.ArchiveFileSystem;
 import org.jetbrains.annotations.PropertyKey;
 
 import javax.annotation.Nonnull;
@@ -68,40 +67,7 @@ public class ModuleHighlightUtil {
       return null;
     }
 
-    Project project = fsItem.getProject();
-    ProjectFileIndex index = ProjectFileIndex.getInstance(project);
-    if (index.isInLibraryClasses(file)) {
-      VirtualFile classRoot = index.getClassRootForFile(file);
-      if (classRoot != null) {
-        VirtualFile descriptorFile = classRoot.findChild(PsiJavaModule.MODULE_INFO_CLS_FILE);
-        if (descriptorFile == null) {
-          descriptorFile = classRoot.findFileByRelativePath("META-INF/versions/9/" + PsiJavaModule.MODULE_INFO_CLS_FILE);
-        }
-        if (descriptorFile != null) {
-          PsiFile psiFile = PsiManager.getInstance(project).findFile(descriptorFile);
-          if (psiFile instanceof PsiJavaFile) {
-            return ((PsiJavaFile) psiFile).getModuleDeclaration();
-          }
-        } else if (classRoot.getFileSystem() instanceof ArchiveFileSystem && "jar".equalsIgnoreCase(classRoot.getExtension())) {
-          return AutomaticJavaModule.getModule(PsiManager.getInstance(project), classRoot);
-        }
-      }
-    } else {
-      Module module = index.getModuleForFile(file);
-      if (module != null) {
-        boolean isTest = index.isInTestSourceContent(file);
-        List<VirtualFile> files = FilenameIndex.getVirtualFilesByName(project, MODULE_INFO_FILE, GlobalSearchScope.moduleScope(module)).stream().filter(f -> index.isInTestSourceContent(f) == isTest)
-            .collect(Collectors.toList());
-        if (files.size() == 1) {
-          PsiFile psiFile = PsiManager.getInstance(project).findFile(files.get(0));
-          if (psiFile instanceof PsiJavaFile) {
-            return ((PsiJavaFile) psiFile).getModuleDeclaration();
-          }
-        }
-      }
-    }
-
-    return null;
+    return JavaPsiFacade.getInstance(fsItem.getProject()).findModule(file);
   }
 
   public static HighlightInfo checkPackageStatement(@Nonnull PsiPackageStatement statement, @Nonnull PsiFile file, @Nullable PsiJavaModule module) {
