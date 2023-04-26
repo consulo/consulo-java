@@ -113,10 +113,10 @@ public abstract class LightJavaModuleBase extends LightElement implements PsiJav
     return "PsiJavaModule:" + getName();
   }
 
-  protected static final class LightJavaModuleReferenceElement extends LightElement implements PsiJavaModuleReferenceElement {
+  public static final class LightJavaModuleReferenceElement extends LightElement implements PsiJavaModuleReferenceElement {
     private final String myText;
 
-    protected LightJavaModuleReferenceElement(@Nonnull PsiManager manager, @Nonnull String text) {
+    public LightJavaModuleReferenceElement(@Nonnull PsiManager manager, @Nonnull String text) {
       super(manager, JavaLanguage.INSTANCE);
       myText = text;
     }
@@ -138,10 +138,10 @@ public abstract class LightJavaModuleBase extends LightElement implements PsiJav
     }
   }
 
-  protected static class LightPackageAccessibilityStatement extends LightElement implements PsiPackageAccessibilityStatement {
+  public static class LightPackageAccessibilityStatement extends LightElement implements PsiPackageAccessibilityStatement {
     private final String myPackageName;
 
-    protected LightPackageAccessibilityStatement(@Nonnull PsiManager manager, @Nonnull String packageName) {
+    public LightPackageAccessibilityStatement(@Nonnull PsiManager manager, @Nonnull String packageName) {
       super(manager, JavaLanguage.INSTANCE);
       myPackageName = packageName;
     }
