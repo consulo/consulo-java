@@ -26,7 +26,6 @@ import consulo.application.dumb.IndexNotReadyException;
 import consulo.application.progress.ProgressManager;
 import consulo.application.util.CachedValueProvider;
 import consulo.application.util.Queryable;
-import consulo.component.extension.Extensions;
 import consulo.component.util.ModificationTracker;
 import consulo.container.PluginException;
 import consulo.container.plugin.PluginId;
@@ -317,7 +316,7 @@ public class ClsFileImpl extends PsiBinaryFileImpl implements PsiJavaFile, PsiFi
   @Override
   @Nonnull
   public PsiElement getNavigationElement() {
-    for (ClsCustomNavigationPolicy navigationPolicy : Extensions.getExtensions(ClsCustomNavigationPolicy.EP_NAME)) {
+    for (ClsCustomNavigationPolicy navigationPolicy : ClsCustomNavigationPolicy.EP_NAME.getExtensionList()) {
       try {
         PsiElement navigationElement = navigationPolicy instanceof ClsCustomNavigationPolicyEx ? ((ClsCustomNavigationPolicyEx) navigationPolicy).getFileNavigationElement(this) :
             navigationPolicy.getNavigationElement(this);
