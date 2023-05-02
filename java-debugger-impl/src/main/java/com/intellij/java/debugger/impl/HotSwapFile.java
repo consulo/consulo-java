@@ -15,7 +15,7 @@
  */
 package com.intellij.java.debugger.impl;
 
-import java.io.File;
+import java.nio.file.Path;
 
 /**
  * User: lex
@@ -23,9 +23,9 @@ import java.io.File;
  * Time: 2:23:38 PM
  */
 public class HotSwapFile {
-  final File file;
+  final Path file;
 
-  public HotSwapFile(File file) {
+  public HotSwapFile(Path file) {
     this.file = file;
   }
 }

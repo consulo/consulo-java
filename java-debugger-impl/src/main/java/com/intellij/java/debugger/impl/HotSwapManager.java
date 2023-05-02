@@ -23,31 +23,38 @@ import consulo.annotation.component.ServiceAPI;
 import consulo.annotation.component.ServiceImpl;
 import consulo.application.ApplicationManager;
 import consulo.application.util.SystemInfo;
-import consulo.application.util.function.Computable;
-import consulo.ide.ServiceManager;
 import consulo.ide.impl.idea.openapi.util.io.FileUtil;
+import consulo.logging.Logger;
 import consulo.module.content.layer.OrderEnumerator;
 import consulo.project.Project;
 import consulo.util.lang.Pair;
 import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.VirtualFile;
+import consulo.virtualFileSystem.util.VirtualFileUtil;
 import jakarta.inject.Singleton;
 
 import javax.annotation.Nonnull;
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.attribute.FileTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 @Singleton
 @ServiceAPI(ComponentScope.PROJECT)
 @ServiceImpl
 public class HotSwapManager {
+  private static final Logger LOG = Logger.getInstance(HotSwapManager.class);
+
   @Nonnull
   public static HotSwapManager getInstance(@Nonnull Project project) {
-    return ServiceManager.getService(project, HotSwapManager.class);
+    return project.getInstance(HotSwapManager.class);
   }
 
   private final Map<DebuggerSession, Long> myTimeStamps = new HashMap<>();
@@ -72,10 +79,10 @@ public class HotSwapManager {
     final long timeStamp = getTimeStamp(session);
     final Map<String, HotSwapFile> modifiedClasses = new HashMap<>();
 
-    List<File> outputRoots = ApplicationManager.getApplication().runReadAction((Computable<List<File>>)() -> {
+    List<File> outputRoots = ApplicationManager.getApplication().runReadAction((Supplier<List<File>>)() -> {
       final List<VirtualFile> allDirs =
         OrderEnumerator.orderEntries(session.getProject()).withoutSdk().withoutLibraries().getPathsList().getRootDirs();
-      return allDirs.stream().map(consulo.ide.impl.idea.openapi.vfs.VfsUtil::virtualToIoFile).collect(Collectors.toList());
+      return allDirs.stream().map(VirtualFileUtil::virtualToIoFile).collect(Collectors.toList());
     });
 
     for (File root : outputRoots) {
@@ -110,7 +117,7 @@ public class HotSwapManager {
           progress.setText(DebuggerBundle.message("progress.hotswap.scanning.path", path));
           //noinspection HardCodedStringLiteral
           final String qualifiedName = path.substring(rootPath.length(), path.length() - CLASS_EXTENSION.length()).replace('/', '.');
-          container.put(qualifiedName, new HotSwapFile(file));
+          container.put(qualifiedName, new HotSwapFile(file.toPath()));
         }
       }
     }
@@ -131,24 +138,29 @@ public class HotSwapManager {
       sessionWithStamps.add(new Pair<>(session, getInstance(session.getProject()).getTimeStamp(session)));
     }
     for (Map.Entry<String, List<String>> entry : generatedPaths.entrySet()) {
-      final File root = new File(entry.getKey());
+      final Path root = Path.of(entry.getKey());
       for (String relativePath : entry.getValue()) {
         if (SystemInfo.isFileSystemCaseSensitive ? StringUtil.endsWith(relativePath, CLASS_EXTENSION) : StringUtil.endsWithIgnoreCase
           (relativePath, CLASS_EXTENSION)) {
           final String qualifiedName = relativePath.substring(0, relativePath.length() - CLASS_EXTENSION.length()).replace('/', '.');
-          final HotSwapFile hotswapFile = new HotSwapFile(new File(root, relativePath));
-          final long fileStamp = hotswapFile.file.lastModified();
+          final HotSwapFile hotswapFile = new HotSwapFile(root.resolve(relativePath));
+          try {
+            final FileTime fileStamp = Files.getLastModifiedTime(hotswapFile.file);
 
-          for (Pair<DebuggerSession, Long> pair : sessionWithStamps) {
-            final DebuggerSession session = pair.first;
-            if (fileStamp > pair.second) {
-              Map<String, HotSwapFile> container = result.get(session);
-              if (container == null) {
-                container = new HashMap<>();
-                result.put(session, container);
+            for (Pair<DebuggerSession, Long> pair : sessionWithStamps) {
+              final DebuggerSession session = pair.first;
+              if (fileStamp.toMillis() > pair.second) {
+                Map<String, HotSwapFile> container = result.get(session);
+                if (container == null) {
+                  container = new HashMap<>();
+                  result.put(session, container);
+                }
+                container.put(qualifiedName, hotswapFile);
               }
-              container.put(qualifiedName, hotswapFile);
             }
+          }
+          catch (IOException e) {
+            LOG.error(hotswapFile.file.toString(), e);
           }
         }
       }

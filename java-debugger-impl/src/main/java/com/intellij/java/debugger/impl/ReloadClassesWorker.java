@@ -15,25 +15,25 @@
  */
 package com.intellij.java.debugger.impl;
 
-import java.io.IOException;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Nullable;
 import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.impl.engine.DebugProcessImpl;
 import com.intellij.java.debugger.impl.engine.DebuggerManagerThreadImpl;
 import com.intellij.java.debugger.impl.jdi.VirtualMachineProxyImpl;
 import com.intellij.java.debugger.impl.ui.breakpoints.BreakpointManager;
 import consulo.component.ProcessCanceledException;
-import consulo.project.Project;
-import consulo.ide.impl.idea.openapi.util.io.FileUtil;
-import consulo.ui.ex.MessageCategory;
-import consulo.ui.ex.awt.UIUtil;
 import consulo.internal.com.sun.jdi.ReferenceType;
 import consulo.logging.Logger;
+import consulo.project.Project;
+import consulo.ui.ex.MessageCategory;
+import consulo.ui.ex.awt.UIUtil;
+
+import javax.annotation.Nullable;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author lex
@@ -110,10 +110,6 @@ class ReloadClassesWorker
 
 		final DebugProcessImpl debugProcess = getDebugProcess();
 		final VirtualMachineProxyImpl virtualMachineProxy = debugProcess.getVirtualMachineProxy();
-		if(virtualMachineProxy == null)
-		{
-			return;
-		}
 
 		final Project project = debugProcess.getProject();
 		final BreakpointManager breakpointManager = (DebuggerManagerEx.getInstanceEx(project)).getBreakpointManager();
@@ -138,7 +134,7 @@ class ReloadClassesWorker
 				final byte[] content;
 				try
 				{
-					content = FileUtil.loadFileBytes(fileDescr.file);
+					content = Files.readAllBytes(fileDescr.file);
 				}
 				catch(IOException e)
 				{
@@ -229,6 +225,7 @@ class ReloadClassesWorker
 		String reason = null;
 		if(ex != null)
 		{
+			LOG.warn(ex);
 			reason = ex.getLocalizedMessage();
 		}
 		if(reason == null || reason.length() == 0)
