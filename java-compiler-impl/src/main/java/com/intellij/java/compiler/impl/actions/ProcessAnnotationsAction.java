@@ -67,7 +67,7 @@ public class ProcessAnnotationsAction extends CompileActionBase {
       return compiler instanceof AnnotationProcessingCompiler || compiler instanceof ResourceCompiler;
     };
     if (module != null) {
-      CompilerManager.getInstance(project).make(new ModuleCompileScope(module, false), filter, null);
+      CompilerManager.getInstance(project).make(new ModuleCompileScope(module, false, true), filter, null);
     } else {
       final FileSetCompileScope scope = getCompilableFiles(project, dataContext.getData(PlatformDataKeys.VIRTUAL_FILE_ARRAY));
       if (scope != null) {
