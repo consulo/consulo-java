@@ -21,10 +21,8 @@ import com.intellij.java.language.projectRoots.JavaSdkVersion;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiJavaModule;
 import com.intellij.java.language.psi.util.PsiMethodUtil;
-import consulo.execution.ExecutionBundle;
-import consulo.execution.ProgramRunnerUtil;
-import consulo.execution.RuntimeConfigurationException;
-import consulo.execution.RuntimeConfigurationWarning;
+import consulo.application.ReadAction;
+import consulo.execution.*;
 import consulo.execution.configuration.*;
 import consulo.execution.configuration.log.ui.LogConfigurationPanel;
 import consulo.execution.configuration.ui.SettingsEditor;
@@ -47,6 +45,7 @@ import consulo.process.ProcessHandlerBuilder;
 import consulo.process.cmd.GeneralCommandLine;
 import consulo.project.DumbService;
 import consulo.project.Project;
+import consulo.util.lang.BitUtil;
 import consulo.util.xml.serializer.DefaultJDOMExternalizer;
 import consulo.virtualFileSystem.util.PathsList;
 import org.jdom.Element;
@@ -70,7 +69,6 @@ public class ApplicationConfiguration extends ModuleBasedConfiguration<JavaRunCo
 
   private ShortenCommandLine myShortenCommandLine = null;
 
-  public String ENV_VARIABLES;
   private final Map<String, String> myEnvs = new LinkedHashMap<>();
   public boolean PASS_PARENT_ENVS = true;
 
@@ -119,6 +117,27 @@ public class ApplicationConfiguration extends ModuleBasedConfiguration<JavaRunCo
   @Nullable
   public PsiClass getMainClass() {
     return getConfigurationModule().findClass(MAIN_CLASS_NAME);
+  }
+
+  @Override
+  public boolean includeTestScope() {
+    return ReadAction.compute(() -> {
+      try {
+        JavaRunConfigurationModule module = getConfigurationModule();
+        String runClass = getRunClass();
+        if (module != null && runClass != null) {
+          int classpathType = JavaParametersUtil.getClasspathType(module, runClass, false);
+          // if there no test scope - we don't need compile it
+          if (!BitUtil.isSet(classpathType, OwnJavaParameters.TESTS_ONLY)) {
+            return false;
+          }
+        }
+      }
+      catch (CantRunException ignored) {
+      }
+
+      return true;
+    });
   }
 
   @Override
