@@ -15,23 +15,26 @@
  */
 package com.intellij.java.impl.spi;
 
-import javax.annotation.Nonnull;
-
-import consulo.language.editor.annotation.AnnotationHolder;
-import consulo.language.editor.annotation.Annotator;
-import consulo.virtualFileSystem.VirtualFile;
-import com.intellij.java.language.psi.PsiClass;
-import consulo.language.psi.PsiElement;
-import com.intellij.java.language.psi.util.ClassUtil;
-import consulo.language.psi.PsiUtilCore;
 import com.intellij.java.impl.spi.psi.SPIClassProviderReferenceElement;
 import com.intellij.java.language.impl.spi.psi.SPIFile;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.util.ClassUtil;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.language.editor.annotation.AnnotationHolder;
+import consulo.language.editor.annotation.Annotator;
+import consulo.language.editor.annotation.HighlightSeverity;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiUtilCore;
+import consulo.virtualFileSystem.VirtualFile;
+
+import javax.annotation.Nonnull;
 
 /**
  * User: anna
  */
-public class SPIAnnotator implements Annotator{
+public class SPIAnnotator implements Annotator {
   @Override
+  @RequiredReadAction
   public void annotate(@Nonnull PsiElement element, @Nonnull AnnotationHolder holder) {
     final VirtualFile file = PsiUtilCore.getVirtualFile(element);
     if (file != null) {
@@ -40,15 +43,21 @@ public class SPIAnnotator implements Annotator{
         ClassUtil.findPsiClass(element.getManager(), serviceProviderName, null, true, element.getContainingFile().getResolveScope());
       if (element instanceof SPIFile) {
         if (psiClass == null) {
-          holder.createErrorAnnotation(element, "No service provider \"" + serviceProviderName + "\' found").setFileLevelAnnotation(true);
+          holder.newAnnotation(HighlightSeverity.ERROR, "No service provider \"" + serviceProviderName + "\' found")
+                .fileLevel()
+                .create();
         }
-      } else if (element instanceof SPIClassProviderReferenceElement) {
+      }
+      else if (element instanceof SPIClassProviderReferenceElement) {
         final PsiElement resolve = ((SPIClassProviderReferenceElement)element).resolve();
         if (resolve == null) {
-          holder.createErrorAnnotation(element, "Cannot resolve symbol " + element.getText());
-        } else if (resolve instanceof PsiClass && psiClass != null) {
+          holder.newAnnotation(HighlightSeverity.ERROR, "Cannot resolve symbol " + element.getText()).range(element).create();
+        }
+        else if (resolve instanceof PsiClass && psiClass != null) {
           if (!((PsiClass)resolve).isInheritor(psiClass, true)) {
-            holder.createErrorAnnotation(element, "Registered extension should implement " + serviceProviderName);
+            holder.newAnnotation(HighlightSeverity.ERROR, "Registered extension should implement " + serviceProviderName)
+                  .range(element)
+                  .create();
           }
         }
       }
