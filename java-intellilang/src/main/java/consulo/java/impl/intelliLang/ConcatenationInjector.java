@@ -429,15 +429,9 @@ public class ConcatenationInjector implements ConcatenationAwareInjector {
     }
 
     private List<Pair<PsiLanguageInjectionHost, Language>> processInjectionWithContext(BaseInjection injection, boolean settingsAvailable) {
-      Language language = InjectedLanguage.findLanguageById(injection.getInjectedLanguageId());
+      Language language = InjectorUtils.getLanguageByString(injection.getInjectedLanguageId());
       if (language == null) {
-        ReferenceInjector injector = ReferenceInjector.findById(injection.getInjectedLanguageId());
-        if (injector != null) {
-          language = injector.toLanguage();
-        }
-        else {
-          return List.of();
-        }
+        return List.of();
       }
 
       final boolean separateFiles = !injection.isSingleFile() && StringUtil.isNotEmpty(injection.getValuePattern());
