@@ -19,7 +19,8 @@ import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.*;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.ide.impl.intelliLang.Configuration;
-import consulo.ide.impl.intelliLang.inject.InjectedLanguage;
+import consulo.ide.impl.intelliLang.inject.InjectorUtils;
+import consulo.java.impl.intelliLang.pattern.PatternValidator;
 import consulo.language.Language;
 import consulo.language.editor.inspection.LocalInspectionTool;
 import consulo.language.editor.inspection.ProblemHighlightType;
@@ -27,7 +28,6 @@ import consulo.language.editor.inspection.ProblemsHolder;
 import consulo.language.editor.rawHighlight.HighlightDisplayLevel;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.util.PsiTreeUtil;
-import consulo.java.impl.intelliLang.pattern.PatternValidator;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
@@ -80,7 +80,7 @@ public class UnknownLanguageID extends LocalInspectionTool {
                 final Object id = JavaPsiFacade.getInstance(expression.getProject()).
                   getConstantEvaluationHelper().computeConstantExpression(expression);
                 if (id instanceof String) {
-                  final Language language = InjectedLanguage.findLanguageById((String)id);
+                  final Language language = InjectorUtils.getLanguageByString((String)id);
                   if (language == null) {
                     holder.registerProblem(expression, "Unknown language '" + id + "'", ProblemHighlightType.LIKE_UNKNOWN_SYMBOL);
                   }
