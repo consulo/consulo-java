@@ -18,7 +18,8 @@ package com.intellij.java.language.impl.psi.impl.source.tree.java;
 import com.intellij.java.language.impl.psi.impl.PsiImplUtil;
 import com.intellij.java.language.impl.psi.impl.source.Constants;
 import com.intellij.java.language.impl.psi.impl.source.tree.ChildRole;
-import com.intellij.java.language.impl.psi.scope.util.PsiScopesUtil;
+import com.intellij.java.language.impl.psi.scope.ElementClassHint;
+import com.intellij.java.language.impl.psi.scope.PatternResolveState;
 import com.intellij.java.language.psi.*;
 import consulo.language.ast.ASTNode;
 import consulo.language.ast.ChildRoleBase;
@@ -184,12 +185,29 @@ public class PsiForStatementImpl extends CompositePsiElement implements PsiForSt
   }
 
   @Override
-  public boolean processDeclarations(@Nonnull PsiScopeProcessor processor, @Nonnull ResolveState state, PsiElement lastParent, @Nonnull PsiElement place) {
+  public boolean processDeclarations(@Nonnull PsiScopeProcessor processor,
+                                     @Nonnull ResolveState state,
+                                     PsiElement lastParent,
+                                     @Nonnull PsiElement place) {
     processor.handleEvent(PsiScopeProcessor.Event.SET_DECLARATION_HOLDER, this);
-    if (lastParent == null || lastParent.getParent() != this)
+    ElementClassHint elementClassHint = processor.getHint(ElementClassHint.KEY);
+    if (elementClassHint != null && !elementClassHint.shouldProcess(ElementClassHint.DeclarationKind.VARIABLE)) return true;
+    if (lastParent == null) {
+      // Only patterns may introduce variables visible after loop
+      return PsiWhileStatementImpl.processDeclarationsInLoopCondition(processor, state, place, this);
+    }
+    else if (lastParent.getParent() != this) {
       // Parent element should not see our vars
       return true;
-
-    return PsiScopesUtil.walkChildrenScopes(this, processor, state, lastParent, place);
+    }
+    PsiStatement initialization = getInitialization();
+    if (initialization != null && lastParent != initialization) {
+      if (!initialization.processDeclarations(processor, state, null, place)) return false;
+    }
+    PsiExpression condition = getCondition();
+    if (condition != null && (lastParent == getBody() || lastParent == getUpdate())) {
+      return condition.processDeclarations(processor, PatternResolveState.WHEN_TRUE.putInto(state), null, place);
+    }
+    return true;
   }
 }

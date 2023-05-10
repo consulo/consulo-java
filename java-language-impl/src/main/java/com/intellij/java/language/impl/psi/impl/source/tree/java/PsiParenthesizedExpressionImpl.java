@@ -17,6 +17,7 @@ package com.intellij.java.language.impl.psi.impl.source.tree.java;
 
 import com.intellij.java.language.impl.psi.impl.source.Constants;
 import com.intellij.java.language.impl.psi.impl.source.tree.ChildRole;
+import com.intellij.java.language.impl.psi.scope.ElementClassHint;
 import com.intellij.java.language.psi.JavaElementVisitor;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiParenthesizedExpression;
@@ -24,7 +25,10 @@ import com.intellij.java.language.psi.PsiType;
 import consulo.language.ast.ASTNode;
 import consulo.language.ast.ChildRoleBase;
 import consulo.language.ast.IElementType;
+import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
+import consulo.language.psi.resolve.PsiScopeProcessor;
+import consulo.language.psi.resolve.ResolveState;
 import consulo.logging.Logger;
 
 import javax.annotation.Nonnull;
@@ -40,7 +44,7 @@ public class PsiParenthesizedExpressionImpl extends ExpressionPsiElement impleme
   @Override
   @Nullable
   public PsiExpression getExpression() {
-    return (PsiExpression) findChildByRoleAsPsiElement(ChildRole.EXPRESSION);
+    return (PsiExpression)findChildByRoleAsPsiElement(ChildRole.EXPRESSION);
   }
 
   @Override
@@ -75,9 +79,11 @@ public class PsiParenthesizedExpressionImpl extends ExpressionPsiElement impleme
     IElementType i = child.getElementType();
     if (i == LPARENTH) {
       return ChildRole.LPARENTH;
-    } else if (i == RPARENTH) {
+    }
+    else if (i == RPARENTH) {
       return ChildRole.RPARENTH;
-    } else {
+    }
+    else {
       if (EXPRESSION_BIT_SET.contains(child.getElementType())) {
         return ChildRole.EXPRESSION;
       }
@@ -88,10 +94,24 @@ public class PsiParenthesizedExpressionImpl extends ExpressionPsiElement impleme
   @Override
   public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
-      ((JavaElementVisitor) visitor).visitParenthesizedExpression(this);
-    } else {
+      ((JavaElementVisitor)visitor).visitParenthesizedExpression(this);
+    }
+    else {
       visitor.visitElement(this);
     }
+  }
+
+  @Override
+  public boolean processDeclarations(@Nonnull PsiScopeProcessor processor,
+                                     @Nonnull ResolveState state,
+                                     PsiElement lastParent,
+                                     @Nonnull PsiElement place) {
+    if (lastParent != null) return true;
+    ElementClassHint elementClassHint = processor.getHint(ElementClassHint.KEY);
+    if (elementClassHint != null && !elementClassHint.shouldProcess(ElementClassHint.DeclarationKind.VARIABLE)) return true;
+    PsiExpression expression = getExpression();
+    if (expression == null) return true;
+    return expression.processDeclarations(processor, state, null, place);
   }
 
   public String toString() {

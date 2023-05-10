@@ -21,8 +21,10 @@ import com.intellij.java.language.impl.psi.impl.source.tree.ChildRole;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
 import com.intellij.java.language.impl.psi.scope.ElementClassHint;
 import com.intellij.java.language.impl.psi.scope.NameHint;
+import com.intellij.java.language.impl.psi.scope.PatternResolveState;
 import com.intellij.java.language.impl.psi.scope.util.PsiScopesUtil;
 import com.intellij.java.language.psi.*;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.language.ast.ASTNode;
 import consulo.language.ast.ChildRoleBase;
 import consulo.language.ast.IElementType;
@@ -31,7 +33,6 @@ import consulo.language.impl.ast.TreeUtil;
 import consulo.language.impl.psi.LazyParseablePsiElement;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
-import consulo.language.psi.resolve.BaseScopeProcessor;
 import consulo.language.psi.resolve.PsiScopeProcessor;
 import consulo.language.psi.resolve.ResolveState;
 import consulo.logging.Logger;
@@ -99,6 +100,7 @@ public class PsiCodeBlockImpl extends LazyParseablePsiElement implements PsiCode
 
   // return Pair(classes, locals) or null if there was conflict
   @Nullable
+  @RequiredReadAction
   private Pair<Set<String>, Set<String>> buildMaps() {
     Set<String> set1 = myClassesSet;
     Set<String> set2 = myVariablesSet;
@@ -107,29 +109,26 @@ public class PsiCodeBlockImpl extends LazyParseablePsiElement implements PsiCode
       final Set<String> localsSet = new HashSet<String>();
       final Set<String> classesSet = new HashSet<String>();
       final Ref<Boolean> conflict = new Ref<Boolean>(Boolean.FALSE);
-      PsiScopesUtil.walkChildrenScopes(this, new BaseScopeProcessor() {
-        @Override
-        public boolean execute(@Nonnull PsiElement element, ResolveState state) {
-          if (element instanceof PsiLocalVariable) {
-            final PsiLocalVariable variable = (PsiLocalVariable) element;
-            final String name = variable.getName();
-            if (!localsSet.add(name)) {
-              conflict.set(Boolean.TRUE);
-              localsSet.clear();
-              classesSet.clear();
-            }
-          } else if (element instanceof PsiClass) {
-            final PsiClass psiClass = (PsiClass) element;
-            final String name = psiClass.getName();
-            if (!classesSet.add(name)) {
-              conflict.set(Boolean.TRUE);
-              localsSet.clear();
-              classesSet.clear();
-            }
+      PsiScopesUtil.walkChildrenScopes(this, (element, state) -> {
+        if (element instanceof PsiLocalVariable || element instanceof PsiPatternVariable) {
+          final PsiVariable variable = (PsiVariable) element;
+          final String name = variable.getName();
+          if (!localsSet.add(name)) {
+            conflict.set(Boolean.TRUE);
+            localsSet.clear();
+            classesSet.clear();
           }
-          return !conflict.get();
+        } else if (element instanceof PsiClass) {
+          final PsiClass psiClass = (PsiClass) element;
+          final String name = psiClass.getName();
+          if (!classesSet.add(name)) {
+            conflict.set(Boolean.TRUE);
+            localsSet.clear();
+            classesSet.clear();
+          }
         }
-      }, ResolveState.initial(), this, this);
+        return !conflict.get();
+      }, PatternResolveState.WHEN_BOTH.putInto(ResolveState.initial()), this, this);
 
       myClassesSet = set1 = classesSet.isEmpty() ? Collections.<String>emptySet() : classesSet;
       myVariablesSet = set2 = localsSet.isEmpty() ? Collections.<String>emptySet() : localsSet;

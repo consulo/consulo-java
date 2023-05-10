@@ -18,14 +18,19 @@ package com.intellij.java.language.impl.psi.impl.source.tree.java;
 import com.intellij.java.language.impl.psi.impl.PsiImplUtil;
 import com.intellij.java.language.impl.psi.impl.source.Constants;
 import com.intellij.java.language.impl.psi.impl.source.tree.ChildRole;
+import com.intellij.java.language.impl.psi.scope.ElementClassHint;
 import com.intellij.java.language.psi.*;
 import consulo.language.ast.ASTNode;
 import consulo.language.ast.ChildRoleBase;
 import consulo.language.ast.IElementType;
 import consulo.language.impl.ast.TreeUtil;
 import consulo.language.impl.psi.CompositePsiElement;
+import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
+import consulo.language.psi.resolve.PsiScopeProcessor;
+import consulo.language.psi.resolve.ResolveState;
 import consulo.logging.Logger;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 
@@ -114,6 +119,17 @@ public class PsiDoWhileStatementImpl extends CompositePsiElement implements PsiD
         return ChildRoleBase.NONE;
       }
     }
+  }
+
+  @Override
+  public boolean processDeclarations(@Nonnull PsiScopeProcessor processor,
+                                     @Nonnull ResolveState state,
+                                     PsiElement lastParent,
+                                     @Nonnull PsiElement place) {
+    if (lastParent != null) return true;
+    ElementClassHint elementClassHint = processor.getHint(ElementClassHint.KEY);
+    if (elementClassHint != null && !elementClassHint.shouldProcess(ElementClassHint.DeclarationKind.VARIABLE)) return true;
+    return PsiWhileStatementImpl.processDeclarationsInLoopCondition(processor, state, place, this);
   }
 
   @Override

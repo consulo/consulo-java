@@ -24,15 +24,15 @@ import com.intellij.java.language.impl.psi.scope.ElementClassHint;
 import com.intellij.java.language.impl.psi.scope.NameHint;
 import com.intellij.java.language.impl.psi.scope.PatternResolveState;
 import com.intellij.java.language.psi.*;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.language.ast.ASTNode;
-import consulo.language.psi.PsiElement;
-import consulo.language.psi.PsiElementVisitor;
-import consulo.language.psi.resolve.ResolveState;
-import consulo.language.impl.psi.CompositePsiElement;
-import consulo.language.psi.resolve.BaseScopeProcessor;
-import consulo.language.psi.resolve.PsiScopeProcessor;
 import consulo.language.ast.ChildRoleBase;
 import consulo.language.ast.IElementType;
+import consulo.language.impl.psi.CompositePsiElement;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiElementVisitor;
+import consulo.language.psi.resolve.PsiScopeProcessor;
+import consulo.language.psi.resolve.ResolveState;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 
@@ -47,7 +47,7 @@ public class PsiIfStatementImpl extends CompositePsiElement implements PsiIfStat
 
   @Override
   public PsiExpression getCondition() {
-    return (PsiExpression) findChildByRoleAsPsiElement(ChildRole.CONDITION);
+    return (PsiExpression)findChildByRoleAsPsiElement(ChildRole.CONDITION);
   }
 
   @Override
@@ -63,27 +63,27 @@ public class PsiIfStatementImpl extends CompositePsiElement implements PsiIfStat
 
   @Override
   public PsiStatement getThenBranch() {
-    return (PsiStatement) findChildByRoleAsPsiElement(ChildRole.THEN_BRANCH);
+    return (PsiStatement)findChildByRoleAsPsiElement(ChildRole.THEN_BRANCH);
   }
 
   @Override
   public PsiStatement getElseBranch() {
-    return (PsiStatement) findChildByRoleAsPsiElement(ChildRole.ELSE_BRANCH);
+    return (PsiStatement)findChildByRoleAsPsiElement(ChildRole.ELSE_BRANCH);
   }
 
   @Override
   public PsiJavaToken getLParenth() {
-    return (PsiJavaToken) findChildByRoleAsPsiElement(ChildRole.LPARENTH);
+    return (PsiJavaToken)findChildByRoleAsPsiElement(ChildRole.LPARENTH);
   }
 
   @Override
   public PsiJavaToken getRParenth() {
-    return (PsiJavaToken) findChildByRoleAsPsiElement(ChildRole.RPARENTH);
+    return (PsiJavaToken)findChildByRoleAsPsiElement(ChildRole.RPARENTH);
   }
 
   @Override
   public PsiKeyword getElseElement() {
-    return (PsiKeyword) findChildByRoleAsPsiElement(ChildRole.ELSE_KEYWORD);
+    return (PsiKeyword)findChildByRoleAsPsiElement(ChildRole.ELSE_KEYWORD);
   }
 
   @Override
@@ -98,7 +98,7 @@ public class PsiIfStatementImpl extends CompositePsiElement implements PsiIfStat
     }
 
     PsiElementFactory elementFactory = JavaPsiFacade.getInstance(getProject()).getElementFactory();
-    PsiIfStatement ifStatement = (PsiIfStatement) elementFactory.createStatementFromText("if (true) {} else {}", null);
+    PsiIfStatement ifStatement = (PsiIfStatement)elementFactory.createStatementFromText("if (true) {} else {}", null);
     ifStatement.getElseBranch().replace(statement);
 
     addRange(ifStatement.getElseElement(), ifStatement.getLastChild());
@@ -109,7 +109,7 @@ public class PsiIfStatementImpl extends CompositePsiElement implements PsiIfStat
     PsiElementFactory elementFactory = JavaPsiFacade.getInstance(getProject()).getElementFactory();
     ASTNode keyword = findChildByRole(ChildRole.IF_KEYWORD);
     LOG.assertTrue(keyword != null);
-    PsiIfStatement ifStatementPattern = (PsiIfStatement) elementFactory.createStatementFromText("if (){}", this);
+    PsiIfStatement ifStatementPattern = (PsiIfStatement)elementFactory.createStatementFromText("if (){}", this);
     if (getLParenth() == null) {
       addAfter(ifStatementPattern.getLParenth(), keyword.getPsi());
     }
@@ -120,7 +120,8 @@ public class PsiIfStatementImpl extends CompositePsiElement implements PsiIfStat
     PsiStatement thenBranch = getThenBranch();
     if (thenBranch == null) {
       addAfter(statement, getRParenth());
-    } else {
+    }
+    else {
       thenBranch.replace(statement);
     }
   }
@@ -171,72 +172,75 @@ public class PsiIfStatementImpl extends CompositePsiElement implements PsiIfStat
     IElementType i = child.getElementType();
     if (i == IF_KEYWORD) {
       return ChildRole.IF_KEYWORD;
-    } else if (i == ELSE_KEYWORD) {
+    }
+    else if (i == ELSE_KEYWORD) {
       return ChildRole.ELSE_KEYWORD;
-    } else if (i == LPARENTH) {
+    }
+    else if (i == LPARENTH) {
       return ChildRole.LPARENTH;
-    } else if (i == RPARENTH) {
+    }
+    else if (i == RPARENTH) {
       return ChildRole.RPARENTH;
-    } else {
+    }
+    else {
       if (ElementType.EXPRESSION_BIT_SET.contains(child.getElementType())) {
         return ChildRole.CONDITION;
-      } else if (child.getPsi() instanceof PsiStatement) {
+      }
+      else if (child.getPsi() instanceof PsiStatement) {
         if (findChildByRoleAsPsiElement(ChildRole.THEN_BRANCH) == child) {
           return ChildRole.THEN_BRANCH;
-        } else {
+        }
+        else {
           return ChildRole.ELSE_BRANCH;
         }
-      } else {
+      }
+      else {
         return ChildRoleBase.NONE;
       }
     }
   }
 
   @Override
+  @RequiredReadAction
   public boolean processDeclarations(@Nonnull PsiScopeProcessor processor,
                                      @Nonnull ResolveState state,
                                      PsiElement lastParent,
                                      @Nonnull PsiElement place) {
     ElementClassHint elementClassHint = processor.getHint(ElementClassHint.KEY);
-    if (elementClassHint != null && !elementClassHint.shouldProcess(ElementClassHint.DeclarationKind.VARIABLE)) {
-      return true;
-    }
+    if (elementClassHint != null && !elementClassHint.shouldProcess(ElementClassHint.DeclarationKind.VARIABLE)) return true;
     PsiExpression condition = getCondition();
     if (condition != null) {
       PsiStatement thenBranch = getThenBranch();
       PsiStatement elseBranch = getElseBranch();
       if (lastParent == null) {
-        if (state.get(PatternResolveState.KEY) == PatternResolveState.WHEN_NONE) {
-          return true;
-        }
+        if (state.get(PatternResolveState.KEY) == PatternResolveState.WHEN_NONE) return true;
         PsiScopeProcessor conditionProcessor;
         if (state.get(PatternResolveState.KEY) == PatternResolveState.WHEN_BOTH) {
           conditionProcessor = processor;
-        } else {
-          conditionProcessor = new BaseScopeProcessor() {
-            @Override
-            public boolean execute(@Nonnull PsiElement element, ResolveState state) {
-              LOG.assertTrue(element instanceof PsiPatternVariable);
-              final NameHint hint = processor.getHint(NameHint.KEY);
-              if (hint != null && !((PsiPatternVariable) element).getName().equals(hint.getName(state))) {
-                return true;
-              }
-              ControlFlow flow;
-              try {
-                ControlFlowFactory factory = ControlFlowFactory.getInstance(getProject());
-                flow = factory.getControlFlow(PsiIfStatementImpl.this, new LocalsControlFlowPolicy(PsiIfStatementImpl.this), false);
-              } catch (AnalysisCanceledException e) {
-                return true;
-              }
-              boolean thenCompletesNormally = canCompleteNormally(thenBranch, flow);
-              boolean elseCompletesNormally = canCompleteNormally(elseBranch, flow);
-              if (thenCompletesNormally == elseCompletesNormally ||
-                  PatternResolveState.fromBoolean(thenCompletesNormally) !=
-                      PatternResolveState.stateAtParent((PsiPatternVariable) element, condition)) {
-                return true;
-              }
-              return processor.execute(element, state);
+        }
+        else {
+          conditionProcessor = (element, s) -> {
+            LOG.assertTrue(element instanceof PsiPatternVariable);
+            final NameHint hint = processor.getHint(NameHint.KEY);
+            if (hint != null && !((PsiPatternVariable)element).getName().equals(hint.getName(s))) {
+              return true;
             }
+            ControlFlow flow;
+            try {
+              flow = ControlFlowFactory.getControlFlow(
+                this, new LocalsControlFlowPolicy(this), ControlFlowOptions.NO_CONST_EVALUATE);
+            }
+            catch (AnalysisCanceledException e) {
+              return true;
+            }
+            boolean thenCompletesNormally = canCompleteNormally(thenBranch, flow);
+            boolean elseCompletesNormally = canCompleteNormally(elseBranch, flow);
+            if (thenCompletesNormally == elseCompletesNormally ||
+              PatternResolveState.fromBoolean(thenCompletesNormally) !=
+                PatternResolveState.stateAtParent((PsiPatternVariable)element, condition)) {
+              return true;
+            }
+            return processor.execute(element, s);
           };
         }
         return condition.processDeclarations(conditionProcessor, PatternResolveState.WHEN_BOTH.putInto(state), null, place);
@@ -262,8 +266,9 @@ public class PsiIfStatementImpl extends CompositePsiElement implements PsiIfStat
   @Override
   public void accept(@Nonnull PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
-      ((JavaElementVisitor) visitor).visitIfStatement(this);
-    } else {
+      ((JavaElementVisitor)visitor).visitIfStatement(this);
+    }
+    else {
       visitor.visitElement(this);
     }
   }

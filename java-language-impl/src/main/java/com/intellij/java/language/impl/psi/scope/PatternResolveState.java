@@ -2,6 +2,7 @@
 package com.intellij.java.language.impl.psi.scope;
 
 import com.intellij.java.language.psi.*;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.resolve.ResolveState;
 import consulo.util.dataholder.Key;
@@ -36,6 +37,7 @@ public enum PatternResolveState {
   }
 
   @Nonnull
+  @RequiredReadAction
   public static PatternResolveState stateAtParent(PsiPatternVariable element, PsiExpression parent) {
     PsiPattern pattern = element.getPattern();
     PatternResolveState state = WHEN_TRUE;

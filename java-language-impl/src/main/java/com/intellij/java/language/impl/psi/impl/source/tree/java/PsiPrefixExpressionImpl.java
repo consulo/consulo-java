@@ -18,11 +18,17 @@ package com.intellij.java.language.impl.psi.impl.source.tree.java;
 import com.intellij.java.language.impl.psi.impl.source.tree.ChildRole;
 import com.intellij.java.language.impl.psi.impl.source.tree.ElementType;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
+import com.intellij.java.language.impl.psi.scope.ElementClassHint;
+import com.intellij.java.language.impl.psi.scope.PatternResolveState;
+import com.intellij.java.language.impl.psi.scope.util.PsiScopesUtil;
 import com.intellij.java.language.psi.*;
 import consulo.language.ast.ASTNode;
 import consulo.language.ast.ChildRoleBase;
 import consulo.language.ast.IElementType;
+import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
+import consulo.language.psi.resolve.PsiScopeProcessor;
+import consulo.language.psi.resolve.ResolveState;
 import consulo.logging.Logger;
 
 import javax.annotation.Nonnull;
@@ -102,6 +108,19 @@ public class PsiPrefixExpressionImpl extends ExpressionPsiElement implements Psi
     } else {
       visitor.visitElement(this);
     }
+  }
+
+  @Override
+  public boolean processDeclarations(@Nonnull PsiScopeProcessor processor,
+                                     @Nonnull ResolveState state,
+                                     PsiElement lastParent,
+                                     @Nonnull PsiElement place) {
+    if (lastParent != null || !getOperationTokenType().equals(JavaTokenType.EXCL)) return true;
+    ElementClassHint elementClassHint = processor.getHint(ElementClassHint.KEY);
+    if (elementClassHint != null && !elementClassHint.shouldProcess(ElementClassHint.DeclarationKind.VARIABLE)) return true;
+    PatternResolveState hint = state.get(PatternResolveState.KEY);
+    if (hint == null) return true;
+    return PsiScopesUtil.walkChildrenScopes(this, processor, hint.invert().putInto(state), null, place);
   }
 
   public String toString() {
