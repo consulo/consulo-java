@@ -4,6 +4,7 @@ import com.intellij.java.language.impl.JavaFileType;
 import consulo.content.ContentFolderTypeProvider;
 import consulo.java.language.module.extension.JavaModuleExtension;
 import consulo.language.content.ProductionResourceContentFolderTypeProvider;
+import consulo.language.content.ProjectRootsUtil;
 import consulo.language.content.TestResourceContentFolderTypeProvider;
 import consulo.language.file.FileTypeManager;
 import consulo.language.psi.PsiCodeFragment;
@@ -14,7 +15,6 @@ import consulo.module.content.ModuleRootManager;
 import consulo.module.content.ProjectFileIndex;
 import consulo.module.content.ProjectRootManager;
 import consulo.project.Project;
-import consulo.project.ui.view.tree.ProjectRootsUtil;
 import consulo.virtualFileSystem.VirtualFile;
 
 import javax.annotation.Nonnull;
