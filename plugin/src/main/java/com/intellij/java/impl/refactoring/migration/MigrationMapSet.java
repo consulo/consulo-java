@@ -403,7 +403,7 @@ public class MigrationMapSet
 		root.addContent(nameElement);
 
 		Element descriptionElement = new Element(DESCRIPTION);
-		descriptionElement.setAttribute(VALUE, map.getDescription());
+		descriptionElement.setAttribute(VALUE, StringUtil.notNullize(map.getDescription()));
 		root.addContent(descriptionElement);
 
 		for(int i = 0; i < map.getEntryCount(); i++)
