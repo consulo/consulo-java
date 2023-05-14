@@ -30,12 +30,13 @@ public abstract class NullableNotNullManager {
   protected static final Logger LOG = Logger.getInstance(NullableNotNullManager.class);
   protected final Project myProject;
 
-  protected static final String JAVAX_ANNOTATION_NULLABLE = "javax.annotation.Nullable";
-  protected static final String JAVAX_ANNOTATION_NONNULL = "javax.annotation.Nonnull";
+  protected static final String JAKARTA_ANNOTATION_NULLABLE = "jakarta.annotation.Nullable";
+  protected static final String JAKARTA_ANNOTATION_NONNULL = "jakarta.annotation.Nonnull";
 
   public static final String[] DEFAULT_NULLABLES = {
       NULLABLE,
-      JAVAX_ANNOTATION_NULLABLE,
+      JAKARTA_ANNOTATION_NULLABLE,
+      "javax.annotation.Nullable",
       "javax.annotation.CheckForNull",
       "edu.umd.cs.findbugs.annotations.Nullable",
       "android.support.annotation.Nullable",
@@ -48,7 +49,8 @@ public abstract class NullableNotNullManager {
   };
   public static final String[] DEFAULT_NOT_NULLS = {
       NOT_NULL,
-      JAVAX_ANNOTATION_NONNULL,
+      JAKARTA_ANNOTATION_NONNULL,
+      "javax.annotation.Nonnull",
       "edu.umd.cs.findbugs.annotations.NonNull",
       "android.support.annotation.NonNull",
       "androidx.annotation.NonNull",

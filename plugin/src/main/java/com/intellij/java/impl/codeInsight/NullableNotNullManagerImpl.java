@@ -38,7 +38,6 @@ import javax.annotation.Nullable;
 import java.util.*;
 
 import static com.intellij.java.language.codeInsight.AnnotationUtil.NOT_NULL;
-import static com.intellij.java.language.codeInsight.AnnotationUtil.NULLABLE;
 
 @Singleton
 @State(name = "NullableNotNullManager", storages = @Storage("misc.xml"))
@@ -47,11 +46,11 @@ public class NullableNotNullManagerImpl extends NullableNotNullManager implement
   public static final String TYPE_QUALIFIER_NICKNAME = "javax.annotation.meta.TypeQualifierNickname";
   private static final String INSTRUMENTED_NOT_NULLS_TAG = "instrumentedNotNulls";
 
-  public String myDefaultNullable = JAVAX_ANNOTATION_NULLABLE;
-  public String myDefaultNotNull = JAVAX_ANNOTATION_NONNULL;
+  public String myDefaultNullable = JAKARTA_ANNOTATION_NULLABLE;
+  public String myDefaultNotNull = JAKARTA_ANNOTATION_NONNULL;
   public final JDOMExternalizableStringList myNullables = new JDOMExternalizableStringList(Arrays.asList(DEFAULT_NULLABLES));
   public final JDOMExternalizableStringList myNotNulls = new JDOMExternalizableStringList(Arrays.asList(DEFAULT_NOT_NULLS));
-  private List<String> myInstrumentedNotNulls = ContainerUtil.newArrayList(JAVAX_ANNOTATION_NONNULL);
+  private List<String> myInstrumentedNotNulls = ContainerUtil.newArrayList(JAKARTA_ANNOTATION_NONNULL);
   private final SimpleModificationTracker myTracker = new SimpleModificationTracker();
 
   @Inject
@@ -142,7 +141,7 @@ public class NullableNotNullManagerImpl extends NullableNotNullManager implement
       }
     }
 
-    if (myInstrumentedNotNulls.size() != 1 || !NOT_NULL.equals(myInstrumentedNotNulls.get(0))) {
+    if (myInstrumentedNotNulls.size() != 1 || !JAKARTA_ANNOTATION_NONNULL.equals(myInstrumentedNotNulls.get(0))) {
       // poor man's @XCollection(style = XCollection.Style.v2)
       Element instrumentedNotNulls = new Element(INSTRUMENTED_NOT_NULLS_TAG);
       for (String value : myInstrumentedNotNulls) {
@@ -155,8 +154,8 @@ public class NullableNotNullManagerImpl extends NullableNotNullManager implement
   }
 
   private boolean hasDefaultValues() {
-    return NOT_NULL.equals(myDefaultNotNull) &&
-      NULLABLE.equals(myDefaultNullable) &&
+    return JAKARTA_ANNOTATION_NONNULL.equals(myDefaultNotNull) &&
+      JAKARTA_ANNOTATION_NULLABLE.equals(myDefaultNullable) &&
       new HashSet<>(myNullables).equals(Set.of(DEFAULT_NULLABLES)) &&
       new HashSet<>(myNotNulls).equals(Set.of(DEFAULT_NOT_NULLS));
   }
@@ -190,7 +189,7 @@ public class NullableNotNullManagerImpl extends NullableNotNullManager implement
 
   @Nonnull
   private List<PsiClass> getAllNullabilityNickNames() {
-    if (!getNotNulls().contains(JAVAX_ANNOTATION_NONNULL)) {
+    if (!getNotNulls().contains(JAKARTA_ANNOTATION_NONNULL)) {
       return Collections.emptyList();
     }
     return CachedValuesManager.getManager(myProject).getCachedValue(myProject, () -> {
@@ -311,10 +310,10 @@ public class NullableNotNullManagerImpl extends NullableNotNullManager implement
       return null;
     }
 
-    if (qName.equals(JAVAX_ANNOTATION_NULLABLE) && getNullables().contains(qName)) {
+    if (qName.equals(JAKARTA_ANNOTATION_NULLABLE) && getNullables().contains(qName)) {
       return Nullability.NULLABLE;
     }
-    if (qName.equals(JAVAX_ANNOTATION_NONNULL)) {
+    if (qName.equals(JAKARTA_ANNOTATION_NONNULL)) {
       return extractNullityFromWhenValue(qualifier);
     }
     return null;
@@ -334,7 +333,7 @@ public class NullableNotNullManagerImpl extends NullableNotNullManager implement
       return Nullability.UNKNOWN;
     }
 
-    PsiAnnotation nonNull = AnnotationUtil.findAnnotation(psiClass, JAVAX_ANNOTATION_NONNULL);
+    PsiAnnotation nonNull = AnnotationUtil.findAnnotation(psiClass, JAKARTA_ANNOTATION_NONNULL);
     return nonNull != null ? extractNullityFromWhenValue(nonNull) : Nullability.UNKNOWN;
   }
 
@@ -352,7 +351,7 @@ public class NullableNotNullManagerImpl extends NullableNotNullManager implement
     }
 
     // 'when' is unknown and annotation is known -> default value (for javax.annotation.Nonnull is ALWAYS)
-    if (when == null && JAVAX_ANNOTATION_NONNULL.equals(nonNull.getQualifiedName())) {
+    if (when == null && JAKARTA_ANNOTATION_NONNULL.equals(nonNull.getQualifiedName())) {
       return Nullability.NOT_NULL;
     }
     return Nullability.UNKNOWN;

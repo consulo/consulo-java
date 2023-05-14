@@ -41,10 +41,10 @@ import static consulo.util.lang.BitUtil.isSet;
  */
 public class AnnotationUtil {
   @Deprecated
-  @DeprecationInfo("JB NotNull annotations is not used anymore. Use jsr305 annotations")
+  @DeprecationInfo("JB NotNull annotations is not used anymore. Use jakarta annotations")
   public static final String NULLABLE = "org.jetbrains.annotations.Nullable";
   @Deprecated
-  @DeprecationInfo("JB NotNull annotations is not used anymore. Use jsr305 annotations")
+  @DeprecationInfo("JB NotNull annotations is not used anymore. Use jakarta annotations")
   public static final String NOT_NULL = "org.jetbrains.annotations.NotNull";
 
   public static final String NON_NLS = "org.jetbrains.annotations.NonNls";
@@ -695,8 +695,6 @@ public class AnnotationUtil {
   /**
    * @deprecated use {@link NullableNotNullManager} (to be removed in IDEA 2018)
    */
-  public static final Set<String> ALL_ANNOTATIONS = Set.of(NULLABLE, NOT_NULL);
-
   private static final String[] SIMPLE_NAMES = {
       "NotNull",
       "Nullable",
