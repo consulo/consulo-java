@@ -20,6 +20,7 @@ import consulo.document.Document;
 import consulo.document.event.DocumentEvent;
 import consulo.document.event.DocumentListener;
 import consulo.find.FindSettings;
+import consulo.find.ui.ScopeChooserCombo;
 import consulo.language.editor.refactoring.ui.RefactoringDialog;
 import consulo.language.editor.ui.awt.EditorComboBox;
 import consulo.language.psi.PsiDocumentManager;
@@ -34,14 +35,12 @@ import consulo.ui.ex.awt.DialogWrapper;
 import consulo.ui.ex.awt.JBUI;
 import consulo.ui.ex.awt.LabeledComponent;
 import consulo.ui.ex.awt.Messages;
-import consulo.ui.ex.awt.scopeChooser.ScopeChooserCombo;
 import consulo.util.lang.function.Functions;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
@@ -66,12 +65,7 @@ public abstract class TypeMigrationDialog extends RefactoringDialog {
 
     myScopeChooserCombo = new ScopeChooserCombo(project, false, true, FindSettings.getInstance().getDefaultScopeName());
     Disposer.register(myDisposable, myScopeChooserCombo);
-    myScopeChooserCombo.getChildComponent().addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        validateButtons();
-      }
-    });
+    myScopeChooserCombo.getChildComponent().addActionListener((ActionListener)e -> validateButtons());
     setTitle(REFACTORING_NAME);
   }
 

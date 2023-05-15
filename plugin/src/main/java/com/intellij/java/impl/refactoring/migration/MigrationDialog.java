@@ -15,27 +15,26 @@
  */
 package com.intellij.java.impl.refactoring.migration;
 
-import java.awt.BorderLayout;
+import com.intellij.java.impl.refactoring.HelpID;
+import consulo.application.HelpManager;
+import consulo.content.scope.SearchScope;
+import consulo.disposer.Disposer;
+import consulo.find.FindSettings;
+import consulo.find.ui.ScopeChooserCombo;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.logging.Logger;
+import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
+import consulo.ui.ex.awt.DialogWrapper;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
-
-import javax.annotation.Nullable;
-import javax.swing.*;
-
-import javax.annotation.Nonnull;
-import consulo.find.FindSettings;
-import consulo.ui.ex.awt.scopeChooser.ScopeChooserCombo;
-import consulo.logging.Logger;
-import consulo.application.HelpManager;
-import consulo.project.Project;
-import consulo.ui.ex.awt.DialogWrapper;
-import consulo.disposer.Disposer;
-import consulo.content.scope.SearchScope;
-import com.intellij.java.impl.refactoring.HelpID;
-import consulo.language.editor.refactoring.RefactoringBundle;
-import consulo.ui.annotation.RequiredUIAccess;
 
 public class MigrationDialog extends DialogWrapper
 {
