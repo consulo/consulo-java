@@ -27,7 +27,6 @@ import com.intellij.java.language.patterns.PsiMethodPattern;
 import com.intellij.java.language.psi.*;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
-import consulo.ide.impl.idea.ui.ColorChooser;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.FileModificationService;
@@ -39,6 +38,7 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 import consulo.ui.ex.JBColor;
+import consulo.ui.ex.awt.ColorChooser;
 import consulo.util.lang.StringUtil;
 
 import javax.annotation.Nonnull;
