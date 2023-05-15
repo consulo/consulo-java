@@ -21,47 +21,63 @@ import com.intellij.java.debugger.impl.settings.NodeRendererSettings;
 import com.intellij.java.debugger.impl.ui.tree.ValueDescriptor;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.internal.com.sun.jdi.*;
-import consulo.ui.ex.awtUnsafe.TargetAWT;
+import consulo.java.debugger.impl.tree.render.RGBColorObjectRender;
+import consulo.ui.color.RGBColor;
 import consulo.ui.image.Image;
-import consulo.ui.image.ImageEffects;
 import jakarta.inject.Inject;
-
-import java.awt.*;
 
 /**
  * Created by Egor on 04.10.2014.
  */
 @ExtensionImpl
-class ColorObjectRenderer extends ToStringBasedRenderer {
-  @Inject
-  public ColorObjectRenderer(final NodeRendererSettings rendererSettings) {
-    super(rendererSettings, "Color", null, null);
-    setClassName("java.awt.Color");
-    setEnabled(true);
-  }
+public class ColorObjectRenderer extends ToStringBasedRenderer
+{
+	@Inject
+	public ColorObjectRenderer(final NodeRendererSettings rendererSettings)
+	{
+		super(rendererSettings, "Color", null, null);
+		setClassName("java.awt.Color");
+		setEnabled(true);
+	}
 
-  @Override
-  public Image calcValueIcon(ValueDescriptor descriptor,
-                             EvaluationContext evaluationContext,
-                             DescriptorLabelListener listener) throws EvaluateException {
-    final Value value = descriptor.getValue();
-    if (value instanceof ObjectReference) {
-      try {
-        final ObjectReference objRef = (ObjectReference)value;
-        final ReferenceType refType = objRef.referenceType();
-        final Field valueField = refType.fieldByName("value");
-        if (valueField != null) {
-          final Value rgbValue = objRef.getValue(valueField);
-          if (rgbValue instanceof IntegerValue) {
-            @SuppressWarnings("UseJBColor") final Color color = new Color(((IntegerValue)rgbValue).value(), true);
-            return ImageEffects.colorFilled(16, 16, TargetAWT.from(color));
-          }
-        }
-      }
-      catch (Exception e) {
-        throw new EvaluateException(e.getMessage(), e);
-      }
-    }
-    return null;
-  }
+	@Override
+	public Image calcValueIcon(ValueDescriptor descriptor,
+							   EvaluationContext evaluationContext,
+							   DescriptorLabelListener listener) throws EvaluateException
+	{
+		final Value value = descriptor.getValue();
+		if(value instanceof ObjectReference)
+		{
+			try
+			{
+				final ObjectReference objRef = (ObjectReference) value;
+				final ReferenceType refType = objRef.referenceType();
+
+				Integer intValue = getFieldValue(refType, objRef, "value");
+				if(intValue != null)
+				{
+					return RGBColorObjectRender.debuggerColorIcon(RGBColor.fromRGBValue(intValue));
+				}
+			}
+			catch(Exception e)
+			{
+				throw new EvaluateException(e.getMessage(), e);
+			}
+		}
+		return null;
+	}
+
+	public static Integer getFieldValue(ReferenceType refType, ObjectReference objRef, String fieldName) throws EvaluateException
+	{
+		final Field valueField = refType.fieldByName(fieldName);
+		if(valueField != null)
+		{
+			final Value rgbValue = objRef.getValue(valueField);
+			if(rgbValue instanceof IntegerValue)
+			{
+				return ((IntegerValue) rgbValue).value();
+			}
+		}
+		return null;
+	}
 }

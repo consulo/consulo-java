@@ -16,6 +16,8 @@
 
 package consulo.java.debugger.impl.apiAdapters;
 
+import consulo.internal.com.sun.tools.jdi.SocketTransportService;
+
 /**
  * @author VISTALL
  * @since 31.05.2015
@@ -24,14 +26,7 @@ public class TransportClassDelegates
 {
 	public static Class<?> getSocketTransportServiceClass()
 	{
-		try
-		{
-			return Class.forName("consulo.internal.com.sun.tools.jdi.SocketTransportService");
-		}
-		catch(ClassNotFoundException e)
-		{
-			throw new Error(e);
-		}
+		return SocketTransportService.class;
 	}
 
 	public static Class<?> getSharedMemoryTransportServiceClass()

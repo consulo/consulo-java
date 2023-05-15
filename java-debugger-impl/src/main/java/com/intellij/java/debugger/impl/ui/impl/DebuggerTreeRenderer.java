@@ -31,6 +31,8 @@ import consulo.execution.debug.XDebuggerManager;
 import consulo.execution.debug.ui.ValueMarkup;
 import consulo.execution.debug.ui.XDebuggerUIConstants;
 import consulo.ide.impl.idea.xdebugger.impl.XDebugSessionImpl;
+import consulo.ide.impl.idea.xdebugger.impl.ui.DebuggerUIUtil;
+import consulo.ide.impl.idea.xdebugger.impl.ui.XDebugSessionTab;
 import consulo.internal.com.sun.jdi.ObjectReference;
 import consulo.internal.com.sun.jdi.Value;
 import consulo.ui.ex.Gray;
@@ -141,7 +143,7 @@ public class DebuggerTreeRenderer extends ColoredTreeCellRenderer {
     if (valueDescriptor instanceof WatchItemDescriptor && nodeIcon != AllIcons.Debugger.Watch) {
       XDebugSession session = XDebuggerManager.getInstance(valueDescriptor.getProject()).getCurrentSession();
       if (session != null) {
-        consulo.ide.impl.idea.xdebugger.impl.ui.XDebugSessionTab tab = ((XDebugSessionImpl) session).getSessionTab();
+        XDebugSessionTab tab = ((XDebugSessionImpl) session).getSessionTab();
         if (tab != null && tab.isWatchesInVariables()) {
           nodeIcon = AllIcons.Debugger.Watch;
         }
@@ -172,11 +174,11 @@ public class DebuggerTreeRenderer extends ColoredTreeCellRenderer {
   }
 
   public static SimpleColoredText getDescriptorText(final DebuggerContextImpl debuggerContext, NodeDescriptorImpl descriptor, boolean multiline) {
-    return getDescriptorText(debuggerContext, descriptor, consulo.ide.impl.idea.xdebugger.impl.ui.DebuggerUIUtil.getColorScheme(null), multiline, true);
+    return getDescriptorText(debuggerContext, descriptor, DebuggerUIUtil.getColorScheme(null), multiline, true);
   }
 
   public static SimpleColoredText getDescriptorTitle(final DebuggerContextImpl debuggerContext, NodeDescriptorImpl descriptor) {
-    return getDescriptorText(debuggerContext, descriptor, consulo.ide.impl.idea.xdebugger.impl.ui.DebuggerUIUtil.getColorScheme(null), false, false);
+    return getDescriptorText(debuggerContext, descriptor, DebuggerUIUtil.getColorScheme(null), false, false);
   }
 
   private static SimpleColoredText getDescriptorText(DebuggerContextImpl debuggerContext, NodeDescriptorImpl descriptor, EditorColorsScheme colorScheme, boolean multiline, boolean appendValue) {
