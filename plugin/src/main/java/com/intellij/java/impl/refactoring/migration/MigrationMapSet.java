@@ -195,16 +195,16 @@ public class MigrationMapSet
 			}
 		}
 
-		for(PredefinedMigrationProvider provider : Extensions.getExtensions(PredefinedMigrationProvider.EP_NAME))
+		PredefinedMigrationProvider.EP_NAME.forEachExtensionSafe(provider ->
 		{
 			URL migrationMap = provider.getMigrationMap();
 			String fileName = new File(migrationMap.getFile()).getName();
 			if(myDeletedMaps.contains(FileUtil.getNameWithoutExtension(fileName)))
 			{
-				continue;
+				return;
 			}
 			copyMap(dir, migrationMap, fileName);
-		}
+		});
 
 		for(String defaultTemplate : DEFAULT_MAPS)
 		{
