@@ -355,6 +355,11 @@ public class DebugProcessEvents extends DebugProcessImpl {
       final String transportName = DebuggerBundle.getTransportName(getConnection());
       showStatusText(DebuggerBundle.message("status.connected", addressDisplayName, transportName));
       LOG.debug("leave: processVMStartEvent()");
+
+      XDebugSession session = getSession().getXDebugSession();
+      if(session != null) {
+        session.setPauseActionSupported(true);
+      }
     }
   }
 
