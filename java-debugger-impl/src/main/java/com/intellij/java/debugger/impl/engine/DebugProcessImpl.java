@@ -68,7 +68,7 @@ import consulo.execution.debug.XDebugSession;
 import consulo.execution.debug.XDebuggerActions;
 import consulo.execution.debug.XSourcePosition;
 import consulo.execution.debug.ui.XDebuggerUIConstants;
-import consulo.fileEditor.util.StatusBarUtil;
+import consulo.fileEditor.statusBar.StatusBarUtil;
 import consulo.ide.impl.idea.xdebugger.impl.XDebugSessionImpl;
 import consulo.internal.com.sun.jdi.*;
 import consulo.internal.com.sun.jdi.connect.*;
