@@ -15,15 +15,15 @@
  */
 package com.intellij.java.debugger.impl.engine;
 
-import java.io.OutputStream;
-
 import com.intellij.java.debugger.DebuggerManager;
-import consulo.process.ProcessHandler;
 import com.intellij.java.debugger.engine.DebugProcess;
 import com.intellij.java.debugger.engine.DebugProcessAdapter;
+import consulo.process.BaseProcessHandler;
 import consulo.project.Project;
 
-public class RemoteDebugProcessHandler extends ProcessHandler
+import java.io.OutputStream;
+
+public class RemoteDebugProcessHandler extends BaseProcessHandler
 {
 	private final Project myProject;
 
