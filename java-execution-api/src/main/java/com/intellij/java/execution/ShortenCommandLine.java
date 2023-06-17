@@ -56,16 +56,10 @@ public enum ShortenCommandLine {
   }
 
   public static ShortenCommandLine getDefaultMethod(Project project, String rootPath) {
-    if (!OwnJdkUtil.useDynamicClasspath(project)) {
-      return NONE;
-    }
     if (rootPath != null && OwnJdkUtil.isModularRuntime(rootPath)) {
       return ARGS_FILE;
     }
-    if (OwnJdkUtil.useClasspathJar()) {
-      return MANIFEST;
-    }
-    return CLASSPATH_FILE;
+    return NONE;
   }
 
   public static ShortenCommandLine readShortenClasspathMethod(@Nonnull Element element) {

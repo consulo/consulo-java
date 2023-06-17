@@ -128,7 +128,7 @@ public class OwnSimpleJavaParameters extends SimpleProgramParameters
 
 	public void setUseDynamicClasspath(@Nullable Project project)
 	{
-		setUseDynamicClasspath(OwnJdkUtil.useDynamicClasspath(project));
+		setUseDynamicClasspath(true);
 	}
 
 	public boolean isDynamicVMOptions()
@@ -191,7 +191,7 @@ public class OwnSimpleJavaParameters extends SimpleProgramParameters
 	 */
 	public void setUseClasspathJar(boolean useClasspathJar)
 	{
-		myUseClasspathJar = useClasspathJar && OwnJdkUtil.useClasspathJar();
+		myUseClasspathJar = useClasspathJar;
 	}
 
 	public void setShortenCommandLine(@Nullable ShortenCommandLine mode, Project project)

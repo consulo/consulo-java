@@ -315,7 +315,6 @@ public class ApplicationConfiguration extends ModuleBasedConfiguration<JavaRunCo
     protected OwnJavaParameters createJavaParameters() throws ExecutionException {
       final OwnJavaParameters params = new OwnJavaParameters();
       T configuration = getConfiguration();
-      params.setShortenCommandLine(configuration.getShortenCommandLine(), configuration.getProject());
 
       final JavaRunConfigurationModule module = myConfiguration.getConfigurationModule();
       final String alternativeJreHome = myConfiguration.ALTERNATIVE_JRE_PATH_ENABLED ? myConfiguration.ALTERNATIVE_JRE_PATH : null;
@@ -328,6 +327,9 @@ public class ApplicationConfiguration extends ModuleBasedConfiguration<JavaRunCo
       } else {
         JavaParametersUtil.configureProject(module.getProject(), params, OwnJavaParameters.JDK_AND_CLASSES_AND_TESTS, alternativeJreHome);
       }
+
+      // we need set #setShortenCommandLine after jdk set since, some default values checked
+      params.setShortenCommandLine(configuration.getShortenCommandLine(), configuration.getProject());
 
       params.setMainClass(myConfiguration.MAIN_CLASS_NAME);
 

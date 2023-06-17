@@ -19,19 +19,16 @@ package consulo.java.execution.projectRoots;
 import com.intellij.java.execution.CommandLineWrapperUtil;
 import com.intellij.java.language.projectRoots.JavaSdkType;
 import consulo.application.Application;
-import consulo.application.ApplicationPropertiesComponent;
 import consulo.content.bundle.Sdk;
 import consulo.content.bundle.SdkTypeId;
 import consulo.execution.CantRunException;
 import consulo.execution.ExecutionBundle;
 import consulo.java.execution.OwnSimpleJavaParameters;
-import consulo.platform.Platform;
 import consulo.process.cmd.GeneralCommandLine;
 import consulo.process.cmd.ParametersList;
 import consulo.process.cmd.ParametersListUtil;
 import consulo.process.local.OSProcessUtil;
 import consulo.project.Project;
-import consulo.project.ProjectPropertiesComponent;
 import consulo.util.dataholder.Key;
 import consulo.util.io.ClassPathUtil;
 import consulo.util.io.FileUtil;
@@ -99,21 +96,24 @@ public class OwnJdkUtil {
     return new File(homePath, "modules/java.base").isDirectory();
   }
 
+  @Deprecated
   public static boolean useDynamicVMOptions() {
-    return ApplicationPropertiesComponent.getInstance().getBoolean("idea.dynamic.vmoptions", true);
+    return true;
   }
 
+  @Deprecated
   public static boolean useDynamicParameters() {
-    return ApplicationPropertiesComponent.getInstance().getBoolean("idea.dynamic.parameters", true);
+    return true;
   }
 
+  @Deprecated
   public static boolean useClasspathJar() {
-    return ApplicationPropertiesComponent.getInstance().getBoolean("idea.dynamic.classpath.jar", true);
+    return true;
   }
 
+  @Deprecated
   public static boolean useDynamicClasspath(@Nullable Project project) {
-    boolean hasDynamicProperty = Boolean.parseBoolean(Platform.current().jvm().getRuntimeProperty("idea.dynamic.classpath", "false"));
-    return project != null ? ProjectPropertiesComponent.getInstance(project).getBoolean("dynamic.classpath", hasDynamicProperty) : hasDynamicProperty;
+    return true;
   }
 
   public static GeneralCommandLine setupJVMCommandLine(@Nonnull OwnSimpleJavaParameters javaParameters) throws CantRunException {
@@ -145,8 +145,8 @@ public class OwnJdkUtil {
 
     ParametersList vmParameters = javaParameters.getVMParametersList();
     boolean dynamicClasspath = javaParameters.isDynamicClasspath();
-    boolean dynamicVMOptions = dynamicClasspath && javaParameters.isDynamicVMOptions() && useDynamicVMOptions();
-    boolean dynamicParameters = dynamicClasspath && javaParameters.isDynamicParameters() && useDynamicParameters();
+    boolean dynamicVMOptions = dynamicClasspath && javaParameters.isDynamicVMOptions();
+    boolean dynamicParameters = dynamicClasspath && javaParameters.isDynamicParameters();
     boolean dynamicMainClass = false;
 
     if (dynamicClasspath) {
@@ -270,7 +270,7 @@ public class OwnJdkUtil {
                                        boolean dynamicVMOptions,
                                        boolean dynamicParameters) throws CantRunException {
     try {
-      File argFile = FileUtil.createTempFile("idea_arg_file", null);
+      File argFile = FileUtil.createTempFile("consulo_arg_file", null);
 
       try (PrintWriter writer = new PrintWriter(argFile)) {
         if (dynamicVMOptions) {

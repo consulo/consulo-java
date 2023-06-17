@@ -317,7 +317,7 @@ public abstract class JavaTestFrameworkRunnableState<T extends ModuleBasedConfig
     try {
       final File tempFile = FileUtil.createTempFile("command.line", "", true);
       try (PrintWriter writer = new PrintWriter(tempFile, CharsetToolkit.UTF8)) {
-        if (OwnJdkUtil.useDynamicClasspath(getConfiguration().getProject()) && forkPerModule()) {
+        if (forkPerModule()) {
           writer.println("use classpath jar");
         } else {
           writer.println("");
