@@ -4,3 +4,4 @@
 /target
 target/
 dependency-reduced-pom.xml
+plugin/sandbox
