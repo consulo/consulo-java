@@ -19,21 +19,22 @@ import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.JavaDocTokenType;
 import com.intellij.java.language.psi.JavaTokenType;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.codeEditor.Editor;
-import consulo.ide.impl.psi.impl.source.codeStyle.SemanticEditorPosition;
-import consulo.ide.impl.psi.impl.source.codeStyle.lineIndent.JavaLikeLangLineIndentProvider;
+import consulo.document.Document;
 import consulo.language.Language;
 import consulo.language.ast.IElementType;
 import consulo.language.ast.TokenType;
 import consulo.language.codeStyle.Indent;
+import consulo.language.codeStyle.lineIndent.JavaLikeLangLineIndentProvider;
+import consulo.language.codeStyle.lineIndent.SemanticEditorPosition;
+import consulo.language.codeStyle.lineIndent.SemanticEditorPositionFactory;
 import consulo.project.Project;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.HashMap;
 
-import static consulo.ide.impl.psi.impl.source.codeStyle.lineIndent.JavaLikeLangLineIndentProvider.JavaLikeElement.*;
 import static consulo.language.codeStyle.Indent.Type.CONTINUATION;
+import static consulo.language.codeStyle.lineIndent.JavaLikeLangLineIndentProvider.JavaLikeElement.*;
 
 /**
  * @author Rustam Vishnyakov
@@ -84,9 +85,10 @@ public class JavaLineIndentProvider extends JavaLikeLangLineIndentProvider
 
 	@Nullable
 	@Override
-	protected Indent getIndentInBlock(@Nonnull Project project,
-									  @Nullable Language language,
-									  @Nonnull SemanticEditorPosition blockStartPosition)
+	protected Indent getIndentInBlock(@jakarta.annotation.Nonnull Project project,
+									  @jakarta.annotation.Nonnull Document document,
+									  @jakarta.annotation.Nullable Language language,
+									  @jakarta.annotation.Nonnull SemanticEditorPosition blockStartPosition)
 	{
 		SemanticEditorPosition beforeStart = blockStartPosition.before().beforeOptional(Whitespace);
 		if(beforeStart.isAt(JavaTokenType.EQ) ||
@@ -97,7 +99,7 @@ public class JavaLineIndentProvider extends JavaLikeLangLineIndentProvider
 			// For arrays like int x = {<caret>0, 1, 2}
 			return getDefaultIndentFromType(CONTINUATION);
 		}
-		return super.getIndentInBlock(project, language, blockStartPosition);
+		return super.getIndentInBlock(project, document, language, blockStartPosition);
 	}
 
 	@Override
@@ -107,16 +109,18 @@ public class JavaLineIndentProvider extends JavaLikeLangLineIndentProvider
 	}
 
 	@Override
-	protected boolean isInArray(@Nonnull Editor editor, int offset)
+	protected boolean isInArray(@Nonnull SemanticEditorPositionFactory factory, int offset)
 	{
-		SemanticEditorPosition position = getPosition(editor, offset);
+		SemanticEditorPosition position = getPosition(factory, offset);
 		position.moveBefore();
 		if(position.isAt(JavaTokenType.LBRACE))
 		{
 			if(position.before().beforeOptional(Whitespace).isAt(JavaTokenType.RBRACKET))
+			{
 				return true;
+			}
 		}
-		return super.isInArray(editor, offset);
+		return super.isInArray(factory, offset);
 	}
 
 	@Override
