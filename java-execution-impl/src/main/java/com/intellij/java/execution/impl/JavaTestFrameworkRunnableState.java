@@ -231,7 +231,6 @@ public abstract class JavaTestFrameworkRunnableState<T extends ModuleBasedConfig
   protected OwnJavaParameters createJavaParameters() throws ExecutionException {
     final OwnJavaParameters javaParameters = new OwnJavaParameters();
     Project project = getConfiguration().getProject();
-    javaParameters.setShortenCommandLine(getConfiguration().getShortenCommandLine(), project);
     final Module module = getConfiguration().getConfigurationModule().getModule();
 
     Sdk jdk = module == null ? null : ModuleUtilCore.getSdk(module, JavaModuleExtension.class);
@@ -265,6 +264,7 @@ public abstract class JavaTestFrameworkRunnableState<T extends ModuleBasedConfig
       javaParameters.getVMParametersList().addProperty("idea.test.cyclic.buffer.size", String.valueOf(ConsoleBuffer.getCycleBufferSize()));
     }
 
+    javaParameters.setShortenCommandLine(getConfiguration().getShortenCommandLine(), project);
     return javaParameters;
   }
 
