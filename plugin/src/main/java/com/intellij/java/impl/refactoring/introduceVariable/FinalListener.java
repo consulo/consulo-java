@@ -1,15 +1,15 @@
 package com.intellij.java.impl.refactoring.introduceVariable;
 
-import consulo.language.editor.completion.lookup.LookupManager;
-import consulo.ide.impl.idea.codeInsight.lookup.impl.LookupImpl;
 import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.java.language.psi.PsiModifierList;
 import com.intellij.java.language.psi.PsiTypeElement;
 import com.intellij.java.language.psi.PsiVariable;
-import consulo.logging.Logger;
-import consulo.document.Document;
 import consulo.codeEditor.Editor;
-import consulo.language.psi.*;
+import consulo.document.Document;
+import consulo.language.editor.completion.lookup.LookupEx;
+import consulo.language.editor.completion.lookup.LookupManager;
+import consulo.language.psi.PsiDocumentManager;
+import consulo.logging.Logger;
 
 /**
 * User: anna
@@ -46,7 +46,7 @@ public class FinalListener {
         }
       }
     };
-    final LookupImpl lookup = (LookupImpl)LookupManager.getActiveLookup(myEditor);
+    final LookupEx lookup = LookupManager.getActiveLookup(myEditor);
     if (lookup != null) {
       lookup.performGuardedChange(runnable);
     } else {

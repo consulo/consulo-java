@@ -24,16 +24,17 @@
  */
 package com.intellij.java.impl.codeInsight.completion;
 
+import com.intellij.java.language.JavaLanguage;
+import com.intellij.java.language.patterns.PsiJavaPatterns;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.completion.lookup.CharFilter;
 import consulo.language.editor.completion.lookup.Lookup;
 import consulo.language.editor.completion.lookup.LookupElement;
-import consulo.ide.impl.idea.codeInsight.lookup.impl.LookupImpl;
-import com.intellij.java.language.JavaLanguage;
-import com.intellij.java.language.patterns.PsiJavaPatterns;
-import com.intellij.java.language.psi.*;
-import consulo.language.psi.*;
-import com.intellij.java.language.psi.javadoc.PsiDocComment;
+import consulo.language.psi.PsiDocumentManager;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
 
 @ExtensionImpl(id = "java")
@@ -93,7 +94,7 @@ public class JavaCharFilter extends CharFilter {
       }
     }
     if ((c == ',' || c == '=') && o instanceof PsiVariable) {
-      int lookupStart = ((LookupImpl)lookup).getLookupStart();
+      int lookupStart = lookup.getLookupStart();
       String name = ((PsiVariable)o).getName();
       if (lookupStart >= 0 && name != null && name.equals(lookup.itemPattern(item))) {
         return Result.HIDE_LOOKUP;
