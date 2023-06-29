@@ -45,13 +45,13 @@ import consulo.disposer.Disposer;
 import consulo.execution.debug.XDebugSession;
 import consulo.execution.debug.XDebuggerManager;
 import consulo.execution.debug.event.XDebugSessionListener;
-import consulo.ide.impl.idea.openapi.actionSystem.impl.ActionButtonImpl;
 import consulo.internal.com.sun.jdi.ObjectReference;
 import consulo.internal.com.sun.jdi.ReferenceType;
 import consulo.internal.com.sun.jdi.VirtualMachine;
 import consulo.internal.com.sun.jdi.request.ClassPrepareRequest;
 import consulo.logging.Logger;
 import consulo.project.Project;
+import consulo.ui.Size;
 import consulo.ui.ex.action.*;
 import consulo.ui.ex.awt.*;
 import consulo.ui.ex.awt.event.DocumentAdapter;
@@ -294,7 +294,7 @@ public class ClassesFilteredView extends BorderLayoutPanel implements Disposable
     final Presentation actionsPresentation = new Presentation("Memory View Settings");
     actionsPresentation.setIcon(AllIcons.General.GearPlain);
 
-    final ActionButton button = new ActionButtonImpl(group, actionsPresentation, ActionPlaces.UNKNOWN, new JBDimension(25, 25));
+    final ActionButton button = ActionButtonFactory.getInstance().create(group, actionsPresentation, ActionPlaces.UNKNOWN, new Size(25, 25));
     final BorderLayoutPanel topPanel = new BorderLayoutPanel();
     topPanel.addToCenter(myFilterTextField);
     topPanel.addToRight(button.getComponent());
