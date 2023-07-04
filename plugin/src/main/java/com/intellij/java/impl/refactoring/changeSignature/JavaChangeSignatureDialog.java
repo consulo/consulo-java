@@ -208,7 +208,7 @@ public class JavaChangeSignatureDialog extends ChangeSignatureDialogBase<Paramet
     final JBTable table = new JBTable(myExceptionsModel);
     table.setStriped(true);
     table.setRowHeight(20);
-    table.getColumnModel().getColumn(0).setCellRenderer(new CodeFragmentTableCellRenderer(myProject));
+    table.getColumnModel().getColumn(0).setCellRenderer(new CodeFragmentTableCellRenderer(myProject, JavaFileType.INSTANCE));
     final JavaCodeFragmentTableCellEditor cellEditor = new JavaCodeFragmentTableCellEditor(myProject);
     cellEditor.addDocumentListener(new DocumentAdapter() {
       @Override

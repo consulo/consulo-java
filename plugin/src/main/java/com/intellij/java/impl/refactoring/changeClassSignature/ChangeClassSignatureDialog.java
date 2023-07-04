@@ -15,52 +15,37 @@
  */
 package com.intellij.java.impl.refactoring.changeClassSignature;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.intellij.java.impl.refactoring.HelpID;
+import com.intellij.java.impl.refactoring.ui.JavaCodeFragmentTableCellEditor;
+import com.intellij.java.language.impl.JavaFileType;
+import com.intellij.java.language.psi.*;
+import consulo.ide.impl.idea.refactoring.ui.CodeFragmentTableCellRenderer;
+import consulo.ide.impl.idea.ui.TableColumnAnimator;
+import consulo.language.editor.refactoring.RefactoringBundle;
+import consulo.language.editor.refactoring.ui.RefactoringDialog;
+import consulo.language.editor.refactoring.ui.StringTableCellEditor;
+import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
+import consulo.language.findUsage.DescriptiveNameUtil;
+import consulo.logging.Logger;
+import consulo.project.Project;
+import consulo.ui.ex.awt.ColoredTableCellRenderer;
+import consulo.ui.ex.awt.EditableModel;
+import consulo.ui.ex.awt.SeparatorFactory;
+import consulo.ui.ex.awt.ToolbarDecorator;
+import consulo.ui.ex.awt.table.JBTable;
+import consulo.ui.ex.awt.util.TableUtil;
+import consulo.util.collection.ContainerUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTable;
-import javax.swing.ListSelectionModel;
+import javax.swing.*;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableColumn;
-
-import consulo.language.findUsage.DescriptiveNameUtil;
-import consulo.logging.Logger;
-import consulo.project.Project;
-import com.intellij.java.language.psi.JavaCodeFragmentFactory;
-import com.intellij.java.language.psi.PsiClass;
-import com.intellij.java.language.psi.PsiNameHelper;
-import com.intellij.java.language.psi.PsiPrimitiveType;
-import com.intellij.java.language.psi.PsiType;
-import com.intellij.java.language.psi.PsiTypeCodeFragment;
-import com.intellij.java.language.psi.PsiTypeParameter;
-import com.intellij.java.impl.refactoring.HelpID;
-import consulo.language.editor.refactoring.RefactoringBundle;
-import consulo.ide.impl.idea.refactoring.ui.CodeFragmentTableCellRenderer;
-import com.intellij.java.impl.refactoring.ui.JavaCodeFragmentTableCellEditor;
-import consulo.language.editor.refactoring.ui.RefactoringDialog;
-import consulo.language.editor.refactoring.ui.StringTableCellEditor;
-import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
-import consulo.ui.ex.awt.ColoredTableCellRenderer;
-import consulo.ui.ex.awt.SeparatorFactory;
-import consulo.ide.impl.idea.ui.TableColumnAnimator;
-import consulo.ui.ex.awt.util.TableUtil;
-import consulo.ui.ex.awt.ToolbarDecorator;
-import consulo.ui.ex.awt.table.JBTable;
-import consulo.util.collection.ContainerUtil;
-import consulo.ui.ex.awt.EditableModel;
+import java.awt.*;
+import java.util.List;
+import java.util.*;
 
 /**
  * @author dsl
@@ -157,7 +142,7 @@ public class ChangeClassSignatureDialog extends RefactoringDialog {
     Project project = myClass.getProject();
     nameColumn.setCellRenderer(new MyCellRenderer());
     nameColumn.setCellEditor(new StringTableCellEditor(project));
-    valueColumn.setCellRenderer(new MyCodeFragmentTableCellRenderer());
+    valueColumn.setCellRenderer(new CodeFragmentTableCellRenderer(project, JavaFileType.INSTANCE));
     valueColumn.setCellEditor(new JavaCodeFragmentTableCellEditor(project));
 
     myTable.setPreferredScrollableViewportSize(new Dimension(210, myTable.getRowHeight() * 4));
@@ -342,24 +327,6 @@ public class ChangeClassSignatureDialog extends RefactoringDialog {
       acquireState(table, isSelected, false, row, col);
       getCellState().updateRenderer(this);
       append((String)value);
-    }
-  }
-
-  private class MyCodeFragmentTableCellRenderer extends CodeFragmentTableCellRenderer {
-
-    public MyCodeFragmentTableCellRenderer() {
-      super(getProject());
-    }
-
-    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-      final Component component = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-      //if (!myTableModel.isCellEditable(row, column)) {
-      //  component.setBackground(component.getBackground().darker());
-      //}
-
-      //TODO: better solution
-
-      return component;
     }
   }
 }
