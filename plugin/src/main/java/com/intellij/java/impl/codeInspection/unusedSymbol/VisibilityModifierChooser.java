@@ -17,7 +17,7 @@ package com.intellij.java.impl.codeInspection.unusedSymbol;
 
 import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.java.language.util.VisibilityUtil;
-import consulo.application.AllIcons;
+import consulo.platform.base.icon.PlatformIconGroup;
 import consulo.ui.ex.RelativePoint;
 import consulo.ui.ex.UserActivityProviderComponent;
 import consulo.ui.ex.awt.ClickListener;
@@ -67,8 +67,8 @@ public class VisibilityModifierChooser extends JLabel implements UserActivityPro
 
   public VisibilityModifierChooser(@Nonnull Supplier<Boolean> canBeEnabled, @Nonnull String modifier, @Nonnull Consumer<String> modifierChangedConsumer, @Nonnull String[] modifiers) {
     myCanBeEnabled = canBeEnabled;
-    setIcon(TargetAWT.to(AllIcons.General.Combo2));
-    setDisabledIcon(TargetAWT.to(AllIcons.General.Combo2));
+    setIcon(TargetAWT.to(PlatformIconGroup.generalArrowdown()));
+    setDisabledIcon(TargetAWT.to(PlatformIconGroup.generalArrowdown()));
     setIconTextGap(0);
     setHorizontalTextPosition(SwingConstants.LEFT);
     myCurrentModifier = modifier;
