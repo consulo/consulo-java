@@ -15,15 +15,16 @@
  */
 package com.intellij.java.impl.psi.util;
 
-import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.JavaRecursiveElementWalkingVisitor;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiLiteralExpression;
+import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ServiceAPI;
 import consulo.annotation.component.ServiceImpl;
-import consulo.application.Application;
 import consulo.disposer.Disposable;
 import consulo.ide.ServiceManager;
-import consulo.ide.impl.idea.openapi.vfs.VfsUtilCore;
 import consulo.language.psi.*;
 import consulo.language.psi.path.FileReference;
 import consulo.project.Project;
@@ -38,6 +39,7 @@ import jakarta.inject.Singleton;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -145,7 +147,7 @@ public class ProjectIconsAccessor implements Disposable
 		{
 			try
 			{
-				final Image icon = createOrFindBetterIcon(file, isConsuloProject(element));
+				final Image icon = createOrFindBetterIcon(file);
 				iconInfo = new Pair<>(stamp, hasProperSize(icon) ? icon : null);
 				myIconsCache.put(file.getPath(), iconInfo);
 			}
@@ -173,22 +175,18 @@ public class ProjectIconsAccessor implements Disposable
 		return icon.getHeight() <= JBUI.scale(ICON_MAX_WEIGHT) && icon.getWidth() <= JBUI.scale(ICON_MAX_HEIGHT);
 	}
 
-	private static boolean isConsuloProject(@Nullable PsiElement element)
+	private static Image createOrFindBetterIcon(VirtualFile file) throws IOException
 	{
-		if(element == null)
+		Image.ImageType imageType = Image.ImageType.PNG;
+		if("svg".equalsIgnoreCase(file.getExtension()))
 		{
-			return false;
+			imageType = Image.ImageType.SVG;
 		}
-		return JavaPsiFacade.getInstance(element.getProject()).findClass(Application.class.getName(), element.getResolveScope()) != null;
-	}
 
-	private static Image createOrFindBetterIcon(VirtualFile file, boolean useIconLoader) throws IOException
-	{
-		//		if(useIconLoader)
-		//		{
-		//			return IconLoader.findIcon(new File(file.getPath()).toURI().toURL());
-		//		}
-		return Image.fromUrl(VfsUtilCore.virtualToIoFile(file).toURI().toURL());
+		try (InputStream stream = file.getInputStream())
+		{
+			return Image.fromStream(imageType, stream);
+		}
 	}
 
 	@Override
