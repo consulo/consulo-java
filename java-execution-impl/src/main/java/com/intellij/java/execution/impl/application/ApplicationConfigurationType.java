@@ -15,19 +15,20 @@
  */
 package com.intellij.java.execution.impl.application;
 
-import com.intellij.java.language.JavaCoreBundle;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiJavaFile;
 import com.intellij.java.language.psi.util.PsiMethodUtil;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.application.AllIcons;
 import consulo.execution.configuration.ConfigurationFactory;
 import consulo.execution.configuration.ConfigurationType;
 import consulo.execution.configuration.ModuleBasedConfiguration;
 import consulo.execution.configuration.RunConfiguration;
+import consulo.java.execution.localize.JavaExecutionLocalize;
 import consulo.java.language.module.extension.JavaModuleExtension;
 import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
 import consulo.module.extension.ModuleExtensionHelper;
+import consulo.platform.base.icon.PlatformIconGroup;
 import consulo.project.Project;
 import consulo.ui.image.Image;
 import org.jetbrains.annotations.NonNls;
@@ -59,18 +60,18 @@ public class ApplicationConfigurationType implements ConfigurationType {
   }
 
   @Override
-  public String getDisplayName() {
-    return JavaCoreBundle.message("application.configuration.name");
+  public LocalizeValue getDisplayName() {
+    return JavaExecutionLocalize.applicationConfigurationName();
   }
 
   @Override
-  public String getConfigurationTypeDescription() {
-    return JavaCoreBundle.message("application.configuration.description");
+  public LocalizeValue getConfigurationTypeDescription() {
+    return JavaExecutionLocalize.applicationConfigurationDescription();
   }
 
   @Override
   public Image getIcon() {
-    return AllIcons.RunConfigurations.Application;
+    return PlatformIconGroup.runconfigurationsApplication();
   }
 
   @Override

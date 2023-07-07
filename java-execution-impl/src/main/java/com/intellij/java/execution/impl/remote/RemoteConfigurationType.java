@@ -21,23 +21,21 @@
 package com.intellij.java.execution.impl.remote;
 
 import consulo.annotation.component.ExtensionImpl;
-import consulo.application.AllIcons;
 import consulo.execution.configuration.ConfigurationFactory;
 import consulo.execution.configuration.ConfigurationTypeBase;
 import consulo.execution.configuration.RunConfiguration;
-import consulo.java.execution.JavaExecutionBundle;
+import consulo.java.execution.localize.JavaExecutionLocalize;
 import consulo.java.language.module.extension.JavaModuleExtension;
 import consulo.module.extension.ModuleExtensionHelper;
+import consulo.platform.base.icon.PlatformIconGroup;
 import consulo.project.Project;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 @ExtensionImpl
 public class RemoteConfigurationType extends ConfigurationTypeBase {
   public RemoteConfigurationType() {
-    super("JavaRemoteConfigurationType", JavaExecutionBundle.message("remote.debug.configuration.display.name"), JavaExecutionBundle.message("remote.debug.configuration.description"), AllIcons
-        .RunConfigurations.Remote);
+    super("JavaRemoteConfigurationType", JavaExecutionLocalize.remoteDebugConfigurationDisplayName(), JavaExecutionLocalize.remoteDebugConfigurationDescription(), PlatformIconGroup.runconfigurationsRemote());
     addFactory(new ConfigurationFactory(this) {
       @Override
       public RunConfiguration createTemplateConfiguration(Project project) {
@@ -51,7 +49,7 @@ public class RemoteConfigurationType extends ConfigurationTypeBase {
     });
   }
 
-  @Nullable
+  @Nonnull
   public static RemoteConfigurationType getInstance() {
     return EP_NAME.findExtensionOrFail(RemoteConfigurationType.class);
   }

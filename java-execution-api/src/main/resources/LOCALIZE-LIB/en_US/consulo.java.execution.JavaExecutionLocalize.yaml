@@ -1,0 +1,28 @@
+remote.debug.configuration.description:
+  text: Java Remote debug configuration
+remote.debug.configuration.display.name:
+  text: Java Remote
+jre.path.is.not.valid.jre.home.error.message:
+  text: '''''{0}'''' is not a valid JRE home'
+show.swing.inspector:
+  text: '&Enable capturing form snapshots'
+show.swing.inspector.disabled:
+  text: '&Enable capturing form snapshots (requires JRE 5.0 or higher)'
+application.configuration.shorten.command.line.label:
+  text: 'Shorten command &line:'
+application.configuration.main.class.label:
+  text: 'Main &class:'
+application.configuration.use.classpath.and.jdk.of.module.label:
+  text: 'Use classpath of m&odule:'
+application.configuration.include.provided.scope:
+  text: Include dependencies with "Provided" scope
+run.configuration.jre.label:
+  text: '&JRE:'
+jar.application.configuration.description:
+  text: Configuration to run a JAR file using 'java -jar' command
+jar.application.configuration.name:
+  text: JAR Application
+application.configuration.description:
+  text: Java Application configuration
+application.configuration.name:
+  text: Java Application

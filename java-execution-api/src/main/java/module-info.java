@@ -15,4 +15,5 @@ module consulo.java.execution.api {
 	exports consulo.java.execution;
 	exports consulo.java.execution.configurations;
 	exports consulo.java.execution.projectRoots;
+	exports consulo.java.execution.localize;
 }

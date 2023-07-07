@@ -6,7 +6,7 @@ package com.intellij.java.execution.impl.jar;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.application.AllIcons;
 import consulo.execution.configuration.*;
-import consulo.java.execution.JavaExecutionBundle;
+import consulo.java.execution.localize.JavaExecutionLocalize;
 import consulo.java.language.module.extension.JavaModuleExtension;
 import consulo.module.extension.ModuleExtensionHelper;
 import consulo.project.Project;
@@ -23,8 +23,8 @@ public class JarApplicationConfigurationType extends ConfigurationTypeBase imple
   }
 
   public JarApplicationConfigurationType() {
-    super("JarApplication", JavaExecutionBundle.message("jar.application.configuration.name"), JavaExecutionBundle.message("jar.application.configuration.description"), AllIcons.FileTypes.Archive);
-    addFactory(new ConfigurationFactoryEx(this) {
+    super("JarApplication", JavaExecutionLocalize.jarApplicationConfigurationName(), JavaExecutionLocalize.jarApplicationConfigurationDescription(), AllIcons.FileTypes.Archive);
+    addFactory(new ConfigurationFactory(this) {
       @Override
       public void onNewConfigurationCreated(@Nonnull RunConfiguration configuration) {
         JarApplicationConfiguration jarApplicationConfiguration = (JarApplicationConfiguration) configuration;
