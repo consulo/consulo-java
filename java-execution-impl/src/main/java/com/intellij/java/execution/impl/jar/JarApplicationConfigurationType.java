@@ -34,6 +34,13 @@ public class JarApplicationConfigurationType extends ConfigurationTypeBase imple
         }
       }
 
+      @Nonnull
+      @Override
+      public String getId() {
+        // not localized string - do not change if not want break old configurations 
+        return "JAR Application";
+      }
+
       @Override
       @Nonnull
       public RunConfiguration createTemplateConfiguration(Project project) {

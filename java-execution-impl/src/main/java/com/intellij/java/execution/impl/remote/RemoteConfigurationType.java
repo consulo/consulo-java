@@ -37,6 +37,12 @@ public class RemoteConfigurationType extends ConfigurationTypeBase {
   public RemoteConfigurationType() {
     super("JavaRemoteConfigurationType", JavaExecutionLocalize.remoteDebugConfigurationDisplayName(), JavaExecutionLocalize.remoteDebugConfigurationDescription(), PlatformIconGroup.runconfigurationsRemote());
     addFactory(new ConfigurationFactory(this) {
+      @Nonnull
+      @Override
+      public String getId() {
+        return "Java Remote";
+      }
+
       @Override
       public RunConfiguration createTemplateConfiguration(Project project) {
         return new RemoteConfiguration(project, this);

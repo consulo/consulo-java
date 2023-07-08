@@ -42,6 +42,13 @@ public class ApplicationConfigurationType implements ConfigurationType {
 
   public ApplicationConfigurationType() {
     myFactory = new ConfigurationFactory(this) {
+      @Nonnull
+      @Override
+      public String getId() {
+        // non localized string as id - do change, this can break loading old projects
+        return "Java Application";
+      }
+
       @Override
       public RunConfiguration createTemplateConfiguration(Project project) {
         return new ApplicationConfiguration("", project, ApplicationConfigurationType.this);
