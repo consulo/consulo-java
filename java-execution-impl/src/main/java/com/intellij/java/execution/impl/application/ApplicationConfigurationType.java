@@ -24,11 +24,11 @@ import consulo.execution.configuration.ConfigurationType;
 import consulo.execution.configuration.ModuleBasedConfiguration;
 import consulo.execution.configuration.RunConfiguration;
 import consulo.java.execution.localize.JavaExecutionLocalize;
+import consulo.java.language.impl.icon.JavaPsiImplIconGroup;
 import consulo.java.language.module.extension.JavaModuleExtension;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
 import consulo.module.extension.ModuleExtensionHelper;
-import consulo.platform.base.icon.PlatformIconGroup;
 import consulo.project.Project;
 import consulo.ui.image.Image;
 import org.jetbrains.annotations.NonNls;
@@ -78,7 +78,7 @@ public class ApplicationConfigurationType implements ConfigurationType {
 
   @Override
   public Image getIcon() {
-    return PlatformIconGroup.runconfigurationsApplication();
+    return JavaPsiImplIconGroup.java();
   }
 
   @Override
