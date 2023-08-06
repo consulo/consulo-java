@@ -37,7 +37,7 @@ import java.io.IOException;
  * @author max
  */
 public class JavaFileElementType extends ILightStubFileElementType<PsiJavaFileStub> {
-  public static final int STUB_VERSION = 51;
+  public static final int STUB_VERSION = 52;
 
   public JavaFileElementType() {
     super("java.FILE", JavaLanguage.INSTANCE);

@@ -93,4 +93,6 @@ public interface PsiKeyword extends PsiJavaToken {
   String SEALED = "sealed";
   String PERMITS = "permits";
   String NON_SEALED = "non-sealed";
+  
+  String WHEN = "when";
 }

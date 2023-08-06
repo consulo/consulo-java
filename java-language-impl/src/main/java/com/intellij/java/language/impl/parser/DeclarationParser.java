@@ -451,20 +451,30 @@ public class DeclarationParser {
     boolean isEmpty = true;
 
     while (true) {
-      final IElementType tokenType = builder.getTokenType();
-      if (tokenType == null) {
-        break;
+      IElementType tokenType = builder.getTokenType();
+      if (tokenType == null) break;
+      if (isSealedToken(builder, tokenType)) {
+        builder.remapCurrentToken(JavaTokenType.SEALED_KEYWORD);
+        tokenType = JavaTokenType.SEALED_KEYWORD;
       }
-      if (modifiers.contains(tokenType)) {
+      if (isNonSealedToken(builder, tokenType)) {
+        PsiBuilder.Marker nonSealed = builder.mark();
+        PsiBuilderUtil.advance(builder, 3);
+        nonSealed.collapse(JavaTokenType.NON_SEALED_KEYWORD);
+        isEmpty = false;
+      }
+      else if (modifiers.contains(tokenType)) {
         builder.advanceLexer();
         isEmpty = false;
-      } else if (tokenType == JavaTokenType.AT) {
+      }
+      else if (tokenType == JavaTokenType.AT) {
         if (ElementType.KEYWORD_BIT_SET.contains(builder.lookAhead(1))) {
           break;
         }
         parseAnnotation(builder);
         isEmpty = false;
-      } else {
+      }
+      else {
         break;
       }
     }

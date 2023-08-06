@@ -38,6 +38,7 @@ import consulo.language.psi.*;
 import consulo.language.psi.resolve.PsiScopeProcessor;
 import consulo.language.psi.resolve.ResolveCache;
 import consulo.language.psi.resolve.ResolveState;
+import consulo.language.psi.util.PsiTreeUtil;
 import consulo.project.Project;
 
 import javax.annotation.Nonnull;
@@ -48,7 +49,7 @@ public class JavaResolveUtil {
     PsiElement scope = element.getContext();
     while (scope != null) {
       if (scope instanceof PsiClass) {
-        return (PsiClass) scope;
+        return (PsiClass)scope;
       }
       scope = scope.getContext();
     }
@@ -84,18 +85,15 @@ public class JavaResolveUtil {
     }
 
     if (placeFile instanceof JavaCodeFragment) {
-      JavaCodeFragment fragment = (JavaCodeFragment) placeFile;
+      JavaCodeFragment fragment = (JavaCodeFragment)placeFile;
       JavaCodeFragment.VisibilityChecker visibilityChecker = fragment.getVisibilityChecker();
       if (visibilityChecker != null) {
         JavaCodeFragment.VisibilityChecker.Visibility visibility = visibilityChecker.isDeclarationVisible(member, place);
-        if (visibility == JavaCodeFragment.VisibilityChecker.Visibility.VISIBLE) {
-          return true;
-        }
-        if (visibility == JavaCodeFragment.VisibilityChecker.Visibility.NOT_VISIBLE) {
-          return false;
-        }
+        if (visibility == JavaCodeFragment.VisibilityChecker.Visibility.VISIBLE) return true;
+        if (visibility == JavaCodeFragment.VisibilityChecker.Visibility.NOT_VISIBLE) return false;
       }
-    } else if (ignoreReferencedElementAccessibility(placeFile)) {
+    }
+    else if (ignoreReferencedElementAccessibility(placeFile)) {
       return true;
     }
 
@@ -126,66 +124,65 @@ public class JavaResolveUtil {
       if (memberClass == null) {
         return false;
       }
-      for (PsiElement placeParent = place; placeParent != null; placeParent = placeParent.getContext()) {
-        if (placeParent instanceof PsiClass && InheritanceUtil.isInheritorOrSelf((PsiClass) placeParent, memberClass, true)) {
-          if (member instanceof PsiClass ||
-              modifierList.hasModifierProperty(PsiModifier.STATIC) ||
-              accessObjectClass == null ||
-              InheritanceUtil.isInheritorOrSelf(accessObjectClass, (PsiClass) placeParent, true)) {
-            return true;
-          }
+      PsiClass contextClass;
+      if (member instanceof PsiClass) {
+        // if resolving supertype reference, skip its containing class with getContextClass
+        contextClass = getContextClass(place);
+      }
+      else {
+        contextClass = PsiTreeUtil.getContextOfType(place, PsiClass.class, false);
+        if (isInClassAnnotationParameterList(place, contextClass)) return false;
+        if (contextClass instanceof PsiAnonymousClass &&
+          PsiTreeUtil.isAncestor(((PsiAnonymousClass)contextClass).getArgumentList(), place, true)) {
+          contextClass = PsiTreeUtil.getContextOfType(contextClass, PsiClass.class, true);
         }
       }
-      return false;
+      return canAccessProtectedMember(member, memberClass, accessObjectClass, contextClass,
+                                      modifierList.hasModifierProperty(PsiModifier.STATIC));
     }
 
     if (effectiveAccessLevel == PsiUtil.ACCESS_LEVEL_PRIVATE) {
-      if (memberClass == null) {
-        return true;
-      }
+      if (memberClass == null) return true;
       if (accessObjectClass != null) {
         PsiClass topMemberClass = getTopLevelClass(memberClass, accessObjectClass);
         PsiClass topAccessClass = getTopLevelClass(accessObjectClass, memberClass);
-        if (!manager.areElementsEquivalent(topMemberClass, topAccessClass)) {
-          return false;
-        }
+        if (!manager.areElementsEquivalent(topMemberClass, topAccessClass)) return false;
         if (accessObjectClass instanceof PsiAnonymousClass && accessObjectClass.isInheritor(memberClass, true)) {
-          if (place instanceof PsiMethodCallExpression) {
+          if (!(place instanceof PsiAnonymousClass)) {
             return false;
           }
         }
       }
 
+      PsiClass memberTopLevelClass = getTopLevelClass(memberClass, null);
       if (fileResolveScope == null) {
         PsiClass placeTopLevelClass = getTopLevelClass(place, null);
-        PsiClass memberTopLevelClass = getTopLevelClass(memberClass, null);
-        return manager.areElementsEquivalent(placeTopLevelClass, memberTopLevelClass);
-      } else {
-        return fileResolveScope instanceof PsiClass && !((PsiClass) fileResolveScope).isInheritor(memberClass, true);
+        return manager.areElementsEquivalent(placeTopLevelClass, memberTopLevelClass) &&
+          !isInClassAnnotationParameterList(place, placeTopLevelClass);
+      }
+      else {
+        PsiClass scopeTopLevelClass = getTopLevelClass(fileResolveScope, null);
+        return manager.areElementsEquivalent(scopeTopLevelClass, memberTopLevelClass) &&
+          fileResolveScope instanceof PsiClass &&
+          !((PsiClass)fileResolveScope).isInheritor(memberClass, true);
       }
     }
 
-    if (!facade.arePackagesTheSame(member, place)) {
-      return false;
-    }
+    if (!facade.arePackagesTheSame(member, place)) return false;
     //if (modifierList.hasModifierProperty(PsiModifier.STATIC)) return true;
-    // maybe inheritance lead through package local class in other package ?
+    // maybe inheritance lead through package-private class in other package ?
     final PsiClass placeClass = getContextClass(place);
-    if (memberClass == null || placeClass == null) {
-      return true;
-    }
+    if (memberClass == null || placeClass == null) return true;
     // check only classes since interface members are public,  and if placeClass is interface,
     // then its members are static, and cannot refer to non-static members of memberClass
-    if (memberClass.isInterface() || placeClass.isInterface()) {
-      return true;
-    }
-    PsiClass clazz = accessObjectClass != null ? accessObjectClass : placeClass.getSuperClass(); //may start from super class
+    if (memberClass.isInterface() || placeClass.isInterface()) return true;
+    PsiClass clazz = accessObjectClass != null ?
+      accessObjectClass :
+      placeClass.getSuperClass(); //may start from super class
     if (clazz != null && clazz.isInheritor(memberClass, true)) {
       PsiClass superClass = clazz;
       while (!manager.areElementsEquivalent(superClass, memberClass)) {
-        if (superClass == null || !facade.arePackagesTheSame(superClass, memberClass)) {
-          return false;
-        }
+        if (superClass == null || !facade.arePackagesTheSame(superClass, memberClass)) return false;
         superClass = superClass.getSuperClass();
       }
     }
@@ -193,10 +190,36 @@ public class JavaResolveUtil {
     return true;
   }
 
+  public static boolean canAccessProtectedMember(@Nonnull PsiMember member,
+                                                 @Nonnull PsiClass memberClass,
+                                                 @Nullable PsiClass accessObjectClass, @Nullable PsiClass contextClass, boolean isStatic) {
+    while (contextClass != null) {
+      if (InheritanceUtil.isInheritorOrSelf(contextClass, memberClass, true)) {
+        if (member instanceof PsiClass || isStatic || accessObjectClass == null
+          || InheritanceUtil.isInheritorOrSelf(accessObjectClass, contextClass, true)) {
+          return true;
+        }
+      }
+
+      contextClass = getContextClass(contextClass);
+    }
+    return false;
+  }
+
+  private static boolean isInClassAnnotationParameterList(@Nonnull PsiElement place, @Nullable PsiClass contextClass) {
+    if (contextClass != null) {
+      PsiAnnotation annotation = PsiTreeUtil.getContextOfType(place, PsiAnnotation.class, true);
+      if (annotation != null && PsiTreeUtil.isAncestor(contextClass.getModifierList(), annotation, false)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   private static boolean ignoreReferencedElementAccessibility(PsiFile placeFile) {
     return placeFile instanceof FileResolveScopeProvider &&
-        ((FileResolveScopeProvider) placeFile).ignoreReferencedElementAccessibility() &&
-        !PsiImplUtil.isInServerPage(placeFile);
+      ((FileResolveScopeProvider)placeFile).ignoreReferencedElementAccessibility() &&
+      !PsiImplUtil.isInServerPage(placeFile);
   }
 
   public static boolean isInJavaDoc(final PsiElement place) {
@@ -223,7 +246,7 @@ public class JavaResolveUtil {
           isAtLeast17 = JavaVersionService.getInstance().isAtLeast(placeParent, JavaSdkVersion.JDK_1_7);
         }
         if (!isTypeParameter || isAtLeast17) {
-          PsiClass aClass = (PsiClass) placeParent;
+          PsiClass aClass = (PsiClass)placeParent;
 
           if (memberClass != null && aClass.isInheritor(memberClass, true)) {
             return aClass;
@@ -237,7 +260,10 @@ public class JavaResolveUtil {
     return lastClass;
   }
 
-  public static boolean processImplicitlyImportedPackages(final PsiScopeProcessor processor, final ResolveState state, final PsiElement place, PsiManager manager) {
+  public static boolean processImplicitlyImportedPackages(final PsiScopeProcessor processor,
+                                                          final ResolveState state,
+                                                          final PsiElement place,
+                                                          PsiManager manager) {
     PsiPackage defaultPackage = JavaPsiFacade.getInstance(manager.getProject()).findPackage("");
     if (defaultPackage != null) {
       if (!defaultPackage.processDeclarations(processor, state, null, place)) {
@@ -258,16 +284,16 @@ public class JavaResolveUtil {
   public static void substituteResults(@Nonnull final PsiJavaCodeReferenceElement ref, @Nonnull JavaResolveResult[] result) {
     if (result.length > 0 && result[0].getElement() instanceof PsiClass) {
       for (int i = 0; i < result.length; i++) {
-        final CandidateInfo resolveResult = (CandidateInfo) result[i];
+        final CandidateInfo resolveResult = (CandidateInfo)result[i];
         final PsiElement resultElement = resolveResult.getElement();
-        if (resultElement instanceof PsiClass && ((PsiClass) resultElement).hasTypeParameters()) {
+        if (resultElement instanceof PsiClass && ((PsiClass)resultElement).hasTypeParameters()) {
           PsiSubstitutor substitutor = resolveResult.getSubstitutor();
           result[i] = new CandidateInfo(resolveResult, substitutor) {
             @Nonnull
             @Override
             public PsiSubstitutor getSubstitutor() {
               final PsiType[] parameters = ref.getTypeParameters();
-              return super.getSubstitutor().putAll((PsiClass) resultElement, parameters);
+              return super.getSubstitutor().putAll((PsiClass)resultElement, parameters);
             }
           };
         }
@@ -286,8 +312,9 @@ public class JavaResolveUtil {
       return JavaResolveResult.EMPTY_ARRAY;
     }
     Project project = containingFile.getProject();
-    ResolveResult[] results = ResolveCache.getInstance(project).resolveWithCaching(ref, resolver, needToPreventRecursion, incompleteCode, containingFile);
-    return results.length == 0 ? JavaResolveResult.EMPTY_ARRAY : (JavaResolveResult[]) results;
+    ResolveResult[] results =
+      ResolveCache.getInstance(project).resolveWithCaching(ref, resolver, needToPreventRecursion, incompleteCode, containingFile);
+    return results.length == 0 ? JavaResolveResult.EMPTY_ARRAY : (JavaResolveResult[])results;
   }
 
   /**
@@ -301,9 +328,11 @@ public class JavaResolveUtil {
     PsiExpressionListImpl expressionList = new PsiExpressionListImpl();
     final DummyHolder result = DummyHolderFactory.createHolder(PsiManager.getInstance(project), place);
     final FileElement holder = result.getTreeElement();
-    holder.rawAddChildren((TreeElement) expressionList.getNode());
+    holder.rawAddChildren((TreeElement)expressionList.getNode());
 
     return PsiResolveHelper.SERVICE.getInstance(project)
-        .resolveConstructor(PsiTypesUtil.getClassType(superClassWhichTheSuperCallMustResolveTo), expressionList, place).getElement();
+                                   .resolveConstructor(PsiTypesUtil.getClassType(superClassWhichTheSuperCallMustResolveTo),
+                                                       expressionList,
+                                                       place).getElement();
   }
 }

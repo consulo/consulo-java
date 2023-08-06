@@ -27,30 +27,29 @@ import javax.annotation.Nonnull;
  * @see PsiMethod#getThrowsList()
  * @see PsiProvidesStatement#getImplementationList()
  */
-public interface PsiReferenceList extends PsiElement
-{
-	PsiReferenceList[] EMPTY_ARRAY = new PsiReferenceList[0];
+public interface PsiReferenceList extends PsiElement {
+  PsiReferenceList[] EMPTY_ARRAY = new PsiReferenceList[0];
 
-	/**
-	 * Returns the array of reference elements contained in the list.
-	 */
-	@Nonnull
-	PsiJavaCodeReferenceElement[] getReferenceElements();
+  /**
+   * Returns the array of reference elements contained in the list.
+   */
+  @Nonnull
+  PsiJavaCodeReferenceElement[] getReferenceElements();
 
-	/**
-	 * Returns the array of classes referenced by elements in the list.
-	 */
-	@Nonnull
-	PsiClassType[] getReferencedTypes();
+  /**
+   * Returns the array of classes referenced by elements in the list.
+   */
+  @Nonnull
+  PsiClassType[] getReferencedTypes();
 
-	Role getRole();
+  Role getRole();
 
-	enum Role
-	{
-		THROWS_LIST,
-		EXTENDS_LIST,
-		IMPLEMENTS_LIST,
-		EXTENDS_BOUNDS_LIST,
-		PROVIDES_WITH_LIST
-	}
+  enum Role {
+    THROWS_LIST,
+    EXTENDS_LIST,
+    IMPLEMENTS_LIST,
+    PERMITS_LIST,
+    EXTENDS_BOUNDS_LIST,
+    PROVIDES_WITH_LIST
+  }
 }
