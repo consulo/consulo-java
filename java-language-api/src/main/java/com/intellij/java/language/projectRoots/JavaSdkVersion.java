@@ -33,9 +33,15 @@ public enum JavaSdkVersion
 	JDK_14(LanguageLevel.JDK_14),
 	JDK_15(LanguageLevel.JDK_15),
 	JDK_16(LanguageLevel.JDK_16),
-	JDK_17(LanguageLevel.JDK_17);
+	JDK_17(LanguageLevel.JDK_17),
+	JDK_18(LanguageLevel.JDK_18),
+	JDK_19(LanguageLevel.JDK_19),
+	JDK_20(LanguageLevel.JDK_20),
+	JDK_21(LanguageLevel.JDK_21),
+	JDK_22(LanguageLevel.JDK_22)
+	;
 
-	public static JavaSdkVersion MAX_JDK = JDK_16;
+	public static JavaSdkVersion MAX_JDK = JDK_21;
 
 	private final LanguageLevel myMaxLanguageLevel;
 
