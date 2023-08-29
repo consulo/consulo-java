@@ -644,16 +644,20 @@ public abstract class NullableStuffInspectionBase extends AbstractBaseJavaLocalI
       PsiAnnotation annotation = notNull == null ? nullable : notNull;
       reportPrimitiveType(holder, annotation, listOwner);
     }
-    if (listOwner instanceof PsiParameter) {
-      checkLoopParameterNullability(holder, notNull, nullable, DfaPsiUtil.inferParameterNullability((PsiParameter) listOwner));
+    if (listOwner instanceof PsiParameter psiParameter) {
+      checkLoopParameterNullability(holder, notNull, nullable, DfaPsiUtil.inferParameterNullability((PsiParameter) listOwner), psiParameter);
     }
   }
 
-  private static void checkLoopParameterNullability(ProblemsHolder holder, @Nullable PsiAnnotation notNull, @Nullable PsiAnnotation nullable, Nullability expectedNullability) {
+  private static void checkLoopParameterNullability(ProblemsHolder holder, @Nullable PsiAnnotation notNull, @Nullable PsiAnnotation nullable, Nullability expectedNullability, PsiParameter owner) {
     if (notNull != null && expectedNullability == Nullability.NULLABLE) {
       holder.registerProblem(notNull, "Parameter can be null",
           new RemoveAnnotationQuickFix(notNull, null));
     } else if (nullable != null && expectedNullability == Nullability.NOT_NULL) {
+      if(nullable.getContainingFile() != owner.getContainingFile()) {
+        return;
+      }
+      
       holder.registerProblem(nullable, "Parameter is always not-null",
           new RemoveAnnotationQuickFix(nullable, null));
     }
