@@ -86,7 +86,7 @@ public final class ClassInnerStuffCache {
   }
 
   private boolean classNameIsSealed() {
-    return PsiUtil.getLanguageLevel(myClass).isAtLeast(LanguageLevel.JDK_15_PREVIEW) && PsiKeyword.SEALED.equals(myClass.getName());
+    return PsiUtil.getLanguageLevel(myClass).isAtLeast(LanguageLevel.JDK_17) && PsiKeyword.SEALED.equals(myClass.getName());
   }
 
   private boolean isAnonymousClass() {

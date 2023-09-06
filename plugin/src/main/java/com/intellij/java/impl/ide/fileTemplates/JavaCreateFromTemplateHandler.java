@@ -54,7 +54,7 @@ public class JavaCreateFromTemplateHandler implements CreateFromTemplateHandler 
     }
     final String name = "myClass" + "." + extension;
     final PsiFile psiFile = PsiFileFactory.getInstance(project).createFileFromText(name, JavaFileType.INSTANCE, content, System.currentTimeMillis(), false, false);
-    psiFile.putUserData(PsiUtil.FILE_LANGUAGE_LEVEL_KEY, LanguageLevel.JDK_15_PREVIEW);
+    psiFile.putUserData(PsiUtil.FILE_LANGUAGE_LEVEL_KEY, LanguageLevel.JDK_16);
     if (!(psiFile instanceof PsiJavaFile)) {
       throw new IncorrectOperationException("This template did not produce a Java class or an interface\n" + psiFile.getText());
     }

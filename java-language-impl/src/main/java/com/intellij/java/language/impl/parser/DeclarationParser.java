@@ -414,19 +414,19 @@ public class DeclarationParser {
     if (tokenType == JavaTokenType.IDENTIFIER && PsiKeyword.RECORD.equals(builder.getTokenText()) &&
         builder.lookAhead(1) == JavaTokenType.IDENTIFIER) {
       LanguageLevel level = getLanguageLevel(builder);
-      return level.isAtLeast(LanguageLevel.JDK_15_PREVIEW);
+      return level.isAtLeast(LanguageLevel.JDK_16);
     }
     return false;
   }
 
   private static boolean isSealedToken(PsiBuilder builder, IElementType tokenType) {
-    return getLanguageLevel(builder).isAtLeast(LanguageLevel.JDK_15_PREVIEW) &&
+    return getLanguageLevel(builder).isAtLeast(LanguageLevel.JDK_17) &&
         tokenType == JavaTokenType.IDENTIFIER &&
         PsiKeyword.SEALED.equals(builder.getTokenText());
   }
 
   private static boolean isNonSealedToken(PsiBuilder builder, IElementType tokenType) {
-    if (!getLanguageLevel(builder).isAtLeast(LanguageLevel.JDK_15_PREVIEW) ||
+    if (!getLanguageLevel(builder).isAtLeast(LanguageLevel.JDK_17) ||
         tokenType != JavaTokenType.IDENTIFIER ||
         !"non".equals(builder.getTokenText()) ||
         builder.lookAhead(1) != JavaTokenType.MINUS ||
