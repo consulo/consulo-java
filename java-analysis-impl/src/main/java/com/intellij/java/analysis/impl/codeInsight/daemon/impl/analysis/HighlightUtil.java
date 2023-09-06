@@ -1743,7 +1743,7 @@ public class HighlightUtil extends HighlightUtilBase {
 
     if (kind == null || requiredLevel != null && !level.isAtLeast(requiredLevel)) {
       boolean is7 = level.isAtLeast(LanguageLevel.JDK_1_7);
-      String expected = JavaErrorBundle.message(is7 ? "valid.switch.17.selector.types" : "valid.switch.selector.types");
+      String expected = JavaErrorBundle.message(is7 ? "valid.switch.1_7.selector.types" : "valid.switch.selector.types");
       String message = JavaErrorBundle.message("incompatible.types", expected, JavaHighlightUtil.formatType(type));
       HighlightInfo info =
         HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(expression).descriptionAndTooltip(message).create();
