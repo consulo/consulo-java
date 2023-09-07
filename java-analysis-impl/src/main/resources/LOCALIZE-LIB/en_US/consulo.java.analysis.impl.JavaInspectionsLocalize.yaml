@@ -241,7 +241,7 @@ inspection.return.separated.from.computation.family.quickfix:
 inspection.nullable.problems.display.name:
   text: '@NotNull/@Nullable problems'
 inspection.nullable.problems.method.overrides.notnull.option:
-  text: <html>Report @NotNull &parameters overriding @Nullable and <br>@Nullable methods overriding @NotNull</html>
+  text: Report @NotNull &parameters overriding @Nullable and @Nullable methods overriding @NotNull
 inspection.nullable.problems.method.overrides.option:
   text: Report non-&annotated parameters or methods overriding @NotNull
 inspection.nullable.problems.not.annotated.getters.for.annotated.fields:
