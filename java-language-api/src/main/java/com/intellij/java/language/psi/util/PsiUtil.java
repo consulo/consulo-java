@@ -1075,10 +1075,10 @@ public final class PsiUtil extends PsiUtilCore {
   }
 
   public static boolean isRawSubstitutor(@Nonnull PsiTypeParameterListOwner owner, @Nonnull PsiSubstitutor substitutor) {
+    if (substitutor == PsiSubstitutor.EMPTY) return false;
+
     for (PsiTypeParameter parameter : typeParametersIterable(owner)) {
-      if (substitutor.substitute(parameter) == null) {
-        return true;
-      }
+      if (substitutor.substitute(parameter) == null) return true;
     }
     return false;
   }

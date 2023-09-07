@@ -181,22 +181,21 @@ public class PsiElementFactoryImpl extends PsiJavaParserFacadeImpl implements Ps
   public PsiTypeParameter createTypeParameter(String name, PsiClassType[] superTypes) {
     StringBuilder builder = new StringBuilder();
     builder.append("public <").append(name);
-    if (superTypes.length > 1) {
+    if (superTypes.length > 1 || superTypes.length == 1 && !superTypes[0].equalsToText(JavaClassNames.JAVA_LANG_OBJECT)) {
       builder.append(" extends ");
       for (PsiClassType type : superTypes) {
-        if (type.equalsToText(JavaClassNames.JAVA_LANG_OBJECT)) {
-          continue;
+        if (!type.equalsToText(JavaClassNames.JAVA_LANG_OBJECT)) {
+          builder.append(type.getCanonicalText(true)).append('&');
         }
-        builder.append(type.getCanonicalText()).append(',');
       }
-
       builder.delete(builder.length() - 1, builder.length());
     }
     builder.append("> void foo(){}");
     try {
       return createMethodFromText(builder.toString(), null).getTypeParameters()[0];
-    } catch (RuntimeException e) {
-      throw new IncorrectOperationException("type parameter text: " + builder.toString());
+    }
+    catch (RuntimeException e) {
+      throw new IncorrectOperationException("type parameter text: " + builder, (Throwable)e);
     }
   }
 
@@ -208,7 +207,8 @@ public class PsiElementFactoryImpl extends PsiJavaParserFacadeImpl implements Ps
       throw new IncorrectOperationException("Cannot create field with type \"null\".");
     }
 
-    final String text = "class _Dummy_ { private " + type.getCanonicalText() + " " + name + "; }";
+    String text =
+      "class _Dummy_ { private " + GenericsUtil.getVariableTypeByExpressionType(type).getCanonicalText(true) + " " + name + "; }";
     final PsiJavaFile aFile = createDummyJavaFile(text);
     final PsiClass[] classes = aFile.getClasses();
     if (classes.length < 1) {
@@ -232,7 +232,7 @@ public class PsiElementFactoryImpl extends PsiJavaParserFacadeImpl implements Ps
       throw new IncorrectOperationException("Cannot create method with type \"null\".");
     }
 
-    final String canonicalText = returnType.getCanonicalText();
+    String canonicalText = GenericsUtil.getVariableTypeByExpressionType(returnType).getCanonicalText(true);
     final PsiJavaFile aFile = createDummyJavaFile("class _Dummy_ { public " + canonicalText + " " + name + "() {} " +
         "}");
     final PsiClass[] classes = aFile.getClasses();
@@ -252,8 +252,9 @@ public class PsiElementFactoryImpl extends PsiJavaParserFacadeImpl implements Ps
 
   @Nonnull
   @Override
-  public PsiMethod createMethod(@Nonnull @NonNls String name, PsiType returnType, PsiElement context) throws IncorrectOperationException {
-    return createMethodFromText("public " + returnType.getCanonicalText(true) + " " + name + "() {}", context);
+  public PsiMethod createMethod(@Nonnull String name, PsiType returnType, PsiElement context) throws IncorrectOperationException {
+    return createMethodFromText("public " + GenericsUtil.getVariableTypeByExpressionType(returnType)
+                                                        .getCanonicalText(true) + " " + name + "() {}", context);
   }
 
   @Nonnull

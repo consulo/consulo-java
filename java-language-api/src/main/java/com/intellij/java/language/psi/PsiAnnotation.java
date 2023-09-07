@@ -16,6 +16,7 @@
 package com.intellij.java.language.psi;
 
 import com.intellij.java.language.jvm.JvmAnnotation;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.meta.PsiMetaOwner;
 import consulo.util.collection.ArrayFactory;
@@ -153,5 +154,17 @@ public interface PsiAnnotation extends PsiAnnotationMemberValue, PsiMetaOwner, J
   @Override
   default boolean canNavigateToSource() {
     return false;
+  }
+
+  /**
+   * @return the target of {@link #getNameReferenceElement()}, if it's an {@code @interface}, otherwise null
+   */
+  @Nullable
+  @RequiredReadAction
+  default PsiClass resolveAnnotationType() {
+    PsiJavaCodeReferenceElement element = getNameReferenceElement();
+    PsiElement declaration = element == null ? null : element.resolve();
+    if (!(declaration instanceof PsiClass) || !((PsiClass)declaration).isAnnotationType()) return null;
+    return (PsiClass)declaration;
   }
 }
