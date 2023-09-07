@@ -388,7 +388,6 @@ open module consulo.java {
   exports com.intellij.java.impl.vfs.impl.jar;
   exports consulo.java.impl;
   exports consulo.java.impl.application.options;
-  exports consulo.java.impl.bundle;
   exports consulo.java.impl.codeInsight;
   exports consulo.java.impl.fileEditor.impl;
   exports consulo.java.impl.ide;

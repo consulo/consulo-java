@@ -32,7 +32,6 @@ import consulo.content.bundle.SdkModificator;
 import consulo.content.bundle.SdkTable;
 import consulo.fileChooser.FileChooserDescriptor;
 import consulo.java.execution.projectRoots.OwnJdkUtil;
-import consulo.java.impl.bundle.JavaHomePredefinedBundleProvider;
 import consulo.java.language.fileTypes.JModFileType;
 import consulo.java.language.impl.JavaIcons;
 import consulo.logging.Logger;
@@ -165,7 +164,7 @@ public class JavaSdkImpl extends JavaSdk {
   }
 
   /**
-   * @implNote do not chech JAVA_HOME, since it sdk will be created by own provider {@link JavaHomePredefinedBundleProvider}
+   * @implNote do not chech JAVA_HOME, {@link #getEnviromentVariables(Platform)}
    */
   @Nonnull
   @Override
@@ -193,6 +192,12 @@ public class JavaSdkImpl extends JavaSdk {
     }
 
     return list;
+  }
+
+  @Nonnull
+  @Override
+  public Set<String> getEnviromentVariables(@Nonnull Platform platform) {
+    return Set.of("JAVA_HOME");
   }
 
   private void collectJavaPathsAtSdkman(List<String> list, File sdkmanJavaDir) {
