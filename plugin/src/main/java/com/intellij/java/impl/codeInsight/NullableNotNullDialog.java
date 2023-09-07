@@ -8,6 +8,7 @@ import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.project.ProjectManager;
 import consulo.ui.Button;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.DialogWrapper;
 import consulo.ui.ex.awt.JBUI;
 import consulo.ui.ex.awt.Splitter;
@@ -57,17 +58,19 @@ public class NullableNotNullDialog extends DialogWrapper {
     return button;
   }
 
+  @RequiredUIAccess
   public static void showDialogWithInstrumentationOptions(@Nonnull Component context) {
     showDialog(context, true);
   }
 
+  @RequiredUIAccess
   public static void showDialog(Component context, boolean showInstrumentationOptions) {
     Project project = DataManager.getInstance().getDataContext(context).getData(CommonDataKeys.PROJECT);
     if (project == null) {
       project = ProjectManager.getInstance().getDefaultProject();
     }
     NullableNotNullDialog dialog = new NullableNotNullDialog(project, showInstrumentationOptions);
-    dialog.show();
+    dialog.showAsync();
   }
 
   @Override
