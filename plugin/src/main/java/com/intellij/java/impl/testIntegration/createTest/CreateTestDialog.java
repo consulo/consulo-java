@@ -31,7 +31,6 @@ import com.intellij.java.language.testIntegration.TestFramework;
 import com.intellij.java.language.util.TreeClassChooser;
 import com.intellij.java.language.util.TreeClassChooserFactory;
 import consulo.application.*;
-import consulo.component.extension.Extensions;
 import consulo.document.event.DocumentAdapter;
 import consulo.document.event.DocumentEvent;
 import consulo.ide.impl.idea.ide.util.PropertiesComponent;
@@ -121,7 +120,7 @@ public class CreateTestDialog extends DialogWrapper {
     Map<String, JRadioButton> nameToButtonMap = new HashMap<String, JRadioButton>();
     List<Pair<String, JRadioButton>> attachedLibraries = new ArrayList<Pair<String, JRadioButton>>();
 
-    for (final TestFramework descriptor : Extensions.getExtensions(TestFramework.EXTENSION_NAME)) {
+    for (final TestFramework descriptor : TestFramework.EXTENSION_NAME.getExtensionList()) {
       final JRadioButton b = new JRadioButton(descriptor.getName());
       myLibraryButtons.add(b);
       group.add(b);

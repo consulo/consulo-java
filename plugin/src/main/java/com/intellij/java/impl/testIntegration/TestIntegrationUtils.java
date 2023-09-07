@@ -24,7 +24,6 @@ import com.intellij.java.language.testIntegration.JavaTestFramework;
 import com.intellij.java.language.testIntegration.TestFramework;
 import consulo.application.ApplicationManager;
 import consulo.codeEditor.Editor;
-import consulo.component.extension.Extensions;
 import consulo.document.util.TextRange;
 import consulo.fileTemplate.FileTemplate;
 import consulo.fileTemplate.FileTemplateDescriptor;
@@ -40,7 +39,6 @@ import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.logging.Logger;
 import consulo.project.Project;
-import consulo.util.collection.SmartList;
 import consulo.util.lang.StringUtil;
 
 import javax.annotation.Nonnull;
@@ -245,15 +243,14 @@ public class TestIntegrationUtils {
   }
 
   public static List<TestFramework> findSuitableFrameworks(PsiClass targetClass) {
-    TestFramework[] frameworks = Extensions.getExtensions(TestFramework.EXTENSION_NAME);
-    for (TestFramework each : frameworks) {
+    for (TestFramework each : TestFramework.EXTENSION_NAME.getExtensionList()) {
       if (each.isTestClass(targetClass)) {
         return Collections.singletonList(each);
       }
     }
 
-    List<TestFramework> result = new SmartList<TestFramework>();
-    for (TestFramework each : frameworks) {
+    List<TestFramework> result = new ArrayList<>();
+    for (TestFramework each : TestFramework.EXTENSION_NAME.getExtensionList()) {
       if (each.isPotentialTestClass(targetClass)) {
         result.add(each);
       }

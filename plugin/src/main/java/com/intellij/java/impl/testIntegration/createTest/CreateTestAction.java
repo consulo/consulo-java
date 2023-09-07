@@ -17,9 +17,9 @@ package com.intellij.java.impl.testIntegration.createTest;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.testIntegration.TestFramework;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
-import consulo.component.extension.Extensions;
 import consulo.ide.impl.idea.ide.util.PropertiesComponent;
 import consulo.language.content.LanguageContentFolderScopes;
 import consulo.language.content.TestContentFolderTypeProvider;
@@ -81,8 +81,9 @@ public class CreateTestAction extends PsiElementBaseIntentionAction {
     return true;
   }
 
+  @RequiredReadAction
   public static boolean isAvailableForElement(PsiElement element) {
-    if (Extensions.getExtensions(TestFramework.EXTENSION_NAME).length == 0) return false;
+    if (!TestFramework.EXTENSION_NAME.hasAnyExtensions()) return false;
 
     if (element == null) return false;
 
@@ -90,7 +91,7 @@ public class CreateTestAction extends PsiElementBaseIntentionAction {
 
     if (psiClass == null) return false;
 
-    Module srcModule = ModuleUtilCore.findModuleForPsiElement(psiClass);
+    Module srcModule = psiClass.getModule();
     if (srcModule == null) return false;
 
     if (psiClass.isAnnotationType() ||

@@ -23,7 +23,6 @@ import com.intellij.java.language.testIntegration.JavaTestFramework;
 import com.intellij.java.language.testIntegration.TestFramework;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
-import consulo.component.extension.Extensions;
 import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
@@ -60,7 +59,7 @@ public class MoveInitializerToSetUpMethodAction extends BaseMoveInitializerToMet
       final PsiClass aClass = field.getContainingClass();
       LOG.assertTrue(aClass != null);
       final PsiElementFactory elementFactory = JavaPsiFacade.getElementFactory(project);
-      for (TestFramework framework : Extensions.getExtensions(TestFramework.EXTENSION_NAME)) {
+      for (TestFramework framework : TestFramework.EXTENSION_NAME.getExtensionList()) {
         if (framework instanceof JavaTestFramework && framework.isTestClass(aClass)) {
           try {
             ((JavaTestFramework)framework).createSetUpPatternMethod(elementFactory);
