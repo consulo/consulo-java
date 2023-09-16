@@ -34,9 +34,6 @@ import com.intellij.java.language.psi.infos.MethodCandidateInfo;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.java.language.psi.javadoc.PsiDocTagValue;
 import com.intellij.java.language.psi.util.*;
-import consulo.annotation.component.ExtensionImpl;
-import consulo.application.ApplicationManager;
-import consulo.application.ApplicationProperties;
 import consulo.application.dumb.IndexNotReadyException;
 import consulo.application.progress.ProgressIndicator;
 import consulo.application.progress.ProgressManager;
@@ -48,7 +45,10 @@ import consulo.language.editor.DaemonCodeAnalyzer;
 import consulo.language.editor.Pass;
 import consulo.language.editor.inspection.LocalQuickFixAndIntentionActionOnPsiElement;
 import consulo.language.editor.intention.QuickFixAction;
-import consulo.language.editor.rawHighlight.*;
+import consulo.language.editor.rawHighlight.HighlightInfo;
+import consulo.language.editor.rawHighlight.HighlightInfoHolder;
+import consulo.language.editor.rawHighlight.HighlightInfoType;
+import consulo.language.editor.rawHighlight.HighlightVisitor;
 import consulo.language.inject.InjectedLanguageManager;
 import consulo.language.psi.*;
 import consulo.language.psi.util.PsiTreeUtil;
@@ -107,10 +107,6 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
   private final Map<PsiClass, MostlySingularMultiMap<MethodSignature, PsiMethod>> myDuplicateMethods = new HashMap<>();
   private final Set<PsiClass> myOverrideEquivalentMethodsVisitedClasses = new HashSet<>();
 
-  private static class Holder {
-    private static final boolean CHECK_ELEMENT_LEVEL = ApplicationManager.getApplication().isUnitTestMode() || ApplicationProperties.isInSandbox();
-  }
-
   @Inject
   public HighlightVisitorImpl(@Nonnull PsiResolveHelper resolveHelper) {
     myResolveHelper = resolveHelper;
@@ -136,13 +132,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
 
   @Override
   public void visit(@Nonnull PsiElement element) {
-    if (Holder.CHECK_ELEMENT_LEVEL) {
-      ((CheckLevelHighlightInfoHolder) myHolder).enterLevel(element);
-      element.accept(this);
-      ((CheckLevelHighlightInfoHolder) myHolder).enterLevel(null);
-    } else {
-      element.accept(this);
-    }
+    element.accept(this);
   }
 
   private void registerReferencesFromInjectedFragments(@Nonnull PsiElement element) {
@@ -153,7 +143,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
   @Override
   public boolean analyze(@Nonnull PsiFile file, boolean updateWholeFile, @Nonnull HighlightInfoHolder holder, @Nonnull Runnable highlight) {
     try {
-      prepare(Holder.CHECK_ELEMENT_LEVEL ? new CheckLevelHighlightInfoHolder(file, holder) : holder, file);
+      prepare(holder, file);
       if (updateWholeFile) {
         ProgressIndicator progress = ProgressManager.getInstance().getProgressIndicator();
         if (progress == null) throw new IllegalStateException("Must be run under progress");
