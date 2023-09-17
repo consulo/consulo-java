@@ -25,6 +25,7 @@ import com.intellij.java.analysis.codeInsight.intention.QuickFixFactory;
 import com.intellij.java.analysis.impl.codeInsight.ClassUtil;
 import com.intellij.java.analysis.impl.psi.util.JavaMatchers;
 import com.intellij.java.analysis.impl.psi.util.PsiMatchers;
+import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.java.language.impl.codeInsight.ExceptionUtil;
 import com.intellij.java.language.impl.codeInsight.daemon.JavaErrorBundle;
@@ -359,21 +360,25 @@ public class HighlightClassUtil {
   }
 
   @Nullable
-  private static HighlightInfo checkStaticMethodDeclarationInInnerClass(PsiKeyword keyword) {
+  private static HighlightInfo checkStaticMethodDeclarationInInnerClass(PsiKeyword keyword, LanguageLevel languageLevel) {
+    if (languageLevel.isAtLeast(LanguageLevel.JDK_16)) {
+      return null;
+    }
+
     if (getEnclosingStaticClass(keyword, PsiMethod.class) == null) {
       return null;
     }
-    PsiMethod method = (PsiMethod) keyword.getParent().getParent();
+    PsiMethod method = (PsiMethod)keyword.getParent().getParent();
     if (PsiUtilCore.hasErrorElementChild(method)) {
       return null;
     }
     String message = JavaErrorBundle.message("static.declaration.in.inner.class");
     HighlightInfo result = HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR).range(keyword)
-        .descriptionAndTooltip(message).create();
+                                        .descriptionAndTooltip(message).create();
     QuickFixAction.registerQuickFixAction(result, QUICK_FIX_FACTORY.createModifierListFix(method,
-        PsiModifier.STATIC, false, false));
-    QuickFixAction.registerQuickFixAction(result, QUICK_FIX_FACTORY.createModifierListFix((PsiClass) keyword
-        .getParent().getParent().getParent(), PsiModifier.STATIC, true, false));
+                                                                                          PsiModifier.STATIC, false, false));
+    QuickFixAction.registerQuickFixAction(result, QUICK_FIX_FACTORY.createModifierListFix((PsiClass)keyword
+      .getParent().getParent().getParent(), PsiModifier.STATIC, true, false));
     return result;
   }
 
@@ -449,12 +454,12 @@ public class HighlightClassUtil {
   }
 
   @Nullable
-  public static HighlightInfo checkStaticDeclarationInInnerClass(PsiKeyword keyword) {
+  public static HighlightInfo checkStaticDeclarationInInnerClass(PsiKeyword keyword, LanguageLevel languageLevel) {
     HighlightInfo errorResult = checkStaticFieldDeclarationInInnerClass(keyword);
     if (errorResult != null) {
       return errorResult;
     }
-    errorResult = checkStaticMethodDeclarationInInnerClass(keyword);
+    errorResult = checkStaticMethodDeclarationInInnerClass(keyword, languageLevel);
     if (errorResult != null) {
       return errorResult;
     }
