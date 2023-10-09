@@ -726,7 +726,7 @@ public class StubBuildingVisitor<T> extends ClassVisitor {
     @Override
     public void visitParameter(String name, int access) {
       int paramIndex = myParamNameIndex++ - myParamIgnoreCount;
-      if (!isSet(access, Opcodes.ACC_SYNTHETIC) && paramIndex >= 0 && paramIndex < myParamCount) {
+      if (name != null && !isSet(access, Opcodes.ACC_SYNTHETIC) && paramIndex >= 0 && paramIndex < myParamCount) {
         setParameterName(name, paramIndex);
       }
     }
