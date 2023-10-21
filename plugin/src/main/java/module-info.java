@@ -250,9 +250,6 @@ open module consulo.java {
   exports com.intellij.java.impl.openapi.vfs.impl.jrt;
   exports com.intellij.java.impl.packageDependencies;
   exports com.intellij.java.impl.packageDependencies.ui;
-  exports com.intellij.java.impl.pom.java;
-  exports com.intellij.java.impl.pom.java.events;
-  exports com.intellij.java.impl.pom.java.impl;
   exports com.intellij.java.impl.profile.codeInspection.ui;
   exports com.intellij.java.impl.psi;
   exports com.intellij.java.impl.psi.codeStyle;
