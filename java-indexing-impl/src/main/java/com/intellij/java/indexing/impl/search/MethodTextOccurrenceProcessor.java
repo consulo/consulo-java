@@ -22,18 +22,18 @@ import com.intellij.java.language.psi.PsiSubstitutor;
 import com.intellij.java.language.psi.util.MethodSignature;
 import com.intellij.java.language.psi.util.MethodSignatureUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
-import consulo.application.util.function.Processor;
 import consulo.language.psi.*;
 import consulo.language.psi.search.RequestResultProcessor;
 
 import javax.annotation.Nonnull;
 import java.util.Arrays;
+import java.util.function.Predicate;
 
 /**
  * @author peter
  */
 public class MethodTextOccurrenceProcessor extends RequestResultProcessor {
-  private static final PsiReferenceService ourReferenceService = PsiReferenceService.getService();
+  private  final PsiReferenceService myReferenceService;
   private final PsiMethod[] myMethods;
   protected final PsiClass myContainingClass;
   protected final boolean myStrictSignatureSearch;
@@ -45,14 +45,15 @@ public class MethodTextOccurrenceProcessor extends RequestResultProcessor {
     myMethods = methods;
     myContainingClass = aClass;
     myStrictSignatureSearch = strictSignatureSearch;
+    myReferenceService = PsiReferenceService.getService();
   }
 
   @Override
   public final boolean processTextOccurrence(@Nonnull PsiElement element,
                                              int offsetInElement,
-                                             @Nonnull final Processor<? super PsiReference> consumer) {
-    for (PsiReference ref : ourReferenceService.getReferences(element, new PsiReferenceService.Hints(myMethods[0],
-        offsetInElement))) {
+                                             @Nonnull final Predicate<? super PsiReference> consumer) {
+    for (PsiReference ref : myReferenceService.getReferences(element, new PsiReferenceService.Hints(myMethods[0],
+                                                                                                    offsetInElement))) {
       if (ReferenceRange.containsOffsetInElement(ref, offsetInElement) && !processReference(consumer, ref)) {
         return false;
       }
@@ -60,7 +61,7 @@ public class MethodTextOccurrenceProcessor extends RequestResultProcessor {
     return true;
   }
 
-  private boolean processReference(Processor<? super PsiReference> consumer, PsiReference ref) {
+  private boolean processReference(Predicate<? super PsiReference> consumer, PsiReference ref) {
     for (PsiMethod method : myMethods) {
       if (!method.isValid()) {
         continue;
@@ -70,7 +71,7 @@ public class MethodTextOccurrenceProcessor extends RequestResultProcessor {
         return true;
       }
       if (ref.isReferenceTo(method)) {
-        return consumer.process(ref);
+        return consumer.test(ref);
       }
 
       if (!processInexactReference(ref, ref.resolve(), method, consumer)) {
@@ -84,7 +85,7 @@ public class MethodTextOccurrenceProcessor extends RequestResultProcessor {
   protected boolean processInexactReference(PsiReference ref,
                                             PsiElement refElement,
                                             PsiMethod method,
-                                            Processor<? super PsiReference> consumer) {
+                                            Predicate<? super PsiReference> consumer) {
     if (refElement instanceof PsiMethod) {
       PsiMethod refMethod = (PsiMethod) refElement;
       PsiClass refMethodClass = refMethod.getContainingClass();
@@ -100,7 +101,7 @@ public class MethodTextOccurrenceProcessor extends RequestResultProcessor {
           MethodSignature refSignature = refMethod.getSignature(PsiSubstitutor.EMPTY);
 
           if (MethodSignatureUtil.isSubsignature(superSignature, refSignature)) {
-            if (!consumer.process(ref)) {
+            if (!consumer.test(ref)) {
               return false;
             }
           }
@@ -110,7 +111,7 @@ public class MethodTextOccurrenceProcessor extends RequestResultProcessor {
       if (!myStrictSignatureSearch) {
         PsiManager manager = method.getManager();
         if (manager.areElementsEquivalent(refMethodClass, myContainingClass)) {
-          if (!consumer.process(ref)) {
+          if (!consumer.test(ref)) {
             return false;
           }
         }
