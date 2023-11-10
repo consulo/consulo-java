@@ -20,32 +20,32 @@
  */
 package com.intellij.java.impl.ide.favoritesTreeView;
 
-import consulo.annotation.component.ExtensionImpl;
-import consulo.ide.impl.idea.ide.favoritesTreeView.FavoriteNodeProvider;
-import consulo.project.ui.view.tree.ViewSettings;
-import consulo.project.ui.view.tree.AbstractTreeNode;
 import com.intellij.java.analysis.impl.codeInspection.reference.RefMethodImpl;
 import com.intellij.java.impl.ide.favoritesTreeView.smartPointerPsiNodes.MethodSmartPointerNode;
 import com.intellij.java.language.impl.psi.presentation.java.ClassPresentationUtil;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
-import consulo.language.editor.CommonDataKeys;
+import consulo.annotation.component.ExtensionImpl;
+import consulo.bookmark.ui.view.BookmarkNodeProvider;
 import consulo.dataContext.DataContext;
+import consulo.language.editor.CommonDataKeys;
 import consulo.language.editor.LangDataKeys;
-import consulo.module.Module;
-import consulo.language.util.ModuleUtilCore;
-import consulo.project.Project;
-import consulo.virtualFileSystem.VirtualFile;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiManager;
+import consulo.language.util.ModuleUtilCore;
+import consulo.module.Module;
+import consulo.project.Project;
+import consulo.project.ui.view.tree.AbstractTreeNode;
+import consulo.project.ui.view.tree.ViewSettings;
+import consulo.virtualFileSystem.VirtualFile;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collection;
 
 @ExtensionImpl
-public class PsiMethodFavoriteNodeProvider extends FavoriteNodeProvider {
+public class PsiMethodFavoriteNodeProvider implements BookmarkNodeProvider {
   @Override
   public Collection<AbstractTreeNode> getFavoriteNodes(final DataContext context, final ViewSettings viewSettings) {
     final Project project = context.getData(CommonDataKeys.PROJECT);
@@ -76,7 +76,7 @@ public class PsiMethodFavoriteNodeProvider extends FavoriteNodeProvider {
     if (element instanceof PsiMethod) {
       return new MethodSmartPointerNode(project, element, viewSettings);
     }
-    return super.createNode(project, element, viewSettings);
+    return BookmarkNodeProvider.super.createNode(project, element, viewSettings);
   }
 
   @Override
